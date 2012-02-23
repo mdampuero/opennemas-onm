@@ -58,14 +58,13 @@ jQuery(document).ready(function($){
     * Content provider code
     ***************************************************************************/
 
-    $( "#content-provider").dialog({ minWidth: 600, autoOpen: false, maxHeight: 500 });
+    $( "#content-provider").dialog({ minWidth: 600, /*autoOpen: false,*/ maxHeight: 500 });
 
     $( "#content-provider .content-provider-block-wrapper").tabs({
         ajaxOptions: {
             error: function( xhr, status, index, anchor ) {
                 $( anchor.hash ).html(
-                    "<div>Couldn't load this tab. We'll try to fix this as soon as possible. " +
-                    "If this wouldn't be a demo.</div>" );
+                    "<div>Couldn't load this tab. We'll try to fix this as soon as possible.</div>" );
             }
         },
         load: function(event,ui) {
@@ -81,9 +80,10 @@ jQuery(document).ready(function($){
             url: $(this).attr('href'),
             success: function(data){
                 parent.html(data);
+                makeContentProviderAndPlaceholdersSortable();
             }
-        })
-    })
+        });
+    });
 
 
     /***************************************************************************

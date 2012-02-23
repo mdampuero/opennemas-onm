@@ -81,7 +81,7 @@ div#content-provider .ui-tabs-panel .content-provider-block > div {
 }
 
 .content-provider-block-wrapper {
-    padding-bottom:30px;
+    height:100%;
 }
 .content-provider-block .pagination {
     bottom: 0;
@@ -108,7 +108,6 @@ div#content-provider .ui-tabs-panel .content-provider-block > div {
 }
 
 #content-provider .content-provider-block-wrapper {
-    position:relative;
 }
 
 #content-provider .ui-tabs-nav {
@@ -122,44 +121,13 @@ div#content-provider .ui-tabs-panel .content-provider-block > div {
     margin-top: 29px;
     border:0 none;
     border-top: 1px solid #ccc;
+    padding-bottom:30px;
 }
 
 div.content-provider-block {
+    padding-bottom: 35px;
     overflow-x:hidden;
     height: 100%;
-}
-
-.delete-button {
-    height: 20px !important;
-    width: 17px !important;
-    margin-bottom: -1px !important;
-    text-indent:-9999px !important;
-    background:url(../images/frontpagemanager/archive.png) top left no-repeat !important;
-    display:block;
-}
-.edit-button {
-    height: 20px !important;
-    width: 17px !important;
-    margin-bottom: -1px !important;
-    text-indent:-9999px !important;
-    background:url(../images/frontpagemanager/edit.png) top left no-repeat !important;
-    display:block;
-}
-.home-button {
-    height: 20px !important;
-    width: 17px !important;
-    margin-bottom: -1px !important;
-    text-indent:-9999px !important;
-    background:url(../images/frontpagemanager/home.png) top left no-repeat !important;
-    display:block;
-}
-.settings-button {
-    height: 20px !important;
-    width: 17px !important;
-    margin-bottom: -1px !important;
-    text-indent:-9999px !important;
-    background:url(../images/frontpagemanager/settings.png) top left no-repeat !important;
-    display:block;
 }
 
 
@@ -176,7 +144,7 @@ div#content-provider .ui-widget-header {
 
 #content-provider .ui-tabs-panel {
     background:White;
-    max-height:500px;
+    max-height:100%;
 }
 #content-provider .ui-tabs-nav {
     padding:3px 0 0 0 !important;
@@ -225,23 +193,6 @@ div.content div.description span.type {
 #frontpagemanager div.content-provider-element {
     position:relative;
 }
-#frontpagemanager div.content-provider-element:hover .selectButton {
-    background-image: url("https://s-static.ak.facebook.com/rsrc.php/v1/yQ/r/-DtXTPJXrav.png");
-    background-position: 0 -294px;
-    background-repeat: no-repeat;
-    display: block;
-    position:absolute;
-    top:-3px;
-    right: 10px;
-    height: 24px;
-    width: 21px;
-}
-
-div.content-provider-element .selectButton:hover {
-    background-image: url("https://s-static.ak.facebook.com/rsrc.php/v1/yQ/r/-DtXTPJXrav.png");
-    background-position: -21px -294px !important;
-    background-repeat: no-repeat;
-}
 .ui-sortable-helper {
     z-index: 99999;
 }
@@ -259,7 +210,7 @@ div#content-provider span.type {
 }
 
 .ui-sortable-helper {
-    max-width:300px;
+    max-width:400px;
 }
 
 
@@ -357,7 +308,6 @@ div#content-provider #toggler{
 .ui-tabs-panel, .tabs > div {
     border:0 none !important;
     border-top:1px solid #ccc !important;
-    padding:10px;
 }
 
 .ui-dialog .ui-icon-closethick {
@@ -370,12 +320,18 @@ div#content-provider #toggler{
 
 #content-provider .pagination {
     float:none;
-    text-align:right;
-    height:20px;
+    text-align:left;
     padding:0;
     width:100%;
     background:#ccc;
+    position:absolute;
+    bottom:0;
+    left:0;
+    width:100%;
+    border:0 none;
+    margin:0;
 }
-#content-provider .pagination a{
+#content-provider .pagination *:first-child { margin-left:10px; }
+#content-provider .pagination a {
     float:none;
 }

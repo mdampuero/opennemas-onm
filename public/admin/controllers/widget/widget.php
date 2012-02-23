@@ -134,7 +134,8 @@ switch($action) {
 
         list($widgets, $pager) = $cm->find_pages(
             'Widget',
-            'contents.available=1', 'ORDER BY created DESC ', ($page-1)*5, $page*5
+            'contents.available=1 '. $sqlExcludedOpinions,
+            'ORDER BY created DESC ', ($page-1)*5, 5
         );
 
         $tpl->assign(array(

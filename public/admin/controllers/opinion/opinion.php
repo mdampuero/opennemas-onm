@@ -770,10 +770,11 @@ switch ($action) {
                 $opinionsExcluded = implode(', ', $contentElementsInFrontpage);
                 $sqlExcludedOpinions = ' AND `pk_opinion` NOT IN ('.$opinionsExcluded.')';
             }
-            $opinions = $cm->find(
+
+            list($opinions, $pager) = $cm->find_pages(
                 'Opinion',
-                'contents.available = 1 ' . $sqlExcludedOpinions,
-                ' ORDER BY created DESC LIMIT 0,16'
+                'contents.available=1'. $sqlExcludedOpinions,
+                'ORDER BY created DESC ', ($page-1)*5, 5
             );
 
             $tpl->assign(array(

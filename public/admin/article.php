@@ -1639,7 +1639,7 @@ if (isset($_REQUEST['action']) ) {
         case 'content-provider-suggested':
 
             $category = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_STRING,   array('options' => array( 'default' => 'home')));
-            $page     = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_STRING,   array('options' => array( 'default' => 'home')));
+            $page     = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_STRING,   array('options' => array( 'default' => 1)));
 
             if ($category == 'home') { $category = 0; }
 
@@ -1657,11 +1657,8 @@ if (isset($_REQUEST['action']) ) {
 
             list($articles, $pager) = $cm->find_pages(
                 'Article',
-                'contents.available=1', 'ORDER BY created DESC', $page, 9
-            );
-            $articles = $cm->find(
-                'Article',
-                'contents.available=1', 'ORDER BY created DESC LIMIT 0,10'
+                'contents.available=1 AND in_litter != 1 AND in_home=2'. $sqlExcludedOpinions,
+                ' ORDER BY created DESC ', ($page-1), 5
             );
 
             $tpl->assign(array(
@@ -1676,7 +1673,7 @@ if (isset($_REQUEST['action']) ) {
         case 'content-provider-category':
 
             $category = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_STRING,   array('options' => array( 'default' => 'home')));
-            $page     = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_STRING,   array('options' => array( 'default' => 'home')));
+            $page     = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_STRING,   array('options' => array( 'default' => 1)));
 
             if ($category == 'home') { $category = 0; }
 
@@ -1692,13 +1689,14 @@ if (isset($_REQUEST['action']) ) {
                 $sqlExcludedOpinions = ' AND `pk_article` NOT IN ('.$contentsExcluded.')';
             }
 
-            $articles = $cm->find(
+            list($articles, $pager) = $cm->find_pages(
                 'Article',
-                'contents.available=1', 'ORDER BY created DESC LIMIT 0,10'
+                'contents.available=1'. $sqlExcludedOpinions, 'ORDER BY created DESC', ($page-1)*5, 5, $category
             );
 
             $tpl->assign(array(
                 'articles' => $articles,
+                'pager'    => $pager,
             ));
 
             $tpl->display('article/content-provider-category.tpl');

@@ -3,6 +3,6 @@
         {include file="widget/content-provider/widget.tpl"}
     {/foreach}
 </div>
-<div class="pagination">
+<div class="pagination clearfix">
     {$pager->links}
 </div><!-- / -->
