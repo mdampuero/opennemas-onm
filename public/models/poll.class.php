@@ -201,6 +201,7 @@ class Poll extends Content {
         $rs = $GLOBALS['application']->conn->Execute( $sql );
         $i=0;
         $total=0;
+        $items = array();
         while (!$rs->EOF) {
             $items[$i]['pk_item']=$rs->fields['pk_item'];
             $items[$i]['item']=$rs->fields['item'];
@@ -212,13 +213,14 @@ class Poll extends Content {
         }
 
         //TODO: improvement calc percents
+        if(!empty($items)) {
             foreach ($items as &$item) {
                 $item['percent'] =0;
                 if(!empty($item['votes'])) {
                     $item['percent'] = sprintf("%.0f",($item['votes']*100 / $total) );
                 }
             }
-
+        }
         return $items;
     }
 
