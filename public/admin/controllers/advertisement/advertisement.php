@@ -136,7 +136,7 @@ switch($action) {
                 $adv->is_flash = 0;
             }
             $adv->fk_content_categories = explode(',', $adv->fk_content_categories);
-            
+
             //Get the name of the advertisement placeholder
             $adv_placeholder = $adv->getNameOfAdvertisementPlaceholder($adv->type_advertisement);
             $adv->advertisement_placeholder = $adv_placeholder;
@@ -333,6 +333,10 @@ switch($action) {
 
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page.'&'.$query_string);
     break;
+
+    case 'content-provider':
+        echo 'Not implemented';
+        break;
 
     default:
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page.'&'.$query_string);

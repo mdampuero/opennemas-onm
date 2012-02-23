@@ -70,7 +70,7 @@ jQuery(document).ready(function($){
         load: function(event,ui) {
             makeContentProviderAndPlaceholdersSortable();
         }
-    }).disableSelection();
+    });
 
     $( "#content-provider").on('click', '.pagination a', function(e, ui){
         e.preventDefault();

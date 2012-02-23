@@ -504,15 +504,9 @@ switch ($action) {
             $sqlExcludedOpinions = ' AND `pk_video` NOT IN ('.$contentsExcluded.')';
         }
 
-        list($widgets, $pager) = $cm->find_pages(
+        list($videos, $pager) = $cm->find_pages(
             'Video',
-            'contents.available=1', 'ORDER BY created DESC', $page, 9
-        );
-
-        $videos = $cm->find(
-            'video',
-            'contents.available = 1 ' . $sqlExcludedOpinions,
-            ' ORDER BY created DESC LIMIT 0,10'
+            'contents.available=1', 'ORDER BY created DESC ', ($page-1)*5, 5
         );
 
         $tpl->assign(array(
