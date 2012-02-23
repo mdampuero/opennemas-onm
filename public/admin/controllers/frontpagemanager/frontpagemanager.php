@@ -75,8 +75,10 @@ switch ($action) {
         $lm  = new LayoutManager(
             SITE_PATH."/themes/".TEMPLATE_USER."/layouts/default.xml"
         );
+
         $layout = $lm->render(array(
-            'contents' => $contentElementsInFrontpage
+            'contents'  => $contentElementsInFrontpage,
+            'home'      => ($categoryID == 0),
         ));
 
         $tpl->assign(array(

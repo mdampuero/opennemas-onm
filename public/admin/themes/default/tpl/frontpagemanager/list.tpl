@@ -27,29 +27,31 @@
                 </li>
                 {/if}
                 <li>
-                    <a title="More actions">
+                    <a title="More actions" id="button_moreactions">
                         <img border="0" src="{$params.IMAGE_DIR}home_no50.png" title="{t}No home{/t}" alt="More actions" ><br />{t}More actions{/t}
                     </a>
+                </li>
+                <li class="separator"></li>
+                <li>
+                    <a href="#" id="button_previewfrontpage" title="{t}Preview frontpage with actual content positions{/t}">
+                        <img border="0" src="{$params.IMAGE_DIR}preview.png" title="{t}Preview{/t}" alt="{t}Preview{/t}" ><br />{t}Preview{/t}
+                    </a>
+                </li>
+                <li>
+                     <a href="#" data-category="{$category}" id="button_clearcache">
+                         <img border="0" src="{$params.IMAGE_DIR}clearcache.png" title="{t}Clean cache{/t}" alt="" /><br />{t}Clean cache{/t}
+                     </a>
                 </li>
                 <li style="display:none">
                     <button type="button" style="cursor:pointer; background-color: #e1e3e5; border: 0px; width: 95px;" onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
                         <img id="select_button" class="icon" status="0" src="{$params.IMAGE_DIR}select_button.png" title="{t}Select all{/t}" alt="{t}Select all{/t}"  status="0">
                     </button>
                 </li>
+                <li class="separator"></li>
                 <li>
-                    <a id="get_ids" href="#" class="admin_add" title="Guardar Positions" alt="Guardar Cambios">
+                    <a id="button_savepositions" href="#" class="admin_add" title="Guardar Positions" alt="Guardar Cambios">
                         <img border="0" src="{$params.IMAGE_DIR}save.png" title="{t}Save changes{/t}" alt="{t}Save changes{/t}" ><br />{t}Save changes{/t}
                     </a>
-                </li>
-                <li>
-                    <a href="#" class="admin_add" onClick="javascript:previewFrontpage('{$category}');return false;" title="Previsualizar posiciones en portada">
-                        <img border="0" src="{$params.IMAGE_DIR}preview.png" title="{t}Preview{/t}" alt="{t}Preview{/t}" ><br />{t}Preview{/t}
-                    </a>
-                </li>
-                <li style="display:none">
-                     <a href="#" onclick="clearcache('{$category}'); return false;" id="button_clearcache">
-                         <img border="0" src="{$params.IMAGE_DIR}clearcache.png" title="{t}Clean cache{/t}" alt="" /><br />{t}Clean cache{/t}
-                     </a>
                 </li>
                 <li>
                      <a href="#" id="button_addnewcontents">
@@ -98,6 +100,9 @@
                     </li>
                     <li>
                         <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/video/video.php?action=content-provider&amp;category={$category}">{t}Videos{/t}</a>
+                    </li>
+                    <li>
+                        <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/search-advanced/search-advanced.php?action=content-provider&amp;category={$category}">{t}Videos{/t}</a>
                     </li>
                 </ul>
             </div>

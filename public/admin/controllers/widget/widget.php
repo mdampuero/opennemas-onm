@@ -118,7 +118,7 @@ switch($action) {
     case 'content-provider':
 
         $category = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_STRING,   array('options' => array( 'default' => 'home')));
-        $page     = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_STRING,   array('options' => array( 'default' => 'home')));
+        $page     = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_STRING,   array('options' => array( 'default' => 1)));
 
         if ($category == 'home') { $category = 0; }
 
@@ -134,14 +134,7 @@ switch($action) {
 
         list($widgets, $pager) = $cm->find_pages(
             'Widget',
-            'contents.available=1', 'ORDER BY created DESC', $page, 9
-        );
-        // var_dump($widgets, $pager);die();
-
-        $widgets = $cm->find(
-            'Widget',
-            'contents.available = 1 ' . $sqlExcludedOpinions,
-            ' ORDER BY created DESC LIMIT 0,10'
+            'contents.available=1', 'ORDER BY created DESC ', ($page-1)*5, $page*5
         );
 
         $tpl->assign(array(

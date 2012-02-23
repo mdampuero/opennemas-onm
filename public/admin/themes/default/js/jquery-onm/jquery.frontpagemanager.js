@@ -1,5 +1,9 @@
 jQuery(document).ready(function($){
 
+    /***************************************************************************
+    * Sortable handlers
+    ***************************************************************************/
+
     makeContentProviderAndPlaceholdersSortable = function () {
         // Make content providers sortable and allow to D&D over the placeholders
         jQuery('div#content-provider .ui-tabs-panel > div').sortable({
@@ -24,6 +28,9 @@ jQuery(document).ready(function($){
 
     makeContentProviderAndPlaceholdersSortable();
 
+    /***************************************************************************
+    * Content elements in frontpage code
+    ***************************************************************************/
     // Toggle content-provider-element checkbox if all the content-provider-elemnt is clicked
     $('div.placeholder').on('click', 'div.content-provider-element .description', function() {
        checkbox = $(this).find('input[type="checkbox"]');
@@ -34,21 +41,71 @@ jQuery(document).ready(function($){
     });
 
 
-    $('div.placeholder').on('click', 'div.content-provider-element a.delete', function(e) {
+    $('div.placeholder').on('click', 'div.content-provider-element a.drop-element', function(e) {
         e.preventDefault();
         var parent = $(this).closest('.content-provider-element');
         parent.animate({'backgroundColor':'#fb6c6c'},300).animate({'opacity': 0, 'height': 0 }, 300, function() {
             parent.remove();
         });
+        jQuery('#warnings-validation').html('<div class="notice">{t}Please, remember save positions after finish.{/t}</div>');
     });
     $('div.placeholder').on('mouseleave', 'div.content-provider-element', function(e) {
         $(this).find('.content-action-buttons').removeClass('open');
     });
 
 
-    // When get_ids button is clicked get all the contents inside any placeholder
-    // and build some js objects with information about them
-    jQuery('#get_ids').click(function() {
+    /***************************************************************************
+    * Content provider code
+    ***************************************************************************/
+
+    $( "#content-provider").dialog({ minWidth: 600, autoOpen: false, maxHeight: 500 });
+
+    $( "#content-provider .content-provider-block-wrapper").tabs({
+        ajaxOptions: {
+            error: function( xhr, status, index, anchor ) {
+                $( anchor.hash ).html(
+                    "<div>Couldn't load this tab. We'll try to fix this as soon as possible. " +
+                    "If this wouldn't be a demo.</div>" );
+            }
+        },
+        load: function(event,ui) {
+            makeContentProviderAndPlaceholdersSortable();
+        }
+    }).disableSelection();
+
+    $( "#content-provider").on('click', '.pagination a', function(e, ui){
+        e.preventDefault();
+        var href   = $(this).attr('href');
+        var parent = $(this).closest('.ui-tabs-panel');
+        $.ajax({
+            url: $(this).attr('href'),
+            success: function(data){
+                parent.html(data);
+            }
+        })
+    })
+
+
+    /***************************************************************************
+    * General buttons actions code
+    ***************************************************************************/
+
+    $('#button_addnewcontents').on('click', function() {
+        $( "#content-provider").dialog('open');
+    });
+
+    $('#button_clearcache').on('click', function(e, ui) {
+        e.preventDefault();
+        var category = $(this).data('category');
+        $.ajax({
+            url: "/admin/controllers/tpl_manager/refresh_caches.php?category=" + encodeURIComponent(category),
+            success: function(data){
+                $('#warnings-validation').html(data);
+            }
+        });
+    });
+
+    $('#button_savepositions').on('click',function() {
 
         var els = [];
         var category = jQuery("#frontpagemanager").data("category");
@@ -77,23 +134,11 @@ jQuery(document).ready(function($){
         return false;
     });
 
-    $( "#content-provider").dialog({ minWidth: 600, autoOpen: false, maxHeight: 500 });
-
-    $('#button_addnewcontents').on('click', function() {
-        $( "#content-provider").dialog('open');
+    $('#button_previewfrontpage, #button_moreactions').on('click', function (e, ui){
+        e.preventDefault();
+        alert('not implemented');
     });
 
-    $( "#content-provider .content-provider-block-wrapper").tabs({
-        ajaxOptions: {
-            error: function( xhr, status, index, anchor ) {
-                $( anchor.hash ).html(
-                    "<div>Couldn't load this tab. We'll try to fix this as soon as possible. " +
-                    "If this wouldn't be a demo.</div>" );
-            }
-        },
-        load: function(event,ui) {
-            makeContentProviderAndPlaceholdersSortable();
-        }
-    }).disableSelection();
+
 
 });

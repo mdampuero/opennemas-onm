@@ -158,6 +158,10 @@ switch ($action) {
 
     break;
 
+    case 'content-provider':
+        $tpl->display('search_advanced/content-provider.tpl');
+        break;
+
     default:
         Application::forward('search_advanced.php');
         return;
@@ -190,7 +194,7 @@ function checkTypes(& $htmlCheck)
         if($aType['name']== 'static_page'){
             $aType['name']= 'static_pages';
         }
-        
+
         if (mod::moduleExists(strtoupper($aType['name']).'_MANAGER')) {
             if (mod::isActivated(strtoupper($aType['name']).'_MANAGER')) {
                 if(isset($_REQUEST[$aType[1]]))
@@ -205,7 +209,7 @@ function checkTypes(& $htmlCheck)
             }
         }
     }
-    
+
     try
     {
         $szTypes = trim($szTypes);

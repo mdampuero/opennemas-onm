@@ -4,8 +4,5 @@
     {/foreach}
 </div>
 <div class="pagination">
-    <ul>
-        <li><a href="#" title="Go to the next contents">Next »</a></li>
-        <li><a href="#" title="Go to the previous contents">« Previous</a></li>
-    </ul><!-- / -->
+    {$pager->links}
 </div><!-- / -->

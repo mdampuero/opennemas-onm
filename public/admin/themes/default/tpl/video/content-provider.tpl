@@ -3,3 +3,6 @@
         {include file="video/content-provider/video.tpl"}
     {/foreach}
 </div>
+<div class="pagination">
+    {$pager->links}
+</div><!-- / -->

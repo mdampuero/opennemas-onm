@@ -13,24 +13,41 @@
         </a>
         <ul class="dropdown-menu">
             <li>
-                <a href="{$smarty.server.PHP_SELF}?action=delete&amp;id={$content->id}&amp;category={$category}" title="{t}Delete{/t}" class="delete">{t}Delete{/t}</a>
-            </li>
-            <li>
                 <a title="{t 1=$content->title}Edit '%1'{/t}" href="/admin/article.php?action=read&amp;id={$content->id}&amp;category={$smarty.request.category}">
-                    {t}Edit{/t}
+                    <i class="icon-pencil"></i> {t}Edit{/t}
                 </a>
             </li>
             <li>
                 <a title="{t}Suggest to home{/t}" href="#">
-                    {t}Suggest to home{/t}
+                    <i class="icon-ban"></i> {t}Remove{/t}
                 </a>
             </li>
+            <li>
+                <a title="{t}Arquive{/t}" href="#">
+                    <i class="icon-inbox"></i> {t}Arquive{/t}
+                </a>
+            </li>
+            <li>
+                {if !$params['home']}
+                <a title="{t}Suggest to home{/t}" href="#">
+                    <i class="icon-home"></i> {t}Suggest to home{/t}
+                </a>
+                {/if}
+            </li>
+            <li class="divider"></li>
+            <li>
+                <a href="{$smarty.server.PHP_SELF}?action=delete&amp;id={$content->id}&amp;category={$category}" title="{t}Delete{/t}" class="delete">
+                    <i class="icon-trash"></i> {t}Send to trash{/t}
+                </a>
+            </li>
+
+            <!--
             <li class="divider"></li>
             <li>
                 <a title="{t}Settings{/t}" href="#">
                     {t}Settings{/t}
                 </a>
-            </li>
+            </li> -->
         </ul>
     </div>
 </div>
@@ -39,13 +56,7 @@
 
 <!-- <table id='tabla{$aux}' name='tabla{$aux}' value="{$suggestedArticles[d]->id}" data="Article" width="100%" class="tabla" style="text-align:center;padding:0px;padding-bottom:4px;">
     <tr class="row1{schedule_class item=$suggestedArticles[d]}" style="cursor:pointer;">
-        <td style="text-align: left; width:10px;">
-            <input type="checkbox" class="minput" pos={$aux} id="selected_{$placeholder}_{$aux}" name="selected_fld[]" value="{$suggestedArticles[d]->id}"  style="cursor:pointer;" />
-        </td>
-         <td style="text-align: left;"  onmouseout="UnTip()" onmouseover="Tip('<b>Creado:</b>{$suggestedArticles[d]->created}<br /><b>Vistos:</b>{$suggestedArticles[d]->views}<br /><b>Votos:</b>{$suggestedArticles[d]->rating}<br /><b>Comentarios:</b>{$suggestedArticles[d]->comment}<br /><b>Publisher:</b>{$suggestedArticles[d]->publisher}<br /><b>Last Editor:</b>{$suggestedArticles[d]->editor}<br />{schedule_info item=$suggestedArticles[d]}', SHADOW, true, ABOVE, true, WIDTH, 300)" onClick="javascript:document.getElementById('selected_{$placeholder}_{$aux}').click();">
 
-            {is_clone item=$suggestedArticles[d]}{$suggestedArticles[d]->title|clearslash}
-        </td>
         {if $category neq 'home'}
             <td align="center">
                 <div class="inhome" style="display:inline;">
@@ -69,11 +80,7 @@
         <td style="width:80px; text-align:right; padding-right:10px;">
 
             <ul class="action-buttons">
-                <li>
-                    <a href="{$smarty.server.PHP_SELF}?id={$suggestedArticles[d]->id}&action=read" title="Editar">
-                        <img src="{$params.IMAGE_DIR}edit.png" border="0" alt="Editar" />
-                    </a>
-                </li>
+
                 <li>
                     <a  onClick="javascript:confirmar_hemeroteca(this,'{$category}','{$suggestedArticles[d]->id}') "  title="Archivar">
                        <img src="{$params.IMAGE_DIR}save_hemeroteca_icon.png" border="0" alt="Archivar" />

@@ -3,3 +3,6 @@
         {include file="article/content-provider/article.tpl"}
     {/foreach}
 </div>
+<div class="pagination">
+    {$pager->links}
+</div><!-- / -->

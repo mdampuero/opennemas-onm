@@ -14,23 +14,24 @@
         <ul class="dropdown-menu">
             <li>
                 <a href="#" title="{t}Delete{/t}" class="delete">
-                    {t}Delete{/t}
+                    <i class="icon-trash"></i> {t}Delete{/t}
                 </a>
             </li>
             <li>
                 <a title="{t 1=$content->title}Edit '%1'{/t}" href="/admin/controllers/video/video.php?action=delete&amp;id={$content->id}">
-                    {t}Edit{/t}
+                    <i class="icon-pencil"></i> {t}Edit{/t}
                 </a>
             </li>
             <li>
+                {if !$params['home']}
                 <a title="{t}Suggest to home{/t}" href="#">
-                    {t}Suggest to home{/t}
+                    <i class="icon-home"></i> {t}Suggest to home{/t}
                 </a>
+                {/if}
             </li>
-            <li class="divider"></li>
             <li>
-                <a title="{t}Settings{/t}" href="#">
-                    Settings
+                <a title="{t}Arquive{/t}" href="#">
+                    <i class="icon-inbox"></i> {t}Arquive{/t}
                 </a>
             </li>
         </ul>

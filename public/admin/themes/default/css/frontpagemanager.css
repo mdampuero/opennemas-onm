@@ -36,7 +36,7 @@
 #frontpagemanager .placeholder,
 #frontpagemanager div.placeholder div.content {
     min-height:50px;
-    background:#E7EBF2;
+    background:#ececec;
 }
 #frontpagemanager div.static {
     background:#aaa;
@@ -203,7 +203,7 @@ div.content .content-action-buttons{
 }
 #frontpagemanager div.content .btn-group .btn {
     margin-left: 0;
-    padding: 0 6px;
+    padding: 3px 6px;
     font-size: 0.9em;
     color:Black;
 }
@@ -246,7 +246,7 @@ div.content-provider-element .selectButton:hover {
     z-index: 99999;
 }
 .ui-sortable-helper .selectButton,
-.ui-sortable-helper ul.action-buttons {
+.ui-sortable-helper .content-action-buttons {
     display:none !important;
 }
 
@@ -366,4 +366,16 @@ div#content-provider #toggler{
 
 .ui-sortable-helper {
     z-index:9999 !important;
+}
+
+#content-provider .pagination {
+    float:none;
+    text-align:right;
+    height:20px;
+    padding:0;
+    width:100%;
+    background:#ccc;
+}
+#content-provider .pagination a{
+    float:none;
 }

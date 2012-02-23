@@ -148,6 +148,7 @@ class LayoutManager
                     $contentTypeName = $content->content_type_name;
                     if (!empty($contentTypeName)) {
                         $tpl->assign('content',$content);
+                        $tpl->assign('params',$this->params);
                         $output .= $tpl->fetch(strtolower($content->content_type_name).'/content-provider/'.strtolower($content->content_type_name).".tpl");
                     }
                 }
@@ -168,7 +169,10 @@ class LayoutManager
 
         if (isset($params['contents'])) {
             $this->contents = $params['contents'];
+            unset($params['contents']);
         }
+
+        $this->params = $params;
 
         $output = '';
         foreach ($this->layoutDoc as $element => $value ) {
