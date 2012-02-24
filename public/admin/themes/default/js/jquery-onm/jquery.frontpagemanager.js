@@ -10,7 +10,7 @@ jQuery(document).ready(function($){
             connectWith: "div.placeholder div.content",
             placeholder: 'placeholder-element',
             update: function(event,ui) {
-                jQuery('#warnings-validation').html('<div class="notice">{t}Please, remember save positions after finish.{/t}</div>');
+                jQuery('#warnings-validation').html('<div class="notice">'+frontpage_messages.remember_save_positions+'</div>');
             }
             //containment: '#content-with-ticker'
         }).disableSelection();
@@ -20,7 +20,7 @@ jQuery(document).ready(function($){
             connectWith: "div#content-provider .ui-tabs-panel > div, div.placeholder div.content",
             placeholder: 'placeholder-element',
             update: function(event,ui) {
-                jQuery('#warnings-validation').html('<div class="notice">{t}Please, remember save positions after finish.{/t}</div>');
+                jQuery('#warnings-validation').html('<div class="notice">'+frontpage_messages.remember_save_positions+'</div>');
             }
             //containment: '#content-with-ticker'
         }).disableSelection();
@@ -39,6 +39,9 @@ jQuery(document).ready(function($){
            !checkbox.is(':checked')
        );
     });
+    $('div.placeholder').on('mouseleave', 'div.content-provider-element', function(e) {
+        $(this).find('.content-action-buttons').removeClass('open');
+    });
 
 
     $('div.placeholder').on('click', 'div.content-provider-element a.drop-element', function(e) {
@@ -47,11 +50,14 @@ jQuery(document).ready(function($){
         parent.animate({'backgroundColor':'#fb6c6c'},300).animate({'opacity': 0, 'height': 0 }, 300, function() {
             parent.remove();
         });
-        jQuery('#warnings-validation').html('<div class="notice">{t}Please, remember save positions after finish.{/t}</div>');
+        jQuery('#warnings-validation').html('<div class="notice">'+frontpage_messages.remember_save_positions+'</div>');
     });
-    $('div.placeholder').on('mouseleave', 'div.content-provider-element', function(e) {
-        $(this).find('.content-action-buttons').removeClass('open');
-    });
+
+    // suggest-home
+
+    // arquive
+
+    // send-to-trash
 
 
     /***************************************************************************
@@ -64,7 +70,7 @@ jQuery(document).ready(function($){
         ajaxOptions: {
             error: function( xhr, status, index, anchor ) {
                 $( anchor.hash ).html(
-                    "<div>Couldn't load this tab. We'll try to fix this as soon as possible.</div>" );
+                    "<div>"+frontpage_messages.error_tab_content_provider+"</div>" );
             }
         },
         load: function(event,ui) {

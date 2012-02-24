@@ -13,25 +13,31 @@
         </a>
         <ul class="dropdown-menu">
             <li>
-                <a href="#" title="{t}Delete{/t}" class="delete">
-                    <i class="icon-trash"></i> {t}Delete{/t}
-                </a>
-            </li>
-            <li>
                 <a title="{t 1=$content->title}Edit '%1'{/t}" href="/admin/controllers/opinion/opinion.php?action=delete&amp;id={$content->id}">
                     <i class="icon-pencil"></i> {t}Edit{/t}
                 </a>
             </li>
             <li>
+                <a href="#" title="{t}Delete{/t}" class="drop-delete">
+                    <i class="icon-trash"></i> {t}Remove{/t}
+                </a>
+            </li>
+            <li>
+                <a title="{t}Arquive{/t}" href="#" class="arquive">
+                    <i class="icon-inbox"></i> {t}Arquive{/t}
+                </a>
+            </li>
+            <li>
                 {if !$params['home']}
-                <a title="{t}Suggest to home{/t}" href="#">
+                <a title="{t}Suggest to home{/t}" href="#" class="suggest-home">
                     <i class="icon-home"></i> {t}Suggest to home{/t}
                 </a>
                 {/if}
             </li>
+            <li class="divider"></li>
             <li>
-                <a title="{t}Arquive{/t}" href="#">
-                    <i class="icon-inbox"></i> {t}Arquive{/t}
+                <a href="{$smarty.server.PHP_SELF}?action=delete&amp;id={$content->id}&amp;category={$category}" title="{t}Delete{/t}" class="send-to-trash">
+                    <i class="icon-trash"></i> {t}Send to trash{/t}
                 </a>
             </li>
         </ul>
