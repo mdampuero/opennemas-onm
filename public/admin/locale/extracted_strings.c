@@ -281,13 +281,28 @@ gettext("words");
 gettext("Body");
 
 /* public/admin/themes/default/tpl//comment/list.tpl */
-gettext("ALL");
+gettext("Delete");
 
 /* public/admin/themes/default/tpl//comment/list.tpl */
-gettext("HOME");
+gettext("Delete");
 
 /* public/admin/themes/default/tpl//comment/list.tpl */
-gettext("OPINION");
+gettext("Unpublish");
+
+/* public/admin/themes/default/tpl//comment/list.tpl */
+gettext("Unpublish");
+
+/* public/admin/themes/default/tpl//comment/list.tpl */
+gettext("Unpublish");
+
+/* public/admin/themes/default/tpl//comment/list.tpl */
+gettext("Publish");
+
+/* public/admin/themes/default/tpl//comment/list.tpl */
+gettext("Publish");
+
+/* public/admin/themes/default/tpl//comment/list.tpl */
+gettext("Publish");
 
 /* public/admin/themes/default/tpl//comment/list.tpl */
 gettext("Pending");
@@ -343,6 +358,42 @@ gettext("from facebook");
 /* public/admin/themes/default/tpl//comment/list.tpl */
 gettext("There is no comments here.");
 
+/* public/admin/themes/default/tpl//comment/modals/_modalAccept.tpl */
+gettext("Delete comments");
+
+/* public/admin/themes/default/tpl//comment/modals/_modalAccept.tpl */
+gettext("You must select some elements.");
+
+/* public/admin/themes/default/tpl//comment/modals/_modalAccept.tpl */
+gettext("Accept");
+
+/* public/admin/themes/default/tpl//comment/modals/_modalBatchDelete.tpl */
+gettext("Delete comments");
+
+/* public/admin/themes/default/tpl//comment/modals/_modalBatchDelete.tpl */
+gettext("Are you sure you want to delete <span>%num%</span> comments?");
+
+/* public/admin/themes/default/tpl//comment/modals/_modalBatchDelete.tpl */
+gettext("Yes, delete all");
+
+/* public/admin/themes/default/tpl//comment/modals/_modalBatchDelete.tpl */
+gettext("No");
+
+/* public/admin/themes/default/tpl//comment/modals/_modalBatchDelete.tpl */
+gettext("You must select some elements.");
+
+/* public/admin/themes/default/tpl//comment/modals/_modalDelete.tpl */
+gettext("Delete comment");
+
+/* public/admin/themes/default/tpl//comment/modals/_modalDelete.tpl */
+gettext("Are you sure that do you want delete \"<span>%title%</span>\"?");
+
+/* public/admin/themes/default/tpl//comment/modals/_modalDelete.tpl */
+gettext("Yes, delete");
+
+/* public/admin/themes/default/tpl//comment/modals/_modalDelete.tpl */
+gettext("No");
+
 /* public/admin/themes/default/tpl//video/selecttype.tpl */
 gettext("Video manager");
 
@@ -351,6 +402,39 @@ gettext("Which type of video do you want to add?");
 
 /* public/admin/themes/default/tpl//video/selecttype.tpl */
 gettext("Upload file from my computer");
+
+/* public/admin/themes/default/tpl//video/content-provider/video.tpl */
+gettext("Actions");
+
+/* public/admin/themes/default/tpl//video/content-provider/video.tpl */
+gettext("Edit '%1'");
+
+/* public/admin/themes/default/tpl//video/content-provider/video.tpl */
+gettext("Edit");
+
+/* public/admin/themes/default/tpl//video/content-provider/video.tpl */
+gettext("Delete");
+
+/* public/admin/themes/default/tpl//video/content-provider/video.tpl */
+gettext("Remove");
+
+/* public/admin/themes/default/tpl//video/content-provider/video.tpl */
+gettext("Arquive");
+
+/* public/admin/themes/default/tpl//video/content-provider/video.tpl */
+gettext("Arquive");
+
+/* public/admin/themes/default/tpl//video/content-provider/video.tpl */
+gettext("Suggest to home");
+
+/* public/admin/themes/default/tpl//video/content-provider/video.tpl */
+gettext("Suggest to home");
+
+/* public/admin/themes/default/tpl//video/content-provider/video.tpl */
+gettext("Delete");
+
+/* public/admin/themes/default/tpl//video/content-provider/video.tpl */
+gettext("Send to trash");
 
 /* public/admin/themes/default/tpl//video/config.tpl */
 gettext("video :: Configuration");
@@ -449,13 +533,43 @@ gettext("Video Manager :: Listing videos");
 gettext("Delete");
 
 /* public/admin/themes/default/tpl//video/list.tpl */
+gettext("Delete");
+
+/* public/admin/themes/default/tpl//video/list.tpl */
+gettext("Delete");
+
+/* public/admin/themes/default/tpl//video/list.tpl */
+gettext("Delete");
+
+/* public/admin/themes/default/tpl//video/list.tpl */
+gettext("Unpublish");
+
+/* public/admin/themes/default/tpl//video/list.tpl */
+gettext("Unpublish");
+
+/* public/admin/themes/default/tpl//video/list.tpl */
 gettext("Unpublish");
 
 /* public/admin/themes/default/tpl//video/list.tpl */
 gettext("Publish");
 
 /* public/admin/themes/default/tpl//video/list.tpl */
+gettext("Publish");
+
+/* public/admin/themes/default/tpl//video/list.tpl */
+gettext("Publish");
+
+/* public/admin/themes/default/tpl//video/list.tpl */
 gettext("New video");
+
+/* public/admin/themes/default/tpl//video/list.tpl */
+gettext("Save positions");
+
+/* public/admin/themes/default/tpl//video/list.tpl */
+gettext("Save positions");
+
+/* public/admin/themes/default/tpl//video/list.tpl */
+gettext("Save positions");
 
 /* public/admin/themes/default/tpl//video/list.tpl */
 gettext("Config video module");
@@ -485,13 +599,58 @@ gettext("Published");
 gettext("Favorite");
 
 /* public/admin/themes/default/tpl//video/list.tpl */
+gettext("Home");
+
+/* public/admin/themes/default/tpl//video/list.tpl */
 gettext("Actions");
+
+/* public/admin/themes/default/tpl//video/list.tpl */
+gettext("Take out from home");
+
+/* public/admin/themes/default/tpl//video/list.tpl */
+gettext("Put in home");
 
 /* public/admin/themes/default/tpl//video/list.tpl */
 gettext("Edit");
 
 /* public/admin/themes/default/tpl//video/list.tpl */
 gettext("There is no videos yet.");
+
+/* public/admin/themes/default/tpl//video/modals/_modalAccept.tpl */
+gettext("Delete videos");
+
+/* public/admin/themes/default/tpl//video/modals/_modalAccept.tpl */
+gettext("You must select some elements.");
+
+/* public/admin/themes/default/tpl//video/modals/_modalAccept.tpl */
+gettext("Accept");
+
+/* public/admin/themes/default/tpl//video/modals/_modalBatchDelete.tpl */
+gettext("Delete videos");
+
+/* public/admin/themes/default/tpl//video/modals/_modalBatchDelete.tpl */
+gettext("Are you sure you want to delete <span>%num%</span> videos?");
+
+/* public/admin/themes/default/tpl//video/modals/_modalBatchDelete.tpl */
+gettext("Yes, delete all");
+
+/* public/admin/themes/default/tpl//video/modals/_modalBatchDelete.tpl */
+gettext("No");
+
+/* public/admin/themes/default/tpl//video/modals/_modalBatchDelete.tpl */
+gettext("You must select some elements.");
+
+/* public/admin/themes/default/tpl//video/modals/_modalDelete.tpl */
+gettext("Delete video");
+
+/* public/admin/themes/default/tpl//video/modals/_modalDelete.tpl */
+gettext("Are you sure that do you want delete \"<span>%title%</span>\"?");
+
+/* public/admin/themes/default/tpl//video/modals/_modalDelete.tpl */
+gettext("Yes, delete");
+
+/* public/admin/themes/default/tpl//video/modals/_modalDelete.tpl */
+gettext("No");
 
 /* public/admin/themes/default/tpl//video/partials/_video_information.tpl */
 gettext("Title:");
@@ -626,6 +785,36 @@ gettext("Newsstand Manager");
 gettext("Widget Home");
 
 /* public/admin/themes/default/tpl//newsstand/list.tpl */
+gettext("Delete");
+
+/* public/admin/themes/default/tpl//newsstand/list.tpl */
+gettext("Delete");
+
+/* public/admin/themes/default/tpl//newsstand/list.tpl */
+gettext("Delete");
+
+/* public/admin/themes/default/tpl//newsstand/list.tpl */
+gettext("Delete");
+
+/* public/admin/themes/default/tpl//newsstand/list.tpl */
+gettext("Unpublish");
+
+/* public/admin/themes/default/tpl//newsstand/list.tpl */
+gettext("Unpublish");
+
+/* public/admin/themes/default/tpl//newsstand/list.tpl */
+gettext("Unpublish");
+
+/* public/admin/themes/default/tpl//newsstand/list.tpl */
+gettext("Publish");
+
+/* public/admin/themes/default/tpl//newsstand/list.tpl */
+gettext("Publish");
+
+/* public/admin/themes/default/tpl//newsstand/list.tpl */
+gettext("Publish");
+
+/* public/admin/themes/default/tpl//newsstand/list.tpl */
 gettext("New cover");
 
 /* public/admin/themes/default/tpl//newsstand/list.tpl */
@@ -675,6 +864,42 @@ gettext("Put in home");
 
 /* public/admin/themes/default/tpl//newsstand/list.tpl */
 gettext("There is no stands");
+
+/* public/admin/themes/default/tpl//newsstand/modals/_modalAccept.tpl */
+gettext("Delete newsstands");
+
+/* public/admin/themes/default/tpl//newsstand/modals/_modalAccept.tpl */
+gettext("You must select some elements.");
+
+/* public/admin/themes/default/tpl//newsstand/modals/_modalAccept.tpl */
+gettext("Accept");
+
+/* public/admin/themes/default/tpl//newsstand/modals/_modalBatchDelete.tpl */
+gettext("Delete kioskos");
+
+/* public/admin/themes/default/tpl//newsstand/modals/_modalBatchDelete.tpl */
+gettext("Are you sure you want to delete <span>%num%</span> kioskos?");
+
+/* public/admin/themes/default/tpl//newsstand/modals/_modalBatchDelete.tpl */
+gettext("Yes, delete all");
+
+/* public/admin/themes/default/tpl//newsstand/modals/_modalBatchDelete.tpl */
+gettext("No");
+
+/* public/admin/themes/default/tpl//newsstand/modals/_modalBatchDelete.tpl */
+gettext("You must select some elements.");
+
+/* public/admin/themes/default/tpl//newsstand/modals/_modalDelete.tpl */
+gettext("Delete kiosko");
+
+/* public/admin/themes/default/tpl//newsstand/modals/_modalDelete.tpl */
+gettext("Are you sure that do you want delete \"<span>%title%</span>\"?");
+
+/* public/admin/themes/default/tpl//newsstand/modals/_modalDelete.tpl */
+gettext("Yes, delete");
+
+/* public/admin/themes/default/tpl//newsstand/modals/_modalDelete.tpl */
+gettext("No");
 
 /* public/admin/themes/default/tpl//album/config.tpl */
 gettext("Album :: Configuration");
@@ -742,57 +967,6 @@ gettext("If previus select most views for order the album's frontpage. Use this 
 /* public/admin/themes/default/tpl//album/config.tpl */
 gettext("Save");
 
-/* public/admin/themes/default/tpl//album/album_images.tpl */
-gettext("Album images (Double click to select and cut images)");
-
-/* public/admin/themes/default/tpl//album/album_images.tpl */
-gettext("Show image");
-
-/* public/admin/themes/default/tpl//album/album_images.tpl */
-gettext("Show image");
-
-/* public/admin/themes/default/tpl//album/album_images.tpl */
-gettext("Available images");
-
-/* public/admin/themes/default/tpl//album/album_images.tpl */
-gettext("Search images by title...");
-
-/* public/admin/themes/default/tpl//album/album_images.tpl */
-gettext("Images for album:");
-
-/* public/admin/themes/default/tpl//album/album_images.tpl */
-gettext("File:");
-
-/* public/admin/themes/default/tpl//album/album_images.tpl */
-gettext("Dimensions:");
-
-/* public/admin/themes/default/tpl//album/album_images.tpl */
-gettext("Weight:");
-
-/* public/admin/themes/default/tpl//album/album_images.tpl */
-gettext("Created:");
-
-/* public/admin/themes/default/tpl//album/album_images.tpl */
-gettext("Description:");
-
-/* public/admin/themes/default/tpl//album/album_images.tpl */
-gettext("Default image:");
-
-/* public/admin/themes/default/tpl//album/album_images.tpl */
-gettext("Tags:");
-
-/* public/admin/themes/default/tpl//album/album_images.tpl */
-gettext("Image");
-
-/* public/admin/themes/default/tpl//album/album_images.tpl */
-gettext("Footer text for image:");
-
-/* public/admin/themes/default/tpl//album/album_images.tpl */
-gettext("\"test image\"");
-
-/* public/admin/themes/default/tpl//album/album_images.tpl */
-gettext("\"Frontpage image\"");
-
 /* public/admin/themes/default/tpl//album/new.tpl */
 gettext("Album manager");
 
@@ -806,13 +980,19 @@ gettext("Editing Album");
 gettext("Save and continue");
 
 /* public/admin/themes/default/tpl//album/new.tpl */
+gettext("Save and continue");
+
+/* public/admin/themes/default/tpl//album/new.tpl */
+gettext("Save");
+
+/* public/admin/themes/default/tpl//album/new.tpl */
+gettext("Save");
+
+/* public/admin/themes/default/tpl//album/new.tpl */
 gettext("Save");
 
 /* public/admin/themes/default/tpl//album/new.tpl */
 gettext("Go back");
-
-/* public/admin/themes/default/tpl//album/new.tpl */
-gettext("Enter album information");
 
 /* public/admin/themes/default/tpl//album/new.tpl */
 gettext("Title:");
@@ -821,25 +1001,22 @@ gettext("Title:");
 gettext("\"Album\"");
 
 /* public/admin/themes/default/tpl//album/new.tpl */
-gettext("%1");
-
-/* public/admin/themes/default/tpl//album/new.tpl */
-gettext("%1");
-
-/* public/admin/themes/default/tpl//album/new.tpl */
 gettext("Available:");
 
 /* public/admin/themes/default/tpl//album/new.tpl */
-gettext("No");
+gettext("Category");
 
 /* public/admin/themes/default/tpl//album/new.tpl */
-gettext("Yes");
+gettext("%1");
 
 /* public/admin/themes/default/tpl//album/new.tpl */
-gettext("\"Album\"");
+gettext("%1");
 
 /* public/admin/themes/default/tpl//album/new.tpl */
-gettext("\"description\"");
+gettext("Agency");
+
+/* public/admin/themes/default/tpl//album/new.tpl */
+gettext("Description");
 
 /* public/admin/themes/default/tpl//album/new.tpl */
 gettext("%1");
@@ -848,11 +1025,17 @@ gettext("%1");
 gettext("Keywords:");
 
 /* public/admin/themes/default/tpl//album/new.tpl */
-gettext("\"Metadata\"");
-
-/* public/admin/themes/default/tpl//album/new.tpl */
 gettext("Separated by coma");
 
+/* public/admin/themes/default/tpl//album/new.tpl */
+gettext("\"Metadata\"");
+
+/* public/admin/themes/default/tpl//album/list.tpl */
+gettext("Album manager");
+
+/* public/admin/themes/default/tpl//album/list.tpl */
+gettext("Delete");
+
 /* public/admin/themes/default/tpl//album/list.tpl */
 gettext("Delete");
 
@@ -861,6 +1044,12 @@ gettext("Delete");
 
 /* public/admin/themes/default/tpl//album/list.tpl */
 gettext("Delete");
+
+/* public/admin/themes/default/tpl//album/list.tpl */
+gettext("Unpublish");
+
+/* public/admin/themes/default/tpl//album/list.tpl */
+gettext("Unpublish");
 
 /* public/admin/themes/default/tpl//album/list.tpl */
 gettext("Unpublish");
@@ -961,8 +1150,104 @@ gettext("Delete");
 /* public/admin/themes/default/tpl//album/list.tpl */
 gettext("There is no albums yet");
 
-/* public/admin/themes/default/tpl//album/modals/confirm_delete.tpl */
+/* public/admin/themes/default/tpl//album/modals/_edit_album_photo.tpl */
+gettext("Complete all the required album information before save it");
+
+/* public/admin/themes/default/tpl//album/modals/_edit_album_photo.tpl */
+gettext("File name");
+
+/* public/admin/themes/default/tpl//album/modals/_edit_album_photo.tpl */
+gettext("Creation date");
+
+/* public/admin/themes/default/tpl//album/modals/_edit_album_photo.tpl */
+gettext("Description");
+
+/* public/admin/themes/default/tpl//album/modals/_edit_album_photo.tpl */
+gettext("Tags");
+
+/* public/admin/themes/default/tpl//album/modals/_edit_album_photo.tpl */
+gettext("Close");
+
+/* public/admin/themes/default/tpl//album/modals/_modalAccept.tpl */
+gettext("Delete albums");
+
+/* public/admin/themes/default/tpl//album/modals/_modalAccept.tpl */
+gettext("You must select some elements.");
+
+/* public/admin/themes/default/tpl//album/modals/_modalAccept.tpl */
+gettext("Accept");
+
+/* public/admin/themes/default/tpl//album/modals/_edit_album_error.tpl */
+gettext("Complete all the required album information before save it");
+
+/* public/admin/themes/default/tpl//album/modals/_edit_album_error.tpl */
+gettext("Check that you have included more than one image in this album");
+
+/* public/admin/themes/default/tpl//album/modals/_edit_album_error.tpl */
+gettext("Assign an image as a cover image");
+
+/* public/admin/themes/default/tpl//album/modals/_edit_album_error.tpl */
+gettext("Close");
+
+/* public/admin/themes/default/tpl//album/modals/_modalBatchDelete.tpl */
+gettext("Delete albums");
+
+/* public/admin/themes/default/tpl//album/modals/_modalBatchDelete.tpl */
+gettext("Are you sure you want to delete <span>%num%</span> albums?");
+
+/* public/admin/themes/default/tpl//album/modals/_modalBatchDelete.tpl */
+gettext("Yes, delete all");
+
+/* public/admin/themes/default/tpl//album/modals/_modalBatchDelete.tpl */
 gettext("No");
+
+/* public/admin/themes/default/tpl//album/modals/_modalBatchDelete.tpl */
+gettext("You must select some elements.");
+
+/* public/admin/themes/default/tpl//album/modals/_modalDelete.tpl */
+gettext("Delete album");
+
+/* public/admin/themes/default/tpl//album/modals/_modalDelete.tpl */
+gettext("Are you sure that do you want delete \"<span>%title%</span>\"?");
+
+/* public/admin/themes/default/tpl//album/modals/_modalDelete.tpl */
+gettext("Yes, delete");
+
+/* public/admin/themes/default/tpl//album/modals/_modalDelete.tpl */
+gettext("No");
+
+/* public/admin/themes/default/tpl//album/partials/_images.tpl */
+gettext("Images in this album");
+
+/* public/admin/themes/default/tpl//album/partials/_images.tpl */
+gettext("Cover image");
+
+/* public/admin/themes/default/tpl//album/partials/_images.tpl */
+gettext("Drop");
+
+/* public/admin/themes/default/tpl//album/partials/_images.tpl */
+gettext("File name");
+
+/* public/admin/themes/default/tpl//album/partials/_images.tpl */
+gettext("Creation date");
+
+/* public/admin/themes/default/tpl//album/partials/_images.tpl */
+gettext("Description");
+
+/* public/admin/themes/default/tpl//album/partials/_images.tpl */
+gettext("Tags");
+
+/* public/admin/themes/default/tpl//album/partials/_images.tpl */
+gettext("Available images");
+
+/* public/admin/themes/default/tpl//album/partials/_images.tpl */
+gettext("Search images by title...");
+
+/* public/admin/themes/default/tpl//album/partials/_images.tpl */
+gettext("Edit");
+
+/* public/admin/themes/default/tpl//album/partials/_images.tpl */
+gettext("Drop");
 
 /* public/admin/themes/default/tpl//menues/edit.tpl */
 gettext("Menu manager");
@@ -1014,6 +1299,9 @@ gettext(" Use add button for create a new link in the menu");
 
 /* public/admin/themes/default/tpl//menues/edit.tpl */
 gettext(" Use dobleClick if you want delete or edit one element");
+
+/* public/admin/themes/default/tpl//menues/edit.tpl */
+gettext(" Only allow two levels in menus");
 
 /* public/admin/themes/default/tpl//menues/edit.tpl */
 gettext("Description");
@@ -1130,7 +1418,7 @@ gettext("Delete menus");
 gettext("Are you sure you want to delete <span>%num%</span> menus?");
 
 /* public/admin/themes/default/tpl//menues/modals/_modalBatchDelete.tpl */
-gettext("Yes");
+gettext("Yes, delete all");
 
 /* public/admin/themes/default/tpl//menues/modals/_modalBatchDelete.tpl */
 gettext("No");
@@ -1142,13 +1430,55 @@ gettext("You must select some elements.");
 gettext("Delete menu");
 
 /* public/admin/themes/default/tpl//menues/modals/_modalDelete.tpl */
-gettext("Are you sure that do you want delete \"%title%\"?");
+gettext("Are you sure that do you want delete \"<span>%title%</span>\"?");
 
 /* public/admin/themes/default/tpl//menues/modals/_modalDelete.tpl */
-gettext("Yes");
+gettext("Yes, delete");
 
 /* public/admin/themes/default/tpl//menues/modals/_modalDelete.tpl */
 gettext("No");
+
+/* public/admin/themes/default/tpl//article/content-provider/article.tpl */
+gettext("Article");
+
+/* public/admin/themes/default/tpl//article/content-provider/article.tpl */
+gettext("Actions");
+
+/* public/admin/themes/default/tpl//article/content-provider/article.tpl */
+gettext("Edit '%1'");
+
+/* public/admin/themes/default/tpl//article/content-provider/article.tpl */
+gettext("Edit");
+
+/* public/admin/themes/default/tpl//article/content-provider/article.tpl */
+gettext("Suggest to home");
+
+/* public/admin/themes/default/tpl//article/content-provider/article.tpl */
+gettext("Remove");
+
+/* public/admin/themes/default/tpl//article/content-provider/article.tpl */
+gettext("Arquive");
+
+/* public/admin/themes/default/tpl//article/content-provider/article.tpl */
+gettext("Arquive");
+
+/* public/admin/themes/default/tpl//article/content-provider/article.tpl */
+gettext("Suggest to home");
+
+/* public/admin/themes/default/tpl//article/content-provider/article.tpl */
+gettext("Suggest to home");
+
+/* public/admin/themes/default/tpl//article/content-provider/article.tpl */
+gettext("Delete");
+
+/* public/admin/themes/default/tpl//article/content-provider/article.tpl */
+gettext("Send to trash");
+
+/* public/admin/themes/default/tpl//article/content-provider/article.tpl */
+gettext("Settings");
+
+/* public/admin/themes/default/tpl//article/content-provider/article.tpl */
+gettext("Settings");
 
 /* public/admin/themes/default/tpl//article/pending.tpl */
 gettext("Pending articles");
@@ -2156,10 +2486,31 @@ gettext("Polls manager");
 gettext("Delete");
 
 /* public/admin/themes/default/tpl//polls/list.tpl */
+gettext("Delete");
+
+/* public/admin/themes/default/tpl//polls/list.tpl */
+gettext("Delete");
+
+/* public/admin/themes/default/tpl//polls/list.tpl */
+gettext("Delete");
+
+/* public/admin/themes/default/tpl//polls/list.tpl */
 gettext("Unpublish");
 
 /* public/admin/themes/default/tpl//polls/list.tpl */
 gettext("Publish");
+
+/* public/admin/themes/default/tpl//polls/list.tpl */
+gettext("Publish");
+
+/* public/admin/themes/default/tpl//polls/list.tpl */
+gettext("Publish");
+
+/* public/admin/themes/default/tpl//polls/list.tpl */
+gettext("New poll");
+
+/* public/admin/themes/default/tpl//polls/list.tpl */
+gettext("New poll");
 
 /* public/admin/themes/default/tpl//polls/list.tpl */
 gettext("New poll");
@@ -2171,7 +2522,7 @@ gettext("Config album module");
 gettext("Configurations");
 
 /* public/admin/themes/default/tpl//polls/list.tpl */
-gettext("WIDGET HOME");
+gettext("Widget Home");
 
 /* public/admin/themes/default/tpl//polls/list.tpl */
 gettext("All categories");
@@ -2181,6 +2532,9 @@ gettext("Title");
 
 /* public/admin/themes/default/tpl//polls/list.tpl */
 gettext("Subtitle");
+
+/* public/admin/themes/default/tpl//polls/list.tpl */
+gettext("Section");
 
 /* public/admin/themes/default/tpl//polls/list.tpl */
 gettext("Votes");
@@ -2195,13 +2549,22 @@ gettext("Views");
 gettext("Date");
 
 /* public/admin/themes/default/tpl//polls/list.tpl */
-gettext("Favorite");
-
-/* public/admin/themes/default/tpl//polls/list.tpl */
 gettext("Published");
 
 /* public/admin/themes/default/tpl//polls/list.tpl */
+gettext("Favorite");
+
+/* public/admin/themes/default/tpl//polls/list.tpl */
+gettext("Home");
+
+/* public/admin/themes/default/tpl//polls/list.tpl */
 gettext("Actions");
+
+/* public/admin/themes/default/tpl//polls/list.tpl */
+gettext("Favorite");
+
+/* public/admin/themes/default/tpl//polls/list.tpl */
+gettext("NoFavorite");
 
 /* public/admin/themes/default/tpl//polls/list.tpl */
 gettext("Take out from home");
@@ -2211,6 +2574,42 @@ gettext("Put in home");
 
 /* public/admin/themes/default/tpl//polls/list.tpl */
 gettext("There is no polls yet.");
+
+/* public/admin/themes/default/tpl//polls/modals/_modalAccept.tpl */
+gettext("Delete polls");
+
+/* public/admin/themes/default/tpl//polls/modals/_modalAccept.tpl */
+gettext("You must select some elements.");
+
+/* public/admin/themes/default/tpl//polls/modals/_modalAccept.tpl */
+gettext("Accept");
+
+/* public/admin/themes/default/tpl//polls/modals/_modalBatchDelete.tpl */
+gettext("Delete polls");
+
+/* public/admin/themes/default/tpl//polls/modals/_modalBatchDelete.tpl */
+gettext("Are you sure you want to delete <span>%num%</span> polls?");
+
+/* public/admin/themes/default/tpl//polls/modals/_modalBatchDelete.tpl */
+gettext("Yes, delete all");
+
+/* public/admin/themes/default/tpl//polls/modals/_modalBatchDelete.tpl */
+gettext("No");
+
+/* public/admin/themes/default/tpl//polls/modals/_modalBatchDelete.tpl */
+gettext("You must select some elements.");
+
+/* public/admin/themes/default/tpl//polls/modals/_modalDelete.tpl */
+gettext("Delete poll");
+
+/* public/admin/themes/default/tpl//polls/modals/_modalDelete.tpl */
+gettext("Are you sure that do you want delete \"<span>%title%</span>\"?");
+
+/* public/admin/themes/default/tpl//polls/modals/_modalDelete.tpl */
+gettext("Yes, delete");
+
+/* public/admin/themes/default/tpl//polls/modals/_modalDelete.tpl */
+gettext("No");
 
 /* public/admin/themes/default/tpl//login/login.tpl */
 gettext("The journalism CMS");
@@ -2291,6 +2690,12 @@ gettext("Upload an image");
 gettext("Opinion Manager :: Author list");
 
 /* public/admin/themes/default/tpl//opinion/authors/list.tpl */
+gettext("Delete");
+
+/* public/admin/themes/default/tpl//opinion/authors/list.tpl */
+gettext("Delete");
+
+/* public/admin/themes/default/tpl//opinion/authors/list.tpl */
 gettext("New author");
 
 /* public/admin/themes/default/tpl//opinion/authors/list.tpl */
@@ -2323,6 +2728,78 @@ gettext("Actions");
 /* public/admin/themes/default/tpl//opinion/authors/list.tpl */
 gettext("There is no available authors");
 
+/* public/admin/themes/default/tpl//opinion/authors/modals/_modalAccept.tpl */
+gettext("Delete authors");
+
+/* public/admin/themes/default/tpl//opinion/authors/modals/_modalAccept.tpl */
+gettext("You must select some elements.");
+
+/* public/admin/themes/default/tpl//opinion/authors/modals/_modalAccept.tpl */
+gettext("Accept");
+
+/* public/admin/themes/default/tpl//opinion/authors/modals/_modalBatchDelete.tpl */
+gettext("Delete author");
+
+/* public/admin/themes/default/tpl//opinion/authors/modals/_modalBatchDelete.tpl */
+gettext("Are you sure you want to delete <span>%num%</span> authors?");
+
+/* public/admin/themes/default/tpl//opinion/authors/modals/_modalBatchDelete.tpl */
+gettext("Yes, delete all");
+
+/* public/admin/themes/default/tpl//opinion/authors/modals/_modalBatchDelete.tpl */
+gettext("No");
+
+/* public/admin/themes/default/tpl//opinion/authors/modals/_modalBatchDelete.tpl */
+gettext("You must select some elements.");
+
+/* public/admin/themes/default/tpl//opinion/authors/modals/_modalDelete.tpl */
+gettext("Delete author");
+
+/* public/admin/themes/default/tpl//opinion/authors/modals/_modalDelete.tpl */
+gettext("Are you sure that do you want delete \"<span>%title%</span>\"?");
+
+/* public/admin/themes/default/tpl//opinion/authors/modals/_modalDelete.tpl */
+gettext("Yes, delete");
+
+/* public/admin/themes/default/tpl//opinion/authors/modals/_modalDelete.tpl */
+gettext("No");
+
+/* public/admin/themes/default/tpl//opinion/content-provider/opinion.tpl */
+gettext("Opinion");
+
+/* public/admin/themes/default/tpl//opinion/content-provider/opinion.tpl */
+gettext("Actions");
+
+/* public/admin/themes/default/tpl//opinion/content-provider/opinion.tpl */
+gettext("Edit '%1'");
+
+/* public/admin/themes/default/tpl//opinion/content-provider/opinion.tpl */
+gettext("Edit");
+
+/* public/admin/themes/default/tpl//opinion/content-provider/opinion.tpl */
+gettext("Delete");
+
+/* public/admin/themes/default/tpl//opinion/content-provider/opinion.tpl */
+gettext("Remove");
+
+/* public/admin/themes/default/tpl//opinion/content-provider/opinion.tpl */
+gettext("Arquive");
+
+/* public/admin/themes/default/tpl//opinion/content-provider/opinion.tpl */
+gettext("Arquive");
+
+/* public/admin/themes/default/tpl//opinion/content-provider/opinion.tpl */
+gettext("Suggest to home");
+
+/* public/admin/themes/default/tpl//opinion/content-provider/opinion.tpl */
+gettext("Suggest to home");
+
+/* public/admin/themes/default/tpl//opinion/content-provider/opinion.tpl */
+gettext("Delete");
+
+/* public/admin/themes/default/tpl//opinion/content-provider/opinion.tpl */
+gettext("Send to trash");
+
 /* public/admin/themes/default/tpl//opinion/newPhoto.tpl */
 gettext("Invalid image: the filename name contains spaces or special chars.");
 
@@ -2351,10 +2828,10 @@ gettext("Go back to list");
 gettext("Information about opinion widget settings");
 
 /* public/admin/themes/default/tpl//opinion/config.tpl */
-gettext("Total Director Opinion in widget:");
+gettext("Number of director articles in the widget:");
 
 /* public/admin/themes/default/tpl//opinion/config.tpl */
-gettext("Total Editorials in widget:");
+gettext("Number of editorial articles in the widget:");
 
 /* public/admin/themes/default/tpl//opinion/config.tpl */
 gettext("Save");
@@ -2495,7 +2972,25 @@ gettext("Listing opinions");
 gettext("Delete");
 
 /* public/admin/themes/default/tpl//opinion/list.tpl */
+gettext("Delete");
+
+/* public/admin/themes/default/tpl//opinion/list.tpl */
 gettext("Unpublish");
+
+/* public/admin/themes/default/tpl//opinion/list.tpl */
+gettext("Unpublish");
+
+/* public/admin/themes/default/tpl//opinion/list.tpl */
+gettext("Unpublish");
+
+/* public/admin/themes/default/tpl//opinion/list.tpl */
+gettext("Publish");
+
+/* public/admin/themes/default/tpl//opinion/list.tpl */
+gettext("Publish");
+
+/* public/admin/themes/default/tpl//opinion/list.tpl */
+gettext("Publish");
 
 /* public/admin/themes/default/tpl//opinion/list.tpl */
 gettext("Put in home");
@@ -2526,6 +3021,42 @@ gettext("Editorial");
 
 /* public/admin/themes/default/tpl//opinion/list.tpl */
 gettext("Director opinion");
+
+/* public/admin/themes/default/tpl//opinion/modals/_modalAccept.tpl */
+gettext("Delete opinions");
+
+/* public/admin/themes/default/tpl//opinion/modals/_modalAccept.tpl */
+gettext("You must select some elements.");
+
+/* public/admin/themes/default/tpl//opinion/modals/_modalAccept.tpl */
+gettext("Accept");
+
+/* public/admin/themes/default/tpl//opinion/modals/_modalBatchDelete.tpl */
+gettext("Delete opinions");
+
+/* public/admin/themes/default/tpl//opinion/modals/_modalBatchDelete.tpl */
+gettext("Are you sure you want to delete <span>%num%</span> opinions?");
+
+/* public/admin/themes/default/tpl//opinion/modals/_modalBatchDelete.tpl */
+gettext("Yes, delete all");
+
+/* public/admin/themes/default/tpl//opinion/modals/_modalBatchDelete.tpl */
+gettext("No");
+
+/* public/admin/themes/default/tpl//opinion/modals/_modalBatchDelete.tpl */
+gettext("You must select some elements.");
+
+/* public/admin/themes/default/tpl//opinion/modals/_modalDelete.tpl */
+gettext("Delete opinion");
+
+/* public/admin/themes/default/tpl//opinion/modals/_modalDelete.tpl */
+gettext("Are you sure that do you want delete \"<span>%title%</span>\"?");
+
+/* public/admin/themes/default/tpl//opinion/modals/_modalDelete.tpl */
+gettext("Yes, delete");
+
+/* public/admin/themes/default/tpl//opinion/modals/_modalDelete.tpl */
+gettext("No");
 
 /* public/admin/themes/default/tpl//opinion/partials/_opinion_list.tpl */
 gettext("Select an author");
@@ -2567,6 +3098,12 @@ gettext("Published");
 gettext("Actions");
 
 /* public/admin/themes/default/tpl//opinion/partials/_opinion_list.tpl */
+gettext("Edit");
+
+/* public/admin/themes/default/tpl//opinion/partials/_opinion_list.tpl */
+gettext("Delete");
+
+/* public/admin/themes/default/tpl//opinion/partials/_opinion_list.tpl */
 gettext("There is no opinions yet.");
 
 /* public/admin/themes/default/tpl//opinion/partials/_opinion_list_home.tpl */
@@ -2600,7 +3137,19 @@ gettext("Director Articles");
 gettext("Director");
 
 /* public/admin/themes/default/tpl//opinion/partials/_opinion_list_home.tpl */
+gettext("Edit");
+
+/* public/admin/themes/default/tpl//opinion/partials/_opinion_list_home.tpl */
+gettext("Delete");
+
+/* public/admin/themes/default/tpl//opinion/partials/_opinion_list_home.tpl */
 gettext("Editorial Articles");
+
+/* public/admin/themes/default/tpl//opinion/partials/_opinion_list_home.tpl */
+gettext("Edit");
+
+/* public/admin/themes/default/tpl//opinion/partials/_opinion_list_home.tpl */
+gettext("Delete");
 
 /* public/admin/themes/default/tpl//opinion/partials/_opinion_list_home.tpl */
 gettext("Other Articles");
@@ -2608,11 +3157,143 @@ gettext("Other Articles");
 /* public/admin/themes/default/tpl//opinion/partials/_opinion_list_home.tpl */
 gettext("Director");
 
+/* public/admin/themes/default/tpl//opinion/partials/_opinion_list_home.tpl */
+gettext("Edit");
+
+/* public/admin/themes/default/tpl//opinion/partials/_opinion_list_home.tpl */
+gettext("Delete");
+
+/* public/admin/themes/default/tpl//frontpagemanager/content-providers/others_articles_in_category.tpl */
+gettext("Title");
+
+/* public/admin/themes/default/tpl//frontpagemanager/content-providers/others_articles_in_category.tpl */
+gettext("Views");
+
+/* public/admin/themes/default/tpl//frontpagemanager/content-providers/others_articles_in_category.tpl */
+gettext("Created");
+
+/* public/admin/themes/default/tpl//frontpagemanager/content-providers/others_articles_in_category.tpl */
+gettext("Author");
+
+/* public/admin/themes/default/tpl//frontpagemanager/content-providers/others_articles_in_category.tpl */
+gettext("Last editor");
+
+/* public/admin/themes/default/tpl//frontpagemanager/content-providers/others_articles_in_category.tpl */
+gettext("Actions");
+
+/* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
+gettext("Please, remember save positions after finish.");
+
+/* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
+gettext("Couldn't load this tab. We'll try to fix this as soon as possible.");
+
+/* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
+gettext("Frontpage Manager");
+
+/* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
+gettext("HOME");
+
+/* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
+gettext("Suggest to home");
+
+/* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
+gettext("Suggest to home");
+
+/* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
+gettext("Suggest to home");
+
+/* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
+gettext("No home");
+
+/* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
+gettext("More actions");
+
+/* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
+gettext("Preview frontpage with actual content positions");
+
+/* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
+gettext("Preview");
+
+/* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
+gettext("Preview");
+
+/* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
+gettext("Preview");
+
+/* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
+gettext("Clean cache");
+
+/* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
+gettext("Clean cache");
+
+/* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
+gettext("Select all");
+
+/* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
+gettext("Select all");
+
+/* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
+gettext("Save changes");
+
+/* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
+gettext("Save changes");
+
+/* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
+gettext("Save changes");
+
+/* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
+gettext("Add contents");
+
+/* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
+gettext("Add contents");
+
+/* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
+gettext("HOME");
+
+/* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
+gettext("Available contents");
+
+/* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
+gettext("Other articles in this category");
+
+/* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
+gettext("Suggested articles");
+
+/* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
+gettext("Search");
+
+/* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
+gettext("Widgets");
+
+/* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
+gettext("Opinions");
+
+/* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
+gettext("Videos");
+
+/* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
+gettext("Albums");
+
+/* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
+gettext("Advertisement");
+
+/* public/admin/themes/default/tpl//search_advanced/content-provider.tpl */
+gettext("Latest news in Spain...");
+
+/* public/admin/themes/default/tpl//search_advanced/content-provider.tpl */
+gettext("Search");
+
 /* public/admin/themes/default/tpl//search_advanced/index.tpl */
 gettext("Advanced search");
 
 /* public/admin/themes/default/tpl//search_advanced/index.tpl */
-gettext("Advanced Search");
+gettext("Please fill the form of<br> the side to search contents");
+
+/* public/admin/themes/default/tpl//search_advanced/index.tpl */
+gettext("Content name");
+
+/* public/admin/themes/default/tpl//search_advanced/index.tpl */
+gettext("Content type");
 
 /* public/admin/themes/default/tpl//search_advanced/index.tpl */
 gettext("Search");
@@ -2636,19 +3317,16 @@ gettext("Use other words.");
 gettext("Use more general search criteria.");
 
 /* public/admin/themes/default/tpl//search_advanced/partials/_list.tpl */
-gettext("Title");
+gettext("Type");
 
 /* public/admin/themes/default/tpl//search_advanced/partials/_list.tpl */
-gettext("Type");
+gettext("Title");
 
 /* public/admin/themes/default/tpl//search_advanced/partials/_list.tpl */
 gettext("Category");
 
 /* public/admin/themes/default/tpl//search_advanced/partials/_list.tpl */
 gettext("Creation date");
-
-/* public/admin/themes/default/tpl//search_advanced/partials/_list.tpl */
-gettext("Status");
 
 /* public/admin/themes/default/tpl//search_advanced/partials/_list.tpl */
 gettext("Actions");
@@ -2759,6 +3437,36 @@ gettext("Upload file");
 gettext("Upload file");
 
 /* public/admin/themes/default/tpl//files/list.tpl */
+gettext("Delete");
+
+/* public/admin/themes/default/tpl//files/list.tpl */
+gettext("Delete");
+
+/* public/admin/themes/default/tpl//files/list.tpl */
+gettext("Delete");
+
+/* public/admin/themes/default/tpl//files/list.tpl */
+gettext("Delete");
+
+/* public/admin/themes/default/tpl//files/list.tpl */
+gettext("Unpublish");
+
+/* public/admin/themes/default/tpl//files/list.tpl */
+gettext("Unpublish");
+
+/* public/admin/themes/default/tpl//files/list.tpl */
+gettext("Unpublish");
+
+/* public/admin/themes/default/tpl//files/list.tpl */
+gettext("Publish");
+
+/* public/admin/themes/default/tpl//files/list.tpl */
+gettext("Publish");
+
+/* public/admin/themes/default/tpl//files/list.tpl */
+gettext("Publish");
+
+/* public/admin/themes/default/tpl//files/list.tpl */
 gettext("GLOBAL");
 
 /* public/admin/themes/default/tpl//files/list.tpl */
@@ -2783,10 +3491,49 @@ gettext("Path");
 gettext("Availability");
 
 /* public/admin/themes/default/tpl//files/list.tpl */
+gettext("Published");
+
+/* public/admin/themes/default/tpl//files/list.tpl */
 gettext("Actions");
 
 /* public/admin/themes/default/tpl//files/list.tpl */
 gettext("There is not files available here.");
+
+/* public/admin/themes/default/tpl//files/modals/_modalAccept.tpl */
+gettext("Delete newsstands");
+
+/* public/admin/themes/default/tpl//files/modals/_modalAccept.tpl */
+gettext("You must select some elements.");
+
+/* public/admin/themes/default/tpl//files/modals/_modalAccept.tpl */
+gettext("Accept");
+
+/* public/admin/themes/default/tpl//files/modals/_modalBatchDelete.tpl */
+gettext("Delete files");
+
+/* public/admin/themes/default/tpl//files/modals/_modalBatchDelete.tpl */
+gettext("Are you sure you want to delete <span>%num%</span> files?");
+
+/* public/admin/themes/default/tpl//files/modals/_modalBatchDelete.tpl */
+gettext("Yes, delete all");
+
+/* public/admin/themes/default/tpl//files/modals/_modalBatchDelete.tpl */
+gettext("No");
+
+/* public/admin/themes/default/tpl//files/modals/_modalBatchDelete.tpl */
+gettext("You must select some elements.");
+
+/* public/admin/themes/default/tpl//files/modals/_modalDelete.tpl */
+gettext("Delete file");
+
+/* public/admin/themes/default/tpl//files/modals/_modalDelete.tpl */
+gettext("Are you sure that do you want delete \"<span>%title%</span>\"?");
+
+/* public/admin/themes/default/tpl//files/modals/_modalDelete.tpl */
+gettext("Yes, delete");
+
+/* public/admin/themes/default/tpl//files/modals/_modalDelete.tpl */
+gettext("No");
 
 /* public/admin/themes/default/tpl//tpl_manager/config.tpl */
 gettext("Cache Manager");
@@ -3040,47 +3787,8 @@ gettext("Category");
 /* public/admin/themes/default/tpl//frontpage/blocks/articles_suggested.tpl */
 gettext("Actions");
 
-/* public/admin/themes/default/tpl//frontpage/blocks/widgets_available.tpl */
-gettext("Title");
-
-/* public/admin/themes/default/tpl//frontpage/blocks/widgets_available.tpl */
-gettext("Actions");
-
-/* public/admin/themes/default/tpl//frontpage/blocks/widgets_available.tpl */
-gettext("Edit");
-
-/* public/admin/themes/default/tpl//frontpage/blocks/others_articles_in_category.tpl */
-gettext("Title");
-
-/* public/admin/themes/default/tpl//frontpage/blocks/others_articles_in_category.tpl */
-gettext("Views");
-
-/* public/admin/themes/default/tpl//frontpage/blocks/others_articles_in_category.tpl */
-gettext("Created");
-
-/* public/admin/themes/default/tpl//frontpage/blocks/others_articles_in_category.tpl */
-gettext("Author");
-
-/* public/admin/themes/default/tpl//frontpage/blocks/others_articles_in_category.tpl */
-gettext("Last editor");
-
-/* public/admin/themes/default/tpl//frontpage/blocks/others_articles_in_category.tpl */
-gettext("Actions");
-
-/* public/admin/themes/default/tpl//frontpage/blocks/opinions_available.tpl */
-gettext("Title");
-
-/* public/admin/themes/default/tpl//frontpage/blocks/opinions_available.tpl */
-gettext("Actions");
-
-/* public/admin/themes/default/tpl//frontpage/blocks/opinions_available.tpl */
-gettext("Edit");
-
 /* public/admin/themes/default/tpl//category/config.tpl */
 gettext("Sections :: Configuration");
-
-/* public/admin/themes/default/tpl//category/config.tpl */
-gettext("Go back to list");
 
 /* public/admin/themes/default/tpl//category/config.tpl */
 gettext("Go back to list");
@@ -3134,13 +3842,13 @@ gettext("Go Back");
 gettext("Go Back");
 
 /* public/admin/themes/default/tpl//category/form.tpl */
-gettext("Go Back");
+gettext("Editing category");
 
 /* public/admin/themes/default/tpl//category/form.tpl */
 gettext("Name");
 
 /* public/admin/themes/default/tpl//category/form.tpl */
-gettext(" Title for short title name ");
+gettext("Title for short title name ");
 
 /* public/admin/themes/default/tpl//category/form.tpl */
 gettext("Internal name for calculate slugs and uri ");
@@ -3185,10 +3893,16 @@ gettext("Book");
 gettext("Subsection of:");
 
 /* public/admin/themes/default/tpl//category/form.tpl */
-gettext("Show in menu:");
+gettext("Available:");
 
 /* public/admin/themes/default/tpl//category/form.tpl */
 gettext("If this option is activated this category will be showed in menu");
+
+/* public/admin/themes/default/tpl//category/form.tpl */
+gettext("Show in rss:");
+
+/* public/admin/themes/default/tpl//category/form.tpl */
+gettext("If this option is activated this category will be showed in rss");
 
 /* public/admin/themes/default/tpl//category/form.tpl */
 gettext("Frontpage logo:");
@@ -3203,16 +3917,16 @@ gettext("Color:");
 gettext("Subsections:");
 
 /* public/admin/themes/default/tpl//category/form.tpl */
-gettext("Title:");
+gettext("Title");
 
 /* public/admin/themes/default/tpl//category/form.tpl */
-gettext("Internal name:");
+gettext("Internal name");
 
 /* public/admin/themes/default/tpl//category/form.tpl */
-gettext("Type:");
+gettext("Type");
 
 /* public/admin/themes/default/tpl//category/form.tpl */
-gettext("In menu:");
+gettext("In menu");
 
 /* public/admin/themes/default/tpl//category/form.tpl */
 gettext("Actions");
@@ -3697,6 +4411,42 @@ gettext("Content");
 /* public/admin/themes/default/tpl//widget/edit.tpl */
 gettext("Save");
 
+/* public/admin/themes/default/tpl//widget/content-provider/widget.tpl */
+gettext("Widget");
+
+/* public/admin/themes/default/tpl//widget/content-provider/widget.tpl */
+gettext("Actions");
+
+/* public/admin/themes/default/tpl//widget/content-provider/widget.tpl */
+gettext("Edit '%1'");
+
+/* public/admin/themes/default/tpl//widget/content-provider/widget.tpl */
+gettext("Edit");
+
+/* public/admin/themes/default/tpl//widget/content-provider/widget.tpl */
+gettext("Delete");
+
+/* public/admin/themes/default/tpl//widget/content-provider/widget.tpl */
+gettext("Remove");
+
+/* public/admin/themes/default/tpl//widget/content-provider/widget.tpl */
+gettext("Arquive");
+
+/* public/admin/themes/default/tpl//widget/content-provider/widget.tpl */
+gettext("Arquive");
+
+/* public/admin/themes/default/tpl//widget/content-provider/widget.tpl */
+gettext("Suggest to home");
+
+/* public/admin/themes/default/tpl//widget/content-provider/widget.tpl */
+gettext("Suggest to home");
+
+/* public/admin/themes/default/tpl//widget/content-provider/widget.tpl */
+gettext("Delete");
+
+/* public/admin/themes/default/tpl//widget/content-provider/widget.tpl */
+gettext("Send to trash");
+
 /* public/admin/themes/default/tpl//widget/list.tpl */
 gettext("Widget Manager");
 
@@ -3735,6 +4485,18 @@ gettext("Delete");
 
 /* public/admin/themes/default/tpl//widget/list.tpl */
 gettext("There is no available widgets");
+
+/* public/admin/themes/default/tpl//widget/modals/_modalDelete.tpl */
+gettext("Delete widget");
+
+/* public/admin/themes/default/tpl//widget/modals/_modalDelete.tpl */
+gettext("Are you sure that do you want delete \"<span>%title%</span>\"?");
+
+/* public/admin/themes/default/tpl//widget/modals/_modalDelete.tpl */
+gettext("Yes, delete");
+
+/* public/admin/themes/default/tpl//widget/modals/_modalDelete.tpl */
+gettext("No");
 
 /* public/admin/themes/default/tpl//trash/trash.tpl */
 gettext("Trash");
@@ -4040,6 +4802,9 @@ gettext("Poll Inner");
 gettext("Newsletter");
 
 /* public/admin/themes/default/tpl//advertisement/list.tpl */
+gettext("Advertisement manager");
+
+/* public/admin/themes/default/tpl//advertisement/list.tpl */
 gettext("Delete");
 
 /* public/admin/themes/default/tpl//advertisement/list.tpl */
@@ -4068,6 +4833,9 @@ gettext("New");
 
 /* public/admin/themes/default/tpl//advertisement/list.tpl */
 gettext("HOMEPAGE");
+
+/* public/admin/themes/default/tpl//advertisement/list.tpl */
+gettext("OPINION");
 
 /* public/admin/themes/default/tpl//advertisement/list.tpl */
 gettext("Banner type:");
@@ -4142,10 +4910,43 @@ gettext("Pending");
 gettext("Edit");
 
 /* public/admin/themes/default/tpl//advertisement/list.tpl */
-gettext("Delete");
-
-/* public/admin/themes/default/tpl//advertisement/list.tpl */
 gettext("There is no advertisement stored in this section");
+
+/* public/admin/themes/default/tpl//advertisement/modals/_modalAccept.tpl */
+gettext("Delete advertisements");
+
+/* public/admin/themes/default/tpl//advertisement/modals/_modalAccept.tpl */
+gettext("You must select some elements.");
+
+/* public/admin/themes/default/tpl//advertisement/modals/_modalAccept.tpl */
+gettext("Accept");
+
+/* public/admin/themes/default/tpl//advertisement/modals/_modalBatchDelete.tpl */
+gettext("Delete advertisements");
+
+/* public/admin/themes/default/tpl//advertisement/modals/_modalBatchDelete.tpl */
+gettext("Are you sure you want to delete <span>%num%</span> advertisements?");
+
+/* public/admin/themes/default/tpl//advertisement/modals/_modalBatchDelete.tpl */
+gettext("Yes, delete all");
+
+/* public/admin/themes/default/tpl//advertisement/modals/_modalBatchDelete.tpl */
+gettext("No");
+
+/* public/admin/themes/default/tpl//advertisement/modals/_modalBatchDelete.tpl */
+gettext("You must select some elements.");
+
+/* public/admin/themes/default/tpl//advertisement/modals/_modalDelete.tpl */
+gettext("Delete advertisement");
+
+/* public/admin/themes/default/tpl//advertisement/modals/_modalDelete.tpl */
+gettext("Are you sure that do you want delete \"<span>%title%</span>\"?");
+
+/* public/admin/themes/default/tpl//advertisement/modals/_modalDelete.tpl */
+gettext("Yes, delete");
+
+/* public/admin/themes/default/tpl//advertisement/modals/_modalDelete.tpl */
+gettext("No");
 
 /* public/admin/themes/default/tpl//advertisement/test_script.tpl */
 gettext("Test for Javascript ad");
@@ -5302,6 +6103,168 @@ gettext("Remove File");
 /* public/admin/themes/default/tpl//agency_importer/ideal/importXML.tpl */
 gettext("Add File");
 
+/* public/admin/themes/default/tpl//letter/read.tpl */
+gettext("Letter Manager");
+
+/* public/admin/themes/default/tpl//letter/read.tpl */
+gettext("Editing letter");
+
+/* public/admin/themes/default/tpl//letter/read.tpl */
+gettext("Save and exit");
+
+/* public/admin/themes/default/tpl//letter/read.tpl */
+gettext("Save and exit");
+
+/* public/admin/themes/default/tpl//letter/read.tpl */
+gettext("Save and continue");
+
+/* public/admin/themes/default/tpl//letter/read.tpl */
+gettext("Go back");
+
+/* public/admin/themes/default/tpl//letter/read.tpl */
+gettext("Go back");
+
+/* public/admin/themes/default/tpl//letter/read.tpl */
+gettext("Go back");
+
+/* public/admin/themes/default/tpl//letter/read.tpl */
+gettext("Go back");
+
+/* public/admin/themes/default/tpl//letter/read.tpl */
+gettext("Go back");
+
+/* public/admin/themes/default/tpl//letter/read.tpl */
+gettext("Title");
+
+/* public/admin/themes/default/tpl//letter/read.tpl */
+gettext("Published");
+
+/* public/admin/themes/default/tpl//letter/read.tpl */
+gettext(" Author nickname");
+
+/* public/admin/themes/default/tpl//letter/read.tpl */
+gettext("Email");
+
+/* public/admin/themes/default/tpl//letter/read.tpl */
+gettext("Date");
+
+/* public/admin/themes/default/tpl//letter/read.tpl */
+gettext("Sent from IP address");
+
+/* public/admin/themes/default/tpl//letter/read.tpl */
+gettext("Statistics");
+
+/* public/admin/themes/default/tpl//letter/read.tpl */
+gettext("Title");
+
+/* public/admin/themes/default/tpl//letter/read.tpl */
+gettext("Inner title");
+
+/* public/admin/themes/default/tpl//letter/read.tpl */
+gettext("words");
+
+/* public/admin/themes/default/tpl//letter/read.tpl */
+gettext("Body");
+
+/* public/admin/themes/default/tpl//letter/list.tpl */
+gettext("Letter to the Editor management");
+
+/* public/admin/themes/default/tpl//letter/list.tpl */
+gettext("Delete");
+
+/* public/admin/themes/default/tpl//letter/list.tpl */
+gettext("Delete");
+
+/* public/admin/themes/default/tpl//letter/list.tpl */
+gettext("Delete");
+
+/* public/admin/themes/default/tpl//letter/list.tpl */
+gettext("Delete");
+
+/* public/admin/themes/default/tpl//letter/list.tpl */
+gettext("Delete");
+
+/* public/admin/themes/default/tpl//letter/list.tpl */
+gettext("Unpublish");
+
+/* public/admin/themes/default/tpl//letter/list.tpl */
+gettext("Unpublish");
+
+/* public/admin/themes/default/tpl//letter/list.tpl */
+gettext("Reject");
+
+/* public/admin/themes/default/tpl//letter/list.tpl */
+gettext("Publish");
+
+/* public/admin/themes/default/tpl//letter/list.tpl */
+gettext("Publish");
+
+/* public/admin/themes/default/tpl//letter/list.tpl */
+gettext("Publish");
+
+/* public/admin/themes/default/tpl//letter/list.tpl */
+gettext("New letter");
+
+/* public/admin/themes/default/tpl//letter/list.tpl */
+gettext("Pending");
+
+/* public/admin/themes/default/tpl//letter/list.tpl */
+gettext("Published");
+
+/* public/admin/themes/default/tpl//letter/list.tpl */
+gettext("Rejected");
+
+/* public/admin/themes/default/tpl//letter/list.tpl */
+gettext("Title");
+
+/* public/admin/themes/default/tpl//letter/list.tpl */
+gettext("Lettered on");
+
+/* public/admin/themes/default/tpl//letter/list.tpl */
+gettext("Date");
+
+/* public/admin/themes/default/tpl//letter/list.tpl */
+gettext("Actions");
+
+/* public/admin/themes/default/tpl//letter/list.tpl */
+gettext("There is no letters here.");
+
+/* public/admin/themes/default/tpl//letter/modals/_modalAccept.tpl */
+gettext("Delete letters");
+
+/* public/admin/themes/default/tpl//letter/modals/_modalAccept.tpl */
+gettext("You must select some elements.");
+
+/* public/admin/themes/default/tpl//letter/modals/_modalAccept.tpl */
+gettext("Accept");
+
+/* public/admin/themes/default/tpl//letter/modals/_modalBatchDelete.tpl */
+gettext("Delete letters");
+
+/* public/admin/themes/default/tpl//letter/modals/_modalBatchDelete.tpl */
+gettext("Are you sure you want to delete <span>%num%</span> letters?");
+
+/* public/admin/themes/default/tpl//letter/modals/_modalBatchDelete.tpl */
+gettext("Yes, delete all");
+
+/* public/admin/themes/default/tpl//letter/modals/_modalBatchDelete.tpl */
+gettext("No");
+
+/* public/admin/themes/default/tpl//letter/modals/_modalBatchDelete.tpl */
+gettext("You must select some elements.");
+
+/* public/admin/themes/default/tpl//letter/modals/_modalDelete.tpl */
+gettext("Delete letter");
+
+/* public/admin/themes/default/tpl//letter/modals/_modalDelete.tpl */
+gettext("Are you sure that do you want delete \"<span>%title%</span>\"?");
+
+/* public/admin/themes/default/tpl//letter/modals/_modalDelete.tpl */
+gettext("Yes, delete");
+
+/* public/admin/themes/default/tpl//letter/modals/_modalDelete.tpl */
+gettext("No");
+
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("System Wide Settings");
 
@@ -5477,7 +6440,10 @@ gettext("Google Maps API key:");
 gettext("Get API keys");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
-gettext("You can get your Google Maps API Key from <a href=\"http://code.google.com/intl/gl-GL/apis/maps/signup.html\">Google maps sign up website</a>.");
+gettext("You can get your Google <strong>Maps</strong> API Key from <a href=\"http://code.google.com/apis/maps/signup.html\"  target=\"_blank\">Google maps sign up website</a>.");
+
+/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
+gettext("You can get your Google <strong>Search</strong> API Key from <a href=\"http://www.google.com/cse/manage/create\"  target=\"_blank\">Google Search sign up website</a>.");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("Google Search API key:");
@@ -5752,11 +6718,20 @@ gettext("Delete");
 /* public/admin/themes/default/tpl//static_pages/list.tpl */
 gettext("There is no static pages.");
 
-/* public/admin/themes/default/tpl//newsletter/config.tpl */
-gettext("Newsletter :: Configuration");
+/* public/admin/themes/default/tpl//static_pages/modals/_modalDelete.tpl */
+gettext("Delete statics");
+
+/* public/admin/themes/default/tpl//static_pages/modals/_modalDelete.tpl */
+gettext("Are you sure that do you want delete \"<span>%title%</span>\"?");
+
+/* public/admin/themes/default/tpl//static_pages/modals/_modalDelete.tpl */
+gettext("Yes, delete");
+
+/* public/admin/themes/default/tpl//static_pages/modals/_modalDelete.tpl */
+gettext("No");
 
 /* public/admin/themes/default/tpl//newsletter/config.tpl */
-gettext("Go back to list");
+gettext("Newsletter :: Configuration");
 
 /* public/admin/themes/default/tpl//newsletter/config.tpl */
 gettext("Go back to list");
@@ -5789,6 +6764,15 @@ gettext("Point to inner");
 gettext("Point to frontpage");
 
 /* public/admin/themes/default/tpl//newsletter/config.tpl */
+gettext("Newsletter subscription type");
+
+/* public/admin/themes/default/tpl//newsletter/config.tpl */
+gettext("Manage newsletter by e-mail");
+
+/* public/admin/themes/default/tpl//newsletter/config.tpl */
+gettext("Manage newsletter by subscriptors table");
+
+/* public/admin/themes/default/tpl//newsletter/config.tpl */
 gettext("Mail address in form subscription");
 
 /* public/admin/themes/default/tpl//newsletter/config.tpl */
@@ -5796,6 +6780,9 @@ gettext("Save");
 
 /* public/admin/themes/default/tpl//newsletter/send.tpl */
 gettext("Delivered newsletter report");
+
+/* public/admin/themes/default/tpl//newsletter/send.tpl */
+gettext("Back");
 
 /* public/admin/themes/default/tpl//newsletter/send.tpl */
 gettext("Back");
@@ -5810,13 +6797,22 @@ gettext("Newsletter management");
 gettext("Next");
 
 /* public/admin/themes/default/tpl//newsletter/listArticles.tpl */
+gettext("Next");
+
+/* public/admin/themes/default/tpl//newsletter/listArticles.tpl */
 gettext("Next step");
 
 /* public/admin/themes/default/tpl//newsletter/listArticles.tpl */
 gettext("Clean container of selected opinions");
 
 /* public/admin/themes/default/tpl//newsletter/listArticles.tpl */
+gettext("Clean container of selected opinions");
+
+/* public/admin/themes/default/tpl//newsletter/listArticles.tpl */
 gettext("Clean");
+
+/* public/admin/themes/default/tpl//newsletter/listArticles.tpl */
+gettext("Select all the opinions available");
 
 /* public/admin/themes/default/tpl//newsletter/listArticles.tpl */
 gettext("Select all the opinions available");
@@ -5829,9 +6825,6 @@ gettext("Config newsletter module");
 
 /* public/admin/themes/default/tpl//newsletter/listArticles.tpl */
 gettext("Configurations");
-
-/* public/admin/themes/default/tpl//newsletter/listArticles.tpl */
-gettext("Subscriptors");
 
 /* public/admin/themes/default/tpl//newsletter/listArticles.tpl */
 gettext("Subscriptors");
@@ -5918,6 +6911,18 @@ gettext("Status");
 gettext("Actions");
 
 /* public/admin/themes/default/tpl//newsletter/subscriptors.tpl */
+gettext("Mail sent.Waiting for user");
+
+/* public/admin/themes/default/tpl//newsletter/subscriptors.tpl */
+gettext("Accepted by user");
+
+/* public/admin/themes/default/tpl//newsletter/subscriptors.tpl */
+gettext("Accepted by administrator");
+
+/* public/admin/themes/default/tpl//newsletter/subscriptors.tpl */
+gettext("Disabled by administrator");
+
+/* public/admin/themes/default/tpl//newsletter/subscriptors.tpl */
 gettext("Edit user");
 
 /* public/admin/themes/default/tpl//newsletter/subscriptors.tpl */
@@ -5930,7 +6935,13 @@ gettext("Newsletter management");
 gettext("Next");
 
 /* public/admin/themes/default/tpl//newsletter/listOpinions.tpl */
+gettext("Next");
+
+/* public/admin/themes/default/tpl//newsletter/listOpinions.tpl */
 gettext("Next step");
+
+/* public/admin/themes/default/tpl//newsletter/listOpinions.tpl */
+gettext("Back");
 
 /* public/admin/themes/default/tpl//newsletter/listOpinions.tpl */
 gettext("Back");
@@ -5942,13 +6953,22 @@ gettext("Previous step");
 gettext("Clean container of selected opinions");
 
 /* public/admin/themes/default/tpl//newsletter/listOpinions.tpl */
+gettext("Clean container of selected opinions");
+
+/* public/admin/themes/default/tpl//newsletter/listOpinions.tpl */
 gettext("Clean");
 
 /* public/admin/themes/default/tpl//newsletter/listOpinions.tpl */
 gettext("Select all the opinions available");
 
 /* public/admin/themes/default/tpl//newsletter/listOpinions.tpl */
+gettext("Select all the opinions available");
+
+/* public/admin/themes/default/tpl//newsletter/listOpinions.tpl */
 gettext("Select all");
+
+/* public/admin/themes/default/tpl//newsletter/listOpinions.tpl */
+gettext("Config newsletter module");
 
 /* public/admin/themes/default/tpl//newsletter/listOpinions.tpl */
 gettext("Config newsletter module");
@@ -5987,7 +7007,13 @@ gettext("Newsletter management");
 gettext("Next");
 
 /* public/admin/themes/default/tpl//newsletter/listAccounts.tpl */
+gettext("Next");
+
+/* public/admin/themes/default/tpl//newsletter/listAccounts.tpl */
 gettext("Next step");
+
+/* public/admin/themes/default/tpl//newsletter/listAccounts.tpl */
+gettext("Back");
 
 /* public/admin/themes/default/tpl//newsletter/listAccounts.tpl */
 gettext("Back");
@@ -5999,13 +7025,22 @@ gettext("Previous step");
 gettext("Clean container of selected opinions");
 
 /* public/admin/themes/default/tpl//newsletter/listAccounts.tpl */
+gettext("Clean container of selected opinions");
+
+/* public/admin/themes/default/tpl//newsletter/listAccounts.tpl */
 gettext("Clean");
 
 /* public/admin/themes/default/tpl//newsletter/listAccounts.tpl */
 gettext("Select all the opinions available");
 
 /* public/admin/themes/default/tpl//newsletter/listAccounts.tpl */
+gettext("Select all the opinions available");
+
+/* public/admin/themes/default/tpl//newsletter/listAccounts.tpl */
 gettext("Select all");
+
+/* public/admin/themes/default/tpl//newsletter/listAccounts.tpl */
+gettext("Config newsletter module");
 
 /* public/admin/themes/default/tpl//newsletter/listAccounts.tpl */
 gettext("Config newsletter module");
@@ -6044,7 +7079,13 @@ gettext("Newsletter management");
 gettext("Next");
 
 /* public/admin/themes/default/tpl//newsletter/preview.tpl */
+gettext("Next");
+
+/* public/admin/themes/default/tpl//newsletter/preview.tpl */
 gettext("Next step");
+
+/* public/admin/themes/default/tpl//newsletter/preview.tpl */
+gettext("Previous");
 
 /* public/admin/themes/default/tpl//newsletter/preview.tpl */
 gettext("Previous");
@@ -6053,7 +7094,13 @@ gettext("Previous");
 gettext("Previous step");
 
 /* public/admin/themes/default/tpl//newsletter/preview.tpl */
+gettext("Newsletter preview");
+
+/* public/admin/themes/default/tpl//newsletter/preview.tpl */
 gettext("Email subject");
+
+/* public/admin/themes/default/tpl//newsletter/newSubscriptor.tpl */
+gettext("Add new subscriptor");
 
 /* public/admin/themes/default/tpl//newsletter/newSubscriptor.tpl */
 gettext("Email");
@@ -6290,6 +7337,15 @@ gettext("Go back");
 gettext("Go back");
 
 /* public/admin/themes/default/tpl//image/create_improved.tpl */
+gettext("Edit uploaded");
+
+/* public/admin/themes/default/tpl//image/create_improved.tpl */
+gettext("Edit uploaded");
+
+/* public/admin/themes/default/tpl//image/create_improved.tpl */
+gettext("Please click in the \"Edit uploaded\" button from above to edit latest upload photo's data");
+
+/* public/admin/themes/default/tpl//image/create_improved.tpl */
 gettext("Cancel upload");
 
 /* public/admin/themes/default/tpl//image/create_improved.tpl */
@@ -6416,7 +7472,7 @@ gettext("Edit");
 gettext("Delete");
 
 /* public/admin/themes/default/tpl//image/_partials/_media_browser.tpl */
-gettext("No available images to list here");
+gettext("No available images<br> for this search");
 
 /* public/admin/themes/default/tpl//image/_partials/photo_data.tpl */
 gettext("Basic information");
@@ -6603,9 +7659,6 @@ gettext("Search images");
 
 /* public/admin/themes/default/tpl//image/search.tpl */
 gettext("Search result");
-
-/* public/admin/themes/default/tpl//image/search.tpl */
-gettext("Information");
 
 /* public/admin/themes/default/tpl//image/search.tpl */
 gettext("Go back");
@@ -7103,13 +8156,52 @@ gettext("There is no available instances yet");
 gettext("Go to admin main page");
 
 /* public/manager/themes/default/tpl/base/base.tpl */
-gettext(" made by OpenHost S.L.");
+gettext("Search...");
 
 /* public/manager/themes/default/tpl/base/base.tpl */
-gettext("All rights reserved &copy; 2008 - %1");
+gettext("There are new comments to moderate");
 
 /* public/manager/themes/default/tpl/base/base.tpl */
-gettext("Support & Help");
+gettext("Edit my profile");
+
+/* public/manager/themes/default/tpl/base/base.tpl */
+gettext("Edit my user profile");
+
+/* public/manager/themes/default/tpl/base/base.tpl */
+gettext("Active users in backend");
+
+/* public/manager/themes/default/tpl/base/base.tpl */
+gettext("Connected users");
+
+/* public/manager/themes/default/tpl/base/base.tpl */
+gettext("Do you really want to exit from backend?");
+
+/* public/manager/themes/default/tpl/base/base.tpl */
+gettext("Logout from control panel");
+
+/* public/manager/themes/default/tpl/base/base.tpl */
+gettext("Log out");
+
+/* public/manager/themes/default/tpl/base/base.tpl */
+gettext("About");
+
+/* public/manager/themes/default/tpl/base/base.tpl */
+gettext("Help");
+
+/* public/manager/themes/default/tpl/base/base.tpl */
+gettext("Help");
+
+/* public/manager/themes/default/tpl/base/base.tpl */
+gettext("Privacy Policy");
+
+/* public/manager/themes/default/tpl/base/base.tpl */
+gettext("Privacy Policy");
+
+/* public/manager/themes/default/tpl/base/base.tpl */
+gettext("Legal");
+
+/* public/manager/themes/default/tpl/base/base.tpl */
+gettext("Legal");
 
 /* public/manager/themes/default/tpl/base/base.tpl */
 gettext("Your password must contain 5 characters and dont contain the word <password> or your user name.");
