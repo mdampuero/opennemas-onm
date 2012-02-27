@@ -24,8 +24,6 @@
         <!--[if IE]>{css_tag href="/ie.css"}<![endif]-->
         {css_tag href="/buttons.css"}
         {css_tag href="/jquery/jquery-ui.css" media="all" type="text/css"}
-        {css_tag href="/lightview.css"}
-        {css_tag href="/lightwindow.css" media="screen"}
     {/block}
 
     {block name="prototype"}
@@ -48,14 +46,11 @@
         {block name="js-library"}{/block}
         {script_tag src="/onm/scripts.js"}
         {script_tag src="/modernizr/modernizr-2.5.0.min.js"}
-        {script_tag src="/fabtabulous.js"}
         {script_tag src="/control.maxlength.js"}
         {script_tag src="/utils.js"}
         {script_tag src="/utils_header.js"}
         {script_tag src="/utilsopinion.js"}
         {script_tag src="/validation.js"}
-        {script_tag src="/lightview.js"}
-        {script_tag src="/lightwindow.js" defer="defer"}
         {script_tag src="/tiny_mce/tiny_mce_gzip.js"}
      {/block}
 

@@ -9,11 +9,12 @@ function previewArticle(id,formID,type){
     $(formID).id.value = id;
 
     $('formulario').action.value = '';
-    myLightWindow.activateWindow({
+    jQuery.colorbox({
         href: '/controllers/preview_content.php?id='+id+'&action=article',
-        title: 'Previsualización',
-        author: '',
-        type: 'external'
+        title: 'Previsualización Articulo',
+        iframe: true,
+        width: '90%',
+        height: '90%'
     });
 
 }
