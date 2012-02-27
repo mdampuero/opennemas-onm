@@ -1587,7 +1587,8 @@ INSERT INTO `privileges` (`pk_privilege`, `name`, `description`, `module`) VALUE
 (169, 'LETTER_SETTINGS', 'Configurar modulo de cartas', 'LETTER'),
 (170, 'LETTER_AVAILABLE', 'Aprobar cartas', 'LETTER'),
 (171, 'LETTER_FAVORITE', 'Gestionar Widget de cartas', 'LETTER'),
-(172, 'LETTER_CREATE', 'Subir cartas', 'LETTER');
+(172, 'LETTER_CREATE', 'Subir cartas', 'LETTER'),
+(173, 'LETTER_ADMIN', 'Admon. cartas', 'LETTER');
 
 -- --------------------------------------------------------
 
