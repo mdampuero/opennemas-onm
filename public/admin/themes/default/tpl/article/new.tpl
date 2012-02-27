@@ -3,6 +3,7 @@
 {block name="header-js" append}
     {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
     {script_tag src="/jquery/jquery-ui-sliderAccess.js"}
+    {script_tag src="/jquery/jquery.colorbox-min.js"}
     {script_tag src="/onm/jquery.datepicker.js"}
     {script_tag src="/utilsarticle.js"}
     {script_tag src="/editables.js"}
@@ -11,6 +12,7 @@
 {/block}
 
 {block name="header-css" append}
+    {css_tag href="/jquery/colorbox.css" media="screen"}
     <style type="text/css">
     label {
         display:block;
