@@ -238,9 +238,7 @@ class Content
         // Load object properties
         $this->load( $rs->fields );
         $this->fk_user = $this->fk_author;
-        if(!empty($this->params) && is_string($this->params))
-            $this->params = unserialize($this->params);
-
+        
         // Fire event onAfterXxx
         $GLOBALS['application']->dispatch('onAfterRead', $this);
     }
@@ -743,6 +741,8 @@ class Content
         }
 
         $this->permalink = '';//$this->uri;
+        if(!empty($this->params) && is_string($this->params))
+            $this->params = unserialize($this->params);
     }
 
     /**

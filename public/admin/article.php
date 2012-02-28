@@ -535,7 +535,8 @@ if (isset($_REQUEST['action']) ) {
             }
 
             $tpl->assign(
-                array('availableSizes'=>array(20,22,24,26,28,30,32,34))
+                array('availableSizes'=>array(20=>'20',22=>'22',24=>'24',26=>'26',
+                                            28=>'28',30=>'30',32=>'32',34=>'34'))
             );
 
             $tpl->display('article/new.tpl');
