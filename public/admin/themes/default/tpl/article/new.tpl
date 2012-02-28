@@ -425,26 +425,26 @@
                     {assign var=cont value=1}
                     {section name=n loop=$losrel}
                         <li id="{$losrel[n]->id|clearslash}">
-                            <table  width="99%">
+                            <table  width="99%;">
                                 <tr>
-                                    <td>
+                                    <td style="cursor: pointer;">
                                         {$losrel[n]->title|clearslash|escape:'html'}
                                     </td>
-                                    <td style='width:120'>
+                                    <td style='width:120px'>
                                         {assign var="ct" value=$losrel[n]->content_type}
                                         {$content_types.$ct}
                                     </td>
-                                    <td width="120">
+                                    <td style='width:120px'>
                                         {$losrel[n]->category_name|clearslash}
                                     </td>
-                                    <td style='width:120'>
-                                        <select>
-                                            <option>{t}Gallery{/t} (album)</option>
-                                            <option>{t}Link{/t} (todos)</option>
-                                            <option>{t}Embebed{/t} (video album, image)</option>
-                                        </select>
+                                    <td style='width:120px'>
+                                         {is_module_activated name="AVANCED_ARTICLE_MANAGER"}
+                                        {if $content_types.$ct eq 'Galeria'}
+                                         {t}Show as gallery:{/t}  <input type='radio' name='params[withGallery]' value='{$losrel[n]->id}' {if $article->params['withGallery'] eq $losrel[n]->id} checked ="checked"{/if} >
+                                        {/if}
+                                         {/is_module_activated}
                                     </td>
-                                    <td width="120">
+                                    <td style='width:40px'>
                                         <a  href="#" onClick="javascript:del_relation('{$losrel[n]->id|clearslash}','thelist2');" title="Quitar relacion">
                                             <img src="{$params.IMAGE_DIR}btn_no.png"  />
                                         </a>
@@ -462,28 +462,26 @@
                         {assign var=cont value=1}
                         {section name=n loop=$intrel}
                         <li id="{$intrel[n]->id|clearslash}">
-                            <table  style='width:99%'>
+                            <table  style='width:99%;'>
                                 <tr>
-                                    <td>
+                                    <td  style="cursor: pointer;">
                                         {$intrel[n]->title|clearslash|escape:'html'}
                                     </td>
-                                    <td style='width:120'>
+                                    <td style='width:120px'>
                                         {assign var="ct" value=$intrel[n]->content_type}
                                         {$content_types.$ct}
                                     </td>
-                                    <td style='width:120'>
+                                    <td style='width:120px'>
                                         {$intrel[n]->category_name|clearslash}
                                     </td>
-                                    <td style='width:120'>
-                                        {is_module_activated name="AVANCED_ARTICLE_MANAGER"}
-                                        <select>
-                                            <option>{t}Gallery{/t} (album)</option>
-                                            <option>{t}Link{/t} (todos)</option>
-                                            <option>{t}Embebed{/t} (video album, image)</option>
-                                        </select>
-                                        {/is_module_activated}
+                                    <td style='width:120px'>
+                                         {is_module_activated name="AVANCED_ARTICLE_MANAGER"}
+                                        {if $content_types.$ct eq 'Galeria'}
+                                         {t}Show as gallery:{/t}  <input type='radio' name='params[withGalleryInt]' value='{$intrel[n]->id}' {if $article->params['withGalleryInt'] eq $intrel[n]->id} checked ="checked"{/if} >
+                                        {/if}
+                                         {/is_module_activated}
                                     </td>
-                                    <td style='width:120'>
+                                    <td style='width:40px'>
                                         <a  href="#" onClick="javascript:del_relation('{$intrel[n]->id|clearslash}','thelist2int');" title="Quitar relacion">
                                                 <img src="{$params.IMAGE_DIR}btn_no.png"  />
                                         </a>
@@ -504,7 +502,7 @@
         </div>
         {else}
         <div id="elementos-relacionados" style="width:98%">
-            <div style="padding:10px; width:90% margin:0 auto;">
+            <div style="padding:10px; width:90%; margin:0px;">
                 <h2>{t}Related contents in frontpage{/t}</h2>
                 <div style="position:relative;" id="scroll-container2">
                     <ul id="thelist2" style="padding: 4px; background: #EEEEEE"></ul>

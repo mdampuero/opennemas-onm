@@ -8,6 +8,9 @@
                 <ul>
                     <li><a href="#frontpage-image" title="{t}Image or video for frontpage:{/t}">{t}Image for frontpage{/t}{if isset($photo1) && $photo1->name}<span class="marker">&#164;</span>{/if}</a></li>
                     <li><a href="#inner-image" title="{t}Image for inner article page:{/t}">{t}Image for inner article page{/t}{if isset($photo2) && $photo2->name}<span class="marker">&#164;</span>{/if}</a></li>
+                    {is_module_activated name="AVANCED_ARTICLE_MANAGER"}
+                    <li><a href="#home-image" title="{t}Image for home:{/t}">{t}Image for Home{/t}{if isset($photo3) && $photo3->name}<span class="marker">&#164;</span>{/if}</a></li>
+                    {/is_module_activated}
                 </ul><!-- / -->
                 <div id="frontpage-image" class="droppable-image-position droppable-position">
                     <div>
@@ -66,7 +69,39 @@
                             <input type="hidden" name="img2" value="{$article->img2|default:""}" class="related-element-id"/>
                         </div>
                     </div>
-                </div><!-- /frontpage-image -->
+                </div><!-- /inner-image -->
+                {is_module_activated name="AVANCED_ARTICLE_MANAGER"}
+                <div id="home-image" class="droppable-image-position droppable-position">
+                    <div>
+                        <a class="delete-button">
+                            <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/trash.png" id="remove_imgHome" alt="Eliminar" title="Eliminar" />
+                        </a>
+                        <div class="clearfix">
+                            <div class="thumbnail article-resource-image">
+                                {if isset($article->params['imageHome']) && $photo3->name}
+                                    <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo3->path_file}{$photo3->name}" id="home_image" name="{$photo3->name}" />
+                                {else}
+                                    <img src="http://placehold.it/290x226" id="home_image" />
+                                {/if}
+                            </div>
+                            <div class="article-resource-image-info">
+                                <div><label>{t}File name{/t}</label>     <span class="filename">{$photo3->name|default:'default_img.jpg'}</span></div>
+                                <div><label>{t}Image size{/t}</label>    <span class="image_size">{$photo3->width|default:0} x {$photo3->height|default:0}</span> (px)</div>
+                                <div><label>{t}File size{/t}</label>     <span class="file_size">{$photo3->size|default:0}</span> Kb</div>
+                                <div><label>{t}Creation date{/t}</label> <span class="created_time">{$photo3->created|default:""}</span></div>
+                                <div><label>{t}Description{/t}</label>   <span class="description">{$photo3->description|escape:'html'}</span></div>
+                                <div><label>{t}Tags{/t}</label>          <span class="tags">{$photo3->metadata|default:""}</span></div>
+                            </div>
+                        </div><!-- / -->
+                        <div id="footer_img_portada" class="article-resource-footer">
+                            <label for="title">{t}Footer text for Home image:{/t}</label>
+                            <textarea name="params[imageHomeFooter]" style="width:95%" class="related-element-footer">{$article->params['imageHomeFooter']|clearslash|escape:'html'}</textarea>
+                            <input type="hidden" name="params[imageHome]" value="{$article->params['imageHome']|default:""}" class="related-element-id" />
+                        </div>
+                    </div><!-- / -->
+                </div><!-- /home-image -->
+
+                {/is_module_activated}
             </div><!-- /related-images -->
 
         </td>

@@ -482,12 +482,10 @@ if (isset($_REQUEST['action']) ) {
             }
 
             if(is_array($article->params) &&
-                    (array_key_exists('imgHome', $article->params)) ) {
-                $imgHome = $article->params['imgHome'];
-                if(!empty($imgHome)){
-                    $photoHome= new Photo($imgHome);
-                    $tpl->assign('photoHome', $photoHome);
-                }
+                    (array_key_exists('imageHome', $article->params)) &&
+                    !empty($article->params['imageHome']) ) {
+                $photoHome= new Photo($article->params['imageHome']);
+                $tpl->assign('photo3', $photoHome);
             }
 
             $video = $article->fk_video;
