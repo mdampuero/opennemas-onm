@@ -57,15 +57,16 @@ if (!isset($action)) {
 }
 
 $configurations = s::get('special_settings');
+
 $numFavorites = (isset($configurations['total_widget']) && !empty($configurations['total_widget']))? $configurations['total_widget']: 1;
 $sizeFile = (isset($configurations['size_file']) && !empty($configurations['size_file']))? $configurations['size_file']: 5000000;
+$cm = new ContentManager();
 
 switch($action) {
 
     case 'list':
         Acl::checkOrForward('SPECIAL_ADMIN');
 
-        $cm = new ContentManager();
 
         if (empty($page)) {
             $limit= "LIMIT ".(ITEMS_PAGE+1);
@@ -114,27 +115,25 @@ switch($action) {
 
     case 'read':
         Acl::checkOrForward('SPECIAL_UPDATE');
-        $cm = new ContentManager();
         $special = new Special($_REQUEST['id']);
         $nots=$special->get_contents($_REQUEST['id']);
         $tpl->assign('special', $special);
-        if($nots){
+        $noticias_left = array();
+        $noticias_right = array();
+        if(!empty($nots)) {
             foreach($nots as $noticia){
                 if(($noticia['position']%2)==0){
-                    $noticias_right[]=new Article($noticia['fk_content']);
+                    $noticias_right[]=new Content($noticia['fk_content']);
                 }else{
-                    $noticias_left[]=new Article($noticia['fk_content']);
+                    $noticias_left[]=new Content($noticia['fk_content']);
                 }
             }
+            $tpl->assign('noticias_right',$noticias_right);
+            $tpl->assign('noticias_left',$noticias_left);
         }
 
-        $tpl->assign('noticias_right',$noticias_right);
-                    $tpl->assign('noticias_left',$noticias_left);
-        $articles= $cm->find_by_category('Article', $category, ' 1=1 ', 'ORDER BY created DESC LIMIT 0,1000');
-        $params=$category;
-        $articles = $cm->paginate_num_js($articles,16,1,'changeSpecials',$params);
-                    //var_dump($cm->pager);
-        $tpl->assign('paginacion_articles', $cm->pager);
+
+        $articles= $cm->find_by_category('Article', $category, ' 1=1 ', 'ORDER BY created DESC LIMIT 0,100');
         $tpl->assign('articles', $articles);
 
         $tpl->display('special/new.tpl');
@@ -142,12 +141,9 @@ switch($action) {
     break;
     case 'new':
         Acl::checkOrForward('SPECIAL_CREATE');
-        $cm = new ContentManager();
-        $articles= $cm->find_by_category('Article', $category, '1=1 ', 'ORDER BY created DESC LIMIT 0,1000');
-        $params = $category;
-        $articles = $cm->paginate_num_js($articles,16,1,'changeSpecials',$params);
-                    //var_dump($cm->pager);
-        $tpl->assign('paginacion_articles', $cm->pager);
+
+        $articles= $cm->find_by_category('Article', $category, '1=1 ', 'ORDER BY created DESC LIMIT 0,100');
+
         $tpl->assign('articles', $articles);
 
         $tpl->display('special/new.tpl');
@@ -167,9 +163,7 @@ switch($action) {
         Acl::checkOrForward('SPECIAL_UPDATE');
         $special = new Special($_REQUEST['id']);
         $special->update($_POST);
-        if(isset($_GET['desde']) && $_GET['desde']=='hemeroteca'){
-            Application::forward('hemeroteca.php?action=list&type=special&category='.$category);
-        }
+
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category);
     break;
 
@@ -212,18 +206,6 @@ switch($action) {
 
     break;
 
-    case 'available_status':
-
-        Acl::checkOrForward('SPECIAL_AVAILABLE');
-
-        $special = new Special($_REQUEST['id']);
-
-        // FIXME: evitar otros valores erróneos
-        $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
-        $special->set_available($_REQUEST['id'],$status);
-
-        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category);
-    break;
 
     case 'change_status':
 
@@ -241,38 +223,29 @@ switch($action) {
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category);
     break;
 
-    case 'mstatus':
-        Acl::checkOrForward('SPECIAL_AVAILABLE');
-        if(isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld'])>0){
-            $fields = $_REQUEST['selected_fld'];
-            if(is_array($fields)) {
-                foreach($fields as $i ) {
-                    $special = new Special($i);
-                    $special->set_status($i);   //Se reutiliza el id para pasar el status
+
+    case 'batchFrontpage':
+
+        Acl::checkOrForward('ALBUM_AVAILABLE');
+
+        if(isset($_GET['selected_fld']) && count($_GET['selected_fld']) > 0) {
+            $fields = $_GET['selected_fld'];
+
+            $status = filter_input ( INPUT_GET, 'status' , FILTER_SANITIZE_NUMBER_INT );
+            if (is_array($fields)) {
+                foreach ($fields as $i) {
+                    $album = new Album($i);
+                    $album->set_available($status, $_SESSION['userid']);
+                    if ($status == 0) {
+                        $album->set_favorite($status);
+                    }
                 }
             }
         }
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category);
+
     break;
 
-    case 'mfrontpage':
-        Acl::checkOrForward('SPECIAL_AVAILABLE');
-
-        $status = ($_REQUEST['id']==1)? 1: 0; // Evitar otros valores
-        if(isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld'])>0)
-        {
-            $fields = $_REQUEST['selected_fld'];
-
-            if(is_array($fields)) {
-                foreach($fields as $i ) {
-                    $special = new Special($i);
-                    $special->set_frontpage($status);   //Se reutiliza el id para pasar el estatus
-                    $special->set_available($i,$status);//Disponible
-                }
-            }
-        }
-        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category);
-    break;
 
     case 'batchDelete':
         Acl::checkOrForward('SPECIAL_DELETE');
@@ -290,6 +263,36 @@ switch($action) {
 
         Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&letter_status=' .
                     $letterStatus . '&page=' . $page);
+    break;
+
+
+     case 'save_positions':
+        $positions = $_GET['positions'];
+        if (isset($positions)  && is_array($positions)
+                && count($positions) > 0) {
+           $_positions = array();
+           $pos = 1;
+
+           foreach($positions as $id) {
+                    $_positions[] = array($pos, '1', $id);
+                    $pos += 1;
+            }
+
+            $album = new Album();
+            $msg = $album->set_position($_positions, $_SESSION['userid']);
+
+            // FIXME: buscar otra forma de hacerlo
+            /* Eliminar caché portada cuando actualizan orden opiniones {{{ */
+            require_once(SITE_CORE_PATH.'template_cache_manager.class.php');
+            $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
+            $tplManager->delete('home|0');
+         }
+         if(!empty($msg) && $msg == true) {
+             echo _("Positions saved successfully.");
+         } else{
+             echo _("Unable to save the new positions. Please contact with your system administrator.");
+         }
+        exit(0);
     break;
 
 
@@ -315,7 +318,7 @@ switch($action) {
     break;
 
     case 'change_article_page':
-        $articles= $cm->find_by_category('Article',$category, '1=1 ', 'ORDER BY created DESC LIMIT 0,1000');
+        $articles= $cm->find_by_category('Article',$category, '1=1 ', 'ORDER BY created DESC LIMIT 0,100');
         $params=$category;
         $articles = $cm->paginate_num_js($articles,16,1,'changeSpecials',$params);
         $tpl->assign('paginacion_articles', $cm->pager);

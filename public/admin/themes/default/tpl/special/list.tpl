@@ -1,10 +1,8 @@
 {extends file="base/admin.tpl"}
+
 {block name="header-js" append}
     {script_tag src="/onm/jquery-functions.js" language="javascript"}
- 
-
 {/block}
-
 
 {block name="content"}
 <form action="#" method="post" name="formulario" id="formulario">
@@ -68,9 +66,8 @@
 
         <ul class="pills clearfix">
             <li>
-                <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=favorite" {if $category=='favorite'}class="active"{elseif $ca eq $datos_cat[0]->fk_content_category}{*class="active"*}{/if}>{t}WIDGET HOME{/t}</a>
+                <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=widget" {if $category=='widget'}class="active"{elseif $ca eq $datos_cat[0]->fk_content_category}{*class="active"*}{/if}>{t}WIDGET HOME{/t}</a>
             </li>
-
            {include file="menu_categories.tpl" home=$smarty.server.SCRIPT_NAME|cat:"?action=list"}
         </ul>
 
@@ -192,4 +189,5 @@
         // ]]>
     </script>
 {/if}
+
 {/block}

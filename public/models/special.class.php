@@ -1,5 +1,20 @@
 <?php
+/*
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+/**
+ * Handles all CRUD operations over Specials.
+ *
+ * @package    Onm
+ * @subpackage Model
+ * @author     Sandra Pereira <sandra@openhost.es>
+ **/
 class Special extends Content {
+
     public $pk_special  = NULL;
     public $subtitle  = NULL;
     public $img1  = NULL;
@@ -21,7 +36,7 @@ class Special extends Content {
 
         parent::create($data);
 
-        $sql = "INSERT INTO specials ( `pk_special`, `subtitle`,  `img1`,   `pdf_path`) " .
+        $sql = "INSERT INTO specials ( `pk_special`, `subtitle`,  `img1`, `pdf_path`) " .
 				"VALUES (?,?,?,?)";
 
         $values = array( $this->id,$data['subtitle'], $data['img1'],   $data['pdf_path']);
@@ -32,29 +47,27 @@ class Special extends Content {
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
             return(false);
         }
-      //   $this->id = $GLOBALS['application']->conn->Insert_ID();
-        // var_dump($data['noticias']);
-            if(!empty($data['pdf_path']) && isset($data['noticias_left']) && isset($data['noticias_right'])){
-                $tok = strtok($data['noticias_left'],",");
-                $name="";
-                $pos=1;
-                $type_content='Article';
-                while (($tok !== false) AND ($tok !=" ")) {
-                            $this->set_contents($this->id ,$tok, $pos, $name,  $type_content);
-                            $tok = strtok(",");
-                            $pos+=2;
-                }
-                $tok = strtok($data['noticias_right'],",");
-                $name="";
-                $pos=2;
-                $type_content='Article';
-                while (($tok !== false) AND ($tok !=" ")) {
-                            $this->set_contents($this->id ,$tok, $pos, $name,  $type_content);
-                            $tok = strtok(",");
-                            $pos+=2;
-                }
-            }
 
+        if(!empty($data['pdf_path']) && isset($data['noticias_left']) && isset($data['noticias_right'])) {
+            $tok = strtok($data['noticias_left'],",");
+            $name="";
+            $pos=1;
+            $type_content='Article';
+            while (($tok !== false) AND ($tok !=" ")) {
+                        $this->set_contents($this->id ,$tok, $pos, $name,  $type_content);
+                        $tok = strtok(",");
+                        $pos+=2;
+            }
+            $tok = strtok($data['noticias_right'],",");
+            $name="";
+            $pos=2;
+            $type_content='Article';
+            while (($tok !== false) AND ($tok !=" ")) {
+                        $this->set_contents($this->id ,$tok, $pos, $name,  $type_content);
+                        $tok = strtok(",");
+                        $pos+=2;
+            }
+        }
 
         return(true);
     }
@@ -161,10 +174,10 @@ class Special extends Content {
     	if($id == NULL) {
     		return(false);
     	}
-        $related = array();
     	$sql = 'SELECT * FROM `special_contents` WHERE fk_special = ' .intval($id).' ORDER BY position ASC';
         $rs = $GLOBALS['application']->conn->Execute($sql);
- 		 $i=0;
+ 		$i=0;
+        $items = array();
         while(!$rs->EOF) {
         	$items[$i]['fk_content'] = $rs->fields['fk_content'];
         	$items[$i]['name'] = $rs->fields['name'];
