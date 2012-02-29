@@ -44,11 +44,11 @@
     <div id="statistics-tabbed" class="tabs">
         <ul>
             <li><a href="#last-visits">{t}General{/t}</a></li>
-            <li><a href="#browsers">{t}Browsers and Search Engines{/t}</a></li>
-            <li><a href="#search-engines">{t}Browsers and Search Engines{/t}</a></li>
+            <li><a href="#browsers">{t}Visitors Browsers{/t}</a></li>
+            <li><a href="#search-engines">{t}Search Engines{/t}</a></li>
             <li><a href="#page-titles">{t}Page Titles{/t}</a></li>
-            <li><a href="#external-websites">{t}External websites and Keywords{/t}</a></li>
-            <li><a href="#keywords">{t}External websites and Keywords{/t}</a></li>
+            <li><a href="#external-websites">{t}External Websites{/t}</a></li>
+            <li><a href="#keywords">{t}Keywords List{/t}</a></li>
         </ul>
 
 
