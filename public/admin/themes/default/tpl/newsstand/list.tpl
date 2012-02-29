@@ -38,7 +38,7 @@
                 </a>
             </li>
             {/acl}
-            {acl isAllowed="KIOSKO_WIDGET"}
+            {acl isAllowed="KIOSKO_HOME"}
              {if $category eq 'favorite'}
                 <li>
                     <a href="#" class="admin_add" onClick="javascript:saveSortPositions('{$smarty.server.PHP_SELF}');" title="Guardar Positions" alt="Guardar Posiciones">
@@ -140,7 +140,7 @@
             </td>
             {if $category!='widget' && $category!='all'}
             <td align="center">
-            {acl isAllowed="KIOSKO_FAVORITE"}
+            {acl isAllowed="KIOSKO_UPDATE"}
                 {if $portadas[as]->favorite == 1}
                     <a href="?id={$portadas[as]->id}&amp;action=change_favorite&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage}" class="favourite_on" title="Quitar de favorito"></a>
                 {else}
