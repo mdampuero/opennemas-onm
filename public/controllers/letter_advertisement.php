@@ -8,7 +8,7 @@ $advertisement = Advertisement::getInstance();
 
 // Load internal banners, principal banners (1,2,3,11,13) and use cache to performance
 /* $banners = $advertisement->cache->getAdvertisements(array(1, 2, 3, 10, 12, 11, 13), $category); */
-$banners = $advertisement->getAdvertisements(array(1, 2, 103, 105, 9, 10), $category);
+$banners = $advertisement->getAdvertisements(array(1, 2, 103, 105, 5, 6), $category);
  $cm = new ContentManager();
 $banners = $cm->getInTime($banners);
 //$advertisement->render($banners, &$tpl);
