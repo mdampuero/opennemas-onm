@@ -56,9 +56,6 @@ gettext("Save");
 gettext("Go back");
 
 /* public/admin/themes/default/tpl//special/new.tpl */
-gettext("Enter special information");
-
-/* public/admin/themes/default/tpl//special/new.tpl */
 gettext("Title:");
 
 /* public/admin/themes/default/tpl//special/new.tpl */
@@ -172,41 +169,80 @@ gettext("Delete");
 /* public/admin/themes/default/tpl//special/list.tpl */
 gettext("There is no specials yet");
 
-/* public/admin/themes/default/tpl//special/special_image.tpl */
-gettext("Image for Special:");
+/* public/admin/themes/default/tpl//special/partials/_load_images.tpl */
+gettext("Image for home:");
 
-/* public/admin/themes/default/tpl//special/special_image.tpl */
-gettext("File:");
+/* public/admin/themes/default/tpl//special/partials/_load_images.tpl */
+gettext("Image for Special");
 
-/* public/admin/themes/default/tpl//special/special_image.tpl */
-gettext("Dimensions:");
+/* public/admin/themes/default/tpl//special/partials/_load_images.tpl */
+gettext("File name");
 
-/* public/admin/themes/default/tpl//special/special_image.tpl */
-gettext("Weight:");
+/* public/admin/themes/default/tpl//special/partials/_load_images.tpl */
+gettext("Image size");
 
-/* public/admin/themes/default/tpl//special/special_image.tpl */
-gettext("Created:");
+/* public/admin/themes/default/tpl//special/partials/_load_images.tpl */
+gettext("File size");
 
-/* public/admin/themes/default/tpl//special/special_image.tpl */
-gettext("Description:");
+/* public/admin/themes/default/tpl//special/partials/_load_images.tpl */
+gettext("Creation date");
 
-/* public/admin/themes/default/tpl//special/special_image.tpl */
-gettext("Default image:");
+/* public/admin/themes/default/tpl//special/partials/_load_images.tpl */
+gettext("Description");
 
-/* public/admin/themes/default/tpl//special/special_image.tpl */
-gettext("Tags:");
+/* public/admin/themes/default/tpl//special/partials/_load_images.tpl */
+gettext("Tags");
 
-/* public/admin/themes/default/tpl//special/special_image.tpl */
-gettext("Image");
-
-/* public/admin/themes/default/tpl//special/special_image.tpl */
-gettext("Footer image:");
-
-/* public/admin/themes/default/tpl//special/special_image.tpl */
+/* public/admin/themes/default/tpl//special/partials/_load_images.tpl */
 gettext("Available images");
 
-/* public/admin/themes/default/tpl//special/special_image.tpl */
+/* public/admin/themes/default/tpl//special/partials/_load_images.tpl */
 gettext("Search images by title...");
+
+/* public/admin/themes/default/tpl//special/partials/special_image.tpl */
+gettext("Image for Special:");
+
+/* public/admin/themes/default/tpl//special/partials/special_image.tpl */
+gettext("File:");
+
+/* public/admin/themes/default/tpl//special/partials/special_image.tpl */
+gettext("Dimensions:");
+
+/* public/admin/themes/default/tpl//special/partials/special_image.tpl */
+gettext("Weight:");
+
+/* public/admin/themes/default/tpl//special/partials/special_image.tpl */
+gettext("Created:");
+
+/* public/admin/themes/default/tpl//special/partials/special_image.tpl */
+gettext("Description:");
+
+/* public/admin/themes/default/tpl//special/partials/special_image.tpl */
+gettext("Default image:");
+
+/* public/admin/themes/default/tpl//special/partials/special_image.tpl */
+gettext("Tags:");
+
+/* public/admin/themes/default/tpl//special/partials/special_image.tpl */
+gettext("Image");
+
+/* public/admin/themes/default/tpl//special/partials/special_image.tpl */
+gettext("Footer image:");
+
+/* public/admin/themes/default/tpl//special/partials/special_image.tpl */
+gettext("Available images");
+
+/* public/admin/themes/default/tpl//special/partials/special_image.tpl */
+gettext("Search images by title...");
+
+/* public/admin/themes/default/tpl//special/partials/_contents_containers.tpl */
+gettext("Articles");
+
+/* public/admin/themes/default/tpl//special/partials/_contents_containers.tpl */
+gettext("Opinions");
+
+/* public/admin/themes/default/tpl//special/partials/_contents_containers.tpl */
+gettext("Albums");
 
 /* public/admin/themes/default/tpl//comment/read.tpl */
 gettext("Comment Manager");
@@ -225,9 +261,6 @@ gettext("Unpublish");
 
 /* public/admin/themes/default/tpl//comment/read.tpl */
 gettext("Publish");
-
-/* public/admin/themes/default/tpl//comment/read.tpl */
-gettext("See article");
 
 /* public/admin/themes/default/tpl//comment/read.tpl */
 gettext("Go back");
@@ -1706,22 +1739,10 @@ gettext("Server hour:");
 gettext("Description");
 
 /* public/admin/themes/default/tpl//article/new.tpl */
-gettext("Gallery");
+gettext("Show as gallery:");
 
 /* public/admin/themes/default/tpl//article/new.tpl */
-gettext("Link");
-
-/* public/admin/themes/default/tpl//article/new.tpl */
-gettext("Embebed");
-
-/* public/admin/themes/default/tpl//article/new.tpl */
-gettext("Gallery");
-
-/* public/admin/themes/default/tpl//article/new.tpl */
-gettext("Link");
-
-/* public/admin/themes/default/tpl//article/new.tpl */
-gettext("Embebed");
+gettext("Show as gallery:");
 
 /* public/admin/themes/default/tpl//article/new.tpl */
 gettext("Related contents in frontpage");
@@ -1936,42 +1957,6 @@ gettext("Use other words.");
 /* public/admin/themes/default/tpl//article/partials/_related.tpl */
 gettext("Use more general search criteria.");
 
-/* public/admin/themes/default/tpl//article/partials/_load_image.tpl */
-gettext("Image for home frontpage:");
-
-/* public/admin/themes/default/tpl//article/partials/_load_image.tpl */
-gettext("File name:");
-
-/* public/admin/themes/default/tpl//article/partials/_load_image.tpl */
-gettext("Size:");
-
-/* public/admin/themes/default/tpl//article/partials/_load_image.tpl */
-gettext("File size:");
-
-/* public/admin/themes/default/tpl//article/partials/_load_image.tpl */
-gettext("File creation date");
-
-/* public/admin/themes/default/tpl//article/partials/_load_image.tpl */
-gettext("Description:");
-
-/* public/admin/themes/default/tpl//article/partials/_load_image.tpl */
-gettext("Footer text for frontpage image:");
-
-/* public/admin/themes/default/tpl//article/partials/_load_image.tpl */
-gettext("File name:");
-
-/* public/admin/themes/default/tpl//article/partials/_load_image.tpl */
-gettext("Size:");
-
-/* public/admin/themes/default/tpl//article/partials/_load_image.tpl */
-gettext("File size:");
-
-/* public/admin/themes/default/tpl//article/partials/_load_image.tpl */
-gettext("File creation date");
-
-/* public/admin/themes/default/tpl//article/partials/_load_image.tpl */
-gettext("Description:");
-
 /* public/admin/themes/default/tpl//article/partials/_images.tpl */
 gettext("Multimedia associated to this article:");
 
@@ -1986,6 +1971,12 @@ gettext("Image for inner article page:");
 
 /* public/admin/themes/default/tpl//article/partials/_images.tpl */
 gettext("Image for inner article page");
+
+/* public/admin/themes/default/tpl//article/partials/_images.tpl */
+gettext("Image for home:");
+
+/* public/admin/themes/default/tpl//article/partials/_images.tpl */
+gettext("Image for Home");
 
 /* public/admin/themes/default/tpl//article/partials/_images.tpl */
 gettext("File name");
@@ -2028,6 +2019,27 @@ gettext("Tags");
 
 /* public/admin/themes/default/tpl//article/partials/_images.tpl */
 gettext("Footer text for inner image:");
+
+/* public/admin/themes/default/tpl//article/partials/_images.tpl */
+gettext("File name");
+
+/* public/admin/themes/default/tpl//article/partials/_images.tpl */
+gettext("Image size");
+
+/* public/admin/themes/default/tpl//article/partials/_images.tpl */
+gettext("File size");
+
+/* public/admin/themes/default/tpl//article/partials/_images.tpl */
+gettext("Creation date");
+
+/* public/admin/themes/default/tpl//article/partials/_images.tpl */
+gettext("Description");
+
+/* public/admin/themes/default/tpl//article/partials/_images.tpl */
+gettext("Tags");
+
+/* public/admin/themes/default/tpl//article/partials/_images.tpl */
+gettext("Footer text for Home image:");
 
 /* public/admin/themes/default/tpl//article/partials/_images.tpl */
 gettext("Available images");
@@ -2216,46 +2228,43 @@ gettext("Go back");
 gettext("Go back");
 
 /* public/admin/themes/default/tpl//article/partials/_article_avanced_customize.tpl */
-gettext("Agency in Bulletin");
-
-/* public/admin/themes/default/tpl//article/partials/_article_avanced_customize.tpl */
-gettext("Agency");
-
-/* public/admin/themes/default/tpl//article/partials/_article_avanced_customize.tpl */
-gettext("Frontpage section");
-
-/* public/admin/themes/default/tpl//article/partials/_article_avanced_customize.tpl */
-gettext("Image position in frontpage");
+gettext("Customize for section Frontpage");
 
 /* public/admin/themes/default/tpl//article/partials/_article_avanced_customize.tpl */
 gettext("Size for title");
 
 /* public/admin/themes/default/tpl//article/partials/_article_avanced_customize.tpl */
-gettext("Customize for home");
+gettext("Image position");
 
 /* public/admin/themes/default/tpl//article/partials/_article_avanced_customize.tpl */
-gettext("Title for Home Frontpage");
+gettext("Customize for Home Frontpage");
+
+/* public/admin/themes/default/tpl//article/partials/_article_avanced_customize.tpl */
+gettext("Title");
+
+/* public/admin/themes/default/tpl//article/partials/_article_avanced_customize.tpl */
+gettext("Title for Home frontpage");
+
+/* public/admin/themes/default/tpl//article/partials/_article_avanced_customize.tpl */
+gettext("Size");
+
+/* public/admin/themes/default/tpl//article/partials/_article_avanced_customize.tpl */
+gettext("Subtitle");
 
 /* public/admin/themes/default/tpl//article/partials/_article_avanced_customize.tpl */
 gettext("Title for Home");
 
 /* public/admin/themes/default/tpl//article/partials/_article_avanced_customize.tpl */
-gettext("Size for title in home");
+gettext("Summary");
 
 /* public/admin/themes/default/tpl//article/partials/_article_avanced_customize.tpl */
-gettext("Home Subtitle");
+gettext("Image position");
 
 /* public/admin/themes/default/tpl//article/partials/_article_avanced_customize.tpl */
-gettext("Title for Home");
+gettext("Agency in Bulletin");
 
 /* public/admin/themes/default/tpl//article/partials/_article_avanced_customize.tpl */
-gettext("Home summary");
-
-/* public/admin/themes/default/tpl//article/partials/_article_avanced_customize.tpl */
-gettext("Image position for Home");
-
-/* public/admin/themes/default/tpl//article/partials/_article_avanced_customize.tpl */
-gettext("Image for home Frontpage");
+gettext("Agency");
 
 /* public/admin/themes/default/tpl//article/library.tpl */
 gettext("Library");
@@ -3276,6 +3285,18 @@ gettext("Albums");
 
 /* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
 gettext("Advertisement");
+
+/* public/admin/themes/default/tpl//frontpagemanager/modals/_modalDelete.tpl */
+gettext("Delete menu");
+
+/* public/admin/themes/default/tpl//frontpagemanager/modals/_modalDelete.tpl */
+gettext("Are you sure that do you want to send to trash \"<span>%title%</span>\"?");
+
+/* public/admin/themes/default/tpl//frontpagemanager/modals/_modalDelete.tpl */
+gettext("Send to trash");
+
+/* public/admin/themes/default/tpl//frontpagemanager/modals/_modalDelete.tpl */
+gettext("Keep");
 
 /* public/admin/themes/default/tpl//search_advanced/content-provider.tpl */
 gettext("Latest news in Spain...");
@@ -4353,9 +4374,6 @@ gettext("Creating new widget");
 
 /* public/admin/themes/default/tpl//widget/edit.tpl */
 gettext("Editing widget \"%1\"");
-
-/* public/admin/themes/default/tpl//widget/edit.tpl */
-gettext("Cancel");
 
 /* public/admin/themes/default/tpl//widget/edit.tpl */
 gettext("Cancel");
@@ -6494,6 +6512,9 @@ gettext("You can get your Piwik Site information from <a href=\"https://piwik.op
 gettext("Server URL:");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
+gettext("User Token Auth:");
+
+/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("Recaptcha");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
@@ -6588,6 +6609,39 @@ gettext("Acting performed:");
 
 /* public/admin/themes/default/tpl//statistics/statistics.tpl */
 gettext("Content Statistics");
+
+/* public/admin/themes/default/tpl//statistics/statistics.tpl */
+gettext("Piwik Widgets");
+
+/* public/admin/themes/default/tpl//statistics/statistics.tpl */
+gettext("All Categorys");
+
+/* public/admin/themes/default/tpl//statistics/piwik_widgets.tpl */
+gettext("Content Statistics");
+
+/* public/admin/themes/default/tpl//statistics/piwik_widgets.tpl */
+gettext("Piwik Widgets");
+
+/* public/admin/themes/default/tpl//statistics/piwik_widgets.tpl */
+gettext("All Categorys");
+
+/* public/admin/themes/default/tpl//statistics/piwik_widgets.tpl */
+gettext("General");
+
+/* public/admin/themes/default/tpl//statistics/piwik_widgets.tpl */
+gettext("Visitors Browsers");
+
+/* public/admin/themes/default/tpl//statistics/piwik_widgets.tpl */
+gettext("Search Engines");
+
+/* public/admin/themes/default/tpl//statistics/piwik_widgets.tpl */
+gettext("Page Titles");
+
+/* public/admin/themes/default/tpl//statistics/piwik_widgets.tpl */
+gettext("External Websites");
+
+/* public/admin/themes/default/tpl//statistics/piwik_widgets.tpl */
+gettext("Keywords List");
 
 /* public/admin/themes/default/tpl//static_pages/read.tpl */
 gettext("Static Pages Manager");
@@ -6870,6 +6924,24 @@ gettext("Available articles (please, double click over one element to send it)")
 
 /* public/admin/themes/default/tpl//newsletter/listArticles.tpl */
 gettext("Selected articles (please doucle click over one element to discart it)");
+
+/* public/admin/themes/default/tpl//newsletter/_partials/container_contents.tpl */
+gettext("Available contents");
+
+/* public/admin/themes/default/tpl//newsletter/_partials/container_contents.tpl */
+gettext("Opinions");
+
+/* public/admin/themes/default/tpl//newsletter/_partials/container_contents.tpl */
+gettext("Widgets");
+
+/* public/admin/themes/default/tpl//newsletter/_partials/container_contents.tpl */
+gettext("Albums");
+
+/* public/admin/themes/default/tpl//newsletter/_partials/container_contents.tpl */
+gettext("Specials");
+
+/* public/admin/themes/default/tpl//newsletter/_partials/container_contents.tpl */
+gettext("Letters");
 
 /* public/admin/themes/default/tpl//newsletter/subscriptors.tpl */
 gettext("Go back");
