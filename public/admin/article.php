@@ -482,12 +482,10 @@ if (isset($_REQUEST['action']) ) {
             }
 
             if(is_array($article->params) &&
-                    (array_key_exists('imgHome', $article->params)) ) {
-                $imgHome = $article->params['imgHome'];
-                if(!empty($imgHome)){
-                    $photoHome= new Photo($imgHome);
-                    $tpl->assign('photoHome', $photoHome);
-                }
+                    (array_key_exists('imageHome', $article->params)) &&
+                    !empty($article->params['imageHome']) ) {
+                $photoHome= new Photo($article->params['imageHome']);
+                $tpl->assign('photo3', $photoHome);
             }
 
             $video = $article->fk_video;
@@ -537,7 +535,8 @@ if (isset($_REQUEST['action']) ) {
             }
 
             $tpl->assign(
-                array('availableSizes'=>array(20,22,24,26,28,30,32,34))
+                array('availableSizes'=>array(20=>'20',22=>'22',24=>'24',26=>'26',
+                                            28=>'28',30=>'30',32=>'32',34=>'34'))
             );
 
             $tpl->display('article/new.tpl');

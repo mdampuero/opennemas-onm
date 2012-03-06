@@ -1,3 +1,7 @@
+--27-02-2012
+INSERT INTO `privileges` (`pk_privilege`, `name`, `description`, `module`) VALUES
+(173, 'LETTER_ADMIN', 'Admon. cartas', 'LETTER');
+
 --09-02-2012
 ALTER TABLE  `albums` CHANGE  `cover`  `cover_id` BIGINT( 255 ) NULL DEFAULT NULL;
 

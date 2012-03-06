@@ -19,7 +19,7 @@ jQuery(function ($) {
     $('#fileupload').fileupload();
     $('#fileupload').fileupload('option', {
         maxFileSize: 5000000,
-        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i
+        acceptFileTypes: /(\.|\/)(gif|jpe?g|png|swf)$/i
     });
 
     // Enable iframe cross-domain access via redirect page:

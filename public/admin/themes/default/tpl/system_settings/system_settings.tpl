@@ -505,6 +505,14 @@
                                     <input type="text" id="piwik_server_url" name="piwik[server_url]" value="{$configs['piwik']['server_url']|default:""}">
                                 </td>
                             </tr>
+                            <tr>
+                                <th scope="row">
+                                    <label for="piwik_token_auth">{t}User Token Auth:{/t}</label>
+                                </th>
+                                <td>
+                                    <input type="text" id="piwik_token_auth" name="piwik[token_auth]" value="{$configs['piwik']['token_auth']|default:""}">
+                                </td>
+                            </tr>
 
                         </tbody>
                     </table>

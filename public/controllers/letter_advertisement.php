@@ -8,14 +8,14 @@ $advertisement = Advertisement::getInstance();
 
 // Load internal banners, principal banners (1,2,3,11,13) and use cache to performance
 /* $banners = $advertisement->cache->getAdvertisements(array(1, 2, 3, 10, 12, 11, 13), $category); */
-$banners = $advertisement->getAdvertisements(array(801, 802, 803, 805, 809, 810), $category);
+$banners = $advertisement->getAdvertisements(array(1, 2, 103, 105, 5, 6), $category);
  $cm = new ContentManager();
 $banners = $cm->getInTime($banners);
 //$advertisement->render($banners, &$tpl);
 $advertisement->render($banners, $advertisement);
 
 
-$intersticial = $advertisement->getIntersticial(850, '$category');
+$intersticial = $advertisement->getIntersticial(50, '$category');
 if (!empty($intersticial)) {
     $advertisement->render(array($intersticial), $advertisement);
 }

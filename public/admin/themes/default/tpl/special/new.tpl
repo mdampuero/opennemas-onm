@@ -47,15 +47,6 @@
         </div>
     </div>
     <div class="wrapper-content">
-
-        <table class="adminheading">
-            <tr>
-                <td>
-                    {t}Enter special information{/t}
-                </td>
-            </tr>
-        </table>
-
         <table class="adminform">
             <tbody>
                 <tr>
@@ -67,10 +58,10 @@
                             size="60" value="{$special->title|clearslash|escape:"html"}"
                             class="required" onBlur="javascript:get_metadata(this.value);" />
                     </td>
-                    <td rowspan="4">
-                        <table style='background-color:#F5F5F5; padding:18px;'>
+                    <td rowspan="4"  style="padding: 4px;">
+                        <table  style='background-color:#F5F5F5; padding:8px;'>
                             <tr>
-                                <td valign="top"  align="right" nowrap="nowrap">
+                                <td valign="top"  style="text-align:right;padding: 4px;" nowrap="nowrap">
                                 <label for="title">Secci&oacute;n:</label>
                                 </td>
                                 <td nowrap="nowrap">
@@ -85,7 +76,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td valign="top"  align="right" nowrap="nowrap">
+                                <td valign="top" style="text-align:right;padding: 4px;" nowrap="nowrap">
                                     <label for="title"> {t}Available:{/t} </label>
                                 </td>
                                 <td valign="top" nowrap="nowrap">
@@ -144,12 +135,12 @@
                 </tr>
                 <tr>
                     <td valign="top" align="right" colspan="3">
-                        {include file="special/special_image.tpl"}
+                        {include file="special/partials/_load_images.tpl"}
                     </td>
                 </tr>
                 <tr>
                     <td valign="top" align="right" colspan="3">
-                        {include file="special/special_content.tpl"}
+                        {include file="special/partials/_contents_containers.tpl"}
                     </td>
                 </tr>
           </tbody>

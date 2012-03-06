@@ -6,18 +6,25 @@
 {/block}
 
 {block name="content"}
-{* LISTADO ******************************************************************* *}
-{if !isset($smarty.request.action) || $smarty.request.action eq "index"}
+
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
         <div class="title"><h2>{t}Content Statistics{/t}</h2></div>
     </div>
 </div>
+
 <div class="wrapper-content">
-    {* ZONA MENU CATEGORIAS ******* *}
+
     <ul class="pills">
         <li>
-            <a href="statistics.php?action=index&category=0" id="link_global" {if $category==0}class="active"{/if}>TODAS</a>
+            <a href="statistics.php?action=getPiwikWidgets" id="piwik" {if $category == 'piwik_widgets'} class="active"{/if}>
+                {t}Piwik Widgets{/t}
+            </a>
+        </li>
+        <li>
+            <a href="statistics.php?action=index&category=0" id="link_global" {if $category == '0'} class="active"{/if}>
+                {t}All Categorys{/t}
+            </a>
         </li>
         {include file="menu_categories.tpl" home="statistics.php?action=index"}
     </ul>
@@ -106,13 +113,13 @@
             </tr>
         </table>
     </div>
+
     <script type="text/javascript">
     /* <![CDATA[ */
         change_dashboard('viewed',{$category});
     /* ]]> */
     </script>
 </div>
-{/if}
 
     <input type="hidden" id="action" name="action" value="" />
     <input type="hidden" name="id" id="id" value="{$id|default:""}" />

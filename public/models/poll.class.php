@@ -14,11 +14,11 @@
  * @author     Sandra Pereira <sandra@openhost.es>
  **/
 class Poll extends Content {
-    var $pk_poll = NULL;
-    var $subtitle = NULL;
-    var $total_votes   	= NULL;
-    var $used_ips   	= NULL;
-	var $visualization 	= NULL;
+    public $pk_poll = NULL;
+    public $subtitle = NULL;
+    public $total_votes   	= NULL;
+    public $used_ips   	= NULL;
+	public $visualization 	= NULL;
 
 
     function __construct($id=null) {
@@ -61,7 +61,7 @@ class Poll extends Content {
         return parent::__get($name);
     }
 
-    function create($data) {
+    public function create($data) {
         //Modificamos los metadatos con los tags de cada item
         $tags = '';
     	if(isset($data['item']) && !empty($data['item'] )){
@@ -101,7 +101,7 @@ class Poll extends Content {
         return true;
     }
 
-    function read($id) {
+    public function read($id) {
         parent::read($id);
 
         $sql = 'SELECT * FROM polls WHERE pk_poll = '.($id);
@@ -124,7 +124,7 @@ class Poll extends Content {
 
     }
 
-    function update($data) {
+    public function update($data) {
     	if(isset($data['item']) && !empty($data['item'] )){
 			$tags = implode(',', $data['item']);
 
@@ -175,7 +175,7 @@ class Poll extends Content {
         $this->pk_poll = $data['id'];
 	}
 
-    function remove($id) {
+    public function remove($id) {
         parent::remove($id);
 
         $sql = 'DELETE FROM polls WHERE pk_poll ='.($id);
@@ -195,12 +195,13 @@ class Poll extends Content {
         }
     }
 
-    function get_items($pk_poll){
+    public function get_items($pk_poll){
         $sql = 'SELECT poll_items.pk_item, poll_items.item, poll_items.votes, poll_items.metadata '
                 .' FROM poll_items WHERE fk_pk_poll = '.($pk_poll).' ORDER BY poll_items.pk_item';
         $rs = $GLOBALS['application']->conn->Execute( $sql );
         $i=0;
         $total=0;
+        $items = array();
         while (!$rs->EOF) {
             $items[$i]['pk_item']=$rs->fields['pk_item'];
             $items[$i]['item']=$rs->fields['item'];
@@ -212,17 +213,18 @@ class Poll extends Content {
         }
 
         //TODO: improvement calc percents
+        if(!empty($items)) {
             foreach ($items as &$item) {
                 $item['percent'] =0;
                 if(!empty($item['votes'])) {
                     $item['percent'] = sprintf("%.0f",($item['votes']*100 / $total) );
                 }
             }
-
+        }
         return $items;
     }
 
-    function vote($pk_item,$ip){
+    public function vote($pk_item,$ip){
         $this->used_ips = $this->add_count($this->used_ips,$ip);
         if (!$this->used_ips){
                 Application::setCookieSecure("polls".$this->id, 'true', time()+60*60*24*30);
@@ -265,7 +267,7 @@ class Poll extends Content {
         return(true);
     }
 
-    function add_count($ips_count, $ip) {
+    public function add_count($ips_count, $ip) {
 		$ips = array();
 		if($ips_count){
 	    	foreach($ips_count as $ip_array){
@@ -285,28 +287,5 @@ class Poll extends Content {
 
 		return $ips_count;
     }
-
-    function set_view_column($status) {
-        //	Comprobamos fechas.
-        if($this->id == NULL) {
-            return(false);
-        }
-
-        $rs = $GLOBALS['application']->conn->Execute( $sql );
-
-    	$sql = "UPDATE polls SET `view_column`=?
-                    WHERE pk_poll=".$this->id;
-        $values = array($status);
-
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-
-            return;
-        }
-        return(true);
-    }
-
 
 }

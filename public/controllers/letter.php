@@ -52,7 +52,7 @@ switch($action) {
            || (!$tpl->isCached('letter/letter-frontpage.tpl',$cacheID))) {
 
                 $otherLetters = $cm->find_all('Letter', 'available=1 ',
-                                            'ORDER BY created DESC LIMIT 8');
+                                            'ORDER BY created DESC LIMIT 5');
 
             $tpl->assign( array('otherLetters'=> $otherLetters ) );
 
