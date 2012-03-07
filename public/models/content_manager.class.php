@@ -149,7 +149,7 @@ class ContentManager
                     ));
                     $contents[] = $content;
                 }
-                
+
                 $rs->MoveNext();
             }
         }
@@ -1381,6 +1381,7 @@ class ContentManager
                 'created'=> $rs->fields['created'],
                 'category_title'=> $ccm->get_title($ccm->get_name($rs->fields['category_id'])),
                 'id' =>$rs->fields['pk_content'],
+                'category' => $rs->fields['category_id'],
 
                 /* to filter in getInTime() */
                 'starttime' => $rs->fields['starttime'],

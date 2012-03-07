@@ -1759,6 +1759,39 @@ gettext("Body");
 /* public/admin/themes/default/tpl//statistics/statistics.tpl */
 gettext("Content Statistics");
 
+/* public/admin/themes/default/tpl//statistics/statistics.tpl */
+gettext("Piwik Widgets");
+
+/* public/admin/themes/default/tpl//statistics/statistics.tpl */
+gettext("All Categorys");
+
+/* public/admin/themes/default/tpl//statistics/piwik_widgets.tpl */
+gettext("Content Statistics");
+
+/* public/admin/themes/default/tpl//statistics/piwik_widgets.tpl */
+gettext("Piwik Widgets");
+
+/* public/admin/themes/default/tpl//statistics/piwik_widgets.tpl */
+gettext("All Categorys");
+
+/* public/admin/themes/default/tpl//statistics/piwik_widgets.tpl */
+gettext("General");
+
+/* public/admin/themes/default/tpl//statistics/piwik_widgets.tpl */
+gettext("Visitors Browsers");
+
+/* public/admin/themes/default/tpl//statistics/piwik_widgets.tpl */
+gettext("Search Engines");
+
+/* public/admin/themes/default/tpl//statistics/piwik_widgets.tpl */
+gettext("Page Titles");
+
+/* public/admin/themes/default/tpl//statistics/piwik_widgets.tpl */
+gettext("External Websites");
+
+/* public/admin/themes/default/tpl//statistics/piwik_widgets.tpl */
+gettext("Keywords List");
+
 /* public/admin/themes/default/tpl//article/pending.tpl */
 gettext("Pending articles");
 
@@ -2781,6 +2814,9 @@ gettext("You can get your Piwik Site information from <a href=\"https://piwik.op
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("Server URL:");
+
+/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
+gettext("User Token Auth:");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("Recaptcha");
