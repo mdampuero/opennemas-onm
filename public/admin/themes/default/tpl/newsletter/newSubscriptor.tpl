@@ -5,7 +5,7 @@
     <style>
     input[type="text"]  {
         max-height: 80%;
-        width: 300px;
+        width: 500px;
     }
     label {
         float:right;
@@ -65,37 +65,52 @@
         <table  class="adminform">
             <tr>
                 <td>
-                    <label for="emailDA">{t}Email{/t}</label>
+                    <label for="emailDA">{t}Email{/t}:</label>
                 </td>
                 <td>
-                    <input type="text" id="emailDA" name="email" title="Correo Electr&oacute;nico"
+                    <input type="text" id="emailDA" name="email" title="{t}Email{/t}"
                         value="{$user->email}" class="required validate-email" />
+                </td>
+                <td rowspan="6">
+                    <div class="help-block margin-left-1">
+                        <div class="title"><h4>{t}Basic parameters{/t}</h4></div>
+                        <div class="content">
+                            <dl>
+                                <dt><strong>{t}Subscriptor data{/t}</strong></dt>
+                                <dd>{t}The complete name and email address of the subscriptor{/t}</dd>
+                                <dt><strong>{t}Subscribed{/t}</strong></dt>
+                                <dd>{t}If is subscribed, the user email address will be available on the account provider{/t}</dd>
+                                <dt><strong>{t}Activated{/t}</strong></dt>
+                                <dd>{t}If is activated means that the user is ready to receive newsletters{/t}</dd>
+                            </dl>
+                        </div>
+                    </div>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <label for="nombreDA">{t}Name{/t}</label>
+                    <label for="nombreDA">{t}Name{/t}:</label>
                 </td>
-                <td>
-                    <input type="text" id="nombreDA" name="name" title="Nombre del usuario"
+                <td colspan="2">
+                    <input type="text" id="nombreDA" name="name" title="{t}Name{/t}"
                         value="{$user->name}" class="required validate-alpha" />
                 </td>
             </tr>
             <tr>
                 <td>
-                    <label for="apellidoDA">{t}Surname{/t}</label>
+                    <label for="apellidoDA">{t}Surname{/t}:</label>
                 </td>
-                <td>
-                    <input type="text" id="apellidoDA" name="firstname" title="Primer apellido del usuario"
+                <td colspan="2">
+                    <input type="text" id="apellidoDA" name="firstname" title="{t}Surname{/t}"
                         value="{$user->firstname}" class="required validate-alpha" />
                 </td>
             </tr>
             <tr>
                 <td>
-                    <label for="segApellidoDA">{t}Lastname{/t}</label>
+                    <label for="segApellidoDA">{t}Lastname{/t}:</label>
                 </td>
-                <td>
-                    <input type="text" id="segApellidoDA" name="lastname" title="Segundo apellido del usuario"
+                <td colspan="2">
+                    <input type="text" id="segApellidoDA" name="lastname" title="{t}Lastname{/t}"
                         class="validate-alpha" value="{$user->lastname}" />
                 </td>
             </tr>
@@ -105,7 +120,7 @@
                         {t}Subscribed{/t}:
                     </label>
                 </td>
-                <td>
+                <td colspan="2">
                     <select name="subscription" id="subscribed">
                         <option value="1" {if is_null($user->subscription) || $user->subscription eq 1 }selected="selected"{/if}>{t}Yes{/t}</option>
                         <option value="0" {if (isset($user->subscription)) && $user->subscription eq 0}selected="selected"{/if}>{t}No{/t}</option>
@@ -115,10 +130,10 @@
             <tr>
                 <td>
                     <label for="activated">
-                        {t}Activated{/t}
+                        {t}Activated{/t}:
                     </label>
                 </td>
-                <td>
+                <td colspan="2">
                     <select name="status" id="activated">
                         <option value="2" {if is_null($user) || $user->status eq 2}selected="selected"{/if}>{t}Yes{/t}</option>
                         <option value="3" {if $user->status eq 3 || $user->status eq 1}selected="selected"{/if}>{t}No{/t}</option>
@@ -127,7 +142,7 @@
             </tr>
             <tfoot>
                 <tr>
-                    <td colspan="2"></td>
+                    <td colspan="3"></td>
                 </tr>
             </tfoot>
         </table>
