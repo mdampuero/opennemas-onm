@@ -36,10 +36,14 @@
     tr {
         vertical-align:top;
     }
+    .ui-widget-content a {
+        color: #0B55C4 !important;
+    }
     </style>
 {/block}
 
 {block name="footer-js" append}
+    {script_tag src="/jquery/jquery.min.js"}
     {script_tag src="/jquery/jquery_colorpicker/js/colorpicker.js"}
     {script_tag src="/tiny_mce/opennemas-config.js"}
 
@@ -114,7 +118,7 @@
                                 <td>
                                     <input type="text" id="site_name" name="site_name" value="{$configs['site_name']|default:""}">
                                 </td>
-                                <td rowspan=4>
+                                <td rowspan=7>
                                     <div class="help-block margin-left-1">
                                         <div class="title"><h4>Basic parameters</h4></div>
                                         <div class="content">
@@ -137,7 +141,7 @@
                                                 <dt><strong>{t}Edit your Site footer{/t}</strong></dt>
                                                 <dd>{t}You can edit here the footer of the site.{/t}</dd>
                                             </dl>
-                                             </div>
+                                        </div>
                                     </div>
                                 </td>
                             </tr>
@@ -190,12 +194,12 @@
                             <tr>
                                 <th scope="row">
                                     <label for="site_footer">{t}Text in footer frontpages:{/t}</label>
-                                    <div id="toggle-btn" style="float:right;">
+<!--                                    <div id="toggle-btn" style="float:right;">
                                         <a title="Habilitar/Deshabilitar editor" data-selector-to-hide="site_footer" class="toggle-tinymce" href="#">
                                             <img alt="" src="{$params.IMAGE_DIR}users_edit.png"></a>
-                                    </div>
+                                    </div>-->
                                 </th>
-                                <td colspan=2>
+                                <td>
                                     <textarea id="site_footer" name="site_footer" cols="50" rows="7">{$configs['site_footer']|default:""}</textarea>
                                 </td>
                             </tr>
@@ -313,8 +317,8 @@
                                 </td>
                                 <td>
                                     <div class="help-block margin-left-1">
-                                        <div class="title"><h4>{t}Seconds for refresh pages{/t}</h4></div>
-                                        <div class="content"> {t}Default is set to 900 seconds for refreshing pages in opennemas configuration..{/t} </div>
+                                        <div class="title"><h4>{t}Seconds for refresh pages{/t}<br/></h4></div>
+                                        <div class="content"> {t}Default is set to 900 seconds for refreshing pages in opennemas configuration..{/t}</div>
                                     </div>
                                 </td>
                             </tr>
@@ -329,7 +333,7 @@
                                 <td>
                                     <div class="help-block margin-left-1">
                                         <div class="title"><h4>{t}Number items in admin lists{/t}</h4></div>
-                                        <div class="content">{t}Default: 20 elements{/t}</div>
+                                        <div class="content">{t}Default: 20 elements{/t}<br/></div>
                                     </div>
                                 </td>
                             </tr>
@@ -563,26 +567,4 @@
 
     </form>
 </div>
-{script_tag language="javascript" src="/jquery/jquery.min.js"}
-{script_tag language="javascript" src="/jquery_colorpicker/js/colorpicker.js"}
-{script_tag src="/tiny_mce/opennemas-config.js"}
-<script type="text/javascript" language="javascript">
-    tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
-    OpenNeMas.tinyMceConfig.footer.elements = "site_footer";
-    tinyMCE.init( OpenNeMas.tinyMceConfig.footer );
-
-    $.noConflict();
-    jQuery('#site_color').ColorPicker({
-        onSubmit: function(hsb, hex, rgb, el) {
-            jQuery(el).val(hex);
-            jQuery(el).ColorPickerHide();
-        },
-        onBeforeShow: function () {
-            jQuery(this).ColorPickerSetColor(this.value);
-        }
-    })
-    .bind('keyup', function(){
-        jQuery(this).ColorPickerSetColor(this.value);
-    });
-</script>
 {/block}
