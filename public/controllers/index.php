@@ -240,7 +240,9 @@ if(($tpl->caching == 0)
     /***** GET ALL FRONTPAGE'S IMAGES *******/
     $imagenes = array();
     foreach($articles_home as $i => $art) {
-        if($actual_category == 'home' && !empty($art->params['imageHome'])) {
+        if($actual_category == 'home' && !empty($art->params) &&
+                array_key_exists('imageHome', $art->params) &&
+                !empty($art->params['imageHome'])) {
             $imagenes[] = $art->params['imageHome'];
         }elseif(isset($art->img1)) {
             $imagenes[] = $art->img1;
@@ -270,7 +272,8 @@ if(($tpl->caching == 0)
             // Buscar la imagen
             if(!empty($imagenes)) {
                 foreach($imagenes as $img) {
-                    if( ($actual_category == 'home') &&
+                    if( ($actual_category == 'home')
+                            && (isset($column[$c]->params['imageHome'])) &&
                         ($img->pk_content == $column[$c]->params['imageHome']) ) {
                         $column[$c]->imageHomePath = $img->path_file.$img->name;
                         $column[$c]->imageHome = $img;
