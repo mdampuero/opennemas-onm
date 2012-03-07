@@ -141,11 +141,6 @@ OpenNeMas.tinyMceConfig.advanced.elements = "widget_content";
     tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
 {/if}
 
-// FIXME: fix toolbar
-submitForm = function() {
-        document.getElementById('formulario').submit();
-};
-
 toogleTiny = function(value) {
     if(value == 'html') {
 //        $('toggle-btn').show();
