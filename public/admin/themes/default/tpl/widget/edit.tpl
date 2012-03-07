@@ -1,30 +1,14 @@
 {extends file="base/admin.tpl"}
 
-{block name="footer-js" append}
-<script language="Javascript" type="text/javascript">
-// FIXME: fix toolbar
-submitForm = function() {
-    document.getElementById('formulario').submit();
-};
-
-toogleTiny = function(value) {
-    if(value == 'html') {
-        $('toggle-btn').show();
-        $('widget_textarea').show();
-        $('select-widget').hide();
-        tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
-    } else if (value == 'intelligentwidget') {
-        $('toggle-btn').hide();
-        $('widget_textarea').hide();
-        $('select-widget').show();
-    } else {
-        $('toggle-btn').hide();
-        $('widget_textarea').show();
-        $('select-widget').hide();
-        OpenNeMas.tinyMceFunctions.destroy( 'widget_content' );
+{block name="header-css" append}
+    <style type="text/css">
+    label {
+        float:right;
     }
-}
-</script>
+    td {
+        padding:10px;
+    }
+    </style>
 {/block}
 
 {block name="content" append}
@@ -35,8 +19,8 @@ toogleTiny = function(value) {
         </div>
         <ul class="old-button">
             <li>
-                <a href="?action=list" class="admin_add" value="{t}Cancel{/t}" title="{t}Cancel{/t}">
-                    <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Cancel{/t}" alt="{t}Cancel{/t}" /><br />
+                <a href="?action=list" class="admin_add" title="{t}Cancel{/t}">
+                    <img src="{$params.IMAGE_DIR}previous.png" title="{t}Cancel{/t}" alt="{t}Cancel{/t}" /><br />
                     {t}Go back{/t}
                 </a>
             </li>
@@ -57,10 +41,11 @@ toogleTiny = function(value) {
                 </tr>
             </tbody>
         </table>
+
         <table class="adminform">
         <tbody>
         <tr>
-            <td valign="top" align="right" style="padding:4px;" width="150px">
+            <td>
                 <label for="title">{t}Widget name{/t}:</label>
             </td>
             <td>
@@ -68,7 +53,7 @@ toogleTiny = function(value) {
             </td>
         </tr>
         <tr>
-            <td valign="top" align="right" style="padding:4px;">
+            <td>
                 <label for="available">{t}Published{/t}:</label>
             </td>
             <td>
@@ -79,7 +64,7 @@ toogleTiny = function(value) {
             </td>
         </tr>
         <tr>
-            <td valign="top" align="right" style="padding:4px;">
+            <td>
                 <label for="renderlet">{t}Widget type{/t}:</label>
             </td>
             <td>
@@ -93,7 +78,7 @@ toogleTiny = function(value) {
             </td>
         </tr>
         <tr>
-            <td valign="top" align="right" style="padding:4px;">
+            <td>
                 <label for="metadata">{t}Keywords{/t}:</label>
             </td>
             <td>
@@ -102,7 +87,7 @@ toogleTiny = function(value) {
         </tr>
 
         <tr>
-            <td valign="top" align="right" style="padding:4px;">
+            <td>
                 <label for="description">{t}Description{/t}:</label>
             </td>
             <td>
@@ -111,16 +96,16 @@ toogleTiny = function(value) {
         </tr>
 
         <tr class="widget-content">
-            <td valign="top" align="right" style="padding:4px;">
+            <td>
                 <label>{t}Content{/t}:</label>
-                <div id="toggle-btn" style="float:right;{if isset($widget) && $widget->renderlet == 'html'}display:inline{else}display:none{/if}">
+<!--                <div id="toggle-btn" style="float:right;{if isset($widget) && $widget->renderlet == 'html'}display:inline{else}display:none{/if}">
                     <a title="Habilitar/Deshabilitar editor" onclick="OpenNeMas.tinyMceFunctions.toggle('widget_content');return false;" href="#">
-                        <img border="0" alt="" src="{$params.IMAGE_DIR}users_edit.png"></a>
-                </div>
+                        <img alt="" src="{$params.IMAGE_DIR}users_edit.png"></a>
+                </div>-->
             </td>
             <td>
                 <div id="widget_textarea" style="{if isset($widget) && $widget->renderlet == 'intelligentwidget' || $smarty.get.action eq 'new'}display:none{else}display:inline{/if}">
-                    <textarea cols="80" id="widget_content" rows="20" name="content">{$widget->content|default:""}</textarea>
+                    <textarea class="required" cols="80" id="widget_content" rows="20" name="content">{$widget->content|default:""}</textarea>
                 </div>
 
                 <div id="select-widget" style="{if isset($widget) && $widget->renderlet == 'intelligentwidget' || $smarty.get.action eq 'new'}display:inline{else}display:none{/if}">
@@ -143,12 +128,40 @@ toogleTiny = function(value) {
         </div>
     </div>
 </form>
+{/block}
+
+
+{block name="footer-js" append}
 {script_tag src="/tiny_mce/opennemas-config.js"}
-<script type="text/javascript" language="javascript">
-    tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
-    OpenNeMas.tinyMceConfig.advanced.elements = "widget_content";
+<script type="text/javascript">
+//TinyMce scripts
+tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
+OpenNeMas.tinyMceConfig.advanced.elements = "widget_content";
 {if isset($widget) && $widget->renderlet == 'html'}
     tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
 {/if}
+
+// FIXME: fix toolbar
+submitForm = function() {
+        document.getElementById('formulario').submit();
+};
+
+toogleTiny = function(value) {
+    if(value == 'html') {
+//        $('toggle-btn').show();
+        $('widget_textarea').show();
+        $('select-widget').hide();
+        tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
+    } else if (value == 'intelligentwidget') {
+//        $('toggle-btn').hide();
+        $('widget_textarea').hide();
+        $('select-widget').show();
+    } else {
+//        $('toggle-btn').hide();
+        $('widget_textarea').show();
+        $('select-widget').hide();
+        OpenNeMas.tinyMceFunctions.destroy( 'widget_content' );
+    }
+}
 </script>
 {/block}
