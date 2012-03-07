@@ -20,6 +20,18 @@
     div#match-color {
         cursor: pointer;
     }
+    .match_viewer {
+        height:28px;
+        border: 1px solid #B5B8C8;
+        border-right:0 !important;
+        width:30px !important;
+        display:inline-block;
+        border-top-left-radius: 3px;
+        border-bottom-left-radius: 3px;
+        float: left;
+        margin-left:-2px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset;
+    }
     </style>
 {/block}
 
@@ -253,7 +265,7 @@
                         <label for="site_match_color">{t}Click to match with site color:{/t}</label>
                         <div id="match-color">
                             <input readonly="readonly" size="6" type="text" id="site_match_color" name="color" value="{setting name="site_color"}">
-                            <div class="colopicker_viewer" style="background-color:#{setting name="site_color"}"></div>
+                            <div class="match_viewer" style="background-color:#{setting name="site_color"}"></div>
                         </div>
                     </td>
                     <td>
