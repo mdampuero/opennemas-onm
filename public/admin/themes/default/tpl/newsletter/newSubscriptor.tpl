@@ -23,16 +23,18 @@
 <form action="#" method="post" name="formulario" id="formulario">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{$titulo_barra}&nbsp; </h2></div>
+            <div class="title">
+                <h2>
+                    {if $smarty.request.action eq "new"}
+                        {t}Creating new subscriptor{/t}
+                    {else}
+                        {t 1=$user->name}Editing subscriptor "%1"{/t}{/if}
+                </h2>
+            </div>
             <ul class="old-button">
                 <li>
                     <a href="#" class="admin_add" onClick="sendFormValidate(this, '_self', 'validate', '{$user->id}', 'formulario');" title="Validar">
-                        <img src="{$params.IMAGE_DIR}validate.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />Guardar y continuar
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="admin_add" onClick="enviar(this, '_self', 'list', '{$user->id}');" title="Cancelar">
-                        <img src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
+                        <img src="{$params.IMAGE_DIR}save_and_continue.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />{t}Save and continue{/t}
                     </a>
                 </li>
                 <li>
@@ -41,7 +43,13 @@
                 {else}
                    <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', '0', 'formulario');">
                 {/if}
-                        <img src="{$params.IMAGE_DIR}save.gif" title="Guardar" alt="Guardar"><br />Guardar
+                    <img src="{$params.IMAGE_DIR}save.png" title="Guardar" alt="Guardar"><br />{t}Save and exit{/t}
+                    </a>
+                </li>
+                <li class="separator"></li>
+                <li>
+                    <a href="?action=list" class="admin_add" title="Cancelar">
+                        <img src="{$params.IMAGE_DIR}previous.png" title="Cancelar" alt="Cancelar" ><br />{t}Go back{/t}
                     </a>
                 </li>
             </ul>
@@ -99,7 +107,7 @@
                 </td>
                 <td>
                     <select name="subscription" id="subscribed">
-                        <option value="1" {if !(isset($user->subscription)) || $user->subscription eq 1 }selected="selected"{/if}>{t}Yes{/t}</option>
+                        <option value="1" {if is_null($user->subscription) || $user->subscription eq 1 }selected="selected"{/if}>{t}Yes{/t}</option>
                         <option value="0" {if (isset($user->subscription)) && $user->subscription eq 0}selected="selected"{/if}>{t}No{/t}</option>
                     </select>
                 </td>
@@ -112,8 +120,8 @@
                 </td>
                 <td>
                     <select name="status" id="activated">
-                        <option value="2" {if $user->status eq 2}selected="selected"{/if}>{t}Yes{/t}</option>
-                        <option value="3" {if !isset($user) || $user->status eq 3 || $user->status eq 1 }selected="selected"{/if}>{t}No{/t}</option>
+                        <option value="2" {if is_null($user) || $user->status eq 2}selected="selected"{/if}>{t}Yes{/t}</option>
+                        <option value="3" {if $user->status eq 3 || $user->status eq 1}selected="selected"{/if}>{t}No{/t}</option>
                     </select>
                 </td>
             </tr>
@@ -123,7 +131,7 @@
                 </tr>
             </tfoot>
         </table>
-        
+
         <input type="hidden" id="action" name="action" value="" />
         <input type="hidden" name="id" id="id" value="{$id|default:""}" />
 
