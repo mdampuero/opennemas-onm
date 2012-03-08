@@ -264,7 +264,7 @@
                     <td>
                         <label for="site_match_color">{t}Click to match with site color:{/t}</label>
                         <div id="match-color">
-                            <input readonly="readonly" size="6" type="text" id="site_match_color" name="color" value="{setting name="site_color"}">
+                            <input readonly="readonly" size="6" type="text" id="site_match_color" name="color-website" value="{setting name="site_color"}">
                             <div class="match_viewer" style="background-color:#{setting name="site_color"}"></div>
                         </div>
                     </td>
