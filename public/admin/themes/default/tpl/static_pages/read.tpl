@@ -22,14 +22,14 @@
             <div class="title"><h2>{t}Static Pages Manager{/t} :: {t}Editing page{/t}</h2></div>
                 <ul class="old-button">
                 <li>
-                    <a href="#" id="save-continue" class="admin_add" title="Validar">
+                    <button name="action" type="submit" value="validate" id="save-continue" class="admin_add" title="Validar">
                         <img src="{$params.IMAGE_DIR}save_and_continue.png" title="{t}Save and continue{/t}" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
-                    </a>
+                    </button>
                 </li>
                 <li>
-                    <a href="#" id="save-exit" class="admin_add" title="{t}Save and exit{/t}">
+                    <button name="action" type="submit" value="save" id="save-exit" class="admin_add" title="{t}Save and exit{/t}">
                         <img src="{$params.IMAGE_DIR}save.png" title="{t}Save and exit{/t}" alt="{t}Save and exit{/t}" /><br />{t}Save and exit{/t}
-                    </a>
+                    </button>
                 </li>
                 <li class="separator"></li>
                 <li>
@@ -112,7 +112,6 @@
 
     <input type="hidden" name="filter[title]" value="{$smarty.request.filter.title|default:""}" />
     <input type="hidden" name="id" id="id" value="{$id|default:""}" />
-    <input type="hidden" id="action" name="action" value="save" />
 </form>
 {/block}
 
