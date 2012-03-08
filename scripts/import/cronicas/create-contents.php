@@ -1,11 +1,11 @@
 <?php
-/* 
+/*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 
 /**
- * Description of importContents 
+ * Description of importContents
  * Import opinions with author and his photos & articles with categories,images...
  *
  * @author sandra
@@ -73,15 +73,15 @@ class createContents {
                     'fk_content_category' => $categories['fk_content_category'],
 
                 );
-            
+
             $sql = 'INSERT INTO content_categories
                 (`pk_content_category`, `title`, `name`,`inmenu`, `posmenu`, `internal_category`, `fk_content_category`  )
                 VALUES (?,?,?,?,?,?,?)';
 
 
             $stmt = $this->new->conn->Prepare($sql);
-            if (count($values)>0) {
-                if ($this->new->conn->Execute($stmt, $values) === false) {
+            if (count($valuescategories)>0) {
+                if ($this->new->conn->Execute($stmt, $valuescategories) === false) {
                     $errorMsg = $this->new->conn->ErrorMsg();
                      $this->log('importCategories: '.$errorMsg);
                      printf('importCategories: '.$errorMsg);
@@ -90,7 +90,7 @@ class createContents {
             } else {
                return true;
             }
-         
+
         return false;
 
     }
@@ -132,7 +132,7 @@ class createContents {
      	if($data['photos']) {
             $values= array();
             foreach($data['photos'] as $photo) {
-                
+
                 $values[] = array( $pk_author, $photo->pk_img, $photo->path_img );
 
             }
@@ -148,7 +148,7 @@ class createContents {
             }
         }
 
-        return $newID;
+        return array($newID, $photo->pk_img);
     }
 
 
@@ -161,7 +161,11 @@ class createContents {
 
          if(!empty($opinions)){
              foreach ($opinions as $data) {
-                $data->fk_author = $newAuthorId;
+                 $newAuthor = $this->insertAuthor($data);
+                $data['fk_author'] = $newAuthor[0];
+                $data['fk_author_img'] = $newAuthor[1];
+                $data['fk_author_img_widget'] = $newAuthor[1];
+
                 $id = $opinion->create($data);
                 if(!empty($id) ) {
                     $this->insertRefactorID($data->pk_opinion, $id, 'opinion');
@@ -177,7 +181,7 @@ class createContents {
          return false;
     }
 
-   
+
     /**
      * Upload images
      *
@@ -198,7 +202,7 @@ class createContents {
             if(!empty($nameFile)) {
                 $uploaddir =$path_upload.$path_file;
 
-                if(!is_dir($uploaddir)) {                    
+                if(!is_dir($uploaddir)) {
                     FilesManager::createDirectory($uploaddir);
                 }
 
@@ -261,7 +265,7 @@ class createContents {
                     $fallos .= " '" . $nameFile . "' ";
                 }
             } //if empty
- 
+
         return $elid;
     }
 
@@ -274,7 +278,7 @@ class createContents {
      *
      * @throws <b>Exception</b> Explanation of exception.
      */
-    
+
     public function insertImage($pk_photo) {
 
         $sql = 'SELECT * FROM photos WHERE pk_photo = '.$pk_photo;
@@ -289,6 +293,16 @@ class createContents {
         return $pk_image;
     }
 
+    public function insertImagebyName($name) {
+        //search in dir
+
+        //defined data
+
+        //Insert in db
+
+        //return id
+
+    }
     /**
      * create articles in new DB.
      *
@@ -300,29 +314,44 @@ class createContents {
      */
     public function importArticles($articles) {
 
-        
+
          $categories = array();
 
          if(!empty($articles)) {
              $article = new Article();
              foreach ($articles as $data) {
-                $data->img1 = $this->insertImage($data->img1);
-                $data->img2 = $this->insertImage($data->img2);
+                $data['img1'] = $this->insertImagebyName($data['img1']);
+                $data['img2'] = $this->insertImagebyName($data['img2']);
+                //id_video = fk_video
+                $data['params'] = array('titleHome'=>$data['title_home']
+                                        //titleHomeSize, title_home
+                                        //titleSize title_size
+                                        //subtitleHome, subtitle_home
+                                        //summaryHome, summary_home
+                                        //imageHomePosition
+                                        //imagePosition 	img_pos
+                                        //agencyBulletin, agency_web
+                                        //withGallery, with_galery
+                                        //withGalleryInt with_galery_int
+                                        //imageHome => img3
+                                        //imageHomeFooter => img3_footer
+                                        );
+
                 $id = $article->create($data);
 
                 if(!empty($id) ) {
-                    $this->insertRefactorID($data->pk_article, $id, 'opinion');
+                    $this->insertRefactorID($data->pk_article, $id, 'article');
                 }else{
                     $errorMsg = 'Problem '.$data->pk_article.' - '.$data->title;
                     $this->log('insert article : '.$errorMsg);
                     printf('insert article : '.$errorMsg);
                 }
              }
-             
+
          }
 
          $this->importCategories($categories);
-         
+
          return true;
 
     }
@@ -354,16 +383,16 @@ class createContents {
             }
         }
         return $item;
-         
+
     }
 
-    
 
-    
+
+
     public function log($text = null) {
         if(isset($text) && !is_null($text) ) {
             $handle = fopen( $this->logFile , "a");
-            
+
             if ($handle) {
                 $datawritten = fwrite($handle, $text);
                 fclose($handle);
@@ -373,7 +402,6 @@ class createContents {
         }
     }
 
-    
+
 
 }
- 

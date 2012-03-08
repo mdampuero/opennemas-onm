@@ -8,7 +8,6 @@ require_once('../../session_bootstrap.php');
 Acl::checkOrForward('NEWSLETTER_ADMIN');
 
 $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
-$tpl->assign('titulo_barra', 'Newsletter Subscriptor');
 
 function compileFilter($filters)
 {
@@ -60,7 +59,7 @@ if( isset($_REQUEST['action']) ) {
 
             $tpl->display('newsletter/subscriptors.tpl');
         break;
-       
+
         case 'existsEmail':
             $exists = (Subscriptor::exists_email( $_REQUEST['emailDA'] ))? '1': '0';
             header('Content-type: application/json');
@@ -71,7 +70,7 @@ if( isset($_REQUEST['action']) ) {
 
         // Crear un nuevo artículo
         case 'new':
-             
+
             $tpl->display('newsletter/newSubscriptor.tpl');
 
         break;
@@ -81,9 +80,9 @@ if( isset($_REQUEST['action']) ) {
             if (empty($id)) { //because forwards
                 $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
             }
-            
+
             $user = new Subscriptor( $id );
-            
+
             $tpl->assign('user', $user);
 
             $tpl->display('newsletter/newSubscriptor.tpl');
@@ -111,7 +110,7 @@ if( isset($_REQUEST['action']) ) {
             if($user->create( $_POST )) {
                 Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
             } else {
-                $tpl->assign('message', '<ul><li>' . implode('</li><li>', $user->_errors) . '</li></ul>');              
+                $tpl->assign('message', '<ul><li>' . implode('</li><li>', $user->_errors) . '</li></ul>');
                 $_REQUEST['action'] = 'new';
             }
         break;
@@ -193,7 +192,7 @@ if( isset($_REQUEST['action']) ) {
             Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list');
         break;
 
-        case 'munsubscribe': 
+        case 'munsubscribe':
             $user = new Subscriptor();
 
             $data = array();
@@ -207,7 +206,7 @@ if( isset($_REQUEST['action']) ) {
             Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list');
         break;
 
-        case 'msubscribe': 
+        case 'msubscribe':
             $user = new Subscriptor();
 
             $data = array();

@@ -63,13 +63,13 @@ OpenNeMas.tinyMceConfig = {
 
         setup : function(ed) {
             ed.onKeyUp.add(function(ed, e) {
-                if(counttiny) {
+                if(counttiny && document.getElementById('counter_body')) {
                     counttiny(document.getElementById('counter_body'), ed);
                 }
             });
 
             ed.onChange.add(function(ed, e) {
-                if(counttiny) {
+                if(counttiny && document.getElementById('counter_body')) {
                     counttiny(document.getElementById('counter_body'), ed);
                 }
             });
@@ -123,13 +123,13 @@ OpenNeMas.tinyMceConfig = {
 
         setup : function(ed) {
             ed.onKeyUp.add(function(ed, e) {
-                if(counttiny) {
+                if(counttiny && document.getElementById('counter_summary')) {
                     counttiny(document.getElementById('counter_summary'), ed);
                 }
             });
 
             ed.onChange.add(function(ed, e) {
-                if(counttiny) {
+                if(counttiny && document.getElementById('counter_summary')) {
                     counttiny(document.getElementById('counter_summary'), ed);
                 }
             });
@@ -179,21 +179,8 @@ OpenNeMas.tinyMceConfig = {
         theme_advanced_resize_horizontal : false,
         theme_advanced_resizing : true,
 
-        spellchecker_languages : "+Castellano=es,Galego=gl,English=en",
+        spellchecker_languages : "+Castellano=es,Galego=gl,English=en"
 
-        setup : function(ed) {
-            ed.onKeyUp.add(function(ed, e) {
-                if(counttiny) {
-                    counttiny(document.getElementById('counter_summary'), ed);
-                }
-            });
-
-            ed.onChange.add(function(ed, e) {
-                if(counttiny) {
-                    counttiny(document.getElementById('counter_summary'), ed);
-                }
-            });
-        }
     },
 
     'widget': {

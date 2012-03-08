@@ -17,6 +17,21 @@
     .utilities-conf label {
         text-transform:none;
     }
+    div#match-color {
+        cursor: pointer;
+    }
+    .match_viewer {
+        height:28px;
+        border: 1px solid #B5B8C8;
+        border-right:0 !important;
+        width:30px !important;
+        display:inline-block;
+        border-top-left-radius: 3px;
+        border-bottom-left-radius: 3px;
+        float: left;
+        margin-left:-2px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset;
+    }
     </style>
 {/block}
 
@@ -41,13 +56,16 @@
     } catch(e) { }
 
     jQuery(document).ready(function($) {
+
+        var color = jQuery('.colopicker_viewer');
+
         $('#site_color').ColorPicker({
             onSubmit: function(hsb, hex, rgb, el) {
                 jQuery(el).val(hex);
                 jQuery(el).ColorPickerHide();
             },
             onChange: function (hsb, hex, rgb) {
-                jQuery('.colopicker_viewer').css('background-color', '#' + hex);
+                color.css('background-color', '#' + hex);
             },
             onBeforeShow: function () {
                 jQuery(this).ColorPickerSetColor(this.value);
@@ -55,6 +73,13 @@
         })
         .bind('keyup', function(){
             jQuery(this).ColorPickerSetColor(this.value);
+        });
+
+        var btn = jQuery('div#match-color');
+        var inpt = jQuery('input#site_color');
+        btn.on('click', function(){
+            inpt.val( '{setting name="site_color"}' );
+            color.css('background-color', '#' + '{setting name="site_color"}');
         });
     });
 </script>
@@ -106,14 +131,28 @@
                         <input type="text" id="title" name="title" title="Título" value="{$category->title|clearslash|default:""}"
                             class="required" size="80" />
                     </td>
-                    <td rowspan="3">
+                    <td rowspan="5" style="padding:10px 0px;">
                         <div class="help-block margin-left-1">
-                            <div class="title"><h4>Sections</h4></div>
+                            <div class="title"><h4>{t}Editing category{/t}</h4></div>
                             <div class="content">
-                                {t}Title for short title name {/t}<br />
-                                {t}Internal name for calculate slugs and uri {/t}<br />
-                                {t}Title page for the long title used for seo & in title bar, widgets, menues...{/t}
-                                {t}If title page empty Opennemas get short title{/t}
+                                <dl>
+                                    <dt><strong>{t}Name{/t}</strong></dt>
+                                    <dd>{t}The name for the category{/t}</dd>
+                                    {if isset($category) && !empty($category->name)}
+                                    <dt><strong>{t}Slug{/t}</strong></dt>
+                                    <dd>{t}Title page for the long title used for seo & in title bar, widgets, menues...{/t}</dd>
+                                    {/if}
+                                    <dt><strong>{t}Page Title {/t}</strong></dt>
+                                    <dd>{t}Internal name for calculate slugs and uri {/t}</dd>
+                                    <dt><strong>{t}Category available{/t}</strong></dt>
+                                    <dd>{t}Type of contents for this category{/t}</dd>
+                                    <dt><strong>{t}Subsection{/t}</strong></dt>
+                                    <dd>{t}If this category will be a subsection of another{/t}</dd>
+                                    <dt><strong>{t}Show in rss{/t}</strong></dt>
+                                    <dd>{t}If this category will be showed or not in RSS{/t}</dd>
+                                    <dt><strong>{t}Color{/t}</strong></dt>
+                                    <dd>{t}Choose a color for this category or click the right button to match with the site color{/t}</dd>
+                                </dl>
                             </div>
                         </div>
                     </td>
@@ -181,9 +220,6 @@
                             </select>
                         </div>
                     </td>
-                    <td>
-
-                    </td>
                 </tr>
                 <tr>
                     <td colspan="3">
@@ -193,7 +229,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="3">
+                    <td colspan="2">
                         <label for="params[inrss]">{t}Show in rss:{/t}</label>
                         <input type="checkbox" id="params[inrss]" name="params[inrss]" value="1"
                             {if !isset($category->params['inrss']) || $category->params['inrss'] eq 1} checked="checked"{/if}>
@@ -219,10 +255,21 @@
                 </tr>
                 {/if}
                 <tr>
-                    <td colspan="3">
+                    <td>
                         <label for="site_color">{t}Color:{/t}</label>
                         <input readonly="readonly" size="6" type="text" id="site_color" name="color" value="{$category->color|default:"0000ff"}">
                         <div class="colopicker_viewer" style="background-color:#{$category->color|default:"0000ff"}"></div>
+
+                    </td>
+                    <td>
+                        <label for="site_match_color">{t}Click to match with site color:{/t}</label>
+                        <div id="match-color">
+                            <input readonly="readonly" size="6" type="text" id="site_match_color" name="color" value="{setting name="site_color"}">
+                            <div class="match_viewer" style="background-color:#{setting name="site_color"}"></div>
+                        </div>
+                    </td>
+                    <td>
+
                     </td>
                 </tr>
 
