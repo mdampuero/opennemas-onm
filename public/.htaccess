@@ -505,6 +505,8 @@ Options -Indexes
     #Sitemap
     RewriteRule ^sitemapnews.xml?$ controllers/sitemap.php?action=news [L,NC]
     RewriteRule ^sitemapweb.xml?$ controllers/sitemap.php?action=web [L,NC]
+    RewriteRule ^sitemapnews.xml.gz?$ controllers/sitemap.php?action=news&format=gz [L,NC]
+    RewriteRule ^sitemapweb.xml.gz?$ controllers/sitemap.php?action=web&format=gz [L,NC]
     RewriteRule ^sitemap.xml?$ controllers/sitemap.php [L,NC]
 
     #Robots.txt

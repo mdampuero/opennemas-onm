@@ -23,7 +23,7 @@ if (($tpl->caching == 0)
 {
 
     // Get all available categories
-    $availableCategories = $ccm->order_by_posmenu($ccm->categories);
+    list($availableCategories, $subcats, $other) = $ccm->getArraysMenu(0, 1);
 
     switch($action) {
 
@@ -60,25 +60,28 @@ if (($tpl->caching == 0)
 
         case 'news': {
 
-            //FIXME: add this value in a config file for easy editing
-            $interval='DATE_SUB(CURDATE(), INTERVAL 10 DAY)';
-
             $articlesByCategory = array();
+
+            $maxArticlesByCategory = floor(900 / count($availableCategories));
 
             // Foreach available category and retrieve articles from 700 days ago
             foreach ($availableCategories as $category) {
                 if ($category->inmenu == 1
                     && $category->internal_category == 1)
                 {
-
-                    $articlesByCategory[$category->name] = $cm->getArrayOfArticlesInCategory($category->pk_content_category, 'available=1 AND fk_content_type=1 AND changed >='.$interval.'','ORDER BY changed DESC');
+                    $articlesByCategory[$category->name] = $cm->getArrayOfArticlesInCategory(
+                            $category->pk_content_category,
+                            'available=1 AND fk_content_type=1 ',
+                            'ORDER BY changed DESC',
+                            $maxArticlesByCategory
+                    );
                     $articlesByCategory[$category->name] = $cm->getInTime($articlesByCategory[$category->name]);
 
                 }
             }
 
             // Get latest opinions
-            $opinions = $cm->getOpinionAuthorsPermalinks('contents.available=1 AND contents.content_status=1 AND changed >='.$interval.'', 'ORDER BY position ASC, changed DESC LIMIT 100');
+            $opinions = $cm->getOpinionAuthorsPermalinks('contents.available=1 AND contents.content_status=1 ', 'ORDER BY position ASC, changed DESC LIMIT 100');
 
             $improvedOpinions = array();
             foreach($opinions as $opinion) {
@@ -95,8 +98,24 @@ if (($tpl->caching == 0)
 
     $tpl->assign('availableCategories', $availableCategories);
 }
-
-// Return the output as xml
-header('Content-type: application/xml charset=utf-8');
 $tpl->assign('action', $action);
-$tpl->display('sitemap/sitemap.tpl', $cacheID);
+$sitemapContents = $tpl->fetch('sitemap/sitemap.tpl', $cacheID);
+
+
+
+$format = filter_input(INPUT_GET,'format',FILTER_SANITIZE_STRING);
+
+if ($format == 'gz') {
+    // disable ZLIB ouput compression
+    ini_set('zlib.output_compression','Off');
+    // compress data
+    $gzipoutput = gzencode($sitemapContents,6);
+    header('Content-Type: application/x-download');
+    header('Content-Encoding: gzip'); #
+    header('Content-Length: '.strlen($gzipoutput));
+    echo $gzipoutput;
+} else {
+    // Return the output as xml
+    header('Content-type: application/xml charset=utf-8');
+    echo $sitemapContents;
+}
