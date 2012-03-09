@@ -1813,7 +1813,7 @@ class ContentManager
     * @return mixed, array with values of articles. BE AWARE: this doesnt return Objects
     * @throws ExceptionClass [description]
     */
-    public function getArrayOfArticlesInCategory($categoryID, $filter=null, $_order_by='ORDER BY 1')
+    public function getArrayOfArticlesInCategory($categoryID, $filter=null, $_order_by='ORDER BY 1', $_limit = 50)
     {
         $items = array();
         $_where = '1=1  AND in_litter=0';
@@ -1832,7 +1832,7 @@ class ContentManager
                     .'FROM  contents, contents_categories '
                     .'WHERE contents.pk_content = contents_categories.pk_fk_content '
                     .'      AND contents_categories.pk_fk_content_category=\''.$categoryID.'\' '
-                    .'      AND '.$_where.' '.$_order_by;
+                    .'      AND '.$_where.' '.$_order_by . ' LIMIT '.$_limit;
 
         $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
         $rs = $GLOBALS['application']->conn->Execute($sql);
