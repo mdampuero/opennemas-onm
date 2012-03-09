@@ -61,7 +61,7 @@ if (\Onm\Module\ModuleManager::isActivated('IMAGE_MANAGER')) {
                 $szWhere = "TRUE";
                 $htmlOut .= _(
                     "<div>"
-                    ."<p>Unable to find any content matching your search criterira.</p>" 
+                    ."<p>Unable to find any content matching your search criterira.</p>"
                     ."<p>Your search string <strong>" . $metadatas . "</strong> doesn't have any matched content.</p>"
                     ."</div>"
                 );

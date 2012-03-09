@@ -68,24 +68,10 @@ class cSearch
 	*/
 	public function SearchRelatedContents($szSourceTags, $szContentsTypeTitle,$iLimit=NULL,$_where=NULL)
 	{
-        if(is_array($szSourceTags)){
-            $szSourceTags2=array();
-            $i = 0;
-            foreach ($szSourceTags as $key) {
-                $szSourceTags2[$i] = '+'.$key;
-                $i++;
-            }
+        $szMatch2 = $this->DefineMatchOfSentence2($szSourceTags);//Match con contents.title
 
-            $szSourceTags2 = implode(' ', $szSourceTags2);// Con + obligatorio
-            $szSourceTags = implode(' ', $szSourceTags);// Sin+ no obligatorio
-            $szMatch2 = $this->DefineMatchOfSentence2($szSourceTags);//Match con contents.title
-        } else {
-            $szMatch2 = '1=1';
-        }
-
-        $szMatch = $this->DefineMatchOfSentence($szSourceTags2); //Match con metadata
-        $szSqlSentence = "SELECT pk_content, available, title, metadata, pk_fk_content_category, created, catName, " . (($szMatch)) .'+'.(($szMatch2)) . " AS rel FROM contents, contents_categories";
-        $szSqlWhere = " WHERE " . (($szMatch)) .' AND '.(($szMatch2));
+        $szSqlSentence = "SELECT pk_content, available, title, metadata, pk_fk_content_category, created, catName, " .(($szMatch2)) . " AS rel FROM contents, contents_categories";
+        $szSqlWhere = " WHERE " .(($szMatch2));
         $szSqlWhere .=  " AND ( " . $this->ParserTypes($szContentsTypeTitle) . ") ";
         $szSqlWhere .= "  AND in_litter = 0 AND pk_content = pk_fk_content";
         if($_where!=NULL){

@@ -58,7 +58,8 @@ function get_tags(title)
     ajax=objetoAjax();
     var category="";
     if($('category')){
-       category=$('category').options[$('category').selectedIndex].getAttribute('name');
+       category=$('category').options[$('category').selectedIndex].getAttribute('data-name');
+       if(category==null) {category='';}
     }
     var tags= document.getElementById('metadata').value;
 

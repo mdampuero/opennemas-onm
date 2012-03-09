@@ -117,6 +117,7 @@ if (isset($_REQUEST['action'])) {
                 $tpl->assign('editorial', $editorial);
                 $tpl->assign('opinions',  $improvedOpinions);
                 $tpl->assign('pagination',  $pagination);
+                $tpl->assign('page', $page);
 
             }
 
@@ -197,6 +198,7 @@ if (isset($_REQUEST['action'])) {
                 $tpl->assign('pagination_list', $pagination);
                 $tpl->assign('opinions', $opinions);
                 $tpl->assign('author_id', $authorID);
+                $tpl->assign('page', $page);
 
             } // End if isCached
 

@@ -32,6 +32,9 @@
         margin-left:-2px;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset;
     }
+    .onm-button {
+        height: 30px;
+    }
     </style>
 {/block}
 
@@ -57,29 +60,30 @@
 
     jQuery(document).ready(function($) {
 
-        var color = jQuery('.colopicker_viewer');
+        var color = $('.colopicker_viewer');
+        var inpt = $('#site_color, #colopicker_viewer');
+        var btn = $('.onm-button');
 
-        $('#site_color').ColorPicker({
+        inpt.ColorPicker({
             onSubmit: function(hsb, hex, rgb, el) {
-                jQuery(el).val(hex);
-                jQuery(el).ColorPickerHide();
+                $(el).val(hex);
+                $(el).ColorPickerHide();
             },
             onChange: function (hsb, hex, rgb) {
                 color.css('background-color', '#' + hex);
             },
             onBeforeShow: function () {
-                jQuery(this).ColorPickerSetColor(this.value);
+                $(this).ColorPickerSetColor(this.value);
             }
         })
         .bind('keyup', function(){
-            jQuery(this).ColorPickerSetColor(this.value);
+            $(this).ColorPickerSetColor(this.value);
         });
 
-        var btn = jQuery('div#match-color');
-        var inpt = jQuery('input#site_color');
-        btn.on('click', function(){
+        btn.on('click', function(e, ui){
             inpt.val( '{setting name="site_color"}' );
             color.css('background-color', '#' + '{setting name="site_color"}');
+            e.preventDefault();
         });
     });
 </script>
@@ -225,7 +229,7 @@
                     <td colspan="3">
                         <label for="inmenu">{t}Available:{/t}</label>
                         <input type="checkbox" id="inmenu" name="inmenu" value="1" {if $category->inmenu eq 1} checked="checked"{/if}>
-                            {t}If this option is activated this category will be showed in menu{/t}
+                            {t}If this option is activated this category will be available{/t}
                     </td>
                 </tr>
                 <tr>
@@ -254,19 +258,19 @@
                     </td>
                 </tr>
                 {/if}
+                {capture "websiteColor"}
+                    {setting name="site_color"}
+                {/capture}
                 <tr>
                     <td>
-                        <label for="site_color">{t}Color:{/t}</label>
-                        <input readonly="readonly" size="6" type="text" id="site_color" name="color" value="{$category->color|default:"0000ff"}">
-                        <div class="colopicker_viewer" style="background-color:#{$category->color|default:"0000ff"}"></div>
-
+                        <label>{t}Color:{/t}</label>
+                        <input readonly="readonly" size="6" type="text" id="site_color" name="color" value="{$category->color|default:$smarty.capture.websiteColor|trim}">
+                        <div id="colopicker_viewer" class="colopicker_viewer" style="background-color:#{$category->color|default:$smarty.capture.websiteColor|trim}"></div>
                     </td>
                     <td>
-                        <label for="site_match_color">{t}Click to match with site color:{/t}</label>
-                        <div id="match-color">
-                            <input readonly="readonly" size="6" type="text" id="site_match_color" name="color" value="{setting name="site_color"}">
-                            <div class="match_viewer" style="background-color:#{setting name="site_color"}"></div>
-                        </div>
+                        <label>{t}Click to reset color:{/t}</label>
+                        <button class="onm-button" >{t}Reset color{/t}</button>
+                        <div class="match_viewer" style="background-color:#{setting name="site_color"}"></div>
                     </td>
                     <td>
 
