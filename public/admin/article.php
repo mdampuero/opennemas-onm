@@ -1635,6 +1635,29 @@ if (isset($_REQUEST['action']) ) {
             Application::forward('index.php?go=' . urlencode($uri));
         } break;
 
+        case 'content-list-provider':
+
+            $items_page = s::get('items_per_page') ?: 20;
+            $category = filter_input( INPUT_GET, 'category' , FILTER_SANITIZE_STRING, array('options' => array('default' => '0')) );
+            $page = filter_input( INPUT_GET, 'page' , FILTER_SANITIZE_STRING, array('options' => array('default' => '1')) );
+            $cm = new ContentManager();
+
+            list($articles, $pages) = $cm->find_pages('Article',
+                        'fk_content_type=1 and content_status=1 AND available=1 ',
+                        'ORDER BY frontpage DESC, starttime DESC,  contents.title ASC ',
+                        $page, $items_page, $category);
+
+            $tpl->assign(array('contents'=>$articles,
+                                'contentTypeCategories'=>$allcategorys,
+                                'category' =>$category,
+                                'pagination'=>$pages->links
+                        ));
+
+            $html_out = $tpl->fetch("common/content_provider/_container-content-list.tpl");
+            Application::ajax_out($html_out);
+
+        break;
+
         default: {
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
         } break;
