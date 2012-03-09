@@ -395,6 +395,33 @@ Options -Indexes
     RewriteCond %{REQUEST_FILENAME} !-d
 
     #--------------------------------------------------------
+    #Redirection from old elidealgallego.com
+    #Inner Article
+    RewriteRule ^index\.php/[a-z0-9\-]+/[a-z0-9\-]+/([0-9]+)\-[a-z0-9\-]+/?$ /controllers/redirect-imported-elements.php?content_type=article&content_id=$1 [L,NC]
+    RewriteRule ^index\.php/opinion/[a-z0-9\-]+/([0-9]+)\-[a-z]/?$ /controllers/redirect-from-editmaker.php?content_type=opinion&content_id=$1 [L,NC]
+    #------------------------
+    RewriteRule ^index.php/?$ / [R=301,L,NC]
+    RewriteRule ^index.php/inicio/?$ / [R=301,L,NC]
+    RewriteRule ^index.php/opinion.*/?$ /opinion/ [R=301,L,NC]
+    RewriteRule ^index.php/iberia/?$ /seccion/espana/ [R=301,L,NC]
+    RewriteRule ^index.php/opinion/?$ /opinion/ [R=301,L,NC]
+    RewriteRule ^index.php/historial-aturuxos/[0-9]+\-[a-z0-9\-]+/?$ /opinion/autor/000005/aturuxos/ [R=301,L,NC]
+    RewriteRule ^index.php/mundo.*/?$ /seccion/mundo/ [R=301,L,NC]
+    RewriteRule ^index.php/economia.*/?$ /seccion/economia/ [R=301,L,NC]
+    RewriteRule ^index.php/sociedad.*/?$ /seccion/sociedad/ [R=301,L,NC]
+    RewriteRule ^index.php/deportes.*/?$ /seccion/deportes/ [R=301,L,NC]
+    RewriteRule ^index.php/periodico-impreso/a-coruna/?$ /seccion/coruna/ [R=301,L,NC]
+    RewriteRule ^index.php/periodico-impreso/area-metropolitana/?$ /seccion/area-metropolitana/ [R=301,L,NC]
+    RewriteRule ^index.php/periodico-impreso/provincia/?$ /seccion/coruna/ [R=301,L,NC]
+    RewriteRule ^index.php/horoscopo-semanal/?$ /estaticas/horoscopo.html [R=301,L,NC]
+    RewriteRule ^index.php/cartelera/?$ /estaticas/cartelera.html [R=301,L,NC]
+    RewriteRule ^index.php/aeropuertos/?$ /estaticas/aeropuertos.html [R=301,L,NC]
+    RewriteRule ^index.php/farmacias/?$ /estaticas/farmacia.html [R=301,L,NC]
+    RewriteRule ^index.php/galerias/?$ /album/ [R=301,L,NC]
+    RewriteRule ^index.php/.*/?$ / [R=301,L,NC]
+    #--------------------------------------------------------
+
+    #--------------------------------------------------------
     #Redirection from old nuevatribuna.es
 
     # provisiona cronicas
