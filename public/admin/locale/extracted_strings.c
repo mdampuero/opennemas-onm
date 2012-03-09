@@ -2882,7 +2882,7 @@ gettext("Subsection of:");
 gettext("Available:");
 
 /* public/admin/themes/default/tpl//category/form.tpl */
-gettext("If this option is activated this category will be showed in menu");
+gettext("If this option is activated this category will be available");
 
 /* public/admin/themes/default/tpl//category/form.tpl */
 gettext("Show in rss:");
@@ -2900,7 +2900,10 @@ gettext("Image logo:");
 gettext("Color:");
 
 /* public/admin/themes/default/tpl//category/form.tpl */
-gettext("Click to match with site color:");
+gettext("Click to reset color:");
+
+/* public/admin/themes/default/tpl//category/form.tpl */
+gettext("Reset color");
 
 /* public/admin/themes/default/tpl//category/form.tpl */
 gettext("Subsections:");
