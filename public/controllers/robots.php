@@ -13,5 +13,5 @@ Disallow: /harming/humans
 Disallow: /ignoring/human/orders
 Disallow: /harm/to/self
 
-Sitemap: <?php echo SITE_URL; ?>sitemapnews.xml
-Sitemap: <?php echo SITE_URL; ?>sitemapweb.xml
+Sitemap: <?php echo SITE_URL; ?>sitemapnews.xml.gz
+Sitemap: <?php echo SITE_URL; ?>sitemapweb.xml.gz
