@@ -41,7 +41,12 @@ if (($tpl->caching == 0)
                     && $category->internal_category == 1)
                 {
 
-                    $articlesByCategory[$category->name] = $cm->getArrayOfArticlesInCategory($category->pk_content_category, 'available=1 AND fk_content_type=1',' ORDER BY created DESC LIMIT 0 ,'.$maxArticlesByCategory);
+                    $articlesByCategory[$category->name] = $cm->getArrayOfArticlesInCategory(
+                            $category->pk_content_category,
+                            'available=1 AND fk_content_type=1',
+                            ' ORDER BY created DESC',
+                            $maxArticlesByCategory
+                    );
                     $articlesByCategory[$category->name] = $cm->getInTime($articlesByCategory[$category->name]);
 
                 }
