@@ -22,7 +22,7 @@ $tpl->setConfig('opinion');
 $category_name = filter_input(INPUT_GET,'category_name',FILTER_SANITIZE_STRING);
 $subcategory_name = filter_input(INPUT_GET,'subcategory_name',FILTER_SANITIZE_STRING);
 $authorID = (int) filter_input(INPUT_GET,'author_id',FILTER_SANITIZE_STRING);
- 
+
 /**
  * Redirect to home if category_name is not opinion
 */
@@ -115,6 +115,7 @@ if (isset($_REQUEST['action'])) {
                 $tpl->assign('editorial', $editorial);
                 $tpl->assign('opinions',  $improvedOpinions);
                 $tpl->assign('pagination',  $pagination);
+                $tpl->assign('page', $page);
 
             }
 
@@ -123,7 +124,7 @@ if (isset($_REQUEST['action'])) {
         break;
 
         case 'list_op_author':  // Author frontpage
- 
+
             // Don't execute the app logic if there are caches available
             if (!$tpl->isCached('opinion/frontpage_author.tpl', $cacheID)) {
 
@@ -195,6 +196,7 @@ if (isset($_REQUEST['action'])) {
                 $tpl->assign('pagination_list', $pagination);
                 $tpl->assign('opinions', $opinions);
                 $tpl->assign('author_id', $authorID);
+                $tpl->assign('page', $page);
 
             } // End if isCached
 
