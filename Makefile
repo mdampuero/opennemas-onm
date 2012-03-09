@@ -14,7 +14,8 @@ SESSIONS_FOLDERS = \
 	
 LINGUAS = \
 	es_ES \
-	gl_ES
+	gl_ES \
+	pt_BR
 
 DOC_FOLDERS = public/core \
 	public/controllers \
