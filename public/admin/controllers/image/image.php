@@ -19,7 +19,7 @@ $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 
 Acl::checkOrForward('IMAGE_ADMIN');
 
-if(!class_exists('Imagick')) {
+if(!extension_loaded('imagick')) {
     throw new Exception("Imagick isn't installed in this server, if you are in a Debian based system please installa php5-imagick package");
 }
 

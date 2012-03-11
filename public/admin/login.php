@@ -6,7 +6,6 @@ require_once('../bootstrap.php');
 require_once('session_bootstrap.php');
 
 require_once(SITE_CORE_PATH.'privileges_check.class.php');
-require_once(SITE_CORE_PATH.'method_cache_manager.class.php');
 
 /**
  * Setup view
@@ -25,7 +24,6 @@ switch ($action) {
         $captcha  = '';
 
         $user = new User();
-        // var_dump($_SESSION, $token);
 
         if ($_SESSION['csrf'] !== $token) {
             $tpl->assign('message', _('Login token is not valid. Try to autenticate again.'));

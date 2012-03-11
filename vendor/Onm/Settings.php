@@ -53,7 +53,7 @@ class Settings
             // Try to fetch the setting from APC first
             $fetchedFromAPC = false;
             if (extension_loaded('apc')) {
-                $settingValue = apc_fetch(APC_PREFIX . "_". $settingName, $fetchedFromAPC);
+                $settingValue = apc_fetch(APC_PREFIX . ".". $settingName, $fetchedFromAPC);
             }
 
             // If was not fetched from APC now is turn of DB
@@ -75,7 +75,7 @@ class Settings
                 $settingValue = unserialize($rs);
 
                 if (extension_loaded('apc')) {
-                    apc_store(APC_PREFIX . "_".$settingName, $settingValue);
+                    apc_store(APC_PREFIX . ".".$settingName, $settingValue);
                 }
 
             }
@@ -87,14 +87,14 @@ class Settings
             if (extension_loaded('apc')) {
                 $apcSettingName = array();
                 foreach ($settingName as $key) {
-                    $apcSettingName []= APC_PREFIX . "_". $key;
+                    $apcSettingName []= APC_PREFIX . ".". $key;
                 }
 
                 $apcSettingValue = apc_fetch($apcSettingName, $fetchedFromAPC);
 
                 $settingValue = array();
                 foreach ($apcSettingValue as $key => $value) {
-                    $key = preg_replace("@".APC_PREFIX . "_@", "", $key);
+                    $key = preg_replace("@".APC_PREFIX . "\.@", "", $key);
                     $settingValue[$key] = $value;
                 }
 
@@ -127,7 +127,7 @@ class Settings
                 if (extension_loaded('apc')) {
                     $apcSettingName = array();
                     foreach ($settingValue as $key => $option) {
-                        $apcSettingName [APC_PREFIX . "_". $key] = $option;
+                        $apcSettingName [APC_PREFIX . ".". $key] = $option;
                     }
                     apc_store($apcSettingName);
                 }
@@ -174,7 +174,7 @@ class Settings
             return false;
         }
         if (extension_loaded('apc')) {
-            apc_store(APC_PREFIX . "_".$settingName, $settingValue);
+            apc_store(APC_PREFIX . ".".$settingName, $settingValue);
         }
 
         return true;
@@ -204,7 +204,7 @@ class Settings
         }
 
         if (extension_loaded('apc')) {
-            apc_delete($instanceName . "_".$settingName);
+            apc_delete($instanceName . ".".$settingName);
         } else {
             return false;
         }

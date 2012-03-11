@@ -1,11 +1,13 @@
 <?php
-/*
- * This file is part of the onm package.
- * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+/**
+ * This file is part of the Onm package.
+ *
+ * (c)  OpenHost S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- */
+ **/
+// TODO: Move all the class functions to plain functions into functions.php
 /**
  * Library for handling unusual string operations.
  *
@@ -399,17 +401,18 @@ class String_Utils
 
         return $result;
     }
-    
-    static public function generatePassword($length = 8) {
+
+    static public function generatePassword($length = 8)
+    {
         $chars = "234567890abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         $i = 0;
         $password = "";
-        
+
         while ($i <= $length-1) {
             $password .= $chars{mt_rand(0,strlen($chars)-1)};
             $i++;
         }
-        
+
         return $password;
     }
 

@@ -1,8 +1,13 @@
 <?php
-
 /**
- * Defining application, libs, and other internal constants.
-*/
+ * This file is part of the Onm package.
+ *
+ * (c)  OpenHost S.L. <developers@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ **/
+require_once __DIR__.'/autoload.php';
 
 // Define path to application directory
 defined('APPLICATION_PATH')
@@ -31,7 +36,7 @@ $configFile = implode(DIRECTORY_SEPARATOR, array(
 if (file_exists($configFile)) {
 
     require($configFile);
-    require_once(SITE_CORE_PATH.'application.class.php');
+    require_once(SITE_CORE_PATH.'Application.php');
     \Application::initAutoloader('*');
 
     // Loads one ONM instance from database

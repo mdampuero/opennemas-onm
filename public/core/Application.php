@@ -7,7 +7,6 @@
  * file that was distributed with this source code.
  */
 use Onm\Settings as s;
-
 /**
  * Main application class, handles all the initialization of the app
  *
@@ -35,33 +34,17 @@ class Application
     static $request        = null;
 
     /**
-     * Initializes the Application class.
-     **/
-    public function __construct()
-    {
-        $this->adodb        = SITE_LIBS_PATH.'adodb5/adodb.inc.php';
-        $this->smarty       = SITE_LIBS_PATH.'smarty/Smarty.class.php';
-        $this->log          = SITE_LIBS_PATH.'Log.php';
-        $this->pager        = SITE_LIBS_PATH.'Pager/Pager.php';
-        $this->template     = SITE_LIBS_PATH.'template.class.php';
-    }
-
-
-    /**
     * Setup the Application instance and assigns it to a global variable
     *
     * If global variable application doesn't exists create an instance of it,
     * and setup up DB conection, Adodb logger instance, Workflow
     * logger instance,
     *
-    * @access static
     * @return object $GLOBALS['application']
     */
     static public function load()
     {
         if (!isset($GLOBALS['application']) || $GLOBALS['application']==NULL) {
-
-
             // Setting up static Constants
             self::initInternalConstants();
 
@@ -79,20 +62,23 @@ class Application
 
                 self::initTimeZone();
             }
-
         }
 
-        return( $GLOBALS['application'] );
+        return $GLOBALS['application'];
     }
 
-    /*
-     * Initializes the Request object and register it inside Application object
-     *
-     * @param $
-     */
-    static public function getRequest()
+    static public function initDatabase()
     {
-        return \Onm\Request::getInstance();
+        // Database
+        $GLOBALS['application']->conn = \ADONewConnection(BD_TYPE);
+        $GLOBALS['application']->conn->Connect(
+            BD_HOST, BD_USER, BD_PASS, BD_DATABASE
+        );
+
+        // Check if adodb is log enabled
+        if (s::get('log_db_enabled') == 1) {
+            $GLOBALS['application']->conn->LogSQL();
+        }
     }
 
     static public function initLogger()
@@ -117,59 +103,6 @@ class Application
         } else {
             $GLOBALS['application']->logger = \Log::singleton('null');
         }
-    }
-
-    static public function initDatabase()
-    {
-
-    /*     // Database
-        self::$conn = \ADONewConnection(BD_TYPE);
-        self::$conn->Connect(
-            BD_HOST, BD_USER, BD_PASS, BD_DATABASE
-        );
-
-        // Check if adodb log is enabled
-        if (s::get('log_db_enabled') == 1) {
-            self::$conn->LogSQL();
-        }
-     *
-     */
-        // Database
-        $GLOBALS['application']->conn = \ADONewConnection(BD_TYPE);
-        $GLOBALS['application']->conn->Connect(
-            BD_HOST, BD_USER, BD_PASS, BD_DATABASE
-        );
-
-        // Check if adodb is log enabled
-        if (s::get('log_db_enabled') == 1) {
-            $GLOBALS['application']->conn->LogSQL();
-        }
-    }
-
-    static public function getConnection($data = array())
-    {
-        if (self::$conn == null || !(self::$conn instanceof \ADOConnection)) {
-            // Database
-            self::$conn = \ADONewConnection($data['BD_TYPE']);
-            self::$conn->Connect(
-               $data[' BD_HOST'], $data['BD_USER'], $data['BD_PASS'], $data['BD_DATABASE']
-            );
-
-            // Check if adodb log is enabled
-            if (s::get('log_db_enabled') == 1) {
-                self::$conn->LogSQL();
-            }
-        }
-        return self::$conn;
-    }
-
-    static public function setConnection($connectionObject)
-    {
-        if ($connectionObject instanceof \ADOConnection) {
-            throw new \Exception('$connectionObject is not an instance of ADOConnection');
-        }
-        self::$conn = $connectionObject;
-        return self::$conn;
     }
 
     /**
@@ -219,7 +152,6 @@ class Application
      * Sets the timezone for this app from the instance settings
      *
      * @return void
-     * @author
      **/
     static public function initTimeZone()
     {
@@ -236,53 +168,20 @@ class Application
     */
     static public function initAutoloader($packages=null)
     {
-        // Instanciate Zend_Loader_Autoloader
-        require_once 'Zend/Loader/Autoloader.php';
-        $autoloader = Zend_Loader_Autoloader::getInstance();
-        // Register Onm_ Namespace
-        $autoloader->registerNamespace('Onm_');
 
-        $libs = array(  'adodb'    => SITE_VENDOR_PATH.'/adodb5/adodb.inc.php',
-                        'pager'    => SITE_VENDOR_PATH.'/Pager/Pager.php',
-                        'template' => array(
-                                        SITE_VENDOR_PATH.'/smarty/smarty-legacy/Smarty.class.php',
-                                        SITE_VENDOR_PATH.'/Log.php',
-                                        SITE_VENDOR_PATH.'/Template.php'
-                                    ),
-                     );
-
-        // if no packages was given load the common libraries
-        if ( is_null($packages) || $packages == '*' ) {
-            foreach ($libs as $lib) {
-                if ( !is_array($lib) ) {
-                    require_once($lib);
-                } else {
-                    foreach ($lib as $dependencia) {
-                        require_once($dependencia);
-                    }
-                }
-            }
-        // if packages was given as argument try to merge with common libraries
-        // and load all of them
-        } else {
-            $pcks = explode(';', $packages);
-            foreach ($pcks as $p) {
-                if ( array_key_exists($p, $libs) ) {
-                    if ( !is_array($libs[$p]) ) {
-                        require_once($libs[$p]);
-                    } else {
-                        foreach ($libs[$p] as $dependencia) {
-                            require_once($dependencia);
-                        }
-                    }
-                }
-            }
-        }
+        // TODO: move to autoload.php
+        // Load required libraries
+        require_once SITE_VENDOR_PATH.'/adodb5/adodb.inc.php';
+        require_once SITE_VENDOR_PATH.'/Pager/Pager.php';
+        require_once SITE_VENDOR_PATH.'/smarty/smarty-legacy/Smarty.class.php';
+        require_once SITE_VENDOR_PATH.'/Log.php';
+        require_once SITE_VENDOR_PATH.'/Template.php';
 
         // Function to autoload classes on the fly using SPL autload
         spl_autoload_register('Application::autoload');
     }
 
+    // TODO: move to a separated file called functions.php
     /**
      * Autoloads classes by its name.
      *
@@ -314,25 +213,6 @@ class Application
                 require SITE_MODELS_PATH.'/'.$filename.'.class.php';
                 return true;
             }
-        }
-
-        // Use PSR-0 Final Proposal autoloader
-        if (strripos($className, '\\') !== false) {
-            $className = ltrim($className, '\\');
-            $fileName  = '';
-            $namespace = '';
-            if ($lastNsPos = strripos($className, '\\')) {
-                $namespace = substr($className, 0, $lastNsPos);
-                $className = substr($className, $lastNsPos + 1);
-                $fileName  = str_replace(
-                    '\\',
-                    DIRECTORY_SEPARATOR,
-                    $namespace
-                ) . DIRECTORY_SEPARATOR;
-            }
-            $fileName .= str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
-
-            require $fileName;
         }
 
     }
@@ -442,6 +322,7 @@ class Application
         define('ITEMS_PAGE', "20"); // TODO: delete from application
     }
 
+    // TODO: move to a separated file called functions.php
     /**
      * Returns the available languages
      *
@@ -462,6 +343,7 @@ class Application
         return \Zend_Registry::get('logger');
     }
 
+    // TODO: move to a separated file called functions.php
     /**
     * Raise an HTTP redirection to given url
     *
@@ -475,6 +357,8 @@ class Application
         exit(0);
     }
 
+    // TODO: move to a separated file called functions.php
+    // TODO: rename the function to isMobile()
     /**
      * Detect a mobile device and redirect to mobile version
      *
@@ -512,6 +396,7 @@ class Application
         return $isMobileDevice;
     }
 
+    // TODO: move to a separated file called functions.php
     /**
      * Check if current request is from backend
      *
@@ -538,24 +423,7 @@ class Application
         exit(0);
     }
 
-    // Redirección sobre el frame principal
-    static public function forwardTargetParent($url)
-    {
-        $html =<<<HTMLCODE
-<html>
-<head>
-  <meta http-equiv="refresh" content="0;url=/admin/login.php" />
-</head>
-<body>
-<script> window.top.location="$url";</script>
-</body>
-</html>
-HTMLCODE;
-        echo($html);
-
-        exit(0);
-    }
-
+    // TODO: move to a separated file called functions.php
     /**
     * Wrapper to output content to AJAX requests
     *
@@ -606,15 +474,9 @@ HTMLCODE;
         }
     }
 
+    // TODO: move to a separated file called functions.php
     /**
     * Stablishes a cookie value in a secure way
-    *
-    * @access public
-    * @param bool,string,integer,double $baz
-    * @return mixed
-    * @author nameofauthor
-    * Other available tags: @tutorial, @version, @copyright, @deprecated,
-    * @example, @ignore, @link, @see, @since
     */
     static public function setCookieSecure($name, $value, $expires=0, $domain='/')
     {
@@ -624,12 +486,13 @@ HTMLCODE;
         );
     }
 
+
+    // TODO: move to a separated file called functions.php
     /**
-    * Try to get the real IP of the client
-    *
-    * @access static
-    * @return string, the client ip
-    */
+     * Try to get the real IP of the client
+     *
+     * @return string the client ip
+     **/
     static public function getRealIP()
     {
         // REMOTE_ADDR: dirección ip del cliente

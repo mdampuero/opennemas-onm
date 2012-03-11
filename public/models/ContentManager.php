@@ -45,7 +45,8 @@ class ContentManager
 
         if($rs !== false) {
             while(!$rs->EOF) {
-                $obj = new $content_type();
+                $contentType = ucfirst($content_type);
+                $obj = new $contentType();
                 $obj->load($rs->fields);
 
                 $items[] = $obj;
