@@ -1,6 +1,6 @@
 #!/usr/bin/php5
 <?php
-/* 
+/*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
@@ -10,7 +10,6 @@
  *
  * @author sandra
  */
-
 
 printf("Welcome to OpenNemas database Refactorize \n");
 
@@ -47,13 +46,12 @@ set_include_path(implode(PATH_SEPARATOR, array(
     SITE_CORE_PATH, SITE_LIBS_PATH, SITE_VENDOR_PATH, SITE_MODELS_PATH, get_include_path(),
 )));
 
+require SITE_PATH.'/autoload.php';
+\Application::initAutoloader('*');
 
- require_once('application.class.php');
- \Application::initAutoloader('*');
+$app = \Application::load();
 
-    $app = \Application::load();
 
- 
 if(!defined(INSTANCE_MEDIA) )
     define('INSTANCE_MEDIA', SITE_PATH.'media/images');
 
@@ -62,8 +60,6 @@ if(!defined(INSTANCE_MEDIA) )
 */
 
 require 'import-contents.php';
-require 'string_utils.class.php';
-
 
 
 print_r(" \n You will import opinions {$topic} \n");

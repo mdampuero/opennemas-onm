@@ -35,8 +35,8 @@ $configFile = implode(DIRECTORY_SEPARATOR, array(
 
 if (file_exists($configFile)) {
 
-    require($configFile);
-    require_once(SITE_CORE_PATH.'Application.php');
+    require $configFile;
+    require_once 'Application.php';
     \Application::initAutoloader('*');
 
     // Loads one ONM instance from database
