@@ -165,7 +165,6 @@ if (isset($_REQUEST['action'])) {
 													  .' and contents.available=1  and contents.content_status=1',
 													  'ORDER BY created DESC '.$_limit);
                     $aut = new Author($authorID);
-                    $name_author = String_Utils::get_title($aut->name);
                     if (!empty($opinions)) {
                         foreach ($opinions as &$opinion) {
                             $opinion['author_name_slug']  = String_Utils::get_title($opinion['name']);
@@ -192,7 +191,7 @@ if (isset($_REQUEST['action'])) {
 				require_once ("index_sections.php");
 				require_once ("widget_static_pages.php");
 
-                $tpl->assign('author_name', $name_author);
+                $tpl->assign('author_name', $aut->name);
                 $tpl->assign('pagination_list', $pagination);
                 $tpl->assign('opinions', $opinions);
                 $tpl->assign('author_id', $authorID);
