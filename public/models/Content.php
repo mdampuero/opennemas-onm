@@ -95,7 +95,7 @@ class Content
                 break;
 
             case 'slug2':
-                return String_Utils::get_title($this->title);
+                return StringUtils::get_title($this->title);
                 break;
 
             case 'content_type_name':
@@ -153,7 +153,7 @@ class Content
 
 
         if(empty($data['slug'] ) || !isset($data['slug']) )
-            $data['slug'] = mb_strtolower(String_Utils::get_title($data['title']));
+            $data['slug'] = mb_strtolower(StringUtils::get_title($data['title']));
 
         $data['views']   = 1;
         $data['created'] = (empty($data['created']))? date("Y-m-d H:i:s") : $data['created'];
@@ -238,7 +238,7 @@ class Content
         // Load object properties
         $this->load( $rs->fields );
         $this->fk_user = $this->fk_author;
-        
+
         // Fire event onAfterXxx
         $GLOBALS['application']->dispatch('onAfterRead', $this);
     }
@@ -282,7 +282,7 @@ class Content
         if (empty($data['fk_user_last_editor'])&& !isset ($data['fk_user_last_editor'])) $data['fk_user_last_editor']= $_SESSION['userid'];
 
         if(empty($data['slug'] ) || !isset($data['slug']) )
-            $data['slug'] = mb_strtolower(String_Utils::get_title($data['title']));
+            $data['slug'] = mb_strtolower(StringUtils::get_title($data['title']));
 
 
         if (empty($data['description'])&& !isset ($data['description'])) $data['description']='';

@@ -13,7 +13,7 @@
  * @subpackage Model
  * @author     Fran Dieguez <fran@openhost.es>
  **/
-class Widget_Factory
+class WidgetFactory
 {
 
     public function __construct($useDB = true)

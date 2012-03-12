@@ -29,7 +29,7 @@ $section = (!empty($subcategory_name))? $subcategory_name: $category_name;
 $section = (is_null($section))? 'home': $section;
 $tpl->assign('section', $section);
 
-//Listado de opiniones portada seccion opinion.           
+//Listado de opiniones portada seccion opinion.
 $cm = new ContentManager();
 $director  = $cm->find('Opinion', 'type_opinion=2 AND in_home=1 AND available=1 AND content_status=1', 'ORDER BY created DESC  LIMIT 0,1');
 $editorial = $cm->find('Opinion', 'type_opinion=1 AND in_home=1 AND available=1 AND content_status=1', 'ORDER BY position ASC, created DESC LIMIT 0,2');
@@ -45,7 +45,7 @@ if(isset ($director[0])){
 //Obtener los slug's de los autores
 $i=0;
 foreach ($opinions as $op){
-    $opinions[$i]['author_name_slug']=String_Utils::get_title($op['name']);
+    $opinions[$i]['author_name_slug']=StringUtils::get_title($op['name']);
     $i++;
 }
 

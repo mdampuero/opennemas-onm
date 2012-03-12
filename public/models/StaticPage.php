@@ -19,7 +19,7 @@ define('STATIC_PAGE_PATH', 'estaticas/');
  *
  */
 
-class Static_Page extends Content
+class StaticPage extends Content
 {
     /**
      * @var pk_static_page Page identifier
@@ -55,7 +55,7 @@ class Static_Page extends Content
 
 
         // Clear  magic_quotes
-        String_Utils::disabled_magic_quotes($data);
+        StringUtils::disabled_magic_quotes($data);
         $data['category'] = 0;
         $this->commonData($data);
         parent::create($data);
@@ -151,7 +151,7 @@ class Static_Page extends Content
 
 
         // Clear  magic_quotes
-        String_Utils::disabled_magic_quotes($data);
+        StringUtils::disabled_magic_quotes($data);
         $data['category'] = 0;
         $this->commonData($data);
         parent::update($data);
@@ -213,9 +213,9 @@ class Static_Page extends Content
 
 
         if (empty($slug) && !empty($title)) {
-            $slug = String_Utils::get_title($title, $useStopList = false);
+            $slug = StringUtils::get_title($title, $useStopList = false);
         }
-        $slug = String_Utils::get_title($slug, $useStopList = false);
+        $slug = StringUtils::get_title($slug, $useStopList = false);
 
         // Get titles to check unique value
         $slugs = $this->getSlugs('pk_static_page<>"' . $id . '"');
@@ -239,7 +239,7 @@ class Static_Page extends Content
                 `contents`.`pk_content`= `static_pages`.`pk_static_page` AND
                 `static_pages`.`slug` LIKE ?
                 ORDER BY  pk_static_page DESC';
-         
+
         $id = $GLOBALS['application']->conn->GetOne($sql, array($slug));
 
         if ($id === false) {

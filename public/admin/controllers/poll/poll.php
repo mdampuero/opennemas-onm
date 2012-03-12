@@ -285,7 +285,7 @@ switch ($action) {
         m::add(_('Settings saved successfully.'), m::SUCCESS);
 
         $httpParams = array(array('action'=>'list'),);
-        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
 
 
     default:

@@ -13,7 +13,7 @@
  * @subpackage Acl
  * @author     Fran Dieguez <fran@openhost.es>
  **/
-class Privileges_check
+class PrivilegesCheck
 {
 
     /**
@@ -76,9 +76,9 @@ class Privileges_check
     {
         try {
             if (!isset($_SESSION['userid'])
-                || Privileges_check::CheckSessionExpireTime()
+                || self::CheckSessionExpireTime()
             ) {
-                Privileges_check::SessionExpireTimeAction();
+                self::SessionExpireTimeAction();
             }
 
             if (isset($_SESSION['isMaster'])
@@ -98,7 +98,7 @@ class Privileges_check
                 || empty($_SESSION['userid'])
                 || !in_array($privilege, $_SESSION['privileges'])
                 || (!is_null($categoryID)
-                    && !(Privileges_check::CheckAccessCategories($category))
+                    && !(self::CheckAccessCategories($category))
                     )
             ) {
                 return false;
@@ -121,7 +121,7 @@ class Privileges_check
         Application::forward("/admin/login.php");
     }
 
-     
+
     public static function LoadSessionExpireTime()
     {
         if (isset($_SESSION)
@@ -142,7 +142,7 @@ class Privileges_check
             return true;
         }
         //Actuliza la sesion
-        Privileges_check::LoadSessionExpireTime();
+        self::LoadSessionExpireTime();
         return false;
     }
 

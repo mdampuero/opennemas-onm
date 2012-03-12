@@ -248,14 +248,14 @@ class ImporterXml {
 
         if(!empty($this->data['category_name'])) {
             $ccm = ContentCategoryManager::get_instance();
-            $current_category = strtolower(String_Utils::normalize_name( $this->data['category_name'] ));
+            $current_category = strtolower(StringUtils::normalize_name( $this->data['category_name'] ));
             $this->data['category'] = $ccm->get_id($current_category);
 
         } else {
             $this->data['category']=  20;
         }
 
-        $this->data['metadata'] =  String_Utils::get_tags($this->data['title']);
+        $this->data['metadata'] =  StringUtils::get_tags($this->data['title']);
 
 
 

@@ -13,7 +13,7 @@
  * @package Onm
  * @subpackage Model
  **/
-class Album_photo
+class AlbumPhoto
 {
 
     public $pk_album = NULL;

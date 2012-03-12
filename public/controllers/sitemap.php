@@ -54,7 +54,7 @@ if (($tpl->caching == 0)
 
             $opinions = $cm->getOpinionAuthorsPermalinks('contents.available=1 and contents.content_status=1', 'ORDER BY in_home DESC, position ASC, changed DESC LIMIT 100');
             foreach ($opinions as &$opinion){
-                $opinion['author_name_slug'] = String_Utils::get_title($opinion['name']);
+                $opinion['author_name_slug'] = StringUtils::get_title($opinion['name']);
             }
 
             $tpl->assign('articlesByCategory',$articlesByCategory);
@@ -91,7 +91,7 @@ if (($tpl->caching == 0)
             $improvedOpinions = array();
             foreach($opinions as $opinion) {
 
-                $opinion['author_name_slug'] = String_Utils::get_title($opinion['name']);
+                $opinion['author_name_slug'] = StringUtils::get_title($opinion['name']);
                 $improvedOpinions []= $opinion;
             }
 

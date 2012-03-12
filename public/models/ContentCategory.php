@@ -56,7 +56,7 @@ class ContentCategory {
     public function create($data)
     {
         $data['name'] = strtolower($data['title']);
-        $data['name'] = String_Utils::normalize_name($data['name']);
+        $data['name'] = StringUtils::normalize_name($data['name']);
         $data['logo_path'] = (isset($data['logo_path'])) ? $data['logo_path'] : '';
         $data['color'] = (isset($data['color'])) ? $data['color'] : '';
         $data['params'] = serialize($data['params']);
@@ -123,7 +123,7 @@ class ContentCategory {
         $this->read($data['id']); //Para comprobar si cambio el nombre carpeta
         //No se puede cambiar el nombre de las url's
       /*  if($data['title'] != $this->title) {
-            $data['name'] = String_Utils::normalize_name($data['title']);
+            $data['name'] = StringUtils::normalize_name($data['title']);
         } else {
             $data['name'] =$this->name;
         }

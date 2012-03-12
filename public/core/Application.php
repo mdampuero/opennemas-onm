@@ -176,45 +176,6 @@ class Application
         require_once SITE_VENDOR_PATH.'/smarty/smarty-legacy/Smarty.class.php';
         require_once SITE_VENDOR_PATH.'/Log.php';
         require_once SITE_VENDOR_PATH.'/Template.php';
-
-        // Function to autoload classes on the fly using SPL autload
-        spl_autoload_register('Application::autoload');
-    }
-
-    // TODO: move to a separated file called functions.php
-    /**
-     * Autoloads classes by its name.
-     *
-     * @param string $className the name of the class.
-     *
-     * @return boolean true if class was found and loaded
-     */
-    static private function autoload($className)
-    {
-
-        // Use Onm old loader
-        $filename = strtolower($className);
-        if ( file_exists(dirname(__FILE__).'/'.$filename.'.class.php') ) {
-            require dirname(__FILE__).'/'.$filename.'.class.php';
-            return true;
-        } elseif ( file_exists(SITE_MODELS_PATH.'/'.$filename.'.class.php') ) {
-            require SITE_MODELS_PATH.'/'.$filename.'.class.php';
-            return true;
-        } else {
-            // Try convert MethodCacheManager to method_cache_manager
-            $filename = strtolower(
-                preg_replace('/([a-z])([A-Z])/', '$1_$2', $className)
-            );
-
-            if ( file_exists(dirname(__FILE__).'/'.$filename.'.class.php') ) {
-                require dirname(__FILE__).'/'.$filename.'.class.php';
-                return true;
-            } elseif ( file_exists(SITE_MODELS_PATH.'/'.$filename.'.class.php') ) {
-                require SITE_MODELS_PATH.'/'.$filename.'.class.php';
-                return true;
-            }
-        }
-
     }
 
 
@@ -558,6 +519,7 @@ class Application
         return $clientIp;
     }
 
+    // TODO: move to a separated file called functions.php
     /**
      * Register in the log one event in the content
      *
@@ -575,6 +537,7 @@ class Application
             $logger->notice( $msg );
     }
 
+    // TODO: move to a separated file called functions.php
     /**
      * Register in the Database error handler one error message
      *

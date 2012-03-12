@@ -21,13 +21,13 @@
 use Onm\Settings as s,
     Onm\Message  as m;
 
-require_once('../../../bootstrap.php');
-require_once('../../session_bootstrap.php');
+require_once '../../../bootstrap.php';
+require_once '../../session_bootstrap.php';
 
 Acl::checkOrForward('NEWSLETTER_ADMIN');
 
 require_once(SITE_CORE_PATH.'string_utils.class.php');
-String_Utils::disabled_magic_quotes();
+StringUtils::disabled_magic_quotes();
 
 $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 $tpl->assign('application_name', 'Boletín de Noticias');
@@ -102,7 +102,7 @@ switch($action) {
         $httpParams [] = array(
                             'action'=>'config',
                         );
-        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
     } else {
         $configurations = s::get('newsletter_maillist');
             foreach ($configurations as $key => $value) {
@@ -111,7 +111,7 @@ switch($action) {
                 $httpParams [] = array(
                     'action'=>'config',
                 );
-            Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+            Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
             }
         }
     }
@@ -187,7 +187,7 @@ switch($action) {
 
         }
         $tpl->assign('mailList', $mailList);
-       
+
         // Ajax request
         if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
            ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')) {
@@ -206,7 +206,7 @@ switch($action) {
      * Step 4: preview the message
      */
     case 'preview':
-        
+
         $htmlContent = $newsletter->render();
         $tpl->assign('htmlContent', $htmlContent);
         $tpl->display('newsletter/preview.tpl');
@@ -251,7 +251,7 @@ switch($action) {
                 $htmlFinal .= '<tr><td width=50% ><strong class="failed">FAILED</strong>&nbsp;&nbsp;</td><td>'. $mailbox->name . ' &lt;' . $mailbox->email. '&gt;</td></tr>';
             }
         }
-        
+
         if (isset($data->lists)) {
             foreach($data->lists as $email) {
                 if (trim($email) != ""){
@@ -269,10 +269,10 @@ switch($action) {
                         $htmlFinal .= '<tr><td width=50% ><strong class="failed">FAILED</strong>&nbsp;&nbsp;</td><td>'. $mailbox->name . ' &lt;' . $mailbox->email. '&gt;</td></tr>';
                     }
                 }
-                
+
             }
         }
-        
+
         $tpl->assign(array(
             'html_final' => $htmlFinal,
             'postmaster' => $postmaster,
@@ -341,7 +341,7 @@ switch($action) {
         $httpParams = array(
                             array('action'=>'listArticles'),
                             );
-        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
 
     break;
 

@@ -209,7 +209,7 @@ switch($action) {
         $album = new Album($id);
         $relations=array();
         $msg ='';
-        $relations = Related_content::get_content_relations($id);
+        $relations = RelatedContent::get_content_relations($id);
 
         if (!empty($relations)) {
             $msg = sprintf(_("<br>The album has some relations"));
@@ -234,7 +234,7 @@ switch($action) {
         if (!empty($id)) {
             $album = new Album($id);
             //Delete relations
-            $rel= new Related_content();
+            $rel= new RelatedContent();
             $rel->delete_all($id);
             $album->delete( $id ,$_SESSION['userid'] );
         } else {
@@ -331,7 +331,7 @@ switch($action) {
                     foreach ($fields as $i ) {
                         $album = new Album($i);
                         $relations=array();
-                        $relations = Related_content::get_content_relations( $i );
+                        $relations = RelatedContent::get_content_relations( $i );
 
                         if(!empty($relations)){
                             $alert =1;
@@ -402,7 +402,7 @@ switch($action) {
             m::add(_('Settings saved successfully.'), m::SUCCESS);
 
             $httpParams = array(array('action'=>'list'),);
-            Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+            Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
         }
 
     break;

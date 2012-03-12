@@ -13,7 +13,6 @@ use Onm\Settings as s,
 // Setup app
 require_once(dirname(__FILE__).'/../../../bootstrap.php');
 require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
-require_once(SITE_CORE_PATH.'privileges_check.class.php');
 
 $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 

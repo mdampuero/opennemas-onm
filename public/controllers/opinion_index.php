@@ -101,7 +101,7 @@ if (isset($_REQUEST['action'])) {
 				foreach($opinions as $opinion) {
 					$opinion->author = new Author($opinion->fk_author);
 					$opinion->name = $opinion->author->name;
-					$opinion->author_name_slug = String_Utils::get_title($opinion->name);
+					$opinion->author_name_slug = StringUtils::get_title($opinion->name);
 					$improvedOpinions[] = $opinion;
 				}
 
@@ -165,10 +165,10 @@ if (isset($_REQUEST['action'])) {
 													  .' and contents.available=1  and contents.content_status=1',
 													  'ORDER BY created DESC '.$_limit);
                     $aut = new Author($authorID);
-                    $name_author = String_Utils::get_title($aut->name);
+                    $name_author = StringUtils::get_title($aut->name);
                     if (!empty($opinions)) {
                         foreach ($opinions as &$opinion) {
-                            $opinion['author_name_slug']  = String_Utils::get_title($opinion['name']);
+                            $opinion['author_name_slug']  = StringUtils::get_title($opinion['name']);
                         }
                     }
 

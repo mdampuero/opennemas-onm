@@ -32,7 +32,7 @@ if(isset($category) && !empty($category)) {
 
 require_once('../../application_events.php');
 
-String_Utils::disabled_magic_quotes();
+StringUtils::disabled_magic_quotes();
 
 $isAjax = ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest');
 

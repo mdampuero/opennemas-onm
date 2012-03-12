@@ -57,7 +57,7 @@ class Video extends Content
 
                 break;
             case 'slug':
-                return String_Utils::get_title($this->title);
+                return StringUtils::get_title($this->title);
                 break;
 
             case 'content_type_name':

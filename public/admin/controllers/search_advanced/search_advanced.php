@@ -74,13 +74,13 @@ switch ($action) {
             $arrayResults = cSearch::Paginate($Pager, $arrayResults, "id", 10);
             $indice       = 0; $ind = 0;
             $res          = array();
-            $szTagsArray  = explode(', ', String_Utils::get_tags($szTags));
+            $szTagsArray  = explode(', ', StringUtils::get_tags($szTags));
 
 
             foreach ($arrayResults as $res ) {
                 for($ind=0; $ind < sizeof($szTagsArray); $ind++){
-                    $arrayResults[$indice]['titule']   = String_Utils::ext_str_ireplace($szTagsArray[$ind], '<b><span style="color:blue">$1</font></b>', $arrayResults[$indice]['titule']);
-                    $arrayResults[$indice]['metadata'] = String_Utils::ext_str_ireplace($szTagsArray[$ind], '<b><span style="color:blue">$1</font></b>', $arrayResults[$indice]['metadata']);
+                    $arrayResults[$indice]['titule']   = StringUtils::ext_str_ireplace($szTagsArray[$ind], '<b><span style="color:blue">$1</font></b>', $arrayResults[$indice]['titule']);
+                    $arrayResults[$indice]['metadata'] = StringUtils::ext_str_ireplace($szTagsArray[$ind], '<b><span style="color:blue">$1</font></b>', $arrayResults[$indice]['metadata']);
                 }
                 $indice++;
             }
@@ -134,12 +134,12 @@ switch ($action) {
         $indice = 0;
         $ind = 0;
         $res = array();
-        $szTagsArray = explode(', ', String_Utils::get_tags($szTags));
+        $szTagsArray = explode(', ', StringUtils::get_tags($szTags));
 
         foreach ($arrayResults as $res ) {
             for($ind=0; $ind < sizeof($szTagsArray); $ind++){
-                $arrayResults[$indice]['titule']   = String_Utils::ext_str_ireplace($szTagsArray[$ind], '<b><span style="color:blue">$1</font></b>', $arrayResults[$indice]['titule']);
-                $arrayResults[$indice]['metadata'] = String_Utils::ext_str_ireplace($szTagsArray[$ind], '<b><span style="color:blue">$1</font></b>', $arrayResults[$indice]['metadata']);
+                $arrayResults[$indice]['titule']   = StringUtils::ext_str_ireplace($szTagsArray[$ind], '<b><span style="color:blue">$1</font></b>', $arrayResults[$indice]['titule']);
+                $arrayResults[$indice]['metadata'] = StringUtils::ext_str_ireplace($szTagsArray[$ind], '<b><span style="color:blue">$1</font></b>', $arrayResults[$indice]['metadata']);
             }
 
             $indice++;
@@ -190,7 +190,7 @@ function checkTypes(& $htmlCheck)
         if($aType['name']== 'static_page'){
             $aType['name']= 'static_pages';
         }
-        
+
         if (mod::moduleExists(strtoupper($aType['name']).'_MANAGER')) {
             if (mod::isActivated(strtoupper($aType['name']).'_MANAGER')) {
                 if(isset($_REQUEST[$aType[1]]))
@@ -205,7 +205,7 @@ function checkTypes(& $htmlCheck)
             }
         }
     }
-    
+
     try
     {
         $szTypes = trim($szTypes);

@@ -13,7 +13,7 @@
  * @subpackage Model
  * @author     Fran Dieguez <fran@openhost.es>
  **/
-class User_group
+class UserGroup
 {
 
     /**Id del grupo*/
@@ -158,7 +158,7 @@ class User_group
         $sql = "SELECT pk_user_group, name FROM user_groups WHERE name <>'Masters'";
         $rs = $GLOBALS['application']->conn->Execute($sql);
         while (!$rs->EOF) {
-                $userGroup = new User_Group();
+                $userGroup = new UserGroup();
                 $userGroup->set_values($rs->fields);
                 $types[] = $userGroup;
             $rs->MoveNext();

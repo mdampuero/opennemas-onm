@@ -274,8 +274,8 @@ class Advertisement extends Content
      **/
     function create($data)
     {
-        // Clear magic_quotes String_Utils::fixScriptDeclaration & String_Utils::disabled_magic_quotes
-        String_Utils::disabled_magic_quotes($data);
+        // Clear magic_quotes StringUtils::fixScriptDeclaration & StringUtils::disabled_magic_quotes
+        StringUtils::disabled_magic_quotes($data);
 
         parent::create($data);
 
@@ -310,7 +310,7 @@ class Advertisement extends Content
             return null;
         }
 
-        $rel = new Related_content();
+        $rel = new RelatedContent();
         if (isset($data['selectos'])) {
             $pos = 1;
             foreach ($data['selectos'] as $relac) {
@@ -389,12 +389,12 @@ class Advertisement extends Content
     {
         parent::update($data);
 
-        // Remove magic_quotes, String_Utils::fixScriptDeclaration
-        // & String_Utils::disabled_magic_quotes
-        String_Utils::disabled_magic_quotes( $data );
+        // Remove magic_quotes, StringUtils::fixScriptDeclaration
+        // & StringUtils::disabled_magic_quotes
+        StringUtils::disabled_magic_quotes( $data );
 
         if (!empty($data['script'])) {
-            //$data['script'] = String_Utils::fixScriptDeclaration($data['script']);
+            //$data['script'] = StringUtils::fixScriptDeclaration($data['script']);
             $data['script'] = base64_encode( $data['script'] );
         }
 
@@ -427,7 +427,7 @@ class Advertisement extends Content
             return null;
         }
 
-        $rel = new Related_content();
+        $rel = new RelatedContent();
         $rel->delete($data['id']);
         if (isset($data['selectos'])) {
             $pos=1;

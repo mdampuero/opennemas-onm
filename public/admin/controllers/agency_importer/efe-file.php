@@ -34,20 +34,20 @@ $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 $tpl->assign('titulo_barra', 'Import Agency EFE news from XML files');
 
 
- 
+
 // TODO : define in settings
 define('SITE_TMP_PATH',  SITE_PATH.'..'.DS.'tmp'.DS.'xml'.DS);
 $uploaddir  = SITE_TMP_PATH;
 
 if(!file_exists($uploaddir)){
-    mkdir($uploaddir);  
+    mkdir($uploaddir);
 }
 
 
 $numCategories = array();
 $ccm = new ContentCategoryManager();
 $numCategories = $ccm->get_all_categories();
-  
+
 function decompressZIP($file) {
     $zip = new ZipArchive;
 
@@ -77,7 +77,7 @@ function decompressZIP($file) {
 function importAgencyXML($XMLFile) {
     $xmlDoc = new DOMDocument();
     $xmlDoc->load($XMLFile );
- 
+
 
     $fieldNode = $xmlDoc->getElementsByTagName( "field" );
     // array containinr the new article
@@ -152,7 +152,7 @@ function splitBodyInHtmlParagraph($body) {
 
 function createArticle($elementXML,$numCategories,$check='1')
 {
-    
+
     $data = array();
     $ccm = ContentCategoryManager::get_instance();
 
@@ -164,9 +164,9 @@ function createArticle($elementXML,$numCategories,$check='1')
     $data['summary']="";
     $data['body']="";
     $data['pk_author'] = $_SESSION['userid'];
-    
- 
-  
+
+
+
     if (!empty($elementXML['category'])) {
         $data['subtitle'] = strtoupper($elementXML['category']);
     }
@@ -184,9 +184,9 @@ function createArticle($elementXML,$numCategories,$check='1')
     }
     if(strlen($data['agency']) == 0) {
         $data['agency'] = "Agencia EFE";
-        
+
     }
-     
+
     if (!empty($elementXML['title'])) {
        $data['title']= $elementXML['title'];
        $data['title_int']= $elementXML['title'];
@@ -195,14 +195,14 @@ function createArticle($elementXML,$numCategories,$check='1')
 
     if (!empty($elementXML['month'])) { //date("Y-m-d H:i:s");
        $data['created']= $elementXML['year'].'-'.$elementXML['month'].'-'.$elementXML['day'].' '.$elementXML['hour'].':'.$elementXML['minute'].':'.$elementXML['second'] ;
-       
+
     }
 
 
-    $current_category = strtolower(String_Utils::normalize_name($elementXML['category']));
+    $current_category = strtolower(StringUtils::normalize_name($elementXML['category']));
 
     $data['category'] = $ccm->get_id($current_category);
- 
+
     //If the system does not recognize the category, send to unknown category
     if (empty($data['category'])) {
 
@@ -210,10 +210,10 @@ function createArticle($elementXML,$numCategories,$check='1')
 
         $data['category'] = 20;
     }else{
- 
+
         $elementXML['category'] = $elementXML['category'].' (Assigned to '.$current_category.')';
     }
-  
+
     $numCategories[ $current_category ]+=1;
 
     //Creating article object
@@ -223,7 +223,7 @@ function createArticle($elementXML,$numCategories,$check='1')
     $data['ordenArti']="";$data['ordenArtiInt']="";
 
     $article = new Article();
-    $metadata = String_Utils::get_title($data['title']);
+    $metadata = StringUtils::get_title($data['title']);
     $data['metadata'] = str_replace('-',',',$metadata);
 
 //NEW CODE: The import module imports articles from each category to frontpage directly
@@ -236,7 +236,7 @@ function createArticle($elementXML,$numCategories,$check='1')
                 $data['content_status']=0;
                 $data['available']=0;
                 $data['frontpage']=0;
-           
+
         }else{ //directo a portada
                 $data['content_status']=1;
                 $data['available']=1;
@@ -264,13 +264,13 @@ function createArticle($elementXML,$numCategories,$check='1')
         }
     }
 
-    $article->create( $data ); 
+    $article->create( $data );
     return $numCategories;
 } #end createArticle
 
 function createOpinion($elementXML,$numCategories,$check='1')
 {
-        
+
             $data['body']="";
             $data['title']="";
             $data['author']="";
@@ -293,7 +293,7 @@ function createOpinion($elementXML,$numCategories,$check='1')
                $name.= $texto." / ";
             }
             $name=strtolower($name);
-            $name=String_Utils::normalize_name($name);
+            $name=StringUtils::normalize_name($name);
             $name=preg_replace('/[\-]+/', '', $name);
             $name=trim($name);
 
@@ -302,7 +302,7 @@ function createOpinion($elementXML,$numCategories,$check='1')
             $old_percent=70;
             $cont=0;
             foreach ($authors as $author){
-                $author_name=trim(String_Utils::normalize_name($author->name));
+                $author_name=trim(StringUtils::normalize_name($author->name));
 
                 $i=similar_text($author_name,$name,$percen);
                 if($percen>$old_percent){
@@ -353,17 +353,17 @@ function createOpinion($elementXML,$numCategories,$check='1')
                  $data['available']=0;
                  $data['in_home']=0;
             }
- 
+
             $data['fk_publisher'] = $_SESSION['userid'];
             $data['metadata']=""; $data['category']=""; $data['description']="";
-            $data['with_comment']="1";  
-            $metadata = String_Utils::get_title($data['title']);
+            $data['with_comment']="1";
+            $metadata = StringUtils::get_title($data['title']);
             $data['metadata'] = str_replace('-',',',$metadata);
             $data['metadata'] = $data['metadata'].', '.$metas_name;
 
             $opinion = new Opinion();
-            $opinion->create( $data );      
-            
+            $opinion->create( $data );
+
             $numCategories['opinion']+=1;
 
             return $numCategories;
@@ -380,7 +380,7 @@ if(isset($_REQUEST['action']) ) {
                 for($i=0,$j=0;$i<count($_FILES["file"]["name"]);$i++) {
 
                     $nameFile = $_FILES["file"]["name"][$i];
- 
+
                     $datos=pathinfo($nameFile);//sacamos info del archivo
 
                     //Preparamos el nuevo nombre YYYYMMDDHHMMSSmmmmmm
@@ -399,7 +399,7 @@ if(isset($_REQUEST['action']) ) {
                             $dataZIP = decompressZIP($uploaddir.$name);
 
                             @chmod($uploaddir.$name,0775);
-                            sort($dataZIP); 
+                            sort($dataZIP);
                             foreach($dataZIP as $elementZIP) {
                                 @chmod($uploaddir.$elementZIP,0775);
                                 $eltoXML = importAgencyXML($uploaddir.$elementZIP);
@@ -416,15 +416,15 @@ if(isset($_REQUEST['action']) ) {
                             }
                         }else{
                             $eltoXML = importAgencyXML($uploaddir.$name);
-                          
+
                             $XMLFile[$j]= $nameFile;
                             if (preg_match("/OPINIÓN|OPINION|opinion|opinión/", $eltoXML['category'])) {
                                 $numCategories=createOpinion($eltoXML,$numCategories);
-                                 
+
                             }else{
                                 $numCategories=createArticle($eltoXML,$numCategories,$check);
                             }
-                            
+
                             $dataXML[$j] = $eltoXML;
                             $j++;
                         }
@@ -434,8 +434,8 @@ if(isset($_REQUEST['action']) ) {
                            <br> Compruebe su tamaño (MAX 300 MB)";
                      }
                 }
-         
-                 
+
+
                 $tpl->assign('numCategories', $numCategories);
                 $tpl->assign('XMLFile', $XMLFile);
                 $tpl->assign('dataXML', $dataXML);
@@ -448,7 +448,7 @@ if(isset($_REQUEST['action']) ) {
         break;
 
         case 'check':
-          
+
             $dateStamp = date('Y') . date ('m') . date ('d');
 
             if (count($_FILES["file"]["name"]) >= 1 && !empty($_FILES["file"]["name"][0]) ) {
@@ -518,4 +518,3 @@ if(isset($_REQUEST['action']) ) {
 $tpl->assign('formAttrs', 'enctype="multipart/form-data"');
 $tpl->display('agency_importer/efe-file/index.tpl');
 
- 

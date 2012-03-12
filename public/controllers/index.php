@@ -255,7 +255,7 @@ if(($tpl->caching == 0)
     }
 
     $column = array(); //Contendrá las noticias de la columna
-    $relia  = new Related_content();
+    $relia  = new RelatedContent();
      // $rating_bar_col1 = array();//Array que contiene las barras de votación de las noticias de la columna1
 
     //for ( $c = 0,$aux = 0; $articles_home[$aux]->title != "" ; $c++, $aux ++ ) {

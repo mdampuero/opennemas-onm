@@ -94,7 +94,7 @@ if(isset($_REQUEST['action']) ) {
             $tpl->setConfig('articles');
 
             /******************************  BREADCRUB *********************************/
-            $str = new String_Utils();
+            $str = new StringUtils();
             $title = $str->get_title($article->title);
 
             $print_url = '/imprimir/' . $title. '/' . $category_name . '/';
@@ -196,7 +196,7 @@ if(isset($_REQUEST['action']) ) {
                     /**************** PHOTOs ****************/
 
                     /******* RELATED  CONTENT *******/
-                    $rel= new Related_content();
+                    $rel= new RelatedContent();
 
                     $relationes =
                         $rel->cache->get_relations_int($articleID);
@@ -236,7 +236,7 @@ if(isset($_REQUEST['action']) ) {
 
 
                 /************* COLUMN-LAST *******************************/
-                $relia  = new Related_content();
+                $relia  = new RelatedContent();
                 $other_news =
                     $cm->find_by_category_name('Article',
                                                $actual_category,
@@ -395,7 +395,7 @@ if(isset($_REQUEST['action']) ) {
                     }
                     //Generate author-name-slug for generate_uri
                     foreach ($articles_home as &$art) {
-                        $art['author_name_slug'] = String_Utils::get_title($art['name']);
+                        $art['author_name_slug'] = StringUtils::get_title($art['name']);
                     }
 
                 // Get the RSS for the rest of categories
@@ -527,7 +527,7 @@ if(isset($_REQUEST['action']) ) {
                                  'link' => '/seccion/' . $category_name . '/' );
 
             // URL impresión
-            $str = new String_Utils();
+            $str = new StringUtils();
             $title = $str->get_title($article->title);
             $print_url = '/imprimir/' . $title. '/' . $category_name . '/';
 
@@ -583,7 +583,7 @@ if(isset($_REQUEST['action']) ) {
             require_once('session_bootstrap.php');
 
             // Check if magic_quotes is enabled and clear globals arrays
-            String_Utils::disabled_magic_quotes();
+            StringUtils::disabled_magic_quotes();
 
             // Check direct access
             if($_SESSION['sendformtoken'] != $_REQUEST['token']) {

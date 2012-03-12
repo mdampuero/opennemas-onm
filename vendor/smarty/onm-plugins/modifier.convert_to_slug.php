@@ -7,7 +7,7 @@
  */
 function smarty_modifier_convert_to_slug($value)
 {
-     $output = String_Utils::get_title($value);
+     $output = StringUtils::get_title($value);
 
     return $output;
 }

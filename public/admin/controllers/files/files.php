@@ -151,7 +151,7 @@ switch($action) {
 
                     if (is_file($ruta)) {
                         $status[$i]='1'; //Si existe
-                      
+
                     } else {
                         $status[$i]='0';
                         $archivo->set_available(0, $_SESSION['userid']);
@@ -193,7 +193,7 @@ switch($action) {
 
         $relations=array();
         $msg ='';
-        $relations = Related_content::get_content_relations($id);
+        $relations = RelatedContent::get_content_relations($id);
 
         if (!empty($relations)) {
             $msg = sprintf(_("<br>The album has some relations"));
@@ -217,7 +217,7 @@ switch($action) {
         if($id){
             $att = new Attachment($id);
             //Delete relations
-            $rel= new Related_content();
+            $rel= new RelatedContent();
             $rel->delete_all($id);
             $att->delete( $id ,$_SESSION['userid'] );
         }
@@ -274,7 +274,7 @@ switch($action) {
             if(is_array($fields)) {
                 foreach($fields as $i) {
                     $opinion = new Opinion($i);
-                    $rel = new Related_content();
+                    $rel = new RelatedContent();
                     $relationes = array();
                     $relationes = $rel->get_content_relations( $i );//de portada
 
@@ -327,7 +327,7 @@ switch($action) {
             $data['category'] = $category;
             $data['available'] = 1;
             $data['description'] = $_POST['title'];
-            $data['metadata'] = String_Utils::get_tags($_POST['title']);
+            $data['metadata'] = StringUtils::get_tags($_POST['title']);
             $data['fk_publisher'] = $_SESSION['userid'];
 
             // Create folder if it doesn't exist

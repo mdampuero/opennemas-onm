@@ -219,7 +219,7 @@ class Comment extends \Content
         if (isset($data['author'])) {
             $text.= ' ' . $data['author'];
         }
-        $weight = String_Utils::getWeightBadWords($text);
+        $weight = StringUtils::getWeightBadWords($text);
         return $weight > 100;
     }
 

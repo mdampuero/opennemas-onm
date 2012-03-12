@@ -33,7 +33,7 @@ $tpl = new Template();
 
 require_once( "module_categories_manage.php");
 
- 
+
 $cm = new ContentManager();
 /********************************* ESPECIALES COLUMNA *************************/
 //Modulo especial
@@ -42,7 +42,7 @@ if(!empty($_REQUEST['special_id'])){
     $specials=$special->get_by_category($actual_category, ' pk_special !='.$_REQUEST['special_id'].' AND available=1 ', ' favorite DESC, created DESC LIMIT 0,5');
 }else{
      $specials=$special->get_by_category($actual_category, ' available=1 ', ' favorite DESC, created DESC LIMIT 0,5');
-     
+
 }
  $tpl->assign('specials', $specials);
  if(!empty($specials)){
@@ -59,7 +59,7 @@ if(!empty($_REQUEST['special_id'])){
         }
 
     }
-   
+
  }else{
        $html = <<< ERROR_HTML_OUTPUT
      <h1>No hay ningún especial disponible</h1>
@@ -96,9 +96,9 @@ if($special->available==1){
              $tpl->assign('vertical', '1');
             }
         }
-       
+
         $tpl->assign('width', $width);
-	
+
     /********************************************************************************************/
 
     $special->set_numviews($_REQUEST['special_id']);
@@ -116,7 +116,7 @@ if($special->available==1){
     $tpl->assign('noticias_left', $noticias_left);
 
     $c=0;
-    $relia= new Related_content();
+    $relia= new RelatedContent();
 
     if($noticias_right){
         $adjuntos1 = array();
@@ -124,7 +124,7 @@ if($special->available==1){
         $cat1 = array();
         $img_widths_c1 = array();
         $galery_c1 = array();
-        
+
         foreach($noticias_right as $noticia) {
             //galerys
                 $dimensions = new MediaItem("media/images/".$noticia->img1);
@@ -142,7 +142,7 @@ if($special->available==1){
                 }
                 $tantos_c1[$c] =$tantos;
 
-                
+
                 $relationes = $relia->get_relations($noticia->id);
                 $i=0;
                 foreach($relationes as $id_rel)

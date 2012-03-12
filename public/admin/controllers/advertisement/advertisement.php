@@ -136,7 +136,7 @@ switch($action) {
                 $adv->is_flash = 0;
             }
             $adv->fk_content_categories = explode(',', $adv->fk_content_categories);
-            
+
             //Get the name of the advertisement placeholder
             $adv_placeholder = $adv->getNameOfAdvertisementPlaceholder($adv->type_advertisement);
             $adv->advertisement_placeholder = $adv_placeholder;
@@ -159,7 +159,7 @@ switch($action) {
     case 'test_script':
         Acl::checkOrForward('ADVERTISEMENT_ADMIN');
 
-        String_Utils::disabled_magic_quotes();
+        StringUtils::disabled_magic_quotes();
         $tpl->assign('script', $_POST['script']); // ten que vir por POST
 
         $tpl->display('advertisement/test_script.tpl');

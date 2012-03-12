@@ -88,7 +88,7 @@ if( isset($_REQUEST['action']) ) {
 
 		case 'read':
             Acl::checkOrForward('CATEGORY_UPDATE');
-            
+
             $tpl->assign('formAttrs', 'enctype="multipart/form-data"');
             $category = new ContentCategory( $_REQUEST['id'] );
             $tpl->assign('category', $category);
@@ -96,7 +96,7 @@ if( isset($_REQUEST['action']) ) {
             $tpl->assign('subcategorys', $subcategorys);
             $categories = array();
             foreach($allcategorys as $cate) {
-               if($cate->pk_content_category != $_REQUEST['id']  && 
+               if($cate->pk_content_category != $_REQUEST['id']  &&
                    ($cate->internal_category != 0 && $cate->fk_content_category == 0)) {
                    $categories[] = $cate;
                }
@@ -109,9 +109,9 @@ if( isset($_REQUEST['action']) ) {
 		break;
 
 		case 'update':
-            
+
             Acl::checkOrForward('CATEGORY_UPDATE');
-            
+
             if (isset($_POST['inmenu'])) {$_POST['inmenu'] = 1;} else {$_POST['inmenu'] = 0;}
             if (isset($_POST['params']['inrss'])) {$_POST['params']['inrss'] = 1;} else {$_POST['params']['inrss'] = 0;}
 
@@ -142,7 +142,7 @@ if( isset($_REQUEST['action']) ) {
 
 		case 'create':
             Acl::checkOrForward('CATEGORY_CREATE');
-            
+
             if (isset($_POST['inmenu'])) {$_POST['inmenu'] = 1;} else {$_POST['inmenu'] = 0;}
             if (isset($_POST['params']['inrss'])) {$_POST['params']['inrss'] = 1;} else {$_POST['params']['inrss'] = 0;}
 
@@ -158,17 +158,17 @@ if( isset($_REQUEST['action']) ) {
                    $_POST['logo_path'] = $nameFile;
                 }
             }
-            
+
             if($category->create( $_POST )) {
                 $user = new User();
                 $user->addCategoryToUser($_SESSION['userid'],$category->pk_content_category);
                 $_SESSION['accesscategories'] = $user->get_access_categories_id($_SESSION['userid']);
-                
+
                 $ccm->reloadCategories();
             }
-  
+
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
-            
+
             $tpl->display('category/form.tpl');
 
         break;
@@ -177,12 +177,12 @@ if( isset($_REQUEST['action']) ) {
             Acl::checkOrForward('CATEGORY_DELETE');
 
             $category = new ContentCategory();
-            
+
             if($category->delete( $_POST['id'] )) {
                 $user = new User();
                 $user->delCategoryToUser($_SESSION['userid'],$_POST['id']);
                 $_SESSION['accesscategories'] = $user->get_access_categories_id($_SESSION['userid']);
-                
+
                 $ccm->reloadCategories();
                 $msg = _("Categoy deleted successfully");
             }else{
@@ -207,24 +207,24 @@ if( isset($_REQUEST['action']) ) {
 		case 'set_inmenu':
 
 		    $category = new ContentCategory($_REQUEST['id']);
-            
+
             // FIXME: evitar otros valores erróneos
             $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
             $category->set_inmenu($status);
             /* Limpiar la cache de portada de todas las categorias */
          //   $refresh = Content::refreshFrontpageForAllCategories();
             $ccm->reloadCategories();
-            
+
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
 
 		break;
 
 		case 'validate':
-            
+
             $configurations = s::get('section_settings');
             if (isset($_POST['inmenu'])) {$_POST['inmenu'] = 1;} else {$_POST['inmenu'] = 0;}
             if (isset($_POST['params']['inrss'])) {$_POST['params']['inrss'] = 1;} else {$_POST['params']['inrss'] = 0;}
-            
+
             if($configurations['allowLogo'] == 1 ) {
 
                 if(!empty($_FILES) && isset($_FILES['logo_path'])) {
@@ -246,7 +246,7 @@ if( isset($_REQUEST['action']) ) {
                 $user = new User();
                 $user->addCategoryToUser($_SESSION['userid'],$category->pk_content_category);
                 $_SESSION['accesscategories'] = $user->get_access_categories_id($_SESSION['userid']);
-               
+
                    $ccm->reloadCategories();
                }
             } else {
@@ -296,13 +296,13 @@ if( isset($_REQUEST['action']) ) {
             foreach ($_POST as $key => $value ) {
                 s::set($key, $value);
             }
- 
+
             m::add(_('Settings saved.'), m::SUCCESS);
 
             $httpParams = array(
                                 array('action'=>'list'),
                                 );
-            Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+            Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
 
         break;
 

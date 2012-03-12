@@ -67,7 +67,7 @@ class Poll extends Content {
     	if(isset($data['item']) && !empty($data['item'] )){
 			$tags = implode(',', $data['item']);
 			$data['metadata'] = $data['metadata'].','.$tags;
-            $data['metadata'] = String_Utils::get_tags($data['metadata']);
+            $data['metadata'] = StringUtils::get_tags($data['metadata']);
     	}
 
     	parent::create($data);
@@ -76,7 +76,7 @@ class Poll extends Content {
 		if($data['item']){
 			foreach($data['item'] as $item){
 				$sql='INSERT INTO poll_items (`fk_pk_poll`, `item`, `metadata`) VALUES (?,?,?)';
-                $tags = String_Utils::get_tags($item);
+                $tags = StringUtils::get_tags($item);
 	        	$values = array($this->id,$item, $tags);
 				$i++;
 
@@ -129,7 +129,7 @@ class Poll extends Content {
 			$tags = implode(',', $data['item']);
 
 			$data['metadata'] = $data['metadata'].','.$tags;
-            $data['metadata'] = String_Utils::get_tags($data['metadata']);
+            $data['metadata'] = StringUtils::get_tags($data['metadata']);
     	}
 
 

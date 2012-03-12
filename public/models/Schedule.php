@@ -47,7 +47,7 @@ class Schedule extends Content
               $item->bgcolor = $rs->fields['bgcolor'];
               $item->ensign = $rs->fields['ensign'];
               $item->position = $rs->fields['position'];
-              $item->name = String_Utils::get_title($rs->fields['calendar_title']);
+              $item->name = StringUtils::get_title($rs->fields['calendar_title']);
 
               $calendars[]=$item;
           	  $rs->MoveNext();
@@ -79,8 +79,8 @@ class Schedule extends Content
               $item->startdate = $rs->fields['startdate'];
               $item->enddate = $rs->fields['enddate'];
               $item->section = $rs->fields['section'];
-              $item->name = String_Utils::get_slug(html_entity_decode($rs->fields['subject'],ENT_QUOTES, 'UTF-8'));
-              $item->slug =  String_Utils::get_slug($rs->fields['subject']);
+              $item->name = StringUtils::get_slug(html_entity_decode($rs->fields['subject'],ENT_QUOTES, 'UTF-8'));
+              $item->slug =  StringUtils::get_slug($rs->fields['subject']);
 
               $events[]=$item;
               $rs->MoveNext();

@@ -166,7 +166,7 @@ class cSearch
             return -1;
 
         //Transform the input string to search like: 'La via del tren' => '+via +tren'
-        $szSourceTags = explode(', ', String_Utils::get_tags($szSourceTags));
+        $szSourceTags = explode(', ', StringUtils::get_tags($szSourceTags));
         $szSourceTags2=array();
         $i = 0;
         foreach ($szSourceTags as $key) {
@@ -259,7 +259,7 @@ class cSearch
 	    }
 
             //Transform the input string to search like: 'La via del tren' => '+via +tren'
-            $szSourceTags = explode(', ', String_Utils::get_tags($szSourceTags));
+            $szSourceTags = explode(', ', StringUtils::get_tags($szSourceTags));
             $szSourceTags2=array();
             $i = 0;
             foreach ($szSourceTags as $key) {

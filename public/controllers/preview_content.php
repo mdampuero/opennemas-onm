@@ -24,20 +24,20 @@ $articleID = filter_input(INPUT_GET,'id',FILTER_SANITIZE_STRING);
 $tpl->assign('contentId', $articleID); // Used on module_comments.tpl
 $category_name = $ccm->get_category_name_by_content_id(filter_input(INPUT_GET,'id',FILTER_SANITIZE_STRING));
 $subcategory_name = filter_input(INPUT_GET,'subcategory_name',FILTER_SANITIZE_STRING);
-// Normalizar os nomes 
+// Normalizar os nomes
 list($category_name, $subcategory_name) = $ccm->normalize($category_name, $subcategory_name);
- 
+
 /**************************************  SECURITY  *******************************************/
 
 if(isset($_REQUEST['action']) ) {
-    switch($_REQUEST['action']) {        
+    switch($_REQUEST['action']) {
         case 'article': {
             // Load config
             $tpl->setConfig('articles');
 
             $article = new Article($_REQUEST['id']);
-            
-            $str = new String_Utils();
+
+            $str = new StringUtils();
             $title = $str->get_title($article->title);
 
 
@@ -97,7 +97,7 @@ if(isset($_REQUEST['action']) ) {
                     /**************** PHOTOs ****************/
 
                     /******* RELATED  CONTENT *******/
-                    $rel= new Related_content();
+                    $rel= new RelatedContent();
 
                     $relationes =
                         $rel->cache->get_relations_int($_REQUEST['id']);
@@ -132,7 +132,7 @@ if(isset($_REQUEST['action']) ) {
 
 
                 /************* COLUMN-LAST *******************************/
-                $relia  = new Related_content();
+                $relia  = new RelatedContent();
                 $other_news =
                     $cm->find_by_category_name('Article',
                                                $actual_category,
@@ -165,12 +165,12 @@ if(isset($_REQUEST['action']) ) {
         } break;
 
 
-        
+
         default: {
             Application::forward301('index.php');
         } break;
     }
-    
+
 } else {
     Application::forward301('index.php');
 }

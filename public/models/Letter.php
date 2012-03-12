@@ -65,7 +65,7 @@ class Letter extends Content
                                 'id' => sprintf('%06d',$this->id),
                                 'date' => date('YmdHis', strtotime($this->created)),
                                 'slug' => $this->slug,
-                                'category' => String_Utils::get_title($this->author),
+                                'category' => StringUtils::get_title($this->author),
                             )
                         );
 					//'cartas-al-director/_AUTHOR_/_SLUG_/_DATE__ID_.html'
@@ -75,7 +75,7 @@ class Letter extends Content
                 break;
             }
             case 'slug': {
-                return String_Utils::get_title($this->title);
+                return StringUtils::get_title($this->title);
                 break;
             }
             default: {
@@ -180,7 +180,7 @@ class Letter extends Content
         if (isset($data['author'])) {
             $text.= ' ' . $data['author'];
         }
-        $weight = String_Utils::getWeightBadWords($text);
+        $weight = StringUtils::getWeightBadWords($text);
         return $weight > 100;
     }
 

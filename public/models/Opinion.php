@@ -82,7 +82,7 @@ class Opinion extends Content
                                 'id' => sprintf('%06d',$this->id),
                                 'date' => date('YmdHis', strtotime($this->created)),
                                 'slug' => $this->slug,
-                                'category' => String_Utils::get_title($authorName),
+                                'category' => StringUtils::get_title($authorName),
                             )
                         );
 					//'opinion/_AUTHOR_/_DATE_/_SLUG_/_ID_.html'
@@ -92,7 +92,7 @@ class Opinion extends Content
                 break;
             }
             case 'slug': {
-                return String_Utils::get_title($this->title);
+                return StringUtils::get_title($this->title);
                 break;
             }
             default: {
@@ -143,7 +143,7 @@ class Opinion extends Content
             return;
         }
 
-        
+
         if ((int)$rs->fields['fk_author'] == 0) {
             if ((int)$rs->fields['type_opinion'] == 1) {
                 $rs->fields['author'] = 'Editorial';
@@ -338,10 +338,10 @@ class Opinion extends Content
         } else {
 
             $aut = new Author($this->fk_author);
-            $this->name = String_Utils::get_title($aut->name);
+            $this->name = StringUtils::get_title($aut->name);
             $this->author_name_slug = $this->name;
         }
-        
+
 		$tpl->assign('item',$this);
 		$tpl->assign('cssclass', 'opinion');
 
@@ -473,8 +473,8 @@ class Opinion extends Content
         $contents = $cm->find('Opinion', 'contents.available=1 AND opinions.fk_author = '.$authorID,
                     'ORDER BY  contents.created DESC,  contents.title ASC ' .$sqlLimit);
 
-        $author = new Author($authorID);    
-            
+        $author = new Author($authorID);
+
         // For each opinion get its author and photo
         foreach ($contents as $content) {
             $content->author = $author;

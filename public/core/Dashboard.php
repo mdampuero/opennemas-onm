@@ -30,7 +30,7 @@ class Dashboard {
                                 'id' => $mostVisitedContentObjects[$i]->id,
                                 'date' => date('Y-m-d', strtotime($mostVisitedContentObjects[$i]->created)),
                                 'category' => $cm->get_categoryName_by_contentId($mostVisitedContentObjects[$i]->id),
-                                'slug' => String_Utils::get_title($mostVisitedContentObjects[$i]->title),
+                                'slug' => StringUtils::get_title($mostVisitedContentObjects[$i]->title),
                             )
                         );;
         }

@@ -45,7 +45,7 @@ if (
     $httpParams [] = array(
                         'action'=>'config',
                     );
-    Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+    Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
 }
 
 // TODO : define in settings
@@ -53,10 +53,10 @@ define('SITE_TMP_PATH',  SITE_PATH.'..'.DS.'tmp'.DS.'xml'.DS);
 $uploaddir  = SITE_TMP_PATH;
 
 if(!file_exists($uploaddir)){
-    FilesManager::createDirectory($uploaddir); 
+    FilesManager::createDirectory($uploaddir);
 }
- 
- 
+
+
 switch($action) {
 
     case 'config':
@@ -69,23 +69,23 @@ switch($action) {
                 'title_int' => $schema['title_int'],
                 'subtitle' => $schema['subtitle'],
                 'summary' => $schema['summary'],
-                'agency' => $schema['agency'],                    
+                'agency' => $schema['agency'],
                 'created' => $schema['created'],
                 'metadata'    => $schema['metadata'],
                 'description' => $schema['description'],
                 'category_name' => $schema['category_name'],
-                'body' =>$schema['body'],   
-                'ignored' =>$schema['ignored'], 
+                'body' =>$schema['body'],
+                'ignored' =>$schema['ignored'],
             ));
 
         }
 
         $tpl->display('agency_importer/filesXML/config.tpl');
-    break; 
+    break;
 
 
     case 'save_config':
-       
+
 
          $title    = filter_input( INPUT_POST, 'title' , FILTER_SANITIZE_STRING );
          $title_int = filter_input( INPUT_POST, 'title_int' , FILTER_SANITIZE_STRING );
@@ -111,11 +111,11 @@ switch($action) {
             'metadata' => $metadata,
             'description' => $description,
             'category_name' => $category_name,
-            'body' =>$body,   
-            'ignored' =>$ignored, 
+            'body' =>$body,
+            'ignored' =>$ignored,
         );
 
- 
+
         if (s::set('xml_file_schema', $schema) ) {
             m::add(_('Importer XML configuration saved successfully'), m::SUCCESS);
         } else {
@@ -185,13 +185,13 @@ switch($action) {
                         }
                     } else {
                         $importer = ImporterXml::getInstance();
-                        
+
                         $eltoXML = $importer->importXML($uploaddir.$name);
 
                         $XMLFile[$j]=$nameFile;
 
                         $values = $importer->getXMLData($eltoXML);
-                    
+
                         $article =new Article();
                         $article->create($values);
 
@@ -211,9 +211,9 @@ switch($action) {
             $tpl->assign('dataXML', $dataXML);
             $tpl->assign('action', "import");
             $tpl->assign('total_num', $j);
-            
+
             $tpl->assign('formAttrs', 'enctype="multipart/form-data"');
-            
+
         }
         $tpl->display('agency_importer/filesXML/list.tpl');
         //Removed all of temp files in SITE_ADMIN_TMP_PATH
@@ -248,16 +248,16 @@ switch($action) {
                         foreach($dataZIP as $elementZIP) {
                             @chmod($uploaddir.$elementZIP,0775);
                             $importer = ImporterXml::getInstance();
-                        
+
                             $eltoXML = $importer->importXML($uploaddir.$elementZIP);
                             if($eltoXML){
                                 $values = $importer->getXMLData($eltoXML);
-                            
+
                                 $XMLFile[$j]=$elementZIP;
                                 $dataXML[$j] = $values;
-                            } else{                            
+                            } else{
                                 m::add(_( 'No valid XML format' ));
-                            
+
                             }
                             $j++;
                         }
@@ -265,9 +265,9 @@ switch($action) {
                     else
                     {
                         $importer = ImporterXml::getInstance();
-                        
+
                         $eltoXML = $importer->importXML($uploaddir.$name);
-                        
+
                             $values = $importer->getXMLData($eltoXML);
                             $XMLFile[$j]=$nameFile;
                             $dataXML[$j] = $values;
@@ -283,9 +283,9 @@ switch($action) {
             $tpl->assign('dataXML', $dataXML);
             $tpl->assign('action', "check");
             $tpl->assign('total_num', $j);
-            
+
             $tpl->assign('formAttrs', 'enctype="multipart/form-data"');
-            
+
         }
         $tpl->display('agency_importer/filesXML/list.tpl');
         //Removed all of temp files in SITE_ADMIN_TMP_PATH

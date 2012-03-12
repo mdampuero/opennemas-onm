@@ -15,13 +15,13 @@
  * @subpackage Utils
  * @author     Fran Dieguez <fran@openhost.es>
  **/
-class String_Utils
+class StringUtils
 {
 
     var $stringTest = NULL;
 
     /**
-      * Constructor for String_Utils class
+      * Constructor for StringUtils class
       *
       * @access public
       * @param string $string
@@ -127,20 +127,20 @@ class String_Utils
      **/
     static public function get_title($title, $useStopList=true)
     {
-        $title = String_Utils::clearSpecialChars($title);
-        $title = String_Utils::normalize_name($title);
+        $title = StringUtils::clearSpecialChars($title);
+        $title = StringUtils::normalize_name($title);
         $title = mb_ereg_replace('[^a-z0-9\- ]', '', $title);
 
         if($useStopList) {
             // Remove stop list
-            $titule = String_Utils::remove_shorts($title);
+            $titule = StringUtils::remove_shorts($title);
         }
 
         if(empty($titule) || $titule ==" "){ //Si se queda vacio, no quitar shorts.
             $titule=$title;
          }
 
-        $titule = String_Utils::setSeparator($titule, '-');
+        $titule = StringUtils::setSeparator($titule, '-');
         $titule = preg_replace('/[\-]+/', '-', $titule);
 
         return $titule;
@@ -179,11 +179,11 @@ class String_Utils
      **/
     static public function get_tags($title)
     {
-        $tags = String_Utils::clearSpecialChars($title);
+        $tags = StringUtils::clearSpecialChars($title);
 
         // Remove stop list
-        $tags = String_Utils::remove_shorts($tags);
-        $tags = String_Utils::setSeparator($tags, ',');
+        $tags = StringUtils::remove_shorts($tags);
+        $tags = StringUtils::setSeparator($tags, ',');
         $tags = preg_replace('|-|', ',', $tags);
         $tags = preg_replace('/[\,]+/', ',', $tags);
 
@@ -279,7 +279,7 @@ class String_Utils
      * @param string $text
      * @param integer $num_words
      * @return string
-     * @example String_Utils::get_num_words('hello world', 1)
+     * @example StringUtils::get_num_words('hello world', 1)
      **/
     static public function get_num_words($text,$num_words)
     {
@@ -312,7 +312,7 @@ class String_Utils
      **/
     static public function filterBadWords($text, $weight=0, $replaceStr=' ')
     {
-        $words = String_Utils::loadBadWords();
+        $words = StringUtils::loadBadWords();
         $text = ' ' . $text . ' ';
 
         foreach($words as $word) {
@@ -331,7 +331,7 @@ class String_Utils
      **/
     static public function getWeightBadWords($text)
     {
-        $words = String_Utils::loadBadWords();
+        $words = StringUtils::loadBadWords();
         $text = ' ' . $text . ' ';
 
         $weight = 0;

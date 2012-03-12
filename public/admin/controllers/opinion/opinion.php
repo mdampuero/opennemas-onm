@@ -397,7 +397,7 @@ switch($action) {
 
         $relations=array();
         $msg ='';
-        $relations = Related_content::get_content_relations($id);
+        $relations = RelatedContent::get_content_relations($id);
 
         if (!empty($relations)) {
             $msg = sprintf(_("<br>The album has some relations"));
@@ -428,7 +428,7 @@ switch($action) {
 
         if($id) {
             //Delete relations
-            $rel= new Related_content();
+            $rel= new RelatedContent();
             $rel->delete_all($id);
 
             $opinion = new Opinion($id);
@@ -583,7 +583,7 @@ switch($action) {
             if(is_array($fields)) {
                 foreach($fields as $i) {
                     $opinion = new Opinion($i);
-                    $rel = new Related_content();
+                    $rel = new RelatedContent();
                     $relationes = array();
                     $relationes = $rel->get_content_relations( $i );//de portada
 
@@ -752,7 +752,7 @@ switch($action) {
         m::add(_('Settings saved successfully.'), m::SUCCESS);
 
         $httpParams = array(array('action'=>'list'),);
-        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
 
     break;
 

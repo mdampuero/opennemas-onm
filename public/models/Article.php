@@ -42,9 +42,9 @@ class Article extends Content
 
     /**
      * Initializes the Article object from an ID
-     * 
+     *
      * @param int $id the id of the article we want to initialize
-     * 
+     *
      * @return void
      **/
     public function __construct($id=null)
@@ -62,14 +62,14 @@ class Article extends Content
     /**
      * Magic method for populate properties on the fly
      *
-     * @return mixed 
-     * @author 
+     * @return mixed
+     * @author
      **/
     public function __get($name)
     {
         switch ($name) {
             case 'uri':
-                
+
                 if (empty($this->category_name)) {
                     $this->category_name = $this->loadCategoryName($this->pk_content);
                 }
@@ -87,7 +87,7 @@ class Article extends Content
                 break;
 
             case 'slug2':
-                return String_Utils::get_title($this->title);
+                return StringUtils::get_title($this->title);
                 break;
 
             default:
@@ -101,7 +101,7 @@ class Article extends Content
      * Creates one article from an array of properties
      *
      * @param mixed $data array of properties for the article
-     * 
+     *
      * @return null if the article was not created
      * @return int  the id of the article
      **/
@@ -109,7 +109,7 @@ class Article extends Content
     {
         if (!isset($data['description'])) {
             $data['description'] =
-                String_Utils::get_num_words($data['body'], 50);
+                StringUtils::get_num_words($data['body'], 50);
         }
 
         $data['subtitle']= $data['subtitle'];
@@ -173,13 +173,13 @@ class Article extends Content
      *
      * @param string $data   list of related content IDs
      * @param int    $id     the id of the content we want to relate other contents
-     * @param string $method the method to bind related contents 
-     * 
+     * @param string $method the method to bind related contents
+     *
      * @return void
      **/
     public function saveRelated($data, $id, $method)
     {
-        $rel = new Related_content();
+        $rel = new RelatedContent();
 
         //Articulos relacionados en portada
         if (isset($data)) {
@@ -198,7 +198,7 @@ class Article extends Content
      * Reads the data for one article given one ID
      *
      * @param int $id the id to get its information
-     * 
+     *
      * @return void
      **/
     public function read($id)
@@ -234,7 +234,7 @@ class Article extends Content
      * Updates the information for one article given an array for the new data
      *
      * @return void
-     * @author 
+     * @author
      **/
     public function update($data)
     {
@@ -251,7 +251,7 @@ class Article extends Content
 
         // Update an article
         if (!$data['description']) {
-            $data['description'] = String_Utils::get_num_words(
+            $data['description'] = StringUtils::get_num_words(
                 $data['body'],
                 50
             );
@@ -318,7 +318,7 @@ class Article extends Content
         }
 
         // articulos ordenArti y attaches ordenAtt
-        $rel = new Related_content();
+        $rel = new RelatedContent();
 
         //Eliminamos para volver a insertar por si borraron.
         $rel->delete($data['id']);
@@ -349,7 +349,7 @@ class Article extends Content
      * Deletes permanently one article given one  id
      *
      * @param int $id the id of the article we want to delete
-     * 
+     *
      * @return void
      **/
     public function remove($id)
@@ -358,7 +358,7 @@ class Article extends Content
 
         $sql = 'DELETE FROM articles WHERE pk_article='.($id);
 
-        $rel = new Related_content();
+        $rel = new RelatedContent();
         $rel->delete($id); //Eliminamos con los que esta relacionados.
 
         $rel = new Comment();
@@ -379,16 +379,16 @@ class Article extends Content
      *
      * @param string $articlePK the id of the article
      * @param string $catName   the name of the article category
-     * 
+     *
      * @return string The new permalink
      */
     public function rebuildPermalink($articlePK, $catName=null)
     {
         $article = new Article($articlePK);
-        $slug = String_Utils::get_title($article->title, false);
+        $slug = StringUtils::get_title($article->title, false);
 
         // prevent overflow field permalink
-        $slug = String_Utils::str_stop($slug, 180);
+        $slug = StringUtils::str_stop($slug, 180);
 
         if (is_null($catName)) {
             $cm = ContentCategoryManager::get_instance();
@@ -401,7 +401,7 @@ class Article extends Content
         return $permalink;
     }
 
-    
+
     public function createClone($content)
     {
         $id = null;
@@ -442,7 +442,7 @@ class Article extends Content
         $_SESSION['_from'] = $data['category'];
 
         // Clear slash
-        String_Utils::disabled_magic_quotes($data);
+        StringUtils::disabled_magic_quotes($data);
 
         if ($this->create($data)) {
             // Save into table of cloned articles

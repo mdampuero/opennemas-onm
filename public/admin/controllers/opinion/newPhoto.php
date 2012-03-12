@@ -18,7 +18,7 @@ $nameCat = filter_input(INPUT_GET,'nameCat',FILTER_SANITIZE_STRING, array('optio
 $script = '';
 
 if(isset($_REQUEST['action']) && $_REQUEST['action']=='addPhoto') {
-    $nameAuthor= String_Utils::normalize_name($_REQUEST['nameAuthor']);
+    $nameAuthor= StringUtils::normalize_name($_REQUEST['nameAuthor']);
     $tpl->assign('nameCat', $nameCat);
     $tpl->assign('category', $_REQUEST['category']);
 
@@ -36,7 +36,7 @@ if(isset($_REQUEST['action']) && $_REQUEST['action']=='addPhoto') {
     if (count($_FILES["file"]["name"]) >= 1 && !empty($_FILES["file"]["name"][0]) ) {
 
         for($i=0;$i<count($_FILES["file"]["name"]);$i++) {
-            
+
             $nameFile = $_FILES["file"]["name"][$i];	//Nombre del archivo a subir
             $datos=pathinfo($nameFile);					 //sacamos inofr del archivo
 
@@ -46,13 +46,13 @@ if(isset($_REQUEST['action']) && $_REQUEST['action']=='addPhoto') {
             $micro=intval(substr($t['usec'],0,5)); //Le damos formato de 5digitos a los microsegundos
 
             $name= date("YmdHis").$micro.".".$extension;
-            
+
             if(!is_dir($uploaddir)) {
                 FilesManager::createDirectory($uploaddir);
             }
-                
+
             $uploader_status = move_uploaded_file($_FILES["file"]["tmp_name"][$i], $uploaddir.'/'.$name);
-            
+
             if ($uploader_status) {
 
                 @chmod($uploaddir.'/'.$name,0777); //Permisos   del fichero
@@ -93,7 +93,7 @@ if(isset($_REQUEST['action']) && $_REQUEST['action']=='addPhoto') {
                              parent.document.getElementById( 'contenedor' ).innerHTML = parent.document.getElementById( 'contenedor' ).innerHTML  + nuevo ;
                              putMini('".$elid."','".MEDIA_IMG_PATH_WEB.$data['path_file']."/".$data['name']."');
                              parent.document.getElementById('warnings-validation').innerHTML = parent.document.getElementById('warnings-validation').innerHTML + \"<div class='notice'>Recuerde guardar para mantener los cambios</div>\";
-                                </script>   ";                    
+                                </script>   ";
                            $tpl->assign('script', $script);
                 }  else {
                     echo "<br> Ocurrió algún error al guardar la foto inténtelo otra vez";

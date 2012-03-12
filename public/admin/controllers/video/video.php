@@ -281,7 +281,7 @@ switch ($action) {
         $video = new Video($id);
         $relations=array();
         $msg ='';
-        $relations = Related_content::get_content_relations($id);
+        $relations = RelatedContent::get_content_relations($id);
 
         if (!empty($relations)) {
             $msg = sprintf(_("<br>The video has some relations"));
@@ -306,7 +306,7 @@ switch ($action) {
         if (!empty($id)) {
             $video = new Video($id);
             //Delete relations
-            $rel= new Related_content();
+            $rel= new RelatedContent();
             $rel->delete_all($id);
             $video->delete( $id ,$_SESSION['userid'] );
         } else {
@@ -402,7 +402,7 @@ switch ($action) {
                 foreach($fields as $i ) {
                     $video = new Video($i);
                     $relations=array();
-                    $relations = Related_content::get_content_relations( $i );
+                    $relations = RelatedContent::get_content_relations( $i );
 
                     if (!empty($relations)) {
                         $msg .= " \"".$video->title."\", ";
@@ -481,7 +481,7 @@ switch ($action) {
         $httpParams = array(
             array('action'=>'list'),
         );
-        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
 
         break;
 

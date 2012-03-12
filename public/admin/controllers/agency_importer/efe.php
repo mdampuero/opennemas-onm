@@ -52,7 +52,7 @@ if (
     $httpParams [] = array(
                         'action'=>'config',
                     );
-    Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+    Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
 }
 
 switch($action) {
@@ -120,7 +120,7 @@ switch($action) {
         break;
 
     case 'list':
- 
+
         $efe = \Onm\Import\Efe::getInstance();
 
         // Get the amount of minutes from last sync
@@ -193,7 +193,7 @@ switch($action) {
 
             // Redirect the user to the list of articles and show him/her an error message
             $httpParams []= array( 'error' => sprintf(_('ID "%d" doesn\'t exist'),$id));
-            Application::forward($_SERVER['PHP_SELF'] . '?'.String_Utils::toHttpParams($httpParams));
+            Application::forward($_SERVER['PHP_SELF'] . '?'.StringUtils::toHttpParams($httpParams));
 
         }
 
@@ -297,7 +297,7 @@ switch($action) {
                         'local_file' => realpath($efe->syncPath.DIRECTORY_SEPARATOR.$photo->file_path),
                         'fk_category' => $category,
                         'category_name' => $categoryInstance->name,
-                        'metadata' => String_Utils::get_tags($photo->title),
+                        'metadata' => StringUtils::get_tags($photo->title),
                     );
 
                     $photo = new Photo();
@@ -328,7 +328,7 @@ switch($action) {
                         'available' => 1,
                         'content_status' => 0,
                         'title' => $video->title,
-                        'metadata' => String_Utils::get_tags($video->title),
+                        'metadata' => StringUtils::get_tags($video->title),
                         'description' => '',
                         'author_name' => 'internal',
                     );
@@ -352,7 +352,7 @@ switch($action) {
             'frontpage' => 0,
             'in_home' => 0,
             'title_int' => $element->texts[0]->title,
-            'metadata' => String_Utils::get_tags($element->texts[0]->title),
+            'metadata' => StringUtils::get_tags($element->texts[0]->title),
             'subtitle' => $element->texts[0]->pretitle,
             'agency' => s::get('efe_agency_string') ?: $element->agency_name,
             'summary' => $element->texts[0]->summary,
@@ -380,7 +380,7 @@ switch($action) {
 
             $httpParams []= array( 'id' => $newArticleID,
                                   'action' => 'read');
-            Application::forward(SITE_URL_ADMIN.'/article.php' . '?'.String_Utils::toHttpParams($httpParams));
+            Application::forward(SITE_URL_ADMIN.'/article.php' . '?'.StringUtils::toHttpParams($httpParams));
 
         }
 
@@ -425,7 +425,7 @@ switch($action) {
                             array('page' => $page),
                             );
 
-        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
 
     } break;
 
@@ -438,7 +438,7 @@ switch($action) {
             array('action' => 'list'),
             array('page' => $page),
         );
-        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
 
     } break;
 
@@ -449,6 +449,6 @@ switch($action) {
             array('action','list'),
             array('page',$page),
         );
-        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($params));
+        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($params));
     } break;
 }

@@ -14,7 +14,7 @@ use Onm\Message as m;
  *
  * @package    Onm
  * @subpackage Acl
- * @version    $Id: privileges_check.class.php 1 2010-10-07 17:44:01Z Fran Dieguez $
+ * @version    $Id: PrivilegesCheck.class.php 1 2010-10-07 17:44:01Z Fran Dieguez $
  */
 class Acl
 {
@@ -25,7 +25,7 @@ class Acl
      *
      * @param string $rule
      * @param string $module
-     * 
+     *
      * @return boolean
      **/
     public static function check($rule, $module=null)
@@ -34,7 +34,7 @@ class Acl
             $rule = strtoupper($module) . '_' . strtoupper($rule);
         }
 
-        return Privileges_check::CheckPrivileges($rule);
+        return PrivilegesCheck::CheckPrivileges($rule);
     }
 
     /**
@@ -51,7 +51,7 @@ class Acl
             $rule = strtoupper($module) . '_' . strtoupper($rule);
         }
 
-        if ( !Privileges_check::CheckPrivileges($rule)) {
+        if ( !PrivilegesCheck::CheckPrivileges($rule)) {
             m::add( _("Sorry, you don't have enought privileges") );
             Application::forward('/admin/');
         }
@@ -104,7 +104,7 @@ class Acl
     */
     public static function _C($category)
     {
-        return Privileges_check::CheckAccessCategories($category);
+        return PrivilegesCheck::CheckAccessCategories($category);
     }
 
     public static function deny($message='Acceso no permitido')

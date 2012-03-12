@@ -1988,7 +1988,7 @@ class ContentManager
      **/
     public function getRelatedContentFromContentID($contentID)
     {
-        $rc  = new Related_content();
+        $rc  = new RelatedContent();
         $ccm = new ContentCategoryManager();
         $relatedContentIDs = $rc->get_relations($contentID);
         $relatedContent = array();

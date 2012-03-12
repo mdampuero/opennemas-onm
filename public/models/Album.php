@@ -85,7 +85,7 @@ class Album extends Content
                 break;
             }
             case 'slug': {
-                return String_Utils::get_title($this->title);
+                return StringUtils::get_title($this->title);
                 break;
             }
 
@@ -277,7 +277,7 @@ class Album extends Content
      **/
     public function _saveAttachedPhotos($data)
     {
-        $albumPhoto = new Album_photo;
+        $albumPhoto = new AlbumPhoto;
         if (isset($data['album_photos_id'])) {
             foreach ($data['album_photos_id'] as $position => $photoID) {
                 $photoFooter = filter_var($data['album_photos_footer'][$position], FILTER_SANITIZE_STRING);

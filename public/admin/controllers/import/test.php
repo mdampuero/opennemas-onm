@@ -1,5 +1,5 @@
 <?php
- 
+
 /* -*- Mode: PHP; tab-width: 4 -*- */
 /**
  * OpenNeMas project
@@ -57,7 +57,7 @@ function importXML($XMLFile)
  $docXML = importXML($XMLFile);
 //var_dump($eltoXML);
 
-  
+
 
 
  function check_label($label){
@@ -71,19 +71,19 @@ function importXML($XMLFile)
                       "/data/" => "agency"
                        );
      foreach($relation as $pattern=>$value) {
-         
+
          if(preg_match($pattern, $label)) {
             return $value;
          }
      }
-     
+
  }
 
 function checkXML($docXML){
     $data =array();
     foreach( $docXML as $nodeXML ) {
-        foreach( $nodeXML as $eleto ) {            
-            if($eleto->getname()=='meta'){                
+        foreach( $nodeXML as $eleto ) {
+            if($eleto->getname()=='meta'){
                         if($eleto->attributes()->name =='day'){
                             $day =$eleto->attributes()->content;
                         }
@@ -133,8 +133,8 @@ function checkXML($docXML){
     $data['columns']="1";$data['description']="";$data['fk_video']="";$data['fk_video2']="";$data['footer_video2']="";
     $data['ordenArti']="";$data['ordenArtiInt']="";
 
-   
-    $metadata = String_Utils::get_title($data['title']);
+
+    $metadata = StringUtils::get_title($data['title']);
     $data['metadata'] = str_replace('-',',',$metadata);
 
     $data['content_status']=0;
@@ -148,4 +148,3 @@ function checkXML($docXML){
 
 $data =checkXML($docXML);
 
-  

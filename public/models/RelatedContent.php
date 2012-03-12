@@ -13,7 +13,7 @@
  * @subpackage Model
  * @author     me
  **/
-class Related_content
+class RelatedContent
 {
     public $pk_content1 = null;
     public $pk_content2 = null;
@@ -301,7 +301,7 @@ class Related_content
 
         if ($relations) {
             foreach ($relations as $related) {
-                $relations = new Related_content();
+                $relations = new RelatedContent();
                 $relations->create($contentID, $related);
             }
             return;
