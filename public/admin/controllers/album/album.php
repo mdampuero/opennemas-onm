@@ -368,7 +368,6 @@ switch($action) {
 
             // FIXME: buscar otra forma de hacerlo
             /* Eliminar caché portada cuando actualizan orden opiniones {{{ */
-            require_once(SITE_CORE_PATH.'template_cache_manager.class.php');
             $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
             $tplManager->delete('home|0');
          }

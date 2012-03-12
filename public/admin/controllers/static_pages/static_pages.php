@@ -64,7 +64,7 @@ switch($action) {
         $page = (isset($_REQUEST['page']))? $_REQUEST['page']: 0;
 
         $cm = new ContentManager();
-        list($pages, $pager) = $cm->find_pages('Static_Page', $filter, 'ORDER BY created DESC ', $page, 10);
+        list($pages, $pager) = $cm->find_pages('StaticPage', $filter, 'ORDER BY created DESC ', $page, 10);
 
         $tpl->assign( array('pages' => $pages,'pager' => $pager));
         $tpl->display('static_pages/list.tpl');

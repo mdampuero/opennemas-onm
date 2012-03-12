@@ -26,7 +26,6 @@ require_once '../../session_bootstrap.php';
 
 Acl::checkOrForward('NEWSLETTER_ADMIN');
 
-require_once(SITE_CORE_PATH.'string_utils.class.php');
 StringUtils::disabled_magic_quotes();
 
 $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
