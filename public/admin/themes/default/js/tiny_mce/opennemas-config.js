@@ -31,6 +31,10 @@ OpenNeMas.tinyMceConfig = {
         skin : "cirkuit",
         //skin_variant : "silver",
 
+        // Paste as plain text settings
+        paste_text_use_dialog : true,
+        paste_text_linebreaktype : "p",
+
         /* theme_advanced_styles : "Título 1=header1;Título 2=header2;Título 3=header3;",*/
         theme_advanced_disable : "help",
 
