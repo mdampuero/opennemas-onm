@@ -18,17 +18,13 @@ class Application
 {
     var $conn           = null;
     var $logger         = null;
-    var $workflow       = null;
     var $errors         = array();
     var $adodb          = null;
     var $smarty         = null;
     var $log            = null;
-    var $menu           = null;
-    var $pager          = null;
     var $template       = null;
     var $sesion         = null;
     var $cache          = null;
-    var $image          = null;
     var $events         = array();
     static $language    = '';
     static $request        = null;
@@ -171,6 +167,7 @@ class Application
 
         // TODO: move to autoload.php
         // Load required libraries
+        require_once SITE_LIBS_PATH.'/functions.php';
         require_once SITE_VENDOR_PATH.'/adodb5/adodb.inc.php';
         require_once SITE_VENDOR_PATH.'/Pager/Pager.php';
         require_once SITE_VENDOR_PATH.'/smarty/smarty-legacy/Smarty.class.php';
@@ -178,9 +175,8 @@ class Application
         require_once SITE_VENDOR_PATH.'/Template.php';
     }
 
-
     /*
-     * Initializes all the internal application constans
+     * Initializes all the internal application constants
      *
      */
     static public function initInternalConstants()
@@ -264,7 +260,6 @@ class Application
         define('ADVERTISEMENT_ENABLE', true);
 
 
-
         /**
          * Mail settings
          **/
@@ -302,6 +297,42 @@ class Application
     static public function getLogger()
     {
         return \Zend_Registry::get('logger');
+    }
+
+
+
+    /* Events system */
+    public function register($event, $callback, $args=array())
+    {
+        $this->events[$event][] = array($callback, $args);
+    }
+
+    public function dispatch($eventName, $instance, $args=array())
+    {
+        if ( isset($this->events[$eventName]) ) {
+            $events = $this->events[$eventName];
+
+            if ( is_array($events) ) {
+                foreach ($events as $i => $event) {
+                    $callback = $event[0];
+                    $args     = array_merge($args, $event[1]);
+
+                    if (is_object($instance)) {
+                        if (method_exists($instance, $callback)) {
+                            // Call to the instance
+                            call_user_func_array(
+                                array(&$instance, $callback), $args
+                            );
+                        }
+                    } else {
+                        // Static call
+                        call_user_func_array(
+                            array($instance, $callback), $args
+                        );
+                    }
+                }
+            }
+        }
     }
 
     // TODO: move to a separated file called functions.php
@@ -399,40 +430,6 @@ class Application
         header("Pragma: nocache");
         echo $htmlout;
         exit(0);
-    }
-
-    /* Events system */
-    public function register($event, $callback, $args=array())
-    {
-        $this->events[$event][] = array($callback, $args);
-    }
-
-    public function dispatch($eventName, $instance, $args=array())
-    {
-        if ( isset($this->events[$eventName]) ) {
-            $events = $this->events[$eventName];
-
-            if ( is_array($events) ) {
-                foreach ($events as $i => $event) {
-                    $callback = $event[0];
-                    $args     = array_merge($args, $event[1]);
-
-                    if (is_object($instance)) {
-                        if (method_exists($instance, $callback)) {
-                            // Call to the instance
-                            call_user_func_array(
-                                array(&$instance, $callback), $args
-                            );
-                        }
-                    } else {
-                        // Static call
-                        call_user_func_array(
-                            array($instance, $callback), $args
-                        );
-                    }
-                }
-            }
-        }
     }
 
     // TODO: move to a separated file called functions.php
@@ -552,15 +549,4 @@ class Application
         return $errorMsg;
     }
 
-}
-
-/* Others commons functions */
-if (!function_exists('clearslash')) {
-    function clearslash($string)
-    {
-        $string = stripslashes($string);
-        $string = str_replace("\\", '', $string);
-
-        return stripslashes($string);
-    }
 }
