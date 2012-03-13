@@ -160,6 +160,45 @@ class ContentManager
 
 
     /**
+    * Fetches all the contents (articles, widgets, etc) for one specific category
+    * given an array of content ids, position and placeholder
+    *
+    * This is used from frontpage manager for preview the actual frontpage
+    *
+    * @param array $contents, [ 'id':'xxx', 'position':'xxx', 'placeholder':'xxx', 'params': [] ]
+    * @return mixed, array of contents
+    */
+    public function getContentsForHomepageFromArray($contentsArray)
+    {
+
+        // Initialization of variables
+        $contents = array();
+
+        // iterate over all found contents and initialize them
+        foreach ($contentsArray as $element) {
+            $content = new $element['content_type']($element['id']);
+
+            if (!array_key_exists('params', $element)) {
+                $element['params'] = serialize(array());
+            }
+            // only add it to the final results if is not in litter
+            if ($content->in_litter == 0) {
+                $content->load(array(
+                    'placeholder' => $element['placeholder'],
+                    'position'    => $element['position'],
+                    'params'      => unserialize($element['params']),
+                ));
+                $contents[] = $content;
+            }
+        }
+
+        // Return all the objects of contents initialized
+        return $contents;
+
+    }
+
+
+    /**
      * Fetches all the contents (articles, widgets, etc) for one specific category
      * with its placeholder and position
      *
@@ -296,13 +335,6 @@ class ContentManager
 
         $finalArray = array();
         foreach($array as $element) {
-
-            if(isset($element->home_placeholder)) {
-                var_dump($element);
-            }
-            die('dentro loop');
-            var_dump($filterKeys, $filterValues, $element->home_placeholder);
-            die();
             if($element[$i]->{$filterKey} == $filterValue) {
                 $finalArray[] = $element;
             }

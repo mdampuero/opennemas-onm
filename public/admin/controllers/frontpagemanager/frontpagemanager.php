@@ -32,7 +32,6 @@ $tpl->assign('category', $category);
  * Getting categories
 */
 $ccm = ContentCategoryManager::get_instance();
-$tplFrontend = new Template(TEMPLATE_USER);
 $section = $ccm->get_name($category);
 $section = (empty($section))? 'home': $section;
 $categoryID = ($category == 'home') ? 0 : $category;
@@ -166,6 +165,82 @@ switch ($action) {
         }
 
     break;
+
+    case 'preview_frontpage':
+
+        $category_name    = filter_input(
+            INPUT_GET, 'category_name', FILTER_SANITIZE_STRING,
+            array('options' => array('default' => 'home'))
+        );
+        $subcategory_name = filter_input(INPUT_GET,'subcategory_name',FILTER_SANITIZE_STRING);
+
+        $tpl     = new Template(TEMPLATE_USER);
+        $tpl->setConfig('frontpages');
+        $cacheID = $tpl->generateCacheId($category_name, $subcategory_name, 0 /*$cache_page*/);
+
+        // Initialize the Content and Database object
+        $ccm = ContentCategoryManager::get_instance();
+        list($category_name, $subcategory_name) = $ccm->normalize($category_name, $subcategory_name);
+        $section = (!empty($subcategory_name))? $subcategory_name: $category_name;
+        $section = (is_null($section))? 'home': $section;
+
+        $tpl->loadConfigOrDefault('template.conf', $section);
+        unset($section);
+
+        $actual_category = (!isset($subcategory_name))? $category_name : $subcategory_name;
+
+        $tpl->assign('actual_category', $actual_category);
+        $actualCategoryId = $ccm->get_id($actual_category);
+
+        require_once SITE_PATH."/controllers/index_sections.php";
+
+        $cm = new ContentManager;
+        $contents = $_POST['contents'];
+
+        $contentsInHomepage = $cm->getContentsForHomepageFromArray($contents);
+        var_dump($contentsInHomepage);die();
+
+
+        // Filter articles if some of them has time scheduling and sort them by position
+        $contentsInHomepage = $cm->sortArrayofObjectsByProperty($contentsInHomepage, 'position');
+
+        /***** GET ALL FRONTPAGE'S IMAGES *******/
+        $imageIdsList = array();
+        foreach ($contentsInHomepage as $content) {
+            if (isset($content->img1)) {
+                $imageIdsList []= $content->img1;
+            }
+        }
+
+        if (count($imageIdsList) > 0) {
+            $imageList = $cm->find('Photo', 'pk_content IN ('. implode(',', $imageIdsList) .')');
+        } else {
+            $imageList = array();
+        }
+
+        $column = array();
+        // Overloading information for contents
+        foreach ($contentsInHomepage as &$content) {
+
+            // Load category related information
+            $content->category_name  = $content->loadCategoryName($content->id);
+            $content->category_title = $content->loadCategoryTitle($content->id);
+
+            // Load attached and related contents from array
+            $content->loadFrontpageImageFromHydratedArray($imageList)
+                    ->loadAttachedVideo()
+                    ->loadRelatedContents();
+        }
+        $tpl->assign('column', $contentsInHomepage);
+
+        // Fetch information for Static Pages
+        //TODO: Move to a widget. Used in all templates
+        require_once SITE_PATH."/controllers/widget_static_pages.php";
+
+
+        $tpl->display('frontpage/frontpage.tpl', $cacheID);
+
+        break;
 
     default: {
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);

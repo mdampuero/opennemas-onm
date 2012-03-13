@@ -5,10 +5,11 @@
     {css_tag href="/bp/print.css" media="print"}
     <!--[if IE]>{css_tag href="/bp/ie.css"}<![endif]-->
     {css_tag href="/frontpagemanager.css"}
-
+    {css_tag href="/jquery/colorbox.css" media="screen"}
 {/block}
 
 {block name="footer-js" append}
+    {script_tag src="/jquery/jquery.colorbox-min.js"}
     <script>
         var frontpage_messages = {
             remember_save_positions: "{t}Please, remember save positions after finish.{/t}",

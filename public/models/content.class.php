@@ -270,7 +270,7 @@ class Content
         // Load object properties
         $this->load( $rs->fields );
         $this->fk_user = $this->fk_author;
-        
+
         // Fire event onAfterXxx
         $GLOBALS['application']->dispatch('onAfterRead', $this);
     }
@@ -1649,6 +1649,7 @@ class Content
     {
 
         $relationsHandler  = new Related_content();
+        $ccm = new ContentCategoryManager();
         $this->related_contents = array();
         $relations = $relationsHandler->get_relations($this->id);
 

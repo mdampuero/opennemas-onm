@@ -58,13 +58,15 @@ jQuery(document).ready(function($){
     // arquive
 
     // send-to-trash
+    //
+
 
 
     /***************************************************************************
     * Content provider code
     ***************************************************************************/
 
-    $( "#content-provider").dialog({ minWidth: 600, /*autoOpen: false,*/ maxHeight: 500 });
+    $( "#content-provider").dialog({ minWidth: 600, autoOpen: false, maxHeight: 500 });
 
     $( "#content-provider .content-provider-block-wrapper").tabs({
         ajaxOptions: {
@@ -96,8 +98,24 @@ jQuery(document).ready(function($){
     * General buttons actions code
     ***************************************************************************/
 
-    $('#button_addnewcontents').on('click', function() {
+    $('#button_addnewcontents').on('click', function(e, ui) {
         $( "#content-provider").dialog('open');
+        e.preventDefault();
+    });
+
+    $('#button_savepositions').on('click',function() {
+        var els = get_contents_in_frontpage();
+        var category = jQuery("#frontpagemanager").data("category");
+
+        jQuery.post("frontpagemanager.php?action=save_positions&category=" + category,
+                { 'contents_positions': els }
+        ).success(function(data) {
+            jQuery('#warnings-validation').html("<div class='success'>"+data+"</div>");
+        }).error(function(data) {
+            jQuery('#warnings-validation').html("<div class='error'>"+data.responseText+"</div>");
+        });
+
+        return false;
     });
 
     $('#button_clearcache').on('click', function(e, ui) {
@@ -111,10 +129,27 @@ jQuery(document).ready(function($){
         });
     });
 
-    $('#button_savepositions').on('click',function() {
+    $('#button_previewfrontpage').on('click', function (e, ui){
+        e.preventDefault();
+        var contents = get_contents_in_frontpage();
+        jQuery.colorbox({
+            href: "/admin/controllers/frontpagemanager/frontpagemanager.php?action=preview_frontpage",
+            data: { 'contents': contents },
+            title: 'Previsualización Portada',
+            // iframe: true,
+            width: '90%',
+            height: '90%'
+        });
+    });
 
+    $('#button_moreactions').on('click', function (e, ui){
+        e.preventDefault();
+        alert('not implemented');
+    });
+
+    function get_contents_in_frontpage() {
         var els = [];
-        var category = jQuery("#frontpagemanager").data("category");
+
         jQuery('div.placeholder').each(function (){
             var placeholder = jQuery(this).data('placeholder');
             jQuery(this).find('div.content-provider-element').each(function (index){
@@ -128,23 +163,7 @@ jQuery(document).ready(function($){
             });
 
         });
-
-        jQuery.post("frontpagemanager.php?action=save_positions&category=" + category,
-                { 'contents_positions': els }
-        ).success(function(data) {
-            jQuery('#warnings-validation').html("<div class='success'>"+data+"</div>");
-        }).error(function(data) {
-            jQuery('#warnings-validation').html("<div class='error'>"+data.responseText+"</div>");
-        });
-
-        return false;
-    });
-
-    $('#button_previewfrontpage, #button_moreactions').on('click', function (e, ui){
-        e.preventDefault();
-        alert('not implemented');
-    });
-
-
+        return els;
+    }
 
 });
