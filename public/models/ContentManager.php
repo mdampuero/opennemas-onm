@@ -33,8 +33,8 @@ class ContentManager
 
     public function init($content_type)
     {
-        $this->table = $this->pluralize( $content_type );
-        $this->content_type = $content_type;
+        $this->table = tableize( $content_type );
+        $this->content_type = underscore($content_type);
     }
 
 
@@ -75,7 +75,7 @@ class ContentManager
         }
 
         $sql = 'SELECT '.$fields.' FROM `contents`, `'.$this->table.'` ' .
-                'WHERE '.$_where.' AND `contents`.`pk_content`= `'.$this->table.'`.`pk_'.strtolower($content_type).'` '.$_order_by;
+                'WHERE '.$_where.' AND `contents`.`pk_content`= `'.$this->table.'`.`pk_'.$this->content_type.'` '.$_order_by;
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
         $items = $this->load_obj($rs, $content_type);
@@ -100,7 +100,7 @@ class ContentManager
         }
 
         $sql = 'SELECT '.$fields.' FROM `contents`, `'.$this->table.'`, `contents_categories` ' .
-                ' WHERE '.$_where.' AND `contents`.`pk_content`= `'.$this->table.'`.`pk_'.strtolower($content_type).'` '.
+                ' WHERE '.$_where.' AND `contents`.`pk_content`= `'.$this->table.'`.`pk_'.$this->content_type.'` '.
                 ' AND `contents`.`pk_content`= `contents_categories`.`pk_fk_content` '.$_order_by;
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
@@ -452,14 +452,14 @@ class ContentManager
 
 
         $sql = 'SELECT * FROM '.$_tables .
-                'WHERE '.$_where.$_category.$_author.$_days.' AND `contents`.`pk_content`=`pk_'.strtolower($content_type).'` '.
+                'WHERE '.$_where.$_category.$_author.$_days.' AND `contents`.`pk_content`=`pk_'.$this->content_type.'` '.
                 $_order_by;
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if($rs->_numOfRows<$num && $not_empty) {
             $sql = 'SELECT * FROM '.$_tables .
-                    'WHERE '.$_where.$_category.$_author.' AND `contents`.`pk_content`=`pk_'.strtolower($content_type).'` '.
+                    'WHERE '.$_where.$_category.$_author.' AND `contents`.`pk_content`=`pk_'.$this->content_type.'` '.
                     ' '.$_order_by;
             $rs = $GLOBALS['application']->conn->Execute($sql);
         }
@@ -1210,11 +1210,11 @@ class ContentManager
         if( intval($pk_fk_content_category) > 0) {
             $sql = 'SELECT * FROM contents_categories, contents, '.$this->table.'  ' .
                 ' WHERE '.$_where.' AND `contents_categories`.`pk_fk_content_category`='.$pk_fk_content_category.
-                '  AND `contents`.`pk_content`=`'.$this->table.'`.`pk_'.strtolower($content_type).'` AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` '.
+                '  AND `contents`.`pk_content`=`'.$this->table.'`.`pk_'.$this->content_type.'` AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` '.
                  $_order_by.$_limit;
         } else {
             $sql = 'SELECT * FROM `contents`, `'.$this->table.'` ' .
-                    ' WHERE '.$_where.' AND `contents`.`pk_content`=`'.$this->table.'`.`pk_'.strtolower($content_type).'` '.$_order_by.$_limit;
+                    ' WHERE '.$_where.' AND `contents`.`pk_content`=`'.$this->table.'`.`pk_'.$this->content_type.'` '.$_order_by.$_limit;
         }
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
@@ -1253,7 +1253,7 @@ class ContentManager
         if( intval($pk_fk_content_category) > 0 ) {
             $sql = 'SELECT * FROM contents_categories, contents, '.$this->table.'  ' .
                    'WHERE '.$_where.' AND `contents_categories`.`pk_fk_content_category`=' .
-                   $pk_fk_content_category.'  AND `contents`.`pk_content`=`' . $this->table . '`.`pk_'.strtolower($content_type) .
+                   $pk_fk_content_category.'  AND `contents`.`pk_content`=`' . $this->table . '`.`pk_'.$this->content_type .
                    '` AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` ' . $_order_by;
         } else {
             return( $items );
@@ -1284,7 +1284,7 @@ class ContentManager
 
         $sql = 'SELECT * FROM contents_categories, contents,  '.$this->table.'  ' .
                 'WHERE '.$_where.' AND `contents_categories`.`pk_fk_content_category`='.$pk_fk_content_category .
-                '  AND `contents`.`pk_content`= `'.$this->table.'`.`pk_'.strtolower($content_type) .
+                '  AND `contents`.`pk_content`= `'.$this->table.'`.`pk_'.$this->content_type .
                 '` AND `contents_categories`.`pk_fk_content` = `contents`.`pk_content` '.$_order_by;
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
@@ -1774,16 +1774,6 @@ class ContentManager
         }
 
         return $szPages;
-    }
-
-
-
-    /* FIXME: Establecer los plurales siguiendo el criterio del idioma espanhol
-    para otros casos ya tenemos versiones inglesas */
-    public function pluralize($name)
-    {
-        $name = strtolower($name);
-        return $name . 's';
     }
 
 

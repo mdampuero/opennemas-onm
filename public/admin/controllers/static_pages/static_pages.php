@@ -27,10 +27,7 @@ require_once('../../../bootstrap.php');
 require_once('../../session_bootstrap.php');
 
 // Check ACL
-if(!Acl::check('STATIC_ADMIN')) {
-    Acl::deny();
-}
-
+Acl::checkOrForward('STATIC_ADMIN');
 /**
  * Setup view
  */

@@ -11,6 +11,22 @@
  * This file stores shared function that could be used by the framework
  */
 
+function underscore($name) {
+         $withUnderscore = strtolower(preg_replace('/(?<=\\w)([A-Z])/', '_\\1', $name));
+
+         return $withUnderscore;
+    }
+
+function tableize($name) {
+         return pluralize(underscore($name));
+    }
+
+ function pluralize($name)
+    {
+        $name = strtolower($name);
+        return $name . 's';
+    }
+
 function clearslash($string)
 {
     $string = stripslashes($string);

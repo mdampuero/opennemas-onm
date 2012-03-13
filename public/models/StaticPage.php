@@ -25,7 +25,8 @@ class StaticPage extends Content
      * @var pk_static_page Page identifier
      */
     public $pk_static_page = null;
-    public $content_type = __CLASS__;
+  //  public $content_type = __CLASS__;
+      public $content_type = 'static_page';
     /**
      * @var string Content of body
      */
@@ -75,6 +76,7 @@ class StaticPage extends Content
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
             return false;
         }
+
         return true;
     }
     protected function commonData($data)
@@ -245,7 +247,7 @@ class StaticPage extends Content
         if ($id === false) {
             return null;
         }
-        return new Static_Page($id);
+        return new StaticPage($id);
     }
     /**
      *
