@@ -12,20 +12,20 @@
  */
 
 function underscore($name) {
-         $withUnderscore = strtolower(preg_replace('/(?<=\\w)([A-Z])/', '_\\1', $name));
+    $withUnderscore = strtolower(preg_replace('/(?<=\\w)([A-Z])/', '_\\1', $name));
 
-         return $withUnderscore;
-    }
+    return $withUnderscore;
+}
 
 function tableize($name) {
-         return pluralize(underscore($name));
-    }
+    return pluralize(underscore($name));
+}
 
- function pluralize($name)
-    {
-        $name = strtolower($name);
-        return $name . 's';
-    }
+    function pluralize($name)
+{
+    $name = strtolower($name);
+    return $name . 's';
+}
 
 function clearslash($string)
 {
