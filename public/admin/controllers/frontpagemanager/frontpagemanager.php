@@ -195,11 +195,10 @@ switch ($action) {
         require_once SITE_PATH."/controllers/index_sections.php";
 
         $cm = new ContentManager;
-        $contents = $_POST['contents'];
+        $contentsRAW = filter_input(INPUT_GET, 'contents');
+        $contents = json_decode(json_decode($contentsRAW), true);
 
         $contentsInHomepage = $cm->getContentsForHomepageFromArray($contents);
-        var_dump($contentsInHomepage);die();
-
 
         // Filter articles if some of them has time scheduling and sort them by position
         $contentsInHomepage = $cm->sortArrayofObjectsByProperty($contentsInHomepage, 'position');

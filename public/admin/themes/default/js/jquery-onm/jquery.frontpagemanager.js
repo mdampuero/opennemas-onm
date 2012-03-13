@@ -58,8 +58,6 @@ jQuery(document).ready(function($){
     // arquive
 
     // send-to-trash
-    //
-
 
 
     /***************************************************************************
@@ -132,11 +130,12 @@ jQuery(document).ready(function($){
     $('#button_previewfrontpage').on('click', function (e, ui){
         e.preventDefault();
         var contents = get_contents_in_frontpage();
+        var encodedContents = JSON.stringify(get_contents_in_frontpage());
         jQuery.colorbox({
-            href: "/admin/controllers/frontpagemanager/frontpagemanager.php?action=preview_frontpage",
+            href: "/admin/controllers/frontpagemanager/frontpagemanager.php?action=preview_frontpage&contents="+encodedContents,
             data: { 'contents': contents },
             title: 'Previsualización Portada',
-            // iframe: true,
+            iframe: true,
             width: '90%',
             height: '90%'
         });
@@ -147,23 +146,24 @@ jQuery(document).ready(function($){
         alert('not implemented');
     });
 
-    function get_contents_in_frontpage() {
-        var els = [];
-
-        jQuery('div.placeholder').each(function (){
-            var placeholder = jQuery(this).data('placeholder');
-            jQuery(this).find('div.content-provider-element').each(function (index){
-                els.push({
-                    'id' : jQuery(this).data('content-id'),
-                    'content_type': jQuery(this).data('class'),
-                    'placeholder': placeholder,
-                    'position': index,
-                    'params': {}
-                });
-            });
-
-        });
-        return els;
-    }
-
 });
+
+
+function get_contents_in_frontpage() {
+    var els = [];
+
+    jQuery('div.placeholder').each(function (){
+        var placeholder = jQuery(this).data('placeholder');
+        jQuery(this).find('div.content-provider-element').each(function (index){
+            els.push({
+                'id' : jQuery(this).data('content-id'),
+                'content_type': jQuery(this).data('class'),
+                'placeholder': placeholder,
+                'position': index,
+                'params': {}
+            });
+        });
+
+    });
+    return els;
+}
