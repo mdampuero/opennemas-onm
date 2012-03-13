@@ -158,18 +158,6 @@
         uploadedBytes: '{t}Uploaded bytes exceed file size{/t}',
         emptyResult: '{t}Empty file upload result{/t}'
     };
-
-    window.onbeforeunload = function (e) {
-        e = e || window.event;
-
-        var filesforsend = jQuery("#fileupload tr.template-download").length;
-
-        if (filesforsend > 0) {
-            return false;
-        };
-    };
-
-
     </script>
 
     <!-- The Templates and Load Image plugins are included for the FileUpload user interface -->
