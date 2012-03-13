@@ -190,9 +190,9 @@ switch($action) {
         if(isset($adv) && (!empty($adv))) {
             //Buscar foto where pk_foto=img1
             $photo1 = new Photo($adv);
+            $tpl->assign('photo1', $photo1);
         }
 
-        $tpl->assign('photo1', $photo1);
 
         $tpl->display('advertisement/new.tpl');
 

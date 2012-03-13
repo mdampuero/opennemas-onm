@@ -1,6 +1,6 @@
 <div id="advertisement-mosaic-opinion" style="">
     <div id="advertisement-mosaic-frame-opinion"></div>
-    <img src="{$smarty.const.SITE_URL_ADMIN}/images/advertisement/right2Ads.png" width="240" usemap="#mapOpinion" />
+    <img src="{$params.IMAGE_DIR}advertisement/right2Ads.png" width="240" usemap="#mapOpinion" />
 </div>
 
 <map name="mapOpinion">

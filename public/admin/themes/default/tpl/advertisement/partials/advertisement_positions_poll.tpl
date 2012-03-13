@@ -10,7 +10,7 @@
         <td rowspan="7">
             <div id="advertisement-mosaic-poll">
                 <div id="advertisement-mosaic-frame-poll"></div>
-                <img src="{$smarty.const.SITE_URL_ADMIN}/images/advertisement/right2Ads.png" width="240" usemap="#mapGallery" />
+                <img src="{$params.IMAGE_DIR}/advertisement/right2Ads.png" width="240" usemap="#mapGallery" />
             </div>
         </td>
     </tr>
