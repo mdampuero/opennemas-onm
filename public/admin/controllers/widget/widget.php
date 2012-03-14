@@ -1,5 +1,6 @@
 <?php
-
+use Onm\Settings as s,
+    Onm\Message as m;
 /**
  * Setup app
 */
@@ -114,6 +115,24 @@ switch($action) {
         Application::forward(SITE_URL_ADMIN.'/article.php?action=list&category='.$_REQUEST['category']);
         break;
     }
+
+    case 'content-list-provider':
+        $items_page = s::get('items_per_page') ?: 20;
+        $page = filter_input( INPUT_GET, 'page' , FILTER_SANITIZE_STRING, array('options' => array('default' => '1')) );
+        $cm = new ContentManager();
+
+        list($widgets, $pager)= $cm->find_pages('Widget', "fk_content_type=12 AND `available`=1",
+                                                'ORDER BY starttime DESC ',
+                                                 $page, $items_page);
+
+        $tpl->assign(array('contents'=>$widgets,
+                            'pagination'=>$pager->links
+                    ));
+
+        $html_out = $tpl->fetch("common/content_provider/_container-content-list.tpl");
+        Application::ajax_out($html_out);
+
+    break;
 
     case 'list':
     default: {

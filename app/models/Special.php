@@ -7,34 +7,123 @@
  * file that was distributed with this source code.
  */
 /**
- * Handles all CRUD operations over Specials.
+ * Handles all the CRUD actions over albums.
  *
  * @package    Onm
  * @subpackage Model
- * @author     Sandra Pereira <sandra@openhost.es>
  **/
+
 class Special extends Content {
 
+    /**
+     * the special id
+     */
     public $pk_special  = NULL;
-    public $subtitle  = NULL;
-    public $img1  = NULL;
+    /**
+     * the subtitle for this album
+     */
+    public $subtitle = NULL;
+    /**
+     * path for get a pdf file
+     */
     public $pdf_path  = NULL;
+    /**
+     * the id of the image that is the cover for this album
+     */
 
+    public $img1  = NULL;
+
+    /**
+     * Initializes the Special class.
+     *
+     * @param strin $id the id of the album.
+     **/
     function __construct($id=NULL) {
        parent::__construct($id);
-       // echo $id."<br>";
-        if(!is_null($id)) {
+
+        if (!is_null($id)) {
             $this->read($id);
         }
-       	$this->content_type = 'Special';
+        $this->content_type = __CLASS__;
 
+        return $this;
     }
 
+  /**
+     * Magic function for getting uninitilized object properties.
+     *
+     * @param string $name the name of the property to get.
+     *
+     * @return mixed the value for the property
+     **/
+    public function __get($name)
+    {
 
+        switch ($name) {
 
+            case 'uri': {
+                if (empty($this->category_name)) {
+                    $this->category_name = $this->loadCategoryName($this->pk_content);
+                }
+                $uri =  Uri::generate(
+                    'special',
+                    array(
+                        'id' => sprintf('%06d',$this->id),
+                        'date' => date('YmdHis', strtotime($this->created)),
+                        'category' => $this->category_name,
+                        'slug' => $this->slug,
+                    )
+                );
+
+                return ($uri !== '') ? $uri : $this->permalink;
+
+                break;
+            }
+            case 'slug': {
+                return String_Utils::get_title($this->title);
+                break;
+            }
+
+            case 'content_type_name': {
+                $contentTypeName = $GLOBALS['application']->conn->Execute(
+                    'SELECT * FROM `content_types` '
+                    .'WHERE pk_content_type = "'. $this->content_type
+                    .'" LIMIT 1'
+                );
+
+                if (isset($contentTypeName->fields['name'])) {
+                    $returnValue = $contentTypeName;
+                } else {
+                    $returnValue = $this->content_type;
+                }
+                $this->content_type_name = $returnValue;
+                return $returnValue;
+
+                break;
+            }
+
+            default: {
+                break;
+            }
+        }
+
+        parent::__get($name);
+    }
+
+    /**
+     * Creates an special from a data array and stores it in db
+     *
+     * @param array $data the data of the special
+     *
+     * @return bool true if the object was stored
+     */
     public function create($data) {
 
         parent::create($data);
+
+        if(!array_key_exists('pdf_path', $data)) {
+            $data['pdf_path']='';
+        }
 
         $sql = "INSERT INTO specials ( `pk_special`, `subtitle`,  `img1`, `pdf_path`) " .
 				"VALUES (?,?,?,?)";
@@ -48,25 +137,8 @@ class Special extends Content {
             return(false);
         }
 
-        if(!empty($data['pdf_path']) && isset($data['noticias_left']) && isset($data['noticias_right'])) {
-            $tok = strtok($data['noticias_left'],",");
-            $name="";
-            $pos=1;
-            $type_content='Article';
-            while (($tok !== false) AND ($tok !=" ")) {
-                        $this->set_contents($this->id ,$tok, $pos, $name,  $type_content);
-                        $tok = strtok(",");
-                        $pos+=2;
-            }
-            $tok = strtok($data['noticias_right'],",");
-            $name="";
-            $pos=2;
-            $type_content='Article';
-            while (($tok !== false) AND ($tok !=" ")) {
-                        $this->set_contents($this->id ,$tok, $pos, $name,  $type_content);
-                        $tok = strtok(",");
-                        $pos+=2;
-            }
+        if(empty($data['pdf_path']) ) {
+             $this->saveItems($data);
         }
 
         return(true);
@@ -94,7 +166,11 @@ class Special extends Content {
     }
 
     public function update($data) {
+        if(!array_key_exists('pdf_path', $data)) {
+            $data['pdf_path']='';
+        }
         parent::update($data);
+
 
         $sql = "UPDATE specials SET `subtitle`=?, `img1`=?,  `pdf_path`=?  ".
         		"WHERE pk_special=".intval($data['id']);
@@ -107,35 +183,9 @@ class Special extends Content {
           	 return;
         }
 
-
-	   if(!empty($data['pdf_path']) ) {
-                $this->delete_all_contents($data['id'] ); //Pq si no no quita
-                if(isset($data['noticias_left'])){
-                    $tok = strtok($data['noticias_left'],",");
-                    $name="";
-                    $pos=1;
-                    $type_content='Article';
-                    while (($tok !== false) AND ($tok !=" ")) {
-                               // $this->delete_contents($data['id'] ,$tok)  	;
-                                $this->set_contents($data['id'] ,$tok, $pos, $name,  $type_content);
-                                $tok = strtok(",");
-                                $pos+=2;
-                    }
-                }
-                if( isset($data['noticias_right'])){
-                    $tok = strtok($data['noticias_right'],",");
-                    $name="";
-                    $pos=2;
-                    $type_content='Article';
-                    while (($tok !== false) AND ($tok !=" ")) {
-                             //   $this->delete_contents($data['id'] ,$tok)  	;
-                                $this->set_contents($data['id'] ,$tok, $pos, $name,  $type_content);
-                                $tok = strtok(",");
-                                $pos+=2;
-                    }
-                }
-            }
-
+        if(empty($data['pdf_path']) ) {
+            $this->saveItems($data);
+        }
 	}
 
 
@@ -164,6 +214,33 @@ class Special extends Content {
         }
     }
 
+    public function saveItems($data) {
+        $this->delete_all_contents($data['id'] );
+        if(isset($data['noticias_left'])) {
+            $tok = strtok($data['noticias_left'],",");
+            $name="";
+            $pos=1;
+            $type_content='Article';
+            while (($tok !== false) AND ($tok !=" ")) {
+                // $this->delete_contents($data['id'] ,$tok)  	;
+                $this->set_contents($data['id'] ,$tok, $pos, $name,  $type_content);
+                $tok = strtok(",");
+                $pos+=2;
+            }
+        }
+        if( isset($data['noticias_right'])){
+            $tok = strtok($data['noticias_right'],",");
+            $name="";
+            $pos=2;
+            $type_content='Article';
+            while (($tok !== false) AND ($tok !=" ")) {
+                //   $this->delete_contents($data['id'] ,$tok)  	;
+                $this->set_contents($data['id'] ,$tok, $pos, $name,  $type_content);
+                $tok = strtok(",");
+                $pos+=2;
+            }
+        }
+    }
 
 
 /****************************************************************************/
@@ -192,12 +269,13 @@ class Special extends Content {
     }
 
 
-  //Define contenidos dentro de un modulo
-   public function set_contents($id,$pk_content, $position, $name,  $type_content){
+    //Define contenidos dentro de un modulo
+    public function set_contents($id,$pk_content, $position, $name,  $type_content) {
 		if($id == NULL) {
     		return(false);
     	}
-    	$visible=1;
+
+       $visible=1;
 	   $sql = "INSERT INTO special_contents (`fk_special`, `fk_content`,`position`,`name`,`visible`,`type_content`) " .
 							" VALUES (?,?,?,?,?,?)";
 	    $values = array($id, $pk_content, $position, $name, $visible, $type_content);

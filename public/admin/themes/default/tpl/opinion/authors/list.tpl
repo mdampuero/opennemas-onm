@@ -16,14 +16,14 @@
                 {/acl}
                 {acl isAllowed="AUTHOR_CREATE"}
                 <li>
-                    <a href="{$smarty.server.PHP_SELF}?action=new&page=0" class="admin_add"  accesskey="N" tabindex="1">
+                    <a href="{$smarty.server.PHP_SELF}?action=new&amp;page=0" class="admin_add"  accesskey="N" tabindex="1">
                         <img border="0" src="{$params.IMAGE_DIR}authors_add.png" title="{t}New author{/t}" alt="{t}New author{/t}"><br />{t}New author{/t}
                     </a>
                 </li>
                 {/acl}
                 {acl isAllowed="OPINION_ADMIN"}
                 <li >
-                    <a href="opinion.php?action=list&desde=author" class="admin_add" name="submit_mult" value="Listado Opiniones" title="Listado Opiniones">
+                    <a href="opinion.php?action=list&amp;desde=author" class="admin_add" name="submit_mult" value="Listado Opiniones" title="Listado Opiniones">
                         <img border="0" src="{$params.IMAGE_DIR}previous.png" title="Listado Opiniones" alt="Listado Opiniones"><br />{t escape="off"}Go back{/t}
                     </a>
                 </li>
@@ -58,7 +58,7 @@
                     <th>{t}Blog name{/t}</th>
                     <th>{t}Blog url{/t}</th>
                     <th class="title" style="text-align:center">{t}Photos (#){/t}</th>
-                    <th class="title">{t}Actions{/t}</th>
+                    <th class="right" style="width:60px;">{t}Actions{/t}</th>
                 </tr>
             </thead>
             {section name=c loop=$authors}
@@ -82,7 +82,7 @@
                     <td style="text-align:center">
                         {$authors[c]->num_photos}
                     </td>
-                    <td style="text-align:center;">
+                    <td class="right">
 						<ul class="action-buttons">
                             {acl isAllowed="AUTHOR_UPDATE"}
 							<li>
@@ -110,7 +110,7 @@
             {/section}
             <tfoot>
                 <tr class="pagination">
-                    <td colspan="6" align="center">
+                    <td colspan="7" align="center">
                         {$paginacion->links}
                     </td>
                 </tr>
