@@ -1648,7 +1648,7 @@ class Content
     public function loadRelatedContents()
     {
 
-        $relationsHandler  = new Related_content();
+        $relationsHandler  = new RelatedContent();
         $ccm = new ContentCategoryManager();
         $this->related_contents = array();
         $relations = $relationsHandler->get_relations($this->id);
