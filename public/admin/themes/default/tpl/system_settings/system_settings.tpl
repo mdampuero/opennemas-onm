@@ -29,6 +29,7 @@
         vertical-align:middle
     }
     input[type="text"],
+    td,
     textarea{
         width:400px;
         max-height:80%
@@ -120,7 +121,7 @@
                                 </td>
                                 <td rowspan=7>
                                     <div class="help-block margin-left-1">
-                                        <div class="title"><h4>Basic parameters</h4></div>
+                                        <div class="title"><h4>{t}Basic parameters{/t}</h4></div>
                                         <div class="content">
                                             <dl>
                                                 <dt><strong>{t}Site agency{/t}</strong></dt>
@@ -295,8 +296,21 @@
                                 <th scope="row">
                                     <label for="site_title">{t}Language{/t}</label>
                                 </th>
-                                <td colspan="2">
+                                <td>
                                     {html_options name=site_language options=$languages selected=$configs['site_language']}
+                                </td>
+                                <td rowspan=4>
+                                    <div class="help-block margin-left-1">
+                                        <div class="title"><h4>{t}Basic parameters{/t}</h4></div>
+                                        <div class="content">
+                                            <dl>
+                                                <dt><strong>{t}Seconds for refresh pages{/t}</strong></dt>
+                                                <dd>{t}The default configuration in Opennemas for refreshing pages is 900 seconds{/t}</dd>
+                                                <dt><strong>{t}Number items in admin lists{/t}</strong></dt>
+                                                <dd>{t}Default: 20 elements{/t}</dd>
+                                            </dl>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
@@ -311,30 +325,16 @@
                                 <th scope="row">
                                     <label for="refresh_interval">{t}Refresh page every (secs):{/t}</label>
                                 </th>
-                                <td>
+                                <td colspan="2">
                                     <input type="number" id="refresh_interval" name="refresh_interval" value="{$configs['refresh_interval']|default:900}">
-                                    <span class="default-value"></span>
-                                </td>
-                                <td>
-                                    <div class="help-block margin-left-1">
-                                        <div class="title"><h4>{t}Seconds for refresh pages{/t}<br/></h4></div>
-                                        <div class="content"> {t}Default is set to 900 seconds for refreshing pages in opennemas configuration..{/t}</div>
-                                    </div>
                                 </td>
                             </tr>
-
                             <tr>
                                 <th scope="row">
                                     <label for="items_per_page">{t}Items per page:{/t}</label>
                                 </th>
                                 <td>
                                     <input type="number" id="items_per_page" name="items_per_page" value="{$configs['items_per_page']|default:20}">
-                                </td>
-                                <td>
-                                    <div class="help-block margin-left-1">
-                                        <div class="title"><h4>{t}Number items in admin lists{/t}</h4></div>
-                                        <div class="content">{t}Default: 20 elements{/t}<br/></div>
-                                    </div>
                                 </td>
                             </tr>
 
