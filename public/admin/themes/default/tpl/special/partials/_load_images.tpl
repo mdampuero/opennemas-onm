@@ -88,7 +88,7 @@ jQuery(document).ready(function($){
 
 
 });
-getGalleryImages('listByCategory','{$category}','','1');
+//getGalleryImages('listByCategory','{$category}','','1');
 </script>
 
 
