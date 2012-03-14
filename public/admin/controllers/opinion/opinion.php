@@ -727,6 +727,23 @@ switch($action) {
         Application::ajax_out($out);
     break;
 
+    case 'content-list-provider':
+        $items_page = s::get('items_per_page') ?: 20;
+        $page = filter_input( INPUT_GET, 'page' , FILTER_SANITIZE_STRING, array('options' => array('default' => '1')) );
+        $cm = new ContentManager();
+
+        list($opinions, $pager)= $cm->find_pages('Opinion', "available=1",
+                                                 'ORDER BY starttime DESC ',
+                                                  $page, $items_page);
+
+        $tpl->assign(array('contents'=>$opinions,
+                            'pagination'=>$pager->links
+                    ));
+
+        $html_out = $tpl->fetch("common/content_provider/_container-content-list.tpl");
+        Application::ajax_out($html_out);
+
+    break;
 
     case 'config':
 

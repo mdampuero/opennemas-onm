@@ -66,8 +66,6 @@ switch($action) {
 
     case 'list':
         Acl::checkOrForward('SPECIAL_ADMIN');
-
-
         if (empty($page)) {
             $limit= "LIMIT ".(ITEMS_PAGE+1);
         } else {
@@ -76,7 +74,6 @@ switch($action) {
 
         if ($category == 'widget') {
             $specials = $cm->find_all('Special', 'in_home =1 AND available =1', 'ORDER BY position, created DESC '.$limit);
-
             if(!empty($specials)) {
                 foreach ($specials as &$special) {
                     $special->category_name = $ccm->get_name($special->category);
@@ -86,15 +83,11 @@ switch($action) {
             if (count($specials) != $numFavorites ) {
                 m::add( sprintf(_("You must put %d specials in the HOME widget"), $numFavorites));
             }
-
         } else {
 
             $specials = $cm->find_by_category('Special', $category, '1=1',
                            'ORDER BY created DESC '.$limit);
-
         }
-
-
 
         $params = array(
             'page'=>$page, 'items'=>ITEMS_PAGE,
@@ -115,39 +108,37 @@ switch($action) {
 
     case 'read':
         Acl::checkOrForward('SPECIAL_UPDATE');
-        $special = new Special($_REQUEST['id']);
-        $nots=$special->get_contents($_REQUEST['id']);
-        $tpl->assign('special', $special);
-        $noticias_left = array();
-        $noticias_right = array();
-        if(!empty($nots)) {
-            foreach($nots as $noticia){
-                if(($noticia['position']%2)==0){
-                    $noticias_right[]=new Content($noticia['fk_content']);
-                }else{
-                    $noticias_left[]=new Content($noticia['fk_content']);
-                }
-            }
-            $tpl->assign('noticias_right',$noticias_right);
-            $tpl->assign('noticias_left',$noticias_left);
+
+        $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
+        $special = new Special($id);
+        $contents=$special->get_contents($id);
+        if(!empty($special->img1)){
+            $photo1 = new Photo($special->img1);
+            $tpl->assign('photo1', $photo1);
         }
 
-
-        $articles= $cm->find_by_category('Article', $category, ' 1=1 ', 'ORDER BY created DESC LIMIT 0,100');
-        $tpl->assign('articles', $articles);
+        $contentsLeft = array();
+        $contentsRight = array();
+        if(!empty($contents)) {
+            foreach($contents as $content){
+                if(($content['position']%2)==0){
+                    $contentsRight[]=new Content($content['fk_content']);
+                }else{
+                    $contentsLeft[]=new Content($content['fk_content']);
+                }
+            }
+            $tpl->assign('contentsRight',$contentsRight);
+            $tpl->assign('contentsLeft',$contentsLeft);
+        }
+        $tpl->assign('special', $special);
 
         $tpl->display('special/new.tpl');
 
     break;
+
     case 'new':
         Acl::checkOrForward('SPECIAL_CREATE');
-
-        $articles= $cm->find_by_category('Article', $category, '1=1 ', 'ORDER BY created DESC LIMIT 0,100');
-
-        $tpl->assign('articles', $articles);
-
         $tpl->display('special/new.tpl');
-
     break;
 
     case 'create':
@@ -161,20 +152,45 @@ switch($action) {
 
     case 'update':
         Acl::checkOrForward('SPECIAL_UPDATE');
-        $special = new Special($_REQUEST['id']);
+        $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
+        $special = new Special($id);
+
         $special->update($_POST);
 
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category);
     break;
 
+      case 'validate':
 
+        $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
+        if(empty($id)) {
+            Acl::checkOrForward('SPECIAL_CREATE');
+
+            $special = new Special();
+            if (!$special->create($_POST))
+                m::add(_($special->errors));
+        } else {
+
+            Acl::checkOrForward('SPECIAL_UPDATE');
+            $special = new Special($id);
+            if (!Acl::isAdmin()
+                && !Acl::check('CONTENT_OTHER_UPDATE')
+                && $special->fk_user != $_SESSION['userid'])
+            {
+                m::add(_("You can't modify this special because you don't have enought privileges.") );
+            }
+            $special->update($_POST);
+
+        }
+        Application::forward($_SERVER['SCRIPT_NAME'].'?action=read&id='.$special->id.'&category='.$category.'&page='.$page);
+
+    break;
 
     case 'delete':
-
         Acl::checkOrForward('SPECIAL_DELETE');
-
-        $special = new Special($_REQUEST['id']);
-        $special->delete($_REQUEST['id']);
+        $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
+        $special = new Special($id);
+        $special->delete($id);
 
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category);
     break;
@@ -211,11 +227,16 @@ switch($action) {
 
         Acl::checkOrForward('SPECIAL_AVAILABLE');
 
-        $special = new Special($_REQUEST['id']);
+        $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
+        $status = filter_input(INPUT_GET,'status',FILTER_VALIDATE_INT,
+                                array('options' => array('default'=> 0)));
 
+        $special = new Special($id);
         //Publicar o no, comprobar num clic
-        $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
-        $special->set_status($status);
+        $special->set_available($status, $_SESSION['userid']);
+        if($status == 0){
+            $special->set_favorite($status);
+        }
 
         if(isset($_GET['desde']) && $_GET['desde']=='search'){
             Application::forward('search.php?action=search&stringSearch='.$_GET['stringSearch'].'&page='.$_GET['page']);
@@ -223,21 +244,18 @@ switch($action) {
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category);
     break;
 
-
     case 'batchFrontpage':
-
-        Acl::checkOrForward('ALBUM_AVAILABLE');
+        Acl::checkOrForward('SPECIAL_AVAILABLE');
 
         if(isset($_GET['selected_fld']) && count($_GET['selected_fld']) > 0) {
             $fields = $_GET['selected_fld'];
-
             $status = filter_input ( INPUT_GET, 'status' , FILTER_SANITIZE_NUMBER_INT );
             if (is_array($fields)) {
                 foreach ($fields as $i) {
-                    $album = new Album($i);
-                    $album->set_available($status, $_SESSION['userid']);
+                    $special = new Special($i);
+                    $special->set_available($status, $_SESSION['userid']);
                     if ($status == 0) {
-                        $album->set_favorite($status);
+                        $special->set_favorite($status);
                     }
                 }
             }
@@ -245,7 +263,6 @@ switch($action) {
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category);
 
     break;
-
 
     case 'batchDelete':
         Acl::checkOrForward('SPECIAL_DELETE');
@@ -261,12 +278,11 @@ switch($action) {
             }
         }
 
-        Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&letter_status=' .
-                    $letterStatus . '&page=' . $page);
+        Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&category=' .
+                    $category . '&page=' . $page);
     break;
 
-
-     case 'save_positions':
+    case 'save_positions':
         $positions = $_GET['positions'];
         if (isset($positions)  && is_array($positions)
                 && count($positions) > 0) {
@@ -277,7 +293,6 @@ switch($action) {
                     $_positions[] = array($pos, '1', $id);
                     $pos += 1;
             }
-
             $album = new Album();
             $msg = $album->set_position($_positions, $_SESSION['userid']);
 
@@ -295,9 +310,7 @@ switch($action) {
         exit(0);
     break;
 
-
     case 'm_no_in_special':
-
           if(isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld'])>0){
              $fields = $_REQUEST['selected_fld'];
              if(is_array($fields)) {
@@ -397,9 +410,7 @@ switch($action) {
 
         unset($_POST['action']);
         unset($_POST['submit']);
-
         foreach ($_POST as $key => $value ) { s::set($key, $value); }
-
         m::add(_('Settings saved successfully.'), m::SUCCESS);
 
         $httpParams = array(array('action'=>'list'),);
