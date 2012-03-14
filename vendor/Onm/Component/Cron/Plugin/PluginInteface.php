@@ -1,0 +1,25 @@
+<?php
+/**
+ * This file is part of the Onm package.
+ *
+ * (c)  OpenHost S.L. <developers@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ **/
+namespace Onm\Component\Cron;
+/**
+ * Interface for Cron plugins
+ *
+ * @package Onm_Compoment_Cron
+ **/
+interface PluginInterface
+{
+    /**
+     * Executes the plugin logic given an array of parameters
+     *
+     * @return boolean true if the plugin was executed properly
+     **/
+    public function execute($params = array());
+
+} // END class PluginInterface
