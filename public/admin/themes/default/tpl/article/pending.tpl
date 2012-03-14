@@ -123,12 +123,11 @@
                 </th>
                 {if $category eq 'todos' || $category eq 'opinion'}
                     <th class="center" style="width:100px;">{t}Section{/t} <img src="themes/default/images/newsletter/editar.gif" border="0"></th>
-                    <th  class="center" style="width:70px;">{t}Page{/t}</th>
                 {/if}
                 <th  class="center" style="width:100px;">{t}Author{/t} <img src="themes/default/images/newsletter/editar.gif" border="0"></th>
-                <th class="center" style="width:80px;">{t}Created{/t}</th>
+                <th class="center" style="width:100px;">{t}Created{/t}</th>
                 <th class="center" style="width:80px;">{t}Last Editor{/t}</th>
-                <th class="center" style="width:70px;">{t}Actions{/t}</th>
+                <th class="right" style="width:60px;">{t}Actions{/t}</th>
             </thead>
             <input type="hidden"  name="user_name"  id="user_name" value="{$smarty.session.username}">
             {if isset($articles)}
@@ -162,9 +161,6 @@
                                 // ]]>
                               </script>
                         </td>
-                        <td  class="center">
-
-                        </td>
                     {/if}
                     <td >
                         <span style="cursor:pointer;" title="agency" id="agency_{$articles[c]->id}" name="{$articles[c]->id}" >{$articles[c]->agency} </span>
@@ -183,7 +179,7 @@
                     <td class="center">
                         <span style="cursor:pointer;" title="editor" id="editor_{$articles[c]->id}">{$art_editors[c]}</span>
                     </td>
-                    <td class="center">
+                    <td class="right">
                         <ul class="action-buttons">
                             {if $category!=20 && $articles[c]->category !=20}
                             <li>
@@ -241,21 +237,29 @@
         <table class="listing-table">
             <thead>
                 <th style="width:15px;"></th>
+                <th  class="left" style="width:100px;">{t}Author{/t} <img src="themes/default/images/newsletter/editar.gif" border="0"></th>
                 <th align="left" ><img src="themes/default/images/newsletter/editar.gif" border="0">Título</th>
                 {if $category eq 'todos' || $category eq 'opinion'}
-                    <th class="center" >{t}Type{/t}</th>
+                    <th class="center" style="width:100px;">{t}Type{/t}</th>
                 {/if}
-                <th  class="center" style="width:100px;">{t}Author{/t} <img src="themes/default/images/newsletter/editar.gif" border="0"></th>
-                <th class="center" style="width:80px;">{t}Created{/t}</th>
+                <th class="center" style="width:100px;">{t}Created{/t}</th>
                 <th class="center" style="width:80px;">{t}Last Editor{/t}</th>
-                <th class="center" style="width:70px;">{t}Actions{/t}</th>
+                <th class="right" style="width:60px;">{t}Actions{/t}</th>
             </thead>
             <tbody>
                 {section name=c loop=$opinions}
                 <tr {cycle values="class=row0,class=row1"}   >
-                    <td style="font-size: 11px;">
+                    <td class="left">
                           <input type="checkbox" class="minput"  id="selected_opin_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$opinions[c]->id}"  style="cursor:pointer;">
                           <input type="hidden"  name="permit_{$opinions[c]->id}"  id="permit_{$opinions[c]->id}" value="1"    />
+                    </td>
+                    <td>
+                           <span  title="author" old_author="{$opinions[c]->fk_author}" name="{$opinions[c]->id}" id="author_{$opinions[c]->id}"  {if $opin_names[c]} style="cursor:pointer;"> {$opin_names[c]}  {else} style="padding:4px;background-color:#FFA6A6;cursor:pointer;" >Unknown  {/if}</span>
+                        <script type="text/javascript">
+                        // <![CDATA[
+                                new Editable('author_{$opinions[c]->id}','select');
+                        // ]]>
+                        </script>
                     </td>
                     <td  onClick="javascript:document.getElementById('selected_opin_{$smarty.section.c.iteration}').click();">
                         {if isset($opinions[c]->paper_page)} <img width="16px" align="absmiddle" src="themes/default/images/xml_24.png" border="0" alt="De ImportXML" /> {/if}
@@ -266,29 +270,20 @@
                             // ]]>
                         </script>
                     </td>
-                  <td  >
-                            OPINION {if $opinions[c]->type_opinion eq '0'} Autor{elseif $opinions[c]->type_opinion eq '0'}Director{else}Editorial{/if}
-                    </td>
-                     <td  >
-                           <span  title="author" old_author="{$opinions[c]->fk_author}" name="{$opinions[c]->id}" id="author_{$opinions[c]->id}"  {if $opin_names[c]} style="cursor:pointer;"> {$opin_names[c]}  {else} style="padding:4px;background-color:#FFA6A6;cursor:pointer;" >Unknown  {/if}
-                              </span>
-                  <script type="text/javascript">
-                    // <![CDATA[
-                            new Editable('author_{$opinions[c]->id}','select');
-                    // ]]>
-                    </script>
+                    <td class="center">
+                        {if $opinions[c]->type_opinion eq '0'}Author opinion{elseif $opinions[c]->type_opinion eq '0'}Director opinion{else}Editorial opinion{/if}
                     </td>
                     <td class="center" >
-                             {$opinions[c]->created}
+                        {$opinions[c]->created}
                     </td>
-                 {*  <td class="center" >
-                             {$opin_publishers[c]}
+                    {*  <td class="center" >
+                        {$opin_publishers[c]}
                     </td> *}
                     <td class="center" >
                         <span style="cursor:pointer;" title="editor" id="editor_{$opinions[c]->id}">{$opin_editors[c]}</span>
                     </td>
 
-                    <td  class="center">
+                    <td  class="right">
                         <ul class="action-buttons">
                             <li>
                                 {if $opinions[c]->content_status == 1}

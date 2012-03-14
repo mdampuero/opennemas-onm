@@ -1,6 +1,6 @@
 <div id="advertisement-mosaic-gallery">
     <div id="advertisement-mosaic-frame-gallery"></div>
-    <img src="{$params.IMAGE_DIR}/advertisement/right2Ads.png" width="240" usemap="#mapGallery" />
+    <img src="{$params.IMAGE_DIR}advertisement/right2Ads.png" width="240" usemap="#mapGallery" />
 </div>
 
 <map name="mapGallery">

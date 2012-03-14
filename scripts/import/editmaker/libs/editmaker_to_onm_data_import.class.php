@@ -1,9 +1,9 @@
 <?php
 class EditmakerToOnmDataImport {
-    
+
     public $idsMatches = array();
     public $categoryIDForContentID = array();
-    
+
     public $categoriesMatches =
             array(
                 48 => 13,   // CULTURA Y OCIO
@@ -23,7 +23,7 @@ class EditmakerToOnmDataImport {
                 64 => 4,     // OPINION
                 66 => 4,     // OPINION
             );
-            
+
     public $matchAuthors =
             array(
                 74 => 384, //Alberto priego
@@ -145,11 +145,11 @@ class EditmakerToOnmDataImport {
                 //132 => , //
                 37 => 364,
             );
-            
+
     public function __construct ($config = array())
     {
         $this->dbConfig = $config;
-        
+
         if (isset($config['bd_host'])
             && isset($config['bd_database'])
             && isset($config['bd_user'])
@@ -164,30 +164,30 @@ class EditmakerToOnmDataImport {
                                   );
 
         } else {
-            
+
             echo    "ERROR: You must provide the connection configuration to the\n"
                     ."\tEditMaker database";
             die();
-        }        
+        }
 
     }
-    
+
     public function matchCategory($category)
     {
-        
+
         return $this->categoriesMatches[$category];
 
     }
-    
+
     public function matchAuthor($author)
     {
-        
+
         return ((isset($this->matchAuthors[$author])
                         ? $this->matchAuthors[$author]
                         : false));
 
     }
-    
+
     public function matchID($originalID)
     {
         if(isset($this->idsMatches[$originalID])) {
@@ -195,9 +195,9 @@ class EditmakerToOnmDataImport {
             return $this->idsMatches[$originalID];
 
         } else {
-            
+
             $sql = 'SELECT * FROM `translation_ids` WHERE `pk_content_old`=?';
-            
+
             $values = array($originalID);
             $getRowFromPkContentOld = $GLOBALS['application']->conn->Prepare($sql);
             $rss = $GLOBALS['application']->conn->Execute($getRowFromPkContentOld,
@@ -209,20 +209,20 @@ class EditmakerToOnmDataImport {
                 $this->idsMatches[$originalID] = $rss->fields['pk_content'];
                 return ($rss->fields['pk_content']);
             }
-            
+
         }
     }
-    
+
     public function getCategoryIDFromContent($pkContent) {
-        
+
         if(isset($this->categoryIDForContentID[$pkContent])) {
 
             return $this->categoryIDForContentID[$pkContent];
 
         } else {
-            
+
             $sql = 'SELECT pk_fk_content_category FROM `contents_categories` WHERE `pk_fk_content`=?';
-            
+
             $values = array($pkContent);
             $getCategoryIDfromPkContent = $GLOBALS['application']->conn->Prepare($sql);
             $rss = $GLOBALS['application']->conn->Execute($getCategoryIDfromPkContent,
@@ -234,16 +234,16 @@ class EditmakerToOnmDataImport {
                 $this->categoryIDForContentID[$pkContent] = $rss->fields['pk_fk_content_category'];
                 return ($rss->fields['pk_fk_content_category']);
             }
-            
+
         }
     }
-    
+
     public function importCategories()
     {
         $ih = new ImportHelper();
-            
+
         foreach( $this->categoriesMatches as $originalID => $newID ) {
-            
+
             if ($ih->elementIsImported($originalID, 'category') ) {
                 echo "Category with id {$originalID} already imported\n";
             } else {
@@ -253,9 +253,9 @@ class EditmakerToOnmDataImport {
             }
 
         }
-        
+
         foreach( $this->categoriesOpinion as $originalID => $originalID) {
-            
+
             if ($ih->elementIsImported($originalID, 'category') ) {
                 echo "Category with id {$originalID} already imported\n";
             } else {
@@ -265,40 +265,40 @@ class EditmakerToOnmDataImport {
             }
 
         }
-        
+
     }
-    
+
     public function importArticles()
     {
-        
+
         $_sql_where = ' WHERE Seccion IN ('.implode(', ', array_keys($this->categoriesMatches)).") ";
         $_limit = ''; /*'LIMIT 0,1'*/;
-        
+
         $sql = 'SELECT * FROM noticias'.$_sql_where.' '.$_limit;
-        
+
         // Fetch the list of Articles available in EditMaker
         $request = $this->orig->conn->Prepare($sql);
         $rs = $this->orig->conn->Execute($request);
 
-        
+
         if (!$rs) {
             ImportHelper::messageStatus($this->orig->conn->ErrorMsg());
         } else {
-        
+
             $totalRows = $rs->_numOfRows;
             $articles = $rs->fields;
             $current = 1;
             $ih = new ImportHelper();
-                    
+
             while (!$rs->EOF) {
-                
+
                 if ($ih->elementIsImported($rs->fields['id'], 'article') ) {
                     echo "[{$current}/{$totalRows}] Article with id {$rs->fields['id']} already imported\n";
                 } else {
                     echo "[{$current}/{$totalRows}] Importing article with id {$rs->fields['id']} - ";
-                    
+
                     $originalArticleID = $rs->fields['id'];
-                
+
                     $values = array(
                             'title' => $rs->fields['Titulo'],
                             'category' => $this->matchCategory($rs->fields['Seccion']),
@@ -307,7 +307,7 @@ class EditmakerToOnmDataImport {
                             'frontpage' => 0,
                             'in_home' => 0,
                             'title_int' => $rs->fields['Titulo'],
-                            'metadata' => String_Utils::get_tags($rs->fields['Titulo']),
+                            'metadata' => StringUtils::get_tags($rs->fields['Titulo']),
                             'subtitle' => $rs->fields['Antetit'],
                             'agency' => 'nuevatribuna.es',
                             'summary' => $rs->fields['Entrad'],
@@ -315,56 +315,56 @@ class EditmakerToOnmDataImport {
                             'posic' => 0,
                             'id' => 0,
                             'fk_publisher' => 125
-                        );                    
-                            
+                        );
+
                     $article = new Article();
                     $newArticleID = $article->create($values);
                     if(is_string($newArticleID)) {
-                        
+
                         $ih->logElementInsert($originalArticleID, $newArticleID, 'article');
                         $ih->updateViews($newArticleID, $rs->fields['visitas']);
                         $ih->updateCreateDate($newArticleID, $rs->fields['fecha']);
-                        
+
                     }
                     echo "new id {$newArticleID} [DONE]\n";
                     //ImportHelper::messageStatus("Importing Articles: $current/$totalRows");
                     //sleep(0.12);
                 }
-                
+
                 $current++;
-                
+
                 $rs->MoveNext();
             }
-            
+
             $rs->Close(); # optional
-            
+
         }
-        
+
     }
-    
+
     public function importOpinions()
     {
         $sql = "SELECT * FROM translation_ids WHERE type='author'";
-        
+
         // Fetch the list of Articles available in EditMaker and some statistics
         $request = $GLOBALS['application']->conn->Prepare($sql);
         $rs = $GLOBALS['application']->conn->Execute($request);
-        
+
         if (!$rs) {
             ImportHelper::messageStatus($GLOBALS['application']->conn->ErrorMsg());
         } else {
-            
+
             while (!$rs->EOF) {
-                
+
                 $this->matchAuthors[$rs->fields['pk_content_old']] = $rs->fields['pk_content'];
                 $rs->MoveNext();
-                
+
             }
-            
-            
+
+
             $rs->Close(); # optional
-            
-            // Getting the 
+
+            // Getting the
             $_filter_by_section = ' Seccion IN ('.implode(', ', array_keys($this->categoriesOpinion)).") ";
             $sql = 'SELECT noticias.id, noticias.Antetit, noticias.Titulo,
                     noticias.Subtit, noticias.Entrad, noticias.Texto,
@@ -379,8 +379,8 @@ class EditmakerToOnmDataImport {
             // Fetch the list of Opinions available for one author in EditMaker
             $request = $this->orig->conn->Prepare($sql);
             $rs = $this->orig->conn->Execute($request);
-            
-            
+
+
             if(!$rs) {
                 ImportHelper::messageStatus($this->orig->conn->ErrorMsg());
             } else {
@@ -389,29 +389,29 @@ class EditmakerToOnmDataImport {
                 $opinions = $rs->fields;
                 $current = 1;
                 $ih = new ImportHelper();
-                
+
                 while (!$rs->EOF) {
-                    
+
                     if ($ih->elementIsImported($rs->fields['id'], 'opinion') ) {
                         echo "[{$current}/{$totalRows}] Opinion with id {$rs->fields['id']} already imported\n";
                     } else {
                         echo "[{$current}/{$totalRows}] Importing opinion with id {$rs->fields['id']} - ";
-                        
+
                         $originalOpinionID = $rs->fields['id'];
-                        
+
                         if ($this->matchAuthor($rs->fields['firmante_id'])) {
-                            
+
                             //var_dump($rs->fields['firmante_id'], $this->matchAuthor($rs->fields['firmante_id']));
                             //die();
                             //
-                            
+
                             $values =
                                 array(
                                     'title' => $rs->fields['Titulo'],
                                     'category' => 'opinion',
                                     'body' => $rs->fields['Texto'],
                                     'type_opinion' => '0',
-                                    'metadata' => String_Utils::get_tags($rs->fields['Titulo'].' '.$rs->fields['firmante_nombre'] ),
+                                    'metadata' => StringUtils::get_tags($rs->fields['Titulo'].' '.$rs->fields['firmante_nombre'] ),
                                     'views' => $rs->fields['visitas'],
                                     'created' => $rs->fields['fecha'],
                                     'fk_author' => (int)$this->matchAuthor($rs->fields['firmante_id']),
@@ -420,46 +420,46 @@ class EditmakerToOnmDataImport {
                                     'with_comment' => 1,
                                     'in_home' => 0,
                                 );
-                            
-                                
-                                
+
+
+
                             $opinion = new Opinion();
                             $newOpinionID = $opinion->create($values);
-                            
+
                             if(is_string($newOpinionID)) {
-                                
+
                                 $ih->logElementInsert($originalOpinionID, $newOpinionID, 'opinion');
                                 $ih->updateViews($newOpinionID,$rs->fields['visitas']);
                                 $ih->updateCreateDate($newOpinionID, $rs->fields['fecha']);
-                            
+
                             }
                             echo "new id {$newOpinionID} [DONE]\n";
-                                                        
+
                         } else {
                             echo "This has not an correlated element\n";
                         }
-                        
+
                     }
-                    
+
                     $current++;
                     $rs->MoveNext();
                 }
-                $rs->Close(); # optional           
+                $rs->Close(); # optional
             }
         }
-        
+
     }
-    
+
     public function importArrayAuthors()
     {
         $ih = new ImportHelper();
-        
+
         $totalRows = count($this->matchAuthors);
         $current = 1;
-        
-        
+
+
         foreach ($this->matchAuthors as $original_id => $new_id) {
-            
+
             if ($ih->elementIsImported($original_id, 'author') ) {
                 echo "[{$current}/{$totalRows}] Author with id {$original_id} already imported\n";
             } else {
@@ -467,28 +467,28 @@ class EditmakerToOnmDataImport {
                 echo "[{$current}/{$totalRows}] Importing author with id {$original_id} - ";
                 $ih->logElementInsert($original_id, $new_id, 'author');
                 echo "new id {$new_id} [DONE]\n";
-                
+
             }
             $current++;
         }
-        
+
     }
-    
+
     public function importAuthorsWeirdMode()
     {
         $sql = "SELECT  original_authors.id as original_id,
                         original_authors.nombre as name,
-                        new_authors.pk_author as new_id 
+                        new_authors.pk_author as new_id
                 FROM    `".$this->dbConfig['bd_database']."`.`firmantes` as `original_authors`,
-                        `".BD_INST."`.`authors` as `new_authors` 
+                        `".BD_INST."`.`authors` as `new_authors`
                 WHERE `original_authors`.`nombre` =  `new_authors`.`name`
                 ORDER BY original_id";
-                
+
         // Fetch the list of Opinions available for one author in EditMaker
         $request = $this->orig->conn->Prepare($sql);
         $rs = $this->orig->conn->Execute($request);
-        
-        
+
+
         if(!$rs) {
             ImportHelper::messageStatus($this->orig->conn->ErrorMsg());
         } else {
@@ -497,72 +497,72 @@ class EditmakerToOnmDataImport {
             $opinions = $rs->fields;
             $current = 1;
             $ih = new ImportHelper();
-            
+
             while (!$rs->EOF) {
-                
+
                 if ($ih->elementIsImported($rs->fields['original_id'], 'author') ) {
                     echo "[{$current}/{$totalRows}] Author with id {$rs->fields['original_id']} already imported\n";
                 } else {
                     echo "[{$current}/{$totalRows}] Importing author with id {$rs->fields['original_id']} - ";
-                
+
                     if(is_string($rs->fields['new_id'])) {
-                        
+
                         $ih->logElementInsert($rs->fields['original_id'], $rs->fields['new_id'], 'author');
-                    
+
                     }
                     echo "new id {$rs->fields['new_id']} [DONE]\n";
-                    
+
                 }
-                
+
                 $current++;
                 $rs->MoveNext();
             }
-            $rs->Close(); # optional           
+            $rs->Close(); # optional
         }
-            
+
     }
-    
+
     public function importAuthors()
     {
-        
-        
+
+
         $sql = 'SELECT * FROM firmantes';
-        
+
         // Fetch the list of Articles available in EditMaker and some statistics
         $request = $this->orig->conn->Prepare($sql);
         $rs = $this->orig->conn->Execute($request);
-        
+
         if (!$rs) {
             ImportHelper::messageStatus($this->orig->conn->ErrorMsg());
         } else {
-        
+
             $totalRows = $rs->_numOfRows;
             $authors = $rs->fields;
             $current = 1;
             $ih = new ImportHelper();
-            
+
             while (!$rs->EOF) {
-                
+
                 if ($ih->elementIsImported($rs->fields['id'], 'author') ) {
                     echo "[{$current}/{$totalRows}] Author with id {$rs->fields['id']} already imported\n";
                 } else {
                     echo "[{$current}/{$totalRows}] Importing author with id {$rs->fields['id']} - ";
-                    
+
                     $originalAuthorID = $rs->fields['id'];
-                    
+
                     $values = array(
                             'name' => iconv("ISO-8859-1", "UTF-8", $rs->fields['nombre']),
                         );
 
                     $author = new Author();
                     $newAuthorID = $author->create($values);
-                    
+
                     if(is_string($newAuthorID)) {
-                        
+
                         $ih = new ImportHelper();
                         $ih->logElementInsert($originalAuthorID, $newAuthorID, 'author');
                         $this->matchAuthor[$originalAuthorID] = $newAuthorID;
-                        
+
                     }
                     echo "new id {$newAuthorID} [DONE]\n";
                 }
@@ -572,35 +572,35 @@ class EditmakerToOnmDataImport {
             $rs->Close(); # optional
         }
     }
-    
+
 
     public function importComments()
     {
-        $sql = 'SELECT id_noti as fk_content,opiniones.* 
+        $sql = 'SELECT id_noti as fk_content,opiniones.*
                 FROM  `opiniones` , noti_foro
                 WHERE opiniones.id_foro = noti_foro.id_foro
                 GROUP BY `id`';
-        
+
         // Fetch the list of Comments available in EditMaker and some statistics
         $request = $this->orig->conn->Prepare($sql);
         $rs = $this->orig->conn->Execute($request);
-        
+
         if (!$rs) {
             ImportHelper::messageStatus($this->orig->conn->ErrorMsg());
         } else {
-        
+
             $totalRows = $rs->_numOfRows;
             $authors = $rs->fields;
             $current = 1;
             $ih = new ImportHelper();
-            
+
             while (!$rs->EOF) {
-                
+
                 if ($ih->elementIsImported($rs->fields['id'], 'comment') ) {
                     echo "[{$current}/{$totalRows}] Comment with id {$rs->fields['id']} already imported\n";
                 } else {
                     echo "[{$current}/{$totalRows}] Importing comment with id {$rs->fields['id']} over content with id {$this->matchID($rs->fields['fk_content'])} - ";
-                    
+
                     $originalCommentID = $rs->fields['id'];
 
                     $data = array(
@@ -612,7 +612,7 @@ class EditmakerToOnmDataImport {
                                     'author' => iconv("ISO-8859-1", "UTF-8", $rs->fields['nombre']),
                                     'email'  => iconv("ISO-8859-1", "UTF-8", $rs->fields['email']),
                                   );
-                    
+
                     $comment = new Comment();
                     $newCommentID = $comment->create(
                                                         array(
@@ -621,17 +621,17 @@ class EditmakerToOnmDataImport {
                                                             'ip' => $rs->fields['ip']
                                                         )
                                                     );
-                    
+
                     $ih->updateCreateDate($newCommentID, $rs->fields['fecha']);
 
                     if(is_string($newCommentID)) {
-                        
+
                         $ih = new ImportHelper();
                         $ih->logElementInsert($originalCommentID, $newCommentID, 'comment');
-                        
+
                     }
                     echo "new id {$newCommentID} [DONE]\n";
-                    
+
                 }
                 $current++;
                 $rs->MoveNext();
@@ -639,5 +639,5 @@ class EditmakerToOnmDataImport {
             $rs->Close(); # optional
         }
     }
-    
+
 }

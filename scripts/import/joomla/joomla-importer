@@ -33,7 +33,7 @@ $availableActions = array(
     'import-articles', 'show-categories',
 );
 
-require SITE_CORE_PATH.'application.class.php';
+require SITE_PATH.'/autoload.php';
 Application::initAutoloader();
 
 require 'JoomlaImporter.php';

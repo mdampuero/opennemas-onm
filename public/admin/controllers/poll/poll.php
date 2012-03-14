@@ -259,6 +259,29 @@ switch ($action) {
                 '?action=list&category='.$category.'&page='.$page);
     break;
 
+
+    case 'content-list-provider':
+
+        $items_page = s::get('items_per_page') ?: 20;
+        $category = filter_input( INPUT_GET, 'category' , FILTER_SANITIZE_STRING, array('options' => array('default' => '0')) );
+        $page = filter_input( INPUT_GET, 'page' , FILTER_SANITIZE_STRING, array('options' => array('default' => '1')) );
+        $cm = new ContentManager();
+
+        list($polls, $pager) = $cm->find_pages('Poll', 'available=1 ',
+                    'ORDER BY starttime DESC,  contents.title ASC ',
+                    $page, $items_page, $category);
+
+        $tpl->assign(array('contents'=>$polls,
+                            'contentTypeCategories'=>$parentCategories,
+                            'category' =>$category,
+                            'pagination'=>$pager->links
+                    ));
+
+        $html_out = $tpl->fetch("common/content_provider/_container-content-list.tpl");
+        Application::ajax_out($html_out);
+
+    break;
+
     case 'config':
 
         Acl::checkOrForward('POLL_SETTINGS');
@@ -285,7 +308,7 @@ switch ($action) {
         m::add(_('Settings saved successfully.'), m::SUCCESS);
 
         $httpParams = array(array('action'=>'list'),);
-        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
 
 
     default:

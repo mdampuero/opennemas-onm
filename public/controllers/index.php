@@ -97,7 +97,6 @@ if (
     foreach ($contentsInHomepage as $content) {
         if (isset($content->img1)) {
             $imageIdsList []= $content->img1;
-
         }
     }
 

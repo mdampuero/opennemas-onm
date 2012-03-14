@@ -16,7 +16,6 @@ require_once(dirname(__FILE__).'/../../../bootstrap.php');
 require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
 
 // Check ACL
-require_once(SITE_CORE_PATH.'privileges_check.class.php');
 Acl::checkorForward('ONM_SETTINGS');
 
 /**
@@ -83,7 +82,7 @@ switch($action) {
         $httpParams = array(
                             array('action'=>'list'),
                             );
-        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
         break;
 
 
@@ -91,6 +90,6 @@ switch($action) {
         $httpParams = array(
                             array('action','list'),
                             );
-        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($params));
+        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($params));
     } break;
 }

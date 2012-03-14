@@ -72,7 +72,7 @@ if(isset($_REQUEST['action']) ) {
                 if( ($tpl->caching == 0) || !$tpl->isCached('opinion.tpl', $cache_id) ) {
 
                     // Please SACAR esta broza de aqui {
-                    $str = new String_Utils();
+                    $str = new StringUtils();
                     $title = $str->get_title($opinion->title);
                     $print_url = '/imprimir/' . $title. '/'. $opinion->pk_content . '.html';
                     $tpl->assign('print_url', $print_url);
@@ -81,7 +81,7 @@ if(isset($_REQUEST['action']) ) {
 
 
 
-                    $opinion->author_name_slug = String_Utils::get_title($opinion->name);
+                    $opinion->author_name_slug = StringUtils::get_title($opinion->name);
 
 
                     // Fetch rating for this opinion
@@ -150,7 +150,7 @@ if(isset($_REQUEST['action']) ) {
             // Article
             $opinion = new Opinion($dirtyID);
             $opinion->category_name = 'opinion';
-            $opinion->author_name_slug = String_Utils::get_title($opinion->name);
+            $opinion->author_name_slug = StringUtils::get_title($opinion->name);
 
             $author = new Author($opinion->fk_author);
 
@@ -186,7 +186,7 @@ if(isset($_REQUEST['action']) ) {
             require_once('session_bootstrap.php');
 
             // Check if magic_quotes is enabled and clear globals arrays
-            String_Utils::disabled_magic_quotes();
+            StringUtils::disabled_magic_quotes();
 
             // Check direct access
             if($_SESSION['sendformtoken'] != $_REQUEST['token']) {
@@ -218,7 +218,7 @@ if(isset($_REQUEST['action']) ) {
 
             // Load permalink to embed into content
             $opinion = new Opinion($dirtyID);
-            $opinion->author_name_slug = String_Utils::get_title($opinion->name);
+            $opinion->author_name_slug = StringUtils::get_title($opinion->name);
             $opinionType = '';
             if ($opinion->type_opinion == 1) {
                 $opinionType = 'editorial';
@@ -227,7 +227,7 @@ if(isset($_REQUEST['action']) ) {
             } else {
                 $opinionType = $opinion->author_name_slug;
             }
-            $tplMail->assign('opinionType', $opinionType);            
+            $tplMail->assign('opinionType', $opinionType);
             $tplMail->assign('mail', $mail);
             $tplMail->assign('opinion', $opinion);
 

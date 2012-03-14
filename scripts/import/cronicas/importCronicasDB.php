@@ -48,12 +48,12 @@ set_include_path(implode(PATH_SEPARATOR, array(
 )));
 
 
- require_once('application.class.php');
- \Application::initAutoloader('*');
+require SITE_PATH.'/autoload.php';
+\Application::initAutoloader('*');
 
-    $app = \Application::load();
+$app = \Application::load();
 
- 
+
 if(!defined(INSTANCE_MEDIA) )
     define('INSTANCE_MEDIA', SITE_PATH.'media/images');
 
@@ -62,7 +62,7 @@ if(!defined(INSTANCE_MEDIA) )
 */
 
 require 'import-cronicas.php';
- 
+
 $importer = new createContents();
 
 $old = new importCronicas($config_oldDB);
@@ -72,7 +72,7 @@ $importer->sqlExecute();
 
 $types = $importer->getContentTypes();
 
-//foreach ($types as $type) 
+//foreach ($types as $type)
 $type='article';
 
 $contents = $old->getContents($type);

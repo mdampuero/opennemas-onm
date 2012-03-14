@@ -1,6 +1,6 @@
 <div id="advertisement-mosaic-videointerior" style=" ">
     <div id="advertisement-mosaic-videointerior-frame"></div>
-    <img src="{$params.IMAGE_DIR}/advertisement/videoAds.png" width="240" height="435" usemap="#mapVideoInterior" />
+    <img src="{$params.IMAGE_DIR}advertisement/videoAds.png" width="240" height="435" usemap="#mapVideoInterior" />
 </div>
 
 <map name="mapVideoInterior">

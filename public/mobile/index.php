@@ -91,13 +91,12 @@ class MobileRouter {
     }
 
     static function redirect_web() {
-        require_once('../core/application.class.php');
         setcookie("confirm_mobile", "1", time()+3600, '/');
         Application::forward('/');
     }
 
     static function log() {
-        require_once('../core/application.class.php');
+        require_once('../core/Application.php');
     }
 }
 

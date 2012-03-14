@@ -1,6 +1,6 @@
 <div id="advertisement-mosaic-interior" style="">
     <div id="advertisement-mosaic-interior-frame"></div>
-    <img src="{$params.IMAGE_DIR}/advertisement/ArticleAds.png" width="240" usemap="#mapInterior" />
+    <img src="{$params.IMAGE_DIR}advertisement/ArticleAds.png" width="240" usemap="#mapInterior" />
 </div>
 
 <map name="mapInterior">

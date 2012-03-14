@@ -2,8 +2,6 @@
 require_once('../../../bootstrap.php');
 require_once('../../session_bootstrap.php');
 
-require_once(SITE_CORE_PATH.'privileges_check.class.php');
-
 use Message as m;
 
 if(!Acl::isMaster()) {
@@ -53,22 +51,22 @@ if(isset($action) ) {
 		case 'co':
 			//$commandToPerform = "svn --work-tree={$destination} --git-dir={$destination}/.git pull --rebase";
 		break;
-	
+
 		case 'status':
 			$commandToPerform = "git --work-tree={$destination} --git-dir={$destination}/.git status";
 		break;
 		case 'update':
 			$commandToPerform = "git pull --rebase";
 		break;
-	
+
 		case 'info':
 			$commandToPerform = 'svn info  --username '.$username.' --password '.$password.' '.$repository;
 		break;
-	
+
 		case 'list':
 			$commandToPerform = "git --work-tree=\"{$destination}/\" --git-dir=\"{$destination}.git/\" ls-files";
 		break;
-	
+
 		default:
 			Application::forward($_SERVER['PHP_SELF']);
 		break;

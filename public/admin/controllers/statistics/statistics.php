@@ -157,12 +157,12 @@ if(isset($action) ) {
             );
 
 
-            $urlLastVisits = $piwik['server_url'] . '?'.String_Utils::toHttpParams($httpParamsLastVisits);
-            $urlPageTitles = $piwik['server_url'] . '?'.String_Utils::toHttpParams($httpParamsPageTitles);
-            $urlListKeyword = $piwik['server_url'] . '?'.String_Utils::toHttpParams($httpParamsListKeywords);
-            $urlBestSearchEngines = $piwik['server_url'] . '?'.String_Utils::toHttpParams($httpParamsBestSearchEngines);
-            $urlExternalWebsites = $piwik['server_url'] . '?'.String_Utils::toHttpParams($httpParamsExternalWebsites);
-            $urlVisitorsBrowsers = $piwik['server_url'] . '?'.String_Utils::toHttpParams($httpParamsVisitorsBrowsers);
+            $urlLastVisits = $piwik['server_url'] . '?'.StringUtils::toHttpParams($httpParamsLastVisits);
+            $urlPageTitles = $piwik['server_url'] . '?'.StringUtils::toHttpParams($httpParamsPageTitles);
+            $urlListKeyword = $piwik['server_url'] . '?'.StringUtils::toHttpParams($httpParamsListKeywords);
+            $urlBestSearchEngines = $piwik['server_url'] . '?'.StringUtils::toHttpParams($httpParamsBestSearchEngines);
+            $urlExternalWebsites = $piwik['server_url'] . '?'.StringUtils::toHttpParams($httpParamsExternalWebsites);
+            $urlVisitorsBrowsers = $piwik['server_url'] . '?'.StringUtils::toHttpParams($httpParamsVisitorsBrowsers);
 
 
             $tpl->assign(
@@ -200,19 +200,19 @@ if(isset($action) ) {
             if ($type=='viewed') {
                 $title = "<h2>".sprintf(_("More seen in %s"), $tiempo)."</h2>";
                 $items = Dashboard::getMostViewed('Article',$category,$days);
-                String_Utils :: disabled_magic_quotes($items);
+                StringUtils :: disabled_magic_quotes($items);
                 $html_output = Dashboard::viewedTable($items, $title);
 
             } elseif ($type=='comented') {
                 $title = "<h2>".sprintf(_("Most commented %s"), $tiempo)."</h2>";
                 $items = Dashboard::getMostComented('Article',$category,$days);
-                String_Utils :: disabled_magic_quotes($items);
+                StringUtils :: disabled_magic_quotes($items);
                 $html_output = Dashboard::comentedTable($items, $title);
 
             } elseif ($type=='voted') {
                 $title = "<h2>".sprintf(_("Most voted %s"), $tiempo)."</h2>";
                 $items = Dashboard::getMostVoted('Article',$category,$days);
-                String_Utils :: disabled_magic_quotes($items);
+                StringUtils :: disabled_magic_quotes($items);
                 $html_output = Dashboard::votedTable($items, $title);
             }
 

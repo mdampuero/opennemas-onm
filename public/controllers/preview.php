@@ -78,10 +78,10 @@ if ($category_name == 'home') {
 }
 else
 {
-    $articles_home = 
-        $cm->find_by_category('Article', $category_name, 
+    $articles_home =
+        $cm->find_by_category('Article', $category_name,
                                 'contents.frontpage=1 AND contents.content_status=1 '.
-                                'AND contents.available=1  AND contents.fk_content_type=1 ', 
+                                'AND contents.available=1  AND contents.fk_content_type=1 ',
                                 'ORDER BY placeholder ASC, position ASC, created DESC');
 
     $articles_home = $cm->getInTime($articles_home);
@@ -100,7 +100,7 @@ else
         }
     }
 }
-    
+
 $articles_home = $cm->sortArrayofObjectsByProperty($articles_home, 'position');
 // }}}
 $tpl->assign('articles_home', $articles_home);
@@ -147,7 +147,7 @@ $tpl->assign('photos', $photos);
     }
 
     $column = array(); //Contendrá las noticias de la columna
-    $relia  = new Related_content();
+    $relia  = new RelatedContent();
      // $rating_bar_col1 = array();//Array que contiene las barras de votación de las noticias de la columna1
     $c = 0;
     $aux = 0;
@@ -216,10 +216,10 @@ $tpl->assign('photos', $photos);
    //  $tpl->assign('relationed_c1', $relat_c1);
     $tpl->assign('column', $column);
 
- 
+
     /************************************ END COLUMN1 **************************************************/
-    
-    
+
+
 /********************************* ADVERTISEMENTS  *********************************************/
 require_once ("index_advertisement.php");
 /********************************* ADVERTISEMENTS  *********************************************/

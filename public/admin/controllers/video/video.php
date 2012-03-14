@@ -281,7 +281,7 @@ switch ($action) {
         $video = new Video($id);
         $relations=array();
         $msg ='';
-        $relations = Related_content::get_content_relations($id);
+        $relations = RelatedContent::get_content_relations($id);
 
         if (!empty($relations)) {
             $msg = sprintf(_("<br>The video has some relations"));
@@ -306,7 +306,7 @@ switch ($action) {
         if (!empty($id)) {
             $video = new Video($id);
             //Delete relations
-            $rel= new Related_content();
+            $rel= new RelatedContent();
             $rel->delete_all($id);
             $video->delete( $id ,$_SESSION['userid'] );
         } else {
@@ -402,7 +402,7 @@ switch ($action) {
                 foreach($fields as $i ) {
                     $video = new Video($i);
                     $relations=array();
-                    $relations = Related_content::get_content_relations( $i );
+                    $relations = RelatedContent::get_content_relations( $i );
 
                     if (!empty($relations)) {
                         $msg .= " \"".$video->title."\", ";
@@ -438,7 +438,6 @@ switch ($action) {
 
             // FIXME: buscar otra forma de hacerlo
             /* Eliminar caché portada cuando actualizan orden opiniones {{{ */
-            require_once(SITE_CORE_PATH.'template_cache_manager.class.php');
             $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
             $tplManager->delete('home|0');
          }
@@ -448,6 +447,29 @@ switch ($action) {
              echo _("Unable to save the new positions. Please contact with your system administrator.");
          }
         exit(0);
+    break;
+
+
+    case 'content-list-provider':
+
+        $items_page = s::get('items_per_page') ?: 20;
+        $category = filter_input( INPUT_GET, 'category' , FILTER_SANITIZE_STRING, array('options' => array('default' => '0')) );
+        $page = filter_input( INPUT_GET, 'page' , FILTER_SANITIZE_STRING, array('options' => array('default' => '1')) );
+        $cm = new ContentManager();
+
+        list($videos, $pager) = $cm->find_pages('Video', 'available=1 ',
+                    'ORDER BY starttime DESC,  contents.title ASC ',
+                    $page, $items_page, $category);
+
+        $tpl->assign(array('contents'=>$videos,
+                            'contentTypeCategories'=>$parentCategories,
+                            'category' =>$category,
+                            'pagination'=>$pager->links
+                    ));
+
+        $html_out = $tpl->fetch("common/content_provider/_container-content-list.tpl");
+        Application::ajax_out($html_out);
+
     break;
 
     case 'config':
@@ -481,7 +503,7 @@ switch ($action) {
         $httpParams = array(
             array('action'=>'list'),
         );
-        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
 
         break;
 

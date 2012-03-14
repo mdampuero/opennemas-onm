@@ -397,7 +397,7 @@ switch ($action) {
 
         $relations=array();
         $msg ='';
-        $relations = Related_content::get_content_relations($id);
+        $relations = RelatedContent::get_content_relations($id);
 
         if (!empty($relations)) {
             $msg = sprintf(_("<br>The album has some relations"));
@@ -428,13 +428,12 @@ switch ($action) {
 
         if($id) {
             //Delete relations
-            $rel= new Related_content();
+            $rel= new RelatedContent();
             $rel->delete_all($id);
 
             $opinion = new Opinion($id);
             $opinion->delete($id, $_SESSION['userid']);
 
-            require_once(SITE_CORE_PATH.'template_cache_manager.class.php');
             $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
             $tplManager->delete('opinion|1');
         }
@@ -583,7 +582,7 @@ switch ($action) {
             if(is_array($fields)) {
                 foreach($fields as $i) {
                     $opinion = new Opinion($i);
-                    $rel = new Related_content();
+                    $rel = new RelatedContent();
                     $relationes = array();
                     $relationes = $rel->get_content_relations( $i );//de portada
 
@@ -623,7 +622,6 @@ switch ($action) {
 
             // FIXME: buscar otra forma de hacerlo
             /* Eliminar caché portada cuando actualizan orden opiniones {{{ */
-            require_once(SITE_CORE_PATH.'template_cache_manager.class.php');
             $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
             $tplManager->delete('home|0');
             /* }}} */
@@ -727,6 +725,23 @@ switch ($action) {
         Application::ajax_out($out);
     break;
 
+    case 'content-list-provider':
+        $items_page = s::get('items_per_page') ?: 20;
+        $page = filter_input( INPUT_GET, 'page' , FILTER_SANITIZE_STRING, array('options' => array('default' => '1')) );
+        $cm = new ContentManager();
+
+        list($opinions, $pager)= $cm->find_pages('Opinion', "available=1",
+                                                 'ORDER BY starttime DESC ',
+                                                  $page, $items_page);
+
+        $tpl->assign(array('contents'=>$opinions,
+                            'pagination'=>$pager->links
+                    ));
+
+        $html_out = $tpl->fetch("common/content_provider/_container-content-list.tpl");
+        Application::ajax_out($html_out);
+
+    break;
 
     case 'config':
 
@@ -752,7 +767,7 @@ switch ($action) {
         m::add(_('Settings saved successfully.'), m::SUCCESS);
 
         $httpParams = array(array('action'=>'list'),);
-        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
 
     break;
 

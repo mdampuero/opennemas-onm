@@ -52,7 +52,7 @@ if (
     $httpParams [] = array(
                         'action'=>'config',
                     );
-    Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+    Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
 }
 
 switch($action) {
@@ -185,7 +185,7 @@ switch($action) {
 
             // Redirect the user to the list of articles and show him/her an error message
             $httpParams []= array( 'error' => sprintf(_('ID "%d" doesn\'t exist'),$id));
-            Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+            Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
 
         }
 
@@ -209,7 +209,7 @@ switch($action) {
                         'frontpage' => 0,
                         'in_home' => 0,
                         'title_int' => $element->title,
-                        'metadata' => String_Utils::get_tags($element->title),
+                        'metadata' => StringUtils::get_tags($element->title),
                         'subtitle' => $element->pretitle,
                         'agency' => s::get('europapress_agency_string') ?: $element->agencyName,
                         'summary' => $element->summary,
@@ -236,7 +236,7 @@ switch($action) {
 
             $httpParams []= array( 'id' => $newArticleID,
                                   'action' => 'read');
-            Application::forward(SITE_URL_ADMIN.'/article.php' . '?'.String_Utils::toHttpParams($httpParams));
+            Application::forward(SITE_URL_ADMIN.'/article.php' . '?'.StringUtils::toHttpParams($httpParams));
 
         }
 
@@ -283,7 +283,7 @@ switch($action) {
                             array('page' => $page),
                             );
 
-        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
 
     } break;
 
@@ -296,7 +296,7 @@ switch($action) {
             array('action' => 'list'),
             array('page' => $page),
         );
-        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
 
     } break;
 
@@ -307,6 +307,6 @@ switch($action) {
             array('action','list'),
             array('page',$page),
         );
-        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($params));
+        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($params));
     } break;
 }

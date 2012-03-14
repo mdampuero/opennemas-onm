@@ -5,9 +5,6 @@
 require_once('../bootstrap.php');
 require_once('session_bootstrap.php');
 
-require_once(SITE_CORE_PATH.'privileges_check.class.php');
-require_once(SITE_CORE_PATH.'method_cache_manager.class.php');
-
 /**
  * Setup view
 */
@@ -25,7 +22,6 @@ switch ($action) {
         $captcha  = '';
 
         $user = new User();
-        // var_dump($_SESSION, $token);
 
         if ($_SESSION['csrf'] !== $token) {
             $tpl->assign('message', _('Login token is not valid. Try to autenticate again.'));
@@ -50,8 +46,8 @@ switch ($action) {
                         'realname'         => $user->firstname . " " . $user->lastname,
                         'username'         => $user->login,
                         'email'            => $user->email,
-                        'isAdmin'          => ( User_group::getGroupName($user->fk_user_group)=='Administrador' ),
-                        'isMaster'         => ( User_group::getGroupName($user->fk_user_group)=='Masters' ),
+                        'isAdmin'          => ( UserGroup::getGroupName($user->fk_user_group)=='Administrador' ),
+                        'isMaster'         => ( UserGroup::getGroupName($user->fk_user_group)=='Masters' ),
                         'privileges'       => Privilege::get_privileges_by_user($user->id),
                         'accesscategories' => $user->get_access_categories_id(),
                         'authMethod'       => $user->authMethod,
@@ -61,7 +57,7 @@ switch ($action) {
 
                     // Store default expire time
                     $app::setCookieSecure('default_expire', $user->sessionexpire, 0, '/admin/');
-                    Privileges_check::loadSessionExpireTime();
+                    PrivilegesCheck::loadSessionExpireTime();
                     $GLOBALS['Session']->cleanExpiredSessionFiles();
 
                     $forwardTo = filter_input(INPUT_POST, 'forward_to');

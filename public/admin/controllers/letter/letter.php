@@ -48,7 +48,7 @@ switch($action) {
 
         $filter = "content_status = ".$letterStatus;
         $items_page = s::get('items_per_page') ?: 20;
- 
+
         // ContentManager::find_pages(<TIPO>, <WHERE>, <ORDER>, <PAGE>, <ITEMS_PER_PAGE>, <CATEGORY>);
         list($letters, $pager)= $cm->find_pages('Letter', $filter.' ',
                                                  'ORDER BY  created DESC ', $page, $items_page);
@@ -196,6 +196,24 @@ switch($action) {
 
         Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&letterStatus=' .
                     $letterStatus . '&page=' . $page);
+    break;
+
+    case 'content-list-provider':
+        $items_page = s::get('items_per_page') ?: 20;
+        $page = filter_input( INPUT_GET, 'page' , FILTER_SANITIZE_STRING, array('options' => array('default' => '1')) );
+        $cm = new ContentManager();
+
+        list($letters, $pager)= $cm->find_pages('Letter', "available=1",
+                                                 'ORDER BY starttime DESC ',
+                                                  $page, $items_page);
+
+        $tpl->assign(array('contents'=>$letters,
+                            'pagination'=>$pager->links
+                    ));
+
+        $html_out = $tpl->fetch("common/content_provider/_container-content-list.tpl");
+        Application::ajax_out($html_out);
+
     break;
 
     default:

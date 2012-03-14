@@ -159,7 +159,7 @@ switch($action) {
     case 'test_script':
         Acl::checkOrForward('ADVERTISEMENT_ADMIN');
 
-        String_Utils::disabled_magic_quotes();
+        StringUtils::disabled_magic_quotes();
         $tpl->assign('script', $_POST['script']); // ten que vir por POST
 
         $tpl->display('advertisement/test_script.tpl');
@@ -190,9 +190,9 @@ switch($action) {
         if(isset($adv) && (!empty($adv))) {
             //Buscar foto where pk_foto=img1
             $photo1 = new Photo($adv);
+            $tpl->assign('photo1', $photo1);
         }
 
-        $tpl->assign('photo1', $photo1);
 
         $tpl->display('advertisement/new.tpl');
 

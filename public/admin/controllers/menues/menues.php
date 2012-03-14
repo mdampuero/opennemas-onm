@@ -94,7 +94,7 @@ switch($action) {
             }
         }
         $cm = new ContentManager();
-        $staticPages = $cm->find('Static_Page', '1=1', 'ORDER BY created DESC ');
+        $staticPages = $cm->find('StaticPage', '1=1', 'ORDER BY created DESC ');
         $menues = Menu::listMenues();
 
         $tpl->assign(array( 'categories'=> $parentCategories,
@@ -130,7 +130,7 @@ switch($action) {
             }
         }
         $cm = new ContentManager();
-        $staticPages = $cm->find('Static_Page', '1=1', 'ORDER BY created DESC ');
+        $staticPages = $cm->find('StaticPage', '1=1', 'ORDER BY created DESC ');
         $menues = Menu::listMenues();
 
         $tpl->assign(array( 'categories'=> $parentCategories,

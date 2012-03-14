@@ -15,7 +15,6 @@
 
 require_once('../../../bootstrap.php');
 require_once('../../session_bootstrap.php');
-require_once(SITE_CORE_PATH.'privileges_check.class.php');
 
 set_time_limit(0);
 //ignore_user_abort(true);

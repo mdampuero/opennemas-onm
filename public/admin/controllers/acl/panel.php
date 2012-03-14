@@ -10,7 +10,7 @@ require_once('../../session_bootstrap.php');
 */
 $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 
-if( Privileges_check::CheckPrivileges('USER_ADMIN') ) {
+if( PrivilegesCheck::CheckPrivileges('USER_ADMIN') ) {
     // Peticiones por Ajax
     if(
         isset($_SERVER['HTTP_X_REQUESTED_WITH'])

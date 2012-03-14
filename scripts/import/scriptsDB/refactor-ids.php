@@ -89,7 +89,7 @@ class refactorIds {
 
         $sql2=" ALTER TABLE `contents`
             ADD `params` LONGTEXT NULL,
-            ADD `category_name` VARCHAR( 255 ) NOT NULL COMMENT 'name category',           
+            ADD `category_name` VARCHAR( 255 ) NOT NULL COMMENT 'name category',
             DROP `archive`,
             DROP `paper_page`";
 
@@ -98,7 +98,7 @@ class refactorIds {
             printf( 'sqlExecute function: '. $this->orig->conn->ErrorMsg());
             $this->log('sqlExecute function: '.$this->orig->conn->ErrorMsg() );
 
-          
+
         }
        // $rss = $this->orig->conn->Execute($sql2);
         if (!$rss) {
@@ -148,9 +148,9 @@ INSERTAR;
         if (!$rss) {
             printf( 'sqlExecute function: '. $this->orig->conn->ErrorMsg());
             $this->log('sqlExecute function: '.$this->orig->conn->ErrorMsg() );
-            
+
         }
-    
+
 
         return true;
     }
@@ -161,10 +161,10 @@ INSERTAR;
      public function executeSqlFile($fileName) {
 
         $file = file_get_contents($fileName); // Leo el archivo
-   
+
         $tokens = preg_split("/;/", $file, null, PREG_SPLIT_NO_EMPTY);
         $length = count($tokens);
- 
+
           if ($length > 0) {
               foreach ($tokens as $sql) {
                 printf(  " \n - SENTENCE: {$sql} \n ");
@@ -172,7 +172,7 @@ INSERTAR;
                  if (!$rss) {
                     printf( 'ERROR '.$this->orig->conn->ErrorMsg() );
                     $this->log($this->orig->conn->ErrorMsg() );
-                     
+
                 }
               }
           }
@@ -207,7 +207,7 @@ INSERTAR;
       *
       */
      public function getContentTypes() {
-       
+
         $items = array();
         $sql = 'SELECT pk_content_type, name, title FROM content_types ';
 
@@ -249,7 +249,7 @@ INSERTAR;
             $this->log('insertRefactorID function: '.$this->orig->conn->ErrorMsg() );
             return false;
         }
-       
+
         return true;
     }
 
@@ -265,9 +265,9 @@ INSERTAR;
      */
 
     public function updateContent($contentID, $newID, $slug, $content_type) {
-       
+
         $values = array($newID, $slug, $contentID);
-         
+
         $sql = 'UPDATE `contents` SET `pk_content`=?, `slug`=? WHERE pk_content=?';
         $contentSql =  $this->orig->conn->Prepare($sql);
 
@@ -282,9 +282,9 @@ INSERTAR;
          //tables(articles, opinions,...)
         $pk_table = " pk_".strtolower($content_type);
         $table_name = strtolower($content_type). 's';
-         
+
         $sql = "UPDATE ". $table_name ." SET ".$pk_table."= ? WHERE ". $pk_table ."= ?";
-     
+
         $sqlTable = $this->orig->conn->Prepare($sql);
         $values = array($newID, $contentID);
 
@@ -321,7 +321,7 @@ INSERTAR;
     //content_positions
         $sql = "UPDATE content_positions SET `pk_fk_content`= ? WHERE `pk_fk_content` = ?";
         $sqlList[] = $this->orig->conn->Prepare($sql);
- 
+
     // comments
         $sql = "UPDATE comments SET `pk_comment`= ? WHERE  `pk_comment`= ?";
         $sql2 =" UPDATE comments SET `fk_content`= ? WHERE  `fk_content`= ?";
@@ -345,7 +345,7 @@ INSERTAR;
     //ratings
         $sql = "UPDATE ratings SET `pk_rating`= ? WHERE  `pk_rating`= ?";
         $sqlList[] = $this->orig->conn->Prepare($sql);
-    
+
 
         return $sqlList;
     }
@@ -388,7 +388,7 @@ INSERTAR;
      */
 
     public function updateTables($sqlList,$values) {
-      
+
         foreach($sqlList as $sql) {
             var_dump($sql);
             $rss = $this->orig->conn->Execute($sql,$values);
@@ -413,7 +413,7 @@ INSERTAR;
     public function refactorDB() {
 
         $content_types = $this->getContentTypes();
-        
+
         $newID = 1;
         $values = array();
         $contents = $this->getContents(); //get utils data contents
@@ -421,13 +421,13 @@ INSERTAR;
 
         foreach ($contents as $content) {
 
-            $slug = String_Utils::get_title( $content["title"] );
+            $slug = StringUtils::get_title( $content["title"] );
             $content_type = $content["fk_content_type"];
             $contentID = $content['pk_content'];
 
             $resp = $this->updateContent($contentID, $newID, $slug, $content_types[$content_type]);
             //   var_dump($contentID.", $newID, $slug, $content_type, ".$content_types[$content_type]);
-          
+
             if ($resp) {
 
                 $this->insertRefactorID($contentID, $newID, $content_types[$content_type]);
@@ -446,7 +446,7 @@ INSERTAR;
         unset ($contents);
 
         return true;
-        
+
     }
 
 
@@ -477,7 +477,7 @@ INSERTAR;
 
     public function refactorSecondaryTables() {
 
-        
+
         $values =  $this->getIds();
         printf('\n \n get values ok');
         $sqlList = $this->prepareSecondaryTables();
@@ -504,7 +504,7 @@ INSERTAR;
         unset ($sqlList);
 
     }
-    
+
     /**
      * Change openhost workers to master users
      *
@@ -566,4 +566,3 @@ INSERTAR;
     }
 
 }
- 
