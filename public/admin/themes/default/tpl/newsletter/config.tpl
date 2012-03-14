@@ -30,6 +30,7 @@
 jQuery(document).ready(function($){
     var newsletterStatus = $('#newsletter_enable');
     var newsletterType = $('#newsletter_subscriptionType');
+    var reCaptcha = '{$missing_recaptcha}';
 
     //If selected manage newsletter by e-mail, show e-mail address field
     newsletterType.on('change', function() {
@@ -44,7 +45,7 @@ jQuery(document).ready(function($){
 
     //If newsletter is changed to activated and recaptcha is missing show warning
     newsletterStatus.on('change', function() {
-        if ($(this).val() == 'yes' && {$missing_recaptcha}) {
+        if ($(this).val() == 'yes' && reCaptcha) {
             $('#warnings-validation').replaceWith('<div class="notice">{t escape=off}Before using newsletter you have to fill the <a href="/admin/controllers/system_settings/system_settings.php#external"  target="_blank">reCaptcha keys on system settings</a>{/t}</div>');
         } else {
             if ($('div.notice')) {
@@ -55,7 +56,7 @@ jQuery(document).ready(function($){
 
     //If newsletter is activated and recaptcha is missing don't send form
     $('#formulario').on('submit', function(){
-        if (newsletterStatus.val() == 'yes' && {$missing_recaptcha}) {
+        if (newsletterStatus.val() == 'yes' && reCaptcha) {
             if ($('#warnings-validation')) {
                 $('#warnings-validation').replaceWith('<div class="notice">{t escape=off}Before using newsletter you have to fill the <a href="/admin/controllers/system_settings/system_settings.php#external"  target="_blank">reCaptcha keys on system settings</a>{/t}</div>');
 
