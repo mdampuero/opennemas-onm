@@ -20,9 +20,7 @@
     {block name="header-css"}
         {css_tag href="/bootstrap/bootstrap.css"}
         {css_tag href="/style.css"}
-        {css_tag href="/admin.css"}
         <!--[if IE]>{css_tag href="/ie.css"}<![endif]-->
-        {css_tag href="/buttons.css"}
         {css_tag href="/jquery/jquery-ui.css" media="all" type="text/css"}
 	{/block}
 

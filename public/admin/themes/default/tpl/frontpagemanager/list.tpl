@@ -2,7 +2,6 @@
 
 {block name="header-css" append}
     {css_tag href="/bp/screen.css"}
-    {css_tag href="/bp/print.css" media="print"}
     <!--[if IE]>{css_tag href="/bp/ie.css"}<![endif]-->
     {css_tag href="/frontpagemanager.css"}
     {css_tag href="/jquery/colorbox.css" media="screen"}
