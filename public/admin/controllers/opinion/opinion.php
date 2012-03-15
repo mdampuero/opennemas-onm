@@ -782,18 +782,23 @@ switch ($action) {
             // Fetching opinions
             $sqlExcludedOpinions = '';
             if(count($contentElementsInFrontpage) > 0) {
-                $opinionsExcluded = implode(', ', $contentElementsInFrontpage);
+                $opinionsExcluded    = implode(', ', $contentElementsInFrontpage);
                 $sqlExcludedOpinions = ' AND `pk_opinion` NOT IN ('.$opinionsExcluded.')';
             }
 
             list($opinions, $pager) = $cm->find_pages(
                 'Opinion',
                 'contents.available=1'. $sqlExcludedOpinions,
-                'ORDER BY created DESC ', ($page-1)*5, 5
+                'ORDER BY created DESC ', $page, 5
             );
+
+            foreach ($opinions as $opinion) {
+                $opinion->author = new Author($opinion->fk_author);
+            }
 
             $tpl->assign(array(
                 'opinions' => $opinions,
+                'pager'    => $pager,
             ));
 
             $tpl->display('opinion/content-provider.tpl');

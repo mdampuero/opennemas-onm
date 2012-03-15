@@ -1638,7 +1638,7 @@ if (isset($_REQUEST['action']) ) {
         case 'content-provider-suggested':
 
             $category = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_STRING,   array('options' => array( 'default' => 'home')));
-            $page     = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_STRING,   array('options' => array( 'default' => 1)));
+            $page     = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_NUMBER_INT,   array('options' => array( 'default' => 1)));
 
             if ($category == 'home') { $category = 0; }
 
@@ -1657,7 +1657,7 @@ if (isset($_REQUEST['action']) ) {
             list($articles, $pager) = $cm->find_pages(
                 'Article',
                 'contents.available=1 AND in_litter != 1 AND in_home=2'. $sqlExcludedOpinions,
-                ' ORDER BY created DESC ', ($page-1), 5
+                ' ORDER BY created DESC ', $page, 5
             );
 
             $tpl->assign(array(
@@ -1672,7 +1672,7 @@ if (isset($_REQUEST['action']) ) {
         case 'content-provider-category':
 
             $category = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_STRING,   array('options' => array( 'default' => 'home')));
-            $page     = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_STRING,   array('options' => array( 'default' => 1)));
+            $page     = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_NUMBER_INT,   array('options' => array( 'default' => 1)));
 
             if ($category == 'home') { $category = 0; }
 
@@ -1690,7 +1690,7 @@ if (isset($_REQUEST['action']) ) {
 
             list($articles, $pager) = $cm->find_pages(
                 'Article',
-                'contents.available=1'. $sqlExcludedOpinions, 'ORDER BY created DESC', ($page-1)*5, 5, $category
+                'contents.available=1 '. $sqlExcludedOpinions, 'ORDER BY created DESC ', $page, 5, $category
             );
 
             $tpl->assign(array(
@@ -1705,8 +1705,8 @@ if (isset($_REQUEST['action']) ) {
 		case 'content-list-provider':
 
             $items_page = s::get('items_per_page') ?: 20;
-            $category = filter_input( INPUT_GET, 'category' , FILTER_SANITIZE_STRING, array('options' => array('default' => '0')) );
-            $page = filter_input( INPUT_GET, 'page' , FILTER_SANITIZE_STRING, array('options' => array('default' => '1')) );
+            $category   = filter_input( INPUT_GET, 'category' , FILTER_SANITIZE_STRING, array('options' => array('default' => '0')) );
+            $page       = filter_input( INPUT_GET, 'page' , FILTER_SANITIZE_NUMBER_INT, array('options' => array('default' => '1')) );
             $cm = new ContentManager();
 
             list($articles, $pages) = $cm->find_pages('Article',
@@ -1714,14 +1714,15 @@ if (isset($_REQUEST['action']) ) {
                         'ORDER BY frontpage DESC, starttime DESC,  contents.title ASC ',
                         $page, $items_page, $category);
 
-            $tpl->assign(array('contents'=>$articles,
-                                'contentTypeCategories'=>$allcategorys,
-                                'category' =>$category,
-                                'pagination'=>$pages->links
-                        ));
+            $tpl->assign(array(
+                'contents'=>$articles,
+                'contentTypeCategories'=>$allcategorys,
+                'category' =>$category,
+                'pagination'=>$pages->links
+            ));
 
-            $html_out = $tpl->fetch("common/content_provider/_container-content-list.tpl");
-            Application::ajax_out($html_out);
+            $htmlOut = $tpl->fetch("common/content_provider/_container-content-list.tpl");
+            Application::ajax_out($htmlOut);
 
         default: {
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);

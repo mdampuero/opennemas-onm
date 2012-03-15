@@ -1,9 +1,9 @@
-<div data-content-id="{$content->id}" data-class="Opinion" class="content-provider-element clearfix">
+<div data-content-id="{$content->id}" data-class="Album" class="content-provider-element clearfix">
     <div class="description">
-        <input type="checkbox" class="action-button" name="selected-{$smarty.foreach.opinions_loop.index}">
+        <input type="checkbox" class="action-button" name="selected-{$smarty.foreach.album_loop.index}">
         <div class="title">
-            <span class="type">{t}Opinion{/t}</span>
-            {$content->author->name} - {$content->title}
+            <span class="type">Album</span>
+            {$content->title}
         </div>
     </div>
     <div class="content-action-buttons btn-group">
@@ -13,12 +13,12 @@
         </a>
         <ul class="dropdown-menu">
             <li>
-                <a title="{t 1=$content->title}Edit '%1'{/t}" href="/admin/controllers/opinion/opinion.php?action=delete&amp;id={$content->id}">
+                <a title="{t 1=$content->title}Edit '%1'{/t}" href="/admin/controllers/album/album.php?action=delete&amp;id={$content->id}">
                     <i class="icon-pencil"></i> {t}Edit{/t}
                 </a>
             </li>
             <li>
-                <a href="#" title="{t}Delete{/t}" class="drop-delete">
+                <a href="#" title="{t}Delete{/t}" class="drop-element">
                     <i class="icon-trash"></i> {t}Remove{/t}
                 </a>
             </li>
@@ -43,3 +43,5 @@
         </ul>
     </div>
 </div>
+
+

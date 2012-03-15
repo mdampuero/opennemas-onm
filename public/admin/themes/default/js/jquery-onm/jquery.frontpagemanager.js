@@ -75,7 +75,8 @@ jQuery(document).ready(function($){
         },
         load: function(event,ui) {
             makeContentProviderAndPlaceholdersSortable();
-        }
+        },
+        fx: { opacity: 'toggle', duration: 'fast' }
     });
 
     $( "#content-provider").on('click', '.pagination a', function(e, ui){

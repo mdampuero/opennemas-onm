@@ -429,7 +429,37 @@ switch($action) {
     break;
 
     case 'content-provider':
-        echo 'Not implemented';
+
+        $category = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_STRING,   array('options' => array( 'default' => 'home')));
+        $page     = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_NUMBER_INT,   array('options' => array( 'default' => 1)));
+
+        if ($category == 'home') { $category = 0; }
+
+        $cm = new  ContentManager();
+
+        // Get contents for this home
+        $contentElementsInFrontpage  = $cm->getContentsIdsForHomepageOfCategory($category);
+
+        // Fetching opinions
+        $sqlExcludedOpinions = '';
+        if (count($contentElementsInFrontpage) > 0) {
+            $contentsExcluded    = implode(', ', $contentElementsInFrontpage);
+            $sqlExcludedOpinions = ' AND `pk_video` NOT IN ('.$contentsExcluded.')';
+        }
+
+        list($albums, $pager) = $cm->find_pages(
+            'Album',
+            'contents.available=1 ', 'ORDER BY created DESC ', $page, 5
+        );
+
+
+        $tpl->assign(array(
+            'albums' => $albums,
+            'pager'  => $pager,
+        ));
+
+        $tpl->display('album/content-provider.tpl');
+
         break;
 
     default:

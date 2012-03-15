@@ -383,7 +383,7 @@ class Video extends Content
      **/
     public function render($params)
     {
-        return 'not implemented';
+        return "\n<!-- album rendering not implemented -->\n";
     }
 
 }

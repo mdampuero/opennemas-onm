@@ -829,7 +829,7 @@ class Article extends Content
         }
 
         $tpl->assign('item',$this);
-        $tpl->assign('cssclass', 'article');
+        $tpl->assign('cssclass', $params['cssclass']);
 
         try {
             $html = $tpl->fetch($params['tpl']);

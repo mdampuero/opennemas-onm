@@ -314,4 +314,14 @@ class Album extends Content
         }
         return $this;
     }
+
+    /**
+     * Renders the album
+     *
+     * @return void
+     **/
+    public function render($params, $smarty)
+    {
+        return "\n<!-- album rendering not implemented -->\n";
+    }
 }
