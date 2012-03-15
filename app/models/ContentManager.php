@@ -179,7 +179,7 @@ class ContentManager
         foreach ($contentsArray as $element) {
             $content = new $element['content_type']($element['id']);
 
-            if (!array_key_exists('params', $element)) {
+            if (!array_key_exists('params', $element) || empty($element['params'])) {
                 $element['params'] = serialize(array());
             }
             // only add it to the final results if is not in litter
@@ -1267,11 +1267,9 @@ class ContentManager
         $total_contents=$this->count($content_type, $filter, $pk_fk_content_category);
         if(empty($page)) {
             $page = 1;
-        }
-        if(empty($page)) {
             $items_page=10;
         }
-        $_limit='LIMIT '.($page-1)*$items_page.', '.($items_page);
+        $_limit=' LIMIT '.($page-1)*$items_page.', '.($items_page);
 
 
         if( intval($pk_fk_content_category) > 0) {
@@ -1281,8 +1279,11 @@ class ContentManager
                  $_order_by.$_limit;
         } else {
             $sql = 'SELECT * FROM `contents`, `'.$this->table.'` ' .
-                    ' WHERE '.$_where.' AND `contents`.`pk_content`=`'.$this->table.'`.`pk_'.$this->content_type.'` '.$_order_by.$_limit;
+                    ' WHERE '.$_where.' AND `contents`.`pk_content`=`'.$this->table.'`.`pk_'.$this->content_type.'` '.$_order_by.' '.$_limit;
         }
+// print_r($sql);
+// var_dump($page, $items_page);die();
+
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
 

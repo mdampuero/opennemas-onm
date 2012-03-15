@@ -279,7 +279,7 @@ class Efe implements \Onm\Import\Importer
                 continue;
             }
 
-            if (($params['title'] != '*') 
+            if (($params['title'] != '*')
                 && !($element->hasContent($params['title'])))
             {
                 continue;
