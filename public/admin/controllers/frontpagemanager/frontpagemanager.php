@@ -174,17 +174,11 @@ switch ($action) {
         $subcategory_name = filter_input(INPUT_GET,'subcategory_name',FILTER_SANITIZE_STRING);
 
         $tpl     = new Template(TEMPLATE_USER);
-        $tpl->setConfig('frontpages');
-        $cacheID = $tpl->generateCacheId($category_name, $subcategory_name, 0 /*$cache_page*/);
+        $tpl->caching = false;
 
         // Initialize the Content and Database object
         $ccm = ContentCategoryManager::get_instance();
         list($category_name, $subcategory_name) = $ccm->normalize($category_name, $subcategory_name);
-        $section = (!empty($subcategory_name))? $subcategory_name: $category_name;
-        $section = (is_null($section))? 'home': $section;
-
-        $tpl->loadConfigOrDefault('template.conf', $section);
-        unset($section);
 
         $actual_category = (!isset($subcategory_name))? $category_name : $subcategory_name;
 
@@ -219,7 +213,6 @@ switch ($action) {
         $column = array();
         // Overloading information for contents
         foreach ($contentsInHomepage as &$content) {
-
             // Load category related information
             $content->category_name  = $content->loadCategoryName($content->id);
             $content->category_title = $content->loadCategoryTitle($content->id);
@@ -235,8 +228,7 @@ switch ($action) {
         //TODO: Move to a widget. Used in all templates
         require_once SITE_PATH."/controllers/widget_static_pages.php";
 
-
-        $tpl->display('frontpage/frontpage.tpl', $cacheID);
+        $tpl->display('frontpage/frontpage.tpl');
 
         break;
 
