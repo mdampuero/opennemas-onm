@@ -1,4 +1,4 @@
-<div data-content-id="{$content->id}" data-class="Video" class="content-provider-element clearfix">
+<div data-content-id="{$content->id}" data-class="Video" class="content-provider-element {schedule_class item=$content} clearfix">
     <div class="description">
         <input type="checkbox" class="action-button" name="selected-{$smarty.foreach.video_loop.index}">
         <div class="title">

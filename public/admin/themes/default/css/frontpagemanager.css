@@ -343,3 +343,8 @@ div#content-provider #toggler{
     border: 1px solid #444444;
     color: White !important;
 }
+
+.scheduled { border-left:3px solid Black !important; }
+.scheduled.intime { border-left-color: Green !important; }
+.scheduled.dued { border-left-color: Red !important; }
+.scheduled.postponed { border-left-color: Blue !important; }

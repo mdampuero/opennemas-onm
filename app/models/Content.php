@@ -905,6 +905,41 @@ class Content
     }
 
     /**
+     * Check if this content is postponed
+     *
+     * @return boolean
+     */
+    public function isPostponed()
+    {
+        // If new < starttime
+        $start   = strtotime($this->starttime);
+        $now = time();
+
+        if (!empty($start)) {
+            return ($now < $start);
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if this content is dued
+     *
+     * @return boolean
+     */
+    public function isDued()
+    {
+        $end   = strtotime($this->endtime);
+        $now   = time();
+
+        if (!empty($end) && !preg_match('/0000\-00\-00 00:00:00/', $this->endtime)) {
+            return $end < $now;
+        }
+
+        return false;
+    }
+
+    /**
      * Check if this content is obsolete
      *
      * @return boolean
