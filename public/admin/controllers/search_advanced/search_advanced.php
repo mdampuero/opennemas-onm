@@ -159,6 +159,21 @@ switch ($action) {
     break;
 
     case 'content-provider':
+        $searchString = '';
+
+        if (($searchString = $request->get('search_string')) != '') {
+            // Add logic here to calculte the results variable
+            $results= array();
+            for ($i=0; $i < 2; $i++) {
+                $element = new stdClass();
+                $element->id   = $i;
+                $element->name = 'title '.$i;
+                $results []= $element;
+            }
+            $tpl->assign('results', $results);
+        }
+
+        $tpl->assign('search_string', $searchString);
         $tpl->display('search_advanced/content-provider.tpl');
         break;
 

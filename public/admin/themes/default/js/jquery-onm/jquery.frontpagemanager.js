@@ -1,31 +1,29 @@
+makeContentProviderAndPlaceholdersSortable = function () {
+    // Make content providers sortable and allow to D&D over the placeholders
+    jQuery('div#content-provider .ui-tabs-panel > div').sortable({
+        connectWith: "div.placeholder div.content",
+        placeholder: 'placeholder-element',
+        update: function(event,ui) {
+            jQuery('#warnings-validation').html('<div class="notice">'+frontpage_messages.remember_save_positions+'</div>');
+        }
+        //containment: '#content-with-ticker'
+    }).disableSelection();
+
+    // Make content providers sortable and allow to D&D over placeholders and content provider
+    jQuery('div.placeholder div.content').sortable({
+        connectWith: "div#content-provider .ui-tabs-panel > div, div.placeholder div.content",
+        placeholder: 'placeholder-element',
+        update: function(event,ui) {
+            jQuery('#warnings-validation').html('<div class="notice">'+frontpage_messages.remember_save_positions+'</div>');
+        }
+        //containment: '#content-with-ticker'
+    }).disableSelection();
+};
 jQuery(document).ready(function($){
 
     /***************************************************************************
     * Sortable handlers
     ***************************************************************************/
-
-    makeContentProviderAndPlaceholdersSortable = function () {
-        // Make content providers sortable and allow to D&D over the placeholders
-        jQuery('div#content-provider .ui-tabs-panel > div').sortable({
-            connectWith: "div.placeholder div.content",
-            placeholder: 'placeholder-element',
-            update: function(event,ui) {
-                jQuery('#warnings-validation').html('<div class="notice">'+frontpage_messages.remember_save_positions+'</div>');
-            }
-            //containment: '#content-with-ticker'
-        }).disableSelection();
-
-        // Make content providers sortable and allow to D&D over placeholders and content provider
-        jQuery('div.placeholder div.content').sortable({
-            connectWith: "div#content-provider .ui-tabs-panel > div, div.placeholder div.content",
-            placeholder: 'placeholder-element',
-            update: function(event,ui) {
-                jQuery('#warnings-validation').html('<div class="notice">'+frontpage_messages.remember_save_positions+'</div>');
-            }
-            //containment: '#content-with-ticker'
-        }).disableSelection();
-    };
-
     makeContentProviderAndPlaceholdersSortable();
 
     /***************************************************************************

@@ -76,6 +76,7 @@ switch ($action) {
         $layout = $lm->render(array(
             'contents'  => $contentElementsInFrontpage,
             'home'      => ($categoryID == 0),
+            'smarty'    => $tpl,
         ));
 
         $tpl->assign(array(
