@@ -139,25 +139,22 @@ class LayoutManager
     public function renderContentsForPlaceholder($placeholderName)
     {
         if (isset($this->contents) && count($this->contents) > 0) {
-
-            //$tpl = new \Template(TEMPLATE_ADMIN);
             $output = '';
-            $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
             foreach ($this->contents as $content) {
                 if ($content->placeholder == $placeholderName) {
                     $contentTypeName = $content->content_type_name;
+                    // TODO: Add logic here for delayed, in time or postponed elements
+                    // that will be passed to the view
                     if (!empty($contentTypeName)) {
-                        $tpl->assign('content',$content);
-                        $tpl->assign('params',$this->params);
-                        $output .= $tpl->fetch(strtolower($content->content_type_name).'/content-provider/'.strtolower($content->content_type_name).".tpl");
+                        $this->tpl->assign('content',$content);
+                        $this->tpl->assign('params',$this->params);
+                        $output .= $this->tpl->fetch(strtolower($content->content_type_name).'/content-provider/'.strtolower($content->content_type_name).".tpl")."\n";
                     }
                 }
             }
             return $output;
         }
     }
-
-
 
     /**
      * Renders the frontpage layout.
@@ -166,6 +163,13 @@ class LayoutManager
      **/
     public function render($params = array())
     {
+        // For bost performance by sharing the same view instance througth
+        // rendering process.
+        if (array_key_exists('smarty', $params)) {
+            $this->tpl = clone $params['smarty'];
+        } else {
+            $this->tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
+        }
 
         if (isset($params['contents'])) {
             $this->contents = $params['contents'];
