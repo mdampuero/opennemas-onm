@@ -128,7 +128,9 @@ switch($action) {
 
         $categories = \Onm\Import\DataSource\NewsMLG1::getOriginalCategories();
 
-        $find_params = array(
+        $itemsPage =  s::get('items_per_page') ?: 20;
+
+        $findParams = array(
             'category' => filter_input(
                 INPUT_GET, 'filter_category' , FILTER_SANITIZE_STRING,
                 array('options' => array('default' => '*'))
@@ -137,25 +139,25 @@ switch($action) {
                 INPUT_GET, 'filter_title', FILTER_SANITIZE_STRING,
                 array('options' => array('default' => '*'))
             ),
+            'page'       => filter_input(
+                INPUT_GET, 'page' , FILTER_SANITIZE_STRING,
+                array('options' => array('default' => 0))
+            ),
+            'items_page' => $itemsPage,
         );
 
+        list($countTotalElements, $elements) = $efe->findAll($findParams);
 
-
-        $elements = $efe->findAll($find_params);
-
-        $items_page = s::get('items_per_page') ?: 20;
         // Pager
-        $pager_options = array(
+        $pagerOptions = array(
             'mode'        => 'Sliding',
-            'perPage'     => $items_page,
+            'perPage'     => $itemsPage,
             'delta'       => 4,
             'clearIfVoid' => true,
             'urlVar'      => 'page',
-            'totalItems'  => count($elements),
+            'totalItems'  => $countTotalElements,
         );
-        $pager = Pager::factory($pager_options);
-
-        $elements = array_slice($elements, ($page-1)*$items_page, $items_page);
+        $pager = Pager::factory($pagerOptions);
 
         $urns = array();
         foreach ($elements as $element) {
@@ -165,11 +167,11 @@ switch($action) {
 
         $tpl->assign(
             array(
-                'elements'      =>  $elements,
-                'already_imported' => $alreadyImported,
-                'categories'    =>  $categories,
-                'minutes'       =>  $minutesFromLastSync,
-                'pagination'    =>  $pager,
+                'elements'         =>  $elements,
+                'already_imported' =>  $alreadyImported,
+                'categories'       =>  $categories,
+                'minutes'          =>  $minutesFromLastSync,
+                'pagination'       =>  $pager,
             )
         );
 

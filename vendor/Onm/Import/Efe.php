@@ -261,9 +261,16 @@ class Efe implements \Onm\Import\Importer
     public function findAll($params = array())
     {
 
-        //$synchronizer = new \Onm\Import\Synchronizer\FTP($this->syncPath);
+        $filesSynced = $this->getLocalFileList($this->syncPath);
+        rsort($filesSynced, SORT_STRING);
 
-        $files = $this->getLocalFileList($this->syncPath);
+        $counTotalElements = count($filesSynced);
+        if (array_key_exists('items_page', $params) && array_key_exists('page', $params)) {
+            $files = array_slice($filesSynced, $params['items_page'] * $params['page'], $params['items_page']);
+        } else {
+            $files = $filesSynced;
+        }
+        unset($filesSynced);
 
         $elements = array();
         $elementsCount = 0;
@@ -279,7 +286,7 @@ class Efe implements \Onm\Import\Importer
                 continue;
             }
 
-            if (($params['title'] != '*') 
+            if (($params['title'] != '*')
                 && !($element->hasContent($params['title'])))
             {
                 continue;
@@ -304,7 +311,7 @@ class Efe implements \Onm\Import\Importer
 
         usort($elements, create_function('$a,$b', 'return  $b->created_time->getTimestamp() - $a->created_time->getTimestamp();'));
 
-        return $elements;
+        return array($counTotalElements, $elements);
 
     }
 
