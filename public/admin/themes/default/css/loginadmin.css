@@ -22,9 +22,13 @@ html[xmlns] .clearfix
 {
 		height: 1%;
 }
+html {
+	background:none !important;
+	overflow-y: visible !important;
+}
 
 #logo {
-	margin:240px auto;
+	margin:210px auto;
 	margin-bottom:40px;
 	text-align:center;
 }
@@ -42,7 +46,7 @@ html[xmlns] .clearfix
 }
 
 body {
-	background:#1a1a1a url('../images/backgrounds/a_auth_body_bg.jpg') top left repeat-x;
+	background:#1a1a1a url('../images/backgrounds/a_auth_body_bg.jpg') top left repeat-x !important;
 	color:White;
 	font-family:Ubuntu,Arial;
 }
