@@ -10,10 +10,10 @@
 
     <meta name="author"    content="OpenHost,SL">
     <meta name="generator" content="OpenNemas - News Management System">
-    <meta name="viewport" content="width=device-width">
+    <meta name="viewport"  content="width=device-width">
 
     {block name="meta"}
-        <title>{setting name=site_name} - OpenNeMaS - Administration section</title>
+        <title>{setting name=site_name} - OpenNeMaS administration</title>
     {/block}
 
     <link rel="icon" href="{$params.IMAGE_DIR}favicon.png">
