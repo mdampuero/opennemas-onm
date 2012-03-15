@@ -93,10 +93,11 @@ switch($action) {
      * Step 1: list all articles available in frontpage
      */
     case 'listArticles':
-    /**
-     * Check if module is configured, if not redirect to configuration form
-    */
-    if (is_null(s::get('newsletter_maillist')) || !(s::get('newsletter_subscriptionType'))) {
+    //Check if module is configured, if not redirect to configuration form
+    if (is_null(s::get('newsletter_maillist'))
+        || !(s::get('newsletter_subscriptionType'))
+        || !(s::get('newsletter_enable')))
+    {
         m::add(_('Please provide your Newsletter configuration to start to use your Newsletter module'));
         $httpParams [] = array(
                             'action'=>'config',
@@ -312,14 +313,25 @@ switch($action) {
         $configurationsKeys = array(
                                     'newsletter_maillist',
                                     'newsletter_subscriptionType',
+                                    'newsletter_enable',
+                                    'recaptcha',
                                     );
 
         $configurations = s::get($configurationsKeys);
 
+        //Check that user has configured reCaptcha keys if newsletter is enabled
+        $missingRecaptcha = false;
+        if (empty($configurations['recaptcha']['public_key'])
+             || empty($configurations['recaptcha']['private_key']))
+        {
+            $missingRecaptcha = true;
+        }
+
         $tpl->assign(
                      array(
                             'configs'   => $configurations,
-                        )
+                            'missing_recaptcha'   => $missingRecaptcha,
+                          )
                     );
 
         $tpl->display('newsletter/config.tpl');
