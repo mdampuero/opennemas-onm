@@ -188,6 +188,12 @@ class Template extends Smarty
         $this->configLoad('cache.conf', $section);
         $config = $this->getConfigVars();
 
+        if (!array_key_exists('caching', $config) || empty($config['caching'])) {
+            $config['caching'] = 0;
+        }
+        if (!array_key_exists('cache_lifetime', $config) || empty($config['cache_lifetime'])) {
+            $config['cache_lifetime'] = 86400;
+        }
         $this->caching = $config['caching'];
         $this->cache_lifetime = $config['cache_lifetime'];
     }
