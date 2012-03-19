@@ -5,10 +5,11 @@
 */
 require_once('../bootstrap.php');
 use Onm\Settings as s;
+
 /**
  * Redirect Mobile browsers to mobile site unless a cookie exists.
 */
-$app->mobileRouter();
+// $app->mobileRouter();
 
 /**
  * Setup view
@@ -90,42 +91,11 @@ if($_REQUEST['action']=='vote' ||  $_REQUEST['action']=='rating' ) {
 if(isset($_REQUEST['action']) ) {
     switch($_REQUEST['action']) {
         case 'read': {
+
             // Load config
             $tpl->setConfig('articles');
 
-            /******************************  BREADCRUB *********************************/
-            $str = new StringUtils();
-            $title = $str->get_title($article->title);
 
-            $print_url = '/imprimir/' . $title. '/' . $category_name . '/';
-
-            $breadcrub   = array();
-            $breadcrub[] = array('text' => $ccm->get_title($category_name),
-                                 'link' => '/seccion/' . $category_name . '/' );
-            if(!empty($subcategory_name)) {
-                $breadcrub[] = array(
-                    'text' => $ccm->get_title($subcategory_name),
-                    'link' => '/seccion/' . $category_name . '/' . $subcategory_name . '/'
-                );
-                $print_url .= $subcategory_name . '/';
-            }
-
-            $print_url .= $dirtyID . '.html';
-            $tpl->assign('print_url', $print_url);
-            $tpl->assign('sendform_url', '/controllers/article.php?action=sendform&article_id=' . $_GET['article_id'] . '&category_name=' .
-                                        $category_name . '&subcategory_name=' . $subcategory_name);
-
-            // Check if $section is "in menu" then show breadcrub
-            $cat = $ccm->getByName($section);
-            if(!is_null($cat) && $cat->inmenu) {
-                $tpl->assign('breadcrub', $breadcrub);
-            }
-
-
-
-            /******************************  CATEGORIES & SUBCATEGORIES  ******/
-            require_once ("index_sections.php");
-            /******************************  CATEGORIES & SUBCATEGORIES  ******/
 
             $tpl->assign('category_name', $_GET['category_name']);
 
@@ -137,6 +107,38 @@ if(isset($_REQUEST['action']) ) {
 
                 // Increment numviews if it's accesible
                 Content::setNumViews($article->pk_article);
+
+                /******************************  BREADCRUB *********************************/
+                $str = new StringUtils();
+                $title = $str->get_title($article->title);
+
+                $print_url = '/imprimir/' . $title. '/' . $category_name . '/';
+
+                $breadcrub   = array();
+                $breadcrub[] = array('text' => $ccm->get_title($category_name),
+                                     'link' => '/seccion/' . $category_name . '/' );
+                if(!empty($subcategory_name)) {
+                    $breadcrub[] = array(
+                        'text' => $ccm->get_title($subcategory_name),
+                        'link' => '/seccion/' . $category_name . '/' . $subcategory_name . '/'
+                    );
+                    $print_url .= $subcategory_name . '/';
+                }
+
+                $print_url .= $dirtyID . '.html';
+                $tpl->assign('print_url', $print_url);
+                $tpl->assign('sendform_url', '/controllers/article.php?action=sendform&article_id=' . $_GET['article_id'] . '&category_name=' .
+                                            $category_name . '&subcategory_name=' . $subcategory_name);
+
+                // Check if $section is "in menu" then show breadcrub
+                $cat = $ccm->getByName($section);
+                if(!is_null($cat) && $cat->inmenu) {
+                    $tpl->assign('breadcrub', $breadcrub);
+                }
+
+                /******************************  CATEGORIES & SUBCATEGORIES  ******/
+                require_once ("index_sections.php");
+                /******************************  CATEGORIES & SUBCATEGORIES  ******/
                 if(isset($subcategory_name) && !empty($category_name)){
                     $actual_category = $subcategory_name;
                 }else{
@@ -230,77 +232,77 @@ if(isset($_REQUEST['action']) ) {
                    // $arrayResults= $cm->getInTime($arrayResults);
                     $tpl->assign('suggested', $arrayResults);
 
+                    $relia  = new RelatedContent();
+                    $other_news =
+                        $cm->find_by_category_name('Article',
+                                                   $actual_category,
+                                                    'contents.frontpage=1'
+                                                    .' AND contents.content_status=1'
+                                                    .' AND contents.available=1'
+                                                    .' AND contents.fk_content_type=1'
+                                                    .' AND contents.pk_content != '.$articleID.''
+                                                    ,'ORDER BY views DESC, placeholder ASC,'
+                                                    .'       position ASC, created DESC'
+                                                    .' LIMIT 1,3');
+                    $tpl->assign('other_news', $other_news);
+
+                    require_once("widget_static_pages.php");
+
+                    if(!isset($lastAlbum)){ $lastAlbum=null; }
+                    $tpl->assign('lastAlbum', $lastAlbum);
+
                 } // end if $tpl->is_cached
-
-
-
-
-                /************* COLUMN-LAST *******************************/
-                $relia  = new RelatedContent();
-                $other_news =
-                    $cm->find_by_category_name('Article',
-                                               $actual_category,
-                                                'contents.frontpage=1'
-                                                .' AND contents.content_status=1'
-                                                .' AND contents.available=1'
-                                                .' AND contents.fk_content_type=1'
-                                                .' AND contents.pk_content != '.$articleID.''
-                                                ,'ORDER BY views DESC, placeholder ASC,'
-                                                .'       position ASC, created DESC'
-                                                .' LIMIT 1,3');
-                $tpl->assign('other_news', $other_news);
-
-                require_once('widget_headlines_past.php');
-               // require_once('widget_media.php');
-
 
                 /************* END COLUMN-LAST ***************************/
 
 
-                require_once("widget_static_pages.php");
 
             } else {
                 Application::forward301('/404.html');
             }
 
-
-            if(!isset($lastAlbum)){ $lastAlbum=null; }
-            $tpl->assign('lastAlbum', $lastAlbum);
-
         } break;
 
         case 'index_rss': {
 
-            /******************************  CATEGORIES & SUBCATEGORIES  ******/
-            require_once ("index_sections.php");
-            /**
-             * Fetch information for Advertisements
-            */
-            require_once("index_advertisement.php");
-            /**
-             * Fetch information for Static Pages
-             */
-             //TODO: Move to a widget. Used in all templates
-            require_once("widget_static_pages.php");
-            /************* COLUMN-LAST *******************************/
-            $other_news =
-                $cm->find(  'Article',
-                            'contents.in_home=1 AND contents.frontpage=1 AND '
-                            .'contents.fk_content_type=1 AND contents.content_status=1 '
-                            .'AND  contents.available=1',
-                            'ORDER BY created DESC LIMIT 1,3');
-
-            $tpl->assign('other_news', $other_news);
-
             $cacheID = $tpl->generateCacheId('Index', '', "RSS");
 
-            $ccm = ContentCategoryManager::get_instance();
+            if (($tpl->caching == 0)
+                || !$tpl->isCached('rss/index.tpl', $cache_id) )
+            {
 
-            $categoriesTree = $ccm->getCategoriesTreeMenu();
-            $opinionAuthors = Author::list_authors();
+                /******************************  CATEGORIES & SUBCATEGORIES  ******/
+                require_once "index_sections.php";
+                /**
+                 * Fetch information for Advertisements
+                */
+                require_once "index_advertisement.php";
+                /**
+                 * Fetch information for Static Pages
+                 */
+                 //TODO: Move to a widget. Used in all templates
+                require_once "widget_static_pages.php";
+                /************* COLUMN-LAST *******************************/
+                $other_news = $cm->find(
+                    'Article',
+                    'contents.in_home=1 AND contents.frontpage=1 AND '
+                    .'contents.fk_content_type=1 AND contents.content_status=1 '
+                    .'AND  contents.available=1',
+                    'ORDER BY created DESC LIMIT 1,3'
+                );
 
-            $tpl->assign('categoriesTree', $categoriesTree);
-            $tpl->assign('opinionAuthors', $opinionAuthors);
+                $tpl->assign('other_news', $other_news);
+
+
+                $ccm = ContentCategoryManager::get_instance();
+
+                $categoriesTree = $ccm->getCategoriesTreeMenu();
+                $opinionAuthors = Author::list_authors();
+
+                $tpl->assign('categoriesTree', $categoriesTree);
+                $tpl->assign('opinionAuthors', $opinionAuthors);
+            }
+
             $tpl->display('rss/index.tpl', $cacheID);
             exit(0);
 
@@ -518,46 +520,55 @@ if(isset($_REQUEST['action']) ) {
         } break;
 
         case 'print': {
-            // Article
-            $article = new Article($articleID);
 
-            // Breadcrub/Pathway
-            $breadcrub   = array();
-            $breadcrub[] = array('text' => $ccm->get_title($category_name),
-                                 'link' => '/seccion/' . $category_name . '/' );
+            $cacheID = $tpl->generateCacheId($category_name, $subcategory_name, $articleID);
 
-            // URL impresión
-            $str = new StringUtils();
-            $title = $str->get_title($article->title);
-            $print_url = '/imprimir/' . $title. '/' . $category_name . '/';
+            if (!$tpl->isCached('article/article_printer.tpl', $cacheID)) {
+                // Article
+                $article = new Article($articleID);
 
-            if(!empty($subcategory_name)) {
+                // Breadcrub/Pathway
+                $breadcrub   = array();
                 $breadcrub[] = array(
-                    'text' => $ccm->get_title($subcategory_name),
-                    'link' => '/seccion/' . $category_name . '/' . $subcategory_name . '/'
+                    'text' => $ccm->get_title($category_name),
+                    'link' => '/seccion/' . $category_name . '/'
                 );
 
-                $print_url .= $subcategory_name . '/';
+                // URL impresión
+                $str = new StringUtils();
+                $title = $str->get_title($article->title);
+                $print_url = '/imprimir/' . $title. '/' . $category_name . '/';
+
+                if(!empty($subcategory_name)) {
+                    $breadcrub[] = array(
+                        'text' => $ccm->get_title($subcategory_name),
+                        'link' => '/seccion/' . $category_name . '/' . $subcategory_name . '/'
+                    );
+
+                    $print_url .= $subcategory_name . '/';
+                }
+
+                $print_url .= $dirtyID . '.html';
+                $tpl->assign('print_url', $print_url);
+
+                $cat = $ccm->getByName($section);
+                if(!is_null($cat) && $cat->inmenu) {
+                    $tpl->assign('breadcrub', $breadcrub);
+                }
+
+                // Foto interior
+                if(isset($article->img2) and ($article->img2 != 0)){
+                    $photoInt = new Photo($article->img2);
+                    $tpl->assign('photoInt', $photoInt);
+                }
+
+                $tpl->caching = 0;
+                $tpl->assign('article', $article);
             }
 
-            $print_url .= $dirtyID . '.html';
-            $tpl->assign('print_url', $print_url);
-
-            $cat = $ccm->getByName($section);
-            if(!is_null($cat) && $cat->inmenu) {
-                $tpl->assign('breadcrub', $breadcrub);
-            }
-
-            // Foto interior
-            if(isset($article->img2) and ($article->img2 != 0)){
-                $photoInt = new Photo($article->img2);
-                $tpl->assign('photoInt', $photoInt);
-            }
-
-            $tpl->caching = 0;
-            $tpl->assign('article', $article);
             $tpl->display('article/article_printer.tpl');
             exit(0);
+
         } break;
 
 
