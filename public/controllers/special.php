@@ -103,10 +103,8 @@ if (!is_null($action) ) {
 
                 if(!empty($contents)) {
                     foreach($contents as $item) {
-                        //$content_type = $item['cotent_type'];
-                        $content = new Content($item['fk_content']);
-                        $content->category_name = $content->loadCategoryName($item['fk_content']);
-                        $content->category_title = $content->loadCategoryTitle($item['fk_content']);
+                     
+                        $content = Content::get($item['fk_content']);
 
                         if(isset($content->img1)) {
                             $img = new Photo($content->img1);
@@ -114,7 +112,7 @@ if (!is_null($action) ) {
                             $content->img1 = $img;
                         }
                         if(isset($content->fk_video)) {
-                            $video = new Video($video);
+                            $video = new Video($content->fk_video);
                             $content->obj_video = $video;
                         }
 
@@ -124,6 +122,10 @@ if (!is_null($action) ) {
                             $content->placeholder = 'placeholder_1_1';
                         }
                         $columns[] = $content;
+
+                        $content->category_name = $content->loadCategoryName($item['fk_content']);
+                        $content->category_title = $content->loadCategoryTitle($item['fk_content']);
+
                     }
                 }
 
