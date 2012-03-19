@@ -2315,3 +2315,9 @@ div.dashboardBox div.table {
 .clearer {
     clear: both;
 }
+
+.spinner {
+  background:url(../images/throbber.svg) top right no-repeat;
+  width:16px;
+  height:16px;
+}

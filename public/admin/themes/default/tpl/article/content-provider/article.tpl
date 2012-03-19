@@ -18,8 +18,8 @@
                 </a>
             </li>
             <li>
-                <a title="{t}Suggest to home{/t}" href="#" class="drop-element">
-                    <i class="icon-ban"></i> {t}Remove{/t}
+                <a title="{t}Remove element from this frontpage{/t}" href="#" class="drop-element">
+                    <i class="icon-trash"></i> {t}Remove{/t}
                 </a>
             </li>
             <li>
@@ -29,7 +29,7 @@
             </li>
             <li>
                 {if !$params['home']}
-                <a title="{t}Suggest to home{/t}" href="#" class="suggest-home">
+                <a title="{t}Suggest this element to home{/t}" href="#" class="suggest-home">
                     <i class="icon-home"></i> {t}Suggest to home{/t}
                 </a>
                 {/if}

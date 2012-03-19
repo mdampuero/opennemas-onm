@@ -69,7 +69,14 @@ jQuery(document).ready(function($){
             error: function( xhr, status, index, anchor ) {
                 $( anchor.hash ).html(
                     "<div>"+frontpage_messages.error_tab_content_provider+"</div>" );
-            }
+            },
+            complete: function() {
+                $('#content-provider .spinner').hide();
+            },
+            beforeSend: function(){
+                $('#content-provider .spinner').show();
+
+           }
         },
         load: function(event,ui) {
             makeContentProviderAndPlaceholdersSortable();
@@ -86,7 +93,14 @@ jQuery(document).ready(function($){
             success: function(data){
                 parent.html(data);
                 makeContentProviderAndPlaceholdersSortable();
-            }
+            },
+            complete: function() {
+                $('#content-provider .spinner').hide();
+            },
+            beforeSend: function(){
+                $('#content-provider .spinner').show();
+
+           }
         });
     });
 
