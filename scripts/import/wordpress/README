@@ -16,16 +16,16 @@ First: If you need import categories, you have save in config var "categories".
 You write originID = newId if the category exists, but if not exitst newID=0.
 Then you write category data in config var "newCategories".
 
-Second: If you want import wp images, you need save images folder in local dir
+Second: If you want to import wp images, you need save images folder in local dir
 and save this in config var [media] directory.
 
-Third: As wordpress haven't author opinions you have config authorOpinionID.
+Third: As wordpress doesn't have author opinions you have config authorOpinionID.
 If you want import opinion you have assign originID catogory the newID=4
 
 
 
 ATENTION!
-If you need redirect 301 for old urls:
+If you need to make 30 redirections for old urls:
      #http://www.url.com/category/politica
       #http://www.url.com/category/tendencias/medios-comunicacion
     RewriteRule ^category/([a-z0-9\-]+)/?$ /seccion/$1/ [R=301,L,NC]
