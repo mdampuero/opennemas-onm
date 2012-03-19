@@ -148,7 +148,11 @@ class LayoutManager
                     if (!empty($contentTypeName)) {
                         $this->tpl->assign('content',$content);
                         $this->tpl->assign('params',$this->params);
-                        $output .= $this->tpl->fetch(strtolower($content->content_type_name).'/content-provider/'.strtolower($content->content_type_name).".tpl")."\n";
+                        try {
+                            $output .= $this->tpl->fetch(strtolower($content->content_type_name).'/content-provider/'.strtolower($content->content_type_name).".tpl")."\n";
+                        } catch (\SmartyException $e) {
+                            // Do nothing.
+                        }
                     }
                 }
             }
