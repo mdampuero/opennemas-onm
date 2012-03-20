@@ -29,61 +29,39 @@ if(empty($dirtyID)) {
 
 $articleID = Content::resolveID($dirtyID);
 
-
 $tpl->assign('contentId', $articleID); // Used on module_comments.tpl
 
-if($_REQUEST['action']=='vote' ||  $_REQUEST['action']=='rating' ) {
-    $category_name = 'home';
-    $subcategory_name = null;
-// If $action == 'rss' desnormalize process
-}else{
-    if(preg_match('@rss@',$_REQUEST['action'])) {
-        $category_name = ((isset($_REQUEST['category_name']) ? $_REQUEST['category_name'] : ''));
-        $subcategory_name = ((isset($_REQUEST['subcategory_name']) ? $_REQUEST['subcategory_name'] : ''));
-    } else {
-        if(!empty($articleID) ){
-            $article = new Article($articleID);
+$category_name = (isset($_GET['category_name']) ? $_GET['category_name'] : '');
+$subcategory_name = (isset($_GET['subcategory_name']) ? $_GET['subcategory_name'] : '');
+// Normalizar os nomes
+list($category_name, $subcategory_name) = $ccm->normalize($category_name, $subcategory_name);
+$_GET['category_name'] = $category_name;
+$_GET['subcategory_name'] = $subcategory_name;
 
-             if ($_SERVER['REQUEST_URI'] != '/'.$article->uri
-                     && !preg_match('@print@',$_REQUEST['action'])
-                     && !preg_match('@send@',$_REQUEST['action'])) {
-                 Application::forward301('/'.$article->uri);
-             }
-            $article->category_name = $article->loadCategoryName($articleID);
-            $category_name = $article->category_name;
-            $subcategory_name = null;
-        }
+$section = (!empty($subcategory_name))? $subcategory_name: $category_name;
+$section = (is_null($section))? 'home': $section;
+
+if (isset($category_name) && !empty($category_name)) {
+
+    if (!$ccm->exists($category_name)) {
+        Application::forward301('/');
+    } else {
+        $category = $ccm->get_id($category_name);
     }
 
-    // Normalizar os nomes
-    list($category_name, $subcategory_name) = $ccm->normalize($category_name, $subcategory_name);
-    $_GET['category_name'] = $category_name;
-    $_GET['subcategory_name'] = $subcategory_name;
-
-    $section = (!empty($subcategory_name))? $subcategory_name: $category_name;
-    $section = (is_null($section))? 'home': $section;
-
-
-    if (isset($category_name) && !empty($category_name)) {
-
-        if (!$ccm->exists($category_name)) {
+    if (isset($subcategory_name) && !empty($subcategory_name)) {
+        if (!$ccm->exists($subcategory_name)) {
             Application::forward301('/');
         } else {
-            $category = $ccm->get_id($category_name);
+            $subcategory = $ccm->get_id($subcategory_name);
         }
-
-        if (isset($subcategory_name) && !empty($subcategory_name)) {
-            if (!$ccm->exists($subcategory_name)) {
-                Application::forward301('/');
-            } else {
-                $subcategory = $ccm->get_id($subcategory_name);
-            }
-        }
-    } elseif(isset($_REQUEST["action"]) && (preg_match('@rss@',$_REQUEST['action']))) {
-        $_GET['category_name'] = $category_name = 'home';
-    } elseif(isset($_REQUEST["action"]) && ($_REQUEST["action"]!="rating" && $_REQUEST["action"]!="vote" && $_REQUEST["action"]!="rss" && $_REQUEST["action"]!="get_plus")) {
-        Application::forward301('/');
     }
+} elseif(isset($_REQUEST["action"]) && (preg_match('@rss@',$_REQUEST['action']))) {
+    $_GET['category_name'] = $category_name = 'home';
+} elseif(isset($_REQUEST["action"]) && ($_REQUEST["action"]!="rating" && $_REQUEST["action"]!="vote" && $_REQUEST["action"]!="rss" && $_REQUEST["action"]!="get_plus")) {
+        var_dump('forward');die();
+
+    Application::forward301('/');
 }
 
 /**************************************  SECURITY  *******************************************/
@@ -92,99 +70,114 @@ if(isset($_REQUEST['action']) ) {
     switch($_REQUEST['action']) {
         case 'read': {
 
+
+
+            if(!empty($articleID) ){
+                // Increment numviews if it's accesible
+                Content::setNumViews($articleID);
+
+
+                $article = new Article($articleID);
+                $tpl->assign('article', $article);
+
+                //  if ($_SERVER['REQUEST_URI'] != '/'.$article->uri
+                //          && !preg_match('@print@',$_REQUEST['action'])
+                //          && !preg_match('@send@',$_REQUEST['action'])) {
+                //      Application::forward301('/'.$article->uri);
+                //  }
+                $article->category_name = $article->loadCategoryName($articleID);
+                $category_name = $article->category_name;
+                $subcategory_name = null;
+            }
+
             // Load config
             $tpl->setConfig('articles');
-
-
 
             $tpl->assign('category_name', $_GET['category_name']);
 
             $cm = new ContentManager();
 
-            if (($article->available==1) && ($article->in_litter==0)
-                && ($article->isStarted())
-            ) {
 
-                // Increment numviews if it's accesible
-                Content::setNumViews($article->pk_article);
+            // Advertisements for single article NO CACHE
+            require_once('article_advertisement.php');
 
-                /******************************  BREADCRUB *********************************/
-                $str = new StringUtils();
-                $title = $str->get_title($article->title);
+            /**
+             * Getting comments for current article
+             **/
+            $comment = new Comment();
+            $comments = $comment->get_public_comments($articleID);
+            $tpl->assign('num_comments', count($comments));
+            $tpl->assign('comments', $comments);
+            $tpl->assign('articleId', $articleID);
 
-                $print_url = '/imprimir/' . $title. '/' . $category_name . '/';
+            $cache_id = $tpl->generateCacheId(
+                $category_name, $subcategory_name, $articleID
+            );
 
-                $breadcrub   = array();
-                $breadcrub[] = array('text' => $ccm->get_title($category_name),
-                                     'link' => '/seccion/' . $category_name . '/' );
-                if(!empty($subcategory_name)) {
-                    $breadcrub[] = array(
-                        'text' => $ccm->get_title($subcategory_name),
-                        'link' => '/seccion/' . $category_name . '/' . $subcategory_name . '/'
-                    );
-                    $print_url .= $subcategory_name . '/';
-                }
+            if (($tpl->caching == 0) || !$tpl->isCached('article/article.tpl', $cache_id) )
+            {
 
-                $print_url .= $dirtyID . '.html';
-                $tpl->assign('print_url', $print_url);
-                $tpl->assign('sendform_url', '/controllers/article.php?action=sendform&article_id=' . $_GET['article_id'] . '&category_name=' .
-                                            $category_name . '&subcategory_name=' . $subcategory_name);
-
-                // Check if $section is "in menu" then show breadcrub
-                $cat = $ccm->getByName($section);
-                if(!is_null($cat) && $cat->inmenu) {
-                    $tpl->assign('breadcrub', $breadcrub);
-                }
-
-                /******************************  CATEGORIES & SUBCATEGORIES  ******/
-                require_once ("index_sections.php");
-                /******************************  CATEGORIES & SUBCATEGORIES  ******/
-                if(isset($subcategory_name) && !empty($category_name)){
-                    $actual_category = $subcategory_name;
-                }else{
-                    $actual_category =$category_name;
-                }
-                $actual_category_id = $ccm->get_id($actual_category);
-                $actual_category_title = $ccm->get_title($actual_category);
-                $tpl->assign('actual_category_title',$actual_category_title);
-
-                /**
-                 * Getting comments for current article
-                 **/
-                $comment = new Comment();
-                $comments = $comment->get_public_comments($articleID);
-                $tpl->assign('num_comments', count($comments));
-                $tpl->assign('comments', $comments);
-
-
-                $cache_id = $tpl->generateCacheId(
-                    $category_name, $subcategory_name, $articleID
-                );
-
-                // Advertisements for single article NO CACHE
-                require_once('article_advertisement.php');
-
-                $tpl->assign('article', $article);
-
-                if (($tpl->caching == 0)
-                    || !$tpl->isCached('article/article.tpl', $cache_id) )
-                {
+                if (($article->available==1) && ($article->in_litter==0)
+                    && ($article->isStarted())
+                ) {
 
 
 
-                    if (isset($article->img2)
-                       && ($article->img2 != 0))
-                    {
+                    /******************************  BREADCRUB *********************************/
+                    $str = new StringUtils();
+                    $title = $str->get_title($article->title);
+
+                    $print_url = '/imprimir/' . $title. '/' . $category_name . '/';
+
+                    $breadcrub   = array();
+                    $breadcrub[] = array('text' => $ccm->get_title($category_name),
+                                         'link' => '/seccion/' . $category_name . '/' );
+                    if(!empty($subcategory_name)) {
+                        $breadcrub[] = array(
+                            'text' => $ccm->get_title($subcategory_name),
+                            'link' => '/seccion/' . $category_name . '/' . $subcategory_name . '/'
+                        );
+                        $print_url .= $subcategory_name . '/';
+                    }
+
+                    $print_url .= $dirtyID . '.html';
+                    $tpl->assign('print_url', $print_url);
+                    $tpl->assign('sendform_url', '/controllers/article.php?action=sendform&article_id=' . $_GET['article_id'] . '&category_name=' .
+                                                $category_name . '&subcategory_name=' . $subcategory_name);
+
+                    // Check if $section is "in menu" then show breadcrub
+                    $cat = $ccm->getByName($section);
+                    if(!is_null($cat) && $cat->inmenu) {
+                        $tpl->assign('breadcrub', $breadcrub);
+                    }
+
+                    /******************************  CATEGORIES & SUBCATEGORIES  ******/
+                    require_once ("index_sections.php");
+                    /******************************  CATEGORIES & SUBCATEGORIES  ******/
+                    if(isset($subcategory_name) && !empty($category_name)){
+                        $actual_category = $subcategory_name;
+                    }else{
+                        $actual_category =$category_name;
+                    }
+                    $actual_category_id = $ccm->get_id($actual_category);
+                    $actual_category_title = $ccm->get_title($actual_category);
+                    $tpl->assign('actual_category_title',$actual_category_title);
+
+
+                    $tpl->assign('article', $article);
+
+                    // Before here started the isCached
+
+
+                    if (isset($article->img2) && ($article->img2 != 0)) {
                         $photoInt = new Photo($article->img2);
                         $tpl->assign('photoInt', $photoInt);
                     }
 
-                    if (isset($article->fk_video2)
-                       && ($article->fk_video2 != 09))
-                    {
+                    if (isset($article->fk_video2) && ($article->fk_video2 != 09)) {
                         $videoInt = new Video($article->fk_video2);
                         $tpl->assign('videoInt', $videoInt);
-                    }else{
+                    } else {
                         $video =
                             $cm->find_by_category_name(
                                 'Video',
@@ -198,10 +191,9 @@ if(isset($_REQUEST['action']) ) {
                     /**************** PHOTOs ****************/
 
                     /******* RELATED  CONTENT *******/
-                    $rel= new RelatedContent();
+                    $relContent= new RelatedContent();
 
-                    $relationes =
-                        $rel->cache->get_relations_int($articleID);
+                    $relationes = $relContent->cache->get_relations_int($articleID);
                     $relat = $cm->cache->getContents($relationes);
 
                     // Filter by scheduled {{{
@@ -212,7 +204,7 @@ if(isset($_REQUEST['action']) ) {
 
 
                     //Nombre categoria correcto.
-                    foreach($relat as $ril) {
+                    foreach ($relat as $ril) {
                         $ril->category_name = $ccm->get_category_name_by_content_id($ril->id);
                     }
                     $tpl->assign('relationed', $relat);
@@ -229,37 +221,37 @@ if(isset($_REQUEST['action']) ) {
                             4
                         );
                     }
-                   // $arrayResults= $cm->getInTime($arrayResults);
+                    $arrayResults= $cm->getInTime($arrayResults);
                     $tpl->assign('suggested', $arrayResults);
 
-                    $relia  = new RelatedContent();
-                    $other_news =
-                        $cm->find_by_category_name('Article',
-                                                   $actual_category,
-                                                    'contents.frontpage=1'
-                                                    .' AND contents.content_status=1'
-                                                    .' AND contents.available=1'
-                                                    .' AND contents.fk_content_type=1'
-                                                    .' AND contents.pk_content != '.$articleID.''
-                                                    ,'ORDER BY views DESC, placeholder ASC,'
-                                                    .'       position ASC, created DESC'
-                                                    .' LIMIT 1,3');
+                    $other_news = $cm->find_by_category_name(
+                        'Article',
+                        $actual_category,
+                        'contents.frontpage=1'
+                        .' AND contents.content_status=1'
+                        .' AND contents.available=1'
+                        .' AND contents.fk_content_type=1'
+                        .' AND contents.pk_content != '.$articleID.''
+                        ,'ORDER BY views DESC, placeholder ASC,'
+                        .'       position ASC, created DESC'
+                        .' LIMIT 1,3'
+                    );
                     $tpl->assign('other_news', $other_news);
 
-                    require_once("widget_static_pages.php");
+                    require_once "widget_static_pages.php";
 
-                    if(!isset($lastAlbum)){ $lastAlbum=null; }
+                    if (!isset($lastAlbum)){ $lastAlbum=null; }
                     $tpl->assign('lastAlbum', $lastAlbum);
 
-                } // end if $tpl->is_cached
+                    // Before here end the iscached if
 
-                /************* END COLUMN-LAST ***************************/
+                } else {
+                    Application::forward301('/404.html');
+                }
 
+            } // end if $tpl->is_cached
 
-
-            } else {
-                Application::forward301('/404.html');
-            }
+            $tpl->display('article/article.tpl', $cache_id);
 
         } break;
 
@@ -314,6 +306,9 @@ if(isset($_REQUEST['action']) ) {
             $tpl->setConfig('rss');
             $title_rss = "";
             $rss_url = SITE_URL;
+
+            $category_name = ((isset($_REQUEST['category_name']) ? $_REQUEST['category_name'] : ''));
+            $subcategory_name = ((isset($_REQUEST['subcategory_name']) ? $_REQUEST['subcategory_name'] : ''));
 
             if ((strtolower($category_name)=="opinion")
                 && isset($_GET["author"]))
@@ -453,6 +448,9 @@ if(isset($_REQUEST['action']) ) {
 
 
         case 'vote': {
+
+            $category_name = 'home';
+            $subcategory_name = null;
 
             $ip = $_SERVER['REMOTE_ADDR'];
             $ip_from = $_GET['i'];
@@ -708,5 +706,3 @@ if(isset($_REQUEST['action']) ) {
 } else {
     Application::forward301('index.php');
 }
-
-$tpl->display('article/article.tpl', $cache_id);
