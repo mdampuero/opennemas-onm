@@ -49,11 +49,6 @@ if(($tpl->caching == 0)
     $ccm = ContentCategoryManager::get_instance();
 
     list($category_name, $subcategory_name) = $ccm->normalize($category_name, $subcategory_name);
-    $section = (!empty($subcategory_name))? $subcategory_name: $category_name;
-    $section = (is_null($section))? 'home': $section;
-
-    $tpl->loadConfigOrDefault('template.conf', $section); // $category_name is a string
-    unset($section);
 
     /**
      * If no home   category name
