@@ -74,7 +74,7 @@ function smarty_function_script_tag($params, &$smarty) {
     $output = "<script {$type} src=\"{$resource}{$mtime}\" {$properties} ></script>";
 
     if ($escape) {
-        $output = str_replace('/>', '\/>', $output);
+        $output = str_replace('</', '<\/', $output);
     }
 
     return $output;
