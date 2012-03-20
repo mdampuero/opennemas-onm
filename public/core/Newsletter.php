@@ -74,6 +74,7 @@ class Newsletter
             $category = $ccm->get_name($tok->category);
             $data->articles[$i]->date= date('Y-m-d', strtotime(str_replace('/', '-', substr($tok->created, 6))));
             $data->articles[$i]->cat = $category;
+            $data->articles[$i]->agency = (is_array($tok->params) && array_key_exists('agencyBulletin', $tok->params))?$tok->params['agencyBulletin']:'';
             $i++;
         }
         $i = 0;
@@ -628,7 +629,7 @@ class PConecta_Newsletter_Items_Provider extends Newsletter_Items_Provider
         $sources = array(
             'Article' => array(
                 'table'  => 'contents',
-                'fields' => array('pk_content', 'title', /*'summary',*/ 'permalink', 'created', 'category'),
+                'fields' => array('pk_content', 'title', 'params', 'subtitle', 'created', 'category'),
                 'conditions' => '`fk_content_type`=1'
             ),
 
@@ -781,8 +782,8 @@ class PConecta_Article_Newsletter_Item extends Newsletter_Item
 {
     public $pk_content;
     public $title;
-    public $summary;
-    public $permalink;
+    public $params;
+    public $subtitle;
     public $created;
     public $category;
     public $category_name;
