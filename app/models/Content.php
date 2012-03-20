@@ -1263,6 +1263,13 @@ class Content
 
     static public function setNumViews($id=null)
     {
+
+        if (array_key_exists('HTTP_USER_AGENT', $_SERVER)
+            && !empty($_SERVER['HTTP_USER_AGENT']))
+        {
+            return false;
+        }
+
         $botStrings = array(
             "google",
             "bot",
@@ -1288,8 +1295,8 @@ class Content
             "mechanize",
         );
 
+        $httpUserAgent = preg_quote($_SERVER['HTTP_USER_AGENT']);
         foreach ($botStrings as $bot) {
-            $httpUserAgent = preg_quote($_SERVER['HTTP_USER_AGENT']);
             if (preg_match( "@".strtolower($httpUserAgent)."@", $bot) > 0) {
                 return false;
             }

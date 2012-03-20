@@ -3,8 +3,8 @@
 /**
  * Setup app
 */
-require_once('../bootstrap.php');
-require_once('./session_bootstrap.php');
+require_once('../../../bootstrap.php');
+require_once(SITE_ADMIN_PATH.'/session_bootstrap.php');
 
 /**
  * Setup Database Access
@@ -39,5 +39,5 @@ $output .= $delimiter;
 $output .= ');'; // Finish code: end of array definition. Now we have the JavaScript code ready!
 
  header('Content-type: text/javascript'); // Make output a real JavaScript file!
- 
+
 echo $output;

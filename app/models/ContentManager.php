@@ -768,7 +768,7 @@ class ContentManager
 
 
 
-        $comment_title = $this->find($content_type, $filter, $_order_by, $fields);
+        $comment_title = $this->find($content_type, $filter, $_order_by);
         foreach($items as $item) {
             $articles[$item->pk_content] = array('pk_content'=>$item->pk_content,
                                                 'comment'=>'',
