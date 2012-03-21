@@ -60,6 +60,13 @@ $configurations = s::get('book_settings');
 $numFavorites = (isset($configurations['total_widget']) && !empty($configurations['total_widget']))? $configurations['total_widget']: 1;
 $sizeFile = (isset($configurations['size_file']) && !empty($configurations['size_file']))? $configurations['size_file']: 5000000;
 
+ $ruta = INSTANCE_MEDIA_PATH.'/books/';
+
+// Create folder if it doesn't exist
+if( !file_exists($ruta) ) {
+        FilesManager::createDirectory($ruta);
+}
+
 switch($action) {
 
     case 'list':
@@ -161,12 +168,7 @@ switch($action) {
         Acl::checkOrForward('BOOK_CREATE');
 
         /*  Subir pdf e imagen para thumbnail*/
-        $ruta = INSTANCE_MEDIA_PATH.'/books/';
 
-        // Create folder if it doesn't exist
-        if( !file_exists($ruta) ) {
-             FilesManager::createDirectory($ruta);
-        }
 
         $nombre_archivo = $_FILES['file']['name'];
         $archivo_temporal = $_FILES['file']['tmp_name'];
