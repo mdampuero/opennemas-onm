@@ -48,6 +48,7 @@ class Uri
        'kiosko'        =>  array( 'portadas-papel/_CATEGORY_/_DATE__ID_.html'),
        'letter'   =>  array( 'cartas-al-director/_CATEGORY_/_SLUG_/_DATE__ID_.html'),
        'special'   =>  array( 'especiales/_CATEGORY_/_SLUG_/_DATE__ID_.html'),
+       'book'   =>  array( 'libro/_CATEGORY_/_SLUG_/_DATE__ID_.html'),
     );
 
     /**

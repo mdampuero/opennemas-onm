@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Onm package.
  *
@@ -19,6 +20,8 @@ $category_name    = filter_input(
     array('options' => array('default' => 'home'))
 );
 $subcategory_name = filter_input(INPUT_GET,'subcategory_name',FILTER_SANITIZE_STRING);
+$cache_page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT);
+$cache_page = (is_null($cache_page))? 0 : $cache_page;
 
 // Setup view
 $tpl     = new Template(TEMPLATE_USER);
@@ -34,14 +37,12 @@ if (
     || !$tpl->isCached('frontpage/frontpage.tpl', $cacheID)
 ) {
 
-    // Initialize the Content and Database object
+    /**
+     * Init the Content and Database object
+    */
     $ccm = ContentCategoryManager::get_instance();
     list($category_name, $subcategory_name) = $ccm->normalize($category_name, $subcategory_name);
-    $section = (!empty($subcategory_name))? $subcategory_name: $category_name;
-    $section = (is_null($section))? 'home': $section;
 
-    $tpl->loadConfigOrDefault('template.conf', $section);
-    unset($section);
 
     // If no home category name
     if ($category_name != 'home') {

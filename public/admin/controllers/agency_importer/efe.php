@@ -141,7 +141,7 @@ switch($action) {
             ),
             'page'       => filter_input(
                 INPUT_GET, 'page' , FILTER_SANITIZE_STRING,
-                array('options' => array('default' => 0))
+                array('options' => array('default' => 1))
             ),
             'items_page' => $itemsPage,
         );

@@ -573,9 +573,8 @@ if(isset($_REQUEST['action']) ) {
         case 'sendform': {
             require_once('session_bootstrap.php');
             $token = $_SESSION['sendformtoken'] = md5(uniqid('sendform'));
-
-            //Ya se iniciliza en la linea 50
-             //$article = new Article($_REQUEST['article_id']);
+            
+            $article = new Article($_REQUEST['article_id']);
             $tpl->assign('article', $article);
             $tpl->assign('article_id', $dirtyID);
 

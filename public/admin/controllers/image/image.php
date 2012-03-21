@@ -182,7 +182,7 @@ switch($action) {
 
         list($photos, $pager) = $cm->find_pages(
             'Photo', 'contents.fk_content_type=8 and photos.media_type="image"',
-            'ORDER BY  created DESC ', $page, 40, $category
+            'ORDER BY  created DESC ', $page, 36, $category
         );
 
         foreach ($photos as &$photo) {
@@ -192,7 +192,7 @@ switch($action) {
         }
 
         $_SESSION['desde'] = 'category_catalog';
-        $tpl->assign('paginacion', $pager);
+        $tpl->assign('pages', $pager);
         $tpl->assign('photos', $photos);
         $tpl->assign('category', $category);
         $tpl->display('image/category_catalog.tpl');
@@ -208,7 +208,7 @@ switch($action) {
             'contents.fk_content_type=8 and photos.media_type="image" and created >=' .
             'DATE_SUB(CURDATE(), INTERVAL 1 DAY)'.' ',
             'ORDER BY created DESC ',
-            $page, 40, $category
+            $page, 36, $category
         );
 
         foreach ($photos as &$photo) {
@@ -218,7 +218,7 @@ switch($action) {
         }
 
         $_SESSION['desde'] = 'today_catalog';
-        $tpl->assign('paginacion', $pager);
+        $tpl->assign('pages', $pager);
         $tpl->assign('photos', $photos);
         $tpl->assign('action', $action);
         $tpl->assign('category', $category);

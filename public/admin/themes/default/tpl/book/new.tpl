@@ -52,7 +52,7 @@
             </tr>
         </table>
 
-        <table class="adminform" >
+        <table class="adminform">
             <tbody>
                 <tr>
                     <td>
@@ -63,7 +63,7 @@
                             size="60" value="{$book->title|clearslash|escape:"html"}"
                             class="required" onBlur="javascript:get_metadata(this.value);" />
                     </td>
-                    <td rowspan="4">
+                    <td rowspan="2">
                         <table style='background-color:#F5F5F5; padding:18px;'>
                             <tr>
                                 <td>
@@ -101,30 +101,27 @@
                 <td style="padding:4px;">
                     <label for="title">Archivo:</label>
                 </td>
-                <td width="70%">
-                    {if (!isset($book->file_name) || empty($book->file_name) )}
-                        <input name="file" type="file"/>
-                    {else}
-                        <input name="file" type="text" readonly="readonly" value="{$book->file_name}"/>
+                <td>
+                    {if (isset($book->file_name) && !empty($book->file_name) )}
+                         <input name="file_name" type="text" readonly="readonly" value="{$book->file_name}"/>
                     {/if}
-
+                    <input name="file" type="file"/>
                 </td>
             </tr>
             <tr>
                 <td style="padding:4px;">
                     <label for="title">Tapa libro:</label>
                 </td>
-                <td width="70%">
-                    {if (!isset($book->file_name) || empty($book->file_name) )}
-                         <input name="file_img" type="file"/>
-                         <div id="informa" style="display: none; width:100%; height:40px;">*Imagen</div>
-                         <br />
-                     {else}
-                         <input name="file_img" type="text" readonly="readonly" value="{$libro->file_img|default:''}"/>
-                         <div id="informa" style="display: none; width:100%; height:40px;"></div>
-                         <br /><br />
-                         <img src="{$smarty.const.URL_PUBLIC}/{$smarty.const.MEDIA_FILE}/libros/{$libro->file_img}" style=" width: 164px;" />
+                <td>
+                    {if (isset($book->file_img) && !empty($book->file_img) )}
+                         <input name="file_img" type="text" readonly="readonly" value="{$book->file_img|default:''}"/>
                      {/if}
+                      <input name="file_img" type="file"/>
+                </td>
+                <td rowspan="5" style="padding:6px;">
+                    <a href="{$smarty.const.INSTANCE_MEDIA}/books/{$book->file_name}" target="_blank">
+                    <img src="{$smarty.const.INSTANCE_MEDIA}/books/{$book->file_img}" style=" width: 164px;" />
+                    </a>
                 </td>
             </tr>
 

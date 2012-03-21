@@ -19,6 +19,8 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
+use Onm\Settings as s;
+
 //error_reporting(E_ALL);
 /**
  * Setup app
@@ -59,9 +61,10 @@ switch($action) {
         }
 
         $page = (isset($_REQUEST['page']))? $_REQUEST['page']: 0;
+        $items_page = s::get('items_per_page') ?: 20;
 
         $cm = new ContentManager();
-        list($pages, $pager) = $cm->find_pages('StaticPage', $filter, 'ORDER BY created DESC ', $page, 10);
+        list($pages, $pager) = $cm->find_pages('StaticPage', $filter, 'ORDER BY created DESC ', $page, $items_page);
 
         $tpl->assign( array('pages' => $pages,'pager' => $pager));
         $tpl->display('static_pages/list.tpl');
