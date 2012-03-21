@@ -622,7 +622,7 @@ Options -Indexes
     #Books
     #libros/titulo/200812081741363340.html
     RewriteRule ^libro/([0-9]+).html$ controllers/books.php?action=view&id=$1 [L,NC]
-    RewriteRule ^libro/([a-z0-9\-]*)/([0-9]+).html$ controllers/books.php?action=view&id=$2 [L,NC]
+    RewriteRule ^libro/([a-z0-9\-]*)/([a-z0-9\-]*)/([0-9]+).html$ controllers/books.php?action=view&id=$3 [L,NC]
     RewriteRule ^libros/?$  controllers/books.php [L,NC]
 
     #Especiales

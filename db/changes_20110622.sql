@@ -1,3 +1,6 @@
+--20-03-2012
+ALTER TABLE `books` ADD `file_img` VARCHAR( 255 ) NULL ;
+
 --27-02-2012
 INSERT INTO `privileges` (`pk_privilege`, `name`, `description`, `module`) VALUES
 (173, 'LETTER_ADMIN', 'Admon. cartas', 'LETTER'),

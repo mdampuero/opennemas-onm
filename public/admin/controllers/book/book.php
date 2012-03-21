@@ -116,6 +116,7 @@ switch($action) {
         Acl::checkOrForward('BOOK_UPDATE');
         $book = new Book( $_REQUEST['id'] );
         $tpl->assign('book', $book);
+        $tpl->assign('category', $book->category);
         $tpl->display('book/new.tpl');
 
     break;
@@ -125,6 +126,25 @@ switch($action) {
         Acl::checkOrForward('BOOK_UPDATE');
         $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
         $book = new Book($id);
+
+        if(!empty($_FILES['file']['name'])) {
+            $nombre_archivo = $_FILES['file']['name'];
+            $archivo_temporal = $_FILES['file']['tmp_name'];
+
+            // Move uploaded pdf
+            $uploadStatusPdf = @move_uploaded_file($archivo_temporal, $ruta.$nombre_archivo);
+            if($uploadStatusPdf){
+                $nombre_archivo_swf = str_replace('pdf', 'swf', $nombre_archivo);
+                exec('pdf2swf -O 1 '.$ruta.$nombre_archivo.' -o '.$ruta.$nombre_archivo_swf);
+            }
+        }
+
+        if(!empty($_FILES['file_img']['name'])) {
+               //Book image front
+            $nombre_archivo_img = $_FILES['file_img']['name'];
+            $archivo_temporal_img = $_FILES['file_img']['tmp_name'];
+            $uploadStatusPdf_img = @move_uploaded_file($archivo_temporal_img, $ruta.$nombre_archivo_img);
+        }
 
         if(!Acl::isAdmin() && !Acl::check('CONTENT_OTHER_UPDATE') && $book->fk_user != $_SESSION['userid']) {
             m::add(_("You can't modify this book data because you don't have enought privileges.") );
@@ -161,7 +181,7 @@ switch($action) {
 
 
         $book = new Book();
-        if ( ($uploadStatusPdf !== false)  && ($uploadStatusPdf_img!== false) &&  $book->create( $_POST )) {
+        if ( ($uploadStatusPdf !== false) &&  $book->create( $_POST )) {
             $nombre_archivo_swf = str_replace('pdf', 'swf', $nombre_archivo);
             exec('pdf2swf -O 1 '.$ruta.$nombre_archivo.' -o '.$ruta.$nombre_archivo_swf);
 
@@ -205,10 +225,14 @@ switch($action) {
             $uploadStatusPdf_img = @move_uploaded_file($archivo_temporal_img, $ruta.$nombre_archivo_img);
 
             $book = new Book();
-            if ( ($uploadStatusPdf !== false)  && ($uploadStatusPdf_img !== false) && $book->create( $_POST )) {
+            if ( ($uploadStatusPdf !== false) ) {
                 $nombre_archivo_swf = str_replace('pdf', 'swf', $nombre_archivo);
                 exec('pdf2swf -O 1 '.$ruta.$nombre_archivo.' -o '.$ruta.$nombre_archivo_swf);
-
+                if(!empty($_POST['id'])){
+                    $book->update( $_POST );
+                }else{
+                    $book->create( $_POST );
+                }
                 Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
 
             } elseif ( $_FILES['file']['size'] > $sizeFile ) {

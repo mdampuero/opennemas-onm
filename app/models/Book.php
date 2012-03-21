@@ -1,16 +1,13 @@
 <?php
 
 class Book extends Content {
-    public $pk_book  = NULL;    
+    public $pk_book  = NULL;
     public $author  = NULL;
     public $file_name  = NULL;
     public $editorial  = NULL;
     public $books_path = NULL;
 
 
-    /**
-      * Constructor PHP5
-    */
     function __construct($id=null) {
         parent::__construct($id);
 
@@ -22,25 +19,56 @@ class Book extends Content {
         $this->content_type = 'Book';
         $this->books_path = INSTANCE_MEDIA_PATH.'/books/';
     }
-    
+
+
+	public function __get($name)
+    {
+
+        switch ($name) {
+            case 'uri': {
+                if (empty($this->category_name)) {
+                    $this->category_name = $this->loadCategoryName($this->pk_content);
+                }
+				$uri =  Uri::generate('book',
+                            array(
+                                'id' => sprintf('%06d',$this->id),
+                                'date' => date('YmdHis', strtotime($this->created)),
+                                'slug' => $this->slug,
+                                'category' => $this->category_name,
+                            )
+                        );
+				return ($uri !== '') ? $uri : $this->permalink;
+
+                break;
+            }
+
+            default: {
+                break;
+            }
+        }
+
+        return parent::__get($name);
+    }
+
     public function create($data) {
-        
+
         parent::create($data);
 
-        $sql = "INSERT INTO books (`pk_book`, `author`, `file`, `editorial`) " .
-                        "VALUES (?,?,?,?)";
+        $sql = "INSERT INTO books (`pk_book`, `author`, `file`, `file_img`,`editorial`) " .
+                        "VALUES (?,?,?,?,?)";
 
         if (!file_exists($this->books_path) ) {
             FilesManager::createDirectory($this->books_path);
         }
-      
+
         $this->file_name = $_FILES['file']['name'];
+        $this->file_img = $_FILES['file_img']['name'];
 
         $this->createThumb();
 
         $values = array($this->id, $data['author'],
-                        $this->file_name, $data['editorial']);
-       
+                        $this->file_name, $this->file_img, $data['editorial']);
+
         if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
 
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
@@ -49,7 +77,7 @@ class Book extends Content {
 
             return(false);
         }
-        
+
         return(true);
     }
 
@@ -70,19 +98,25 @@ class Book extends Content {
         }
 
         $this->pk_book = $rs->fields['pk_book'];
-        $this->author = $rs->fields['author'];       
+        $this->author = $rs->fields['author'];
         $this->file_name = $rs->fields['file'];
+        $this->file_img = $rs->fields['file_img'];
         $this->editorial = $rs->fields['editorial'];
     }
 
     function update($data) {
 
-        parent::update($data);
+        $file_name = $_FILES['file']['name'];
+        $file_img = $_FILES['file_img']['name'];
 
-        $sql = "UPDATE books SET  `author`=?,`file`=?, `editorial`=? ".
+        parent::update($data);
+        $data['file_name'] = !empty($file_name)?$file_name:$this->file_name;
+        $data['file_img'] = !empty($file_img)?$file_img:$this->file_img;
+
+        $sql = "UPDATE books SET  `author`=?,`file`=?,`file_img`=?, `editorial`=? ".
         		"WHERE pk_book = ".intval($data['id']);
 
-        $values = array( $data['author'], $data['file_name'], $data['editorial']);
+        $values = array( $data['author'], $data['file_name'], $data['file_img'], $data['editorial']);
 
         if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
