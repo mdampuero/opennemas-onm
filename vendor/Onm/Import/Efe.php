@@ -266,7 +266,7 @@ class Efe implements \Onm\Import\Importer
 
         $counTotalElements = count($filesSynced);
         if (array_key_exists('items_page', $params) && array_key_exists('page', $params)) {
-            $files = array_slice($filesSynced, $params['items_page'] * $params['page'], $params['items_page']);
+            $files = array_slice($filesSynced, $params['items_page'] * ($params['page']-1), $params['items_page']);
         } else {
             $files = $filesSynced;
         }
