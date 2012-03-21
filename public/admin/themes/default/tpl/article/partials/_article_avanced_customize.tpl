@@ -16,8 +16,13 @@
                     <tr>
                         <td>
                             <label>{t}Size for title{/t}</label>
+                            {if isset($article->params['titleSize'])}
+                                {assign var=defaultValue value=$article->params['titleSize']}
+                            {else}
+                                {assign var=defaultValue value=24}
+                            {/if}
                             <select name="params[titleSize]">
-                                {html_options values=$availableSizes options=$availableSizes selected=$article->params['titleSize']|default:"24"}
+                                {html_options values=$availableSizes options=$availableSizes selected=$defaultValue}
                             </select>
                         </td>
                         <td></td>
@@ -56,7 +61,12 @@
                             <td>
                                 <label>{t}Size{/t}</label>
                                 <select name="params[titleHomeSize]">
-                                     {html_options values=$availableSizes options=$availableSizes selected=$article->params['titleHomeSize']|default:"24"}
+                                    {if isset($article->params['titleHomeSize'])}
+                                        {assign var=defaultValue value=$article->params['titleHomeSize']}
+                                    {else}
+                                        {assign var=defaultValue value=24}
+                                    {/if}
+                                     {html_options values=$availableSizes options=$availableSizes selected=$defaultValue}
                                 </select>
                             </td>
                         </tr>
@@ -96,29 +106,6 @@
             </fieldset>
        </td>
     </tr>
-
-    <tr>
-        <td>
-            <fieldset>
-                <legend>Boletín</legend>
-                <table><tbody>
-                    <tr>
-                        <td colspan="2" >
-                            <label>{t}Agency in Bulletin{/t}</label>
-                            <input 	type="text" id="agencyWeb" name="params[agencyBulletin]" title="{t}Agency{/t}"
-                             style="width:98%" tabindex="5"
-                            {if is_object($article)}
-                                value="{$article->params['agencyBulletin']|clearslash|escape:"html"}"
-                            {else}
-                                value="{setting name=site_agency}"
-                            {/if}
-                            />
-                        </td>
-                    </tr>
-                </tbody></table>
-            </fieldset>
-       </td>
-    </tr>
-
+ 
 </tbody>
 </table>

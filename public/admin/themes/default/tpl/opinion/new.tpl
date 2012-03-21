@@ -144,6 +144,7 @@
                                                 </select>
                                             </td>
                                         </tr>
+                                        {is_module_activated name="COMMENT_MANAGER"}
                                         <tr>
                                             <td>
                                                 <label for="title">{t}Allow comments:{/t}</label>
@@ -155,6 +156,7 @@
                                                 </select>
                                             </td>
                                         </tr>
+                                        {/is_module_activated}
                                         <tr>
                                             <td>
                                                     <label for="title">{t}Title words-count:{/t}</label>

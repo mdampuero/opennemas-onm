@@ -77,6 +77,7 @@
                                  </tr>
                                  <tr>
                                  </tr>
+                                 {is_module_activated name="COMMENT_MANAGER"}
                                  <tr>
                                     <td valign="top"  align="right" style="padding:4px;" >
                                         <label for="title">{t}Allow comments{/t}</label>
@@ -88,6 +89,7 @@
                                         </select>
                                     </td>
                                 </tr>
+                                {/is_module_activated}
                              </table>
                          </div>
                      </td>
@@ -170,7 +172,7 @@
         <input type="hidden" id="action" name="action" value="" />
         <input type="hidden" name="id" id="id" value="{$id|default:""}" />
 
- 
+
     </form>
 </div>
 {/block}

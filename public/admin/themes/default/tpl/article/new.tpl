@@ -72,11 +72,13 @@
                     <a id="avanced-custom-button" href="#avanced-custom">{t}Article customize{/t}</a>
                 </li>
                 {/is_module_activated}
+                {is_module_activated name="COMMENT_MANAGER"}
                 {if isset($article) && is_object($article) && !$article->isClone()}
                 <li>
                     <a href="#comments">{t}Comments{/t}</a>
                 </li>
                 {/if}
+                {/is_module_activated}
                 <li>
                     <a href="#contenidos-relacionados">{t}Related contents{/t}</a>
                 </li>
@@ -113,8 +115,10 @@
                                     <div style="text-align:right">
                                         <h3>{t}Options{/t}</h3>
                                         {if $smarty.session.desde != 'list_hemeroteca'}
+                                            {is_module_activated name="COMMENT_MANAGER"}
                                             {t}Allow coments{/t}
                                             <input type="checkbox" {if (isset($article) && $article->with_comment eq 1)}checked{/if} name="with_comment" id="with_comment" value=1/>
+                                            {/is_module_activated}
                                             <br/>
                                             {acl isAllowed="ARTICLE_AVAILABLE"}
                                                 {t}Available:{/t}
@@ -248,6 +252,18 @@
                                             {/if}
                                     />
                                 </div><!-- / -->
+                                {is_module_activated name="AVANCED_ARTICLE_MANAGER"}
+                                <div style="display:inline-block; width:69%; vertical-align:top;">
+                                   <label>{t}Agency in Bulletin{/t}</label>
+                                    <input 	type="text" id="agencyWeb" name="params[agencyBulletin]" title="{t}Agency{/t}"
+                                    style="width:98%" tabindex="5"
+                                    {if is_object($article)}
+                                        value="{$article->params['agencyBulletin']|clearslash|escape:"html"}"
+                                    {else}
+                                        value=""
+                                    {/if}
+                                 </div>
+                                {/is_module_activated}
                             </td>
                         </tr>
                         <tr>
