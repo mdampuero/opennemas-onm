@@ -68,6 +68,11 @@ class cSearch
 	*/
 	public function SearchRelatedContents($szSourceTags, $szContentsTypeTitle,$iLimit=NULL,$_where=NULL)
 	{
+        // If $szSourceTags is array
+        // convert it in one string of words separated by blank
+        if (is_array($szSourceTags)) {
+            $szSourceTags = implode(' ', $szSourceTags);
+        }
         $szMatch2 = $this->DefineMatchOfSentence2($szSourceTags);//Match con contents.title
 
         $szSqlSentence = "SELECT pk_content, available, title, metadata, pk_fk_content_category, created, catName, " .(($szMatch2)) . " AS rel FROM contents, contents_categories";
