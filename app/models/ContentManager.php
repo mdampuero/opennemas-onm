@@ -1152,12 +1152,12 @@ class ContentManager
         if( intval($pk_fk_content_category) > 0) {
             $sql = 'SELECT COUNT(contents.pk_content) FROM `contents_categories`, `contents`, ' . $this->table . '  ' .
                    ' WHERE '.$_where.' AND `contents_categories`.`pk_fk_content_category`='.$pk_fk_content_category .
-                   '  AND pk_content=`'.$this->table.'`.`pk_'.strtolower($content_type) .
+                   '  AND pk_content=`'.$this->table.'`.`pk_'.strtolower($this->content_type) .
                    '` AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` ';
 
         } else {
            $sql = 'SELECT COUNT(contents.pk_content) AS total FROM `contents`, `'.$this->table.'` ' .
-                  'WHERE '.$_where.' AND `contents`.`pk_content`=`'.$this->table.'`.`pk_'.strtolower($content_type).'` ';
+                  'WHERE '.$_where.' AND `contents`.`pk_content`=`'.$this->table.'`.`pk_'.strtolower($this->content_type).'` ';
         }
 
         $rs = $GLOBALS['application']->conn->GetOne($sql);
