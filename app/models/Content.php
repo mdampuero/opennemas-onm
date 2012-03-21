@@ -1244,8 +1244,8 @@ class Content
     static public function setNumViews($id=null)
     {
 
-        if (array_key_exists('HTTP_USER_AGENT', $_SERVER)
-            && !empty($_SERVER['HTTP_USER_AGENT']))
+        if (!array_key_exists('HTTP_USER_AGENT', $_SERVER)
+            && empty($_SERVER['HTTP_USER_AGENT']))
         {
             return false;
         }
