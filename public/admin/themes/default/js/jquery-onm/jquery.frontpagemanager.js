@@ -48,15 +48,65 @@ jQuery(document).ready(function($){
         parent.animate({'backgroundColor':'#fb6c6c'},300).animate({'opacity': 0, 'height': 0 }, 300, function() {
             parent.remove();
         });
-        jQuery('#warnings-validation').html('<div class="notice">'+frontpage_messages.remember_save_positions+'</div>');
+        show_save_frontpage_dialog();
     });
 
     // suggest-home
+    $('div.placeholder').on('click', 'div.content-provider-element a.suggest-to-home', function(e) {
+        alert('not implemented');
+        e.preventDefault();
+        $(this).toggleClass('suggested');
+        return false;
+    });
 
     // arquive
+    $('div.placeholder').on('click', 'div.content-provider-element a.arquive', function(e) {
+        alert('not implemented');
+        e.preventDefault();
+        var parent = $(this).closest('.content-provider-element');
+        parent.animate({'backgroundColor':'#fb6c6c'},300).animate({'opacity': 0, 'height': 0 }, 300, function() {
+            parent.remove();
+        });
+        show_save_frontpage_dialog();
+        return false;
+    });
+
+
+    $("#modal-element-send-trash").modal({ backdrop: 'static', keyboard: true });
 
     // send-to-trash
+    $('div.placeholder').on('click', 'div.content-provider-element a.send-to-trash', function(e, ui) {
+        var element = $(this).closest('.content-provider-element');
+        var elementID = element.data('content-id');
+        $("body").data('element-for-del', element);
+        $('#modal-element-send-trash').data('selected-for-del', elementID);
 
+        $('#modal-element-send-trash .modal-body span.title').html( '<strong>' + element.find('.title').html() + '</strong>');
+        $("#modal-element-send-trash ").modal('show');
+        e.preventDefault();
+    });
+
+    $('#modal-element-send-trash').on('click', 'a.btn.yes', function(e, ui){
+        var delId = $("#modal-element-send-trash").data("selected-for-del");
+        if(delId) {
+            $.ajax({
+                url:  "/admin/controllers/common/content.php",
+                type: "GET",
+                data: { action:"send-to-trash", id:delId }
+            });
+        }
+        show_save_frontpage_dialog();
+        $("#modal-element-send-trash").modal('hide');
+        $("body").data('element-for-del').animate({ 'backgroundColor':'#fb6c6c' },300).animate({ 'opacity': 0, 'height': 0 }, 300, function() {
+            $(this).remove();
+        });
+        e.preventDefault();
+    });
+
+    $('#modal-element-send-trash').on('click', 'a.btn.no', function(e){
+        $("#modal-element-send-trash").modal('hide');
+        e.preventDefault();
+    });
 
     /***************************************************************************
     * Content provider code
@@ -116,14 +166,14 @@ jQuery(document).ready(function($){
 
     $('#button_savepositions').on('click',function() {
         var els = get_contents_in_frontpage();
-        var category = jQuery("#frontpagemanager").data("category");
+        var category = $("#frontpagemanager").data("category");
 
-        jQuery.post("frontpagemanager.php?action=save_positions&category=" + category,
+        $.post("frontpagemanager.php?action=save_positions&category=" + category,
                 { 'contents_positions': els }
         ).success(function(data) {
-            jQuery('#warnings-validation').html("<div class='success'>"+data+"</div>");
+            $('#warnings-validation').html("<div class='success'>"+data+"</div>");
         }).error(function(data) {
-            jQuery('#warnings-validation').html("<div class='error'>"+data.responseText+"</div>");
+            $('#warnings-validation').html("<div class='error'>"+data.responseText+"</div>");
         });
 
         return false;
@@ -144,7 +194,7 @@ jQuery(document).ready(function($){
         e.preventDefault();
         var contents = get_contents_in_frontpage();
         var encodedContents = JSON.stringify(get_contents_in_frontpage());
-        jQuery.colorbox({
+        $.colorbox({
             href: "/admin/controllers/frontpagemanager/frontpagemanager.php?action=preview_frontpage&contents="+encodedContents,
             data: { 'contents': contents },
             title: 'Previsualización Portada',
@@ -179,4 +229,8 @@ function get_contents_in_frontpage() {
 
     });
     return els;
+}
+
+function show_save_frontpage_dialog() {
+    jQuery('#warnings-validation').html('<div class="notice">'+frontpage_messages.remember_save_positions+'</div>');
 }

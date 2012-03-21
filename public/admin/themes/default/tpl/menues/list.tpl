@@ -157,7 +157,7 @@
                             </td>
                             <td>
                                 {acl isAllowed="MENU_UPDATE"}
-                                 <a href="{$smarty.server.SCRIPT_NAME}?action=read&name={$withoutFather[m]->name}"
+                                 <a href="{$smarty.server.SCRIPT_NAME}?action=read&amp;name={$withoutFather[m]->name}"
                                 {/acl}
                                     title="{t 1=$withoutFather[m]->name}Edit page '%1'{/t}" title={t}"Edit"{/t}>
                                      {$withoutFather[m]->name|capitalize}
@@ -168,7 +168,7 @@
                                  <ul class="action-buttons clearfix">
                                     <li>
                                     {acl isAllowed="MENU_UPDATE"}
-                                        <a href="{$smarty.server.SCRIPT_NAME}?action=read&name={$withoutFather[m]->name}" title="{t 1=$withoutFather[m]->name}Edit page '%1'{/t}" title={t}"Edit"{/t}>
+                                        <a href="{$smarty.server.SCRIPT_NAME}?action=read&amp;name={$withoutFather[m]->name}" title="{t 1=$withoutFather[m]->name}Edit page '%1'{/t}" title={t}"Edit"{/t}>
                                             <img src="{$params.IMAGE_DIR}edit.png" border="0" />
                                         </a>
                                     {/acl}

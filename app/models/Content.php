@@ -62,7 +62,7 @@ class Content
     {
         $this->cache = new MethodCacheManager($this, array('ttl' => 30));
 
-        if (!is_null($id)) { $this->read($id); }
+        if (!is_null($id)) { return $this->read($id); }
     }
 
     /**
@@ -273,6 +273,8 @@ class Content
 
         // Fire event onAfterXxx
         $GLOBALS['application']->dispatch('onAfterRead', $this);
+
+        return $this;
     }
 
 
@@ -562,12 +564,10 @@ class Content
      *
      * @return boolean true if all went well
      **/
-    public function setPending()
+    public function setDraft()
     {
         // NEW APPROACH
         // Set the flags to the pending status
-        // Drop from all the frontpages
-        // Clean caches where this content is
 
         // OLD APPROACH
         if (($this->id == null) && !is_array($status)) { return false; }
@@ -583,9 +583,8 @@ class Content
         $values = array($_SESSION['userid'], date("Y-m-d H:i:s"), $this->id);
 
         if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
-            $errorMsg = Application::logDatabaseError();
-
-            return;
+            Application::logDatabaseError();
+            return false;
         }
 
         /* Notice log of this action */
@@ -653,6 +652,8 @@ class Content
             $errorMsg = Application::logDatabaseError();
             return false;
         }
+
+        $this->favorite = 1;
 
         /* Notice log of this action */
         Application::logContentEvent(__METHOD__, $this);
@@ -1515,24 +1516,29 @@ class Content
      *
      * @return boolean true if was removed successfully
      **/
-    public function unpublishFromHomePage($contentPK)
+    public function dropFromAllHomePages($contentPK)
     {
+        $ccm = ContentCategoryManager::get_instance();
         $cm = new ContentManager();
+        if ($category == 'home') {
+            $category_name = 'home';
+            $category = 0;
+        } else {
+            $category_name = $ccm->get_name($category);
+        }
 
-        $sql = 'UPDATE contents SET `available`=0 WHERE pk_content='.$contentPK;
-        $sql2 = 'DELETE FROM content_positions WHERE pk_fk_content = '.$contentPK;
+        $sql = 'DELETE FROM content_positions WHERE pk_fk_content = '.$pk_content;
+
         $rs = $GLOBALS['application']->conn->Execute($sql);
-        $rs2 = $GLOBALS['application']->conn->Execute($sql2);
 
-        if (!$rs || !$rs2) {
+        if (!$rs) {
             Application::logDatabaseError();
             return false;
         } else {
             $type = $cm->getContentTypeNameFromId($this->content_type,true);
             /* Notice log of this action */
-
             $logger = Application::getLogger();
-            $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed action Unpublish from homepage at '.$type.' Id '.$pk_content);
+            $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed action Drop from frontpage '.$type.' with id '.$pk_content);
             return true;
         }
     }
@@ -1585,7 +1591,6 @@ class Content
         $sql="SELECT pk_content FROM `refactor_ids` WHERE pk_content_old = ?";
         $value= array($oldID);
         $refactorID = $GLOBALS['application']->conn->GetOne($sql,$value);
-
         if(!empty($refactorID)) {
             $content = new Content($refactorID);
             Application::forward301('/'.$content->uri);
@@ -1603,7 +1608,6 @@ class Content
      * @return int id in table content or forward to 404
      *
      */
-
     public static function resolveID($dirtyID) {
 
         if (!empty($dirtyID)){

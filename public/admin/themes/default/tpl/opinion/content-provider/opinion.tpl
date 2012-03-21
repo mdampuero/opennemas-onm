@@ -29,7 +29,7 @@
             </li>
             <li>
                 {if !$params['home']}
-                <a title="{t}Suggest to home{/t}" href="#" class="suggest-home">
+                <a title="{t}Suggest to home{/t}" href="#" class="suggest-to-home">
                     <i class="icon-home"></i> {t}Suggest to home{/t}
                 </a>
                 {/if}

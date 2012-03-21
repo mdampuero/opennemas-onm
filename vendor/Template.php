@@ -51,7 +51,7 @@ class Template extends Smarty
         // Create cache and compile dirs if not exists to make template instance aware
         foreach (array('cache', 'compile') as $key => $value ) {
             $directory = CACHE_PATH.DS.'smarty'.DS.$value;
-            if (!file_exists($directory)) {
+            if (!is_dir($directory)) {
                 mkdir($directory, 0755);
             }
             $this->{$value."_dir"} = realpath($directory).'/';
@@ -76,9 +76,9 @@ class Template extends Smarty
         // Set filters: $filters = array('pre' => array(), 'post' => array(), 'output' => array())
         $this->setFilters($filters);
 
-        $this->loadFilter("output","trimwhitespace");
+        // $this->loadFilter("output","trimwhitespace");
 
-
+        // $this->debugging = true;
         $this->assign(
             'params',
                 array(
@@ -214,27 +214,25 @@ class TemplateAdmin extends Template {
 
         foreach (array('cache', 'compile') as $key => $value ) {
             $directory = CACHE_PATH.DS.'smarty'.DS.'admin-'.$value;
-            if (!file_exists($directory)) {
+            if (!is_dir($directory)) {
                 mkdir($directory);
             }
             $this->{$value."_dir"} = realpath($directory).'/';
         }
 
-        $this->template_dir	= $this->templateBaseDir.'tpl/';
-        $this->config_dir	= $this->templateBaseDir.'config/';
-        $this->plugins_dir[]= $this->templateBaseDir.'plugins/';
-        $this->caching	= false;
+        $this->template_dir  = $this->templateBaseDir.'tpl/';
+        $this->config_dir    = $this->templateBaseDir.'config/';
+        $this->plugins_dir[] = $this->templateBaseDir.'plugins/';
+        $this->caching       = false;
         $this->allow_php_tag = true;
-
-
 
         // Template variables
         $baseUrl = SITE_URL.SS.'admin'.SS.'themes'.SS.$theme.SS;
 
-        $this->locale_dir	= $baseUrl.'locale/';
-        $this->css_dir	        = $baseUrl.'css/';
-        $this->image_dir	= $baseUrl.'images/';
-        $this->js_dir	        = $baseUrl.'js/';
+        $this->locale_dir = $baseUrl.'locale/';
+        $this->css_dir    = $baseUrl.'css/';
+        $this->image_dir  = $baseUrl.'images/';
+        $this->js_dir     = $baseUrl.'js/';
 
         $this->assign('params',
                 array(
@@ -246,6 +244,8 @@ class TemplateAdmin extends Template {
 
         $this->theme = $theme;
         $this->assign('THEME', $theme);
+        // $this->debugging = true;
+
 
     }
 

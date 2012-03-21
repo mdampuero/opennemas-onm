@@ -11,10 +11,115 @@ require_once('../../../bootstrap.php');
 require_once('../../session_bootstrap.php');
 
 // Fetching HTTP vars
-$action   = filter_input(INPUT_GET, 'action', FILTER_SANITIZE_STRING,  array('options' => array( 'default' => 'list')));
-
+$action = $request->query->filter('action', '', FILTER_SANITIZE_STRING);
+$id     = $request->query->getInt('id');
 switch ($action) {
-    case 'suggest-to-frontpage':
-        //
+
+    // Marks a content as pending
+    case 'set-draft':
+
+        if (is_int($id)) {
+            $content = new Content($id);
+            $content->setDraft();
+        }
+
+        // Drop from any frontpage
+
+
         break;
+
+    // Marks a content as available
+    case 'set-available':
+
+        if (is_int($id)) {
+            $content = new Content($id);
+            $content->setAvailable();
+        }
+
+        break;
+
+    case 'set-unavailable':
+
+        // poner como no disponible
+        // y saca de todas las portadas
+
+        // Drop fron any frontpage
+
+        break;
+
+    // Toggles availability of a ontent
+    case 'toggle-available':
+
+        if (is_int($id)) {
+            $content = new Content($id);
+            $availability = ($content->availability == 1);
+            $content->toggleAvailable();
+            if ($availability) {
+                // Drop from any frontpage
+            }
+        }
+
+        break;
+
+    case 'arquive':
+
+        // saca de todas las portatillas
+        // saca flag de sugerido
+        // y mantiene contenido disponible
+
+
+
+        break;
+
+    case 'set-favorite':
+
+        # code...
+
+        break;
+
+    case 'unset-favorite':
+
+        # code...
+
+        break;
+
+    case 'set-suggested-to-frontpage':
+        // suggestToHomepage
+        # code...
+
+        break;
+
+    case 'unset-suggested-to-frontpage':
+
+        # code...
+
+        break;
+
+    case 'send-to-trash':
+        // envia la papelera
+        // marcar como no available
+        // si está en cualquiera de las portadillas lo saca
+
+        $content = new Content($id);
+        $content = false;
+        if ($content !== false) {
+            $content->setDraft();
+        } else {
+            $error = sprintf('Content with id %s no valid', $id);
+        }
+
+        if (isset($error)) {
+            echo json_encode(array('error' => $error));
+        }
+
+        break;
+
+    case 'recover-from-trash':
+
+        // pone como disponible
+
+        break;
+
+
+
 }
