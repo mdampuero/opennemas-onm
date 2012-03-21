@@ -12,7 +12,7 @@
  */
 
 
-printf("Welcome to OpenNemas database Refactorize \n");
+printf("Welcome to OpenNemas database Importer \n");
 
 /**
  * Setting up the import application
@@ -61,22 +61,32 @@ if(!defined(INSTANCE_MEDIA) )
  * General configurations
 */
 
-require 'import-cronicas.php';
+$cronicasImporter = new CronicasToOnm($configOldDB,$configNewDB);
 
-$importer = new createContents();
+$helper = new CronicasHelper();
+$helper->clearExamples(); //delete example contents
+$helper->sqlExecute();
 
-$old = new importCronicas($config_oldDB);
+$cronicasImporter->importCategories();
 
-$importer->clearExamples(); //delete example contents
-$importer->sqlExecute();
+$cronicasImporter->importImages();
 
-$types = $importer->getContentTypes();
+$cronicasImporter->importArticles();
 
-//foreach ($types as $type)
-$type='article';
+$cronicasImporter->importRelatedContents();
 
-$contents = $old->getContents($type);
+$cronicasImporter->importAuthorsOpinion();
 
-$importer->insertContents($contents);
+$cronicasImporter->importOpinions();
 
- printf("OpenNemas database is ok for Cronicas \n");
+$cronicasImporter->importSpecials();
+
+$cronicasImporter->importAlbums();
+
+$cronicasImporter->importLetters();
+
+$cronicasImporter->importAdvertisements();
+
+printf("OpenNemas database is ok for Cronicas \n");
+
+$helper->printResults();
