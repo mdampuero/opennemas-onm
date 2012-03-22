@@ -73,7 +73,10 @@ input[readonly="readonly"] { background:#eee !important; }
 input[type='text'], input[type='file'], input[type='password'], textarea { 	background:White; border: 1px solid #B5B8C8; color:#555; padding:5px; vertical-align:middle; border-radius:2px; }
 input[type='text']:focus, input[type='file']:focus, input[type='password']:focus, textarea:focus,select:fofus { box-shadow: 0 1px 3px rgba(0,0,0, 0.2) inset; border-color:#3079ED; }
 
-label {padding: 1px 3px 1px 0px;}
+label {
+    padding: 1px 3px 1px 0px;
+    display: inline;
+}
 
 .wrapper-content {
     margin: 0 auto;
