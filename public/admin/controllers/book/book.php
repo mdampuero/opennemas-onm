@@ -38,6 +38,13 @@ if(empty($category)) {
 $ccm = ContentCategoryManager::get_instance();
 list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu($category, $contentType);
 
+$bookCategories = array();
+foreach($parentCategories as $bCat){
+    if($bCat->internal_category == $contentType){
+        $bookCategories[] = $bCat;
+    }
+
+}
 if(empty($category)) {
     $category ='favorite';
 }
@@ -45,7 +52,7 @@ if(empty($category)) {
 $tpl->assign('category', $category);
 
 $tpl->assign('subcat', $subcat);
-$tpl->assign('allcategorys', $parentCategories);
+$tpl->assign('allcategorys', $bookCategories);
 
 $tpl->assign('datos_cat', $categoryData);
 
