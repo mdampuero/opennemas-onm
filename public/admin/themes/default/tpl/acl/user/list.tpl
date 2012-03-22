@@ -43,7 +43,7 @@
 
 		<table class="adminheading">
 			<tr>
-				<th>
+				<th class="form-inline">
 					<label for="username">{t}Filter by name{/t}
 						<input id="username" name="filter[name]" value="{$smarty.request.filter.name|default:""}" />
 					</label>

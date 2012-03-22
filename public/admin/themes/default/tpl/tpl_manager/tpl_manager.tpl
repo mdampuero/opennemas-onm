@@ -87,11 +87,11 @@ img.inputExtension { top:9px !important; }
 
         <div class="table-info clearfix">
             <div>
-                <div class="right">
+                <div class="right form-inline">
                     <label>
                         {t}Show{/t}
                         <input type="text" name="items_page" id="items_page" value="{$smarty.request.items_page}"
-                            size="3" maxlength="3" style="text-align:right; margin-top:-2px; padding:2px 5px" />
+                            size="3" maxlength="3" style="width:30px !important; text-align:right; margin-top:-2px; padding:2px 5px" />
                         {t}items/page with type{/t}
                     </label>
 

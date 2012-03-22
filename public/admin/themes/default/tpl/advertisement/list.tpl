@@ -68,7 +68,7 @@
 
             <table class="adminheading">
                 <tr>
-                    <th>
+                    <th class="form-inline">
                         <label for="filter[type_advertisement]">{t}Banner type:{/t}</label>
                         <select name="filter[type_advertisement]" id="filter[type_advertisement]" onchange="submitFilters(this.form);">
                             {if !isset($smarty.request.filter) && !isset($smarty.request.filter.type_advertisement)}

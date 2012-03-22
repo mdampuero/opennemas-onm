@@ -16,7 +16,7 @@
     <div class="top-action-bar clearfix">
 		<div class="wrapper-content">
 			<div class="title"><h2>{t}Privileges manager{/t}</h2></div>
-            <ul class="old-button">				 
+            <ul class="old-button">
 				<li>
 					<a href="{$smarty.server.PHP_SELF}?action=new&id=0" accesskey="N" tabindex="1">
 						<img border="0" src="{$params.IMAGE_DIR}user_add.png" title="Nuevo" alt="Nuevo"><br />{t}New Privilege{/t}
@@ -25,13 +25,13 @@
 			</ul>
 		</div>
 	</div>
-    
+
     {render_messages}
-    
+
     <div class="wrapper-content">
         <table class="adminheading">
             <tr>
-                <th nowrap align="right">
+                <th class="right form-inline">
                     <label>{t}Filter by module:{/t}
                         <select name="module" onchange="$('action').value='list';$('formulario').submit();">
                             <option value="">{t}-- All --{/t}</option>
@@ -57,7 +57,7 @@
                 {section name=c loop=$privileges}
                 <tr>
                     <td>
-                        <a href="{$smarty.server.PHP_SELF}?action=read&id={$privileges[c]->id}" title="{t}Edit privilege{/t}">
+                        <a href="{$smarty.server.PHP_SELF}?action=read&amp;id={$privileges[c]->id}" title="{t}Edit privilege{/t}">
                             {$privileges[c]->name}
                         </a>
                     </td>
@@ -73,7 +73,7 @@
                     <td class="right">
                         <ul class="action-buttons">
                             <li>
-                                <a href="{$smarty.server.PHP_SELF}?action=read&id={$privileges[c]->id}" title="{t}Edit privilege{/t}">
+                                <a href="{$smarty.server.PHP_SELF}?action=read&amp;id={$privileges[c]->id}" title="{t}Edit privilege{/t}">
                                     <img src="{$params.IMAGE_DIR}edit.png" border="0" />
                                 </a>
                             </li>
