@@ -78,7 +78,6 @@ class Template extends Smarty
 
         // $this->loadFilter("output","trimwhitespace");
 
-        // $this->debugging = true;
         $this->assign(
             'params',
                 array(
@@ -244,8 +243,6 @@ class TemplateAdmin extends Template {
 
         $this->theme = $theme;
         $this->assign('THEME', $theme);
-        // $this->debugging = true;
-
 
     }
 
@@ -275,6 +272,7 @@ class TemplateManager extends Template {
 
         $this->setFilters($filters);
 
+
         // Parent variables
         $this->templateBaseDir = SITE_PATH.DS.'manager'.DS.'themes'.DS.'default'.DS;
 
@@ -294,8 +292,6 @@ class TemplateManager extends Template {
         $this->caching	     = false;
         $this->allow_php_tag = true;
 
-
-
         // Template variables
         $baseUrl = SITE_URL.SS.'admin'.SS.'themes'.SS.$theme.SS;
 
@@ -304,17 +300,15 @@ class TemplateManager extends Template {
         $this->image_dir	= $baseUrl.'images/';
         $this->js_dir	        = $baseUrl.'js/';
 
-        $this->assign('params',
-                array(
-                    'LOCALE_DIR' =>    $this->locale_dir,
-                    'CSS_DIR'	 =>    $this->css_dir,
-                    'IMAGE_DIR'  =>    $this->image_dir,
-                    'JS_DIR'	 =>    $this->js_dir )
+        $this->assign('params', array(
+            'LOCALE_DIR' =>    $this->locale_dir,
+            'CSS_DIR'	 =>    $this->css_dir,
+            'IMAGE_DIR'  =>    $this->image_dir,
+            'JS_DIR'	 =>    $this->js_dir )
         );
 
         $this->theme = $theme;
         $this->assign('THEME', $theme);
-
     }
 
     function setUpLocale()

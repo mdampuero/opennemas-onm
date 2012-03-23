@@ -55,12 +55,11 @@
      {/block}
 
 </head>
-<body>
-    {script_tag src="/wz_tooltip.js"}
+<body class="manager">
 
     <header class="global-nav clearfix">
         <div class="logoonm pull-right">
-            <a  href="{$smarty.const.SITE_URL}admin/" id="logo-onm" class="clearfix" title="{t}Go to admin main page{/t}">
+            <a  href="{$smarty.const.SITE_URL}manager/" id="logo-onm" class="clearfix" title="{t}Go to admin main page{/t}">
                <img src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}images/logo-opennemas-small.png" alt="opennemas" width="132" height="27"/>
             </a>
         </div>
@@ -79,34 +78,6 @@
                 </form>
             </div>
 
-            {if {count_pending_comments} gt 0}
-            <div class="notification-messages">
-                <a  class="comments-available" title="{t}There are new comments to moderate{/t}"
-                    href="{$smarty.const.SITE_URL_ADMIN}/controllers/comment/comment.php?action=list&amp;category=todos">
-                    <span class="icon">{count_pending_comments}</span>
-                </a>
-            </div>
-            {/if}
-
-            <div class="usermenu">
-                <a href="#" class="menu"><span class="icon">&nbsp;</span></a>
-                <div>
-                    <div class="avatar">
-                        {gravatar email=$smarty.session.email image_dir=$params.IMAGE_DIR image=true size="50"}
-                    </div><!-- /.avatar -->
-                    <div class="user-info">
-                        <div class="complete-name">{$smarty.session.realname|ucfirst}</div>
-                        <div class="login-name">{$smarty.session.username}</div>
-                        <ul class="links">
-                            <li><a id="settings" title="{t}Edit my profile{/t}" href="{$smarty.const.SITE_URL_ADMIN}/controllers/acl/user.php?action=read&amp;id={$smarty.session.userid}">{t}Edit my user profile{/t}</a></li>
-                            {if Acl::check('BACKEND_ADMIN') eq true}
-                            <li><a href="#" id="user_activity" title="{t}Active users in backend{/t}">{t}Connected users{/t} ({count_sessions})</a></li>
-                            {/if}
-                            <li><a href="javascript:salir('{t}Do you really want to exit from backend?{/t}','{$smarty.const.SITE_URL_ADMIN}/logout.php?csrf={$smarty.session.csrf}');" id="logout" class="logout" title="{t}Logout from control panel{/t}">{t}Log out{/t}</a></li>
-                        </ul><!-- /.links -->
-                    </div><!-- /.user-info -->
-                </div>
-            </div>
         </div>
     </header>
 
@@ -162,17 +133,10 @@
     {/block}
 
 
-    {if Acl::check('USER_ADMIN') eq true}
-    {include file="welcome/modals/_modal_users.tpl"}
-    {script_tag src="/onm/footer-functions-admin.js"}
-    {/if}
-
     <!--[if lt IE 7 ]>
         <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.2/CFInstall.min.js"></script>
         <script>window.attachEvent("onload",function(){ CFInstall.check({ mode:"overlay" }) })</script>
     <![endif]-->
-
-    {debug}
 
 </body>
 </html>

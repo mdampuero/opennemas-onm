@@ -29,7 +29,7 @@ label {
             <div class="search clearfix">
                 <div class="search-results">
                     <div id="search-results">
-                        
+
                         {if !is_null($smarty.get.stringSearch)}
                             {include file="search_advanced/partials/_list.tpl"}
                         {else}
@@ -47,8 +47,8 @@ label {
                     <div>
                         <label for="string_search">
                             {t}Content name{/t}
-                            <input type="text" id="stringSearch" name="stringSearch" title="stringSearch" value="{$search_string}"
-                                class="required" /> &nbsp;
+                            <input type="search" id="stringSearch" name="stringSearch" title="stringSearch" value="{$search_string}"
+                                class="input-medium search-query" /> &nbsp;
 
                         </label>
 
@@ -67,7 +67,7 @@ label {
 
                         {/foreach}
                         <br>
-                        <button type="submit" class="onm-button red">{t}Search{/t}</button>
+                        <button type="submit" class="btn btn-danger">{t}Search content{/t}</button>
                     </div><!-- /search-form -->
                 </div>
             </div><!-- /search -->

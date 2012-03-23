@@ -119,8 +119,8 @@ img.inputExtension { top:9px !important; }
                         {html_options options=$sections selected=$smarty.request.section|default:""}
                     </select>
 
-                    <button onclick="javascript:paginate(1);return false;">
-                        <img src="{$params.IMAGE_DIR}template_manager/reload16x16.png"  width="10" />
+                    <button onclick="javascript:paginate(1);return false;" class="btn">
+                        <i class="icon-refresh"></i>
                         {t}Update list{/t}
                     </button>
                 </div>
@@ -128,7 +128,7 @@ img.inputExtension { top:9px !important; }
         </div>
         <div id="caches">
 		{if count($caches)>0}
-		<table class="listing-table">
+		<table class="listing-table table-striped">
 			<thead>
 				<tr>
 					<th  style="width:10px;">

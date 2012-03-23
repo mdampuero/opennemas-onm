@@ -11,8 +11,8 @@
 
     </div>
     <div class="modal-footer">
-        <a class="btn primary yes" href="#">{t}Send to trash{/t}</a>
-        <a class="btn secondary no" href="#">{t}Keep{/t}</a>
+        <a class="btn btn-primary" href="#">{t}Send to trash{/t}</a>
+        <a class="btn" href="#">{t}Keep{/t}</a>
     </div>
 </div>
 

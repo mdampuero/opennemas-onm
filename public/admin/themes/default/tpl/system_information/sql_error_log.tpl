@@ -30,9 +30,9 @@
                     {$total_errors} registered SQL errors
                 </div>
                 <div class="right">
-                    <form method="GET" action="{$smarty.server.PHP_SELF}">
-                        <input type="text" name="search" value="{$search}">
-                        <button type="submit">{t}Search{/t}</button>
+                    <form method="GET" action="{$smarty.server.PHP_SELF}" class="form-inline form-search">
+                        <input type="search" name="search" value="{$search}" class="input-medium search-query">
+                        <button type="submit" class="btn">{t}Search{/t}</button>
                     </form>
                 </div>
             </div>
@@ -45,7 +45,7 @@
                     <th scope="col" style="width:5px;">#</th>
                     <th class="center" style="width:120px; text-align:center;">{t}Creation date{/t}</th>
                     <th >{t}Error explanation{/t}</th>
-                    <th class="center" style="width:80px; text-align:center;">{t}Execution time{/t}</th>
+                    <th class="center" style="width:120px; text-align:center;">{t}Execution time{/t}</th>
                </tr>
             </thead>
             <tbody>
@@ -79,13 +79,11 @@
                 {/foreach}
             </tbody>
 
-            {if $pagination->_totalItems > 0}
             <tfoot>
                 <tr class="pagination">
                     <td colspan="4">{$pagination->links}</td>
                 </tr>
             </tfoot>
-            {/if}
 
          </table>
 

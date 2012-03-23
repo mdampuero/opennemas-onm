@@ -105,7 +105,7 @@
                     <th style="width:40px">{t}Section{/t}</th>
                     <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
                     <th class="center" style="width:110px;">{t}Date{/t}</th>
-                    <th class="center" style="width:20px;">{t}Actions{/t}</th>
+                    <th class="center" style="width:200px;">{t}Actions{/t}</th>
                </tr>
             </thead>
 
@@ -121,19 +121,13 @@
                     <td class="center">{$litterelems[c]->category_title}</td>
                     <td class="center">{$litterelems[c]->views}</td>
                     <td class="center">{$litterelems[c]->created}</td>
-                    <td class="center">
-                        <ul class="action-buttons">
-                            <li>
-                               <a href="{$smarty.server.PHP_SELF}?id={$litterelems[c]->id}&amp;action=no_in_litter&amp;mytype={$mytype}&amp;page={$paginacion->_currentPage}" title="Recuperar">
-                                   <img class="portada" src="{$params.IMAGE_DIR}trash_no.png" border="0" alt="{t}Restore{/t}" />
-                               </a>
-                            </li>
-                            <li>
-                                <a href="{$smarty.server.PHP_SELF}?id={$litterelems[c]->id}&amp;action=remove&amp;mytype={$mytype}&amp;page={$paginacion->_currentPage}" title="{t}Delete{/t}">
-                                   <img src="{$params.IMAGE_DIR}trash.png" border="0" />
-                                   </a>
-                            </li>
-                        </ul>
+                    <td class="right form-inline">
+                        <a class="btn btn-mini" href="{$smarty.server.PHP_SELF}?id={$litterelems[c]->id}&amp;action=no_in_litter&amp;mytype={$mytype}&amp;page={$paginacion->_currentPage}" title="Recuperar">
+                            {t}Restore{/t}
+                        </a>
+                        <a class="btn btn-danger btn-mini" href="{$smarty.server.PHP_SELF}?id={$litterelems[c]->id}&amp;action=remove&amp;mytype={$mytype}&amp;page={$paginacion->_currentPage}" title="{t}Delete{/t}">
+                            {t}Delete{/t}
+                        </a>
                     </td>
                 </tr>
                 {sectionelse}

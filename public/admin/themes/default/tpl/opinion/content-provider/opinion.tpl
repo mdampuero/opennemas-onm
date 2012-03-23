@@ -7,7 +7,7 @@
         </div>
     </div>
     <div class="content-action-buttons btn-group">
-        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+        <a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">
             {t}Actions{/t}
         <span class="caret"></span>
         </a>

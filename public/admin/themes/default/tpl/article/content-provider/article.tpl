@@ -7,7 +7,7 @@
         </div>
     </div>
     <div class="content-action-buttons btn-group">
-        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+        <a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">
             {t}Actions{/t}
         <span class="caret"></span>
         </a>
@@ -40,14 +40,6 @@
                     <i class="icon-trash"></i> {t}Send to trash{/t}
                 </a>
             </li>
-
-            <!--
-            <li class="divider"></li>
-            <li>
-                <a title="{t}Settings{/t}" href="#">
-                    {t}Settings{/t}
-                </a>
-            </li> -->
         </ul>
     </div>
 </div>

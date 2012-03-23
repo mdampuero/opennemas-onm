@@ -1635,7 +1635,7 @@ div.action-bar .right{
 .listing-table.nofill tr:hover { background:none !important;}
 .listing-table th td { text-align:center; }
 .listing-table td.empty{ text-align:center; font-size:13px; padding:30px; }
-.listing-table td a { color:#0069D6; font-weight: bold; text-decoration:none; text-shadow: 0px 0 5px white;}
+.listing-table td a:not(.btn) { color:#0069D6; font-weight: bold; text-decoration:none; text-shadow: 0px 0 5px white;}
 .listing-table tfoot td { text-align:center; border: 0 none; min-height:33px;}
 .listing-table tbody .family_type { background:#F5F5F5; font-weight: bold; padding: 8px; }
 
@@ -1649,7 +1649,7 @@ div.action-bar .right{
 
 
 .listing-table .pagination { color:#aaa !important; }
-.listing-table .pagination a { background: #3f3f3f; border: 1px solid #666; color:White; }
+.listing-table .pagination a { background: #3f3f3f; border: 1px solid #666; color:White !important; text-shadow:none; }
 .listing-table .pagination a:hover { background:#3c3c3c; }
 
 /* -------------------------------------------------------------
@@ -2322,3 +2322,6 @@ div.dashboardBox div.table {
 }
 
 .pagination a{float:none !important; }
+a.btn { color: #333; }
+a.btn-primary,a.btn-primary:hover,a.btn-warning,a.btn-warning:hover,a.btn-danger,a.btn-danger:hover,a.btn-success,a.btn-success:hover,a.btn-info,a.btn-info:hover,a.btn-inverse,a.btn-inverse:hover{text-shadow:0 -1px 0 rgba(0, 0, 0, 0.25);color:#ffffff;}
+a.btn-primary.active,a.btn-warning.active,a.btn-danger.active,a.btn-success.active,a.btn-info.active,a.btn-dark.active{color:rgba(255, 255, 255, 0.75);}

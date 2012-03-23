@@ -45,7 +45,7 @@
 			<tr>
 				<th class="form-inline">
 					<label for="username">{t}Filter by name{/t}
-						<input id="username" name="filter[name]" value="{$smarty.request.filter.name|default:""}" />
+						<input id="username" name="filter[name]" value="{$smarty.request.filter.name|default:""}" class  />
 					</label>
 
 					<label for="userlogin">{t}or username:{/t}
@@ -53,20 +53,19 @@
 					</label>
 
 					<label for="usergroup">{t}and group:{/t}
-						<select id="usergroup" name="filter[group]">
+						<select id="usergroup" name="filter[group]" class="span2">
 							{if isset($smarty.request.filter) && isset($smarty.request.filter.group)}
 								{assign var=filter_selected value=$smarty.request.filter.group}
 							{/if}
 							{html_options options=$groupsOptions selected=$filter_selected|default:""}
 						</select>
 					</label>
-					<input type="hidden" name="page" value="{$smarty.request.page}" />
-					<button type="submit">{t}Search{/t}</button>
+					<button type="submit" class="btn">{t}Search{/t}</button>
 				</th>
 			</tr>
 		</table>
 
-		<table class="listing-table">
+		<table class="listing-table table-striped">
 			{if count($users) gt 0}
 			<thead>
 				<tr>

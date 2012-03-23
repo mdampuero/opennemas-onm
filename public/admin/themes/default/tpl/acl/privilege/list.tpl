@@ -29,22 +29,22 @@
     {render_messages}
 
     <div class="wrapper-content">
-        <table class="adminheading">
-            <tr>
-                <th class="right form-inline">
+        <div class="table-info clearfix">
+            <div>
+                <div class="right form-inline">
                     <label>{t}Filter by module:{/t}
                         <select name="module" onchange="$('action').value='list';$('formulario').submit();">
                             <option value="">{t}-- All --{/t}</option>
                             {section name="mods" loop=$modules}
-							<option value="{$modules[mods]}"{if isset($smarty.request.module) && $modules[mods] eq $smarty.request.module} selected="selected"{/if}>{$modules[mods]}</option>
+                            <option value="{$modules[mods]}"{if isset($smarty.request.module) && $modules[mods] eq $smarty.request.module} selected="selected"{/if}>{$modules[mods]}</option>
                             {/section}
                         </select>
                     </label>
-                </th>
-            </tr>
-        </table><!--.adminheading-->
+                </div>
+            </div>
+        </div>
 
-        <table class="listing-table">
+        <table class="listing-table table-striped">
             <thead>
                 <tr>
                     <th>{t}Privilege name{/t}</th>

@@ -74,11 +74,11 @@
 
     <div class="table-info clearfix">
             <div>
-                <div class="left"><strong>Total: {$pagination->_totalItems} articles.</strong></div>
+                <div class="left"><label>Total: {$pagination->_totalItems} articles.</label></div>
                 <div class="right form-inline">
                     <label for="username">
                         {t}Filter by title or content{/t}
-                        <input id="username" name="filter_title" onchange="this.form.submit();" value="{$smarty.request.filter_title}" />
+                        <input id="username" name="filter_title" onchange="this.form.submit();" value="{$smarty.request.filter_title}" class="input-medium search-query"/>
                     </label>
 
                     <label for="usergroup">
@@ -89,7 +89,7 @@
                         </select>
                     </label>
 
-                    <button type="submit">{t}Search{/t}</button>
+                    <button type="submit" class="btn">{t}Search{/t}</button>
                 </div>
             </div>
         </div>
@@ -136,8 +136,8 @@
                 <td class="right">
                     <ul class="action-buttons">
                         <li>
-                            <a class="publishing" href="{$smarty.server.PHP_SELF}?action=import&amp;id={$elements[c]->xmlFile}" title="Importar">
-                           <img alt="Publicar" src="{$params.IMAGE_DIR}archive_no2.png">
+                            <a class="btn btn-mini" href="{$smarty.server.PHP_SELF}?action=import&amp;id={$elements[c]->xmlFile}" title="{t}Import{/t}">
+                                {t}Import{/t}
                             </a>
                         </li>
                     </ul>
