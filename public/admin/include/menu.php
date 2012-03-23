@@ -3,17 +3,17 @@
 $menuXml = '<?xml version="1.0"?>
 <menu>
     <submenu title="'.htmlspecialchars(_("Web site"), ENT_QUOTES).'" id="frontpage" link="#">
-        <node
+        <!--<node
             module_name="FRONTPAGE_MANAGER"
             privilege="ARTICLE_FRONTPAGE"
             title="'.htmlspecialchars(_("Frontpage Manager"), ENT_QUOTES).'"
             id="frontpage_manager"
             link="article.php"
-        />
+        />-->
         <node
             module_name="FRONTPAGE_MANAGER"
             privilege="ARTICLE_FRONTPAGE"
-            title="'.htmlspecialchars(_("New Frontpage Manager"), ENT_QUOTES).'"
+            title="'.htmlspecialchars(_("Frontpage Manager"), ENT_QUOTES).'"
             id="frontpage_manager"
             link="controllers/frontpagemanager/frontpagemanager.php"
         />
