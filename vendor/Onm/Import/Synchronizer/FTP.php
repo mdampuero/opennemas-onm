@@ -29,7 +29,7 @@ class FTP {
         $this->params = $params;
 
         $this->serverUrl = parse_url($params['server']);
-        
+
 
         $this->ftpConnection = @ftp_connect($this->serverUrl['host']);
         // test if the connection was successful
@@ -43,7 +43,7 @@ class FTP {
             $loginResult = ftp_login($this->ftpConnection,
                                      $params['user'],
                                      $params['password']);
-            
+
 
             if (!$loginResult) {
                 throw new \Exception(sprintf(_('Can\'t login into server '), $params['server']));
@@ -72,13 +72,16 @@ class FTP {
      *
      * @throws <b>Exception</b> $cacheDir not writable.
      */
-    public function downloadFilesToCacheDir($cacheDir, $excludedFiles = array())
+    public function downloadFilesToCacheDir($cacheDir, $excludedFiles = array(), $maxAge = null)
     {
 
-        $files = ftp_nlist($this->ftpConnection, ftp_pwd($this->ftpConnection));
+        $files = ftp_rawlist($this->ftpConnection, ftp_pwd($this->ftpConnection), true);
+        $files = $this->_filterOldFiles($this->_formatRawFtpFileList($files), $maxAge);
+
+        // Filter files by its creation
 
         self::cleanWeirdFiles($cacheDir);
-        $deletedFiles = self::cleanFiles($cacheDir,$files, $excludedFiles);
+        $deletedFiles = self::cleanFiles($cacheDir,$files, $excludedFiles, $maxAge);
 
         $downloadedFiles = 0;
 
@@ -87,20 +90,20 @@ class FTP {
             if (is_array($files) && count($files) > 0) {
                 foreach($files as $file) {
 
-                    
-                    if (!isset($this->params['allowed_file_extesions_pattern']) 
-                        || !preg_match('@'.$this->params['allowed_file_extesions_pattern'].'@', $file)
+
+                    if (!isset($this->params['allowed_file_extesions_pattern'])
+                        || !preg_match('@'.$this->params['allowed_file_extesions_pattern'].'@', $file['filename'])
                     ) {
                         continue;
                     } else {
                         $elements []= $file;
-                        $localFilePath = $cacheDir.DIRECTORY_SEPARATOR.strtolower(basename($file));
+                        $localFilePath = $cacheDir.DIRECTORY_SEPARATOR.strtolower(basename($file['filename']));
                         if (!file_exists($localFilePath)){
-                            @ftp_get($this->ftpConnection,  $cacheDir.DIRECTORY_SEPARATOR.strtolower(basename($file)), $file, FTP_BINARY);
+                            @ftp_get($this->ftpConnection,  $cacheDir.DIRECTORY_SEPARATOR.strtolower(basename($file['filename'])), $file['filename'], FTP_BINARY);
                             $downloadedFiles++;
                         }
                     }
-                    
+
                 }
             }
         } else {
@@ -146,7 +149,7 @@ class FTP {
      *
      * @return boolean, true if all went well
     */
-    static public function cleanFiles($cacheDir, $serverFiles, $localFileList)
+    static public function cleanFiles($cacheDir, $serverFiles, $localFileList, $maxAge)
     {
 
         $deletedFiles = 0;
@@ -155,19 +158,102 @@ class FTP {
 
             $serverFileList = array();
             foreach ($serverFiles as $key) {
-                $serverFileList []= strtolower(basename($key));
+                $serverFileList []= strtolower(basename($key['filename']));
             }
 
             foreach ($localFileList as $file) {
-                if(!in_array($file,$serverFileList)) {
+                $filePath = $cacheDir.'/'.$file;
+                if (!in_array($file, $serverFileList)) {
                     unlink($cacheDir.'/'.$file);
                     $deletedFiles++;
                 }
+
             }
         }
 
         return $deletedFiles;
     }
 
+    /**
+     * Converts a raw file list from a FTP connection to a formatted array list
+     *
+     * @return array list of files with its properties
+     **/
+    protected function _formatRawFtpFileList($rawFiles='')
+    {
+        // here the magic begins!
+        $structure = array();
+        $arraypointer = &$structure;
+        foreach ($rawFiles as $rawfile) {
+            if ($rawfile[0] == '/') {
+                $paths = array_slice(explode('/', str_replace(':', '', $rawfile)), 1);
+                $arraypointer = &$structure;
+                foreach ($paths as $path) {
+                    foreach ($arraypointer as $i => $file) {
+                        if ($file['text'] == $path) {
+                            $arraypointer = &$arraypointer[ $i ]['children'];
+                            break;
+                        }
+                    }
+                }
+            } elseif(!empty($rawfile)) {
+                $info = preg_split("/[\s]+/", $rawfile, 9);
+                $arraypointer[] = array(
+                    'filename'   => $info[8],
+                    'isDir'  => $info[0]{0} == 'd',
+                    'size'   => $this->_byteconvert($info[4]),
+                    'chmod'  => $this->_chmodnum($info[0]),
+                    'date'   => \DateTime::createFromFormat('d M H:i', $info[6] . ' ' . $info[5] . ' ' . $info[7]),
+                    'raw'    => $info,
+                    'raw2'   => $rawfile,
+                    // the 'children' attribut is automatically added if the folder contains at least one file
+                );
+            }
+        }
+        return $structure;
 
+    }
+
+
+    /**
+     * Converts a byte based file size to a human readable string
+     * @param  integer $bytes the amount of bytes of the file
+     * @return string        the human readable file size
+     */
+    protected function _byteconvert($bytes) {
+        $symbol = array('B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
+        $exp = floor( log($bytes) / log(1024) );
+        return sprintf( '%.2f ' . $symbol[ $exp ], ($bytes / pow(1024, floor($exp))) );
+    }
+
+    /**
+     * Converts an chmod string to a numeric based file permissions
+     * @param  string $chmod the chmod string-based file perms
+     * @return integer        the numeric based file permissions
+     */
+    protected function _chmodnum($chmod) {
+        $trans = array('-' => '0', 'r' => '4', 'w' => '2', 'x' => '1');
+        $chmod = substr(strtr($chmod, $trans), 1);
+        $array = str_split($chmod, 3);
+        return array_sum(str_split($array[0])) . array_sum(str_split($array[1])) . array_sum(str_split($array[2]));
+    }
+
+    /**
+     * Filters files by its creation
+     *
+     * @param  array $files the list of files for filtering
+     * @param  int $maxAge timestamp of the max age allowed for files
+     * @return array the list of files without those with age > $magAge
+     **/
+    protected function _filterOldFiles($files, $maxAge)
+    {
+
+        if (!empty($maxAge)) {
+            $files = array_filter($files, function($item) use ($maxAge) {
+                return (time() - $maxAge) < $item['date']->getTimestamp();
+            });
+        }
+
+        return $files;
+    }
 }

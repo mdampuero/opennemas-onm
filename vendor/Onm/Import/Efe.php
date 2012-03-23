@@ -138,7 +138,7 @@ class Efe implements \Onm\Import\Importer
         $excludedFiles = self::getLocalFileList($this->syncPath);
 
         $synchronizer = new \Onm\Import\Synchronizer\FTP($params);
-        $ftpSync = $synchronizer->downloadFilesToCacheDir($this->syncPath, $excludedFiles);
+        $ftpSync = $synchronizer->downloadFilesToCacheDir($this->syncPath, $excludedFiles, $params['max_age']);
 
         $this->unlockSync();
 
