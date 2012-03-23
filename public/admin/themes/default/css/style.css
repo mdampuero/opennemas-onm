@@ -2118,18 +2118,17 @@ html.draganddrop #dropzone {
 .yellow.awesome:hover                           { background-color: #fc9200; }
 
 .onm-button {
-  border-radius: 2px 2px 2px 2px;
-  cursor: default;
-  font-size: 11px;
-  font-weight: bold;
-  padding:4px 10px;
-  min-width: 54px;
-  outline: 0 none;
-  text-align: center;
-  display:inline-block;
-  text-transform:uppercase;
-  outline:transparent;
-
+    border-radius: 2px 2px 2px 2px;
+    cursor: default;
+    font-size: 11px;
+    font-weight: bold;
+    padding:4px 10px;
+    min-width: 54px;
+    outline: 0 none;
+    text-align: center;
+    display:inline-block;
+    text-transform:uppercase;
+    outline:transparent;
     background-color: #F5F5F5;
     background-image: -moz-linear-gradient(center top , #F5F5F5, #F1F1F1);
     background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#F5F5F5), to(#F1F1F1));
@@ -2321,3 +2320,5 @@ div.dashboardBox div.table {
   width:16px;
   height:16px;
 }
+
+.pagination a{float:none !important; }

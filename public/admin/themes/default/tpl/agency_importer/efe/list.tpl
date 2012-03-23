@@ -79,7 +79,7 @@
 
     <div class="warnings-validation"></div><!-- / -->
 
-    <form action="{$smarty.server.PHP_SELF}" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
+    <form action="{$smarty.server.PHP_SELF}" method="GET" name="formulario" id="formulario">
 
     	{render_messages}
 
@@ -106,25 +106,27 @@
     	</div>
     	{/if}
 
+        <div class="table-info clearfix">
+            <div>
+                <div class="left"><strong>Total: {$pagination->_totalItems} articles.</strong></div>
+                <div class="right form-inline">
+                    <label for="username">
+                        {t}Filter by title or content{/t}
+                        <input id="username" name="filter_title" onchange="this.form.submit();" value="{$smarty.request.filter_title}" />
+                    </label>
 
-        <table class="adminheading">
-    	<tr>
-    	    <th>Total: {$pagination->_totalItems} articles.</th>
-    	    <th >
-    		<label for="username">{t}Filter by title or content{/t}</label>
-    		<input id="username" name="filter_title" onchange="this.form.submit();" value="{$smarty.request.filter_title}" />
+                    <label for="usergroup">
+                        {t}and category:{/t}
+                        <select id="usergroup" name="filter_category" onchange="this.form.submit();">
+                            <option value="*">{t}All{/t}</option>
+                            {html_options options=$categories selected=$smarty.request.filter_group|default:""}
+                        </select>
+                    </label>
 
-    		<label for="usergroup">{t}and category:{/t}</label>
-    		<select id="usergroup" name="filter_category" onchange="this.form.submit();">
-    		     <option value="*">{t}All{/t}</option>
-    		     {html_options options=$categories selected=$smarty.request.filter_group|default:""}
-    		</select>
-
-    		<input type="hidden" name="page" value="{$smarty.request.page|default:""}" />
-    		<input type="submit" value="{t}Search{/t}">
-    	    </th>
-    	</tr>
-        </table>
+                    <button type="submit">{t}Search{/t}</button>
+                </div>
+            </div>
+        </div>
 
         <table class="listing-table">
             <thead>
