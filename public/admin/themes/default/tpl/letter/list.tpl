@@ -124,7 +124,7 @@
                                 {/acl}
                                  {acl isAllowed="LETTER_UPDATE"}
 								<li>
-									<a {$smarty.server.PHP_SELF}?action=read&id={$letters[c]->id} title="Modificar">
+									<a href="{$smarty.server.PHP_SELF}?action=read&id={$letters[c]->id}" title="Modificar">
 										<img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
 								</li>
                                 {/acl}

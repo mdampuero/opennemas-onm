@@ -6,12 +6,24 @@
 {/block}
 
 
+{block name="footer-js" append}
+<script>
+
+jQuery('#starttime').datepicker({
+        showAnim: "fadeIn",
+        dateFormat: 'yy-mm-dd'
+    });
+
+</script>
+
+{/block}
+
 {block name="content"}
 <form action="#" method="post" name="formulario" id="formulario" enctype="multipart/form-data" {$formAttrs}>
 
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Book manager{/t} :: {if $smarty.request.action eq "new"}{t}Creating Book{/t}{else}{t}Editing Album{/t}{/if}</h2></div>
+            <div class="title"><h2>{t}Book manager{/t} :: {if $smarty.request.action eq "new"}{t}Creating Book{/t}{else}{t}Editing Book{/t}{/if}</h2></div>
             <ul class="old-button">
                 {acl isAllowed="BOOK_CREATE"}
                 <li>
@@ -131,7 +143,7 @@
                     </td>
                     <td>
                         <input type="text" id="author" name="author" title="{t}author{/t}"
-                            size="60" value="{$book->author|clearslash|escape:"html"}" />
+                            size="30" value="{$book->author|clearslash|escape:"html"}" />
                     </td>
                 </tr>
                  <tr>
@@ -139,8 +151,8 @@
                         <label for="title">{t}Date{/t}:</label>
                     </td>
                     <td>
-                        <input type="text" id="startime" name="startime" title="{t}Date{/t}"
-                            size="60" value="{$book->startime|clearslash|escape:"html"}" />
+                        <input type="text" id="starttime" name="starttime" title="{t}Date{/t}"
+                            size="60" value="{$book->starttime|clearslash|date_format:"Y-m-d"}" />
                     </td>
                 </tr>
                  <tr>
@@ -157,7 +169,7 @@
                         <label for="title">Descripci&oacute;n:</label>
                     </td>
                     <td>
-                        <textarea name="description" id="description"  title="description" style="width:90%; height:10em;">{t 1=$book->description|clearslash|escape:"html"}%1{/t}</textarea>
+                        <textarea name="description" id="description"  title="description" style="width:98%; height:10em;">{t 1=$book->description|clearslash|escape:"html"}%1{/t}</textarea>
                     </td>
                 </tr>
 
