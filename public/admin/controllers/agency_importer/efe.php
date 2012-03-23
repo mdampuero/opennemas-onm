@@ -72,6 +72,8 @@ switch($action) {
                     'agency_string' => s::get('efe_agency_string'),
                     'sync_from' => array(
                         'no_limits' => _('No limit'),
+                        '21600' => sprintf(_('%d hours'),'6'),
+                        '43200' => sprintf(_('%d hours'),'12'),
                         '86400' => _('1 day'),
                         '172800' => sprintf(_('%d days'),'2'),
                         '259200' => sprintf(_('%d days'),'3'),
@@ -394,10 +396,11 @@ switch($action) {
             $serverAuth = s::get('efe_server_auth');
 
             $ftpConfig = array(
-                'server'    => $serverAuth['server'],
-                'user'      => $serverAuth['username'],
-                'password'  => $serverAuth['password'],
+                'server'                         => $serverAuth['server'],
+                'user'                           => $serverAuth['username'],
+                'password'                       => $serverAuth['password'],
                 'allowed_file_extesions_pattern' => '.*',
+                'max_age'                => s::get('efe_sync_from_limit')
             );
 
             $efeSynchronizer = \Onm\Import\Efe::getInstance();

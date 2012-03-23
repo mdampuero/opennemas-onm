@@ -72,6 +72,8 @@ switch($action) {
                     'agency_string' => s::get('europapress_agency_string'),
                     'sync_from' => array(
                         'no_limits' => _('No limit'),
+                        '21600' => sprintf(_('%d hours'),'6'),
+                        '43200' => sprintf(_('%d hours'),'12'),
                         '86400' => _('1 day'),
                         '172800' => sprintf(_('%d days'),'2'),
                         '259200' => sprintf(_('%d days'),'3'),
@@ -256,6 +258,7 @@ switch($action) {
                 'user'      => $serverAuth['username'],
                 'password'  => $serverAuth['password'],
                 'allowed_file_extesions_pattern' => '.*\.xml$',
+                'max_age'                => s::get('europapress_sync_from_limit')
             );
 
             $epSynchronizer = \Onm\Import\Europapress::getInstance();
@@ -276,14 +279,14 @@ switch($action) {
             m::add( $errorMessage, m::ERROR );
         } catch (\Exception $e) {
             m::add($e->getMessage(), m::ERROR);
-            $e = new \Onm\Import\Europapress();
-            $e->unlockSync();
         }
+        $e = new \Onm\Import\Europapress();
+        $e->unlockSync();
 
         $httpParams = array(
-                            array('action' => 'list'),
-                            array('page' => $page),
-                            );
+            array('action' => 'list'),
+            array('page' => $page),
+        );
 
         Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
 
