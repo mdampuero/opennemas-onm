@@ -57,7 +57,7 @@
 </head>
 <body class="manager">
 
-    <header class="global-nav clearfix">
+    <header class="global-nav manager clearfix">
         <div class="logoonm pull-right">
             <a  href="{$smarty.const.SITE_URL}manager/" id="logo-onm" class="clearfix" title="{t}Go to admin main page{/t}">
                <img src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}images/logo-opennemas-small.png" alt="opennemas" width="132" height="27"/>
