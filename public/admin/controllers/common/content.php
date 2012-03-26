@@ -22,9 +22,8 @@ switch ($action) {
             $content = new Content($id);
             $content->setDraft();
         }
-
         // Drop from any frontpage
-
+        $content->dropFromAllHomePages();
 
         break;
 
@@ -86,6 +85,7 @@ switch ($action) {
     case 'set-suggested-to-frontpage':
         // suggestToHomepage
         # code...
+        //frontpage=1
 
         break;
 
@@ -96,20 +96,23 @@ switch ($action) {
         break;
 
     case 'send-to-trash':
-        // envia la papelera
-        // marcar como no available
-        // si está en cualquiera de las portadillas lo saca
 
         $content = new Content($id);
-        $content = false;
-        if ($content !== false) {
-            $content->setDraft();
+
+        if ($content->id !== null) {
+            if ($content->setTrashed()) {
+                $content->dropFromAllHomePages();
+            } else {
+                $error = sprintf('Unable to set trashed state to content with id %s', $id);
+            }
         } else {
             $error = sprintf('Content with id %s no valid', $id);
         }
 
         if (isset($error)) {
             echo json_encode(array('error' => $error));
+        } else {
+            echo json_encode(array('done'));
         }
 
         break;

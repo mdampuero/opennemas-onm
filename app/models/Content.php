@@ -566,18 +566,15 @@ class Content
      **/
     public function setDraft()
     {
-        // NEW APPROACH
-        // Set the flags to the pending status
 
         // OLD APPROACH
-        if (($this->id == null) && !is_array($status)) { return false; }
+        if ($this->id == null) { return false; }
 
         $GLOBALS['application']->dispatch('onBeforeAvailable', $this);
 
         $stmt = $GLOBALS['application']->conn->Prepare(
             'UPDATE contents
-             SET `available`=0, `fk_user_last_editor`=?,
-                 `changed`=? WHERE `pk_content`=?'
+             SET `available`=0, `fk_user_last_editor`=?, `changed`=? WHERE `pk_content`=?'
         );
 
         $values = array($_SESSION['userid'], date("Y-m-d H:i:s"), $this->id);
@@ -621,7 +618,8 @@ class Content
 
         $values = array($_SESSION['userid'], date("Y-m-d H:i:s"), $this->id);
 
-        if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
+        $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
+        if ($rs === false) {
             $errorMsg = Application::logDatabaseError();
             return false;
         }
@@ -1008,6 +1006,16 @@ class Content
         /* Notice log of this action */
         $logger = Application::logContentEvent(__METHOD__, $this);
 
+    }
+
+    /**
+     * Returns true if the content is suggested
+     *
+     * @return boolean true if the content is suggested
+     **/
+    public function isSuggested()
+    {
+        return ($this->frontpage = 1);
     }
 
     //New function - published directly in frontpages and no change position
@@ -1516,18 +1524,11 @@ class Content
      *
      * @return boolean true if was removed successfully
      **/
-    public function dropFromAllHomePages($contentPK)
+    public function dropFromAllHomePages()
     {
-        $ccm = ContentCategoryManager::get_instance();
-        $cm = new ContentManager();
-        if ($category == 'home') {
-            $category_name = 'home';
-            $category = 0;
-        } else {
-            $category_name = $ccm->get_name($category);
-        }
 
-        $sql = 'DELETE FROM content_positions WHERE pk_fk_content = '.$pk_content;
+        $cm = new ContentManager();
+        $sql = 'DELETE FROM content_positions WHERE pk_fk_content = '.$this->id;
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
@@ -1538,7 +1539,10 @@ class Content
             $type = $cm->getContentTypeNameFromId($this->content_type,true);
             /* Notice log of this action */
             $logger = Application::getLogger();
-            $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed action Drop from frontpage '.$type.' with id '.$pk_content);
+            $logger->notice(
+                'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed '
+                .'action Drop from frontpage '.$type.' with id '.$this->id
+            );
             return true;
         }
     }

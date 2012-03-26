@@ -1281,9 +1281,6 @@ class ContentManager
             $sql = 'SELECT * FROM `contents`, `'.$this->table.'` ' .
                     ' WHERE '.$_where.' AND `contents`.`pk_content`=`'.$this->table.'`.`pk_'.$this->content_type.'` '.$_order_by.' '.$_limit;
         }
-// print_r($sql);
-// var_dump($page, $items_page);die();
-
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
 

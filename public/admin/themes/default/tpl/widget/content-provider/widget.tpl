@@ -8,8 +8,8 @@
     </div>
     <div class="content-action-buttons btn-group">
         <a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">
-            {t}Actions{/t}
-        <span class="caret"></span>
+            <i class="icon-cog"></i>
+            <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
             <li>

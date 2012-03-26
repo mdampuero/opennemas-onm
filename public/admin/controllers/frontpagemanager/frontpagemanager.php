@@ -1,6 +1,4 @@
 <?php
-use Onm\Settings as s,
-    Onm\LayoutManager;
 /*
  * This file is part of the Onm package.
  *
@@ -9,6 +7,9 @@ use Onm\Settings as s,
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use Onm\Settings as s,
+    Onm\LayoutManager;
+
 require_once '../../../bootstrap.php';
 require_once '../../session_bootstrap.php';
 
@@ -17,9 +18,10 @@ $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
 require_once '../../controllers/utils_content.php';
 
 // Fetch request variables
-$action   = filter_input(INPUT_GET, 'action', FILTER_SANITIZE_STRING,  array('options' => array( 'default' => 'list')));
-$page     = filter_input(INPUT_GET, 'page', FILTER_VALIDATE_INT, array('options' => array( 'default' => 1)));
-$category = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_STRING,   array('options' => array( 'default' => 'home')));
+$action   = $request->query->filter('action', 'list', FILTER_SANITIZE_STRING);
+$page     = $request->query->filter('page', 1, FILTER_SANITIZE_NUMBER_INT);
+$category = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
+
 (!isset($_SESSION['_from'])) ? $_SESSION['_from'] = $category : null ;
 (!isset($_SESSION['desde'])) ? $_SESSION['desde'] = 'list' : null ;
 
@@ -35,9 +37,11 @@ $section = (empty($section))? 'home': $section;
 $categoryID = ($category == 'home') ? 0 : $category;
 list($parentCategories, $subcat, $datos_cat) = $ccm->getArraysMenu($categoryID);
 
-$tpl->assign('subcat', $subcat);
-$tpl->assign('allcategorys', $parentCategories);
-$tpl->assign('datos_cat', $datos_cat);
+$tpl->assign(array(
+    'subcat' => $subcat,
+    'allcategorys' => $parentCategories,
+    'datos_cat' => $datos_cat
+));
 $allcategorys = $parentCategories;
 
 
@@ -64,7 +68,6 @@ switch ($action) {
 
         // Get contents for this home
         $contentElementsInFrontpage  = $cm->getContentsForHomepageOfCategory($categoryID);
-
 
         // Sort all the elements by its position
         $contentElementsInFrontpage  = $cm->sortArrayofObjectsByProperty($contentElementsInFrontpage, 'position');
@@ -101,12 +104,13 @@ switch ($action) {
 
         // Get the form-encoded places from request
         if (isset($_POST['contents_positions'])) {
-            $contentsPositions = $_POST['contents_positions'];
+            $contentsPositions = $request->request->get('contents_positions');
         } else {
             $contentsPositions = null;
         }
-        $categoryID = filter_input(INPUT_GET, 'category', FILTER_VALIDATE_INT);
-        $validReceivedData = is_array($contentsPositions) && !empty($contentsPositions) && isset($categoryID);
+
+        $categoryID = $request->query->filter('category', null, FILTER_SANITIZE_NUMBER_INT);
+        $validReceivedData = is_array($contentsPositions) && !empty($contentsPositions) && !is_null($categoryID);
 
         $savedProperly = false;
         if ($validReceivedData) {
@@ -167,20 +171,17 @@ switch ($action) {
 
     case 'preview_frontpage':
 
-        $category_name    = filter_input(
-            INPUT_GET, 'category_name', FILTER_SANITIZE_STRING,
-            array('options' => array('default' => 'home'))
-        );
-        $subcategory_name = filter_input(INPUT_GET,'subcategory_name',FILTER_SANITIZE_STRING);
+        $categoryName    = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+        $subCategoryName = $request->query->filter('subcategory_name', null, FILTER_SANITIZE_STRING);
 
         $tpl     = new Template(TEMPLATE_USER);
         $tpl->caching = false;
 
         // Initialize the Content and Database object
         $ccm = ContentCategoryManager::get_instance();
-        list($category_name, $subcategory_name) = $ccm->normalize($category_name, $subcategory_name);
+        list($category_name, $subcategory_name) = $ccm->normalize($categoryName, $subCategoryName);
 
-        $actual_category = (!isset($subcategory_name))? $category_name : $subcategory_name;
+        $actual_category = (is_null($subcategory_name))? $category_name : $subcategory_name;
 
         $tpl->assign('actual_category', $actual_category);
         $actualCategoryId = $ccm->get_id($actual_category);
@@ -188,7 +189,7 @@ switch ($action) {
         require_once SITE_PATH."/controllers/index_sections.php";
 
         $cm = new ContentManager;
-        $contentsRAW = filter_input(INPUT_GET, 'contents');
+        $contentsRAW = $request->query->filter('contents');
         $contents = json_decode(json_decode($contentsRAW), true);
 
         $contentsInHomepage = $cm->getContentsForHomepageFromArray($contents);

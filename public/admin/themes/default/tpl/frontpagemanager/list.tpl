@@ -128,4 +128,6 @@
     <input type="hidden" name="id" id="id" value="{$id|default}" />
 </form>
 {include file="frontpagemanager/modals/_modal_send_to_trash.tpl"}
+{include file="frontpagemanager/modals/_modal_archive.tpl"}
+{include file="frontpagemanager/modals/_modal_suggest_to_frontpage.tpl"}
 {/block}

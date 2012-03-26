@@ -52,29 +52,84 @@ jQuery(document).ready(function($){
     });
 
     // suggest-home
+    //
+    $("#modal-element-suggest-to-home").modal({ backdrop: 'static', keyboard: true });
     $('div.placeholder').on('click', 'div.content-provider-element a.suggest-to-home', function(e) {
-        alert('not implemented');
+        var element = $(this).closest('.content-provider-element');
+        var elementID = element.data('content-id');
+        $("body").data('element-for-suggest-to-home', element);
+        $('#modal-element-suggest-to-home').data('selected-for-suggest-to-home', elementID);
+
+        $('#modal-element-suggest-to-home .modal-body span.title').html( '<strong>' + element.find('.title').html() + '</strong>');
+        $("#modal-element-suggest-to-home").modal('show');
         e.preventDefault();
-        $(this).toggleClass('suggested');
         return false;
+    });
+
+    $('#modal-element-suggest-to-home').on('click', 'a.btn.yes', function(e, ui){
+        // var delId = $("#modal-element-archive").data("selected-for-del");
+        // log(delId);
+        // if(delId) {
+        //     $.ajax({
+        //         url:  "/admin/controllers/common/content.php",
+        //         type: "GET",
+        //         data: { action:"archive", id:delId }
+        //     });
+        // }
+        // show_save_frontpage_dialog();
+        $("#modal-element-suggest-to-home").modal('hide');
+        // $("body").data('element-for-archive').animate({ 'backgroundColor':'#fb6c6c' },300).animate({ 'opacity': 0, 'height': 0 }, 300, function() {
+        //     $(this).remove();
+        // });
+        $("body").data('element-for-suggest-to-home').toggleClass('suggested');
+        e.preventDefault();
+    });
+
+    $('#modal-element-suggest-to-home').on('click', 'a.btn.no', function(e){
+        $("#modal-element-suggest-to-home").modal('hide');
+        e.preventDefault();
     });
 
     // arquive
+    $("#modal-element-archive").modal({ backdrop: 'static', keyboard: true });
     $('div.placeholder').on('click', 'div.content-provider-element a.arquive', function(e) {
-        alert('not implemented');
+        var element = $(this).closest('.content-provider-element');
+        var elementID = element.data('content-id');
+        $("body").data('element-for-archive', element);
+        $('#modal-element-archive').data('selected-for-archive', elementID);
+
+        $('#modal-element-archive .modal-body span.title').html( '<strong>' + element.find('.title').html() + '</strong>');
+        $("#modal-element-archive").modal('show');
         e.preventDefault();
-        var parent = $(this).closest('.content-provider-element');
-        parent.animate({'backgroundColor':'#fb6c6c'},300).animate({'opacity': 0, 'height': 0 }, 300, function() {
-            parent.remove();
-        });
+    });
+
+    $('#modal-element-archive').on('click', 'a.btn.yes', function(e, ui){
+        var delId = $("#modal-element-archive").data("selected-for-del");
+        log(delId);
+        if(delId) {
+            $.ajax({
+                url:  "/admin/controllers/common/content.php",
+                type: "GET",
+                data: { action:"archive", id:delId }
+            });
+        }
         show_save_frontpage_dialog();
-        return false;
+        $("#modal-element-archive").modal('hide');
+        $("body").data('element-for-archive').animate({ 'backgroundColor':'#fb6c6c' },300).animate({ 'opacity': 0, 'height': 0 }, 300, function() {
+            $(this).remove();
+        });
+        e.preventDefault();
+    });
+
+    $('#modal-element-archive').on('click', 'a.btn.no', function(e){
+        $("#modal-element-archive").modal('hide');
+        e.preventDefault();
     });
 
 
-    $("#modal-element-send-trash").modal({ backdrop: 'static', keyboard: true });
 
     // send-to-trash
+    $("#modal-element-send-trash").modal({ backdrop: 'static', keyboard: true });
     $('div.placeholder').on('click', 'div.content-provider-element a.send-to-trash', function(e, ui) {
         var element = $(this).closest('.content-provider-element');
         var elementID = element.data('content-id');
@@ -88,6 +143,7 @@ jQuery(document).ready(function($){
 
     $('#modal-element-send-trash').on('click', 'a.btn.yes', function(e, ui){
         var delId = $("#modal-element-send-trash").data("selected-for-del");
+        log(delId);
         if(delId) {
             $.ajax({
                 url:  "/admin/controllers/common/content.php",

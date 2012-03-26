@@ -349,7 +349,9 @@ div#content-provider #toggler{
 .scheduled.intime { border-left-color: Green !important; }
 .scheduled.dued { border-left-color: Red !important; }
 .scheduled.postponed { border-left-color: Blue !important; }
-
+.suggested {
+    background:#
+}
 #content-provider .spinner {
     position:absolute;
     top:9px;

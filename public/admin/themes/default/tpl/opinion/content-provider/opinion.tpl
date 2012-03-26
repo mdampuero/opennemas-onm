@@ -1,4 +1,4 @@
-<div data-content-id="{$content->id}" data-class="Opinion" class="content-provider-element {schedule_class item=$content} clearfix">
+<div data-content-id="{$content->id}" data-class="Opinion" class="content-provider-element {schedule_class item=$content} {suggested_class item=$content} clearfix">
     <div class="description">
         <input type="checkbox" class="action-button" name="selected-{$smarty.foreach.opinions_loop.index}">
         <div class="title">
@@ -8,12 +8,12 @@
     </div>
     <div class="content-action-buttons btn-group">
         <a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">
-            {t}Actions{/t}
-        <span class="caret"></span>
+            <i class="icon-cog"></i>
+            <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
             <li>
-                <a title="{t 1=$content->title}Edit '%1'{/t}" href="/admin/controllers/opinion/opinion.php?action=delete&amp;id={$content->id}">
+                <a title="{t 1=$content->title}Edit '%1'{/t}" href="/admin/controllers/opinion/opinion.php?action=read&amp;id={$content->id}">
                     <i class="icon-pencil"></i> {t}Edit{/t}
                 </a>
             </li>
