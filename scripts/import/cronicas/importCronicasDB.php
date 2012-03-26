@@ -69,19 +69,35 @@ $helper->sqlExecute();
 
 $cronicasImporter->importCategories();
 
+<<<<<<< Updated upstream
 $cronicasImporter->importImages();
 
 $cronicasImporter->importArticles();
+=======
+//$cronicasImporter->importImagesArticles();
 
-$cronicasImporter->importRelatedContents();
+$limit = ' LIMIT 11000, 11200';
+$cronicasImporter->importArticles($limit);
+>>>>>>> Stashed changes
 
-$cronicasImporter->importAuthorsOpinion();
+//$cronicasImporter->importRelatedContents();
 
+//$cronicasImporter->importAuthorsOpinion();
+
+/*
 $cronicasImporter->importOpinions();
 
+<<<<<<< Updated upstream
 $cronicasImporter->importSpecials();
+=======
+$cronicasImporter->importOtherImages();
+
+$cronicasImporter->importGalleries();
+>>>>>>> Stashed changes
 
 $cronicasImporter->importAlbums();
+ *
+ * $cronicasImporter->importSpecials();
 
 $cronicasImporter->importLetters();
 
