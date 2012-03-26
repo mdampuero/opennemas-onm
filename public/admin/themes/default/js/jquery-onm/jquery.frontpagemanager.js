@@ -59,20 +59,20 @@ jQuery(function($){
     $('div.placeholder').on('click', 'div.content-provider-element a.suggest-to-home', function(e) {
         var element = $(this).closest('.content-provider-element');
         var elementID = element.data('content-id');
-
+        var modal = $('#modal-element-suggest-to-home');
         if (element.is('.suggested')) {
-            $('#modal-element-suggest-to-home').find('.enable').hide();
-            $('#modal-element-suggest-to-home').find('.disable').show();
+            modal.find('.enable').hide();
+            modal.find('.disable').show();
         } else {
-            $('#modal-element-suggest-to-home').find('.enable').show();
-            $('#modal-element-suggest-to-home').find('.disable').hide();
+            modal.find('.enable').show();
+            modal.find('.disable').hide();
         }
 
+        modal.data('selected-for-suggest-to-home', elementID);
         $("body").data('element-for-suggest-to-home', element);
-        $('#modal-element-suggest-to-home').data('selected-for-suggest-to-home', elementID);
 
         $('#modal-element-suggest-to-home .modal-body span.title').html( '<strong>' + element.find('.title').html() + '</strong>');
-        $("#modal-element-suggest-to-home").modal('show');
+        modal.modal('show');
         e.preventDefault();
         return false;
     });
@@ -102,10 +102,11 @@ jQuery(function($){
         var element = $(this).closest('.content-provider-element');
         var elementID = element.data('content-id');
         $("body").data('element-for-archive', element);
-        $('#modal-element-archive').data('selected-for-archive', elementID);
+        var modal = $('#modal-element-archive');
+        modal.data('selected-for-archive', elementID);
 
-        $('#modal-element-archive .modal-body span.title').html( '<strong>' + element.find('.title').html() + '</strong>');
-        $("#modal-element-archive").modal('show');
+        modal.find('.modal-body span.title').html( '<strong>' + element.find('.title').html() + '</strong>');
+        modal.modal('show');
         e.preventDefault();
     });
 
@@ -121,8 +122,10 @@ jQuery(function($){
         }
         show_save_frontpage_dialog();
         $("#modal-element-archive").modal('hide');
-        $("body").data('element-for-archive').animate({ 'backgroundColor':'#fb6c6c' },300).animate({ 'opacity': 0, 'height': 0 }, 300, function() {
-            $(this).remove();
+        $("body").data('element-for-archive')
+            .animate({ 'backgroundColor':'#fb6c6c' },300)
+            .animate({ 'opacity': 0, 'height': 0 }, 300, function() {
+                $(this).remove();
         });
         e.preventDefault();
     });
