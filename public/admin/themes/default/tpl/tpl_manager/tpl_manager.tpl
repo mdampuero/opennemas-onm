@@ -317,7 +317,7 @@
                     <td class="left">{$caches[c].created|date_format:"%H:%M:%S %d/%m/%Y"}</td>
 
                     <td class="left">
-                        <div class="valid-until-date {if $caches[c].expires < $smarty.now}valid{else}expired{/if}">
+                        <div class="valid-until-date {if $caches[c].expires < $smarty.now}expired{else}valid{/if}">
                             {$caches[c].expires|date_format:"%H:%M:%S %d/%m/%Y"}
                         </div>
                     </td>
