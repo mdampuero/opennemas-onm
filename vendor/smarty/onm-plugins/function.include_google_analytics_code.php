@@ -21,7 +21,7 @@ function smarty_function_include_google_analytics_code($params, &$smarty) {
     if (is_array($gAnalyticsConfigs) && !empty($apiKey))  {
         $output = "<script type=\"text/javascript\">
             var _gaq = _gaq || [];
-            _gaq.push(['_setAccount', '". $apikey."']);";
+            _gaq.push(['_setAccount', '".$apiKey."']);";
 
         // If base domain for ganalytics is set append it to the final output.
         if (array_key_exists('base_domain', $gAnalyticsConfigs)
