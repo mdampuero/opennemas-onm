@@ -245,6 +245,7 @@ class SessionManager implements ArrayAccess
         );
 
         $i=0;
+        $result= array();
         while (isset($vars[$i])) {
             //TODO: the @ was written cause eht unserialize raises an notice
             // Try to fix this with other way
