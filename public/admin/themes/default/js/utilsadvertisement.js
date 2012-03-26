@@ -6,19 +6,19 @@
 function permanencia(my) {
 	console.log(my.options[my.selectedIndex].value);
 	var selectedOption = my.options[my.selectedIndex].value;
-	if (selectedOption=='CLIC') {		
+	if (selectedOption=='CLIC') {
 		$('porclic').show();
 		$('porview').hide();
 		$('porfecha').hide();
-	} else if (selectedOption=='VIEW') {		
+	} else if (selectedOption=='VIEW') {
 		$('porview').show();
 		$('porclic').hide();
 		$('porfecha').hide();
-	} else if (selectedOption=='DATE') {		
+	} else if (selectedOption=='DATE') {
 		$('porclic').hide();
 		$('porview').hide();
 		$('porfecha').show();
-	} else {		
+	} else {
 		$('porclic').hide();
 		$('porview').hide();
 		$('porfecha').hide();
@@ -31,30 +31,30 @@ function with_without_script(my) {
    if (my.checked === true){
 		$('div_script').setStyle({ display: 'block'});
 		$('div_url1').setStyle({ display: 'none'});
-		$('ädvertisement-images').setStyle({ display: 'none'});
+		$('advertisement-images').setStyle({ display: 'none'});
 	} else {
-		$('ädvertisement-images').setStyle({ display: 'block'});
+		$('advertisement-images').setStyle({ display: 'block'});
 		$('div_url1').setStyle({ display: 'block'});
 		$('div_script').setStyle({ display: 'none'});
 	}
 }
 
 function isflash(name) {
-//ojo ruta: 
+//ojo ruta:
 	var posic=name.lastIndexOf('.');
-	var extension= name.substring(posic);	
-	
+	var extension= name.substring(posic);
+
 	if (extension =='.swf')
 	   return true;
 	else
-	   return false;	
+	   return false;
 }
 function noticiasshow(my) {
   if( $(my.id).checked===true){
 	$('noticias-relacionadas').show();
-  }else{	
+  }else{
 	$('noticias-relacionadas').hide();
-  }	
+  }
 }
 
 //////////////////////////// CUADROS IMAGEN Y VIDEO //////////////////////////////////////////////////////////
