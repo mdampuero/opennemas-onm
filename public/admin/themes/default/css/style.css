@@ -833,6 +833,7 @@ legend {
 
   .global-nav div.info-left { float:right; display:inline-block; }
   .global-nav .logoonm, .global-nav > nav { float:left; display:inline-block; }
+  .global-nav .logoonm:hover, .global-nav .logoonm:active { text-decoration:none; outline: none;}
 
   .global-nav a, .global-nav{ color:#ddd; white-space:nowrap; }
   .global-nav .logoonm { width:140px; margin:0; padding:0; height:35px;}
@@ -984,7 +985,7 @@ legend {
       font-weight:normal;
       text-shadow:0 1px 0 #FFFFFF;
       margin:0;
-      padding:22px 0;
+      padding:20px 0;
       font-size:1.6em;
     }
 

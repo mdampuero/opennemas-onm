@@ -45,10 +45,10 @@ document.observe('dom:loaded', function() {
 
             <thead>
                 {if count($widgets) > 0}
-                <th width="85%">{t}Name{/t}</th>
-                <th>{t}Type{/t}</th>
-                <th class="center">{t}Published{/t}</th>
-                <th class="center">Actions</th>
+                <th>{t}Name{/t}</th>
+                <th style="width:70px">{t}Type{/t}</th>
+                <th class="center" style="width:20px">{t}Published{/t}</th>
+                <th class="right" style="width:100px">Actions</th>
                 {else}
                 <th scope="col" colspan=4>&nbsp;</th>
                 {/if}
@@ -77,28 +77,21 @@ document.observe('dom:loaded', function() {
                         {/acl}
                     </td>
 
-                    <td>
-                        <ul class="action-buttons clearfix">
-                            {if ($widgets[wgt]->renderlet != 'intelligentwidget' or true)}
-                            {acl isAllowed="WIDGET_UPDATE"}
-                            <li>
-                                <a href="widget.php?action=edit&id={$widgets[wgt]->pk_widget}" title="{t}Edit{/t}">
-                                <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
-                            </li>
-                            {/acl}
-                            {acl isAllowed="WIDGET_DELETE"}
-                            <li>
-                                <a class="del" data-controls-modal="modal-from-dom"
-                                   data-id="{$widgets[wgt]->pk_widget}" title="{t}Delete{/t}"
-                                   data-title="{$widgets[wgt]->title|capitalize}" href="#" >
-                                    <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
-                            </li>
-                            {/acl}
-                            {else}
-                            <li></li>
-                            {/if}
-
-                        </ul>
+                    <td class="right" >
+                        {if ($widgets[wgt]->renderlet != 'intelligentwidget' or true)}
+                        {acl isAllowed="WIDGET_UPDATE"}
+                        <a href="widget.php?action=edit&amp;id={$widgets[wgt]->pk_widget}" title="{t}Edit{/t}" class="btn btn-mini">
+                            {t}Edit{/t}
+                        </a>
+                        {/acl}
+                        {acl isAllowed="WIDGET_DELETE"}
+                            <a class="del btn btn-mini btn-danger" data-controls-modal="modal-from-dom"
+                               data-id="{$widgets[wgt]->pk_widget}" title="{t}Delete{/t}"
+                               data-title="{$widgets[wgt]->title|capitalize}" href="#" >
+                                {t}Delete{/t}
+                            </a>
+                        {/acl}
+                        {/if}
                     </td>
                 </tr>
                 {sectionelse}
