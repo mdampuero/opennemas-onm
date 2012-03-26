@@ -276,22 +276,10 @@ $menuXml = '<?xml version="1.0"?>
             privilege="ONLY_MASTERS" />
         <node class="divider" />
         <node
-            module_name="SYSTEM_UPDATE_MANAGER"
-            title="'.htmlspecialchars(_("Update System"), ENT_QUOTES).'"
-            id="system_update__manager"
-            link="controllers/updatesystem/index.php"
-            privilege="ONLY_MASTERS" />
-        <node
             module_name="LOG_SQL"
             title="'.htmlspecialchars(_("SQL error log"), ENT_QUOTES).'"
             id="log_sql"
             link="controllers/system_information/sql_error_log.php"
-            privilege="ONLY_MASTERS" />
-        <node
-            module_name="MYSQL_MANAGER"
-            title="'.htmlspecialchars(_("Database manager"), ENT_QUOTES).'"
-            id="mysql_manager"
-            link="controllers/system_information/system_information.php?action=mysql_check"
             privilege="ONLY_MASTERS" />
         <node
             title="'.htmlspecialchars(_("Support and Help"), ENT_QUOTES).'"
