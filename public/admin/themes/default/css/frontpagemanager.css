@@ -345,13 +345,16 @@ div#content-provider #toggler{
     color: White !important;
 }
 
+#frontpagemanager:not(.home) .suggested {
+    background:#FFFFE0 !important;
+    border:1px solid #BDB76B !important;
+}
+
 .scheduled { border-left:3px solid Black !important; }
 .scheduled.intime { border-left-color: Green !important; }
 .scheduled.dued { border-left-color: Red !important; }
 .scheduled.postponed { border-left-color: Blue !important; }
-.suggested {
-    background:#
-}
+
 #content-provider .spinner {
     position:absolute;
     top:9px;

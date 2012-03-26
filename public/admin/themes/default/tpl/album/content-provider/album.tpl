@@ -1,4 +1,4 @@
-<div data-content-id="{$content->id}" data-class="Album" class="content-provider-element clearfix">
+<div data-content-id="{$content->id}" data-class="Album" class="content-provider-element {schedule_class item=$content} {suggested_class item=$content} clearfix">
     <div class="description">
         <input type="checkbox" class="action-button" name="selected-{$smarty.foreach.album_loop.index}">
         <div class="title">
@@ -7,7 +7,7 @@
         </div>
     </div>
     <div class="content-action-buttons btn-group">
-        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+        <a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">
             <i class="icon-cog"></i>
             <span class="caret"></span>
         </a>
@@ -18,7 +18,7 @@
                 </a>
             </li>
             <li>
-                <a href="#" title="{t}Delete{/t}" class="drop-element">
+                <a title="{t}Remove element from this frontpage{/t}" href="#" class="drop-element">
                     <i class="icon-trash"></i> {t}Remove{/t}
                 </a>
             </li>

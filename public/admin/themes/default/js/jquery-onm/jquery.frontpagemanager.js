@@ -3,6 +3,7 @@ makeContentProviderAndPlaceholdersSortable = function () {
     jQuery('div#content-provider .ui-tabs-panel > div').sortable({
         connectWith: "div.placeholder div.content",
         placeholder: 'placeholder-element',
+        handle : '.description',
         update: function(event,ui) {
             jQuery('#warnings-validation').html('<div class="notice">'+frontpage_messages.remember_save_positions+'</div>');
         }
@@ -13,13 +14,14 @@ makeContentProviderAndPlaceholdersSortable = function () {
     jQuery('div.placeholder div.content').sortable({
         connectWith: "div#content-provider .ui-tabs-panel > div, div.placeholder div.content",
         placeholder: 'placeholder-element',
+        handle : '.description',
         update: function(event,ui) {
             jQuery('#warnings-validation').html('<div class="notice">'+frontpage_messages.remember_save_positions+'</div>');
         }
         //containment: '#content-with-ticker'
     }).disableSelection();
 };
-jQuery(document).ready(function($){
+jQuery(function($){
 
     /***************************************************************************
     * Sortable handlers
@@ -41,7 +43,7 @@ jQuery(document).ready(function($){
         $(this).find('.content-action-buttons').removeClass('open');
     });
 
-
+    // Drop element button
     $('div.placeholder').on('click', 'div.content-provider-element a.drop-element', function(e) {
         e.preventDefault();
         var parent = $(this).closest('.content-provider-element');
@@ -57,6 +59,15 @@ jQuery(document).ready(function($){
     $('div.placeholder').on('click', 'div.content-provider-element a.suggest-to-home', function(e) {
         var element = $(this).closest('.content-provider-element');
         var elementID = element.data('content-id');
+
+        if (element.is('.suggested')) {
+            $('#modal-element-suggest-to-home').find('.enable').hide();
+            $('#modal-element-suggest-to-home').find('.disable').show();
+        } else {
+            $('#modal-element-suggest-to-home').find('.enable').show();
+            $('#modal-element-suggest-to-home').find('.disable').hide();
+        }
+
         $("body").data('element-for-suggest-to-home', element);
         $('#modal-element-suggest-to-home').data('selected-for-suggest-to-home', elementID);
 
@@ -67,20 +78,15 @@ jQuery(document).ready(function($){
     });
 
     $('#modal-element-suggest-to-home').on('click', 'a.btn.yes', function(e, ui){
-        // var delId = $("#modal-element-archive").data("selected-for-del");
-        // log(delId);
-        // if(delId) {
-        //     $.ajax({
-        //         url:  "/admin/controllers/common/content.php",
-        //         type: "GET",
-        //         data: { action:"archive", id:delId }
-        //     });
-        // }
-        // show_save_frontpage_dialog();
+        var contentId = $("#modal-element-suggest-to-home").data("selected-for-suggest-to-home");
+        if(contentId) {
+            $.ajax({
+                url:  "/admin/controllers/common/content.php",
+                type: "GET",
+                data: { action:"toggle-suggested", id:contentId }
+            });
+        }
         $("#modal-element-suggest-to-home").modal('hide');
-        // $("body").data('element-for-archive').animate({ 'backgroundColor':'#fb6c6c' },300).animate({ 'opacity': 0, 'height': 0 }, 300, function() {
-        //     $(this).remove();
-        // });
         $("body").data('element-for-suggest-to-home').toggleClass('suggested');
         e.preventDefault();
     });

@@ -264,7 +264,7 @@ $menuXml = '<?xml version="1.0"?>
         <node class="divider" />
         <node
             module_name="CACHE_MANAGER"
-            title="'.htmlspecialchars(_("Cache manager"), ENT_QUOTES).'"
+            title="'.htmlspecialchars(_("Performance"), ENT_QUOTES).'"
             id="cache_manager"
             link="controllers/tpl_manager/tpl_manager.php"
             privilege="CACHE_ADMIN" />

@@ -82,7 +82,7 @@
 
         <div id="warnings-validation"></div><!-- /warnings-validation -->
 
-        <div id="frontpagemanager" data-category="{$category_id}" class="clearfix">
+        <div id="frontpagemanager" data-category="{$category_id}" class="{$category} clearfix">
             {$layout}
         </div><!-- /frontpagemanager -->
 

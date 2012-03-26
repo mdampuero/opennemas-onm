@@ -479,6 +479,29 @@ class Content
         return true;
     }
 
+    /**
+     * Change current value of frontpage property
+     *
+     * @param string $id the id of the element
+     *
+     * @return boolean true if it was changed successfully
+     **/
+    public function toggleSuggested()
+    {
+        $sql = 'UPDATE `contents` SET `frontpage` = (`frontpage` + 1) % 2 WHERE `pk_content`=?';
+
+        if ($GLOBALS['application']->conn->Execute($sql, array($this->id)) === false) {
+            $errorMsg = Application::logDatabaseError();
+            throw new \Exception($errorMsg);
+            return false;
+        }
+
+        /* Notice log of this action */
+        Application::logContentEvent(__METHOD__, $this);
+
+        return true;
+    }
+
     //Cambia available y estatus, paso de pendientes a disponibles y viceversa.
     public function set_available($status,$last_editor)
     {
@@ -1015,7 +1038,7 @@ class Content
      **/
     public function isSuggested()
     {
-        return ($this->frontpage = 1);
+        return ($this->frontpage == 1);
     }
 
     //New function - published directly in frontpages and no change position

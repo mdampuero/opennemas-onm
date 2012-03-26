@@ -95,6 +95,26 @@ switch ($action) {
 
         break;
 
+    case 'toggle-suggested':
+        $content = new Content($id);
+
+        if ($content->id !== null) {
+            try {
+                $content->toggleSuggested();
+            } catch (\Exception $e) {
+                $error = sprintf('Unable to set suggested to frontpage state to content with id %s: %s', $id, $e->getMessage());
+            }
+        } else {
+            $error = sprintf('Content with id %s no valid', $id);
+        }
+
+        if (isset($error)) {
+            echo json_encode(array('error' => $error));
+        } else {
+            echo json_encode(array('done'));
+        }
+        break;
+
     case 'send-to-trash':
 
         $content = new Content($id);
