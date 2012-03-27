@@ -4,8 +4,10 @@
       <h3>{t}Archive this element{/t}</h3>
     </div>
     <div class="modal-body">
-        <p>{t escape=off}Are you sure that do you want to archive the next element?{/t}</p>
-        <p>{t escape=off}This will remove this content from this frontpage and it will remain available for read.{/t}</p>
+        <p>
+            {t escape=off}Are you sure that do you want to archive the next element?{/t}<br/>
+            {t escape=off}This will remove this content from <strong>ALL FRONTPAGES</strong> but it will remain available for read.{/t}
+        </p>
         <ul>
             <li><span class="title">%title%</span></li>
         </ul>

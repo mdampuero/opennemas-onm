@@ -111,7 +111,7 @@ jQuery(function($){
     });
 
     $('#modal-element-archive').on('click', 'a.btn.yes', function(e, ui){
-        var delId = $("#modal-element-archive").data("selected-for-del");
+        var delId = $("#modal-element-archive").data("selected-for-archive");
         log(delId);
         if(delId) {
             $.ajax({

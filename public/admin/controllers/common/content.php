@@ -60,12 +60,30 @@ switch ($action) {
 
         break;
 
-    case 'arquive':
+    case 'archive':
 
         // saca de todas las portatillas
         // saca flag de sugerido
         // y mantiene contenido disponible
+        $content = new Content($id);
 
+        if ($content->id !== null) {
+            try {
+                $content->setArchived();
+            } catch (\Exception $e) {
+                $error = sprintf('Unable to set suggested to frontpage state to content with id %s: %s', $id, $e->getMessage());
+            }
+            $content->dropFromAllHomePages();
+        } else {
+            $error = sprintf('Content with id %s no valid', $id);
+        }
+
+        if (isset($error)) {
+            echo json_encode(array('error' => $error));
+        } else {
+            echo json_encode(array('done'));
+        }
+        break;
 
 
         break;
