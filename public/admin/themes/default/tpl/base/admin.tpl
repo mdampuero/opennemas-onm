@@ -69,7 +69,7 @@
         <div class="global-user-tools pull-right">
 
             <div class="global-search nofillonhover">
-                <form action="{$smarty.const.SITE_URL_ADMIN}/controllers/search_advanced/search_advanced.php" method="post">
+                <form action="{$smarty.const.SITE_URL_ADMIN}/controllers/search_advanced/search_advanced.php">
                     <input type="hidden" name="action" value="search" />
                     <input type="hidden" name="article" value="on" />
                     <input type="hidden" name="id" value="0" />
