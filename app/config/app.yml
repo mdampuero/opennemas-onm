@@ -1,0 +1,38 @@
+imports:
+    - { resource: parameters.yml }
+
+# Framework Base Configuration
+framework:
+    secret:          %secret%
+    charset:         UTF-8
+    csrf_protection: true
+    default_locale:  %locale%
+
+# Database Configuration
+database:
+    connection:
+        driver:   %database_driver%
+        host:     %database_host%
+        port:     %database_port%
+        dbname:   %database_name%
+        user:     %database_user%
+        password: %database_password%
+        charset:  UTF8
+
+# Swiftmailer Configuration
+swiftmailer:
+    transport: %mailer_transport%
+    host:      %mailer_host%
+    username:  %mailer_user%
+    password:  %mailer_password%
+    spool:     { type: memory }
+
+# Cache Configuration
+cache:
+    default:
+        handler: %cache_handler%
+
+# Session Configuration
+session:
+    handler: %session_handler%
+    params:  %session_params%
