@@ -16,9 +16,9 @@ switch ($action) {
     case 'login':
 
 		//  Get values from post
-        $login    = filter_input ( INPUT_POST, 'login' , FILTER_SANITIZE_STRING );
-        $password = filter_input ( INPUT_POST, 'password' , FILTER_SANITIZE_STRING );
-        $token    = filter_input ( INPUT_POST, 'token' , FILTER_SANITIZE_STRING );
+        $login    = $request->request->filter('login', null, FILTER_SANITIZE_STRING);
+        $password = $request->request->filter('password', null, FILTER_SANITIZE_STRING);
+        $token    = $request->request->filter('token', null, FILTER_SANITIZE_STRING);
         $captcha  = '';
 
         $user = new User();
@@ -26,6 +26,7 @@ switch ($action) {
         if ($_SESSION['csrf'] !== $token) {
             $tpl->assign('message', _('Login token is not valid. Try to autenticate again.'));
         } else {
+
             // Try to autenticate the user
             if ($user->login($login, $password, $token, $captcha)) {
 
@@ -72,13 +73,18 @@ switch ($action) {
                 $tpl->assign('message', _('Username or password incorrect.'));
             }
         }
-        $_SESSION['csrf'] = md5(uniqid(mt_rand(), true));
+        $token = md5(uniqid(mt_rand(), true));
+        $tpl->assign('token', $token);
+        $_SESSION['csrf'] = $token;
+
         $tpl->display('login/login.tpl');
 
     break;
 
     default:
-        $_SESSION['csrf'] = md5(uniqid(mt_rand(), true));
+        $token = md5(uniqid(mt_rand(), true));
+        $tpl->assign('token', $token);
+        $_SESSION['csrf'] = $token;
         $languages = Application::getAvailableLanguages();
         $currentLanguage =Application::$language;
         $tpl->assign('languages', $languages);

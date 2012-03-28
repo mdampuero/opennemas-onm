@@ -10,12 +10,12 @@
 use Onm\Settings as s,
     Onm\LayoutManager;
 
-require_once '../../../bootstrap.php';
-require_once '../../session_bootstrap.php';
+require_once __DIR__.'/../../../bootstrap.php';
+require_once __DIR__.'/../../session_bootstrap.php';
 
 $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
 
-require_once '../../controllers/utils_content.php';
+require_once __DIR__.'/../../controllers/utils_content.php';
 
 // Fetch request variables
 $action   = $request->query->filter('action', 'list', FILTER_SANITIZE_STRING);
