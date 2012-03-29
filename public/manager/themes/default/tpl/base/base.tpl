@@ -13,7 +13,7 @@
     <meta name="viewport" content="width=device-width">
 
     {block name="meta"}
-        <title>{setting name=site_name} - OpenNeMaS - Administration section</title>
+        <title>OpenNeMaS - Administration section</title>
     {/block}
 
     <link rel="icon" href="{$params.IMAGE_DIR}favicon.png">
