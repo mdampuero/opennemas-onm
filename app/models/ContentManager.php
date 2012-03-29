@@ -127,11 +127,11 @@ class ContentManager
         $contents = array();
 
         $sql = 'SELECT * FROM content_positions '
-              .'WHERE `fk_category`='.$categoryID.' '
+              .'WHERE `fk_category`=? '
               .'ORDER BY position ASC ';
 
         // Fetch the id, placeholder, position, and content_type in this category's frontpage
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($categoryID));
 
         if($rs !== false) {
 
