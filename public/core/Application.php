@@ -546,7 +546,7 @@ class Application
         $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
 
         $logger = Application::getLogger();
-        $logger->error('[Database Error] '.$errorMsg);
+        $logger->notice('[Database Error] '.$errorMsg, 'normal');
 
         $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
         $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
