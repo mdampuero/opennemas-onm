@@ -13,7 +13,9 @@ $configFile = implode(DIRECTORY_SEPARATOR, array(
     APPLICATION_PATH, 'config', 'config.inc.php'
 ));
 
-$request = Symfony\Component\HttpFoundation\Request::createFromGlobals();
+if (!isset($request)) {
+    $request = Symfony\Component\HttpFoundation\Request::createFromGlobals();
+}
 
 if (file_exists($configFile)) {
 
