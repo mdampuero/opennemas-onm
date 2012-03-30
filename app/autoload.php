@@ -22,10 +22,11 @@ define('SITE_LIBS_PATH',   realpath(SITE_PATH . "libs") . DIRECTORY_SEPARATOR);
 define('SITE_CORE_PATH',   realpath(SITE_PATH.DIRECTORY_SEPARATOR."core").DIRECTORY_SEPARATOR);
 define('SITE_VENDOR_PATH', realpath(APPLICATION_PATH.DIRECTORY_SEPARATOR."vendor").DIRECTORY_SEPARATOR);
 define('SITE_MODELS_PATH', realpath(APPLICATION_PATH.DIRECTORY_SEPARATOR."app/models").DIRECTORY_SEPARATOR);
+define('SITE_WS_API_PATH', realpath(APPLICATION_PATH.DIRECTORY_SEPARATOR."app/rest").DIRECTORY_SEPARATOR);
 
 // Ensure library/ is on include_path
 set_include_path(implode(PATH_SEPARATOR, array(
-    SITE_CORE_PATH, SITE_LIBS_PATH, SITE_VENDOR_PATH, SITE_MODELS_PATH, get_include_path(),
+    SITE_CORE_PATH, SITE_LIBS_PATH, SITE_VENDOR_PATH, SITE_MODELS_PATH, SITE_WS_API_PATH, get_include_path(),
 )));
 
 require_once __DIR__.'/../vendor/Symfony/Component/ClassLoader/UniversalClassLoader.php';
@@ -52,6 +53,7 @@ $loader->registerPrefix("Zend_", __DIR__.'/../vendor/Zend/');
 // Registering fallbacks and include path usage
 $loader->registerNamespaceFallback(__DIR__.'/core/');
 $loader->registerNamespaceFallback(SITE_MODELS_PATH);
+$loader->registerNamespaceFallback(SITE_WS_API_PATH);
 $loader->useIncludePath(true);
 
 $loader->register();
