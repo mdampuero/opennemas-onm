@@ -11,7 +11,7 @@
  * @author sandra
  */
 
-class CronicasHelper {
+class migrationNewslibrary {
 
     public $logFile = "";
 

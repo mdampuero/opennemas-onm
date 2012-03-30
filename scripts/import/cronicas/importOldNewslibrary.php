@@ -12,7 +12,7 @@
  */
 
 
-printf("Welcome to OpenNemas database Importer \n");
+printf("Welcome to OpenNemas Newslibrary Importer \n");
 
 /**
  * Setting up the import application
@@ -52,38 +52,15 @@ require SITE_PATH.'../config/config.inc.php';
 */
 
 
-$cronicasImporter = new CronicasToOnm($configOldDB,$configNewDB);
+$migrator = new migrationNewslibrary($configOldDB,$configNewDB);
 
- $cronicasImporter->helper->sqlExecute(); // create translated tables
-//$cronicasImporter->helper->sqlClearData(); //delete old data in tables
+$migrator->helper->sqlExecute(); // create translated tables
 
-$cronicasImporter->importCategories();
+$migrator->importCategories();
 
- /*$cronicasImporter->importImagesArticles();
+$migrator->migrateImagesPath();
+$migrator->migrateUrls();
 
-$limit = ' LIMIT 4500, 5000';
-$cronicasImporter->importArticles($limit);
+printf("OpenNemas newslibrary is ok for Cronicas \n");
 
-$cronicasImporter->importAuthorsOpinion();
-
-$cronicasImporter->importPhotoAuthorsOpinion();
-
-$cronicasImporter->importOpinions();
-
-$cronicasImporter->importLetters();
-*/
-
-//$cronicasImporter->importGalleries();
-
-$cronicasImporter->importAlbums();
-/*
- * $cronicasImporter->importSpecials();
-
-
-
-$cronicasImporter->importAdvertisements();
- * $cronicasImporter->importRelatedContents();
-*/
-printf("OpenNemas database is ok for Cronicas \n");
-
-$cronicasImporter->helper->printResults();
+$migrator->helper->printResults();
