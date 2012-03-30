@@ -18,19 +18,10 @@ require_once('../bootstrap.php');
  */
 $tpl = new Template(TEMPLATE_USER);
 
-$ccm = new ContentCategoryManager();
-$cm = new ContentManager();
-
-$category_name = filter_input(INPUT_GET,'category_name',FILTER_SANITIZE_STRING);
-if(empty($category_name)) {
-    $category_name = filter_input(INPUT_POST,'category_name',FILTER_SANITIZE_STRING);
-}
-
-$menuFrontpage = Menu::renderMenu('album');
-$tpl->assign('menuFrontpage',$menuFrontpage->items);
-
+$category_name = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
 
 if(!empty($category_name)) {
+    $ccm = new ContentCategoryManager();
     $category = $ccm->get_id($category_name);
     $actual_category_id = $category; // FOR WIDGETS
     $category_real_name = $ccm->get_title($category_name); //used in title
@@ -49,13 +40,10 @@ if(!empty($category_name)) {
 
 /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
 
-//Getting articles
-$cm = new ContentManager();
-
 /**
  * Route to the proper action
  */
-$action = filter_input(INPUT_GET,'action',FILTER_SANITIZE_STRING);
+$action = $request->query->filter('action', '', FILTER_SANITIZE_STRING);
 
 if (!is_null($action) ) {
 
@@ -63,12 +51,7 @@ if (!is_null($action) ) {
 
         case 'show':
 
-            //Modulo especial
-             $dirtyID = filter_input(INPUT_GET,'special_id',FILTER_SANITIZE_STRING);
-
-            if(empty($dirtyID)) {
-                $dirtyID = filter_input(INPUT_POST,'special_id',FILTER_SANITIZE_STRING);
-            }
+            $dirtyID = $request->query->filter('special_id', '' , FILTER_SANITIZE_STRING);
 
             $specialID = Content::resolveID($dirtyID);
 			$cacheID = $tpl->generateCacheId($category_name, null, $specialID);
@@ -103,7 +86,7 @@ if (!is_null($action) ) {
 
                 if(!empty($contents)) {
                     foreach($contents as $item) {
-                     
+
                         $content = Content::get($item['fk_content']);
 
                         if(isset($content->img1)) {

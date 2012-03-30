@@ -1,36 +1,28 @@
 <?php
 /*
  * -------------------------------------------------------------
- * File:     	function.render_widget.php
- * Comprueba el tipo y escribe el nombre o la imag
+ * File:     	function.render_menu.php
+ * Render menu items.
  */
-function smarty_function_render_widget($params, &$smarty) {
+function smarty_function_render_menu($params, &$smarty) {
 
 	// Initialicing parameters
-	$widgetName = (isset($params['name']) ? $params['name'] : null);
-	$widgetID = (isset($params['id']) ? $params['id'] : null);
+	$menuName = (isset($params['name']) ? $params['name'] : null);
+	$tpl = (isset($params['tpl']) ? $params['tpl'] : null);
+    $smarty->assign('actual_category', $params['actual_category']);
     $output = '';
+    if(empty($menuName)) {
+        $smarty->trigger_error("Menu doesn't exists");
+        return $output;
+    }
+    $menuItems= Menu::renderMenu($menuName);
+    if (!empty($menuItems->items)) {
+        $smarty->assign('menuItems', $menuItems->items);
+    }
 
-	// Initialize database access
-	$cm = new ContentManager();
-	$ccm = ContentCategoryManager::get_instance();
 
-	if(!is_null($widgetName)) {
-		// Initialize widget from db
-		$widget = new Widget();
-		$widget->readIntelligentFromName($widgetName);
-	} else {
+    $output .= "\n". $smarty->fetch( $tpl );
 
-		// Initialize widget from db
-		$widget = new Widget();
-		$widget->read($widgetID);
-
-	}
-
-	if($widget->available) {
-		$output = $widget->render($params);
-	}
-
-	// Render its contents
+	// Render menu items
 	return $output;
 }

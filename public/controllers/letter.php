@@ -20,29 +20,20 @@ $tpl = new Template(TEMPLATE_USER);
 
 /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
 $cm  = new ContentManager();
-$ccm = ContentCategoryManager::get_instance();
 
 /**
  * Setting up available categories for menu.
 */
+ /******************************  *********************************/
 
-$menuFrontpage= Menu::renderMenu('frontpage');
-$tpl->assign('menuFrontpage',$menuFrontpage->items);
-
-/******************************  *********************************/
-
-$action = filter_input(INPUT_POST,'action', FILTER_SANITIZE_STRING);
-if(empty($action)) {
-    $action = filter_input(INPUT_GET,'action', FILTER_SANITIZE_STRING, array('options' => array('default' => 'list')) );
-}
+$action = $request->query->filter('action', 'frontpage', FILTER_SANITIZE_STRING);
 
 switch($action) {
     case 'frontpage':
 
         $tpl->setConfig('letter-frontpage');
 
-        $page = filter_input(INPUT_GET,'page',FILTER_SANITIZE_STRING,
-								 array('options'=> array('default' => 0)));
+        $page = $request->query->filter('page', '0', FILTER_SANITIZE_STRING);
 
         $cacheID = $tpl->generateCacheId('letter-frontpage', '', $page);
 
@@ -68,13 +59,7 @@ switch($action) {
     case 'show':
 
         $tpl->setConfig('letter-inner');
-
-        $dirtyID = filter_input(INPUT_GET,'id',FILTER_SANITIZE_STRING);
-        if(empty($dirtyID)) {
-            $dirtyID = filter_input(INPUT_POST,'id',FILTER_SANITIZE_STRING);
-        }
-
-        $slug = filter_input(INPUT_GET,'slug',FILTER_SANITIZE_STRING);
+        $dirtyID = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
 
         $letterId = Content::resolveID($dirtyID);
 
@@ -118,10 +103,6 @@ switch($action) {
                 $tpl->display('letter/letter.tpl', $cacheID);
 
             }
-
-            /************* COLUMN-LAST *******************************/
-
-            require_once("widget_static_pages.php");
          } else {
             Application::forward301('/404.html');
         }
@@ -130,14 +111,20 @@ switch($action) {
 
     case 'save_letter':
 
+        $recaptcha_challenge_field = $request->query->
+                filter('recaptcha_challenge_field', '', FILTER_SANITIZE_STRING);
+        $recaptcha_response_field = $request->query->
+                filter('recaptcha_response_field', '', FILTER_SANITIZE_STRING);
+
+
         //Get config vars
         $configRecaptcha = s::get('recaptcha');
 
         // Get reCaptcha validate response
         $resp = recaptcha_check_answer ($configRecaptcha['private_key'],
                                         $_SERVER["REMOTE_ADDR"],
-                                        $_POST["recaptcha_challenge_field"],
-                                        $_POST["recaptcha_response_field"]);
+                                        $recaptcha_challenge_field,
+                                        $recaptcha_response_field);
 
         // What happens when the CAPTCHA was entered incorrectly
         if (!$resp->is_valid) {
@@ -146,21 +133,28 @@ switch($action) {
             exit();
         } else {
 
-           if(isset($_POST['lettertext']) && !empty($_POST['lettertext'])) {
-                if( isset($_POST['security_code']) && empty($_POST['security_code']) ) {
+            $lettertext = $request->query->filter('lettertext', '', FILTER_SANITIZE_STRING);
+            $security_code = $request->query->filter('security_code', '', FILTER_SANITIZE_STRING);
 
-                    /*  Anonymous comment ************************* */
-                    $data = array();
-                    $data['body']     = $_POST['lettertext'];
-                    $data['author']   = $_POST['name'];
-                    $data['title']    = $_POST['subject'];
-                    $data['email']    = $_POST['mail'];
-                    $data['available'] = 0; //pendding
+            if(!empty($lettertext) && !empty($security_code) ) {
+                $lettertext = $request->query->filter('lettertext', '', FILTER_SANITIZE_STRING);
+                $security_code = $request->query->filter('security_code', '', FILTER_SANITIZE_STRING);
 
-                    $letter = new Letter();
-                    $msg =  $letter->saveLetter($data);
-                }
-           }else{
+                /*  Anonymous comment ************************* */
+                $data = array();
+                $name = $request->query->filter('name', '', FILTER_SANITIZE_STRING);
+                $subject = $request->query->filter('subject', '', FILTER_SANITIZE_STRING);
+                $mail = $request->query->filter('mail', '', FILTER_SANITIZE_STRING);
+                $data['body']     = $lettertext;
+                $data['author']   = $name;
+                $data['title']    = $subject;
+                $data['email']    = $mail;
+                $data['available'] = 0; //pendding
+
+                $letter = new Letter();
+                $msg =  $letter->saveLetter($data);
+
+           } else {
                $msg = 'Su Carta al Director <strong>no</strong> ha sido guardada.';
            }
            echo $msg;

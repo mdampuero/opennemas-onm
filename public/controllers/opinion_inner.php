@@ -20,20 +20,15 @@ $cm = new ContentManager();
 /**
  * Fetch HTTP variables
 */
-$category_name = $_GET['category_name'] = 'opinion';
+$category_name = $request->query->filter('category_name', 'opinion', FILTER_SANITIZE_STRING);
+$subcategory_name = $request->query->filter('subcategory_name', '', FILTER_SANITIZE_STRING);
 
-$dirtyID = filter_input(INPUT_GET,'opinion_id',FILTER_SANITIZE_STRING);
 
-if(empty($dirtyID)) {
-    $dirtyID = filter_input(INPUT_POST,'opinion_id',FILTER_SANITIZE_STRING);
-}
+$dirtyID = $request->query->filter('opinion_id', '' , FILTER_SANITIZE_STRING);
 
 $opinionID = Content::resolveID($dirtyID);
 
-
-
 $tpl->assign('contentId',$opinionID); // Used on module_comments.tpl
-
 
 $tpl->assign('action', $_REQUEST['action']);
 
@@ -53,10 +48,6 @@ if(isset($_REQUEST['action']) ) {
             $opinion = new Opinion($opinionID );
 
             Content::setNumViews($opinionID);
-
-            $ccm = ContentCategoryManager::get_instance();
-            require_once ("index_sections.php");
-            require_once("widget_static_pages.php");
 
             /**
              * Fetch comments for this opinion
@@ -124,6 +115,7 @@ if(isset($_REQUEST['action']) ) {
 
                     $tpl->assign('other_opinions', $otherOpinions);
                     $tpl->assign('opinion', $opinion);
+                    $tpl->assign('actual_category', 'opinion');
 
                 }
 

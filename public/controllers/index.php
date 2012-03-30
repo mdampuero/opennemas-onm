@@ -8,6 +8,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  **/
+use Symfony\Component\HttpFoundation\Response;
+
 // Start up and setup the app
 require_once '../bootstrap.php';
 
@@ -15,16 +17,12 @@ require_once '../bootstrap.php';
 $app->mobileRouter();
 
 // Fetch HTTP variables
-$category_name    = filter_input(
-    INPUT_GET, 'category_name', FILTER_SANITIZE_STRING,
-    array('options' => array('default' => 'home'))
-);
-$subcategory_name = filter_input(INPUT_GET,'subcategory_name',FILTER_SANITIZE_STRING);
-$cache_page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT);
-$cache_page = (is_null($cache_page))? 0 : $cache_page;
+$category_name = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+$subcategory_name = $request->query->filter('subcategory_name', 'home', FILTER_SANITIZE_STRING);
+$cache_page = $request->query->filter('page', 0, FILTER_VALIDATE_INT);
 
 // Setup view
-$tpl     = new Template(TEMPLATE_USER);
+$tpl = new Template(TEMPLATE_USER);
 $tpl->setConfig('frontpages');
 $cacheID = $tpl->generateCacheId($category_name, $subcategory_name, 0 /*$cache_page*/);
 
@@ -41,49 +39,26 @@ if (
      * Init the Content and Database object
     */
     $ccm = ContentCategoryManager::get_instance();
-    list($category_name, $subcategory_name) = $ccm->normalize($category_name, $subcategory_name);
-
 
     // If no home category name
     if ($category_name != 'home') {
-
-        // Redirect to home page if the desired category doesn't
-        // exist or  is empty this is a home page
+        // Redirect to home page if the desired category doesn't exist
         if (empty($category_name) || !$ccm->exists($category_name)) {
-            Application::forward301('/');
-        } else {
-            // If there is no any article in a category forward into the first subcategory
-            if ($ccm->isEmpty($category_name) && !isset($subcategory_name)) {
-                $subcategory_name = $ccm->get_first_subcategory($ccm->get_id($category_name));
-
-                $forwardUrl = '/';
-                if (!empty($subcategory_name)) {
-                    $forwardUrl = '/seccion/'.$category_name.'/'.$subcategory_name.'/';
-                }
-                Application::forward301($forwardUrl);
-
-            } else {
-                $category = $ccm->get_id($category_name);
-            }
-
+            $output = $tpl->fetch('frontpage/not_found.tpl');
+            $response = new Response($output, 404, array('content-type' => 'text/html'));
+            $response->send();
+            exit(0);
         }
-
-        if (isset($subcategory_name) && !empty($subcategory_name)) {
-            if (!$ccm->exists($subcategory_name)) {
-                Application::forward301('/');
-            } else {
-                $subcategory = $ccm->get_id($subcategory_name);
-            }
-        }
-
     }
 
-    $actual_category = (!isset($subcategory_name))? $category_name : $subcategory_name;
-
-    $tpl->assign('actual_category', $actual_category);
-    $actualCategoryId = $ccm->get_id($actual_category);
-
-    require_once "index_sections.php";
+    $actualCategory = (!isset($subcategory_name))? $category_name : $subcategory_name;
+    $actualCategoryId = $actual_category_id = $ccm->get_id($actualCategory);
+    $tpl->assign(array(
+        'category_name' => $category_name,
+        'actual_category' => $actualCategory,
+        'actual_category_id' => $actualCategoryId,
+        'actual_category_title' => $ccm->get_title($category_name),
+    ));
 
     $cm = new ContentManager;
 
@@ -107,7 +82,6 @@ if (
         $imageList = array();
     }
 
-    $column = array();
     // Overloading information for contents
     foreach ($contentsInHomepage as &$content) {
 
@@ -122,10 +96,6 @@ if (
     }
     $tpl->assign('column', $contentsInHomepage);
 
-    // Fetch information for Static Pages
-    //TODO: Move to a widget. Used in all templates
-    require_once "widget_static_pages.php";
-
-
 } // $tpl->is_cached('index.tpl')
+
 $tpl->display('frontpage/frontpage.tpl', $cacheID);

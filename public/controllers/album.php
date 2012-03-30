@@ -23,13 +23,9 @@ $tpl = new Template(TEMPLATE_USER);
 */
 $ccm = new ContentCategoryManager();
 
-$category_name = filter_input(INPUT_GET,'category_name',FILTER_SANITIZE_STRING);
-if(empty($category_name)) {
-    $category_name = filter_input(INPUT_POST,'category_name',FILTER_SANITIZE_STRING);
-}
-
-$menuFrontpage = Menu::renderMenu('album');
-$tpl->assign('menuFrontpage',$menuFrontpage->items);
+$category_name = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+$subcategory_name = null;
+$action = $request->query->filter('action', '', FILTER_SANITIZE_STRING);
 
 if(!empty($category_name)) {
     $category = $ccm->get_id($category_name);
@@ -47,6 +43,7 @@ if(!empty($category_name)) {
         'category_real_name' => $category_real_name ,
     ));
 }
+$tpl->assign('actual_category', $category_name);
 
 /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
 
