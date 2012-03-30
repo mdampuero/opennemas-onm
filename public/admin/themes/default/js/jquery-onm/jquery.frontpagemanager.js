@@ -1,23 +1,25 @@
 makeContentProviderAndPlaceholdersSortable = function () {
     // Make content providers sortable and allow to D&D over the placeholders
-    jQuery('div#content-provider .ui-tabs-panel > div').sortable({
+    jQuery('div#content-provider .ui-tabs-panel > div:not(.pagination)').sortable({
         connectWith: "div.placeholder div.content",
         placeholder: 'placeholder-element',
         handle : '.description',
         update: function(event,ui) {
             jQuery('#warnings-validation').html('<div class="notice">'+frontpage_messages.remember_save_positions+'</div>');
-        }
+        },
+        tolerance: 'pointer'
         //containment: '#content-with-ticker'
     }).disableSelection();
 
     // Make content providers sortable and allow to D&D over placeholders and content provider
     jQuery('div.placeholder div.content').sortable({
-        connectWith: "div#content-provider .ui-tabs-panel > div, div.placeholder div.content",
+        connectWith: "div#content-provider .ui-tabs-panel > div:not(.pagination), div.placeholder div.content",
         placeholder: 'placeholder-element',
         handle : '.description',
         update: function(event,ui) {
             jQuery('#warnings-validation').html('<div class="notice">'+frontpage_messages.remember_save_positions+'</div>');
-        }
+        },
+        tolerance: 'pointer'
         //containment: '#content-with-ticker'
     }).disableSelection();
 };
@@ -225,11 +227,12 @@ jQuery(function($){
     ***************************************************************************/
 
     $('#button_addnewcontents').on('click', function(e, ui) {
-        $( "#content-provider").dialog('open');
         e.preventDefault();
+        $( "#content-provider").dialog('open');
     });
 
     $('#button_savepositions').on('click',function() {
+        e.preventDefault();
         var els = get_contents_in_frontpage();
         var category = $("#frontpagemanager").data("category");
 
@@ -240,8 +243,6 @@ jQuery(function($){
         }).error(function(data) {
             $('#warnings-validation').html("<div class='error'>"+data.responseText+"</div>");
         });
-
-        return false;
     });
 
     $('#button_clearcache').on('click', function(e, ui) {

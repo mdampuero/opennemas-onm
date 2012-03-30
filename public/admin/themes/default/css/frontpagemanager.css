@@ -5,6 +5,9 @@
     margin-bottom:207px
 }
 
+#frontpagemanager.home .suggest-to-home {
+    display:none;
+}
 #frontpagemanager .wrapper,
 #frontpagemanager .placeholder {
     vertical-align:top;
@@ -64,7 +67,8 @@ div#content-provider .ui-tabs-panel .content-provider-block > div {
     cursor:pointer;
 }
 
-#frontpagemanager .placeholder-element {
+#frontpagemanager .placeholder-element ,
+#content-provider .placeholder-element {
     min-height:17px;
     margin:5px;
     border:1px dashed #aaa !important;
