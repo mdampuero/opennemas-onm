@@ -38,14 +38,11 @@ $tpl->assign('LIBROS_FILES_PATH',  INSTANCE_MEDIA_PATH.'/books/');
 
 $cm = new ContentManager();
 
-$page = filter_input(INPUT_GET, 'page', FILTER_VALIDATE_INT,  array('options' => array('default' => '1'))  );
+$page = $request->query->filter('page', 1, FILTER_VALIDATE_INT);
 $tpl->assign('page', $page);
 
 
-$action = filter_input( INPUT_POST, 'action' , FILTER_SANITIZE_STRING );
-if (!isset($action)) {
-    $action = filter_input( INPUT_GET, 'action' , FILTER_SANITIZE_STRING, array('options' => array('default' => 'list')) );
-}
+$action = $request->query->filter('action', 'list', FILTER_SANITIZE_STRING);
 switch($action) {
 
     case 'list':
@@ -70,15 +67,9 @@ switch($action) {
         break;
 
     case 'view' :
-        //Implementar vista de pdf con flex paper
-        $dirtyID =  filter_input(INPUT_GET,'id',FILTER_SANITIZE_STRING);
-
-        if(empty($dirtyID)) {
-            $dirtyID = filter_input(INPUT_POST,'id',FILTER_SANITIZE_STRING);
-        }
+        $dirtyID = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
 
         $id = Content::resolveID($dirtyID);
-
 
         $book = new Book($id);
         Content::setNumViews($id);
@@ -97,7 +88,7 @@ switch($action) {
         break;
      case 'more_books' :
 
-         $category = filter_input(INPUT_GET, 'category', FILTER_VALIDATE_INT );
+         $category = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
          if ($page<1) {
              $page = 1;
              $tpl->assign('page', $page);

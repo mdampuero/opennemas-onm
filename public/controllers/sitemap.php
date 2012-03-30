@@ -15,7 +15,7 @@ $tpl->setConfig('sitemap');
 $cm  = new ContentManager();
 $ccm = ContentCategoryManager::get_instance();
 
-$action = filter_input(INPUT_GET,'action',FILTER_SANITIZE_STRING);
+$action = $request->query->filter('action', 'web', FILTER_SANITIZE_STRING);
 $cacheID = $tpl->generateCacheId('sitemap', '', $action);
 
 if (($tpl->caching == 0)
@@ -108,7 +108,7 @@ $sitemapContents = $tpl->fetch('sitemap/sitemap.tpl', $cacheID);
 
 
 
-$format = filter_input(INPUT_GET,'format',FILTER_SANITIZE_STRING);
+$format = $request->query->filter('format', null, FILTER_SANITIZE_STRING);
 
 if ($format == 'gz') {
     // disable ZLIB ouput compression

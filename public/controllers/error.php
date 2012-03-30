@@ -16,7 +16,7 @@ require_once('../bootstrap.php');
  * Setup view
 */
 $tpl = new Template(TEMPLATE_USER);
-$errorCode = filter_input(INPUT_GET, 'errordoc');
+$errorCode = $request->query->filter('errordoc', null, FILTER_SANITIZE_STRING);  
 
 /**
  * Fetch HTTP variables
