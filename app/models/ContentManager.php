@@ -1071,25 +1071,23 @@ class ContentManager
      * @see Content::isInTime()
      * @param array $items Array of Content objects
      * @param string $time Time filter, by default is now. Syntax: 'YYYY-MM-DD HH:MM:SS'
+     *
      * @return array Items filtered
     */
     public function getInTime($items, $time=null)
     {
         $filtered = array();
-        if(is_array($items)) {
-            foreach($items as $item) {
-                if(is_object($item)) {
-
-                    if($item->isInTime(null, null, $time)) {
+        if (is_array($items)) {
+            foreach ($items as $item) {
+                if (is_object($item)) {
+                    if($item->isInTime()) {
                         $filtered[] = $item;
                     }
-
                 } else {
-
                     $starttime = (!empty($item['starttime']))? $item['starttime']: '0000-00-00 00:00:00';
-                    $endtime  = (!empty($item['endtime']))? $item['endtime']: '0000-00-00 00:00:00';
+                    $endtime   = (!empty($item['endtime']))? $item['endtime']: '0000-00-00 00:00:00';
 
-                    if(Content::isInTime2($starttime, $endtime, $time)) {
+                    if (Content::isInTime2($starttime, $endtime, $time)) {
                         $filtered[] = $item;
                     }
                 }
@@ -1102,10 +1100,10 @@ class ContentManager
 
 
      /**
-     * Filter content objects by  available and not inlitter.
-     * @param array $items Array of Content objects
-     * @return array Items filtered
-    */
+      * Filter content objects by  available and not inlitter.
+      * @param array $items Array of Content objects
+      * @return array Items filtered
+      **/
     public function getAvailable($items)
     {
         $filtered = array();

@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 /**
- * Explanation for this class.
+ * Handles all the common actions in all the contents
  *
  * @package    Onm
  * @subpackage Model
@@ -837,48 +837,50 @@ class Content
     }
 
     /**
+     * Check if this content is scheduled
+     * or, in others words, if this content has a starttime and/or endtime defined
+     *
+     * @return boolean
+    */
+    public function isScheduled()
+    {
+        $start = new \DateTime($this->starttime);
+        $end   = new \DateTime($this->endtime);
+
+        if ($start->getTimeStamp() > 0 || $end->getTimeStamp() > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Check if a content is in time for publishing
      *
      * @param string $starttime the initial time from it will be available
-     * @param string $starttime the initial time until it will be available
-     * @param string $starttime time to compare with the previous parameters
+     * @param string $endtime the initial time until it will be available
+     * @param string $time time to compare with the previous parameters
      *
      * @return boolean
      **/
-    public function isInTime($starttime=null, $endtime=null, $time=null)
+    public function isInTime()
     {
-
-        if (is_null($starttime)) {
-            $start = strtotime($this->starttime);
-            $end   = strtotime($this->endtime);
-        } else {
-            $start = strtotime($starttime);
-            $end   = strtotime($endtime);
+        if ($this->isScheduled()) {
+            if ($this->isDued() || $this->isPostponed()) {
+                return false;
+            }
         }
-
-        if ($start == $end) { return true; }
-
-
-        if (is_null($time)) {
-            $now = time();
-        } else {
-            $now = strtotime($time);
-        }
-
-        // If $start and $end not defined then return true
-        if (empty($start) && empty($end)) { return true; }
-
-        // only setted $end
-        if (empty($start)) { return ($now < $end); }
-
-        // only setted $start
-        if (empty($end) || $end <= 0) { return ($now > $start); }
-
-        // $start < $now < $end
-        return (($now < $end) && ($now > $start));
+        return true;
     }
 
-    // FIXME:  change function name
+    /**
+     * Check if a content is in time for publishing
+     *
+     * @param string $starttime the initial time from it will be available
+     * @param string $endtime the initial time until it will be available
+     * @param string $time time to compare with the previous parameters
+     *
+     * @return boolean
+     **/
     static public function isInTime2($starttime=null, $endtime=null, $time=null)
     {
 
@@ -904,6 +906,7 @@ class Content
 
         // $start < $now < $end
         return (($now < $end) && ($now > $start));
+        return false;
     }
 
     /**
@@ -915,90 +918,54 @@ class Content
     */
     public function isStarted()
     {
-        $now = time();
-        $start = strtotime($this->starttime);
+        $start = new \DateTime($this->starttime);
+        $now = new \DateTime();
 
         // If $start isn't defined then return true
-        if (empty($start)) {
-            return true;
+        if ($start->getTimeStamp() > 0) {
+            return ($now->getTimeStamp() > $start->getTimeStamp());
         }
-
-        return ($now > $start);
+        return false;
     }
 
     /**
      * Check if this content is postponed
      *
+     *       Now     Start
+     * -------|--------[-----------
+     *
      * @return boolean
      */
     public function isPostponed()
     {
-        // If new < starttime
-        $start   = strtotime($this->starttime);
-        $now = time();
+        $start = new \DateTime($this->starttime);
+        $now   = new \DateTime();
 
-        if (!empty($start)) {
-            return ($now < $start);
+
+        // If $start isn't defined then return false
+        if ($start->getTimeStamp() > 0) {
+            // throw new \Exception(var_export($now->getTimeStamp() < $start->getTimeStamp()));
+            return ($now->getTimeStamp() < $start->getTimeStamp());
         }
-
         return false;
     }
 
     /**
      * Check if this content is dued
-     *
+     *       End      Now
+     * -------]--------|-----------
      * @return boolean
      */
     public function isDued()
     {
-        $end   = strtotime($this->endtime);
-        $now   = time();
+        $end = new \DateTime($this->endtime);
+        $now = new \DateTime();
 
-        if (!empty($end) && !preg_match('/0000\-00\-00 00:00:00/', $this->endtime)) {
-            return $end < $now;
+        // If $end isn't defined then return false
+        if ($end->getTimeStamp() > 0) {
+            return ($now->getTimeStamp() > $end->getTimeStamp());
         }
-
         return false;
-    }
-
-    /**
-     * Check if this content is obsolete
-     *
-     * @return boolean
-     */
-    public function isObsolete()
-    {
-        $end   = strtotime($this->endtime);
-        $now   = time();
-
-        if (!empty($end)) {
-            return $end < $now;
-        }
-
-        return false;
-    }
-
-    /**
-     * Check if a content is out of time for publishing
-     *
-     * @see Content::isInTime()
-     * @return boolean
-    */
-    public function isOutTime($starttime=null, $endtime=null, $time=null)
-    {
-        return !$this->isInTime($starttime, $endtime, $time);
-    }
-
-    /**
-     * Check if this content is scheduled
-     * or, in others words, if this content has a starttime and/or endtime
-     *
-     * @return boolean
-    */
-    public function isScheduled()
-    {
-        return ((!empty($this->starttime) && !preg_match('/0000\-00\-00 00:00:00/', $this->starttime)) ||
-                (!empty($this->endtime) && !preg_match('/0000\-00\-00 00:00:00/', $this->endtime)));
     }
 
     public function set_status($status, $last_editor)
@@ -1041,72 +1008,15 @@ class Content
         return ($this->frontpage == 1);
     }
 
-    //New function - published directly in frontpages and no change position
-    public function set_directly_frontpage($status,$last_editor)
-    {
-        $GLOBALS['application']->dispatch('onBeforeAvailable', $this);
-        if (($this->id == null) && !is_array($status)) {
-            return false;
-        }
-        $changed = date("Y-m-d H:i:s");
-
-        $stmt = $GLOBALS['application']->conn->
-            Prepare('UPDATE contents SET `frontpage`=?, `available`=?, `content_status`=?, `position`=?, `fk_user_last_editor`=?, '.
-                    '`changed`=? WHERE `pk_content`=?');
-
-        if (!is_array($status)) {
-            $values = array($status, $status, $status, 1,$last_editor, $changed, $this->id);
-        } else {
-            $values = $status;
-        }
-
-        if (count($values)>0) {
-            if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
-                $errorMsg = Application::logDatabaseError();
-                return false;
-            }
-        }
-        //opinions in_home
-         $stmt = $GLOBALS['application']->conn->
-            Prepare('UPDATE contents SET `in_home`=?, `available`=?, `content_status`=?, `fk_user_last_editor`=?, '.
-                    '`changed`=? WHERE `pk_content`=? AND `fk_content_type`=4');
-
-        if (!is_array($status)) {
-            $values = array($status, $this->id);
-        } else {
-            $values = $status;
-        }
-
-        if (count($values)>0) {
-            if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
-                $errorMsg = Application::logDatabaseError();
-                return false;
-            }
-        }
-
-        /* Notice log of this action */
-        $logger = Application::logContentEvent();
-
-        // Set status for it's updated to next event
-        if (!empty($this)) {
-            $this->available = $status;
-        }
-
-        $GLOBALS['application']->dispatch('onAfterAvailable', $this);
-    }
-
-
     public function set_frontpage($status, $last_editor)
     {
-      //  $GLOBALS['application']->dispatch('onBeforeSetFrontpage', $this);
-
         $changed = date("Y-m-d H:i:s");
         if (($this->id == null) && !is_array($status)) {
             return false;
         }
 
         $stmt = $GLOBALS['application']->conn->
-            Prepare('UPDATE contents SET `frontpage`=?, placeholder="placeholder_0_1", `position`=20 WHERE `pk_content`=?');
+            Prepare('UPDATE contents SET `frontpage`=? WHERE `pk_content`=?');
 
         if (!is_array($status)) {
             $values = array($status, $this->id);
@@ -1122,44 +1032,7 @@ class Content
         }
 
         /* Notice log of this action */
-
         $logger = Application::logContentEvent(__METHOD__, $this);
-
-        //$GLOBALS['application']->dispatch('onAfterSetFrontpage', $this);
-    }
-
-
-
-    public function set_position($position, $last_editor)
-    {
-        $GLOBALS['application']->dispatch('onBeforePosition', $this);
-
-        $changed = date("Y-m-d H:i:s");
-        if (($this->id == null) && !is_array($position)) {
-            return false;
-        }
-        $stmt = $GLOBALS['application']->conn->
-            Prepare('UPDATE contents SET `position`=?, `placeholder`=? WHERE `pk_content`=?');
-        if (!is_array($position)) {
-            $values = array($position, $this->id);
-        } else {
-            $values = $position;
-        }
-
-        if (count($values)>0) {
-            if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
-                $errorMsg = Application::logDatabaseError();
-                return false;
-            }
-
-        }
-
-        /* Notice log of this action */
-        $logger = Application::logContentEvent(__METHOD__, $this);
-
-        $GLOBALS['application']->dispatch('onAfterPosition', $this);
-
-        return true;
     }
 
     public function set_inhome($status, $last_editor)
@@ -1444,6 +1317,7 @@ class Content
         }
     }
 
+    // TODO: move to a Cache handler
     /**
      * Regenerates the homepage cache.
      **/
@@ -1463,6 +1337,7 @@ class Content
         }
     }
 
+    // TODO: move to a Cache handler
     /**
      * Regenerate cache files for all categories homepages.
      *
@@ -1486,6 +1361,7 @@ class Content
 
     }
 
+    // TODO: move to a Cache handler
     /**
      * Deletes the homepage cache.
      *
@@ -1523,10 +1399,9 @@ class Content
             $category_name = $ccm->get_name($category);
         }
 
-        $sql = 'DELETE FROM content_positions WHERE fk_category = '.$category.' AND pk_fk_content = '.$pk_content;
+        $sql = 'DELETE FROM content_positions WHERE fk_category=? AND pk_fk_content=?';
 
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($category, $pk_content));
 
         if (!$rs) {
             Application::logDatabaseError();
@@ -1551,15 +1426,15 @@ class Content
     {
 
         $cm = new ContentManager();
-        $sql = 'DELETE FROM content_positions WHERE pk_fk_content = '.$this->id;
+        $sql = 'DELETE FROM content_positions WHERE pk_fk_content = ?';
 
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($this->id));
 
         if (!$rs) {
             Application::logDatabaseError();
             return false;
         } else {
-            $type = $cm->getContentTypeNameFromId($this->content_type,true);
+            $type = $cm->getContentTypeNameFromId($this->content_type, true);
             /* Notice log of this action */
             $logger = Application::getLogger();
             $logger->notice(
@@ -1576,14 +1451,13 @@ class Content
 
         $changed = date("Y-m-d H:i:s");
 
-        $sql = "UPDATE contents SET `favorite`=? WHERE pk_content=".$this->id;
-        $values = array($status);
+        $sql = "UPDATE contents SET `favorite`=? WHERE pk_content=?";
+        $values = array($status, $this->id);
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
-            return;
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        if ($rs === false) {
+            Application::logDatabaseError();
+            return false;
         }
         return true;
     }

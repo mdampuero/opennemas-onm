@@ -8,13 +8,18 @@ function smarty_function_schedule_class($params, &$smarty) {
 
     $item = $params['item'];
 
-    if($item->isScheduled() && $item->isInTime() && !empty($item->endtime) && !preg_match('/0000\-00\-00 00:00:00/', $item->endtime)) {
-        return ' scheduled intime ';
-    } elseif($item->isScheduled() && $item->isPostponed()) {
-        return ' scheduled postponed ';
-    }elseif($item->isScheduled() && $item->isDued()) {
-        return ' scheduled dued ';
+    $output = '';
+
+    if ($item->isScheduled()) {
+        $output .= ' scheduled ';
+    }
+    if ($item->isInTime()) {
+        $output .= ' intime ';
+    } elseif ($item->isPostponed()) {
+        $output .= ' postponed ';
+    } elseif ($item->isDued()) {
+        $output .= ' dued ';
     }
 
-    return '';
+    return $output;
 }
