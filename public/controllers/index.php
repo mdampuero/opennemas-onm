@@ -17,9 +17,9 @@ require_once '../bootstrap.php';
 $app->mobileRouter();
 
 // Fetch HTTP variables
-$category_name = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+$category_name    = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
 $subcategory_name = $request->query->filter('subcategory_name', 'home', FILTER_SANITIZE_STRING);
-$cache_page = $request->query->filter('page', 0, FILTER_VALIDATE_INT);
+$cache_page       = $request->query->filter('page', 0, FILTER_VALIDATE_INT);
 
 // Setup view
 $tpl = new Template(TEMPLATE_USER);
