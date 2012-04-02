@@ -231,7 +231,7 @@ jQuery(function($){
         $( "#content-provider").dialog('open');
     });
 
-    $('#button_savepositions').on('click',function() {
+    $('#button_savepositions').on('click',function(e, ui) {
         e.preventDefault();
         var els = get_contents_in_frontpage();
         var category = $("#frontpagemanager").data("category");

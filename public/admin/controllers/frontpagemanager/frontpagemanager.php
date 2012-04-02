@@ -186,8 +186,6 @@ switch ($action) {
         $tpl->assign('actual_category', $actual_category);
         $actualCategoryId = $ccm->get_id($actual_category);
 
-        require_once SITE_PATH."/controllers/index_sections.php";
-
         $cm = new ContentManager;
         $contentsRAW = $request->query->filter('contents');
         $contents = json_decode(json_decode($contentsRAW), true);
@@ -224,10 +222,6 @@ switch ($action) {
                     ->loadRelatedContents();
         }
         $tpl->assign('column', $contentsInHomepage);
-
-        // Fetch information for Static Pages
-        //TODO: Move to a widget. Used in all templates
-        require_once SITE_PATH."/controllers/widget_static_pages.php";
 
         $tpl->display('frontpage/frontpage.tpl');
 
