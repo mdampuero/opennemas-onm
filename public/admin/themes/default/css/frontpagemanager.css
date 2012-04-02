@@ -202,6 +202,8 @@ div.content div.description span.type {
 }
 .ui-sortable-helper {
     z-index: 99999;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .ui-sortable-helper .selectButton,
 .ui-sortable-helper .content-action-buttons {

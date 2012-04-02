@@ -18,7 +18,7 @@
                 </a>
             </li>
             <li>
-                <a href="#" title="{t}Delete{/t}" class="drop-delete">
+                <a title="{t}Remove element from this frontpage{/t}" href="#" class="drop-element">
                     <i class="icon-trash"></i> {t}Remove{/t}
                 </a>
             </li>
