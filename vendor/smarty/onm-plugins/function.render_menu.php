@@ -15,11 +15,13 @@ function smarty_function_render_menu($params, &$smarty) {
         $smarty->trigger_error("Menu doesn't exists");
         return $output;
     }
-    $menuItems= Menu::renderMenu($menuName);
+    $menuItems = Menu::renderMenu($menuName);
     if (!empty($menuItems->items)) {
         $smarty->assign('menuItems', $menuItems->items);
-    }
 
+    }else {
+       $smarty->assign('menuItems', array());
+    }
 
     $output .= "\n". $smarty->fetch( $tpl );
 
