@@ -62,15 +62,6 @@ switch($action) {
         // Advertisements for single article NO CACHE
         require_once('article_advertisement.php');
 
-        /**
-            * Getting comments for current article
-            **/
-        $comment = new Comment();
-        $comments = $comment->get_public_comments($articleID);
-        $tpl->assign('num_comments', count($comments));
-        $tpl->assign('comments', $comments);
-        $tpl->assign('articleId', $articleID);
-
         $cache_id = $tpl->generateCacheId(
             $category_name, $subcategory_name, $articleID
         );
@@ -190,16 +181,6 @@ switch($action) {
 
         $tpl->display('article/article.tpl', $cache_id);
 
-    } break;
-
-
-    case 'captcha': {
-        $width  = isset($_GET['width'])  ? $_GET['width']  : '176';
-        $height = isset($_GET['height']) ? $_GET['height'] :  '49';
-        $characters = isset($_GET['characters']) && $_GET['characters'] > 1 ? $_GET['characters'] : '5';
-
-        $captcha = new CaptchaSecurityImages($width, $height, $characters, dirname(__FILE__).'/media/fonts/monofont.ttf');
-        exit(0);
     } break;
 
     case 'vote': {
