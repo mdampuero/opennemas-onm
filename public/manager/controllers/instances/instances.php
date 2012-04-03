@@ -94,7 +94,7 @@ switch($action) {
 
         //If is creating a new instance, get DB params on the fly
         $actionName = filter_input(INPUT_POST, 'action_name' , FILTER_SANITIZE_STRING);
-        $internalNameShort = trim(substr($internalName, 0, 13));
+        $internalNameShort = trim(substr($internalName, 0, 11));
         $settings = "";
         if($actionName == "edit") {
             $settings = $_POST['settings'];
@@ -107,7 +107,7 @@ switch($action) {
                 'BD_HOST' => "localhost",
                 'BD_USER' => $internalNameShort,
                 'BD_PASS' => $password,
-                'BD_DATABASE' => $internalNameShort,
+                'BD_DATABASE' => "c-".$internalNameShort,
             );
         }
 
