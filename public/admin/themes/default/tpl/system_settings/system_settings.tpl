@@ -470,14 +470,14 @@
                                     </div>
                                 </td>
                             </tr>
-                            <tr>
+<!--                            <tr>
                                 <th scope="row">
                                     <label for="google_analytics_base_domain">{t}Base domain:{/t}</label>
                                 </th>
                                 <td>
                                     <input type="text" id="google_analytics_base_domain" name="google_analytics[base_domain]" value="{$configs['google_analytics']['base_domain']|default:""}">
                                 </td>
-                            </tr>
+                            </tr>-->
 
                         </tbody>
                     </table>
