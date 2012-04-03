@@ -94,7 +94,7 @@ switch($action) {
 
         //If is creating a new instance, get DB params on the fly
         $actionName = filter_input(INPUT_POST, 'action_name' , FILTER_SANITIZE_STRING);
-        $internalNameShort = trim(substr($internalName, 0, 10));
+        $internalNameShort = trim(substr($internalName, 0, 13));
         $settings = "";
         if($actionName == "edit") {
             $settings = $_POST['settings'];
@@ -105,9 +105,9 @@ switch($action) {
                 'MEDIA_URL' => "http://media.opennemas.com",
                 'BD_TYPE' => "mysqli",
                 'BD_HOST' => "localhost",
-                'BD_USER' => "onm".$internalNameShort.'usr',
+                'BD_USER' => $internalNameShort,
                 'BD_PASS' => $password,
-                'BD_DATABASE' => "onm-".$internalNameShort,
+                'BD_DATABASE' => $internalNameShort,
             );
         }
 
@@ -138,6 +138,8 @@ switch($action) {
         }
 
         $errors = array();
+        // Check for reapeted internalnameshort and if so , add a number at the end
+        $data = $im->checkInternalShortName($data);
 
         if (intval($data['id']) > 0) {
             $configurationsKeys = array(
