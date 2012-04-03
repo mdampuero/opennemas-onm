@@ -21,13 +21,12 @@
 use Onm\Settings as s,
     Onm\Message  as m;
 
-require_once('../../../bootstrap.php');
-require_once('../../session_bootstrap.php');
+require_once '../../../bootstrap.php';
+require_once '../../session_bootstrap.php';
 
 Acl::checkOrForward('NEWSLETTER_ADMIN');
 
-require_once(SITE_CORE_PATH.'string_utils.class.php');
-String_Utils::disabled_magic_quotes();
+StringUtils::disabled_magic_quotes();
 
 $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 $tpl->assign('application_name', 'Boletín de Noticias');
@@ -94,15 +93,16 @@ switch($action) {
      * Step 1: list all articles available in frontpage
      */
     case 'listArticles':
-    /**
-     * Check if module is configured, if not redirect to configuration form
-    */
-    if (is_null(s::get('newsletter_maillist')) || !(s::get('newsletter_subscriptionType'))) {
+    //Check if module is configured, if not redirect to configuration form
+    if (is_null(s::get('newsletter_maillist'))
+        || !(s::get('newsletter_subscriptionType'))
+        || !(s::get('newsletter_enable')))
+    {
         m::add(_('Please provide your Newsletter configuration to start to use your Newsletter module'));
         $httpParams [] = array(
                             'action'=>'config',
                         );
-        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
     } else {
         $configurations = s::get('newsletter_maillist');
             foreach ($configurations as $key => $value) {
@@ -111,7 +111,7 @@ switch($action) {
                 $httpParams [] = array(
                     'action'=>'config',
                 );
-            Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+            Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
             }
         }
     }
@@ -187,7 +187,7 @@ switch($action) {
 
         }
         $tpl->assign('mailList', $mailList);
-       
+
         // Ajax request
         if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
            ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')) {
@@ -206,7 +206,7 @@ switch($action) {
      * Step 4: preview the message
      */
     case 'preview':
-        
+
         $htmlContent = $newsletter->render();
         $tpl->assign('htmlContent', $htmlContent);
         $tpl->display('newsletter/preview.tpl');
@@ -251,7 +251,7 @@ switch($action) {
                 $htmlFinal .= '<tr><td width=50% ><strong class="failed">FAILED</strong>&nbsp;&nbsp;</td><td>'. $mailbox->name . ' &lt;' . $mailbox->email. '&gt;</td></tr>';
             }
         }
-        
+
         if (isset($data->lists)) {
             foreach($data->lists as $email) {
                 if (trim($email) != ""){
@@ -269,10 +269,10 @@ switch($action) {
                         $htmlFinal .= '<tr><td width=50% ><strong class="failed">FAILED</strong>&nbsp;&nbsp;</td><td>'. $mailbox->name . ' &lt;' . $mailbox->email. '&gt;</td></tr>';
                     }
                 }
-                
+
             }
         }
-        
+
         $tpl->assign(array(
             'html_final' => $htmlFinal,
             'postmaster' => $postmaster,
@@ -313,14 +313,25 @@ switch($action) {
         $configurationsKeys = array(
                                     'newsletter_maillist',
                                     'newsletter_subscriptionType',
+                                    'newsletter_enable',
+                                    'recaptcha',
                                     );
 
         $configurations = s::get($configurationsKeys);
 
+        //Check that user has configured reCaptcha keys if newsletter is enabled
+        $missingRecaptcha = false;
+        if (empty($configurations['recaptcha']['public_key'])
+             || empty($configurations['recaptcha']['private_key']))
+        {
+            $missingRecaptcha = true;
+        }
+
         $tpl->assign(
                      array(
                             'configs'   => $configurations,
-                        )
+                            'missing_recaptcha'   => $missingRecaptcha,
+                          )
                     );
 
         $tpl->display('newsletter/config.tpl');
@@ -341,7 +352,7 @@ switch($action) {
         $httpParams = array(
                             array('action'=>'listArticles'),
                             );
-        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
 
     break;
 

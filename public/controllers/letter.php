@@ -11,6 +11,7 @@ use Onm\Settings as s;
  * Start up and setup the app
 */
 require_once('../bootstrap.php');
+require_once('recaptchalib.php');
 
 /**
  * Setup view
@@ -52,7 +53,7 @@ switch($action) {
            || (!$tpl->isCached('letter/letter-frontpage.tpl',$cacheID))) {
 
                 $otherLetters = $cm->find_all('Letter', 'available=1 ',
-                                            'ORDER BY created DESC LIMIT 8');
+                                            'ORDER BY created DESC LIMIT 5');
 
             $tpl->assign( array('otherLetters'=> $otherLetters ) );
 
@@ -129,6 +130,22 @@ switch($action) {
 
     case 'save_letter':
 
+        //Get config vars
+        $configRecaptcha = s::get('recaptcha');
+
+        // Get reCaptcha validate response
+        $resp = recaptcha_check_answer ($configRecaptcha['private_key'],
+                                        $_SERVER["REMOTE_ADDR"],
+                                        $_POST["recaptcha_challenge_field"],
+                                        $_POST["recaptcha_response_field"]);
+
+        // What happens when the CAPTCHA was entered incorrectly
+        if (!$resp->is_valid) {
+            $msg="reCAPTCHA no fue introducido correctamente. Intentelo de nuevo.";
+            echo ($msg);
+            exit();
+        } else {
+
            if(isset($_POST['lettertext']) && !empty($_POST['lettertext'])) {
                 if( isset($_POST['security_code']) && empty($_POST['security_code']) ) {
 
@@ -148,6 +165,7 @@ switch($action) {
            }
            echo $msg;
            exit();
+        }
 
     default:
       //  Application::forward301('index.php');

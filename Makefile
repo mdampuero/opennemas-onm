@@ -14,7 +14,8 @@ SESSIONS_FOLDERS = \
 	
 LINGUAS = \
 	es_ES \
-	gl_ES
+	gl_ES \
+	pt_BR
 
 DOC_FOLDERS = public/core \
 	public/controllers \
@@ -32,7 +33,7 @@ extracttrans:
 	@xgettext public/admin/controllers/**/* \
 	        public/admin/include/menu.php public/core/*.php \
         	vendor/Onm/**/**/*.php \
-	        public/models/*.php \
+	        app/models/*.php \
         	public/manager/controllers/**/*.php \
         	public/admin/themes/default/**/*.php \
 		  $(LOCALE_FOLDER)'extracted_strings.c' \

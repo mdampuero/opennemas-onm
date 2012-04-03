@@ -12,7 +12,8 @@
     {script_tag src="/utilsGallery.js"}
     <script type="text/javascript">
         jQuery(document).ready(function ($){
-            $('#position-adv').tabs();
+            var $tabs = $('#position-adv').tabs();
+            $tabs.tabs('select', '#{$smarty.get.place}' );
         });
 
         function testScript(frm)  {
@@ -291,7 +292,7 @@ input, select, textarea {
                         <li><a href="#publi-newsletter">{t}Newsletter{/t}</a></li>
                         {/is_module_activated}
                     </ul>
-                    
+
                     <div id="publi-portada">
                         {include file="advertisement/partials/advertisement_positions.tpl"}
                     </div>
@@ -299,7 +300,7 @@ input, select, textarea {
                     <div id="publi-interior">
                         {include file="advertisement/partials/advertisement_positions_interior.tpl"}
                     </div>
-                    
+
                     <div id="publi-video">
                         {include file="advertisement/partials/advertisement_positions_video.tpl"}
                     </div>
@@ -330,7 +331,7 @@ input, select, textarea {
                 </div><!-- /position-adv -->
             </fieldset>
         </div><!-- / -->
-        
+
         <input type="hidden" name="filter[type_advertisement]" value="{$smarty.request.filter.type_advertisement|default:""}" />
         <input type="hidden" name="filter[available]" value="{$smarty.request.filter.available|default:""}" />
         <input type="hidden" name="filter[type]" value="{$smarty.request.filter.type|default:""}" />

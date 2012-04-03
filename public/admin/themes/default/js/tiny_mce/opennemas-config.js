@@ -31,6 +31,10 @@ OpenNeMas.tinyMceConfig = {
         skin : "cirkuit",
         //skin_variant : "silver",
 
+        // Paste as plain text settings
+        paste_text_use_dialog : true,
+        paste_text_linebreaktype : "p",
+
         /* theme_advanced_styles : "Título 1=header1;Título 2=header2;Título 3=header3;",*/
         theme_advanced_disable : "help",
 
@@ -55,7 +59,7 @@ OpenNeMas.tinyMceConfig = {
         /* Iframe */
         /*extended_valid_elements: "iframe[src|width|height|name|align|frameborder|scrolling|marginheight|marginwidth],object[data|type|classid|codebase|width|height|align],param[name|value],embed[quality|type|pluginspage|width|height|src|align],img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name|obj|param|embed]",*/
         extended_valid_elements: "iframe[src|width|height|name|align|frameborder|scrolling|marginheight|marginwidth],blockquote[class=style1]",
-                
+
         theme_advanced_resize_horizontal : false,
         theme_advanced_resizing : true,
 
@@ -63,13 +67,13 @@ OpenNeMas.tinyMceConfig = {
 
         setup : function(ed) {
             ed.onKeyUp.add(function(ed, e) {
-                if(counttiny) {
+                if(counttiny && document.getElementById('counter_body')) {
                     counttiny(document.getElementById('counter_body'), ed);
                 }
             });
 
             ed.onChange.add(function(ed, e) {
-                if(counttiny) {
+                if(counttiny && document.getElementById('counter_body')) {
                     counttiny(document.getElementById('counter_body'), ed);
                 }
             });
@@ -123,13 +127,13 @@ OpenNeMas.tinyMceConfig = {
 
         setup : function(ed) {
             ed.onKeyUp.add(function(ed, e) {
-                if(counttiny) {
+                if(counttiny && document.getElementById('counter_summary')) {
                     counttiny(document.getElementById('counter_summary'), ed);
                 }
             });
 
             ed.onChange.add(function(ed, e) {
-                if(counttiny) {
+                if(counttiny && document.getElementById('counter_summary')) {
                     counttiny(document.getElementById('counter_summary'), ed);
                 }
             });
@@ -179,21 +183,8 @@ OpenNeMas.tinyMceConfig = {
         theme_advanced_resize_horizontal : false,
         theme_advanced_resizing : true,
 
-        spellchecker_languages : "+Castellano=es,Galego=gl,English=en",
+        spellchecker_languages : "+Castellano=es,Galego=gl,English=en"
 
-        setup : function(ed) {
-            ed.onKeyUp.add(function(ed, e) {
-                if(counttiny) {
-                    counttiny(document.getElementById('counter_summary'), ed);
-                }
-            });
-
-            ed.onChange.add(function(ed, e) {
-                if(counttiny) {
-                    counttiny(document.getElementById('counter_summary'), ed);
-                }
-            });
-        }
     },
 
     'widget': {

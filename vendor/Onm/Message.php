@@ -1,11 +1,17 @@
 <?php
+/**
+ * This file is part of the Onm package.
+ *
+ * (c)  OpenHost S.L. <developers@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ **/
 namespace Onm;
 /**
  * Class for handling Messages for showing to the user.
  *
  * @package    Onm
- * @author     me
- * @version    Git: $Id: Message.php Lun Xul 25 15:47:30 2011 frandieguez $
  */
 class Message
 {
@@ -83,8 +89,8 @@ class Message
 
         if (!isset($_SESSION)
             || !is_array($_SESSION)
-            || !array_key_exists('messages', $_SESSION))
-        {
+            || !array_key_exists('messages', $_SESSION)
+        ) {
 
         }
         if (is_null($priority)) {

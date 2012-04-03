@@ -49,11 +49,6 @@ if(($tpl->caching == 0)
     $ccm = ContentCategoryManager::get_instance();
 
     list($category_name, $subcategory_name) = $ccm->normalize($category_name, $subcategory_name);
-    $section = (!empty($subcategory_name))? $subcategory_name: $category_name;
-    $section = (is_null($section))? 'home': $section;
-
-    $tpl->loadConfigOrDefault('template.conf', $section); // $category_name is a string
-    unset($section);
 
     /**
      * If no home   category name
@@ -240,9 +235,14 @@ if(($tpl->caching == 0)
     /***** GET ALL FRONTPAGE'S IMAGES *******/
     $imagenes = array();
     foreach($articles_home as $i => $art) {
-        if(isset($art->img1)) {
+        if($actual_category == 'home' && !empty($art->params) &&
+                array_key_exists('imageHome', $art->params) &&
+                !empty($art->params['imageHome'])) {
+            $imagenes[] = $art->params['imageHome'];
+        }elseif(isset($art->img1)) {
             $imagenes[] = $art->img1;
         }
+
     }
 
     if(count($imagenes)>0) {
@@ -250,7 +250,7 @@ if(($tpl->caching == 0)
     }
 
     $column = array(); //Contendrá las noticias de la columna
-    $relia  = new Related_content();
+    $relia  = new RelatedContent();
      // $rating_bar_col1 = array();//Array que contiene las barras de votación de las noticias de la columna1
 
     //for ( $c = 0,$aux = 0; $articles_home[$aux]->title != "" ; $c++, $aux ++ ) {
@@ -267,6 +267,12 @@ if(($tpl->caching == 0)
             // Buscar la imagen
             if(!empty($imagenes)) {
                 foreach($imagenes as $img) {
+                    if( ($actual_category == 'home')
+                            && (isset($column[$c]->params['imageHome'])) &&
+                        ($img->pk_content == $column[$c]->params['imageHome']) ) {
+                        $column[$c]->imageHomePath = $img->path_file.$img->name;
+                        $column[$c]->imageHome = $img;
+                    }
                     if($img->pk_content == $column[$c]->img1) {
                         $column[$c]->img1_path = $img->path_file.$img->name;
                         $column[$c]->img1 = $img;

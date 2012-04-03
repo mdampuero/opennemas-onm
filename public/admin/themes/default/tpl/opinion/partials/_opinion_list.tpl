@@ -86,14 +86,15 @@
 				<ul class="action-buttons">
                     {acl isAllowed="OPINION_UPDATE"}
 					<li>
-						<a href="{$smarty.server.PHP_SELF}?action=read&amp;id={$opinions[c]->id}" title="Modificar">
+						<a href="{$smarty.server.PHP_SELF}?action=read&amp;id={$opinions[c]->id}" title="{t}Edit{/t}">
 							<img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
 					</li>
                     {/acl}
                     {acl isAllowed="OPINION_DELETE"}
 					<li>
-						<a href="#" onClick="javascript:delete_opinion('{$opinions[c]->id}',{$paginacion->_currentPage|default:0});" title="Eliminar">
-							<img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
+						 <a class="del" data-controls-modal="modal-from-dom" data-id="{$opinions[c]->id}"
+                            data-title="{$opinions[c]->title|capitalize}" href="#" title="{t}Delete{/t}">
+                                <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
 					</li>
                     {/acl}
 				</ul>

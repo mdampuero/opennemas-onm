@@ -1,3 +1,9 @@
 [submodule "vendor/Panorama"]
 	path = vendor/Panorama
 	url = git://github.com/frandieguez/Panorama-PHP.git
+[submodule "vendor/Symfony/Component/ClassLoader"]
+	path = vendor/Symfony/Component/ClassLoader
+	url = https://github.com/symfony/ClassLoader.git
+[submodule "vendor/Symfony/Component/HttpFoundation"]
+	path = vendor/Symfony/Component/HttpFoundation
+	url = https://github.com/symfony/HttpFoundation

@@ -29,6 +29,7 @@
         vertical-align:middle
     }
     input[type="text"],
+    td,
     textarea{
         width:400px;
         max-height:80%
@@ -36,10 +37,14 @@
     tr {
         vertical-align:top;
     }
+    .ui-widget-content a {
+        color: #0B55C4 !important;
+    }
     </style>
 {/block}
 
 {block name="footer-js" append}
+    {script_tag src="/jquery/jquery.min.js"}
     {script_tag src="/jquery/jquery_colorpicker/js/colorpicker.js"}
     {script_tag src="/tiny_mce/opennemas-config.js"}
 
@@ -114,9 +119,9 @@
                                 <td>
                                     <input type="text" id="site_name" name="site_name" value="{$configs['site_name']|default:""}">
                                 </td>
-                                <td rowspan=4>
+                                <td rowspan=7>
                                     <div class="help-block margin-left-1">
-                                        <div class="title"><h4>Basic parameters</h4></div>
+                                        <div class="title"><h4>{t}Basic parameters{/t}</h4></div>
                                         <div class="content">
                                             <dl>
                                                 <dt><strong>{t}Site agency{/t}</strong></dt>
@@ -137,7 +142,7 @@
                                                 <dt><strong>{t}Edit your Site footer{/t}</strong></dt>
                                                 <dd>{t}You can edit here the footer of the site.{/t}</dd>
                                             </dl>
-                                             </div>
+                                        </div>
                                     </div>
                                 </td>
                             </tr>
@@ -190,12 +195,12 @@
                             <tr>
                                 <th scope="row">
                                     <label for="site_footer">{t}Text in footer frontpages:{/t}</label>
-                                    <div id="toggle-btn" style="float:right;">
+<!--                                    <div id="toggle-btn" style="float:right;">
                                         <a title="Habilitar/Deshabilitar editor" data-selector-to-hide="site_footer" class="toggle-tinymce" href="#">
                                             <img alt="" src="{$params.IMAGE_DIR}users_edit.png"></a>
-                                    </div>
+                                    </div>-->
                                 </th>
-                                <td colspan=2>
+                                <td>
                                     <textarea id="site_footer" name="site_footer" cols="50" rows="7">{$configs['site_footer']|default:""}</textarea>
                                 </td>
                             </tr>
@@ -291,8 +296,21 @@
                                 <th scope="row">
                                     <label for="site_title">{t}Language{/t}</label>
                                 </th>
-                                <td colspan="2">
+                                <td>
                                     {html_options name=site_language options=$languages selected=$configs['site_language']}
+                                </td>
+                                <td rowspan=4>
+                                    <div class="help-block margin-left-1">
+                                        <div class="title"><h4>{t}Basic parameters{/t}</h4></div>
+                                        <div class="content">
+                                            <dl>
+                                                <dt><strong>{t}Seconds for refresh pages{/t}</strong></dt>
+                                                <dd>{t}The default configuration in Opennemas for refreshing pages is 900 seconds{/t}</dd>
+                                                <dt><strong>{t}Number items in admin lists{/t}</strong></dt>
+                                                <dd>{t}Default: 20 elements{/t}</dd>
+                                            </dl>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
@@ -307,30 +325,16 @@
                                 <th scope="row">
                                     <label for="refresh_interval">{t}Refresh page every (secs):{/t}</label>
                                 </th>
-                                <td>
+                                <td colspan="2">
                                     <input type="number" id="refresh_interval" name="refresh_interval" value="{$configs['refresh_interval']|default:900}">
-                                    <span class="default-value"></span>
-                                </td>
-                                <td>
-                                    <div class="help-block margin-left-1">
-                                        <div class="title"><h4>{t}Seconds for refresh pages{/t}</h4></div>
-                                        <div class="content"> {t}Default is set to 900 seconds for refreshing pages in opennemas configuration..{/t} </div>
-                                    </div>
                                 </td>
                             </tr>
-
                             <tr>
                                 <th scope="row">
                                     <label for="items_per_page">{t}Items per page:{/t}</label>
                                 </th>
                                 <td>
                                     <input type="number" id="items_per_page" name="items_per_page" value="{$configs['items_per_page']|default:20}">
-                                </td>
-                                <td>
-                                    <div class="help-block margin-left-1">
-                                        <div class="title"><h4>{t}Number items in admin lists{/t}</h4></div>
-                                        <div class="content">{t}Default: 20 elements{/t}</div>
-                                    </div>
                                 </td>
                             </tr>
 
@@ -466,14 +470,14 @@
                                     </div>
                                 </td>
                             </tr>
-                            <tr>
+<!--                            <tr>
                                 <th scope="row">
                                     <label for="google_analytics_base_domain">{t}Base domain:{/t}</label>
                                 </th>
                                 <td>
                                     <input type="text" id="google_analytics_base_domain" name="google_analytics[base_domain]" value="{$configs['google_analytics']['base_domain']|default:""}">
                                 </td>
-                            </tr>
+                            </tr>-->
 
                         </tbody>
                     </table>
@@ -503,6 +507,14 @@
                                 </th>
                                 <td>
                                     <input type="text" id="piwik_server_url" name="piwik[server_url]" value="{$configs['piwik']['server_url']|default:""}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    <label for="piwik_token_auth">{t}User Token Auth:{/t}</label>
+                                </th>
+                                <td>
+                                    <input type="text" id="piwik_token_auth" name="piwik[token_auth]" value="{$configs['piwik']['token_auth']|default:""}">
                                 </td>
                             </tr>
 
@@ -555,26 +567,4 @@
 
     </form>
 </div>
-{script_tag language="javascript" src="/jquery/jquery.min.js"}
-{script_tag language="javascript" src="/jquery_colorpicker/js/colorpicker.js"}
-{script_tag src="/tiny_mce/opennemas-config.js"}
-<script type="text/javascript" language="javascript">
-    tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
-    OpenNeMas.tinyMceConfig.footer.elements = "site_footer";
-    tinyMCE.init( OpenNeMas.tinyMceConfig.footer );
-
-    $.noConflict();
-    jQuery('#site_color').ColorPicker({
-        onSubmit: function(hsb, hex, rgb, el) {
-            jQuery(el).val(hex);
-            jQuery(el).ColorPickerHide();
-        },
-        onBeforeShow: function () {
-            jQuery(this).ColorPickerSetColor(this.value);
-        }
-    })
-    .bind('keyup', function(){
-        jQuery(this).ColorPickerSetColor(this.value);
-    });
-</script>
 {/block}

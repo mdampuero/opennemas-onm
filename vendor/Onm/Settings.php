@@ -23,9 +23,9 @@ namespace Onm;
  * @package    Onm
  * @subpackage Settings
  * @author     Fran Dieguez <fran@openhost.es>
- * @version    Git: $Id: Settings.php Mér Xul 13 01:06:01 2011 frandieguez $
  */
-class Settings {
+class Settings
+{
 
     /**
      * Fetches a setting from its name.
@@ -44,20 +44,22 @@ class Settings {
     static public function get( $settingName )
     {
         // the setting name must be setted
-        if (!isset($settingName) || empty($settingName)) { return false; };
+        if (!isset($settingName) || empty($settingName)) {
+            return false;
+        };
 
         if (!is_array($settingName)) {
 
             // Try to fetch the setting from APC first
             $fetchedFromAPC = false;
             if (extension_loaded('apc')) {
-                $settingValue = apc_fetch(APC_PREFIX . "_". $settingName, $fetchedFromAPC);
+                $settingValue = apc_fetch(APC_PREFIX . ".". $settingName, $fetchedFromAPC);
             }
 
             // If was not fetched from APC now is turn of DB
             if (!$fetchedFromAPC) {
                 $sql = "SELECT value FROM `settings` WHERE name = \"{$settingName}\"";
-                $rs = $GLOBALS['application']->conn->GetOne( $sql );
+                $rs = $GLOBALS['application']->conn->GetOne($sql);
 
 
                 if (!$rs) {
@@ -73,7 +75,7 @@ class Settings {
                 $settingValue = unserialize($rs);
 
                 if (extension_loaded('apc')) {
-                    apc_store(APC_PREFIX . "_".$settingName, $settingValue);
+                    apc_store(APC_PREFIX . ".".$settingName, $settingValue);
                 }
 
             }
@@ -85,14 +87,14 @@ class Settings {
             if (extension_loaded('apc')) {
                 $apcSettingName = array();
                 foreach ($settingName as $key) {
-                    $apcSettingName []= APC_PREFIX . "_". $key;
+                    $apcSettingName []= APC_PREFIX . ".". $key;
                 }
 
                 $apcSettingValue = apc_fetch($apcSettingName, $fetchedFromAPC);
 
                 $settingValue = array();
-                foreach ($apcSettingValue as $key => $value ) {
-                    $key = preg_replace("@".APC_PREFIX . "_@","", $key);
+                foreach ($apcSettingValue as $key => $value) {
+                    $key = preg_replace("@".APC_PREFIX . "\.@", "", $key);
                     $settingValue[$key] = $value;
                 }
 
@@ -105,13 +107,14 @@ class Settings {
             ) {
 
                 $settingName = implode("', '", $settingName);
-                $sql = ( "SELECT name, value FROM `settings` WHERE name IN ('{$settingName}') ");
-                $rs = $GLOBALS['application']->conn->Execute( $sql );
+                $sql         = "SELECT name, value FROM `settings` "
+                               ."WHERE name IN ('{$settingName}') ";
+                $rs          = $GLOBALS['application']->conn->Execute($sql);
 
                 if (!$rs) {
-                    $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-                    $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-                    $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+                    $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+                    $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+                    $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
 
                     return false;
                 }
@@ -124,7 +127,7 @@ class Settings {
                 if (extension_loaded('apc')) {
                     $apcSettingName = array();
                     foreach ($settingValue as $key => $option) {
-                        $apcSettingName [APC_PREFIX . "_". $key] = $option;
+                        $apcSettingName [APC_PREFIX . ".". $key] = $option;
                     }
                     apc_store($apcSettingName);
                 }
@@ -151,7 +154,9 @@ class Settings {
     static public function set($settingName, $settingValue)
     {
         // the setting name must be setted
-        if (!isset($settingName) || empty($settingName)) { return false; };
+        if (!isset($settingName) || empty($settingName)) {
+            return false;
+        }
 
         $settingValueSerialized = serialize($settingValue);
 
@@ -159,17 +164,17 @@ class Settings {
                             VALUES ('{$settingName}','{$settingValueSerialized}')
                             ON DUPLICATE KEY UPDATE value='{$settingValueSerialized}'";
 
-        $rs = $GLOBALS['application']->conn->Execute( $sql );
+        $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
 
             return false;
         }
         if (extension_loaded('apc')) {
-            apc_store(APC_PREFIX . "_".$settingName, $settingValue);
+            apc_store(APC_PREFIX . ".".$settingName, $settingValue);
         }
 
         return true;
@@ -192,10 +197,14 @@ class Settings {
         if (is_null($instanceName)) {
             $instanceName = APC_PREFIX;
         }
+
         // the setting name must be setted
-        if (!isset($settingName) || empty($settingName)) { return false; };
+        if (!isset($settingName) || empty($settingName)) {
+            return false;
+        }
+
         if (extension_loaded('apc')) {
-            apc_delete($instanceName . "_".$settingName);
+            apc_delete($instanceName . ".".$settingName);
         } else {
             return false;
         }

@@ -1,13 +1,38 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-js" append}
-    {script_tag src="/utilsspecial.js" language="javascript"}
 
 {/block}
 
+{block name="header-css" append}
+ {css_tag href="/parts/specials.css"}
+{/block}
+
 {block name="footer-js" append}
-    {script_tag src="/cropper.js" language="javascript"}
-    {script_tag src="/utilsGallery.js" language="javascript"}
+    {script_tag src="/utilsGallery.js"}
+    {script_tag src="/onm/jquery.content-provider.js"}
+    {script_tag src="/onm/jquery.specials.js"}
+    {script_tag src="/tiny_mce/opennemas-config.js"}
+
+    <script type="text/javascript">
+        tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
+        OpenNeMas.tinyMceConfig.simple.elements = "description";
+        tinyMCE.init( OpenNeMas.tinyMceConfig.simple );
+    </script>
+
+      <script>
+    try {
+        new Validation('formulario', { immediate : true });
+    } catch(e) { }
+
+    jQuery(document).ready(function($){
+        $("#form-validate-button, #form-send-button").on("click", function(event) {
+
+            saveSpecialContent();
+            return true;
+        });
+    });
+    </script>
 {/block}
 
 {block name="content"}
@@ -17,25 +42,28 @@
         <div class="wrapper-content">
             <div class="title"><h2>{t}Special manager{/t} :: {if $smarty.request.action eq "new"}{t}Creating Special{/t}{else}{t}Editing Special{/t}{/if}</h2></div>
             <ul class="old-button">
-                <li>
+
+                 <li>
                     {acl isAllowed="SPECIAL_CREATE"}
-                    <a class="admin_add" onClick="enviar(this, '_self', 'validate', '{$special->id}');" value="Validar" title="Validar">
-                        <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />{t}Save and continue{/t}
-                    </a>
+                    <button type="submit" name="action" value="validate"  id="form-validate-button">
+                        <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="Guardar y continuar" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
+                    </button>
                     {/acl}
                 </li>
                 <li>
                     {if isset($special->id)}
                         {acl isAllowed="SPECIAL_UPDATE"}
-                            <a onClick="javascript: enviar(this, '_self', 'update', '{$special->id}');">
+                        <button type="submit" name="action" value="update" id="form-send-button">
+                            <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar" alt="{t}Save{/t}" ><br />{t}Save{/t}
+                        </button>
                         {/acl}
                     {else}
                         {acl isAllowed="SPECIAL_CREATE"}
-                            <a onClick="javascript: enviar(this, '_self', 'create', '0');">
+                        <button type="submit" name="action" value="create" id="form-send-button">
+                            <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />{t}Save{/t}
+                        </button>
                         {/acl}
                     {/if}
-                        <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar y salir" alt="Guardar y salir"><br />{t}Save{/t}
-                    </a>
                 </li>
                 <li class="separator"></li>
                 <li>
@@ -47,15 +75,6 @@
         </div>
     </div>
     <div class="wrapper-content">
-
-        <table class="adminheading">
-            <tr>
-                <td>
-                    {t}Enter special information{/t}
-                </td>
-            </tr>
-        </table>
-
         <table class="adminform">
             <tbody>
                 <tr>
@@ -67,10 +86,10 @@
                             size="60" value="{$special->title|clearslash|escape:"html"}"
                             class="required" onBlur="javascript:get_metadata(this.value);" />
                     </td>
-                    <td rowspan="4">
-                        <table style='background-color:#F5F5F5; padding:18px;'>
+                    <td rowspan="4"  style="padding: 4px;">
+                        <table  style='background-color:#F5F5F5; padding:8px;'>
                             <tr>
-                                <td valign="top"  align="right" nowrap="nowrap">
+                                <td valign="top"  style="text-align:right;padding: 4px;" nowrap="nowrap">
                                 <label for="title">Secci&oacute;n:</label>
                                 </td>
                                 <td nowrap="nowrap">
@@ -85,7 +104,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td valign="top"  align="right" nowrap="nowrap">
+                                <td valign="top" style="text-align:right;padding: 4px;" nowrap="nowrap">
                                     <label for="title"> {t}Available:{/t} </label>
                                 </td>
                                 <td valign="top" nowrap="nowrap">
@@ -105,19 +124,10 @@
                         <label for="title">Subtitle:</label>
                     </td>
                     <td style="padding:4px;" nowrap="nowrap">
-                        <input type="text" id="agency" name="agency" title={t}"Special"{/t}
+                        <input type="text" id="subtitle" name="subtitle" title={t}"Special"{/t}
                             size="60" value="{$special->subtitle|clearslash|escape:"html"}" />
                     </td>
                 </tr>
-                <tr>
-                    <td valign="top" align="right" style="padding:4px;">
-                        <label for="title">Descripci&oacute;n:</label>
-                    </td>
-                    <td style="padding:4px;" nowrap="nowrap">
-                        <textarea name="description" id="description"  title="description" style="width:90%; height:10em;">{t 1=$special->description|clearslash|escape:"html"}%1{/t}</textarea>
-                    </td>
-                </tr>
-
                 <tr>
                     <td valign="top" align="right" style="padding:4px;">
                         <label for="metadata">{t}Keywords:{/t}</label>
@@ -134,7 +144,7 @@
                     </td>
                     <td style="padding:4px;" nowrap="nowrap">
                         <input 	type="text" id="slug" name="slug" title="{t}slug{/t}"
-                                                        style="width:98%" maxlength="256" tabindex="5"
+                            size="60" maxlength="256" tabindex="5"
                             {if is_object($article)}
                                     value="{$article->slug|clearslash|escape:"html"}"
                             {else}
@@ -142,30 +152,35 @@
                             {/if}/>
                      </td>
                 </tr>
+                 <tr>
+                    <td valign="top" align="right" style="padding:4px;">
+                        <label for="title">Descripci&oacute;n:</label>
+                    </td>
+                    <td style="padding:4px;" nowrap="nowrap" colspan="2">
+                        <textarea name="description" id="description"  title="description" style="width:90%; height:10em;">
+                            {t 1=$special->description|clearslash|escape:"html"}%1{/t}
+                        </textarea>
+                    </td>
+                </tr>
+
                 <tr>
                     <td valign="top" align="right" colspan="3">
-                        {include file="special/special_image.tpl"}
+                        {include file="special/partials/_load_images.tpl"}
                     </td>
                 </tr>
                 <tr>
                     <td valign="top" align="right" colspan="3">
-                        {include file="special/special_content.tpl"}
+                        {include file="special/partials/_contents_containers.tpl"}
                     </td>
                 </tr>
           </tbody>
         </table>
     </div>
-<script type="text/javascript" language="javascript">
-tinyMCE.init({
-	mode : "exact",
-	elements : "description"
-});
-</script>
-    <input type="hidden" id="noticias_right" name="noticias_right" value="">
-    <input type="hidden" id="noticias_left" name="noticias_left" value="">
+    <input type="text" id="noticias_right" name="noticias_right" value="">
+    <input type="text" id="noticias_left" name="noticias_left" value="">
 
-    <input type="hidden" id="action" name="action" value="" />
-    <input type="hidden" name="id" id="id" value="{$id|default:""}" />
+    <input type="hidden" name="id" id="id" value="{$special->id|default:""}" />
+
 </form>
 
 {/block}

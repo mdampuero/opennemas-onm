@@ -78,7 +78,7 @@ jQuery(document).ready(function($) {
 </div><!-- / -->
 <form action="{$smarty.server.PHP_SELF}" method="post" name="formulario" id="formulario">
     <div class="wrapper-content">
-        
+
         <div id="instance-edit" class="tabs">
             <ul>
                 <li><a href="#general">{t}General{/t}</a> </li>
@@ -196,6 +196,7 @@ jQuery(document).ready(function($) {
                     </tbody>
                 </table>
             </div>
+            {if $smarty.get.action neq "new"}
             <div id="general-information">
                 <table>
                     <tbody>
@@ -672,7 +673,7 @@ jQuery(document).ready(function($) {
                     </tbody>
                 </table>
             </div>
-
+            {/if}
             <input type="hidden" name="action_name" id="action_name" value="{$smarty.get.action}"></input>
             <input type="hidden" id="id" name="id" value="{$instance->id|default:""}" />
             <input type="hidden" id="action" name="action" value="save" />

@@ -11,14 +11,17 @@ function smarty_function_include_google_analytics_code($params, &$smarty) {
 
     $gAnalyticsConfigs = s::get('google_analytics');
 
+    if (array_key_exists('api_key', $gAnalyticsConfigs)) {
+        $apiKey = trim($gAnalyticsConfigs['api_key']);
+    } else {
+        $apiKey = '';
+    }
+
     // Only return anything if the Ganalytics is setted in the configuration
-    if (is_array($gAnalyticsConfigs)
-        && array_key_exists('api_key', $gAnalyticsConfigs)
-        && !empty($gAnalyticsConfigs['api_key']  ))
-    {
+    if (is_array($gAnalyticsConfigs) && !empty($apiKey))  {
         $output = "<script type=\"text/javascript\">
             var _gaq = _gaq || [];
-            _gaq.push(['_setAccount', '". $gAnalyticsConfigs['api_key']."']);";
+            _gaq.push(['_setAccount', '".$apiKey."']);";
 
         // If base domain for ganalytics is set append it to the final output.
         if (array_key_exists('base_domain', $gAnalyticsConfigs)

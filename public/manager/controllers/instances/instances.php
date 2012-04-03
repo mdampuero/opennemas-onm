@@ -24,17 +24,17 @@ $action = (isset($_REQUEST['action']))? $_REQUEST['action']: null;
 
 
 switch($action) {
-    
+
     case 'edit':
-        
+
         $templates = im::getAvailableTemplates();
         $tpl->assign('templates', $templates);
-        
+
         $id = $_REQUEST['id'];
         $instance = $im->read($id);
-           
+
         list($instance->totals, $instance->configs) = $im->getDBInformation($instance->settings);
-        
+
         $tpl->assign( 'instance', $instance);
 
         $tpl->assign(
@@ -53,7 +53,7 @@ switch($action) {
     case 'new':
 
         $templates = im::getAvailableTemplates();
-              
+
         $tpl->assign(array(
             'templates' => $templates,
             //'defaultDatabaseAuth' => $onmInstancesConnection,
@@ -68,12 +68,12 @@ switch($action) {
                 'logLevels' => array('normal' => _('Normal'), 'verbose' => _('Verbose'), 'all' => _('All (Paranoic mode)') ),
             )
         );
-        
+
         $tpl->display('instances/edit.tpl');
         break;
 
     case 'delete':
-        
+
         $id = $_REQUEST['id'];
         $deletion = $im->delete($id);
 
@@ -91,26 +91,26 @@ switch($action) {
         }
         //Force internal_name lowercase
         $internalName = strtolower($internalName);
-        
+
         //If is creating a new instance, get DB params on the fly
         $actionName = filter_input(INPUT_POST, 'action_name' , FILTER_SANITIZE_STRING);
-        $internalNameShort = trim(substr($internalName, 0, 10));
+        $internalNameShort = trim(substr($internalName, 0, 11));
         $settings = "";
         if($actionName == "edit") {
             $settings = $_POST['settings'];
         } else {
-            $password = String_Utils::generatePassword(16);
+            $password = StringUtils::generatePassword(16);
             $settings = array(
                 'TEMPLATE_USER' => "retrincos",
                 'MEDIA_URL' => "http://media.opennemas.com",
                 'BD_TYPE' => "mysqli",
                 'BD_HOST' => "localhost",
-                'BD_USER' => "onm".$internalNameShort.'usr',
+                'BD_USER' => $internalNameShort,
                 'BD_PASS' => $password,
-                'BD_DATABASE' => "onm-".$internalNameShort,
+                'BD_DATABASE' => "c-".$internalNameShort,
             );
         }
-        
+
         //Get all the Post data
         $data = array(
             'id' => filter_input(INPUT_POST, 'id' , FILTER_SANITIZE_STRING),
@@ -123,10 +123,10 @@ switch($action) {
             'domains' => filter_input(INPUT_POST, 'domains' , FILTER_SANITIZE_STRING),
             'activated' => filter_input(INPUT_POST, 'activated' , FILTER_SANITIZE_NUMBER_INT),
             'settings' => $settings,
-            'site_created' => filter_input(INPUT_POST, 'site_created' , FILTER_SANITIZE_STRING, 
+            'site_created' => filter_input(INPUT_POST, 'site_created' , FILTER_SANITIZE_STRING,
                                         array('options' => array('default' => date("d-m-Y - H:m"))))
         );
-        
+
         //Also get timezone if comes from openhost form
         if (isset($_POST['timezone']) && !empty ($_POST['timezone'])) {
             $allTimezones = \DateTimeZone::listIdentifiers();
@@ -138,7 +138,9 @@ switch($action) {
         }
 
         $errors = array();
-        
+        // Check for reapeted internalnameshort and if so , add a number at the end
+        $data = $im->checkInternalShortName($data);
+
         if (intval($data['id']) > 0) {
             $configurationsKeys = array(
                     'site_title', 'site_description','site_keywords',
@@ -155,12 +157,12 @@ switch($action) {
                     'log_enabled', 'log_db_enabled', 'log_level',
                     'activated_modules'
             );
-            
+
             //Delete the 'activated_modules' apc_cache for this instance
             s::invalidate('activated_modules', $data['internal_name']);
             //Delete the 'site_name' apc_cache for this instance
             s::invalidate('site_name', $data['internal_name']);
-            
+
             //TODO: PROVISIONAL WHILE DONT DELETE $GLOBALS['application']->conn // is used in settings set
             $GLOBALS['application']->conn = $im->getConnection( $settings );
 
@@ -182,7 +184,7 @@ switch($action) {
                 Application::forward('?action=new');
             }
         }
-        
+
         if ($errors){
             m::add('Instance saved successfully.');
         }
@@ -191,7 +193,7 @@ switch($action) {
         break;
 
     case 'changeactivated':
-        
+
         $instance = $im->read($_REQUEST['id']);
 
         $available = ($instance->activated+1) % 2;
@@ -210,10 +212,10 @@ switch($action) {
     case 'list':
     default:
 
-        // QUIRK MODE: If I don't star the session Onm\Message doesn't show 
+        // QUIRK MODE: If I don't star the session Onm\Message doesn't show
         // available messages
         // session_start();
-        
+
         $find_params = array(
             'name' => filter_input(
                 INPUT_GET, 'filter_name', FILTER_SANITIZE_STRING,
@@ -224,19 +226,19 @@ switch($action) {
                 array('options' => array('default' => '20'))
             ),
         );
-        
+
         $instances = $im->findAll($find_params);
-        
+
         foreach($instances as &$instance) {
              list($instance->totals, $instance->configs) =
                      $im->getDBInformation($instance->settings);
-            
+
             $instance->domains = preg_split("@, @", $instance->domains);
 
         }
-        
+
         $items_page =  $find_params['per_page'];
-        
+
         // Pager
         $pager_options = array(
             'mode'        => 'Sliding',

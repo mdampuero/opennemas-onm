@@ -127,7 +127,7 @@ Newsletter.Manager = Class.create({
         // shortcuts
         this.items = options.items || [];
 
-        this.itemTemplate = '<div class="actions"></div><strong>[#{extra}]</strong><span class="title" title="#{permalink}">#{title}</span>';
+        this.itemTemplate = '<div class="actions"></div><strong>[#{extra}]</strong><span class="title" title="#{subtitle}">#{title}</span>';
         this.renderList();
     },
 

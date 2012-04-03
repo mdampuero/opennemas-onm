@@ -19,30 +19,28 @@ require_once('../../session_bootstrap.php');
 Acl::checkOrForward('POLL_ADMIN');
 
 $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
-$tpl->assign('titulo_barra', 'Polls Management');
 
 $page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT, array('options' => array('default' => 1)));
-
+$items_page = s::get('items_per_page') ?: 20;
 
 /******************* GESTION CATEGORIAS  *****************************/
 $contentType = Content::getIDContentType('poll');
 
 
-$category = filter_input(INPUT_GET,'category');
+$category = filter_input(INPUT_GET,'category', FILTER_SANITIZE_STRING);
 if(empty($category)) {
-    $category = filter_input(INPUT_POST,'category',FILTER_VALIDATE_INT, array('options' => array('default' => 0 )));
+    $category = filter_input(INPUT_POST,'category',FILTER_SANITIZE_STRING, array('options' => array('default' => 0 )));
 }
 
 $ccm = ContentCategoryManager::get_instance();
 list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu($category, $contentType);
 
-if(empty($category)) {$category ='favorite';}
+if(empty($category)) {$category ='home';}
 
 $tpl->assign('category', $category);
 $tpl->assign('subcat', $subcat);
 $tpl->assign('allcategorys', $parentCategories);
 $tpl->assign('datos_cat', $categoryData);
-$allcategorys = $parentCategories;
 /******************* GESTION CATEGORIAS  *****************************/
 
 $action = filter_input( INPUT_POST, 'action' , FILTER_SANITIZE_STRING );
@@ -56,22 +54,20 @@ switch ($action) {
 
         $cm = new ContentManager();
 
-
-        if(empty($numItems)) {$numItems=16;}
         $configurations = s::get('poll_settings');
-        $numFavorites = $configurations['total_widget'];
+        $totalWidget = $configurations['total_widget'];
 
         if (empty($page)) {
-            $limit = "LIMIT ".(ITEMS_PAGE+1);
+            $limit = "LIMIT ".($items_page+1);
         } else {
-            $limit = "LIMIT ".($page-1) * ITEMS_PAGE .', '.$numItems;
+            $limit = "LIMIT ".($page-1) * $items_page .', '.$items_page;
         }
 
-        if ($category == 'favorite') { //Widget video
-            $polls = $cm->find_all('Poll', 'favorite = 1 AND available =1', 'ORDER BY  created DESC '. $limit);
+        if ($category == 'home') { //Widget video
+            $polls = $cm->find_all('Poll', 'in_home = 1 AND available =1', 'ORDER BY  created DESC '. $limit);
 
-            if (count($polls) != $numFavorites ) {
-                m::add( sprintf(_("You must put %d polls in the HOME widget"), $numFavorites));
+            if (count($polls) != $totalWidget ) {
+                m::add( sprintf(_("You must put %d polls in the HOME"), $totalWidget));
             }
 
             if(!empty($polls)){
@@ -80,7 +76,6 @@ switch ($action) {
                     $poll->category_title = $ccm->get_title($poll->category_name);
                 }
             }
-
         } elseif ($category == 'all') {
             $polls = $cm->find_all('Poll', 'available =1', 'ORDER BY created DESC '. $limit);
 
@@ -96,12 +91,13 @@ switch ($action) {
         }
 
         $params = array(
-            'page'=>$page, 'items'=>ITEMS_PAGE,
+            'page'=>$page, 'items'=>$items_page,
             'total' => count($polls),
             'url'=>$_SERVER['SCRIPT_NAME'].'?action=list&category='.$category,
         );
 
         $pagination = \Onm\Pager\SimplePager::getPagerUrl($params);
+
         $tpl->assign( array(
             'paginacion' => $pagination,
             'polls'=> $polls)
@@ -138,7 +134,8 @@ switch ($action) {
         $poll = new Poll();
         $_POST['publisher'] = $_SESSION['userid'];
         if ($poll->create( $_POST )) {
-            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
+            Application::forward($_SERVER['SCRIPT_NAME'].
+                    '?action=list&category='.$category.'&page='.$page);
         } else {
             $tpl->assign('errors', $poll->errors);
         }
@@ -149,24 +146,26 @@ switch ($action) {
     case 'update':
         Acl::checkOrForward('POLL_UPDATE');
 
-        $poll = new Poll();
+        $contentID = filter_input ( INPUT_POST, 'id' , FILTER_SANITIZE_NUMBER_INT);
+        $poll = new Poll($contentID);
         $poll->update( $_REQUEST );
 
-        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
+        Application::forward($_SERVER['SCRIPT_NAME'].
+                '?action=list&category='.$category.'&page='.$page);
 
     break;
 
     case 'validate':
         $poll = null;
-
-        if (empty($_POST["id"])) {
+        $contentID = filter_input ( INPUT_POST, 'id' , FILTER_SANITIZE_NUMBER_INT);
+        if (empty($contentID)) {
             Acl::checkOrForward('POLL_CREATE');
             $poll = new Poll();
             if(!$poll->create( $_POST ))
                 $tpl->assign('errors', $poll->errors);
         } else {
             Acl::checkOrForward('POLL_UPDATE');
-            $poll = new Poll();
+            $poll = new Poll($contentID);
             $poll->update( $_REQUEST );
         }
 
@@ -178,82 +177,109 @@ switch ($action) {
         $poll = new Poll();
         $poll->delete( $_POST['id'] );
 
-        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
+        Application::forward($_SERVER['SCRIPT_NAME'].
+                '?action=list&category='.$category.'&page='.$page);
     break;
 
-    case 'change_status':
+    case 'changeAvailable':
+
         Acl::checkOrForward('POLL_AVAILABLE');
-        $poll = new Poll($_REQUEST['id']);
-        //Publicar o no,
-        $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
-        $poll->set_available($status, $_SESSION['userid']);
+        $contentID = filter_input ( INPUT_GET, 'id' , FILTER_SANITIZE_NUMBER_INT);
+        $status = filter_input ( INPUT_GET, 'status' , FILTER_SANITIZE_NUMBER_INT);
 
-        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
+        $poll = new Poll($contentID);
+        $poll->set_available($status,$_SESSION['userid']);
+
+        Application::forward($_SERVER['SCRIPT_NAME'].
+                '?action=list&category='.$category.'&page='.$page);
 
     break;
 
-    case 'change_favorite':
+    case 'changeFavorite':
         Acl::checkOrForward('POLL_FAVORITE');
-        $poll = new Poll($_REQUEST['id']);
-        //Publicar o no,
-        $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
-        $poll->set_favorite($status);
-        if (isset($_GET['from']) && $_GET['from'] =='index') {
-            Application::forward('index.php?action=list&msg='.$msg);
-        }else{
-            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
-        }
+        $contentID = filter_input ( INPUT_GET, 'id' , FILTER_SANITIZE_NUMBER_INT);
+        $status = filter_input ( INPUT_GET, 'status' , FILTER_SANITIZE_NUMBER_INT);
+
+        $poll = new Poll($contentID);
+        $poll->set_favorite($status,$_SESSION['userid']);
+
+        Application::forward($_SERVER['SCRIPT_NAME'].
+                '?action=list&category='.$category.'&page='.$page);
+
     break;
 
-    case 'change_available':
+    case 'changeInHome':
+
+        Acl::checkOrForward('POLL_AVAILABLE');
+        $contentID = filter_input ( INPUT_GET, 'id' , FILTER_SANITIZE_NUMBER_INT);
+        $status = filter_input ( INPUT_GET, 'status' , FILTER_SANITIZE_NUMBER_INT);
+
+        $poll = new Poll($contentID);
+        $poll->set_inhome($status,$_SESSION['userid']);
+
+        Application::forward($_SERVER['SCRIPT_NAME'].
+                '?action=list&category='.$category.'&page='.$page);
+
+    break;
+
+    case 'batchFrontpage':
         Acl::checkOrForward('POLL_AVAILABLE');
 
-        $poll = new Poll($_REQUEST['id']);
-        //Publicar o no,
-        $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
-        $poll->set_available($_REQUEST['id'],$status);
+        $status = filter_input ( INPUT_GET, 'status' , FILTER_SANITIZE_NUMBER_INT );
 
-        if ($_GET['from']=='index') {
-            Application::forward('index.php?action=list');
-        } else {
-            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
-        }
-    break;
-
-    case 'mfrontpage':
-        Acl::checkOrForward('POLL_AVAILABLE');
-
-        if (isset($_REQUEST['selected_fld'])
-                && count($_REQUEST['selected_fld'])>0) {
-            $fields = $_REQUEST['selected_fld'];
-
-            if (is_array($fields)) {
-                foreach($fields as $i ) {
-                    $poll = new Poll($i);
-                    $poll->set_status($_REQUEST['id']);   //Se reutiliza el id para pasar el estatus
-                }
-            }
-        }
-
-        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category);
-    break;
-    case 'mdelete':
-        Acl::checkOrForward('POLL_DELETE');
-
-        if(isset($_REQUEST['selected_fld'])
-                && count($_REQUEST['selected_fld'])>0) {
-
-            $fields = $_REQUEST['selected_fld'];
-
+        if(isset($_GET['selected_fld']) && count($_GET['selected_fld']) > 0) {
+            $fields = $_GET['selected_fld'];
             if(is_array($fields)) {
                 foreach($fields as $i ) {
                     $poll = new Poll($i);
-                    $poll->delete( $i);
+                    $poll->set_available($status, $_SESSION['userid']);
                 }
             }
         }
 
-        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
+        Application::forward($_SERVER['SCRIPT_NAME'].
+                '?action=list&category='.$category.'&page='.$page);
+    break;
+
+    case 'batchDelete':
+        Acl::checkOrForward('POLL_DELETE');
+
+        if(isset($_GET['selected_fld']) && count($_GET['selected_fld']) > 0) {
+            $fields = $_GET['selected_fld'];
+
+            if(is_array($fields)) {
+                foreach($fields as $i ) {
+                     $poll = new Poll($i);
+                    $poll->delete( $i, $_SESSION['userid'] );
+                }
+            }
+        }
+
+        Application::forward($_SERVER['SCRIPT_NAME'] .
+                '?action=list&category='.$category.'&page='.$page);
+    break;
+
+
+    case 'content-list-provider':
+
+        $items_page = s::get('items_per_page') ?: 20;
+        $category = filter_input( INPUT_GET, 'category' , FILTER_SANITIZE_STRING, array('options' => array('default' => '0')) );
+        $page = filter_input( INPUT_GET, 'page' , FILTER_SANITIZE_STRING, array('options' => array('default' => '1')) );
+        $cm = new ContentManager();
+
+        list($polls, $pager) = $cm->find_pages('Poll', 'available=1 ',
+                    'ORDER BY starttime DESC,  contents.title ASC ',
+                    $page, $items_page, $category);
+
+        $tpl->assign(array('contents'=>$polls,
+                            'contentTypeCategories'=>$parentCategories,
+                            'category' =>$category,
+                            'pagination'=>$pager->links
+                    ));
+
+        $html_out = $tpl->fetch("common/content_provider/_container-content-list.tpl");
+        Application::ajax_out($html_out);
+
     break;
 
     case 'config':
@@ -282,7 +308,7 @@ switch ($action) {
         m::add(_('Settings saved successfully.'), m::SUCCESS);
 
         $httpParams = array(array('action'=>'list'),);
-        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
 
 
     default:

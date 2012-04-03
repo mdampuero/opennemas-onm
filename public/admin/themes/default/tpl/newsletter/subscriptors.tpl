@@ -97,7 +97,7 @@
 <form action="#" method="post" name="formulario" id="formulario">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{$titulo_barra}&nbsp; </h2></div>
+            <div class="title"><h2>{t}Newsletter Subscriptors{/t}</h2></div>
             <ul class="old-button">
                 <li>
                     <a href="#" class="admin_add mdelete" id="submit_mult" title="Eliminar">
@@ -194,7 +194,7 @@
                         {/if}
                         </a>
                     </td>
-                    <td class="center">                            
+                    <td class="center">
                         {if      $users[c]->status eq 0} {t}Mail sent.Waiting for user{/t}
                         {elseif  $users[c]->status eq 1} {t}Accepted by user{/t}
                         {elseif  $users[c]->status eq 2} {t}Accepted by administrator{/t}
@@ -238,7 +238,7 @@
             </tr>
             </tfoot>
         </table>
-                
+
         <input type="hidden" id="action" name="action" value="" />
         <input type="hidden" name="id" id="id" value="{$id|default:""}" />
     </div>

@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  **/
 namespace Onm\File\Image;
+
+
 /**
  * Handles all the operations with Images using the ImageMagick library
  *
@@ -16,7 +18,7 @@ namespace Onm\File\Image;
 class Imagick extends Common implements ImageInterface
 {
     // The image object to operate into
-    protected $image;
+    protected $_image;
 
     /**
      * Initializes the object from a path
@@ -27,9 +29,9 @@ class Imagick extends Common implements ImageInterface
      **/
     public function load($image)
     {
-        $this->image = new Imagick();
+        $this->_image = new \Imagick();
 
-        $this->image->readImage($image);
+        $this->_image->readImage($image);
 
         return $this;
     }
@@ -41,7 +43,7 @@ class Imagick extends Common implements ImageInterface
      **/
     public function unload()
     {
-        $this->image->destroy();
+        $this->_image->destroy();
 
         return $this;
     }
@@ -55,12 +57,38 @@ class Imagick extends Common implements ImageInterface
     public function save($filePath = '')
     {
         if (!$filePath) {
-            $this->image->writeImage();
+            $this->_image->writeImage();
         } else {
-            $this->image->writeImage($filePath);
+            $this->_image->writeImage($filePath);
         }
 
         return $this;
+    }
+
+    /**
+     * Returns the width of the image
+     *
+     * @return int the width of the image
+     **/
+    public function getWidth()
+    {
+        if (is_object($this->_image)) {
+            return (int)$this->_image->getImageWidth();
+        }
+        throw new \Exception(_('Please initialize the image before get its width.'));
+    }
+
+    /**
+     * Returns the height of the image
+     *
+     * @return int the height of the image
+     **/
+    public function getHeight()
+    {
+        if (is_object($this->_image)) {
+            return (int)$this->_image->getImageHeight();
+        }
+        throw new \Exception(_('Please initialize the image before get its height.'));
     }
 
     /**
@@ -80,14 +108,13 @@ class Imagick extends Common implements ImageInterface
         // If not forcing the enlarge and the image size is
         // bigger that the required size return the same image
         if (!$enlarge
-            && $this->enlarge($width, $height, $this->image->getImageWidth(), $this->image->getImageHeight()))
-        {
+            && $this->enlarge($width, $height, $this->getWidth(), $this->getHeight())) {
             return $this;
         }
 
         $fit = ($width === 0 || $height === 0) ? false : true;
 
-        $this->image->scaleImage($width, $height, $fit);
+        $this->_image->scaleImage($width, $height, $fit);
 
         return $this;
     }
@@ -104,10 +131,10 @@ class Imagick extends Common implements ImageInterface
      **/
     public function crop($width, $height, $x = 0, $y = 0)
     {
-        $x = $this->transformPosition($x, $width, $this->image->getImageWidth());
-        $y = $this->transformPosition($y, $height, $this->image->getImageHeight());
+        $x = $this->transformPosition($x, $width, $this->getWidth());
+        $y = $this->transformPosition($y, $height, $this->getHeight());
 
-        $this->image->cropImage($width, $height, $x, $y);
+        $this->_image->cropImage($width, $height, $x, $y);
 
         return $this;
     }
@@ -119,7 +146,7 @@ class Imagick extends Common implements ImageInterface
      **/
     public function flip()
     {
-        $this->image->flipImage();
+        $this->_image->flipImage();
 
         return $this;
     }
@@ -131,7 +158,7 @@ class Imagick extends Common implements ImageInterface
      **/
     public function flop()
     {
-        $this->image->flopImage();
+        $this->_image->flopImage();
 
         return $this;
     }
@@ -146,8 +173,8 @@ class Imagick extends Common implements ImageInterface
      **/
     public function thumbnail($width, $height)
     {
-        $widthResize  = ($width/$this->image->getImageWidth()) * 100;
-        $heightResize = ($height/$this->image->getImageHeight()) * 100;
+        $widthResize  = ($width/$this->getWidth()) * 100;
+        $heightResize = ($height/$this->getHeight()) * 100;
 
         if ($widthResize < $heightResize) {
             $this->resize(0, $height);
@@ -178,7 +205,7 @@ class Imagick extends Common implements ImageInterface
             $background = '#'.$background;
         }
 
-        $this->image->rotateImage($background, $degrees);
+        $this->_image->rotateImage($background, $degrees);
 
         return $this;
     }
@@ -201,11 +228,11 @@ class Imagick extends Common implements ImageInterface
             $objectImage->readImage($imagePath);
         }
 
-        $x = $this->transformPosition($x, $objectImage->getImageWidth(), $this->image->getImageWidth());
-        $y = $this->transformPosition($y, $objectImage->getImageHeight(), $this->image->getImageHeight());
+        $x = $this->transformPosition($x, $objectImage->getWidth(), $this->getWidth());
+        $y = $this->transformPosition($y, $objectImage->getHeight(), $this->getHeight());
 
-        $this->image->compositeImage($objectImage, $objectImage->getImageCompose(), $x, $y);
-        $this->image->flattenImages();
+        $this->_image->compositeImage($objectImage, $objectImage->getImageCompose(), $x, $y);
+        $this->_image->flattenImages();
 
         return $this;
     }
@@ -219,9 +246,41 @@ class Imagick extends Common implements ImageInterface
      */
     public function convert($targetFormat)
     {
-        $this->image->setImageFormat($targetFormat);
+        $this->_image->setImageFormat($targetFormat);
 
         return $this;
+    }
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function output($header = true)
+    {
+        //Show header mime-type
+        if ($header) {
+            $format = strtolower($this->_image->getImageFormat());
+            $header = '';
+
+            switch ($format) {
+                case 'jpeg':
+                case 'jpg':
+                case 'gif':
+                case 'png':
+                    $header = "image/$format";
+                    break;
+            }
+
+            if ($header) {
+                header('Content-Type: '.$header);
+            }
+        }
+
+        echo $this->_image->getImageBlob();
+
+        die();
     }
 
 } // END class ImageMagick

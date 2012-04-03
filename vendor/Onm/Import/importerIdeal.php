@@ -48,7 +48,7 @@ class importerIdeal {
                       "/TextoBandera/"=>"summary",
                       "/Entradilla/"=>"summary",
                       "/Cuadratin/"=>"summary"
-                      
+
 
                        );
         foreach($relation as $pattern=>$value) {
@@ -62,7 +62,7 @@ class importerIdeal {
 
     static public function checkXMLData($docXML){
         $data =array();
- 
+
         $data['subtitle']="";
         $data['agency']="";
         $data['title']="";
@@ -83,7 +83,7 @@ class importerIdeal {
                             if($eleto->attributes()->name =='year'){
                                 $year = $eleto->attributes()->content;
                             }
-                          
+
                 }else{
                     foreach($eleto->attributes() as $a => $b) {
 
@@ -127,7 +127,7 @@ class importerIdeal {
         $data['ordenArti']="";$data['ordenArtiInt']="";
 
 
-        $metadata = '';//String_Utils::get_title($data['title']);
+        $metadata = '';//StringUtils::get_title($data['title']);
         $data['metadata'] = str_replace('-',',',$metadata);
 
         $data['content_status']=0;
@@ -137,10 +137,10 @@ class importerIdeal {
         $data['fk_publisher'] ='';
         if(empty($data['title_int']))
             $data['title_int']=$data['title'];
-        
+
         return ($data);
     }
-  
+
 //De xornal pasar a string utils
     static public function splitBodyInHtmlParagraph($body) {
 

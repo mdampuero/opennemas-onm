@@ -19,6 +19,8 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
+use Onm\Settings as s;
+
 //error_reporting(E_ALL);
 /**
  * Setup app
@@ -27,11 +29,7 @@ require_once('../../../bootstrap.php');
 require_once('../../session_bootstrap.php');
 
 // Check ACL
-require_once(SITE_CORE_PATH.'privileges_check.class.php');
-if(!Acl::check('STATIC_ADMIN')) {
-    Acl::deny();
-}
-
+Acl::checkOrForward('STATIC_ADMIN');
 /**
  * Setup view
  */
@@ -63,9 +61,10 @@ switch($action) {
         }
 
         $page = (isset($_REQUEST['page']))? $_REQUEST['page']: 0;
+        $items_page = s::get('items_per_page') ?: 20;
 
         $cm = new ContentManager();
-        list($pages, $pager) = $cm->find_pages('Static_Page', $filter, 'ORDER BY created DESC ', $page, 10);
+        list($pages, $pager) = $cm->find_pages('StaticPage', $filter, 'ORDER BY created DESC ', $page, $items_page);
 
         $tpl->assign( array('pages' => $pages,'pager' => $pager));
         $tpl->display('static_pages/list.tpl');
@@ -74,7 +73,7 @@ switch($action) {
 
     case 'read':
 
-        $page = new Static_Page();
+        $page = new StaticPage();
         $page->read($_REQUEST['id']);
 
         $tpl->assign('id', $page->id);
@@ -85,14 +84,14 @@ switch($action) {
 
     case 'new':
 
-        $page = new Static_Page(); //used define('STATIC_PAGE_PATH', 'estaticas/');
+        $page = new StaticPage(); //used define('STATIC_PAGE_PATH', 'estaticas/');
         $tpl->display('static_pages/read.tpl');
 
     break;
 
     case 'delete':
 
-        $page = new Static_Page();
+        $page = new StaticPage();
         $page->delete($_REQUEST['id']);
 
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list' . $_redirect);
@@ -101,12 +100,12 @@ switch($action) {
 
     case 'save':
 
-        $page = new Static_Page();
+        $page = new StaticPage();
 
         $data = $_POST;
 
         $data['slug'] = $page->buildSlug($data['slug'], $data['id'], $data['title']);
-        $data['metadata']  = String_Utils::normalize_metadata($data['metadata']);
+        $data['metadata']  = StringUtils::normalize_metadata($data['metadata']);
         $page->save($data);
 
         Application::forward( $_SERVER['SCRIPT_NAME'].'?action=list' . $_redirect);
@@ -115,12 +114,12 @@ switch($action) {
 
     case 'validate':
 
-        $page = new Static_Page();
+        $page = new StaticPage();
 
         $data = $_POST;
 
         $data['slug'] = $page->buildSlug($data['slug'], $data['id'], $data['title']);
-        $data['metadata']  = String_Utils::normalize_metadata($data['metadata']);
+        $data['metadata']  = StringUtils::normalize_metadata($data['metadata']);
         $page->save($data);
 
         Application::forward( $_SERVER['SCRIPT_NAME'].'?action=read&id='.$data['id']);
@@ -135,7 +134,7 @@ switch($action) {
         if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])
            && ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'))
         {
-            $page = new Static_Page();
+            $page = new StaticPage();
             $slug = $page->buildSlug($_POST['slug'], $_POST['id'], $_POST['title']);
 
             Application::ajax_out($slug);
@@ -153,7 +152,7 @@ switch($action) {
         if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])
             && ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'))
         {
-            $output  = String_Utils::normalize_metadata($_POST['metadata']);
+            $output  = StringUtils::normalize_metadata($_POST['metadata']);
             Application::ajax_out($output);
         }
 
@@ -169,7 +168,7 @@ switch($action) {
         if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])
             && ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'))
         {
-            $page = new Static_Page();
+            $page = new StaticPage();
             $page->read($_REQUEST['id']);
 
             $available = ($page->available+1) % 2;

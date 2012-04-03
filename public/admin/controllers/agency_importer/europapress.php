@@ -52,7 +52,7 @@ if (
     $httpParams [] = array(
                         'action'=>'config',
                     );
-    Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+    Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
 }
 
 switch($action) {
@@ -72,6 +72,8 @@ switch($action) {
                     'agency_string' => s::get('europapress_agency_string'),
                     'sync_from' => array(
                         'no_limits' => _('No limit'),
+                        '21600' => sprintf(_('%d hours'),'6'),
+                        '43200' => sprintf(_('%d hours'),'12'),
                         '86400' => _('1 day'),
                         '172800' => sprintf(_('%d days'),'2'),
                         '259200' => sprintf(_('%d days'),'3'),
@@ -128,7 +130,9 @@ switch($action) {
 
         $categories = \Onm\Import\DataSource\Europapress::getOriginalCategories();
 
-        $find_params = array(
+        $itemsPage =  s::get('items_per_page') ?: 20;
+
+        $findParams = array(
             'category' => filter_input(
                 INPUT_GET, 'filter_category' , FILTER_SANITIZE_STRING,
                 array('options' => array('default' => '*'))
@@ -137,25 +141,25 @@ switch($action) {
                 INPUT_GET, 'filter_title', FILTER_SANITIZE_STRING,
                 array('options' => array('default' => '*'))
             ),
+            'page'       => filter_input(
+                INPUT_GET, 'page' , FILTER_SANITIZE_STRING,
+                array('options' => array('default' => 1))
+            ),
+            'items_page' => $itemsPage,
         );
 
+        list($countTotalElements, $elements) = $europapress->findAll($findParams);
 
-
-        $elements = $europapress->findAll($find_params);
-
-        $items_page = s::get('items_per_page') ?: 20;
         // Pager
-        $pager_options = array(
+        $pagerOptions = array(
             'mode'        => 'Sliding',
-            'perPage'     => $items_page,
+            'perPage'     => $itemsPage,
             'delta'       => 4,
             'clearIfVoid' => true,
             'urlVar'      => 'page',
-            'totalItems'  => count($elements),
+            'totalItems'  => $countTotalElements,
         );
-        $pager = Pager::factory($pager_options);
-
-        $elements = array_slice($elements, ($page-1)*$items_page, $items_page);
+        $pager = Pager::factory($pagerOptions);
 
         $tpl->assign(
             array(
@@ -185,7 +189,7 @@ switch($action) {
 
             // Redirect the user to the list of articles and show him/her an error message
             $httpParams []= array( 'error' => sprintf(_('ID "%d" doesn\'t exist'),$id));
-            Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+            Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
 
         }
 
@@ -209,7 +213,7 @@ switch($action) {
                         'frontpage' => 0,
                         'in_home' => 0,
                         'title_int' => $element->title,
-                        'metadata' => String_Utils::get_tags($element->title),
+                        'metadata' => StringUtils::get_tags($element->title),
                         'subtitle' => $element->pretitle,
                         'agency' => s::get('europapress_agency_string') ?: $element->agencyName,
                         'summary' => $element->summary,
@@ -236,7 +240,7 @@ switch($action) {
 
             $httpParams []= array( 'id' => $newArticleID,
                                   'action' => 'read');
-            Application::forward(SITE_URL_ADMIN.'/article.php' . '?'.String_Utils::toHttpParams($httpParams));
+            Application::forward(SITE_URL_ADMIN.'/article.php' . '?'.StringUtils::toHttpParams($httpParams));
 
         }
 
@@ -254,6 +258,7 @@ switch($action) {
                 'user'      => $serverAuth['username'],
                 'password'  => $serverAuth['password'],
                 'allowed_file_extesions_pattern' => '.*\.xml$',
+                'max_age'                => s::get('europapress_sync_from_limit')
             );
 
             $epSynchronizer = \Onm\Import\Europapress::getInstance();
@@ -274,16 +279,16 @@ switch($action) {
             m::add( $errorMessage, m::ERROR );
         } catch (\Exception $e) {
             m::add($e->getMessage(), m::ERROR);
-            $e = new \Onm\Import\Europapress();
-            $e->unlockSync();
         }
+        $e = new \Onm\Import\Europapress();
+        $e->unlockSync();
 
         $httpParams = array(
-                            array('action' => 'list'),
-                            array('page' => $page),
-                            );
+            array('action' => 'list'),
+            array('page' => $page),
+        );
 
-        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
 
     } break;
 
@@ -296,7 +301,7 @@ switch($action) {
             array('action' => 'list'),
             array('page' => $page),
         );
-        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
 
     } break;
 
@@ -307,6 +312,6 @@ switch($action) {
             array('action','list'),
             array('page',$page),
         );
-        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($params));
+        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($params));
     } break;
 }

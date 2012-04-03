@@ -26,7 +26,8 @@ namespace Onm\Benchmark;
  * @author     Fran Dieguez <fran@openhost.es>
  * @version    SVN: $Id: Benchmark.php 28842 Lun Xuñ 27 11:50:52 2011 frandieguez $
  */
-class Timer {
+class Timer
+{
 
     static public $instance = null;
 
@@ -42,8 +43,7 @@ class Timer {
     static public function getInstance($config = array())
     {
 
-        if (!(self::$instance instanceof self))
-        {
+        if (!(self::$instance instanceof self)) {
             self::$instance = new self($config);
         }
         return self::$instance;
@@ -56,9 +56,7 @@ class Timer {
      */
     public function __construct( $config = array())
     {
-        if (!isset(self::$markers)
-           && count(self::$markers) < 1)
-        {
+        if (!isset(self::$markers) && count(self::$markers) < 1) {
             self::$markers = array();
         }
     }
@@ -84,7 +82,7 @@ class Timer {
     {
         if (array_key_exists($marker, self::$markers)) {
             self::$markers[$marker]['endtime'] = $this->_getMicrotime();
-        } else  {
+        } else {
             throw new \Exception("Marker '{$marker}' doesn't exists.");
         }
     }
@@ -99,9 +97,14 @@ class Timer {
     public function display($marker = "default")
     {
         if (extension_loaded('bcmath')) {
-            return bcsub(self::$markers[$marker]['endtime'], self::$markers[$marker]['starttime'], 6);
+            return bcsub(
+                self::$markers[$marker]['endtime'],
+                self::$markers[$marker]['starttime'],
+                6
+            );
         } else {
-            return self::$markers[$marker]['endtime'] - self::$markers[$marker]['starttime'];
+            return self::$markers[$marker]['endtime']
+                    - self::$markers[$marker]['starttime'];
         }
     }
     /**
@@ -111,7 +114,8 @@ class Timer {
      * @access private
      * @since  1.3.0
      */
-    private function _getMicrotime() {
+    private function _getMicrotime()
+    {
         $microtime = explode(' ', microtime());
         return $microtime[1] . substr($microtime[0], 1);
     }

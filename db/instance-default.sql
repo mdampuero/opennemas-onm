@@ -1580,14 +1580,15 @@ INSERT INTO `privileges` (`pk_privilege`, `name`, `description`, `module`) VALUE
 (140, 'BOOK_AVAILABLE', 'Aprobar libros', 'BOOK'),
 (139, 'BOOK_FAVORITE', 'Gestionar Widget de libros', 'BOOK'),
 (138, 'BOOK_CREATE', 'Subir libros', 'BOOK'),
-(137, 'BOOK_ADMIN', 'Administrar modulo de libros', 'BOOK')
+(137, 'BOOK_ADMIN', 'Administrar modulo de libros', 'BOOK'),
 (166, 'LETTER_TRASH', 'Vaciar papelera de cartas', 'LETTER'),
 (167, 'LETTER_DELETE', 'Eliminar cartas', 'LETTER'),
 (168, 'LETTER_UPDATE', 'Modificar cartas', 'LETTER'),
 (169, 'LETTER_SETTINGS', 'Configurar modulo de cartas', 'LETTER'),
 (170, 'LETTER_AVAILABLE', 'Aprobar cartas', 'LETTER'),
 (171, 'LETTER_FAVORITE', 'Gestionar Widget de cartas', 'LETTER'),
-(172, 'LETTER_CREATE', 'Subir cartas', 'LETTER');
+(172, 'LETTER_CREATE', 'Subir cartas', 'LETTER'),
+(173, 'LETTER_ADMIN', 'Admon. cartas', 'LETTER');
 
 -- --------------------------------------------------------
 

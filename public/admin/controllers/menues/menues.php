@@ -18,8 +18,10 @@ $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 
 $ccm = ContentCategoryManager::get_instance();
 
-//Frontpages ¿? add polls, kiosko, static_pages
-$pages = array('frontpage'=>1, 'opinion'=>4, 'album'=>7, 'video'=>9, 'mobile'=>3, 'poll'=>11);
+//Modules => change & check if ismodule activated
+$pages = array('frontpage'=>1, 'opinion'=>4, 'album'=>7, 'video'=>9, 'mobile'=>3,
+    'poll'=>11, 'letter'=>17, 'kiosko'=> 14,'boletin'=>13 //,'especiales'=10,'agenda'=16
+    );
 
 $action = filter_input(INPUT_POST,'action',FILTER_SANITIZE_STRING );
 if (empty($action)) {
@@ -94,7 +96,7 @@ switch($action) {
             }
         }
         $cm = new ContentManager();
-        $staticPages = $cm->find('Static_Page', '1=1', 'ORDER BY created DESC ');
+        $staticPages = $cm->find('StaticPage', '1=1', 'ORDER BY created DESC ');
         $menues = Menu::listMenues();
 
         $tpl->assign(array( 'categories'=> $parentCategories,
@@ -130,7 +132,7 @@ switch($action) {
             }
         }
         $cm = new ContentManager();
-        $staticPages = $cm->find('Static_Page', '1=1', 'ORDER BY created DESC ');
+        $staticPages = $cm->find('StaticPage', '1=1', 'ORDER BY created DESC ');
         $menues = Menu::listMenues();
 
         $tpl->assign(array( 'categories'=> $parentCategories,

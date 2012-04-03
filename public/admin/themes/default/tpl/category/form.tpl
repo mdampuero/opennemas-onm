@@ -17,6 +17,24 @@
     .utilities-conf label {
         text-transform:none;
     }
+    div#match-color {
+        cursor: pointer;
+    }
+    .match_viewer {
+        height:28px;
+        border: 1px solid #B5B8C8;
+        border-right:0 !important;
+        width:30px !important;
+        display:inline-block;
+        border-top-left-radius: 3px;
+        border-bottom-left-radius: 3px;
+        float: left;
+        margin-left:-2px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset;
+    }
+    .onm-button {
+        height: 30px;
+    }
     </style>
 {/block}
 
@@ -41,20 +59,31 @@
     } catch(e) { }
 
     jQuery(document).ready(function($) {
-        $('#site_color').ColorPicker({
+
+        var color = $('.colopicker_viewer');
+        var inpt = $('#site_color, #colopicker_viewer');
+        var btn = $('.onm-button');
+
+        inpt.ColorPicker({
             onSubmit: function(hsb, hex, rgb, el) {
-                jQuery(el).val(hex);
-                jQuery(el).ColorPickerHide();
+                $(el).val(hex);
+                $(el).ColorPickerHide();
             },
             onChange: function (hsb, hex, rgb) {
-                jQuery('.colopicker_viewer').css('background-color', '#' + hex);
+                color.css('background-color', '#' + hex);
             },
             onBeforeShow: function () {
-                jQuery(this).ColorPickerSetColor(this.value);
+                $(this).ColorPickerSetColor(this.value);
             }
         })
         .bind('keyup', function(){
-            jQuery(this).ColorPickerSetColor(this.value);
+            $(this).ColorPickerSetColor(this.value);
+        });
+
+        btn.on('click', function(e, ui){
+            inpt.val( '{setting name="site_color"}' );
+            color.css('background-color', '#' + '{setting name="site_color"}');
+            e.preventDefault();
         });
     });
 </script>
@@ -106,14 +135,28 @@
                         <input type="text" id="title" name="title" title="Título" value="{$category->title|clearslash|default:""}"
                             class="required" size="80" />
                     </td>
-                    <td rowspan="3">
+                    <td rowspan="5" style="padding:10px 0px;">
                         <div class="help-block margin-left-1">
-                            <div class="title"><h4>Sections</h4></div>
+                            <div class="title"><h4>{t}Editing category{/t}</h4></div>
                             <div class="content">
-                                {t}Title for short title name {/t}<br />
-                                {t}Internal name for calculate slugs and uri {/t}<br />
-                                {t}Title page for the long title used for seo & in title bar, widgets, menues...{/t}
-                                {t}If title page empty Opennemas get short title{/t}
+                                <dl>
+                                    <dt><strong>{t}Name{/t}</strong></dt>
+                                    <dd>{t}The name for the category{/t}</dd>
+                                    {if isset($category) && !empty($category->name)}
+                                    <dt><strong>{t}Slug{/t}</strong></dt>
+                                    <dd>{t}Title page for the long title used for seo & in title bar, widgets, menues...{/t}</dd>
+                                    {/if}
+                                    <dt><strong>{t}Page Title {/t}</strong></dt>
+                                    <dd>{t}Internal name for calculate slugs and uri {/t}</dd>
+                                    <dt><strong>{t}Category available{/t}</strong></dt>
+                                    <dd>{t}Type of contents for this category{/t}</dd>
+                                    <dt><strong>{t}Subsection{/t}</strong></dt>
+                                    <dd>{t}If this category will be a subsection of another{/t}</dd>
+                                    <dt><strong>{t}Show in rss{/t}</strong></dt>
+                                    <dd>{t}If this category will be showed or not in RSS{/t}</dd>
+                                    <dt><strong>{t}Color{/t}</strong></dt>
+                                    <dd>{t}Choose a color for this category or click the right button to match with the site color{/t}</dd>
+                                </dl>
                             </div>
                         </div>
                     </td>
@@ -181,19 +224,16 @@
                             </select>
                         </div>
                     </td>
-                    <td>
-
-                    </td>
                 </tr>
                 <tr>
                     <td colspan="3">
                         <label for="inmenu">{t}Available:{/t}</label>
                         <input type="checkbox" id="inmenu" name="inmenu" value="1" {if $category->inmenu eq 1} checked="checked"{/if}>
-                            {t}If this option is activated this category will be showed in menu{/t}
+                            {t}If this option is activated this category will be available{/t}
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="3">
+                    <td colspan="2">
                         <label for="params[inrss]">{t}Show in rss:{/t}</label>
                         <input type="checkbox" id="params[inrss]" name="params[inrss]" value="1"
                             {if !isset($category->params['inrss']) || $category->params['inrss'] eq 1} checked="checked"{/if}>
@@ -218,11 +258,22 @@
                     </td>
                 </tr>
                 {/if}
+                {capture "websiteColor"}
+                    {setting name="site_color"}
+                {/capture}
                 <tr>
-                    <td colspan="3">
-                        <label for="site_color">{t}Color:{/t}</label>
-                        <input readonly="readonly" size="6" type="text" id="site_color" name="color" value="{$category->color|default:"0000ff"}">
-                        <div class="colopicker_viewer" style="background-color:#{$category->color|default:"0000ff"}"></div>
+                    <td>
+                        <label>{t}Color:{/t}</label>
+                        <input readonly="readonly" size="6" type="text" id="site_color" name="color" value="{$category->color|default:$smarty.capture.websiteColor|trim}">
+                        <div id="colopicker_viewer" class="colopicker_viewer" style="background-color:#{$category->color|default:$smarty.capture.websiteColor|trim}"></div>
+                    </td>
+                    <td>
+                        <label>{t}Click to reset color:{/t}</label>
+                        <button class="onm-button" >{t}Reset color{/t}</button>
+                        <div class="match_viewer" style="background-color:#{setting name="site_color"}"></div>
+                    </td>
+                    <td>
+
                     </td>
                 </tr>
 

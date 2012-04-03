@@ -47,7 +47,7 @@ if(($tpl->caching == 0)
 
 
     /******* RELATED  CONTENT *******/
-    $rel= new Related_content();
+    $rel= new RelatedContent();
 
     $relationes = $rel->cache->get_relations_int($articleID);
     $relat = $cm->cache->getContents($relationes);

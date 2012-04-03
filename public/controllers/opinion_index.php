@@ -22,7 +22,7 @@ $tpl->setConfig('opinion');
 $category_name = filter_input(INPUT_GET,'category_name',FILTER_SANITIZE_STRING);
 $subcategory_name = filter_input(INPUT_GET,'subcategory_name',FILTER_SANITIZE_STRING);
 $authorID = (int) filter_input(INPUT_GET,'author_id',FILTER_SANITIZE_STRING);
- 
+
 /**
  * Redirect to home if category_name is not opinion
 */
@@ -101,7 +101,7 @@ if (isset($_REQUEST['action'])) {
 				foreach($opinions as $opinion) {
 					$opinion->author = new Author($opinion->fk_author);
 					$opinion->name = $opinion->author->name;
-					$opinion->author_name_slug = String_Utils::get_title($opinion->name);
+					$opinion->author_name_slug = StringUtils::get_title($opinion->name);
 					$improvedOpinions[] = $opinion;
 				}
 
@@ -115,6 +115,7 @@ if (isset($_REQUEST['action'])) {
                 $tpl->assign('editorial', $editorial);
                 $tpl->assign('opinions',  $improvedOpinions);
                 $tpl->assign('pagination',  $pagination);
+                $tpl->assign('page', $page);
 
             }
 
@@ -123,7 +124,7 @@ if (isset($_REQUEST['action'])) {
         break;
 
         case 'list_op_author':  // Author frontpage
- 
+
             // Don't execute the app logic if there are caches available
             if (!$tpl->isCached('opinion/frontpage_author.tpl', $cacheID)) {
 
@@ -164,10 +165,9 @@ if (isset($_REQUEST['action'])) {
 													  .' and contents.available=1  and contents.content_status=1',
 													  'ORDER BY created DESC '.$_limit);
                     $aut = new Author($authorID);
-                    $name_author = String_Utils::get_title($aut->name);
                     if (!empty($opinions)) {
                         foreach ($opinions as &$opinion) {
-                            $opinion['author_name_slug']  = String_Utils::get_title($opinion['name']);
+                            $opinion['author_name_slug']  = StringUtils::get_title($opinion['name']);
                         }
                     }
 
@@ -191,10 +191,11 @@ if (isset($_REQUEST['action'])) {
 				require_once ("index_sections.php");
 				require_once ("widget_static_pages.php");
 
-                $tpl->assign('author_name', $name_author);
+                $tpl->assign('author_name', $aut->name);
                 $tpl->assign('pagination_list', $pagination);
                 $tpl->assign('opinions', $opinions);
                 $tpl->assign('author_id', $authorID);
+                $tpl->assign('page', $page);
 
             } // End if isCached
 

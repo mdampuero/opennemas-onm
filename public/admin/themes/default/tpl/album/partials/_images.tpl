@@ -3,35 +3,35 @@
         <li><a href="#list-of-images">{t}Images in this album{/t}</a></li>
         <li><a href="#frontpage-image">{t}Cover image{/t}</a></li>
     </ul>
-    <div id="list-of-images" class="list-of-images">
+    <div id="list-of-images" class="list-of-images clearfix">
         <ul>
             {if !empty($photos)}
                 {foreach from=$photos item=photo key=key name=album_photos}
                     <li class="image thumbnail">
                         <div class="overlay-image">
                             <div>
-                                <ul class="image-buttons">
+                                <ul class="image-buttons clearfix">
                                     <li><a href="#" class="edit-button" title="Editar"><img src="{$params.IMAGE_DIR}edit.png"></a></li>
                                     <li><a href="#" class="delete-button" title="{t}Drop{/t}"><img src="{$params.IMAGE_DIR}trash.png"></a></li>
                                 </ul>
                             </div>
                         </div>
                         <img
-                             src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo->path_file}{$photo->name}"
-                             id="img{$photo->pk_photo}"
-                             data-id="{$photo->pk_photo}"
-                             data-title="{$photo->name}"
-                             data-description="{$photo->description|escape:"html"}"
-                             data-path="{$photo->path_file}"
-                             data-width="{$photo->width}"
-                             data-height="{$photo->height}"
-                             data-filesize="{$photo->size}"
-                             data-created="{$photo->created}"
-                             data-tags="{$photo->metadata}"
-                             data-footer="{$otherPhotos[n][2]|escape:"html"}"
+                             src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo['photo']->path_file}{$photo['photo']->name}"
+                             id="img{$photo['photo']->pk_photo}"
+                             data-id="{$photo['photo']->pk_photo}"
+                             data-title="{$photo['photo']->name}"
+                             data-description="{$photo['photo']->description|escape:"html"}"
+                             data-path="{$photo['photo']->path_file}"
+                             data-width="{$photo['photo']->width}"
+                             data-height="{$photo['photo']->height}"
+                             data-filesize="{$photo['photo']->size}"
+                             data-created="{$photo['photo']->created}"
+                             data-tags="{$photo['photo']->metadata}"
+                             data-footer="{$photo['description']|escape:"html"}"
                              alt="{$photo->name}"/>
-                        <textarea name="album_photos_footer[]">{$photo->name}</textarea>
-                        <input type="hidden" name="album_photos_ids[]" value="{$photo->pk_photo}">
+                        <textarea name="album_photos_footer[]">{$photo['description']}</textarea>
+                        <input type="hidden" name="album_photos_id[]" value="{$photo['id']}">
                     </li><!-- /image -->
                 {/foreach}
             {/if}
@@ -44,25 +44,21 @@
             </a>
             <div class="clearfix">
                 <div class="thumbnail article-resource-image">
-                    {if isset($video2) && $video2->pk_video}
-                        {if $video2->author_name == 'internal'}
-                        <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}/../{$video2->information['thumbnails']['normal']}" />
-                        {else}
-                        <img src="{$video2->information['thumbnail']}"/>
-                        {/if}
+                    {if !empty($album->cover_id)}
+                        <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$album->cover}"/>
                     {else}
                         <img src="http://placehold.it/290x226" />
                     {/if}
                 </div>
                 <div class="article-resource-image-info">
-                    <div><label>{t}File name{/t}</label>     <span class="filename">{$video2->name|default:'default_img.jpg'}</span></div>
-                    <div><label>{t}Creation date{/t}</label> <span class="created_time">{$video2->created|default:""}</span></div>
-                    <div><label>{t}Description{/t}</label>   <span class="description">{$video2->description|escape:'html'}</span></div>
-                    <div><label>{t}Tags{/t}</label>          <span class="tags">{$video2->metadata|default:""}</span></div>
+                    <div><label>{t}File name{/t}</label>     <span class="filename">{$album->cover_image->name|default:'default_img.jpg'}</span></div>
+                    <div><label>{t}Creation date{/t}</label> <span class="created_time">{$album->cover_image->created|default:""}</span></div>
+                    <div><label>{t}Description{/t}</label>   <span class="description">{$album->cover_image->description|escape:'html'}</span></div>
+                    <div><label>{t}Tags{/t}</label>          <span class="tags">{$album->cover_image->metadata|default:""}</span></div>
                 </div>
             </div>
             <div class="article-resource-footer">
-                <input type="hidden" name="album_frontpage_image" value="{$video2->pk_video}" class="album-frontpage-image"/>
+                <input type="hidden" name="album_frontpage_image" value="{$album->cover_id}" class="album-frontpage-image"/>
             </div>
         </div>
     </div><!-- /inner-video -->
@@ -203,6 +199,13 @@ jQuery(document).ready(function($){
             elementID.val(elementID.data('id'));
             parent.fadeTo('slow', 1);
         };
+    });
+
+    jQuery('.edit-button').on('click', function () {
+        var parent = jQuery(this).parent();
+        var elementID = parent.find('.album-frontpage-image');
+
+        jQuery("#modal-edit-album-photo").modal('show');
     });
 
 });

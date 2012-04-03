@@ -41,7 +41,7 @@ switch($action) {
 
         $users = $cm->paginate_num($users, ITEMS_PAGE);
 
-        $user_group = new User_group();
+        $user_group = new UserGroup();
         $group      = $user_group->get_user_groups();
 
         $groupsOptions = array();
@@ -65,7 +65,7 @@ switch($action) {
         Acl::checkOrForward('USER_CREATE');
 
         $user = new User( $_REQUEST['id'] );
-        $userGroup = new User_group();
+        $userGroup = new UserGroup();
         $tpl->assign('user', $user);
         $tpl->assign('user_groups', $userGroup->get_user_groups());
 
@@ -82,7 +82,7 @@ switch($action) {
         }
         $user = new User( $_REQUEST['id'] );
 
-        $user_group = new User_group();
+        $user_group = new UserGroup();
         $tpl->assign('user', $user);
         $tpl->assign('user_groups', $user_group->get_user_groups());
 

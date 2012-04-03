@@ -24,16 +24,14 @@ Acl::checkOrForward('ALBUM_ADMIN');
 require_once('./albums_events.php');
 
 $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
-$tpl->assign('titulo_barra', _('Album Management'));
 
 $page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT);
-
+$tpl->assign('page', $page);
 /******************* GESTION CATEGORIAS  *****************************/
 $contentType = Content::getIDContentType('album');
 
 $category = filter_input(INPUT_GET,'category',FILTER_SANITIZE_STRING);
-
-if(empty($category)) {
+if (empty($category)) {
     $category = filter_input(INPUT_POST,'category',FILTER_SANITIZE_STRING);
 }
 
@@ -60,19 +58,19 @@ switch($action) {
 
     case 'list':
         Acl::checkOrForward('ALBUM_ADMIN');
-
         $configurations = s::get('album_settings');
-        $numFavorites = $configurations['total_widget'];
 
         if (empty($page)) {
-            $limit= "LIMIT ".(ITEMS_PAGE+1);
+            $limit = "LIMIT ".(ITEMS_PAGE+1);
         } else {
-            $limit= "LIMIT ".($page-1) * ITEMS_PAGE .', '.(ITEMS_PAGE+1);
+            $limit = "LIMIT ".($page-1) * ITEMS_PAGE .', '.(ITEMS_PAGE+1);
         }
 
         $cm = new ContentManager();
 
         if ($category == 'widget') {
+
+            $numFavorites = $configurations['total_widget'];
             $albums = $cm->find_all('Album', 'in_home =1 AND available =1',
                                 'ORDER BY position ASC, created DESC '.$limit);
             if (count($albums) != $numFavorites ) {
@@ -86,7 +84,7 @@ switch($action) {
             }
 
         } elseif ($category === 'all') {
-            $albums = $cm->find_all('Album', 'available =1', 'ORDER BY  created DESC '.$limit);
+            $albums = $cm->find_all('Album', 'available=1', 'ORDER BY created DESC '.$limit);
             if(!empty($albums)) {
                 foreach ($albums as &$album) {
                     $album->category_name = $ccm->get_name($album->category);
@@ -94,17 +92,20 @@ switch($action) {
                 }
             }
         } else {
-            $albums = $cm->find_by_category('Album', $category, 'fk_content_type=7',
-                           'ORDER BY created DESC '.$limit);
+            $albums = $cm->find_by_category(
+                'Album',
+                $category,
+                'fk_content_type=7',
+                'ORDER BY created DESC '.$limit
+            );
         }
 
-        $params = array(
-            'page'=>$page, 'items'=>ITEMS_PAGE,
+        $pagination = \Onm\Pager\SimplePager::getPagerUrl(array(
+            'page'  => $page,
+            'items' => ITEMS_PAGE,
             'total' => count($albums),
-            'url'=>$_SERVER['SCRIPT_NAME'].'?action=list&category='.$category
-        );
-
-        $pagination = \Onm\Pager\SimplePager::getPagerUrl($params);
+            'url'   => $_SERVER['SCRIPT_NAME'].'?action=list&category='.$category
+        ));
 
         $tpl->assign(array(
             'pagination' => $pagination,
@@ -119,12 +120,6 @@ switch($action) {
 
         Acl::checkOrForward('ALBUM_CREATE');
 
-        $configurations = s::get('album_settings');
-
-        $tpl->assign( array(
-            'crop_width' => $configurations['crop_width'],
-            'crop_height' => $configurations['crop_height'] ));
-
         $tpl->display('album/new.tpl');
 
     break;
@@ -132,47 +127,36 @@ switch($action) {
     case 'read':
 
         Acl::checkOrForward('ALBUM_UPDATE');
+        $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
 
-        $configurations = s::get('album_settings');
-
-        if (empty($id)) {
-            $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
-        }
-
-        $album = new Album( $id);
-        $tpl->assign('album', $album);
+        $album = new Album($id);
 
         $photos = array();
-        $photoIds = $album->get_album($id);
-        if (!empty($photoIds)) {
-            foreach ($photoIds as $ph) {
-                $photos[] = new Photo($photo[0]);
-            }
-        }
+        $photos = $album->_getAttachedPhotos($id);
+
         $tpl->assign( array(
             'category' => $album->category,
             'photos' => $photos,
+            'album' => $album,
         ));
         $tpl->display('album/new.tpl');
 
     break;
 
     case 'create':
-        var_dump($_POST);die();
 
         Acl::checkOrForward('ALBUM_CREATE');
         $album = new Album();
-        if ($album->create( $_POST )) {
+        if ($album->create($_POST)) {
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
         }else{
-             m::add(_($album->errors) );
+            m::add(_($album->errors) );
         }
         $tpl->display('album/new.tpl');
 
     break;
 
     case 'update':
-        var_dump($_POST);die();
 
         Acl::checkOrForward('ALBUM_UPDATE');
 
@@ -193,16 +177,14 @@ switch($action) {
     break;
 
     case 'validate':
-        var_dump($_POST);die();
 
         $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
         if(empty($id)) {
+            Acl::checkOrForward('ALBUM_CREATE');
 
-        Acl::checkOrForward('ALBUM_CREATE');
-
-        $album = new Album();
-        if (!$album->create( $_POST ))
-            m::add(_($album->errors));
+            $album = new Album();
+            if (!$album->create($_POST))
+                m::add(_($album->errors));
         } else {
 
             Acl::checkOrForward('ALBUM_UPDATE');
@@ -220,49 +202,47 @@ switch($action) {
 
     break;
 
-    case 'delete':
-
-        Acl::checkOrForward('ALBUM_DELETE');
+    case 'getRelations':
 
         $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
 
         $album = new Album($id);
-
         $relations=array();
         $msg ='';
-        $relations = Related_content::get_content_relations( $id );
+        $relations = RelatedContent::get_content_relations($id);
+
         if (!empty($relations)) {
-            $msg = sprintf(_('The album "%s" has related elements')."\n", $album->title);
-            $cm= new ContentManager();
+            $msg = sprintf(_("<br>The album has some relations"));
+            $cm = new ContentManager();
             $relat = $cm->getContents($relations);
-            foreach ($relat as $contents) {
-               $msg.=" - ".strtoupper($contents->category_name).": ".$contents->title." \n";
+            foreach($relat as $contents) {
+                $msg.=" <br>- ".strtoupper($contents->category_name).": ".$contents->title;
             }
-            $msg.="\n \n "._("Caution! Are you sure that you want to delete this album and all related contents?");
-        } else {
-            $msg = sprintf(_('Do you want to delete "%s"?'), $album->title);
+            $msg.="<br> "._("Caution! Are you sure that you want to delete this album and its relations?");
+
+            echo $msg;
         }
-        echo $msg;
+
         exit(0);
+        break;
 
-    break;
-
-    case 'yesdel':
+    case 'delete':
 
         Acl::checkOrForward('ALBUM_DELETE');
 
-        $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
-        if ($id){
+        $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
+        if (!empty($id)) {
             $album = new Album($id);
             //Delete relations
-            $rel= new Related_content();
+            $rel= new RelatedContent();
             $rel->delete_all($id);
-            $album->delete($id,$_SESSION['userid'] );
+            $album->delete( $id ,$_SESSION['userid'] );
+        } else {
+            m::add(_('You must give an id for delete the album.'), m::ERROR);
         }
-        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$album->category.'&page='.$_REQUEST['page']);
+        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$album->category.'&page='.$page);
 
-    break;
-
+        break;
 
     case 'change_status':
 
@@ -316,13 +296,14 @@ switch($action) {
         break;
 
 
-    case 'mfrontpage':
+    case 'batchFrontpage':
 
         Acl::checkOrForward('ALBUM_AVAILABLE');
-        if(isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld'])>0)
-        {
-            $fields = $_REQUEST['selected_fld'];
-            $status = ($_REQUEST['id']==1)? 1: 0; //Se reutiliza el id para pasar el estatus
+
+        if(isset($_GET['selected_fld']) && count($_GET['selected_fld']) > 0) {
+            $fields = $_GET['selected_fld'];
+
+            $status = filter_input ( INPUT_GET, 'status' , FILTER_SANITIZE_NUMBER_INT );
             if (is_array($fields)) {
                 foreach ($fields as $i) {
                     $album = new Album($i);
@@ -337,33 +318,34 @@ switch($action) {
 
     break;
 
-    case 'mdelete':
+    case 'batchDelete':
+        Acl::checkOrForward('ALBUM_DELETE');
 
-        Acl::checkOrForward('ALBUM_TRASH');
-        if (isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld'])>0) {
-        $fields = $_REQUEST['selected_fld'];
-        if (is_array($fields)) {
+        if(isset($_GET['selected_fld']) && count($_GET['selected_fld']) > 0) {
+            $fields = $_GET['selected_fld'];
 
-            $msg = _("These albums have relations:");
+            if (is_array($fields)) {
 
-            foreach ($fields as $i ) {
-                $album = new Album($i);
-                $relations=array();
-                $relations = Related_content::get_content_relations( $i );
+                    $msg = _("These albums have relations:");
 
-                if(!empty($relations)){
-                     $alert =1;
-                     $msg .= " \"".$album->title."\", ";
+                    foreach ($fields as $i ) {
+                        $album = new Album($i);
+                        $relations=array();
+                        $relations = RelatedContent::get_content_relations( $i );
 
-                }else{
-                    $album->delete( $i,$_SESSION['userid'] );
+                        if(!empty($relations)){
+                            $alert =1;
+                            $msg .= " \"".$album->title."\", ";
+
+                        }else{
+                            $album->delete( $i,$_SESSION['userid'] );
+                        }
+                    }
+                    if (isset($alert) && !empty($alert)) {
+                        $msg.=_("You must delete them one by one!");
+                        m::add( $msg );
+                    }
                 }
-            }
-            if (isset($alert) && !empty($alert)) {
-                $msg.=_("You must delete them one by one!");
-                m::add( $msg );
-            }
-        }
         }
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.' &page='.$page);
 
@@ -386,7 +368,6 @@ switch($action) {
 
             // FIXME: buscar otra forma de hacerlo
             /* Eliminar caché portada cuando actualizan orden opiniones {{{ */
-            require_once(SITE_CORE_PATH.'template_cache_manager.class.php');
             $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
             $tplManager->delete('home|0');
          }
@@ -396,6 +377,28 @@ switch($action) {
              echo _("Unable to save the new positions. Please contact with your system administrator.");
          }
         exit(0);
+    break;
+
+    case 'content-list-provider':
+
+        $items_page = s::get('items_per_page') ?: 20;
+        $category = filter_input( INPUT_GET, 'category' , FILTER_SANITIZE_STRING, array('options' => array('default' => '0')) );
+        $page = filter_input( INPUT_GET, 'page' , FILTER_SANITIZE_STRING, array('options' => array('default' => '1')) );
+        $cm = new ContentManager();
+
+        list($albums, $pager) = $cm->find_pages('Album', 'available=1 ',
+                    'ORDER BY starttime DESC,  contents.title ASC ',
+                    $page, $items_page, $category);
+
+        $tpl->assign(array('contents'=>$albums,
+                            'contentTypeCategories'=>$parentCategories,
+                            'category' =>$category,
+                            'pagination'=>$pager->links
+                    ));
+
+        $html_out = $tpl->fetch("common/content_provider/_container-content-list.tpl");
+        Application::ajax_out($html_out);
+
     break;
 
     case 'config':
@@ -420,7 +423,7 @@ switch($action) {
             m::add(_('Settings saved successfully.'), m::SUCCESS);
 
             $httpParams = array(array('action'=>'list'),);
-            Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+            Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
         }
 
     break;

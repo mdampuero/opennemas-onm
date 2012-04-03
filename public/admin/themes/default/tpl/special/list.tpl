@@ -1,10 +1,8 @@
 {extends file="base/admin.tpl"}
+
 {block name="header-js" append}
     {script_tag src="/onm/jquery-functions.js" language="javascript"}
- 
-
 {/block}
-
 
 {block name="content"}
 <form action="#" method="post" name="formulario" id="formulario">
@@ -14,23 +12,21 @@
             <ul class="old-button">
                 {acl isAllowed="SPECIAL_DELETE"}
                 <li>
-                    <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="Eliminar" title="Eliminar">
-                        <img border="0" src="{$params.IMAGE_DIR}trash.png" title="Eliminar" alt="Eliminar" ><br />Eliminar
+                    <a class="delChecked" data-controls-modal="modal-special-batchDelete" href="#" title="{t}Delete{/t}">
+                        <img border="0" src="{$params.IMAGE_DIR}trash.png" title="{t}Delete{/t}" alt="{t}Delete{/t}" ><br />{t}Delete{/t}
                     </a>
                 </li>
                 {/acl}
                 {acl isAllowed="SPECIAL_AVAILABLE"}
                 <li>
-                    <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 0);" name="submit_mult" value="noFrontpage" title="noFrontpage">
-                        <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="noFrontpage" alt="noFrontpage" ><br />Despublicar
-                    </a>
+                    <button value="batchnoFrontpage" name="buton-batchnoFrontpage" id="buton-batchnoFrontpage" type="submit">
+                       <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="{t}Unpublish{/t}" alt="{t}Unpublish{/t}" /><br />{t}Unpublish{/t}
+                    </button>
                 </li>
-                {/acl}
-                {acl isAllowed="SPECIAL_AVAILABLE"}
                 <li>
-                    <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 1);" name="submit_mult" value="Frontpage" title="Frontpage">
-                        <img border="0" src="{$params.IMAGE_DIR}publish.gif" title="Publicar" alt="Publicar" ><br />Publicar
-                    </a>
+                    <button value="batchFrontpage" name="buton-batchFrontpage" id="buton-batchFrontpage" type="submit">
+                       <img border="0" src="{$params.IMAGE_DIR}publish.gif" title="{t}Publish{/t}" alt="{t}Publish{/t}" /><br />{t}Publish{/t}
+                    </button>
                 </li>
                 {/acl}
                 {acl isAllowed="SPECIAL_CREATE"}
@@ -40,9 +36,9 @@
                     </a>
                 </li>
                 {/acl}
-                {acl isAllowed="ALBUM_WIDGET"}
-                    <li class="separator"></li>
+                {acl isAllowed="SPECIAL_WIDGET"}
                      {if $category eq 'widget'}
+                        <li class="separator"></li>
                         <li>
                             <a href="#" class="admin_add" onClick="javascript:saveSortPositions('{$smarty.server.PHP_SELF}');" title="Guardar Positions" alt="Guardar Posiciones">
                                 <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar Cambios" alt="Guardar Posiciones"><br />{t}Save positions{/t}
@@ -68,9 +64,8 @@
 
         <ul class="pills clearfix">
             <li>
-                <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=favorite" {if $category=='favorite'}class="active"{elseif $ca eq $datos_cat[0]->fk_content_category}{*class="active"*}{/if}>{t}WIDGET HOME{/t}</a>
+                <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=widget" {if $category=='widget'}class="active"{elseif $ca eq $datos_cat[0]->fk_content_category}{*class="active"*}{/if}>{t}WIDGET HOME{/t}</a>
             </li>
-
            {include file="menu_categories.tpl" home=$smarty.server.SCRIPT_NAME|cat:"?action=list"}
         </ul>
 
@@ -100,7 +95,7 @@
                     <input type="checkbox" class="minput"  id="selected_{$smarty.section.as.iteration}" name="selected_fld[]" value="{$specials[as]->id}"  style="cursor:pointer;" >
                 </td>
                 <td>
-                    <a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$specials[as]->pk_special}');" title="{$specials[as]->title|clearslash}">
+                    <a href="{$smarty.server.PHP_SELF}?action=read&amp;id={$specials[as]->pk_special}" title="{$specials[as]->title|clearslash}">
                         {$specials[as]->title|clearslash}
                     </a>
                 </td>
@@ -118,11 +113,11 @@
                 <td class="center">
                     {acl isAllowed="SPECIAL_AVAILABLE"}
                         {if $specials[as]->available == 1}
-                                <a href="?id={$specials[as]->pk_special}&amp;action=change_status&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title="{t}Published{/t}">
+                                <a href="{$smarty.server.PHP_SELF}?id={$specials[as]->pk_special}&amp;action=change_status&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title="{t}Published{/t}">
                                         <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="{t}Published{/t}" /></a>
                         {else}
-                                <a href="?id={$specials[as]->pk_special}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title="{t}Pending{/t}">
-                                        <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="{t}Pending{/t}"/></a>
+                                <a href="{$smarty.server.PHP_SELF}?id={$specials[as]->pk_special}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title="{t}Pending{/t}">
+                                        <img src="{$params.IMAGE_DIR}publish_r.png" alt="{t}Pending{/t}"/></a>
                         {/if}
                     {/acl}
                 </td>
@@ -130,9 +125,9 @@
                 <td class="center">
                     {acl isAllowed="SPECIAL_FAVORITE"}
                         {if $specials[as]->favorite == 1}
-                           <a href="?id={$specials[as]->id}&amp;action=change_favorite&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="favourite_on" title="{t}Take out from frontpage{/t}"></a>
+                           <a href="{$smarty.server.PHP_SELF}?id={$specials[as]->id}&amp;action=change_favorite&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="favourite_on" title="{t}Take out from frontpage{/t}"></a>
                         {else}
-                            <a href="?id={$specials[as]->id}&amp;action=change_favorite&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="favourite_off" title="{t}Put in frontpage{/t}"></a>
+                            <a href="{$smarty.server.PHP_SELF}?id={$specials[as]->id}&amp;action=change_favorite&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="favourite_off" title="{t}Put in frontpage{/t}"></a>
                         {/if}
                     {/acl}
                 </td>
@@ -140,9 +135,9 @@
                 <td class="center">
                     {acl isAllowed="SPECIAL_HOME"}
                         {if $specials[as]->in_home == 1}
-                           <a href="?id={$specials[as]->id}&amp;action=change_inHome&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="no_home" title="{t}Take out from home{/t}"></a>
+                           <a href="{$smarty.server.PHP_SELF}?id={$specials[as]->id}&amp;action=change_inHome&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="no_home" title="{t}Take out from home{/t}"></a>
                         {else}
-                            <a href="?id={$specials[as]->id}&amp;action=change_inHome&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="go_home" title="{t}Put in home{/t}"></a>
+                            <a href="{$smarty.server.PHP_SELF}?id={$specials[as]->id}&amp;action=change_inHome&amp;status=1&amp;category={$category}&amp;page={$page|default:0}" class="go_home" title="{t}Put in home{/t}"></a>
                         {/if}
                     {/acl}
                 </td>
@@ -150,15 +145,18 @@
                     <ul class="action-buttons">
                        {acl isAllowed="SPECIAL_UPDATE"}
                         <li>
-                           <a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$specials[as]->pk_special}');" title="{t}Edit{/t}" >
-                                   <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
+                           <a href="{$smarty.server.PHP_SELF}?action=read&amp;id={$specials[as]->pk_special}" title="{t}Edit{/t}" >
+                                <img src="{$params.IMAGE_DIR}edit.png" />
+                            </a>
                        </li>
                        {/acl}
 
                        {acl isAllowed="SPECIAL_DELETE"}
                        <li>
-                           <a href="#" onClick="javascript:delete_special('{$specials[as]->pk_special}','{$paginacion->_currentPage|default:0}');" title={t}Delete{/t}>
-                                   <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
+                            <a class="del" data-controls-modal="modal-from-dom" data-id="{$specials[as]->id}"
+                               data-title="{$specials[as]->title|capitalize}" href="#" title="{t}Delete{/t}">
+                               <img src="{$params.IMAGE_DIR}trash.png" />
+                            </a>
                        </li>
                        {/acl}
                     </ul>
@@ -173,23 +171,42 @@
             </tbody>
             <tfoot>
               <td colspan="9">
-                {$paginacion->links|default:""}&nbsp;
+                {$pagination|default:""}&nbsp;
               </td>
             </tfoot>
         </table>
 
+        <input type="hidden" name="page" id="page" value="{$page|default:0}" />
+        <input type="hidden" name="category" id="category" value="{$category}" />
+        <input type="hidden" id="status" name="status" value="" />
         <input type="hidden" id="action" name="action" value="" />
         <input type="hidden" name="id" id="id" value="{$id|default:""}" />
     </div>
 </form>
-
-{if $category eq 'widget'}
-    <script type="text/javascript">
+    <script>
         // <![CDATA[
+        jQuery('#buton-batchnoFrontpage').on('click', function(){
+            jQuery('#action').attr('value', "batchFrontpage");
+            jQuery('#status').attr('value', "0");
+            jQuery('#formulario').submit();
+            e.preventDefault();
+        });
+        jQuery('#buton-batchFrontpage').on('click', function(){
+            jQuery('#action').attr('value', "batchFrontpage");
+            jQuery('#status').attr('value', "1");
+            jQuery('#formulario').submit();
+            e.preventDefault();
+        });
+
+        {if $category eq 'widget'}
             jQuery(document).ready(function() {
                 makeSortable();
             });
         // ]]>
+        {/if}
     </script>
-{/if}
+
+    {include file="special/modals/_modalDelete.tpl"}
+    {include file="special/modals/_modalBatchDelete.tpl"}
+    {include file="special/modals/_modalAccept.tpl"}
 {/block}

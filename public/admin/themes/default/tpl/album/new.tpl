@@ -142,9 +142,10 @@
             </div><!-- /album-images -->
         </div>
 
-        <input type="hidden" name="id" id="id" value="{$id|default:""}" />
+        <input type="hidden" name="id" id="id" value="{$album->pk_album|default:""}" />
 
     </div>
 </form>
 {include file="album/modals/_edit_album_error.tpl"}
+{include file="album/modals/_edit_album_photo.tpl"}
 {/block}

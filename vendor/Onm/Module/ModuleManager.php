@@ -15,7 +15,8 @@ namespace Onm\Module;
  * @author     Fran Dieguez <fran@openhost.es>
  * @version    SVN: $Id: Module.php 28842 Xov Xuñ 23 12:24:17 2011 frandieguez $
  */
-class ModuleManager {
+class ModuleManager
+{
 
     /**
      * Stores the activatedModules over all instances of ModuleManager
@@ -56,7 +57,7 @@ class ModuleManager {
 
         if (is_null(self::$activatedModules)) {
 
-            if(!isset($activatedModules) or (count($activatedModules) < 1)) {
+            if (!isset($activatedModules) or (count($activatedModules) < 1)) {
 
                 self::$activatedModules = self::getAvailableModules();
 
@@ -193,7 +194,7 @@ class ModuleManager {
             }
         } catch (ModuleException $e) {
              $_SESSION['error'] = $e->getMessage();
-             m::add( _("Sorry, you don't have enought privileges") );
+             m::add(_("Sorry, you don't have enought privileges"));
              Application::forward('/admin/');
         }
 

@@ -7,27 +7,19 @@
  * file that was distributed with this source code.
  */
 namespace Onm\Pager;
-
 /**
  * Class for generate image with next and previus.
  *
  * @package    Onm
  * @subpackage UI
  * @author     Sandra Pereira <sandra@openhost.es>
- * @version    SVN: $Id: SimplePager.class.php 28842 Mon July 4 16:37:26 2011 $
  */
-class SimplePager {
+class SimplePager
+{
 
     const ITEMS = 20;
     public $next = null;
     public $previus = null;
-
-    /**
-     * Initializes the SimplePager instance
-     *
-     * @return void
-     **/
-    public function __construct() { }
 
     /**
      * Returns the HTML paginate with js action onclick
@@ -48,8 +40,10 @@ class SimplePager {
         $others    = $params['others'];
         $function  = $params['function'];
 
-        $next       = "<a onClick='".$function."(".$others.", ".($page+1).")' title='"._("Get previous page")."'>"._("Next »")."</a>\n";
-        $previous   = "<a onClick='".$function."(".$others."', '".($page-1)."')' title='"._("Get previous page")."'>"._("« Previous")."</a>\n";
+        $next     = "<a onClick='".$function."(".$others.", ".($page+1).")' title='"
+                    ._("Get next page")."'>"._("Next »")."</a>\n";
+        $previous = "<a onClick='".$function."(".$others.", ".($page-1).")' title='"
+                    ._("Get previous page")."'>"._("« Previous")."</a>\n";
 
         if ($page == 1 || empty($page)) {
             if ($total <= $items) {
@@ -93,7 +87,7 @@ class SimplePager {
         $previous   = "<a href='".$url."&page=".($page-1)."' title='Previous'>". _('« Previous') ."</a>";
 
         if ($page == 1 || empty($page)) {
-            if($total <= $items) {
+            if ($total <= $items) {
                 $html ='';
             } else {
                 $html.= "<li>";

@@ -30,14 +30,14 @@ interface ImageInterface
 
     public function flop();
 
-    public function createThumbnail($width, $height);
-
-    public function show($header = true);
+    public function thumbnail($width, $height);
 
     public function rotate($degrees, $background = null);
 
     public function merge($image, $x = 0, $y = 0);
 
     public function convert($format);
+
+    public function output();
 
 } // END interface ImageInterface

@@ -482,12 +482,10 @@ if (isset($_REQUEST['action']) ) {
             }
 
             if(is_array($article->params) &&
-                    (array_key_exists('imgHome', $article->params)) ) {
-                $imgHome = $article->params['imgHome'];
-                if(!empty($imgHome)){
-                    $photoHome= new Photo($imgHome);
-                    $tpl->assign('photoHome', $photoHome);
-                }
+                    (array_key_exists('imageHome', $article->params)) &&
+                    !empty($article->params['imageHome']) ) {
+                $photoHome= new Photo($article->params['imageHome']);
+                $tpl->assign('photo3', $photoHome);
             }
 
             $video = $article->fk_video;
@@ -502,7 +500,7 @@ if (isset($_REQUEST['action']) ) {
                 $tpl->assign('video2', $video2);
             }
 
-            $rel= new Related_content();
+            $rel= new RelatedContent();
 
             $relationes = array();
             $relationes = $rel->get_relations( $_REQUEST['id'] );//de portada
@@ -537,7 +535,8 @@ if (isset($_REQUEST['action']) ) {
             }
 
             $tpl->assign(
-                array('availableSizes'=>array(20,22,24,26,28,30,32,34))
+                array('availableSizes'=>array(20=>'20',22=>'22',24=>'24',26=>'26',
+                                            28=>'28',30=>'30',32=>'32',34=>'34'))
             );
 
             $tpl->display('article/new.tpl');
@@ -623,6 +622,8 @@ if (isset($_REQUEST['action']) ) {
                 Application::forward('index.php');
             }elseif ($_SESSION['desde'] == 'europa_press_import') {
                 Application::forward('controllers/agency_importer/europapress.php?action=list&page=0&message=');
+            }elseif ($_SESSION['desde'] == 'efe_press_import') {
+                Application::forward('controllers/agency_importer/efe.php');
             }elseif ($_SESSION['desde'] == 'list') {
                 Application::forward($_SERVER['SCRIPT_NAME'].'?action='.$_SESSION['desde'].'&category='.$_SESSION['_from'].'&page='.$_REQUEST['page']);
             }elseif ($_SESSION['desde'] == 'list_hemeroteca') {
@@ -717,7 +718,7 @@ if (isset($_REQUEST['action']) ) {
                 } else {
 
                     $article = new Article($_REQUEST['id']);
-                    $rel= new Related_content();
+                    $rel= new RelatedContent();
                     $relationes=array();
 
                     $relationes = $rel->get_content_relations( $_REQUEST['id'] );//de portada
@@ -766,7 +767,7 @@ if (isset($_REQUEST['action']) ) {
                 $article = new Article($_REQUEST['id']);
 
                 //Delete relations
-                $rel= new Related_content();
+                $rel= new RelatedContent();
                 $rel->delete_all($_REQUEST['id']);
                 $article->delete( $_REQUEST['id'], $_SESSION['userid'] );
 
@@ -1055,7 +1056,7 @@ if (isset($_REQUEST['action']) ) {
                      $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
                      foreach($numCategories as $category=>$num){
                         if($num!=0 && $category!='UNKNOWN' && $category !='opinion'){
-                             $category=strtolower(String_Utils::normalize_name($category));
+                             $category=strtolower(StringUtils::normalize_name($category));
                              if (($category == 'política') || ($category == 'polItica')|| ($category == 'politica')){
                                      $category = 'polItica';
                              }
@@ -1176,7 +1177,7 @@ if (isset($_REQUEST['action']) ) {
 
                  /*  foreach($fields as $i ) {
                         $article = new Article($i);
-                        $rel= new Related_content();
+                        $rel= new RelatedContent();
                         $relationes=array();
 
                         $relationes = $rel->get_content_relations( $i );//de portada
@@ -1193,7 +1194,7 @@ if (isset($_REQUEST['action']) ) {
 */
                      foreach($fields as $i ) {
                         $content = new Content($i);
-                        $rel= new Related_content();
+                        $rel= new RelatedContent();
                         $relationes=array();
 
                         $relationes = $rel->get_content_relations( $i );//de portada
@@ -1215,7 +1216,7 @@ if (isset($_REQUEST['action']) ) {
                 if(is_array($fields)) {
                     foreach($fields as $i ) {
                         $article = new Article($i);
-                       $rel= new Related_content();
+                       $rel= new RelatedContent();
                         $relationes=array();
 
                         $relationes = $rel->get_content_relations($i );//de portada
@@ -1339,10 +1340,10 @@ if (isset($_REQUEST['action']) ) {
             $cm = new ContentManager();
             $mySearch = cSearch::Instance();
             //Transform the input string to search like: 'La via del tren' => '+via +tren'
-            $szSourceTags = explode(', ', String_Utils::get_tags($_REQUEST['metadata']));
+            $szSourceTags = explode(', ', StringUtils::get_tags($_REQUEST['metadata']));
             $where="available=1 ";
             $search=$mySearch->SearchRelatedContents($szSourceTags, 'Article,Opinion',NULL,$where);
-            $szSourceTags = explode(', ', htmlentities(String_Utils::get_tags($_REQUEST['metadata']),NULL,'UTF-8'));
+            $szSourceTags = explode(', ', htmlentities(StringUtils::get_tags($_REQUEST['metadata']),NULL,'UTF-8'));
             //Put searched words with diferent color
             $ind = 0; $indice = 0;
             $res = array();
@@ -1350,7 +1351,7 @@ if (isset($_REQUEST['action']) ) {
                 foreach ($search as $res ) {
                     $search[$indice]['metadata'] = htmlentities($search[$indice]['metadata'],NULL, 'UTF-8');
                     for($ind=0; $ind < sizeof($szSourceTags); $ind++){
-                        $search[$indice]['title'] = String_Utils::ext_str_ireplace($szSourceTags[$ind], '<b><font color=blue>$1</font></b>', $search[$indice]['title']);
+                        $search[$indice]['title'] = StringUtils::ext_str_ireplace($szSourceTags[$ind], '<b><font color=blue>$1</font></b>', $search[$indice]['title']);
                     }
                     $indice++;
                 }
@@ -1633,6 +1634,29 @@ if (isset($_REQUEST['action']) ) {
             $uri = $_SERVER['SCRIPT_NAME'] . '?action=read&category=' . $clone->category . '&id=' . $clone->id;
             Application::forward('index.php?go=' . urlencode($uri));
         } break;
+
+        case 'content-list-provider':
+
+            $items_page = s::get('items_per_page') ?: 20;
+            $category = filter_input( INPUT_GET, 'category' , FILTER_SANITIZE_STRING, array('options' => array('default' => '0')) );
+            $page = filter_input( INPUT_GET, 'page' , FILTER_SANITIZE_STRING, array('options' => array('default' => '1')) );
+            $cm = new ContentManager();
+
+            list($articles, $pages) = $cm->find_pages('Article',
+                        'fk_content_type=1 and content_status=1 AND available=1 ',
+                        'ORDER BY frontpage DESC, starttime DESC,  contents.title ASC ',
+                        $page, $items_page, $category);
+
+            $tpl->assign(array('contents'=>$articles,
+                                'contentTypeCategories'=>$allcategorys,
+                                'category' =>$category,
+                                'pagination'=>$pages->links
+                        ));
+
+            $html_out = $tpl->fetch("common/content_provider/_container-content-list.tpl");
+            Application::ajax_out($html_out);
+
+        break;
 
         default: {
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);

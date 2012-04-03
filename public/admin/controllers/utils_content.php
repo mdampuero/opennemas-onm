@@ -15,9 +15,6 @@ require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
 */
 $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 
-require_once(SITE_CORE_PATH.'privileges_check.class.php');
-
-
 if(isset($_REQUEST['action']) ) {
     switch($_REQUEST['action']) {
         case 'get_tags':
@@ -34,7 +31,7 @@ if(isset($_REQUEST['action']) ) {
             }
 
             $tags = $cat." ".$_GET['title']." ".$_GET['tags'];
-            $tags = String_Utils::get_tags($tags);
+            $tags = StringUtils::get_tags($tags);
             Application::ajax_out($tags);
 
             break;
@@ -88,7 +85,7 @@ if(isset($_REQUEST['action']) ) {
 			$div='search-noticias';
 			$relationes=array();
 			$intrelationes=array();
-			$rel= new Related_content();
+			$rel= new RelatedContent();
   		 	$relationes = $rel->get_relations( $id );//de portada
 	        $intrelationes = $rel->get_relations_int( $id );//de interor
 
@@ -154,7 +151,7 @@ if(isset($_REQUEST['action']) ) {
 			$relationes=array();
 			$intrelationes=array();
 			if(($id) && ($id != 0)){
-				$rel= new Related_content();
+				$rel= new RelatedContent();
 	  		 	$relationes = $rel->get_relations( $id );//de portada
 		        $intrelationes = $rel->get_relations_int( $_REQUEST['id'] );//de interior
 			}

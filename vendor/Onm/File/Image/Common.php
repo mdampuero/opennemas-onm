@@ -28,7 +28,7 @@ abstract class Common
 
         $arrayOperations = $this->getOperations($operations);
 
-        foreach ($array_operations as $operation) {
+        foreach ($arrayOperations as $operation) {
             $function = $operation['function'];
             $params = $operation['params'];
 
@@ -57,9 +57,31 @@ abstract class Common
                     $this->$function($params[0], $params[1], $params[2], $params[3]);
                     break;
                 default:
-                    throw new Exception(sprintf(_('No valid operation (%s) for image transform. All operation string is %s'), $function, implode(',', $params)));
+                    throw new \Exception(
+                        sprintf(
+                            _(
+                                'No valid operation (%s) for image transform.'
+                                .' All operation string is %s'
+                            ),
+                            $function,
+                            implode(',', $params)
+                        )
+                    );
             }
         }
+
+        // if ($this->settings['cache']) {
+
+        //     $cache_folder = $pathToTheCache.'images/';
+
+        //     if (!is_dir($cache_folder) && !@mkdir($cache_folder, 0755)) {
+        //         $this->Debug->error('file', 'There was an error creating the folder "%s"', $cache_folder);
+        //     }
+
+        //     if (is_writable($cache_folder)) {
+        //         $this->save($cache_folder.alphaNumeric($this->info['file'].$operations));
+        //     }
+        // }
 
         return $this;
     }
@@ -69,12 +91,13 @@ abstract class Common
      *
      * return array the formatted operations array
      **/
-    private function getOperations($operations) {
+    private function getOperations($operations)
+    {
         $return = array();
-        $array = explode('|', $operations);
+        $listOperations = explode('|', $operations);
 
-        foreach ($array as $each) {
-            $params = explode(',', $each);
+        foreach ($listOperations as $rawOperation) {
+            $params = explode(',', $rawOperation);
 
             while (empty($params[0]) && (count($params) > 0)) {
                 array_shift($params);

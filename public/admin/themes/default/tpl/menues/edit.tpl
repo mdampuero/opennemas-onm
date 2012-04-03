@@ -155,6 +155,9 @@ legend {
                                             <li>
                                                 <a href="#listado">{t}Global Categories{/t}</a>
                                             </li>
+                                             <li>
+                                                <a href="#subcategories">{t}Subcategories{/t}</a>
+                                            </li>
                                             {is_module_activated name="ALBUM_MANAGER"}
                                             <li>
                                                 <a href="#listadoAlbum">{t}Album Categories{/t}</a>
@@ -171,14 +174,12 @@ legend {
                                             </li>
                                             {/is_module_activated}
                                             <li>
-                                                <a href="#frontpages">{t}Available Frontpages{/t}</a>
+                                                <a href="#frontpages">{t}Available Modules{/t}</a>
                                             </li>
                                             <li>
                                                 <a href="#staticPages">{t}Static Pages{/t}</a>
                                             </li>
-                                            <li>
-                                                <a href="#subcategories">{t}Subcategories{/t}</a>
-                                            </li>
+
                                         </ul>
 
                                         <div id="listado">
@@ -232,11 +233,21 @@ legend {
                                          <div id="frontpages">
                                             <ul id='availablePages' class="elementsContainer">
                                                 {foreach from=$pages item=value key=page}
-                                                    <li id="page_{$page}"   pk_item="{$value}"
-                                                        title="{if $page eq 'frontpage'}home{elseif $page eq 'poll'}encuesta{else}{$page}{/if}"
-                                                        link="{if $page eq 'frontpage'}home{elseif $page eq 'poll'}encuesta{else}{$page}{/if}"
+                                                    <li id="page_{$page}" pk_item="{$value}"  title="{$page}"
+                                                        link="{if $page eq 'frontpage'}home
+                                                                {elseif $page eq 'poll'}encuesta
+                                                                {elseif $page eq 'letter'}cartas-al-director
+                                                                {elseif $page eq 'kiosko'}portadas-papel
+                                                                {elseif $page eq 'letter'}cartas-al-director
+                                                                {elseif $page eq 'boletin'}newsletter
+                                                                {else}{$page}{/if}"
                                                         type="internal"  class="drag-category" pk_menu="">
-                                                       {if $page eq 'frontpage'}home{elseif $page eq 'poll'}encuesta{else}{$page}{/if}
+                                                        {if $page eq 'frontpage'}home
+                                                                {elseif $page eq 'poll'}Encuesta
+                                                                {elseif $page eq 'letter'}Cartas Al Director
+                                                                 {elseif $page eq 'kiosko'}Portadas Papel
+                                                                 {elseif $page eq 'boletin'}Bolet&iacute;n
+                                                                {else}{$page}{/if}
                                                     </li>
                                                 {/foreach}
                                             </ul>

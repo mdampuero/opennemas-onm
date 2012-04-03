@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""} >
+<form action="#" method="GET" name="formulario" id="formulario" {$formAttrs|default:""} >
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
         <div class="title"><h2>{t}Files manager :: {/t}{if $category eq 0}{t}General statistics{/t}{else}{$datos_cat[0]->title}{/if}</h2></div>
@@ -13,19 +13,39 @@
 					{t}Upload file{/t}
 				</a>
 			</li>
+            {acl isAllowed="FILES_DELETE"}
+            <li>
+                <a class="delChecked" data-controls-modal="modal-file-batchDelete" href="#" title="{t}Delete{/t}">
+                    <img src="{$params.IMAGE_DIR}trash.png" border="0"  title="{t}Delete{/t}" alt="{t}Delete{/t}" ><br />{t}Delete{/t}
+                </a>
+            </li>
+            {/acl}
+            {acl isAllowed="FILES_AVAILABLE"}
+            <li>
+                    <button value="batchnoFrontpage" name="buton-batchnoFrontpage" id="buton-batchnoFrontpage" type="submit">
+                       <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="{t}Unpublish{/t}" alt="{t}Unpublish{/t}" ><br />{t}Unpublish{/t}
+                   </button>
+               </li>
+               <li>
+                   <button value="batchFrontpage" name="buton-batchFrontpage" id="buton-batchFrontpage" type="submit">
+                       <img border="0" src="{$params.IMAGE_DIR}publish.gif" title="{t}Publish{/t}" alt="{t}Publish{/t}" ><br />{t}Publish{/t}
+                   </button>
+            </li>
+            {/acl}
         </ul>
         {/if}
     </div>
 </div>
 <div class="wrapper-content">
 
-		<ul class="pills">
-			<li>
-				<a href="{$smarty.server.PHP_SELF}?action=list&category=0" id="link_global"  {if $category==0}class="active"{/if}>{t}GLOBAL{/t}</a>
-			</li>
-			{include file="menu_categories.tpl" home="{$smarty.server.PHP_SELF}?action=list"}
-		</ul>
-        {render_messages}
+    <ul class="pills">
+        <li>
+            <a href="{$smarty.server.PHP_SELF}?action=list&category=0" id="link_global"  {if $category==0}class="active"{/if}>{t}GLOBAL{/t}</a>
+        </li>
+        {include file="menu_categories.tpl" home="{$smarty.server.PHP_SELF}?action=list"}
+    </ul>
+
+    {render_messages}
 	<div id="{$category}">
 		{if $category eq 0}
 			<table class="listing-table">
@@ -107,17 +127,22 @@
 			<table class="listing-table">
 				<thead>
 					<tr>
+                        <th style="width:15px;"><input type="checkbox" id="toggleallcheckbox"></th>
 						<th>{t}Title{/t}</th>
 						<th>{t}Path{/t}</th>
 						<th class="center" style="width:40px">{t}Availability{/t}</th>
+                        <th class="center" style="width:40px">{t}Published{/t}</th>
 						<th style="width:40px">{t}Actions{/t}</th>
 					</tr>
 				</thead>
 
 				<tbody>
 					{section name=c loop=$attaches}
-					<tr {cycle values="class=row0,class=row1"}>
-						<td>
+					 <tr data-id="{$attaches[c]->id}">
+                        <td class="center">
+                                <input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$attaches[c]->id}"  style="cursor:pointer;" >
+                        </td>
+                        <td>
 							{$attaches[c]->title|clearslash}
 						</td>
 						<td>
@@ -130,6 +155,19 @@
 								<img src="{$params.IMAGE_DIR}icon_aviso.gif" border="0" alt="No" />
 							{/if}
 						</td>
+                        <td align="center">
+                            {acl isAllowed="FILE_AVAILABLE"}
+                                {if $attaches[c]->available == 1}
+                                    <a href="?id={$attaches[c]->id}&amp;action=change_status&amp;status=0&amp;page={$paginacion->_currentPage}&amp;category={$category}" title="Publicado">
+                                        <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" />
+                                    </a>
+                                {else}
+                                    <a href="?id={$attaches[c]->id}&amp;action=change_status&amp;status=1&amp;page={$paginacion->_currentPage}&amp;category={$category}" title="Pendiente">
+                                        <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" />
+                                    </a>
+                                {/if}
+                            {/acl}
+                        </td>
 						<td class="center">
 							<ul class="action-buttons">
                                 {acl isAllowed="FILE_UPDATE"}
@@ -139,7 +177,10 @@
                                 {/acl}
                                 {acl isAllowed="FILE_DELETE"}
 								<li>
-									<a href="#" onClick="javascript:delete_fichero('{$attaches[c]->id}',1);" title="Eliminar"><img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
+									<a class="del" data-controls-modal="modal-from-dom"
+                               data-id="{$attaches[c]->id}"
+                               data-title="{$attaches[c]->title|capitalize}"  href="#" >
+                                        <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
 								</li>
                                 {/acl}
 							</ul>
@@ -168,9 +209,28 @@
 			</div>
 		{/if}
 
-		<input type="hidden" id="action" name="action" value="" />
-		<input type="hidden" name="id" id="id" value="{$id|default:""}" />
+        <input type="hidden" name="category" id="category" value="{$category}" />
+        <input type="hidden" id="status" name="status" value="" />
+        <input type="hidden" id="action" name="action" value="" />
+        <input type="hidden" name="id" id="id" value="{$id|default:""}" />
 
-</div><!--fin wrapper-content-->
+     <script>
+        jQuery('#buton-batchnoFrontpage').on('click', function(){
+            jQuery('#action').attr('value', "batchFrontpage");
+            jQuery('#status').attr('value', "0");
+            jQuery('#formulario').submit();
+            e.preventDefault();
+        });
+        jQuery('#buton-batchFrontpage').on('click', function(){
+            jQuery('#action').attr('value', "batchFrontpage");
+            jQuery('#status').attr('value', "1");
+            jQuery('#formulario').submit();
+            e.preventDefault();
+        });
+    </script>
+</div>
 </form>
+{include file="files/modals/_modalDelete.tpl"}
+{include file="files/modals/_modalBatchDelete.tpl"}
+{include file="files/modals/_modalAccept.tpl"}
 {/block}

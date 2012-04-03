@@ -83,7 +83,7 @@ $menuXml = '<?xml version="1.0"?>
             module_name="LETTER_MANAGER"
             privilege="LETTER_ADMIN"
             title="'.htmlspecialchars(_("Letter to the editor"), ENT_QUOTES).'"
-            id="opinion_manager"
+            id="letter_manager"
             link="controllers/letter/letter.php"
         />
         <node
@@ -218,7 +218,7 @@ $menuXml = '<?xml version="1.0"?>
             title="'.htmlspecialchars(_("Statistics"), ENT_QUOTES).'"
             id="statistics"
             link="controllers/statistics/statistics.php"
-            privilege="BACKEND_ADMIN" />
+            privilege="STATS_ADMIN" />
     </submenu>
 
     <submenu title="'.htmlspecialchars(_("System"), ENT_QUOTES).'" id="system" link="#"

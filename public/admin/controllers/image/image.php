@@ -13,13 +13,12 @@ use Onm\Settings as s,
 // Setup app
 require_once(dirname(__FILE__).'/../../../bootstrap.php');
 require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
-require_once(SITE_CORE_PATH.'privileges_check.class.php');
 
 $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 
 Acl::checkOrForward('IMAGE_ADMIN');
 
-if(!class_exists('Imagick')) {
+if(!extension_loaded('imagick')) {
     throw new Exception("Imagick isn't installed in this server, if you are in a Debian based system please installa php5-imagick package");
 }
 
@@ -183,7 +182,7 @@ switch($action) {
 
         list($photos, $pager) = $cm->find_pages(
             'Photo', 'contents.fk_content_type=8 and photos.media_type="image"',
-            'ORDER BY  created DESC ', $page, 40, $category
+            'ORDER BY  created DESC ', $page, 36, $category
         );
 
         foreach ($photos as &$photo) {
@@ -193,7 +192,7 @@ switch($action) {
         }
 
         $_SESSION['desde'] = 'category_catalog';
-        $tpl->assign('paginacion', $pager);
+        $tpl->assign('pages', $pager);
         $tpl->assign('photos', $photos);
         $tpl->assign('category', $category);
         $tpl->display('image/category_catalog.tpl');
@@ -209,7 +208,7 @@ switch($action) {
             'contents.fk_content_type=8 and photos.media_type="image" and created >=' .
             'DATE_SUB(CURDATE(), INTERVAL 1 DAY)'.' ',
             'ORDER BY created DESC ',
-            $page, 40, $category
+            $page, 36, $category
         );
 
         foreach ($photos as &$photo) {
@@ -219,7 +218,7 @@ switch($action) {
         }
 
         $_SESSION['desde'] = 'today_catalog';
-        $tpl->assign('paginacion', $pager);
+        $tpl->assign('pages', $pager);
         $tpl->assign('photos', $photos);
         $tpl->assign('action', $action);
         $tpl->assign('category', $category);
@@ -386,11 +385,11 @@ switch($action) {
         $foto = new Photo($id);
         $contents = $foto->is_used($id);
 
-
         if (count($contents) > 0 && ($forceDelete != 'yes')) {
             $cm = new ContentManager();
             $related_contents = $cm->getContents($contents);
             $tpl->assign('related_contents', $related_contents);
+            $tpl->assign('foto', $foto);
             $tpl->assign('id',$id);
             $tpl->assign('form_action', $_SERVER['REQUEST_URI']);
             $tpl->display('image/delete_relations.tpl');
@@ -398,7 +397,7 @@ switch($action) {
             $foto->delete($id, $_SESSION['userid']);
             Application::forward(
                 $_SERVER['SCRIPT_NAME'] . '?action=' . $_SESSION['desde']
-                .'&category=' . $category . '&page=' . $page
+                .'&category=' . $foto->category . '&page=' . $page
             );
         }
         break;

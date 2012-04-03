@@ -73,7 +73,10 @@ input[readonly="readonly"] { background:#eee !important; }
 input[type='text'], input[type='file'], input[type='password'], textarea { 	background:White; border: 1px solid #B5B8C8; color:#555; padding:5px; vertical-align:middle; border-radius:2px; }
 input[type='text']:focus, input[type='file']:focus, input[type='password']:focus, textarea:focus,select:fofus { box-shadow: 0 1px 3px rgba(0,0,0, 0.2) inset; border-color:#3079ED; }
 
-label {padding: 1px 3px 1px 0px;}
+label {
+    padding: 1px 3px 1px 0px;
+    display: inline;
+}
 
 .wrapper-content {
     margin: 0 auto;
@@ -1070,13 +1073,14 @@ ul#menu.manager a { color:White !important; }
 			font-size:13px;
 			background:url(../images/backgrounds/bullet-help.png) bottom right no-repeat;
 			margin-right:24px;
+            height: 30px;
 		}
 			.help-block.warning .title h4 { color: #8A1F11; }
 	.help-block .content {
-		margin-top:40px;
+		margin-top:50px;
 		padding:15px;
 		color:#333;
-		font-size:1.02em;
+		font-size:1.0em;
 	}
 	.help-block dl { margin-top:0; }
 	.help-block dd { margin:10px 0 10px 20px; }
@@ -1625,16 +1629,18 @@ div.action-bar .right{
 }
 .list-of-images .image .overlay-image .image-buttons {
 	background: rgba(255,255,255,0.8);
+	padding:2px;
 	display:none;
 }
 .list-of-images .image .overlay-image:hover .image-buttons {
 	display:block;
 }
 .list-of-images .image .image-buttons li {
-	display:inline-block;
+	width:16px;
 	padding:2px;
+	display:block;
 }
-.list-of-images .image .overlay-image .image-buttons img { width:16px; }
+.list-of-images .image .overlay-image .image-buttons img { width:16px; display:block }
 
 .list-of-images .image .overlay-image {
 	background:transparent;
@@ -1703,7 +1709,7 @@ div.action-bar .right{
 
 .progressbar div {
     width: auto;
-    background: url(../../images/progressbar.gif);
+    background: url(../images/progressbar.gif);
 }
 
 .fileupload-progressbar {

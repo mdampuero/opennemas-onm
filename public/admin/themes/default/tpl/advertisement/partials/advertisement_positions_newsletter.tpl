@@ -7,7 +7,7 @@
         <td rowspan="5">
             <div id="advertisement-mosaic-newsletter">
                 <div id="advertisement-mosaic-frame-newsletter"></div>
-                <img src="{$smarty.const.SITE_URL_ADMIN}/images/advertisement/newsletter.png" width="240" usemap="#mapGallery" />
+                <img src="{$params.IMAGE_DIR}/advertisement/newsletter.png" width="240" usemap="#mapGallery" />
             </div>
         </td>
     </tr>
@@ -41,4 +41,3 @@
     </tr>
 </tbody>
 </table>
- 

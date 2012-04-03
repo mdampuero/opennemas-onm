@@ -174,7 +174,7 @@ function createArticle($elementXML,$numCategories,$check='1')
                      ".l" => "", ". l" => "", ".XdG" => ".", ". XdG" => ".", ".EP" => "", ". EP" => ".",
                      " n</p>" => ".</p>", " l</p>" => ".</p>", " EP</p>" => ".</p>", " XdG</p>" => ".</p>");
     $data['body'] = strtr($data['body'], $finales);
-    $current_category = strtolower(String_Utils::normalize_name($elementXML->seccion));
+    $current_category = strtolower(StringUtils::normalize_name($elementXML->seccion));
 
 
     $data['category'] = $ccm->get_id($current_category);
@@ -199,7 +199,7 @@ function createArticle($elementXML,$numCategories,$check='1')
     $data['ordenArti']="";$data['ordenArtiInt']="";
 
     $article = new Article();
-    $metadata = String_Utils::get_title($data['title']);
+    $metadata = StringUtils::get_title($data['title']);
     $data['metadata'] = str_replace('-',',',$metadata);
 
 //NEW CODE: The import module imports articles from each category to frontpage directly
@@ -276,7 +276,7 @@ function createOpinion($elementXML,$numCategories,$check='1')
                $name.= $texto." / ";
             }
             $name=strtolower($name);
-            $name=String_Utils::normalize_name($name);
+            $name=StringUtils::normalize_name($name);
             $name=preg_replace('/[\-]+/', '', $name);
             $name=trim($name);
 
@@ -285,7 +285,7 @@ function createOpinion($elementXML,$numCategories,$check='1')
             $old_percent=70;
             $cont=0;
             foreach ($authors as $author){
-                $author_name=trim(String_Utils::normalize_name($author->name));
+                $author_name=trim(StringUtils::normalize_name($author->name));
 
                 $i=similar_text($author_name,$name,$percen);
                 if($percen>$old_percent){
@@ -341,7 +341,7 @@ function createOpinion($elementXML,$numCategories,$check='1')
             $data['fk_publisher']=$_SESSION['userid'];
             $data['metadata']="";$data['category']="";$data['description']="";
             $data['with_comment']="1";$data['publisher']="3";
-            $metadata = String_Utils::get_title($data['title']);
+            $metadata = StringUtils::get_title($data['title']);
             $data['metadata'] = str_replace('-',',',$metadata);
             $data['metadata'] = $data['metadata'].', '.$metas_name;
 
