@@ -58,6 +58,7 @@ switch ($action) {
                     );
 
                     // Store default expire time
+                    global $app;
                     $app::setCookieSecure('default_expire', $user->sessionexpire, 0, '/admin/');
                     PrivilegesCheck::loadSessionExpireTime();
                     $GLOBALS['Session']->cleanExpiredSessionFiles();

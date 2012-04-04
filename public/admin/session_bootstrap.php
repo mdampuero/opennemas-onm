@@ -10,7 +10,7 @@
 $GLOBALS['Session'] = SessionManager::getInstance(OPENNEMAS_BACKEND_SESSIONS);
 $GLOBALS['Session']->bootstrap();
 
-
+global $request;
 if (!isset($_SESSION['userid']) && !preg_match('@^/login@', $request->getPathInfo())) {
     $url = $request->getPathInfo();
 
