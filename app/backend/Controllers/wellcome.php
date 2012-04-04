@@ -2,8 +2,8 @@
 /**
  * Setup app
 */
-require_once('../bootstrap.php');
-require_once('./session_bootstrap.php');
+require_once '../bootstrap.php';
+require_once './session_bootstrap.php';
 
 /**
  * Setup view

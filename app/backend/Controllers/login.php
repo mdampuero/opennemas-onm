@@ -2,8 +2,8 @@
 /**
  * Setup app
 */
-require_once('../bootstrap.php');
-require_once('session_bootstrap.php');
+require_once '../bootstrap.php';
+require_once 'session_bootstrap.php';
 
 /**
  * Setup view
@@ -20,6 +20,7 @@ switch ($action) {
         $password = $request->request->filter('password', null, FILTER_SANITIZE_STRING);
         $token    = $request->request->filter('token', null, FILTER_SANITIZE_STRING);
         $captcha  = '';
+    // var_dump($_SESSION['csrf'], $token);
 
         $user = new User();
 
@@ -86,9 +87,10 @@ switch ($action) {
         $tpl->assign('token', $token);
         $_SESSION['csrf'] = $token;
         $languages = Application::getAvailableLanguages();
-        $currentLanguage =Application::$language;
+        $currentLanguage = Application::$language;
         $tpl->assign('languages', $languages);
         $tpl->assign('current_language', $currentLanguage);
+
         $tpl->display('login/login.tpl');
         break;
 }

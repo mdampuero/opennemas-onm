@@ -10,11 +10,14 @@
 $GLOBALS['Session'] = SessionManager::getInstance(OPENNEMAS_BACKEND_SESSIONS);
 $GLOBALS['Session']->bootstrap();
 
-if (!isset($_SESSION['userid']) && !preg_match('/login\.php$/', $_SERVER['SCRIPT_FILENAME'])) {
-    $url = parse_url($_SERVER['REQUEST_URI']);
+
+if (!isset($_SESSION['userid']) && !preg_match('@^/login@', $request->getPathInfo())) {
+    $url = $request->getPathInfo();
+
     if (!empty($url)) {
-        $redirectTo = urlencode(trim($url['path'], '/'));
+        $redirectTo = urlencode($request->getBaseUrl()."/".trim($url['path'], '/'));
     }
-    header('Location: ' . SITE_URL_ADMIN .'/login.php?forward_to='.$redirectTo);
+
+    header('Location: ' . $request->getBaseUrl() .'/login/?forward_to='.$redirectTo);
     exit(0);
 }

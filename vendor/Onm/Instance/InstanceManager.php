@@ -35,9 +35,9 @@ class InstanceManager
      * Initializes the Request object
      *
      */
-    public function __construct()
+    public function __construct($onmInstancesConnection)
     {
-        $this->_connection = self::getConnection();
+        $this->_connection = self::getConnection($onmInstancesConnection);
         return $this;
     }
 
@@ -138,20 +138,12 @@ class InstanceManager
      */
     static public function getConnection($connectionData=null)
     {
-        // Database
-        global $onmInstancesConnection;
-        if (
-            !is_null($connectionData)
-            && is_array($connectionData)
-        ) {
-            $onmInstancesConnection = $connectionData;
-        }
-        $conn = \ADONewConnection($onmInstancesConnection['BD_TYPE']);
+        $conn = \ADONewConnection($connectionData['BD_TYPE']);
         $conn->Connect(
-            $onmInstancesConnection['BD_HOST'],
-            $onmInstancesConnection['BD_USER'],
-            $onmInstancesConnection['BD_PASS'],
-            $onmInstancesConnection['BD_DATABASE']
+            $connectionData['BD_HOST'],
+            $connectionData['BD_USER'],
+            $connectionData['BD_PASS'],
+            $connectionData['BD_DATABASE']
         );
 
         // Check if adodb is log enabled

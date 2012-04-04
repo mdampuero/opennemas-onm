@@ -9,56 +9,32 @@
  **/
 
 require '../../app/autoload.php';
+
 use Symfony\Component\HttpFoundation\Request,
     Symfony\Component\Routing\RouteCollection,
     Symfony\Component\Routing\Matcher\UrlMatcher,
     Symfony\Component\Routing\RequestContext,
     Symfony\Component\Routing\Route;
 
+// Load the available route collection
 $routes = new RouteCollection();
-
-foreach (glob(SITE_PATH.'/app/modules/*/routes.php') as $routeFile) {
+foreach (glob(APP_PATH.'/*/routes.php') as $routeFile) {
     require $routeFile;
 }
 
-$routes->add('admin_system_settings', new Route(
-    '/system/settings',
-    array('_controller' => 'controllers/system_settings/system_settings.php')),
-    '/admin'
-);
-$routes->add('admin_frontpage_list', new Route(
-    '/frontpages',
-    array('_controller' => 'controllers/frontpagemanager/frontpagemanager.php', 'action' => 'list')),
-    '/admin'
-);
-$routes->add('admin_frontpage_list_with_category', new Route(
-    '/frontpages/{category}',
-    array('_controller' => 'controllers/frontpagemanager/frontpagemanager.php', 'action' => 'list')),
-    '/admin'
-);
-$routes->add('admin_login', new Route(
-    '/login',
-    array('_controller' => 'login.php')),
-    '/admin'
-);
-$routes->add('admin_welcome', new Route(
-    '/',
-    array('_controller' => 'index.php')),
-    '/admin'
-);
-$context = new RequestContext();
+// Create the request object
 $request = Request::createFromGlobals();
 
+// Create the Request context from the request, useful for the matcher
+$context = new RequestContext();
 $context->fromRequest($request);
+
+// Inialize the url matcher
 $matcher = new UrlMatcher($routes, $context);
 
+//Initialize the url generator
 $generator = new \Symfony\Component\Routing\Generator\UrlGenerator($routes, $context);
-try {
-    $parameters = $matcher->match(rtrim($request->getPathInfo(), '/'));
-    foreach ($parameters as $param => $value) {
-        $request->query->set($param, $value);
-    }
-    require $parameters['_controller'];
-} catch (\Symfony\Component\Routing\Exception\ResourceNotFoundException $e) {
-    require 'index.php';
-}
+
+// Dispatch the response
+$dispatcher = new \Onm\Dispatcher($matcher, $request);
+$dispatcher->dispatch();

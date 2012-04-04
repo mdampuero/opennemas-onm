@@ -1,0 +1,66 @@
+<?php
+use Symfony\Component\HttpFoundation\Request,
+    Symfony\Component\Routing\RouteCollection,
+    Symfony\Component\Routing\Matcher\UrlMatcher,
+    Symfony\Component\Routing\RequestContext,
+    Symfony\Component\Routing\Route;
+
+$routes->add(
+    'admin_system_settings',
+    new Route(
+        '/system/settings',
+        array('_controllerfile' => 'controllers/system_settings/system_settings.php')
+    ),
+    '/admin'
+);
+$routes->add(
+    'admin_frontpage_list',
+    new Route(
+        '/frontpages',
+        array('_controllerfile' => 'controllers/frontpagemanager/frontpagemanager.php', 'action' => 'list')
+    ),
+    '/admin'
+);
+$routes->add(
+    'admin_frontpage_list_with_category',
+    new Route(
+        '/frontpages/{category}',
+        array('_controllerfile' => 'controllers/frontpagemanager/frontpagemanager.php', 'action' => 'list')
+    ),
+    '/admin'
+);
+$routes->add(
+    'admin_login_form',
+    new Route(
+        '/login',
+        array('_controllerfile' => APP_PATH.'/backend/Controllers/login.php')
+    ),
+    '/admin'
+);
+$routes->add(
+    'admin_login',
+    new Route(
+        '/login',
+        array('_controllerfile' => APP_PATH.'/backend/Controllers/login.php', 'action' => 'login'),
+        array('_method' => 'POST')
+    ),
+    '/admin'
+);
+$routes->add(
+    'admin_logout',
+    new Route(
+        '/logout',
+        array('_controllerfile' => APP_PATH.'/backend/Controllers/logout.php')
+    ),
+    '/admin'
+);
+$routes->add(
+    'admin_welcome',
+    new Route(
+        '/',
+        array('_controllerfile' => APP_PATH.'/backend/Controllers/wellcome.php')
+    ),
+    '/admin'
+);
+
+

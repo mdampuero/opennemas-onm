@@ -118,7 +118,7 @@ class PrivilegesCheck
      **/
     private static function SessionExpireTimeAction()
     {
-        Application::forward("/admin/login.php");
+        Application::forward("/admin/login/");
     }
 
 

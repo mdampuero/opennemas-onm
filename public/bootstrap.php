@@ -13,6 +13,8 @@ $configFile = implode(DIRECTORY_SEPARATOR, array(
     APPLICATION_PATH, 'config', 'config.inc.php'
 ));
 
+
+global $request;
 if (!isset($request)) {
     $request = Symfony\Component\HttpFoundation\Request::createFromGlobals();
 }
@@ -25,7 +27,7 @@ if (file_exists($configFile)) {
     \Application::initAutoloader('*');
 
     // Loads one ONM instance from database
-    $im = \Onm\Instance\InstanceManager::getInstance();
+    $im = new \Onm\Instance\InstanceManager($onmInstancesConnection);
     try {
         $instance = $im->load($_SERVER['SERVER_NAME']);
     } catch (\Onm\Instance\NotActivatedException $e) {
