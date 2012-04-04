@@ -62,7 +62,7 @@
 
 
 {block name="content"}
-<form id="formulario" name="formulario" action="{$smarty.server.SCRIPT_NAME}" method="POST">
+<form  action="{url name=admin_tpl_manager}" method="get">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title">
@@ -96,7 +96,7 @@
                 </li>
                 <li class="separator"></li>
                 <li>
-                    <a href="{$smarty.server.SCRIPT_NAME}?action=config" title="{t}Configurar cachés{/t}">
+                    <a href="{url name=admin_tpl_manager action=config}" title="{t}Configurar cachés{/t}">
                         <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" />
                         <br />
                         {t}Settings{/t}
@@ -323,10 +323,10 @@
                     </td>
                     <td class="left">{$caches[c].size} KB</td>
                     <td class="left">
-                        <a class="btn btn-mini" href="{$smarty.server.PHP_SELF}?action=refresh&amp;cacheid={$caches[c].category}|{$caches[c].resource}&amp;tpl={$caches[c].template}.tpl&amp;{$paramsUri}&amp;uris={$contentUris.$resource|urlencode}"
+                        <a class="btn btn-mini" href="{url name=admin_tpl_manager}?action=refresh&amp;cacheid={$caches[c].category}|{$caches[c].resource}&amp;tpl={$caches[c].template}.tpl&amp;{$paramsUri}&amp;uris={$contentUris.$resource|urlencode}"
                            title="{t}Regenerate cache file{/t}">{t}Regenerate{/t}</a>
                         &nbsp;
-                        <a class="btn btn-mini btn-danger delete-cache-button" href="{$smarty.server.PHP_SELF}?action=delete&amp;cacheid={$caches[c].category}|{$caches[c].resource}&amp;tpl={$caches[c].template}.tpl&amp;{$paramsUri}"
+                        <a class="btn btn-mini btn-danger delete-cache-button" href="{url name=admin_tpl_manager}?action=delete&amp;cacheid={$caches[c].category}|{$caches[c].resource}&amp;tpl={$caches[c].template}.tpl&amp;{$paramsUri}"
                             title="{t}Delete cache file{/t}">{t}Delete{/t}</a>
                     </td>
                 </tr>

@@ -16,7 +16,7 @@
 </div>
 <div class="wrapper-content">
 
-	<form id="formulario" name="formulario" action="{$smarty.server.SCRIPT_NAME}" method="POST">
+	<form id="formulario" name="formulario" action="{url name=admin_tpl_manager}" method="POST">
 
 		<div style="width:700px; margin:0 auto;">
             <table class="listing-table table table-striped">

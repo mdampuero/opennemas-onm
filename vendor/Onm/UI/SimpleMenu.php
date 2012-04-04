@@ -135,9 +135,6 @@ class SimpleMenu
         if (preg_match("@#@", $url)) {
             $url = $url;
         }
-        if (!preg_match("@^http@", $url) && !preg_match("@#@", $url)) {
-            $url = $this->baseUrl."/".$url;
-        }
 
         $target = '';
         if ($external) {

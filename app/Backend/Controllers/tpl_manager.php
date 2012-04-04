@@ -13,8 +13,8 @@
  * @link       http://framework.zend.com/package/PackageName
  */
 
-require_once('../../../bootstrap.php');
-require_once('../../session_bootstrap.php');
+require_once '../bootstrap.php';
+require_once './session_bootstrap.php';
 
 /**
  * Check if the user can do Administrative actions
@@ -45,21 +45,6 @@ $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 function refreshAction(&$tplManager, $cacheid, $tpl,$uri = NULL)
 {
     $tplManager->delete($cacheid, $tpl);
-/*
-    $url = Uri::generate('opinion_author_frontpage',
-							  array(
-									'slug' => $opinions[0]['author_name_slug'],
-									'id' => $opinions[0]['pk_author']
-									));
-    $url .=  Uri::generate( 'article',
-                                array(
-                                    'id' => $article->id,
-                                    'date' => date('Y-m-d', strtotime($article->created)),
-                                    'category' => $article->category_name,
-                                    'slug' => $article->slug,
-                                )
-                            );
-*/
     $matches = array();
 
     preg_match('/(?P<category>[^\|]+)\|(?P<resource>[0-9]+)$/', $cacheid, $matches);
@@ -226,8 +211,8 @@ switch($action) {
                 refreshAction($tplManager, $_REQUEST['cacheid'], $_REQUEST['tpl'], $_REQUEST['uris']);
             }
         }
-
-        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&'.$params);
+        global $generator;
+        Application::forward($generator->generate('admin_tpl_manager'));
 
     } break;
 
@@ -246,8 +231,8 @@ switch($action) {
             }
 
             $tplManager->saveConfig($config);
-
-            Application::forward($_SERVER['PHP_SELF'] . '?action=list');
+            global $generator;
+            Application::forward($generator->generate('admin_tpl_manager'));
         } else {
             $config = $tplManager->dumpConfig();
             $tpl->assign('config', $config);

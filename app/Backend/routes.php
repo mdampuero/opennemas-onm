@@ -14,6 +14,24 @@ $routes->add(
     '/admin'
 );
 $routes->add(
+    'admin_tpl_manager',
+    new Route(
+        '/system/cachemanager',
+        array('_controllerfile' => APP_PATH.'/Backend/Controllers/tpl_manager.php')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_system_settings',
+    new Route(
+        '/system/settings',
+        array('_controllerfile' => APP_PATH.'/Backend/Controllers/system_settings.php')
+    ),
+    '/admin'
+);
+
+$routes->add(
     'admin_frontpage_list',
     new Route(
         '/frontpages',
