@@ -12,8 +12,8 @@ use Onm\Settings as s,
 /**
  * Setup app
 */
-require_once(dirname(__FILE__).'/../../../bootstrap.php');
-require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
+require_once '../bootstrap.php';
+require_once './session_bootstrap.php';
 
 // Check ACL
 Acl::checkorForward('ONM_SETTINGS');
@@ -34,24 +34,22 @@ switch($action) {
     case 'list':
 
         $configurationsKeys = array(
-                                    'site_title', 'site_logo', 'site_description','site_keywords','site_agency', 'site_footer',
-                                    'site_color', 'site_name', 'time_zone','site_language','site_footer',
-                                    'recaptcha', 'google_maps_api_key','google_custom_search_api_key',
-                                    'facebook','facebook_page','facebook_id','twitter_page',
-                                    'google_analytics','piwik', 'section_settings',
-                                    'items_per_page','refresh_interval',
-                                    'webmastertools_google', 'webmastertools_bing'
-                                    );
+            'site_title', 'site_logo', 'site_description','site_keywords','site_agency', 'site_footer',
+            'site_color', 'site_name', 'time_zone','site_language','site_footer',
+            'recaptcha', 'google_maps_api_key','google_custom_search_api_key',
+            'facebook','facebook_page','facebook_id','twitter_page',
+            'google_analytics','piwik', 'section_settings',
+            'items_per_page','refresh_interval',
+            'webmastertools_google', 'webmastertools_bing'
+        );
 
         $configurations = s::get($configurationsKeys);
 
-        $tpl->assign(
-                     array(
-                            'configs'   => $configurations,
-                            'timezones' => \DateTimeZone::listIdentifiers(),
-                            'languages' => array('en_US' => _("English"), 'es_ES' => _("Spanish"), 'gl_ES' => _("Galician")),
-                         )
-                    );
+        $tpl->assign(array(
+            'configs'   => $configurations,
+            'timezones' => \DateTimeZone::listIdentifiers(),
+            'languages' => array('en_US' => _("English"), 'es_ES' => _("Spanish"), 'gl_ES' => _("Galician")),
+        ));
 
         $tpl->display('system_settings/system_settings.tpl');
         break;
@@ -84,12 +82,4 @@ switch($action) {
                             );
         Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
         break;
-
-
-    default: {
-        $httpParams = array(
-                            array('action','list'),
-                            );
-        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($params));
-    } break;
 }

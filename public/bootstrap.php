@@ -13,11 +13,31 @@ $configFile = implode(DIRECTORY_SEPARATOR, array(
     APPLICATION_PATH, 'config', 'config.inc.php'
 ));
 
+use Symfony\Component\HttpFoundation\Request,
+    Symfony\Component\Routing\RouteCollection,
+    Symfony\Component\Routing\Matcher\UrlMatcher,
+    Symfony\Component\Routing\RequestContext,
+    Symfony\Component\Routing\Route;
 
-global $request;
-if (!isset($request)) {
-    $request = Symfony\Component\HttpFoundation\Request::createFromGlobals();
+// Load the available route collection
+$routes = new RouteCollection();
+foreach (glob(APP_PATH.'/*/routes.php') as $routeFile) {
+    require $routeFile;
 }
+
+// Create the request object
+$request = Request::createFromGlobals();
+
+// Create the Request context from the request, useful for the matcher
+$context = new RequestContext();
+$context->fromRequest($request);
+
+// Inialize the url matcher
+$matcher = new UrlMatcher($routes, $context);
+
+//Initialize the url generator
+global $generator;
+$generator = new \Symfony\Component\Routing\Generator\UrlGenerator($routes, $context);
 
 if (file_exists($configFile)) {
 

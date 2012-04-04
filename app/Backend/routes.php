@@ -9,7 +9,7 @@ $routes->add(
     'admin_system_settings',
     new Route(
         '/system/settings',
-        array('_controllerfile' => 'controllers/system_settings/system_settings.php')
+        array('_controllerfile' => APP_PATH.'/Backend/Controllers/system_settings.php')
     ),
     '/admin'
 );
@@ -33,7 +33,7 @@ $routes->add(
     'admin_login_form',
     new Route(
         '/login',
-        array('_controllerfile' => APP_PATH.'/backend/Controllers/login.php')
+        array('_controllerfile' => APP_PATH.'/Backend/Controllers/login.php')
     ),
     '/admin'
 );
@@ -41,7 +41,7 @@ $routes->add(
     'admin_login',
     new Route(
         '/login',
-        array('_controllerfile' => APP_PATH.'/backend/Controllers/login.php', 'action' => 'login'),
+        array('_controllerfile' => APP_PATH.'/Backend/Controllers/login.php', 'action' => 'login'),
         array('_method' => 'POST')
     ),
     '/admin'
@@ -50,7 +50,7 @@ $routes->add(
     'admin_logout',
     new Route(
         '/logout',
-        array('_controllerfile' => APP_PATH.'/backend/Controllers/logout.php')
+        array('_controllerfile' => APP_PATH.'/Backend/Controllers/logout.php')
     ),
     '/admin'
 );
@@ -58,7 +58,7 @@ $routes->add(
     'admin_welcome',
     new Route(
         '/',
-        array('_controllerfile' => APP_PATH.'/backend/Controllers/wellcome.php')
+        array('_controllerfile' => APP_PATH.'/Backend/Controllers/wellcome.php')
     ),
     '/admin'
 );

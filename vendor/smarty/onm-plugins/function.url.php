@@ -9,14 +9,19 @@ function smarty_function_url($params, &$smarty) {
     $url = '';
 
     global $generator;
-    if (array_key_exists('name', $params)) {
-        $name = $params['name'];
-        unset($params['name']);
-        try {
-            $url = $generator->generate($name, $params);
-        } catch (\Symfony\Component\Routing\Exception\RouteNotFoundException $e) {
-            $url = 'not-found '.$params['name'];
+    if (is_object($generator)) {
+        if (array_key_exists('name', $params)) {
+            $name = $params['name'];
+            $absolute = $params['absolute'];
+            unset($params['name'], $params['absolute']);
+            try {
+                $url = $generator->generate($name, $params, $absolute);
+            } catch (\Symfony\Component\Routing\Exception\RouteNotFoundException $e) {
+                $url = '#not-found-'.$params['name'];
+            }
         }
+    } else {
+        $url = '#url-generator-not-available';
     }
 
     return $url;

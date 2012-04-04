@@ -98,7 +98,7 @@
 
     {render_messages}
 
-    <form action="{$smarty.server.SCRIPT_NAME}" enctype="multipart/form-data" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
+    <form action="{url name="admin_system_settings"}" enctype="multipart/form-data" method="post">
         <div id="system-settings-tabbed" class="tabs">
             <ul>
                 <li><a href="#general">{t}General{/t}</a></li>
