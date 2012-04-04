@@ -29,7 +29,7 @@ if (!isset($action)) {
     $action = filter_input( INPUT_GET, 'action' , FILTER_SANITIZE_STRING, array('options' => array('default' => 'list')) );
 }
 
-switch($action) {
+switch ($action) {
 
     case 'list':
 
@@ -77,9 +77,6 @@ switch($action) {
         }
 
         m::add(_('Settings saved.'), m::SUCCESS);
-        $httpParams = array(
-                            array('action'=>'list'),
-                            );
-        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
+        Application::forward(url('admin_system_settings', array(), true));
         break;
 }
