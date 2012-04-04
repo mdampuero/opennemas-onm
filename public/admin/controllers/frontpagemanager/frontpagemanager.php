@@ -18,6 +18,7 @@ $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
 require_once __DIR__.'/../../controllers/utils_content.php';
 
 // Fetch request variables
+global $request;
 $action   = $request->query->filter('action', 'list', FILTER_SANITIZE_STRING);
 $page     = $request->query->filter('page', 1, FILTER_SANITIZE_NUMBER_INT);
 $category = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);

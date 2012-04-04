@@ -23,6 +23,15 @@ $routes->add(
 );
 
 $routes->add(
+    'admin_system_sqllog',
+    new Route(
+        '/system/sql-error-log',
+        array('_controllerfile' => APP_PATH.'/Backend/Controllers/sql_error_log.php')
+    ),
+    '/admin'
+);
+
+$routes->add(
     'admin_system_settings',
     new Route(
         '/system/settings',

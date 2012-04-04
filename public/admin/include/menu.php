@@ -234,7 +234,7 @@ $menuXml = '<?xml version="1.0"?>
             module_name="SETTINGS_MANAGER"
             title="'.htmlspecialchars(_("System settings"), ENT_QUOTES).'"
             id="settings_manager"
-            link="'.$generator->generate("admin_system_settings", array(), true).'"
+            link="'.url("admin_system_settings", array(), true).'"
             privilege="ONM_SETTINGS" />
 
             <submenu title="'.htmlspecialchars(_("Users & Groups"), ENT_QUOTES).'" id="user-group_manager" link="#"
@@ -266,7 +266,7 @@ $menuXml = '<?xml version="1.0"?>
             module_name="CACHE_MANAGER"
             title="'.htmlspecialchars(_("Cache manager"), ENT_QUOTES).'"
             id="cache_manager"
-            link="'.$generator->generate("admin_tpl_manager", array(), true).'"
+            link="'.url("admin_tpl_manager", array(), true).'"
             privilege="CACHE_ADMIN" />
         <node
             module_name="PHP_CACHE_MANAGER"
@@ -279,7 +279,7 @@ $menuXml = '<?xml version="1.0"?>
             module_name="LOG_SQL"
             title="'.htmlspecialchars(_("SQL error log"), ENT_QUOTES).'"
             id="log_sql"
-            link="/admin/controllers/system_information/sql_error_log.php"
+            link="'.url("admin_system_sqllog", array(), true).'"
             privilege="ONLY_MASTERS" />
         <node
             title="'.htmlspecialchars(_("Support and Help"), ENT_QUOTES).'"

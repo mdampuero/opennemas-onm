@@ -4,10 +4,9 @@ use Onm\Message as m;
 /**
  * Setup app
 */
-require_once('../../../bootstrap.php');
-require_once('../../session_bootstrap.php');
+require_once('./session_bootstrap.php');
 
- 
+
 if(!Acl::isMaster()) {
     m::add("You don't have permissions");
     Application::forward('/admin/');
