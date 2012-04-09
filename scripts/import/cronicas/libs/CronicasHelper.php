@@ -253,6 +253,25 @@ class CronicasHelper {
         }
     }
 
+
+     public function updateCover($contentID, $coverId)
+    {
+        if(isset($contentID) && isset($coverId)) {
+            $sql = 'UPDATE `albums` SET `cover_id`=?  WHERE pk_album=?';
+
+            $values = array($coverId, $contentID);
+            $views_update_sql = $GLOBALS['application']->conn->Prepare($sql);
+            $rss = $GLOBALS['application']->conn->Execute($views_update_sql,
+                                                          $values);
+            if (!$rss) {
+                echo $GLOBALS['application']->conn->ErrorMsg();
+            }
+
+        } else {
+            echo "Please provide a contentID and coverid to update it.";
+        }
+    }
+
     /**
      * Load properties in a object.
      *

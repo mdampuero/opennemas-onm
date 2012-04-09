@@ -578,7 +578,7 @@ class CronicasToOnm {
                             'category' => '0',
                             'category_name' => 'letter',
                             'email' => '',
-                            'body' => $data['body'],
+                            'body' => $rs->fields['body'],
                             'metadata' =>  StringUtils::get_tags($rs->fields['author']).', '.$rs->fields['metadata'].', opinion',
                             'description' => 'opinion '.$rs->fields['author'].' '.strip_tags(substr($data['body'],0,100)),
                             'author' => $rs->fields['author'],
@@ -587,7 +587,7 @@ class CronicasToOnm {
                             'in_home' => $rs->fields['in_home'],
                             'content_status' => $rs->fields['content_status'],
                             'created' => $rs->fields['created'],
-                            'starttime' => $rs->fields['startime'],
+                            'starttime' => $rs->fields['created'],
                             'changed' => $rs->fields['changed'],
                             'fk_user' => USER_ID,
                             'fk_publisher' => USER_ID,
@@ -740,6 +740,7 @@ class CronicasToOnm {
                     if(!empty($albumID) ) {
                         $this->helper->insertRefactorID($originalAlbumID, $albumID->id, 'album');
                         $this->helper->updateViews($albumID->id, $rs->fields['views'] );
+                        $this->helper->updateCover($albumID->id,  $album_photos_id[1] );
                     }else{
                         $errorMsg = 'Problem '.$originalAlbumID.' - '.$title;
                         $this->helper->log('insert album : '.$errorMsg);
