@@ -54,14 +54,14 @@ require SITE_PATH.'../config/config.inc.php';
 
 $cronicasImporter = new CronicasToOnm($configOldDB,$configNewDB);
 
- $cronicasImporter->helper->sqlExecute(); // create translated tables
-//$cronicasImporter->helper->sqlClearData(); //delete old data in tables
+ //$cronicasImporter->helper->sqlExecute(); // create translated tables
+ //$cronicasImporter->helper->sqlClearData(); //delete old data in tables
 
 $cronicasImporter->importCategories();
 
- /*$cronicasImporter->importImagesArticles();
+$cronicasImporter->importImagesArticles();
 
-$limit = ' LIMIT 4500, 5000';
+$limit = ' LIMIT 0, 15000';
 $cronicasImporter->importArticles($limit);
 
 $cronicasImporter->importAuthorsOpinion();
@@ -71,19 +71,19 @@ $cronicasImporter->importPhotoAuthorsOpinion();
 $cronicasImporter->importOpinions();
 
 $cronicasImporter->importLetters();
-*/
 
-//$cronicasImporter->importGalleries();
+$cronicasImporter->importSpecials();
+
+$cronicasImporter->importGalleries();
 
 $cronicasImporter->importAlbums();
-/*
- * $cronicasImporter->importSpecials();
-
-
 
 $cronicasImporter->importAdvertisements();
- * $cronicasImporter->importRelatedContents();
-*/
+ 
+$cronicasImporter->importAttachments();
+
+//$cronicasImporter->importRelatedContents();
+
 printf("OpenNemas database is ok for Cronicas \n");
 
 $cronicasImporter->helper->printResults();

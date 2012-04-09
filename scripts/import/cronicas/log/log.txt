@@ -1,0 +1,35 @@
+0 - Problem copying attachment  AyudasMujeres.pdf ->  ayudasmujeres.pdf 
+/var/www/cronicas/media/files/cronicas/AyudasMujeres.pdf, /var/www/onm-instance/public/media/cronicas/files/2012/04/04/ayudasmujeres.pdf 
+ insert att : Problem 71 - bulletin.tar.gzinsert att : Problem 72 - bulletin.tar.gz1 - Problem copying attachment  Normal ->  normal 
+/var/www/cronicas/media/files//Normal, /var/www/onm-instance/public/media/cronicas/files/2012/04/04/normal 
+ 2 - Problem copying attachment  BA20081022grafico.pdf ->  ba20081022grafico.pdf 
+/var/www/cronicas/media/files/cronicas/BA20081022grafico.pdf, /var/www/onm-instance/public/media/cronicas/files/2012/04/04/ba20081022grafico.pdf 
+ 3 - Problem copying attachment  BA20081022planemigrastur.doc ->  ba20081022planemigrastur.doc 
+/var/www/cronicas/media/files/cronicas/BA20081022planemigrastur.doc, /var/www/onm-instance/public/media/cronicas/files/2012/04/04/ba20081022planemigrastur.doc 
+ 4 - Problem copying attachment  MA20090316Madrid.pdf ->  ma20090316madrid.pdf 
+/var/www/cronicas/media/files//MA20090316Madrid.pdf, /var/www/onm-instance/public/media/cronicas/files/2012/04/04/ma20090316madrid.pdf 
+ 5 - Problem copying attachment  CB20090402Nacionalidad.pdf ->  cb20090402nacionalidad.pdf 
+/var/www/cronicas/media/files//CB20090402Nacionalidad.pdf, /var/www/onm-instance/public/media/cronicas/files/2012/04/04/cb20090402nacionalidad.pdf 
+ 6 - Problem copying attachment  MA20090402Nacionalidad.pdf ->  ma20090402nacionalidad.pdf 
+/var/www/cronicas/media/files//MA20090402Nacionalidad.pdf, /var/www/onm-instance/public/media/cronicas/files/2012/04/04/ma20090402nacionalidad.pdf 
+ 7 - Problem copying attachment  BA20090402Nacionalidad.pdf ->  ba20090402nacionalidad.pdf 
+/var/www/cronicas/media/files/cronicas/BA20090402Nacionalidad.pdf, /var/www/onm-instance/public/media/cronicas/files/2012/04/04/ba20090402nacionalidad.pdf 
+ 8 - Problem copying attachment  AN20090402Nacionalidad.pdf ->  an20090402nacionalidad.pdf 
+/var/www/cronicas/media/files/galicia/AN20090402Nacionalidad.pdf, /var/www/onm-instance/public/media/cronicas/files/2012/04/04/an20090402nacionalidad.pdf 
+ 9 - Problem copying attachment  MA20090618Nacionalidad.pdf ->  ma20090618nacionalidad.pdf 
+/var/www/cronicas/media/files//MA20090618Nacionalidad.pdf, /var/www/onm-instance/public/media/cronicas/files/2012/04/04/ma20090618nacionalidad.pdf 
+ 10 - Problem copying attachment  AN20100318ssanadulucia.pdf ->  an20100318ssanadulucia.pdf 
+/var/www/cronicas/media/files/galicia/AN20100318ssanadulucia.pdf, /var/www/onm-instance/public/media/cronicas/files/2012/04/04/an20100318ssanadulucia.pdf 
+ 11 - Problem copying attachment  AN20100318feria.pdf ->  an20100318feria.pdf 
+/var/www/cronicas/media/files/galicia/AN20100318feria.pdf, /var/www/onm-instance/public/media/cronicas/files/2012/04/04/an20100318feria.pdf 
+ insert att : Problem 470 - Plan Integral de Apoyo a la Ciudadanía Castellana y Leonesa en el Exterior y a la Emigración de Retorno 2009-2012  12 - Problem copying attachment  MA20110323CARTA SOLICITUD VOTO CERA.pdf ->  ma20110323carta-solicitud-voto-cera.pdf 
+/var/www/cronicas/media/files//MA20110323CARTA SOLICITUD VOTO CERA.pdf, /var/www/onm-instance/public/media/cronicas/files/2012/04/04/ma20110323carta-solicitud-voto-cera.pdf 
+ 13 - Problem copying attachment  MA20110511ppmadrid.pdf ->  ma20110511ppmadrid.pdf 
+/var/www/cronicas/media/files//MA20110511ppmadrid.pdf, /var/www/onm-instance/public/media/cronicas/files/2012/04/04/ma20110511ppmadrid.pdf 
+ 14 - Problem copying attachment  CB20110518carta.pdf ->  cb20110518carta.pdf 
+/var/www/cronicas/media/files//CB20110518carta.pdf, /var/www/onm-instance/public/media/cronicas/files/2012/04/04/cb20110518carta.pdf 
+ insert att : Problem 498 - Instrucción Nacionalidad15 - Problem copying attachment  MA20111223Especialmadrid.pdf ->  ma20111223especialmadrid.pdf 
+/var/www/cronicas/media/files//MA20111223Especialmadrid.pdf, /var/www/onm-instance/public/media/cronicas/files/2012/04/04/ma20111223especialmadrid.pdf 
+ 16 - Problem copying attachment  AN20120216SolicitudAndalucia.pdf ->  an20120216solicitudandalucia.pdf 
+/var/www/cronicas/media/files/galicia/AN20120216SolicitudAndalucia.pdf, /var/www/onm-instance/public/media/cronicas/files/2012/04/04/an20120216solicitudandalucia.pdf 
+ 

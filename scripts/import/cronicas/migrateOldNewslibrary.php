@@ -52,15 +52,12 @@ require SITE_PATH.'../config/config.inc.php';
 */
 
 
-$migrator = new migrationNewslibrary($configOldDB,$configNewDB);
-
-$migrator->helper->sqlExecute(); // create translated tables
+$migrator = new migrationNewslibrary($configNewDB);
 
 $migrator->importCategories();
 
-$migrator->migrateImagesPath();
-$migrator->migrateUrls();
+//$migrator->migrateAllDirs();
+$migrator->migrateTest();
 
 printf("OpenNemas newslibrary is ok for Cronicas \n");
-
-$migrator->helper->printResults();
+ 
