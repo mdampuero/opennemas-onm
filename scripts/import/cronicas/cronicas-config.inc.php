@@ -14,7 +14,7 @@ $configOldDB = array(
 
 $configNewDB = array(
                           'host' => 'localhost',
-                          'database' => 'onm-cronicas-bak1',
+                          'database' => 'onm-cronicas',
                           'user' => 'root',
                           'password' => 'root' ,
                           'type' => 'mysql' ,
@@ -28,3 +28,5 @@ define('INSTANCE_UNIQUE_NAME', 'cronicas');
 define('USER_ID','135');
 
 define('OLD_MEDIA','/var/www/cronicas/media/');
+
+define('OLD_LIBRARY','/var/www/cronicas/media/library');

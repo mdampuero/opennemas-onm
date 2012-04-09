@@ -15,11 +15,11 @@ class CronicasHelper {
 
     public $logFile = "";
 
-    public function __construct ()
+    public function __construct ($logName ='log.txt')
     {
-        $this->logFile = __DIR__."/../log/log.txt";
+        $this->logFile = __DIR__."/../log/".$logName;
 
-        $handle = fopen( $this->logFile , "wb");
+        $handle = fopen( $this->logFile , "a");
         fclose($handle);
     }
 
@@ -102,11 +102,11 @@ class CronicasHelper {
     public function sqlClearData() {
 
         //emtpy tables
-        $tables = array('articles, albums, albums_photos,
-            attachments, authors, authors_imgs, books, commets,
-            content_positions, kiosko, opinions, pclave, photos, polls, poll_items,
-            ratings, related_contents, specials, special_contents, videos, votes,
-            translation_ids, author_opinion, images_translated');
+        $tables = array('articles', 'albums', 'albums_photos',
+            'attachments', 'authors', 'author_imgs', 'books', 'comments',
+            'content_positions', 'kioskos', 'opinions', 'pclave', 'photos', 'polls', 'poll_items',
+            'ratings', 'related_contents', 'specials', 'special_contents', 'videos', 'votes',
+            'translation_ids', 'author_opinion', 'images_translated');
 
         foreach($tables as $table) {
             $sql="TRUNCATE TABLE {$table}";
@@ -116,14 +116,19 @@ class CronicasHelper {
             }
         }
 
-        $sql = "SELECT pk_content FROM contents WHERE content_type != 2 AND content_type != 12 AND content_type != 13";
+        $sql = "SELECT pk_content FROM contents WHERE fk_content_type = 2 OR fk_content_type = 12 OR fk_content_type = 13";
         $rss = $GLOBALS['application']->conn->Execute($sql);
-        $result= $rs->getArray();
-        $contents = explode(',', $result);
 
-        $sql = "DELETE * FROM contents WHERE pk_content IN ($contents)";
+        $result= $rss->GetArray();
+        $contents= '';
+        foreach ($result as $res) {
+            $contents .= $res['pk_content'] .', ';
+        }
+
+        $sql = "DELETE FROM contents WHERE pk_content NOT IN ($contents 0)";
+
         $rss = $GLOBALS['application']->conn->Execute($sql);
-        $sql = "DELETE * FROM contents_categories WHERE pk_fk_content IN ($contents)";
+        $sql = "DELETE FROM contents_categories WHERE pk_fk_content NOT IN  ($contents 0)";
         $rss = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rss) {
@@ -230,6 +235,43 @@ class CronicasHelper {
         }
     }
 
+    public function updateParams($contentID, $views)
+    {
+        if(isset($contentID) && isset($views)) {
+            $sql = 'UPDATE `contents` SET `params`=?  WHERE pk_content=?';
+
+            $values = array($params, $contentID);
+            $views_update_sql = $GLOBALS['application']->conn->Prepare($sql);
+            $rss = $GLOBALS['application']->conn->Execute($views_update_sql,
+                                                          $values);
+            if (!$rss) {
+                echo $GLOBALS['application']->conn->ErrorMsg();
+            }
+
+        } else {
+            echo "Please provide a contentID and views to update it.";
+        }
+    }
+
+
+     public function updateCover($contentID, $coverId)
+    {
+        if(isset($contentID) && isset($coverId)) {
+            $sql = 'UPDATE `albums` SET `cover_id`=?  WHERE pk_album=?';
+
+            $values = array($coverId, $contentID);
+            $views_update_sql = $GLOBALS['application']->conn->Prepare($sql);
+            $rss = $GLOBALS['application']->conn->Execute($views_update_sql,
+                                                          $values);
+            if (!$rss) {
+                echo $GLOBALS['application']->conn->ErrorMsg();
+            }
+
+        } else {
+            echo "Please provide a contentID and coverid to update it.";
+        }
+    }
+
     /**
      * Load properties in a object.
      *
@@ -277,6 +319,17 @@ class CronicasHelper {
 
     static public function printResults() {
 
+        echo "\n AUTHORS OPINION \n";
+        $sql = "SELECT count(*) as total FROM `author_opinion` ";
+        $rs = $GLOBALS['application']->conn->Execute($count_sql);
+
+        if (!$rs) {
+            echo $GLOBALS['application']->conn->ErrorMsg();
+        } else {
+            echo "There are imported {$rs->fields['total']}  authors opinion.\n";
+            $rs->Close(); # optional
+        }
+        echo "\n CONTENTS \n";
         $sql = "SELECT type , count( * ) AS `total` FROM `translation_ids` GROUP BY type";
 
         $count_sql = $GLOBALS['application']->conn->Prepare($sql);
@@ -287,6 +340,20 @@ class CronicasHelper {
         } else {
 
             while (!$rs->EOF) {
+                echo "There are imported {$rs->fields['total']} type {$rs->fields['type']}.\n";
+                $rs->MoveNext();
+            }
+            $rs->Close(); # optional
+        }
+        echo "\n IMAGES \n";
+        $sql = "SELECT type , count( * ) AS `total` FROM `images_translated` GROUP BY type";
+
+        $count_sql = $GLOBALS['application']->conn->Prepare($sql);
+        $rs = $GLOBALS['application']->conn->Execute($count_sql);
+        if (!$rs) {
+            echo $GLOBALS['application']->conn->ErrorMsg();
+        } else {
+             while (!$rs->EOF) {
                 echo "There are imported {$rs->fields['total']} type {$rs->fields['type']}.\n";
                 $rs->MoveNext();
             }
