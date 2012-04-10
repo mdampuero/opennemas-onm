@@ -7,3 +7,6 @@
 [submodule "vendor/Symfony/Component/HttpFoundation"]
 	path = vendor/Symfony/Component/HttpFoundation
 	url = https://github.com/symfony/HttpFoundation
+[submodule "vendor/Symfony/Component/Routing"]
+	path = vendor/Symfony/Component/Routing
+	url = https://github.com/symfony/Routing
