@@ -141,7 +141,7 @@ class Special extends Content {
              $this->saveItems($data);
         }
 
-        return(true);
+        return $this->id;
     }
 
     public function read($id) {

@@ -60,10 +60,11 @@ switch($action) {
         Acl::checkOrForward('ALBUM_ADMIN');
         $configurations = s::get('album_settings');
 
+        $items_page = s::get('items_per_page') ?: 20;
         if (empty($page)) {
-            $limit = "LIMIT ".(ITEMS_PAGE+1);
+            $limit= "LIMIT ".($items_page+1);
         } else {
-            $limit = "LIMIT ".($page-1) * ITEMS_PAGE .', '.(ITEMS_PAGE+1);
+            $limit= "LIMIT ".($page-1) * $items_page .', '.$items_page;
         }
 
         $cm = new ContentManager();
@@ -102,7 +103,7 @@ switch($action) {
 
         $pagination = \Onm\Pager\SimplePager::getPagerUrl(array(
             'page'  => $page,
-            'items' => ITEMS_PAGE,
+            'items' => $items_page,
             'total' => count($albums),
             'url'   => $_SERVER['SCRIPT_NAME'].'?action=list&category='.$category
         ));

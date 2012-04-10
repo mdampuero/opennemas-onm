@@ -278,7 +278,7 @@ class Album extends Content
     public function _saveAttachedPhotos($data)
     {
         $albumPhoto = new AlbumPhoto;
-        if (isset($data['album_photos_id'])) {
+        if (isset($data['album_photos_id']) && !empty($data['album_photos_id'])) {
             foreach ($data['album_photos_id'] as $position => $photoID) {
                 $photoFooter = filter_var($data['album_photos_footer'][$position], FILTER_SANITIZE_STRING);
                 $sql = "INSERT INTO albums_photos "
@@ -286,7 +286,7 @@ class Album extends Content
                      ." VALUES (?,?,?,?)";
 
                 $values = array($this->id, $photoID, $position, $photoFooter);
-
+ 
                 $rs = $GLOBALS['application']->conn->Execute($sql, $values);
 
                 if ($rs === false) {

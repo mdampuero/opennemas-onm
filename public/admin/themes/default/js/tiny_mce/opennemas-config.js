@@ -272,6 +272,11 @@ OpenNeMas.tinyMceFunctions = {
         }
     },
 
+    saveTiny: function(refId) {
+        var ed = tinyMCE.get(refId);
+        ed.save();
+    },
+
     destroy: function(refId) {
         var ed = tinyMCE.get(refId);
         if(!ed.isHidden()) {

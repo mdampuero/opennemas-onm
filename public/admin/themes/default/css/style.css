@@ -1665,10 +1665,16 @@ div.action-bar .right{
 }
 
 .article-resource-image, .article-resource-image-info {
-    width: 270px;
+    width: 260px;
     float:left;
     display:inline-block;
 }
+
+.article-resource-image-info {
+     width: 250px;
+    margin-left:10px;
+}
+
 .resource-container .article-resource-image img {
     width:100%;
     background:#ccc;
