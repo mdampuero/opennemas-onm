@@ -625,7 +625,8 @@ if (isset($_REQUEST['action']) ) {
             }elseif ($_SESSION['desde'] == 'efe_press_import') {
                 Application::forward('controllers/agency_importer/efe.php');
             }elseif ($_SESSION['desde'] == 'list') {
-                Application::forward($_SERVER['SCRIPT_NAME'].'?action='.$_SESSION['desde'].'&category='.$_SESSION['_from'].'&page='.$_REQUEST['page']);
+               // Application::forward($_SERVER['SCRIPT_NAME'].'?action='.$_SESSION['desde'].'&category='.$_SESSION['_from'].'&page='.$_REQUEST['page']);
+                 Application::forward('controllers/frontpagemanager/frontpagemanager.php?action='.$_SESSION['desde'].'&category='.$_SESSION['_from'].'&page='.$_REQUEST['page']);
             }elseif ($_SESSION['desde'] == 'list_hemeroteca') {
                 Application::forward($_SERVER['SCRIPT_NAME'].'?action='.$_SESSION['desde'].'&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
             }
