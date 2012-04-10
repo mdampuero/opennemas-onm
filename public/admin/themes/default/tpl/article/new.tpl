@@ -6,6 +6,7 @@
     {script_tag src="/jquery/jquery.colorbox-min.js"}
     {script_tag src="/onm/jquery.datepicker.js"}
     {script_tag src="/utilsarticle.js"}
+    {script_tag src="/jquery-onm/jquery.article.js"}
     {script_tag src="/editables.js"}
     {script_tag src="/utilsGallery.js"}
     {script_tag src="/swfobject.js"}
@@ -550,7 +551,7 @@
             <span id="savePreviewText"></span>
         </div>
             <input type="hidden" id="action" name="action" value="" />
-            <input type="hidden" name="id" id="id" value="{$id|default:""}" />
+            <input type="hidden" name="id" id="id" value="{$article->id|default:""}" />
         </div>
     </div>
 </form>
