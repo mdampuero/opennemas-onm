@@ -66,10 +66,12 @@ switch($action) {
 
     case 'list':
         Acl::checkOrForward('SPECIAL_ADMIN');
+
+        $items_page = s::get('items_per_page') ?: 20;
         if (empty($page)) {
-            $limit= "LIMIT ".(ITEMS_PAGE+1);
+            $limit= "LIMIT ".($items_page+1);
         } else {
-            $limit= "LIMIT ".($page-1) * ITEMS_PAGE .', '.ITEMS_PAGE;
+            $limit= "LIMIT ".($page-1) * $items_page .', '.$items_page;
         }
 
         if ($category == 'widget') {
@@ -90,7 +92,7 @@ switch($action) {
         }
 
         $params = array(
-            'page'=>$page, 'items'=>ITEMS_PAGE,
+            'page'=>$page, 'items'=>$items_page,
             'total' => count($specials),
             'url'=>$_SERVER['SCRIPT_NAME'].'?action=list&category='.$category
         );
