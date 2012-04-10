@@ -46,6 +46,7 @@ class Dispatcher
             if (array_key_exists('_controllerfile', $parameters)) {
                 require $parameters['_controllerfile'];
             } else {
+                // Experimental
                 $controller = new $parameters['_controller']($this->request);
             }
         } catch (\Symfony\Component\Routing\Exception\ResourceNotFoundException $e) {

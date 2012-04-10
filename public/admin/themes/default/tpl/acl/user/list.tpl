@@ -20,19 +20,22 @@
 
 
 {block name="content"}
-<form action="{$smarty.server.PHP_SELF}" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
+<script type="text/javascript">
+	alert('mdelete not implemented, delete elements doesnt work. Should be ported to a modal dialog.');
+</script>
+<form action="{url name=admin_user_list}" method="get">
 	<div class="top-action-bar clearfix">
 		<div class="wrapper-content">
 			<div class="title"><h2>{t}User manager{/t}</h2></div>
 			<ul class="old-button">
 				<li>
-					<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" title="Eliminar">
-						<img src="{$params.IMAGE_DIR}trash.png" title="Eliminar" alt="Eliminar" ><br />Eliminar
+					<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" title="{t}Delete{/t}">
+						<img src="{$params.IMAGE_DIR}trash.png" title="{t}Delete{/t}" alt="{t}Delete{/t}" ><br />{t}Delete{/t}
 					</a>
 				</li>
 				<li class="separator"></li>
 				<li>
-					<a href="{$smarty.server.PHP_SELF}?action=new&amp;id=0" accesskey="N" tabindex="1">
+					<a href="{url name=admin_users_new}" accesskey="N" tabindex="1">
 						<img src="{$params.IMAGE_DIR}user_add.png" title="Nuevo" alt="Nuevo"><br />{t}New user{/t}
 					</a>
 				</li>
@@ -102,7 +105,7 @@
 					<td class="right">
 						<ul class="action-buttons">
 							<li>
-								<a href="{$smarty.server.PHP_SELF}?action=read&amp;id={$user->id}&amp;page={$page|default:0}" title="{t}Edit user{/t}">
+								<a href="{url name=admin_user_show id=$user->id page=$page|default:0}" title="{t}Edit user{/t}">
 									<img src="{$params.IMAGE_DIR}edit.png" alt="{t}Edit user{/t}"/>
 								</a>
 							</li>

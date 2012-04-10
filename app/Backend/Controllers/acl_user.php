@@ -6,9 +6,8 @@ use Onm\Settings as s,
 /**
  * Setup application
 */
-require_once('../../../bootstrap.php');
-require_once('../../session_bootstrap.php');
-
+require_once '../bootstrap.php';
+require_once 'session_bootstrap.php';
 
 /**
  * Set up view
@@ -17,19 +16,20 @@ $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 
 $ccm = new ContentCategoryManager();
 
+// Initialize request parameters
+global $request;
+$action = $request->request->filter('action', null, FILTER_SANITIZE_STRING);
+if (empty($action)) {
+    $action = $request->query->filter('action', 'list', FILTER_SANITIZE_STRING);
+}
+// var_dump($action);die();
+
 if (!array_key_exists('page', $_REQUEST)) {
     $page = 0;
 } else {
     $page = $_REQUEST['page'] ?:0;
 }
-
-$action = filter_input( INPUT_POST, 'action' , FILTER_SANITIZE_STRING );
-if (!isset($action)) {
-    $action = filter_input( INPUT_GET, 'action' , FILTER_SANITIZE_STRING, array('options' => array('default' => 'list')) );
-}
-
-
-switch($action) {
+switch ($action) {
     case 'list':
         Acl::checkOrForward('USER_ADMIN');
 
@@ -77,10 +77,11 @@ switch($action) {
 
     case 'read': {
         //user can modify his data
-        if ($_REQUEST['id'] != $_SESSION['userid']) {
-            Acl::checkOrForward('USER_UPDATE');
-        }
-        $user = new User( $_REQUEST['id'] );
+        $id = $request->query->getDigits('id');
+        // Check if the user is the same as the one that we want edit or if we have
+        // permissions for editting other user information.
+        if ($id != $_SESSION['userid']) { Acl::checkOrForward('USER_UPDATE'); }
+        $user = new User($id);
 
         $user_group = new UserGroup();
         $tpl->assign('user', $user);

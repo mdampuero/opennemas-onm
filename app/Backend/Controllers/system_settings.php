@@ -24,9 +24,10 @@ Acl::checkorForward('ONM_SETTINGS');
 $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 
 // Initialize request parameters
-$action = filter_input( INPUT_POST, 'action' , FILTER_SANITIZE_STRING );
-if (!isset($action)) {
-    $action = filter_input( INPUT_GET, 'action' , FILTER_SANITIZE_STRING, array('options' => array('default' => 'list')) );
+global $request;
+$action = $request->request->filter('action', null, FILTER_SANITIZE_STRING);
+if (empty($action)) {
+    $action = $request->request->filter('action', 'list', FILTER_SANITIZE_STRING);
 }
 
 switch ($action) {

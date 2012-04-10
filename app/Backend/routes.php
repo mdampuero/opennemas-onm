@@ -6,6 +6,40 @@ use Symfony\Component\HttpFoundation\Request,
     Symfony\Component\Routing\Route;
 
 $routes->add(
+    'admin_user_list',
+    new Route(
+        '/accesscontrol/users',
+        array('_controllerfile' => APP_PATH.'/Backend/Controllers/acl_user.php')
+    ),
+    '/admin'
+);
+$routes->add(
+    'admin_user_save',
+    new Route(
+        '/accesscontrol/user/{id}',
+        array('_controllerfile' => APP_PATH.'/Backend/Controllers/acl_user.php', 'action' => 'save'), array(
+            '_method' => 'POST',
+        )
+    ),
+    '/admin'
+);
+$routes->add(
+    'admin_user_show',
+    new Route(
+        '/accesscontrol/user/{id}',
+        array('_controllerfile' => APP_PATH.'/Backend/Controllers/acl_user.php', 'action' => 'read')
+    ),
+    '/admin'
+);
+$routes->add(
+    'admin_user_new',
+    new Route(
+        '/accesscontrol/users/new',
+        array('_controllerfile' => APP_PATH.'/Backend/Controllers/acl_user.php', 'action' => 'new')
+    ),
+    '/admin'
+);
+$routes->add(
     'admin_system_settings',
     new Route(
         '/system/settings',
