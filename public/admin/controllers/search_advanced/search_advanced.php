@@ -127,6 +127,7 @@ switch ($action) {
         );
 
 
+
         if( isset($arrayResults) && !empty($arrayResults)){
             $arrayResults = cSearch::Paginate($Pager, $arrayResults, "id", 10);
         }
@@ -159,16 +160,31 @@ switch ($action) {
     break;
 
     case 'content-provider':
-        $searchString = '';
 
-        if (($searchString = $request->get('search_string')) != '') {
-            // Add logic here to calculte the results variable
-            $results= array();
-            for ($i=0; $i < 2; $i++) {
-                $element = new stdClass();
-                $element->id   = $i;
-                $element->name = 'title '.$i;
-                $results []= $element;
+        $searchString = $request->query->filter('search_string', '', FILTER_SANITIZE_STRING);
+        if ($searchString != '') {
+
+            $searchStringArray = array_map(function($element) {
+                return trim($element);
+            }, explode(',', $searchString));
+
+            $searcher = cSearch::getInstance();
+            $matchString = '';
+            foreach ($searchStringArray as $key) {
+                $matchString []= $searcher->DefineMatchOfSentence($key);
+            }
+            $matchString = implode($matchString, ' AND ');
+
+            $sql = "SELECT pk_content, fk_content_type FROM contents "
+                  ."WHERE ".$matchString;
+            $rs = $GLOBALS['application']->conn->Execute($sql);
+
+            $results = array();
+            if ($rs !== false) {
+                while (!$rs->EOF) {
+                    $results []= new Content($rs->fields['pk_content']);
+                    $rs->MoveNext();
+                }
             }
             $tpl->assign('results', $results);
         }
