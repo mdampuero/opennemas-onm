@@ -3,14 +3,17 @@
 {block name="header-js" append}
     {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
     {script_tag src="/jquery/jquery-ui-sliderAccess.js"}
+    {script_tag src="/jquery/jquery.colorbox-min.js"}
     {script_tag src="/onm/jquery.datepicker.js"}
     {script_tag src="/utilsarticle.js"}
+    {script_tag src="/jquery-onm/jquery.article.js"}
     {script_tag src="/editables.js"}
     {script_tag src="/utilsGallery.js"}
     {script_tag src="/swfobject.js"}
 {/block}
 
 {block name="header-css" append}
+    {css_tag href="/jquery/colorbox.css" media="screen"}
     <style type="text/css">
     label {
         display:block;
@@ -548,7 +551,7 @@
             <span id="savePreviewText"></span>
         </div>
             <input type="hidden" id="action" name="action" value="" />
-            <input type="hidden" name="id" id="id" value="{$id|default:""}" />
+            <input type="hidden" name="id" id="id" value="{$article->id|default:""}" />
         </div>
     </div>
 </form>

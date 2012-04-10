@@ -47,6 +47,11 @@ $loader->registerNamespaces(array(
     'Panorama'          => __DIR__.'/../vendor/Panorama',
 ));
 
+// SessionHandlerInterface
+if (!interface_exists('SessionHandlerInterface')) {
+    $loader->registerPrefixFallback(realpath(__DIR__.'/../vendor/Symfony/Component/HttpFoundation/Resources/stubs'));
+}
+
 // Ŕegistering prefixes
 $loader->registerPrefix("Zend_", __DIR__.'/../vendor/Zend/');
 

@@ -22,9 +22,13 @@ html[xmlns] .clearfix
 {
 		height: 1%;
 }
+html {
+	background:none !important;
+	overflow-y: visible !important;
+}
 
 #logo {
-	margin:240px auto;
+	margin:220px auto;
 	margin-bottom:40px;
 	text-align:center;
 }
@@ -34,7 +38,10 @@ html[xmlns] .clearfix
 	height:32px;
 	text-indent: -999%;
 	margin:0 auto;
-	margin-bottom:3px
+	margin-bottom:3px;
+	padding:0;
+	font-size: 3em;
+    line-height: 1;
 }
 #logo div {
 	font-size:small;
@@ -42,7 +49,7 @@ html[xmlns] .clearfix
 }
 
 body {
-	background:#1a1a1a url('../images/backgrounds/a_auth_body_bg.jpg') top left repeat-x;
+	background:#1a1a1a url('../images/backgrounds/a_auth_body_bg.jpg') top left repeat-x !important;
 	color:White;
 	font-family:Ubuntu,Arial;
 }
@@ -60,7 +67,7 @@ input[type="text"],
 input[type="password"]{
 	width:100%;
 	border:0px;
-	padding:10px;
+	padding:10px !important;
 	border-radius:3px;
 }
 
@@ -118,10 +125,10 @@ footer nav ul li {
 	color: #555;
 }
 footer nav a, footer nav a:active {
-	color: #666;
+	color: #666 !important;
 	text-decoration:none;
 	outline:none;
-	padding:0px 6px;
+	padding:0px 6px !important;
 	-moz-transition: color 0.3s ease 0s;
 }
-footer nav a:hover, footer nav a.active { color:White; }
+footer nav a:hover, footer nav a.active { color:White !important; }

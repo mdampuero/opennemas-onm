@@ -20,22 +20,13 @@ if(!Acl::isMaster()) {
 $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 $tpl->assign('titulo_barra', 'Mysql check');
 
-$action = filter_input ( INPUT_GET, 'action' , FILTER_SANITIZE_STRING, array( 'options' => array('default' => 'mysql_check')) );
+$action = filter_input ( INPUT_GET, 'action' , FILTER_SANITIZE_STRING, array( 'options' => array('default' => 'apc_iframe')) );
 
 switch($action) {
 
     case 'apc_iframe':
 
         $tpl->display('system_information/apc_iframe.tpl');
-
-        break;
-
-    case 'mysql_check':
-
-        $mysqlcheck = SITE_LIBS_PATH.'tuning-primer.sh all';
-        exec($mysqlcheck, $return);
-        $tpl->assign('return', $return);
-        $tpl->display('system_information/mysql-check.tpl');
 
         break;
 }

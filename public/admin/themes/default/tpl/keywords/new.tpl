@@ -40,58 +40,35 @@
     </div>
 
     <div class="wrapper-content">
-        <table class="adminheading">
-            <tr>
-                <th>{t}Keyword information{/t}</th>
-            </tr>
-        </table>
-		<table class="adminform">
-            <tbody>
-            <tr>
-                <td valign="top" align="right" style="padding:4px;" width="40%">
-                    <label for="name">Palabra clave:</label>
-                </td>
-                <td style="padding:4px;" nowrap="nowrap" width="60%">
-                    <input type="text" id="pclave" name="pclave" title="Palabra clave" value="{$pclave->pclave|default:""}"
-                           class="required" size="30" maxlength="60" />
-                </td>
-            </tr>
-            <tr>
-                <th valign="top" align="right" style="padding:4px;" width="40%">
-                    <label for="tipo">Tipo:</label>
-                </td>
-                <td style="padding:4px;" nowrap="nowrap" width="60%">
-                    <select name="tipo" id="tipo">
-                        {html_options options=$tipos selected=$pclave->tipo|default:""}
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td valign="top" align="right" style="padding:4px;" width="40%">
-                    <label for="value">Valor:</label>
-                </td>
-                <td style="padding:4px;" nowrap="nowrap" width="60%">
-                    <input type="text" id="value" name="value" title="Valor" value="{$pclave->value|default:""}"
-                           size="50" maxlength="240" />
-                </td>
-            </tr>
-
-            <tr>
-                <td valign="top" align="right" style="padding:4px;">
-                    <label>Existing similar elements yet: </label>
-                </td>
-                <td valign="top" style="padding:4px;">
-                    <div id="similarKeywords" style="border: 1px solid #CCC; padding: 10px; width: 400px; background-color: #EEE;"></div>
-                </td>
-            </tr>
-
-            </tbody>
-		</table>
-        <div class="action-bar clearfix">
-            <div class="right">
-                <input type="submit" name="submit" value="{t}Save{/t}"  class="onm-button red">
-            </div>
-        </div>
+        <form class="form-horizontal span8">
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label" for="pclave">{t}Keyword name{/t}</label>
+                    <div class="controls">
+                        <input type="text" id="pclave" name="pclave" title="Palabra clave" value="{$pclave->pclave|default:""}"
+                               class="required input-xlarge" size="30" maxlength="60" />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="tipo">{t}Type{/t}</label>
+                    <div class="controls">
+                        <select name="tipo" id="tipo">
+                            {html_options options=$tipos selected=$pclave->tipo|default:""}
+                        </select>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="value">{t}Value{/t}</label>
+                    <div class="controls">
+                       <input type="text" id="value" name="value" title="Valor" value="{$pclave->value|default:""}"
+                               class="required input-xlarge"/>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">{t}Save{/t}</button>
+                </div>
+            </fieldset>
+        </form>
     </div>
 
     <input type="hidden" id="action" name="action" value="save" />

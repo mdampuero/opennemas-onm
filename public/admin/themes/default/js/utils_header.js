@@ -101,22 +101,6 @@ function confirmar_hemeroteca(eleto,category, id) {
 }
 
 
-function vaciar(elto, id) {
-    if(confirm('¿Está seguro de quitar este elemento de la papelera?')) {
-        enviar(elto, '_self', 'remove', id);
-    }
-}
-
-function seleccionar_fichero(nombre_campo, tipo) {
-    if(dialogo)
-    {
-        if(!dialogo.closed) dialogo.close();
-    }
-
-    dialogo = window.open('include/dialogo.archivo.php?campo_retorno='+nombre_campo+'&tipo_archivo='+tipo, 'dialogo', 'toolbar=no, location=no, directories=no, status=no, menub ar=no, scrollbar=no, resizable=no, copyhistory=yes, width=410, height=360, left=100, top=100, screenX=100, screenY=100');
-    dialogo.focus();
-}
-
 //Operaciones multiples.
 function enviar2(elto, trg, acc, id) {
     var Lista=document.getElementsByClassName('minput');
@@ -140,7 +124,7 @@ function enviar2(elto, trg, acc, id) {
             if(res) {
 
                 var parentEl = elto.parentNode;
-                
+
                 while(parentEl.nodeName != "FORM") {
                     parentEl = parentEl.parentNode;
                 }
@@ -182,7 +166,7 @@ function enviar3(elto, trg, acc, id) {
     var arreglo = $A(Lista);
     var alguno=0;
     arreglo.each(function(el, indice) {
-        if(document.getElementById(el.id).checked!=false){
+        if(document.getElementById(el.id).checked !== false){
           alguno=1;
         }
     });
@@ -201,14 +185,14 @@ function enviar3(elto, trg, acc, id) {
             parentEl.action.value = acc;
             parentEl.id.value = id;
 
-            if(objForm != null) {
+            if (objForm !== null) {
                 objForm.submit();
             } else {
                 parentEl.submit();
             }
         }
       }else{
-           var parentEl = elto.parentNode;
+            var parentEl = elto.parentNode;
             while(parentEl.nodeName != "FORM") {
                 parentEl = parentEl.parentNode;
             }
@@ -217,7 +201,7 @@ function enviar3(elto, trg, acc, id) {
             parentEl.action.value = acc;
             parentEl.id.value = id;
 
-            if(objForm != null) {
+            if (objForm !== null) {
                 objForm.submit();
             } else {
                 parentEl.submit();
@@ -232,7 +216,7 @@ function cancel(action,category,page) {
     }else if(/opinion/.test(action)) {
         location.href ='/admin/controllers/opinion/opinion.php';
     }else if(/advertisement/.test(action)) {
-        location.href ='controllers/advertisement/advertisement.php';    
+        location.href ='controllers/advertisement/advertisement.php';
     }else if(/europa_press_import/.test(action)) {
         location.href ='controllers/agency_importer/europapress.php';
     }else if(/search_advanced/.test(action)) {

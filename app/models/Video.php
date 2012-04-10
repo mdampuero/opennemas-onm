@@ -376,4 +376,14 @@ class Video extends Content
         return $thumbs;
     }
 
+    /**
+     * Renders the video object in frontpage
+     *
+     * @return string the final HTML for this video
+     **/
+    public function render($params)
+    {
+        return "\n<!-- album rendering not implemented -->\n";
+    }
+
 }

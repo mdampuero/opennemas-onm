@@ -6,26 +6,23 @@
 require_once('../bootstrap.php');
 
 // redirect to /mobile/ if it's mobile device request
-$app->mobileRouter();
+//$app->mobileRouter();
 
 $tpl = new Template(TEMPLATE_USER);
-
-$cm  = new ContentManager();
-$ccm = ContentCategoryManager::get_instance();
 
 /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
 
 // Get category and subcategory
-$category_name = (isset($_GET['category_name'])) ? $_GET['category_name'] : 'home';
+$category_name = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+$subcategory_name = $request->query->filter('subcategory_name', null, FILTER_SANITIZE_STRING);
+
 $actual_category = $category_name;
-if (isset ($_GET['subcategory_name'])) {
-    $subcategory_name = $_GET['subcategory_name'];
-    $actual_category = $_GET['subcategory_name'];
+if (isset($subcategory_name)) {
+    $actual_category =  $subcategory_name;
 }
-require_once ("index_sections.php");
+
 /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
 require_once ("index_advertisement.php");
-require_once("widget_static_pages.php");
 
 // Visualizar
 $tpl->display('search/search.tpl');

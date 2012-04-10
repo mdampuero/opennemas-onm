@@ -759,7 +759,28 @@ class InstanceManager
         return $templates;
     }
 
+    /*
+     * Check for repeated internalNameShort
+     *
+     */
+    public function checkInternalShortName($data)
+    {
+        // Generate internalnameShort
+        $internalNameShort = $data['settings']['BD_DATABASE'];
 
+        // Check if the generated InternalShortName already exists
+        $sql = "SELECT count(*) as internalShort_exists FROM instances WHERE `domains` LIKE '".$internalNameShort."%'";
+        $rs = $this->_connection->Execute($sql);
+
+
+        if ($rs && $rs->fields['internalShort_exists'] > 0) {
+            $num = $rs->fields['internalShort_exists'];
+            $data['settings']['BD_USER'] = $internalNameShort.$num;
+            $data['settings']['BD_DATABASE'] = $internalNameShort.$num;
+        }
+
+        return $data;
+    }
 }
 
 /**

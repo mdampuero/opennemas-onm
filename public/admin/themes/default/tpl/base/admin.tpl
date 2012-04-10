@@ -10,22 +10,18 @@
 
     <meta name="author"    content="OpenHost,SL">
     <meta name="generator" content="OpenNemas - News Management System">
-    <meta name="viewport" content="width=device-width">
+    <meta name="viewport"  content="width=device-width">
 
     {block name="meta"}
-        <title>{setting name=site_name} - OpenNeMaS - Administration section</title>
+        <title>{setting name=site_name} - OpenNeMaS administration</title>
     {/block}
 
     <link rel="icon" href="{$params.IMAGE_DIR}favicon.png">
     {block name="header-css"}
         {css_tag href="/bootstrap/bootstrap.css"}
         {css_tag href="/style.css"}
-        {css_tag href="/admin.css"}
         <!--[if IE]>{css_tag href="/ie.css"}<![endif]-->
-        {css_tag href="/buttons.css"}
         {css_tag href="/jquery/jquery-ui.css" media="all" type="text/css"}
-        {css_tag href="/lightview.css"}
-        {css_tag href="/lightwindow.css" media="screen"}
 	{/block}
 
     {block name="prototype"}
@@ -40,6 +36,7 @@
         <script type="text/javascript">
         jQuery.noConflict();
         </script>
+        {script_tag src="/bootstrap/bootstrap.js"}
         {script_tag src="/jquery/bootstrap-modal.js"}
         {block name="prototype"}{/block}
     {/block}
@@ -48,14 +45,11 @@
         {block name="js-library"}{/block}
         {script_tag src="/onm/scripts.js"}
         {script_tag src="/modernizr/modernizr-2.5.0.min.js"}
-        {script_tag src="/fabtabulous.js"}
         {script_tag src="/control.maxlength.js"}
         {script_tag src="/utils.js"}
         {script_tag src="/utils_header.js"}
         {script_tag src="/utilsopinion.js"}
         {script_tag src="/validation.js"}
-        {script_tag src="/lightview.js"}
-        {script_tag src="/lightwindow.js" defer="defer"}
         {script_tag src="/tiny_mce/tiny_mce_gzip.js"}
      {/block}
 
@@ -75,7 +69,7 @@
         <div class="global-user-tools pull-right">
 
             <div class="global-search nofillonhover">
-                <form action="{$smarty.const.SITE_URL_ADMIN}/controllers/search_advanced/search_advanced.php" method="post">
+                <form action="{$smarty.const.SITE_URL_ADMIN}/controllers/search_advanced/search_advanced.php">
                     <input type="hidden" name="action" value="search" />
                     <input type="hidden" name="article" value="on" />
                     <input type="hidden" name="id" value="0" />

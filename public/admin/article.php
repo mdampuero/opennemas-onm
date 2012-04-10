@@ -625,7 +625,8 @@ if (isset($_REQUEST['action']) ) {
             }elseif ($_SESSION['desde'] == 'efe_press_import') {
                 Application::forward('controllers/agency_importer/efe.php');
             }elseif ($_SESSION['desde'] == 'list') {
-                Application::forward($_SERVER['SCRIPT_NAME'].'?action='.$_SESSION['desde'].'&category='.$_SESSION['_from'].'&page='.$_REQUEST['page']);
+               // Application::forward($_SERVER['SCRIPT_NAME'].'?action='.$_SESSION['desde'].'&category='.$_SESSION['_from'].'&page='.$_REQUEST['page']);
+                 Application::forward('controllers/frontpagemanager/frontpagemanager.php?action='.$_SESSION['desde'].'&category='.$_SESSION['_from'].'&page='.$_REQUEST['page']);
             }elseif ($_SESSION['desde'] == 'list_hemeroteca') {
                 Application::forward($_SERVER['SCRIPT_NAME'].'?action='.$_SESSION['desde'].'&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
             }
@@ -787,15 +788,15 @@ if (isset($_REQUEST['action']) ) {
             $article = new Article($_REQUEST['id']);
 
             // FIXME: evitar otros valores erróneos
-            $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
-            if($status==1){
+            $status = ($_REQUEST['status']==1) ? 1: 0; // Evitar otros valores
+            if ($status==1){
                     //Recuperar de hemeroteca
                    //$article->set_available(0,$_SESSION['userid']);
                    //  $_position=array(100,'placeholder_0_1',$_REQUEST['id']);
                     // $article->set_inhome(0,$_SESSION['userid']);
-                    $article->set_frontpage(0,$_SESSION['userid']);
+                    $article->set_frontpage(0, $_SESSION['userid']);
                     // $article->set_position($_position,$_SESSION['userid']);
-            }else{
+            } else {
                 //Enviar a la hemeroteca eliminar caches.
                 if($article->frontpage==1) {
                     $_position=array(100,'placeholder_0_1',$_REQUEST['id']);
@@ -892,13 +893,6 @@ if (isset($_REQUEST['action']) ) {
             //    $article->set_home_position($_home, $_SESSION['userid']);
             //}
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
-        break;
-
-        case 'set_position':
-            Acl::checkOrForward('ARTICLE_FRONTPAGE');
-            $article = new Article($_REQUEST['id']);
-            $article->set_position($_REQUEST['posicion'],$_SESSION['userid']);
-            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_GET['category'].'&page='.$_REQUEST['page']);
         break;
 
         case 'mstatus':
@@ -999,100 +993,6 @@ if (isset($_REQUEST['action']) ) {
 
              Application::forward($_SERVER['SCRIPT_NAME'].'?action='.$_SESSION['desde'].'&category='.$_SESSION['_from'].'&page='.$_REQUEST['page']);
              break;
-
-         //New function -For XML articles. published directly in frontpages and no change position
-         case 'mdirectly_frontpage':
-             if(isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld'])>0) {
-                 $fields = $_REQUEST['selected_fld'];
-
-                 $_available=array();
-                 $status=($_REQUEST['id']==1)? 1: 0; // Evitar otros valores
-                  //Usa id para pasar el estatus
-                 $changed = date('Y-m-d H:i:s');
-                  $pos_opinion=1;
-                 if(is_array($fields)) {
-                  //    $ccm = ContentCategoryManager::get_instance();
-                      $numCategories = array();
-                      $numCategories = $ccm->get_all_categories();
-                      $cm=new ContentManager();
-
-                      foreach($fields as $i ) {
-                             $content = new Content($i);
-                             if($content->content_type==4){ //Es opinion
-                                  $_available[] = array($status, $status, $status, $pos_opinion, $_SESSION['userid'], $changed, $i);
-                                  $pos_opinion++;
-                             }else{
-
-                                 $actual_category=$ccm->get_name($content->category);
-
-                                 $numCategories[$actual_category]+=1;
-                                 if($numCategories[$actual_category]==1){
-                                      //incluirla como destacada
-                                     $destacadas = $cm->find_by_category('Article', $content->category, 'fk_content_type=1 AND content_status=1  AND available=1 AND frontpage=1  AND placeholder="placeholder_0_0" ', 'ORDER BY created DESC' );
-                                     $destacadas = $cm->getInTime($destacadas);
-                                     //quitamos las antiguas destacadas
-                                     $_positions = array();
-                                     $pos=2;
-                                     foreach ($destacadas as $art){
-                                        $_positions[] = array($pos, 'placeholder_0_1',  $art->id);
-                                        $pos++;
-                                     }
-
-                                     $content->set_position($_positions, $_SESSION['userid']);
-                                     $content->set_available(1, $_SESSION['userid']);
-                                     $content->set_frontpage(1, $_SESSION['userid']);
-                                     $params=array(1, 'placeholder_0_0', $i);
-                                     $content->set_position($params, $_SESSION['userid']);
-
-                                 }else{
-                                     //Incluirla como noticia de la categoria.
-                                      $_available[] = array($status, $status, $status, $numCategories[$actual_category], $_SESSION['userid'], $changed, $i);
-                                 }
-                             }
-                      }
-
-
-                    // Recorremos las categorias y las dejamos en 20. Eliminamos caches
-                     $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
-                     foreach($numCategories as $category=>$num){
-                        if($num!=0 && $category!='UNKNOWN' && $category !='opinion'){
-                             $category=strtolower(StringUtils::normalize_name($category));
-                             if (($category == 'política') || ($category == 'polItica')|| ($category == 'politica')){
-                                     $category = 'polItica';
-                             }
-                             $id_category=$ccm->get_id($category);
-
-                             $total=$num;
-                             $_frontpage = array();
-                             $_positions = array();
-                             //reducir a 20 noticias en portada
-                             $articles= $cm->find_by_category('Article', $id_category, 'fk_content_type=1 AND content_status=1 AND available=1 AND frontpage=1   AND placeholder!="placeholder_0_0"', 'ORDER BY changed DESC, position ASC ');
-                             $articles = $cm->getInTime($articles);
-                             foreach($articles as $article){
-                                 if($total<20){
-                                     $_position[]= array($total,'placeholder_0_1', $article->id);
-                                     $total++;
-                                 }else{
-                                      $_frontpage[] = array(0, $article->id);
-                                 }
-
-                             }
-                             $article = new Article();
-                             $article->set_frontpage($_frontpage, $_SESSION['userid']);
-                            $article->set_position($_position, $_SESSION['userid']);
-                             $tplManager->delete($category . '|RSS');
-                             $delete = $tplManager->delete($category . '|0');
-                        }
-                    }
-                      //actualizamos los frontpages.
-                     $content = new Content();
-                     $content->set_directly_frontpage($_available, $_SESSION['userid']);
-
-
-             }
-            }
-            Application::forward($_SERVER['SCRIPT_NAME'].'?action='.$_SESSION['desde'].'&category='.$_SESSION['_from'].'&page='.$_REQUEST['page']);
-            break;
 
         case 'm_inhome_status':
             Acl::checkOrForward('ARTICLE_HOME');
@@ -1635,11 +1535,78 @@ if (isset($_REQUEST['action']) ) {
             Application::forward('index.php?go=' . urlencode($uri));
         } break;
 
-        case 'content-list-provider':
+        case 'content-provider-suggested':
+
+            $category = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_STRING,   array('options' => array( 'default' => 'home')));
+            $page     = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_NUMBER_INT,   array('options' => array( 'default' => 1)));
+
+            if ($category == 'home') { $category = 0; }
+
+            $cm = new  ContentManager();
+
+            // Get contents for this home
+            $contentElementsInFrontpage  = $cm->getContentsIdsForHomepageOfCategory($category);
+
+            // Fetching opinions
+            $sqlExcludedOpinions = '';
+            if (count($contentElementsInFrontpage) > 0) {
+                $contentsExcluded = implode(', ', $contentElementsInFrontpage);
+                $sqlExcludedOpinions = ' AND `pk_article` NOT IN ('.$contentsExcluded.')';
+            }
+
+            list($articles, $pager) = $cm->find_pages(
+                'Article',
+                'contents.available=1 AND in_litter != 1 AND in_home=2'. $sqlExcludedOpinions,
+                ' ORDER BY created DESC ', $page, 5
+            );
+
+            $tpl->assign(array(
+                'articles' => $articles,
+                'pager'   => $pager,
+            ));
+
+            $tpl->display('article/content-provider-suggested.tpl');
+
+            break;
+
+        case 'content-provider-category':
+
+            $category = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_STRING,   array('options' => array( 'default' => 'home')));
+            $page     = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_NUMBER_INT,   array('options' => array( 'default' => 1)));
+
+            if ($category == 'home') { $category = 0; }
+
+            $cm = new  ContentManager();
+
+            // Get contents for this home
+            $contentElementsInFrontpage  = $cm->getContentsIdsForHomepageOfCategory($category);
+
+            // Fetching opinions
+            $sqlExcludedOpinions = '';
+            if (count($contentElementsInFrontpage) > 0) {
+                $contentsExcluded = implode(', ', $contentElementsInFrontpage);
+                $sqlExcludedOpinions = ' AND `pk_article` NOT IN ('.$contentsExcluded.')';
+            }
+
+            list($articles, $pager) = $cm->find_pages(
+                'Article',
+                'contents.available=1 '. $sqlExcludedOpinions, 'ORDER BY created DESC ', $page, 5, $category
+            );
+
+            $tpl->assign(array(
+                'articles' => $articles,
+                'pager'    => $pager,
+            ));
+
+            $tpl->display('article/content-provider-category.tpl');
+
+            break;
+
+		case 'content-list-provider':
 
             $items_page = s::get('items_per_page') ?: 20;
-            $category = filter_input( INPUT_GET, 'category' , FILTER_SANITIZE_STRING, array('options' => array('default' => '0')) );
-            $page = filter_input( INPUT_GET, 'page' , FILTER_SANITIZE_STRING, array('options' => array('default' => '1')) );
+            $category   = filter_input( INPUT_GET, 'category' , FILTER_SANITIZE_STRING, array('options' => array('default' => '0')) );
+            $page       = filter_input( INPUT_GET, 'page' , FILTER_SANITIZE_NUMBER_INT, array('options' => array('default' => '1')) );
             $cm = new ContentManager();
 
             list($articles, $pages) = $cm->find_pages('Article',
@@ -1647,16 +1614,15 @@ if (isset($_REQUEST['action']) ) {
                         'ORDER BY frontpage DESC, starttime DESC,  contents.title ASC ',
                         $page, $items_page, $category);
 
-            $tpl->assign(array('contents'=>$articles,
-                                'contentTypeCategories'=>$allcategorys,
-                                'category' =>$category,
-                                'pagination'=>$pages->links
-                        ));
+            $tpl->assign(array(
+                'contents'=>$articles,
+                'contentTypeCategories'=>$allcategorys,
+                'category' =>$category,
+                'pagination'=>$pages->links
+            ));
 
-            $html_out = $tpl->fetch("common/content_provider/_container-content-list.tpl");
-            Application::ajax_out($html_out);
-
-        break;
+            $htmlOut = $tpl->fetch("common/content_provider/_container-content-list.tpl");
+            Application::ajax_out($htmlOut);
 
         default: {
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);

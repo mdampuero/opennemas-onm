@@ -8,14 +8,18 @@ function smarty_function_schedule_class($params, &$smarty) {
 
     $item = $params['item'];
 
-    if($item->isScheduled() && $item->isInTime()) {
-        //return ' scheduled_V';
-        return '';
-    } elseif($item->isScheduled() && $item->isObsolete()) {
-        return ' scheduled_R';
-    }elseif($item->isScheduled() && !$item->isObsolete()) {
-        return ' scheduled_A';
+    $output = '';
+
+    if ($item->isScheduled()) {
+        $output .= ' scheduled ';
+    }
+    if ($item->isInTime()) {
+        $output .= ' intime ';
+    } elseif ($item->isPostponed()) {
+        $output .= ' postponed ';
+    } elseif ($item->isDued()) {
+        $output .= ' dued ';
     }
 
-    return '';
+    return $output;
 }

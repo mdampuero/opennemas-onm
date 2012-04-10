@@ -3,12 +3,19 @@
 $menuXml = '<?xml version="1.0"?>
 <menu>
     <submenu title="'.htmlspecialchars(_("Web site"), ENT_QUOTES).'" id="frontpage" link="#">
-        <node
+        <!--<node
             module_name="FRONTPAGE_MANAGER"
             privilege="ARTICLE_FRONTPAGE"
             title="'.htmlspecialchars(_("Frontpage Manager"), ENT_QUOTES).'"
             id="frontpage_manager"
             link="article.php"
+        />-->
+        <node
+            module_name="FRONTPAGE_MANAGER"
+            privilege="ARTICLE_FRONTPAGE"
+            title="'.htmlspecialchars(_("Frontpage Manager"), ENT_QUOTES).'"
+            id="frontpage_manager"
+            link="controllers/frontpagemanager/frontpagemanager.php"
         />
         <node
             module_name="STATIC_PAGES_MANAGER"
@@ -270,7 +277,7 @@ $menuXml = '<?xml version="1.0"?>
         <node class="divider" />
         <node
             module_name="CACHE_MANAGER"
-            title="'.htmlspecialchars(_("Cache manager"), ENT_QUOTES).'"
+            title="'.htmlspecialchars(_("Performance"), ENT_QUOTES).'"
             id="cache_manager"
             link="controllers/tpl_manager/tpl_manager.php"
             privilege="CACHE_ADMIN" />
@@ -282,22 +289,10 @@ $menuXml = '<?xml version="1.0"?>
             privilege="ONLY_MASTERS" />
         <node class="divider" />
         <node
-            module_name="SYSTEM_UPDATE_MANAGER"
-            title="'.htmlspecialchars(_("Update System"), ENT_QUOTES).'"
-            id="system_update__manager"
-            link="controllers/updatesystem/index.php"
-            privilege="ONLY_MASTERS" />
-        <node
             module_name="LOG_SQL"
             title="'.htmlspecialchars(_("SQL error log"), ENT_QUOTES).'"
             id="log_sql"
             link="controllers/system_information/sql_error_log.php"
-            privilege="ONLY_MASTERS" />
-        <node
-            module_name="MYSQL_MANAGER"
-            title="'.htmlspecialchars(_("Database manager"), ENT_QUOTES).'"
-            id="mysql_manager"
-            link="controllers/system_information/system_information.php?action=mysql_check"
             privilege="ONLY_MASTERS" />
         <node
             title="'.htmlspecialchars(_("Support and Help"), ENT_QUOTES).'"

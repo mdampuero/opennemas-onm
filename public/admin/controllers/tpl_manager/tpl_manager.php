@@ -16,9 +16,6 @@
 require_once('../../../bootstrap.php');
 require_once('../../session_bootstrap.php');
 
-set_time_limit(0);
-//ignore_user_abort(true);
-
 /**
  * Check if the user can do Administrative actions
 */

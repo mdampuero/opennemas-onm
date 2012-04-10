@@ -93,9 +93,11 @@ class Settings
                 $apcSettingValue = apc_fetch($apcSettingName, $fetchedFromAPC);
 
                 $settingValue = array();
-                foreach ($apcSettingValue as $key => $value) {
-                    $key = preg_replace("@".APC_PREFIX . "\.@", "", $key);
-                    $settingValue[$key] = $value;
+                if(!empty($apcSettingValue)) {
+                    foreach ($apcSettingValue as $key => $value) {
+                        $key = preg_replace("@".APC_PREFIX . "\.@", "", $key);
+                        $settingValue[$key] = $value;
+                    }
                 }
 
             }

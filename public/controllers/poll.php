@@ -20,21 +20,18 @@ $tpl = new Template(TEMPLATE_USER);
 
 /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
 $cm  = new ContentManager();
-$ccm = ContentCategoryManager::get_instance();
 
 /**
- * Setting up available categories for menu.
+ * Setting up available categories.
 */
 
-$category_name = filter_input(INPUT_GET,'category_name',FILTER_SANITIZE_STRING);
-if(empty($category_name)) {
-    $category_name = filter_input(INPUT_POST,'category_name',FILTER_SANITIZE_STRING);
-}
-
-$menuFrontpage= Menu::renderMenu('encuesta');
-$tpl->assign('menuFrontpage',$menuFrontpage->items);
+$category_name = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
+$subcategory_name = $request->query->filter('subcategory_name', '', FILTER_SANITIZE_STRING);
+$page = $request->query->filter('page', 0, FILTER_VALIDATE_INT);
+$action = $request->query->filter('action', 'frontpage', FILTER_SANITIZE_STRING);
 
 if(!empty($category_name)) {
+    $ccm = ContentCategoryManager::get_instance();
     $category = $ccm->get_id($category_name);
     $actual_category_id = $category; // FOR WIDGETS
     $category_real_name = $ccm->get_title($category_name); //used in title
@@ -42,6 +39,7 @@ if(!empty($category_name)) {
                         'category' => $category ,
                         'actual_category_id' => $actual_category_id ,
                         'category_real_name' => $category_real_name ,
+                        'actual_category' =>$category_name,
                 ) );
 } else {
      $category_real_name = 'Portada';
@@ -52,8 +50,6 @@ if(!empty($category_name)) {
                 ) );
 }
 /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
-
-
    $pollSettings = s::get('poll_settings');
 
    $tpl->assign(array (
@@ -62,12 +58,6 @@ if(!empty($category_name)) {
 
 /**************************************  SECURITY  *******************************************/
 
-$action = filter_input(INPUT_POST,'action', FILTER_SANITIZE_STRING);
-if(empty($action)) {
-    $action = filter_input(INPUT_GET,'action', FILTER_SANITIZE_STRING, array('options' => array('default' => 'list')) );
-}
-$page = filter_input(INPUT_GET,'page',FILTER_SANITIZE_STRING,
-								 array('options'=> array('default' => 0)));
 switch($action) {
     case 'frontpage':
 
@@ -114,10 +104,7 @@ switch($action) {
 
         $tpl->setConfig('poll-inner');
 
-        $dirtyID = filter_input(INPUT_GET,'id',FILTER_SANITIZE_STRING);
-        if(empty($dirtyID)) {
-            $dirtyID = filter_input(INPUT_POST,'id',FILTER_SANITIZE_STRING);
-        }
+        $dirtyID = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
 
         $pollId = Content::resolveID($dirtyID);
 
@@ -175,7 +162,6 @@ switch($action) {
 
             /************* COLUMN-LAST *******************************/
 
-            require_once("widget_static_pages.php");
          } else {
             Application::forward301('/404.html');
         }
@@ -184,10 +170,7 @@ switch($action) {
 
     case 'addVote':
 
-        $dirtyID = filter_input(INPUT_GET,'id',FILTER_SANITIZE_STRING);
-        if(empty($dirtyID)) {
-            $dirtyID = filter_input(INPUT_POST,'id',FILTER_SANITIZE_STRING);
-        }
+        $dirtyID = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
 
         $pollId = Content::resolveID($dirtyID);
         /**
@@ -202,15 +185,15 @@ switch($action) {
             if (isset($_COOKIE[$cookie])) {
                  Application::setCookieSecure($cookie, 'tks');
             }
-            if (isset($_POST['respEncuesta'])
-                    && !empty($_POST['respEncuesta'])
-                     && !isset($_COOKIE[$cookie]) ) {
+            $respEncuesta = $request->query->filter('respEncuesta', '', FILTER_SANITIZE_STRING);
+
+            if (!empty($respEncuesta) && !isset($_COOKIE[$cookie]) ) {
                 $ip = $_SERVER['REMOTE_ADDR'];
-                $poll->vote($_POST['respEncuesta'],$ip);
+                $poll->vote($respEncuesta, $ip);
             }
 
             $cacheID= $tpl->generateCacheId($category_name, '',$pollId );
-            $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
+            $tplManager = new TemplateCacheManager( TEMPLATE_USER_PATH );
             $tplManager->delete($cacheID, 'poll.tpl');
             $cacheID = $tpl->generateCacheId('poll'.$category_name, '', $page);
             $tplManager->delete($cacheID, 'poll_frontpage.tpl');

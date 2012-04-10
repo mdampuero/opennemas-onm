@@ -529,11 +529,11 @@ class Application
     {
         $logger = Application::getLogger();
 
-            $msg = 'User '.$_SESSION['username'].'(ID:'.$_SESSION['userid'].') has executed '
-            .'the action '.$action;
-            if(!empty($content)){ $msg.=' at '.get_class($content).' (ID:'.$content->id.')';}
+        $msg = 'User '.$_SESSION['username'].'(ID:'.$_SESSION['userid'].') has executed '
+        .'the action '.$action;
+        if(!empty($content)){ $msg.=' at '.get_class($content).' (ID:'.$content->id.')';}
 
-            $logger->notice( $msg );
+        $logger->notice( $msg );
     }
 
     // TODO: move to a separated file called functions.php
@@ -546,6 +546,10 @@ class Application
     static public function logDatabaseError()
     {
         $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+
+        $logger = Application::getLogger();
+        $logger->notice('[Database Error] '.$errorMsg, 'normal');
+
         $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
         $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
         return $errorMsg;

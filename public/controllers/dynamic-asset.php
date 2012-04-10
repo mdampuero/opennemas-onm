@@ -9,8 +9,8 @@
  **/
 require_once('../bootstrap.php');
 
-$file      = filter_input(INPUT_GET, 'file', FILTER_SANITIZE_STRING);
-$transform = filter_input(INPUT_GET, 'transform', FILTER_SANITIZE_STRING);
+$file      = $request->query->filter('file', null, FILTER_SANITIZE_STRING);
+$transform = $request->query->filter('transform', null, FILTER_SANITIZE_STRING);;
 
 if (preg_match('@(jpg|jpeg|gif|png)@i',$file)) {
     $filePath = MEDIA_PATH.DIRECTORY_SEPARATOR.$file;

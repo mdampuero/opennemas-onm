@@ -77,14 +77,16 @@ class Photo extends Content
      *
      * @params array $data the data for the photo, must content the photo local_file
      **/
-    public function createFromLocalFile($dataSource)
+    public function createFromLocalFile($dataSource, $dateForDirectory=NULL)
     {
 
         $filePath = $dataSource["local_file"];
 
         if(!empty($filePath)) {
              // Check upload directory
-            $dateForDirectory = date("/Y/m/d/");
+            if(empty($dateForDirectory)) {
+                $dateForDirectory = date("/Y/m/d/");
+            }
             $uploadDir = MEDIA_PATH.DS.IMG_DIR.DS.$dateForDirectory.DIRECTORY_SEPARATOR ;
 
             if(!is_dir($uploadDir)) { FilesManager::createDirectory($uploadDir); }
@@ -106,8 +108,10 @@ class Photo extends Content
                 'category'     => $dataSource["fk_category"],
                 'nameCat'      => $dataSource["category_name"],
 
-                'created'      => $fileInformation->atime,
-                'changed'      => $fileInformation->mtime,
+               // 'created'      => $fileInformation->atime,
+               // 'changed'      => $fileInformation->mtime,
+                'created'      => $dataSource["created"],
+                'changed'      => $dataSource["changed"],
                 'date'         => $fileInformation->mtime,
                 'size'         => round($fileInformation->size/1024, 2),
                 'width'        => $fileInformation->width,

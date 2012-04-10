@@ -14,39 +14,22 @@ $contentType = Content::getIDContentType('kiosko');
 
 /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
 
+$category_name = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
+$subcategory_name = $request->query->filter('subcategory_name', '', FILTER_SANITIZE_STRING);
 
-$category_name = filter_input(INPUT_GET,'category_name',FILTER_SANITIZE_STRING);
-if(empty($category_name)) {
-    $category_name = filter_input(INPUT_POST,'category_name',FILTER_SANITIZE_STRING);
-}
+$action = $request->query->filter('action', 'list' , FILTER_SANITIZE_STRING);
+$cache_page = $request->query->filter('page', 0, FILTER_VALIDATE_INT);
+$month = $request->query->filter('month', date('n'), FILTER_VALIDATE_INT);
+$year = $request->query->filter('year', date('Y'), FILTER_VALIDATE_INT);
 
-$ccm = ContentCategoryManager::get_instance();
-if(!empty($category_name)) {
-    $category = $ccm->get_id($category_name);
-}else{
-    $category = 0;
-}
-
-list($allcategorys, $subcat, $categoryData) = $ccm->getArraysMenu($category, $contentType);
- //list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu($category, $contentType);
-
-
-require_once("index_sections.php");
-
-
+$tpl->assign(array( 'actual_category' =>$category_name, ));
 /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
 
-$cache_page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT);
-$cache_page = (is_null($cache_page))? 0 : $cache_page;
 /**
  * Setup view
 */
 
 $tpl->setConfig('kiosko');
-
-$action = filter_input(INPUT_GET,'action',FILTER_SANITIZE_STRING, array('options' => array('default' => 'list' )) );
-$month = filter_input(INPUT_GET,'month',FILTER_VALIDATE_INT, array('options' => array('default' => date('n') )) );
-$year = filter_input(INPUT_GET,'year',FILTER_VALIDATE_INT, array('options' => array('default' => date('Y') )) );
 
 if(!defined('KIOSKO_DIR'))
         define('KIOSKO_DIR', "kiosko".SS);
@@ -58,9 +41,12 @@ switch($action) {
         */
         $cache_id = $tpl->generateCacheId('newsstand', $category_name,  $cache_page);
         $kiosko =array();
-        if((1==1) ||($tpl->caching == 0)
+        if( ($tpl->caching == 0)
            || !$tpl->isCached('newsstand/newsstand.tpl', $cache_id) )
         {
+            $ccm = ContentCategoryManager::get_instance();
+            $category = $ccm->get_id($category_name);
+            list($allcategorys, $subcat, $categoryData) = $ccm->getArraysMenu($category, $contentType);
             foreach ($allcategorys as $theCategory) {
                 $cm = new ContentManager();
 
@@ -74,7 +60,6 @@ switch($action) {
                                    'portadas' => $portadas);
                 }
             }
-
 
             $tpl->assign( array('KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR,
                  'date' => '1-'.$month.'-'.$year,
@@ -90,10 +75,8 @@ switch($action) {
 
     case 'read':
 
-        $dirtyID = filter_input(INPUT_GET,'id',FILTER_SANITIZE_STRING);
-        if(empty($dirtyID)) {
-            $dirtyID = filter_input(INPUT_POST,'id',FILTER_SANITIZE_STRING);
-        }
+        $dirtyID = $request->query->filter('id', '' , FILTER_SANITIZE_STRING);
+
         $epaperId = Content::resolveID($dirtyID);
 
         /**
@@ -140,13 +123,11 @@ switch($action) {
     break;
 }
 
-
 //for widget_newsstand_dates
 //TODO: intelligent wigget
 $ki = new Kiosko();
 $months_kiosko = $ki->get_months_by_years();
 $tpl->assign('months_kiosko', $months_kiosko);
-
 
 // advertisement NOCACHE
 require_once('index_advertisement.php');

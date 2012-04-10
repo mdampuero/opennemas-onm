@@ -16,24 +16,20 @@ require_once('../bootstrap.php');
  * Fetch HTTP variables
 */
 
-$category_name = filter_input(INPUT_GET,'category_name',FILTER_SANITIZE_STRING);
+$category_name = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+$subcategory_name = $request->query->filter('subcategory_name', '', FILTER_SANITIZE_STRING);
+$cache_page = $request->query->filter('page', 0, FILTER_VALIDATE_INT);
+$date = $request->query->filter('date', '', FILTER_SANITIZE_STRING);
+
 if ( !(isset($category_name) && !empty($category_name)) ) {
     $category_name = 'home';
 }
-
-$subcategory_name = filter_input(INPUT_GET,'subcategory_name',FILTER_SANITIZE_STRING);
-$cache_page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT);
-$cache_page = (is_null($cache_page))? 0 : $cache_page;
-
-$date = filter_input(INPUT_GET,'date',FILTER_SANITIZE_STRING);
-
-
 /**
  * Setup view
-*/
+ */
 $tpl = new Template(TEMPLATE_USER);
 //$tpl->setConfig('newslibrary');
-//$cache_id = $tpl->generateCacheId($category_name, $subcategory_name, $date);
+ $cache_id = $tpl->generateCacheId($category_name, $subcategory_name, $date);
 
 $tpl->assign('newslibraryDate',$date);
 /**
@@ -44,30 +40,17 @@ require_once("index_advertisement.php");
 $ccm = ContentCategoryManager::get_instance();
 $settings = s::get('frontpage_settings');
 
-$menuFrontpage= Menu::renderMenu('frontpage');
-
-if (!empty($menuFrontpage->items)) {
-    $tpl->assign('menuFrontpage',$menuFrontpage->items);
-}
-if (empty($category_name) && !empty($menuFrontpage->items)) {
-    foreach ($menuFrontpage->items as  $item) {
-        if(empty($category_name) && $item->type == 'category') {
-             $category_name = $item->link;
-             $category = $ccm->get_id($category_name);
-        }
-    }
-
-}
-
 if ( 1==1 || ($tpl->caching == 0)  || !$tpl->isCached('frontpage/newslibrary.tpl', $cache_id) )
 {
 
     $fp = new Frontpage();
 
-    /************************ FETCHING NEWS ***********************************/
+    /****************** FETCHING NEWS IN STATIC FILES **********************/
    if(isset($settings['viewMethod']) &&
            $settings['viewMethod'] == 'listFrontpages') {
 
+        $actual_category_id = $ccm->get_id($category_name);
+        //TODO: review this option
         if( $fp->getFrontpage($date, $actual_category_id) ) {
 
             $articles_home = array();

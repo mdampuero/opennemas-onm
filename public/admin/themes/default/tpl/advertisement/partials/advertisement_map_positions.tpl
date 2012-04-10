@@ -13,8 +13,7 @@
           href="javascript:adPositionPortada.selectPosition(1);" />
     <area shape="rect" coords="178,1,240,25" alt="Banner superior derecho" title="Banner top right"
           href="javascript:adPositionPortada.selectPosition(2);" />
-    <area shape="rect" coords="10,46,80,128" alt="Botón columna 1 position1" title="Butt
-    on column 1 position 1"
+    <area shape="rect" coords="10,46,80,128" alt="Botón columna 1 position1" title="Button column 1 position 1"
           href="javascript:adPositionPortada.selectPosition(11);" />
     <area shape="rect" coords="10,132,80,212" alt="Botón columna 1 position2" title="Button column 1 position 2"
           href="javascript:adPositionPortada.selectPosition(12);" />

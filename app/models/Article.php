@@ -90,6 +90,9 @@ class Article extends Content
                 return StringUtils::get_title($this->title);
                 break;
 
+            case 'content_type_name':
+                return 'Article';
+
             default:
                 break;
         }
@@ -813,5 +816,27 @@ class Article extends Content
     }
 
     /* }}} methods clone */
+
+    /**
+     * Renders the article given a set of parameters
+     *
+     * @return string the final html for the article
+     **/
+    public function render($params, $tpl = null)
+    {
+        if (!isset($tpl)) {
+            $tpl = new Template(TEMPLATE_USER);
+        }
+
+        $tpl->assign('item',$this);
+        $tpl->assign('cssclass', $params['cssclass']);
+
+        try {
+            $html = $tpl->fetch($params['tpl']);
+        } catch (\Exception $e) {
+            $html = 'Article not available';
+        }
+        return $html;
+    }
 
 }

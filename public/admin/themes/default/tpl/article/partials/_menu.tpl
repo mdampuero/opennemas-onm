@@ -25,7 +25,7 @@
 			</li>
 			<li class="separator"></li>
 			<li>
-				<a href="{$smarty.server.PHP_SELF}?action={if isset($smarty.session.desde)}{$smarty.session.desde|default:""}{else}list_pendientes{/if}&amp;category={$smarty.request.category|default:"todas"}&amp;page={$smarty.get.page|default:0}" title="{t}Cancel{/t}">
+				<a href="{if isset($smarty.session.desde) && ($smarty.session.desde neq 'list')}{$smarty.server.PHP_SELF}?action={$smarty.session.desde|default:"list_pendientes"}{else}controllers/frontpagemanager/frontpagemanager.php?action=list{/if}&amp;category={$smarty.request.category|default:"todas"}&amp;page={$smarty.get.page|default:0}" title="{t}Cancel{/t}">
 					<img src="{$params.IMAGE_DIR}previous.png" title="{t}Preview{/t}" alt="{t}Cancel{/t}" ><br />{t}Go back{/t}
 				</a>
 			</li>
@@ -84,9 +84,15 @@
                                 <img src="{$params.IMAGE_DIR}previous.png"  alt="{t}Cancel{/t}" ><br />{t}Go back{/t}
                             </a>
                         {else}
-                        <a href="{$smarty.server.PHP_SELF}?action={$smarty.session.desde|default:"list_pendientes"}&amp;category={$smarty.request.category|default:""}&amp;page={$smarty.get.page|default:""}" title="{t}Cancel{/t}">
-                            <img src="{$params.IMAGE_DIR}previous.png" alt="{t}Cancel{/t}" ><br />{t}Go back{/t}
-                        </a>
+                             {if $smarty.session.desde eq 'list'}
+                                 <a href="controllers/frontpagemanager/frontpagemanager.php?action={$smarty.session.desde|default:"list_pendientes"}&amp;category={$smarty.request.category|default:""}&amp;page={$smarty.get.page|default:""}" title="{t}Cancel{/t}">
+                                    <img src="{$params.IMAGE_DIR}previous.png" alt="{t}Cancel{/t}" ><br />{t}Go back{/t}
+                                </a>
+                             {else}
+                                <a href="{$smarty.server.PHP_SELF}?action={$smarty.session.desde|default:"list_pendientes"}&amp;category={$smarty.request.category|default:""}&amp;page={$smarty.get.page|default:""}" title="{t}Cancel{/t}">
+                                    <img src="{$params.IMAGE_DIR}previous.png" alt="{t}Cancel{/t}" ><br />{t}Go back{/t}
+                                </a>
+                             {/if}
                         {/if}
                     {/if}
                 {/if}

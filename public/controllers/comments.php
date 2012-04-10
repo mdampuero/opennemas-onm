@@ -6,24 +6,86 @@
 require_once('../bootstrap.php');
 require_once('./session_bootstrap.php');
 
+use Symfony\Component\HttpFoundation\Response;
+
 $tpl = new Template(TEMPLATE_USER);
 
 if(isset($_REQUEST['action']) ) {
     switch($_REQUEST['action']) {
-        
+
+        case 'get':
+
+            // asdf
+            //
+            $contentID = $request->query->filter('content_id', null, FILTER_SANITIZE_NUMBER_INT);
+
+            $content = new Content($contentID);
+
+            if (!is_null($content->id)) {
+                // Getting comments for current article
+                $comment = new Comment();
+                $comments = $comment->get_public_comments($contentID);
+                $tpl->assign(array(
+                    'num_comments' => count($comments),
+                    'comments'     => $comments,
+                    'contentId'    => $contentID,
+                    'content'      => $contentID,
+                ));
+
+                $output = $tpl->fetch('comments/comments.tpl');
+
+                Application::ajax_out($output);
+            } else {
+                $response = new Response('Content not available', 404, array('content-type' => 'text/html'));
+                $response->send();
+            }
+
+            break;
+
+        case 'vote': {
+
+            $category_name = 'home';
+            $subcategory_name = null;
+
+            $ip = $_SERVER['REMOTE_ADDR'];
+            $ip_from = $_GET['i'];
+            $vote_value = intval($_GET['v']); // 1 A favor o 2 en contra
+            $page = (!isset($_GET['p']))? 0: intval($_GET['p']);
+
+            $comment_id = $_GET['a'];
+
+            if($ip != $ip_from) {
+                Application::ajax_out("Error no ip vote!");
+            }
+
+            $vote = new Vote($comment_id);
+            if(is_null($vote)) {
+                Application::ajax_out("Error no  vote value!");
+            }
+            $update = $vote->update($vote_value,$ip);
+
+            if($update) {
+                $html_out = $vote->render($page,'result',1);
+            } else {
+                $html_out = "Ya ha votado anteriormente este comentario.";
+            }
+
+            Application::ajax_out($html_out);
+        } break;
+
         case 'paginate_comments':
-            
+
             $comment = new Comment();
             $comments = $comment->get_public_comments($_REQUEST['id']);
-            
+
             $tpl->assign('num_comments_total', count($comments));
             //  if(count($comments) >0) {
             $cm = new ContentManager();
             $comments = $cm->paginate_num_js($comments, 9, 1, 'get_paginate_comments',"'".$_REQUEST['id']."'");
-            
+
             $tpl->assign('paginacion', $cm->pager);
             $tpl->assign('comments', $comments);
-            
+
             $caching = $tpl->caching;
             $tpl->caching = 0;
             $output = $tpl->fetch('internal_widgets/module_print_comments.tpl');
@@ -31,12 +93,12 @@ if(isset($_REQUEST['action']) ) {
             //}
             Application::ajax_out($output);
         break;
-    
+
         case 'save_comment':
-            
+
             if(isset($_POST['textareacomentario']) && !empty($_POST['textareacomentario'])) {
                 if( isset($_POST['security_code']) && empty($_POST['security_code']) ) {
-                    
+
                     /*  Anonymous comment ************************* */
                     $data = array();
                     $data['body']     = $_POST['textareacomentario'];
@@ -75,9 +137,9 @@ if(isset($_REQUEST['action']) ) {
             } else {
                 echo("Su comentario no ha sido guardado.\nAsegúrese de cumplimentar correctamente todos los campos.");
             }
-            
+
         break;
-        
+
     }
 }
 
@@ -89,7 +151,7 @@ if(isset($_REQUEST['action']) ) {
  */
 function saveComment($data)
 {
-    //Get $_SESSION values for userComment 
+    //Get $_SESSION values for userComment
     $_SESSION['username'] = $data['author'];
     $_SESSION['userid'] = 'comment #'.$_POST['id'];
     $comment = new Comment();

@@ -127,6 +127,7 @@ switch ($action) {
         );
 
 
+
         if( isset($arrayResults) && !empty($arrayResults)){
             $arrayResults = cSearch::Paginate($Pager, $arrayResults, "id", 10);
         }
@@ -157,6 +158,40 @@ switch ($action) {
         Application::ajax_out($html_out);
 
     break;
+
+    case 'content-provider':
+
+        $searchString = $request->query->filter('search_string', '', FILTER_SANITIZE_STRING);
+        if ($searchString != '') {
+
+            $searchStringArray = array_map(function($element) {
+                return trim($element);
+            }, explode(',', $searchString));
+
+            $searcher = cSearch::getInstance();
+            $matchString = '';
+            foreach ($searchStringArray as $key) {
+                $matchString []= $searcher->DefineMatchOfSentence($key);
+            }
+            $matchString = implode($matchString, ' AND ');
+
+            $sql = "SELECT pk_content, fk_content_type FROM contents "
+                  ."WHERE ".$matchString;
+            $rs = $GLOBALS['application']->conn->Execute($sql);
+
+            $results = array();
+            if ($rs !== false) {
+                while (!$rs->EOF) {
+                    $results []= new Content($rs->fields['pk_content']);
+                    $rs->MoveNext();
+                }
+            }
+            $tpl->assign('results', $results);
+        }
+
+        $tpl->assign('search_string', $searchString);
+        $tpl->display('search_advanced/content-provider.tpl');
+        break;
 
     default:
         Application::forward('search_advanced.php');

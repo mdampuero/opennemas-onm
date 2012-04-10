@@ -60,28 +60,30 @@ function confirmarDelete(action) {
     {render_messages}
 </div>
 <div class="wrapper-content">
-<form action="{$smarty.server.PHP_SELF}" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>  
+<form action="{$smarty.server.PHP_SELF}" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
     <table class="adminheading">
         <tr>
             <th align="left">Total: {$pagination->_totalItems} instances.</th>
-            <th nowrap="nowrap" align="right">
-                <label for="username">{t}Filter by name{/t}</label>
-                <input id="username" name="filter_name" onchange="this.form.submit();" value="{$smarty.request.filter_title}" />
-
-                <label for="usergroup">{t}Per page{/t}</label>
-                <select id="usergroup" name="filter_per_page" onchange="this.form.submit();">
-                     <option value="10" {if $per_page eq 10}selected{/if}>10</option>
-                     <option value="20" {if $per_page eq 20}selected{/if}>20</option>
-                     <option value="50" {if $per_page eq 50}selected{/if}>50</option>
-                     <option value="100" {if $per_page eq 100}selected{/if}>100</option>              
-                </select>
-                
+            <th class="right form-inline">
+                <label for="username">
+                    {t}Filter by name{/t}</label>
+                    <input id="username" class="" name="filter_name" onchange="this.form.submit();" value="{$smarty.request.filter_title}" />
+                </label>
+                <label for="usergroup">
+                    {t}Per page{/t}
+                    <select id="usergroup" name="filter_per_page" onchange="this.form.submit();">
+                         <option value="10" {if $per_page eq 10}selected{/if}>10</option>
+                         <option value="20" {if $per_page eq 20}selected{/if}>20</option>
+                         <option value="50" {if $per_page eq 50}selected{/if}>50</option>
+                         <option value="100" {if $per_page eq 100}selected{/if}>100</option>
+                    </select>
+                </label>
                 <input type="hidden" name="page" value="1" />
-                <input type="submit" value="{t}Search{/t}">
+                <button type="submit" class="btn">{t}Search{/t}</button>
             </th>
         </tr>
     </table>
-    
+
     <table class="listing-table" >
 
         <thead>
@@ -122,7 +124,7 @@ function confirmarDelete(action) {
                     {$instance->configs['contact_mail']}
                 </td>
                 <td>
-                    {$instance->totals[1]} 
+                    {$instance->totals[1]}
                 </td>
                 <td>
                     {$instance->totals[8]}

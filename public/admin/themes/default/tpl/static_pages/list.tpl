@@ -17,16 +17,19 @@
 
 	<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
 
-        <table class="adminheading">
-            <tr>
-                <th align="right">
-                    <label>{t}Title:{/t} <input type="text" name="filter[title]" for="submit" value="{$smarty.request.filter.title|default:""}" /></label>
-                    <input type="submit" id="search" value="{t}Search{/t}">
-                </th>
-            </tr>
-        </table><!--menu-heading-->
+        <div class="table-info clearfix">
+            <div>
+                <div class="right form-inline">
+                    <label>
+                        {t}Title:{/t}
+                        <input type="search" class="search-query" name="filter[title]" for="submit" value="{$smarty.request.filter.title|default:""}" />
+                    </label>
+                    <button type="submit" id="search" class="btn">{t}Search{/t}</button>
+                </div>
+            </div>
+        </div>
 
-        <table class="listing-table">
+        <table class="listing-table table table-striped">
             <thead>
                 <tr>
                 {if count($pages) > 0}
@@ -34,9 +37,8 @@
                     <th>{t}URL{/t}</th>
                     <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
                     <th class="center" style="width:20px;">{t}Published{/t}</th>
-                    <th class="center" style="width:20px;">{t}Actions{/t}</th>
+                    <th class="center" style="width:100px;">{t}Actions{/t}</th>
                 {else}
-                    <th scope="col" colspan=4>&nbsp;</th>
                 {/if}
                 </tr>
             </thead>
@@ -71,29 +73,23 @@
                     </td>
 
                     <td class="center">
-						<ul class="action-buttons">
-                            {acl isAllowed="STATIC_UPDATE"}
-							<li>
-								<a href="{$smarty.server.PHP_SELF}?action=read&id={$pages[k]->id}" title="{t}Modify{/t}">
-									<img src="{$params.IMAGE_DIR}edit.png" border="0" />
-								</a>
-							</li>
-                            {/acl}
-                            {acl isAllowed="STATIC_DELETE"}
-							<li>
-								<a class="del" data-controls-modal="modal-from-dom"
-                                   data-id="{$pages[k]->id}" title="{t}Delete{/t}"
-                                   data-title="{$pages[k]->title|capitalize}" href="#" >
-                                    <img src="{$params.IMAGE_DIR}trash.png" border="0" />
-								</a>
-							</li>
-                            {/acl}
-						</ul>
+                        {acl isAllowed="STATIC_UPDATE"}
+							<a class="btn btn-mini" href="{$smarty.server.PHP_SELF}?action=read&id={$pages[k]->id}" title="{t}Modify{/t}">
+								{t}Edit{/t}
+							</a>
+                        {/acl}
+                        {acl isAllowed="STATIC_DELETE"}
+							<a class="del btn btn-mini btn-danger" data-controls-modal="modal-from-dom"
+                               data-id="{$pages[k]->id}" title="{t}Delete{/t}"
+                               data-title="{$pages[k]->title|capitalize}" href="#" >
+                                {t}Delete{/t}
+							</a>
+                        {/acl}
                     </td>
                 </tr>
                 {sectionelse}
                 <tr>
-                    <td align="center"><h2>{t}There is no static pages.{/t}</h2></td>
+                    <td class="empty">{t}There is no static pages.{/t}</td>
                 </tr>
                 {/section}
             </tbody><!--menu-adminlist-->

@@ -95,7 +95,11 @@ class Opinion extends Content
                 return StringUtils::get_title($this->title);
                 break;
             }
+            case 'content_type_name':
+                return 'Opinion';
+                break;
             default: {
+                return parent::__get($name);
                 break;
             }
         }

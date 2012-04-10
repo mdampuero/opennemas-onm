@@ -48,17 +48,22 @@ switch($action) {
 
         $filter = "content_status = ".$letterStatus;
         $items_page = s::get('items_per_page') ?: 20;
+        if (empty($page)) {
+            $limit= "LIMIT ".($items_page+1);
+        } else {
+            $limit= "LIMIT ".($page-1) * $items_page .', '.$items_page;
+        }
+
 
         // ContentManager::find_pages(<TIPO>, <WHERE>, <ORDER>, <PAGE>, <ITEMS_PER_PAGE>, <CATEGORY>);
-        list($letters, $pager)= $cm->find_pages('Letter', $filter.' ',
-                                                 'ORDER BY  created DESC ', $page, $items_page);
+        $letters =$cm->find_all('Letter', $filter.' ', 'ORDER BY  created DESC '.$limit);
 
         $params = array(
-            'page'=>$page, 'items'=>ITEMS_PAGE,
+            'page'=>$page, 'items'=>$items_page,
             'total' => count($letters),
             'url'=>$_SERVER['SCRIPT_NAME'].'?action=list&letterStatus=' . $letterStatus
         );
-
+ 
         $pagination = \Onm\Pager\SimplePager::getPagerUrl($params);
 
         $tpl->assign(array(
