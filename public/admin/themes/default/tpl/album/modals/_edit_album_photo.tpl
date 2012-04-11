@@ -1,7 +1,7 @@
 <div class="modal hide fade" id="modal-edit-album-photo">
     <div class="modal-header">
-      <a class="close" href="#">×</a>
-      <h3>{t}Edit image properties{/t}</h3>
+        <a class="close" href="#">×</a>
+        <h3>{t}Edit image properties{/t}</h3>
     </div>
     <div class="modal-body clearfix">
         <div class="thumbnail article-resource-image">
@@ -14,7 +14,7 @@
             <div><label>{t}Description{/t}</label>
                 <textarea name="footer_image" id="footer_image" class="footer_image"></textarea>
                 <input type="hidden" name="id_image" id="id_image" value="">
-            <div>
+            </div>
         </div>
     </div>
     <div class="modal-footer">

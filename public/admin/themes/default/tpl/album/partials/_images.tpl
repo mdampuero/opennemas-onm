@@ -203,7 +203,8 @@ jQuery(document).ready(function($){
         };
     });
 
-    jQuery('.edit-button').on('click', function () {
+    jQuery('#album-contents').on('click', '.edit-button', function (event, ui) {
+        event.preventDefault();
         var parent = jQuery(this).parents('.image.thumbnail');
         var element = parent.children('img');
 
@@ -221,8 +222,10 @@ jQuery(document).ready(function($){
 
         jQuery("#modal-edit-album-photo .article-resource-image").find("img").attr('src', element.attr("src"));
 
+
         jQuery("#modal-edit-album-photo").modal('show');
 
+     
     });
 
 });
