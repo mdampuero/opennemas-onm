@@ -105,7 +105,7 @@ class Content
                 );
 
                 if (isset($contentTypeName->fields['name'])) {
-                    $returnValue = mb_strtolower($contentTypeName);
+                    $returnValue = mb_strtolower($contentTypeName->fields['name']);
                 } else {
                     $returnValue = $this->content_type;
                 }
