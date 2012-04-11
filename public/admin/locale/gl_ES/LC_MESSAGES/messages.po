@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-04-11 14:55+0200\n"
-"PO-Revision-Date: 2012-04-11 15:36+0200\n"
+"PO-Revision-Date: 2012-04-11 16:08+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <gnome-l10n-gl@gnome.org>\n"
 "Language: gl_ES\n"
@@ -1007,9 +1007,8 @@ msgid "Privileges"
 msgstr "Privilexios"
 
 #: public/admin/include/menu.php:267
-#, fuzzy
 msgid "Performance"
-msgstr "Permanencia"
+msgstr "Rendemento"
 
 #: public/admin/include/menu.php:273
 msgid "PHP Cache manager"
@@ -1276,9 +1275,8 @@ msgid "This content type has not support for the voting system"
 msgstr "Non é posíbel votar este tipo de contido"
 
 #: app/models/Video.php:214
-#, fuzzy
 msgid "There was an error while processing your video file"
-msgstr "Produciuse un erro ao gardar a configuración de EFE"
+msgstr "Produciuse un erro ao procesar o ficheiro de vídeo"
 
 #: app/models/Video.php:225
 #, php-format
@@ -1418,9 +1416,8 @@ msgid "Total in widget home:"
 msgstr "Elementos no widget de portada:"
 
 #: public/admin/locale/extracted_strings.c:26
-#, fuzzy
 msgid "Time of the last special most viewed (days):"
-msgstr "Data do último álbum máis visto (días):"
+msgstr "Data do último especial máis visto (días):"
 
 #: public/admin/locale/extracted_strings.c:29
 #: public/admin/locale/extracted_strings.c:1079
@@ -1430,13 +1427,10 @@ msgid "Definition values"
 msgstr "Valores de definición"
 
 #: public/admin/locale/extracted_strings.c:32
-#, fuzzy
 msgid ""
 " Use  total in widget special for define how many videos can see in widgets "
 "in newspaper frontpage"
 msgstr ""
-"Use «total en widget de álbum» para definir cantos vídeos se mostran nos "
-"widgets de portada"
 
 #: public/admin/locale/extracted_strings.c:35
 msgid ""
@@ -1648,9 +1642,8 @@ msgstr "Título:"
 
 #: public/admin/locale/extracted_strings.c:71
 #: public/admin/locale/extracted_strings.c:89
-#, fuzzy
 msgid "\"Special\""
-msgstr "Especiais"
+msgstr "\"Especial\""
 
 #: public/admin/locale/extracted_strings.c:74
 #: public/admin/locale/extracted_strings.c:77
@@ -2127,9 +2120,8 @@ msgstr "Sacar de portada"
 #: public/admin/locale/extracted_strings.c:194
 #: public/admin/locale/extracted_strings.c:1265
 #: public/admin/locale/extracted_strings.c:4526
-#, fuzzy
 msgid "Put in frontpage"
-msgstr "\"Poñer en portada\""
+msgstr "Poñer en portada"
 
 #: public/admin/locale/extracted_strings.c:197
 #: public/admin/locale/extracted_strings.c:707
@@ -2186,9 +2178,8 @@ msgstr "Non hai ningún especial aínda."
 
 #: public/admin/locale/extracted_strings.c:212
 #: public/admin/locale/extracted_strings.c:221
-#, fuzzy
 msgid "Delete specials"
-msgstr "Seleccionar todo"
+msgstr "Eliminar especiais"
 
 #: public/admin/locale/extracted_strings.c:215
 #: public/admin/locale/extracted_strings.c:233
@@ -2233,9 +2224,8 @@ msgid "Accept"
 msgstr "Aceptar"
 
 #: public/admin/locale/extracted_strings.c:224
-#, fuzzy
 msgid "Are you sure you want to delete <span>%num%</span> specials?"
-msgstr "Ten certeza de que quere eliminar o ficheiro de caché seleccionado?"
+msgstr "Ten certeza de que quere eliminar <span>%num%</span> especiais?"
 
 #: public/admin/locale/extracted_strings.c:227
 #: public/admin/locale/extracted_strings.c:479
@@ -2966,7 +2956,7 @@ msgstr "Nova portada"
 
 #: public/admin/locale/extracted_strings.c:926
 msgid "WIDGET"
-msgstr ""
+msgstr "WIDGET"
 
 #: public/admin/locale/extracted_strings.c:929
 msgid "Cover"
@@ -3263,9 +3253,8 @@ msgid "Poll Categories"
 msgstr "Categorías de enquéritos"
 
 #: public/admin/locale/extracted_strings.c:1472
-#, fuzzy
 msgid "Available Modules"
-msgstr "Imaxe dispoñíbel"
+msgstr "Módulos dispoñíbeis"
 
 #: public/admin/locale/extracted_strings.c:1490
 msgid "Listing menues"
@@ -3953,9 +3942,8 @@ msgid "Available"
 msgstr "Dispoñíbel"
 
 #: public/admin/locale/extracted_strings.c:2549
-#, fuzzy
 msgid "Allow comments"
-msgstr "Permitir comentarios:"
+msgstr "Permitir comentarios"
 
 #: public/admin/locale/extracted_strings.c:2567
 msgid "Visualization"
@@ -3974,9 +3962,8 @@ msgid "Delete last answer"
 msgstr "Eliminar a última resposta"
 
 #: public/admin/locale/extracted_strings.c:2582
-#, fuzzy
 msgid "Polls manager"
-msgstr "Xestor de libros"
+msgstr "Xestor de enquéritos"
 
 #: public/admin/locale/extracted_strings.c:2609
 #: public/admin/locale/extracted_strings.c:2612
@@ -3985,9 +3972,8 @@ msgid "New poll"
 msgstr "Novo enquérito"
 
 #: public/admin/locale/extracted_strings.c:2666
-#, fuzzy
 msgid "NoFavorite"
-msgstr "Favorito"
+msgstr ""
 
 #: public/admin/locale/extracted_strings.c:2675
 msgid "There is no polls yet."
@@ -3995,19 +3981,16 @@ msgstr "Non hai ningún enquérito aínda."
 
 #: public/admin/locale/extracted_strings.c:2678
 #: public/admin/locale/extracted_strings.c:2687
-#, fuzzy
 msgid "Delete polls"
-msgstr "Eliminar todo"
+msgstr "Eliminar enquéritos"
 
 #: public/admin/locale/extracted_strings.c:2690
-#, fuzzy
 msgid "Are you sure you want to delete <span>%num%</span> polls?"
-msgstr "Ten certeza de que quere eliminar o ficheiro de caché seleccionado?"
+msgstr "Ten certeza de que quere eliminar <span>%num%</span> enquéritos?"
 
 #: public/admin/locale/extracted_strings.c:2702
-#, fuzzy
 msgid "Delete poll"
-msgstr "Eliminar todo"
+msgstr "Eliminar enquérito"
 
 #: public/admin/locale/extracted_strings.c:2714
 msgid "The journalism CMS"
@@ -4102,20 +4085,17 @@ msgid "There is no available authors"
 msgstr "Non hai autores dispoñíbeis"
 
 #: public/admin/locale/extracted_strings.c:2831
-#, fuzzy
 msgid "Delete authors"
-msgstr "Seleccionar autor"
+msgstr "Eliminar autores"
 
 #: public/admin/locale/extracted_strings.c:2840
 #: public/admin/locale/extracted_strings.c:2855
-#, fuzzy
 msgid "Delete author"
-msgstr "Seleccionar autor"
+msgstr "Eliminar autor"
 
 #: public/admin/locale/extracted_strings.c:2843
-#, fuzzy
 msgid "Are you sure you want to delete <span>%num%</span> authors?"
-msgstr "Ten certeza de que quere eliminar o ficheiro de caché seleccionado?"
+msgstr "Ten certeza de que quere eliminar <span>%num%</span> autores?"
 
 #: public/admin/locale/extracted_strings.c:2900
 #: public/admin/locale/extracted_strings.c:7493
@@ -4137,14 +4117,12 @@ msgid "Information about opinion widget settings"
 msgstr "Información sobre as preferencias do widget de opinión"
 
 #: public/admin/locale/extracted_strings.c:2927
-#, fuzzy
 msgid "Number of director articles in the widget:"
-msgstr "Número de editoriais no widget:"
+msgstr "Número de artigos da editorial no widget:"
 
 #: public/admin/locale/extracted_strings.c:2930
-#, fuzzy
 msgid "Number of editorial articles in the widget:"
-msgstr "Número de editoriais no widget:"
+msgstr "Número de artigos da editorial no widget:"
 
 #: public/admin/locale/extracted_strings.c:2936
 msgid "Opinion Manager :: New opinion"
@@ -4235,9 +4213,8 @@ msgid "New opinion"
 msgstr "Nova opinión"
 
 #: public/admin/locale/extracted_strings.c:3110
-#, fuzzy
 msgid "Widgets home"
-msgstr "Nome do widget"
+msgstr ""
 
 #: public/admin/locale/extracted_strings.c:3113
 msgid "Author Opinions"
@@ -4254,19 +4231,16 @@ msgstr "Opinión do director"
 
 #: public/admin/locale/extracted_strings.c:3122
 #: public/admin/locale/extracted_strings.c:3131
-#, fuzzy
 msgid "Delete opinions"
-msgstr "Opinión do director"
+msgstr "Eliminar opinións"
 
 #: public/admin/locale/extracted_strings.c:3134
-#, fuzzy
 msgid "Are you sure you want to delete <span>%num%</span> opinions?"
-msgstr "Ten certeza de que quere eliminar o ficheiro de caché seleccionado?"
+msgstr "Ten certeza de que quere eliminar <span>%num%</span> opinións?"
 
 #: public/admin/locale/extracted_strings.c:3146
-#, fuzzy
 msgid "Delete opinion"
-msgstr "Opinión do director"
+msgstr "Eliminar opinión"
 
 #: public/admin/locale/extracted_strings.c:3158
 msgid "Select an author"
@@ -4500,19 +4474,16 @@ msgid "There is not files available here."
 msgstr "Non hai ningún ficheiro dispoñíbel aínda."
 
 #: public/admin/locale/extracted_strings.c:3659
-#, fuzzy
 msgid "Delete files"
-msgstr "Seleccionar todo"
+msgstr "Eliminar ficheiros"
 
 #: public/admin/locale/extracted_strings.c:3662
-#, fuzzy
 msgid "Are you sure you want to delete <span>%num%</span> files?"
-msgstr "Ten certeza de que quere eliminar o ficheiro de caché seleccionado?"
+msgstr "Ten certeza de que quere eliminar <span>%num%</span> ficheiros?"
 
 #: public/admin/locale/extracted_strings.c:3674
-#, fuzzy
 msgid "Delete file"
-msgstr "Eliminar ficheiro de caché"
+msgstr "Eliminar ficheiro"
 
 #: public/admin/locale/extracted_strings.c:3686
 #: public/admin/locale/extracted_strings.c:3716
@@ -4591,55 +4562,45 @@ msgid "Frontpages"
 msgstr "Portadas"
 
 #: public/admin/locale/extracted_strings.c:3758
-#, fuzzy
 msgid "Article: inner"
-msgstr "Parámetros do artigo"
+msgstr "Artigo: interior"
 
 #: public/admin/locale/extracted_strings.c:3761
-#, fuzzy
 msgid "Mobile: frontpages"
-msgstr "Portadas de móbil"
+msgstr "Móbil: portada"
 
 #: public/admin/locale/extracted_strings.c:3767
-#, fuzzy
 msgid "Opinion: frontpage"
-msgstr "Portada de opinión"
+msgstr "Opinion: portada"
 
 #: public/admin/locale/extracted_strings.c:3770
-#, fuzzy
 msgid "Opinion: inner"
-msgstr "Xestor de opinión"
+msgstr "Opinión: interior"
 
 #: public/admin/locale/extracted_strings.c:3773
-#, fuzzy
 msgid "Video: frontpage"
-msgstr "Portada de vídeo"
+msgstr "Vídeo: portada"
 
 #: public/admin/locale/extracted_strings.c:3776
-#, fuzzy
 msgid "Video: inner"
-msgstr "Vídeo interior"
+msgstr "Vídeo: interior"
 
 #: public/admin/locale/extracted_strings.c:3779
-#, fuzzy
 msgid "Album: frontpage"
-msgstr "Álbume: portada"
+msgstr "Álbum: portada"
 
 #: public/admin/locale/extracted_strings.c:3782
-#, fuzzy
 msgid "Album: inner"
-msgstr "Álbume: interior"
+msgstr "Álbum: interior"
 
 #: public/admin/locale/extracted_strings.c:3785
 #: public/admin/locale/extracted_strings.c:3872
-#, fuzzy
 msgid "Poll: frontpage"
-msgstr "Enquéritos: portada"
+msgstr "Enquérito: portada"
 
 #: public/admin/locale/extracted_strings.c:3788
-#, fuzzy
 msgid "Poll: inner"
-msgstr "Enquérito:interior"
+msgstr "Enquérito: interior"
 
 #: public/admin/locale/extracted_strings.c:3791
 msgid "and from"
@@ -4882,19 +4843,16 @@ msgid "Subsection of:"
 msgstr "Subsección de:"
 
 #: public/admin/locale/extracted_strings.c:4079
-#, fuzzy
 msgid "If this option is activated this category will be available"
-msgstr "Se esta opción está activada esta categoría mostrarase no menú"
+msgstr "Se esta opción está activada esta categoría estará dispoñíbel"
 
 #: public/admin/locale/extracted_strings.c:4082
-#, fuzzy
 msgid "Show in rss:"
-msgstr "Mostrar en menú:"
+msgstr "Mostrar no RSS:"
 
 #: public/admin/locale/extracted_strings.c:4085
-#, fuzzy
 msgid "If this option is activated this category will be showed in rss"
-msgstr "Se esta opción está activada esta categoría mostrarase no menú"
+msgstr "Se esta opción está activada esta categoría mostrarase no RSS"
 
 #: public/admin/locale/extracted_strings.c:4088
 msgid "Frontpage logo:"
@@ -4911,14 +4869,12 @@ msgid "Color:"
 msgstr "Cor:"
 
 #: public/admin/locale/extracted_strings.c:4097
-#, fuzzy
 msgid "Click to reset color:"
-msgstr "Cor do sitio:"
+msgstr "Prema para restabelecer a cor:"
 
 #: public/admin/locale/extracted_strings.c:4100
-#, fuzzy
 msgid "Reset color"
-msgstr "Cor do sitio:"
+msgstr "Restabelecer cor"
 
 #: public/admin/locale/extracted_strings.c:4103
 msgid "Subsections:"
@@ -4936,9 +4892,8 @@ msgid "Internal name"
 msgstr "Nome interno"
 
 #: public/admin/locale/extracted_strings.c:4115
-#, fuzzy
 msgid "In menu"
-msgstr "No menú:"
+msgstr "No menú"
 
 #: public/admin/locale/extracted_strings.c:4130
 msgid "Listing categories"
@@ -5014,13 +4969,10 @@ msgid "Time of the last books most viewed (days):"
 msgstr "Data do último álbum máis visto (días):"
 
 #: public/admin/locale/extracted_strings.c:4364
-#, fuzzy
 msgid ""
 " Use  total in widget books for define how many books can see in widgets in "
 "newspaper frontpage"
 msgstr ""
-"Use «total en widget de portada» para definir cantos vídeos se pueden ver "
-"nos widgets de portada"
 
 #: public/admin/locale/extracted_strings.c:4367
 msgid " Book file size for define max size in bytes"
@@ -5117,9 +5069,8 @@ msgid "Content"
 msgstr "Contido"
 
 #: public/admin/locale/extracted_strings.c:4598
-#, fuzzy
 msgid "Widget"
-msgstr "Widgets"
+msgstr "Widget"
 
 #: public/admin/locale/extracted_strings.c:4631
 msgid "Widget Manager"
@@ -5152,9 +5103,8 @@ msgid "There is no available widgets"
 msgstr "Non hai ningún widget dispoñíbel"
 
 #: public/admin/locale/extracted_strings.c:4676
-#, fuzzy
 msgid "Delete widget"
-msgstr "Novo widget"
+msgstr "Eliminar widget"
 
 #: public/admin/locale/extracted_strings.c:4706
 #: public/admin/locale/extracted_strings.c:8456
@@ -5185,19 +5135,16 @@ msgid "Media manager"
 msgstr "Xestor multimedia"
 
 #: public/admin/locale/extracted_strings.c:4784
-#, fuzzy
 msgid "Go to multimedia manager"
-msgstr "Ir á páxina principal do administrador"
+msgstr "Ir ao xestor multimedia"
 
 #: public/admin/locale/extracted_strings.c:4790
-#, fuzzy
 msgid "Create new opinion"
-msgstr "Nova opinión"
+msgstr "Crear nova opinión"
 
 #: public/admin/locale/extracted_strings.c:4796
-#, fuzzy
 msgid "Create new article"
-msgstr "Creando nova instancia"
+msgstr "Crear novo artigo"
 
 #: public/admin/locale/extracted_strings.c:4802
 msgid "News in other online newspapers..."
@@ -5212,7 +5159,6 @@ msgid "You don't have RSS configured to show here"
 msgstr "Non ten ningún RSS configurado para mostrar aquí"
 
 #: public/admin/locale/extracted_strings.c:4811
-#, fuzzy
 msgid "Logged in users"
 msgstr "Usuarios conectados"
 
@@ -5370,9 +5316,8 @@ msgid "Poll Inner"
 msgstr "Enquérito interior"
 
 #: public/admin/locale/extracted_strings.c:4988
-#, fuzzy
 msgid "Advertisement manager"
-msgstr "Publicidade"
+msgstr "Xestor de publicidade"
 
 #: public/admin/locale/extracted_strings.c:5018
 msgid "HOMEPAGE"
@@ -5449,19 +5394,16 @@ msgstr "No hai ningunha publicidade almacenada nesta sección"
 
 #: public/admin/locale/extracted_strings.c:5099
 #: public/admin/locale/extracted_strings.c:5108
-#, fuzzy
 msgid "Delete advertisements"
-msgstr "Publicidade habilitada:"
+msgstr "Publicidade publicidades"
 
 #: public/admin/locale/extracted_strings.c:5111
-#, fuzzy
 msgid "Are you sure you want to delete <span>%num%</span> advertisements?"
-msgstr "Ten certeza de que quere eliminar o ficheiro de caché seleccionado?"
+msgstr "Ten certeza de que quere eliminar <span>%num%</span> publicidades?"
 
 #: public/admin/locale/extracted_strings.c:5123
-#, fuzzy
 msgid "Delete advertisement"
-msgstr "Publicidade habilitada:"
+msgstr "Eliminar publicidade"
 
 #: public/admin/locale/extracted_strings.c:5135
 msgid "Test for Javascript ad"
@@ -5480,13 +5422,11 @@ msgid "Available multimedia for ads"
 msgstr "Multimedia dispoñíbel para publicidade"
 
 #: public/admin/locale/extracted_strings.c:5168
-#, fuzzy
 msgid "Editing user group"
-msgstr "Editando información de usuario"
+msgstr "Editando grupo de usuarios"
 
 #: public/admin/locale/extracted_strings.c:5171
 #: public/admin/locale/extracted_strings.c:5285
-#, fuzzy
 msgid "User manager"
 msgstr "Xestor de usuarios"
 
@@ -5496,9 +5436,8 @@ msgstr "Editando información de usuario"
 
 #: public/admin/locale/extracted_strings.c:5210
 #: public/admin/locale/extracted_strings.c:5213
-#, fuzzy
 msgid "Personal information"
-msgstr "Información da palabra clave"
+msgstr "Información persoal"
 
 #: public/admin/locale/extracted_strings.c:5222
 #: public/admin/locale/extracted_strings.c:5225
@@ -5509,9 +5448,8 @@ msgid "Name:"
 msgstr "Nome:"
 
 #: public/admin/locale/extracted_strings.c:5228
-#, fuzzy
 msgid "User information"
-msgstr "Información da palabra clave"
+msgstr "Información do usuario"
 
 #: public/admin/locale/extracted_strings.c:5231
 msgid "Please complete the user information by filling the aside form."
@@ -5567,9 +5505,8 @@ msgid "User group:"
 msgstr "Grupos de usuarios:"
 
 #: public/admin/locale/extracted_strings.c:5273
-#, fuzzy
 msgid "--Select one--"
-msgstr "-- Seleccione un grupo --"
+msgstr "--Seleccione un--"
 
 #: public/admin/locale/extracted_strings.c:5276
 msgid "Edit groups and privileges"
@@ -5734,14 +5671,12 @@ msgid "Editing keyword information"
 msgstr "Editando información de palabra clave"
 
 #: public/admin/locale/extracted_strings.c:5531
-#, fuzzy
 msgid "Keyword name"
-msgstr "Xestor de palabras chave"
+msgstr "Nome da palabra chave"
 
 #: public/admin/locale/extracted_strings.c:5537
-#, fuzzy
 msgid "Value"
-msgstr "Tipo dos valores"
+msgstr "Valor"
 
 #: public/admin/locale/extracted_strings.c:5546
 msgid "Listing keywords"
@@ -5765,9 +5700,8 @@ msgid "Replacement value"
 msgstr "Valor de reemplazo"
 
 #: public/admin/locale/extracted_strings.c:5570
-#, fuzzy
 msgid "Edit this content"
-msgstr "Editando comentario"
+msgstr "Editar este contido"
 
 #: public/admin/locale/extracted_strings.c:5582
 msgid "No available keywords yet."
@@ -5975,9 +5909,8 @@ msgid "This article was imported before. Take care of it."
 msgstr "Este artigo foi importado con anterioridade."
 
 #: public/admin/locale/extracted_strings.c:5792
-#, fuzzy
 msgid "Other attachments"
-msgstr "Anexos"
+msgstr "Outros anexos"
 
 #: public/admin/locale/extracted_strings.c:5804
 #: public/admin/locale/extracted_strings.c:5990
@@ -6253,7 +6186,6 @@ msgid "Edit Site color"
 msgstr "Editar cor do sitio"
 
 #: public/admin/locale/extracted_strings.c:6560
-#, fuzzy
 msgid ""
 "You can edit the site color here.\n"
 "                                                    This will change the "
@@ -6468,24 +6400,22 @@ msgid "Get API keys"
 msgstr "Obter chaves da API"
 
 #: public/admin/locale/extracted_strings.c:6695
-#, fuzzy
 msgid ""
 "You can get your Google <strong>Maps</strong> API Key from <a href=\"http://"
 "code.google.com/apis/maps/signup.html\"  target=\"_blank\">Google maps sign "
 "up website</a>."
 msgstr ""
 "Pode obter as suas chaves de Google Maps desde <a href=\"http://code.google."
-"com/intl/gl-GL/apis/maps/signup.html\">o sitio web Google Maps sign up</a>."
+"com/apis/maps/signup.html\">o sitio web Google Maps sign up</a>."
 
 #: public/admin/locale/extracted_strings.c:6698
-#, fuzzy
 msgid ""
 "You can get your Google <strong>Search</strong> API Key from <a href="
 "\"http://www.google.com/cse/manage/create\"  target=\"_blank\">Google Search "
 "sign up website</a>."
 msgstr ""
-"Pode obter as suas chaves de Google Maps desde <a href=\"http://code.google."
-"com/intl/gl-GL/apis/maps/signup.html\">o sitio web Google Maps sign up</a>."
+"Pode obter as suas chaves de Google Maps desde <a href=\"http://www.google."
+"com/cse/manage/create\">o sitio web Google Maps sign up</a>."
 
 #: public/admin/locale/extracted_strings.c:6701
 #: public/admin/locale/extracted_strings.c:8345
