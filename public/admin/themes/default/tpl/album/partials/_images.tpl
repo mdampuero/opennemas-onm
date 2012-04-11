@@ -189,8 +189,8 @@ jQuery(document).ready(function($){
         }
     });
 
-    jQuery('#frontpage-image .delete-button').on('click', function () {
-        var parent = jQuery(this).parent();
+    $('#frontpage-image .delete-button').on('click', function () {
+        var parent = $(this).parent();
         var elementID = parent.find('.album-frontpage-image');
 
         if (elementID.val() > 0) {
@@ -208,24 +208,19 @@ jQuery(document).ready(function($){
         var parent = jQuery(this).parents('.image.thumbnail');
         var element = parent.children('img');
 
-        jQuery("#modal-edit-album-photo input#id_image").val( element.attr('id') );
+        $("#modal-edit-album-photo input#id_image").val( element.attr('id') );
 
         var footer_text = parent.children('textarea').html();
-        jQuery("#modal-edit-album-photo textarea#footer_image").val(footer_text);
+        $("#modal-edit-album-photo textarea#footer_image").val(footer_text);
 
         // Change the image information in the edit modalbox
-
-        var article_info = jQuery("#modal-edit-album-photo .article-resource-image-info");
+        var article_info = $("#modal-edit-album-photo .article-resource-image-info");
         article_info.find(".image_size").html(element.data("width") + " x "+ element.data("height") + " px");
         article_info.find(".file_size").html(element.data("filesize") + " Kb");
         article_info.find(".created_time").html(element.data("created"));
 
-        jQuery("#modal-edit-album-photo .article-resource-image").find("img").attr('src', element.attr("src"));
-
-
-        jQuery("#modal-edit-album-photo").modal('show');
-
-     
+        $("#modal-edit-album-photo .article-resource-image").find("img").attr('src', element.attr("src"));
+        $("#modal-edit-album-photo").modal('show');
     });
 
 });

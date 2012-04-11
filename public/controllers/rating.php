@@ -23,7 +23,7 @@ if($ip != $ip_from) {
 //Comprobamos que exista el artículo que se quiere votar
 $content = new Content($article_id);
 
-if(is_null($content->id)) {
+if (is_null($content->id)) {
     Application::ajax_out(_("Content not available"));
 }
 

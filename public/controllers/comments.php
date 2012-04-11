@@ -44,7 +44,7 @@ switch ($action) {
 
     case 'vote': {
 
-        $category_name = 'home';
+        $category_name    = 'home';
         $subcategory_name = null;
 
         $ip = $_SERVER['REMOTE_ADDR'];
