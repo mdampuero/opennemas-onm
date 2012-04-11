@@ -1556,7 +1556,7 @@ if (isset($_REQUEST['action']) ) {
 
             list($articles, $pager) = $cm->find_pages(
                 'Article',
-                'contents.available=1 AND in_litter != 1 AND in_home=2'. $sqlExcludedOpinions,
+                'contents.available=1 AND in_litter != 1 AND frontpage=1'. $sqlExcludedOpinions,
                 ' ORDER BY created DESC ', $page, 5
             );
 

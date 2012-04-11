@@ -844,10 +844,11 @@ class Content
     */
     public function isScheduled()
     {
-        $start = new \DateTime($this->starttime);
-        $end   = new \DateTime($this->endtime);
+        $created = new \DateTime($this->created);
+        $start =   new \DateTime($this->starttime);
+        $end   =   new \DateTime($this->endtime);
 
-        if ($start->getTimeStamp() > 0 || $end->getTimeStamp() > 0) {
+        if ( ($start->getTimeStamp() > 0 && $start != $created ) || $end->getTimeStamp() > 0) {
             return true;
         }
         return false;
