@@ -121,14 +121,15 @@
                                             {is_module_activated name="COMMENT_MANAGER"}
                                             {t}Allow coments{/t}
                                             <input type="checkbox" {if (isset($article) && $article->with_comment eq 1)}checked{/if} name="with_comment" id="with_comment" value=1/>
-                                            {/is_module_activated}
                                             <br/>
+                                            {/is_module_activated}
+
                                             {acl isAllowed="ARTICLE_AVAILABLE"}
                                                 {t}Available:{/t}
                                                 <input type="checkbox" {if (isset($article) && $article->content_status eq 1)}checked{/if}  name="content_status" id="content_status" value=1/>
                                                 <br/>
                                             {/acl}
-                                            {acl isAllowed="ARTICLE_FRONTPAGE"}
+                                            {*acl isAllowed="ARTICLE_FRONTPAGE"}
                                                 {t}Put in section frontpage:{/t}
                                                 <input type="checkbox"  name="frontpage" {if (isset($article) && $article->frontpage eq 1)}checked{/if} id="frontpage" value=1/>
                                                 <br/>
@@ -145,7 +146,10 @@
                                                        value=2/>
                                                 <br/>
                                             {/if}
-                                           {/acl}
+                                           {/acl*}
+                                           <input type="hidden" id="in_home" name="in_home"  value="{$article->in_home|default:"0"}" />
+                                           <input type="hidden" id="frontpage" name="frontpage"  value="{$article->frontpage|default:"0"}" />
+
                                         {else} {* else if not list_hemeroteca *}
                                             {t}Archived:{/t}
                                             <input type="checkbox" name="content_status" {if (isset($article) && $article->content_status == 0)}checked{/if} value="0" id="content_status"/>
@@ -438,6 +442,11 @@
             {include file="article/partials/_related.tpl"}
         </div>
 
+        {*is_module_activated name="AVANCED_ARTICLE_MANAGER"}
+        <div id="elementos-relacionados" style="width:98%">
+            {include file ="article/partials/_related_content.tpl"}
+        </div>
+        {/is_module_activated*}
         {if isset($article) && is_object($article)}
         <div id="elementos-relacionados" style="width:98%">
             <br/>Listado contenidos relacionados en Portada:  <br/>
