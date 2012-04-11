@@ -9,7 +9,9 @@
 
 // Site Information settings
 $siteIDName = preg_replace('@\.@', '_', $_SERVER['SERVER_NAME']);
-define('APC_PREFIX', $siteIDName);
+
+// Uncomment for activating development mode
+define('ENVIRONMENT', 'development');
 
 /**
  * Database settings
@@ -21,7 +23,3 @@ $onmInstancesConnection = array(
     'BD_PASS' => "1234",
     'BD_DATABASE' => "onm-instances",
 );
-
-define('ADVERTISEMENT_ENABLE', true);
-define('SITE_TITLE_MOBILE', "Nueva Tribuna");   // Title to use in the frontend
-define('SITE_FULLNAME', "Nueva Tribuna");           // Human readable site name
