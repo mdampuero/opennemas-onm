@@ -300,6 +300,66 @@ INSERTAR;
         return true;
     }
 
+
+    public function updateFrontpageArticles() {
+
+        $sql = "SELECT pk_content, pk_fk_content_category, placeholder, position ".
+                " FROM contents, contents_categories ".
+                " WHERE frontpage=1 AND contents.fk_content_type=1 ".
+                " AND pk_content = pk_fk_content AND content_status=1 AND available=1 ";
+
+        $rs =  $this->orig->conn->Execute($sql);
+        $values= array();
+        while(!$rs->EOF) {
+            $values[] =  array(
+                                $rs->fields['pk_content'],
+                                $rs->fields['pk_fk_content_category'],
+                                $rs->fields['placeholder'],
+                                $rs->fields['position'],
+                                NULL,
+                                'Article'
+                   );
+
+            $rs->MoveNext();
+        }
+
+        $sql = "SELECT pk_content, pk_fk_content_category, home_placeholder, home_pos ".
+                " FROM contents, contents_categories ".
+                " WHERE in_home=1 AND frontpage=1  AND contents.fk_content_type=1 ".
+                " AND pk_content = pk_fk_content AND content_status=1 AND available=1 ";
+
+        $rs =  $this->orig->conn->Execute($sql);
+
+        while(!$rs->EOF) {
+            $values[] =  array(
+                            $rs->fields['pk_content'],
+                            0,
+                            $rs->fields['home_placeholder'],
+                            $rs->fields['home_pos'],
+                            NULL,
+                            'Article',
+                   );
+
+            $rs->MoveNext();
+        }
+
+        $rs->Close(); # optional
+
+        $sql= "INSERT INTO `content_positions` ".
+              " (`pk_fk_content`, `fk_category`, `position`, `placeholder`, `params`, `content_type`)".
+              " VALUES (?, ?, ?, ?, ?, ?)";
+        $this->orig->conn->Prepare($sql);
+        $rss = $this->orig->conn->Execute($sql,$values);
+        if (!$rss) {
+            $error =  "\n-  ".$sql." - ".$values." - ".$this->orig->conn->ErrorMsg() ;
+            $this->log('-'.$error);
+            printf('\n-'.$error);
+        }else{
+             printf('\n- Articles are added in frontpages');
+        }
+
+
+    }
     /**
      * prepare sql sentences for actualice ids
      *
