@@ -296,6 +296,7 @@ class Application
         } else {
             ini_set('expose_php', 'off');
         }
+        ini_set('apc.slam_defense','0');
     }
 
     // TODO: move to a separated file called functions.php
