@@ -55,7 +55,7 @@ JSINTERSTICIAL;
     $advertisement = Advertisement::getInstance();
     $banner = $advertisement->fetch('banner' . $type);
     $photo  = $advertisement->fetch('photo' . $type);
- 
+
     if(!isset($params['cssclass'])) {
         $smarty->trigger_error("renderbanner: missing 'cssclass' parameter");
         return;
@@ -70,12 +70,12 @@ JSINTERSTICIAL;
         $width  = $params['width'];
         $height = $params['height'];
     }
-    
+
     /**
      * If the Ad is Flash based try to get the width and height fixed
      */
     if (isset ($photo)) {
-    if ( ($photo->width <= $width) 
+    if ( ($photo->width <= $width)
          && ($photo->height <= $height)
          && ($photo->type_img === 'swf'))
     {
@@ -108,8 +108,8 @@ JSINTERSTICIAL;
     if( isset($params['beforeHTML']) ) {
         $output .= $params['beforeHTML'];
     }
-    
-    
+
+
 
     // Initial container
     $output .= '<div class="'.$cssclass.'">';
@@ -127,14 +127,13 @@ JSINTERSTICIAL;
 
         // TODO: controlar los banners swf especiales con div por encima
         if( strtolower($photo->type_img)=='swf' ) {
-            
+
             if(!$overlap && !$banner->overlap) {
                 // Flash object
                 // FIXME: build flash object with all tags and params
                 $output .= '<a target="_blank" href="'.SITE_URL.'/publicidade/'. $banner->pk_advertisement .'.html" rel="nofollow">';
                 $output .= '<object>
                         <param name="wmode" value="transparent" />
-                        <param name="movie" value="'. MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name. '" />
                         <param name="width" value="'.$width.'" />
                         <param name="height" value="'.$height.'" />
                         <embed src="'. MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name. '"
@@ -155,7 +154,6 @@ JSINTERSTICIAL;
 
                 $output .= '<div style="position: absolute; z-index: 0; width: '.$width.'px; left: 0px;">
                         <object width="'.$width.'" height="'.$height.'">
-                            <param name="movie" value="'. MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name. '" />
                             <param name="wmode" value="opaque" />
                             <param name="width" value="'.$width.'" />
                             <param name="height" value="'.$height.'" />
