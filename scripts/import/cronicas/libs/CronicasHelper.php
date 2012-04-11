@@ -134,8 +134,7 @@ class CronicasHelper {
         if (!$rss) {
             $this->log('clear contents function: '.$GLOBALS['application']->conn->ErrorMsg() );
         }
-
-
+ 
     }
 
 
@@ -257,6 +256,7 @@ class CronicasHelper {
      public function updateCover($contentID, $coverId)
     {
         if(isset($contentID) && isset($coverId)) {
+
             $sql = 'UPDATE `albums` SET `cover_id`=?  WHERE pk_album=?';
 
             $values = array($coverId, $contentID);
