@@ -1,3 +1,60 @@
+
+ALTER TABLE `books` ADD `file_img` VARCHAR( 255 ) NULL ;
+
+
+ALTER TABLE  `albums` CHANGE  `cover`  `cover_id` BIGINT( 255 ) NULL DEFAULT NULL;
+
+UPDATE contents SET starttime = created WHERE starttime = '0000-00-00 00:00:00';
+
+
+INSERT INTO `content_types` ( `pk_content_type`, `name`, `title` ) VALUES
+(17, 'letter', 'Letters to the Editor'), (18, 'frontpage', 'Portada');
+
+
+CREATE TABLE IF NOT EXISTS `letters` (
+  `pk_letter` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `author` varchar(255)  DEFAULT NULL,
+  `email` varchar(255)  DEFAULT NULL,
+  `body` text ,
+  PRIMARY KEY (`pk_letter`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+CREATE TABLE IF NOT EXISTS `frontpages` (
+   `pk_frontpage` bigint(20) NOT NULL COMMENT '',
+   `date` int(11) NOT NULL COMMENT 'date as 20110720',
+   `category` int(11) NOT NULL COMMENT 'category',
+   `version` bigint(20) DEFAULT NULL,
+   `content_positions` longtext NOT NULL COMMENT 'serialized id of contents',
+   `promoted` tinyint(1) DEFAULT NULL,
+   `day_frontpage` tinyint(1) DEFAULT NULL,
+   `params` longtext NOT NULL COMMENT 'serialized params',
+   PRIMARY KEY (`date`,`category`)
+
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+ 
+ALTER TABLE `contents` ADD `urn_source` VARCHAR( 255 ) NULL DEFAULT NULL;
+
+INSERT INTO `content_categories` (
+`pk_content_category` ,
+`title` ,
+`name` ,
+`inmenu` ,
+`posmenu` ,
+`internal_category` ,
+`fk_content_category` ,
+`params` ,
+`logo_path` ,
+`color`
+)
+VALUES (
+NULL , 'Portadas', 'portadas', '1', '10', '14', '0', NULL , NULL , '#638F38'
+);
+
+
+
+-- 15-Nov-2011
+
 ALTER TABLE `content_categories` ADD `params` LONGTEXT NULL ;
 
 DROP TABLE IF EXISTS `content_types`;
@@ -46,7 +103,7 @@ CREATE TABLE IF NOT EXISTS `menu_items` (
   KEY `pk_menu` (`pk_menu`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
- 
+
 CREATE TABLE IF NOT EXISTS `menues` (
   `pk_menu` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -160,7 +217,7 @@ CREATE TABLE IF NOT EXISTS `special_contents` (
   `type_content` varchar(100) CHARACTER SET utf8 NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
- 
+
 
 ALTER TABLE `contents` ADD `favorite` TINYINT( 1 ) NOT NULL DEFAULT '0' AFTER `in_home`;
 
