@@ -51,7 +51,11 @@ legend {
     color:#666;
     text-transform:uppercase;
     font-size:13px;
-    padding:0 10px;
+    padding:0;
+    padding-bottom:4px;
+    margin:0;
+    line-height:14px;
+    border-bottom:1px solid #ccc;
 }
 .panel {
     margin:0;
@@ -211,7 +215,7 @@ input, select, textarea {
                 <div style="display:inline-block; width:20%">
 
                     <label for="available">{t}Published:{/t}</label>
-                    <select name="available" id="available"
+                    <select name="available" id="available" style="width:50px;"
                         {acl isNotAllowed="ADVERTISEMENT_AVAILA"} disabled="disabled" {/acl} >
                         <option value="1" {if isset($advertisement->available) &&  $advertisement->available == 1}selected="selected"{/if}>Si</option>
                         <option value="0" {if isset($advertisement->available) &&  $advertisement->available == 0}selected="selected"{/if}>No</option>
