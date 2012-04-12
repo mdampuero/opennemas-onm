@@ -1514,7 +1514,8 @@ class Content
 
         if (!empty($dirtyID)){
 
-            if (INSTANCE_UNIQUE_NAME == 'nuevatribuna') {
+            if (preg_match('@tribuna@',INSTANCE_UNIQUE_NAME) || preg_match('@retrincos@',INSTANCE_UNIQUE_NAME) ) {
+            //if (INSTANCE_UNIQUE_NAME == 'nuevatribuna' || INSTANCE_UNIQUE_NAME == 'retrincos' ) {
                 $contentID = self::searchInRefactorID($dirtyID);
             }
 
