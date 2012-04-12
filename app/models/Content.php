@@ -1495,6 +1495,7 @@ class Content
         $refactorID = $GLOBALS['application']->conn->GetOne($sql,$value);
         if(!empty($refactorID)) {
             $content = new Content($refactorID);
+            $content = $content->get($refactorID);
             Application::forward301('/'.$content->uri);
         }
 
