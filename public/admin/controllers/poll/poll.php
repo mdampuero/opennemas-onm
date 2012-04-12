@@ -55,7 +55,11 @@ switch ($action) {
         $cm = new ContentManager();
 
         $configurations = s::get('poll_settings');
-        $totalWidget = $configurations['total_widget'];
+        if (array_key_exists('total_widget', $configurations)) {
+            $totalWidget = $configurations['total_widget'];
+        } else {
+            $totalWidget = 0;
+        }
 
         if (empty($page)) {
             $limit = "LIMIT ".($items_page+1);

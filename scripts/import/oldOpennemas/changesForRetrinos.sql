@@ -1,3 +1,145 @@
+-- Changes in video table
+
+ALTER TABLE `videos` CHANGE `videoid` `video_url` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ;
+ALTER TABLE `videos` CHANGE `htmlcode` `information` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+
+-- New Feature for enable/disable users
+
+ALTER TABLE `users` ADD `authorize` TINYINT( 1 ) NOT NULL DEFAULT '1' COMMENT '1 authorized - 0 unauthorized' AFTER `phone`;
+
+-- Create table for settings
+-- Drop content into it
+
+DROP  TABLE IF EXISTS `settings`;
+CREATE TABLE `settings` (
+    `name` varchar(128) NOT NULL DEFAULT '',
+    `value` longtext NOT NULL,
+    PRIMARY KEY (`name`)
+);
+
+INSERT INTO `settings` VALUES ( 'opinion_algoritm', 's:8:"position";');
+
+-- Table structure for table `menues`
+-- Drop content into it
+
+DROP TABLE IF EXISTS `menues`;
+CREATE TABLE IF NOT EXISTS `menues` (
+  `pk_menu` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `type` varchar(255) NOT NULL,
+  `site` text NOT NULL,
+  `params` varchar(255) DEFAULT NULL,
+  `pk_father` int(11) DEFAULT NULL,
+  PRIMARY KEY (`pk_menu`),
+  UNIQUE KEY `name` (`name`),
+  KEY `name_2` (`name`),
+  KEY `pk_menu` (`pk_menu`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+
+-- Dumping data for table `menues`
+
+INSERT INTO `menues` (`pk_menu`, `name`, `type`, `site`, `params`, `pk_father`) VALUES
+(1, 'frontpage', '', ' ', NULL, NULL),
+(2, 'opinion', '', ' ', NULL, NULL),
+(3, 'mobile', '', '', NULL, NULL),
+(4, 'album', '', ' ', NULL, NULL),
+(5, 'video', '', ' ', NULL, NULL),
+(6, 'poll', '', '', NULL, NULL);
+
+-- Table structure for table menu_items
+-- Drop content into it
+
+DROP TABLE IF EXISTS `menu_items`;
+CREATE TABLE IF NOT EXISTS `menu_items` (
+  `pk_item` int(11) NOT NULL AUTO_INCREMENT,
+  `pk_menu` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `link_name` varchar(255) NOT NULL,
+  `type` varchar(255) NOT NULL COMMENT '''category'',''external'',''static'', internal''',
+  `position` int(11) NOT NULL,
+  `pk_father` int(11) DEFAULT NULL,
+  PRIMARY KEY (`pk_item`),
+  KEY `pk_item` (`pk_item`),
+  KEY `pk_menu` (`pk_menu`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- Some alter table fixes
+ALTER TABLE `albums` DROP `favorite` ;
+ALTER TABLE `albums` AUTO_INCREMENT =1;
+ALTER TABLE `albums` ADD INDEX ( `pk_album` ) ;
+ALTER TABLE `albums` CHANGE `pk_album` `pk_album` BIGINT( 20 ) UNSIGNED NOT NULL AUTO_INCREMENT ;
+ALTER TABLE `articles_clone` ADD INDEX ( `pk_clone` ) ;
+ALTER TABLE `contents` ADD `favorite` TINYINT( 1 ) NULL ;
+ALTER TABLE `contents` CHANGE `permalink` `slug` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ;
+ALTER TABLE `contents` ADD `params` LONGTEXT NULL ;
+ALTER TABLE `contents` ADD `category_name` VARCHAR( 255 ) NOT NULL COMMENT 'name category';
+ALTER TABLE `contents` DROP `archive` ;
+ALTER TABLE `contents` DROP `paper_page` ;
+ALTER TABLE `comments` CHANGE `pk_comment` `pk_comment` BIGINT( 20 ) UNSIGNED NOT NULL AUTO_INCREMENT ;
+ALTER TABLE `kioskos` CHANGE `pk_kiosko` `pk_kiosko` BIGINT( 20 ) UNSIGNED NOT NULL AUTO_INCREMENT ;
+ALTER TABLE `polls` ADD `with_comment` SMALLINT( 1 ) NULL DEFAULT '1';
+ALTER TABLE `polls` CHANGE `pk_poll` `pk_poll` BIGINT( 20 ) UNSIGNED NOT NULL AUTO_INCREMENT ;
+ALTER TABLE `poll_items` CHANGE `votes` `votes` INT( 10 ) UNSIGNED NULL DEFAULT '0';
+ALTER TABLE `ratings` CHANGE `pk_rating` `pk_rating` BIGINT( 20 ) UNSIGNED NOT NULL AUTO_INCREMENT ;
+ALTER TABLE `static_pages` CHANGE `pk_static_page` `pk_static_page` BIGINT( 20 ) NOT NULL AUTO_INCREMENT COMMENT 'BIGINT(20)';
+ALTER TABLE `videos` DROP COLUMN `favorite`;
+ALTER TABLE `votes` CHANGE `pk_vote` `pk_vote` BIGINT( 20 ) UNSIGNED NOT NULL AUTO_INCREMENT ;
+ALTER TABLE `widgets` CHANGE `pk_widget` `pk_widget` BIGINT( 20 ) UNSIGNED NOT NULL AUTO_INCREMENT ;
+
+-- Drop and recreate table users
+-- Table structure for table users
+-- Dumping data for table users
+
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE IF NOT EXISTS `users` (
+  `pk_user` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `online` tinyint(1) NOT NULL DEFAULT '0',
+  `login` varchar(100) DEFAULT NULL,
+  `password` varchar(50) DEFAULT NULL,
+  `sessionexpire` tinyint(2) unsigned NOT NULL DEFAULT '15',
+  `email` varchar(255) DEFAULT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `firstname` varchar(100) DEFAULT NULL,
+  `lastname` varchar(100) DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `phone` varchar(15) DEFAULT NULL,
+  `authorize` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1 authorized - 0 unauthorized',
+  `fk_user_group` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`pk_user`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=133 ;
+
+INSERT INTO `users` (`pk_user`, `online`, `login`, `password`, `sessionexpire`, `email`, `name`, `firstname`, `lastname`, `address`, `phone`, `authorize`, `fk_user_group`) VALUES
+(3, 0, 'macada', '2f575705daf41049194613e47027200b', 30, 'david.martinez@openhost.es', 'David', 'Martinez', 'Carballo', ' ', ' ', 1, 4),
+(5, 0, 'fran', '6d87cd9493f11b830bbfdf628c2c4f08', 65, 'fran@openhost.es', 'Francisco ', 'DiÃ©guez', 'Souto', ' ', ' ', 1, 4),
+(4, 0, 'alex', '4c246829b53bc5712d52ee777c52ebe7', 60, 'alex@openhost.es', 'Alexandre', 'Rico', '', '', '', 1, 4),
+(7, 0, 'sandra', 'bd80e7c35b56dccd2d1796cf39cd05f6', 99, 'sandra@openhost.es', 'Sandra', 'Pereira', '', '', '', 1, 4),
+(132, 0, 'admin', '75bba3adeaec86b143375d90a6d61bfd', 45, 'admin@opennemas.com', 'administrator', 'administrator', NULL, NULL, NULL, 1, 5);
+
+-- Drop and recreate table user_groups
+-- Table structure for table `user_groups`
+-- Dumping data for table `user_groups`
+
+DROP  TABLE IF EXISTS `user_groups`;
+CREATE TABLE IF NOT EXISTS `user_groups` (
+  `pk_user_group` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`pk_user_group`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+
+INSERT INTO `user_groups` (`pk_user_group`, `name`) VALUES
+(4, 'Masters'),
+(5, 'Administrador'),
+(6, 'Usuarios');
+
+-- Drop and recreate table users_content_categories
+-- Table structure for table users_content_categories
+
+DROP  TABLE IF EXISTS `users_content_categories`;
+CREATE TABLE IF NOT EXISTS `users_content_categories` (
+  `pk_fk_user` int(10) unsigned NOT NULL,
+  `pk_fk_content_category` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`pk_fk_user`,`pk_fk_content_category`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- Drop and recreate table user_groups_privileges
 -- Table structure for table user_groups_privileges
@@ -255,6 +397,97 @@ INSERT INTO `privileges` (`pk_privilege`, `name`, `description`, `module`) VALUE
 (170, 'LETTER_AVAILABLE', 'Aprobar cartas', 'LETTER'),
 (171, 'LETTER_FAVORITE', 'Gestionar Widget de cartas', 'LETTER'),
 (172, 'LETTER_CREATE', 'Subir cartas', 'LETTER'),
-(173, 'LETTER_ADMIN', 'Admon. cartas', 'LETTER'),
-(174, 'POLL_FAVORITE', 'Añadir a widgets', 'POLL'),
-('175', 'POLL_HOME', 'Añadir al widget de portada', 'POLL');
+(173, 'LETTER_ADMIN', 'Admon. cartas', 'LETTER');
+
+-- Add new content type Book
+
+INSERT INTO `content_types` (`pk_content_type` , `name` , `title` , `fk_template_default`)
+VALUES (15 , 'book', 'libro', NULL);
+
+-- Create tables letters and frontpages
+
+CREATE TABLE IF NOT EXISTS `letters` (
+  `pk_letter` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `author` varchar(255)  DEFAULT NULL,
+  `email` varchar(255)  DEFAULT NULL,
+  `body` text ,
+  PRIMARY KEY (`pk_letter`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+CREATE TABLE IF NOT EXISTS `frontpages` (
+   `pk_frontpage` bigint(20) NOT NULL COMMENT '',
+   `date` int(11) NOT NULL COMMENT 'date as 20110720',
+   `category` int(11) NOT NULL COMMENT 'category',
+   `version` bigint(20) DEFAULT NULL,
+   `content_positions` longtext NOT NULL COMMENT 'serialized id of contents',
+   `promoted` tinyint(1) DEFAULT NULL,
+   `day_frontpage` tinyint(1) DEFAULT NULL,
+   `params` longtext NOT NULL COMMENT 'serialized params',
+   PRIMARY KEY (`date`,`category`)
+
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- Table structure for table `specials`
+
+CREATE TABLE IF NOT EXISTS `specials` (
+  `pk_special` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `subtitle` varchar(250) CHARACTER SET utf8 DEFAULT NULL,
+  `pdf_path` varchar(250) CHARACTER SET utf8 DEFAULT '0',
+  `img1` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`pk_special`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- Table structure for table `special_contents`
+
+CREATE TABLE IF NOT EXISTS `special_contents` (
+  `fk_content` varchar(250) CHARACTER SET utf8 NOT NULL,
+  `fk_special` int(10) NOT NULL,
+  `name` varchar(200) CHARACTER SET utf8 DEFAULT NULL,
+  `position` int(10) DEFAULT '10',
+  `visible` smallint(1) DEFAULT '1',
+  `type_content` varchar(100) CHARACTER SET utf8 NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- Table structure for table `books`
+
+CREATE TABLE IF NOT EXISTS `books` (
+  `pk_book` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `author` varchar(250) DEFAULT NULL,
+  `file` varchar(250) DEFAULT NULL,
+  `editorial` varchar(250) DEFAULT NULL,
+    PRIMARY KEY (`pk_book`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- Table structure for table `content_positions`
+
+CREATE TABLE IF NOT EXISTS `content_positions` (
+  `pk_fk_content` bigint(20) NOT NULL,
+  `fk_category` int(11) NOT NULL,
+  `position` int(11) NOT NULL DEFAULT '0',
+  `placeholder` varchar(45) NOT NULL DEFAULT '',
+  `params` text,
+  `content_type` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`pk_fk_content`,`fk_category`,`position`,`placeholder`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- Table structure for table `pc_users`
+
+CREATE TABLE IF NOT EXISTS `pc_users` (
+  `pk_pc_user` int(11) NOT NULL AUTO_INCREMENT,
+  `email` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `firstname` varchar(255) NOT NULL,
+  `lastname` varchar(255) NOT NULL,
+  `status` int(11) NOT NULL,
+  `subscription` int(11) NOT NULL,
+  PRIMARY KEY (`pk_pc_user`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- Table structure for table `translation_ids`
+
+CREATE TABLE IF NOT EXISTS `translation_ids` (
+  `pk_content_old` bigint(10) NOT NULL,
+  `pk_content` bigint(10) NOT NULL,
+  `type` varchar(20) NOT NULL,
+  PRIMARY KEY (`pk_content_old`,`pk_content`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;

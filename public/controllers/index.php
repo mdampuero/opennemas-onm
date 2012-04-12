@@ -18,7 +18,7 @@ $app->mobileRouter();
 
 // Fetch HTTP variables
 $category_name    = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
-$subcategory_name = $request->query->filter('subcategory_name', 'home', FILTER_SANITIZE_STRING);
+$subcategory_name = $request->query->filter('subcategory_name', '', FILTER_SANITIZE_STRING);
 $cache_page       = $request->query->filter('page', 0, FILTER_VALIDATE_INT);
 
 // Setup view
@@ -51,7 +51,7 @@ if (
         }
     }
 
-    $actualCategory = (!isset($subcategory_name))? $category_name : $subcategory_name;
+    $actualCategory = (empty($subcategory_name))? $category_name : $subcategory_name;
     $actualCategoryId = $actual_category_id = $ccm->get_id($actualCategory);
     $tpl->assign(array(
         'category_name' => $category_name,
@@ -63,7 +63,7 @@ if (
     $cm = new ContentManager;
 
     $contentsInHomepage = $cm->getContentsForHomepageOfCategory($actualCategoryId);
-
+ 
     // Filter articles if some of them has time scheduling and sort them by position
     $contentsInHomepage = $cm->getInTime($contentsInHomepage);
     $contentsInHomepage = $cm->sortArrayofObjectsByProperty($contentsInHomepage, 'position');

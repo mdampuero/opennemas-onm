@@ -2,22 +2,6 @@
 //Funciones llamadas en article.tpl
 //
 
-function previewArticle(id,formID,type){
-    if(!validateForm(formID))
-        return false;
-
-    $(formID).id.value = id;
-
-    $('formulario').action.value = '';
-    jQuery.colorbox({
-        href: '/controllers/preview_content.php?id='+id+'&action=article',
-        title: 'Previsualización Articulo',
-        iframe: true,
-        width: '90%',
-        height: '90%'
-    });
-
-}
 /**
  * Eliminar desde botonera las cachés
  */

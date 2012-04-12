@@ -40,6 +40,8 @@ class Application
     */
     static public function load()
     {
+        self::initEnvironment(ENVIRONMENT);
+
         if (!isset($GLOBALS['application']) || $GLOBALS['application']==NULL) {
             // Setting up static Constants
             self::initInternalConstants();
@@ -276,6 +278,25 @@ class Application
         $GLOBALS['conn'] = NULL;
 
         define('ITEMS_PAGE', "20"); // TODO: delete from application
+    }
+
+    /**
+     * Sets the PHP environment given an environmen name 'production', 'development'
+     *
+     * @return void
+     **/
+    public static function initEnvironment($environment = 'production')
+    {
+        if ($environment == 'development') {
+            ini_set('expose_php', 'On');
+            ini_set('error_reporting', E_ALL | E_STRICT);
+            ini_set('display_errors', 'On');
+            ini_set('display_startup_errors', 'On');
+            ini_set('html_errors', 'On');
+        } else {
+            ini_set('expose_php', 'off');
+        }
+        ini_set('apc.slam_defense','0');
     }
 
     // TODO: move to a separated file called functions.php

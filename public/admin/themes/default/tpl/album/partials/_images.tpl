@@ -11,7 +11,7 @@
                         <div class="overlay-image">
                             <div>
                                 <ul class="image-buttons clearfix">
-                                    <li><a href="#" class="edit-button" title="Editar"><img src="{$params.IMAGE_DIR}edit.png"></a></li>
+                                    <li><a href="#"  data-id="{$photo['photo']->pk_photo}" class="edit-button" title="Editar"><img src="{$params.IMAGE_DIR}edit.png"></a></li>
                                     <li><a href="#" class="delete-button" title="{t}Drop{/t}"><img src="{$params.IMAGE_DIR}trash.png"></a></li>
                                 </ul>
                             </div>
@@ -55,6 +55,8 @@
                     <div><label>{t}Creation date{/t}</label> <span class="created_time">{$album->cover_image->created|default:""}</span></div>
                     <div><label>{t}Description{/t}</label>   <span class="description">{$album->cover_image->description|escape:'html'}</span></div>
                     <div><label>{t}Tags{/t}</label>          <span class="tags">{$album->cover_image->metadata|default:""}</span></div>
+                    <div><label>{t}Image size{/t}</label>    <span class="image_size">{$album->cover_image->image_size|default:""}</span></div>
+                    <div><label>{t}File size{/t}</label>     <span class="file_size">{$album->cover_image->file_size|default:""}</span></div>
                 </div>
             </div>
             <div class="article-resource-footer">
@@ -187,8 +189,8 @@ jQuery(document).ready(function($){
         }
     });
 
-    jQuery('#frontpage-image .delete-button').on('click', function () {
-        var parent = jQuery(this).parent();
+    $('#frontpage-image .delete-button').on('click', function () {
+        var parent = $(this).parent();
         var elementID = parent.find('.album-frontpage-image');
 
         if (elementID.val() > 0) {
@@ -201,11 +203,24 @@ jQuery(document).ready(function($){
         };
     });
 
-    jQuery('.edit-button').on('click', function () {
-        var parent = jQuery(this).parent();
-        var elementID = parent.find('.album-frontpage-image');
+    jQuery('#album-contents').on('click', '.edit-button', function (event, ui) {
+        event.preventDefault();
+        var parent = jQuery(this).parents('.image.thumbnail');
+        var element = parent.children('img');
 
-        jQuery("#modal-edit-album-photo").modal('show');
+        $("#modal-edit-album-photo input#id_image").val( element.attr('id') );
+
+        var footer_text = parent.children('textarea').html();
+        $("#modal-edit-album-photo textarea#footer_image").val(footer_text);
+
+        // Change the image information in the edit modalbox
+        var article_info = $("#modal-edit-album-photo .article-resource-image-info");
+        article_info.find(".image_size").html(element.data("width") + " x "+ element.data("height") + " px");
+        article_info.find(".file_size").html(element.data("filesize") + " Kb");
+        article_info.find(".created_time").html(element.data("created"));
+
+        $("#modal-edit-album-photo .article-resource-image").find("img").attr('src', element.attr("src"));
+        $("#modal-edit-album-photo").modal('show');
     });
 
 });

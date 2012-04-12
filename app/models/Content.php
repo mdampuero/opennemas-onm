@@ -105,7 +105,7 @@ class Content
                 );
 
                 if (isset($contentTypeName->fields['name'])) {
-                    $returnValue = mb_strtolower($contentTypeName);
+                    $returnValue = mb_strtolower($contentTypeName->fields['name']);
                 } else {
                     $returnValue = $this->content_type;
                 }
@@ -844,10 +844,11 @@ class Content
     */
     public function isScheduled()
     {
-        $start = new \DateTime($this->starttime);
-        $end   = new \DateTime($this->endtime);
+        $created = new \DateTime($this->created);
+        $start =   new \DateTime($this->starttime);
+        $end   =   new \DateTime($this->endtime);
 
-        if ($start->getTimeStamp() > 0 || $end->getTimeStamp() > 0) {
+        if ( ($start->getTimeStamp() > 0 && $start != $created ) || $end->getTimeStamp() > 0) {
             return true;
         }
         return false;
@@ -1494,6 +1495,7 @@ class Content
         $refactorID = $GLOBALS['application']->conn->GetOne($sql,$value);
         if(!empty($refactorID)) {
             $content = new Content($refactorID);
+            $content = $content->get($refactorID);
             Application::forward301('/'.$content->uri);
         }
 
@@ -1513,7 +1515,8 @@ class Content
 
         if (!empty($dirtyID)){
 
-            if (INSTANCE_UNIQUE_NAME == 'nuevatribuna') {
+            if (preg_match('@tribuna@',INSTANCE_UNIQUE_NAME) || preg_match('@retrincos@',INSTANCE_UNIQUE_NAME) ) {
+            //if (INSTANCE_UNIQUE_NAME == 'nuevatribuna' || INSTANCE_UNIQUE_NAME == 'retrincos' ) {
                 $contentID = self::searchInRefactorID($dirtyID);
             }
 

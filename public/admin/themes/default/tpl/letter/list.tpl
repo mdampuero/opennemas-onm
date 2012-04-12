@@ -152,7 +152,7 @@
 				<tfoot>
 					<tr class="pagination">
 						<td colspan="13">
-                            {$paginacion->links|default:""}&nbsp;
+                            {$pagination|default:""} &nbsp;
                         </td>
 					</tr>
 				</tfoot>

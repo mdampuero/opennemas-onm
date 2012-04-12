@@ -21,7 +21,7 @@ jQuery("#modal-edit-album-errors").modal({
     show: false,
 });
 jQuery('#modal-edit-album-errors a.btn.accept').on('click', function(e){
-    jQuery("#modal-menu-accept").modal('hide');
+    jQuery("#modal-edit-album-errors").modal('hide');
     e.preventDefault();
 });
 </script>

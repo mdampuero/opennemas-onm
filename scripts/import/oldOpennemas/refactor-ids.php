@@ -55,6 +55,19 @@ class refactorIds {
      */
     public function modifySchema() {
 
+        $sql="CREATE TABLE IF NOT EXISTS `refactor_ids` (
+          `pk_content_old` bigint(10) NOT NULL,
+          `pk_content` bigint(10) NOT NULL,
+          `type` varchar(20)  NULL,
+          PRIMARY KEY (`pk_content_old`,`pk_content`)
+        ) ENGINE=MyISAM DEFAULT CHARSET=latin1";
+
+        $rss = $this->orig->conn->Execute($sql);
+        if (!$rss) {
+            printf(    "ERROR: Can't modify database");
+            die();
+        }
+
         $sql1 ="DROP TABLE IF EXISTS `settings`";
         $rss = $this->orig->conn->Execute($sql1);
 
@@ -69,42 +82,6 @@ class refactorIds {
         if (!$rss) {
             printf(    "ERROR: Can't create settings table");
             die();
-        }
-
-        $sql="CREATE TABLE IF NOT EXISTS `refactor_ids` (
-          `pk_content_old` bigint(10) NOT NULL,
-          `pk_content` bigint(10) NOT NULL,
-          `type` varchar(20)  NULL,
-          PRIMARY KEY (`pk_content_old`,`pk_content`)
-        ) ENGINE=MyISAM DEFAULT CHARSET=latin1";
-
-        $rss = $this->orig->conn->Execute($sql);
-        if (!$rss) {
-            printf(    "ERROR: Can't modify database");
-            die();
-        }
-
-        $sql1=" ALTER TABLE `contents`
-            CHANGE `permalink` `slug` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL";
-
-        $sql2=" ALTER TABLE `contents`
-            ADD `params` LONGTEXT NULL,
-            ADD `category_name` VARCHAR( 255 ) NOT NULL COMMENT 'name category',
-            DROP `archive`,
-            DROP `paper_page`";
-
-     //   $rss = $this->orig->conn->Execute($sql1);
-        if (!$rss) {
-            printf( 'sqlExecute function: '. $this->orig->conn->ErrorMsg());
-            $this->log('sqlExecute function: '.$this->orig->conn->ErrorMsg() );
-
-
-        }
-       // $rss = $this->orig->conn->Execute($sql2);
-        if (!$rss) {
-            printf( 'sqlExecute function: '. $this->orig->conn->ErrorMsg());
-            $this->log('sqlExecute function: '.$this->orig->conn->ErrorMsg() );
-
         }
 
         $sql = <<<INSERTAR
@@ -151,11 +128,54 @@ INSERTAR;
 
         }
 
+ $sql = <<<INSERTAR
+INSERT INTO `menues` (`pk_menu`, `name`, `type`, `site`, `params`, `pk_father`) VALUES
+(1, 'frontpage', '', 'nuevatribuna.local', 'a:1:{s:11:"description";s:0:"";}', 0),
+(2, 'opinion', '', '', NULL, NULL),
+(3, 'mobile', '', '', NULL, NULL),
+(4, 'album', '', '', NULL, NULL),
+(5, 'video', '', '', NULL, NULL),
+(6, 'poll', '', '', NULL, NULL),
+(8, 'statics', '', '', NULL, NULL),
+(7, 'submenu Portada', '', 'nuevatribuna.local', 'a:1:{s:11:"description";s:29:"sub Menu que se ve en portada";}', 1);
+
+
+INSERTAR;
+
+        $rss = $this->orig->conn->Execute($sql);
+        if (!$rss) {
+            printf( 'sqlExecute function: '. $this->orig->conn->ErrorMsg());
+            $this->log('sqlExecute function: '.$this->orig->conn->ErrorMsg() );
+
+        }
+
+ $sql = <<<INSERTAR
+INSERT INTO `menu_items` (`pk_item`, `pk_menu`, `title`, `link_name`, `type`, `position`, `pk_father`) VALUES
+(1, 1, 'Portada', 'home', 'internal', 1, 0),
+(2, 1, 'España', 'espana', 'category', 3, 0),
+(3, 1, 'Mundo', 'mundo', 'category', 4, 0),
+(4, 1, 'Opinión', 'opinion', 'internal', 2, 0),
+(5, 1, 'Sociedad', 'sociedad', 'category', 6, 0),
+(6, 1, 'Medio Ambiente', 'medio-ambiente', 'category', 7, 0),
+(7, 1, 'Cultura | Ocio', 'cultura---ocio', 'category', 8, 0),
+(8, 1, 'Entrevistas', 'entrevistas', 'category', 9, 0),
+(9, 1, 'Economía', 'economia', 'category', 5, 0),
+(10, 7, 'Versión Móvil', 'mobile', 'internal', 1, 1);
+
+
+INSERTAR;
+
+        $rss = $this->orig->conn->Execute($sql);
+        if (!$rss) {
+            printf( 'sqlExecute function: '. $this->orig->conn->ErrorMsg());
+            $this->log('sqlExecute function: '.$this->orig->conn->ErrorMsg() );
+
+        }
+
+
 
         return true;
     }
-
-
 
 
      public function executeSqlFile($fileName) {
@@ -171,7 +191,7 @@ INSERTAR;
                 $rss = $this->orig->conn->Execute($sql);
                  if (!$rss) {
                     printf( 'ERROR '.$this->orig->conn->ErrorMsg() );
-                    $this->log($this->orig->conn->ErrorMsg() );
+                    $this->log( $sql. " - ".$this->orig->conn->ErrorMsg() );
 
                 }
               }
@@ -300,6 +320,66 @@ INSERTAR;
         return true;
     }
 
+
+    public function updateFrontpageArticles() {
+
+        $sql = "SELECT pk_content, pk_fk_content_category, placeholder, position ".
+                " FROM contents, contents_categories ".
+                " WHERE frontpage=1 AND contents.fk_content_type=1 ".
+                " AND pk_content = pk_fk_content AND content_status=1 AND available=1 ";
+
+        $rs =  $this->orig->conn->Execute($sql);
+        $values= array();
+        while(!$rs->EOF) {
+            $values[] =  array(
+                                $rs->fields['pk_content'],
+                                $rs->fields['pk_fk_content_category'],
+                                $rs->fields['placeholder'],
+                                $rs->fields['position'],
+                                NULL,
+                                'Article'
+                   );
+
+            $rs->MoveNext();
+        }
+
+        $sql = "SELECT pk_content, pk_fk_content_category, home_placeholder, home_pos ".
+                " FROM contents, contents_categories ".
+                " WHERE in_home=1 AND frontpage=1  AND contents.fk_content_type=1 ".
+                " AND pk_content = pk_fk_content AND content_status=1 AND available=1 ";
+
+        $rs =  $this->orig->conn->Execute($sql);
+
+        while(!$rs->EOF) {
+            $values[] =  array(
+                            $rs->fields['pk_content'],
+                            0,
+                            $rs->fields['home_placeholder'],
+                            $rs->fields['home_pos'],
+                            NULL,
+                            'Article',
+                   );
+
+            $rs->MoveNext();
+        }
+
+        $rs->Close(); # optional
+
+        $sql= "INSERT INTO `content_positions` ".
+              " (`pk_fk_content`, `fk_category`, `placeholder`, `position`, `params`, `content_type`)".
+              " VALUES (?, ?, ?, ?, ?, ?)";
+        $this->orig->conn->Prepare($sql);
+        $rss = $this->orig->conn->Execute($sql,$values);
+        if (!$rss) {
+            $error =  "\n-  ".$sql." - ".$values." - ".$this->orig->conn->ErrorMsg() ;
+            $this->log('-'.$error);
+            printf('\n-'.$error);
+        }else{
+             printf('\n- Articles are added in frontpages');
+        }
+
+
+    }
     /**
      * prepare sql sentences for actualice ids
      *
@@ -400,6 +480,29 @@ INSERTAR;
         }
     }
 
+     public function updateAdvertisements() {
+
+       $sql2 = "SELECT distinct(path) FROM advertisements";
+       $rs = $this->orig->conn->Execute($sql2);
+
+          while(!$rs->EOF) {
+              $newID = $this->elementIsRefactor($rs->fields['path'], 'photo');
+              var_dump($rs->fields['path']);
+              if(!empty($newID)) {
+                   $sql = "UPDATE advertisements SET `path`= ? WHERE  `path`= ?";
+                   $values = array( $newID, $rs->fields['path']);
+                    var_dump($values);
+                    $rss = $this->orig->conn->Execute($sql,$values);
+                    if (!$rss) {
+                        $error =  "\n- ".$sql." - ".$values." - ".$this->orig->conn->ErrorMsg() ;
+                        $this->log('-'.$error);
+                        printf('\n-'.$error);
+                    }
+              }
+
+          $rs->MoveNext();
+       }
+    }
 
     /**
      * Update tables with new ids and update content slug.
@@ -452,8 +555,8 @@ INSERTAR;
 
     public function getIds($where = '') {
 
-
         $items = array();
+
         $sql = "SELECT pk_content_old, pk_content  FROM refactor_ids ".$where;
 
         $rs =  $this->orig->conn->Execute($sql);
@@ -477,7 +580,6 @@ INSERTAR;
 
     public function refactorSecondaryTables() {
 
-
         $values =  $this->getIds();
         printf('\n \n get values ok');
         $sqlList = $this->prepareSecondaryTables();
@@ -491,7 +593,6 @@ INSERTAR;
     }
 
      public function refactorImgTables() {
-
 
         $values =  $this->getIds( " WHERE  `type` = 'photo' "  );
         printf('\n \n get values ok');
@@ -548,6 +649,25 @@ INSERTAR;
 
     }
 
+     public function elementIsRefactor($contentID, $contentType) {
+        if(isset($contentID) && isset($contentType)) {
+            $sql = 'SELECT * FROM `refactor_ids` WHERE `pk_content_old`=? AND type=?';
+
+            $values = array($contentID, $contentType);
+            $views_update_sql = $this->orig->conn->Prepare($sql);
+            $rss = $this->orig->conn->Execute($views_update_sql,
+                                                          $values);
+
+            if (!$rss) {
+                echo $this->orig->conn->ErrorMsg();
+            } else {
+                return ($rss->fields['pk_content']);
+            }
+
+        } else {
+            echo "There is imported {$contentID} - {$contentType}\n.";
+        }
+    }
 
     /**
      *  Write in log file

@@ -24,34 +24,29 @@ class cSearch
 	static private $Instance;
 
 	/*
-	 * Name: __construct
-	 *
-	 * Input:  void
-	 *
-	 * Output: void
-	 *
-	*/
-	private function __construct()
-	{
-
-	}
-
-	/*
-	 * Name: 	Instance()
-	 *
-	 * Description:	Devuelve una instancia al propio Objeto. Patron singleton.
-	 *
-	 * Input: void
-	 *
-	 * Output: Instancia al propio objeto.
-	 *
-	*/
+	 * TODO: drop and use getInstance function
+	 **/
 	static public function Instance()
 	{
-       if (!isset(self::$Instance)) {
-          self::$Instance = new cSearch ();
-       }
-       return self::$Instance;
+       return self::getInstance();
+    }
+
+    /*
+     * Name:    getInstance()
+     *
+     * Description: Devuelve una instancia al propio Objeto. Patron singleton.
+     *
+     * Input: void
+     *
+     * Output: Instancia al propio objeto.
+     *
+    */
+    static public function getInstance()
+    {
+        if (!isset(self::$Instance)) {
+            self::$Instance = new cSearch ();
+        }
+        return self::$Instance;
     }
 
 
@@ -199,7 +194,6 @@ class cSearch
         $szSqlSentence .= " AND ( " . $this->ParserTypes($szContentsTypeTitle) . ") AND (" . $szWhere . ") ";
         $szSqlSentence .= " ORDER BY _height DESC, created DESC";
         $szSqlSentence .= " LIMIT " . $iLimit;
-
 
         $resultSet = $GLOBALS['application']->conn->Execute($szSqlSentence);
 
@@ -363,7 +357,7 @@ class cSearch
 	 * Output: (String) Parte "WHERE" de la sentencia SQL.
 	 *
 	*/
-	private function DefineMatchOfSentence($szSourceTags)
+	public function DefineMatchOfSentence($szSourceTags)
 	{
         $szSourceTags = trim($szSourceTags);
         $szSqlMatch = " MATCH (" . cSearch::_FullTextColumn  .
