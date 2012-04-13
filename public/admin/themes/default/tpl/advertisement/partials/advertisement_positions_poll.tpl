@@ -3,7 +3,7 @@
     <tr>
         <td colspan="2">
             <label>
-                Banner Intersticial - Gallery (800X600)
+                Banner Intersticial - {t}Encuestas{/t} (800X600)
                 <input type="radio" name="type_advertisement" value="850" {if isset($advertisement) && $advertisement->type_advertisement == 850}checked="checked" {/if}/>
             </label>
         </td>

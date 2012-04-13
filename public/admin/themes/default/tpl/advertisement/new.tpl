@@ -304,34 +304,43 @@ input, select, textarea {
                     <div id="publi-interior">
                         {include file="advertisement/partials/advertisement_positions_interior.tpl"}
                     </div>
-
+                    {is_module_activated name="VIDEO_MANAGER"}
                     <div id="publi-video">
                         {include file="advertisement/partials/advertisement_positions_video.tpl"}
                     </div>
                     <div id="publi-video-interior">
                         {include file="advertisement/partials/advertisement_positions_video_interior.tpl"}
                     </div>
+                    {/is_module_activated}
+                    {is_module_activated name="OPINION_MANAGER"}
                     <div id="publi-opinion">
                         {include file="advertisement/partials/advertisement_positions_opinion.tpl"}
                     </div>
                     <div id="publi-opinion-interior">
                         {include file="advertisement/partials/advertisement_positions_opinion_interior.tpl"}
                     </div>
+                    {/is_module_activated}
+                    {is_module_activated name="ALBUM_MANAGER"}
                     <div id="publi-gallery">
                         {include file="advertisement/partials/advertisement_positions_gallery.tpl"}
                     </div>
                     <div id="publi-gallery-inner">
                         {include file="advertisement/partials/advertisement_positions_gallery_inner.tpl"}
                     </div>
+                    {/is_module_activated}
+                    {is_module_activated name="POLL_MANAGER"}
                     <div id="publi-poll">
                         {include file="advertisement/partials/advertisement_positions_poll.tpl"}
                     </div>
                     <div id="publi-poll-inner">
                         {include file="advertisement/partials/advertisement_positions_poll_inner.tpl"}
                     </div>
+                    {/is_module_activated}
+                    {is_module_activated name="NEWSLETTER_MANAGER"}
                     <div id="publi-newsletter">
                         {include file="advertisement/partials/advertisement_positions_newsletter.tpl"}
                     </div>
+                    {/is_module_activated}
                 </div><!-- /position-adv -->
             </fieldset>
         </div><!-- / -->

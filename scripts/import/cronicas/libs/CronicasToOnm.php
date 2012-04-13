@@ -478,7 +478,7 @@ class CronicasToOnm {
                     $authorData['img'] = $this->helper->imageIsImported($rs->fields['img'], 'image');
                     if(empty($authorData['img'])) {
 
-                        $sql2 = "SELECT fk_photo FROM author_imgs WHERE fk_author = ? ORDER BY fk_photo DESC  LIMIT 1 ";
+                        $sql2 = "SELECT pk_img FROM author_imgs WHERE fk_author = ? ORDER BY fk_photo DESC  LIMIT 1 ";
                         $values2 = array( $authorData['id'] );
                         $rs2 = $GLOBALS['application']->conn->Execute($sql2, $values2);
                         if(!$rs2) {
