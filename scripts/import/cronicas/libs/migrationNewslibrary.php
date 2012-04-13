@@ -97,27 +97,29 @@ class migrationNewslibrary {
 
     // test in one file
     public function migrateTest() {
-        $path = OLD_LIBRARY."test/";
-        $html = file_get_contents($path."home.html");
+        $catName ='home';
+       // foreach($this->categoryNames as $catName) {
+            $path = OLD_LIBRARY."test/";
+            $html = file_get_contents($path."{$catName}.html");
 
-        $htmlOut = $this->migrateSources( $html );
-        $htmlOut = $this->migrateSourcesImages( $htmlOut );
-        $htmlOut = $this->migrateUrls( $htmlOut );
-        $htmlOut = $this->migrateOtherUrls($htmlOut);
+            $htmlOut = $this->migrateSources( $html );
+            $htmlOut = $this->migrateSourcesImages( $htmlOut );
+            $htmlOut = $this->migrateUrls( $htmlOut );
+            $htmlOut = $this->migrateOtherUrls($htmlOut);
 
-        $directoryDate =date("/Y/m/d/");
-        $basePath = MEDIA_PATH.'/'.'library'.$directoryDate;
-        if(!file_exists($basePath) ) {
-            mkdir($basePath, 0777, true);
-        }
-        $newFile =  $basePath."home.html"  ;
-        $result = file_put_contents($newFile, $htmlOut);
-        var_dump($newFile);
-        if(!$result) {
-            $this->helper->log(" Problem with {$path} file");
-            var_dump("problem with {$path} \n");
-        }
-
+            $directoryDate =date("/Y/m/d/");
+            $basePath = MEDIA_PATH.'/'.'library'.$directoryDate;
+            if(!file_exists($basePath) ) {
+                mkdir($basePath, 0777, true);
+            }
+            $newFile =  $basePath."home.html"  ;
+            $result = file_put_contents($newFile, $htmlOut);
+            var_dump($newFile);
+            if(!$result) {
+                $this->helper->log(" Problem with {$path} file");
+                var_dump("problem with {$path} \n");
+            }
+       // }
     }
 
     public function migrateSources($html) {
@@ -208,7 +210,7 @@ class migrationNewslibrary {
                 var_dump('\n '.$content->uri);
                 $htmlResult = preg_replace('@(href ?= ?"/)(.*/)(\d+)\.html ?@', 'href="'.$content->uri, $html);
             }else{
-                ///publicidad/453.html
+               $this->helper->log($contentID);
 
             }
         }
