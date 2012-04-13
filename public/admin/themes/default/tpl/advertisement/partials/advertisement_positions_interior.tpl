@@ -34,7 +34,10 @@
     </tr>
 
     <tr>
-        <td colspan="2">
+        <td>
+
+        </td>
+        <td>
             <label>
                 Banner1 Column Right (I) (300X*)
                 <input type="radio" name="type_advertisement" value="103" {if $advertisement->type_advertisement == 103}checked="checked" {/if}/>
@@ -42,18 +45,46 @@
         </td>
     </tr>
     <tr>
-        <td colspan="2">
+        <td>
+        </td>
+        <td>
+            <label>
+                Banner2 Column Right(I) (300X*)
+                <input type="radio" name="type_advertisement" value="105" {if $advertisement->type_advertisement == 105}checked="checked" {/if}/>
+            </label>
+        </td>
+    </tr>
+    <tr>
+        <td>
             <label>
                 Robapágina (650X*)
                 <input type="radio" name="type_advertisement" value="104" {if $advertisement->type_advertisement == 104}checked="checked" {/if}/>
             </label>
         </td>
+        <td>
+            <label>
+                Banner3 Column Right(I) (300X*)
+                <input type="radio" name="type_advertisement" value="106" {if $advertisement->type_advertisement == 106}checked="checked" {/if}/>
+            </label>
+        </td>
     </tr>
     <tr>
-        <td colspan="2">
+        <td>
+        </td>
+        <td>
             <label>
-                Banner2 Column Right(I) (300X*)
-                <input type="radio" name="type_advertisement" value="105" {if $advertisement->type_advertisement == 105}checked="checked" {/if}/>
+                Banner4 Column Right(I) (300X*)
+                <input type="radio" name="type_advertisement" value="107" {if $advertisement->type_advertisement == 107}checked="checked" {/if}/>
+            </label>
+        </td>
+    </tr>
+    <tr>
+        <td>
+        </td>
+        <td>
+            <label>
+                Banner5 Column Right(I) (300X*)
+                <input type="radio" name="type_advertisement" value="108" {if $advertisement->type_advertisement == 108}checked="checked" {/if}/>
             </label>
         </td>
     </tr>

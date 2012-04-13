@@ -65,6 +65,9 @@ class Advertisement extends Content
         103 => "[I] Banner Columna Derecha 1",
         104 => "[I] Robapágina",
         105 => "[I] Banner Columna Derecha 2",
+        106 => "[I] Banner Columna Derecha 3",
+        107 => "[I] Banner Columna Derecha 4",
+        108 => "[I] Banner Columna Derecha 5",
 
         109 => "[I] Big Banner Inferior",
         110 => "[I] Banner Inferior Derecho",
@@ -137,6 +140,9 @@ class Advertisement extends Content
         703 => "[OI] Banner1 Column Right (I) (300X*)",
         704 => "[OI] Robapágina (650X*)",
         705 => "[OI] Banner2 Column Right(I) (300X*)",
+        706 => "[OI] Banner3 Column Right(I) (300X*)",
+        707 => "[OI] Banner4 Column Right(I) (300X*)",
+        708 => "[OI] Banner5 Column Right(I) (300X*)",
         709 => "[OI] Big Banner Bottom(I) (728X90)",
         710 => "[OI] Banner Bottom Right(I) (234X90)",
 
