@@ -162,6 +162,8 @@ switch ($action) {
     case 'content-provider':
 
         $searchString = $request->query->filter('search_string', '', FILTER_SANITIZE_STRING);
+        $page     = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_NUMBER_INT,   array('options' => array( 'default' => 1)));
+
         if ($searchString != '') {
 
             $searchStringArray = array_map(function($element) {
@@ -177,14 +179,27 @@ switch ($action) {
 
             $sql = "SELECT pk_content, fk_content_type FROM contents "
                   ."WHERE ".$matchString;
-            $rs = $GLOBALS['application']->conn->Execute($sql);
+            $rs = $GLOBALS['application']->conn->GetArray($sql);
 
             $results = array();
             if ($rs !== false) {
-                while (!$rs->EOF) {
-                    $results []= new Content($rs->fields['pk_content']);
-                    $rs->MoveNext();
+                $resultSetSize = count($rs);
+                $rs = array_splice($rs, ($page-1)*5, 5);
+
+                foreach ($rs as $content) {
+                    $results []= new Content($content['pk_content']);
                 }
+
+                $pagerOptions = array(
+                    'mode'        => 'Sliding',
+                    'perPage'     => 5,
+                    'delta'       => 4,
+                    'clearIfVoid' => true,
+                    'urlVar'      => 'page',
+                    'totalItems'  => $resultSetSize,
+                );
+                $pager = Pager::factory($pagerOptions);
+                $tpl->assign('pager', $pager);
             }
             $tpl->assign('results', $results);
         }
