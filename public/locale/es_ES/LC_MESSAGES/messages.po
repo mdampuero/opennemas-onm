@@ -1,0 +1,15 @@
+#: public/controllers/rating.php:9
+msgid "Action not recognized!"
+msgstr ""
+
+#: public/controllers/rating.php:20
+msgid "Problem with IP verification!"
+msgstr ""
+
+#: public/controllers/rating.php:27
+msgid "Content not available"
+msgstr ""
+
+#: public/controllers/rating.php:36
+msgid "You have voted this new previously."
+msgstr ""
