@@ -57,7 +57,7 @@ switch($action) {
 
         $cacheID = $tpl->generateCacheId( $category_name, $subcategory_name, $articleID );
 
-        if (($tpl->caching == 0) || !$tpl->isCached('article/article.tpl', $cache_id) )
+        if (($tpl->caching == 0) || !$tpl->isCached('article/article.tpl', $cacheID) )
         {
 
             $article = new Article($articleID);
