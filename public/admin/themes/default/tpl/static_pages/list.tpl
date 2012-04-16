@@ -51,8 +51,8 @@
                     </td>
 
                     <td>
-                        <a href="{$smarty.const.SITE_URL}{$smarty.const.STATIC_PAGE_PATH}{$pages[k]->slug}.html" target="_blank" title="{t}Open in a new window{/t}">
-                            {$smarty.const.SITE_URL}{$smarty.const.STATIC_PAGE_PATH}{$pages[k]->slug}.html
+                        <a href="{$smarty.const.SITE_URL}{$smarty.const.STATIC_PAGE_PATH}/{$pages[k]->slug}.html" target="_blank" title="{t}Open in a new window{/t}">
+                            {$smarty.const.SITE_URL}{$smarty.const.STATIC_PAGE_PATH}/{$pages[k]->slug}.html
                         </a>
                     </td>
 
