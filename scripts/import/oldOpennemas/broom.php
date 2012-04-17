@@ -97,25 +97,37 @@ class Broom {
 
         $sqls = array();
         $sqls[] ="DELETE FROM `contents_categories` WHERE `contents_categories`.`pk_fk_content` >".$value;
-        $sqls []= 'DELETE FROM contents  WHERE `pk_content` > '.$value;
-        $sqls []= 'DELETE FROM articles  WHERE `pk_article`  > '.$value;
-        $sqls []= 'DELETE FROM opinions  WHERE `pk_opinion`  > '.$value;
-        $sqls []= 'DELETE FROM advertisements  WHERE `pk_advertisement`  > '.$value;
-        $sqls []= 'DELETE FROM albums  WHERE `pk_album`  > '.$value;
-        $sqls []= 'DELETE FROM albums_photos  WHERE `pk_album`  > '.$value.'  OR `pk_photo`  > '.$value;
-        $sqls []= 'DELETE FROM videos  WHERE `pk_video`  > '.$value;
-        $sqls []= 'DELETE FROM photos  WHERE `pk_photo`  > '.$value;
-        $sqls []= 'DELETE FROM comments  WHERE `pk_comment`  > '.$value;
-        $sqls []= 'DELETE FROM votes  WHERE `pk_vote`  > '.$value;
-        $sqls []= 'DELETE FROM ratings  WHERE `pk_rating`  > '.$value;
-        $sqls []= 'DELETE FROM attachments  WHERE `pk_attachment`  > '.$value;
-        $sqls []= 'DELETE FROM polls  WHERE `pk_poll`  > '.$value;
-        $sqls []= 'DELETE FROM poll_items  WHERE `fk_pk_poll`  > '.$value;
-        $sqls []= 'DELETE FROM related_contents  WHERE `pk_content1` > '.$value. '   OR `pk_content2`  > '.$value;
-        $sqls []= 'DELETE FROM kioskos  WHERE `pk_kiosko`  > '.$value;
-        $sqls []= 'DELETE FROM static_pages  WHERE `pk_static_page`  > '.$value;
+        $sqls[]= 'DELETE FROM contents  WHERE `pk_content` > '.$value;
+        $sqls[]= 'DELETE FROM articles  WHERE `pk_article`  > '.$value;
+        $sqls[]= 'DELETE FROM opinions  WHERE `pk_opinion`  > '.$value;
+        $sqls[]= 'DELETE FROM advertisements  WHERE `pk_advertisement`  > '.$value;
+        $sqls[]= 'DELETE FROM albums  WHERE `pk_album`  > '.$value;
+        $sqls[]= 'DELETE FROM albums_photos  WHERE `pk_album`  > '.$value.'  OR `pk_photo`  > '.$value;
+        $sqls[]= 'DELETE FROM videos  WHERE `pk_video`  > '.$value;
+        $sqls[]= 'DELETE FROM photos  WHERE `pk_photo`  > '.$value;
+        $sqls[]= 'DELETE FROM comments  WHERE `pk_comment`  > '.$value;
+        $sqls[]= 'DELETE FROM votes  WHERE `pk_vote`  > '.$value;
+        $sqls[]= 'DELETE FROM ratings  WHERE `pk_rating`  > '.$value;
+        $sqls[]= 'DELETE FROM attachments  WHERE `pk_attachment`  > '.$value;
+        $sqls[]= 'DELETE FROM polls  WHERE `pk_poll`  > '.$value;
+        $sqls[]= 'DELETE FROM poll_items  WHERE `fk_pk_poll`  > '.$value;
+        $sqls[]= 'DELETE FROM related_contents  WHERE `pk_content1` > '.$value. '   OR `pk_content2`  > '.$value;
+        $sqls[]= 'DELETE FROM kioskos  WHERE `pk_kiosko`  > '.$value;
+        $sqls[]= 'DELETE FROM static_pages  WHERE `pk_static_page`  > '.$value;
 
-        //ALTER TABLE `contents` AUTO_INCREMENT =1
+        $sqls[]= "ALTER TABLE `contents` AUTO_INCREMENT =1";
+        $sqls[]= "ALTER TABLE `articles` AUTO_INCREMENT =1";
+        $sqls[]= "ALTER TABLE `advertisements` AUTO_INCREMENT =1";
+        $sqls[]= "ALTER TABLE `opinions` AUTO_INCREMENT =1";
+        $sqls[]= "ALTER TABLE `albums` AUTO_INCREMENT =1";
+        $sqls[]= "ALTER TABLE `videos` AUTO_INCREMENT =1";
+        $sqls[]= "ALTER TABLE `photos` AUTO_INCREMENT =1";
+        $sqls[]= "ALTER TABLE `attachments` AUTO_INCREMENT =1";
+        $sqls[]= "ALTER TABLE `static_pages` AUTO_INCREMENT =1";
+        $sqls[]= "ALTER TABLE `polls` AUTO_INCREMENT =1";
+        $sqls[]= "ALTER TABLE `kioskos` AUTO_INCREMENT =1";
+
+
         $fail = true;
         foreach ($sqls as $sql) {
             $rss = $this->orig->conn->Execute($sql);

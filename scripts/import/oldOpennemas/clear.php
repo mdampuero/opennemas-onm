@@ -42,15 +42,15 @@ require  'adodb5/adodb.inc.php';
 require 'db-config.inc.php';
 require 'broom.php';
 
-
 $broom = new Broom($config);
 
- $broom->writeDataInLog(); //Save in log possible information of tribuna
+$broom->writeDataInLog(); //Save in log possible information of tribuna
+printf("log is written ok \n");
 
- //$ok=$broom->clearExecute();
+$ok=$broom->clearExecute();
 
 if ($ok) {
     printf("OpenNemas database is cleared \n");
 } else {
-    printf("Sorry database isn't cleared \n");
+    printf("Sorry database isn't cleared check line 50 is commented \n");
 }

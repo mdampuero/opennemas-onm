@@ -477,6 +477,7 @@ INSERTAR;
                 $this->log('-'.$error);
                 printf('\n-'.$error);
             }
+            $rss->Close();
         }
     }
 
@@ -498,10 +499,12 @@ INSERTAR;
                         $this->log('-'.$error);
                         printf('\n-'.$error);
                     }
+                    $rss->Close();
               }
 
           $rs->MoveNext();
        }
+       $rs->Close();
     }
 
     /**
@@ -566,7 +569,7 @@ INSERTAR;
                 $items[] = array($rs->fields['pk_content'],  $rs->fields['pk_content_old']);
                 $rs->MoveNext();
             }
-
+            $rs->Close();
             return $items;
 
         } else {
