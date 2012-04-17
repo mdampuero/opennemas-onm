@@ -145,8 +145,12 @@ class ContentManager
                     $content->load(array(
                         'placeholder' => $rs->fields['placeholder'],
                         'position'    => $rs->fields['position'],
-                        'params'      => unserialize($rs->fields['params']),
                     ));
+                    if ( is_array( $content->params ) && $content->params > 0 ) {
+                       $content->params = array_merge($content->params  , (array)unserialize($rs->fields['params']) );
+                    } else {
+                        $content->params = unserialize($rs->fields['params']);
+                    }
                     $contents[] = $content;
                 }
 
