@@ -1,5 +1,5 @@
 <?php
-/* 
+/*
  *
  *
  */
@@ -41,16 +41,16 @@ class Broom {
         }
 
     }
-    
+
     /**
      * Get data before drop  contents.
-     * This contents can't refactor id's 
+     * This contents can't refactor id's
      */
 
     public function writeDataInLog() {
 
         //$value = "200701010000000000";
-        $value = "201101010000000000"; //tribuna was in 03-2011 
+        $value = "201101010000000000"; //tribuna was in 03-2011
 
         $sqls = array();
         $sqls[] ="SELECT * FROM `contents_categories` WHERE `contents_categories`.`pk_fk_content` >".$value;
@@ -81,7 +81,7 @@ class Broom {
                 $rs->MoveNext();
             }
              $this->log("\n\n");
-           
+
         }
         return  true;
 
@@ -89,7 +89,7 @@ class Broom {
 
     /**
      * Delete dirty fields from all tables.
-     * 
+     *
      */
 
     public function clearExecute() {
@@ -115,6 +115,7 @@ class Broom {
         $sqls []= 'DELETE FROM kioskos  WHERE `pk_kiosko`  > '.$value;
         $sqls []= 'DELETE FROM static_pages  WHERE `pk_static_page`  > '.$value;
 
+        //ALTER TABLE `contents` AUTO_INCREMENT =1
         $fail = true;
         foreach ($sqls as $sql) {
             $rss = $this->orig->conn->Execute($sql);
@@ -133,7 +134,7 @@ class Broom {
     /**
      *  Write in log file
      */
-    
+
     public function log($text = null) {
         if(isset($text) && !is_null($text) ) {
             $handle = fopen( $this->logFile , "a");
@@ -148,4 +149,3 @@ class Broom {
     }
 
 }
- 

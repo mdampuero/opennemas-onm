@@ -38,7 +38,7 @@ $tpl->assign('newslibraryDate',$date);
 require_once("index_advertisement.php");
 
 $ccm = ContentCategoryManager::get_instance();
-$settings = 'staticFrontpages';//s::get('newslibraryView');
+$settings = s::get('newslibraryView');
 
 if ( 1==1 || ($tpl->caching == 0)  || !$tpl->isCached('frontpage/newslibrary.tpl', $cache_id) )
 {
@@ -114,6 +114,7 @@ if ( 1==1 || ($tpl->caching == 0)  || !$tpl->isCached('frontpage/newslibrary.tpl
         if(!empty($contents)) {
             foreach ($contents as $content) {
                $categoryID = $content->category;
+               $library[$categoryID] = new stdClass();
                $library[$categoryID]->id = $categoryID;
                $library[$categoryID]->title = $allCategories[$categoryID]->title;
                $library[$categoryID]->contents[] = $content;
