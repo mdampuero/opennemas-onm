@@ -77,12 +77,12 @@ $cronicasImporter->importSpecials();
 $cronicasImporter->importGalleries();
 
 $cronicasImporter->importAlbums();
-
+*/
 $cronicasImporter->importAdvertisements();
-
+/*
 $cronicasImporter->importAttachments();
 
-//$cronicasImporter->importRelatedContents();
+ $cronicasImporter->importRelatedContents();
 */
 printf("OpenNemas database is ok for Cronicas \n");
 
