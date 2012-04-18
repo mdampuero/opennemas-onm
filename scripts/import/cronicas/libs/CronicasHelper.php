@@ -61,13 +61,13 @@ class CronicasHelper {
         if(!empty($contentID)) {
             $sql = 'SELECT * FROM `translation_ids` WHERE `pk_content_old`=?';
 
-            $values = array($contentID, $contentType);
+            $values = array($contentID);
             $views_update_sql = $GLOBALS['application']->conn->Prepare($sql);
             $rss = $GLOBALS['application']->conn->Execute($views_update_sql,
                                                           $values);
 
             if (!$rss) {
-                echo $GLOBALS['application']->conn->ErrorMsg();
+                echo $GLOBALS['application']->conn->ErrorMsg()."\n";
             } else {
                 return ($rss->fields['pk_content']);
             }
@@ -134,7 +134,7 @@ class CronicasHelper {
         if (!$rss) {
             $this->log('clear contents function: '.$GLOBALS['application']->conn->ErrorMsg() );
         }
- 
+
     }
 
 

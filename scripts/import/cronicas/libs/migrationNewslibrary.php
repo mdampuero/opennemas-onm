@@ -51,7 +51,7 @@ class migrationNewslibrary {
     {
 
       $this->categoriesData = ContentCategoryManager::get_instance()->categories;
-      $this->categoryNames = array('0'=>'home', '1'=>'cronicas', '2' => 'galicia',
+      $this->categoryNames = array(/*'0'=>'home', */ '1'=>'cronicas', '2' => 'galicia',
                     '3' => 'asturias', '4' => 'canarias', '5' => 'castillaleon',
                     '6' => 'cantabria', '7' => 'madrid', '8' => 'baleares',
                     '9' => 'andalucia', '15'=>'paisvasco'  );
@@ -98,9 +98,12 @@ class migrationNewslibrary {
     // test in one file
     public function migrateTest() {
         $catName ='home';
-       // foreach($this->categoryNames as $catName) {
-            $path = OLD_LIBRARY."test/";
-            $html = file_get_contents($path."{$catName}.html");
+        $path = OLD_LIBRARY."test/";
+         foreach($this->categoryNames as $catName) {
+           $oldFile =$path."/{$catName}.html";
+           echo $oldFile."\n";
+           if(file_exists($oldFile) ) {
+            $html = file_get_contents($oldFile);
 
             $htmlOut = $this->migrateSources( $html );
             $htmlOut = $this->migrateSourcesImages( $htmlOut );
@@ -112,14 +115,16 @@ class migrationNewslibrary {
             if(!file_exists($basePath) ) {
                 mkdir($basePath, 0777, true);
             }
-            $newFile =  $basePath."home.html"  ;
+            $newFile =  $basePath."{$catName}.html"  ;
             $result = file_put_contents($newFile, $htmlOut);
+            var_dump($path."{$catName}.html");
             var_dump($newFile);
             if(!$result) {
                 $this->helper->log(" Problem with {$path} file");
                 var_dump("problem with {$path} \n");
             }
-       // }
+           }
+         }
     }
 
     public function migrateSources($html) {
@@ -136,7 +141,7 @@ class migrationNewslibrary {
         $replacements = array(
                             '@/themes/default/images/@' => '/themes/cronicas/images/old/' ,
                             '@/themes/default/css/@'    => '/themes/cronicas/css/old/',
-                            '@/js/(.*)\.js@'            => '/themes/cronicas/js/old/$1.js',
+                          //  '@/js/(.*)\.js@'            => '/themes/cronicas/js/old/$1.js',
                         );
 
         $htmlResult = preg_replace(
@@ -167,15 +172,18 @@ class migrationNewslibrary {
         $newImage = new Photo();
         foreach($result[0] as $res) {
 
+            //get the path for search in db
             $img = preg_replace('@src?=?\"/media/images/@', '',$res);
 
             $imageID = $this->helper->imageIsImported($img, 'image');
             if(!empty($imageID)) {
                 $newImage->read($imageID);
-                $source =" src=\"/media/cronicas/images{$newImage->path_file}{$newImage->name}\" ";
+                $source =" src=\"/media/cronicas/images{$newImage->path_file}{$newImage->name}";
                 $htmlResult =preg_replace('@src?=?\"/media/images/([^"])* @',
                                                             $source,
                                                             $htmlResult);
+            }else{
+                 $this->helper->log("Problem with image {$img} new {$imageID}.\n");
             }
         }
 
@@ -199,7 +207,7 @@ class migrationNewslibrary {
         $result= array();
 
         preg_match_all('@(href ?= ?"/)(.*/)(\d+)\.html ?@', $html, $result, PREG_SET_ORDER);
-         $newContent = new Content();
+        $newContent = new Content();
         foreach($result as $res) {
             $contentID = array_pop($res);
 
@@ -210,11 +218,10 @@ class migrationNewslibrary {
                 var_dump('\n '.$content->uri);
                 $htmlResult = preg_replace('@(href ?= ?"/)(.*/)(\d+)\.html ?@', 'href="'.$content->uri, $html);
             }else{
-               $this->helper->log($contentID);
+               $this->helper->log("Problem with element {$contentID} new {$elementID}.\n");
 
             }
         }
-
 
        //   $htmlResult = preg_replace($patterns, $replacements, $html);
         return $htmlResult;
@@ -245,6 +252,23 @@ class migrationNewslibrary {
 
 
          return $htmlResult;
+
+     }
+
+     public function someImprovements() {
+         //Added newslibrary calendar.
+         //div id="dcalback"
+         /*
+          *
+          *   <div id="dcalback">
+    <div id="calendar">
+        <script type="text/javascript">
+            var mostra_calendar=function()  { navigate("10-04-2012","galicia"); }
+            Event.observe(window, 'load', mostra_calendar );
+        </script>
+    </div>
+</div>
+          */
 
      }
 
