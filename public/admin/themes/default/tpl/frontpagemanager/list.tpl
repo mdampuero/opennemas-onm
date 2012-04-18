@@ -90,6 +90,7 @@
             <div class="spinner"></div>
             <div class="content-provider-block-wrapper wrapper-content clearfix">
                 <ul>
+                    {is_module_activated name="ARTICLE_MANAGER"}
                     {if $category neq 'home'}
                     <li>
                         <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/article.php?action=content-provider-category&amp;category={$category}">{t}Other articles in this category{/t}</a>
@@ -99,24 +100,37 @@
                         <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/article.php?action=content-provider-suggested">{t}Suggested articles{/t}</a>
                     </li>
                     {/if}
+                    {/is_module_activated}
+                    {is_module_activated name="ADVANCED_SEARCH"}
                     <li>
                         <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/search_advanced/search_advanced.php?action=content-provider&amp;">{t}Search{/t}</a>
                     </li>
+                    {/is_module_activated}
+                    {is_module_activated name="WIDGET_MANAGER"}
                     <li>
                         <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/widget/widget.php?action=content-provider&amp;category={$category}">{t}Widgets{/t}</a>
                     </li>
+                    {/is_module_activated}
+                    {is_module_activated name="OPINION_MANAGER"}
                     <li>
                         <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/opinion/opinion.php?action=content-provider&amp;category={$category}">{t}Opinions{/t}</a>
                     </li>
+                    {/is_module_activated}
+                    {is_module_activated name="VIDEO_MANAGER"}
                     <li>
                         <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/video/video.php?action=content-provider&amp;category={$category}">{t}Videos{/t}</a>
                     </li>
+                    {/is_module_activated}
+                    {is_module_activated name="ALBUM_MANAGER"}
                     <li>
                         <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/album/album.php?action=content-provider&amp;category={$category}">{t}Albums{/t}</a>
                     </li>
+                    {/is_module_activated}
+                    {is_module_activated name="ADS_MANAGER"}
                     <li>
                         <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/advertisement/advertisement.php?action=content-provider&amp;category={$category}">{t}Advertisement{/t}</a>
                     </li>
+                    {/is_module_activated}
                 </ul>
             </div>
 

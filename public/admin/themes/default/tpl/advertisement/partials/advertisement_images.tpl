@@ -21,7 +21,7 @@
                                 {elseif isset($photo1) && $photo1->name}
                                     <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo1->path_file}{$photo1->name}" />
                                 {else}
-                                    <img src="{$smarty.const.MEDIA_IMG_PATH_URL}{$photo1->path_file}{$photo1->name}" width="270" />
+                                    <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/default_img.jpg" width="270" />
                                 {/if}
                             </div>
                             <div id="image-information" class="article-resource-image-info">

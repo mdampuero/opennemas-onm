@@ -9,6 +9,14 @@ $menuXml = '<?xml version="1.0"?>
             link="controllers/instances/instances.php"
         />
     </submenu>
+    <submenu title="'.htmlspecialchars(_("Framework"), ENT_QUOTES).'" id="system" link="#">
+        <node
+            title="'.htmlspecialchars(_("Status"), ENT_QUOTES).'"
+            id="support_help"
+            link="controllers/framework/framework.php"
+            target="external"
+        />
+    </submenu>
     <submenu title="'.htmlspecialchars(_("System"), ENT_QUOTES).'" id="system" link="#">
         <node
             title="'.htmlspecialchars(_("Global settings"), ENT_QUOTES).'"

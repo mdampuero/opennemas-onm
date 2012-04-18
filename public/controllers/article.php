@@ -21,34 +21,28 @@ $ccm = ContentCategoryManager::get_instance();
 /**
  * Getting request params
  **/
-
-$dirtyID = $request->query->filter('article_id', '', FILTER_SANITIZE_STRING);
-$articleID = Content::resolveID($dirtyID);
+$dirtyID          = $request->query->filter('article_id', '', FILTER_SANITIZE_STRING);
+$articleID        = Content::resolveID($dirtyID);
 
 $tpl->assign('contentId', $articleID); // Used on module_comments.tpl
 
-$category_name = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+$category_name    = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
 $subcategory_name = null;
-$action = $request->query->filter('action', '', FILTER_SANITIZE_STRING);
+$action           = $request->query->filter('action', '', FILTER_SANITIZE_STRING);
 
 if (isset($category_name) && !empty($category_name)) {
-        $category = $ccm->get_id($category_name);
+    $category = $ccm->get_id($category_name);
 } elseif(isset($_REQUEST["action"]) && ( $_REQUEST["action"]!="vote" && $_REQUEST["action"]!="get_plus")) {
     Application::forward301('/');
 }
 
-/**************************************  SECURITY  *******************************************/
-
-if( empty($action) ) {
-    Application::forward301('/404.html');
-}
 switch($action) {
     case 'read': {
 
         if (empty($articleID) ) {
-             Application::forward301('/404.html');
+            Application::forward301('/404.html');
         }
-            // Increment numviews if it's accesible
+        // Increment numviews if it's accesible
         Content::setNumViews($articleID);
 
         // Load config
@@ -58,15 +52,12 @@ switch($action) {
 
         $cm = new ContentManager();
 
-
         // Advertisements for single article NO CACHE
         require_once('article_advertisement.php');
 
-        $cache_id = $tpl->generateCacheId(
-            $category_name, $subcategory_name, $articleID
-        );
+        $cacheID = $tpl->generateCacheId( $category_name, $subcategory_name, $articleID );
 
-        if (($tpl->caching == 0) || !$tpl->isCached('article/article.tpl', $cache_id) )
+        if (($tpl->caching == 0) || !$tpl->isCached('article/article.tpl', $cacheID) )
         {
 
             $article = new Article($articleID);
@@ -75,7 +66,8 @@ switch($action) {
                 && ($article->isStarted())
             ) {
 
-                /******************************  BREADCRUB *********************************/
+                // Print url, breadcrumb code ----------------------------------
+                // TODO: Seems that this is trash, evaluate its removal
 
                 $title = StringUtils::get_title($article->title);
 
@@ -96,26 +88,23 @@ switch($action) {
                     $tpl->assign('breadcrub', $breadcrub);
                 }
 
-                /******************************  CATEGORIES & SUBCATEGORIES  ******
+               // Categories code ----------------------------------------------
+               // TODO: Seems that this is trash, evaluate its removal
 
-                /******************************  CATEGORIES & SUBCATEGORIES  ******/
-
-                $actual_category =$category_name;
-                $actual_category_id = $ccm->get_id($actual_category);
+                $actual_category       =$category_name;
+                $actual_category_id    = $ccm->get_id($actual_category);
                 $actual_category_title = $ccm->get_title($actual_category);
 
                 $tpl->assign(array(
-                    'category_name'=> $actual_category ,
-                    'actual_category_title' =>$actual_category_title,
-                    'actual_category' => $actual_category,
-                    'actual_category_id' =>$actual_category_id,
+                    'category_name'         => $actual_category ,
+                    'actual_category_title' => $actual_category_title,
+                    'actual_category'       => $actual_category,
+                    'actual_category_id'    =>$actual_category_id,
                 ));
 
                 $tpl->assign('article', $article);
 
-                // Before here started the isCached
-
-
+                // Associated media code ------------------------------------------
                 if (isset($article->img2) && ($article->img2 != 0)) {
                     $photoInt = new Photo($article->img2);
                     $tpl->assign('photoInt', $photoInt);
@@ -125,53 +114,51 @@ switch($action) {
                     $videoInt = new Video($article->fk_video2);
                     $tpl->assign('videoInt', $videoInt);
                 } else {
-                    $video =
-                        $cm->find_by_category_name(
-                            'Video',
-                            $actual_category,
-                            'contents.content_status=1',
-                            'ORDER BY created DESC LIMIT 0 , 1'
-                        );
-                    if(isset($video[0])){ $tpl->assign('videoInt', $video[0]); }
+                    $video =  $cm->find_by_category_name(
+                        'Video',
+                        $actual_category,
+                        'contents.content_status=1',
+                        'ORDER BY created DESC LIMIT 0 , 1'
+                    );
+                    if (isset($video[0])) {
+                        $tpl->assign('videoInt', $video[0]);
+                    }
                 }
 
-                /********************** PHOTOs ****************************/
+                // Related contents code ---------------------------------------
+                $relContent      = new RelatedContent();
+                $relatedContents = array();
 
-                /******************* RELATED CONTENT **********************/
-                $relContent= new RelatedContent();
+                $relationIDs     = $relContent->cache->get_relations_int($articleID);
+                if (count($relationIDs) > 0) {
+                    $relatedContents = $cm->cache->getContents($relationIDs);
 
-                $relationes = $relContent->cache->get_relations_int($articleID);
-                $relat = $cm->cache->getContents($relationes);
-
-                // Filter by scheduled {{{
-                $relat = $cm->getInTime($relat);
-                // }}}
-                //Filter availables and not inlitter.
-                $relat = $cm->cache->getAvailable($relat);
+                    // Drop contents that are not available or not in time
+                    $relatedContents = $cm->getInTime($relatedContents);
+                    $relatedContents = $cm->cache->getAvailable($relatedContents);
 
 
-                //Nombre categoria correcto.
-                foreach ($relat as $ril) {
-                    $ril->category_name = $ccm->get_category_name_by_content_id($ril->id);
+                    // Add category name
+                    foreach ($relatedContents as &$content) {
+                        $content->category_name = $ccm->get_category_name_by_content_id($content->id);
+                    }
                 }
-                $tpl->assign('relationed', $relat);
+                $tpl->assign('relationed', $relatedContents);
 
-                /******************* SUGGESTED CONTENTS *******************/
-                $arrayResults =null;
+                // Machine suggested contents code -----------------------------
+                $machineSuggestedContents = array();
                 if(!empty($article->metadata)) {
-                    $objSearch = cSearch::Instance();
-                    $arrayResults=$objSearch->SearchSuggestedContents(
+                    $objSearch    = cSearch::Instance();
+                    $machineSuggestedContents = $objSearch->SearchSuggestedContents(
                         $article->metadata,
                         'Article',
                         "pk_fk_content_category= ".$article->category.
                         " AND contents.available=1 AND pk_content = pk_fk_content",
                         4
                     );
+                    $machineSuggestedContents = $cm->getInTime($machineSuggestedContents);
                 }
-                $arrayResults= $cm->getInTime($arrayResults);
-                $tpl->assign('suggested', $arrayResults);
-
-                // Before here end the iscached if
+                $tpl->assign('suggested', $machineSuggestedContents);
 
             } else {
                 Application::forward301('/404.html');
@@ -179,7 +166,7 @@ switch($action) {
 
         } // end if $tpl->is_cached
 
-        $tpl->display('article/article.tpl', $cache_id);
+        $tpl->display('article/article.tpl', $cacheID);
 
     } break;
 

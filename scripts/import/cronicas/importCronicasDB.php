@@ -58,7 +58,7 @@ $cronicasImporter = new CronicasToOnm($configOldDB,$configNewDB);
  //$cronicasImporter->helper->sqlClearData(); //delete old data in tables
 
 $cronicasImporter->importCategories();
-
+/*
 $cronicasImporter->importImagesArticles();
 
 $limit = ' LIMIT 0, 15000';
@@ -77,13 +77,13 @@ $cronicasImporter->importSpecials();
 $cronicasImporter->importGalleries();
 
 $cronicasImporter->importAlbums();
-
+*/
 $cronicasImporter->importAdvertisements();
- 
+/*
 $cronicasImporter->importAttachments();
 
-//$cronicasImporter->importRelatedContents();
-
+ $cronicasImporter->importRelatedContents();
+*/
 printf("OpenNemas database is ok for Cronicas \n");
 
 $cronicasImporter->helper->printResults();

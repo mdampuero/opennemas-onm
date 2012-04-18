@@ -92,15 +92,15 @@ class CronicasToOnm {
                 3 => 24,  // asturias
                 4 => 28,   // canarias
                 5 => 23,  // castillaleon
-                6 => 12,   // cantabria
-                7 => 296,  // madrid
-                8 => 21,   // Baleares
-                9 => 22,   // Andalucia
-                10 => 24,  // opinion
-                11 => 28,   // publi
+                6 => 27,   // cantabria
+                7 => 25,  // madrid
+                8 => 29,   // Baleares
+                9 => 26,   // Andalucia
+                10 => 4,  // opinion
+                11 => 2,   // publi
                 15 => 30,  // paisvasco
-
             );
+
       $this->categoriesData = ContentCategoryManager::get_instance()->categories;
 
       return false;
@@ -195,7 +195,7 @@ class CronicasToOnm {
                             if(empty($title)) { // if empty footer ->get title
                                 $title =$rs->fields['title'];
                             }
-                            $category = $rs->fields['pk_fk_content_category'];
+                            $category =$this->matchInternalCategory($rs->fields['pk_fk_content_category']);
                             $category_name = $this->categoriesData[$category]->name;
                             $slug =StringUtils::get_title($title);
                             $imageData = array(
@@ -267,7 +267,7 @@ class CronicasToOnm {
                                         'summaryHome'=>$rs->fields['summary_home'],
                                         'agencyBulletin'=> $rs->fields['agency_web'],
                                         );
-                    $category =$this->matchInternalCategory($rs->fields['pk_fk_content_category']);
+                    $category = $this->matchInternalCategory($rs->fields['pk_fk_content_category']);
                     $data = array('title' => $rs->fields['title'],
                         'category' => $category,
                         'subtitle' => $rs->fields['subtitle'],
@@ -478,7 +478,7 @@ class CronicasToOnm {
                     $authorData['img'] = $this->helper->imageIsImported($rs->fields['img'], 'image');
                     if(empty($authorData['img'])) {
 
-                        $sql2 = "SELECT fk_photo FROM author_imgs WHERE fk_author = ? ORDER BY fk_photo DESC  LIMIT 1 ";
+                        $sql2 = "SELECT pk_img FROM author_imgs WHERE fk_author = ? ORDER BY fk_photo DESC  LIMIT 1 ";
                         $values2 = array( $authorData['id'] );
                         $rs2 = $GLOBALS['application']->conn->Execute($sql2, $values2);
                         if(!$rs2) {
@@ -709,7 +709,7 @@ class CronicasToOnm {
                     list($album_photos_id, $album_photos_footer) = $this->getAlbumContents($originalAlbumID, $rs->fields);
 
                     $data = array('title' => $rs->fields['title'],
-                        'category' => $rs->fields['pk_fk_content_category'],
+                        'category' => $this->matchInternalCategory($rs->fields['pk_fk_content_category']),
                         'with_comment' => 0,
                         'content_status' =>$rs->fields['content_status'],
                         'available' => $rs->fields['available'],
@@ -986,17 +986,18 @@ class CronicasToOnm {
                 } else {
                     echo "[{$current}/{$totalRows}] Importing ads with id {$originalAdID} - ";
                     $title= $rs->fields['title'];
-                    $category =$this->matchInternalCategory($rs->fields['pk_fk_content_category']);
+                    $category =2;//$this->matchInternalCategory($rs->fields['pk_fk_content_category']);
                     $category_name = $this->categoriesData[$category]->name;
 
-                    $imageID = $this->helper->elementIsImported($rs->fields['path'], 'image');
+                    $imageID = ""; //$this->helper->elementIsImported($rs->fields['path'], 'image');
                     if(empty($imageID)) {
                         $name =$rs->fields['path'];
+                        var_dump($name);
                         $imageData = array(
                             'title' => $rs->fields['title'],
                             'name' => $name,
                             'category'=> $category,
-                            'category_name'=>  'ads',
+                            'category_name'=>  'advertisement',
                             'metadata' => StringUtils::get_tags($title.','.$category_name,' publicidad'),
                             'description' => $title,
                             'created' => $rs->fields['created'],
@@ -1011,8 +1012,8 @@ class CronicasToOnm {
                         'category' => $category,
                         'summary' => $rs->fields['summary'],
                         'body' => $rs->fields['body'],
-                        'path' =>$this->helper->imageIsImported($rs->fields['path'],'image'),
-                        'url' =>$rs->fields['url'],
+                        'path' => $newimageID, //$this->helper->imageIsImported($rs->fields['path'],'image'),
+                        'url' => $rs->fields['url'],
                         'num_clic_count' =>$rs->fields['num_clic_count'],
                         'category_name'=>  $category_name,
                         'description' => $title,

@@ -9,8 +9,8 @@ require_once('../bootstrap.php');
  * Set up view
 */
 $tpl = new Template(TEMPLATE_USER);
- 
-$slug = $request->query->filter('$slug', null, FILTER_SANITIZE_STRING);
+
+$slug = $request->query->filter('slug', null, FILTER_SANITIZE_STRING);
 
 if(isset($slug) ) {
 

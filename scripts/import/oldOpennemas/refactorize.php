@@ -1,7 +1,7 @@
 #!/usr/bin/php5
 <?php
-/* 
- * 
+/*
+ *
  */
 
 /**
@@ -30,7 +30,7 @@ set_include_path(
 */
 
 require  'adodb5/adodb.inc.php';
- 
+
 
 
 /**
@@ -38,23 +38,27 @@ require  'adodb5/adodb.inc.php';
 */
 require 'db-config.inc.php';
 require 'refactor-ids.php';
-require 'string_utils.class.php';
+require 'StringUtils.php';
 
  $refactor = new refactorIds($config);
- 
- $refactor->executeSqlFile('changesForNT.sql');
+
+/* $refactor->executeSqlFile('changesForNT.sql');
 
  $refactor->executeSqlFile('createPrivileges.sql');
-  
+
  $refactor->modifySchema(); //prepare tables
 
  $refactor->addMasterUsers(); // change admin to master Openhost's users
 
  $refactor->refactorDB(); // create new ids & slug
- 
+
  $refactor->refactorSecondaryTables(); //change secondary table, example related_contents...
 
  $refactor->refactorImgTables(); //change id images in some tables
- 
+*/
+ //$refactor->updateFrontpageArticles(); // create new ids & slug
+
+  $refactor->updateAdvertisements();
+
  printf(" \n OpenNemas database {$config['bd_database']} is ok \n ");
  printf("\n ---------Attention: you new change settings values & move media folder -------------- \n ");

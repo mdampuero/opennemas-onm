@@ -115,7 +115,7 @@
                         <td >
                             <input id="stringImageSearch" name="stringImageSearch" type="text"
                                onkeypress="onImageKeyEnter(event, $('category_imag').options[$('category_imag').selectedIndex].value,encodeURIComponent($('stringImageSearch').value),1);"
-                               onclick="this.select();" placeholder="{t}Search images by title...{/t}" />
+                               onclick="this.select();" placeholder="{t}Search images by title...{/t}" style="width: 150px;"/>
                         </td>
                         <td>
                             <select style="width:140px" id="category_imag" name="category_imag" class="required" onChange="getGalleryImages('listByCategory',this.options[this.selectedIndex].value,'', 1);">
@@ -231,7 +231,7 @@
                             <div class="cajaBusqueda" style="width:100%;" >
                                 <input class="textoABuscar" id="stringVideoSearch" name="stringVideoSearch" type="text"
                                        onkeypress="onVideoKeyEnter(event, $('category_imag').options[$('category_video').selectedIndex].value, $('stringVideoSearch').value,1);"
-                                       onclick="this.select();" placeholder="{t}Search videos by title...{/t}"
+                                       onclick="this.select();" placeholder="{t}Search videos by title...{/t}"  style="width: 150px;"
                                        />
                             </div>
                         </td>

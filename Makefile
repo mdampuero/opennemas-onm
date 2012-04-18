@@ -1,7 +1,5 @@
 #!/usr/bin/make
 
-LOCALE_FOLDER = './public/admin/locale/'
-
 TPL_FOLDER = \
 	public/admin/themes/default/tpl/ \
 	public/manager/themes/default/tpl
@@ -25,21 +23,21 @@ DOC_FOLDERS = public/core \
 
 all: l10n
 
-l10n: extracttrans updatepofiles compiletranslations
+l10n: extracttrans updatepofiles compiletranslations extracttrans-backend updatepofiles-backend compiletranslations-backend
 
-extracttrans:
+extracttrans-backend:
 	@echo "Extracting translations";
-	@tsmarty2c $(TPL_FOLDER) > $(LOCALE_FOLDER)'extracted_strings.c'
+	@tsmarty2c $(TPL_FOLDER) > public/admin/locale/extracted_strings.c
 	@xgettext public/admin/controllers/**/* \
 	        public/admin/include/menu.php public/core/*.php \
         	vendor/Onm/**/**/*.php \
 	        app/models/*.php \
         	public/manager/controllers/**/*.php \
         	public/admin/themes/default/**/*.php \
-		  $(LOCALE_FOLDER)'extracted_strings.c' \
+		  public/admin/locale/extracted_strings.c \
 		  -o $(LOCALE_FOLDER)'onmadmin.pot' --from-code=UTF-8
 
-updatepofiles:
+updatepofiles-backend:
 	@echo "Updating translations";
 	@for i in $(LINGUAS); do \
 		echo " - $$i";	\
@@ -47,12 +45,33 @@ updatepofiles:
 			'public/admin/locale/onmadmin.pot'; \
 	done
 
-compiletranslations:
+compiletranslations-backend:
 	@echo "Compiling translations";
 	@for i in $(LINGUAS); do \
 		echo " - $$i: " && \
 		msgfmt -vf "public/admin/locale/$$i/LC_MESSAGES/messages.po" \
 			-o "public/admin/locale/$$i/LC_MESSAGES/messages.mo"; \
+	done
+
+extracttrans:
+	@echo "Extracting translations";
+	@xgettext public/controllers/* \
+		  -o public/locale/onmfront.pot --from-code=UTF-8
+
+updatepofiles:
+	@echo "Updating translations";
+	@for i in $(LINGUAS); do \
+		echo " - $$i";	\
+		msgmerge -U "public/locale/$$i/LC_MESSAGES/messages.po" \
+			'public/locale/onmfront.pot'; \
+	done
+
+compiletranslations:
+	@echo "Compiling translations";
+	@for i in $(LINGUAS); do \
+		echo " - $$i: " && \
+		msgfmt -vf "public/locale/$$i/LC_MESSAGES/messages.po" \
+			-o "public/locale/$$i/LC_MESSAGES/messages.mo"; \
 	done
 
 doc: generate-docblox-doc

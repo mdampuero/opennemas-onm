@@ -38,7 +38,7 @@ $tpl->assign('newslibraryDate',$date);
 require_once("index_advertisement.php");
 
 $ccm = ContentCategoryManager::get_instance();
-$settings = s::get('frontpage_settings');
+$settings = s::get('newslibraryView');
 
 if ( 1==1 || ($tpl->caching == 0)  || !$tpl->isCached('frontpage/newslibrary.tpl', $cache_id) )
 {
@@ -46,10 +46,14 @@ if ( 1==1 || ($tpl->caching == 0)  || !$tpl->isCached('frontpage/newslibrary.tpl
     $fp = new Frontpage();
 
     /****************** FETCHING NEWS IN STATIC FILES **********************/
-   if(isset($settings['viewMethod']) &&
-           $settings['viewMethod'] == 'listFrontpages') {
+   if (!empty($settings) &&
+           $settings == 'listFrontpages') {
 
-        $actual_category_id = $ccm->get_id($category_name);
+        if($category_name != 'home') {
+          $actual_category_id = $ccm->get_id($category_name);
+        } else {
+          $actual_category_id = 0;
+        }
         //TODO: review this option
         if( $fp->getFrontpage($date, $actual_category_id) ) {
 
@@ -81,16 +85,25 @@ if ( 1==1 || ($tpl->caching == 0)  || !$tpl->isCached('frontpage/newslibrary.tpl
 
                 }
             }
-
         }
 
         $tpl->assign('articles_home', $articles_home);
 
         $tpl->display('frontpage/fp_newslibrary.tpl');
 
-    } elseif (isset($settings['viewMethod']) &&
-           $settings['viewMethod'] == 'staticFrontpages') {
+    } elseif ($settings == 'staticFrontpages') {
                 //cronicas method
+        if($category_name != 'home') {
+            $actual_category_id = $ccm->get_id($category_name);
+        } else {
+            $actual_category_id = 0;
+        }
+        $path = preg_replace('@-@','/',$date);
+        var_dump($path);
+        var_dump(INSTANCE_MEDIA."library/{$path}/{$category_name}.html");
+        if( !empty($date) ) {
+            echo file_get_contents(INSTANCE_MEDIA."library/{$path}/{$category_name}.html");
+        }
     } else {
 
         $cm = new ContentManager();
@@ -101,6 +114,7 @@ if ( 1==1 || ($tpl->caching == 0)  || !$tpl->isCached('frontpage/newslibrary.tpl
         if(!empty($contents)) {
             foreach ($contents as $content) {
                $categoryID = $content->category;
+               $library[$categoryID] = new stdClass();
                $library[$categoryID]->id = $categoryID;
                $library[$categoryID]->title = $allCategories[$categoryID]->title;
                $library[$categoryID]->contents[] = $content;

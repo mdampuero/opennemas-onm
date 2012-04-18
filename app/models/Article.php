@@ -824,9 +824,10 @@ class Article extends Content
      **/
     public function render($params, $tpl = null)
     {
-        if (!isset($tpl)) {
+
+      //  if (!isset($tpl)) {
             $tpl = new Template(TEMPLATE_USER);
-        }
+        //}
 
         $tpl->assign('item',$this);
         $tpl->assign('cssclass', $params['cssclass']);
@@ -836,6 +837,7 @@ class Article extends Content
         } catch (\Exception $e) {
             $html = 'Article not available';
         }
+
         return $html;
     }
 

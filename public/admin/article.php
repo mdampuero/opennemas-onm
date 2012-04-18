@@ -548,8 +548,8 @@ if (isset($_REQUEST['action']) ) {
             Acl::checkOrForward('ARTICLE_CREATE');
 
             if (isset($_POST['with_comment'])) {$_POST['with_comment'] = 1;} else {$_POST['with_comment'] = 0;}
-            if (isset($_POST['frontpage'])) {$_POST['frontpage'] = 1;} else {$_POST['frontpage'] = 0;}
-            if (isset($_POST['in_home'])) {$_POST['in_home'] = 2;} else {$_POST['in_home'] = 0;}
+      //      if (isset($_POST['frontpage'])) {$_POST['frontpage'] = 1;} else {$_POST['frontpage'] = 0;}
+      //      if (isset($_POST['in_home'])) {$_POST['in_home'] = 2;} else {$_POST['in_home'] = 0;}
             if (isset($_POST['content_status'])) {$_POST['content_status'] = 1;} else {$_POST['content_status'] = 0;}
 
             $article = new Article();
@@ -1556,7 +1556,7 @@ if (isset($_REQUEST['action']) ) {
 
             list($articles, $pager) = $cm->find_pages(
                 'Article',
-                'contents.available=1 AND in_litter != 1 AND in_home=2'. $sqlExcludedOpinions,
+                'contents.available=1 AND in_litter != 1 AND frontpage=1'. $sqlExcludedOpinions,
                 ' ORDER BY created DESC ', $page, 5
             );
 
