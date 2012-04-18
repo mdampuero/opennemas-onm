@@ -77,13 +77,19 @@ $cronicasImporter->importSpecials();
 $cronicasImporter->importGalleries();
 
 $cronicasImporter->importAlbums();
-*/
+
 $cronicasImporter->importAdvertisements();
-/*
+
 $cronicasImporter->importAttachments();
 
  $cronicasImporter->importRelatedContents();
 */
+
+$cronicasImporter->updateFrontpageArticles();
+
 printf("OpenNemas database is ok for Cronicas \n");
 
 $cronicasImporter->helper->printResults();
+
+
+////UPDATE `contents` SET available=1  WHERE `fk_content_type` =8
