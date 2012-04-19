@@ -848,6 +848,9 @@ class Content
         $start =   new \DateTime($this->starttime);
         $end   =   new \DateTime($this->endtime);
 
+        if (($start->getTimeStamp() - $end->getTimeStamp()) == 0) {
+            return false;
+        }
         if ( ($start->getTimeStamp() > 0 && $start != $created ) || $end->getTimeStamp() > 0) {
             return true;
         }
