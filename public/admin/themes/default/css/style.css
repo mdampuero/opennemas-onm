@@ -2349,3 +2349,15 @@ a.btn-primary.active,a.btn-warning.active,a.btn-danger.active,a.btn-success.acti
 #related-content-provider .ui-tabs-nav .ui-tabs-paging-prev a, #related-content-provider .ui-tabs-nav .ui-tabs-paging-next a, {    
     border-color: #DFDFDF;
 }
+
+
+div.column-receiver {
+    border: 1px solid gray;   
+    margin: 4px;
+    min-height: 200px; 
+}
+
+ul.content-receiver, div#content-provider ul#contentList {
+    min-height: 40px;
+    padding: 4px;
+}

@@ -42,18 +42,18 @@ jQuery(document).ready(function($){
         });
     });
 //change page
-
-    $( "#content-provider").on('click', 'div#container-content-list div.contents div.pagination a', function(e, ui){
+    $( "#content-provider").on('click', 'div.ui-tabs-panel div.contents div.pagination a', function(e, ui){
         e.preventDefault();
         var href   = $(this).attr('href');
-          var parent = $(this).closest('.ui-tabs-panel');
-        $.ajax({
+        var parent = $(this).closest('.ui-tabs-panel');
+         
+         $.ajax({
             url: $(this).attr('href'),
             success: function(data){
                 parent.html(data);
                 makeContentProviderAndReceiverSortable();
             }
-        });
+        }); 
     });
 
 

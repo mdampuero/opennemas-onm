@@ -394,16 +394,18 @@ switch($action) {
 
     case 'related-provider':
 
+
+
         $items_page = s::get('items_per_page') ?: 20;
         $category = filter_input( INPUT_GET, 'category' , FILTER_SANITIZE_STRING, array('options' => array('default' => '0')) );
         $page = filter_input( INPUT_GET, 'page' , FILTER_SANITIZE_STRING, array('options' => array('default' => '1')) );
         $cm = new ContentManager();
 
-        list($polls, $pager) = $cm->find_pages('Special', 'available=1 ',
+        list($specials, $pager) = $cm->find_pages('Special', 'available=1 ',
                     'ORDER BY starttime DESC,  contents.title ASC ',
                     $page, $items_page, $category);
 
-        $tpl->assign(array('contents'=>$polls,
+        $tpl->assign(array('contents'=>$specials,
                             'contentTypeCategories'=>$parentCategories,
                             'category' =>$category,
                             'pagination'=>$pager->links

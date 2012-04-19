@@ -369,7 +369,7 @@ switch($action) {
         $page = filter_input( INPUT_GET, 'page' , FILTER_SANITIZE_STRING, array('options' => array('default' => '1')) );
         $cm = new ContentManager();
 
-        list($polls, $pager) = $cm->find_pages('File', 'available=1 ',
+        list($polls, $pager) = $cm->find_pages('Attachment', 'available=1 ',
                     'ORDER BY starttime DESC,  contents.title ASC ',
                     $page, $items_page, $category);
 

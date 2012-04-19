@@ -2,16 +2,16 @@
  <div id="content-provider" class="related-content-provider clearfix" >    
     <ul>
         {is_module_activated name="ADVANCED_SEARCH"}
-        <li>
+        {*<li>
             <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/search_advanced/search_advanced.php?action=content-provider&amp;">{t}Search{/t}</a>
-        </li>
+        </li> *}
         {/is_module_activated}
 
         {is_module_activated name="ARTICLE_MANAGER"}
-
+        {*
         <li>
             <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/article.php?action=related-provider-suggested">{t}Suggested articles{/t}</a>
-        </li>
+        </li> *}
         <li>
             <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/article.php?action=related-provider-category&amp;category={$category}">{t}Other articles{/t}</a>
         </li>
@@ -39,14 +39,14 @@
         </li>
         {/is_module_activated}
         {is_module_activated name="SPECIAL_MANAGER"}
-        <li>
+        {*<li>
             <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/special/special.php?action=related-provider&amp;category={$category}">{t}Specials{/t}</a>
-        </li>
+        </li> *}
         {/is_module_activated}
         {is_module_activated name="FILE_MANAGER"}
         <li>
             <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/files/files.php?action=related-provider&amp;category={$category}">{t}Files{/t}</a>
-        </li>
+        </li> 
         {/is_module_activated}
     </ul>
 </div><!-- /content-provider -->
