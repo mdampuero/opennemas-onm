@@ -98,7 +98,10 @@ if ( 1==1 || ($tpl->caching == 0)  || !$tpl->isCached('frontpage/newslibrary.tpl
         } else {
             $actual_category_id = 0;
         }
-        $path = preg_replace('@-@','/',$date);
+        $patterns = array ('',
+                   );
+
+        $path = preg_replace('/(\d{4})(\d{2})(\d{2})/', '/$1/$2/$3', $date);
         var_dump($path);
         var_dump(INSTANCE_MEDIA."library/{$path}/{$category_name}.html");
         if( !empty($date) ) {

@@ -23,7 +23,7 @@ FrontpageManager.contentProvider = function() {
 
 };
 
-FrontpageManager.toolbar = function {
+FrontpageManager.toolbar = function (){
 
 }
 
