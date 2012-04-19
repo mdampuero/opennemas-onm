@@ -2,8 +2,7 @@
 
 {block name="header-js" append}
     {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
-    {script_tag src="/jquery/jquery-ui-sliderAccess.js"}
-    {script_tag src="/jquery/jquery.ui.tabs-paging.js"}
+    {script_tag src="/jquery/jquery-ui-sliderAccess.js"}    
     {script_tag src="/jquery/jquery.colorbox-min.js"}
     {script_tag src="/onm/jquery.datepicker.js"}
     {script_tag src="/utilsarticle.js"}
@@ -11,6 +10,7 @@
     {script_tag src="/editables.js"}
     {script_tag src="/utilsGallery.js"}
     {script_tag src="/swfobject.js"}
+    {script_tag src="/onm/jquery.content-provider.js"}
 {/block}
 
 {block name="header-css" append}
@@ -35,19 +35,23 @@
             $('title').focus(); // Set focus first element
         }
     });
-    jQuery(document).ready(function ($){
-        $('#article-form').tabs();
-        $( "#content-provider" ).tabs();
-        $( "#content-provider" ).tabs('paging', { cycle: true, follow: true } );
+    jQuery(document).ready(function($){
+        $('#article-form').tabs();      
+        // $("#form-validate-button #form-send-button ul li a#related-contents").on("click", function(event) {
+            $( "#content-provider" ).tabs();
+            $( "#content-provider" ).tabs('paging', { cycle: false, follow: false, tabsPerPage: 4 } );
+        //}  
     });
 
-     jQuery(document).ready(function($){
+    jQuery(document).ready(function($){
+
         $("#form-validate-button, #form-send-button").on("click", function(event) {
 
             saveRelatedContent();
             return true;
         });
     });
+
     </script>
 
     {script_tag src="/tiny_mce/opennemas-config.js"}
@@ -392,7 +396,7 @@
             </table>
         </div>
         {is_module_activated name="AVANCED_ARTICLE_MANAGER"}
-        <div id="avanced-custom" style="width:98%">
+        <div id="avanced-custom">
             {include file ="article/partials/_article_avanced_customize.tpl"}
         </div>
         {/is_module_activated}
@@ -403,7 +407,7 @@
             {/if}
         {/is_module_activated}
 
-        <div id="related-contents" style="width:98%">
+        <div id="related-contents">
             {include file ="article/related/_related_list.tpl"}
         </div>
 

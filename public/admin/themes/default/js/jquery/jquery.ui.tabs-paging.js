@@ -1,290 +1,271 @@
-/**
- * jQuery.ScrollableTab - Scrolling multiple tabs.
- * @copyright (c) 2010 Astun Technology Ltd - http://www.astuntechnology.com
- * Dual licensed under MIT and GPL.
- * Date: 28/04/2010
- * @author Aamir Afridi - aamirafridi(at)gmail(dot)com | http://www.aamirafridi.com
- * @version 1.0
- */
+/*
+Copyright (c) 2009, http://seyfertdesign.com/jquery/ui-tabs-paging.html
 
-;(function($){
-	//Global plugin settings
-	var settings = {
-		'animationSpeed' : 100, //The speed in which the tabs will animate/scroll
-		'closable' : false, //Make tabs closable
-		'resizable' : false, //Alow resizing the tabs container
-		'resizeHandles' : 'e,s,se', //Resizable in North, East and NorthEast directions
-		'loadLastTab':false, //When tabs loaded, scroll to the last tab - default is the first tab
-		'easing':'swing' //The easing equation
-	}
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-	$.fn.scrollabletab = function(options){
-		//Check if scrollto plugin is available - (pasted the plugin at the end of this plugin)
-		//if(!$.fn.scrollTo) return alert('Error:\nScrollTo plugin not available.');
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
 
-		return this.each(function(){
-			var	o = $.extend({}, settings, options), //Extend the options if any provided
-			$tabs = $(this),
-			$tabsNav = $tabs.find('.ui-tabs-nav'),
-			$nav;//will save the refrence for the wrapper having next and previous buttons
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+*/
 
-			//Adjust the css class
-			//$tabsNav.removeClass('ui-corner-all').addClass('ui-corner-top');
-			$tabs.css({'padding':2, 'position':'relative'});
-			//$tabsNav.css('position','inherit');
+$.extend($.ui.tabs.prototype, {
+        paging: function(options) {
+                var opts = {
+                        tabsPerPage: 0,
+                        nextButton: '&#187;',
+                        prevButton: '&#171;',
+                        follow: false,
+                        cycle: false,
+                        selectOnAdd: false,
+                        followOnSelect: false
+                };
+                 
+                opts = $.extend(opts, options);
 
-			//Wrap inner items
-			$tabs.wrap('<div id="stTabswrapper" class="stTabsMainWrapper" style="position:relative"/>').find('.ui-tabs-nav').css('overflow','hidden').wrapInner('<div class="stTabsInnerWrapper" style="width:30000px"><span class="stWidthChecker"/></div>');
+                var self = this, initialized = false, currentPage, 
+                        buttonWidth, containerWidth, allTabsWidth, tabWidths, 
+                        maxPageWidth, pages, resizeTimer = null, 
+                        windowHeight = $(window).height(), windowWidth = $(window).width();
+                
+                function init() {
+                        destroy();
+                        
+                        allTabsWidth = 0, currentPage = 0, maxPageWidth = 0, buttonWidth = 0,
+                                pages = new Array(), tabWidths = new Array(), selectedTabWidths = new Array();
+                        
+                        containerWidth = self.element.width();
+                        console.log(containerWidth);
+                        
+                        // loops through LIs, get width of each tab when selected and unselected.
+                        var maxDiff = 0;  // the max difference between a selected and unselected tab
+                        self.lis.each(function(i) {                     
+                                if (i == self.options.selected) {
+                                        selectedTabWidths[i] = $(this).outerWidth({ margin: true });
+                                        tabWidths[i] = self.lis.eq(i).removeClass('ui-tabs-selected').outerWidth({ margin: true });
+                                        self.lis.eq(i).addClass('ui-tabs-selected');
+                                        maxDiff = Math.min(maxDiff, Math.abs(selectedTabWidths[i] - tabWidths[i]));
+                                        allTabsWidth += tabWidths[i];
+                                } else {
+                                        tabWidths[i] = $(this).outerWidth({ margin: true });
+                                        selectedTabWidths[i] = self.lis.eq(i).addClass('ui-tabs-selected').outerWidth({ margin: true });
+                                        self.lis.eq(i).removeClass('ui-tabs-selected');
+                                        maxDiff = Math.max(maxDiff, Math.abs(selectedTabWidths[i] - tabWidths[i]));
+                                        allTabsWidth += tabWidths[i];
+                                }
+                        });
+            // fix padding issues with buttons
+            // TODO determine a better way to handle this
+                        allTabsWidth += maxDiff + ($.browser.msie?4:0) + 9;  
 
-			var $widthChecker = $tabs.find('.stWidthChecker'),
-				$itemContainer = $tabs.find('.stTabsInnerWrapper'),
-				$tabsWrapper = $tabs.parents('#stTabswrapper').width($tabs.outerWidth(true));
-				//Fixing safari bug
-				if($.browser.safari)
-				{
-					$tabsWrapper.width($tabs.width()+6);
-				}
-				//alert($tabsWrapper.width());
-			if(o.resizable)
-			{
-				if(!!$.fn.resizable)
-				{
-					$tabsWrapper.resizable({
-						minWidth : $tabsWrapper.width(),
-						maxWidth : $tabsWrapper.width()*2,
-						minHeight : $tabsWrapper.height(),
-						maxHeight : $tabsWrapper.height()*2,
-						handles : o.resizeHandles,
-						alsoResize: $tabs,
-						//start : function(){  },
-						resize: function(){
-							$tabs.trigger('resized');
-						}
-						//stop: function(){ $tabs.trigger('scrollToTab',$tabsNav.find('li.ui-tabs-selected')); }
-					});
-				}
-				else
-				{
-					alert('Error:\nCannot be resizable because "jQuery.resizable" plugin is not available.');
-				}
-			}
+                        // if the width of all tables is greater than the container's width, calculate the pages
+                        if (allTabsWidth > containerWidth) {
+                                // create next button                   
+                                li = $('<li></li>')
+                                        .addClass('ui-state-default ui-tabs-paging-next')
+                                        .append($('<a href="#"></a>')
+                                                        .click(function() { page('next'); return false; })
+                                                        .html(opts.nextButton));
+                                
+                                self.lis.eq(self.length()-1).after(li);
+                                buttonWidth = li.outerWidth({ margin: true });
+                                
+                                // create prev button
+                                li = $('<li></li>')
+                                        .addClass('ui-state-default ui-tabs-paging-prev')
+                                        .append($('<a href="#"></a>')
+                                                        .click(function() { page('prev'); return false; })
+                                                        .html(opts.prevButton));
+                                self.lis.eq(0).before(li);
+                                buttonWidth += li.outerWidth({ margin: true });
+                                
+                                // TODO determine fix for padding issues to next button
+                                buttonWidth += 19; 
+                                                                
+                                var pageIndex = 0, pageWidth = 0, maxTabPadding = 0;
+                                
+                                // start calculating pageWidths
+                                for (var i = 0; i < tabWidths.length; i++) {
+                                        // if first tab of page or selected tab's padding larger than the current max, set the maxTabPadding
+                                        if (pageWidth == 0 || selectedTabWidths[i] - tabWidths[i] > maxTabPadding)
+                                                maxTabPadding = (selectedTabWidths[i] - tabWidths[i]);
+                                        
+                                        // if first tab of page, initialize pages variable for page 
+                                        if (pages[pageIndex] == null) {
+                                                pages[pageIndex] = { start: i };
+                                        
+                                        } else if ((i > 0 && (i % opts.tabsPerPage) == 0) || (tabWidths[i] + pageWidth + buttonWidth + 12) > containerWidth) {
+                                                if ((pageWidth + maxTabPadding) > maxPageWidth) 
+                                                        maxPageWidth = (pageWidth + maxTabPadding);
+                                                pageIndex++;
+                                                pages[pageIndex] = { start: i };                        
+                                                pageWidth = 0;
+                                        }
+                                        pages[pageIndex].end = i+1;
+                                        pageWidth += tabWidths[i];
+                                        if (i == self.options.selected) currentPage = pageIndex;
+                                }
+                                if ((pageWidth + maxTabPadding) > maxPageWidth) 
+                                        maxPageWidth = (pageWidth + maxTabPadding);                             
 
-
-			//Add navigation icons
-				//Total height of nav/2 - total height of arrow/2
-			var arrowsTopMargin = (parseInt(parseInt($tabsNav.innerHeight(true)/2)-8)),
-				arrowsCommonCss={'cursor':'pointer','z-index':1000,'position':'absolute','top':3,'height':$tabsNav.outerHeight()-($.browser.safari ? 2 : 1)};
-			$tabsWrapper.prepend(
-			  $nav = $('<div/>')
-			  		.disableSelection()
-					.css({'position':'relative','z-index':3000,'display':'none'})
-					.append(
-						$('<span/>')
-							.disableSelection()
-							.attr('title','Previous tab')
-							.css(arrowsCommonCss)
-							.addClass('ui-state-active ui-corner-tl ui-corner-bl stPrev stNav')
-							.css('left',3)
-							.append($('<span/>').disableSelection().addClass('ui-icon ui-icon-carat-1-w').html('Previous tab').css('margin-top',arrowsTopMargin))
-							.click(function(){
-								//Check if disabled
-								if($(this).hasClass('ui-state-disabled')) return;
-								//Just select the previous tab and trigger scrollToTab event
-								prevIndex = $tabsNav.find('li.ui-tabs-selected').prevAll().length-1
-								//Now select the tab
-								$tabsNav.find('li').eq(prevIndex).find('a').trigger('click');
-								return false;
-							}),
-						$('<span/>')
-							.disableSelection()
-							.attr('title','Next tab')
-							.css(arrowsCommonCss)
-							.addClass('ui-state-active ui-corner-tr ui-corner-br stNext stNav')
-							.css({'right':3})
-							.append($('<span/>').addClass('ui-icon ui-icon-carat-1-e').html('Next tab').css('margin-top',arrowsTopMargin))
-							.click(function(){
-								//Just select the previous tab and trigger scrollToTab event
-								nextIndex = $tabsNav.find('li.ui-tabs-selected').prevAll().length+1
-								//Now select the tab
-								$tabsNav.find('li').eq(nextIndex).find('a').trigger('click');
-								return false;
-							})
-					)
-			);
-
-			//Bind events to the $tabs
-			$tabs
-			.bind('tabsremove', function(){
-  				$tabs.trigger('scrollToTab').trigger('navHandler').trigger('navEnabler');
-			})
-			.bind('addCloseButton',function(){
-				//Add close button if require
-				if(!o.closable) return;
-				$(this).find('.ui-tabs-nav li').each(function(){
-					if($(this).find('.ui-tabs-close').length>0) return; //Already has close button
-					var closeTopMargin = parseInt(parseInt($tabsNav.find('li:first').innerHeight()/2,10)-8);
-					$(this).disableSelection().append(
-						$('<span style="float:left;cursor:pointer;margin:'+closeTopMargin+'px 2px 0 -11px" class="ui-tabs-close ui-icon ui-icon-close" title="Close this tab"></span>')
-							.click(function()
-							{
-								$tabs.tabs('remove',$(this).parents('li').prevAll().length);
-								//If one tab remaining than hide the close button
-								if($tabs.tabs('length')==1)
-								{
-									$tabsNav.find('.ui-icon-close').hide();
-								}
-								else
-								{
-									$tabsNav.find('.ui-icon-close').show();
-								}
-								//Call the method when tab is closed (if any)
-								if($.isFunction(o.onTabClose))
-								{
-									o.onTabClose();
-								}
-								return false;
-							})
-					);
-					//Show all close buttons if any hidden
-					$tabsNav.find('.ui-icon-close').show();
-				});
-			})
-			.bind('tabsadd',function(event){
-				//Select it on Add
-				$tabs.tabs('select',$tabs.tabs('length')-1);
-				//Now remove the extra span added to the tab (not needed)
-				$lastTab = $tabsNav.find('li:last');
-				if($lastTab.find('a span').length>0) $lastTab.find('a').html($lastTab.find('a span').html());
-				//Move the li to the innerwrapper
-				$lastTab.appendTo($widthChecker);
-				//Scroll the navigation to the newly added tab and also add close button to it
-				$tabs
-					.trigger('addCloseButton')
-					.trigger('bindTabClick')
-					.trigger('navHandler')
-					.trigger('scrollToTab');
-			})//End tabsadd
-			.bind('addTab',function(event,label,content){
-				//Generate a random id
-				var tabid = 'stTab-'+(Math.floor(Math.random()*10000));
-				//Append the content to the body
-				$('body').append($('<div id="'+tabid+'"/>').append(content));
-				//Add the tab
-				$tabs.tabs('add','#'+tabid,label);
-			})//End addTab
-			.bind('bindTabClick',function(){
-				//Handle scroll when user manually click on a tab
-				$tabsNav.find('a').click(function(){
-					var $liClicked = $(this).parents('li');
-					var navWidth = $nav.find('.stPrev').outerWidth(true);
-					//debug('left='+($liClicked.offset().left)+' and tabs width = '+ ($tabs.width()-navWidth));
-					if(($liClicked.position().left-navWidth)<0)
-					{
-						$tabs.trigger('scrollToTab',[$liClicked,'tabClicked','left'])
-					}
-					else if(($liClicked.outerWidth()+$liClicked.position().left)>($tabs.width()-navWidth))
-					{
-						$tabs.trigger('scrollToTab',[$liClicked,'tabClicked','right'])
-					}
-					//Enable or disable next and prev arrows
-					$tabs.trigger('navEnabler');
-					return false;
-				});
-			})
-			//Bind the event to act when tab is added
-			.bind('scrollToTab',function(event,$tabToScrollTo,clickedFrom,hiddenOnSide){
-				//If tab not provided than scroll to the last tab
-				$tabToScrollTo = (typeof $tabToScrollTo!='undefined') ? $($tabToScrollTo) : $tabsNav.find('li.ui-tabs-selected');
-				//Scroll the pane to the last tab
-				var navWidth = $nav.is(':visible') ? $nav.find('.stPrev').outerWidth(true) : 0;
-				//debug($tabToScrollTo.prevAll().length)
-
-				offsetLeft = -($tabs.width()-($tabToScrollTo.outerWidth(true)+navWidth+parseInt($tabsNav.find('li:last').css('margin-right'),10)));
-				offsetLeft = (clickedFrom=='tabClicked' && hiddenOnSide=='left') ? -navWidth : offsetLeft;
-				offsetLeft = (clickedFrom=='tabClicked' && hiddenOnSide=='right') ? offsetLeft : offsetLeft;
-				//debug(offsetLeft);
-				var scrollSettings = { 'axis':'x', 'margin':true, 'offset': {'left':offsetLeft}, 'easing':o.easing||'' }
-				//debug(-($tabs.width()-(116+navWidth)));
-				$tabsNav.scrollTo($tabToScrollTo,o.animationSpeed,scrollSettings);
-			})
-			.bind('navEnabler',function(){
-				setTimeout(function(){
-					//Check if last or first tab is selected than disable the navigation arrows
-					var isLast = $tabsNav.find('.ui-tabs-selected').is(':last-child'),
-						isFirst = $tabsNav.find('.ui-tabs-selected').is(':first-child'),
-						$ntNav = $tabsWrapper.find('.stNext'),
-						$pvNav = $tabsWrapper.find('.stPrev');
-					//debug('isLast = '+isLast+' - isFirst = '+isFirst);
-					if(isLast)
-					{
-						$pvNav.removeClass('ui-state-disabled');
-						$ntNav.addClass('ui-state-disabled');
-					}
-					else if(isFirst)
-					{
-						$ntNav.removeClass('ui-state-disabled');
-						$pvNav.addClass('ui-state-disabled');
-					}
-					else
-					{
-						$ntNav.removeClass('ui-state-disabled');
-						$pvNav.removeClass('ui-state-disabled');
-					}
-				},o.animationSpeed);
-			})
-			//Now check if tabs need navigation (many tabs out of sight)
-			.bind('navHandler',function(){
-				//Check the width of $widthChecker against the $tabsNav. If widthChecker has bigger width than show the $nav else hide it
-				if($widthChecker.width()>$tabsNav.width())
-				{
-					$nav.show();
-					//Put some margin to the first tab to make it visible if selected
-					$tabsNav.find('li:first').css('margin-left',$nav.find('.stPrev').outerWidth(true));
-				}
-				else
-				{
-					$nav.hide();
-					//Remove the margin from the first element
-					$tabsNav.find('li:first').css('margin-left',0);
-				}
-			})
-			.bind('tabsselect', function() {
-				//$tabs.trigger('navEnabler');
-			})
-			.bind('resized', function() {
-				$tabs.trigger('navHandler');
-				$tabs.trigger('scrollToTab',$tabsNav.find('li.ui-tabs-selected'));
-			})
-			//To add close buttons to the already existing tabs
-			.trigger('addCloseButton')
-			.trigger('bindTabClick')
-			//For the tabs that already exists
-			.trigger('navHandler')
-			.trigger('navEnabler');
-
-			//Select last tab if option is true
-			if(o.loadLastTab)
-			{
-				setTimeout(function(){$tabsNav.find('li:last a').trigger('click')},o.animationSpeed);
-			}
-		});
-
-		//Just for debuging
-		function debug(obj)
-		{console.log(obj)}
-	}
-})(jQuery);
-
-
-
-/**
- * jQuery.ScrollTo - Easy element scrolling using jQuery.
- * Copyright (c) 2007-2009 Ariel Flesler - aflesler(at)gmail(dot)com | http://flesler.blogspot.com
- * Dual licensed under MIT and GPL.
- * Date: 5/25/2009
- * @author Ariel Flesler
- * @version 1.4.2
- *
- * http://flesler.blogspot.com/2007/10/jqueryscrollto.html
- */
-;(function(d){var k=d.scrollTo=function(a,i,e){d(window).scrollTo(a,i,e)};k.defaults={axis:'xy',duration:parseFloat(d.fn.jquery)>=1.3?0:1};k.window=function(a){return d(window)._scrollable()};d.fn._scrollable=function(){return this.map(function(){var a=this,i=!a.nodeName||d.inArray(a.nodeName.toLowerCase(),['iframe','#document','html','body'])!=-1;if(!i)return a;var e=(a.contentWindow||a).document||a.ownerDocument||a;return d.browser.safari||e.compatMode=='BackCompat'?e.body:e.documentElement})};d.fn.scrollTo=function(n,j,b){if(typeof j=='object'){b=j;j=0}if(typeof b=='function')b={onAfter:b};if(n=='max')n=9e9;b=d.extend({},k.defaults,b);j=j||b.speed||b.duration;b.queue=b.queue&&b.axis.length>1;if(b.queue)j/=2;b.offset=p(b.offset);b.over=p(b.over);return this._scrollable().each(function(){var q=this,r=d(q),f=n,s,g={},u=r.is('html,body');switch(typeof f){case'number':case'string':if(/^([+-]=)?\d+(\.\d+)?(px|%)?$/.test(f)){f=p(f);break}f=d(f,this);case'object':if(f.is||f.style)s=(f=d(f)).offset()}d.each(b.axis.split(''),function(a,i){var e=i=='x'?'Left':'Top',h=e.toLowerCase(),c='scroll'+e,l=q[c],m=k.max(q,i);if(s){g[c]=s[h]+(u?0:l-r.offset()[h]);if(b.margin){g[c]-=parseInt(f.css('margin'+e))||0;g[c]-=parseInt(f.css('border'+e+'Width'))||0}g[c]+=b.offset[h]||0;if(b.over[h])g[c]+=f[i=='x'?'width':'height']()*b.over[h]}else{var o=f[h];g[c]=o.slice&&o.slice(-1)=='%'?parseFloat(o)/100*m:o}if(/^\d+$/.test(g[c]))g[c]=g[c]<=0?0:Math.min(g[c],m);if(!a&&b.queue){if(l!=g[c])t(b.onAfterFirst);delete g[c]}});t(b.onAfter);function t(a){r.animate(g,j,b.easing,a&&function(){a.call(this,n,b)})}}).end()};k.max=function(a,i){var e=i=='x'?'Width':'Height',h='scroll'+e;if(!d(a).is('html,body'))return a[h]-d(a)[e.toLowerCase()]();var c='client'+e,l=a.ownerDocument.documentElement,m=a.ownerDocument.body;return Math.max(l[h],m[h])-Math.min(l[c],m[c])};function p(a){return typeof a=='object'?a:{top:a,left:a}}})(jQuery);
+                            // hide all tabs then show tabs for current page
+                                self.lis.hide().slice(pages[currentPage].start, pages[currentPage].end).show();
+                                if (currentPage == (pages.length - 1) && !opts.cycle) 
+                                        disableButton('next');                  
+                                if (currentPage == 0 && !opts.cycle) 
+                                        disableButton('prev');
+                                
+                                // calculate the right padding for the next button
+                                buttonPadding = containerWidth - maxPageWidth - buttonWidth;
+                                if (buttonPadding > 0) 
+                                        $('.ui-tabs-paging-next', self.element).css({ paddingRight: buttonPadding + 'px' });
+                                
+                                initialized = true;
+                        } else {
+                                destroy();
+                        }
+                        
+                        $(window).bind('resize', handleResize);
+                }
+                
+                function page(direction) {
+                        currentPage = currentPage + (direction == 'prev'?-1:1);
+                        
+                        if ((direction == 'prev' && currentPage < 0 && opts.cycle) ||
+                                (direction == 'next' && currentPage >= pages.length && !opts.cycle))
+                                currentPage = pages.length - 1;
+                        else if ((direction == 'prev' && currentPage < 0) || 
+                                         (direction == 'next' && currentPage >= pages.length && opts.cycle))
+                                currentPage = 0;
+                        
+                        var start = pages[currentPage].start;
+                        var end = pages[currentPage].end;
+                        self.lis.hide().slice(start, end).show();
+                        
+                        if (direction == 'prev') {
+                                enableButton('next');
+                                if (opts.follow && (self.options.selected < start || self.options.selected > (end-1))) self.select(end-1);
+                                if (!opts.cycle && start <= 0) disableButton('prev');
+                        } else {
+                                enableButton('prev');
+                                if (opts.follow && (self.options.selected < start || self.options.selected > (end-1))) self.select(start);
+                                if (!opts.cycle && end >= self.length()) disableButton('next');
+                        }
+                }
+                
+                function disableButton(direction) {
+                        $('.ui-tabs-paging-'+direction, self.element).addClass('ui-tabs-paging-disabled');
+                }
+                
+                function enableButton(direction) {
+                        $('.ui-tabs-paging-'+direction, self.element).removeClass('ui-tabs-paging-disabled');
+                }
+                
+                // special function defined to handle IE6 and IE7 resize issues
+                function handleResize() {
+                        if (resizeTimer) clearTimeout(resizeTimer);
+                        
+                        if (windowHeight != $(window).height() || windowWidth != $(window).width()) 
+                                resizeTimer = setTimeout(reinit, 100);
+                }
+                
+                function reinit() {     
+                        windowHeight = $(window).height();
+                        windowWidth = $(window).width();
+                        init();
+                }
+                
+                function destroy() {
+                        // remove buttons
+                        $('.ui-tabs-paging-next', self.element).remove();
+                        $('.ui-tabs-paging-prev', self.element).remove();
+                        
+                        // show all tabs
+                        self.lis.show();
+                        
+                        initialized = false;
+                        
+                        $(window).unbind('resize', handleResize);
+                }
+                
+                // reconfigure "ui.tabs" add/remove events to reinit paging
+                var tabsAdd = self.add;
+                self.add = function(url, label, index) {
+                        // remove paging buttons before adding a tab
+                        if (initialized)
+                                destroy();
+                        
+                        tabsAdd.apply(this, [url, label, index]);
+                    
+                        if (opts.selectOnAdd) {
+                                if (index == undefined) index = this.lis.length-1;
+                                this.select(index);
+                        }
+                        // re-initialize paging buttons
+                        init();
+                };
+                var tabsRemove = self.remove;
+                self.remove = function(index) {
+                        // remove paging buttons before removing a tab
+                        if (initialized)
+                                destroy();
+                        
+                        tabsRemove.apply(this, [index]);
+                        
+                        // re-initialize paging buttons
+                        init();
+                };
+                // reconfigure "ui.tabs" select event to change pages if new tab is selected
+                var tabsSelect = self.select;
+                self.select = function(index) {
+                        tabsSelect.apply(this, [index]);
+                        
+                        // if paging is not initialized or it is not configured to 
+                        // change pages when a new tab is selected, then do nothing
+                        if (!initialized || !opts.followOnSelect)
+                                return;
+                        
+                        // find the new page based on index of the tab selected
+                        for (i in pages) {
+                                var start = pages[i].start;
+                                var end = pages[i].end;
+                                if (index >= start && index < end) {
+                                        // if the the tab selected is not within the currentPage of tabs, then change pages
+                                        if (i != currentPage) {
+                                                self.lis.hide().slice(start, end).show();
+                                                
+                                                currentPage = parseInt(i);
+                                                if (currentPage == 0) {
+                                                        enableButton('next');
+                                                        if (!opts.cycle && start <= 0) disableButton('prev');
+                                                } else {
+                                                        enableButton('prev');
+                                                        if (!opts.cycle && end >= self.length()) disableButton('next');
+                                                }
+                                        }
+                                        break;
+                                }
+                        }
+                };
+                
+                // add, remove, and destroy functions specific for paging 
+                $.extend($.ui.tabs.prototype, {
+                        pagingDestroy: function() {
+                                destroy();
+                        }
+                });
+                
+                init();
+        }
+});
