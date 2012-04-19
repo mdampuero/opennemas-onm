@@ -1138,7 +1138,7 @@ if (isset($_REQUEST['action']) ) {
 
         break;
 
-
+/*
         case 'get_others_articles':
             //Listado paginado de articulos no en portada de categoria.
             $cm = new ContentManager();
@@ -1236,7 +1236,7 @@ if (isset($_REQUEST['action']) ) {
         break;
 
         case 'search_adv':
-            /* Buscador en pestaña de contenidos relacionandos*/
+            //Buscador en pestaña de contenidos relacionandos
             $cm = new ContentManager();
             $mySearch = cSearch::Instance();
             //Transform the input string to search like: 'La via del tren' => '+via +tren'
@@ -1471,7 +1471,7 @@ if (isset($_REQUEST['action']) ) {
             $html_out=print_lists_related($_REQUEST['id'], $attaches, 'adjuntos_div');
             Application::ajax_out("<h2>Ficheros:</h2>".$categorys.$html_out.$paginacionV);
         break;
-
+*/
         case 'get_categorys_list':
 
              $allcategorys =$ccm->cache->renderCategoriesTree();
@@ -1604,6 +1604,8 @@ if (isset($_REQUEST['action']) ) {
 
 		case 'content-list-provider':
 
+        case 'related-provider-category':
+
             $items_page = s::get('items_per_page') ?: 20;
             $category   = filter_input( INPUT_GET, 'category' , FILTER_SANITIZE_STRING, array('options' => array('default' => '0')) );
             $page       = filter_input( INPUT_GET, 'page' , FILTER_SANITIZE_NUMBER_INT, array('options' => array('default' => '1')) );
@@ -1623,6 +1625,35 @@ if (isset($_REQUEST['action']) ) {
 
             $htmlOut = $tpl->fetch("common/content_provider/_container-content-list.tpl");
             Application::ajax_out($htmlOut);
+
+            break;
+
+        	case 'content-list-provider':
+
+        case 'related-provider-category':
+
+            $items_page = s::get('items_per_page') ?: 20;
+            $metadata   = filter_input( INPUT_GET, 'metadata' , FILTER_SANITIZE_STRING, array('options' => array('default' => '0')) );
+            $page       = filter_input( INPUT_GET, 'page' , FILTER_SANITIZE_NUMBER_INT, array('options' => array('default' => '1')) );
+            $cm = new ContentManager();
+
+            $mySearch = cSearch::Instance();
+            $where = "content_status=1 AND available=1 ";
+            $search = $mySearch->SearchRelatedContents($metadata, 'Article,Opinion', NULL, $where);
+            if(($search) && count($search)>0){
+                var_dump($search);
+            }
+            $tpl->assign(array(
+                'contents'=>$articles,
+                'contentTypeCategories'=>$allcategorys,
+                'category' =>$category,
+                'pagination'=>$pages->links
+            ));
+
+            $htmlOut = $tpl->fetch("common/content_provider/_container-content-list.tpl");
+            Application::ajax_out($htmlOut);
+
+            break;
 
         default: {
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);

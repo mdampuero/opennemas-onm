@@ -3,6 +3,7 @@
 {block name="header-js" append}
     {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
     {script_tag src="/jquery/jquery-ui-sliderAccess.js"}
+    {script_tag src="/jquery/jquery.ui.tabs-paging.js"}
     {script_tag src="/jquery/jquery.colorbox-min.js"}
     {script_tag src="/onm/jquery.datepicker.js"}
     {script_tag src="/utilsarticle.js"}
@@ -36,6 +37,16 @@
     });
     jQuery(document).ready(function ($){
         $('#article-form').tabs();
+        $( "#content-provider" ).tabs();
+        $( "#content-provider" ).tabs('paging', { cycle: true, follow: true } );
+    });
+
+     jQuery(document).ready(function($){
+        $("#form-validate-button, #form-send-button").on("click", function(event) {
+
+            saveRelatedContent();
+            return true;
+        });
     });
     </script>
 
@@ -76,23 +87,16 @@
                 </li>
                 {/is_module_activated}
                 {is_module_activated name="COMMENT_MANAGER"}
-                {if isset($article) && is_object($article) && !$article->isClone()}
+                {if isset($article) && is_object($article)}
                 <li>
                     <a href="#comments">{t}Comments{/t}</a>
                 </li>
                 {/if}
                 {/is_module_activated}
                 <li>
-                    <a href="#contenidos-relacionados">{t}Related contents{/t}</a>
+                    <a href="#related-contents">{t}Related contents{/t}</a>
                 </li>
-                <li>
-                    <a href="#elementos-relacionados" onClick="mover();">{t}Sort related contents{/t}</a>
-                </li>
-                {if isset($article) && is_object($article) && isset($clones)}
-                <li>
-                    <a href="#clones">Clones</a>
-                </li>
-                {/if}
+
             </ul>
 
             {* Pestaña de edición-contenido*}
@@ -393,163 +397,15 @@
         </div>
         {/is_module_activated}
 
-        {if $smarty.request.action eq 'read'}
-        <div id="comments" style="width:98%">
-            <table>
-                <tbody>
-                    <tr>
-                        <th class="title" style='width:50%'>Comentario</th>
-                        <th class="title"  style='width:20%'>Autor</th>
-                        <th class="right">Publicar</th>
-                        <th class="right">Eliminar</th>
-                    </tr>
-                    {section name=c loop=$comments}
-                    <tr>
-                        <td>
-                            <a style="cursor:pointer;font-size:14px;"
-                               onclick="new Effect.toggle($('{$comments[c]->pk_comment}'),'blind')">
-                                {$comments[c]->body|truncate:30}
-                            </a>
-                        </td>
-                        <td>
-                            {$comments[c]->author} ({$comments[c]->ip})
-                            <br />
-                            {$comments[c]->email}
-                        </td>
-                        <td class="right">
-                        </td>
-                        <td class="right">
-                            <a href="#" onClick="javascript:confirmarDelComment(this, '{$comments[c]->pk_comment}');" title="Eliminar">
-                                <img src="{$params.IMAGE_DIR}trash.png"  />
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div id="{$comments[c]->pk_comment}" class="{$comments[c]->pk_comment}" style="display: none;">
-                                <strong>Comentario:</strong> (IP: {$comments[c]->ip} - Publicado: {$comments[c]->changed})
-                                <br/> {$comments[c]->body}
-                            </div>
-                        </td>
-                    </tr>
-                    {/section}
-                </tbody>
-            </table>
-        </div>
-        {/if}
+        {is_module_activated name="COMMENT_MANAGER"}
+            {if isset($article) && is_object($article)}
+                {include file="article/partials/_comments.tpl"}
+            {/if}
+        {/is_module_activated}
 
-        <div id="contenidos-relacionados" style="width:98%">
-            {include file="article/partials/_related.tpl"}
+        <div id="related-contents" style="width:98%">
+            {include file ="article/related/_related_list.tpl"}
         </div>
-
-        {*is_module_activated name="AVANCED_ARTICLE_MANAGER"}
-        <div id="elementos-relacionados" style="width:98%">
-            {include file ="article/partials/_related_content.tpl"}
-        </div>
-        {/is_module_activated*}
-        {if isset($article) && is_object($article)}
-        <div id="elementos-relacionados" style="width:98%">
-            <br/>Listado contenidos relacionados en Portada:  <br/>
-                <div style="position:relative;" id="scroll-container2">
-                    <ul id="thelist2" style="padding: 4px; background: #EEEEEE">
-                    {assign var=cont value=1}
-                    {section name=n loop=$losrel}
-                        <li id="{$losrel[n]->id|clearslash}">
-                            <table  width="99%;">
-                                <tr>
-                                    <td style="cursor: pointer;">
-                                        {$losrel[n]->title|clearslash|escape:'html'}
-                                    </td>
-                                    <td style='width:120px'>
-                                        {assign var="ct" value=$losrel[n]->content_type}
-                                        {$content_types.$ct}
-                                    </td>
-                                    <td style='width:120px'>
-                                        {$losrel[n]->category_name|clearslash}
-                                    </td>
-                                    <td style='width:120px'>
-                                         {is_module_activated name="AVANCED_ARTICLE_MANAGER"}
-                                        {if $content_types.$ct eq 'Galeria'}
-                                         {t}Show as gallery:{/t}  <input type='radio' name='params[withGallery]' value='{$losrel[n]->id}' {if $article->params['withGallery'] eq $losrel[n]->id} checked ="checked"{/if} >
-                                        {/if}
-                                         {/is_module_activated}
-                                    </td>
-                                    <td style='width:40px'>
-                                        <a  href="#" onClick="javascript:del_relation('{$losrel[n]->id|clearslash}','thelist2');" title="Quitar relacion">
-                                            <img src="{$params.IMAGE_DIR}btn_no.png"  />
-                                        </a>
-                                    </td>
-                                </tr>
-                            </table>
-                        </li>
-                    {assign var=cont value=$cont+1}
-                    {/section}
-                    </ul>
-                </div>
-                <br />Listado contenidos relacionados en Interior:  <br />
-                <div style="position:relative;" id="scroll-container2int">
-                    <ul id="thelist2int" style="padding: 4px; background: #EEEEEE">
-                        {assign var=cont value=1}
-                        {section name=n loop=$intrel}
-                        <li id="{$intrel[n]->id|clearslash}">
-                            <table  style='width:99%;'>
-                                <tr>
-                                    <td  style="cursor: pointer;">
-                                        {$intrel[n]->title|clearslash|escape:'html'}
-                                    </td>
-                                    <td style='width:120px'>
-                                        {assign var="ct" value=$intrel[n]->content_type}
-                                        {$content_types.$ct}
-                                    </td>
-                                    <td style='width:120px'>
-                                        {$intrel[n]->category_name|clearslash}
-                                    </td>
-                                    <td style='width:120px'>
-                                         {is_module_activated name="AVANCED_ARTICLE_MANAGER"}
-                                        {if $content_types.$ct eq 'Galeria'}
-                                         {t}Show as gallery:{/t}  <input type='radio' name='params[withGalleryInt]' value='{$intrel[n]->id}' {if $article->params['withGalleryInt'] eq $intrel[n]->id} checked ="checked"{/if} >
-                                        {/if}
-                                         {/is_module_activated}
-                                    </td>
-                                    <td style='width:40px'>
-                                        <a  href="#" onClick="javascript:del_relation('{$intrel[n]->id|clearslash}','thelist2int');" title="Quitar relacion">
-                                                <img src="{$params.IMAGE_DIR}btn_no.png"  />
-                                        </a>
-                                    </td>
-                                </tr>
-                            </table>
-                         </li>
-                    {assign var=cont value=$cont+1}
-                    {/section}
-                </ul>
-            </div>
-            <br/><br/>
-
-            <div class="p">
-                <input type="hidden" id="ordenPortada" name="ordenArti" value="" />
-                <input type="hidden" id="ordenInterior" name="ordenArtiInt" value="" />
-            </div>
-        </div>
-        {else}
-        <div id="elementos-relacionados" style="width:98%">
-            <div style="padding:10px; width:90%; margin:0px;">
-                <h2>{t}Related contents in frontpage{/t}</h2>
-                <div style="position:relative;" id="scroll-container2">
-                    <ul id="thelist2" style="padding: 4px; background: #EEEEEE"></ul>
-                </div>
-                <br>
-                <h2>{t}Related contents in inner article:{/t}</h2>
-                <div style="position:relative;" id="scroll-container2int">
-                    <ul id="thelist2int" style="padding: 4px; background: #EEEEEE"></ul>
-                </div>
-                <div class="p">
-                    <input type="hidden" id="ordenPortada" name="ordenArti" value="" />
-                    <input type="hidden" id="ordenInterior" name="ordenArtiInt" value="" />
-                </div>
-            </div>
-        </div>
-        {/if}
-
 
         <div id="reloadPreview" style="display: none; background-color: #FFE9AF; color: #666; border: 1px solid #996699; padding: 10px; font-size: 1.1em; font-weight: bold; width: 550px; position: absolute; right: 0; top: 0;">
             <img src="{$params.IMAGE_DIR}loading.gif"  />

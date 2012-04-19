@@ -451,6 +451,7 @@ switch ($action) {
 
 
     case 'content-list-provider':
+    case 'related-provider':
 
         $items_page = s::get('items_per_page') ?: 20;
         $category = filter_input( INPUT_GET, 'category' , FILTER_SANITIZE_STRING, array('options' => array('default' => '0')) );
