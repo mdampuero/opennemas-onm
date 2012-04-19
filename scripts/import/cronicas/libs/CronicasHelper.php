@@ -103,7 +103,7 @@ class CronicasHelper {
 
         //emtpy tables
         $tables = array('articles', 'albums', 'albums_photos', 'advertisements',
-            'attachments', 'authors', 'author_imgs', 'books', 'comments',
+            'attachments', 'authors', 'author_imgs', 'books', 'comments', 'letters',
             'content_positions', 'kioskos', 'opinions', 'pclave', 'photos', 'polls', 'poll_items',
             'ratings', 'related_contents', 'specials', 'special_contents', 'videos', 'votes',
             'translation_ids', 'author_opinion', 'images_translated');
