@@ -143,8 +143,16 @@ class CronicasHelper {
         if (!$rss) {
             $this->log('clear contents '.$sql.' function: '.$GLOBALS['application']->conn->ErrorMsg() );
         }
- 
-    }
+  
+        $sql = "ALTER TABLE `authors` AUTO_INCREMENT =3";
+
+        $rss = $GLOBALS['application']->conn->Execute($sql);
+       
+        if (!$rss) {
+            $this->log('clear contents '.$sql.' function: '.$GLOBALS['application']->conn->ErrorMsg() );
+        }
+
+     }
 
 
      public function insertImageTranslated($pk_photo, $url, $type) {
