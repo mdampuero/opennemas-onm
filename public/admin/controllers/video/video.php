@@ -465,6 +465,7 @@ switch ($action) {
         $tpl->assign(array('contents'=>$videos,
                             'contentTypeCategories'=>$parentCategories,
                             'category' =>$category,
+                            'contentType'=>'Video',
                             'pagination'=>$pager->links
                     ));
 

@@ -1620,6 +1620,7 @@ if (isset($_REQUEST['action']) ) {
                 'contents'=>$articles,
                 'contentTypeCategories'=>$allcategorys,
                 'category' =>$category,
+                'contentType'=>'Article',
                 'pagination'=>$pages->links
             ));
 
@@ -1628,9 +1629,8 @@ if (isset($_REQUEST['action']) ) {
 
             break;
 
-        	case 'content-list-provider':
-
-        case 'related-provider-category':
+         
+        case 'related-provider-suggest':
 
             $items_page = s::get('items_per_page') ?: 20;
             $metadata   = filter_input( INPUT_GET, 'metadata' , FILTER_SANITIZE_STRING, array('options' => array('default' => '0')) );

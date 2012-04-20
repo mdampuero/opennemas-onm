@@ -395,6 +395,7 @@ switch($action) {
         $tpl->assign(array('contents'=>$albums,
                             'contentTypeCategories'=>$parentCategories,
                             'category' =>$category,
+                            'contentType'=>'Album',
                             'pagination'=>$pager->links
                     ));
 

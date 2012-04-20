@@ -279,7 +279,8 @@ switch ($action) {
         $tpl->assign(array('contents'=>$polls,
                             'contentTypeCategories'=>$parentCategories,
                             'category' =>$category,
-                            'pagination'=>$pager->links
+                            'pagination'=>$pager->links,
+                            'contentType'=>'Poll',
                     ));
 
         $html_out = $tpl->fetch("common/content_provider/_container-content-list.tpl");

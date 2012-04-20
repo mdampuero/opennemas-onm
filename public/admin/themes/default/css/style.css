@@ -2361,3 +2361,11 @@ ul.content-receiver, div#content-provider ul#contentList {
     min-height: 40px;
     padding: 4px;
 }
+
+div#content-provider span.type {
+    display: none;
+}
+
+div#content-provider ul li {
+    list-style: none;
+}

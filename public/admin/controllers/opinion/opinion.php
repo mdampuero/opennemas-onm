@@ -736,8 +736,9 @@ switch ($action) {
                                                  'ORDER BY starttime DESC ',
                                                   $page, $items_page);
 
-        $tpl->assign(array('contents'=>$opinions,
-                            'pagination'=>$pager->links
+        $tpl->assign(array( 'contents'=>$opinions,
+                            'pagination'=>$pager->links,
+                            'contentType'=>'Opinion',
                     ));
 
         $html_out = $tpl->fetch("common/content_provider/_container-content-list.tpl");
