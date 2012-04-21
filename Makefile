@@ -15,11 +15,6 @@ LINGUAS = \
 	gl_ES \
 	pt_BR
 
-DOC_FOLDERS = public/core \
-	public/controllers \
-	public/libs/Onm/ \
-	public/libs/Panorama/Panorama/ \
-
 all: l10n
 
 l10n: extracttrans updatepofiles compiletranslations extracttrans-backend updatepofiles-backend compiletranslations-backend
@@ -73,7 +68,7 @@ compiletranslations:
 			-o "public/locale/$$i/LC_MESSAGES/messages.mo"; \
 	done
 
-clean: cleancache cleaninstancefiles cleanlogs cleandocs
+clean: cleancache cleaninstancefiles cleanlogs
 
 cleancache:
 	@echo "Cleaning cache...";
@@ -90,7 +85,3 @@ cleanlogs:
 cleansmarty:
 	@echo "Cleaning smarty remporary files..."
 	rm tmp/instances/*/smarty/ -r
-
-cleandocs:
-	@echo "Cleaning generated documentations..."
-	rm doc/api -r
