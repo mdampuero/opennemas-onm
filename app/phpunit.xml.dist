@@ -29,6 +29,7 @@
 
   <filter>
     <whitelist>
+        <directory>models</directory>
         <directory>bundles</directory>
         <directory suffix=".php">app</directory>
         <exclude>
