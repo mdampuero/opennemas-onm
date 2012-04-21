@@ -34,6 +34,7 @@ if ($_REQUEST['action']=='list_pendientes') {
 (!isset($_SESSION['_from'])) ? $_SESSION['_from'] = $_REQUEST['category'] : null ;
 
 $tpl->assign('category', $_REQUEST['category']);
+$tpl->assign('action', $_REQUEST['action']);
 
 /**
  * Getting categories
@@ -605,8 +606,12 @@ if (isset($_REQUEST['action']) ) {
             } else {
                 $article = new Article();
                 $_REQUEST['fk_user_last_editor'] = $_SESSION['userid'];
-
-                $article->update( $_REQUEST );
+                $data = $_REQUEST;
+                unset($data['action']);
+                unset($data['stringVideoSearch']);
+                unset($data['stringImageSearch']);
+                unset($data['stringSearch']);
+                $article->update($data);
             }
 
             if( $_SESSION['desde']=='search_advanced'){

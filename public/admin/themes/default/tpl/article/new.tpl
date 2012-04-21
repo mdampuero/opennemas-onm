@@ -229,21 +229,18 @@
                                 <div style="display:inline-block; width:30%; vertical-align:top;">
                                     <label for="category">{t}Section:{/t}</label>
                                     <select style="width:100%" name="category" id="category" class="validate-section" onChange="get_tags($('title').value);"  tabindex="3">
-                                        <option value="20" data-name="" {if !isset($category)}selected{/if}>
-                                            {t}Unknown{/t}
-                                        </option>
+                                        <option value="20" data-name="{t}Unknown{/t}" {if !isset($category)}selected{/if}>{t}Unknown{/t}</option>
                                         {section name=as loop=$allcategorys}
-                                        {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
-                                        <option value="{$allcategorys[as]->pk_content_category}" data-name="{$allcategorys[as]->title}"
-                                        {if $category eq $allcategorys[as]->pk_content_category || $article->category eq $allcategorys[as]->pk_content_category}selected{/if}>
-                                            {$allcategorys[as]->title}</option>
-                                        {section name=su loop=$subcat[as]}
-                                            {if $subcat[as][su]->internal_category eq 1}
-                                                <option value="{$subcat[as][su]->pk_content_category}" data-name="{$allcategorys[as]->title}"
-                                                {if $category eq $subcat[as][su]->pk_content_category || $article->category eq $subcat[as][su]->pk_content_category}selected{/if} >&nbsp;&nbsp;|_&nbsp;&nbsp;{$subcat[as][su]->title}</option>
-                                            {/if}
-                                        {/section}
-                                        {/acl}
+                                            {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
+                                            <option value="{$allcategorys[as]->pk_content_category}" data-name="{$allcategorys[as]->title}"
+                                            {if (($category == $allcategorys[as]->pk_content_category) && $action == "new") || $article->category eq $allcategorys[as]->pk_content_category}selected{/if}>{$allcategorys[as]->title}</option>
+                                            {section name=su loop=$subcat[as]}
+                                                {if $subcat[as][su]->internal_category eq 1}
+                                                    <option value="{$subcat[as][su]->pk_content_category}" data-name="{$subcat[as][su]->title}"
+                                                    {if $category eq $subcat[as][su]->pk_content_category || $article->category eq $subcat[as][su]->pk_content_category}selected{/if} >&nbsp;&nbsp;|_&nbsp;&nbsp;{$subcat[as][su]->title}</option>
+                                                {/if}
+                                            {/section}
+                                            {/acl}
                                         {/section}
                                     </select>
                                 </div><!-- / -->
