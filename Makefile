@@ -20,7 +20,6 @@ DOC_FOLDERS = public/core \
 	public/libs/Onm/ \
 	public/libs/Panorama/Panorama/ \
 
-
 all: l10n
 
 l10n: extracttrans updatepofiles compiletranslations extracttrans-backend updatepofiles-backend compiletranslations-backend
@@ -73,13 +72,6 @@ compiletranslations:
 		msgfmt -vf "public/locale/$$i/LC_MESSAGES/messages.po" \
 			-o "public/locale/$$i/LC_MESSAGES/messages.mo"; \
 	done
-
-doc: generate-docblox-doc
-
-generate-docblox-doc:
-	@echo "Generating documentation using DocBlox..."
-	mkdir -p doc/docblox/log
-	docblox -c doc/docblox.xml --title="OpenNemas"
 
 clean: cleancache cleaninstancefiles cleanlogs cleandocs
 
