@@ -205,7 +205,7 @@
                         </tr>
                         <tr>
                             <td style="vertical-align:top; padding:4px 0;">
-                                <label for="title">{t}Inner title:{/t}</label>
+                                <label for="title_int">{t}Inner title:{/t}</label>
                                 <input 	type="text" id="title_int" name="title_int" title="{t}Inner title:{/t}"
                                         value="{$article->title_int|clearslash|escape:"html"}" class="required" style="width:100%"
                                         maxlength="256"
