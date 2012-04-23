@@ -5,48 +5,28 @@
 */
 require_once('../bootstrap.php');
 
-/**
- * Redirect Mobile browsers to mobile site unless a cookie exists.
-*/
+// Redirect Mobile browsers to mobile site unless a cookie exists.
 // $app->mobileRouter();
 
-/**
- * Setup view
-*/
+//Setup view
 $tpl = new Template(TEMPLATE_USER);
 $tpl->setConfig('opinion');
 
-/**
- * Fetch HTTP variables
-*/
-
-$category_name = $request->query->filter('category_name', 'opinion', FILTER_SANITIZE_STRING);
-
+// HTTP variables
 $action        = $request->query->filter('action', 'list' , FILTER_SANITIZE_STRING);
+$authorID      = (int)$request->query->filter('author_id', '' , FILTER_VALIDATE_INT);
 $page          = $request->query->filter('page', 1, FILTER_VALIDATE_INT);
 
-$authorID      = (int)$request->query->filter('author_id', '' , FILTER_SANITIZE_STRING);
-
-/**
- * Redirect to home if category_name is not opinion
-*/
-if ($category_name !="opinion") { Application::forward('/home/'); }
-
-/**
- * Set up Model
-*/
-/**
- * Fetch information for some uncached parts of the view
-*/
-require_once ("opinion_index_advertisement.php");
-
-/**
- * Generate the ID for use it to fetch caches
-*/
-$cacheID = 'opinion|'.(($authorID != '') ? $authorID.'|' : '').$page;
 $tpl->assign('actual_category', 'opinion'); // Used in renderMenu
 
+// Fetch information for some uncached parts of the view
+require_once "opinion_index_advertisement.php";
+
+// Generate the ID for use it to fetch caches
+$cacheID = 'opinion|'.(($authorID != '') ? $authorID.'|' : '').$page;
+
 switch ($action) {
+
     case 'list_opinions': // Index frontpage
 
         // Don't execute the app logic if there are caches available
@@ -128,74 +108,75 @@ switch ($action) {
         // Don't execute the app logic if there are caches available
         if (!$tpl->isCached('opinion/frontpage_author.tpl', $cacheID)) {
 
+            $cm = new ContentManager();
+
+            // Get author info
+            $author = new Author($authorID);
+
+            // Setting filters for the further SQLs
+            if ($authorID == 1) { // Editorial
+                $filter = 'opinions.type_opinion=1';
+                $authorName = 'editorial';
+            } elseif ($authorID == 2) { // Director
+                $filter =  'opinions.type_opinion=2';
+                $authorName = 'director';
+            } else { // Regular authors
+                $filter = 'opinions.type_opinion=0 AND opinions.fk_author='.$authorID;
+                $authorName = StringUtils::get_title($author->name);
+            }
+
             $_limit=' LIMIT '.(($page-1)*ITEMS_PAGE).', '.(ITEMS_PAGE);
 
-            $cm = new ContentManager();
-            // Fetch editorial opinions
-            if ($authorID==1) { //Editorial
+            // Get the number of total opinions for this author for pagination purpouses
+            $countOpinions = $cm->cache->count(
+                'Opinion',
+                $filter.' AND contents.available=1  and contents.content_status=1 '
+            );
 
-                $opinions = $cm->find_listAuthorsEditorial('contents.available=1  AND contents.content_status=1', 'ORDER BY created DESC '.$_limit);
-                $total_opinions = $cm->cache->count('Opinion','opinions.type_opinion=1 and contents.available=1  and contents.content_status=1');
-                $name_author= 'editorial';
-                if (!empty($opinions)) {
-                    foreach ($opinions as &$opinion) {
-                        $opinion['pk_author'] = 1;
-                        $opinion['author_name_slug']  = $name_author;
-                    }
+            // Get the list articles for this author
+            $opinions = $cm->getOpinionArticlesWithAuthorInfo(
+                $filter.' AND contents.available=1 and contents.content_status=1',
+                'ORDER BY created DESC '.$_limit
+            );
+
+            if (!empty($opinions)) {
+                foreach ($opinions as &$opinion) {
+                    $opinion['pk_author'] = $authorID;
+                    $opinion['author_name_slug']  = $authorName;
                 }
-            // Fetch director opinions
-            } elseif ($authorID == 2) { //Director
-
-                $opinions = $cm->find_listAuthors('opinions.type_opinion=2 and contents.available=1 and contents.content_status=1', 'ORDER BY created DESC '.$_limit);
-                $total_opinions = $cm->cache->count('Opinion','opinions.type_opinion=2 and contents.available=1  and contents.content_status=1');
-                $name_author = 'director';
-                if (!empty($opinions)) {
-                    foreach ($opinions as &$opinion) {
-                        $opinion['pk_author'] = 2;
-                        $opinion['author_name_slug']  = $name_author;
-                    }
-                }
-            // Fetch common author opinions
-            } else { //Author
-
-                // First, I need to know the amount of opinions for if it is necessary to paginate.
-                $total_opinions = $cm->count('Opinion',
-                                                'opinions.type_opinion=0 and opinions.fk_author='.($authorID)
-                                                .' AND contents.available=1 AND contents.content_status=1');
-                $opinions = $cm->find_listAuthors('opinions.type_opinion=0 and opinions.fk_author='.($authorID)
-                                                    .' and contents.available=1  and contents.content_status=1',
-                                                    'ORDER BY created DESC '.$_limit);
-                $aut = new Author($authorID);
-                if (!empty($opinions)) {
-                    foreach ($opinions as &$opinion) {
-                        $opinion['author_name_slug']  = StringUtils::get_title($opinion['name']);
-                    }
-                }
-
-                $tpl->assign('author_name', $aut->name);
             }
 
             // If there aren't opinions just redirect to homepage opinion
-            if(empty($total_opinions)){ Application::forward301('/seccion/opinion/'); }
+            if (empty($countOpinions)){
+                Application::forward301('/seccion/opinion/');
+            }
 
             $url = Uri::generate(
                 'opinion_author_frontpage',
                 array(
                     'slug' => $opinions[0]['author_name_slug'],
                     'id' => $opinions[0]['pk_author']
-                    )
+                )
             );
 
-            $pagination = $cm->create_paginate($total_opinions, ITEMS_PAGE, 2, 'URL', $url);
+            $pagination = $cm->create_paginate($countOpinions, ITEMS_PAGE, 2, 'URL', $url, '');
 
-            $tpl->assign('pagination_list', $pagination);
-            $tpl->assign('opinions', $opinions);
-            $tpl->assign('author_id', $authorID);
-            $tpl->assign('page', $page);
+            // Clean weird variables from this assign (must check all the templates)
+            // pagination_list cahnge to pagination
+            // drop author_id, $author_name as they are inside author var
+            $tpl->assign(array(
+                'pagination_list' => $pagination,
+                'opinions'        => $opinions,
+                'author_id'       => $authorID,
+                'author'          => $author,
+                'author_name'     => $author->name,
+                'page'            => $page,
+            ));
 
         } // End if isCached
 
         $tpl->display('opinion/opinion_author_index.tpl', $cacheID);
+
     break;
 
 }
