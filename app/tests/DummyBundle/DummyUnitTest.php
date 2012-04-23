@@ -44,6 +44,26 @@ class DummyUnitTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test double
+     *
+     * @return void
+     **/
+    public function testArticleClass()
+    {
+        // Create a stub for the SomeClass class.
+        $stub = $this->getMock('Article');
+
+        // Configure the stub.
+        $stub->expects($this->any())
+             ->method('create')
+             ->will($this->returnValue('foo'));
+
+        // Calling $stub->doSomething() will now return
+        // 'foo'.
+        $this->assertEquals('foo', $stub->create('as'));
+    }
+
+    /**
      * @covers {className}::{origMethodName}
      * @todo Implement testErrorAction().
      */
