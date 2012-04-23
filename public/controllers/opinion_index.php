@@ -109,13 +109,13 @@ switch ($action) {
                 $opinion->author_name_slug = StringUtils::get_title($opinion->name);
             }
 
-            $pagination = $cm->create_paginate($total_opinions, ITEMS_PAGE, 2, 'URL', $url);
+            $pagination = $cm->create_paginate($total_opinions, 1, ITEMS_PAGE, 'URL', $url, '');
+
 
             $tpl->assign('editorial', $editorial);
             $tpl->assign('opinions',  $opinions);
             $tpl->assign('pagination',  $pagination);
             $tpl->assign('page', $page);
-
 
         }
 
@@ -178,11 +178,13 @@ switch ($action) {
             // If there aren't opinions just redirect to homepage opinion
             if(empty($total_opinions)){ Application::forward301('/seccion/opinion/'); }
 
-            $url = Uri::generate('opinion_author_frontpage',
-                            array(
-                                'slug' => $opinions[0]['author_name_slug'],
-                                'id' => $opinions[0]['pk_author']
-                                ));
+            $url = Uri::generate(
+                'opinion_author_frontpage',
+                array(
+                    'slug' => $opinions[0]['author_name_slug'],
+                    'id' => $opinions[0]['pk_author']
+                    )
+            );
 
             $pagination = $cm->create_paginate($total_opinions, ITEMS_PAGE, 2, 'URL', $url);
 

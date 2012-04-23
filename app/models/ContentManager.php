@@ -1547,7 +1547,7 @@ class ContentManager
      *  $function ->nombre de la funcion en js / URL (segun se quiera recargar ajax o una url)
      * $params -> parametros de la funcion js / dir url  que se carga
      */
-    public function create_paginate($total_items, $num_pages, $delta, $funcion='null', $params='null')
+    public function create_paginate($total_items, $num_pages, $delta, $funcion='null', $params='null', $separator = " | ")
     {
         if (!isset($num_pages)) {
             $num_pages = 5;
@@ -1590,7 +1590,7 @@ class ContentManager
             'delta'       => $delta,
             'clearIfVoid' => true,
             'urlVar'      => $page,
-            'separator' => '|',
+            'separator'   => $separator,
             'spacesBeforeSeparator' => 1,
             'spacesAfterSeparator' => 1,
             'totalItems'  => $total_items,
