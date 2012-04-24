@@ -31,9 +31,9 @@ if (isset($action) && ($action == 'submit' || $action == 'create_subscriptor'))
     $configSiteName = s::get('site_name');
     $configMailTo = s::get('newsletter_maillist');
 
-    $recaptcha_challenge_field = $request->query->
+    $recaptcha_challenge_field = $request->request->
                 filter('recaptcha_challenge_field', null, FILTER_SANITIZE_STRING);
-    $recaptcha_response_field = $request->query->
+    $recaptcha_response_field = $request->request->
             filter('recaptcha_response_field', null, FILTER_SANITIZE_STRING);
 
 
@@ -50,10 +50,10 @@ if (isset($action) && ($action == 'submit' || $action == 'create_subscriptor'))
         echo ($resp);
     } else {// Correct CAPTCHA, bad mail and name empty
 
-        $email = $request->query->filter('email', null, FILTER_SANITIZE_STRING);
-        $name = $request->query->filter('name', null, FILTER_SANITIZE_STRING);
+        $email = $request->request->filter('email', null, FILTER_SANITIZE_STRING);
+        $name = $request->request->filter('name', null, FILTER_SANITIZE_STRING);
 
-        if ( isset($email) && isset($name)) {
+        if ( empty($email) || empty($name)) {
             $resp='<script>(!alert("Lo sentimos, no se ha podido completar su solicitud.\nVerifique el formulario y vuelva intentarlo."))</script>
                     <script>location.href="#"</script>';
             echo ($resp);
@@ -62,10 +62,10 @@ if (isset($action) && ($action == 'submit' || $action == 'create_subscriptor'))
             //Filter $_POST vars from FORM
             $data['name'] = $name;
             $data['email'] = $email;
-            $data['subscription'] = $request->query->filter('subscription', null, FILTER_SANITIZE_STRING);
-            $data['subscritorEntity'] = $request->query->filter('entity', null, FILTER_SANITIZE_STRING);
-            $data['subscritorCountry'] = $request->query->filter('country', null, FILTER_SANITIZE_STRING);
-            $data['subscritorCommunity'] = $request->query->filter('community', null, FILTER_SANITIZE_STRING);
+            $data['subscription'] = $request->request->filter('subscription', null, FILTER_SANITIZE_STRING);
+            $data['subscritorEntity'] = $request->request->filter('entity', null, FILTER_SANITIZE_STRING);
+            $data['subscritorCountry'] = $request->request->filter('country', null, FILTER_SANITIZE_STRING);
+            $data['subscritorCommunity'] = $request->request->filter('community', null, FILTER_SANITIZE_STRING);
 
             switch($action) {
                 // Logic for subscription sending a mail to s::get('newsletter_maillist')
