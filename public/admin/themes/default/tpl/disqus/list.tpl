@@ -5,14 +5,17 @@
 <style type="text/css">
 
 .iframe {
+    margin-top:60px;
     width:100%;
     margin:0 auto;
+    bottom:0;
 }
 
 iframe {
     margin:0 auto;
-    min-height:85%;
+    min-height:100%%;
     border:0 none;
+    overflow:visible;
 }
 .top-action-bar .title > * {
     display: inline-block;
@@ -43,4 +46,7 @@ iframe {
         {t}Disqus not configured{/t}
     {/if}
 </div>
+{/block}
+
+{block name="copyright"}
 {/block}
