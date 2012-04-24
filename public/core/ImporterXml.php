@@ -186,7 +186,8 @@ class ImporterXml {
         }
 
         $texto = $this->checkBeIgnored($texto);
-        return $texto;
+        //$texto = $this->checkBeAllowed($texto);
+        return $texto.'<br>';
 
     }
 
