@@ -91,6 +91,7 @@ class ModuleManager
                 'CACHE_MANAGER',
                 'CATEGORY_MANAGER',
                 'COMMENT_MANAGER',
+                'COMMENT_DISQUS_MANAGER',
                 'EFE_FILE_IMPORTER',
                 'EFE_IMPORTER',
                 'EUROPAPRESS_IMPORTER',
