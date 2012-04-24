@@ -27,6 +27,7 @@ class ImporterXml {
    static private $instance = null;
 
    public $ignoreds = NULL;
+   public $alloweds = NULL;
    public $labels = NULL;
    public $schema = NULL;
    public $data = NULL;
@@ -40,27 +41,18 @@ class ImporterXml {
      */
     public function __construct($config = array())
     {
-           $this->schema = s::get('xml_file_schema');
-         /*  $this->schema = array('NOMBRE_SECCION'=>'category_name',
-                    'Antetítulo'=> 'subtitle',
-                    'FECHA'=>'created',
-                    'Título'=> 'title',
-                    'Texo'=> 'bo',
-                    'Texto'=> 'body',
-                    'NOMBRE_PUBLICACION'=>'agency',
-                    'FECHA_SALIDA' =>'created',
-                    'Pie de foto'=>'img1_footer',
-                    'ignored'=>'ESTILO, STYLE',
-
-
-            ); */
-
-
+        $this->schema = s::get('xml_file_schema');
+         
         $this->labels = array_values($this->schema);
 
         $ignoreds = explode(',', $this->schema['ignored']);
         foreach($ignoreds as $lab) {
             $this->ignoreds[] = trim($lab);
+        }
+
+        $allowed = explode(',', $this->schema['important']);
+        foreach($allowed as $lab) {
+            $this->alloweds[] = trim($lab);
         }
 
         $this->data = array();
@@ -69,7 +61,7 @@ class ImporterXml {
                 $this->data[$k] ='';
             }
         }
-
+          
     }
 
 
@@ -101,19 +93,11 @@ class ImporterXml {
 
    public function checkLabels($label) {
 
-      /*  foreach($this->schema as $value=>$pattern) {
-
-             if(preg_match('/'.$pattern.'/', $label, $matches)) {
-              var_dump($matches);
-
-                return $value;
-             }
-        }*/
        foreach($this->schema as $value=>$pattern) {
-           if($label == $pattern)
+            if($label == $pattern)
                 return $value;
        }
-        return false;
+       return false;
 
     }
 
@@ -126,6 +110,8 @@ class ImporterXml {
         }
     }
 
+    
+
     static function parseXMLtoArray($eleto) {
 
         $json = json_encode($eleto);
@@ -137,36 +123,45 @@ class ImporterXml {
 
     public function parseNodes($array) {
 
-
+        $tag = ''; 
+        $end = '';
         $texto ='';
         if(!empty($array)) {
             foreach($array as $key=>$value) {
-               if($key =='@attributes')  {
-
-                   $label = $this->checkAttributes($value);
-                   if(!empty($label)) {
-
+               if($key =='@attributes')  {                 
+                    $label = $this->checkAttributes($value);
+                    if($this->checkBeAllowed($value)) {
+                            $tag = '<b>'; 
+                            $end = '</b> <br>';
+                    } else {
+                        $tag = ''; 
+                        $end = ' ';
+                    }
+                    if(!empty($label)) {
+                     
                         $point = next($array);
 
                         if(is_object($point) || is_array($point) ) {
-                                $this->data[$label] = $this->parseNodes($point);
+                            
+                            $this->data[$label] = $this->parseNodes($point);
                         } else {
 
-                             $this->data[$label] .= $this->checkBeIgnored($point);
+                            $this->data[$label] .=$this->checkBeIgnored($point);
 
                         }
-                   }
+                    }
                } elseif(!in_array($key, $this->ignoreds) ) {
                    $label = $this->checkLabels($key);
 
                } else {
                    return '';
                }
-
+               
                if( !empty($label)) {
-
+                
                     if(!is_object($value) && !is_array($value)) {
-                        $texto = (string)$value;
+                        $texto = (string)$value;    
+                        
                         $this->data[$label]  = $this->checkBeIgnored($texto) ;
 
                     } else {
@@ -174,20 +169,22 @@ class ImporterXml {
                         $this->data[$label]  .= $this->parseNodes($value);
                     }
                 } else {
+                    
+                    if(is_object($value) || is_array($value)) {
+                        
+                        $texto .=   $this->parseNodes($value);                        
+                    }else{
 
-                     if(is_object($value) || is_array($value)) {
-                        $texto .=   $this->parseNodes($value);
-                     }else{
-                        $texto .= $this->checkBeIgnored($value);
-                     }
+                        $texto .= ' <br>'.$this->checkBeIgnored($value);
+                    }
                 }
 
             }
         }
-
+ 
         $texto = $this->checkBeIgnored($texto);
-        //$texto = $this->checkBeAllowed($texto);
-        return $texto.'<br>';
+       
+        return $tag.$texto.$end;
 
     }
 
@@ -201,19 +198,38 @@ class ImporterXml {
             foreach($value as $n=>$val) {
 
                 if(!empty($val) &&  (!in_array($n, $this->ignoreds) ) ) {
-                   $label = $this->checkAttributes($val);
-
+                   $label = $this->checkAttributes($val);                   
                 }
             }
         } else {
 
             if(!empty($value)) {
-                $label = $this->checkLabels($value);
+                $label = $this->checkLabels($value);                             
             }
         }
-
-
+ 
         return $label;
+    }
+
+    public function checkBeAllowed($value) {
+        if((is_object($value) || is_array($value)) ) {
+
+            foreach($value as $n=>$val) {
+
+                if(!empty($val) &&  (!in_array($n, $this->ignoreds) ) ) {
+                    $result = $this->checkBeAllowed($val); 
+                    if($result) {
+                        return true;
+                    }
+                }
+            }
+        } else {         
+            if (in_array($value, $this->alloweds)) {
+                 
+                return true;
+            }
+        }
+        return false;
     }
 
 
@@ -243,9 +259,12 @@ class ImporterXml {
         $this->data['ordenArti']="";$this->data['ordenArtiInt']="";
 
         $this->parseNodes($values);
-
+ 
         if(empty($this->data['title_int']))
             $this->data['title_int'] = $this->data['title'];
+
+        if(empty($this->data['summary']))
+            $this->data['summary'] = substr($this->data['body'],0, strpos($this->data['body'], '.') ).'.';
 
         if(!empty($this->data['category_name'])) {
             $ccm = ContentCategoryManager::get_instance();
