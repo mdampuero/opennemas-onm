@@ -74,12 +74,16 @@ class SessionManager implements ArrayAccess
     public function bootstrap($lifetime=null)
     {
         // Save the actual lifetime for this session in the session manager
-        $this->lifetime = $lifetime;
+        if (is_null($lifetime)) {
+            $this->lifetime = self::MAX_SESSION_LIFETIME;
+        } else {
+            $this->lifetime = $lifetime;
+        }
 
         if (is_null($lifetime)
             && !isset($_COOKIE['default_expire'])
         ) {
-            $lifetime = 60; // 60 minutes by default
+            $lifetime = self::MAX_SESSION_LIFETIME; // 60 minutes by default
         } elseif (isset($_COOKIE['default_expire'])) {
             $lifetime = intval($_COOKIE['default_expire']);
         }
