@@ -89,7 +89,7 @@ switch ($action) {
                 $opinion->author_name_slug = StringUtils::get_title($opinion->name);
             }
 
-            $pagination = $cm->create_paginate($total_opinions, 1, ITEMS_PAGE, 'URL', $url, '');
+            $pagination = $cm->create_paginate($total_opinions, ITEMS_PAGE, 2, 'URL', $url, '');
 
 
             $tpl->assign('editorial', $editorial);

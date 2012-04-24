@@ -70,7 +70,6 @@ switch ($action) {
                 $rating = new Rating($opinionID);
                 $tpl->assign('rating_bar', $rating->render('article','vote'));
 
-
                 // Fetch suggested contents
                 $objSearch = cSearch::Instance();
                 $suggestedContents = $objSearch->SearchSuggestedContents(
@@ -106,10 +105,13 @@ switch ($action) {
                     $otherOpinion->author_name_slug  = $opinion->author_name_slug;
                 }
 
+                $author = new \Author($opinion->fk_author);
+
                 $tpl->assign(array(
                     'other_opinions'  => $otherOpinions,
                     'opinion'         => $opinion,
-                    'actual_category' => 'opinion'
+                    'actual_category' => 'opinion',
+                    'author'          => $author,
                 ));
 
             }
