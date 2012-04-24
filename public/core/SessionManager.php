@@ -79,7 +79,7 @@ class SessionManager implements ArrayAccess
         if (is_null($lifetime)
             && !isset($_COOKIE['default_expire'])
         ) {
-            $lifetime = 15; // 15 minutes by default
+            $lifetime = 60; // 60 minutes by default
         } elseif (isset($_COOKIE['default_expire'])) {
             $lifetime = intval($_COOKIE['default_expire']);
         }
