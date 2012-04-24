@@ -21,7 +21,7 @@ $category_name = $request->query->filter('category_name', 'home', FILTER_SANITIZ
 require_once("statics_advertisement.php");
 
 //If the form was sent
-$action = $request->query->filter('action', null, FILTER_SANITIZE_STRING);
+$action = $request->request->filter('action', null, FILTER_SANITIZE_STRING);
 
 if (isset($action) && ($action == 'submit' || $action == 'create_subscriptor'))
 {
