@@ -29,7 +29,7 @@ extracttrans-backend:
         	public/manager/controllers/**/*.php \
         	public/admin/themes/default/**/*.php \
 		  public/admin/locale/extracted_strings.c \
-		  -o $(LOCALE_FOLDER)'onmadmin.pot' --from-code=UTF-8
+		  -o public/admin/locale/onmadmin.pot --from-code=UTF-8
 
 updatepofiles-backend:
 	@echo "Updating translations";
