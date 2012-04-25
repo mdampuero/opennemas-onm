@@ -71,7 +71,7 @@ switch ($action) {
             try {
                 $content->setArchived();
             } catch (\Exception $e) {
-                $error = sprintf('Unable to set suggested to frontpage state to content with id %s: %s', $id, $e->getMessage());
+                $error = sprintf('Unable to arquive content with id %s: %s', $id, $e->getMessage());
             }
             $content->dropFromAllHomePages();
         } else {
