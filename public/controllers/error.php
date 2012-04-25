@@ -16,8 +16,11 @@ require_once('../bootstrap.php');
  * Setup view
 */
 $tpl = new Template(TEMPLATE_USER);
-$errorCode = $request->query->filter('errordoc', null, FILTER_SANITIZE_STRING);  
+$errorCode = $request->query->filter('errordoc', null, FILTER_SANITIZE_STRING);
 
+if($errorCode =='404') {
+    $tpl->display('static_pages/404.tpl');
+}
 /**
  * Fetch HTTP variables
 */

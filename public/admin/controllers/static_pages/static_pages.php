@@ -122,7 +122,8 @@ switch($action) {
         $data['metadata']  = StringUtils::normalize_metadata($data['metadata']);
         $page->save($data);
 
-        Application::forward( $_SERVER['SCRIPT_NAME'].'?action=read&id='.$data['id']);
+
+        Application::forward( $_SERVER['SCRIPT_NAME'].'?action=read&id='.$page->id);
 
     break;
 
