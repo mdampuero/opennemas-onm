@@ -66,7 +66,7 @@ class InstanceManager
     public function load( $serverName )
     {
         //TODO: improve search for allowing subdomains with wildcards
-        $sql = "SELECT * FROM instances WHERE domains LIKE '%{$serverName}%' LIMIT 1";
+        $sql = "SELECT SQL_CACHE * FROM instances WHERE domains LIKE '%{$serverName}%' LIMIT 1";
         $rs = $this->_connection->Execute($sql);
 
         if (!$rs) {
@@ -123,9 +123,7 @@ class InstanceManager
         // If this instance doesn't exist check if the request is from manager
         // in that case return a dummie instance.
         } else {
-
             throw new \Onm\Instance\NotFoundException(_('Instance not found'));
-
         }
         return $instance;
 
@@ -194,7 +192,7 @@ class InstanceManager
 
         $instances = array();
 
-        $sql = "SELECT * FROM instances WHERE id = ?";
+        $sql = "SELECT SQL_CACHE * FROM instances WHERE id = ?";
         $rs = $this->_connection->Execute($sql, array($id));
 
         if (!$rs) {

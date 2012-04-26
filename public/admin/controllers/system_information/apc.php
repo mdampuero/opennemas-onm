@@ -3,8 +3,13 @@
 /**
  * Setup app
 */
-require_once('../../../bootstrap.php');
-require_once('../../session_bootstrap.php');
+require_once '../../../bootstrap.php' ;
+require_once '../../session_bootstrap.php';
+
+if(!Acl::isMaster()) {
+    m::add("You don't have permissions");
+    Application::forward('/admin/');
+}
 
 /*
   +----------------------------------------------------------------------+
@@ -124,7 +129,6 @@ $MY_SELF_WO_SORT=
 	"&COUNT=".$MYREQUEST['COUNT'];
 
 // authentication needed?
-//
 if (!USE_AUTHENTICATION) {
 	$AUTHENTICATED=1;
 } else {

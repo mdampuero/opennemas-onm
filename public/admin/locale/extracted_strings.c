@@ -1631,9 +1631,6 @@ gettext("Delete");
 gettext("Publish");
 
 /* public/admin/themes/default/tpl//article/pending.tpl */
-gettext("Publish to frontpage");
-
-/* public/admin/themes/default/tpl//article/pending.tpl */
 gettext("New article");
 
 /* public/admin/themes/default/tpl//article/pending.tpl */
@@ -1773,6 +1770,9 @@ gettext("Inner title:");
 
 /* public/admin/themes/default/tpl//article/new.tpl */
 gettext("Section:");
+
+/* public/admin/themes/default/tpl//article/new.tpl */
+gettext("Unknown");
 
 /* public/admin/themes/default/tpl//article/new.tpl */
 gettext("Unknown");
@@ -2181,6 +2181,15 @@ gettext("Available videos");
 
 /* public/admin/themes/default/tpl//article/partials/_images.tpl */
 gettext("Search videos by title...");
+
+/* public/admin/themes/default/tpl//article/partials/_related_content.tpl */
+gettext("Related in frontpage");
+
+/* public/admin/themes/default/tpl//article/partials/_related_content.tpl */
+gettext("Related in inner");
+
+/* public/admin/themes/default/tpl//article/partials/_related_content.tpl */
+gettext("Related in home");
 
 /* public/admin/themes/default/tpl//article/partials/_menu.tpl */
 gettext("Article manager");
@@ -4684,6 +4693,51 @@ gettext("Yes, delete");
 /* public/admin/themes/default/tpl//widget/modals/_modalDelete.tpl */
 gettext("No");
 
+/* public/admin/themes/default/tpl//disqus/config.tpl */
+gettext("Comment manager");
+
+/* public/admin/themes/default/tpl//disqus/config.tpl */
+gettext("Configuration");
+
+/* public/admin/themes/default/tpl//disqus/config.tpl */
+gettext("Go back to list");
+
+/* public/admin/themes/default/tpl//disqus/config.tpl */
+gettext("Go back to list");
+
+/* public/admin/themes/default/tpl//disqus/config.tpl */
+gettext("Go back to list");
+
+/* public/admin/themes/default/tpl//disqus/config.tpl */
+gettext("Go back to list");
+
+/* public/admin/themes/default/tpl//disqus/config.tpl */
+gettext("Auth credentials");
+
+/* public/admin/themes/default/tpl//disqus/config.tpl */
+gettext("Short name:");
+
+/* public/admin/themes/default/tpl//disqus/config.tpl */
+gettext("Save");
+
+/* public/admin/themes/default/tpl//disqus/list.tpl */
+gettext("Comment manager");
+
+/* public/admin/themes/default/tpl//disqus/list.tpl */
+gettext("Reload list");
+
+/* public/admin/themes/default/tpl//disqus/list.tpl */
+gettext("Config disqus module");
+
+/* public/admin/themes/default/tpl//disqus/list.tpl */
+gettext("Config Europapress module");
+
+/* public/admin/themes/default/tpl//disqus/list.tpl */
+gettext("Config");
+
+/* public/admin/themes/default/tpl//disqus/list.tpl */
+gettext("Disqus not configured");
+
 /* public/admin/themes/default/tpl//trash/trash.tpl */
 gettext("Trash");
 
@@ -5163,6 +5217,12 @@ gettext("Tags");
 
 /* public/admin/themes/default/tpl//advertisement/partials/advertisement_images.tpl */
 gettext("Available multimedia for ads");
+
+/* public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_poll_inner.tpl */
+gettext("Encuestas");
+
+/* public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_poll.tpl */
+gettext("Encuestas");
 
 /* public/admin/themes/default/tpl//acl/user/modal/_modal_edit_user_group.tpl */
 gettext("Editing user group");
@@ -5900,6 +5960,9 @@ gettext("Body:");
 gettext("Ignored labels:");
 
 /* public/admin/themes/default/tpl//agency_importer/filesXML/config.tpl */
+gettext("Important labels:");
+
+/* public/admin/themes/default/tpl//agency_importer/filesXML/config.tpl */
 gettext("Definition values");
 
 /* public/admin/themes/default/tpl//agency_importer/filesXML/config.tpl */
@@ -5910,6 +5973,9 @@ gettext("The name can be one attribute or one label in XML file");
 
 /* public/admin/themes/default/tpl//agency_importer/filesXML/config.tpl */
 gettext("Use ignored labels separated with commas");
+
+/* public/admin/themes/default/tpl//agency_importer/filesXML/config.tpl */
+gettext("Check important labels for write with bolder font");
 
 /* public/admin/themes/default/tpl//agency_importer/filesXML/config.tpl */
 gettext("Save");

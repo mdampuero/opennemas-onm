@@ -1,3 +1,36 @@
+var FrontpageManager;
+
+(function ($){
+
+FrontpageManager = {
+
+    init: function() {
+
+        // Init event handlers for buttons for each content in frontpage
+        //  -
+
+    },
+
+    makeContentProviderAndPlaceholdersSortable: function() {
+
+    }
+
+
+
+};
+
+FrontpageManager.contentProvider = function() {
+
+};
+
+FrontpageManager.toolbar = function (){
+
+}
+
+$(document).ready( FrontpageManager.init );
+
+})(jQuery);
+
 makeContentProviderAndPlaceholdersSortable = function () {
     // Make content providers sortable and allow to D&D over the placeholders
     jQuery('div#content-provider .ui-tabs-panel > div:not(.pagination)').sortable({

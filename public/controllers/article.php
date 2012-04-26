@@ -52,13 +52,12 @@ switch($action) {
 
         $cm = new ContentManager();
 
-
         // Advertisements for single article NO CACHE
         require_once('article_advertisement.php');
 
-        $cache_id = $tpl->generateCacheId( $category_name, $subcategory_name, $articleID );
+        $cacheID = $tpl->generateCacheId( $category_name, $subcategory_name, $articleID );
 
-        if (($tpl->caching == 0) || !$tpl->isCached('article/article.tpl', $cache_id) )
+        if (($tpl->caching == 0) || !$tpl->isCached('article/article.tpl', $cacheID) )
         {
 
             $article = new Article($articleID);
@@ -105,7 +104,7 @@ switch($action) {
 
                 $tpl->assign('article', $article);
 
-                // Related media code ------------------------------------------
+                // Associated media code ------------------------------------------
                 if (isset($article->img2) && ($article->img2 != 0)) {
                     $photoInt = new Photo($article->img2);
                     $tpl->assign('photoInt', $photoInt);
@@ -167,7 +166,7 @@ switch($action) {
 
         } // end if $tpl->is_cached
 
-        $tpl->display('article/article.tpl', $cache_id);
+        $tpl->display('article/article.tpl', $cacheID);
 
     } break;
 

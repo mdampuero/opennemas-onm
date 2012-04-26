@@ -1,7 +1,5 @@
 #!/usr/bin/make
 
-LOCALE_FOLDER = './public/admin/locale/'
-
 TPL_FOLDER = \
 	public/admin/themes/default/tpl/ \
 	public/manager/themes/default/tpl
@@ -17,29 +15,23 @@ LINGUAS = \
 	gl_ES \
 	pt_BR
 
-DOC_FOLDERS = public/core \
-	public/controllers \
-	public/libs/Onm/ \
-	public/libs/Panorama/Panorama/ \
-
-
 all: l10n
 
-l10n: extracttrans updatepofiles compiletranslations
+l10n: extracttrans updatepofiles compiletranslations extracttrans-backend updatepofiles-backend compiletranslations-backend
 
-extracttrans:
+extracttrans-backend:
 	@echo "Extracting translations";
-	@tsmarty2c $(TPL_FOLDER) > $(LOCALE_FOLDER)'extracted_strings.c'
+	@tsmarty2c $(TPL_FOLDER) > public/admin/locale/extracted_strings.c
 	@xgettext public/admin/controllers/**/* \
 	        public/admin/include/menu.php public/core/*.php \
         	vendor/Onm/**/**/*.php \
 	        app/models/*.php \
         	public/manager/controllers/**/*.php \
         	public/admin/themes/default/**/*.php \
-		  $(LOCALE_FOLDER)'extracted_strings.c' \
-		  -o $(LOCALE_FOLDER)'onmadmin.pot' --from-code=UTF-8
+		  public/admin/locale/extracted_strings.c \
+		  -o public/admin/locale/onmadmin.pot --from-code=UTF-8
 
-updatepofiles:
+updatepofiles-backend:
 	@echo "Updating translations";
 	@for i in $(LINGUAS); do \
 		echo " - $$i";	\
@@ -47,7 +39,7 @@ updatepofiles:
 			'public/admin/locale/onmadmin.pot'; \
 	done
 
-compiletranslations:
+compiletranslations-backend:
 	@echo "Compiling translations";
 	@for i in $(LINGUAS); do \
 		echo " - $$i: " && \
@@ -55,14 +47,28 @@ compiletranslations:
 			-o "public/admin/locale/$$i/LC_MESSAGES/messages.mo"; \
 	done
 
-doc: generate-docblox-doc
+extracttrans:
+	@echo "Extracting translations";
+	@xgettext public/controllers/* \
+		  -o public/locale/onmfront.pot --from-code=UTF-8
 
-generate-docblox-doc:
-	@echo "Generating documentation using DocBlox..."
-	mkdir -p doc/docblox/log
-	docblox -c doc/docblox.xml --title="OpenNemas"
+updatepofiles:
+	@echo "Updating translations";
+	@for i in $(LINGUAS); do \
+		echo " - $$i";	\
+		msgmerge -U "public/locale/$$i/LC_MESSAGES/messages.po" \
+			'public/locale/onmfront.pot'; \
+	done
 
-clean: cleancache cleaninstancefiles cleanlogs cleandocs
+compiletranslations:
+	@echo "Compiling translations";
+	@for i in $(LINGUAS); do \
+		echo " - $$i: " && \
+		msgfmt -vf "public/locale/$$i/LC_MESSAGES/messages.po" \
+			-o "public/locale/$$i/LC_MESSAGES/messages.mo"; \
+	done
+
+clean: cleancache cleaninstancefiles cleanlogs
 
 cleancache:
 	@echo "Cleaning cache...";
@@ -79,7 +85,3 @@ cleanlogs:
 cleansmarty:
 	@echo "Cleaning smarty remporary files..."
 	rm tmp/instances/*/smarty/ -r
-
-cleandocs:
-	@echo "Cleaning generated documentations..."
-	rm doc/api -r

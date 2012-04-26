@@ -51,7 +51,11 @@ legend {
     color:#666;
     text-transform:uppercase;
     font-size:13px;
-    padding:0 10px;
+    padding:0;
+    padding-bottom:4px;
+    margin:0;
+    line-height:14px;
+    border-bottom:1px solid #ccc;
 }
 .panel {
     margin:0;
@@ -211,7 +215,7 @@ input, select, textarea {
                 <div style="display:inline-block; width:20%">
 
                     <label for="available">{t}Published:{/t}</label>
-                    <select name="available" id="available"
+                    <select name="available" id="available" style="width:50px;"
                         {acl isNotAllowed="ADVERTISEMENT_AVAILA"} disabled="disabled" {/acl} >
                         <option value="1" {if isset($advertisement->available) &&  $advertisement->available == 1}selected="selected"{/if}>Si</option>
                         <option value="0" {if isset($advertisement->available) &&  $advertisement->available == 0}selected="selected"{/if}>No</option>
@@ -300,34 +304,43 @@ input, select, textarea {
                     <div id="publi-interior">
                         {include file="advertisement/partials/advertisement_positions_interior.tpl"}
                     </div>
-
+                    {is_module_activated name="VIDEO_MANAGER"}
                     <div id="publi-video">
                         {include file="advertisement/partials/advertisement_positions_video.tpl"}
                     </div>
                     <div id="publi-video-interior">
                         {include file="advertisement/partials/advertisement_positions_video_interior.tpl"}
                     </div>
+                    {/is_module_activated}
+                    {is_module_activated name="OPINION_MANAGER"}
                     <div id="publi-opinion">
                         {include file="advertisement/partials/advertisement_positions_opinion.tpl"}
                     </div>
                     <div id="publi-opinion-interior">
                         {include file="advertisement/partials/advertisement_positions_opinion_interior.tpl"}
                     </div>
+                    {/is_module_activated}
+                    {is_module_activated name="ALBUM_MANAGER"}
                     <div id="publi-gallery">
                         {include file="advertisement/partials/advertisement_positions_gallery.tpl"}
                     </div>
                     <div id="publi-gallery-inner">
                         {include file="advertisement/partials/advertisement_positions_gallery_inner.tpl"}
                     </div>
+                    {/is_module_activated}
+                    {is_module_activated name="POLL_MANAGER"}
                     <div id="publi-poll">
                         {include file="advertisement/partials/advertisement_positions_poll.tpl"}
                     </div>
                     <div id="publi-poll-inner">
                         {include file="advertisement/partials/advertisement_positions_poll_inner.tpl"}
                     </div>
+                    {/is_module_activated}
+                    {is_module_activated name="NEWSLETTER_MANAGER"}
                     <div id="publi-newsletter">
                         {include file="advertisement/partials/advertisement_positions_newsletter.tpl"}
                     </div>
+                    {/is_module_activated}
                 </div><!-- /position-adv -->
             </fieldset>
         </div><!-- / -->

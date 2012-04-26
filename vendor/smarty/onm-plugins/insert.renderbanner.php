@@ -132,8 +132,9 @@ JSINTERSTICIAL;
                 // Flash object
                 // FIXME: build flash object with all tags and params
                 $output .= '<a target="_blank" href="'.SITE_URL.'/publicidade/'. $banner->pk_advertisement .'.html" rel="nofollow">';
-                $output .= '<object>
+                $output .= '<object width="'.$width.'" height="'.$height.'" >
                         <param name="wmode" value="transparent" />
+                        <param name="movie" value="'. MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name. '" />
                         <param name="width" value="'.$width.'" />
                         <param name="height" value="'.$height.'" />
                         <embed src="'. MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name. '"
@@ -154,6 +155,7 @@ JSINTERSTICIAL;
 
                 $output .= '<div style="position: absolute; z-index: 0; width: '.$width.'px; left: 0px;">
                         <object width="'.$width.'" height="'.$height.'">
+                            <param name="movie" value="'. MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name. '" />
                             <param name="wmode" value="opaque" />
                             <param name="width" value="'.$width.'" />
                             <param name="height" value="'.$height.'" />

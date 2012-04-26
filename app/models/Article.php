@@ -245,13 +245,6 @@ class Article extends Content
             $data['available'] = $data['content_status'];
         }
 
-        // If it's clone use special update {{{
-        if ($this->isClone($data['id'])) {
-            $data = $this->updateClone($data['id'], $data);
-            return true;
-        }
-        // }}}
-
         // Update an article
         if (!$data['description']) {
             $data['description'] = StringUtils::get_num_words(
@@ -824,9 +817,10 @@ class Article extends Content
      **/
     public function render($params, $tpl = null)
     {
-        if (!isset($tpl)) {
+
+      //  if (!isset($tpl)) {
             $tpl = new Template(TEMPLATE_USER);
-        }
+        //}
 
         $tpl->assign('item',$this);
         $tpl->assign('cssclass', $params['cssclass']);
@@ -836,6 +830,7 @@ class Article extends Content
         } catch (\Exception $e) {
             $html = 'Article not available';
         }
+
         return $html;
     }
 

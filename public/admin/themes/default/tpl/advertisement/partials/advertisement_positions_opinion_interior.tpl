@@ -32,7 +32,12 @@
         <td colspan="2"><hr /></td>
     </tr>
     <tr>
-        <td colspan="2">
+
+        <td>
+
+        </td>
+
+        <td>
             <label>
                Banner1 Column Right (300X*)
                 <input type="radio" name="type_advertisement" value="703" {if isset($advertisement) && $advertisement->type_advertisement == 703}checked="checked" {/if}/>
@@ -41,19 +46,51 @@
     </tr>
 
     <tr>
-        <td colspan="2">
+        <td>
+        </td>
+        <td>
+            <label>
+               Banner2 Column Right (300X*)
+                <input type="radio" name="type_advertisement" value="705" {if isset($advertisement) && $advertisement->type_advertisement == 705}checked="checked" {/if}/>
+            </label>
+        </td>
+    </tr>
+    <tr>
+
+    <tr>
+        <td>
             <label>
                 Robapágina (650X*)
                 <input type="radio" name="type_advertisement" value="704" {if isset($advertisement) && $advertisement->type_advertisement == 704}checked="checked" {/if}/>
             </label>
         </td>
+        <td>
+            <label>
+               Banner3 Column Right (300X*)
+                <input type="radio" name="type_advertisement" value="706" {if isset($advertisement) && $advertisement->type_advertisement == 706}checked="checked" {/if}/>
+            </label>
+        </td>
+    </tr>
+    <tr>
+
+    <tr>
+        <td>
+        </td>
+        <td>
+            <label>
+               Banner4 Column Right (300X*)
+                <input type="radio" name="type_advertisement" value="707" {if isset($advertisement) && $advertisement->type_advertisement == 707}checked="checked" {/if}/>
+            </label>
+        </td>
     </tr>
 
     <tr>
-        <td colspan="2">
+        <td>
+        </td>
+        <td>
             <label>
-               Banner2 Column Right (300X*)
-                <input type="radio" name="type_advertisement" value="705" {if isset($advertisement) && $advertisement->type_advertisement == 705}checked="checked" {/if}/>
+               Banner5 Column Right (300X*)
+                <input type="radio" name="type_advertisement" value="708" {if isset($advertisement) && $advertisement->type_advertisement == 708}checked="checked" {/if}/>
             </label>
         </td>
     </tr>

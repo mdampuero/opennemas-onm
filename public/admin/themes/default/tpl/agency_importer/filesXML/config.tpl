@@ -91,9 +91,13 @@
                                 <input type="text" class="required" id="body" name="body" value="{$body|default:""}" />
                             </div>
                             <hr>
-                             <div>
+                            <div>
                                 <label for="ignored">{t}Ignored labels:{/t}</label>
                                 <input type="text" class="required" id="ignored" name="ignored" value="{$ignored|default:""}" />
+                            </div>
+                            <div>
+                                <label for="ignored">{t}Important labels:{/t}</label>
+                                <input type="text" class="required" id="important" name="important" value="{$important|default:""}" />
                             </div>
                              
                         </div>
@@ -110,7 +114,8 @@
                                         &LT;FIELD NAME="Title"&GT; This is a title &LT;/FIELD&GT; <br>
                                         &LT;title&GT; This is a title &LT;/title&GT;
                                         </li>
-                                         <li>{t}Use ignored labels separated with commas{/t}</li> 
+                                        <li>{t}Use ignored labels separated with commas{/t}</li> 
+                                        <li>{t}Check important labels for write with bolder font{/t}</li> 
                                     </ul>
                                     
                                 </div>

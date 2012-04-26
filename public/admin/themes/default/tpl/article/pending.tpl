@@ -31,18 +31,8 @@
                     <img border="0" src="{$params.IMAGE_DIR}publish.gif" alt="noFrontpage"><br />{t}Publish{/t}
                 </a>
             </li>
-             <li>
-                <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdirectly_frontpage', 1);" onmouseover="return escape('<u>P</u>ublicar directamente en portada');" name="submit_mult" value="noFrontpage">
-                    <img border="0" src="{$params.IMAGE_DIR}publish_direct.gif" alt="publicar en portada directamente"><br />{t}Publish to frontpage{/t}
-                </a>
-            </li>
             {/if}
             {/acl}
-            <li>
-                <button type="button" style="cursor:pointer; background-color: #e1e3e5; border: 0px; width: 95px;" onmouseover="return escape('<u>S</u>eleccionar todo');" onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
-                    <img id="select_button" class="icon" src="{$params.IMAGE_DIR}select_button.png" alt="Seleccionar Todo"  status="0">
-                </button>
-            </li>
             <li class="separator"></li>
             {acl isAllowed="ARTICLE_CREATE"}
             <li>
@@ -86,7 +76,7 @@
     <div id="{$category}">
         <table class="listing-table">
             <thead>
-                <th style="width:15px;"></th>
+                <th style="width:15px;"><input type="checkbox" id="toggleallcheckbox"></th>
                 <th class="left" >
                     <img src="themes/default/images/newsletter/editar.gif" border="0">
                     {t}Title{/t}

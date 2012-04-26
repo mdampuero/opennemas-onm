@@ -19,19 +19,29 @@
         </testsuite>
     </testsuites>
 
-    <!--
-    <php>
-        <server name="KERNEL_DIR" value="/path/to/your/app/" />
-    </php>
-    -->
-
     <filter>
         <whitelist>
+            <directory>models</directory>
             <directory>bundles</directory>
+            <directory suffix=".php">app</directory>
+            <exclude>
+                <file>app/autoload.php</file>
+            </exclude>
             <exclude>
                 <directory>bundles/*Bundle/Resources</directory>
             </exclude>
         </whitelist>
+        <blacklist>
+            <directory suffix=".php">../vendor/Symfony</directory>
+        </blacklist>
     </filter>
+
+    <selenium>
+        <browser name="Firefox on localhost"
+                browser="*chrome"
+                host="localhost"
+                port="4444"
+                timeout="30000"/>
+    </selenium>
 
 </phpunit>

@@ -222,7 +222,7 @@ legend {
                                             <ul id='pollCategories' class="elementsContainer">
                                                 {section name=as loop=$pollCategories}
                                                         <li id="video_{$pollCategories[as]->pk_content_category}" title="{$pollCategories[as]->title}"
-                                                            type="pollCategory" link="{$pollCategories[as]->name}"
+                                                         type="pollCategory" link="{$pollCategories[as]->name}"
                                                              pk_item="{$pollCategories[as]->pk_content_category}"
                                                             class="drag-category" pk_menu="">
                                                             {$pollCategories[as]->title}
@@ -234,13 +234,13 @@ legend {
                                             <ul id='availablePages' class="elementsContainer">
                                                 {foreach from=$pages item=value key=page}
                                                     <li id="page_{$page}" pk_item="{$value}"  title="{$page}"
-                                                        link="{if $page eq 'frontpage'}home
-                                                                {elseif $page eq 'poll'}encuesta
-                                                                {elseif $page eq 'letter'}cartas-al-director
-                                                                {elseif $page eq 'kiosko'}portadas-papel
-                                                                {elseif $page eq 'letter'}cartas-al-director
-                                                                {elseif $page eq 'boletin'}newsletter
-                                                                {else}{$page}{/if}"
+                                                        link={if $page eq 'frontpage'}"home"
+                                                                {elseif $page eq 'poll'}"encuesta"
+                                                                {elseif $page eq 'letter'}"cartas-al-director"
+                                                                {elseif $page eq 'kiosko'}"portadas-papel"
+                                                                {elseif $page eq 'letter'}"cartas-al-director"
+                                                                {elseif $page eq 'boletin'}"newsletter"
+                                                                {else}{$page}{/if}
                                                         type="internal"  class="drag-category" pk_menu="">
                                                         {if $page eq 'frontpage'}home
                                                                 {elseif $page eq 'poll'}Encuesta

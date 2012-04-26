@@ -154,10 +154,6 @@ switch ($action) {
                 }
             }
 
-
-
-            $message = "Su comentario no ha sido guardado.\nAsegúrese de cumplimentar correctamente todos los campos.";
-
         } else {
             $message = "Su comentario no ha sido guardado.\nAsegúrese de cumplimentar correctamente todos los campos.";
             die();

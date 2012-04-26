@@ -234,6 +234,7 @@ class Application
         define('INSTANCE_MEDIA', MEDIA_URL.INSTANCE_UNIQUE_NAME.DS);
         define('INSTANCE_MEDIA_PATH', SITE_PATH.DS."media".DS.INSTANCE_UNIQUE_NAME.DS);
 
+        define('STATIC_PAGE_PATH', 'estaticas');
 
         define('MEDIA_DIR', INSTANCE_UNIQUE_NAME);    // External server or a local dir
         define('MEDIA_DIR_URL', MEDIA_URL.SS.MEDIA_DIR.SS); // Full path to the instance media files
