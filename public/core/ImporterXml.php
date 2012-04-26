@@ -128,13 +128,16 @@ class ImporterXml {
         $end = '';
         $texto ='';
         if(!empty($array)) {
+
             foreach($array as $key=>$value) {
                 if($key =='@attributes')  {
                     $label = $this->checkAttributes($value);
 
-                    if(is_array($value) &&
+                    if((is_array($value) &&
                         array_key_exists('class', $value)
-                        && $this->checkBeImportant($value['class'])) {
+                        && $this->checkBeImportant($value['class']))
+                        || (!is_array($value)
+                        && $this->checkBeImportant($value['class']))) {
 
                             $tag = '<b>';
                             $end = '</b> <br>';
@@ -149,10 +152,10 @@ class ImporterXml {
 
                         if(is_object($point) || is_array($point) ) {
 
-                            $this->data[$label] .= $this->parseNodes($point);
+                            $this->data[$label] .= $tag.$this->parseNodes($point).$end;
                         } else {
 
-                            $this->data[$label] .= $this->checkBeIgnored($point);
+                            $this->data[$label] .= $tag. $this->checkBeIgnored($point) .$end;
 
                         }
                     }
