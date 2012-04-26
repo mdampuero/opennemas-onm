@@ -129,67 +129,73 @@ class ImporterXml {
         $texto ='';
         if(!empty($array)) {
             foreach($array as $key=>$value) {
-               if($key =='@attributes')  {
+                if($key =='@attributes')  {
                     $label = $this->checkAttributes($value);
 
                     if(is_array($value) &&
                         array_key_exists('class', $value)
                         && $this->checkBeImportant($value['class'])) {
-                        echo ' <br><br><br> sdfsdf';
-                            $tag = '<b>sdfsdfsdfsdfsdf';
+
+                            $tag = '<b>';
                             $end = '</b> <br>';
                     } else {
                         $tag = '';
                         $end = ' ';
                     }
+
                     if(!empty($label)) {
 
                         $point = next($array);
 
                         if(is_object($point) || is_array($point) ) {
 
-                            $this->data[$label] = $tag. $this->parseNodes($point). $end;
+                            $this->data[$label] .= $this->parseNodes($point);
                         } else {
 
-                            $this->data[$label] .=$this->checkBeIgnored($point);
+                            $this->data[$label] .= $this->checkBeIgnored($point);
 
                         }
                     }
-               } elseif(!in_array($key, $this->ignoreds) ) {
+                } elseif(!in_array($key, $this->ignoreds) ) {
                    $label = $this->checkLabels($key);
 
-               } else {
+                } else {
                    return '';
-               }
+                }
 
-               if( !empty($label)) {
+                if( !empty($label)) {
 
                     if(!is_object($value) && !is_array($value)) {
                         $texto = (string)$value;
 
-                        $this->data[$label]  = $this->checkBeIgnored($texto) ;
+                        $this->data[$label]  .= $this->checkBeIgnored($texto);
 
                     } else {
 
                         $this->data[$label]  .= $this->parseNodes($value);
                     }
                 } else {
-
+                    if(!empty($tag)) {
+                        $texto .= $tag;
+                    }
                     if(is_object($value) || is_array($value)) {
 
                         $texto .=   $this->parseNodes($value);
+
                     }else{
 
-                        $texto .= ' <br>'.$tag.$this->checkBeIgnored($value);
+                        $texto .= ' <br>'. $this->checkBeIgnored($value);
+                    }
+                    if(!empty($tag)) {
+                        $texto .= $end;
                     }
                 }
-
             }
         }
 
         $texto = $this->checkBeIgnored($texto);
 
-        return $tag.$texto.$end;
+        return $texto;
 
     }
 
@@ -221,8 +227,7 @@ class ImporterXml {
         if((!is_object($value) && !is_array($value)) ) {
 
             if (in_array($value, $this->alloweds)) {
-                var_dump($this->alloweds);
-                var_dump($value);
+
                 return true;
             }
         }
