@@ -63,6 +63,18 @@ switch ($action) {
             $tpl->assign('datos_cat', $datos_cat);
             $tpl->assign('category', $_REQUEST['category']);
         }
+        $menuItems = Menu::renderMenu('frontpage');
+        if (!empty($menuItems->items )) {
+            foreach ($menuItems->items as  &$item) {
+                $item->categoryID = $ccm->get_id($item->link);
+                if(!empty($item->submenu)) {
+                    foreach ($item->submenu as  &$subitem) {
+                        $subitem->categoryID = $ccm->get_id($subitem->link);
+                    }
+                }
+            }
+            $tpl->assign('menuItems', $menuItems->items);
+        }
 
         $cm = new ContentManager();
 
