@@ -297,7 +297,7 @@ class Content
         $this->read( $data['id']); //????
 
         $data['changed']          = date("Y-m-d H:i:s");
-        $data['starttime']        = (empty($data['starttime']))? '0000-00-00 00:00:00': $data['starttime'];
+        $data['starttime']        = (empty($data['starttime']))? $this->starttime: $data['starttime'];
         $data['endtime']          = (empty($data['endtime']))? '0000-00-00 00:00:00': $data['endtime'];
         $data['content_status']   = (!isset($data['content_status']))? $this->content_status: $data['content_status'];
         $data['available']        = (!isset($data['available']))? $this->available: $data['available'];
