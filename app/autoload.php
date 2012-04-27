@@ -42,9 +42,9 @@ if (extension_loaded('apc')) {
 
 // Registering namespaces
 $loader->registerNamespaces(array(
-    'Onm'              => __DIR__.'/../vendor',
-    'Symfony'          => __DIR__.'/../vendor',
-    'Panorama'          => __DIR__.'/../vendor/Panorama',
+    'Onm'      => __DIR__.'/../vendor',
+    'Symfony'  => __DIR__.'/../vendor',
+    'Panorama' => __DIR__.'/../vendor/Panorama',
 ));
 
 // SessionHandlerInterface
@@ -53,7 +53,11 @@ if (!interface_exists('SessionHandlerInterface')) {
 }
 
 // Ŕegistering prefixes
-$loader->registerPrefix("Zend_", __DIR__.'/../vendor/Zend/');
+$loader->registerPrefixes(array(
+    "Zend_" => __DIR__.'/../vendor/Zend/'
+));
+
+require (__DIR__.'/../vendor/Zend/Log.php');
 
 // Registering fallbacks and include path usage
 $loader->registerNamespaceFallback(__DIR__.'/core/');
