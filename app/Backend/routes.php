@@ -84,6 +84,14 @@ $routes->add(
     ),
     '/admin'
 );
+$routes->add(
+    'admin_php_status',
+    new Route(
+        '/system/php-status',
+        array('_controller' => 'Backend:Controllers:SystemInformationController:default')
+    ),
+    '/admin'
+);
 
 $routes->add(
     'admin_frontpage_list',

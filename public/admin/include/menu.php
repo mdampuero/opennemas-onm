@@ -279,7 +279,7 @@ $menuXml = '<?xml version="1.0"?>
             module_name="PHP_CACHE_MANAGER"
             title="'.htmlspecialchars(_("PHP Cache manager"), ENT_QUOTES).'"
             id="php_cache__manager"
-            link="/admin/controllers/system_information/system_information.php?action=apc_iframe"
+            link="'.url("admin_php_status", array()).'"
             privilege="ONLY_MASTERS" />
         <node class="divider" />
         <node
