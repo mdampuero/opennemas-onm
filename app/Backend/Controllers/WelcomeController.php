@@ -16,7 +16,7 @@ use Onm\Framework\Controller\Controller;
  * @package Backend_Controllers
  * @author
  **/
-class Welcome extends Controller
+class WelcomeController extends Controller
 {
 
     /**
