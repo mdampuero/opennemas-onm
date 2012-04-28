@@ -47,7 +47,8 @@ class Dispatcher
             $this->dispatchRaw($parameters);
 
         } catch (ResourceNotFoundException $e) {
-            echo 'Route not found: '.$e->getMessage();
+            $this->request->request->set('error', serialize($e));
+            $this->dispatchClass('Framework:Controllers:ErrorController:default');
         }
     }
 
@@ -74,8 +75,14 @@ class Dispatcher
      **/
     public function dispatchControllerFile($controllerFileName)
     {
-        $response = require $controllerFileName;
-        return $response;
+        try {
+            $response = require $controllerFileName;
+            return $response;
+        } catch (Exception $e) {
+            throw new ResourceNotFoundException(
+                "Route '$className' don't exists."
+            );
+        }
     }
 
     /**
@@ -94,7 +101,7 @@ class Dispatcher
                 return $controller->{$actionName}();
             } else {
                 throw new ResourceNotFoundException(
-                    "Controller '$className' don't exists."
+                    "Route class '$className' don't exists."
                 );
             }
 

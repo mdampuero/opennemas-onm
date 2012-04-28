@@ -241,7 +241,7 @@ $menuXml = '<?xml version="1.0"?>
             module_name="SETTINGS_MANAGER"
             title="'.htmlspecialchars(_("System settings"), ENT_QUOTES).'"
             id="settings_manager"
-            link="'.url("admin_system_settings", array(), true).'"
+            link="'.url("admin_system_settings", array()).'"
             privilege="ONM_SETTINGS" />
 
             <submenu title="'.htmlspecialchars(_("Users & Groups"), ENT_QUOTES).'" id="user-group_manager" link="#"
@@ -251,7 +251,7 @@ $menuXml = '<?xml version="1.0"?>
                     privilege="USER_ADMIN"
                     title="'.htmlspecialchars(_("Users"), ENT_QUOTES).'"
                     id="user_manager"
-                    link="'.url("admin_user_list", array(), true).'"
+                    link="'.url("admin_user_list", array()).'"
                 />
                 <node
                     module_name="USER_GROUP_MANAGER"
@@ -273,7 +273,7 @@ $menuXml = '<?xml version="1.0"?>
             module_name="CACHE_MANAGER"
             title="'.htmlspecialchars(_("Cache manager"), ENT_QUOTES).'"
             id="cache_manager"
-            link="'.url("admin_tpl_manager", array(), true).'"
+            link="'.url("admin_tpl_manager", array()).'"
             privilege="CACHE_ADMIN" />
         <node
             module_name="PHP_CACHE_MANAGER"
@@ -286,7 +286,7 @@ $menuXml = '<?xml version="1.0"?>
             module_name="LOG_SQL"
             title="'.htmlspecialchars(_("SQL error log"), ENT_QUOTES).'"
             id="log_sql"
-            link="'.url("admin_system_sqllog", array(), true).'"
+            link="'.url("admin_databaseerrors", array()).'"
             privilege="ONLY_MASTERS" />
         <node
             title="'.htmlspecialchars(_("Support and Help"), ENT_QUOTES).'"

@@ -59,7 +59,9 @@ class Controller extends ContainerAware
      */
     public function redirect($url, $status = 302)
     {
-        return new RedirectResponse($url, $status);
+        // return new RedirectResponse($url, $status);
+        header("Location: ".$url);
+        exit(0);
     }
 
     /**

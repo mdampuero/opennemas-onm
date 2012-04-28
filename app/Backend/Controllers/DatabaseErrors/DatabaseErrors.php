@@ -1,33 +1,63 @@
 <?php
-use Onm\Message as m;
+/**
+ * This file is part of the Onm package.
+ *
+ * (c)  OpenHost S.L. <developers@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ **/
+namespace Backend\Controllers\DatabaseErrors;
+
+use Onm\Framework\Controller\Controller,
+    Onm\Message as m;
 
 /**
- * Setup app
-*/
-require_once('./session_bootstrap.php');
+ * Handles all the request for Welcome actions
+ *
+ * @package Backend_Controllers
+ * @author
+ **/
+class DatabaseErrors extends Controller
+{
 
+    /**
+     * Common actions for all the actions
+     *
+     * @return void
+     * @author
+     **/
+    public function init()
+    {
+        //Setup app
+        require_once './session_bootstrap.php';
 
-if(!Acl::isMaster()) {
-    m::add("You don't have permissions");
-    Application::forward('/admin/');
-}
+        if(!\Acl::isMaster()) {
+            m::add("You don't have permissions");
+            Application::forward('/admin/');
+        }
 
-$cm = new ContentManager();
+        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
+    }
 
-/**
- * Setup view
-*/
-$tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
+    /**
+     * Gets all the settings and displays the form
+     *
+     * @return string the response
+     **/
+    public function defaultAction()
+    {
+        $cm = new \ContentManager();
 
-$action = filter_input ( INPUT_GET, 'action' , FILTER_SANITIZE_STRING, array( 'options' => array('default' => 'list')) );
-$page = filter_input ( INPUT_GET, 'page' , FILTER_SANITIZE_STRING, array( 'options' => array('default' => 1)) );
-$search = filter_input ( INPUT_GET, 'search' , FILTER_SANITIZE_STRING, array( 'options' => array('default' => "")) );
+        $page = filter_input(
+            INPUT_GET, 'page' , FILTER_SANITIZE_STRING,
+            array( 'options' => array('default' => 1))
+        );
+        $search = filter_input(
+            INPUT_GET, 'search' , FILTER_SANITIZE_STRING,
+            array( 'options' => array('default' => ""))
+        );
 
-
-switch($action) {
-
-    case 'list':
-        $cm = new ContentManager();
 
         $filters = (isset($_REQUEST['filter']))? $_REQUEST['filter']: null;
 
@@ -64,8 +94,6 @@ switch($action) {
 
         $errors = $rs;
 
-
-
         $pagerOptions = array(
             'mode'        => 'Sliding',
             'perPage'     => $itemsPerPage,
@@ -74,9 +102,9 @@ switch($action) {
             'urlVar'      => 'page',
             'totalItems'  => $totalErrors,
         );
-        $pager = Pager::factory($pagerOptions);
+        $pager = \Pager::factory($pagerOptions);
 
-        $tpl->assign( array(
+        $this->view->assign( array(
             'errors' => $errors,
             'pagination' => $pager,
             'total_errors' => $rsTotalErrors,
@@ -85,12 +113,16 @@ switch($action) {
             'search' => $search,
         ));
 
-        $tpl->display('system_information/sql_error_log.tpl');
+        $this->view->display('system_information/sql_error_log.tpl');
+    }
 
-        break;
-
-    case 'purge':
-
+    /**
+     * Performs the action of saving the configuration settings
+     *
+     * @return string the response
+     **/
+    public function purgeAction()
+    {
         $sql = "TRUNCATE TABLE `adodb_logsql`";
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
@@ -102,8 +134,7 @@ switch($action) {
 
         m::add(_('SQL errors registered in database cleaned sucessfully.'). m::SUCCESS);
 
-        Application::forward($_SERVER['PHP_SELF']);
+        $this->redirect(url('admin_databaseerrors', array(), true));
+    }
 
-        break;
-
-}
+} // END class SystemSettigns

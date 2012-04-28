@@ -52,7 +52,7 @@ $routes->add(
 $routes->add(
     'admin_system_settings_save',
     new Route(
-        '/system/settings',
+        '/system/settings/save',
         array('_controller' => 'Backend:Controllers:SystemSettings:SystemSettings:save'),
         array('_method' => 'POST')
     ),
@@ -69,10 +69,18 @@ $routes->add(
 );
 
 $routes->add(
-    'admin_system_sqllog',
+    'admin_databaseerrors',
     new Route(
-        '/system/sql-error-log',
-        array('_controllerfile' => APP_PATH.'/Backend/Controllers/sql_error_log.php')
+        '/system/databaseerrors',
+        array('_controller' => 'Backend:Controllers:DatabaseErrors:DatabaseErrors:default')
+    ),
+    '/admin'
+);
+$routes->add(
+    'admin_databaseerrors_purge',
+    new Route(
+        '/system/databaseerrors/purge',
+        array('_controller' => 'Backend:Controllers:DatabaseErrors:DatabaseErrors:purge')
     ),
     '/admin'
 );
@@ -97,15 +105,15 @@ $routes->add(
     'admin_login_form',
     new Route(
         '/login',
-        array('_controllerfile' => APP_PATH.'/Backend/Controllers/login.php')
+        array('_controller' => 'Backend:Controllers:Authentication:Authentication:default')
     ),
     '/admin'
 );
 $routes->add(
-    'admin_login',
+    'admin_login_processform',
     new Route(
-        '/login',
-        array('_controllerfile' => APP_PATH.'/Backend/Controllers/login.php', 'action' => 'login'),
+        '/login/process',
+        array('_controller' => 'Backend:Controllers:Authentication:Authentication:processform'),
         array('_method' => 'POST')
     ),
     '/admin'
@@ -114,7 +122,7 @@ $routes->add(
     'admin_logout',
     new Route(
         '/logout',
-        array('_controllerfile' => APP_PATH.'/Backend/Controllers/logout.php')
+        array('_controller' => 'Backend:Controllers:Authentication:Authentication:logout')
     ),
     '/admin'
 );

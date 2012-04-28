@@ -5,7 +5,7 @@
             <div class="title"><h2>{t}SQL error log{/t}</h2></div>
             <ul class="old-button">
                 <li>
-                    <a class="admin_add" href="{$smarty.server.PHP_SELF}?action=purge">
+                    <a class="admin_add" href="{url name="admin_databaseerrors_purge"}">
                         <img alt="{t}Clean{/t}" src="{$params.IMAGE_DIR}/editclear.png"><br>
                         {t}Clean{/t}
                     </a>

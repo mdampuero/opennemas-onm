@@ -1,39 +1,51 @@
 <?php
-/*
- * This file is part of the onm package.
- * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+/**
+ * This file is part of the Onm package.
+ *
+ * (c)  OpenHost S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- */
-use Onm\Settings as s,
+ **/
+namespace Backend\Controllers\SystemSettings;
+
+use Onm\Framework\Controller\Controller,
+    Onm\Settings as s,
     Onm\Message as m,
     Onm\Module\ModuleManager;
 /**
- * Setup app
-*/
-require_once '../bootstrap.php';
-require_once './session_bootstrap.php';
+ * Handles all the request for Welcome actions
+ *
+ * @package Backend_Controllers
+ * @author
+ **/
+class SystemSettings extends Controller
+{
 
-// Check ACL
-Acl::checkorForward('ONM_SETTINGS');
+    /**
+     * Common actions for all the actions
+     *
+     * @return void
+     * @author
+     **/
+    public function init()
+    {
+        //Setup app
+        require_once './session_bootstrap.php';
 
-/**
- * Setup view
-*/
-$tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
+        // Check ACL
+        \Acl::checkorForward('ONM_SETTINGS');
 
-// Initialize request parameters
-global $request;
-$action = $request->request->filter('action', null, FILTER_SANITIZE_STRING);
-if (empty($action)) {
-    $action = $request->request->filter('action', 'list', FILTER_SANITIZE_STRING);
-}
+        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
+    }
 
-switch ($action) {
-
-    case 'list':
-
+    /**
+     * Gets all the settings and displays the form
+     *
+     * @return string the response
+     **/
+    public function defaultAction()
+    {
         $configurationsKeys = array(
             'site_title', 'site_logo', 'site_description','site_keywords','site_agency', 'site_footer',
             'site_color', 'site_name', 'time_zone','site_language','site_footer',
@@ -46,17 +58,22 @@ switch ($action) {
 
         $configurations = s::get($configurationsKeys);
 
-        $tpl->assign(array(
+        $this->view->assign(array(
             'configs'   => $configurations,
             'timezones' => \DateTimeZone::listIdentifiers(),
             'languages' => array('en_US' => _("English"), 'es_ES' => _("Spanish"), 'gl_ES' => _("Galician")),
         ));
 
-        $tpl->display('system_settings/system_settings.tpl');
-        break;
+        $this->view->display('system_settings/system_settings.tpl');
+    }
 
-    case 'save':
-
+    /**
+     * Performs the action of saving the configuration settings
+     *
+     * @return string the response
+     **/
+    public function saveAction()
+    {
         unset($_POST['action']);
         unset($_POST['submit']);
 
@@ -70,7 +87,7 @@ switch ($action) {
         }
         if($_POST['section_settings']['allowLogo'] == 1){
             $path = MEDIA_PATH.'/sections';
-            FilesManager::createDirectory($path);
+            \FilesManager::createDirectory($path);
         }
 
         foreach ($_POST as $key => $value ) {
@@ -78,6 +95,9 @@ switch ($action) {
         }
 
         m::add(_('Settings saved.'), m::SUCCESS);
-        Application::forward(url('admin_system_settings', array(), true));
-        break;
-}
+
+        // Send the user back to the form
+        $this->redirect(url('admin_system_settings', array(), true));
+    }
+
+} // END class SystemSettigns
