@@ -26,7 +26,7 @@ define('APP_PATH',         realpath(APPLICATION_PATH.DIRECTORY_SEPARATOR."app/")
 
 // Ensure library/ is on include_path
 set_include_path(implode(PATH_SEPARATOR, array(
-    SITE_CORE_PATH, SITE_LIBS_PATH, SITE_VENDOR_PATH, SITE_MODELS_PATH, get_include_path(),
+    SITE_CORE_PATH, SITE_LIBS_PATH, SITE_VENDOR_PATH, SITE_MODELS_PATH, APP_PATH, get_include_path(),
 )));
 
 require_once __DIR__.'/../vendor/Symfony/Component/ClassLoader/UniversalClassLoader.php';

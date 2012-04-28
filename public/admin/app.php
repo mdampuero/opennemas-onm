@@ -12,5 +12,5 @@ require '../../app/autoload.php';
 require '../bootstrap.php';
 
 // Dispatch the response
-$dispatcher = new \Onm\Dispatcher($matcher, $request);
+$dispatcher = new \Onm\Framework\Dispatcher\Dispatcher($matcher, $request);
 $dispatcher->dispatch();

@@ -39,14 +39,26 @@ $routes->add(
     ),
     '/admin'
 );
+
 $routes->add(
     'admin_system_settings',
     new Route(
         '/system/settings',
-        array('_controllerfile' => APP_PATH.'/Backend/Controllers/system_settings.php')
+        array('_controller' => 'Backend:Controllers:SystemSettings:SystemSettings:default')
     ),
     '/admin'
 );
+
+$routes->add(
+    'admin_system_settings_save',
+    new Route(
+        '/system/settings',
+        array('_controller' => 'Backend:Controllers:SystemSettings:SystemSettings:save'),
+        array('_method' => 'POST')
+    ),
+    '/admin'
+);
+
 $routes->add(
     'admin_tpl_manager',
     new Route(
@@ -61,15 +73,6 @@ $routes->add(
     new Route(
         '/system/sql-error-log',
         array('_controllerfile' => APP_PATH.'/Backend/Controllers/sql_error_log.php')
-    ),
-    '/admin'
-);
-
-$routes->add(
-    'admin_system_settings',
-    new Route(
-        '/system/settings',
-        array('_controllerfile' => APP_PATH.'/Backend/Controllers/system_settings.php')
     ),
     '/admin'
 );
@@ -119,9 +122,8 @@ $routes->add(
     'admin_welcome',
     new Route(
         '/',
-        array('_controllerfile' => APP_PATH.'/Backend/Controllers/wellcome.php')
+        array('_controller' => 'Backend:Controllers:Welcome:Welcome:default')
     ),
     '/admin'
 );
-
 
