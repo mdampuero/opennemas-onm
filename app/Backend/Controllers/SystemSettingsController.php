@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  **/
-namespace Backend\Controllers\SystemSettings;
+namespace Backend\Controllers;
 
 use Onm\Framework\Controller\Controller,
     Onm\Settings as s,
@@ -19,7 +19,7 @@ use Onm\Framework\Controller\Controller,
  * @package Backend_Controllers
  * @author
  **/
-class SystemSettings extends Controller
+class SystemSettingsController extends Controller
 {
 
     /**

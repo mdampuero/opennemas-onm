@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  **/
-namespace Backend\Controllers\Authentication;
+namespace Backend\Controllers;
 
 use Onm\Framework\Controller\Controller,
     Onm\Message as m;
@@ -18,7 +18,7 @@ use Onm\Framework\Controller\Controller,
  * @package Backend_Controllers
  * @author
  **/
-class Authentication extends Controller
+class AuthenticationController extends Controller
 {
 
     /**

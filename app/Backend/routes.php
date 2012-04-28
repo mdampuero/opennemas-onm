@@ -44,7 +44,7 @@ $routes->add(
     'admin_system_settings',
     new Route(
         '/system/settings',
-        array('_controller' => 'Backend:Controllers:SystemSettings:SystemSettings:default')
+        array('_controller' => 'Backend:Controllers:SystemSettingsController:default')
     ),
     '/admin'
 );
@@ -53,7 +53,7 @@ $routes->add(
     'admin_system_settings_save',
     new Route(
         '/system/settings/save',
-        array('_controller' => 'Backend:Controllers:SystemSettings:SystemSettings:save'),
+        array('_controller' => 'Backend:Controllers:SystemSettingsController:save'),
         array('_method' => 'POST')
     ),
     '/admin'
@@ -72,7 +72,7 @@ $routes->add(
     'admin_databaseerrors',
     new Route(
         '/system/databaseerrors',
-        array('_controller' => 'Backend:Controllers:DatabaseErrors:DatabaseErrors:default')
+        array('_controller' => 'Backend:Controllers:DatabaseErrorsController:default')
     ),
     '/admin'
 );
@@ -80,7 +80,7 @@ $routes->add(
     'admin_databaseerrors_purge',
     new Route(
         '/system/databaseerrors/purge',
-        array('_controller' => 'Backend:Controllers:DatabaseErrors:DatabaseErrors:purge')
+        array('_controller' => 'Backend:Controllers:DatabaseErrorsController:purge')
     ),
     '/admin'
 );
@@ -105,7 +105,7 @@ $routes->add(
     'admin_login_form',
     new Route(
         '/login',
-        array('_controller' => 'Backend:Controllers:Authentication:Authentication:default')
+        array('_controller' => 'Backend:Controllers:AuthenticationController:default')
     ),
     '/admin'
 );
@@ -113,7 +113,7 @@ $routes->add(
     'admin_login_processform',
     new Route(
         '/login/process',
-        array('_controller' => 'Backend:Controllers:Authentication:Authentication:processform'),
+        array('_controller' => 'Backend:Controllers:AuthenticationController:processform'),
         array('_method' => 'POST')
     ),
     '/admin'
@@ -122,7 +122,7 @@ $routes->add(
     'admin_logout',
     new Route(
         '/logout',
-        array('_controller' => 'Backend:Controllers:Authentication:Authentication:logout')
+        array('_controller' => 'Backend:Controllers:AuthenticationController:logout')
     ),
     '/admin'
 );
@@ -130,7 +130,7 @@ $routes->add(
     'admin_welcome',
     new Route(
         '/',
-        array('_controller' => 'Backend:Controllers:Welcome:Welcome:default')
+        array('_controller' => 'Backend:Controllers:WelcomeController:default')
     ),
     '/admin'
 );
