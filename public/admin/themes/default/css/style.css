@@ -1061,17 +1061,19 @@ legend {
 /* Global menu properties*/
 ul#menu { margin: 0; padding: 0; list-style: none; display:block; height:100% }
 ul#menu a { display: block; color: #CCCCCC; white-space:nowrap; vertical-align:middle; text-decoration: none; }
-  ul#menu li:hover > a, ul#menu a:hover { color:White; background-color: rgba(255, 255, 255, 0.1); }
+  ul#menu li:hover > a, ul#menu a:hover,
+  ul#menu li:focus > a, ul#menu a:focus { color:White; background-color: rgba(255, 255, 255, 0.1); }
 
 ul#menu ul {margin: 0; padding: 0; position: absolute; top: 99%; left: 0px; background-color: #222; box-shadow: 0 0px 5px rgba(0, 0, 0, 0.9) inset, 0 1px 2px rgba(0, 0, 0, 0.6); }
   ul#menu li { display: block; position:relative; list-style: none; margin: 0; padding: 0; border: 0 none;}
-    ul#menu a:hover { color: White; }
+    ul#menu a:hover, ul#menu a:focus { color: White; }
   ul#menu > li ul { border-radius: 0 0 5px 5px ; }
 
 /* Root menu */
 ul#menu > li {  display: inline-block;  position: relative; height:100% }
   ul#menu > li > a { margin: 0; padding: 10px 10px !important; line-height: 18px;}
-  ul#menu > li:hover > a { background-color: #111; box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.3) inset; }
+  ul#menu > li:hover > a,
+  ul#menu > li:focus > a { background-color: #111; box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.3) inset; }
 
 /* 2nd Menu */
 ul#menu > li > ul { top: 99%; left: 0px; display:none;}
@@ -1080,7 +1082,8 @@ ul#menu > li > ul { top: 99%; left: 0px; display:none;}
 ul#menu ul:after { clear: both; display: block; content: "."; height: 0; visibility: hidden; }
 
 /* 2nd-to-infinity Menu */
-ul#menu li:hover > ul { display: block; }
+ul#menu li:hover > ul,
+ul#menu li:focus > ul { display: block; }
   ul#menu ul li a { padding: 5px 35px 5px 15px ; }
 ul#menu ul li { clear: both; display: block; float: none; }
 ul#menu ul li:last-child  a { padding-bottom:6px; }

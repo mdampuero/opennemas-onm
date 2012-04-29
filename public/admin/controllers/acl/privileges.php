@@ -11,7 +11,7 @@
 */
 require_once('../../../bootstrap.php');
 require_once('../../session_bootstrap.php');
- 
+
 
 use Message as m;
 
@@ -83,7 +83,7 @@ switch($_REQUEST['action']) {
         m::add("You don't have permissions");
         //$privilege->update( $_REQUEST );
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
-         
+
 
     } break;
 

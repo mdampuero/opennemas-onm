@@ -6,7 +6,7 @@
 			<div class="title"><h2>{t}User group management{/t}</h2></div>
 			<ul class="old-button">
 				<li>
-                    <a href="{$smarty.server.PHP_SELF}?action=new">
+                    <a href="{url name="admin_acl_usergroups_create"}">
                         <img src="{$params.IMAGE_DIR}usergroup_add.png" title="{t}New Privilege{/t}" alt="{t}New User Group{/t}"><br />{t}New User group{/t}
                     </a>
                 </li>
@@ -30,14 +30,14 @@
                 {section name=c loop=$user_groups}
                 <tr>
                     <td>
-                        <a href="{$smarty.server.PHP_SELF}?action=read&amp;id={$user_groups[c]->id}" title="{t}Edit group{/t}">
+                        <a href="{url name="admin_acl_usergroups_show" id="{$user_groups[c]->id}"}" title="{t}Edit group{/t}">
                             {$user_groups[c]->name}
                         </a>
                     </td>
                     <td class="right">
 						<ul class="action-buttons">
 							<li>
-								<a href="#" onClick="javascript:enviar(this, '_self', 'read', {$user_groups[c]->id});" title="{t}Edit group{/t}">
+								<a href="{url name="admin_acl_usergroups_show" id="{$user_groups[c]->id}"}" title="{t}Edit group{/t}">
 									<img src="{$params.IMAGE_DIR}edit.png" alt="{t}Edit group{/t}" />
 								</a>
 							</li>

@@ -16,7 +16,6 @@ use Onm\Framework\Controller\Controller,
  * Handles all the request for Welcome actions
  *
  * @package Backend_Controllers
- * @author
  **/
 class AuthenticationController extends Controller
 {
@@ -25,7 +24,6 @@ class AuthenticationController extends Controller
      * Common actions for all the actions
      *
      * @return void
-     * @author
      **/
     public function init()
     {
@@ -45,16 +43,20 @@ class AuthenticationController extends Controller
     public function defaultAction()
     {
         $token = md5(uniqid(mt_rand(), true));
-        $this->view->assign('token', $token);
         $_SESSION['csrf'] = $token;
         $languages = \Application::getAvailableLanguages();
         $currentLanguage = \Application::$language;
-        $this->view->assign('languages', $languages);
-        $this->view->assign('current_language', $currentLanguage);
 
+
+        $this->view->assign(array(
+            'languages' => $languages,
+            'current_language' => $currentLanguage,
+            'token' => $token,
+        ));
         $this->view->display('login/login.tpl');
     }
 
+    // TODO: Move session management logic to a specialized class
     /**
      * Gets all the settings and displays the form
      *
@@ -67,7 +69,6 @@ class AuthenticationController extends Controller
         $password = $this->request->request->filter('password', null, FILTER_SANITIZE_STRING);
         $token    = $this->request->request->filter('token', null, FILTER_SANITIZE_STRING);
         $captcha  = '';
-    // var_dump($_SESSION['csrf'], $token);
 
         $user = new \User();
 
@@ -126,7 +127,7 @@ class AuthenticationController extends Controller
         $this->view->assign('token', $token);
         $_SESSION['csrf'] = $token;
 
-        $this->view->display('login/login.tpl');
+        echo $this->render('login/login.tpl');
     }
 
     /**
@@ -144,15 +145,14 @@ class AuthenticationController extends Controller
             if (isset($_COOKIE[session_name()])) {
                 setcookie(session_name(), '', time()-42000, '/');
             }
-            //Delete the cache that handles the number of active sessions
+            // Delete the cache that handles the number of active sessions
             apc_delete(APC_PREFIX . "_"."num_sessions");
             session_destroy();
-            header ('Location: ' . SITE_URL );
+            $this->redirect(url('admin_login_form'));
 
         } else {
             echo "Are you hijacking my session dude?!";
         }
-
     }
 
 } // END class Authentication

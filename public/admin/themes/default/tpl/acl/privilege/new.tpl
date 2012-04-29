@@ -78,29 +78,32 @@ new PrivilegeHelper('module', 'name', { modules: {json_encode value=$modules} })
 {/block}
 
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
+<form action="{if isset($privilege->id)}{url name="admin_acl_privileges_update" id=$privilege->id}{else}{url name="admin_acl_privileges_create"}{/if}" method="post">
     <div class="top-action-bar clearfix">
 		<div class="wrapper-content">
 			<div class="title"><h2>{t}Privileges manager{/t} :: {t}Editing privilege{/t}</h2></div>
 			<ul class="old-button">
 				<li>
                 {if isset($privilege->id)}
-                   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'update', '{$privilege->id|default:""}', 'formulario');">
+                    <button type="submit" name="action" value="update">
                 {else}
-                   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', '0', 'formulario');">
+                    <button type="submit" name="action" value="create">
                 {/if}
-                        <img border="0" src="{$params.IMAGE_DIR}save.png" title="{t}Save{/t}" alt="{t}Save{/t}"><br />{t}Save{/t}
-                    </a>
+                        <img border="0" src="{$params.IMAGE_DIR}save.png" title="{t}Save{/t}" alt="{t}Save{/t}">
+                        <br />{t}Save{/t}
+                    </button>
                 </li>
                 <li>
-                    <a href="#" class="admin_add" onClick="sendFormValidate(this, '_self', 'validate', '{$privilege->id}', 'formulario');" value="Validar" title="Validar">
-                        <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="{t}Save and continue{/t}" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
-                    </a>
+                    <button type="submit" name="action" value="validate">
+                        <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" alt="{t}Save and continue{/t}" >
+                        <br />{t}Save and continue{/t}
+                    </button>
                 </li>
 				<li class="separator"></li>
                 <li>
-                    <a href="{$smarty.server.PHP_SELF}?action=list" onmouseover="return escape('{t}Go back{/t}');" value="{t}Go back{/t}" title="{t}Go back{/t}">
-                        <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
+                    <a href="{url name="admin_acl_privileges"}" title="{t}Go back{/t}">
+                        <img border="0" src="{$params.IMAGE_DIR}previous.png" alt="{t}Go back{/t}" >
+                        <br />{t}Go back{/t}
                     </a>
                 </li>
 			</ul>
@@ -118,7 +121,6 @@ new PrivilegeHelper('module', 'name', { modules: {json_encode value=$modules} })
 					<td colspan=2>&nbsp;</td>
 				</tr>
 
-				{* Módulo *}
 				<tr>
 					<td valign="top" align="right" style="padding:4px;" width="30%">
 						<label for="module">{t}Module{/t}</label>
@@ -129,7 +131,6 @@ new PrivilegeHelper('module', 'name', { modules: {json_encode value=$modules} })
 					</td>
 				</tr>
 
-				{* Name *}
 				<tr>
 					<td valign="top" align="right" style="padding:4px;" width="30%">
 						<label for="description">{t}Name:{/t}</label>
@@ -140,7 +141,6 @@ new PrivilegeHelper('module', 'name', { modules: {json_encode value=$modules} })
 					</td>
 				</tr>
 
-				{* Descripcion *}
 				<tr>
 					<td valign="top" align="right" style="padding:4px;" width="30%">
 						<label for="description">{t}Description{/t}</label>
@@ -159,8 +159,7 @@ new PrivilegeHelper('module', 'name', { modules: {json_encode value=$modules} })
 	        </table>
         </div>
 
-
-        <input type="hidden" id="action" name="action" value="" /><input type="hidden" name="id" id="id" value="{$id|default:""}" />
+        <input type="hidden" name="id" id="id" value="{$privilege->id|default:""}" />
     </div>
 </form>
 {/block}

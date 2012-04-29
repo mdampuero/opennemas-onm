@@ -44,9 +44,16 @@ class Dispatcher
                 $this->request->query->set($param, $value);
             }
 
-            $this->dispatchRaw($parameters);
+            $response = $this->dispatchRaw($parameters);
+
+            if (is_string($response)) {
+                echo $response;
+            }
 
         } catch (ResourceNotFoundException $e) {
+            $this->request->request->set('error', serialize($e));
+            $this->dispatchClass('Framework:Controllers:ErrorController:default');
+        } catch (\Exception $e) {
             $this->request->request->set('error', serialize($e));
             $this->dispatchClass('Framework:Controllers:ErrorController:default');
         }

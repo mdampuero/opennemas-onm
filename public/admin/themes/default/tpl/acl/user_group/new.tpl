@@ -1,30 +1,30 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
+<form action="{if isset($user_group->id)}{url name="admin_acl_usergroups_update" id=$user_group->id}{else}{url name="admin_acl_usergroups_create"}{/if}" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
 
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title"><h2>{t}User group manager{/t} :: {t 1=$user_group->name}Editing %1{/t}</h2></div>
             <ul class="old-button">
                 <li>
-                    <a href="#" class="admin_add" onClick="sendFormValidate(this, '_self', 'validate', '{$user_group->id}', 'formulario');" value="Validar" title="Validar">
+                    <button type="submit" name="action" name="validate">
                         <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="{t}Save and continue{/t}" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
-                    </a>
+                    </button>
                 </li>
                 <li>
                 {if isset($user_group->id)}
-                   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'update', {$user_group->id|default:""}, 'formulario');">
+                    <button type="submit" name="action" name="update">
                 {else}
-                   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', 0,'formulario');">
+                    <button type="submit" name="action" name="create">
                 {/if}
-                        <img border="0" src="{$params.IMAGE_DIR}save.png" title="{t}Save{/t}" alt="Guardar y salir"><br />{t}Save{/t}
-                    </a>
+                        <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}"><br />{t}Save{/t}
+                    </button>
                 </li>
                 <li class="separator"></li>
                 <li>
-                    <a href="{$smarty.server.PHP_SELF}?action=list" value="{t}Go back{/t}" title="{t}Go back{/t}">
-                        <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
+                    <a href="{url name="admin_acl_usergroups"}" title="{t}Go back{/t}">
+                        <img src="{$params.IMAGE_DIR}previous.png" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
                     </a>
                 </li>
             </ul>
@@ -33,7 +33,6 @@
     <div class="wrapper-content">
         <table class="adminform">
             <tbody>
-            <!-- Id -->
             <tr>
                 <td align="right" style="padding:4px;" width="20%">
                     <label for="id">{* Id: *}</label>
@@ -43,7 +42,6 @@
                         value="{$user_group->id}" readonly />
                 </td>
             </tr>
-            <!-- Nome -->
             <tr>
                 <td valign="top" align="right" style="padding:4px;" width="20%">
                     <label for="name">{t}Name:{/t}</label>
@@ -54,7 +52,6 @@
                         {if $user_group->name eq $smarty.const.SYS_NAME_GROUP_ADMIN}disabled="disabled"{/if} />
                 </td>
             </tr>
-            <!-- Privileges -->
             <tr>
                 <td valign="top" align="right" style="padding:4px;" width="20%">
                     <label for="privileges">{t}Grants:{/t}</label>
@@ -103,9 +100,6 @@
             </tfoot>
         </table>
 	</div>
-
-	<input type="hidden" id="action" name="action" value="" />
 	<input type="hidden" name="id" id="id" value="{$id|default:""}" />
-    
 </form>
 {/block}

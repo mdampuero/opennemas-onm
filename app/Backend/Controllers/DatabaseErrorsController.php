@@ -40,6 +40,7 @@ class DatabaseErrorsController extends Controller
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
     }
 
+    // TODO: refactorize this method to make it simpler
     /**
      * Gets all the settings and displays the form
      *
@@ -104,7 +105,7 @@ class DatabaseErrorsController extends Controller
         );
         $pager = \Pager::factory($pagerOptions);
 
-        $this->view->assign( array(
+        echo $this->render('system_information/sql_error_log.tpl',  array(
             'errors' => $errors,
             'pagination' => $pager,
             'total_errors' => $rsTotalErrors,
@@ -112,8 +113,6 @@ class DatabaseErrorsController extends Controller
             'elements_page' => ($itemsPerPage*($page-1)),
             'search' => $search,
         ));
-
-        $this->view->display('system_information/sql_error_log.tpl');
     }
 
     /**
@@ -127,9 +126,7 @@ class DatabaseErrorsController extends Controller
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
         if (!$rs) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            \Application::logDatabaseError();
         }
 
         m::add(_('SQL errors registered in database cleaned sucessfully.'). m::SUCCESS);

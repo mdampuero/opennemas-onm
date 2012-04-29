@@ -258,14 +258,14 @@ $menuXml = '<?xml version="1.0"?>
                     privilege="USER_ADMIN"
                     title="'.htmlspecialchars(_("User Groups"), ENT_QUOTES).'"
                     id="user_group_manager"
-                    link="/admin/controllers/acl/user_groups.php"
+                    link="'.url("admin_acl_usergroups", array()).'"
                 />
                 <node
                     module_name="PRIVILEGE_MANAGER"
                     privilege="ONLY_MASTERS"
                     title="'.htmlspecialchars(_("Privileges"), ENT_QUOTES).'"
                     id="privilege_manager"
-                    link="/admin/controllers/acl/privileges.php"
+                    link="'.url("admin_acl_privileges", array()).'"
                 />
             </submenu>
         <node class="divider" />

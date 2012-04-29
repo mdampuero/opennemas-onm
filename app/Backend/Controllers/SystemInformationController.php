@@ -9,12 +9,12 @@
  **/
 namespace Backend\Controllers;
 
-use Onm\Framework\Controller\Controller;
+use Onm\Framework\Controller\Controller,
+    Onm\Message as m;
 /**
  * Handles the actions for the system information
  *
  * @package Backend_Controllers
- * @author
  **/
 class SystemInformationController extends Controller
 {
@@ -23,30 +23,26 @@ class SystemInformationController extends Controller
      * undocumented function
      *
      * @return void
-     * @author
      **/
     public function init()
     {
-        /**
-         * Setup app
-        */
-        require_once '../bootstrap.php';
+        // Initializae the session manager
         require_once './session_bootstrap.php';
 
         if(!\Acl::isMaster()) {
-            m::add("You don't have permissions");
+            m::add(_("You don't have permissions to access to the system information."));
             $this->redirect(url('admin_welcome'));
         }
 
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
     }
     /**
-     * Handles the default action
+     * Shows the APC information iframe
      *
      * @return void
      **/
     public function defaultAction()
     {
-        $this->view->display('system_information/apc_iframe.tpl');
+        $this->render('system_information/apc_iframe.tpl');
     }
 } // END class Welcome

@@ -18,7 +18,7 @@
 			<div class="title"><h2>{t}Privileges manager{/t}</h2></div>
             <ul class="old-button">
 				<li>
-					<a href="{$smarty.server.PHP_SELF}?action=new&id=0" accesskey="N" tabindex="1">
+					<a href="{url name="admin_acl_privileges_create"}" accesskey="N" tabindex="1">
 						<img border="0" src="{$params.IMAGE_DIR}user_add.png" title="Nuevo" alt="Nuevo"><br />{t}New Privilege{/t}
 					</a>
 				</li>
@@ -26,9 +26,8 @@
 		</div>
 	</div>
 
-    {render_messages}
-
     <div class="wrapper-content">
+        {render_messages}
         <div class="table-info clearfix">
             <div>
                 <div class="right form-inline">
@@ -57,7 +56,7 @@
                 {section name=c loop=$privileges}
                 <tr>
                     <td>
-                        <a href="{$smarty.server.PHP_SELF}?action=read&amp;id={$privileges[c]->id}" title="{t}Edit privilege{/t}">
+                        <a href="{url name="admin_acl_privileges_show" id=$privileges[c]->id}" title="{t}Edit privilege{/t}">
                             {$privileges[c]->name}
                         </a>
                     </td>
@@ -73,12 +72,12 @@
                     <td class="right">
                         <ul class="action-buttons">
                             <li>
-                                <a href="{$smarty.server.PHP_SELF}?action=read&amp;id={$privileges[c]->id}" title="{t}Edit privilege{/t}">
+                                <a href="{url name="admin_acl_privileges_show" id=$privileges[c]->id}" title="{t}Edit privilege{/t}">
                                     <img src="{$params.IMAGE_DIR}edit.png" border="0" />
                                 </a>
                             </li>
                             <li>
-                                <a href="#" onClick="javascript:confirmar(this, '{$privileges[c]->id}');" title="{t}Delete privilege{/t}">
+                                <a href="{url name="admin_acl_privileges_delete" id=$privileges[c]->id}" title="{t}Delete privilege{/t}">
                                     <img src="{$params.IMAGE_DIR}trash.png" border="0" />
                                 </a>
                             </li>
@@ -94,7 +93,7 @@
             <tfoot>
                 <tr>
                     <td colspan="5" align="center">
-                        {$paginacion->links|default:""}&nbsp;
+                        {$paginacion->links|default:"&nbsp;"}
                     </td>
                 </tr>
             </tfoot>

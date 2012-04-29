@@ -17,7 +17,6 @@ use Onm\Framework\Controller\Controller,
  * Handles all the request for Welcome actions
  *
  * @package Backend_Controllers
- * @author
  **/
 class SystemSettingsController extends Controller
 {
@@ -26,7 +25,6 @@ class SystemSettingsController extends Controller
      * Common actions for all the actions
      *
      * @return void
-     * @author
      **/
     public function init()
     {
@@ -58,15 +56,14 @@ class SystemSettingsController extends Controller
 
         $configurations = s::get($configurationsKeys);
 
-        $this->view->assign(array(
+        return $this->render('system_settings/system_settings.tpl', array(
             'configs'   => $configurations,
             'timezones' => \DateTimeZone::listIdentifiers(),
             'languages' => array('en_US' => _("English"), 'es_ES' => _("Spanish"), 'gl_ES' => _("Galician")),
         ));
-
-        $this->view->display('system_settings/system_settings.tpl');
     }
 
+    // TODO: use symfony request instead of $_POST and $_FILES variables
     /**
      * Performs the action of saving the configuration settings
      *
@@ -85,7 +82,7 @@ class SystemSettingsController extends Controller
                $_POST['site_logo'] = $nameFile;
             }
         }
-        if($_POST['section_settings']['allowLogo'] == 1){
+        if($_POST['section_settings']['allowLaz ogo'] == 1){
             $path = MEDIA_PATH.'/sections';
             \FilesManager::createDirectory($path);
         }
@@ -97,7 +94,7 @@ class SystemSettingsController extends Controller
         m::add(_('Settings saved.'), m::SUCCESS);
 
         // Send the user back to the form
-        $this->redirect(url('admin_system_settings', array(), true));
+        return $this->redirect(url('admin_system_settings', array(), true));
     }
 
 } // END class SystemSettigns
