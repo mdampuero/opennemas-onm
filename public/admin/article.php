@@ -444,6 +444,7 @@ if (isset($_REQUEST['action']) ) {
                 unset($data['stringVideoSearch']);
                 unset($data['stringImageSearch']);
                 unset($data['stringSearch']);
+
                 $article->update($data);
                 if (!array_key_exists('content_status', $data)) {
                     $article->dropFromAllHomePages();

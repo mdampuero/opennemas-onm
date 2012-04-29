@@ -251,17 +251,25 @@ class ImporterXml {
 
         $this->data['pk_author'] = $_SESSION['userid'];
 
+        $imgImported =NULL;
+        if(!empty( $this->data['img'] )) {
+            s::get('SITE_URL');
+            $urn_source = preg_match( "@*.*{1,3}@", $this->data['img']);
 
+            $imgImported = Content::findByUrn($urn_source);
+        }
 
         $this->data['content_status']=0;
         $this->data['available']=0;
         $this->data['frontpage']=0;
 
-        $this->data['img1']=""; $this->data['img1_footer']="";
-        $this->data['img2']="";$this->data['img2_footer']="";
-        $this->data['fk_video']=""; $this->data['footer_video']="";
+        $this->data['img1'] = $imgImported;
+        $this->data['img1_footer'] = $this->data['img_footer'];
+        $this->data['img2'] = $imgImported;
+        $this->data['img2_footer'] = $this->data['img_footer'];
+        $this->data['fk_video']="";  $this->data['footer_video']="";
         $this->data['fk_video2']=""; $this->data['footer_video2']="";
-        $this->data['ordenArti']="";$this->data['ordenArtiInt']="";
+        $this->data['ordenArti']=""; $this->data['ordenArtiInt']="";
 
         $this->parseNodes($values);
 

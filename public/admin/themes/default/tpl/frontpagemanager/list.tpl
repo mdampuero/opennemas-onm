@@ -19,7 +19,7 @@
 {/block}
 
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
+<form action="#" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
     <div class="top-action-bar">
         <div class="wrapper-content">
             <div class="title"><h2>{t}Frontpage Manager{/t} :: {if $category eq 0}{t}HOME{/t}{else}{$datos_cat[0]->title}{/if}</h2></div>
@@ -71,14 +71,7 @@
 
     <div class="wrapper-content">
 
-        <ul id="categories" class="pills">
-            {acl hasCategoryAccess=0}
-            <li>
-                <a href="/admin/controllers/frontpagemanager/frontpagemanager.php?action=list&amp;category=home" id='link_home' {if $category=='home'}class="active"{/if}>{t}HOME{/t}</a>
-            </li>
-            {/acl}
-            {include file="menu_categories.tpl" home="/admin/controllers/frontpagemanager/frontpagemanager.php?action=list"}
-        </ul><!-- /categories -->
+        {include file="frontpagemanager/_render_menu_categories.tpl"}
 
         <div id="warnings-validation"></div><!-- /warnings-validation -->
 
