@@ -26,6 +26,8 @@ $tpl = new Template(TEMPLATE_USER);
 $tpl->setConfig('frontpages');
 $cacheID = $tpl->generateCacheId($category_name, $subcategory_name, 0 /*$cache_page*/);
 
+$actualCategory = (empty($subcategory_name))? $category_name : $subcategory_name;
+
 // Fetch information for Advertisements
 require_once "index_advertisement.php";
 
