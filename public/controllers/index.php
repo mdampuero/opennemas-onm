@@ -26,6 +26,11 @@ $tpl = new Template(TEMPLATE_USER);
 $tpl->setConfig('frontpages');
 $cacheID = $tpl->generateCacheId($category_name, $subcategory_name, 0 /*$cache_page*/);
 
+$actualCategory = (empty($subcategory_name))? $category_name : $subcategory_name;
+$tpl->assign(array(
+        'category_name' => $category_name,
+        'actual_category' => $actualCategory));
+
 // Fetch information for Advertisements
 require_once "index_advertisement.php";
 
@@ -51,11 +56,9 @@ if (
         }
     }
 
-    $actualCategory = (empty($subcategory_name))? $category_name : $subcategory_name;
+
     $actualCategoryId = $actual_category_id = $ccm->get_id($actualCategory);
     $tpl->assign(array(
-        'category_name' => $category_name,
-        'actual_category' => $actualCategory,
         'actual_category_id' => $actualCategoryId,
         'actual_category_title' => $ccm->get_title($category_name),
     ));
@@ -63,7 +66,7 @@ if (
     $cm = new ContentManager;
 
     $contentsInHomepage = $cm->getContentsForHomepageOfCategory($actualCategoryId);
- 
+
     // Filter articles if some of them has time scheduling and sort them by position
     $contentsInHomepage = $cm->getInTime($contentsInHomepage);
     $contentsInHomepage = $cm->sortArrayofObjectsByProperty($contentsInHomepage, 'position');

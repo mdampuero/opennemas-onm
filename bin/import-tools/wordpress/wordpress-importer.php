@@ -8,8 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-define('DS', '/');
-
 
 printf("Welcome to OpenNemas data importer from WordPress\n");
 
@@ -28,7 +26,7 @@ define('SITE_CORE_PATH',   realpath(SITE_PATH.DIRECTORY_SEPARATOR."core").DIRECT
 define('SITE_VENDOR_PATH', realpath(APPLICATION_PATH.DIRECTORY_SEPARATOR."vendor").DIRECTORY_SEPARATOR);
 define('SITE_MODELS_PATH', realpath(APPLICATION_PATH.DIRECTORY_SEPARATOR."app".DIRECTORY_SEPARATOR."models").DIRECTORY_SEPARATOR);
 define('APC_PREFIX', 'wordpress-importer');
-error_reporting(E_ALL ^ E_NOTICE);
+
 
 
 // Ensure library/ is on include_path
@@ -66,7 +64,6 @@ $migrationHandler->importImages();
 $migrationHandler->importArticles();
 
 $migrationHandler->importComments();
-
 
 $migrationHandler->printResults();
 

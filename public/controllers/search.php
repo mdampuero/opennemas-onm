@@ -1,28 +1,32 @@
 <?php
+/**
+ * This file is part of the Onm package.
+ *
+ * (c)  OpenHost S.L. <developers@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ **/
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Start up and setup the app
 */
 require_once('../bootstrap.php');
 
-// redirect to /mobile/ if it's mobile device request
+
+// Redirect Mobile browsers to mobile site unless a cookie exists.
 //$app->mobileRouter();
 
+/**
+ * Setup view
+ */
 $tpl = new Template(TEMPLATE_USER);
 
-/******************************  CATEGORIES & SUBCATEGORIES  *********************************/
-
-// Get category and subcategory
-$category_name = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
-$subcategory_name = $request->query->filter('subcategory_name', null, FILTER_SANITIZE_STRING);
-
-$actual_category = $category_name;
-if (isset($subcategory_name)) {
-    $actual_category =  $subcategory_name;
-}
-
-/******************************  CATEGORIES & SUBCATEGORIES  *********************************/
+/**
+ * Fetch advertisements
+ */
 require_once ("index_advertisement.php");
 
-// Visualizar
+// Display template
 $tpl->display('search/search.tpl');

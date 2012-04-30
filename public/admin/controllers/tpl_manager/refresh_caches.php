@@ -17,6 +17,7 @@ if(isset($_REQUEST['category'])) {
         $category_name = 'home';
         $title = 'PORTADA';
     }
+    $category_name = preg_replace('/[^a-zA-Z0-9\s]+/', '', $category_name);
 
     $tplManager->delete($category_name . '|RSS');
     $delete = $tplManager->delete($category_name . '|0'); // this sentence remove index.tpl and mobile.index.tpl

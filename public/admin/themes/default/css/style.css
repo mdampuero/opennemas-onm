@@ -1175,6 +1175,11 @@ ul#menu.manager a { color:White !important; }
           height:35px !important;
         }
 
+
+h2.disqus {
+    background: url(../images/disqus.png) center left no-repeat;
+    padding-left:150px !important;
+}
 /* -------------------------------------------------------------
   Help blocks
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */

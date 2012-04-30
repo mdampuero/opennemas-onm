@@ -178,6 +178,7 @@ class migrationNewslibrary {
             $path = $res;
             $img = preg_replace('@src?=?\"/media/images/@', '',$path);
 
+
             $imageID = $this->helper->imageIsImported($img, 'image');
             if(!empty($imageID)) {
                 $newImage->read($imageID);
@@ -230,6 +231,7 @@ class migrationNewslibrary {
         }
 
         $htmlResult = preg_replace($patterns, $replacements, $html);
+
         return $htmlResult;
     }
 

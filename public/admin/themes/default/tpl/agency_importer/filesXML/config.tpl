@@ -36,7 +36,7 @@
         <br>
 
        {render_messages}
-       
+
         <div>
 
              <table class="adminheading">
@@ -73,7 +73,7 @@
                             <div>
                                 <label for="created">{t}Created:{/t}</label>
                                 <input type="text" class="required" id="created" name="created" value="{$created|default:""}" />
-                            </div>                            
+                            </div>
                              <div>
                                 <label for="metadata">{t}Metadata:{/t}</label>
                                 <input type="text" class="required" id="metadata" name="metadata" value="{$metadata|default:""}" />
@@ -86,16 +86,28 @@
                                 <label for="category_name">{t}Section:{/t}</label>
                                 <input type="text" class="required" id="category_name" name="category_name" value="{$category_name|default:""}" />
                             </div>
-                             <div>
+                            <div>
+                                <label for="urn_source">{t}Image:{/t}</label>
+                                <input type="text" class="required" id="urn_source" name="urn_source" value="{$urn_source|default:""}" />
+                            </div>
+                            <div>
+                                <label for="img_footer">{t}Image Footer:{/t}</label>
+                                <input type="text" class="required" id="img_footer" name="img_footer" value="{$img_footer|default:""}" />
+                            </div>
+                            <div>
                                 <label for="body">{t}Body:{/t}</label>
                                 <input type="text" class="required" id="body" name="body" value="{$body|default:""}" />
                             </div>
                             <hr>
-                             <div>
+                            <div>
                                 <label for="ignored">{t}Ignored labels:{/t}</label>
                                 <input type="text" class="required" id="ignored" name="ignored" value="{$ignored|default:""}" />
                             </div>
-                             
+                            <div>
+                                <label for="ignored">{t}Important labels:{/t}</label>
+                                <input type="text" class="required" id="important" name="important" value="{$important|default:""}" />
+                            </div>
+
                         </div>
                     </td>
                      <td> <br/>
@@ -103,25 +115,26 @@
 								<div class="title"><h4>{t}Definition values{/t}</h4></div>
                                 <div class="content">
                                     <ul>
-                                        <li>{t}Define the names of labels in the xml files that you want to fill in article fields{/t}</li> 
+                                        <li>{t}Define the names of labels in the xml files that you want to fill in article fields{/t}</li>
                                         <li>Atention: this rules are case sensitive</li>
                                         <li>{t}The name can be one attribute or one label in XML file{/t}<br>
                                         Example:<br>
                                         &LT;FIELD NAME="Title"&GT; This is a title &LT;/FIELD&GT; <br>
                                         &LT;title&GT; This is a title &LT;/title&GT;
                                         </li>
-                                         <li>{t}Use ignored labels separated with commas{/t}</li> 
+                                        <li>{t}Use ignored labels separated with commas{/t}</li>
+                                        <li>{t}Check important labels for write with bolder font{/t}</li>
                                     </ul>
-                                    
+
                                 </div>
                         </div>
                     </td>
                 </tr>
-                                
-               
-                
-                
-                
+
+
+
+
+
             </table>
             <div class="action-bar clearfix">
                 <div class="right">

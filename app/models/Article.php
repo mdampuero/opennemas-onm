@@ -245,13 +245,6 @@ class Article extends Content
             $data['available'] = $data['content_status'];
         }
 
-        // If it's clone use special update {{{
-        if ($this->isClone($data['id'])) {
-            $data = $this->updateClone($data['id'], $data);
-            return true;
-        }
-        // }}}
-
         // Update an article
         if (!$data['description']) {
             $data['description'] = StringUtils::get_num_words(

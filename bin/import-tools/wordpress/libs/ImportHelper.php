@@ -107,4 +107,13 @@ class ImportHelper
         }
 
     }
+
+    public function messageStatus($text)
+    {
+
+        $date = date('d.m.Y');
+        //$percent = ($total)? floor($current*100/$total): 0;
+        echo sprintf("[%s] %s", $date, $text);
+    }
+
 } // END class ImportHelper

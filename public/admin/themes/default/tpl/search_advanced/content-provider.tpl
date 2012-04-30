@@ -8,7 +8,7 @@
 {if count($results) > 0}
 <div id="search_results_available" class="content-provider-block">
     {foreach from=$results item=content name=video_loop}
-        {include file="video/content-provider/video.tpl"}
+        {include file="article/content-provider/article.tpl"}
     {/foreach}
 </div>
 <div class="pagination clearfix">
