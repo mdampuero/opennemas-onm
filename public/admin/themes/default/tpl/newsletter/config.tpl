@@ -103,7 +103,7 @@ jQuery(document).ready(function($){
                     <td>
                         <input type="text" name="newsletter_maillist[name]" value="{$configs['newsletter_maillist']['name']|default:""}" />
                     </td>
-                    <td rowspan="6">
+                    <td rowspan="7">
                         <div class="help-block margin-left-1">
                             <div class="title"><h4>{t}Basic parameters{/t}</h4></div>
                             <div class="content">
