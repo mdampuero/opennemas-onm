@@ -98,7 +98,7 @@ input[type="password"]{
 {/block}
 
 {block name="content"}
-<form action="{url name=admin_user_save id=$user->id}" method="post" name="formulario" id="formulario">
+<form action="{if isset($user->id)}{url name=admin_acl_user_update id=$user->id}{else}{url name=admin_acl_user_create}{/if}" method="POST">
 
 	<div class="top-action-bar clearfix">
 		<div class="wrapper-content">
@@ -106,21 +106,21 @@ input[type="password"]{
 			<ul class="old-button">
                 <li>
                 {if isset($user->id)}
-                    <button action="submit" name="action" value="update" onClick="javascript:sendFormValidate(this, '_self', 'update', {$user->id}, 'formulario');">
+                    <button action="submit" name="action" value="update">
                 {else}
-                    <button action="submit" name="action" value="update" onClick="javascript:sendFormValidate(this, '_self', 'create', 0, 'formulario');">
+                    <button action="submit" name="action" value="create">
                 {/if}
                         <img src="{$params.IMAGE_DIR}save.png" title="{t}Save and exit{/t}" alt="{t}Save and exit{/t}"><br />{t}Save{/t}
                     </button>
                 </li>
                 <li>
-                    <button action="submit" name="action" value="validate" onClick="sendFormValidate(this, '_self', 'validate', '{$user->id}', 'formulario');" >
+                    <button action="submit" name="action" value="validate">
                         <img src="{$params.IMAGE_DIR}save_and_continue.png" title="{t}Save and continue{/t}" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
                     </button>
                 </li>
                 <li class="separator"></li>
                 <li>
-                    <a href="{url name=admin_user_list page=0}">
+                    <a href="{url name=admin_acl_user}">
                         <img src="{$params.IMAGE_DIR}previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
                     </a>
                 </li>
@@ -317,8 +317,7 @@ input[type="password"]{
             </div><!-- /privileges -->
 
     </div><!-- / -->
-    	<input type="hidden" id="action" name="action" value="" />
-		<input type="hidden" name="id" id="id" value="{$id|default:""}" />
+		<input type="hidden" name="id" id="id" value="{$user->id}" />
     </div>
 </form>
 {/block}

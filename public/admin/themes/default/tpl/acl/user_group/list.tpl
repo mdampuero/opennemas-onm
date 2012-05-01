@@ -23,7 +23,7 @@
             <thead>
                 <tr>
                     <th>{t}Group name{/t}</th>
-                    <th class="right">{t}Actions{/t}</th>
+                    <th class="center" style="width:110px">{t}Actions{/t}</th>
                 </tr>
             </thead>
             <tbody>
@@ -34,19 +34,15 @@
                             {$user_groups[c]->name}
                         </a>
                     </td>
-                    <td class="right">
-						<ul class="action-buttons">
-							<li>
-								<a href="{url name="admin_acl_usergroups_show" id="{$user_groups[c]->id}"}" title="{t}Edit group{/t}">
-									<img src="{$params.IMAGE_DIR}edit.png" alt="{t}Edit group{/t}" />
-								</a>
-							</li>
-							<li>
-								<a href="#" onClick="javascript:confirmar(this, {$user_groups[c]->id});" title="{t}Delete group{/t}">
-									<img src="{$params.IMAGE_DIR}trash.png" alt="{t}Delete group{/t}" />
-								</a>
-							</li>
-						</ul>
+                    <td class="center">
+                        <div class="btn-group">
+							<a class="btn" href="{url name="admin_acl_usergroups_show" id="{$user_groups[c]->id}"}" title="{t}Edit group{/t}">
+								<i class="icon-pencil"></i> {t}Edit{/t}
+							</a>
+							<a class="btn btn-danger" href="#" onClick="javascript:confirmar(this, {$user_groups[c]->id});" title="{t}Delete group{/t}">
+								<i class="icon-trash icon-white"></i>
+							</a>
+                        </div>
                     </td>
                 </tr>
                 {sectionelse}

@@ -11,7 +11,7 @@
                     </a>
                 </li>
                 <li>
-                    <a title="{t}Refresh the list for getting newest error list{/t}" href="{$smarty.server.PHP_SELF}">
+                    <a title="{t}Refresh the list for getting newest error list{/t}" href="{url name=admin_databaseerrors}">
                         <img alt="{t}Refresh list{/t}" src="{$params.IMAGE_DIR}/template_manager/refresh48x48.png"><br>
                         {t}Refresh list{/t}
                     </a>

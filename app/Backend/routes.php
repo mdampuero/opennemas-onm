@@ -1,69 +1,81 @@
 <?php
 use Symfony\Component\Routing\Route;
 
+// Frontpage management routes
 $routes->add(
-    'admin_user_list',
+    'admin_frontpage_list',
     new Route(
-        '/acl/users',
-        array('_controllerfile' => APP_PATH.'/Backend/Controllers/acl_user.php')
+        '/frontpages',
+        array('_controllerfile' => 'controllers/frontpagemanager/frontpagemanager.php', 'action' => 'list')
     ),
     '/admin'
 );
 $routes->add(
-    'admin_user_save',
+    'admin_frontpage_list_with_category',
     new Route(
-        '/acl/user/{id}',
-        array('_controllerfile' => APP_PATH.'/Backend/Controllers/acl_user.php', 'action' => 'save'), array(
-            '_method' => 'POST',
-        )
-    ),
-    '/admin'
-);
-$routes->add(
-    'admin_user_show',
-    new Route(
-        '/acl/user/{id}',
-        array('_controllerfile' => APP_PATH.'/Backend/Controllers/acl_user.php', 'action' => 'read')
-    ),
-    '/admin'
-);
-$routes->add(
-    'admin_user_new',
-    new Route(
-        '/acl/users/new',
-        array('_controllerfile' => APP_PATH.'/Backend/Controllers/acl_user.php', 'action' => 'new')
+        '/frontpages/{category}',
+        array('_controllerfile' => 'controllers/frontpagemanager/frontpagemanager.php', 'action' => 'list')
     ),
     '/admin'
 );
 
-$routes->add(
-    'admin_system_settings',
-    new Route(
-        '/system/settings',
-        array('_controller' => 'Backend:Controllers:SystemSettingsController:default')
-    ),
-    '/admin'
-);
-
-$routes->add(
-    'admin_system_settings_save',
-    new Route(
-        '/system/settings/save',
-        array('_controller' => 'Backend:Controllers:SystemSettingsController:save'),
-        array('_method' => 'POST')
-    ),
-    '/admin'
-);
-
+// Template cache controller routes
 $routes->add(
     'admin_tpl_manager',
     new Route(
         '/system/cachemanager',
-        array('_controllerfile' => APP_PATH.'/Backend/Controllers/tpl_manager.php')
+        array('_controller' => 'Backend:Controllers:CacheManagerController:default')
     ),
     '/admin'
 );
 
+$routes->add(
+    'admin_tpl_manager_config',
+    new Route(
+        '/system/cachemanager/config',
+        array('_controller' => 'Backend:Controllers:CacheManagerController:config')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_tpl_manager_refresh',
+    new Route(
+        '/system/cachemanager/refresh',
+        array('_controller' => 'Backend:Controllers:CacheManagerController:refresh')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_tpl_manager_update',
+    new Route(
+        '/system/cachemanager/update',
+        array('_controller' => 'Backend:Controllers:CacheManagerController:update')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_tpl_manager_delete',
+    new Route(
+        '/system/cachemanager/delete',
+        array('_controller' => 'Backend:Controllers:CacheManagerController:delete')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_tpl_manager_deleteall',
+    new Route(
+        '/system/cachemanager/deleteall',
+        array('_controller' => 'Backend:Controllers:CacheManagerController:deleteAll')
+    ),
+    '/admin'
+);
+
+
+// Database error controller routes
 $routes->add(
     'admin_databaseerrors',
     new Route(
@@ -89,6 +101,62 @@ $routes->add(
     '/admin'
 );
 
+
+// User management routes
+$routes->add(
+    'admin_acl_user',
+    new Route(
+        '/acl/users',
+        array('_controller' => 'Backend:Controllers:AclUserController:default')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_acl_user_show',
+    new Route(
+        '/acl/user/show/{id}',
+        array('_controller' => 'Backend:Controllers:AclUserController:show')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_acl_user_create',
+    new Route(
+        '/acl/user/create',
+        array('_controller' => 'Backend:Controllers:AclUserController:create')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_acl_user_update',
+    new Route(
+        '/acl/user/{id}/update',
+        array('_controller' => 'Backend:Controllers:AclUserController:update')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_acl_user_delete',
+    new Route(
+        '/acl/user/{id}/delete',
+        array('_controller' => 'Backend:Controllers:AclUserController:delete')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_acl_user_batchdelete',
+    new Route(
+        '/acl/users/batchdelete',
+        array('_controller' => 'Backend:Controllers:AclUserController:batchDelete')
+    ),
+    '/admin'
+);
+
 // Privilege management routes
 $routes->add(
     'admin_acl_privileges',
@@ -102,7 +170,7 @@ $routes->add(
 $routes->add(
     'admin_acl_privileges_show',
     new Route(
-        '/acl/privileges/show/{id}',
+        '/acl/privilege/show/{id}',
         array('_controller' => 'Backend:Controllers:AclPrivilegesController:show')
     ),
     '/admin'
@@ -181,23 +249,45 @@ $routes->add(
     '/admin'
 );
 
-// Frontpage management routes
+
 $routes->add(
-    'admin_frontpage_list',
+    'admin_system_settings',
     new Route(
-        '/frontpages',
-        array('_controllerfile' => 'controllers/frontpagemanager/frontpagemanager.php', 'action' => 'list')
+        '/system/settings',
+        array('_controller' => 'Backend:Controllers:SystemSettingsController:default')
     ),
     '/admin'
 );
+
 $routes->add(
-    'admin_frontpage_list_with_category',
+    'admin_system_settings_save',
     new Route(
-        '/frontpages/{category}',
-        array('_controllerfile' => 'controllers/frontpagemanager/frontpagemanager.php', 'action' => 'list')
+        '/system/settings/save',
+        array('_controller' => 'Backend:Controllers:SystemSettingsController:save'),
+        array('_method' => 'POST')
     ),
     '/admin'
 );
+
+$routes->add(
+    'admin_system_settings',
+    new Route(
+        '/system/settings',
+        array('_controller' => 'Backend:Controllers:SystemSettingsController:default')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_system_settings_save',
+    new Route(
+        '/system/settings/save',
+        array('_controller' => 'Backend:Controllers:SystemSettingsController:save'),
+        array('_method' => 'POST')
+    ),
+    '/admin'
+);
+
 $routes->add(
     'admin_login_form',
     new Route(

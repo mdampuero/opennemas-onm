@@ -79,7 +79,7 @@ class AclUserGroupsController extends Controller
      **/
     public function createAction()
     {
-        Acl::checkOrForward('GROUP_GREATE');
+        \Acl::checkOrForward('GROUP_GREATE');
 
         $userGroup = new \UserGroup();
         $privilege = new \Privilege();
@@ -89,8 +89,10 @@ class AclUserGroupsController extends Controller
             if ($userGroup->create( $_POST )) {
                 // If user group was saved successfully and the action is validate
                 // show again the form
-                if ($this->request->get('action') != 'validate') {
-                    $this->redirect(url('admin_acl_usergroups'));
+                if ($this->request->get('action') == 'validate') {
+                    return $this->redirect(url('admin_acl_usergroups'));
+                } else {
+                    return $this->redirect(url('admin_acl_usergroups_show', array('id' => $userGroup->id)));
                 }
             } else {
                 $this->view->assign('errors', $userGroup->errors);
@@ -138,4 +140,5 @@ class AclUserGroupsController extends Controller
 
         $this->redirect(url('admin_acl_usergroups'));
     }
+
 } // END class AclUserGroupsController

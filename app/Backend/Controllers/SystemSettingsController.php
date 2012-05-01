@@ -82,7 +82,7 @@ class SystemSettingsController extends Controller
                $_POST['site_logo'] = $nameFile;
             }
         }
-        if($_POST['section_settings']['allowLaz ogo'] == 1){
+        if($_POST['section_settings']['allowLogo'] == 1){
             $path = MEDIA_PATH.'/sections';
             \FilesManager::createDirectory($path);
         }

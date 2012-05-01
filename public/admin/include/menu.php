@@ -251,7 +251,7 @@ $menuXml = '<?xml version="1.0"?>
                     privilege="USER_ADMIN"
                     title="'.htmlspecialchars(_("Users"), ENT_QUOTES).'"
                     id="user_manager"
-                    link="'.url("admin_user_list", array()).'"
+                    link="'.url("admin_acl_user", array()).'"
                 />
                 <node
                     module_name="USER_GROUP_MANAGER"

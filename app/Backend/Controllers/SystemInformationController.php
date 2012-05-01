@@ -43,6 +43,7 @@ class SystemInformationController extends Controller
      **/
     public function defaultAction()
     {
-        $this->render('system_information/apc_iframe.tpl');
+        return $this->render('system_information/apc_iframe.tpl');
     }
+
 } // END class Welcome

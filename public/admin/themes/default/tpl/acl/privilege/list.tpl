@@ -49,7 +49,7 @@
                     <th>{t}Privilege name{/t}</th>
                     <th>{t}Description{/t}</th>
                     <th>{t}Module{/t}</th>
-                    <th class="center" style="width:30px;">{t}Actions{/t}</th>
+                    <th class="center" style="width:110px;">{t}Actions{/t}</th>
                 </tr>
             </thead>
             <tbody>
@@ -70,18 +70,14 @@
                     </td>
 
                     <td class="right">
-                        <ul class="action-buttons">
-                            <li>
-                                <a href="{url name="admin_acl_privileges_show" id=$privileges[c]->id}" title="{t}Edit privilege{/t}">
-                                    <img src="{$params.IMAGE_DIR}edit.png" border="0" />
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{url name="admin_acl_privileges_delete" id=$privileges[c]->id}" title="{t}Delete privilege{/t}">
-                                    <img src="{$params.IMAGE_DIR}trash.png" border="0" />
-                                </a>
-                            </li>
-                        </ul>
+                        <div class="btn-group">
+                            <a class="btn" href="{url name="admin_acl_privileges_show" id=$privileges[c]->id}" title="{t}Edit privilege{/t}">
+                                <i class="icon-pencil"></i> {t}Edit{/t}
+                            </a>
+                            <a class="btn btn-danger" href="{url name="admin_acl_privileges_delete" id=$privileges[c]->id}" title="{t}Delete privilege{/t}">
+                                <i class="icon-trash icon-white"></i>
+                            </a>
+                        </div>
                     </td>
                 </tr>
                 {sectionelse}

@@ -1,49 +1,39 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-    <script type="text/javascript">
-        document.observe('dom:loaded', function(){
-            onChangeGroup( document.formulario.id_user_group, new Array('comboAccessCategory','labelAccessCategory') );
-
-            // Refrescar los elementos seleccionados
-            $('ids_category').select('option').each(function(item){
-                if( item.getAttribute('selected') ) {
-                    item.selected=true;
-                    item.setAttribute('selected', 'selected');
-                }
-            });
-
-            new SpinnerControl('sessionexpire', 'up', 'dn', { interval: 5,  min: 15, max: 250 });
-        });
-    </script>
+<script>
+jQuery(function($){
+	$('#batch-delete').on('click', function(){
+		var form = $('#userform');
+		form.attr('action', '{url name="admin_acl_user_batchdelete"}');
+	});
+});
+</script>
 {/block}
 
 
 {block name="content"}
-<script type="text/javascript">
-	alert('mdelete not implemented, delete elements doesnt work. Should be ported to a modal dialog.');
-</script>
-<form action="{url name=admin_user_list}" method="get">
+<form action="{url name=admin_user_list}" method="get" id="userform">
 	<div class="top-action-bar clearfix">
 		<div class="wrapper-content">
 			<div class="title"><h2>{t}User manager{/t}</h2></div>
 			<ul class="old-button">
 				<li>
-					<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" title="{t}Delete{/t}">
-						<img src="{$params.IMAGE_DIR}trash.png" title="{t}Delete{/t}" alt="{t}Delete{/t}" ><br />{t}Delete{/t}
-					</a>
+					<button type="submit" id="batch-delete" title="{t}Delete selected users{/t}">
+						<img src="{$params.IMAGE_DIR}trash.png" alt="{t}Delete{/t}" ><br />{t}Delete{/t}
+					</button>
 				</li>
 				<li class="separator"></li>
 				<li>
-					<a href="{url name=admin_users_new}" accesskey="N" tabindex="1">
-						<img src="{$params.IMAGE_DIR}user_add.png" title="Nuevo" alt="Nuevo"><br />{t}New user{/t}
+					<a href="{url name=admin_acl_user_create}" title="{t}Create new user{/t}">
+						<img src="{$params.IMAGE_DIR}user_add.png" alt="Nuevo"><br />{t}New user{/t}
 					</a>
 				</li>
 			</ul>
 		</div>
 	</div>
 	<div class="wrapper-content">
-
+		{render_messages}
 		<table class="adminheading">
 			<tr>
 				<th class="form-inline">
@@ -76,9 +66,9 @@
                         <input type="checkbox" id="toggleallcheckbox">
                     </th>
 					<th class="left">{t}Full name{/t}</th>
-					<th class="center">{t}Username{/t}</th>
-					<th class="center">{t}Group{/t}</th>
-					<th class="right">{t}Actions{/t}</th>
+					<th class="center" style="width:110px">{t}Username{/t}</th>
+					<th class="center" style="width:140px">{t}Group{/t}</th>
+					<th class="center" style="width:110px">{t}Actions{/t}</th>
 				</tr>
 			</thead>
 			{/if}
@@ -86,10 +76,10 @@
 				{foreach from=$users item=user name=user_listing}
 				<tr>
 					<td>
-						<input type="checkbox" class="minput"  id="selected_{$user->id}" name="selected_fld[]" value="{$user->id}"  style="cursor:pointer;">
+						<input type="checkbox" name="selected[]" value="{$user->id}">
 					</td>
 					<td class="left">
-						<a href="?action=read&amp;id={$user->id}" title="{t}Edit user{/t}">
+						<a href="{url name=admin_acl_user_show id=$user->id}" title="{t}Edit user{/t}">
 							{$user->name}&nbsp;{$user->firstname}&nbsp;{$user->lastname}</a>
 					</td>
 					<td class="center">
@@ -103,18 +93,15 @@
 						{/section}
 					</td>
 					<td class="right">
-						<ul class="action-buttons">
-							<li>
-								<a href="{url name=admin_user_show id=$user->id page=$page|default:0}" title="{t}Edit user{/t}">
-									<img src="{$params.IMAGE_DIR}edit.png" alt="{t}Edit user{/t}"/>
-								</a>
-							</li>
-							<li>
-								<a href="#" onClick="javascript:confirmar(this, {$user->id});" title="{t}Delete user{/t}">
-									<img src="{$params.IMAGE_DIR}trash.png" alt="{t}Delete user{/t}"/>
-								</a>
-							</li>
-						</ul>
+						<div class="btn-group">
+							<a class="btn" href="{url name=admin_acl_user_show id=$user->id}" title="{t}Edit user{/t}">
+								<i class="icon-pencil"></i> {t}Edit{/t}
+							</a>
+
+							<a class="btn btn-danger" href="{url name=admin_acl_user_delete id=$user->id}" title="{t}Delete this user{/t}">
+								<i class="icon-trash icon-white"></i>
+							</a>
+						</div>
 					</td>
 				</tr>
 
@@ -134,10 +121,6 @@
 				</tr>
 			</tfoot>
 		</table>
-
-		<input type="hidden" id="action" name="action" value="list" />
-		<input type="hidden" name="id" id="id" value="{$id|default:""}" />
-
 	</div>
 </form>
 {/block}
