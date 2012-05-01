@@ -10,6 +10,7 @@
 namespace Framework\Controllers;
 
 use Onm\Framework\Controller\Controller,
+    Symfony\Component\Routing\Exception\ResourceNotFoundException,
     Onm\Message as m;
 
 /**
@@ -31,6 +32,8 @@ class ErrorController extends Controller
     {
     }
 
+    // TODO: find a way to render a simple file with smarty without initializing
+    // all the
     /**
      * Shows the login form
      *

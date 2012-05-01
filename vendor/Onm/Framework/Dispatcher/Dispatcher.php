@@ -51,12 +51,22 @@ class Dispatcher
             }
 
         } catch (ResourceNotFoundException $e) {
-            $this->request->request->set('error', serialize($e));
-            $this->dispatchClass('Framework:Controllers:ErrorController:default');
+            $this->handleException($e);
         } catch (\Exception $e) {
-            $this->request->request->set('error', serialize($e));
-            $this->dispatchClass('Framework:Controllers:ErrorController:default');
+            $this->handleException($e);
         }
+    }
+
+    /**
+     * Handles exceptions and redirect them to a controller
+     *
+     * @return void
+     * @author
+     **/
+    public function handleException($exception)
+    {
+        $this->request->request->set('error', serialize($exception));
+        $this->dispatchClass('Framework:Controllers:ErrorController:default');
     }
 
     /**
@@ -108,7 +118,7 @@ class Dispatcher
                 return $controller->{$actionName}();
             } else {
                 throw new ResourceNotFoundException(
-                    "Route class '$className' don't exists."
+                    "Route class '$controllerClassName' don't exists."
                 );
             }
 
