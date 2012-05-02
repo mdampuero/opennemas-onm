@@ -10,3 +10,6 @@
 [submodule "vendor/Symfony/Component/Routing"]
 	path = vendor/Symfony/Component/Routing
 	url = https://github.com/symfony/Routing
+[submodule "vendor/Symfony/Component/DependencyInjection"]
+	path = vendor/Symfony/Component/DependencyInjection
+	url = https://github.com/symfony/DependencyInjection.git
