@@ -28,6 +28,13 @@ require_once('bootstrap.php');
 
 $r = new Restler();
 $r->setSupportedFormats('JsonFormat', 'XmlFormat');
-$r->addAPIClass('articleRest');
-$r->addAPIClass('categoryRest');
+$r->addAPIClass('Instances');
+$r->addAPIClass('Ads');
+$r->addAPIClass('Contents');
+$r->addAPIClass('Articles');
+$r->addAPIClass('Opinions');
+$r->addAPIClass('Comments');
+$r->addAPIClass('Images');
+$r->addAPIClass('Videos');
+$r->addAPIClass('Categories');
 $r->handle();
