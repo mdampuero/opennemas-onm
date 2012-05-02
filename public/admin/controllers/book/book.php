@@ -228,7 +228,7 @@ switch($action) {
         $uploadStatusPdf_img = @move_uploaded_file($archivo_temporal_img, $ruta.$nombre_archivo_img);
 
         $book = new Book();
-        if ( !empty($_FILES['file']['name'])) && ($uploadStatusPdf !== false) ) {
+        if ( (!empty($_FILES['file']['name'])) && ($uploadStatusPdf !== false) ) {
             $nombre_archivo_swf = str_replace('pdf', 'swf', $nombre_archivo);
             exec('pdf2swf -O 1 '.$ruta.$nombre_archivo.' -o '.$ruta.$nombre_archivo_swf);
         } elseif ( $_FILES['file']['size'] > $sizeFile ) {
@@ -237,7 +237,7 @@ switch($action) {
         } else {
              m::add( sprintf(_("Sorry, file can't upload.")));
         }
-        if ( !empty($_FILES['file_img']['name'])) && ($uploadStatusPdf_img !== false) ) {
+        if ( (!empty($_FILES['file_img']['name'])) && ($uploadStatusPdf_img !== false) ) {
             m::add( sprintf(_("Sorry, image file can't upload.")));
         }
 
