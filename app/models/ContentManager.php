@@ -1233,7 +1233,7 @@ class ContentManager
         $pager_options = array(
             'mode'        => 'Sliding',
             'perPage'     => $items_page,
-            'delta'       => 4,
+            'delta'       => 3,
             'clearIfVoid' => true,
             'urlVar'      => 'page',
             'totalItems'  => $total_contents,

@@ -183,6 +183,11 @@ class Article extends Content
     public function saveRelated($data, $id, $method)
     {
         $rel = new RelatedContent();
+        /*
+        $contentsRAW = $request->query->filter('contents');
+        $contents = json_decode(json_decode($contentsRAW), true);
+
+    */
 
         //Articulos relacionados en portada
         if (isset($data)) {

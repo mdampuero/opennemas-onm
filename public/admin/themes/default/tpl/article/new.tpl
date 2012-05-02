@@ -2,7 +2,7 @@
 
 {block name="header-js" append}
     {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
-    {script_tag src="/jquery/jquery-ui-sliderAccess.js"}    
+    {script_tag src="/jquery/jquery-ui-sliderAccess.js"}
     {script_tag src="/jquery/jquery.colorbox-min.js"}
     {script_tag src="/onm/jquery.datepicker.js"}
     {script_tag src="/utilsarticle.js"}
@@ -36,11 +36,11 @@
         }
     });
     jQuery(document).ready(function($){
-        $('#article-form').tabs();      
+        $('#article-form').tabs();
         // $("#form-validate-button #form-send-button ul li a#related-contents").on("click", function(event) {
             $( "#content-provider" ).tabs();
             $( "#content-provider" ).tabs('paging', { cycle: false, follow: false, tabsPerPage: 4 } );
-        //}  
+        //}
     });
 
     jQuery(document).ready(function($){
@@ -406,6 +406,14 @@
 
         <div id="related-contents">
             {include file ="article/related/_related_list.tpl"}
+            <input type="hidden" id="relatedFrontpage" name="ordenArti" value="" />
+            <input type="hidden" id="relatedInner" name="ordenArtiInt" value="" />
+
+            <input type="hidden" id="params[withGallery]" name="params[withGallery]" value="" />
+            <input type="hidden" id="params[withGalleryInt]" name="params[withGalleryInt]" value="" />
+
+            <input type="hidden" id="params[relatedHome]" name="params[relatedHome]" value="" />
+            <input type="hidden" id="params[withGalleryHome]" name="params[withGalleryHome]" value="" />
         </div>
 
         <div id="reloadPreview" style="display: none; background-color: #FFE9AF; color: #666; border: 1px solid #996699; padding: 10px; font-size: 1.1em; font-weight: bold; width: 550px; position: absolute; right: 0; top: 0;">

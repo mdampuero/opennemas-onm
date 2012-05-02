@@ -46,14 +46,14 @@ jQuery(document).ready(function($){
         e.preventDefault();
         var href   = $(this).attr('href');
         var parent = $(this).closest('.ui-tabs-panel');
-         
+
          $.ajax({
             url: $(this).attr('href'),
             success: function(data){
                 parent.html(data);
                 makeContentProviderAndReceiverSortable();
             }
-        }); 
+        });
     });
 
 
@@ -63,11 +63,29 @@ jQuery(document).ready(function($){
 
     makeContentProviderAndReceiverSortable = function () {
         // Make content providers sortable and allow to D&D over the placeholders
-       jQuery('div#content-provider ul#contentList').sortable({
+        var before ='';
+        jQuery('div#content-provider ul#contentList').sortable({
             connectWith: "div.column-receiver ul.content-receiver",
             dropOnEmpty: true,
             placeholder: 'placeholder-element',
-            tolerance: 'pointer'
+            tolerance: 'pointer',
+            forcePlaceholderSize: true,
+            start:function(event,ui){
+                $(ui.item).show();
+                clone = $(ui.item).clone();
+                clone.removeAttr( 'style' );
+                before = $(ui.item).prev();
+                parent = $(ui.item).parent();
+
+            },
+            stop:function(event, ui){
+                if(before.length>0) {
+                    before.after(clone);
+                } else {
+                    parent.prepend(clone);
+                  //  this
+                }
+            }
         }).disableSelection();
 
         // Make content providers sortable and allow to D&D over placeholders and content provider
@@ -75,7 +93,7 @@ jQuery(document).ready(function($){
             connectWith: "div#content-provider ul#contentList, div.column-receiver ul.content-receiver",
             dropOnEmpty: true,
             placeholder: 'placeholder-element',
-            tolerance: 'pointer'
+            tolerance: 'pointer',
         }).disableSelection();
 
     };
