@@ -47,7 +47,7 @@ class AclUserGroupsController extends Controller
         $userGroup  = new \UserGroup();
         $userGroups = $userGroup->get_user_groups();
 
-        echo $this->render('acl/user_group/list.tpl', array(
+        return $this->render('acl/user_group/list.tpl', array(
             'user_groups' => $userGroups
         ));
     }
@@ -65,7 +65,7 @@ class AclUserGroupsController extends Controller
         $userGroup = new \UserGroup($id);
         $privilege = new \Privilege();
 
-        echo $this->render(
+        return $this->render(
             'acl/user_group/new.tpl', array(
             'user_group' => $userGroup,
             'modules'    => $privilege->getPrivilegesByModules(),
@@ -99,7 +99,7 @@ class AclUserGroupsController extends Controller
             }
         }
 
-        echo $this->render('acl/user_group/new.tpl', array(
+        return $this->render('acl/user_group/new.tpl', array(
             'user_group' => $userGroup,
             'modules'    => $privilege->getPrivilegesByModules(),
         ));
@@ -117,7 +117,7 @@ class AclUserGroupsController extends Controller
         $userGroup = new \UserGroup();
         $userGroup->update( $_REQUEST );
 
-        $this->redirect(url('admin_acl_usergroups'));
+        return $this->redirect(url('admin_acl_usergroups'));
     }
 
 
@@ -138,7 +138,7 @@ class AclUserGroupsController extends Controller
             m::add(sprintf(_('Unable to delete the user group with id "%d"')), $id);
         }
 
-        $this->redirect(url('admin_acl_usergroups'));
+        return $this->redirect(url('admin_acl_usergroups'));
     }
 
 } // END class AclUserGroupsController

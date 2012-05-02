@@ -176,7 +176,7 @@ $menuXml = '<?xml version="1.0"?>
             module_name="TRASH_MANAGER"
             title="'.htmlspecialchars(_("Trash"), ENT_QUOTES).'"
             id="trash_manager"
-            link="/admin/controllers/trash.php"
+            link="'.url("admin_trash", array()).'"
             privilege="TRASH_ADMIN" />
         <node class="divider" />
         <node

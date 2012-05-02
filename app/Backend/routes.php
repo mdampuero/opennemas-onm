@@ -38,6 +38,34 @@ $routes->add(
     '/admin'
 );
 
+// Trash controller routes
+$routes->add(
+    'admin_trash',
+    new Route(
+        '/system/trash',
+        array('_controller' => 'Backend:Controllers:TrashController:default')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_trash_delete',
+    new Route(
+        '/system/trash/{id}/delete',
+        array('_controller' => 'Backend:Controllers:TrashController:delete')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_trash_batchdelete',
+    new Route(
+        '/system/trash/batchdelete',
+        array('_controller' => 'Backend:Controllers:TrashController:batchDelete')
+    ),
+    '/admin'
+);
+
 // Template cache controller routes
 $routes->add(
     'admin_tpl_manager',

@@ -1,5 +1,16 @@
 {extends file="base/admin.tpl"}
 
+{block name="footer-js"}
+<script>
+jQuery(function($){
+    $('#batch-delete').on('click', function(e, ui) {
+        var form = $('#trashform');
+        form.attr('action', '{url name=admin_trash_batchdelete}');
+    })
+});
+</script>
+{/block}
+
 {block name="admin_menu"}
 <div class="top-action-bar clearfix">
 	<div class="wrapper-content">
@@ -12,9 +23,9 @@
 				</a>
 			</li>
 			<li>
-				<a href="#" class="admin_add" onClick="javascript:enviar3(this, '_self', 'mremove', 0);" title="Eliminar">
-					<img border="0" src="{$params.IMAGE_DIR}trash.png" title="Eliminar" alt="Eliminar"><br />{t}Delete{/t}
-				</a>
+                <button type="submit" id="batch-delete" title="{t}Deletes the selected elements{/t}">
+                    <img border="0" src="{$params.IMAGE_DIR}trash.png" title="Eliminar" alt="Eliminar"><br />{t}Delete{/t}
+                </button>
 			</li>
             <li class="separator"></li>
 			<li>
@@ -29,70 +40,12 @@
 {/block}
 
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""} >
+<form action="{url name=admin_trash}" method="post" id="trashform">
 {block name="admin_menu"}{/block}
 	<div class="wrapper-content">
-		<ul class="pills clearfix">
-			{*{section name=as loop=$types_content}
-				<li>
-					{assign var=ca value=`$types_content[as]`}
-					<a href="litter.php?action=list&amp;mytype={$ca}" {if $mytype==$ca}class="active"{/if}>{$types_content[as]}</a>
-				</li>
-			{/section} *}
-            {is_module_activated name="ARTICLE_MANAGER"}
-            {acl isAllowed="ARTICLE_TRASH"}
-                <li><a href="{$smarty.server.PHP_SELF}?action=list&amp;mytype=article" {if $mytype=='article'}class="active"{/if}>{t}Articles{/t}</a></li>
-            {/acl}{/is_module_activated}
+        {render_messages}
 
-            {is_module_activated name="OPINION_MANAGER"}
-            {acl isAllowed="OPINION_TRASH"}
-                <li><a href="{$smarty.server.PHP_SELF}?action=list&amp;mytype=opinion" {if $mytype=='opinion'}class="active"{/if}>{t}Opinions{/t}</a></li>
-            {/acl}{/is_module_activated}
-
-            {is_module_activated name="ADS_MANAGER"}
-            {acl isAllowed="ADVERTISEMENT_TRASH"}
-                <li><a href="{$smarty.server.PHP_SELF}?action=list&amp;mytype=advertisement" {if $mytype=='advertisement'}class="active"{/if}>{t}Ads{/t}</a></li>
-			{/acl}{/is_module_activated}
-
-            {is_module_activated name="COMMENT_MANAGER"}
-            {acl isAllowed="COMMENT_TRASH"}
-                <li><a href="{$smarty.server.PHP_SELF}?action=list&amp;mytype=comment" {if $mytype=='comment'}class="active"{/if}>{t}Coments{/t}</a></li>
-			{/acl}{/is_module_activated}
-
-            {is_module_activated name="ALBUM_MANAGER"}
-            {acl isAllowed="ALBUM_TRASH"}
-                <li><a href="{$smarty.server.PHP_SELF}?action=list&amp;mytype=album" {if $mytype=='album'}class="active"{/if}>{t}Albums{/t}</a></li>
-            {/acl}{/is_module_activated}
-
-            {is_module_activated name="IMAGE_MANAGER"}
-            {acl isAllowed="IMAGE_TRASH"}
-                <li><a href="{$smarty.server.PHP_SELF}?action=list&amp;mytype=photo" {if $mytype=='photo'}class="active"{/if}>{t}Photographies{/t}</a></li>
-			{/acl}{/is_module_activated}
-
-            {is_module_activated name="VIDEO_MANAGER"}
-            {acl isAllowed="VIDEO_TRASH"}
-                <li><a href="{$smarty.server.PHP_SELF}?action=list&amp;mytype=video" {if $mytype=='video'}class="active"{/if}>{t}Videos{/t}</a></li>
-			{/acl}{/is_module_activated}
-
-            {is_module_activated name="FILE_MANAGER"}
-            {acl isAllowed="FILE_DELETE"}
-                <li><a href="{$smarty.server.PHP_SELF}?action=list&amp;mytype=attachment" {if $mytype=='attachment'}class="active"{/if}>{t}Files{/t}</a></li>
-            {/acl}{/is_module_activated}
-
-            {is_module_activated name="POLL_MANAGER"}
-            {acl isAllowed="POLL_DELETE"}
-                <li><a href="{$smarty.server.PHP_SELF}?action=list&amp;mytype=poll" {if $mytype=='poll'}class="active"{/if}>{t}Polls{/t}</a></li>
-            {/acl}{/is_module_activated}
-
-            {is_module_activated name="STATIC_PAGES_MANAGER"}
-            {acl isAllowed="STATIC_DELETE"}
-                <li><a href="{$smarty.server.PHP_SELF}?action=list&amp;mytype=static_page" {if $mytype=='static_page'}class="active"{/if}>{t}Static Pages{/t}</a></li>
-            {/acl}{/is_module_activated}
-            {is_module_activated name="WIDGET_MANAGER"}
-            {acl isAllowed="WIDGET_DELETE"}
-                <li><a href="{$smarty.server.PHP_SELF}?action=list&amp;mytype=widget" {if $mytype=='widget'}class="active"{/if}>{t}Widgets{/t}</a></li>
-            {/acl}{/is_module_activated}
-		</ul>
+        {include file="trash/partials/_pills.tpl"}
 
         <table class="listing-table">
 
@@ -105,7 +58,7 @@
                     <th style="width:40px">{t}Section{/t}</th>
                     <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
                     <th class="center" style="width:110px;">{t}Date{/t}</th>
-                    <th class="center" style="width:200px;">{t}Actions{/t}</th>
+                    <th class="center" style="width:120px;">{t}Actions{/t}</th>
                </tr>
             </thead>
 
@@ -113,21 +66,23 @@
                 {section name=c loop=$litterelems}
                 <tr>
                     <td >
-                        <input type="checkbox" class="minput"  id="selected{$smarty.section.c.iteration}" name="selected_fld[]" value="{$litterelems[c]->id}"  style="cursor:pointer;" >
+                        <input type="checkbox" name="selected[]" value="{$litterelems[c]->id}">
                     </td>
-                    <td onClick="javascript:document.getElementById('selected{$smarty.section.c.iteration}').click();">
+                    <td>
                         {$litterelems[c]->title|clearslash}
                     </td>
                     <td class="center">{$litterelems[c]->category_title}</td>
                     <td class="center">{$litterelems[c]->views}</td>
                     <td class="center">{$litterelems[c]->created}</td>
-                    <td class="right form-inline">
-                        <a class="btn btn-mini" href="{$smarty.server.PHP_SELF}?id={$litterelems[c]->id}&amp;action=no_in_litter&amp;mytype={$mytype}&amp;page={$paginacion->_currentPage}" title="Recuperar">
-                            {t}Restore{/t}
-                        </a>
-                        <a class="btn btn-danger btn-mini" href="{$smarty.server.PHP_SELF}?id={$litterelems[c]->id}&amp;action=remove&amp;mytype={$mytype}&amp;page={$paginacion->_currentPage}" title="{t}Delete{/t}">
-                            {t}Delete{/t}
-                        </a>
+                    <td class="right">
+                        <div class="btn-group">
+                            <a class="btn" href="{$smarty.server.PHP_SELF}?id={$litterelems[c]->id}&amp;action=no_in_litter&amp;mytype={$mytype}&amp;page={$paginacion->_currentPage}" title="Recuperar">
+                                <i class="icon-retweet"></i> {t}Restore{/t}
+                            </a>
+                            <a class="btn btn-danger" href="{url name=admin_trash_delete id=$litterelems[c]->id mytype=$mytype page=$paginacion->_currentPage}" title="{t}Delete this content{/t}">
+                                <i class="icon-trash icon-white"></i>
+                            </a>
+                        </div>
                     </td>
                 </tr>
                 {sectionelse}
@@ -150,8 +105,5 @@
         </table>
 
     </div>
-
-    <input type="hidden" id="action" name="action" value="" />
-    <input type="hidden" name="id" id="id" value="{$id|default:""}" />
 </form>
 {/block}
