@@ -31,19 +31,13 @@ $menuXml = '<?xml version="1.0"?>
             id="widget_manager"
             link="controllers/widget/widget.php"
         />
-        <submenu title="'.htmlspecialchars(_("Synchronize"), ENT_QUOTES).'" id="sync_manager" link="#"
-                    privilege="STATIC_ADMIN" module_name="SYNC_MANAGER">
-            <node
-                title="'.htmlspecialchars(_("Sync Instances"), ENT_QUOTES).'"
-                id="sync_client_manager"
-                link="controllers/web_services/client.php"
-            />
-            <node
-                title="'.htmlspecialchars(_("Config Servers"), ENT_QUOTES).'"
-                id="sync_server_manager"
-                link="controllers/web_services/server.php"
-            />
-        </submenu>
+        <node
+            module_name="SYNC_MANAGER"
+            title="'.htmlspecialchars(_("Sync Instances"), ENT_QUOTES).'"
+            privilege="SYNC_ADMIN"
+            id="sync_manager"
+            link="controllers/web_services/client.php"
+        />
         <node class="divider" />
         <node
             module_name="MENU_MANAGER"
