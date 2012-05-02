@@ -61,10 +61,7 @@ class Photo extends Content
 
         $execution = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($execution === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-
+            $errorMsg = Application::logDatabaseError();
             return false;
         }
 
@@ -141,6 +138,7 @@ class Photo extends Content
 
                 $photo = new Photo();
                 $photoID = $photo->create($data);
+
 
                 if ($photoID) {
 

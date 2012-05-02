@@ -72,6 +72,13 @@ $menuXml = '<?xml version="1.0"?>
             link="controllers/comment/comment.php?action=list"
         />
         <node
+            module_name="COMMENT_DISQUS_MANAGER"
+            privilege="COMMENT_ADMIN"
+            title="'.htmlspecialchars(_("Comments (Disqus)"), ENT_QUOTES).'"
+            id="comment_manager"
+            link="controllers/disqus/disqus.php?action=list"
+        />
+        <node
             module_name="POLL_MANAGER"
             privilege="POLL_ADMIN"
             title="'.htmlspecialchars(_("Polls"), ENT_QUOTES).'"

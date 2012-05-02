@@ -102,7 +102,7 @@ class CronicasHelper {
     public function sqlClearData() {
 
         //emtpy tables
-        $tables = array('articles', 'albums', 'albums_photos',
+        $tables = array('articles', 'albums', 'albums_photos', 'advertisements',
             'attachments', 'authors', 'author_imgs', 'books', 'comments',
             'content_positions', 'kioskos', 'opinions', 'pclave', 'photos', 'polls', 'poll_items',
             'ratings', 'related_contents', 'specials', 'special_contents', 'videos', 'votes',
@@ -116,7 +116,7 @@ class CronicasHelper {
             }
         }
 
-        $sql = "SELECT pk_content FROM contents WHERE fk_content_type = 2 OR fk_content_type = 12 OR fk_content_type = 13";
+        $sql = "SELECT pk_content FROM contents WHERE fk_content_type = 12 OR fk_content_type = 13";
         $rss = $GLOBALS['application']->conn->Execute($sql);
 
         $result= $rss->GetArray();
@@ -133,6 +133,23 @@ class CronicasHelper {
 
         if (!$rss) {
             $this->log('clear contents function: '.$GLOBALS['application']->conn->ErrorMsg() );
+        }
+
+        $sql = "ALTER TABLE `contents` AUTO_INCREMENT =1";
+
+        $rss = $GLOBALS['application']->conn->Execute($sql);
+       
+        if (!$rss) {
+            $this->log('clear contents '.$sql.' function: '.$GLOBALS['application']->conn->ErrorMsg() );
+        }
+
+
+        $sql = "ALTER TABLE `authors` AUTO_INCREMENT =3";
+
+        $rss = $GLOBALS['application']->conn->Execute($sql);
+       
+        if (!$rss) {
+            $this->log('clear contents '.$sql.' function: '.$GLOBALS['application']->conn->ErrorMsg() );
         }
 
     }

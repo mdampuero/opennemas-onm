@@ -15,12 +15,6 @@ LINGUAS = \
 	gl_ES \
 	pt_BR
 
-DOC_FOLDERS = public/core \
-	public/controllers \
-	public/libs/Onm/ \
-	public/libs/Panorama/Panorama/ \
-
-
 all: l10n
 
 l10n: extracttrans updatepofiles compiletranslations extracttrans-backend updatepofiles-backend compiletranslations-backend
@@ -35,7 +29,7 @@ extracttrans-backend:
         	public/manager/controllers/**/*.php \
         	public/admin/themes/default/**/*.php \
 		  public/admin/locale/extracted_strings.c \
-		  -o $(LOCALE_FOLDER)'onmadmin.pot' --from-code=UTF-8
+		  -o public/admin/locale/onmadmin.pot --from-code=UTF-8
 
 updatepofiles-backend:
 	@echo "Updating translations";
@@ -74,14 +68,7 @@ compiletranslations:
 			-o "public/locale/$$i/LC_MESSAGES/messages.mo"; \
 	done
 
-doc: generate-docblox-doc
-
-generate-docblox-doc:
-	@echo "Generating documentation using DocBlox..."
-	mkdir -p doc/docblox/log
-	docblox -c doc/docblox.xml --title="OpenNemas"
-
-clean: cleancache cleaninstancefiles cleanlogs cleandocs
+clean: cleancache cleaninstancefiles cleanlogs
 
 cleancache:
 	@echo "Cleaning cache...";
@@ -98,7 +85,3 @@ cleanlogs:
 cleansmarty:
 	@echo "Cleaning smarty remporary files..."
 	rm tmp/instances/*/smarty/ -r
-
-cleandocs:
-	@echo "Cleaning generated documentations..."
-	rm doc/api -r

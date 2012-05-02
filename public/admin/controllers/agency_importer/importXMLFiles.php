@@ -74,8 +74,10 @@ switch($action) {
                 'metadata'    => $schema['metadata'],
                 'description' => $schema['description'],
                 'category_name' => $schema['category_name'],
+                'urn_source' => $schema['urn_source'],
                 'body' =>$schema['body'],
                 'ignored' =>$schema['ignored'],
+                'important' =>$schema['important'],
             ));
 
         }
@@ -86,21 +88,22 @@ switch($action) {
 
     case 'save_config':
 
+        $title    = filter_input( INPUT_POST, 'title' , FILTER_SANITIZE_STRING );
+        $title_int = filter_input( INPUT_POST, 'title_int' , FILTER_SANITIZE_STRING );
+        $subtitle = filter_input( INPUT_POST, 'subtitle' , FILTER_SANITIZE_STRING );
+        $summary  = filter_input( INPUT_POST, 'summary' , FILTER_SANITIZE_STRING );
+        $agency   = filter_input( INPUT_POST, 'agency' , FILTER_SANITIZE_STRING );
+        $created   = filter_input( INPUT_POST, 'created' , FILTER_SANITIZE_STRING );
+        $body     = filter_input( INPUT_POST, 'body' , FILTER_SANITIZE_STRING );
+        $metadata = filter_input( INPUT_POST, 'metadata' , FILTER_SANITIZE_STRING );
+        $description = filter_input( INPUT_POST, 'description' , FILTER_SANITIZE_STRING );
+        $category_name = filter_input( INPUT_POST, 'category_name' , FILTER_SANITIZE_STRING );
+        $urn_source = filter_input( INPUT_POST, 'urn_source' , FILTER_SANITIZE_STRING );
+        $body = filter_input( INPUT_POST, 'body' , FILTER_SANITIZE_STRING );
+        $ignored = filter_input( INPUT_POST, 'ignored' , FILTER_SANITIZE_STRING );
+        $important = filter_input( INPUT_POST, 'important' , FILTER_SANITIZE_STRING );
 
-         $title    = filter_input( INPUT_POST, 'title' , FILTER_SANITIZE_STRING );
-         $title_int = filter_input( INPUT_POST, 'title_int' , FILTER_SANITIZE_STRING );
-         $subtitle = filter_input( INPUT_POST, 'subtitle' , FILTER_SANITIZE_STRING );
-         $summary  = filter_input( INPUT_POST, 'summary' , FILTER_SANITIZE_STRING );
-         $agency   = filter_input( INPUT_POST, 'agency' , FILTER_SANITIZE_STRING );
-         $created   = filter_input( INPUT_POST, 'created' , FILTER_SANITIZE_STRING );
-         $body     = filter_input( INPUT_POST, 'body' , FILTER_SANITIZE_STRING );
-         $metadata = filter_input( INPUT_POST, 'metadata' , FILTER_SANITIZE_STRING );
-         $description = filter_input( INPUT_POST, 'description' , FILTER_SANITIZE_STRING );
-         $category_name = filter_input( INPUT_POST, 'category_name' , FILTER_SANITIZE_STRING );
-         $body = filter_input( INPUT_POST, 'body' , FILTER_SANITIZE_STRING );
-         $ignored = filter_input( INPUT_POST, 'ignored' , FILTER_SANITIZE_STRING );
-
-         $schema =  array(
+        $schema =  array(
             'title'    => $title,
             'title_int' => $title_int,
             'subtitle' => $subtitle,
@@ -112,9 +115,11 @@ switch($action) {
             'description' => $description,
             'category_name' => $category_name,
             'body' =>$body,
+            'urn_source' => $urn_source,
+            'img_footer' => $img_footer,
             'ignored' =>$ignored,
+            'important' =>$important,
         );
-
 
         if (s::set('xml_file_schema', $schema) ) {
             m::add(_('Importer XML configuration saved successfully'), m::SUCCESS);

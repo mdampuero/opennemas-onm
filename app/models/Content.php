@@ -171,7 +171,7 @@ class Content
                    " VALUES (?,?,?, ?,?,?, ?,?,?, ?,?,?,?,?, ?,?,?, ?,?,?, ?,?,?,?)";
 
 
-        $data['starttime']        = (empty($data['starttime']))? date("Y-m-d H:i:s"): $data['starttime'];
+        $data['starttime']        = (!isset($data['starttime']) || empty($data['starttime']) || ($data['starttime'])=='0000-00-00 00:00:00')? date("Y-m-d H:i:s"): $data['starttime'];
         $data['endtime']          = (empty($data['endtime']))? '0000-00-00 00:00:00': $data['endtime'];
         $data['content_status']   = (empty($data['content_status']))? 0: intval($data['content_status']);
         $data['available']        = (empty($data['available']))? 0: intval($data['available']);
@@ -297,7 +297,7 @@ class Content
         $this->read( $data['id']); //????
 
         $data['changed']          = date("Y-m-d H:i:s");
-        $data['starttime']        = (empty($data['starttime']))? '0000-00-00 00:00:00': $data['starttime'];
+        $data['starttime']        = (empty($data['starttime']))? $this->starttime: $data['starttime'];
         $data['endtime']          = (empty($data['endtime']))? '0000-00-00 00:00:00': $data['endtime'];
         $data['content_status']   = (!isset($data['content_status']))? $this->content_status: $data['content_status'];
         $data['available']        = (!isset($data['available']))? $this->available: $data['available'];
@@ -848,6 +848,9 @@ class Content
         $start =   new \DateTime($this->starttime);
         $end   =   new \DateTime($this->endtime);
 
+        if (($start->getTimeStamp() - $end->getTimeStamp()) == 0) {
+            return false;
+        }
         if ( ($start->getTimeStamp() > 0 && $start != $created ) || $end->getTimeStamp() > 0) {
             return true;
         }

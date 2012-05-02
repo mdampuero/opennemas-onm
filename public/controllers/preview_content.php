@@ -228,6 +228,6 @@ if( !empty($action) ) {
 } else {
     Application::forward301('index.php');
 }
-
+$tpl->caching = 0;
 $tpl->display('article/article.tpl');
 

@@ -16,8 +16,13 @@ defined('SITE_URL') or die('Direct access is forbidden');
     13.- anuncios google
     14.- 2o botoncuadrado columna2
     15.- 2o lateral derecho
-    16.- 3er botoncuadrado columna2 
+    16.- 3er botoncuadrado columna2
 */
+
+/**
+ * Fetch HTTP vars
+ */
+$category_name = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
 
 $ccm = ContentCategoryManager::get_instance();
 $category = $ccm->get_id($category_name);

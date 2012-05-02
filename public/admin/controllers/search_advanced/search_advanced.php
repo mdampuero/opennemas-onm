@@ -178,7 +178,7 @@ switch ($action) {
             $matchString = implode($matchString, ' AND ');
 
             $sql = "SELECT pk_content, fk_content_type FROM contents "
-                  ."WHERE ".$matchString;
+                  ."WHERE contents.available=1 AND".$matchString;
             $rs = $GLOBALS['application']->conn->GetArray($sql);
 
             $results = array();

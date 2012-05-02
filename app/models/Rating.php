@@ -209,7 +209,6 @@ class Rating
                     <div class='vote-element {$active} {$pk_rating}_{$i}'
                         onmouseover=\"change_rating({$i}, '{$pk_rating}')\"
                         onmouseout=\"change_rating({$value}, '{$pk_rating}')\">
-                        &nbsp;
                     </div>
                 </a>
             </li>";

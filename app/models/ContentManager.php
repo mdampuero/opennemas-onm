@@ -86,6 +86,21 @@ class ContentManager
 
     public function find_all($content_type, $filter=null, $_order_by='ORDER BY 1', $fields='*')
     {
+        return $this->findAll($content_type, $filter, $_order_by, $fields);
+    }
+
+    /**
+     * Returns an array of objects for a given content type and filters
+     *
+     * @param string $content_type the content type to search for
+     * @param string $filter the SQL string to filter contents
+     * @param string $order_by SQL string to order results
+     * @param string $fields the list of fields to get
+     *
+     * @return array the list of content objects
+     **/
+    public function findAll($content_type, $filter = null, $_order_by = 'ORDER BY 1', $fields='*')
+    {
         $this->init($content_type);
         $items = array();
 
@@ -978,7 +993,7 @@ class ContentManager
                 $pks = $this->getInTime($pks);
         }
 
-        if(count($pks)<6 && $not_empty) {
+        if(count($pks) < 6 && $not_empty) {
             //En caso de que existan menos de 6 contenidos, lo hace referente a los 200 últimos contenidos
            /*  $pks = $this->getInTime($this->find($content_type,$_where_slave.$_comented,
                             'ORDER BY changed DESC LIMIT 0,200','pk_content, starttime, endtime')); */
@@ -1127,79 +1142,6 @@ class ContentManager
 
         return $filtered;
     }
-
-
-    /**
-     * Return a SQL condition to filter by time
-     *
-     * @param string $time Time to test
-     * @return string SQL condition
-    */
-    public function getInTimeSQL($time=null)
-    {
-        $now = 'NOW()';
-        if(!is_null($time)) {
-            $now = $time;
-        }
-
-        $sql = " (`contents`.`starttime` > $now OR `contents`.`starttime` = '000-00-00 00:00:00') AND ".
-               "(`contents`.`endtime` < $now OR `contents`.`endtime` = '000-00-00 00:00:00') ";
-
-        return $sql;
-    }
-
-
-    /**
-     * Get elements of a placeholder
-     *
-     * @param string $placeholder
-     * @param array $items
-     * @param boolean $isHomePlaceholder
-     * @return array
-    */
-    public function getElementsByPlaceHolder($placeholder, $items, $isHomePlaceholder=false)
-    {
-        $filtered = array();
-
-        $property = 'placeholder';
-        if($isHomePlaceholder) {
-            $property = 'home_placeholder';
-        }
-
-        foreach($items as $item) {
-            if($item->{$property} == $placeholder) {
-                $filtered[] = $item;
-            }
-        }
-
-        return $filtered;
-    }
-
-
-    /**
-     * Group elements by a placeholder
-     *
-     * @param array $items
-     * @param boolean $isHomePlaceholder
-     * @return array
-    */
-    public function groupByPlaceHolder($items, $isHomePlaceholder=false)
-    {
-        $placeholders = array();
-
-        $property = 'placeholder';
-        if($isHomePlaceholder) {
-            $property = 'home_placeholder';
-        }
-        foreach($items as $item) {
-            if($item->{$property} == $placeholder) {
-                $filtered[] = $item;
-            }
-        }
-
-        return $filtered;
-    }
-
 
     /**
      * Count: Contanbiliza el numero de elementos de un tipo.
@@ -1465,7 +1407,7 @@ class ContentManager
 
 
     //this function returns title,catName and slugs of last headlines from Subcategories of a given category
-    public function find_listAuthors($filter=null, $_order_by='ORDER BY 1')
+    public function getOpinionArticlesWithAuthorInfo($filter=null, $_order_by='ORDER BY 1')
     {
 
         $items = array();
@@ -1504,40 +1446,6 @@ class ContentManager
     }
 
 
-    public function find_listAuthorsEditorial($filter=null, $_order_by='ORDER BY 1')
-    {
-
-        $items = array();
-        $_where = '1=1  AND in_litter=0';
-
-        if( !is_null($filter) ) {
-            if( $filter == 'in_litter=1') {
-                //se busca desde la litter.php
-                $_where = $filter;
-            }
-
-            $_where = $filter.' AND in_litter=0';
-        }
-
-        $sql= 'SELECT authors.name, opinions.pk_opinion as id, contents.title, contents.slug, opinions.type_opinion,
-                      opinions.body,contents.created,contents.changed
-               FROM contents, opinions
-                    LEFT JOIN authors ON (authors.pk_author=opinions.fk_author)
-               WHERE `contents`.`fk_content_type`=4 and opinions.type_opinion=1 AND contents.pk_content=opinions.pk_opinion
-                    AND '.$_where.' '.$_order_by;
-
-        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        $items =null;
-        if (!empty($rs)) {
-            $items = $rs->GetArray();
-        }
-
-        return $items;
-    }
-
-
     //FIXME: unificar todos los paginates
     //create_paginate() -
     /*  PARAMS:
@@ -1547,7 +1455,7 @@ class ContentManager
      *  $function ->nombre de la funcion en js / URL (segun se quiera recargar ajax o una url)
      * $params -> parametros de la funcion js / dir url  que se carga
      */
-    public function create_paginate($total_items, $num_pages, $delta, $funcion='null', $params='null')
+    public function create_paginate($total_items, $num_pages, $delta, $funcion='null', $params='null', $separator = " | ")
     {
         if (!isset($num_pages)) {
             $num_pages = 5;
@@ -1590,7 +1498,7 @@ class ContentManager
             'delta'       => $delta,
             'clearIfVoid' => true,
             'urlVar'      => $page,
-            'separator' => '|',
+            'separator'   => $separator,
             'spacesBeforeSeparator' => 1,
             'spacesAfterSeparator' => 1,
             'totalItems'  => $total_items,
