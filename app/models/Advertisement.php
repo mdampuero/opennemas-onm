@@ -731,7 +731,7 @@ class Advertisement extends Content
      * @param array $banners Array of Advertisement objects
      * @param Smarty $tpl Template
      **/
-    function render($banners, $tpl)
+    function render($banners, $tpl, $wsUrl = false)
     {
         // Extract pk_photos to perform one query
         $pk_photos = array();
@@ -741,12 +741,25 @@ class Advertisement extends Content
             }
         }
         $banners_selected =array();
+
         //Get photos
         $cm = new ContentManager();
-        $objs = $cm->cache->find(
-            'Photo',
-            "pk_content IN ('" . implode("','", $pk_photos) . "')"
-        );
+        if (!$wsUrl) {
+            $objs = $cm->cache->find(
+                'Photo',
+                "pk_content IN ('" . implode("','", $pk_photos) . "')"
+            );
+        } else {
+            $objsArray = array();
+            foreach ($pk_photos as $photo) {
+                $objsArray[] = json_decode(file_get_contents($wsUrl.'/ws.php/images/id/'.(int)$photo));
+            }
+            foreach ($objsArray as $item) {
+                $content = new Advertisement();
+                $content->load($item);
+                $objs[] = $content;
+            }
+        }
 
         // Array of photos objects,
         // key is pk_content array( 'pk_content' => object )
