@@ -1,5 +1,7 @@
 <?php
 
+use Onm\Settings as s;
+
 /**
  * Smarty plugin to render a banner into OpenNeMas
  *
@@ -54,7 +56,43 @@ JSINTERSTICIAL;
 
     $advertisement = Advertisement::getInstance();
     $banner = $advertisement->fetch('banner' . $type);
-    $photo  = $advertisement->fetch('photo' . $type);
+
+    /**
+     *  Hack for rendering ads from ws
+     *  Redefine constants to vars
+     */
+    $mediaImgPath = MEDIA_IMG_PATH;
+    $mediaImgPathWeb = MEDIA_IMG_PATH_WEB;
+    $siteUrl = SITE_URL;
+
+    if (preg_match('@/ext[/|\.]@', $_SERVER['REQUEST_URI']))  {
+
+        $wsUrl = '';
+        $syncParams = s::get('sync_params');
+        foreach ($syncParams as $siteUrl => $categoriesToSync) {
+            foreach ($categoriesToSync as $value) {
+                if (preg_match('/'.$_GET['category_name'].'/i', $value)) {
+                    $wsUrl = $siteUrl;
+                }
+            }
+        }
+
+        // Redefine constants to vars
+        $mediaImgPath = json_decode(file_get_contents($wsUrl.'/ws.php/instances/mediaimgpath/'));
+        $mediaImgPathWeb = json_decode(file_get_contents($wsUrl.'/ws.php/instances/mediaurl/'));
+        $siteUrl = json_decode(file_get_contents($wsUrl.'/ws.php/instances/siteurl/'));
+
+        //Get photo from apiRest
+        $photoData = json_decode(file_get_contents($wsUrl.'/ws.php/images/id/'.(int)$banner->img));
+        $photo = new Photo();
+        $photo->load($photoData);
+
+    } else {
+        //Get photo from _registry
+        $photo  = $advertisement->fetch('photo' . $type);
+    }
+
+
 
     if(!isset($params['cssclass'])) {
         $smarty->trigger_error("renderbanner: missing 'cssclass' parameter");
@@ -75,18 +113,19 @@ JSINTERSTICIAL;
      * If the Ad is Flash based try to get the width and height fixed
      */
     if (isset ($photo)) {
-    if ( ($photo->width <= $width)
-         && ($photo->height <= $height)
-         && ($photo->type_img === 'swf'))
-    {
-        $width = $photo->width;
-        $height = $photo->height;
+        if ( ($photo->width <= $width)
+            && ($photo->height <= $height)
+            && ($photo->type_img === 'swf'))
+        {
+            $width = $photo->width;
+            $height = $photo->height;
+        }
     }
-    }
+
     // If $height is equals to * then calculate using GD
     if($height == '*') {
-        if(file_exists(MEDIA_IMG_PATH. $photo->path_file. $photo->name)) {
-            list($w, $h, $type, $attr) = getimagesize( MEDIA_IMG_PATH. $photo->path_file. $photo->name );
+        if(file_exists($mediaImgPath. $photo->path_file. $photo->name)) {
+            list($w, $h, $type, $attr) = getimagesize( $mediaImgPath. $photo->path_file. $photo->name );
             if($w == $width) { // La imagen es proporcional
                 $height = $h;
             } else {
@@ -119,7 +158,7 @@ JSINTERSTICIAL;
         // $output .= $banner->script;
 
         // Parallelized method using iframes
-        $output .= '<iframe src="'.SITE_URL.'/publicidade/get/' . $banner->pk_content  . '.html" ' .
+        $output .= '<iframe src="'.$siteUrl.'/publicidade/get/' . $banner->pk_content  . '.html" ' .
                    'scrolling="no" frameborder="0" width="' . $width . '" height="' . $height . '" ' .
                    'marginwidth="0" marginheight="0" rel="nofollow">Publicidad</iframe>';
 
@@ -131,13 +170,13 @@ JSINTERSTICIAL;
             if(!$overlap && !$banner->overlap) {
                 // Flash object
                 // FIXME: build flash object with all tags and params
-                $output .= '<a target="_blank" href="'.SITE_URL.'/publicidade/'. $banner->pk_advertisement .'.html" rel="nofollow">';
+                $output .= '<a target="_blank" href="'.$siteUrl.'/publicidade/'. $banner->pk_advertisement .'.html" rel="nofollow">';
                 $output .= '<object width="'.$width.'" height="'.$height.'" >
                         <param name="wmode" value="transparent" />
-                        <param name="movie" value="'. MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name. '" />
+                        <param name="movie" value="'. $mediaImgPathWeb. $photo->path_file. $photo->name. '" />
                         <param name="width" value="'.$width.'" />
                         <param name="height" value="'.$height.'" />
-                        <embed src="'. MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name. '"
+                        <embed src="'. $mediaImgPathWeb. $photo->path_file. $photo->name. '"
                             width="'.$width.'" height="'.$height.'" alt="Publicidad '. $banner->title. '" wmode="transparent"></embed>
                     </object>';
             } else {
@@ -145,21 +184,21 @@ JSINTERSTICIAL;
                     $output .= '<div style="position: relative; width: '.$width.'px; height: '.$height.'px;">
                         <div style="left:0px;top:0px;cursor:pointer;background-color:transparent;position:absolute;z-index:100;width:'.
                             $width.'px;height:'.$height.'px;"
-                            onclick="javascript:window.open(\''.SITE_URL.'/publicidade/'.$banner->pk_advertisement.'.html\', \'_blank\');return false;"></div>';
+                            onclick="javascript:window.open(\''.$siteUrl.'/publicidade/'.$banner->pk_advertisement.'.html\', \'_blank\');return false;"></div>';
                 } else {
                     $output .= '<div style="position: relative; width: '.$width.'px; height: '.$height.'px;">
                         <div style="left:0px;top:0px;cursor:pointer;background-color:#FFF;filter:alpha(opacity=0);position:absolute;z-index:100;width:'.
                             $width.'px;height:'.$height.'px;"
-                            onclick="javascript:window.open(\''.SITE_URL.'/publicidade/'.$banner->pk_advertisement.'.html\', \'_blank\');return false;"></div>';
+                            onclick="javascript:window.open(\''.$siteUrl.'/publicidade/'.$banner->pk_advertisement.'.html\', \'_blank\');return false;"></div>';
                 }
 
                 $output .= '<div style="position: absolute; z-index: 0; width: '.$width.'px; left: 0px;">
                         <object width="'.$width.'" height="'.$height.'">
-                            <param name="movie" value="'. MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name. '" />
+                            <param name="movie" value="'. $mediaImgPathWeb. $photo->path_file. $photo->name. '" />
                             <param name="wmode" value="opaque" />
                             <param name="width" value="'.$width.'" />
                             <param name="height" value="'.$height.'" />
-                            <embed src="'. MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name. '" wmode="opaque"
+                            <embed src="'. $mediaImgPathWeb. $photo->path_file. $photo->name. '" wmode="opaque"
                                 width="'.$width.'" height="'.$height.'" alt="Publicidad '. $banner->title. '"></embed>
                         </object>
                     </div>
@@ -176,8 +215,8 @@ JSINTERSTICIAL;
             }
         } else {
             // Image
-            $output .= '<a target="_blank" href="'.SITE_URL.'/publicidade/'. $banner->pk_advertisement .'.html" rel="nofollow">';
-            $output .= '<img src="'. MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name.'"
+            $output .= '<a target="_blank" href="'.$siteUrl.'/publicidade/'. $banner->pk_advertisement .'.html" rel="nofollow">';
+            $output .= '<img src="'. $mediaImgPathWeb. $photo->path_file. $photo->name.'"
                     alt="Publicidad '.$banner->title.'" width="'.$width.'" height="'.$height.'" />';
         }
 
