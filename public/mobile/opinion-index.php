@@ -33,7 +33,7 @@ $tpl->assign('section', $section);
 $cm = new ContentManager();
 $director  = $cm->find('Opinion', 'type_opinion=2 AND in_home=1 AND available=1 AND content_status=1', 'ORDER BY created DESC  LIMIT 0,1');
 $editorial = $cm->find('Opinion', 'type_opinion=1 AND in_home=1 AND available=1 AND content_status=1', 'ORDER BY position ASC, created DESC LIMIT 0,2');
-$opinions = $cm->find_listAuthors('available=1 AND type_opinion=0 AND content_status=1', 'ORDER BY in_home DESC, position ASC, created DESC LIMIT 0,10');
+$opinions = $cm->getOpinionArticlesWithAuthorInfo('available=1 AND type_opinion=0 AND content_status=1', 'ORDER BY in_home DESC, position ASC, created DESC LIMIT 0,10');
 
 //Comprobación de index undefined php5.3
 $tpl->assign('editorial', $editorial);

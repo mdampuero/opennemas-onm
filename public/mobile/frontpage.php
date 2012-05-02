@@ -56,73 +56,40 @@ if(($tpl->caching == 0) || !$tpl->isCached('mobile/frontpage-mobile.tpl', $cache
     $photos = array();
     if ($section == 'home') {
 
-        $articles_home = $cm->find_all('Article',
-                            'contents.in_home=1 AND contents.frontpage=1 '
-                            .'AND contents.available=1 AND contents.content_status=1 '
-                            .'AND contents.fk_content_type=1 '
-                            .' AND contents.home_placeholder != \'\'',
-                            'ORDER BY home_pos ASC, created DESC');
+        $actualCategoryId = 0;
 
-        // Filter by scheduled {{{
-        $articles_home = $cm->getInTime($articles_home);
-        // }}}
+        $contentsInHomepage = $cm->getContentsForHomepageOfCategory($actualCategoryId);
 
-        foreach ($articles_home as $article) {
-            $article->position = $article->home_pos;
-        }
-        
-        $actual_category = 'home';
-        $actual_category_id = 0;
+        // Filter articles if some of them has time scheduling and sort them by position
+        $contentsInHomepage = $cm->getInTime($contentsInHomepage);
+        $contentsInHomepage = $cm->sortArrayofObjectsByProperty($contentsInHomepage, 'position');
 
-        /// Adding Widgets {{{
-        $contentsInHomepage = $cm->getContentsForHomepageOfCategory($actual_category_id);
 
+    } else {
+        $tpl->assign('section', $category_name);
+        $actualCategoryId =  $ccm->get_id($section);
+
+        $contentsInHomepage = $cm->getContentsForHomepageOfCategory($actualCategoryId);
+
+        // Filter articles if some of them has time scheduling and sort them by position
+        $contentsInHomepage = $cm->getInTime($contentsInHomepage);
+        $contentsInHomepage = $cm->sortArrayofObjectsByProperty($contentsInHomepage, 'position');
+    }
+
+
+        /// Deleting Widgets {{{
+        $articles_home = array();
         foreach($contentsInHomepage as $content) {
             if(isset($content->home_placeholder)
                && !empty($content->home_placeholder)
                && ($content->home_placeholder != '')
-               && ($content->content_type == 4)
+               && ($content->content_type != 'Widget')
                )
             {
                 $articles_home[] = $content;
 
             }
         }
-        
-        $destaca = array();
-        foreach($articles_home as $i => $article) {
-            $articles_home[$i]->category_name = $articles_home[$i]->loadCategoryName($articles_home[$i]->id);
-            $article->category_name = $articles_home[$i]->category_name;
-
-            if(preg_match('@highlighted@', $article->home_placeholder)) {
-                $destaca[] = $article;
-            }
-        }
-
-        $articles_home = $cm->sortArrayofObjectsByProperty($articles_home, 'position');
-
-    } else {
-        $tpl->assign('section', $category_name);
-
-        $articles_home = $cm->find_by_category_name('Article', $section, 'frontpage=1 AND content_status=1 AND available=1  AND fk_content_type=1',
-                                                    'ORDER BY placeholder ASC, position ASC, created DESC');
-
-        // Filter by scheduled {{{
-        $articles_home = $cm->getInTime($articles_home);
-        // }}}
-
-        $destaca = array();
-        foreach($articles_home as $i => $article) {
-        $articles_home[$i]->category_name = $articles_home[$i]->loadCategoryName($articles_home[$i]->id);
-        $article->category_name = $articles_home[$i]->category_name;
-
-            if(preg_match('@highlighted@', $article->home_placeholder)) {
-                $destaca[] = $article;
-            }
-        }
-    }
-    
-    $tpl->assign('destaca', $destaca);
     $tpl->assign('articles_home', $articles_home);
 
     /**************************************  PHOTOS  ***********************************************/
