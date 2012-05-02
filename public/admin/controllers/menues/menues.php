@@ -99,6 +99,18 @@ switch($action) {
         $staticPages = $cm->find('StaticPage', '1=1', 'ORDER BY created DESC ');
         $menues = Menu::listMenues();
 
+        if ($syncParams = s::get('sync_params')) {
+            // Fetch all elements from settings
+            $allSites = array();
+            foreach ($syncParams as $siteUrl => $categories) {
+                $allSites[] = array ($siteUrl => $categories);
+            }
+
+            $tpl->assign('elements', $allSites);
+
+        }
+
+
         $tpl->assign(array( 'categories'=> $parentCategories,
                             'subcat'=> $subcat,
                             'albumCategories'=>$albumCategories,
@@ -134,6 +146,17 @@ switch($action) {
         $cm = new ContentManager();
         $staticPages = $cm->find('StaticPage', '1=1', 'ORDER BY created DESC ');
         $menues = Menu::listMenues();
+
+        if ($syncParams = s::get('sync_params')) {
+            // Fetch all elements from settings
+            $allSites = array();
+            foreach ($syncParams as $siteUrl => $categories) {
+                $allSites[] = array ($siteUrl => $categories);
+            }
+
+            $tpl->assign('elements', $allSites);
+
+        }
 
         $tpl->assign(array( 'categories'=> $parentCategories,
                             'subcat'=> $subcat,

@@ -179,6 +179,9 @@ legend {
                                             <li>
                                                 <a href="#staticPages">{t}Static Pages{/t}</a>
                                             </li>
+                                            <li>
+                                                <a href="#syncCategories">{t}Sync Categories{/t}</a>
+                                            </li>
 
                                         </ul>
 
@@ -267,7 +270,7 @@ legend {
                                         <div id="subcategories" style="border:1px solid #CCCCCC;padding: 4px;">
                                             {section name=as loop=$categories}
                                                 {if !empty($subcat[as])}
-                                                    <b>{$categories[as]->title}</b>
+                                                    <strong>{$categories[as]->title}</strong>
                                                     <ul  class="elementsContainer" id="subCategories{$categories[as]->pk_content_category}">
                                                     {section name=su loop=$subcat[as]}
                                                          <li id="subcat_{$subcat[as][su]->pk_content_category}" title="{$subcat[as][su]->title}"
@@ -278,6 +281,23 @@ legend {
                                                     </ul>
                                                 {/if}
                                             {/section}
+                                        </div>
+
+                                        <div id="syncCategories" style="border:1px solid #CCCCCC;padding: 4px;">
+                                            {foreach $elements as $config}
+                                                {foreach $config as $site => $categories}
+                                                <strong>{$site}</strong>
+                                                <ul id='availableSync' class="elementsContainer">
+                                                    {foreach $categories as $category}
+                                                    <li id="sync_" title="{$category|capitalize}"
+                                                        type="syncCategory" link="{$category}"
+                                                        class="drag-category" pk_menu="">
+                                                        {$category|capitalize}
+                                                    </li>
+                                                    {/foreach}
+                                                </ul>
+                                                {/foreach}
+                                            {/foreach}
                                         </div>
 
                                     </div>
