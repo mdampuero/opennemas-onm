@@ -1,29 +1,45 @@
- $('#button_savepositions').on('click',function(e, ui) {
-        e.preventDefault();
-        var els = get_contents_in_frontpage();
-        //JSON.stringify(get_contents_in_frontpage());
-        var category = $("#frontpagemanager").data("category");
+jQuery(document).ready(function($){
+    $("#validate-button").on("click", function(event) {
+        alert('updated');
+        event.preventDefault();
 
-
+        save_related_contents();
+        alert('updated');
     });
 
+    $("#save-button").on("click", function(event) {
+        event.preventDefault();
+        save_related_contents();
+        alert('updated');
+    }
+});
+
+function save_related_contents() {
+
+    var els = get_related_contents('frontpage_related');
+    jQuery('relatedFrontpage').val(els);
+
+    els = get_related_contents('inner_related');
+    jQuery('relatedInner').val(els);
+
+    if($('home_related')) {
+        els = get_related_contents('home_related');
+        jQuery('relatedHome').val(els);
+    }
+}
 
 
-function get_related_contents() {
+function get_related_contents(container) {
     var els = [];
 
-    jQuery('div.placeholder').each(function (){
-        var placeholder = jQuery(this).data('placeholder');
-        jQuery(this).find('div.content-provider-element').each(function (index){
-            els.push({
-                'id' : jQuery(this).data('content-id'),
-                'content_type': jQuery(this).data('class'),
-                'placeholder': placeholder,
-                'position': index,
-                'params': {}
-            });
+    jQuery(container).find('div.content-provider-element').each(function (index){
+        els.push({
+            'id' : jQuery(container).data('id'),
+            'content_type': jQuery(container).data('type'),
+            'position': index
         });
-
     });
-    return els;
+
+    var encodedContents = JSON.stringify(els);
+    return encodedContents;
 }

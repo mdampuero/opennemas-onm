@@ -2372,7 +2372,7 @@ div#content-provider span.type {
     display: none;
 }
 
-div#article-form.tabs div#related-contents div#column-receiver ul.content-receiver li,
+div#article-form.tabs div#related-contents div.column-receiver ul.content-receiver li,
 div#article-form.tabs div#related-contents div#content-provider ul li {
     list-style: none outside none;
     cursor:pointer;

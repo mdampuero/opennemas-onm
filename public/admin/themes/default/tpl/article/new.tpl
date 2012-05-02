@@ -10,7 +10,7 @@
     {script_tag src="/editables.js"}
     {script_tag src="/utilsGallery.js"}
     {script_tag src="/swfobject.js"}
-    {script_tag src="/onm/jquery.content-provider.js"}
+
 {/block}
 
 {block name="header-css" append}
@@ -28,6 +28,8 @@
 {/block}
 
 {block name="footer-js" append}
+    {script_tag src="/onm/jquery.content-provider.js"}
+    {script_tag src="/jquery-onm/jquery.articlerelated.js"}
     <script>
     document.observe('dom:loaded', function() {
         if($('title')){
@@ -41,15 +43,6 @@
             $( "#content-provider" ).tabs();
             $( "#content-provider" ).tabs('paging', { cycle: false, follow: false, tabsPerPage: 4 } );
         //}
-    });
-
-    jQuery(document).ready(function($){
-
-        $("#form-validate-button, #form-send-button").on("click", function(event) {
-
-            saveRelatedContent();
-            return true;
-        });
     });
 
     </script>
@@ -406,13 +399,13 @@
 
         <div id="related-contents">
             {include file ="article/related/_related_list.tpl"}
-            <input type="hidden" id="relatedFrontpage" name="ordenArti" value="" />
-            <input type="hidden" id="relatedInner" name="ordenArtiInt" value="" />
+            <input type="text" id="relatedFrontpage" name="ordenArti" value="" />
+            <input type="text" id="relatedInner" name="ordenArtiInt" value="" />
 
             <input type="hidden" id="params[withGallery]" name="params[withGallery]" value="" />
             <input type="hidden" id="params[withGalleryInt]" name="params[withGalleryInt]" value="" />
 
-            <input type="hidden" id="params[relatedHome]" name="params[relatedHome]" value="" />
+            <input type="text" id="relatedHome" name="relatedHome" value="" />
             <input type="hidden" id="params[withGalleryHome]" name="params[withGalleryHome]" value="" />
         </div>
 
