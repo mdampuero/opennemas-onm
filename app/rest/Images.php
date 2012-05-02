@@ -1,20 +1,19 @@
 <?php
 
-class CategoryRest
+class Images
 {
     public $restler;
 
     /*
-    * @url GET /articleRest/id/:id
+    * @url GET /images/id/:id
     */
-    function id ($n1)
+    function id ($id)
     {
         $this->_validateInt(func_get_args());
 
-        $cm = new ContentManager();
-        $categoryContents = $cm->getContentsForHomepageOfCategory($n1);
+        $image = new Photo($id);
 
-        return $categoryContents;
+        return $image;
     }
 
     private function _validateInt ($number)
