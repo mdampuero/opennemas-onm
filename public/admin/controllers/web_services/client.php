@@ -49,31 +49,136 @@ switch($action) {
 
     case 'config':
 
+        if (isset($_POST['categories']) && !empty($_POST['categories'])) {
+            // Filter params
+            $syncParams = filter_input_array(INPUT_POST);
+            $siteUrl = filter_input( INPUT_POST, 'site_url', FILTER_SANITIZE_URL);
+            $categoriesToSync = $syncParams['categories'];
+
+
+            // Get saved settings if exists
+            if ($syncSettings = s::get('sync_params')) {
+                $syncParams = array_merge($syncSettings,array($siteUrl => $categoriesToSync));
+            } else {
+                $syncParams = array($siteUrl => $categoriesToSync);
+            }
+
+            if (s::set('sync_params', $syncParams))
+            {
+                m::add(_('EFE module configuration saved successfully'), m::SUCCESS);
+            } else {
+                m::add(_('There was an error while saving the EFE module configuration'), m::ERROR);
+            }
+
+            Application::forward(SITE_URL_ADMIN.'/controllers/web_services/client.php');
+
+        } elseif (isset($_POST['submit'])) {
+            $message = _('There is no configuration to save.');
+            $tpl->assign('message', $message);
+        }
+
         $tpl->display('web_services/config.tpl');
+
     break;
 
-    case 'sync':
+    case 'connect':
 
+        $siteUrl = filter_input( INPUT_POST, 'site_url' , FILTER_VALIDATE_URL );
+
+        if (isset($siteUrl) && !empty($siteUrl)) {
+            $connectionUrl = $siteUrl.'/ws.php/categories/lists.xml';
+            $xmlString = @file_get_contents($connectionUrl);
+            if ($xmlString) {
+                $categories = simplexml_load_string($xmlString);
+
+                $availableCategories = array();
+                foreach ($categories as $category) {
+                    $availableCategories[] = $category;
+                }
+                $tpl->assign('categories', $availableCategories);
+            }
+        }
+
+        $output = $tpl->fetch('web_services/partials/_list_categories.tpl');
+
+        echo  $output ;
+
+    break;
+
+    case 'edit':
+
+        $currentSiteUrl = filter_input( INPUT_GET, 'site_url' , FILTER_VALIDATE_URL );
+
+        // Fetch all categories from site url
+        $connectionUrl = $currentSiteUrl.'/ws.php/categories/lists.xml';
+        $xmlString = file_get_contents($connectionUrl);
+        $categories = simplexml_load_string($xmlString);
+
+        $availableCategories = array();
+        foreach ($categories as $category) {
+            $availableCategories[] = $category;
+        }
+
+        // Fetch sync categories in config
+        $syncParams = s::get('sync_params');
+        $categoriesChecked = array();
+        foreach ($syncParams as $siteUrl => $categories) {
+            if (preg_match('@'.$currentSiteUrl.'@', $siteUrl)) {
+                $categoriesChecked = $categories;
+            }
+        }
+
+        // Show list
+        $tpl->assign('site_url', $currentSiteUrl);
+        $tpl->assign('categories', $availableCategories);
+        $tpl->assign('categories_checked', $categoriesChecked);
+        $output = $tpl->fetch('web_services/partials/_list_categories.tpl');
+        $tpl->assign('output', $output);
+        $tpl->display('web_services/edit.tpl');
+
+    break;
+
+    case 'delete':
+
+        $currentSiteUrl = filter_input( INPUT_GET, 'site_url' , FILTER_VALIDATE_URL );
+
+        // Fetch sync categories in config
+        $syncParams = s::get('sync_params');
+        $categoriesChecked = array();
+
+        foreach ($syncParams as $siteUrl => $categories) {
+            if (preg_match('@'.$currentSiteUrl.'@', $siteUrl)) {
+                $syncParamsToDelete = array($siteUrl => $categories);
+            }
+        }
+
+        $syncParams = array_diff_assoc($syncParams, $syncParamsToDelete);
+
+        if (s::set('sync_params', $syncParams))
+        {
+            m::add(_('Site configuration deleted successfully'), m::SUCCESS);
+        } else {
+            m::add(_('There was an error while deleting this configuration'), m::ERROR);
+        }
+
+        Application::forward(SITE_URL_ADMIN.'/controllers/web_services/client.php');
 
     break;
 
     default:
 
-        $url = array(
-//            'http://retrincos.local/ws.php/articlerest/id/3949.xml',
-//            'http://idealgallego.local/ws.php/articlerest/id/1031.xml',
-            'http://idealgallego.local/ws.php/articlerest/dayrange/80.xml',
-        );
+        if ($syncParams = s::get('sync_params')) {
 
-        $articles = array();
-        foreach ($url as $value) {
-            $xmlString = file_get_contents($value);
-            $articles = simplexml_load_string($xmlString);
+            // Fetch all elements
+            $allSites = array();
+            foreach ($syncParams as $siteUrl => $categories) {
+                $allSites[] = array ($siteUrl => $categories);
+            }
+
+            $tpl->assign('elements', $allSites);
+
         }
 
-        var_dump($articles);die();
-
-        $tpl->assign('elements',$articles);
         $tpl->display('web_services/client.tpl');
 
     break;
