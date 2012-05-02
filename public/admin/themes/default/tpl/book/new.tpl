@@ -56,6 +56,8 @@ jQuery('#starttime').datepicker({
     </div>
     <div class="wrapper-content">
 
+        {render_messages}
+
         <table class="adminheading">
             <tr>
                 <td>
@@ -111,7 +113,7 @@ jQuery('#starttime').datepicker({
 
             <tr>
                 <td style="padding:4px;">
-                    <label for="title">Archivo:</label>
+                    <label for="title">Archivo:(pdf)</label>
                 </td>
                 <td>
                     {if (isset($book->file_name) && !empty($book->file_name) )}
@@ -122,7 +124,7 @@ jQuery('#starttime').datepicker({
             </tr>
             <tr>
                 <td style="padding:4px;">
-                    <label for="title">Tapa libro:</label>
+                    <label for="title">Tapa libro:(jpg)</label>
                 </td>
                 <td>
                     {if (isset($book->file_img) && !empty($book->file_img) )}
@@ -131,9 +133,12 @@ jQuery('#starttime').datepicker({
                       <input name="file_img" type="file"/>
                 </td>
                 <td rowspan="5" style="padding:6px;">
+                    {if (!empty($book->id))}
+                    <label for="title">Preview:</label><br>
                     <a href="{$smarty.const.INSTANCE_MEDIA}/books/{$book->file_name}" target="_blank">
-                    <img src="{$smarty.const.INSTANCE_MEDIA}/books/{$book->file_img}" style=" width: 164px;" />
+                        <img src="{$smarty.const.INSTANCE_MEDIA}/books/{$book->file_img}" style=" width: 164px;" />
                     </a>
+                    {/if}
                 </td>
             </tr>
 
@@ -187,7 +192,7 @@ jQuery('#starttime').datepicker({
         </table>
 
         <input type="hidden" id="action" name="action" value="" />
-        <input type="hidden" name="id" id="id" value="{$id|default:""}" />
+        <input type="hidden" name="id" id="id" value="{$book->id|default:""}" />
     </div>
 </form>
 {/block}
