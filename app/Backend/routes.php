@@ -19,6 +19,25 @@ $routes->add(
     '/admin'
 );
 
+// Comments by Disqus controller routes
+$routes->add(
+    'admin_comments_disqus',
+    new Route(
+        '/comments/disqus',
+        array('_controller' => 'Backend:Controllers:CommentsDisqusController:default')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_comments_disqus_config',
+    new Route(
+        '/comments/disqus/config',
+        array('_controller' => 'Backend:Controllers:CommentsDisqusController:config')
+    ),
+    '/admin'
+);
+
 // Template cache controller routes
 $routes->add(
     'admin_tpl_manager',

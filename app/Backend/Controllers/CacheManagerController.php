@@ -195,7 +195,7 @@ class CacheManagerController extends Controller
      **/
     public function configAction()
     {
-        if($this->request->getMethod() == 'POST') {
+        if ($this->request->getMethod() == 'POST') {
             $config = array();
 
             $cacheGroups             = $this->request->request->get('group');

@@ -43,13 +43,13 @@ class AclUserController extends Controller
         \Acl::checkOrForward('USER_ADMIN');
 
         $filter    = $this->request->query->get('filter', null);
-
+        
         $cm        = new \ContentManager();
         $user      = new \User();
-
+        
         $users     = $user->get_users($filter, ' ORDER BY login ');
         $users     = $cm->paginate_num($users, ITEMS_PAGE);
-
+        
         $userGroup = new \UserGroup();
         $group     = $userGroup->get_user_groups();
 

@@ -41,7 +41,7 @@ jQuery(document).ready(function(){
             <h2 class="disqus">{t}Comment manager{/t}</h2>
             <ul class="old-button">
                 <li>
-                    <a href="{$smarty.server.PHP_SELF}?action=config" class="admin_add" title="{t}Reload list{/t}">
+                    <a href="{url name=admin_comments_disqus_config}" title="{t}Disqus module configuration{/t}">
                         <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" title="{t}Config disqus module{/t}" alt="{t}Config Europapress module{/t}" ><br />{t}Config{/t}
                     </a>
                 </li>
