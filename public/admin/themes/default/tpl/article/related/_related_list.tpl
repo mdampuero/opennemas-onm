@@ -51,7 +51,7 @@
                 <input type="hidden" id="params[withGallery]" name="params[withGallery]" value="" />
                 <input type="hidden" id="params[withGalleryInt]" name="params[withGalleryInt]" value="" />
 
-                <input type="hidden" id="params[relatedHome]" name="params[relatedHome]" value="" />
+                <input type="hidden" id="relatedHome" name="relatedHome" value="" />
                 <input type="hidden" id="params[withGalleryHome]" name="params[withGalleryHome]" value="" />
 
             </td>
