@@ -38,11 +38,11 @@
             <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/poll/poll.php?action=related-provider&amp;category={$category}">{t}Polls{/t}</a>
         </li>
         {/is_module_activated}
-        {is_module_activated name="LETTER_MANAGER"}
+        {*is_module_activated name="LETTER_MANAGER"}
         <li>
             <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/letter/letter.php?action=related-provider&amp;category={$category}">{t}Letters{/t}</a>
         </li>
-        {/is_module_activated}
+        {/is_module_activated*}
         {is_module_activated name="SPECIAL_MANAGER"}
         {*<li>
             <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/special/special.php?action=related-provider&amp;category={$category}">{t}Specials{/t}</a>

@@ -26,7 +26,7 @@ function get_related_contents(container) {
     var els = [];
 
     jQuery('#'+container).find('ul.content-receiver li').each(function (index, item) {
-        console.log(item );
+
         els.push({
             'id' : jQuery(item).data('id'),
             'content_type': jQuery(item).data('type'),

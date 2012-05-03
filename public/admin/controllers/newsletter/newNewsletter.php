@@ -111,7 +111,7 @@ switch($action) {
         $tpl->display('newsletter/newsletterContents.tpl');
     break;
 
-    case 'loadNewsletter':
+    case 'loadSavedNewsletter':
 
         $newsletter = new Newsletter(array('namespace' => 'PConecta_'));
         //$htmlContent = $newsletter->dbLoad();
@@ -132,7 +132,8 @@ switch($action) {
 
     case 'save':
 
-        $htmlContent = $newsletter->render();
+        $newsletter = new Newsletter(array('namespace' => 'PConecta_'));
+         $htmlContent = $newsletter->get();
         $tpl->assign('htmlContent', $htmlContent);
 
     break;

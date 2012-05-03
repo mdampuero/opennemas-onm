@@ -7,9 +7,9 @@
 
 {block name="footer-js" append}
 {script_tag src="/newsletter.js"}
-{script_tag src="newsletter/addContents.js"}
+{script_tag src="/jquery-onm/newsletter/jquery.stepContents.js"}
 {script_tag src="/onm/jquery.content-provider.js"}
-{script_tag src="/jquery-onm/jquery.newsletter.js"}
+{script_tag src="/jquery-onm/newsletter/jquery.newsletter.js"}
 {/block}
 
 {block name="content"}
@@ -23,7 +23,7 @@
         <ul class="old-button">
 
             <li>
-                <a href="#" class="admin_add" title="{t}Next{/t}">
+                <a href="#" class="admin_add" title="{t}Next{/t}" id="next-button">
                     <img src="{$params.IMAGE_DIR}arrow_next.png" alt="{t}Next{/t}" /><br />
                     {t}Next step{/t}
                 </a>
@@ -66,30 +66,37 @@
     </div>
 </div>
 
-
-<div class="newsletter-contents">
+<div class="wrapper-content">
 
     {render_messages}
 
-    <table style="margin-bottom:0; width:100%;">
-        <tbody>
-            <tr>
-                <td style="width:50%; vertical-align:top; padding:4px 0;" >
-                    <div id="newsletter-container" class="column-receiver">
-                        <h5>{t}Newsletter contents{/t}</h5>
-                        <hr>
-                        <ul class="content-receiver" >
+    <div class="newsletter-contents">
 
-                        </ul>
-                    </div>
-                </td>
-                <td style="width:50%; vertical-align:top; padding:4px 0;" >
-                    {include file="newsletter/_partials/container_contents.tpl"}
-                </td>
-            </tr>
-        </tbody>
-    </table>
+        <table style="margin-bottom:0; width:100%;">
+            <tbody>
+                <tr>
+                    <td style="width:50%; vertical-align:top; padding:4px 0;" >
+                        <div id="newsletter-container" class="column-receiver">
+                            <h5>{t}Newsletter contents{/t}</h5>
+                            <hr>
+                            <ul class="content-receiver" >
 
+                            </ul>
+                        </div>
+                    </td>
+                    <td style="width:50%; vertical-align:top; padding:4px 0;" >
+                        <div  style="width:100%;background-color:#EEE;padding:10px;">
+                            <a id="button-add-text" style="cursor:pointer;">
+                                <img src="{$params.IMAGE_DIR}list-add.png" style="width:24px" border="0" /><br>{t}Add Text{/t}
+                            </a>
+                        </div>
+                        {include file="newsletter/_partials/container_contents.tpl"}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <textarea name="newsletter" id="newsletter" style="display:;"></textarea>
+    </div>
 </div>
 {/block}
 
