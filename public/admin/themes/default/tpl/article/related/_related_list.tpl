@@ -43,6 +43,26 @@
                         </ul>
 
                     </div>
+                    <div id="gallery-Frontpage" class="column-receiver">
+                        <h5>{t}Gallery for frontpage{/t}</h5>
+                        <hr>
+                        <ul class="content-receiver" >
+                                <li class="" data-type="{$contentsHome[d]->content_type}" data-id="{$contentsHome[d]->pk_content}">
+                                    {$article->params['gallery']}
+                                </li>
+                        </ul>
+
+                    </div>
+                    <div id="gallery-Inner" class="column-receiver">
+                         <h5>{t}Gallery for inner{/t}</h5>
+                        <hr>
+                        <ul class="content-receiver" >
+                                <li class="" data-type="{$contentsHome[d]->content_type}" data-id="{$contentsHome[d]->pk_content}">
+                                    {$article->params['gallery']}
+                                </li>
+                        </ul>
+
+                    </div>
                 {/is_module_activated}
 
             </td>
