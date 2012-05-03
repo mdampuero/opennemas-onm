@@ -183,22 +183,13 @@ class Article extends Content
     public function saveRelated($data, $id, $method)
     {
         $rel = new RelatedContent();
-        /*
-        $contentsRAW = $request->query->filter('contents');
-        $contents = json_decode(json_decode($contentsRAW), true);
 
-    */
+        $contents = json_decode(json_decode($data), true);
 
-        //Articulos relacionados en portada
-        if (isset($data)) {
-            $tok = strtok($data, ",");
-            $pos = 1;
-            while (($tok !== false) && ($tok != " ")) {
-                $rel->{$method}($id, $pos, $tok);
-                $tok = strtok(",");
-                $pos++;
-            }
+        foreach ($contents as $content) {
+            $rel->{$method}($id, $content['position'], $content['id']);
         }
+
     }
 
 

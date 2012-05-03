@@ -22,8 +22,8 @@
                         <hr>
                         <ul class="content-receiver" >
                         {section name=d loop=$intrel}
-                            <li class="" data-type="{$contentsLeft[d]->content_type}" data-id="{$contentsLeft[d]->pk_content}">
-                                {$contentsLeft[d]->created|date_format:"%d-%m-%Y"}:{$contentsLeft[d]->title|clearslash}
+                            <li class="" data-type="{$intrel[d]->content_type}" data-id="{$intrel[d]->pk_content}">
+                                {$intrel[d]->created|date_format:"%d-%m-%Y"}:{$intrel[d]->title|clearslash}
                             </li>
                         {/section}
                         </ul>
@@ -35,24 +35,15 @@
                         <h5>{t}Related in home{/t}</h5>
                         <hr>
                         <ul class="content-receiver" >
-                            {section name=d loop=$contentsRight}
-                                <li class="" data-type="{$contentsRight[d]->content_type}" data-id="{$contentsRight[d]->pk_content}">
-                                    {$contentsRight[d]->created|date_format:"%d-%m-%Y"}:{$contentsRight[d]->title|clearslash}
+                            {section name=d loop=$contentsHome}
+                                <li class="" data-type="{$contentsHome[d]->content_type}" data-id="{$contentsHome[d]->pk_content}">
+                                    {$contentsHome[d]->created|date_format:"%d-%m-%Y"}:{$contentsHome[d]->title|clearslash}
                                 </li>
                             {/section}
                         </ul>
 
                     </div>
                 {/is_module_activated}
-
-                <input type="hidden" id="relatedFrontpage" name="ordenArti" value="" />
-                <input type="hidden" id="relatedInner" name="ordenArtiInt" value="" />
-
-                <input type="hidden" id="params[withGallery]" name="params[withGallery]" value="" />
-                <input type="hidden" id="params[withGalleryInt]" name="params[withGalleryInt]" value="" />
-
-                <input type="hidden" id="relatedHome" name="relatedHome" value="" />
-                <input type="hidden" id="params[withGalleryHome]" name="params[withGalleryHome]" value="" />
 
             </td>
         </tr>

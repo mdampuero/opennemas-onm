@@ -62,34 +62,12 @@ jQuery(document).ready(function($){
     ***************************************************************************/
 
     makeContentProviderAndReceiverSortable = function () {
-        // Make content providers sortable and allow to D&D over the placeholders
-        var before ='';
-        jQuery('div#content-provider ul#contentList').sortable({
-            connectWith: "div.column-receiver ul.content-receiver",
-            dropOnEmpty: true,
-            placeholder: 'placeholder-element',
-            tolerance: 'pointer',
-            forcePlaceholderSize: true,
-            start:function(event,ui){
-                $(ui.item).show();
-                clone = $(ui.item).clone();
-                clone.removeAttr( 'style' );
-                before = $(ui.item).prev();
-                parent = $(ui.item).parent();
 
-            },
-            remove:function(event, ui){
-                if(before.length>0) {
-                    before.after(clone);
-                } else {
-                    parent.prepend(clone);
-                  //  this
-                }
-            },
-            receive: function(event, ui) {
-
-               // $(ui.item).prepend(newIItem);
-            },
+        // Make content providers draggable and define ghost element
+        jQuery('div#content-provider ul#contentList li').draggable({
+            connectToSortable: "div.column-receiver ul.content-receiver",
+            helper: "clone",
+            revert: "invalid"
         }).disableSelection();
 
         // Make content providers sortable and allow to D&D over placeholders and content provider
