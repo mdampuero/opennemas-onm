@@ -726,6 +726,8 @@ switch ($action) {
     break;
 
     case 'content-list-provider':
+    case 'related-provider':
+
         $items_page = s::get('items_per_page') ?: 20;
         $page = filter_input( INPUT_GET, 'page' , FILTER_SANITIZE_STRING, array('options' => array('default' => '1')) );
         $cm = new ContentManager();
@@ -734,8 +736,9 @@ switch ($action) {
                                                  'ORDER BY starttime DESC ',
                                                   $page, $items_page);
 
-        $tpl->assign(array('contents'=>$opinions,
-                            'pagination'=>$pager->links
+        $tpl->assign(array( 'contents'=>$opinions,
+                            'pagination'=>$pager->links,
+                            'contentType'=>'Opinion',
                     ));
 
         $html_out = $tpl->fetch("common/content_provider/_container-content-list.tpl");

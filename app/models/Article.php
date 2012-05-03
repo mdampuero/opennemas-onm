@@ -184,16 +184,12 @@ class Article extends Content
     {
         $rel = new RelatedContent();
 
-        //Articulos relacionados en portada
-        if (isset($data)) {
-            $tok = strtok($data, ",");
-            $pos = 1;
-            while (($tok !== false) && ($tok != " ")) {
-                $rel->{$method}($id, $pos, $tok);
-                $tok = strtok(",");
-                $pos++;
-            }
+        $contents = json_decode(json_decode($data), true);
+
+        foreach ($contents as $content) {
+            $rel->{$method}($id, $content['position'], $content['id']);
         }
+
     }
 
 

@@ -35,11 +35,12 @@
                             </select>
                         </td>
                     </tr>
+
                 </tbody></table>
             </fieldset>
        </td>
     </tr>
-
+     <tr><td><hr></td></tr>
     <tr>
         <td>
             <fieldset>
@@ -106,6 +107,6 @@
             </fieldset>
        </td>
     </tr>
- 
+
 </tbody>
 </table>
