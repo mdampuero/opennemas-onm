@@ -32,7 +32,7 @@ function save_related_contents() {
 function get_related_contents(container) {
     var els = [];
 
-    jQuery(container).find('ul.content-receiver').each(function (index){
+    jQuery(container).find('div.content-provider-element').each(function (index){
         els.push({
             'id' : jQuery(container).data('id'),
             'content_type': jQuery(container).data('type'),

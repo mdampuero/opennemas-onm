@@ -78,14 +78,18 @@ jQuery(document).ready(function($){
                 parent = $(ui.item).parent();
 
             },
-            stop:function(event, ui){
+            remove:function(event, ui){
                 if(before.length>0) {
                     before.after(clone);
                 } else {
                     parent.prepend(clone);
                   //  this
                 }
-            }
+            },
+            receive: function(event, ui) {
+
+               // $(ui.item).prepend(newIItem);
+            },
         }).disableSelection();
 
         // Make content providers sortable and allow to D&D over placeholders and content provider
