@@ -1449,6 +1449,53 @@ class Content
         }
     }
 
+    /**
+     * Define content position in a widget
+     *
+     * @param array $status - array of contents id's
+     *
+     * @return pk_content or false
+    */
+
+    public function set_position($position, $last_editor)
+    {
+        $GLOBALS['application']->dispatch('onBeforePosition', $this);
+
+        $changed = date("Y-m-d H:i:s");
+        if (($this->id == null) && !is_array($position)) {
+            return false;
+        }
+        $stmt = $GLOBALS['application']->conn->
+            Prepare('UPDATE contents SET `position`=?, `placeholder`=? WHERE `pk_content`=?');
+        if (!is_array($position)) {
+            $values = array($position, $this->id);
+        } else {
+            $values = $position;
+        }
+
+        if (count($values)>0) {
+            if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
+                $errorMsg = Application::logDatabaseError();
+                return false;
+            }
+
+        }
+
+        /* Notice log of this action */
+        $logger = Application::logContentEvent(__METHOD__, $this);
+
+        $GLOBALS['application']->dispatch('onAfterPosition', $this);
+
+        return true;
+    }
+
+    /**
+     * Define contents as un/favorite for include them in a widget
+     *
+     * @param array $status - array of contents id's
+     *
+     * @return true or false
+    */
     public function set_favorite($status)
     {
         if ($this->id == null) return false;
@@ -1466,7 +1513,7 @@ class Content
         return true;
     }
 
-      /**
+    /**
      * Check if $pk_content exists in database
      *
      * @param string $pk_content
