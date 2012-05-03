@@ -88,7 +88,8 @@ switch($action) {
         }
 
         if ($category == 'favorite') {
-            $books = $cm->find_all('Book', 'favorite =1 AND available =1', 'ORDER BY position, created DESC '.$limit);
+            $books = $cm->find_all('Book', 'favorite =1 AND available =1',
+                'ORDER BY position, created DESC '.$limit);
 
             if(!empty($books)) {
                 foreach ($books as &$book) {
@@ -102,7 +103,7 @@ switch($action) {
 
         } else {
             $books = $cm->find_by_category('Book', $category, '1=1',
-                           'ORDER BY created DESC '.$limit);
+                           'ORDER BY position ASC, created DESC '.$limit);
         }
 
         $params = array(
@@ -337,19 +338,29 @@ switch($action) {
 
     break;
 
-    case 'save_orden_list':
-          $orden = $_GET['orden'];
-          if(isset($orden)){
-               $tok = strtok($orden,",");
-               $pos=1;
-               while (($tok !== false) AND ($tok !=" ")) {
-                    $book = new Book($tok);
-                    $book->set_position($pos);
-                    $tok = strtok(",");
-                    $pos++;
-               }
-           }
-          exit(0);
+    case 'save_positions':
+        $positions = $_GET['positions'];
+
+        if (isset($positions)  && is_array($positions)
+                && count($positions) > 0) {
+           $_positions = array();
+           $pos = 1;
+
+           foreach($positions as $id) {
+                    $_positions[] = array($pos, '1', $id);
+                    $pos += 1;
+            }
+
+            $book= new Book();
+            $msg = $book->set_position($_positions, $_SESSION['userid']);
+
+         }
+         if(!empty($msg) && $msg == true) {
+             echo _("Positions saved successfully.");
+         } else{
+             echo _("Unable to save the new positions. Please contact with your system administrator.");
+         }
+        exit(0);
     break;
 
     default:

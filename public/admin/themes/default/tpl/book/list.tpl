@@ -1,6 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-js" append}
+    {script_tag src="/onm/jquery-functions.js" language="javascript"}
     {script_tag src="/utilsBook.js" language="javascript"}
 {/block}
 
@@ -37,6 +38,14 @@
                     </a>
                 </li>
                 {/acl}
+
+                <li class="separator"></li>
+                <li>
+                    <a href="#" onClick="javascript:saveSortPositions('{$smarty.server.PHP_SELF}');" title="{t}Save positions{/t}">
+                        <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save positions{/t}"><br />{t}Save positions{/t}
+                    </a>
+                </li>
+
                 {acl isAllowed="BOOK_SETTINGS"}
                 <li class="separator"></li>
                 <li>
@@ -59,7 +68,8 @@
             </li>
            {include file="menu_categories.tpl" home=$smarty.server.SCRIPT_NAME|cat:"?action=list"}
         </ul>
-
+        {* MENSAJES DE AVISO GUARDAR POS******* *}
+        <div id="warnings-validation"></div>
 
         <table class="listing-table">
             <thead>
@@ -77,9 +87,9 @@
                     <th class="center" style="width:35px;">{t}Actions{/t}</th>
                 </tr>
             </thead>
-
+             <tbody class="sortable">
             {section name=as loop=$books}
-            <tr {cycle values="class=row0,class=row1"}>
+            <tr data-id="{$books[as]->pk_book}">
                 <td class="center">
                     <input type="checkbox" class="minput"  id="selected_{$smarty.section.as.iteration}" name="selected_fld[]" value="{$books[as]->id}"  style="cursor:pointer;" >
                 </td>
@@ -150,12 +160,13 @@
                 <td class="empty" colspan="9">{t}There is no books yet{/t}</td>
             </tr>
         {/section}
-            <tfoot>
-              <td colspan="9">
-                {$paginacion->links|default:""}&nbsp;
-              </td>
-            </tfoot>
-        </table>
+        </tbody>
+        <tfoot>
+          <td colspan="9">
+            {$paginacion->links|default:""}&nbsp;
+          </td>
+        </tfoot>
+    </table>
 
         <input type="hidden" name="category" id="category" value="{$category}" />
         <input type="hidden" name="status" id="status" value="" />
@@ -178,6 +189,11 @@
         jQuery('#formulario').submit();
         e.preventDefault();
     });
+
+    jQuery(document).ready(function() {
+        makeSortable();
+    });
+// ]]>
 
 </script>
 
