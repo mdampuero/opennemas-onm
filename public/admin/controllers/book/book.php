@@ -88,7 +88,8 @@ switch($action) {
         }
 
         if ($category == 'favorite') {
-            $books = $cm->find_all('Book', 'favorite =1 AND available =1', 'ORDER BY position, created DESC '.$limit);
+            $books = $cm->find_all('Book', 'favorite =1 AND available =1',
+                'ORDER BY position, created DESC '.$limit);
 
             if(!empty($books)) {
                 foreach ($books as &$book) {
@@ -102,7 +103,7 @@ switch($action) {
 
         } else {
             $books = $cm->find_by_category('Book', $category, '1=1',
-                           'ORDER BY created DESC '.$limit);
+                           'ORDER BY position ASC, created DESC '.$limit);
         }
 
         $params = array(
@@ -142,7 +143,7 @@ switch($action) {
         $book = new Book($id);
 
         if(!empty($_FILES['file']['name'])) {
-            $nombre_archivo = $_FILES['file']['name'];
+            $nombre_archivo = FilesManager::cleanFileName($_FILES['file']['name']);
             $archivo_temporal = $_FILES['file']['tmp_name'];
 
             // Move uploaded pdf
@@ -155,7 +156,7 @@ switch($action) {
 
         if(!empty($_FILES['file_img']['name'])) {
                //Book image front
-            $nombre_archivo_img = $_FILES['file_img']['name'];
+            $nombre_archivo_img = FilesManager::cleanFileName($_FILES['file_img']['name']);
             $archivo_temporal_img = $_FILES['file_img']['tmp_name'];
             $uploadStatusPdf_img = @move_uploaded_file($archivo_temporal_img, $ruta.$nombre_archivo_img);
         }
@@ -174,14 +175,11 @@ switch($action) {
 
         Acl::checkOrForward('BOOK_CREATE');
 
-        /*  Subir pdf e imagen para thumbnail*/
-
-
-        $nombre_archivo = $_FILES['file']['name'];
+        $nombre_archivo = FilesManager::cleanFileName($_FILES['file']['name']);
         $archivo_temporal = $_FILES['file']['tmp_name'];
 
         //Book image front
-        $nombre_archivo_img = $_FILES['file_img']['name'];
+        $nombre_archivo_img = FilesManager::cleanFileName($_FILES['file_img']['name']);
         $archivo_temporal_img = $_FILES['file_img']['tmp_name'];
 
         // Move uploaded pdf
@@ -211,67 +209,55 @@ switch($action) {
 
         $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
 
-        if(empty($id)) {
 
-            Acl::checkOrForward('BOOK_CREATE');
+        Acl::checkOrForward('BOOK_CREATE');
 
-            /*  Subir pdf e imagen para thumbnail*/
-            $ruta = INSTANCE_MEDIA_PATH.'/books/';
 
-            // Create folder if it doesn't exist
-            if( !file_exists($ruta) ) {
-                 FilesManager::createDirectory($ruta);
-            }
+        // Create folder if it doesn't exist
+        if( !file_exists($ruta) ) {
+             FilesManager::createDirectory($ruta);
+        }
 
-            $nombre_archivo = $_FILES['file']['name'];
-            $archivo_temporal = $_FILES['file']['tmp_name'];
-             //Book image front
-            $nombre_archivo_img = $_FILES['file_img']['name'];
-            $archivo_temporal_img = $_FILES['file_img']['tmp_name'];
+        $nombre_archivo   = FilesManager::cleanFileName($_FILES['file']['name']);
+        $archivo_temporal = $_FILES['file']['tmp_name'];
+         //Book image front
+        $nombre_archivo_img   = FilesManager::cleanFileName($_FILES['file_img']['name']);
+        $archivo_temporal_img = $_FILES['file_img']['tmp_name'];
 
-            // Move uploaded pdf
-            $uploadStatusPdf = @move_uploaded_file($archivo_temporal, $ruta.$nombre_archivo);
-            $uploadStatusPdf_img = @move_uploaded_file($archivo_temporal_img, $ruta.$nombre_archivo_img);
+        // Move uploaded pdf
+        $uploadStatusPdf     = @move_uploaded_file($archivo_temporal, $ruta.$nombre_archivo);
+        $uploadStatusPdf_img = @move_uploaded_file($archivo_temporal_img, $ruta.$nombre_archivo_img);
 
-            $book = new Book();
-            if ( ($uploadStatusPdf !== false) ) {
-                $nombre_archivo_swf = str_replace('pdf', 'swf', $nombre_archivo);
-                exec('pdf2swf -O 1 '.$ruta.$nombre_archivo.' -o '.$ruta.$nombre_archivo_swf);
-                if(!empty($_POST['id'])){
-                    $book->update( $_POST );
-                }else{
-                    $book->create( $_POST );
-                }
-                Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
-
-            } elseif ( $_FILES['file']['size'] > $sizeFile ) {
-                 m::add( sprintf(_("Sorry, file can't upload. You must check file size.(< %sB)"), $sizeFile ));
-
-            } else {
-                 m::add( sprintf(_("Sorry, file can't upload.")));
-            }
+        $book = new Book();
+        if ( (!empty($_FILES['file']['name'])) && ($uploadStatusPdf !== false) ) {
+            $nombre_archivo_swf = str_replace('pdf', 'swf', $nombre_archivo);
+            exec('pdf2swf -O 1 '.$ruta.$nombre_archivo.' -o '.$ruta.$nombre_archivo_swf);
+        } elseif ( $_FILES['file']['size'] > $sizeFile ) {
+             m::add( sprintf(_("Sorry, file can't upload. You must check file size.(< %sB)"), $sizeFile ));
 
         } else {
-
-            Acl::checkOrForward('BOOK_UPDATE');
-            $book = new Book($id);
-
-            if(!Acl::isAdmin() && !Acl::check('CONTENT_OTHER_UPDATE') && $book->fk_user != $_SESSION['userid']) {
-                m::add(_("You can't modify this book data because you don't have enought privileges.") );
-                Application::forward($_SERVER['SCRIPT_NAME'].'?action=read&id='.$id);
-            } else {
-                $book->update( $_POST );
-            }
-
+             m::add( sprintf(_("Sorry, file can't upload.")));
         }
+        if ( (!empty($_FILES['file_img']['name'])) && ($uploadStatusPdf_img !== false) ) {
+            m::add( sprintf(_("Sorry, image file can't upload.")));
+        }
+
+        if (!empty($id)) {
+            $book->update( $_POST );
+        }else{
+            $book->create( $_POST );
+        }
+
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=read&id='.$book->id.'&category='.$category.'&page='.$page);
 
     break;
 
     case 'delete':
+
+        $id = filter_input(INPUT_POST,'id', FILTER_DEFAULT);
         Acl::checkOrForward('BOOK_DELETE');
         $book = new Book();
-        $book->delete( $_POST['id'] );
+        $book->delete( $id );
 
          Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
     break;
@@ -283,7 +269,7 @@ switch($action) {
         $book = new Book($_REQUEST['id']);
         //Publicar o no, comprobar num clic
         $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
-        $book->set_status($status);
+        $book->set_available($status, $_SESSION['userid']);
 
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
     break;
@@ -298,22 +284,29 @@ switch($action) {
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
     break;
 
-    case 'mstatus':
+    case 'batchFrontpage':
 
         Acl::checkOrForward('BOOK_AVAILABLE');
-        if(isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld'])>0){
-            $fields = $_REQUEST['selected_fld'];
-            if(is_array($fields)) {
-                foreach($fields as $i ) {
+
+        if(isset($_GET['selected_fld']) && count($_GET['selected_fld']) > 0) {
+            $fields = $_GET['selected_fld'];
+
+            $status = filter_input ( INPUT_GET, 'status' , FILTER_SANITIZE_NUMBER_INT );
+            if (is_array($fields)) {
+                foreach ($fields as $i) {
                     $book = new Book($i);
-                    $book->set_status($i);   //Se reutiliza el id para pasar el status
+                    $book->set_available($status, $_SESSION['userid']);
+                    if ($status == 0) {
+                        $book->set_favorite($status);
+                    }
                 }
             }
         }
-        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
+        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category);
+
     break;
 
-    case 'mdelete':
+    case 'batchDelete':
 
         Acl::checkOrForward('BOOK_DELETE');
         if(isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld'])>0){
@@ -345,19 +338,29 @@ switch($action) {
 
     break;
 
-    case 'save_orden_list':
-          $orden = $_GET['orden'];
-          if(isset($orden)){
-               $tok = strtok($orden,",");
-               $pos=1;
-               while (($tok !== false) AND ($tok !=" ")) {
-                    $book = new Book($tok);
-                    $book->set_position($pos);
-                    $tok = strtok(",");
-                    $pos++;
-               }
-           }
-          exit(0);
+    case 'save_positions':
+        $positions = $_GET['positions'];
+
+        if (isset($positions)  && is_array($positions)
+                && count($positions) > 0) {
+           $_positions = array();
+           $pos = 1;
+
+           foreach($positions as $id) {
+                    $_positions[] = array($pos, '1', $id);
+                    $pos += 1;
+            }
+
+            $book= new Book();
+            $msg = $book->set_position($_positions, $_SESSION['userid']);
+
+         }
+         if(!empty($msg) && $msg == true) {
+             echo _("Positions saved successfully.");
+         } else{
+             echo _("Unable to save the new positions. Please contact with your system administrator.");
+         }
+        exit(0);
     break;
 
     default:

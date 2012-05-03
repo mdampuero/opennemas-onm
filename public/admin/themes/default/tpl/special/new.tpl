@@ -176,8 +176,8 @@
           </tbody>
         </table>
     </div>
-    <input type="text" id="noticias_right" name="noticias_right" value="">
-    <input type="text" id="noticias_left" name="noticias_left" value="">
+    <input type="hidden" id="noticias_right" name="noticias_right" value="">
+    <input type="hidden" id="noticias_left" name="noticias_left" value="">
 
     <input type="hidden" name="id" id="id" value="{$special->id|default:""}" />
 

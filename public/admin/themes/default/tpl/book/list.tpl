@@ -1,35 +1,34 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-js" append}
+    {script_tag src="/onm/jquery-functions.js" language="javascript"}
     {script_tag src="/utilsBook.js" language="javascript"}
 {/block}
 
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario">
+<form action="#" method="get" name="formulario" id="formulario">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title"><h2>{t}Book manager{/t} :: {if $category eq 0}Widget Home{else}{$datos_cat[0]->title}{/if}</h2></div>
             <ul class="old-button">
                 {acl isAllowed="BOOK_DELETE"}
                 <li>
-                    <a href="#" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="Eliminar" title="Eliminar">
-                        <img src="{$params.IMAGE_DIR}trash.png" title="Eliminar" alt="Eliminar" ><br />{t}Delete{/t}
+                    <a class="delChecked" data-controls-modal="modal-book-batchDelete" href="#" title="{t}Delete{/t}">
+                        <img src="{$params.IMAGE_DIR}trash.png" border="0"  title="{t}Delete{/t}" alt="{t}Delete{/t}" ><br />{t}Delete{/t}
                     </a>
                 </li>
                 {/acl}
                 {acl isAllowed="BOOK_AVAILABLE"}
                 <li>
-                    <a href="#" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 0);" name="submit_mult" title="{t}Unpublish{/t}">
-                        <img src="{$params.IMAGE_DIR}publish_no.gif" title="noFrontpage" alt="noFrontpage" ><br />{t}Unpublish{/t}
-                    </a>
-                </li>
-                {/acl}
-                {acl isAllowed="BOOK_AVAILABLE"}
-                <li>
-                    <a href="#" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 1);" name="submit_mult" title="{t}Publish{/t}">
-                        <img src="{$params.IMAGE_DIR}publish.gif" alt="{t}Publish{/t}" ><br />{t}Publish{/t}
-                    </a>
-                </li>
+                    <button value="batchnoFrontpage" name="buton-batchnoFrontpage" id="buton-batchnoFrontpage" type="submit">
+                       <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="{t}Unpublish{/t}" alt="{t}Unpublish{/t}" ><br />{t}Unpublish{/t}
+                   </button>
+               </li>
+               <li>
+                   <button value="batchFrontpage" name="buton-batchFrontpage" id="buton-batchFrontpage" type="submit">
+                       <img border="0" src="{$params.IMAGE_DIR}publish.gif" title="{t}Publish{/t}" alt="{t}Publish{/t}" ><br />{t}Publish{/t}
+                   </button>
+               </li>
                 {/acl}
                 {acl isAllowed="BOOK_CREATE"}
                 <li class="separator"></li>
@@ -39,6 +38,14 @@
                     </a>
                 </li>
                 {/acl}
+
+                <li class="separator"></li>
+                <li>
+                    <a href="#" onClick="javascript:saveSortPositions('{$smarty.server.PHP_SELF}');" title="{t}Save positions{/t}">
+                        <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save positions{/t}"><br />{t}Save positions{/t}
+                    </a>
+                </li>
+
                 {acl isAllowed="BOOK_SETTINGS"}
                 <li class="separator"></li>
                 <li>
@@ -61,7 +68,8 @@
             </li>
            {include file="menu_categories.tpl" home=$smarty.server.SCRIPT_NAME|cat:"?action=list"}
         </ul>
-
+        {* MENSAJES DE AVISO GUARDAR POS******* *}
+        <div id="warnings-validation"></div>
 
         <table class="listing-table">
             <thead>
@@ -79,9 +87,9 @@
                     <th class="center" style="width:35px;">{t}Actions{/t}</th>
                 </tr>
             </thead>
-
+             <tbody class="sortable">
             {section name=as loop=$books}
-            <tr {cycle values="class=row0,class=row1"}>
+            <tr data-id="{$books[as]->pk_book}">
                 <td class="center">
                     <input type="checkbox" class="minput"  id="selected_{$smarty.section.as.iteration}" name="selected_fld[]" value="{$books[as]->id}"  style="cursor:pointer;" >
                 </td>
@@ -136,8 +144,10 @@
 
                        {acl isAllowed="BOOK_DELETE"}
                        <li>
-                            <a href="#" onClick="javascript:deleteBook('{$books[as]->pk_book}','{$paginacion->_currentPage|default:0}');" title="{t}Delete{/t}">
-                               <img src="{$params.IMAGE_DIR}trash.png" />
+                             <a class="del" data-controls-modal="modal-from-dom"
+                               data-id="{$books[as]->pk_book}"
+                               data-title="{$books[as]->title|capitalize}"  href="#" >
+                                <img src="{$params.IMAGE_DIR}trash.png" border="0" />
                             </a>
                        </li>
                        {/acl}
@@ -150,15 +160,45 @@
                 <td class="empty" colspan="9">{t}There is no books yet{/t}</td>
             </tr>
         {/section}
-            <tfoot>
-              <td colspan="9">
-                {$paginacion->links|default:""}&nbsp;
-              </td>
-            </tfoot>
-        </table>
+        </tbody>
+        <tfoot>
+          <td colspan="9">
+            {$paginacion->links|default:""}&nbsp;
+          </td>
+        </tfoot>
+    </table>
 
+        <input type="hidden" name="category" id="category" value="{$category}" />
+        <input type="hidden" name="status" id="status" value="" />
         <input type="hidden" id="action" name="action" value="" />
         <input type="hidden" name="id" id="id" value="{$id|default:""}" />
+
     </div>
 </form>
+ <script>
+    // <![CDATA[
+    jQuery('#buton-batchnoFrontpage').on('click', function(e){
+        jQuery('#action').attr('value', "batchFrontpage");
+        jQuery('#status').attr('value', "0");
+        jQuery('#formulario').submit();
+        e.preventDefault();
+    });
+    jQuery('#buton-batchFrontpage').on('click', function(e){
+        jQuery('#action').attr('value', "batchFrontpage");
+        jQuery('#status').attr('value', "1");
+        jQuery('#formulario').submit();
+        e.preventDefault();
+    });
+
+    jQuery(document).ready(function() {
+        makeSortable();
+    });
+// ]]>
+
+</script>
+
+{include file="book/modals/_modalDelete.tpl"}
+{include file="book/modals/_modalBatchDelete.tpl"}
+{include file="book/modals/_modalAccept.tpl"}
+
 {/block}

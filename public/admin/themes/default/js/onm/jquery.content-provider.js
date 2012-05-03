@@ -42,12 +42,12 @@ jQuery(document).ready(function($){
         });
     });
 //change page
-
-    $( "#content-provider").on('click', 'div#container-content-list div.contents div.pagination a', function(e, ui){
+    $( "#content-provider").on('click', 'div.ui-tabs-panel div.contents div.pagination a', function(e, ui){
         e.preventDefault();
         var href   = $(this).attr('href');
-          var parent = $(this).closest('.ui-tabs-panel');
-        $.ajax({
+        var parent = $(this).closest('.ui-tabs-panel');
+
+         $.ajax({
             url: $(this).attr('href'),
             success: function(data){
                 parent.html(data);
@@ -62,12 +62,12 @@ jQuery(document).ready(function($){
     ***************************************************************************/
 
     makeContentProviderAndReceiverSortable = function () {
-        // Make content providers sortable and allow to D&D over the placeholders
-       jQuery('div#content-provider ul#contentList').sortable({
-            connectWith: "div.column-receiver ul.content-receiver",
-            dropOnEmpty: true,
-            placeholder: 'placeholder-element',
-            tolerance: 'pointer'
+
+        // Make content providers draggable and define ghost element
+        jQuery('div#content-provider ul#contentList li').draggable({
+            connectToSortable: "div.column-receiver ul.content-receiver",
+            helper: "clone",
+            revert: "invalid"
         }).disableSelection();
 
         // Make content providers sortable and allow to D&D over placeholders and content provider
@@ -75,7 +75,7 @@ jQuery(document).ready(function($){
             connectWith: "div#content-provider ul#contentList, div.column-receiver ul.content-receiver",
             dropOnEmpty: true,
             placeholder: 'placeholder-element',
-            tolerance: 'pointer'
+            tolerance: 'pointer',
         }).disableSelection();
 
     };

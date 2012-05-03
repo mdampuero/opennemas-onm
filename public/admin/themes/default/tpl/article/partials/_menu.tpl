@@ -6,14 +6,14 @@
 		<ul class="old-button">
             {acl isAllowed="ARTICLE_UPDATE"}
 			<li>
-				<a href="#" class="admin_add" onClick="recolectar();sendFormValidate(this, '_self', 'validate', '{$article->id|default:""}', 'formulario');" title="{t}Save and continue{/t}">
+				<a href="#" class="admin_add" id="validate-button" onClick="save_related_contents();sendFormValidate(this, '_self', 'validate', '{$article->id|default:""}', 'formulario');" title="{t}Save and continue{/t}">
 				<img src="{$params.IMAGE_DIR}save_and_continue.png" title="{t}Save and continue{/t}" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
 				</a>
 			</li>
             {/acl}
             {acl isAllowed="ARTICLE_CREATE"}
 			<li>
-				<a href="#" class="admin_add" onClick="recolectar();sendFormValidate(this, '_self', 'create', 0, 'formulario');" id="button_save">
+				<a href="#" class="admin_add" id="save-button" onClick="save_related_contents();sendFormValidate(this, '_self', 'create', 0, 'formulario');" >
 				<img src="{$params.IMAGE_DIR}save.png" title="{t}Save and exit{/t}" alt="{t}Save and exit{/t}" ><br />{t}Save and exit{/t}
 				</a>
 			</li>
@@ -41,7 +41,7 @@
 		<ul class="old-button">
 			{if ($article->content_status eq 0) && ($article->available eq 1)}
             <li>
-                <a href="#" class="admin_add" onClick="recolectar();sendFormValidate(this, '_self', 'restore', '{$article->id|default:""}', 'formulario');" onmouseover="return escape('Recuperar');" name="submit_mult" value="noFrontpage">
+                <a href="#" class="admin_add" onClick="sendFormValidate(this, '_self', 'restore', '{$article->id|default:""}', 'formulario');" onmouseover="return escape('Recuperar');" name="submit_mult" value="noFrontpage">
                     <img src="{$params.IMAGE_DIR}archive_no.png" alt="{t}Restore{/t}"><br />{t}Restore{/t}
                 </a>
             </li>
@@ -49,14 +49,14 @@
 
             {acl isAllowed="ARTICLE_UPDATE"}
 		    <li>
-                <a href="#" class="admin_add" onClick="recolectar();sendFormValidate(this, '_self', 'validate', '{$article->id|default:""}', 'formulario');" title="{t}Save and continue{/t}">
+                <a href="#" class="admin_add" id="save-button" onClick="save_related_contents();sendFormValidate(this, '_self', 'validate', '{$article->id|default:""}', 'formulario');" title="{t}Save and continue{/t}">
                     <img src="{$params.IMAGE_DIR}save_and_continue.png" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
                 </a>
 		    </li>
              {/acl}
             {acl isAllowed="ARTICLE_UPDATE"}
             <li>
-                <a href="#" class="admin_add" onClick="recolectar(); sendFormValidate(this, '_self', 'update', '{$article->id|default:""}', 'formulario');" id="button_save">
+                <a href="#" class="admin_add" id="validate-button" onClick="save_related_contents();sendFormValidate(this, '_self', 'update', '{$article->id|default:""}', 'formulario');" id="button_save">
                     <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save and exit{/t}" ><br />{t}Save and exit{/t}
                 </a>
             </li>
