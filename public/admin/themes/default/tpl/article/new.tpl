@@ -398,11 +398,11 @@
             <input type="hidden" id="relatedFrontpage" name="ordenArti" value="" />
             <input type="hidden" id="relatedInner" name="ordenArtiInt" value="" />
 
-            <input type="hidden" id="params[withGallery]" name="params[withGallery]" value="" />
-            <input type="hidden" id="params[withGalleryInt]" name="params[withGalleryInt]" value="" />
+            <input type="hidden" id="withGallery" name="params[withGallery]" value="" />
+            <input type="hidden" id="withGalleryInt" name="params[withGalleryInt]" value="" />
 
             <input type="hidden" id="relatedHome" name="relatedHome" value="" />
-            <input type="hidden" id="params[withGalleryHome]" name="params[withGalleryHome]" value="" />
+            <input type="hidden" id="withGalleryHome" name="params[withGalleryHome]" value="" />
         </div>
 
         <div id="reloadPreview" style="display: none; background-color: #FFE9AF; color: #666; border: 1px solid #996699; padding: 10px; font-size: 1.1em; font-weight: bold; width: 550px; position: absolute; right: 0; top: 0;">

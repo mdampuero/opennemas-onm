@@ -16,10 +16,19 @@ function save_related_contents() {
     jQuery('#relatedFrontpage').val(els);
     els = get_related_contents('inner_related');
     jQuery('#relatedInner').val(els);
-    if($('#home_related')) {
+    if(jQuery('#related-contents').find('#home_related')) {
         els = get_related_contents('home_related');
         jQuery('#relatedHome').val(els);
+
+        els = get_gallery('gallery-Frontpage');
+        jQuery('#withGallery').val(els);
+        els = get_gallery('gallery-Inner');
+        jQuery('#withGalleryInt').val(els);
+        els = get_gallery('gallery-Home');
+        jQuery('#withGalleryHome').val(els);
+
     }
+
 }
 
 function get_related_contents(container) {
@@ -37,4 +46,16 @@ function get_related_contents(container) {
     var encodedContents = JSON.stringify(els);
 
     return encodedContents;
+}
+
+function get_gallery(container) {
+
+    var item= jQuery('#'+container).find('ul.content-receiver li:first');
+    if( jQuery(item).data('type') == 'Album') {
+
+        var id = jQuery(item).data('id');
+
+        return id;
+    }
+    return null;
 }
