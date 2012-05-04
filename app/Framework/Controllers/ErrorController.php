@@ -43,6 +43,7 @@ class ErrorController extends Controller
     {
         global $error;
         $error = unserialize($this->request->get('error'));
+        header('HTTP/1.0 404 Not Found');
         require realpath(__DIR__."/../Views/ErrorController/default.php");
     }
 
