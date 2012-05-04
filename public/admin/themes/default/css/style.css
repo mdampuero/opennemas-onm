@@ -2359,15 +2359,21 @@ div#newsletter-container.column-receiver,
 div#article-form.tabs div#related-contents  div.column-receiver {
     border: 1px solid gray;
     margin: 4px;
-    min-height: 200px;
+    min-height: 140px;
 }
 
 
 div#article-form.tabs div#related-contents ul.content-receiver,
 div.newsletter-contents div#content-provider ul ,
 div#related-contents div#content-provider ul#contentList {
-    min-height: 40px;
+    min-height: 100px;
     padding: 4px;
+}
+div#article-form.tabs div.gallery {
+      min-height: 40px !important;
+}
+div#article-form.tabs div.gallery ul{
+min-height: 30px  !important;
 }
 
 div#content-provider span.type {

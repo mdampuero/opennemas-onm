@@ -67,11 +67,18 @@ jQuery(document).ready(function($){
         jQuery('div#content-provider ul#contentList li').draggable({
             connectToSortable: "div.column-receiver ul.content-receiver",
             helper: "clone",
-            revert: "invalid"
+            revert: "true"
         }).disableSelection();
 
         // Make content providers sortable and allow to D&D over placeholders and content provider
         jQuery('div.column-receiver ul.content-receiver').sortable({
+            connectWith: "div#content-provider ul#contentList, div.column-receiver ul.content-receiver",
+            dropOnEmpty: true,
+            placeholder: 'placeholder-element',
+            tolerance: 'pointer',
+        }).disableSelection();
+
+        jQuery('div#content-provider ul#contentList').sortable({
             connectWith: "div#content-provider ul#contentList, div.column-receiver ul.content-receiver",
             dropOnEmpty: true,
             placeholder: 'placeholder-element',

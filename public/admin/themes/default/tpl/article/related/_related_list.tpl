@@ -43,23 +43,37 @@
                         </ul>
 
                     </div>
-                    <div id="gallery-Frontpage" class="column-receiver">
-                        <h5>{t}Gallery for frontpage{/t}</h5>
+                    <div id="gallery-Frontpage" class="column-receiver gallery">
+                        <h5>{t}Gallery for frontpage{/t}(*{t}Only one album{/t})</h5>
                         <hr>
                         <ul class="content-receiver" >
-                                <li class="" data-type="{$contentsHome[d]->content_type}" data-id="{$contentsHome[d]->pk_content}">
-                                    {$article->params['gallery']}
+                            {if !empty($article->params['withGallery']) && !empty($galleries[front]->pk_album)}
+                                <li class="" data-type="Album" data-id="{$article->params['withGallery']}">
+                                    {$galleries[front]->created|date_format:"%d-%m-%Y"}:{$galleries[front]->title|clearslash}
                                 </li>
+                            {/if}
                         </ul>
-
                     </div>
-                    <div id="gallery-Inner" class="column-receiver">
-                         <h5>{t}Gallery for inner{/t}</h5>
+                    <div id="gallery-Inner" class="column-receiver gallery">
+                         <h5>{t}Gallery for inner{/t}(*{t}Only one album{/t})</h5>
                         <hr>
                         <ul class="content-receiver" >
-                                <li class="" data-type="{$contentsHome[d]->content_type}" data-id="{$contentsHome[d]->pk_content}">
-                                    {$article->params['gallery']}
+                            {if !empty($article->params['withGallery']) && !empty($galleries[inner]->pk_album)}
+                                <li class="" data-type="Album" data-id="{$article->params['withGallery']}">
+                                    {$galleries[inner]->created|date_format:"%d-%m-%Y"}:{$galleries[inner]->title|clearslash}
                                 </li>
+                            {/if}
+                        </ul>
+                    </div>
+                    <div id="gallery-Home" class="column-receiver gallery">
+                        <h5>{t}Gallery for Home{/t} (*{t}Only one album{/t})</h5>
+                        <hr>
+                        <ul class="content-receiver" >
+                            {if !empty($article->params['withGallery']) && !empty($galleries[home]->pk_album)}
+                                <li class="" data-type="Album" data-id="{$article->params['withGallery']}">
+                                    {$galleries[home]->created|date_format:"%d-%m-%Y"}:{$galleries[home]->title|clearslash}
+                                </li>
+                            {/if}
                         </ul>
 
                     </div>
