@@ -388,7 +388,7 @@ switch($action) {
         $page = filter_input( INPUT_GET, 'page' , FILTER_SANITIZE_STRING, array('options' => array('default' => '1')) );
         $cm = new ContentManager();
 
-        list($albums, $pager) = $cm->find_pages('Album', 'available=1 ',
+        list($albums, $pager) = $cm->find_pages('Album', '1=1 ',
                     'ORDER BY starttime DESC,  contents.title ASC ',
                     $page, $items_page, $category);
 
@@ -447,7 +447,7 @@ switch($action) {
         $sqlExcludedOpinions = '';
         if (count($contentElementsInFrontpage) > 0) {
             $contentsExcluded    = implode(', ', $contentElementsInFrontpage);
-            $sqlExcludedOpinions = ' AND `pk_video` NOT IN ('.$contentsExcluded.')';
+            $sqlExcludedOpinions = ' AND `pk_album` NOT IN ('.$contentsExcluded.')';
         }
 
         list($albums, $pager) = $cm->find_pages(
