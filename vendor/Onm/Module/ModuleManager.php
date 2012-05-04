@@ -126,6 +126,8 @@ class ModuleManager
                 'LIBRARY_MANAGER',
                 'LETTER_MANAGER',
                 'SYNC_MANAGER',
+                'FRONTPAGES_LIBRARY',
+                'STATIC_LIBRARY'
 
             );
         }
