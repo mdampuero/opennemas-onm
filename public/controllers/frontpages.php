@@ -38,16 +38,15 @@ $tpl->assign('newslibraryDate',$date);
 require_once("index_advertisement.php");
 
 $ccm = ContentCategoryManager::get_instance();
-$settings = s::get('newslibraryView');
 
-if ( 1==1 || ($tpl->caching == 0)  || !$tpl->isCached('frontpage/newslibrary.tpl', $cache_id) )
+
+if ( ($tpl->caching == 0)  || !$tpl->isCached('frontpage/newslibrary.tpl', $cache_id) )
 {
 
     $fp = new Frontpage();
 
     /****************** FETCHING NEWS IN STATIC FILES **********************/
-   if (!empty($settings) &&
-           $settings == 'listFrontpages') {
+    if(\Onm\Module\ModuleManager::isActivated('FRONTPAGES_LIBRARY')) {
 
         if($category_name != 'home') {
           $actual_category_id = $ccm->get_id($category_name);
@@ -55,7 +54,7 @@ if ( 1==1 || ($tpl->caching == 0)  || !$tpl->isCached('frontpage/newslibrary.tpl
           $actual_category_id = 0;
         }
         //TODO: review this option
-        if( $fp->getFrontpage($date, $actual_category_id) ) {
+        if( $fp->cache->getFrontpage($date, $actual_category_id) ) {
 
             $articles_home = array();
             if(!empty($fp->contents)){
@@ -91,7 +90,7 @@ if ( 1==1 || ($tpl->caching == 0)  || !$tpl->isCached('frontpage/newslibrary.tpl
 
         $tpl->display('frontpage/fp_newslibrary.tpl');
 
-    } elseif ($settings == 'staticFrontpages') {
+    } elseif(\Onm\Module\ModuleManager::isActivated('STATIC_LIBRARY')) {
                 //cronicas method
         if($category_name != 'home') {
             $actual_category_id = $ccm->get_id($category_name);

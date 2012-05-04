@@ -124,8 +124,10 @@ class ModuleManager
                 'SCHEDULE_MANAGER',
                 'AVANCED_ARTICLE_MANAGER',
                 'LIBRARY_MANAGER',
-                'LETTER_MANAGER'
-
+                'LETTER_MANAGER',
+                'SYNC_MANAGER',
+                'FRONTPAGES_LIBRARY',
+                'STATIC_LIBRARY'
             );
         }
 
