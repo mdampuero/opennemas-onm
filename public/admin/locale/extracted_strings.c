@@ -2153,9 +2153,6 @@ gettext("Comments");
 gettext("Related contents");
 
 /* public/admin/themes/default/tpl//article/new.tpl */
-gettext("Sort related contents");
-
-/* public/admin/themes/default/tpl//article/new.tpl */
 gettext("Frontpage title:");
 
 /* public/admin/themes/default/tpl//article/new.tpl */
@@ -2274,96 +2271,6 @@ gettext("Server hour:");
 
 /* public/admin/themes/default/tpl//article/new.tpl */
 gettext("Description");
-
-/* public/admin/themes/default/tpl//article/new.tpl */
-gettext("Show as gallery:");
-
-/* public/admin/themes/default/tpl//article/new.tpl */
-gettext("Show as gallery:");
-
-/* public/admin/themes/default/tpl//article/new.tpl */
-gettext("Related contents in frontpage");
-
-/* public/admin/themes/default/tpl//article/new.tpl */
-gettext("Related contents in inner article:");
-
-/* public/admin/themes/default/tpl//article/partials/_related.tpl */
-gettext("Suggested articles");
-
-/* public/admin/themes/default/tpl//article/partials/_related.tpl */
-gettext("Suggested articles");
-
-/* public/admin/themes/default/tpl//article/partials/_related.tpl */
-gettext("Articles by section");
-
-/* public/admin/themes/default/tpl//article/partials/_related.tpl */
-gettext("Articles in library");
-
-/* public/admin/themes/default/tpl//article/partials/_related.tpl */
-gettext("Articles for review");
-
-/* public/admin/themes/default/tpl//article/partials/_related.tpl */
-gettext("Opinions");
-
-/* public/admin/themes/default/tpl//article/partials/_related.tpl */
-gettext("Albums");
-
-/* public/admin/themes/default/tpl//article/partials/_related.tpl */
-gettext("Videos");
-
-/* public/admin/themes/default/tpl//article/partials/_related.tpl */
-gettext("Files");
-
-/* public/admin/themes/default/tpl//article/partials/_related.tpl */
-gettext("Search");
-
-/* public/admin/themes/default/tpl//article/partials/_related.tpl */
-gettext("Suggested articles");
-
-/* public/admin/themes/default/tpl//article/partials/_related.tpl */
-gettext("Articles by section");
-
-/* public/admin/themes/default/tpl//article/partials/_related.tpl */
-gettext("Articles in library");
-
-/* public/admin/themes/default/tpl//article/partials/_related.tpl */
-gettext("Pending articles");
-
-/* public/admin/themes/default/tpl//article/partials/_related.tpl */
-gettext("Opinions");
-
-/* public/admin/themes/default/tpl//article/partials/_related.tpl */
-gettext("Albums");
-
-/* public/admin/themes/default/tpl//article/partials/_related.tpl */
-gettext("Videos");
-
-/* public/admin/themes/default/tpl//article/partials/_related.tpl */
-gettext("Files");
-
-/* public/admin/themes/default/tpl//article/partials/_related.tpl */
-gettext("Search in the information catalog:");
-
-/* public/admin/themes/default/tpl//article/partials/_related.tpl */
-gettext("Search");
-
-/* public/admin/themes/default/tpl//article/partials/_related.tpl */
-gettext("We cant find any content with your search criteria.");
-
-/* public/admin/themes/default/tpl//article/partials/_related.tpl */
-gettext("Your search \"<b>%1</b>\" didn't return any element.");
-
-/* public/admin/themes/default/tpl//article/partials/_related.tpl */
-gettext("Suggestions:");
-
-/* public/admin/themes/default/tpl//article/partials/_related.tpl */
-gettext("Check if all the words are written correctly.");
-
-/* public/admin/themes/default/tpl//article/partials/_related.tpl */
-gettext("Use other words.");
-
-/* public/admin/themes/default/tpl//article/partials/_related.tpl */
-gettext("Use more general search criteria.");
 
 /* public/admin/themes/default/tpl//article/partials/_menu.tpl */
 gettext("Article manager");
@@ -2644,15 +2551,6 @@ gettext("Available videos");
 /* public/admin/themes/default/tpl//article/partials/_images.tpl */
 gettext("Search videos by title...");
 
-/* public/admin/themes/default/tpl//article/partials/_related_content.tpl */
-gettext("Related in frontpage");
-
-/* public/admin/themes/default/tpl//article/partials/_related_content.tpl */
-gettext("Related in inner");
-
-/* public/admin/themes/default/tpl//article/partials/_related_content.tpl */
-gettext("Related in home");
-
 /* public/admin/themes/default/tpl//article/partials/_article_avanced_customize.tpl */
 gettext("Customize for section Frontpage");
 
@@ -2727,6 +2625,60 @@ gettext("Restore to available");
 
 /* public/admin/themes/default/tpl//article/library.tpl */
 gettext("There is no article saved");
+
+/* public/admin/themes/default/tpl//article/related/_related_list.tpl */
+gettext("Related in frontpage");
+
+/* public/admin/themes/default/tpl//article/related/_related_list.tpl */
+gettext("Related in inner");
+
+/* public/admin/themes/default/tpl//article/related/_related_list.tpl */
+gettext("Related in home");
+
+/* public/admin/themes/default/tpl//article/related/_related_list.tpl */
+gettext("Gallery for frontpage");
+
+/* public/admin/themes/default/tpl//article/related/_related_list.tpl */
+gettext("Only one album");
+
+/* public/admin/themes/default/tpl//article/related/_related_list.tpl */
+gettext("Gallery for inner");
+
+/* public/admin/themes/default/tpl//article/related/_related_list.tpl */
+gettext("Only one album");
+
+/* public/admin/themes/default/tpl//article/related/_related_list.tpl */
+gettext("Gallery for Home");
+
+/* public/admin/themes/default/tpl//article/related/_related_list.tpl */
+gettext("Only one album");
+
+/* public/admin/themes/default/tpl//article/related/_related_provider.tpl */
+gettext("Search");
+
+/* public/admin/themes/default/tpl//article/related/_related_provider.tpl */
+gettext("Suggested articles");
+
+/* public/admin/themes/default/tpl//article/related/_related_provider.tpl */
+gettext("Other articles");
+
+/* public/admin/themes/default/tpl//article/related/_related_provider.tpl */
+gettext("Opinions");
+
+/* public/admin/themes/default/tpl//article/related/_related_provider.tpl */
+gettext("Videos");
+
+/* public/admin/themes/default/tpl//article/related/_related_provider.tpl */
+gettext("Albums");
+
+/* public/admin/themes/default/tpl//article/related/_related_provider.tpl */
+gettext("Polls");
+
+/* public/admin/themes/default/tpl//article/related/_related_provider.tpl */
+gettext("Specials");
+
+/* public/admin/themes/default/tpl//article/related/_related_provider.tpl */
+gettext("Files");
 
 /* public/admin/themes/default/tpl//article/list.tpl */
 gettext("Please, remember save positions after finish.");
@@ -4969,6 +4921,42 @@ gettext("%1");
 /* public/admin/themes/default/tpl//newsstand/read.tpl */
 gettext("Save");
 
+/* public/admin/themes/default/tpl//book/modals/_modalBatchDelete.tpl */
+gettext("Delete specials");
+
+/* public/admin/themes/default/tpl//book/modals/_modalBatchDelete.tpl */
+gettext("Are you sure you want to delete <span>%num%</span> books?");
+
+/* public/admin/themes/default/tpl//book/modals/_modalBatchDelete.tpl */
+gettext("Yes, delete all");
+
+/* public/admin/themes/default/tpl//book/modals/_modalBatchDelete.tpl */
+gettext("No");
+
+/* public/admin/themes/default/tpl//book/modals/_modalBatchDelete.tpl */
+gettext("You must select some elements.");
+
+/* public/admin/themes/default/tpl//book/modals/_modalAccept.tpl */
+gettext("Delete books");
+
+/* public/admin/themes/default/tpl//book/modals/_modalAccept.tpl */
+gettext("You must select some elements.");
+
+/* public/admin/themes/default/tpl//book/modals/_modalAccept.tpl */
+gettext("Accept");
+
+/* public/admin/themes/default/tpl//book/modals/_modalDelete.tpl */
+gettext("Delete book");
+
+/* public/admin/themes/default/tpl//book/modals/_modalDelete.tpl */
+gettext("Are you sure that do you want delete \"<span>%title%</span>\"?");
+
+/* public/admin/themes/default/tpl//book/modals/_modalDelete.tpl */
+gettext("Yes, delete");
+
+/* public/admin/themes/default/tpl//book/modals/_modalDelete.tpl */
+gettext("No");
+
 /* public/admin/themes/default/tpl//book/new.tpl */
 gettext("Book manager");
 
@@ -5096,6 +5084,18 @@ gettext("Book manager");
 gettext("Delete");
 
 /* public/admin/themes/default/tpl//book/list.tpl */
+gettext("Delete");
+
+/* public/admin/themes/default/tpl//book/list.tpl */
+gettext("Delete");
+
+/* public/admin/themes/default/tpl//book/list.tpl */
+gettext("Delete");
+
+/* public/admin/themes/default/tpl//book/list.tpl */
+gettext("Unpublish");
+
+/* public/admin/themes/default/tpl//book/list.tpl */
 gettext("Unpublish");
 
 /* public/admin/themes/default/tpl//book/list.tpl */
@@ -5118,6 +5118,15 @@ gettext("New book");
 
 /* public/admin/themes/default/tpl//book/list.tpl */
 gettext("New book");
+
+/* public/admin/themes/default/tpl//book/list.tpl */
+gettext("Save positions");
+
+/* public/admin/themes/default/tpl//book/list.tpl */
+gettext("Save positions");
+
+/* public/admin/themes/default/tpl//book/list.tpl */
+gettext("Save positions");
 
 /* public/admin/themes/default/tpl//book/list.tpl */
 gettext("Config book module");
@@ -5169,9 +5178,6 @@ gettext("Put in frontpage");
 
 /* public/admin/themes/default/tpl//book/list.tpl */
 gettext("Edit book");
-
-/* public/admin/themes/default/tpl//book/list.tpl */
-gettext("Delete");
 
 /* public/admin/themes/default/tpl//book/list.tpl */
 gettext("There is no books yet");
@@ -5334,6 +5340,9 @@ gettext("Available Modules");
 
 /* public/admin/themes/default/tpl//menues/edit.tpl */
 gettext("Static Pages");
+
+/* public/admin/themes/default/tpl//menues/edit.tpl */
+gettext("Sync Categories");
 
 /* public/admin/themes/default/tpl//menues/edit.tpl */
 gettext("Title:");
@@ -5995,6 +6004,69 @@ gettext("Save");
 /* public/admin/themes/default/tpl//tpl_manager/config.tpl */
 gettext("Cancel");
 
+/* public/admin/themes/default/tpl//newsletter/newsletterContents.tpl */
+gettext("Newsletter management");
+
+/* public/admin/themes/default/tpl//newsletter/newsletterContents.tpl */
+gettext("Next");
+
+/* public/admin/themes/default/tpl//newsletter/newsletterContents.tpl */
+gettext("Next");
+
+/* public/admin/themes/default/tpl//newsletter/newsletterContents.tpl */
+gettext("Next step");
+
+/* public/admin/themes/default/tpl//newsletter/newsletterContents.tpl */
+gettext("Previous");
+
+/* public/admin/themes/default/tpl//newsletter/newsletterContents.tpl */
+gettext("Previous");
+
+/* public/admin/themes/default/tpl//newsletter/newsletterContents.tpl */
+gettext("Prev step");
+
+/* public/admin/themes/default/tpl//newsletter/newsletterContents.tpl */
+gettext("Clean containers");
+
+/* public/admin/themes/default/tpl//newsletter/newsletterContents.tpl */
+gettext("Clean containers");
+
+/* public/admin/themes/default/tpl//newsletter/newsletterContents.tpl */
+gettext("Clean");
+
+/* public/admin/themes/default/tpl//newsletter/newsletterContents.tpl */
+gettext("Load saved Newsletter");
+
+/* public/admin/themes/default/tpl//newsletter/newsletterContents.tpl */
+gettext("Load saved Newsletter");
+
+/* public/admin/themes/default/tpl//newsletter/newsletterContents.tpl */
+gettext("Load newsletter");
+
+/* public/admin/themes/default/tpl//newsletter/newsletterContents.tpl */
+gettext("Config newsletter module");
+
+/* public/admin/themes/default/tpl//newsletter/newsletterContents.tpl */
+gettext("Configurations");
+
+/* public/admin/themes/default/tpl//newsletter/newsletterContents.tpl */
+gettext("Subscriptors");
+
+/* public/admin/themes/default/tpl//newsletter/newsletterContents.tpl */
+gettext("Subscriptors");
+
+/* public/admin/themes/default/tpl//newsletter/newsletterContents.tpl */
+gettext("Subscriptors");
+
+/* public/admin/themes/default/tpl//newsletter/newsletterContents.tpl */
+gettext("Subscriptors");
+
+/* public/admin/themes/default/tpl//newsletter/newsletterContents.tpl */
+gettext("Newsletter contents");
+
+/* public/admin/themes/default/tpl//newsletter/newsletterContents.tpl */
+gettext("Add Text");
+
 /* public/admin/themes/default/tpl//newsletter/listArticles.tpl */
 gettext("Newsletter management");
 
@@ -6344,22 +6416,34 @@ gettext("Write others receivers");
 gettext("(Separated by commas or different lines)");
 
 /* public/admin/themes/default/tpl//newsletter/_partials/container_contents.tpl */
-gettext("Available contents");
+gettext("Search");
+
+/* public/admin/themes/default/tpl//newsletter/_partials/container_contents.tpl */
+gettext("Suggested articles");
+
+/* public/admin/themes/default/tpl//newsletter/_partials/container_contents.tpl */
+gettext("Other articles");
 
 /* public/admin/themes/default/tpl//newsletter/_partials/container_contents.tpl */
 gettext("Opinions");
 
 /* public/admin/themes/default/tpl//newsletter/_partials/container_contents.tpl */
-gettext("Widgets");
+gettext("Videos");
 
 /* public/admin/themes/default/tpl//newsletter/_partials/container_contents.tpl */
 gettext("Albums");
 
 /* public/admin/themes/default/tpl//newsletter/_partials/container_contents.tpl */
-gettext("Specials");
+gettext("Polls");
 
 /* public/admin/themes/default/tpl//newsletter/_partials/container_contents.tpl */
 gettext("Letters");
+
+/* public/admin/themes/default/tpl//newsletter/_partials/container_contents.tpl */
+gettext("Specials");
+
+/* public/admin/themes/default/tpl//newsletter/_partials/container_contents.tpl */
+gettext("Files");
 
 /* public/admin/themes/default/tpl//newsletter/listOpinions.tpl */
 gettext("Newsletter management");
@@ -7791,6 +7875,117 @@ gettext("Delete");
 
 /* public/admin/themes/default/tpl//widget/content-provider/widget.tpl */
 gettext("Send to trash");
+
+/* public/admin/themes/default/tpl//web_services/client.tpl */
+gettext("Sync Manager");
+
+/* public/admin/themes/default/tpl//web_services/client.tpl */
+gettext("Client side");
+
+/* public/admin/themes/default/tpl//web_services/client.tpl */
+gettext("Add site to sync");
+
+/* public/admin/themes/default/tpl//web_services/client.tpl */
+gettext("Add site to sync");
+
+/* public/admin/themes/default/tpl//web_services/client.tpl */
+gettext("Add site to sync");
+
+/* public/admin/themes/default/tpl//web_services/client.tpl */
+gettext("Add site to sync");
+
+/* public/admin/themes/default/tpl//web_services/client.tpl */
+gettext("Synchronization Status");
+
+/* public/admin/themes/default/tpl//web_services/client.tpl */
+gettext("Site Url");
+
+/* public/admin/themes/default/tpl//web_services/client.tpl */
+gettext("Categories to Sync");
+
+/* public/admin/themes/default/tpl//web_services/client.tpl */
+gettext("Status");
+
+/* public/admin/themes/default/tpl//web_services/client.tpl */
+gettext("Edit");
+
+/* public/admin/themes/default/tpl//web_services/client.tpl */
+gettext("Delete");
+
+/* public/admin/themes/default/tpl//web_services/client.tpl */
+gettext("There are no synchorinize settings available");
+
+/* public/admin/themes/default/tpl//web_services/client.tpl */
+gettext("Try adding one site to synchronize on the config button above.");
+
+/* public/admin/themes/default/tpl//web_services/partials/_list_categories.tpl */
+gettext("Categories to availables to sync");
+
+/* public/admin/themes/default/tpl//web_services/partials/_list_categories.tpl */
+gettext("There is no elements to sync");
+
+/* public/admin/themes/default/tpl//web_services/partials/_list_categories.tpl */
+gettext("Check if the given site url is correct.");
+
+/* public/admin/themes/default/tpl//web_services/config.tpl */
+gettext("Sync Manager");
+
+/* public/admin/themes/default/tpl//web_services/config.tpl */
+gettext("Client configuration");
+
+/* public/admin/themes/default/tpl//web_services/config.tpl */
+gettext("Go back");
+
+/* public/admin/themes/default/tpl//web_services/config.tpl */
+gettext("Go back");
+
+/* public/admin/themes/default/tpl//web_services/config.tpl */
+gettext("Clients list");
+
+/* public/admin/themes/default/tpl//web_services/config.tpl */
+gettext("Go back");
+
+/* public/admin/themes/default/tpl//web_services/config.tpl */
+gettext("Go back");
+
+/* public/admin/themes/default/tpl//web_services/config.tpl */
+gettext("Synchronization settings");
+
+/* public/admin/themes/default/tpl//web_services/config.tpl */
+gettext("Site Url:");
+
+/* public/admin/themes/default/tpl//web_services/config.tpl */
+gettext("Connect");
+
+/* public/admin/themes/default/tpl//web_services/config.tpl */
+gettext("Save");
+
+/* public/admin/themes/default/tpl//web_services/edit.tpl */
+gettext("Sync Manager");
+
+/* public/admin/themes/default/tpl//web_services/edit.tpl */
+gettext("Edit Site Configuration");
+
+/* public/admin/themes/default/tpl//web_services/edit.tpl */
+gettext("Go back");
+
+/* public/admin/themes/default/tpl//web_services/edit.tpl */
+gettext("Go back");
+
+/* public/admin/themes/default/tpl//web_services/edit.tpl */
+gettext("Clients list");
+
+/* public/admin/themes/default/tpl//web_services/edit.tpl */
+gettext("Go back");
+
+/* public/admin/themes/default/tpl//web_services/edit.tpl */
+gettext("Go back");
+
+/* public/admin/themes/default/tpl//web_services/edit.tpl */
+gettext("Synchronization settings");
+
+/* public/admin/themes/default/tpl//web_services/edit.tpl */
+gettext("Save");
 
 /* public/admin/themes/default/tpl//special/modals/_modalBatchDelete.tpl */
 gettext("Delete specials");
