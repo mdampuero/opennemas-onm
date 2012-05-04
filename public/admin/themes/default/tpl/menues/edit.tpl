@@ -144,6 +144,11 @@ legend {
                                                 <li class="menuItem" id="item_{$menu->items[c]->pk_item}" pk_item="{$menu->items[c]->pk_item}" title="{$menu->items[c]->title}"
                                                     link="{$menu->items[c]->link}" type="{$menu->items[c]->type}" >
                                                     {$menu->items[c]->title}
+                                                    {if $menu->items[c]->type == 'syncCategory'}
+                                                        <img src="{$params.IMAGE_DIR}iconos/reload.png"
+                                                             title="{t 1=$menu->items[c]}Synchronized from {/t}"
+                                                             alt="{t}Sync{/t}" >
+                                                    {/if}
                                                 </li>
                                             {/section}
                                         {/if}
