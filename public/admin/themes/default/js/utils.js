@@ -1,10 +1,3 @@
-// JavaScript Document
-function sinFrames() {
-	if (top.location != self.location) {
-		top.location = self.location;
-	}
-}
-
 function checkAll(field,img)
 {
 	if(field){
@@ -25,12 +18,6 @@ function checkAll(field,img)
 			 	$( field ).checked = status;
 		}
 	}
-}
-
-
-function get_height(my) {
-
-my.height=(window.innerHeight-60);
 }
 
 function objetoAjax(){
@@ -98,26 +85,24 @@ function get_metadata(title)
    //como hacemos uso del metodo GET
    //colocamos null
    ajax.send(null)
-
-
 }
+
 //Para imagen
 function get_metadata_imagen(description,id)
 {
 	 //instanciamos el objetoAjax
-	   ajax=objetoAjax();
+	ajax=objetoAjax();
 
-	   var tags= document.getElementById('metadata['+id+']').value;
+	var tags= document.getElementById('metadata['+id+']').value;
 
-	   //uso del medotod GET
-	   ajax.open("GET", "/admin/controllers/utils_content.php?action=get_tags&title="+description+"&tags="+tags);
-	   ajax.onreadystatechange=function() {
-	    if (ajax.readyState==4) {
-		     //mostrar resultados en esta capa
-		     document.getElementById('metadata['+id+']').value = ajax.responseText
-
-		   }
-       }
+    //uso del medotod GET
+    ajax.open("GET", "/admin/controllers/utils_content.php?action=get_tags&title="+description+"&tags="+tags);
+    ajax.onreadystatechange=function() {
+        if (ajax.readyState==4) {
+            //mostrar resultados en esta capa
+            document.getElementById('metadata['+id+']').value = ajax.responseText
+        }
+    }
    //como hacemos uso del metodo GET
    //colocamos null
    ajax.send(null)
@@ -154,9 +139,9 @@ function onChangeGroup(evaluateControl, ids)
     {
         var combo = document.getElementById('ids_category');
         //se define la variable "el" igual a nuestro div
-        if(evaluateControl.options[evaluateControl.selectedIndex].text.toLowerCase() == "administrador")
+        if (evaluateControl.options[evaluateControl.selectedIndex].text.toLowerCase() == "administrador")
         {
-            for(iIndex=0; iIndex<ids.length; iIndex++)
+            for (iIndex=0; iIndex<ids.length; iIndex++)
             {
                 var hideDiv = document.getElementById(ids[iIndex]);
                 hideDiv.style.display = 'none'; //damos un atributo display:none que oculta el div
@@ -167,7 +152,7 @@ function onChangeGroup(evaluateControl, ids)
         }
         else
         {
-            for(iIndex=0; iIndex<ids.length; iIndex++)
+            for (iIndex=0; iIndex<ids.length; iIndex++)
             {
                 var showDiv = document.getElementById(ids[iIndex]);
                 if (showDiv) {
@@ -186,10 +171,13 @@ function onChangeGroup(evaluateControl, ids)
 
 function paginate_search(action,page,stringSearch,categories)
 {
-    new Ajax.Updater('search-results', "search_advanced.php?action="+action+"&page="+page+"&stringSearch="+stringSearch+categories,
+    new Ajax.Updater(
+        'search-results',
+        "search_advanced.php?action="+action+"&page="+page+"&stringSearch="+stringSearch+categories,
         {
             evalScripts: true
-        } );
+        }
+    );
 }
 
 
@@ -219,8 +207,8 @@ function del_photo(id)
 
 
 function delete_fichero(id,page){
-
-      new Ajax.Request( 'files.php?action=delete&id='+id+'&page='+page,
+    new Ajax.Request(
+        'files.php?action=delete&id='+id+'&page='+page,
         {
             onSuccess: function(transport) {
                  var msg = transport.responseText;
@@ -231,73 +219,15 @@ function delete_fichero(id,page){
                    }
                    return false;
             }
-        });
-
-
- }
-
-
-
-
-function send_notify(id,action){
-
-      new Ajax.Request( 'search_advanced.php?action='+action+'&id='+id,
-        {
-            onSuccess: function(transport) {
-                 var msg = transport.responseText;
-                 showMsg({'warn':[msg ]},'growl');
-            }
-        });
-
-
- }
-
-function get_dashboard_box(type,category,days,div) {
-
-    var url = '/admin/controllers/statistics/statistics.php?action=get&type='+type+'&category='+category+'&days='+days;
-
-    new Ajax.Request(url, {
-        'method': 'get',
-        onSuccess: function(transport) {
-            $(div).update(transport.responseText);
-        },
-        onLoading: function() {
-            $(div).update('<div class="upload"><img src=\"/admin/themes/default/images/loading.gif\" /></div>');
         }
-    });
-}
-
-function change_dashboard(div,category) {
-    if (div=='viewed') {
-        $('comented').setStyle({display: 'none'});
-        $('voted').setStyle({display: 'none'});
-        $('viewed').setStyle({display: 'block'});
-    } else if (div=='comented') {
-        $('comented').setStyle({display: 'block'});
-        $('voted').setStyle({display: 'none'});
-        $('viewed').setStyle({display: 'none'});
-    } else if (div=='voted') {
-        $('comented').setStyle({display: 'none'});
-        $('voted').setStyle({display: 'block'});
-        $('viewed').setStyle({display: 'none'});
-    }
-
-    if ($(div+'_most_24h').empty()) {
-        get_dashboard_box(div,category,1,div+'_most_24h');
-        get_dashboard_box(div,category,2,div+'_most_48h');
-        get_dashboard_box(div,category,3,div+'_most_72h');
-        get_dashboard_box(div,category,7,div+'_most_1s');
-        get_dashboard_box(div,category,14,div+'_most_2s');
-        get_dashboard_box(div,category,30,div+'_most_1m');
-    }
-
+    );
 }
 
 
 function  show_subcat(category,home){
     new Ajax.Updater('menu_subcats', "/admin/controllers/utils_content.php?action=get_subcategories&category="+category+"&home="+home,
     {
-          evalScripts: true
+        evalScripts: true
     });//
 }
 

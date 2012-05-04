@@ -19,6 +19,25 @@ $routes->add(
     '/admin'
 );
 
+// Statistics controller routes
+$routes->add(
+    'admin_statistics',
+    new Route(
+        '/statistics',
+        array('_controller' => 'Backend:Controllers:StatisticsController:default')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_statistics_widget',
+    new Route(
+        '/statistics/widget',
+        array('_controller' => 'Backend:Controllers:StatisticsController:getWidget')
+    ),
+    '/admin'
+);
+
 // Comments by Disqus controller routes
 $routes->add(
     'admin_comments_disqus',

@@ -231,7 +231,7 @@ $menuXml = '<?xml version="1.0"?>
             module_name="ONM_STATISTICS"
             title="'.htmlspecialchars(_("Statistics"), ENT_QUOTES).'"
             id="statistics"
-            link="/admin/controllers/statistics/statistics.php"
+            link="'.url('admin_statistics', array()).'"
             privilege="STATS_ADMIN" />
     </submenu>
 

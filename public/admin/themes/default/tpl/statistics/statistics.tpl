@@ -1,8 +1,49 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-js"}
-    {$smarty.block.parent}
-    {script_tag src="/swfobject.js" language="javascript"}
+{block name="header-css" append}
+<style type="text/css">
+    #viewed > div, #comented > div, #voted > div {
+        width:32%;
+        display:inline-block;
+        vertical-align: top;
+        margin-right:2px;
+        padding:3px;
+    }
+    #viewed > div table, #comented > div table, #voted > div table {
+        width:97%;
+    }
+</style>
+{/block}
+
+{block name="footer-js" append}
+    {script_tag src="/jquery/jquery.min.js"}
+    <script>
+    jQuery(document).ready(function() {
+        jQuery("#statistics").tabs();
+    });
+    </script>
+    {script_tag src="/swfobject.js"}
+
+    <script type="text/javascript">
+
+    jQuery(document).ready(function($){
+        $('#viewed, #comented, #voted').each(function(el){
+            var url = $(this).data('url');
+            $(this).children('div').each(function(){
+                var el = $(this);
+                var days = $(this).data('days');
+                var url_complete = url +   days;
+                $.ajax({
+                    url: url_complete,
+                    success: function(text) {
+                        el.html(text);
+                        // $(this).html(text);
+                    }
+                })
+            });
+        })
+    });
+</script>
 {/block}
 
 {block name="content"}
@@ -17,111 +58,43 @@
 
     <ul class="pills">
         <li>
-            <a href="statistics.php?action=getPiwikWidgets" id="piwik" {if $category == 'piwik_widgets'} class="active"{/if}>
-                {t}Piwik Widgets{/t}
-            </a>
-        </li>
-        <li>
-            <a href="statistics.php?action=index&category=0" id="link_global" {if $category == '0'} class="active"{/if}>
+            <a href="{url name="admin_statistics"}?category=0" {if $category == '0'} class="active"{/if}>
                 {t}All Categorys{/t}
             </a>
         </li>
-        {include file="menu_categories.tpl" home="statistics.php?action=index"}
+        {include file="menu_categories.tpl" home="{url name="admin_statistics"}?ext=1"}
     </ul>
 
-    <div id="dashboard_enlaces">
-        <a href="javascript:change_dashboard('viewed',{$category})">Más Vistas</a> |
-        <a href="javascript:change_dashboard('comented',{$category})">Más Comentadas</a> |
-        <a href="javascript:change_dashboard('voted',{$category})">Más Valoradas</a>
+    <div id="statistics" class="tabs">
+        <ul>
+            <li><a href="#viewed">{t}More viewed{/t}</a></li>
+            <li><a href="#comented">{t}More commented{/t}</a></li>
+            <li><a href="#voted">{t}More voted{/t}</a></li>
+        </ul>
+        <div id="viewed" data-url="{url name=admin_statistics_widget}?type=viewed&amp;category={$category}&amp;days=">
+            <div id="viewed_most_24h" data-days="1">{t}Loading...{/t}</div>
+            <div id="viewed_most_48h" data-days="2">{t}Loading...{/t}</div>
+            <div id="viewed_most_72h" data-days="3">{t}Loading...{/t}</div>
+            <div id="viewed_most_1s"  data-days="7">{t}Loading...{/t}</div>
+            <div id="viewed_most_2s"  data-days="14">{t}Loading...{/t}</div>
+            <div id="viewed_most_1m"  data-days="30">{t}Loading...{/t}</div>
+        </div>
+        <div id="comented" data-url="{url name=admin_statistics_widget}?type=comented&amp;category={$category}&amp;days=">
+            <div id="comented_most_24h" data-days="1">{t}Loading...{/t}</div>
+            <div id="comented_most_48h" data-days="2">{t}Loading...{/t}</div>
+            <div id="comented_most_72h" data-days="3">{t}Loading...{/t}</div>
+            <div id="comented_most_1s"  data-days="7">{t}Loading...{/t}</div>
+            <div id="comented_most_2s"  data-days="14">{t}Loading...{/t}</div>
+            <div id="comented_most_1m"  data-days="30">{t}Loading...{/t}</div>
+        </div>
+        <div id="voted" data-url="{url name=admin_statistics_widget}?type=voted&amp;category={$category}&amp;days=">
+            <div id="voted_most_24h" data-days="1">{t}Loading...{/t}</div>
+            <div id="voted_most_48h" data-days="2">{t}Loading...{/t}</div>
+            <div id="voted_most_72h" data-days="3">{t}Loading...{/t}</div>
+            <div id="voted_most_1s"  data-days="7">{t}Loading...{/t}</div>
+            <div id="voted_most_2s"  data-days="14">{t}Loading...{/t}</div>
+            <div id="voted_most_1m"  data-days="30">{t}Loading...{/t}</div>
+        </div>
     </div>
-
-    <div id="viewed">
-        <table border="0" Cellpadding="0" cellspacing="0"  width="100%">
-            <tr>
-                <td width="33%" valign="top">
-                    <div id="viewed_most_24h"></div>
-                </td>
-                <td width="33%" valign="top">
-                    <div id="viewed_most_48h"></div>
-                </td>
-                <td width="33%" valign="top">
-                    <div id="viewed_most_72h"></div>
-                </td>
-            </tr>
-            <tr>
-                <td width="33%" valign="top">
-                    <div id="viewed_most_1s"></div>
-                </td>
-                <td width="33%" valign="top">
-                    <div id="viewed_most_2s"></div>
-                </td>
-                <td width="33%" valign="top">
-                    <div id="viewed_most_1m"></div>
-                </td>
-            </tr>
-        </table>
-    </div>
-    <div id="comented">
-        <table border="0" Cellpadding="0" cellspacing="0"  width="100%">
-            <tr>
-                <td width="33%" valign="top">
-                    <div id="comented_most_24h"></div>
-                </td>
-                <td width="33%" valign="top">
-                    <div id="comented_most_48h"></div>
-                </td>
-                <td width="33%" valign="top">
-                    <div id="comented_most_72h"></div>
-                </td>
-            </tr>
-            <tr>
-                <td width="33%" valign="top">
-                    <div id="comented_most_1s"></div>
-                </td>
-                <td width="33%" valign="top">
-                    <div id="comented_most_2s"></div>
-                </td>
-                <td width="33%" valign="top">
-                    <div id="comented_most_1m"></div>
-                </td>
-            </tr>
-        </table>
-    </div>
-    <div id="voted">
-        <table border="0" Cellpadding="0" cellspacing="0"  width="100%">
-            <tr>
-                <td width="33%" valign="top">
-                    <div id="voted_most_24h"></div>
-                </td>
-                <td width="33%" valign="top">
-                    <div id="voted_most_48h"></div>
-                </td>
-                <td width="33%" valign="top">
-                    <div id="voted_most_72h"></div>
-                </td>
-            <tr>
-                <td width="33%" valign="top">
-                    <div id="voted_most_1s"></div>
-                </td>
-                <td width="33%" valign="top">
-                    <div id="voted_most_2s"></div>
-                </td>
-                <td width="33%" valign="top">
-                    <div id="voted_most_1m"></div>
-                </td>
-            </tr>
-            </tr>
-        </table>
-    </div>
-
-    <script type="text/javascript">
-    /* <![CDATA[ */
-        change_dashboard('viewed',{$category});
-    /* ]]> */
-    </script>
 </div>
-
-    <input type="hidden" id="action" name="action" value="" />
-    <input type="hidden" name="id" id="id" value="{$id|default:""}" />
-</form>
 {/block}
