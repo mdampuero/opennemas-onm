@@ -513,7 +513,7 @@ class Content
 
         $stmt = $GLOBALS['application']->conn->
             Prepare('UPDATE contents SET `available`=?, `content_status`=?, `fk_user_last_editor`=?, '.
-                    '`changed`=? WHERE `pk_content`=?');
+                    '`starttime`=? WHERE `pk_content`=?');
 
         if (!is_array($status)) {
             $values = array($status, $status, $last_editor, $changed, $this->id);
@@ -558,7 +558,7 @@ class Content
 
         $stmt = $GLOBALS['application']->conn->
             Prepare('UPDATE contents SET `available`=1, `content_status`=1, `fk_user_last_editor`=?, '.
-                    '`changed`=? WHERE `pk_content`=?');
+                    '`starttime`=? WHERE `pk_content`=?');
 
         $values = array($_SESSION['userid'], date("Y-m-d H:i:s"), $this->id);
 
