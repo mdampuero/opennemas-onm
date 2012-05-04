@@ -41,7 +41,7 @@
                 {if count($elements) >0}
                     <th style='width:40% !important;'>{t}Site Url{/t}</th>
                     <th style='width:55% !important;'>{t}Categories to Sync{/t}</th>
-                    <th style="width:5% !important;">{t}Status{/t}</th>
+                    <th style="width:5% !important;">{t}Actions{/t}</th>
                 </tr>
                 {else}
                 <tr>
