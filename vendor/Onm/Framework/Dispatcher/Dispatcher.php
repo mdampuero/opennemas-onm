@@ -24,10 +24,11 @@ class Dispatcher
      *
      * @return this
      **/
-    public function __construct($matcher, &$request)
+    public function __construct($matcher, &$request, $container)
     {
         $this->matcher = $matcher;
         $this->request = $request;
+        $this->container = $container;
     }
 
     /**
@@ -117,6 +118,7 @@ class Dispatcher
                 self::resolveClasNameAndAction($className);
             if (class_exists($controllerClassName)) {
                 $controller = new $controllerClassName($this->request);
+                $controller->setContainer($this->container);
                 $controller->init();
                 return $controller->{$actionName}();
             } else {

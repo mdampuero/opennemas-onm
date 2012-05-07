@@ -11,6 +11,8 @@
 require '../../app/autoload.php';
 require '../bootstrap.php';
 
+$sc = include '../../app/container.php';
+
 // Dispatch the response
-$dispatcher = new \Onm\Framework\Dispatcher\Dispatcher($matcher, $request);
+$dispatcher = new \Onm\Framework\Dispatcher\Dispatcher($matcher, $request, $sc);
 $dispatcher->dispatch();
