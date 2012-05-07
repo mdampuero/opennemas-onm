@@ -167,25 +167,29 @@ class migrationNewslibrary {
 
         $htmlResult = $html;
         $result = array();
+        $patterns =  array();
+        $replacements = array();
         preg_match_all('@src?=?\"/media/images/([^"])*@', $html, $result);
 
         $newImage = new Photo();
         foreach($result[0] as $res) {
 
             //get the path for search in db
-            $img = preg_replace('@src?=?\"/media/images/@', '',$res);
+            $path = $res;
+            $img = preg_replace('@src?=?\"/media/images/@', '',$path);
+
 
             $imageID = $this->helper->imageIsImported($img, 'image');
             if(!empty($imageID)) {
                 $newImage->read($imageID);
-                $source =" src=\"/media/cronicas/images{$newImage->path_file}{$newImage->name}";
-                $htmlResult =preg_replace('@src?=?\"/media/images/([^"])* @',
-                                                            $source,
-                                                            $htmlResult);
+                $replacements[] =" src=\"/media/cronicas/images{$newImage->path_file}{$newImage->name} ";
+                $patterns[] = "@{$res}@";
+
             }else{
                  $this->helper->log("Problem with image {$img} new {$imageID}.\n");
             }
         }
+        $htmlResult = preg_replace($patterns, $replacements, $html);
 
         return $htmlResult;
 
@@ -203,27 +207,31 @@ class migrationNewslibrary {
 
     public function migrateUrls($html) {
 
-        $htmlResult = $html;
-        $result= array();
+
+        $patterns =  array();
+        $replacements = array();
+        $result = array();
 
         preg_match_all('@(href ?= ?"/)(.*/)(\d+)\.html ?@', $html, $result, PREG_SET_ORDER);
         $newContent = new Content();
         foreach($result as $res) {
-            $contentID = array_pop($res);
+
+            $contentID =$res[3];
 
             $elementID = $this->helper->elementTranslate($contentID);
             if(!empty($elementID)) {
                 $content = $newContent->get($elementID);
 
-                var_dump('\n '.$content->uri);
-                $htmlResult = preg_replace('@(href ?= ?"/)(.*/)(\d+)\.html ?@', 'href="'.$content->uri, $html);
+                $patterns[] = "@{$res[0]}@";
+                $replacements[] ='href="/'.$content->uri;
             }else{
                $this->helper->log("Problem with element {$contentID} new {$elementID}.\n");
 
             }
         }
 
-       //   $htmlResult = preg_replace($patterns, $replacements, $html);
+        $htmlResult = preg_replace($patterns, $replacements, $html);
+
         return $htmlResult;
     }
 
@@ -248,7 +256,7 @@ class migrationNewslibrary {
 
          $htmlResult = preg_replace($patterns, $replacements, $html,  -1, $count);
 
-        $htmlResult =preg_replace('@(href ?= ?"/hemeroteca/)(\w+)/(.*)/"@', "\$1\$3/\$2.html", $htmlResult, -1, $count);
+         $htmlResult =preg_replace('@(href ?= ?"/hemeroteca/)(\w+)/(.*)/"@', '\$1\$3/\$2.html"', $htmlResult, -1, $count);
 
 
          return $htmlResult;

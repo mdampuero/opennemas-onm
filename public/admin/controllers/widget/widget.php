@@ -62,7 +62,7 @@ switch($action) {
 
         if (isset($_SESSION['desde'])) {
             if ($_SESSION['desde'] == 'list') {
-                Application::forward('/admin/article.php?action='.$_SESSION['desde'].'&category='.$_SESSION['categoria']);
+                Application::forward('/admin/controllers/frontpagemanager/frontpagemanager.php?action='.$_SESSION['desde'].'&category='.$_SESSION['categoria']);
             }elseif ($_SESSION['desde'] == 'widget') {
                 Application::forward('?action=list');
             }elseif ($_SESSION['desde'] == 'search_advanced') {

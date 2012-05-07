@@ -53,21 +53,23 @@ require SITE_PATH.'../config/config.inc.php';
 
 
 $cronicasImporter = new CronicasToOnm($configOldDB,$configNewDB);
+/*
+$cronicasImporter->helper->sqlExecute(); // create translated tables
+$cronicasImporter->helper->sqlClearData(); //delete old data in tables
 
- $cronicasImporter->helper->sqlExecute(); // create translated tables
- $cronicasImporter->helper->sqlClearData(); //delete old data in tables
-
+exit();
+*/
 $cronicasImporter->importCategories();
 
-$cronicasImporter->importImagesArticles();
+//$cronicasImporter->importImagesArticles();
 
 $limit = ' LIMIT 0, 15000';
-$cronicasImporter->importArticles($limit);
+//$cronicasImporter->importArticles($limit);
 
-$cronicasImporter->importAuthorsOpinion();
+//$cronicasImporter->importAuthorsOpinion();
 
 $cronicasImporter->importPhotoAuthorsOpinion();
-
+/*
 $cronicasImporter->importOpinions();
 
 $cronicasImporter->importLetters();
@@ -81,9 +83,15 @@ $cronicasImporter->importAlbums();
 $cronicasImporter->importAdvertisements();
 
 $cronicasImporter->importAttachments();
+*/
+ $cronicasImporter->importRelatedContents();
 
-$cronicasImporter->importRelatedContents();
+
+$cronicasImporter->updateFrontpageArticles();
 
 printf("OpenNemas database is ok for Cronicas \n");
 
 $cronicasImporter->helper->printResults();
+
+
+////UPDATE `contents` SET available=1  WHERE `fk_content_type` =8

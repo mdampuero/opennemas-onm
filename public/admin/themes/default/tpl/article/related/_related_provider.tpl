@@ -1,5 +1,5 @@
 
- <div id="content-provider" class="related-content-provider clearfix" >
+ <div id="content-provider" class="related-content-provider clearfix" >    
     <ul>
         {is_module_activated name="ADVANCED_SEARCH"}
         {*<li>
@@ -33,16 +33,11 @@
             <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/album/album.php?action=related-provider&amp;category={$category}">{t}Albums{/t}</a>
         </li>
         {/is_module_activated}
-        {is_module_activated name="POLL_MANAGER"}
+            {is_module_activated name="POLL_MANAGER"}
         <li>
             <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/poll/poll.php?action=related-provider&amp;category={$category}">{t}Polls{/t}</a>
         </li>
         {/is_module_activated}
-        {*is_module_activated name="LETTER_MANAGER"}
-        <li>
-            <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/letter/letter.php?action=related-provider&amp;category={$category}">{t}Letters{/t}</a>
-        </li>
-        {/is_module_activated*}
         {is_module_activated name="SPECIAL_MANAGER"}
         {*<li>
             <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/special/special.php?action=related-provider&amp;category={$category}">{t}Specials{/t}</a>
@@ -51,7 +46,7 @@
         {is_module_activated name="FILE_MANAGER"}
         <li>
             <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/files/files.php?action=related-provider&amp;category={$category}">{t}Files{/t}</a>
-        </li>
+        </li> 
         {/is_module_activated}
     </ul>
 </div><!-- /content-provider -->

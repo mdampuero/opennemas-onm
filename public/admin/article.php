@@ -355,6 +355,14 @@ if (isset($_REQUEST['action']) ) {
             }
             $tpl->assign('intrel', $intrel);
 
+            if(\Onm\Module\ModuleManager::isActivated('AVANCED_ARTICLE_MANAGER')) {
+                $galleries = array();
+                $galleries['home'] = new Album($article->params['withGalleryHome']);
+                $galleries['front'] = new Album($article->params['withGallery']);
+                $galleries['inner'] = new Album($article->params['withGalleryInt']);
+                $tpl->assign('galleries', $galleries);
+            }
+
             //Comentarios
             $comment = new Comment();
             $comments = $cm->find('Comment', ' fk_content="'.$_REQUEST['id'].'"', NULL);
@@ -920,23 +928,6 @@ if (isset($_REQUEST['action']) ) {
                     $alert='';
                 if(is_array($fields)) {
 
-                 /*  foreach($fields as $i ) {
-                        $article = new Article($i);
-                        $rel= new RelatedContent();
-                        $relationes=array();
-
-                        $relationes = $rel->get_content_relations( $i );//de portada
-
-                        if(!empty($relationes)){
-                             $nodels[] =$i;
-                             $alert='ok';
-                             $msg .= " \"".$article->title."\",    \n";
-
-                        }else{
-                            $article->delete($i,$_SESSION['userid'] );
-                        }
-                    }
-*/
                      foreach($fields as $i ) {
                         $content = new Content($i);
                         $rel= new RelatedContent();
@@ -981,340 +972,6 @@ if (isset($_REQUEST['action']) ) {
 
             Application::forward($_SERVER['SCRIPT_NAME'].'?action='.$_SESSION['desde'].'&category='. $_SESSION['_from'].'&alert='.$alert.'&msg='.$msg.'&page='.$_REQUEST['page']);
 
-        break;
-
-
-        case 'get_others_articles':
-            //Listado paginado de articulos no en portada de categoria.
-            $cm = new ContentManager();
-            list($articles, $pages)= $cm->find_pages('Article', 'content_status=1 AND available=1 AND frontpage=0 AND fk_content_type=1 ', 'ORDER BY  created DESC,  title ASC ',$_REQUEST['page'],10, $_REQUEST['category']);
-            $params=$_GET['category'];
-            //$paginacion=$cm->makePagesLinkjs($pages, 'savePos('.$_GET['category'].'); get_others_articles', $params);
-            $paginacion=$cm->makePagesLinkjs($pages, ' get_others_articles', $params);
-            $tpl->assign('paginacion', $paginacion);
-
-            $rating = new Rating();
-            $comment = new Comment();
-            $aut=new User();
-            foreach ($articles as $key => $value) {
-                $articles[$key]->catName = $ccm->get_title($value->catName);
-                $articles[$key]->authorName = $aut->get_user_name($value->fk_publisher);
-                $articles[$key]->lastEditorName = $aut->get_user_name($value->fk_user_last_editor);
-            }
-            $tpl->assign('articles', $articles);
-
-            $html_out=$tpl->fetch('frontpage/blocks/others_articles_in_category.tpl');
-            Application::ajax_out($html_out);
-
-        break;
-
-        case 'get_suggested_articles':
-        //Sugeridas -
-            $cm = new ContentManager();
-            list($articles, $pages)= $cm->find_pages('Article', 'content_status=1 AND available=1 AND frontpage=1 AND fk_content_type=1 AND in_home=2', 'ORDER BY  created DESC,  title ASC ',$_REQUEST['page'],10);
-            $params="'".$_REQUEST['category']."'";
-            //$paginacion=$cm->makePagesLinkjs($pages, 'savePos(\''.$_REQUEST['category'].'\');  get_suggested_articles', $params);
-            $paginacion=$cm->makePagesLinkjs($pages, 'get_suggested_articles', $params);
-            $tpl->assign('paginacion', $paginacion);
-
-            $tpl->assign('other_category','suggested');
-            $rating = new Rating();
-            $comment = new Comment();
-            $aut=new User();
-            foreach ($articles as $key => $value) {
-                $articles[$key]->catName = $ccm->get_title($value->catName);
-                $articles[$key]->authorName = $aut->get_user_name($value->fk_publisher);
-                $articles[$key]->lastEditorName = $aut->get_user_name($value->fk_user_last_editor);
-            }
-
-            $tpl->assign('articles', $articles);
-
-            $html_out=$tpl->fetch('frontpage/blocks/others_articles_in_category.tpl');
-            Application::ajax_out($html_out);
-
-        break;
-
-        case 'get_frontpage_articles':
-             //Listado de portadas por secciones con que no están en home
-            $cm = new ContentManager();
-            $articles = $cm->find_by_category('Article', $_REQUEST['category'] ,'fk_content_type=1 AND in_home!=1 AND content_status=1 AND available=1 AND frontpage=1  ', 'ORDER BY placeholder ASC, position ASC,  title ASC ');
-
-            $rating = new Rating();
-            $comment = new Comment();
-            $aut=new User();
-            foreach ($articles as $art){
-                $art->publisher=$aut->get_user_name($art->fk_publisher);
-                $art->editor=$aut->get_user_name($art->fk_user_last_editor);
-                $art->rating= $rating->get_value($art->id);
-                $art->comment = $comment->count_public_comments( $art->id );
-            }
-
-            $tpl->assign('articles', $articles);
-
-            $html_out=$tpl->fetch('article/list_frontpages.tpl');
-            Application::ajax_out($html_out);
-
-        break;
-
-        case 'search_related':
-            $cm = new ContentManager();
-            $mySearch = cSearch::Instance();
-            $where="content_status=1 AND available=1 ";
-            $search=$mySearch->SearchRelatedContents($_REQUEST['metadata'], 'Article',NULL,$where);
-            if(($search) && count($search)>0){
-                $id=0;
-                //Para evitar mostrar la misma noticia que se edita en sugeridas
-                if($search[0]['id']){
-                    $id=$search[0]['id'];
-                }
-                $params=$id.",'".$_REQUEST['metadata']."'";
-                $search = $cm->paginate_array_num_js($search,20, 3, "search_related", $params);
-                $pages=$cm->pager;
-                $paginas='<p align="center">'.$pages->links.'</p>'	;
-                $div = print_search_related($id, $search);
-            } else{
-                $div="<h3>No hay noticias sugeridas</h3>";
-                $paginas='No hay noticias que se relacionen con las palabras clave: '.$_REQUEST['metadata'];
-            }
-            Application::ajax_out($div.$paginas);
-
-        break;
-
-        case 'search_adv':
-            /* Buscador en pestaña de contenidos relacionandos*/
-            $cm = new ContentManager();
-            $mySearch = cSearch::Instance();
-            //Transform the input string to search like: 'La via del tren' => '+via +tren'
-            $szSourceTags = explode(', ', StringUtils::get_tags($_REQUEST['metadata']));
-            $where="available=1 ";
-            $search=$mySearch->SearchRelatedContents($szSourceTags, 'Article,Opinion',NULL,$where);
-            $szSourceTags = explode(', ', htmlentities(StringUtils::get_tags($_REQUEST['metadata']),NULL,'UTF-8'));
-            //Put searched words with diferent color
-            $ind = 0; $indice = 0;
-            $res = array();
-            if ($search) {
-                foreach ($search as $res ) {
-                    $search[$indice]['metadata'] = htmlentities($search[$indice]['metadata'],NULL, 'UTF-8');
-                    for($ind=0; $ind < sizeof($szSourceTags); $ind++){
-                        $search[$indice]['title'] = StringUtils::ext_str_ireplace($szSourceTags[$ind], '<b><font color=blue>$1</font></b>', $search[$indice]['title']);
-                    }
-                    $indice++;
-                }
-            }
-
-            if(($search) && count($search)>0){
-                $params="0,'".$_REQUEST['metadata']."'";
-                $search = $cm->paginate_array_num_js($search,20 , 3, "search_adv", $params);
-                $pages=$cm->pager;
-                $paginas='<p align="center">'.$pages->links.'</p>';
-                $div=print_search_related(0, $search);
-            } else{
-                $div="<h3>No hay noticias sugeridas</h3>";
-                $paginas='No hay noticias que se relacionen con las palabras clave: '.$_REQUEST['metadata'];
-            }
-
-            Application::ajax_out($div.$paginas);
-
-        break;
-
-        case 'get_noticias':
-            $cm = new ContentManager();
-            if (!isset($_GET['category'])
-                || empty($_GET['category'])
-                || ($_GET['category'] == 'home')
-                || ($_GET['category'] == 'todos')
-                || ($_GET['category'] == ' ')
-            ) {
-                $category = 36;//Galicia
-                $datos_cat = $ccm->find('pk_content_category=36', NULL);
-            } else {
-                $category = $_GET['category'];
-                $datos_cat = $ccm->find('pk_content_category='.$category, NULL);
-            }
-            $categorys=print_menu($allcategorys,$subcat,$datos_cat[0],'noticias');
-
-            list($articles, $pages)= $cm->find_pages('Article', 'fk_content_type=1 and content_status=1 AND available=1 ', 'ORDER BY  created DESC,  contents.title ASC ',$_REQUEST['page'],20,$category);
-
-            $params=$_REQUEST['id'].", 'noticias',$category";
-            $paginacion=$cm->makePagesLinkjs($pages, ' get_div_contents', $params);
-            $paginacionV='<p align="center">'.$paginacion .'</p>'	;
-
-            $html_out = print_lists_related($_REQUEST['id'], $articles, 'noticias_div');
-            Application::ajax_out("<h2>Publicadas</h2>".$categorys.$html_out.$paginacionV);
-
-        break;
-
-          case 'get_hemeroteca':
-            $cm = new ContentManager();
-            if (!isset($_GET['category'])
-                || empty($_GET['category'])
-                || ($_GET['category'] == 'home')
-                || ($_GET['category'] == 'todos')
-                || ($_GET['category'] == ' ')
-            ) {
-                $category = 36;//Galicia
-                $datos_cat = $ccm->find('pk_content_category=36', NULL);
-            } else {
-                $category = $_GET['category'];
-                $datos_cat = $ccm->find('pk_content_category='.$category, NULL);
-            }
-
-            $categorys=print_menu($allcategorys,$subcat,$datos_cat[0],'hemeroteca');
-
-            list($articles, $pages)= $cm->find_pages('Article', 'fk_content_type=1 and content_status=0 AND available=1 ', 'ORDER BY  created DESC,  contents.title ASC ',$_REQUEST['page'],20,$category);
-
-            $params=$_REQUEST['id'].", 'hemeroteca',$category";
-            $paginacion=$cm->makePagesLinkjs($pages, ' get_div_contents', $params);
-            $paginacionV='<p align="center">'.$paginacion .'</p>'	;
-            $html_out = print_lists_related($_REQUEST['id'], $articles, 'hemeroteca_div');
-            Application::ajax_out("<h2>Hemeroteca</h2>".$categorys.$html_out.$paginacionV);
-
-            break;
-
-         case 'get_pendientes':
-            $cm = new ContentManager();
-            if (!isset($_GET['category'])
-                || empty($_GET['category'])
-                || ($_GET['category'] == 'home')
-                || ($_GET['category'] == 'todos')
-                || ($_GET['category'] == ' ')
-            ) {
-                $category = 36;//Galicia
-                $datos_cat = $ccm->find('pk_content_category=36', NULL);
-            } else {
-                $category = $_GET['category'];
-                $datos_cat = $ccm->find('pk_content_category='.$category, NULL);
-            }
-
-            $categorys=print_menu($allcategorys,$subcat,$datos_cat[0],'pendientes');
-
-            list($articles, $pages)= $cm->find_pages('Article', 'fk_content_type=1 and available=0', 'ORDER BY  created DESC,  contents.title ASC ',$_REQUEST['page'],20,$category);
-
-            $params=$_REQUEST['id'].", 'pendientes',$category";
-            $paginacion=$cm->makePagesLinkjs($pages, ' get_div_contents', $params);
-            $paginacionV='<p align="center">'.$paginacion .'</p>'	;
-
-            $html_out = print_lists_related($_REQUEST['id'], $articles, 'pendientes_div');
-            Application::ajax_out("<h2>Noticias Pendientes:</h2>".$categorys.$html_out.$paginacionV);
-
-        break;
-
-        case 'reload_menu':
-            $cm = new ContentManager();
-            if (!isset($_GET['category'])
-                || empty($_GET['category'])
-                || ($_GET['category'] == 'home')
-                || ($_GET['category'] == 'todos')
-                || ($_GET['category'] == ' ')
-            ) {
-                $category = 36;//Galicia
-                $datos_cat = $ccm->find('pk_content_category=36', NULL);
-            } else {
-                $category = $_GET['category'];
-                $datos_cat = $ccm->find('pk_content_category='.$category, NULL);
-            }
-            $tpl->assign('category', $_GET['category']);
-            $tpl->assign('home', '');
-            $html_out=$tpl->fetch('menu_categorys.tpl');
-            Application::ajax_out($html_out);
-
-        break;
-
-        case 'get_videos':
-            $cm = new ContentManager();
-            if (!isset($_GET['category'])
-                || empty($_GET['category'])
-                || ($_GET['category'] == 'home')
-                || ($_GET['category'] == 'todos')
-                || ($_GET['category'] == ' ')
-            ) {
-                $category = 36;//Galicia
-                $datos_cat = $ccm->find('pk_content_category=36', NULL);
-            } else {
-                $category = $_GET['category'];
-                $datos_cat = $ccm->find('pk_content_category='.$category, NULL);
-            }
-
-            $categorys=print_menu($allcategorys,$subcat,$datos_cat[0],'videos');
-
-            list($videos, $pages)= $cm->find_pages('Video', 'available=1', 'ORDER BY  created DESC,  contents.title ASC ',$_REQUEST['page'],20, $category);
-
-            $params=$_REQUEST['id'].", 'videos',0";
-            $paginacion=$cm->makePagesLinkjs($pages, ' get_div_contents', $params);
-            $paginacionV='<p align="center">'.$paginacion .'</p>'	;
-
-            $html_out = print_lists_related($_REQUEST['id'], $videos, 'videos_div');
-            Application::ajax_out("<h2>Videos: </h2>".$categorys.$html_out.$paginacionV);
-
-        break;
-
-        case 'get_albums':
-            $cm = new ContentManager();
-            if (!isset($_GET['category'])
-                || empty($_GET['category'])
-                || ($_GET['category'] == 'home')
-                || ($_GET['category'] == 'todos')
-                || ($_GET['category'] == ' ')
-            ) {
-                $category = 3;//Album
-                $datos_cat = $ccm->find('pk_content_category=3', NULL);
-            } else {
-                $category = $_GET['category'];
-                $datos_cat = $ccm->find('pk_content_category='.$category, NULL);
-            }
-
-           $categorys=print_menu($allcategorys,$subcat,$datos_cat[0],'albums');
-
-           list($albums, $pages)= $cm->find_pages('Album', 'available=1  AND fk_content_type=7', 'ORDER BY  created DESC,  contents.title ASC ',$_REQUEST['page'],20,$category);
-
-           $params=$_REQUEST['id'].", 'albums',".$category;
-           $paginacion=$cm->makePagesLinkjs($pages, ' get_div_contents', $params);
-           $paginacionV='<p align="center">'.$paginacion .'</p>'	;
-
-           $html_out=print_lists_related($_REQUEST['id'], $albums, 'albums_div')	;
-           Application::ajax_out("<h2>Galerias:</h2>".$categorys.$html_out.$paginacionV);
-
-        break;
-        case 'get_opinions':
-            $cm = new ContentManager();
-            $menu=print_menu_opinion($_GET['category']);
-             list($opinions, $pages)= $cm->find_pages('Opinion', 'content_status=1  and available=1 and type_opinion='.$_GET['category'], 'ORDER BY  created DESC,  contents.title ASC ',$_REQUEST['page'],20);
-
-            $params=$_REQUEST['id'].", 'opinions',".$_GET['category'];
-            $paginacion=$cm->makePagesLinkjs($pages, ' get_div_contents', $params);
-            $paginacionV='<p align="center">'.$paginacion .'</p>'	;
-            $html_out=print_lists_related($_REQUEST['id'], $opinions, 'opinions_div')	;
-            Application::ajax_out("<h2>Opiniones:</h2>".$menu.$html_out.$paginacionV);
-
-        break;
-
-        case 'get_adjuntos':
-            $cm = new ContentManager();
-
-            $cm = new ContentManager();
-            if (!isset($_GET['category'])
-                || empty($_GET['category'])
-                || ($_GET['category'] == 'home')
-                || ($_GET['category'] == 'todos')
-                || ($_GET['category'] == ' ')
-            ) {
-                $category = 36;//Galicia
-                $datos_cat = $ccm->find('pk_content_category=36', NULL);
-            } else {
-                $category = $_GET['category'];
-                $datos_cat = $ccm->find('pk_content_category='.$category, NULL);
-            }
-
-            $categorys=print_menu($allcategorys,$subcat,$datos_cat[0],'adjuntos');
-
-            list($attaches, $pages)= $cm->find_pages('Attachment', 'content_status=1  AND fk_content_type=3', 'ORDER BY  created DESC,  contents.title ASC ',$_REQUEST['page'],20,$category);
-
-            $params=$_REQUEST['id'].", 'adjuntos',".$category;
-            $paginacion=$cm->makePagesLinkjs($pages, ' get_div_contents', $params);
-            $paginacionV='<p align="center">'.$paginacion .'</p>'	;
-
-            $html_out=print_lists_related($_REQUEST['id'], $attaches, 'adjuntos_div');
-            Application::ajax_out("<h2>Ficheros:</h2>".$categorys.$html_out.$paginacionV);
         break;
 
         case 'get_categorys_list':
@@ -1449,6 +1106,8 @@ if (isset($_REQUEST['action']) ) {
 
 		case 'content-list-provider':
 
+        case 'related-provider-category':
+
             $items_page = s::get('items_per_page') ?: 20;
             $category   = filter_input( INPUT_GET, 'category' , FILTER_SANITIZE_STRING, array('options' => array('default' => '0')) );
             $page       = filter_input( INPUT_GET, 'page' , FILTER_SANITIZE_NUMBER_INT, array('options' => array('default' => '1')) );
@@ -1463,11 +1122,40 @@ if (isset($_REQUEST['action']) ) {
                 'contents'=>$articles,
                 'contentTypeCategories'=>$allcategorys,
                 'category' =>$category,
+                'contentType'=>'Article',
                 'pagination'=>$pages->links
             ));
 
             $htmlOut = $tpl->fetch("common/content_provider/_container-content-list.tpl");
             Application::ajax_out($htmlOut);
+
+            break;
+
+
+        case 'related-provider-suggest':
+
+            $items_page = s::get('items_per_page') ?: 20;
+            $metadata   = filter_input( INPUT_GET, 'metadata' , FILTER_SANITIZE_STRING, array('options' => array('default' => '0')) );
+            $page       = filter_input( INPUT_GET, 'page' , FILTER_SANITIZE_NUMBER_INT, array('options' => array('default' => '1')) );
+            $cm = new ContentManager();
+
+            $mySearch = cSearch::Instance();
+            $where = "content_status=1 AND available=1 ";
+            $search = $mySearch->SearchRelatedContents($metadata, 'Article,Opinion', NULL, $where);
+            if(($search) && count($search)>0){
+                var_dump($search);
+            }
+            $tpl->assign(array(
+                'contents'=>$articles,
+                'contentTypeCategories'=>$allcategorys,
+                'category' =>$category,
+                'pagination'=>$pages->links
+            ));
+
+            $htmlOut = $tpl->fetch("common/content_provider/_container-content-list.tpl");
+            Application::ajax_out($htmlOut);
+
+            break;
 
         default: {
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);

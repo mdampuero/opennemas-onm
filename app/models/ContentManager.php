@@ -86,7 +86,7 @@ class ContentManager
 
     public function find_all($content_type, $filter=null, $_order_by='ORDER BY 1', $fields='*')
     {
-        return $this->findAll($content_type, $filter=null, $_order_by='ORDER BY 1', $fields='*');
+        return $this->findAll($content_type, $filter, $_order_by, $fields);
     }
 
     /**
@@ -1233,7 +1233,7 @@ class ContentManager
         $pager_options = array(
             'mode'        => 'Sliding',
             'perPage'     => $items_page,
-            'delta'       => 4,
+            'delta'       => 3,
             'clearIfVoid' => true,
             'urlVar'      => 'page',
             'totalItems'  => $total_contents,

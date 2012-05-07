@@ -201,6 +201,7 @@ class CronicasToOnm {
                             $imageData = array(
                                 'title' => $title,
                                 'name' => $name,
+                                'available' =>1,
                                 'category'=> $category,
                                 'category_name'=>  $category_name,
                                 'metadata' => StringUtils::get_tags($slug.', '.$category_name),
@@ -280,6 +281,10 @@ class CronicasToOnm {
                         'img2_footer' =>$rs->fields['img2_footer'],
                         'category_name'=>  $category_name,
                         'description' => $title,
+                        'frontpage' => $rs->fields['frontpage'],
+                        'in_home' => $rs->fields['in_home'],
+                        'position' => $rs->fields['position'],
+                        'home_pos' => $rs->fields['home_pos'],
                         'created' => $rs->fields['created'],
                         'changed' => $rs->fields['changed'],
                         'starttime' => $rs->fields['created'],
@@ -1320,6 +1325,68 @@ class CronicasToOnm {
 
         }
         $rs->Close(); # optional
+    }
+
+
+    public function updateFrontpageArticles() {
+
+        $sql = "SELECT pk_content, pk_fk_content_category, placeholder, position ".
+                " FROM contents, contents_categories ".
+                " WHERE frontpage=1 AND contents.fk_content_type=1 ".
+                " AND pk_content = pk_fk_content AND content_status=1 AND available=1 ";
+
+        $rs =  $GLOBALS['application']->conn->Execute($sql);
+        $values= array();
+        while(!$rs->EOF) {
+            $values[] =  array(
+                                $rs->fields['pk_content'],
+                                $rs->fields['pk_fk_content_category'],
+                                $rs->fields['placeholder'],
+                                $rs->fields['position'],
+                                NULL,
+                                'Article'
+                   );
+
+            $rs->MoveNext();
+        }
+
+        $sql = "SELECT pk_content, pk_fk_content_category, home_placeholder, home_pos ".
+                " FROM contents, contents_categories ".
+                " WHERE in_home=1 AND frontpage=1  AND contents.fk_content_type=1 ".
+                " AND pk_content = pk_fk_content AND content_status=1 AND available=1 ";
+echo $sql;
+        $rs =  $GLOBALS['application']->conn->Execute($sql);
+
+        while(!$rs->EOF) {
+            $values[] =  array(
+                            $rs->fields['pk_content'],
+                            0,
+                            $rs->fields['home_placeholder'],
+                            $rs->fields['home_pos'],
+                            NULL,
+                            'Article',
+                   );
+
+            $rs->MoveNext();
+        }
+
+        $rs->Close(); # optional
+
+        $sql= "INSERT INTO `content_positions` ".
+              " (`pk_fk_content`, `fk_category`, `placeholder`, `position`, `params`, `content_type`)".
+              " VALUES ( ?, ?, ?, ?, ?, ?)";
+        self::$originConn->Prepare($sql);
+        $rss = self::$originConn->Execute($sql,$values);
+        if (!$rss) {
+            var_dump($values);
+            $error =  "\n-  ".$sql." -- ".self::$originConn->ErrorMsg() ;
+            $this->helper->log('-'.$error);
+            printf('\n-'.$error);
+        }else{
+             printf('\n- Articles are added in frontpages');
+        }
+
+        //UPDATE `contents` SET available=1  WHERE `fk_content_type` =8
     }
 
 }

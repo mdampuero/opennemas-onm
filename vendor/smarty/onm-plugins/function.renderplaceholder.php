@@ -13,12 +13,14 @@ function smarty_function_renderplaceholder($params, &$smarty) {
     $varname       = (!isset($params['varname']))? 'item': $params['varname'];
 
     // Doing some checks if this method was called properly
-    if (!isset($items)) { throw new Exception('RenderPlaceHolder: you must specify the items param'); }
+    if (!isset($items)) {
+        throw new Exception('RenderPlaceHolder: you must specify the items param');
+    }
 
     // Iterate over all the items and try to get its html representation
     $caching         = $smarty->caching;
     $smarty->caching = 0;
-    if (isset($items) && count($items>0)){
+    if (isset($items) && count($items>0)) {
         foreach ($items as $i => $item) {
 
             if ($item->placeholder == $placeholder && ($item->available == 1)) {
