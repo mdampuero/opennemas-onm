@@ -59,6 +59,12 @@
                         {t}Delete{/t}
                     </button>
                 </li>
+                <li>
+                    <a title="{t}Get updated cache list{/t}" href="{url name=admin_tpl_manager}">
+                        <img alt="{t}Refresh list{/t}" src="{$params.IMAGE_DIR}/template_manager/refresh48x48.png"><br>
+                        {t}Refresh list{/t}
+                    </a>
+                </li>
 
                 <li class="separator"></li>
                 <li>
