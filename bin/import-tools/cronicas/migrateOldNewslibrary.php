@@ -57,8 +57,8 @@ $migrator = new migrationNewslibrary($configNewDB);
 $migrator->importCategories();
 $iniDate ='20120331';
 $endDate ='20120101';
-//$migrator->migrateAllDirs($iniDate, $endDate);
-$migrator->migrateTest();
+ $migrator->migrateAllDirs($iniDate, $endDate);
+//$migrator->migrateTest();
 
 printf("OpenNemas newslibrary is ok for Cronicas \n");
 
