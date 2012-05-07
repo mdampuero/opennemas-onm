@@ -52,8 +52,9 @@ class WelcomeController extends Controller
             array('name' => 'El mundo', 'url'=> 'http://elmundo.feedsportal.com/elmundo/rss/portada.xml'),
         );
 
-        $this->view->assign('feeds',$feeds);
-        $this->view->display('welcome/index.tpl');
+        return $this->render('welcome/index.tpl', array(
+            'feeds' => $feeds
+        ));
 
     }
 } // END class Welcome
