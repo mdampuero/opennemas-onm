@@ -31,10 +31,22 @@ class Controller extends ContainerAware
      * @return void
      * @author
      **/
-    public function __construct($request)
+    public function __construct($container)
     {
-        $this->request = $request;
+        $this->container = $container;
     }
+
+    /**
+     * Retrieve unsetted variables from the container
+     *
+     * @return void
+     * @author
+     **/
+    public function __get($name)
+    {
+        return $this->container->get($name);
+    }
+
     /**
      * Forwards the request to another controller.
      *

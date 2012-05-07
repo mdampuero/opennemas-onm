@@ -46,6 +46,8 @@ class Dispatcher
                 $this->request->query->set($param, $value);
             }
 
+            $this->container->set('request',$this->request);
+
             $response = $this->dispatchRaw($parameters);
 
             if (is_string($response)) {
@@ -126,7 +128,6 @@ class Dispatcher
                     "Route class '$controllerClassName' don't exists."
                 );
             }
-
         }
     }
 
