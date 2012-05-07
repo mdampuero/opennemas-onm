@@ -34,7 +34,7 @@ class AclPrivilegesController extends Controller
 
         if(!\Acl::isMaster()) {
             m::add("You don't have permissions");
-            $this->redirect(url('admin_welcome'));
+            return $this->redirect(url('admin_welcome'));
         }
 
         $this->privilege = new \Privilege();
@@ -55,7 +55,7 @@ class AclPrivilegesController extends Controller
 
         $privileges = $this->privilege->get_privileges($filter);
 
-        echo $this->render('acl/privilege/list.tpl', array(
+        return $this->render('acl/privilege/list.tpl', array(
             'privileges' => $privileges,
             'modules'    => $this->privilege->getModuleNames()
         ));
@@ -83,7 +83,7 @@ class AclPrivilegesController extends Controller
         }
         $modules = $this->privilege->getModuleNames();
 
-        echo $this->render('acl/privilege/new.tpl', array(
+        return $this->render('acl/privilege/new.tpl', array(
             'modules' => $modules,
         ));
     }
@@ -101,7 +101,7 @@ class AclPrivilegesController extends Controller
         $this->privilege->read($id);
         $modules = $this->privilege->getModuleNames();
 
-        echo $this->render('acl/privilege/new.tpl',array(
+        return $this->render('acl/privilege/new.tpl',array(
             'privilege' => $this->privilege,
             'id'        => $this->privilege->pk_privilege,
             'modules'   => $modules,
@@ -117,7 +117,7 @@ class AclPrivilegesController extends Controller
     {
         m::add("For now is not possible to update privilege information.");
         //$privilege->update( $_REQUEST );
-        $this->redirect(url('admin_acl_privileges'));
+        return $this->redirect(url('admin_acl_privileges'));
     }
 
 
@@ -135,7 +135,7 @@ class AclPrivilegesController extends Controller
             m::add(sprintf(_('Unable to delete privilege with id "%d"')), $id);
         }
 
-        $this->redirect(url('admin_acl_privileges'));
+        return $this->redirect(url('admin_acl_privileges'));
     }
 
 

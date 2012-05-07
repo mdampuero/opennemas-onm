@@ -43,17 +43,16 @@ class AuthenticationController extends Controller
     public function defaultAction()
     {
         $token = md5(uniqid(mt_rand(), true));
+
         $_SESSION['csrf'] = $token;
         $languages = \Application::getAvailableLanguages();
         $currentLanguage = \Application::$language;
 
-
-        $this->view->assign(array(
+        return $this->render('login/login.tpl', array(
             'languages' => $languages,
             'current_language' => $currentLanguage,
             'token' => $token,
         ));
-        $this->view->display('login/login.tpl');
     }
 
     // TODO: Move session management logic to a specialized class
@@ -113,9 +112,9 @@ class AuthenticationController extends Controller
 
                     $forwardTo = filter_input(INPUT_POST, 'forward_to');
                     if (!is_null($forwardTo) && !empty($forwardTo)) {
-                        $this->redirect(SITE_URL.$forwardTo);
+                        return $this->redirect(SITE_URL.$forwardTo);
                     } else {
-                        $this->redirect(SITE_URL_ADMIN);
+                        return $this->redirect(SITE_URL_ADMIN);
                     }
                 }
 
@@ -127,7 +126,7 @@ class AuthenticationController extends Controller
         $this->view->assign('token', $token);
         $_SESSION['csrf'] = $token;
 
-        echo $this->render('login/login.tpl');
+        return $this->render('login/login.tpl');
     }
 
     /**

@@ -15,7 +15,6 @@ use Onm\Framework\Controller\Controller,
  * Handles the actions for the system information
  *
  * @package Backend_Controllers
- * @author
  **/
 class AclUserGroupsController extends Controller
 {

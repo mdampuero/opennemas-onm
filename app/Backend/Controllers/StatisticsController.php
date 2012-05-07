@@ -10,7 +10,8 @@
 namespace Backend\Controllers;
 
 use Onm\Framework\Controller\Controller,
-    Onm\Message as m;
+    Onm\Message as m,
+    Symfony\Component\HttpFoundation\Response;
 /**
  * Handles the actions for the system information
  *

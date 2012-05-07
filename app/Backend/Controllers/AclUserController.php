@@ -43,13 +43,13 @@ class AclUserController extends Controller
         \Acl::checkOrForward('USER_ADMIN');
 
         $filter    = $this->request->query->get('filter', null);
-        
+
         $cm        = new \ContentManager();
         $user      = new \User();
-        
+
         $users     = $user->get_users($filter, ' ORDER BY login ');
         $users     = $cm->paginate_num($users, ITEMS_PAGE);
-        
+
         $userGroup = new \UserGroup();
         $group     = $userGroup->get_user_groups();
 
@@ -118,15 +118,17 @@ class AclUserController extends Controller
         $user->update($_REQUEST);
 
         if ($action == 'validate') {
-            return $this->redirect(url('admin_acl_user_show', array('id' => $userId)));
+            $redirectUrl = url('admin_acl_user_show', array('id' => $userId));
         } else {
             // If a regular user is upating him/her information redirect to welcome page
-            if ( ($_REQUEST['id'] == $_SESSION['userid']) && !Acl::check('USER_UPDATE') ) {
-                return $this->redirect(url('admin_welcome'));
+            if (($userId == $_SESSION['userid']) && !Acl::check('USER_UPDATE')) {
+                $redirectUrl = url('admin_welcome');
             } else {
-                return $this->redirect(url('admin_acl_user'));
+                $redirectUrl = url('admin_acl_user');
             }
         }
+
+        return $this->redirect($redirectUrl);
     }
 
     /**
@@ -138,8 +140,10 @@ class AclUserController extends Controller
     {
         \Acl::checkOrForward('USER_CREATE');
 
+        $action = $this->request->request->filter('action', null, FILTER_SANITIZE_STRING);
+
         if ($this->request->getMethod() == 'POST') {
-            $user = new User();
+            $user = new \User();
             if ($user->create($_POST)) {
                 if ($action == 'validate') {
                     return $this->redirect(url('admin_acl_user_show', array('id' => $user->id)));
@@ -149,7 +153,7 @@ class AclUserController extends Controller
                 $this->view->assign('errors', $user->errors);
             }
         }
-        $this->view->display('acl/user/new.tpl');
+        return $this->render('acl/user/new.tpl');
     }
 
     /**
@@ -192,7 +196,7 @@ class AclUserController extends Controller
         } else {
             m::add(_('You haven\'t selected any user to delete.'), m::ERROR);
         }
-        $this->redirect(url('admin_acl_user'));
+        return $this->redirect(url('admin_acl_user'));
     }
 
 } // END class AclUserController

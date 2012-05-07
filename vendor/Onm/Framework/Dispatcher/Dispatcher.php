@@ -9,7 +9,8 @@
  **/
 namespace Onm\Framework\Dispatcher;
 
-use \Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use \Symfony\Component\Routing\Exception\ResourceNotFoundException,
+    \Symfony\Component\HttpFoundation\Response;
 /**
  * Dispatches url to a matched controller
  *
@@ -47,8 +48,10 @@ class Dispatcher
             $response = $this->dispatchRaw($parameters);
 
             if (is_string($response)) {
-                echo $response;
+                $response = new Response($response);
             }
+
+            $response->send();
 
         } catch (ResourceNotFoundException $e) {
             $this->handleException($e);

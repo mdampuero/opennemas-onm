@@ -105,7 +105,7 @@ class DatabaseErrorsController extends Controller
         );
         $pager = \Pager::factory($pagerOptions);
 
-        echo $this->render('system_information/sql_error_log.tpl',  array(
+        return $this->render('system_information/sql_error_log.tpl',  array(
             'errors' => $errors,
             'pagination' => $pager,
             'total_errors' => $rsTotalErrors,
@@ -131,7 +131,7 @@ class DatabaseErrorsController extends Controller
 
         m::add(_('SQL errors registered in database cleaned sucessfully.'). m::SUCCESS);
 
-        $this->redirect(url('admin_databaseerrors', array(), true));
+        return $this->redirect(url('admin_databaseerrors', array(), true));
     }
 
 } // END class SystemSettigns

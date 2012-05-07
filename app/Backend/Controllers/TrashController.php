@@ -96,7 +96,7 @@ class TrashController extends Controller
             }
         }
 
-        $this->redirect(url(
+        return $this->redirect(url(
             'admin_trash',
             array('mytype' => $this->filterContentType, 'page' => $this->page)
         ));
@@ -146,14 +146,18 @@ class TrashController extends Controller
     public function deleteAllAction()
     {
         if ($_REQUEST['id'] == 6){ //Eliminar todos
-
             $cm = new ContentManager();
             $contents = $cm->find($_REQUEST['mytype'], 'in_litter=1', 'ORDER BY created DESC ');
+
             foreach ($contents as $cont){
                 $content = new Content($cont->id);
                 $content->remove($cont->id);
             }
-            return $this->redirect(url('admin_trash', array('mytype' => $this->filterContentType, 'page' => $this->page)));
+
+            return $this->redirect(url(
+                'admin_trash',
+                array('mytype' => $this->filterContentType, 'page' => $this->page)
+            ));
         }
     }
 

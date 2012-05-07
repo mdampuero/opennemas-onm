@@ -31,7 +31,7 @@ class SystemInformationController extends Controller
 
         if(!\Acl::isMaster()) {
             m::add(_("You don't have permissions to access to the system information."));
-            $this->redirect(url('admin_welcome'));
+            return $this->redirect(url('admin_welcome'));
         }
 
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
