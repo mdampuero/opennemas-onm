@@ -1,312 +1,54 @@
 <?php
-/* -*- Mode: PHP; tab-width: 4 -*- */
-/**
- * OpenNeMas project
+/*
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
- * LICENSE
- *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://framework.zend.com/license/new-bsd
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@zend.com so we can send you a copy immediately.
- *
- * @category   OpenNeMas
- * @package    OpenNeMas
- * @copyright  Copyright (c) 2009 Openhost S.L. (http://openhost.es)
- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 use Onm\Settings as s,
-    Onm\Message  as m;
+    Onm\Message as m;
+/**
+ * Setup app
+*/
+require_once(dirname(__FILE__).'/../../../bootstrap.php');
+require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
 
-require_once '../../../bootstrap.php';
-require_once '../../session_bootstrap.php';
+//Check if module is activated in this onm instance
+\Onm\Module\ModuleManager::checkActivatedOrForward('NEWSLETTER_MANAGER');
 
+ // Check if the user can admin books
 Acl::checkOrForward('NEWSLETTER_ADMIN');
 
-StringUtils::disabled_magic_quotes();
 
 $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
-$tpl->assign('application_name', 'Boletín de Noticias');
 
-$newsletter = new Newsletter(array('namespace' => 'PConecta_'));
-$ccm = ContentCategoryManager::get_instance();
-
-function buildFilter($filters)
-{
-    if(!isset($filters) || is_null($filters)) {
-        return array(array('in_home=1'), 'home_placeholder ASC, home_pos ASC, created DESC');
-    }
-
-    $fltr = array('`available`=1');
-    $order_by = 'created DESC';
-
-    switch($filters['options']) {
-        case 'in_home': {
-            $fltr[] = '`in_home`=1';
-            $fltr[] = '`frontpage`=1';
-            $fltr[] = '`content_status`=1';
-            $fltr[] = '`home_placeholder` IS NOT NULL';
-            $order_by = 'home_placeholder ASC, home_pos ASC, created DESC';
-        } break;
-
-        case 'frontpage': {
-            $fltr[] = '`frontpage`=1';
-            $fltr[] = '`content_status`=1';
-            $order_by = 'placeholder ASC, position ASC, created DESC';
-        } break;
-
-        case 'hemeroteca': {
-            $fltr[] = '`content_status`=0';
-        } break;
-    }
-
-    if(isset($filters['q']) && !empty($filters['q'])) {
-        $fltr[] = 'MATCH (title,metadata) AGAINST ("'.addslashes($filters['q']).'" IN BOOLEAN MODE)';
-    }
-
-    if(isset($filters['category']) && !empty($filters['category']) && ($filters['category']>0)) {
-        $fltr['category'] = $filters['category'];
-    } elseif(isset($filters['category'])) {
-        //$order_by = '`content_categories`.`name` ASC, ' . $order_by; // ???
-    }
-
-    if(isset($filters['author']) && !empty($filters['author']) && ($filters['author']>0)) {
-        $fltr[] = '`opinions`.`fk_author`='.$filters['author'];
-    }
-
-    return array($fltr, $order_by);
-}
 
 // Initialize request parameters
 $action = filter_input( INPUT_POST, 'action' , FILTER_SANITIZE_STRING );
 if (!isset($action)) {
-    $action = filter_input( INPUT_GET, 'action' , FILTER_SANITIZE_STRING, array('options' => array('default' => 'listArticles')) );
+    $action = filter_input( INPUT_GET, 'action' , FILTER_SANITIZE_STRING, array('options' => array('default' => 'addContents')) );
+}
+
+if (is_null(s::get('newsletter_maillist')) || !(s::get('newsletter_subscriptionType'))
+    || !(s::get('newsletter_enable'))) {
+        m::add(_('Please provide your Newsletter configuration to start to use your Newsletter module'));
+        $httpParams [] = array( 'action'=>'config' );
+        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
+} else {
+    $configurations = s::get('newsletter_maillist');
+        foreach ($configurations as $key => $value) {
+        if ($key != 'receiver' && empty($value)) {
+            m::add(_('Your newsletter configuration is not complete. Please go to settings and complete the form.'), m::ERROR);
+            $httpParams [] = array(
+                'action'=>'config',
+            );
+        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
+        }
+    }
 }
 
 switch($action) {
-
-
-    /**
-     * Step 1: list all articles available in frontpage
-     */
-    case 'listArticles':
-    //Check if module is configured, if not redirect to configuration form
-    if (is_null(s::get('newsletter_maillist'))
-        || !(s::get('newsletter_subscriptionType'))
-        || !(s::get('newsletter_enable')))
-    {
-        m::add(_('Please provide your Newsletter configuration to start to use your Newsletter module'));
-        $httpParams [] = array(
-                            'action'=>'config',
-                        );
-        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
-    } else {
-        $configurations = s::get('newsletter_maillist');
-            foreach ($configurations as $key => $value) {
-            if ($key != 'receiver' && empty($value)) {
-                m::add(_('Your newsletter configuration is not complete. Please go to settings and complete the form.'), m::ERROR);
-                $httpParams [] = array(
-                    'action'=>'config',
-                );
-            Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
-            }
-        }
-    }
-        $items = $newsletter->getItemsProvider();
-
-        // Get articles in frontpage
-        $articles = $items->getItems('Article',
-                                     array('in_home=1',
-                                           'content_status=1',
-                                           'contents.available=1',
-                                           'contents.frontpage=1'),
-                                     'home_placeholder ASC, home_pos ASC, created DESC',
-                                     '0, ' . Newsletter::ITEMS_MAX_LIMIT);
-
-        $message = filter_input ( INPUT_GET, 'message' , FILTER_SANITIZE_STRING, array('options' => array('default' => null)) );
-
-        $tpl->assign(array(
-            'content_categories'    => $ccm->getCategoriesTreeMenu(),
-            'items'                 => $articles,
-            'message'               => $message,
-        ));
-
-        $tpl->display('newsletter/listArticles.tpl');
-
-        break;
-
-    /**
-     * Step 2: list all opinions available
-     */
-    case 'listOpinions':
-
-        $items = $newsletter->getItemsProvider();
-
-        // Opinions
-        $opinions = $items->getItems('Opinion', array('in_home=1', 'content_status=1'),
-                                     'created DESC',
-                                     '0, ' . Newsletter::ITEMS_MAX_LIMIT);
-        $tpl->assign('items', $opinions);
-
-        // Authors
-        $author = new Author();
-        $authors = $author->all_authors(NULL,'ORDER BY name');
-        $tpl->assign('authors', $authors);
-
-        // Postmaster
-        if(isset($_REQUEST['postmaster']) && !empty($_REQUEST['postmaster'])) {
-            $tpl->assign('postmaster', json_decode($_REQUEST['postmaster']));
-        }
-
-        $tpl->display('newsletter/listOpinions.tpl');
-
-        break;
-
-    /**
-     * Step 3: list Accounts available for send this message
-     * TODO: must be improved to allow custom destinations or edit existing.
-     */
-    case 'listAccounts':
-        $account = $newsletter->getAccountsProvider();
-        $accounts = $account->getAccounts();
-
-        $receiver = array();
-        $mailList = array();
-        $configurations = \Onm\Settings::get('newsletter_maillist');
-        if (!is_null($configurations)
-            && array_key_exists('email', $configurations)
-            && !empty($configurations['email']))
-        {
-            $mailList[] = new Newsletter_Account(
-                $configurations['email'],
-                $configurations['name']
-            );
-
-        }
-        $tpl->assign('mailList', $mailList);
-
-        // Ajax request
-        if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
-           ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')) {
-            header('Content-type: application/json');
-            echo json_encode($accounts);
-            exit(0);
-        }
-
-        $tpl->assign('items', $accounts);
-
-        $tpl->display('newsletter/listAccounts.tpl');
-
-        break;
-
-    /**
-     * Step 4: preview the message
-     */
-    case 'preview':
-
-        $htmlContent = $newsletter->render();
-        $tpl->assign('htmlContent', $htmlContent);
-        $tpl->display('newsletter/preview.tpl');
-
-        break;
-
-    /**
-     * Step 5: send the message to destinations and see send report.
-     */
-    case 'send':
-
-        // save newsletter
-        $postmaster = $_REQUEST['postmaster'];
-        $newsletter->create(array('data' => $postmaster));
-
-        // Ignore user abort and life time to infinite
-        $newsletter->setConfigMailing();
-        $htmlContent = $newsletter->render();
-
-        $params = array(
-            'subject'   => $_REQUEST['subject'],
-            'mail_host' => MAIL_HOST,
-            'mail_user' => MAIL_USER,
-            'mail_pass' => MAIL_PASS,
-            'mail_from' => MAIL_FROM,
-            'mail_from_name' => s::get('site_name'),
-        );
-
-        $data = json_decode($postmaster);
-
-        $htmlFinal = "";
-
-        // Mail user by user
-        foreach($data->accounts as $mailbox) {
-
-            // Replace name destination
-            $emailHtmlContent = str_replace('###DESTINATARIO###', $mailbox->name, $htmlContent);
-
-            if($newsletter->sendToUser($mailbox, $emailHtmlContent, $params)) {
-                $htmlFinal .= '<tr><td width=50% align=right><strong class="ok">OK</strong>&nbsp;&nbsp;</td><td>'. $mailbox->name . ' &lt;' . $mailbox->email . '&gt;</td></tr>';
-            } else {
-                $htmlFinal .= '<tr><td width=50% ><strong class="failed">FAILED</strong>&nbsp;&nbsp;</td><td>'. $mailbox->name . ' &lt;' . $mailbox->email. '&gt;</td></tr>';
-            }
-        }
-
-        if (isset($data->lists)) {
-            foreach($data->lists as $email) {
-                if (trim($email) != ""){
-                    $mailbox = new stdClass();
-                    $name = preg_split('/@/',$email);
-                    $mailbox->name = $name[0];
-                    $mailbox->email =trim($email);
-
-                    // Replace name destination
-                    $emailHtmlContent = str_replace('###DESTINATARIO###', $mailbox->name, $htmlContent);
-
-                    if($newsletter->sendToUser($mailbox, $emailHtmlContent, $params)) {
-                        $htmlFinal .= '<tr><td width=50% align=right><strong class="ok">OK</strong>&nbsp;&nbsp;</td><td>'. $mailbox->name . ' &lt;' . $mailbox->email . '&gt;</td></tr>';
-                    } else {
-                        $htmlFinal .= '<tr><td width=50% ><strong class="failed">FAILED</strong>&nbsp;&nbsp;</td><td>'. $mailbox->name . ' &lt;' . $mailbox->email. '&gt;</td></tr>';
-                    }
-                }
-
-            }
-        }
-
-        $tpl->assign(array(
-            'html_final' => $htmlFinal,
-            'postmaster' => $postmaster,
-        ));
-        $tpl->display('newsletter/send.tpl');
-
-    break;
-
-
-    case 'search':
-
-        $items = $newsletter->getItemsProvider();
-
-        $source = (in_array($_REQUEST['source'], array('Article', 'Opinion')))? $_REQUEST['source']: 'Article';
-        list($filter, $order_by) = buildFilter($_REQUEST['filters']);
-
-        $articles = $items->getItems($source, $filter, $order_by, '0, 50');
-
-        // Ajax request
-        if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
-           ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')) {
-            header('Content-type: application/json');
-            echo json_encode($articles);
-            exit(0);
-        }
-
-        $tpl->assign('content_categories', $ccm->getCategoriesTreeMenu());
-        $tpl->assign('items', $articles);
-
-        $tpl->display('newsletter/listArticles.tpl');
-
-    break;
-
-
 
     case 'config':
 
@@ -350,10 +92,189 @@ switch($action) {
         m::add(_('Settings saved.'), m::SUCCESS);
 
         $httpParams = array(
-                            array('action'=>'listArticles'),
+                            array('action'=>'addContents'),
                             );
         Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
 
     break;
 
+    /**
+     * Step: list all contents
+     */
+    case 'addContents':
+
+
+        //Get saved newsletters
+        $newsletter = new NewNewsletter();
+        $savedNewsletters = $newsletter->cache->search('1=1 ORDER BY created DESC LIMIT 0,30');
+        //
+        $newsletterContent = json_decode(json_decode($_COOKIE['data-newsletter']));
+        $tpl->assign( array(
+                    'newsletterContent' => $newsletterContent,
+                    'savedNewsletters'  => $savedNewsletters ) );
+
+        $tpl->display('newsletter/steps/newsletterContents.tpl');
+    break;
+
+    case 'loadSavedNewsletter':
+
+        $id = filter_input(INPUT_POST,'saved_newsletters',FILTER_VALIDATE_INT);
+
+        $newsletter = new NewNewsletter($id);
+
+        $_COOKIE['data-newsletter'] = $newsletter->data;
+        $newsletterContent = json_decode(json_decode($_COOKIE['data-newsletter']));
+
+        $savedNewsletters = $newsletter->search('1=1 ORDER BY created DESC LIMIT 0,30');
+
+        $tpl->assign( array(
+                    'newsletterContent' => $newsletterContent,
+                    'savedNewsletters'  => $savedNewsletters ) );
+
+        $tpl->display('newsletter/steps/newsletterContents.tpl');
+
+    break;
+   /**
+     * Step: preview the message
+     */
+    case 'preview':
+        $newsletter = new NewsletterManager();
+        $htmlContent = $newsletter->render();
+
+        $tpl->assign('htmlContent', $htmlContent);
+        $tpl->display('newsletter/steps/newsletterPreview.tpl');
+
+    break;
+
+    case 'save':
+
+        $newsletter = new NewNewsletter();
+        $htmlContent = $newsletter->create($htmlContent);
+        $tpl->assign('htmlContent', $htmlContent);
+
+    break;
+
+    /**
+     * Step: list Accounts available for send this message
+     * TODO: must be improved to allow custom destinations or edit existing.
+     */
+    case 'listRecipients':
+
+        $newsletter = new Newsletter(array('namespace' => 'PConecta_'));
+
+        $account = $newsletter->getAccountsProvider();
+        $accounts = $account->getAccounts();
+
+        $receiver = array();
+        $mailList = array();
+        $configurations = \Onm\Settings::get('newsletter_maillist');
+        if (!is_null($configurations)
+            && array_key_exists('email', $configurations)
+            && !empty($configurations['email']))
+        {
+            $mailList[] = new Newsletter_Account(
+                $configurations['email'],
+                $configurations['name']
+            );
+
+        }
+        $tpl->assign('mailList', $mailList);
+
+        // Ajax request
+        if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
+           ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')) {
+            header('Content-type: application/json');
+            echo json_encode($accounts);
+            exit(0);
+        }
+
+        $tpl->assign('accounts', $accounts);
+
+        if(isset($_COOKIE['data-recipients'])) {
+            $recipients = json_decode(json_decode($_COOKIE['data-recipients']));
+            $tpl->assign('recipients', $recipients);
+        }
+
+        $tpl->display('newsletter/steps/newsletterRecipients.tpl');
+
+    break;
+
+    /**
+     * Step: send the message to destinations and see send report.
+     */
+    case 'send':
+
+        $subject =  filter_input( INPUT_POST, 'subject' , FILTER_SANITIZE_STRING );
+        $newsletter = new NewNewsletter();
+
+        // save newsletter
+        $postmaster = $_COOKIE['data-newsletter'];
+        $newsletter->create(array('content' => $postmaster));
+
+        // Ignore user abort and life time to infinite
+        $nManager = new NewsletterManager();
+        $nManager->setConfigMailing();
+        $htmlContent = $nManager->render();
+
+        $params = array(
+            'subject'   => $subject,
+            'mail_host' => MAIL_HOST,
+            'mail_user' => MAIL_USER,
+            'mail_pass' => MAIL_PASS,
+            'mail_from' => MAIL_FROM,
+            'mail_from_name' => s::get('site_name'),
+        );
+
+        $data = json_decode($postmaster);
+
+        $htmlFinal = "";
+
+        // Mail user by user
+        $recipients = json_decode(json_decode($_COOKIE['data-recipients']));
+        foreach($recipients as $mailbox) {
+
+            // Replace name destination
+            $emailHtmlContent = str_replace('###DESTINATARIO###', $mailbox->name, $htmlContent);
+
+            if($nManager->sendToUser($mailbox, $emailHtmlContent, $params)) {
+                $htmlFinal .= '<tr><td width=50% align=right><strong class="ok">OK</strong>&nbsp;&nbsp;</td><td>'. $mailbox->name . ' &lt;' . $mailbox->email . '&gt;</td></tr>';
+            } else {
+                $htmlFinal .= '<tr><td width=50% ><strong class="failed">FAILED</strong>&nbsp;&nbsp;</td><td>'. $mailbox->name . ' &lt;' . $mailbox->email. '&gt;</td></tr>';
+            }
+        }
+
+        if (isset($data->lists)) {
+            foreach($data->lists as $email) {
+                if (trim($email) != ""){
+                    $mailbox = new stdClass();
+                    $name = preg_split('/@/',$email);
+                    $mailbox->name = $name[0];
+                    $mailbox->email =trim($email);
+
+                    // Replace name destination
+                    $emailHtmlContent = str_replace('###DESTINATARIO###', $mailbox->name, $htmlContent);
+
+                    if($nManager->sendToUser($mailbox, $emailHtmlContent, $params)) {
+                        $htmlFinal .= '<tr><td width=50% align=right><strong class="ok">OK</strong>&nbsp;&nbsp;</td><td>'. $mailbox->name . ' &lt;' . $mailbox->email . '&gt;</td></tr>';
+                    } else {
+                        $htmlFinal .= '<tr><td width=50% ><strong class="failed">FAILED</strong>&nbsp;&nbsp;</td><td>'. $mailbox->name . ' &lt;' . $mailbox->email. '&gt;</td></tr>';
+                    }
+                }
+
+            }
+        }
+
+        $tpl->assign(array(
+            'html_final' => $htmlFinal,
+            'postmaster' => $postmaster,
+        ));
+
+        unset($_COOKIE['data-recipients']);
+        unset($_COOKIE['data-newsletter']);
+        $tpl->display('newsletter/steps/newsletterSend.tpl');
+
+    break;
+
+
 }
+
