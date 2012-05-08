@@ -86,6 +86,21 @@ class ContentManager
 
     public function find_all($content_type, $filter=null, $_order_by='ORDER BY 1', $fields='*')
     {
+        return $this->findAll($content_type, $filter, $_order_by, $fields);
+    }
+
+    /**
+     * Returns an array of objects for a given content type and filters
+     *
+     * @param string $content_type the content type to search for
+     * @param string $filter the SQL string to filter contents
+     * @param string $order_by SQL string to order results
+     * @param string $fields the list of fields to get
+     *
+     * @return array the list of content objects
+     **/
+    public function findAll($content_type, $filter = null, $_order_by = 'ORDER BY 1', $fields='*')
+    {
         $this->init($content_type);
         $items = array();
 
@@ -127,6 +142,99 @@ class ContentManager
         $contents = array();
 
         $sql = 'SELECT * FROM content_positions '
+              .'WHERE `fk_category`=? '
+              .'ORDER BY position ASC ';
+
+        // Fetch the id, placeholder, position, and content_type in this category's frontpage
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($categoryID));
+
+        if($rs !== false) {
+
+            // iterate over all found contents and initialize them
+            while(!$rs->EOF) {
+
+                $content = new $rs->fields['content_type']($rs->fields['pk_fk_content']);
+                // add all the additional properties related with positions and params
+
+                if ($content->in_litter == 0) {
+                    $content->load(array(
+                        'placeholder' => $rs->fields['placeholder'],
+                        'position'    => $rs->fields['position'],
+                    ));
+                    if ( is_array( $content->params ) && $content->params > 0 ) {
+                       $content->params = array_merge($content->params  , (array)unserialize($rs->fields['params']) );
+                    } else {
+                        $content->params = unserialize($rs->fields['params']);
+                    }
+                    $contents[] = $content;
+                }
+
+                $rs->MoveNext();
+            }
+        }
+
+        // Return all the objects of contents initialized
+        return $contents;
+
+    }
+
+
+    /**
+    * Fetches all the contents (articles, widgets, etc) for one specific category
+    * given an array of content ids, position and placeholder
+    *
+    * This is used from frontpage manager for preview the actual frontpage
+    *
+    * @param array $contents, [ 'id':'xxx', 'position':'xxx', 'placeholder':'xxx', 'params': [] ]
+    * @return mixed, array of contents
+    */
+    public function getContentsForHomepageFromArray($contentsArray)
+    {
+
+        // Initialization of variables
+        $contents = array();
+
+        // iterate over all found contents and initialize them
+        foreach ($contentsArray as $element) {
+            $content = new $element['content_type']($element['id']);
+
+            if (!array_key_exists('params', $element) || empty($element['params'])) {
+                $element['params'] = serialize(array());
+            }
+            // only add it to the final results if is not in litter
+            if ($content->in_litter == 0) {
+                $content->load(array(
+                    'placeholder' => $element['placeholder'],
+                    'position'    => $element['position'],
+                    'params'      => unserialize($element['params']),
+                ));
+                $contents[] = $content;
+            }
+        }
+
+        // Return all the objects of contents initialized
+        return $contents;
+
+    }
+
+
+    /**
+     * Fetches all the contents (articles, widgets, etc) for one specific category
+     * with its placeholder and position
+     *
+     * This is used for HomePages, fetches all the contents assigned for it and allows
+     * to render an entire homepage
+     *
+     * @param type $category_id, the id of the category we want to get contents from
+     * @return mixed, array of contents
+     **/
+    public function getContentsIdsForHomepageOfCategory($categoryID)
+    {
+
+        // Initialization of variables
+        $contents = array();
+
+        $sql = 'SELECT * FROM content_positions '
               .'WHERE `fk_category`='.$categoryID.' '
               .'ORDER BY position ASC ';
 
@@ -138,18 +246,11 @@ class ContentManager
             // iterate over all found contents and initialize them
             while(!$rs->EOF) {
 
-                $content = new $rs->fields['content_type']($rs->fields['pk_fk_content']);
-                // add all the additional properties related with positions and params
-
-                if ($content->in_litter == 0) {
-                    $placeholder = ($categoryID == 0) ? 'home_placeholder': 'placeholder';
-                    $content->load(array(
-                        $placeholder => $rs->fields['placeholder'],
-                        'position'    => $rs->fields['position'],
-                        'params'      => unserialize($rs->fields['params']),
-                    ));
-                    $contents[] = $content;
+                if (!class_exists($rs->fields['content_type'])) {
+                    $rs->MoveNext();
+                    continue;
                 }
+                $contents []= $rs->fields['pk_fk_content'];
 
                 $rs->MoveNext();
             }
@@ -176,15 +277,14 @@ class ContentManager
         $GLOBALS['application']->conn->StartTrans();
 
         // Clean all the contents for this category after insert the new ones
-        if(!ContentManager::clearContentPositionsForHomePageOfCategory($categoryID)) {
+        if (!ContentManager::clearContentPositionsForHomePageOfCategory($categoryID)) {
             return false;
         }
 
         if (count($elements) > 0) {
 
             // Foreach element setup the sql values statement part
-            foreach($elements as $element) {
-
+            foreach ($elements as $element) {
                 $positions[] = array(
                                         $element['id'],
                                         $categoryID,
@@ -205,9 +305,7 @@ class ContentManager
 
             // Handling if there were some errors into the execution
             if(!$rs) {
-                $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-                $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-                $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+                Application::logDatabaseError();
                 return false;
             } else {
                 return true;
@@ -238,9 +336,7 @@ class ContentManager
 
         // return the value and log if there were errors
         if(!$rs) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            Application::logDatabaseError();
             return false;
         } else {
             return true;
@@ -259,13 +355,6 @@ class ContentManager
 
         $finalArray = array();
         foreach($array as $element) {
-
-            if(isset($element->home_placeholder)) {
-                var_dump($element);
-            }
-            die('dentro loop');
-            var_dump($filterKeys, $filterValues, $element->home_placeholder);
-            die();
             if($element[$i]->{$filterKey} == $filterValue) {
                 $finalArray[] = $element;
             }
@@ -683,10 +772,7 @@ class ContentManager
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
-
+            Application::logDatabaseError();
             return false;
         } else {
             while (!$rs->EOF) {
@@ -907,7 +993,7 @@ class ContentManager
                 $pks = $this->getInTime($pks);
         }
 
-        if(count($pks)<6 && $not_empty) {
+        if(count($pks) < 6 && $not_empty) {
             //En caso de que existan menos de 6 contenidos, lo hace referente a los 200 últimos contenidos
            /*  $pks = $this->getInTime($this->find($content_type,$_where_slave.$_comented,
                             'ORDER BY changed DESC LIMIT 0,200','pk_content, starttime, endtime')); */
@@ -1004,25 +1090,23 @@ class ContentManager
      * @see Content::isInTime()
      * @param array $items Array of Content objects
      * @param string $time Time filter, by default is now. Syntax: 'YYYY-MM-DD HH:MM:SS'
+     *
      * @return array Items filtered
     */
     public function getInTime($items, $time=null)
     {
         $filtered = array();
-        if(is_array($items)) {
-            foreach($items as $item) {
-                if(is_object($item)) {
-
-                    if($item->isInTime(null, null, $time)) {
+        if (is_array($items)) {
+            foreach ($items as $item) {
+                if (is_object($item)) {
+                    if($item->isInTime()) {
                         $filtered[] = $item;
                     }
-
                 } else {
-
                     $starttime = (!empty($item['starttime']))? $item['starttime']: '0000-00-00 00:00:00';
-                    $endtime  = (!empty($item['endtime']))? $item['endtime']: '0000-00-00 00:00:00';
+                    $endtime   = (!empty($item['endtime']))? $item['endtime']: '0000-00-00 00:00:00';
 
-                    if(Content::isInTime2($starttime, $endtime, $time)) {
+                    if (Content::isInTime2($starttime, $endtime, $time)) {
                         $filtered[] = $item;
                     }
                 }
@@ -1035,10 +1119,10 @@ class ContentManager
 
 
      /**
-     * Filter content objects by  available and not inlitter.
-     * @param array $items Array of Content objects
-     * @return array Items filtered
-    */
+      * Filter content objects by  available and not inlitter.
+      * @param array $items Array of Content objects
+      * @return array Items filtered
+      **/
     public function getAvailable($items)
     {
         $filtered = array();
@@ -1058,79 +1142,6 @@ class ContentManager
 
         return $filtered;
     }
-
-
-    /**
-     * Return a SQL condition to filter by time
-     *
-     * @param string $time Time to test
-     * @return string SQL condition
-    */
-    public function getInTimeSQL($time=null)
-    {
-        $now = 'NOW()';
-        if(!is_null($time)) {
-            $now = $time;
-        }
-
-        $sql = " (`contents`.`starttime` > $now OR `contents`.`starttime` = '000-00-00 00:00:00') AND ".
-               "(`contents`.`endtime` < $now OR `contents`.`endtime` = '000-00-00 00:00:00') ";
-
-        return $sql;
-    }
-
-
-    /**
-     * Get elements of a placeholder
-     *
-     * @param string $placeholder
-     * @param array $items
-     * @param boolean $isHomePlaceholder
-     * @return array
-    */
-    public function getElementsByPlaceHolder($placeholder, $items, $isHomePlaceholder=false)
-    {
-        $filtered = array();
-
-        $property = 'placeholder';
-        if($isHomePlaceholder) {
-            $property = 'home_placeholder';
-        }
-
-        foreach($items as $item) {
-            if($item->{$property} == $placeholder) {
-                $filtered[] = $item;
-            }
-        }
-
-        return $filtered;
-    }
-
-
-    /**
-     * Group elements by a placeholder
-     *
-     * @param array $items
-     * @param boolean $isHomePlaceholder
-     * @return array
-    */
-    public function groupByPlaceHolder($items, $isHomePlaceholder=false)
-    {
-        $placeholders = array();
-
-        $property = 'placeholder';
-        if($isHomePlaceholder) {
-            $property = 'home_placeholder';
-        }
-        foreach($items as $item) {
-            if($item->{$property} == $placeholder) {
-                $filtered[] = $item;
-            }
-        }
-
-        return $filtered;
-    }
-
 
     /**
      * Count: Contanbiliza el numero de elementos de un tipo.
@@ -1200,11 +1211,9 @@ class ContentManager
         $total_contents=$this->count($content_type, $filter, $pk_fk_content_category);
         if(empty($page)) {
             $page = 1;
-        }
-        if(empty($page)) {
             $items_page=10;
         }
-        $_limit='LIMIT '.($page-1)*$items_page.', '.($items_page);
+        $_limit=' LIMIT '.($page-1)*$items_page.', '.($items_page);
 
 
         if( intval($pk_fk_content_category) > 0) {
@@ -1214,7 +1223,7 @@ class ContentManager
                  $_order_by.$_limit;
         } else {
             $sql = 'SELECT * FROM `contents`, `'.$this->table.'` ' .
-                    ' WHERE '.$_where.' AND `contents`.`pk_content`=`'.$this->table.'`.`pk_'.$this->content_type.'` '.$_order_by.$_limit;
+                    ' WHERE '.$_where.' AND `contents`.`pk_content`=`'.$this->table.'`.`pk_'.$this->content_type.'` '.$_order_by.' '.$_limit;
         }
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
@@ -1224,7 +1233,7 @@ class ContentManager
         $pager_options = array(
             'mode'        => 'Sliding',
             'perPage'     => $items_page,
-            'delta'       => 4,
+            'delta'       => 3,
             'clearIfVoid' => true,
             'urlVar'      => 'page',
             'totalItems'  => $total_contents,
@@ -1382,7 +1391,6 @@ class ContentManager
                 'created'=> $rs->fields['created'],
                 'category_title'=> $ccm->get_title($ccm->get_name($rs->fields['category_id'])),
                 'id' =>$rs->fields['pk_content'],
-                'category' => $rs->fields['category_id'],
 
                 /* to filter in getInTime() */
                 'starttime' => $rs->fields['starttime'],
@@ -1399,7 +1407,7 @@ class ContentManager
 
 
     //this function returns title,catName and slugs of last headlines from Subcategories of a given category
-    public function find_listAuthors($filter=null, $_order_by='ORDER BY 1')
+    public function getOpinionArticlesWithAuthorInfo($filter=null, $_order_by='ORDER BY 1')
     {
 
         $items = array();
@@ -1438,40 +1446,6 @@ class ContentManager
     }
 
 
-    public function find_listAuthorsEditorial($filter=null, $_order_by='ORDER BY 1')
-    {
-
-        $items = array();
-        $_where = '1=1  AND in_litter=0';
-
-        if( !is_null($filter) ) {
-            if( $filter == 'in_litter=1') {
-                //se busca desde la litter.php
-                $_where = $filter;
-            }
-
-            $_where = $filter.' AND in_litter=0';
-        }
-
-        $sql= 'SELECT authors.name, opinions.pk_opinion as id, contents.title, contents.slug, opinions.type_opinion,
-                      opinions.body,contents.created,contents.changed
-               FROM contents, opinions
-                    LEFT JOIN authors ON (authors.pk_author=opinions.fk_author)
-               WHERE `contents`.`fk_content_type`=4 and opinions.type_opinion=1 AND contents.pk_content=opinions.pk_opinion
-                    AND '.$_where.' '.$_order_by;
-
-        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        $items =null;
-        if (!empty($rs)) {
-            $items = $rs->GetArray();
-        }
-
-        return $items;
-    }
-
-
     //FIXME: unificar todos los paginates
     //create_paginate() -
     /*  PARAMS:
@@ -1481,7 +1455,7 @@ class ContentManager
      *  $function ->nombre de la funcion en js / URL (segun se quiera recargar ajax o una url)
      * $params -> parametros de la funcion js / dir url  que se carga
      */
-    public function create_paginate($total_items, $num_pages, $delta, $funcion='null', $params='null')
+    public function create_paginate($total_items, $num_pages, $delta, $funcion='null', $params='null', $separator = " | ")
     {
         if (!isset($num_pages)) {
             $num_pages = 5;
@@ -1524,7 +1498,7 @@ class ContentManager
             'delta'       => $delta,
             'clearIfVoid' => true,
             'urlVar'      => $page,
-            'separator' => '|',
+            'separator'   => $separator,
             'spacesBeforeSeparator' => 1,
             'spacesAfterSeparator' => 1,
             'totalItems'  => $total_items,
@@ -1882,10 +1856,8 @@ class ContentManager
         $rs = $GLOBALS['application']->conn->Execute( $sql );
 
         if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-            return;
+            Application::logDatabaseError();
+            return false;
         }
 
         return $rs->fields['pk_content_category'];
@@ -1899,10 +1871,8 @@ class ContentManager
         $rs = $GLOBALS['application']->conn->GetOne($sql);
 
         if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-            return;
+            Application::logDatabaseError();
+            return false;
         }
 
         $category_name=$this->get_title($rs);

@@ -61,8 +61,8 @@ class Book extends Content {
             FilesManager::createDirectory($this->books_path);
         }
 
-        $this->file_name = $_FILES['file']['name'];
-        $this->file_img = $_FILES['file_img']['name'];
+        $this->file_name = FilesManager::cleanFileName($_FILES['file']['name'],'');
+        $this->file_img  = FilesManager::cleanFileName($_FILES['file_img']['name'],'');
 
         $this->createThumb();
 
@@ -78,7 +78,7 @@ class Book extends Content {
             return(false);
         }
 
-        return(true);
+        return $this->id;
     }
 
 
@@ -97,17 +97,17 @@ class Book extends Content {
             return;
         }
 
-        $this->pk_book = $rs->fields['pk_book'];
-        $this->author = $rs->fields['author'];
+        $this->pk_book   = $rs->fields['pk_book'];
+        $this->author    = $rs->fields['author'];
         $this->file_name = $rs->fields['file'];
-        $this->file_img = $rs->fields['file_img'];
+        $this->file_img  = $rs->fields['file_img'];
         $this->editorial = $rs->fields['editorial'];
     }
 
     function update($data) {
 
-        $file_name = $_FILES['file']['name'];
-        $file_img = $_FILES['file_img']['name'];
+        $file_name = FilesManager::cleanFileName($_FILES['file']['name']);
+        $file_img  = FilesManager::cleanFileName($_FILES['file_img']['name']);
 
         parent::update($data);
         $data['file_name'] = !empty($file_name)?$file_name:$this->file_name;
@@ -124,6 +124,7 @@ class Book extends Content {
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
           	return false;
         }
+        return $this->id;
     }
 
     function remove($id) {
@@ -132,9 +133,9 @@ class Book extends Content {
         $sql = 'DELETE FROM books WHERE pk_book='.($this->id);
 
         $book_pdf = $this->books_path.$this->file_name;
-        $book_image = $this->books_path.preg_replace("/.pdf$/",".jpg",$this->file_name);
-        unlink($book_pdf);
-        unlink($book_image);
+        $book_image = $this->books_path.$this->file_img;
+        @unlink($book_pdf);
+        @unlink($book_image);
 
         if($GLOBALS['application']->conn->Execute($sql)===false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();

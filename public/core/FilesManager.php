@@ -45,18 +45,18 @@ class FilesManager {
             $GLOBALS['application']->logger->emerg("Error creating directory: " . $path);
         }
     }
-    
+
     /**
      * Copy source path into destination path, and creates it if not exists.
      *
-     * @param string $source fullpath for the copy 
+     * @param string $source fullpath for the copy
      * @param string $destination path to the new destination
      */
     static public function recursiveCopy($source, $destination)
     {
         // Delete destination if exists
         if (file_exists($destination)) { unlink($destination); }
-        
+
         // if is dir try to recursive copy it, if is a file copy it directly
         if (is_dir($source)) {
             if (!file_exists($destination)) { mkdir($destination,0775, true); }
@@ -139,15 +139,15 @@ class FilesManager {
         }
 
     }
-    
+
     /**
      * Uncompress Zip archives
      *
      * @param string $file name
-     *  
+     *
      */
     static public function decompressZIP($file) {
-       
+
         $zip = new ZipArchive;
 
         // open archive
@@ -164,16 +164,32 @@ class FilesManager {
         // print details of each file
         // DEL REVËS   for ($x=$numFiles; $x>0; $x--) {
         for ($x=0; $x<$numFiles; $x++) {
-            
+
             $file = $zip->statIndex($x);
             $dataZIP[$x] = $file['name'];
         }
 
         $zip->extractTo(SITE_TMP_PATH.DS);
-        
+
         $zip->close();
-        
+
         return $dataZIP;
+    }
+
+     /**
+     * Clean the special chars into a file name
+     *
+     * @access static
+     * @param string $name, the string to clean
+     * @return string, the string cleaned
+     **/
+    static public function cleanFileName($name)
+    {
+        $name = html_entity_decode($name, ENT_COMPAT, 'UTF-8');
+        $name = mb_strtolower($name, 'UTF-8');
+        $name = mb_ereg_replace('[^a-z0-9\.\-]', '', $name);
+
+        return $name;
     }
 
 }

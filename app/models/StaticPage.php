@@ -8,8 +8,6 @@
  * file that was distributed with this source code.
 */
 
-//TODO: Move this into url_configurations array
-define('STATIC_PAGE_PATH', 'estaticas/');
 /**
  * Handles all the CRUD actions over StaticPages.
  *

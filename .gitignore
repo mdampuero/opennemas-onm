@@ -18,3 +18,5 @@ doc/*
 *.sublime-*
 *patches_xornal*
 tmp/instances/*
+cache.properties
+build

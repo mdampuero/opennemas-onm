@@ -55,7 +55,11 @@ switch ($action) {
         $cm = new ContentManager();
 
         $configurations = s::get('poll_settings');
-        $totalWidget = $configurations['total_widget'];
+        if (array_key_exists('total_widget', $configurations)) {
+            $totalWidget = $configurations['total_widget'];
+        } else {
+            $totalWidget = 0;
+        }
 
         if (empty($page)) {
             $limit = "LIMIT ".($items_page+1);
@@ -262,6 +266,7 @@ switch ($action) {
 
     case 'content-list-provider':
 
+    case 'related-provider':
         $items_page = s::get('items_per_page') ?: 20;
         $category = filter_input( INPUT_GET, 'category' , FILTER_SANITIZE_STRING, array('options' => array('default' => '0')) );
         $page = filter_input( INPUT_GET, 'page' , FILTER_SANITIZE_STRING, array('options' => array('default' => '1')) );
@@ -274,7 +279,8 @@ switch ($action) {
         $tpl->assign(array('contents'=>$polls,
                             'contentTypeCategories'=>$parentCategories,
                             'category' =>$category,
-                            'pagination'=>$pager->links
+                            'pagination'=>$pager->links,
+                            'contentType'=>'Poll',
                     ));
 
         $html_out = $tpl->fetch("common/content_provider/_container-content-list.tpl");

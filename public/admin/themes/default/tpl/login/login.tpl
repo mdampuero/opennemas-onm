@@ -22,10 +22,9 @@
 
     {block name="header-css"}
         {css_tag href="/bp/screen.css" media="screen, projection"}
+        {css_tag href="/style.css" media="screen, projection"}
         {css_tag href="/loginadmin.css"}
-        {css_tag href="/bp/print.css" media="print"}
         <!--[if lt IE 8]{css_tag href="/bp/ie.css" media="screen, projection"}[endif]-->
-        {css_tag href="/buttons.css"}
     {/block}
 
 

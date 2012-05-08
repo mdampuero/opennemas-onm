@@ -4,6 +4,11 @@
     {script_tag src="/utilsarticle.js" language="javascript"}
     {script_tag src="/editables.js" language="javascript"}
     {script_tag src="/utilsGallery.js" language="javascript"}
+    {script_tag src="/jquery/jquery.colorbox-min.js"}
+{/block}
+
+{block name="header-css" append}
+    {css_tag href="/jquery/colorbox.css" media="screen"}
 {/block}
 
 {block name="footer-js" append}

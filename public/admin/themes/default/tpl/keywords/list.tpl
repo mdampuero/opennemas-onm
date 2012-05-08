@@ -16,26 +16,28 @@
 	</div>
 	<div class="wrapper-content">
 
-			<table class="adminheading">
-				<tr>
-					<td align="right">
-						{t}Search keyworks containing {/t}
-						{if isset($smarty.request.filter)
+			<div class="table-info clearfix">
+	            <div>
+	                <div class="right form-inline">
+	                    {if isset($smarty.request.filter)
 							&& isset({$smarty.request.filter.pclave})}
 							{assign var=filterPClave value=$smarty.request.filter.pclave}
 						{/if}
-						<input type="text" name="filter[pclave]" style="margin-top:-2px;" value="{$filterPClave|default:""}" />
-						<button type="submit" onclick="javascript:$('action').value='list';">Filtrer</button>
-					</td>
-				</tr>
-			</table>
+						<label for="filter">
+							{t}Search keyworks containing {/t}
+							<input type="search" name="filter[pclave]" value="{$filterPClave|default:""}" class="input-medium search-query" />
+						</label>
+						<button type="submit" class="btn">{t}Buscar{/t}</button>
+	                </div>
+	            </div>
+	        </div>
 			<table class="listing-table">
 				<thead>
 					<tr>
 						<th style="width:20px;">{t}Type{/t}</th>
 						<th scope=col>{t}Keyword{/t}</th>
 						<th scope=col>{t}Replacement value{/t}</th>
-						<th scope=col style="width:40px;">{t}Actions{/t}</th>
+						<th scope=col style="width:100px;">{t}Actions{/t}</th>
 					</tr>
 				</thead>
 
@@ -53,16 +55,12 @@
 						</td>
 
 						<td class="right">
-							<ul class="action-buttons">
-								<li>
-									<a href="{$smarty.server.PHP_SELF}?action=read&id={$pclaves[k]->id}" title="{t}Modify{/t}">
-										<img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
-								</li>
-								<li>
-									<a href="#" onClick="javascript:confirmar(this, {$pclaves[k]->id});" title="{t}Delete{/t}">
-										<img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
-								</li>
-							</ul>
+							<a class="btn btn-mini" href="{$smarty.server.PHP_SELF}?action=read&amp;id={$pclaves[k]->id}" title="{t}Edit this content{/t}">
+	                            {t}Edit{/t}
+	                        </a>
+	                        <a class="btn btn-danger btn-mini" onClick="javascript:confirmar(this, {$pclaves[k]->id});" title="{t}Delete{/t}">
+	                            {t}Delete{/t}
+	                        </a>
 						</td>
 					</tr>
 					{sectionelse}

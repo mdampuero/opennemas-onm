@@ -8,12 +8,14 @@ jQuery(document).ready(function(){
 
         jQuery( 'ul.elementsContainer' ).sortable({
             connectWith: ".menuelements",
-            placeholder: 'placeholder-element'
+            placeholder: 'placeholder-element',
+            tolerance: 'pointer'
         }).disableSelection();
 
         jQuery( '.menuelements' ).sortable({
             connectWith: 'ul.elementsContainer',
-            placeholder: 'placeholder-element'
+            placeholder: 'placeholder-element',
+            tolerance: 'pointer'
         }).disableSelection();
 
     }();

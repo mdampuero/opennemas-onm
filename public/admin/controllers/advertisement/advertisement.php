@@ -334,6 +334,10 @@ switch($action) {
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page.'&'.$query_string);
     break;
 
+    case 'content-provider':
+        echo 'Not implemented';
+        break;
+
     default:
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page.'&'.$query_string);
     break;

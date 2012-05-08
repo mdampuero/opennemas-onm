@@ -79,7 +79,7 @@
 
     <div class="warnings-validation"></div><!-- / -->
 
-    <form action="{$smarty.server.PHP_SELF}" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
+    <form action="{$smarty.server.PHP_SELF}" method="GET" name="formulario" id="formulario">
 
     	{render_messages}
 
@@ -106,25 +106,27 @@
     	</div>
     	{/if}
 
+        <div class="table-info clearfix">
+            <div>
+                <div class="left"><label>Total: {$pagination->_totalItems} articles.</label></div>
+                <div class="right form-inline">
+                    <label for="username">
+                        {t}Filter by title or content{/t}
+                        <input id="username" name="filter_title" onchange="this.form.submit();" value="{$smarty.request.filter_title}" class="input-medium search-query" />
+                    </label>
 
-        <table class="adminheading">
-    	<tr>
-    	    <th>Total: {$pagination->_totalItems} articles.</th>
-    	    <th >
-    		<label for="username">{t}Filter by title or content{/t}</label>
-    		<input id="username" name="filter_title" onchange="this.form.submit();" value="{$smarty.request.filter_title}" />
+                    <label for="usergroup">
+                        {t}and category:{/t}
+                        <select id="usergroup" name="filter_category" onchange="this.form.submit();">
+                            <option value="*">{t}All{/t}</option>
+                            {html_options options=$categories selected=$smarty.request.filter_group|default:""}
+                        </select>
+                    </label>
 
-    		<label for="usergroup">{t}and category:{/t}</label>
-    		<select id="usergroup" name="filter_category" onchange="this.form.submit();">
-    		     <option value="*">{t}All{/t}</option>
-    		     {html_options options=$categories selected=$smarty.request.filter_group|default:""}
-    		</select>
-
-    		<input type="hidden" name="page" value="{$smarty.request.page|default:""}" />
-    		<input type="submit" value="{t}Search{/t}">
-    	    </th>
-    	</tr>
-        </table>
+                    <button type="submit" class="btn">{t}Search{/t}</button>
+                </div>
+            </div>
+        </div>
 
         <table class="listing-table">
             <thead>
@@ -197,8 +199,8 @@
                     <td class="right">
                         <ul class="action-buttons">
                             <li>
-                                <a class="publishing" href="{$smarty.server.PHP_SELF}?action=import_select_category&amp;id={$elements[c]->xmlFile}" title="Importar">
-                               <img alt="Publicar" src="{$params.IMAGE_DIR}archive_no2.png">
+                                <a class="btn btn-mini" href="{$smarty.server.PHP_SELF}?action=import_select_category&amp;id={$elements[c]->xmlFile}" title="{t}Import{/t}">
+                                    {t}Import{/t}
                                 </a>
                             </li>
                         </ul>

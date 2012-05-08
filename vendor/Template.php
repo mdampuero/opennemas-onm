@@ -54,7 +54,7 @@ class Template extends Smarty
         // Create cache and compile dirs if not exists to make template instance aware
         foreach (array('cache', 'compile') as $key => $value ) {
             $directory = CACHE_PATH.DS.'smarty'.DS.$value;
-            if (!file_exists($directory)) {
+            if (!is_dir($directory)) {
                 mkdir($directory, 0755);
             }
             $this->{$value."_dir"} = realpath($directory).'/';
@@ -78,8 +78,7 @@ class Template extends Smarty
         // Set filters: $filters = array('pre' => array(), 'post' => array(), 'output' => array())
         $this->setFilters($filters);
 
-        $this->loadFilter("output","trimwhitespace");
-
+        // $this->loadFilter("output","trimwhitespace");
 
         $this->assign(
             'params',
@@ -216,7 +215,7 @@ class TemplateAdmin extends Template {
 
         foreach (array('cache', 'compile') as $key => $value ) {
             $directory = CACHE_PATH.DS.'smarty'.DS.'admin-'.$value;
-            if (!file_exists($directory)) {
+            if (!is_dir($directory)) {
                 mkdir($directory);
             }
             $this->{$value."_dir"} = realpath($directory).'/';
@@ -227,15 +226,13 @@ class TemplateAdmin extends Template {
         $this->addPluginsDir($this->templateBaseDir.'plugins/');
         $this->caching	= false;
 
-
-
         // Template variables
         $baseUrl = SITE_URL.SS.'admin'.SS.'themes'.SS.$theme.SS;
 
-        $this->locale_dir	= $baseUrl.'locale/';
-        $this->css_dir	        = $baseUrl.'css/';
-        $this->image_dir	= $baseUrl.'images/';
-        $this->js_dir	        = $baseUrl.'js/';
+        $this->locale_dir = $baseUrl.'locale/';
+        $this->css_dir    = $baseUrl.'css/';
+        $this->image_dir  = $baseUrl.'images/';
+        $this->js_dir     = $baseUrl.'js/';
 
         $this->assign('params',
                 array(
@@ -276,6 +273,7 @@ class TemplateManager extends Template {
 
         $this->setFilters($filters);
 
+
         // Parent variables
         $this->templateBaseDir = SITE_PATH.DS.'manager'.DS.'themes'.DS.'default'.DS;
 
@@ -295,8 +293,6 @@ class TemplateManager extends Template {
         $this->caching	     = false;
         $this->allow_php_tag = true;
 
-
-
         // Template variables
         $baseUrl = SITE_URL.SS.'admin'.SS.'themes'.SS.$theme.SS;
 
@@ -305,17 +301,15 @@ class TemplateManager extends Template {
         $this->image_dir	= $baseUrl.'images/';
         $this->js_dir	        = $baseUrl.'js/';
 
-        $this->assign('params',
-                array(
-                    'LOCALE_DIR' =>    $this->locale_dir,
-                    'CSS_DIR'	 =>    $this->css_dir,
-                    'IMAGE_DIR'  =>    $this->image_dir,
-                    'JS_DIR'	 =>    $this->js_dir )
+        $this->assign('params', array(
+            'LOCALE_DIR' =>    $this->locale_dir,
+            'CSS_DIR'	 =>    $this->css_dir,
+            'IMAGE_DIR'  =>    $this->image_dir,
+            'JS_DIR'	 =>    $this->js_dir )
         );
 
         $this->theme = $theme;
         $this->assign('THEME', $theme);
-
     }
 
     function setUpLocale()

@@ -660,7 +660,7 @@ jQuery(document).ready(function($) {
                             <th scope="row">
                                 <label for="mail_server">{t}Activated modules{/t}</label>
                             </th>
-                            <td>
+                            <td class="form-inline">
                                 {html_checkboxes name='activated_modules' values=$available_modules output=$available_modules selected=$configs['activated_modules']  separator='<br />'}
                             </td>
                             <td>

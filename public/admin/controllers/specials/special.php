@@ -66,10 +66,12 @@ switch($action) {
 
     case 'list':
         Acl::checkOrForward('SPECIAL_ADMIN');
+
+        $items_page = s::get('items_per_page') ?: 20;
         if (empty($page)) {
-            $limit= "LIMIT ".(ITEMS_PAGE+1);
+            $limit= "LIMIT ".($items_page+1);
         } else {
-            $limit= "LIMIT ".($page-1) * ITEMS_PAGE .', '.ITEMS_PAGE;
+            $limit= "LIMIT ".($page-1) * $items_page .', '.$items_page;
         }
 
         if ($category == 'widget') {
@@ -90,7 +92,7 @@ switch($action) {
         }
 
         $params = array(
-            'page'=>$page, 'items'=>ITEMS_PAGE,
+            'page'=>$page, 'items'=>$items_page,
             'total' => count($specials),
             'url'=>$_SERVER['SCRIPT_NAME'].'?action=list&category='.$category
         );
@@ -390,6 +392,29 @@ switch($action) {
         exit(0);
     break;
 
+    case 'related-provider':
+
+
+
+        $items_page = s::get('items_per_page') ?: 20;
+        $category = filter_input( INPUT_GET, 'category' , FILTER_SANITIZE_STRING, array('options' => array('default' => '0')) );
+        $page = filter_input( INPUT_GET, 'page' , FILTER_SANITIZE_STRING, array('options' => array('default' => '1')) );
+        $cm = new ContentManager();
+
+        list($specials, $pager) = $cm->find_pages('Special', 'available=1 ',
+                    'ORDER BY starttime DESC,  contents.title ASC ',
+                    $page, $items_page, $category);
+
+        $tpl->assign(array('contents'=>$specials,
+                            'contentTypeCategories'=>$parentCategories,
+                            'category' =>$category,
+                            'pagination'=>$pager->links
+                    ));
+
+        $html_out = $tpl->fetch("common/content_provider/_container-content-list.tpl");
+        Application::ajax_out($html_out);
+
+    break;
     case 'config':
 
         $configurationsKeys = array('special_settings',);

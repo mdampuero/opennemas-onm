@@ -60,7 +60,7 @@ if (!isset($action)) {
 }
 
 
-switch($action) {
+switch ($action) {
     case 'list':
 
         $configurations = s::get('opinion_settings');
@@ -726,6 +726,8 @@ switch($action) {
     break;
 
     case 'content-list-provider':
+    case 'related-provider':
+
         $items_page = s::get('items_per_page') ?: 20;
         $page = filter_input( INPUT_GET, 'page' , FILTER_SANITIZE_STRING, array('options' => array('default' => '1')) );
         $cm = new ContentManager();
@@ -734,8 +736,9 @@ switch($action) {
                                                  'ORDER BY starttime DESC ',
                                                   $page, $items_page);
 
-        $tpl->assign(array('contents'=>$opinions,
-                            'pagination'=>$pager->links
+        $tpl->assign(array( 'contents'=>$opinions,
+                            'pagination'=>$pager->links,
+                            'contentType'=>'Opinion',
                     ));
 
         $html_out = $tpl->fetch("common/content_provider/_container-content-list.tpl");
@@ -771,8 +774,41 @@ switch($action) {
 
     break;
 
-    default:
-        Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&page=' . $page);
-    break;
-}
+    case 'content-provider':
 
+            $category = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_STRING,   array('options' => array( 'default' => 'home')));
+            if ($category == 'home') { $category = 0; }
+
+            // Get contents for this home
+            $contentElementsInFrontpage  = $cm->getContentsIdsForHomepageOfCategory($category);
+
+            // Fetching opinions
+            $sqlExcludedOpinions = '';
+            if(count($contentElementsInFrontpage) > 0) {
+                $opinionsExcluded    = implode(', ', $contentElementsInFrontpage);
+                $sqlExcludedOpinions = ' AND `pk_opinion` NOT IN ('.$opinionsExcluded.')';
+            }
+
+            list($opinions, $pager) = $cm->find_pages(
+                'Opinion',
+                'contents.available=1'. $sqlExcludedOpinions,
+                'ORDER BY created DESC ', $page, 5
+            );
+
+            foreach ($opinions as $opinion) {
+                $opinion->author = new Author($opinion->fk_author);
+            }
+
+            $tpl->assign(array(
+                'opinions' => $opinions,
+                'pager'    => $pager,
+            ));
+
+            $tpl->display('opinion/content-provider.tpl');
+
+            break;
+
+    default:
+            Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&page=' . $page);
+        break;
+}

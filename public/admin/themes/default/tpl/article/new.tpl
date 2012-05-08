@@ -3,14 +3,18 @@
 {block name="header-js" append}
     {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
     {script_tag src="/jquery/jquery-ui-sliderAccess.js"}
+    {script_tag src="/jquery/jquery.colorbox-min.js"}
     {script_tag src="/onm/jquery.datepicker.js"}
     {script_tag src="/utilsarticle.js"}
+    {script_tag src="/jquery-onm/jquery.article.js"}
     {script_tag src="/editables.js"}
     {script_tag src="/utilsGallery.js"}
     {script_tag src="/swfobject.js"}
+
 {/block}
 
 {block name="header-css" append}
+    {css_tag href="/jquery/colorbox.css" media="screen"}
     <style type="text/css">
     label {
         display:block;
@@ -24,6 +28,8 @@
 {/block}
 
 {block name="footer-js" append}
+    {script_tag src="/onm/jquery.content-provider.js"}
+    {script_tag src="/jquery-onm/jquery.articlerelated.js"}
     <script>
     document.observe('dom:loaded', function() {
         if($('title')){
@@ -31,9 +37,10 @@
             $('title').focus(); // Set focus first element
         }
     });
-    jQuery(document).ready(function ($){
+    jQuery(document).ready(function($){
         $('#article-form').tabs();
     });
+
     </script>
 
     {script_tag src="/tiny_mce/opennemas-config.js"}
@@ -73,23 +80,16 @@
                 </li>
                 {/is_module_activated}
                 {is_module_activated name="COMMENT_MANAGER"}
-                {if isset($article) && is_object($article) && !$article->isClone()}
+                {if isset($article) && is_object($article)}
                 <li>
                     <a href="#comments">{t}Comments{/t}</a>
                 </li>
                 {/if}
                 {/is_module_activated}
                 <li>
-                    <a href="#contenidos-relacionados">{t}Related contents{/t}</a>
+                    <a href="#related-contents">{t}Related contents{/t}</a>
                 </li>
-                <li>
-                    <a href="#elementos-relacionados" onClick="mover();">{t}Sort related contents{/t}</a>
-                </li>
-                {if isset($article) && is_object($article) && isset($clones)}
-                <li>
-                    <a href="#clones">Clones</a>
-                </li>
-                {/if}
+
             </ul>
 
             {* Pestaña de edición-contenido*}
@@ -118,14 +118,15 @@
                                             {is_module_activated name="COMMENT_MANAGER"}
                                             {t}Allow coments{/t}
                                             <input type="checkbox" {if (isset($article) && $article->with_comment eq 1)}checked{/if} name="with_comment" id="with_comment" value=1/>
-                                            {/is_module_activated}
                                             <br/>
+                                            {/is_module_activated}
+
                                             {acl isAllowed="ARTICLE_AVAILABLE"}
                                                 {t}Available:{/t}
                                                 <input type="checkbox" {if (isset($article) && $article->content_status eq 1)}checked{/if}  name="content_status" id="content_status" value=1/>
                                                 <br/>
                                             {/acl}
-                                            {acl isAllowed="ARTICLE_FRONTPAGE"}
+                                            {*acl isAllowed="ARTICLE_FRONTPAGE"}
                                                 {t}Put in section frontpage:{/t}
                                                 <input type="checkbox"  name="frontpage" {if (isset($article) && $article->frontpage eq 1)}checked{/if} id="frontpage" value=1/>
                                                 <br/>
@@ -142,7 +143,10 @@
                                                        value=2/>
                                                 <br/>
                                             {/if}
-                                           {/acl}
+                                           {/acl*}
+                                           <input type="hidden" id="in_home" name="in_home"  value="{$article->in_home|default:"0"}" />
+                                           <input type="hidden" id="frontpage" name="frontpage"  value="{$article->frontpage|default:"0"}" />
+
                                         {else} {* else if not list_hemeroteca *}
                                             {t}Archived:{/t}
                                             <input type="checkbox" name="content_status" {if (isset($article) && $article->content_status == 0)}checked{/if} value="0" id="content_status"/>
@@ -198,7 +202,7 @@
                         </tr>
                         <tr>
                             <td style="vertical-align:top; padding:4px 0;">
-                                <label for="title">{t}Inner title:{/t}</label>
+                                <label for="title_int">{t}Inner title:{/t}</label>
                                 <input 	type="text" id="title_int" name="title_int" title="{t}Inner title:{/t}"
                                         value="{$article->title_int|clearslash|escape:"html"}" class="required" style="width:100%"
                                         maxlength="256"
@@ -222,21 +226,18 @@
                                 <div style="display:inline-block; width:30%; vertical-align:top;">
                                     <label for="category">{t}Section:{/t}</label>
                                     <select style="width:100%" name="category" id="category" class="validate-section" onChange="get_tags($('title').value);"  tabindex="3">
-                                        <option value="20" data-name="" {if !isset($category)}selected{/if}>
-                                            {t}Unknown{/t}
-                                        </option>
+                                        <option value="20" data-name="{t}Unknown{/t}" {if !isset($category)}selected{/if}>{t}Unknown{/t}</option>
                                         {section name=as loop=$allcategorys}
-                                        {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
-                                        <option value="{$allcategorys[as]->pk_content_category}" data-name="{$allcategorys[as]->title}"
-                                        {if $category eq $allcategorys[as]->pk_content_category || $article->category eq $allcategorys[as]->pk_content_category}selected{/if}>
-                                            {$allcategorys[as]->title}</option>
-                                        {section name=su loop=$subcat[as]}
-                                            {if $subcat[as][su]->internal_category eq 1}
-                                                <option value="{$subcat[as][su]->pk_content_category}" data-name="{$allcategorys[as]->title}"
-                                                {if $category eq $subcat[as][su]->pk_content_category || $article->category eq $subcat[as][su]->pk_content_category}selected{/if} >&nbsp;&nbsp;|_&nbsp;&nbsp;{$subcat[as][su]->title}</option>
-                                            {/if}
-                                        {/section}
-                                        {/acl}
+                                            {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
+                                            <option value="{$allcategorys[as]->pk_content_category}" data-name="{$allcategorys[as]->title}"
+                                            {if (($category == $allcategorys[as]->pk_content_category) && $action == "new") || $article->category eq $allcategorys[as]->pk_content_category}selected{/if}>{$allcategorys[as]->title}</option>
+                                            {section name=su loop=$subcat[as]}
+                                                {if $subcat[as][su]->internal_category eq 1}
+                                                    <option value="{$subcat[as][su]->pk_content_category}" data-name="{$subcat[as][su]->title}"
+                                                    {if $category eq $subcat[as][su]->pk_content_category || $article->category eq $subcat[as][su]->pk_content_category}selected{/if} >&nbsp;&nbsp;|_&nbsp;&nbsp;{$subcat[as][su]->title}</option>
+                                                {/if}
+                                            {/section}
+                                            {/acl}
                                         {/section}
                                     </select>
                                 </div><!-- / -->
@@ -381,163 +382,28 @@
             </table>
         </div>
         {is_module_activated name="AVANCED_ARTICLE_MANAGER"}
-        <div id="avanced-custom" style="width:98%">
+        <div id="avanced-custom">
             {include file ="article/partials/_article_avanced_customize.tpl"}
         </div>
         {/is_module_activated}
 
-        {if $smarty.request.action eq 'read'}
-        <div id="comments" style="width:98%">
-            <table>
-                <tbody>
-                    <tr>
-                        <th class="title" style='width:50%'>Comentario</th>
-                        <th class="title"  style='width:20%'>Autor</th>
-                        <th class="right">Publicar</th>
-                        <th class="right">Eliminar</th>
-                    </tr>
-                    {section name=c loop=$comments}
-                    <tr>
-                        <td>
-                            <a style="cursor:pointer;font-size:14px;"
-                               onclick="new Effect.toggle($('{$comments[c]->pk_comment}'),'blind')">
-                                {$comments[c]->body|truncate:30}
-                            </a>
-                        </td>
-                        <td>
-                            {$comments[c]->author} ({$comments[c]->ip})
-                            <br />
-                            {$comments[c]->email}
-                        </td>
-                        <td class="right">
-                        </td>
-                        <td class="right">
-                            <a href="#" onClick="javascript:confirmarDelComment(this, '{$comments[c]->pk_comment}');" title="Eliminar">
-                                <img src="{$params.IMAGE_DIR}trash.png"  />
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div id="{$comments[c]->pk_comment}" class="{$comments[c]->pk_comment}" style="display: none;">
-                                <strong>Comentario:</strong> (IP: {$comments[c]->ip} - Publicado: {$comments[c]->changed})
-                                <br/> {$comments[c]->body}
-                            </div>
-                        </td>
-                    </tr>
-                    {/section}
-                </tbody>
-            </table>
-        </div>
-        {/if}
+        {is_module_activated name="COMMENT_MANAGER"}
+            {if isset($article) && is_object($article)}
+                {include file="article/partials/_comments.tpl"}
+            {/if}
+        {/is_module_activated}
 
-        <div id="contenidos-relacionados" style="width:98%">
-            {include file="article/partials/_related.tpl"}
-        </div>
+        <div id="related-contents">
+            {include file ="article/related/_related_list.tpl"}
+            <input type="hidden" id="relatedFrontpage" name="ordenArti" value="" />
+            <input type="hidden" id="relatedInner" name="ordenArtiInt" value="" />
 
-        {if isset($article) && is_object($article)}
-        <div id="elementos-relacionados" style="width:98%">
-            <br/>Listado contenidos relacionados en Portada:  <br/>
-                <div style="position:relative;" id="scroll-container2">
-                    <ul id="thelist2" style="padding: 4px; background: #EEEEEE">
-                    {assign var=cont value=1}
-                    {section name=n loop=$losrel}
-                        <li id="{$losrel[n]->id|clearslash}">
-                            <table  width="99%;">
-                                <tr>
-                                    <td style="cursor: pointer;">
-                                        {$losrel[n]->title|clearslash|escape:'html'}
-                                    </td>
-                                    <td style='width:120px'>
-                                        {assign var="ct" value=$losrel[n]->content_type}
-                                        {$content_types.$ct}
-                                    </td>
-                                    <td style='width:120px'>
-                                        {$losrel[n]->category_name|clearslash}
-                                    </td>
-                                    <td style='width:120px'>
-                                         {is_module_activated name="AVANCED_ARTICLE_MANAGER"}
-                                        {if $content_types.$ct eq 'Galeria'}
-                                         {t}Show as gallery:{/t}  <input type='radio' name='params[withGallery]' value='{$losrel[n]->id}' {if $article->params['withGallery'] eq $losrel[n]->id} checked ="checked"{/if} >
-                                        {/if}
-                                         {/is_module_activated}
-                                    </td>
-                                    <td style='width:40px'>
-                                        <a  href="#" onClick="javascript:del_relation('{$losrel[n]->id|clearslash}','thelist2');" title="Quitar relacion">
-                                            <img src="{$params.IMAGE_DIR}btn_no.png"  />
-                                        </a>
-                                    </td>
-                                </tr>
-                            </table>
-                        </li>
-                    {assign var=cont value=$cont+1}
-                    {/section}
-                    </ul>
-                </div>
-                <br />Listado contenidos relacionados en Interior:  <br />
-                <div style="position:relative;" id="scroll-container2int">
-                    <ul id="thelist2int" style="padding: 4px; background: #EEEEEE">
-                        {assign var=cont value=1}
-                        {section name=n loop=$intrel}
-                        <li id="{$intrel[n]->id|clearslash}">
-                            <table  style='width:99%;'>
-                                <tr>
-                                    <td  style="cursor: pointer;">
-                                        {$intrel[n]->title|clearslash|escape:'html'}
-                                    </td>
-                                    <td style='width:120px'>
-                                        {assign var="ct" value=$intrel[n]->content_type}
-                                        {$content_types.$ct}
-                                    </td>
-                                    <td style='width:120px'>
-                                        {$intrel[n]->category_name|clearslash}
-                                    </td>
-                                    <td style='width:120px'>
-                                         {is_module_activated name="AVANCED_ARTICLE_MANAGER"}
-                                        {if $content_types.$ct eq 'Galeria'}
-                                         {t}Show as gallery:{/t}  <input type='radio' name='params[withGalleryInt]' value='{$intrel[n]->id}' {if $article->params['withGalleryInt'] eq $intrel[n]->id} checked ="checked"{/if} >
-                                        {/if}
-                                         {/is_module_activated}
-                                    </td>
-                                    <td style='width:40px'>
-                                        <a  href="#" onClick="javascript:del_relation('{$intrel[n]->id|clearslash}','thelist2int');" title="Quitar relacion">
-                                                <img src="{$params.IMAGE_DIR}btn_no.png"  />
-                                        </a>
-                                    </td>
-                                </tr>
-                            </table>
-                         </li>
-                    {assign var=cont value=$cont+1}
-                    {/section}
-                </ul>
-            </div>
-            <br/><br/>
+            <input type="hidden" id="withGallery" name="params[withGallery]" value="" />
+            <input type="hidden" id="withGalleryInt" name="params[withGalleryInt]" value="" />
 
-            <div class="p">
-                <input type="hidden" id="ordenPortada" name="ordenArti" value="" />
-                <input type="hidden" id="ordenInterior" name="ordenArtiInt" value="" />
-            </div>
+            <input type="hidden" id="relatedHome" name="relatedHome" value="" />
+            <input type="hidden" id="withGalleryHome" name="params[withGalleryHome]" value="" />
         </div>
-        {else}
-        <div id="elementos-relacionados" style="width:98%">
-            <div style="padding:10px; width:90%; margin:0px;">
-                <h2>{t}Related contents in frontpage{/t}</h2>
-                <div style="position:relative;" id="scroll-container2">
-                    <ul id="thelist2" style="padding: 4px; background: #EEEEEE"></ul>
-                </div>
-                <br>
-                <h2>{t}Related contents in inner article:{/t}</h2>
-                <div style="position:relative;" id="scroll-container2int">
-                    <ul id="thelist2int" style="padding: 4px; background: #EEEEEE"></ul>
-                </div>
-                <div class="p">
-                    <input type="hidden" id="ordenPortada" name="ordenArti" value="" />
-                    <input type="hidden" id="ordenInterior" name="ordenArtiInt" value="" />
-                </div>
-            </div>
-        </div>
-        {/if}
-
 
         <div id="reloadPreview" style="display: none; background-color: #FFE9AF; color: #666; border: 1px solid #996699; padding: 10px; font-size: 1.1em; font-weight: bold; width: 550px; position: absolute; right: 0; top: 0;">
             <img src="{$params.IMAGE_DIR}loading.gif"  />
@@ -548,8 +414,12 @@
             <span id="savePreviewText"></span>
         </div>
             <input type="hidden" id="action" name="action" value="" />
-            <input type="hidden" name="id" id="id" value="{$id|default:""}" />
+            <input type="hidden" name="id" id="id" value="{$article->id|default:""}" />
         </div>
     </div>
 </form>
+<script type="text/javascript">
+
+</script>
+
 {/block}

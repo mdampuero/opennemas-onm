@@ -127,6 +127,7 @@ switch ($action) {
         );
 
 
+
         if( isset($arrayResults) && !empty($arrayResults)){
             $arrayResults = cSearch::Paginate($Pager, $arrayResults, "id", 10);
         }
@@ -157,6 +158,55 @@ switch ($action) {
         Application::ajax_out($html_out);
 
     break;
+
+    case 'content-provider':
+
+        $searchString = $request->query->filter('search_string', '', FILTER_SANITIZE_STRING);
+        $page     = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_NUMBER_INT,   array('options' => array( 'default' => 1)));
+
+        if ($searchString != '') {
+
+            $searchStringArray = array_map(function($element) {
+                return trim($element);
+            }, explode(',', $searchString));
+
+            $searcher = cSearch::getInstance();
+            $matchString = '';
+            foreach ($searchStringArray as $key) {
+                $matchString []= $searcher->DefineMatchOfSentence($key);
+            }
+            $matchString = implode($matchString, ' AND ');
+
+            $sql = "SELECT pk_content, fk_content_type FROM contents "
+                  ."WHERE contents.available=1 AND".$matchString;
+            $rs = $GLOBALS['application']->conn->GetArray($sql);
+
+            $results = array();
+            if ($rs !== false) {
+                $resultSetSize = count($rs);
+                $rs = array_splice($rs, ($page-1)*5, 5);
+
+                foreach ($rs as $content) {
+                    $results []= new Content($content['pk_content']);
+                }
+
+                $pagerOptions = array(
+                    'mode'        => 'Sliding',
+                    'perPage'     => 5,
+                    'delta'       => 4,
+                    'clearIfVoid' => true,
+                    'urlVar'      => 'page',
+                    'totalItems'  => $resultSetSize,
+                );
+                $pager = Pager::factory($pagerOptions);
+                $tpl->assign('pager', $pager);
+            }
+            $tpl->assign('results', $results);
+        }
+
+        $tpl->assign('search_string', $searchString);
+        $tpl->display('search_advanced/content-provider.tpl');
+        break;
 
     default:
         Application::forward('search_advanced.php');

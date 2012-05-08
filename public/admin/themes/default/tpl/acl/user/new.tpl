@@ -242,8 +242,9 @@ input[type="password"]{
                                 <label for="email">{t}Email adress:{/t}</label>
                             </th>
                             <td>
-                                <input type="email" id="email" name="email"
-                                    value="{$user->email}" class="required validate-email"  size="50"/>
+                                <div class="input-prepend">
+                                    <span class="add-on">@</span><input class="span2" id="email" type="email" name="email" value="{$user->email}" class="required validate-email"  size="50">
+                                </div>
                             </td>
                         </tr>
                     </tbody>
@@ -315,7 +316,7 @@ input[type="password"]{
                     </tbody>
                 </table>
             </div><!-- /privileges -->
-        
+
     </div><!-- / -->
     	<input type="hidden" id="action" name="action" value="" />
 		<input type="hidden" name="id" id="id" value="{$id|default:""}" />

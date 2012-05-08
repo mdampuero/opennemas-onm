@@ -18,19 +18,14 @@ $tpl->setConfig('video');
 /**
  * Setting up available categories for menu.
 */
-$cm = new ContentManager();
-$ccm = ContentCategoryManager::get_instance();
-$page = filter_input(INPUT_GET,'page',FILTER_SANITIZE_STRING, array('options' => array('default' => '0')));
-$category_name = filter_input(INPUT_GET,'category_name',FILTER_SANITIZE_STRING);
-if(empty($category_name)) {
-    $category_name = filter_input(INPUT_POST,'category_name',FILTER_SANITIZE_STRING);
-}
-$actual_category_id = $category = 0; //NEED CODE WIDGETS
 
-$menuFrontpage = Menu::renderMenu('video');
-$tpl->assign('menuFrontpage',$menuFrontpage->items);
+$category_name = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
+
+$action = $request->query->filter('action', 'list' , FILTER_SANITIZE_STRING);
+$page = $request->query->filter('page', 0, FILTER_VALIDATE_INT);
 
 if(!empty($category_name)) {
+    $ccm = ContentCategoryManager::get_instance();
     $category = $ccm->get_id($category_name);
     $actual_category_id = $category;
     $category_real_name = $ccm->get_title($category_name);
@@ -38,26 +33,18 @@ if(!empty($category_name)) {
                         'category' => $category ,
                         'actual_category_id' => $actual_category_id ,
                         'category_real_name' => $category_real_name ,
+                        'actual_category' =>$category_name,
                 ) );
 } else {
      $category_real_name = 'Portada';
      $tpl->assign(array(
                         'category_real_name' => $category_real_name ,
                 ) );
+     $actual_category_id = $category = 0; //NEED CODE WIDGETS
+
 }
 
-// Setting up static-pages on video
-require_once("widget_static_pages.php");
-
 /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
-
-/**
- * Getting request params
- */
-$action = filter_input(
-    INPUT_GET, 'action', FILTER_SANITIZE_STRING,
-    array('options' => array('default' => 'list'))
-);
 
 switch ($action) {
 
@@ -69,6 +56,8 @@ switch ($action) {
         if (($tpl->caching == 0)
             || !$tpl->isCached('video/video_frontpage.tpl', $cacheID)
         ) {
+
+            $cm = new ContentManager();
 
             $videosSettings = s::get('video_settings');
 
@@ -151,13 +140,9 @@ switch ($action) {
 
     case 'inner':
 
-       // $videoID = filter_input( INPUT_GET, 'id' , FILTER_SANITIZE_NUMBER_INT );
+        $cm = new ContentManager();
 
-        $dirtyID = filter_input(INPUT_GET,'id',FILTER_SANITIZE_STRING);
-
-        if(empty($dirtyID)) {
-            $dirtyID = filter_input(INPUT_POST,'id',FILTER_SANITIZE_STRING);
-        }
+        $dirtyID = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
 
         $videoID = Content::resolveID($dirtyID);
         /**
@@ -229,8 +214,8 @@ switch ($action) {
 
         $items_page = 3;
 
-        $page = filter_input(INPUT_GET,'page',FILTER_SANITIZE_STRING,  array('options' => array('default' => '1')));
-        $category = filter_input(INPUT_GET,'category',FILTER_SANITIZE_STRING,  array('options' => array('default' => '0')));
+        $category_name = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
+        $page = $request->query->filter('page', 1, FILTER_VALIDATE_INT);
 
         $_limit = 'LIMIT ' . ($page - 1) * $items_page . ', ' . ($items_page);
 
@@ -263,9 +248,9 @@ switch ($action) {
 
         $video = NULL;
 
-        $page = filter_input(INPUT_GET,'page',FILTER_SANITIZE_STRING,  array('options' => array('default' => '1')));
-        $category = filter_input(INPUT_GET,'category',FILTER_SANITIZE_STRING,  array('options' => array('default' => '0')));
-        
+        $category_name = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
+        $page = $request->query->filter('page', 1, FILTER_VALIDATE_INT);
+
         if ($category == '0') {
             $items_page = 6;
         } else {

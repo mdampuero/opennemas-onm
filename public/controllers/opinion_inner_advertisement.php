@@ -9,7 +9,7 @@ $category = (!isset($category) || ($category=='home'))? 0: $category;
 $advertisement = Advertisement::getInstance();
 
 /* $banners = $advertisement->cache->getAdvertisements(array(1, 2, 3, 5, 10, 12, 11, 13, 101), $category); */
-$banners = $advertisement->getAdvertisements(array(701, 702, 703, 704, 705, 709, 710), $category);
+$banners = $advertisement->getAdvertisements(array(701, 702, 703, 704, 705, 706, 707, 708, 709, 710), $category);
   $cm = new ContentManager();
 $banners = $cm->getInTime($banners);
 //$advertisement->render($banners, &$tpl);

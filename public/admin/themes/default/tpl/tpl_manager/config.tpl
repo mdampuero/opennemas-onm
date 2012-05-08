@@ -1,13 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-	<style type="text/css">
-	td {
-		background:none !important;
-	}
-	</style>
-{/block}
-
 {block name="content"}
 <div class="top-action-bar clearfix">
 	<div class="wrapper-content">
@@ -27,7 +19,7 @@
 	<form id="formulario" name="formulario" action="{$smarty.server.SCRIPT_NAME}" method="POST">
 
 		<div style="width:700px; margin:0 auto;">
-            <table class="listing-table">
+            <table class="listing-table table table-striped">
                 <thead>
                     <tr>
 						<th class="center" style="width:10px">
@@ -62,11 +54,10 @@
 					{/foreach}
 				</tbody>
             </table>
-                <div class="action-bar clearfix">
-                    <div class="right">
-                        <input type="submit" name="submit" value="{t}Save{/t}"  class="onm-button red">
-                    </div>
-                </div><!-- / -->
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">{t}Save{/t}</button>
+                <button class="btn">{t}Cancel{/t}</button>
+            </div>
 		</div>
 
 		<input type="hidden" id="action" name="action" value="config" />

@@ -102,7 +102,7 @@
                     <th class="center" style="width:35px;">{t}Actions{/t}</th>
                 </tr>
             </thead>
-             <tbody class="sortable">
+            <tbody class="sortable">
             {section name=as loop=$albums}
             <tr data-id="{$albums[as]->pk_album}">
                 <td class="center">
@@ -180,8 +180,8 @@
             <tr>
                 <td class="empty" colspan=9>{t}There is no albums yet{/t}</td>
             </tr>
-        {/section}
-          </tbody>
+            {/section}
+            </tbody>
             <tfoot>
               <td colspan="9">
                 {$pagination|default:""}&nbsp;

@@ -60,10 +60,11 @@ switch($action) {
         Acl::checkOrForward('ALBUM_ADMIN');
         $configurations = s::get('album_settings');
 
+        $items_page = s::get('items_per_page') ?: 20;
         if (empty($page)) {
-            $limit = "LIMIT ".(ITEMS_PAGE+1);
+            $limit= "LIMIT ".($items_page+1);
         } else {
-            $limit = "LIMIT ".($page-1) * ITEMS_PAGE .', '.(ITEMS_PAGE+1);
+            $limit= "LIMIT ".($page-1) * $items_page .', '.$items_page;
         }
 
         $cm = new ContentManager();
@@ -102,7 +103,7 @@ switch($action) {
 
         $pagination = \Onm\Pager\SimplePager::getPagerUrl(array(
             'page'  => $page,
-            'items' => ITEMS_PAGE,
+            'items' => $items_page,
             'total' => count($albums),
             'url'   => $_SERVER['SCRIPT_NAME'].'?action=list&category='.$category
         ));
@@ -381,18 +382,20 @@ switch($action) {
 
     case 'content-list-provider':
 
+    case 'related-provider':
         $items_page = s::get('items_per_page') ?: 20;
         $category = filter_input( INPUT_GET, 'category' , FILTER_SANITIZE_STRING, array('options' => array('default' => '0')) );
         $page = filter_input( INPUT_GET, 'page' , FILTER_SANITIZE_STRING, array('options' => array('default' => '1')) );
         $cm = new ContentManager();
 
-        list($albums, $pager) = $cm->find_pages('Album', 'available=1 ',
+        list($albums, $pager) = $cm->find_pages('Album', '1=1 ',
                     'ORDER BY starttime DESC,  contents.title ASC ',
                     $page, $items_page, $category);
 
         $tpl->assign(array('contents'=>$albums,
                             'contentTypeCategories'=>$parentCategories,
                             'category' =>$category,
+                            'contentType'=>'Album',
                             'pagination'=>$pager->links
                     ));
 
@@ -427,6 +430,40 @@ switch($action) {
         }
 
     break;
+
+    case 'content-provider':
+
+        $category = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_STRING,   array('options' => array( 'default' => 'home')));
+        $page     = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_NUMBER_INT,   array('options' => array( 'default' => 1)));
+
+        if ($category == 'home') { $category = 0; }
+
+        $cm = new  ContentManager();
+
+        // Get contents for this home
+        $contentElementsInFrontpage  = $cm->getContentsIdsForHomepageOfCategory($category);
+
+        // Fetching opinions
+        $sqlExcludedOpinions = '';
+        if (count($contentElementsInFrontpage) > 0) {
+            $contentsExcluded    = implode(', ', $contentElementsInFrontpage);
+            $sqlExcludedOpinions = ' AND `pk_album` NOT IN ('.$contentsExcluded.')';
+        }
+
+        list($albums, $pager) = $cm->find_pages(
+            'Album',
+            'contents.available=1 ', 'ORDER BY created DESC ', $page, 5
+        );
+
+
+        $tpl->assign(array(
+            'albums' => $albums,
+            'pager'  => $pager,
+        ));
+
+        $tpl->display('album/content-provider.tpl');
+
+        break;
 
     default:
 

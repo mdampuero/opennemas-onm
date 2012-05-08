@@ -7,50 +7,31 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-/**
- * Start up and setup the app
-*/
+// Start up and setup the app
 require_once('../bootstrap.php');
 
-/**
- * Setup view
-*/
-$tpl = new Template(TEMPLATE_USER);
-$errorCode = filter_input(INPUT_GET, 'errordoc');
+// Setup view
+$tpl       = new Template(TEMPLATE_USER);
 
-/**
- * Fetch HTTP variables
-*/
+// Fetch HTTP variables
+$errorCode     = $request->query->filter('errordoc', null, FILTER_SANITIZE_STRING);
+$category_name = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
+$cache_page    = $request->query->filter('page', 0, FILTER_VALIDATE_INT);
 
-$category_name = filter_input(INPUT_GET,'category_name',FILTER_SANITIZE_STRING);
-if ( !(isset($category_name) && !empty($category_name)) ) {
-    $category_name = 'home';
+require_once "statics_advertisement.php";
+
+if ($errorCode =='404') {
+    $tpl->display('static_pages/404.tpl');
+} else {
+
+    $tpl->assign('category_real_name', $page->title);
+    $tpl->assign('page', $page);
+
+    $page = new stdClass();
+
+    // Dummy content while testing this feature
+    $page->title   = 'No hemos podido encontrar la página que buscas.';
+    $page->content = 'Whoups!';
+
+    $tpl->display('static_pages/statics.tpl');
 }
-
-$subcategory_name = filter_input(INPUT_GET,'subcategory_name',FILTER_SANITIZE_STRING);
-$cache_page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT);
-$cache_page = (is_null($cache_page))? 0 : $cache_page;
-
-/******************************  CATEGORIES & SUBCATEGORIES  *********************************/
-$ccm = ContentCategoryManager::get_instance();
-$cm = new ContentManager();
-require_once ("index_sections.php");
-
-$page = new stdClass();
-
-// Dummy content while testing this feature
-$page->title = 'No hemos podido encontrar la página que buscas.';
-$page->content = 'Whoups!';
-
-
-$tpl->assign('category_real_name', $page->title);
-$tpl->assign('page', $page);   
-
-
-require_once("widget_static_pages.php");
-/********************************* ADVERTISEMENTS  *********************************************/
-require_once ("statics_advertisement.php");
-/********************************* ADVERTISEMENTS  *********************************************/
-
-
-$tpl->display('static_pages/statics.tpl');

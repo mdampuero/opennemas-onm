@@ -91,6 +91,7 @@ class ModuleManager
                 'CACHE_MANAGER',
                 'CATEGORY_MANAGER',
                 'COMMENT_MANAGER',
+                'COMMENT_DISQUS_MANAGER',
                 'EFE_FILE_IMPORTER',
                 'EFE_IMPORTER',
                 'EUROPAPRESS_IMPORTER',
@@ -123,8 +124,10 @@ class ModuleManager
                 'SCHEDULE_MANAGER',
                 'AVANCED_ARTICLE_MANAGER',
                 'LIBRARY_MANAGER',
-                'LETTER_MANAGER'
-
+                'LETTER_MANAGER',
+                'SYNC_MANAGER',
+                'FRONTPAGES_LIBRARY',
+                'STATIC_LIBRARY'
             );
         }
 

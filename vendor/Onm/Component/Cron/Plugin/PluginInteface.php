@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  **/
-namespace Onm\Component\Cron;
+namespace Onm\Component\Cron\Plugin;
 /**
  * Interface for Cron plugins
  *

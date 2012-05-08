@@ -23,13 +23,9 @@ $tpl = new Template(TEMPLATE_USER);
 */
 $ccm = new ContentCategoryManager();
 
-$category_name = filter_input(INPUT_GET,'category_name',FILTER_SANITIZE_STRING);
-if(empty($category_name)) {
-    $category_name = filter_input(INPUT_POST,'category_name',FILTER_SANITIZE_STRING);
-}
-
-$menuFrontpage = Menu::renderMenu('album');
-$tpl->assign('menuFrontpage',$menuFrontpage->items);
+$category_name = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+$subcategory_name = null;
+$action = $request->query->filter('action', 'frontpage', FILTER_SANITIZE_STRING);
 
 if(!empty($category_name)) {
     $category = $ccm->get_id($category_name);
@@ -47,6 +43,7 @@ if(!empty($category_name)) {
         'category_real_name' => $category_real_name ,
     ));
 }
+$tpl->assign('actual_category', $category_name);
 
 /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
 
@@ -56,18 +53,13 @@ $cm = new ContentManager();
 /**
  * Route to the proper action
  */
-$action = filter_input(INPUT_GET,'action',FILTER_SANITIZE_STRING);
 
 if (!is_null($action) ) {
 
     switch ($action) {
 
         case 'frontpage':
-
-			$page = filter_input(
-                INPUT_GET,'page',FILTER_SANITIZE_STRING,
-				array('options'=> array('default' => 0))
-            );
+            $page = $request->query->filter('page', 0, FILTER_VALIDATE_INT);
 
 			//Setup caching system
 			$tpl->setConfig('gallery-frontpage');
@@ -126,11 +118,7 @@ if (!is_null($action) ) {
 
         case 'show':
 
-            $dirtyID = filter_input(INPUT_GET,'album_id',FILTER_SANITIZE_STRING);
-
-            if(empty($dirtyID)) {
-                $dirtyID = filter_input(INPUT_POST,'album_id',FILTER_SANITIZE_STRING);
-            }
+            $dirtyID = $request->query->filter('album_id', null, FILTER_SANITIZE_STRING);
 
             $albumID = Content::resolveID($dirtyID);
 			/**

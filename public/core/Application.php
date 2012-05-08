@@ -40,6 +40,8 @@ class Application
     */
     static public function load()
     {
+        self::initEnvironment(ENVIRONMENT);
+
         if (!isset($GLOBALS['application']) || $GLOBALS['application']==NULL) {
             // Setting up static Constants
             self::initInternalConstants();
@@ -232,6 +234,7 @@ class Application
         define('INSTANCE_MEDIA', MEDIA_URL.INSTANCE_UNIQUE_NAME.DS);
         define('INSTANCE_MEDIA_PATH', SITE_PATH.DS."media".DS.INSTANCE_UNIQUE_NAME.DS);
 
+        define('STATIC_PAGE_PATH', 'estaticas');
 
         define('MEDIA_DIR', INSTANCE_UNIQUE_NAME);    // External server or a local dir
         define('MEDIA_DIR_URL', MEDIA_URL.SS.MEDIA_DIR.SS); // Full path to the instance media files
@@ -276,6 +279,25 @@ class Application
         $GLOBALS['conn'] = NULL;
 
         define('ITEMS_PAGE', "20"); // TODO: delete from application
+    }
+
+    /**
+     * Sets the PHP environment given an environmen name 'production', 'development'
+     *
+     * @return void
+     **/
+    public static function initEnvironment($environment = 'production')
+    {
+        if ($environment == 'development') {
+            ini_set('expose_php', 'On');
+            ini_set('error_reporting', E_ALL | E_STRICT);
+            ini_set('display_errors', 'On');
+            ini_set('display_startup_errors', 'On');
+            ini_set('html_errors', 'On');
+        } else {
+            ini_set('expose_php', 'off');
+        }
+        ini_set('apc.slam_defense','0');
     }
 
     // TODO: move to a separated file called functions.php
@@ -527,11 +549,11 @@ class Application
     {
         $logger = Application::getLogger();
 
-            $msg = 'User '.$_SESSION['username'].'(ID:'.$_SESSION['userid'].') has executed '
-            .'the action '.$action;
-            if(!empty($content)){ $msg.=' at '.get_class($content).' (ID:'.$content->id.')';}
+        $msg = 'User '.$_SESSION['username'].'(ID:'.$_SESSION['userid'].') has executed '
+        .'the action '.$action;
+        if(!empty($content)){ $msg.=' at '.get_class($content).' (ID:'.$content->id.')';}
 
-            $logger->notice( $msg );
+        $logger->notice( $msg );
     }
 
     // TODO: move to a separated file called functions.php
@@ -544,6 +566,10 @@ class Application
     static public function logDatabaseError()
     {
         $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+
+        $logger = Application::getLogger();
+        $logger->notice('[Database Error] '.$errorMsg, 'normal');
+
         $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
         $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
         return $errorMsg;

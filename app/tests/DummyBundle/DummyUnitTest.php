@@ -33,12 +33,34 @@ class DummyUnitTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers {className}::{origMethodName}
+     * @covers \Content::isInTime2
      * @todo Implement testNotFoundAction().
      */
     public function testFranisHandsome()
     {
+        $article = \Article::isInTime2('-1 day');
+        $article = new \Article('');
         $this->assertTrue(true, 'Fran is handsome');
+    }
+
+    /**
+     * Test double
+     *
+     * @return void
+     **/
+    public function testArticleClass()
+    {
+        // Create a stub for the SomeClass class.
+        $stub = $this->getMock('Article');
+
+        // Configure the stub.
+        $stub->expects($this->any())
+             ->method('create')
+             ->will($this->returnValue('foo'));
+
+        // Calling $stub->doSomething() will now return
+        // 'foo'.
+        $this->assertEquals('foo', $stub->create('as'));
     }
 
     /**

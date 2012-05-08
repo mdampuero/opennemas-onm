@@ -16,24 +16,20 @@ require_once('../bootstrap.php');
  * Fetch HTTP variables
 */
 
-$category_name = filter_input(INPUT_GET,'category_name',FILTER_SANITIZE_STRING);
+$category_name = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+$subcategory_name = $request->query->filter('subcategory_name', '', FILTER_SANITIZE_STRING);
+$cache_page = $request->query->filter('page', 0, FILTER_VALIDATE_INT);
+$date = $request->query->filter('date', '', FILTER_SANITIZE_STRING);
+
 if ( !(isset($category_name) && !empty($category_name)) ) {
     $category_name = 'home';
 }
-
-$subcategory_name = filter_input(INPUT_GET,'subcategory_name',FILTER_SANITIZE_STRING);
-$cache_page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT);
-$cache_page = (is_null($cache_page))? 0 : $cache_page;
-
-$date = filter_input(INPUT_GET,'date',FILTER_SANITIZE_STRING);
-
-
 /**
  * Setup view
-*/
+ */
 $tpl = new Template(TEMPLATE_USER);
 //$tpl->setConfig('newslibrary');
-//$cache_id = $tpl->generateCacheId($category_name, $subcategory_name, $date);
+ $cache_id = $tpl->generateCacheId($category_name, $subcategory_name, $date);
 
 $tpl->assign('newslibraryDate',$date);
 /**
@@ -42,33 +38,23 @@ $tpl->assign('newslibraryDate',$date);
 require_once("index_advertisement.php");
 
 $ccm = ContentCategoryManager::get_instance();
-$settings = s::get('frontpage_settings');
 
-$menuFrontpage= Menu::renderMenu('frontpage');
 
-if (!empty($menuFrontpage->items)) {
-    $tpl->assign('menuFrontpage',$menuFrontpage->items);
-}
-if (empty($category_name) && !empty($menuFrontpage->items)) {
-    foreach ($menuFrontpage->items as  $item) {
-        if(empty($category_name) && $item->type == 'category') {
-             $category_name = $item->link;
-             $category = $ccm->get_id($category_name);
-        }
-    }
-
-}
-
-if ( 1==1 || ($tpl->caching == 0)  || !$tpl->isCached('frontpage/newslibrary.tpl', $cache_id) )
+if ( ($tpl->caching == 0)  || !$tpl->isCached('frontpage/newslibrary.tpl', $cache_id) )
 {
 
     $fp = new Frontpage();
 
-    /************************ FETCHING NEWS ***********************************/
-   if(isset($settings['viewMethod']) &&
-           $settings['viewMethod'] == 'listFrontpages') {
+    /****************** FETCHING NEWS IN STATIC FILES **********************/
+    if(\Onm\Module\ModuleManager::isActivated('FRONTPAGES_LIBRARY')) {
 
-        if( $fp->getFrontpage($date, $actual_category_id) ) {
+        if($category_name != 'home') {
+          $actual_category_id = $ccm->get_id($category_name);
+        } else {
+          $actual_category_id = 0;
+        }
+        //TODO: review this option
+        if( $fp->cache->getFrontpage($date, $actual_category_id) ) {
 
             $articles_home = array();
             if(!empty($fp->contents)){
@@ -98,16 +84,27 @@ if ( 1==1 || ($tpl->caching == 0)  || !$tpl->isCached('frontpage/newslibrary.tpl
 
                 }
             }
-
         }
 
         $tpl->assign('articles_home', $articles_home);
 
         $tpl->display('frontpage/fp_newslibrary.tpl');
 
-    } elseif (isset($settings['viewMethod']) &&
-           $settings['viewMethod'] == 'staticFrontpages') {
+    } elseif(\Onm\Module\ModuleManager::isActivated('STATIC_LIBRARY')) {
                 //cronicas method
+        if($category_name != 'home') {
+            $actual_category_id = $ccm->get_id($category_name);
+        } else {
+            $actual_category_id = 0;
+        }
+
+        $path = preg_replace('/(\d{4})(\d{2})(\d{2})/', '/$1/$2/$3', $date);
+
+        var_dump(INSTANCE_MEDIA."library/{$path}/{$category_name}.html");
+
+        if( !empty($date) ) {
+            echo file_get_contents(INSTANCE_MEDIA."library/{$path}/{$category_name}.html");
+        }
     } else {
 
         $cm = new ContentManager();
@@ -118,6 +115,7 @@ if ( 1==1 || ($tpl->caching == 0)  || !$tpl->isCached('frontpage/newslibrary.tpl
         if(!empty($contents)) {
             foreach ($contents as $content) {
                $categoryID = $content->category;
+               $library[$categoryID] = new stdClass();
                $library[$categoryID]->id = $categoryID;
                $library[$categoryID]->title = $allCategories[$categoryID]->title;
                $library[$categoryID]->contents[] = $content;

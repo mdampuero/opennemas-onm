@@ -9,7 +9,7 @@ $category = $ccm->get_id($category_name);
 $category = (!isset($category) || ($category_name=='home'))? 0: $category;
 $advertisement = Advertisement::getInstance();
 
-$positions = array(101, 102, 103, 104, 105, 109, 110);
+$positions = array(101, 102, 103, 104, 105, 106, 107, 108, 109, 110);
 
 $banners = $advertisement->getAdvertisements($positions, $category);
 

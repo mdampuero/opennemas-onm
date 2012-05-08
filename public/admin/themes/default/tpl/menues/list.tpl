@@ -54,7 +54,7 @@
                     <tr>
                         <th style="width:15px;"><input type="checkbox" id="toggleallcheckbox"></th>
                         <th>{t}Title{/t}</th>
-                        <th align="center" style="width:30px;">{t}Actions{/t}</th>
+                        <th class="right" style="width:100px;">{t}Actions{/t}</th>
 
                     </tr>
                 </thead>
@@ -73,26 +73,21 @@
                                      {$menues[m]->name|capitalize}
                                  </a>
                             </td>
-                             <td class="center">
-                                 <ul class="action-buttons clearfix">
-                                    <li>
-                                        {acl isAllowed="MENU_UPDATE"}
-                                            <a href="{$smarty.server.SCRIPT_NAME}?action=read&name={$menues[m]->name}" title="{t 1=$menues[m]->name}Edit page '%1'{/t}" title={t}"Edit"{/t}>
-                                                <img src="{$params.IMAGE_DIR}edit.png" border="0" />
-                                            </a>
-                                        {/acl}
-                                    </li>
-                                     <li>
-                                         {if $menues[m]->type eq 'user'}
-                                        {acl isAllowed="MENU_ADMIN"}
-                                            <a class="del" data-controls-modal="modal-from-dom"
-                                               data-id="{$menues[m]->pk_menu}" data-title="{$menues[m]->name|capitalize}"  href="#" >
-                                                <img src="{$params.IMAGE_DIR}trash.png" border="0" />
-                                            </a>
-                                        {/acl}
-                                        {/if}
-                                    </li>
-                                 </ul>
+                             <td class="right">
+                                {acl isAllowed="MENU_UPDATE"}
+                                <a href="{$smarty.server.SCRIPT_NAME}?action=read&amp;name={$menues[m]->name}" \
+                                    title="{t 1=$menues[m]->name}Edit page '%1'{/t}" class="btn btn-mini">
+                                    {t}Edit{/t}
+                                </a>
+                                {/acl}
+                                {if $menues[m]->type eq 'user'}
+                                    {acl isAllowed="MENU_ADMIN"}
+                                        <a  class="del btn btn-mini btn-danger" data-controls-modal="modal-from-dom"
+                                            data-id="{$menues[m]->pk_menu}" data-title="{$menues[m]->name|capitalize}"   href="#" >
+                                            {t}Delete{/t}
+                                        </a>
+                                    {/acl}
+                                {/if}
                             </td>
                         </tr>
 
@@ -108,35 +103,29 @@
                                     <td style="padding-left:20px">
                                         <strong>&rArr; </strong>
                                         {acl isAllowed="MENU_UPDATE"}
-                                        <a href="{$smarty.server.SCRIPT_NAME}?action=read&name={$subMenu[s]->name}"
+                                        <a href="{$smarty.server.SCRIPT_NAME}?action=read&amp;name={$subMenu[s]->name}"
                                         {/acl}
                                            title="{t 1=$subMenu[s]->name}Edit page '%1'{/t}" title={t}"Edit"{/t}>
                                             {$subMenu[s]->name|capitalize}
                                         </a>
                                     </td>
 
-                                    <td class="center">
-                                         <ul class="action-buttons clearfix">
-                                        <li>
-                                            {acl isAllowed="MENU_UPDATE"}
-                                            <a href="{$smarty.server.SCRIPT_NAME}?action=read&name={$subMenu[s]->name}"
-                                               title="{t 1=$subMenu[s]->name}Edit page '%1'{/t}" title={t}"Edit"{/t}>
-                                                <img src="{$params.IMAGE_DIR}edit.png" border="0" />
-                                            </a>
-                                            {/acl}
-                                        </li>
-                                        <li>
-                                             {if $subMenu[s]->type eq 'user'}
+                                    <td class="right">
+                                        {acl isAllowed="MENU_UPDATE"}
+                                        <a href="{$smarty.server.SCRIPT_NAME}?action=read&amp;name={$subMenu[s]->name}" \
+                                            title="{t}Edit{/t}" class="btn btn-mini">
+                                            {t}Edit{/t}
+                                        </a>
+                                        {/acl}
+                                        {if $subMenu[s]->type eq 'user'}
                                             {acl isAllowed="MENU_ADMIN"}
-                                                   <a class="del" data-controls-modal="modal-from-dom"
-                                                       data-id="{$subMenu[s]->pk_menu}"
-                                                       data-title="{$subMenu[s]->name|capitalize}"  href="#" >
-                                                    <img src="{$params.IMAGE_DIR}trash.png" border="0" />
+                                                <a  class="del btn btn-mini btn-danger" data-controls-modal="modal-from-dom"
+                                                   data-id="{$subMenu[s]->pk_menu}"
+                                                       data-title="{$subMenu[s]->name|capitalize}" href="#" >
+                                                    {t}Delete{/t}
                                                 </a>
                                             {/acl}
-                                            {/if}
-                                        </li>
-                                      </ul>
+                                        {/if}
                                     </td>
                                 </tr>
                                  {/section}
@@ -157,34 +146,29 @@
                             </td>
                             <td>
                                 {acl isAllowed="MENU_UPDATE"}
-                                 <a href="{$smarty.server.SCRIPT_NAME}?action=read&name={$withoutFather[m]->name}"
+                                 <a href="{$smarty.server.SCRIPT_NAME}?action=read&amp;name={$withoutFather[m]->name}"
                                 {/acl}
                                     title="{t 1=$withoutFather[m]->name}Edit page '%1'{/t}" title={t}"Edit"{/t}>
                                      {$withoutFather[m]->name|capitalize}
                                  </a>
                             </td>
 
-                            <td class="center">
-                                 <ul class="action-buttons clearfix">
-                                    <li>
-                                    {acl isAllowed="MENU_UPDATE"}
-                                        <a href="{$smarty.server.SCRIPT_NAME}?action=read&name={$withoutFather[m]->name}" title="{t 1=$withoutFather[m]->name}Edit page '%1'{/t}" title={t}"Edit"{/t}>
-                                            <img src="{$params.IMAGE_DIR}edit.png" border="0" />
+                            <td class="right">
+                                {acl isAllowed="MENU_UPDATE"}
+                                <a  href="{$smarty.server.SCRIPT_NAME}?action=read&amp;name={$withoutFather[m]->name}"
+                                    title="{t 1=$subMenu[s]->name}Edit page '%1'{/t}" class="btn btn-mini">
+                                    {t}Edit{/t}
+                                </a>
+                                {/acl}
+                                {if $withoutFather[m]->type eq 'user'}
+                                    {acl isAllowed="MENU_ADMIN"}
+                                        <a  class="del btn btn-mini btn-danger" data-controls-modal="modal-from-dom"
+                                           data-id="{$withoutFather[m]->pk_menu}" title="{t}Delete{/t}"
+                                           data-title="{$widgets[wgt]->title|capitalize}" href="#" >
+                                            {t}Delete{/t}
                                         </a>
                                     {/acl}
-                                    </li>
-                                    <li>
-                                         {if $withoutFather[m]->type eq 'user'}
-                                        {acl isAllowed="MENU_ADMIN"}
-                                           <a class="del" data-controls-modal="modal-from-dom"
-                                               data-id="{$withoutFather[m]->pk_menu}"
-                                               href="#" >
-                                                <img src="{$params.IMAGE_DIR}trash.png" border="0" />
-                                            </a>
-                                        {/acl}
-                                        {/if}
-                                   </li>
-                               </ul>
+                                {/if}
                             </td>
                         </tr>
                        {/section}

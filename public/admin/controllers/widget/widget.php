@@ -62,7 +62,7 @@ switch($action) {
 
         if (isset($_SESSION['desde'])) {
             if ($_SESSION['desde'] == 'list') {
-                Application::forward('/admin/article.php?action='.$_SESSION['desde'].'&category='.$_SESSION['categoria']);
+                Application::forward('/admin/controllers/frontpagemanager/frontpagemanager.php?action='.$_SESSION['desde'].'&category='.$_SESSION['categoria']);
             }elseif ($_SESSION['desde'] == 'widget') {
                 Application::forward('?action=list');
             }elseif ($_SESSION['desde'] == 'search_advanced') {
@@ -115,6 +115,38 @@ switch($action) {
         Application::forward(SITE_URL_ADMIN.'/article.php?action=list&category='.$_REQUEST['category']);
         break;
     }
+
+    case 'content-provider':
+
+        $category = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_STRING,   array('options' => array( 'default' => 'home')));
+        $page     = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_STRING,   array('options' => array( 'default' => 1)));
+
+        if ($category == 'home') { $category = 0; }
+
+        // Get contents for this home
+        $contentElementsInFrontpage  = $cm->getContentsIdsForHomepageOfCategory($category);
+
+        // Fetching opinions
+        $sqlExcludedOpinions = '';
+        if (count($contentElementsInFrontpage) > 0) {
+            $contentsExcluded = implode(', ', $contentElementsInFrontpage);
+            $sqlExcludedOpinions = ' AND `pk_widget` NOT IN ('.$contentsExcluded.')';
+        }
+
+        list($widgets, $pager) = $cm->find_pages(
+            'Widget',
+            'contents.available=1 '. $sqlExcludedOpinions,
+            'ORDER BY created DESC ', $page, 5
+        );
+
+        $tpl->assign(array(
+            'widgets' => $widgets,
+            'pager'   => $pager,
+        ));
+
+        $tpl->display('widget/content-provider.tpl');
+
+        break;
 
     case 'content-list-provider':
         $items_page = s::get('items_per_page') ?: 20;

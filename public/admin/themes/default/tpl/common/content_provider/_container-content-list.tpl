@@ -16,8 +16,10 @@
 <div class="contents">
     <ul id='contentList'>
         {section name=n loop=$contents}
-            <li data-id="{$contents[n]->id}" data-type="{$contents[n]->type}">
-                {$contents[n]->starttime|date_format:"%d-%m-%Y"}: {$contents[n]->title}
+            <li data-id="{$contents[n]->id}" data-type="{$contentType}" data-title="{$contents[n]->title|clearslash}">
+                <span class="type">{t}{$contentType}{/t} -</span>
+                <span class="date">{t}{$contents[n]->starttime|date_format:"%d-%m-%Y"}{/t} -</span>
+                {$contents[n]->title}
             </li>
         {/section}
     </ul>

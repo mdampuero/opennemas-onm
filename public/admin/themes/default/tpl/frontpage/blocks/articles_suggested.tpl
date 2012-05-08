@@ -11,12 +11,12 @@
             <th style="width:6%;">{t}Actions{/t}</th>
         </tr>
     </thead>
-    <tr><td colspan="13">
+    <tr>
+        <td colspan="13">
             <div id="articles-suggested" class="seccion" style="float:left;width:100%;">
                 {assign var=aux value='100'}
                 {section name=d loop=$suggestedArticles}
-
-                    <table id='tabla{$aux}' name='tabla{$aux}' value="{$suggestedArticles[d]->id}" data="{$suggestedArticles[d]->content_type}" width="100%" class="tabla" style="text-align:center;padding:0px;padding-bottom:4px;">
+                    <table id='tabla{$aux}' name='tabla{$aux}' value="{$suggestedArticles[d]->id}" data="Article" width="100%" class="tabla" style="text-align:center;padding:0px;padding-bottom:4px;">
                         <tr class="row1{schedule_class item=$suggestedArticles[d]}" style="cursor:pointer;">
                             <td align="left" style="width:2%;">
                                 <input type="checkbox" class="minput" pos={$aux} id="selected_{$placeholder}_{$aux}" name="selected_fld[]" value="{$suggestedArticles[d]->id}"  style="cursor:pointer;" />

@@ -35,25 +35,20 @@ if(isset($_REQUEST['action']) ) {
 		case 'list':
 			$cm = new ContentManager();
 
-			// ContentManager::find(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>);
-
 			$types_content = $cm->get_types();
 
 			$tpl->assign('types_content', $types_content);
 
-			// ContentManager::find(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>);
-
-			//$litterelems= $cm->find($_REQUEST['mytype'], 'in_litter=1', 'ORDER BY archive DESC ');
             list($litterelems, $pager)= $cm->find_pages($_REQUEST['mytype'], 'in_litter=1', 'ORDER BY changed DESC ',$_REQUEST['page'],20);
             $content = new Content();
- 
+
             foreach($litterelems as &$elem ) {
 
 				$elem->category_name =  $content->loadCategoryName($elem->id);
 				$elem->category_title = $content->loadCategoryTitle($elem->id);
- 
+
             }
-           
+
 			$tpl->assign('paginacion', $pager);
 
 			$tpl->assign('litterelems', $litterelems);
@@ -152,7 +147,7 @@ if(isset($_REQUEST['action']) ) {
 
             $id = filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
 			$contenido = new Content($id);
-             
+
 			$type = $contenido->content_type;
 
 			$name = $GLOBALS['application']->conn->

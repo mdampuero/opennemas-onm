@@ -62,34 +62,37 @@
 
         </div>
 
-            <table class="adminheading">
-                <tr>
-                    <th nowrap="nowrap" align="right">
-                        <label for="category">{t}Category name:{/t}</label>
+        <div class="table-info clearfix">
+            <div>
+                <div class="right form-inline">
+                    <label for="category">
+                        {t}Category name:{/t}
                         <select name="category" onchange="submitFilters(this.form);">
                             <option value="todos" {if $category eq '0'}selected{/if}> {t}All{/t} </option>
                             {section name=as loop=$allcategorys}
                                  <option value="{$allcategorys[as]->pk_content_category}" {if isset($category) && ($category eq $allcategorys[as]->pk_content_category)}selected{/if}>{$allcategorys[as]->title}</option>
                                  {section name=su loop=$subcat[as]}
-										{if $subcat[as][su]->internal_category eq 1}
-											<option value="{$subcat[as][su]->pk_content_category}"
-											{if $category eq $subcat[as][su]->pk_content_category || $article->category eq $subcat[as][su]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;|_&nbsp;&nbsp;{$subcat[as][su]->title}</option>
-										{/if}
-									{/section}
+                                        {if $subcat[as][su]->internal_category eq 1}
+                                            <option value="{$subcat[as][su]->pk_content_category}"
+                                            {if $category eq $subcat[as][su]->pk_content_category || $article->category eq $subcat[as][su]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;|_&nbsp;&nbsp;{$subcat[as][su]->title}</option>
+                                        {/if}
+                                    {/section}
                             {/section}
                         </select>
-                        &nbsp;&nbsp;&nbsp;
-                        <label>{t}Module:{/t}</label>
-                        <select name="module" onchange="submitFilters(this.form);">
-                            <option value="0" {if $module eq '0'}selected{/if}> {t}All{/t} </option>
-                            {foreach from=$content_types key=i item=type}
-                                 <option value="{$i}" {if $smarty.get.module eq $i}selected{/if}>{$type}</option>
-                            {/foreach}
-                        </select>
-                        <input type="hidden" id="page" name="page" value="{$smarty.request.page|default:"1"}" />
-                    </th>
-                </tr>
-            </table>
+                    </label>
+
+                    <label>{t}Module:{/t}
+                    <select name="module" onchange="submitFilters(this.form);">
+                        <option value="0" {if $module eq '0'}selected{/if}> {t}All{/t} </option>
+                        {foreach from=$content_types key=i item=type}
+                        <option value="{$i}" {if $smarty.get.module eq $i}selected{/if}>{$type}</option>
+                        {/foreach}
+                    </select>
+                    </label>
+                    <input type="hidden" id="page" name="page" value="{$smarty.request.page|default:"1"}" />
+                </div>
+            </div>
+        </div>
 
 		<div id="{$category}">
 

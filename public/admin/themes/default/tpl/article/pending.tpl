@@ -31,18 +31,8 @@
                     <img border="0" src="{$params.IMAGE_DIR}publish.gif" alt="noFrontpage"><br />{t}Publish{/t}
                 </a>
             </li>
-             <li>
-                <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdirectly_frontpage', 1);" onmouseover="return escape('<u>P</u>ublicar directamente en portada');" name="submit_mult" value="noFrontpage">
-                    <img border="0" src="{$params.IMAGE_DIR}publish_direct.gif" alt="publicar en portada directamente"><br />{t}Publish to frontpage{/t}
-                </a>
-            </li>
             {/if}
             {/acl}
-            <li>
-                <button type="button" style="cursor:pointer; background-color: #e1e3e5; border: 0px; width: 95px;" onmouseover="return escape('<u>S</u>eleccionar todo');" onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
-                    <img id="select_button" class="icon" src="{$params.IMAGE_DIR}select_button.png" alt="Seleccionar Todo"  status="0">
-                </button>
-            </li>
             <li class="separator"></li>
             {acl isAllowed="ARTICLE_CREATE"}
             <li>
@@ -61,12 +51,12 @@
     <ul class="pills" style="margin-bottom:28px;">
         {acl hasCategoryAccess=0}
         <li>
-            <a href="article.php?action=list_pendientes&category=todos" id="link_todos"  {if $category=='todos'}class="active"{/if}>TODOS</font></a>
+            <a href="article.php?action=list_pendientes&amp;category=todos" id="link_todos"  {if $category=='todos'}class="active"{/if}>TODOS</font></a>
         </li>
         {/acl}
         {acl hasCategoryAccess=20}
         <li>
-            <a href="article.php?action=list_pendientes&category=20" id='link_unknown' {if $category=='20'} class="active"{/if}>UNKNOWN</font></a>
+            <a href="article.php?action=list_pendientes&amp;category=20" id='link_unknown' {if $category=='20'} class="active"{/if}>UNKNOWN</font></a>
         </li>
         {/acl}
         <script type="text/javascript">
@@ -83,40 +73,10 @@
         </script>
         {include file="menu_categories.tpl" home="article.php?action=list_pendientes"}
     </ul>
-
-    {if isset($smarty.get.alert) && ($smarty.get.alert eq 'ok')}
-        <div class="notice">
-            {$smarty.get.msg}
-        </div>
-    {/if}
-
     <div id="{$category}">
-        <!--<table class="adminheading">
-            <tr>
-                <td><strong>{t}Pending articles{/t}</strong><span style="font-size: 10px;"><em>(estos articulos <b>NO</b> est&aacute;n aceptadas por lo que no estar&aacute;n inclu&iacute;dos en el almac&eacute;n de noticias. Ac&eacute;ptelos para poder publicarlos)</em></span></td>
-                <td align='right'>{t}Go to section:{/t}
-                    <select name="category" id="category" class="" onChange="javascript:location.href='article.php?action=list_pendientes&category='+this.options[this.selectedIndex].value;">
-                        {if $category eq "todos"}
-                           <option value="todos" selected="selected" name="{$allcategorys[as]->title|default:""}" >{t}All{/t}</option>
-                        {else}
-                           <option value="" selected="selected">{t}Category list{/t}</option>
-                           <option value="todos" name="{$allcategorys[as]->title|default:""}" >{t}All{/t}</option>
-                        {/if}
-                        <option value="20" {if isset($category) && $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{t}Unasigned{/t}</option>
-                        <option value="opinion" {if isset($category) && $category eq 'opinion'}selected{/if} name="{$allcategorys[as]->title}" >{t}Opinion{/t}</option>
-                        {section name=as loop=$allcategorys}
-                            <option value="{$allcategorys[as]->pk_content_category}" {if isset($category) && $article->category eq $allcategorys[as]->pk_content_category}selected="selected"{/if} name="{$allcategorys[as]->title}">{$allcategorys[as]->title}</option>
-                            {section name=su loop=$subcat[as]}
-                                <option value="{$subcat[as][su]->pk_content_category}" {if isset($category) && $article->category  eq $subcat[as][su]->pk_content_category} selected="selected"{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
-                            {/section}
-                        {/section}
-                    </select>
-                </td>
-            </tr>
-        </table>-->
         <table class="listing-table">
             <thead>
-                <th style="width:15px;"></th>
+                <th style="width:15px;"><input type="checkbox" id="toggleallcheckbox"></th>
                 <th class="left" >
                     <img src="themes/default/images/newsletter/editar.gif" border="0">
                     {t}Title{/t}

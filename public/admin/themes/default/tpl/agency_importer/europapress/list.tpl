@@ -13,7 +13,7 @@
     <script>
     jQuery(document).ready(function (){
         jQuery('.sync_with_server').click(function() {
-           jQuery('.warnings-validation').html('<div class="ui-blocker"></div><div class="ui-blocker-message"><img src="/admin/themes/default/images/ajax-loader.gif" /><br />{t}Downloading articles from EuropaPress, please wait...{/t}</div>'); 
+           jQuery('.warnings-validation').html('<div class="ui-blocker"></div><div class="ui-blocker-message"><img src="/admin/themes/default/images/ajax-loader.gif" /><br />{t}Downloading articles from EuropaPress, please wait...{/t}</div>');
         });
     });
     </script>
@@ -72,25 +72,28 @@
 	</div>
 	{/if}
 
+    <div class="table-info clearfix">
+            <div>
+                <div class="left"><label>Total: {$pagination->_totalItems} articles.</label></div>
+                <div class="right form-inline">
+                    <label for="username">
+                        {t}Filter by title or content{/t}
+                        <input id="username" name="filter_title" onchange="this.form.submit();" value="{$smarty.request.filter_title}" class="input-medium search-query"/>
+                    </label>
 
-    <table class="adminheading">
-	<tr>
-	    <th>Total: {$pagination->_totalItems} articles.</th>
-	    <th class="right">
-			<label for="username">{t}Filter by title or content{/t}</label>
-			<input id="username" name="filter_title" onchange="this.form.submit();" value="{$smarty.request.filter_title}" />
+                    <label for="usergroup">
+                        {t}and category:{/t}
+                        <select id="usergroup" name="filter_category" onchange="this.form.submit();">
+                            <option value="*">{t}All{/t}</option>
+                            {html_options options=$categories selected=$smarty.request.filter_group|default:""}
+                        </select>
+                    </label>
 
-			<label for="usergroup">{t}and category:{/t}</label>
-			<select id="usergroup" name="filter_category" onchange="this.form.submit();">
-			     <option value="*">{t}All{/t}</option>
-			     {html_options options=$categories selected=$smarty.request.filter_group|default:""}
-			</select>
+                    <button type="submit" class="btn">{t}Search{/t}</button>
+                </div>
+            </div>
+        </div>
 
-			<input type="hidden" name="page" value="{$smarty.request.page|default:""}" />
-			<input type="submit" value="{t}Search{/t}">
-	    </th>
-	</tr>
-    </table>
 
     <table class="listing-table">
         <thead>
@@ -133,8 +136,8 @@
                 <td class="right">
                     <ul class="action-buttons">
                         <li>
-                            <a class="publishing" href="{$smarty.server.PHP_SELF}?action=import&amp;id={$elements[c]->xmlFile}" title="Importar">
-                           <img alt="Publicar" src="{$params.IMAGE_DIR}archive_no2.png">
+                            <a class="btn btn-mini" href="{$smarty.server.PHP_SELF}?action=import&amp;id={$elements[c]->xmlFile}" title="{t}Import{/t}">
+                                {t}Import{/t}
                             </a>
                         </li>
                     </ul>

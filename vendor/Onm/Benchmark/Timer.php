@@ -19,6 +19,7 @@ namespace Onm\Benchmark;
  * $timer->start();
  * $timer->stop();
  * $timer->display();
+ * </code>
  *
  *
  * @package    Onm

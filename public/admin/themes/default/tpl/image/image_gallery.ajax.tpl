@@ -5,7 +5,7 @@
             <div style="float: left;">
                 <a href="#">
                     {if $photos[n]->type_img=='swf' || $photos[n]->type_img=='SWF'}
-                        <object style="z-index:-3; cursor:default;">
+                        <object width="68" height="40" style="z-index:-3; cursor:default;">
                             <param name="movie" value="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photos[n]->path_file}{$photos[n]->name}">
                             <param name="autoplay" value="false">
                             <param name="autoStart" value="0">

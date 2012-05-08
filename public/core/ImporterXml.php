@@ -27,6 +27,7 @@ class ImporterXml {
    static private $instance = null;
 
    public $ignoreds = NULL;
+   public $alloweds = NULL;
    public $labels = NULL;
    public $schema = NULL;
    public $data = NULL;
@@ -40,27 +41,18 @@ class ImporterXml {
      */
     public function __construct($config = array())
     {
-           $this->schema = s::get('xml_file_schema');
-         /*  $this->schema = array('NOMBRE_SECCION'=>'category_name',
-                    'Antetítulo'=> 'subtitle',
-                    'FECHA'=>'created',
-                    'Título'=> 'title',
-                    'Texo'=> 'bo',
-                    'Texto'=> 'body',
-                    'NOMBRE_PUBLICACION'=>'agency',
-                    'FECHA_SALIDA' =>'created',
-                    'Pie de foto'=>'img1_footer',
-                    'ignored'=>'ESTILO, STYLE',
-
-
-            ); */
-
+        $this->schema = s::get('xml_file_schema');
 
         $this->labels = array_values($this->schema);
 
         $ignoreds = explode(',', $this->schema['ignored']);
         foreach($ignoreds as $lab) {
             $this->ignoreds[] = trim($lab);
+        }
+
+        $allowed = explode(',', $this->schema['important']);
+        foreach($allowed as $lab) {
+            $this->alloweds[] = trim($lab);
         }
 
         $this->data = array();
@@ -101,19 +93,12 @@ class ImporterXml {
 
    public function checkLabels($label) {
 
-      /*  foreach($this->schema as $value=>$pattern) {
-
-             if(preg_match('/'.$pattern.'/', $label, $matches)) {
-              var_dump($matches);
-
-                return $value;
-             }
-        }*/
        foreach($this->schema as $value=>$pattern) {
-           if($label == $pattern)
+
+            if($label == $pattern)
                 return $value;
        }
-        return false;
+       return false;
 
     }
 
@@ -126,6 +111,8 @@ class ImporterXml {
         }
     }
 
+
+
     static function parseXMLtoArray($eleto) {
 
         $json = json_encode($eleto);
@@ -137,55 +124,80 @@ class ImporterXml {
 
     public function parseNodes($array) {
 
-
+        $tag = '';
+        $end = '';
         $texto ='';
         if(!empty($array)) {
-            foreach($array as $key=>$value) {
-               if($key =='@attributes')  {
 
-                   $label = $this->checkAttributes($value);
-                   if(!empty($label)) {
+            foreach($array as $key=>$value) {
+                if($key =='@attributes')  {
+                    $label = $this->checkAttributes($value);
+
+                    if((is_array($value) &&
+                        array_key_exists('class', $value)
+                        && $this->checkBeImportant($value['class']))
+                        || (!is_array($value)
+                        && $this->checkBeImportant($value['class']))) {
+
+                            $tag = '<b>';
+                            $end = '</b> <br>';
+                    } else {
+                        $tag = '';
+                        $end = ' ';
+                    }
+
+                    if(!empty($label)) {
 
                         $point = next($array);
 
                         if(is_object($point) || is_array($point) ) {
-                                $this->data[$label] = $this->parseNodes($point);
+
+                            $this->data[$label] .= $tag.$this->parseNodes($point).$end;
                         } else {
 
-                             $this->data[$label] .= $this->checkBeIgnored($point);
+                            $this->data[$label] .= $tag. $this->checkBeIgnored($point) .$end;
 
                         }
-                   }
-               } elseif(!in_array($key, $this->ignoreds) ) {
+                    }
+                } elseif(!in_array($key, $this->ignoreds) ) {
                    $label = $this->checkLabels($key);
 
-               } else {
+                } else {
                    return '';
-               }
+                }
 
-               if( !empty($label)) {
+                if( !empty($label)) {
 
                     if(!is_object($value) && !is_array($value)) {
                         $texto = (string)$value;
-                        $this->data[$label]  = $this->checkBeIgnored($texto) ;
+
+                        $this->data[$label]  .= $this->checkBeIgnored($texto);
 
                     } else {
 
                         $this->data[$label]  .= $this->parseNodes($value);
                     }
                 } else {
+                    if(!empty($tag)) {
+                        $texto .= $tag;
+                    }
+                    if(is_object($value) || is_array($value)) {
 
-                     if(is_object($value) || is_array($value)) {
                         $texto .=   $this->parseNodes($value);
-                     }else{
-                        $texto .= $this->checkBeIgnored($value);
-                     }
-                }
 
+                    }else{
+
+                        $texto .= ' <br>'. $this->checkBeIgnored($value);
+                    }
+                    if(!empty($tag)) {
+                        $texto .= $end;
+                    }
+                }
             }
         }
 
         $texto = $this->checkBeIgnored($texto);
+
         return $texto;
 
     }
@@ -201,7 +213,6 @@ class ImporterXml {
 
                 if(!empty($val) &&  (!in_array($n, $this->ignoreds) ) ) {
                    $label = $this->checkAttributes($val);
-
                 }
             }
         } else {
@@ -211,8 +222,19 @@ class ImporterXml {
             }
         }
 
-
         return $label;
+    }
+
+    public function checkBeImportant($value) {
+
+        if((!is_object($value) && !is_array($value)) ) {
+
+            if (in_array($value, $this->alloweds)) {
+
+                return true;
+            }
+        }
+        return false;
     }
 
 
@@ -229,22 +251,33 @@ class ImporterXml {
 
         $this->data['pk_author'] = $_SESSION['userid'];
 
+        $imgImported =NULL;
+        if(!empty( $this->data['img'] )) {
+            s::get('SITE_URL');
+            $urn_source = preg_match( "@*.*{1,3}@", $this->data['img']);
 
+            $imgImported = Content::findByUrn($urn_source);
+        }
 
         $this->data['content_status']=0;
         $this->data['available']=0;
         $this->data['frontpage']=0;
 
-        $this->data['img1']=""; $this->data['img1_footer']="";
-        $this->data['img2']="";$this->data['img2_footer']="";
-        $this->data['fk_video']=""; $this->data['footer_video']="";
+        $this->data['img1'] = $imgImported;
+        $this->data['img1_footer'] = $this->data['img_footer'];
+        $this->data['img2'] = $imgImported;
+        $this->data['img2_footer'] = $this->data['img_footer'];
+        $this->data['fk_video']="";  $this->data['footer_video']="";
         $this->data['fk_video2']=""; $this->data['footer_video2']="";
-        $this->data['ordenArti']="";$this->data['ordenArtiInt']="";
+        $this->data['ordenArti']=""; $this->data['ordenArtiInt']="";
 
         $this->parseNodes($values);
 
         if(empty($this->data['title_int']))
             $this->data['title_int'] = $this->data['title'];
+
+        if(empty($this->data['summary']))
+            $this->data['summary'] = strip_tags(substr($this->data['body'],0, strpos($this->data['body'], '.') ).'.');
 
         if(!empty($this->data['category_name'])) {
             $ccm = ContentCategoryManager::get_instance();
