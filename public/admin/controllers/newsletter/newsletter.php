@@ -122,7 +122,7 @@ switch($action) {
 
         $newsletter = new NewNewsletter($id);
 
-        $_COOKIE['data-newsletter'] = $newsletter->data;
+        setcookie('data-newsletter', $newsletter->data);
         $newsletterContent = json_decode(json_decode($_COOKIE['data-newsletter']));
 
         $savedNewsletters = $newsletter->search('1=1 ORDER BY created DESC LIMIT 0,30');
