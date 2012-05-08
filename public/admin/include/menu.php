@@ -48,7 +48,7 @@ $menuXml = '<?xml version="1.0"?>
             privilege="ARTICLE_PENDINGS"
             title="'.htmlspecialchars(_("Articles"), ENT_QUOTES).'"
             id="article_manager"
-            link="article.php?action=list_pendientes"
+            link="/admin/article.php?action=list_pendientes"
         />
         <node
             module_name="OPINION_MANAGER"
@@ -169,7 +169,7 @@ $menuXml = '<?xml version="1.0"?>
             privilege="SEARCH_ADMIN"
             title="'.htmlspecialchars(_("Advanced Search"), ENT_QUOTES).'"
             id="advanced_search"
-            link="/admin/controllers/search_advanced/search_advanced.php"
+            link="'.url('admin_search').'"
         />
          <node class="divider" />
         <node
@@ -189,7 +189,7 @@ $menuXml = '<?xml version="1.0"?>
             module_name="KEYWORD_MANAGER"
             title="'.htmlspecialchars(_("Keywords"), ENT_QUOTES).'"
             id="keyword_manager"
-            link="/admin/controllers/keywords/keywords.php"
+            link="'.url('admin_keyword', array()).'"
             privilege="PCLAVE_ADMIN" />
         <node class="divider" />
          <node

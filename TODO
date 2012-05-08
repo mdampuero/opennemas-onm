@@ -1,0 +1,38 @@
+TODO
+====
+
+
+Advanced Search Controller
+--------------------------
+- Integrate the contents paginated
+- Port search content-provider
+- Review all the icons (when a content is trashed, archived, ...)
+- Improve advanced search capabilities (filter by category, date range, ...)
+
+
+User controller
+---------------
+- Integrate modal dialog when deleting
+- Review pagination of users
+- When a user doesn't exists (on editting or deleting) show error
+- In some point I could create two users with the same information.
+- Editting a user: detect if a user is master so hide privilege listing
+
+User group controller
+---------------------
+- Integrate modal dialog when deleting
+- Review pagination of user groups
+- When a user group doesn't exists (on editting or deleting) show error
+
+
+Tpl cache manager
+-----------------
+- When saving the configuration show a message
+- Review pagination links (now with js)
+- When selecting a new items per page and push Enter, the deleting tpl alert shows
+
+
+Trash controller
+----------------
+- batch buttons doesnt work
+

@@ -99,7 +99,7 @@ class Dispatcher
     public function dispatchControllerFile($controllerFileName)
     {
         try {
-            $response = require $controllerFileName;
+            $response = include $controllerFileName;
             return $response;
         } catch (Exception $e) {
             throw new ResourceNotFoundException(
@@ -119,7 +119,7 @@ class Dispatcher
             list($controllerClassName, $actionName) =
                 self::resolveClasNameAndAction($className);
             if (class_exists($controllerClassName)) {
-                $controller = new $controllerClassName($this->request);
+                $controller = new $controllerClassName();
                 $controller->setContainer($this->container);
                 $controller->init();
                 return $controller->{$actionName}();

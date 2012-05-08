@@ -63,23 +63,23 @@ jQuery(function($){
             </thead>
 
             <tbody>
-                {section name=c loop=$litterelems}
+                {section name=c loop=$contents}
                 <tr>
                     <td >
-                        <input type="checkbox" name="selected[]" value="{$litterelems[c]->id}">
+                        <input type="checkbox" name="selected[]" value="{$contents[c]->id}">
                     </td>
                     <td>
-                        {$litterelems[c]->title|clearslash}
+                        {$contents[c]->title|clearslash}
                     </td>
-                    <td class="center">{$litterelems[c]->category_title}</td>
-                    <td class="center">{$litterelems[c]->views}</td>
-                    <td class="center">{$litterelems[c]->created}</td>
+                    <td class="center">{$contents[c]->category_title}</td>
+                    <td class="center">{$contents[c]->views}</td>
+                    <td class="center">{$contents[c]->created}</td>
                     <td class="right">
                         <div class="btn-group">
-                            <a class="btn" href="{$smarty.server.PHP_SELF}?id={$litterelems[c]->id}&amp;action=no_in_litter&amp;mytype={$mytype}&amp;page={$paginacion->_currentPage}" title="Recuperar">
+                            <a class="btn" href="{$smarty.server.PHP_SELF}?id={$contents[c]->id}&amp;action=no_in_litter&amp;mytype={$mytype}&amp;page={$paginacion->_currentPage}" title="Recuperar">
                                 <i class="icon-retweet"></i> {t}Restore{/t}
                             </a>
-                            <a class="btn btn-danger" href="{url name=admin_trash_delete id=$litterelems[c]->id mytype=$mytype page=$paginacion->_currentPage}" title="{t}Delete this content{/t}">
+                            <a class="btn btn-danger" href="{url name=admin_trash_delete id=$contents[c]->id mytype=$mytype page=$paginacion->_currentPage}" title="{t}Delete this content{/t}">
                                 <i class="icon-trash icon-white"></i>
                             </a>
                         </div>
@@ -97,7 +97,7 @@ jQuery(function($){
             <tfoot>
                 <tr class="pagination">
                     <td colspan="6">
-                        {$paginacion->links}&nbsp;
+                        {$pagination->links}&nbsp;
                     </td>
                 </tr>
             </tfoot>

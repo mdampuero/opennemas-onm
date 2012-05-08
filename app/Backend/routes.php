@@ -19,6 +19,62 @@ $routes->add(
     '/admin'
 );
 
+// Search controller routes
+$routes->add(
+    'admin_search',
+    new Route(
+        '/search',
+        array('_controller' => 'Backend:Controllers:SearchController:default')
+    ),
+    '/admin'
+);
+
+// Keywork controller routes
+$routes->add(
+    'admin_keyword',
+    new Route(
+        '/keywords',
+        array('_controller' => 'Backend:Controllers:KeywordsController:default')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_keyword_create',
+    new Route(
+        '/keywords/create',
+        array('_controller' => 'Backend:Controllers:KeywordsController:create')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_keyword_show',
+    new Route(
+        '/keywords/{id}/show}',
+        array('_controller' => 'Backend:Controllers:KeywordsController:show')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_keyword_update',
+    new Route(
+        '/keywords/{id}/update}',
+        array('_controller' => 'Backend:Controllers:KeywordsController:update')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_keyword_delete',
+    new Route(
+        '/keywords/{id}/delete}',
+        array('_controller' => 'Backend:Controllers:KeywordsController:delete')
+    ),
+    '/admin'
+);
+
 // Statistics controller routes
 $routes->add(
     'admin_statistics',

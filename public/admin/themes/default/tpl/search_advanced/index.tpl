@@ -24,7 +24,7 @@ label {
     </div>
 </div>
 <div class="wrapper-content">
-    <form action="{$smarty.server.PHP_SELF}" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
+    <form action="{url name=admin_search}" method="GET">
         <div class="wrapper-content">
             <div class="search clearfix">
                 <div class="search-results">

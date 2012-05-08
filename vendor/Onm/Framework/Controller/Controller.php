@@ -24,18 +24,6 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class Controller extends ContainerAware
 {
-
-    /**
-     * undocumented function
-     *
-     * @return void
-     * @author
-     **/
-    public function __construct($container)
-    {
-        $this->container = $container;
-    }
-
     /**
      * Retrieve unsetted variables from the container
      *
@@ -84,7 +72,8 @@ class Controller extends ContainerAware
      */
     public function renderView($view, array $parameters = array())
     {
-        // return $this->container->get('templating')->render($view, $parameters);
+        $this->view->assign($parameters);
+        return $this->view->fetch($view);
     }
 
     /**
@@ -98,8 +87,8 @@ class Controller extends ContainerAware
      */
     public function render($view, array $parameters = array(), Response $response = null)
     {
-        $this->view->assign($parameters);
-        return $this->view->fetch($view);
+        $response = $this->renderView($view, $parameters);
+        return new Response($response);
         // return $this->container->get('templating')->renderResponse($view, $parameters, $response);
     }
 

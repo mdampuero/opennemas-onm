@@ -47,7 +47,7 @@ class TrashController extends Controller
         $contentTypes = $cm->get_types();
 
         // Get paginated elements that are marked as in litter
-        list($trashedElements, $pager) = $cm->find_pages(
+        list($elements, $pager) = $cm->find_pages(
             $this->filterContentType, 'in_litter=1',
             'ORDER BY changed DESC ', $this->page, 20
         );
@@ -55,7 +55,7 @@ class TrashController extends Controller
 
         // Complete elements information
         $content = new \Content();
-        foreach ($trashedElements as &$item) {
+        foreach ($elements as &$item) {
             $item->category_name =  $content->loadCategoryName($item->id);
             $item->category_title = $content->loadCategoryTitle($item->id);
         }
@@ -64,7 +64,7 @@ class TrashController extends Controller
             'mytype' => $this->filterContentType,
             'types_content' => $contentTypes,
             'paginacion'    => $pager,
-            'litterelems'   => $trashedElements
+            'contents'   => $elements
         ));
     }
 
