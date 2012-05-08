@@ -106,7 +106,7 @@ switch($action) {
 
         //Get saved newsletters
         $newsletter = new NewNewsletter();
-        $savedNewsletters = $newsletter->cache->search('1=1 ORDER BY created DESC LIMIT 0,30');
+        $savedNewsletters = $newsletter->search('1=1 ORDER BY created DESC LIMIT 0,30');
         //
         $newsletterContent = json_decode(json_decode($_COOKIE['data-newsletter']));
         $tpl->assign( array(
@@ -203,8 +203,8 @@ switch($action) {
      * Step: send the message to destinations and see send report.
      */
     case 'send':
+        $subject =  $_COOKIE['data-subject'];
 
-        $subject =  filter_input( INPUT_POST, 'subject' , FILTER_SANITIZE_STRING );
         $newsletter = new NewNewsletter();
 
         // save newsletter
@@ -271,6 +271,7 @@ switch($action) {
 
         unset($_COOKIE['data-recipients']);
         unset($_COOKIE['data-newsletter']);
+        unset($_COOKIE['data-subject']);
         $tpl->display('newsletter/steps/newsletterSend.tpl');
 
     break;

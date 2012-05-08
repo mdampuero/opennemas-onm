@@ -8,6 +8,14 @@
 {block name="footer-js" append}
 {script_tag src="/jquery/jquery.cookie.js"}
 {script_tag src="/jquery-onm/newsletter/jquery.newsletterPreview.js"}
+
+{script_tag src="/tiny_mce/opennemas-config.js"}
+<script type="text/javascript">
+//TinyMce scripts
+tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
+OpenNeMas.tinyMceConfig.advanced.elements = "htmlContent";
+</script>
+
 {/block}
 
 {block name="content"}
@@ -68,7 +76,7 @@
 		<tr>
 			<td>
 				<div style="width:85%; margin:0 auto;">
-					<div style="border:1px solid #ccc; padding:20px;background-color: white;">
+					<div id="htmlContent" style="border:1px solid #ccc; padding:20px;background-color: white;">
 						{$htmlContent}
 					</div>
 					<br>
