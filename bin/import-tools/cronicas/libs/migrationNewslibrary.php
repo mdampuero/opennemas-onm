@@ -64,7 +64,7 @@ class migrationNewslibrary {
         while($iniDate >= $endDate) {
 
             foreach($this->categoryNames as $catName) {
-                $path = OLD_LIBRARY."/{$date}/{$catName}.html";
+                $path = OLD_LIBRARY."/{$iniDate}/{$catName}.html";
                 $html =file_get_contents($path);
 
                 $htmlOut = $this->migrateSources( $html );
@@ -73,13 +73,13 @@ class migrationNewslibrary {
                 $htmlOut = $this->migrateOtherUrls($htmlOut);
 
 
-                $date =  new Date($iniDate);
+                $date =  new DateTime($iniDate);
                 $directoryDate = $date->format("/Y/m/d/");
-                $basePath = MEDIA_PATH.'/'.FILE_DIR.$directoryDate;
+                $basePath = MEDIA_PATH.'/library'.$directoryDate;
                 if( !file_exists($basePath) ) {
                     mkdir($basePath, 0777, true);
                 }
-                $newFile =  $basePath."home.html"  ;
+                $newFile =  $basePath."{$catName}.html"  ;
 
                 $result = file_put_contents($newFile, $htmlOut);
                 if(!$result) {
@@ -87,7 +87,9 @@ class migrationNewslibrary {
                 }
 
             }
-
+            $m = $date->format("m");
+            $y = $date->format("Y");
+            $d = $date->format("d");
             $ayer  = mktime(0, 0, 0, $m  , $d-1, $y);
             $iniDate = date("Ymd", $ayer);
 

@@ -3,7 +3,21 @@
 jQuery('#buttons').on('click','#next-button', function() {
 
     var contents = saveNewsletter();
-     jQuery("textarea#newsletter").val(contents);
+    jQuery('#newsletterForm').submit();
+
+
+});
+
+jQuery('#buttons').on('click','#clean-button', function() {
+
+    jQuery("div#newsletter-container").find('ul.content-receiver li').remove();
+
+});
+
+jQuery('#savedNewsletter').on('click','#load-saved', function() {
+
+    jQuery("#action").val('loadSavedNewsletter');
+    jQuery('#newsletterForm').submit();
 
 
 });
@@ -17,12 +31,14 @@ function saveNewsletter() {
 
         els.push({
             'id' : jQuery(item).data('id'),
+            'title': jQuery(item).data('title'),
             'content_type': jQuery(item).data('type'),
             'position': (index+1),
         });
     });
 
     var encodedContents = JSON.stringify(els);
+    jQuery.cookie("data-newsletter", encodedContents);
 
     return encodedContents;
 

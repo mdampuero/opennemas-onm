@@ -341,6 +341,11 @@ table.adminlist tr.row2 {
 table.adminlist tr:hover {
   background-color: #EEEEEE;
 }
+
+table.adminlist tr.noHover:hover {
+  background-color: #FFF;
+}
+
 table.adminlist thead a:hover { text-decoration: none; }
 table.adminlist thead th img { vertical-align: middle; }
 table.adminlist tbody th { font-weight: bold; }
