@@ -23,27 +23,28 @@ Acl::checkOrForward('NEWSLETTER_ADMIN');
 
 $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 
-
 // Initialize request parameters
 $action = filter_input( INPUT_POST, 'action' , FILTER_SANITIZE_STRING );
 if (!isset($action)) {
     $action = filter_input( INPUT_GET, 'action' , FILTER_SANITIZE_STRING, array('options' => array('default' => 'addContents')) );
 }
 
-if (is_null(s::get('newsletter_maillist')) || !(s::get('newsletter_subscriptionType'))
-    || !(s::get('newsletter_enable'))) {
-        m::add(_('Please provide your Newsletter configuration to start to use your Newsletter module'));
-        $httpParams [] = array( 'action'=>'config' );
-        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
-} else {
-    $configurations = s::get('newsletter_maillist');
-        foreach ($configurations as $key => $value) {
-        if ($key != 'receiver' && empty($value)) {
-            m::add(_('Your newsletter configuration is not complete. Please go to settings and complete the form.'), m::ERROR);
-            $httpParams [] = array(
-                'action'=>'config',
-            );
-        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
+if($action != 'config' && $action != 'save_config') {
+    if (is_null(s::get('newsletter_maillist')) || !(s::get('newsletter_subscriptionType') )
+        || !(s::get('newsletter_enable'))) {
+            m::add(_('Please provide your Newsletter configuration to start to use your Newsletter module'));
+            $httpParams [] = array( 'action'=>'config' );
+            Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
+    } else {
+        $configurations = s::get('newsletter_maillist');
+            foreach ($configurations as $key => $value) {
+            if ($key != 'receiver' && empty($value)) {
+                m::add(_('Your newsletter configuration is not complete. Please go to settings and complete the form.'), m::ERROR);
+                $httpParams [] = array(
+                    'action'=>'config',
+                );
+            Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
+            }
         }
     }
 }
@@ -84,7 +85,6 @@ switch($action) {
 
         unset($_POST['action']);
         unset($_POST['submit']);
-
         foreach ($_POST as $key => $value ) {
             s::set($key, $value);
         }
@@ -108,7 +108,8 @@ switch($action) {
         $newsletter = new NewNewsletter();
         $savedNewsletters = $newsletter->search('1=1 ORDER BY created DESC LIMIT 0,30');
         //
-        $newsletterContent = json_decode(json_decode($_COOKIE['data-newsletter']));
+
+        $newsletterContent = isset($_COOKIE['data-newsletter'])?json_decode(json_decode($_COOKIE['data-newsletter'])):'';
         $tpl->assign( array(
                     'newsletterContent' => $newsletterContent,
                     'savedNewsletters'  => $savedNewsletters ) );
