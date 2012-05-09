@@ -76,7 +76,6 @@ class KeywordsController extends Controller
      * Performs the searches over all the keywords
      *
      * @return void
-     * @author
      **/
     public function searchAction()
     {
