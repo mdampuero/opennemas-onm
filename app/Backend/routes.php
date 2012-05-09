@@ -117,7 +117,7 @@ $routes->add(
 $routes->add(
     'admin_trash',
     new Route(
-        '/system/trash',
+        '/trash',
         array('_controller' => 'Backend:Controllers:TrashController:default')
     ),
     '/admin'
@@ -126,7 +126,7 @@ $routes->add(
 $routes->add(
     'admin_trash_delete',
     new Route(
-        '/system/trash/{id}/delete',
+        '/trash/{id}/delete',
         array('_controller' => 'Backend:Controllers:TrashController:delete')
     ),
     '/admin'
@@ -135,8 +135,63 @@ $routes->add(
 $routes->add(
     'admin_trash_batchdelete',
     new Route(
-        '/system/trash/batchdelete',
+        '/trash/batchdelete',
         array('_controller' => 'Backend:Controllers:TrashController:batchDelete')
+    ),
+    '/admin'
+);
+
+// Importer Europapress controller routes
+$routes->add(
+    'admin_importer_europapress',
+    new Route(
+        '/importer/europapress',
+        array('_controller' => 'Backend:Controllers:ImporterEuropapressController:list')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_importer_europapress_config',
+    new Route(
+        '/importer/europapress/config',
+        array('_controller' => 'Backend:Controllers:ImporterEuropapressController:config')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_importer_europapress_unlock',
+    new Route(
+        '/importer/europapress/unlock',
+        array('_controller' => 'Backend:Controllers:ImporterEuropapressController:unlock')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_importer_europapress_sync',
+    new Route(
+        '/importer/europapress/sync',
+        array('_controller' => 'Backend:Controllers:ImporterEuropapressController:sync')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_importer_europapress_import',
+    new Route(
+        '/importer/europapress/{id}/import',
+        array('_controller' => 'Backend:Controllers:ImporterEuropapressController:import')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_importer_europapress_show',
+    new Route(
+        '/importer/europapress/{id}/show',
+        array('_controller' => 'Backend:Controllers:ImporterEuropapressController:show')
     ),
     '/admin'
 );

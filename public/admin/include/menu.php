@@ -202,7 +202,7 @@ $menuXml = '<?xml version="1.0"?>
             module_name="EUROPAPRESS_IMPORTER"
             title="'.htmlspecialchars(_("EuropaPress importer"), ENT_QUOTES).'"
             id="europaPress_importer"
-            link="/admin/controllers/agency_importer/europapress.php"
+            link="'.url('admin_importer_europapress').'"
             privilege="IMPORT_EPRESS" />
         <node
             module_name="EFE_IMPORTER"
