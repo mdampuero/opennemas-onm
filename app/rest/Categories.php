@@ -30,6 +30,16 @@ class Categories
     }
 
     /*
+    * @url GET /categories/exist/:category_name
+    */
+    function exist ($actualCategory)
+    {
+        $ccm = new ContentCategoryManager();
+
+        return $ccm->exists($actualCategory);
+    }
+
+    /*
     * @url GET /categories/lists
     */
     function lists ()

@@ -38,11 +38,25 @@ if (
      * Init the Content and Database object
     */
     $ccm = ContentCategoryManager::get_instance();
+    $cm = new ContentManager;
+
+    // Get sync params
+    $wsUrl = '';
+    $syncParams = s::get('sync_params');
+    foreach ($syncParams as $siteUrl => $categoriesToSync) {
+        foreach ($categoriesToSync as $value) {
+            if (preg_match('/'.$category_name.'/i', $value)) {
+                $wsUrl = $siteUrl;
+            }
+        }
+    }
+
+    $existsCategory =file_get_contents($wsUrl.'/ws.php/categories/exist/'.$category_name );
 
     // If no home category name
     if ($category_name != 'home') {
         // Redirect to home page if the desired category doesn't exist
-        if (empty($category_name) || !$ccm->exists($category_name)) {
+        if (empty($category_name) || !$existsCategory ) {
             $output = $tpl->fetch('frontpage/not_found.tpl');
             $response = new Response($output, 404, array('content-type' => 'text/html'));
             $response->send();
@@ -58,18 +72,6 @@ if (
         'actual_category_id' => $actualCategoryId,
         'actual_category_title' => $ccm->get_title($category_name),
     ));
-
-    $cm = new ContentManager;
-
-    $wsUrl = '';
-    $syncParams = s::get('sync_params');
-    foreach ($syncParams as $siteUrl => $categoriesToSync) {
-        foreach ($categoriesToSync as $value) {
-            if (preg_match('/'.$category_name.'/i', $value)) {
-                $wsUrl = $siteUrl;
-            }
-        }
-    }
 
     // Get category id correspondence with ws
     $wsActualCategoryId = file_get_contents($wsUrl.'/ws.php/categories/id/'.$category_name );
@@ -91,9 +93,11 @@ if (
     $getContentsUrl = $wsUrl.'/ws.php/categories/allcontent/'.$wsActualCategoryId;
     $allContentsInHomepage = json_decode(file_get_contents($getContentsUrl), true);
 
+
     $contentsInHomepage = array();
     foreach ($allContentsInHomepage as $item) {
-        $contentType = $cm->getContentTypeNameFromId((int)$item['fk_content_type'], true);
+        $contentType = file_get_contents($wsUrl.'/ws.php/contents/contenttype/'.(int)$item['fk_content_type'] );
+        $contentType = str_replace('"', '', $contentType);
         $content = new $contentType();
         $content->load($item);
         $contentsInHomepage[] = $content;
