@@ -13,7 +13,7 @@ use \Onm\Instance\InstanceManager as im,
  * Setup view
 */
 $tpl = new \TemplateManager(TEMPLATE_ADMIN);
-$im = im::getInstance();
+$im = new im($onmInstancesConnection);
 
 session_start();
 
@@ -21,7 +21,6 @@ session_start();
 $page   = filter_input( INPUT_GET, 'page' , FILTER_SANITIZE_NUMBER_INT, array('options' => array('default' => '1')) );
 // Widget instance
 $action = (isset($_REQUEST['action']))? $_REQUEST['action']: null;
-
 
 switch($action) {
 
