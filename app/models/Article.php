@@ -186,10 +186,11 @@ class Article extends Content
 
         $contents = json_decode(json_decode($data), true);
 
-        foreach ($contents as $content) {
-            $rel->{$method}($id, $content['position'], $content['id']);
+        if (is_array($contents) && count($contents) > 0) {
+            foreach ($contents as $content) {
+                $rel->{$method}($id, $content['position'], $content['id']);
+            }
         }
-
     }
 
 
