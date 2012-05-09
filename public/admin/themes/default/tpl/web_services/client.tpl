@@ -40,12 +40,13 @@
                 <tr>
                 {if count($elements) >0}
                     <th style='width:40% !important;'>{t}Site Url{/t}</th>
-                    <th style='width:55% !important;'>{t}Categories to Sync{/t}</th>
+                    <th style='width:45% !important;'>{t}Categories to Sync{/t}</th>
+                    <th style="width:10% !important;">{t}Color{/t}</th>
                     <th style="width:5% !important;">{t}Actions{/t}</th>
                 </tr>
                 {else}
                 <tr>
-                    <th coslpan=3>&nbsp;</th>
+                    <th coslpan=4>&nbsp;</th>
                 </tr>
                 {/if}
             </thead>
@@ -63,7 +64,13 @@
                                 {$category}
                             {/foreach}
                         </td>
-
+                        <td>
+                            <div class="colopicker_viewer"
+                                 style="background-color: #{$site_color[$site]};
+                                        border-top-right-radius: 3px !important;
+                                        border-bottom-right-radius: 3px !important;">
+                            </div>
+                        </td>
                         <td class="right">
                             <ul class="action-buttons">
                                 <li>
@@ -85,7 +92,7 @@
                     {/foreach}
                 {foreachelse}
                 <tr>
-                    <td colspan=3 class="empty">
+                    <td colspan=4 class="empty">
                         <h2>
                             <b>{t}There are no synchorinize settings available{/t}</b>
                         </h2>
@@ -96,7 +103,7 @@
             </tbody>
             <tfoot>
                  <tr class="pagination">
-                     <td colspan="3">{$pagination->links|default:""}&nbsp;</td>
+                     <td colspan="4">{$pagination->links|default:""}&nbsp;</td>
                  </tr>
             </tfoot>
 

@@ -53,8 +53,9 @@ switch($action) {
             // Filter params
             $syncParams = filter_input_array(INPUT_POST);
             $siteUrl = filter_input( INPUT_POST, 'site_url', FILTER_SANITIZE_URL);
-            $categoriesToSync = $syncParams['categories'];
+            $siteColor = filter_input( INPUT_POST, 'site_color', FILTER_SANITIZE_STRING);
 
+            $categoriesToSync = $syncParams['categories'];
 
             // Get saved settings if exists
             if ($syncSettings = s::get('sync_params')) {
@@ -63,7 +64,14 @@ switch($action) {
                 $syncParams = array($siteUrl => $categoriesToSync);
             }
 
-            if (s::set('sync_params', $syncParams))
+            // Get site colors
+            if ($syncColorSettings = s::get('sync_colors')) {
+                $syncColors = array_merge($syncColorSettings,array($siteUrl => $siteColor));
+            } else {
+                $syncColors = array($siteUrl => $siteColor);
+            }
+
+            if (s::set('sync_params', $syncParams) && s::set('sync_colors', $syncColors))
             {
                 m::add(_('EFE module configuration saved successfully'), m::SUCCESS);
             } else {
@@ -121,6 +129,7 @@ switch($action) {
 
         // Fetch sync categories in config
         $syncParams = s::get('sync_params');
+        $syncColors = s::get('sync_colors');
         $categoriesChecked = array();
         foreach ($syncParams as $siteUrl => $categories) {
             if (preg_match('@'.$currentSiteUrl.'@', $siteUrl)) {
@@ -128,8 +137,13 @@ switch($action) {
             }
         }
 
+        if (array_key_exists($currentSiteUrl, $syncColors)) {
+            $color = $syncColors[$currentSiteUrl];
+        }
+
         // Show list
         $tpl->assign('site_url', $currentSiteUrl);
+        $tpl->assign('site_color', $color);
         $tpl->assign('categories', $availableCategories);
         $tpl->assign('categories_checked', $categoriesChecked);
         $output = $tpl->fetch('web_services/partials/_list_categories.tpl');
@@ -144,17 +158,23 @@ switch($action) {
 
         // Fetch sync categories in config
         $syncParams = s::get('sync_params');
-        $categoriesChecked = array();
+        $syncColors = s::get('sync_colors');
 
+        $categoriesChecked = array();
         foreach ($syncParams as $siteUrl => $categories) {
             if (preg_match('@'.$currentSiteUrl.'@', $siteUrl)) {
                 $syncParamsToDelete = array($siteUrl => $categories);
             }
         }
 
-        $syncParams = array_diff_assoc($syncParams, $syncParamsToDelete);
+        if (array_key_exists($currentSiteUrl, $syncColors)) {
+            $syncColorToDelete = array($currentSiteUrl => $syncColors[$currentSiteUrl]);
+        }
 
-        if (s::set('sync_params', $syncParams))
+        $syncParams = array_diff_assoc($syncParams, $syncParamsToDelete);
+        $syncColors = array_diff_assoc($syncColors, $syncColorToDelete);
+
+        if (s::set('sync_params', $syncParams) && s::set('sync_colors', $syncColors))
         {
             m::add(_('Site configuration deleted successfully'), m::SUCCESS);
         } else {
@@ -169,12 +189,19 @@ switch($action) {
 
         if ($syncParams = s::get('sync_params')) {
 
+            $syncColors = s::get('sync_colors');
+
             // Fetch all elements
             $allSites = array();
+            $colors = array();
             foreach ($syncParams as $siteUrl => $categories) {
                 $allSites[] = array ($siteUrl => $categories);
+                if (array_key_exists($siteUrl, $syncColors)) {
+                    $colors[$siteUrl] = $syncColors[$siteUrl];
+                }
             }
 
+            $tpl->assign('site_color', $colors);
             $tpl->assign('elements', $allSites);
 
         }

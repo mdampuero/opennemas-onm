@@ -1,6 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
+{css_tag href="/css/colorpicker.css" basepath="/js/jquery/jquery_colorpicker/"}
     <style type="text/css">
     input[type="text"],
     input[type="password"] {
@@ -14,6 +15,7 @@
 {/block}
 
 {block name="footer-js" append}
+{script_tag src="/jquery/jquery_colorpicker/js/colorpicker.js"}
     <script type="text/javascript">
         jQuery(document).ready(function($) {
             $('#connect').on('click',function(e){
@@ -27,10 +29,27 @@
                     dataType: 'html',
                     success: function(data) {
                         $('div.categories').html(data);
+                        $('#colorDiv').css('display', 'inline');
                     }
                 });
 
             });
+
+            jQuery('#color-picker').ColorPicker({
+                onSubmit: function(hsb, hex, rgb, el) {
+                    jQuery(el).val(hex);
+                    jQuery(el).ColorPickerHide();
+                },
+                onChange: function (hsb, hex, rgb) {
+                    jQuery('.colopicker_viewer').css('background-color', '#' + hex);
+                },
+                onBeforeShow: function () {
+                    jQuery(this).ColorPickerSetColor(this.value);
+                }
+            }).bind('keyup', function(){
+                jQuery(this).ColorPickerSetColor(this.value);
+            });
+
         });
 
     </script>
@@ -91,6 +110,11 @@
                 </tr>
                 <tr>
                     <td>
+                        <div id="colorDiv" style="display: none;">
+                            <label for="site_color">{t}Site color:{/t}</label>
+                            <input readonly="readonly" type="text" class="colorpicker_input" id="color-picker" name="site_color" value="">
+                            <div class="colopicker_viewer" style="background-color:#{$site_color}"></div>
+                        </div>
                         <div class="categories">
 
                         </div>

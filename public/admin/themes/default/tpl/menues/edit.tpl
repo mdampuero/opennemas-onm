@@ -142,12 +142,13 @@ legend {
                                         {if isset($menu) && !empty($menu->items)}
                                             {section name=c loop=$menu->items}
                                                 <li class="menuItem" id="item_{$menu->items[c]->pk_item}" pk_item="{$menu->items[c]->pk_item}" title="{$menu->items[c]->title}"
-                                                    link="{$menu->items[c]->link}" type="{$menu->items[c]->type}" >
+                                                    link="{$menu->items[c]->link}" type="{$menu->items[c]->type}"
+                                                    title="{t 1=$menu->items[c]->title}Synchronized from %1{/t}"
+                                                    style="background: #{$menu->items[c]->color|default:'FFFFFF'} !important;">
                                                     {$menu->items[c]->title}
                                                     {if $menu->items[c]->type == 'syncCategory'}
-                                                        <img src="{$params.IMAGE_DIR}iconos/reload.png"
-                                                             title="{t 1=$menu->items[c]}Synchronized from {/t}"
-                                                             alt="{t}Sync{/t}" >
+                                                        <img src="{$params.IMAGE_DIR}sync-icon.png"
+                                                             alt="{t}Sync{/t}">
                                                     {/if}
                                                 </li>
                                             {/section}
@@ -160,7 +161,7 @@ legend {
                                             <li>
                                                 <a href="#listado">{t}Global Categories{/t}</a>
                                             </li>
-                                             <li>
+                                            <li>
                                                 <a href="#subcategories">{t}Subcategories{/t}</a>
                                             </li>
                                             {is_module_activated name="ALBUM_MANAGER"}
@@ -289,15 +290,18 @@ legend {
                                         </div>
 
                                         <div id="syncCategories" style="border:1px solid #CCCCCC;padding: 4px;">
-                                            {foreach $elements as $config}
-                                                {foreach $config as $site => $categories}
+                                            {foreach $elements as $config name=colors}
+                                                {foreach from=$config key=site item=categories}
                                                 <strong>{$site}</strong>
                                                 <ul id='availableSync' class="elementsContainer">
                                                     {foreach $categories as $category}
-                                                    <li id="sync_" title="{$category|capitalize}"
+                                                    <li id="sync_category" title="{$category|capitalize}"
                                                         type="syncCategory" link="{$category}"
-                                                        class="drag-category" pk_menu="">
+                                                        class="drag-category" pk_menu=""
+                                                        style="background-color: #{$colors[$site]}">
                                                         {$category|capitalize}
+                                                        <img src="{$params.IMAGE_DIR}sync-icon.png"
+                                                             alt="{t}Sync{/t}" >
                                                     </li>
                                                     {/foreach}
                                                 </ul>
