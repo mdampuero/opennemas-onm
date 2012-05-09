@@ -1,14 +1,16 @@
 TODO
 ====
 
+Onm\Framework\Controller
+------------------------
+- Evaluate if the request should be passed as parameter when calling a action method.
 
 Advanced Search Controller
 --------------------------
 - Integrate the contents paginated
 - Port search content-provider
 - Review all the icons (when a content is trashed, archived, ...)
-- Improve advanced search capabilities (filter by category, date range, ...)
-
+- ENHANCEMENT: Improve advanced search capabilities (filter by category, date range, ...)
 
 User controller
 ---------------
@@ -24,15 +26,19 @@ User group controller
 - Review pagination of user groups
 - When a user group doesn't exists (on editting or deleting) show error
 
-
 Tpl cache manager
 -----------------
-- When saving the configuration show a message
+- Show a informational message when saving the configuration
 - Review pagination links (now with js)
 - When selecting a new items per page and push Enter, the deleting tpl alert shows
-
 
 Trash controller
 ----------------
 - batch buttons doesnt work
+
+Europapress Importer
+--------------------
+- Change redirect to article form url in import method when changed
+- Validate if $id exists and handle with redirection (methods show and import)
+
 
