@@ -51,7 +51,7 @@ class migrationNewslibrary {
     {
 
       $this->categoriesData = ContentCategoryManager::get_instance()->categories;
-      $this->categoryNames = array(/*'0'=>'home', */ '1'=>'cronicas', '2' => 'galicia',
+      $this->categoryNames = array('0'=>'home', '1'=>'cronicas', '2' => 'galicia',
                     '3' => 'asturias', '4' => 'canarias', '5' => 'castillaleon',
                     '6' => 'cantabria', '7' => 'madrid', '8' => 'baleares',
                     '9' => 'andalucia', '15'=>'paisvasco'  );
@@ -66,22 +66,23 @@ class migrationNewslibrary {
             foreach($this->categoryNames as $catName) {
                 $path = OLD_LIBRARY."/{$iniDate}/{$catName}.html";
                 $html =file_get_contents($path);
+                if(!empty($html)) {
+                    $htmlOut = $this->migrateSources( $html );
+                    $htmlOut = $this->migrateSourcesImages( $htmlOut );
+                    $htmlOut = $this->migrateUrls( $htmlOut );
+                    $htmlOut = $this->migrateOtherUrls($htmlOut);
 
-                $htmlOut = $this->migrateSources( $html );
-                $htmlOut = $this->migrateSourcesImages( $htmlOut );
-                $htmlOut = $this->migrateUrls( $htmlOut );
-                $htmlOut = $this->migrateOtherUrls($htmlOut);
 
+                    $date =  new DateTime($iniDate);
+                    $directoryDate = $date->format("/Y/m/d/");
+                    $basePath = MEDIA_PATH.'/library'.$directoryDate;
+                    if( !file_exists($basePath) ) {
+                        mkdir($basePath, 0777, true);
+                    }
+                    $newFile =  $basePath."{$catName}.html"  ;
 
-                $date =  new DateTime($iniDate);
-                $directoryDate = $date->format("/Y/m/d/");
-                $basePath = MEDIA_PATH.'/library'.$directoryDate;
-                if( !file_exists($basePath) ) {
-                    mkdir($basePath, 0777, true);
+                    $result = file_put_contents($newFile, $htmlOut);
                 }
-                $newFile =  $basePath."{$catName}.html"  ;
-
-                $result = file_put_contents($newFile, $htmlOut);
                 if(!$result) {
                     $this->helper->log(" Problem with {$path} file");
                 }
