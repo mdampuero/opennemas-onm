@@ -1,16 +1,19 @@
 {
-    "name": "openhost/onm-core",
+    "name": "openhost/opennemas",
     "description": "High performance and scalable NMS focused in journalism workflow",
-    "keywords": [],
+    "keywords": ["nms", "newspapres", "magazines", "content management system"],
     "homepage": "http://opennemas.com",
-    "require": {
-        "symfony/class-loader": "v2.0.12",
-        "symfony/http-foundation": "v2.0.12"
-    },
     "authors": [
         {
             "name": "OpenHost developers",
             "email": "developers@openhost.es"
         }
-    ]
+    ],
+    "require": {
+        "symfony/class-loader": "2.1.*",
+        "symfony/http-foundation": "2.1.*",
+        "symfony/routing": "2.1.*",
+        "symfony/event-dispatcher": "2.1.*",
+        "symfony/dependency-injection": "2.1.*"
+    }
 }
