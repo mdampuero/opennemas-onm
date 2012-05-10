@@ -52,6 +52,7 @@
                 <th>{t}Title{/t}</th>
                 <th class="center">{t}# photos{/t}</th>
                 <th class="center">{t}Total Size (MB){/t}</th>
+                <th class="center">{t}Average Size (KB){/t}</th>
                 <th class="center">{t}JPG images{/t}</th>
                 <th class="center">{t}GIF images{/t}</th>
                 <th class="center">{t}PNG images{/t}</th>
@@ -62,10 +63,13 @@
         </thead>
         <tbody>
             {section name=c loop=$categorys}
+            {math assign="total_size" equation="x / y" x=$num_photos[c]->size|default:0 y=1024 format="%.2f"}
+            {math assign="avg_size" equation="x / y" x=$num_photos[c]->size|default:0 y=$num_photos[c]->total|default:1 format="%.2f"}
             <tr>
                 <td><a href="{$smarty.server.PHP_SELF}?action=category_catalog&amp;category={$categorys[c]->pk_content_category}">{$categorys[c]->title|clearslash|escape:"html"}</a></td>
                 <td class="center"><strong>{$num_photos[c]->total|default:0}</strong></td>
-                <td class="center" style="border-right:1px solid #999"><strong>{math equation="x / y" x=$num_photos[c]->size|default:0 y=1024 format="%.2f"} MB</strong></td>
+                <td class="center"><strong>{$total_size} MB</strong></td>
+                <td class="center" style="border-right:1px solid #999"><strong>{$avg_size} KB</strong></td>
                 <td class="center">{$num_photos[c]->jpg|default:0}</td>
                 <td class="center">{$num_photos[c]->gif|default:0}</td>
                 <td class="center">{$num_photos[c]->png|default:0}</td>
@@ -74,10 +78,14 @@
                 <td class="center">{$num_photos[c]->BN|default:0}</td>
             </tr>
             {section name=su loop=$subcategorys[c]}
+            {assign value=$num_sub_photos[c][su] var="subcat"}
+            {math assign="sub_total_size" equation="x / y" x=$subcat->size|default:0 y=1024 format="%.2f"}
+            {math assign="sub_avg_size" equation="x / y" x=$subcat->size|default:0 y=$num_sub_photos[c][su]->total|default:1 format="%.2f"}
             <tr>
                 <td style="padding-left:25px;">&rArr; <a href="{$smarty.server.PHP_SELF}?action=category_catalog&amp;category={$subcategorys[c][su]->pk_content_category}">{$subcategorys[c][su]->title}</a></td>
                 <td class="center"><strong>{$num_sub_photos[c][su]->total|default:0}</strong></td>
-                <td class="center" style="border-right:1px solid #999"><strong>{assign value=$num_sub_photos[c][su] var="subcat"}{math equation="x / y" x=$subcat->size|default:0 y=1024 format="%.2f"} MB</strong></td>
+                <td class="center"><strong>{$sub_total_size} MB</strong></td>
+                <td class="center" style="border-right:1px solid #999"><strong>{$sub_avg_size} KB</strong></td>
                 <td class="center">{$num_sub_photos[c][su]->jpg|default:0}</td>
                 <td class="center">{$num_sub_photos[c][su]->gif|default:0}</td>
                 <td class="center">{$num_sub_photos[c][su]->png|default:0}</td>
@@ -88,14 +96,15 @@
             {/section}
             {/section}
             <tr>
-                <td class="family_type" colspan="9">{t}Specials{/t}</td>
+                <td class="family_type" colspan="10">{t}Specials{/t}</td>
             </tr>
 
             {section name=c loop=$num_especials}
             <tr>
                 <td><a href="{$smarty.server.PHP_SELF}?action=category_catalog&amp;category={$num_especials[c]->id}">{$num_especials[c]->title|clearslash|escape:"html"}</a></td>
                 <td class="center"><strong>{$num_especials[c]->total|default:0}</strong></td>
-                <td class="center" style="border-right:1px solid #999"><strong>{math equation="x / y" x=$num_especials[c]->size|default:0 y=1024 format="%.2f"} MB</strong></td>
+                <td class="center"><strong>{math equation="x / y" x=$num_especials[c]->size|default:0 y=1024 format="%.2f"} MB</strong></td>
+                <td class="center" style="border-right:1px solid #999"><strong>{math equation="x / y" x=$num_especials[c]->size|default:0 y=$num_especials[c]->total|default:1 format="%.2f"} KB</strong></td>
                 <td class="center">{$num_especials[c]->jpg|default:0}</td>
                 <td class="center">{$num_especials[c]->gif|default:0}</td>
                 <td class="center">{$num_especials[c]->png|default:0}</td>
@@ -111,6 +120,7 @@
                 <td class="left"><strong>{t}TOTAL{/t}</strong></td>
                 <td class="center"><strong>{$totals['total']|default:0}</strong></td>
                 <td class="center"><strong>{math equation="x / y" x=$totals['size']|default:0 y=1024 format="%.2f"} MB</strong></td>
+                <td class="center"><strong>{math equation="x / y" x=$totals['size']|default:0 y=$totals['total']|default:1 format="%.2f"} KB</strong></td>
                 <td class="center">{$totals['jpg']|default:0}</td>
                 <td class="center">{$totals['gif']|default:0}</td>
                 <td class="center">{$totals['png']|default:0}</td>
