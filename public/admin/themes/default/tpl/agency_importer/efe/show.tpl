@@ -25,12 +25,12 @@
         <div class="title"><h2>{t}EFE importer{/t} :: {t}Article information{/t}</h2></div>
         <ul class="old-button">
             <li>
-                <a href="{$smarty.server.PHP_SELF}?action=import_select_category&amp;id={$element->xmlFile}" title="{t}Import{/t}">
+                <a href="{url name=admin_importer_efe_pickcategory id=$element->xmlFile}" title="{t}Import{/t}">
                 <img src="{$params.IMAGE_DIR}archive_no.png" alt="{t}Import{/t}" ><br />{t}Import{/t}
                 </a>
             </li>
             <li>
-                <a href="{$smarty.server.PHP_SELF}?action=list" class="admin_add" title="{t}Go back to list{/t}">
+                <a href="{url name=admin_importer_efe}" class="admin_add" title="{t}Go back to list{/t}">
                 <img src="{$params.IMAGE_DIR}previous.png" alt="{t}Go back to list{/t}" ><br />{t}Go back to list{/t}
                 </a>
             </li>
@@ -93,7 +93,7 @@
             <ul>
             {foreach from=$element->photos item=photo}
                 <li style="vertical-align: top" class="clearfix">
-                    <img style="float:left;" width="220" src="{$smarty.server.PHP_SELF}?action=show_attachment&amp;id={$element->id}&amp;attachment_id={$photo->id}" alt="{$photo->title}">
+                    <img style="float:left;" width="220" src="{url name=admin_importer_efe_showattachment id=$element->id attachment_id=$photo->id}" alt="{$photo->title}">
                     &nbsp;{$photo->title}
                 </li>
             {/foreach}

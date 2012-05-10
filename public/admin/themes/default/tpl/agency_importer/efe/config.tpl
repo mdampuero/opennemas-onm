@@ -24,7 +24,7 @@
         <div class="title"><h2>{t}EFE importer{/t} :: {t}Module configuration{/t}</h2></div>
         <ul class="old-button">
             <li>
-                <a href="{$smarty.server.PHP_SELF}?action=list" class="admin_add" value="{t}Go back to list{/t}" title="{t}Go back to list{/t}">
+                <a href="{url name=admin_importer_efe}" class="admin_add" value="{t}Go back to list{/t}" title="{t}Go back to list{/t}">
                 <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Sync list  with server{/t}" alt="{t}Go back to list{/t}" ><br />{t}Go back to list{/t}
                 </a>
             </li>
@@ -32,24 +32,9 @@
     </div>
 </div>
 <div class="wrapper-content">
-   <form action="{$smarty.server.PHP_SELF}" method="POST" name="formulario" id="formulario">
-        <br>
+   <form action="{url name=admin_importer_efe_config}" method="POST">
 
-        {if $message}
-        <div class="error">
-             <ul>
-                {foreach from=$message item=msg}
-                <li>{$msg}</li>
-                {/foreach}
-             </ul>
-        </div>
-        {/if}
-
-        {if (!empty($error))}
-        <div class="error">
-             {render_error}
-        </div>
-        {/if}
+        {render_messages}
 
         <div>
 
@@ -93,7 +78,7 @@
             </table>
             <div class="action-bar clearfix">
                 <div class="right">
-                    <input type="submit" name="submit" value="{t}Save{/t}"  class="onm-button green">
+                    <input type="submit" value="{t}Save{/t}" class="onm-button green">
                 </div>
             </div>
         </div>

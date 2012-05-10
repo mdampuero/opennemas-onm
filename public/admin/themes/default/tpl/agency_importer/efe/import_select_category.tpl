@@ -7,7 +7,7 @@
     </div>
 </div>
 <div class="wrapper-content">
-    <form action="{$smarty.server.PHP_SELF}" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
+    <form action="{url name=admin_importer_efe_import id=$id}" method="POST">
 
     {render_messages}
     <div class="panel">
@@ -32,8 +32,6 @@
         <button type="submit" class="btn btn-primary">{t}Import{/t}</button>
         <a class="btn" onclick="history.go(-1)">{t}Go back{/t}</a>
     </div>
-    <input type="hidden" name="id" value="{$id}" placeholder="">
-    <input type="hidden" id="action" name="action" value="import" />
     </form>
 </div>
 {/block}

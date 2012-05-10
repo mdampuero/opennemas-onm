@@ -35,10 +35,19 @@ Tpl cache manager
 Trash controller
 ----------------
 - batch buttons doesnt work
+- Review pagination
 
 Europapress Importer
 --------------------
 - Change redirect to article form url in import method when changed
 - Validate if $id exists and handle with redirection (methods show and import)
+- Review pagination
+- Review back button in article editting form when importing
+
+EFE importer
+------------
+- Move last sync time check from template list.tpl to the controller
+- Review pagination
+- Review back button in article editting form when importing
 
 

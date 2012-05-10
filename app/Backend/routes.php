@@ -196,6 +196,81 @@ $routes->add(
     '/admin'
 );
 
+// Importer Efe controller routes
+$routes->add(
+    'admin_importer_efe',
+    new Route(
+        '/importer/efe',
+        array('_controller' => 'Backend:Controllers:ImporterEfeController:list')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_importer_efe_config',
+    new Route(
+        '/importer/efe/config',
+        array('_controller' => 'Backend:Controllers:ImporterEfeController:config')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_importer_efe_unlock',
+    new Route(
+        '/importer/efe/unlock',
+        array('_controller' => 'Backend:Controllers:ImporterEfeController:unlock')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_importer_efe_sync',
+    new Route(
+        '/importer/efe/sync',
+        array('_controller' => 'Backend:Controllers:ImporterEfeController:sync')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_importer_efe_import',
+    new Route(
+        '/importer/efe/{id}/import',
+        array('_controller' => 'Backend:Controllers:ImporterEfeController:import')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_importer_efe_show',
+    new Route(
+        '/importer/efe/{id}/show',
+        array('_controller' => 'Backend:Controllers:ImporterEfeController:show')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_importer_efe_showattachment',
+    new Route(
+        '/importer/europapress/{id}/attachment/{attachment_id}',
+        array('_controller' => 'Backend:Controllers:ImporterEfeController:showAttachment')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_importer_efe_pickcategory',
+    new Route(
+        '/importer/europapress/{id}/import/pickcategory',
+        array('_controller' => 'Backend:Controllers:ImporterEfeController:selectCategoryWhereToImport')
+    ),
+    '/admin'
+);
+
+
+
 // Template cache controller routes
 $routes->add(
     'admin_tpl_manager',
