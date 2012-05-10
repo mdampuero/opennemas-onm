@@ -72,6 +72,7 @@ class Dispatcher
     public function handleException($exception)
     {
         $this->request->request->set('error', serialize($exception));
+        $this->container->set('request',$this->request);
         $this->dispatchClass('Framework:Controllers:ErrorController:default');
     }
 
