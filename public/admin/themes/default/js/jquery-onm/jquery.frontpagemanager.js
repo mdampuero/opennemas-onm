@@ -90,7 +90,22 @@ jQuery(function($){
 
     // suggest-home
     //
-    $("#modal-element-suggest-to-home").modal({ backdrop: 'static', keyboard: true });
+    $('div.placeholder').on('click', 'div.content-provider-element a.suggest-to-home', function(e) {
+        var element = $(this).closest('.content-provider-element');
+        var contentId = element.data('content-id');
+        if(contentId) {
+            $.ajax({
+                url:  "/admin/controllers/common/content.php",
+                type: "GET",
+                data: { action:"toggle-suggested", id:contentId }
+            });
+        }
+
+        element.toggleClass('suggested');
+        e.preventDefault();
+     });
+
+/*  $("#modal-element-suggest-to-home").modal({ backdrop: 'static', keyboard: true });
     $('div.placeholder').on('click', 'div.content-provider-element a.suggest-to-home', function(e) {
         var element = $(this).closest('.content-provider-element');
         var elementID = element.data('content-id');
@@ -130,6 +145,7 @@ jQuery(function($){
         $("#modal-element-suggest-to-home").modal('hide');
         e.preventDefault();
     });
+*/
 
     // arquive
     $("#modal-element-archive").modal({ backdrop: 'static', keyboard: true });
