@@ -1,7 +1,7 @@
 //STEPS
 jQuery('#buttons').on('click','#next-button', function() {
     saveChanges();
-    jQuery('#newsletterForm').submit();
+   // jQuery('#newsletterForm').submit();
 });
 
 jQuery('#buttons').on('click','#prev-button', function() {
@@ -17,7 +17,6 @@ jQuery('#newsletterForm').on('click','#edit-button', function() {
 
     tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
 
-    alert('testing as save changes');
 });
 
 jQuery('#newsletterForm').on('click','#save-button', function() {
@@ -40,10 +39,10 @@ function saveChanges() {
     }
     var htmlContent = jQuery('div#content').find('div#htmlContent').html();
     jQuery.ajax({
-            url:  "newsletter.php",
-            type: "POST",
-            data: { action:"saveNewsletterContent", html:htmlContent },
-        });
+        url:  "/admin/controllers/newsletter/newsletter.php",
+        type: "POST",
+        data: { action:"saveNewsletterContent", html:htmlContent },
+    });
 
 
 }

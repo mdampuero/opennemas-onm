@@ -134,7 +134,7 @@ switch($action) {
 
         apc_store('newsletterHtml',$newsletter->html,0);
 
-        $htmlContent = html_entity_decode($newsletter->html);
+        $htmlContent = html_entity_decode($newsletter->html, ENT_QUOTES );
         $tpl->assign( array(
                     'htmlContent' => $htmlContent,
                     ) );
@@ -144,9 +144,10 @@ switch($action) {
     break;
 
     case 'saveNewsletterContent';
-        $html = filter_input(INPUT_POST,'html',FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-
+        $html = filter_input(INPUT_POST,'html');
+        $html = htmlentities($html, ENT_QUOTES);
         apc_store('newsletterHtml', $html, 0); //ttl=0 //persistent
+        Application::ajax_out('ok');
 
    /**
      * Step: preview the message
@@ -155,7 +156,7 @@ switch($action) {
 
         $newsletter = new NewsletterManager();
         if (apc_exists('newsletterHtml')) {
-            $htmlContent = html_entity_decode(apc_fetch('newsletterHtml'));
+            $htmlContent = html_entity_decode(apc_fetch('newsletterHtml'), ENT_QUOTES);
 
         } else {
             $htmlContent = $newsletter->render();
