@@ -2342,3 +2342,9 @@ input.hidden-element {
 div.newsletter-contents  div#content-provider   input.hidden-element {
     display: inline;
 }
+
+div.newsletter-contents ul li.container-label {
+    border:1px solid #AAA !important;
+    background-color: #EEE;
+    font-weight: bold;
+}

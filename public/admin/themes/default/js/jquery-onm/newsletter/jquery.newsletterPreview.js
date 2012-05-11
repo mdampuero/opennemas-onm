@@ -7,7 +7,8 @@ jQuery('#buttons').on('click','#next-button', function() {
 jQuery('#buttons').on('click','#prev-button', function() {
 
     saveChanges();
-    jQuery("#action").val('addContents');
+    alert('Si vuelve atrás perderá los cambios realizados');
+    jQuery("#action").val('updateContents');
     jQuery('#newsletterForm').submit();
 
 });
@@ -15,8 +16,14 @@ jQuery('#buttons').on('click','#prev-button', function() {
 jQuery('#newsletterForm').on('click','#edit-button', function() {
 
     tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
+
     alert('testing as save changes');
 });
+
+jQuery('#newsletterForm').on('click','#save-button', function() {
+    saveChanges();
+});
+
 
 
 
@@ -27,5 +34,16 @@ function saveChanges() {
     jQuery.cookie("data-subject", JSON.stringify(subject));
 
     //Save updates
+    if(tinyMCE.get('htmlContent')) {
+        OpenNeMas.tinyMceFunctions.saveTiny( 'htmlContent' )
+        OpenNeMas.tinyMceFunctions.destroy( 'htmlContent' );
+    }
+    var htmlContent = jQuery('div#content').find('div#htmlContent').html();
+    jQuery.ajax({
+            url:  "newsletter.php",
+            type: "POST",
+            data: { action:"saveNewsletterContent", html:htmlContent },
+        });
+
 
 }

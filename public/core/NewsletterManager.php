@@ -108,24 +108,29 @@ class NewsletterManager {
 
 
         $dataContents = array();
-        foreach ($newsletterContent as $key => &$item) {
-            if(!empty($item->id)) {
-                $content = new Content($item->id);
-                $content = $content->get($item->id);
+        if(!empty($newsletterContent)) {
+            foreach ($newsletterContent as  $container) {
+                foreach ($container->items as $key => &$item) {
+                    if(!empty($item->id) && $item->content_type !='label') {
+                        $content = new Content($item->id);
+                        if(!empty($content)) {
+                            $content = $content->get($item->id);
 
-                $item->content_type = $content->content_type;
-                $item->title        = $content->title;
-                $item->slug         = $content->slug;
-                $item->uri          = $content->uri;
-                $item->subtitle     = $content->subtitle;
-                $item->date         = date('Y-m-d', strtotime(str_replace('/', '-', substr($content->created, 6))));
-                $item->cat          = $content->category_name;
-                $item->agency       = (is_array($content->params) && array_key_exists('agencyBulletin', $content->params))?$content->params['agencyBulletin']:'';
-                $item->name         = (isset($content->name))?$content->name:'';
-                $item->image        = (isset($content->cover))?$content->cover:'';
+                            $item->content_type = $content->content_type;
+                            $item->title        = $content->title;
+                            $item->slug         = $content->slug;
+                            $item->uri          = $content->uri;
+                            $item->subtitle     = $content->subtitle;
+                            $item->date         = date('Y-m-d', strtotime(str_replace('/', '-', substr($content->created, 6))));
+                            $item->cat          = $content->category_name;
+                            $item->agency       = (is_array($content->params) && array_key_exists('agencyBulletin', $content->params))?$content->params['agencyBulletin']:'';
+                            $item->name         = (isset($content->name))?$content->name:'';
+                            $item->image        = (isset($content->cover))?$content->cover:'';
+                        }
+                    }
+                }
             }
         }
-
         $tpl->assign('newsletterContent', $newsletterContent);
 
 

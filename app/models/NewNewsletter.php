@@ -42,9 +42,9 @@ class NewNewsletter
 
         $data['created'] = date("Y-m-d H:i:s");
 
-        $sql = 'INSERT INTO `newsletter_archive` (`data`, `created`) VALUES (?,?)';
+        $sql = 'INSERT INTO `newsletter_archive` (`data`, `html`, `created`) VALUES (?,?,?)';
 
-        $values = array($data['content'], $data['created']);
+        $values = array($data['content'], $data['html'], $data['created']);
 
         if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
@@ -92,6 +92,7 @@ class NewNewsletter
         $this->pk_newsletter  = $fields['pk_newsletter'];
         $this->data           = $fields['data'];
         $this->created        = $fields['created'];
+        $this->html           = $fields['html'];
     }
 
     /**

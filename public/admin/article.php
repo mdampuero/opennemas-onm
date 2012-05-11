@@ -1131,6 +1131,47 @@ if (isset($_REQUEST['action']) ) {
 
             break;
 
+        case 'provider-frontpage':
+
+            $items_page = s::get('items_per_page') ?: 20;
+            $category   = filter_input( INPUT_GET, 'category' , FILTER_SANITIZE_STRING, array('options' => array('default' => '0')) );
+            $page       = filter_input( INPUT_GET, 'page' , FILTER_SANITIZE_NUMBER_INT, array('options' => array('default' => '1')) );
+            $cm = new ContentManager();
+            $categoryID = (empty($category) || $category == 'home') ? '0' : $category;
+            $placeholder = ($categoryID == 0) ? 'home_placeholder': 'placeholder';
+            // Get contents for this home
+            $contentElementsInFrontpage  = $cm->getContentsForHomepageOfCategory($categoryID);
+
+            // Sort all the elements by its position
+            $contentElementsInFrontpage  = $cm->sortArrayofObjectsByProperty($contentElementsInFrontpage, 'position');
+
+            $articles = array();
+            foreach($contentElementsInFrontpage as $content) {
+                if($content->content_type =='1') {
+                    $articles[] = $content;
+                }
+            }
+
+            $home = new StdClass();
+               $home->pk_content_category = '0';
+               $home->title = 'Home';
+               $home->name ='home';
+
+            array_unshift($allcategorys, $home);
+
+            $tpl->assign(array(
+                'contents'              => $articles,
+                'contentTypeCategories' => $allcategorys,
+                'category'              => $category,
+                'contentType'           => 'Article',
+                'action'                => 'provider-frontpage',
+            ));
+
+            $htmlOut = $tpl->fetch("common/content_provider/_container-content-list.tpl");
+            Application::ajax_out($htmlOut);
+
+            break;
+
 
         case 'related-provider-suggest':
 
