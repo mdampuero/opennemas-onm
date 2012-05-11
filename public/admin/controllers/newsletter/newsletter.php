@@ -111,8 +111,8 @@ switch($action) {
         $newsletterContent = isset($_COOKIE['data-newsletter']) ?
                      json_decode(json_decode($_COOKIE['data-newsletter'])) : '';
 
-        if (apc_exists('newsletterHtml')) {
-            apc_delete( 'newsletterHtml' );
+        if( array_key_exists('newsletterHtml', $_SESSION) ) {
+            unset($_SESSION['newsletterHtml']);
         }
 
         $tpl->assign( array(
@@ -130,9 +130,7 @@ switch($action) {
 
         setcookie('data-newsletter', $newsletter->data);
 
-      //  setcookie('data-htmlContent', $newsletter->html, time()+7*24*60*60); PRoblem too large
-
-        apc_store('newsletterHtml',$newsletter->html,0);
+        $_SESSION['newsletterHtml'] = $newsletter->html;
 
         $htmlContent = html_entity_decode($newsletter->html, ENT_QUOTES );
         $tpl->assign( array(
@@ -146,7 +144,8 @@ switch($action) {
     case 'saveNewsletterContent';
         $html = filter_input(INPUT_POST,'html');
         $html = htmlentities($html, ENT_QUOTES);
-        apc_store('newsletterHtml', $html, 0); //ttl=0 //persistent
+        $_SESSION['newsletterHtml'] = $html;
+
         Application::ajax_out('ok');
 
    /**
@@ -155,9 +154,11 @@ switch($action) {
     case 'preview':
 
         $newsletter = new NewsletterManager();
-        if (apc_exists('newsletterHtml')) {
-            $htmlContent = html_entity_decode(apc_fetch('newsletterHtml'), ENT_QUOTES);
 
+        if( array_key_exists('newsletterHtml', $_SESSION) &&
+            !empty($_SESSION['newsletterHtml'])) {
+
+            $htmlContent = html_entity_decode($_SESSION['newsletterHtml'], ENT_QUOTES);
         } else {
             $htmlContent = $newsletter->render();
         }
@@ -222,8 +223,10 @@ switch($action) {
         $nManager = new NewsletterManager();
         $nManager->setConfigMailing();
 
-        if (apc_exists('newsletterHtml')) {
-            $htmlContent = html_entity_decode(apc_fetch('newsletterHtml'));
+        if( array_key_exists('newsletterHtml', $_SESSION) &&
+            !empty($_SESSION['newsletterHtml'])) {
+
+            $htmlContent = html_entity_decode($_SESSION['newsletterHtml'], ENT_QUOTES);
         } else {
             $htmlContent = $nManager->render();
         }
@@ -233,8 +236,6 @@ switch($action) {
         // save newsletter
         $postmaster = $_COOKIE['data-newsletter'];
         $newsletter->create( array('content' => $postmaster, 'html'=> $htmlContent));
-
-        apc_delete( 'newsletterHtml' );
 
 
 
@@ -270,6 +271,7 @@ switch($action) {
             'postmaster' => $postmaster,
         ));
 
+        unset($_SESSION['newsletterHtml']);
         unset($_COOKIE['data-recipients']);
         unset($_COOKIE['data-newsletter']);
         unset($_COOKIE['data-subject']);

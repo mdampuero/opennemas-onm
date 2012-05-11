@@ -1,7 +1,7 @@
 //STEPS
 jQuery('#buttons').on('click','#next-button', function() {
     saveChanges();
-   // jQuery('#newsletterForm').submit();
+    jQuery('#newsletterForm').submit();
 });
 
 jQuery('#buttons').on('click','#prev-button', function() {
