@@ -179,12 +179,14 @@ switch($action) {
         // Get categories from menu
         $menu = Menu::getMenu($name);
 
-        // Overload sync category color
-        foreach ($menu->items as &$item) {
-            foreach ($syncParams as $siteUrl => $categories) {
-                foreach ($categories as $category) {
-                    if ($item->type == 'syncCategory' && $item->link == $category) {
-                        $item->color = $colors[$siteUrl];
+        // Overload sync category color if exists
+        if ($syncParams) {
+            foreach ($menu->items as &$item) {
+                foreach ($syncParams as $siteUrl => $categories) {
+                    foreach ($categories as $category) {
+                        if ($item->type == 'syncCategory' && $item->link == $category) {
+                            $item->color = $colors[$siteUrl];
+                        }
                     }
                 }
             }
