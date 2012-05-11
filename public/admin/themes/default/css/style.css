@@ -2,7 +2,7 @@
  * ==|== normalize ==========================================================
  */
 
-rticle, aside, details, figcaption, figure, footer, header, hgroup, nav, section { display: block; }
+article, aside, details, figcaption, figure, footer, header, hgroup, nav, section { display: block; }
 audio, canvas, video { display: inline-block; *display: inline; *zoom: 1; }
 audio:not([controls]) { display: none; }
 [hidden] { display: none; }
@@ -1469,94 +1469,6 @@ div.action-bar .right{
       margin-bottom:3px;
     }
 
-/*
-  #media-browser .photo:hover {
-    z-index:999;
-    background:#4787ED;
-    background: #005991;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#005991', endColorstr='#4787ED');
-    background: -webkit-gradient(linear, left top, left bottom, from(#005991), to(#4787ED));
-    background: -moz-linear-gradient(top,  #005991,  #4787ED);
-  }
-    #media-browser .photo-image {
-      width:140px;
-      position:relative;
-    }
-      #media-browser .photo:hover .photo-image {
-        border:1px solid transparent;
-        box-shadow:none;
-      }
-      #media-browser .photo:hover .photo-data {
-        display:block;
-        text-align:left;
-      }
-
-      #media-browser .photo-image img {
-        max-width:140px;
-        max-height:80px;
-        padding:2px;
-      }
-      #media-browser .photo-image img.flash-flag {
-                width:16px;
-                height:16px;
-                border: none;
-      }
-        #media-browser .photo:hover .photo-image img {
-          border:1px solid White;
-        }
-
-
-    #media-browser .photo-data {
-
-      padding-left:160px;
-      position:absolute;
-      top:0;
-      left:0;
-      z-index:10;
-      display:none;
-      box-shadow: 0 0 10px rgba(20, 20, 20, 0.8);
-      border-radius:3px;
-    }
-      #media-browser .photo-data ul {
-        min-width:175px;
-        margin:0;
-        padding:0;
-        padding-right:10px;
-        margin-right:10px;
-        margin-top:5px;
-      }
-        #media-browser .photo-data ul li {
-          list-style:none;
-          color:white;
-          margin-bottom:3px;
-        }
-          #media-browser .photo-data img {
-            vertical-align:middle;
-          }
-
-      #media-browser .photo-data .actions {
-        margin:8px;
-        text-align:right;
-      }
-      #media-browser .photo-data .actions img{
-        width:16px;
-        height:16px;
-        border:0 none !important;
-        padding:0 !important;
-        vertical-align:middle;
-      }
-      #media-browser .photo-data .actions a {
-        color:White;
-        font-weight:bold;
-        display:inline;
-      }
-      #media-browser .photo-data .actions a:hover {
-        text-shadow:0 0 3px Black;
-        text-decoration:none;
-      }
-    #media-browser .photo-hovered {
-      z-index:999;
-    }*/
     #exif table td {
       padding:0;
     }
@@ -1951,6 +1863,20 @@ html.draganddrop #dropzone {
     }
     .search .search-form .type-picker label {display:inline; margin:0; font-weight:normal;}
     .search .search-form .type-picker input {display:inline-block; clear:right; margin:0;}
+/* -------------------------------------------------------------
+    MENU
+ ------------------------------------------------------------- */
+div.clearfix div.menu-categories {
+    display:inline-block;
+    width:75%;
+    float:left;
+ }
+
+div.clearfix div.menu-other-categories {
+    display:inline-block;
+    width:25%;
+    float:right;
+}
 
 /* -------------------------------------------------------------
   pills experiment
@@ -2367,11 +2293,13 @@ div#article-form.tabs div#related-contents  div.column-receiver {
     min-height: 140px;
 }
 
-
 div#article-form.tabs div#related-contents ul.content-receiver,
-div.newsletter-contents div#content-provider ul ,
 div#related-contents div#content-provider ul#contentList {
     min-height: 100px;
+    padding: 4px;
+}
+
+div.newsletter-contents div#content-provider ul {
     padding: 4px;
 }
 div#article-form.tabs div.gallery {
@@ -2398,10 +2326,25 @@ div.newsletter-contents div#content-provider ul li {
 }
 
 div#newsletter-container.column-receiver ul{
-    min-height: 500px;
-    padding:5px;
+    border: 1px solid;
+    min-height: 200px;
+    padding: 5px;
 }
 
 div#newsletter-container.column-receiver h5 {
     padding:5px;
+}
+
+input.hidden-element {
+    display: none;
+}
+
+div.newsletter-contents  div#content-provider   input.hidden-element {
+    display: inline;
+}
+
+div.newsletter-contents ul li.container-label {
+    border:1px solid #AAA !important;
+    background-color: #EEE;
+    font-weight: bold;
 }

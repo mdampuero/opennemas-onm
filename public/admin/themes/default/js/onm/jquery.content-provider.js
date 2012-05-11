@@ -76,6 +76,7 @@ jQuery(document).ready(function($){
             dropOnEmpty: true,
             placeholder: 'placeholder-element',
             tolerance: 'pointer',
+            items: "li:not(.container-label)",
         }).disableSelection();
 
         jQuery('div#content-provider ul#contentList').sortable({

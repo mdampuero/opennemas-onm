@@ -121,8 +121,7 @@
 				</td>
 			</tr>
 		</table>
-        <textarea name="newsletter" id="newsletter" style="display:;"></textarea>
-        <textarea name="recipients" id="recipients" style="display:;"></textarea>
+
         <input type="hidden" id="action" name="action" value="send" />
 	    <div id="separator"></div>
 	</div>

@@ -51,6 +51,7 @@
                 <tr>
                     <td colspan=2>
                         <strong>Envío finalizado.</strong>
+
                     </td>
                 </tr>
             </tfoot>
