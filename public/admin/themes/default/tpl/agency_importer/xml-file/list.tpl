@@ -2,48 +2,33 @@
 
 {block name="header-css" append}
 {/block}
-   
+
 {block name="header-js" prepend}
      {script_tag src="/addFiles.js" language="javascript"}
 {/block}
-     
+
 {block name="content"}
 
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
+<form action="#" method="POST" enctype="multipart/form-data">
 
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
              <div class="title"><h2>{t}XML importer{/t} :: {t}Select files{/t}</h2></div>
             <ul class="old-button">
                 <li>
-                    <a href="#" class="admin_add" onClick="cancel('list_agency', 'todos', '');" value="Cancelar" title="Cancelar">
-                        <img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" ><br />{t}Go back{/t}
-                    </a>
+                    <button type="submit" name="dryrun" value="1">
+                        <img src="{$params.IMAGE_DIR}checkout.png" alt="Importar"><br />{t}Check{/t}
+                    </button>
                 </li>
                 <li>
-                    <a href="#" class="admin_add"  onclick="enviar(this, '_self', 'check', 0);" onmouseover="return escape('<u>C</u>heck');" name="check" value="check">
-                        <img border="0" src="{$params.IMAGE_DIR}checkout.png" alt="Importar"><br />{t}Check{/t}
-                    </a>
+                    <button type="submit">
+                        <img src="{$params.IMAGE_DIR}checkout.png" alt="Importar"><br />{t}Import{/t}
+                    </button>
                 </li>
+                <li class="separator"></li>
                 <li>
-                    <a href="#" class="admin_add" onclick="enviar(this, '_self', 'import', 0);" onmouseover="return escape('<u>I</u>mportar XML');" name="import" value="import">
-                        <img border="0" src="{$params.IMAGE_DIR}checkout.png" alt="Importar"><br />{t}Import{/t}
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="admin_add" onclick="delFile()" onmouseover="return escape('<u>R</u>emove File');" name="remove" value="remove">
-                        <img border="0" src="{$params.IMAGE_DIR}list-remove.png" alt="Remove"><br />{t}Remove File{/t}
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="admin_add" onclick="addFile();" onmouseover="return escape('<u>A</u>dd File');" name="add" value="add">
-                        <img border="0" src="{$params.IMAGE_DIR}list-add.png" alt="Add"><br />{t}Add File{/t}
-                    </a>
-                </li>
-                <li class="separator"></li>                
-                <li>
-                    <a href="{$smarty.server.PHP_SELF}?action=config" class="admin_add" value="{t}Config XML Schema{/t}" title="{t}Config XML Schema{/t}">
-                    <img border="0" src="{$params.IMAGE_DIR}template_manager/configure48x48.png" title="{t}Config XML Schema{/t}" alt="{t}Config XML Schema{/t}" ><br />{t}Config{/t}
+                    <a href="{url name=admin_importer_xmlfile_config}" title="{t}Config XML Schema{/t}">
+                    <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="{t}Config XML Schema{/t}" ><br />{t}Config{/t}
                     </a>
                 </li>
             </ul>
@@ -56,7 +41,7 @@
        {render_messages}
         <br>
         <div>
-            
+
             <table class="adminheading">
                 <tr>
                     <th nowrap>&nbsp;</th>
@@ -75,8 +60,8 @@
                           <p>&nbsp;</p>
                     </td></tr>
                 </table><br />
-                
-                
+
+
             {if isset($dataXML) && !empty($dataXML)}
                 {if isset($action) && $action eq 'check'}<h2>Checking XML files</h2>
                 {else}<h2>IMPORTING XML files</h2>
@@ -104,7 +89,7 @@
                             {if !empty($article.body)}<tr><td style="vertical-align:top;" ><b>Cuerpo: </b></td><td>{$article.body}</td></tr>{/if}
                             {if !empty($article.description)}<tr><td><b>Description: </b></td><td>{$article.description}</td></tr>{/if}
                             {if !empty($article.metadata)}<tr><td><b>Metadata: </b></td><td>{$article.metadata}</td></tr>{/if}
-                         
+
                         </table>
                         <br>
                     {/foreach}
@@ -125,4 +110,3 @@
 {/block}
 
 
-      

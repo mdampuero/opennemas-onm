@@ -269,6 +269,32 @@ $routes->add(
     '/admin'
 );
 
+// Importer XML file controller routes
+$routes->add(
+    'admin_importer_xmlfile',
+    new Route(
+        '/importer/xml-file',
+        array('_controller' => 'Backend:Controllers:ImporterXmlfileController:default')
+    ),
+    '/admin'
+);
+$routes->add(
+    'admin_importer_xmlfile_config',
+    new Route(
+        '/importer/xml-file/config',
+        array('_controller' => 'Backend:Controllers:ImporterXmlfileController:config')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_importer_xmlfile_import',
+    new Route(
+        '/importer/xml-file/import',
+        array('_controller' => 'Backend:Controllers:ImporterXmlfileController:import')
+    ),
+    '/admin'
+);
 
 
 // Template cache controller routes

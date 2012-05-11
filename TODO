@@ -39,7 +39,6 @@ Trash controller
 
 Europapress Importer
 --------------------
-- Change redirect to article form url in import method when changed
 - Validate if $id exists and handle with redirection (methods show and import)
 - Review pagination
 - Review back button in article editting form when importing
@@ -50,4 +49,12 @@ EFE importer
 - Review pagination
 - Review back button in article editting form when importing
 
-
+XML file importer
+-----------------
+- CAUTION: this was a quick port, without checking if it works.
+- Complete refactorize the import method as is a mess
+- Use Symfony HttpFoundation for handling uploaded files.
+- Check if all works well
+- Add buttons to add and remove more files in form.
+- Import and check actions was merged (check doesn't save files, review it).
+- Rework in UX.

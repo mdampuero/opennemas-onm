@@ -56,7 +56,6 @@ if(!file_exists($uploaddir)){
     FilesManager::createDirectory($uploaddir);
 }
 
-
 switch($action) {
 
     case 'config':
@@ -297,9 +296,9 @@ switch($action) {
      //   foreach(glob(SITE_ADMIN_TMP_PATH.DS.'xml'.DS.'*.*') as $v){unlink($v);}
     break;
 
-default:
-        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
-break;
+    default:
+            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
+    break;
 }
 
 

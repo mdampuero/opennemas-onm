@@ -213,17 +213,10 @@ $menuXml = '<?xml version="1.0"?>
         />
         <node
             module_name="PAPER_IMPORT"
-            privilege="IMPORT_EFE_FILE"
-            title="'.htmlspecialchars(_("EFE file Importer"), ENT_QUOTES).'"
-            id="import_efe_file"
-            link="/admin/controllers/agency_importer/efe-file.php"
-        />
-        <node
-            module_name="PAPER_IMPORT"
             privilege="IMPORT_XML"
             title="'.htmlspecialchars(_("XML Importer"), ENT_QUOTES).'"
             id="xml_importer"
-            link="/admin/controllers/agency_importer/importXMLFiles.php"
+            link="'.url('admin_importer_xmlfile').'"
         />
 
         <node class="divider" />
