@@ -6,23 +6,22 @@
 {/block}
 
 {block name="footer-js" append}
-{script_tag src="/jquery/jquery.cookie.js"}
-{script_tag src="/jquery-onm/newsletter/jquery.newsletterPreview.js"}
 
+{script_tag src="/jquery/jquery.cookie.js"}
+{script_tag src="/jquery-onm/jquery.newsletter.js"}
 {script_tag src="/tiny_mce/opennemas-config.js"}
 <script type="text/javascript">
 //TinyMce scripts
 tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
 OpenNeMas.tinyMceConfig.advanced.elements = "htmlContent";
 </script>
-
 {/block}
 
 {block name="content"}
 
 <form action="#" method="post" name="newsletterForm" id="newsletterForm" {$formAttrs}>
 
-<div id="buttons" class="top-action-bar clearfix">
+<div id="buttons-preview" class="top-action-bar clearfix">
 	<div class="wrapper-content">
 		<div class="title">
                 <h2>{t}Newsletter management{/t}</h2>
