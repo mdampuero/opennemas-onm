@@ -8,7 +8,7 @@
 {block name="footer-js" append}
 {script_tag src="/jquery/jquery.cookie.js"}
 {script_tag src="/onm/jquery.content-provider.js"}
-{script_tag src="/jquery-onm/newsletter/jquery.stepContents.js"}
+{script_tag src="/jquery-onm/jquery.newsletter.js"}
 
 {/block}
 
@@ -16,7 +16,7 @@
 
 <form action="#" method="post" name="newsletterForm" id="newsletterForm" {$formAttrs}>
 
-    <div id="buttons" class="top-action-bar clearfix">
+    <div id="buttons-contents" class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title">
                 <h2>{t}Newsletter management{/t}</h2>

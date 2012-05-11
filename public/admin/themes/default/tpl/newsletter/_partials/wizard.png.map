@@ -1,8 +1,0 @@
-{* <img src="wizard.png" width="384" height="51" border="0" usemap="#map" /> *} 
-
-<map name="map" id="map">
-    <area shape="circle" coords="22,21,19"  href="#1" action="listArticles" title="Selección de artículos" alt="Selección de artículos" />
-    <area shape="circle" coords="86,22,19"  href="#2" action="listOpinions" title="Selección de artículos de opinión" alt="Selección de artículos de opinión" />
-    <area shape="circle" coords="150,20,18" href="#3" action="listAccounts" title="Selección de destinatarios" alt="Selección de destinatarios" />
-    <area shape="circle" coords="215,21,19" href="#4" action="preview"      title="Vista previa antes de envío" alt="Vista previa antes de envío" />
-</map>
