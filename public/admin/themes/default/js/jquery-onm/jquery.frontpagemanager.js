@@ -269,7 +269,7 @@ jQuery(function($){
         var els = get_contents_in_frontpage();
         var category = $("#frontpagemanager").data("category");
 
-        $.post("frontpagemanager.php?action=save_positions&category=" + category,
+        $.post(frontpage_urls.save_positions,
                 { 'contents_positions': els }
         ).success(function(data) {
             $('#warnings-validation').html("<div class='success'>"+data+"</div>");
@@ -294,7 +294,7 @@ jQuery(function($){
         var contents = get_contents_in_frontpage();
         var encodedContents = JSON.stringify(get_contents_in_frontpage());
         $.colorbox({
-            href: "/admin/controllers/frontpagemanager/frontpagemanager.php?action=preview_frontpage&contents="+encodedContents,
+            href: frontpage_urls.preview_frontpage + "?contents="+encodedContents,
             data: { 'contents': contents },
             title: 'Previsualización Portada',
             iframe: true,

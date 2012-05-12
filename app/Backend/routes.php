@@ -5,16 +5,34 @@ use Symfony\Component\Routing\Route;
 $routes->add(
     'admin_frontpage_list',
     new Route(
-        '/frontpages',
-        array('_controllerfile' => 'controllers/frontpagemanager/frontpagemanager.php', 'action' => 'list')
+        '/frontpages/{category}',
+        array(
+            '_controller' => 'Backend:Controllers:FrontpagesController:show',
+            'category' => 'home',
+        )
     ),
     '/admin'
 );
+
 $routes->add(
-    'admin_frontpage_list_with_category',
+    'admin_frontpage_savepositions',
     new Route(
-        '/frontpages/{category}',
-        array('_controllerfile' => 'controllers/frontpagemanager/frontpagemanager.php', 'action' => 'list')
+        '/frontpages/{category}/save-positions',
+        array(
+            '_controller' => 'Backend:Controllers:FrontpagesController:savePositions',
+            'category' => 'home',
+        )
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_frontpage_preview',
+    new Route(
+        '/frontpages/{category}/preview',
+        array(
+            '_controller' => 'Backend:Controllers:FrontpagesController:preview',
+        )
     ),
     '/admin'
 );

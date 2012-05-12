@@ -3,19 +3,12 @@ global $generator;
 $menuXml = '<?xml version="1.0"?>
 <menu>
     <submenu title="'.htmlspecialchars(_("Web site"), ENT_QUOTES).'" id="frontpage" link="#">
-        <!--<node
-            module_name="FRONTPAGE_MANAGER"
-            privilege="ARTICLE_FRONTPAGE"
-            title="'.htmlspecialchars(_("Frontpage Manager"), ENT_QUOTES).'"
-            id="frontpage_manager"
-            link="article.php"
-        />-->
         <node
             module_name="FRONTPAGE_MANAGER"
             privilege="ARTICLE_FRONTPAGE"
             title="'.htmlspecialchars(_("Frontpage Manager"), ENT_QUOTES).'"
             id="frontpage_manager"
-            link="/admin/controllers/frontpagemanager/frontpagemanager.php"
+            link="'.url('admin_frontpage_list').'"
         />
         <node
             module_name="STATIC_PAGES_MANAGER"

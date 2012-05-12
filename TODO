@@ -1,6 +1,12 @@
 TODO
 ====
 
+General
+-------
+- Include the logger initialization into the container and make use of it
+- Include the mailer initialization into the container and make use of it
+  (maybe using the Swift Mailer library)
+
 Onm\Framework\Controller
 ------------------------
 - Evaluate if the request should be passed as parameter when calling a action method.
@@ -31,6 +37,11 @@ Tpl cache manager
 - Show a informational message when saving the configuration
 - Review pagination links (now with js)
 - When selecting a new items per page and push Enter, the deleting tpl alert shows
+- Migrate the clean cache action
+
+Statistics controller
+---------------------
+- Review articles links as all of them are wrong.
 
 Trash controller
 ----------------

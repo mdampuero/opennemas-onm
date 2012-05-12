@@ -1,70 +1,87 @@
 <?php
-/*
+/**
  * This file is part of the Onm package.
  *
- * (c)  Fran Dieguez <fran@openhost.es>
+ * (c)  OpenHost S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- */
-use Onm\Settings as s,
+ **/
+namespace Backend\Controllers;
+
+use Onm\Framework\Controller\Controller,
+    Onm\Message as m,
+    Onm\Settings as s,
     Onm\LayoutManager;
-
-require_once __DIR__.'/../../../bootstrap.php';
-require_once __DIR__.'/../../session_bootstrap.php';
-
-$tpl = new TemplateAdmin(TEMPLATE_ADMIN);
-
-require_once __DIR__.'/../../controllers/utils_content.php';
-
-// Fetch request variables
-global $request;
-$action   = $request->query->filter('action', 'list', FILTER_SANITIZE_STRING);
-$page     = $request->query->filter('page', 1, FILTER_SANITIZE_NUMBER_INT);
-$category = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
-
-(!isset($_SESSION['_from'])) ? $_SESSION['_from'] = $category : null ;
-(!isset($_SESSION['desde'])) ? $_SESSION['desde'] = 'list' : null ;
-
-
-$tpl->assign('category', $category);
-
 /**
- * Getting categories
-*/
-$ccm = ContentCategoryManager::get_instance();
-$section = $ccm->get_name($category);
-$section = (empty($section))? 'home': $section;
-$categoryID = ($category == 'home') ? 0 : $category;
-list($parentCategories, $subcat, $datos_cat) = $ccm->getArraysMenu($categoryID);
+ * Handles the actions for the system information
+ *
+ * @package Backend_Controllers
+ **/
+class FrontpagesController extends Controller
+{
 
-$tpl->assign(array(
-    'subcat' => $subcat,
-    'allcategorys' => $parentCategories,
-    'datos_cat' => $datos_cat
-));
-$allcategorys = $parentCategories;
+    /**
+     * Common code for all the actions
+     *
+     * @return void
+     **/
+    public function init()
+    {
+        // Initializae the session manager
+        require_once './session_bootstrap.php';
+
+        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
+    }
+
+    /**
+     * Displays the frontpage elements for a given frontpage id
+     *
+     * @return Response the response object
+     **/
+    public function showAction()
+    {
+        $page     = $this->request->query->filter('page', 1, FILTER_SANITIZE_NUMBER_INT);
+        $category = $this->request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
+
+        (!isset($_SESSION['_from'])) ? $_SESSION['_from'] = $category : null ;
+        (!isset($_SESSION['desde'])) ? $_SESSION['desde'] = 'list' : null ;
 
 
-switch ($action) {
+        $this->view->assign('category', $category);
 
-    case 'list':
+        /**
+         * Getting categories
+        */
+        $ccm = \ContentCategoryManager::get_instance();
+        $section = $ccm->get_name($category);
+        $section = (empty($section))? 'home': $section;
+        $categoryID = ($category == 'home') ? 0 : $category;
+        list($parentCategories, $subcat, $datos_cat) = $ccm->getArraysMenu($categoryID);
+
+        $this->view->assign(array(
+            'subcat' => $subcat,
+            'allcategorys' => $parentCategories,
+            'datos_cat' => $datos_cat
+        ));
+        $allcategorys = $parentCategories;
 
         // Check if the user can edit frontpages
-        if(!Acl::check('ARTICLE_FRONTPAGE')) {
-            Acl::deny();
-        } elseif (!Acl::_C($categoryID)) {
+        if(!\Acl::check('ARTICLE_FRONTPAGE')) {
+            \Acl::deny();
+        } elseif (!\Acl::_C($categoryID)) {
             $categoryID = $_SESSION['accesscategories'][0];
             $section = $ccm->get_name($categoryID);
             $_REQUEST['category'] = $categoryID;
             list($parentCategories, $subcat, $datos_cat) = $ccm->getArraysMenu();
 
-            $tpl->assign('subcat', $subcat);
-            $tpl->assign('allcategorys', $parentCategories);
-            $tpl->assign('datos_cat', $datos_cat);
-            $tpl->assign('category', $_REQUEST['category']);
+            $this->view->assign('subcat', $subcat);
+            $this->view->assign('allcategorys', $parentCategories);
+            $this->view->assign('datos_cat', $datos_cat);
+            $this->view->assign('category', $_REQUEST['category']);
         }
-        $menuItems = Menu::renderMenu('frontpage');
+
+        $menuItems = \Menu::renderMenu('frontpage');
         if (!empty($menuItems->items )) {
             foreach ($menuItems->items as  &$item) {
                 $item->categoryID = $ccm->get_id($item->link);
@@ -74,10 +91,10 @@ switch ($action) {
                     }
                 }
             }
-            $tpl->assign('menuItems', $menuItems->items);
+            $this->view->assign('menuItems', $menuItems->items);
         }
 
-        $cm = new ContentManager();
+        $cm = new \ContentManager();
 
         // Get contents for this home
         $contentElementsInFrontpage  = $cm->getContentsForHomepageOfCategory($categoryID);
@@ -92,37 +109,44 @@ switch ($action) {
         $layout = $lm->render(array(
             'contents'  => $contentElementsInFrontpage,
             'home'      => ($categoryID == 0),
-            'smarty'    => $tpl,
+            'smarty'    => $this->view,
         ));
 
-        $tpl->assign(array(
+        $_SESSION['desde'] = 'list';
+        $_SESSION['_from'] = $category;
+
+        return $this->render('frontpagemanager/list.tpl', array(
             'category'           => $category,
             'category_id'        => $categoryID,
             'frontpage_articles' => $contentElementsInFrontpage,
             'layout'             => $layout,
         ));
-        $_SESSION['desde'] = 'list';
-        $_SESSION['_from'] = $category;
+    }
 
-        $tpl->display('frontpagemanager/list.tpl');
+    /**
+     * Saves frontpage positions for given frontpage
+     *
+     * @return Response the response object
+     **/
+    public function savePositionsAction()
+    {
+        if(!\Acl::check('ARTICLE_FRONTPAGE')) { Acl::deny(); }
 
-    break;
+        $category      = $this->request->query->filter('category', null, FILTER_SANITIZE_STRING);
 
-    case 'save_positions':
+        $tcacheManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
 
-        if(!Acl::check('ARTICLE_FRONTPAGE')) { Acl::deny(); }
-
-        // Setup view
-        $tpl = new TemplateCacheManager(TEMPLATE_USER_PATH);
+        $ccm           = \ContentCategoryManager::get_instance();
+        $section       = $ccm->get_name($category);
 
         // Get the form-encoded places from request
         if (isset($_POST['contents_positions'])) {
-            $contentsPositions = $request->request->get('contents_positions');
+            $contentsPositions = $this->request->request->get('contents_positions');
         } else {
             $contentsPositions = null;
         }
 
-        $categoryID = $request->query->filter('category', null, FILTER_SANITIZE_NUMBER_INT);
+        $categoryID = ($category == 'home') ? 0 : $category;
         $validReceivedData = is_array($contentsPositions) && !empty($contentsPositions) && !is_null($categoryID);
 
         $savedProperly = false;
@@ -131,7 +155,6 @@ switch ($action) {
             $contents = array();
             // Iterate over each element and populate its element to save.
             foreach ($contentsPositions as $params) {
-
                 if (
                     !isset($categoryID) || !isset($params['placeholder'])
                     || !isset($params['position']) || !isset($params['content_type'])
@@ -146,61 +169,66 @@ switch ($action) {
                     'position' => $params['position'],
                     'content_type' => $params['content_type'],
                 );
-
             }
 
             // Save contents
-            $savedProperly = ContentManager::saveContentPositionsForHomePage($categoryID, $contents);
+            $savedProperly = \ContentManager::saveContentPositionsForHomePage($categoryID, $contents);
 
         }
 
         if ($categoryID == 0){ $section = 'home'; }
 
-        $tpl->delete($section . '|RSS');
-        $tpl->delete($section . '|0');
+        $tcacheManager->delete($section . '|RSS');
+        $tcacheManager->delete($section . '|0');
 
         /* Notice log of this action */
-        $logger = Application::getLogger();
+        $logger = \Application::getLogger();
         $logger->notice(
             'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed'
             .' action Frontpage save positions at '.$section.' Ids '.json_encode($contentsPositions)
         );
 
         // If this request is Ajax return properly formated result.
-        if ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
+        if ($this->request->isXmlHttpRequest()) {
             if ($savedProperly) {
-                echo _("Content positions saved properly");
+                return _("Content positions saved properly");
             } else {
-                header('HTTP/1.1 500 Internal Server Error');
                 if ($validReceivedData == false) {
-                    echo _("Unable to save content positions: Data sent from the client were not valid.");
+                    $errorMessage = _("Unable to save content positions: Data sent from the client were not valid.");
                 } else {
-                    echo _("Unable to save content positions: Unknow reason");
+                    $errorMessage = _("Unable to save content positions: Unknow reason");
                 }
+
+                $response = new Response($errorMessage, 500);
             }
         }
+    }
 
-    break;
+    /**
+     *
+     *
+     * @return void
+     * @author
+     **/
+    public function previewAction()
+    {
+        $categoryName    = $this->request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+        $subCategoryName = $this->request->query->filter('subcategory_name', null, FILTER_SANITIZE_STRING);
 
-    case 'preview_frontpage':
-
-        $categoryName    = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
-        $subCategoryName = $request->query->filter('subcategory_name', null, FILTER_SANITIZE_STRING);
-
-        $tpl     = new Template(TEMPLATE_USER);
-        $tpl->caching = false;
+        $this->view     = new \Template(TEMPLATE_USER);
+        $this->view->caching = false;
 
         // Initialize the Content and Database object
-        $ccm = ContentCategoryManager::get_instance();
+        $ccm = \ContentCategoryManager::get_instance();
         list($category_name, $subcategory_name) = $ccm->normalize($categoryName, $subCategoryName);
 
         $actual_category = (is_null($subcategory_name))? $category_name : $subcategory_name;
 
-        $tpl->assign('actual_category', $actual_category);
+        $this->view->assign('actual_category', $actual_category);
         $actualCategoryId = $ccm->get_id($actual_category);
 
-        $cm = new ContentManager;
-        $contentsRAW = $request->query->filter('contents');
+        $cm = new \ContentManager;
+        $contentsRAW = $this->request->query->filter('contents');
         $contents = json_decode(json_decode($contentsRAW), true);
 
         $contentsInHomepage = $cm->getContentsForHomepageFromArray($contents);
@@ -234,13 +262,8 @@ switch ($action) {
                     ->loadAttachedVideo()
                     ->loadRelatedContents();
         }
-        $tpl->assign('column', $contentsInHomepage);
+        $this->view->assign('column', $contentsInHomepage);
 
-        $tpl->display('frontpage/frontpage.tpl');
-
-        break;
-
-    default: {
-        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
-    } break;
-}
+        return $this->render('frontpage/frontpage.tpl');
+    }
+} // END class FrontpagesController

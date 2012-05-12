@@ -14,6 +14,10 @@
             remember_save_positions: "{t}Please, remember save positions after finish.{/t}",
             error_tab_content_provider: "{t}Couldn't load this tab. We'll try to fix this as soon as possible.{/t}"
         }
+        var frontpage_urls = {
+            save_positions: '{url name=admin_frontpage_savepositions category=$category}',
+            preview_frontpage: '{url name=admin_frontpage_preview category=$category}'
+        };
     </script>
     {script_tag src="/jquery-onm/jquery.frontpagemanager.js"}
 {/block}
