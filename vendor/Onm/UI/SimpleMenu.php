@@ -206,7 +206,7 @@ class SimpleMenu
             $class = $this->getclass($menu['class']);
             $html .= "<li {$class}>";
             $html .= $this->getHref($value['title'], 'menu_'.$value['id'], $value['link']);
-            $html .= "<ul>".implode("\n", $output)."</ul>";
+            $html .= "<ul>".implode("", $output)."</ul>";
             $html .="</li>";
         }
         return $html;
@@ -257,7 +257,7 @@ class SimpleMenu
             $output []= $this->_renderElement($element, $value, false);
         }
 
-        $menu = "<ul id='menu' class='clearfix'>".implode("\n", $output)."</ul>";
+        $menu = "<ul id='menu' class='clearfix'>".implode("", $output)."</ul>";
         if ($params['doctype']) {
             $menu = "<nav>".$menu."</nav>";
         }
