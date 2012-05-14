@@ -58,12 +58,14 @@
     <h1 class="error-title">There was an error in onm</h1>
     <div class="error-trace">
         <div class="title <?php if($error->getCode() == 1) { echo "error"; } ?>">
-            <p><strong><?php echo $error->getMessage() ?></strong></p>
-
-            <p>File: <?php echo $error->getFile() ?>  Line: <?php echo $error->getLine(); ?></p>
+            <p>
+                ( ! ) Exception: <?php echo get_class($error);?> - <?php echo $error->getMessage(). $errorMessage ?> :  in
+                <?php echo $error->getFile() ?> on line <?php echo $error->getLine(); ?>
+            </p>
         </div>
         <?php
             $backtrace = $error->getTrace();
+            $backtrace = array_reverse($backtrace);
             if (is_array($backtrace)
                 && count($backtrace) > 0
             ) { ?>
@@ -80,8 +82,9 @@
                             <td>
                                 <a href="file://{$file}"> <?php echo $trace_step['file']; ?></a>
 
-                                <p>Class: <?php echo $trace_step['function']; ?> Function: <?php echo $trace_step['function']; ?></p>
+                                <p>Class: <?php echo $trace_step['class']; ?>::<?php echo $trace_step['function']; ?>()</p>
                                 <p>
+                                    Args:
                                     <?php echo print_r($trace_step['args']); ?>
                                 </p>
                             </td>

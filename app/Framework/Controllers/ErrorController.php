@@ -43,8 +43,24 @@ class ErrorController extends Controller
     {
         global $error;
         $error = unserialize($this->request->get('error'));
+        // var_dump($error);die();
+
+        // print("<html><body>".$error->xdebug_message."</body></html>");die();
+
+        $name = join('', array_slice(explode('\\', get_class($error)), -1));
+        switch ($name) {
+            case 'ResourceNotFoundException':
+                $errorMessage = 'Resource path not found';
+
+                break;
+
+            default:
+                $errorMessage = '';
+                break;
+        }
+
         header('HTTP/1.0 404 Not Found');
-        require realpath(__DIR__."/../Views/ErrorController/default.php");
+        return include __DIR__."/../Views/ErrorController/default.php";
     }
 
 } // END class Authentication
