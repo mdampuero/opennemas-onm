@@ -6,6 +6,7 @@
             depends="prepare,lint,phploc-ci,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpunit-ci" />
 
     <path id="project.paths.php">
+        <pathelement path="${basedir}/app/Backend" />
         <pathelement path="${basedir}/app/models" />
         <pathelement path="${basedir}/public/core" />
         <pathelement path="${basedir}/public/controllers" />
