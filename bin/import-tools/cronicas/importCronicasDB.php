@@ -53,23 +53,26 @@ require SITE_PATH.'../config/config.inc.php';
 
 
 $cronicasImporter = new CronicasToOnm($configOldDB,$configNewDB);
-/*
-$cronicasImporter->helper->sqlExecute(); // create translated tables
-$cronicasImporter->helper->sqlClearData(); //delete old data in tables
 
-exit();
-*/
+//$cronicasImporter->helper->sqlExecute(); // create translated tables
+//$cronicasImporter->helper->sqlClearData(); //delete old data in tables
+
+
 $cronicasImporter->importCategories();
 
-//$cronicasImporter->importImagesArticles();
-
-$limit = ' LIMIT 0, 15000';
-//$cronicasImporter->importArticles($limit);
-
-//$cronicasImporter->importAuthorsOpinion();
+$cronicasImporter->importAuthorsOpinion();
 
 $cronicasImporter->importPhotoAuthorsOpinion();
-/*
+printf("Check author names (Problem with similar name author)");
+exit();
+
+
+$limit = ' LIMIT 0, 18000';
+$cronicasImporter->importImagesArticles();
+$cronicasImporter->importArticles($limit);
+
+
+
 $cronicasImporter->importOpinions();
 
 $cronicasImporter->importLetters();
@@ -83,8 +86,8 @@ $cronicasImporter->importAlbums();
 $cronicasImporter->importAdvertisements();
 
 $cronicasImporter->importAttachments();
-*/
- $cronicasImporter->importRelatedContents();
+
+$cronicasImporter->importRelatedContents();
 
 
 $cronicasImporter->updateFrontpageArticles();

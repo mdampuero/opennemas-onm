@@ -282,6 +282,8 @@ class CronicasToOnm {
                         'category_name'=>  $category_name,
                         'description' => $title,
                         'frontpage' => $rs->fields['frontpage'],
+                        'content_status' => $rs->fields['content_status'],
+                        'available' => $rs->fields['available'],
                         'in_home' => $rs->fields['in_home'],
                         'position' => $rs->fields['position'],
                         'home_pos' => $rs->fields['home_pos'],
@@ -1375,10 +1377,12 @@ echo $sql;
         $sql= "INSERT INTO `content_positions` ".
               " (`pk_fk_content`, `fk_category`, `placeholder`, `position`, `params`, `content_type`)".
               " VALUES ( ?, ?, ?, ?, ?, ?)";
-        self::$originConn->Prepare($sql);
-        $rss = self::$originConn->Execute($sql,$values);
+
+        $insert_sql = $GLOBALS['application']->conn->Prepare($sql);
+        $rss = $GLOBALS['application']->conn->Execute($insert_sql, $values);
+
         if (!$rss) {
-            var_dump($values);
+
             $error =  "\n-  ".$sql." -- ".self::$originConn->ErrorMsg() ;
             $this->helper->log('-'.$error);
             printf('\n-'.$error);
