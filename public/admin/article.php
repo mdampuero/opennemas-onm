@@ -277,6 +277,11 @@ if (isset($_REQUEST['action']) ) {
 
             $tpl->assign(array( 'availableSizes'=>array(16,18,20,22,24,26,28,30,32,34)
                         ) );
+             $tpl->assign(
+                array('availableSizes'=>array(16=>'16',18=>'18',20=>'20',22=>'22',24=>'24',26=>'26',
+                                            28=>'28',30=>'30',32=>'32',34=>'34'))
+            );
+
 
             //TODO: AJAX
             // require_once('controllers/video/videoGallery.php');
@@ -377,7 +382,7 @@ if (isset($_REQUEST['action']) ) {
             }
 
             $tpl->assign(
-                array('availableSizes'=>array(20=>'20',22=>'22',24=>'24',26=>'26',
+                array('availableSizes'=>array(16=>'16',18=>'18',20=>'20',22=>'22',24=>'24',26=>'26',
                                             28=>'28',30=>'30',32=>'32',34=>'34'))
             );
 

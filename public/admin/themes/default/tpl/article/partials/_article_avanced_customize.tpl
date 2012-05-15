@@ -16,12 +16,12 @@
                     <tr>
                         <td>
                             <label>{t}Size for title{/t}</label>
-                            {if isset($article->params['titleSize'])}
+                            {if isset($article->params['titleSize']) && !empty($article->params['titleSize'])}
                                 {assign var=defaultValue value=$article->params['titleSize']}
                             {else}
-                                {assign var=defaultValue value=24}
+                                {assign var=defaultValue value=26}
                             {/if}
-                            <select name="params[titleSize]">
+                            <select name="params[titleSize]">}
                                 {html_options values=$availableSizes options=$availableSizes selected=$defaultValue}
                             </select>
                         </td>
@@ -62,7 +62,7 @@
                             <td>
                                 <label>{t}Size{/t}</label>
                                 <select name="params[titleHomeSize]">
-                                    {if isset($article->params['titleHomeSize'])}
+                                    {if isset($article->params['titleHomeSize']) && !empty($article->params['titleHomeSize'])}
                                         {assign var=defaultValue value=$article->params['titleHomeSize']}
                                     {else}
                                         {assign var=defaultValue value=26}
