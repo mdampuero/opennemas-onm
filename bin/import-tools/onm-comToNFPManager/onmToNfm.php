@@ -1,23 +1,19 @@
-#!/usr/bin/php5
+#!/usr/bin/env php
 <?php
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of refactorize
+ * This file is part of the Onm package.
  *
- * @author sandra
+ * (c)  Sandra Pereira <sandra@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
-
-printf("Welcome to OpenNemas Newslibrary Importer \n");
+printf("Welcome to OpenNemas frontpage manager script\n");
 
 /**
  * Setting up the import application
 */
-
 error_reporting(E_ALL ^ E_NOTICE);
 
 
@@ -29,9 +25,7 @@ define('SITE_LIBS_PATH',   realpath(SITE_PATH . "libs") . DIRECTORY_SEPARATOR);
 define('SITE_CORE_PATH',   realpath(SITE_PATH.DIRECTORY_SEPARATOR."core").DIRECTORY_SEPARATOR);
 define('SITE_VENDOR_PATH', realpath(APPLICATION_PATH.DIRECTORY_SEPARATOR."vendor").DIRECTORY_SEPARATOR);
 define('SITE_MODELS_PATH', realpath(APPLICATION_PATH.DIRECTORY_SEPARATOR."app".DIRECTORY_SEPARATOR."models").DIRECTORY_SEPARATOR);
-define('APC_PREFIX', 'cronicas-importer');
-
-require 'cronicas-config.inc.php';
+define('APC_PREFIX', 'opennemas-importer');
 
 // Ensure library/ is on include_path
 set_include_path(implode(PATH_SEPARATOR, array( __DIR__.'/libs/',
@@ -44,22 +38,23 @@ set_include_path(implode(PATH_SEPARATOR, array( __DIR__.'/libs/',
 require SITE_VENDOR_PATH.'/adodb5/adodb.inc.php';
 
 require SITE_PATH.'../app/autoload.php';
+
 Application::initAutoloader();
 
 require SITE_PATH.'../config/config.inc.php';
+require 'db-config.inc.php';
+
+Application::initInternalConstants();
+Application::initDatabase();
+
+require 'commToNFpManager.php';
+
 /**
  * General configurations
 */
 
+$frontpageHandler = new CommToNFpManager();
 
-$migrator = new migrationNewslibrary($configNewDB);
+$frontpageHandler->modifySchema();
 
-$migrator->importCategories();
-$iniDate ='20120228';
-$endDate ='20120101';
-
-$migrator->migrateAllDirs($iniDate, $endDate);
-
-
-printf("OpenNemas newslibrary is ok for Cronicas \n");
-
+$frontpageHandler->updateFrontpageArticles();

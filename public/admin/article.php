@@ -275,8 +275,13 @@ if (isset($_REQUEST['action']) ) {
             $tpl->assign('MEDIA_IMG_PATH_WEB', MEDIA_IMG_PATH_WEB);
 
 
-            $tpl->assign(array( 'availableSizes'=>array(20,22,24,26,28,30,32,34)
+            $tpl->assign(array( 'availableSizes'=>array(16,18,20,22,24,26,28,30,32,34)
                         ) );
+             $tpl->assign(
+                array('availableSizes'=>array(16=>'16',18=>'18',20=>'20',22=>'22',24=>'24',26=>'26',
+                                            28=>'28',30=>'30',32=>'32',34=>'34'))
+            );
+
 
             //TODO: AJAX
             // require_once('controllers/video/videoGallery.php');
@@ -377,7 +382,7 @@ if (isset($_REQUEST['action']) ) {
             }
 
             $tpl->assign(
-                array('availableSizes'=>array(20=>'20',22=>'22',24=>'24',26=>'26',
+                array('availableSizes'=>array(16=>'16',18=>'18',20=>'20',22=>'22',24=>'24',26=>'26',
                                             28=>'28',30=>'30',32=>'32',34=>'34'))
             );
 
@@ -1124,6 +1129,47 @@ if (isset($_REQUEST['action']) ) {
                 'category' =>$category,
                 'contentType'=>'Article',
                 'pagination'=>$pages->links
+            ));
+
+            $htmlOut = $tpl->fetch("common/content_provider/_container-content-list.tpl");
+            Application::ajax_out($htmlOut);
+
+            break;
+
+        case 'provider-frontpage':
+
+            $items_page = s::get('items_per_page') ?: 20;
+            $category   = filter_input( INPUT_GET, 'category' , FILTER_SANITIZE_STRING, array('options' => array('default' => '0')) );
+            $page       = filter_input( INPUT_GET, 'page' , FILTER_SANITIZE_NUMBER_INT, array('options' => array('default' => '1')) );
+            $cm = new ContentManager();
+            $categoryID = (empty($category) || $category == 'home') ? '0' : $category;
+            $placeholder = ($categoryID == 0) ? 'home_placeholder': 'placeholder';
+            // Get contents for this home
+            $contentElementsInFrontpage  = $cm->getContentsForHomepageOfCategory($categoryID);
+
+            // Sort all the elements by its position
+            $contentElementsInFrontpage  = $cm->sortArrayofObjectsByProperty($contentElementsInFrontpage, 'position');
+
+            $articles = array();
+            foreach($contentElementsInFrontpage as $content) {
+                if($content->content_type =='1') {
+                    $articles[] = $content;
+                }
+            }
+
+            $home = new StdClass();
+               $home->pk_content_category = '0';
+               $home->title = 'Home';
+               $home->name ='home';
+
+            array_unshift($allcategorys, $home);
+
+            $tpl->assign(array(
+                'contents'              => $articles,
+                'contentTypeCategories' => $allcategorys,
+                'category'              => $category,
+                'contentType'           => 'Article',
+                'action'                => 'provider-frontpage',
             ));
 
             $htmlOut = $tpl->fetch("common/content_provider/_container-content-list.tpl");

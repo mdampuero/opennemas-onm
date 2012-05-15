@@ -16,12 +16,12 @@
                     <tr>
                         <td>
                             <label>{t}Size for title{/t}</label>
-                            {if isset($article->params['titleSize'])}
+                            {if isset($article->params['titleSize']) && !empty($article->params['titleSize'])}
                                 {assign var=defaultValue value=$article->params['titleSize']}
                             {else}
-                                {assign var=defaultValue value=24}
+                                {assign var=defaultValue value=26}
                             {/if}
-                            <select name="params[titleSize]">
+                            <select name="params[titleSize]">}
                                 {html_options values=$availableSizes options=$availableSizes selected=$defaultValue}
                             </select>
                         </td>
@@ -29,8 +29,8 @@
                         <td >
                             <label for="description">{t}Image position{/t}</label>
                             <select name="params[imagePosition]" id="img_home_pos">
-                                <option value="left" {if $article->params['imagePosition'] eq "left" || !$article->params['imagePosition']} selected{/if}>Izquierda</option>
-                                <option value="right" {if $article->params['imagePosition'] eq "right"} selected{/if}>Derecha</option>
+                                <option value="right" {if $article->params['imagePosition'] eq "right" || !$article->params['imagePosition']} selected{/if}>Derecha</option>
+                                <option value="left" {if $article->params['imagePosition'] eq "left"} selected{/if}>Izquierda</option>
                                 <option value="none" {if $article->params['imagePosition'] eq "none"} selected{/if}>Justificada(300px)</option>
                             </select>
                         </td>
@@ -62,10 +62,10 @@
                             <td>
                                 <label>{t}Size{/t}</label>
                                 <select name="params[titleHomeSize]">
-                                    {if isset($article->params['titleHomeSize'])}
+                                    {if isset($article->params['titleHomeSize']) && !empty($article->params['titleHomeSize'])}
                                         {assign var=defaultValue value=$article->params['titleHomeSize']}
                                     {else}
-                                        {assign var=defaultValue value=24}
+                                        {assign var=defaultValue value=26}
                                     {/if}
                                      {html_options values=$availableSizes options=$availableSizes selected=$defaultValue}
                                 </select>
@@ -96,8 +96,8 @@
                             <td  colspan="2">
                                 <label for="img_pos">{t}Image position{/t}</label>
                                 <select name="params[imageHomePosition]" id="img_pos" >
-                                    <option value="left" {if $article->params['imageHomePosition'] eq "left" || !$article->params['imageHomePosition']} selected{/if}>Izquierda</option>
-                                    <option value="right" {if $article->params['imageHomePosition'] eq "right"} selected{/if}>Derecha</option>
+                                    <option value="right" {if $article->params['imageHomePosition'] eq "right" || !$article->params['imageHomePosition']} selected{/if}>Derecha</option>
+                                    <option value="left" {if $article->params['imageHomePosition'] eq "left"} selected{/if}>Izquierda</option>
                                     <option value="none" {if $article->params['imageHomePosition'] eq "none"} selected{/if}>Justificada(300px)</option>
                                </select>
                             </td>

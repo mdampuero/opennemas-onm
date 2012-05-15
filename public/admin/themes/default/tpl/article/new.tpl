@@ -244,7 +244,7 @@
                                 <div style="display:inline-block; width:69%; vertical-align:top;">
                                 <label for="agency">{t}Agency{/t}</label>
                                     <input  type="text" id="agency" name="agency" title="{t}Agency{/t}"
-                                            class="required" style="width:100%" tabindex="4"
+                                            style="width:100%" tabindex="4"
                                             {if is_object($article)}
                                                 value="{$article->agency|clearslash|escape:"html"}"
                                                 onblur="setTimeout(function(){ tinyMCE.get('summary').focus(); }, 200);"

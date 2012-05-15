@@ -34,6 +34,7 @@ function with_without_script(my) {
 		$('advertisement-images').setStyle({ display: 'none'});
 	} else {
 		$('advertisement-images').setStyle({ display: 'block'});
+		$('photos').setStyle({ display: 'block'});
 		$('div_url1').setStyle({ display: 'block'});
 		$('div_script').setStyle({ display: 'none'});
 	}

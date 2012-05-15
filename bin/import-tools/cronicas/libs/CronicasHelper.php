@@ -104,7 +104,7 @@ class CronicasHelper {
         //emtpy tables
         $tables = array('articles', 'albums', 'albums_photos', 'advertisements',
 
-            'attachments', 'authors', 'author_imgs', 'books', 'comments', 'letters',
+            'attachments', 'authors', 'author_imgs', 'comments', 'letters',
             'content_positions', 'kioskos', 'opinions', 'pclave', 'photos', 'polls', 'poll_items',
             'ratings', 'related_contents', 'specials', 'special_contents', 'videos', 'votes',
             'translation_ids', 'author_opinion', 'images_translated');
@@ -250,7 +250,7 @@ class CronicasHelper {
         }
     }
 
-    public function updateParams($contentID, $views)
+    public function updateParams($contentID, $params)
     {
         if(isset($contentID) && isset($views)) {
             $sql = 'UPDATE `contents` SET `params`=?  WHERE pk_content=?';
@@ -337,7 +337,7 @@ class CronicasHelper {
 
         echo "\n AUTHORS OPINION \n";
         $sql = "SELECT count(*) as total FROM `author_opinion` ";
-        $rs = $GLOBALS['application']->conn->Execute($count_sql);
+        $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
             echo $GLOBALS['application']->conn->ErrorMsg();

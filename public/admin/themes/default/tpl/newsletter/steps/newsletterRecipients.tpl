@@ -7,14 +7,14 @@
 
 {block name="footer-js" append}
 {script_tag src="/jquery/jquery.cookie.js"}
-{script_tag src="/jquery-onm/newsletter/jquery.stepRecipients.js"}
+{script_tag src="/jquery-onm/jquery.newsletter.js"}
 {/block}
 
 {block name="content"}
 
 <form action="#" method="post" name="newsletterForm" id="newsletterForm" {$formAttrs}>
 
-    <div id="buttons" class="top-action-bar clearfix">
+    <div id="buttons-recipients" class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title">
                 <h2>{t}Newsletter management{/t}</h2>
@@ -79,7 +79,7 @@
 				<td style="width:50%">
 	                 <div id="mailList"  style="min-height:50px;">
 	                    <label>{t}MailList Account{/t}: </label> <br />
-						<ul id="items-mailList" style="margin:0; padding:0px">
+						<ul id="items-mailList" style="margin:0; padding:0px;min-height:40px;">
 							{section name=d loop=$mailList}
                             <li  data-email="{$mailList[d]->email}"  data-name="{$mailList[d]->name}">
                                 {$mailList[d]->name}:{$mailList[d]->email}
@@ -90,7 +90,7 @@
 	                <hr>
 					<div id="dbList" >
 	                    <label>{t}DataBase Accounts{/t}:</label> <br />
-						<ul id="items-dbList" style="margin:0; padding:0px">
+						<ul id="items-dbList" style="margin:0; padding:0px;min-height:40px;">
 							{section name=d loop=$accounts}
                             <li  data-email="{$accounts[d]->email}" data-name="{$accounts[d]->name}">
                                 {$accounts[d]->name}:{$accounts[d]->email}
@@ -121,8 +121,7 @@
 				</td>
 			</tr>
 		</table>
-        <textarea name="newsletter" id="newsletter" style="display:;"></textarea>
-        <textarea name="recipients" id="recipients" style="display:;"></textarea>
+
         <input type="hidden" id="action" name="action" value="send" />
 	    <div id="separator"></div>
 	</div>

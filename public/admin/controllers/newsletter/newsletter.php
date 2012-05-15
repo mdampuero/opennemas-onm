@@ -102,14 +102,19 @@ switch($action) {
      * Step: list all contents
      */
     case 'addContents':
-
+    case 'updateContents':
 
         //Get saved newsletters
         $newsletter = new NewNewsletter();
         $savedNewsletters = $newsletter->search('1=1 ORDER BY created DESC LIMIT 0,30');
-        //
 
-        $newsletterContent = isset($_COOKIE['data-newsletter'])?json_decode(json_decode($_COOKIE['data-newsletter'])):'';
+        $newsletterContent = isset($_COOKIE['data-newsletter']) ?
+                     json_decode(json_decode($_COOKIE['data-newsletter'])) : '';
+
+        if( array_key_exists('newsletterHtml', $_SESSION) ) {
+            unset($_SESSION['newsletterHtml']);
+        }
+
         $tpl->assign( array(
                     'newsletterContent' => $newsletterContent,
                     'savedNewsletters'  => $savedNewsletters ) );
@@ -124,34 +129,42 @@ switch($action) {
         $newsletter = new NewNewsletter($id);
 
         setcookie('data-newsletter', $newsletter->data);
-        $newsletterContent = json_decode(json_decode($_COOKIE['data-newsletter']));
 
-        $savedNewsletters = $newsletter->search('1=1 ORDER BY created DESC LIMIT 0,30');
+        $_SESSION['newsletterHtml'] = $newsletter->html;
 
+        $htmlContent = html_entity_decode($newsletter->html, ENT_QUOTES );
         $tpl->assign( array(
-                    'newsletterContent' => $newsletterContent,
-                    'savedNewsletters'  => $savedNewsletters ) );
+                    'htmlContent' => $htmlContent,
+                    ) );
 
-        $tpl->display('newsletter/steps/newsletterContents.tpl');
-
-    break;
-   /**
-     * Step: preview the message
-     */
-    case 'preview':
-        $newsletter = new NewsletterManager();
-        $htmlContent = $newsletter->render();
-
-        $tpl->assign('htmlContent', $htmlContent);
         $tpl->display('newsletter/steps/newsletterPreview.tpl');
 
     break;
 
-    case 'save':
+    case 'saveNewsletterContent';
+        $html = filter_input(INPUT_POST,'html');
+        $html = htmlentities($html, ENT_QUOTES);
+        $_SESSION['newsletterHtml'] = $html;
 
-        $newsletter = new NewNewsletter();
-        $htmlContent = $newsletter->create($htmlContent);
+        Application::ajax_out('ok');
+
+   /**
+     * Step: preview the message
+     */
+    case 'preview':
+
+        $newsletter = new NewsletterManager();
+
+        if( array_key_exists('newsletterHtml', $_SESSION) &&
+            !empty($_SESSION['newsletterHtml'])) {
+
+            $htmlContent = html_entity_decode($_SESSION['newsletterHtml'], ENT_QUOTES);
+        } else {
+            $htmlContent = $newsletter->render();
+        }
+
         $tpl->assign('htmlContent', $htmlContent);
+        $tpl->display('newsletter/steps/newsletterPreview.tpl');
 
     break;
 
@@ -168,6 +181,7 @@ switch($action) {
 
         $receiver = array();
         $mailList = array();
+
         $configurations = \Onm\Settings::get('newsletter_maillist');
         if (!is_null($configurations)
             && array_key_exists('email', $configurations)
@@ -206,16 +220,24 @@ switch($action) {
     case 'send':
         $subject =  $_COOKIE['data-subject'];
 
+        $nManager = new NewsletterManager();
+        $nManager->setConfigMailing();
+
+        if( array_key_exists('newsletterHtml', $_SESSION) &&
+            !empty($_SESSION['newsletterHtml'])) {
+
+            $htmlContent = html_entity_decode($_SESSION['newsletterHtml'], ENT_QUOTES);
+        } else {
+            $htmlContent = $nManager->render();
+        }
+
         $newsletter = new NewNewsletter();
 
         // save newsletter
         $postmaster = $_COOKIE['data-newsletter'];
-        $newsletter->create(array('content' => $postmaster));
+        $newsletter->create( array('content' => $postmaster, 'html'=> $htmlContent));
 
-        // Ignore user abort and life time to infinite
-        $nManager = new NewsletterManager();
-        $nManager->setConfigMailing();
-        $htmlContent = $nManager->render();
+
 
         $params = array(
             'subject'   => $subject,
@@ -244,35 +266,16 @@ switch($action) {
             }
         }
 
-        if (isset($data->lists)) {
-            foreach($data->lists as $email) {
-                if (trim($email) != ""){
-                    $mailbox = new stdClass();
-                    $name = preg_split('/@/',$email);
-                    $mailbox->name = $name[0];
-                    $mailbox->email =trim($email);
-
-                    // Replace name destination
-                    $emailHtmlContent = str_replace('###DESTINATARIO###', $mailbox->name, $htmlContent);
-
-                    if($nManager->sendToUser($mailbox, $emailHtmlContent, $params)) {
-                        $htmlFinal .= '<tr><td width=50% align=right><strong class="ok">OK</strong>&nbsp;&nbsp;</td><td>'. $mailbox->name . ' &lt;' . $mailbox->email . '&gt;</td></tr>';
-                    } else {
-                        $htmlFinal .= '<tr><td width=50% ><strong class="failed">FAILED</strong>&nbsp;&nbsp;</td><td>'. $mailbox->name . ' &lt;' . $mailbox->email. '&gt;</td></tr>';
-                    }
-                }
-
-            }
-        }
-
         $tpl->assign(array(
             'html_final' => $htmlFinal,
             'postmaster' => $postmaster,
         ));
 
+        unset($_SESSION['newsletterHtml']);
         unset($_COOKIE['data-recipients']);
         unset($_COOKIE['data-newsletter']);
         unset($_COOKIE['data-subject']);
+
         $tpl->display('newsletter/steps/newsletterSend.tpl');
 
     break;
