@@ -106,7 +106,7 @@
                                 <hr>
                                 {if empty($newsletterContent)}
                                     <ul class="content-receiver" data-id="1">
-                                        <li class="container-label" data-type="label"  data-id="1" data-title="Destacado">Destacado</li>
+                                        <li class="container-label" data-type="label"  data-id="1" data-title="En Portada">En Portada</li>
                                     </ul>
                                 {else}
 

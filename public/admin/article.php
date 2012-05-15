@@ -275,7 +275,7 @@ if (isset($_REQUEST['action']) ) {
             $tpl->assign('MEDIA_IMG_PATH_WEB', MEDIA_IMG_PATH_WEB);
 
 
-            $tpl->assign(array( 'availableSizes'=>array(20,22,24,26,28,30,32,34)
+            $tpl->assign(array( 'availableSizes'=>array(16,18,20,22,24,26,28,30,32,34)
                         ) );
 
             //TODO: AJAX
