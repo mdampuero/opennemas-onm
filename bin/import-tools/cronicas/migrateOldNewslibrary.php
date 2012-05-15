@@ -55,10 +55,11 @@ require SITE_PATH.'../config/config.inc.php';
 $migrator = new migrationNewslibrary($configNewDB);
 
 $migrator->importCategories();
-$iniDate ='20120331';
+$iniDate ='20120228';
 $endDate ='20120101';
- $migrator->migrateAllDirs($iniDate, $endDate);
-//$migrator->migrateTest();
+
+$migrator->migrateAllDirs($iniDate, $endDate);
+
 
 printf("OpenNemas newslibrary is ok for Cronicas \n");
 
