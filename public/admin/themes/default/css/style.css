@@ -1544,6 +1544,9 @@ div.action-bar .right{
 .listing-table tbody tr td:first-child input[type="checkbox"] {
   margin-left: 4px;
 }
+.listing-table .btn-group {
+  float:right;
+}
 /* -------------------------------------------------------------
   upper header for filtering... no yet finished. NEEDS WORK.
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */

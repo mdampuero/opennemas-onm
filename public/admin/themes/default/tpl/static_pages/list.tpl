@@ -6,7 +6,7 @@
 		<div class="title"><h2>{t}Static Pages Manager{/t} :: {t}Listing static pages{/t}</h2></div>
 		<ul class="old-button">
 			<li>
-				<a href="{$smarty.server.PHP_SELF}?action=new" title="Nueva Página">
+				<a href="{url name=admin_staticpages_create}" title="{t}Create new page{/t}">
 					<img border="0" src="{$params.IMAGE_DIR}list-add.png" title="{t}New static page{/t}" alt="" /><br />{t}New page{/t}
 				</a>
 			</li>
@@ -15,7 +15,7 @@
 </div>
 <div class="wrapper-content">
 
-	<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
+	<form action="{url name=admin_staticpages}" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
 
         <div class="table-info clearfix">
             <div>
@@ -73,18 +73,21 @@
                     </td>
 
                     <td class="center">
+                        <div class="btn-group">
                         {acl isAllowed="STATIC_UPDATE"}
-							<a class="btn btn-mini" href="{$smarty.server.PHP_SELF}?action=read&id={$pages[k]->id}" title="{t}Modify{/t}">
-								{t}Edit{/t}
-							</a>
+                            <a class="btn" href="{url name=admin_staticpages_show id=$pages[k]->id}" title="{t}Modify{/t}">
+                                <i class="icon-pencil"></i>{t}Edit{/t}
+                            </a>
                         {/acl}
                         {acl isAllowed="STATIC_DELETE"}
-							<a class="del btn btn-mini btn-danger" data-controls-modal="modal-from-dom"
+                            <a class="del btn btn-danger" data-controls-modal="modal-from-dom"
                                data-id="{$pages[k]->id}" title="{t}Delete{/t}"
                                data-title="{$pages[k]->title|capitalize}" href="#" >
-                                {t}Delete{/t}
-							</a>
+                                <i class="icon-trash icon-white"></i>
+                            </a>
                         {/acl}
+
+                        </div>
                     </td>
                 </tr>
                 {sectionelse}
@@ -102,8 +105,6 @@
             {/if}
         </table>
 
-        <input type="hidden" id="action" name="action" value="list" />
-        <input type="hidden" id="id" name="id" value="" />
     </form>
 
     {script_tag src="/switcher_flag.js" language="javascript"}

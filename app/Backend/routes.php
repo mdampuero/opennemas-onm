@@ -37,6 +37,57 @@ $routes->add(
     '/admin'
 );
 
+// Static Pages controller
+$routes->add(
+    'admin_staticpages',
+    new Route(
+        '/static-pages',
+        array(
+            '_controller' => 'Backend:Controllers:StaticPagesController:list',
+        )
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_staticpages_show',
+    new Route(
+        '/static-pages/{id}/show',
+        array(
+            '_controller' => 'Backend:Controllers:StaticPagesController:show',
+        )
+    ),
+    '/admin'
+);
+
+
+$routes->add(
+    'admin_staticpages_create',
+    new Route(
+        '/static-pages/create',
+        array('_controller' => 'Backend:Controllers:StaticPagesController:create')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_staticpages_update',
+    new Route(
+        '/static-pages/{id}/update}',
+        array('_controller' => 'Backend:Controllers:StaticPagesController:update')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_staticpages_delete',
+    new Route(
+        '/static-pages/{id}/delete}',
+        array('_controller' => 'Backend:Controllers:StaticPagesController:delete')
+    ),
+    '/admin'
+);
+
 // Search controller routes
 $routes->add(
     'admin_search',
@@ -403,7 +454,7 @@ $routes->add(
     'admin_acl_user',
     new Route(
         '/acl/users',
-        array('_controller' => 'Backend:Controllers:AclUserController:default')
+        array('_controller' => 'Backend:Controllers:AclUserController:list')
     ),
     '/admin'
 );

@@ -15,7 +15,7 @@ $menuXml = '<?xml version="1.0"?>
             privilege="STATIC_ADMIN"
             title="'.htmlspecialchars(_("Static Pages"), ENT_QUOTES).'"
             id="static_pages_manager"
-            link="/admin/controllers/static_pages/static_pages.php"
+            link="'.url('admin_staticpages').'"
         />
         <node
             module_name="WIDGET_MANAGER"

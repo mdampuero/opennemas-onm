@@ -69,3 +69,8 @@ XML file importer
 - Add buttons to add and remove more files in form.
 - Import and check actions was merged (check doesn't save files, review it).
 - Rework in UX.
+
+Static pages
+------------
+- Drop Prototype (SwitcherFlag call) in the list action
+- Problem with delete modal dialogs, the url should be generated with smarty.

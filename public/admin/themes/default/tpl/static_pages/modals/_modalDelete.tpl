@@ -31,7 +31,7 @@ jQuery('#modal-statics-delete a.btn.yes').on('click', function(){
     var delId = jQuery("body").data("selected-for-del");
     if(delId) {
         jQuery.ajax({
-            url:  "{$smarty.server.SCRIPT_NAME}",
+            url:  "{url name=admin_staticpages_delete id=DELETE}",
             type: "POST",
             data: { action:"delete", id:delId },
             success: function(){

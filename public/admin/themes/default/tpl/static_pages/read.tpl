@@ -16,25 +16,25 @@
     </style>
 {/block}
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
+<form action="{if isset($page->id)}{url name=admin_staticpages_update id=$page->id}{else}{url name=admin_staticpages_create}{/if}" method="POST">
     <div class="top-action-bar">
         <div class="wrapper-content">
             <div class="title"><h2>{t}Static Pages Manager{/t} :: {t}Editing page{/t}</h2></div>
                 <ul class="old-button">
                 <li>
-                    <button name="action" type="submit" value="validate" id="save-continue" class="admin_add" title="Validar">
+                    <button type="submit" name="action" value="validate" id="save-continue" title="Validar">
                         <img src="{$params.IMAGE_DIR}save_and_continue.png" title="{t}Save and continue{/t}" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
                     </button>
                 </li>
                 <li>
-                    <button name="action" type="submit" value="save" id="save-exit" class="admin_add" title="{t}Save and exit{/t}">
+                    <button type="submit" name="action" value="save" id="save-exit" title="{t}Save and exit{/t}">
                         <img src="{$params.IMAGE_DIR}save.png" title="{t}Save and exit{/t}" alt="{t}Save and exit{/t}" /><br />{t}Save and exit{/t}
                     </button>
                 </li>
                 <li class="separator"></li>
                 <li>
-                    <a href="?action=list" class="admin_add" title="{t}Cancel{/t}">
-                        <img src="{$params.IMAGE_DIR}previous.png" title="{t}Cancel{/t}" alt="{t}Cancel{/t}" /><br />{t}Go back{/t}
+                    <a href="{url name=admin_staticpages}" title="{t}Go back{/t}">
+                        <img src="{$params.IMAGE_DIR}previous.png" alt="{t}Cancel{/t}" /><br />{t}Go back{/t}
                     </a>
                 </li>
     		</ul>
@@ -54,7 +54,7 @@
                     <div>
                         <label for="available">{t}Published{/t}</label>
                         <select name="available" id="available" class="required" tabindex="4">
-                            <option value="1"{if isset($page->available) &&$page->available eq 1} selected="selected"{/if}>{t}Yes{/t}</option>
+                            <option value="1"{if isset($page->available) && $page->available eq 1} selected="selected"{/if}>{t}Yes{/t}</option>
                             <option value="0"{if isset($page->available) && $page->available eq 0} selected="selected"{/if}>{t}No{/t}</option>
                         </select>
                     </div>
