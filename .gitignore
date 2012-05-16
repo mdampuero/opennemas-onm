@@ -14,3 +14,5 @@ nbproject/
 *.sublime-*
 cache.properties
 build
+vendor/composer
+vendor/.composer
