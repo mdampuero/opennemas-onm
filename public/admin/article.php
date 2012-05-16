@@ -25,7 +25,7 @@ $tpl->assign('content_types', array(1 => 'Noticia' , 7 => 'Galeria', 9 => 'Video
 /**
  * Fetch request variables
 */
-(!isset($_SESSION['desde'])) ? $_SESSION['desde'] = 'list' : null ;
+(!isset($_SESSION['desde'])) ? $_SESSION['desde'] = 'list_pendientes' : null ;
 (!isset($_REQUEST['page'])) ? $_REQUEST['page'] = 1 : null ;
 (!isset($_REQUEST['action'])) ?  $_REQUEST['action'] = 'list' : null ;
 
@@ -63,15 +63,19 @@ if (isset($_REQUEST['action']) ) {
 
     switch ($_REQUEST['action']) {
 
+        case 'list':
+            Application::forward('controllers/frontpagemanager/frontpagemanager.php?action=list&category='.$_REQUEST['category']);
+
+        break;
         case 'list_pendientes':
 
             Acl::checkOrForward('ARTICLE_PENDINGS');
 
             //Comprobación si el usuario tiene acceso a esta categoria/seccion.
             if ($_REQUEST['category'] != 'todos') {
-                 if(!Acl::_C( $_REQUEST['category'])){
+                 if(!Acl::_C( $_REQUEST['category'])) {
                       m::add(_("you don't have enought privileges to see this category.") );
-                      Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
+                      Application::forward('/');
                  }
             } elseif (!Acl::_C($categoryID)) {
                 $categoryID           = $_SESSION['accesscategories'][0];
@@ -163,7 +167,7 @@ if (isset($_REQUEST['action']) ) {
             if ($_REQUEST['category'] != 'todos') {
                  if(!Acl::_C( $_REQUEST['category'])) {
                       m::add(_("you don't have enought privileges to see this category.") );
-                      Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
+                      Application::forward($_SERVER['SCRIPT_NAME'].'?action=list_pendientes');
                  }
 
             }
@@ -464,11 +468,11 @@ if (isset($_REQUEST['action']) ) {
                 }
             }
 
-            if( $_SESSION['desde']=='search_advanced'){
+            if( $_SESSION['desde'] =='search_advanced'){
                 if(isset($_GET['stringSearch'])){
                  Application::forward('controllers/search_advanced/search_advanced.php?action=search&stringSearch='.$_GET['stringSearch'].'&category='.$_SESSION['_from'].'&page='.$_REQUEST['page']);
                 }else{
-                    $_SESSION['desde']='list';
+                    $_SESSION['desde']='list_pendientes';
                     $_SESSION['_from']='home';
                 }
             }
@@ -486,7 +490,7 @@ if (isset($_REQUEST['action']) ) {
                 Application::forward($_SERVER['SCRIPT_NAME'].'?action='.$_SESSION['desde'].'&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
             }
             if(isset($_REQUEST['available']) && $_REQUEST['available'] == 1){
-                 $_SESSION['desde']='list';
+                 $_SESSION['desde']='list_pendientes';
                  $_SESSION['_from'] =$_REQUEST['category'];
 
             }else{
@@ -670,7 +674,9 @@ if (isset($_REQUEST['action']) ) {
             if(isset($_REQUEST['desde']) && ($_REQUEST['desde']=='search')) {
                 if($article->available==0){
                     $_SESSION['desde']='list_pendientes';
-                }else{ $_SESSION['desde']='list';  }
+                }else{
+                    Application::forward('controllers/frontpagemanager/frontpagemanager.php?action=list&category='.$_REQUEST['category']);
+                }
 
             }
             Application::forward($_SERVER['SCRIPT_NAME'].'?action='.$_SESSION['desde'].'&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
@@ -750,7 +756,7 @@ if (isset($_REQUEST['action']) ) {
             //    $_home[] = array(105, 'placeholder_0_1',$_REQUEST['id']);
             //    $article->set_home_position($_home, $_SESSION['userid']);
             //}
-            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
+            Application::forward('controllers/frontpagemanager/frontpagemanager.php?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
         break;
 
         case 'mstatus':
@@ -897,7 +903,7 @@ if (isset($_REQUEST['action']) ) {
                 $article->set_inhome($_inhome, $_SESSION['userid']);
             }
 
-           Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
+           Application::forward('controllers/frontpagemanager/frontpagemanager.php?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
 
         break;
 
@@ -1204,10 +1210,10 @@ if (isset($_REQUEST['action']) ) {
             break;
 
         default: {
-            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
+            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list_pendientes&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
         } break;
     } //switch
 
 } else {
-    Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
+    Application::forward($_SERVER['SCRIPT_NAME'].'?action=list_pendientes&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
 }
