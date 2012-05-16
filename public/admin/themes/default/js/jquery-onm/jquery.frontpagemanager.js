@@ -147,6 +147,35 @@ jQuery(function($){
     });
 */
 
+    $('#multiple_delete').on('click', function(e,ui){
+        e.preventDefault();
+        var contents = $('#frontpagemanager .content-provider-element input[type="checkbox"]:checked').closest('.content-provider-element');
+        if(contents.length > 0) {
+            $("#modal-batch-delete").modal('show');
+        }
+    });
+    $("#modal-batch-delete").modal({ backdrop: 'static', keyboard: true });
+    $('#modal-batch-delete').on('click', 'a.btn.no', function(e,ui){
+        e.preventDefault();
+        $("#modal-batch-delete").modal('hide');
+    });
+    $('#modal-batch-delete').on('click', 'a.btn.yes', function(e, ui){
+        e.preventDefault();
+        var contents = $('#frontpagemanager .content-provider-element input[type="checkbox"]:checked').closest('.content-provider-element');
+        show_save_frontpage_dialog();
+        $("#modal-batch-delete").modal('hide');
+        contents.animate({ 'backgroundColor':'#fb6c6c' },300)
+       .animate({ 'opacity': 0, 'height': 0 }, 300, function() {
+            $(this).remove();
+        });
+        e.preventDefault();
+    });
+
+    $('#modal-element-archive').on('click', 'a.btn.no', function(e){
+        e.preventDefault();
+        $("#modal-element-archive").modal('hide');
+    });
+
     // arquive
     $("#modal-element-archive").modal({ backdrop: 'static', keyboard: true });
     $('div.placeholder').on('click', 'div.content-provider-element a.arquive', function(e) {
@@ -163,7 +192,6 @@ jQuery(function($){
 
     $('#modal-element-archive').on('click', 'a.btn.yes', function(e, ui){
         var delId = $("#modal-element-archive").data("selected-for-archive");
-        log(delId);
         if(delId) {
             $.ajax({
                 url:  "/admin/controllers/common/content.php",
