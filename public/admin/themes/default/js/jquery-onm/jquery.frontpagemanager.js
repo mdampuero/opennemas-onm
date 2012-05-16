@@ -147,13 +147,7 @@ jQuery(function($){
     });
 */
 
-    $('#multiple_delete').on('click', function(e,ui){
-        e.preventDefault();
-        var contents = $('#frontpagemanager .content-provider-element input[type="checkbox"]:checked').closest('.content-provider-element');
-        if(contents.length > 0) {
-            $("#modal-batch-delete").modal('show');
-        }
-    });
+
     $("#modal-batch-delete").modal({ backdrop: 'static', keyboard: true });
     $('#modal-batch-delete').on('click', 'a.btn.no', function(e,ui){
         e.preventDefault();
@@ -350,6 +344,14 @@ jQuery(function($){
     $('#button_moreactions').on('click', function (e, ui){
         e.preventDefault();
         alert('not implemented');
+    });
+
+    $('#button_multiple_delete').on('click', function(e,ui){
+        e.preventDefault();
+        var contents = $('#frontpagemanager .content-provider-element input[type="checkbox"]:checked').closest('.content-provider-element');
+        if(contents.length > 0) {
+            $("#modal-batch-delete").modal('show');
+        }
     });
 
 });

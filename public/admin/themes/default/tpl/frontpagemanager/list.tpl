@@ -32,7 +32,7 @@
                 </li>
                 <li class="separator"></li>
                 <li>
-                    <a href="#" id="multiple_delete">
+                    <a href="#" id="button_multiple_delete">
                         <img src="{$params.IMAGE_DIR}/article_add.png" title="" alt="" /><br>
                         {t}Drop selected{/t}
                     </a>
