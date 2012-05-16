@@ -24,7 +24,13 @@
         <div class="wrapper-content">
             <div class="title"><h2>{t}Frontpage Manager{/t} :: {if $category eq 0}{t}HOME{/t}{else}{$datos_cat[0]->title}{/if}</h2></div>
             <ul class="old-button">
-
+                <li>
+                    <a href="article.php?action=new&category={$category}" class="admin_add" title="{t}New article{/t}">
+                        <img src="{$params.IMAGE_DIR}/article_add.png" title="" alt="" />
+                        <br />{t}New article{/t}
+                    </a>
+                </li>
+                <li class="separator"></li>
                 {if $category!='home'}
                 <li>
                     <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'm_inhome_status', 2);" name="submit_mult" value="Frontpage" title="Sugerir Home">
@@ -32,23 +38,15 @@
                     </a>
                 </li>
                 {/if}
-                <!-- <li>
-                    <a title="More actions" id="button_moreactions">
-                        <img border="0" src="{$params.IMAGE_DIR}home_no50.png" title="{t}No home{/t}" alt="More actions" ><br />{t}More actions{/t}
-                    </a>
-                </li>
-                <li class="separator"></li> -->
+
+                <li class="separator"></li>
+
                 <li>
                      <a href="#" data-category="{$category}" id="button_clearcache">
                          <img border="0" src="{$params.IMAGE_DIR}clearcache.png" title="{t}Clean cache{/t}" alt="" /><br />{t}Clean cache{/t}
                      </a>
                 </li>
-                <li style="display:none">
-                    <button type="button" style="cursor:pointer; background-color: #e1e3e5; border: 0px; width: 95px;" onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
-                        <img id="select_button" class="icon" status="0" src="{$params.IMAGE_DIR}select_button.png" title="{t}Select all{/t}" alt="{t}Select all{/t}"  status="0">
-                    </button>
-                </li>
-                <li class="separator"></li>
+
                 <li>
                     <a href="#" id="button_previewfrontpage" title="{t}Preview frontpage with actual content positions{/t}">
                         <img border="0" src="{$params.IMAGE_DIR}preview.png" title="{t}Preview{/t}" alt="{t}Preview{/t}" ><br />{t}Preview{/t}

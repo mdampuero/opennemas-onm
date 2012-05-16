@@ -1103,7 +1103,7 @@ if (isset($_REQUEST['action']) ) {
 
             list($articles, $pager) = $cm->find_pages(
                 'Article',
-                'contents.available=1 '. $sqlExcludedOpinions, 'ORDER BY created DESC ', $page, 5, $category
+                'contents.available=1 '. $sqlExcludedOpinions, 'ORDER BY created DESC ', $page, 10, $category
             );
 
             $tpl->assign(array(
