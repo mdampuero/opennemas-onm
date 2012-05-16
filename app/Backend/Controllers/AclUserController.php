@@ -38,7 +38,7 @@ class AclUserController extends Controller
      *
      * @return void
      **/
-    public function defaultAction()
+    public function listAction()
     {
         \Acl::checkOrForward('USER_ADMIN');
 
