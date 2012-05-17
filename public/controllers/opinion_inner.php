@@ -55,7 +55,7 @@ switch ($action) {
 
         if (($opinion->available == 1) && ($opinion->in_litter == 0)){
 
-            if( ($tpl->caching == 0) || !$tpl->isCached('opinion.tpl', $cache_id) ) {
+            if( ($tpl->caching == 0) || !$tpl->isCached('opinion.tpl', $cacheID) ) {
 
                 // Please SACAR esta broza de aqui {
                 $str = new StringUtils();
