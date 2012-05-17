@@ -133,7 +133,11 @@ switch ($action) {
                     );
 
                 } else {
-                    $message = "Su comentario no ha sido guardado.\nParece que está no conectado a Facebook.";
+                    if (preg_match('@territoris@', $_SERVER['SERVER_NAME'])) {
+                        $message = "El seu comentari no ha estat guardat.\nSembla que està no connectat a Facebook.";
+                    } else {
+                        $message = "Su comentario no ha sido guardado.\nParece que está no conectado a Facebook.";
+                    }
                 }
             }
 
@@ -146,17 +150,28 @@ switch ($action) {
             $data = array_map('strip_tags', $data);
 
             if ($comment->hasBadWorsComment($data)) {
-                $message = "Su comentario fue rechazado debido al uso de palabras malsonantes.";
+                if (preg_match('@territoris@', $_SERVER['SERVER_NAME'])) {
+                    $message = "El seu comentari va ser rebutjat per l'ús de paraules malsonants.";
+                } else {
+                    $message = "Su comentario fue rechazado debido al uso de palabras malsonantes.";
+                }
             } else {
                 $ip = Application::getRealIP();
                 if ($comment->create( array( 'id' => $_POST['id'], 'data' => $data, 'ip' => $ip) ) ) {
-                    $message = "Su comentario ha sido guardado y está pendiente de publicación.";
+                    if (preg_match('@territoris@', $_SERVER['SERVER_NAME'])) {
+                        $message = "El seu comentari ha estat emmagatzemat i està pendent de publicar-se.";
+                    } else {
+                        $message = "Su comentario ha sido guardado y está pendiente de publicación.";
+                    }
                 }
             }
 
         } else {
-            $message = "Su comentario no ha sido guardado.\nAsegúrese de cumplimentar correctamente todos los campos.";
-            die();
+            if (preg_match('@territoris@', $_SERVER['SERVER_NAME'])) {
+                $message = "El seu comentari no ha estat guardat.\nAssegureu-vos emplenar correctament tots els camps";
+            } else {
+                $message = "Su comentario no ha sido guardado.\nAsegúrese de cumplimentar correctamente todos los campos.";
+            }
         }
         $response = new Response($message, 200);
         $response->send();
