@@ -14,42 +14,6 @@ function clearcache(category) {
 	});
 }
 
-///////////////////////////////////////////////////////////////////////////
-//REVISAR: SE usa???
-function isflash(name) {
-//ojo ruta:
-	var posic=name.lastIndexOf('.');
-	var extension= name.substring(posic);
-
-	if (extension =='.swf')
-	   return true;
-	else
-	   return false;
-}
-
-//Checkea el nombre de una imag expresion tipo: 20080512Cervantes.jpg
-
-function isNameOk(name) {
- //ojo con la ruta:
-	var posic=name.lastIndexOf('/');
-	posic=posic+1; //Para que coja la barra /
-	var nombre= name.substring(posic);
-	var filter=/^[0-9A-Za-z_]+\.[A-Za-z][A-Za-z][A-Za-z]$/;
-
-	if (filter.test(nombre))
-	   return true;
-	else
-	   return false;
-}
-
-///////////////////////////////////////////////////////////////////////////////////////
-//REVISAR: SE usa???
-function show_iframe(){
-
-	$('overlay').setAttribute('style','visibility:visible;');
-	$('black').setAttribute('style','visibility:visible;');
-	$('iframecont').setAttribute('style','visibility:visible;');
-}
 
 //////////////////////////// CUADROS IMAGEN Y VIDEO //////////////////////////////////////////////////////////
 
@@ -90,53 +54,6 @@ function  get_others_articles(category,page){
                    containment:['des','even','odd','hole1','hole2','hole3','hole4', 'art']
                 });
 
-        }
-    } );
-}
-function  change_style_link(link) {
- var Nodes=$('down_menu').select('a');
-    for (i = 0; i < Nodes.length; i++) {
-        Nodes[i].setAttribute('style','cursor:pointer;background-color:#F2F2F2;color:#999999;float:left;margin-left:0;margin-right:6px;padding:5px 8px;text-decoration:none;');
-    }
- $(link).setAttribute('style',"cursor:pointer;color:#000000; font-weight:bold; background-color:#BFD9BF");
-
-}
-
-function  reload_div_menu(category){
-
-    new Ajax.Updater('menu_front_category', "article.php?action=reload_menu&category="+category,
-    {
-          evalScripts: true
-    });//
-}
-
- //Paginacion otras portadas.
-function  get_frontpage_articles(category)
-{
-    new Ajax.Updater('frontpages', "article.php?action=get_frontpage_articles&category="+category,
-    {
-        evalScripts: true,
-        onLoaded : $('frontpages').update('<h2> Cargando ...</h2>'),
-        onComplete: function() {
-            make_sortable_divs_portadas('home');
-          /*  Sortable.create( 'left' ,{
-                tag:'table',
-                only:'tabla',
-                dropOnEmpty: true,
-                containment:['des','even','odd','art2','hole1','hole2','hole3','hole4']
-                });
-            Sortable.create( 'right' ,{
-                tag:'table',
-                only:'tabla',
-                dropOnEmpty: true,
-                containment:['des','even','odd','art2','hole1','hole2','hole3','hole4']
-                }); */
-            Sortable.create( 'top' ,{
-                tag:'table',
-                only:'tabla',
-                dropOnEmpty: true,
-                containment:['des','even','odd','art2','hole1','hole2','hole3','hole4']
-                });
         }
     } );
 }
