@@ -29,19 +29,18 @@
             <div class="title"><h2>{t}Frontpage Manager{/t} :: {if $category eq 0}{t}HOME{/t}{else}{$datos_cat[0]->title}{/if}</h2></div>
             <ul class="old-button">
                 <li>
-                    <a href="article.php?action=new&category={$category}" class="admin_add" title="{t}New article{/t}">
+                    <a href="/admin/article.php?action=new&amp;category={$category}" class="admin_add" title="{t}New article{/t}">
                         <img src="{$params.IMAGE_DIR}/article_add.png" title="" alt="" />
                         <br />{t}New article{/t}
                     </a>
                 </li>
                 <li class="separator"></li>
-                {if $category!='home'}
                 <li>
-                    <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'm_inhome_status', 2);" name="submit_mult" value="Frontpage" title="Sugerir Home">
-                        <img border="0" src="{$params.IMAGE_DIR}gosuggest50.png" title="{t}Suggest to home{/t}" alt="{t}Suggest to home{/t}" ><br />{t}Suggest to home{/t}
+                    <a href="#" id="button_multiple_delete">
+                        <img src="{$params.IMAGE_DIR}/article_add.png" title="" alt="" /><br>
+                        {t}Drop selected{/t}
                     </a>
                 </li>
-                {/if}
 
                 <li class="separator"></li>
 
@@ -139,4 +138,5 @@
 {include file="frontpagemanager/modals/_modal_send_to_trash.tpl"}
 {include file="frontpagemanager/modals/_modal_archive.tpl"}
 {include file="frontpagemanager/modals/_modal_suggest_to_frontpage.tpl"}
+{include file="frontpagemanager/modals/_modal_drop_selected.tpl"}
 {/block}

@@ -119,6 +119,7 @@ jQuery('#created').datetimepicker({
                     <legend>Basic information</legend>
                     <div style="display:inline-block; width:80%">
                         <label for="title">{t}Title{/t}</label>
+
                         <input type="text" id="title" name="title" title="Título de la noticia" onkeyup="countWords(this,document.getElementById('counter_title'))" value="{$letter->title|clearslash|escape:"html"}" class="required" style="width:97%" />
                     </div><!-- / -->
                     {acl isAllowed="LETTER_AVAILABLE"}

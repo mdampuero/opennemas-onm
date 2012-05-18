@@ -7,7 +7,6 @@
     {script_tag src="/onm/jquery.datepicker.js"}
     {script_tag src="/utilsarticle.js"}
     {script_tag src="/jquery-onm/jquery.article.js"}
-    {script_tag src="/editables.js"}
     {script_tag src="/utilsGallery.js"}
     {script_tag src="/swfobject.js"}
 
@@ -30,15 +29,11 @@
 {block name="footer-js" append}
     {script_tag src="/onm/jquery.content-provider.js"}
     {script_tag src="/jquery-onm/jquery.articlerelated.js"}
+    {script_tag src="/jquery-onm/jquery.inputlength.js"}
     <script>
-    document.observe('dom:loaded', function() {
-        if($('title')){
-            new OpenNeMas.Maxlength($('title'), {});
-            $('title').focus(); // Set focus first element
-        }
-    });
     jQuery(document).ready(function($){
         $('#article-form').tabs();
+        $('#title, #title_int, #subtitle').inputLengthControl();
     });
 
     </script>
@@ -69,14 +64,14 @@
 
             <ul>
                 <li>
-                    <a href="#edicion-contenido">{t}Article content{/t}</a>
+                    <a href="#edicion-contenido">{t}Content{/t}</a>
                 </li>
                 <li>
-                    <a href="#edicion-extra">{t}Article parameters{/t}</a>
+                    <a href="#edicion-extra">{t}Parameters{/t}</a>
                 </li>
                 {is_module_activated name="AVANCED_ARTICLE_MANAGER"}
                 <li>
-                    <a id="avanced-custom-button" href="#avanced-custom">{t}Article customize{/t}</a>
+                    <a id="avanced-custom-button" href="#avanced-custom">{t}Customize{/t}</a>
                 </li>
                 {/is_module_activated}
                 {is_module_activated name="COMMENT_MANAGER"}
@@ -99,16 +94,13 @@
                         <tr>
                             <td style="width:75%; vertical-align:top; padding:4px 0;" >
                                 <label for="title">{t}Frontpage title:{/t}</label>
-                                <input type="text" id="title" name="title"
-                                       title="{t}Title for this new in frontpage{/t}" style="width:100%"
+                                <div class="input-append"  id="title">
+                                    <input type="text" name="title" style="width:90%"
                                        value="{$article->title|clearslash|escape:"html"|default:""}"
-                                       class="required" maxlength="256"
-                                       onChange="countWords(this,document.getElementById('counter_title'));"
-                                       onkeyup="countWords(this,document.getElementById('counter_title'))"
-                                       {if is_object($article)}
-                                       onChange="search_related('{$article->pk_article}',$('metadata').value);"
-                                       {/if}
+                                       class="required span-10" maxlength="256"
                                        tabindex="1"/>
+                                    <span class="add-on"></span>
+                                </div>
                             </td>
                             <td style="width:20%; text-align:right;"  rowspan="5">
                                 <div class="utilities-conf" style="width:99%;">
@@ -158,57 +150,19 @@
                                             <input type="hidden" id="in_home" name="in_home"  value="{$article->in_home}" />
                                         {/if}
                                     </div>
-
-                                    <div style="text-align:right">
-                                        <h3>{t}Statistics{/t}</h3>
-                                        <div>
-                                            {t}Frontpage title:{/t}
-                                            <input type="text" id="counter_title" name="counter_title" disabled=disabled
-                                                   value="0" onkeyup="countWords(document.getElementById('title'),this)"/> {t}words{/t}
-                                        </div><!-- / -->
-                                        <div>
-                                            {t}Inner title{/t}
-                                            <input type="text" id="counter_title_int" name="counter_title_int" disabled=disabled
-                                                    value="0" onkeyup="countWords(document.getElementById('title_int'),this)"/> {t}words{/t}
-                                        </div><!-- / -->
-                                        <div>
-                                            {t}Pretitle:{/t}
-                                            <input type="text" id="counter_subtitle" name="counter_subtitle" disabled=disabled
-                                                    value="0" onkeyup="countWords(document.getElementById('subtitle'),this)"/> {t}words{/t}
-                                        </div><!-- / -->
-                                        <div>
-                                            {t}Summary:{/t}
-                                            <input type="text" id="counter_summary" name="counter_summary" disabled=disabled
-                                                    value="0"
-                                                    onChange="countWords(document.getElementById('summary'),this)"
-                                                    onkeyup="countWords(document.getElementById('summary'),this)"/> {t}words{/t}
-                                        </div><!-- / -->
-                                        <div>
-                                            {t}Body:{/t}
-                                            <input type="text" id="counter_body" name="counter_body" disabled=disabled
-                                                    value="0" size="3" onChange="counttiny(document.getElementById('counter_body'));" onkeyup="counttiny(document.getElementById('counter_body'));"/> {t}words{/t}
-                                        </div><!-- / -->
-                                    </div><!-- / -->
-                                    <script>
-                                    document.observe("dom:loaded", function() {
-                                        countWords(document.getElementById('title'), document.getElementById('counter_title'));
-                                        countWords(document.getElementById('subtitle'), document.getElementById('counter_subtitle'));
-                                        countWords(document.getElementById('summary'), document.getElementById('counter_summary'));
-                                        countWords(document.getElementById('body'), document.getElementById('counter_body'));
-                                    });
-                                    </script>
                                 </div>
                             </td>
                         </tr>
                         <tr>
                             <td style="vertical-align:top; padding:4px 0;">
                                 <label for="title_int">{t}Inner title:{/t}</label>
-                                <input 	type="text" id="title_int" name="title_int" title="{t}Inner title:{/t}"
-                                        value="{$article->title_int|clearslash|escape:"html"}" class="required" style="width:100%"
+                                <div class="input-append"  id="title_int_input">
+                                    <input type="text" name="title_int" id="title_int_input" style="width:90%"
+                                        value="{$article->title_int|clearslash|escape:"html"}" class="required"
                                         maxlength="256"
-                                        onChange="countWords(this,document.getElementById('counter_title_int'));get_tags(this.value);"
-                                        onkeyup="countWords(this,document.getElementById('counter_title_int'))"
                                         tabindex="2"/>
+                                    <span class="add-on"></span>
+                                </div>
 
                                 <script>
                                 $('title').observe('blur', function(evt) {
@@ -241,7 +195,7 @@
                                         {/section}
                                     </select>
                                 </div><!-- / -->
-                                <div style="display:inline-block; width:69%; vertical-align:top;">
+                                <div style="display:inline-block; width:30%; vertical-align:top;">
                                 <label for="agency">{t}Agency{/t}</label>
                                     <input  type="text" id="agency" name="agency" title="{t}Agency{/t}"
                                             style="width:100%" tabindex="4"
@@ -254,7 +208,7 @@
                                     />
                                 </div><!-- / -->
                                 {is_module_activated name="AVANCED_ARTICLE_MANAGER"}
-                                <div style="display:inline-block; width:69%; vertical-align:top;">
+                                <div style="display:inline-block; width:30%; vertical-align:top;">
                                    <label>{t}Agency in Bulletin{/t}</label>
                                     <input 	type="text" id="agencyWeb" name="params[agencyBulletin]" title="{t}Agency{/t}"
                                     style="width:98%" tabindex="5"
@@ -270,8 +224,12 @@
                         <tr>
                             <td >
                                 <label for="subtitle">{t}Pretitle{/t}</label>
-                                <input type="text" id="subtitle" name="subtitle" title="antetítulo" style="width:100%"
-                                        value="{$article->subtitle|upper|clearslash|escape:"html"}" onChange="countWords(this,document.getElementById('counter_subtitle'))" onkeyup="countWords(this,document.getElementById('counter_subtitle'))" tabindex="5"/>
+                                <div class="input-append"  id="subtitle">
+                                    <input type="text" name="subtitle" style="width:90%"
+                                        value="{$article->subtitle|upper|clearslash|escape:"html"}"
+                                        tabindex="5"/>
+                                    <span class="add-on"></span>
+                                </div>
                             </td>
                         </tr>
                         <tr>
@@ -298,9 +256,7 @@
                                         </a>
                                     {/if}
                                 </label>
-                                <textarea tabindex="6" name="summary" id="summary" title="Resumen de la noticia" style="width:100%; min-height:70px;"
-                                          onChange="countWords(this,document.getElementById('counter_summary'))"
-                                          onkeyup="countWords(this,document.getElementById('counter_summary'))">{$article->summary|clearslash|escape:"html"}
+                                <textarea tabindex="6" name="summary" id="summary" title="Resumen de la noticia" style="width:100%; min-height:70px;">{$article->summary|clearslash|escape:"html"}
                                 </textarea>
                             </td>
                         </tr>
@@ -404,22 +360,10 @@
             <input type="hidden" id="relatedHome" name="relatedHome" value="" />
             <input type="hidden" id="withGalleryHome" name="params[withGalleryHome]" value="" />
         </div>
-
-        <div id="reloadPreview" style="display: none; background-color: #FFE9AF; color: #666; border: 1px solid #996699; padding: 10px; font-size: 1.1em; font-weight: bold; width: 550px; position: absolute; right: 0; top: 0;">
-            <img src="{$params.IMAGE_DIR}loading.gif"  />
-            <span id="reloadPreviewText"></span>
-        </div>
-        <div id="savePreview" style="display: none; background-color: #FFE9AF; color: #666; border: 1px solid #996699; padding: 10px; font-size: 1.1em; font-weight: bold; width: 550px; position: absolute; right: 0; top: 0;">
-            <img src="{$params.IMAGE_DIR}btn_filesave.png"  />
-            <span id="savePreviewText"></span>
-        </div>
             <input type="hidden" id="action" name="action" value="" />
             <input type="hidden" name="id" id="id" value="{$article->id|default:""}" />
         </div>
     </div>
 </form>
-<script type="text/javascript">
-
-</script>
 
 {/block}

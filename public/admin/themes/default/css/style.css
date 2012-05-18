@@ -204,7 +204,7 @@ input.button  { cursor: pointer; }
 #content{ margin-top: 52px;width:100% }
 
 input[readonly="readonly"] { background:#eee !important; }
-input[type='text'], input[type='file'], input[type='password'], textarea {  background:White; border: 1px solid #B5B8C8; color:#555; padding:5px; vertical-align:middle; border-radius:2px; }
+input[type='text'], input[type='file'], input[type='password'], textarea {  background:White; border: 1px solid #B5B8C8; color:#555; vertical-align:middle; border-radius:2px; }
 input[type='text']:focus, input[type='file']:focus, input[type='password']:focus, textarea:focus,select:fofus { box-shadow: 0 1px 3px rgba(0,0,0, 0.2) inset; border-color:#3079ED; }
 
 label {padding: 1px 3px 1px 0px;}
@@ -1092,24 +1092,25 @@ ul#menu.manager a { color:White !important; }
   padding:4px 0;
 }
 
-  #menu-acciones-admin ul, .old-button {
+  #menu-acciones-admin > ul, .old-button {
     list-style: none;
     margin: 0 5px;
     padding: 0px;
   }
 
-    #menu-acciones-admin ul li ,
-    .old-button li {
+    #menu-acciones-admin > ul li ,
+    .old-button > li {
       padding-left: 0px;
       padding-right: 0px;
       float: right;
       text-align: center;
       white-space: nowrap;
+      position:relative;
     }
 
-      #menu-acciones-admin ul li a,
-      .old-button li a ,
-      .old-button li button {
+      #menu-acciones-admin > ul li a,
+      .old-button > li a ,
+      .old-button > li button {
         display: block;
         padding: 2px 4px;
         text-decoration: none;
@@ -1127,9 +1128,19 @@ ul#menu.manager a { color:White !important; }
         }
 
 
-        .old-button li a img,
-        .old-button li a button {
+        .old-button > li a img,
+        .old-button > li a button {
           height:35px !important;
+        }
+        .old-button ul {
+          display:none;
+          position:absolute;
+          top:99%;
+          left:0;
+        }
+
+        .old-button li:hover ul {
+          display:block;
         }
 
         #menu-acciones-admin ul li a:hover,

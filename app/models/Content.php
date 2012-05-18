@@ -539,6 +539,24 @@ class Content
         $GLOBALS['application']->dispatch('onAfterAvailable', $this);
     }
 
+    /**
+     * Returns the availability state of a content
+     *
+     * @return string the state of the content
+     **/
+    public function getStatus()
+    {
+        if ($this->in_litter == 1) {
+            $state = 'trashed';
+        } elseif ($this->available == 0) {
+            $state = 'draft';
+        } elseif($this->content_status == 1 && $this->available == 1) {
+            $state = 'available';
+        }
+
+        return $state;
+    }
+
 
     /**
      * Sets the available status for this content.
@@ -834,6 +852,26 @@ class Content
         $this->permalink = '';//$this->uri;
         if(!empty($this->params) && is_string($this->params))
             $this->params = unserialize($this->params);
+    }
+
+    /**
+     * Returns the scheduling state
+     *
+     * @return string the scheduling state
+     **/
+    public function getSchedulingState()
+    {
+        if ($this->isScheduled) {
+            if ($this->isInTime()) {
+                return 'in-time';
+            } elseif($this->isDued()) {
+                return 'dued';
+            } elseif($this->isPostponed()) {
+                return 'postponed';
+            }
+        } else {
+            return 'not-scheduled';
+        }
     }
 
     /**
