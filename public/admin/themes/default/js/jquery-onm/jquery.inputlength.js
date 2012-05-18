@@ -32,12 +32,13 @@
                     var $element = $(this),
                         element = this,
                         settings = $(this).data('inputLengthControl'),
-                        length = $element.val().length;
+                        length = $element.find(settings.input).val().length;
 
                     for (var i = 0; i < settings.ranges.length; i++) {
 
                         if (length >= settings.ranges[i].min && length <= settings.ranges[i].max) {
-                            $element.css( 'background-color', settings.ranges[i].class);
+                            $element.find(settings.infobox).css( 'color', settings.ranges[i].class)
+                                .text(length);
                         };
                     };
                 });
@@ -56,10 +57,12 @@
     $.fn.inputLengthControl.defaults = {
         ranges: [
             {'min': 0, 'max': 19, 'class': ''},
-            {'min': 20, 'max': 34, 'class': '#EEFFEE'},
-            {'min': 35, 'max': 79, 'class': '#FFEE99'},
-            {'min': 80, 'max': 149, 'class': '#FFCCCC'},
-            {'min': 150, 'max': 250, 'class': '#AA0000'},
-        ]
+            {'min': 20, 'max': 34, 'class': '#A8A400'},
+            {'min': 35, 'max': 79, 'class': '#A8A432'},
+            {'min': 80, 'max': 149, 'class': '#AB4700'},
+            {'min': 150, 'max': 250, 'class': '#AB0B00'},
+        ],
+        input: 'input',
+        infobox: '.add-on',
     };
 })(jQuery);
