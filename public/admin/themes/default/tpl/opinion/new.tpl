@@ -20,6 +20,7 @@
 {script_tag src="/utilsopinion.js"}
 {script_tag src="/photos.js"}
 {script_tag src="/tiny_mce/opennemas-config.js"}
+{script_tag src="/jquery-onm/jquery.inputlength.js"}
 <script type="text/javascript">
     countWords(
                document.getElementById('title'),
@@ -48,13 +49,10 @@
     OpenNeMas.tinyMceConfig.advanced.elements = "body";
     tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
 
-    document.observe('dom:loaded', function() {
-        if($('title')){
-            new OpenNeMas.Maxlength($('title'), { });
-        }
-    });
+
     jQuery(document).ready(function ($){
         $('#opinion-form').tabs();
+        $('#title').inputLengthControl();
     });
 </script>
 {/block}

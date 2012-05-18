@@ -7,7 +7,6 @@
     {script_tag src="/onm/jquery.datepicker.js"}
     {script_tag src="/utilsarticle.js"}
     {script_tag src="/jquery-onm/jquery.article.js"}
-    {script_tag src="/editables.js"}
     {script_tag src="/utilsGallery.js"}
     {script_tag src="/swfobject.js"}
 
@@ -30,15 +29,11 @@
 {block name="footer-js" append}
     {script_tag src="/onm/jquery.content-provider.js"}
     {script_tag src="/jquery-onm/jquery.articlerelated.js"}
+    {script_tag src="/jquery-onm/jquery.inputlength.js"}
     <script>
-    document.observe('dom:loaded', function() {
-        if($('title')){
-            new OpenNeMas.Maxlength($('title'), {});
-            $('title').focus(); // Set focus first element
-        }
-    });
     jQuery(document).ready(function($){
         $('#article-form').tabs();
+        $('#title').inputLengthControl();
     });
 
     </script>
@@ -403,15 +398,6 @@
 
             <input type="hidden" id="relatedHome" name="relatedHome" value="" />
             <input type="hidden" id="withGalleryHome" name="params[withGalleryHome]" value="" />
-        </div>
-
-        <div id="reloadPreview" style="display: none; background-color: #FFE9AF; color: #666; border: 1px solid #996699; padding: 10px; font-size: 1.1em; font-weight: bold; width: 550px; position: absolute; right: 0; top: 0;">
-            <img src="{$params.IMAGE_DIR}loading.gif"  />
-            <span id="reloadPreviewText"></span>
-        </div>
-        <div id="savePreview" style="display: none; background-color: #FFE9AF; color: #666; border: 1px solid #996699; padding: 10px; font-size: 1.1em; font-weight: bold; width: 550px; position: absolute; right: 0; top: 0;">
-            <img src="{$params.IMAGE_DIR}btn_filesave.png"  />
-            <span id="savePreviewText"></span>
         </div>
             <input type="hidden" id="action" name="action" value="" />
             <input type="hidden" name="id" id="id" value="{$article->id|default:""}" />
