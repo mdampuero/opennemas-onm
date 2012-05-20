@@ -148,11 +148,13 @@ class AclUserController extends Controller
                 if ($action == 'validate') {
                     return $this->redirect(url('admin_acl_user_show', array('id' => $user->id)));
                 }
+
                 return $this->redirect(url('admin_acl_user'));
             } else {
                 $this->view->assign('errors', $user->errors);
             }
         }
+
         return $this->render('acl/user/new.tpl');
     }
 
@@ -196,6 +198,7 @@ class AclUserController extends Controller
         } else {
             m::add(_('You haven\'t selected any user to delete.'), m::ERROR);
         }
+
         return $this->redirect(url('admin_acl_user'));
     }
 

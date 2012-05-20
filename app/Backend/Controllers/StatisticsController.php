@@ -115,6 +115,7 @@ class StatisticsController extends Controller
             \StringUtils :: disabled_magic_quotes($items);
             $output = \Dashboard::votedTable($items, $title);
         }
+
         return $output;
     }
 

@@ -185,6 +185,7 @@ class CacheManagerController extends Controller
     public function deleteAllAction()
     {
         $this->frontpageTemplate->clearAllCache();
+
         return $this->redirect(url('admin_tpl_manager'));
     }
 

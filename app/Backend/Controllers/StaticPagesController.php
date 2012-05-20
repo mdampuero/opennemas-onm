@@ -83,6 +83,7 @@ class StaticPagesController extends Controller
             ));
         } else {
             m::add(sprintf(_('Static page with id "%d" doesn\'t exists.'), $id), m::ERROR);
+
             return $this->redirect($this->generateUrl('admin_staticpages'));
         }
     }

@@ -131,6 +131,7 @@ class TrashController extends Controller
                 }
             }
         }
+
         return $this->redirect(url(
             'admin_trash',
             array('mytype' => $this->filterContentType, 'page' => $this->page)

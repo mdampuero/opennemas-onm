@@ -170,6 +170,7 @@ class KeywordsController extends Controller
         $content = json_decode($HTTP_RAW_POST_DATA)->content;
         if(!empty($content)) {
             $terms = $pclave->getList();
+
             return $pclave->replaceTerms($content, $terms);
         }
     }

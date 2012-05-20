@@ -45,6 +45,7 @@ class CommentsDisqusController extends Controller
         if (is_null(s::get('disqus_shortname')) && $action != 'config'
         ) {
             m::add(_('Please provide your Disqus configuration to start to use your Disqus Comments module'));
+
             return $this->redirect(url('admin_comments_disqus_config'));
         }
     }
@@ -89,6 +90,7 @@ class CommentsDisqusController extends Controller
             } else {
                 m::add(_('There was an error while saving the Disqus module configuration'), m::ERROR);
             }
+
             return $this->redirect(url('admin_comments_disqus_config'));
         }
     }

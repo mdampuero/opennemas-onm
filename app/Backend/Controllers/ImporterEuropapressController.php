@@ -47,6 +47,7 @@ class ImporterEuropapressController extends Controller
 
         if (is_null(s::get('europapress_server_auth'))) {
             m::add(_('Please provide your Europapress auth credentials to start to use your Europapress Importer module'));
+
             return $this->redirect(url('admin_import_europapress'));
         }
 
@@ -157,9 +158,11 @@ class ImporterEuropapressController extends Controller
 
             $httpParams []= array( 'id' => $newArticleID,
                                   'action' => 'read');
+
             return $this->redirect(SITE_URL_ADMIN.'/article.php' . '?'.\StringUtils::toHttpParams($httpParams));
         } else {
             m::add(sprintf('Unable to import the file "%s"',$id));
+
             return $this->redirect(url('admin_importer_europapress'));
         }
     }

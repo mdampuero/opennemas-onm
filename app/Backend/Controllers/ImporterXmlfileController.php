@@ -38,6 +38,7 @@ class ImporterXmlfileController extends Controller
             && $action != 'config'
         ) {
             m::add(_('Please provide XML file schema'));
+
             return $this->redirect($this->generateUrl('admin_importer_xmlfile_config'));
         }
     }
@@ -61,6 +62,7 @@ class ImporterXmlfileController extends Controller
     {
         if ('POST' != $this->request->getMethod()) {
             m::add(_('Form was sent in the wrong way.'));
+
             return $this->redirect($this->generateUrl('admin_importer_xmlfile'));
         }
 
@@ -210,6 +212,7 @@ class ImporterXmlfileController extends Controller
                 ));
 
             }
+
             return $this->render('agency_importer/xml-file/config.tpl');
         }
     }

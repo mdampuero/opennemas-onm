@@ -34,6 +34,7 @@ class AclPrivilegesController extends Controller
 
         if(!\Acl::isMaster()) {
             m::add("You don't have permissions");
+
             return $this->redirect(url('admin_welcome'));
         }
 

@@ -171,11 +171,9 @@ class SearchController extends Controller
     private function _paginateLink($Pager, $szSearchString, $arrayCheckedTypes)
     {
         $szPages=null;
-        if($Pager->_totalPages>1)
-        {
+        if($Pager->_totalPages>1) {
             $szPages = '<p align="center">';
-            if ($Pager->_currentPage != 1)
-            {
+            if ($Pager->_currentPage != 1) {
                 $szPages .= '<a style="cursor:pointer;" href="#" onclick="paginate_search(\'search_paging\', 1, \''.
                             $szSearchString.'\', \'';
                 foreach($arrayCheckedTypes as $itemType)
@@ -183,10 +181,8 @@ class SearchController extends Controller
                 $szPages .= '\'); return false;">Primera</a> ... | ';
             }
 
-            for($iIndex=$Pager->_currentPage-1; $iIndex<=$Pager->_currentPage+1 && $iIndex <= $Pager->_totalPages;$iIndex++)
-            {
-                if($Pager->_currentPage == 1)
-                {
+            for($iIndex=$Pager->_currentPage-1; $iIndex<=$Pager->_currentPage+1 && $iIndex <= $Pager->_totalPages;$iIndex++) {
+                if($Pager->_currentPage == 1) {
                     if(($iIndex+1) > $Pager->_totalPages)
                         break;
                     $szPages .= '<a style="cursor:pointer;" href="#" onclick="paginate_search(\'search_paging\',' .
@@ -199,9 +195,7 @@ class SearchController extends Controller
                         $szPages .= '<b>' . ($iIndex+1) . '</b></a> | ';
                     else
                         $szPages .= ($iIndex+1) . '</a> | ';
-                }
-                else
-                {
+                } else {
                     $szPages .= '<a style="cursor:pointer;" href="#" onclick="paginate_search(\'search_paging\',' .
                                 $iIndex . ', \''. $szSearchString.'\', \'';
                     foreach($arrayCheckedTypes as $itemType)
@@ -214,8 +208,7 @@ class SearchController extends Controller
                         $szPages .= $iIndex . '</a> | ';
                 }
             }
-            if($Pager->_currentPage != $Pager->_lastPageText)
-            {
+            if($Pager->_currentPage != $Pager->_lastPageText) {
                 $szPages .= '... <a style="cursor:pointer;" href="#" onclick="paginate_search(\'search_paging\',' .
                                 $Pager->_lastPageText . ', \''. $szSearchString.'\', \'';
                 foreach($arrayCheckedTypes as $itemType)
@@ -224,6 +217,7 @@ class SearchController extends Controller
             }
             $szPages .= "</p> ";
         }
+
         return $szPages;
     }
 

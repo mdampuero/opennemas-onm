@@ -124,6 +124,7 @@ class ImporterEfeController extends Controller
             m::add(sprintf(_('ID "%d" doesn\'t exist'),$id));
 
             $page = $this->request->query->filter('page', 0, FILTER_VALIDATE_INT);
+
             return $this->redirect($this->generateUrl('admin_importer_efe',array('page' => $page)));
         }
 
@@ -146,17 +147,20 @@ class ImporterEfeController extends Controller
 
         if (empty($id)) {
             m::add(_('Please specify the article to import.'), m::ERROR);
+
             return $this->redirect($this->generateUrl('admin_importer_efe'));
         }
 
         if (empty($category)) {
             m::add(_('Please assign the category where import this article'), m::ERROR);
+
             return $this->redirect($this->generateUrl('admin_importer_efe_pickcategory', array('id' => $id)));
         }
 
         $categoryInstance = new \ContentCategory($category);
         if (!is_object($categoryInstance)) {
             m::add(_('The category you have chosen doesn\'t exists.'), m::ERROR);
+
             return $this->redirect($this->generateUrl('admin_importer_efe_pickcategory', array('id' => $id)));
         }
 
@@ -166,6 +170,7 @@ class ImporterEfeController extends Controller
             $element = $efe->findByFileName($id);
         } catch (\Exception $e) {
             m::add(_('Please specify the article to import.'), m::ERROR);
+
             return $this->redirect($this->generateUrl('admin_importer_efe'));
         }
 
@@ -266,6 +271,7 @@ class ImporterEfeController extends Controller
         // TODO: change this redirection when creating the ported article controller
         if(!empty($newArticleID)) {
             $httpParams []= array( 'id' => $newArticleID, 'action' => 'read');
+
             return $this->redirect(SITE_URL_ADMIN.'/article.php' . '?'.\StringUtils::toHttpParams($httpParams));
         }
     }
@@ -331,6 +337,7 @@ class ImporterEfeController extends Controller
         } else {
             $response = new Response('Image not found', 404);
         }
+
         return $response;
     }
 
@@ -416,6 +423,7 @@ class ImporterEfeController extends Controller
         unset($_SESSION['error']);
 
         $page = $this->request->query->filter('page', null, FILTER_VALIDATE_INT);
+
         return $this->redirect($this->generateUrl('admin_importer_efe',array('page' => $page)));
     }
 
