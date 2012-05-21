@@ -50,12 +50,14 @@ class Cron
             && in_array('\Onm\Component\Cron\Plugin\PluginInterface',  class_implements($plugin))
         ) {
             $this->_registeredPlugins []= $plugin;
+
             return true;
         } elseif (is_string($plugin)) {
             // if the parameter plugin is an string and its the class name of an
             // available plugin register it.
             return true;
         }
+
         return false;
     }
 
@@ -72,6 +74,7 @@ class Cron
                 $loaded &= $this->registerPlugin($plugin);
             }
         }
+
         return $loaded;
     }
 

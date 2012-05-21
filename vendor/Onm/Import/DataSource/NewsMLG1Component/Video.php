@@ -38,21 +38,25 @@
 
             case 'id':
                 $attributes = $this->getData()->attributes();
+
                 return (string)$attributes->Euid;
                 break;
 
             case 'title':
                 $content = $this->getData()->NewsComponent->ContentItem->DataContent->xpath('//body.content');
+
                 return (string)$content[1]->p;
                 break;
 
             case 'file_type':
                 $fileType = $this->getData()->NewsComponent->ContentItem->MimeType->attributes()->FormalName;
+
                 return (string)$fileType;
                 break;
 
             case 'file_path':
                 $fileType = $this->getData()->NewsComponent->ContentItem->attributes()->Href;
+
                 return (string)$fileType;
                 break;
 

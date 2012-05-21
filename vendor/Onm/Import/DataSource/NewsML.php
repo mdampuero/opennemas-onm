@@ -33,7 +33,7 @@ class NewsMLG1 {
 
 
     private $data = null;
-    
+
     static private $priorityMap = array(
         '10'  => 4,
         '20' => 3,
@@ -59,6 +59,7 @@ class NewsMLG1 {
         {
             self::$instance = new self($config);
         }
+
         return self::$instance;
 
     }
@@ -111,7 +112,7 @@ class NewsMLG1 {
             case 'priority':
                 return self::matchPriority((string) $this->data->PRIORIDAD);
                 break;
-            
+
             case 'priorityNumber':
                 return self::$priorityMap[(string) $this->data->PRIORIDAD];
                 break;
@@ -123,7 +124,7 @@ class NewsMLG1 {
             case 'category':
                 return self::matchCategoryName((string) $this->data->SECCION);
                 break;
-            
+
             case 'originalCategory':
                 return (string) $this->data->SECCION;
                 break;
@@ -259,6 +260,7 @@ class NewsMLG1 {
         } else {
             $category = $categoryName;
         }
+
         return $category;
 
     }
@@ -297,6 +299,7 @@ class NewsMLG1 {
         } else {
             $priority = $priority;
         }
+
         return $priority;
     }
 

@@ -3,7 +3,7 @@
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
- * 
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
@@ -79,6 +79,7 @@ class LayoutManager
 
         }
         $output []= '</div><!-- end wrapper -->';
+
         return implode("\n", $output);
     }
 
@@ -105,6 +106,7 @@ class LayoutManager
                     .$this->renderContentsForPlaceholder($innerValues['name'])
                     .'<!-- {placeholder-content-'.$innerValues['name']. '} --></div>'
                     .'</div><!-- end wrapper -->';
+
         return $output;
     }
 
@@ -128,6 +130,7 @@ class LayoutManager
         $output  =  '<div class="static clearfix '.$innerValues['class'].' span-'.$innerValues['width'].$last.'">'
                     .$description
                     .'</div><!-- end static -->';
+
         return $output;
     }
 
@@ -157,6 +160,7 @@ class LayoutManager
                     }
                 }
             }
+
             return $output;
         }
     }
@@ -187,6 +191,7 @@ class LayoutManager
         foreach ($this->layoutDoc as $element => $value ) {
             $output []= $this->renderElement($element, $value, false);
         }
+
         return implode("\n", $output);
     }
 

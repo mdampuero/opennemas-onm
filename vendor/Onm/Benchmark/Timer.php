@@ -47,6 +47,7 @@ class Timer
         if (!(self::$instance instanceof self)) {
             self::$instance = new self($config);
         }
+
         return self::$instance;
 
     }
@@ -118,6 +119,7 @@ class Timer
     private function _getMicrotime()
     {
         $microtime = explode(' ', microtime());
+
         return $microtime[1] . substr($microtime[0], 1);
     }
 }

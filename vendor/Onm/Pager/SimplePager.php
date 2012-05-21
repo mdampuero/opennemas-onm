@@ -24,7 +24,7 @@ class SimplePager
     /**
      * Returns the HTML paginate with js action onclick
      *
-     * @param array  $params     the params for this function
+     * @param array $params the params for this function
      *  function-javascript function name, 'total' totalelements,
      *  'items' elements for page, and 'page' page number
      *
@@ -67,7 +67,7 @@ class SimplePager
      /**
      * Returns the HTML paginate with href params
      *
-     * @param array  $params     the params for this function
+     * @param array $params the params for this function
      *                           url-url to link, 'total' total elements,
      *                           'items' elements for page, and 'page' page number
      *

@@ -143,9 +143,9 @@ class FTP {
     /**
      * Clean downloaded files in cacheDir that are not present in server
      *
-     * @param string    $cacheDir       the directory where remove files
-     * @param string    $serverFiles    the list of files present in server
-     * @param string    $localFiles     the list of local files
+     * @param string $cacheDir    the directory where remove files
+     * @param string $serverFiles the list of files present in server
+     * @param string $localFiles  the list of local files
      *
      * @return boolean, true if all went well
     */
@@ -210,6 +210,7 @@ class FTP {
                 );
             }
         }
+
         return $structure;
 
     }
@@ -217,32 +218,34 @@ class FTP {
 
     /**
      * Converts a byte based file size to a human readable string
-     * @param  integer $bytes the amount of bytes of the file
+     * @param integer $bytes the amount of bytes of the file
      * @return string        the human readable file size
      */
     protected function _byteconvert($bytes) {
         $symbol = array('B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
         $exp = floor( log($bytes) / log(1024) );
+
         return sprintf( '%.2f ' . $symbol[ $exp ], ($bytes / pow(1024, floor($exp))) );
     }
 
     /**
      * Converts an chmod string to a numeric based file permissions
-     * @param  string $chmod the chmod string-based file perms
+     * @param string $chmod the chmod string-based file perms
      * @return integer        the numeric based file permissions
      */
     protected function _chmodnum($chmod) {
         $trans = array('-' => '0', 'r' => '4', 'w' => '2', 'x' => '1');
         $chmod = substr(strtr($chmod, $trans), 1);
         $array = str_split($chmod, 3);
+
         return array_sum(str_split($array[0])) . array_sum(str_split($array[1])) . array_sum(str_split($array[2]));
     }
 
     /**
      * Filters files by its creation
      *
-     * @param  array $files the list of files for filtering
-     * @param  int $maxAge timestamp of the max age allowed for files
+     * @param array $files  the list of files for filtering
+     * @param int   $maxAge timestamp of the max age allowed for files
      * @return array the list of files without those with age > $magAge
      **/
     protected function _filterOldFiles($files, $maxAge)

@@ -71,6 +71,7 @@ class ModuleManager
 
             }
         }
+
         return self::$activatedModules;
     }
 
@@ -145,6 +146,7 @@ class ModuleManager
         if (!isset($activatedModules) or !is_array($activatedModules)) {
             return true;
         }
+
         return in_array('ALL', $activatedModules);
     }
 

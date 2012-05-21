@@ -101,6 +101,7 @@ class Dispatcher
     {
         try {
             $response = include $controllerFileName;
+
             return $response;
         } catch (Exception $e) {
             throw new ResourceNotFoundException(
@@ -123,6 +124,7 @@ class Dispatcher
                 $controller = new $controllerClassName();
                 $controller->setContainer($this->container);
                 $controller->init();
+
                 return $controller->{$actionName}();
             } else {
                 throw new ResourceNotFoundException(

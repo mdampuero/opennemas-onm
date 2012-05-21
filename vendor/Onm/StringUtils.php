@@ -45,6 +45,7 @@ class StringUtils
     {
         $name = self::normalize($name);
         $name = preg_replace('/[\- ]+/', '-', $name);
+
         return $name;
     }
 
@@ -132,7 +133,7 @@ class StringUtils
     /**
      * Generates a valid permalink
      *
-     * @param string $title
+     * @param string  $title
      * @param boolean $useStopList
      * @return string
      **/
@@ -177,6 +178,7 @@ class StringUtils
         $items = array_keys($items);
 
         $metadata = implode(',', $items);
+
         return $metadata;
     }
 
@@ -233,6 +235,7 @@ class StringUtils
             if ($pos === false) {
                 return substr($string, 0, $maxLength).$suffix;
             }
+
             return substr($string, 0, $pos).$suffix;
         } else {
             return $string;
@@ -247,6 +250,7 @@ class StringUtils
         // replace literal entities
         $transTbl = get_html_translation_table(HTML_ENTITIES);
         $transTbl = array_flip($transTbl);
+
         return utf8_encode(strtr($string, $transTbl));
     }
 
@@ -263,6 +267,7 @@ class StringUtils
                 $value = is_array($value) ?
                             array_map('stripslashes_deep', $value) :
                             stripslashes($value);
+
                 return $value;
             }
 
@@ -281,13 +286,14 @@ class StringUtils
     static public function clearBadChars($string)
     {
         $string = preg_replace('/'.chr(226).chr(128).chr(169).'/', '', $string);
+
         return $string;
     }
 
     /**
      * Gets "n" first words from a given text
      *
-     * @param string $text
+     * @param string  $text
      * @param integer $numWords
      * @return string
      * @example self::get_numWords('hello world', 1)
@@ -379,6 +385,7 @@ class StringUtils
 
             // And implode all key=value parameters with &
             $result = implode('&', $result);
+
             return $result;
 
         } else {
@@ -423,6 +430,7 @@ class StringUtils
             $password .= $chars{mt_rand(0, strlen($chars)-1)};
             $i++;
         }
+
         return $password;
     }
 

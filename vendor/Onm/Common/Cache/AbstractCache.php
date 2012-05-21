@@ -155,7 +155,7 @@ abstract class AbstractCache implements Cache
     /**
      * Prefix the passed id with the configured namespace value
      *
-     * @param string $id  The id to namespace
+     * @param string $id The id to namespace
      * @return string $id The namespaced id
      */
     private function _getNamespacedId($id)

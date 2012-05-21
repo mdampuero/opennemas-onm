@@ -38,6 +38,7 @@ class InstanceManager
     public function __construct($onmInstancesConnection)
     {
         $this->_connection = self::getConnection($onmInstancesConnection);
+
         return $this;
     }
 
@@ -51,6 +52,7 @@ class InstanceManager
         if (null === self::$_instance) {
             self::$_instance = new self();
         }
+
         return self::$_instance;
     }
 
@@ -71,6 +73,7 @@ class InstanceManager
 
         if (!$rs) {
             $errorMsg = $this->_connection->ErrorMsg();
+
             return false;
         }
 
@@ -125,6 +128,7 @@ class InstanceManager
         } else {
             throw new \Onm\Instance\NotFoundException(_('Instance not found'));
         }
+
         return $instance;
 
     }
@@ -146,6 +150,7 @@ class InstanceManager
 
         // Check if adodb is log enabled
         $conn->LogSQL();
+
         return $conn;
     }
 
@@ -167,6 +172,7 @@ class InstanceManager
 
         if (!$rs) {
             $errorMsg = $connection->ErrorMsg();
+
             return false;
         }
 
@@ -197,6 +203,7 @@ class InstanceManager
 
         if (!$rs) {
             $errorMsg = $rs->ErrorMsg();
+
             return false;
         }
 
@@ -291,8 +298,10 @@ class InstanceManager
 
         if (!$rs) {
             $errorMsg = $connection->ErrorMsg();
+
             return false;
         }
+
         return true;
     }
 
@@ -317,8 +326,10 @@ class InstanceManager
         $rs = $this->_connection->Execute($sql, $values);
         if (!$rs) {
             $errorMsg = $connection->ErrorMsg();
+
             return false;
         }
+
         return true;
     }
 
@@ -337,6 +348,7 @@ class InstanceManager
         $rs = $this->_connection->Execute($sql, array($instance->id));
         if (!$rs) {
             $errorMsg = $this->_connection->ErrorMsg();
+
             return false;
         }
         $this->deleteDefaultAssetsForInstance(SITE_PATH.DS.'media'.DS.$instance->internal_name);
@@ -454,6 +466,7 @@ class InstanceManager
                     "Could not create the instance reference into the instance table: {$this->_connection->ErrorMsg()}"
                 );
             }
+
             return true;
         //If instance name or contact mail already exists and comes from openhost form
         } elseif (isset ($_POST['timezone'])) {
@@ -494,6 +507,7 @@ class InstanceManager
         if (!$this->_connection->Execute($sql, $values)) {
             return false;
         }
+
         return true;
     }
 
@@ -532,6 +546,7 @@ class InstanceManager
                 exec("sudo apachectl graceful", $output, $exitCode);
                 if ($exitCode > 0) {
                     var_dump("Unable to reload apache configuration (exit code {$exitCode}): ".$output);
+
                     return false;
                 }
             } else {
@@ -557,6 +572,7 @@ class InstanceManager
         if (file_exists($instanceConfigPath)) {
             return  unlink($instanceConfigPath);
         }
+
         return false;
     }
 
@@ -653,8 +669,10 @@ class InstanceManager
                 'Could not create the default database/user/grant/privileges'
                 .' for the instance/user...'
             );
+
             return false;
         }
+
         return true;
 
     }
@@ -672,6 +690,7 @@ class InstanceManager
         if (!$this->_connection->Execute($sql)) {
             return false;
         }
+
         return true;
     }
 
@@ -689,6 +708,7 @@ class InstanceManager
         if (!$this->_connection->Execute($sql)) {
             return false;
         }
+
         return true;
     }
 
@@ -727,6 +747,7 @@ class InstanceManager
                 }
             }
             reset($objects);
+
             return rmdir($mediaPath);
         }
 
