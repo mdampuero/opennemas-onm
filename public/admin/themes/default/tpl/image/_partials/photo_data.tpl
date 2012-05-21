@@ -6,8 +6,19 @@
     </ul><!-- / -->
     <div id="basic-{$photo->id}">
         <div class="image-preview">
-            <img src="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}" onunload="GUnload()" />
+            {if preg_match('/^swf$/i', $photo->type_img)}
+                <object width="" height="">
+                    <param name="wmode" value="transparent"
+                           value="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}"/>
+                    <embed wmode="transparent"
+                           src="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}"></embed>
+                </object>
+                <!-- <img style="width:16px;height:16px;border:none;"  src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/flash.gif" /> -->
+            {else}
+                <img src="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}" onunload="GUnload()" />
+            {/if}
         </div>
+
         <div class="photo-basic-information">
             <div class="photo-static-info">
                 <div><label>{t}Name:{/t}</label> {$photo->title}</div>
