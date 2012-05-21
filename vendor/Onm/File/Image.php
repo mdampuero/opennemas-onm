@@ -30,6 +30,7 @@ class Image
         } else {
             throw new \Exception('Image handler not implemented.');
         }
+
         return $this;
     }
 

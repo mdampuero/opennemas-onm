@@ -51,6 +51,7 @@ class Efe implements \Onm\Import\Importer
         {
             self::$instance = new self($config);
         }
+
         return self::$instance;
 
     }
@@ -79,7 +80,7 @@ class Efe implements \Onm\Import\Importer
     /**
      * Creates the syncPath, to allow to work with it
      *
-     * @param array     $params     the parameters to manipulate the behaviour of this function
+     * @param array $params the parameters to manipulate the behaviour of this function
      */
     public function setupSyncEnvironment($params = array())
     {
@@ -237,7 +238,7 @@ class Efe implements \Onm\Import\Importer
     /*
      * Gets the minutes from last synchronization of elements
      *
-     * @param array     $params     misc params that alteres function behaviour
+     * @param array $params misc params that alteres function behaviour
      *
      * @return integer  minutes from last synchronization of elements
      */
@@ -327,6 +328,7 @@ class Efe implements \Onm\Import\Importer
     {
 
         $element = new \Onm\Import\DataSource\NewsMLG1($this->syncPath.DIRECTORY_SEPARATOR.$id.'.xml');
+
         return  $element;
 
     }
@@ -342,6 +344,7 @@ class Efe implements \Onm\Import\Importer
     {
 
         $element = new \Onm\Import\DataSource\NewsMLG1($this->syncPath.DIRECTORY_SEPARATOR.$id);
+
         return  $element;
 
     }
@@ -350,7 +353,7 @@ class Efe implements \Onm\Import\Importer
     /**
      * gets a list of stored elements filtered by some params
      *
-     * @param array     $params     array of params to filter elements with
+     * @param array $params array of params to filter elements with
      *
      * @return array    elements    stored
      */

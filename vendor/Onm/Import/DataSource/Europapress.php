@@ -59,6 +59,7 @@ class Europapress {
         {
             self::$instance = new self($config);
         }
+
         return self::$instance;
 
     }
@@ -259,6 +260,7 @@ class Europapress {
         } else {
             $category = $categoryName;
         }
+
         return $category;
 
     }
@@ -297,6 +299,7 @@ class Europapress {
         } else {
             $priority = $priority;
         }
+
         return $priority;
     }
 
@@ -325,6 +328,7 @@ class Europapress {
         if (preg_match("@".$needle."@", $body)) {
             return true;
         }
+
         return false;
     }
 

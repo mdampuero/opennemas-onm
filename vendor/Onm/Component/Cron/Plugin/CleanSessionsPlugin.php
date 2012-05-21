@@ -27,6 +27,7 @@ class CleanSessions implements PluginInterface
     public function __construct(Cron $cron)
     {
         $this->cron = $cron;
+
         return true;
     }
 

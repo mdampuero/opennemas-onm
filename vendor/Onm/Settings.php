@@ -35,7 +35,7 @@ class Settings
      *  s::get('opinion');
      *
      * @param string $settingName the name of the setting.
-     * @param array $settingName  array of settings name
+     * @param array  $settingName array of settings name
      *
      * @return string the value of the setting
      * @return array  if was provided an array of names this function returns an array of name/values
@@ -148,7 +148,7 @@ class Settings
      *  use Onm\Settings as s;
      *  s::set('opinion', 'test');
      *
-     * @param string $settingName the name of the setting.
+     * @param string $settingName  the name of the setting.
      * @param string $settingValue the value of the setting.
      *
      * @return boolean true if the setting was stored.
@@ -189,7 +189,7 @@ class Settings
      *  use Onm\Settings as s;
      *  s::invalidate('opinion');
      *
-     * @param string $settingName the name of the setting.
+     * @param string $settingName  the name of the setting.
      * @param string $instanceName the name of the instance.
      *
      * @return boolean true if the setting apc_cache was invalidated.

@@ -12,7 +12,7 @@
   * Handles all the operations for NITF data
   *
   * @package Onm
-  * @author 
+  * @author
   **/
  class NITF
  {
@@ -20,7 +20,7 @@
      * Instantiates the NITF DOM data from an SimpleXML object
      *
      * @return void
-     * @author 
+     * @author
      **/
     public function __construct($data)
     {
@@ -39,25 +39,27 @@
 
             case 'id':
                 $attributes = $this->getData()->attributes();
+
                 return (string)$attributes->Euid;
                 break;
 
             case 'title':
                 $titles = $this->getData()->xpath("//NewsLines/HeadLine");
+
                 return (string)$titles[0];
                 break;
 
             case 'pretitle':
                 $pretitles = $this->getData()->xpath("//NewsLines/SubHeadLine");
+
                 return (string)$pretitles[0];
                 break;
 
             case 'summary':
                 $summaries = $this->getData()->xpath("//nitf/body/body.head/abstract");
                 $summary = "";
-                foreach($summaries[0]->children() as $child)
-                {
-                  $summary .= "<p>".sprintf("%s", $child)."</p>"; 
+                foreach($summaries[0]->children() as $child) {
+                  $summary .= "<p>".sprintf("%s", $child)."</p>";
                 }
 
                 return $summary;
@@ -66,18 +68,18 @@
             case 'body':
                 $summaries = $this->getData()->xpath("//nitf/body/body.content");
                 $summary = "";
-                foreach($summaries[0]->children() as $child)
-                {
-                  $summary .= "<p>".sprintf("%s", $child)."</p>\n"; 
+                foreach($summaries[0]->children() as $child) {
+                  $summary .= "<p>".sprintf("%s", $child)."</p>\n";
                 }
 
                 return $summary;
                 break;
-            
+
             case 'created_time':
                 $originalDate = (string)$this->getData()->DescriptiveMetadata->DateLineDate;
                 var_dump($originalDate);die();
-                
+
+
                 return \DateTime::createFromFormat(
                     \DateTime::ISO8601,
                     $originalDate
@@ -88,6 +90,7 @@
                 if (count($this->texts) > 0) {
                     return $this->texts[0];
                 }
+
                 return;
                 break;
 

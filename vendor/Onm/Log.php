@@ -107,6 +107,7 @@ class Log extends \Zend_Log
             $writer = new \Zend_Log_Writer_Mock;
         }
         $writer->setFormatter($this->_formatter);
+
         return $writer;
     }
 }

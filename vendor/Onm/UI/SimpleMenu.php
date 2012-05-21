@@ -23,7 +23,7 @@ class SimpleMenu
     /**
      * Initilizes the object from an XML file
      *
-     * @param string $menuXMLFile   the path to the XML menu file
+     * @param string $menuXMLFile the path to the XML menu file
      *
      * @return void
      */
@@ -58,7 +58,7 @@ class SimpleMenu
     /**
      * Returns the HTML for a given XML menu file
      *
-     * @param array  $params     the params for this function
+     * @param array $params the params for this function
      *
      * @return string    the HTML for this menu
      */
@@ -212,6 +212,7 @@ class SimpleMenu
             $html .= "<ul>".implode("\n", $output)."</ul>";
             $html .="</li>";
         }
+
         return $html;
     }
 

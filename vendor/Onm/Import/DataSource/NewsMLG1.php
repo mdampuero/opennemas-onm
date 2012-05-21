@@ -108,6 +108,7 @@ class NewsMLG1 {
             case 'priority':
                 $rawUrgency =  $this->getData()
                                     ->xpath("//NewsItem/NewsManagement/Urgency");
+
                 return (int)$rawUrgency[0]->attributes()->FormalName;
                 break;
 
@@ -144,12 +145,14 @@ class NewsMLG1 {
                 if (count($this->texts) > 0) {
                     return $this->texts[0]->body;
                 }
+
                 return;
                 break;
 
             case 'agency_name':
                 $rawAgencyName = $this->getData()->NewsEnvelope
                                       ->SentFrom->Party->xpath("//Property[@FormalName=\"Organization\"]");
+
                 return (string)$rawAgencyName[0]->attributes()->Value;
                 break;
 
@@ -246,6 +249,7 @@ class NewsMLG1 {
             $this->videos = array();
         }
     }
+
         return $this->videos;
     }
 
@@ -268,6 +272,7 @@ class NewsMLG1 {
     public function getAudios()
     {
         $contents = $this->getData()->xpath("//NewsItem/NewsComponent/NewsComponent[@Duid=\"multimedia_".$this->id.".multimedia.audios\"]");
+
         return $contents;
     }
 
@@ -280,6 +285,7 @@ class NewsMLG1 {
     public function getModdocs()
     {
         $contents = $this->getData()->xpath("//NewsItem/NewsComponent/NewsComponent[@Duid=\"multimedia_".$this->id.".multimedia.moddocs\"]");
+
         return $contents;
     }
 
@@ -292,6 +298,7 @@ class NewsMLG1 {
     public function getFiles()
     {
         $contents = $this->getData()->xpath("//NewsItem/NewsComponent/NewsComponent[@Duid=\"multimedia_".$this->id.".multimedia.files\"]");
+
         return $contents;
     }
 
@@ -330,6 +337,7 @@ class NewsMLG1 {
         if (preg_match("@".$needle."@", $body)) {
             return true;
         }
+
         return false;
     }
 

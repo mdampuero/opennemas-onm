@@ -67,6 +67,7 @@ class MemcacheCache extends AbstractCache
                 }
             }
         }
+
         return $keys;
     }
 
