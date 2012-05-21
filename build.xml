@@ -3,7 +3,7 @@
 <project name="OpenNemas" default="build">
 
     <target name="build"
-            depends="prepare,lint,phploc-ci,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpunit-ci" />
+            depends="prepare,lint,phploc-ci,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpunit-ci,docblox" />
 
     <path id="project.paths.php">
         <pathelement path="${basedir}/app/models" />
