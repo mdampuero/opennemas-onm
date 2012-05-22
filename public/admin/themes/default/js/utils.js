@@ -28,11 +28,6 @@ function checkAll(field,img)
 }
 
 
-function get_height(my) {
-
-my.height=(window.innerHeight-60);
-}
-
 function objetoAjax(){
 	var xmlhttp=false;
 	try {
@@ -230,22 +225,6 @@ function delete_fichero(id,page){
                       location.href= ruta;
                    }
                    return false;
-            }
-        });
-
-
- }
-
-
-
-
-function send_notify(id,action){
-
-      new Ajax.Request( 'search_advanced.php?action='+action+'&id='+id,
-        {
-            onSuccess: function(transport) {
-                 var msg = transport.responseText;
-                 showMsg({'warn':[msg ]},'growl');
             }
         });
 
