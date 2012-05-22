@@ -73,10 +73,10 @@ class Album extends Content
                 $uri =  Uri::generate(
                     'album',
                     array(
-                        'id' => sprintf('%06d',$this->id),
-                        'date' => date('YmdHis', strtotime($this->created)),
+                        'id'       => sprintf('%06d',$this->id),
+                        'date'     => date('YmdHis', strtotime($this->created)),
                         'category' => $this->category_name,
-                        'slug' => $this->slug,
+                        'slug'     => $this->slug,
                     )
                 );
 
@@ -140,7 +140,7 @@ class Album extends Content
             $data["subtitle"],
             $data["agency"],
             $data["fuente"],
-            $this->cover
+            $data['album_frontpage_image'],
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
