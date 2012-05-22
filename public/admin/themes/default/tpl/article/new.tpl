@@ -34,8 +34,17 @@
     jQuery(document).ready(function($){
         $('#article-form').tabs();
         $('#title, #title_int, #subtitle').inputLengthControl();
+        $('#title_input, #category').on('change', function() {
+            var title = $('#title_input');
+            var category = $('#category option:selected');
+            var metatags = $('#metadata');
+            var title_int_element = $('#title_int_input');
+            if (title_int_element.val().length == 0) {
+                title_int_element.val(title.val());
+            };
+            fill_tags(title.val() + " " + category.data('name') + " " + metatags.val(), '#metadata');
+        })
     });
-
     </script>
 
     {script_tag src="/tiny_mce/opennemas-config.js"}
@@ -95,7 +104,7 @@
                             <td style="width:75%; vertical-align:top; padding:4px 0;" >
                                 <label for="title">{t}Frontpage title:{/t}</label>
                                 <div class="input-append"  id="title">
-                                    <input type="text" name="title" style="width:90%"
+                                    <input type="text" name="title" style="width:90%" id="title_input"
                                        value="{$article->title|clearslash|escape:"html"|default:""}"
                                        class="required span-10" maxlength="256"
                                        tabindex="1"/>
@@ -156,30 +165,20 @@
                         <tr>
                             <td style="vertical-align:top; padding:4px 0;">
                                 <label for="title_int">{t}Inner title:{/t}</label>
-                                <div class="input-append"  id="title_int_input">
+                                <div class="input-append"  id="title_int">
                                     <input type="text" name="title_int" id="title_int_input" style="width:90%"
                                         value="{$article->title_int|clearslash|escape:"html"}" class="required"
                                         maxlength="256"
                                         tabindex="2"/>
                                     <span class="add-on"></span>
                                 </div>
-
-                                <script>
-                                $('title').observe('blur', function(evt) {
-                                    var tituloInt = $('title_int').value.strip();
-                                    if( tituloInt.length == 0 ) {
-                                            $('title_int').value = $F('title');
-                                            get_tags($('title_int').value);
-                                    }
-                                });
-                                </script>
                             </td>
                         </tr>
                         <tr>
                             <td style="vertical-align:top; padding:4px 0;" >
                                 <div style="display:inline-block; width:30%; vertical-align:top;">
                                     <label for="category">{t}Section:{/t}</label>
-                                    <select style="width:100%" name="category" id="category" class="validate-section" onChange="get_tags($('title').value);"  tabindex="3">
+                                    <select style="width:100%" name="category" id="category" class="validate-section" tabindex="3">
                                         <option value="20" data-name="{t}Unknown{/t}" {if !isset($category)}selected{/if}>{t}Unknown{/t}</option>
                                         {section name=as loop=$allcategorys}
                                             {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}

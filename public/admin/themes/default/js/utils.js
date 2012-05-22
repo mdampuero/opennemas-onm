@@ -46,33 +46,15 @@ function objetoAjax(){
 	return xmlhttp;
 }
 
-//Para articles
-function get_tags(title)
-{
-    //instanciamos el objetoAjax
-    ajax=objetoAjax();
-    var category="";
-    if($('category')){
-       category=$('category').options[$('category').selectedIndex].getAttribute('data-name');
-       if(category==null) {category='';}
-    }
-    var tags= document.getElementById('metadata').value;
-
-    //uso del medotod GET
-    ajax.open("GET", "/admin/controllers/utils_content.php?action=get_tags&title="+title+"&categ="+category+"&tags="+tags);
-    ajax.onreadystatechange=function() {
-    if (ajax.readyState==4) {
-         //mostrar resultados en esta capa
-         document.getElementById('metadata').value = ajax.responseText
-
-       }
-    }
-   //como hacemos uso del metodo GET
-   //colocamos null
-   ajax.send(null)
-
-
+function fill_tags (raw_info, target_element) {
+    jQuery.ajax({
+        url: "/admin/controllers/common/content.php?action=calculate-tags&data="+raw_info,
+    }).done(function(data) {
+        log(data);
+        jQuery(target_element).val(data);
+    });
 }
+
 //Para publicidad, opinion y album
 function get_metadata(title)
 {
