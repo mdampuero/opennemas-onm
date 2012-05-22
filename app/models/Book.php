@@ -1,6 +1,23 @@
 <?php
+/**
+ * This file is part of the Onm package.
+ *
+ * (c)  OpenHost S.L. <developers@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ **/
 
-class Book extends Content {
+/**
+ * Book
+ *
+ * Handles all the functionality of Book
+ *
+ * @package    Onm
+ * @subpackage Model
+ */
+class Book extends Content
+{
     public $pk_book  = NULL;
     public $author  = NULL;
     public $file_name  = NULL;

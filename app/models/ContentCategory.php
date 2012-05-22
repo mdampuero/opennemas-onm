@@ -11,9 +11,9 @@
  *
  * @package    Onm
  * @subpackage Model
- * @author     Fran Dieguez <fran@openhost.es>
  **/
-class ContentCategory {
+class ContentCategory
+{
     var $pk_content_category = NULL;
     var $fk_content_category = NULL;
     var $img_path = NULL;
@@ -79,9 +79,7 @@ class ContentCategory {
             $data['internal_category'], $data['logo_path'], $data['color'], $data['params']);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+            Application::logDatabaseError();
 
             return false;
         }
@@ -102,9 +100,7 @@ class ContentCategory {
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+            Application::logDatabaseError();
 
             return;
         }
@@ -146,10 +142,7 @@ class ContentCategory {
                     $data['logo_path'], $data['color'], $data['params']);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-
-            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+            Application::logDatabaseError();
 
             return;
         }
@@ -162,9 +155,7 @@ class ContentCategory {
             $values = array($data['subcategory']);
 
             if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-                $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-                $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-                $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+                Application::logDatabaseError();
 
                 return;
             }
@@ -186,9 +177,7 @@ class ContentCategory {
             $sql = 'DELETE FROM content_categories WHERE pk_content_category=' . ($id);
 
             if ($GLOBALS['application']->conn->Execute($sql) === false) {
-                $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-                $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-                $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+                Application::logDatabaseError();
 
                 return false;
             }
@@ -237,9 +226,7 @@ class ContentCategory {
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+            Application::logDatabaseError();
 
             return false;
         }
@@ -271,13 +258,9 @@ class ContentCategory {
 
             foreach ($sqls as $sql) {
                 if ($GLOBALS['application']->conn->Execute($sql) === false) {
-                    $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-                    $GLOBALS['application']->logger->debug(
-                        'Error: ' . $errorMsg
-                    );
-                    $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+                    Application::logDatabaseError();
 
-                    return;
+                    return false;
                 }
             }
         }
@@ -298,11 +281,9 @@ class ContentCategory {
         $values = array($weight, $this->pk_content_category);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+            Application::logDatabaseError();
 
-            return;
+            return false;
         }
     }
 
@@ -322,11 +303,9 @@ class ContentCategory {
         $values = array($status, $this->posmenu, $this->pk_content_category);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+            Application::logDatabaseError();
 
-            return;
+            return false;
         }
     }
 }
