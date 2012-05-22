@@ -196,7 +196,7 @@ $menuXml = '<?xml version="1.0"?>
             module_name="SCHEDULE_MANAGER"
             title="'.htmlspecialchars(_("Agenda"), ENT_QUOTES).'"
             id="cronicas_schedule_manager"
-            link="http://www.cronicasdelaemigracion.com//agenda/"
+            link="http://www.cronicasdelaemigracion.com/agenda/"
             privilege="SCHEDULE_ADMIN" />
         <node
             module_name="EUROPAPRESS_IMPORTER"
@@ -232,7 +232,109 @@ $menuXml = '<?xml version="1.0"?>
             title="'.htmlspecialchars(_("Statistics"), ENT_QUOTES).'"
             id="statistics"
             link="controllers/statistics/statistics.php"
+            privilege="STATS_ADMIN"
+        />
+
+        <node
+            module_name="CRONICAS_MODULES"
+            title="'.htmlspecialchars(_("Statistics Piwik"), ENT_QUOTES).'"
+            id="piwik_manager"
+            target="external"
+            link="https://piwik.openhost.es/admin/index.php?module=Login&amp;action=logme&amp;login=cronicas&amp;password=44bdf5f29c992928c5233b0ec1b87bc2"
             privilege="STATS_ADMIN" />
+
+        <submenu title="'.htmlspecialchars(_("Mailman Manager"), ENT_QUOTES).'" id="mailman" link="#"
+                     privilege="NEWSLETTER_ADMIN">
+            <node
+                module_name="CRONICAS_MODULES"
+                privilege="NEWSLETTER_ADMIN"
+                target="external"
+                title="'.htmlspecialchars(_("Mailman Newsletter"), ENT_QUOTES).'"
+                id="mailman"
+                link="https://listas.cronicasdelaemigracion.com/cgi-bin/mailman/admin/boletin"
+            />
+            <node
+                module_name="CRONICAS_MODULES"
+                privilege="NEWSLETTER_ADMIN"
+                target="external"
+                title="'.htmlspecialchars(_("Mailman Priority"), ENT_QUOTES).'"
+                id="mailman"
+                link="https://listas.cronicasdelaemigracion.com/cgi-bin/mailman/admin/boletinprioridad"
+            />
+            <node
+                module_name="CRONICAS_MODULES"
+                privilege="NEWSLETTER_ADMIN"
+                target="external"
+                title="'.htmlspecialchars(_("Mailman Crónicas"), ENT_QUOTES).'"
+                id="mailman"
+                link="https://listas.cronicasdelaemigracion.com/cgi-bin/mailman/admin/cronicas"
+            />
+            <node
+                module_name="CRONICAS_MODULES"
+                privilege="NEWSLETTER_ADMIN"
+                target="external"
+                title="'.htmlspecialchars(_("Mailman Galicia"), ENT_QUOTES).'"
+                id="mailman"
+                link="https://listas.cronicasdelaemigracion.com/cgi-bin/mailman/admin/galicia"
+            />
+            <node
+                module_name="CRONICAS_MODULES"
+                privilege="NEWSLETTER_ADMIN"
+                target="external"
+                title="'.htmlspecialchars(_("Mailman Asturias"), ENT_QUOTES).'"
+                id="mailman"
+                link="https://listas.cronicasdelaemigracion.com/cgi-bin/mailman/admin/asturias"
+            />
+            <node
+                module_name="CRONICAS_MODULES"
+                privilege="NEWSLETTER_ADMIN"
+                target="external"
+                title="'.htmlspecialchars(_("Mailman Madrid"), ENT_QUOTES).'"
+                id="mailman"
+                link="https://listas.cronicasdelaemigracion.com/cgi-bin/mailman/admin/madrid"
+            />
+            <node
+                module_name="CRONICAS_MODULES"
+                privilege="NEWSLETTER_ADMIN"
+                target="external"
+                title="'.htmlspecialchars(_("Mailman Castilla y León"), ENT_QUOTES).'"
+                id="mailman"
+                link="https://listas.cronicasdelaemigracion.com/cgi-bin/mailman/admin/castillayleon"
+            />
+            <node
+                module_name="CRONICAS_MODULES"
+                privilege="NEWSLETTER_ADMIN"
+                target="external"
+                title="'.htmlspecialchars(_("Mailman Canarias"), ENT_QUOTES).'"
+                id="mailman"
+                link="https://listas.cronicasdelaemigracion.com/cgi-bin/mailman/admin/canarias"
+            />
+            <node
+                module_name="CRONICAS_MODULES"
+                privilege="NEWSLETTER_ADMIN"
+                target="external"
+                title="'.htmlspecialchars(_("Mailman Cantabria"), ENT_QUOTES).'"
+                id="mailman"
+                link="https://listas.cronicasdelaemigracion.com/cgi-bin/mailman/admin/cantabria"
+            />
+            <node
+                module_name="CRONICAS_MODULES"
+                privilege="NEWSLETTER_ADMIN"
+                target="external"
+                title="'.htmlspecialchars(_("Mailman Baleares"), ENT_QUOTES).'"
+                id="mailman"
+                link="https://listas.cronicasdelaemigracion.com/cgi-bin/mailman/admin/baleares"
+            />
+            <node
+                module_name="CRONICAS_MODULES"
+                privilege="NEWSLETTER_ADMIN"
+                target="external"
+                title="'.htmlspecialchars(_("Mailman Andalucía"), ENT_QUOTES).'"
+                id="mailman"
+                link="https://listas.cronicasdelaemigracion.com/cgi-bin/mailman/admin/andalucia"
+            />
+        </submenu>
+
     </submenu>
 
     <submenu title="'.htmlspecialchars(_("System"), ENT_QUOTES).'" id="system" link="#"
