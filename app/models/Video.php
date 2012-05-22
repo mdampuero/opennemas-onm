@@ -74,6 +74,7 @@ class Video extends Content
                     $returnValue = $this->content_type;
                 }
                 $this->content_type_name = $returnValue;
+
                 return $returnValue;
 
                 break;
@@ -115,6 +116,7 @@ class Video extends Content
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
             $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+
             return false;
         }
 
@@ -132,6 +134,7 @@ class Video extends Content
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
             $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+
             return;
         }
 
@@ -157,6 +160,7 @@ class Video extends Content
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
             $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+
             return;
         }
     }
@@ -178,6 +182,7 @@ class Video extends Content
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
             $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+
             return;
         }
     }
@@ -213,6 +218,7 @@ class Video extends Content
         } else {
             throw new \Exception(_('There was an error while processing your video file'));
         }
+
         return $videoId;
     }
 
@@ -373,6 +379,7 @@ class Video extends Content
             imagejpeg($image, $imageFile, 90);
             $thumbs[$name] = $baseName;
         }
+
         return $thumbs;
     }
 

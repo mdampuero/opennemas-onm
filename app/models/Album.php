@@ -102,6 +102,7 @@ class Album extends Content
                     $returnValue = $this->content_type;
                 }
                 $this->content_type_name = $returnValue;
+
                 return $returnValue;
 
                 break;
@@ -286,15 +287,17 @@ class Album extends Content
                      ." VALUES (?,?,?,?)";
 
                 $values = array($this->id, $photoID, $position, $photoFooter);
- 
+
                 $rs = $GLOBALS['application']->conn->Execute($sql, $values);
 
                 if ($rs === false) {
                     return Application::logDatabaseError();
                 }
             }
+
             return true;
         }
+
         return $this;
     }
 
@@ -312,6 +315,7 @@ class Album extends Content
         if (!$rs) {
             return Application::logDatabaseError();
         }
+
         return $this;
     }
 

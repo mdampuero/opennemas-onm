@@ -62,6 +62,7 @@ class Photo extends Content
         $execution = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($execution === false) {
             $errorMsg = Application::logDatabaseError();
+
             return false;
         }
 
@@ -379,6 +380,7 @@ class Photo extends Content
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
             $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+
             return;
 
         }
@@ -582,6 +584,7 @@ class Photo extends Content
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
             $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+
             return;
 
         }
@@ -606,9 +609,11 @@ class Photo extends Content
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
             $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+
             return;
 
         }
+
         return true;
     }
 
@@ -623,6 +628,7 @@ class Photo extends Content
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
             $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+
             return;
 
         }
@@ -650,6 +656,7 @@ class Photo extends Content
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
             $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+
             return;
 
         }
@@ -701,6 +708,7 @@ function map_entities($str)
 {
     // $str = mb_convert_encoding($str, 'UTF-8', mb_detect_encoding($str));
     $str = mb_convert_encoding($str, "UTF-8", "CP1252,CP1251,ISO-8859-1,UTF-8, ISO-8859-15");
+
     return mb_strtolower($str, 'UTF-8');
     // return htmlentities($str, ENT_COMPAT, 'UTF-8');
 }

@@ -72,6 +72,7 @@ class StaticPage extends Content
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return false;
         }
 
@@ -108,9 +109,11 @@ class StaticPage extends Content
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return null;
         }
         $this->load($rs->fields);
+
         return $this;
     }
     /**
@@ -168,8 +171,10 @@ class StaticPage extends Content
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return false;
         }
+
         return true;
     }
     public function save($data)
@@ -201,8 +206,10 @@ class StaticPage extends Content
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return false;
         }
+
         return true;
     }
     /**
@@ -224,6 +231,7 @@ class StaticPage extends Content
         while (in_array($tmp, $slugs)) {
             $tmp = $slug . '-' . ++$i;
         }
+
         return $tmp;
     }
     /**
@@ -245,6 +253,7 @@ class StaticPage extends Content
         if ($id === false) {
             return null;
         }
+
         return new StaticPage($id);
     }
     /**
@@ -262,6 +271,7 @@ class StaticPage extends Content
         foreach ($pages as $p) {
             $titles[] = $p->slug;
         }
+
         return $titles;
     }
 }

@@ -87,11 +87,13 @@ class Widget extends Content
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
             $GLOBALS['application']->conn->RollbackTrans();
+
             return false;
         }
 
         // Commit transaction
         $GLOBALS['application']->conn->CommitTrans();
+
         return true;
     }
     /**
@@ -113,6 +115,7 @@ class Widget extends Content
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return null;
         }
         $this->load($rs->fields);
@@ -135,6 +138,7 @@ class Widget extends Content
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return null;
         }
         $id = $rs->fields['pk_widget'];
@@ -148,6 +152,7 @@ class Widget extends Content
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return null;
         }
         $this->load($rs->fields);
@@ -208,11 +213,13 @@ class Widget extends Content
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
             $GLOBALS['application']->conn->RollbackTrans();
+
             return false;
         }
 
         // Commit transaction
         $GLOBALS['application']->conn->CommitTrans();
+
         return true;
     }
     /**
@@ -228,8 +235,10 @@ class Widget extends Content
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return false;
         }
+
         return true;
     }
 
@@ -254,6 +263,7 @@ class Widget extends Content
                 }
             }
         }
+
         return $allWidgets;
     }
 
@@ -276,8 +286,10 @@ class Widget extends Content
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return false;
         }
+
         return true;
     }
     public function put_permalink($end, $type, $title, $cat)
@@ -305,6 +317,7 @@ class Widget extends Content
         eval($this->content);
         $output = ob_get_contents();
         ob_end_clean();
+
         return $output;
     }
     /**
@@ -327,6 +340,7 @@ class Widget extends Content
         $wgtTpl->caching = 0;
         $wgtTpl->force_compile = true;
         $output = $wgtTpl->fetch($resource);
+
         return $output;
     }
     private function _renderlet_intelligentwidget($params=null)
@@ -351,10 +365,10 @@ class Widget extends Content
         }
         try {
             $class = new $className;
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             return "Widget {$this->content} not available";
         }
+
         return $class->render($params);
     }
 }

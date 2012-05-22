@@ -41,10 +41,10 @@ class RelatedContent
     /**
      * Creates a relation between two contents given its ids.
      *
-     * @param string $contentID the content id.
+     * @param string $contentID  the content id.
      * @param string $contentID2 the content id.
-     * @param int $position the weight of the relation, for sorting
-     * @param int $posint the weight of the relation in inner
+     * @param int    $position   the weight of the relation, for sorting
+     * @param int    $posint     the weight of the relation in inner
      * @param string $verport
      * @param string $verint
      * @param string $relation
@@ -70,8 +70,10 @@ class RelatedContent
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return (false);
         }
+
         return (true);
     }
 
@@ -117,6 +119,7 @@ class RelatedContent
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return;
         }
         $this->pk_content1 = $rs->fields['pk_content1'];
@@ -148,6 +151,7 @@ class RelatedContent
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return;
         }
     }
@@ -165,6 +169,7 @@ class RelatedContent
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return;
         }
     }
@@ -186,6 +191,7 @@ class RelatedContent
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return;
         }
     }
@@ -218,6 +224,7 @@ class RelatedContent
             }
         }
         $related = array_unique($related);
+
         return $related;
     }
 
@@ -249,6 +256,7 @@ class RelatedContent
             }
         }
         $related = array_unique($related);
+
         return $related;
     }
 
@@ -270,6 +278,7 @@ class RelatedContent
             }
         }
         $related = array_unique($related);
+
         return $related;
     }
 
@@ -291,6 +300,7 @@ class RelatedContent
             }
         }
         $related = array_unique($related);
+
         return $related;
     }
 
@@ -304,6 +314,7 @@ class RelatedContent
                 $relations = new RelatedContent();
                 $relations->create($contentID, $related);
             }
+
             return;
         }
     }
@@ -332,6 +343,7 @@ class RelatedContent
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return;
         }
     }
@@ -361,6 +373,7 @@ class RelatedContent
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return;
         }
     }
@@ -405,6 +418,7 @@ class RelatedContent
                 }
             }
         }*/
+
         return $output;
     }
 }

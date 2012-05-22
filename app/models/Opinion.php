@@ -16,14 +16,14 @@
 class Opinion extends Content
 {
 
-	var $pk_opinion             = NULL;
-	var $fk_content_categories  = NULL;
-	var $fk_author              = NULL;
-	var $body                   = NULL;
+    var $pk_opinion             = NULL;
+    var $fk_content_categories  = NULL;
+    var $fk_author              = NULL;
+    var $body                   = NULL;
     var $author                 = NULL;
-	var $fk_author_img          = NULL;
-	var $with_comment           = NULL;
-	var $fk_author_img_widget   = NULL;
+    var $fk_author_img          = NULL;
+    var $with_comment           = NULL;
+    var $fk_author_img_widget   = NULL;
 
     private static $instance    = NULL;
 
@@ -48,6 +48,7 @@ class Opinion extends Content
 
         if( is_null(self::$instance) ) {
             self::$instance = new Opinion();
+
             return self::$instance;
 
         } else {
@@ -56,28 +57,28 @@ class Opinion extends Content
         }
     }
 
-	public function __get($name) {
+    public function __get($name) {
 
         switch ($name) {
             case 'uri': {
 
-				// Happy hacking!
+                // Happy hacking!
 
-				if ($this->fk_author == 0) {
+                if ($this->fk_author == 0) {
 
-					if ((int)$this->type_opinion == 1) {
-						$authorName = 'Editorial';
-					} elseif ((int)$this->type_opinion == 2) {
-						$authorName = 'Director';
-					}
+                    if ((int)$this->type_opinion == 1) {
+                        $authorName = 'Editorial';
+                    } elseif ((int)$this->type_opinion == 2) {
+                        $authorName = 'Director';
+                    }
 
-				} else {
-					$author = new Author($this->fk_author);
-					$authorName = $author->name;
-				}
+                } else {
+                    $author = new Author($this->fk_author);
+                    $authorName = $author->name;
+                }
 
 
-				$uri =  Uri::generate('opinion',
+                $uri =  Uri::generate('opinion',
                             array(
                                 'id' => sprintf('%06d',$this->id),
                                 'date' => date('YmdHis', strtotime($this->created)),
@@ -85,7 +86,7 @@ class Opinion extends Content
                                 'category' => StringUtils::get_title($authorName),
                             )
                         );
-					//'opinion/_AUTHOR_/_DATE_/_SLUG_/_ID_.html'
+                    //'opinion/_AUTHOR_/_DATE_/_SLUG_/_ID_.html'
 
                  return $uri;
 
@@ -144,6 +145,7 @@ class Opinion extends Content
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
             return;
         }
 
@@ -179,7 +181,7 @@ class Opinion extends Content
 
           $this->load( $rs->fields );
           $opinion_instance = Opinion::get_instance();
-      	  $this->author     = $opinion_instance->get_author_name( $rs->fields['fk_author'] );
+            $this->author     = $opinion_instance->get_author_name( $rs->fields['fk_author'] );
     }
 
     /**
@@ -245,33 +247,33 @@ class Opinion extends Content
 
     function find_by_gender($gender) {
 
-	   /* $sql = 'SELECT contents.title, opinions.pk_opinion, opinions.fk_author, opinions.fk_author_img, contents.pk_content, contents.permalink, authors.name, author_imgs.path_img FROM opinions, contents, authors, author_imgs' .
-			    ' WHERE in_litter=0 AND content_status=1 AND authors.pk_author= opinions.fk_author AND  pk_opinion = pk_content AND opinions.fk_author_img=author_imgs.pk_img AND gender="'.$gender.'" ORDER BY created DESC';
-	  echo $sql;
-	 */
+       /* $sql = 'SELECT contents.title, opinions.pk_opinion, opinions.fk_author, opinions.fk_author_img, contents.pk_content, contents.permalink, authors.name, author_imgs.path_img FROM opinions, contents, authors, author_imgs' .
+                ' WHERE in_litter=0 AND content_status=1 AND authors.pk_author= opinions.fk_author AND  pk_opinion = pk_content AND opinions.fk_author_img=author_imgs.pk_img AND gender="'.$gender.'" ORDER BY created DESC';
+      echo $sql;
+     */
         $sql = 'SELECT contents.title, opinions.pk_opinion, opinions.fk_author, opinions.fk_author_img, opinions.fk_author_img_widget, contents.pk_content, contents.permalink, authors.name FROM opinions, contents, authors WHERE in_litter=0 AND content_status=1 and type_opinion=0 AND authors.pk_author= opinions.fk_author AND  pk_opinion = pk_content AND  gender="'.$gender.'" ORDER BY created DESC';
 
-	    $rs = $GLOBALS['application']->conn->Execute($sql);
-		$i = 0;
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $i = 0;
 
-	    while(!$rs->EOF) {
+        while(!$rs->EOF) {
             $items[$i]->pk_opinion       = $rs->fields['pk_opinion'];
             $items[$i]->permalink       = $rs->fields['permalink'];
             $items[$i]->title			= $rs->fields['title'];
-	        $items[$i]->name       		= $rs->fields['name'];
-	        $items[$i]->fk_author       		= $rs->fields['fk_author'];
-	        $items[$i]->fk_author_img       	= $rs->fields['fk_author_img'];
-	        $items[$i]->fk_author_img_widget    = $rs->fields['fk_author_img_widget'];
+            $items[$i]->name       		= $rs->fields['name'];
+            $items[$i]->fk_author       		= $rs->fields['fk_author'];
+            $items[$i]->fk_author_img       	= $rs->fields['fk_author_img'];
+            $items[$i]->fk_author_img_widget    = $rs->fields['fk_author_img_widget'];
 
-	   //     $items[$i]->path_img       	= $rs->fields['path_img'];
-	    	$i++;
-		    $rs->MoveNext();
-	    }
+       //     $items[$i]->path_img       	= $rs->fields['path_img'];
+            $i++;
+            $rs->MoveNext();
+        }
 
-		return( $items );
-	}
+        return( $items );
+    }
 
-	//Poner en una clase aparte
+    //Poner en una clase aparte
     function get_opinion_algoritm() {
         $sql = 'SELECT `value` FROM settings `name`=`opinion_algoritm`';
         $rs = $GLOBALS['application']->conn->Execute( $sql );
@@ -331,9 +333,9 @@ class Opinion extends Content
         }
     }
 
-	public function render() {
+    public function render() {
 
-		$tpl = new Template(TEMPLATE_USER);
+        $tpl = new Template(TEMPLATE_USER);
 
         if ((int)$this->type_opinion == 1) {
              $this->author_name_slug = 'editorial';
@@ -346,15 +348,15 @@ class Opinion extends Content
             $this->author_name_slug = $this->name;
         }
 
-		$tpl->assign('item',$this);
-		$tpl->assign('cssclass', 'opinion');
+        $tpl->assign('item',$this);
+        $tpl->assign('cssclass', 'opinion');
 
-		return $tpl->fetch('frontpage/frontpage_opinion.tpl');
+        return $tpl->fetch('frontpage/frontpage_opinion.tpl');
 
     }
 
 
-	/**
+    /**
     * Get latest Opinions without opinions present in frontpage
     *
     * @return mixed, latest opinions sorted by creation time
@@ -362,49 +364,49 @@ class Opinion extends Content
     static public function getLatestAvailableOpinions($params = array())
     {
 
-		$contents = array();
+        $contents = array();
 
-		// Setting up default parameters
-		$default_params = array(
-			'limit' => 6,
-		);
-		$options = array_merge($default_params, $params);
-		$_sql_limit = " LIMIT {$options['limit']}";
+        // Setting up default parameters
+        $default_params = array(
+            'limit' => 6,
+        );
+        $options = array_merge($default_params, $params);
+        $_sql_limit = " LIMIT {$options['limit']}";
 
         $cm = new ContentManager();
-		$ccm = ContentCategoryManager::get_instance();
+        $ccm = ContentCategoryManager::get_instance();
 
-		// Excluding opinions already present in this frontpage
-		$category = (isset($_REQUEST['category'])) ? $ccm->get_id($_REQUEST['category']) :  0;
-		$contentsSuggestedInFrontpage = $cm->getContentsForHomepageOfCategory($category);
-		foreach ($contentsSuggestedInFrontpage as $content) {
-			if($content->content_type == 4) {
-				$excludedContents []= $content->id;
-			}
-		}
+        // Excluding opinions already present in this frontpage
+        $category = (isset($_REQUEST['category'])) ? $ccm->get_id($_REQUEST['category']) :  0;
+        $contentsSuggestedInFrontpage = $cm->getContentsForHomepageOfCategory($category);
+        foreach ($contentsSuggestedInFrontpage as $content) {
+            if($content->content_type == 4) {
+                $excludedContents []= $content->id;
+            }
+        }
 
-		if (count($excludedContents) > 0) {
-			$sqlExcludedContents = ' AND opinions.pk_opinion NOT IN (';
-			$sqlExcludedContents .= implode(', ', $excludedContents);
-			$sqlExcludedContents .= ') ';
-		}
+        if (count($excludedContents) > 0) {
+            $sqlExcludedContents = ' AND opinions.pk_opinion NOT IN (';
+            $sqlExcludedContents .= implode(', ', $excludedContents);
+            $sqlExcludedContents .= ') ';
+        }
 
-		// Getting latest opinions taking in place later considerations
+        // Getting latest opinions taking in place later considerations
         $contents = $cm->find('Opinion',
                     'contents.content_status=1 AND contents.available=1'. $sqlExcludedContents,
                     'ORDER BY contents.created DESC, contents.title ASC ' .$_sql_limit);
 
 
 
-		// For each opinion get its author and photo
-		foreach ($contents as $content) {
-			$content->author = new Author($content->fk_author);
-			$content->author->photo = $content->author->get_photo($content->fk_author_img);
-			if (isset($content->author->photo->path_img)){
-				$content->photo = $content->author->photo->path_img;
-			}
-			$content->name = $content->author->name;
-		}
+        // For each opinion get its author and photo
+        foreach ($contents as $content) {
+            $content->author = new Author($content->fk_author);
+            $content->author->photo = $content->author->get_photo($content->fk_author_img);
+            if (isset($content->author->photo->path_img)){
+                $content->photo = $content->author->photo->path_img;
+            }
+            $content->name = $content->author->name;
+        }
 
         return $contents;
     }
@@ -417,33 +419,33 @@ class Opinion extends Content
     static public function getAllLatestOpinions($params = array())
     {
 
-		$contents = array();
+        $contents = array();
 
-		// Setting up default parameters
-		$default_params = array(
-			'limit' => 6,
-		);
-		$options = array_merge($default_params, $params);
-		$_sql_limit = " LIMIT {$options['limit']}";
+        // Setting up default parameters
+        $default_params = array(
+            'limit' => 6,
+        );
+        $options = array_merge($default_params, $params);
+        $_sql_limit = " LIMIT {$options['limit']}";
 
-		$cm = new ContentManager();
-		$ccm = ContentCategoryManager::get_instance();
+        $cm = new ContentManager();
+        $ccm = ContentCategoryManager::get_instance();
 
-		// Getting All latest opinions
-		$contents = $cm->find('Opinion', 'contents.available=1 ',
-					'ORDER BY  contents.created DESC,  contents.title ASC ' .$_sql_limit);
+        // Getting All latest opinions
+        $contents = $cm->find('Opinion', 'contents.available=1 ',
+                    'ORDER BY  contents.created DESC,  contents.title ASC ' .$_sql_limit);
 
 
 
-		// For each opinion get its author and photo
-		foreach ($contents as $content) {
-			$content->author = new Author($content->fk_author);
-			$content->author->photo = $content->author->get_photo($content->fk_author_img);
-			if (isset($content->author->photo->path_img)){
-				$content->photo = $content->author->photo->path_img;
-			}
-			$content->name = $content->author->name;
-		}
+        // For each opinion get its author and photo
+        foreach ($contents as $content) {
+            $content->author = new Author($content->fk_author);
+            $content->author->photo = $content->author->get_photo($content->fk_author_img);
+            if (isset($content->author->photo->path_img)){
+                $content->photo = $content->author->photo->path_img;
+            }
+            $content->name = $content->author->name;
+        }
 
         return $contents;
     }

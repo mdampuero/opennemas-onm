@@ -124,6 +124,7 @@ class Frontpage extends Content
 
             return(false);
         }
+
         return true;
 
     }
@@ -146,6 +147,7 @@ class Frontpage extends Content
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return null;
         }
 
@@ -256,7 +258,7 @@ class Frontpage extends Content
      * Read, get a specific frontpage
      *
      * @param int $category category in menu element
-     * @param int $date date of calendar
+     * @param int $date     date of calendar
      * @return Widget Return instance to chaining method
      */
 
@@ -274,6 +276,7 @@ class Frontpage extends Content
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return false;
         }
 
@@ -286,7 +289,7 @@ class Frontpage extends Content
      * Read, get a specific frontpage
      *
      * @param int $category category in menu element
-     * @param int $date date of calendar
+     * @param int $date     date of calendar
      * @return Widget Return instance to chaining method
      */
 
@@ -304,6 +307,7 @@ class Frontpage extends Content
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return false;
         }
         $items = array();

@@ -82,9 +82,11 @@ class ContentCategory {
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return false;
         }
         $this->pk_content_category = $GLOBALS['application']->conn->Insert_ID();
+
         return true;
     }
 
@@ -103,6 +105,7 @@ class ContentCategory {
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return;
         }
         $this->load($rs->fields);
@@ -147,6 +150,7 @@ class ContentCategory {
 
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return;
         }
 
@@ -161,9 +165,11 @@ class ContentCategory {
                 $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
                 $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
                 return;
             }
         }
+
         return true;
     }
 
@@ -183,8 +189,10 @@ class ContentCategory {
                 $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
                 $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
                 return false;
             }
+
             return true;
         } else {
             return false;
@@ -232,6 +240,7 @@ class ContentCategory {
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return false;
         }
         $array_contents = array();
@@ -267,10 +276,12 @@ class ContentCategory {
                         'Error: ' . $errorMsg
                     );
                     $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
                     return;
                 }
             }
         }
+
         return true;
     }
 
@@ -290,6 +301,7 @@ class ContentCategory {
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return;
         }
     }
@@ -313,6 +325,7 @@ class ContentCategory {
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return;
         }
     }

@@ -93,9 +93,9 @@ class ContentManager
      * Returns an array of objects for a given content type and filters
      *
      * @param string $content_type the content type to search for
-     * @param string $filter the SQL string to filter contents
-     * @param string $order_by SQL string to order results
-     * @param string $fields the list of fields to get
+     * @param string $filter       the SQL string to filter contents
+     * @param string $order_by     SQL string to order results
+     * @param string $fields       the list of fields to get
      *
      * @return array the list of content objects
      **/
@@ -306,6 +306,7 @@ class ContentManager
             // Handling if there were some errors into the execution
             if(!$rs) {
                 Application::logDatabaseError();
+
                 return false;
             } else {
                 return true;
@@ -316,6 +317,7 @@ class ContentManager
         /**
          * Finishing transaction
         */
+
         return $GLOBALS['application']->conn->CompleteTrans();
 
     }
@@ -337,6 +339,7 @@ class ContentManager
         // return the value and log if there were errors
         if(!$rs) {
             Application::logDatabaseError();
+
             return false;
         } else {
             return true;
@@ -359,6 +362,7 @@ class ContentManager
                 $finalArray[] = $element;
             }
         }
+
         return $finalArray;
     }
 
@@ -382,14 +386,12 @@ class ContentManager
         $stack[1]['l'] = 0;
         $stack[1]['r'] = count($array)-1;
 
-        do
-        {
+        do {
             $l = $stack[$cur]['l'];
             $r = $stack[$cur]['r'];
             $cur--;
 
-            do
-            {
+            do {
                 $i = $l;
                 $j = $r;
                 $tmp = $array[(int)( ($l+$r)/2 )];
@@ -397,14 +399,12 @@ class ContentManager
                 // split the array in to parts
                 // first: objects with "smaller" property $property
                 // second: objects with "bigger" property $property
-                do
-                {
+                do {
                     while( $array[$i]->{$property} < $tmp->{$property} ) $i++;
                     while( $tmp->{$property} < $array[$j]->{$property} ) $j--;
 
                     // Swap elements of two parts if necesary
-                    if( $i <= $j)
-                    {
+                    if( $i <= $j) {
                         $w = $array[$i];
                         $array[$i] = $array[$j];
                         $array[$j] = $w;
@@ -498,13 +498,13 @@ class ContentManager
     /**
      * This function returns an array of objects $content_type of the most viewed in the last few days indicated.
      *
-     * @param string $content_type type of content
-     * @param boolean $not_empty If there are no results regarding the days indicated, the query is performed on the entire bd. For default is false
-     * @param integer $category pk_content_category ok the contents. If value is 0, then does not filter by categories. For default is 0.
-     * @param integer $author pk_author of the contnet. If value is 0, then does not filter by categories. For default is 0.
-     * @param integer $days Interval of days on which the request takes place. For default is 2.
-     * @param integer $num Number of objects that the function returns. For default is 8.
-     * @param boolean $all Get all the content regardless of content status.
+     * @param string  $content_type type of content
+     * @param boolean $not_empty    If there are no results regarding the days indicated, the query is performed on the entire bd. For default is false
+     * @param integer $category     pk_content_category ok the contents. If value is 0, then does not filter by categories. For default is 0.
+     * @param integer $author       pk_author of the contnet. If value is 0, then does not filter by categories. For default is 0.
+     * @param integer $days         Interval of days on which the request takes place. For default is 2.
+     * @param integer $num          Number of objects that the function returns. For default is 8.
+     * @param boolean $all          Get all the content regardless of content status.
      * @return array of objects $content_type
      */
     public function getMostViewedContent($content_type, $not_empty = false, $category = 0, $author=0, $days=2, $num=9, $all=false)
@@ -562,12 +562,12 @@ class ContentManager
 
     /**
      * This function returns an array of objects $content_type of the most commented in the last few days indicated.
-     * @param string $content_type type of content
-     * @param boolean $not_empty If there are no results regarding the days indicated, the query is performed on the entire bd. For default is false
-     * @param integer $category pk_content_category ok the contents. If value is 0, then does not filter by categories. For default is 0.
-     * @param integer $days Interval of days on which the consultation takes place. For default is 2.
-     * @param integer $num Number of objects that the function returns. For default is 8.
-     * @param boolean $all Get all the content regardless of content status and endtime.
+     * @param string  $content_type type of content
+     * @param boolean $not_empty    If there are no results regarding the days indicated, the query is performed on the entire bd. For default is false
+     * @param integer $category     pk_content_category ok the contents. If value is 0, then does not filter by categories. For default is 0.
+     * @param integer $days         Interval of days on which the consultation takes place. For default is 2.
+     * @param integer $num          Number of objects that the function returns. For default is 8.
+     * @param boolean $all          Get all the content regardless of content status and endtime.
      * @return array
      */
     public function getMostComentedContent($content_type, $not_empty = false, $category = 0, $days=2, $num=9, $all=false)
@@ -664,6 +664,7 @@ class ContentManager
                 if ($a['num'] == $b['num']) {
                     return 0;
                 }
+
                 return ($a['num'] > $b['num']) ? -1 : 1;
             }
         }
@@ -677,13 +678,13 @@ class ContentManager
     /**
      * This function returns an array of objects $content_type of the most voted in the last few days indicated.
      * Objects only have covered the fields pk_content, title, and total_value total_votes
-     * @param string $content_type type of content
-     * @param boolean $not_empty If there are no results regarding the days indicated, the query is performed on the entire bd. For default is false
-     * @param integer $category pk_content_category ok the contents. If value is 0, then does not filter by categories. For default is 0.
-     * @param integer $author pk_author of the contnet. If value is 0, then does not filter by categories. For default is 0.
-     * @param integer $days Interval of days on which the consultation takes place. For default is 2.
-     * @param integer $num Number of objects that the function returns. For default is 8.
-     * @param boolean $all Get all the content regardless of content status.
+     * @param string  $content_type type of content
+     * @param boolean $not_empty    If there are no results regarding the days indicated, the query is performed on the entire bd. For default is false
+     * @param integer $category     pk_content_category ok the contents. If value is 0, then does not filter by categories. For default is 0.
+     * @param integer $author       pk_author of the contnet. If value is 0, then does not filter by categories. For default is 0.
+     * @param integer $days         Interval of days on which the consultation takes place. For default is 2.
+     * @param integer $num          Number of objects that the function returns. For default is 8.
+     * @param boolean $all          Get all the content regardless of content status.
      * @return array of objects $content_type
      */
     public function getMostVotedContent($content_type, $not_empty = false, $category = 0, $author=0, $days=2, $num=8, $all=false)
@@ -727,17 +728,18 @@ class ContentManager
         }
 
         $items = $this->load_obj($rs, $content_type);
+
         return $items;
     }
 
       /**
      * This function returns an array of objects $content_type an the last comment.
-     * @param string $content_type type of content
-     * @param boolean $not_empty If there are no results regarding the days indicated, the query is performed on the entire bd. For default is false
-     * @param integer $category pk_content_category ok the contents. If value is 0, then does not filter by categories. For default is 0.
-     * @param integer $days Interval of days on which the consultation takes place. For default is 2.
-     * @param integer $num Number of objects that the function returns. For default is 8.
-     * @param boolean $all Get all the content regardless of content status and endtime.
+     * @param string  $content_type type of content
+     * @param boolean $not_empty    If there are no results regarding the days indicated, the query is performed on the entire bd. For default is false
+     * @param integer $category     pk_content_category ok the contents. If value is 0, then does not filter by categories. For default is 0.
+     * @param integer $days         Interval of days on which the consultation takes place. For default is 2.
+     * @param integer $num          Number of objects that the function returns. For default is 8.
+     * @param boolean $all          Get all the content regardless of content status and endtime.
      * @return array
      */
     public function getLastComentsContent($content_type, $not_empty = false, $category = 0, $num=6, $all=false)
@@ -773,6 +775,7 @@ class ContentManager
 
         if (!$rs) {
             Application::logDatabaseError();
+
             return false;
         } else {
             while (!$rs->EOF) {
@@ -850,10 +853,10 @@ class ContentManager
      /**
      * This function returns an array of objects all types of the most viewed in the last few days indicated.
      * @param boolean $not_empty If there are no results regarding the days indicated, the query is performed on the entire bd. For default is false
-     * @param integer $category pk_content_category ok the contents. If value is 0, then does not filter by categories. For default is 0.
-     * @param integer $days Interval of days on which the consultation takes place. For default is 2.
-     * @param integer $num Number of objects that the function returns. For default is 8.
-     * @param boolean $all Get all the content regardless of content status.
+     * @param integer $category  pk_content_category ok the contents. If value is 0, then does not filter by categories. For default is 0.
+     * @param integer $days      Interval of days on which the consultation takes place. For default is 2.
+     * @param integer $num       Number of objects that the function returns. For default is 8.
+     * @param boolean $all       Get all the content regardless of content status.
      * @return array of objects
      */
     function getAllMostViewed( $not_empty = false, $category = 0,  $days=2, $num=6, $all=false) {
@@ -905,10 +908,10 @@ class ContentManager
      * This function returns an array of objects all types of the most voted in the last few days indicated.
      * Objects only have covered the fields pk_content, title, and total_value total_votes
      * @param boolean $not_empty If there are no results regarding the days indicated, the query is performed on the entire bd. For default is false
-     * @param integer $category pk_content_category ok the contents. If value is 0, then does not filter by categories. For default is 0.
-     * @param integer $days Interval of days on which the consultation takes place. For default is 2.
-     * @param integer $num Number of objects that the function returns. For default is 8.
-     * @param boolean $all Get all the content regardless of content status.
+     * @param integer $category  pk_content_category ok the contents. If value is 0, then does not filter by categories. For default is 0.
+     * @param integer $days      Interval of days on which the consultation takes place. For default is 2.
+     * @param integer $num       Number of objects that the function returns. For default is 8.
+     * @param boolean $all       Get all the content regardless of content status.
      * @return array of objects
      */
     public function getAllMostVoted($not_empty = false, $category = 0, $days=2, $num=6, $all=false) {
@@ -952,12 +955,12 @@ class ContentManager
 
    /**
      * This function returns an array of objects $content_type of the most commented in the last few days indicated.
-     * @param string $content_type type of content
-     * @param boolean $not_empty If there are no results regarding the days indicated, the query is performed on the entire bd. For default is false
-     * @param integer $category pk_content_category ok the contents. If value is 0, then does not filter by categories. For default is 0.
-     * @param integer $days Interval of days on which the consultation takes place. For default is 2.
-     * @param integer $num Number of objects that the function returns. For default is 8.
-     * @param boolean $all Get all the content regardless of content status and endtime.
+     * @param string  $content_type type of content
+     * @param boolean $not_empty    If there are no results regarding the days indicated, the query is performed on the entire bd. For default is false
+     * @param integer $category     pk_content_category ok the contents. If value is 0, then does not filter by categories. For default is 0.
+     * @param integer $days         Interval of days on which the consultation takes place. For default is 2.
+     * @param integer $num          Number of objects that the function returns. For default is 8.
+     * @param boolean $all          Get all the content regardless of content status and endtime.
      * @return array
      */
     function getAllMostComented($not_empty = false, $category = 0, $days=2, $num=6, $all=false) {
@@ -1056,6 +1059,7 @@ class ContentManager
             if ($a['num'] == $b['num']) {
                 return 0;
             }
+
             return ($a['num'] > $b['num']) ? -1 : 1;
         }
         uasort($articles,'cmp');
@@ -1088,8 +1092,8 @@ class ContentManager
      * Filter content objects by starttime and endtime
      *
      * @see Content::isInTime()
-     * @param array $items Array of Content objects
-     * @param string $time Time filter, by default is now. Syntax: 'YYYY-MM-DD HH:MM:SS'
+     * @param array  $items Array of Content objects
+     * @param string $time  Time filter, by default is now. Syntax: 'YYYY-MM-DD HH:MM:SS'
      *
      * @return array Items filtered
     */
@@ -1187,12 +1191,12 @@ class ContentManager
      *                            $page=1, $items_page=10, $pk_fk_content_category=null);
      * </code>
      *
-     * @param int $content_type     Tipo contenido.
-     * @param string|null $filter   Condiciones para clausula where.
-     * @param string $_order_by     Orden de visualizacion
-     * @param int $page             Página que se quiere visualizar.
-     * @param int $items_page       Número de elementos por pagina.
-     * @param int|null $pk_fk_content_category Id de categoria (para find_by_category y si null es find).
+     * @param int         $content_type           Tipo contenido.
+     * @param string|null $filter                 Condiciones para clausula where.
+     * @param string      $_order_by              Orden de visualizacion
+     * @param int         $page                   Página que se quiere visualizar.
+     * @param int         $items_page             Número de elementos por pagina.
+     * @param int|null    $pk_fk_content_category Id de categoria (para find_by_category y si null es find).
      * @return array                Array ($items, $pager)
      */
     public function find_pages($content_type, $filter=null, $_order_by='ORDER BY 1', $page=1, $items_page=10,$pk_fk_content_category=null )
@@ -1311,8 +1315,7 @@ class ContentManager
         $items = array();
         $_where = '1=1  AND in_litter=0';
 
-        if( !is_null($filter) )
-        {
+        if( !is_null($filter) ) {
             if( $filter == 'in_litter=1') {
                 //se busca desde la litter.php
                 $_where = $filter;
@@ -1361,6 +1364,7 @@ class ContentManager
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         $items = $this->load_obj($rs, 'Headline');
+
         return $items;
     }
 
@@ -1803,6 +1807,7 @@ class ContentManager
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         $items = $rs->GetArray();
+
         return $items;
     }
 
@@ -1857,6 +1862,7 @@ class ContentManager
 
         if (!$rs) {
             Application::logDatabaseError();
+
             return false;
         }
 
@@ -1872,6 +1878,7 @@ class ContentManager
 
         if (!$rs) {
             Application::logDatabaseError();
+
             return false;
         }
 
@@ -1961,6 +1968,7 @@ class ContentManager
             }
             // }}}
         }
+
         return $relatedContent;
     }
 
@@ -2022,6 +2030,7 @@ class ContentManager
 
             return $contents;
         }
+
         return false;
     }
 }

@@ -314,9 +314,11 @@ class User
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
             return false;
         }
          apc_delete(APC_PREFIX . "_readAccessCategories".$this->id);
+
         return true;
     }
 
@@ -361,6 +363,7 @@ class User
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
             return false;
         }
 
@@ -369,6 +372,7 @@ class User
             // Set access categories
             $this->accesscategories = $this->readAccessCategories();
             $this->authMethod = 'database';
+
             return true;
         }
 
@@ -405,6 +409,7 @@ class User
             $data = $this->getUserDataByEmail($email);
 
             if(empty($data)) { // Don't exist into database
+
                 return false;
             }
 
@@ -422,6 +427,7 @@ class User
 
         // If wasn't thrown any exception then return true
         $this->authMethod = 'google_clientlogin';
+
         return true;
     }
 
@@ -440,10 +446,12 @@ class User
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
             return false;
         }
 
         $this->set_values($rs->fields);
+
         return $this->password;
     }
 
@@ -462,6 +470,7 @@ class User
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
             return null;
         }
 
@@ -529,14 +538,14 @@ class User
 
     public function get_access_categories_name()
     {
-        if(!empty($this->accesscategories))
-        {
+        if(!empty($this->accesscategories)) {
             foreach($this->accesscategories as $category) {
                 $names[] = $category->name;
             }
 
             return names;
         }
+
         return null;
     }
 
@@ -551,6 +560,7 @@ class User
             if ($a->posmenu == $b->posmenu) {
                 return 0;
             }
+
             return ($a->posmenu < $b->posmenu) ? -1 : 1;
         }
         usort($categories, 'sortInMenu');
@@ -566,6 +576,7 @@ class User
     public function users_online()
     {
         $sql = 'SELECT COUNT (*) FROM users WHERE online=1';
+
         return( $GLOBALS['application']->conn->Execute($sql));
     }
 
@@ -629,6 +640,7 @@ class User
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
             return false;
         }
         //Se cambia name por login.
@@ -639,8 +651,7 @@ class User
     {
         $messages = array('total' => 0, 'entries' => array());
 
-        if(function_exists('curl_init'))
-        {
+        if(function_exists('curl_init')) {
             $curl = curl_init('https://mail.google.com/mail/feed/atom');
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);

@@ -117,30 +117,35 @@ class Content
             case 'category_name':
 
                 $this->category_name = $this->loadCategoryName($this->id);
+
                 return $this->category_name;
                 break;
 
             case 'publisher':
                 $user  = new User();
                 $this->publisher = $user->get_user_name($this->fk_publisher);
+
                 return $this->publisher;
                 break;
 
             case 'last_editor':
                 $user  = new User();
                 $this->last_editor = $user->get_user_name($this->fk_user_last_editor);
+
                 return $this->last_editor;
                 break;
 
             case 'ratings':
                 $rating = new Rating();
                 $this->ratings = $rating->get_value($this->id);
+
                 return $this->ratings;
                 break;
 
             case 'comments':
                 $comment = new Comment();
                 $this->comments = $comment->count_public_comments($this->id);
+
                 return $this->comments;
                 break;
 
@@ -231,6 +236,7 @@ class Content
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             Application::logDatabaseError();
+
             return false;
         }
 
@@ -264,6 +270,7 @@ class Content
         $rs = $GLOBALS['application']->conn->Execute($sql);
         if (!$rs) {
             Application::logDatabaseError();
+
             return false;
         }
 
@@ -350,6 +357,7 @@ class Content
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             Application::logDatabaseError();
+
             return false;
         }
 
@@ -375,6 +383,7 @@ class Content
 
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
             Application::logDatabaseError();
+
             return;
         }
 
@@ -382,6 +391,7 @@ class Content
 
         if ($GLOBALS['application']->conn->Execute($sql) === false) {
             Application::logDatabaseError();
+
             return false;
         }
 
@@ -419,6 +429,7 @@ class Content
 
         if ($GLOBALS['application']->conn->Execute($sql, $values)===false) {
             Application::logDatabaseError();
+
             return false;
         }
 
@@ -449,6 +460,7 @@ class Content
 
          if ($GLOBALS['application']->conn->Execute($sql, $values)===false) {
             Application::logDatabaseError();
+
             return false;
         }
         /* Notice log of this action */
@@ -468,6 +480,7 @@ class Content
 
         if ($GLOBALS['application']->conn->Execute($sql, array($id)) === false) {
             Application::logDatabaseError();
+
             return false;
         }
 
@@ -491,6 +504,7 @@ class Content
         if ($GLOBALS['application']->conn->Execute($sql, array($this->id)) === false) {
             Application::logDatabaseError();
             throw new \Exception($errorMsg);
+
             return false;
         }
 
@@ -522,6 +536,7 @@ class Content
         if (count($values)>0) {
             if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
                 Application::logDatabaseError();
+
                 return false;
             }
         }
@@ -620,6 +635,7 @@ class Content
 
         if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
             Application::logDatabaseError();
+
             return false;
         }
 
@@ -660,6 +676,7 @@ class Content
         $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
         if ($rs === false) {
             Application::logDatabaseError();
+
             return false;
         }
 
@@ -670,6 +687,7 @@ class Content
         $this->in_litter = 2;
 
         $GLOBALS['application']->dispatch('onAfterAvailable', $this);
+
         return true;
     }
 
@@ -687,6 +705,7 @@ class Content
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             Application::logDatabaseError();
+
             return false;
         }
 
@@ -719,6 +738,7 @@ class Content
 
         if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
             Application::logDatabaseError();
+
             return false;
         }
 
@@ -729,6 +749,7 @@ class Content
         $this->in_litter = 2;
 
         $GLOBALS['application']->dispatch('onAfterArhived', $this);
+
         return true;
     }
 
@@ -755,6 +776,7 @@ class Content
 
         if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
             Application::logDatabaseError();
+
             return false;
         }
 
@@ -786,6 +808,7 @@ class Content
                 $this->category = $rs;
             }
         }
+
         return $ccm->get_name($this->category);
 
     }
@@ -890,6 +913,7 @@ class Content
         if ( ($start->getTimeStamp() > 0 && $start != $created ) || $end->getTimeStamp() > 0) {
             return true;
         }
+
         return false;
     }
 
@@ -897,8 +921,8 @@ class Content
      * Check if a content is in time for publishing
      *
      * @param string $starttime the initial time from it will be available
-     * @param string $endtime the initial time until it will be available
-     * @param string $time time to compare with the previous parameters
+     * @param string $endtime   the initial time until it will be available
+     * @param string $time      time to compare with the previous parameters
      *
      * @return boolean
      **/
@@ -909,6 +933,7 @@ class Content
                 return false;
             }
         }
+
         return true;
     }
 
@@ -916,8 +941,8 @@ class Content
      * Check if a content is in time for publishing
      *
      * @param string $starttime the initial time from it will be available
-     * @param string $endtime the initial time until it will be available
-     * @param string $time time to compare with the previous parameters
+     * @param string $endtime   the initial time until it will be available
+     * @param string $time      time to compare with the previous parameters
      *
      * @return boolean
      **/
@@ -965,6 +990,7 @@ class Content
         if ($start->getTimeStamp() > 0) {
             return ($now->getTimeStamp() > $start->getTimeStamp());
         }
+
         return false;
     }
 
@@ -987,6 +1013,7 @@ class Content
             // throw new \Exception(var_export($now->getTimeStamp() < $start->getTimeStamp()));
             return ($now->getTimeStamp() < $start->getTimeStamp());
         }
+
         return false;
     }
 
@@ -1005,6 +1032,7 @@ class Content
         if ($end->getTimeStamp() > 0) {
             return ($now->getTimeStamp() > $end->getTimeStamp());
         }
+
         return false;
     }
 
@@ -1029,6 +1057,7 @@ class Content
         if (count($values)>0) {
             if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
                 Application::logDatabaseError();
+
                 return false;
             }
         }
@@ -1067,6 +1096,7 @@ class Content
         if (count($values)>0) {
             if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
                 Application::logDatabaseError();
+
                 return false;
             }
         }
@@ -1096,6 +1126,7 @@ class Content
         if (count($values)>0) {
             if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
                 Application::logDatabaseError();
+
                 return false;
             }
         }
@@ -1127,6 +1158,7 @@ class Content
         if (count($values)>0) {
             if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
                 Application::logDatabaseError();
+
                 return;
             }
         }
@@ -1162,8 +1194,7 @@ class Content
                 throw new \Exception("There was an error while fetching available content types. '$szSqlContentTypes'.");
             }
 
-            try
-            {
+            try {
                 $resultArray = $resultSet->GetArray();
                 $i=0;
                 foreach ($resultArray as &$res) {
@@ -1173,6 +1204,7 @@ class Content
                 }
             } catch (exception $e) {
                 printf("Excepcion: " . $e.message);
+
                 return null;
             }
 
@@ -1277,6 +1309,7 @@ class Content
 
         if ($GLOBALS['application']->conn->Execute($sql) === false) {
             Application::logDatabaseError();
+
             return false;
         }
     }
@@ -1392,6 +1425,7 @@ class Content
             $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $category->name) . '|0');
             $output .= sprintf(_("Homepage for category %s cleaned sucessfully."), $category->name);
         }
+
         return $output;
 
     }
@@ -1418,7 +1452,7 @@ class Content
     /**
      * Removes element with $contentPK from homepage of category.
      *
-     * @param string $category the id of the category where remove the element.
+     * @param string $category  the id of the category where remove the element.
      * @param string $contentPK the pk of the content.
      *
      * @return boolean true if was removed successfully
@@ -1440,12 +1474,14 @@ class Content
 
         if (!$rs) {
             Application::logDatabaseError();
+
             return false;
         } else {
             $type = $cm->getContentTypeNameFromId($this->content_type,true);
             /* Notice log of this action */
             $logger = Application::getLogger();
             $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed action Drop from frontpage at category '.$category_name.' an '.$type.' Id '.$pk_content);
+
             return true;
         }
     }
@@ -1467,6 +1503,7 @@ class Content
 
         if (!$rs) {
             Application::logDatabaseError();
+
             return false;
         } else {
             $type = $cm->getContentTypeNameFromId($this->content_type, true);
@@ -1476,6 +1513,7 @@ class Content
                 'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed '
                 .'action Drop from frontpage '.$type.' with id '.$this->id
             );
+
             return true;
         }
     }
@@ -1507,6 +1545,7 @@ class Content
         if (count($values)>0) {
             if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
                 Application::logDatabaseError();
+
                 return false;
             }
 
@@ -1539,8 +1578,10 @@ class Content
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
             Application::logDatabaseError();
+
             return false;
         }
+
         return true;
     }
 
@@ -1647,6 +1688,7 @@ class Content
 
         if (!$contents) {
             Application::logDatabaseError();
+
             return;
         }
 
@@ -1693,6 +1735,7 @@ class Content
                 }
             }
         }
+
         return $this;
     }
 
@@ -1716,6 +1759,7 @@ class Content
                 }
             }
         }
+
         return $this;
     }
 
@@ -1734,6 +1778,7 @@ class Content
         ) {
            $content->obj_video = new Video($content->fk_video);;
         }
+
         return $this;
     }
 }

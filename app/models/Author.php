@@ -157,6 +157,7 @@ class Author
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
             $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+
             return;
         }
 
@@ -240,7 +241,7 @@ class Author
     /**
      * Finds authors given a sql WHERE and ORDER BY clause.
      *
-     * @param string $where the SQL WHERE clause
+     * @param string $where   the SQL WHERE clause
      * @param string $orderBy the SQL ORDER BY clause
      *
      * @return array the array of authors that matches the criteria
@@ -295,6 +296,7 @@ class Author
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
             $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+
             return;
         }
 
@@ -314,7 +316,7 @@ class Author
     /**
      * Returns a list of all authors
      *
-     * @param string $filter, the where sql part to filter authors by
+     * @param string $filter,   the where sql part to filter authors by
      * @param string $_orderBy, the ORDER BY sql part to sort authors with
      * @return mixed, array of all matched authors
      **/
@@ -350,6 +352,7 @@ class Author
                   $i++;
             }
         }
+
         return( $items );
     }
 
@@ -377,7 +380,7 @@ class Author
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
         $i  = 0;
-        
+
         while (!$rs->EOF) {
             $items[$i] = new stdClass;
             $items[$i]->id         = $rs->fields['pk_author'];
@@ -387,6 +390,7 @@ class Author
               $rs->MoveNext();
               $i++;
         }
+
         return( $items );
 
     }
@@ -418,7 +422,7 @@ class Author
                 }
             }
         }
-        
+
         if (isset(self::$_photos[$id])) return self::$_photos[$id];
 
         return null;

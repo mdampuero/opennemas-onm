@@ -253,6 +253,7 @@ class Advertisement extends Content
         // Set the content_type
         // FIXME: this should be into the __construct method of Content class.
         $this->content_type = get_class();
+
         return $this;
     }
 
@@ -474,6 +475,7 @@ class Advertisement extends Content
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
             $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+
             return;
         }
     }
@@ -560,6 +562,7 @@ class Advertisement extends Content
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
             $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+
             return;
         }
 
@@ -617,7 +620,7 @@ class Advertisement extends Content
     /**
      * Get advertisement for a given type and category
      *
-     * @param array $types Types of advertisement
+     * @param array  $types    Types of advertisement
      * @param string $category Category of advertisement
      *
      * @return array Array of Advertisement objects
@@ -687,7 +690,7 @@ class Advertisement extends Content
     /**
      * Return banners for the interstitial position.
      *
-     * @param array $type the list of positions to get banners from.
+     * @param array  $type     the list of positions to get banners from.
      * @param string $category the category to get banners from.
      *
      * @return array
@@ -728,8 +731,8 @@ class Advertisement extends Content
     /**
      * Inject banners into template
      *
-     * @param array $banners Array of Advertisement objects
-     * @param Smarty $tpl Template
+     * @param array  $banners Array of Advertisement objects
+     * @param Smarty $tpl     Template
      **/
     function render($banners, $tpl)
     {
@@ -797,7 +800,7 @@ class Advertisement extends Content
      * workaround for Advertisement::render
      *
      * @param string $entry
-     * @param mixed $value
+     * @param mixed  $value
      **/
     public function assign($entry, $value)
     {
@@ -841,6 +844,7 @@ class Advertisement extends Content
                 $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
                 $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+
                 return;
             }
         }

@@ -23,7 +23,7 @@ class Subscriptor
     public $name = null;
     public $firstname = null;
     public $lastname = null;
- 
+
     /**
      * status=0 - (mail se le envio pero aun no le dio al link del correo)
      * status=1 - (tas recibir el mail, el usuario ha clicado en el link y se ha aceptado)
@@ -49,7 +49,7 @@ class Subscriptor
      * @see Privilege::Privilege
      * @param int $id Privilege Id
     */
-    
+
     public function __construct($id=null)
     {
         if(!is_null($id)) {
@@ -61,6 +61,7 @@ class Subscriptor
 
         if( is_null(self::$instance) ) {
             self::$instance = new Subscriptor();
+
             return self::$instance;
 
         } else {
@@ -70,16 +71,16 @@ class Subscriptor
     }
 
     public function create($data) {
-    
+
         $data['status'] = (!isset($data['status']))? 0: $data['status'];
-        
-        // WARNING!!! By default, subscription=1  
+
+        // WARNING!!! By default, subscription=1
         $data['subscription'] = (isset($data['subscription']))? $data['subscription']: 1;
-        
+
         // By default first and last name are ""
         $data['firstname'] = (isset($data['firstname']))? $data['firstname']: "";
         $data['lastname'] = (isset($data['lastname']))? $data['lastname']: "";
-        
+
         $sql = 'INSERT INTO ' . $this->_tableName . ' (
                   `email`, `name`, `firstname`, `lastname`,
                  `status`, `subscription`) VALUES
@@ -93,6 +94,7 @@ class Subscriptor
 
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
             return false;
         }
 
@@ -104,7 +106,7 @@ class Subscriptor
     public function read($id) {
         $sql = 'SELECT * FROM ' . $this->_tableName . ' WHERE pk_pc_user = ?';
         $rs = $GLOBALS['application']->conn->Execute( $sql, array($id) );
-      
+
         if (!$rs) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
@@ -112,7 +114,7 @@ class Subscriptor
 
             return;
         }
-         
+
         $this->load($rs->fields);
     }
 
@@ -145,7 +147,7 @@ class Subscriptor
      *
     */
     public function update($data, $isBackend=FALSE) {
-       
+
         if($isBackend) {
             $sql = 'UPDATE ' . $this->_tableName . ' SET `subscription`=?, `status`=?,'.
                     ' `email`=?, `name`=?, `firstname`=?, `lastname`=?  ';
@@ -175,7 +177,7 @@ class Subscriptor
 
         return true;
     }
- 
+
     /**
      * Recuperar un usuario por email
     */
@@ -192,6 +194,7 @@ class Subscriptor
         }
 
         $this->load($rs->fields);
+
         return $this;
     }
 
@@ -272,8 +275,8 @@ class Subscriptor
      * Multiple update property
      *
      * @param int|array $id
-     * @param string $property
-     * @param mixed $value
+     * @param string    $property
+     * @param mixed     $value
     */
     public function mUpdateProperty($id, $property, $value=null)
     {
@@ -293,12 +296,13 @@ class Subscriptor
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
             return false;
         }
 
         return true;
     }
-    
+
 
     public function countUsers($where=null) {
         $sql = 'SELECT count(*) FROM ' . $this->_tableName;
@@ -336,5 +340,5 @@ class Subscriptor
 
         return $pager;
     }
-    
+
 }

@@ -36,16 +36,16 @@ class MenuItems {
     /**
      * Create a new menu
      *
-     * @param array $data  .
+     * @param array $data .
      *
      * @return bool If create in database
      */
 
     public function create($data) {
 
-		$sql = "INSERT INTO menu_items ".
+        $sql = "INSERT INTO menu_items ".
                " (`pk_menu`,`title`,`link_name`, `type`,`position`,`pk_father`) " .
-			   " VALUES (?,?,?,?,?,?)";
+               " VALUES (?,?,?,?,?,?)";
 
         $values = array($data[pk_menu],$data["title"],$data["link_name"],
                         $data["type"],$data["position"],$data["pk_father"]);
@@ -57,6 +57,7 @@ class MenuItems {
 
             return false;
         }
+
         return true;
     }
 
@@ -89,7 +90,7 @@ class MenuItems {
     public function update($data) {
 
         $sql = "UPDATE album_items SET  `title`=?, `name`=?, `params`=?,`type`=?,`site`=? ".
-        		" WHERE pk_album= ?" ;
+                " WHERE pk_album= ?" ;
 
         $values = array( $data['name'],$data['params'], $data['type'], $data['site'], $data['id']);
 
@@ -97,11 +98,12 @@ class MenuItems {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
             return false;
         }
 
         return true;
-	}
+    }
 
      /**
     * Delete definetelly one content
@@ -121,8 +123,10 @@ class MenuItems {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
             return false;
         }
+
         return true;
 
         /* Notice log of this action */
@@ -160,15 +164,15 @@ class MenuItems {
         $i=0;
         while (!$rs->EOF) {
             $menu[$i] = new stdClass();
-        	$menu[$i]->pk_item   = $rs->fields['pk_item'];
-        	$menu[$i]->pk_menu   = $rs->fields['pk_menu'];
+            $menu[$i]->pk_item   = $rs->fields['pk_item'];
+            $menu[$i]->pk_menu   = $rs->fields['pk_menu'];
             $menu[$i]->title     = $rs->fields['title'];
             $menu[$i]->link      = $rs->fields['link_name'];
-        	$menu[$i]->position  = $rs->fields['position'];
+            $menu[$i]->position  = $rs->fields['position'];
             $menu[$i]->type      = $rs->fields['type'];
-        	$menu[$i]->pk_father = $rs->fields['pk_father'];
-          	$rs->MoveNext();
-          	$i++;
+            $menu[$i]->pk_father = $rs->fields['pk_father'];
+              $rs->MoveNext();
+              $i++;
         }
 
         return $menu;
@@ -195,7 +199,7 @@ class MenuItems {
        // $menu =  $rs->GetRows();
         $menu = array();
         while (!$rs->EOF) {
-        	$menu[]  = $rs->fields['pk_item'];
+            $menu[]  = $rs->fields['pk_item'];
             $rs->MoveNext();
         }
 
@@ -294,8 +298,10 @@ class MenuItems {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
             return false;
         }
+
         return true;
 
         /* Notice log of this action */

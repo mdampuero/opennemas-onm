@@ -15,29 +15,29 @@
  *
  * @author Alex Rico
  */
-class ContentType 
+class ContentType
 {
     /**
      * @var int(10) with id for a content type
      */
     public $pk_content_type = null;
-    
+
     /**
      * @var string with internal name for content type
      */
     public $name = null;
-    
+
     /**
      * @var string with readable name for content type
      */
     public $title = null;
-    
+
     /**
-     * @var int(10) 
+     * @var int(10)
      */
     public $fk_template_default = null;
-    
-    
+
+
     /**
      * Initializes the content type for a given id.
      *
@@ -76,7 +76,7 @@ class ContentType
         $GLOBALS['application']->dispatch('onAfterRead', $this);
 
     }
-    
+
     /**
      * Load properties into this instance
      *
@@ -102,7 +102,7 @@ class ContentType
             }
         }
     }
-    
+
     /*
      * Fetches available content types.
      *
@@ -127,8 +127,7 @@ class ContentType
                 throw new \Exception("There was an error while fetching available content types. '$szSqlContentTypes'.");
             }
 
-            try
-            {
+            try {
                 $resultArray = $resultSet->GetArray();
                 $i=0;
                 foreach ($resultArray as &$res) {
@@ -138,6 +137,7 @@ class ContentType
                 }
             } catch (exception $e) {
                 printf("Excepcion: " . $e.message);
+
                 return null;
             }
 
@@ -148,7 +148,7 @@ class ContentType
 
         return $resultArray;
     }
-    
+
     /*
      * Find a content type id given the name of one content type.
      *
@@ -169,13 +169,13 @@ class ContentType
          return false;
 
     }
-    
+
     /*
      * Get the content type object given the id of one content.
      *
      * @return int pk_content_type.
      * @param int $id The id of a content
-     * 
+     *
      */
     static public function getContentTypeByContentId($id)
     {
@@ -191,7 +191,7 @@ class ContentType
         }
 
         return $rs;
-        
+
 
     }
 

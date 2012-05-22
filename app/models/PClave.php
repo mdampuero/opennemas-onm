@@ -55,6 +55,7 @@ class PClave {
         if(is_null(self::$instance)){
             self::$instance = new PClave();
         }
+
         return self::$instance;
     }
     /**
@@ -241,6 +242,7 @@ class PClave {
                 if (strlen($a->pclave) == strlen($b->pclave)) {
                     return 0;
                 }
+
                 return (strlen($a->pclave) < strlen($b->pclave)) ? 1 : -1;
             }
         }
@@ -289,6 +291,7 @@ class PClave {
     public function cb_url($pclave, $value) {
         //Añadido target="_blank"
         $text = '<a target="_blank" href="%s" title="Ir a %s">%s</a>';
+
         return sprintf($text, $value, $value, $pclave);
     }
 

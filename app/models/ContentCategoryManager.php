@@ -38,6 +38,7 @@ class ContentCategoryManager {
             $this->categories = $this->cache->populate_categories();
 
             self::$instance = $this;
+
             return self::$instance;
         } else {
            return self::$instance;
@@ -49,6 +50,7 @@ class ContentCategoryManager {
             $instance = new ContentCategoryManager();
 
             self::$instance = $instance;
+
             return self::$instance;
         } else {
             return self::$instance;
@@ -174,6 +176,7 @@ class ContentCategoryManager {
     */
     function find_by_type($fk_content_type, $filter=NULL, $_order_by='ORDER BY 1') {
         $_where = 'fk_content_type='. $fk_content_type .' ';
+
         return $this->find($_where);
     }
 
@@ -187,8 +190,10 @@ class ContentCategoryManager {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$error_msg);
                 $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
                 return;
             }
+
             return $rs->fields['name'];
         }
         if(isset($this->categories[$id]->name)) {
@@ -215,8 +220,10 @@ class ContentCategoryManager {
                     $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                     $GLOBALS['application']->logger->debug('Error: '.$error_msg);
                     $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
                     return;
                 }
+
                 return $rs->fields['posmenu'];
             }
 
@@ -241,6 +248,7 @@ class ContentCategoryManager {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$error_msg);
                 $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
                 return NULL;
             }
 
@@ -279,6 +287,7 @@ class ContentCategoryManager {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$error_msg);
                 $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
                 return;
             }
 
@@ -307,6 +316,7 @@ class ContentCategoryManager {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$error_msg);
                 $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
                 return;
             }
 
@@ -333,6 +343,7 @@ class ContentCategoryManager {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$error_msg);
                 $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
                 return;
             }
 
@@ -360,6 +371,7 @@ class ContentCategoryManager {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$error_msg);
                 $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
                 return;
             }
 
@@ -392,6 +404,7 @@ class ContentCategoryManager {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$error_msg);
                 $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
                 return;
             }
             $items = array ();
@@ -428,6 +441,7 @@ class ContentCategoryManager {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$error_msg);
                 $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
                 return;
             }
 
@@ -472,6 +486,7 @@ class ContentCategoryManager {
                 if  ($a->posmenu == $b->posmenu) {
 
                 }
+
                 return ($a->posmenu > $b->posmenu) ? +1 : -1;
 
             }
@@ -498,6 +513,7 @@ class ContentCategoryManager {
                 if  ($a->internal_category == $b->internal_category) {
                     return ($a->posmenu > $b->posmenu) ? +1 : -1;
                 }
+
                 return ($a->internal_category < $b->internal_category) ? 1 : +1;
 
             }
@@ -621,6 +637,7 @@ class ContentCategoryManager {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$error_msg);
                 $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
                 return;
             }
 
@@ -648,6 +665,7 @@ class ContentCategoryManager {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$error_msg);
                 $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
                 return;
             }
 
@@ -707,6 +725,7 @@ class ContentCategoryManager {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
             return;
         }
 
@@ -722,6 +741,7 @@ class ContentCategoryManager {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
             return;
         }
 
@@ -933,8 +953,10 @@ class ContentCategoryManager {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$error_msg);
                 $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
                 return;
             }
+
             return $rs->fields['catName'];
         }
 

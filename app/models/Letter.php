@@ -25,9 +25,9 @@
 class Letter extends Content
 {
 
-	var $pk_letter     = NULL;
+    var $pk_letter     = NULL;
     var $author        = NULL;
-	var $body          = NULL;
+    var $body          = NULL;
 
     private static $instance    = NULL;
 
@@ -48,6 +48,7 @@ class Letter extends Content
 
         if( is_null(self::$instance) ) {
             self::$instance = new Letter();
+
             return self::$instance;
 
         } else {
@@ -56,11 +57,11 @@ class Letter extends Content
         }
     }
 
-	public function __get($name) {
+    public function __get($name) {
 
         switch ($name) {
             case 'uri': {
-				$uri =  Uri::generate('letter',
+                $uri =  Uri::generate('letter',
                             array(
                                 'id' => sprintf('%06d',$this->id),
                                 'date' => date('YmdHis', strtotime($this->created)),
@@ -68,7 +69,7 @@ class Letter extends Content
                                 'category' => StringUtils::get_title($this->author),
                             )
                         );
-					//'cartas-al-director/_AUTHOR_/_SLUG_/_DATE__ID_.html'
+                    //'cartas-al-director/_AUTHOR_/_SLUG_/_DATE__ID_.html'
 
                  return $uri;
 
@@ -118,6 +119,7 @@ class Letter extends Content
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
             return;
         }
       $this->load( $rs->fields );
@@ -181,6 +183,7 @@ class Letter extends Content
             $text.= ' ' . $data['author'];
         }
         $weight = StringUtils::getWeightBadWords($text);
+
         return $weight > 100;
     }
 
