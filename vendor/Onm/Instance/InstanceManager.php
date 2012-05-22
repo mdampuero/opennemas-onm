@@ -244,12 +244,12 @@ class InstanceManager
         // If was not fetched from APC now is turn of DB
         if (!$fetchedFromAPC) {
 
-            $DBConection = self::getConnection($settings);
+            $dbConection = self::getConnection($settings);
 
             $sql = 'SELECT count(*) as total, fk_content_type as type FROM contents'.
                ' GROUP BY `fk_content_type`';
 
-            $rs = $DBConection->Execute($sql);
+            $rs = $dbConection->Execute($sql);
 
 
             if ($rs !== false) {
@@ -593,16 +593,18 @@ class InstanceManager
                ."TO `{$data['settings']['BD_USER']}`@'localhost' ";
         $sql4 = "GRANT ALL PRIVILEGES ON `{$data['settings']['BD_DATABASE']}` . * "
                ."TO '{$data['settings']['BD_USER']}'@'localhost'";
-        $rs2= $conn->Execute($sql2);
-        $rs3= $conn->Execute($sql3);
-        $rs4= $conn->Execute($sql4);
+        $rs2 = $conn->Execute($sql2);
+        $rs3 = $conn->Execute($sql3);
+        $rs4 = $conn->Execute($sql4);
 
         // If the database was created sucessfully now import the default data.
         if ($rs && $rs2 && $rs3 && $rs4) {
             $connection2 = self::getConnection($data['settings']);
             $exampleDatabasePath = realpath(APPLICATION_PATH.DS.'db'.DS.'instance-default.sql');
-            $execLine = "mysql -h {$onmInstancesConnection['BD_HOST']} -u {$onmInstancesConnection['BD_USER']}"
-                       ." -p{$onmInstancesConnection['BD_PASS']} {$data['settings']['BD_DATABASE']} < {$exampleDatabasePath}";
+            $execLine = "mysql -h {$onmInstancesConnection['BD_HOST']} "
+                        ."-u {$onmInstancesConnection['BD_USER']}"
+                        ." -p{$onmInstancesConnection['BD_PASS']} "
+                        ."{$data['settings']['BD_DATABASE']} < {$exampleDatabasePath}";
             exec($execLine, $output, $exitCode);
             if ($exitCode > 0) {
                 throw new DatabaseForInstanceNotCreatedException(

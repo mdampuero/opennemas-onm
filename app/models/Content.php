@@ -219,7 +219,7 @@ class Content
 
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = Application::logDatabaseError();
+            Application::logDatabaseError();
 
             return false;
         }
@@ -230,7 +230,7 @@ class Content
         $values = array($this->id, $data['category'],$catName);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = Application::logDatabaseError();
+            Application::logDatabaseError();
             return false;
         }
 
@@ -263,7 +263,7 @@ class Content
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
         if (!$rs) {
-            $errorMsg = Application::logDatabaseError();
+            Application::logDatabaseError();
             return false;
         }
 
@@ -334,7 +334,7 @@ class Content
 
 
             if ($GLOBALS['application']->conn->Execute($sql2, $values) === false) {
-                $errorMsg = Application::logDatabaseError();
+                Application::logDatabaseError();
 
                 return(false);
             }
@@ -349,7 +349,7 @@ class Content
             $data['fk_user_last_editor'], $data['slug'],$this->category_name, $data['params'], $data['id'] );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = Application::logDatabaseError();
+            Application::logDatabaseError();
             return false;
         }
 
@@ -374,23 +374,21 @@ class Content
         $sql = 'DELETE FROM contents WHERE pk_content='.($id);
 
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
-            $errorMsg = Application::logDatabaseError();
+            Application::logDatabaseError();
             return;
         }
 
         $sql = 'DELETE FROM contents_categories WHERE pk_fk_content='.($id);
 
         if ($GLOBALS['application']->conn->Execute($sql) === false) {
-            $errorMsg = Application::logDatabaseError();
+            Application::logDatabaseError();
             return false;
         }
 
         $sql = 'DELETE FROM content_positions WHERE pk_fk_content = '.($id);
 
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            Application::logDatabaseError();
         }
         /* Notice log of this action */
         Application::logContentEvent(__METHOD__, $this);
@@ -420,7 +418,7 @@ class Content
         $values = array(1, $changed, $last_editor);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values)===false) {
-            $errorMsg = Application::logDatabaseError();
+            Application::logDatabaseError();
             return false;
         }
 
@@ -450,7 +448,7 @@ class Content
           $values = array(0,1,1, $changed, $last_editor);
 
          if ($GLOBALS['application']->conn->Execute($sql, $values)===false) {
-            $errorMsg = Application::logDatabaseError();
+            Application::logDatabaseError();
             return false;
         }
         /* Notice log of this action */
@@ -469,7 +467,7 @@ class Content
         $sql = 'UPDATE `contents` SET `available` = (`available` + 1) % 2 WHERE `pk_content`=?';
 
         if ($GLOBALS['application']->conn->Execute($sql, array($id)) === false) {
-            $errorMsg = Application::logDatabaseError();
+            Application::logDatabaseError();
             return false;
         }
 
@@ -491,7 +489,7 @@ class Content
         $sql = 'UPDATE `contents` SET `frontpage` = (`frontpage` + 1) % 2 WHERE `pk_content`=?';
 
         if ($GLOBALS['application']->conn->Execute($sql, array($this->id)) === false) {
-            $errorMsg = Application::logDatabaseError();
+            Application::logDatabaseError();
             throw new \Exception($errorMsg);
             return false;
         }
@@ -523,7 +521,7 @@ class Content
 
         if (count($values)>0) {
             if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
-                $errorMsg = Application::logDatabaseError();
+                Application::logDatabaseError();
                 return false;
             }
         }
@@ -581,7 +579,7 @@ class Content
         $values = array($_SESSION['userid'], date("Y-m-d H:i:s"), $this->id);
 
         if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
-            $errorMsg = Application::logDatabaseError();
+            Application::logDatabaseError();
 
             return;
         }
@@ -661,7 +659,7 @@ class Content
 
         $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
         if ($rs === false) {
-            $errorMsg = Application::logDatabaseError();
+            Application::logDatabaseError();
             return false;
         }
 
@@ -688,7 +686,7 @@ class Content
         $values = array($status);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = Application::logDatabaseError();
+            Application::logDatabaseError();
             return false;
         }
 
@@ -720,7 +718,7 @@ class Content
         $values = array($_SESSION['userid'], date("Y-m-d H:i:s"), $this->id);
 
         if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
-            $errorMsg = Application::logDatabaseError();
+            Application::logDatabaseError();
             return false;
         }
 
@@ -756,7 +754,7 @@ class Content
         $values = array($_SESSION['userid'], date("Y-m-d H:i:s"), $this->id);
 
         if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
-            $errorMsg = Application::logDatabaseError();
+            Application::logDatabaseError();
             return false;
         }
 
@@ -1030,7 +1028,7 @@ class Content
 
         if (count($values)>0) {
             if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
-                $errorMsg = Application::logDatabaseError();
+                Application::logDatabaseError();
                 return false;
             }
         }
@@ -1068,7 +1066,7 @@ class Content
 
         if (count($values)>0) {
             if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
-                $errorMsg = Application::logDatabaseError();
+                Application::logDatabaseError();
                 return false;
             }
         }
@@ -1097,7 +1095,7 @@ class Content
 
         if (count($values)>0) {
             if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
-                $errorMsg = Application::logDatabaseError();
+                Application::logDatabaseError();
                 return false;
             }
         }
@@ -1128,7 +1126,7 @@ class Content
 
         if (count($values)>0) {
             if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
-                $errorMsg = Application::logDatabaseError();
+                Application::logDatabaseError();
                 return;
             }
         }
@@ -1204,7 +1202,6 @@ class Content
         }
 
         return false;
-
     }
 
 
@@ -1262,7 +1259,6 @@ class Content
                        && isset($item->pk_advertisement)
                        && !empty($item->pk_advertisement)) {
                         $ads[] = $item->pk_advertisement;
-
                     }
                 }
             }
@@ -1280,11 +1276,8 @@ class Content
         }
 
         if ($GLOBALS['application']->conn->Execute($sql) === false) {
-          $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-          $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-          $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
-
-          return;
+            Application::logDatabaseError();
+            return false;
         }
     }
 
@@ -1513,7 +1506,7 @@ class Content
 
         if (count($values)>0) {
             if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
-                $errorMsg = Application::logDatabaseError();
+                Application::logDatabaseError();
                 return false;
             }
 
@@ -1653,9 +1646,7 @@ class Content
         $contents = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$contents) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            Application::logDatabaseError();
             return;
         }
 
