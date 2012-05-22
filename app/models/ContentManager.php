@@ -93,9 +93,9 @@ class ContentManager
      * Returns an array of objects for a given content type and filters
      *
      * @param string $contentType the content type to search for
-     * @param string $filter       the SQL string to filter contents
-     * @param string $order_by     SQL string to order results
-     * @param string $fields       the list of fields to get
+     * @param string $filter      the SQL string to filter contents
+     * @param string $order_by    SQL string to order results
+     * @param string $fields      the list of fields to get
      *
      * @return array the list of content objects
      **/
@@ -323,6 +323,7 @@ class ContentManager
 
         // Finishing transaction
         $GLOBALS['application']->conn->CompleteTrans();
+
         return $returnValue;
     }
 
@@ -346,6 +347,7 @@ class ContentManager
         } else {
             $returnValue = true;
         }
+
         return $returnValue;
     }
 
@@ -501,12 +503,12 @@ class ContentManager
      * This function returns an array of objects $contentType of the most viewed in the last few days indicated.
      *
      * @param string  $contentType type of content
-     * @param boolean $not_empty    If there are no results regarding the days indicated, the query is performed on the entire bd. For default is false
-     * @param integer $category     pk_content_category ok the contents. If value is 0, then does not filter by categories. For default is 0.
-     * @param integer $author       pk_author of the contnet. If value is 0, then does not filter by categories. For default is 0.
-     * @param integer $days         Interval of days on which the request takes place. For default is 2.
-     * @param integer $num          Number of objects that the function returns. For default is 8.
-     * @param boolean $all          Get all the content regardless of content status.
+     * @param boolean $not_empty   If there are no results regarding the days indicated, the query is performed on the entire bd. For default is false
+     * @param integer $category    pk_content_category ok the contents. If value is 0, then does not filter by categories. For default is 0.
+     * @param integer $author      pk_author of the contnet. If value is 0, then does not filter by categories. For default is 0.
+     * @param integer $days        Interval of days on which the request takes place. For default is 2.
+     * @param integer $num         Number of objects that the function returns. For default is 8.
+     * @param boolean $all         Get all the content regardless of content status.
      * @return array of objects $contentType
      */
     public function getMostViewedContent($contentType, $not_empty = false, $category = 0, $author=0, $days=2, $num=9, $all=false)
@@ -564,11 +566,11 @@ class ContentManager
     /**
      * This function returns an array of objects $contentType of the most commented in the last few days indicated.
      * @param string  $contentType type of content
-     * @param boolean $not_empty    If there are no results regarding the days indicated, the query is performed on the entire bd. For default is false
-     * @param integer $category     pk_content_category ok the contents. If value is 0, then does not filter by categories. For default is 0.
-     * @param integer $days         Interval of days on which the consultation takes place. For default is 2.
-     * @param integer $num          Number of objects that the function returns. For default is 8.
-     * @param boolean $all          Get all the content regardless of content status and endtime.
+     * @param boolean $not_empty   If there are no results regarding the days indicated, the query is performed on the entire bd. For default is false
+     * @param integer $category    pk_content_category ok the contents. If value is 0, then does not filter by categories. For default is 0.
+     * @param integer $days        Interval of days on which the consultation takes place. For default is 2.
+     * @param integer $num         Number of objects that the function returns. For default is 8.
+     * @param boolean $all         Get all the content regardless of content status and endtime.
      * @return array
      */
     public function getMostComentedContent($contentType, $not_empty = false, $category = 0, $days=2, $num=9, $all=false)
@@ -680,12 +682,12 @@ class ContentManager
      * This function returns an array of objects $contentType of the most voted in the last few days indicated.
      * Objects only have covered the fields pk_content, title, and total_value total_votes
      * @param string  $contentType type of content
-     * @param boolean $not_empty    If there are no results regarding the days indicated, the query is performed on the entire bd. For default is false
-     * @param integer $category     pk_content_category ok the contents. If value is 0, then does not filter by categories. For default is 0.
-     * @param integer $author       pk_author of the contnet. If value is 0, then does not filter by categories. For default is 0.
-     * @param integer $days         Interval of days on which the consultation takes place. For default is 2.
-     * @param integer $num          Number of objects that the function returns. For default is 8.
-     * @param boolean $all          Get all the content regardless of content status.
+     * @param boolean $not_empty   If there are no results regarding the days indicated, the query is performed on the entire bd. For default is false
+     * @param integer $category    pk_content_category ok the contents. If value is 0, then does not filter by categories. For default is 0.
+     * @param integer $author      pk_author of the contnet. If value is 0, then does not filter by categories. For default is 0.
+     * @param integer $days        Interval of days on which the consultation takes place. For default is 2.
+     * @param integer $num         Number of objects that the function returns. For default is 8.
+     * @param boolean $all         Get all the content regardless of content status.
      * @return array of objects $contentType
      */
     public function getMostVotedContent($contentType, $not_empty = false, $category = 0, $author=0, $days=2, $num=8, $all=false)
@@ -736,11 +738,11 @@ class ContentManager
       /**
      * This function returns an array of objects $contentType an the last comment.
      * @param string  $contentType type of content
-     * @param boolean $not_empty    If there are no results regarding the days indicated, the query is performed on the entire bd. For default is false
-     * @param integer $category     pk_content_category ok the contents. If value is 0, then does not filter by categories. For default is 0.
-     * @param integer $days         Interval of days on which the consultation takes place. For default is 2.
-     * @param integer $num          Number of objects that the function returns. For default is 8.
-     * @param boolean $all          Get all the content regardless of content status and endtime.
+     * @param boolean $not_empty   If there are no results regarding the days indicated, the query is performed on the entire bd. For default is false
+     * @param integer $category    pk_content_category ok the contents. If value is 0, then does not filter by categories. For default is 0.
+     * @param integer $days        Interval of days on which the consultation takes place. For default is 2.
+     * @param integer $num         Number of objects that the function returns. For default is 8.
+     * @param boolean $all         Get all the content regardless of content status and endtime.
      * @return array
      */
     public function getLastComentsContent($contentType, $not_empty = false, $category = 0, $num=6, $all=false)
@@ -852,10 +854,10 @@ class ContentManager
      /**
      * This function returns an array of objects all types of the most viewed in the last few days indicated.
      * @param boolean $notEmpty If there are no results regarding the days indicated, the query is performed on the entire bd. For default is false
-     * @param integer $category  pk_content_category ok the contents. If value is 0, then does not filter by categories. For default is 0.
-     * @param integer $days      Interval of days on which the consultation takes place. For default is 2.
-     * @param integer $num       Number of objects that the function returns. For default is 8.
-     * @param boolean $all       Get all the content regardless of content status.
+     * @param integer $category pk_content_category ok the contents. If value is 0, then does not filter by categories. For default is 0.
+     * @param integer $days     Interval of days on which the consultation takes place. For default is 2.
+     * @param integer $num      Number of objects that the function returns. For default is 8.
+     * @param boolean $all      Get all the content regardless of content status.
      * @return array of objects
      */
     function getAllMostViewed( $notEmpty = false, $category = 0,  $days=2, $num=6, $all=false) {
@@ -902,10 +904,10 @@ class ContentManager
      * This function returns an array of objects all types of the most voted in the last few days indicated.
      * Objects only have covered the fields pk_content, title, and total_value total_votes
      * @param boolean $notEmpty If there are no results regarding the days indicated, the query is performed on the entire bd. For default is false
-     * @param integer $category  pk_content_category ok the contents. If value is 0, then does not filter by categories. For default is 0.
-     * @param integer $days      Interval of days on which the consultation takes place. For default is 2.
-     * @param integer $num       Number of objects that the function returns. For default is 8.
-     * @param boolean $all       Get all the content regardless of content status.
+     * @param integer $category pk_content_category ok the contents. If value is 0, then does not filter by categories. For default is 0.
+     * @param integer $days     Interval of days on which the consultation takes place. For default is 2.
+     * @param integer $num      Number of objects that the function returns. For default is 8.
+     * @param boolean $all      Get all the content regardless of content status.
      * @return array of objects
      */
     public function getAllMostVoted($notEmpty = false, $category = 0, $days=2, $num=6, $all=false) {
@@ -950,7 +952,7 @@ class ContentManager
    /**
      * This function returns an array of objects $content_type of the most commented in the last few days indicated.
      * @param string  $content_type type of content
-     * @param boolean $notEmpty    If there are no results regarding the days indicated, the query is performed on the entire bd. For default is false
+     * @param boolean $notEmpty     If there are no results regarding the days indicated, the query is performed on the entire bd. For default is false
      * @param integer $category     pk_content_category ok the contents. If value is 0, then does not filter by categories. For default is 0.
      * @param integer $days         Interval of days on which the consultation takes place. For default is 2.
      * @param integer $num          Number of objects that the function returns. For default is 8.
@@ -1187,7 +1189,7 @@ class ContentManager
      *                            $page=1, $items_page=10, $pk_fk_content_category=null);
      * </code>
      *
-     * @param int         $contentType           Tipo contenido.
+     * @param int         $contentType            Tipo contenido.
      * @param string|null $filter                 Condiciones para clausula where.
      * @param string      $_order_by              Orden de visualizacion
      * @param int         $page                   Página que se quiere visualizar.
