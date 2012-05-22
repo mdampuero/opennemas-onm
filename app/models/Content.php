@@ -891,7 +891,7 @@ class Content
      **/
     public function getSchedulingState()
     {
-        if ($this->isScheduled) {
+        if ($this->isScheduled()) {
             if ($this->isInTime()) {
                 return 'in-time';
             } elseif($this->isDued()) {

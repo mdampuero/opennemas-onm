@@ -33,8 +33,8 @@
                 <li class="separator"></li>
                 <li>
                     <a href="#" id="button_multiple_delete">
-                        <img src="{$params.IMAGE_DIR}/article_add.png" title="" alt="" /><br>
-                        {t}Drop selected{/t}
+                        <img src="{$params.IMAGE_DIR}/trash.png" title="" alt="" /><br>
+                        {t}Remove selected{/t}
                     </a>
                 </li>
 
