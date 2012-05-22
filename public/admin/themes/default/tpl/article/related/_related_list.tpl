@@ -9,9 +9,9 @@
                     <h5>{t}Related in frontpage{/t}</h5>
                     <hr>
                     <ul class="content-receiver" >
-                        {section name=d loop=$losrel}
-                            <li class="" data-type="{$losrel[d]->content_type}" data-id="{$losrel[d]->pk_content}">
-                                {$losrel[d]->created|date_format:"%d-%m-%Y"}:{$losrel[d]->title|clearslash}
+                        {section name=d loop=$orderFront}
+                            <li class="" data-type="{$orderFront[d]->content_type}" data-id="{$orderFront[d]->pk_content}">
+                                {$orderFront[d]->created|date_format:"%d-%m-%Y"}:{$orderFront[d]->title|clearslash}
                             </li>
                         {/section}
                     </ul>
@@ -21,9 +21,9 @@
                         <h5>{t}Related in inner{/t}</h5>
                         <hr>
                         <ul class="content-receiver" >
-                        {section name=d loop=$intrel}
-                            <li class="" data-type="{$intrel[d]->content_type}" data-id="{$intrel[d]->pk_content}">
-                                {$intrel[d]->created|date_format:"%d-%m-%Y"}:{$intrel[d]->title|clearslash}
+                        {section name=d loop=$orderInner}
+                            <li class="" data-type="{$orderInner[d]->content_type}" data-id="{$orderInner[d]->pk_content}">
+                                {$orderInner[d]->created|date_format:"%d-%m-%Y"}:{$orderInner[d]->title|clearslash}
                             </li>
                         {/section}
                         </ul>
@@ -35,9 +35,9 @@
                         <h5>{t}Related in home{/t}</h5>
                         <hr>
                         <ul class="content-receiver" >
-                            {section name=d loop=$contentsHome}
-                                <li class="" data-type="{$contentsHome[d]->content_type}" data-id="{$contentsHome[d]->pk_content}">
-                                    {$contentsHome[d]->created|date_format:"%d-%m-%Y"}:{$contentsHome[d]->title|clearslash}
+                            {section name=d loop=$orderHome}
+                                <li class="" data-type="{$orderHome[d]->content_type}" data-id="{$orderHome[d]->pk_content}">
+                                    {$orderHome[d]->created|date_format:"%d-%m-%Y"}:{$orderHome[d]->title|clearslash}
                                 </li>
                             {/section}
                         </ul>
@@ -47,9 +47,9 @@
                         <h5>{t}Gallery for frontpage{/t}(*{t}Only one album{/t})</h5>
                         <hr>
                         <ul class="content-receiver" >
-                            {if !empty($article->params['withGallery']) && !empty($galleries[front]->pk_album)}
+                            {if !empty($article->params['withGallery']) && !empty($galleries['front']->pk_album)}
                                 <li class="" data-type="Album" data-id="{$article->params['withGallery']}">
-                                    {$galleries[front]->created|date_format:"%d-%m-%Y"}:{$galleries[front]->title|clearslash}
+                                    {$galleries['front']->created|date_format:"%d-%m-%Y"}:{$galleries['front']->title|clearslash}
                                 </li>
                             {/if}
                         </ul>
@@ -58,9 +58,9 @@
                          <h5>{t}Gallery for inner{/t}(*{t}Only one album{/t})</h5>
                         <hr>
                         <ul class="content-receiver" >
-                            {if !empty($article->params['withGallery']) && !empty($galleries[inner]->pk_album)}
+                            {if !empty($article->params['withGallery']) && !empty($galleries['inner']->pk_album)}
                                 <li class="" data-type="Album" data-id="{$article->params['withGallery']}">
-                                    {$galleries[inner]->created|date_format:"%d-%m-%Y"}:{$galleries[inner]->title|clearslash}
+                                    {$galleries['inner']->created|date_format:"%d-%m-%Y"}:{$galleries['inner']->title|clearslash}
                                 </li>
                             {/if}
                         </ul>
@@ -69,9 +69,9 @@
                         <h5>{t}Gallery for Home{/t} (*{t}Only one album{/t})</h5>
                         <hr>
                         <ul class="content-receiver" >
-                            {if !empty($article->params['withGallery']) && !empty($galleries[home]->pk_album)}
+                            {if !empty($article->params['withGallery']) && !empty($galleries['home']->pk_album)}
                                 <li class="" data-type="Album" data-id="{$article->params['withGallery']}">
-                                    {$galleries[home]->created|date_format:"%d-%m-%Y"}:{$galleries[home]->title|clearslash}
+                                    {$galleries['home']->created|date_format:"%d-%m-%Y"}:{$galleries['home']->title|clearslash}
                                 </li>
                             {/if}
                         </ul>

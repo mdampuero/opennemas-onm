@@ -1716,13 +1716,17 @@ class Content
      * Loads all the related contents for this content
      *
      **/
-    public function loadRelatedContents()
+    public function loadRelatedContents($category_name='')
     {
 
         $relationsHandler  = new RelatedContent();
         $ccm = new ContentCategoryManager();
         $this->related_contents = array();
-        $relations = $relationsHandler->get_relations($this->id);
+        if ($category_name == 'home') {
+            $relations = $relationsHandler->getHomeRelations($this->id);
+        } else {
+            $relations = $relationsHandler->get_relations($this->id);
+        }
 
         if (count($relations) > 0) {
             foreach ($relations as $i => $relatedContentId) {

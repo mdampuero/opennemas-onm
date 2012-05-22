@@ -157,17 +157,28 @@ class Article extends Content
 
             return false;
         }
+        if (!empty($data['relatedFront'])) {
+            $this->saveRelated(
+                $data['relatedFront'],
+                $this->id,
+                'set_rel_position'
+            );
+        }
+        if (!empty($data['relatedInner'])) {
+            $this->saveRelated(
+                $data['relatedInner'],
+                $this->id,
+                'set_rel_position_int'
+            );
+        }
 
-        $this->saveRelated(
-            $data['ordenArti'],
-            $this->id,
-            'set_rel_position'
-        );
-        $this->saveRelated(
-            $data['ordenArtiInt'],
-            $this->id,
-            'set_rel_position_int'
-        );
+        if (!empty($data['relatedHome'])) {
+            $this->saveRelated(
+                $data['relatedHome'],
+                $this->id,
+                'setHomeRelations'
+            );
+        }
 
         return $this->id;
     }
@@ -267,41 +278,22 @@ class Article extends Content
         $GLOBALS['application']->dispatch('onBeforeUpdate', $this);
         parent::update($data);
 
-        if (!isset($data['home_columns'])) {
-            $sql = "UPDATE articles "
-                    ."SET `subtitle`=?, `agency`=?, `summary`=?, `body`=?, "
-                    ."`img1`=?, `img1_footer`=?, `img2`=?, `img2_footer`=?, "
-                    ."`fk_video`=?, `fk_video2`=?, `footer_video2`=?, "
-                    ."`columns`=?, `with_comment`=?, `title_int`=? "
-                    ."WHERE pk_article=".($data['id']);
-
-            $values = array(
-                strtoupper($data['subtitle']), $data['agency'],
-                $data['summary'], $data['body'],
-                $data['img1'], $data['img1_footer'], $data['img2'],
-                $data['img2_footer'], $data['fk_video'], $data['fk_video2'],
-                $data['footer_video2'],
-                (isset($data['columns']))?$data['columns']:'',
-                $data['with_comment'], $data['title_int']
-            );
-        } else {
-            $sql =
-                "UPDATE articles"
+        $sql = "UPDATE articles "
                 ."SET `subtitle`=?, `agency`=?, `summary`=?, `body`=?, "
                 ."`img1`=?, `img1_footer`=?, `img2`=?, `img2_footer`=?, "
                 ."`fk_video`=?, `fk_video2`=?, `footer_video2`=?, "
-                ."`home_columns`=?, `with_comment`=?, `title_int`=? "
+                ."`columns`=?, `with_comment`=?, `title_int`=? "
                 ."WHERE pk_article=".($data['id']);
 
-            $values = array(
-                strtoupper($data['subtitle']), $data['agency'],
-                $data['summary'], $data['body'], $data['img1'],
-                $data['img1_footer'], $data['img2'], $data['img2_footer'],
-                $data['fk_video'], $data['fk_video2'], $data['footer_video2'],
-                $data['home_columns'], $data['with_comment'],
-                $data['title_int']
-            );
-        }
+        $values = array(
+            strtoupper($data['subtitle']), $data['agency'],
+            $data['summary'], $data['body'],
+            $data['img1'], $data['img1_footer'], $data['img2'],
+            $data['img2_footer'], $data['fk_video'], $data['fk_video2'],
+            $data['footer_video2'],
+            (isset($data['columns']))?$data['columns']:'',
+            $data['with_comment'], $data['title_int']
+        );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
@@ -317,16 +309,28 @@ class Article extends Content
         //Eliminamos para volver a insertar por si borraron.
         $rel->delete($data['id']);
 
-        $this->saveRelated(
-            $data['ordenArti'],
-            $data['id'],
-            'set_rel_position'
-        );
-        $this->saveRelated(
-            $data['ordenArtiInt'],
-            $data['id'],
-            'set_rel_position_int'
-        );
+        if (!empty($data['relatedFront'])) {
+            $this->saveRelated(
+                $data['relatedFront'],
+                $data['id'],
+                'set_rel_position'
+            );
+        }
+        if (!empty($data['relatedInner'])) {
+            $this->saveRelated(
+                $data['relatedInner'],
+                $data['id'],
+                'set_rel_position_int'
+            );
+        }
+
+        if (!empty($data['relatedHome'])) {
+            $this->saveRelated(
+                $data['relatedHome'],
+                $this->id,
+                'setHomeRelations'
+            );
+        }
 
         $this->category_name = $this->loadCategoryName($this->id);
         $GLOBALS['application']->dispatch('onAfterUpdate', $this);
