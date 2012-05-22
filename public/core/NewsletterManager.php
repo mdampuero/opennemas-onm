@@ -108,14 +108,15 @@ class NewsletterManager {
 
 
         $dataContents = array();
-        if(!empty($newsletterContent)) {
+        if (!empty($newsletterContent)) {
             foreach ($newsletterContent as  $container) {
                 foreach ($container->items as $key => &$item) {
-                    if(!empty($item->id) && $item->content_type !='label') {
+                    if (!empty($item->id) && $item->content_type !='label') {
                         $content = new Content($item->id);
-                        if(!empty($content)) {
-                            $content = $content->get($item->id);
 
+                        //if is a real content include it in the contents array
+                        if (!empty($content) && is_object($content)) {
+                            $content = $content->get($item->id);
                             $item->content_type = $content->content_type;
                             $item->title        = $content->title;
                             $item->slug         = $content->slug;
@@ -164,6 +165,7 @@ class NewsletterManager {
 
         $tpl->assign('conf', $configurations);
         $htmlContent = $tpl->fetch('newsletter/newNewsletter.tpl');
+
         return $htmlContent;
     }
 

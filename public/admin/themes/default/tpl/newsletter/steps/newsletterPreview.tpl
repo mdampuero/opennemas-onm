@@ -94,4 +94,7 @@ OpenNeMas.tinyMceConfig.advanced.elements = "htmlContent";
 	</div>
 
 </form>
+
+{include file="newsletter/modals/_back_contents_accept.tpl"}
+
 {/block}
