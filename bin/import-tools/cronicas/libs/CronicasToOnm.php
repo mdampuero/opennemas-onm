@@ -856,7 +856,7 @@ class CronicasToOnm {
                             'content_status' =>$article->content_status,
                             'available' => $article->available,
                             'frontpage' => $article->frontpage,
-                            'in_home' => $article->in_home,
+                            'in_home' => 0,
                             'metadata' => $article->metadata.', album',
                             'subtitle' => $article->subtitle,
                             'agency' => '',
