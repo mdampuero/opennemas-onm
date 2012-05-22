@@ -1,36 +1,3 @@
-var FrontpageManager;
-
-(function ($){
-
-FrontpageManager = {
-
-    init: function() {
-
-        // Init event handlers for buttons for each content in frontpage
-        //  -
-
-    },
-
-    makeContentProviderAndPlaceholdersSortable: function() {
-
-    }
-
-
-
-};
-
-FrontpageManager.contentProvider = function() {
-
-};
-
-FrontpageManager.toolbar = function (){
-
-}
-
-$(document).ready( FrontpageManager.init );
-
-})(jQuery);
-
 makeContentProviderAndPlaceholdersSortable = function () {
     // Make content providers sortable and allow to D&D over the placeholders
     jQuery('div#content-provider .ui-tabs-panel > div:not(.pagination)').sortable({
@@ -103,7 +70,63 @@ jQuery(function($){
 
         element.toggleClass('suggested');
         e.preventDefault();
-     });
+    });
+
+
+    // $('div.placeholder div.content-provider-element').popover({
+    //     // content: function() {
+    //     //     // var ajaxdata;
+    //     //     // var url = '/admin/controllers/common/content.php?action=get-info&id='+$(this).data('content-id');
+    //     //     // $.ajax({
+    //     //     //     url: url,
+    //     //     //     async: false,
+    //     //     //     dataType: 'json'
+    //     //     // }).done(function(data) {
+    //     //     //     ajaxdata = data;
+    //     //     // });
+    //     //     // log(ajaxdata.title);
+    //     //     return 'hola';
+    //     // },
+    //     placement: "below",
+    //     content: "hola caracola"
+    // });
+    $('div.placeholder div.content-provider-element .title').popover({
+        placement: 'bottom',
+        content: function() {
+            var ajaxdata;
+            var id = $(this).closest('div.content-provider-element').data('content-id');
+            var url = '/admin/controllers/common/content.php?action=get-info&id='+id;
+            $.ajax({
+                url: url,
+                async: false,
+                dataType: 'json'
+            }).done(function(data) {
+                ajaxdata = data;
+            });
+            if (ajaxdata.scheduled_state == 'not-scheduled') {
+                ajaxdata.scheduled_state = 'Not scheduled';
+            };
+            return "State: "+ajaxdata.state
+                    + "<br>Views: "+ajaxdata.views
+                    + "<br>Category: "+ajaxdata.category
+                    + "<br>Scheduled: "+ajaxdata.scheduled_state
+                    + "<br>Start time: "+ajaxdata.starttime;
+        },
+        title: function() {
+            var ajaxdata;
+            var id = $(this).closest('div.content-provider-element').data('content-id');
+            var url = '/admin/controllers/common/content.php?action=get-info&id='+id;
+            $.ajax({
+                url: url,
+                async: false,
+                dataType: 'json'
+            }).done(function(data) {
+                ajaxdata = data;
+            });
+            return ajaxdata.title;
+        },
+        delay: 1000,
+    })
 
 /*  $("#modal-element-suggest-to-home").modal({ backdrop: 'static', keyboard: true });
     $('div.placeholder').on('click', 'div.content-provider-element a.suggest-to-home', function(e) {
@@ -225,7 +248,6 @@ jQuery(function($){
 
     $('#modal-element-send-trash').on('click', 'a.btn.yes', function(e, ui){
         var delId = $("#modal-element-send-trash").data("selected-for-del");
-        log(delId);
         if(delId) {
             $.ajax({
                 url:  "/admin/controllers/common/content.php",
