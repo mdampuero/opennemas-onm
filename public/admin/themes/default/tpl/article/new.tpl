@@ -351,8 +351,8 @@
 
         <div id="related-contents">
             {include file ="article/related/_related_list.tpl"}
-            <input type="hidden" id="relatedFrontpage" name="ordenArti" value="" />
-            <input type="hidden" id="relatedInner" name="ordenArtiInt" value="" />
+            <input type="hidden" id="relatedFrontpage" name="relatedFront" value="" />
+            <input type="hidden" id="relatedInner" name="relatedInner" value="" />
 
             <input type="hidden" id="withGallery" name="params[withGallery]" value="" />
             <input type="hidden" id="withGalleryInt" name="params[withGalleryInt]" value="" />

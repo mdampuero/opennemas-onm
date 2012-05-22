@@ -152,11 +152,20 @@ jQuery('#buttons-preview').on('click','#next-button', function() {
 });
 
 jQuery('#buttons-preview').on('click','#prev-button', function() {
-
     saveChanges();
-    alert('Si vuelve atrás perderá los cambios realizados');
+    jQuery("#modal-newsletter-accept").modal('show');
+});
+
+jQuery('#modal-newsletter-accept a.btn.accept').on('click', function(e){
+    jQuery("#modal-newsletter-accept").modal('hide');
     jQuery("#action").val('updateContents');
     jQuery('#newsletterForm').submit();
+    e.preventDefault();
+});
+
+jQuery('#modal-newsletter-accept a.btn.no').on('click', function(e){
+    jQuery("#modal-newsletter-accept").modal('hide');
+    e.preventDefault();
 
 });
 
@@ -209,9 +218,10 @@ jQuery('#buttons-recipients').on('click','#prev-button', function() {
 });
 
 
-jQuery('#buttons').on('click','#clean-button', function() {
+jQuery('#buttons-recipients').on('click','#clean-button', function() {
 
     jQuery("div#recipients").find('ul#items-recipients li').remove();
+    jQuery("div#manualList textarea#othersMails").val('');
 
 });
 

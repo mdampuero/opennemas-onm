@@ -95,7 +95,7 @@ if (
         // Load attached and related contents from array
         $content->loadFrontpageImageFromHydratedArray($imageList)
                 ->loadAttachedVideo()
-                ->loadRelatedContents();
+                ->loadRelatedContents($category_name);
     }
     $tpl->assign('column', $contentsInHomepage);
 

@@ -13,8 +13,8 @@
   *
   * @package default
   **/
- class Photo
- {
+class Photo
+{
 
     /**
      * Instantiates the Photo DOM data from an SimpleXML object
@@ -43,36 +43,43 @@
                 break;
 
             case 'title':
-                $content = $this->getData()->NewsComponent->ContentItem->DataContent->xpath('//body.content');
+                $content =
+                    $this->getData()
+                    ->NewsComponent->ContentItem->DataContent
+                    ->xpath('//body.content');
 
                 return (string)$content[1]->p;
                 break;
 
             case 'file_type':
-                $fileType = $this->getData()->NewsComponent->ContentItem->MimeType->attributes()->FormalName;
+                $fileType =
+                    $this->getData()
+                    ->NewsComponent->ContentItem->MimeType
+                    ->attributes()->FormalName;
 
                 return (string)$fileType;
                 break;
 
             case 'file_path':
-                $fileType = $this->getData()->NewsComponent->ContentItem->attributes()->Href;
+                $fileType =
+                    $this->getData()
+                    ->NewsComponent->ContentItem
+                    ->attributes()->Href;
 
                 return (string)$fileType;
                 break;
 
             case 'created_time':
-                $originalDate = (string)$this->getData()->DescriptiveMetadata->DateLineDate;
+                $originalDate =
+                    (string)$this->getData()
+                    ->DescriptiveMetadata->DateLineDate;
                 // ISO 8601 doesn't match this date 20111211T103900+0000
                 $originalDate = preg_replace('@\+(\d){4}$@', '', $originalDate);
 
-                return \DateTime::createFromFormat(
-                    'Ymd\THis',
-                    $originalDate
-                );
+                return \DateTime::createFromFormat('Ymd\THis', $originalDate);
                 break;
         }
     }
-
 
     /*
      * Returns the internal data, use with caution
@@ -82,4 +89,4 @@
         return $this->data;
     }
 
- } // END class Photo
+} // END class Photo

@@ -8,6 +8,9 @@
  */
 namespace Onm\Import;
 
+use \Onm\Import\Synchronizer\LockException;
+use \Onm\Import\DataSource\NewsMLG1;
+
 /**
  * Class to import news from Efe Agency FTP
  *
@@ -18,22 +21,21 @@ namespace Onm\Import;
  */
 class Efe implements \Onm\Import\Importer
 {
-
     // the instance object
-    static private $instance = null;
+    static private $_instance = null;
 
     // the configuration to access to the server
-    private $defaultConfig = array(
-                            'port' => 21,
-                            );
+    private $_defaultConfig = array(
+        'port' => 21,
+    );
 
-    private $config = array();
+    private $_config = array();
 
-    private $ftpConnection = null;
+    private $_ftpConnection = null;
+
+    private $_lockFile = '';
 
     public $syncPath = '';
-
-    private $lockFile = '';
 
 
     /**
@@ -45,14 +47,14 @@ class Efe implements \Onm\Import\Importer
     static public function getInstance($config = array())
     {
 
-        if (!(self::$instance instanceof self)
-            //&& (count(array_diff($this->config, $config)) > 0)
+        if (!(self::$_instance instanceof self)
+            //&& (count(array_diff($this->_config, $config)) > 0)
             )
         {
-            self::$instance = new self($config);
+            self::$_instance = new self($config);
         }
 
-        return self::$instance;
+        return self::$_instance;
 
     }
 
@@ -66,32 +68,32 @@ class Efe implements \Onm\Import\Importer
     public function __construct($config = array())
     {
 
-        $this->syncPath = implode(DIRECTORY_SEPARATOR,
-                                  array(CACHE_PATH, 'efe_import_cache'));
+        $this->syncPath = implode(
+            DIRECTORY_SEPARATOR,
+            array(CACHE_PATH, 'efe_import_cache')
+        );
         $this->syncFilePath = $this->syncPath.DIRECTORY_SEPARATOR.".sync";
 
         // Merging default configurations with new ones
-        $this->config = array_merge($this->defaultConfig, $config);
+        $this->_config = array_merge($this->_defaultConfig, $config);
 
-        $this->lockFile = $this->syncPath.DIRECTORY_SEPARATOR.".lock";
+        $this->_lockFile = $this->syncPath.DIRECTORY_SEPARATOR.".lock";
 
     }
 
     /**
      * Creates the syncPath, to allow to work with it
      *
-     * @param array $params the parameters to manipulate the behaviour of this function
+     * @param array $params the parameters to manipulate
+     *                      the behaviour of this function
      */
     public function setupSyncEnvironment($params = array())
     {
         if (!file_exists($this->syncPath)) {
-
             mkdir($this->syncPath);
-
-        } elseif(!file_exists($this->syncFilePath)) {
+        } elseif (!file_exists($this->syncFilePath)) {
 
             return touch($this->syncFilePath);
-
         }
 
         return false;
@@ -106,11 +108,10 @@ class Efe implements \Onm\Import\Importer
     {
 
         return (
-                file_exists($this->syncFilePath)
-                && is_writable($this->syncPath)
-                && is_writable($this->syncFilePath)
-                );
-
+            file_exists($this->syncFilePath)
+            && is_writable($this->syncPath)
+            && is_writable($this->syncFilePath)
+        );
     }
 
 
@@ -126,20 +127,24 @@ class Efe implements \Onm\Import\Importer
     public function sync($params = array())
     {
         // Check if the folder where store elements is ready and writtable
-        if(!$this->isSyncEnrironmetReady()) {
+        if (!$this->isSyncEnrironmetReady()) {
             $this->setupSyncEnvironment();
         }
 
-        if (file_exists($this->lockFile)) {
-            throw new \Onm\Import\Synchronizer\LockException(sprintf(_("Seems that other user is syncing the news.")));
+        if (file_exists($this->_lockFile)) {
+            throw new LockException(
+                sprintf(_("Seems that other user is syncing the news."))
+            );
         }
 
         $this->lockSync();
 
         $excludedFiles = self::getLocalFileList($this->syncPath);
 
-        $synchronizer = new \Onm\Import\Synchronizer\FTP($params);
-        $ftpSync = $synchronizer->downloadFilesToCacheDir($this->syncPath, $excludedFiles, $params['max_age']);
+        $synchronizer  = new \Onm\Import\Synchronizer\FTP($params);
+        $ftpSync = $synchronizer->downloadFilesToCacheDir(
+            $this->syncPath, $excludedFiles, $params['max_age']
+        );
 
         $this->unlockSync();
 
@@ -156,7 +161,7 @@ class Efe implements \Onm\Import\Importer
     public function lockSync()
     {
         try {
-            touch($this->lockFile);
+            touch($this->_lockFile);
         } catch (\Exception $e) {
             return;
         }
@@ -169,8 +174,8 @@ class Efe implements \Onm\Import\Importer
      */
     public function unlockSync()
     {
-        if (file_exists($this->lockFile)) {
-            unlink($this->lockFile);
+        if (file_exists($this->_lockFile)) {
+            unlink($this->_lockFile);
         }
     }
 
@@ -203,20 +208,19 @@ class Efe implements \Onm\Import\Importer
      */
     public function updateSyncFile($importedElements = array())
     {
-
         $syncParams = $this->getSyncParams();
 
-        if(is_string($importedElements)) {
+        if (is_string($importedElements)) {
             $importedElements = array($importedElements);
         }
 
         // Clean previously imported files that are not present in local cache
-        $localElements = $this->getLocalFileList($this->syncPath);
-        $previousImportedElements = $syncParams['imported_elements'];
+        $localElements  = $this->getLocalFileList($this->syncPath);
+        $previousImportedElements      = $syncParams['imported_elements'];
         $previousImportedElementsCount = count($previousImportedElements);
         $elements = array();
         for ($i=0; $i < $previousImportedElementsCount; $i++) {
-            if(in_array($previousImportedElements[$i], $localElements)) {
+            if (in_array($previousImportedElements[$i], $localElements)) {
                 $elements []= $previousImportedElements[$i];
             }
         }
@@ -225,14 +229,13 @@ class Efe implements \Onm\Import\Importer
         $newImportedelements = array_merge($importedElements,$elements);
 
         $newSyncParams = array(
-            'lastimport' => date('c'),
+            'lastimport'        => date('c'),
             'imported_elements' => $newImportedelements,
         );
 
         file_put_contents($this->syncFilePath, serialize($newSyncParams));
 
         return $newSyncParams;
-
     }
 
     /*
@@ -244,14 +247,12 @@ class Efe implements \Onm\Import\Importer
      */
     public function minutesFromLastSync($params = array())
     {
-        $params = $this->getSyncParams();
+        $params    = $this->getSyncParams();
 
-        $to_time = strtotime(date('c'));
-        $from_time = strtotime($params['lastimport']);
+        $toTime   = strtotime(date('c'));
+        $fromTime = strtotime($params['lastimport']);
 
-        return round((abs($to_time - $from_time) / 60), 0);
-
-
+        return round((abs($toTime - $fromTime) / 60), 0);
     }
 
     /**
@@ -267,7 +268,10 @@ class Efe implements \Onm\Import\Importer
 
         $counTotalElements = count($filesSynced);
         if (array_key_exists('items_page', $params) && array_key_exists('page', $params)) {
-            $files = array_slice($filesSynced, $params['items_page'] * ($params['page']-1), $params['items_page']);
+            $files = array_slice(
+                $filesSynced, $params['items_page'] * ($params['page']-1),
+                $params['items_page']
+            );
         } else {
             $files = $filesSynced;
         }
@@ -282,7 +286,7 @@ class Efe implements \Onm\Import\Importer
                 continue;
             }
             try {
-                $element = new \Onm\Import\DataSource\NewsMLG1($this->syncPath.DIRECTORY_SEPARATOR.$file);
+                $element = new NewsMLG1($this->syncPath.DIRECTORY_SEPARATOR.$file);
             } catch (\Exception $e) {
                 continue;
             }
@@ -310,7 +314,9 @@ class Efe implements \Onm\Import\Importer
 
         }
 
-        usort($elements, create_function('$a,$b', 'return  $b->created_time->getTimestamp() - $a->created_time->getTimestamp();'));
+        usort($elements, create_function('$a,$b',
+            'return  $b->created_time->getTimestamp() - $a->created_time->getTimestamp();')
+        );
 
         return array($counTotalElements, $elements);
 
@@ -327,7 +333,7 @@ class Efe implements \Onm\Import\Importer
     public function findByID($id)
     {
 
-        $element = new \Onm\Import\DataSource\NewsMLG1($this->syncPath.DIRECTORY_SEPARATOR.$id.'.xml');
+        $element = new NewsMLG1($this->syncPath.DIRECTORY_SEPARATOR.$id.'.xml');
 
         return  $element;
 
@@ -343,7 +349,7 @@ class Efe implements \Onm\Import\Importer
     public function findByFileName($id)
     {
 
-        $element = new \Onm\Import\DataSource\NewsMLG1($this->syncPath.DIRECTORY_SEPARATOR.$id);
+        $element = new NewsMLG1($this->syncPath.DIRECTORY_SEPARATOR.$id);
 
         return  $element;
 
@@ -375,17 +381,16 @@ class Efe implements \Onm\Import\Importer
     {
         $fileListing = glob($cacheDir.DIRECTORY_SEPARATOR.'*.xml');
 
-        usort($fileListing, create_function('$a,$b', 'return filemtime($b) - filemtime($a);'));
+        usort($fileListing, create_function('$a,$b',
+            'return filemtime($b) - filemtime($a);')
+        );
 
         $fileListingCleaned = array();
 
-        foreach($fileListing as $file) {
+        foreach ($fileListing as $file) {
             $fileListingCleaned []= basename($file);
         }
 
         return $fileListingCleaned;
     }
-
-
-
 }

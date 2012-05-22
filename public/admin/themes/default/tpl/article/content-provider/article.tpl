@@ -7,6 +7,9 @@
         </div>
     </div>
     <div class="content-action-buttons btn-group">
+        <a href="#" class="btn btn-mini info">
+            <i class="icon-info-sign"></i>
+        </a>
         <a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">
             <i class="icon-cog"></i>
             <span class="caret"></span>

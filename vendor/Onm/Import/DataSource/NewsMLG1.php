@@ -1,51 +1,33 @@
 <?php
 /**
- *  Copyright (C) 2011 by OpenHost S.L.
+ * This file is part of the Onm package.
  *
- *  Permission is hereby granted, free of charge, to any person obtaining a copy
- *  of this software and associated documentation files (the "Software"), to deal
- *  in the Software without restriction, including without limitation the rights
- *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *  copies of the Software, and to permit persons to whom the Software is
- *  furnished to do so, subject to the following conditions:
+ * (c)  OpenHost S.L. <developers@openhost.es>
  *
- *  The above copyright notice and this permission notice shall be included in
- *  all copies or substantial portions of the Software.
- *
- *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- *  THE SOFTWARE.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  **/
-/**
- * (c) Copyright Mér Mai 25 17:07:03 2011 Fran Diéguez. All Rights Reserved.
-*/
-/*
- * class Europapress
- */
 namespace Onm\Import\DataSource;
+
 use Onm\Settings as s;
+use \Onm\Import\DataSource\NewsMLG1Component\Video;
+use \Onm\Import\DataSource\NewsMLG1Component\Photo;
 
-class NewsMLG1 {
+class NewsMLG1
+{
 
-
-    private $data = null;
+    private $_data = null;
 
     /**
     * Ensures that we always get one single instance
     *
     * @return object, the unique instance object
-    * @author Fran Dieguez <fran@openhsot.es>
     **/
     static public function getInstance($config)
     {
 
         if ((!self::$instance instanceof self) or
-            (count(array_diff($this->config, $config)) > 0))
-        {
+            (count(array_diff($this->config, $config)) > 0)) {
             self::$instance = new self($config);
         }
 
@@ -57,24 +39,33 @@ class NewsMLG1 {
      * __construct()
      * @param $xmlFile, the XML file that contains information about an EP new
      */
-    public function __construct($xmlFile) {
+    public function __construct($xmlFile)
+    {
 
         $this->xmlFile = basename($xmlFile);
 
         $baseAgency = s::get('site_agency');
         $this->agencyName = $baseAgency.' | Europapress';
 
-        if(file_exists($xmlFile)) {
+        if (file_exists($xmlFile)) {
             if (filesize($xmlFile) < 2) {
-                throw new \Exception(sprintf(_("File '%d' can't be loaded."), $xmlFile));
+                throw new \Exception(
+                    sprintf(_("File '%d' can't be loaded."), $xmlFile)
+                );
             }
 
-            $this->data = simplexml_load_file($xmlFile, NULL, LIBXML_NOERROR | LIBXML_NOWARNING);
-            if (!$this->data) {
-                throw new \Exception(sprintf(_("File '%d' can't be loaded."), $xmlFile));
+            $this->_data = simplexml_load_file(
+                $xmlFile, NULL, LIBXML_NOERROR | LIBXML_NOWARNING
+            );
+            if (!$this->_data) {
+                throw new \Exception(
+                    sprintf(_("File '%d' can't be loaded."), $xmlFile)
+                );
             }
         } else {
-            throw new \Exception(sprintf(_("File '%d' doesn't exists."), $xmlFile));
+            throw new \Exception(
+                sprintf(_("File '%d' doesn't exists."), $xmlFile)
+            );
         }
 
         return $this;
@@ -114,7 +105,8 @@ class NewsMLG1 {
 
             case 'tags':
                 $rawCategory = $this->getData()->NewsItem->NewsComponent
-                                    ->DescriptiveMetadata->xpath("//Property[@FormalName=\"Tesauro\"]");
+                                    ->DescriptiveMetadata
+                                    ->xpath("//Property[@FormalName=\"Tesauro\"]");
                 $rawTags = (string)$rawCategory[0]->attributes()->Value;
                 $tagGroups = explode(";", $rawTags);
 
@@ -128,12 +120,12 @@ class NewsMLG1 {
                 break;
 
             case 'created_time':
-                $originalDate = (string)$this->getData()->NewsItem->NewsManagement
-                                                        ->ThisRevisionCreated;
+                $originalDate = (string)$this->getData()
+                                            ->NewsItem->NewsManagement
+                                            ->ThisRevisionCreated;
 
                 // ISO 8601 doesn't match this date 20111211T103900+0000
                 $originalDate = preg_replace('@\+(\d){4}$@', '', $originalDate);
-
 
                 return \DateTime::createFromFormat(
                     'Ymd\THis',
@@ -150,8 +142,10 @@ class NewsMLG1 {
                 break;
 
             case 'agency_name':
-                $rawAgencyName = $this->getData()->NewsEnvelope
-                                      ->SentFrom->Party->xpath("//Property[@FormalName=\"Organization\"]");
+                $rawAgencyName =
+                    $this->getData()
+                         ->NewsEnvelope->SentFrom->Party
+                         ->xpath("//Property[@FormalName=\"Organization\"]");
 
                 return (string)$rawAgencyName[0]->attributes()->Value;
                 break;
@@ -172,11 +166,13 @@ class NewsMLG1 {
      * Returns the available text in this multimedia package
      *
      * @return void
-     * @author
      **/
     public function getTexts()
     {
-        $contents = $this->getData()->xpath("//NewsItem/NewsComponent/NewsComponent[@Duid=\"multimedia_".$this->id.".multimedia.texts\"]");
+        $contents = $this->getData()->xpath(
+            "//NewsItem/NewsComponent/NewsComponent"
+            ."[@Duid=\"multimedia_".$this->id.".multimedia.texts\"]"
+        );
 
         $texts = null;
         if (isset($contents[0]) && $contents[0]->NewsComponent) {
@@ -193,18 +189,20 @@ class NewsMLG1 {
      * Returns the available photos in this multimedia package
      *
      * @return void
-     * @author
      **/
     public function getPhotos()
     {
         if (!isset($this->photos)) {
-            $contents = $this->getData()->xpath("//NewsItem/NewsComponent/NewsComponent[@Duid=\"multimedia_".$this->id.".multimedia.photos\"]");
+            $contents = $this->getData()->xpath(
+                "//NewsItem/NewsComponent/NewsComponent"
+                ."[@Duid=\"multimedia_".$this->id.".multimedia.photos\"]"
+            );
 
             if (count($contents) > 0) {
                 $this->photos = array();
                 foreach ($contents[0] as $componentName => $component) {
                     if ($componentName == 'NewsComponent') {
-                        $photoComponent = new \Onm\Import\DataSource\NewsMLG1Component\Photo($component);
+                        $photoComponent = new Photo($component);
                         $this->photos[$photoComponent->id] = $photoComponent;
                     }
                 }
@@ -230,25 +228,27 @@ class NewsMLG1 {
      * Returns the available images in this multimedia package
      *
      * @return void
-     * @author
      **/
     public function getVideos()
     {
-    if (!isset($this->videos)) {
-        $contents = $this->getData()->xpath("//NewsItem/NewsComponent/NewsComponent[@Duid=\"multimedia_".$this->id.".multimedia.videos\"]");
+        if (!isset($this->videos)) {
+            $contents = $this->getData()->xpath(
+                "//NewsItem/NewsComponent/NewsComponent"
+                ."[@Duid=\"multimedia_".$this->id.".multimedia.videos\"]"
+            );
 
-        if (count($contents) > 0) {
-            $this->videos = array();
-            foreach ($contents[0] as $componentName => $component) {
-                if ($componentName == 'NewsComponent') {
-                    $videoComponent = new \Onm\Import\DataSource\NewsMLG1Component\Video($component);
-                    $this->videos[$videoComponent->id] = $videoComponent;
+            if (count($contents) > 0) {
+                $this->videos = array();
+                foreach ($contents[0] as $componentName => $component) {
+                    if ($componentName == 'NewsComponent') {
+                        $videoComponent = new Video($component);
+                        $this->videos[$videoComponent->id] = $videoComponent;
+                    }
                 }
+            } else {
+                $this->videos = array();
             }
-        } else {
-            $this->videos = array();
         }
-    }
 
         return $this->videos;
     }
@@ -267,11 +267,13 @@ class NewsMLG1 {
      * Returns the available audios in this multimedia package
      *
      * @return void
-     * @author
      **/
     public function getAudios()
     {
-        $contents = $this->getData()->xpath("//NewsItem/NewsComponent/NewsComponent[@Duid=\"multimedia_".$this->id.".multimedia.audios\"]");
+        $contents = $this->getData()->xpath(
+            "//NewsItem/NewsComponent/NewsComponent"
+            ."[@Duid=\"multimedia_".$this->id.".multimedia.audios\"]"
+        );
 
         return $contents;
     }
@@ -280,11 +282,13 @@ class NewsMLG1 {
      * Returns the available Documentary modules in this multimedia package
      *
      * @return void
-     * @author
      **/
     public function getModdocs()
     {
-        $contents = $this->getData()->xpath("//NewsItem/NewsComponent/NewsComponent[@Duid=\"multimedia_".$this->id.".multimedia.moddocs\"]");
+        $contents = $this->getData()->xpath(
+            "//NewsItem/NewsComponent/NewsComponent"
+            ."[@Duid=\"multimedia_".$this->id.".multimedia.moddocs\"]"
+        );
 
         return $contents;
     }
@@ -293,11 +297,13 @@ class NewsMLG1 {
      * Returns the available files in this multimedia package
      *
      * @return void
-     * @author
      **/
     public function getFiles()
     {
-        $contents = $this->getData()->xpath("//NewsItem/NewsComponent/NewsComponent[@Duid=\"multimedia_".$this->id.".multimedia.files\"]");
+        $contents = $this->getData()->xpath(
+            "//NewsItem/NewsComponent/NewsComponent"
+            ."[@Duid=\"multimedia_".$this->id.".multimedia.files\"]"
+        );
 
         return $contents;
     }
@@ -312,12 +318,12 @@ class NewsMLG1 {
         return array();
     }
 
-    /*
+    /**
      * Returns the internal data, use with caution
      */
     public function getData()
     {
-        return $this->data;
+        return $this->_data;
     }
 
     /**
@@ -340,6 +346,5 @@ class NewsMLG1 {
 
         return false;
     }
-
 
 }

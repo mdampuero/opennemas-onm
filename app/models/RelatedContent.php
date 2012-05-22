@@ -323,7 +323,7 @@ class RelatedContent
     public function set_rel_position($contentID, $position, $relationID)
     {
         $sql =  "SELECT position FROM related_contents"
-                ." WHERE pk_content1=? AND pk_content2 =?";
+                ." WHERE pk_content1=? AND pk_content2 =?  WHERE verportada=1";
         $values = array($contentID, intval($relationID));
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
 
@@ -378,6 +378,60 @@ class RelatedContent
         }
     }
 
+    public function setHomeRelations($contentID, $position, $relationID)
+    {
+        $sql =  "SELECT position FROM related_contents"
+                ." WHERE pk_content1=? AND pk_content2 =? AND verportada=2";
+        $values = array($contentID, intval($relationID));
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+
+        if (isset($rs->fields['position'])) {
+            $sql = "UPDATE related_contents "
+                    ."SET `verportada`=?, `position`=?"
+                    ." WHERE pk_content1=? AND pk_content2=?";
+            $values = array(2, $position, $contentID, $relationID);
+        } else {
+            $sql =  "INSERT INTO related_contents (`pk_content1`, `pk_content2`,
+                                                  `position`,`verportada`) "
+                    . " VALUES (?,?,?,?)";
+            $values = array($contentID, $relationID, $position, 2);
+        }
+
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+            return;
+        }
+    }
+
+    public function getHomeRelations($contentID)
+    {
+        $sql =  "SELECT DISTINCT pk_content2  FROM related_contents "
+                ." WHERE pk_content1=? AND verportada=2 ORDER BY position DESC";
+        $values = array($contentID);
+
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+
+        if ($rs === false) {
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+            return;
+        }
+
+        $related = array();
+        while (!$rs->EOF) {
+            $related[] = $rs->fields['pk_content2'];
+            $rs->MoveNext();
+        }
+
+        $related = array_unique($related);
+        return $related;
+    }
+
+
+    //TODO: Delete
     public function sortArticles($articles)
     {
         //Hay que coger las cats para que sean indices de los arrays

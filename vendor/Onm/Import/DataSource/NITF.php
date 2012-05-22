@@ -14,8 +14,8 @@
   * @package Onm
   * @author
   **/
- class NITF
- {
+class NITF
+{
     /**
      * Instantiates the NITF DOM data from an SimpleXML object
      *
@@ -26,7 +26,6 @@
     {
         $this->data = $data;
     }
-
 
     /*
      * Magic method for translate properties into XML elements
@@ -56,9 +55,11 @@
                 break;
 
             case 'summary':
-                $summaries = $this->getData()->xpath("//nitf/body/body.head/abstract");
-                $summary = "";
-                foreach($summaries[0]->children() as $child) {
+                $summaries = $this->getData()->xpath(
+                    "//nitf/body/body.head/abstract"
+                );
+                $summary   = "";
+                foreach ($summaries[0]->children() as $child) {
                   $summary .= "<p>".sprintf("%s", $child)."</p>";
                 }
 
@@ -66,9 +67,11 @@
                 break;
 
             case 'body':
-                $summaries = $this->getData()->xpath("//nitf/body/body.content");
+                $summaries = $this->getData()->xpath(
+                    "//nitf/body/body.content"
+                );
                 $summary = "";
-                foreach($summaries[0]->children() as $child) {
+                foreach ($summaries[0]->children() as $child) {
                   $summary .= "<p>".sprintf("%s", $child)."</p>\n";
                 }
 
@@ -76,9 +79,8 @@
                 break;
 
             case 'created_time':
-                $originalDate = (string)$this->getData()->DescriptiveMetadata->DateLineDate;
-                var_dump($originalDate);die();
-
+                $originalDate =
+                    (string)$this->getData()->DescriptiveMetadata->DateLineDate;
 
                 return \DateTime::createFromFormat(
                     \DateTime::ISO8601,
@@ -93,10 +95,8 @@
 
                 return;
                 break;
-
         }
     }
-
 
     /*
      * Returns the internal data, use with caution

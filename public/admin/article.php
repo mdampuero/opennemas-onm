@@ -343,26 +343,21 @@ if (isset($_REQUEST['action']) ) {
                 $tpl->assign('video2', $video2);
             }
 
-            $rel= new RelatedContent();
+            $relationsHandler= new RelatedContent();
 
-            $relationes = array();
-            $relationes = $rel->get_relations( $_REQUEST['id'] );//de portada
-            $losrel = array();
-            foreach($relationes as $aret) {
-                $resul = new Content($aret);
-                $losrel[] = $resul;
+            $orderFront = array();
+            $relations = $relationsHandler->get_relations( $_REQUEST['id'] );//de portada
+            foreach($relations as $aret) {
+                $orderFront[] =  new Content($aret);
             }
-            $tpl->assign('losrel', $losrel);
+            $tpl->assign('orderFront', $orderFront);
 
-            // Relacionados de interior
-            $intrelationes = array();
-            $intrelationes = $rel->get_relations_int($_REQUEST['id']);//de interor
-            $intrel = array();
-            foreach($intrelationes as $aret) {
-                $resul = new Content($aret);
-                $intrel[] = $resul;
+            $orderInner = array();
+            $relations = $relationsHandler->get_relations_int($_REQUEST['id']);//de interor
+            foreach($relations as $aret) {
+                $orderInner[] = new Content($aret);
             }
-            $tpl->assign('intrel', $intrel);
+            $tpl->assign('orderInner', $orderInner);
 
             if(\Onm\Module\ModuleManager::isActivated('AVANCED_ARTICLE_MANAGER')) {
                 $galleries = array();
@@ -370,6 +365,16 @@ if (isset($_REQUEST['action']) ) {
                 $galleries['front'] = new Album($article->params['withGallery']);
                 $galleries['inner'] = new Album($article->params['withGalleryInt']);
                 $tpl->assign('galleries', $galleries);
+
+                $orderHome = array();
+                $relations = $relationsHandler->getHomeRelations( $_REQUEST['id'] );//de portada
+                if (!empty($relations)) {
+                    foreach($relations as $aret) {
+                        $orderHome[] = new Content($aret);
+                    }
+                    $tpl->assign('orderHome', $orderHome);
+                }
+
             }
 
             //Comentarios

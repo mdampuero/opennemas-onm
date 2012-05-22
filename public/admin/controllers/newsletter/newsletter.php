@@ -111,13 +111,14 @@ switch($action) {
         $newsletterContent = isset($_COOKIE['data-newsletter']) ?
                      json_decode(json_decode($_COOKIE['data-newsletter'])) : '';
 
-        if( array_key_exists('newsletterHtml', $_SESSION) ) {
+        if (array_key_exists('newsletterHtml', $_SESSION)) {
             unset($_SESSION['newsletterHtml']);
         }
 
         $tpl->assign( array(
-                    'newsletterContent' => $newsletterContent,
-                    'savedNewsletters'  => $savedNewsletters ) );
+            'newsletterContent' => $newsletterContent,
+            'savedNewsletters'  => $savedNewsletters )
+        );
 
         $tpl->display('newsletter/steps/newsletterContents.tpl');
     break;
@@ -133,6 +134,7 @@ switch($action) {
         $_SESSION['newsletterHtml'] = $newsletter->html;
 
         $htmlContent = html_entity_decode($newsletter->html, ENT_QUOTES );
+
         $tpl->assign( array(
                     'htmlContent' => $htmlContent,
                     ) );
