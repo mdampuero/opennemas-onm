@@ -52,7 +52,8 @@ class FTP {
             if (isset($this->serverUrl['path'])) {
                 if (!@ftp_chdir($this->ftpConnection, $this->serverUrl['path'])) {
                     throw new \Exception(sprintf(
-                        _("Directory '%s' doesn't exists or you don't have enought permissions to acces it"),
+                        _("Directory '%s' doesn't exists or you "
+                            ."don't have enought permissions to acces it"),
                         $this->serverUrl['path']
                     ));
                 }
@@ -221,7 +222,8 @@ class FTP {
      * @param integer $bytes the amount of bytes of the file
      * @return string        the human readable file size
      */
-    protected function _byteconvert($bytes) {
+    protected function _byteconvert($bytes)
+    {
         $symbol = array('B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
         $exp = floor( log($bytes) / log(1024) );
 
@@ -233,12 +235,15 @@ class FTP {
      * @param string $chmod the chmod string-based file perms
      * @return integer        the numeric based file permissions
      */
-    protected function _chmodnum($chmod) {
+    protected function _chmodnum($chmod)
+    {
         $trans = array('-' => '0', 'r' => '4', 'w' => '2', 'x' => '1');
         $chmod = substr(strtr($chmod, $trans), 1);
         $array = str_split($chmod, 3);
 
-        return array_sum(str_split($array[0])) . array_sum(str_split($array[1])) . array_sum(str_split($array[2]));
+        return array_sum(str_split($array[0]))
+            . array_sum(str_split($array[1]))
+            . array_sum(str_split($array[2]));
     }
 
     /**
