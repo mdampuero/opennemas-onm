@@ -46,6 +46,7 @@ class UserGroup
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return (false);
         }
         $this->id = $GLOBALS['application']->conn->Insert_ID();
@@ -56,8 +57,10 @@ class UserGroup
         if ((!is_null($data['privileges']))
             && (count($data['privileges'] > 0))
         ) {
+
             return $this->insert_privileges($data['privileges']);
         }
+
         return (true);
     }
 
@@ -71,6 +74,7 @@ class UserGroup
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return;
         }
         $this->set_values($rs->fields);
@@ -85,6 +89,7 @@ class UserGroup
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return;
         }
         while (!$rs->EOF) {
@@ -111,6 +116,7 @@ class UserGroup
                 $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
                 $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
                 return;
             }
 
@@ -124,6 +130,7 @@ class UserGroup
                 return $this->insert_privileges($data['privileges']);
             }
         }
+
         return (false);
     }
 
@@ -136,6 +143,7 @@ class UserGroup
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return;
         }
 
@@ -148,6 +156,7 @@ class UserGroup
 
         $sql = 'SELECT name FROM user_groups WHERE pk_user_group=?';
         $rs = $GLOBALS['application']->conn->GetOne($sql, $userGroupFK);
+
         return ($rs);
     }
 
@@ -163,6 +172,7 @@ class UserGroup
                 $types[] = $userGroup;
             $rs->MoveNext();
         }
+
         return ($types);
     }
 
@@ -171,8 +181,10 @@ class UserGroup
 
 
         if (isset($this->privileges)) {
+
             return in_array(intval($privilegeID), $this->privileges);
         }
+
         return false;
     }
 
@@ -190,9 +202,11 @@ class UserGroup
                 $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
                 $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
                 return (false);
             }
         }
+
         return (true);
     }
 
@@ -206,6 +220,7 @@ class UserGroup
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return;
         }
     }

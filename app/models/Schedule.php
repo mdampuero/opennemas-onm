@@ -40,7 +40,7 @@ class Schedule extends Content
          $calendars=array();
          while(!$rs->EOF) {
               $item=new stdClass();
-        	  $item->id=$rs->fields['calendar'];
+              $item->id=$rs->fields['calendar'];
               $item->calendar_title = $rs->fields['calendar_title'];
               $item->contact_email = $rs->fields['contact_email'];
               $item->contact_name = $rs->fields['contact_name'];
@@ -50,7 +50,7 @@ class Schedule extends Content
               $item->name = StringUtils::get_title($rs->fields['calendar_title']);
 
               $calendars[]=$item;
-          	  $rs->MoveNext();
+                $rs->MoveNext();
          }
 
          return $calendars;

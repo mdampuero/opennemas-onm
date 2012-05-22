@@ -96,6 +96,7 @@ class Article extends Content
             default:
                 break;
         }
+
         return parent::__get($name);
 
     }
@@ -307,6 +308,7 @@ class Article extends Content
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
             $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+
             return;
         }
 
@@ -363,6 +365,7 @@ class Article extends Content
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
             $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+
             return;
         }
     }
@@ -478,7 +481,7 @@ class Article extends Content
      * ONLY fields that clone can update
      *
      * @param string $contentPK
-     * @param array $formValues Data values from POST
+     * @param array  $formValues Data values from POST
      */
     public function updateClone($contentPK, $formValues)
     {
@@ -718,6 +721,7 @@ class Article extends Content
         }
 
         $sql = 'SELECT count(*) FROM `articles_clone` WHERE `pk_clone` = ?';
+
         return $GLOBALS['application']->conn->GetOne($sql, $values) > 0; */
 
         Article::loadHashClones();
@@ -743,6 +747,7 @@ class Article extends Content
         }
 
         $sql = 'SELECT count(*) FROM `articles_clone` WHERE `pk_original` = ?';
+
         return $GLOBALS['application']->conn->GetOne($sql, $values) > 0; */
 
         Article::loadHashClones();
@@ -768,6 +773,7 @@ class Article extends Content
         }
 
         $sql = 'SELECT pk_clone FROM `articles_clone` WHERE `pk_original` = ?';
+
         return $GLOBALS['application']->conn->GetCol($sql, $values); */
 
         Article::loadHashClones();

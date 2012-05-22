@@ -72,8 +72,10 @@ class Vote
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return (false);
         }
+
         return (true);
     }
 
@@ -96,6 +98,7 @@ class Vote
                 $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
                 $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
                 return (false);
             }
             $this->pk_vote = $votePK;
@@ -111,6 +114,7 @@ class Vote
             //       $this->karma = $rs->fields['karma'];
             $this->ips_count_vote = unserialize($rs->fields['ips_count_vote']);
         }
+
         return (true);
     }
 
@@ -143,6 +147,7 @@ class Vote
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return (false);
         }
 
@@ -152,6 +157,7 @@ class Vote
             'true',
             time() + 60 * 60 * 24 * 30
         );
+
         return true;
     }
 
@@ -193,6 +199,7 @@ class Vote
                         . $this->pk_vote . "\">" . $outputHTML;
             $outputHTML.= "</div>";
         }
+
         return $outputHTML;
     }
 
@@ -217,6 +224,7 @@ class Vote
             if ($countIPs[$countKIP]['count'] == 50) return FALSE;
             $countIPs[$countKIP]['count']++;
         }
+
         return $countIPs;
     }
 
@@ -237,8 +245,10 @@ class Vote
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return;
         }
+
         return $rs->fields['karma'];
     }
 
@@ -253,6 +263,7 @@ class Vote
 
         $imgPath = TEMPLATE_USER_URL . "images/utilities/";
         $imageTpl = '<img src="%s%s.png" style="vertical-align:middle;" alt="%s" title="%s" /> ( %d ) ';
+
         return sprintf($imageTpl, $imgPath, ($i % 2 == 0) ? "vote-up" : "vote-down", $this->_messages[$i], $this->_messages[$i], ($i % 2 == 1) ? $this->value_pos : $this->value_neg);
     }
 
@@ -278,6 +289,7 @@ class Vote
                      src="{$imgPath}%s.png"
                      alt="%s" /> </a>   ( %d )
 LINKTPLDOC;
+
         return sprintf(
             $linkTpl,
             $_SERVER['REMOTE_ADDR'],

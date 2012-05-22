@@ -104,7 +104,7 @@ class Kiosko extends Content {
                     $data['content_status'] = $data['available'];
         }
 
-    	$GLOBALS['application']->dispatch('onBeforeUpdate', $this);
+        $GLOBALS['application']->dispatch('onBeforeUpdate', $this);
 
         parent::update($data);
 
@@ -117,6 +117,7 @@ class Kiosko extends Content {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
             return;
         }
 
@@ -145,6 +146,7 @@ class Kiosko extends Content {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
             return;
         }
     }
@@ -180,8 +182,10 @@ class Kiosko extends Content {
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
             $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+
             return;
         }
+
         return true;
     }
 
@@ -222,7 +226,7 @@ class Kiosko extends Content {
         $sql = "SELECT DISTINCT MONTH(date) as month, YEAR(date) as year FROM `kioskos` ORDER BY year, month DESC";
         $rs = $GLOBALS['application']->conn->Execute( $sql );
 
-    	while(!$rs->EOF) {
+        while(!$rs->EOF) {
             $items[$rs->fields['year']][] = $rs->fields['month'];
             $rs->MoveNext();
         }

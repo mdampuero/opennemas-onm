@@ -12,7 +12,8 @@
  * @package Onm
  * @subpackage Model
  */
-class ContentCategoryManager {
+class ContentCategoryManager
+{
 
     /**
      * @var array with categories
@@ -29,7 +30,8 @@ class ContentCategoryManager {
     */
     public $cache = null;
 
-    function __construct() {
+    public function __construct()
+    {
         if( is_null(self::$instance) ) {
             // Posibilidad de cachear resultados de métodos
             $this->cache = new MethodCacheManager($this, array('ttl' => 300));
@@ -38,22 +40,24 @@ class ContentCategoryManager {
             $this->categories = $this->cache->populate_categories();
 
             self::$instance = $this;
+
             return self::$instance;
         } else {
            return self::$instance;
         }
     }
 
-    static function get_instance() {
-        if( is_null(self::$instance) ) {
+    static public function get_instance()
+    {
+        if ( is_null(self::$instance) ) {
             $instance = new ContentCategoryManager();
 
             self::$instance = $instance;
+
             return self::$instance;
         } else {
             return self::$instance;
         }
-
     }
 
     /**
@@ -63,12 +67,13 @@ class ContentCategoryManager {
      *
      * @return array Array with Content_category objects
     */
-    function reloadCategories() {
+    public function reloadCategories()
+    {
 
         $this->categories = null;
         $method ='populate_categories';
-        $args = array();
-        $key = 'ContentCategoryManager'.$method.md5(serialize($args));
+        $args   = array();
+        $key    = 'ContentCategoryManager'.$method.md5(serialize($args));
         if(defined('APC_PREFIX')) {
             $key = APC_PREFIX . $key;
         }
@@ -87,7 +92,8 @@ class ContentCategoryManager {
      *
      * @return array Array with Content_category objects
     */
-    function populate_categories() {
+    public function populate_categories()
+    {
         $sql = 'SELECT * FROM content_categories ORDER BY posmenu ASC';
         $rs = $GLOBALS['application']->conn->Execute( $sql );
 
@@ -107,7 +113,7 @@ class ContentCategoryManager {
             }
         }
 
-        return( $this->categories );
+        return $this->categories;
     }
 
     /**
@@ -117,7 +123,8 @@ class ContentCategoryManager {
      * @param $subcategory_name Name of subcategory
      * @return array Return category_name and subcategory_name fixed
     */
-    function normalize($category_name, $subcategory_name=null) {
+    public function normalize($category_name, $subcategory_name=null)
+    {
         if(!empty($subcategory_name)) {
             // It's a father category
             return array($category_name, $subcategory_name);
@@ -139,7 +146,8 @@ class ContentCategoryManager {
      * @param $order_by
      * @return array Return category objects
     */
-    function find($filter=NULL, $_order_by='ORDER BY 1') {
+    public function find($filter=NULL, $_order_by='ORDER BY 1')
+    {
         $items = array();
         $_where = '1=1';
 
@@ -172,13 +180,16 @@ class ContentCategoryManager {
      * @param $order_by
      * @return array Return category objects
     */
-    function find_by_type($fk_content_type, $filter=NULL, $_order_by='ORDER BY 1') {
+    public function find_by_type($fk_content_type, $filter=NULL, $_order_by='ORDER BY 1')
+    {
         $_where = 'fk_content_type='. $fk_content_type .' ';
+
         return $this->find($_where);
     }
 
     //Devuelve el nombre de una categoria para los upload y posible las urls
-    function get_name($id) {
+    public function get_name($id)
+    {
         if( is_null($this->categories) ) {
             $sql = 'SELECT name FROM content_categories WHERE pk_content_category = ?';
             $rs = $GLOBALS['application']->conn->Execute( $sql, array($id) );
@@ -187,11 +198,13 @@ class ContentCategoryManager {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$error_msg);
                 $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
                 return;
             }
+
             return $rs->fields['name'];
         }
-        if(isset($this->categories[$id]->name)) {
+        if (isset($this->categories[$id]->name)) {
             return($this->categories[$id]->name);
         } else {
             return('');
@@ -205,8 +218,9 @@ class ContentCategoryManager {
      * @param int $id Category ID
      * @return int Return posmenu
      */
-    function get_pos($id) {
-        if( is_null($this->categories) ) {
+    public function get_pos($id)
+    {
+        if (is_null($this->categories)) {
             if(is_numeric($id)) {
                 $sql = 'SELECT posmenu FROM content_categories WHERE pk_content_category = ?';
                 $rs = $GLOBALS['application']->conn->Execute( $sql, array($id) );
@@ -215,15 +229,17 @@ class ContentCategoryManager {
                     $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                     $GLOBALS['application']->logger->debug('Error: '.$error_msg);
                     $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
                     return;
                 }
+
                 return $rs->fields['posmenu'];
             }
 
             return 0;
         }
 
-        if(!isset($this->categories[$id])) {
+        if (!isset($this->categories[$id])) {
             return 0;
         }
 
@@ -232,8 +248,9 @@ class ContentCategoryManager {
     }
 
     //Returns cetegory id
-    function get_id($category_name) {
-        if( is_null($this->categories) ) {
+    public function get_id($category_name)
+    {
+        if (is_null($this->categories)) {
             $sql = 'SELECT pk_content_category FROM content_categories WHERE name = ?';
             $rs  = $GLOBALS['application']->conn->Execute( $sql, array($category_name) );
 
@@ -241,6 +258,7 @@ class ContentCategoryManager {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$error_msg);
                 $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
                 return NULL;
             }
 
@@ -248,8 +266,8 @@ class ContentCategoryManager {
         }
 
         // Singleton version
-        foreach($this->categories as $category) {
-            if($category->name == $category_name) {
+        foreach ($this->categories as $category) {
+            if ($category->name == $category_name) {
                 return( $category->pk_content_category );
             }
         }
@@ -266,7 +284,8 @@ class ContentCategoryManager {
      *
      * @throws <b>Exception</b> Explanation of exception.
      */
-    function getFirstCategory($category_type) {
+    public function getFirstCategory($category_type)
+    {
 
         if( is_null($this->categories) ) {
             $sql = 'SELECT * FROM content_categories WHERE '.
@@ -279,6 +298,7 @@ class ContentCategoryManager {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$error_msg);
                 $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
                 return;
             }
 
@@ -288,8 +308,8 @@ class ContentCategoryManager {
         // Singleton version
         $categories = $this->order_by_posmenu($this->categories);
 
-        foreach($categories as $category) {
-            if(($category->internal_category == $category_type) && ($category->inmenu==1) ) {
+        foreach ($categories as $category) {
+            if (($category->internal_category == $category_type) && ($category->inmenu==1) ) {
 
                 return( $category->name );
             }
@@ -297,8 +317,9 @@ class ContentCategoryManager {
     }
 
     //Returns the title of category
-    function get_title($category_name) {
-        if( is_null($this->categories) ) {
+    public function get_title($category_name)
+    {
+        if (is_null($this->categories)) {
             $sql = 'SELECT title FROM content_categories WHERE name = ?';
 
             $rs = $GLOBALS['application']->conn->Execute( $sql, array($category_name) );
@@ -307,6 +328,7 @@ class ContentCategoryManager {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$error_msg);
                 $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
                 return;
             }
 
@@ -323,7 +345,8 @@ class ContentCategoryManager {
         return('');
     }
 
-    function getByName($category_name) {
+    public function getByName($category_name)
+    {
         if( is_null($this->categories) ) {
             $sql = 'SELECT title FROM content_categories WHERE name = ?';
 
@@ -333,6 +356,7 @@ class ContentCategoryManager {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$error_msg);
                 $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
                 return;
             }
 
@@ -340,8 +364,8 @@ class ContentCategoryManager {
         }
 
         // Singleton version
-        foreach($this->categories as $category) {
-            if($category->name == $category_name) {
+        foreach ($this->categories as $category) {
+            if ($category->name == $category_name) {
                 return $category;
             }
         }
@@ -350,7 +374,8 @@ class ContentCategoryManager {
     }
 
     //Returns an all cetegories array
-    function get_all_categories() {
+    public function get_all_categories()
+    {
         if( is_null($this->categories) ) {
             $sql = 'SELECT name FROM content_categories';
 
@@ -360,6 +385,7 @@ class ContentCategoryManager {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$error_msg);
                 $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
                 return;
             }
 
@@ -383,7 +409,8 @@ class ContentCategoryManager {
     }
 
         //Returns an all cetegories array
-    function get_all_categoriesID() {
+    public function get_all_categoriesID()
+    {
         if( is_null($this->categories) ) {
             $sql = 'SELECT pk_content_category FROM content_categories WHERE internal_category=1';
             $rs = $GLOBALS['application']->conn->Execute( $sql );
@@ -392,6 +419,7 @@ class ContentCategoryManager {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$error_msg);
                 $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
                 return;
             }
             $items = array ();
@@ -406,8 +434,8 @@ class ContentCategoryManager {
 
         // Singleton version
         $items = array();
-        foreach($this->categories as $category) {
-            if( $category->internal_category == 1 ) {
+        foreach ($this->categories as $category) {
+            if ( $category->internal_category == 1 ) {
                 $items[$category->pk_content_category] = $category->pk_content_category;
             }
         }
@@ -417,7 +445,8 @@ class ContentCategoryManager {
 
     //Returns an array with subcetegories from a single category
     //with internal_name as index
-    function get_all_subcategories($category_id) {
+    public function get_all_subcategories($category_id)
+    {
         if( is_null($this->categories) ) {
             $sql = 'SELECT name,title,internal_category FROM content_categories WHERE internal_category<>0 AND inmenu=1 AND
                 fk_content_category = ? ORDER BY posmenu';
@@ -428,6 +457,7 @@ class ContentCategoryManager {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$error_msg);
                 $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
                 return;
             }
 
@@ -455,7 +485,8 @@ class ContentCategoryManager {
         return $items;
     }
 
-    function order_by_posmenu($categories) {
+    public function order_by_posmenu($categories)
+    {
         $categories = array_values($categories);
 
         // FIXME: create a lambda function once we upgrade to new version 5.3 of PHP
@@ -472,6 +503,7 @@ class ContentCategoryManager {
                 if  ($a->posmenu == $b->posmenu) {
 
                 }
+
                 return ($a->posmenu > $b->posmenu) ? +1 : -1;
 
             }
@@ -481,7 +513,8 @@ class ContentCategoryManager {
         return( $categories );
     }
 
-    function group_by_type($categories) {
+    public function group_by_type($categories)
+    {
         $categories = array_values($categories);
 
         // FIXME: create a lambda function once we upgrade to new version 5.3 of PHP
@@ -498,6 +531,7 @@ class ContentCategoryManager {
                 if  ($a->internal_category == $b->internal_category) {
                     return ($a->posmenu > $b->posmenu) ? +1 : -1;
                 }
+
                 return ($a->internal_category < $b->internal_category) ? 1 : +1;
 
             }
@@ -513,7 +547,8 @@ class ContentCategoryManager {
      * @todo To do work recursive for varios nested levels
      * @return array Tree structure
     */
-    function getCategoriesTree() {
+    public function getCategoriesTree()
+    {
         $tree = array();
 
         $categories = $this->order_by_posmenu($this->categories);
@@ -546,7 +581,8 @@ class ContentCategoryManager {
      * @todo  To render a select form with categories
      * @return array unidimensional structure for select form
     */
-    function renderCategoriesTree() {
+    public function renderCategoriesTree()
+    {
        // $this->getCategoriesTree();
         $categories = $this->getCategoriesTreeMenu();
         $i=0;
@@ -580,7 +616,8 @@ class ContentCategoryManager {
      * @todo To do work recursive for varios nested levels
      * @return array Tree structure
     */
-    function getCategoriesTreeMenu() {
+    public function getCategoriesTreeMenu()
+    {
         $tree = array();
 
         $categories = $this->order_by_posmenu($this->categories);
@@ -609,7 +646,8 @@ class ContentCategoryManager {
     }
 
     //Returns first subcategory from a father category_id
-    function get_first_subcategory($category_id) {
+    public function get_first_subcategory($category_id)
+    {
         if( is_null($this->categories) ) {
             $sql = 'SELECT name FROM content_categories
                     WHERE inmenu=1 AND fk_content_category=? AND internal_category<>0
@@ -621,6 +659,7 @@ class ContentCategoryManager {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$error_msg);
                 $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
                 return;
             }
 
@@ -638,7 +677,8 @@ class ContentCategoryManager {
         }
     }
 
-    function get_father($category_name){
+    public function get_father($category_name)
+    {
         if( is_null($this->categories) ) {
             $sql='SELECT content2.name FROM `content_categories` as content1,`content_categories` as content2 '.
                  'WHERE content1.name=? and content1.fk_content_category=content2.pk_content_category';
@@ -648,6 +688,7 @@ class ContentCategoryManager {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$error_msg);
                 $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
                 return;
             }
 
@@ -676,7 +717,8 @@ class ContentCategoryManager {
     }
 
     //Returns false if the category does not exist
-    function exists($category_name) {
+    public function exists($category_name)
+    {
         if( is_null($this->categories) ) {
             $sql = 'SELECT count(*) AS total FROM content_categories WHERE name = ?';
             $rs  = $GLOBALS['application']->conn->GetOne( $sql, $category_name );
@@ -696,7 +738,8 @@ class ContentCategoryManager {
     }
 
     //Returns true if there is no contents in that category name
-    function isEmpty($category) {
+    public function isEmpty($category)
+    {
         $pk_category = $this->get_id($category);
         $sql1 = 'SELECT count( * )
                  FROM `content_positions`
@@ -707,6 +750,7 @@ class ContentCategoryManager {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
             return;
         }
 
@@ -722,6 +766,7 @@ class ContentCategoryManager {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
             return;
         }
 
@@ -729,7 +774,8 @@ class ContentCategoryManager {
     }
 
  //Returns true if there is no contents in that category id
-    function is_Empty($category) {
+    public function is_Empty($category)
+    {
         $sql1 = 'SELECT count(pk_content) AS number FROM `contents`, `contents_categories`
             WHERE `fk_content_type`=1 AND `in_litter`=0 AND contents_categories.pk_fk_content_category=? AND contents.pk_content=pk_fk_content';
         $rs1 = $GLOBALS['application']->conn->Execute( $sql1, array($category) );
@@ -745,7 +791,8 @@ class ContentCategoryManager {
     }
 
 
-    function count_content_by_type($category, $type) {
+    public function count_content_by_type($category, $type)
+    {
         $sql = 'SELECT count(pk_content) AS number FROM `contents`,`contents_categories` WHERE'.
             ' contents.pk_content=pk_fk_content AND pk_fk_content_category=? AND `fk_content_type`=?';
         $rs = $GLOBALS['application']->conn->Execute( $sql, array($category, $type) );
@@ -762,7 +809,8 @@ class ContentCategoryManager {
      *
      * @see ContentCategoryManager::count_content_by_type
     */
-    function count_content_by_type_group($type, $filter=NULL) {
+    public function count_content_by_type_group($type, $filter=NULL)
+    {
          $_where = '1=1';
         if( !is_null($filter) ) {
             $_where = $filter;
@@ -786,7 +834,8 @@ class ContentCategoryManager {
         return $groups;
     }
 
-     function countMediaByTypeGroup($filter=NULL) {
+     public function countMediaByTypeGroup($filter=NULL)
+     {
          $_where = '1=1';
         if( !is_null($filter) ) {
             $_where = $filter;
@@ -810,7 +859,8 @@ class ContentCategoryManager {
         return $groups;
     }
 
-    function data_media_by_type_group($filter=NULL) {
+    public function data_media_by_type_group($filter=NULL)
+    {
          $_where = '1=1';
         if( !is_null($filter) ) {
             $_where = $filter;
@@ -845,7 +895,8 @@ class ContentCategoryManager {
      *
      * @throws <b>Exception</b> Explanation of exception.
      */
-    function getArraysMenu($category=NULL, $internal_category = 1) {
+    public function getArraysMenu($category=NULL, $internal_category = 1)
+    {
 
         //fullcat contains array with all cats order by posmenu
         //parentCategories is an array with all menu cats in frontpage
@@ -901,7 +952,8 @@ class ContentCategoryManager {
      *
      * @throws <b>Exception</b> Explanation of exception.
      */
-    function getSubcategories($category_id) {
+    public function getSubcategories($category_id)
+    {
         if( is_null($this->categories) ) {
             $this->categories = $this->cache->populate_categories();
         }
@@ -924,7 +976,8 @@ class ContentCategoryManager {
      * @param int $id Content ID
      * @return int Return category name
      */
-    function get_category_name_by_content_id($id) {
+    public function get_category_name_by_content_id($id)
+    {
         if(is_numeric($id)) {
             $sql = 'SELECT catName FROM contents_categories WHERE pk_fk_content=?';
             $rs = $GLOBALS['application']->conn->Execute( $sql, array($id) );
@@ -933,8 +986,10 @@ class ContentCategoryManager {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$error_msg);
                 $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
                 return;
             }
+
             return $rs->fields['catName'];
         }
 

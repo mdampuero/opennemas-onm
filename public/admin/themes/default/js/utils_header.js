@@ -229,15 +229,3 @@ function cancel(action,category,page) {
         location.href= '/admin/article.php?action='+action+'&amp;category='+category+'&amp;page='+page;
     }
 }
-
-function change_att_pos(id, position, id2) {
-    location.href= 'article.php?action=set_att_position&amp;id='+id+'&amp;position='+position+'&amp;id2='+id2;
-}
-
-function change_pos(id, posic, category) {
-    location.href= 'article.php?action=set_position&amp;id='+id+'&posicion='+posic+'&amp;category='+category;
-}
-
-function alert_frontpage() {
-    window.alert("No puede publicar mas de 21 articulos en la Portada!");
-}

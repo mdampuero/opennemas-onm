@@ -2345,3 +2345,6 @@ div.newsletter-contents ul li.container-label {
     background-color: #EEE;
     font-weight: bold;
 }
+.popover-title {
+  margin-bottom:0 !important;
+}

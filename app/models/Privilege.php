@@ -247,6 +247,7 @@ class Privilege
             $privileges[$module][] = $privilege;
             $rs->MoveNext();
         }
+
         return $privileges;
     }
 
@@ -264,6 +265,7 @@ class Privilege
             $privileges[] = $rs->fields['name'];
               $rs->MoveNext();
         }
+
         return( $privileges);
     }
 

@@ -21,7 +21,7 @@ class Book extends Content {
     }
 
 
-	public function __get($name)
+    public function __get($name)
     {
 
         switch ($name) {
@@ -29,7 +29,7 @@ class Book extends Content {
                 if (empty($this->category_name)) {
                     $this->category_name = $this->loadCategoryName($this->pk_content);
                 }
-				$uri =  Uri::generate('book',
+                $uri =  Uri::generate('book',
                             array(
                                 'id' => sprintf('%06d',$this->id),
                                 'date' => date('YmdHis', strtotime($this->created)),
@@ -37,7 +37,8 @@ class Book extends Content {
                                 'category' => $this->category_name,
                             )
                         );
-				return ($uri !== '') ? $uri : $this->permalink;
+
+                return ($uri !== '') ? $uri : $this->permalink;
 
                 break;
             }
@@ -114,7 +115,7 @@ class Book extends Content {
         $data['file_img'] = !empty($file_img)?$file_img:$this->file_img;
 
         $sql = "UPDATE books SET  `author`=?,`file`=?,`file_img`=?, `editorial`=? ".
-        		"WHERE pk_book = ".intval($data['id']);
+                "WHERE pk_book = ".intval($data['id']);
 
         $values = array( $data['author'], $data['file_name'], $data['file_img'], $data['editorial']);
 
@@ -122,8 +123,10 @@ class Book extends Content {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-          	return false;
+
+              return false;
         }
+
         return $this->id;
     }
 
@@ -141,6 +144,7 @@ class Book extends Content {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
             return;
         }
     }

@@ -78,8 +78,10 @@ class Comment extends \Content
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return (false);
         }
+
         return ($this->id);
     }
 
@@ -98,6 +100,7 @@ class Comment extends \Content
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return;
         }
         $this->pk_comment = $rs->fields['pk_comment'];
@@ -126,6 +129,7 @@ class Comment extends \Content
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return;
         }
     }
@@ -144,6 +148,7 @@ class Comment extends \Content
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return;
         }
     }
@@ -169,6 +174,7 @@ class Comment extends \Content
                 $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
                 $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
                 return;
             }
         }
@@ -201,6 +207,7 @@ class Comment extends \Content
                 }
             }
         }
+
         return $related;
     }
 
@@ -220,6 +227,7 @@ class Comment extends \Content
             $text.= ' ' . $data['author'];
         }
         $weight = StringUtils::getWeightBadWords($text);
+
         return $weight > 100;
     }
 
@@ -250,6 +258,7 @@ class Comment extends \Content
                 $rs->MoveNext();
             }
         }
+
         return $related;
     }
 
@@ -275,6 +284,7 @@ class Comment extends \Content
                 array($contentID)
             );
         }
+
         return intval($rs);
     }
 
@@ -316,6 +326,7 @@ class Comment extends \Content
             }
             $rs->MoveNext();
         }
+
         return $items;
     }
 
@@ -333,6 +344,7 @@ class Comment extends \Content
                 AND `in_litter` =0
                 ORDER BY `created` ASC';
         $rs = $GLOBALS['application']->conn->Execute($sql);
+
         return intval($rs->fields['count(pk_content)']);
     }
 

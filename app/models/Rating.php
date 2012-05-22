@@ -61,8 +61,10 @@ class Rating
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return (false);
         }
+
         return (true);
     }
 
@@ -99,8 +101,10 @@ class Rating
                 $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
                 $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
                 return (false);
             }
+
             return;
         }
 
@@ -108,6 +112,7 @@ class Rating
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return;
         }
         $this->pk_rating = $pk_rating;
@@ -127,6 +132,7 @@ class Rating
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return;
         }
         $value = 0;
@@ -135,6 +141,7 @@ class Rating
             $valor = $rs->fields['total_value'] / $rs->fields['total_votes'];
             $value = round($valor * 100) / 100;
         }
+
         return $value;
     }
 
@@ -162,6 +169,7 @@ class Rating
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return (false);
         }
 
@@ -171,6 +179,7 @@ class Rating
             'true',
             time() + 60 * 60 * 24 * 30
         );
+
         return (true);
     }
 
@@ -194,6 +203,7 @@ class Rating
             if ($ips_count[$countKIP]['count'] == 50) return FALSE;
             $ips_count[$countKIP]['count']++;
         }
+
         return $ips_count;
     }
 
@@ -212,6 +222,7 @@ class Rating
                     </div>
                 </a>
             </li>";
+
         return $output;
     }
 
@@ -219,6 +230,7 @@ class Rating
     {
 
         $active = ($value >= $i) ? "active" : '';
+
         return $imageTpl =
             "<li><div class='vote-element {$active}'>&nbsp;</div></li>";
     }
@@ -226,7 +238,7 @@ class Rating
     /**
      * Get an integer and returns an string with the humanized num of votes
      *
-     * @param   integer $total_votes num of votes
+     * @param integer $total_votes num of votes
      * @return  string description
      * @author  Fran Dieguez <fran@openhost.es>
      * @since   Mon Sep 13 2010 18:12:58 GMT+0200 (CEST)
@@ -240,8 +252,8 @@ class Rating
     /**
      * Prints the list of img elements representing the actual votes
      *
-     * @param   dobule $actualVotes average of votes
-     * @param   string $pageType the kind of page this'll be rendered in
+     * @param dobule $actualVotes average of votes
+     * @param string $pageType    the kind of page this'll be rendered in
      * @return  string elements imgs representing the actual votes
      * @author  Fran Dieguez <fran@openhost.es>
      * @since   Mon Sep 13 2010 18:12:58 GMT+0200 (CEST)
@@ -253,14 +265,15 @@ class Rating
         for ($i = 1;$i <= $this->num_of_stars;$i++) {
             $votes_on_images.= $this->renderImg($i, $actualVotes, $pageType);
         }
+
         return $votes_on_images;
     }
 
     /**
      * Prints the list of elements links representing the actual votes
      *
-     * @param   dobule $actualVotes average of votes
-     * @param   string $pageType the kind of page this'll be rendered in
+     * @param dobule $actualVotes average of votes
+     * @param string $pageType    the kind of page this'll be rendered in
      * @return  string elements links representing the actual votes
      * @author  Fran Dieguez <fran@openhost.es>
      * @since   Mon Sep 13 2010 18:12:58 GMT+0200 (CEST)
@@ -274,14 +287,15 @@ class Rating
                 $i, $pageType, $this->pk_rating, $actualVotes
             );
         }
+
         return $votes_on_links;
     }
 
     /**
      * Get an integer and returns an string with the humanized num of votes
      *
-     * @param   string $page num of votes
-     * @param   string $type the type of
+     * @param string $page num of votes
+     * @param string $type the type of
      * @return  string description
      * @author  Fran Dieguez <fran@openhost.es>
      * @since   Mon Sep 13 2010 18:12:58 GMT+0200 (CEST)
@@ -351,6 +365,7 @@ class Rating
                 );
                 break;
         }
+
         return $htmlOut;
     }
 }

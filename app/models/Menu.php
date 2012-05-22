@@ -40,7 +40,7 @@ class Menu
     /**
      * Create a new menu
      *
-     * @param array $data  .
+     * @param array $data .
      *
      * @return bool If create in database
      */
@@ -89,6 +89,7 @@ class Menu
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
             $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+
             return false;
         }
 
@@ -119,6 +120,7 @@ class Menu
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
             $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+
             return false;
         }
         $config = array('pk_father'=> $data['pk_father']);
@@ -155,8 +157,10 @@ class Menu
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
             $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+
             return false;
         }
+
         return true;
 
         /* Notice log of this action */
@@ -274,6 +278,7 @@ class Menu
                     MenuItems::getMenuItems('pk_father='.$item->pk_item);
             }
         }
+
         return $menu;
 
     }

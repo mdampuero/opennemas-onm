@@ -20,6 +20,7 @@ function checkAll(field,img)
 	}
 }
 
+
 function objetoAjax(){
 	var xmlhttp=false;
 	try {

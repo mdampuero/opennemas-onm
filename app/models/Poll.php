@@ -18,7 +18,7 @@ class Poll extends Content {
     public $subtitle = NULL;
     public $total_votes   	= NULL;
     public $used_ips   	= NULL;
-	public $visualization 	= NULL;
+    public $visualization 	= NULL;
 
 
     function __construct($id=null) {
@@ -32,7 +32,7 @@ class Poll extends Content {
     }
 
 
-	public function __get($name)
+    public function __get($name)
     {
 
         switch ($name) {
@@ -40,7 +40,7 @@ class Poll extends Content {
                 if (empty($this->category_name)) {
                     $this->category_name = $this->loadCategoryName($this->pk_content);
                 }
-				$uri =  Uri::generate('poll',
+                $uri =  Uri::generate('poll',
                             array(
                                 'id' => sprintf('%06d',$this->id),
                                 'date' => date('YmdHis', strtotime($this->created)),
@@ -48,7 +48,8 @@ class Poll extends Content {
                                 'category' => $this->category_name,
                             )
                         );
-				return ($uri !== '') ? $uri : $this->permalink;
+
+                return ($uri !== '') ? $uri : $this->permalink;
 
                 break;
             }
@@ -58,45 +59,48 @@ class Poll extends Content {
             }
         }
 
+
         return parent::__get($name);
     }
 
     public function create($data) {
         //Modificamos los metadatos con los tags de cada item
         $tags = '';
-    	if(isset($data['item']) && !empty($data['item'] )){
-			$tags = implode(',', $data['item']);
-			$data['metadata'] = $data['metadata'].','.$tags;
+        if(isset($data['item']) && !empty($data['item'] )){
+            $tags = implode(',', $data['item']);
+            $data['metadata'] = $data['metadata'].','.$tags;
             $data['metadata'] = StringUtils::get_tags($data['metadata']);
-    	}
+        }
 
-    	parent::create($data);
+        parent::create($data);
 
-		$i=1;
-		if($data['item']){
-			foreach($data['item'] as $item){
-				$sql='INSERT INTO poll_items (`fk_pk_poll`, `item`, `metadata`) VALUES (?,?,?)';
+        $i=1;
+        if($data['item']){
+            foreach($data['item'] as $item){
+                $sql='INSERT INTO poll_items (`fk_pk_poll`, `item`, `metadata`) VALUES (?,?,?)';
                 $tags = StringUtils::get_tags($item);
-	        	$values = array($this->id,$item, $tags);
-				$i++;
+                $values = array($this->id,$item, $tags);
+                $i++;
 
-				if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-		            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-		            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-		            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-		        }
-			}
-		}
-       	$sql = 'INSERT INTO polls (`pk_poll`, `subtitle`,`total_votes`, `visualization`, `with_comment`)
+                if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+                    $error_msg = $GLOBALS['application']->conn->ErrorMsg();
+                    $GLOBALS['application']->logger->debug('Error: '.$error_msg);
+                    $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+                }
+            }
+        }
+           $sql = 'INSERT INTO polls (`pk_poll`, `subtitle`,`total_votes`, `visualization`, `with_comment`)
                 VALUES (?,?,?,?,?)';
         $values = array($this->id,$data['subtitle'], 0,$data['visualization'],$data['with_comment']);
 
-    	if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-      		return false;
+
+              return false;
         }
+
 
         return true;
     }
@@ -112,6 +116,7 @@ class Poll extends Content {
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
 
+
             return;
         }
 
@@ -125,15 +130,15 @@ class Poll extends Content {
     }
 
     public function update($data) {
-    	if(isset($data['item']) && !empty($data['item'] )){
-			$tags = implode(',', $data['item']);
+        if(isset($data['item']) && !empty($data['item'] )){
+            $tags = implode(',', $data['item']);
 
-			$data['metadata'] = $data['metadata'].','.$tags;
+            $data['metadata'] = $data['metadata'].','.$tags;
             $data['metadata'] = StringUtils::get_tags($data['metadata']);
-    	}
+        }
 
 
-    	parent::update($data);
+        parent::update($data);
         $tags=explode(', ',$tags);//Reinicia los indices del array
 
         if($data['item']){
@@ -161,19 +166,20 @@ class Poll extends Content {
                 }
             }
         }
-    	$sql = "UPDATE polls SET `subtitle`=?, `visualization`=?, `with_comment`=?
-	                    WHERE pk_poll= ?";
+        $sql = "UPDATE polls SET `subtitle`=?, `visualization`=?, `with_comment`=?
+                        WHERE pk_poll= ?";
 
         $values = array($data['subtitle'],  $data['visualization'],$data['with_comment'], $data['id']);
-		if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
             return(false);
         }
 
         $this->pk_poll = $data['id'];
-	}
+    }
 
     public function remove($id) {
         parent::remove($id);
@@ -184,13 +190,15 @@ class Poll extends Content {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
             return;
         }
         $sql='DELETE FROM poll_items WHERE fk_pk_poll ='.($id);
-		if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
             return;
         }
     }
@@ -221,6 +229,7 @@ class Poll extends Content {
                 }
             }
         }
+
         return $items;
     }
 
@@ -228,6 +237,7 @@ class Poll extends Content {
         $this->used_ips = $this->add_count($this->used_ips,$ip);
         if (!$this->used_ips){
                 Application::setCookieSecure("polls".$this->id, 'true', time()+60*60*24*30);
+
                 return(false);
         }
 
@@ -243,6 +253,7 @@ class Poll extends Content {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
             return(false);
         }
 
@@ -258,34 +269,36 @@ class Poll extends Content {
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
 
+
             return(false);
         }
 
         //creamos la cookie
         Application::setCookieSecure("polls".$this->id, 'true', time()+60*60*24*30);
 
+
         return(true);
     }
 
     public function add_count($ips_count, $ip) {
-		$ips = array();
-		if($ips_count){
-	    	foreach($ips_count as $ip_array){
-				$ips[] = $ip_array['ip'];
-			}
-		}
-		//Se busca si existe algún voto desde la ip
-		$kip_count = array_search($ip, $ips);
+        $ips = array();
+        if($ips_count){
+            foreach($ips_count as $ip_array){
+                $ips[] = $ip_array['ip'];
+            }
+        }
+        //Se busca si existe algún voto desde la ip
+        $kip_count = array_search($ip, $ips);
 
-		if($kip_count === FALSE) {
-			//No se ha votado desde esa ip
-			$ips_count[] = array('ip' => $ip, 'count' => 1);
-		} else {
-			if ($ips_count[$kip_count]['count'] ==50) return FALSE;
-			$ips_count[$kip_count]['count']++;
-		}
+        if($kip_count === FALSE) {
+            //No se ha votado desde esa ip
+            $ips_count[] = array('ip' => $ip, 'count' => 1);
+        } else {
+            if ($ips_count[$kip_count]['count'] ==50) return FALSE;
+            $ips_count[$kip_count]['count']++;
+        }
 
-		return $ips_count;
+        return $ips_count;
     }
 
 }

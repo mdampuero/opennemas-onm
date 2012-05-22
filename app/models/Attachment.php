@@ -91,7 +91,8 @@ class Attachment extends Content  {
 //            $msg = new Message('Un fichero con el mismo nombre ya existe.<br />' .
 //                               'Para subir un fichero con el mismo nombre elimine el existente.', 'error');
 //            $msg->push();
-            
+
+
             return false;
         }
 
@@ -133,6 +134,7 @@ class Attachment extends Content  {
         if ($data['category']==8){
             $GLOBALS['application']->dispatch('onAfterCreateAttach', $this, array('category'=>$data['category']));
         }
+
         return true;
     }
 
@@ -156,7 +158,7 @@ class Attachment extends Content  {
     * Fetches information from one attachment given an id
     *
     * @param integer $id the id of the attachment we want to get information
-    * 
+    *
     * @return void
     */
     public function read($id)
@@ -178,7 +180,7 @@ class Attachment extends Content  {
 
     /**
      * Updates the information for one attachment given an array of data
-     * 
+     *
      * @param array $data the array of data for the attachment
      *
      * @return void
@@ -195,6 +197,7 @@ class Attachment extends Content  {
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
             $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+
             return;
         }
     }
@@ -247,6 +250,7 @@ class Attachment extends Content  {
         $att->title = $rs->fields['title'];
         $att->path = $rs->fields['path'];
         $att->category = $rs->fields['category'];
+
         return $att;
     }
 
@@ -385,6 +389,7 @@ class Attachment extends Content  {
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
             $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+
             return;
         }
     }
