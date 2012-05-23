@@ -568,6 +568,8 @@ class Content
      **/
     public function getStatus()
     {
+        $state = '';
+
         if ($this->in_litter == 1) {
             $state = 'trashed';
         } elseif ($this->available == 0) {

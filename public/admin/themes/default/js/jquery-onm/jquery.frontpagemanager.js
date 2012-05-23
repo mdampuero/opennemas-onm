@@ -101,15 +101,13 @@ jQuery(function($){
             };
 
             content = parent_content_div.data('popover-content');
-            // if (content.scheduled_state == 'not-scheduled') {
-            //     content.scheduled_state = 'Not scheduled';
-            // };
 
             var content_html = "State: "+content.state
                 + "<br>Views: "+content.views
                 + "<br>Category: "+content.category
                 + "<br>Scheduled: <span class='scheduled-state "+content.scheduled_state+"'>"+content.scheduled_state+"</span>"
-                + "<br>Start time: "+content.starttime;
+                + "<br>Start time: "+content.starttime
+                + "<br>Last author: "+content.last_author;
             return content_html;
         },
         title: function() {
