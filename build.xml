@@ -9,6 +9,7 @@
         <pathelement path="${basedir}/app/models" />
         <pathelement path="${basedir}/public/core" />
         <pathelement path="${basedir}/public/controllers" />
+        <pathelement path="${basedir}/public/admin/controllers" />
         <pathelement path="${basedir}/vendor/Onm" />
         <!-- Take a look at lint target should be updated -->
     </path>
@@ -55,6 +56,7 @@
                 <include name="app/models/" />
                 <include name="public/core/" />
                 <include name="public/controllers/" />
+                <include name="public/admin/controllers" />
                 <include name="vendor/Onm/" />
             </fileset>
         </apply>
