@@ -16,6 +16,7 @@ namespace Onm\Import\Synchronizer;
  * @author     Fran Dieguez <fran@openhost.es>
  * @version    SVN: $Id: LockException.php 28842 Mér Xuñ 22 16:23:46 2011 frandieguez $
  */
-class LockException extends \Exception {
+class LockException extends \Exception
+{
 
 }

@@ -79,42 +79,42 @@ jQuery(function($){
         $('div.placeholder div.content-provider-element .info').popover('hide');
     });
 
-    $('div.placeholder div.content-provider-element .info').popover({
-        placement: 'left',
-        trigger: 'manual',
-        animation: false,
-        delay:0,
-        content: function() {
-            var parent_content_div = $(this).closest('div.content-provider-element');
-            var content = '';
-            if (parent_content_div.data('popover-content') != undefined) {
-            } else {
+    $('div.placeholder div.content-provider-element .info').each(function() {
+        var element = $(this);
+
+        function get_content (elem) {
+            var parent_content_div = $(elem).closest('div.content-provider-element');
+            var content_html = '';
+
+            if (parent_content_div.data('popover-content') == undefined) {
                 var id = parent_content_div.data('content-id');
                 var url = '/admin/controllers/common/content.php?action=get-info&id='+id;
+                var content = '';
                 $.ajax({
                     url: url,
                     async: false,
                     dataType: 'json'
                 }).done(function(data) {
-                    parent_content_div.data('popover-content', data);
+                    content = data;
                 });
-            };
 
-            content = parent_content_div.data('popover-content');
-            // if (content.scheduled_state == 'not-scheduled') {
-            //     content.scheduled_state = 'Not scheduled';
-            // };
+                var content_html = "State: "+content.state
+                    + "<br>Views: "+content.views
+                    + "<br>Category: "+content.category
+                    + "<br>Scheduled: <span class='scheduled-state "+content.scheduled_state+"'>"+content.scheduled_state+"</span>"
+                    + "<br>Start time: "+content.starttime
+                    + "<br>Last author: "+content.last_author;
+                parent_content_div.data('popover-content', content_html);
+            } else {
+                content_html = parent_content_div.data('popover-content');
+            }
 
-            var content_html = "State: "+content.state
-                + "<br>Views: "+content.views
-                + "<br>Category: "+content.category
-                + "<br>Scheduled: <span class='scheduled-state "+content.scheduled_state+"'>"+content.scheduled_state+"</span>"
-                + "<br>Start time: "+content.starttime;
             return content_html;
-        },
-        title: function() {
+        }
+
+        function get_title (elem) {
             var ajaxdata;
-            var id = $(this).closest('div.content-provider-element').data('content-id');
+            var id = elem.closest('div.content-provider-element').data('content-id');
             var url = '/admin/controllers/common/content.php?action=get-info&id='+id;
             $.ajax({
                 url: url,
@@ -124,8 +124,16 @@ jQuery(function($){
                 ajaxdata = data;
             });
             return ajaxdata.title;
-        },
-        delay:100,
+        }
+
+        $(this).popover({
+            placement: 'left',
+            trigger: 'manual',
+            animation: false,
+            delay:0,
+            title: get_title(element),
+            content: get_content(element),
+        })
     });
 
     $("#modal-batch-delete").modal({ backdrop: 'static', keyboard: true });

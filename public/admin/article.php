@@ -359,11 +359,11 @@ if (isset($_REQUEST['action']) ) {
             }
             $tpl->assign('orderInner', $orderInner);
 
-            if(\Onm\Module\ModuleManager::isActivated('AVANCED_ARTICLE_MANAGER')) {
+            if(\Onm\Module\ModuleManager::isActivated('AVANCED_ARTICLE_MANAGER') && is_array($article->params)) {
                 $galleries = array();
-                $galleries['home'] = new Album($article->params['withGalleryHome']);
-                $galleries['front'] = new Album($article->params['withGallery']);
-                $galleries['inner'] = new Album($article->params['withGalleryInt']);
+                $galleries['home'] = (array_key_exists('withGalleryHome',$article->params))? new Album($article->params['withGalleryHome']): null;
+                $galleries['front'] = (array_key_exists('withGalleryHome',$article->params))? new Album($article->params['withGallery']): null;
+                $galleries['inner'] = (array_key_exists('withGalleryHome',$article->params))? new Album($article->params['withGalleryInt']): null;
                 $tpl->assign('galleries', $galleries);
 
                 $orderHome = array();

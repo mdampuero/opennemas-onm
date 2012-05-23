@@ -47,7 +47,7 @@ set_include_path(implode(PATH_SEPARATOR, array(
 )));
 
 require SITE_PATH.'/autoload.php';
-\Application::initAutoloader('*');
+\Application::initAutoloader();
 
 $app = \Application::load();
 

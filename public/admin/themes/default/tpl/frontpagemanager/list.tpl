@@ -38,7 +38,7 @@
                 <li>
                     <a href="#" id="button_multiple_delete">
                         <img src="{$params.IMAGE_DIR}/trash.png" title="" alt="" /><br>
-                        {t}Remove selected{/t}
+                        {t}Remove{/t}
                     </a>
                 </li>
 

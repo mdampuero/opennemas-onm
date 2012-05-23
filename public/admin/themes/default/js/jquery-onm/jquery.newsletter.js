@@ -30,7 +30,7 @@ saveNewsletter = (function() {
 
     var els = [];
 
-    jQuery('div#newsletter-container').find('ul.content-receiver').each(function (index, cont) {
+   jQuery('div#newsletter-container').find('div.container-receiver').each(function (index, cont) {
 
         var lis = [];
         jQuery(cont).find('li').each(function(i, item) {
@@ -46,7 +46,7 @@ saveNewsletter = (function() {
 
         els.push({
             'id' : jQuery(cont).data('id'),
-            'title': jQuery(cont).find('li:first').data('title'),
+            'title': jQuery(cont).data('title'),
             'content_type': 'container',
             'position': (index+1),
             'items': lis,
@@ -54,12 +54,12 @@ saveNewsletter = (function() {
     });
 
     var encodedContents = JSON.stringify(els);
+
     jQuery.cookie("data-newsletter", encodedContents);
 
     return encodedContents;
 
 });
-
 
 addSelectedItems  = (function () {
 
@@ -119,13 +119,23 @@ jQuery(function($){
     });
 
     jQuery('#modal-add-label a.btn.save').on('click', function(e) {
- //open modal
+    //open modal
         var label = jQuery("#modal-add-label input#container_label").val();
-        var id = jQuery("div.column-receiver ul:last-child").data('id') +1;
+        var id = 1;
+        jQuery("div.column-receiver div.container-receiver").each(function (index, item) {
+            if( jQuery(item).data('id') > id) {
+                id = jQuery(item).data('id');
+            }
 
-        jQuery("div.column-receiver").append( '<ul class="content-receiver" data-id="'+id+'" >'+
-            '<li class="container-label" data-id="'+id+'" data-title="'+label+'" data-type="label">'+
-            label+'</li></ul>');
+        });
+        id = id + 1;
+
+        jQuery("div.column-receiver").append( '<div data-title="' + label + '" data-id="' + id +
+                '" class="container-receiver"><div class="container-label"><span>' +
+                label +'</span> <div class="container-buttons btn-group">' +
+                ' <i class="icon-chevron-down"></i><i class="icon-pencil"></i>' +
+                ' <i class="icon-trash"></i> </div> </div>' +
+                ' <ul class="content-receiver"> </ul> </div>');
 
         jQuery('div.column-receiver ul.content-receiver').sortable({
             connectWith: "div#content-provider ul#contentList, div.column-receiver ul.content-receiver",
@@ -141,7 +151,61 @@ jQuery(function($){
         e.preventDefault();
     });
 
+    jQuery('div#newsletter-container').sortable({
+        axis: "y",
+        handle: "span",
+        tolerance: 'pointer',
+    }).disableSelection();
+
+    jQuery("modal-update-label").modal({
+        backdrop: 'static', //Show a grey back drop
+        keyboard: true, //Can close on escape
+        show: false,
+    });
+
+    jQuery('#modal-update-label a.btn.save').on('click', function(e) {
+    //open modal
+        var label = jQuery("#modal-update-label input#updated_label").val();
+
+
+        var id = jQuery('#modal-update-label input#updated_id').val();
+
+        var container = jQuery("div.container-receiver[data-id="+id+"]");
+        container.attr('data-title', label);
+        jQuery(container).find('div.container-label span').html(label);
+
+        jQuery("#modal-update-label").modal('hide');
+
+        e.preventDefault();
+    });
+
+    /* Containers operations  */
+    jQuery("div#newsletter-container").on('click','.container-label .icon-pencil', function() {
+        var container = jQuery(this).closest('div.container-receiver');
+
+        jQuery('#modal-update-label input#updated_label').val(container.attr('data-title'));
+        jQuery('#modal-update-label input#updated_id').val(container.data('id'));
+
+        jQuery("#modal-update-label").modal('show');
+
+    });
+
+    jQuery("div#newsletter-container").on('click','.container-label .icon-trash', function() {
+        jQuery(this).closest('div.container-receiver').remove();
+
+    });
+
+    jQuery("div#newsletter-container").on('click','.container-label .icon-chevron-down', function(i, item) {
+        jQuery(this).closest('div.container-receiver').find('ul.content-receiver').toggle("blind");
+
+    });
+
+
+
 });
+
+
+
 
 /*****************************************************************************/
 

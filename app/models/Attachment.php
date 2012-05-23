@@ -23,7 +23,8 @@ use Onm\Message as m;
  * @package    Onm
  * @subpackage Model
  */
-class Attachment extends Content  {
+class Attachment extends Content
+{
     var $pk_attachment   = null;
     var $title           = null;
     var $path            = null;
@@ -54,7 +55,6 @@ class Attachment extends Content  {
     * @param integer $id, the id of the Attachment
     * @return null
     */
-
     public function __construct($id=NULL)
     {
         $this->content_type = 'attachment';

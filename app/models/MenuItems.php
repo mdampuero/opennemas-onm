@@ -12,7 +12,8 @@
  * @package Onm
  * @subpackage Model
  */
-class MenuItems {
+class MenuItems
+{
     public $pk_item    = null;
     public $pk_menu    = null;
     public $title      = null;
@@ -41,7 +42,8 @@ class MenuItems {
      * @return bool If create in database
      */
 
-    public function create($data) {
+    public function create($data)
+    {
 
         $sql = "INSERT INTO menu_items ".
                " (`pk_menu`,`title`,`link_name`, `type`,`position`,`pk_father`) " .
@@ -51,9 +53,7 @@ class MenuItems {
                         $data["type"],$data["position"],$data["pk_father"]);
 
         if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            Application::logDatabaseError();
 
             return false;
         }
@@ -70,15 +70,14 @@ class MenuItems {
      *
      * @throws <b>Exception</b> Explanation of exception.
      */
-    public function read($id) {
+    public function read($id)
+    {
 
         $sql = 'SELECT * FROM menues WHERE pk_item = '.($id);
         $rs = $GLOBALS['application']->conn->Execute( $sql );
 
         if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            Application::logDatabaseError();
 
             return false;
         }
@@ -87,7 +86,8 @@ class MenuItems {
 
     }
 
-    public function update($data) {
+    public function update($data)
+    {
 
         $sql = "UPDATE album_items SET  `title`=?, `name`=?, `params`=?,`type`=?,`site`=? ".
                 " WHERE pk_album= ?" ;
@@ -95,9 +95,7 @@ class MenuItems {
         $values = array( $data['name'],$data['params'], $data['type'], $data['site'], $data['id']);
 
         if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            Application::logDatabaseError();
 
             return false;
         }
@@ -115,14 +113,13 @@ class MenuItems {
     * @param integer $last_editor
     * @return null
     */
-    public function delete($id) {
+    public function delete($id)
+    {
 
         $sql = 'DELETE FROM menu_items WHERE pk_item ='.($id);
 
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            Application::logDatabaseError();
 
             return false;
         }
@@ -153,9 +150,7 @@ class MenuItems {
         $rs = $GLOBALS['application']->conn->Execute( $sql );
 
         if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            Application::logDatabaseError();
 
             return false;
         }
@@ -186,12 +181,10 @@ class MenuItems {
        // $config = array_merge(self::config, $params_config);
 
         $sql = "SELECT pk_item FROM menu_items WHERE pk_menu = ? ORDER BY position ASC";
-        $rs = $GLOBALS['application']->conn->Execute( $sql, array($id) );
+        $rs  = $GLOBALS['application']->conn->Execute( $sql, array($id) );
 
         if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            Application::logDatabaseError();
 
             return false;
         }
@@ -204,7 +197,6 @@ class MenuItems {
         }
 
         return $menu;
-
     }
 
     /**
@@ -280,7 +272,6 @@ class MenuItems {
         }
 
         return false;
-
     }
 
    /**
@@ -290,47 +281,44 @@ class MenuItems {
     * @param integer $id
     * @return null
     */
-    static public function emptyMenu($id) {
+    static public function emptyMenu($id)
+    {
 
         $sql = 'DELETE FROM menu_items WHERE pk_menu ='.($id);
 
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            Application::logDatabaseError();
 
             return false;
         }
 
-        return true;
-
         /* Notice log of this action */
         $logger = Application::getLogger();
         $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed action Remove  at menu_item Id '.$id);
+
+        return true;
     }
 
-    static public function deleteItems($items) {
+    static public function deleteItems($items)
+    {
 
         $sql= "DELETE FROM menu_items WHERE pk_item = ?";
         $stmt = $GLOBALS['application']->conn->Prepare($sql);
         foreach($items as $item) {
             $resp = $GLOBALS['application']->conn->Execute($stmt, array($item) );
 
-            if ( $resp === false) {
-                $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-                $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-                $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            if ($resp === false) {
+                Application::logDatabaseError();
 
+                return false;
             }
         }
-
-        return true;
 
         /* Notice log of this action */
         $logger = Application::getLogger();
         $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed action Remove  at menu_item Id '.$id);
+
+        return true;
     }
-
-
 
 }

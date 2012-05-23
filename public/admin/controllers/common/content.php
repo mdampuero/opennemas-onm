@@ -175,7 +175,7 @@ switch ($action) {
                 'scheduled_state' => $content->getSchedulingState(),
                 'state'           => $content->getStatus(),
                 'views'           => $content->views,
-                'last_author'     => $author,
+                'last_author'     => $author->firstname . " " . $author->lastname,
             );
 
         } else {
@@ -191,6 +191,13 @@ switch ($action) {
         header('Content-type: application/json');
         echo $output;
 
+        break;
+
+    case 'calculate-tags':
+        $tags = $request->query->filter('data', '', FILTER_SANITIZE_STRING);
+
+        $tags = StringUtils::get_tags($tags);
+        Application::ajax_out($tags);
         break;
 
 
