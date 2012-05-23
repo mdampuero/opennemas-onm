@@ -16,8 +16,8 @@ namespace Onm\Import\Synchronizer;
  * @author     Fran Dieguez <fran@openhost.es>
  * @version    SVN: $Id: FTP.php 28842 Mér Xuñ 22 16:24:40 2011 frandieguez $
  */
-class FTP {
-
+class FTP
+{
 
     /*
      * Opens an FTP connection with the parameters of the object
@@ -34,7 +34,10 @@ class FTP {
         $this->ftpConnection = @ftp_connect($this->serverUrl['host']);
         // test if the connection was successful
         if (!$this->ftpConnection) {
-            throw new \Exception(sprintf(_('Can\'t connect to server %s. Contact with your administrator for support.'), $params['server']));
+            throw new \Exception(
+                sprintf(_('Can\'t connect to server %s. Contact with your "
+                    ."administrator for support.'), $params['server'])
+            );
         }
 
         // if there is a ftp login configuration use it
@@ -44,9 +47,10 @@ class FTP {
                                      $params['user'],
                                      $params['password']);
 
-
             if (!$loginResult) {
-                throw new \Exception(sprintf(_('Can\'t login into server '), $params['server']));
+                throw new \Exception(
+                    sprintf(_('Can\'t login into server '), $params['server'])
+                );
             }
 
             if (isset($this->serverUrl['path'])) {
@@ -61,7 +65,6 @@ class FTP {
 
             return $this;
         }
-
     }
 
     /**
@@ -75,12 +78,14 @@ class FTP {
      */
     public function downloadFilesToCacheDir($cacheDir, $excludedFiles = array(), $maxAge = null)
     {
-
-        $files = ftp_rawlist($this->ftpConnection, ftp_pwd($this->ftpConnection), true);
-        $files = $this->_filterOldFiles($this->_formatRawFtpFileList($files), $maxAge);
+        $files = ftp_rawlist(
+            $this->ftpConnection, ftp_pwd($this->ftpConnection), true
+        );
+        $files = $this->_filterOldFiles(
+            $this->_formatRawFtpFileList($files), $maxAge
+        );
 
         // Filter files by its creation
-
         self::cleanWeirdFiles($cacheDir);
         $deletedFiles = self::cleanFiles($cacheDir,$files, $excludedFiles, $maxAge);
 
@@ -89,32 +94,33 @@ class FTP {
         if (is_writable($cacheDir)) {
             $elements = array();
             if (is_array($files) && count($files) > 0) {
-                foreach($files as $file) {
-
-
+                foreach ($files as $file) {
                     if (!isset($this->params['allowed_file_extesions_pattern'])
                         || !preg_match('@'.$this->params['allowed_file_extesions_pattern'].'@', $file['filename'])
                     ) {
                         continue;
                     } else {
-                        $elements []= $file;
+                        $elements[]    = $file;
                         $localFilePath = $cacheDir.DIRECTORY_SEPARATOR.strtolower(basename($file['filename']));
-                        if (!file_exists($localFilePath)){
-                            @ftp_get($this->ftpConnection,  $cacheDir.DIRECTORY_SEPARATOR.strtolower(basename($file['filename'])), $file['filename'], FTP_BINARY);
+                        if (!file_exists($localFilePath)) {
+                            @ftp_get($this->ftpConnection, $localFilePath,
+                                $file['filename'], FTP_BINARY);
+
                             $downloadedFiles++;
                         }
                     }
-
                 }
             }
         } else {
-            throw new Exception(sprintf(_('Directory %s is not writable.'),$cacheDir));
+            throw new Exception(
+                sprintf(_('Directory %s is not writable.'), $cacheDir)
+            );
         }
 
         return array(
-                     "deleted" => $deletedFiles,
-                     "downloaded" => $downloadedFiles
-                     );
+            "deleted"    => $deletedFiles,
+            "downloaded" => $downloadedFiles
+        );
 
     }
 
@@ -131,7 +137,7 @@ class FTP {
 
         $fileListingCleaned = array();
 
-        foreach($fileListing as $file) {
+        foreach ($fileListing as $file) {
             if (filesize($file) < 2) {
                 unlink($file);
                 $fileListingCleaned []= basename($file);
@@ -152,11 +158,9 @@ class FTP {
     */
     static public function cleanFiles($cacheDir, $serverFiles, $localFileList, $maxAge)
     {
-
         $deletedFiles = 0;
 
         if (count($localFileList) > 0) {
-
             $serverFileList = array();
             foreach ($serverFiles as $key) {
                 $serverFileList []= strtolower(basename($key['filename']));
@@ -168,7 +172,6 @@ class FTP {
                     unlink($cacheDir.'/'.$file);
                     $deletedFiles++;
                 }
-
             }
         }
 
@@ -197,23 +200,25 @@ class FTP {
                         }
                     }
                 }
-            } elseif(!empty($rawfile)) {
+            } elseif (!empty($rawfile)) {
                 $info = preg_split("/[\s]+/", $rawfile, 9);
                 $arraypointer[] = array(
                     'filename'   => $info[8],
                     'isDir'  => $info[0]{0} == 'd',
                     'size'   => $this->_byteconvert($info[4]),
                     'chmod'  => $this->_chmodnum($info[0]),
-                    'date'   => \DateTime::createFromFormat('d M H:i', $info[6] . ' ' . $info[5] . ' ' . $info[7]),
+                    'date'   => \DateTime::createFromFormat(
+                        'd M H:i', $info[6] . ' ' . $info[5] . ' ' . $info[7]
+                    ),
                     'raw'    => $info,
                     'raw2'   => $rawfile,
-                    // the 'children' attribut is automatically added if the folder contains at least one file
+                    // the 'children' attribut is automatically added
+                    // if the folder contains at least one file
                 );
             }
         }
 
         return $structure;
-
     }
 
 
@@ -225,9 +230,10 @@ class FTP {
     protected function _byteconvert($bytes)
     {
         $symbol = array('B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
-        $exp = floor( log($bytes) / log(1024) );
+        $exp    = floor(log($bytes)/log(1024));
 
-        return sprintf( '%.2f ' . $symbol[ $exp ], ($bytes / pow(1024, floor($exp))) );
+        return sprintf('%.2f '.$symbol[ $exp ],
+            ($bytes/pow(1024, floor($exp))));
     }
 
     /**
@@ -255,7 +261,6 @@ class FTP {
      **/
     protected function _filterOldFiles($files, $maxAge)
     {
-
         if (!empty($maxAge)) {
             $files = array_filter($files, function($item) use ($maxAge) {
                 return (time() - $maxAge) < $item['date']->getTimestamp();

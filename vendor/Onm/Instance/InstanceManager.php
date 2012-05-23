@@ -68,7 +68,8 @@ class InstanceManager
     public function load( $serverName )
     {
         //TODO: improve search for allowing subdomains with wildcards
-        $sql = "SELECT SQL_CACHE * FROM instances WHERE domains LIKE '%{$serverName}%' LIMIT 1";
+        $sql = "SELECT SQL_CACHE * FROM instances"
+            ." WHERE domains LIKE '%{$serverName}%' LIMIT 1";
         $rs = $this->_connection->Execute($sql);
 
         if (!$rs) {
@@ -120,7 +121,9 @@ class InstanceManager
 
             // If this instance is not activated throw an exception
             if ($instance->activated != '1') {
-                throw new \Onm\Instance\NotActivatedException(_('Instance not activated'));
+                throw new \Onm\Instance\NotActivatedException(
+                    _('Instance not activated')
+                );
             }
 
         // If this instance doesn't exist check if the request is from manager
@@ -130,7 +133,6 @@ class InstanceManager
         }
 
         return $instance;
-
     }
 
     /*
@@ -168,11 +170,11 @@ class InstanceManager
      */
     public function findAll($params = array())
     {
-
         $instances = array();
 
         if ($params['name'] != '*') {
-            $sql = "SELECT * FROM instances WHERE name LIKE '%".$params['name']."%' ORDER BY id DESC";
+            $sql = "SELECT * FROM instances "
+                 ."WHERE name LIKE '%".$params['name']."%' ORDER BY id DESC";
         } else {
             $sql = "SELECT * FROM instances ORDER BY id DESC";
         }
@@ -239,11 +241,11 @@ class InstanceManager
 
         if (extension_loaded('apc')) {
             $totals = apc_fetch(
-                APC_PREFIX . "getDBInformation_totals_".$settings['BD_DATABASE'],
+                APC_PREFIX."getDBInformation_totals_".$settings['BD_DATABASE'],
                 $fetchedFromAPC
             );
             $information = apc_fetch(
-                APC_PREFIX . "getDBInformation_infor_".$settings['BD_DATABASE'],
+                APC_PREFIX."getDBInformation_infor_".$settings['BD_DATABASE'],
                 $fetchedFromAPCInfor
             );
         }
@@ -253,11 +255,10 @@ class InstanceManager
 
             $dbConection = self::getConnection($settings);
 
-            $sql = 'SELECT count(*) as total, fk_content_type as type FROM contents'.
-               ' GROUP BY `fk_content_type`';
+            $sql = 'SELECT count(*) as total, fk_content_type as type '
+                 .'FROM contents GROUP BY `fk_content_type`';
 
             $rs = $dbConection->Execute($sql);
-
 
             if ($rs !== false) {
                 while (!$rs->EOF) {
@@ -267,7 +268,8 @@ class InstanceManager
                 }
             }
             if (extension_loaded('apc')) {
-                apc_store(APC_PREFIX . "getDBInformation_totals_".$settings['BD_DATABASE'], $totals, 300);
+                apc_store(APC_PREFIX . "getDBInformation_totals_"
+                    .$settings['BD_DATABASE'], $totals, 300);
             }
         }
 
@@ -284,7 +286,8 @@ class InstanceManager
 
             if ($rs !== false) {
                 while (!$rs->EOF) {
-                    $information[ $rs->fields['name'] ] = unserialize($rs->fields['value']);
+                    $information[ $rs->fields['name'] ] =
+                        unserialize($rs->fields['value']);
                     $rs->MoveNext();
                 }
             }
@@ -321,7 +324,8 @@ class InstanceManager
      */
     public function update($data)
     {
-        $sql = "UPDATE instances SET name=?, internal_name=?, domains=?, activated=?, settings=? WHERE id=?";
+        $sql = "UPDATE instances SET name=?, internal_name=?, "
+             . "domains=?, activated=?, settings=? WHERE id=?";
         $values = array(
             $data['name'],
             $data['internal_name'],
@@ -359,7 +363,9 @@ class InstanceManager
 
             return false;
         }
-        $this->deleteDefaultAssetsForInstance(SITE_PATH.DS.'media'.DS.$instance->internal_name);
+        $this->deleteDefaultAssetsForInstance(
+            SITE_PATH.DS.'media'.DS.$instance->internal_name
+        );
         $this->deleteDatabaseForInstance($instance->settings);
         $this->deleteInstanceUserFromDatabaseManager($instance->settings);
         $this->deleteInstanceWithInternalName($instance->internal_name);
@@ -403,17 +409,23 @@ class InstanceManager
         } catch (DefaultAssetsForInstanceNotCopiedException $e) {
 
             $errors []= $e->getMessage();
-            $this->deleteDefaultAssetsForInstance(SITE_PATH.DS.'media'.DS.$data['internal_name']);
+            $this->deleteDefaultAssetsForInstance(
+                SITE_PATH.DS.'media'.DS.$data['internal_name']
+            );
             $this->deleteDatabaseForInstance($data);
             $this->deleteInstanceWithInternalName($data['internal_name']);
 
         } catch (ApacheConfigurationNotCreatedException $e) {
 
             $errors []= $e->getMessage();
-            $this->deleteDefaultAssetsForInstance(SITE_PATH.DS.'media'.DS.$data['internal_name']);
+            $this->deleteDefaultAssetsForInstance(
+                SITE_PATH.DS.'media'.DS.$data['internal_name']
+            );
             $this->deleteDatabaseForInstance($data);
             $this->deleteInstanceWithInternalName($data['internal_name']);
-            $this->deleteApacheConfAndReloadConfiguration($data['internal_name']);
+            $this->deleteApacheConfAndReloadConfiguration(
+                $data['internal_name']
+            );
 
         }
 
@@ -446,19 +458,22 @@ class InstanceManager
         }
 
         // Check if the instance already exists
-        $sql = "SELECT count(*) as instance_exists FROM instances WHERE `internal_name` = ?";
+        $sql = "SELECT count(*) as instance_exists FROM instances "
+             . "WHERE `internal_name` = ?";
         $rs = $this->_connection->Execute($sql, array($data['internal_name']));
 
         // Check if the email already exists
-        $sql2 = "SELECT count(*) as email_exists FROM instances WHERE `contact_mail` = ?";
+        $sql2 = "SELECT count(*) as email_exists FROM instances "
+              . "WHERE `contact_mail` = ?";
         $rs2 = $this->_connection->Execute($sql2, array($data['user_mail']));
 
         // If doesn´t exist the instance in the database and doesn't exist contact mail proceed
         if ($rs && !(bool)$rs->fields['instance_exists'] &&
             $rs2 && !(bool)$rs2->fields['email_exists']) {
 
-            $sql3 = "INSERT INTO instances (name, internal_name, domains, activated, settings, contact_mail)
-                    VALUES (?, ?, ?, ?, ?, ?)";
+            $sql3 = "INSERT INTO instances (name, internal_name, domains, "
+                  . "activated, settings, contact_mail) "
+                  . "VALUES (?, ?, ?, ?, ?, ?)";
             $values = array(
                 $data['name'],
                 $data['internal_name'],
@@ -471,7 +486,8 @@ class InstanceManager
             $rs3 = $this->_connection->Execute($sql3, $values);
             if (!$rs3) {
                 throw new InstanceNotRegisteredException(
-                    "Could not create the instance reference into the instance table: {$this->_connection->ErrorMsg()}"
+                    "Could not create the instance reference into the instance "
+                    ."table: {$this->_connection->ErrorMsg()}"
                 );
             }
 
@@ -488,9 +504,13 @@ class InstanceManager
         //If instance name or contact mail already exists and comes from manager
         } else {
             if ($rs && (bool)$rs->fields['instance_exists']) {
-                throw new InstanceNotRegisteredException(_("Instance internal name is already in use."));
+                throw new InstanceNotRegisteredException(
+                    _("Instance internal name is already in use.")
+                );
             } elseif ( $rs2 && (bool)$rs2->fields['email_exists']) {
-                throw new InstanceNotRegisteredException(_("Instance contact mail is already in use."));
+                throw new InstanceNotRegisteredException(
+                    _("Instance contact mail is already in use.")
+                );
             }
         }
 
@@ -502,7 +522,8 @@ class InstanceManager
     /**
      * Delete one instance reference from the instances table.
      *
-     * @param string $internalName the internal name of the instance we need to delete
+     * @param string $internalName the internal name of
+     *                             the instance we need to delete
      *
      * @return boolean false if something went wrong
      * @author
@@ -536,30 +557,32 @@ class InstanceManager
 
             // Replace wildcards with the proper settings.
             $replacements = array(
-                '@{IP}@' => $_SERVER['SERVER_ADDR'],
+                '@{IP}@'           => $_SERVER['SERVER_ADDR'],
                 '@{SITE_DOMAINS}@' => implode(' ', explode(',', $data['domains'])),
-                '@{SITE_PATH}@' => SITE_PATH,
-                '@{TMP_PATH}@' => SYS_LOG_PATH,
-                '@{ID}@' => $data['internal_name'],
+                '@{SITE_PATH}@'    => SITE_PATH,
+                '@{TMP_PATH}@'     => SYS_LOG_PATH,
+                '@{ID}@'           => $data['internal_name'],
             );
             $apacheConfString = preg_replace(
                 array_keys($replacements), array_values($replacements),
                 $apacheConfString
             );
 
-            $instanceConfigPath = $configPath.DS.'vhosts.d'.DS.$data['internal_name'];
+            $instanceConfigPath =
+                $configPath.DS.'vhosts.d'.DS.$data['internal_name'];
 
             // If we can create the instance configuration file reload apache
             if (file_put_contents($instanceConfigPath, $apacheConfString)) {
                 exec("sudo apachectl graceful", $output, $exitCode);
                 if ($exitCode > 0) {
-                    var_dump("Unable to reload apache configuration (exit code {$exitCode}): ".$output);
+                    //"Unable to reload apache configuration
+                    //(exit code {$exitCode}): ".$output);
 
                     return false;
                 }
             } else {
                 throw new ApacheConfigurationNotCreatedException(
-                    "Could not create the Apache vhost config for the instance.",
+                    "Could not create the Apache vhost config for the instance",
                     1
                 );
             }
@@ -604,19 +627,20 @@ class InstanceManager
 
         //Create new mysql user for this instance and grant usage and privileges
         $sql2 = "CREATE USER `{$data['settings']['BD_USER']}`@'localhost' "
-               ."IDENTIFIED BY '{$data['settings']['BD_PASS']}' ";
+              . "IDENTIFIED BY '{$data['settings']['BD_PASS']}' ";
         $sql3 = "GRANT USAGE ON `{$data['settings']['BD_DATABASE']}`.* "
-               ."TO `{$data['settings']['BD_USER']}`@'localhost' ";
-        $sql4 = "GRANT ALL PRIVILEGES ON `{$data['settings']['BD_DATABASE']}` . * "
-               ."TO '{$data['settings']['BD_USER']}'@'localhost'";
+              . "TO `{$data['settings']['BD_USER']}`@'localhost' ";
+        $sql4 = "GRANT ALL PRIVILEGES ON `{$data['settings']['BD_DATABASE']}`.*"
+              . " TO '{$data['settings']['BD_USER']}'@'localhost'";
         $rs2 = $conn->Execute($sql2);
         $rs3 = $conn->Execute($sql3);
         $rs4 = $conn->Execute($sql4);
 
         // If the database was created sucessfully now import the default data.
         if ($rs && $rs2 && $rs3 && $rs4) {
-            $connection2 = self::getConnection($data['settings']);
-            $exampleDatabasePath = realpath(APPLICATION_PATH.DS.'db'.DS.'instance-default.sql');
+            $connection2         = self::getConnection($data['settings']);
+            $exampleDatabasePath =
+                realpath(APPLICATION_PATH.DS.'db'.DS.'instance-default.sql');
             $execLine = "mysql -h {$onmInstancesConnection['BD_HOST']} "
                         ."-u {$onmInstancesConnection['BD_USER']}"
                         ." -p{$onmInstancesConnection['BD_PASS']} "
@@ -630,7 +654,8 @@ class InstanceManager
             }
 
             // Insert user with data from the openhost form
-            //TODO: PROVISIONAL WHILE DONT DELETE $GLOBALS['application']->conn // is used in settings set
+            //TODO: PROVISIONAL WHILE DONT DELETE $GLOBALS['application']->conn
+            //// is used in settings set
             $im = $this->getInstance();
             $GLOBALS['application']->conn = $im->getConnection($data['settings']);
 
@@ -731,7 +756,9 @@ class InstanceManager
     {
         $mediaPath = SITE_PATH.DS.'media'.DS.$name;
         if (!file_exists($mediaPath)) {
-            return fm::recursiveCopy(SITE_PATH.DS.'media'.DS.'default', $mediaPath);
+            return fm::recursiveCopy(
+                SITE_PATH.DS.'media'.DS.'default', $mediaPath
+            );
         } else {
             //TODO: return codes for handling this errors
             return "The media folder {$name} already exists.";
@@ -750,7 +777,9 @@ class InstanceManager
             foreach ($objects as $object) {
                 if ($object != "." && $object != "..") {
                     if (filetype($mediaPath."/".$object) == "dir") {
-                        $this->deleteDefaultAssetsForInstance($mediaPath."/".$object);
+                        $this->deleteDefaultAssetsForInstance(
+                            $mediaPath."/".$object
+                        );
                     } else {
                         unlink($mediaPath."/".$object);
                     }
@@ -790,7 +819,8 @@ class InstanceManager
         $internalNameShort = $data['settings']['BD_DATABASE'];
 
         // Check if the generated InternalShortName already exists
-        $sql = "SELECT count(*) as internalShort_exists FROM instances WHERE `domains` LIKE '".$internalNameShort."%'";
+        $sql = "SELECT count(*) as internalShort_exists FROM instances "
+             . "WHERE `domains` LIKE '".$internalNameShort."%'";
         $rs = $this->_connection->Execute($sql);
 
 

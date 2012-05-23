@@ -44,7 +44,6 @@ class Europapress implements \Onm\Import\Importer
      */
     static public function getInstance($config = array())
     {
-
         if (!(self::$instance instanceof self)
             //&& (count(array_diff($this->config, $config)) > 0)
             )
@@ -53,7 +52,6 @@ class Europapress implements \Onm\Import\Importer
         }
 
         return self::$instance;
-
     }
 
     /**
