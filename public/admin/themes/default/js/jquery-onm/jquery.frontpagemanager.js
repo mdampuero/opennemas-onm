@@ -86,28 +86,31 @@ jQuery(function($){
         delay:0,
         content: function() {
             var parent_content_div = $(this).closest('div.content-provider-element');
-            var content = '';
-            if (parent_content_div.data('popover-content') != undefined) {
-            } else {
+            var content_html = '';
+
+            if (parent_content_div.data('popover-content') == undefined) {
                 var id = parent_content_div.data('content-id');
                 var url = '/admin/controllers/common/content.php?action=get-info&id='+id;
+                var content = '';
                 $.ajax({
                     url: url,
                     async: false,
                     dataType: 'json'
                 }).done(function(data) {
-                    parent_content_div.data('popover-content', data);
+                    content = data;
                 });
-            };
 
-            content = parent_content_div.data('popover-content');
+                var content_html = "State: "+content.state
+                    + "<br>Views: "+content.views
+                    + "<br>Category: "+content.category
+                    + "<br>Scheduled: <span class='scheduled-state "+content.scheduled_state+"'>"+content.scheduled_state+"</span>"
+                    + "<br>Start time: "+content.starttime
+                    + "<br>Last author: "+content.last_author;
+                parent_content_div.data('popover-content', content_html);
+            } else {
+                content_html = parent_content_div.data('popover-content');
+            }
 
-            var content_html = "State: "+content.state
-                + "<br>Views: "+content.views
-                + "<br>Category: "+content.category
-                + "<br>Scheduled: <span class='scheduled-state "+content.scheduled_state+"'>"+content.scheduled_state+"</span>"
-                + "<br>Start time: "+content.starttime
-                + "<br>Last author: "+content.last_author;
             return content_html;
         },
         title: function() {
