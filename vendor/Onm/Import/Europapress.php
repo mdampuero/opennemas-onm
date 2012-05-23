@@ -23,9 +23,7 @@ class Europapress implements \Onm\Import\Importer
     static private $instance = null;
 
     // the configuration to access to the server
-    private $defaultConfig = array(
-                            'port' => 21,
-                            );
+    private $defaultConfig = array('port' => 21);
 
     private $config = array();
 
@@ -43,10 +41,7 @@ class Europapress implements \Onm\Import\Importer
      */
     static public function getInstance($config = array())
     {
-        if (!(self::$instance instanceof self)
-            //&& (count(array_diff($this->config, $config)) > 0)
-            )
-        {
+        if (!self::$instance instanceof self) {
             self::$instance = new self($config);
         }
 
@@ -62,7 +57,6 @@ class Europapress implements \Onm\Import\Importer
      */
     public function __construct($config = array())
     {
-
         $this->syncPath = implode(DIRECTORY_SEPARATOR,
                                   array(CACHE_PATH, 'europapress_import_cache'));
         $this->syncFilePath = $this->syncPath.DIRECTORY_SEPARATOR.".sync";
@@ -71,7 +65,6 @@ class Europapress implements \Onm\Import\Importer
         $this->config = array_merge($this->defaultConfig, $config);
 
         $this->lockFile = $this->syncPath.DIRECTORY_SEPARATOR.".lock";
-
     }
 
     /**
@@ -82,13 +75,10 @@ class Europapress implements \Onm\Import\Importer
     public function setupSyncEnvironment($params = array())
     {
         if (!file_exists($this->syncPath)) {
-
             mkdir($this->syncPath);
-
         } elseif(!file_exists($this->syncFilePath)) {
 
             return touch($this->syncFilePath);
-
         }
 
         return false;
@@ -102,11 +92,10 @@ class Europapress implements \Onm\Import\Importer
     public function isSyncEnrironmetReady()
     {
 
-        return (
-                file_exists($this->syncFilePath)
-                && is_writable($this->syncPath)
-                && is_writable($this->syncFilePath)
-                );
+        return (file_exists($this->syncFilePath)
+            && is_writable($this->syncPath)
+            && is_writable($this->syncFilePath)
+        );
 
     }
 
@@ -123,12 +112,14 @@ class Europapress implements \Onm\Import\Importer
     public function sync($params = array())
     {
         // Check if the folder where store elements is ready and writtable
-        if(!$this->isSyncEnrironmetReady()) {
+        if (!$this->isSyncEnrironmetReady()) {
             $this->setupSyncEnvironment();
         }
 
         if (file_exists($this->lockFile)) {
-            throw new \Onm\Import\Synchronizer\LockException(sprintf(_("Seems that other user is syncing the news.")));
+            throw new \Onm\Import\Synchronizer\LockException(
+                sprintf(_("Seems that other user is syncing the news."))
+            );
         }
 
         $this->lockSync();
@@ -136,12 +127,13 @@ class Europapress implements \Onm\Import\Importer
         $excludedFiles = self::getLocalFileList($this->syncPath);
 
         $synchronizer = new \Onm\Import\Synchronizer\FTP($params);
-        $ftpSync = $synchronizer->downloadFilesToCacheDir($this->syncPath, $excludedFiles, $params['max_age']);
+        $ftpSync = $synchronizer->downloadFilesToCacheDir(
+            $this->syncPath, $excludedFiles, $params['max_age']
+        );
 
         $this->unlockSync();
 
         return $ftpSync;
-
     }
 
 
@@ -184,9 +176,9 @@ class Europapress implements \Onm\Import\Importer
             return unserialize(file_get_contents($this->syncFilePath));
         } else {
             return array(
-                        'lastimport' => '',
-                        'imported_elements' => array(),
-                        );
+                'lastimport' => '',
+                'imported_elements' => array(),
+            );
         }
     }
 
@@ -203,7 +195,7 @@ class Europapress implements \Onm\Import\Importer
 
         $syncParams = $this->getSyncParams();
 
-        if(is_string($importedElements)) {
+        if (is_string($importedElements)) {
             $importedElements = array($importedElements);
         }
 
@@ -213,7 +205,7 @@ class Europapress implements \Onm\Import\Importer
         $previousImportedElementsCount = count($previousImportedElements);
         $elements = array();
         for ($i=0; $i < $previousImportedElementsCount; $i++) {
-            if(in_array($previousImportedElements[$i], $localElements)) {
+            if (in_array($previousImportedElements[$i], $localElements)) {
                 $elements []= $previousImportedElements[$i];
             }
         }
@@ -243,12 +235,10 @@ class Europapress implements \Onm\Import\Importer
     {
         $params = $this->getSyncParams();
 
-        $to_time = strtotime(date('c'));
-        $from_time = strtotime($params['lastimport']);
+        $toTime   = strtotime(date('c'));
+        $fromTime = strtotime($params['lastimport']);
 
-        return round((abs($to_time - $from_time) / 60), 0);
-
-
+        return round((abs($toTime - $fromTime) / 60), 0);
     }
 
     /**
@@ -258,13 +248,18 @@ class Europapress implements \Onm\Import\Importer
      */
     public function findAll($params = array())
     {
-
         $filesSynced = $this->getLocalFileList($this->syncPath);
         rsort($filesSynced, SORT_STRING);
 
         $counTotalElements = count($filesSynced);
-        if (array_key_exists('items_page', $params) && array_key_exists('page', $params)) {
-            $files = array_slice($filesSynced, $params['items_page'] * ($params['page']-1), $params['items_page']);
+        if (array_key_exists('items_page', $params)
+            && array_key_exists('page', $params)
+        ) {
+            $files = array_slice(
+                $filesSynced,
+                $params['items_page'] * ($params['page']-1),
+                $params['items_page']
+            );
         } else {
             $files = $filesSynced;
         }
@@ -274,40 +269,38 @@ class Europapress implements \Onm\Import\Importer
         $elementsCount = 0;
 
         foreach ($files as $file) {
-
             if (filesize($this->syncPath.DIRECTORY_SEPARATOR.$file) <= 0) {
                 continue;
             }
             try {
-                $element = new \Onm\Import\DataSource\Europapress($this->syncPath.DIRECTORY_SEPARATOR.$file);
+                $element = new \Onm\Import\DataSource\Europapress(
+                    $this->syncPath.DIRECTORY_SEPARATOR.$file
+                );
             } catch (\Exception $e) {
                 continue;
             }
 
             if (($params['title'] != '*')
-                && !($element->hasContent($params['title'])))
-            {
+                && !($element->hasContent($params['title']))
+            ) {
                 continue;
             }
 
             if ((($params['category'] != '*'))
-                && !(preg_match('@'.$params['category'].'@', $element->originalCategory) > 0))
-            {
+                && !(preg_match('@'.$params['category'].'@', $element->originalCategory) > 0)
+            ) {
                 continue;
             }
 
-            if(array_key_exists('limit',$params)
-               && ($elementsCount <= $params['limit']))
-            {
+            if (array_key_exists('limit',$params)
+               && ($elementsCount <= $params['limit'])
+            ) {
                 break;
             }
 
             $elements []= $element;
             $elementsCount++;
-
-
         }
-
         usort($elements, create_function('$a,$b', 'return  $b->created_time->getTimestamp() - $a->created_time->getTimestamp();'));
 
         return array($counTotalElements, $elements);
@@ -324,11 +317,11 @@ class Europapress implements \Onm\Import\Importer
      */
     public function findByID($id)
     {
-
-        $element = new \Onm\Import\DataSource\Europapress($this->syncPath.DIRECTORY_SEPARATOR.$id.'.xml');
+        $element = new \Onm\Import\DataSource\Europapress(
+            $this->syncPath.DIRECTORY_SEPARATOR.$id.'.xml'
+        );
 
         return  $element;
-
     }
 
     /*
@@ -340,13 +333,12 @@ class Europapress implements \Onm\Import\Importer
      */
     public function findByFileName($id)
     {
-
-        $element = new \Onm\Import\DataSource\Europapress($this->syncPath.DIRECTORY_SEPARATOR.$id);
+        $element = new \Onm\Import\DataSource\Europapress(
+            $this->syncPath.DIRECTORY_SEPARATOR.$id
+        );
 
         return  $element;
-
     }
-
 
     /**
      * gets a list of stored elements filtered by some params
@@ -360,8 +352,6 @@ class Europapress implements \Onm\Import\Importer
 
     }
 
-
-
     /**
      * Fetches the files present in $cacheDir.
      *
@@ -373,17 +363,15 @@ class Europapress implements \Onm\Import\Importer
     {
         $fileListing = glob($cacheDir.DIRECTORY_SEPARATOR.'*.xml');
 
-        usort($fileListing, create_function('$a,$b', 'return filemtime($b) - filemtime($a);'));
+        usort($fileListing,
+            create_function('$a,$b', 'return filemtime($b) - filemtime($a);'));
 
         $fileListingCleaned = array();
 
-        foreach($fileListing as $file) {
+        foreach ($fileListing as $file) {
             $fileListingCleaned []= basename($file);
         }
 
         return $fileListingCleaned;
     }
-
-
-
 }

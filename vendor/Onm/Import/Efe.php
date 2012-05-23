@@ -31,8 +31,6 @@ class Efe implements \Onm\Import\Importer
 
     private $_config = array();
 
-    private $_ftpConnection = null;
-
     private $_lockFile = '';
 
     public $syncPath = '';

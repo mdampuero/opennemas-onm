@@ -236,20 +236,6 @@ class Rating
     }
 
     /**
-     * Get an integer and returns an string with the humanized num of votes
-     *
-     * @param integer $total_votes num of votes
-     * @return  string description
-     * @author  Fran Dieguez <fran@openhost.es>
-     * @since   Mon Sep 13 2010 18:12:58 GMT+0200 (CEST)
-     */
-    private function humanizeNumVotes($total_votes)
-    {
-
-        return $total_votes . (($total_votes > 1) ? " votos" : " voto");
-    }
-
-    /**
      * Prints the list of img elements representing the actual votes
      *
      * @param dobule $actualVotes average of votes
@@ -343,11 +329,6 @@ class Rating
                     );
                 }
                 $htmlOut.= "</ul> ";
-
-                // append the counter of total votes
-                //$htmlOut .= $this->humanizeNumVotes($this->total_votes);
-
-                // if this request is not an AJAX request wrap it.
 
 
                 if (!$ajax) {

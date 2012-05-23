@@ -297,19 +297,40 @@ class Widget extends Content
 
         return '';
     }
+
     public function render($params = null)
     {
+        switch ($this->renderlet) {
+            case 'html':
+                $content = $this->_renderlet_html($params);
+                break;
 
-        $method = '_renderlet_' . $this->renderlet;
+            case 'smarty':
+                $content = $this->_renderlet_smarty($params);
+                break;
 
-        //call_user_func_array(array($this, $method), array($smarty));
-        return "<div class=\"widget\">" . $this->$method($params) . "</div>";
+            case 'intelligentwidget':
+                $content = $this->_renderlet_intelligentwidget($params);
+                break;
+
+            case 'php':
+                $content = $this->_renderlet_php($params);
+                break;
+
+            default:
+                $content = '';
+                break;
+        }
+
+        return "<div class=\"widget\">" .$content. "</div>";
     }
+
     private function _renderlet_html()
     {
 
         return $this->content;
     }
+
     private function _renderlet_php()
     {
 
@@ -320,6 +341,7 @@ class Widget extends Content
 
         return $output;
     }
+
     /**
      *
      * SEE resource.string.php Smarty plugin
@@ -327,7 +349,6 @@ class Widget extends Content
      */
     private function _renderlet_smarty()
     {
-
 
         // Deprecated
         //$resource = 'string:' . $this->content;
@@ -343,6 +364,7 @@ class Widget extends Content
 
         return $output;
     }
+
     private function _renderlet_intelligentwidget($params=null)
     {
 

@@ -361,7 +361,8 @@ class Attachment extends Content
        return $att;
     }
 
-    public function readids($ruta) {
+    public function readids($ruta)
+    {
         $sql = 'SELECT * FROM attachments WHERE path = "'.$ruta.'"';
         $rs = $GLOBALS['application']->conn->Execute($sql);
 

@@ -28,7 +28,6 @@ class Author
 
     // Static members for performance
     static private $_photos   = null;
-    static private $_authors  = null;
 
     private $_defaultValues = array(
         'name'=>'',
