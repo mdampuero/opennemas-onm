@@ -100,30 +100,47 @@
                     </tr>
                     <tr>
                         <td style="width:50%; vertical-align:top; padding:4px 0;" >
-
-                            <div id="newsletter-container" class="column-receiver">
-                                <h5>{t}Newsletter contents{/t}</h5>
+                            <h5>{t}Newsletter contents{/t}</h5>
                                 <hr>
+                            <div id="newsletter-container" class="column-receiver">
+
                                 {if empty($newsletterContent)}
-                                    <ul class="content-receiver" data-id="1">
-                                        <li class="container-label" data-type="label"  data-id="1" data-title="En Portada">En Portada</li>
-                                    </ul>
+                                    <div class="container-receiver"  data-title="En Portada" data-id="1" >
+                                        <div class="container-label"><span>En Portada</span>
+                                            <div class="container-buttons btn-group">
+                                                    <i class="icon-chevron-down"></i>
+                                                    <i class="icon-pencil"></i>
+                                                    <i class="icon-trash"></i>
+                                            </div>
+                                        </div>
+                                        <ul class="content-receiver">
+                                        </ul>
+                                    </div>
                                 {else}
 
                                     {section name=c loop=$newsletterContent}
                                         {assign var='contents' value=$newsletterContent[c]->items}
                                         {if !empty($contents)}
-                                        <ul class="content-receiver" data-id="{$newsletterContent[c]->id}">
-                                            {section name=d loop=$contents}
-                                                {if !empty($contents[d]->title)}
-                                                <li  data-id="{$contents[d]->id}"
-                                                    {if $contents[d]->content_type eq 'label'} class="container-label" {/if}
-                                                    data-title="{$contents[d]->title}" data-type="{$contents[d]->content_type}" >
-                                                     {$contents[d]->type} {$contents[d]->title}
-                                                </li>
-                                                {/if}
-                                            {/section}
-                                        </ul>
+                                        <div class="container-receiver" data-title="{$newsletterContent[c]->title}" data-id="{$newsletterContent[c]->id}">
+                                            <div class="container-label"><span>{$newsletterContent[c]->title}</span>
+                                                <div class="container-buttons btn-group">
+                                                        <i class="icon-chevron-down"></i>
+                                                        <i class="icon-pencil"></i>
+                                                        <i class="icon-trash"></i>
+                                                </div>
+                                            </div>
+                                            <ul class="content-receiver">
+                                                {section name=d loop=$contents}
+                                                    {if !empty($contents[d]->title)}
+                                                    <li  data-id="{$contents[d]->id}"
+                                                        {if $contents[d]->content_type eq 'label'} class="container-label" {/if}
+                                                        data-title="{$contents[d]->title}" data-type="{$contents[d]->content_type}" >
+                                                         {$contents[d]->type} {$contents[d]->title}
+                                                    </li>
+                                                    {/if}
+                                                {/section}
+                                            </ul>
+                                        </div>
                                         {/if}
                                     {/section}
                                 {/if}
@@ -142,6 +159,7 @@
     </div>
 
 </form>
- {include file="newsletter/modals/_add_container_label.tpl"}
+{include file="newsletter/modals/_add_container_label.tpl"}
+{include file="newsletter/modals/_update_container_label.tpl"}
 {/block}
 

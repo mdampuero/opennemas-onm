@@ -2337,9 +2337,10 @@ div.newsletter-contents div#content-provider ul li {
 }
 
 div#newsletter-container.column-receiver ul{
-    border: 1px solid;
+    border-bottom: 1px solid;
     min-height: 200px;
     padding: 5px;
+    margin: 0px 0px 10px 0px;
 }
 
 div#newsletter-container.column-receiver h5 {
@@ -2354,11 +2355,17 @@ div.newsletter-contents  div#content-provider   input.hidden-element {
     display: inline;
 }
 
-div.newsletter-contents ul li.container-label {
+div.newsletter-contents .container-label {
     border:1px solid #AAA !important;
     background-color: #EEE;
     font-weight: bold;
+    padding: 4px;
 }
+
+div.newsletter-contents .container-buttons {
+    float:right;
+}
+
 .popover-title {
   margin-bottom:0 !important;
 }
