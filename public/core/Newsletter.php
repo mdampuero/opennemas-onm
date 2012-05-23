@@ -144,7 +144,7 @@ class Newsletter
         $mail->IsSMTP();
         $mail->Host = $params['mail_host'];
         if (!empty($params['mail_user'])
-            && !empty($paramsp['mail_password']))
+            && !empty($params['mail_password']))
         {
             $mail->SMTPAuth = true;
         } else {
@@ -230,8 +230,8 @@ class Newsletter
 
                 </schema>';
 
-        $sql = $schema->ParseSchemaString( $axmls );
-        $result = $schema->ExecuteSchema();
+        $schema->ParseSchemaString($axmls)
+               ->ExecuteSchema();
     }
 
     public function schema_exists()
@@ -561,10 +561,12 @@ class PConecta_Newsletter_Accounts_Provider extends Newsletter_Accounts_Provider
     public function __construct()
     {
         // Inject dependencies
-        parent::__construct($conn   = $GLOBALS['application']->conn,
-                            $table  = 'pc_users',
-                            $fields = 'email,name,firstname,lastname',
-                            $filter = 'status > 0 AND subscription = 1');
+        parent::__construct(
+            $GLOBALS['application']->conn,
+            'pc_users',
+            'email,name,firstname,lastname',
+            'status > 0 AND subscription = 1'
+        );
     }
 
     public function fetch()
@@ -579,8 +581,8 @@ class PConecta_Newsletter_Accounts_Provider extends Newsletter_Accounts_Provider
 
         $this->accounts = array();
 
-        if($rs!==false) {
-            while(!$rs->EOF) {
+        if ($rs!==false) {
+            while (!$rs->EOF) {
                 $this->accounts[] = new Newsletter_Account(
                     /* email */
                     $rs->fields['email'],
@@ -671,10 +673,6 @@ class PConecta_Newsletter_Items_Provider extends Newsletter_Items_Provider
 
             $filter = $this->_cond2str($filters, $this->sources[$source]['conditions']);
 
-            //var_dump($source, $category, $filter, 'ORDER BY ' . $order_by . ' ' . $limit);
-            //die();
-
-
             $items = $cm->find_by_category($source, $category,
                                            $filter, 'ORDER BY ' . $order_by . ' ' . $limit);
 
@@ -708,12 +706,12 @@ class PConecta_Newsletter_Items_Provider extends Newsletter_Items_Provider
 
 
         $this->items = array();
-        $className = 'PConecta_' . $source . '_Newsletter_Item';
+        $className   = 'PConecta_' . $source . '_Newsletter_Item';
 
-        foreach($items as $content) {
+        foreach ($items as $content) {
             $item = new $className(); // Newsletter_Item
 
-            foreach($this->sources[$source]['fields'] as $fld) {
+            foreach ($this->sources[$source]['fields'] as $fld) {
                 // Format date
                 if($fld == 'created') {
                     $content->{$fld} = date('H:i d/m/Y', strtotime($content->{$fld}));
@@ -725,12 +723,13 @@ class PConecta_Newsletter_Items_Provider extends Newsletter_Items_Provider
                 $item->{$fld} = StringUtils::clearBadChars($item->{$fld});
             }
 
-            if($source=='Article') {
+            if ($source=='Article') {
                 $ccm = new ContentCategoryManager();
                 $content->loadCategoryName($content->id);
 
                 $item->category = $content->category;
-                $item->category_name = $ccm->get_title($ccm->get_name($item->category));
+                $item->category_name =
+                    $ccm->get_title($ccm->get_name($item->category));
             }
 
             $this->items[] = $item;

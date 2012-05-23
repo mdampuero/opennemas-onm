@@ -84,7 +84,7 @@ class Application
         // init Logger
         $logLevel = (s::get('log_level'))?: 'normal';
         $logger = new \Onm\Log($logLevel);
-        $registry = Zend_Registry::set('logger', $logger);
+        Zend_Registry::set('logger', $logger);
 
         // Composite Logger (file + mail)
         // http://www.indelible.org/php/Log/guide.html#composite-handlers
@@ -164,7 +164,7 @@ class Application
     *
     * @param array $packages list of packages to load
     */
-    static public function initAutoloader($packages=null)
+    static public function initAutoloader()
     {
 
         // TODO: move to autoload.php
@@ -335,7 +335,7 @@ class Application
             $events = $this->events[$eventName];
 
             if ( is_array($events) ) {
-                foreach ($events as $i => $event) {
+                foreach ($events as $event) {
                     $callback = $event[0];
                     $args     = array_merge($args, $event[1]);
 

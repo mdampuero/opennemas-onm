@@ -6,30 +6,29 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-/**
- * Newsletter
- **/
-
 use Onm\Settings as s,
     Onm\Message  as m;
 
+/**
+ * Newsletter
+ **/
+class NewsletterManager
+{
 
-class NewsletterManager {
-
-     /**
+    /**
      * Send mail to all users
      *
      */
-    function send($mailboxes, $htmlContent, $params)
+    public function send($mailboxes, $htmlContent, $params)
     {
-        $saved = $this->saveNewsletter($htmlContent);
+        $this->saveNewsletter($htmlContent);
 
-        foreach($mailboxes as $mailbox) {
+        foreach ($mailboxes as $mailbox) {
             $this->sendToUser($mailbox, $htmlContent, $params);
         }
     }
 
-    function sendToUser($mailbox, $htmlcontent, $params)
+    public function sendToUser($mailbox, $htmlcontent, $params)
     {
         require_once(SITE_LIBS_PATH.'phpmailer/class.phpmailer.php');
 
@@ -38,7 +37,7 @@ class NewsletterManager {
         $mail->IsSMTP();
         $mail->Host = $params['mail_host'];
         if (!empty($params['mail_user'])
-            && !empty($paramsp['mail_password']))
+            && !empty($params['mail_password']))
         {
             $mail->SMTPAuth = true;
         } else {
@@ -102,15 +101,12 @@ class NewsletterManager {
     public function render()
     {
         $tpl = new Template(TEMPLATE_USER);
-        $ccm = new ContentCategoryManager();
 
         $newsletterContent = json_decode(json_decode($_COOKIE['data-newsletter']));
 
-
-        $dataContents = array();
         if (!empty($newsletterContent)) {
             foreach ($newsletterContent as  $container) {
-                foreach ($container->items as $key => &$item) {
+                foreach ($container->items as &$item) {
                     if (!empty($item->id) && $item->content_type !='label') {
                         $content = new Content($item->id);
 
@@ -141,27 +137,32 @@ class NewsletterManager {
 
         //render ads
         $advertisement = Advertisement::getInstance();
-        $banners = $advertisement->getAdvertisements(array(1001, 1009), 0);
-        $cm = new ContentManager();
-        $banners = $cm->getInTime($banners);
+        $banners       = $advertisement->getAdvertisements(array(1001, 1009), 0);
+        $cm            = new ContentManager();
+        $banners       = $cm->getInTime($banners);
 
         $advertisement->render($banners, $advertisement);
 
          // VIERNES 4 DE SEPTIEMBRE 2009
-        $days = array('Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado');
-        $months = array('', 'Enero', 'Febrero', 'Marzo',
-                        'Abril', 'Mayo', 'Junio',
-                        'Julio', 'Agosto', 'Septiembre',
-                        'Octubre', 'Noviembre', 'Diciembre');
+        $days = array(
+            'Domingo', 'Lunes', 'Martes', 'Miércoles',
+            'Jueves', 'Viernes', 'Sábado'
+        );
+        $months = array(
+            '', 'Enero', 'Febrero', 'Marzo',
+            'Abril', 'Mayo', 'Junio',
+            'Julio', 'Agosto', 'Septiembre',
+            'Octubre', 'Noviembre', 'Diciembre'
+        );
         $tpl->assign('current_date', $days[(int)date('w')] . ' ' . date('j') . ' de ' . $months[(int)date('n')] . ' ' . date('Y'));
 
-        $URL_PUBLIC = preg_replace('@^http[s]?://(.*?)/$@i', 'http://$1', SITE_URL);
-        $tpl->assign('URL_PUBLIC', $URL_PUBLIC);
+        $publicUrl = preg_replace('@^http[s]?://(.*?)/$@i', 'http://$1', SITE_URL);
+        $tpl->assign('URL_PUBLIC', $publicUrl);
 
         $configurations = s::get(array(
-                                    'newsletter_maillist',
-                                    'newsletter_subscriptionType',
-                                    ));
+            'newsletter_maillist',
+            'newsletter_subscriptionType',
+        ));
 
         $tpl->assign('conf', $configurations);
         $htmlContent = $tpl->fetch('newsletter/newNewsletter.tpl');
@@ -169,10 +170,8 @@ class NewsletterManager {
         return $htmlContent;
     }
 
-    public function saveNewsletter($htmlContent) {
-        $html = json_encode($htmlContent);
-
-
+    public function saveNewsletter($htmlContent)
+    {
+        json_encode($htmlContent);
     }
-
 }
