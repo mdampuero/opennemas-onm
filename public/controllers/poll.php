@@ -28,9 +28,12 @@ $cm  = new ContentManager();
 $category_name = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
 $subcategory_name = $request->query->filter('subcategory_name', '', FILTER_SANITIZE_STRING);
 $page = $request->query->filter('page', 0, FILTER_VALIDATE_INT);
-$action = $request->query->filter('action', 'frontpage', FILTER_SANITIZE_STRING);
+$action = $request->request->filter('action', '', FILTER_SANITIZE_STRING);
+if (empty($action)) {
+  $action = $request->query->filter('action', 'frontpage', FILTER_SANITIZE_STRING);
+}
 
-if(!empty($category_name)) {
+if (!empty($category_name)) {
     $ccm = ContentCategoryManager::get_instance();
     $category = $ccm->get_id($category_name);
     $actual_category_id = $category; // FOR WIDGETS
@@ -170,7 +173,7 @@ switch($action) {
 
     case 'addVote':
 
-        $dirtyID = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
+        $dirtyID = $request->request->filter('id', '', FILTER_SANITIZE_STRING);
 
         $pollId = Content::resolveID($dirtyID);
         /**
@@ -180,12 +183,12 @@ switch($action) {
 
         $poll = new Poll($pollId);
 
-        if(!empty($poll->id)) {
+        if (!empty($poll->id)) {
             $cookie="polls".$pollId;
             if (isset($_COOKIE[$cookie])) {
                  Application::setCookieSecure($cookie, 'tks');
             }
-            $respEncuesta = $request->query->filter('respEncuesta', '', FILTER_SANITIZE_STRING);
+            $respEncuesta = $request->request->filter('respEncuesta', '', FILTER_SANITIZE_STRING);
 
             if (!empty($respEncuesta) && !isset($_COOKIE[$cookie]) ) {
                 $ip = $_SERVER['REMOTE_ADDR'];
