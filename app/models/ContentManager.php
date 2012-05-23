@@ -59,8 +59,12 @@ class ContentManager
     }
 
 
-    public function find($contentType, $filter=null, $orderBy='ORDER BY 1', $fields='*')
-    {
+    public function find(
+        $contentType,
+        $filter=null,
+        $orderBy='ORDER BY 1',
+        $fields='*'
+    ) {
         $this->init($contentType);
         $items = array();
 
@@ -84,8 +88,12 @@ class ContentManager
     }
 
 
-    public function find_all($contentType, $filter=null, $orderBy='ORDER BY 1', $fields='*')
-    {
+    public function find_all(
+        $contentType,
+        $filter  =null,
+        $orderBy ='ORDER BY 1',
+        $fields  ='*'
+    ) {
         return $this->findAll($contentType, $filter, $orderBy, $fields);
     }
 
@@ -99,24 +107,30 @@ class ContentManager
      *
      * @return array the list of content objects
      **/
-    public function findAll($contentType, $filter = null, $orderBy = 'ORDER BY 1', $fields='*')
-    {
+    public function findAll(
+        $contentType,
+        $filter  = null,
+        $orderBy = 'ORDER BY 1',
+        $fields  ='*'
+    ) {
         $this->init($contentType);
         $items = array();
 
         $where = '`contents`.`in_litter`=0';
 
-        if( !is_null($filter) ) {
-            if( $filter == 'in_litter=1') { //se busca desde la litter.php
+        if (!is_null($filter)) {
+            if ($filter == 'in_litter=1') { //se busca desde la litter.php
                 $where = $filter;
-            } else{
+            } else {
                 $where = ' `contents`.`in_litter`=0 AND '.$filter;
             }
         }
 
-        $sql = 'SELECT '.$fields.' FROM `contents`, `'.$this->table.'`, `contents_categories` ' .
-                ' WHERE '.$where.' AND `contents`.`pk_content`= `'.$this->table.'`.`pk_'.$this->content_type.'` '.
-                ' AND `contents`.`pk_content`= `contents_categories`.`pk_fk_content` '.$orderBy;
+        $sql = 'SELECT '.$fields
+             . ' FROM `contents`, `'.$this->table.'`, `contents_categories` '
+             . ' WHERE '.$where
+             . ' AND `contents`.`pk_content`= `'.$this->table.'`.`pk_'.$this->content_type.'` '
+             . ' AND `contents`.`pk_content`= `contents_categories`.`pk_fk_content` '.$orderBy;
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
         $items = $this->load_obj($rs, $contentType);
@@ -132,12 +146,11 @@ class ContentManager
     * This is used for HomePages, fetches all the contents assigned for it and
     * allows to render an entire homepage
     *
-    * @param type $category_id, the id of the category we want to get contents from
+    * @param  type $category_id, the id of the category we want to get contents from
     * @return mixed, array of contents
     */
     public function getContentsForHomepageOfCategory($categoryID)
     {
-
         // Initialization of variables
         $contents = array();
 
@@ -149,11 +162,10 @@ class ContentManager
         // in this category's frontpage
         $rs = $GLOBALS['application']->conn->Execute($sql, array($categoryID));
 
-        if($rs !== false) {
+        if ($rs !== false) {
 
             // iterate over all found contents and initialize them
             while (!$rs->EOF) {
-
                 $content = new $rs->fields['content_type'](
                     $rs->fields['pk_fk_content']
                 );
@@ -281,8 +293,10 @@ class ContentManager
     * @param mixed $elements, an array with the id, placeholder, position
     * @return boolean, if all went good this will be true and viceversa
     */
-    static public function saveContentPositionsForHomePage($categoryID, $elements =  array())
-    {
+    static public function saveContentPositionsForHomePage(
+        $categoryID,
+        $elements =  array()
+    ) {
 
         // Starting the Transaction
         $GLOBALS['application']->conn->StartTrans();
@@ -333,8 +347,9 @@ class ContentManager
     * @param int $categoryID, the id of the category we want to clear positions from
     * @return boolean, if all went good this will be true and viceversa
     */
-    static public function clearContentPositionsForHomePageOfCategory($categoryID)
-    {
+    static public function clearContentPositionsForHomePageOfCategory(
+        $categoryID
+    ) {
         // clean actual contents for the homepage of this category
         $sql = 'DELETE FROM content_positions '
               .'WHERE `fk_category`='.$categoryID;
@@ -351,8 +366,10 @@ class ContentManager
         return $returnValue;
     }
 
-    static public function filterContentsbyProperty($array, $property)
-    {
+    static public function filterContentsbyProperty(
+        $array,
+        $property
+    ) {
 
         $filterKeys   = array_keys($property);
         $filterKey    = $filterKeys[0];
@@ -383,7 +400,7 @@ class ContentManager
     * @param mixed $property, the property to sort with
     * @return mixed, the sorted $array
     */
-    static public function sortArrayofObjectsByProperty( $array, $property )
+    static public function sortArrayofObjectsByProperty($array, $property)
     {
         // Y si el array es vacio ????
         if (count($array) > 0) {
@@ -404,11 +421,15 @@ class ContentManager
                     // first: objects with "smaller" property $property
                     // second: objects with "bigger" property $property
                     do {
-                        while ($array[$i]->{$property} < $tmp->{$property}) $i++;
-                        while ($tmp->{$property} < $array[$j]->{$property}) $j--;
+                        while ($array[$i]->{$property} < $tmp->{$property}) {
+                            $i++;
+                        }
+                        while ($tmp->{$property} < $array[$j]->{$property}) {
+                            $j--;
+                        }
 
                         // Swap elements of two parts if necesary
-                        if( $i <= $j) {
+                        if ($i <= $j) {
                             $w         = $array[$i];
                             $array[$i] = $array[$j];
                             $array[$j] = $w;
@@ -438,24 +459,29 @@ class ContentManager
     * @param int $contentID, the id of the content we want to work with
     * @return string, the name of the content
     */
-    static public function getContentTypeNameFromId($contentID, $ucfirst = false)
-    {
+    static public function getContentTypeNameFromId(
+        $contentID,
+        $ucfirst = false
+    ) {
         // Raise an error if $contentID is not a number
         if(!is_numeric($contentID)) {
             // Try to uniformize this, cause if $contentID comes from an widget
             // this raises an error cause the contentID is 'Widget'
             //throw new InvalidArgumentException('getContentTypeNameFromId function only accepts integers. Input was: '.$int);
-            $return_value = ($ucfirst === true) ? ucfirst($contentID) : strtolower($contentID);
+            $return_value = ($ucfirst === true)
+                ? ucfirst($contentID) : strtolower($contentID);
         } else {
 
             // retrieve the name for this id
-            $sql = "SELECT name FROM content_types WHERE `pk_content_type`=$contentID";
+            $sql = "SELECT name FROM content_types "
+                 . "WHERE `pk_content_type`=$contentID";
             $rs = $GLOBALS['application']->conn->Execute($sql);
 
             if ($rs->_numOfRows < 1) {
                 $return_value = false;
             } else {
-                $return_value = ($ucfirst === true) ? ucfirst($rs->fields['name']) : $rs->fields['name'];
+                $return_value = ($ucfirst === true)
+                    ? ucfirst($rs->fields['name']) : $rs->fields['name'];
             }
         }
 
@@ -483,7 +509,8 @@ class ContentManager
         } else {
 
             // retrieve the name for this id
-            $sql = "SELECT path FROM attachments WHERE `pk_attachment`=$contentID";
+            $sql = "SELECT path FROM attachments "
+                 . "WHERE `pk_attachment`=$contentID";
             $rs = $GLOBALS['application']->conn->Execute($sql);
 
             if ($rs->_numOfRows < 1) {
@@ -500,19 +527,36 @@ class ContentManager
     }
 
     /**
-     * This function returns an array of objects $contentType of the most viewed in the last few days indicated.
+     * This function returns an array of objects $contentType of the most viewed
+     * in the last few days indicated.
      *
      * @param string  $contentType type of content
-     * @param boolean $not_empty   If there are no results regarding the days indicated, the query is performed on the entire bd. For default is false
-     * @param integer $category    pk_content_category ok the contents. If value is 0, then does not filter by categories. For default is 0.
-     * @param integer $author      pk_author of the contnet. If value is 0, then does not filter by categories. For default is 0.
-     * @param integer $days        Interval of days on which the request takes place. For default is 2.
-     * @param integer $num         Number of objects that the function returns. For default is 8.
-     * @param boolean $all         Get all the content regardless of content status.
+     * @param boolean $not_empty   If there are no results regarding the days
+     *                             indicated, the query is performed on the
+     *                             entire bd. For default is false
+     * @param integer $category    pk_content_category ok the contents. If value
+     *                             is 0, then does not filter by categories. For
+     *                             default is 0.
+     * @param integer $author      pk_author of the contnet. If value is 0, then
+     *                             does not filter by categories. For default
+     *                             is 0.
+     * @param integer $days        Interval of days on which the request takes
+     *                             place. For default is 2.
+     * @param integer $num         Number of objects that the function returns.
+     *                             For default is 8.
+     * @param boolean $all         Get all the content regardless of content
+     *                             status.
      * @return array of objects $contentType
      */
-    public function getMostViewedContent($contentType, $not_empty = false, $category = 0, $author=0, $days=2, $num=9, $all=false)
-    {
+    public function getMostViewedContent(
+        $contentType,
+        $notEmpty = false,
+        $category  = 0,
+        $author    =0,
+        $days      =2,
+        $num       =9,
+        $all       =false
+    ) {
         $this->init($contentType);
 
         $items   = array();
@@ -544,16 +588,18 @@ class ContentManager
 
 
 
-        $sql = 'SELECT * FROM '.$_tables .
-                'WHERE '.$_where.$_category.$_author.$_days.' AND `contents`.`pk_content`=`pk_'.$this->content_type.'` '.
-                $_order_by;
+        $sql = 'SELECT * FROM '.$_tables
+             . 'WHERE '.$_where.$_category.$_author.$_days
+             . ' AND `contents`.`pk_content`=`pk_'.$this->content_type.'` '
+             . $_order_by;
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
-        if ($rs->_numOfRows<$num && $not_empty) {
-            $sql = 'SELECT * FROM '.$_tables .
-                    'WHERE '.$_where.$_category.$_author.' AND `contents`.`pk_content`=`pk_'.$this->content_type.'` '.
-                    ' '.$_order_by;
+        if ($rs->_numOfRows<$num && $notEmpty) {
+            $sql = 'SELECT * FROM '.$_tables
+                 . 'WHERE '.$_where.$_category.$_author
+                 . ' AND `contents`.`pk_content`=`pk_'.$this->content_type.'` '
+                 . $_order_by;
             $rs = $GLOBALS['application']->conn->Execute($sql);
         }
 
@@ -564,17 +610,32 @@ class ContentManager
 
 
     /**
-     * This function returns an array of objects $contentType of the most commented in the last few days indicated.
+     * This function returns an array of objects $contentType of the most
+     * commented in the last few days indicated.
+     *
      * @param string  $contentType type of content
-     * @param boolean $not_empty   If there are no results regarding the days indicated, the query is performed on the entire bd. For default is false
-     * @param integer $category    pk_content_category ok the contents. If value is 0, then does not filter by categories. For default is 0.
-     * @param integer $days        Interval of days on which the consultation takes place. For default is 2.
-     * @param integer $num         Number of objects that the function returns. For default is 8.
-     * @param boolean $all         Get all the content regardless of content status and endtime.
+     * @param boolean $not_empty   If there are no results regarding the days
+     *                             indicated, the query is performed on the
+     *                             entire bd. For default is false
+     * @param integer $category    pk_content_category ok the contents. If value
+     *                             is 0, then does not filter by categories. For
+     *                             default is 0.
+     * @param integer $days        Interval of days on which the consultation
+     *                             takes place. For default is 2.
+     * @param integer $num         Number of objects that the function returns.
+     *                             For default is 8.
+     * @param boolean $all         Get all the content regardless of content
+     *                             status and endtime.
      * @return array
      */
-    public function getMostComentedContent($contentType, $not_empty = false, $category = 0, $days=2, $num=9, $all=false)
-    {
+    public function getMostComentedContent(
+        $contentType,
+        $notEmpty = false,
+        $category  = 0,
+        $days      =2,
+        $num       =9,
+        $all       =false
+    ) {
         $this->init($contentType);
         $items = array();
 
@@ -595,7 +656,7 @@ class ContentManager
                 $pks = $this->getInTime($pks);
             }
 
-            if(count($pks)<$num && $not_empty) {
+            if(count($pks)<$num && $notEmpty) {
                 //En caso de que existan menos de 6 contenidos, lo hace referente a los 200 últimos contenidos
                 $pks = $this->find_by_category($contentType, $category,$_where_slave.$_comented,
                                 'ORDER BY `contents`.`content_status` DESC, created DESC LIMIT 200','pk_content, starttime, endtime');
@@ -611,7 +672,7 @@ class ContentManager
                 $pks = $this->getInTime($pks);
             }
 
-            if(count($pks)< $num && $not_empty) {
+            if(count($pks)< $num && $notEmpty) {
 
                 //En caso de que existan menos de $num contenidos, lo hace referente a los 200 últimos contenidos
                 $pks = $this->getInTime($this->find($contentType,$_where_slave.$_comented,
@@ -679,19 +740,38 @@ class ContentManager
 
 
     /**
-     * This function returns an array of objects $contentType of the most voted in the last few days indicated.
-     * Objects only have covered the fields pk_content, title, and total_value total_votes
+     * This function returns an array of objects $contentType of the most voted
+     * in the last few days indicated.
+     * Objects only have covered the fields pk_content, title, and total_value
+     * total_votes
+     *
      * @param string  $contentType type of content
-     * @param boolean $not_empty   If there are no results regarding the days indicated, the query is performed on the entire bd. For default is false
-     * @param integer $category    pk_content_category ok the contents. If value is 0, then does not filter by categories. For default is 0.
-     * @param integer $author      pk_author of the contnet. If value is 0, then does not filter by categories. For default is 0.
-     * @param integer $days        Interval of days on which the consultation takes place. For default is 2.
-     * @param integer $num         Number of objects that the function returns. For default is 8.
-     * @param boolean $all         Get all the content regardless of content status.
-     * @return array of objects $contentType
+     * @param boolean $not_empty   If there are no results regarding the days
+     *                             indicated, the query is performed on the
+     *                             entire bd. For default is false
+     * @param integer $category    pk_content_category ok the contents. If value
+     *                             is 0, then does not filter by categories.
+     *                             For default is 0.
+     * @param integer $author      pk_author of the contnet. If value is 0,
+     *                             then does not filter by categories.
+     *                             For default is 0.
+     * @param integer $days        Interval of days on which the consultation
+     *                             takes place. For default is 2.
+     * @param integer $num         Number of objects that the function returns.
+     *                             For default is 8.
+     * @param boolean $all         Get all the content regardless of content
+     *                             status.
+     * @return array the contents
      */
-    public function getMostVotedContent($contentType, $not_empty = false, $category = 0, $author=0, $days=2, $num=8, $all=false)
-    {
+    public function getMostVotedContent(
+        $contentType,
+        $not_empty = false,
+        $category = 0,
+        $author=0,
+        $days=2,
+        $num=8,
+        $all=false
+    ) {
         $this->init($contentType);
         $items = array();
 
@@ -738,15 +818,27 @@ class ContentManager
       /**
      * This function returns an array of objects $contentType an the last comment.
      * @param string  $contentType type of content
-     * @param boolean $not_empty   If there are no results regarding the days indicated, the query is performed on the entire bd. For default is false
-     * @param integer $category    pk_content_category ok the contents. If value is 0, then does not filter by categories. For default is 0.
-     * @param integer $days        Interval of days on which the consultation takes place. For default is 2.
-     * @param integer $num         Number of objects that the function returns. For default is 8.
-     * @param boolean $all         Get all the content regardless of content status and endtime.
+     * @param boolean $not_empty   If there are no results regarding the days
+     *                             indicated, the query is performed on the
+     *                             entire bd. For default is false
+     * @param integer $category    pk_content_category ok the contents. If value
+     *                             is 0, then does not filter by categories.
+     *                             For default is 0.
+     * @param integer $days        Interval of days on which the consultation
+     *                             takes place. For default is 2.
+     * @param integer $num         Number of objects that the function returns.
+     *                             For default is 8.
+     * @param boolean $all         Get all the content regardless of content
+     *                             status and endtime.
      * @return array
      */
-    public function getLastComentsContent($contentType, $not_empty = false, $category = 0, $num=6, $all=false)
-    {
+    public function getLastComentsContent(
+        $contentType,
+        $not_empty = false,
+        $category  = 0,
+        $num       =6,
+        $all       =false
+    ) {
         $this->init($contentType);
         $items = array();
 
@@ -805,15 +897,16 @@ class ContentManager
 
         foreach ($comments as $comment) {
             if (array_key_exists($comment->fk_content, $articles)) {
+                $index = $comment->fk_content;
                 foreach($contents as $cont){
-                    if ($cont[0]==$comment->pk_comment) {
-                        $articles[$comment->fk_content]['comment_title'] = $cont['title'];
+                    if ($cont[0] == $index) {
+                        $articles[$index]['comment_title'] = $cont['title'];
                     }
                 }
 
-                $articles[$comment->fk_content]['comment']    = $comment->body;
-                $articles[$comment->fk_content]['pk_comment'] = $comment->pk_comment;
-                $articles[$comment->fk_content]['author']     = $comment->author;
+                $articles[$index]['comment']    = $comment->body;
+                $articles[$index]['pk_comment'] = $comment->pk_comment;
+                $articles[$index]['author']     = $comment->author;
             }
         }
 
@@ -827,7 +920,9 @@ class ContentManager
                 WHERE contents.fk_content_type=1 AND contents.pk_content IN
                       (SELECT fk_content
                        FROM `comments`,contents
-                       WHERE comments.pk_comment = contents.pk_content AND contents.available = 1 AND contents.content_status = 1
+                       WHERE comments.pk_comment = contents.pk_content
+                       AND contents.available = 1
+                       AND contents.content_status = 1
                        ORDER BY pk_comment DESC)
                 ORDER BY contents.created DESC
                 LIMIT '. $num;
@@ -1197,21 +1292,29 @@ class ContentManager
      * @param int|null    $pk_fk_content_category Id de categoria (para find_by_category y si null es find).
      * @return array                Array ($items, $pager)
      */
-    public function find_pages($contentType, $filter=null, $_order_by='ORDER BY 1', $page=1, $items_page=10,$pk_fk_content_category=null )
-    {
+    public function find_pages(
+        $contentType,
+        $filter                 = null,
+        $_order_by              = 'ORDER BY 1',
+        $page                   = 1,
+        $items_page             = 10,
+        $pk_fk_content_category = null
+    ) {
         $this->init($contentType);
         $items = array();
         $_where = '`contents`.`in_litter`=0';
 
-        if( !is_null($filter) ) {
-            if(( $filter == ' `contents`.`in_litter`=1') || ($filter == 'in_litter=1')){ //se busca desde la litter.php
+        if (!is_null($filter)) {
+            if ($filter == ' `contents`.`in_litter`=1'
+               || $filter == 'in_litter=1'
+            ) { //se busca desde la litter.php
                 $_where = $filter;
             } else {
                 $_where = ' `contents`.`in_litter`=0 AND '.$filter;
             }
         }
-        $total_contents=$this->count($contentType, $filter, $pk_fk_content_category);
-        if(empty($page)) {
+        $countContents=$this->count($contentType, $filter, $pk_fk_content_category);
+        if (empty($page)) {
             $page = 1;
             $items_page=10;
         }
@@ -1238,7 +1341,7 @@ class ContentManager
             'delta'       => 3,
             'clearIfVoid' => true,
             'urlVar'      => 'page',
-            'totalItems'  => $total_contents,
+            'totalItems'  => $countContents,
         );
         $pager = Pager::factory($pager_options);
 
@@ -1262,12 +1365,13 @@ class ContentManager
         }
 
         if( intval($pk_fk_content_category) > 0 ) {
-            $sql = 'SELECT * FROM contents_categories, contents, '.$this->table.'  ' .
-                   'WHERE '.$_where.' AND `contents_categories`.`pk_fk_content_category`=' .
-                   $pk_fk_content_category.'  AND `contents`.`pk_content`=`' . $this->table . '`.`pk_'.$this->content_type .
-                   '` AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` ' . $_order_by;
+            $sql = 'SELECT * FROM contents_categories, contents, '.$this->table.'  '
+                 . 'WHERE '.$_where.' AND `contents_categories`.`pk_fk_content_category`='
+                 . $pk_fk_content_category.'  AND `contents`.`pk_content`=`' . $this->table . '`.`pk_'.$this->content_type
+                 . '` AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` '
+                 . $_order_by;
         } else {
-            return( $items );
+            return $items ;
         }
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
@@ -1282,24 +1386,23 @@ class ContentManager
     {
         $this->init($contentType); //recupera el id de la categoria del array.
         $pk_fk_content_category=$this->get_id($category_name);
-        $items = array();
+        $items  = array();
         $_where = 'in_litter=0';
 
-        if( !is_null($filter) ) {
-            if( preg_match('/in_litter=1/i', $filter) ) { //se busca desde la litter.php
+        if (!is_null($filter) ) {
+            if (preg_match('/in_litter=1/i', $filter)) { //se busca desde la litter.php
                 $_where = $filter;
             } else {
                 $_where = $filter.' AND in_litter=0';
             }
         }
 
-        $sql = 'SELECT * FROM contents_categories, contents,  '.$this->table.'  ' .
-                'WHERE '.$_where.' AND `contents_categories`.`pk_fk_content_category`='.$pk_fk_content_category .
-                '  AND `contents`.`pk_content`= `'.$this->table.'`.`pk_'.$this->content_type .
-                '` AND `contents_categories`.`pk_fk_content` = `contents`.`pk_content` '.$_order_by;
+        $sql = 'SELECT * FROM contents_categories, contents,  '.$this->table.'  '
+             . 'WHERE '.$_where.' AND `contents_categories`.`pk_fk_content_category`='.$pk_fk_content_category
+             . '  AND `contents`.`pk_content`= `'.$this->table.'`.`pk_'.$this->content_type
+             . '` AND `contents_categories`.`pk_fk_content` = `contents`.`pk_content` '.$_order_by;
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
-
         $items = $this->load_obj($rs, $contentType);
 
         return $items;
@@ -1307,25 +1410,31 @@ class ContentManager
 
 
     //this function returns last contents of Subcategories of a given category
-    public function find_inSubcategory_by_categoryName($contentType, $category_name, $filter=null, $_order_by='ORDER BY 1')
-    {
+    public function find_inSubcategory_by_categoryName(
+        $contentType,
+        $category_name,
+        $filter    = null,
+        $_order_by = 'ORDER BY 1'
+    ) {
         $this->init($contentType);
         $items = array();
-        $_where = '1=1  AND in_litter=0';
+        $where = '1=1  AND in_litter=0';
 
         if( !is_null($filter) ) {
             if( $filter == 'in_litter=1') {
                 //se busca desde la litter.php
-                $_where = $filter;
+                $where = $filter;
             }
 
-            $_where = $filter.' AND in_litter=0';
+            $where = $filter.' AND in_litter=0';
         }
 
-        $sql= 'SELECT contents.pk_content FROM contents,content_categories, contents_categories '. $_where.
-              ' AND content_categories.fk_content_category=\''.$this->get_id($category_name).'\''.
-              ' WHERE content_categories.pk_content_category=contents_categories.pk_fk_content_category '.
-              ' AND contents.pk_content = contents_categories.pk_fk_content '. $_order_by;
+        $sql = 'SELECT contents.pk_content '
+             . 'FROM contents,content_categories, contents_categories '
+             . $where
+             . ' AND content_categories.fk_content_category=\''.$this->get_id($category_name).'\''
+             . ' WHERE content_categories.pk_content_category=contents_categories.pk_fk_content_category '
+             . ' AND contents.pk_content = contents_categories.pk_fk_content '. $_order_by;
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
@@ -1342,22 +1451,28 @@ class ContentManager
 
     //Find title, date and slug from category id.
     // Assing values to new object call Headline
-    public function find_category_headline($pkFkContentCategory, $filter=null, $_order_by='ORDER BY 1')
-    {
-        $_where = 'in_litter=0';
-        if( !is_null($filter) ) {
-            if( preg_match('/in_litter=1/i', $filter) ) {
+    public function find_category_headline(
+        $pkFkContentCategory,
+        $filter=null,
+        $orderBy = 'ORDER BY 1'
+    ) {
+        $where = 'in_litter=0';
+        if (!is_null($filter) ) {
+            if ( preg_match('/in_litter=1/i', $filter) ) {
                 //se busca desde la litter.php
-                $_where = $filter;
+                $where = $filter;
             } else {
-                $_where = $filter.' AND in_litter=0';
+                $where = $filter.' AND in_litter=0';
             }
         }
 
-        $sql = 'SELECT contents.pk_content, contents.title, contents.slug, contents.created, contents.changed,
-                       contents.starttime, contents.endtime  FROM contents_categories, contents ' .
-               'WHERE contents.fk_content_type=1 and '.$_where.' AND pk_fk_content_category=\'' .
-               $pkFkContentCategory.'\'  AND  pk_fk_content = pk_content '.$_order_by;
+        $sql = 'SELECT contents.pk_content, contents.title, contents.slug,
+                       contents.created, contents.changed, contents.starttime,
+                       contents.endtime
+                FROM contents_categories, contents '
+             . 'WHERE contents.fk_content_type=1 and '.$where
+             . ' AND pk_fk_content_category=\'' . $pkFkContentCategory.'\''
+             . ' AND  pk_fk_content = pk_content '.$orderBy;
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
@@ -1367,11 +1482,14 @@ class ContentManager
     }
 
 
-    //this function returns title,catName and slugs of last headlines from Subcategories of a given category
+    //this function returns title,catName and slugs of last headlines from
+    //Subcategories of a given category
     public function findHeadlines(/*$filter=null, $_order_by='ORDER BY 1'*/)
     {
-        $sql = 'SELECT `contents`.`title`, `contents`.`pk_content` , `contents`.`created` ,  `contents`.`slug` , `contents`.`starttime` ,
-                       `contents`.`endtime` , `contents_categories`.`pk_fk_content_category` AS `category_id`
+        $sql = 'SELECT `contents`.`title`, `contents`.`pk_content` ,
+                       `contents`.`created` ,  `contents`.`slug` ,
+                       `contents`.`starttime` , `contents`.`endtime` ,
+                       `contents_categories`.`pk_fk_content_category` AS `category_id`
                 FROM `contents`
                     LEFT JOIN contents_categories ON ( `contents`.`pk_content` = `contents_categories`.`pk_fk_content` )
                 WHERE `contents`.`content_status` =1
@@ -1386,12 +1504,14 @@ class ContentManager
         $items = array();
         while (!$rs->EOF) {
             $items[] = array(
-                'title'          =>$rs->fields['title'],
+                'title'          => $rs->fields['title'],
                 'catName'        => $ccm->get_name($rs->fields['category_id']),
                 'slug'           => $rs->fields['slug'],
                 'created'        => $rs->fields['created'],
-                'category_title' => $ccm->get_title($ccm->get_name($rs->fields['category_id'])),
-                'id'             =>$rs->fields['pk_content'],
+                'category_title' => $ccm->get_title(
+                    $ccm->get_name($rs->fields['category_id'])
+                ),
+                'id'             => $rs->fields['pk_content'],
 
                 /* to filter in getInTime() */
                 'starttime'      => $rs->fields['starttime'],
@@ -1452,11 +1572,17 @@ class ContentManager
      * $totalItems ->num eltos a  paginar
      * $num_pages -> numero de elementos por pagina
      * $delta ->cantidad de numeros que se visualizan.
-     *  $function ->nombre de la funcion en js / URL (segun se quiera recargar ajax o una url)
+     * $function ->nombre de la funcion en js / URL (segun se quiera recargar ajax o una url)
      * $params -> parametros de la funcion js / dir url  que se carga
      */
-    public function create_paginate($totalItems, $numPages, $delta, $funcion='null', $params='null', $separator = " | ")
-    {
+    public function create_paginate(
+        $totalItems,
+        $numPages,
+        $delta,
+        $funcion   ='null',
+        $params    ='null',
+        $separator = " | "
+    ) {
         if (!isset($numPages)) {
             $numPages = 5;
         }
@@ -1560,8 +1686,13 @@ class ContentManager
 
     //Mantener pagina en frontend comentarios y Planconecta.
     //Paginate para contents de numPages
-    public function paginate_num_js($items, $numPages, $delta, $funcion, $params='null')
-    {
+    public function paginate_num_js(
+        $items,
+        $numPages,
+        $delta,
+        $funcion,
+        $params='null'
+    ) {
         if (!isset($numPages)) {
             $numPages = 20;
         }
@@ -1587,7 +1718,7 @@ class ContentManager
         $this->pager = &Pager::factory(array(
             'itemData'      => $_items,
             'perPage'       => $itemsPerPage,
-            'delta'         => $delta, //Num de paginas antes y despues de la actual
+            'delta'         => $delta, // # of pages before and after this one
             'append'        => true,
             'separator'     => '|',
             'spacesBeforeSeparator' => 1,
@@ -1620,8 +1751,13 @@ class ContentManager
 
     // admin - article.php - search related.
     //FIXME: unificar todos los paginates
-    public function paginate_array_num_js($items, $numPages, $delta, $funcion, $params='null')
-    {
+    public function paginate_array_num_js(
+        $items,
+        $numPages,
+        $delta,
+        $funcion,
+        $params='null'
+    ) {
         $_items = array();
 
         foreach ($items as $v) {
@@ -1689,7 +1825,8 @@ class ContentManager
             $szPages = '<p align="center">';
 
             if ($pager->_currentPage != 1) {
-                $szPages .= '<a style="cursor:pointer;" onClick="'.$funcion.'('.$params.',1);">Primera</a> ... | ';
+                $szPages .= '<a style="cursor:pointer;" onClick="'
+                    .$funcion.'('.$params.',1);">Primera</a> ... | ';
             }
 
             for ($iIndex=$pager->_currentPage-2; $iIndex<=$pager->_currentPage+2 && $iIndex <= $pager->_totalPages;$iIndex++) {
@@ -1699,7 +1836,8 @@ class ContentManager
                         break;
                     }
 
-                    $szPages .= '<a style="cursor:pointer;" onClick="'.$funcion.'('.$params.','.($iIndex+2).');">';
+                    $szPages .= '<a style="cursor:pointer;" onClick="'
+                        .$funcion.'('.$params.','.($iIndex+2).');">';
                     if($pager->_currentPage == ($iIndex+2)) {
                         $szPages .= '<b>' . ($iIndex+2) . '</b></a> | ';
                     } else {
@@ -1711,7 +1849,8 @@ class ContentManager
                         break;
                     }
 
-                    $szPages .= '<a style="cursor:pointer;" onClick="'.$funcion.'('.$params.','.($iIndex+1).');">';
+                    $szPages .= '<a style="cursor:pointer;" onClick="'
+                        .$funcion.'('.$params.','.($iIndex+1).');">';
                     if($pager->_currentPage == ($iIndex+1)) {
                         $szPages .= '<b>' . ($iIndex+1) . '</b></a> | ';
                     } else {
@@ -1719,7 +1858,8 @@ class ContentManager
                     }
 
                 } else {
-                    $szPages .= '<a style="cursor:pointer;" onClick="'.$funcion.'('.$params.','.$iIndex.');">';
+                    $szPages .= '<a style="cursor:pointer;" onClick="'
+                        .$funcion.'('.$params.','.$iIndex.');">';
                     if($pager->_currentPage == ($iIndex)) {
                         $szPages .= '<b>' . $iIndex . '</b></a> | ';
                     } else {
@@ -1730,8 +1870,9 @@ class ContentManager
             }
 
             if ($pager->_currentPage != $pager->_lastPageText) {
-                $szPages .= '... <a style="cursor:pointer;" onClick="' . $funcion .
-                                    '(' . $params.','.$pager->_lastPageText.');">Última </a>';
+                $szPages .= '... <a style="cursor:pointer;" onClick="'
+                    . $funcion .
+                    '(' . $params.','.$pager->_lastPageText.');">Última </a>';
             }
 
             $szPages .= "</p> ";
@@ -1768,17 +1909,21 @@ class ContentManager
     * @return mixed, array with values of articles. BE AWARE: this doesnt return Objects
     * @throws ExceptionClass [description]
     */
-    public function getArrayOfArticlesInCategory($categoryID, $filter=null, $_order_by='ORDER BY 1', $_limit = 50)
-    {
+    public function getArrayOfArticlesInCategory(
+        $categoryID,
+        $filter    = null,
+        $orderBy ='ORDER BY 1',
+        $limit    = 50
+    ) {
         $items  = array();
-        $_where = '1=1  AND in_litter=0';
+        $where = '1=1  AND in_litter=0';
 
         if (!is_null($filter)) {
             if ($filter == 'in_litter=1') {
-                $_where = $filter;
+                $where = $filter;
             }
 
-            $_where = $filter . ' AND in_litter=0';
+            $where = $filter . ' AND in_litter=0';
         }
 
         $sql =  'SELECT contents.pk_content, contents.title, contents.slug, '
@@ -1787,7 +1932,7 @@ class ContentManager
             .'FROM  contents, contents_categories '
             .'WHERE contents.pk_content = contents_categories.pk_fk_content '
             .'      AND contents_categories.pk_fk_content_category=\''.$categoryID.'\' '
-            .'      AND '.$_where.' '.$_order_by . ' LIMIT '.$_limit;
+            .'      AND '.$where.' '.$orderBy . ' LIMIT '.$limit;
 
         $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
         $rs = $GLOBALS['application']->conn->Execute($sql);
@@ -1879,19 +2024,21 @@ class ContentManager
     {
         $contents = array();
         if( is_array($pk_contents) && count($pk_contents) > 0 ) {
-            $sql  = 'SELECT * FROM `contents` WHERE fk_content_type != 8 AND pk_content IN ('.implode(',', $pk_contents).')';
-            $rs = $GLOBALS['application']->conn->Execute($sql);
+            $sql = 'SELECT * FROM `contents` '
+                 . 'WHERE fk_content_type != 8 '
+                 . 'AND pk_content IN ('.implode(',', $pk_contents).')';
+            $rs  = $GLOBALS['application']->conn->Execute($sql);
 
             if ($rs !== false) {
                 while (!$rs->EOF) {
                     $obj = new Content();
                     $obj->load($rs->fields);
-                    $obj->content_type = $GLOBALS['application']->conn->GetOne('SELECT name FROM `content_types` WHERE pk_content_type = "' .
-                                                                                    $obj->fk_content_type . '"');
+                    $obj->content_type = $GLOBALS['application']->conn->GetOne(
+                        'SELECT name FROM `content_types` WHERE pk_content_type = "' .
+                        $obj->fk_content_type . '"');
                     $obj->category_name = $obj->loadCategoryName($obj->id);
 
                     $contents[] = $obj;
-
                     $rs->MoveNext();
                 }
             }
@@ -1900,7 +2047,7 @@ class ContentManager
         $contentsOrdered = array();
         foreach ($pk_contents as $pk_content) {
             foreach ($contents as $content) {
-                if($content->pk_content == $pk_content) {
+                if ($content->pk_content == $pk_content) {
                     $contentsOrdered[] = $content;
                     break;
                 }
@@ -1914,22 +2061,28 @@ class ContentManager
     /**
      * Returns an array of image objects given an array/unique_id  of image
      *
-     * @return void
+     * @return array the list of images
      **/
     static public function getRelatedImagesForContentsWithIDs($relatedImagesIDs)
     {
         // If the given ids is an unique element transform it to an array.
-        if (!is_array($relatedImagesIDs) && !empty($relatedImagesIDs)) {
+        if (!is_array($relatedImagesIDs)
+            && !empty($relatedImagesIDs)
+        ) {
             $relatedImagesIDs = array($relatedImagesIDs);
         }
 
         // If the related images id array is empty just return an empty array
-        if(!(count($relatedImagesIDs) > 0)) { return array(); }
+        if (!(count($relatedImagesIDs) > 0)) {
+            return array();
+        }
 
         // Fetch the images from SQL
         $relatedImagesSQL = implode(',', $relatedImagesIDs);
-        $cm = new ContentManager();
-        $images = $cm->find('Photo', "pk_content IN ($relatedImagesSQL)");
+        $cm               = new ContentManager();
+        $images           = $cm->find(
+            'Photo', "pk_content IN ($relatedImagesSQL)"
+        );
 
         return $images;
     }
@@ -1943,12 +2096,16 @@ class ContentManager
     {
         $rc  = new RelatedContent();
         $ccm = new ContentCategoryManager();
+
         $relatedContentIDs = $rc->get_relations($contentID);
         $relatedContent = array();
         foreach ($relatedContentIDs as $contentID) {
             $content = new Content($contentID);
             // Filter by scheduled {{{
-            if ($content->isInTime() && $content->available==1 && $content->in_litter==0) {
+            if ($content->isInTime()
+                && $content->available==1
+                && $content->in_litter==0
+            ) {
                 $content->category_name = $ccm->get_name($content->category);
                 $relatedContent[] = $content;
             }
@@ -1961,18 +2118,18 @@ class ContentManager
 
 
     /**
-    * Fetches all the contents (articles, widgets, etc) for one specific category
-    * with its placeholder and position
+    * Fetches all the contents (articles, widgets, etc) for one specific
+    * category with its placeholder and position
     *
-    * This is used for HomePages, fetches all the contents assigned for it and allows
-    * to render an entire homepage
+    * This is used for HomePages, fetches all the contents assigned for it and
+    * allows to render an entire homepage
     *
-    * @param type $category_id, the id of the category we want to get contents from
-    * @return mixed, array of contents
+    * @param type $category_id category id we want to get contents from
+    * @return null|array array of contents
     */
     public function getContentsForLibrary($date)
     {
-        if(empty($date)) {
+        if (empty($date)) {
             return false;
         }
         // Initialization of variables
