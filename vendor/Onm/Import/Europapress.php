@@ -40,7 +40,6 @@ class Europapress implements \Onm\Import\Importer
      * Ensures that we always get one single instance
      *
      * @return  object      the unique instance object
-     *
      */
     static public function getInstance($config = array())
     {

@@ -73,7 +73,7 @@ class InstanceManager
         $rs = $this->_connection->Execute($sql);
 
         if (!$rs) {
-            $errorMsg = $this->_connection->ErrorMsg();
+            $this->_connection->ErrorMsg();
 
             return false;
         }
@@ -181,7 +181,7 @@ class InstanceManager
         $rs = $this->_connection->Execute($sql);
 
         if (!$rs) {
-            $errorMsg = $connection->ErrorMsg();
+            $connection->ErrorMsg();
 
             return false;
         }
@@ -212,7 +212,7 @@ class InstanceManager
         $rs = $this->_connection->Execute($sql, array($id));
 
         if (!$rs) {
-            $errorMsg = $rs->ErrorMsg();
+            $rs->ErrorMsg();
 
             return false;
         }
@@ -308,7 +308,7 @@ class InstanceManager
         $rs = $this->_connection->Execute($sql, array($flag, $id));
 
         if (!$rs) {
-            $errorMsg = $connection->ErrorMsg();
+            $connection->ErrorMsg();
 
             return false;
         }
@@ -337,7 +337,7 @@ class InstanceManager
 
         $rs = $this->_connection->Execute($sql, $values);
         if (!$rs) {
-            $errorMsg = $connection->ErrorMsg();
+            $connection->ErrorMsg();
 
             return false;
         }
@@ -359,7 +359,7 @@ class InstanceManager
         $sql = "DELETE FROM instances WHERE id=?";
         $rs = $this->_connection->Execute($sql, array($instance->id));
         if (!$rs) {
-            $errorMsg = $this->_connection->ErrorMsg();
+            $this->_connection->ErrorMsg();
 
             return false;
         }

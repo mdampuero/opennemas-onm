@@ -429,18 +429,18 @@ class Opinion extends Content
         $_sql_limit = " LIMIT {$options['limit']}";
 
         $cm = new ContentManager();
-        $ccm = ContentCategoryManager::get_instance();
 
         // Getting All latest opinions
-        $contents = $cm->find('Opinion', 'contents.available=1 ',
-                    'ORDER BY  contents.created DESC,  contents.title ASC ' .$_sql_limit);
-
-
+        $contents = $cm->find(
+            'Opinion', 'contents.available=1 ',
+            'ORDER BY  contents.created DESC,  contents.title ASC ' .$_sql_limit
+        );
 
         // For each opinion get its author and photo
         foreach ($contents as $content) {
             $content->author = new Author($content->fk_author);
-            $content->author->photo = $content->author->get_photo($content->fk_author_img);
+            $content->author->photo =
+                $content->author->get_photo($content->fk_author_img);
             if (isset($content->author->photo->path_img)){
                 $content->photo = $content->author->photo->path_img;
             }
@@ -467,24 +467,24 @@ class Opinion extends Content
         $options = array_merge($default_params, $params);
         $sqlLimit = " LIMIT {$options['limit']}";
 
-
         if (!isset($authorID)) {
-            return;
+            return array();
         }
 
         $cm = new ContentManager();
-        $ccm = ContentCategoryManager::get_instance();
 
         // Getting All latest opinions
-        $contents = $cm->find('Opinion', 'contents.available=1 AND opinions.fk_author = '.$authorID,
-                    'ORDER BY  contents.created DESC,  contents.title ASC ' .$sqlLimit);
+        $contents = $cm->find('Opinion',
+            'contents.available=1 AND opinions.fk_author = '.$authorID,
+            'ORDER BY  contents.created DESC,  contents.title ASC ' .$sqlLimit);
 
         $author = new Author($authorID);
 
         // For each opinion get its author and photo
         foreach ($contents as $content) {
             $content->author = $author;
-            $content->author->photo = $content->author->get_photo($content->fk_author_img);
+            $content->author->photo =
+                $content->author->get_photo($content->fk_author_img);
             if (isset($content->author->photo->path_img)){
                 $content->photo = $content->author->photo->path_img;
             }
