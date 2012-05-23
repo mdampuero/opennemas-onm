@@ -54,9 +54,6 @@ saveNewsletter = (function() {
     });
 
     var encodedContents = JSON.stringify(els);
-    log(els);
-    log(encodedContents);
-    alert('dfsd');
 
     jQuery.cookie("data-newsletter", encodedContents);
 
