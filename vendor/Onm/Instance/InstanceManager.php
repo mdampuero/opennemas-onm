@@ -105,15 +105,13 @@ class InstanceManager
             // Transform all the intance settings into application constants.
             $instance->settings = unserialize($instance->settings);
             if (empty($instance->settings['MEDIA_URL'])) {
-                $instance->settings['MEDIA_URL'] = implode(
-                    '',
+                $instance->settings['MEDIA_URL'] = implode('',
                     array(
                         'http://',
                         $_SERVER['HTTP_HOST'],
                         '/media'.
                         '/'
-                    )
-                );
+                    ));
             }
             foreach ($instance->settings as $key => $value ) {
                 define($key, $value);
@@ -121,9 +119,7 @@ class InstanceManager
 
             // If this instance is not activated throw an exception
             if ($instance->activated != '1') {
-                throw new \Onm\Instance\NotActivatedException(
-                    _('Instance not activated')
-                );
+                throw new \Onm\Instance\NotActivatedException(_('Instance not activated'));
             }
 
         // If this instance doesn't exist check if the request is from manager
@@ -151,12 +147,10 @@ class InstanceManager
             $onmInstancesConnection = $connectionData;
         }
         $conn = \ADONewConnection($onmInstancesConnection['BD_TYPE']);
-        $conn->Connect(
-            $onmInstancesConnection['BD_HOST'],
-            $onmInstancesConnection['BD_USER'],
-            $onmInstancesConnection['BD_PASS'],
-            $onmInstancesConnection['BD_DATABASE']
-        );
+        $conn->Connect($onmInstancesConnection['BD_HOST'],
+                       $onmInstancesConnection['BD_USER'],
+                       $onmInstancesConnection['BD_PASS'],
+                       $onmInstancesConnection['BD_DATABASE']);
 
         // Check if adodb is log enabled
         $conn->LogSQL();
@@ -240,19 +234,14 @@ class InstanceManager
         $information = array();
 
         if (extension_loaded('apc')) {
-            $totals = apc_fetch(
-                APC_PREFIX."getDBInformation_totals_".$settings['BD_DATABASE'],
-                $fetchedFromAPC
-            );
-            $information = apc_fetch(
-                APC_PREFIX."getDBInformation_infor_".$settings['BD_DATABASE'],
-                $fetchedFromAPCInfor
-            );
+            $key = APC_PREFIX."getDBInformation_totals_".$settings['BD_DATABASE'];
+            $totals = apc_fetch($key, $fetchedFromAPC);
+            $key = APC_PREFIX."getDBInformation_infor_".$settings['BD_DATABASE'];
+            $information = apc_fetch($key, $fetchedFromAPCInfor);
         }
 
         // If was not fetched from APC now is turn of DB
         if (!$fetchedFromAPC) {
-
             $dbConection = self::getConnection($settings);
 
             $sql = 'SELECT count(*) as total, fk_content_type as type '
@@ -274,7 +263,6 @@ class InstanceManager
         }
 
         if (!$fetchedFromAPCInfor) {
-
             if (!isset($dbConection) || empty($dbConection)) {
                 $dbConection = self::getConnection($settings);
             }
@@ -363,9 +351,9 @@ class InstanceManager
 
             return false;
         }
-        $this->deleteDefaultAssetsForInstance(
-            SITE_PATH.DS.'media'.DS.$instance->internal_name
-        );
+
+        $assetFolder = SITE_PATH.DS.'media'.DS.$instance->internal_name;
+        $this->deleteDefaultAssetsForInstance($assetFolder);
         $this->deleteDatabaseForInstance($instance->settings);
         $this->deleteInstanceUserFromDatabaseManager($instance->settings);
         $this->deleteInstanceWithInternalName($instance->internal_name);
@@ -409,23 +397,19 @@ class InstanceManager
         } catch (DefaultAssetsForInstanceNotCopiedException $e) {
 
             $errors []= $e->getMessage();
-            $this->deleteDefaultAssetsForInstance(
-                SITE_PATH.DS.'media'.DS.$data['internal_name']
-            );
+            $assetFolder = SITE_PATH.DS.'media'.DS.$data['internal_name'];
+            $this->deleteDefaultAssetsForInstance($assetFolder);
             $this->deleteDatabaseForInstance($data);
             $this->deleteInstanceWithInternalName($data['internal_name']);
 
         } catch (ApacheConfigurationNotCreatedException $e) {
 
             $errors []= $e->getMessage();
-            $this->deleteDefaultAssetsForInstance(
-                SITE_PATH.DS.'media'.DS.$data['internal_name']
-            );
+            $assetFolder = SITE_PATH.DS.'media'.DS.$data['internal_name'];
+            $this->deleteDefaultAssetsForInstance($assetFolder);
             $this->deleteDatabaseForInstance($data);
             $this->deleteInstanceWithInternalName($data['internal_name']);
-            $this->deleteApacheConfAndReloadConfiguration(
-                $data['internal_name']
-            );
+            $this->deleteApacheConfAndReloadConfiguration($data['internal_name']);
 
         }
 
@@ -515,8 +499,6 @@ class InstanceManager
         }
 
         return false;
-
-
     }
 
     /**
@@ -563,10 +545,8 @@ class InstanceManager
                 '@{TMP_PATH}@'     => SYS_LOG_PATH,
                 '@{ID}@'           => $data['internal_name'],
             );
-            $apacheConfString = preg_replace(
-                array_keys($replacements), array_values($replacements),
-                $apacheConfString
-            );
+            $apacheConfString = preg_replace(array_keys($replacements),
+                array_values($replacements), $apacheConfString);
 
             $instanceConfigPath =
                 $configPath.DS.'vhosts.d'.DS.$data['internal_name'];
@@ -587,7 +567,6 @@ class InstanceManager
                 );
             }
         }
-
     }
 
     /**
@@ -617,11 +596,9 @@ class InstanceManager
         // Gets global database connection and creates the requested database
         global $onmInstancesConnection;
         $conn = \ADONewConnection($onmInstancesConnection['BD_TYPE']);
-        $conn->Connect(
-            $onmInstancesConnection['BD_HOST'],
-            $onmInstancesConnection['BD_USER'],
-            $onmInstancesConnection['BD_PASS']
-        );
+        $conn->Connect($onmInstancesConnection['BD_HOST'],
+                       $onmInstancesConnection['BD_USER'],
+                       $onmInstancesConnection['BD_PASS']);
         $sql = "CREATE DATABASE `{$data['settings']['BD_DATABASE']}`";
         $rs = $conn->Execute($sql);
 
@@ -674,7 +651,8 @@ class InstanceManager
                     return false;
                 }
 
-                $sql2 = "INSERT INTO `users_content_categories` (`pk_fk_user`, `pk_fk_content_category`)"
+                $sql2 = "INSERT INTO `users_content_categories` "
+                        ."(`pk_fk_user`, `pk_fk_content_category`)"
                         ."VALUES (134, 0), (134, 22), (134, 23), (134, 24), "
                         ."       (134, 25), (134, 26), (134, 27), "
                         ."       (134, 28), (134, 29), (134, 30), (134, 31)";
@@ -691,9 +669,15 @@ class InstanceManager
             //Change and insert some data with instance information
             s::set('site_name', $data['name']);
             s::set('site_created', $data['site_created']);
-            s::set('site_title', $data['name'].' - OpenNemas - Servicio online para tu periódico digital - Online service for digital newspapers');
-            s::set('site_description', $data['name'].' - OpenNemas - Servicio online para tu periódico digital - Online service for digital newspapers');
-            s::set('site_keywords', $data['internal_name'].', openNemas, servicio, online, periódico, digital, service, newspapers');
+            s::set('site_title',
+                $data['name'].' - OpenNemas - Servicio online para tu periódico'
+                .' digital - Online service for digital newspapers');
+            s::set('site_description',
+                $data['name'].' - OpenNemas - Servicio online para tu periódico'
+                .' digital - Online service for digital newspapers');
+            s::set('site_keywords',
+                $data['internal_name'].', openNemas, servicio, online, '
+                .'periódico, digital, service, newspapers');
             s::set('site_agency', $data['internal_name'].'.opennemas.com');
             if (isset ($data['timezone'])) {
                 s::set('time_zone', $data['timezone']);
@@ -756,9 +740,8 @@ class InstanceManager
     {
         $mediaPath = SITE_PATH.DS.'media'.DS.$name;
         if (!file_exists($mediaPath)) {
-            return fm::recursiveCopy(
-                SITE_PATH.DS.'media'.DS.'default', $mediaPath
-            );
+            return fm::recursiveCopy(SITE_PATH.DS.'media'.DS.'default',
+                $mediaPath);
         } else {
             //TODO: return codes for handling this errors
             return "The media folder {$name} already exists.";
@@ -772,25 +755,22 @@ class InstanceManager
      */
     public function deleteDefaultAssetsForInstance($mediaPath)
     {
-        if (is_dir($mediaPath)) {
-            $objects = scandir($mediaPath);
-            foreach ($objects as $object) {
-                if ($object != "." && $object != "..") {
-                    if (filetype($mediaPath."/".$object) == "dir") {
-                        $this->deleteDefaultAssetsForInstance(
-                            $mediaPath."/".$object
-                        );
-                    } else {
-                        unlink($mediaPath."/".$object);
-                    }
+        if (!is_dirr($mediaPath)) {
+            return false;
+        }
+        $objects = scandir($mediaPath);
+        foreach ($objects as $object) {
+            if ($object != "." && $object != "..") {
+                if (filetype($mediaPath."/".$object) == "dir") {
+                    $this->deleteDefaultAssetsForInstance($mediaPath."/".$object);
+                } else {
+                    unlink($mediaPath."/".$object);
                 }
             }
-            reset($objects);
-
-            return rmdir($mediaPath);
         }
+        reset($objects);
 
-        return false;
+        return rmdir($mediaPath);
     }
 
     /*

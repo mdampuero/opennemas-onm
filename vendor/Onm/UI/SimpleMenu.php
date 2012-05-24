@@ -167,10 +167,8 @@ class SimpleMenu
                 $external = isset($value['target']);
                 $class = $this->_getClass($value['class']);
                 $html .= "<li {$class}>"
-                      . $this->_getHref(
-                            $value['title'], 'submenu_'.$value['id'],
-                            $value['link'], $external
-                        )
+                      . $this->_getHref($value['title'],
+                            'submenu_'.$value['id'], $value['link'], $external)
                       . "</li>";
             }
         }
@@ -195,10 +193,8 @@ class SimpleMenu
                 $external = isset($submenu['target']);
                 $class = $this->_getClass($submenu['class']);
                 $html.= "<li {$class}>";
-                    $html .= $this->_getHref(
-                        $submenu['title'], 'submenu_'.$submenu['id'],
-                        $submenu['link'], $external
-                    );
+                    $html .= $this->_getHref($submenu['title'],
+                        'submenu_'.$submenu['id'], $submenu['link'], $external);
                 $html.= "</li>";
             }
         }
@@ -219,10 +215,8 @@ class SimpleMenu
 
             $html = "";
             foreach ($this->_menu as $menu) {
-
                 // Check if the user can se this menu and module activated
-                if (
-                    (!isset($menu['privilege']) || $this->_checkAcl($menu['privilege']))
+                if ((!isset($menu['privilege']) || $this->_checkAcl($menu['privilege']))
                     && (\Onm\Module\ModuleManager::isActivated((string)$menu['module_name']))
                 ) {
                     $class = $this->_getClass($menu['class']);
