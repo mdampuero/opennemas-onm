@@ -193,7 +193,7 @@ class SimpleMenu
                 && \Acl::isMaster()
             ) {
                 $external = isset($submenu['target']);
-                $class = $this->getclass($submenu['class']);
+                $class = $this->_getClass($submenu['class']);
                 $html.= "<li {$class}>";
                     $html .= $this->_getHref(
                         $submenu['title'], 'submenu_'.$submenu['id'],
@@ -225,7 +225,7 @@ class SimpleMenu
                     (!isset($menu['privilege']) || $this->_checkAcl($menu['privilege']))
                     && (\Onm\Module\ModuleManager::isActivated((string)$menu['module_name']))
                 ) {
-                    $class = $this->getclass($menu['class']);
+                    $class = $this->_getClass($menu['class']);
                     $html .= "<li {$class}>"
                           . $this->_getHref($menu['title'], 'menu_'.$menu['id'], $menu['link']);
 
