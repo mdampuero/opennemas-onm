@@ -16,18 +16,18 @@ use Onm\Settings as s;
  **/
 class Application
 {
-    var $conn           = null;
-    var $logger         = null;
-    var $errors         = array();
-    var $adodb          = null;
-    var $smarty         = null;
-    var $log            = null;
-    var $template       = null;
-    var $sesion         = null;
-    var $cache          = null;
-    var $events         = array();
-    static $language    = '';
-    static $request        = null;
+    public $conn           = null;
+    public $logger         = null;
+    public $errors         = array();
+    public $adodb          = null;
+    public $smarty         = null;
+    public $log            = null;
+    public $template       = null;
+    public $sesion         = null;
+    public $cache          = null;
+    public $events         = array();
+    public static $language    = '';
+    public static $request        = null;
 
     /**
     * Setup the Application instance and assigns it to a global variable
@@ -38,7 +38,7 @@ class Application
     *
     * @return object $GLOBALS['application']
     */
-    static public function load()
+    public static function load()
     {
         self::initEnvironment(ENVIRONMENT);
 
@@ -65,7 +65,7 @@ class Application
         return $GLOBALS['application'];
     }
 
-    static public function initDatabase()
+    public static function initDatabase()
     {
         // Database
         $GLOBALS['application']->conn = \ADONewConnection(BD_TYPE);
@@ -79,7 +79,7 @@ class Application
         }
     }
 
-    static public function initLogger()
+    public static function initLogger()
     {
         // init Logger
         $logLevel = (s::get('log_level'))?: 'normal';
@@ -106,7 +106,7 @@ class Application
     /**
      * Set up gettext translations.
      */
-    static public function initL10nSystem()
+    public static function initL10nSystem()
     {
         $timezone = s::get('time_zone');
         if (isset($timezone)) {
@@ -151,7 +151,7 @@ class Application
      *
      * @return void
      **/
-    static public function initTimeZone()
+    public static function initTimeZone()
     {
         if ($timezone = s::get('time_zone')) {
             $availableTimeZones = \DateTimeZone::listIdentifiers();
@@ -164,7 +164,7 @@ class Application
     *
     * @param array $packages list of packages to load
     */
-    static public function initAutoloader()
+    public static function initAutoloader()
     {
 
         // TODO: move to autoload.php
@@ -181,7 +181,7 @@ class Application
      * Initializes all the internal application constants
      *
      */
-    static public function initInternalConstants()
+    public static function initInternalConstants()
     {
         /**
          * System setup
@@ -306,7 +306,7 @@ class Application
      *
      * @return array the list of languages
      **/
-    static public function getAvailableLanguages()
+    public static function getAvailableLanguages()
     {
         return array('en_US' => "English", 'es_ES' => "Español", 'gl_ES' => "Galego");
     }
@@ -316,7 +316,7 @@ class Application
     *
     * @return An instance of Onm logger
     */
-    static public function getLogger()
+    public static function getLogger()
     {
         return \Zend_Registry::get('logger');
     }
@@ -365,7 +365,7 @@ class Application
     *
     * @param string $url the url to redirect to
     */
-    static public function forward($url)
+    public static function forward($url)
     {
         header("Location: ".$url);
         exit(0);
@@ -376,7 +376,7 @@ class Application
     /**
      * Detect a mobile device and redirect to mobile version
      *
-     * @param boolean $autoRedirect
+     * @param  boolean $autoRedirect
      * @return boolean True if it's a mobile device and $autoRedirect is false
      */
     public function mobileRouter($autoRedirect=true)
@@ -418,7 +418,7 @@ class Application
      *
      * @return boolean true if request is from backend
     */
-    static public function isBackend()
+    public static function isBackend()
     {
         return strncasecmp($_SERVER['REQUEST_URI'], '/admin/', 7) == 0 ;
     }
@@ -430,7 +430,7 @@ class Application
     *
     * @param string $url the url to redirect to
     */
-    static public  function forward301($url)
+    public static function forward301($url)
     {
         header('HTTP/1.1 301 Moved Permanently');
         header('Location: ' . $url);
@@ -446,7 +446,7 @@ class Application
     * @param string $htmlout, the content to output
     * @return null
     */
-    static public function ajax_out($htmlout)
+    public static function ajax_out($htmlout)
     {
         header("Cache-Control: no-cache");
         header("Pragma: nocache");
@@ -458,7 +458,7 @@ class Application
     /**
     * Stablishes a cookie value in a secure way
     */
-    static public function setCookieSecure($name, $value, $expires=0, $domain='/')
+    public static function setCookieSecure($name, $value, $expires=0, $domain='/')
     {
         setcookie(
             $name, $value, $expires, $domain,
@@ -473,7 +473,7 @@ class Application
      *
      * @return string the client ip
      **/
-    static public function getRealIP()
+    public static function getRealIP()
     {
         // REMOTE_ADDR: dirección ip del cliente
         // HTTP_X_FORWARDED_FOR: si no está vacío indica que se ha utilizado
@@ -545,13 +545,13 @@ class Application
      * @return void
      * @author
      **/
-    static public function logContentEvent($action=NULL, $content=NULL)
+    public static function logContentEvent($action=NULL, $content=NULL)
     {
         $logger = Application::getLogger();
 
         $msg = 'User '.$_SESSION['username'].'(ID:'.$_SESSION['userid'].') has executed '
         .'the action '.$action;
-        if(!empty($content)){ $msg.=' at '.get_class($content).' (ID:'.$content->id.')';}
+        if (!empty($content)) { $msg.=' at '.get_class($content).' (ID:'.$content->id.')';}
 
         $logger->notice( $msg );
     }
@@ -563,7 +563,7 @@ class Application
      * @return boolean true if all was sucessfully performed
      * @author
      **/
-    static public function logDatabaseError()
+    public static function logDatabaseError()
     {
         $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
 
@@ -572,6 +572,7 @@ class Application
 
         $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
         $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+
         return $errorMsg;
     }
 

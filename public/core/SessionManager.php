@@ -55,7 +55,7 @@ class SessionManager implements ArrayAccess
      * @return SessionManager The instance for SessionManager
      *
      **/
-    static function getInstance($sessionSavePath)
+    public static function getInstance($sessionSavePath)
     {
         if (!isset($sessionSavePath)) {
             $sessionSavePath = session_save_path();
@@ -63,6 +63,7 @@ class SessionManager implements ArrayAccess
         if ( is_null(self::$_singleton)) {
             self::$_singleton = new SessionManager($sessionSavePath);
         }
+
         return( self::$_singleton );
     }
 
@@ -105,7 +106,7 @@ class SessionManager implements ArrayAccess
     /**
      * Magic method for setting a key-value in the session variable.
      *
-     * @param string $name the name of the variable.
+     * @param string $name  the name of the variable.
      * @param string $value the value for the variable.
      **/
     public function __set($name, $value)
@@ -116,6 +117,7 @@ class SessionManager implements ArrayAccess
     public function __get($name)
     {
         if (!isset($_SESSION[$name])) return null;
+
         return($_SESSION[$name]);
     }
 
@@ -127,7 +129,7 @@ class SessionManager implements ArrayAccess
     * @param mixed value
     * @return void
     */
-    function offsetSet($key, $value)
+    public function offsetSet($key, $value)
     {
         $_SESSION[$key] = $value;
     }
@@ -138,7 +140,7 @@ class SessionManager implements ArrayAccess
     * @param mixed key (string or integer)
     * @return mixed value
     */
-    function offsetGet($key)
+    public function offsetGet($key)
     {
         return($_SESSION[$key]);
     }
@@ -149,7 +151,7 @@ class SessionManager implements ArrayAccess
     * @param mixed key (string or integer)
     * @return void
     */
-    function offsetUnset($key)
+    public function offsetUnset($key)
     {
         unset($_SESSION[$key]);
     }
@@ -160,7 +162,7 @@ class SessionManager implements ArrayAccess
     * @param mixed key (string or integer)
     * @return boolean
     */
-    function offsetExists($offset)
+    public function offsetExists($offset)
     {
         return isset($_SESSION[$key]);
     }
@@ -256,6 +258,7 @@ class SessionManager implements ArrayAccess
             $result[$vars[$i++]]=@unserialize($vars[$i]);
             $i++;
         }
+
         return $result;
     }
 

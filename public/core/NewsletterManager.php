@@ -73,7 +73,7 @@ class NewsletterManager
 
         $mail->Body = $this->HTML;
 
-        if(!$mail->Send()) {
+        if (!$mail->Send()) {
             $this->errors[] = "Error en el envío del mensaje " . $mail->ErrorInfo;
 
             return false;

@@ -34,7 +34,7 @@ class Newsletter
 
       // This is causing an E_STRICT error, we should reimplement this class
         // cause it has a lot of counterparts inherited from Xornal.
-        //if(!$this->schema_exists()) {
+        //if (!$this->schema_exists()) {
         //    $this->setupDatabaseTable();
         //}
 
@@ -43,12 +43,12 @@ class Newsletter
     public function setup($namespace)
     {
         $accountsProvider = $namespace . 'Newsletter_Accounts_Provider';
-        if(class_exists($accountsProvider)) {
+        if (class_exists($accountsProvider)) {
             $this->accountsProvider = new $accountsProvider();
         }
 
         $itemsProvider = $namespace . 'Newsletter_Items_Provider';
-        if(class_exists($itemsProvider)) {
+        if (class_exists($itemsProvider)) {
             $this->itemsProvider = new $itemsProvider();
         }
     }
@@ -70,7 +70,7 @@ class Newsletter
 
         $data = json_decode($_REQUEST['postmaster']);
         $i = 0;
-        foreach ($data->articles as $tok){
+        foreach ($data->articles as $tok) {
             $category = $ccm->get_name($tok->category);
             $data->articles[$i]->date= date('Y-m-d', strtotime(str_replace('/', '-', substr($tok->created, 6))));
             $data->articles[$i]->cat = $category;
@@ -79,7 +79,7 @@ class Newsletter
         }
         $i = 0;
         if (isset($data->opinions) && !empty($data->opinions)) {
-            foreach ($data->opinions as $tok){
+            foreach ($data->opinions as $tok) {
                 $data->opinions[$i]->date= date('Y-m-d', strtotime(str_replace('/', '-', substr($tok->created, 6))));
                 $data->opinions[$i]->slug= StringUtils::get_title($data->opinions[$i]->author);
                 $i++;
@@ -121,6 +121,7 @@ class Newsletter
 
         $tpl->assign('conf', $configurations);
         $htmlContent = $tpl->fetch('newsletter/newsletter.tpl');
+
         return $htmlContent;
     }
 
@@ -128,14 +129,14 @@ class Newsletter
      * Send mail to all users
      *
      */
-    function send($mailboxes, $htmlcontent, $params)
+    public function send($mailboxes, $htmlcontent, $params)
     {
-        foreach($mailboxes as $mailbox) {
+        foreach ($mailboxes as $mailbox) {
             $this->sendToUser($mailbox, $htmlcontent, $params);
         }
     }
 
-    function sendToUser($mailbox, $htmlcontent, $params)
+    public function sendToUser($mailbox, $htmlcontent, $params)
     {
         require_once(SITE_LIBS_PATH.'phpmailer/class.phpmailer.php');
 
@@ -180,7 +181,7 @@ class Newsletter
 
         $mail->Body = $this->HTML;
 
-        if(!$mail->Send()) {
+        if (!$mail->Send()) {
             $this->errors[] = "Error en el envío del mensaje " . $mail->ErrorInfo;
 
             return false;
@@ -252,7 +253,7 @@ class Newsletter
 
         $values = array($data['data'], $data['created']);
 
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -296,7 +297,7 @@ class Newsletter
     {
         $newsletters = array();
 
-        if(is_null($filter)) {
+        if (is_null($filter)) {
             $filter = '1=1';
         }
 
@@ -311,7 +312,7 @@ class Newsletter
             return $newsletters;
         }
 
-        while(!$rs->EOF) {
+        while (!$rs->EOF) {
             $obj = new Newsletter();
             $obj->loadData($rs->fields);
             $newsletters[] = $obj;
@@ -331,7 +332,7 @@ class Newsletter
     {
         $sql = 'DELETE FROM `' . $this->tablename. '` WHERE pk_newsletter=?';
 
-        if($GLOBALS['application']->conn->Execute($sql, array(intval($id)))===false) {
+        if ($GLOBALS['application']->conn->Execute($sql, array(intval($id)))===false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -365,7 +366,7 @@ class Newsletter_Account
 
     public function __get($name)
     {
-        if(!property_exists($this, $name)) {
+        if (!property_exists($this, $name)) {
             return null;
         }
 
@@ -395,7 +396,7 @@ class Newsletter_Item
 
     public function __get($name)
     {
-        if(!isset($this->values[$name])) {
+        if (!isset($this->values[$name])) {
             return null;
         }
 
@@ -429,7 +430,7 @@ abstract class Newsletter_Accounts_Provider
         $this->table    = $table;
         $this->filter   = $filter;
 
-        if(is_array($fields)) {
+        if (is_array($fields)) {
             $fields = implode(',', $fields);
         }
         $this->fields = $fields;
@@ -445,11 +446,11 @@ abstract class Newsletter_Accounts_Provider
     protected function buildQuery()
     {
         $fields = $this->fields;
-        if(is_array($fields)) {
+        if (is_array($fields)) {
             $fields = implode(',', $fields);
         }
 
-        if(!is_null($this->database)) {
+        if (!is_null($this->database)) {
             $table = $this->database . '.' . $this->table;
         } else {
             $table = $this->table;
@@ -457,7 +458,7 @@ abstract class Newsletter_Accounts_Provider
 
         $sql = 'SELECT ' . $fields . ' FROM ' . $table;
 
-        if(!is_null($this->filter)) {
+        if (!is_null($this->filter)) {
             $sql .= ' WHERE ' . $this->filter;
         }
 
@@ -530,11 +531,11 @@ abstract class Newsletter_Items_Provider
     protected function buildQuery($source, $filter)
     {
         $fields = $this->sources[$source]['fields'];
-        if(is_array($fields)) {
+        if (is_array($fields)) {
             $fields = implode(',', $fields);
         }
 
-        if(!is_null($this->database)) {
+        if (!is_null($this->database)) {
             $table = $this->database . '.' . $this->sources[$source]['table'];
         } else {
             $table = $this->sources[$source]['table'];
@@ -542,7 +543,7 @@ abstract class Newsletter_Items_Provider
 
         $sql = 'SELECT ' . $fields . ' FROM ' . $table;
 
-        if(!is_null($this->filter) && is_string($filter)) {
+        if (!is_null($this->filter) && is_string($filter)) {
             $sql .= ' WHERE ' . $filter;
         }
 
@@ -610,7 +611,7 @@ class PConecta_Newsletter_Accounts_Provider extends Newsletter_Accounts_Provider
         $name = preg_replace('/[ ]+\,/', ',', $name);
         $name = trim($name);
 
-        if(strlen($name) <= 0) {
+        if (strlen($name) <= 0) {
             $name = $email;
         }
 
@@ -654,20 +655,20 @@ class PConecta_Newsletter_Items_Provider extends Newsletter_Items_Provider
         $cm = new ContentManager();
 
         // $order_by
-        if(is_null($order_by)) {
+        if (is_null($order_by)) {
             $order_by = 'created DESC';
         }
 
         // $limit
-        if(is_null($limit)) {
+        if (is_null($limit)) {
             $limit = '';
         } else {
-            if(!preg_match('/^limit/i', $limit)) {
+            if (!preg_match('/^limit/i', $limit)) {
                 $limit = 'LIMIT ' . $limit;
             }
         }
 
-        if(is_array($filters) && isset($filters['category']) && !empty($filters['category'])) {
+        if (is_array($filters) && isset($filters['category']) && !empty($filters['category'])) {
             $category = $filters['category'];
             unset($filters['category']);
 
@@ -694,10 +695,10 @@ class PConecta_Newsletter_Items_Provider extends Newsletter_Items_Provider
             $items = $cm->getInTime($items);
             // }}}
 
-            if($source=='Opinion') {
-                for($i=0, $len=count($items); $i<$len; $i++) {
+            if ($source=='Opinion') {
+                for ($i=0, $len=count($items); $i<$len; $i++) {
                     $items[$i]->author = $items[$i]->get_author_name($items[$i]->fk_author);
-                    if($items[$i]->type_opinion == '2') {
+                    if ($items[$i]->type_opinion == '2') {
                         $items[$i]->author = 'Carta del Director';
                     }
                 }
@@ -713,7 +714,7 @@ class PConecta_Newsletter_Items_Provider extends Newsletter_Items_Provider
 
             foreach ($this->sources[$source]['fields'] as $fld) {
                 // Format date
-                if($fld == 'created') {
+                if ($fld == 'created') {
                     $content->{$fld} = date('H:i d/m/Y', strtotime($content->{$fld}));
                 }
 
@@ -748,16 +749,16 @@ class PConecta_Newsletter_Items_Provider extends Newsletter_Items_Provider
     {
         $filterString = $conditions;
 
-        if(!is_null($filters)) {
-            if(!is_null($filterString) && strlen(trim($filterString))>0) {
+        if (!is_null($filters)) {
+            if (!is_null($filterString) && strlen(trim($filterString))>0) {
                 $filterString .= ' AND ';
-            } elseif(is_null($filterString)) {
+            } elseif (is_null($filterString)) {
                 $filterString = '';
             }
 
             $parts = array();
-            foreach($filters as $k => $v) {
-                if(!is_numeric($k)) {
+            foreach ($filters as $k => $v) {
+                if (!is_numeric($k)) {
                     $parts[] = '`' . $k . '`="' . $v . '"';
                 } else {
                     $parts[] = $v;

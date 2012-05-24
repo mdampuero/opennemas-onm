@@ -11,12 +11,14 @@
  *
  * @package Onm
  */
-class Dashboard {
-
-    function __construct() {
+class Dashboard
+{
+    public function __construct()
+    {
     }
 
-    static function getMostViewed($content_type,$category=0,$days=3) {
+    public static function getMostViewed($content_type,$category=0,$days=3)
+    {
         $cm = new ContentManager();
 
         $mostVisitedContentObjects = $cm->cache->getMostViewedContent($content_type, false, $category, 0, $days, 10,true);
@@ -38,7 +40,8 @@ class Dashboard {
         return $mostVisitedContent;
     }
 
-    static function viewedTable($items, $title) {
+    public static function viewedTable($items, $title)
+    {
             $html_output = "<div class=\"dashboardBox\">".$title."";
 
             if (count($items)>0) {
@@ -67,13 +70,16 @@ class Dashboard {
             return $html_output;
     }
 
-    static function getMostComented($content_type,$category=0,$days=3) {
+    public static function getMostComented($content_type,$category=0,$days=3)
+    {
         $cm = new ContentManager();
         $mostComentedContentObjects = $cm->cache->getMostComentedContent($content_type, false, $category, $days, 10, true);
+
         return $mostComentedContentObjects;
     }
 
-    static function comentedTable($items, $title) {
+    public static function comentedTable($items, $title)
+    {
             $html_output = "<div class=\"dashboardBox\">".$title."";
 
             if (count($items)>0) {
@@ -102,7 +108,8 @@ class Dashboard {
             return $html_output;
     }
 
-    static function getMostVoted($content_type,$category=0,$days=3) {
+    public static function getMostVoted($content_type,$category=0,$days=3)
+    {
         $cm = new ContentManager();
         $mostVotedContentObjects = $cm->cache->getMostVotedContent($content_type, false, $category, 0, $days, 10, true);
 
@@ -120,7 +127,8 @@ class Dashboard {
         return $mostVotedContent;
     }
 
-    static function votedTable($items, $title) {
+    public static function votedTable($items, $title)
+    {
             $html_output = "<div class=\"dashboardBox\">".$title."";
 
             if (count($items)>0) {
