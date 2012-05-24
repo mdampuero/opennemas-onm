@@ -28,11 +28,13 @@ class ContentCategory
     public $internal_category = NULL; // flag asignar a un tipo de contenido.
     public $params = null;
 
-    /* $internal_category = 0 categoria es interna (para usar ventajas funciones class ContentCategory) no se muestra en el menu.
-
-     * $internal_category = 1 categoria generica para todos los tipos de contenidos.
+    /**
+     * $internal_category = 0 categoria es interna (para usar ventajas
+     * funciones class ContentCategory) no se muestra en el menu.
+     * $internal_category = 1 categoria generica para todos los
+     * tipos de contenidos.
      * $internal_category = n corresponde con el content_type
-    */
+     **/
 
     /**
      * Initializes the Category class.
@@ -57,7 +59,8 @@ class ContentCategory
     {
         $data['name'] = strtolower($data['title']);
         $data['name'] = StringUtils::normalize_name($data['name']);
-        $data['logo_path'] = (isset($data['logo_path'])) ? $data['logo_path'] : '';
+        $data['logo_path'] =
+            (isset($data['logo_path'])) ? $data['logo_path'] : '';
         $data['color'] = (isset($data['color'])) ? $data['color'] : '';
         $data['params'] = serialize($data['params']);
         $ccm = new ContentCategoryManager();
@@ -75,10 +78,19 @@ class ContentCategory
                     (`name`, `title`,`inmenu`,`fk_content_category`,
                     `internal_category`, `logo_path`,`color`, `params`)
                 VALUES (?,?,?,?,?,?,?,?)";
-        $values = array($data['name'], $data['title'], $data['inmenu'], $data['subcategory'],
-            $data['internal_category'], $data['logo_path'], $data['color'], $data['params']);
+        $values = array(
+            $data['name'],
+            $data['title'],
+            $data['inmenu'],
+            $data['subcategory'],
+            $data['internal_category'],
+            $data['logo_path'],
+            $data['color'],
+            $data['params']
+        );
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        if ($rs === false) {
             Application::logDatabaseError();
 
             return false;
@@ -96,8 +108,9 @@ class ContentCategory
     public function read($id)
     {
         $this->pk_content_category = ($id);
-        $sql = 'SELECT * FROM content_categories WHERE pk_content_category = ' . $this->pk_content_category;
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $sql = 'SELECT * FROM content_categories WHERE pk_content_category =?';
+        $values = $this->pk_content_category;
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
 
         if (!$rs) {
             Application::logDatabaseError();
@@ -119,19 +132,14 @@ class ContentCategory
      **/
     public function update($data)
     {
-        $this->read($data['id']); //Para comprobar si cambio el nombre carpeta
-        //No se puede cambiar el nombre de las url's
-      /*  if ($data['title'] != $this->title) {
-            $data['name'] = StringUtils::normalize_name($data['title']);
-        } else {
-            $data['name'] =$this->name;
-        }
-     */
+        $this->read($data['id']);
+
         $data['params'] = serialize($data['params']);
         if (empty($data['logo_path'])) {
             $data['logo_path'] = $this->logo_path;
         }
-        $data['color'] = (isset($data['color'])) ? $data['color'] : $this->color;
+        $data['color'] =
+            (isset($data['color'])) ? $data['color'] : $this->color;
         $sql = "UPDATE content_categories SET  `title`=?, `inmenu`=?, ".
                        " `fk_content_category`=?, `internal_category`=?, ".
                        " `logo_path`=?,`color`=?, `params`=? ".
@@ -154,7 +162,8 @@ class ContentCategory
                     WHERE fk_content_category=" . ($data['id']);
             $values = array($data['subcategory']);
 
-            if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+            if ($rs === false) {
                 Application::logDatabaseError();
 
                 return;
@@ -174,9 +183,10 @@ class ContentCategory
     public function delete($id)
     {
         if (ContentCategoryManager::is_Empty($id)) {
-            $sql = 'DELETE FROM content_categories WHERE pk_content_category=' . ($id);
+            $sql = 'DELETE FROM content_categories WHERE pk_content_category=?';
 
-            if ($GLOBALS['application']->conn->Execute($sql) === false) {
+            $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
+            if ($rs === false) {
                 Application::logDatabaseError();
 
                 return false;
@@ -222,39 +232,60 @@ class ContentCategory
      **/
     public function empty_category($id)
     {
-        $sql = 'SELECT pk_fk_content FROM contents_categories WHERE pk_fk_content_category=' . ($id);
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $sql = 'SELECT pk_fk_content FROM contents_categories '
+             . 'WHERE pk_fk_content_category=?';
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
             Application::logDatabaseError();
 
             return false;
         }
-        $array_contents = array();
+        $contentsArray = array();
         while (!$rs->EOF) {
-            $array_contents[] = $rs->fields['pk_fk_content'];
+            $contentsArray[] = $rs->fields['pk_fk_content'];
             $rs->MoveNext();
         }
 
-        if (!empty($array_contents)) {
-            $contents = implode(', ', $array_contents);
-            $sqls []= 'DELETE FROM contents  WHERE `pk_content` IN (' . $contents . ') ';
-            $sqls []= 'DELETE FROM articles  WHERE `pk_article` IN (' . $contents . ') ';
-            $sqls []= 'DELETE FROM articles_clone  WHERE `pk_original` IN (' . $contents . ')  OR `pk_clone` IN (' . $contents . ') ';
-            $sqls []= 'DELETE FROM advertisements  WHERE `pk_advertisement` IN (' . $contents . ') ';
-            $sqls []= 'DELETE FROM albums  WHERE `pk_album` IN (' . $contents . ') ';
-            $sqls []= 'DELETE FROM albums_photos  WHERE `pk_album` IN (' . $contents . ')   OR `pk_photo` IN (' . $contents . ') ';
-            $sqls []= 'DELETE FROM videos  WHERE `pk_video` IN (' . $contents . ') ';
-            $sqls []= 'DELETE FROM photos  WHERE `pk_photo` IN (' . $contents . ') ';
-            $sqls []= 'DELETE FROM comments  WHERE `pk_comment` IN (' . $contents . ') ';
-            $sqls []= 'DELETE FROM votes  WHERE `pk_vote` IN (' . $contents . ') ';
-            $sqls []= 'DELETE FROM ratings  WHERE `pk_rating` IN (' . $contents . ') ';
-            $sqls []= 'DELETE FROM attachments  WHERE `pk_attachment` IN (' . $contents . ') ';
-            $sqls []= 'DELETE FROM polls  WHERE `pk_poll` IN (' . $contents . ') ';
-            $sqls []= 'DELETE FROM poll_items  WHERE `fk_pk_poll` IN (' . $contents . ') ';
-            $sqls []= 'DELETE FROM related_contents  WHERE `pk_content1` IN (' . $contents . ')   OR `pk_content2` IN (' . $contents . ') ';
-            $sqls []= 'DELETE FROM kioskos  WHERE `pk_kiosko` IN (' . $contents . ') ';
-            $sqls []= 'DELETE FROM static_pages  WHERE `pk_static_page` IN (' . $contents . ') ';
+        if (!empty($contentsArray)) {
+            $contents = implode(', ', $contentsArray);
+            $sqls []= 'DELETE FROM contents  '
+                .'WHERE `pk_content` IN ('.$contents.')';
+            $sqls []= 'DELETE FROM articles '
+                .' WHERE `pk_article` IN ('.$contents.')';
+            $sqls []= 'DELETE FROM articles_clone  '
+                .'WHERE `pk_original` IN (' . $contents . ')  '
+                .'OR `pk_clone` IN ('.$contents.')';
+            $sqls []= 'DELETE FROM advertisements  '
+                .'WHERE `pk_advertisement` IN ('.$contents.')';
+            $sqls []= 'DELETE FROM albums  '
+                .'WHERE `pk_album` IN ('.$contents.')';
+            $sqls []= 'DELETE FROM albums_photos '
+                .'WHERE `pk_album` IN (' . $contents . ')  '
+                .'OR `pk_photo` IN ('.$contents.')';
+            $sqls []= 'DELETE FROM videos '
+                .'WHERE `pk_video` IN ('.$contents.')';
+            $sqls []= 'DELETE FROM photos '
+                .'WHERE `pk_photo` IN ('.$contents.')';
+            $sqls []= 'DELETE FROM comments '
+                .'WHERE `pk_comment` IN ('.$contents.')';
+            $sqls []= 'DELETE FROM votes '
+                .'WHERE `pk_vote` IN ('.$contents.')';
+            $sqls []= 'DELETE FROM ratings '
+                .'WHERE `pk_rating` IN ('.$contents.')';
+            $sqls []= 'DELETE FROM attachments '
+                .'WHERE `pk_attachment` IN ('.$contents.')';
+            $sqls []= 'DELETE FROM polls '
+                .'WHERE `pk_poll` IN ('.$contents.')';
+            $sqls []= 'DELETE FROM poll_items '
+                .'WHERE `fk_pk_poll` IN ('.$contents.')';
+            $sqls []= 'DELETE FROM related_contents '
+                .'WHERE `pk_content1` IN (' . $contents . ')  '
+                .'OR `pk_content2` IN ('.$contents.')';
+            $sqls []= 'DELETE FROM kioskos '
+                .'WHERE `pk_kiosko` IN ('.$contents.')';
+            $sqls []= 'DELETE FROM static_pages '
+                .'WHERE `pk_static_page` IN ('.$contents.')';
 
             foreach ($sqls as $sql) {
                 if ($GLOBALS['application']->conn->Execute($sql) === false) {

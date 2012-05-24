@@ -582,7 +582,9 @@ class Advertisement extends Content
     public static function setNumViews($id=null)
     {
         // if $id was not given return null and do nothing
-        if (is_null($id)) { return null; }
+        if (is_null($id)) {
+            return null;
+        }
 
         parent::setNumViews($id);
 

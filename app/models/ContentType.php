@@ -59,18 +59,16 @@ class ContentType
         if (empty($id)) {
             return false;
         }
-        $sql = 'SELECT * FROM content_types WHERE pk_content_type = '.($id);
-        $rs = $GLOBALS['application']->conn->Execute( $sql );
+        $sql = 'SELECT * FROM content_types WHERE pk_content_type =?';
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            \Application::logDatabaseError();
 
             return false;
         }
 
-        $this->load( $rs->fields );
+        $this->load($rs->fields);
 
         // Fire event onAfterXxx
         $GLOBALS['application']->dispatch('onAfterRead', $this);
@@ -108,23 +106,28 @@ class ContentType
      *
      * @return array an array with each content type with id, name and title.
      *
-     * @throw Exception if there was an error while fetching all the content types
+     * @throw Exception if there was an error while fetching all the
+     *                  content types
      */
     public static function getAllContentTypes()
     {
         $fetchedFromAPC = false;
         if (extension_loaded('apc')) {
-            $resultArray = apc_fetch(APC_PREFIX . "_getContentTypes", $fetchedFromAPC);
+            $resultArray = apc_fetch(APC_PREFIX . "_getContentTypes",
+                $fetchedFromAPC);
         }
 
         // If was not fetched from APC now is turn of DB
         if (!$fetchedFromAPC) {
 
-            $szSqlContentTypes = "SELECT pk_content_type, name, title FROM content_types";
-            $resultSet = $GLOBALS['application']->conn->Execute($szSqlContentTypes);
+            $sqlContTypes = "SELECT pk_content_type, name, title "
+                               . "FROM content_types";
+            $resultSet = $GLOBALS['application']->conn->Execute($sqlContTypes);
 
             if (!$resultSet) {
-                throw new \Exception("There was an error while fetching available content types. '$szSqlContentTypes'.");
+                $message = "There was an error while fetching available "
+                         . "content types. '$sqlContTypes'.";
+                throw new \Exception($message);
             }
 
             try {
@@ -142,8 +145,8 @@ class ContentType
             }
 
             if (extension_loaded('apc')) {
-                    apc_store(APC_PREFIX . "_getContentTypes", $resultArray);
-                }
+                apc_store(APC_PREFIX . "_getContentTypes", $resultArray);
+            }
         }
 
         return $resultArray;
@@ -152,22 +155,22 @@ class ContentType
     /*
      * Find a content type id given the name of one content type.
      *
-     * @return int    pk_content_type.
      * @param  string $name The name of a content type
-     * @throw Exception if there was an error while fetching all the content types
+     * @return int    pk_content_type.
+     * @throw  Exception  if there was an error while fetching
+     *                    all the content types
      */
     public static function getIdContentType($name)
     {
         $contenTypes = self::getContentTypes();
 
-         foreach ($contenTypes as $types) {
-             if ($types['name'] == $name) {
-                 return $types['pk_content_type'];
-             }
-         }
+        foreach ($contenTypes as $types) {
+            if ($types['name'] == $name) {
+                return $types['pk_content_type'];
+            }
+        }
 
-         return false;
-
+        return false;
     }
 
     /*
@@ -180,21 +183,14 @@ class ContentType
     public static function getContentTypeByContentId($id)
     {
         $sql = 'SELECT fk_content_type FROM contents WHERE pk_content = ?';
-        $rs = $GLOBALS['application']->conn->GetOne($sql,$id);
+        $rs = $GLOBALS['application']->conn->GetOne($sql, $id);
 
         if (!$rs) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            \Application::logDatabaseError();
 
             return false;
         }
 
         return $rs;
-
-
     }
-
 }
-
-?>
