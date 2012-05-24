@@ -11,25 +11,14 @@
  *
  * @package    Onm
  * @subpackage Model
- * @author     Sandra Pereira <sandra@openhost.es>
  **/
-/*
- CREATE TABLE IF NOT EXISTS `letters` (
-  `pk_letter` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `author` varchar(250)  DEFAULT NULL,
-  `body` text ,
-  PRIMARY KEY (`pk_letter`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
- */
 class Letter extends Content
 {
-
     public $pk_letter     = NULL;
     public $author        = NULL;
     public $body          = NULL;
 
-    private static $instance    = NULL;
+    private static $_instance    = NULL;
 
 
     public function __construct($id=null)
@@ -46,14 +35,14 @@ class Letter extends Content
 
     public function get_instance()
     {
-        if ( is_null(self::$instance) ) {
-            self::$instance = new Letter();
+        if ( is_null(self::$_instance) ) {
+            self::$_instance = new Letter();
 
-            return self::$instance;
+            return self::$_instance;
 
         } else {
 
-            return self::$instance;
+            return self::$_instance;
         }
     }
 
@@ -62,16 +51,16 @@ class Letter extends Content
         switch ($name) {
             case 'uri': {
                 $uri =  Uri::generate('letter',
-                            array(
-                                'id' => sprintf('%06d',$this->id),
-                                'date' => date('YmdHis', strtotime($this->created)),
-                                'slug' => $this->slug,
-                                'category' => StringUtils::get_title($this->author),
-                            )
-                        );
-                    //'cartas-al-director/_AUTHOR_/_SLUG_/_DATE__ID_.html'
+                    array(
+                        'id' => sprintf('%06d',$this->id),
+                        'date' => date('YmdHis', strtotime($this->created)),
+                        'slug' => $this->slug,
+                        'category' => StringUtils::get_title($this->author),
+                    )
+                );
+                //'cartas-al-director/_AUTHOR_/_SLUG_/_DATE__ID_.html'
 
-                 return $uri;
+                return $uri;
 
                 break;
             }
@@ -96,17 +85,20 @@ class Letter extends Content
         $sql = 'INSERT INTO letters ( `pk_letter`, `author`, `email`, `body`) '.
                     ' VALUES (?,?,?,?)';
 
-        $values = array( $this->id, $data['author'], $data['email'], $data['body']);
+        $values = array(
+            $this->id,
+            $data['author'],
+            $data['email'],
+            $data['body']
+        );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
-           return(false);
+           return false;
         }
 
-       return($this->id);
+       return $this->id;
     }
 
     public function read($id)
@@ -117,11 +109,9 @@ class Letter extends Content
 
         $rs = $GLOBALS['application']->conn->Execute( $sql, array($id) );
         if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
-            return;
+            return false;
         }
       $this->load( $rs->fields );
       $this->ip = $this->params['ip'];
@@ -142,12 +132,15 @@ class Letter extends Content
                                    `body` = ?
                             WHERE pk_letter = ?";
 
-        $values = array($data['author'],$data['email'],$data['body'],$data['id'] );
+        $values = array(
+            $data['author'],
+            $data['email'],
+            $data['body'],
+            $data['id']
+        );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
             return;
         }
@@ -161,9 +154,7 @@ class Letter extends Content
         $sql = 'DELETE FROM letters WHERE pk_letter ='.($id);
 
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
             return;
         }
@@ -200,7 +191,8 @@ class Letter extends Content
         $data = array_map('strip_tags', $data);
 
         if ($letter->hasBadWorsComment($data)) {
-            return "Su comentario fue rechazado debido al uso de palabras malsonantes.";
+            return "Su comentario fue rechazado debido al uso "
+                ."de palabras malsonantes.";
         }
 
         $ip = Application::getRealIP();
@@ -209,7 +201,8 @@ class Letter extends Content
             return "Su carta ha sido guardada y está pendiente de publicación.";
         }
 
-    return "Su carta no ha sido guardado.\nAsegúrese de cumplimentar correctamente todos los campos.";
+        return "Su carta no ha sido guardado.\nAsegúrese de cumplimentar "
+            ."correctamente todos los campos.";
 
 
     }

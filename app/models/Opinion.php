@@ -16,21 +16,21 @@
 class Opinion extends Content
 {
 
-    public $pk_opinion             = NULL;
-    public $fk_content_categories  = NULL;
-    public $fk_author              = NULL;
-    public $body                   = NULL;
-    public $author                 = NULL;
-    public $fk_author_img          = NULL;
-    public $with_comment           = NULL;
-    public $fk_author_img_widget   = NULL;
+    public $pk_opinion            = null;
+    public $fk_content_categories = null;
+    public $fk_author             = null;
+    public $body                  = null;
+    public $author                = null;
+    public $fk_author_img         = null;
+    public $with_comment          = null;
+    public $fk_author_img_widget  = null;
 
-    private static $instance    = NULL;
+    private static $_instance     = null;
 
     /**
-     * Array of authors
-     */
-    private $authors_name       = NULL;
+    * Array of authors
+    */
+    private $_authorNames         = null;
 
     public function __construct($id=null)
     {
@@ -41,19 +41,18 @@ class Opinion extends Content
         }
 
         $this->content_type = 'Opinion';
-
     }
 
     public function get_instance()
     {
-        if ( is_null(self::$instance) ) {
-            self::$instance = new Opinion();
+        if ( is_null(self::$_instance) ) {
+            self::$_instance = new Opinion();
 
-            return self::$instance;
+            return self::$_instance;
 
         } else {
 
-            return self::$instance;
+            return self::$_instance;
         }
     }
 
@@ -61,9 +60,6 @@ class Opinion extends Content
     {
         switch ($name) {
             case 'uri': {
-
-                // Happy hacking!
-
                 if ($this->fk_author == 0) {
 
                     if ((int)$this->type_opinion == 1) {
@@ -79,16 +75,16 @@ class Opinion extends Content
 
 
                 $uri =  Uri::generate('opinion',
-                            array(
-                                'id' => sprintf('%06d',$this->id),
-                                'date' => date('YmdHis', strtotime($this->created)),
-                                'slug' => $this->slug,
-                                'category' => StringUtils::get_title($authorName),
-                            )
-                        );
-                    //'opinion/_AUTHOR_/_DATE_/_SLUG_/_ID_.html'
+                    array(
+                        'id' => sprintf('%06d',$this->id),
+                        'date' => date('YmdHis', strtotime($this->created)),
+                        'slug' => $this->slug,
+                        'category' => StringUtils::get_title($authorName),
+                    )
+                );
+                //'opinion/_AUTHOR_/_DATE_/_SLUG_/_ID_.html'
 
-                 return $uri;
+                return $uri;
 
                 break;
             }
@@ -116,14 +112,22 @@ class Opinion extends Content
 
         parent::create($data);
 
-        $sql = 'INSERT INTO opinions (`pk_opinion`, `fk_author`, `body`,`fk_author_img`,`with_comment`, type_opinion,fk_author_img_widget) VALUES (?,?,?,?,?,?,?)';
+        $sql = 'INSERT INTO opinions (`pk_opinion`, `fk_author`, `body`,
+            `fk_author_img`,`with_comment`, type_opinion,fk_author_img_widget)
+            VALUES (?,?,?,?,?,?,?)';
 
-        $values = array($this->id,  $data['fk_author'], $data['body'],$data['fk_author_img'],$data['with_comment'], $data['type_opinion'],$data['fk_author_img_widget']);
+        $values = array(
+            $this->id,
+            $data['fk_author'],
+            $data['body'],
+            $data['fk_author_img'],
+            $data['with_comment'],
+            $data['type_opinion'],
+            $data['fk_author_img_widget']
+        );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
            return(false);
         }
@@ -143,9 +147,7 @@ class Opinion extends Content
         $rs = $GLOBALS['application']->conn->Execute( $sql );
 
         if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
             return;
         }
@@ -194,22 +196,22 @@ class Opinion extends Content
      */
     public function get_author_name($fk_author)
     {
-        if ( is_null( $this->authors_name ) ) {
+        if ( is_null( $this->_authorNames ) ) {
             $sql = 'SELECT pk_author, name FROM `authors`';
             $rs = $GLOBALS['application']->conn->Execute( $sql );
 
             while (!$rs->EOF) {
-                $this->authors_name[ $rs->fields['pk_author'] ] = $rs->fields['name'];
+                $this->_authorNames[ $rs->fields['pk_author'] ] = $rs->fields['name'];
 
                 $rs->MoveNext();
             }
         }
 
-        if ( !isset($this->authors_name[ $fk_author ]) ) {
+        if ( !isset($this->_authorNames[ $fk_author ]) ) {
             return('');
         }
 
-        return( $this->authors_name[ $fk_author ] );
+        return( $this->_authorNames[ $fk_author ] );
     }
 
     public function update($data)
@@ -225,9 +227,7 @@ class Opinion extends Content
         $values = array($data['fk_author'],$data['body'],$data['fk_author_img'],$data['with_comment'],$data['type_opinion'],$data['fk_author_img_widget'] );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
             return;
         }
@@ -241,9 +241,7 @@ class Opinion extends Content
         $sql = 'DELETE FROM opinions WHERE pk_opinion ='.($id);
 
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
             return;
         }
@@ -284,9 +282,7 @@ class Opinion extends Content
         $rs = $GLOBALS['application']->conn->Execute( $sql );
 
         if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
             return false;
         }
@@ -298,17 +294,15 @@ class Opinion extends Content
     {
         $sql = "UPDATE settings SET `value`='".$value."' WHERE `name`=`opinion_algoritm`";
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
             return;
         }
     }
 
-    public function count_inhome_type($type_opinion=NULL)
+    public function count_inhome_type($type_opinion=null)
     {
-        if (($type_opinion==NULL) && ($this->type_opinion)) {
+        if (($type_opinion==null) && ($this->type_opinion)) {
             $type_opinion=$this->type_opinion;
         }
 
@@ -318,9 +312,7 @@ class Opinion extends Content
 
         $rs = $GLOBALS['application']->conn->Execute( $sql );
         if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
             return false;
         }
@@ -401,8 +393,8 @@ class Opinion extends Content
 
         // Getting latest opinions taking in place later considerations
         $contents = $cm->find('Opinion',
-                    'contents.content_status=1 AND contents.available=1'. $sqlExcludedContents,
-                    'ORDER BY contents.created DESC, contents.title ASC ' .$_sql_limit);
+            'contents.content_status=1 AND contents.available=1'. $sqlExcludedContents,
+            'ORDER BY contents.created DESC, contents.title ASC ' .$_sql_limit);
 
 
 

@@ -17,12 +17,12 @@
  **/
 class Subscriptor
 {
-    public $id = null;
+    public $id        = null;
 
-    public $email = null;
-    public $name = null;
+    public $email     = null;
+    public $name      = null;
     public $firstname = null;
-    public $lastname = null;
+    public $lastname  = null;
 
     /**
      * status=0 - (mail se le envio pero aun no le dio al link del correo)
@@ -41,7 +41,7 @@ class Subscriptor
 
     private $_tableName = '`pc_users`';
 
-    private static $instance    = NULL;
+    private static $_instance    = NULL;
 
     /**
      * Constructor
@@ -59,14 +59,14 @@ class Subscriptor
 
     public function get_instance()
     {
-        if ( is_null(self::$instance) ) {
-            self::$instance = new Subscriptor();
+        if ( is_null(self::$_instance) ) {
+            self::$_instance = new Subscriptor();
 
-            return self::$instance;
+            return self::$_instance;
 
         } else {
 
-            return self::$instance;
+            return self::$_instance;
         }
     }
 
