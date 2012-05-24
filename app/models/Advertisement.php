@@ -220,7 +220,7 @@ class Advertisement extends Content
     /**
      * @var Advertisement instance, singleton pattern
      **/
-    private static $singleton = null;
+    private static $_singleton = null;
 
     /**
      * @var registry of banners
@@ -244,7 +244,7 @@ class Advertisement extends Content
         }
 
         // Store this object into the cache manager for better performance
-        if ( is_null($this->cache) ) {
+        if (is_null($this->cache) ) {
             $this->cache = new MethodCacheManager($this, array('ttl' => (20)));
         } else {
             $this->cache->set_cache_life(20); // 20 seconds
@@ -265,11 +265,11 @@ class Advertisement extends Content
     public static function getInstance()
     {
         // Create a unique instance if not available
-        if ( is_null(self::$singleton) ) {
-            self::$singleton = new Advertisement();
+        if (is_null(self::$_singleton) ) {
+            self::$_singleton = new Advertisement();
         }
 
-        return self::$singleton;
+        return self::$_singleton;
     }
 
     /**
@@ -281,7 +281,8 @@ class Advertisement extends Content
      **/
     public function create($data)
     {
-        // Clear magic_quotes StringUtils::fixScriptDeclaration & StringUtils::disabled_magic_quotes
+        // Clear magic_quotes StringUtils::fixScriptDeclaration
+        // & StringUtils::disabled_magic_quotes
         StringUtils::disabled_magic_quotes($data);
 
         parent::create($data);
@@ -296,23 +297,27 @@ class Advertisement extends Content
 
         $data['overlap'] = (isset($data['overlap']))? $data['overlap']: 0;
         $data['timeout'] = (isset($data['timeout']))? $data['timeout']: -1;
-        $data['type_medida'] = (isset($data['type_medida']))? $data['type_medida']: 'NULL';
+        $data['type_medida'] =
+            (isset($data['type_medida']))? $data['type_medida']: 'NULL';
 
-        $sql = "INSERT INTO advertisements (`pk_advertisement`, `type_advertisement`, `fk_content_categories`,
-                                            `path`, `url`, `type_medida`, `num_clic`, `num_clic_count`,
-                                            `num_view`, `with_script`, `script`, `overlap`, `timeout`)
+        $sql = "INSERT INTO advertisements
+                    (`pk_advertisement`, `type_advertisement`,
+                     `fk_content_categories`, `path`, `url`, `type_medida`,
+                     `num_clic`, `num_clic_count`, `num_view`, `with_script`,
+                     `script`, `overlap`, `timeout`)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         // $this->id was setted in parent::create($data)
-        $values = array($this->id, $data['type_advertisement'], $data['category'],
-                        $data['img'], $data['url'], $data['type_medida'], $data['num_clic'],
-                        0, $data['num_view'], $data['with_script'], $data['script'], $data['overlap'],
-                        $data['timeout']);
+        $values = array(
+            $this->id, $data['type_advertisement'], $data['category'],
+            $data['img'], $data['url'], $data['type_medida'], $data['num_clic'],
+            0, $data['num_view'], $data['with_script'],
+            $data['script'], $data['overlap'], $data['timeout']
+        );
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        if ($rs === false) {
+            \Application::logDatabaseError();
 
             return null;
         }
@@ -350,17 +355,15 @@ class Advertisement extends Content
         parent::read($id); // Read content of Content
 
         $sql = 'SELECT * FROM advertisements WHERE pk_advertisement = '.($id);
-        $rs = $GLOBALS['application']->conn->Execute( $sql );
+        $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            \Application::logDatabaseError();
 
             return;
         }
 
-        $this->load( $rs->fields );
+        $this->load($rs->fields);
 
         // Return instance to method chaining
         return $this;
@@ -398,17 +401,19 @@ class Advertisement extends Content
 
         // Remove magic_quotes, StringUtils::fixScriptDeclaration
         // & StringUtils::disabled_magic_quotes
-        StringUtils::disabled_magic_quotes( $data );
+        StringUtils::disabled_magic_quotes($data);
 
         if (!empty($data['script'])) {
             //$data['script'] = StringUtils::fixScriptDeclaration($data['script']);
-            $data['script'] = base64_encode( $data['script'] );
+            $data['script'] = base64_encode($data['script'] );
         }
 
         $data['overlap'] = (isset($data['overlap']))? $data['overlap']: 0;
         $data['timeout'] = (isset($data['timeout']))? $data['timeout']: 0;
-        $data['with_script'] = (isset($data['with_script']))? $data['with_script']: 0;
-        $data['type_medida'] = (isset($data['type_medida']))? $data['type_medida']: 'NULL';
+        $data['with_script'] =
+            (isset($data['with_script']))? $data['with_script']: 0;
+        $data['type_medida'] =
+            (isset($data['type_medida']))? $data['type_medida']: 'NULL';
 
         $sql = "UPDATE advertisements
                 SET `type_advertisement`=?, `fk_content_categories`=?,
@@ -426,10 +431,7 @@ class Advertisement extends Content
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            \Application::logDatabaseError();
 
             return null;
         }
@@ -445,8 +447,8 @@ class Advertisement extends Content
         }
 
         // Necesarios para evento
-        $this->pk_advertisement = $this->id;
-        $this->available        = $data['available'];
+        $this->pk_advertisement      = $this->id;
+        $this->available             = $data['available'];
         $this->type_advertisement    = $data['type_advertisement'];
         $this->fk_content_categories = $data['category'];
 
@@ -472,9 +474,7 @@ class Advertisement extends Content
         $sql = 'DELETE FROM advertisements WHERE pk_advertisement ='.($id);
 
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            \Application::logDatabaseError();
 
             return;
         }
@@ -498,12 +498,10 @@ class Advertisement extends Content
         // Fetch data for the ad from the database
         $sql = 'SELECT url FROM `advertisements` '
                 .'WHERE `advertisements`.`pk_advertisement`=?';
-        $rs = $GLOBALS['application']->conn->Execute( $sql, array($id) );
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($id) );
 
         if (!$rs) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            \Application::logDatabaseError();
 
             return null;
         }
@@ -512,7 +510,8 @@ class Advertisement extends Content
     }
 
     /**
-     * Function that retrieves the name of the placeholder given the type_advertisemnt
+     * Function that retrieves the name of the placeholder given
+     * the type_advertisemnt
      * For example type=503  => name=publi-gallery-inner
      *
      * @param  string $type_advertisement
@@ -559,9 +558,7 @@ class Advertisement extends Content
         $values = array($id);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            \Application::logDatabaseError();
 
             return;
         }
@@ -569,8 +566,7 @@ class Advertisement extends Content
         $ad = new Advertisement($id);
 
         //No publicado
-        if (
-            ($ad->type_medida=='CLIC' )
+        if (($ad->type_medida=='CLIC' )
             && ($ad->num_clic <= $ad->num_clic_count)
         ) {
             $status = 0;
@@ -595,21 +591,16 @@ class Advertisement extends Content
             foreach ($id as $banner) {
 
                 // if this ad has views limit and it has reached unpublish it
-                if (
-                    (isset($banner) && property_exists($banner, 'type_medida'))
-                    && (
-                        ($banner->type_medida == 'VIEW')
-                        AND ($banner->num_view <= $banner->views)
-                        )
+                if ((isset($banner) && property_exists($banner, 'type_medida'))
+                    && (($banner->type_medida == 'VIEW')
+                        AND ($banner->num_view <= $banner->views))
                 ) {
                     $banner->set_status($status = 0, 'NULL');
-
                 }
             }
         } else {
             $ad = new Advertisement($id);
-            if (
-                ($ad->type_medida == 'VIEW')
+            if (($ad->type_medida == 'VIEW')
                 && ($ad->num_view <= $ad->views)
             ) {
                 parent::set_status($status = 0, 'NULL');
@@ -636,26 +627,34 @@ class Advertisement extends Content
 
             $cm = new ContentManager();
             if ($category!=0) {
-                $rsBanner = $cm->find('Advertisement', ' type_advertisement IN ('.$types.') AND available=1 AND
-                                                    (fk_content_categories LIKE \'%'.$category.'%\' OR fk_content_categories=0)',
-                                        'ORDER BY type_advertisement, created');
+                $rsBanner = $cm->find(
+                    'Advertisement',
+                    ' type_advertisement IN ('.$types.') AND available=1 AND
+                    (fk_content_categories LIKE \'%'.$category.'%\'
+                    OR fk_content_categories=0)',
+                    'ORDER BY type_advertisement, created'
+                );
             } else {
-                $rsBanner = $cm->find('Advertisement', ' type_advertisement IN ('.$types.') AND available=1 AND
-                                                    fk_content_categories=0',
-                                        'ORDER BY type_advertisement, created');
+                $rsBanner = $cm->find(
+                    'Advertisement',
+                    ' type_advertisement IN ('.$types.') AND available=1 AND
+                    fk_content_categories=0',
+                    'ORDER BY type_advertisement, created'
+                );
             }
 
             // If this banner is not in time don't add it to the final results
            $rsBanner = $cm->getInTime($rsBanner);
 
-            // $advertisements is an array of banners, grouped by advertisement type
+            // $advertisements is an array of banners,
+            // grouped by advertisement type
             $advertisements = array();
             foreach ($rsBanner as $adv) {
 
-                $adv->fk_content_categories = explode(',', $adv->fk_content_categories);
+                $adv->fk_content_categories =
+                    explode(',', $adv->fk_content_categories);
 
-                if (
-                    !in_array($category, $adv->fk_content_categories)
+                if (!in_array($category, $adv->fk_content_categories)
                     && $adv->fk_content_categories != array(0)
                 ) {
                     continue;
@@ -669,7 +668,9 @@ class Advertisement extends Content
                 if ($adv->fk_content_categories == array(0)) {
                     array_push($advertisements[$adv->type_advertisement], $adv);
                 } else {
-                    array_unshift($advertisements[$adv->type_advertisement], $adv);
+                    array_unshift(
+                        $advertisements[$adv->type_advertisement], $adv
+                    );
                 }
 
             }
@@ -711,18 +712,12 @@ class Advertisement extends Content
                 ' ORDER BY type_advertisement, created'
             );
 
-            //if (count($rsBanner) == 1) {
-            //    $interstitial = $rsBanner[0];
-            //}
-
             $numBanner = array_rand($rsBanner);
             if (!is_null($numBanner)) {
                 $interstitial = $rsBanner[$numBanner];
             } else {
                 $interstitial = null;
             }
-
-
         }
 
         return $interstitial;
@@ -752,7 +747,7 @@ class Advertisement extends Content
         );
 
         // Array of photos objects,
-        // key is pk_content array( 'pk_content' => object )
+        // key is pk_content array('pk_content' => object )
         $photos = array();
         foreach ($objs as $obj) {
             $photos[ $obj->pk_content ] = $obj;
@@ -769,18 +764,25 @@ class Advertisement extends Content
                 $tpl->assign('banner'.$banner->type_advertisement, $banner);
             }
 
-
-            // FIXME: This is a workarround until decide what to do into the Content class
-            // This will avoid the the notice messages but doesn't keep the code clean.
-            // We should change de content class to return values initialized allways.
-            (isset($banner->with_script))?($with_script = $banner->with_script):($with_script = null);
+            // FIXME: This is a workarround until decide what to do into
+            // the Content class
+            // This will avoid the the notice messages but doesn't keep
+            // the code clean.
+            // We should change de content class to return values
+            // always initialized.
+            (isset($banner->with_script))?($with_script =
+                    $banner->with_script):($with_script = null);
 
             if ($with_script) {
-                $tpl->assign('script_b'.$banner->type_advertisement, $banner->script);
+                $tpl->assign(
+                    'script_b'.$banner->type_advertisement,
+                    $banner->script
+                );
             } else {
 
                 if (isset($banner->path) && property_exists($banner, 'path')) {
-                    // "path" is Photo ID, $banner->img is similar but deprecated
+                    // "path" is Photo ID, $banner->img
+                    // is similar but deprecated
                     $adv = $banner->path;
                 }
                 //Evitar undefined index
@@ -816,7 +818,12 @@ class Advertisement extends Content
      **/
     public function fetch($entry)
     {
-        return (isset($this->_registry[$entry]))? $this->_registry[$entry]: null;
+        if (isset($this->_registry[$entry])) {
+            $value = $this->_registry[$entry];
+        } else {
+            $value = null;
+        }
+        return $value;
     }
 
     /**
@@ -826,24 +833,27 @@ class Advertisement extends Content
     public function onPublish()
     {
         if (!empty($this->available) && (intval($this->available)>0)) {
-            // Documentation: http://www.xaprb.com/blog/2006/06/23/how-to-select-from-an-update-target-in-mysql/
-            $sql = 'UPDATE `contents` SET `available`=0 WHERE pk_content IN (
-                        SELECT `pk_advertisement` FROM (
-                            SELECT `advertisements`.*
-                            FROM `advertisements`, `contents`, `contents_categories`
-                            WHERE `advertisements`.`type_advertisement`='.$this->type_advertisement.' AND
-                                `advertisements`.`pk_advertisement`<>'.$this->pk_advertisement.' AND
-                                `contents_categories`.`pk_fk_content_category`='.$this->fk_content_categories.' AND
-                                `contents`.`pk_content`=`contents_categories`.`pk_fk_content` AND
-                                `contents`.`pk_content`=`advertisements`.`pk_advertisement`
-                        ) AS temp
-                    )';
+            $sql = 'UPDATE `contents` SET `available`=0 '
+                 . 'WHERE pk_content IN (
+                    SELECT `pk_advertisement` FROM (
+                        SELECT `advertisements`.*
+                        FROM `advertisements`, `contents`,
+                            `contents_categories`
+                        WHERE `advertisements`.`type_advertisement`='
+                            .$this->type_advertisement.'
+                        AND `advertisements`.`pk_advertisement`<>'
+                            .$this->pk_advertisement.'
+                        AND `contents_categories`.`pk_fk_content_category`='
+                            .$this->fk_content_categories.'
+                        AND `contents`.`pk_content`='
+                            .'`contents_categories`.`pk_fk_content`
+                        AND `contents`.`pk_content`='
+                            .'`advertisements`.`pk_advertisement`
+                    ) AS temp )';
 
             $rs = $GLOBALS['application']->conn->Execute($sql, $values);
             if ($rs === false) {
-                $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-                $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-                $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+                \Application::logDatabaseError();
 
                 return;
             }

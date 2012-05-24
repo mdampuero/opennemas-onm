@@ -75,9 +75,7 @@ class Author
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            Application::logDatabaseError();
 
             return(false);
         }
@@ -95,9 +93,7 @@ class Author
 
                 $rs = $GLOBALS['application']->conn->Execute($sql, $values);
                 if (!$rs) {
-                    $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-                    $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-                    $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+                    Application::logDatabaseError();
                 }
             }
         }
@@ -121,9 +117,7 @@ class Author
         $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            Application::logDatabaseError();
 
             return;
         }
@@ -153,9 +147,7 @@ class Author
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            Application::logDatabaseError();
 
             return;
         }
@@ -172,20 +164,18 @@ class Author
 
                 $rs = $GLOBALS['application']->conn->Execute($sql, $values);
                 if (!$rs) {
-                    $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-                    $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-                    $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+                    Application::logDatabaseError();
                 }
             }
         }
 
         if ($data['del_img']) {
-                $tok = strtok($data['del_img'], ",");
-                while (($tok !== false) AND ($tok !=" ")) {
-                    $sql = "DELETE FROM author_imgs WHERE pk_img=".$tok;
-                    $GLOBALS['application']->conn->Execute($sql);
-                    $tok = strtok(",");
-                }
+            $tok = strtok($data['del_img'], ",");
+            while (($tok !== false) AND ($tok !=" ")) {
+                $sql = "DELETE FROM author_imgs WHERE pk_img=".$tok;
+                $GLOBALS['application']->conn->Execute($sql);
+                $tok = strtok(",");
+            }
         }
     }
 
@@ -199,18 +189,14 @@ class Author
         $sql = 'DELETE FROM authors WHERE pk_author='.($id);
 
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            Application::logDatabaseError();
 
             return;
         }
         $sql = 'DELETE FROM author_imgs WHERE fk_author='.($id);
 
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            Application::logDatabaseError();
 
             return;
         }
@@ -292,9 +278,7 @@ class Author
         $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            Application::logDatabaseError();
 
             return;
         }
@@ -413,8 +397,8 @@ class Author
                 while (!$rs->EOF) {
                     $photo = new stdClass();
                     $photo->path_img    = $rs->fields['path_img'];
-                    $photo->path_file    = $rs->fields['path_img'];
-                    $photo->description    = $rs->fields['description'];
+                    $photo->path_file   = $rs->fields['path_img'];
+                    $photo->description = $rs->fields['description'];
 
                     self::$_photos[ $rs->fields['pk_img'] ] = $photo;
                     $rs->MoveNext();
@@ -442,9 +426,7 @@ class Author
         $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            Application::logDatabaseError();
 
             return;
         }
