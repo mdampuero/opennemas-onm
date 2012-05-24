@@ -213,14 +213,14 @@ class Advertisement extends Content
     /**
      * @var MethodCacheManager Instance of MethodCacheManager
      **/
-    var $cache = NULL;
+    public $cache = NULL;
 
 
 
     /**
      * @var Advertisement instance, singleton pattern
      **/
-    static private $singleton = null;
+    private static $singleton = null;
 
     /**
      * @var registry of banners
@@ -234,7 +234,7 @@ class Advertisement extends Content
      *
      * return Advertisement the instance of the advertisement class
      **/
-    function __construct($id=null)
+    public function __construct($id=null)
     {
         // Fetch information from Content class
         parent::__construct($id);
@@ -262,7 +262,7 @@ class Advertisement extends Content
      *
      * @see Advertisement::__construct()
      **/
-    static function getInstance()
+    public static function getInstance()
     {
         // Create a unique instance if not available
         if ( is_null(self::$singleton) ) {
@@ -279,7 +279,7 @@ class Advertisement extends Content
      *
      * @return Advertisement
      **/
-    function create($data)
+    public function create($data)
     {
         // Clear magic_quotes StringUtils::fixScriptDeclaration & StringUtils::disabled_magic_quotes
         StringUtils::disabled_magic_quotes($data);
@@ -345,7 +345,7 @@ class Advertisement extends Content
      *
      * @return Advertisement the instance for the Ad
      **/
-    function read($id)
+    public function read($id)
     {
         parent::read($id); // Read content of Content
 
@@ -373,7 +373,7 @@ class Advertisement extends Content
      *
      * @return void
      **/
-    function load($properties)
+    public function load($properties)
     {
         $this->category = self::ADVERTISEMENT_CATEGORY;
         parent::load($properties);
@@ -392,7 +392,7 @@ class Advertisement extends Content
      *
      * @return Advertisement Return the instance to chaining method
      **/
-    function update($data)
+    public function update($data)
     {
         parent::update($data);
 
@@ -465,7 +465,7 @@ class Advertisement extends Content
      * @return void
      *
      **/
-    function remove($id)
+    public function remove($id)
     {
         parent::remove($id);
 
@@ -487,7 +487,7 @@ class Advertisement extends Content
      *
      * @return string
      **/
-    function getUrl($id)
+    public function getUrl($id)
     {
         // Try to minimize the database overload if this object was preloaded
         // or doesn't fit the rules
@@ -515,7 +515,7 @@ class Advertisement extends Content
      * Function that retrieves the name of the placeholder given the type_advertisemnt
      * For example type=503  => name=publi-gallery-inner
      *
-     * @param string $type_advertisement
+     * @param  string $type_advertisement
      * @return string $name_advertisement
      **/
     public function getNameOfAdvertisementPlaceholder($type_advertisement)
@@ -552,7 +552,7 @@ class Advertisement extends Content
      *
      * @return void
      **/
-    static function setNumClics($id)
+    public static function setNumClics($id)
     {
         $sql = "UPDATE advertisements SET `num_clic_count`=`num_clic_count`+1 "
                 ." WHERE `pk_advertisement`=?";
@@ -583,7 +583,7 @@ class Advertisement extends Content
      *
      * @param int $id
      **/
-    static function setNumViews($id=null)
+    public static function setNumViews($id=null)
     {
         // if $id was not given return null and do nothing
         if (is_null($id)) { return null; }
@@ -625,7 +625,7 @@ class Advertisement extends Content
      *
      * @return array Array of Advertisement objects
      **/
-    function getAdvertisements($types=array(), $category='home')
+    public function getAdvertisements($types=array(), $category='home')
     {
         $banners = array();
 
@@ -734,7 +734,7 @@ class Advertisement extends Content
      * @param array  $banners Array of Advertisement objects
      * @param Smarty $tpl     Template
      **/
-    function render($banners, $tpl)
+    public function render($banners, $tpl)
     {
         // Extract pk_photos to perform one query
         $pk_photos = array();
@@ -811,7 +811,7 @@ class Advertisement extends Content
      * Fetch a entry from set of banners,
      * workaround for Advertisement::render
      *
-     * @param string $entry
+     * @param  string $entry
      * @return mixed
      **/
     public function fetch($entry)
@@ -823,7 +823,7 @@ class Advertisement extends Content
      * Fire this event when publish an advertisement and unpublished others
      * banners where type_advertisement is equals
     */
-    function onPublish()
+    public function onPublish()
     {
         if (!empty($this->available) && (intval($this->available)>0)) {
             // Documentation: http://www.xaprb.com/blog/2006/06/23/how-to-select-from-an-update-target-in-mysql/

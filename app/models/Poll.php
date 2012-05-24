@@ -13,7 +13,8 @@
  * @subpackage Model
  * @author     Sandra Pereira <sandra@openhost.es>
  **/
-class Poll extends Content {
+class Poll extends Content
+{
     public $pk_poll = NULL;
     public $subtitle = NULL;
     public $total_votes   	= NULL;
@@ -21,10 +22,11 @@ class Poll extends Content {
     public $visualization 	= NULL;
 
 
-    function __construct($id=null) {
+    public function __construct($id=null)
+    {
         parent::__construct($id);
 
-        if(is_numeric($id)) {
+        if (is_numeric($id)) {
             $this->read($id);
         }
 
@@ -63,10 +65,11 @@ class Poll extends Content {
         return parent::__get($name);
     }
 
-    public function create($data) {
+    public function create($data)
+    {
         //Modificamos los metadatos con los tags de cada item
         $tags = '';
-        if(isset($data['item']) && !empty($data['item'] )){
+        if (isset($data['item']) && !empty($data['item'] )) {
             $tags = implode(',', $data['item']);
             $data['metadata'] = $data['metadata'].','.$tags;
             $data['metadata'] = StringUtils::get_tags($data['metadata']);
@@ -75,14 +78,14 @@ class Poll extends Content {
         parent::create($data);
 
         $i=1;
-        if($data['item']){
-            foreach($data['item'] as $item){
+        if ($data['item']) {
+            foreach ($data['item'] as $item) {
                 $sql='INSERT INTO poll_items (`fk_pk_poll`, `item`, `metadata`) VALUES (?,?,?)';
                 $tags = StringUtils::get_tags($item);
                 $values = array($this->id,$item, $tags);
                 $i++;
 
-                if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+                if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
                     $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                     $GLOBALS['application']->logger->debug('Error: '.$error_msg);
                     $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -93,7 +96,7 @@ class Poll extends Content {
                 VALUES (?,?,?,?,?)';
         $values = array($this->id,$data['subtitle'], 0,$data['visualization'],$data['with_comment']);
 
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -105,7 +108,8 @@ class Poll extends Content {
         return true;
     }
 
-    public function read($id) {
+    public function read($id)
+    {
         parent::read($id);
 
         $sql = 'SELECT * FROM polls WHERE pk_poll = '.($id);
@@ -129,8 +133,9 @@ class Poll extends Content {
 
     }
 
-    public function update($data) {
-        if(isset($data['item']) && !empty($data['item'] )){
+    public function update($data)
+    {
+        if (isset($data['item']) && !empty($data['item'] )) {
             $tags = implode(',', $data['item']);
 
             $data['metadata'] = $data['metadata'].','.$tags;
@@ -141,10 +146,10 @@ class Poll extends Content {
         parent::update($data);
         $tags=explode(', ',$tags);//Reinicia los indices del array
 
-        if($data['item']){
+        if ($data['item']) {
             //Eliminamos los antiguos
             $sql='DELETE FROM poll_items WHERE fk_pk_poll ='.($data['id']);
-            if($GLOBALS['application']->conn->Execute($sql) === false) {
+            if ($GLOBALS['application']->conn->Execute($sql) === false) {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$error_msg);
                 $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -154,12 +159,12 @@ class Poll extends Content {
             $totalvotes=0;
 
             $votes = $data['votes'];
-            foreach($data['item'] as $item){
+            foreach ($data['item'] as $item) {
                 $sql='INSERT INTO poll_items (`fk_pk_poll`, `item`,`votes`) VALUES (?,?,?)';
                 $values = array($data['id'], $item, $votes[$i]);
                 $i++;
 
-                if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+                if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
                     $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                     $GLOBALS['application']->logger->debug('Error: '.$error_msg);
                     $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -170,7 +175,7 @@ class Poll extends Content {
                         WHERE pk_poll= ?";
 
         $values = array($data['subtitle'],  $data['visualization'],$data['with_comment'], $data['id']);
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -181,12 +186,13 @@ class Poll extends Content {
         $this->pk_poll = $data['id'];
     }
 
-    public function remove($id) {
+    public function remove($id)
+    {
         parent::remove($id);
 
         $sql = 'DELETE FROM polls WHERE pk_poll ='.($id);
 
-        if($GLOBALS['application']->conn->Execute($sql)===false) {
+        if ($GLOBALS['application']->conn->Execute($sql)===false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -194,7 +200,7 @@ class Poll extends Content {
             return;
         }
         $sql='DELETE FROM poll_items WHERE fk_pk_poll ='.($id);
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -203,7 +209,8 @@ class Poll extends Content {
         }
     }
 
-    public function get_items($pk_poll){
+    public function get_items($pk_poll)
+    {
         $sql = 'SELECT poll_items.pk_item, poll_items.item, poll_items.votes, poll_items.metadata '
                 .' FROM poll_items WHERE fk_pk_poll = '.($pk_poll).' ORDER BY poll_items.pk_item';
         $rs = $GLOBALS['application']->conn->Execute( $sql );
@@ -221,10 +228,10 @@ class Poll extends Content {
         }
 
         //TODO: improvement calc percents
-        if(!empty($items)) {
+        if (!empty($items)) {
             foreach ($items as &$item) {
                 $item['percent'] =0;
-                if(!empty($item['votes'])) {
+                if (!empty($item['votes'])) {
                     $item['percent'] = sprintf("%.0f",($item['votes']*100 / $total) );
                 }
             }
@@ -233,9 +240,10 @@ class Poll extends Content {
         return $items;
     }
 
-    public function vote($pk_item,$ip){
+    public function vote($pk_item,$ip)
+    {
         $this->used_ips = $this->add_count($this->used_ips,$ip);
-        if (!$this->used_ips){
+        if (!$this->used_ips) {
                 Application::setCookieSecure("polls".$this->id, 'true', time()+60*60*24*30);
 
                 return(false);
@@ -249,7 +257,7 @@ class Poll extends Content {
                     WHERE pk_item=? ";
         $values = array($votes, $pk_item);
 
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -264,7 +272,7 @@ class Poll extends Content {
         $values = array($this->total_votes, serialize($this->used_ips), $this->id);
 
 
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -280,17 +288,18 @@ class Poll extends Content {
         return(true);
     }
 
-    public function add_count($ips_count, $ip) {
+    public function add_count($ips_count, $ip)
+    {
         $ips = array();
-        if($ips_count){
-            foreach($ips_count as $ip_array){
+        if ($ips_count) {
+            foreach ($ips_count as $ip_array) {
                 $ips[] = $ip_array['ip'];
             }
         }
         //Se busca si existe algún voto desde la ip
         $kip_count = array_search($ip, $ips);
 
-        if($kip_count === FALSE) {
+        if ($kip_count === FALSE) {
             //No se ha votado desde esa ip
             $ips_count[] = array('ip' => $ip, 'count' => 1);
         } else {

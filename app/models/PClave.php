@@ -15,7 +15,8 @@ use \Onm\Settings as s;
  * @subpackage Model
  * @author     Fran Dieguez <fran@openhost.es>
  **/
-class PClave {
+class PClave
+{
     /**
      * @var int Identifier of class
      */
@@ -43,16 +44,18 @@ class PClave {
      *
      * @param int $id
      */
-    public function __construct($id=null) {
-        if(!is_null($id)) {
+    public function __construct($id=null)
+    {
+        if (!is_null($id)) {
             $this->read($id);
         }
 
         $this->cache = new MethodCacheManager($this, array('ttl' => 330));
     }
 
-    public function getInstance(){
-        if(is_null(self::$instance)){
+    public function getInstance()
+    {
+        if (is_null(self::$instance)) {
             self::$instance = new PClave();
         }
 
@@ -61,10 +64,11 @@ class PClave {
     /**
      * Create a new object
      *
-     * @param array $data
+     * @param  array  $data
      * @return PClave
      */
-    public function create($data) {
+    public function create($data)
+    {
         // Clear  magic_quotes
         StringUtils::disabled_magic_quotes( $data );
 
@@ -75,7 +79,7 @@ class PClave {
         $values[] = $data['tipo'];
         /*$this->sanitize( &$data );*/
 
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -92,16 +96,17 @@ class PClave {
     /**
      * Read, get a specific object
      *
-     * @param int $id Object ID
+     * @param  int    $id Object ID
      * @return PClave Return instance to chaining method
      */
-    public function read($id) {
+    public function read($id)
+    {
         $sql = "SELECT * FROM pclave WHERE id=?";
 
         $values = array($id);
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-        if($rs === false) {
+        if ($rs === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -119,17 +124,18 @@ class PClave {
      *
      * @param array $properties Array properties
      */
-    public function load($properties) {
-        if(is_array($properties)) {
-            foreach($properties as $k => $v) {
-                if(!is_numeric($k)) {
+    public function load($properties)
+    {
+        if (is_array($properties)) {
+            foreach ($properties as $k => $v) {
+                if (!is_numeric($k)) {
                     $this->{$k} = $v;
                 }
             }
-        } elseif(is_object($properties)) {
+        } elseif (is_object($properties)) {
             $properties = get_object_vars($properties);
-            foreach($properties as $k => $v) {
-                if(!is_numeric($k)) {
+            foreach ($properties as $k => $v) {
+                if (!is_numeric($k)) {
                     $this->{$k} = $v;
                 }
             }
@@ -139,10 +145,11 @@ class PClave {
     /**
      * Update
      *
-     * @param array $data Array values
+     * @param  array   $data Array values
      * @return boolean
      */
-    public function update($data) {
+    public function update($data)
+    {
         // Clear  magic_quotes
         StringUtils::disabled_magic_quotes( $data );
 
@@ -153,7 +160,7 @@ class PClave {
         $values[] = $data['value'];
         $values[] = $data['id'];
 
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -169,8 +176,9 @@ class PClave {
      *
      * @param array $data Post data
      */
-    public function save($data) {
-        if(empty($data['id'])) {
+    public function save($data)
+    {
+        if (empty($data['id'])) {
             $this->create($data);
         } else {
             $this->update($data);
@@ -180,14 +188,15 @@ class PClave {
     /**
      * Delete
      *
-     * @param int $id Identifier
+     * @param  int     $id Identifier
      * @return boolean
      */
-    public function delete($id) {
+    public function delete($id)
+    {
         $sql = "DELETE FROM pclave WHERE id=?";
         $values = array($id);
 
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -203,16 +212,17 @@ class PClave {
      *
      * @return array Terms
      */
-    public function getList($filter=null) {
+    public function getList($filter=null)
+    {
         $sql = 'SELECT * FROM `pclave`';
-        if(!is_null($filter)) {
+        if (!is_null($filter)) {
             $sql = 'SELECT * FROM `pclave` WHERE ' . $filter;
         }
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         $terms = array();
-        if($rs !== false) {
-            while(!$rs->EOF) {
+        if ($rs !== false) {
+            while (!$rs->EOF) {
                 $obj = new PClave();
                 $obj->load( $rs->fields );
 
@@ -230,15 +240,17 @@ class PClave {
     /**
      *
      */
-    public function replaceTerms($text, $terms) {
-        if(mb_detect_encoding($text) == "UTF-8") {
+    public function replaceTerms($text, $terms)
+    {
+        if (mb_detect_encoding($text) == "UTF-8") {
             $text = ' '.($text).' ';
         } else {
             $text = ' '.utf8_decode($text).' '; // spaces necessary to evaluate first and last pattern matching
         }
 
-        if(!function_exists('longestFirst')){
-            function longestFirst($a, $b) {
+        if (!function_exists('longestFirst')) {
+            function longestFirst($a, $b)
+            {
                 if (strlen($a->pclave) == strlen($b->pclave)) {
                     return 0;
                 }
@@ -248,9 +260,9 @@ class PClave {
         }
         usort($terms, "longestFirst");
 
-        foreach($terms as $term) {
+        foreach ($terms as $term) {
             $method = 'cb_'.$term->tipo;
-            if(method_exists($this, $method)) {
+            if (method_exists($this, $method)) {
                 $replacement = $this->$method($term->pclave, $term->value);
 
                 // WARNING: utf8
@@ -269,12 +281,12 @@ class PClave {
     }
 
     /* Callbacks to execute replacement */
-    public function cb_intsearch($pclave, $value) {
-
+    public function cb_intsearch($pclave, $value)
+    {
         $text = '<a href="'.SITE_URL.'search.php?cx='. s::get('google_custom_search_api_key') .'&cof=FORID:10&ie=UTF-8&q=%s' .
             '&destino='.SITE_NAME.'" title="%s">%s</a>';
 
-        if(empty($value)) {
+        if (empty($value)) {
             $value = $pclave;
         }
         $origin = $pclave;
@@ -288,14 +300,16 @@ class PClave {
         return sprintf($text, $value, 'Buscar m&aacute;s entradas '. s::get('site_name') .'en para: ' . htmlentities($origin, ENT_COMPAT, 'UTF-8'), $pclave);
     }
 
-    public function cb_url($pclave, $value) {
+    public function cb_url($pclave, $value)
+    {
         //Añadido target="_blank"
         $text = '<a target="_blank" href="%s" title="Ir a %s">%s</a>';
 
         return sprintf($text, $value, $value, $pclave);
     }
 
-    public function cb_email($pclave, $value) {
+    public function cb_email($pclave, $value)
+    {
         $matches = array();
         preg_match('/^(?P<cuenta>[^@]+)@(?P<dominio>[^\.]+)\.(?P<tld>.*?)$/', $value, $matches);
         $text =<<< MAIL_LINK

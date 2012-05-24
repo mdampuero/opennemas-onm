@@ -52,7 +52,7 @@ class MenuItems
         $values = array($data[pk_menu],$data["title"],$data["link_name"],
                         $data["type"],$data["position"],$data["pk_father"]);
 
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             Application::logDatabaseError();
 
             return false;
@@ -94,7 +94,7 @@ class MenuItems
 
         $values = array( $data['name'],$data['params'], $data['type'], $data['site'], $data['id']);
 
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             Application::logDatabaseError();
 
             return false;
@@ -140,7 +140,7 @@ class MenuItems
      * @return array with categories order by positions
      */
 
-    static public function getMenuItems($params = array())
+    public static function getMenuItems($params = array())
     {
          // ver en europapress
         //config para sacar solo padres, solo hijos, todo...
@@ -174,7 +174,7 @@ class MenuItems
 
     }
 
-    static public function getPkItems($id)
+    public static function getPkItems($id)
     {
          // ver en europapress
         //config para sacar solo padres, solo hijos, todo...
@@ -206,14 +206,14 @@ class MenuItems
      *
      * @return bool if update ok true
      */
-    static public function setMenu($id, $items =array(), $params_config = array())
+    public static function setMenu($id, $items =array(), $params_config = array())
     {
         $config['pk_father'] = !empty($params_config['pk_father'])? $params_config['pk_father']: 0;
 
         $items = json_decode($items);
 
 
-        if(!empty($id) && !empty($items)){
+        if (!empty($id) && !empty($items)) {
 
             $stmt = $GLOBALS['application']->conn->Prepare("INSERT INTO menu_items ".
                            " (`pk_menu`,`title`,`link_name`, `type`,`position`,`pk_father`) ".
@@ -281,7 +281,7 @@ class MenuItems
     * @param integer $id
     * @return null
     */
-    static public function emptyMenu($id)
+    public static function emptyMenu($id)
     {
 
         $sql = 'DELETE FROM menu_items WHERE pk_menu ='.($id);
@@ -299,12 +299,12 @@ class MenuItems
         return true;
     }
 
-    static public function deleteItems($items)
+    public static function deleteItems($items)
     {
 
         $sql= "DELETE FROM menu_items WHERE pk_item = ?";
         $stmt = $GLOBALS['application']->conn->Prepare($sql);
-        foreach($items as $item) {
+        foreach ($items as $item) {
             $resp = $GLOBALS['application']->conn->Execute($stmt, array($item) );
 
             if ($resp === false) {

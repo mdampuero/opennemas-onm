@@ -22,27 +22,27 @@ class User
      * @access public
      * @var string
      */
-    var $id               = null;
-    var $login            = null;
-    var $password         = null;
-    var $sessionexpire    = null;
-    var $email            = null;
-    var $name             = null;
-    var $firstname        = null;
-    var $lastname         = null;
-    var $address          = null;
-    var $phone            = null;
-    var $authorize        = null;
-    var $id_user_group    = null;
-    var $accesscategories = null;
-    var $fk_user_group    = null;
+    public $id               = null;
+    public $login            = null;
+    public $password         = null;
+    public $sessionexpire    = null;
+    public $email            = null;
+    public $name             = null;
+    public $firstname        = null;
+    public $lastname         = null;
+    public $address          = null;
+    public $phone            = null;
+    public $authorize        = null;
+    public $id_user_group    = null;
+    public $accesscategories = null;
+    public $fk_user_group    = null;
     /**#@-*/
 
     /**
      * @var string
      */
-    var $authMethod = null;
-    var $clientLoginToken = null;
+    public $authMethod = null;
+    public $clientLoginToken = null;
 
     /**
      * Compatible PHP4 constructor
@@ -52,16 +52,16 @@ class User
      */
     public function __construct($id=null)
     {
-        if(!is_null($id)) {
+        if (!is_null($id)) {
             $this->read($id);
         }
 
-        if(!property_exists($this, 'cache')){
+        if (!property_exists($this, 'cache')) {
             $this->cache = null;
         }
 
         // Use MethodCacheManager
-        if( is_null($this->cache) ) {
+        if ( is_null($this->cache) ) {
             $this->cache = new MethodCacheManager($this, array('ttl' => 60));
         } else {
             $this->cache->set_cache_life(60); // 60 seconds
@@ -81,7 +81,7 @@ class User
                         $data['id_user_group']);
 
 
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -91,7 +91,7 @@ class User
         $this->id = $GLOBALS['application']->conn->Insert_ID();
 
         //Insertar las categorias de acceso.
-        if(isset($data['ids_category'])) {
+        if (isset($data['ids_category'])) {
             $this->createAccessCategoriesDB($data['ids_category']);
         }
 
@@ -137,7 +137,7 @@ class User
         // Init transaction
         $GLOBALS['application']->conn->BeginTrans();
 
-        if(isset($data['password']) && (strlen($data['password']) > 0)) {
+        if (isset($data['password']) && (strlen($data['password']) > 0)) {
             $sql = "UPDATE users SET `login`=?, `password`= ?, `sessionexpire`=?,
                                 `email`=?, `name`=?, `firstname`=?, `lastname`=?,
                                 `address`=?, `phone`=?, `fk_user_group`=?
@@ -159,7 +159,7 @@ class User
                          $data['address'], $data['phone'], $data['id_user_group'] );
         }
 
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             // Rollback
             $GLOBALS['application']->conn->RollbackTrans();
 
@@ -171,7 +171,7 @@ class User
         }
 
         $this->id = $data['id'];
-        if(isset($data['ids_category'])) {
+        if (isset($data['ids_category'])) {
             $this->createAccessCategoriesDB($data['ids_category']);
         }
 
@@ -183,7 +183,7 @@ class User
     {
         $sql = 'DELETE FROM users WHERE pk_user='.intval($id);
 
-        if($GLOBALS['application']->conn->Execute($sql)===false) {
+        if ($GLOBALS['application']->conn->Execute($sql)===false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -196,17 +196,17 @@ class User
 
     private function createAccessCategoriesDB($IdsCategory)
     {
-        if( $this->deleteAccessCategoriesDB() ) {
+        if ( $this->deleteAccessCategoriesDB() ) {
             $sql = "INSERT INTO users_content_categories (`pk_fk_user`, `pk_fk_content_category`)
                     VALUES (?,?)";
 
             $values = array();
-            for($iIndex=0; $iIndex<count($IdsCategory); $iIndex++) {
+            for ($iIndex=0; $iIndex<count($IdsCategory); $iIndex++) {
                 $values[] = array($this->id, $IdsCategory[$iIndex]);
             }
 
             // bulk insert
-            if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
                 $GLOBALS['application']->conn->RollbackTrans();
 
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
@@ -224,8 +224,8 @@ class User
         return false;
     }
 
-    public function addCategoryToUser ($idUser, $idCategory) {
-
+    public function addCategoryToUser ($idUser, $idCategory)
+    {
         apc_delete(APC_PREFIX . "_readAccessCategories".$idUser);
 
         $sql = "INSERT INTO users_content_categories (`pk_fk_user`, `pk_fk_content_category`)
@@ -233,7 +233,7 @@ class User
 
         $values = array($idUser, $idCategory);
 
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -247,13 +247,13 @@ class User
 
     }
 
-    public function delCategoryToUser($idUser, $idCategory) {
-
+    public function delCategoryToUser($idUser, $idCategory)
+    {
         apc_delete(APC_PREFIX . "_readAccessCategories".$idUser);
 
         $sql = 'DELETE FROM users_content_categories WHERE pk_fk_content_category='.intval($idCategory);
 
-        if($GLOBALS['application']->conn->Execute($sql) === false) {
+        if ($GLOBALS['application']->conn->Execute($sql) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -290,7 +290,7 @@ class User
             }
 
             $contentCategories = array();
-            while(!$rs->EOF) {
+            while (!$rs->EOF) {
                  $contentCategory = new ContentCategory($rs->fields['pk_fk_content_category']);
                  $contentCategories[] = $contentCategory;
                  $rs->MoveNext();
@@ -308,7 +308,7 @@ class User
     {
         $sql = 'DELETE FROM users_content_categories WHERE pk_fk_user='.intval($this->id);
 
-        if($GLOBALS['application']->conn->Execute($sql)===false) {
+        if ($GLOBALS['application']->conn->Execute($sql)===false) {
             $GLOBALS['application']->conn->RollbackTrans();
 
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
@@ -326,7 +326,7 @@ class User
     {
         $result = false;
 
-        if($this->isValidEmail($login)) {
+        if ($this->isValidEmail($login)) {
             $result = $this->authGoogleClientLogin($login, $password, $loginToken=null, $loginCaptcha=null);
         } else {
             $result = $this->authDatabase($login, $password);
@@ -338,10 +338,11 @@ class User
     /**
      * Check email is valid to login
      *
-     * @param string $email
+     * @param  string  $email
      * @return boolean
      */
-    public function isValidEmail($email) {
+    public function isValidEmail($email)
+    {
         // TODO: restrict accounts to @xornaldegalicia.com
         // return preg_match('/.+@xornaldegalicia.com/', $email);
         return preg_match('/.+@.+\..+/', $email);
@@ -350,8 +351,8 @@ class User
     /**
      * Try authenticate with database
      *
-     * @param string $login
-     * @param string $password
+     * @param  string  $login
+     * @param  string  $password
      * @return boolean Return true if login exists and password match
      */
     public function authDatabase($login, $password)
@@ -359,7 +360,7 @@ class User
         $sql = 'SELECT * FROM users WHERE login=\''.strval($login).'\'';
         $rs = $GLOBALS['application']->conn->Execute( $sql );
 
-        if(!$rs) {
+        if (!$rs) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -368,7 +369,7 @@ class User
         }
 
         $this->set_values($rs->fields);
-        if($this->password === md5($password)) {
+        if ($this->password === md5($password)) {
             // Set access categories
             $this->accesscategories = $this->readAccessCategories();
             $this->authMethod = 'database';
@@ -385,10 +386,10 @@ class User
     /**
      * Try authenticate from google account
      *
-     * @param string $email
-     * @param string $passwd
-     * @param string $loginToken
-     * @param string $loginCaptcha
+     * @param  string        $email
+     * @param  string        $passwd
+     * @param  string        $loginToken
+     * @param  string        $loginCaptcha
      * @return boolean|array
      */
     public function authGoogleClientLogin($email, $passwd, $loginToken=null, $loginCaptcha=null)
@@ -408,7 +409,7 @@ class User
             // Check exists account into database
             $data = $this->getUserDataByEmail($email);
 
-            if(empty($data)) { // Don't exist into database
+            if (empty($data)) { // Don't exist into database
 
                 return false;
             }
@@ -434,7 +435,7 @@ class User
     /**
      * Get a password from a login
      *
-     * @param string $login
+     * @param  string $login
      * @return string Return the password of login
      */
     public function getPwd($login)
@@ -442,7 +443,7 @@ class User
         $sql = 'SELECT password FROM users WHERE login=\''.strval($login).'\'';
         $rs = $GLOBALS['application']->conn->Execute( $sql );
 
-        if(!$rs) {
+        if (!$rs) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -458,7 +459,7 @@ class User
     /**
      * Get user data by email
      *
-     * @param string $email
+     * @param  string     $email
      * @return array|null
      */
     public function getUserDataByEmail($email)
@@ -466,7 +467,7 @@ class User
         $sql = 'SELECT * FROM users WHERE email=?';
         $rs  = $GLOBALS['application']->conn->Execute($sql, array($email));
 
-        if(!$rs) {
+        if (!$rs) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -485,7 +486,7 @@ class User
      */
     public function set_values($data)
     {
-        if(!empty($data)) {
+        if (!empty($data)) {
             $this->id           = $data['pk_user'];
             $this->login        = $data['login'];
             $this->password     = $data['password'];
@@ -499,7 +500,7 @@ class User
             $this->authorize    = $data['authorize'];
             $this->fk_user_group= $data['fk_user_group'];
 
-            if(isset($data['ids_category'])) {
+            if (isset($data['ids_category'])) {
                 $this->accesscategories = $this->setAccessCategories($data['ids_category']);
             }
         }
@@ -529,7 +530,7 @@ class User
 
     public function setAccessCategories($IdsCategory)
     {
-        for($iIndex=0; $iIndex<count($IdsCategory); $iIndex++) {
+        for ($iIndex=0; $iIndex<count($IdsCategory); $iIndex++) {
             $contentCategories[] = new ContentCategory($IdsCategory[$iIndex]);
         }
 
@@ -538,8 +539,8 @@ class User
 
     public function get_access_categories_name()
     {
-        if(!empty($this->accesscategories)) {
-            foreach($this->accesscategories as $category) {
+        if (!empty($this->accesscategories)) {
+            foreach ($this->accesscategories as $category) {
                 $names[] = $category->name;
             }
 
@@ -551,12 +552,13 @@ class User
 
     public function get_access_categories_id($id=null)
     {
-        if( empty($this->accesscategories) ) {
+        if ( empty($this->accesscategories) ) {
             $this->accesscategories = $this->readAccessCategories($id);
         }
 
         $categories = $this->accesscategories;
-        function sortInMenu($a, $b) {
+        function sortInMenu($a, $b)
+        {
             if ($a->posmenu == $b->posmenu) {
                 return 0;
             }
@@ -566,7 +568,7 @@ class User
         usort($categories, 'sortInMenu');
 
         $ids = array();
-        foreach($categories as $category) {
+        foreach ($categories as $category) {
             $ids[] = $category->pk_content_category;
         }
 
@@ -588,8 +590,8 @@ class User
         $sql = 'SELECT * FROM `users` ' . $_where . ' ' . $_order_by;
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
-        if($rs !== false) {
-            while(!$rs->EOF) {
+        if ($rs !== false) {
+            while (!$rs->EOF) {
                 $user = new User();
 
                 $user->set_values($rs->fields);
@@ -606,25 +608,25 @@ class User
     {
         $newFilter = ' WHERE fk_user_group != 4';
 
-        if(!is_null($filter) && is_string($filter)) {
-            if(preg_match('/^[ ]*where/i', $filter)) {
+        if (!is_null($filter) && is_string($filter)) {
+            if (preg_match('/^[ ]*where/i', $filter)) {
                 $newFilter .= '  AND ' . $filter;
             }
-        } elseif(!is_null($filter) && is_array($filter)) {
+        } elseif (!is_null($filter) && is_array($filter)) {
             $parts = array();
-            if(isset($filter['login']) && !empty($filter['login'])) {
+            if (isset($filter['login']) && !empty($filter['login'])) {
                 $parts[] = '`login` LIKE "' . $filter['login'] . '%"';
             }
 
-            if(isset($filter['name']) && !empty($filter['name'])) {
+            if (isset($filter['name']) && !empty($filter['name'])) {
                 $parts[] = 'MATCH(`name`, `firstname`, `lastname`) AGAINST ("' . $filter['name'] . '" IN BOOLEAN MODE)';
             }
 
-            if(isset($filter['group']) && intval($filter['group'])>0) {
+            if (isset($filter['group']) && intval($filter['group'])>0) {
                 $parts[] = '`fk_user_group` = ' . $filter['group'] . '';
             }
 
-            if(count($parts) > 0) {
+            if (count($parts) > 0) {
                 $newFilter .= ' AND ' . implode(' OR ', $parts);
             }
         }
@@ -651,7 +653,7 @@ class User
     {
         $messages = array('total' => 0, 'entries' => array());
 
-        if(function_exists('curl_init')) {
+        if (function_exists('curl_init')) {
             $curl = curl_init('https://mail.google.com/mail/feed/atom');
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
@@ -661,14 +663,14 @@ class User
             $result = curl_exec($curl);
             $code = curl_getinfo ($curl, CURLINFO_HTTP_CODE);
 
-            if($code != 200) {
+            if ($code != 200) {
                 return $messages;
             }
 
             $xml = simplexml_load_string($result);
             $messages['total'] = (int)$xml->fullcount;
 
-            foreach($xml->entry as $entry) {
+            foreach ($xml->entry as $entry) {
                 //$link = $entry->xpath('link[@href]');
                 $link = $entry->link->attributes();
                 $link = $link['href'];
@@ -691,14 +693,14 @@ class User
     /**
      * Functions that manages the state of an user Enabled=1/Disabled=0
      *
-     * @param type $id
+     * @param  type $id
      * @return type
      */
     public function unauthorize_user($id)
     {
         $sql = "UPDATE users SET `authorize`=0 WHERE pk_user=".intval($id);
 
-        if($GLOBALS['application']->conn->Execute($sql) === false) {
+        if ($GLOBALS['application']->conn->Execute($sql) === false) {
 
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
@@ -712,7 +714,7 @@ class User
     {
         $sql = "UPDATE users SET `authorize`=1 WHERE pk_user=".intval($id);
 
-        if($GLOBALS['application']->conn->Execute($sql) === false) {
+        if ($GLOBALS['application']->conn->Execute($sql) === false) {
 
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);

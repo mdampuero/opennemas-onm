@@ -22,7 +22,7 @@ use \Onm\Import\DataSource\NewsMLG1;
 class Efe implements \Onm\Import\Importer
 {
     // the instance object
-    static private $_instance = null;
+    private static $_instance = null;
 
     // the configuration to access to the server
     private $_defaultConfig = array(
@@ -39,10 +39,10 @@ class Efe implements \Onm\Import\Importer
     /**
      * Ensures that we always get one single instance
      *
-     * @return  object      the unique instance object
+     * @return object the unique instance object
      *
      */
-    static public function getInstance($config = array())
+    public static function getInstance($config = array())
     {
 
         if (!(self::$_instance instanceof self)
@@ -154,7 +154,7 @@ class Efe implements \Onm\Import\Importer
     /*
      * Creates a lock for avoid concurrent sync by multiple users
      *
-     * @return  void
+     * @return void
      */
     public function lockSync()
     {
@@ -241,7 +241,7 @@ class Efe implements \Onm\Import\Importer
      *
      * @param array $params misc params that alteres function behaviour
      *
-     * @return integer  minutes from last synchronization of elements
+     * @return integer minutes from last synchronization of elements
      */
     public function minutesFromLastSync($params = array())
     {
@@ -326,7 +326,7 @@ class Efe implements \Onm\Import\Importer
      *
      * @param $id
      *
-     * @return  DataSource\Efe  the article object
+     * @return DataSource\Efe the article object
      */
     public function findByID($id)
     {
@@ -342,7 +342,7 @@ class Efe implements \Onm\Import\Importer
      *
      * @param $fileName
      *
-     * @return  DataSource\NewsMLG1  the article object
+     * @return DataSource\NewsMLG1 the article object
      */
     public function findByFileName($id)
     {
@@ -359,7 +359,7 @@ class Efe implements \Onm\Import\Importer
      *
      * @param array $params array of params to filter elements with
      *
-     * @return array    elements    stored
+     * @return array elements    stored
      */
     public function findAllBy($params = array())
     {
@@ -375,7 +375,7 @@ class Efe implements \Onm\Import\Importer
      *
      * @return array the list of files
      */
-    static public function getLocalFileList($cacheDir)
+    public static function getLocalFileList($cacheDir)
     {
         $fileListing = glob($cacheDir.DIRECTORY_SEPARATOR.'*.xml');
 

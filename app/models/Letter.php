@@ -25,18 +25,18 @@
 class Letter extends Content
 {
 
-    var $pk_letter     = NULL;
-    var $author        = NULL;
-    var $body          = NULL;
+    public $pk_letter     = NULL;
+    public $author        = NULL;
+    public $body          = NULL;
 
     private static $instance    = NULL;
 
 
-    function __construct($id=null) {
-
+    public function __construct($id=null)
+    {
         parent::__construct($id);
 
-        if(is_numeric($id)) {
+        if (is_numeric($id)) {
             $this->read($id);
         }
 
@@ -44,9 +44,9 @@ class Letter extends Content
 
     }
 
-    function get_instance() {
-
-        if( is_null(self::$instance) ) {
+    public function get_instance()
+    {
+        if ( is_null(self::$instance) ) {
             self::$instance = new Letter();
 
             return self::$instance;
@@ -57,8 +57,8 @@ class Letter extends Content
         }
     }
 
-    public function __get($name) {
-
+    public function __get($name)
+    {
         switch ($name) {
             case 'uri': {
                 $uri =  Uri::generate('letter',
@@ -85,8 +85,8 @@ class Letter extends Content
         }
     }
 
-    function create($data) {
-
+    public function create($data)
+    {
         $data['content_status'] = $data['available'];
         $data['position']   =  1;
         $data['category'] = 0;
@@ -98,7 +98,7 @@ class Letter extends Content
 
         $values = array( $this->id, $data['author'], $data['email'], $data['body']);
 
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -109,7 +109,8 @@ class Letter extends Content
        return($this->id);
     }
 
-    function read($id) {
+    public function read($id)
+    {
         parent::read($id);
 
         $sql = "SELECT * FROM letters WHERE pk_letter = ? ";
@@ -128,7 +129,8 @@ class Letter extends Content
     }
 
 
-    function update($data) {
+    public function update($data)
+    {
         $data['content_status'] = $data['available'];
         $data['position']   =  1;
         $data['category'] = 0;
@@ -142,7 +144,7 @@ class Letter extends Content
 
         $values = array($data['author'],$data['email'],$data['body'],$data['id'] );
 
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -153,12 +155,12 @@ class Letter extends Content
         $GLOBALS['application']->dispatch('onAfterUpdateLetter', $this);
     }
 
-    function remove($id) { //Elimina definitivamente
+    public function remove($id) { //Elimina definitivamente
         parent::remove($id);
 
         $sql = 'DELETE FROM letters WHERE pk_letter ='.($id);
 
-        if($GLOBALS['application']->conn->Execute($sql)===false) {
+        if ($GLOBALS['application']->conn->Execute($sql)===false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -171,7 +173,7 @@ class Letter extends Content
      * Determines if the content of a comment has bad words
      *
      * @access public
-     * @param mixed $data, the data from the comment
+     * @param  mixed    $data, the data from the comment
      * @return integer, higher values means more bad words
      **/
     public function hasBadWorsComment($data)
@@ -188,8 +190,8 @@ class Letter extends Content
     }
 
 
-    function saveLetter($data) {
-
+    public function saveLetter($data)
+    {
         $_SESSION['username'] = $data['author'];
         $_SESSION['userid'] = 'user';
         $letter = new Letter();
@@ -197,13 +199,13 @@ class Letter extends Content
         // Prevent XSS attack
         $data = array_map('strip_tags', $data);
 
-        if($letter->hasBadWorsComment($data)) {
+        if ($letter->hasBadWorsComment($data)) {
             return "Su comentario fue rechazado debido al uso de palabras malsonantes.";
         }
 
         $ip = Application::getRealIP();
         $data["params"] = array('ip'=> $ip);
-        if($letter->create( $data ) ) {
+        if ($letter->create( $data ) ) {
             return "Su carta ha sido guardada y está pendiente de publicación.";
         }
 

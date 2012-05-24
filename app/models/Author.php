@@ -27,7 +27,7 @@ class Author
     public $cache    = null;
 
     // Static members for performance
-    static private $_photos   = null;
+    private static $_photos   = null;
 
     private $_defaultValues = array(
         'name'=>'',
@@ -315,11 +315,11 @@ class Author
     /**
      * Returns a list of all authors
      *
-     * @param string $filter,   the where sql part to filter authors by
-     * @param string $_orderBy, the ORDER BY sql part to sort authors with
+     * @param  string $filter,   the where sql part to filter authors by
+     * @param  string $_orderBy, the ORDER BY sql part to sort authors with
      * @return mixed, array of all matched authors
      **/
-    static public function list_authors($filter=NULL, $_orderBy='ORDER BY 1')
+    public static function list_authors($filter=NULL, $_orderBy='ORDER BY 1')
     {
 
         $items = array();
@@ -474,7 +474,7 @@ class Author
      *
      * @return int the number of photos
      **/
-    static public function count_author_photos($id)
+    public static function count_author_photos($id)
     {
         $sql = 'SELECT COUNT(*) FROM author_imgs WHERE fk_author = '.($id);
         $rs  = $GLOBALS['application']->conn->Execute($sql);

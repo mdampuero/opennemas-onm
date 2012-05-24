@@ -47,7 +47,7 @@ class ContentCategoryManager
         }
     }
 
-    static public function get_instance()
+    public static function get_instance()
     {
         if (is_null(self::$_instance)) {
             self::$_instance = new ContentCategoryManager();
@@ -122,7 +122,7 @@ class ContentCategoryManager
     */
     public function normalize($categoryName, $subcategoryName=null)
     {
-        if(!empty($subcategoryName)) {
+        if (!empty($subcategoryName)) {
             // It's a father category
             return array($categoryName, $subcategoryName);
         }
@@ -212,7 +212,7 @@ class ContentCategoryManager
     /**
      * Returns the position in menu
      *
-     * @param int $id Category ID
+     * @param  int $id Category ID
      * @return int Return posmenu
      */
     public function get_pos($id)
@@ -443,7 +443,7 @@ class ContentCategoryManager
     //with internal_name as index
     public function get_all_subcategories($id)
     {
-        if( is_null($this->categories) ) {
+        if ( is_null($this->categories) ) {
             $sql = 'SELECT name,title,internal_category '
                  . 'FROM content_categories WHERE internal_category<>0 '
                  .' AND inmenu=1 AND fk_content_category = ? ORDER BY posmenu';
@@ -490,7 +490,8 @@ class ContentCategoryManager
         // FIXME: create a lambda function once we upgrade to new version 5.3 of PHP
         if (!function_exists('__order_by_posmenu')) {
             // Ordenar
-            function __order_by_posmenu($a, $b) {
+            function __order_by_posmenu($a, $b)
+            {
                 //Las que no están en el menú colocarlas al final
                 if ($b->inmenu == 0) {
                     return 0;
@@ -518,7 +519,8 @@ class ContentCategoryManager
         // FIXME: create a lambda function once we upgrade to new version 5.3 of PHP
         if (!function_exists('__group_by_type')) {
             // Ordenar
-            function __group_by_type($a, $b) {
+            function __group_by_type($a, $b)
+            {
                 //Las que no están en el menú colocarlas al final
                 if ($b->internal_category == 0) {
                      return 0;
@@ -552,7 +554,7 @@ class ContentCategoryManager
         $categories = $this->order_by_posmenu($this->categories);
 
         // First loop categories
-        foreach($categories as $category) {
+        foreach ($categories as $category) {
             if ($category->fk_content_category == 0
                 && $category->internal_category != 0
             ) {
@@ -562,7 +564,7 @@ class ContentCategoryManager
         }
 
         // Loop on subcategories
-        foreach($categories as $category) {
+        foreach ($categories as $category) {
             if ($category->fk_content_category != 0
                 && $category->internal_category != 0
                 && isset($tree[$category->fk_content_category])
@@ -586,7 +588,7 @@ class ContentCategoryManager
         $categories = $this->getCategoriesTreeMenu();
         $i=0;
         $tree =array();
-         foreach($categories as $category) {
+         foreach ($categories as $category) {
             if ($category->fk_content_category == 0
                 && $category->internal_category != 0
                 && ($category->pk_content_category != 4)
@@ -595,8 +597,8 @@ class ContentCategoryManager
                 $tree[$i]->pk_content_category = $category->pk_content_category;
                 $tree[$i]->title = ' '. $category->title;
                 $i++;
-                if (!empty($category->childNodes)){ //subcategorys
-                    foreach($category->childNodes as $subcat){
+                if (!empty($category->childNodes)) { //subcategorys
+                    foreach ($category->childNodes as $subcat) {
                         $tree[$i] = new stdClass();
                         $tree[$i]->pk_content_category =
                             $subcat->pk_content_category;
@@ -624,7 +626,7 @@ class ContentCategoryManager
         $categories = $this->order_by_posmenu($this->categories);
 
         // First loop categories
-        foreach($categories as $category) {
+        foreach ($categories as $category) {
             $category->params = unserialize($category->params);
             if ($category->fk_content_category == 0
                 && $category->internal_category == 1
@@ -637,7 +639,7 @@ class ContentCategoryManager
 
         // Loop on subcategories
         foreach ($categories as $category) {
-            //if(($category->fk_content_category != 0) && ($category->internal_category == 1)) {
+            //if (($category->fk_content_category != 0) && ($category->internal_category == 1)) {
             if ($category->fk_content_category != 0
                 && $category->internal_category != 0
                 && isset($tree[$category->fk_content_category])
@@ -653,7 +655,7 @@ class ContentCategoryManager
     //Returns first subcategory from a father category_id
     public function get_first_subcategory($category_id)
     {
-        if( is_null($this->categories) ) {
+        if ( is_null($this->categories) ) {
             $sql = 'SELECT name FROM content_categories
                     WHERE inmenu=1 AND fk_content_category=?
                     AND internal_category<>0
@@ -687,7 +689,7 @@ class ContentCategoryManager
 
     public function get_father($category_name)
     {
-        if( is_null($this->categories) ) {
+        if ( is_null($this->categories) ) {
             $sql = 'SELECT content2.name '
                  . 'FROM `content_categories` as content1, '
                  . '`content_categories` as content2 '
@@ -960,7 +962,7 @@ class ContentCategoryManager
      *
      * @param int $category_id
      *
-     * @return array  childs categorys
+     * @return array childs categorys
      *
      * @throws <b>Exception</b> Explanation of exception.
      */
@@ -983,7 +985,7 @@ class ContentCategoryManager
     /**
      * Returns the category name of a Content throw ID
      *
-     * @param int $id Content ID
+     * @param  int $id Content ID
      * @return int Return category name
      */
     public function get_category_name_by_content_id($id)

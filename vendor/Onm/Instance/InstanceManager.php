@@ -63,7 +63,7 @@ class InstanceManager
      * @param string $serverName the domain name for one instance
      *
      * @return stdClass dummy object with properties for the loaded instance
-     * @return false  if the instance doesn't exists
+     * @return false    if the instance doesn't exists
      */
     public function load( $serverName )
     {
@@ -140,7 +140,7 @@ class InstanceManager
      *
      * @param $arg
      */
-    static public function getConnection($connectionData=null)
+    public static function getConnection($connectionData=null)
     {
         // Database
         global $onmInstancesConnection;
@@ -797,7 +797,7 @@ class InstanceManager
      * Get available templates
      *
      */
-    static public function getAvailableTemplates()
+    public static function getAvailableTemplates()
     {
         // Change this to get dinamically templates from folder
         foreach (glob(SITE_PATH.DS.'themes'.DS.'*') as $value ) {

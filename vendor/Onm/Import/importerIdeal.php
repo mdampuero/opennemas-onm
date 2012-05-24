@@ -24,9 +24,8 @@
 namespace Onm\Import;
 
 
-class importerIdeal {
-
-
+class importerIdeal
+{
     //TODO:mixer functions - separate in classes
    static public function importXML($XMLFile)
     {
@@ -36,7 +35,8 @@ class importerIdeal {
         return $s;
     }
 
-   static public function check_label($label){
+   static public function check_label($label)
+   {
         $relation = array(
                       "/Antetitulo/"=>"subtitle",
                       "/TextoGeneral/"=>"body",
@@ -51,16 +51,17 @@ class importerIdeal {
 
 
                        );
-        foreach($relation as $pattern=>$value) {
+        foreach ($relation as $pattern=>$value) {
 
-             if(preg_match($pattern, $label)) {
+             if (preg_match($pattern, $label)) {
                 return $value;
              }
         }
 
      }
 
-    static public function checkXMLData($docXML){
+    public static function checkXMLData($docXML)
+    {
         $data =array();
 
         $data['subtitle']="";
@@ -71,25 +72,25 @@ class importerIdeal {
         $data['body']="";
         $data['pk_author'] = $_SESSION['userid'];
 
-        foreach( $docXML as $nodeXML ) {
-            foreach( $nodeXML as $eleto ) {
-                if($eleto->getname()=='meta'){
-                            if($eleto->attributes()->name =='day'){
+        foreach ( $docXML as $nodeXML ) {
+            foreach ( $nodeXML as $eleto ) {
+                if ($eleto->getname()=='meta') {
+                            if ($eleto->attributes()->name =='day') {
                                 $day =$eleto->attributes()->content;
                             }
-                            if($eleto->attributes()->name =='month'){
+                            if ($eleto->attributes()->name =='month') {
                                 $month =$eleto->attributes()->content;
                             }
-                            if($eleto->attributes()->name =='year'){
+                            if ($eleto->attributes()->name =='year') {
                                 $year = $eleto->attributes()->content;
                             }
 
-                }else{
-                    foreach($eleto->attributes() as $a => $b) {
+                } else {
+                    foreach ($eleto->attributes() as $a => $b) {
 
                         if($a == 'class')  // Tiene los nombres en el atribute class
                          $field = self::check_label($b);
-                         if(!empty($field) && empty($data[$field])){
+                         if (!empty($field) && empty($data[$field])) {
                               //El primero que encuentra es con el que se queda
                              $data[$field] = '';
                              foreach ($eleto->p as $span) {
@@ -98,14 +99,14 @@ class importerIdeal {
                              }
                          }
                          // Algunos son nodos inferiores
-                         if(count($eleto->children())>0) {
-                             foreach($eleto->children() as $node) {
-                                 foreach($node->attributes() as $c=>$d){
+                         if (count($eleto->children())>0) {
+                             foreach ($eleto->children() as $node) {
+                                 foreach ($node->attributes() as $c=>$d) {
                                      $field = self::check_label($d);
-                                     if(!empty($field) && empty($data[$field])) {
-                                         if($field =='agency'){
+                                     if (!empty($field) && empty($data[$field])) {
+                                         if ($field =='agency') {
                                              $data[$field] = $node->children()->span[0] .  $node->children()->span[1] ;
-                                         }else{
+                                         } else {
                                          // $name=$node->getname();  probar a usar en vez de las etiquetas
                                             $data[$field] = $node->p->span ;
                                          }
@@ -142,8 +143,8 @@ class importerIdeal {
     }
 
 //De xornal pasar a string utils
-    static public function splitBodyInHtmlParagraph($body) {
-
+    public static function splitBodyInHtmlParagraph($body)
+    {
         $bodyiso = mb_convert_encoding ($body,"UTF-8","ISO-8859-1");
 
         $bodyisoArray = split("â©", $bodyiso );

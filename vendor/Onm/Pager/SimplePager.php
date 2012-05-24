@@ -32,7 +32,7 @@ class SimplePager
      *                      'items' elements for page,
      *                      and 'page' page number
      *
-     * @return string    the HTML for pagination
+     * @return string the HTML for pagination
      */
     public static function getPager($params = array())
     {

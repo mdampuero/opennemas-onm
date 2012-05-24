@@ -19,11 +19,11 @@
 class Rating
 {
 
-    var $pk_rating = null;
-    var $total_votes = null;
-    var $total_value = null;
-    var $ips_count_rating = null;
-    var $num_of_stars = 5;
+    public $pk_rating = null;
+    public $total_votes = null;
+    public $total_value = null;
+    public $ips_count_rating = null;
+    public $num_of_stars = 5;
 
     /**
      * Messages to use in links and image
@@ -238,9 +238,9 @@ class Rating
     /**
      * Prints the list of img elements representing the actual votes
      *
-     * @param dobule $actualVotes average of votes
-     * @param string $pageType    the kind of page this'll be rendered in
-     * @return  string elements imgs representing the actual votes
+     * @param  dobule $actualVotes average of votes
+     * @param  string $pageType    the kind of page this'll be rendered in
+     * @return string elements imgs representing the actual votes
      * @author  Fran Dieguez <fran@openhost.es>
      * @since   Mon Sep 13 2010 18:12:58 GMT+0200 (CEST)
      */
@@ -258,9 +258,9 @@ class Rating
     /**
      * Prints the list of elements links representing the actual votes
      *
-     * @param dobule $actualVotes average of votes
-     * @param string $pageType    the kind of page this'll be rendered in
-     * @return  string elements links representing the actual votes
+     * @param  dobule $actualVotes average of votes
+     * @param  string $pageType    the kind of page this'll be rendered in
+     * @return string elements links representing the actual votes
      * @author  Fran Dieguez <fran@openhost.es>
      * @since   Mon Sep 13 2010 18:12:58 GMT+0200 (CEST)
      */
@@ -280,9 +280,9 @@ class Rating
     /**
      * Get an integer and returns an string with the humanized num of votes
      *
-     * @param string $page num of votes
-     * @param string $type the type of
-     * @return  string description
+     * @param  string $page num of votes
+     * @param  string $type the type of
+     * @return string description
      * @author  Fran Dieguez <fran@openhost.es>
      * @since   Mon Sep 13 2010 18:12:58 GMT+0200 (CEST)
      */

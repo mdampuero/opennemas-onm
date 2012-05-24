@@ -13,8 +13,8 @@
  * @subpackage Model
  **/
 
-class Special extends Content {
-
+class Special extends Content
+{
     /**
      * the special id
      */
@@ -38,7 +38,8 @@ class Special extends Content {
      *
      * @param strin $id the id of the album.
      **/
-    function __construct($id=NULL) {
+    public function __construct($id=NULL)
+    {
        parent::__construct($id);
 
         if (!is_null($id)) {
@@ -118,11 +119,11 @@ class Special extends Content {
      *
      * @return bool true if the object was stored
      */
-    public function create($data) {
-
+    public function create($data)
+    {
         parent::create($data);
 
-        if(!array_key_exists('pdf_path', $data)) {
+        if (!array_key_exists('pdf_path', $data)) {
             $data['pdf_path']='';
         }
 
@@ -131,7 +132,7 @@ class Special extends Content {
 
         $values = array( $this->id,$data['subtitle'], $data['img1'],   $data['pdf_path']);
 
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -139,14 +140,15 @@ class Special extends Content {
             return(false);
         }
 
-        if(empty($data['pdf_path']) ) {
+        if (empty($data['pdf_path']) ) {
              $this->saveItems($data);
         }
 
         return $this->id;
     }
 
-    public function read($id) {
+    public function read($id)
+    {
         parent::read($id);
 
         $sql = 'SELECT * FROM specials WHERE pk_special = '.intval($id);
@@ -167,8 +169,9 @@ class Special extends Content {
 
     }
 
-    public function update($data) {
-        if(!array_key_exists('pdf_path', $data)) {
+    public function update($data)
+    {
+        if (!array_key_exists('pdf_path', $data)) {
             $data['pdf_path']='';
         }
         parent::update($data);
@@ -178,7 +181,7 @@ class Special extends Content {
                 "WHERE pk_special=".intval($data['id']);
         $values = array(  $data['subtitle'], $data['img1'],  $data['pdf_path'] );
 
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -186,7 +189,7 @@ class Special extends Content {
                return;
         }
 
-        if(empty($data['pdf_path']) ) {
+        if (empty($data['pdf_path']) ) {
             $this->saveItems($data);
         }
     }
@@ -199,7 +202,7 @@ class Special extends Content {
 
         $sql = 'DELETE FROM specials WHERE pk_special='.intval($id);
 
-        if($GLOBALS['application']->conn->Execute($sql)===false) {
+        if ($GLOBALS['application']->conn->Execute($sql)===false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -208,7 +211,7 @@ class Special extends Content {
         }
         $sql = 'DELETE FROM special_contents WHERE fk_special = ' .intval($id);
 
-        if($GLOBALS['application']->conn->Execute($sql)===false) {
+        if ($GLOBALS['application']->conn->Execute($sql)===false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -217,9 +220,10 @@ class Special extends Content {
         }
     }
 
-    public function saveItems($data) {
+    public function saveItems($data)
+    {
         $this->delete_all_contents($data['id'] );
-        if(isset($data['noticias_left'])) {
+        if (isset($data['noticias_left'])) {
             $tok = strtok($data['noticias_left'],",");
             $name="";
             $pos=1;
@@ -231,7 +235,7 @@ class Special extends Content {
                 $pos+=2;
             }
         }
-        if( isset($data['noticias_right'])){
+        if ( isset($data['noticias_right'])) {
             $tok = strtok($data['noticias_right'],",");
             $name="";
             $pos=2;
@@ -250,15 +254,16 @@ class Special extends Content {
 /**************************  special_contents ********************************/
 /****************************************************************************/
 
-    public function get_contents($id){
-        if($id == NULL) {
+    public function get_contents($id)
+    {
+        if ($id == NULL) {
             return(false);
         }
         $sql = 'SELECT * FROM `special_contents` WHERE fk_special = ' .intval($id).' ORDER BY position ASC';
         $rs = $GLOBALS['application']->conn->Execute($sql);
          $i=0;
         $items = array();
-        while(!$rs->EOF) {
+        while (!$rs->EOF) {
             $items[$i]['fk_content'] = $rs->fields['fk_content'];
             $items[$i]['name'] = $rs->fields['name'];
             $items[$i]['position'] = $rs->fields['position'];
@@ -274,8 +279,9 @@ class Special extends Content {
 
 
     //Define contenidos dentro de un modulo
-    public function set_contents($id,$pk_content, $position, $name,  $type_content) {
-        if($id == NULL) {
+    public function set_contents($id,$pk_content, $position, $name,  $type_content)
+    {
+        if ($id == NULL) {
             return(false);
         }
 
@@ -284,7 +290,7 @@ class Special extends Content {
                             " VALUES (?,?,?,?,?,?)";
         $values = array($id, $pk_content, $position, $name, $visible, $type_content);
 
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -295,14 +301,14 @@ class Special extends Content {
          return(true);
     }
 //Elimina contenidos dentro de un modulo
-   public function delete_contents($id,$id_content){
-
-        if($id == NULL) {
+   public function delete_contents($id,$id_content)
+   {
+        if ($id == NULL) {
             return(false);
         }
         $sql = 'DELETE FROM special_contents WHERE fk_content ='.intval($id_content).' AND fk_special = ' .intval($id);
 
-        if($GLOBALS['application']->conn->Execute($sql)===false) {
+        if ($GLOBALS['application']->conn->Execute($sql)===false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -311,14 +317,14 @@ class Special extends Content {
         }
     }
 
-    public function delete_all_contents($id){
-
-    if($id == NULL) {
+    public function delete_all_contents($id)
+    {
+    if ($id == NULL) {
             return(false);
         }
     $sql = 'DELETE FROM special_contents WHERE  fk_special = ' .intval($id);
 
-        if($GLOBALS['application']->conn->Execute($sql)===false) {
+        if ($GLOBALS['application']->conn->Execute($sql)===false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;

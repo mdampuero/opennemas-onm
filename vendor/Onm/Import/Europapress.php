@@ -20,7 +20,7 @@ class Europapress implements \Onm\Import\Importer
 {
 
     // the instance object
-    static private $instance = null;
+    private static $instance = null;
 
     // the configuration to access to the server
     private $defaultConfig = array('port' => 21);
@@ -37,9 +37,9 @@ class Europapress implements \Onm\Import\Importer
     /**
      * Ensures that we always get one single instance
      *
-     * @return  object      the unique instance object
+     * @return object the unique instance object
      */
-    static public function getInstance($config = array())
+    public static function getInstance($config = array())
     {
         if (!self::$instance instanceof self) {
             self::$instance = new self($config);
@@ -76,7 +76,7 @@ class Europapress implements \Onm\Import\Importer
     {
         if (!file_exists($this->syncPath)) {
             mkdir($this->syncPath);
-        } elseif(!file_exists($this->syncFilePath)) {
+        } elseif (!file_exists($this->syncFilePath)) {
 
             return touch($this->syncFilePath);
         }
@@ -140,7 +140,7 @@ class Europapress implements \Onm\Import\Importer
     /*
      * Creates a lock for avoid concurrent sync by multiple users
      *
-     * @return  void
+     * @return void
      */
     public function lockSync()
     {
@@ -229,7 +229,7 @@ class Europapress implements \Onm\Import\Importer
      *
      * @param array $params misc params that alteres function behaviour
      *
-     * @return integer  minutes from last synchronization of elements
+     * @return integer minutes from last synchronization of elements
      */
     public function minutesFromLastSync($params = array())
     {
@@ -313,7 +313,7 @@ class Europapress implements \Onm\Import\Importer
      *
      * @param $id
      *
-     * @return  DataSource\Europapress  the article object
+     * @return DataSource\Europapress the article object
      */
     public function findByID($id)
     {
@@ -329,7 +329,7 @@ class Europapress implements \Onm\Import\Importer
      *
      * @param $fileName
      *
-     * @return  DataSource\Europapress  the article object
+     * @return DataSource\Europapress the article object
      */
     public function findByFileName($id)
     {
@@ -345,7 +345,7 @@ class Europapress implements \Onm\Import\Importer
      *
      * @param array $params array of params to filter elements with
      *
-     * @return array    elements    stored
+     * @return array elements    stored
      */
     public function findAllBy($params = array())
     {
@@ -359,7 +359,7 @@ class Europapress implements \Onm\Import\Importer
      *
      * @return array the list of files
      */
-    static public function getLocalFileList($cacheDir)
+    public static function getLocalFileList($cacheDir)
     {
         $fileListing = glob($cacheDir.DIRECTORY_SEPARATOR.'*.xml');
 

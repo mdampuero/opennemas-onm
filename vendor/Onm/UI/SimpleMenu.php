@@ -84,7 +84,7 @@ class SimpleMenu
         return "<a href=\"$url\" $target $attrTitle $attrId>".$title."</a>";
     }
 
-    private  function _checkAcl($privilege)
+    private function _checkAcl($privilege)
     {
         if (isset($privilege) && !is_null($privilege)) {
             $privileges = explode(',', $privilege);
@@ -202,6 +202,7 @@ class SimpleMenu
                 $html.= "</li>";
             }
         }
+
         return $html;
     }
 
@@ -210,7 +211,7 @@ class SimpleMenu
      *
      * @param array $params the params for this function
      *
-     * @return string    the HTML for this menu
+     * @return string the HTML for this menu
      */
     public function getHTML($params = array())
     {

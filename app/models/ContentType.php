@@ -110,7 +110,7 @@ class ContentType
      *
      * @throw Exception if there was an error while fetching all the content types
      */
-    static public function getAllContentTypes()
+    public static function getAllContentTypes()
     {
         $fetchedFromAPC = false;
         if (extension_loaded('apc')) {
@@ -152,11 +152,11 @@ class ContentType
     /*
      * Find a content type id given the name of one content type.
      *
-     * @return int pk_content_type.
-     * @param string $name The name of a content type
+     * @return int    pk_content_type.
+     * @param  string $name The name of a content type
      * @throw Exception if there was an error while fetching all the content types
      */
-    static public function getIdContentType($name)
+    public static function getIdContentType($name)
     {
         $contenTypes = self::getContentTypes();
 
@@ -174,10 +174,10 @@ class ContentType
      * Get the content type object given the id of one content.
      *
      * @return int pk_content_type.
-     * @param int $id The id of a content
+     * @param  int $id The id of a content
      *
      */
-    static public function getContentTypeByContentId($id)
+    public static function getContentTypeByContentId($id)
     {
         $sql = 'SELECT fk_content_type FROM contents WHERE pk_content = ?';
         $rs = $GLOBALS['application']->conn->GetOne($sql,$id);

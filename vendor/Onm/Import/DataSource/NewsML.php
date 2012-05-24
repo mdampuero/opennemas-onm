@@ -29,12 +29,11 @@
 namespace Onm\Import\DataSource;
 use Onm\Settings as s;
 
-class NewsMLG1 {
-
-
+class NewsMLG1
+{
     private $data = null;
 
-    static private $priorityMap = array(
+    private static $priorityMap = array(
         '10'  => 4,
         '20' => 3,
         '25' => 2,
@@ -51,7 +50,7 @@ class NewsMLG1 {
     * @return object, the unique instance object
     * @author Fran Dieguez <fran@openhsot.es>
     **/
-    static public function getInstance($config)
+    public static function getInstance($config)
     {
 
         if ((!self::$instance instanceof self) or
@@ -68,14 +67,14 @@ class NewsMLG1 {
      * __construct()
      * @param $xmlFile, the XML file that contains information about an EP new
      */
-    public function __construct($xmlFile) {
-
+    public function __construct($xmlFile)
+    {
         $this->xmlFile = basename($xmlFile);
 
         $baseAgency = s::get('site_agency');
         $this->agencyName = $baseAgency.' | EFE';
 
-        if(file_exists($xmlFile)) {
+        if (file_exists($xmlFile)) {
             if (filesize($xmlFile) < 2) {
                 throw new \Exception(sprintf(_("File '%d' can't be loaded."), $xmlFile));
             }
@@ -212,7 +211,7 @@ class NewsMLG1 {
      *
      * @param $arg
      */
-    static public function getOriginalCategories()
+    public static function getOriginalCategories()
     {
         return array(
                     'ACE' => _('Society'),
@@ -247,7 +246,7 @@ class NewsMLG1 {
      *
      * @param $arg
      */
-    static public function matchCategoryName($categoryName)
+    public static function matchCategoryName($categoryName)
     {
 
         if (empty($categoryName)) {
@@ -270,7 +269,7 @@ class NewsMLG1 {
      *
      * @param $arg
      */
-    static public function getOriginalPriorities()
+    public static function getOriginalPriorities()
     {
         return array(
             '10'  => _('Flash'),
@@ -288,7 +287,7 @@ class NewsMLG1 {
      * Retrives a localized string for the priority from identifier
      *
      */
-    static public function matchPriority($priority)
+    public static function matchPriority($priority)
     {
         if (empty($priority)) {
             $priority = '30';

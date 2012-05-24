@@ -25,11 +25,12 @@ class Book extends Content
     public $books_path = NULL;
 
 
-    function __construct($id=null) {
+    public function __construct($id=null)
+    {
         parent::__construct($id);
 
         // Si existe idcontenido, entonces cargamos los datos correspondientes
-        if(!is_null($id)) {
+        if (!is_null($id)) {
             $this->read($id);
         }
 
@@ -68,8 +69,8 @@ class Book extends Content
         return parent::__get($name);
     }
 
-    public function create($data) {
-
+    public function create($data)
+    {
         parent::create($data);
 
         $sql = "INSERT INTO books (`pk_book`, `author`, `file`, `file_img`,`editorial`) " .
@@ -87,7 +88,7 @@ class Book extends Content
         $values = array($this->id, $data['author'],
                         $this->file_name, $this->file_img, $data['editorial']);
 
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
 
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
@@ -100,8 +101,8 @@ class Book extends Content
     }
 
 
-    public function read($id) {
-
+    public function read($id)
+    {
         parent::read($id);
 
         $sql = 'SELECT * FROM books WHERE pk_book = '.($id);
@@ -122,8 +123,8 @@ class Book extends Content
         $this->editorial = $rs->fields['editorial'];
     }
 
-    function update($data) {
-
+    public function update($data)
+    {
         $file_name = FilesManager::cleanFileName($_FILES['file']['name']);
         $file_img  = FilesManager::cleanFileName($_FILES['file_img']['name']);
 
@@ -136,7 +137,7 @@ class Book extends Content
 
         $values = array( $data['author'], $data['file_name'], $data['file_img'], $data['editorial']);
 
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -147,7 +148,8 @@ class Book extends Content
         return $this->id;
     }
 
-    function remove($id) {
+    public function remove($id)
+    {
         parent::remove($this->id);
 
         $sql = 'DELETE FROM books WHERE pk_book='.($this->id);
@@ -157,7 +159,7 @@ class Book extends Content
         @unlink($book_pdf);
         @unlink($book_image);
 
-        if($GLOBALS['application']->conn->Execute($sql)===false) {
+        if ($GLOBALS['application']->conn->Execute($sql)===false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -166,7 +168,8 @@ class Book extends Content
         }
     }
 
-    function createThumb() {
+    public function createThumb()
+    {
         $img_name   = basename($this->file_name, ".pdf") . '.jpg';
         $tmp_name   = '/tmp/' . basename($this->file_name, ".pdf") . '.png';
 
@@ -188,7 +191,7 @@ class Book extends Content
                 //remove temp image
                 unlink($tmp_name);
 
-            } catch(Exception $e) {
+            } catch (Exception $e) {
                 // Nothing
             }
 

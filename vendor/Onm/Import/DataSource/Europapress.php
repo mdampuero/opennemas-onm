@@ -19,7 +19,7 @@ class Europapress
 {
     private $_data = null;
 
-    static private $_priorityMap = array(
+    private static $_priorityMap = array(
         '10'  => 4,
         '20' => 3,
         '25' => 2,
@@ -36,7 +36,7 @@ class Europapress
     * @return object, the unique instance object
     * @author Fran Dieguez <fran@openhsot.es>
     **/
-    static public function getInstance($config)
+    public static function getInstance($config)
     {
         if ((!self::$instance instanceof self) or
             (count(array_diff($this->config, $config)) > 0)
@@ -202,7 +202,7 @@ class Europapress
      *
      * @param $arg
      */
-    static public function getOriginalCategories()
+    public static function getOriginalCategories()
     {
         return array(
             'ACE' => _('Society'),
@@ -237,7 +237,7 @@ class Europapress
      *
      * @param string $categoryName the category identifier
      */
-    static public function matchCategoryName($categoryName)
+    public static function matchCategoryName($categoryName)
     {
         if (empty($categoryName)) {
             throw new \ArgumentException();
@@ -258,7 +258,7 @@ class Europapress
      *
      * @param $arg
      */
-    static public function getOriginalPriorities()
+    public static function getOriginalPriorities()
     {
         return array(
             '10' => _('Flash'),
@@ -277,7 +277,7 @@ class Europapress
      *
      * @param string $priority the priority identifier
      */
-    static public function matchPriority($priority)
+    public static function matchPriority($priority)
     {
         if (empty($priority)) {
             $priority = '30';

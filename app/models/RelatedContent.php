@@ -282,7 +282,7 @@ class RelatedContent
         return $related;
     }
 
-    static public function get_content_relations($contentID)
+    public static function get_content_relations($contentID)
     {
         $related = array();
 
@@ -401,6 +401,7 @@ class RelatedContent
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return;
         }
     }
@@ -417,6 +418,7 @@ class RelatedContent
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return;
         }
 
@@ -427,6 +429,7 @@ class RelatedContent
         }
 
         $related = array_unique($related);
+
         return $related;
     }
 
@@ -463,8 +466,8 @@ class RelatedContent
         }
 
         /*
-        for ( $counter = 10; $counter <= 20; $counter++)	{
-            foreach($articles as $article) {
+        for ( $counter = 10; $counter <= 20; $counter++) {
+            foreach ($articles as $article) {
                 if (($article->category == $counter)
                     && ($article->content_status == 1)
                 ) {

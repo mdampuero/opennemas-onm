@@ -52,7 +52,7 @@ class Widget extends Content
      **/
     public function __get($name)
     {
-        switch($name) {
+        switch ($name) {
             case 'content_type_name':
                 return 'Widget';
                 break;
@@ -99,7 +99,7 @@ class Widget extends Content
     /**
      * Read, get a specific object
      *
-     * @param int $id Object ID
+     * @param  int    $id Object ID
      * @return Widget Return instance to chaining method
      */
     public function read($id)
@@ -123,7 +123,7 @@ class Widget extends Content
     /**
      * Read, get a specific object
      *
-     * @param int $id Object ID
+     * @param  int    $id Object ID
      * @return Widget Return instance to chaining method
      */
     public function readIntelligentFromName($content)
@@ -188,7 +188,7 @@ class Widget extends Content
     /**
      * Update
      *
-     * @param array $data Array values
+     * @param  array   $data Array values
      * @return boolean
      */
     public function update($data)
@@ -247,7 +247,7 @@ class Widget extends Content
         $path = realpath(TEMPLATE_USER_PATH . '/tpl' . '/widgets') . '/';
         $allWidgets = array();
 
-        if(is_dir($path)){
+        if (is_dir($path)) {
             $objects = scandir($path);
             foreach ($objects as $object) {
                 if ($object != "." && $object != "..") {
@@ -271,7 +271,7 @@ class Widget extends Content
     /**
      * Delete
      *
-     * @param int $id Identifier
+     * @param  int     $id Identifier
      * @return boolean
      */
     public function remove($id, $editor = null)

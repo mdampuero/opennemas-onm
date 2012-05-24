@@ -16,14 +16,14 @@
 class Opinion extends Content
 {
 
-    var $pk_opinion             = NULL;
-    var $fk_content_categories  = NULL;
-    var $fk_author              = NULL;
-    var $body                   = NULL;
-    var $author                 = NULL;
-    var $fk_author_img          = NULL;
-    var $with_comment           = NULL;
-    var $fk_author_img_widget   = NULL;
+    public $pk_opinion             = NULL;
+    public $fk_content_categories  = NULL;
+    public $fk_author              = NULL;
+    public $body                   = NULL;
+    public $author                 = NULL;
+    public $fk_author_img          = NULL;
+    public $with_comment           = NULL;
+    public $fk_author_img_widget   = NULL;
 
     private static $instance    = NULL;
 
@@ -32,11 +32,11 @@ class Opinion extends Content
      */
     private $authors_name       = NULL;
 
-    function __construct($id=null) {
-
+    public function __construct($id=null)
+    {
         parent::__construct($id);
 
-        if(is_numeric($id)) {
+        if (is_numeric($id)) {
             $this->read($id);
         }
 
@@ -44,9 +44,9 @@ class Opinion extends Content
 
     }
 
-    function get_instance() {
-
-        if( is_null(self::$instance) ) {
+    public function get_instance()
+    {
+        if ( is_null(self::$instance) ) {
             self::$instance = new Opinion();
 
             return self::$instance;
@@ -57,8 +57,8 @@ class Opinion extends Content
         }
     }
 
-    public function __get($name) {
-
+    public function __get($name)
+    {
         switch ($name) {
             case 'uri': {
 
@@ -106,11 +106,11 @@ class Opinion extends Content
         }
     }
 
-    function create($data) {
-
+    public function create($data)
+    {
         $data['content_status'] = $data['available'];
         $data['position']   =  1;
-        if(!isset($data['fk_author'])) {$data['fk_author'] = $data['type_opinion'];} // Editorial o director
+        if (!isset($data['fk_author'])) {$data['fk_author'] = $data['type_opinion'];} // Editorial o director
         (isset($data['fk_author_img'])) ? $data['fk_author_img'] : $data['fk_author_img'] = null ;
         (isset($data['fk_author_img_widget'])) ? $data['fk_author_img_widget'] : $data['fk_author_img_widget'] = null ;
 
@@ -120,7 +120,7 @@ class Opinion extends Content
 
         $values = array($this->id,  $data['fk_author'], $data['body'],$data['fk_author_img'],$data['with_comment'], $data['type_opinion'],$data['fk_author_img_widget']);
 
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -131,7 +131,8 @@ class Opinion extends Content
        return($this->id);
     }
 
-    function read($id) {
+    public function read($id)
+    {
         parent::read($id);
                   //Saca todos los datos de opinion, tiene que ser con left join por si no tiene autor (p.ej editorial) o foto.
         $sql = 'SELECT opinions.*, authors.name, authors.condition, authors.blog, authors.politics, author_imgs.path_img  FROM opinions '
@@ -165,7 +166,8 @@ class Opinion extends Content
   }
 
 /* Mejoras sql -- lee los datos del autor y la imagen todo en la misma consulta
-    function read($id) {
+    public function read($id)
+    {
         parent::read($id);
 
         $sql = 'SELECT * FROM opinions WHERE pk_opinion = '.($id);
@@ -190,28 +192,30 @@ class Opinion extends Content
      *
      * @return String Return name of author
      */
-    function get_author_name($fk_author) {
-        if( is_null( $this->authors_name ) ) {
+    public function get_author_name($fk_author)
+    {
+        if ( is_null( $this->authors_name ) ) {
             $sql = 'SELECT pk_author, name FROM `authors`';
             $rs = $GLOBALS['application']->conn->Execute( $sql );
 
-            while(!$rs->EOF) {
+            while (!$rs->EOF) {
                 $this->authors_name[ $rs->fields['pk_author'] ] = $rs->fields['name'];
 
                 $rs->MoveNext();
             }
         }
 
-        if( !isset($this->authors_name[ $fk_author ]) ) {
+        if ( !isset($this->authors_name[ $fk_author ]) ) {
             return('');
         }
 
         return( $this->authors_name[ $fk_author ] );
     }
 
-    function update($data) {
+    public function update($data)
+    {
         $data['content_status']= $data['available'];
-        if(!isset($data['fk_author'])) {$data['fk_author'] = $data['type_opinion'];} // Editorial o director
+        if (!isset($data['fk_author'])) {$data['fk_author'] = $data['type_opinion'];} // Editorial o director
         (isset($data['fk_author_img'])) ? $data['fk_author_img'] : $data['fk_author_img'] = null ;
         (isset($data['fk_author_img_widget'])) ? $data['fk_author_img_widget'] : $data['fk_author_img_widget'] = null ;
         parent::update($data);
@@ -220,7 +224,7 @@ class Opinion extends Content
 
         $values = array($data['fk_author'],$data['body'],$data['fk_author_img'],$data['with_comment'],$data['type_opinion'],$data['fk_author_img_widget'] );
 
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -231,12 +235,12 @@ class Opinion extends Content
         $GLOBALS['application']->dispatch('onAfterUpdateOpinion', $this);
     }
 
-    function remove($id) { //Elimina definitivamente
+    public function remove($id) { //Elimina definitivamente
         parent::remove($id);
 
         $sql = 'DELETE FROM opinions WHERE pk_opinion ='.($id);
 
-        if($GLOBALS['application']->conn->Execute($sql)===false) {
+        if ($GLOBALS['application']->conn->Execute($sql)===false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -245,8 +249,8 @@ class Opinion extends Content
         }
     }
 
-    function find_by_gender($gender) {
-
+    public function find_by_gender($gender)
+    {
        /* $sql = 'SELECT contents.title, opinions.pk_opinion, opinions.fk_author, opinions.fk_author_img, contents.pk_content, contents.permalink, authors.name, author_imgs.path_img FROM opinions, contents, authors, author_imgs' .
                 ' WHERE in_litter=0 AND content_status=1 AND authors.pk_author= opinions.fk_author AND  pk_opinion = pk_content AND opinions.fk_author_img=author_imgs.pk_img AND gender="'.$gender.'" ORDER BY created DESC';
       echo $sql;
@@ -256,7 +260,7 @@ class Opinion extends Content
         $rs = $GLOBALS['application']->conn->Execute($sql);
         $i = 0;
 
-        while(!$rs->EOF) {
+        while (!$rs->EOF) {
             $items[$i]->pk_opinion       = $rs->fields['pk_opinion'];
             $items[$i]->permalink       = $rs->fields['permalink'];
             $items[$i]->title			= $rs->fields['title'];
@@ -274,7 +278,8 @@ class Opinion extends Content
     }
 
     //Poner en una clase aparte
-    function get_opinion_algoritm() {
+    public function get_opinion_algoritm()
+    {
         $sql = 'SELECT `value` FROM settings `name`=`opinion_algoritm`';
         $rs = $GLOBALS['application']->conn->Execute( $sql );
 
@@ -289,9 +294,10 @@ class Opinion extends Content
        return $rs->fields['opinion_algoritm'];
     }
 
-    function set_opinion_algoritm($value) {
+    public function set_opinion_algoritm($value)
+    {
         $sql = "UPDATE settings SET `value`='".$value."' WHERE `name`=`opinion_algoritm`";
-        if($GLOBALS['application']->conn->Execute($sql)===false) {
+        if ($GLOBALS['application']->conn->Execute($sql)===false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -300,8 +306,9 @@ class Opinion extends Content
         }
     }
 
-    function count_inhome_type($type_opinion=NULL) {
-        if(($type_opinion==NULL) && ($this->type_opinion)){
+    public function count_inhome_type($type_opinion=NULL)
+    {
+        if (($type_opinion==NULL) && ($this->type_opinion)) {
             $type_opinion=$this->type_opinion;
         }
 
@@ -321,20 +328,21 @@ class Opinion extends Content
         return $rs->fields['count(pk_content)'];
     }
 
-    function onUpdateClearCacheOpinion() {
+    public function onUpdateClearCacheOpinion()
+    {
         $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
 
-        if(property_exists($this, 'pk_opinion')) {
+        if (property_exists($this, 'pk_opinion')) {
             $tplManager->delete('opinion|' . $this->pk_opinion);
             $tplManager->fetch(SITE_URL . $this->permalink);
-            if(isset($this->in_home) && $this->in_home) {
+            if (isset($this->in_home) && $this->in_home) {
                 $tplManager->delete('home|0');
             }
         }
     }
 
-    public function render() {
-
+    public function render()
+    {
         $tpl = new Template(TEMPLATE_USER);
 
         if ((int)$this->type_opinion == 1) {
@@ -361,7 +369,7 @@ class Opinion extends Content
     *
     * @return mixed, latest opinions sorted by creation time
     */
-    static public function getLatestAvailableOpinions($params = array())
+    public static function getLatestAvailableOpinions($params = array())
     {
 
         $contents = array();
@@ -380,7 +388,7 @@ class Opinion extends Content
         $category = (isset($_REQUEST['category'])) ? $ccm->get_id($_REQUEST['category']) :  0;
         $contentsSuggestedInFrontpage = $cm->getContentsForHomepageOfCategory($category);
         foreach ($contentsSuggestedInFrontpage as $content) {
-            if($content->content_type == 4) {
+            if ($content->content_type == 4) {
                 $excludedContents []= $content->id;
             }
         }
@@ -402,7 +410,7 @@ class Opinion extends Content
         foreach ($contents as $content) {
             $content->author = new Author($content->fk_author);
             $content->author->photo = $content->author->get_photo($content->fk_author_img);
-            if (isset($content->author->photo->path_img)){
+            if (isset($content->author->photo->path_img)) {
                 $content->photo = $content->author->photo->path_img;
             }
             $content->name = $content->author->name;
@@ -416,7 +424,7 @@ class Opinion extends Content
     *
     * @return mixed, all latest opinions sorted by creation time
     */
-    static public function getAllLatestOpinions($params = array())
+    public static function getAllLatestOpinions($params = array())
     {
 
         $contents = array();
@@ -441,7 +449,7 @@ class Opinion extends Content
             $content->author = new Author($content->fk_author);
             $content->author->photo =
                 $content->author->get_photo($content->fk_author_img);
-            if (isset($content->author->photo->path_img)){
+            if (isset($content->author->photo->path_img)) {
                 $content->photo = $content->author->photo->path_img;
             }
             $content->name = $content->author->name;
@@ -455,7 +463,7 @@ class Opinion extends Content
     *
     * @return mixed, all latest opinions sorted by creation time
     */
-    static public function getLatestOpinionsForAuthor($authorID, $params = array())
+    public static function getLatestOpinionsForAuthor($authorID, $params = array())
     {
 
         $contents = array();
@@ -485,7 +493,7 @@ class Opinion extends Content
             $content->author = $author;
             $content->author->photo =
                 $content->author->get_photo($content->fk_author_img);
-            if (isset($content->author->photo->path_img)){
+            if (isset($content->author->photo->path_img)) {
                 $content->photo = $content->author->photo->path_img;
             }
             $content->name = $content->author->name;

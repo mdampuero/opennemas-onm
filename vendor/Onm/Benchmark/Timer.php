@@ -30,18 +30,18 @@ namespace Onm\Benchmark;
 class Timer
 {
 
-    static public $instance = null;
+    public static $instance = null;
 
-    static public $markers = null;
+    public static $markers = null;
 
 
     /**
      * Ensures that we always get one single instance
      *
-     * @return  object      the unique instance object
+     * @return object the unique instance object
      *
      */
-    static public function getInstance($config = array())
+    public static function getInstance($config = array())
     {
 
         if (!(self::$instance instanceof self)) {

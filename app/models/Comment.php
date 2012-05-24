@@ -14,21 +14,21 @@
  **/
 class Comment extends \Content
 {
-    var $pk_comment = null;
-    var $author = null;
-    var $ciudad = null;
-    var $sexo = null;
-    var $email = null;
-    var $body = null;
-    var $ip = null;
-    var $published = null;
-    var $fk_content = null;
-    var $content_type = null;
+    public $pk_comment = null;
+    public $author = null;
+    public $ciudad = null;
+    public $sexo = null;
+    public $email = null;
+    public $body = null;
+    public $ip = null;
+    public $published = null;
+    public $fk_content = null;
+    public $content_type = null;
 
     /**
      * Initializes the comment object from a given id
      **/
-    function __construct($id = null)
+    public function __construct($id = null)
     {
         parent::__construct($id);
 
@@ -44,8 +44,8 @@ class Comment extends \Content
      * Create a new comment for a given id from content, data regardless the
      * comment, and the ip that issued that comment.
      *
-     * @param array $params the params to change function behaviour
-     * @return bool if it is true the comment was created, if it is false
+     * @param  array $params the params to change function behaviour
+     * @return bool  if it is true the comment was created, if it is false
      *              something went wrong
      **/
     public function create($params)
@@ -184,8 +184,8 @@ class Comment extends \Content
      * Return all the comments from a given content's id
      *
      * @access public
-     * @param integer $contentID
-     * @return mixed, array of comment's objects
+     * @param  integer $contentID
+     * @return mixed,  array of comment's objects
      **/
     public function get_comments($contentID)
     {
@@ -215,7 +215,7 @@ class Comment extends \Content
      * Determines if the content of a comment has bad words
      *
      * @access public
-     * @param mixed $data, the data from the comment
+     * @param  mixed    $data, the data from the comment
      * @return integer, higher values means more bad words
      **/
     public function hasBadWorsComment($data)
@@ -235,8 +235,8 @@ class Comment extends \Content
      * Gets the public comments from a given content's id.
      *
      * @access public
-     * @param integer $contentID
-     * @return mixed, array of comment's objects
+     * @param  integer $contentID
+     * @return mixed,  array of comment's objects
      **/
     public function get_public_comments($contentID)
     {
@@ -266,7 +266,7 @@ class Comment extends \Content
      * Gets the number of public comments
      *
      * @access public
-     * @param integer $contentID, the id of the content to get comments from
+     * @param  integer  $contentID, the id of the content to get comments from
      * @return integer, the number of public comments
      **/
     public function count_public_comments($contentID)

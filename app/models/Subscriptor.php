@@ -52,14 +52,14 @@ class Subscriptor
 
     public function __construct($id=null)
     {
-        if(!is_null($id)) {
+        if (!is_null($id)) {
             $this->read($id);
         }
     }
 
-    function get_instance() {
-
-        if( is_null(self::$instance) ) {
+    public function get_instance()
+    {
+        if ( is_null(self::$instance) ) {
             self::$instance = new Subscriptor();
 
             return self::$instance;
@@ -70,8 +70,8 @@ class Subscriptor
         }
     }
 
-    public function create($data) {
-
+    public function create($data)
+    {
         $data['status'] = (!isset($data['status']))? 0: $data['status'];
 
         // WARNING!!! By default, subscription=1
@@ -89,7 +89,7 @@ class Subscriptor
                          $data['name'], $data['firstname'],$data['lastname'],
                          $data['status'], $data['subscription'] );
 
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
 
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
@@ -103,7 +103,8 @@ class Subscriptor
         return true;
     }
 
-    public function read($id) {
+    public function read($id)
+    {
         $sql = 'SELECT * FROM ' . $this->_tableName . ' WHERE pk_pc_user = ?';
         $rs = $GLOBALS['application']->conn->Execute( $sql, array($id) );
 
@@ -119,24 +120,25 @@ class Subscriptor
     }
 
 
-    public function load($properties) {
-        if(is_array($properties)) {
-            foreach($properties as $k => $v) {
-                if( !is_numeric($k) ) {
+    public function load($properties)
+    {
+        if (is_array($properties)) {
+            foreach ($properties as $k => $v) {
+                if ( !is_numeric($k) ) {
                     $this->{$k} = $v;
                 }
             }
-        } elseif(is_object($properties)) {
+        } elseif (is_object($properties)) {
             $properties = get_object_vars($properties);
-            foreach($properties as $k => $v) {
-                if( !is_numeric($k) ) {
+            foreach ($properties as $k => $v) {
+                if ( !is_numeric($k) ) {
                     $this->{$k} = $v;
                 }
             }
         }
 
         // Special properties
-        if (isset ($this->pk_pc_user)){
+        if (isset ($this->pk_pc_user)) {
             $this->id = $this->pk_pc_user;
         } else {
             $this->id = null;
@@ -146,9 +148,9 @@ class Subscriptor
     /**
      *
     */
-    public function update($data, $isBackend=FALSE) {
-
-        if($isBackend) {
+    public function update($data, $isBackend=FALSE)
+    {
+        if ($isBackend) {
             $sql = 'UPDATE ' . $this->_tableName . ' SET `subscription`=?, `status`=?,'.
                     ' `email`=?, `name`=?, `firstname`=?, `lastname`=?  ';
         } else {
@@ -158,7 +160,7 @@ class Subscriptor
         $sql .= ' WHERE pk_pc_user=' . intval($data['id']);
 
         $data['subscription'] = (isset($data['subscription']))? $data['subscription']: 1;
-        if(!$isBackend) {
+        if (!$isBackend) {
             $values = array($data['subscription'],$data['status']);
         } else {
 
@@ -167,7 +169,7 @@ class Subscriptor
         }
         $this->id = $data['id'];
 
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -181,7 +183,8 @@ class Subscriptor
     /**
      * Recuperar un usuario por email
     */
-    public function getUserByEmail($email) {
+    public function getUserByEmail($email)
+    {
         $sql = 'SELECT * FROM ' . $this->_tableName . ' WHERE `email`=?';
         $rs  = $GLOBALS['application']->conn->Execute( $sql, array($email) );
 
@@ -203,20 +206,20 @@ class Subscriptor
     {
         $items = array();
         $_where = '1=1';
-        if( !is_null($filter) ) {
+        if ( !is_null($filter) ) {
             $_where = $filter;
         }
 
         $sql = 'SELECT * FROM ' . $this->_tableName . ' WHERE ' . $_where;
         $sql .= ' ORDER BY ' . $_order_by;
 
-        if(!is_null($limit)) {
+        if (!is_null($limit)) {
             $sql .= ' LIMIT ' . $limit;
         }
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
-        if($rs !== false) {
-            while(!$rs->EOF) {
+        if ($rs !== false) {
+            while (!$rs->EOF) {
                 $user = new Subscriptor();
                 $user->load($rs->fields);
                 $items[] = $user;
@@ -230,10 +233,11 @@ class Subscriptor
         return $items;
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $sql = 'DELETE FROM ' . $this->_tableName . ' WHERE pk_pc_user='.intval($id);
 
-        if($GLOBALS['application']->conn->Execute($sql)===false) {
+        if ($GLOBALS['application']->conn->Execute($sql)===false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -242,10 +246,11 @@ class Subscriptor
         }
     }
 
-    public function set_status($id, $status) {
+    public function set_status($id, $status)
+    {
         $sql = 'UPDATE ' . $this->_tableName . ' SET `status`='.$status.' WHERE pk_pc_user='.intval($id);
 
-        if($GLOBALS['application']->conn->Execute($sql)===false) {
+        if ($GLOBALS['application']->conn->Execute($sql)===false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -255,7 +260,8 @@ class Subscriptor
     }
 
 
-    public function exists_email( $email ) {
+    public function exists_email( $email )
+    {
        $sql = 'SELECT count(*) AS num FROM `pc_users` WHERE email = "'.$email.'"';
        $rs = $GLOBALS['application']->conn->Execute( $sql );
 
@@ -281,11 +287,11 @@ class Subscriptor
     public function mUpdateProperty($id, $property, $value=null)
     {
         $sql = 'UPDATE ' . $this->_tableName . ' SET `' . $property . '`=? WHERE pk_pc_user=?';
-        if(!is_array($id)) {
+        if (!is_array($id)) {
             $rs = $GLOBALS['application']->conn->Execute($sql, array($value, $id));
         } else {
             $data = array();
-            foreach($id as $item) {
+            foreach ($id as $item) {
                 $data[] = array($item['value'], $item['id']);
             }
 
@@ -304,22 +310,24 @@ class Subscriptor
     }
 
 
-    public function countUsers($where=null) {
+    public function countUsers($where=null)
+    {
         $sql = 'SELECT count(*) FROM ' . $this->_tableName;
-        if(!is_null($where)) {
+        if (!is_null($where)) {
             $sql .= ' WHERE ' . $where;
         }
 
         $rs = $GLOBALS['application']->conn->GetOne($sql);
-        if($rs === false) {
+        if ($rs === false) {
             return 0;
         }
 
         return $rs;
     }
 
-    public function getPager($items_page=40, $total=null) {
-        if(is_null($total)) {
+    public function getPager($items_page=40, $total=null)
+    {
+        if (is_null($total)) {
             $total = $this->countUsers();
         }
 

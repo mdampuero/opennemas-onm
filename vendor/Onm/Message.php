@@ -33,7 +33,7 @@ class Message
      * Initializes the message save handler
      *
      */
-    static public function initMessageHandler()
+    public static function initMessageHandler()
     {
         if (!isset($_SESSION)) {
             session_start();
@@ -64,7 +64,7 @@ class Message
      *  For render all the messages in the template you must include
      *  {render_messages} smarty function.
      */
-    static public function add($message = null, $priority = self::NOTICE)
+    public static function add($message = null, $priority = self::NOTICE)
     {
         self::initMessageHandler();
         if (is_array($message)) {
@@ -82,7 +82,7 @@ class Message
      *
      * @param $priority the priority for gettings the settings
      */
-    static public function getAll($priority = null)
+    public static function getAll($priority = null)
     {
 
         self::initMessageHandler();
@@ -108,7 +108,7 @@ class Message
      *
      * @param $priority
      */
-    static public function getHTMLforAll($priority = null)
+    public static function getHTMLforAll($priority = null)
     {
         $notices = self::getAll(self::NOTICE);
         $errors  = self::getAll(self::ERROR);
@@ -151,7 +151,7 @@ class Message
     /**
      * Cleans messages save handler
      */
-    static public function clean()
+    public static function clean()
     {
         if (isset($_SESSION)) {
             unset($_SESSION['messages']);

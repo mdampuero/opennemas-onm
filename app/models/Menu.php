@@ -104,7 +104,7 @@ class Menu
 
     public function update($data)
     {
-     if(!isset($data['pk_father']) && empty($data['pk_father']))  {
+     if (!isset($data['pk_father']) && empty($data['pk_father'])) {
          $data['pk_father'] = $this->pk_father;
      }
         $sql = "UPDATE menues"
@@ -125,7 +125,7 @@ class Menu
         }
         $config = array('pk_father'=> $data['pk_father']);
 
-        if(!empty($data['forDelete'])){
+        if (!empty($data['forDelete'])) {
             $forDelete = explode(', ', $data['forDelete']);
 
             array_shift($forDelete); //first is empty FIXME
@@ -180,7 +180,7 @@ class Menu
      * @return array with categories order by positions
      */
 
-    static public function getMenu($name)
+    public static function getMenu($name)
     {
         $sql =  "SELECT pk_menu, site, params, type, pk_father"
                 ." FROM menues WHERE name=?";
@@ -217,7 +217,7 @@ class Menu
      *
      * @return bool if update ok true
      */
-    static public function setMenu($menu, $paramsConfig = array())
+    public static function setMenu($menu, $paramsConfig = array())
     {
         return;
     }
@@ -229,7 +229,7 @@ class Menu
      *
      * @return bool if update ok true
      */
-    static public function listMenues($paramsConfig = 1)
+    public static function listMenues($paramsConfig = 1)
     {
         $sql =  "SELECT pk_menu, name, site, params, type, pk_father"
                 ." FROM menues WHERE {$paramsConfig}";
@@ -267,7 +267,7 @@ class Menu
     }
 
 
-    static public function renderMenu($name)
+    public static function renderMenu($name)
     {
 
         $menu = self::getMenu($name);

@@ -14,19 +14,19 @@
  **/
 class ContentCategory
 {
-    var $pk_content_category = NULL;
-    var $fk_content_category = NULL;
-    var $img_path = NULL;
-    var $color = NULL;
-    var $name = NULL; //nombre carpeta
+    public $pk_content_category = NULL;
+    public $fk_content_category = NULL;
+    public $img_path = NULL;
+    public $color = NULL;
+    public $name = NULL; //nombre carpeta
 
-    var $title = NULL; //titulo seccion
+    public $title = NULL; //titulo seccion
 
-    var $inmenu = NULL; // Flag Ver en el menu.
+    public $inmenu = NULL; // Flag Ver en el menu.
 
-    var $posmenu = NULL;
-    var $internal_category = NULL; // flag asignar a un tipo de contenido.
-    var $params = null;
+    public $posmenu = NULL;
+    public $internal_category = NULL; // flag asignar a un tipo de contenido.
+    public $params = null;
 
     /* $internal_category = 0 categoria es interna (para usar ventajas funciones class ContentCategory) no se muestra en el menu.
 
@@ -121,7 +121,7 @@ class ContentCategory
     {
         $this->read($data['id']); //Para comprobar si cambio el nombre carpeta
         //No se puede cambiar el nombre de las url's
-      /*  if($data['title'] != $this->title) {
+      /*  if ($data['title'] != $this->title) {
             $data['name'] = StringUtils::normalize_name($data['title']);
         } else {
             $data['name'] =$this->name;

@@ -27,7 +27,7 @@ class Video extends Content
     /**
      * Initializes the Video object
      **/
-    function __construct($id = null)
+    public function __construct($id = null)
     {
         parent::__construct($id);
         if (!is_null($id)) {
@@ -318,7 +318,7 @@ class Video extends Content
      * @param $flvPath, $sizes
      */
 
-    static public function createThumbnailsfromFLV($flvPath, $sizes = array())
+    public static function createThumbnailsfromFLV($flvPath, $sizes = array())
     {
         $defaultThumbnailSizes = array(
             'small'  =>  array( 'width' => 150, 'height' => 150 ),
@@ -361,7 +361,7 @@ class Video extends Content
                     $frame = $movie->getFrame($thumbnailFrameNumber);
                     $valid = gettype($frame);
                     $thumbnailFrameNumber++;
-                } while(gettype($frame) != 'object');
+                } while (gettype($frame) != 'object');
             }
 
             // Convert to a GD image

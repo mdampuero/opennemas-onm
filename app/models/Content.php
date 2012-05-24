@@ -574,7 +574,7 @@ class Content
             $state = 'trashed';
         } elseif ($this->available == 0) {
             $state = 'draft';
-        } elseif($this->content_status == 1 && $this->available == 1) {
+        } elseif ($this->content_status == 1 && $this->available == 1) {
             $state = 'available';
         }
 
@@ -808,7 +808,7 @@ class Content
     // FIXME:  move to ContentCategory class
     public function loadCategoryName($pk_content)
     {
-        if(!empty($this->category_name)) {
+        if (!empty($this->category_name)) {
             return $this->category_name;
         } else {
             $ccm = ContentCategoryManager::get_instance();
@@ -896,9 +896,9 @@ class Content
         if ($this->isScheduled()) {
             if ($this->isInTime()) {
                 return 'in-time';
-            } elseif($this->isDued()) {
+            } elseif ($this->isDued()) {
                 return 'dued';
-            } elseif($this->isPostponed()) {
+            } elseif ($this->isPostponed()) {
                 return 'postponed';
             }
         } else {
@@ -957,7 +957,7 @@ class Content
      *
      * @return boolean
      **/
-    static public function isInTime2($starttime=null, $endtime=null, $time=null)
+    public static function isInTime2($starttime=null, $endtime=null, $time=null)
     {
 
         $start = strtotime($starttime);
@@ -1186,7 +1186,7 @@ class Content
      *
      * @throw Exception if there was an error while fetching all the content types
      */
-    static public function getContentTypes()
+    public static function getContentTypes()
     {
         $fetchedFromAPC = false;
         if (extension_loaded('apc')) {
@@ -1232,7 +1232,7 @@ class Content
      *
      * @throw Exception if there was an error while fetching all the content types
      */
-    static public function getIdContentType($name)
+    public static function getIdContentType($name)
     {
         $contenTypes = self::getContentTypes();
 
@@ -1246,7 +1246,7 @@ class Content
     }
 
 
-    static public function setNumViews($id=null)
+    public static function setNumViews($id=null)
     {
 
         if (!array_key_exists('HTTP_USER_AGENT', $_SERVER)
@@ -1348,7 +1348,7 @@ class Content
     /**
      * Abstract factory method getter
      *
-     * @param string $pk_content Content identifier
+     * @param  string $pk_content Content identifier
      * @return object Instance of an specific object in function of content type
     */
     public static function get($pk_content)
@@ -1363,7 +1363,7 @@ class Content
         $type = ucfirst( $type );
         try {
             return new $type($pk_content);
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             return null;
         }
     }
@@ -1420,7 +1420,7 @@ class Content
      *
      * @return string Explanation for which elements were deleted
      **/
-    static public function refreshFrontpageForAllCategories()
+    public static function refreshFrontpageForAllCategories()
     {
         $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
 
@@ -1622,7 +1622,7 @@ class Content
         $sql        ="SELECT pk_content FROM `refactor_ids` WHERE pk_content_old = ?";
         $value      = array($oldID);
         $refactorID = $GLOBALS['application']->conn->GetOne($sql,$value);
-        if(!empty($refactorID)) {
+        if (!empty($refactorID)) {
             $content = new Content($refactorID);
             $content = $content->get($refactorID);
             Application::forward301('/'.$content->uri);
@@ -1640,9 +1640,9 @@ class Content
      * @return int id in table content or forward to 404
      *
      */
-    public static function resolveID($dirtyID) {
-
-        if (!empty($dirtyID)){
+    public static function resolveID($dirtyID)
+    {
+        if (!empty($dirtyID)) {
 
             if (preg_match('@tribuna@',INSTANCE_UNIQUE_NAME) || preg_match('@retrincos@',INSTANCE_UNIQUE_NAME) ) {
             //if (INSTANCE_UNIQUE_NAME == 'nuevatribuna' || INSTANCE_UNIQUE_NAME == 'retrincos' ) {
@@ -1670,10 +1670,10 @@ class Content
     /**
      * Search contents by its urn
      *
-     * @param array/string $urns one urn string or one array of urn strings
-     * @return array the array of contents
+     * @param  array/string $urns one urn string or one array of urn strings
+     * @return array        the array of contents
      **/
-    static public function findByUrn($urns)
+    public static function findByUrn($urns)
     {
         if (is_array($urns)) {
             $sqlUrns = '';

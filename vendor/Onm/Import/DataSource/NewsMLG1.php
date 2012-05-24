@@ -23,7 +23,7 @@ class NewsMLG1
     *
     * @return object, the unique instance object
     **/
-    static public function getInstance($config)
+    public static function getInstance($config)
     {
 
         if ((!self::$instance instanceof self) or
@@ -313,7 +313,7 @@ class NewsMLG1
      *
      * @return array
      **/
-    static public function getOriginalCategories()
+    public static function getOriginalCategories()
     {
         return array();
     }

@@ -25,22 +25,22 @@ use Onm\Message as m;
  */
 class Attachment extends Content
 {
-    var $pk_attachment   = null;
-    var $title           = null;
-    var $path            = null;
+    public $pk_attachment   = null;
+    public $title           = null;
+    public $path            = null;
 
-    var $file_path       = null;
+    public $file_path       = null;
     /**
      * category Id
     */
-    var $category        = null;
+    public $category        = null;
 
     /**
      * category name text
     */
     // var $category_name   = null;
 
-    var $cache = null;
+    public $cache = null;
 
     /*  var $categories_name = array(); // el índice será el id de categoría para recuperar el name o title
                                       //array( 10 => array('name' => 'galicia', 'title' => 'Galicia') )
@@ -131,7 +131,7 @@ class Attachment extends Content
             }
         }
 
-        if ($data['category']==8){
+        if ($data['category']==8) {
             $GLOBALS['application']->dispatch('onAfterCreateAttach', $this, array('category'=>$data['category']));
         }
 
@@ -141,8 +141,8 @@ class Attachment extends Content
     /**
      * Check if a attachment exists yet
      *
-     * @param string $path
-     * @param string $category
+     * @param  string  $path
+     * @param  string  $category
      * @return boolean
     */
     public function exists($path, $category)
@@ -267,7 +267,7 @@ class Attachment extends Content
             return;
         }
 
-        while(!$rs->EOF) {
+        while (!$rs->EOF) {
             $att[] = array(
                     'id'    => $rs->fields['pk_attachment'],
                     'title' => $rs->fields['title'],
@@ -331,7 +331,7 @@ class Attachment extends Content
                         // finally, save to jpg (/tmp/xxx.png => *.jpg) to avoid problems with the image
                         $imagick = new Imagick($tmp_name);
                         $imagick->writeImage($media_path . '/' . $img_name);
-                    } catch(Exception $e) {
+                    } catch (Exception $e) {
                         // Nothing
                     }
                 }

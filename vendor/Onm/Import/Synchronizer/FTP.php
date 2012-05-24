@@ -156,7 +156,7 @@ class FTP
      *
      * @return boolean, true if all went well
     */
-    static public function cleanFiles($cacheDir, $serverFiles, $localFileList, $maxAge)
+    public static function cleanFiles($cacheDir, $serverFiles, $localFileList, $maxAge)
     {
         $deletedFiles = 0;
 
@@ -224,8 +224,8 @@ class FTP
 
     /**
      * Converts a byte based file size to a human readable string
-     * @param integer $bytes the amount of bytes of the file
-     * @return string        the human readable file size
+     * @param  integer $bytes the amount of bytes of the file
+     * @return string  the human readable file size
      */
     protected function _byteconvert($bytes)
     {
@@ -238,8 +238,8 @@ class FTP
 
     /**
      * Converts an chmod string to a numeric based file permissions
-     * @param string $chmod the chmod string-based file perms
-     * @return integer        the numeric based file permissions
+     * @param  string  $chmod the chmod string-based file perms
+     * @return integer the numeric based file permissions
      */
     protected function _chmodnum($chmod)
     {
@@ -255,8 +255,8 @@ class FTP
     /**
      * Filters files by its creation
      *
-     * @param array $files  the list of files for filtering
-     * @param int   $maxAge timestamp of the max age allowed for files
+     * @param  array $files  the list of files for filtering
+     * @param  int   $maxAge timestamp of the max age allowed for files
      * @return array the list of files without those with age > $magAge
      **/
     protected function _filterOldFiles($files, $maxAge)

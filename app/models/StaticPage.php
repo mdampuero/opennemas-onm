@@ -93,7 +93,7 @@ class StaticPage extends Content
     /**
      * Read, get a specific object
      *
-     * @param int $id Object ID
+     * @param  int    $id Object ID
      * @return Static Return instance to chaining method
      */
     public function read($id)
@@ -146,7 +146,7 @@ class StaticPage extends Content
     /**
      * Update
      *
-     * @param array $data Array values
+     * @param  array   $data Array values
      * @return boolean
      */
     public function update($data)
@@ -191,7 +191,7 @@ class StaticPage extends Content
      * Delete static page
      *
      * @see Content::remove()
-     * @param int $id Identifier
+     * @param  int     $id Identifier
      * @return boolean
      */
     public function remove($id, $lastEditor = '')
@@ -237,7 +237,7 @@ class StaticPage extends Content
     /**
      *
      */
-    static public function getPageBySlug($slug)
+    public static function getPageBySlug($slug)
     {
 
         $slug = preg_replace('/\*%_\?/', '', $slug);
