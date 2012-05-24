@@ -13,7 +13,7 @@ switch ($action) {
         // Banner Id
         $id = $request->query->filter('id', null , FILTER_SANITIZE_STRING);
 
-        if(isset($id)) {
+        if (isset($id)) {
             $advertisement = new Advertisement();
             /* $banner = $advertisement->cache->read($id); */
             $advertisement->setNumClics($id);

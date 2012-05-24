@@ -16,9 +16,8 @@ if (!(isset($contentID))) { $contentID = null; }
 /**
  * Helper function to check existance one element in translation_ids table
  */
-function getOriginalIDForContentTypeAndID( $content_type, $content_id) {
-
-
+function getOriginalIDForContentTypeAndID( $content_type, $content_id)
+{
     $sql = 'SELECT * FROM `translation_ids` WHERE `pk_content_old`=? AND type=? LIMIT 1';
 
     $_values = array($content_id, $content_type);
@@ -45,9 +44,8 @@ function getOriginalIDForContentTypeAndID( $content_type, $content_id) {
 
 }
 
-function getOriginalIdAndContentTypeFromID( $content_id) {
-
-
+function getOriginalIdAndContentTypeFromID( $content_id)
+{
     $sql = 'SELECT * FROM `translation_ids` WHERE `pk_content_old`=? LIMIT 1';
 
     $_values = $content_id;
@@ -142,7 +140,7 @@ if (!is_null($contentID)) {
     $url = SITE_URL;
 }
 
-if(isset($_REQUEST['stop_redirect'])) { echo $url; die(); }
+if (isset($_REQUEST['stop_redirect'])) { echo $url; die(); }
 
 Header( "HTTP/1.1 301 Moved Permanently" );
 Header( "Location: $url" );

@@ -10,7 +10,7 @@ require_once('../admin/session_bootstrap.php');
 /**
  * Check admin session
  */
-if(!isset($_SESSION['userid']) || empty($_SESSION['userid'])) {
+if (!isset($_SESSION['userid']) || empty($_SESSION['userid'])) {
     Application::forward('/'); // Send to home page
 }
 
@@ -40,9 +40,9 @@ list($category_name, $subcategory_name) = $ccm->normalize($category_name, $subca
  **/
 $action = $request->query->filter('action', null, FILTER_SANITIZE_STRING);
 
-if( !empty($action) ) {
+if ( !empty($action) ) {
 
-    switch($action) {
+    switch ($action) {
         case 'article': {
             // Load config
             $tpl->setConfig('articles');
@@ -52,9 +52,9 @@ if( !empty($action) ) {
             require_once('article_advertisement.php');
 
             // Check if is a subcategory and set actual_category
-            if(isset($subcategory_name) && !empty($category_name)){
+            if (isset($subcategory_name) && !empty($category_name)) {
                 $actual_category = $subcategory_name;
-            }else{
+            } else {
                 $actual_category =$category_name;
             }
 
@@ -87,13 +87,13 @@ if( !empty($action) ) {
             {
                 $videoInt = new Video($article->fk_video2);
                 $tpl->assign('videoInt', $videoInt);
-            }else{
+            } else {
                 $video =
                     $cm->find_by_category_name('Video',
                                                 $actual_category,
                                                 'contents.content_status=1',
                                                 'ORDER BY created DESC LIMIT 0 , 1');
-                if(isset($video[0])){ $tpl->assign('videoInt', $video[0]); }
+                if (isset($video[0])) { $tpl->assign('videoInt', $video[0]); }
             }
 
             /**
@@ -108,7 +108,7 @@ if( !empty($action) ) {
             $relat = $cm->cache->getAvailable($relat);
 
             //Nombre categoria correcto.
-            foreach($relat as $ril) {
+            foreach ($relat as $ril) {
                 $ril->category_name = $ccm->get_category_name_by_content_id($ril->id);
             }
             $tpl->assign('relationed', $relat);
@@ -136,7 +136,7 @@ if( !empty($action) ) {
             $vars = get_class_vars('Article');
 
             foreach ($vars as $key => $value) {
-                if( isset($articleNewValues[$key]) && !empty($articleNewValues[$key])) {
+                if ( isset($articleNewValues[$key]) && !empty($articleNewValues[$key])) {
                     $article->$key = $articleNewValues[$key];
                 }
             }
@@ -152,9 +152,9 @@ if( !empty($action) ) {
 
             $tpl->assign('category_name', $category_name);
 
-            if(isset($subcategory_name) && !empty($category_name)){
+            if (isset($subcategory_name) && !empty($category_name)) {
                 $actual_category = $subcategory_name;
-            }else{
+            } else {
                 $actual_category =$category_name;
             }
             $actual_category_id = $ccm->get_id($actual_category);
@@ -175,13 +175,13 @@ if( !empty($action) ) {
             {
                 $videoInt = new Video($article->fk_video2);
                 $tpl->assign('videoInt', $videoInt);
-            }else{
+            } else {
                 $video =
                     $cm->find_by_category_name('Video',
                                                 $actual_category,
                                                 'contents.content_status=1',
                                                 'ORDER BY created DESC LIMIT 0 , 1');
-                if(isset($video[0])){ $tpl->assign('videoInt', $video[0]); }
+                if (isset($video[0])) { $tpl->assign('videoInt', $video[0]); }
             }
 
             /**************** PHOTOs ****************/
@@ -201,7 +201,7 @@ if( !empty($action) ) {
 
 
             //Nombre categoria correcto.
-            foreach($relat as $ril) {
+            foreach ($relat as $ril) {
                 $ril->category_name = $ccm->get_category_name_by_content_id($ril->id);
             }
             $tpl->assign('relationed', $relat);

@@ -27,7 +27,7 @@ $category_name = $request->query->filter('category_name', 'home', FILTER_SANITIZ
 $subcategory_name = null;
 $action = $request->query->filter('action', 'frontpage', FILTER_SANITIZE_STRING);
 
-if(!empty($category_name)) {
+if (!empty($category_name)) {
     $category = $ccm->get_id($category_name);
     $actual_category_id = $category; // FOR WIDGETS
     $category_real_name = $ccm->get_title($category_name); //used in title
@@ -61,15 +61,15 @@ if (!is_null($action) ) {
         case 'frontpage':
             $page = $request->query->filter('page', 0, FILTER_VALIDATE_INT);
 
-			//Setup caching system
-			$tpl->setConfig('gallery-frontpage');
-			$cacheID = $tpl->generateCacheId($category_name, '', $page);
+            //Setup caching system
+            $tpl->setConfig('gallery-frontpage');
+            $cacheID = $tpl->generateCacheId($category_name, '', $page);
 
-			/**
-			 * Don't execute the action logic if was cached before
-			 */
+            /**
+             * Don't execute the action logic if was cached before
+             */
             if ( ($tpl->caching == 0)
-			   || (!$tpl->isCached('gallery/gallery-frontpage.tpl', $cacheID)) ) {
+               || (!$tpl->isCached('gallery/gallery-frontpage.tpl', $cacheID)) ) {
 
                 $albumSettings = s::get('album_settings');
                 $total = isset($albumSettings['total_front'])?$albumSettings['total_front']:2;
@@ -84,13 +84,13 @@ if (!is_null($action) ) {
                         'ORDER BY  created DESC LIMIT 2'
                     );
                 } else {
-                    if($order == 'favorite') {
+                    if ($order == 'favorite') {
                         $albums = $cm->find(
                             'Album',
                             'fk_content_type=7 AND available=1 ',
                             ' ORDER BY favorite DESC,  created DESC LIMIT '.$total
                         );
-                    }else {
+                    } else {
                         $albums = $cm->find(
                             'Album',
                             'fk_content_type=7 AND available=1 AND '.
@@ -105,13 +105,13 @@ if (!is_null($action) ) {
                     $album->cover       = $album->cover_image->path_file.$album->cover_image->name;
                 }
 
-				$tpl->assign('albums', $albums);
+                $tpl->assign('albums', $albums);
 
-			}
+            }
 
             require_once ("album_front_ads.php");
 
-			// Send the response to the user
+            // Send the response to the user
             $tpl->display('album/album_frontpage.tpl',$cacheID);
 
         break;
@@ -121,57 +121,57 @@ if (!is_null($action) ) {
             $dirtyID = $request->query->filter('album_id', null, FILTER_SANITIZE_STRING);
 
             $albumID = Content::resolveID($dirtyID);
-			/**
-			 * Redirect to album frontpage if id_album wasn't provided
-			 */
-			if (is_null($albumID)) { Application::forward301('/albumes/'); }
+            /**
+             * Redirect to album frontpage if id_album wasn't provided
+             */
+            if (is_null($albumID)) { Application::forward301('/albumes/'); }
 
-			$tpl->setConfig('gallery-inner');
-			$cacheID = $tpl->generateCacheId($category_name, null, $albumID);
+            $tpl->setConfig('gallery-inner');
+            $cacheID = $tpl->generateCacheId($category_name, null, $albumID);
 
-			/**
-			 * Increment views for this content
-			 */
-			Content::setNumViews($albumID);
+            /**
+             * Increment views for this content
+             */
+            Content::setNumViews($albumID);
 
-			$tpl->assign('contentId', $albumID);
+            $tpl->assign('contentId', $albumID);
 
-			require_once("album_inner_ads.php");
+            require_once("album_inner_ads.php");
 
-			if (($tpl->caching == 0)
-				|| (!$tpl->isCached('gallery/gallery.tpl', $cacheID))){
+            if (($tpl->caching == 0)
+                || (!$tpl->isCached('gallery/gallery.tpl', $cacheID))){
 
-				/**
-				 * Get the album from the id and increment the numviews for it
-				 **/
-				$album = new Album( $albumID );
-				$tpl->assign('album', $album);
+                /**
+                 * Get the album from the id and increment the numviews for it
+                 **/
+                $album = new Album( $albumID );
+                $tpl->assign('album', $album);
 
-				/**
-				 * Get the other albums for the albums widget
-				 **/
+                /**
+                 * Get the other albums for the albums widget
+                 **/
                 $configurations = s::get('album_settings');
                 $total = isset($configurations['total_front'])?($configurations['total_front']):2;
                 $days = isset( $configurations['time_last'])?($configurations['time_last']):4;
 
-				$otherAlbums = $cm->find(
+                $otherAlbums = $cm->find(
                     'Album',
-					$category,
-					'available=1 and pk_content !='.$albumID.
-					' AND created >=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY)  ',
+                    $category,
+                    'available=1 and pk_content !='.$albumID.
+                    ' AND created >=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY)  ',
                     ' ORDER BY views DESC,  created DESC LIMIT '.$total
                 );
-				$tpl->assign('gallerys', $otherAlbums);
+                $tpl->assign('gallerys', $otherAlbums);
 
-				$album->category_name = $album->loadCategoryName($album->id);
-				$album->category_title = $album->loadCategoryTitle($album->id);
-				$_albumArray = $album->_getAttachedPhotos($album->id);
+                $album->category_name = $album->loadCategoryName($album->id);
+                $album->category_title = $album->loadCategoryTitle($album->id);
+                $_albumArray = $album->_getAttachedPhotos($album->id);
 
-				$tpl->assign('album_photos', $_albumArray);
+                $tpl->assign('album_photos', $_albumArray);
 
-			} // END iscached
+            } // END iscached
 
-			$tpl->display('album/album.tpl', $cacheID);
+            $tpl->display('album/album.tpl', $cacheID);
 
         break;
 
@@ -181,6 +181,6 @@ if (!is_null($action) ) {
 
     }
 
-} else{
+} else {
     Application::forward301('/');
 }

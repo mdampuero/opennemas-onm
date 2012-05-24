@@ -25,7 +25,7 @@ if (($tpl->caching == 0)
     // Get all available categories
     list($availableCategories, $subcats, $other) = $ccm->getArraysMenu(0, 1);
 
-    switch($action) {
+    switch ($action) {
 
         case 'web':
 
@@ -53,7 +53,7 @@ if (($tpl->caching == 0)
             }
 
             $opinions = $cm->getOpinionAuthorsPermalinks('contents.available=1 and contents.content_status=1', 'ORDER BY in_home DESC, position ASC, changed DESC LIMIT 100');
-            foreach ($opinions as &$opinion){
+            foreach ($opinions as &$opinion) {
                 $opinion['author_name_slug'] = StringUtils::get_title($opinion['name']);
             }
 
@@ -89,7 +89,7 @@ if (($tpl->caching == 0)
             $opinions = $cm->getOpinionAuthorsPermalinks('contents.available=1 AND contents.content_status=1 ', 'ORDER BY position ASC, changed DESC LIMIT 100');
 
             $improvedOpinions = array();
-            foreach($opinions as $opinion) {
+            foreach ($opinions as $opinion) {
 
                 $opinion['author_name_slug'] = StringUtils::get_title($opinion['name']);
                 $improvedOpinions []= $opinion;

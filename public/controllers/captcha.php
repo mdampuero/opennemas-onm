@@ -18,7 +18,7 @@
  * @copyright  Copyright (c) 2009 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
- 
+
 /**
  * Start up and setup the app
 */

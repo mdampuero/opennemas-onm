@@ -22,7 +22,7 @@
 /**
  * THIS SCRIPT CHECK AVAILABILITY FOR A SID/PK_CONTENT
  * Check the sid param exists in database,
- * 
+ *
  * http://.../redirector?sid=2009...00000
  * @see https://redmine.openhost.es/repositories/changes/xornal/trunk/patches/import_checker.php
  */
@@ -33,7 +33,7 @@
 require_once('../bootstrap.php');
 
 // Check param
-if(!isset($_REQUEST['sid']) || !preg_match('/[0-9]{19}/', $_REQUEST['sid'])) {
+if (!isset($_REQUEST['sid']) || !preg_match('/[0-9]{19}/', $_REQUEST['sid'])) {
     header('Location: ' . SITE_URL . 'index.php');
     exit(0);
 }

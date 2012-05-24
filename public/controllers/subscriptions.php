@@ -23,8 +23,7 @@ require_once("statics_advertisement.php");
 //If the form was sent
 $action = $request->request->filter('action', null, FILTER_SANITIZE_STRING);
 
-if (isset($action) && ($action == 'submit' || $action == 'create_subscriptor'))
-{
+if (isset($action) && ($action == 'submit' || $action == 'create_subscriptor')) {
 
     //Get config vars
     $configRecaptcha = s::get('recaptcha');
@@ -67,7 +66,7 @@ if (isset($action) && ($action == 'submit' || $action == 'create_subscriptor'))
             $data['subscritorCountry'] = $request->request->filter('country', null, FILTER_SANITIZE_STRING);
             $data['subscritorCommunity'] = $request->request->filter('community', null, FILTER_SANITIZE_STRING);
 
-            switch($action) {
+            switch ($action) {
                 // Logic for subscription sending a mail to s::get('newsletter_maillist')
                 case 'submit':
 
@@ -79,14 +78,14 @@ if (isset($action) && ($action == 'submit' || $action == 'create_subscriptor'))
                     if (!empty($data['subscritorCommunity']) ) {$formulario.= "Provincia de Origen: ".$data['subscritorCommunity']." \n"; }
 
                     // Checking the type of action to do (alta/baja)
-                    if($data['subscription'] == 'alta'){
+                    if ($data['subscription'] == 'alta') {
                         $subject  = utf8_decode("Solicitud de ALTA - Boletín ".$configSiteName);
 
                         $body=  "Solicitud de Alta en el boletín de: \r\n". $formulario;
 
                         $resp='<script language="JavaScript">(!alert("Se ha subscrito correctamente al boletín."))</script>
                                 <script language="javascript">location.href="/home"</script>';
-                    }else{
+                    } else {
                         $subject  = utf8_decode("Solicitud de BAJA - Boletín ".$configSiteName);
 
                         $body=  "Solicitud de Baja en el boletín de: \r\n". $formulario;
@@ -105,8 +104,7 @@ if (isset($action) && ($action == 'submit' || $action == 'create_subscriptor'))
                     $mail->Username = MAIL_USER;
                     $mail->Password = MAIL_PASS;
 
-                    if (!empty($mail->Username) && !empty($mail->Password))
-                    {
+                    if (!empty($mail->Username) && !empty($mail->Password)) {
                         $mail->SMTPAuth = true;
                     } else {
                         $mail->SMTPAuth = false;
@@ -120,7 +118,7 @@ if (isset($action) && ($action == 'submit' || $action == 'create_subscriptor'))
                     $mail->AddAddress($to, $to);
 
 
-                    if($mail->Send()) {
+                    if ($mail->Send()) {
                         echo($resp);
                     } else {
                         echo('<script>(!alert("Lo sentimos, no se ha podido completar su solicitud.\nVerifique el formulario y vuelva intentarlo."))</script>
@@ -135,7 +133,7 @@ if (isset($action) && ($action == 'submit' || $action == 'create_subscriptor'))
                         $data['status'] = 2;
 
                         $user = new Subscriptor();
-                        if($user->create( $data )) {
+                        if ($user->create( $data )) {
                             echo('<script language="JavaScript">(!alert("Se ha subscrito correctamente al boletín."))</script>
                                         <script language="javascript">location.href="/home"</script>');
                         } else {
@@ -149,7 +147,7 @@ if (isset($action) && ($action == 'submit' || $action == 'create_subscriptor'))
                         $user = new Subscriptor();
                         $user = $user->getUserByEmail($data['email']);
                         $data['id'] = $user->id;
-                        if($user->update( $data )) {
+                        if ($user->update( $data )) {
                             echo('<script language="JavaScript">(!alert("Se ha dado de baja correctamente."))</script>
                                         <script language="javascript">location.href="/home"</script>');
                         } else {

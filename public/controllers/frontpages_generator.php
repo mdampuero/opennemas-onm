@@ -22,13 +22,13 @@ $fp = new Frontpage();
 
 list($allcategorys, $subcat, $categoryData) = $ccm->getArraysMenu(0, 1);
 
-foreach($allcategorys as $category) {
+foreach ($allcategorys as $category) {
 
     $contents = $fp->getContentsPositionsInCategory($category->pk_content_category);
     $date =  date("Ymd");
     $_SESSION['userid'] = "0";
     $_SESSION['username'] = "frontpages_generator";
-    if(!empty($contents)) {
+    if (!empty($contents)) {
         $values = array(
             'title' => "Newspaper library {$date} ",
             'category'=>$category->pk_content_category,

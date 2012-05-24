@@ -7,7 +7,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  **/
-use Symfony\Component\HttpFoundation\Response;
 
 // Start up and setup the app
 require_once '../bootstrap.php';
@@ -25,7 +24,7 @@ $action = $request->query->filter('action', 'index_rss', FILTER_SANITIZE_STRING)
 $tpl = new Template(TEMPLATE_USER);
 //$tpl->setConfig('rss');
 
-switch($action) {
+switch ($action) {
         case 'index_rss': {
 
         $cacheID = $tpl->generateCacheId('Index', '', "RSS");
@@ -68,8 +67,7 @@ switch($action) {
             $cache_id = $tpl->generateCacheId($category_name, $subcategory_name, "RSS");
         }
 
-        if (!$tpl->isCached('rss/rss.tpl', $cache_id))
-        {
+        if (!$tpl->isCached('rss/rss.tpl', $cache_id)) {
             $ccm = ContentCategoryManager::get_instance();
             $cm = new ContentManager();
             // Setting up some variables to print out in the final rss

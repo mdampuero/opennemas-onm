@@ -61,7 +61,7 @@ if (!empty($category_name)) {
 
 /**************************************  SECURITY  *******************************************/
 
-switch($action) {
+switch ($action) {
     case 'frontpage':
 
         $tpl->setConfig('poll-frontpage');
@@ -85,8 +85,8 @@ switch($action) {
                                             'ORDER BY created DESC LIMIT 2,7');
             }
 
-            if(!empty($polls)) {
-                foreach($polls as &$poll) {
+            if (!empty($polls)) {
+                foreach ($polls as &$poll) {
                     $poll->items = $poll->get_items($poll->id);
                     $poll->dirtyId = date('YmdHis', strtotime($poll->created)).sprintf('%06d',$poll->id);
 
@@ -144,7 +144,7 @@ switch($action) {
                       $cookie="polls".$pollId;
                       $msg='';
                       if (isset($_COOKIE[$cookie])) {
-                          if($_COOKIE[$cookie]=='tks') {
+                          if ($_COOKIE[$cookie]=='tks') {
                                $msg = 'Ya ha votado esta encuesta';
                           } else {
                                $msg = 'Gracias, por su voto';

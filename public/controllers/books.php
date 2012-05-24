@@ -43,14 +43,14 @@ $tpl->assign('page', $page);
 
 
 $action = $request->query->filter('action', 'list', FILTER_SANITIZE_STRING);
-switch($action) {
+switch ($action) {
 
     case 'list':
         $categoryBooks = array();
         $i=0;
         foreach ($categories as $cat) {
             //only books categories
-            if($cat->internal_category == $contentType ) {
+            if ($cat->internal_category == $contentType ) {
                 $categoryBooks[$i] = new stdClass();
                 $categoryBooks[$i]->id = $cat->pk_content_category;
                 $categoryBooks[$i]->title = $cat->title;

@@ -54,17 +54,17 @@ switch ($action) {
 
         $comment_id = $_GET['a'];
 
-        if($ip != $ip_from) {
+        if ($ip != $ip_from) {
             Application::ajax_out("Error no ip vote!");
         }
 
         $vote = new Vote($comment_id);
-        if(is_null($vote)) {
+        if (is_null($vote)) {
             Application::ajax_out("Error no  vote value!");
         }
         $update = $vote->update($vote_value,$ip);
 
-        if($update) {
+        if ($update) {
             $html_out = $vote->render($page,'result',1);
         } else {
             $html_out = "Ya ha votado anteriormente este comentario.";
@@ -79,7 +79,7 @@ switch ($action) {
         $comments = $comment->get_public_comments($_REQUEST['id']);
 
         $tpl->assign('num_comments_total', count($comments));
-        //  if(count($comments) >0) {
+        //  if (count($comments) >0) {
         $cm = new ContentManager();
         $comments = $cm->paginate_num_js($comments, 9, 1, 'get_paginate_comments',"'".$_REQUEST['id']."'");
 
