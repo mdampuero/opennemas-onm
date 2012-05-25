@@ -267,7 +267,7 @@ class Europapress implements \Onm\Import\Importer
                 continue;
             }
             try {
-                $file - $this->_syncPath.DIRECTORY_SEPARATOR.$file;
+                $file = $this->_syncPath.DIRECTORY_SEPARATOR.$file;
                 $element = new \Onm\Import\DataSource\Europapress($file);
             } catch (\Exception $e) {
                 continue;
@@ -295,6 +295,7 @@ class Europapress implements \Onm\Import\Importer
             $elements []= $element;
             $elementsCount++;
         }
+
         usort($elements, create_function('$a,$b',
             'return  $b->created_time->getTimestamp() '
                     .'- $a->created_time->getTimestamp();'));
