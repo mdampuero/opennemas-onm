@@ -144,4 +144,3 @@ if (isset($_REQUEST['stop_redirect'])) { echo $url; die(); }
 
 Header( "HTTP/1.1 301 Moved Permanently" );
 Header( "Location: $url" );
-?>

@@ -15,7 +15,7 @@ require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
 */
 $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 
-if(isset($_REQUEST['action']) ) {
+if (isset($_REQUEST['action']) ) {
     switch($_REQUEST['action']) {
         case 'get_tags':
             //Las noticias tienen categorias incluido el nombre como tag.
@@ -74,10 +74,9 @@ if(isset($_REQUEST['action']) ) {
     }
 }
 
-
-/////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////// Contenidos Relacionados ///////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+////////////////////////////////// Contenidos Relacionados ///////////////
+//////////////////////////////////////////////////////////////////////////
 
 //Print del resultado de noticias relacionadas para ajax
 	function print_search_related($id, $search){
@@ -93,17 +92,18 @@ if(isset($_REQUEST['action']) ) {
 			if($search){
 				$html_out .= "<br/><table class='adminlist '>";
 
-				$html_out .= '	<thead>
-									<th>'._('Title').'</th>
-									<th>'._('Category').'</th>
-									<th style="text-align:center">'._('Published').'</th>
-									<th style="text-align:center">'._('Show in frontpage').'</th>
-									<th style="text-align:center">'._('Show in inner article').'</th>
-								</thead>';
+				$html_out .=
+                    '	<thead>
+						<th>'._('Title').'</th>
+						<th>'._('Category').'</th>
+						<th style="text-align:center">'._('Published').'</th>
+						<th style="text-align:center">'._('Show in frontpage').'</th>
+						<th style="text-align:center">'._('Show in inner article').'</th>
+					</thead>';
 
-				$i=0;
-				foreach($search as $art) {
-					if($art['pk_content'] != $id){
+				$i = 0;
+				foreach ($search as $art) {
+					if ($art['pk_content'] != $id){
 						$title=$art['title'];
 						$title = preg_replace('/\\\/', '', $art['title']); //Eliminar comillas
 					    if($art['available'] == 1) {

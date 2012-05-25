@@ -102,7 +102,6 @@ function _recaptcha_http_post($host, $path, $data, $port = 80)
  * @param string $pubkey A public key for reCAPTCHA
  * @param string $error The error given by reCAPTCHA (optional, default is null)
  * @param boolean $use_ssl Should the request be made over ssl? (optional, default is false)
-
  * @return string - The HTML to be embedded in the user's form.
  */
 function recaptcha_get_html ($pubkey, $error = null, $use_ssl = false)
@@ -287,6 +286,3 @@ function recaptcha_mailhide_html($pubkey, $privkey, $email)
         "' onclick=\"window.open('" . htmlentities ($url) . "', '', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=500,height=300'); return false;\" title=\"Reveal this e-mail address\">...</a>@" . htmlentities ($emailparts [1]);
 
 }
-
-
-?>

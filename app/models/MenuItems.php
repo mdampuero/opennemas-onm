@@ -41,7 +41,6 @@ class MenuItems
      *
      * @return bool If create in database
      */
-
     public function create($data)
     {
 
@@ -115,7 +114,6 @@ class MenuItems
     */
     public function delete($id)
     {
-
         $sql = 'DELETE FROM menu_items WHERE pk_item ='.($id);
 
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
@@ -166,8 +164,8 @@ class MenuItems
             $menu[$i]->position  = $rs->fields['position'];
             $menu[$i]->type      = $rs->fields['type'];
             $menu[$i]->pk_father = $rs->fields['pk_father'];
-              $rs->MoveNext();
-              $i++;
+            $rs->MoveNext();
+            $i++;
         }
 
         return $menu;
@@ -176,10 +174,9 @@ class MenuItems
 
     public static function getPkItems($id)
     {
-         // ver en europapress
+        // ver en europapress
         //config para sacar solo padres, solo hijos, todo...
-       // $config = array_merge(self::config, $params_config);
-
+        // $config = array_merge(self::config, $params_config);
         $sql = "SELECT pk_item FROM menu_items WHERE pk_menu = ? ORDER BY position ASC";
         $rs  = $GLOBALS['application']->conn->Execute( $sql, array($id) );
 
@@ -211,7 +208,6 @@ class MenuItems
         $config['pk_father'] = !empty($params_config['pk_father'])? $params_config['pk_father']: 0;
 
         $items = json_decode($items);
-
 
         if (!empty($id) && !empty($items)) {
 
@@ -283,7 +279,6 @@ class MenuItems
     */
     public static function emptyMenu($id)
     {
-
         $sql = 'DELETE FROM menu_items WHERE pk_menu ='.($id);
 
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
@@ -301,7 +296,6 @@ class MenuItems
 
     public static function deleteItems($items)
     {
-
         $sql= "DELETE FROM menu_items WHERE pk_item = ?";
         $stmt = $GLOBALS['application']->conn->Prepare($sql);
         foreach ($items as $item) {

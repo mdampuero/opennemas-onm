@@ -468,7 +468,4 @@ class cSearch
 
       return trim($szResult);
     }
-
-
 }
-?>

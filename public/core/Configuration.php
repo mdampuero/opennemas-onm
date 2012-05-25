@@ -17,14 +17,24 @@ class Configuration
 
   private $items = array();
 
-  function __construct() { $this->parse(); }
+  function __construct()
+  {
+    $this->parse();
+}
 
-  function __get($id) { return $this->items[ $id ]; }
-  function __set($id,$v) { $this->items[ $id ] = $v; }
+  function __get($id) {
+    return $this->items[ $id ];
+}
+  function __set($id,$v) {
+    $this->items[ $id ] = $v;
+}
 
-  function get_items() { $vbles = $this->items;return $vbles; }
+  function get_items() {
+    $vbles = $this->items;return $vbles;
+}
 
-  function set_items($vbles) { $this->items = $vbles;
+  function set_items($vbles) {
+    $this->items = $vbles;
 
     foreach ($this->items as $key => $vb) {
         if ( $key == "SITE_URL" ) $this->items['SITE_URL'] = '\'http://\'.SITE';
@@ -50,7 +60,9 @@ class Configuration
 
   }
 
-  function get_conf_file() { return $this->configFile; }
+  function get_conf_file() {
+    return $this->configFile;
+}
 
   function parse()
   {
