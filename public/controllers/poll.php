@@ -123,6 +123,7 @@ switch ($action) {
             if (($poll->available==1) && ($poll->in_litter==0)) {
                 // Increment numviews if it's accesible
                 $poll->setNumViews($pollId);
+                $poll->items = $poll->get_items($pollId);
                 $items = $poll->get_items($pollId);
                 $poll->dirtyId = $dirtyID;
 

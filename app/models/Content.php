@@ -1811,7 +1811,8 @@ class Content
         $relationsHandler  = new RelatedContent();
         $ccm = new ContentCategoryManager();
         $this->related_contents = array();
-        if ($category_name == 'home') {
+        if (\Onm\Module\ModuleManager::isActivated('AVANCED_ARTICLE_MANAGER')
+            && ($category_name == 'home')) {
             $relations = $relationsHandler->getHomeRelations($this->id);
         } else {
             $relations = $relationsHandler->get_relations($this->id);
