@@ -366,7 +366,7 @@ EOF;
      * @return string
      * @example self::get_numWords('hello world', 1)
      **/
-    public static function get_numWords($text,$numWords)
+    public static function get_num_words($text,$numWords)
     {
         $noHtml      = strip_tags($text);
         $description = explode(" ", $noHtml, $numWords);
