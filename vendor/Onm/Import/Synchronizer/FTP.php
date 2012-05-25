@@ -242,9 +242,13 @@ class FTP
     protected function _byteconvert($bytes)
     {
         $symbol = array('B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
-        $exp    = floor(log($bytes)/log(1024));
+        if ($bytes > 0) {
+            $exp    = floor(log($bytes)/log(1024));
+        } else {
+            $exp = 0;
+        }
 
-        return sprintf('%.2f '.$symbol[ $exp ],
+        return sprintf('%.2f '.$symbol[$exp],
             ($bytes/pow(1024, floor($exp))));
     }
 
