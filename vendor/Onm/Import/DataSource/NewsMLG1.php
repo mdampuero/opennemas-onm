@@ -18,23 +18,6 @@ class NewsMLG1
 
     private $_data = null;
 
-    /**
-    * Ensures that we always get one single instance
-    *
-    * @return object, the unique instance object
-    **/
-    public static function getInstance($config)
-    {
-
-        if ((!self::$instance instanceof self) or
-            (count(array_diff($this->config, $config)) > 0)) {
-            self::$instance = new self($config);
-        }
-
-        return self::$instance;
-
-    }
-
     /*
      * __construct()
      * @param $xmlFile, the XML file that contains information about an EP new

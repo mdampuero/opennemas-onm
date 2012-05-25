@@ -16,25 +16,6 @@ namespace Onm;
  **/
 class StringUtils
 {
-
-    public $stringTest = NULL;
-
-    /**
-      * Constructor for self class
-      *
-      * @access public
-      * @param string $string
-     **/
-    public function __construct($string = null)
-    {
-        //echo $stringTest." si<br>";
-        if (!is_null($string)) {
-            $this->stringTest = $string;
-        } else {
-            $this->stringTest = "";
-        }
-    }
-
     /**
      * Delete disallowed chars from a sentence and transform it to a url friendly name
      *
@@ -58,42 +39,25 @@ class StringUtils
     public static function normalize($name)
     {
         $name = mb_strtolower($name);
-        $trade = array( 'á'=>'a', 'à'=>'a', 'ã'=>'a', 'ä'=>'a', 'â'=>'a', 'Á'=>'A', 'À'=>'A', 'Ã'=>'A',
-                        'Ä'=>'A', 'Â'=>'A', 'é'=>'e', 'è'=>'e', 'ë'=>'e', 'ê'=>'e', 'É'=>'E', 'È'=>'E',
-                        'Ë'=>'E', 'Ê'=>'E', 'í'=>'i', 'ì'=>'i', 'ï'=>'i', 'î'=>'i', 'Í'=>'I', 'Ì'=>'I',
-                        'Ï'=>'I', 'Î'=>'I', 'ó'=>'o', 'ò'=>'o', 'õ'=>'o', 'ö'=>'o', 'ô'=>'o', 'Ó'=>'O',
-                        'Ò'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ô'=>'O', 'ú'=>'u', 'ù'=>'u', 'ü'=>'u', 'û'=>'u',
-                        'Ú'=>'U', 'Ù'=>'U', 'Ü'=>'U', 'Û'=>'U', '$'=>'', '@'=>'', '!'=>'', '#'=>'_',
-                        '%'=>'', '^'=>'', '&'=>'', '*'=>'', '('=>'-', ')'=>'-', '-'=>'-', '+'=>'',
-                        '='=>'', '\\'=>'-', '|'=>'-','`'=>'', '~'=>'', '/'=>'-', '\"'=>'-','\''=>'',
-                        '<'=>'', '>'=>'', '?'=>'-', ','=>'-', 'ç'=>'c', 'Ç'=>'C', '·'=>'',
-                        '.'=>'', ';'=>'-', '['=>'-', ']'=>'-','ñ'=>'n','Ñ'=>'n');
+        $trade = array(
+            'á'=>'a', 'à'=>'a', 'ã'=>'a', 'ä'=>'a', 'â'=>'a', 'Á'=>'A',
+            'À'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Â'=>'A', 'é'=>'e', 'è'=>'e',
+            'ë'=>'e', 'ê'=>'e', 'É'=>'E', 'È'=>'E', 'Ë'=>'E', 'Ê'=>'E',
+            'í'=>'i', 'ì'=>'i', 'ï'=>'i', 'î'=>'i', 'Í'=>'I', 'Ì'=>'I',
+            'Ï'=>'I', 'Î'=>'I', 'ó'=>'o', 'ò'=>'o', 'õ'=>'o', 'ö'=>'o',
+            'ô'=>'o', 'Ó'=>'O', 'Ò'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ô'=>'O',
+            'ú'=>'u', 'ù'=>'u', 'ü'=>'u', 'û'=>'u', 'Ú'=>'U', 'Ù'=>'U',
+            'Ü'=>'U', 'Û'=>'U', '$'=>'', '@'=>'', '!'=>'', '#'=>'_',
+            '%'=>'', '^'=>'', '&'=>'', '*'=>'', '('=>'-', ')'=>'-',
+            '-'=>'-', '+'=>'', '='=>'', '\\'=>'-', '|'=>'-','`'=>'',
+            '~'=>'', '/'=>'-', '\"'=>'-','\''=>'', '<'=>'', '>'=>'',
+            '?'=>'-', ','=>'-', 'ç'=>'c', 'Ç'=>'C', '·'=>'', '.'=>'',
+            ';'=>'-', '['=>'-', ']'=>'-','ñ'=>'n','Ñ'=>'n'
+        );
         $name = strtr($name, $trade);
         $name = rtrim($name);
 
         return $name;
-    }
-
-    /**
-     * Sets the variable string
-     *
-     * @access public
-     * @param string $name
-     **/
-    public function setString($string)
-    {
-        $this->stringTest=$string;
-    }
-
-    /**
-     * Gets the variable string
-     *
-     * @access public
-     * @param string $name
-     **/
-    public function getString()
-    {
-        return $this->stringTest;
     }
 
     /**

@@ -29,23 +29,6 @@ class NewsMLG1
         'B' => 2,
     );
 
-    /**
-    * Ensures that we always get one single instance
-    *
-    * @return object, the unique instance object
-    * @author Fran Dieguez <fran@openhsot.es>
-    **/
-    public static function getInstance($config)
-    {
-        if (!self::$instance instanceof self ||
-            count(array_diff($this->config, $config)) > 0
-        ) {
-            self::$instance = new self($config);
-        }
-
-        return self::$instance;
-    }
-
     /*
      * __construct()
      * @param $xmlFile, the XML file that contains information about an EP new

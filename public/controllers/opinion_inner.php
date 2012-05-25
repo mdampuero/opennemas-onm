@@ -58,8 +58,7 @@ switch ($action) {
             if ( ($tpl->caching == 0) || !$tpl->isCached('opinion.tpl', $cacheID) ) {
 
                 // Please SACAR esta broza de aqui {
-                $str = new StringUtils();
-                $title = $str->get_title($opinion->title);
+                $title = \StringUtils::get_title($opinion->title);
                 $print_url = '/imprimir/' . $title. '/'. $opinion->pk_content . '.html';
                 $tpl->assign('print_url', $print_url);
                 $tpl->assign('sendform_url', '/controllers/opinion_inner.php?action=sendform&opinion_id=' . $dirtyID );
