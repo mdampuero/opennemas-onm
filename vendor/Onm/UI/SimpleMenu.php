@@ -183,6 +183,7 @@ class SimpleMenu
      **/
     private function _renderMenuComponent($submenu)
     {
+
         if ((!isset($submenu['privilege']) || $this->_checkAcl($submenu['privilege']))
             && (\Onm\Module\ModuleManager::isActivated((string)$submenu['module_name']))
         ) {
@@ -227,9 +228,8 @@ class SimpleMenu
                     if ($menu->count() > 0) {
 
                         $html .= "<ul>";
-
                         foreach ($menu as $submenu) {
-                            $this->_renderMenuComponent($submenu);
+                            $html .= $this->_renderMenuComponent($submenu);
                         }
 
                         $html .= "</ul>";
