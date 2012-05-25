@@ -149,18 +149,7 @@ class StringUtils
 
     public static function loadBadWords()
     {
-        $entries = file(dirname(__FILE__).'/string_utils_badwords.txt');
-        $words = array();
-        foreach ($entries as $entry) {
-            if (preg_match('/^(\d+)\,(.*?)$/', $entry, $matches)) {
-                $words[] = array(
-                    'weight' => $matches[1],
-                    'text'   => trim($matches[2])
-                );
-            }
-        }
-
-        return $words;
+        return \Onm\StringUtils::loadBadWords();
     }
 
     /**

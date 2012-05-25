@@ -177,7 +177,111 @@ class StringUtils
      **/
     public static function remove_shorts($string)
     {
-        $shorts = file(dirname(__FILE__).'/self_stoplist.txt');
+        $shorts = <<<EOF
+[0-9]+
+[a-zA-Z]
+a
+as
+ahi
+al
+ante
+ante
+aquel
+aquelo
+aquela
+aquello
+aquella
+aquellas
+aquellos
+aunque
+bajo
+bien
+cabe
+cinco
+como
+con
+conmigo
+contra
+cuatro
+de
+del
+desde
+dos
+durante
+e
+el
+eles
+elas
+en
+entre
+es
+esa
+esas
+ese
+eso
+esos
+esta
+estas
+este
+esto
+estos
+excepto
+hacia
+hasta
+hay
+la
+las
+le
+les
+lo
+los
+me
+mediante
+mi
+nosotras
+nosotros
+nove
+nueve
+o
+os
+ocho
+oito
+otro
+outro
+ou
+para
+pero
+por
+que
+salvo
+se
+segun
+seis
+sete
+si
+siete
+sin
+sen
+sino
+sobre
+su
+sus
+te
+tras
+tres
+tu
+un
+una
+unha
+unhas
+unas
+uno
+unos
+ya
+yo
+si
+EOF;
+        $shorts = preg_split('@\n@', $shorts);
 
         $size = count($shorts);
 
@@ -275,6 +379,19 @@ class StringUtils
     public static function loadBadWords()
     {
         $entries = file(dirname(__FILE__).'/self_badwords.txt');
+        $entries = <<<EOF
+5, m[i]?erda
+5, marica
+5, carallo
+10, [h]?ostia
+20, puta[s]?
+30, cabr[oó]n[a]?
+50, fill[ao] d[ae] puta
+50, hij[ao] de puta
+EOF;
+
+        $entries = preg_split('@\n@', $entries);
+
         $words = array();
         foreach ($entries as $entry) {
             if (preg_match('/^(\d+)\,(.*?)$/', $entry, $matches)) {
