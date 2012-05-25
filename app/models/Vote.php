@@ -17,11 +17,11 @@
 class Vote
 {
 
-    var $pk_vote = null;
-    var $value_pos = null;
-    var $value_neg = null;
-    var $karma = null;
-    var $ips_count_vote = null;
+    public $pk_vote = null;
+    public $value_pos = null;
+    public $value_neg = null;
+    public $karma = null;
+    public $ips_count_vote = null;
 
     /**
      * _messages to use in links and image

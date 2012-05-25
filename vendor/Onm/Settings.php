@@ -41,7 +41,7 @@ class Settings
      * @return array  if was provided an array of names this function returns an array of name/values
      * @return false  if the key doesn't exists or is not setted
      */
-    static public function get( $settingName )
+    public static function get( $settingName )
     {
         // the setting name must be setted
         if (!isset($settingName) || empty($settingName)) {
@@ -93,7 +93,7 @@ class Settings
                 $apcSettingValue = apc_fetch($apcSettingName, $fetchedFromAPC);
 
                 $settingValue = array();
-                if(!empty($apcSettingValue)) {
+                if (!empty($apcSettingValue)) {
                     foreach ($apcSettingValue as $key => $value) {
                         $key = preg_replace("@".APC_PREFIX . "\.@", "", $key);
                         $settingValue[$key] = $value;
@@ -153,7 +153,7 @@ class Settings
      *
      * @return boolean true if the setting was stored.
      */
-    static public function set($settingName, $settingValue)
+    public static function set($settingName, $settingValue)
     {
         // the setting name must be setted
         if (!isset($settingName) || empty($settingName)) {
@@ -194,7 +194,7 @@ class Settings
      *
      * @return boolean true if the setting apc_cache was invalidated.
      */
-    static public function invalidate($settingName, $instanceName = null)
+    public static function invalidate($settingName, $instanceName = null)
     {
         if (is_null($instanceName)) {
             $instanceName = APC_PREFIX;

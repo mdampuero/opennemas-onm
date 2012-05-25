@@ -20,7 +20,7 @@ $tpl = new Template(TEMPLATE_USER);
 
 $category_name = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
 
-if(!empty($category_name)) {
+if (!empty($category_name)) {
     $ccm = new ContentCategoryManager();
     $category = $ccm->get_id($category_name);
     $actual_category_id = $category; // FOR WIDGETS
@@ -54,19 +54,19 @@ if (!is_null($action) ) {
             $dirtyID = $request->query->filter('special_id', '' , FILTER_SANITIZE_STRING);
 
             $specialID = Content::resolveID($dirtyID);
-			$cacheID = $tpl->generateCacheId($category_name, null, $specialID);
-			if (is_null($specialID)) {
+            $cacheID = $tpl->generateCacheId($category_name, null, $specialID);
+            if (is_null($specialID)) {
 
                 $specials = $special->get_by_category($category_name, ' available=1 ',
                         ' favorite DESC, created DESC LIMIT 0,5');
 
-                if(!empty($specials)) {
+                if (!empty($specials)) {
                     //Asignar un especial que no sea pdf.
 
                     $seguir=0;
 
-                    foreach($specials as $spec) {
-                        if(($spec['only_pdf'] != 1) && ($spec['available'] == 1) && ($seguir==0)) {
+                    foreach ($specials as $spec) {
+                        if (($spec['only_pdf'] != 1) && ($spec['available'] == 1) && ($seguir==0)) {
                             $specialID = $spec['pk_special'];
                             $special = $spec;
 
@@ -75,7 +75,7 @@ if (!is_null($action) ) {
                     }
                 }
 
-            } else{
+            } else {
                 $special = new Special($specialID);
             }
             if ($special->available==1) {
@@ -84,24 +84,24 @@ if (!is_null($action) ) {
                 $contents = $special->get_contents($specialID);
                 $columns = array();
 
-                if(!empty($contents)) {
-                    foreach($contents as $item) {
+                if (!empty($contents)) {
+                    foreach ($contents as $item) {
 
                         $content = Content::get($item['fk_content']);
 
-                        if(isset($content->img1)) {
+                        if (isset($content->img1)) {
                             $img = new Photo($content->img1);
                             $content->img1_path = $img->path_file.$img->name;
                             $content->img1 = $img;
                         }
-                        if(isset($content->fk_video)) {
+                        if (isset($content->fk_video)) {
                             $video = new Video($content->fk_video);
                             $content->obj_video = $video;
                         }
 
-                        if(($item['position']%2)==0){
+                        if (($item['position']%2)==0) {
                             $content->placeholder = 'placeholder_0_1';
-                        }else{
+                        } else {
                             $content->placeholder = 'placeholder_1_1';
                         }
                         $columns[] = $content;
@@ -112,7 +112,7 @@ if (!is_null($action) ) {
                     }
                 }
 
-                if(!empty($special->img1)){
+                if (!empty($special->img1)) {
                     $img = new Photo($special->img1);
                     $special->path_img = $img->path_file.$img->name;
                     $special->img = $img;

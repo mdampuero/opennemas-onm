@@ -12,12 +12,12 @@ $tpl = new Template(TEMPLATE_USER);
 
 $slug = $request->query->filter('slug', null, FILTER_SANITIZE_STRING);
 
-if(isset($slug) ) {
+if (isset($slug) ) {
 
     $page = StaticPage::getPageBySlug($slug);
 
     // if static page doesn't exist redirect to 404 error page.
-    if(is_null($page) || (!$page->available)) {
+    if (is_null($page) || (!$page->available)) {
         Application::forward('/404.html');
     }
 

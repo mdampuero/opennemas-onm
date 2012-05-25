@@ -17,13 +17,13 @@ class UserGroup
 {
 
     /**Id del grupo*/
-    var $id = NULL;
+    public $id = NULL;
 
     /**Nombre del grupo*/
-    var $name = NULL;
+    public $name = NULL;
 
     /**Lista de permisos activos para este grupo de usuarios*/
-    var $privileges = NULL;
+    public $privileges = NULL;
 
     public function __construct($id = NULL)
     {

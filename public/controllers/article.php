@@ -32,11 +32,11 @@ $action           = $request->query->filter('action', '', FILTER_SANITIZE_STRING
 
 if (isset($category_name) && !empty($category_name)) {
     $category = $ccm->get_id($category_name);
-} elseif(isset($_REQUEST["action"]) && ( $_REQUEST["action"]!="vote" && $_REQUEST["action"]!="get_plus")) {
+} elseif (isset($_REQUEST["action"]) && ( $_REQUEST["action"]!="vote" && $_REQUEST["action"]!="get_plus")) {
     Application::forward301('/');
 }
 
-switch($action) {
+switch ($action) {
     case 'read': {
 
         if (empty($articleID) ) {
@@ -57,8 +57,7 @@ switch($action) {
 
         $cacheID = $tpl->generateCacheId( $category_name, $subcategory_name, $articleID );
 
-        if (($tpl->caching == 0) || !$tpl->isCached('article/article.tpl', $cacheID) )
-        {
+        if (($tpl->caching == 0) || !$tpl->isCached('article/article.tpl', $cacheID) ) {
 
             $article = new Article($articleID);
 
@@ -84,7 +83,7 @@ switch($action) {
 
                 // Check if $section is "in menu" then show breadcrub
                 $cat = $ccm->getByName($category_name);
-                if(!is_null($cat) && $cat->inmenu) {
+                if (!is_null($cat) && $cat->inmenu) {
                     $tpl->assign('breadcrub', $breadcrub);
                 }
 
@@ -147,7 +146,7 @@ switch($action) {
 
                 // Machine suggested contents code -----------------------------
                 $machineSuggestedContents = array();
-                if(!empty($article->metadata)) {
+                if (!empty($article->metadata)) {
                     $objSearch    = cSearch::Instance();
                     $machineSuggestedContents = $objSearch->SearchSuggestedContents(
                         $article->metadata,
@@ -182,17 +181,17 @@ switch($action) {
 
         $comment_id = $_GET['a'];
 
-        if($ip != $ip_from) {
+        if ($ip != $ip_from) {
             Application::ajax_out("Error no ip vote!");
         }
 
         $vote = new Vote($comment_id);
-        if(is_null($vote)) {
+        if (is_null($vote)) {
             Application::ajax_out("Error no  vote value!");
         }
         $update = $vote->update($vote_value,$ip);
 
-        if($update) {
+        if ($update) {
             $html_out = $vote->render($page,'result',1);
         } else {
             $html_out = "Ya ha votado anteriormente este comentario.";
@@ -202,7 +201,7 @@ switch($action) {
     } break;
 
     case 'get_plus': {
-        if($_GET["content"]=="Comment") {
+        if ($_GET["content"]=="Comment") {
 
             $cm = new ContentManager();
             $articles = $cm->cache->getMostComentedContent('Article', true, $_REQUEST['category'], $_REQUEST['days']);
@@ -260,7 +259,7 @@ switch($action) {
             $title = StringUtils::get_title($article->title);
             $print_url = '/imprimir/' . $title. '/' . $category_name . '/';
 
-            if(!empty($subcategory_name)) {
+            if (!empty($subcategory_name)) {
                 $breadcrub[] = array(
                     'text' => $ccm->get_title($subcategory_name),
                     'link' => '/seccion/' . $category_name . '/' . $subcategory_name . '/'
@@ -273,12 +272,12 @@ switch($action) {
             $tpl->assign('print_url', $print_url);
 
             $cat = $ccm->getByName($category_name);
-            if(!is_null($cat) && $cat->inmenu) {
+            if (!is_null($cat) && $cat->inmenu) {
                 $tpl->assign('breadcrub', $breadcrub);
             }
 
             // Foto interior
-            if(isset($article->img2) and ($article->img2 != 0)){
+            if (isset($article->img2) and ($article->img2 != 0)) {
                 $photoInt = new Photo($article->img2);
                 $tpl->assign('photoInt', $photoInt);
             }
@@ -317,7 +316,7 @@ switch($action) {
         StringUtils::disabled_magic_quotes();
 
         // Check direct access
-        if($_SESSION['sendformtoken'] != $_REQUEST['token']) {
+        if ($_SESSION['sendformtoken'] != $_REQUEST['token']) {
             Application::forward('/');
         }
 
@@ -406,10 +405,10 @@ switch($action) {
             $mail->AddBCC(trim($dest));
         }
 
-        if( $mail->Send() ) {
+        if ( $mail->Send() ) {
             $tpl->assign('message', 'Noticia enviada correctamente.');
         } else {
-            if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')) {
+            if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')) {
                 header("HTTP/1.0 404 Not Found");
             }
             $tpl->assign('message', 'La noticia no pudo ser enviada, inténtelo de nuevo más tarde. <br /> Disculpe las molestias.');

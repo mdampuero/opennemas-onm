@@ -20,18 +20,18 @@ interface Cache
     /**
      * Fetches an entry from the cache.
      *
-     * @param string $id cache id The id of the cache entry to fetch.
+     * @param  string $id cache id The id of the cache entry to fetch.
      * @return string The cached data or FALSE, if no cache entry exists for the given id.
      */
-    function fetch($id);
+    public function fetch($id);
 
     /**
      * Test if an entry exists in the cache.
      *
-     * @param string $id cache id The cache id of the entry to check for.
+     * @param  string  $id cache id The cache id of the entry to check for.
      * @return boolean TRUE if a cache entry exists for the given cache id, FALSE otherwise.
      */
-    function contains($id);
+    public function contains($id);
 
     /**
      * Puts data into the cache.
@@ -43,13 +43,13 @@ interface Cache
      *
      * @return boolean TRUE if the entry was successfully stored in the cache, FALSE otherwise.
      */
-    function save($id, $data, $lifeTime = 0);
+    public function save($id, $data, $lifeTime = 0);
 
     /**
      * Deletes a cache entry.
      *
-     * @param string $id cache id
+     * @param  string  $id cache id
      * @return boolean TRUE if the cache entry was successfully deleted, FALSE otherwise.
      */
-    function delete($id);
+    public function delete($id);
 }

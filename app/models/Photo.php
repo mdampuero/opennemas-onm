@@ -80,14 +80,14 @@ class Photo extends Content
 
         $filePath = $dataSource["local_file"];
 
-        if(!empty($filePath)) {
+        if (!empty($filePath)) {
              // Check upload directory
-            if(empty($dateForDirectory)) {
+            if (empty($dateForDirectory)) {
                 $dateForDirectory = date("/Y/m/d/");
             }
             $uploadDir = MEDIA_PATH.DS.IMG_DIR.DS.$dateForDirectory.DIRECTORY_SEPARATOR ;
 
-            if(!is_dir($uploadDir)) { FilesManager::createDirectory($uploadDir); }
+            if (!is_dir($uploadDir)) { FilesManager::createDirectory($uploadDir); }
 
             $filePathInfo = pathinfo($filePath);     //sacamos infor del archivo
 
@@ -143,7 +143,7 @@ class Photo extends Content
 
                 if ($photoID) {
 
-                    if(preg_match('/^(jpeg|jpg|gif|png)$/', strtolower($filePathInfo['extension']))) {
+                    if (preg_match('/^(jpeg|jpg|gif|png)$/', strtolower($filePathInfo['extension']))) {
 
                         $imageThumbSize = s::get(array(
                             'image_thumb_size',
@@ -235,12 +235,12 @@ class Photo extends Content
         $filePath = $dataSource["local_file"];
         $originalFileName = $dataSource['original_filename'];
 
-        if(!empty($filePath)) {
+        if (!empty($filePath)) {
              // Check upload directory
             $dateForDirectory = date("/Y/m/d/");
             $uploadDir = MEDIA_PATH.DS.IMG_DIR.DS.$dateForDirectory.DIRECTORY_SEPARATOR ;
 
-            if(!is_dir($uploadDir)) { FilesManager::createDirectory($uploadDir); }
+            if (!is_dir($uploadDir)) { FilesManager::createDirectory($uploadDir); }
 
             $filePathInfo = pathinfo($originalFileName);     //sacamos infor del archivo
 
@@ -291,7 +291,7 @@ class Photo extends Content
 
                 if ($photoID) {
 
-                    if(preg_match('/^(jpeg|jpg|gif|png)$/', strtolower($filePathInfo['extension']))) {
+                    if (preg_match('/^(jpeg|jpg|gif|png)$/', strtolower($filePathInfo['extension']))) {
 
                         $imageThumbSize = s::get(array(
                             'image_thumb_size',
@@ -458,7 +458,7 @@ class Photo extends Content
 
                     $exif = array();
                     if (isset($info)) {
-                        foreach($info as $key => $val) {
+                        foreach ($info as $key => $val) {
                             if ($key != 'APP1') {
                                 $data_exif = read_exif_data($image, 0, true); break;
                             }

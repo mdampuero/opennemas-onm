@@ -20,7 +20,7 @@ class Uri
     /**
      * Uri settings
      **
-    static private $_urlConfigurations = array(
+    private static $_urlConfigurations = array(
        'article'   =>  array( 'articulo/_CATEGORY_/_DATE_/_SLUG_/_ID_.html'),
        'opinion'   =>  array( 'opinion/_CATEGORY_/_DATE_/_SLUG_/_ID_.html'),
        'opinion_author_frontpage'   =>  array( 'opinion/autor/_ID_/_SLUG_'),
@@ -34,7 +34,7 @@ class Uri
     );
      *
      */
-    static private $_urlConfigurations = array(
+    private static $_urlConfigurations = array(
        'article'   =>  array( 'articulo/_CATEGORY_/_SLUG_/_DATE__ID_.html'),
        'opinion'   =>  array( 'opinion/_CATEGORY_/_SLUG_/_DATE__ID_.html'),
        'opinion_author_frontpage'   =>  array( 'opinion/autor/_ID_/_SLUG_'),
@@ -61,7 +61,7 @@ class Uri
         Uri::getConfig();
     }
 
-    static public function getConfig($params = array())
+    public static function getConfig($params = array())
     {
         if (isset($GLOBALS['url_configurations'])) {
             $config = array_merge(
@@ -72,10 +72,11 @@ class Uri
         } else {
             $config = self::$_urlConfigurations;
         }
+
         return $config;
     }
 
-    static public function generate($contentType, $params = array())
+    public static function generate($contentType, $params = array())
     {
 
         $config = Uri::getConfig();
@@ -103,6 +104,7 @@ class Uri
         $finaluri = preg_replace(
             array_keys($replacements), array_values($replacements), $config
         );
+
         return trim($finaluri[0]);
     }
 }

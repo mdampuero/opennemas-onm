@@ -22,7 +22,7 @@ use \Onm\Import\DataSource\NewsMLG1;
 class Efe implements \Onm\Import\Importer
 {
     // the instance object
-    static private $_instance = null;
+    private static $_instance = null;
 
     // the configuration to access to the server
     private $_defaultConfig = array(
@@ -30,8 +30,6 @@ class Efe implements \Onm\Import\Importer
     );
 
     private $_config = array();
-
-    private $_ftpConnection = null;
 
     private $_lockFile = '';
 
@@ -41,21 +39,17 @@ class Efe implements \Onm\Import\Importer
     /**
      * Ensures that we always get one single instance
      *
-     * @return  object      the unique instance object
+     * @return object the unique instance object
      *
      */
-    static public function getInstance($config = array())
+    public static function getInstance($config = array())
     {
 
-        if (!(self::$_instance instanceof self)
-            //&& (count(array_diff($this->_config, $config)) > 0)
-            )
-        {
+        if (!self::$_instance instanceof self) {
             self::$_instance = new self($config);
         }
 
         return self::$_instance;
-
     }
 
     /**
@@ -67,18 +61,14 @@ class Efe implements \Onm\Import\Importer
      */
     public function __construct($config = array())
     {
-
-        $this->syncPath = implode(
-            DIRECTORY_SEPARATOR,
-            array(CACHE_PATH, 'efe_import_cache')
-        );
+        $this->syncPath = implode(DIRECTORY_SEPARATOR,
+            array(CACHE_PATH, 'efe_import_cache'));
         $this->syncFilePath = $this->syncPath.DIRECTORY_SEPARATOR.".sync";
 
         // Merging default configurations with new ones
         $this->_config = array_merge($this->_defaultConfig, $config);
 
         $this->_lockFile = $this->syncPath.DIRECTORY_SEPARATOR.".lock";
-
     }
 
     /**
@@ -142,9 +132,8 @@ class Efe implements \Onm\Import\Importer
         $excludedFiles = self::getLocalFileList($this->syncPath);
 
         $synchronizer  = new \Onm\Import\Synchronizer\FTP($params);
-        $ftpSync = $synchronizer->downloadFilesToCacheDir(
-            $this->syncPath, $excludedFiles, $params['max_age']
-        );
+        $ftpSync = $synchronizer->downloadFilesToCacheDir($this->syncPath,
+            $excludedFiles, $params['max_age']);
 
         $this->unlockSync();
 
@@ -156,7 +145,7 @@ class Efe implements \Onm\Import\Importer
     /*
      * Creates a lock for avoid concurrent sync by multiple users
      *
-     * @return  void
+     * @return void
      */
     public function lockSync()
     {
@@ -204,7 +193,8 @@ class Efe implements \Onm\Import\Importer
      *
      * @param array|string importedElements, ids of new imported elements
      *
-     * @return array, array('lastimport' => Date, 'imported_elements' => array())
+     * @return array, array('lastimport' => Date,
+     *                'imported_elements' => array())
      */
     public function updateSyncFile($importedElements = array())
     {
@@ -226,7 +216,7 @@ class Efe implements \Onm\Import\Importer
         }
 
         // Include new importedElements with old ones
-        $newImportedelements = array_merge($importedElements,$elements);
+        $newImportedelements = array_merge($importedElements, $elements);
 
         $newSyncParams = array(
             'lastimport'        => date('c'),
@@ -243,7 +233,7 @@ class Efe implements \Onm\Import\Importer
      *
      * @param array $params misc params that alteres function behaviour
      *
-     * @return integer  minutes from last synchronization of elements
+     * @return integer minutes from last synchronization of elements
      */
     public function minutesFromLastSync($params = array())
     {
@@ -267,11 +257,12 @@ class Efe implements \Onm\Import\Importer
         rsort($filesSynced, SORT_STRING);
 
         $counTotalElements = count($filesSynced);
-        if (array_key_exists('items_page', $params) && array_key_exists('page', $params)) {
-            $files = array_slice(
-                $filesSynced, $params['items_page'] * ($params['page']-1),
-                $params['items_page']
-            );
+        if (array_key_exists('items_page', $params)
+            && array_key_exists('page', $params)
+        ) {
+            $files = array_slice($filesSynced,
+                $params['items_page'] * ($params['page']-1),
+                $params['items_page']);
         } else {
             $files = $filesSynced;
         }
@@ -286,26 +277,29 @@ class Efe implements \Onm\Import\Importer
                 continue;
             }
             try {
-                $element = new NewsMLG1($this->syncPath.DIRECTORY_SEPARATOR.$file);
+                $element = new NewsMLG1(
+                    $this->syncPath.DIRECTORY_SEPARATOR.$file
+                );
             } catch (\Exception $e) {
                 continue;
             }
 
-            if (($params['title'] != '*')
-                && !($element->hasContent($params['title'])))
-            {
+            if ($params['title'] != '*'
+                && !($element->hasContent($params['title']))
+            ) {
                 continue;
             }
 
+            $category = $element->originalCategory;
             if ((($params['category'] != '*'))
-                && !(preg_match('@'.$params['category'].'@', $element->originalCategory) > 0))
-            {
+                && !(preg_match('@'.$params['category'].'@', $category) > 0)
+            ) {
                 continue;
             }
 
-            if(array_key_exists('limit',$params)
-               && ($elementsCount <= $params['limit']))
-            {
+            if (array_key_exists('limit', $params)
+               && ($elementsCount <= $params['limit'])
+            ) {
                 break;
             }
 
@@ -314,9 +308,10 @@ class Efe implements \Onm\Import\Importer
 
         }
 
-        usort($elements, create_function('$a,$b',
-            'return  $b->created_time->getTimestamp() - $a->created_time->getTimestamp();')
-        );
+        usort($elements,
+            create_function('$a,$b',
+            'return  $b->created_time->getTimestamp() '
+            .'- $a->created_time->getTimestamp();'));
 
         return array($counTotalElements, $elements);
 
@@ -328,7 +323,7 @@ class Efe implements \Onm\Import\Importer
      *
      * @param $id
      *
-     * @return  DataSource\Efe  the article object
+     * @return DataSource\Efe the article object
      */
     public function findByID($id)
     {
@@ -344,7 +339,7 @@ class Efe implements \Onm\Import\Importer
      *
      * @param $fileName
      *
-     * @return  DataSource\NewsMLG1  the article object
+     * @return DataSource\NewsMLG1 the article object
      */
     public function findByFileName($id)
     {
@@ -361,7 +356,7 @@ class Efe implements \Onm\Import\Importer
      *
      * @param array $params array of params to filter elements with
      *
-     * @return array    elements    stored
+     * @return array elements    stored
      */
     public function findAllBy($params = array())
     {
@@ -377,13 +372,12 @@ class Efe implements \Onm\Import\Importer
      *
      * @return array the list of files
      */
-    static public function getLocalFileList($cacheDir)
+    public static function getLocalFileList($cacheDir)
     {
         $fileListing = glob($cacheDir.DIRECTORY_SEPARATOR.'*.xml');
 
-        usort($fileListing, create_function('$a,$b',
-            'return filemtime($b) - filemtime($a);')
-        );
+        usort($fileListing,
+            create_function('$a,$b', 'return filemtime($b) - filemtime($a);'));
 
         $fileListingCleaned = array();
 

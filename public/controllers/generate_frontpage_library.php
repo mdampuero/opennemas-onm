@@ -16,12 +16,12 @@ $menuItems = Menu::renderMenu('frontpage');
 $date =  new DateTime();
 $directoryDate = $date->format("/Y/m/d/");
 $basePath = MEDIA_PATH.'/library'.$directoryDate;
-if( !file_exists($basePath) ) {
+if ( !file_exists($basePath) ) {
     mkdir($basePath, 0777, true);
 }
 require_once "index_advertisement.php";
 
-foreach($menuItems->items as $item) {
+foreach ($menuItems->items as $item) {
     $subcategory_name ='';
     $cache_page = 0;
     $category_name = $item->link;

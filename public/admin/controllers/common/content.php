@@ -175,7 +175,7 @@ switch ($action) {
                 'scheduled_state' => $content->getSchedulingState(),
                 'state'           => $content->getStatus(),
                 'views'           => $content->views,
-                'last_author'     => $author->firstname . " " . $author->lastname,
+                'last_author'     => $author->firstname. " " .$author->lastname,
             );
 
         } else {

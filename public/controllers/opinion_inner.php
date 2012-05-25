@@ -53,9 +53,9 @@ switch ($action) {
 
         $cacheID = $tpl->generateCacheId($category_name, $subcategory_name, $opinionID);
 
-        if (($opinion->available == 1) && ($opinion->in_litter == 0)){
+        if (($opinion->available == 1) && ($opinion->in_litter == 0)) {
 
-            if( ($tpl->caching == 0) || !$tpl->isCached('opinion.tpl', $cacheID) ) {
+            if ( ($tpl->caching == 0) || !$tpl->isCached('opinion.tpl', $cacheID) ) {
 
                 // Please SACAR esta broza de aqui {
                 $str = new StringUtils();
@@ -83,10 +83,10 @@ switch ($action) {
                 $tpl->assign('suggested', $suggestedContents);
 
                 // Fetch the other opinions for this author
-                if ($opinion->type_opinion == 1){
+                if ($opinion->type_opinion == 1) {
                     $where=' opinions.type_opinion = 1';
                     $opinion->name = 'Editorial';
-                } elseif ($opinion->type_opinion == 2){
+                } elseif ($opinion->type_opinion == 2) {
                     $where=' opinions.type_opinion = 2';
                     $opinion->name = 'Director';
                 } else {
@@ -169,7 +169,7 @@ switch ($action) {
 
         // Check direct access
         $token = $request->query->filter('token', null , FILTER_SANITIZE_STRING);
-        if($_SESSION['sendformtoken'] != $token) {
+        if ($_SESSION['sendformtoken'] != $token) {
             Application::forward('/');
         }
 
@@ -250,10 +250,10 @@ switch ($action) {
             $mail->AddBCC(trim($dest));
         }
 
-        if( $mail->Send() ) {
+        if ( $mail->Send() ) {
             $tpl->assign('message', 'Correo enviado correctamente.');
         } else {
-            if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')) {
+            if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')) {
                 header("HTTP/1.0 404 Not Found");
         }
             $tpl->assign('message', 'El artículo de opinión no pudo ser enviado, inténtelo de nuevo más tarde. <br /> Disculpe las molestias.');

@@ -32,13 +32,13 @@ class Schedule extends Content
         $this->content_type = 'Schedule';
     }
 
-    function getDataCalendars($limit=8)
+    public function getDataCalendars($limit=8)
     {
          $sql= "SELECT * FROM phpc_AR_calendars WHERE status=1 ORDER BY position ASC, calendar DESC LIMIT 0, $limit";
          $rs = $GLOBALS['application']->conn->Execute($sql);
 
          $calendars=array();
-         while(!$rs->EOF) {
+         while (!$rs->EOF) {
               $item=new stdClass();
               $item->id=$rs->fields['calendar'];
               $item->calendar_title = $rs->fields['calendar_title'];
@@ -59,7 +59,7 @@ class Schedule extends Content
 
 
     // returns all the events for a particular where. Using in sitemap
-    function get_events_by_where($where)
+    public function get_events_by_where($where)
     {
 
         $sql = 'SELECT * FROM phpc_AR_events '
@@ -71,7 +71,7 @@ class Schedule extends Content
 
         $events = array();
 
-        while(!$rs->EOF) {
+        while (!$rs->EOF) {
               $item=new stdClass();
               $item->id = $rs->fields['id'];
               $item->title = $rs->fields['subject'];

@@ -28,7 +28,7 @@ $cm  = new ContentManager();
 
 $action = $request->query->filter('action', 'frontpage', FILTER_SANITIZE_STRING);
 
-switch($action) {
+switch ($action) {
     case 'frontpage':
 
         $tpl->setConfig('letter-frontpage');
@@ -76,7 +76,7 @@ switch($action) {
                 // Increment numviews if it's accesible
                 $letter->setNumViews($letterId);
 
-                //if($slug != $letter->slug) { }
+                //if ($slug != $letter->slug) { }
 
                 $cacheID = $tpl->generateCacheId('letter-inner','', $letterId );
 
@@ -136,7 +136,7 @@ switch($action) {
             $lettertext = $request->query->filter('lettertext', '', FILTER_SANITIZE_STRING);
             $security_code = $request->query->filter('security_code', '', FILTER_SANITIZE_STRING);
 
-            if(!empty($lettertext) && !empty($security_code) ) {
+            if (!empty($lettertext) && !empty($security_code) ) {
                 $lettertext = $request->query->filter('lettertext', '', FILTER_SANITIZE_STRING);
                 $security_code = $request->query->filter('security_code', '', FILTER_SANITIZE_STRING);
 

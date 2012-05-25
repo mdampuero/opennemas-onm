@@ -13,32 +13,33 @@
  * @subpackage Model
  **/
 
-class Special extends Content {
-
+class Special extends Content
+{
     /**
      * the special id
      */
-    public $pk_special  = NULL;
+    public $pk_special  = null;
     /**
      * the subtitle for this album
      */
-    public $subtitle = NULL;
+    public $subtitle = null;
     /**
      * path for get a pdf file
      */
-    public $pdf_path  = NULL;
+    public $pdf_path  = null;
     /**
      * the id of the image that is the cover for this album
      */
 
-    public $img1  = NULL;
+    public $img1  = null;
 
     /**
      * Initializes the Special class.
      *
      * @param strin $id the id of the album.
      **/
-    function __construct($id=NULL) {
+    public function __construct($id=null)
+    {
        parent::__construct($id);
 
         if (!is_null($id)) {
@@ -63,7 +64,8 @@ class Special extends Content {
 
             case 'uri': {
                 if (empty($this->category_name)) {
-                    $this->category_name = $this->loadCategoryName($this->pk_content);
+                    $this->category_name =
+                        $this->loadCategoryName($this->pk_content);
                 }
                 $uri =  Uri::generate(
                     'special',
@@ -118,127 +120,127 @@ class Special extends Content {
      *
      * @return bool true if the object was stored
      */
-    public function create($data) {
-
+    public function create($data)
+    {
         parent::create($data);
 
-        if(!array_key_exists('pdf_path', $data)) {
+        if (!array_key_exists('pdf_path', $data)) {
             $data['pdf_path']='';
         }
 
-        $sql = "INSERT INTO specials ( `pk_special`, `subtitle`,  `img1`, `pdf_path`) " .
-                "VALUES (?,?,?,?)";
+        $sql = "INSERT INTO specials "
+             . "(`pk_special`, `subtitle`, `img1`, `pdf_path`)"
+             . " VALUES (?,?,?,?)";
 
-        $values = array( $this->id,$data['subtitle'], $data['img1'],   $data['pdf_path']);
+        $values = array(
+            $this->id,
+            $data['subtitle'],
+            $data['img1'],
+            $data['pdf_path']
+        );
 
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            \Application::logDatabaseError();
 
             return(false);
         }
 
-        if(empty($data['pdf_path']) ) {
+        if (empty($data['pdf_path']) ) {
              $this->saveItems($data);
         }
 
         return $this->id;
     }
 
-    public function read($id) {
+    public function read($id)
+    {
         parent::read($id);
 
         $sql = 'SELECT * FROM specials WHERE pk_special = '.intval($id);
         $rs = $GLOBALS['application']->conn->Execute( $sql );
 
         if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
             return;
         }
-        $this->id = $rs->fields['pk_special'];
+        $this->id         = $rs->fields['pk_special'];
         $this->pk_special = $rs->fields['pk_special'];
-        $this->subtitle = $rs->fields['subtitle'];
-        $this->img1 = $rs->fields['img1'];
-        $this->pdf_path = $rs->fields['pdf_path'];
+        $this->subtitle   = $rs->fields['subtitle'];
+        $this->img1       = $rs->fields['img1'];
+        $this->pdf_path   = $rs->fields['pdf_path'];
 
     }
 
-    public function update($data) {
-        if(!array_key_exists('pdf_path', $data)) {
-            $data['pdf_path']='';
-        }
+    public function update($data)
+    {
         parent::update($data);
 
+        if (!array_key_exists('pdf_path', $data)) {
+            $data['pdf_path'] = '';
+        }
 
         $sql = "UPDATE specials SET `subtitle`=?, `img1`=?,  `pdf_path`=?  ".
                 "WHERE pk_special=".intval($data['id']);
         $values = array(  $data['subtitle'], $data['img1'],  $data['pdf_path'] );
 
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            \Application::logDatabaseError();
 
-               return;
+            return;
         }
 
-        if(empty($data['pdf_path']) ) {
+        if (empty($data['pdf_path']) ) {
             $this->saveItems($data);
         }
+
+        return true;
     }
 
 
-    public function remove($id) { //Elimina definitivamente
-
+    public function remove($id)
+    {
         parent::remove($id);
-
 
         $sql = 'DELETE FROM specials WHERE pk_special='.intval($id);
 
-        if($GLOBALS['application']->conn->Execute($sql)===false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+        if ($GLOBALS['application']->conn->Execute($sql)===false) {
+            \Application::logDatabaseError();
 
             return;
         }
         $sql = 'DELETE FROM special_contents WHERE fk_special = ' .intval($id);
 
-        if($GLOBALS['application']->conn->Execute($sql)===false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+        if ($GLOBALS['application']->conn->Execute($sql)===false) {
+            \Application::logDatabaseError();
 
             return;
         }
     }
 
-    public function saveItems($data) {
+    public function saveItems($data)
+    {
         $this->delete_all_contents($data['id'] );
-        if(isset($data['noticias_left'])) {
+        if (isset($data['noticias_left'])) {
             $tok = strtok($data['noticias_left'],",");
             $name="";
             $pos=1;
-            $type_content='Article';
+            $contentType='Article';
             while (($tok !== false) AND ($tok !=" ")) {
                 // $this->delete_contents($data['id'] ,$tok)  	;
-                $this->set_contents($data['id'] ,$tok, $pos, $name,  $type_content);
+                $this->set_contents($data['id'] ,$tok, $pos, $name,  $contentType);
                 $tok = strtok(",");
                 $pos+=2;
             }
         }
-        if( isset($data['noticias_right'])){
+        if ( isset($data['noticias_right'])) {
             $tok = strtok($data['noticias_right'],",");
             $name="";
             $pos=2;
-            $type_content='Article';
+            $contentType='Article';
             while (($tok !== false) AND ($tok !=" ")) {
                 //   $this->delete_contents($data['id'] ,$tok)  	;
-                $this->set_contents($data['id'] ,$tok, $pos, $name,  $type_content);
+                $this->set_contents($data['id'] ,$tok, $pos, $name,  $contentType);
                 $tok = strtok(",");
                 $pos+=2;
             }
@@ -250,78 +252,94 @@ class Special extends Content {
 /**************************  special_contents ********************************/
 /****************************************************************************/
 
-    public function get_contents($id){
-        if($id == NULL) {
+    public function get_contents($id)
+    {
+        if ($id == null) {
             return(false);
         }
-        $sql = 'SELECT * FROM `special_contents` WHERE fk_special = ' .intval($id).' ORDER BY position ASC';
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-         $i=0;
-        $items = array();
-        while(!$rs->EOF) {
-            $items[$i]['fk_content'] = $rs->fields['fk_content'];
-            $items[$i]['name'] = $rs->fields['name'];
-            $items[$i]['position'] = $rs->fields['position'];
-            $items[$i]['visible'] = $rs->fields['visible'];
-            $items[$i]['type_content'] = $rs->fields['type_content'];
+        $sql = 'SELECT * FROM `special_contents`'
+             . ' WHERE fk_special=? ORDER BY position ASC';
+        $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($id)));
 
-            $i++;
-              $rs->MoveNext();
+        $i = 0;
+        $items = array();
+        while (!$rs->EOF) {
+            $items []= array(
+                'fk_content'   => $rs->fields['fk_content'],
+                'name'         => $rs->fields['name'],
+                'position'     => $rs->fields['position'],
+                'visible'      => $rs->fields['visible'],
+                'type_content' => $rs->fields['type_content'],
+            );
+            $rs->MoveNext();
         }
 
-       return $items;
+        return $items;
     }
 
 
     //Define contenidos dentro de un modulo
-    public function set_contents($id,$pk_content, $position, $name,  $type_content) {
-        if($id == NULL) {
+    public function set_contents(
+        $id,
+        $pkContent,
+        $position,
+        $name,
+        $typeContent
+    ) {
+        if ($id == null) {
             return(false);
         }
 
-       $visible=1;
-       $sql = "INSERT INTO special_contents (`fk_special`, `fk_content`,`position`,`name`,`visible`,`type_content`) " .
-                            " VALUES (?,?,?,?,?,?)";
-        $values = array($id, $pk_content, $position, $name, $visible, $type_content);
+       $visible = 1;
+       $sql = "INSERT INTO special_contents "
+            . "(`fk_special`, `fk_content`,`position`,`name`,`visible`,`type_content`)"
+            . " VALUES (?,?,?,?,?,?)";
+        $values = array(
+            $id,
+            $pkContent,
+            $position,
+            $name,
+            $visible,
+            $typeContent
+        );
 
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        if ($rs === false) {
+            \Application::logDatabaseError();
 
-            return(false);
+            return false;
         }
 
-         return(true);
+         return true;
     }
-//Elimina contenidos dentro de un modulo
-   public function delete_contents($id,$id_content){
 
-        if($id == NULL) {
-            return(false);
+    // Elimina contenidos dentro de un modulo
+    public function delete_contents($id, $contentId)
+    {
+        if ($id == null) {
+            return false;
         }
-        $sql = 'DELETE FROM special_contents WHERE fk_content ='.intval($id_content).' AND fk_special = ' .intval($id);
+        $sql = 'DELETE FROM special_contents WHERE fk_content=? AND fk_special=?';
 
-        if($GLOBALS['application']->conn->Execute($sql)===false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+        $rs = $GLOBALS['application']->conn->Execute($sql,
+            array(intval($contentId)), intval($id));
+        if ($rs === false) {
+            \Application::logDatabaseError();
 
             return;
         }
     }
 
-    public function delete_all_contents($id){
-
-    if($id == NULL) {
-            return(false);
+    public function delete_all_contents($id)
+    {
+        if ($id == null) {
+            return false;
         }
-    $sql = 'DELETE FROM special_contents WHERE  fk_special = ' .intval($id);
+        $sql = 'DELETE FROM special_contents WHERE  fk_special=?';
+        $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($id)));
 
-        if($GLOBALS['application']->conn->Execute($sql)===false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+        if ($rs === false) {
+            \Application::logDatabaseError();
 
             return;
         }

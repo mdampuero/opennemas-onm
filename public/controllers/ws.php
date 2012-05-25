@@ -5,8 +5,8 @@
 require_once('../bootstrap.php');
 require_once(SITE_LIBS_PATH.'utils.functions.php');
 
-function getCategoryList() {
-
+function getCategoryList()
+{
     $xml_categories = new SimpleXMLElement("<categories></categories>");
 
     //Obtengo las categorias disponibles para hacer subidas
@@ -26,7 +26,7 @@ function getCategoryList() {
         $xml_category->addChild('internalcategory', $parentCategories[$i]->internal_category);
         $xml_category->addChild('fk_content_category', $parentCategories[$i]->fk_content_category);
 
-        if(!empty($subcat[$i])) {
+        if (!empty($subcat[$i])) {
             $num_subcats = count($subcat[$i]);
             $xml_subcategories = $xml_category->addChild('subcategories');
             $xml_subcategories->addAttribute("num", $num_subcats);
@@ -48,11 +48,12 @@ function getCategoryList() {
 
     $responsePayloadString = $xml_categories->asXML();
     $returnMessage = new WSMessage($responsePayloadString);
+
     return $returnMessage;
 }
 
-function addMediaImages($message) {
-
+function addMediaImages($message)
+{
     $cid2stringMap = $message->attachments;
     $cid2contentMap = $message->cid2contentType;
     $response = "";
@@ -60,18 +61,18 @@ function addMediaImages($message) {
     $xml = simplexml_load_string($message->str, 'SimpleXMLElement');
 
     $j=0;
-    foreach($cid2stringMap as $i=>$image_data) {
+    foreach ($cid2stringMap as $i=>$image_data) {
         $f = $cid2stringMap[$i];
         $contentType = $cid2contentMap[$i];
 
         $data['category']=$data['fk_category']=(string) $xml->image[$j]->fk_category;
-        
+
         $ccm = ContentCategoryManager::get_instance();
 
         $nameCat= $ccm->categories[$data['category']]->name;
         $relative_path = "/".$nameCat ."/".date("Ymd")."/";
         $uploaddir = MEDIA_IMG_PATH . $relative_path;
-        if(!is_dir($uploaddir)) {
+        if (!is_dir($uploaddir)) {
             mkdir($uploaddir, 0775);
             @chmod($uploaddir,0775); //Permisos de lectura y escritura del fichero
         }
@@ -110,9 +111,9 @@ function addMediaImages($message) {
 
             $foto = new Photo();
             $elid = $foto->create($data);
-            
-            if( $elid) {
-                if($extension=='jpeg' || $extension=='jpg'  || $extension=='png' || $extension=='gif' ){
+
+            if ( $elid) {
+                if ($extension=='jpeg' || $extension=='jpg'  || $extension=='png' || $extension=='gif' ) {
                      //   miniatura
                         $thumb=new Imagick($uploaddir.$name);
                         $thumb->thumbnailImage(140,100,true);
@@ -121,7 +122,7 @@ function addMediaImages($message) {
               }
             }
             $response .= '<image><title>'.$data['title'].'</title><save>1</save></image>';
-         }else{
+         } else {
             $response .= '<image><title>'.$data['title'].'</title><save>0</save></image>';
         }
 
@@ -130,10 +131,9 @@ function addMediaImages($message) {
 
 
 
-    if(!isset($fallos)) {
+    if (!isset($fallos)) {
         $responsePayload = '<addMediaImages>'.$response.'</addMediaImages>';
-    }
-    else {
+    } else {
         $responsePayload = '<response>0</response>';
     }
 
@@ -142,17 +142,17 @@ function addMediaImages($message) {
     return $returnMessage;
 }
 
-function autenticateUsers($username) {
-
+function autenticateUsers($username)
+{
     $user = new User();
     $pwd = $user->getPwd($username);
 
-    if(isset($pwd)){
+    if (isset($pwd)) {
         return $pwd;
     } else return NULL;
 }
 
-    
+
 $operations = array(
     "addMediaImages" => "addMediaImages",
     "getCategoryList" => "getCategoryList"

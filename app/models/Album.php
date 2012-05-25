@@ -304,7 +304,7 @@ class Album extends Content
     /**
      * Delete one album by a given id
      *
-     * @param int $albumID, the foreighn key for the album
+     * @param  int      $albumID, the foreighn key for the album
      * @return boolean, true if the album was deleted, false if it wasn't
      **/
     public function _removeAttachedImages($albumID)

@@ -25,11 +25,12 @@ class Book extends Content
     public $books_path = NULL;
 
 
-    function __construct($id=null) {
+    public function __construct($id=null)
+    {
         parent::__construct($id);
 
         // Si existe idcontenido, entonces cargamos los datos correspondientes
-        if(!is_null($id)) {
+        if (!is_null($id)) {
             $this->read($id);
         }
 
@@ -44,19 +45,19 @@ class Book extends Content
         switch ($name) {
             case 'uri': {
                 if (empty($this->category_name)) {
-                    $this->category_name = $this->loadCategoryName($this->pk_content);
+                    $this->category_name =
+                        $this->loadCategoryName($this->pk_content);
                 }
                 $uri =  Uri::generate('book',
-                            array(
-                                'id' => sprintf('%06d',$this->id),
-                                'date' => date('YmdHis', strtotime($this->created)),
-                                'slug' => $this->slug,
-                                'category' => $this->category_name,
-                            )
-                        );
+                    array(
+                        'id'       => sprintf('%06d', $this->id),
+                        'date'     => date('YmdHis', strtotime($this->created)),
+                        'slug'     => $this->slug,
+                        'category' => $this->category_name,
+                    )
+                );
 
                 return ($uri !== '') ? $uri : $this->permalink;
-
                 break;
             }
 
@@ -68,49 +69,52 @@ class Book extends Content
         return parent::__get($name);
     }
 
-    public function create($data) {
-
+    public function create($data)
+    {
         parent::create($data);
 
-        $sql = "INSERT INTO books (`pk_book`, `author`, `file`, `file_img`,`editorial`) " .
-                        "VALUES (?,?,?,?,?)";
+        $sql = "INSERT INTO books "
+             . "(`pk_book`, `author`, `file`, `file_img`,`editorial`) "
+             . "VALUES (?,?,?,?,?)";
 
         if (!file_exists($this->books_path) ) {
             FilesManager::createDirectory($this->books_path);
         }
 
-        $this->file_name = FilesManager::cleanFileName($_FILES['file']['name'],'');
-        $this->file_img  = FilesManager::cleanFileName($_FILES['file_img']['name'],'');
+        $this->file_name =
+            FilesManager::cleanFileName($_FILES['file']['name'], '');
+        $this->file_img  =
+            FilesManager::cleanFileName($_FILES['file_img']['name'], '');
 
         $this->createThumb();
 
-        $values = array($this->id, $data['author'],
-                        $this->file_name, $this->file_img, $data['editorial']);
+        $values = array(
+            $this->id,
+            $data['author'],
+            $this->file_name,
+            $this->file_img,
+            $data['editorial']
+        );
 
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            \Application::logDatabaseError();
 
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-
-            return(false);
+            return false;
         }
 
         return $this->id;
     }
 
 
-    public function read($id) {
-
+    public function read($id)
+    {
         parent::read($id);
 
-        $sql = 'SELECT * FROM books WHERE pk_book = '.($id);
-        $rs = $GLOBALS['application']->conn->Execute( $sql );
+        $sql = 'SELECT * FROM books WHERE pk_book=?';
+        $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
             return;
         }
@@ -120,10 +124,12 @@ class Book extends Content
         $this->file_name = $rs->fields['file'];
         $this->file_img  = $rs->fields['file_img'];
         $this->editorial = $rs->fields['editorial'];
+
+        return $this;
     }
 
-    function update($data) {
-
+    public function update($data)
+    {
         $file_name = FilesManager::cleanFileName($_FILES['file']['name']);
         $file_img  = FilesManager::cleanFileName($_FILES['file_img']['name']);
 
@@ -131,68 +137,75 @@ class Book extends Content
         $data['file_name'] = !empty($file_name)?$file_name:$this->file_name;
         $data['file_img'] = !empty($file_img)?$file_img:$this->file_img;
 
-        $sql = "UPDATE books SET  `author`=?,`file`=?,`file_img`=?, `editorial`=? ".
-                "WHERE pk_book = ".intval($data['id']);
+        $sql = "UPDATE books "
+             . "SET  `author`=?,`file`=?,`file_img`=?, `editorial`=? "
+             . "WHERE pk_book=?";
 
-        $values = array( $data['author'], $data['file_name'], $data['file_img'], $data['editorial']);
+        $values = array(
+            $data['author'],
+            $data['file_name'],
+            $data['file_img'],
+            $data['editorial'],
+            intval($data['id']),
+        );
 
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            \Application::logDatabaseError();
 
-              return false;
+            return false;
         }
 
         return $this->id;
     }
 
-    function remove($id) {
+    public function remove($id)
+    {
         parent::remove($this->id);
 
-        $sql = 'DELETE FROM books WHERE pk_book='.($this->id);
+        $sql = 'DELETE FROM books WHERE pk_book=?';
 
-        $book_pdf = $this->books_path.$this->file_name;
-        $book_image = $this->books_path.$this->file_img;
-        @unlink($book_pdf);
-        @unlink($book_image);
+        $bookPdf   = $this->books_path.$this->file_name;
+        $bookImage = $this->books_path.$this->file_img;
+        @unlink($bookPdf);
+        @unlink($bookImage);
 
-        if($GLOBALS['application']->conn->Execute($sql)===false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($this->id));
+        if ($rs === false) {
+            \Application::logDatabaseError();
 
             return;
         }
     }
 
-    function createThumb() {
-        $img_name   = basename($this->file_name, ".pdf") . '.jpg';
-        $tmp_name   = '/tmp/' . basename($this->file_name, ".pdf") . '.png';
+    public function createThumb()
+    {
+        $imageName   = basename($this->file_name, ".pdf") . '.jpg';
+        $tmpName   = '/tmp/' . basename($this->file_name, ".pdf") . '.png';
 
-        if ( !file_exists($this->book_path.'/'.$img_name)
-                && ( file_exists($this->book_path.'/'.$this->file_name)) ) {
+        if (!file_exists($this->book_path.'/'.$imageName)
+            && (file_exists($this->book_path.'/'.$this->file_name))
+        ) {
             try {
                 //// Thumbnail first page (see [0])
-                $imagick = new Imagick($this->books_path.'/'.$this->file_name.'[0]');
+                $imagick =
+                    new Imagick($this->books_path.'/'.$this->file_name.'[0]');
 
                 $imagick->thumbnailImage(180, 0);
 
                 // First, save to PNG (*.pdf => /tmp/xxx.png)
-                $imagick->writeImage($tmp_name);
+                $imagick->writeImage($tmpName);
 
-                // finally, save to jpg (/tmp/xxx.png => *.jpg) to avoid problems with the image
-                $imagick = new Imagick($tmp_name);
-                $imagick->writeImage($this->books_path.'/'.$img_name);
+                // finally, save to jpg (/tmp/xxx.png => *.jpg)
+                // to avoid problems with the image
+                $imagick = new Imagick($tmpName);
+                $imagick->writeImage($this->books_path.'/'.$imageName);
 
                 //remove temp image
-                unlink($tmp_name);
+                unlink($tmpName);
 
-            } catch(Exception $e) {
+            } catch (Exception $e) {
                 // Nothing
             }
-
         }
     }
-
 }

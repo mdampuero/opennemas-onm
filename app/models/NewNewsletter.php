@@ -27,7 +27,9 @@ class NewNewsletter
     {
         $this->cache = new MethodCacheManager($this, array('ttl' => 300));
 
-        if (!is_null($id)) { return $this->read($id); }
+        if (!is_null($id)) {
+            return $this->read($id);
+        }
     }
 
     /**
@@ -42,14 +44,13 @@ class NewNewsletter
 
         $data['created'] = date("Y-m-d H:i:s");
 
-        $sql = 'INSERT INTO `newsletter_archive` (`data`, `html`, `created`) VALUES (?,?,?)';
+        $sql = 'INSERT INTO `newsletter_archive` (`data`, `html`, `created`)'
+             . ' VALUES (?,?,?)';
 
         $values = array($data['content'], $data['html'], $data['created']);
 
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            \Application::logDatabaseError();
 
             return false;
         }
@@ -74,9 +75,7 @@ class NewNewsletter
         $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($id)));
 
         if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
             return;
         }
@@ -109,22 +108,20 @@ class NewNewsletter
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
             return;
         }
 
         $newsletters = array();
         while (!$rs->EOF) {
-                $obj = new NewNewsletter();
-                $obj->loadData($rs->fields);
+            $obj = new NewNewsletter();
+            $obj->loadData($rs->fields);
 
-                $newsletters[] = $obj;
+            $newsletters[] = $obj;
 
-                $rs->MoveNext();
-            }
+            $rs->MoveNext();
+        }
 
         return $newsletters;
     }

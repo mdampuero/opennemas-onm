@@ -19,11 +19,11 @@
 class Rating
 {
 
-    var $pk_rating = null;
-    var $total_votes = null;
-    var $total_value = null;
-    var $ips_count_rating = null;
-    var $num_of_stars = 5;
+    public $pk_rating = null;
+    public $total_votes = null;
+    public $total_value = null;
+    public $ips_count_rating = null;
+    public $num_of_stars = 5;
 
     /**
      * Messages to use in links and image
@@ -58,9 +58,7 @@ class Rating
         $values = array($pk_rating, 0, 0, serialize(array()));
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+            \Application::logDatabaseError();
 
             return (false);
         }
@@ -70,7 +68,6 @@ class Rating
 
     public function read($pk_rating)
     {
-
         $sql = 'SELECT total_votes, total_value, ips_count_rating
                 FROM ratings WHERE pk_rating =' . $pk_rating;
         $rs = $GLOBALS['application']->conn->Execute($sql);
@@ -98,9 +95,7 @@ class Rating
             );
             $rs = $GLOBALS['application']->conn->Execute($sql, $values);
             if (!$rs) {
-                $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-                $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-                $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+                \Application::logDatabaseError();
 
                 return (false);
             }
@@ -109,9 +104,7 @@ class Rating
         }
 
         if (!$rs) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+            \Application::logDatabaseError();
 
             return;
         }
@@ -123,15 +116,12 @@ class Rating
 
     public function get_value($pk_rating)
     {
-
         $sql = 'SELECT total_votes, total_value
                 FROM ratings WHERE pk_rating =' . $pk_rating;
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+            \Application::logDatabaseError();
 
             return;
         }
@@ -166,9 +156,7 @@ class Rating
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+            \Application::logDatabaseError();
 
             return (false);
         }
@@ -185,7 +173,6 @@ class Rating
 
     public function add_count($ips_count, $ip)
     {
-
         $ips = array();
         foreach ($ips_count as $ip_array) {
             $ips[] = $ip_array['ip'];
@@ -195,8 +182,6 @@ class Rating
         $countKIP = array_search($ip, $ips);
 
         if ($countKIP === FALSE) {
-
-            //No se ha votado desde esa ip
             $ips_count[] = array('ip' => $ip, 'count' => 1);
         } else {
 
@@ -228,7 +213,6 @@ class Rating
 
     private function renderImg($i, $value, $page = 'article')
     {
-
         $active = ($value >= $i) ? "active" : '';
 
         return $imageTpl =
@@ -236,25 +220,11 @@ class Rating
     }
 
     /**
-     * Get an integer and returns an string with the humanized num of votes
-     *
-     * @param integer $total_votes num of votes
-     * @return  string description
-     * @author  Fran Dieguez <fran@openhost.es>
-     * @since   Mon Sep 13 2010 18:12:58 GMT+0200 (CEST)
-     */
-    private function humanizeNumVotes($total_votes)
-    {
-
-        return $total_votes . (($total_votes > 1) ? " votos" : " voto");
-    }
-
-    /**
      * Prints the list of img elements representing the actual votes
      *
-     * @param dobule $actualVotes average of votes
-     * @param string $pageType    the kind of page this'll be rendered in
-     * @return  string elements imgs representing the actual votes
+     * @param  dobule $actualVotes average of votes
+     * @param  string $pageType    the kind of page this'll be rendered in
+     * @return string elements imgs representing the actual votes
      * @author  Fran Dieguez <fran@openhost.es>
      * @since   Mon Sep 13 2010 18:12:58 GMT+0200 (CEST)
      */
@@ -272,9 +242,9 @@ class Rating
     /**
      * Prints the list of elements links representing the actual votes
      *
-     * @param dobule $actualVotes average of votes
-     * @param string $pageType    the kind of page this'll be rendered in
-     * @return  string elements links representing the actual votes
+     * @param  dobule $actualVotes average of votes
+     * @param  string $pageType    the kind of page this'll be rendered in
+     * @return string elements links representing the actual votes
      * @author  Fran Dieguez <fran@openhost.es>
      * @since   Mon Sep 13 2010 18:12:58 GMT+0200 (CEST)
      */
@@ -294,28 +264,25 @@ class Rating
     /**
      * Get an integer and returns an string with the humanized num of votes
      *
-     * @param string $page num of votes
-     * @param string $type the type of
-     * @return  string description
+     * @param  string $page num of votes
+     * @param  string $type the type of
+     * @return string description
      * @author  Fran Dieguez <fran@openhost.es>
      * @since   Mon Sep 13 2010 18:12:58 GMT+0200 (CEST)
      */
     public function render($pageType, $action, $ajax = 0)
     {
-
-        /**
-         * If the vote+id cookie exist just show the
-         * results and don't allow to vote again
-         **/
-
+        // If the vote+id cookie exist just show the
+        // results and don't allow to vote again
         if (isset($_COOKIE["vote" . $this->pk_rating])) $action = "result";
-        /**
-         * Calculate the total votes to render
-         */
-        ($this->total_votes == 0
-            ? $actualVotes = 0
-            : $actualVotes =
-                (int)floor($this->total_value / $this->total_votes));
+
+        // Calculate the total votes to render
+        if ($this->total_votes == 0) {
+            $actualVotes = 0;
+        } else {
+            $actualVotes =
+                (int)floor($this->total_value / $this->total_votes);
+        }
         $htmlOut = "";
 
         switch ($pageType) {
@@ -323,32 +290,20 @@ class Rating
             case "article":
             case "video":
                 $htmlOut.= "<ul class=\"voting\">";
-
                 // if the user can vote render the links to vote
-
                 if ($action == "vote") {
-
                     // Render links
                     $htmlOut.= $this->getVotesOnLinks(
                         $actualVotes, $pageType
                     );
-
                     //if the user can't vote render the static images
-
                 } elseif ($action === "result") {
-
                     // Render images
                     $htmlOut.= $this->getVotesOnImages(
                         $actualVotes, $pageType
                     );
                 }
                 $htmlOut.= "</ul> ";
-
-                // append the counter of total votes
-                //$htmlOut .= $this->humanizeNumVotes($this->total_votes);
-
-                // if this request is not an AJAX request wrap it.
-
 
                 if (!$ajax) {
                     $htmlOut =

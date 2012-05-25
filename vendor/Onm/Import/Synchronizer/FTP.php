@@ -76,8 +76,11 @@ class FTP
      *
      * @throws <b>Exception</b> $cacheDir not writable.
      */
-    public function downloadFilesToCacheDir($cacheDir, $excludedFiles = array(), $maxAge = null)
-    {
+    public function downloadFilesToCacheDir(
+        $cacheDir,
+        $excludedFiles = array(),
+        $maxAge = null
+    ) {
         $files = ftp_rawlist(
             $this->ftpConnection, ftp_pwd($this->ftpConnection), true
         );
@@ -87,7 +90,8 @@ class FTP
 
         // Filter files by its creation
         self::cleanWeirdFiles($cacheDir);
-        $deletedFiles = self::cleanFiles($cacheDir,$files, $excludedFiles, $maxAge);
+        $deletedFiles = self::cleanFiles($cacheDir,
+            $files, $excludedFiles, $maxAge);
 
         $downloadedFiles = 0;
 
@@ -95,13 +99,16 @@ class FTP
             $elements = array();
             if (is_array($files) && count($files) > 0) {
                 foreach ($files as $file) {
+                    $fileExtensions =
+                        $this->params['allowed_file_extesions_pattern'];
                     if (!isset($this->params['allowed_file_extesions_pattern'])
-                        || !preg_match('@'.$this->params['allowed_file_extesions_pattern'].'@', $file['filename'])
+                        || !preg_match('@'.$fileExtensions.'@', $file['filename'])
                     ) {
                         continue;
                     } else {
                         $elements[]    = $file;
-                        $localFilePath = $cacheDir.DIRECTORY_SEPARATOR.strtolower(basename($file['filename']));
+                        $localFilePath =
+                            $cacheDir.DIRECTORY_SEPARATOR.strtolower(basename($file['filename']));
                         if (!file_exists($localFilePath)) {
                             @ftp_get($this->ftpConnection, $localFilePath,
                                 $file['filename'], FTP_BINARY);
@@ -156,8 +163,12 @@ class FTP
      *
      * @return boolean, true if all went well
     */
-    static public function cleanFiles($cacheDir, $serverFiles, $localFileList, $maxAge)
-    {
+    public static function cleanFiles(
+        $cacheDir,
+        $serverFiles,
+        $localFileList,
+        $maxAge
+    ) {
         $deletedFiles = 0;
 
         if (count($localFileList) > 0) {
@@ -190,7 +201,8 @@ class FTP
         $arraypointer = &$structure;
         foreach ($rawFiles as $rawfile) {
             if ($rawfile[0] == '/') {
-                $paths = array_slice(explode('/', str_replace(':', '', $rawfile)), 1);
+                $paths =
+                    array_slice(explode('/', str_replace(':', '', $rawfile)), 1);
                 $arraypointer = &$structure;
                 foreach ($paths as $path) {
                     foreach ($arraypointer as $i => $file) {
@@ -224,8 +236,8 @@ class FTP
 
     /**
      * Converts a byte based file size to a human readable string
-     * @param integer $bytes the amount of bytes of the file
-     * @return string        the human readable file size
+     * @param  integer $bytes the amount of bytes of the file
+     * @return string  the human readable file size
      */
     protected function _byteconvert($bytes)
     {
@@ -238,8 +250,8 @@ class FTP
 
     /**
      * Converts an chmod string to a numeric based file permissions
-     * @param string $chmod the chmod string-based file perms
-     * @return integer        the numeric based file permissions
+     * @param  string  $chmod the chmod string-based file perms
+     * @return integer the numeric based file permissions
      */
     protected function _chmodnum($chmod)
     {
@@ -255,8 +267,8 @@ class FTP
     /**
      * Filters files by its creation
      *
-     * @param array $files  the list of files for filtering
-     * @param int   $maxAge timestamp of the max age allowed for files
+     * @param  array $files  the list of files for filtering
+     * @param  int   $maxAge timestamp of the max age allowed for files
      * @return array the list of files without those with age > $magAge
      **/
     protected function _filterOldFiles($files, $maxAge)

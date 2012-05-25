@@ -120,7 +120,7 @@ abstract class Common
      * @param int        $size     the size of the image
      * @param int        $size     the size of the canvas
      *
-     * @return int        the related image position
+     * @return int the related image position
      */
     protected function transformPosition($position, $size, $canvas)
     {

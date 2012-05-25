@@ -31,7 +31,7 @@ class Kiosko extends Content
         parent::__construct($id);
 
         // Si existe idcontenido, entonces cargamos los datos correspondientes
-        if(is_numeric($id)) {
+        if (is_numeric($id)) {
             $this->read($id);
         }
 
@@ -149,8 +149,8 @@ class Kiosko extends Content
     /**
      * Check if a front exists yet
      *
-     * @param string $name_pdf
-     * @param string $category
+     * @param  string  $name_pdf
+     * @param  string  $category
      * @return boolean
     */
     public function exists($path_pdf, $category)
@@ -208,7 +208,7 @@ class Kiosko extends Content
 
                 //remove temp image
                 unlink($tmp_name);
-            } catch(Exception $e) {
+            } catch (Exception $e) {
                 // Nothing
             }
 

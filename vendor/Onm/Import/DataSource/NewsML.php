@@ -1,40 +1,24 @@
 <?php
 /**
- *  Copyright (C) 2011 by OpenHost S.L.
+ * This file is part of the Onm package.
  *
- *  Permission is hereby granted, free of charge, to any person obtaining a copy
- *  of this software and associated documentation files (the "Software"), to deal
- *  in the Software without restriction, including without limitation the rights
- *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *  copies of the Software, and to permit persons to whom the Software is
- *  furnished to do so, subject to the following conditions:
+ * (c)  OpenHost S.L. <developers@openhost.es>
  *
- *  The above copyright notice and this permission notice shall be included in
- *  all copies or substantial portions of the Software.
- *
- *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- *  THE SOFTWARE.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  **/
-/**
- * (c) Copyright Mér Mai 25 17:07:03 2011 Fran Diéguez. All Rights Reserved.
-*/
+namespace Onm\Import\DataSource;
+
+use Onm\Settings as s;
+
 /*
  * class Europapress
  */
-namespace Onm\Import\DataSource;
-use Onm\Settings as s;
+class NewsMLG1
+{
+    private $_data = null;
 
-class NewsMLG1 {
-
-
-    private $data = null;
-
-    static private $priorityMap = array(
+    private static $_priorityMap = array(
         '10'  => 4,
         '20' => 3,
         '25' => 2,
@@ -51,45 +35,46 @@ class NewsMLG1 {
     * @return object, the unique instance object
     * @author Fran Dieguez <fran@openhsot.es>
     **/
-    static public function getInstance($config)
+    public static function getInstance($config)
     {
-
-        if ((!self::$instance instanceof self) or
-            (count(array_diff($this->config, $config)) > 0))
-        {
+        if (!self::$instance instanceof self ||
+            count(array_diff($this->config, $config)) > 0
+        ) {
             self::$instance = new self($config);
         }
 
         return self::$instance;
-
     }
 
     /*
      * __construct()
      * @param $xmlFile, the XML file that contains information about an EP new
      */
-    public function __construct($xmlFile) {
-
+    public function __construct($xmlFile)
+    {
         $this->xmlFile = basename($xmlFile);
 
         $baseAgency = s::get('site_agency');
         $this->agencyName = $baseAgency.' | EFE';
 
-        if(file_exists($xmlFile)) {
+        if (file_exists($xmlFile)) {
             if (filesize($xmlFile) < 2) {
-                throw new \Exception(sprintf(_("File '%d' can't be loaded."), $xmlFile));
+                $message = sprintf(_("File '%d' can't be loaded."), $xmlFile);
+                throw new \Exception($message);
             }
 
-            $this->data = simplexml_load_file($xmlFile, NULL, LIBXML_NOERROR | LIBXML_NOWARNING);
-            if (!$this->data) {
-                throw new \Exception(sprintf(_("File '%d' can't be loaded."), $xmlFile));
+            $this->_data = simplexml_load_file($xmlFile,
+                NULL, LIBXML_NOERROR | LIBXML_NOWARNING);
+            if (!$this->_data) {
+                $message = sprintf(_("File '%d' can't be loaded."), $xmlFile);
+                throw new \Exception();
             }
         } else {
-            throw new \Exception(sprintf(_("File '%d' doesn't exists."), $xmlFile));
+            $message = sprintf(_("File '%d' doesn't exists."), $xmlFile);
+            throw new \Exception($message);
         }
 
         return $this;
-
     }
 
     /*
@@ -102,108 +87,107 @@ class NewsMLG1 {
         switch ($propertyName) {
 
             case 'id':
-                return (int) $this->data->CODIGO;
+                return (int) $this->_data->CODIGO;
                 break;
 
             case 'agencyID':
-                return (string) $this->data->AGENCIA;
+                return (string) $this->_data->AGENCIA;
                 break;
 
             case 'priority':
-                return self::matchPriority((string) $this->data->PRIORIDAD);
+                return self::matchPriority((string) $this->_data->PRIORIDAD);
                 break;
 
             case 'priorityNumber':
-                return self::$priorityMap[(string) $this->data->PRIORIDAD];
+                return self::$_priorityMap[(string) $this->_data->PRIORIDAD];
                 break;
 
             case 'service':
-                return (string) $this->data->SERVICIO;
+                return (string) $this->_data->SERVICIO;
                 break;
 
             case 'category':
-                return self::matchCategoryName((string) $this->data->SECCION);
+                return self::matchCategoryName((string) $this->_data->SECCION);
                 break;
 
             case 'originalCategory':
-                return (string) $this->data->SECCION;
+                return (string) $this->_data->SECCION;
                 break;
 
             case 'informationType':
-                return (string) $this->data->TIPOINFO;
+                return (string) $this->_data->TIPOINFO;
                 break;
 
             case 'key':
-                return (string) $this->data->CLAVE;
+                return (string) $this->_data->CLAVE;
                 break;
 
             case 'created_time':
 
                 $dateFormat = 'd/m/Y H:i:s';
-                $originalDate = $this->data->FECHA.' '.$this->data->HORA;
+                $originalDate = $this->_data->FECHA.' '.$this->_data->HORA;
                 $date = \DateTime::createFromFormat($dateFormat,
-                                                   $originalDate,
-                                                   new \DateTimeZone('Europe/Madrid'));
+                       $originalDate,
+                       new \DateTimeZone('Europe/Madrid'));
 
                 return $date;
                 break;
 
             case 'pretitle':
-                return (string) $this->data->ANTETITULO;
+                return (string) $this->_data->ANTETITULO;
                 break;
 
             case 'title':
-                return (string) $this->data->TITULAR;
+                return (string) $this->_data->TITULAR;
                 break;
 
             case 'body':
-                return nl2br((string) $this->data->CONTENIDO);
+                return nl2br((string) $this->_data->CONTENIDO);
                 break;
 
             case 'summary':
-                return (string) $this->data->ENTRADILLA;
+                return (string) $this->_data->ENTRADILLA;
                 break;
 
             case 'photos':
-                return (array) $this->data->PHOTOS;
+                return (array) $this->_data->PHOTOS;
                 break;
 
             case 'personajes':
-                return (array) $this->data->PERSONAJES;
+                return (array) $this->_data->PERSONAJES;
                 break;
 
             case 'photos':
-                return (array) $this->data->PHOTOS;
+                return (array) $this->_data->PHOTOS;
                 break;
 
             case 'people':
-                return (array) $this->data->PERSONAJES;
+                return (array) $this->_data->PERSONAJES;
                 break;
 
             case 'place':
-                return (array) $this->data->LUGAR;
+                return (array) $this->_data->LUGAR;
                 break;
 
             case 'associatedDocs':
-                return (array) $this->data->DOCS;
+                return (array) $this->_data->DOCS;
                 break;
 
             case 'categories':
-                return (array) $this->data->CATEGORIES;
+                return (array) $this->_data->CATEGORIES;
                 break;
 
             case 'dataCastID':
-                return (array) $this->data->DATACASTID;
+                return (array) $this->_data->DATACASTID;
                 break;
 
             case 'level':
-                return (array) $this->data->LEVEL;
+                return (array) $this->_data->LEVEL;
                 break;
 
             case 'redactor':
-                return (array) $this->data->FIRMA;
+                return (array) $this->_data->FIRMA;
                 break;
-
         }
     }
 
@@ -212,34 +196,34 @@ class NewsMLG1 {
      *
      * @param $arg
      */
-    static public function getOriginalCategories()
+    public static function getOriginalCategories()
     {
         return array(
-                    'ACE' => _('Society'),
-                    'AGR' => _('Agriculture'),
-                    'AYU' => _('Council'),
-                    'CUL' => _('Society (CUL)'),
-                    'CYA' => _('Event CYA'),
-                    'CYT' => _('Society CYT'),
-                    'DCG' => _('Disturbs'),
-                    'DEP' => _('Sports'),
-                    'ECO' => _('Economy'),
-                    'EDU' => _('Society Education EDU'),
-                    'GAL' => _('GALICIA'),
-                    'JEI' => _('JUSTICIA'),
-                    'MEA' => _('Environment'),
-                    'OPI' => _('Opinion'),
-                    'OPL' => _('Politics OPL'),
-                    'POL' => _('Politics POL'),
-                    'PRT' => _('TV Guide'),
-                    'REL' => _('Society REL'),
-                    'SAN' => _('Society SAN'),
-                    'SOC' => _('Society SOC'),
-                    'SUC' => _('Event SUC'),
-                    'SYS' => _('Society SYS'),
-                    'TOR' => _('Society Toros'),
-                    'TRI' => _('Justice'),
-            );
+            'ACE' => _('Society'),
+            'AGR' => _('Agriculture'),
+            'AYU' => _('Council'),
+            'CUL' => _('Society (CUL)'),
+            'CYA' => _('Event CYA'),
+            'CYT' => _('Society CYT'),
+            'DCG' => _('Disturbs'),
+            'DEP' => _('Sports'),
+            'ECO' => _('Economy'),
+            'EDU' => _('Society Education EDU'),
+            'GAL' => _('GALICIA'),
+            'JEI' => _('JUSTICIA'),
+            'MEA' => _('Environment'),
+            'OPI' => _('Opinion'),
+            'OPL' => _('Politics OPL'),
+            'POL' => _('Politics POL'),
+            'PRT' => _('TV Guide'),
+            'REL' => _('Society REL'),
+            'SAN' => _('Society SAN'),
+            'SOC' => _('Society SOC'),
+            'SUC' => _('Event SUC'),
+            'SYS' => _('Society SYS'),
+            'TOR' => _('Society Toros'),
+            'TRI' => _('Justice'),
+        );
     }
 
     /*
@@ -247,9 +231,8 @@ class NewsMLG1 {
      *
      * @param $arg
      */
-    static public function matchCategoryName($categoryName)
+    public static function matchCategoryName($categoryName)
     {
-
         if (empty($categoryName)) {
             throw new \ArgumentException;
         }
@@ -262,7 +245,6 @@ class NewsMLG1 {
         }
 
         return $category;
-
     }
 
     /*
@@ -270,7 +252,7 @@ class NewsMLG1 {
      *
      * @param $arg
      */
-    static public function getOriginalPriorities()
+    public static function getOriginalPriorities()
     {
         return array(
             '10'  => _('Flash'),
@@ -288,7 +270,7 @@ class NewsMLG1 {
      * Retrives a localized string for the priority from identifier
      *
      */
-    static public function matchPriority($priority)
+    public static function matchPriority($priority)
     {
         if (empty($priority)) {
             $priority = '30';
@@ -308,8 +290,6 @@ class NewsMLG1 {
      */
     public function getData()
     {
-        return $this->data;
+        return $this->_data;
     }
-
-
 }

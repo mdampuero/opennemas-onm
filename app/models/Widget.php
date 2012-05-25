@@ -35,7 +35,6 @@ class Widget extends Content
      */
     public function __construct($id = null)
     {
-
         parent::__construct($id);
 
         if (!is_null($id)) {
@@ -52,7 +51,7 @@ class Widget extends Content
      **/
     public function __get($name)
     {
-        switch($name) {
+        switch ($name) {
             case 'content_type_name':
                 return 'Widget';
                 break;
@@ -63,6 +62,7 @@ class Widget extends Content
 
         return parent::__get($name);
     }
+
     public function create($data)
     {
         // Clear  magic_quotes
@@ -83,9 +83,7 @@ class Widget extends Content
         $values = array($this->id, $data['content'], $data['renderlet']);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+            \Application::logDatabaseError();
             $GLOBALS['application']->conn->RollbackTrans();
 
             return false;
@@ -96,10 +94,11 @@ class Widget extends Content
 
         return true;
     }
+
     /**
      * Read, get a specific object
      *
-     * @param int $id Object ID
+     * @param  int    $id Object ID
      * @return Widget Return instance to chaining method
      */
     public function read($id)
@@ -107,23 +106,22 @@ class Widget extends Content
 
         parent::read($id);
         $this->id = $id;
-        $sql = "SELECT * FROM `widgets` WHERE `pk_widget`=?";
-        $values = array($id);
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        $sql      = "SELECT * FROM `widgets` WHERE `pk_widget`=?";
+        $values   = array($id);
+        $rs       = $GLOBALS['application']->conn->Execute($sql, $values);
 
         if ($rs === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+            \Application::logDatabaseError();
 
             return null;
         }
         $this->load($rs->fields);
     }
+
     /**
      * Read, get a specific object
      *
-     * @param int $id Object ID
+     * @param  int    $id Object ID
      * @return Widget Return instance to chaining method
      */
     public function readIntelligentFromName($content)
@@ -135,23 +133,19 @@ class Widget extends Content
         );
 
         if ($rs === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+            \Application::logDatabaseError();
 
             return null;
         }
         $id = $rs->fields['pk_widget'];
         parent::read($id);
         $this->id = array($id);
-        $sql = "SELECT * FROM `widgets` WHERE `pk_widget`=?";
-        $values = array($id);
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        $sql      = "SELECT * FROM `widgets` WHERE `pk_widget`=?";
+        $values   = array($id);
 
+        $rs     = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+            \Application::logDatabaseError();
 
             return null;
         }
@@ -165,8 +159,6 @@ class Widget extends Content
      */
     public function load($properties)
     {
-
-
         if (is_array($properties)) {
             foreach ($properties as $k => $v) {
 
@@ -185,10 +177,11 @@ class Widget extends Content
         }
         $this->id = $this->pk_widget;
     }
+
     /**
      * Update
      *
-     * @param array $data Array values
+     * @param  array   $data Array values
      * @return boolean
      */
     public function update($data)
@@ -209,9 +202,7 @@ class Widget extends Content
         $values = array($data['content'], $data['renderlet'], $data['id']);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+            \Application::logDatabaseError();
             $GLOBALS['application']->conn->RollbackTrans();
 
             return false;
@@ -232,9 +223,7 @@ class Widget extends Content
         $values = array($placeholder, $id);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+            \Application::logDatabaseError();
 
             return false;
         }
@@ -247,7 +236,7 @@ class Widget extends Content
         $path = realpath(TEMPLATE_USER_PATH . '/tpl' . '/widgets') . '/';
         $allWidgets = array();
 
-        if(is_dir($path)){
+        if (is_dir($path)) {
             $objects = scandir($path);
             foreach ($objects as $object) {
                 if ($object != "." && $object != "..") {
@@ -271,21 +260,18 @@ class Widget extends Content
     /**
      * Delete
      *
-     * @param int $id Identifier
+     * @param  int     $id Identifier
      * @return boolean
      */
     public function remove($id, $editor = null)
     {
-
         $sql = "DELETE FROM `widgets` WHERE `pk_widget`=?";
         parent::remove($id); // Delete from database, don't use trash
 
         $values = array($id);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+            \Application::logDatabaseError();
 
             return false;
         }
@@ -297,22 +283,42 @@ class Widget extends Content
 
         return '';
     }
+
     public function render($params = null)
     {
+        switch ($this->renderlet) {
+            case 'html':
+                $content = $this->_renderlet_html($params);
+                break;
 
-        $method = '_renderlet_' . $this->renderlet;
+            case 'smarty':
+                $content = $this->_renderlet_smarty($params);
+                break;
 
-        //call_user_func_array(array($this, $method), array($smarty));
-        return "<div class=\"widget\">" . $this->$method($params) . "</div>";
+            case 'intelligentwidget':
+                $content = $this->_renderlet_intelligentwidget($params);
+                break;
+
+            case 'php':
+                $content = $this->_renderlet_php($params);
+                break;
+
+            default:
+                $content = '';
+                break;
+        }
+
+        return "<div class=\"widget\">" .$content. "</div>";
     }
+
     private function _renderlet_html()
     {
 
         return $this->content;
     }
+
     private function _renderlet_php()
     {
-
         ob_start();
         eval($this->content);
         $output = ob_get_contents();
@@ -320,6 +326,7 @@ class Widget extends Content
 
         return $output;
     }
+
     /**
      *
      * SEE resource.string.php Smarty plugin
@@ -327,11 +334,6 @@ class Widget extends Content
      */
     private function _renderlet_smarty()
     {
-
-
-        // Deprecated
-        //$resource = 'string:' . $this->content;
-
         Template::$registry['widget'][$this->pk_widget] = $this->content;
         $resource = 'string:' . $this->content;
         $wgtTpl = new Template(TEMPLATE_USER);
@@ -343,9 +345,9 @@ class Widget extends Content
 
         return $output;
     }
+
     private function _renderlet_intelligentwidget($params=null)
     {
-
         $output = "Not implemented";
         $path = realpath(TEMPLATE_USER_PATH . '/tpl' . '/widgets') . '/';
         ini_set('include_path', get_include_path() . PATH_SEPARATOR . $path);

@@ -12,19 +12,21 @@
  * @package    Onm
  * @subpackage Utils
  **/
-class FilesManager {
+class FilesManager
+{
     /**
      * Create directories each content, if it don't exists
      * /images/ /files/, /advertisements/, /opinion/
      */
-    public function createAllDirectories() {
+    public function createAllDirectories()
+    {
         $dir_date = date("Y/m/d/");
         // /images/, /files/, /ads/, /opinion/
         // /media/images/año/mes/dia/
         //
         $dirs = array( MEDIA_IMG_DIR, MEDIA_FILE_DIR, MEDIA_ADS_DIR, MEDIA_OPINION_DIR );
 
-        foreach($dirs as $dir) {
+        foreach ($dirs as $dir) {
             $path = MEDIA_PATH.$dir.'/'.$dir_date ;
             FilesManager::createDirectory($path);
         }
@@ -35,11 +37,11 @@ class FilesManager {
      *
      * @param string $path Directory to create
      */
-    static public function createDirectory($path) {
-
+    public static function createDirectory($path)
+    {
         $created =  mkdir($path, 0775, true);
         chmod($path, 0755);
-        if(!$created) {
+        if (!$created) {
             // Register a critical error
             echo '<br> error'.$path;
             $GLOBALS['application']->logger->emerg("Error creating directory: " . $path);
@@ -49,10 +51,10 @@ class FilesManager {
     /**
      * Copy source path into destination path, and creates it if not exists.
      *
-     * @param string $source fullpath for the copy
+     * @param string $source      fullpath for the copy
      * @param string $destination path to the new destination
      */
-    static public function recursiveCopy($source, $destination)
+    public static function recursiveCopy($source, $destination)
     {
         // Delete destination if exists
         if (file_exists($destination)) { unlink($destination); }
@@ -72,6 +74,7 @@ class FilesManager {
         } elseif (file_exists($source)) {
             copy($source, $destination);
         };
+
         return true;
     }
 
@@ -80,9 +83,9 @@ class FilesManager {
      *
      * @param string $path Directory to check
      */
-    public function isDirEmpty($path){
-
-        foreach(glob($path."/*") as $archivos) {
+    public function isDirEmpty($path)
+    {
+        foreach (glob($path."/*") as $archivos) {
             return false; //tiene archivos o dirs que no son /. o /..
         }
 
@@ -94,10 +97,10 @@ class FilesManager {
      *
      * @param string $path Directory to delete
      */
-    public function deleteDirectory($path) {
-
-        if(file_exists($path)) {
-           if(rmdir($path)){
+    public function deleteDirectory($path)
+    {
+        if (file_exists($path)) {
+           if (rmdir($path)) {
               $GLOBALS['application']->logger->emerg("Error deleting directory: " . $path);
            }
         }
@@ -108,13 +111,15 @@ class FilesManager {
      *
      * @param string $path Directory concat with filename
      */
-     static public function mkFile($filename){
-        if(!is_file($filename)) {
+     static public function mkFile($filename)
+     {
+        if (!is_file($filename)) {
             $handle = fopen($filename,"x");
-            if ($handle){
+            if ($handle) {
                 fclose($handle);
+
                 return true;
-            }else{
+            } else {
                 return false;
             }
         } else {
@@ -125,10 +130,11 @@ class FilesManager {
     /**
      * Write some content in a file
      *
-     * @param string $file name
+     * @param string $file  name
      * @param string $input content to save in a file
      */
-    static public function writeInFile($file, $input){
+    public static function writeInFile($file, $input)
+    {
         chmod($file, 0755);
         $handle = fopen($file, "w");
         if (!fwrite($handle, $input)) {
@@ -146,8 +152,8 @@ class FilesManager {
      * @param string $file name
      *
      */
-    static public function decompressZIP($file) {
-
+    public static function decompressZIP($file)
+    {
         $zip = new ZipArchive;
 
         // open archive
@@ -180,10 +186,10 @@ class FilesManager {
      * Clean the special chars into a file name
      *
      * @access static
-     * @param string $name, the string to clean
+     * @param  string  $name, the string to clean
      * @return string, the string cleaned
      **/
-    static public function cleanFileName($name)
+    public static function cleanFileName($name)
     {
         $name = html_entity_decode($name, ENT_COMPAT, 'UTF-8');
         $name = mb_strtolower($name, 'UTF-8');

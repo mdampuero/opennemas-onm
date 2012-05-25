@@ -31,6 +31,7 @@ class PrivilegesCheck
                 || is_null($categoryID)
             ) {
                 $_SESSION['lasturlcategory'] = $_SERVER['REQUEST_URI'];
+
                 return true;
             }
 
@@ -56,18 +57,19 @@ class PrivilegesCheck
             }
 
 
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             return false;
         }
 
         $_SESSION['lasturlcategory'] = $_SERVER['REQUEST_URI'];
+
         return true;
     }
 
     /**
      * Checks if the current user has access to one privilege and category.
      *
-     * @param string $privilege the privelege token.
+     * @param string $privilege  the privelege token.
      * @param string $categoryID the category id
      *
      * @return boolean true if the user has access
@@ -104,11 +106,12 @@ class PrivilegesCheck
                 return false;
             }
 
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             return false;
         }
 
         $_SESSION['lasturl'] = $_SERVER['REQUEST_URI'];
+
         return true;
     }
 
@@ -139,10 +142,12 @@ class PrivilegesCheck
         ) {
             session_destroy();
             unset($_SESSION);
+
             return true;
         }
         //Actuliza la sesion
         self::LoadSessionExpireTime();
+
         return false;
     }
 
@@ -150,6 +155,7 @@ class PrivilegesCheck
     public function HandleError($errno, $errstr, $errfile, $errline)
     {
         throw new Exception($errstr, $errno);
+
         return true;
         //change to return false to make the "catch" block execute;
     }

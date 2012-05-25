@@ -40,25 +40,24 @@ require_once("index_advertisement.php");
 $ccm = ContentCategoryManager::get_instance();
 
 
-if ( ($tpl->caching == 0)  || !$tpl->isCached('frontpage/newslibrary.tpl', $cache_id) )
-{
+if ( ($tpl->caching == 0)  || !$tpl->isCached('frontpage/newslibrary.tpl', $cache_id) ) {
 
     $fp = new Frontpage();
 
     /****************** FETCHING NEWS IN STATIC FILES **********************/
-    if(\Onm\Module\ModuleManager::isActivated('FRONTPAGES_LIBRARY')) {
+    if (\Onm\Module\ModuleManager::isActivated('FRONTPAGES_LIBRARY')) {
 
-        if($category_name != 'home') {
+        if ($category_name != 'home') {
           $actual_category_id = $ccm->get_id($category_name);
         } else {
           $actual_category_id = 0;
         }
         //TODO: review this option
-        if( $fp->cache->getFrontpage($date, $actual_category_id) ) {
+        if ( $fp->cache->getFrontpage($date, $actual_category_id) ) {
 
             $articles_home = array();
-            if(!empty($fp->contents)){
-                foreach($fp->contents as $element) {
+            if (!empty($fp->contents)) {
+                foreach ($fp->contents as $element) {
 
                     $content = new $element['content_type']($element['pk_fk_content']);
                     // add all the additional properties related with positions and params
@@ -71,11 +70,11 @@ if ( ($tpl->caching == 0)  || !$tpl->isCached('frontpage/newslibrary.tpl', $cach
                         'params'     => unserialize($element['params']),
                     ));
 
-                    if(!empty($content->fk_video)) {
+                    if (!empty($content->fk_video)) {
                         $content->video = new Video($content->fk_video);
 
-                    }else {
-                        if(!empty($content->img1)) {
+                    } else {
+                        if (!empty($content->img1)) {
                             $content->image = new Photo($content->img1);
                         }
                     }
@@ -90,9 +89,9 @@ if ( ($tpl->caching == 0)  || !$tpl->isCached('frontpage/newslibrary.tpl', $cach
 
         $tpl->display('frontpage/fp_newslibrary.tpl');
 
-    } elseif(\Onm\Module\ModuleManager::isActivated('STATIC_LIBRARY')) {
+    } elseif (\Onm\Module\ModuleManager::isActivated('STATIC_LIBRARY')) {
                 //cronicas method
-        if($category_name != 'home') {
+        if ($category_name != 'home') {
             $actual_category_id = $ccm->get_id($category_name);
         } else {
             $actual_category_id = 0;
@@ -102,9 +101,9 @@ if ( ($tpl->caching == 0)  || !$tpl->isCached('frontpage/newslibrary.tpl', $cach
 
       //  var_dump(INSTANCE_MEDIA."library/{$path}/{$category_name}.html");
 
-        if( !empty($date) ) {
+        if ( !empty($date) ) {
             $html = file_get_contents(INSTANCE_MEDIA."library/{$path}/{$category_name}.html");
-            if(!empty($html)) {
+            if (!empty($html)) {
                 echo $html;
             } else {
                 $output = $tpl->fetch('frontpage/not_found.tpl');
@@ -121,7 +120,7 @@ if ( ($tpl->caching == 0)  || !$tpl->isCached('frontpage/newslibrary.tpl', $cach
 
         $library = array();
         $contents= $cm->getContentsForLibrary($date);
-        if(!empty($contents)) {
+        if (!empty($contents)) {
             foreach ($contents as $content) {
                $categoryID = $content->category;
                $library[$categoryID] = new stdClass();

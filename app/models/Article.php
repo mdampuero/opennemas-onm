@@ -20,25 +20,25 @@ class Article extends Content
      *
      * @access public
      */
-    var $pk_article    = null;
-    var $subtitle      = null;
-    var $agency        = null;
-    var $summary       = null;
-    var $body          = null;
-    var $img1          = null;
-    var $img1_footer   = null;
-    var $img2          = null;
-    var $img2_footer   = null;
-    var $fk_video      = null;
-    var $fk_video2     = null;
-    var $footer_video2 = null;
-    var $with_comment  = null;
-    var $columns       = null;
-    var $home_columns  = null;
-    var $title_int     = null;
+    public $pk_article    = null;
+    public $subtitle      = null;
+    public $agency        = null;
+    public $summary       = null;
+    public $body          = null;
+    public $img1          = null;
+    public $img1_footer   = null;
+    public $img2          = null;
+    public $img2_footer   = null;
+    public $fk_video      = null;
+    public $fk_video2     = null;
+    public $footer_video2 = null;
+    public $with_comment  = null;
+    public $columns       = null;
+    public $home_columns  = null;
+    public $title_int     = null;
     /**#@-*/
 
-    static $clonesHash = null;
+    public static $clonesHash = null;
 
     /**
      * Initializes the Article object from an ID
@@ -76,10 +76,10 @@ class Article extends Content
                 $uri =  Uri::generate(
                     'article',
                     array(
-                        'id' => sprintf('%06d',$this->id),
-                        'date' => date('YmdHis', strtotime($this->created)),
+                        'id'       => sprintf('%06d',$this->id),
+                        'date'     => date('YmdHis', strtotime($this->created)),
                         'category' => $this->category_name,
-                        'slug' => $this->slug2,
+                        'slug'     => $this->slug2,
                     )
                 );
 
@@ -457,8 +457,8 @@ class Article extends Content
     /**
      * Save into table `articles_clone`
      *
-     * @param string $originalPK
-     * @param string $clonePK
+     * @param  string  $originalPK
+     * @param  string  $clonePK
      * @return boolean
      */
     public function saveClone($originalPK, $clonePK)
@@ -796,7 +796,7 @@ class Article extends Content
         return $values;
     }
 
-    static public function loadHashClones()
+    public static function loadHashClones()
     {
         if (is_null(self::$clonesHash)) {
             $sql = 'SELECT `pk_original`, `pk_clone` FROM `articles_clone`';

@@ -51,7 +51,7 @@ class Imagick extends Common implements ImageInterface
     /**
      * Writes the image in a given path, if not given overwrites the original
      *
-     * @param string $filePath the path where save the image
+     * @param  string           $filePath the path where save the image
      * @return Onm\File\Imagick object
      **/
     public function save($filePath = '')

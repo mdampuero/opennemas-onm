@@ -685,6 +685,20 @@ switch ($action) {
         Application::forward(SITE_URL_ADMIN.'/article.php?action=list&category='.$_REQUEST['category']);
     break;
 
+    case 'changeFavorite':
+
+        Acl::checkOrForward('OPINION_ADMIN');
+        $contentID = filter_input ( INPUT_GET, 'id' , FILTER_SANITIZE_NUMBER_INT);
+        $status = filter_input ( INPUT_GET, 'status' , FILTER_SANITIZE_NUMBER_INT);
+
+        $opinion = new Opinion($contentID);
+        $opinion->set_favorite($status,$_SESSION['userid']);
+
+        Application::forward($_SERVER['SCRIPT_NAME'].
+                '?action=list&category='.$_REQUEST['category'].'&page='.$page);
+
+    break;
+
     case 'unpublish':
         $opinion = new Opinion();
         $opinion->read($_REQUEST['id']);

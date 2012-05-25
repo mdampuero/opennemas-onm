@@ -24,10 +24,10 @@ class TemplateCacheManager
     /**
      * Construct
      * @param string $themeDir Path to smarty theme
-     * @param Smarty $smarty Smarty class
+     * @param Smarty $smarty   Smarty class
      */
-    public function __construct($themeDir, $smarty = null) {
-
+    public function __construct($themeDir, $smarty = null)
+    {
         $this->_smarty = (!is_null($smarty)) ? $smarty : new Template($themeDir);
         $this->_cacheDir = $this->_smarty->cache_dir;
 
@@ -36,8 +36,8 @@ class TemplateCacheManager
     /**
      * Scan cache directory and return an array with cache files
      *
-     * @param string $filter A regular expression to filter cache file names
-     * @return array Array of cache files
+     * @param  string $filter A regular expression to filter cache file names
+     * @return array  Array of cache files
      */
     public function scan($filter = null)
     {
@@ -70,6 +70,7 @@ class TemplateCacheManager
                 }
             }
         }
+
         return $caches;
     }
 
@@ -206,7 +207,7 @@ class TemplateCacheManager
     /**
      * Delete a cache file physically
      *
-     * @param string $cachefile Cache file or cache Id
+     * @param string $cachefile   Cache file or cache Id
      * @param string $tplFilename Template file name
      *
      * @return boolean Return a boolean information of operation performed
@@ -224,8 +225,10 @@ class TemplateCacheManager
         } elseif (!empty($cachefile)) {
             $cachefile = $this->_cacheDir . $cachefile;
             $this->removeFile($cachefile);
+
             return true;
         }
+
         return false;
     }
 
@@ -243,8 +246,8 @@ class TemplateCacheManager
     /**
      * Refresh timestamp of expires for a cachefile or cacheId
      *
-     * @param int $timestamp New timestamp to expires
-     * @param string $cachefile Name of cache file or cache Id
+     * @param int    $timestamp   New timestamp to expires
+     * @param string $cachefile   Name of cache file or cache Id
      * @param string $tplFilename Optional name of template
      *
      * @return boolean Return true if action is performed
@@ -280,8 +283,10 @@ class TemplateCacheManager
 
             // write modified file contents
             file_put_contents($cachefile, $contents);
+
             return true;
         }
+
         return false;
     }
 
@@ -309,6 +314,7 @@ class TemplateCacheManager
         $html = curl_exec($ch);
         ob_end_clean();
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
         return $httpCode == 200;
     }
 
@@ -323,6 +329,7 @@ class TemplateCacheManager
                 $pk_authors[] = $matches[1];
             }
         }
+
         return array($pk_contents, $pk_authors);
     }
 
@@ -332,6 +339,7 @@ class TemplateCacheManager
 
         if (file_exists($filename)) {
             unlink($filename);
+
             return true;
         }
     }
@@ -340,6 +348,7 @@ class TemplateCacheManager
     {
 
         $filename = $this->_smarty->config_dir . 'cache.conf';
+
         return parse_ini_file($filename, true);
     }
 

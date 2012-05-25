@@ -14,21 +14,21 @@
  **/
 class Comment extends \Content
 {
-    var $pk_comment = null;
-    var $author = null;
-    var $ciudad = null;
-    var $sexo = null;
-    var $email = null;
-    var $body = null;
-    var $ip = null;
-    var $published = null;
-    var $fk_content = null;
-    var $content_type = null;
+    public $pk_comment   = null;
+    public $author       = null;
+    public $ciudad       = null;
+    public $sexo         = null;
+    public $email        = null;
+    public $body         = null;
+    public $ip           = null;
+    public $published    = null;
+    public $fk_content   = null;
+    public $content_type = null;
 
     /**
      * Initializes the comment object from a given id
      **/
-    function __construct($id = null)
+    public function __construct($id = null)
     {
         parent::__construct($id);
 
@@ -44,13 +44,13 @@ class Comment extends \Content
      * Create a new comment for a given id from content, data regardless the
      * comment, and the ip that issued that comment.
      *
-     * @param array $params the params to change function behaviour
-     * @return bool if it is true the comment was created, if it is false
+     * @param  array $params the params to change function behaviour
+     * @return bool  if it is true the comment was created, if it is false
      *              something went wrong
      **/
     public function create($params)
     {
-        $fk_content = $params['id'];
+        $fkContent = $params['id'];
         $data = $params['data'];
         $ip = $params['ip'];
 
@@ -70,19 +70,22 @@ class Comment extends \Content
                                       `ip`,`email`,`fk_content`)
                 VALUES (?,?,?,?,?,?,?)';
         $values = array(
-            $this->id, $data['author'], $data['body'],
-            $data['ciudad'], $ip, $data['email'], $fk_content
+            $this->id,
+            $data['author'],
+            $data['body'],
+            $data['ciudad'],
+            $ip,
+            $data['email'],
+            $fkContent
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+            \Application::logDatabaseError();
 
             return (false);
         }
 
-        return ($this->id);
+        return $this->id;
     }
 
     /**
@@ -93,23 +96,21 @@ class Comment extends \Content
     public function read($id)
     {
         parent::read($id);
-        $sql = 'SELECT * FROM comments WHERE pk_comment = ' . ($id);
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $sql = 'SELECT * FROM comments WHERE pk_comment=?';
+        $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+            \Application::logDatabaseError();
 
             return;
         }
         $this->pk_comment = $rs->fields['pk_comment'];
-        $this->author = $rs->fields['author'];
-        $this->body = $rs->fields['body'];
-        $this->ciudad = $rs->fields['ciudad'];
-        $this->ip = $rs->fields['ip'];
-        $this->email = $rs->fields['email'];
-        $this->published = $rs->fields['published'];
+        $this->author     = $rs->fields['author'];
+        $this->body       = $rs->fields['body'];
+        $this->ciudad     = $rs->fields['ciudad'];
+        $this->ip         = $rs->fields['ip'];
+        $this->email      = $rs->fields['email'];
+        $this->published  = $rs->fields['published'];
         $this->fk_content = $rs->fields['fk_content'];
     }
 
@@ -121,14 +122,13 @@ class Comment extends \Content
     public function update($data)
     {
         parent::update($data);
-        $sql = "UPDATE     comments SET `author`=?, `body`=?
-                        WHERE pk_comment=" . ($data['id']);
+        $sql = "UPDATE comments SET `author`=?, `body`=?"
+             . "WHERE pk_comment=" . ($data['id']);
         $values = array($data['author'], $data['body']);
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        if ($rs === false) {
+            \Application::logDatabaseError();
 
             return;
         }
@@ -142,16 +142,16 @@ class Comment extends \Content
     public function remove($id)
     {
         parent::remove($id);
-        $sql = 'DELETE FROM comments WHERE pk_comment =' . ($id);
+        $sql = 'DELETE FROM comments WHERE pk_comment=?';
 
-        if ($GLOBALS['application']->conn->Execute($sql) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
+        if ($rs === false) {
+            \Application::logDatabaseError();
 
             return;
         }
     }
+
     /**
      * Delete all comments from a given content id
      *
@@ -171,9 +171,7 @@ class Comment extends \Content
             $values = array($contentID);
             $rs = $GLOBALS['application']->conn->Execute($sql, $values);
             if ($rs === false) {
-                $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-                $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-                $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+                \Application::logDatabaseError();
 
                 return;
             }
@@ -184,8 +182,8 @@ class Comment extends \Content
      * Return all the comments from a given content's id
      *
      * @access public
-     * @param integer $contentID
-     * @return mixed, array of comment's objects
+     * @param  integer $contentID
+     * @return mixed,  array of comment's objects
      **/
     public function get_comments($contentID)
     {
@@ -201,10 +199,14 @@ class Comment extends \Content
             $rs = $GLOBALS['application']->conn->Execute($sql, $values);
 
             if ($rs !== false) {
-                while (!$rs->EOF) {
-                    $related[] = $rs->fields['pk_comment'];
-                    $rs->MoveNext();
-                }
+                \Application::logDatabaseError();
+
+                return false;
+            }
+
+            while (!$rs->EOF) {
+                $related[] = $rs->fields['pk_comment'];
+                $rs->MoveNext();
             }
         }
 
@@ -215,16 +217,15 @@ class Comment extends \Content
      * Determines if the content of a comment has bad words
      *
      * @access public
-     * @param mixed $data, the data from the comment
+     * @param  mixed    $data, the data from the comment
      * @return integer, higher values means more bad words
      **/
     public function hasBadWorsComment($data)
     {
-
-        $text = $data['title'] . ' ' . $data['body'];
+        $text = $data['title'].' '.$data['body'];
 
         if (isset($data['author'])) {
-            $text.= ' ' . $data['author'];
+            $text .= ' ' . $data['author'];
         }
         $weight = StringUtils::getWeightBadWords($text);
 
@@ -235,8 +236,8 @@ class Comment extends \Content
      * Gets the public comments from a given content's id.
      *
      * @access public
-     * @param integer $contentID
-     * @return mixed, array of comment's objects
+     * @param  integer $contentID
+     * @return mixed,  array of comment's objects
      **/
     public function get_public_comments($contentID)
     {
@@ -252,7 +253,7 @@ class Comment extends \Content
             $values = array($contentID);
             $rs = $GLOBALS['application']->conn->Execute($sql, $values);
             while (!$rs->EOF) {
-                $obj = new Comment();
+                $obj       = new Comment();
                 $obj->load($rs->fields);
                 $related[] = $obj;
                 $rs->MoveNext();
@@ -266,35 +267,28 @@ class Comment extends \Content
      * Gets the number of public comments
      *
      * @access public
-     * @param integer $contentID, the id of the content to get comments from
+     * @param  integer  $contentID, the id of the content to get comments from
      * @return integer, the number of public comments
      **/
     public function count_public_comments($contentID)
     {
-        $rs = 0;
-        if (!empty($contentID)) {
-            $sql = 'SELECT count(pk_comment)
-                    FROM comments, contents
-                    WHERE comments.fk_content = ?
-                      AND content_status=1
-                      AND in_litter=0
-                      AND pk_content=pk_comment';
-            $rs = $GLOBALS['application']->conn->GetOne(
-                $sql,
-                array($contentID)
-            );
+        if (empty($contentID)) {
+
+            return false;
         }
+        $sql = 'SELECT count(pk_comment)
+                FROM comments, contents
+                WHERE comments.fk_content = ?
+                  AND content_status=1
+                  AND in_litter=0
+                  AND pk_content=pk_comment';
+        $rs = $GLOBALS['application']->conn->GetOne($sql, array($contentID));
 
         return intval($rs);
     }
 
     public function get_home_comments($filter = null)
     {
-        //$sql='select fk_content as art, pk_comment as com
-        //from comments, contents, articles
-        //where comments.in_litter=0 and pk_content=pk_comment
-        //ORDER BY created DESC';
-
         if (is_null($filter)) {
             $filter = "1=1";
         }
@@ -335,7 +329,6 @@ class Comment extends \Content
      **/
     public function count_pending_comments()
     {
-
         $sql = 'SELECT count(pk_content)
                 FROM `contents`
                 WHERE `fk_content_type` =6
@@ -347,5 +340,4 @@ class Comment extends \Content
 
         return intval($rs->fields['count(pk_content)']);
     }
-
 }

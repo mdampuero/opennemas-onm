@@ -25,6 +25,14 @@
                 <div><label>{t}File:{/t}</label> {$photo->name}</div>
                 <div><label>{t}Resolution:{/t}</label> {$photo->width} x {$photo->height} (px)</div>
                 <div><label>{t}Size:{/t}</label> {$photo->size} Kb</div>
+                <div>
+                    <label>{t}URL:{/t}</label>
+                    <a href="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}"
+                       title="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}"
+                       target="_blank">
+                       {$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}
+                    </a>
+                </div>
             </div>
             <div>
                 <label>{t}Description:{/t}</label> <br /><textarea class="required" id="description[{$photo->id}]" name="description[{$photo->id}]"
@@ -49,7 +57,7 @@
 
                 <div style="display:inline-block; width:25%">
                     <label>{t}Color:{/t}</label><br/>
-                    <select name="color[{$photo->id}]" id="color[{$photo->id}]" />
+                    <select name="color[{$photo->id}]" id="color[{$photo->id}]" style="width:80px;height:28px;margin-left:20px;"/>
                         <option value="{t}Color{/t}" {if $photo->color eq 'color'} selected {/if}>{t}Color{/t}</option>
                         <option value="{t}B/W{/t}" {if $photo->color eq 'BN'} selected {/if}>{t}B/W{/t}</option>
                     </select>

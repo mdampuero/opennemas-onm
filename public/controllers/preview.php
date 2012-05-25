@@ -9,7 +9,7 @@ require_once('../admin/session_bootstrap.php');
 /**
  *  Check admin session
  */
-if(!isset($_SESSION['userid']) || empty($_SESSION['userid'])) {
+if (!isset($_SESSION['userid']) || empty($_SESSION['userid'])) {
     Application::forward('/'); // Send to home page
 }
 
@@ -23,7 +23,7 @@ if ( !(isset($category_name) && !empty($category_name)) ) {
     $category_name = 'home';
 }
 
-if(!isset($_REQUEST['preview_time'])) {
+if (!isset($_REQUEST['preview_time'])) {
     $_REQUEST['preview_time'] = date('Y-m-d H:i:s');
 }
 $preview_time = isset($_REQUEST['preview_time'])? $_REQUEST['preview_time'] : 20 ;
@@ -65,7 +65,7 @@ if ($category_name == 'home') {
     /// Adding Widgets {{{
     $contentsInHomepage = $cm->getContentsForHomepageOfCategory($actual_category_id);
 
-    foreach($contentsInHomepage as $content) {
+    foreach ($contentsInHomepage as $content) {
         if(isset($content->home_placeholder)
            && !empty($content->home_placeholder)
            && ($content->home_placeholder != '')
@@ -75,9 +75,7 @@ if ($category_name == 'home') {
 
         }
     }
-}
-else
-{
+} else {
     $articles_home =
         $cm->find_by_category('Article', $category_name,
                                 'contents.frontpage=1 AND contents.content_status=1 '.
@@ -89,7 +87,7 @@ else
     /// Adding Widgets {{{
     $contentsInHomepage = $cm->getContentsForHomepageOfCategory($category_name);
 
-    foreach($contentsInHomepage as $content) {
+    foreach ($contentsInHomepage as $content) {
         if(isset($content->placeholder)
            && !empty($content->placeholder)
            && ($content->placeholder != '')
@@ -107,21 +105,21 @@ $tpl->assign('articles_home', $articles_home);
 
 /**************************************  PHOTOS  ***********************************************/
 $imagenes = array();
-foreach($articles_home as $i => $art) {
-    if(isset($art->img1)) {
+foreach ($articles_home as $i => $art) {
+    if (isset($art->img1)) {
         $imagenes[] = $art->img1;
     }
 }
 
 $photos = array();
-if(count($imagenes)>0) {
+if (count($imagenes)>0) {
     $imagenes = $cm->find('Photo', 'pk_content IN ('. implode(',', $imagenes) .')');
 
-    foreach($articles_home as $i => $art) {
-       if(isset($art->img1)) {
+    foreach ($articles_home as $i => $art) {
+       if (isset($art->img1)) {
             // Buscar la imagen
-            foreach($imagenes as $img) {
-                if($img->pk_content == $art->img1) {
+            foreach ($imagenes as $img) {
+                if ($img->pk_content == $art->img1) {
                     $photos[$art->id] = $img->path_file.$img->name;
                     break;
                 }
@@ -136,13 +134,13 @@ $tpl->assign('photos', $photos);
 
     /***** GET ALL FRONTPAGE'S IMAGES *******/
     $imagenes = array();
-    foreach($articles_home as $i => $art) {
-        if(isset($art->img1)) {
+    foreach ($articles_home as $i => $art) {
+        if (isset($art->img1)) {
             $imagenes[] = $art->img1;
         }
     }
 
-    if(count($imagenes)>0) {
+    if (count($imagenes)>0) {
         $imagenes = $cm->find('Photo', 'pk_content IN ('. implode(',', $imagenes) .')');
     }
 
@@ -151,16 +149,16 @@ $tpl->assign('photos', $photos);
      // $rating_bar_col1 = array();//Array que contiene las barras de votación de las noticias de la columna1
     $c = 0;
     $aux = 0;
-    while(isset($articles_home[$aux]) && $articles_home[$aux]->title != "") {
+    while (isset($articles_home[$aux]) && $articles_home[$aux]->title != "") {
         $column[$c] = $articles_home[$aux];
         $column[$c]->category_name = $column[$c]->loadCategoryName($articles_home[$aux]->id);
         $column[$c]->category_title = $column[$c]->loadCategoryTitle($articles_home[$aux]->id);
         /*****  GET IMAGE DATA *****/
-        if(isset($column[$c]->img1)) {
+        if (isset($column[$c]->img1)) {
                 // Buscar la imagen
-                if(!empty($imagenes)) {
-                    foreach($imagenes as $img) {
-                        if($img->pk_content == $column[$c]->img1) {
+                if (!empty($imagenes)) {
+                    foreach ($imagenes as $img) {
+                        if ($img->pk_content == $column[$c]->img1) {
                          //   $photos[$art->id] = $img->path_file.$img->name;
 
                             $column[$c]->img1_path = $img->path_file.$img->name;
@@ -172,7 +170,7 @@ $tpl->assign('photos', $photos);
          /***** GET OBJECT VIDEO *****/
         if (empty($column[$c]->img1) and isset($column[$c]->fk_video) and (!empty($column[$c]->fk_video))) {
             $video=$column[$c]->fk_video;
-            if(isset($video)){
+            if (isset($video)) {
                $video1=new Video($video);
                $column[$c]->obj_video= $video1;
             }
@@ -184,11 +182,11 @@ $tpl->assign('photos', $photos);
         // devueve array con los id de las noticias relacionadas
 
         $relats = array();
-        foreach($relationes as $i => $id_rel) { //Se recorre el array para sacar todos los campos.
+        foreach ($relationes as $i => $id_rel) { //Se recorre el array para sacar todos los campos.
 
             $obj = new Content($id_rel);
             // Filter by scheduled {{{
-            if($obj->isInTime() && $obj->available==1 && $obj->in_litter==0) {
+            if ($obj->isInTime() && $obj->available==1 && $obj->in_litter==0) {
                $relats[] =$obj;
             }
             // }}}
@@ -196,7 +194,7 @@ $tpl->assign('photos', $photos);
         $column[$c]->related_contents = $relats;
 
         /***** COLUMN1 COMMENTS *******
-        if($articles_home[$aux]->with_comment) {
+        if ($articles_home[$aux]->with_comment) {
             $comment = new Comment();
 
             $numcomment1[$articles_home[$aux]->id] = $comment->count_public_comments($articles_home[$aux]->id);

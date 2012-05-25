@@ -24,7 +24,7 @@ $category_name = $request->query->filter('category_name', '', FILTER_SANITIZE_ST
 $action = $request->query->filter('action', 'list' , FILTER_SANITIZE_STRING);
 $page = $request->query->filter('page', 0, FILTER_VALIDATE_INT);
 
-if(!empty($category_name)) {
+if (!empty($category_name)) {
     $ccm = ContentCategoryManager::get_instance();
     $category = $ccm->get_id($category_name);
     $actual_category_id = $category;

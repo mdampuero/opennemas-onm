@@ -59,7 +59,7 @@ switch ($action) {
                 // Fetch the photo images of the director
                 $aut = new Author($director[0]->fk_author);
                 $foto = $aut->get_photo($director[0]->fk_author_img);
-                if (isset($foto->path_img)){
+                if (isset($foto->path_img)) {
                     $dir['photo'] = $foto->path_img;
                 }
                 $dir['name'] = $aut->name;
@@ -147,7 +147,7 @@ switch ($action) {
             }
 
             // If there aren't opinions just redirect to homepage opinion
-            if (empty($countOpinions)){
+            if (empty($countOpinions)) {
                 Application::forward301('/seccion/opinion/');
             }
 

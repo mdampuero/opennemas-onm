@@ -34,7 +34,7 @@ $tpl->setConfig('kiosko');
 if(!defined('KIOSKO_DIR'))
         define('KIOSKO_DIR', "kiosko".SS);
 
-switch($action) {
+switch ($action) {
     case 'list':
         /**
          * Avoid to run the entire app logic if is available a cache for this page
@@ -55,7 +55,7 @@ switch($action) {
                                               'AND MONTH(`kioskos`.date)='.$month.' AND'.
                                               ' YEAR(`kioskos`.date)='.$year.'',
                                               'ORDER BY `kioskos`.date DESC ');
-                if(!empty($portadas)) {
+                if (!empty($portadas)) {
                     $kiosko[] = array ('category' => $theCategory->title,
                                    'portadas' => $portadas);
                 }
@@ -103,7 +103,7 @@ switch($action) {
                                           ' YEAR(`kioskos`.date)='.$year.' ',
                                           'ORDER BY `kioskos`.date DESC ');
             $kiosko =array();
-            if(!empty($portadas)) {
+            if (!empty($portadas)) {
                 $kiosko[] = array ('category' => '',
                                'portadas' => $portadas);
             }

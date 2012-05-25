@@ -81,7 +81,7 @@ class SimpleMenu
         return "<a href=\"$url\" $target $attrTitle $attrId>".$title."</a>";
     }
 
-    private  function _checkAcl($privilege)
+    private function _checkAcl($privilege)
     {
         if (isset($privilege) && !is_null($privilege)) {
             $privileges = explode(',', $privilege);
@@ -164,10 +164,8 @@ class SimpleMenu
                 $external = isset($value['target']);
                 $class = $this->_getClass($value['class']);
                 $html .= "<li {$class}>"
-                      . $this->_getHref(
-                            $value['title'], 'submenu_'.$value['id'],
-                            $value['link'], $external
-                        )
+                      . $this->_getHref($value['title'],
+                            'submenu_'.$value['id'], $value['link'], $external)
                       . "</li>";
             }
         }
@@ -190,15 +188,14 @@ class SimpleMenu
                 && \Acl::isMaster()
             ) {
                 $external = isset($submenu['target']);
-                $class = $this->getclass($submenu['class']);
+                $class = $this->_getClass($submenu['class']);
                 $html.= "<li {$class}>";
-                    $html .= $this->_getHref(
-                        $submenu['title'], 'submenu_'.$submenu['id'],
-                        $submenu['link'], $external
-                    );
+                    $html .= $this->_getHref($submenu['title'],
+                        'submenu_'.$submenu['id'], $submenu['link'], $external);
                 $html.= "</li>";
             }
         }
+
         return $html;
     }
 
@@ -207,7 +204,7 @@ class SimpleMenu
      *
      * @param array $params the params for this function
      *
-     * @return string    the HTML for this menu
+     * @return string the HTML for this menu
      */
     public function getHTML($params = array())
     {
@@ -215,13 +212,11 @@ class SimpleMenu
 
             $html = "";
             foreach ($this->_menu as $menu) {
-
                 // Check if the user can se this menu and module activated
-                if (
-                    (!isset($menu['privilege']) || $this->_checkAcl($menu['privilege']))
+                if ((!isset($menu['privilege']) || $this->_checkAcl($menu['privilege']))
                     && (\Onm\Module\ModuleManager::isActivated((string)$menu['module_name']))
                 ) {
-                    $class = $this->getclass($menu['class']);
+                    $class = $this->_getClass($menu['class']);
                     $html .= "<li {$class}>"
                           . $this->_getHref($menu['title'], 'menu_'.$menu['id'], $menu['link']);
 
