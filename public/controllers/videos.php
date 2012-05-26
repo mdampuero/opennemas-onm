@@ -1,24 +1,21 @@
 <?php
 /**
- * Start up and setup the app
- */
+ * This file is part of the Onm package.
+ *
+ * (c)  OpenHost S.L. <developers@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ **/
+// Start up and setup the app
 require_once ('../bootstrap.php');
 use \Onm\Settings as s;
 
-/**
- * Setup view
- */
+// Setup view
 $tpl = new Template(TEMPLATE_USER);
 $tpl->setConfig('video');
 
-
-/******************************  CATEGORIES & SUBCATEGORIES  *********************************/
-
-/******************************  CATEGORIES & SUBCATEGORIES  *********************************/
-/**
- * Setting up available categories for menu.
-*/
-
+//Setting up available categories for menu.
 $category_name = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
 
 $action = $request->query->filter('action', 'list' , FILTER_SANITIZE_STRING);
@@ -29,22 +26,21 @@ if (!empty($category_name)) {
     $category = $ccm->get_id($category_name);
     $actual_category_id = $category;
     $category_real_name = $ccm->get_title($category_name);
-    $tpl->assign(array( 'category_name' => $category_name ,
-                        'category' => $category ,
-                        'actual_category_id' => $actual_category_id ,
-                        'category_real_name' => $category_real_name ,
-                        'actual_category' =>$category_name,
-                ) );
+    $tpl->assign(array(
+        'category_name'      => $category_name ,
+        'category'           => $category ,
+        'actual_category_id' => $actual_category_id ,
+        'category_real_name' => $category_real_name ,
+        'actual_category'    => $category_name,
+    ));
 } else {
      $category_real_name = 'Portada';
      $tpl->assign(array(
-                        'category_real_name' => $category_real_name ,
-                ) );
-     $actual_category_id = $category = 0; //NEED CODE WIDGETS
+        'category_real_name' => $category_real_name ,
+    ));
+    $actual_category_id = $category = 0; //NEED CODE WIDGETS
 
 }
-
-/******************************  CATEGORIES & SUBCATEGORIES  *********************************/
 
 switch ($action) {
 
@@ -206,7 +202,7 @@ switch ($action) {
         Content::setNumViews($videoID);
         $tpl->display('video/video_inner.tpl', $cacheID);
 
-    break;
+        break;
 
     case 'videos_incategory':
 
@@ -281,9 +277,9 @@ switch ($action) {
         $html = $tpl->fetch('video/partials/_widget_video_more_interesting.tpl');
         echo $html;
         exit(0);
-    break;
+        break;
 
     default:
         Application::forward301('/');
-    break;
+        break;
 }

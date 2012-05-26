@@ -238,8 +238,8 @@ class Newsletter
      */
     public function setupDatabaseTable()
     {
-        require_once(SITE_LIBS_PATH.'adodb5/adodb-xmlschema.inc.php');
-        $schema = new adoSchema( $GLOBALS['application']->conn );
+        require_once SITE_LIBS_PATH.'adodb5/adodb-xmlschema.inc.php';
+        $schema = new adoSchema($GLOBALS['application']->conn);
 
         // Schema for bulletins support.
         $axmls = '<?xml version="1.0"?>
@@ -265,7 +265,7 @@ class Newsletter
 
     public function schema_exists()
     {
-        $dict = NewDataDictionary($GLOBALS['application']->conn);
+        $dict   = NewDataDictionary($GLOBALS['application']->conn);
         $tables = $dict->MetaTables();
 
         return in_array($this->tablename, $tables);

@@ -57,7 +57,7 @@ switch ($action) {
         $tpl->setConfig('rss');
         $title_rss = "";
         $rss_url = SITE_URL;
-        $author = $request->query->filter('author', null , FILTER_SANITIZE_STRING);
+        $author = $request->query->filter('author', null, FILTER_SANITIZE_STRING);
 
         if ((strtolower($category_name)=="opinion")
             && isset($author))
@@ -115,7 +115,7 @@ switch ($action) {
             // If is opinion
             } elseif ($category_name == 'opinion') {
 
-                $author = $request->query->filter('author', null , FILTER_SANITIZE_STRING);
+                $author = $request->query->filter('author', null, FILTER_SANITIZE_STRING);
 
                 // get all the authors of opinions
                 if (!isset ($author)) {

@@ -1,8 +1,13 @@
 <?php
-
 /**
- * Start up and setup the app
-*/
+ * This file is part of the Onm package.
+ *
+ * (c)  OpenHost S.L. <developers@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ **/
+// Start up and setup the app
 require_once('../bootstrap.php');
 
 // Redirect Mobile browsers to mobile site unless a cookie exists.
@@ -13,8 +18,8 @@ $tpl = new Template(TEMPLATE_USER);
 $tpl->setConfig('opinion');
 
 // HTTP variables
-$action        = $request->query->filter('action', 'list' , FILTER_SANITIZE_STRING);
-$authorID      = (int)$request->query->filter('author_id', '' , FILTER_VALIDATE_INT);
+$action        = $request->query->filter('action', 'list', FILTER_SANITIZE_STRING);
+$authorID      = (int)$request->query->filter('author_id', '', FILTER_VALIDATE_INT);
 $page          = $request->query->filter('page', 1, FILTER_VALIDATE_INT);
 
 $tpl->assign('actual_category', 'opinion'); // Used in renderMenu
@@ -28,15 +33,13 @@ $cacheID = 'opinion|'.(($authorID != '') ? $authorID.'|' : '').$page;
 switch ($action) {
 
     case 'list_opinions': // Index frontpage
-
         // Don't execute the app logic if there are caches available
         if (!$tpl->isCached('opinion/opinion_index.tpl', $cacheID)) {
 
             $cm = new ContentManager();
 
             // Fetch last opinions from editorial
-            $editorial = $cm->find(
-                'Opinion',
+            $editorial = $cm->find('Opinion',
                 'opinions.type_opinion=1 '.
                 'AND contents.available=1 '.
                 'AND contents.in_home=1 '.
@@ -89,7 +92,8 @@ switch ($action) {
                 $opinion->author_name_slug = StringUtils::get_title($opinion->name);
             }
 
-            $pagination = $cm->create_paginate($total_opinions, ITEMS_PAGE, 2, 'URL', $url, '');
+            $pagination = $cm->create_paginate($total_opinions,
+                ITEMS_PAGE, 2, 'URL', $url, '');
 
 
             $tpl->assign('editorial', $editorial);
@@ -100,8 +104,7 @@ switch ($action) {
         }
 
         $tpl->display('opinion/opinion_frontpage.tpl', $cacheID);
-
-    break;
+        break;
 
     case 'list_op_author':  // Author frontpage
 
@@ -176,7 +179,6 @@ switch ($action) {
         } // End if isCached
 
         $tpl->display('opinion/opinion_author_index.tpl', $cacheID);
-
-    break;
+        break;
 
 }

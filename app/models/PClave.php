@@ -70,7 +70,7 @@ class PClave
     public function create($data)
     {
         // Clear  magic_quotes
-        StringUtils::disabled_magic_quotes( $data );
+        StringUtils::disabled_magic_quotes($data);
 
         $sql = "INSERT INTO `pclave` (`pclave`, `value`, `tipo`) VALUES (?, ?, ?)";
 
@@ -114,7 +114,7 @@ class PClave
             return null;
         }
 
-        $this->load( $rs->fields );
+        $this->load($rs->fields);
 
         return $this;
     }
@@ -151,7 +151,7 @@ class PClave
     public function update($data)
     {
         // Clear  magic_quotes
-        StringUtils::disabled_magic_quotes( $data );
+        StringUtils::disabled_magic_quotes($data);
 
         $sql = "UPDATE `pclave` SET `pclave`=?, `tipo`=?, `value`=? WHERE `id`=?";
 
@@ -224,7 +224,7 @@ class PClave
         if ($rs !== false) {
             while (!$rs->EOF) {
                 $obj = new PClave();
-                $obj->load( $rs->fields );
+                $obj->load($rs->fields);
 
                 $terms[] = $obj;
 

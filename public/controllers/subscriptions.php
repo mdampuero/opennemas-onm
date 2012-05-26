@@ -23,7 +23,10 @@ require_once("statics_advertisement.php");
 //If the form was sent
 $action = $request->request->filter('action', null, FILTER_SANITIZE_STRING);
 
-if (isset($action) && ($action == 'submit' || $action == 'create_subscriptor')) {
+if (isset($action)
+    && ($action == 'submit'
+        || $action == 'create_subscriptor')
+) {
 
     //Get config vars
     $configRecaptcha = s::get('recaptcha');
@@ -124,8 +127,7 @@ if (isset($action) && ($action == 'submit' || $action == 'create_subscriptor')) 
                         echo('<script>(!alert("Lo sentimos, no se ha podido completar su solicitud.\nVerifique el formulario y vuelva intentarlo."))</script>
                         <script>location.href="/home"</script>');
                     }
-
-                break;
+                    break;
 
                 case 'create_subscriptor':
                     if ($data['subscription'] == 'alta') {
@@ -155,9 +157,7 @@ if (isset($action) && ($action == 'submit' || $action == 'create_subscriptor')) 
                                 <script>location.href="/home"</script>');
                         }
                     }
-
-                break;
-
+                    break;
             }
         }
         $tpl->display('static_pages/subscription.tpl');

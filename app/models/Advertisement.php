@@ -405,7 +405,7 @@ class Advertisement extends Content
 
         if (!empty($data['script'])) {
             //$data['script'] = StringUtils::fixScriptDeclaration($data['script']);
-            $data['script'] = base64_encode($data['script'] );
+            $data['script'] = base64_encode($data['script']);
         }
 
         $data['overlap'] = (isset($data['overlap']))? $data['overlap']: 0;
@@ -498,7 +498,7 @@ class Advertisement extends Content
         // Fetch data for the ad from the database
         $sql = 'SELECT url FROM `advertisements` '
                 .'WHERE `advertisements`.`pk_advertisement`=?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($id) );
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
             \Application::logDatabaseError();

@@ -41,11 +41,11 @@ class MediaItem
 
     public function __construct($file)
     {
-        $this->filename = realpath( $file );
+        $this->filename = realpath($file);
         $this->basename = basename($this->filename);
 
         // Details of file
-        $details = @stat( $this->filename );
+        $details = @stat($this->filename);
 
         $this->mtime	= $details['mtime'];
         $this->size     = $details['size'];

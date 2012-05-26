@@ -102,7 +102,7 @@ class NewNewsletter
      * @return void
      **/
 
-     public function search($where = '1=1')
+    public function search($where = '1=1')
     {
         $sql = 'SELECT * FROM `newsletter_archive` WHERE '.$where;
         $rs = $GLOBALS['application']->conn->Execute($sql);

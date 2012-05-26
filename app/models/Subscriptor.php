@@ -106,7 +106,7 @@ class Subscriptor
     public function read($id)
     {
         $sql = 'SELECT * FROM ' . $this->_tableName . ' WHERE pk_pc_user = ?';
-        $rs = $GLOBALS['application']->conn->Execute( $sql, array($id) );
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
@@ -186,7 +186,7 @@ class Subscriptor
     public function getUserByEmail($email)
     {
         $sql = 'SELECT * FROM ' . $this->_tableName . ' WHERE `email`=?';
-        $rs  = $GLOBALS['application']->conn->Execute( $sql, array($email) );
+        $rs  = $GLOBALS['application']->conn->Execute($sql, array($email));
 
         if ($rs===false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
@@ -263,7 +263,7 @@ class Subscriptor
     public function exists_email( $email )
     {
        $sql = 'SELECT count(*) AS num FROM `pc_users` WHERE email = "'.$email.'"';
-       $rs = $GLOBALS['application']->conn->Execute( $sql );
+       $rs = $GLOBALS['application']->conn->Execute($sql);
 
        if (!$rs) {
            $error_msg = $GLOBALS['application']->conn->ErrorMsg();

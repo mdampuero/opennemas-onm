@@ -14,14 +14,14 @@
  **/
 class Letter extends Content
 {
-    public $pk_letter     = NULL;
-    public $author        = NULL;
-    public $body          = NULL;
+    public $pk_letter         = null;
+    public $author            = null;
+    public $body              = null;
 
-    private static $_instance    = NULL;
+    private static $_instance = null;
 
 
-    public function __construct($id=null)
+    public function __construct($id = null)
     {
         parent::__construct($id);
 
@@ -52,9 +52,9 @@ class Letter extends Content
             case 'uri': {
                 $uri =  Uri::generate('letter',
                     array(
-                        'id' => sprintf('%06d',$this->id),
-                        'date' => date('YmdHis', strtotime($this->created)),
-                        'slug' => $this->slug,
+                        'id'       => sprintf('%06d',$this->id),
+                        'date'     => date('YmdHis', strtotime($this->created)),
+                        'slug'     => $this->slug,
                         'category' => StringUtils::get_title($this->author),
                     )
                 );
@@ -107,13 +107,13 @@ class Letter extends Content
 
         $sql = "SELECT * FROM letters WHERE pk_letter = ? ";
 
-        $rs = $GLOBALS['application']->conn->Execute( $sql, array($id) );
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
         if (!$rs) {
             \Application::logDatabaseError();
 
             return false;
         }
-      $this->load( $rs->fields );
+      $this->load($rs->fields);
       $this->ip = $this->params['ip'];
 
     }
@@ -197,15 +197,12 @@ class Letter extends Content
 
         $ip = Application::getRealIP();
         $data["params"] = array('ip'=> $ip);
-        if ($letter->create( $data ) ) {
+        if ($letter->create($data)) {
             return "Su carta ha sido guardada y está pendiente de publicación.";
         }
 
         return "Su carta no ha sido guardado.\nAsegúrese de cumplimentar "
             ."correctamente todos los campos.";
-
-
     }
-
 
 }

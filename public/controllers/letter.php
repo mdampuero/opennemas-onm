@@ -53,8 +53,7 @@ switch ($action) {
         require_once('letter_advertisement.php');
 
         $tpl->display('letter/letter_frontpage.tpl', $cacheID);
-
-    break;
+        break;
 
     case 'show':
 
@@ -106,8 +105,7 @@ switch ($action) {
          } else {
             Application::forward301('/404.html');
         }
-
-    break;
+        break;
 
     case 'save_letter':
 
@@ -121,10 +119,10 @@ switch ($action) {
         $configRecaptcha = s::get('recaptcha');
 
         // Get reCaptcha validate response
-        $resp = recaptcha_check_answer ($configRecaptcha['private_key'],
-                                        $_SERVER["REMOTE_ADDR"],
-                                        $recaptcha_challenge_field,
-                                        $recaptcha_response_field);
+        $resp = recaptcha_check_answer($configRecaptcha['private_key'],
+                $_SERVER["REMOTE_ADDR"],
+                $recaptcha_challenge_field,
+                $recaptcha_response_field);
 
         // What happens when the CAPTCHA was entered incorrectly
         if (!$resp->is_valid) {
@@ -163,5 +161,5 @@ switch ($action) {
 
     default:
       //  Application::forward301('index.php');
-    break;
+        break;
 }

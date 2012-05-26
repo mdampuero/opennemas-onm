@@ -531,7 +531,7 @@ class Photo extends Content
                             $myiptc['Source'] = $iptc["2#110"][0];
                             $myiptc['Photo_source'] = $iptc["2#183"][0];
 
-                            $myiptc = array_map('map_entities', $myiptc );
+                            $myiptc = array_map('map_entities', $myiptc);
                             $photo->myiptc = $myiptc;
 
                             if (empty($photo->description)) {
@@ -674,7 +674,7 @@ class Photo extends Content
 
         $result = array();
 
-        $rs = $GLOBALS['application']->conn->Execute( $sqlAlbums );
+        $rs = $GLOBALS['application']->conn->Execute($sqlAlbums);
         if ($rs) {
             while (!$rs->EOF) {
                 $result[] = $rs->fields[0];
@@ -682,7 +682,7 @@ class Photo extends Content
             }
         }
 
-        $rs = $GLOBALS['application']->conn->Execute( $sqlAds );
+        $rs = $GLOBALS['application']->conn->Execute($sqlAds);
         if ($rs) {
             while (!$rs->EOF) {
                 $result[] = $rs->fields[0];
@@ -690,7 +690,7 @@ class Photo extends Content
             }
         }
 
-        $rs = $GLOBALS['application']->conn->Execute( $sqlarticles );
+        $rs = $GLOBALS['application']->conn->Execute($sqlarticles);
         if ($rs) {
             while (!$rs->EOF) {
                 $result[]=$rs->fields[0];

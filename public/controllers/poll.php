@@ -100,8 +100,7 @@ switch ($action) {
         require_once('poll_advertisement.php');
 
         $tpl->display('poll/poll_frontpage.tpl', $cacheID);
-
-    break;
+        break;
 
     case 'show':
 
@@ -166,11 +165,10 @@ switch ($action) {
 
             /************* COLUMN-LAST *******************************/
 
-         } else {
+        } else {
             Application::forward301('/404.html');
         }
-
-    break;
+        break;
 
     case 'addVote':
 
@@ -204,10 +202,9 @@ switch ($action) {
 
             Application::forward(SITE_URL.$poll->uri);
         }
-
-    break;
+        break;
 
     default:
-      //  Application::forward301('index.php');
-    break;
+        // Application::forward301('index.php');
+        break;
 }

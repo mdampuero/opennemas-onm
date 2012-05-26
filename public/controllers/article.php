@@ -37,7 +37,7 @@ if (isset($category_name) && !empty($category_name)) {
 }
 
 switch ($action) {
-    case 'read': {
+    case 'read':
 
         if (empty($articleID) ) {
             Application::forward301('/404.html');
@@ -53,9 +53,9 @@ switch ($action) {
         $cm = new ContentManager();
 
         // Advertisements for single article NO CACHE
-        require_once('article_advertisement.php');
+        require_once 'article_advertisement.php';
 
-        $cacheID = $tpl->generateCacheId( $category_name, $subcategory_name, $articleID );
+        $cacheID = $tpl->generateCacheId($category_name, $subcategory_name, $articleID);
 
         if (($tpl->caching == 0) || !$tpl->isCached('article/article.tpl', $cacheID) ) {
 
@@ -113,12 +113,10 @@ switch ($action) {
                     $videoInt = new Video($article->fk_video2);
                     $tpl->assign('videoInt', $videoInt);
                 } else {
-                    $video =  $cm->find_by_category_name(
-                        'Video',
+                    $video =  $cm->find_by_category_name('Video',
                         $actual_category,
                         'contents.content_status=1',
-                        'ORDER BY created DESC LIMIT 0 , 1'
-                    );
+                        'ORDER BY created DESC LIMIT 0 , 1');
                     if (isset($video[0])) {
                         $tpl->assign('videoInt', $video[0]);
                     }
@@ -148,13 +146,12 @@ switch ($action) {
                 $machineSuggestedContents = array();
                 if (!empty($article->metadata)) {
                     $objSearch    = cSearch::Instance();
-                    $machineSuggestedContents = $objSearch->SearchSuggestedContents(
-                        $article->metadata,
-                        'Article',
-                        "pk_fk_content_category= ".$article->category.
-                        " AND contents.available=1 AND pk_content = pk_fk_content",
-                        4
-                    );
+                    $machineSuggestedContents =
+                        $objSearch->SearchSuggestedContents($article->metadata,
+                            'Article',
+                            "pk_fk_content_category= ".$article->category.
+                            " AND contents.available=1 AND pk_content = pk_fk_content",
+                            4);
                     $machineSuggestedContents = $cm->getInTime($machineSuggestedContents);
                 }
                 $tpl->assign('suggested', $machineSuggestedContents);
@@ -166,10 +163,9 @@ switch ($action) {
         } // end if $tpl->is_cached
 
         $tpl->display('article/article.tpl', $cacheID);
+        break;
 
-    } break;
-
-    case 'vote': {
+    case 'vote':
 
         $category_name = 'home';
         $subcategory_name = null;
@@ -189,18 +185,18 @@ switch ($action) {
         if (is_null($vote)) {
             Application::ajax_out("Error no  vote value!");
         }
-        $update = $vote->update($vote_value,$ip);
+        $update = $vote->update($vote_value, $ip);
 
         if ($update) {
-            $html_out = $vote->render($page,'result',1);
+            $html_out = $vote->render($page, 'result', 1);
         } else {
             $html_out = "Ya ha votado anteriormente este comentario.";
         }
 
         Application::ajax_out($html_out);
-    } break;
+        break;
 
-    case 'get_plus': {
+    case 'get_plus':
         if ($_GET["content"]=="Comment") {
 
             $cm = new ContentManager();
@@ -236,10 +232,9 @@ switch ($action) {
         }
 
         Application::ajax_out($html_out);
+        break;
 
-    } break;
-
-    case 'print': {
+    case 'print':
 
         $cacheID = $tpl->generateCacheId($category_name, $subcategory_name, $articleID);
 
@@ -289,10 +284,10 @@ switch ($action) {
         $tpl->display('article/article_printer.tpl');
         exit(0);
 
-    } break;
+        break;
 
 
-    case 'sendform': {
+    case 'sendform':
         require_once('session_bootstrap.php');
         $token = $_SESSION['sendformtoken'] = md5(uniqid('sendform'));
 
@@ -307,9 +302,9 @@ switch ($action) {
         $tpl->caching = 0;
         $tpl->display('article/article_sendform.tpl'); // Don't disturb cache
         exit(0);
-    } break;
+        break;
 
-    case 'send': {
+    case 'send':
         require_once('session_bootstrap.php');
 
         // Check if magic_quotes is enabled and clear globals arrays
@@ -359,7 +354,7 @@ switch ($action) {
         } else {
             $agency = s::get('site_name');
         }
-        $tplMail->assign('agency',$agency);
+        $tplMail->assign('agency', $agency);
 
         if (empty($article->summary)) {
             $summary = substr(strip_tags(stripslashes($article->body)), 0, 300)."...";
@@ -371,7 +366,7 @@ switch ($action) {
 
         if (method_exists($tpl, '_get_plugin_filepath')) {
             //handle with Smarty version 2
-            require_once $tpl->_get_plugin_filepath('function','articledate');
+            require_once $tpl->_get_plugin_filepath('function', 'articledate');
         } else {
             //handle with Smarty version 3 beta 8
             foreach ($tpl->plugins_dir as $value) {
@@ -387,7 +382,7 @@ switch ($action) {
         $params['created'] = $article->created;
         $params['updated'] = $article->updated;
         $params['article'] = $article;
-        $date = smarty_function_articledate($params,$tpl);
+        $date = smarty_function_articledate($params, $tpl);
         $tplMail->assign('date', $date);
 
         $tplMail->caching = 0;
@@ -417,9 +412,9 @@ switch ($action) {
         $tpl->caching = 0;
         $tpl->display('article/article_sendform.tpl'); // Don't disturb cache
         exit(0);
-    } break;
+        break;
 
-    default: {
+    default:
         Application::forward301('index.php');
-    } break;
+        break;
 }

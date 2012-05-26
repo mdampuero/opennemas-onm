@@ -66,7 +66,7 @@ if (isset($_REQUEST['action']) ) {
         case 'list':
             Application::forward('controllers/frontpagemanager/frontpagemanager.php?action=list&category='.$_REQUEST['category']);
 
-        break;
+            break;
         case 'list_pendientes':
 
             Acl::checkOrForward('ARTICLE_PENDINGS');
@@ -124,7 +124,7 @@ if (isset($_REQUEST['action']) ) {
                                       'ORDER BY created DESC, type_opinion DESC, title ASC');
                 $tpl->assign('opinions', $opinions);
                 $aut = new User();
-                foreach ( $opinions as $opin) {
+                foreach ($opinions as $opin) {
                     $autor = new Author($opin->fk_author);
                     $names[] = $autor->name;
                     $art_publishers[]=$aut->get_user_name($opin->fk_publisher);
@@ -158,7 +158,7 @@ if (isset($_REQUEST['action']) ) {
 
             $tpl->display('article/pending.tpl');
 
-        break;
+            break;
 
         case 'list_agency':
             Acl::checkOrForward('ARTICLE_PENDINGS');
@@ -197,9 +197,10 @@ if (isset($_REQUEST['action']) ) {
                     $tpl->assign('opin_editors', $art_publishers);
                     $tpl->assign('opin_editors', $art_editors);
                 }
-            }elseif($_REQUEST['category'] == 'opinion'){
-                $opinions = $cm->find('Opinion', 'fk_content_type=4 AND available=0 ',
-                                      'ORDER BY created DESC, type_opinion DESC, title ASC');
+            } elseif ($_REQUEST['category'] == 'opinion'){
+                $opinions = $cm->find('Opinion',
+                    'fk_content_type=4 AND available=0 ',
+                    'ORDER BY created DESC, type_opinion DESC, title ASC');
                 $tpl->assign('opinions', $opinions);
                 $aut = new User();
                 foreach ( $opinions as $opin) {
@@ -211,9 +212,11 @@ if (isset($_REQUEST['action']) ) {
                 $tpl->assign('opin_names', $names);
                 $tpl->assign('opin_editors', $art_publishers);
                 $tpl->assign('opin_editors', $art_editors);
-            }else{
-                // ContentManager::find_pages(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>,<PAGE>,<ITEMS_PER_PAGE>,<CATEGORY>);
-                list($articles, $pager)= $cm->find_pages('Article', 'available=0 AND fk_content_type=1 ', 'ORDER BY  created DESC, title ASC ',$_REQUEST['page'],10, $_REQUEST['category']);
+            } else {
+                list($articles, $pager)= $cm->find_pages('Article',
+                    'available=0 AND fk_content_type=1 ',
+                    'ORDER BY  created DESC, title ASC ',
+                    $_REQUEST['page'], 10, $_REQUEST['category']);
                 $tpl->assign('articles', $articles);
                 $tpl->assign('paginacion', $pager);
             }
@@ -237,7 +240,7 @@ if (isset($_REQUEST['action']) ) {
 
             $tpl->display('article/article.tpl');
 
-        break;
+            break;
 
 
         case 'list_hemeroteca':
@@ -247,7 +250,10 @@ if (isset($_REQUEST['action']) ) {
             }
             $cm = new ContentManager();
             $rating = new Rating();
-            list($articles, $pager)= $cm->find_pages('Article', 'content_status=0 AND available=1 AND fk_content_type=1 ', 'ORDER BY changed DESC, created DESC, title ASC ',$_REQUEST['page'],10, $_REQUEST['category']);
+            list($articles, $pager)= $cm->find_pages('Article',
+                'content_status=0 AND available=1 AND fk_content_type=1 ',
+                'ORDER BY changed DESC, created DESC, title ASC ',
+                $_REQUEST['page'], 10, $_REQUEST['category']);
             $aut=new User();
             $comment = new Comment();
             foreach ($articles as $art){
@@ -264,13 +270,16 @@ if (isset($_REQUEST['action']) ) {
 
             $tpl->display('article/library.tpl');
 
-        break;
+            break;
 
         case 'new':   // Crear un nuevo artículo
 
             Acl::checkOrForward('ARTICLE_CREATE');
 
-            if(!isset($_REQUEST['category']) || $_REQUEST['category']=='' || $_REQUEST['category']=='home') {
+            if (!isset($_REQUEST['category'])
+                || $_REQUEST['category']==''
+                || $_REQUEST['category']=='home'
+            ) {
                 $_REQUEST['category']=$_SESSION['_from'];
             }
             $tpl->assign('category', $_REQUEST['category']);
@@ -279,22 +288,33 @@ if (isset($_REQUEST['action']) ) {
             $tpl->assign('MEDIA_IMG_PATH_WEB', MEDIA_IMG_PATH_WEB);
 
 
-            $tpl->assign(array( 'availableSizes'=>array(16,18,20,22,24,26,28,30,32,34)
-                        ) );
-             $tpl->assign(
-                array('availableSizes'=>array(16=>'16',18=>'18',20=>'20',22=>'22',24=>'24',26=>'26',
-                                            28=>'28',30=>'30',32=>'32',34=>'34'))
-            );
+            $tpl->assign(array(
+                'availableSizes'=>array(16,18,20,22,24,26,28,30,32,34)
+            ));
+            $tpl->assign(array(
+                    'availableSizes'=> array(
+                        16=>'16',
+                        18=>'18',
+                        20=>'20',
+                        22=>'22',
+                        24=>'24',
+                        26=>'26',
+                        28=>'28',
+                        30=>'30',
+                        32=>'32',
+                        34=>'34'
+                    )
+            ));
 
 
             //TODO: AJAX
             // require_once('controllers/video/videoGallery.php');
             $tpl->display('article/new.tpl');
 
-        break;
+            break;
 
         case 'read':
-        case 'only_read': {
+        case 'only_read':
             if($_REQUEST['action'] == 'read') {
                 Acl::checkOrForward('ARTICLE_UPDATE');
                 $tpl->assign('_from', $_SESSION['_from']);
@@ -397,7 +417,7 @@ if (isset($_REQUEST['action']) ) {
 
             $tpl->display('article/new.tpl');
             // }}}
-        } break;
+            break;
 
         case 'create':
 
@@ -411,8 +431,8 @@ if (isset($_REQUEST['action']) ) {
             $article = new Article();
             $_POST['fk_publisher']=$_SESSION['userid'];
 
-            if($article->create( $_POST )) {
-                if($_SESSION['desde'] == 'index_portada') {
+            if ($article->create( $_POST )) {
+                if ($_SESSION['desde'] == 'index_portada') {
                     Application::forward('index.php');
                 }
 
@@ -423,7 +443,7 @@ if (isset($_REQUEST['action']) ) {
             }
             $tpl->display('article/article.tpl');
 
-        break;
+            break;
 
         case 'unlink':
             $article = new Article($_REQUEST['id']);
@@ -441,11 +461,23 @@ if (isset($_REQUEST['action']) ) {
 
            Acl::checkOrForward('ARTICLE_UPDATE');
            if ($_SESSION['desde'] != 'list_hemeroteca') {
-                if (isset($_POST['with_comment'])) {$_POST['with_comment'] = 1;} else {$_POST['with_comment'] = 0;}
-                if (isset($_POST['frontpage'])) {$_POST['frontpage'] = 1;} else {$_POST['frontpage'] = 0;}
+                if (isset($_POST['with_comment'])) {
+                    $_POST['with_comment'] = 1;
+                } else {
+                    $_POST['with_comment'] = 0;
+                }
+                if (isset($_POST['frontpage'])) {
+                    $_POST['frontpage'] = 1;
+                } else {
+                    $_POST['frontpage'] = 0;
+                }
                 if (isset($_POST['in_home'])) {$_POST['in_home'] = 2;}
             }
-            if (isset($_POST['content_status'])) {$_POST['content_status'] = 1;} else {$_POST['content_status'] = 0;}
+            if (isset($_POST['content_status'])) {
+                $_POST['content_status'] = 1;
+            } else {
+                $_POST['content_status'] = 0;
+            }
 
             // Register cache control event for updating content
             $GLOBALS['application']->register('onAfterUpdate', 'onAfterUpdate_refreshCache');
@@ -454,10 +486,12 @@ if (isset($_REQUEST['action']) ) {
             $articleCheck = new Article();
             $articleCheck->read($_REQUEST['id']);
 
-            if(!Acl::isAdmin() && !Acl::check('CONTENT_OTHER_UPDATE') && $articleCheck->fk_user != $_SESSION['userid']) {
+            if (!Acl::isAdmin()
+                && !Acl::check('CONTENT_OTHER_UPDATE')
+                && $articleCheck->fk_user != $_SESSION['userid']
+            ) {
                 m::add(_("You can't modify this content because you don't have enought privileges.") );
                 Application::forward($_SERVER['SCRIPT_NAME'].'?action=read&id='.$_REQUEST['id']);
-
             } else {
                 $article = new Article();
                 $_REQUEST['fk_user_last_editor'] = $_SESSION['userid'];
@@ -473,7 +507,7 @@ if (isset($_REQUEST['action']) ) {
                 }
             }
 
-            if( $_SESSION['desde'] =='search_advanced'){
+            if ($_SESSION['desde'] =='search_advanced'){
                 if(isset($_GET['stringSearch'])){
                  Application::forward('controllers/search_advanced/search_advanced.php?action=search&stringSearch='.$_GET['stringSearch'].'&category='.$_SESSION['_from'].'&page='.$_REQUEST['page']);
                 }else{
@@ -482,7 +516,7 @@ if (isset($_REQUEST['action']) ) {
                 }
             }
 
-            if($_SESSION['desde']=='index_portada') {
+            if ($_SESSION['desde']=='index_portada') {
                 Application::forward('index.php');
             }elseif ($_SESSION['desde'] == 'europa_press_import') {
                 Application::forward('controllers/agency_importer/europapress.php?action=list&page=0&message=');

@@ -468,7 +468,7 @@ class ContentCategoryManager
         foreach ($categories as $category) {
             if (($category->internal_category)
                 && ($category->inmenu == 1)
-                && ($category->fk_content_category == $category_id)
+                && ($category->fk_content_category == $id)
             ) {
                 $items[$category->name]['title'] = $category->title;
                 $items[$category->name]['internal_category'] =

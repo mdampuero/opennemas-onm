@@ -42,7 +42,7 @@ switch ($action) {
 
         break;
 
-    case 'vote': {
+    case 'vote':
 
         $category_name    = 'home';
         $subcategory_name = null;
@@ -71,7 +71,7 @@ switch ($action) {
         }
 
         Application::ajax_out($html_out);
-    } break;
+        break;
 
     case 'paginate_comments':
 
@@ -175,7 +175,6 @@ switch ($action) {
         }
         $response = new Response($message, 200);
         $response->send();
-
-    break;
+        break;
 
 }
