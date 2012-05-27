@@ -366,7 +366,12 @@ class Widget extends Content
             }
         }
         try {
-            $class = new $className;
+            if (class_exists($className)) {
+                $class = new $className;
+            } else {
+                throw new Exception('', 1);
+
+            }
         } catch (Exception $e) {
             return "Widget {$this->content} not available";
         }
