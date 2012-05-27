@@ -14,20 +14,19 @@
  */
 class ContentCategoryManager
 {
-
     /**
      * @var array with categories
-     */
+     **/
     public $categories = null;
 
     /**
      * @var ContentCategoryManager instance, singleton pattern
-     */
+     **/
     private static $_instance = null;
 
     /**
      * @var MethodCacheManager cache, object to cache requests
-    */
+     **/
     public $cache = null;
 
     public function __construct()
@@ -43,7 +42,7 @@ class ContentCategoryManager
 
             return self::$_instance;
         } else {
-           return self::$_instance;
+            return self::$_instance;
         }
     }
 
@@ -64,7 +63,7 @@ class ContentCategoryManager
      *  call when change or create categories
      *
      * @return array Array with Content_category objects
-    */
+     **/
     public function reloadCategories()
     {
         $this->categories = null;
@@ -168,7 +167,7 @@ class ContentCategoryManager
         return $items;
     }
 
-/**
+    /**
      * find category and subcategory of type content.
      * @param $fkContentType type of elements category.
      * @param $filter - filter of sql
@@ -636,7 +635,7 @@ class ContentCategoryManager
     }
 
     //Returns first subcategory from a father category_id
-    public function get_first_subcategory($category_id)
+    public function get_first_subcategory($categoryId)
     {
         if ( is_null($this->categories) ) {
             $sql = 'SELECT name FROM content_categories
@@ -645,7 +644,7 @@ class ContentCategoryManager
                     ORDER BY posmenu LIMIT 0,1';
 
             $rs = $GLOBALS['application']->conn->Execute($sql,
-                array($category_id));
+                array($categoryId));
 
             if (!$rs) {
                 \Application::logDatabaseError();
@@ -660,7 +659,7 @@ class ContentCategoryManager
         $categories = $this->order_by_posmenu($this->categories);
 
         foreach ($categories as $category) {
-            if ($category->fk_content_category == $category_id
+            if ($category->fk_content_category == $categoryId
                 && $category->inmenu==1
                 && $category->internal_category!=0
             ) {
@@ -911,7 +910,7 @@ class ContentCategoryManager
      *
      * @throws <b>Exception</b> Explanation of exception.
      */
-    public function getArraysMenu($category = NULL, $internal_category = 1)
+    public function getArraysMenu($category = NULL, $internalCategory = 1)
     {
 
         //fullcat contains array with all cats order by posmenu
@@ -934,7 +933,7 @@ class ContentCategoryManager
                 $categoryData[] = $prima;
             }
             if (($prima->internal_category == 1
-                || $prima->internal_category == $internal_category)
+                || $prima->internal_category == $internalCategory)
                 && ($prima->fk_content_category == 0)
             ) {
 
@@ -971,7 +970,7 @@ class ContentCategoryManager
      *
      * @throws <b>Exception</b> Explanation of exception.
      */
-    public function getSubcategories($category_id)
+    public function getSubcategories($categoryId)
     {
         if (is_null($this->categories)) {
             $this->categories = $this->cache->populate_categories();
@@ -979,7 +978,7 @@ class ContentCategoryManager
 
         $items = array();
         foreach ($this->categories as $category) {
-            if ($category->fk_content_category == $category_id) {
+            if ($category->fk_content_category == $categoryId) {
                 $items[]=$category;
             }
         }

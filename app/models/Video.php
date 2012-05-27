@@ -40,21 +40,8 @@ class Video extends Content
     {
         switch ($name) {
             case 'uri':
-                if (empty($this->category_name)) {
-                    $this->category_name = $this->loadCategoryName($this->pk_content);
-                }
-                $uri =  Uri::generate(
-                    'video',
-                    array(
-                        'id' => sprintf('%06d',$this->id),
-                        'date' => date('YmdHis', strtotime($this->created)),
-                        'category' => $this->category_name,
-                        'slug' => $this->slug,
-                    )
-                );
 
-                return ($uri !== '') ? $uri : $this->permalink;
-
+                return $this->getUri();
                 break;
             case 'slug':
                 return StringUtils::get_title($this->title);
@@ -80,23 +67,12 @@ class Video extends Content
                 break;
             case 'thumb':
 
-                if (!is_array($this->information)) {
-                    $information = unserialize($this->information);
-                } else {
-                    $information = $this->information;
-                }
-                if ($this->author_name == 'internal') {
-                    $thumbnail = MEDIA_IMG_PATH_WEB."/../".$information['thumbnails']['normal'];
-                } else {
-                    $thumbnail = $information['thumbnail'];
-                }
-
-                return $thumbnail;
+                return $this->getThumb();
 
             default:
                 break;
         }
-        parent::__get($name);
+        return parent::__get($name);
     }
 
     public function create($data)
@@ -381,6 +357,50 @@ class Video extends Content
         }
 
         return $thumbs;
+    }
+
+    /**
+     * Return the uri for this video
+     *
+     * @return string the video uri
+     **/
+    public function getUri()
+    {
+        if (empty($this->category_name)) {
+            $this->category_name = $this->loadCategoryName($this->pk_content);
+        }
+        $uri =  Uri::generate(
+            'video',
+            array(
+                'id' => sprintf('%06d',$this->id),
+                'date' => date('YmdHis', strtotime($this->created)),
+                'category' => $this->category_name,
+                'slug' => $this->slug,
+            )
+        );
+
+        return ($uri !== '') ? $uri : $this->permalink;
+    }
+
+    /**
+     * Returns the thumb url of this video
+     *
+     * @return string the thumb url
+     **/
+    public function getThumb()
+    {
+        if (!is_array($this->information)) {
+            $information = unserialize($this->information);
+        } else {
+            $information = $this->information;
+        }
+        if ($this->author_name == 'internal') {
+            $thumbnail = MEDIA_IMG_PATH_WEB."/../".$information['thumbnails']['normal'];
+        } else {
+            $thumbnail = $information['thumbnail'];
+        }
+
+        return $thumbnail;
     }
 
     /**

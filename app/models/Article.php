@@ -220,9 +220,7 @@ class Article extends Content
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            \Application::logDatabaseError();
 
             return;
         }
@@ -296,9 +294,7 @@ class Article extends Content
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            \Application::logDatabaseError();
 
             return;
         }
@@ -365,9 +361,7 @@ class Article extends Content
         $this->deleteClone($id); // Eliminar clones
 
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            \Application::logDatabaseError();
 
             return;
         }
@@ -468,10 +462,7 @@ class Article extends Content
                 .'VALUES (?, ?)';
 
         if ($GLOBALS['application']->conn->Execute($sql, $values)===false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            \Application::logDatabaseError();
 
             return false;
         }
@@ -612,6 +603,10 @@ class Article extends Content
 
                 $rs->MoveNext();
             }
+        } else {
+            \Application::logDatabaseError();
+
+            return false;
         }
         // }}}
     }

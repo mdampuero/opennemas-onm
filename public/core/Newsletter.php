@@ -296,8 +296,8 @@ class Newsletter
 
     public function read($id)
     {
-        $sql = 'SELECT * FROM `' . $this->tablename
-             . '` WHERE pk_newsletter=?';
+        $sql = 'SELECT * FROM `' . $this->tablename.'` '
+             . 'WHERE pk_newsletter=?';
         $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($id)));
 
         if (!$rs) {
@@ -305,7 +305,6 @@ class Newsletter
 
             return;
         }
-
         $this->loadData($rs->fields);
 
         return $this;

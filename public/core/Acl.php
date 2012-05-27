@@ -52,7 +52,7 @@ class Acl
         }
 
         if ( !PrivilegesCheck::CheckPrivileges($rule)) {
-            m::add( _("Sorry, you don't have enought privileges") );
+            m::add(_("Sorry, you don't have enought privileges"));
             Application::forward('/admin/');
         }
 
@@ -115,7 +115,7 @@ class Acl
             $message->push();
         }
 
-        m::add( _("Sorry, you don't have enought privileges") );
+        m::add(_("Sorry, you don't have enought privileges") );
         Application::forward('/admin/');
     }
 }

@@ -106,12 +106,7 @@ class InstanceManager
             $instance->settings = unserialize($instance->settings);
             if (empty($instance->settings['MEDIA_URL'])) {
                 $instance->settings['MEDIA_URL'] = implode('',
-                    array(
-                        'http://',
-                        $_SERVER['HTTP_HOST'],
-                        '/media'.
-                        '/'
-                    ));
+                    array('http://' ,$_SERVER['HTTP_HOST'], '/media'.'/'));
             }
             foreach ($instance->settings as $key => $value ) {
                 define($key, $value);
@@ -119,7 +114,8 @@ class InstanceManager
 
             // If this instance is not activated throw an exception
             if ($instance->activated != '1') {
-                throw new \Onm\Instance\NotActivatedException(_('Instance not activated'));
+                $message =_('Instance not activated');
+                throw new \Onm\Instance\NotActivatedException($message);
             }
 
         // If this instance doesn't exist check if the request is from manager
@@ -447,15 +443,19 @@ class InstanceManager
         $rs = $this->_connection->Execute($sql, array($data['internal_name']));
 
         // Check if the email already exists
-        $sql2 = "SELECT count(*) as email_exists FROM instances "
+        $checkMailSql = "SELECT count(*) as email_exists FROM instances "
               . "WHERE `contact_mail` = ?";
-        $rs2 = $this->_connection->Execute($sql2, array($data['user_mail']));
+        $checkMailRs = $this->_connection->Execute($sql2,
+            array($data['user_mail']));
 
         // If doesn´t exist the instance in the database and doesn't exist contact mail proceed
-        if ($rs && !(bool)$rs->fields['instance_exists'] &&
-            $rs2 && !(bool)$rs2->fields['email_exists']) {
-
-            $sql3 = "INSERT INTO instances (name, internal_name, domains, "
+        if ($rs
+            && !(bool)$rs->fields['instance_exists']
+            && $checkMailRs
+            && !(bool)$checkMailRs->fields['email_exists']
+        ) {
+            $createIntanceSql = "INSERT INTO instances "
+                  . "(name, internal_name, domains, "
                   . "activated, settings, contact_mail) "
                   . "VALUES (?, ?, ?, ?, ?, ?)";
             $values = array(
@@ -467,8 +467,9 @@ class InstanceManager
                 $data['user_mail'],
             );
 
-            $rs3 = $this->_connection->Execute($sql3, $values);
-            if (!$rs3) {
+            $createIntanceRs = $this->_connection->Execute($createIntanceSql,
+                $values);
+            if (!$createIntanceRs) {
                 throw new InstanceNotRegisteredException(
                     "Could not create the instance reference into the instance "
                     ."table: {$this->_connection->ErrorMsg()}"
@@ -476,11 +477,15 @@ class InstanceManager
             }
 
             return true;
-        //If instance name or contact mail already exists and comes from openhost form
+
+        // If instance name or contact mail already
+        // exists and comes from openhost form
         } elseif (isset ($_POST['timezone'])) {
             if ($rs && (bool)$rs->fields['instance_exists']) {
                 echo 'instance_exists';
-            } elseif ( $rs2 && (bool)$rs2->fields['email_exists']) {
+            } elseif ($checkMailRs
+                && (bool)$checkMailRs->fields['email_exists']
+            ) {
                 echo 'mail_exists';
             }
 
@@ -619,9 +624,9 @@ class InstanceManager
             $exampleDatabasePath =
                 realpath(APPLICATION_PATH.DS.'db'.DS.'instance-default.sql');
             $execLine = "mysql -h {$onmInstancesConnection['BD_HOST']} "
-                        ."-u {$onmInstancesConnection['BD_USER']}"
-                        ." -p{$onmInstancesConnection['BD_PASS']} "
-                        ."{$data['settings']['BD_DATABASE']} < {$exampleDatabasePath}";
+                ."-u {$onmInstancesConnection['BD_USER']}"
+                ." -p{$onmInstancesConnection['BD_PASS']} "
+                ."{$data['settings']['BD_DATABASE']} < {$exampleDatabasePath}";
             exec($execLine, $output, $exitCode);
             if ($exitCode > 0) {
                 throw new DatabaseForInstanceNotCreatedException(
@@ -634,7 +639,8 @@ class InstanceManager
             //TODO: PROVISIONAL WHILE DONT DELETE $GLOBALS['application']->conn
             //// is used in settings set
             $im = $this->getInstance();
-            $GLOBALS['application']->conn = $im->getConnection($data['settings']);
+            $GLOBALS['application']->conn =
+                $im->getConnection($data['settings']);
 
             if (isset($data['user_name'])
                 && isset ($data['user_pass'])
@@ -651,13 +657,13 @@ class InstanceManager
                     return false;
                 }
 
-                $sql2 = "INSERT INTO `users_content_categories` "
+                $userPrivSql = "INSERT INTO `users_content_categories` "
                         ."(`pk_fk_user`, `pk_fk_content_category`)"
                         ."VALUES (134, 0), (134, 22), (134, 23), (134, 24), "
                         ."       (134, 25), (134, 26), (134, 27), "
                         ."       (134, 28), (134, 29), (134, 30), (134, 31)";
 
-                if (!$connection2->Execute($sql2)) {
+                if (!$connection2->Execute($userPrivSql)) {
                     return false;
                 }
 

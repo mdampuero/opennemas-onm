@@ -369,18 +369,6 @@ class Attachment extends Content
         }
     }
 
-
-    // TODO: eliminar ya no existe directorios por categorias
-    private function getCategoryName($categoryID)
-    {
-        $ccm = ContentCategoryManager::get_instance();
-        foreach ($ccm->categories as $category) {
-            if ($category->pk_content_category == $categoryID) {
-                return $category->name;
-            }
-        }
-    }
-
     public function refreshHome($category = '')
     {
         if ($category == 8) {
