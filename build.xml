@@ -107,7 +107,7 @@
     <target name="phpcs"
         description="Find coding standard violations using PHP_CodeSniffer">
         <exec executable="phpcs">
-            <arg value="--standard=Zend" />
+            <arg value="--standard=PSR1" />
             <arg line="${project.paths.php.space-separated}" />
         </exec>
     </target>
@@ -116,7 +116,7 @@
         description="Find coding standard violations using PHP_CodeSniffer">
         <exec executable="phpcs" output="${basedir}/build/logs/checkstyle.xml">
             <arg line="--report=checkstyle" />
-            <arg value="--standard=Zend" />
+            <arg value="--standard=PSR1" />
             <arg line="${project.paths.php.space-separated}" />
         </exec>
     </target>
