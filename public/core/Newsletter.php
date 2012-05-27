@@ -21,7 +21,7 @@ class Newsletter
     const ITEMS_MAX_LIMIT = 50;
 
     protected $namespace        = null;
-    protected $accountsProvider = null;
+    protected $_accountsProvider = null;
     protected $itemsProvider    = null;
     protected $templateProvider = null;
     protected $tablename        = 'newsletter_archive';
@@ -31,20 +31,13 @@ class Newsletter
     public function __construct($config)
     {
       $this->setup($config['namespace']);
-
-      // This is causing an E_STRICT error, we should reimplement this class
-        // cause it has a lot of counterparts inherited from Xornal.
-        //if (!$this->schema_exists()) {
-        //    $this->setupDatabaseTable();
-        //}
-
     }
 
     public function setup($namespace)
     {
         $accountsProvider = $namespace . 'Newsletter_Accounts_Provider';
         if (class_exists($accountsProvider)) {
-            $this->accountsProvider = new $accountsProvider();
+            $this->_accountsProvider = new $accountsProvider();
         }
 
         $itemsProvider = $namespace . 'Newsletter_Items_Provider';
@@ -55,7 +48,7 @@ class Newsletter
 
     public function getAccountsProvider()
     {
-        return $this->accountsProvider;
+        return $this->_accountsProvider;
     }
 
     public function getItemsProvider()
@@ -111,9 +104,9 @@ class Newsletter
         $advertisement->render($banners, $advertisement);
 
         /*Fetch inmenu categorys*/
-        $inmenu_categorys = $ccm->find('internal_category != 0 '
+        $categoriesInMenu = $ccm->find('internal_category != 0 '
             .'AND fk_content_category =0 AND inmenu=1', 'ORDER BY posmenu');
-        $tpl->assign('inmenu_categorys', $inmenu_categorys);
+        $tpl->assign('inmenu_categorys', $categoriesInMenu);
 
         // VIERNES 4 DE SEPTIEMBRE 2009
         $days = array(
@@ -518,7 +511,7 @@ abstract class Newsletter_Items_Provider
     abstract public function fetch(
         $source,
         $filter=null,
-        $order_by=null,
+        $orderBy=null,
         $limit=null
     );
 
@@ -556,10 +549,10 @@ abstract class Newsletter_Items_Provider
     /**
      * Get items
      */
-    public function getItems($source, $filter=null, $order_by=null, $limit=null)
+    public function getItems($source, $filter=null, $orderBy=null, $limit=null)
     {
         //Newsletter_Item
-        $this->items = $this->fetch($source, $filter, $order_by, $limit);
+        $this->items = $this->fetch($source, $filter, $orderBy, $limit);
 
         return $this->items;
     }
