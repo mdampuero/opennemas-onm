@@ -36,7 +36,7 @@ class ContentCategoryManager
             $this->cache = new MethodCacheManager($this, array('ttl' => 300));
 
             // Rellenar categorías dende caché
-            $this->categories = $this->cache->populate_categories();
+            $this->categories = $this->cache->populateCategories();
 
             self::$_instance = $this;
 
@@ -80,7 +80,6 @@ class ContentCategoryManager
         apc_store($key, serialize($result), 300);
 
         return $result ;
-
     }
 
     /**
@@ -89,7 +88,7 @@ class ContentCategoryManager
      *
      * @return array Array with Content_category objects
     */
-    public function populate_categories()
+    public function populateCategories()
     {
         $sql = 'SELECT * FROM content_categories ORDER BY posmenu ASC';
         $rs = $GLOBALS['application']->conn->Execute($sql);
@@ -973,7 +972,7 @@ class ContentCategoryManager
     public function getSubcategories($categoryId)
     {
         if (is_null($this->categories)) {
-            $this->categories = $this->cache->populate_categories();
+            $this->categories = $this->cache->populateCategories();
         }
 
         $items = array();

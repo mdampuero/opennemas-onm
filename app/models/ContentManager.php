@@ -39,7 +39,7 @@ class ContentManager
 
 
     // Cargar los valores devueltos del sql en objetos.
-    public function load_obj($rs, $contentType)
+    public function loadObject($rs, $contentType)
     {
         $items = array();
 
@@ -86,7 +86,7 @@ class ContentManager
              . $orderBy;
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
-        $items = $this->load_obj($rs, $contentType);
+        $items = $this->loadObject($rs, $contentType);
 
         return $items;
     }
@@ -138,7 +138,7 @@ class ContentManager
              . ' AND `contents`.`pk_content`= `contents_categories`.`pk_fk_content` '.$orderBy;
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
-        $items = $this->load_obj($rs, $contentType);
+        $items = $this->loadObject($rs, $contentType);
 
         return $items;
     }
@@ -367,6 +367,7 @@ class ContentManager
         return $returnValue;
     }
 
+    // TODO: I think that this method is not used anymore
     public static function filterContentsbyProperty(
         $array,
         $property
@@ -605,7 +606,7 @@ class ContentManager
             $rs = $GLOBALS['application']->conn->Execute($sql);
         }
 
-        $items = $this->load_obj($rs, $contentType);
+        $items = $this->loadObject($rs, $contentType);
 
         return $this->getInTime($items);
     }
@@ -830,7 +831,7 @@ class ContentManager
             $rs = $GLOBALS['application']->conn->Execute($sql);
         }
 
-        $items = $this->load_obj($rs, $contentType);
+        $items = $this->loadObject($rs, $contentType);
 
         return $items;
     }
@@ -934,7 +935,7 @@ class ContentManager
         return $articles;
     }
 
-    public function getLatestComments($num=6)
+    public function getLatestComments($num = 6)
     {
         $sql = 'SELECT *
                 FROM contents
@@ -1025,7 +1026,7 @@ class ContentManager
             }
         }
 
-        $items = $this->load_obj($rs, 'content');
+        $items = $this->loadObject($rs, 'content');
 
         return $this->getInTime($items);
     }
@@ -1094,7 +1095,7 @@ class ContentManager
             }
         }
 
-        $items = $this->load_obj($rs, 'content');
+        $items = $this->loadObject($rs, 'content');
 
         return $items;
     }
@@ -1149,7 +1150,7 @@ class ContentManager
                'WHERE '.$_where.'  ' . $_order_by;
         }
         $rs = $GLOBALS['application']->conn->Execute($sql);
-        $pks = $this->load_obj($rs, 'content');
+        $pks = $this->loadObject($rs, 'content');
 
         if (!$all) {
             $pks = $this->getInTime($pks);
@@ -1161,7 +1162,7 @@ class ContentManager
             $sql = 'SELECT * FROM   contents '.
                'WHERE '.$_where_slave.$_comented.'  ' . $_order_by;
             $rs = $GLOBALS['application']->conn->Execute($sql);
-            $pks = $this->load_obj($rs, 'content');
+            $pks = $this->loadObject($rs, 'content');
             $pks = $this->getInTime($pks);
 
             if (!$all) {
@@ -1184,7 +1185,7 @@ class ContentManager
              . 'GROUP BY fk_content ORDER BY num DESC LIMIT 0 , 8';
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
-        $comments = $this->load_obj($rs, 'Comment');
+        $comments = $this->loadObject($rs, 'Comment');
 
         $pk_list = '';
         foreach ($comments as $comment) {
@@ -1200,7 +1201,7 @@ class ContentManager
              . 'FROM contents, comments '
              . 'WHERE available=1 AND pk_content IN ('.$pk_list.')';
         $rs = $GLOBALS['application']->conn->Execute($sql);
-        $items = $this->load_obj($rs, 'content');
+        $items = $this->loadObject($rs, 'content');
         if (empty($items)) {
             return array();
         }
@@ -1428,7 +1429,7 @@ class ContentManager
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
-        $items = $this->load_obj($rs, $contentType);
+        $items = $this->loadObject($rs, $contentType);
 
         $pager_options = array(
             'mode'        => 'Sliding',
@@ -1478,7 +1479,7 @@ class ContentManager
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
-        $items=$this->load_obj($rs, $contentType);
+        $items=$this->loadObject($rs, $contentType);
 
         return $items;
     }
@@ -1513,13 +1514,14 @@ class ContentManager
              .$_order_by;
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
-        $items = $this->load_obj($rs, $contentType);
+        $items = $this->loadObject($rs, $contentType);
 
         return $items;
     }
 
 
     //this function returns last contents of Subcategories of a given category
+    // TODO: I think that this method is no used anymore
     public function find_inSubcategory_by_categoryName(
         $contentType,
         $category_name,
@@ -1553,7 +1555,7 @@ class ContentManager
             return( $items );
 
         } else {
-            $items=$this->load_obj($rs, $contentType);
+            $items=$this->loadObject($rs, $contentType);
         }
 
         return( $items );
@@ -1562,6 +1564,7 @@ class ContentManager
 
     //Find title, date and slug from category id.
     // Assing values to new object call Headline
+    // TODO: I think that this method is no used anymore
     public function find_category_headline(
         $pkFkContentCategory,
         $filter=null,
@@ -1587,7 +1590,7 @@ class ContentManager
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
-        $items = $this->load_obj($rs, 'Headline');
+        $items = $this->loadObject($rs, 'Headline');
 
         return $items;
     }
