@@ -55,7 +55,6 @@ saveNewsletter = (function() {
 
     jQuery('textarea#newsletterContent').text(encodedContents);
 
-alert('sdfsdf');
     return encodedContents;
 
 });

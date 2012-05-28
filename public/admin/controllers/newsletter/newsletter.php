@@ -275,7 +275,7 @@ switch($action) {
         ));
 
         unset($_SESSION['newsletterHtml']);
-        unset($SESSION['data-newsletter']);
+        unset($_SESSION['data-newsletter']);
         unset($_COOKIE['data-recipients']);
         unset($_COOKIE['data-subject']);
 
