@@ -133,7 +133,7 @@ switch($action) {
 
         $_SESSION['newsletterHtml'] = $newsletter->html;
 
-        $htmlContent = html_entity_decode($newsletter->html, ENT_QUOTES );
+        $htmlContent = htmlspecialchars_decode($newsletter->html, ENT_QUOTES );
 
         $tpl->assign( array(
                     'htmlContent' => $htmlContent,
@@ -162,7 +162,9 @@ switch($action) {
 
             $htmlContent = htmlspecialchars_decode($_SESSION['newsletterHtml'], ENT_QUOTES);
         } else {
-            $_SESSION['data-newsletter'] = $_POST['newsletterContent'];
+            if(array_key_exists('newsletterContent', $_POST)) {
+                $_SESSION['data-newsletter'] = $_POST['newsletterContent'];
+            }
             $htmlContent = $newsletter->render();
         }
 

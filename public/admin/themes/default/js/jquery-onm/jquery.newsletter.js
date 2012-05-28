@@ -267,9 +267,12 @@ function saveChanges() {
         type: "POST",
         data: { action:"saveNewsletterContent", html:htmlContent },
         error:function (xhr, ajaxOptions, thrownError){
-                    alert(xhr.status);
-                    alert(thrownError);
-                }
+            log(xhr.status + 'problem saving html code ');
+            alert(xhr.status + 'problem saving html code ');
+        },
+        success: function() {
+            log(ok);
+        }
     });
 }
 
