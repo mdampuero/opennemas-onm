@@ -17,5 +17,9 @@ jQuery("#modal-container-active").modal({
     keyboard: true, //Can close on escape
     show: false
 });
+jQuery('#modal-newsletter-accept a.btn.accept').on('click', function(e){
+    jQuery("#modal-container-active").modal('hide');
+    e.preventDefault();
 
+});
 </script>

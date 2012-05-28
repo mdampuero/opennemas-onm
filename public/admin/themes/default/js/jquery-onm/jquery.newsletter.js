@@ -12,7 +12,7 @@ jQuery('#buttons-contents').on('click','#clean-button', function() {
 
     jQuery("div#newsletter-container").find('ul li').remove();
 
-    jQuery.cookie("data-newsletter", '');
+    jQuery.cookie("data-newsletter", null);
 });
 
 jQuery('#savedNewsletter').on('click','#load-saved', function() {
@@ -37,7 +37,7 @@ saveNewsletter = (function() {
                 'id' : jQuery(item).data('id'),
                 'title': jQuery(item).data('title'),
                 'content_type': jQuery(item).data('type'),
-                'position': (index+1),
+                'position': (i+1),
             });
         });
 
@@ -52,9 +52,12 @@ saveNewsletter = (function() {
     });
 
     var encodedContents = JSON.stringify(els);
-
+    jQuery.cookie("data-newsletter", null);
+log( jQuery.cookie("data-newsletter"));
     jQuery.cookie("data-newsletter", encodedContents);
-
+log(encodedContents);
+log( jQuery.cookie("data-newsletter"));
+alert('sdfsdf');
     return encodedContents;
 
 });
@@ -311,7 +314,7 @@ jQuery('#buttons-recipients').on('click','#prev-button', function() {
 
 jQuery('#buttons-recipients').on('click','#clean-button', function() {
 
-    jQuery.cookie("data-recipients", '');
+    jQuery.cookie("data-recipients", null);
     jQuery("#action").val('listRecipients');
     jQuery('#newsletterForm').submit();
 

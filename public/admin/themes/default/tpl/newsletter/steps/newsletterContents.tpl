@@ -105,7 +105,7 @@
                             <div id="newsletter-container" class="column-receiver">
 
                                 {if empty($newsletterContent)}
-                                    <div class="container-receiver"  data-title="En Portada" data-id="1" >
+                                    <div class="container-receiver active"  data-title="En Portada" data-id="1" >
                                         <div class="container-label"><span>En Portada</span>
                                             <div class="container-buttons btn-group">
                                                     <i class="icon-chevron-down"></i>
