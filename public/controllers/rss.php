@@ -16,7 +16,7 @@ $app->mobileRouter();
 
 // Fetch HTTP variables
 $category_name = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
-$subcategory_name = $request->query->filter('subcategory_name', 'home', FILTER_SANITIZE_STRING);
+$subcategory_name = $request->query->filter('subcategory_name', null, FILTER_SANITIZE_STRING);
 $cache_page = $request->query->filter('page', 0, FILTER_VALIDATE_INT);
 $action = $request->query->filter('action', 'index_rss', FILTER_SANITIZE_STRING);
 
