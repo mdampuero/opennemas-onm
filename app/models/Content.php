@@ -615,6 +615,31 @@ class Content
         return $state;
     }
 
+    /**
+     * Returns a quick info resume of this content
+     *
+     * @return array the quick info
+     **/
+    public function getQuickInfo()
+    {
+        $ccm     = ContentCategoryManager::get_instance();
+        $author  = new User($this->fk_author);
+
+        if ($this->id !== null) {
+            return array(
+                'title'           => $this->title,
+                'category'        => $ccm->get_name($this->category),
+                'starttime'       => $this->starttime,
+                'endtime'         => $this->endtime,
+                'scheduled_state' => $this->getSchedulingState(),
+                'state'           => $this->getStatus(),
+                'views'           => $this->views,
+                'last_author'     => $author->firstname. " " .$author->lastname,
+            );
+
+        }
+    }
+
 
     /**
      * Sets the available status for this content.

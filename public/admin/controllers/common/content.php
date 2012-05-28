@@ -163,21 +163,8 @@ switch ($action) {
 
     case 'get-info':
         $content = new Content($id);
-        $ccm     = ContentCategoryManager::get_instance();
-        $author  = new User($content->fk_author);
-
         if ($content->id !== null) {
-            $output = array(
-                'title'           => $content->title,
-                'category'        => $ccm->get_name($content->category),
-                'starttime'       => $content->starttime,
-                'endtime'         => $content->endtime,
-                'scheduled_state' => $content->getSchedulingState(),
-                'state'           => $content->getStatus(),
-                'views'           => $content->views,
-                'last_author'     => $author->firstname. " " .$author->lastname,
-            );
-
+            $output = $content->getQuickInfo();
         } else {
             $error = sprintf('Content with id %s no valid', $id);
         }

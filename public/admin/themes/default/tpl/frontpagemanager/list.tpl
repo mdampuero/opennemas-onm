@@ -14,6 +14,11 @@
             remember_save_positions: "{t}Please, remember save positions after finish.{/t}",
             error_tab_content_provider: "{t}Couldn't load this tab. We'll try to fix this as soon as possible.{/t}"
         }
+        var content_states = {
+            {foreach from=$frontpage_articles item=content}
+            {$content->id}: {$content->getQuickInfo()|json_encode},
+            {/foreach}
+        }
     </script>
     {script_tag src="/jquery-onm/jquery.frontpagemanager.js"}
 {/block}
