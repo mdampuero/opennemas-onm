@@ -10,9 +10,7 @@ jQuery('#buttons-contents').on('click','#next-button', function() {
 
 jQuery('#buttons-contents').on('click','#clean-button', function() {
 
-    jQuery("div#newsletter-container").find('ul:not(:first)').remove();
-
-    jQuery("div#newsletter-container").find('ul li:not(.container-label)').remove();
+    jQuery("div#newsletter-container").find('ul li').remove();
 
     jQuery.cookie("data-newsletter", '');
 });
@@ -63,14 +61,17 @@ saveNewsletter = (function() {
 
 addSelectedItems  = (function () {
 
-    jQuery('ul#contentList li').find('input:checked').each(function() {
+    if(empty(jQuery('div#newsletter-container div.active'))) {
+        jQuery("#modal-container-active").modal('show');
+    } else {
+        jQuery('ul#contentList li').find('input:checked').each(function() {
 
-        item =  jQuery(this).parent();
-        jQuery('div#newsletter-container ul:last-child').append(item);
+            item =  jQuery(this).parent();
+            jQuery('div#newsletter-container div.active ul.content-receiver').append(item);
 
-    });
-    jQuery('input#toggleallcheckbox').prop("checked", false);
-
+        });
+        jQuery('input#toggleallcheckbox').prop("checked", false);
+    }
 });
 
 toggleProviderCheckbox  = (function (item) {
@@ -92,8 +93,11 @@ toggleProviderCheckbox  = (function (item) {
 });
 
 //OPERATIONS
-jQuery(function($){
+jQuery(function($) {
 
+    jQuery('div.newsletter-contents').on('click', ' div.container-receiver .container-label', function(event) {
+        jQuery(this).closest('div.container-receiver').addClass('active').siblings().removeClass('active')
+    });
 
     jQuery('div.newsletter-contents').on('click','#button-check-all', function(event) {
 
@@ -180,19 +184,21 @@ jQuery(function($){
     });
 
     /* Containers operations  */
-    jQuery("div#newsletter-container").on('click','.container-label .icon-pencil', function() {
+    jQuery("div#newsletter-container").on('click','.container-label .icon-pencil', function(e) {
         var container = jQuery(this).closest('div.container-receiver');
 
         jQuery('#modal-update-label input#updated_label').val(container.attr('data-title'));
         jQuery('#modal-update-label input#updated_id').val(container.data('id'));
 
         jQuery("#modal-update-label").modal('show');
+        e.preventDefault();
 
     });
 
-    jQuery("div#newsletter-container").on('click','.container-label .icon-trash', function() {
+    jQuery("div#newsletter-container").on('click','.container-label .icon-trash', function(e) {
         jQuery(this).closest('div.container-receiver').remove();
 
+        e.preventDefault();
     });
 
     jQuery("div#newsletter-container").on('click','.container-label .icon-chevron-down', function(i, item) {

@@ -195,4 +195,15 @@ jQuery('#starttime').datepicker({
         <input type="hidden" name="id" id="id" value="{$book->id|default:""}" />
     </div>
 </form>
+{capture assign="language"}{setting name=site_language}{/capture}
+{assign var="lang" value=$language|truncate:2:""}
+{if !empty($lang)}
+    {assign var="js" value="/jquery/jquery_i18n/jquery.ui.datepicker-"|cat:$lang|cat:".js"}
+    {script_tag language="javascript" src=$js}
+    <script>
+    jQuery(document).ready(function() {
+        jQuery.datepicker.setDefaults( jQuery.datepicker.regional[ "{$lang}" ] );
+    });
+    </script>
+{/if}
 {/block}
