@@ -22,13 +22,14 @@
     <filter>
         <whitelist>
             <directory>models</directory>
+            <directory>../vendor/Onm</directory>
             <directory>bundles</directory>
             <directory suffix=".php">app</directory>
             <exclude>
                 <file>app/autoload.php</file>
             </exclude>
             <exclude>
-                <directory>bundles/*Bundles/Resources</directory>
+                <directory>bundles/*Bundle/Resources</directory>
             </exclude>
         </whitelist>
         <blacklist>
