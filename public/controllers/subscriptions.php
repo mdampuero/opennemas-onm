@@ -50,16 +50,19 @@ if (isset($action)
         $resp='<script>(!alert("The reCAPTCHA wasn\'t entered correctly. Go back and try it again."))</script>
                     <script>location.href="#"</script>';
         echo ($resp);
-    } else {// Correct CAPTCHA, bad mail and name empty
+    } else {
+        // Correct CAPTCHA, bad mail and name empty
 
         $email = $request->request->filter('email', null, FILTER_SANITIZE_STRING);
         $name = $request->request->filter('name', null, FILTER_SANITIZE_STRING);
 
         if ( empty($email) || empty($name)) {
-            $resp='<script>(!alert("Lo sentimos, no se ha podido completar su solicitud.\nVerifique el formulario y vuelva intentarlo."))</script>
-                    <script>location.href="#"</script>';
+            $resp = '<script>(!alert("Lo sentimos, no se ha podido completar'
+                . ' su solicitud.\nVerifique el formulario y vuelva intentarlo."))</script>'
+                . '<script>location.href="#"</script>';
             echo ($resp);
-        } else {// Correct CAPTCHA, correct mail and name not empty
+        } else {
+            // Correct CAPTCHA, correct mail and name not empty
 
             //Filter $_POST vars from FORM
             $data['name'] = $name;
@@ -76,9 +79,15 @@ if (isset($action)
                     //Build mail body
                     $formulario= "Nombre y Apellidos: ". $data['name']." \r\n".
                         "Email: ".$data['email']." \r\n";
-                    if (!empty($data['subscritorEntity']) ) {$formulario.= "Entidad: ".$data['subscritorEntity']." \n"; }
-                    if (!empty($data['subscritorCountry']) ) {$formulario.= "País: ".$data['subscritorCountry']." \n"; }
-                    if (!empty($data['subscritorCommunity']) ) {$formulario.= "Provincia de Origen: ".$data['subscritorCommunity']." \n"; }
+                    if (!empty($data['subscritorEntity']) ) {
+                        $formulario.= "Entidad: ".$data['subscritorEntity']." \n";
+                    }
+                    if (!empty($data['subscritorCountry']) ) {
+                        $formulario.= "País: ".$data['subscritorCountry']." \n";
+                    }
+                    if (!empty($data['subscritorCommunity']) ) {
+                        $formulario.= "Provincia de Origen: ".$data['subscritorCommunity']." \n";
+                    }
 
                     // Checking the type of action to do (alta/baja)
                     if ($data['subscription'] == 'alta') {
@@ -86,8 +95,9 @@ if (isset($action)
 
                         $body=  "Solicitud de Alta en el boletín de: \r\n". $formulario;
 
-                        $resp='<script language="JavaScript">(!alert("Se ha subscrito correctamente al boletín."))</script>
-                                <script language="javascript">location.href="/home"</script>';
+                        $resp = '<script language="JavaScript">(!alert("Se ha '
+                              . 'subscrito correctamente al boletín."))</script>'
+                              . '<script language="javascript">location.href="/home"</script>';
                     } else {
                         $subject  = utf8_decode("Solicitud de BAJA - Boletín ".$configSiteName);
 
@@ -124,8 +134,10 @@ if (isset($action)
                     if ($mail->Send()) {
                         echo($resp);
                     } else {
-                        echo('<script>(!alert("Lo sentimos, no se ha podido completar su solicitud.\nVerifique el formulario y vuelva intentarlo."))</script>
-                        <script>location.href="/home"</script>');
+                        echo('<script>(!alert("Lo sentimos, no se ha podido '
+                            .'completar su solicitud.\nVerifique el formulario '
+                            .'y vuelva intentarlo."))</script>'
+                            .'<script>location.href="/home"</script>');
                     }
                     break;
 
@@ -136,11 +148,14 @@ if (isset($action)
 
                         $user = new Subscriptor();
                         if ($user->create( $data )) {
-                            echo('<script language="JavaScript">(!alert("Se ha subscrito correctamente al boletín."))</script>
-                                        <script language="javascript">location.href="/home"</script>');
+                            echo('<script language="JavaScript">(!alert("Se ha '
+                                .'subscrito correctamente al boletín."))</script>'
+                                .'<script language="javascript">location.href="/home"</script>');
                         } else {
-                            echo('<script>(!alert("Lo sentimos, no se ha podido completar su solicitud.\nVerifique el formulario y vuelva intentarlo."))</script>
-                                <script>location.href="/home"</script>');
+                            echo('<script>(!alert("Lo sentimos, no se ha podido '
+                                .'completar su solicitud.\nVerifique el formulario '
+                                .'y vuelva intentarlo."))</script>'
+                                .'<script>location.href="/home"</script>');
                         }
                     } else {
                         $data['subscription'] = 0;
@@ -153,8 +168,10 @@ if (isset($action)
                             echo('<script language="JavaScript">(!alert("Se ha dado de baja correctamente."))</script>
                                         <script language="javascript">location.href="/home"</script>');
                         } else {
-                            echo('<script>(!alert("Lo sentimos, no se ha podido completar su solicitud.\nVerifique el formulario y vuelva intentarlo."))</script>
-                                <script>location.href="/home"</script>');
+                            echo('<script>(!alert("Lo sentimos, no se ha podido '
+                                .'completar su solicitud.\nVerifique el '
+                                .'formulario y vuelva intentarlo."))</script>'
+                                .'<script>location.href="/home"</script>');
                         }
                     }
                     break;

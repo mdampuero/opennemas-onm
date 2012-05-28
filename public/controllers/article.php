@@ -32,7 +32,9 @@ $action           = $request->query->filter('action', '', FILTER_SANITIZE_STRING
 
 if (isset($category_name) && !empty($category_name)) {
     $category = $ccm->get_id($category_name);
-} elseif (isset($_REQUEST["action"]) && ( $_REQUEST["action"]!="vote" && $_REQUEST["action"]!="get_plus")) {
+} elseif (isset($_REQUEST["action"])
+    && ( $_REQUEST["action"]!="vote" && $_REQUEST["action"]!="get_plus")
+) {
     Application::forward301('/');
 }
 
@@ -78,8 +80,11 @@ switch ($action) {
 
                 $print_url .= $dirtyID . '.html';
                 $tpl->assign('print_url', $print_url);
-                $tpl->assign('sendform_url', '/controllers/article.php?action=sendform&article_id=' . $_GET['article_id'] . '&category_name=' .
-                                            $category_name . '&subcategory_name=' . $subcategory_name);
+                $tpl->assign('sendform_url',
+                    '/controllers/article.php?action=sendform&article_id='
+                    . $_GET['article_id'] . '&category_name=' .
+                    $category_name . '&subcategory_name=' . $subcategory_name
+                );
 
                 // Check if $section is "in menu" then show breadcrub
                 $cat = $ccm->getByName($category_name);
@@ -87,8 +92,8 @@ switch ($action) {
                     $tpl->assign('breadcrub', $breadcrub);
                 }
 
-               // Categories code ----------------------------------------------
-               // TODO: Seems that this is trash, evaluate its removal
+                // Categories code ----------------------------------------------
+                // TODO: Seems that this is trash, evaluate its removal
 
                 $actual_category       =$category_name;
                 $actual_category_id    = $ccm->get_id($actual_category);
