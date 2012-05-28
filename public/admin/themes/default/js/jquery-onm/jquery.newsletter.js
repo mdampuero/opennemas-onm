@@ -262,18 +262,21 @@ function saveChanges() {
         OpenNeMas.tinyMceFunctions.destroy( 'htmlContent' );
     }
     var htmlContent = jQuery('div#content').find('div#htmlContent').html();
-    jQuery.ajax({
-        url:  "/admin/controllers/newsletter/newsletter.php",
-        type: "POST",
-        data: { action:"saveNewsletterContent", html:htmlContent },
-        error:function (xhr, ajaxOptions, thrownError){
-            log(xhr.status + 'problem saving html code ');
+    setTimeout(function () {
 
-        },
-        success: function() {
-            log(ok);
-        }
-    });
+        jQuery.ajax({
+            url:  "/admin/controllers/newsletter/newsletter.php",
+            type: "POST",
+            data: { action:"saveNewsletterContent", html:htmlContent },
+            error:function (xhr, ajaxOptions, thrownError){
+                log(xhr.status + 'problem saving html code ');
+
+            },
+            success: function() {
+                log('ok');
+            }
+        });
+    }, 3000);
 
 }
 
