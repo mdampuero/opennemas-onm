@@ -24,9 +24,9 @@ $cm = new ContentManager();
 // Fetch HTTP variables
 $category_name    = $request->query->filter('category_name', 'opinion', FILTER_SANITIZE_STRING);
 $subcategory_name = $request->query->filter('subcategory_name', '', FILTER_SANITIZE_STRING);
-$action           = $request->query->filter('action', null , FILTER_SANITIZE_STRING);
+$action           = $request->query->filter('action', null, FILTER_SANITIZE_STRING);
 
-$dirtyID          = $request->query->filter('opinion_id', '' , FILTER_SANITIZE_STRING);
+$dirtyID          = $request->query->filter('opinion_id', '', FILTER_SANITIZE_STRING);
 $opinionID        = Content::resolveID($dirtyID);
 
 $tpl->assign(array(
@@ -58,8 +58,7 @@ switch ($action) {
             if ( ($tpl->caching == 0) || !$tpl->isCached('opinion.tpl', $cacheID) ) {
 
                 // Please SACAR esta broza de aqui {
-                $str = new StringUtils();
-                $title = $str->get_title($opinion->title);
+                $title = \StringUtils::get_title($opinion->title);
                 $print_url = '/imprimir/' . $title. '/'. $opinion->pk_content . '.html';
                 $tpl->assign('print_url', $print_url);
                 $tpl->assign('sendform_url', '/controllers/opinion_inner.php?action=sendform&opinion_id=' . $dirtyID );
@@ -93,13 +92,11 @@ switch ($action) {
                     $where=' opinions.fk_author='.($opinion->fk_author);
                 }
 
-                $otherOpinions = $cm->cache->find(
-                    'Opinion',
+                $otherOpinions = $cm->cache->find(  'Opinion',
                     $where
                     .' AND `pk_opinion` <>' .$opinionID
-                    .' AND available = 1  AND content_status=1'
-                    ,' ORDER BY created DESC '
-                    .' LIMIT 0,9'
+                    .' AND available = 1  AND content_status=1',
+                    ' ORDER BY created DESC LIMIT 0,9'
                 );
                 foreach ($otherOpinions as &$otherOpinion) {
                     $otherOpinion->author_name_slug  = $opinion->author_name_slug;
@@ -168,7 +165,7 @@ switch ($action) {
         StringUtils::disabled_magic_quotes();
 
         // Check direct access
-        $token = $request->query->filter('token', null , FILTER_SANITIZE_STRING);
+        $token = $request->query->filter('token', null, FILTER_SANITIZE_STRING);
         if ($_SESSION['sendformtoken'] != $token) {
             Application::forward('/');
         }
@@ -213,7 +210,7 @@ switch ($action) {
 
 
         // Filter tags before send
-        $message = $request->query->filter('body', null , FILTER_SANITIZE_STRING);
+        $message = $request->query->filter('body', null, FILTER_SANITIZE_STRING);
         $tplMail->assign('body', $message);
         $agency  = s::get('site_name');
         $tplMail->assign('agency',$agency);
@@ -243,7 +240,7 @@ switch ($action) {
         /*
             * Implementacion para enviar a multiples destinatarios separados por coma
             */
-        $destinatarios = explode(',', $request->query->filter('destination', null , FILTER_SANITIZE_STRING));
+        $destinatarios = explode(',', $request->query->filter('destination', null, FILTER_SANITIZE_STRING));
 
         foreach ($destinatarios as $dest) {
             //$mail->AddAddress(trim($dest));

@@ -188,7 +188,7 @@ class Privilege
 
         while (!$rs->EOF) {
             $privilege = new Privilege();
-            $privilege->load( $rs->fields );
+            $privilege->load($rs->fields);
 
             $privileges[]  = $privilege;
             $rs->MoveNext();
@@ -241,7 +241,7 @@ class Privilege
 
         while (!$rs->EOF) {
             $privilege = new Privilege();
-            $privilege->load( $rs->fields );
+            $privilege->load($rs->fields);
 
             $module = $rs->fields['module'];
             $privileges[$module][] = $privilege;

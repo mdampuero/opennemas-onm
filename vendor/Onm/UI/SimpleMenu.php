@@ -128,7 +128,7 @@ class SimpleMenu
      **/
     private function _renderSubMenu($element, $value, $last)
     {
-        foreach ($value as $element => $submenuContent ) {
+        foreach ($value as $element => $submenuContent) {
             $element = $this->_renderElement($element, $submenuContent, false);
             if (!empty($element)) {
                 $output []= $element;
@@ -156,7 +156,7 @@ class SimpleMenu
     {
         $html = null;
         if ((!isset($value['privilege']) || $this->_checkAcl($value['privilege']))
-            && (\Onm\Module\ModuleManager::isActivated((string)$value['module_name']))
+            && (\Onm\Module\ModuleManager::isActivated((string) $value['module_name']))
         ) {
             if (($value['privilege']!='ONLY_MASTERS')
                 || ($value['privilege']=='ONLY_MASTERS') && \Acl::isMaster()
@@ -180,8 +180,9 @@ class SimpleMenu
      **/
     private function _renderMenuComponent($submenu)
     {
+
         if ((!isset($submenu['privilege']) || $this->_checkAcl($submenu['privilege']))
-            && (\Onm\Module\ModuleManager::isActivated((string)$submenu['module_name']))
+            && (\Onm\Module\ModuleManager::isActivated((string) $submenu['module_name']))
         ) {
             if (($submenu['privilege']!='ONLY_MASTERS')
                 || ($submenu['privilege']=='ONLY_MASTERS')
@@ -214,7 +215,7 @@ class SimpleMenu
             foreach ($this->_menu as $menu) {
                 // Check if the user can se this menu and module activated
                 if ((!isset($menu['privilege']) || $this->_checkAcl($menu['privilege']))
-                    && (\Onm\Module\ModuleManager::isActivated((string)$menu['module_name']))
+                    && (\Onm\Module\ModuleManager::isActivated((string) $menu['module_name']))
                 ) {
                     $class = $this->_getClass($menu['class']);
                     $html .= "<li {$class}>"
@@ -224,9 +225,8 @@ class SimpleMenu
                     if ($menu->count() > 0) {
 
                         $html .= "<ul>";
-
                         foreach ($menu as $submenu) {
-                            $this->_renderMenuComponent($submenu);
+                            $html .= $this->_renderMenuComponent($submenu);
                         }
 
                         $html .= "</ul>";
@@ -257,7 +257,7 @@ class SimpleMenu
         }
 
         $output = '';
-        foreach ($this->_menu as $element => $value ) {
+        foreach ($this->_menu as $element => $value) {
             $output []= $this->_renderElement($element, $value, false);
         }
 

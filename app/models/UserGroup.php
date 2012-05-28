@@ -17,18 +17,16 @@ class UserGroup
 {
 
     /**Id del grupo*/
-    public $id = NULL;
+    public $id         = null;
 
     /**Nombre del grupo*/
-    public $name = NULL;
+    public $name       = null;
 
     /**Lista de permisos activos para este grupo de usuarios*/
-    public $privileges = NULL;
+    public $privileges = null;
 
-    public function __construct($id = NULL)
+    public function __construct($id = null)
     {
-
-
         if (!is_null($id)) {
             $this->read($id);
         }

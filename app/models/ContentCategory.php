@@ -14,19 +14,19 @@
  **/
 class ContentCategory
 {
-    public $pk_content_category = NULL;
-    public $fk_content_category = NULL;
-    public $img_path = NULL;
-    public $color = NULL;
-    public $name = NULL; //nombre carpeta
+    public $pk_content_category = null;
+    public $fk_content_category = null;
+    public $img_path            = null;
+    public $color               = null;
+    public $name                = null; //nombre carpeta
 
-    public $title = NULL; //titulo seccion
+    public $title               = null; //titulo seccion
 
-    public $inmenu = NULL; // Flag Ver en el menu.
+    public $inmenu              = null; // Flag Ver en el menu.
 
-    public $posmenu = NULL;
-    public $internal_category = NULL; // flag asignar a un tipo de contenido.
-    public $params = null;
+    public $posmenu             = null;
+    public $internal_category   = null; // flag asignar a un tipo de contenido.
+    public $params              = null;
 
     /**
      * $internal_category = 0 categoria es interna (para usar ventajas
@@ -118,8 +118,9 @@ class ContentCategory
             return;
         }
         $this->load($rs->fields);
-        if(!empty($this->params) && is_string($this->params))
+        if(!empty($this->params) && is_string($this->params)) {
             $this->params = unserialize($this->params);
+        }
 
     }
 
@@ -306,7 +307,9 @@ class ContentCategory
      **/
     public function set_priority($weight)
     {
-        if ($this->pk_content_category == NULL) return false;
+        if ($this->pk_content_category == null) {
+            return false;
+        }
         $sql = "UPDATE content_categories SET `posmenu`=?
                 WHERE pk_content_category=?";
         $values = array($weight, $this->pk_content_category);
@@ -325,8 +328,12 @@ class ContentCategory
      **/
     public function set_inmenu($status)
     {
-        if ($this->pk_content_category == NULL)  return false;
-        if ($status == 0)   $this->posmenu = 30;
+        if ($this->pk_content_category == null) {
+            return false;
+        }
+        if ($status == 0) {
+            $this->posmenu = 30;
+        }
 
         $sql = "UPDATE content_categories "
                 ." SET `inmenu`=?, `posmenu`=?"

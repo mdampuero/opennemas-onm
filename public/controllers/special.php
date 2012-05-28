@@ -46,12 +46,9 @@ if (!empty($category_name)) {
 $action = $request->query->filter('action', '', FILTER_SANITIZE_STRING);
 
 if (!is_null($action) ) {
-
     switch ($action) {
-
         case 'show':
-
-            $dirtyID = $request->query->filter('special_id', '' , FILTER_SANITIZE_STRING);
+            $dirtyID = $request->query->filter('special_id', '', FILTER_SANITIZE_STRING);
 
             $specialID = Content::resolveID($dirtyID);
             $cacheID = $tpl->generateCacheId($category_name, null, $specialID);
@@ -78,6 +75,7 @@ if (!is_null($action) ) {
             } else {
                 $special = new Special($specialID);
             }
+
             if ($special->available==1) {
 
                 Content::setNumViews($specialID);
@@ -122,16 +120,13 @@ if (!is_null($action) ) {
                 $tpl->assign('columns', $columns);
 
 
-                }//if available
+            }//if available
 
         break;
     }
-
 } else {
     Application::forward301('/');
 }
 
 // Visualizar
 $tpl->display('special/special.tpl', $cacheID);
-
-

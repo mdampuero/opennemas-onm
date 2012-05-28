@@ -185,7 +185,9 @@ class Rating
             $ips_count[] = array('ip' => $ip, 'count' => 1);
         } else {
 
-            if ($ips_count[$countKIP]['count'] == 50) return FALSE;
+            if ($ips_count[$countKIP]['count'] == 50) {
+                return false;
+            }
             $ips_count[$countKIP]['count']++;
         }
 
@@ -274,7 +276,9 @@ class Rating
     {
         // If the vote+id cookie exist just show the
         // results and don't allow to vote again
-        if (isset($_COOKIE["vote" . $this->pk_rating])) $action = "result";
+        if (isset($_COOKIE["vote" . $this->pk_rating])) {
+            $action = "result";
+        }
 
         // Calculate the total votes to render
         if ($this->total_votes == 0) {

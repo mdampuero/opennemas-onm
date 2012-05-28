@@ -69,9 +69,8 @@ class Application
     {
         // Database
         $GLOBALS['application']->conn = \ADONewConnection(BD_TYPE);
-        $GLOBALS['application']->conn->Connect(
-            BD_HOST, BD_USER, BD_PASS, BD_DATABASE
-        );
+        $GLOBALS['application']->conn->Connect(BD_HOST,
+            BD_USER, BD_PASS, BD_DATABASE);
 
         // Check if adodb is log enabled
         if (s::get('log_db_enabled') == 1) {
@@ -94,9 +93,8 @@ class Application
             $conf = array('mode' => 0600,
                           'timeFormat' => '[%Y-%m-%d %H:%M:%S]',
                           'lineFormat' => '%1$s %2$s [%3$s] %4$s %5$s %6$s');
-            $fileLogger = &Log::singleton(
-                'file', SYS_LOG_FILENAME, 'application', $conf
-            );
+            $fileLogger = &Log::singleton('file',
+                SYS_LOG_FILENAME, 'application', $conf);
             $GLOBALS['application']->logger->addChild($fileLogger);
         } else {
             $GLOBALS['application']->logger = \Log::singleton('null');
@@ -118,9 +116,12 @@ class Application
         mb_internal_encoding("UTF-8");
 
         $availableLanguages = self::getAvailableLanguages();
-        $forceLanguage = filter_input(INPUT_GET, 'language', FILTER_SANITIZE_STRING);
+        $forceLanguage = filter_input(INPUT_GET,
+            'language', FILTER_SANITIZE_STRING);
 
-        if ($forceLanguage !== null && in_array($forceLanguage, array_keys($availableLanguages))) {
+        if ($forceLanguage !== null
+            && in_array($forceLanguage, array_keys($availableLanguages))
+        ) {
             self::$language = $forceLanguage;
         } else {
             self::$language = s::get('site_language');
@@ -209,8 +210,11 @@ class Application
         define('SITE_ADMIN_TMP_DIR', "tmp");
         define('SITE_ADMIN_PATH', SITE_PATH.SS.SITE_ADMIN_DIR.SS);
         define('SITE_ADMIN_TMP_PATH', SITE_ADMIN_PATH.SITE_ADMIN_TMP_DIR.SS);
-        $cachepath = APPLICATION_PATH.DS.'tmp'.DS.'instances'.DS.INSTANCE_UNIQUE_NAME;
-        if (!file_exists($cachepath)) { mkdir($cachepath, 0755, true); }
+        $cachepath = APPLICATION_PATH.DS.'tmp'
+            .DS.'instances'.DS.INSTANCE_UNIQUE_NAME;
+        if (!file_exists($cachepath)) {
+            mkdir($cachepath, 0755, true);
+        }
         define('CACHE_PATH', realpath($cachepath));
 
         /**
@@ -221,25 +225,36 @@ class Application
         define('SYS_SESSION_PATH', $cachepath.DS."/sessions".DS);
         define('OPENNEMAS_BACKEND_SESSIONS', SYS_SESSION_PATH.'backend/');
         define('OPENNEMAS_FRONTEND_SESSIONS', SYS_SESSION_PATH.'frontend/');
-        if (!file_exists(SYS_SESSION_PATH) ) { mkdir(SYS_SESSION_PATH); }
-        if (!file_exists(OPENNEMAS_BACKEND_SESSIONS) ) { mkdir(OPENNEMAS_BACKEND_SESSIONS); }
-        if (!file_exists(OPENNEMAS_FRONTEND_SESSIONS)) { mkdir(OPENNEMAS_FRONTEND_SESSIONS); }
-        define('SYS_NAME_GROUP_ADMIN', 'Administrador'); // TODO: delete from application
+        if (!file_exists(SYS_SESSION_PATH) ) {
+            mkdir(SYS_SESSION_PATH);
+        }
+        if (!file_exists(OPENNEMAS_BACKEND_SESSIONS) ) {
+            mkdir(OPENNEMAS_BACKEND_SESSIONS);
+        }
+        if (!file_exists(OPENNEMAS_FRONTEND_SESSIONS)) {
+            mkdir(OPENNEMAS_FRONTEND_SESSIONS);
+        }
+
+        // TODO: delete from application
+        define('SYS_NAME_GROUP_ADMIN', 'Administrador');
 
         /**
          * Media paths and urls configurations
          **/
-
         //TODO: All the MEDIA_* should be ported to use this constant
         define('INSTANCE_MEDIA', MEDIA_URL.INSTANCE_UNIQUE_NAME.DS);
-        define('INSTANCE_MEDIA_PATH', SITE_PATH.DS."media".DS.INSTANCE_UNIQUE_NAME.DS);
+        define('INSTANCE_MEDIA_PATH',
+            SITE_PATH.DS."media".DS.INSTANCE_UNIQUE_NAME.DS);
 
         define('STATIC_PAGE_PATH', 'estaticas');
 
-        define('MEDIA_DIR', INSTANCE_UNIQUE_NAME);    // External server or a local dir
-        define('MEDIA_DIR_URL', MEDIA_URL.SS.MEDIA_DIR.SS); // Full path to the instance media files
+        // External server or a local dir
+        define('MEDIA_DIR', INSTANCE_UNIQUE_NAME);
+        // Full path to the instance media files
+        define('MEDIA_DIR_URL', MEDIA_URL.SS.MEDIA_DIR.SS);
 
-        define('MEDIA_PATH', SITE_PATH."media".DS.INSTANCE_UNIQUE_NAME); // local path to write media (/path/to/media)
+        // local path to write media (/path/to/media)
+        define('MEDIA_PATH', SITE_PATH."media".DS.INSTANCE_UNIQUE_NAME);
         define('IMG_DIR', "images");
         define('FILE_DIR', "files");
         define('ADS_DIR', "advertisements");
@@ -247,19 +262,24 @@ class Application
 
         define('MEDIA_IMG_PATH_URL', MEDIA_URL.SS.MEDIA_DIR.SS.IMG_DIR);
         // TODO: A Eliminar
-        define('MEDIA_IMG_PATH', MEDIA_PATH.DS.IMG_DIR); // TODO: delete from application
-        define('MEDIA_IMG_PATH_WEB', MEDIA_URL.SS.MEDIA_DIR.SS.IMG_DIR); // TODO: delete from application
+        // TODO: delete from application
+        define('MEDIA_IMG_PATH', MEDIA_PATH.DS.IMG_DIR);
+        // TODO: delete from application
+        define('MEDIA_IMG_PATH_WEB', MEDIA_URL.SS.MEDIA_DIR.SS.IMG_DIR);
 
         /**
         * Template settings
         **/
-        define('TEMPLATE_USER_PATH',     SITE_PATH.DS."themes".DS.TEMPLATE_USER.DS);
+        define('TEMPLATE_USER_PATH', SITE_PATH.DS."themes".DS.TEMPLATE_USER.DS);
         define('TEMPLATE_USER_URL', SITE_URL."themes".SS.TEMPLATE_USER.SS);
 
         define('TEMPLATE_ADMIN', "default");
-        define('TEMPLATE_ADMIN_PATH',SITE_PATH.DS.ADMIN_DIR.DS."themes".DS.TEMPLATE_ADMIN);
-        define('TEMPLATE_ADMIN_PATH_WEB',SS.ADMIN_DIR.SS."themes".SS.TEMPLATE_ADMIN.SS);
-        define('TEMPLATE_ADMIN_URL', SITE_URL_ADMIN.SS."themes".SS.TEMPLATE_ADMIN.SS);
+        define('TEMPLATE_ADMIN_PATH',
+                SITE_PATH.DS.ADMIN_DIR.DS."themes".DS.TEMPLATE_ADMIN);
+        define('TEMPLATE_ADMIN_PATH_WEB',
+                SS.ADMIN_DIR.SS."themes".SS.TEMPLATE_ADMIN.SS);
+        define('TEMPLATE_ADMIN_URL',
+                SITE_URL_ADMIN.SS."themes".SS.TEMPLATE_ADMIN.SS);
         define('ADVERTISEMENT_ENABLE', true);
 
 
@@ -282,7 +302,8 @@ class Application
     }
 
     /**
-     * Sets the PHP environment given an environmen name 'production', 'development'
+     * Sets the PHP environment given an environmen
+     * name 'production', 'development'
      *
      * @return void
      **/
@@ -297,7 +318,7 @@ class Application
         } else {
             ini_set('expose_php', 'off');
         }
-        ini_set('apc.slam_defense','0');
+        ini_set('apc.slam_defense', '0');
     }
 
     // TODO: move to a separated file called functions.php
@@ -308,7 +329,11 @@ class Application
      **/
     public static function getAvailableLanguages()
     {
-        return array('en_US' => "English", 'es_ES' => "Español", 'gl_ES' => "Galego");
+        return array(
+            'en_US' => "English",
+            'es_ES' => "Español",
+            'gl_ES' => "Galego"
+        );
     }
 
     /**
@@ -322,7 +347,6 @@ class Application
     }
 
 
-
     /* Events system */
     public function register($event, $callback, $args=array())
     {
@@ -331,10 +355,10 @@ class Application
 
     public function dispatch($eventName, $instance, $args=array())
     {
-        if ( isset($this->events[$eventName]) ) {
+        if (isset($this->events[$eventName])) {
             $events = $this->events[$eventName];
 
-            if ( is_array($events) ) {
+            if (is_array($events)) {
                 foreach ($events as $event) {
                     $callback = $event[0];
                     $args     = array_merge($args, $event[1]);
@@ -342,15 +366,13 @@ class Application
                     if (is_object($instance)) {
                         if (method_exists($instance, $callback)) {
                             // Call to the instance
-                            call_user_func_array(
-                                array(&$instance, $callback), $args
-                            );
+                            call_user_func_array(array(&$instance, $callback),
+                                $args);
                         }
                     } else {
                         // Static call
-                        call_user_func_array(
-                            array($instance, $callback), $args
-                        );
+                        call_user_func_array(array($instance, $callback),
+                            $args);
                     }
                 }
             }
@@ -379,10 +401,10 @@ class Application
      * @param  boolean $autoRedirect
      * @return boolean True if it's a mobile device and $autoRedirect is false
      */
-    public function mobileRouter($autoRedirect=true)
+    public function mobileRouter($autoRedirect = true)
     {
         $isMobileDevice = false;
-        $showDesktop = filter_input(INPUT_GET,'show_desktop',FILTER_DEFAULT);
+        $showDesktop = filter_input(INPUT_GET, 'show_desktop', FILTER_DEFAULT);
         if ($showDesktop) {
             $autoRedirect = false;
             $_COOKIE['confirm_mobile'] = 1;
@@ -401,7 +423,7 @@ class Application
             && !(isset($_COOKIE['confirm_mobile']))
         ) {
             if ($autoRedirect) {
-                Application::forward('/mobile' . $_SERVER['REQUEST_URI'] );
+                Application::forward('/mobile' . $_SERVER['REQUEST_URI']);
             } else {
                 $isMobileDevice = true;
             }
@@ -458,12 +480,14 @@ class Application
     /**
     * Stablishes a cookie value in a secure way
     */
-    public static function setCookieSecure($name, $value, $expires=0, $domain='/')
-    {
-        setcookie(
-            $name, $value, $expires, $domain,
-            $_SERVER['SERVER_NAME'], isset($_SERVER['HTTPS']), true
-        );
+    public static function setCookieSecure(
+        $name,
+        $value,
+        $expires =0,
+        $domain  ='/'
+    ) {
+        setcookie($name, $value, $expires, $domain,
+            $_SERVER['SERVER_NAME'], isset($_SERVER['HTTPS']), true);
     }
 
 
@@ -508,7 +532,9 @@ class Application
             reset($entries);
             while (list(, $entry) = each($entries)) {
                 $entry = trim($entry);
-                if ( preg_match("/^([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)/", $entry, $ipList) ) {
+                $foundRegExp = preg_match("/^([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)/",
+                    $entry, $ipList);
+                if ($foundRegExp) {
                     // http://www.faqs.org/rfcs/rfc1918.html
                     $privateIp = array(
                           '/^0\./',
@@ -549,11 +575,13 @@ class Application
     {
         $logger = Application::getLogger();
 
-        $msg = 'User '.$_SESSION['username'].'(ID:'.$_SESSION['userid'].') has executed '
-        .'the action '.$action;
-        if (!empty($content)) { $msg.=' at '.get_class($content).' (ID:'.$content->id.')';}
+        $msg = 'User '.$_SESSION['username'].'(ID:'.$_SESSION['userid']
+            .') has executed the action '.$action;
+        if (!empty($content)) {
+            $msg.=' at '.get_class($content).' (ID:'.$content->id.')';
+        }
 
-        $logger->notice( $msg );
+        $logger->notice($msg);
     }
 
     // TODO: move to a separated file called functions.php

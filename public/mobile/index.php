@@ -38,6 +38,12 @@ $routes = array(
         'handler' => 'MobileRouter::article',
     ),
 
+    /* Article */
+    array(
+        'regexp'  => '%^artigo/.*?(?P<pk_content>[0-9]+)\.html$%',
+        'handler' => 'MobileRouter::article',
+    ),
+
 
     /* Opinion */
     array(

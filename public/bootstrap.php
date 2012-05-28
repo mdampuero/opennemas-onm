@@ -61,7 +61,8 @@ if (file_exists($configFile)) {
     $app = \Application::load();
 
 } else {
-    $errorPage =  file_get_contents(dirname(__FILE__).DIRECTORY_SEPARATOR.'500.html');
+    $errorPage =
+        file_get_contents(dirname(__FILE__).DIRECTORY_SEPARATOR.'500.html');
     echo $errorPage;
     die();
 }

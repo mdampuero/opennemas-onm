@@ -19,8 +19,8 @@ $action = $request->query->filter('action', 'web', FILTER_SANITIZE_STRING);
 $cacheID = $tpl->generateCacheId('sitemap', '', $action);
 
 if (($tpl->caching == 0)
-    || !$tpl->isCached('sitemap/sitemap.tpl', $cacheID) )
-{
+    || !$tpl->isCached('sitemap/sitemap.tpl', $cacheID)
+) {
 
     // Get all available categories
     list($availableCategories, $subcats, $other) = $ccm->getArraysMenu(0, 1);
@@ -61,9 +61,9 @@ if (($tpl->caching == 0)
             $tpl->assign('opinions',$opinions);
 
 
-        break;
+            break;
 
-        case 'news': {
+        case 'news':
 
             $articlesByCategory = array();
 
@@ -97,8 +97,7 @@ if (($tpl->caching == 0)
 
             $tpl->assign('articlesByCategory',$articlesByCategory);
             $tpl->assign('opinions', $improvedOpinions);
-
-        }
+            break;
     }
 
     $tpl->assign('availableCategories', $availableCategories);

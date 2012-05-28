@@ -40,21 +40,8 @@ class Video extends Content
     {
         switch ($name) {
             case 'uri':
-                if (empty($this->category_name)) {
-                    $this->category_name = $this->loadCategoryName($this->pk_content);
-                }
-                $uri =  Uri::generate(
-                    'video',
-                    array(
-                        'id' => sprintf('%06d',$this->id),
-                        'date' => date('YmdHis', strtotime($this->created)),
-                        'category' => $this->category_name,
-                        'slug' => $this->slug,
-                    )
-                );
 
-                return ($uri !== '') ? $uri : $this->permalink;
-
+                return $this->getUri();
                 break;
             case 'slug':
                 return StringUtils::get_title($this->title);
@@ -80,23 +67,12 @@ class Video extends Content
                 break;
             case 'thumb':
 
-                if (!is_array($this->information)) {
-                    $information = unserialize($this->information);
-                } else {
-                    $information = $this->information;
-                }
-                if ($this->author_name == 'internal') {
-                    $thumbnail = MEDIA_IMG_PATH_WEB."/../".$information['thumbnails']['normal'];
-                } else {
-                    $thumbnail = $information['thumbnail'];
-                }
-
-                return $thumbnail;
+                return $this->getThumb();
 
             default:
                 break;
         }
-        parent::__get($name);
+        return parent::__get($name);
     }
 
     public function create($data)
@@ -264,19 +240,21 @@ class Video extends Content
 
         $ffmpgePath = exec("which ffmpeg");
 
-        $originalVideoPath = $originalVideo['file_path'];
-        $fileType = $originalVideo['file_type'];
+        $originalVideoPath  = $originalVideo['file_path'];
+        $fileType           = $originalVideo['file_type'];
         $temporaryVideoPath = $originalVideo['file_path'];
 
         // Calculate upload directory and create it if not exists
-        $relativeUploadDir = 'video'.DS.date("Y/m/d");
+        $relativeUploadDir  = 'video'.DS.date("Y/m/d");
         $absoluteUploadpath = $baseUploadpath.DS.$relativeUploadDir.DS;
-        if(!is_dir($absoluteUploadpath)) FilesManager::createDirectory($absoluteUploadpath);
+        if (!is_dir($absoluteUploadpath)) {
+            FilesManager::createDirectory($absoluteUploadpath);
+        }
 
         // Calculate the final video name by its extension, current data, ...
-        $fileData = pathinfo($originalVideoPath);     //sacamos infor del archivo
-        $t = gettimeofday(); //Sacamos los microsegundos
-        $micro = intval(substr($t['usec'], 0, 5)); //Le damos formato de 5digitos a los microsegundos
+        $fileData = pathinfo($originalVideoPath);
+        $t        = gettimeofday();
+        $micro    = intval(substr($t['usec'], 0, 5));
         $fileName = date("YmdHis") . $micro . "." . 'flv';
 
         // Compose absolute path to the new video file
@@ -306,7 +284,7 @@ class Video extends Content
                 break;
         }
 
-        $return['relative_dir'] = $relativeUploadDir;
+        $return['relative_dir']  = $relativeUploadDir;
         $return['relative_path'] = $relativeUploadDir.DS.$fileName;
         $return['absolute_path'] = $videoSavePath;
 
@@ -381,6 +359,50 @@ class Video extends Content
         }
 
         return $thumbs;
+    }
+
+    /**
+     * Return the uri for this video
+     *
+     * @return string the video uri
+     **/
+    public function getUri()
+    {
+        if (empty($this->category_name)) {
+            $this->category_name = $this->loadCategoryName($this->pk_content);
+        }
+        $uri =  Uri::generate(
+            'video',
+            array(
+                'id' => sprintf('%06d',$this->id),
+                'date' => date('YmdHis', strtotime($this->created)),
+                'category' => $this->category_name,
+                'slug' => $this->slug,
+            )
+        );
+
+        return ($uri !== '') ? $uri : $this->permalink;
+    }
+
+    /**
+     * Returns the thumb url of this video
+     *
+     * @return string the thumb url
+     **/
+    public function getThumb()
+    {
+        if (!is_array($this->information)) {
+            $information = unserialize($this->information);
+        } else {
+            $information = $this->information;
+        }
+        if ($this->author_name == 'internal') {
+            $thumbnail = MEDIA_IMG_PATH_WEB."/../".$information['thumbnails']['normal'];
+        } else {
+            $thumbnail = $information['thumbnail'];
+        }
+
+        return $thumbnail;
     }
 
     /**

@@ -16,25 +16,6 @@ namespace Onm;
  **/
 class StringUtils
 {
-
-    public $stringTest = NULL;
-
-    /**
-      * Constructor for self class
-      *
-      * @access public
-      * @param string $string
-     **/
-    public function __construct($string = null)
-    {
-        //echo $stringTest." si<br>";
-        if (!is_null($string)) {
-            $this->stringTest = $string;
-        } else {
-            $this->stringTest = "";
-        }
-    }
-
     /**
      * Delete disallowed chars from a sentence and transform it to a url friendly name
      *
@@ -58,42 +39,25 @@ class StringUtils
     public static function normalize($name)
     {
         $name = mb_strtolower($name);
-        $trade = array( 'á'=>'a', 'à'=>'a', 'ã'=>'a', 'ä'=>'a', 'â'=>'a', 'Á'=>'A', 'À'=>'A', 'Ã'=>'A',
-                        'Ä'=>'A', 'Â'=>'A', 'é'=>'e', 'è'=>'e', 'ë'=>'e', 'ê'=>'e', 'É'=>'E', 'È'=>'E',
-                        'Ë'=>'E', 'Ê'=>'E', 'í'=>'i', 'ì'=>'i', 'ï'=>'i', 'î'=>'i', 'Í'=>'I', 'Ì'=>'I',
-                        'Ï'=>'I', 'Î'=>'I', 'ó'=>'o', 'ò'=>'o', 'õ'=>'o', 'ö'=>'o', 'ô'=>'o', 'Ó'=>'O',
-                        'Ò'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ô'=>'O', 'ú'=>'u', 'ù'=>'u', 'ü'=>'u', 'û'=>'u',
-                        'Ú'=>'U', 'Ù'=>'U', 'Ü'=>'U', 'Û'=>'U', '$'=>'', '@'=>'', '!'=>'', '#'=>'_',
-                        '%'=>'', '^'=>'', '&'=>'', '*'=>'', '('=>'-', ')'=>'-', '-'=>'-', '+'=>'',
-                        '='=>'', '\\'=>'-', '|'=>'-','`'=>'', '~'=>'', '/'=>'-', '\"'=>'-','\''=>'',
-                        '<'=>'', '>'=>'', '?'=>'-', ','=>'-', 'ç'=>'c', 'Ç'=>'C', '·'=>'',
-                        '.'=>'', ';'=>'-', '['=>'-', ']'=>'-','ñ'=>'n','Ñ'=>'n');
+        $trade = array(
+            'á'=>'a', 'à'=>'a', 'ã'=>'a', 'ä'=>'a', 'â'=>'a', 'Á'=>'A',
+            'À'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Â'=>'A', 'é'=>'e', 'è'=>'e',
+            'ë'=>'e', 'ê'=>'e', 'É'=>'E', 'È'=>'E', 'Ë'=>'E', 'Ê'=>'E',
+            'í'=>'i', 'ì'=>'i', 'ï'=>'i', 'î'=>'i', 'Í'=>'I', 'Ì'=>'I',
+            'Ï'=>'I', 'Î'=>'I', 'ó'=>'o', 'ò'=>'o', 'õ'=>'o', 'ö'=>'o',
+            'ô'=>'o', 'Ó'=>'O', 'Ò'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ô'=>'O',
+            'ú'=>'u', 'ù'=>'u', 'ü'=>'u', 'û'=>'u', 'Ú'=>'U', 'Ù'=>'U',
+            'Ü'=>'U', 'Û'=>'U', '$'=>'', '@'=>'', '!'=>'', '#'=>'_',
+            '%'=>'', '^'=>'', '&'=>'', '*'=>'', '('=>'-', ')'=>'-',
+            '-'=>'-', '+'=>'', '='=>'', '\\'=>'-', '|'=>'-','`'=>'',
+            '~'=>'', '/'=>'-', '\"'=>'-','\''=>'', '<'=>'', '>'=>'',
+            '?'=>'-', ','=>'-', 'ç'=>'c', 'Ç'=>'C', '·'=>'', '.'=>'',
+            ';'=>'-', '['=>'-', ']'=>'-','ñ'=>'n','Ñ'=>'n'
+        );
         $name = strtr($name, $trade);
         $name = rtrim($name);
 
         return $name;
-    }
-
-    /**
-     * Sets the variable string
-     *
-     * @access public
-     * @param string $name
-     **/
-    public function setString($string)
-    {
-        $this->stringTest=$string;
-    }
-
-    /**
-     * Gets the variable string
-     *
-     * @access public
-     * @param string $name
-     **/
-    public function getString()
-    {
-        return $this->stringTest;
     }
 
     /**
@@ -213,7 +177,111 @@ class StringUtils
      **/
     public static function remove_shorts($string)
     {
-        $shorts = file(dirname(__FILE__).'/self_stoplist.txt');
+        $shorts = <<<EOF
+[0-9]+
+[a-zA-Z]
+a
+as
+ahi
+al
+ante
+ante
+aquel
+aquelo
+aquela
+aquello
+aquella
+aquellas
+aquellos
+aunque
+bajo
+bien
+cabe
+cinco
+como
+con
+conmigo
+contra
+cuatro
+de
+del
+desde
+dos
+durante
+e
+el
+eles
+elas
+en
+entre
+es
+esa
+esas
+ese
+eso
+esos
+esta
+estas
+este
+esto
+estos
+excepto
+hacia
+hasta
+hay
+la
+las
+le
+les
+lo
+los
+me
+mediante
+mi
+nosotras
+nosotros
+nove
+nueve
+o
+os
+ocho
+oito
+otro
+outro
+ou
+para
+pero
+por
+que
+salvo
+se
+segun
+seis
+sete
+si
+siete
+sin
+sen
+sino
+sobre
+su
+sus
+te
+tras
+tres
+tu
+un
+una
+unha
+unhas
+unas
+uno
+unos
+ya
+yo
+si
+EOF;
+        $shorts = preg_split('@\n@', $shorts);
 
         $size = count($shorts);
 
@@ -298,7 +366,7 @@ class StringUtils
      * @return string
      * @example self::get_numWords('hello world', 1)
      **/
-    public static function get_numWords($text,$numWords)
+    public static function get_num_words($text,$numWords)
     {
         $noHtml      = strip_tags($text);
         $description = explode(" ", $noHtml, $numWords);
@@ -311,6 +379,19 @@ class StringUtils
     public static function loadBadWords()
     {
         $entries = file(dirname(__FILE__).'/self_badwords.txt');
+        $entries = <<<EOF
+5, m[i]?erda
+5, marica
+5, carallo
+10, [h]?ostia
+20, puta[s]?
+30, cabr[oó]n[a]?
+50, fill[ao] d[ae] puta
+50, hij[ao] de puta
+EOF;
+
+        $entries = preg_split('@\n@', $entries);
+
         $words = array();
         foreach ($entries as $entry) {
             if (preg_match('/^(\d+)\,(.*?)$/', $entry, $matches)) {

@@ -1,9 +1,14 @@
 <?php
-
 /**
- * Start up and setup the app
-*/
-require_once('../bootstrap.php');
+ * This file is part of the Onm package.
+ *
+ * (c)  OpenHost S.L. <developers@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ **/
+//Start up and setup the app
+require_once '../bootstrap.php';
 
 $action = $request->query->filter('action', null , FILTER_SANITIZE_STRING);
 
@@ -23,18 +28,16 @@ switch ($action) {
             $tpl->assign('banner', $banner);
             $tpl->display('ads/advertisement.tpl');
         }
-        exit(0); // Prevent future errors
-
-    break;
+        break;
 
     case 'show': // Redirect to advertisement
-        $publi_id = $request->query->filter('publi_id', null , FILTER_SANITIZE_STRING);
+        $publi_id = $request->query->filter('publi_id',
+            null , FILTER_SANITIZE_STRING);
         if (isset($publi_id)) {
 
             $advertisement = new Advertisement($publi_id);
             $url = $advertisement->getUrl($publi_id);
             if ($url) {
-                var_dump($url);
                 $advertisement->setNumClics($publi_id);
                 // Application::forward( $url);
                 header("Location: $url");
@@ -43,10 +46,10 @@ switch ($action) {
                 echo '<script type="text/javascript">window.close();</script>';
             }
         }
-    break;
+        break;
 
     default:
         // EMPTY ACTION
-    break;
+        break;
 
 }

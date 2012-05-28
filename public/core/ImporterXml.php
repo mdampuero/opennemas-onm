@@ -83,7 +83,7 @@ class ImporterXml
             $simple = simplexml_load_file($XMLFile);
 
         } catch (Exception $e) {
-            m::add( _( "Can't read file. Please check xml file...") );
+            m::add(_( "Can't read file. Please check xml file..."));
             exit();
         }
 
@@ -279,11 +279,12 @@ class ImporterXml
             $this->data['title_int'] = $this->data['title'];
 
         if(empty($this->data['summary']))
-            $this->data['summary'] = strip_tags(substr($this->data['body'],0, strpos($this->data['body'], '.') ).'.');
+            $this->data['summary'] =
+                strip_tags(substr($this->data['body'], 0, strpos($this->data['body'], '.') ).'.');
 
         if (!empty($this->data['category_name'])) {
             $ccm = ContentCategoryManager::get_instance();
-            $current_category = strtolower(StringUtils::normalize_name( $this->data['category_name'] ));
+            $current_category = strtolower(StringUtils::normalize_name($this->data['category_name']));
             $this->data['category'] = $ccm->get_id($current_category);
 
         } else {

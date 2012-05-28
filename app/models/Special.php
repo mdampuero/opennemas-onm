@@ -145,7 +145,7 @@ class Special extends Content
             return(false);
         }
 
-        if (empty($data['pdf_path']) ) {
+        if (empty($data['pdf_path'])) {
              $this->saveItems($data);
         }
 
@@ -220,27 +220,28 @@ class Special extends Content
 
     public function saveItems($data)
     {
-        $this->delete_all_contents($data['id'] );
+        $this->delete_all_contents($data['id']);
         if (isset($data['noticias_left'])) {
-            $tok = strtok($data['noticias_left'],",");
-            $name="";
-            $pos=1;
-            $contentType='Article';
+            $tok = strtok($data['noticias_left'], ",");
+            $name = "";
+            $pos = 1;
+            $contentType = 'Article';
             while (($tok !== false) AND ($tok !=" ")) {
                 // $this->delete_contents($data['id'] ,$tok)  	;
-                $this->set_contents($data['id'] ,$tok, $pos, $name,  $contentType);
+                $this->set_contents($data['id'] , $tok, $pos, $name, $contentType);
                 $tok = strtok(",");
                 $pos+=2;
             }
         }
-        if ( isset($data['noticias_right'])) {
+
+        if (isset($data['noticias_right'])) {
             $tok = strtok($data['noticias_right'],",");
-            $name="";
-            $pos=2;
-            $contentType='Article';
+            $name = "";
+            $pos = 2;
+            $contentType = 'Article';
             while (($tok !== false) AND ($tok !=" ")) {
                 //   $this->delete_contents($data['id'] ,$tok)  	;
-                $this->set_contents($data['id'] ,$tok, $pos, $name,  $contentType);
+                $this->set_contents($data['id'] , $tok, $pos, $name,  $contentType);
                 $tok = strtok(",");
                 $pos+=2;
             }

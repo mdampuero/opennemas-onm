@@ -44,7 +44,7 @@ class cSearch
     public static function getInstance()
     {
         if (!isset(self::$Instance)) {
-            self::$Instance = new cSearch ();
+            self::$Instance = new cSearch();
         }
 
         return self::$Instance;

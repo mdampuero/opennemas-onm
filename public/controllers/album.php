@@ -113,12 +113,12 @@ if (!is_null($action) ) {
 
             // Send the response to the user
             $tpl->display('album/album_frontpage.tpl',$cacheID);
-
-        break;
+            break;
 
         case 'show':
 
-            $dirtyID = $request->query->filter('album_id', null, FILTER_SANITIZE_STRING);
+            $dirtyID = $request->query->filter('album_id',
+                null, FILTER_SANITIZE_STRING);
 
             $albumID = Content::resolveID($dirtyID);
             /**
@@ -144,7 +144,7 @@ if (!is_null($action) ) {
                 /**
                  * Get the album from the id and increment the numviews for it
                  **/
-                $album = new Album( $albumID );
+                $album = new Album($albumID);
                 $tpl->assign('album', $album);
 
                 /**
@@ -172,13 +172,11 @@ if (!is_null($action) ) {
             } // END iscached
 
             $tpl->display('album/album.tpl', $cacheID);
-
-        break;
+            break;
 
         default:
             Application::forward301('/');
-        break;
-
+            break;
     }
 
 } else {

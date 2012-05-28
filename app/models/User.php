@@ -101,12 +101,10 @@ class User
     public function read($id)
     {
         $sql = 'SELECT * FROM users WHERE pk_user = '.intval($id);
-        $rs = $GLOBALS['application']->conn->Execute( $sql );
+        $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
             return;
         }
@@ -138,34 +136,38 @@ class User
         $GLOBALS['application']->conn->BeginTrans();
 
         if (isset($data['password']) && (strlen($data['password']) > 0)) {
-            $sql = "UPDATE users SET `login`=?, `password`= ?, `sessionexpire`=?,
-                                `email`=?, `name`=?, `firstname`=?, `lastname`=?,
-                                `address`=?, `phone`=?, `fk_user_group`=?
+            $sql = "UPDATE users
+                    SET `login`=?, `password`= ?, `sessionexpire`=?,
+                        `email`=?, `name`=?, `firstname`=?, `lastname`=?,
+                        `address`=?, `phone`=?, `fk_user_group`=?
                     WHERE pk_user=".intval($data['id']);
 
-            $values = array($data['login'], md5($data['password']), $data['sessionexpire'],
-                        $data['email'], $data['name'], $data['firstname'],
-                        $data['lastname'], $data['address'],
-                        $data['phone'], $data['id_user_group'] );
+            $values = array(
+                $data['login'], md5($data['password']), $data['sessionexpire'],
+                $data['email'], $data['name'], $data['firstname'],
+                $data['lastname'], $data['address'],
+                $data['phone'], $data['id_user_group']
+            );
 
         } else {
-            $sql = "UPDATE users SET `login`=?, `sessionexpire`=?, `email`=?,
-                                      `name`=?, `firstname`=?, `lastname`=?,
-                                      `address`=?, `phone`=?, `fk_user_group`=?
+            $sql = "UPDATE users
+                    SET `login`=?, `sessionexpire`=?, `email`=?,
+                        `name`=?, `firstname`=?, `lastname`=?,
+                        `address`=?, `phone`=?, `fk_user_group`=?
                     WHERE pk_user=".intval($data['id']);
 
-            $values = array($data['login'], $data['sessionexpire'], $data['email'],
-                        $data['name'], $data['firstname'], $data['lastname'],
-                         $data['address'], $data['phone'], $data['id_user_group'] );
+            $values = array(
+                $data['login'], $data['sessionexpire'], $data['email'],
+                $data['name'], $data['firstname'], $data['lastname'],
+                $data['address'], $data['phone'], $data['id_user_group']
+            );
         }
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             // Rollback
             $GLOBALS['application']->conn->RollbackTrans();
 
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
             return;
         }
@@ -184,9 +186,7 @@ class User
         $sql = 'DELETE FROM users WHERE pk_user='.intval($id);
 
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
             return false;
         }
@@ -197,7 +197,8 @@ class User
     private function createAccessCategoriesDB($IdsCategory)
     {
         if ( $this->deleteAccessCategoriesDB() ) {
-            $sql = "INSERT INTO users_content_categories (`pk_fk_user`, `pk_fk_content_category`)
+            $sql = "INSERT INTO users_content_categories
+                                (`pk_fk_user`, `pk_fk_content_category`)
                     VALUES (?,?)";
 
             $values = array();
@@ -209,9 +210,7 @@ class User
             if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
                 $GLOBALS['application']->conn->RollbackTrans();
 
-                $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-                $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-                $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+                \Application::logDatabaseError();
 
                 return false;
             }
@@ -234,9 +233,7 @@ class User
         $values = array($idUser, $idCategory);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
             return false;
         }
@@ -251,21 +248,18 @@ class User
     {
         apc_delete(APC_PREFIX . "_readAccessCategories".$idUser);
 
-        $sql = 'DELETE FROM users_content_categories WHERE pk_fk_content_category='.intval($idCategory);
+        $sql = 'DELETE FROM users_content_categories '
+             . 'WHERE pk_fk_content_category=?';
+        $values = array(intval($idCategory));
 
-        if ($GLOBALS['application']->conn->Execute($sql) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            \Application::logDatabaseError();
 
             return false;
         }
-
         $this->accesscategories = self::readAccessCategories($idUser);
 
-
         return true;
-
     }
 
     private function readAccessCategories($id=null)
@@ -278,13 +272,14 @@ class User
          // If was not fetched from APC now is turn of DB
         if (!$fetchedFromAPC) {
 
-            $sql = 'SELECT pk_fk_content_category FROM users_content_categories WHERE pk_fk_user = '.intval($id);
-            $rs = $GLOBALS['application']->conn->Execute( $sql );
+            $sql = 'SELECT pk_fk_content_category '
+                 . 'FROM users_content_categories '
+                 . 'WHERE pk_fk_user=?';
+            $values = array(intval($id));
+            $rs = $GLOBALS['application']->conn->Execute($sql, $values);
 
             if (!$rs) {
-                $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-                $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-                $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+                \Application::logDatabaseError();
 
                 return null;
             }
@@ -306,14 +301,13 @@ class User
 
     private function deleteAccessCategoriesDB()
     {
-        $sql = 'DELETE FROM users_content_categories WHERE pk_fk_user='.intval($this->id);
-
-        if ($GLOBALS['application']->conn->Execute($sql)===false) {
+        $sql = 'DELETE FROM users_content_categories WHERE pk_fk_user=?';
+        $values = array(intval($this->id));
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        if ($rs === false) {
             $GLOBALS['application']->conn->RollbackTrans();
 
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
             return false;
         }
@@ -322,12 +316,17 @@ class User
         return true;
     }
 
-    public function login($login, $password, $loginToken=null, $loginCaptcha=null)
-    {
+    public function login(
+        $login,
+        $password,
+        $loginToken=null,
+        $loginCaptcha=null
+    ) {
         $result = false;
 
         if ($this->isValidEmail($login)) {
-            $result = $this->authGoogleClientLogin($login, $password, $loginToken=null, $loginCaptcha=null);
+            $result = $this->authGoogleClientLogin($login,
+                $password, $loginToken=null, $loginCaptcha=null);
         } else {
             $result = $this->authDatabase($login, $password);
         }
@@ -343,8 +342,6 @@ class User
      */
     public function isValidEmail($email)
     {
-        // TODO: restrict accounts to @xornaldegalicia.com
-        // return preg_match('/.+@xornaldegalicia.com/', $email);
         return preg_match('/.+@.+\..+/', $email);
     }
 
@@ -361,9 +358,7 @@ class User
         $rs = $GLOBALS['application']->conn->Execute( $sql );
 
         if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
             return false;
         }
@@ -418,8 +413,10 @@ class User
             $this->set_values($data);
         } catch (Zend_Gdata_App_CaptchaRequiredException $cre) {
             // Incorrect credentials, retry with captcha challenge
-            return array('token'   => $cre->getCaptchaToken(),
-                         'captcha' => $cre->getCaptchaUrl() );
+            return array(
+                'token'   => $cre->getCaptchaToken(),
+                'captcha' => $cre->getCaptchaUrl()
+            );
         } catch (Zend_Gdata_App_AuthException $ae) {
             return false;
         } catch (Exception $exp) {
@@ -444,9 +441,7 @@ class User
         $rs = $GLOBALS['application']->conn->Execute( $sql );
 
         if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
             return false;
         }
@@ -468,9 +463,7 @@ class User
         $rs  = $GLOBALS['application']->conn->Execute($sql, array($email));
 
         if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
             return null;
         }
@@ -544,7 +537,7 @@ class User
                 $names[] = $category->name;
             }
 
-            return names;
+            return $names;
         }
 
         return null;
@@ -639,9 +632,7 @@ class User
         $sql = 'SELECT name, login FROM users WHERE pk_user='.$id;
         $rs = $GLOBALS['application']->conn->Execute($sql);
          if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
             return false;
         }
@@ -661,7 +652,7 @@ class User
             curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
             curl_setopt($curl, CURLOPT_USERPWD, $token); //$username.':'.$password);
             $result = curl_exec($curl);
-            $code = curl_getinfo ($curl, CURLINFO_HTTP_CODE);
+            $code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
             if ($code != 200) {
                 return $messages;
@@ -701,10 +692,7 @@ class User
         $sql = "UPDATE users SET `authorize`=0 WHERE pk_user=".intval($id);
 
         if ($GLOBALS['application']->conn->Execute($sql) === false) {
-
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
             return;
         }
@@ -715,10 +703,7 @@ class User
         $sql = "UPDATE users SET `authorize`=1 WHERE pk_user=".intval($id);
 
         if ($GLOBALS['application']->conn->Execute($sql) === false) {
-
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
             return;
         }

@@ -21,7 +21,7 @@ class Newsletter
     const ITEMS_MAX_LIMIT = 50;
 
     protected $namespace        = null;
-    protected $accountsProvider = null;
+    protected $_accountsProvider = null;
     protected $itemsProvider    = null;
     protected $templateProvider = null;
     protected $tablename        = 'newsletter_archive';
@@ -31,20 +31,13 @@ class Newsletter
     public function __construct($config)
     {
       $this->setup($config['namespace']);
-
-      // This is causing an E_STRICT error, we should reimplement this class
-        // cause it has a lot of counterparts inherited from Xornal.
-        //if (!$this->schema_exists()) {
-        //    $this->setupDatabaseTable();
-        //}
-
     }
 
     public function setup($namespace)
     {
         $accountsProvider = $namespace . 'Newsletter_Accounts_Provider';
         if (class_exists($accountsProvider)) {
-            $this->accountsProvider = new $accountsProvider();
+            $this->_accountsProvider = new $accountsProvider();
         }
 
         $itemsProvider = $namespace . 'Newsletter_Items_Provider';
@@ -55,7 +48,7 @@ class Newsletter
 
     public function getAccountsProvider()
     {
-        return $this->accountsProvider;
+        return $this->_accountsProvider;
     }
 
     public function getItemsProvider()
@@ -72,16 +65,27 @@ class Newsletter
         $i = 0;
         foreach ($data->articles as $tok) {
             $category = $ccm->get_name($tok->category);
-            $data->articles[$i]->date= date('Y-m-d', strtotime(str_replace('/', '-', substr($tok->created, 6))));
+            $date = date('Y-m-d', strtotime(str_replace('/', '-',
+                substr($tok->created, 6))));
+            $data->articles[$i]->date= $date;
             $data->articles[$i]->cat = $category;
-            $data->articles[$i]->agency = (is_array($tok->params) && array_key_exists('agencyBulletin', $tok->params))?$tok->params['agencyBulletin']:'';
+            if (is_array($tok->params)
+                && array_key_exists('agencyBulletin', $tok->params)
+            ) {
+                $data->articles[$i]->agency = $tok->params['agencyBulletin'];
+            } else {
+                $data->articles[$i]->agency = '';
+            }
             $i++;
         }
         $i = 0;
         if (isset($data->opinions) && !empty($data->opinions)) {
             foreach ($data->opinions as $tok) {
-                $data->opinions[$i]->date= date('Y-m-d', strtotime(str_replace('/', '-', substr($tok->created, 6))));
-                $data->opinions[$i]->slug= StringUtils::get_title($data->opinions[$i]->author);
+                $date = date('Y-m-d',
+                    strtotime(str_replace('/', '-', substr($tok->created, 6))));
+                $data->opinions[$i]->date = $date;
+                $slug = StringUtils::get_title($data->opinions[$i]->author);
+                $data->opinions[$i]->slug= $slug;
                 $i++;
             }
         }
@@ -89,7 +93,7 @@ class Newsletter
 
         //render menu
         $menuFrontpage= Menu::renderMenu('frontpage');
-        $tpl->assign('menuFrontpage',$menuFrontpage->items);
+        $tpl->assign('menuFrontpage', $menuFrontpage->items);
 
         //render ads
         $advertisement = Advertisement::getInstance();
@@ -100,24 +104,38 @@ class Newsletter
         $advertisement->render($banners, $advertisement);
 
         /*Fetch inmenu categorys*/
-        $inmenu_categorys = $ccm->find('internal_category != 0 AND fk_content_category =0 AND inmenu=1', 'ORDER BY posmenu');
-        $tpl->assign('inmenu_categorys', $inmenu_categorys);
+        $categoriesInMenu = $ccm->find('internal_category != 0 '
+            .'AND fk_content_category =0 AND inmenu=1', 'ORDER BY posmenu');
+        $tpl->assign('inmenu_categorys', $categoriesInMenu);
 
         // VIERNES 4 DE SEPTIEMBRE 2009
-        $days = array('Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado');
-        $months = array('', 'Enero', 'Febrero', 'Marzo',
-                        'Abril', 'Mayo', 'Junio',
-                        'Julio', 'Agosto', 'Septiembre',
-                        'Octubre', 'Noviembre', 'Diciembre');
-        $tpl->assign('current_date', $days[(int)date('w')] . ' ' . date('j') . ' de ' . $months[(int)date('n')] . ' ' . date('Y'));
+        $days = array(
+            'Domingo',
+            'Lunes',
+            'Martes',
+            'Miércoles',
+            'Jueves',
+            'Viernes',
+            'Sábado'
+        );
+        $months = array(
+            '', 'Enero', 'Febrero', 'Marzo',
+            'Abril', 'Mayo', 'Junio',
+            'Julio', 'Agosto', 'Septiembre',
+            'Octubre', 'Noviembre', 'Diciembre'
+        );
+        $fullDate = $days[(int)date('w')].' '.date('j')
+            .' de '.$months[(int)date('n')].' '.date('Y');
+        $tpl->assign('current_date', $fullDate);
 
-        $URL_PUBLIC = preg_replace('@^http[s]?://(.*?)/$@i', 'http://$1', SITE_URL);
-        $tpl->assign('URL_PUBLIC', $URL_PUBLIC);
+        $publicUrl = preg_replace('@^http[s]?://(.*?)/$@i', 'http://$1',
+            SITE_URL);
+        $tpl->assign('URL_PUBLIC', $publicUrl);
 
         $configurations = s::get(array(
-                                    'newsletter_maillist',
-                                    'newsletter_subscriptionType',
-                                    ));
+            'newsletter_maillist',
+            'newsletter_subscriptionType',
+        ));
 
         $tpl->assign('conf', $configurations);
         $htmlContent = $tpl->fetch('newsletter/newsletter.tpl');
@@ -138,15 +156,15 @@ class Newsletter
 
     public function sendToUser($mailbox, $htmlcontent, $params)
     {
-        require_once(SITE_LIBS_PATH.'phpmailer/class.phpmailer.php');
+        require_once SITE_LIBS_PATH.'phpmailer/class.phpmailer.php';
 
         $mail = new PHPMailer();
         $mail->SetLanguage('es');
         $mail->IsSMTP();
         $mail->Host = $params['mail_host'];
         if (!empty($params['mail_user'])
-            && !empty($params['mail_password']))
-        {
+            && !empty($params['mail_password'])
+        ) {
             $mail->SMTPAuth = true;
         } else {
             $mail->SMTPAuth = false;
@@ -166,14 +184,17 @@ class Newsletter
         $mail->AddAddress($mailbox->email, $mailbox->name);
 
         // embed image logo
-        $mail->AddEmbeddedImage(SITE_PATH . 'themes/xornal/images/xornal-boletin.jpg', 'logo-cid', 'Logotipo');
+        $mail->AddEmbeddedImage(SITE_PATH
+            .'themes/xornal/images/xornal-boletin.jpg', 'logo-cid', 'Logotipo');
 
         $subject = (!isset($params['subject']))? '[Xornal]': $params['subject'];
         $mail->Subject  = $subject;
 
         // TODO: crear un filtro
-        $this->HTML = preg_replace('/(>[^<"]*)["]+([^<"]*<)/', "$1&#34;$2", $this->HTML);
-        $this->HTML = preg_replace("/(>[^<']*)[']+([^<']*<)/", "$1&#39;$2", $this->HTML);
+        $this->HTML = preg_replace('/(>[^<"]*)["]+([^<"]*<)/', "$1&#34;$2",
+            $this->HTML);
+        $this->HTML = preg_replace("/(>[^<']*)[']+([^<']*<)/", "$1&#39;$2",
+            $this->HTML);
         $this->HTML = str_replace('“', '&#8220;', $this->HTML);
         $this->HTML = str_replace('”', '&#8221;', $this->HTML);
         $this->HTML = str_replace('‘', '&#8216;', $this->HTML);
@@ -182,7 +203,7 @@ class Newsletter
         $mail->Body = $this->HTML;
 
         if (!$mail->Send()) {
-            $this->errors[] = "Error en el envío del mensaje " . $mail->ErrorInfo;
+            $this->errors[] = "Error en el envío del mensaje ".$mail->ErrorInfo;
 
             return false;
         }
@@ -210,8 +231,8 @@ class Newsletter
      */
     public function setupDatabaseTable()
     {
-        require_once(SITE_LIBS_PATH.'adodb5/adodb-xmlschema.inc.php');
-        $schema = new adoSchema( $GLOBALS['application']->conn );
+        require_once SITE_LIBS_PATH.'adodb5/adodb-xmlschema.inc.php';
+        $schema = new adoSchema($GLOBALS['application']->conn);
 
         // Schema for bulletins support.
         $axmls = '<?xml version="1.0"?>
@@ -237,7 +258,7 @@ class Newsletter
 
     public function schema_exists()
     {
-        $dict = NewDataDictionary($GLOBALS['application']->conn);
+        $dict   = NewDataDictionary($GLOBALS['application']->conn);
         $tables = $dict->MetaTables();
 
         return in_array($this->tablename, $tables);
@@ -249,14 +270,13 @@ class Newsletter
         $data['data']    = $request['data'];
         $data['created'] = date("Y-m-d H:i:s");
 
-        $sql = 'INSERT INTO `' . $this->tablename. '` (`data`, `created`) VALUES (?,?)';
+        $sql = 'INSERT INTO `' . $this->tablename. '` (`data`, `created`) '
+             . 'VALUES (?,?)';
 
         $values = array($data['data'], $data['created']);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
             return false;
         }
@@ -269,17 +289,15 @@ class Newsletter
 
     public function read($id)
     {
-        $sql = 'SELECT * FROM `' . $this->tablename. '` WHERE pk_newsletter=?';
+        $sql = 'SELECT * FROM `' . $this->tablename.'` '
+             . 'WHERE pk_newsletter=?';
         $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($id)));
 
         if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
             return;
         }
-
         $this->loadData($rs->fields);
 
         return $this;
@@ -302,12 +320,10 @@ class Newsletter
         }
 
         $sql = 'SELECT * FROM `' . $this->tablename. '` WHERE '.$filter;
-        $rs = $GLOBALS['application']->conn->Execute( $sql );
+        $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
             return $newsletters;
         }
@@ -332,10 +348,9 @@ class Newsletter
     {
         $sql = 'DELETE FROM `' . $this->tablename. '` WHERE pk_newsletter=?';
 
-        if ($GLOBALS['application']->conn->Execute($sql, array(intval($id)))===false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+        $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($id)));
+        if ($rs === false) {
+            \Application::logDatabaseError();
 
             return;
         }
@@ -422,8 +437,13 @@ abstract class Newsletter_Accounts_Provider
 
     abstract public function fetch();
 
-    public function __construct($conn, $table, $fields, $filter=null, $database=null)
-    {
+    public function __construct(
+        $conn,
+        $table,
+        $fields,
+        $filter=null,
+        $database=null
+    ) {
         // TODO: control errors
         $this->conn     = $conn;
         $this->database = $database;
@@ -488,7 +508,12 @@ abstract class Newsletter_Items_Provider
 
     protected $items = null;
 
-    abstract public function fetch($source, $filter=null, $order_by=null, $limit=null);
+    abstract public function fetch(
+        $source,
+        $filter=null,
+        $orderBy=null,
+        $limit=null
+    );
 
     /**
      *
@@ -497,14 +522,18 @@ abstract class Newsletter_Items_Provider
      *  $sources = array(
      *       'Article' => array(
      *           'table'  => 'contents',
-     *           'fields' => array('pk_content', 'title', 'summary', 'permalink', 'created'),
-     *           'conditions' => '(`in_litter`=0 AND `available`=1 AND `fk_content_type`=1)'
+     *           'fields' => array('pk_content', 'title',
+     *                             'summary', 'permalink', 'created'),
+     *           'conditions' => '(`in_litter`=0 AND `available`=1
+     *                              AND `fk_content_type`=1)'
      *       ),
      *
      *       'Opinion' => array(
      *           'table'  => 'contents',
-     *           'fields' => array('pk_content', 'title', 'summary', 'permalink', 'created'),
-     *           'conditions' => '(`in_litter`=0 AND `available`=1 AND `fk_content_type`=4)'
+     *           'fields' => array('pk_content', 'title', 'summary',
+     *                             'permalink', 'created'),
+     *           'conditions' => '(`in_litter`=0 AND `available`=1
+     *                             AND `fk_content_type`=4)'
      *       )
      *   );
      * </code>
@@ -520,10 +549,10 @@ abstract class Newsletter_Items_Provider
     /**
      * Get items
      */
-    public function getItems($source, $filter=null, $order_by=null, $limit=null)
+    public function getItems($source, $filter=null, $orderBy=null, $limit=null)
     {
         //Newsletter_Item
-        $this->items = $this->fetch($source, $filter, $order_by, $limit);
+        $this->items = $this->fetch($source, $filter, $orderBy, $limit);
 
         return $this->items;
     }
@@ -562,12 +591,10 @@ class PConecta_Newsletter_Accounts_Provider extends Newsletter_Accounts_Provider
     public function __construct()
     {
         // Inject dependencies
-        parent::__construct(
-            $GLOBALS['application']->conn,
+        parent::__construct($GLOBALS['application']->conn,
             'pc_users',
             'email,name,firstname,lastname',
-            'status > 0 AND subscription = 1'
-        );
+            'status > 0 AND subscription = 1');
     }
 
     public function fetch()
@@ -632,13 +659,15 @@ class PConecta_Newsletter_Items_Provider extends Newsletter_Items_Provider
         $sources = array(
             'Article' => array(
                 'table'  => 'contents',
-                'fields' => array('pk_content', 'title', 'params', 'subtitle', 'created', 'category'),
+                'fields' => array('pk_content', 'title',
+                        'params', 'subtitle', 'created', 'category'),
                 'conditions' => '`fk_content_type`=1'
             ),
 
             'Opinion' => array(
                 'table'  => 'contents',
-                'fields' => array('pk_content', 'title', 'permalink', 'created', 'author', 'type_opinion'),
+                'fields' => array('pk_content', 'title',
+                        'permalink', 'created', 'author', 'type_opinion'),
                 'conditions' => '`fk_content_type`=4'
             )
         );
@@ -668,28 +697,28 @@ class PConecta_Newsletter_Items_Provider extends Newsletter_Items_Provider
             }
         }
 
-        if (is_array($filters) && isset($filters['category']) && !empty($filters['category'])) {
+        if (is_array($filters)
+            && isset($filters['category'])
+            && !empty($filters['category'])
+        ) {
             $category = $filters['category'];
             unset($filters['category']);
 
-            $filter = $this->_cond2str($filters, $this->sources[$source]['conditions']);
+            $filter = $this->_cond2str($filters,
+                $this->sources[$source]['conditions']);
 
             $items = $cm->find_by_category($source, $category,
-                                           $filter, 'ORDER BY ' . $order_by . ' ' . $limit);
+               $filter, 'ORDER BY ' . $order_by . ' ' . $limit);
 
             // Filter in time {{{
             $items = $cm->getInTime($items);
             // }}}
 
         } else {
-            $filter = $this->_cond2str($filters, $this->sources[$source]['conditions']);
-            $items = $cm->find($source,
-                               $filter,
-                               'ORDER BY ' . $order_by . ' ' . $limit);
-
-            //var_dump($source, $filter, 'ORDER BY ' . $order_by . ' ' . $limit);
-            //die();
-
+            $filter = $this->_cond2str($filters,
+                $this->sources[$source]['conditions']);
+            $items = $cm->find($source, $filter,
+               'ORDER BY ' . $order_by . ' ' . $limit);
 
             // Filter in time {{{
             $items = $cm->getInTime($items);
@@ -697,7 +726,8 @@ class PConecta_Newsletter_Items_Provider extends Newsletter_Items_Provider
 
             if ($source=='Opinion') {
                 for ($i=0, $len=count($items); $i<$len; $i++) {
-                    $items[$i]->author = $items[$i]->get_author_name($items[$i]->fk_author);
+                    $items[$i]->author =
+                        $items[$i]->get_author_name($items[$i]->fk_author);
                     if ($items[$i]->type_opinion == '2') {
                         $items[$i]->author = 'Carta del Director';
                     }
@@ -715,10 +745,11 @@ class PConecta_Newsletter_Items_Provider extends Newsletter_Items_Provider
             foreach ($this->sources[$source]['fields'] as $fld) {
                 // Format date
                 if ($fld == 'created') {
-                    $content->{$fld} = date('H:i d/m/Y', strtotime($content->{$fld}));
+                    $content->{$fld} = date('H:i d/m/Y',
+                        strtotime($content->{$fld}));
                 }
 
-                $item->{$fld} = clearslash( strip_tags($content->{$fld}) );
+                $item->{$fld} = clearslash(strip_tags($content->{$fld}));
 
                 // Fix problem with special indesign characters
                 $item->{$fld} = StringUtils::clearBadChars($item->{$fld});

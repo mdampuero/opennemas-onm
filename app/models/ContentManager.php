@@ -1118,9 +1118,9 @@ class ContentManager
     public function getAllMostComented(
         $notEmpty = false,
         $category = 0,
-        $days=2,
-        $num=6,
-        $all=false
+        $days = 2,
+        $num = 6,
+        $all = false
     ) {
         $items = array();
 
@@ -1135,7 +1135,7 @@ class ContentManager
         $_limit    = 'LIMIT 0 , '.$num;
         $_order_by = 'ORDER BY changed DESC';
 
-        $_where=$_where_slave.$_days.$_comented;
+        $_where= $_where_slave.$_days.$_comented;
         if (intval($category)>0) {
             $sql = 'SELECT * FROM contents_categories, contents '
                  . 'WHERE '.$_where
@@ -1150,7 +1150,7 @@ class ContentManager
         $pks = $this->load_obj($rs, 'content');
 
         if (!$all) {
-                $pks = $this->getInTime($pks);
+            $pks = $this->getInTime($pks);
         }
 
         if (count($pks) < 6 && $notEmpty) {
@@ -1929,76 +1929,6 @@ class ContentManager
 
         return $result;
     }
-
-
-    //FIXME: pinta las paginas que ejecutan js
-    //admin article.php, article_change_videos.php
-    public function makePagesLinkjs($pager, $funcion, $params)
-    {
-        $szPages=null;
-        if ($pager->_totalPages>1) {
-            $szPages = '<p align="center">';
-
-            if ($pager->_currentPage != 1) {
-                $szPages .= '<a style="cursor:pointer;" onClick="'
-                    .$funcion.'('.$params.',1);">Primera</a> ... | ';
-            }
-
-            for ($iIndex=$pager->_currentPage-2;
-                $iIndex<=$pager->_currentPage+2 && $iIndex <= $pager->_totalPages;
-                $iIndex++
-            ) {
-
-                if ($pager->_currentPage == 1) {
-                    if (($iIndex+2) > $pager->_totalPages) {
-                        break;
-                    }
-
-                    $szPages .= '<a style="cursor:pointer;" onClick="'
-                        .$funcion.'('.$params.','.($iIndex+2).');">';
-                    if ($pager->_currentPage == ($iIndex+2)) {
-                        $szPages .= '<b>' . ($iIndex+2) . '</b></a> | ';
-                    } else {
-                        $szPages .= ($iIndex+2) . '</a> | ';
-                    }
-
-                } elseif ($pager->_currentPage == 2) {
-                    if (($iIndex+1) > $pager->_totalPages) {
-                        break;
-                    }
-
-                    $szPages .= '<a style="cursor:pointer;" onClick="'
-                        .$funcion.'('.$params.','.($iIndex+1).');">';
-                    if ($pager->_currentPage == ($iIndex+1)) {
-                        $szPages .= '<b>' . ($iIndex+1) . '</b></a> | ';
-                    } else {
-                        $szPages .= ($iIndex+1) . '</a> | ';
-                    }
-
-                } else {
-                    $szPages .= '<a style="cursor:pointer;" onClick="'
-                        .$funcion.'('.$params.','.$iIndex.');">';
-                    if ($pager->_currentPage == ($iIndex)) {
-                        $szPages .= '<b>' . $iIndex . '</b></a> | ';
-                    } else {
-                        $szPages .= $iIndex . '</a> | ';
-                    }
-                }
-
-            }
-
-            if ($pager->_currentPage != $pager->_lastPageText) {
-                $szPages .= '... <a style="cursor:pointer;" onClick="'
-                    . $funcion .
-                    '(' . $params.','.$pager->_lastPageText.');">Última </a>';
-            }
-
-            $szPages .= "</p> ";
-        }
-
-        return $szPages;
-    }
-
 
     //Coge todos los tipos que hay en la tabla
     public function get_types()

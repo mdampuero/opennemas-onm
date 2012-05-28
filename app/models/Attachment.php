@@ -46,7 +46,7 @@ class Attachment extends Content
      * @param integer $id, the id of the Attachment
      * @return null
      **/
-    public function __construct($id=NULL)
+    public function __construct($id=null)
     {
         $this->content_type = 'attachment';
         parent::__construct($id);
@@ -276,7 +276,7 @@ class Attachment extends Content
         if (!$rs) {
             \Application::logDatabaseError();
 
-            return NULL;
+            return null;
         }
 
         $obj = new stdClass();
@@ -366,18 +366,6 @@ class Attachment extends Content
             \Application::logDatabaseError();
 
             return;
-        }
-    }
-
-
-    // TODO: eliminar ya no existe directorios por categorias
-    private function getCategoryName($categoryID)
-    {
-        $ccm = ContentCategoryManager::get_instance();
-        foreach ($ccm->categories as $category) {
-            if ($category->pk_content_category == $categoryID) {
-                return $category->name;
-            }
         }
     }
 

@@ -138,8 +138,8 @@ class ContentType
                     $resultArray[$i]['2'] = htmlentities($res['2']);
                     $i++;
                 }
-            } catch (exception $e) {
-                printf("Excepcion: " . $e.message);
+            } catch (\Exception $e) {
+                printf("Excepcion: " . $e->message);
 
                 return null;
             }

@@ -75,7 +75,7 @@ class Photo extends Content
      *
      * @params array $data the data for the photo, must content the photo local_file
      **/
-    public function createFromLocalFile($dataSource, $dateForDirectory=NULL)
+    public function createFromLocalFile($dataSource, $dateForDirectory=null)
     {
 
         $filePath = $dataSource["local_file"];
@@ -407,7 +407,6 @@ class Photo extends Content
 
     public function read_alldata($id)
     {
-
         $photo = new stdClass();
         $this->read($id);
 
@@ -415,26 +414,26 @@ class Photo extends Content
             return $photo;
         }
 
-        $photo->pk_photo = $this->pk_photo;
-        $photo->id = $this->pk_photo ;
-        $photo->name = $this->name ;
-        $photo->title = $this->title ;
+        $photo->pk_photo    = $this->pk_photo;
+        $photo->id          = $this->pk_photo ;
+        $photo->name        = $this->name ;
+        $photo->title       = $this->title ;
         $photo->description = $this->description ;
-        $photo->metadata = $this->metadata ;
-        $photo->path_file = $this->path_file;
-        $photo->size = $this->size;
-        $photo->resolution = $this->resolution;
-        $photo->width = $this->width;
-        $photo->height = $this->height;
-        $photo->nameCat = $this->nameCat;
-        $photo->type_img = $this->type_img;
-        $photo->category = $this->category;
+        $photo->metadata    = $this->metadata ;
+        $photo->path_file   = $this->path_file;
+        $photo->size        = $this->size;
+        $photo->resolution  = $this->resolution;
+        $photo->width       = $this->width;
+        $photo->height      = $this->height;
+        $photo->nameCat     = $this->nameCat;
+        $photo->type_img    = $this->type_img;
+        $photo->category    = $this->category;
         $photo->author_name = $this->author_name;
         $photo->media_type  = $this->media_type;
-        $photo->color = $this->color;
-        $photo->date  = $this->date;
-        $photo->address  = $this->address;
-        $photo->infor = '';
+        $photo->color       = $this->color;
+        $photo->date        = $this->date;
+        $photo->address     = $this->address;
+        $photo->infor       = '';
 
         $image = MEDIA_IMG_PATH . $this->path_file.$this->name;
 
@@ -497,12 +496,12 @@ class Photo extends Content
 
                         if (is_array($iptc)) {
 
-                            $error_reporting = ini_get('error_reporting');
+                            $errorReporting = ini_get('error_reporting');
                             error_reporting('E_ALL');
 
                             if (isset($iptc["2#025"])) {
                                 $keywordcount = count($iptc["2#025"]);
-                                $keywords=$iptc["2#025"][0];
+                                $keywords     = $iptc["2#025"][0];
 
                                 for ($i=1; $i<$keywordcount; $i++) {
                                     $keywords .= ", ".$iptc["2#025"][$i]  ;
@@ -511,36 +510,33 @@ class Photo extends Content
                                 $keywords = '';
                             }
 
-                            $myiptc['Keywords'] =$keywords;
-                            $myiptc['Caption'] = $iptc["2#120"][0];
+                            $myiptc['Keywords']            =$keywords;
+                            $myiptc['Caption']             = $iptc["2#120"][0];
 
-                            $myiptc['Graphic_name'] = $iptc["2#005"][0];
-                            $myiptc['Urgency'] = $iptc["2#010"][0];
-                            $myiptc['Category'] = $iptc["2#015"][0];
-                            $myiptc['Program'] = $iptc["2#065"][0];
-                            $myiptc['Supp_categories'] = $iptc["2#020"][0];  // note that sometimes supp_categories contans multiple entries
-                            $myiptc['Spec_instr'] = $iptc["2#040"][0];
-                            $myiptc['Creation_date'] =  $iptc["2#055"][0];
-                            $myiptc['Photographer'] = $iptc["2#080"][0];
+                            $myiptc['Graphic_name']        = $iptc["2#005"][0];
+                            $myiptc['Urgency']             = $iptc["2#010"][0];
+                            $myiptc['Category']            = $iptc["2#015"][0];
+                            $myiptc['Program']             = $iptc["2#065"][0];
+                            // note that sometimes supp_categories
+                            // contans multiple entries
+                            $myiptc['Supp_categories']     = $iptc["2#020"][0];
+                            $myiptc['Spec_instr']          = $iptc["2#040"][0];
+                            $myiptc['Creation_date']       = $iptc["2#055"][0];
+                            $myiptc['Photographer']        = $iptc["2#080"][0];
                             $myiptc['Credit_byline_title'] = $iptc["2#085"][0];
-                            $myiptc['City'] = $iptc["2#090"][0];
-                            $myiptc['State'] = $iptc["2#095"][0];
-                            $myiptc['Country'] = $iptc["2#101"][0];
-                            $myiptc['Otr'] = $iptc["2#103"][0];
-                            $myiptc['Headline'] = $iptc["2#105"][0];
-                            $myiptc['Source'] = $iptc["2#110"][0];
-                            $myiptc['Photo_source'] = $iptc["2#183"][0];
+                            $myiptc['City']                = $iptc["2#090"][0];
+                            $myiptc['State']               = $iptc["2#095"][0];
+                            $myiptc['Country']             = $iptc["2#101"][0];
+                            $myiptc['Otr']                 = $iptc["2#103"][0];
+                            $myiptc['Headline']            = $iptc["2#105"][0];
+                            $myiptc['Source']              = $iptc["2#110"][0];
+                            $myiptc['Photo_source']        = $iptc["2#183"][0];
 
-                            $myiptc = array_map('map_entities', $myiptc );
+                            $myiptc = array_map('map_entities', $myiptc);
                             $photo->myiptc = $myiptc;
 
                             if (empty($photo->description)) {
-                            /*    if (!empty($myiptc['Headline'])) {
-                                    $photo->description= $myiptc['Headline'];
-                                } else {
-                                    $photo->description= $myiptc['Caption'];
-                                }*/
-                                 $photo->description= $myiptc['Caption'];
+                                $photo->description= $myiptc['Caption'];
                             }
 
                             if (empty($photo->metadata)) {
@@ -551,7 +547,7 @@ class Photo extends Content
                                 $photo->author_name = $myiptc['Photographer'];
                             }
 
-                            ini_set($error_reporting);
+                            ini_set($errorReporting);
 
                         } else {
                             $photo->infor .=  _("No availabel IPTC data</br>");
@@ -561,7 +557,7 @@ class Photo extends Content
             } // endswitch;
 
         } else {
-            $photo->infor .=  _("Invalid image file</br>");
+            $photo->infor .=  _("Invalid image file");
         }
 
         return $photo;
@@ -571,22 +567,22 @@ class Photo extends Content
     public function update($data)
     {
         parent::update($data);
-        $sql = "UPDATE photos SET `pk_photo`=?, `name`=?, `path_file`=?, `size`=?, `width`=?,`height`=?,`type_img`=?, `author_name`=?, `date`=?, `color`=? " .
-                "WHERE pk_photo=".($data['id']);
+        $sql = "UPDATE photos SET `pk_photo`=?, `name`=?, `path_file`=?, "
+             . "`size`=?, `width`=?,`height`=?,`type_img`=?, `author_name`=?, "
+             . "`date`=?, `color`=? "
+             . "WHERE pk_photo=?";
 
-        $values = array( $data['pk_photo'], $data['name'], $data['path_file'],
-                         $data['size'], $data['width'], $data['height'],
-                         $data['type_img'], $data['author_name'],
-                            $data['date'], $data['color']);
+        $values = array(
+            $data['pk_photo'], $data['name'], $data['path_file'],
+            $data['size'], $data['width'], $data['height'],
+            $data['type_img'], $data['author_name'],
+            $data['date'], $data['color'], $data['id']
+        );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            \Application::logDatabaseError();
 
             return;
-
         }
     }
 
@@ -600,18 +596,22 @@ class Photo extends Content
         }
         parent::update($data);
 
-        $sql = "UPDATE `photos` SET `author_name`=?,`address`=?, `color`=?, `date`=?, `resolution`=? WHERE `pk_photo`='".$data['id']."'";
+        $sql = "UPDATE `photos` SET `author_name`=?,`address`=?, `color`=?, "
+             . "`date`=?, `resolution`=? WHERE `pk_photo`=?";
 
-        $values = array($data['author_name'],$data['address'],$data['color'],$data['date'], $data['resolution'] );
+        $values = array(
+            $data['author_name'],
+            $data['address'],
+            $data['color'],
+            $data['date'],
+            $data['resolution'],
+            $data['id']
+        );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            \Application::logDatabaseError();
 
             return;
-
         }
 
         return true;
@@ -624,10 +624,7 @@ class Photo extends Content
         $sql = 'DELETE FROM photos WHERE pk_photo=?';
 
         if ($GLOBALS['application']->conn->Execute($sql, array($id)) === false) {
-
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            \Application::logDatabaseError();
 
             return;
 
@@ -652,10 +649,7 @@ class Photo extends Content
         $values = array($path, $id);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            \Application::logDatabaseError();
 
             return;
 
@@ -667,14 +661,15 @@ class Photo extends Content
 
     public function is_used($id)
     {
-        $sqlAlbums = 'SELECT pk_album FROM  albums_photos  WHERE  pk_photo= '.$id;
-        $sqlAds = 'SELECT pk_advertisement FROM  advertisements  WHERE  path= '.$id;
-        $sqlarticles = 'SELECT pk_article FROM  articles WHERE img1= '.$id.' OR img2='.$id;
+        $sqlAlbums = 'SELECT pk_album FROM  albums_photos WHERE  pk_photo=?';
+        $sqlAds = 'SELECT pk_advertisement FROM  advertisements WHERE path=?';
+        $sqlarticles = 'SELECT pk_article FROM  articles WHERE img1=? OR img2=?';
         // $sql= "$sql3 UNION $sql1 UNION $sql2";
 
         $result = array();
+        $values = array($id);
 
-        $rs = $GLOBALS['application']->conn->Execute( $sqlAlbums );
+        $rs = $GLOBALS['application']->conn->Execute($sqlAlbums, $values);
         if ($rs) {
             while (!$rs->EOF) {
                 $result[] = $rs->fields[0];
@@ -682,7 +677,7 @@ class Photo extends Content
             }
         }
 
-        $rs = $GLOBALS['application']->conn->Execute( $sqlAds );
+        $rs = $GLOBALS['application']->conn->Execute($sqlAds, $values);
         if ($rs) {
             while (!$rs->EOF) {
                 $result[] = $rs->fields[0];
@@ -690,7 +685,8 @@ class Photo extends Content
             }
         }
 
-        $rs = $GLOBALS['application']->conn->Execute( $sqlarticles );
+        $values = array($id, $id);
+        $rs = $GLOBALS['application']->conn->Execute($sqlarticles, $values);
         if ($rs) {
             while (!$rs->EOF) {
                 $result[]=$rs->fields[0];
@@ -700,7 +696,6 @@ class Photo extends Content
 
         return $result;
     }
-
 
 } //end class
 

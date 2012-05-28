@@ -15,11 +15,11 @@
  **/
 class Poll extends Content
 {
-    public $pk_poll = NULL;
-    public $subtitle = NULL;
-    public $total_votes   	= NULL;
-    public $used_ips   	= NULL;
-    public $visualization 	= NULL;
+    public $pk_poll = null;
+    public $subtitle = null;
+    public $total_votes   	= null;
+    public $used_ips   	= null;
+    public $visualization 	= null;
 
 
     public function __construct($id=null)
@@ -113,7 +113,7 @@ class Poll extends Content
         parent::read($id);
 
         $sql = 'SELECT * FROM polls WHERE pk_poll = '.($id);
-        $rs = $GLOBALS['application']->conn->Execute( $sql );
+        $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
@@ -213,7 +213,7 @@ class Poll extends Content
     {
         $sql = 'SELECT poll_items.pk_item, poll_items.item, poll_items.votes, poll_items.metadata '
                 .' FROM poll_items WHERE fk_pk_poll = '.($pk_poll).' ORDER BY poll_items.pk_item';
-        $rs = $GLOBALS['application']->conn->Execute( $sql );
+        $rs = $GLOBALS['application']->conn->Execute($sql);
         $i=0;
         $total=0;
         $items = array();
@@ -230,9 +230,9 @@ class Poll extends Content
         //TODO: improvement calc percents
         if (!empty($items)) {
             foreach ($items as &$item) {
-                $item['percent'] =0;
+                $item['percent'] = 0;
                 if (!empty($item['votes'])) {
-                    $item['percent'] = sprintf("%.0f",($item['votes']*100 / $total) );
+                    $item['percent'] = sprintf("%.0f", ($item['votes']*100 / $total));
                 }
             }
         }
@@ -303,7 +303,9 @@ class Poll extends Content
             //No se ha votado desde esa ip
             $ips_count[] = array('ip' => $ip, 'count' => 1);
         } else {
-            if ($ips_count[$kip_count]['count'] ==50) return FALSE;
+            if ($ips_count[$kip_count]['count'] ==50) {
+                return false;
+            }
             $ips_count[$kip_count]['count']++;
         }
 
