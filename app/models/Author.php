@@ -303,12 +303,14 @@ class Author
      * @param  string $_orderBy, the ORDER BY sql part to sort authors with
      * @return mixed, array of all matched authors
      **/
-    public static function list_authors($filter=NULL, $_orderBy='ORDER BY 1')
+    public static function list_authors($filter=null, $_orderBy='ORDER BY 1')
     {
 
         $items = array();
         $_where = '1=1';
-        if ( !is_null($filter) ) $_where = $filter;
+        if (!is_null($filter)) {
+            $_where = $filter;
+        }
 
         $sql = 'SELECT `authors`.`pk_author`, `authors`.`name` ,
                        `authors`.`blog` , `authors`.`politics` ,
@@ -348,7 +350,7 @@ class Author
      * @return array multidimensional array with information about
      *               matching authors
      **/
-    public function all_authors($filter=NULL, $_orderBy='ORDER BY 1')
+    public function all_authors($filter=null, $_orderBy='ORDER BY 1')
     {
 
         $items = array();
@@ -406,7 +408,9 @@ class Author
             }
         }
 
-        if (isset(self::$_photos[$id])) return self::$_photos[$id];
+        if (isset(self::$_photos[$id])) {
+            return self::$_photos[$id];
+        }
 
         return null;
     }

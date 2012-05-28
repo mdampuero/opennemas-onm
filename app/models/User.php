@@ -537,7 +537,7 @@ class User
                 $names[] = $category->name;
             }
 
-            return names;
+            return $names;
         }
 
         return null;

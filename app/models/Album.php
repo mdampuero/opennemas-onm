@@ -18,31 +18,31 @@ class Album extends Content
     /**
      * the album id
      */
-    public $pk_album = NULL;
+    public $pk_album = null;
 
     /**
      * the subtitle for this album
      */
-    public $subtitle = NULL;
+    public $subtitle = null;
 
     /**
      * the agency which created this album originaly
      */
-    public $agency = NULL;
+    public $agency = null;
 
-    public $fuente = NULL;
+    public $fuente = null;
 
     /**
      * the id of the image that is the cover for this album
      */
-    public $cover_id = NULL;
+    public $cover_id = null;
 
     /**
      * Initializes the Album class.
      *
      * @param strin $id the id of the album.
      **/
-    public function __construct($id=NULL)
+    public function __construct($id=null)
     {
         parent::__construct($id);
 
@@ -247,7 +247,7 @@ class Album extends Content
     public function _getAttachedPhotos($albumID)
     {
 
-        if ($albumID == NULL) {
+        if ($albumID == null) {
             return false ;
         }
 

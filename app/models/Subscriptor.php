@@ -41,7 +41,7 @@ class Subscriptor
 
     private $_tableName = '`pc_users`';
 
-    private static $_instance    = NULL;
+    private static $_instance    = null;
 
     /**
      * Constructor

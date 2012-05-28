@@ -15,15 +15,15 @@
  **/
 class RelatedContent
 {
-    public $pk_content1 = null;
-    public $pk_content2 = null;
+    public $pk_content1  = null;
+    public $pk_content2  = null;
     public $relationship = null;
-    public $text = null;
-    public $cache = null;
-    public $position = null;
-    public $posinterior = null;
-    public $verportada = null;
-    public $verinterior = null;
+    public $text         = null;
+    public $cache        = null;
+    public $position     = null;
+    public $posinterior  = null;
+    public $verportada   = null;
+    public $verinterior  = null;
 
     /**
      * Gets the relations for a given id.
@@ -34,7 +34,9 @@ class RelatedContent
      **/
     public function __construct($contentID = null)
     {
-        if (!is_null($contentID)) $this->read($contentID);
+        if (!is_null($contentID)) {
+            $this->read($contentID);
+        }
         $this->cache = new MethodCacheManager($this, array('ttl' => 30));
     }
 

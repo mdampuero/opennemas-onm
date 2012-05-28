@@ -75,7 +75,7 @@ class Photo extends Content
      *
      * @params array $data the data for the photo, must content the photo local_file
      **/
-    public function createFromLocalFile($dataSource, $dateForDirectory=NULL)
+    public function createFromLocalFile($dataSource, $dateForDirectory=null)
     {
 
         $filePath = $dataSource["local_file"];

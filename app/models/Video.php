@@ -240,19 +240,21 @@ class Video extends Content
 
         $ffmpgePath = exec("which ffmpeg");
 
-        $originalVideoPath = $originalVideo['file_path'];
-        $fileType = $originalVideo['file_type'];
+        $originalVideoPath  = $originalVideo['file_path'];
+        $fileType           = $originalVideo['file_type'];
         $temporaryVideoPath = $originalVideo['file_path'];
 
         // Calculate upload directory and create it if not exists
-        $relativeUploadDir = 'video'.DS.date("Y/m/d");
+        $relativeUploadDir  = 'video'.DS.date("Y/m/d");
         $absoluteUploadpath = $baseUploadpath.DS.$relativeUploadDir.DS;
-        if(!is_dir($absoluteUploadpath)) FilesManager::createDirectory($absoluteUploadpath);
+        if (!is_dir($absoluteUploadpath)) {
+            FilesManager::createDirectory($absoluteUploadpath);
+        }
 
         // Calculate the final video name by its extension, current data, ...
-        $fileData = pathinfo($originalVideoPath);     //sacamos infor del archivo
-        $t = gettimeofday(); //Sacamos los microsegundos
-        $micro = intval(substr($t['usec'], 0, 5)); //Le damos formato de 5digitos a los microsegundos
+        $fileData = pathinfo($originalVideoPath);
+        $t        = gettimeofday();
+        $micro    = intval(substr($t['usec'], 0, 5));
         $fileName = date("YmdHis") . $micro . "." . 'flv';
 
         // Compose absolute path to the new video file
@@ -282,7 +284,7 @@ class Video extends Content
                 break;
         }
 
-        $return['relative_dir'] = $relativeUploadDir;
+        $return['relative_dir']  = $relativeUploadDir;
         $return['relative_path'] = $relativeUploadDir.DS.$fileName;
         $return['absolute_path'] = $videoSavePath;
 

@@ -141,7 +141,7 @@ class ContentCategoryManager
      * @param $order_by
      * @return array Return category objects
     */
-    public function find($filter = NULL, $orderBy = 'ORDER BY 1')
+    public function find($filter = null, $orderBy = 'ORDER BY 1')
     {
         $items = array();
         $where = '1=1';
@@ -176,7 +176,7 @@ class ContentCategoryManager
     */
     public function find_by_type(
         $fkContentType,
-        $filter    = NULL,
+        $filter    = null,
         $orderBy ='ORDER BY 1'
     ) {
         $_where = 'fk_content_type='. $fkContentType .' ';
@@ -812,7 +812,7 @@ class ContentCategoryManager
      *
      * @see ContentCategoryManager::count_content_by_type
      **/
-    public function count_content_by_type_group($type, $filter=NULL)
+    public function count_content_by_type_group($type, $filter=null)
     {
         $_where = '1=1';
         if (!is_null($filter)) {
@@ -840,7 +840,7 @@ class ContentCategoryManager
         return $groups;
     }
 
-    public function countMediaByTypeGroup($filter=NULL)
+    public function countMediaByTypeGroup($filter=null)
     {
         $_where = '1=1';
         if (!is_null($filter)) {
@@ -869,7 +869,7 @@ class ContentCategoryManager
         return $groups;
     }
 
-    public function data_media_by_type_group($filter=NULL)
+    public function data_media_by_type_group($filter=null)
     {
         $_where = '1=1';
         if (!is_null($filter)) {
@@ -910,7 +910,7 @@ class ContentCategoryManager
      *
      * @throws <b>Exception</b> Explanation of exception.
      */
-    public function getArraysMenu($category = NULL, $internalCategory = 1)
+    public function getArraysMenu($category = null, $internalCategory = 1)
     {
 
         //fullcat contains array with all cats order by posmenu
@@ -1008,7 +1008,7 @@ class ContentCategoryManager
             return $rs->fields['catName'];
         }
 
-        return NULL;
+        return null;
     }
 
 

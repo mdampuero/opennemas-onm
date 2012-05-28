@@ -819,7 +819,7 @@ class Article extends Content
     public function render($params, $tpl = null)
     {
 
-      //  if (!isset($tpl)) {
+        //  if (!isset($tpl)) {
             $tpl = new Template(TEMPLATE_USER);
         //}
 

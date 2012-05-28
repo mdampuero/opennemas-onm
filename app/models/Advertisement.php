@@ -213,7 +213,7 @@ class Advertisement extends Content
     /**
      * @var MethodCacheManager Instance of MethodCacheManager
      **/
-    public $cache = NULL;
+    public $cache = null;
 
 
 
@@ -646,7 +646,7 @@ class Advertisement extends Content
             }
 
             // If this banner is not in time don't add it to the final results
-           $rsBanner = $cm->getInTime($rsBanner);
+            $rsBanner = $cm->getInTime($rsBanner);
 
             // $advertisements is an array of banners,
             // grouped by advertisement type

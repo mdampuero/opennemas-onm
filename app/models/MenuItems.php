@@ -47,7 +47,7 @@ class MenuItems
                " (`pk_menu`,`title`,`link_name`, `type`,`position`,`pk_father`) " .
                " VALUES (?,?,?,?,?,?)";
 
-        $values = array($data[pk_menu],$data["title"],$data["link_name"],
+        $values = array($data['pk_menu'],$data["title"],$data["link_name"],
                         $data["type"],$data["position"],$data["pk_father"]);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {

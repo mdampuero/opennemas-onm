@@ -97,7 +97,7 @@ class InstanceManager
         if ($rs->fields) {
 
             $instance = new \stdClass();
-            foreach ($rs->fields as $key => $value ) {
+            foreach ($rs->fields as $key => $value) {
                 $instance->{$key} = $value;
             }
             define('INSTANCE_UNIQUE_NAME', $instance->internal_name);
@@ -108,7 +108,7 @@ class InstanceManager
                 $instance->settings['MEDIA_URL'] = implode('',
                     array('http://' ,$_SERVER['HTTP_HOST'], '/media'.'/'));
             }
-            foreach ($instance->settings as $key => $value ) {
+            foreach ($instance->settings as $key => $value) {
                 define($key, $value);
             }
 
@@ -118,9 +118,9 @@ class InstanceManager
                 throw new \Onm\Instance\NotActivatedException($message);
             }
 
-        // If this instance doesn't exist check if the request is from manager
-        // in that case return a dummie instance.
         } else {
+            // If this instance doesn't exist check if the request is from manager
+            // in that case return a dummie instance.
             throw new \Onm\Instance\NotFoundException(_('Instance not found'));
         }
 
@@ -208,7 +208,7 @@ class InstanceManager
         }
 
         $instance = new \stdClass();
-        foreach ($rs->fields as $key => $value ) {
+        foreach ($rs->fields as $key => $value) {
             $instance->{$key} = $value;
         }
         $instance->settings = unserialize($instance->settings);
@@ -445,14 +445,13 @@ class InstanceManager
         // Check if the email already exists
         $checkMailSql = "SELECT count(*) as email_exists FROM instances "
               . "WHERE `contact_mail` = ?";
-        $checkMailRs = $this->_connection->Execute($sql2,
-            array($data['user_mail']));
+        $checkMailRs = $this->_connection->Execute($sql2, array($data['user_mail']));
 
         // If doesn´t exist the instance in the database and doesn't exist contact mail proceed
         if ($rs
-            && !(bool)$rs->fields['instance_exists']
+            && !(bool) $rs->fields['instance_exists']
             && $checkMailRs
-            && !(bool)$checkMailRs->fields['email_exists']
+            && !(bool) $checkMailRs->fields['email_exists']
         ) {
             $createIntanceSql = "INSERT INTO instances "
                   . "(name, internal_name, domains, "
@@ -467,8 +466,7 @@ class InstanceManager
                 $data['user_mail'],
             );
 
-            $createIntanceRs = $this->_connection->Execute($createIntanceSql,
-                $values);
+            $createIntanceRs = $this->_connection->Execute($createIntanceSql, $values);
             if (!$createIntanceRs) {
                 throw new InstanceNotRegisteredException(
                     "Could not create the instance reference into the instance "
@@ -478,25 +476,25 @@ class InstanceManager
 
             return true;
 
-        // If instance name or contact mail already
-        // exists and comes from openhost form
         } elseif (isset ($_POST['timezone'])) {
-            if ($rs && (bool)$rs->fields['instance_exists']) {
+            // If instance name or contact mail already
+            // exists and comes from openhost form
+            if ($rs && (bool) $rs->fields['instance_exists']) {
                 echo 'instance_exists';
             } elseif ($checkMailRs
-                && (bool)$checkMailRs->fields['email_exists']
+                && (bool) $checkMailRs->fields['email_exists']
             ) {
                 echo 'mail_exists';
             }
 
             die();
-        //If instance name or contact mail already exists and comes from manager
         } else {
-            if ($rs && (bool)$rs->fields['instance_exists']) {
+            //If instance name or contact mail already exists and comes from manager
+            if ($rs && (bool) $rs->fields['instance_exists']) {
                 throw new InstanceNotRegisteredException(
                     _("Instance internal name is already in use.")
                 );
-            } elseif ( $rs2 && (bool)$rs2->fields['email_exists']) {
+            } elseif ( $rs2 && (bool) $rs2->fields['email_exists']) {
                 throw new InstanceNotRegisteredException(
                     _("Instance contact mail is already in use.")
                 );
@@ -550,8 +548,11 @@ class InstanceManager
                 '@{TMP_PATH}@'     => SYS_LOG_PATH,
                 '@{ID}@'           => $data['internal_name'],
             );
-            $apacheConfString = preg_replace(array_keys($replacements),
-                array_values($replacements), $apacheConfString);
+            $apacheConfString = preg_replace(
+                array_keys($replacements),
+                array_values($replacements),
+                $apacheConfString
+            );
 
             $instanceConfigPath =
                 $configPath.DS.'vhosts.d'.DS.$data['internal_name'];
@@ -621,8 +622,7 @@ class InstanceManager
         // If the database was created sucessfully now import the default data.
         if ($rs && $rs2 && $rs3 && $rs4) {
             $connection2         = self::getConnection($data['settings']);
-            $exampleDatabasePath =
-                realpath(APPLICATION_PATH.DS.'db'.DS.'instance-default.sql');
+            $exampleDatabasePath = realpath(APPLICATION_PATH.DS.'db'.DS.'instance-default.sql');
             $execLine = "mysql -h {$onmInstancesConnection['BD_HOST']} "
                 ."-u {$onmInstancesConnection['BD_USER']}"
                 ." -p{$onmInstancesConnection['BD_PASS']} "
@@ -786,7 +786,7 @@ class InstanceManager
     public static function getAvailableTemplates()
     {
         // Change this to get dinamically templates from folder
-        foreach (glob(SITE_PATH.DS.'themes'.DS.'*') as $value ) {
+        foreach (glob(SITE_PATH.DS.'themes'.DS.'*') as $value) {
             $parts             = preg_split("@/@", $value);
             $name              = $parts[count($parts)-1];
             $templates [$name] = ucfirst($name);

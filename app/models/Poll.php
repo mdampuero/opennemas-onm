@@ -15,11 +15,11 @@
  **/
 class Poll extends Content
 {
-    public $pk_poll = NULL;
-    public $subtitle = NULL;
-    public $total_votes   	= NULL;
-    public $used_ips   	= NULL;
-    public $visualization 	= NULL;
+    public $pk_poll = null;
+    public $subtitle = null;
+    public $total_votes   	= null;
+    public $used_ips   	= null;
+    public $visualization 	= null;
 
 
     public function __construct($id=null)
@@ -303,7 +303,9 @@ class Poll extends Content
             //No se ha votado desde esa ip
             $ips_count[] = array('ip' => $ip, 'count' => 1);
         } else {
-            if ($ips_count[$kip_count]['count'] ==50) return FALSE;
+            if ($ips_count[$kip_count]['count'] ==50) {
+                return false;
+            }
             $ips_count[$kip_count]['count']++;
         }
 

@@ -262,7 +262,7 @@ class Frontpage extends Content
      * @return Widget Return instance to chaining method
      */
 
-    public function getFrontpage($date, $category=0, $version=NULL)
+    public function getFrontpage($date, $category=0, $version=null)
     {
         // if category = 0 => home
         if ( is_null($category) && is_null($date)) {

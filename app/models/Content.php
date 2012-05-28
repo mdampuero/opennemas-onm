@@ -189,17 +189,24 @@ class Content
         $data['urn_source']       = (empty($data['urn_source']))? null: $data['urn_source'];
         $data['params'] = (!isset($data['params']) || empty($data['params']))? null: serialize($data['params']);
 
-        if(empty($data['slug'] ) || !isset($data['slug']) )
+        if (empty($data['slug'] ) || !isset($data['slug']) ) {
             $data['slug'] = mb_strtolower(StringUtils::get_title($data['title']));
+        }
 
         $data['views']   = 1;
         $data['created'] = (empty($data['created']))? date("Y-m-d H:i:s") : $data['created'];
         $data['changed'] = date("Y-m-d H:i:s");
 
-        if (empty($data['description']) && !isset ($data['description'])) {
+        if (empty($data['description'])
+            && !isset ($data['description'])
+        ) {
             $data['description']     = '';
         }
-        if (empty($data['metadata'])&& !isset ($data['metadata'])) $data['metadata']='';
+        if (empty($data['metadata'])
+            && !isset ($data['metadata'])
+        ) {
+            $data['metadata']='';
+        }
 
         $data['fk_user']             =(empty($data['fk_user']) && !isset ($data['fk_user'])) ?$_SESSION['userid'] :$data['fk_user'] ;
         $data['fk_user_last_editor'] =  $data['fk_user'];
@@ -751,7 +758,9 @@ class Content
      **/
     public function setFavorited()
     {
-        if ($this->id == null) return false;
+        if ($this->id == null) {
+            return false;
+        }
 
         $sql = "UPDATE contents SET `favorite`=1 WHERE pk_content=?";
         $values = array($this->id);
@@ -918,18 +927,19 @@ class Content
             $this->content_type = null;
         }
 
-        if ( isset($this->pk_fk_content_category) ) {
+        if (isset($this->pk_fk_content_category)) {
             $this->category = $this->pk_fk_content_category;
         }
 
-        if ( isset($this->category_name) ) {
+        if (isset($this->category_name)) {
             $ccm = ContentCategoryManager::get_instance();
             $this->category_name = $ccm->get_name($this->category);
         }
 
         $this->permalink = '';//$this->uri;
-        if(!empty($this->params) && is_string($this->params))
+        if (!empty($this->params) && is_string($this->params)) {
             $this->params = unserialize($this->params);
+        }
     }
 
     /**
@@ -1272,7 +1282,7 @@ class Content
                     $i++;
                 }
             } catch (exception $e) {
-                printf("Excepcion: " . $e.message);
+                printf("Excepcion: " . $e->message);
 
                 return null;
             }
@@ -1394,7 +1404,7 @@ class Content
      *
      * @return array Array with code status
      *               (array[0] == 200|404), and permalink or null (array[1])
-    */
+     */
     public static function pkExists($pkContent)
     {
        $content = new Content($pkContent);
@@ -1654,7 +1664,9 @@ class Content
     */
     public function set_favorite($status)
     {
-        if ($this->id == null) return false;
+        if ($this->id == null) {
+            return false;
+        }
 
         $sql = "UPDATE contents SET `favorite`=? WHERE pk_content=?";
         $values = array($status, $this->id);
@@ -1723,19 +1735,17 @@ class Content
     public static function resolveID($dirtyID)
     {
         if (!empty($dirtyID)) {
-
             if (preg_match('@tribuna@', INSTANCE_UNIQUE_NAME)
                 || preg_match('@retrincos@', INSTANCE_UNIQUE_NAME)
             ) {
                 $contentID = self::searchInRefactorID($dirtyID);
             }
 
-            preg_match("@(?P<dirtythings>\d{1,14})(?P<digit>\d+)@",
-                $dirtyID, $matches);
-            $contentID = self::searchContentID((int)$matches["digit"]);
+            preg_match("@(?P<dirtythings>\d{1,14})(?P<digit>\d+)@", $dirtyID, $matches);
+            $contentID = self::searchContentID((int) $matches["digit"]);
 
             if (empty($contentID)) {
-               // header("HTTP/1.0 404 Not Found");
+                // header("HTTP/1.0 404 Not Found");
             }
 
             return $contentID;
@@ -1871,7 +1881,7 @@ class Content
             ($force || empty($content->img1))
             && !empty($content->fk_video)
         ) {
-           $content->obj_video = new Video($content->fk_video);;
+            $content->obj_video = new Video($content->fk_video);;
         }
 
         return $this;

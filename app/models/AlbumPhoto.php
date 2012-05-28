@@ -15,17 +15,17 @@
 class AlbumPhoto
 {
 
-    public $pk_album = NULL;
-    public $pk_photo = NULL;
-    public $position = NULL;
-    public $description = NULL;
+    public $pk_album = null;
+    public $pk_photo = null;
+    public $position = null;
+    public $description = null;
 
     /**
      * Initializes the Album class.
      *
      * @param strin $id the id of the album.
      **/
-    public function __construct($id=NULL)
+    public function __construct($id=null)
     {
         if (!is_null($id)) {
             $this->read($id);

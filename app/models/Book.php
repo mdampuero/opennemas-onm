@@ -18,11 +18,11 @@
  */
 class Book extends Content
 {
-    public $pk_book  = NULL;
-    public $author  = NULL;
-    public $file_name  = NULL;
-    public $editorial  = NULL;
-    public $books_path = NULL;
+    public $pk_book  = null;
+    public $author  = null;
+    public $file_name  = null;
+    public $editorial  = null;
+    public $books_path = null;
 
 
     public function __construct($id=null)

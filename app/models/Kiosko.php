@@ -16,12 +16,12 @@ use Onm\Message as m;
  **/
 class Kiosko extends Content
 {
-    public $pk_kiosko  = NULL;
-    public $name  = NULL;
-    public $path  = NULL;
-    public $date  = NULL;
+    public $pk_kiosko  = null;
+    public $name  = null;
+    public $path  = null;
+    public $date  = null;
     public $favorite  = 0;
-    public $kiosko_path =NULL;
+    public $kiosko_path =null;
 
     /**
       * Constructor PHP5
@@ -155,9 +155,11 @@ class Kiosko extends Content
     */
     public function exists($path_pdf, $category)
     {
-        $sql = 'SELECT count(`kioskos`.`pk_kiosko`) AS total FROM kioskos,contents_categories
+        $sql = 'SELECT count(`kioskos`.`pk_kiosko`) AS total
+                FROM kioskos,contents_categories
                 WHERE `contents_categories`.`pk_fk_content`=`kioskos`.`pk_kiosko`
-                AND `kioskos`.`path`=? AND `contents_categories`.`pk_fk_content_category`=?';
+                AND `kioskos`.`path`=?
+                AND `contents_categories`.`pk_fk_content_category`=?';
         $rs = $GLOBALS['application']->conn->GetOne($sql, array($path_pdf, $category));
 
         return intval($rs) > 0;
@@ -166,13 +168,14 @@ class Kiosko extends Content
 
     public function set_favorite($status)
     {
-
-        if ($this->id == null) return false;
+        if ($this->id == null) {
+            return false;
+        }
 
         parent::set_favorite($status);
 
-        $sql = "UPDATE kioskos SET `favorite`=? WHERE pk_kiosko=".$this->id;
-        $values = array($status);
+        $sql = "UPDATE kioskos SET `favorite`=? WHERE pk_kiosko=?";
+        $values = array($status, $this->id);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             Application::logDatabaseError();
