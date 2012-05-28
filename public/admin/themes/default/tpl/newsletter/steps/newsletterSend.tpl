@@ -21,7 +21,7 @@
 
             <ul class="old-button">
                 <li>
-                    <a href="#" class="admin_add" title="{t}Back{/t}">
+                    <a href="#" id="prev-button" class="admin_add" title="{t}Back{/t}">
                         <img src="{$params.IMAGE_DIR}arrow_previous.png" alt="{t}Back{/t}" /><br />
                         {t}Previous step{/t}
                     </a>

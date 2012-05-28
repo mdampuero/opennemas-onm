@@ -2360,7 +2360,14 @@ div.newsletter-contents .container-label {
     background-color: #EEE;
     font-weight: bold;
     padding: 4px;
+    cursor: pointer;
 }
+
+div.active .container-label {
+    color: #0B55C4;
+    background-color: #CCC;
+}
+
 
 div.newsletter-contents .container-buttons {
     float:right;
