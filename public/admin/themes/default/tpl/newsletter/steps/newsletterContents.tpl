@@ -161,5 +161,6 @@
 </form>
 {include file="newsletter/modals/_add_container_label.tpl"}
 {include file="newsletter/modals/_update_container_label.tpl"}
+{include file="newsletter/modals/_activate_container_alert.tpl"}
 {/block}
 

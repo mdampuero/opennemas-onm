@@ -61,7 +61,7 @@ saveNewsletter = (function() {
 
 addSelectedItems  = (function () {
 
-    if(empty(jQuery('div#newsletter-container div.active'))) {
+    if((jQuery('div#newsletter-container div.active').length == 0)) {
         jQuery("#modal-container-active").modal('show');
     } else {
         jQuery('ul#contentList li').find('input:checked').each(function() {
@@ -133,13 +133,14 @@ jQuery(function($) {
 
         });
         id = id + 1;
-
+        jQuery("div.column-receiver").find('.container-receiver').removeClass('active');
         jQuery("div.column-receiver").append( '<div data-title="' + label + '" data-id="' + id +
-                '" class="container-receiver"><div class="container-label"><span>' +
+                '" class="container-receiver active"><div class="container-label"><span>' +
                 label +'</span> <div class="container-buttons btn-group">' +
                 ' <i class="icon-chevron-down"></i><i class="icon-pencil"></i>' +
                 ' <i class="icon-trash"></i> </div> </div>' +
                 ' <ul class="content-receiver"> </ul> </div>');
+
 
         jQuery('div.column-receiver ul.content-receiver').sortable({
             connectWith: "div#content-provider ul#contentList, div.column-receiver ul.content-receiver",
