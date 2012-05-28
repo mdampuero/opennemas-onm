@@ -180,13 +180,6 @@ class StringUtils
         return \Onm\StringUtils::toHttpParams($httpParams);
     }
 
-    public static function ext_str_ireplace($findme, $replacewith, $subject)
-    {
-
-        return \Onm\StringUtils::ext_str_ireplace($findme,
-            $replacewith, $subject);
-    }
-
     public static function generatePassword($length = 8)
     {
 

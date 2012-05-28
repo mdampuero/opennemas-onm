@@ -167,13 +167,45 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers Onm\StringUtils::str_stop
-     * @todo   Implement testStr_stop().
      */
-    public function testStr_stop()
+    public function testStrStop()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
+        $this->assertEquals(
+            'Example phrase to test...',
+            $this->object->str_stop('Example phrase to test str_stop method')
+        );
+    }
+
+    /**
+     * @covers Onm\StringUtils::str_stop
+     */
+    public function testStrStopWithLimit()
+    {
+        $this->assertEquals(
+            'Example phrase to...',
+            $this->object->str_stop('Example phrase to test str_stop method', 20)
+        );
+    }
+
+    /**
+     * @covers Onm\StringUtils::str_stop
+     */
+    public function testStrStopWithPhraseWithoutSpaces()
+    {
+        $this->assertEquals(
+            'Examplephrasetotests...',
+            $this->object->str_stop('Examplephrasetoteststr_stopmethod', 20)
+        );
+    }
+
+    /**
+     * @covers Onm\StringUtils::str_stop
+     */
+    public function testStrStopReturnsOriginalStringIfLongerThanLimit()
+    {
+        $this->assertEquals(
+            'Example phrase to test str_stop method',
+            $this->object->str_stop('Example phrase to test str_stop method', 100)
         );
     }
 
