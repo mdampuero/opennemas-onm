@@ -61,9 +61,9 @@ class Opinion extends Content
             case 'uri': {
                 if ($this->fk_author == 0) {
 
-                    if ((int)$this->type_opinion == 1) {
+                    if ((int) $this->type_opinion == 1) {
                         $authorName = 'Editorial';
-                    } elseif ((int)$this->type_opinion == 2) {
+                    } elseif ((int) $this->type_opinion == 2) {
                         $authorName = 'Director';
                     }
 
@@ -132,10 +132,10 @@ class Opinion extends Content
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
 
-           return(false);
+            return false;
         }
 
-       return($this->id);
+       return $this->id;
     }
 
     public function read($id)
@@ -157,10 +157,10 @@ class Opinion extends Content
         }
 
 
-        if ((int)$rs->fields['fk_author'] == 0) {
-            if ((int)$rs->fields['type_opinion'] == 1) {
+        if ((int) $rs->fields['fk_author'] == 0) {
+            if ((int) $rs->fields['type_opinion'] == 1) {
                 $rs->fields['author'] = 'Editorial';
-            } elseif ((int)$rs->fields['type_opinion'] == 2) {
+            } elseif ((int) $rs->fields['type_opinion'] == 2) {
                 $rs->fields['author'] = 'Director';
             }
         } else {
@@ -171,12 +171,13 @@ class Opinion extends Content
     }
 
     /**
-     * Get author name
-     * @param Integer $fk_author
+     * Returns the author name
+     *
+     * @param int $fkAuthor
      *
      * @return String Return name of author
      */
-    public function get_author_name($fk_author)
+    public function get_author_name($fkAuthor)
     {
         if (is_null($this->_authorNames)) {
             $sql = 'SELECT pk_author, name FROM `authors`';
@@ -190,11 +191,11 @@ class Opinion extends Content
             }
         }
 
-        if ( !isset($this->_authorNames[ $fk_author ]) ) {
-            return('');
+        if (!isset($this->_authorNames[$fkAuthor])) {
+            return '';
         }
 
-        return( $this->_authorNames[ $fk_author ] );
+        return $this->_authorNames[$fkAuthor];
     }
 
     public function update($data)
@@ -210,7 +211,7 @@ class Opinion extends Content
         parent::update($data);
         $sql = "UPDATE opinions SET `fk_author`=?, `body`=?,`fk_author_img`=?, "
              . "`with_comment`=?, `type_opinion`=?, `fk_author_img_widget`=? "
-             . "WHERE pk_opinion=".($data['id']);
+             . "WHERE pk_opinion=?";
 
         $values = array(
             $data['fk_author'],
@@ -218,7 +219,8 @@ class Opinion extends Content
             $data['fk_author_img'],
             $data['with_comment'],
             $data['type_opinion'],
-            $data['fk_author_img_widget']
+            $data['fk_author_img_widget'],
+            $data['id']
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
@@ -230,7 +232,8 @@ class Opinion extends Content
         $GLOBALS['application']->dispatch('onAfterUpdateOpinion', $this);
     }
 
-    public function remove($id) { //Elimina definitivamente
+    public function remove($id)
+    {
         parent::remove($id);
 
         $sql = 'DELETE FROM opinions WHERE pk_opinion ='.($id);
@@ -284,7 +287,7 @@ class Opinion extends Content
             return false;
         }
 
-       return $rs->fields['opinion_algoritm'];
+        return $rs->fields['opinion_algoritm'];
     }
 
     public function set_opinion_algoritm($value)
@@ -338,10 +341,10 @@ class Opinion extends Content
     {
         $tpl = new Template(TEMPLATE_USER);
 
-        if ((int)$this->type_opinion == 1) {
-             $this->author_name_slug = 'editorial';
-        } elseif ((int)$this->type_opinion == 2) {
-             $this->author_name_slug = 'director';
+        if ((int) $this->type_opinion == 1) {
+            $this->author_name_slug = 'editorial';
+        } elseif ((int) $this->type_opinion == 2) {
+            $this->author_name_slug = 'director';
         } else {
 
             $aut = new Author($this->fk_author);
@@ -353,7 +356,6 @@ class Opinion extends Content
         $tpl->assign('cssclass', 'opinion');
 
         return $tpl->fetch('frontpage/frontpage_opinion.tpl');
-
     }
 
 
@@ -399,8 +401,6 @@ class Opinion extends Content
             'contents.content_status=1 AND contents.available=1'. $sqlExcludedContents,
             'ORDER BY contents.created DESC, contents.title ASC ' .$_sql_limit);
 
-
-
         // For each opinion get its author and photo
         foreach ($contents as $content) {
             $content->author = new Author($content->fk_author);
@@ -422,7 +422,6 @@ class Opinion extends Content
     */
     public static function getAllLatestOpinions($params = array())
     {
-
         $contents = array();
 
         // Setting up default parameters
@@ -497,4 +496,5 @@ class Opinion extends Content
 
         return $contents;
     }
+
 }
