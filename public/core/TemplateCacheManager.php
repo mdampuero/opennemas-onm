@@ -308,7 +308,7 @@ class TemplateCacheManager
         ob_start();
 
         // Exec
-        $html = curl_exec($ch);
+        curl_exec($ch);
         ob_end_clean();
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
