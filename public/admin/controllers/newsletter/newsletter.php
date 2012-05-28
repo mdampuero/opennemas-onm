@@ -145,7 +145,7 @@ switch($action) {
 
     case 'saveNewsletterContent';
         $html = filter_input(INPUT_POST,'html');
-        $html = htmlentities($html, ENT_QUOTES);
+        $html = htmlspecialchars($html, ENT_QUOTES);
         $_SESSION['newsletterHtml'] = $html;
 
         Application::ajax_out('ok');
@@ -160,9 +160,9 @@ switch($action) {
         if( array_key_exists('newsletterHtml', $_SESSION) &&
             !empty($_SESSION['newsletterHtml'])) {
 
-            $htmlContent = html_entity_decode($_SESSION['newsletterHtml'], ENT_QUOTES);
+            $htmlContent = htmlspecialchars_decode($_SESSION['newsletterHtml'], ENT_QUOTES);
         } else {
-            $_SESSION['data-newsletter'] =$_POST['newsletterContent'];
+            $_SESSION['data-newsletter'] = $_POST['newsletterContent'];
             $htmlContent = $newsletter->render();
         }
 
@@ -229,7 +229,8 @@ switch($action) {
         if( array_key_exists('newsletterHtml', $_SESSION) &&
             !empty($_SESSION['newsletterHtml'])) {
 
-            $htmlContent = html_entity_decode($_SESSION['newsletterHtml'], ENT_QUOTES);
+            $htmlContent = htmlspecialchars_decode($_SESSION['newsletterHtml'], ENT_QUOTES);
+        var_dump($htmlContent);
         } else {
             $htmlContent = $nManager->render();
         }
@@ -238,6 +239,7 @@ switch($action) {
 
         // save newsletter
         $postmaster = $_SESSION['data-newsletter'];
+
         $newsletter->create( array('content' => $postmaster, 'html'=> $htmlContent));
 
 

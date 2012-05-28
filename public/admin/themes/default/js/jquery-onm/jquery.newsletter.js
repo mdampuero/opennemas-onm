@@ -266,6 +266,10 @@ function saveChanges() {
         url:  "/admin/controllers/newsletter/newsletter.php",
         type: "POST",
         data: { action:"saveNewsletterContent", html:htmlContent },
+        error:function (xhr, ajaxOptions, thrownError){
+                    alert(xhr.status);
+                    alert(thrownError);
+                }
     });
 }
 
