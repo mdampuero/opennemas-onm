@@ -322,13 +322,15 @@ EOF;
         return utf8_encode(strtr($string, $transTbl));
     }
 
+
     /**
      * Disable magic quotes if it is enabled
      *
      * @param array $data
      **/
-    public static function disabled_magic_quotes( &$data=NULL )
+    public static function disabled_magic_quotes(&$data=NULL )
     {
+        // @codeCoverageIgnoreStart
         if (get_magic_quotes_gpc()) {
             function stripslashes_deep($value)
             {
@@ -348,8 +350,8 @@ EOF;
                 $_REQUEST = array_map('stripslashes_deep', $_REQUEST);
             }
         }
+        // @codeCoverageIgnoreEnd
     }
-
 
     public static function clearBadChars($string)
     {
@@ -366,10 +368,10 @@ EOF;
      * @return string
      * @example self::get_numWords('hello world', 1)
      **/
-    public static function get_num_words($text,$numWords)
+    public static function get_num_words($text, $numWords)
     {
         $noHtml      = strip_tags($text);
-        $description = explode(" ", $noHtml, $numWords);
+        $description = explode(" ", $noHtml, $numWords + 1);
         $sobra       = array_pop($description);
         $words       = implode(" ", $description).'...';
 
@@ -378,7 +380,7 @@ EOF;
 
     public static function loadBadWords()
     {
-        $entries = file(dirname(__FILE__).'/self_badwords.txt');
+        // $entries = file(dirname(__FILE__).'/self_badwords.txt');
         $entries = <<<EOF
 5, m[i]?erda
 5, marica
@@ -412,10 +414,17 @@ EOF;
     {
         $words = self::loadBadWords();
         $text = ' ' . $text . ' ';
+        if ($replaceStr != ' ') {
+            $replaceStr = ' '.$replaceStr. ' ';
+        }
 
         foreach ($words as $word) {
             if ($word['weight'] > $weight) {
-                $text = preg_replace('/\W' . $word['text'] . '\W/si', $replaceStr, $text);
+                $text = preg_replace(
+                    '/\W' . $word['text'] . '\W/si',
+                    $replaceStr,
+                    $text
+                );
             }
         }
 
@@ -449,29 +458,24 @@ EOF;
      **/
     public static function toHttpParams(Array $httpParams)
     {
-
         // The final result
         $result = array();
-        if (is_array($httpParams)) {
 
-            // Iterate over each key-value parameter
-            foreach ($httpParams as $param) {
+        // Iterate over each key-value parameter
+        foreach ($httpParams as $param) {
 
-                // Implode each key => value parameter into key-value
-                foreach ($param as $key => $value) {
-                    $result []= $key.'='.$value;
-                }
-
+            // Implode each key => value parameter into key-value
+            foreach ($param as $key => $value) {
+                $result []= $key.'='.$value;
             }
 
-            // And implode all key=value parameters with &
-            $result = implode('&', $result);
-
-            return $result;
-
-        } else {
-            throw new ArgumentError();
         }
+
+        // And implode all key=value parameters with &
+        $result = implode('&', $result);
+
+        return $result;
+
     }
 
     public static function ext_str_ireplace($findme, $replacewith, $subject)
