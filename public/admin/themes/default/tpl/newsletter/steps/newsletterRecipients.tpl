@@ -70,8 +70,8 @@
 
 		<table class="adminheading">
 			<tr style="text-align:center;font-size: 0.85em;">
-				<th>{t}Subscriptors available (please double click over a subscritor to add to recipients){/t}</th>
-				<th>{t}Subscriptors selected (please double click over a subscritor to delete from recipients){/t}</th>
+				<th>{t}Subscriptors available (Drag&drop subscritor to add to recipients){/t}</th>
+				<th>{t}Subscriptors selected (please drag out a subscritor to delete from recipients){/t}</th>
 			</tr>
 		</table>
 		<table class="adminlist" style="min-height:500px">
@@ -108,7 +108,9 @@
 					</div>
 	                <hr>
 					<div id="recipients" style="height:150px;">
+                         <label>{t}Receivers{/t}</label>
 						<ul id="items-recipients" style="min-height:50px;margin:0; padding:0">
+
                             {if !empty($recipients)}
                             {section name=d loop=$recipients}
                             <li  data-email="{$recipients[d]->email}"  data-name="{$recipients[d]->name}">
