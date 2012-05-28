@@ -71,7 +71,7 @@ switch ($action) {
 
                 // Fetch suggested contents
                 $objSearch = cSearch::Instance();
-                $suggestedContents = $objSearch->SearchSuggestedContents(
+                $suggestedContents = $objSearch->searchSuggestedContents(
                     $opinion->metadata,
                     'Opinion',
                     " contents.available=1 AND pk_content = pk_fk_content",

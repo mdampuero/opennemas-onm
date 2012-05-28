@@ -57,7 +57,7 @@ switch ($action) {
             $szCheckedTypes = checkTypes($htmlChecks);
             $szTags  = trim($stringSearch);
             $objSearch = cSearch::Instance();
-            $arrayResults = $objSearch->SearchContentsSelectMerge(
+            $arrayResults = $objSearch->searchContentsSelectMerge(
                 "contents.title as titule, contents.metadata, contents.slug,
                 contents.description, contents.created, contents.pk_content as id,
                 contents_categories.catName, contents_categories.pk_fk_content_category as category,
@@ -113,7 +113,7 @@ switch ($action) {
         $szCheckedTypes = checkTypes($htmlChecks);
         $szTags         = trim($_REQUEST['stringSearch']);
         $objSearch      = cSearch::Instance();
-        $arrayResults   = $objSearch->SearchContentsSelectMerge(
+        $arrayResults   = $objSearch->searchContentsSelectMerge(
             "contents.title as titule, contents.metadata, contents.slug,
             contents.description, contents.created, contents.pk_content as id,
             contents_categories.catName, contents_categories.pk_fk_content_category as category,
@@ -173,7 +173,7 @@ switch ($action) {
             $searcher = cSearch::getInstance();
             $matchString = '';
             foreach ($searchStringArray as $key) {
-                $matchString []= $searcher->DefineMatchOfSentence($key);
+                $matchString []= $searcher->defineMatchOfSentence($key);
             }
             $matchString = implode($matchString, ' AND ');
 

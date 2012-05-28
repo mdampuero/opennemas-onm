@@ -1232,7 +1232,7 @@ if (isset($_REQUEST['action']) ) {
 
             $mySearch = cSearch::Instance();
             $where = "content_status=1 AND available=1 ";
-            $search = $mySearch->SearchRelatedContents($metadata, 'Article,Opinion', NULL, $where);
+            $search = $mySearch->searchRelatedContents($metadata, 'Article,Opinion', NULL, $where);
             if(($search) && count($search)>0){
                 var_dump($search);
             }

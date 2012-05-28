@@ -117,7 +117,7 @@ if ( !empty($action) ) {
              * Fetch suggested contents
              */
             $objSearch = cSearch::Instance();
-            $arrayResults=$objSearch->SearchSuggestedContents(
+            $arrayResults=$objSearch->searchSuggestedContents(
                 $article->metadata,
                 'Article',
                 'pk_fk_content_category= '.$article->category.
@@ -208,7 +208,7 @@ if ( !empty($action) ) {
 
             /******* SUGGESTED CONTENTS *******/
             $objSearch = cSearch::Instance();
-            $arrayResults=$objSearch->SearchSuggestedContents(
+            $arrayResults=$objSearch->searchSuggestedContents(
                 $article->metadata,
                 'Article',
                 'pk_fk_content_category= '.$article->category.

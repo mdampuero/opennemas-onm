@@ -147,7 +147,7 @@ switch ($action) {
                 if (!empty($article->metadata)) {
                     $objSearch    = cSearch::Instance();
                     $machineSuggestedContents =
-                        $objSearch->SearchSuggestedContents($article->metadata,
+                        $objSearch->searchSuggestedContents($article->metadata,
                             'Article',
                             "pk_fk_content_category= ".$article->category.
                             " AND contents.available=1 AND pk_content = pk_fk_content",

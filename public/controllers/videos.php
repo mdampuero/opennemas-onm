@@ -191,7 +191,7 @@ switch ($action) {
 
         /******* SUGGESTED CONTENTS *******/
         $objSearch = cSearch::Instance();
-        $arrayResults=$objSearch->SearchSuggestedContents(
+        $arrayResults=$objSearch->searchSuggestedContents(
             $video->metadata, 'Video',
             "pk_fk_content_category= ".$video->category.
             " AND contents.available=1 AND pk_content = pk_fk_content",

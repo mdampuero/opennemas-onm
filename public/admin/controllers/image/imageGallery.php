@@ -49,7 +49,7 @@ if (\Onm\Module\ModuleManager::isActivated('IMAGE_MANAGER')) {
         if (!empty($metadatas)) {
 
             $presentSearch = cSearch::Instance();
-            $arrayIds      = $presentSearch->SearchContentsSelect('pk_content', $metadatas, 'photo', 100);
+            $arrayIds      = $presentSearch->searchContentsSelect('pk_content', $metadatas, 'photo', 100);
             if (!empty($arrayIds))
             {
                 $szWhere   = '( FALSE ';
