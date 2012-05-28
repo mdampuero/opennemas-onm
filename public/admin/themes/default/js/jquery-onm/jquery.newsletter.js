@@ -52,11 +52,9 @@ saveNewsletter = (function() {
     });
 
     var encodedContents = JSON.stringify(els);
-    jQuery.cookie("data-newsletter", null);
-log( jQuery.cookie("data-newsletter"));
-    jQuery.cookie("data-newsletter", encodedContents);
-log(encodedContents);
-log( jQuery.cookie("data-newsletter"));
+
+    jQuery('textarea#newsletterContent').text(encodedContents);
+
 alert('sdfsdf');
     return encodedContents;
 

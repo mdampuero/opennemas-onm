@@ -154,6 +154,7 @@
                     </tr>
                 </tbody>
             </table>
+             <textarea style="display:none;" id="newsletterContent" name="newsletterContent" style="width:90%"></textarea>
             <input type="hidden" id="action" name="action" value="preview" />
         </div>
     </div>
