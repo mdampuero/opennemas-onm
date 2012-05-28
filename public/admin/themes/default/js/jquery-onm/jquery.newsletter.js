@@ -273,6 +273,26 @@ function saveChanges() {
 
 //SETP 3 - ADD recipients
 
+jQuery('div#dbList').on('click','#add-selected', function () {
+
+    jQuery('ul#contentList li').find('input:checked').each(function() {
+
+        item =  jQuery(this).parent();
+        jQuery('div#recipients ul#items-recipients').append(item);
+
+    });
+    jQuery('input#toggleallcheckbox').prop("checked", false);
+
+
+});
+
+
+jQuery('div#dbList').on('click','#button-check-all', function(event) {
+
+    toggleProviderCheckbox(event.target);
+
+});
+
 jQuery('#buttons-recipients').on('click','#next-button', function() {
 
     var contents = saveRecipients();
@@ -291,8 +311,9 @@ jQuery('#buttons-recipients').on('click','#prev-button', function() {
 
 jQuery('#buttons-recipients').on('click','#clean-button', function() {
 
-    jQuery("div#recipients").find('ul#items-recipients li').remove();
-    jQuery("div#manualList textarea#othersMails").val('');
+    jQuery.cookie("data-recipients", '');
+    jQuery("#action").val('listRecipients');
+    jQuery('#newsletterForm').submit();
 
 });
 
@@ -304,7 +325,7 @@ jQuery(document).ready(function($){
 makeRecipientsListSortables = function () {
 
 
-    jQuery('div#dbList ul#items-dbList').sortable({
+    jQuery('div#dbList ul#contentList').sortable({
             connectWith: "ul#items-recipients",
             dropOnEmpty: true,
             placeholder: 'placeholder-element',
@@ -319,7 +340,7 @@ makeRecipientsListSortables = function () {
         }).disableSelection();
 
     jQuery('div#recipients ul#items-recipients').sortable({
-            connectWith: "ul#items-dbList, ul#items-mailList",
+            connectWith: "ul#contentList, ul#items-mailList",
             dropOnEmpty: true,
             placeholder: 'placeholder-element',
             tolerance: 'pointer',
