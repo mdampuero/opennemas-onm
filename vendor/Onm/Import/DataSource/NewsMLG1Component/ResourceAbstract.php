@@ -41,7 +41,7 @@ abstract class ResourceAbstract
             case 'id':
                 $attributes = $this->getData()->attributes();
 
-                return (string)$attributes->Euid;
+                return (string) $attributes->Euid;
                 break;
 
             case 'title':
@@ -50,7 +50,7 @@ abstract class ResourceAbstract
                     ->NewsComponent->ContentItem->DataContent
                     ->xpath('//body.content');
 
-                return (string)$content[1]->p;
+                return (string) $content[1]->p;
                 break;
 
             case 'file_type':
@@ -59,7 +59,7 @@ abstract class ResourceAbstract
                     ->NewsComponent->ContentItem->MimeType
                     ->attributes()->FormalName;
 
-                return (string)$fileType;
+                return (string) $fileType;
                 break;
 
             case 'file_path':
@@ -68,7 +68,7 @@ abstract class ResourceAbstract
                     ->NewsComponent->ContentItem
                     ->attributes()->Href;
 
-                return (string)$filePath;
+                return (string) $filePath;
                 break;
 
             case 'created_time':

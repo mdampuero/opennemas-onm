@@ -205,8 +205,9 @@ class Video extends Content
         if (empty($file["file_path"])) {
             throw new Exception(sprintf(
                 _('Seems that the server limits file uploads up to %s Mb. '
-                  .'Try to upload files smaller than that size or contact with your administrator'),
-                (int)(ini_get('upload_max_filesize'))
+                  .'Try to upload files smaller than that size or '
+                  .'contact with your administrator'),
+                (int) (ini_get('upload_max_filesize'))
             ));
         }
         $uploads = array();
@@ -221,7 +222,7 @@ class Video extends Content
 
             // We need to add relative path for every thumbnail
             $relativeUploadDir = $convertedVideo['relative_dir'];
-            foreach ($thumbnails as $name => $value ) {
+            foreach ($thumbnails as $name => $value) {
                 $videoInformation['thumbnails'][$name] = $relativeUploadDir.DIRECTORY_SEPARATOR.$value;
             }
         }
@@ -335,7 +336,9 @@ class Video extends Content
             if (gettype($frame) != 'object') {
                 $thumbnailFrameNumber = 1;
                 do {
-                    if ($thumbnailFrameNumber > $totalFrames) { break 1; }
+                    if ($thumbnailFrameNumber > $totalFrames) {
+                        break 1;
+                    }
                     $frame = $movie->getFrame($thumbnailFrameNumber);
                     $valid = gettype($frame);
                     $thumbnailFrameNumber++;
@@ -374,10 +377,10 @@ class Video extends Content
         $uri =  Uri::generate(
             'video',
             array(
-                'id' => sprintf('%06d',$this->id),
-                'date' => date('YmdHis', strtotime($this->created)),
+                'id'       => sprintf('%06d', $this->id),
+                'date'     => date('YmdHis', strtotime($this->created)),
                 'category' => $this->category_name,
-                'slug' => $this->slug,
+                'slug'     => $this->slug,
             )
         );
 
@@ -412,6 +415,7 @@ class Video extends Content
      **/
     public function render($params)
     {
+        unset($params);
         return "\n<!-- video rendering not implemented -->\n";
     }
 

@@ -1065,7 +1065,7 @@ if (isset($_REQUEST['action']) ) {
             $_REQUEST['fk_user_last_editor']=$_SESSION['userid'];
             $content= new Content($_REQUEST['id']);
             $content_type = $GLOBALS['application']->conn->
-            GetOne('SELECT name FROM `content_types` WHERE pk_content_type = "'. $content->content_type.'"');
+                GetOne('SELECT name FROM `content_types` WHERE pk_content_type = "'. $content->content_type.'"');
             $_REQUEST['permalink'] = $content->put_permalink($content->id, $content_type, $content->title, $_REQUEST['pk_fk_content_category']) ;
             $fields1 = array('fk_user_last_editor','permalink');
             SqlHelper::bindAndUpdate('contents', $fields1, $_REQUEST, $filter1);
