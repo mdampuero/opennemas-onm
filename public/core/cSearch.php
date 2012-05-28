@@ -369,7 +369,7 @@ class cSearch
         $data  = $pager->getPageData();
 
         $aResult = array();
-        foreach ($cItems as $k => $v) {
+        foreach ($cItems as $v) {
             if (in_array($v[$szId], $data)) {
                 $aResult[] = $v; // Array 0-n compatible con sections Smarty
             }

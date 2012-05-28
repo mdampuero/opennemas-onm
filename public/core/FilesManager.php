@@ -78,21 +78,8 @@ class FilesManager
         return true;
     }
 
-     /**
-     * Check if a directory is empty
-     *
-     * @param string $path Directory to check
-     */
-    public function isDirEmpty($path)
-    {
-        foreach (glob($path."/*") as $archivos) {
-            return false; //tiene archivos o dirs que no son /. o /..
-        }
 
-        return true;
-    }
-
-     /**
+    /**
      * Delete a directory is it exists
      *
      * @param string $path Directory to delete

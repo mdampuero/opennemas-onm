@@ -45,6 +45,8 @@ class ImporterXml
 
         $this->labels = array_values($this->schema);
 
+        $this->config = $config;
+
         $ignoreds = explode(',', $this->schema['ignored']);
         foreach ($ignoreds as $lab) {
             $this->ignoreds[] = trim($lab);
@@ -67,7 +69,6 @@ class ImporterXml
 
     static public function getInstance($config = null)
     {
-
         if (!self::$instance instanceof self) {
             self::$instance = new self($config);
 

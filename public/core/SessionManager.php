@@ -162,7 +162,7 @@ class SessionManager implements ArrayAccess
     * @param mixed key (string or integer)
     * @return boolean
     */
-    public function offsetExists($offset)
+    public function offsetExists($key)
     {
         return isset($_SESSION[$key]);
     }
@@ -183,8 +183,8 @@ class SessionManager implements ArrayAccess
         if (file_exists($sessionDirectory) && is_dir($sessionDirectory)) {
 
             $sessionFiles = glob($sessionDirectory.DS."sess*");
-            foreach ($sessionFiles as $session) {
-                $contents = file_get_contents($session);
+            foreach ($sessionFiles as $file) {
+                $contents = file_get_contents($file);
                 if (!empty($contents)) {
                     $session =
                         SessionManager::unserializeSession($contents);
@@ -205,7 +205,7 @@ class SessionManager implements ArrayAccess
             }
         }
 
-        return( $sessions );
+        return $sessions;
     }
 
     /**
@@ -213,7 +213,7 @@ class SessionManager implements ArrayAccess
      *
      * @param int $userid the user id.
      **/
-    public function purgeSession($userid)
+    public function purgeSession($userId)
     {
         $sessionDirectory = $this->sessionDirectory;
 
@@ -224,7 +224,7 @@ class SessionManager implements ArrayAccess
                 if (!empty($contents)) {
                     $sessionContents = SessionManager::unserializeSession($contents);
                     if (isset($sessionContents['userid'])
-                        && ($sessionContents['userid'] == $userid)
+                        && ($sessionContents['userid'] == $userId)
                     ) {
                         @unlink($session);
                     }
