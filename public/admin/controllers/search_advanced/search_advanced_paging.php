@@ -31,7 +31,7 @@ if(isset($_REQUEST['action']) )
             $htmlChecks=null;
             $szCheckedTypes = checkTypes();
             $szTags  = trim($_REQUEST['stringSearch']);
-            $objSearch = cSearch::Instance();
+            $objSearch = cSearch::getInstance();
 
             $arrayResults = $objSearch->searchContentsSelectMerge("contents.title, permalink, description, created, contents.pk_content as id, catName, content_types.title, contents.available, content_types.name as content_type",
                     $szTags,

@@ -42,7 +42,7 @@ if (\Onm\Module\ModuleManager::isActivated('VIDEO_MANAGER')) {
 
         if (!empty($metadatas)) {
 
-            $presentSearch = cSearch::Instance();
+            $presentSearch = cSearch::getInstance();
             $arrayIds = $presentSearch->searchContentsSelect('pk_content', $metadatas, 'video', 100);
             if(!empty($arrayIds)) {
                 $szWhere = '( FALSE ';

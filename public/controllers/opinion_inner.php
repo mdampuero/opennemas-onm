@@ -70,7 +70,7 @@ switch ($action) {
                 $tpl->assign('rating_bar', $rating->render('article','vote'));
 
                 // Fetch suggested contents
-                $objSearch = cSearch::Instance();
+                $objSearch = cSearch::getInstance();
                 $suggestedContents = $objSearch->searchSuggestedContents(
                     $opinion->metadata,
                     'Opinion',

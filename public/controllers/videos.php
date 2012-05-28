@@ -190,7 +190,7 @@ switch ($action) {
         $tpl->assign('contentId', $videoID);
 
         /******* SUGGESTED CONTENTS *******/
-        $objSearch = cSearch::Instance();
+        $objSearch = cSearch::getInstance();
         $arrayResults=$objSearch->searchSuggestedContents(
             $video->metadata, 'Video',
             "pk_fk_content_category= ".$video->category.

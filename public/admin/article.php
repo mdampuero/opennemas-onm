@@ -1230,7 +1230,7 @@ if (isset($_REQUEST['action']) ) {
             $page       = filter_input( INPUT_GET, 'page' , FILTER_SANITIZE_NUMBER_INT, array('options' => array('default' => '1')) );
             $cm = new ContentManager();
 
-            $mySearch = cSearch::Instance();
+            $mySearch = cSearch::getInstance();
             $where = "content_status=1 AND available=1 ";
             $search = $mySearch->searchRelatedContents($metadata, 'Article,Opinion', NULL, $where);
             if(($search) && count($search)>0){

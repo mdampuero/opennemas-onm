@@ -56,7 +56,7 @@ switch ($action) {
             $htmlChecks=null;
             $szCheckedTypes = checkTypes($htmlChecks);
             $szTags  = trim($stringSearch);
-            $objSearch = cSearch::Instance();
+            $objSearch = cSearch::getInstance();
             $arrayResults = $objSearch->searchContentsSelectMerge(
                 "contents.title as titule, contents.metadata, contents.slug,
                 contents.description, contents.created, contents.pk_content as id,
@@ -112,7 +112,7 @@ switch ($action) {
         $htmlChecks     =null;
         $szCheckedTypes = checkTypes($htmlChecks);
         $szTags         = trim($_REQUEST['stringSearch']);
-        $objSearch      = cSearch::Instance();
+        $objSearch      = cSearch::getInstance();
         $arrayResults   = $objSearch->searchContentsSelectMerge(
             "contents.title as titule, contents.metadata, contents.slug,
             contents.description, contents.created, contents.pk_content as id,

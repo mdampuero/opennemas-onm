@@ -145,7 +145,7 @@ switch ($action) {
                 // Machine suggested contents code -----------------------------
                 $machineSuggestedContents = array();
                 if (!empty($article->metadata)) {
-                    $objSearch    = cSearch::Instance();
+                    $objSearch    = cSearch::getInstance();
                     $machineSuggestedContents =
                         $objSearch->searchSuggestedContents($article->metadata,
                             'Article',

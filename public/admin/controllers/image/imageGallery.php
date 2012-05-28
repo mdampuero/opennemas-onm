@@ -48,7 +48,7 @@ if (\Onm\Module\ModuleManager::isActivated('IMAGE_MANAGER')) {
 
         if (!empty($metadatas)) {
 
-            $presentSearch = cSearch::Instance();
+            $presentSearch = cSearch::getInstance();
             $arrayIds      = $presentSearch->searchContentsSelect('pk_content', $metadatas, 'photo', 100);
             if (!empty($arrayIds))
             {
