@@ -268,13 +268,13 @@ function saveChanges() {
         data: { action:"saveNewsletterContent", html:htmlContent },
         error:function (xhr, ajaxOptions, thrownError){
             log(xhr.status + 'problem saving html code ');
-            alert(xhr.status + 'problem saving html code ');
+
         },
         success: function() {
             log(ok);
         }
     });
-    alert('sdfdfsfd');
+
 }
 
 /*****************************************************************************/

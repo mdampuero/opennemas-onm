@@ -232,7 +232,7 @@ switch($action) {
             !empty($_SESSION['newsletterHtml'])) {
 
             $htmlContent = htmlspecialchars_decode($_SESSION['newsletterHtml'], ENT_QUOTES);
-        var_dump($htmlContent);
+
         } else {
             $htmlContent = $nManager->render();
         }
