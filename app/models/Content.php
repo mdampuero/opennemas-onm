@@ -78,19 +78,7 @@ class Content
     {
         switch ($name) {
             case 'uri':
-                if (empty($this->category_name)) {
-                    $this->category_name =
-                        $this->loadCategoryName($this->pk_content);
-                }
-                $uri =  Uri::generate(strtolower($this->content_type_name),
-                    array(
-                        'id'       => sprintf('%06d', $this->id),
-                        'date'     => date('YmdHis', strtotime($this->created)),
-                        'category' => $this->category_name,
-                        'slug'     => $this->slug2,
-                    ));
-
-                return ($uri !== '') ? $uri : $this->permalink;
+                return $this->getUri();
                 break;
 
             case 'slug2':
@@ -99,20 +87,7 @@ class Content
                 break;
 
             case 'content_type_name':
-                $sql = 'SELECT * FROM `content_types` '
-                     . 'WHERE pk_content_type = ? LIMIT 1';
-                $values = array($this->content_type);
-                $contentTypeName =
-                    $GLOBALS['application']->conn->Execute($sql, $values);
-
-                if (isset($contentTypeName->fields['name'])) {
-                    $returnValue =
-                        mb_strtolower($contentTypeName->fields['name']);
-                } else {
-                    $returnValue = $this->content_type;
-                }
-
-                return $returnValue;
+                return $this->getContentTypeName();
                 break;
 
             case 'category_name':
@@ -151,6 +126,52 @@ class Content
             default:
                 break;
         }
+    }
+
+    /**
+     * Returns the URI for this content
+     *
+     * @return string the uri
+     **/
+    public function getUri()
+    {
+        if (empty($this->category_name)) {
+            $this->category_name =
+                $this->loadCategoryName($this->pk_content);
+        }
+        $uri =  Uri::generate(strtolower($this->content_type_name),
+            array(
+                'id'       => sprintf('%06d', $this->id),
+                'date'     => date('YmdHis', strtotime($this->created)),
+                'category' => $this->category_name,
+                'slug'     => $this->slug2,
+            ));
+
+        return ($uri !== '') ? $uri : $this->permalink;
+    }
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function getContentTypeName()
+    {
+        $sql = 'SELECT * FROM `content_types` '
+             . 'WHERE pk_content_type = ? LIMIT 1';
+        $values = array($this->content_type);
+        $contentTypeName =
+            $GLOBALS['application']->conn->Execute($sql, $values);
+
+        if (isset($contentTypeName->fields['name'])) {
+            $returnValue =
+                mb_strtolower($contentTypeName->fields['name']);
+        } else {
+            $returnValue = $this->content_type;
+        }
+
+        return $returnValue;
     }
 
     /**
@@ -298,8 +319,6 @@ class Content
     public function update($data)
     {
         $GLOBALS['application']->dispatch('onBeforeUpdate', $this);
-
-        $name_type = $this->content_type;
 
         $sql = "UPDATE contents
                 SET `title`=?, `description`=?,
@@ -585,7 +604,7 @@ class Content
         }
 
         /* Notice log of this action */
-        $logger = Application::logContentEvent(__METHOD__, $this);
+        Application::logContentEvent(__METHOD__, $this);
 
         // Set status for it's updated to next event
         if (!empty($this)) {
@@ -646,14 +665,14 @@ class Content
      *
      * @return boolean true if all went well
      **/
-    public function setAvailable($lastEditor = null)
+    public function setAvailable()
     {
         // NEW APPROACH
         // Set previous status = the actual value
         // Set status = available
 
         // OLD APPROACH
-        if (($this->id == null) && !is_array($status)) {
+        if ($this->id == null) {
             return false;
         }
 
@@ -742,7 +761,7 @@ class Content
         // Set the flags to the trashed status
         // Drop from all the frontpages
         // Clean caches where this content is
-        if (($this->id == null) && !is_array($status)) {
+        if ($this->id == null) {
             return false;
         }
 
@@ -812,7 +831,7 @@ class Content
      **/
     public function setArchived()
     {
-        if (($this->id == null) && !is_array($status)) {
+        if ($this->id == null) {
             return false;
         }
 
@@ -853,7 +872,7 @@ class Content
     public function suggestToHomepage()
     {
         // OLD APPROACH
-        if (($this->id == null) && !is_array($status)) {
+        if (($this->id == null)) {
             return false;
         }
 
@@ -1178,7 +1197,7 @@ class Content
         return ($this->frontpage == 1);
     }
 
-    public function set_frontpage($status, $last_editor)
+    public function set_frontpage($status, $lastEditor)
     {
         if (($this->id == null) && !is_array($status)) {
             return false;
@@ -1206,7 +1225,7 @@ class Content
         Application::logContentEvent(__METHOD__, $this);
     }
 
-    public function set_inhome($status, $last_editor)
+    public function set_inhome($status, $lastEditor)
     {
         $GLOBALS['application']->dispatch('onBeforeSetInhome', $this);
 
@@ -1240,7 +1259,6 @@ class Content
 
     public function set_home_position($position, $lastEditor)
     {
-        $changed = date("Y-m-d H:i:s");
         if (($this->id == null) && !is_array($position)) {
             return false;
         }
@@ -1598,7 +1616,7 @@ class Content
             $logger->notice('User '
                 .$_SESSION['username'].' ('.$_SESSION['userid'].') has executed'
                 .' action Drop from frontpage at category '.$categoryName
-                .' an '.$type.' Id '.$pk_content);
+                .' an '.$type.' Id '.$pkContent);
 
             return true;
         }
@@ -1644,11 +1662,10 @@ class Content
      * @return pk_content or false
     */
 
-    public function set_position($position, $last_editor)
+    public function set_position($position, $lastEditor)
     {
         $GLOBALS['application']->dispatch('onBeforePosition', $this);
 
-        $changed = date("Y-m-d H:i:s");
         if ($this->id == null
             && !is_array($position)
         ) {
@@ -1673,7 +1690,7 @@ class Content
         }
 
         /* Notice log of this action */
-        $logger = Application::logContentEvent(__METHOD__, $this);
+        Application::logContentEvent(__METHOD__, $this);
 
         $GLOBALS['application']->dispatch('onAfterPosition', $this);
 
