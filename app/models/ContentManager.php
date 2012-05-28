@@ -71,7 +71,8 @@ class ContentManager
         $_where = '`contents`.`in_litter`=0';
 
         if (!is_null($filter)) {
-            if ($filter == 'in_litter=1') { //se busca desde la litter.php
+            // se busca desde la litter.php
+            if ($filter == 'in_litter=1') {
                 $_where = $filter;
             } else {
                 $_where = ' `contents`.`in_litter`=0 AND '.$filter;
@@ -122,7 +123,8 @@ class ContentManager
         $where = '`contents`.`in_litter`=0';
 
         if (!is_null($filter)) {
-            if ($filter == 'in_litter=1') { //se busca desde la litter.php
+            //se busca desde la litter.php
+            if ($filter == 'in_litter=1') {
                 $where = $filter;
             } else {
                 $where = ' `contents`.`in_litter`=0 AND '.$filter;
@@ -181,7 +183,7 @@ class ContentManager
                         'position'    => $rs->fields['position'],));
                     if (is_array($content->params) && $content->params > 0) {
                         $content->params = array_merge($content->params,
-                            (array)unserialize($rs->fields['params']));
+                            (array) unserialize($rs->fields['params']));
                     } else {
                         $content->params = unserialize($rs->fields['params']);
                     }
@@ -378,7 +380,7 @@ class ContentManager
 
         $finalArray   = array();
         foreach ($array as $element) {
-            if ($element[$i]->{$filterKey} == $filterValue) {
+            if ($element->{$filterKey} == $filterValue) {
                 $finalArray[] = $element;
             }
         }
@@ -414,7 +416,7 @@ class ContentManager
                 do {
                     $i   = $l;
                     $j   = $r;
-                    $tmp = $array[(int)( ($l+$r)/2 )];
+                    $tmp = $array[(int) (($l+$r)/2)];
 
                     // split the array in to parts
                     // first: objects with "smaller" property $property
@@ -1097,7 +1099,7 @@ class ContentManager
         return $items;
     }
 
-   /**
+    /**
      * This function returns an array of objects $content_type of the most
      * commented in the last few days indicated.
      * @param  string  $content_type type of content
@@ -1230,11 +1232,11 @@ class ContentManager
     }
 
     /**
-    * Get suggested Contents for Homepage
-    *
-    * @return mixed, instantiated elements suggested for homepage
-    * @throws ExceptionClass [description]
-    */
+     * Get suggested Contents for Homepage
+     *
+     * @return mixed, instantiated elements suggested for homepage
+     * @throws ExceptionClass [description]
+     */
     public static function getSuggestedContentsForHomePage()
     {
         $contents = array();
@@ -1286,11 +1288,13 @@ class ContentManager
 
 
 
-     /**
-      * Filter content objects by  available and not inlitter.
-      * @param array $items Array of Content objects
-      * @return array Items filtered
-      **/
+    /**
+     * Filter content objects by  available and not inlitter.
+     *
+     * @param array $items Array of Content objects
+     *
+     * @return array Items filtered
+     **/
     public function getAvailable($items)
     {
         $filtered = array();
@@ -1377,6 +1381,7 @@ class ContentManager
      * @param  int|null    $pk_fk_content_category Id de categoria (para
      *                                             find_by_category y si null
      *                                             es find).
+     *
      * @return array       Array ($items, $pager)
      */
     public function find_pages(
@@ -1451,7 +1456,8 @@ class ContentManager
         $_where = 'AND in_litter=0';
 
         if ( !is_null($filter) ) {
-            if ( $filter == 'in_litter=1') { //se busca desde la litter.php
+            //se busca desde la litter.php
+            if ( $filter == 'in_litter=1') {
                 $_where = $filter;
             } else {
                 $_where = ' in_litter=0 AND '.$filter;
@@ -1484,13 +1490,15 @@ class ContentManager
         $filter=null,
         $_order_by='ORDER BY 1'
     ) {
-        $this->init($contentType); //recupera el id de la categoria del array.
+        // recupera el id de la categoria del array.
+        $this->init($contentType);
         $pk_fk_content_category=$this->get_id($category_name);
         $items  = array();
         $_where = 'in_litter=0';
 
         if (!is_null($filter) ) {
-            if (preg_match('/in_litter=1/i', $filter)) { //se busca desde la litter.php
+            // se busca desde la litter.php
+            if (preg_match('/in_litter=1/i', $filter)) {
                 $_where = $filter;
             } else {
                 $_where = $filter.' AND in_litter=0';

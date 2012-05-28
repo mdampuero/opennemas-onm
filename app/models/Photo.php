@@ -61,7 +61,7 @@ class Photo extends Content
 
         $execution = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($execution === false) {
-            $errorMsg = Application::logDatabaseError();
+            Application::logDatabaseError();
 
             return false;
         }
@@ -87,7 +87,9 @@ class Photo extends Content
             }
             $uploadDir = MEDIA_PATH.DS.IMG_DIR.DS.$dateForDirectory.DIRECTORY_SEPARATOR ;
 
-            if (!is_dir($uploadDir)) { FilesManager::createDirectory($uploadDir); }
+            if (!is_dir($uploadDir)) {
+                FilesManager::createDirectory($uploadDir);
+            }
 
             $filePathInfo = pathinfo($filePath);     //sacamos infor del archivo
 
@@ -623,14 +625,14 @@ class Photo extends Content
 
         $sql = 'DELETE FROM photos WHERE pk_photo=?';
 
-        if ($GLOBALS['application']->conn->Execute($sql, array($id)) === false) {
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
+        if ($rs === false) {
             \Application::logDatabaseError();
 
             return;
-
         }
 
-        $image = MEDIA_IMG_PATH . $this->path_file.$this->name;
+        $image      = MEDIA_IMG_PATH . $this->path_file.$this->name;
         $thumbimage = MEDIA_IMG_PATH . $this->path_file.'140-100-'.$this->name;
 
         if (file_exists($image)) {
@@ -652,7 +654,6 @@ class Photo extends Content
             \Application::logDatabaseError();
 
             return;
-
         }
     }
 
