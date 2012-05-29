@@ -79,8 +79,8 @@ switch ($action) {
 
             foreach ($arrayResults as $res ) {
                 for($ind=0; $ind < sizeof($szTagsArray); $ind++){
-                    $arrayResults[$indice]['titule']   = StringUtils::ext_str_ireplace($szTagsArray[$ind], '<b><span style="color:blue">$1</font></b>', $arrayResults[$indice]['titule']);
-                    $arrayResults[$indice]['metadata'] = StringUtils::ext_str_ireplace($szTagsArray[$ind], '<b><span style="color:blue">$1</font></b>', $arrayResults[$indice]['metadata']);
+                    $arrayResults[$indice]['titule']   = \Onm\StringUtils::extStrIreplace($szTagsArray[$ind], '<b><span style="color:blue">$1</font></b>', $arrayResults[$indice]['titule']);
+                    $arrayResults[$indice]['metadata'] = \Onm\StringUtils::extStrIreplace($szTagsArray[$ind], '<b><span style="color:blue">$1</font></b>', $arrayResults[$indice]['metadata']);
                 }
                 $indice++;
             }
@@ -139,8 +139,8 @@ switch ($action) {
 
         foreach ($arrayResults as $res ) {
             for($ind=0; $ind < sizeof($szTagsArray); $ind++){
-                $arrayResults[$indice]['titule']   = StringUtils::ext_str_ireplace($szTagsArray[$ind], '<b><span style="color:blue">$1</font></b>', $arrayResults[$indice]['titule']);
-                $arrayResults[$indice]['metadata'] = StringUtils::ext_str_ireplace($szTagsArray[$ind], '<b><span style="color:blue">$1</font></b>', $arrayResults[$indice]['metadata']);
+                $arrayResults[$indice]['titule']   = \Onm\StringUtils::extStrIreplace($szTagsArray[$ind], '<b><span style="color:blue">$1</font></b>', $arrayResults[$indice]['titule']);
+                $arrayResults[$indice]['metadata'] = \Onm\StringUtils::extStrIreplace($szTagsArray[$ind], '<b><span style="color:blue">$1</font></b>', $arrayResults[$indice]['metadata']);
             }
 
             $indice++;

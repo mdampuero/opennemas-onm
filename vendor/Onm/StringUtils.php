@@ -478,6 +478,33 @@ EOF;
 
     }
 
+    public static function extStrIreplace($findme, $replacewith, $subject)
+    {
+        // Replaces $findme in $subject with $replacewith
+        // Ignores the case and do keep the original capitalization by using $1 in $replacewith
+        // Required: PHP 5
+
+        $rest = $subject;
+        $result = '';
+
+        while (stripos($rest, $findme) !== false) {
+             $pos = stripos($rest, $findme);
+
+             // Remove the wanted string from $rest and append it to $result
+             $result .= substr($rest, 0, $pos);
+             $rest = substr($rest, $pos, strlen($rest)-$pos);
+
+             // Remove the wanted string from $rest and place it correctly into $result
+             $result .= str_replace('$1', substr($rest, 0, strlen($findme)), $replacewith);
+             $rest = substr($rest, strlen($findme), strlen($rest)-strlen($findme));
+        }
+
+        // After the last match, append the rest
+        $result .= $rest;
+
+        return $result;
+    }
+
     public static function generatePassword($length = 8)
     {
         $chars = "234567890abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
