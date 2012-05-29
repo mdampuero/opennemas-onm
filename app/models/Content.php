@@ -197,18 +197,30 @@ class Content
            " VALUES (?,?,?, ?,?,?, ?,?,?, ?,?,?,?,?, ?,?,?, ?,?,?, ?,?,?,?)";
 
 
-        $data['starttime']        = (!isset($data['starttime']) || empty($data['starttime']) || ($data['starttime'])=='0000-00-00 00:00:00')? date("Y-m-d H:i:s"): $data['starttime'];
+        $data['starttime']        =
+            (!isset($data['starttime']) || empty($data['starttime'])
+             || ($data['starttime'])=='0000-00-00 00:00:00')
+                ? date("Y-m-d H:i:s"): $data['starttime'];
         $data['endtime']          = (empty($data['endtime']))? '0000-00-00 00:00:00': $data['endtime'];
         $data['content_status']   = (empty($data['content_status']))? 0: intval($data['content_status']);
         $data['available']        = (empty($data['available']))? 0: intval($data['available']);
-        $data['frontpage']        = (!isset($data['frontpage']) || empty($data['frontpage']))? 0: intval($data['frontpage']);
-        $data['placeholder']      = (!isset($data['placeholder']) || empty($data['placeholder']))? 'placeholder_0_1': $data['placeholder'];
-        $data['home_placeholder'] = (!isset($data['home_placeholder']) || empty($data['home_placeholder']))? 'placeholder_0_1': $data['home_placeholder'];
+        $data['frontpage']        =
+            (!isset($data['frontpage'])
+                || empty($data['frontpage'])) ? 0: intval($data['frontpage']);
+        $data['placeholder']      =
+            (!isset($data['placeholder']) || empty($data['placeholder']))
+                ? 'placeholder_0_1': $data['placeholder'];
+        $data['home_placeholder'] =
+            (!isset($data['home_placeholder'])
+                || empty($data['home_placeholder']))
+                ? 'placeholder_0_1': $data['home_placeholder'];
         $data['position']         = (empty($data['position']))? '2': $data['position'];
         $data['in_home']          = (empty($data['in_home']))? 0: $data['in_home'];
         $data['home_pos']         = 100;
         $data['urn_source']       = (empty($data['urn_source']))? null: $data['urn_source'];
-        $data['params'] = (!isset($data['params']) || empty($data['params']))? null: serialize($data['params']);
+        $data['params'] =
+            (!isset($data['params'])
+            || empty($data['params'])) ? null: serialize($data['params']);
 
         if (empty($data['slug'] ) || !isset($data['slug']) ) {
             $data['slug'] = mb_strtolower(StringUtils::get_title($data['title']));
@@ -218,19 +230,17 @@ class Content
         $data['created'] = (empty($data['created']))? date("Y-m-d H:i:s") : $data['created'];
         $data['changed'] = date("Y-m-d H:i:s");
 
-        if (empty($data['description'])
-            && !isset ($data['description'])
-        ) {
+        if (empty($data['description'])&& !isset ($data['description'])) {
             $data['description']     = '';
         }
-        if (empty($data['metadata'])
-            && !isset ($data['metadata'])
-        ) {
+        if (empty($data['metadata']) && !isset ($data['metadata'])) {
             $data['metadata']='';
         }
 
-        $data['fk_user']             =(empty($data['fk_user']) && !isset ($data['fk_user'])) ?$_SESSION['userid'] :$data['fk_user'] ;
-        $data['fk_user_last_editor'] =  $data['fk_user'];
+        $data['fk_user']             =
+            (empty($data['fk_user']) && !isset ($data['fk_user']))
+            ? $_SESSION['userid'] :$data['fk_user'] ;
+        $data['fk_user_last_editor'] = $data['fk_user'];
         $data['fk_publisher']        = (empty($data['available']))? '': $data['fk_user'];
 
         $fk_content_type = $GLOBALS['application']->conn->
@@ -1450,7 +1460,7 @@ class Content
      */
     public static function pkExists($pkContent)
     {
-       $content = new Content($pkContent);
+        $content = new Content($pkContent);
         if (empty($content)) {
             $code = 404;
             $url  = null;

@@ -149,7 +149,7 @@ class Album extends Content
 
         $data['id'] = $this->id;
 
-        $this->_saveAttachedPhotos($data);
+        $this->saveAttachedPhotos($data);
 
         return $this;
     }
@@ -211,8 +211,8 @@ class Album extends Content
             return Application::logDatabaseError();
         }
 
-        $this->_removeAttachedImages($data['id']);
-        $this->_saveAttachedPhotos($data);
+        $this->removeAttachedImages($data['id']);
+        $this->saveAttachedPhotos($data);
 
         return $this;
     }
@@ -234,7 +234,7 @@ class Album extends Content
             return Application::logDatabaseError();
         }
 
-        return $this->_removeAttachedImages($id);
+        return $this->removeAttachedImages($id);
     }
 
     /**
@@ -276,7 +276,7 @@ class Album extends Content
      *
      * @return void
      **/
-    public function _saveAttachedPhotos($data)
+    public function saveAttachedPhotos($data)
     {
         $albumPhoto = new AlbumPhoto;
         if (isset($data['album_photos_id']) && !empty($data['album_photos_id'])) {
@@ -307,7 +307,7 @@ class Album extends Content
      * @param  int      $albumID, the foreighn key for the album
      * @return boolean, true if the album was deleted, false if it wasn't
      **/
-    public function _removeAttachedImages($albumID)
+    public function removeAttachedImages($albumID)
     {
         $sql = 'DELETE FROM albums_photos WHERE pk_album=?';
 
