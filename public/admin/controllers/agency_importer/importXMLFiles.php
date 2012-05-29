@@ -34,7 +34,8 @@ $tpl->assign('titulo_barra', 'Import new contents from XML file or Zip XML');
 
 $action = filter_input( INPUT_POST, 'action' , FILTER_SANITIZE_STRING );
 if (!isset($action)) {
-    $action = filter_input( INPUT_GET, 'action' , FILTER_SANITIZE_STRING, array('options' => array('default' => 'list')) );
+    $action = filter_input( INPUT_GET, 'action' ,
+        FILTER_SANITIZE_STRING, array('options' => array('default' => 'list')));
 }
 
 if (
