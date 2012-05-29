@@ -345,8 +345,9 @@ class ContentManager
     /**
     * Clear the content positions for elements in a given category
     *
-    * @param int $categoryID, the id of the category we want to clear positions from
-    * @return boolean, if all went good this will be true and viceversa
+    * @param int $categoryID the id of the category we want
+    *                        to clear positions from
+    * @return boolean if all went good this will be true and viceversa
     */
     public static function clearContentPositionsForHomePageOfCategory(
         $categoryID

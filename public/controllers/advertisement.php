@@ -10,13 +10,13 @@
 //Start up and setup the app
 require_once '../bootstrap.php';
 
-$action = $request->query->filter('action', null , FILTER_SANITIZE_STRING);
+$action = $request->query->filter('action', null, FILTER_SANITIZE_STRING);
 
 switch ($action) {
 
     case 'get':
         // Banner Id
-        $id = $request->query->filter('id', null , FILTER_SANITIZE_STRING);
+        $id = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
 
         if (isset($id)) {
             $advertisement = new Advertisement();
@@ -31,10 +31,8 @@ switch ($action) {
         break;
 
     case 'show': // Redirect to advertisement
-        $publi_id = $request->query->filter('publi_id',
-            null , FILTER_SANITIZE_STRING);
+        $publi_id = $request->query->filter('publi_id', null, FILTER_SANITIZE_STRING);
         if (isset($publi_id)) {
-
             $advertisement = new Advertisement($publi_id);
             $url = $advertisement->getUrl($publi_id);
             if ($url) {
@@ -51,5 +49,4 @@ switch ($action) {
     default:
         // EMPTY ACTION
         break;
-
 }

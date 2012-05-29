@@ -140,11 +140,13 @@ switch ($action) {
 
                 // If frontpage contains a SUBCATEGORY the SQL request will be diferent
 
-                $articles_home = $cm->find_by_category_name('Article',
-                                                            $category_name,
-                                                            'contents.content_status=1 AND '
-                                                            .'contents.available=1 AND contents.fk_content_type=1',
-                                                            'ORDER BY created DESC LIMIT 0,50');
+                $articles_home = $cm->find_by_category_name(
+                    'Article',
+                    $category_name,
+                    'contents.content_status=1 AND '
+                    .'contents.available=1 AND contents.fk_content_type=1',
+                    'ORDER BY created DESC LIMIT 0,50'
+                );
 
                 foreach ($articles_home as $i => $article) {
                     if (isset($article->img1) && $article->img1 != 0) {

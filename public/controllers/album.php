@@ -7,20 +7,13 @@
  * file that was distributed with this source code.
  */
 use Onm\Settings as s;
-/**
- * Start up and setup the app
-*/
+// Start up and setup the app
 require_once('../bootstrap.php');
 
-/**
- * Setup view
- */
+// Setup view
 $tpl = new Template(TEMPLATE_USER);
 
-/******************************  CATEGORIES & SUBCATEGORIES  *********************************/
-/**
- * Setting up available categories for menu.
-*/
+// Setting up available categories for menu.
 $ccm = new ContentCategoryManager();
 
 $category_name = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
@@ -45,14 +38,7 @@ if (!empty($category_name)) {
 }
 $tpl->assign('actual_category', $category_name);
 
-/******************************  CATEGORIES & SUBCATEGORIES  *********************************/
-
-//Getting articles
 $cm = new ContentManager();
-
-/**
- * Route to the proper action
- */
 
 if (!is_null($action) ) {
 
@@ -65,11 +51,10 @@ if (!is_null($action) ) {
             $tpl->setConfig('gallery-frontpage');
             $cacheID = $tpl->generateCacheId($category_name, '', $page);
 
-            /**
-             * Don't execute the action logic if was cached before
-             */
-            if ( ($tpl->caching == 0)
-               || (!$tpl->isCached('gallery/gallery-frontpage.tpl', $cacheID)) ) {
+            // Don't execute the action logic if was cached before
+            if (($tpl->caching == 0)
+               || (!$tpl->isCached('gallery/gallery-frontpage.tpl', $cacheID))
+            ) {
 
                 $albumSettings = s::get('album_settings');
                 $total = isset($albumSettings['total_front'])?$albumSettings['total_front']:2;
@@ -109,10 +94,10 @@ if (!is_null($action) ) {
 
             }
 
-            require_once ("album_front_ads.php");
+            require_once "album_front_ads.php";
 
             // Send the response to the user
-            $tpl->display('album/album_frontpage.tpl',$cacheID);
+            $tpl->display('album/album_frontpage.tpl', $cacheID);
             break;
 
         case 'show':
@@ -121,44 +106,41 @@ if (!is_null($action) ) {
                 null, FILTER_SANITIZE_STRING);
 
             $albumID = Content::resolveID($dirtyID);
-            /**
-             * Redirect to album frontpage if id_album wasn't provided
-             */
-            if (is_null($albumID)) { Application::forward301('/albumes/'); }
+
+            // Redirect to album frontpage if id_album wasn't provided
+            if (is_null($albumID)) {
+                Application::forward301('/albumes/');
+            }
 
             $tpl->setConfig('gallery-inner');
             $cacheID = $tpl->generateCacheId($category_name, null, $albumID);
 
-            /**
-             * Increment views for this content
-             */
+            // Increment views for this content
             Content::setNumViews($albumID);
 
             $tpl->assign('contentId', $albumID);
 
-            require_once("album_inner_ads.php");
+            require_once "album_inner_ads.php";
 
             if (($tpl->caching == 0)
-                || (!$tpl->isCached('gallery/gallery.tpl', $cacheID))){
+                || (!$tpl->isCached('gallery/gallery.tpl', $cacheID))
+            ) {
 
-                /**
-                 * Get the album from the id and increment the numviews for it
-                 **/
+                // Get the album from the id and increment the numviews for it
                 $album = new Album($albumID);
                 $tpl->assign('album', $album);
 
-                /**
-                 * Get the other albums for the albums widget
-                 **/
-                $configurations = s::get('album_settings');
-                $total = isset($configurations['total_front'])?($configurations['total_front']):2;
-                $days = isset( $configurations['time_last'])?($configurations['time_last']):4;
+                // Get the other albums for the albums widget
+                $settings = s::get('album_settings');
+                $total = isset($settings['total_front'])?($settings['total_front']):2;
+                $days = isset($settings['time_last'])?($settings['time_last']):4;
 
                 $otherAlbums = $cm->find(
                     'Album',
                     $category,
-                    'available=1 and pk_content !='.$albumID.
-                    ' AND created >=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY)  ',
+                    'available=1 AND pk_content !='.$albumID
+                    .' AND created >=DATE_SUB(CURDATE(), INTERVAL '
+                    . $days . ' DAY) ',
                     ' ORDER BY views DESC,  created DESC LIMIT '.$total
                 );
                 $tpl->assign('gallerys', $otherAlbums);

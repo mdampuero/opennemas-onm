@@ -1,22 +1,25 @@
 <?php
-
+/**
+ * This file is part of the Onm package.
+ *
+ * (c)  OpenHost S.L. <developers@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ **/
 use Onm\Settings as s;
-/**
- * Setup app
-*/
-require_once('../bootstrap.php');
-require_once('../libs/phpmailer/class.phpmailer.php');
-require_once('recaptchalib.php');
+// Setup app
+require_once '../bootstrap.php';
+require_once '../libs/phpmailer/class.phpmailer.php';
+require_once 'recaptchalib.php';
 
-/**
- * Setup view
-*/
+// Setup view
 $tpl = new Template(TEMPLATE_USER);
 
-/**
- * Fetch some code
-*/
-$category_name = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+// Fetch some code
+$category_name = $request->query->filter(
+    'category_name', 'home', FILTER_SANITIZE_STRING
+);
 
 require_once("statics_advertisement.php");
 
@@ -33,23 +36,27 @@ if (isset($action)
     $configSiteName = s::get('site_name');
     $configMailTo = s::get('newsletter_maillist');
 
-    $recaptcha_challenge_field = $request->request->
-                filter('recaptcha_challenge_field', null, FILTER_SANITIZE_STRING);
-    $recaptcha_response_field = $request->request->
-            filter('recaptcha_response_field', null, FILTER_SANITIZE_STRING);
-
+    $recaptcha_challenge_field = $request->request->filter(
+        'recaptcha_challenge_field', null, FILTER_SANITIZE_STRING
+    );
+    $recaptcha_response_field = $request->request->filter(
+        'recaptcha_response_field', null, FILTER_SANITIZE_STRING
+    );
 
     // Get reCaptcha validate response
-    $resp = recaptcha_check_answer ($configRecaptcha['private_key'],
-                                    $_SERVER["REMOTE_ADDR"],
-                                    $recaptcha_challenge_field,
-                                    $recaptcha_response_field);
+    $resp = recaptcha_check_answer(
+        $configRecaptcha['private_key'],
+        $_SERVER["REMOTE_ADDR"],
+        $recaptcha_challenge_field,
+        $recaptcha_response_field
+    );
 
     // What happens when the CAPTCHA was entered incorrectly
     if (!$resp->is_valid) {
-        $resp='<script>(!alert("The reCAPTCHA wasn\'t entered correctly. Go back and try it again."))</script>
-                    <script>location.href="#"</script>';
-        echo ($resp);
+        $resp = '<script>(!alert("The reCAPTCHA wasn\'t entered correctly. '
+              . 'Go back and try it again."))</script>'
+              . '<script>location.href="#"</script>';
+        echo($resp);
     } else {
         // Correct CAPTCHA, bad mail and name empty
 

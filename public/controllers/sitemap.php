@@ -38,27 +38,31 @@ if (($tpl->caching == 0)
             // Foreach available category retrieve last $maxArticlesByCategory articles in there
             foreach ($availableCategories as $category) {
                 if ($category->inmenu == 1
-                    && $category->internal_category == 1)
-                {
-
+                    && $category->internal_category == 1
+                ) {
                     $articlesByCategory[$category->name] = $cm->getArrayOfArticlesInCategory(
-                            $category->pk_content_category,
-                            'available=1 AND fk_content_type=1',
-                            ' ORDER BY created DESC',
-                            $maxArticlesByCategory
+                        $category->pk_content_category,
+                        'available=1 AND fk_content_type=1',
+                        ' ORDER BY created DESC',
+                        $maxArticlesByCategory
                     );
-                    $articlesByCategory[$category->name] = $cm->getInTime($articlesByCategory[$category->name]);
+                    $articlesByCategory[$category->name] = $cm->getInTime(
+                        $articlesByCategory[$category->name]
+                    );
 
                 }
             }
 
-            $opinions = $cm->getOpinionAuthorsPermalinks('contents.available=1 and contents.content_status=1', 'ORDER BY in_home DESC, position ASC, changed DESC LIMIT 100');
+            $opinions = $cm->getOpinionAuthorsPermalinks(
+                'contents.available=1 and contents.content_status=1',
+                'ORDER BY in_home DESC, position ASC, changed DESC LIMIT 100'
+            );
             foreach ($opinions as &$opinion) {
                 $opinion['author_name_slug'] = StringUtils::get_title($opinion['name']);
             }
 
-            $tpl->assign('articlesByCategory',$articlesByCategory);
-            $tpl->assign('opinions',$opinions);
+            $tpl->assign('articlesByCategory', $articlesByCategory);
+            $tpl->assign('opinions', $opinions);
 
 
             break;
@@ -72,21 +76,26 @@ if (($tpl->caching == 0)
             // Foreach available category and retrieve articles from 700 days ago
             foreach ($availableCategories as $category) {
                 if ($category->inmenu == 1
-                    && $category->internal_category == 1)
-                {
+                    && $category->internal_category == 1
+                ) {
                     $articlesByCategory[$category->name] = $cm->getArrayOfArticlesInCategory(
-                            $category->pk_content_category,
-                            'available=1 AND fk_content_type=1 ',
-                            'ORDER BY changed DESC',
-                            $maxArticlesByCategory
+                        $category->pk_content_category,
+                        'available=1 AND fk_content_type=1 ',
+                        'ORDER BY changed DESC',
+                        $maxArticlesByCategory
                     );
-                    $articlesByCategory[$category->name] = $cm->getInTime($articlesByCategory[$category->name]);
+                    $articlesByCategory[$category->name] = $cm->getInTime(
+                        $articlesByCategory[$category->name]
+                    );
 
                 }
             }
 
             // Get latest opinions
-            $opinions = $cm->getOpinionAuthorsPermalinks('contents.available=1 AND contents.content_status=1 ', 'ORDER BY position ASC, changed DESC LIMIT 100');
+            $opinions = $cm->getOpinionAuthorsPermalinks(
+                'contents.available=1 AND contents.content_status=1 ',
+                'ORDER BY position ASC, changed DESC LIMIT 100'
+            );
 
             $improvedOpinions = array();
             foreach ($opinions as $opinion) {
@@ -95,7 +104,7 @@ if (($tpl->caching == 0)
                 $improvedOpinions []= $opinion;
             }
 
-            $tpl->assign('articlesByCategory',$articlesByCategory);
+            $tpl->assign('articlesByCategory', $articlesByCategory);
             $tpl->assign('opinions', $improvedOpinions);
             break;
     }
@@ -111,9 +120,9 @@ $format = $request->query->filter('format', null, FILTER_SANITIZE_STRING);
 
 if ($format == 'gz') {
     // disable ZLIB ouput compression
-    ini_set('zlib.output_compression','Off');
+    ini_set('zlib.output_compression', 'Off');
     // compress data
-    $gzipoutput = gzencode($sitemapContents,6);
+    $gzipoutput = gzencode($sitemapContents, 6);
     header('Content-Type: application/x-download');
     header('Content-Encoding: gzip'); #
     header('Content-Length: '.strlen($gzipoutput));

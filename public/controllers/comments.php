@@ -62,10 +62,10 @@ switch ($action) {
         if (is_null($vote)) {
             Application::ajax_out("Error no  vote value!");
         }
-        $update = $vote->update($vote_value,$ip);
+        $update = $vote->update($vote_value, $ip);
 
         if ($update) {
-            $html_out = $vote->render($page,'result',1);
+            $html_out = $vote->render($page, 'result', 1);
         } else {
             $html_out = "Ya ha votado anteriormente este comentario.";
         }
@@ -81,7 +81,8 @@ switch ($action) {
         $tpl->assign('num_comments_total', count($comments));
         //  if (count($comments) >0) {
         $cm = new ContentManager();
-        $comments = $cm->paginate_num_js($comments, 9, 1, 'get_paginate_comments',"'".$_REQUEST['id']."'");
+        $comments = $cm->paginate_num_js(
+            $comments, 9, 1, 'get_paginate_comments', "'".$_REQUEST['id']."'");
 
         $tpl->assign('paginacion', $cm->pager);
         $tpl->assign('comments', $comments);
@@ -105,8 +106,8 @@ switch ($action) {
         $id       = $request->request->filter('id', '', FILTER_SANITIZE_STRING);
 
         if (!empty($text)) {
-            // Normal comment
             if (empty($secCode) ) {
+                // Normal comment
                 $data = array(
                     'body'     => $text,
                     'author'   => $author,
@@ -114,8 +115,8 @@ switch ($action) {
                     'category' => $category,
                     'email'    => $email,
                 );
-            } else { // Facebook comment
-
+            } else {
+                // Facebook comment
                 require_once dirname(__FILE__) . '/fb/facebook.php';
                 $fb = new Facebook(FB_APP_APIKEY, FB_APP_SECRET);
                 $facebookUser = $fb->get_loggedin_user();
@@ -168,9 +169,11 @@ switch ($action) {
 
         } else {
             if (preg_match('@territoris@', $_SERVER['SERVER_NAME'])) {
-                $message = "El seu comentari no ha estat guardat.\nAssegureu-vos emplenar correctament tots els camps";
+                $message = "El seu comentari no ha estat guardat.\n"
+                    ."Assegureu-vos emplenar correctament tots els camps";
             } else {
-                $message = "Su comentario no ha sido guardado.\nAsegúrese de cumplimentar correctamente todos los campos.";
+                $message = "Su comentario no ha sido guardado.\n"
+                    ."Asegúrese de cumplimentar correctamente todos los campos.";
             }
         }
         $response = new Response($message, 200);

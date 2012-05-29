@@ -1,9 +1,16 @@
 <?php
-
+/**
+ * This file is part of the Onm package.
+ *
+ * (c)  OpenHost S.L. <developers@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ **/
 /**
  * Start up and setup the app
 */
-require_once('../bootstrap.php');
+require_once '../bootstrap.php';
 use Onm\Settings as s;
 
 /**
@@ -92,7 +99,7 @@ switch ($action) {
                     $tpl->assign('breadcrub', $breadcrub);
                 }
 
-                // Categories code ----------------------------------------------
+                // Categories code -------------------------------------------
                 // TODO: Seems that this is trash, evaluate its removal
 
                 $actual_category       =$category_name;
@@ -108,7 +115,7 @@ switch ($action) {
 
                 $tpl->assign('article', $article);
 
-                // Associated media code ------------------------------------------
+                // Associated media code --------------------------------------
                 if (isset($article->img2) && ($article->img2 != 0)) {
                     $photoInt = new Photo($article->img2);
                     $tpl->assign('photoInt', $photoInt);
@@ -142,7 +149,8 @@ switch ($action) {
 
                     // Add category name
                     foreach ($relatedContents as &$content) {
-                        $content->category_name = $ccm->get_category_name_by_content_id($content->id);
+                        $content->category_name =
+                            $ccm->get_category_name_by_content_id($content->id);
                     }
                 }
                 $tpl->assign('relationed', $relatedContents);
@@ -156,8 +164,10 @@ switch ($action) {
                             'Article',
                             "pk_fk_content_category= ".$article->category.
                             " AND contents.available=1 AND pk_content = pk_fk_content",
-                            4);
-                    $machineSuggestedContents = $cm->getInTime($machineSuggestedContents);
+                            4
+                        );
+                    $machineSuggestedContents =
+                        $cm->getInTime($machineSuggestedContents);
                 }
                 $tpl->assign('suggested', $machineSuggestedContents);
 
@@ -202,41 +212,58 @@ switch ($action) {
         break;
 
     case 'get_plus':
+        $output = "";
         if ($_GET["content"]=="Comment") {
-
             $cm = new ContentManager();
-            $articles = $cm->cache->getMostComentedContent('Article', true, $_REQUEST['category'], $_REQUEST['days']);
+            $articles = $cm->cache->getMostComentedContent(
+                'Article',
+                true,
+                $_REQUEST['category'],
+                $_REQUEST['days']
+            );
 
             //$tpl->
-            $html_out = "";
             foreach ($articles as $article) {
-                $html_out .= '<div class="CNoticiaMas">';
-                $html_out .= '<div class="CContainerIconoTextoNoticiaMas">';
-                $html_out .= '<div class="iconoNoticiaMas"></div>';
-                $html_out .= '<div class="textoNoticiaMas"><a href="'.$article["uri"].'">'.stripslashes($article["title"]).'</a> ('.$article["num"].' comentarios)</div>';
-                $html_out .= '</div>';
-                $html_out .= '<div class="fileteNoticiaMas"><img src="'.TEMPLATE_USER_PATH.MEDIA_IMG_DIR.'/noticiasRecomendadas/fileteRecomendacion.gif" alt=""/></div>';
-                $html_out .= '</div>';
+                $output =
+                    '<div class="CNoticiaMas">'
+                    . '<div class="CContainerIconoTextoNoticiaMas">'
+                    . '<div class="iconoNoticiaMas"></div>'
+                    . '<div class="textoNoticiaMas"><a href="'
+                    . $article["uri"].'">'.stripslashes($article["title"])
+                    . '</a> ('.$article["num"].' comentarios)</div>'
+                    . '</div>'
+                    . '<div class="fileteNoticiaMas"><img src="'
+                    . TEMPLATE_USER_PATH.MEDIA_IMG_DIR
+                    . '/noticiasRecomendadas/fileteRecomendacion.gif" alt=""/></div>'
+                    . '</div>';
             }
         } else {
-
             $cm = new ContentManager();
 
-            $articles_viewed = $cm->cache->getMostViewedContent('Article', true, $_REQUEST['category'], $_REQUEST['author'], $_REQUEST['days']);
+            $articles = $cm->cache->getMostViewedContent(
+                'Article',
+                true,
+                $_REQUEST['category'],
+                $_REQUEST['author'],
+                $_REQUEST['days']
+            );
 
-            $html_out = "";
-            foreach ($articles_viewed as $article) {
-                $html_out .= '<div class="CNoticiaMas">';
-                $html_out .= '<div class="CContainerIconoTextoNoticiaMas">';
-                $html_out .= '<div class="iconoNoticiaMas"></div>';
-                $html_out .= '<div class="textoNoticiaMas"><a href="'.$article->uri.'">'.stripslashes($article->title).'</a></div>';
-                $html_out .= '</div>';
-                $html_out .= '<div class="fileteNoticiaMas"><img src="'.TEMPLATE_USER_PATH.MEDIA_IMG_DIR.'/noticiasRecomendadas/fileteRecomendacion.gif" alt=""/></div>';
-                $html_out .= '</div>';
+            foreach ($articles as $article) {
+                $output = '<div class="CNoticiaMas">'
+                    . '<div class="CContainerIconoTextoNoticiaMas">'
+                    . '<div class="iconoNoticiaMas"></div>'
+                    . '<div class="textoNoticiaMas"><a href="'
+                    . $article->uri.'">'.stripslashes($article->title)
+                    . '</a></div>'
+                    . '</div>'
+                    . '<div class="fileteNoticiaMas"><img src="'
+                    . TEMPLATE_USER_PATH.MEDIA_IMG_DIR
+                    . '/noticiasRecomendadas/fileteRecomendacion.gif" alt=""/></div>'
+                    . '</div>';
             }
         }
 
-        Application::ajax_out($html_out);
+        Application::ajax_out($output);
         break;
 
     case 'print':
@@ -287,8 +314,6 @@ switch ($action) {
         }
 
         $tpl->display('article/article_printer.tpl');
-        exit(0);
-
         break;
 
 
@@ -306,7 +331,6 @@ switch ($action) {
 
         $tpl->caching = 0;
         $tpl->display('article/article_sendform.tpl'); // Don't disturb cache
-        exit(0);
         break;
 
     case 'send':
@@ -339,7 +363,8 @@ switch ($action) {
 
         $mail->From     = $_REQUEST['sender'];
         $mail->FromName = $_REQUEST['name_sender'];
-        $mail->Subject  = $_REQUEST['name_sender'].' ha compartido contigo un contenido de '.s::get('site_name');  //substr(strip_tags($_REQUEST['body']), 0, 100);
+        $mail->Subject  = $_REQUEST['name_sender']
+            .' ha compartido contigo un contenido de '.s::get('site_name');
 
         $tplMail->assign('destination', 'amig@,');
 
@@ -393,11 +418,13 @@ switch ($action) {
         $tplMail->caching = 0;
         $mail->Body = $tplMail->fetch('article/email_send_to_friend.tpl');
 
-        $mail->AltBody = $tplMail->fetch('article/email_send_to_friend_just_text.tpl');
+        $mail->AltBody =
+            $tplMail->fetch('article/email_send_to_friend_just_text.tpl');
 
-        /*
-            * Implementacion para enviar a multiples destinatarios separados por coma
-            */
+        /**
+         * Implementacion para enviar a multiples destinatarios
+         * separados por coma
+         */
         $destinatarios = explode(',', $_REQUEST['destination']);
 
         foreach ($destinatarios as $dest) {
@@ -408,15 +435,19 @@ switch ($action) {
         if ( $mail->Send() ) {
             $tpl->assign('message', 'Noticia enviada correctamente.');
         } else {
-            if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')) {
+            if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])
+                && ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')
+            ) {
                 header("HTTP/1.0 404 Not Found");
             }
-            $tpl->assign('message', 'La noticia no pudo ser enviada, inténtelo de nuevo más tarde. <br /> Disculpe las molestias.');
+            $tpl->assign('message',
+                'La noticia no pudo ser enviada, inténtelo de nuevo más tarde.'
+                .'<br /> Disculpe las molestias.'
+            );
         }
 
         $tpl->caching = 0;
         $tpl->display('article/article_sendform.tpl'); // Don't disturb cache
-        exit(0);
         break;
 
     default:

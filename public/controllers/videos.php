@@ -7,8 +7,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  **/
-// Start up and setup the app
-require_once ('../bootstrap.php');
+require_once '../bootstrap.php';
+
 use \Onm\Settings as s;
 
 // Setup view
@@ -18,7 +18,7 @@ $tpl->setConfig('video');
 //Setting up available categories for menu.
 $category_name = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
 
-$action = $request->query->filter('action', 'list' , FILTER_SANITIZE_STRING);
+$action = $request->query->filter('action', 'list', FILTER_SANITIZE_STRING);
 $page = $request->query->filter('page', 0, FILTER_VALIDATE_INT);
 
 if (!empty($category_name)) {
@@ -39,13 +39,10 @@ if (!empty($category_name)) {
         'category_real_name' => $category_real_name ,
     ));
     $actual_category_id = $category = 0; //NEED CODE WIDGETS
-
 }
 
 switch ($action) {
-
     case 'list':
-
         # If is not cached process this action
         $cacheID = $tpl->generateCacheId( $category_name, '', $page);
 
@@ -139,12 +136,12 @@ switch ($action) {
         $cm = new ContentManager();
 
         $dirtyID = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
-
         $videoID = Content::resolveID($dirtyID);
-        /**
-         * Redirect to album frontpage if id_album wasn't provided
-         */
-        if (is_null($videoID)) { Application::forward301('/video/'); }
+
+        // Redirect to album frontpage if id_album wasn't provided
+        if (is_null($videoID)) {
+            Application::forward301('/video/');
+        }
 
         //Get other_videos for widget video most
         $days = isset( $videosSettings['time_last'])?:124;
@@ -182,7 +179,7 @@ switch ($action) {
                 'video' => $video,
                 'action' => 'inner',
             ));
-            require_once ("video_inner_advertisement.php");
+            require_once "video_inner_advertisement.php";
 
         } //end iscached
 
@@ -201,19 +198,17 @@ switch ($action) {
 
         Content::setNumViews($videoID);
         $tpl->display('video/video_inner.tpl', $cacheID);
-
         break;
 
     case 'videos_incategory':
+        $video = null;
 
-        $video = NULL;
-
-        $items_page = 3;
+        $itemsPage = 3;
 
         $category_name = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
         $page = $request->query->filter('page', 1, FILTER_VALIDATE_INT);
 
-        $_limit = 'LIMIT ' . ($page - 1) * $items_page . ', ' . ($items_page);
+        $_limit = 'LIMIT ' . ($page - 1) * $itemsPage . ', ' . ($itemsPage);
 
         $videos = $cm->find_all(
             'Video',
@@ -236,24 +231,22 @@ switch ($action) {
         $tpl->assign('total_incategory', '9');
         $html = $tpl->fetch('video/partials/_widget_video_incategory.tpl');
         echo $html;
-        exit(0);
-
         break;
 
     case 'videos_more':
 
-        $video = NULL;
+        $video = null;
 
         $category_name = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
         $page = $request->query->filter('page', 1, FILTER_VALIDATE_INT);
 
         if ($category == '0') {
-            $items_page = 6;
+            $itemsPage = 6;
         } else {
-            $items_page = 3;
+            $itemsPage = 3;
         }
 
-        $_limit = 'LIMIT ' . ($page - 1) * $items_page . ', ' . ($items_page);
+        $_limit = 'LIMIT ' . ($page - 1) * $itemsPage . ', ' . ($itemsPage);
 
         $others_videos = $cm->find_all(
             'Video',
@@ -276,7 +269,6 @@ switch ($action) {
         $tpl->assign('total_more', '4');
         $html = $tpl->fetch('video/partials/_widget_video_more_interesting.tpl');
         echo $html;
-        exit(0);
         break;
 
     default:
