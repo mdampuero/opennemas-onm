@@ -22,7 +22,7 @@ class XcacheCache extends AbstractCache
      */
     public function getIds()
     {
-        $this->_checkAuth();
+        $this->checkAuth();
         $keys = array();
 
         for ($i = 0, $count = xcache_count(XC_TYPE_VAR); $i < $count; $i++) {
@@ -41,15 +41,15 @@ class XcacheCache extends AbstractCache
     /**
      * {@inheritdoc}
      */
-    protected function _doFetch($id)
+    protected function doFetch($id)
     {
-        return $this->_doContains($id) ? unserialize(xcache_get($id)) : false;
+        return $this->doContains($id) ? unserialize(xcache_get($id)) : false;
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function _doContains($id)
+    protected function doContains($id)
     {
         return xcache_isset($id);
     }
@@ -57,7 +57,7 @@ class XcacheCache extends AbstractCache
     /**
      * {@inheritdoc}
      */
-    protected function _doSave($id, $data, $lifeTime = 0)
+    protected function doSave($id, $data, $lifeTime = 0)
     {
         return xcache_set($id, serialize($data), (int) $lifeTime);
     }
@@ -65,7 +65,7 @@ class XcacheCache extends AbstractCache
     /**
      * {@inheritdoc}
      */
-    protected function _doDelete($id)
+    protected function doDelete($id)
     {
         return xcache_unset($id);
     }
@@ -77,12 +77,13 @@ class XcacheCache extends AbstractCache
      * @throws \BadMethodCallException When xcache.admin.enable_auth is On
      * @return void
      */
-    protected function _checkAuth()
+    protected function checkAuth()
     {
         if (ini_get('xcache.admin.enable_auth')) {
             throw new \BadMethodCallException(
                 'To use all features of \Onm\Common\Cache\XcacheCache, '
-                .'you must set "xcache.admin.enable_auth" to "Off" in your php.ini.'
+                .'you must set "xcache.admin.enable_auth" to '
+                .'"Off" in your php.ini.'
             );
         }
     }

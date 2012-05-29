@@ -53,7 +53,7 @@ class SimpleMenu
 
     }
 
-    private function _getClass($class)
+    private function getClass($class)
     {
         if (isset($class) && !empty($class)) {
 
@@ -61,7 +61,7 @@ class SimpleMenu
         }
     }
 
-    private function _getHref($title, $id, $url, $external = false)
+    private function getHref($title, $id, $url, $external = false)
     {
         if (empty($title) && empty($url)) {
             return;
@@ -84,7 +84,7 @@ class SimpleMenu
         return "<a href=\"$url\" $target $attrTitle $attrId>".$title."</a>";
     }
 
-    private function _checkAcl($privilege)
+    private function checkAcl($privilege)
     {
         if (isset($privilege) && !is_null($privilege)) {
             $privileges = explode(',', $privilege);
@@ -104,16 +104,16 @@ class SimpleMenu
      *
      * @param $element
      */
-    private function _renderElement($element, $value, $last)
+    private function renderElement($element, $value, $last)
     {
         $output =  array();
         switch ($element) {
             case 'submenu':
-                $output []= $this->_renderSubMenu($element, $value, $last);
+                $output []= $this->renderSubMenu($element, $value, $last);
                 break;
 
             case 'node':
-                $output []= $this->_renderNode($value, $last);
+                $output []= $this->renderNode($value, $last);
                 break;
 
             default:
@@ -129,19 +129,19 @@ class SimpleMenu
      *
      * @return void
      **/
-    private function _renderSubMenu($element, $value, $last)
+    private function renderSubMenu($element, $value, $last)
     {
         foreach ($value as $element => $submenuContent) {
-            $element = $this->_renderElement($element, $submenuContent, false);
+            $element = $this->renderElement($element, $submenuContent, false);
             if (!empty($element)) {
                 $output []= $element;
             }
         }
 
         if (count($output) > 0) {
-            $class = $this->_getClass($value['class']);
+            $class = $this->getClass($value['class']);
             $html  = "<li {$class}>"
-                   . $this->_getHref($value['title'],
+                   . $this->getHref($value['title'],
                         'menu_'.$value['id'], $value['link'])
                    . "<ul>".implode("\n", $output)."</ul>"
                    . "</li>";
@@ -155,19 +155,19 @@ class SimpleMenu
      *
      * @return string the html content for a node
      **/
-    private function _renderNode($value, $last)
+    private function renderNode($value, $last)
     {
         $html = null;
-        if ((!isset($value['privilege']) || $this->_checkAcl($value['privilege']))
+        if ((!isset($value['privilege']) || $this->checkAcl($value['privilege']))
             && (\Onm\Module\ModuleManager::isActivated((string) $value['module_name']))
         ) {
             if (($value['privilege']!='ONLY_MASTERS')
                 || ($value['privilege']=='ONLY_MASTERS') && \Acl::isMaster()
             ) {
                 $external = isset($value['target']);
-                $class = $this->_getClass($value['class']);
+                $class = $this->getClass($value['class']);
                 $html .= "<li {$class}>"
-                      . $this->_getHref($value['title'],
+                      . $this->getHref($value['title'],
                             'submenu_'.$value['id'], $value['link'], $external)
                       . "</li>";
             }
@@ -181,10 +181,10 @@ class SimpleMenu
      *
      * @return string the html for the submenu
      **/
-    private function _renderMenuComponent($submenu)
+    private function renderMenuComponent($submenu)
     {
 
-        if ((!isset($submenu['privilege']) || $this->_checkAcl($submenu['privilege']))
+        if ((!isset($submenu['privilege']) || $this->checkAcl($submenu['privilege']))
             && (\Onm\Module\ModuleManager::isActivated((string) $submenu['module_name']))
         ) {
             if (($submenu['privilege']!='ONLY_MASTERS')
@@ -192,9 +192,9 @@ class SimpleMenu
                 && \Acl::isMaster()
             ) {
                 $external = isset($submenu['target']);
-                $class = $this->_getClass($submenu['class']);
+                $class = $this->getClass($submenu['class']);
                 $html.= "<li {$class}>";
-                    $html .= $this->_getHref($submenu['title'],
+                    $html .= $this->getHref($submenu['title'],
                         'submenu_'.$submenu['id'], $submenu['link'], $external);
                 $html.= "</li>";
             }
@@ -217,19 +217,19 @@ class SimpleMenu
             $html = "";
             foreach ($this->_menu as $menu) {
                 // Check if the user can se this menu and module activated
-                if ((!isset($menu['privilege']) || $this->_checkAcl($menu['privilege']))
+                if ((!isset($menu['privilege']) || $this->checkAcl($menu['privilege']))
                     && (\Onm\Module\ModuleManager::isActivated((string) $menu['module_name']))
                 ) {
-                    $class = $this->_getClass($menu['class']);
+                    $class = $this->getClass($menu['class']);
                     $html .= "<li {$class}>"
-                          . $this->_getHref($menu['title'], 'menu_'.$menu['id'], $menu['link']);
+                          . $this->getHref($menu['title'], 'menu_'.$menu['id'], $menu['link']);
 
                     // If there are elements in this submenu and user can see it, print them
                     if ($menu->count() > 0) {
 
                         $html .= "<ul>";
                         foreach ($menu as $submenu) {
-                            $html .= $this->_renderMenuComponent($submenu);
+                            $html .= $this->renderMenuComponent($submenu);
                         }
 
                         $html .= "</ul>";
@@ -261,7 +261,7 @@ class SimpleMenu
 
         $output = '';
         foreach ($this->_menu as $element => $value) {
-            $output []= $this->_renderElement($element, $value, false);
+            $output []= $this->renderElement($element, $value, false);
         }
 
         $menu = "<ul id='menu' class='clearfix'>"
