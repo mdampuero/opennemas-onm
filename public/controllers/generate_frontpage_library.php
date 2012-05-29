@@ -1,9 +1,10 @@
 #!/usr/bin/php5
 <?php
-
 /**
  * Start up and setup the app
 */
+$_SERVER['SERVER_NAME'] ='onm-cronicas.local';
+$_SERVER['REQUEST_URI'] ='/';
 require_once('../bootstrap.php');
 
 /**
