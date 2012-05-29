@@ -38,7 +38,7 @@ class NewsMLG1
             }
 
             $this->_data = simplexml_load_file(
-                $xmlFile, NULL, LIBXML_NOERROR | LIBXML_NOWARNING
+                $xmlFile, null, LIBXML_NOERROR | LIBXML_NOWARNING
             );
             if (!$this->_data) {
                 throw new \Exception(
@@ -65,32 +65,32 @@ class NewsMLG1
         switch ($propertyName) {
 
             case 'id':
-                return (string)$this->getData()->NewsItem->Identification
+                return (string) $this->getData()->NewsItem->Identification
                                     ->NewsIdentifier->NewsItemId;
                 break;
 
             case 'urn':
-                return (string)$this->getData()->NewsItem->Identification
+                return (string) $this->getData()->NewsItem->Identification
                                     ->NewsIdentifier->PublicIdentifier;
                 break;
 
             case 'title':
-                return (string)$this->getData()->NewsItem->NewsComponent
+                return (string) $this->getData()->NewsItem->NewsComponent
                                     ->NewsLines->HeadLine;
                 break;
 
             case 'priority':
                 $rawUrgency =  $this->getData()
-                                    ->xpath("//NewsItem/NewsManagement/Urgency");
+                                ->xpath("//NewsItem/NewsManagement/Urgency");
 
-                return (int)$rawUrgency[0]->attributes()->FormalName;
+                return (int) $rawUrgency[0]->attributes()->FormalName;
                 break;
 
             case 'tags':
                 $rawCategory = $this->getData()->NewsItem->NewsComponent
-                                    ->DescriptiveMetadata
-                                    ->xpath("//Property[@FormalName=\"Tesauro\"]");
-                $rawTags = (string)$rawCategory[0]->attributes()->Value;
+                                ->DescriptiveMetadata
+                                ->xpath("//Property[@FormalName=\"Tesauro\"]");
+                $rawTags = (string) $rawCategory[0]->attributes()->Value;
                 $tagGroups = explode(";", $rawTags);
 
                 $tags = array();
@@ -103,7 +103,7 @@ class NewsMLG1
                 break;
 
             case 'created_time':
-                $originalDate = (string)$this->getData()
+                $originalDate = (string) $this->getData()
                                             ->NewsItem->NewsManagement
                                             ->ThisRevisionCreated;
 
@@ -130,7 +130,7 @@ class NewsMLG1
                          ->NewsEnvelope->SentFrom->Party
                          ->xpath("//Property[@FormalName=\"Organization\"]");
 
-                return (string)$rawAgencyName[0]->attributes()->Value;
+                return (string) $rawAgencyName[0]->attributes()->Value;
                 break;
 
             case 'texts':

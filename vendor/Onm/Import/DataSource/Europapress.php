@@ -49,7 +49,7 @@ class Europapress
             }
 
             $this->_data = simplexml_load_file(
-                $xmlFile, NULL, LIBXML_NOERROR | LIBXML_NOWARNING
+                $xmlFile, null, LIBXML_NOERROR | LIBXML_NOWARNING
             );
             if (!$this->_data) {
                 throw new \Exception(
@@ -228,7 +228,7 @@ class Europapress
 
         $categories = self::getOriginalCategories();
         if (array_key_exists($categoryName, $categories)) {
-            $category = $categories[(string)$categoryName];
+            $category = $categories[(string) $categoryName];
         } else {
             $category = $categoryName;
         }
@@ -267,7 +267,7 @@ class Europapress
         }
         $priorities = self::getOriginalPriorities();
         if (array_key_exists($priority, $priorities)) {
-            $priority = $priorities[(string)$priority];
+            $priority = $priorities[(string) $priority];
         } else {
             $priority = $priority;
         }

@@ -73,7 +73,7 @@ abstract class ResourceAbstract
 
             case 'created_time':
                 $originalDate =
-                    (string)$this->getData()
+                    (string) $this->getData()
                     ->DescriptiveMetadata->DateLineDate;
                 // ISO 8601 doesn't match this date 20111211T103900+0000
                 $originalDate = preg_replace('@\+(\d){4}$@', '', $originalDate);

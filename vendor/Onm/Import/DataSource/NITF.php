@@ -126,7 +126,7 @@ class NITF
         );
         $summary   = "";
         foreach ($summaries[0]->children() as $child) {
-          $summary .= "<p>".sprintf("%s", $child)."</p>";
+            $summary .= "<p>".sprintf("%s", $child)."</p>";
         }
 
         return $summary;
@@ -144,7 +144,7 @@ class NITF
         );
         $body = "";
         foreach ($bodies[0]->children() as $child) {
-          $body .= "<p>".sprintf("%s", $child)."</p>\n";
+            $body .= "<p>".sprintf("%s", $child)."</p>\n";
         }
 
         return $body;
