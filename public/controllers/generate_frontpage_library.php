@@ -5,7 +5,8 @@
 */
 $_SERVER['SERVER_NAME'] ='cronicasdelaemigracion.com';
 $_SERVER['REQUEST_URI'] ='/';
-require_once('../bootstrap.php');
+
+require __DIR__.'/../bootstrap.php';
 
 /**
  * Setup view
