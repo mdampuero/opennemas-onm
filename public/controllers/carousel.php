@@ -1,19 +1,31 @@
 <?php
-if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH']=='XMLHttpRequest')) {
-    /**
-     * Start up and setup the app
-    */
-    require_once('../bootstrap.php');
-}
+/**
+ * This file is part of the Onm package.
+ *
+ * (c)  OpenHost S.L. <developers@openhost.es>
+ *
+ * For the full copyright AND license information, please view the LICENSE
+ * file that was distributed with this source code.
+ **/
+/**
+ * Start up AND setup the app
+*/
+require_once('../bootstrap.php');
 
 $cm = new ContentManager();
-//$cartadirector = $cm->find('Opinion', 'type_opinion=2 and in_home=1 and available=1 and content_status=1', 'ORDER BY created DESC LIMIT 0,1');
 
-$offset  = (isset($_REQUEST['offset']) && ($_REQUEST['offset']>=0))? $_REQUEST['offset']  : 0;
+$offset  = (isset($_REQUEST['offset']) && ($_REQUEST['offset']>=0))
+                ? $_REQUEST['offset']  : 0;
 $numrows = (isset($_REQUEST['numrows']))? $_REQUEST['numrows']: 10;
-$limit   = 'LIMIT '.intval($offset*$numrows).','.($numrows+1); // 10+1 to control if it's lastest row data
+// 10+1 to control if it's lastest row data
+$limit   = 'LIMIT '.intval($offset*$numrows).','.($numrows+1);
 
-$opinions = $cm->find('Opinion',' opinions.type_opinion=0 and contents.available=1 and contents.content_status=1 and contents.in_home=1', 'ORDER BY position ASC, created DESC '.$limit);
+$opinions = $cm->find('Opinion',
+    ' opinions.type_opinion=0 AND contents.available=1 '
+    .'AND contents.content_status=1 AND contents.in_home=1',
+    'ORDER BY position ASC, created DESC '
+    .$limit
+);
 
 $items = array();
 
@@ -28,11 +40,12 @@ if (!empty($opinions)) {
         $obj->title     = stripslashes($opinion->title);
         $obj->author    = stripslashes($author->name);
         $obj->condition = stripslashes($author->condition);
-        $obj->photo     = $author->cache->get_photo($opinion->fk_author_img_widget)->path_img; // fk_author_img_widget
+        $obj->photo     = $author->cache->get_photo(
+            $opinion->fk_author_img_widget)->path_img; // fk_author_img_widget
 
         $items[] = $obj;
     }
-    $autores  = $author->cache->all_authors(NULL,'ORDER BY name');
+    $autores  = $author->cache->all_authors(null, 'ORDER BY name');
     $tpl->assign('carousel_autores', $autores);
 }
 $isLastest = true;
@@ -47,7 +60,9 @@ $data->items = $items;
 $data->isLastest = $isLastest;
 
 // Petición desde ajax
-if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH']=='XMLHttpRequest')) {
+if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])
+    && ($_SERVER['HTTP_X_REQUESTED_WITH']=='XMLHttpRequest')
+) {
     header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
     header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
     header('Content-type: application/json');
@@ -60,15 +75,20 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH
 $tpl->assign('carousel_data', $data);
 
 // Director
-$director = $cm->find('Opinion',' opinions.type_opinion=2 and contents.in_home=1 and contents.available=1 and contents.content_status=1', 'ORDER BY created DESC LIMIT 0,1');
-if ( isset($director[0]) ) {
+$director = $cm->find('Opinion',
+    ' opinions.type_opinion=2 AND contents.in_home=1 AND contents.available=1 '
+    .'AND contents.content_status=1',
+    'ORDER BY created DESC LIMIT 0,1'
+);
+if (isset($director[0])) {
     $tpl->assign('carousel_director', $director[0]);
 }
 
 // Editorial
-$editorial = $cm->find('Opinion','opinions.type_opinion=1 and contents.in_home=1 and contents.available=1  and contents.content_status=1', 'ORDER BY position ASC, created DESC LIMIT 0,2');
+$editorial = $cm->find('Opinion',
+    'opinions.type_opinion=1 AND contents.in_home=1 AND contents.available=1 '
+    .'AND contents.content_status=1',
+    'ORDER BY position ASC, created DESC LIMIT 0,2'
+);
 $tpl->assign('carousel_editorial', $editorial);
-
-//$autores = $cm->find('Author',' type_opinion=2 and in_home=1 and available=1 and content_status=1', 'ORDER BY ');
-//$author = new Author();
 

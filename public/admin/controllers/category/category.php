@@ -162,7 +162,7 @@ if( isset($_REQUEST['action']) ) {
             if($category->create( $_POST )) {
                 $user = new User();
                 $user->addCategoryToUser($_SESSION['userid'],$category->pk_content_category);
-                $_SESSION['accesscategories'] = $user->get_access_categories_id($_SESSION['userid']);
+                $_SESSION['accesscategories'] = $user->getAccessCategoryIds($_SESSION['userid']);
 
                 $ccm->reloadCategories();
             }
@@ -181,7 +181,7 @@ if( isset($_REQUEST['action']) ) {
             if($category->delete( $_POST['id'] )) {
                 $user = new User();
                 $user->delCategoryToUser($_SESSION['userid'],$_POST['id']);
-                $_SESSION['accesscategories'] = $user->get_access_categories_id($_SESSION['userid']);
+                $_SESSION['accesscategories'] = $user->getAccessCategoryIds($_SESSION['userid']);
 
                 $ccm->reloadCategories();
                 $msg = _("Categoy deleted successfully");
@@ -245,7 +245,7 @@ if( isset($_REQUEST['action']) ) {
                if($category->create( $_POST )) {
                 $user = new User();
                 $user->addCategoryToUser($_SESSION['userid'],$category->pk_content_category);
-                $_SESSION['accesscategories'] = $user->get_access_categories_id($_SESSION['userid']);
+                $_SESSION['accesscategories'] = $user->getAccessCategoryIds($_SESSION['userid']);
 
                    $ccm->reloadCategories();
                }

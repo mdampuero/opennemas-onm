@@ -229,28 +229,27 @@ class Special extends Content
 
     public function saveItems($data)
     {
-        $this->delete_all_contents($data['id']);
+        $this->deleteAllContents($data['id']);
         if (isset($data['noticias_left'])) {
             $tok = strtok($data['noticias_left'], ",");
             $name = "";
             $pos = 1;
             $contentType = 'Article';
             while (($tok !== false) AND ($tok !=" ")) {
-                // $this->delete_contents($data['id'] ,$tok)  	;
-                $this->set_contents($data['id'] , $tok, $pos, $name, $contentType);
+                // $this->deleteContents($data['id'] ,$tok)  	;
+                $this->set_contents($data['id'], $tok, $pos, $name, $contentType);
                 $tok = strtok(",");
                 $pos+=2;
             }
         }
 
         if (isset($data['noticias_right'])) {
-            $tok = strtok($data['noticias_right'],",");
+            $tok = strtok($data['noticias_right'], ",");
             $name = "";
             $pos = 2;
             $contentType = 'Article';
             while (($tok !== false) AND ($tok !=" ")) {
-                //   $this->delete_contents($data['id'] ,$tok)  	;
-                $this->set_contents($data['id'] , $tok, $pos, $name,  $contentType);
+                $this->set_contents($data['id'], $tok, $pos, $name, $contentType);
                 $tok = strtok(",");
                 $pos+=2;
             }
@@ -319,7 +318,7 @@ class Special extends Content
     }
 
     // Elimina contenidos dentro de un modulo
-    public function delete_contents($id, $contentId)
+    public function deleteContents($id, $contentId)
     {
         if (is_null($id)) {
             return false;
@@ -335,7 +334,7 @@ class Special extends Content
         }
     }
 
-    public function delete_all_contents($id)
+    public function deleteAllContents($id)
     {
         if (is_null($id)) {
             return false;

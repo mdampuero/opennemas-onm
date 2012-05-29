@@ -88,7 +88,7 @@ switch($action) {
 
         $tree = $ccm->getCategoriesTree();
         $tpl->assign('content_categories', $tree);
-        $tpl->assign('content_categories_select', $user->get_access_categories_id());
+        $tpl->assign('content_categories_select', $user->getAccessCategoryIds());
 
 
         $tpl->display('acl/user/new.tpl');

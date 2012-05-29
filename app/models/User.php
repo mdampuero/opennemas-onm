@@ -527,7 +527,7 @@ class User
         return $contentCategories;
     }
 
-    public function get_access_categories_name()
+    public function getAccessCategoriesName()
     {
         if (!empty($this->accesscategories)) {
             foreach ($this->accesscategories as $category) {
@@ -540,7 +540,7 @@ class User
         return null;
     }
 
-    public function get_access_categories_id($id=null)
+    public function getAccessCategoryIds($id=null)
     {
         if ( empty($this->accesscategories) ) {
             $this->accesscategories = $this->readAccessCategories($id);

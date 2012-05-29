@@ -50,7 +50,7 @@ switch ($action) {
                         'isAdmin'          => ( UserGroup::getGroupName($user->fk_user_group)=='Administrador' ),
                         'isMaster'         => ( UserGroup::getGroupName($user->fk_user_group)=='Masters' ),
                         'privileges'       => Privilege::get_privileges_by_user($user->id),
-                        'accesscategories' => $user->get_access_categories_id(),
+                        'accesscategories' => $user->getAccessCategoryIds(),
                         'authMethod'       => $user->authMethod,
                         'default_expire'   => $user->sessionexpire,
                         'csrf'             => md5(uniqid(mt_rand(), true))
