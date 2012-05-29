@@ -30,7 +30,7 @@ class Newsletter
 
     public function __construct($config)
     {
-      $this->setup($config['namespace']);
+        $this->setup($config['namespace']);
     }
 
     public function setup($namespace)
