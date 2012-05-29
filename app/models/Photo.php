@@ -105,6 +105,12 @@ class Photo extends Content
             date("YmdHis").$micro.".".strtolower($filePathInfo['extension']);
         $fileInformation    = new MediaItem($filePath);
 
+        if (!array_key_exists('created', $dataSource)) {
+            $dataSource['created'] = $fileInformation->mtime;
+        }
+        if (!array_key_exists('changed', $dataSource)) {
+            $dataSource['changed'] = $fileInformation->mtime;
+        }
         // Building information for the photo image
         $data = array(
             'title'        => $dataSource["title"],
