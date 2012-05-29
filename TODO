@@ -6,6 +6,10 @@ General
 - Include the logger initialization into the container and make use of it
 - Include the mailer initialization into the container and make use of it
   (maybe using the Swift Mailer library)
+- Due to Jenkins changes some files in backend was touched. We must review new
+controllers to find changes. The next lines are the files changed from the commit
+before changes happend to the commit that master was merged into symfony-router
+git diff --name-only e7671812699af6da10fb30b2212673948bd018fc 67180574cd98d75e0a60b7c0459f92a2a1a36731|grep php
 
 Onm\Framework\Controller
 ------------------------
