@@ -110,14 +110,14 @@ switch ($action) {
 
                 // get all the authors of opinions
                 if (!isset ($author)) {
-                    $articles_home = $cm->find_listAuthors(
+                    $articles_home = $cm->getOpinionArticlesWithAuthorInfo(
                         'contents.available=1 and contents.content_status=1',
                         'ORDER BY created DESC LIMIT 0,50'
                     );
                 } else {
                     // get articles for the author in opinion
 
-                    $articles_home = $cm->find_listAuthors(
+                    $articles_home = $cm->getOpinionArticlesWithAuthorInfo(
                         'opinions.fk_author='.((int) $author)
                         .' AND  contents.available=1  '
                         .'AND contents.content_status=1',
