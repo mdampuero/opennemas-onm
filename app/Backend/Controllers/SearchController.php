@@ -69,7 +69,7 @@ class SearchController extends Controller
             $htmlChecks     = null;
             $contentTypesChecked = $this->_checkTypes($htmlChecks);
             $szTags         = trim($stringSearch);
-            $objSearch      = \cSearch::Instance();
+            $objSearch      = new \cSearch();
             $contents   = $objSearch->SearchContentsSelectMerge(
                 "contents.title as titule, contents.metadata, contents.slug,
                 contents.description, contents.created, contents.pk_content as id,
@@ -87,8 +87,8 @@ class SearchController extends Controller
 
             foreach ($contents as &$content) {
                 for($ind=0; $ind < sizeof($szTagsArray); $ind++){
-                    $content['titule']   = \StringUtils::ext_str_ireplace($szTagsArray[$ind], '<span style="font-weight:bold; color:blue">$1</span>', $content['titule']);
-                    $content['metadata'] = \StringUtils::ext_str_ireplace($szTagsArray[$ind], '<span style="font-weight:bold; color:blue">$1</span>', $content['metadata']);
+                    $content['titule']   = \Onm\StringUtils::extStrIreplace($szTagsArray[$ind], '<span style="font-weight:bold; color:blue">$1</span>', $content['titule']);
+                    $content['metadata'] = \Onm\StringUtils::extStrIreplace($szTagsArray[$ind], '<span style="font-weight:bold; color:blue">$1</span>', $content['metadata']);
                 }
             }
             $pagination = \Pager::factory(array(
