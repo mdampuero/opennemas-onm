@@ -155,7 +155,7 @@ switch ($action) {
         ));
 
         $html_out=$tpl->fetch('search_advanced/partials/_list.tpl');
-        Application::ajax_out($html_out);
+        Application::ajaxOut($html_out);
 
     break;
 

@@ -304,7 +304,7 @@ switch ($action) {
                 . '</div>';
         }
 
-        Application::ajax_out($output);
+        Application::ajaxOut($output);
     } break;
 
     default: {

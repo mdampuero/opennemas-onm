@@ -193,12 +193,12 @@ switch ($action) {
         $comment_id = $_GET['a'];
 
         if ($ip != $ip_from) {
-            Application::ajax_out("Error no ip vote!");
+            Application::ajaxOut("Error no ip vote!");
         }
 
         $vote = new Vote($comment_id);
         if (is_null($vote)) {
-            Application::ajax_out("Error no  vote value!");
+            Application::ajaxOut("Error no  vote value!");
         }
         $update = $vote->update($vote_value, $ip);
 
@@ -208,7 +208,7 @@ switch ($action) {
             $html_out = "Ya ha votado anteriormente este comentario.";
         }
 
-        Application::ajax_out($html_out);
+        Application::ajaxOut($html_out);
         break;
 
     case 'get_plus':
@@ -263,7 +263,7 @@ switch ($action) {
             }
         }
 
-        Application::ajax_out($output);
+        Application::ajaxOut($output);
         break;
 
     case 'print':

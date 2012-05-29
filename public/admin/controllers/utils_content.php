@@ -32,7 +32,7 @@ if (isset($_REQUEST['action']) ) {
 
             $tags = $cat." ".$_GET['title']." ".$_GET['tags'];
             $tags = StringUtils::get_tags($tags);
-            Application::ajax_out($tags);
+            Application::ajaxOut($tags);
 
             break;
 
@@ -68,7 +68,7 @@ if (isset($_REQUEST['action']) ) {
             $tpl->assign('category', $_GET['category']);
             $tpl->assign('home', $_GET['home']);
             $html_out = $tpl->fetch('menu_subcategorys.tpl');
-            Application::ajax_out($html_out);
+            Application::ajaxOut($html_out);
 
             break;
     }

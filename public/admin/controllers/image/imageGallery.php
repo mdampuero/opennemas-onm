@@ -130,6 +130,6 @@ if (\Onm\Module\ModuleManager::isActivated('IMAGE_MANAGER')) {
 
     // AJAX REQUEST
     $htmlOut .= $tpl->fetch('image/image_gallery.ajax.tpl');
-    Application::ajax_out($htmlOut);
+    Application::ajaxOut($htmlOut);
 }
 

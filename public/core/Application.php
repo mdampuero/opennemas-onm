@@ -463,12 +463,10 @@ class Application
     /**
     * Wrapper to output content to AJAX requests
     *
-    *
-    * @access static
     * @param string $htmlout, the content to output
     * @return null
     */
-    public static function ajax_out($htmlout)
+    public static function ajaxOut($htmlout)
     {
         header("Cache-Control: no-cache");
         header("Pragma: nocache");

@@ -605,7 +605,7 @@ if (isset($_REQUEST['action']) ) {
                     $article->update( $_REQUEST );
                 }
             }
-            Application::ajax_out($article->id);
+            Application::ajaxOut($article->id);
         break;
 
         case 'delete':
@@ -1029,7 +1029,7 @@ if (isset($_REQUEST['action']) ) {
              $allcategorys =$ccm->cache->renderCategoriesTree();
              $data=json_encode($allcategorys);
              header('Content-type: application/json');
-             Application::ajax_out($data);
+             Application::ajaxOut($data);
 
 
         break;
@@ -1044,7 +1044,7 @@ if (isset($_REQUEST['action']) ) {
             $_REQUEST['permalink'] = $content->put_permalink($content->id, $content_type, $_REQUEST['title'], $content->category) ;
             $fields = array('title','permalink','fk_user_last_editor');
             SqlHelper::bindAndUpdate('contents', $fields, $_REQUEST, $filter);
-            Application::ajax_out('ok');
+            Application::ajaxOut('ok');
          break;
 
         case 'update_agency':
@@ -1057,7 +1057,7 @@ if (isset($_REQUEST['action']) ) {
             $fields = array('agency');
             SqlHelper::bindAndUpdate('articles', $fields, $_REQUEST, $filter);
 
-            Application::ajax_out('ok');
+            Application::ajaxOut('ok');
         break;
 
         case 'update_category':
@@ -1074,7 +1074,7 @@ if (isset($_REQUEST['action']) ) {
             $fields2 = array('pk_fk_content_category','catName');
             SqlHelper::bindAndUpdate('contents_categories', $fields2, $_REQUEST, $filter2);
 
-            Application::ajax_out('ok');
+            Application::ajaxOut('ok');
         break;
 
         case 'clone': {
@@ -1177,7 +1177,7 @@ if (isset($_REQUEST['action']) ) {
             ));
 
             $htmlOut = $tpl->fetch("common/content_provider/_container-content-list.tpl");
-            Application::ajax_out($htmlOut);
+            Application::ajaxOut($htmlOut);
 
             break;
 
@@ -1218,7 +1218,7 @@ if (isset($_REQUEST['action']) ) {
             ));
 
             $htmlOut = $tpl->fetch("common/content_provider/_container-content-list.tpl");
-            Application::ajax_out($htmlOut);
+            Application::ajaxOut($htmlOut);
 
             break;
 
@@ -1244,7 +1244,7 @@ if (isset($_REQUEST['action']) ) {
             ));
 
             $htmlOut = $tpl->fetch("common/content_provider/_container-content-list.tpl");
-            Application::ajax_out($htmlOut);
+            Application::ajaxOut($htmlOut);
 
             break;
 

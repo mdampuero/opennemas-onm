@@ -12,7 +12,7 @@ require_once '../bootstrap.php';
 
 $action = filter_input(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
 if ($action != 'rating') {
-    Application::ajax_out(_("Action not recognized!"));
+    Application::ajaxOut(_("Action not recognized!"));
 }
 
 $ip        = $_SERVER['REMOTE_ADDR'];
@@ -22,14 +22,14 @@ $page      = filter_input(INPUT_GET, 'p', FILTER_SANITIZE_STRING);
 $articleId = filter_input(INPUT_GET, 'a', FILTER_SANITIZE_STRING);
 
 if ($ip != $ipFrom) {
-    Application::ajax_out(_("Problem with IP verification!"));
+    Application::ajaxOut(_("Problem with IP verification!"));
 }
 
 //Comprobamos que exista el artículo que se quiere votar
 $content = new Content($articleId);
 
 if (is_null($content->id)) {
-    Application::ajax_out(_("Content not available"));
+    Application::ajaxOut(_("Content not available"));
 }
 
 $rating = new Rating($content->id);
@@ -41,4 +41,4 @@ if ($update) {
     $output = _("You have voted this new previously.");
 }
 
-Application::ajax_out($output);
+Application::ajaxOut($output);

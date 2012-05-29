@@ -184,7 +184,7 @@ switch ($action) {
         $tags = $request->query->filter('data', '', FILTER_SANITIZE_STRING);
 
         $tags = StringUtils::get_tags($tags);
-        Application::ajax_out($tags);
+        Application::ajaxOut($tags);
         break;
 
 

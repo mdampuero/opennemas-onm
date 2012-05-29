@@ -97,5 +97,5 @@ if (\Onm\Module\ModuleManager::isActivated('VIDEO_MANAGER')) {
 
     $htmlOut .= $tpl->fetch('video/video_gallery.ajax.tpl');
 
-    Application::ajax_out($htmlOut);
+    Application::ajaxOut($htmlOut);
 }

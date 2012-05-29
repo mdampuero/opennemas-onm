@@ -170,7 +170,7 @@ switch ($action) {
         }  else {
             $html_out = _("Please check the video url, seems to be incorrect");
         }
-        Application::ajax_out($html_out);
+        Application::ajaxOut($html_out);
 
 
         break;
@@ -470,7 +470,7 @@ switch ($action) {
                     ));
 
         $html_out = $tpl->fetch("common/content_provider/_container-content-list.tpl");
-        Application::ajax_out($html_out);
+        Application::ajaxOut($html_out);
 
     break;
 

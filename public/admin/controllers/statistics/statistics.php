@@ -216,7 +216,7 @@ if(isset($action) ) {
                 $html_output = Dashboard::votedTable($items, $title);
             }
 
-            Application::ajax_out("$html_output");
+            Application::ajaxOut("$html_output");
             break;
 
         default:

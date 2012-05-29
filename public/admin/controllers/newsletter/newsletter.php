@@ -148,7 +148,7 @@ switch($action) {
         $html = htmlspecialchars($html, ENT_QUOTES);
         $_SESSION['newsletterHtml'] = $html;
 
-        Application::ajax_out('ok');
+        Application::ajaxOut('ok');
 
    /**
      * Step: preview the message
