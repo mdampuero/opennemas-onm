@@ -25,7 +25,7 @@ require_once('./albums_events.php');
 
 $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 
-$page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT);
+$page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT, array('options' => array('default' => '1')));
 $tpl->assign('page', $page);
 /******************* GESTION CATEGORIAS  *****************************/
 $contentType = Content::getIDContentType('album');
@@ -61,10 +61,11 @@ switch($action) {
         $configurations = s::get('album_settings');
 
         $items_page = s::get('items_per_page') ?: 20;
+
         if (empty($page)) {
             $limit= "LIMIT ".($items_page+1);
         } else {
-            $limit= "LIMIT ".($page-1) * $items_page .', '.$items_page;
+            $limit= "LIMIT ".($page-1) * $items_page .', '.($items_page+1);
         }
 
         $cm = new ContentManager();
@@ -107,6 +108,10 @@ switch($action) {
             'total' => count($albums),
             'url'   => $_SERVER['SCRIPT_NAME'].'?action=list&category='.$category
         ));
+
+        if ( count($albums) > $items_page ) {
+            array_pop($albums);
+        }
 
         $tpl->assign(array(
             'pagination' => $pagination,
