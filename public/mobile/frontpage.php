@@ -26,7 +26,7 @@ list($category_name, $subcategory_name) = $ccm->normalize($category_name, $subca
 
 if(($category_name!='home') && ($category_name!='')) {
     if($ccm->isEmpty($category_name) && is_null($subcategory_name)) {
-        $subcategory_name = $ccm->get_first_subcategory($ccm->get_id($category_name));
+        $subcategory_name = $ccm->getFirstSubcategory($ccm->get_id($category_name));
         if(is_null($subcategory_name)){
             Application::forward301('/mobile/');
         } else {

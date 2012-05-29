@@ -35,7 +35,7 @@ if(isset($_REQUEST['action']) ) {
 		case 'list':
 			$cm = new ContentManager();
 
-			$types_content = $cm->get_types();
+			$types_content = $cm->getContentTypes();
 
 			$tpl->assign('types_content', $types_content);
 

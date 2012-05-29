@@ -68,7 +68,7 @@ switch($action) {
             $fullcat = $ccm->order_by_posmenu($ccm->categories);
 
             foreach($parentCategories as $k => $v) {
-                $num_photos[$k]= $ccm->count_content_by_type($v->pk_content_category, $contentType);
+                $num_photos[$k]= $ccm->countContentByType($v->pk_content_category, $contentType);
                 $total_num_photos += $num_photos[$k];
                 $files[$v->pk_content_category] = $cm->find_all('Attachment',
                                          'fk_content_type = 3 AND category = '.$v->pk_content_category ,
@@ -76,7 +76,7 @@ switch($action) {
                 if(!empty($fullcat)){
                     foreach($fullcat as $child) {
                         if($v->pk_content_category == $child->fk_content_category) {
-                            $num_sub_photos[$k][$child->pk_content_category] = $ccm->count_content_by_type($child->pk_content_category, 3);
+                            $num_sub_photos[$k][$child->pk_content_category] = $ccm->countContentByType($child->pk_content_category, 3);
                             $total_num_photos += $num_sub_photos[$k][$child->pk_content_category];
                             $sub_files[$child->pk_content_category][] = $cm->find_all('Attachment',
                                              'fk_content_type = 3 AND category = '.$child->pk_content_category ,

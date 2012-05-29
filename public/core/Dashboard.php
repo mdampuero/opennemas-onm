@@ -30,7 +30,7 @@ class Dashboard
                 'permalink'  => Uri::generate('article', array(
                     'id'       => $content->id,
                     'date'     => date('Y-m-d', strtotime($content->created)),
-                    'category' => $cm->get_categoryName_by_contentId($content->id),
+                    'category' => $cm->getCategoryNameByContentId($content->id),
                     'slug'     => StringUtils::get_title($content->title),
                 )),
 

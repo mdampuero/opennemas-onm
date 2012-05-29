@@ -133,13 +133,13 @@ class ContentCategoryManager
         return array($categoryName, $subcategoryName);
     }
 
- /**
+    /**
      * find objects of category and subcategory
      *
      * @param $filter - filter of sql
      * @param $order_by
      * @return array Return category objects
-    */
+     */
     public function find($filter = null, $orderBy = 'ORDER BY 1')
     {
         $items = array();
@@ -166,22 +166,6 @@ class ContentCategoryManager
         return $items;
     }
 
-    /**
-     * find category and subcategory of type content.
-     * @param $fkContentType type of elements category.
-     * @param $filter - filter of sql
-     * @param $order_by
-     * @return array Return category objects
-    */
-    public function find_by_type(
-        $fkContentType,
-        $filter    = null,
-        $orderBy ='ORDER BY 1'
-    ) {
-        $_where = 'fk_content_type='. $fkContentType .' ';
-
-        return $this->find($_where);
-    }
 
     //Devuelve el nombre de una categoria para los upload y posible las urls
     public function get_name($id)
@@ -398,41 +382,6 @@ class ContentCategoryManager
         return $items;
     }
 
-    // Returns an all cetegories array
-    public function get_all_categoriesID()
-    {
-        if (is_null($this->categories)) {
-            $sql = 'SELECT pk_content_category '
-                 . 'FROM content_categories WHERE internal_category=1';
-            $rs = $GLOBALS['application']->conn->Execute($sql);
-
-            if (!$rs) {
-                \Application::logDatabaseError();
-
-                return;
-            }
-            $items = array ();
-            while (!$rs->EOF) {
-                $str = $rs->fields['pk_content_category'];
-                $items[$str] = $str;
-                $rs->MoveNext();
-            }
-
-            return $items;
-        }
-
-        // Singleton version
-        $items = array();
-        foreach ($this->categories as $category) {
-            if ($category->internal_category == 1) {
-                $items[$category->pk_content_category] =
-                    $category->pk_content_category;
-            }
-        }
-
-        return $items;
-    }
-
     //Returns an array with subcetegories from a single category
     //with internal_name as index
     public function get_all_subcategories($id)
@@ -481,42 +430,49 @@ class ContentCategoryManager
     {
         $categories = array_values($categories);
 
-        usort($categories, function($a, $b) {
-            if ($b->inmenu == 0) {
-                return 0;
-            }
-            if ($a->inmenu == 0) {
-                return +1;
-            }
-            if ($a->posmenu == $b->posmenu) {
+        usort(
+            $categories,
+            function($a, $b)
+            {
+                if ($b->inmenu == 0) {
+                    return 0;
+                }
+                if ($a->inmenu == 0) {
+                    return +1;
+                }
+                if ($a->posmenu == $b->posmenu) {
 
-            }
+                }
 
-            return ($a->posmenu > $b->posmenu) ? +1 : -1;
-        });
+                return ($a->posmenu > $b->posmenu) ? +1 : -1;
+            }
+        );
 
         return $categories;
     }
 
-    public function group_by_type($categories)
+    public function groupByType($categories)
     {
         $categories = array_values($categories);
 
-        usort($categories, function ($a, $b) {
-            //Las que no están en el menú colocarlas al final
-            if ($b->internal_category == 0) {
-                 return 0;
-            }
-            if ($a->internal_category == 0) {
-                 return +1;
-            }
-            if ($a->internal_category == $b->internal_category) {
-                return ($a->posmenu > $b->posmenu) ? +1 : -1;
-            }
+        usort(
+            $categories,
+            function ($a, $b) {
+                //Las que no están en el menú colocarlas al final
+                if ($b->internal_category == 0) {
+                     return 0;
+                }
+                if ($a->internal_category == 0) {
+                     return +1;
+                }
+                if ($a->internal_category == $b->internal_category) {
+                    return ($a->posmenu > $b->posmenu) ? +1 : -1;
+                }
 
-            return ($a->internal_category < $b->internal_category) ? 1 : +1;
+                return ($a->internal_category < $b->internal_category) ? 1 : +1;
 
-        });
+            }
+        );
 
         return $categories;
     }
@@ -578,7 +534,8 @@ class ContentCategoryManager
                 $tree[$i]->pk_content_category = $category->pk_content_category;
                 $tree[$i]->title = ' '. $category->title;
                 $i++;
-                if (!empty($category->childNodes)) { //subcategorys
+                if (!empty($category->childNodes)) {
+                    //subcategorys
                     foreach ($category->childNodes as $subcat) {
                         $tree[$i] = new stdClass();
                         $tree[$i]->pk_content_category =
@@ -634,7 +591,7 @@ class ContentCategoryManager
     }
 
     //Returns first subcategory from a father category_id
-    public function get_first_subcategory($categoryId)
+    public function getFirstSubcategory($categoryId)
     {
         if ( is_null($this->categories) ) {
             $sql = 'SELECT name FROM content_categories
@@ -764,12 +721,14 @@ class ContentCategoryManager
         return $rs->fields['number'] == 0 && $rs1->fields[0] == 0;
     }
 
+
+
     /**
      * Returns true if there is no contents in that category id
      *
      * @return boolean
      **/
-    public function is_Empty($category)
+    public function isEmptyByCategoryId($category)
     {
         $sql1 = 'SELECT count(pk_content) AS number
             FROM `contents`, `contents_categories`
@@ -790,7 +749,7 @@ class ContentCategoryManager
         return $number == 0;
     }
 
-    public function count_content_by_type($category, $type)
+    public function countContentByType($category, $type)
     {
         $sql = 'SELECT count(pk_content) AS number
              FROM `contents`,`contents_categories`
@@ -809,9 +768,9 @@ class ContentCategoryManager
 
     /**
      *
-     * @see ContentCategoryManager::count_content_by_type
+     * @see ContentCategoryManager::countContentByType
      **/
-    public function count_content_by_type_group($type, $filter=null)
+    public function countContentsByGroupType($type, $filter=null)
     {
         $_where = '1=1';
         if (!is_null($filter)) {
@@ -868,7 +827,7 @@ class ContentCategoryManager
         return $groups;
     }
 
-    public function data_media_by_type_group($filter=null)
+    public function dataMediaByTypeGroup($filter=null)
     {
         $_where = '1=1';
         if (!is_null($filter)) {
@@ -899,6 +858,7 @@ class ContentCategoryManager
 
         return $groups;
     }
+
     /**
      * Order array of category menu and submenues.
      * Get category info if there is one selected or get first category info
@@ -918,12 +878,12 @@ class ContentCategoryManager
         //$categoryData is the info of the category selected
 
 
-       //$fullcat = $this->order_by_posmenu($this->categories);
-        $fullcat = $this->group_by_type($this->categories);
+        //$fullcat = $this->order_by_posmenu($this->categories);
+        $fullcat = $this->groupByType($this->categories);
 
         $parentCategories = array();
         $categoryData = array();
-        foreach ( $fullcat as $prima) {
+        foreach ($fullcat as $prima) {
 
             if (!empty($category)
                 && ($prima->pk_content_category == $category)
@@ -959,7 +919,7 @@ class ContentCategoryManager
     }
 
 
-   /**
+    /**
      *
      * Get array with subcategories info from a category id
      *

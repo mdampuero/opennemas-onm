@@ -61,9 +61,9 @@ class ContentManager
 
     public function find(
         $contentType,
-        $filter=null,
-        $orderBy='ORDER BY 1',
-        $fields='*'
+        $filter  = null,
+        $orderBy = 'ORDER BY 1',
+        $fields  = '*'
     ) {
         $this->init($contentType);
         $items = array();
@@ -151,7 +151,8 @@ class ContentManager
     * This is used for HomePages, fetches all the contents assigned for it and
     * allows to render an entire homepage
     *
-    * @param  type $category_id, the id of the category we want to get contents from
+    * @param  type $category_id the id of the category we want
+    *                            to get contents from
     * @return mixed, array of contents
     */
     public function getContentsForHomepageOfCategory($categoryID)
@@ -196,7 +197,6 @@ class ContentManager
 
         // Return all the objects of contents initialized
         return $contents;
-
     }
 
 
@@ -302,7 +302,10 @@ class ContentManager
         $GLOBALS['application']->conn->StartTrans();
 
         // Clean all the contents for this category after insert the new ones
-        if (!ContentManager::clearContentPositionsForHomePageOfCategory($categoryID)) {
+        $clean = ContentManager::clearContentPositionsForHomePageOfCategory(
+            $categoryID
+        );
+        if (!$clean) {
             return false;
         }
 
@@ -319,13 +322,13 @@ class ContentManager
             }
 
             // construct the final sql statement and execute it
-            $stmt =  'INSERT INTO content_positions (pk_fk_content, fk_category, '
-                  . 'position, placeholder, content_type) '
+            $stmt = 'INSERT INTO content_positions (pk_fk_content, fk_category,'
+                  . ' position, placeholder, content_type) '
                   . 'VALUES (?,?,?,?,?)';
 
-            $sqlPrepared = $GLOBALS['application']->conn->Prepare($stmt);
+            $sqlPrep = $GLOBALS['application']->conn->Prepare($stmt);
 
-            $rs = $GLOBALS['application']->conn->Execute($sqlPrepared, $positions);
+            $rs = $GLOBALS['application']->conn->Execute($sqlPrep, $positions);
 
             // Handling if there were some errors into the execution
             if (!$rs) {
@@ -566,8 +569,9 @@ class ContentManager
         $_tables = '`contents`, `'.$this->table.'` ';
         $_where  = '`contents`.`in_litter`=0 ';
         if (!$all) {
-          //  $_where .= 'AND `contents`.`content_status`=1 AND `contents`.`available`=1 ';
-              $_where .= '  AND `contents`.`available`=1 ';
+            //  $_where .= 'AND `contents`.`content_status`=1
+            //  AND `contents`.`available`=1 ';
+            $_where .= '  AND `contents`.`available`=1 ';
         }
         $_days     = 'AND  `contents`.`created`>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
         $_order_by = 'ORDER BY `contents`.`content_status` DESC, `contents`.`views` DESC LIMIT '.$num;
@@ -743,13 +747,16 @@ class ContentManager
             }
         }
 
-        uasort($articles, function($a, $b) {
-            if ($a['num'] == $b['num']) {
-                return 0;
-            }
+        uasort(
+            $articles,
+            function($a, $b) {
+                if ($a['num'] == $b['num']) {
+                    return 0;
+                }
 
-            return ($a['num'] > $b['num']) ? -1 : 1;
-        });
+                return ($a['num'] > $b['num']) ? -1 : 1;
+            }
+        );
 
         return $articles;
     }
@@ -888,7 +895,8 @@ class ContentManager
             return array();
         }
 
-        $sql = 'SELECT * FROM `contents` WHERE `pk_content` IN('.$pk_comment_list.')';
+        $sql = 'SELECT * FROM `contents` '
+             . 'WHERE `pk_content` IN('.$pk_comment_list.')';
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
@@ -938,6 +946,8 @@ class ContentManager
 
     public function getLatestComments($num = 6)
     {
+        $contents = array();
+
         $sql = 'SELECT *
                 FROM contents
                 WHERE contents.fk_content_type=1 AND contents.pk_content IN
@@ -949,13 +959,11 @@ class ContentManager
                        ORDER BY pk_comment DESC)
                 ORDER BY contents.created DESC
                 LIMIT '. $num;
-        $contents = array();
 
-
-        $latestCommenteContentSQL = $GLOBALS['application']->conn->Prepare($sql);
-        $rs = $GLOBALS['application']->conn->Execute($latestCommenteContentSQL);
+        $latestCommenteSQL = $GLOBALS['application']->conn->Prepare($sql);
+        $rs = $GLOBALS['application']->conn->Execute($latestCommenteSQL);
         if (!$rs) {
-            //echo $GLOBALS['application']->conn->ErrorMsg();
+            \Application::logDatabaseError();
         } else {
             while (!$rs->EOF) {
                 $contents []= $rs->fields['pk_content'];
@@ -1220,15 +1228,16 @@ class ContentManager
             }
         }
 
-        function cmp($a, $b)
-        {
-            if ($a['num'] == $b['num']) {
-                return 0;
-            }
+        uasort(
+            $articles,
+            function ($a, $b) {
+                if ($a['num'] == $b['num']) {
+                    return 0;
+                }
 
-            return ($a['num'] > $b['num']) ? -1 : 1;
-        }
-        uasort($articles, 'cmp');
+                return ($a['num'] > $b['num']) ? -1 : 1;
+            }
+        );
 
         return $articles;
     }
@@ -1349,7 +1358,7 @@ class ContentManager
                  .'`.`pk_'.strtolower($this->content_type)
                  . '` AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` ';
         } else {
-           $sql = 'SELECT COUNT(contents.pk_content) AS total '
+            $sql = 'SELECT COUNT(contents.pk_content) AS total '
                 . 'FROM `contents`, `'.$this->table.'` '
                 . 'WHERE '.$_where
                 .' AND `contents`.`pk_content`=`'.$this->table
@@ -1401,7 +1410,8 @@ class ContentManager
         if (!is_null($filter)) {
             if ($filter == ' `contents`.`in_litter`=1'
                || $filter == 'in_litter=1'
-            ) { //se busca desde la litter.php
+            ) {
+                //se busca desde la litter.php
                 $_where = $filter;
             } else {
                 $_where = ' `contents`.`in_litter`=0 AND '.$filter;
@@ -1560,40 +1570,6 @@ class ContentManager
         }
 
         return( $items );
-    }
-
-
-    //Find title, date and slug from category id.
-    // Assing values to new object call Headline
-    // TODO: I think that this method is no used anymore
-    public function find_category_headline(
-        $pkFkContentCategory,
-        $filter=null,
-        $orderBy = 'ORDER BY 1'
-    ) {
-        $where = 'in_litter=0';
-        if (!is_null($filter) ) {
-            if ( preg_match('/in_litter=1/i', $filter) ) {
-                //se busca desde la litter.php
-                $where = $filter;
-            } else {
-                $where = $filter.' AND in_litter=0';
-            }
-        }
-
-        $sql = 'SELECT contents.pk_content, contents.title, contents.slug,
-                       contents.created, contents.changed, contents.starttime,
-                       contents.endtime
-                FROM contents_categories, contents '
-             . 'WHERE contents.fk_content_type=1 and '.$where
-             . ' AND pk_fk_content_category=\'' . $pkFkContentCategory.'\''
-             . ' AND  pk_fk_content = pk_content '.$orderBy;
-
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        $items = $this->loadObject($rs, 'Headline');
-
-        return $items;
     }
 
 
@@ -1875,75 +1851,8 @@ class ContentManager
         return $result;
     }
 
-
-    // admin - article.php - search related.
-    //FIXME: unificar todos los paginates
-    public function paginate_array_num_js(
-        $items,
-        $numPages,
-        $delta,
-        $funcion,
-        $params='null'
-    ) {
-        $_items = array();
-
-        foreach ($items as $v) {
-            $_items[] = $v['id'];
-        }
-
-        if (!isset($numPages)) {
-            $numPages = 20;
-        }
-
-        if (!isset($delta)) {
-            $delta = 1;
-        }
-
-        if ($params=='null') {
-            $fun = $funcion.'(%d)';
-        } else {
-            $fun = $funcion.'('.$params.',%d)';
-        }
-
-        $items_page = (defined(ITEMS_PAGE))?ITEMS_PAGE: $numPages;
-        //'fileName' => '/opinion/%d'
-
-        $this->pager = &Pager::factory(array(
-            'itemData'      => $_items,
-            'perPage'       => $items_page,
-            'delta'         => $delta,
-            'append'        => true,
-            'separator'     => '|',
-            'spacesBeforeSeparator' => 1,
-            'spacesAfterSeparator' => 1,
-            'clearIfVoid'   => true,
-            'urlVar'        => 'page',
-            'append'        => false,
-            'path'          => '',
-            'fileName'      => 'javascript:'.$fun,
-            'mode'          => 'Sliding',
-
-            'linkClass'     => 'pagination',
-            'altFirst'      => 'primera p&aacute;gina',
-            'altLast'       => '&uacute;ltima p&aacute;gina',
-            'altNext'       => 'p&aacute;gina seguinte',
-            'altPrev'       => 'p&aacute;gina anterior',
-            'altPage'       => 'p&aacute;gina'
-        ));
-        $data  = $this->pager->getPageData();
-
-        $result = array();
-        foreach ($items as $k => $v) {
-            if ( in_array($v['id'], $data) ) {
-                $result[] = $v; // Array 0-n compatible con sections Smarty
-            }
-        }
-
-        return $result;
-    }
-
     //Coge todos los tipos que hay en la tabla
-    public function get_types()
+    public function getContentTypes()
     {
         $items = array();
         $sql   = 'SELECT pk_content_type, name, title FROM content_types ';
@@ -2056,7 +1965,8 @@ class ContentManager
     //Returns cetegory id
     public function get_id($category)
     {
-        $sql = 'SELECT pk_content_category FROM content_categories WHERE name=?';
+        $sql = 'SELECT pk_content_category '
+             . 'FROM content_categories WHERE name=?';
         $rs = $GLOBALS['application']->conn->Execute($sql, array($category));
 
         if (!$rs) {
@@ -2070,7 +1980,7 @@ class ContentManager
 
 
     //Returns categoryName with the content Id
-    public function get_categoryName_by_contentId($contentId)
+    public function getCategoryNameByContentId($contentId)
     {
         $sql = 'SELECT pk_fk_contents_category FROM `contents_categories` '
              . 'WHERE pk_fk_content = ?';

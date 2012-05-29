@@ -32,9 +32,9 @@ if( isset($_REQUEST['action']) ) {
             $num_contents=array();
             $num_sub_contents =array();
             // Contabilizar por grupos
-            $groups['articles'] = $ccm->count_content_by_type_group(1);
-            $groups['photos']   = $ccm->count_content_by_type_group(8);
-            $groups['advertisements'] = $ccm->count_content_by_type_group(2);
+            $groups['articles'] = $ccm->countContentsByGroupType(1);
+            $groups['photos']   = $ccm->countContentsByGroupType(8);
+            $groups['advertisements'] = $ccm->countContentsByGroupType(2);
 
             foreach($allcategorys as $cate) {
                if($cate->internal_category !=0 && $cate->fk_content_category == 0 ) {
