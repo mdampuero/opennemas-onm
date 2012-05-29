@@ -16,7 +16,7 @@ $app->mobileRouter();
 
 // Fetch HTTP variables
 $category_name = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
-$subcategory_name = $request->query->filter('subcategory_name', 'home', FILTER_SANITIZE_STRING);
+$subcategory_name = $request->query->filter('subcategory_name', null, FILTER_SANITIZE_STRING);
 $cache_page = $request->query->filter('page', 0, FILTER_VALIDATE_INT);
 $action = $request->query->filter('action', 'index_rss', FILTER_SANITIZE_STRING);
 
@@ -25,19 +25,15 @@ $tpl = new Template(TEMPLATE_USER);
 //$tpl->setConfig('rss');
 
 switch ($action) {
-        case 'index_rss': {
-
+    case 'index_rss':
         $cacheID = $tpl->generateCacheId('Index', '', "RSS");
 
-         /**
-            * Fetch information for Advertisements
-        */
+        // Fetch information for Advertisements
         require_once "index_advertisement.php";
 
         if (($tpl->caching == 0)
-            || !$tpl->isCached('rss/index.tpl', $cacheID) )
-        {
-
+            || !$tpl->isCached('rss/index.tpl', $cacheID)
+        ) {
             $ccm = ContentCategoryManager::get_instance();
 
             $categoriesTree = $ccm->getCategoriesTreeMenu();
@@ -46,22 +42,19 @@ switch ($action) {
             $tpl->assign('categoriesTree', $categoriesTree);
             $tpl->assign('opinionAuthors', $opinionAuthors);
         }
-
         $tpl->display('rss/index.tpl', $cacheID);
-        exit(0);
-    }
+        break;
 
-    case 'rss': {
-
+    case 'rss':
         // Initialicing variables
         $tpl->setConfig('rss');
         $title_rss = "";
-        $rss_url = SITE_URL;
-        $author = $request->query->filter('author', null, FILTER_SANITIZE_STRING);
+        $rss_url   = SITE_URL;
+        $author    = $request->query->filter('author', null, FILTER_SANITIZE_STRING);
 
         if ((strtolower($category_name)=="opinion")
-            && isset($author))
-        {
+            && isset($author)
+        ) {
             $cache_id = $tpl->generateCacheId($category_name, $subcategory_name, "RSS".$author);
         } else {
             $cache_id = $tpl->generateCacheId($category_name, $subcategory_name, "RSS");
@@ -72,20 +65,19 @@ switch ($action) {
             $cm = new ContentManager();
             // Setting up some variables to print out in the final rss
             if (isset($category_name)
-                && !empty($category_name))
-            {
+                && !empty($category_name)
+            ) {
                 $category = $ccm->get_id($category_name);
                 $rss_url .= $category_name.SS;
                 $title_rss .= $category_name;
 
                 if (isset($subcategory_name)
-                    && !empty($subcategory_name))
-                {
+                    && !empty($subcategory_name)
+                ) {
                     $subcategory = $ccm->get_id($subcategory_name);
                     $rss_url .= $subcategory_name.SS;
                     $title_rss .= " > ".$subcategory_name;
                 }
-
             } else {
                 $rss_url .= "home".SS;
                 $title_rss .= "PORTADA";
@@ -112,20 +104,25 @@ switch ($action) {
                     $article->category_name = $article->loadCategoryName($article->id);
                 }
 
-            // If is opinion
             } elseif ($category_name == 'opinion') {
 
                 $author = $request->query->filter('author', null, FILTER_SANITIZE_STRING);
 
                 // get all the authors of opinions
                 if (!isset ($author)) {
-
-                    $articles_home = $cm->find_listAuthors('contents.available=1 and contents.content_status=1', 'ORDER BY created DESC LIMIT 0,50');
-
-                // get articles for the author in opinion
+                    $articles_home = $cm->getOpinionArticlesWithAuthorInfo(
+                        'contents.available=1 and contents.content_status=1',
+                        'ORDER BY created DESC LIMIT 0,50'
+                    );
                 } else {
+                    // get articles for the author in opinion
 
-                    $articles_home = $cm->find_listAuthors('opinions.fk_author='.((int)$author).' and  contents.available=1  and contents.content_status=1','ORDER BY created DESC  LIMIT 0,50');
+                    $articles_home = $cm->getOpinionArticlesWithAuthorInfo(
+                        'opinions.fk_author='.((int) $author)
+                        .' AND  contents.available=1  '
+                        .'AND contents.content_status=1',
+                        'ORDER BY created DESC  LIMIT 0,50'
+                    );
 
                     if (count($articles_home)) {
                         $title_rss = 'Opiniones de «'.$articles_home[0]['name'].'»';
@@ -138,16 +135,18 @@ switch ($action) {
                     $art['author_name_slug'] = StringUtils::get_title($art['name']);
                 }
 
-            // Get the RSS for the rest of categories
             } else {
+                // Get the RSS for the rest of categories
 
                 // If frontpage contains a SUBCATEGORY the SQL request will be diferent
 
-                $articles_home = $cm->find_by_category_name('Article',
-                                                            $category_name,
-                                                            'contents.content_status=1 AND '
-                                                            .'contents.available=1 AND contents.fk_content_type=1',
-                                                            'ORDER BY created DESC LIMIT 0,50');
+                $articles_home = $cm->find_by_category_name(
+                    'Article',
+                    $category_name,
+                    'contents.content_status=1 AND '
+                    .'contents.available=1 AND contents.fk_content_type=1',
+                    'ORDER BY created DESC LIMIT 0,50'
+                );
 
                 foreach ($articles_home as $i => $article) {
                     if (isset($article->img1) && $article->img1 != 0) {
@@ -172,7 +171,5 @@ switch ($action) {
 
         header('Content-type: application/rss+xml; charset=utf-8');
         $tpl->display('rss/rss.tpl', $cache_id);
-
-        exit(0); // finish execution for don't disturb cache
-    } break;
+        break;
 }

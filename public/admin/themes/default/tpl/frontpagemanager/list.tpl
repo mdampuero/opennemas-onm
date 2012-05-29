@@ -18,6 +18,11 @@
             save_positions: '{url name=admin_frontpage_savepositions category=$category}',
             preview_frontpage: '{url name=admin_frontpage_preview category=$category}'
         };
+        var content_states = {
+            {foreach from=$frontpage_articles item=content}
+            {$content->id}: {$content->getQuickInfo()|json_encode},
+            {/foreach}
+        }
     </script>
     {script_tag src="/jquery-onm/jquery.frontpagemanager.js"}
 {/block}

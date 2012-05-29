@@ -44,7 +44,7 @@ class TrashController extends Controller
     public function defaultAction()
     {
         $cm           = new \ContentManager();
-        $contentTypes = $cm->get_types();
+        $contentTypes = $cm->getContentTypes();
 
         // Get paginated elements that are marked as in litter
         list($elements, $pager) = $cm->find_pages(

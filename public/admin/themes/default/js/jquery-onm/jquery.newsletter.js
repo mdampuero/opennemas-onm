@@ -10,11 +10,9 @@ jQuery('#buttons-contents').on('click','#next-button', function() {
 
 jQuery('#buttons-contents').on('click','#clean-button', function() {
 
-    jQuery("div#newsletter-container").find('ul:not(:first)').remove();
+    jQuery("div#newsletter-container").find('ul li').remove();
 
-    jQuery("div#newsletter-container").find('ul li:not(.container-label)').remove();
-
-    jQuery.cookie("data-newsletter", '');
+    jQuery.cookie("data-newsletter", null);
 });
 
 jQuery('#savedNewsletter').on('click','#load-saved', function() {
@@ -39,7 +37,7 @@ saveNewsletter = (function() {
                 'id' : jQuery(item).data('id'),
                 'title': jQuery(item).data('title'),
                 'content_type': jQuery(item).data('type'),
-                'position': (index+1),
+                'position': (i+1),
             });
         });
 
@@ -55,7 +53,7 @@ saveNewsletter = (function() {
 
     var encodedContents = JSON.stringify(els);
 
-    jQuery.cookie("data-newsletter", encodedContents);
+    jQuery('textarea#newsletterContent').text(encodedContents);
 
     return encodedContents;
 
@@ -63,14 +61,17 @@ saveNewsletter = (function() {
 
 addSelectedItems  = (function () {
 
-    jQuery('ul#contentList li').find('input:checked').each(function() {
+    if((jQuery('div#newsletter-container div.active').length == 0)) {
+        jQuery("#modal-container-active").modal('show');
+    } else {
+        jQuery('ul#contentList li').find('input:checked').each(function() {
 
-        item =  jQuery(this).parent();
-        jQuery('div#newsletter-container ul:last-child').append(item);
+            item =  jQuery(this).parent();
+            jQuery('div#newsletter-container div.active ul.content-receiver').append(item);
 
-    });
-    jQuery('input#toggleallcheckbox').prop("checked", false);
-
+        });
+        jQuery('input#toggleallcheckbox').prop("checked", false);
+    }
 });
 
 toggleProviderCheckbox  = (function (item) {
@@ -92,8 +93,11 @@ toggleProviderCheckbox  = (function (item) {
 });
 
 //OPERATIONS
-jQuery(function($){
+jQuery(function($) {
 
+    jQuery('div.newsletter-contents').on('click', ' div.container-receiver .container-label', function(event) {
+        jQuery(this).closest('div.container-receiver').addClass('active').siblings().removeClass('active')
+    });
 
     jQuery('div.newsletter-contents').on('click','#button-check-all', function(event) {
 
@@ -129,13 +133,14 @@ jQuery(function($){
 
         });
         id = id + 1;
-
+        jQuery("div.column-receiver").find('.container-receiver').removeClass('active');
         jQuery("div.column-receiver").append( '<div data-title="' + label + '" data-id="' + id +
-                '" class="container-receiver"><div class="container-label"><span>' +
+                '" class="container-receiver active"><div class="container-label"><span>' +
                 label +'</span> <div class="container-buttons btn-group">' +
                 ' <i class="icon-chevron-down"></i><i class="icon-pencil"></i>' +
                 ' <i class="icon-trash"></i> </div> </div>' +
                 ' <ul class="content-receiver"> </ul> </div>');
+
 
         jQuery('div.column-receiver ul.content-receiver').sortable({
             connectWith: "div#content-provider ul#contentList, div.column-receiver ul.content-receiver",
@@ -180,19 +185,21 @@ jQuery(function($){
     });
 
     /* Containers operations  */
-    jQuery("div#newsletter-container").on('click','.container-label .icon-pencil', function() {
+    jQuery("div#newsletter-container").on('click','.container-label .icon-pencil', function(e) {
         var container = jQuery(this).closest('div.container-receiver');
 
         jQuery('#modal-update-label input#updated_label').val(container.attr('data-title'));
         jQuery('#modal-update-label input#updated_id').val(container.data('id'));
 
         jQuery("#modal-update-label").modal('show');
+        e.preventDefault();
 
     });
 
-    jQuery("div#newsletter-container").on('click','.container-label .icon-trash', function() {
+    jQuery("div#newsletter-container").on('click','.container-label .icon-trash', function(e) {
         jQuery(this).closest('div.container-receiver').remove();
 
+        e.preventDefault();
     });
 
     jQuery("div#newsletter-container").on('click','.container-label .icon-chevron-down', function(i, item) {
@@ -255,16 +262,47 @@ function saveChanges() {
         OpenNeMas.tinyMceFunctions.destroy( 'htmlContent' );
     }
     var htmlContent = jQuery('div#content').find('div#htmlContent').html();
-    jQuery.ajax({
-        url:  "/admin/controllers/newsletter/newsletter.php",
-        type: "POST",
-        data: { action:"saveNewsletterContent", html:htmlContent },
-    });
+    setTimeout(function () {
+
+        jQuery.ajax({
+            url:  "/admin/controllers/newsletter/newsletter.php",
+            type: "POST",
+            data: { action:"saveNewsletterContent", html:htmlContent },
+            error:function (xhr, ajaxOptions, thrownError){
+                log(xhr.status + 'problem saving html code ');
+
+            },
+            success: function() {
+                log('ok');
+            }
+        });
+    }, 3000);
+
 }
 
 /*****************************************************************************/
 
 //SETP 3 - ADD recipients
+
+jQuery('div#dbList').on('click','#add-selected', function () {
+
+    jQuery('ul#contentList li').find('input:checked').each(function() {
+
+        item =  jQuery(this).parent();
+        jQuery('div#recipients ul#items-recipients').append(item);
+
+    });
+    jQuery('input#toggleallcheckbox').prop("checked", false);
+
+
+});
+
+
+jQuery('div#dbList').on('click','#button-check-all', function(event) {
+
+    toggleProviderCheckbox(event.target);
+
+});
 
 jQuery('#buttons-recipients').on('click','#next-button', function() {
 
@@ -284,8 +322,9 @@ jQuery('#buttons-recipients').on('click','#prev-button', function() {
 
 jQuery('#buttons-recipients').on('click','#clean-button', function() {
 
-    jQuery("div#recipients").find('ul#items-recipients li').remove();
-    jQuery("div#manualList textarea#othersMails").val('');
+    jQuery.cookie("data-recipients", null);
+    jQuery("#action").val('listRecipients');
+    jQuery('#newsletterForm').submit();
 
 });
 
@@ -297,7 +336,7 @@ jQuery(document).ready(function($){
 makeRecipientsListSortables = function () {
 
 
-    jQuery('div#dbList ul#items-dbList').sortable({
+    jQuery('div#dbList ul#contentList').sortable({
             connectWith: "ul#items-recipients",
             dropOnEmpty: true,
             placeholder: 'placeholder-element',
@@ -312,7 +351,7 @@ makeRecipientsListSortables = function () {
         }).disableSelection();
 
     jQuery('div#recipients ul#items-recipients').sortable({
-            connectWith: "ul#items-dbList, ul#items-mailList",
+            connectWith: "ul#contentList, ul#items-mailList",
             dropOnEmpty: true,
             placeholder: 'placeholder-element',
             tolerance: 'pointer',
@@ -360,7 +399,7 @@ function saveRecipients() {
 
 jQuery('#buttons-send').on('click','#prev-button', function() {
 
-    jQuery("#action").val('preview');
+    jQuery("#action").val('updateContents');
     jQuery('#newsletterForm').submit();
 
 });

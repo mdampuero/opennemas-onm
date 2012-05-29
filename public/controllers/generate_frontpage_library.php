@@ -1,10 +1,12 @@
 #!/usr/bin/php5
 <?php
-
 /**
  * Start up and setup the app
 */
-require_once('../bootstrap.php');
+$_SERVER['SERVER_NAME'] ='cronicasdelaemigracion.com';
+$_SERVER['REQUEST_URI'] ='/';
+
+require __DIR__.'/../bootstrap.php';
 
 /**
  * Setup view

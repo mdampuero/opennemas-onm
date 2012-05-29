@@ -71,7 +71,7 @@ class LayoutManager
         $total = count($innerValues->children());
         $position = 0;
         $last = false;
-        foreach ($innerValues->children() as $elementTypeInner => $innerValuesInner ) {
+        foreach ($innerValues->children() as $elementTypeInner => $innerValuesInner) {
             $position++;
             $last = ($total == $position);
             $output []= $this->renderElement($elementTypeInner, $innerValuesInner, $last);
@@ -201,7 +201,7 @@ class LayoutManager
         $this->params = $params;
 
         $output = '';
-        foreach ($this->layoutDoc as $element => $value ) {
+        foreach ($this->layoutDoc as $element => $value) {
             $output []= $this->renderElement($element, $value, false);
         }
 

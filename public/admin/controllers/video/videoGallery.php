@@ -42,8 +42,8 @@ if (\Onm\Module\ModuleManager::isActivated('VIDEO_MANAGER')) {
 
         if (!empty($metadatas)) {
 
-            $presentSearch = cSearch::Instance();
-            $arrayIds = $presentSearch->SearchContentsSelect('pk_content', $metadatas, 'video', 100);
+            $presentSearch = cSearch::getInstance();
+            $arrayIds = $presentSearch->searchContentsSelect('pk_content', $metadatas, 'video', 100);
             if(!empty($arrayIds)) {
                 $szWhere = '( FALSE ';
                 foreach($arrayIds as $Id) {
@@ -97,5 +97,5 @@ if (\Onm\Module\ModuleManager::isActivated('VIDEO_MANAGER')) {
 
     $htmlOut .= $tpl->fetch('video/video_gallery.ajax.tpl');
 
-    Application::ajax_out($htmlOut);
+    Application::ajaxOut($htmlOut);
 }

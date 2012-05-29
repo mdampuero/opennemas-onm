@@ -7,30 +7,21 @@
  * file that was distributed with this source code.
  */
 use Onm\Settings as s;
-/**
- * Start up and setup the app
-*/
-require_once('../bootstrap.php');
+// Start up and setup the app
+require_once '../bootstrap.php';
 
-/**
- * Setup view
- */
+// Setup view
 $tpl = new Template(TEMPLATE_USER);
 
-
-/******************************  CATEGORIES & SUBCATEGORIES  *********************************/
 $cm  = new ContentManager();
 
-/**
- * Setting up available categories.
-*/
-
+// Setting up available categories.
 $category_name = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
 $subcategory_name = $request->query->filter('subcategory_name', '', FILTER_SANITIZE_STRING);
 $page = $request->query->filter('page', 0, FILTER_VALIDATE_INT);
 $action = $request->request->filter('action', '', FILTER_SANITIZE_STRING);
 if (empty($action)) {
-  $action = $request->query->filter('action', 'frontpage', FILTER_SANITIZE_STRING);
+    $action = $request->query->filter('action', 'frontpage', FILTER_SANITIZE_STRING);
 }
 
 if (!empty($category_name)) {
@@ -38,28 +29,26 @@ if (!empty($category_name)) {
     $category = $ccm->get_id($category_name);
     $actual_category_id = $category; // FOR WIDGETS
     $category_real_name = $ccm->get_title($category_name); //used in title
-    $tpl->assign(array( 'category_name' => $category_name ,
-                        'category' => $category ,
-                        'actual_category_id' => $actual_category_id ,
-                        'category_real_name' => $category_real_name ,
-                        'actual_category' =>$category_name,
-                ) );
+    $tpl->assign(array(
+        'category_name' => $category_name ,
+        'category' => $category ,
+        'actual_category_id' => $actual_category_id ,
+        'category_real_name' => $category_real_name ,
+        'actual_category' =>$category_name,
+    ));
 } else {
-     $category_real_name = 'Portada';
-     $category_name = 'home';
-     $tpl->assign(array(
-                        'category_real_name' => $category_real_name ,
-                        'category_name'=>$category_name
-                ) );
+    $category_real_name = 'Portada';
+    $category_name = 'home';
+    $tpl->assign(array(
+        'category_real_name' => $category_real_name ,
+        'category_name'=>$category_name
+    ));
 }
-/******************************  CATEGORIES & SUBCATEGORIES  *********************************/
-   $pollSettings = s::get('poll_settings');
+$pollSettings = s::get('poll_settings');
 
-   $tpl->assign(array (
-                        'settings' =>$pollSettings
-                ) );
-
-/**************************************  SECURITY  *******************************************/
+$tpl->assign(array (
+    'settings' => $pollSettings
+));
 
 switch ($action) {
     case 'frontpage':
@@ -72,32 +61,42 @@ switch ($action) {
          * Don't execute action logic if was cached before
          */
         if ( ($tpl->caching == 0)
-           || (!$tpl->isCached('poll/poll-frontpage.tpl',$cacheID))) {
+           || (!$tpl->isCached('poll/poll-frontpage.tpl', $cacheID))) {
             if (isset($category) && !empty($category)) {
-                $polls = $cm->find_by_category('Poll', $category, 'available=1 ',
-                                            'ORDER BY created DESC LIMIT 2');
-                $otherPolls = $cm->find('Poll', 'available=1 ',
-                                            'ORDER BY created DESC LIMIT 5');
+                $polls = $cm->find_by_category(
+                    'Poll', $category, 'available=1 ',
+                    'ORDER BY created DESC LIMIT 2'
+                );
+                $otherPolls = $cm->find(
+                    'Poll', 'available=1 ',
+                    'ORDER BY created DESC LIMIT 5'
+                );
             } else {
-                 $polls = $cm->find('Poll', 'available=1 and in_home=1',
-                                            'ORDER BY created DESC LIMIT 2');
-                 $otherPolls = $cm->find('Poll', 'available=1 ',
-                                            'ORDER BY created DESC LIMIT 2,7');
+                $polls = $cm->find('Poll',
+                    'available=1 and in_home=1',
+                    'ORDER BY created DESC LIMIT 2'
+                );
+                $otherPolls = $cm->find(
+                    'Poll', 'available=1 ',
+                    'ORDER BY created DESC LIMIT 2,7'
+                );
             }
 
             if (!empty($polls)) {
                 foreach ($polls as &$poll) {
                     $poll->items = $poll->get_items($poll->id);
-                    $poll->dirtyId = date('YmdHis', strtotime($poll->created)).sprintf('%06d',$poll->id);
-
+                    $poll->dirtyId = date('YmdHis',
+                        strtotime($poll->created)).sprintf('%06d', $poll->id);
                 }
             }
 
-            $tpl->assign( array('polls'=> $polls, 'otherPolls'=> $otherPolls ) );
-
+            $tpl->assign(array(
+                'polls'=> $polls,
+                'otherPolls'=> $otherPolls
+            ));
         }
 
-        require_once('poll_advertisement.php');
+        require_once 'poll_advertisement.php';
 
         $tpl->display('poll/poll_frontpage.tpl', $cacheID);
         break;
@@ -110,63 +109,63 @@ switch ($action) {
 
         $pollId = Content::resolveID($dirtyID);
 
-        /**
-         * Redirect to album frontpage if id_album wasn't provided
-         */
-        if (is_null($pollId)) { Application::forward301('/encuesta/'); }
+        // Redirect to album frontpage if id_album wasn't provided
+        if (is_null($pollId)) {
+            \Application::forward301('/encuesta/');
+        }
 
         $poll = new Poll($pollId);
 
-        if (!empty($poll)) {
-
-            if (($poll->available==1) && ($poll->in_litter==0)) {
-                // Increment numviews if it's accesible
-                $poll->setNumViews($pollId);
-                $poll->items = $poll->get_items($pollId);
-                $items = $poll->get_items($pollId);
-                $poll->dirtyId = $dirtyID;
-
-                $cacheID = $tpl->generateCacheId($category_name,'', $pollId );
-
-                if ( ($tpl->caching == 0) || !$tpl->isCached('poll/poll.tpl', $cacheID) ) {
-
-                    $comment = new Comment();
-                    $comments = $comment->get_public_comments($pollId);
-
-                    $otherPolls = $cm->find('Poll', 'available=1 ',
-                                            'ORDER BY created DESC LIMIT 5');
-
-                    $tpl->assign( array( 'poll'=>$poll,
-                        'items' => $items,
-                        'num_comments'=> count($comments),
-                        'otherPolls'=>$otherPolls,
-                        ) );
-                      $cookie="polls".$pollId;
-                      $msg='';
-                      if (isset($_COOKIE[$cookie])) {
-                          if ($_COOKIE[$cookie]=='tks') {
-                               $msg = 'Ya ha votado esta encuesta';
-                          } else {
-                               $msg = 'Gracias, por su voto';
-                               Application::setCookieSecure($cookie, 'tks');
-                          }
-                        }
-                        $tpl->assign('msg',$msg);
-
-                } // end if $tpl->is_cached
-
-                require_once('poll_inner_advertisement.php');
-
-                $tpl->assign('contentId', $pollId); // Used on module_comments.tpl
-
-                $tpl->display('poll/poll.tpl', $cacheID);
-
-            }
-
-            /************* COLUMN-LAST *******************************/
-
-        } else {
+        if (empty($poll)) {
             Application::forward301('/404.html');
+        }
+
+        if (($poll->available==1) && ($poll->in_litter==0)) {
+            // Increment numviews if it's accesible
+            $poll->setNumViews($pollId);
+            $poll->items = $poll->get_items($pollId);
+            $items = $poll->get_items($pollId);
+            $poll->dirtyId = $dirtyID;
+
+            $cacheID = $tpl->generateCacheId($category_name, '', $pollId);
+
+            if ($tpl->caching == 0
+                || !$tpl->isCached('poll/poll.tpl', $cacheID)
+            ) {
+
+                $comment = new Comment();
+                $comments = $comment->get_public_comments($pollId);
+
+                $otherPolls = $cm->find(
+                    'Poll', 'available=1 ',
+                    'ORDER BY created DESC LIMIT 5'
+                );
+
+                $tpl->assign( array( 'poll'=>$poll,
+                    'items'        => $items,
+                    'num_comments' => count($comments),
+                    'otherPolls'   => $otherPolls,
+                ));
+                $cookie="polls".$pollId;
+                $msg='';
+                if (isset($_COOKIE[$cookie])) {
+                    if ($_COOKIE[$cookie]=='tks') {
+                        $msg = 'Ya ha votado esta encuesta';
+                    } else {
+                        $msg = 'Gracias, por su voto';
+                        Application::setCookieSecure($cookie, 'tks');
+                    }
+                }
+                $tpl->assign('msg', $msg);
+
+            } // end if $tpl->is_cached
+
+            require_once 'poll_inner_advertisement.php';
+
+            // Used on module_comments.tpl
+            $tpl->assign('contentId', $pollId);
+
+            $tpl->display('poll/poll.tpl', $cacheID);
         }
         break;
 
@@ -175,10 +174,11 @@ switch ($action) {
         $dirtyID = $request->request->filter('id', '', FILTER_SANITIZE_STRING);
 
         $pollId = Content::resolveID($dirtyID);
-        /**
-         * Redirect to album frontpage if id_album wasn't provided
-         */
-        if (is_null($pollId)) { Application::forward301('/encuesta/'); }
+
+        // Redirect to album frontpage if id_album wasn't provided
+        if (is_null($pollId)) {
+            \Application::forward301('/encuesta/');
+        }
 
         $poll = new Poll($pollId);
 
@@ -189,13 +189,15 @@ switch ($action) {
             }
             $respEncuesta = $request->request->filter('respEncuesta', '', FILTER_SANITIZE_STRING);
 
-            if (!empty($respEncuesta) && !isset($_COOKIE[$cookie]) ) {
+            if (!empty($respEncuesta)
+                && !isset($_COOKIE[$cookie])
+            ) {
                 $ip = $_SERVER['REMOTE_ADDR'];
                 $poll->vote($respEncuesta, $ip);
             }
 
-            $cacheID= $tpl->generateCacheId($category_name, '',$pollId );
-            $tplManager = new TemplateCacheManager( TEMPLATE_USER_PATH );
+            $cacheID= $tpl->generateCacheId($category_name, '', $pollId);
+            $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
             $tplManager->delete($cacheID, 'poll.tpl');
             $cacheID = $tpl->generateCacheId('poll'.$category_name, '', $page);
             $tplManager->delete($cacheID, 'poll_frontpage.tpl');

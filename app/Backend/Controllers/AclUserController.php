@@ -94,7 +94,7 @@ class AclUserController extends Controller
             'user'                      => $user,
             'user_groups'               => $user_group->get_user_groups(),
             'content_categories'        => $tree,
-            'content_categories_select' => $user->get_access_categories_id(),
+            'content_categories_select' => $user->getAccessCategoryIds(),
         ));
     }
 

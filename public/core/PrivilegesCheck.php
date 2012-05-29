@@ -78,9 +78,9 @@ class PrivilegesCheck
     {
         try {
             if (!isset($_SESSION['userid'])
-                || self::CheckSessionExpireTime()
+                || self::checkSessionExpireTime()
             ) {
-                self::SessionExpireTimeAction();
+                self::sessionExpireTimeAction();
             }
 
             if (isset($_SESSION['isMaster'])
@@ -119,13 +119,13 @@ class PrivilegesCheck
      * Redirects the user to the login page.
      *
      **/
-    private static function SessionExpireTimeAction()
+    private static function sessionExpireTimeAction()
     {
         Application::forward("/admin/login/");
     }
 
 
-    public static function LoadSessionExpireTime()
+    public static function loadSessionExpireTime()
     {
         if (isset($_SESSION)
             && isset($_SESSION['default_expire'])
@@ -134,7 +134,7 @@ class PrivilegesCheck
         }
     }
 
-    private static function CheckSessionExpireTime()
+    private static function checkSessionExpireTime()
     {
         if (isset($_SESSION)
             && array_key_exists('expire', $_SESSION)
@@ -146,22 +146,9 @@ class PrivilegesCheck
             return true;
         }
         //Actuliza la sesion
-        self::LoadSessionExpireTime();
+        self::loadSessionExpireTime();
 
         return false;
     }
 
-    // Comprobación de session caducada y privilegios
-    public function HandleError($errno, $errstr, $errfile, $errline)
-    {
-        throw new Exception($errstr, $errno);
-
-        return true;
-        //change to return false to make the "catch" block execute;
-    }
-
-    public function InitHandleErrorPrivileges()
-    {
-        set_error_handler('handleError');
-    }
 }

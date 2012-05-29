@@ -78,19 +78,7 @@ class Content
     {
         switch ($name) {
             case 'uri':
-                if (empty($this->category_name)) {
-                    $this->category_name =
-                        $this->loadCategoryName($this->pk_content);
-                }
-                $uri =  Uri::generate(strtolower($this->content_type_name),
-                    array(
-                        'id'       => sprintf('%06d', $this->id),
-                        'date'     => date('YmdHis', strtotime($this->created)),
-                        'category' => $this->category_name,
-                        'slug'     => $this->slug2,
-                    ));
-
-                return ($uri !== '') ? $uri : $this->permalink;
+                return $this->getUri();
                 break;
 
             case 'slug2':
@@ -99,20 +87,7 @@ class Content
                 break;
 
             case 'content_type_name':
-                $sql = 'SELECT * FROM `content_types` '
-                     . 'WHERE pk_content_type = ? LIMIT 1';
-                $values = array($this->content_type);
-                $contentTypeName =
-                    $GLOBALS['application']->conn->Execute($sql, $values);
-
-                if (isset($contentTypeName->fields['name'])) {
-                    $returnValue =
-                        mb_strtolower($contentTypeName->fields['name']);
-                } else {
-                    $returnValue = $this->content_type;
-                }
-
-                return $returnValue;
+                return $this->getContentTypeName();
                 break;
 
             case 'category_name':
@@ -154,6 +129,52 @@ class Content
     }
 
     /**
+     * Returns the URI for this content
+     *
+     * @return string the uri
+     **/
+    public function getUri()
+    {
+        if (empty($this->category_name)) {
+            $this->category_name =
+                $this->loadCategoryName($this->pk_content);
+        }
+        $uri =  Uri::generate(strtolower($this->content_type_name),
+            array(
+                'id'       => sprintf('%06d', $this->id),
+                'date'     => date('YmdHis', strtotime($this->created)),
+                'category' => $this->category_name,
+                'slug'     => $this->slug2,
+            ));
+
+        return ($uri !== '') ? $uri : $this->permalink;
+    }
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function getContentTypeName()
+    {
+        $sql = 'SELECT * FROM `content_types` '
+             . 'WHERE pk_content_type = ? LIMIT 1';
+        $values = array($this->content_type);
+        $contentTypeName =
+            $GLOBALS['application']->conn->Execute($sql, $values);
+
+        if (isset($contentTypeName->fields['name'])) {
+            $returnValue =
+                mb_strtolower($contentTypeName->fields['name']);
+        } else {
+            $returnValue = $this->content_type;
+        }
+
+        return $returnValue;
+    }
+
+    /**
      * Creates one content given an array of data
      *
      * @param array $data array with data for create the article
@@ -176,18 +197,30 @@ class Content
            " VALUES (?,?,?, ?,?,?, ?,?,?, ?,?,?,?,?, ?,?,?, ?,?,?, ?,?,?,?)";
 
 
-        $data['starttime']        = (!isset($data['starttime']) || empty($data['starttime']) || ($data['starttime'])=='0000-00-00 00:00:00')? date("Y-m-d H:i:s"): $data['starttime'];
+        $data['starttime']        =
+            (!isset($data['starttime']) || empty($data['starttime'])
+             || ($data['starttime'])=='0000-00-00 00:00:00')
+                ? date("Y-m-d H:i:s"): $data['starttime'];
         $data['endtime']          = (empty($data['endtime']))? '0000-00-00 00:00:00': $data['endtime'];
         $data['content_status']   = (empty($data['content_status']))? 0: intval($data['content_status']);
         $data['available']        = (empty($data['available']))? 0: intval($data['available']);
-        $data['frontpage']        = (!isset($data['frontpage']) || empty($data['frontpage']))? 0: intval($data['frontpage']);
-        $data['placeholder']      = (!isset($data['placeholder']) || empty($data['placeholder']))? 'placeholder_0_1': $data['placeholder'];
-        $data['home_placeholder'] = (!isset($data['home_placeholder']) || empty($data['home_placeholder']))? 'placeholder_0_1': $data['home_placeholder'];
+        $data['frontpage']        =
+            (!isset($data['frontpage'])
+                || empty($data['frontpage'])) ? 0: intval($data['frontpage']);
+        $data['placeholder']      =
+            (!isset($data['placeholder']) || empty($data['placeholder']))
+                ? 'placeholder_0_1': $data['placeholder'];
+        $data['home_placeholder'] =
+            (!isset($data['home_placeholder'])
+                || empty($data['home_placeholder']))
+                ? 'placeholder_0_1': $data['home_placeholder'];
         $data['position']         = (empty($data['position']))? '2': $data['position'];
         $data['in_home']          = (empty($data['in_home']))? 0: $data['in_home'];
         $data['home_pos']         = 100;
         $data['urn_source']       = (empty($data['urn_source']))? null: $data['urn_source'];
-        $data['params'] = (!isset($data['params']) || empty($data['params']))? null: serialize($data['params']);
+        $data['params'] =
+            (!isset($data['params'])
+            || empty($data['params'])) ? null: serialize($data['params']);
 
         if (empty($data['slug'] ) || !isset($data['slug']) ) {
             $data['slug'] = mb_strtolower(StringUtils::get_title($data['title']));
@@ -197,19 +230,17 @@ class Content
         $data['created'] = (empty($data['created']))? date("Y-m-d H:i:s") : $data['created'];
         $data['changed'] = date("Y-m-d H:i:s");
 
-        if (empty($data['description'])
-            && !isset ($data['description'])
-        ) {
+        if (empty($data['description'])&& !isset ($data['description'])) {
             $data['description']     = '';
         }
-        if (empty($data['metadata'])
-            && !isset ($data['metadata'])
-        ) {
+        if (empty($data['metadata']) && !isset ($data['metadata'])) {
             $data['metadata']='';
         }
 
-        $data['fk_user']             =(empty($data['fk_user']) && !isset ($data['fk_user'])) ?$_SESSION['userid'] :$data['fk_user'] ;
-        $data['fk_user_last_editor'] =  $data['fk_user'];
+        $data['fk_user']             =
+            (empty($data['fk_user']) && !isset ($data['fk_user']))
+            ? $_SESSION['userid'] :$data['fk_user'] ;
+        $data['fk_user_last_editor'] = $data['fk_user'];
         $data['fk_publisher']        = (empty($data['available']))? '': $data['fk_user'];
 
         $fk_content_type = $GLOBALS['application']->conn->
@@ -298,8 +329,6 @@ class Content
     public function update($data)
     {
         $GLOBALS['application']->dispatch('onBeforeUpdate', $this);
-
-        $name_type = $this->content_type;
 
         $sql = "UPDATE contents
                 SET `title`=?, `description`=?,
@@ -585,7 +614,7 @@ class Content
         }
 
         /* Notice log of this action */
-        $logger = Application::logContentEvent(__METHOD__, $this);
+        Application::logContentEvent(__METHOD__, $this);
 
         // Set status for it's updated to next event
         if (!empty($this)) {
@@ -615,20 +644,45 @@ class Content
         return $state;
     }
 
+    /**
+     * Returns a quick info resume of this content
+     *
+     * @return array the quick info
+     **/
+    public function getQuickInfo()
+    {
+        $ccm     = ContentCategoryManager::get_instance();
+        $author  = new User($this->fk_author);
+
+        if ($this->id !== null) {
+            return array(
+                'title'           => $this->title,
+                'category'        => $ccm->get_name($this->category),
+                'starttime'       => $this->starttime,
+                'endtime'         => $this->endtime,
+                'scheduled_state' => $this->getSchedulingState(),
+                'state'           => $this->getStatus(),
+                'views'           => $this->views,
+                'last_author'     => $author->firstname. " " .$author->lastname,
+            );
+
+        }
+    }
+
 
     /**
      * Sets the available status for this content.
      *
      * @return boolean true if all went well
      **/
-    public function setAvailable($lastEditor = null)
+    public function setAvailable()
     {
         // NEW APPROACH
         // Set previous status = the actual value
         // Set status = available
 
         // OLD APPROACH
-        if (($this->id == null) && !is_array($status)) {
+        if ($this->id == null) {
             return false;
         }
 
@@ -717,7 +771,7 @@ class Content
         // Set the flags to the trashed status
         // Drop from all the frontpages
         // Clean caches where this content is
-        if (($this->id == null) && !is_array($status)) {
+        if ($this->id == null) {
             return false;
         }
 
@@ -787,7 +841,7 @@ class Content
      **/
     public function setArchived()
     {
-        if (($this->id == null) && !is_array($status)) {
+        if ($this->id == null) {
             return false;
         }
 
@@ -828,7 +882,7 @@ class Content
     public function suggestToHomepage()
     {
         // OLD APPROACH
-        if (($this->id == null) && !is_array($status)) {
+        if (($this->id == null)) {
             return false;
         }
 
@@ -1153,7 +1207,7 @@ class Content
         return ($this->frontpage == 1);
     }
 
-    public function set_frontpage($status, $last_editor)
+    public function set_frontpage($status, $lastEditor)
     {
         if (($this->id == null) && !is_array($status)) {
             return false;
@@ -1181,7 +1235,7 @@ class Content
         Application::logContentEvent(__METHOD__, $this);
     }
 
-    public function set_inhome($status, $last_editor)
+    public function set_inhome($status, $lastEditor)
     {
         $GLOBALS['application']->dispatch('onBeforeSetInhome', $this);
 
@@ -1215,7 +1269,6 @@ class Content
 
     public function set_home_position($position, $lastEditor)
     {
-        $changed = date("Y-m-d H:i:s");
         if (($this->id == null) && !is_array($position)) {
             return false;
         }
@@ -1407,7 +1460,7 @@ class Content
      */
     public static function pkExists($pkContent)
     {
-       $content = new Content($pkContent);
+        $content = new Content($pkContent);
         if (empty($content)) {
             $code = 404;
             $url  = null;
@@ -1573,7 +1626,7 @@ class Content
             $logger->notice('User '
                 .$_SESSION['username'].' ('.$_SESSION['userid'].') has executed'
                 .' action Drop from frontpage at category '.$categoryName
-                .' an '.$type.' Id '.$pk_content);
+                .' an '.$type.' Id '.$pkContent);
 
             return true;
         }
@@ -1619,11 +1672,10 @@ class Content
      * @return pk_content or false
     */
 
-    public function set_position($position, $last_editor)
+    public function set_position($position, $lastEditor)
     {
         $GLOBALS['application']->dispatch('onBeforePosition', $this);
 
-        $changed = date("Y-m-d H:i:s");
         if ($this->id == null
             && !is_array($position)
         ) {
@@ -1648,7 +1700,7 @@ class Content
         }
 
         /* Notice log of this action */
-        $logger = Application::logContentEvent(__METHOD__, $this);
+        Application::logContentEvent(__METHOD__, $this);
 
         $GLOBALS['application']->dispatch('onAfterPosition', $this);
 

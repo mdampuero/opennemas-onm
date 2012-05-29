@@ -18,23 +18,25 @@ namespace Onm\Common\Cache;
 class APCCache extends AbstractCache
 {
 
-   /*
-    * Initilizes the APCCache
-    *
-    * @param $options
-    */
+    /**
+     * Initilizes the APCCache
+     *
+     * @param $options
+     */
     public function __construct($options= array())
     {
         $this->initialize($options);
     }
 
     /**
-    * Initializes this APCCache instance.
-    */
+     * Initializes this APCCache instance.
+     */
     public function initialize($options = array())
     {
         if (!function_exists('apc_store') || !ini_get('apc.enabled')) {
-            throw new \Exception('You must have APC installed and enabled to use APCCache class.');
+            throw new \Exception(
+                'You must have APC installed and enabled to use APCCache class.'
+            );
         }
     }
 
@@ -56,7 +58,7 @@ class APCCache extends AbstractCache
     /**
      * {@inheritdoc}
      */
-    protected function _doFetch($id)
+    protected function doFetch($id)
     {
         return apc_fetch($id);
     }
@@ -64,7 +66,7 @@ class APCCache extends AbstractCache
     /**
      * {@inheritdoc}
      */
-    protected function _doContains($id)
+    protected function doContains($id)
     {
         $found = false;
 
@@ -76,7 +78,7 @@ class APCCache extends AbstractCache
     /**
      * {@inheritdoc}
      */
-    protected function _doSave($id, $data, $lifeTime = 0)
+    protected function doSave($id, $data, $lifeTime = 0)
     {
         return (bool) apc_store($id, $data, (int) $lifeTime);
     }
@@ -84,7 +86,7 @@ class APCCache extends AbstractCache
     /**
      * {@inheritdoc}
      */
-    protected function _doDelete($id)
+    protected function doDelete($id)
     {
         return apc_delete($id);
     }

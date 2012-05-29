@@ -183,7 +183,7 @@ class ContentCategory
      **/
     public function delete($id)
     {
-        if (ContentCategoryManager::is_Empty($id)) {
+        if (ContentCategoryManager::isEmptyByCategoryId($id)) {
             $sql = 'DELETE FROM content_categories WHERE pk_content_category=?';
 
             $rs = $GLOBALS['application']->conn->Execute($sql, array($id));

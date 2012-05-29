@@ -332,8 +332,8 @@ class Advertisement extends Content
         }
 
         // Needed for onAfterCreateAdvertisement callback
-        $this->pk_advertisement = $this->id;
-        $this->available        = $data['available'];
+        $this->pk_advertisement      = $this->id;
+        $this->available             = $data['available'];
         $this->type_advertisement    = $data['type_advertisement'];
         $this->fk_content_categories = $data['category'];
 
@@ -514,32 +514,32 @@ class Advertisement extends Content
      * the type_advertisemnt
      * For example type=503  => name=publi-gallery-inner
      *
-     * @param  string $type_advertisement
+     * @param  string $advType
      * @return string $name_advertisement
      **/
-    public function getNameOfAdvertisementPlaceholder($type_advertisement)
+    public function getNameOfAdvertisementPlaceholder($advType)
     {
-        if ($type_advertisement > 0 && $type_advertisement < 100) {
+        if ($advType > 0 && $advType < 100) {
             return 'publi-portada';
-        } elseif ($type_advertisement > 100 && $type_advertisement < 200) {
+        } elseif ($advType > 100 && $advType < 200) {
             return 'publi-interior';
-        } elseif ($type_advertisement > 200 && $type_advertisement < 300) {
+        } elseif ($advType > 200 && $advType < 300) {
             return 'publi-video';
-        } elseif ($type_advertisement > 300 && $type_advertisement < 400) {
+        } elseif ($advType > 300 && $advType < 400) {
             return 'publi-video-interior';
-        } elseif ($type_advertisement > 400 && $type_advertisement < 500) {
+        } elseif ($advType > 400 && $advType < 500) {
             return 'publi-gallery';
-        } elseif ($type_advertisement > 500 && $type_advertisement < 600) {
+        } elseif ($advType > 500 && $advType < 600) {
             return 'publi-gallery-inner';
-        } elseif ($type_advertisement > 600 && $type_advertisement < 700) {
+        } elseif ($advType > 600 && $advType < 700) {
             return 'publi-opinion';
-        } elseif ($type_advertisement > 700 && $type_advertisement < 800) {
+        } elseif ($advType > 700 && $advType < 800) {
             return 'publi-opinion-interior';
-        } elseif ($type_advertisement > 800 && $type_advertisement < 900) {
+        } elseif ($advType > 800 && $advType < 900) {
             return 'publi-poll';
-        } elseif ($type_advertisement > 900 && $type_advertisement < 1000) {
+        } elseif ($advType > 900 && $advType < 1000) {
             return 'publi-poll-inner';
-        } elseif ($type_advertisement > 1000 && $type_advertisement < 1100) {
+        } elseif ($advType > 1000 && $advType < 1100) {
             return 'publi-newsletter';
         }
     }
@@ -579,7 +579,7 @@ class Advertisement extends Content
      *
      * @param int $id
      **/
-    public static function setNumViews($id=null)
+    public static function setNumViews($id = null)
     {
         // if $id was not given return null and do nothing
         if (is_null($id)) {
@@ -591,22 +591,31 @@ class Advertisement extends Content
         // if this ad has views limit and it has reached unpublish it
         if (is_array($id)) {
             foreach ($id as $banner) {
-
                 // if this ad has views limit and it has reached unpublish it
-                if ((isset($banner) && property_exists($banner, 'type_medida'))
-                    && (($banner->type_medida == 'VIEW')
-                        AND ($banner->num_view <= $banner->views))
+                if (isset($banner)
+                    && is_object($banner)
+                    && property_exists($banner, 'type_medida')
                 ) {
-                    $banner->set_status($status = 0, 'NULL');
+                    $banner->unpublishIfMaxViewsReached();
                 }
             }
         } else {
             $ad = new Advertisement($id);
-            if (($ad->type_medida == 'VIEW')
-                && ($ad->num_view <= $ad->views)
-            ) {
-                parent::set_status($status = 0, 'NULL');
-            }
+            $ad->unpublishIfMaxViewsReached();
+        }
+    }
+
+    /**
+     * Marks an ad as unpublished if has reached its max allowed views
+     *
+     * @return void
+     **/
+    public function unpublishIfMaxViewsReached()
+    {
+        if (($this->type_medida == 'VIEW')
+            && ($this->num_view <= $this->views)
+        ) {
+            parent::set_status(0, 'NULL');
         }
     }
 
@@ -678,12 +687,9 @@ class Advertisement extends Content
             }
 
             // Perform operations for each advertisement type
-            foreach ($advertisements as $type_advertisement => $advs) {
+            foreach ($advertisements as $advs) {
                 //Select a random banner
-                $banners[] = $advs[ array_rand($advs) ];
-
-                // Previous behavior changed to only fetch first banner
-                //$banners[] = array_shift($advs);
+                $banners[] = $advs[array_rand($advs)];
             }
         }
 
@@ -734,18 +740,18 @@ class Advertisement extends Content
     public function render($banners, $tpl)
     {
         // Extract pk_photos to perform one query
-        $pk_photos = array();
+        $photoIds = array();
         foreach ($banners as $banner) {
             if (!empty($banner->path)) {
-                $pk_photos[] = $banner->path;
+                $photoIds[] = $banner->path;
             }
         }
-        $banners_selected =array();
+        $selectedBanners =array();
         //Get photos
         $cm = new ContentManager();
         $objs = $cm->cache->find(
             'Photo',
-            "pk_content IN ('" . implode("','", $pk_photos) . "')"
+            "pk_content IN ('" . implode("','", $photoIds) . "')"
         );
 
         // Array of photos objects,
@@ -757,7 +763,7 @@ class Advertisement extends Content
 
         foreach ($banners as $banner) {
             // Save selected banners to process after
-            $banners_selected[] = $banner;
+            $selectedBanners[] = $banner;
 
             if (
                 isset($banner->type_advertisement)
@@ -796,7 +802,7 @@ class Advertisement extends Content
             }
         }
         // Update numviews
-        Advertisement::setNumViews($banners_selected);
+        Advertisement::setNumViews($selectedBanners);
     }
 
     /**
@@ -841,18 +847,19 @@ class Advertisement extends Content
                         SELECT `advertisements`.*
                         FROM `advertisements`, `contents`,
                             `contents_categories`
-                        WHERE `advertisements`.`type_advertisement`='
-                            .$this->type_advertisement.'
-                        AND `advertisements`.`pk_advertisement`<>'
-                            .$this->pk_advertisement.'
-                        AND `contents_categories`.`pk_fk_content_category`='
-                            .$this->fk_content_categories.'
+                        WHERE `advertisements`.`type_advertisement`=?
+                        AND `advertisements`.`pk_advertisement`<>?
+                        AND `contents_categories`.`pk_fk_content_category`=?
                         AND `contents`.`pk_content`='
                             .'`contents_categories`.`pk_fk_content`
                         AND `contents`.`pk_content`='
                             .'`advertisements`.`pk_advertisement`
                     ) AS temp )';
-
+            $values = array(
+                $this->type_advertisement,
+                $this->type_advertisement,
+                $this->type_advertisement,
+            );
             $rs = $GLOBALS['application']->conn->Execute($sql, $values);
             if ($rs === false) {
                 \Application::logDatabaseError();

@@ -55,12 +55,17 @@ class MemcacheCache extends AbstractCache
         foreach ($allSlabs as $server => $slabs) {
             if (is_array($slabs)) {
                 foreach (array_keys($slabs) as $slabId) {
-                    $dump = $this->_memcache->getExtendedStats('cachedump', (int) $slabId);
+                    $dump = $this->_memcache->getExtendedStats(
+                        'cachedump', (int) $slabId
+                    );
 
                     if ($dump) {
                         foreach ($dump as $entries) {
                             if ($entries) {
-                                $keys = array_merge($keys, array_keys($entries));
+                                $keys = array_merge(
+                                    $keys,
+                                    array_keys($entries)
+                                );
                             }
                         }
                     }
@@ -74,7 +79,7 @@ class MemcacheCache extends AbstractCache
     /**
      * {@inheritdoc}
      */
-    protected function _doFetch($id)
+    protected function doFetch($id)
     {
         return $this->_memcache->get($id);
     }
@@ -82,7 +87,7 @@ class MemcacheCache extends AbstractCache
     /**
      * {@inheritdoc}
      */
-    protected function _doContains($id)
+    protected function doContains($id)
     {
         return (bool) $this->_memcache->get($id);
     }
@@ -90,7 +95,7 @@ class MemcacheCache extends AbstractCache
     /**
      * {@inheritdoc}
      */
-    protected function _doSave($id, $data, $lifeTime = 0)
+    protected function doSave($id, $data, $lifeTime = 0)
     {
         return $this->_memcache->set($id, $data, 0, (int) $lifeTime);
     }
@@ -98,7 +103,7 @@ class MemcacheCache extends AbstractCache
     /**
      * {@inheritdoc}
      */
-    protected function _doDelete($id)
+    protected function doDelete($id)
     {
         return $this->_memcache->delete($id);
     }

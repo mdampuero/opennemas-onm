@@ -17,16 +17,16 @@
  **/
 class Photo extends Content
 {
-    public $pk_photo = null;
-    public $name = null; //id del articulo
-    public $path_file  = null;
-    public $date  = null;
-    public $size  = null;
-    public $width  = null;
-    public $height  = null;
+    public $pk_photo    = null;
+    public $name        = null; //id del articulo
+    public $path_file   = null;
+    public $date        = null;
+    public $size        = null;
+    public $width       = null;
+    public $height      = null;
     public $resolution  = null;
-    public $type_img = null;
-    public $media_type = null;
+    public $type_img    = null;
+    public $media_type  = null;
     public $author_name = null;
 
     public function __construct($id=null)
@@ -61,7 +61,7 @@ class Photo extends Content
 
         $execution = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($execution === false) {
-            $errorMsg = Application::logDatabaseError();
+            Application::logDatabaseError();
 
             return false;
         }
@@ -73,150 +73,177 @@ class Photo extends Content
      * Creates one photo register in the database from data and local file
      * TODO: this function must content the photo local_file
      *
-     * @params array $data the data for the photo, must content the photo local_file
+     * @params array $data the data for the photo, must content the
+     *                     photo local_file
      **/
     public function createFromLocalFile($dataSource, $dateForDirectory=null)
     {
 
         $filePath = $dataSource["local_file"];
 
-        if (!empty($filePath)) {
-             // Check upload directory
-            if (empty($dateForDirectory)) {
-                $dateForDirectory = date("/Y/m/d/");
-            }
-            $uploadDir = MEDIA_PATH.DS.IMG_DIR.DS.$dateForDirectory.DIRECTORY_SEPARATOR ;
+        if (empty($filePath)) {
+            return false;
+        }
 
-            if (!is_dir($uploadDir)) { FilesManager::createDirectory($uploadDir); }
+        // Check upload directory
+        if (empty($dateForDirectory)) {
+            $dateForDirectory = date("/Y/m/d/");
+        }
+        $uploadDir =
+            MEDIA_PATH.DS.IMG_DIR.DS.$dateForDirectory.DIRECTORY_SEPARATOR;
 
-            $filePathInfo = pathinfo($filePath);     //sacamos infor del archivo
+        if (!is_dir($uploadDir)) {
+            FilesManager::createDirectory($uploadDir);
+        }
 
-            // Getting information for creating
-            $t                  = gettimeofday();
-            $micro              = intval(substr($t['usec'], 0, 5));
-            $finalPhotoFileName = date("YmdHis") . $micro . "." . strtolower($filePathInfo['extension']);
-            $fileInformation    = new MediaItem($filePath);
+        $filePathInfo = pathinfo($filePath);     //sacamos infor del archivo
 
-            // Building information for the photo image
-            $data = array(
-                'title'        => $dataSource["title"],
-                'name'         => $finalPhotoFileName,
-                'path_file'    => $dateForDirectory,
-                'fk_category'  => $dataSource["fk_category"],
-                'category'     => $dataSource["fk_category"],
-                'nameCat'      => $dataSource["category_name"],
+        // Getting information for creating
+        $t                  = gettimeofday();
+        $micro              = intval(substr($t['usec'], 0, 5));
+        $finalPhotoFileName =
+            date("YmdHis").$micro.".".strtolower($filePathInfo['extension']);
+        $fileInformation    = new MediaItem($filePath);
 
-               // 'created'      => $fileInformation->atime,
-               // 'changed'      => $fileInformation->mtime,
-                'created'      => $dataSource["created"],
-                'changed'      => $dataSource["changed"],
-                'date'         => $fileInformation->mtime,
-                'size'         => round($fileInformation->size/1024, 2),
-                'width'        => $fileInformation->width,
-                'height'       => $fileInformation->height,
-                'type_img'     => strtolower($filePathInfo['extension']),
-                'media_type'   => 'image',
+        if (!array_key_exists('created', $dataSource)) {
+            $dataSource['created'] = $fileInformation->mtime;
+        }
+        if (!array_key_exists('changed', $dataSource)) {
+            $dataSource['changed'] = $fileInformation->mtime;
+        }
+        // Building information for the photo image
+        $data = array(
+            'title'        => $dataSource["title"],
+            'name'         => $finalPhotoFileName,
+            'path_file'    => $dateForDirectory,
+            'fk_category'  => $dataSource["fk_category"],
+            'category'     => $dataSource["fk_category"],
+            'nameCat'      => $dataSource["category_name"],
 
-                'author_name'  => '',
-                'pk_author'    => $_SESSION['userid'],
-                'fk_publisher' => $_SESSION['userid'],
-                'description'  => $dataSource['description'],
-                'metadata'     => $dataSource["metadata"],
+           // 'created'      => $fileInformation->atime,
+           // 'changed'      => $fileInformation->mtime,
+            'created'      => $dataSource["created"],
+            'changed'      => $dataSource["changed"],
+            'date'         => $fileInformation->mtime,
+            'size'         => round($fileInformation->size/1024, 2),
+            'width'        => $fileInformation->width,
+            'height'       => $fileInformation->height,
+            'type_img'     => strtolower($filePathInfo['extension']),
+            'media_type'   => 'image',
+
+            'author_name'  => '',
+            'pk_author'    => $_SESSION['userid'],
+            'fk_publisher' => $_SESSION['userid'],
+            'description'  => $dataSource['description'],
+            'metadata'     => $dataSource["metadata"],
+        );
+
+        if (is_dir($uploadDir) && !is_writable($uploadDir)) {
+            m::add(
+                sprintf(
+                    'Upload directory doesn\'t exists or you don\'t '
+                    .'have enought privileges to write files there',
+                    $uploadDir.$finalPhotoFileName
+                ),
+                m::ERROR
             );
+            $importedID = null;
+        }
 
-            if (is_dir($uploadDir) && !is_writable($uploadDir)) {
-                m::add(
-                    sprintf(
-                        'Upload directory doesn\'t exists or you don\'t have enought privileges to write files there',
-                        $uploadDir.$finalPhotoFileName
-                    ),
-                    m::ERROR
-                );
-                $importedID = null;
-            }
+        $fileCopied = copy(
+            $dataSource['local_file'],
+            realpath($uploadDir).DIRECTORY_SEPARATOR.$finalPhotoFileName
+        );
+        if ($fileCopied) {
+            $photo = new Photo();
+            $photoID = $photo->create($data);
 
-            if (copy($dataSource['local_file'], realpath($uploadDir).DIRECTORY_SEPARATOR.$finalPhotoFileName)) {
+            if ($photoID) {
 
-                $photo = new Photo();
-                $photoID = $photo->create($data);
-
-
-                if ($photoID) {
-
-                    if (preg_match('/^(jpeg|jpg|gif|png)$/', strtolower($filePathInfo['extension']))) {
-
-                        $imageThumbSize = s::get(array(
-                            'image_thumb_size',
-                            'image_inner_thumb_size',
-                            'image_front_thumb_size',
-                        ));
-
-                        // Thumbnail handler
-                        $thumb = new Imagick(realpath($uploadDir).DIRECTORY_SEPARATOR.$finalPhotoFileName);
-
-                        // Article inner thumbnail
-                        $thumb->thumbnailImage(
-                            $imageThumbSize['image_front_thumb_size']['width'] ?: 480,
-                            $imageThumbSize['image_front_thumb_size']['height'] ?: 250,
-                            true
-                        );
-                        $thumb->writeImage(
-                            $uploadDir . $imageThumbSize['image_thumb_size']['width'] . '-' . $imageThumbSize['image_thumb_size']['height'] . '-' . $finalPhotoFileName
-                        );
-
-                        // Generate frontpage thumbnails
-                        $thumb->thumbnailImage(
-                            $imageThumbSize['image_front_thumb_size']['width'] ?: 350,
-                            $imageThumbSize['image_front_thumb_size']['height'] ?: 200,
-                            true
-                        );
-                        $thumb->writeImage(
-                            $uploadDir . $imageThumbSize['image_front_thumb_size']['width'] . '-' . $imageThumbSize['image_front_thumb_size']['height'] . '-' . $finalPhotoFileName
-                        );
-
-                        // Main thumbnail
-                        $thumb->thumbnailImage(
-                            $imageThumbSize['image_thumb_size']['width'] ?: 140,
-                            $imageThumbSize['image_thumb_size']['height'] ?: 100,
-                            true
-                        );
-                        //Write the new image to a file
-                        $thumb->writeImage($uploadDir . $imageThumbSize['image_thumb_size']['width'] . '-' . $imageThumbSize['image_thumb_size']['height'] . '-' . $finalPhotoFileName);
-
-                    }
-
-                } else {
-                    Application::getLogger()->notice(sprintf(
-                        'EFE Importer: Unable to register the photo object %s (destination: %s).',
-                        $dataSource['local_file'], $uploadDir.$finalPhotoFileName
+                if (preg_match('/^(jpeg|jpg|gif|png)$/', strtolower($filePathInfo['extension']))) {
+                    $imageThumbSize = s::get(array(
+                        'image_thumb_size',
+                        'image_inner_thumb_size',
+                        'image_front_thumb_size',
                     ));
-                    m::add(
-                        sprintf(
-                            'Unable to register the photo object into OpenNemas.',
-                            $uploadDir.$finalPhotoFileName
-                        ),
-                        m::ERROR
+
+                    // Thumbnail handler
+                    $thumb = new Imagick(
+                        realpath($uploadDir).DIRECTORY_SEPARATOR.$finalPhotoFileName
                     );
+
+                    // Article inner thumbnail
+                    $thumb->thumbnailImage(
+                        $imageThumbSize['image_front_thumb_size']['width'] ?: 480,
+                        $imageThumbSize['image_front_thumb_size']['height'] ?: 250,
+                        true
+                    );
+                    $thumb->writeImage(
+                        $uploadDir.$imageThumbSize['image_thumb_size']['width']
+                        . '-' . $imageThumbSize['image_thumb_size']['height']
+                        . '-' . $finalPhotoFileName
+                    );
+
+                    // Generate frontpage thumbnails
+                    $thumb->thumbnailImage(
+                        $imageThumbSize['image_front_thumb_size']['width'] ?: 350,
+                        $imageThumbSize['image_front_thumb_size']['height'] ?: 200,
+                        true
+                    );
+                    $thumb->writeImage(
+                        $uploadDir.$imageThumbSize['image_front_thumb_size']['width']
+                        . '-' . $imageThumbSize['image_front_thumb_size']['height']
+                        . '-' . $finalPhotoFileName
+                    );
+
+                    // Main thumbnail
+                    $thumb->thumbnailImage(
+                        $imageThumbSize['image_thumb_size']['width'] ?: 140,
+                        $imageThumbSize['image_thumb_size']['height'] ?: 100,
+                        true
+                    );
+                    //Write the new image to a file
+                    $thumb->writeImage(
+                        $uploadDir.$imageThumbSize['image_thumb_size']['width']
+                        .'-'.$imageThumbSize['image_thumb_size']['height']
+                        .'-'.$finalPhotoFileName);
+
                 }
 
-                $importedID = $photoID;
-
             } else {
-
-                $importedID = null;
-
                 Application::getLogger()->notice(sprintf(
-                    'EFE Importer: Unable to creathe the photo file %s (destination: %s).',
+                    'EFE Importer: Unable to register the '
+                    .'photo object %s (destination: %s).',
                     $dataSource['local_file'], $uploadDir.$finalPhotoFileName
                 ));
                 m::add(
                     sprintf(
-                        'Unable to copy the file of the photo related in EFE importer to the article.',
+                        'Unable to register the photo object into OpenNemas.',
                         $uploadDir.$finalPhotoFileName
                     ),
                     m::ERROR
                 );
             }
+
+            $importedID = $photoID;
+
+        } else {
+
+            $importedID = null;
+
+            Application::getLogger()->notice(sprintf(
+                'EFE Importer: Unable to creathe the '
+                .'photo file %s (destination: %s).',
+                $dataSource['local_file'], $uploadDir.$finalPhotoFileName
+            ));
+            m::add(
+                sprintf(
+                    'Unable to copy the file of the photo '
+                    .'related in EFE importer to the article.',
+                    $uploadDir.$finalPhotoFileName
+                ),
+                m::ERROR
+            );
         }
 
         return $importedID;
@@ -227,7 +254,8 @@ class Photo extends Content
      * Creates one photo register in the database from data and local file
      * TODO: this function must content the photo local_file
      *
-     * @params array $data the data for the photo, must content the photo local_file
+     * @params array $data the data for the photo,
+     *                     must content the photo local_file
      **/
     public function createFromLocalFileAjax($dataSource)
     {
@@ -238,16 +266,20 @@ class Photo extends Content
         if (!empty($filePath)) {
              // Check upload directory
             $dateForDirectory = date("/Y/m/d/");
-            $uploadDir = MEDIA_PATH.DS.IMG_DIR.DS.$dateForDirectory.DIRECTORY_SEPARATOR ;
+            $uploadDir =
+                MEDIA_PATH.DS.IMG_DIR.DS.$dateForDirectory.DIRECTORY_SEPARATOR;
 
-            if (!is_dir($uploadDir)) { FilesManager::createDirectory($uploadDir); }
+            if (!is_dir($uploadDir)) {
+                FilesManager::createDirectory($uploadDir);
+            }
 
-            $filePathInfo = pathinfo($originalFileName);     //sacamos infor del archivo
+            $filePathInfo = pathinfo($originalFileName);
 
             // Getting information for creating
             $t                  = gettimeofday();
             $micro              = intval(substr($t['usec'], 0, 5));
-            $finalPhotoFileName = date("YmdHis") . $micro . "." . strtolower($filePathInfo['extension']);
+            $finalPhotoFileName = date("YmdHis")
+                . $micro . "." . strtolower($filePathInfo['extension']);
             $fileInformation    = new MediaItem($filePath);
 
             // Building information for the photo image
@@ -278,13 +310,18 @@ class Photo extends Content
             if (is_dir($uploadDir) && !is_writable($uploadDir)) {
                 throw new Exception(
                     sprintf(
-                        'Upload directory doesn\'t exists or you don\'t have enought privileges to write files there',
+                        'Upload directory doesn\'t exists or you don\'t '
+                        .'have enought privileges to write files there',
                         $uploadDir.$finalPhotoFileName
                     )
                 );
             }
 
-            if (copy($dataSource['local_file'], realpath($uploadDir).DIRECTORY_SEPARATOR.$finalPhotoFileName)) {
+            $fileCopied = copy(
+                $dataSource['local_file'],
+                realpath($uploadDir).DIRECTORY_SEPARATOR.$finalPhotoFileName
+            );
+            if ($fileCopied) {
 
                 $photo = new Photo();
                 $photoID = $photo->create($data);
@@ -309,7 +346,9 @@ class Photo extends Content
                             true
                         );
                         $thumb->writeImage(
-                            $uploadDir . $imageThumbSize['image_thumb_size']['width'] . '-' . $imageThumbSize['image_thumb_size']['height'] . '-' . $finalPhotoFileName
+                            $uploadDir.$imageThumbSize['image_thumb_size']['width']
+                            .'-'.$imageThumbSize['image_thumb_size']['height']
+                            .'-'.$finalPhotoFileName
                         );
 
                         // Generate frontpage thumbnails
@@ -319,7 +358,9 @@ class Photo extends Content
                             true
                         );
                         $thumb->writeImage(
-                            $uploadDir . $imageThumbSize['image_front_thumb_size']['width'] . '-' . $imageThumbSize['image_front_thumb_size']['height'] . '-' . $finalPhotoFileName
+                            $uploadDir.$imageThumbSize['image_front_thumb_size']['width']
+                            .'-'.$imageThumbSize['image_front_thumb_size']['height']
+                            .'-'.$finalPhotoFileName
                         );
 
                         // Main thumbnail
@@ -329,21 +370,24 @@ class Photo extends Content
                             true
                         );
                         //Write the new image to a file
-                        $thumb->writeImage($uploadDir . $imageThumbSize['image_thumb_size']['width'] . '-' . $imageThumbSize['image_thumb_size']['height'] . '-' . $finalPhotoFileName);
-
+                        $thumb->writeImage(
+                            $uploadDir.$imageThumbSize['image_thumb_size']['width']
+                            .'-'.$imageThumbSize['image_thumb_size']['height']
+                            .'-'.$finalPhotoFileName
+                        );
                     }
 
                 } else {
                     Application::getLogger()->notice(sprintf(
-                        'EFE Importer: Unable to register the photo object %s (destination: %s).',
-                        $dataSource['local_file'], $uploadDir.$finalPhotoFileName
+                        'EFE Importer: Unable to register '
+                        .'the photo object %s (destination: %s).',
+                        $dataSource['local_file'],
+                        $uploadDir.$finalPhotoFileName
                     ));
-                   throw new Exception(
-                        sprintf(
-                            'Unable to register the photo object into OpenNemas.',
-                            $uploadDir.$finalPhotoFileName
-                        )
-                    );
+                    throw new Exception(sprintf(
+                        'Unable to register the photo object into OpenNemas.',
+                        $uploadDir.$finalPhotoFileName
+                    ));
                 }
 
                 $photo = new Photo($photoID);
@@ -353,12 +397,14 @@ class Photo extends Content
                 $importedID = null;
 
                 Application::getLogger()->notice(sprintf(
-                    'EFE Importer: Unable to creathe the photo file %s (destination: %s).',
+                    'EFE Importer: Unable to creathe the '
+                    .'photo file %s (destination: %s).',
                     $dataSource['local_file'], $uploadDir.$finalPhotoFileName
                 ));
                 throw new Exception(
                     sprintf(
-                        'Unable to copy the file of the photo related in EFE importer to the article.',
+                        'Unable to copy the file of the photo '
+                        .'related in EFE importer to the article.',
                         $uploadDir.$finalPhotoFileName
                     )
                 );
@@ -372,19 +418,15 @@ class Photo extends Content
     {
         parent::read($id);
 
-        $sql = 'SELECT * FROM photos WHERE pk_photo = '.$id;
+        $sql = 'SELECT * FROM photos WHERE pk_photo =?';
+        $values = array($id);
 
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if (!$rs) {
-
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            \Application::logDatabaseError();
 
             return;
-
         }
-
 
         //$this->load( $rs->fields );
         $this->pk_photo    = $rs->fields['pk_photo'];
@@ -400,12 +442,12 @@ class Photo extends Content
         $this->media_type  = $rs->fields['media_type'];
         $this->description = ($this->description);
         $this->metadata    = ($this->metadata);
-        $this->date        =  $rs->fields['date'];
-        $this->color       =  $rs->fields['color'];
-        $this->address     =  $rs->fields['address'];
+        $this->date        = $rs->fields['date'];
+        $this->color       = $rs->fields['color'];
+        $this->address     = $rs->fields['address'];
     }
 
-    public function read_alldata($id)
+    public function readAllData($id)
     {
         $photo = new stdClass();
         $this->read($id);
@@ -459,12 +501,13 @@ class Photo extends Content
                     if (isset($info)) {
                         foreach ($info as $key => $val) {
                             if ($key != 'APP1') {
-                                $data_exif = read_exif_data($image, 0, true); break;
+                                $exifData =
+                                    read_exif_data($image, 0, true); break;
                             }
                         }
                     }
-                    if (!empty($data_exif)) {
-                        $photo->exif = $data_exif;
+                    if (!empty($exifData)) {
+                        $photo->exif = $exifData;
                     } else {
                         $photo->exif = null;
                     }
@@ -475,18 +518,23 @@ class Photo extends Content
                     } else {
 
                         if (empty($photo->color)) {
-                            if ($data_exif['COMPUTED']['IsColor']==0) {
+                            if ($exifData['COMPUTED']['IsColor']==0) {
                                 $photo->color= 'BN';
                             } else {
                                 $photo->color= 'color';
                             }
                         }
-                        if (isset($data_exif['IFD0'])) {
-                            if (empty($photo->resolution) && !is_null($data_exif['IFD0']['XResolution'])) {
-                                $photo->resolution = $data_exif['IFD0']['XResolution'];
+                        if (isset($exifData['IFD0'])) {
+                            if (empty($photo->resolution)
+                                && !is_null($exifData['IFD0']['XResolution'])
+                            ) {
+                                $photo->resolution =
+                                    $exifData['IFD0']['XResolution'];
                             }
-                            if (empty($photo->date) && !is_null($data_exif['FILE']['FileDateTime'])) {
-                                $photo->date= $data_exif['FILE']['FileDateTime'];
+                            if (empty($photo->date)
+                                && !is_null($exifData['FILE']['FileDateTime'])
+                            ) {
+                                $photo->date= $exifData['FILE']['FileDateTime'];
                             }
                         }
                     }
@@ -587,7 +635,7 @@ class Photo extends Content
     }
 
     //FIXME: Actualiza metadata description y author de una photo
-    public function set_data($data)
+    public function setData($data)
     {
         $data['pk_author'] = $_SESSION['userid'];
         $data['fk_user_last_editor'] = $_SESSION['userid'];
@@ -623,14 +671,14 @@ class Photo extends Content
 
         $sql = 'DELETE FROM photos WHERE pk_photo=?';
 
-        if ($GLOBALS['application']->conn->Execute($sql, array($id)) === false) {
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
+        if ($rs === false) {
             \Application::logDatabaseError();
 
             return;
-
         }
 
-        $image = MEDIA_IMG_PATH . $this->path_file.$this->name;
+        $image      = MEDIA_IMG_PATH . $this->path_file.$this->name;
         $thumbimage = MEDIA_IMG_PATH . $this->path_file.'140-100-'.$this->name;
 
         if (file_exists($image)) {
@@ -642,7 +690,7 @@ class Photo extends Content
 
     }
 
-    public function update_path($path, $id)
+    public function updatePath($path, $id)
     {
         $sql = "UPDATE `photos` SET `path_file`=? WHERE `pk_photo`=?";
 
@@ -652,18 +700,17 @@ class Photo extends Content
             \Application::logDatabaseError();
 
             return;
-
         }
     }
 
     //function check image is used by article, album, advertisement
     // return array id contents use this image.
 
-    public function is_used($id)
+    public function isUsed($id)
     {
-        $sqlAlbums = 'SELECT pk_album FROM  albums_photos WHERE  pk_photo=?';
-        $sqlAds = 'SELECT pk_advertisement FROM  advertisements WHERE path=?';
-        $sqlarticles = 'SELECT pk_article FROM  articles WHERE img1=? OR img2=?';
+        $sqlAlbums = 'SELECT pk_album FROM albums_photos WHERE pk_photo=?';
+        $sqlAds = 'SELECT pk_advertisement FROM advertisements WHERE path=?';
+        $sqlarticles = 'SELECT pk_article FROM articles WHERE img1=? OR img2=?';
         // $sql= "$sql3 UNION $sql1 UNION $sql2";
 
         $result = array();
@@ -698,12 +745,3 @@ class Photo extends Content
     }
 
 } //end class
-
-function map_entities($str)
-{
-    // $str = mb_convert_encoding($str, 'UTF-8', mb_detect_encoding($str));
-    $str = mb_convert_encoding($str, "UTF-8", "CP1252,CP1251,ISO-8859-1,UTF-8, ISO-8859-15");
-
-    return mb_strtolower($str, 'UTF-8');
-    // return htmlentities($str, ENT_COMPAT, 'UTF-8');
-}

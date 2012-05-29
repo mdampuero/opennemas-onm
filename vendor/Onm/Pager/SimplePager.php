@@ -9,7 +9,7 @@
 namespace Onm\Pager;
 
 /**
- * Class for generate image with next and previus.
+ * Class for generate image with next and previous.
  *
  * @package    Onm
  * @subpackage UI
@@ -21,7 +21,7 @@ class SimplePager
 
     public $next = null;
 
-    public $previus = null;
+    public $previous = null;
 
     /**
      * Returns the HTML paginate with js action onclick
@@ -92,7 +92,7 @@ class SimplePager
         $previous = "<a href='".$url."&page=".($page-1)."' title='Previous'>"
                   . _('« Previous') ."</a>";
 
-        if (empty($page)) {
+        if (empty($page) || $page == 1) {
             if ($total <= $items) {
                 $html ='';
             } else {

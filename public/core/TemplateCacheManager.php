@@ -82,7 +82,7 @@ class TemplateCacheManager
     public function parseList($caches)
     {
 
-        for ($i = 0, $total = count($caches);$i < $total;$i++) {
+        for ($i = 0, $total = count($caches); $i < $total;$i++) {
             $data = $this->parse($caches[$i]['filename']);
             $caches[$i]['expires'] = $data['expires'];
             $caches[$i]['created'] = $data['timestamp'];
@@ -100,13 +100,10 @@ class TemplateCacheManager
      */
     public function parse($cacheFileName)
     {
-
-
         // Clear cache of filesystem to get updated information
         /* clearstatcache(); */
 
         $data = null;
-
         if (file_exists($this->_cacheDir . $cacheFileName)) {
             $data = $this->getHeaderInfoFromCacheFile($this->_cacheDir . $cacheFileName);
             $data['timestamp'] = filectime($this->_cacheDir . $cacheFileName);
@@ -311,7 +308,7 @@ class TemplateCacheManager
         ob_start();
 
         // Exec
-        $html = curl_exec($ch);
+        curl_exec($ch);
         ob_end_clean();
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 

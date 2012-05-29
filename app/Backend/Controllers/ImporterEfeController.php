@@ -179,14 +179,14 @@ class ImporterEfeController extends Controller
             $photos = $element->getPhotos();
             foreach($photos as $photo) {
 
-                $filePath = realpath($efe->syncPath.DIRECTORY_SEPARATOR.$photo->file_path);
+                $filePath = realpath($efe->_syncPath.DIRECTORY_SEPARATOR.$photo->file_path);
 
                 // Check if the file exists
                 if ($filePath) {
                     $data = array(
                         'title'         => $photo->title,
                         'description'   => '',
-                        'local_file'    => realpath($efe->syncPath.DIRECTORY_SEPARATOR.$photo->file_path),
+                        'local_file'    => realpath($efe->_syncPath.DIRECTORY_SEPARATOR.$photo->file_path),
                         'fk_category'   => $category,
                         'category_name' => $categoryInstance->name,
                         'metadata'      => \StringUtils::get_tags($photo->title),

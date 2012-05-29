@@ -635,7 +635,7 @@ switch ($action) {
         $fields = array('title','fk_user_last_editor');
         $_REQUEST['fk_user_last_editor']=$_SESSION['userid'];
         SqlHelper::bindAndUpdate('contents', $fields, $_REQUEST, $filter);
-        Application::ajax_out('ok');
+        Application::ajaxOut('ok');
     break;
 
     case 'update_author':
@@ -658,7 +658,7 @@ switch ($action) {
         $_REQUEST['fk_user_last_editor']=$_SESSION['userid'];
         $fields1 = array('fk_user_last_editor');
         SqlHelper::bindAndUpdate('contents', $fields1, $_REQUEST, $filter1);
-        Application::ajax_out('ok');
+        Application::ajaxOut('ok');
     break;
 
     case 'get_authors_list':
@@ -666,7 +666,7 @@ switch ($action) {
         $autores = $aut->all_authors(NULL,'ORDER BY name');
         $autores = json_encode($autores);
         header('Content-type: application/json');
-        Application::ajax_out($autores);
+        Application::ajaxOut($autores);
     break;
 
     case 'changeavailable':
@@ -736,7 +736,7 @@ switch ($action) {
         }
 
         $out.= "</ul>";
-        Application::ajax_out($out);
+        Application::ajaxOut($out);
     break;
 
     case 'content-list-provider':
@@ -756,7 +756,7 @@ switch ($action) {
                     ));
 
         $html_out = $tpl->fetch("common/content_provider/_container-content-list.tpl");
-        Application::ajax_out($html_out);
+        Application::ajaxOut($html_out);
 
     break;
 

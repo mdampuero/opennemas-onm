@@ -26,11 +26,11 @@ class ImporterXml
    // the instance object
    static private $instance = null;
 
-   public $ignoreds = NULL;
-   public $alloweds = NULL;
-   public $labels = NULL;
-   public $schema = NULL;
-   public $data = NULL;
+   public $ignoreds         = null;
+   public $alloweds         = null;
+   public $labels           = null;
+   public $schema           = null;
+   public $data             = null;
 
 
       /**
@@ -45,6 +45,8 @@ class ImporterXml
 
         $this->labels = array_values($this->schema);
 
+        $this->config = $config;
+
         $ignoreds = explode(',', $this->schema['ignored']);
         foreach ($ignoreds as $lab) {
             $this->ignoreds[] = trim($lab);
@@ -56,7 +58,7 @@ class ImporterXml
         }
 
         $this->data = array();
-        foreach ($this->schema as $k=>$v) {
+        foreach ($this->schema as $k => $v) {
             if ($v != 'ignored') {
                 $this->data[$k] ='';
             }
@@ -65,20 +67,18 @@ class ImporterXml
     }
 
 
-   static public function getInstance($config = NULL)
-   {
-
+    static public function getInstance($config = null)
+    {
         if (!self::$instance instanceof self) {
             self::$instance = new self($config);
 
         }
 
         return self::$instance;
+    }
 
-   }
-
-   static public function importXML($XMLFile)
-   {
+    static public function importXML($XMLFile)
+    {
         try {
             $simple = simplexml_load_file($XMLFile);
 
@@ -88,27 +88,29 @@ class ImporterXml
         }
 
         return $simple;
-   }
+    }
 
 
-   public function checkLabels($label)
-   {
-       foreach ($this->schema as $value=>$pattern) {
-
-            if($label == $pattern)
-
+    public function checkLabels($label)
+    {
+       foreach ($this->schema as $value => $pattern) {
+            if ($label == $pattern) {
                 return $value;
+            }
        }
 
        return false;
-
     }
 
     public function checkBeIgnored($text)
     {
-        if (!empty($text) && (in_array($text, $this->ignoreds) || in_array($text, $this->labels) ) ) {
+        if (!empty($text)
+            && (in_array($text, $this->ignoreds)
+                || in_array($text, $this->labels))
+        ) {
             return '';
         } else {
+
             return $text. ' ';
         }
     }
@@ -118,7 +120,7 @@ class ImporterXml
     public static function parseXMLtoArray($eleto)
     {
         $json = json_encode($eleto);
-        $array = json_decode($json,TRUE);
+        $array = json_decode($json, true);
 
         return $array;
     }
@@ -126,16 +128,15 @@ class ImporterXml
 
     public function parseNodes($array)
     {
-        $tag = '';
-        $end = '';
+        $tag   = '';
+        $end   = '';
         $texto ='';
         if (!empty($array)) {
-
-            foreach ($array as $key=>$value) {
+            foreach ($array as $key => $value) {
                 if ($key =='@attributes') {
                     $label = $this->checkAttributes($value);
 
-                    if((is_array($value) &&
+                    if ((is_array($value) &&
                         array_key_exists('class', $value)
                         && $this->checkBeImportant($value['class']))
                         || (!is_array($value)
@@ -157,21 +158,21 @@ class ImporterXml
                             $this->data[$label] .= $tag.$this->parseNodes($point).$end;
                         } else {
 
-                            $this->data[$label] .= $tag. $this->checkBeIgnored($point) .$end;
+                            $this->data[$label] .= $tag. $this->checkBeIgnored($point).$end;
 
                         }
                     }
                 } elseif (!in_array($key, $this->ignoreds) ) {
-                   $label = $this->checkLabels($key);
+                    $label = $this->checkLabels($key);
 
                 } else {
-                   return '';
+                    return '';
                 }
 
                 if ( !empty($label)) {
 
                     if (!is_object($value) && !is_array($value)) {
-                        $texto = (string)$value;
+                        $texto = (string) $value;
 
                         $this->data[$label]  .= $this->checkBeIgnored($texto);
 
@@ -210,10 +211,10 @@ class ImporterXml
 
         if ((is_object($value) || is_array($value)) ) {
 
-            foreach ($value as $n=>$val) {
+            foreach ($value as $n => $val) {
 
-                if (!empty($val) &&  (!in_array($n, $this->ignoreds) ) ) {
-                   $label = $this->checkAttributes($val);
+                if (!empty($val) && (!in_array($n, $this->ignoreds))) {
+                    $label = $this->checkAttributes($val);
                 }
             }
         } else {
@@ -244,7 +245,7 @@ class ImporterXml
     {
         //Clear data
         $this->data = array();
-        foreach ($this->schema as $k=>$v) {
+        foreach ($this->schema as $k => $v) {
             if ($v != 'ignored') {
                 $this->data[$k] ='';
             }
@@ -253,7 +254,7 @@ class ImporterXml
 
         $this->data['pk_author'] = $_SESSION['userid'];
 
-        $imgImported =NULL;
+        $imgImported = null;
         if (!empty( $this->data['img'] )) {
             s::get('SITE_URL');
             $urn_source = preg_match( "@*.*{1,3}@", $this->data['img']);
@@ -275,16 +276,17 @@ class ImporterXml
 
         $this->parseNodes($values);
 
-        if(empty($this->data['title_int']))
+        if (empty($this->data['title_int']))
             $this->data['title_int'] = $this->data['title'];
 
-        if(empty($this->data['summary']))
-            $this->data['summary'] =
-                strip_tags(substr($this->data['body'], 0, strpos($this->data['body'], '.') ).'.');
+        if (empty($this->data['summary']))
+            $this->data['summary'] = strip_tags(
+                substr($this->data['body'], 0, strpos($this->data['body'], '.') ).'.');
 
         if (!empty($this->data['category_name'])) {
             $ccm = ContentCategoryManager::get_instance();
-            $current_category = strtolower(StringUtils::normalize_name($this->data['category_name']));
+            $current_category = strtolower(
+                StringUtils::normalize_name($this->data['category_name']));
             $this->data['category'] = $ccm->get_id($current_category);
 
         } else {
@@ -292,8 +294,6 @@ class ImporterXml
         }
 
         $this->data['metadata'] =  StringUtils::get_tags($this->data['title']);
-
-
 
         return ($this->data);
     }

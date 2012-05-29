@@ -118,7 +118,7 @@ CREATE TABLE IF NOT EXISTS `albums` (
   `subtitle` varchar(250) DEFAULT NULL,
   `agency` varchar(250) DEFAULT NULL,
   `fuente` varchar(250) DEFAULT NULL,
-  `cover` varchar(255) DEFAULT NULL,
+  `cover_id` bigint(255) DEFAULT NULL,
   PRIMARY KEY (`pk_album`),
   UNIQUE KEY `pk_album` (`pk_album`),
   KEY `pk_album_2` (`pk_album`)
@@ -2165,6 +2165,7 @@ CREATE TABLE IF NOT EXISTS `books` (
   `pk_book` bigint(20) unsigned NOT NULL,
   `author` varchar(250) DEFAULT NULL,
   `file` varchar(250) DEFAULT NULL,
+  `file_img` VARCHAR( 255 ) DEFAULT NULL ,
   `editorial` varchar(250) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

@@ -105,7 +105,7 @@
                             <div id="newsletter-container" class="column-receiver">
 
                                 {if empty($newsletterContent)}
-                                    <div class="container-receiver"  data-title="En Portada" data-id="1" >
+                                    <div class="container-receiver active"  data-title="En Portada" data-id="1" >
                                         <div class="container-label"><span>En Portada</span>
                                             <div class="container-buttons btn-group">
                                                     <i class="icon-chevron-down"></i>
@@ -121,7 +121,8 @@
                                     {section name=c loop=$newsletterContent}
                                         {assign var='contents' value=$newsletterContent[c]->items}
                                         {if !empty($contents)}
-                                        <div class="container-receiver" data-title="{$newsletterContent[c]->title}" data-id="{$newsletterContent[c]->id}">
+                                        <div class="container-receiver {if $smarty.section.c.first} active{/if}"
+                                            data-title="{$newsletterContent[c]->title}" data-id="{$newsletterContent[c]->id}">
                                             <div class="container-label"><span>{$newsletterContent[c]->title}</span>
                                                 <div class="container-buttons btn-group">
                                                         <i class="icon-chevron-down"></i>
@@ -154,6 +155,7 @@
                     </tr>
                 </tbody>
             </table>
+             <textarea style="display:none;" id="newsletterContent" name="newsletterContent" style="width:90%"></textarea>
             <input type="hidden" id="action" name="action" value="preview" />
         </div>
     </div>
@@ -161,5 +163,6 @@
 </form>
 {include file="newsletter/modals/_add_container_label.tpl"}
 {include file="newsletter/modals/_update_container_label.tpl"}
+{include file="newsletter/modals/_activate_container_alert.tpl"}
 {/block}
 

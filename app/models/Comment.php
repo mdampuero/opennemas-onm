@@ -163,8 +163,6 @@ class Comment extends \Content
      **/
     public function delete_comments($contentID)
     {
-        $related = array();
-
         if ($contentID) {
             $sql = 'DELETE FROM `comments`, `contents`
                     WHERE `fk_content`=? AND `pk_content`=`pk_comment` ';
@@ -293,7 +291,6 @@ class Comment extends \Content
             $filter = "1=1";
         }
         $items = array();
-        $related = array();
         $sql = "SELECT fk_content, pk_comment
                 FROM comments, contents
                 WHERE ?

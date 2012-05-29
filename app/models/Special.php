@@ -40,7 +40,7 @@ class Special extends Content
      **/
     public function __construct($id=null)
     {
-       parent::__construct($id);
+        parent::__construct($id);
 
         if (!is_null($id)) {
             $this->read($id);
@@ -50,7 +50,7 @@ class Special extends Content
         return $this;
     }
 
-  /**
+    /**
      * Magic function for getting uninitilized object properties.
      *
      * @param string $name the name of the property to get.
@@ -70,10 +70,10 @@ class Special extends Content
                 $uri =  Uri::generate(
                     'special',
                     array(
-                        'id' => sprintf('%06d',$this->id),
-                        'date' => date('YmdHis', strtotime($this->created)),
+                        'id'       => sprintf('%06d', $this->id),
+                        'date'     => date('YmdHis', strtotime($this->created)),
                         'category' => $this->category_name,
-                        'slug' => $this->slug,
+                        'slug'     => $this->slug,
                     )
                 );
 
@@ -180,9 +180,15 @@ class Special extends Content
             $data['pdf_path'] = '';
         }
 
-        $sql = "UPDATE specials SET `subtitle`=?, `img1`=?,  `pdf_path`=?  ".
-                "WHERE pk_special=".intval($data['id']);
-        $values = array(  $data['subtitle'], $data['img1'],  $data['pdf_path'] );
+        $sql = "UPDATE specials "
+             . "SET `subtitle`=?, `img1`=?,  `pdf_path`=?  "
+             . "WHERE pk_special=?";
+        $values = array(
+            $data['subtitle'],
+            $data['img1'],
+            $data['pdf_path'],
+            intval($data['id']),
+        );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
@@ -202,16 +208,19 @@ class Special extends Content
     {
         parent::remove($id);
 
-        $sql = 'DELETE FROM specials WHERE pk_special='.intval($id);
+        $sql = 'DELETE FROM specials WHERE pk_special=?';
+        $values = array(intval($id));
 
-        if ($GLOBALS['application']->conn->Execute($sql)===false) {
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
 
             return;
         }
-        $sql = 'DELETE FROM special_contents WHERE fk_special = ' .intval($id);
 
-        if ($GLOBALS['application']->conn->Execute($sql)===false) {
+        $sql = 'DELETE FROM special_contents WHERE fk_special=?';
+        $values = array(intval($id));
+
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
 
             return;
@@ -220,38 +229,32 @@ class Special extends Content
 
     public function saveItems($data)
     {
-        $this->delete_all_contents($data['id']);
+        $this->deleteAllContents($data['id']);
         if (isset($data['noticias_left'])) {
             $tok = strtok($data['noticias_left'], ",");
             $name = "";
             $pos = 1;
             $contentType = 'Article';
             while (($tok !== false) AND ($tok !=" ")) {
-                // $this->delete_contents($data['id'] ,$tok)  	;
-                $this->set_contents($data['id'] , $tok, $pos, $name, $contentType);
+                // $this->deleteContents($data['id'] ,$tok)  	;
+                $this->set_contents($data['id'], $tok, $pos, $name, $contentType);
                 $tok = strtok(",");
                 $pos+=2;
             }
         }
 
         if (isset($data['noticias_right'])) {
-            $tok = strtok($data['noticias_right'],",");
+            $tok = strtok($data['noticias_right'], ",");
             $name = "";
             $pos = 2;
             $contentType = 'Article';
             while (($tok !== false) AND ($tok !=" ")) {
-                //   $this->delete_contents($data['id'] ,$tok)  	;
-                $this->set_contents($data['id'] , $tok, $pos, $name,  $contentType);
+                $this->set_contents($data['id'], $tok, $pos, $name, $contentType);
                 $tok = strtok(",");
                 $pos+=2;
             }
         }
     }
-
-
-/****************************************************************************/
-/**************************  special_contents ********************************/
-/****************************************************************************/
 
     public function get_contents($id)
     {
@@ -288,13 +291,13 @@ class Special extends Content
         $typeContent
     ) {
         if ($id == null) {
-            return(false);
+            return false;
         }
 
-       $visible = 1;
-       $sql = "INSERT INTO special_contents "
-            . "(`fk_special`, `fk_content`,`position`,`name`,`visible`,`type_content`)"
-            . " VALUES (?,?,?,?,?,?)";
+        $visible = 1;
+        $sql = "INSERT INTO special_contents "
+             . "(`fk_special`, `fk_content`,`position`,`name`,`visible`,`type_content`)"
+             . " VALUES (?,?,?,?,?,?)";
         $values = array(
             $id,
             $pkContent,
@@ -315,15 +318,15 @@ class Special extends Content
     }
 
     // Elimina contenidos dentro de un modulo
-    public function delete_contents($id, $contentId)
+    public function deleteContents($id, $contentId)
     {
-        if ($id == null) {
+        if (is_null($id)) {
             return false;
         }
-        $sql = 'DELETE FROM special_contents WHERE fk_content=? AND fk_special=?';
-
-        $rs = $GLOBALS['application']->conn->Execute($sql,
-            array(intval($contentId)), intval($id));
+        $sql = 'DELETE FROM special_contents '
+             . 'WHERE fk_content=? AND fk_special=?';
+        $values = array(intval($contentId), intval($id));
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
             \Application::logDatabaseError();
 
@@ -331,12 +334,13 @@ class Special extends Content
         }
     }
 
-    public function delete_all_contents($id)
+    public function deleteAllContents($id)
     {
-        if ($id == null) {
+        if (is_null($id)) {
             return false;
         }
-        $sql = 'DELETE FROM special_contents WHERE  fk_special=?';
+        $sql = 'DELETE FROM special_contents '
+             . 'WHERE fk_special=?';
         $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($id)));
 
         if ($rs === false) {

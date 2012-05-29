@@ -160,7 +160,7 @@ class Efe
      */
     public function findByFileName($id)
     {
-        $file    = $this->_syncPath.DIRECTORY_SEPARATOR.$id.'.xml';
+        $file    = $this->_syncPath.DIRECTORY_SEPARATOR.$id;
         $element = new NewsMLG1($file);
 
         return  $element;

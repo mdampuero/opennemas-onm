@@ -605,7 +605,7 @@ if (isset($_REQUEST['action']) ) {
                     $article->update( $_REQUEST );
                 }
             }
-            Application::ajax_out($article->id);
+            Application::ajaxOut($article->id);
         break;
 
         case 'delete':
@@ -1029,7 +1029,7 @@ if (isset($_REQUEST['action']) ) {
              $allcategorys =$ccm->cache->renderCategoriesTree();
              $data=json_encode($allcategorys);
              header('Content-type: application/json');
-             Application::ajax_out($data);
+             Application::ajaxOut($data);
 
 
         break;
@@ -1044,7 +1044,7 @@ if (isset($_REQUEST['action']) ) {
             $_REQUEST['permalink'] = $content->put_permalink($content->id, $content_type, $_REQUEST['title'], $content->category) ;
             $fields = array('title','permalink','fk_user_last_editor');
             SqlHelper::bindAndUpdate('contents', $fields, $_REQUEST, $filter);
-            Application::ajax_out('ok');
+            Application::ajaxOut('ok');
          break;
 
         case 'update_agency':
@@ -1057,7 +1057,7 @@ if (isset($_REQUEST['action']) ) {
             $fields = array('agency');
             SqlHelper::bindAndUpdate('articles', $fields, $_REQUEST, $filter);
 
-            Application::ajax_out('ok');
+            Application::ajaxOut('ok');
         break;
 
         case 'update_category':
@@ -1065,7 +1065,7 @@ if (isset($_REQUEST['action']) ) {
             $_REQUEST['fk_user_last_editor']=$_SESSION['userid'];
             $content= new Content($_REQUEST['id']);
             $content_type = $GLOBALS['application']->conn->
-            GetOne('SELECT name FROM `content_types` WHERE pk_content_type = "'. $content->content_type.'"');
+                GetOne('SELECT name FROM `content_types` WHERE pk_content_type = "'. $content->content_type.'"');
             $_REQUEST['permalink'] = $content->put_permalink($content->id, $content_type, $content->title, $_REQUEST['pk_fk_content_category']) ;
             $fields1 = array('fk_user_last_editor','permalink');
             SqlHelper::bindAndUpdate('contents', $fields1, $_REQUEST, $filter1);
@@ -1074,7 +1074,7 @@ if (isset($_REQUEST['action']) ) {
             $fields2 = array('pk_fk_content_category','catName');
             SqlHelper::bindAndUpdate('contents_categories', $fields2, $_REQUEST, $filter2);
 
-            Application::ajax_out('ok');
+            Application::ajaxOut('ok');
         break;
 
         case 'clone': {
@@ -1177,7 +1177,7 @@ if (isset($_REQUEST['action']) ) {
             ));
 
             $htmlOut = $tpl->fetch("common/content_provider/_container-content-list.tpl");
-            Application::ajax_out($htmlOut);
+            Application::ajaxOut($htmlOut);
 
             break;
 
@@ -1218,7 +1218,7 @@ if (isset($_REQUEST['action']) ) {
             ));
 
             $htmlOut = $tpl->fetch("common/content_provider/_container-content-list.tpl");
-            Application::ajax_out($htmlOut);
+            Application::ajaxOut($htmlOut);
 
             break;
 
@@ -1230,9 +1230,9 @@ if (isset($_REQUEST['action']) ) {
             $page       = filter_input( INPUT_GET, 'page' , FILTER_SANITIZE_NUMBER_INT, array('options' => array('default' => '1')) );
             $cm = new ContentManager();
 
-            $mySearch = cSearch::Instance();
+            $mySearch = cSearch::getInstance();
             $where = "content_status=1 AND available=1 ";
-            $search = $mySearch->SearchRelatedContents($metadata, 'Article,Opinion', NULL, $where);
+            $search = $mySearch->searchRelatedContents($metadata, 'Article,Opinion', NULL, $where);
             if(($search) && count($search)>0){
                 var_dump($search);
             }
@@ -1244,7 +1244,7 @@ if (isset($_REQUEST['action']) ) {
             ));
 
             $htmlOut = $tpl->fetch("common/content_provider/_container-content-list.tpl");
-            Application::ajax_out($htmlOut);
+            Application::ajaxOut($htmlOut);
 
             break;
 

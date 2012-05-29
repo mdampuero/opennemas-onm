@@ -102,7 +102,7 @@ class NewsletterManager
     {
         $tpl = new Template(TEMPLATE_USER);
 
-        $newsletterContent = json_decode(json_decode($_COOKIE['data-newsletter']));
+        $newsletterContent = json_decode(json_decode($_SESSION['data-newsletter']));
 
         if (!empty($newsletterContent)) {
             foreach ($newsletterContent as  $container) {

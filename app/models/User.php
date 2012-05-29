@@ -6,8 +6,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-// see also config.inc.php
-//define('SYS_NAME_GROUP_ADMIN', 'Administrador');
 /**
  * User
  *
@@ -16,12 +14,6 @@
  **/
 class User
 {
-    /**#@+
-     * User properties
-     *
-     * @access public
-     * @var string
-     */
     public $id               = null;
     public $login            = null;
     public $password         = null;
@@ -36,7 +28,6 @@ class User
     public $id_user_group    = null;
     public $accesscategories = null;
     public $fk_user_group    = null;
-    /**#@-*/
 
     /**
      * @var string
@@ -75,18 +66,18 @@ class User
                                       `lastname`, `address`, `phone`,
                                       `fk_user_group`)
                     VALUES (?,?,?,?,?,?,?,?,?,?)";
-        $values = array($data['login'], md5($data['password']),  $data['sessionexpire'],
-                        $data['email'], $data['name'], $data['firstname'],
-                        $data['lastname'], $data['address'], $data['phone'],
-                        $data['id_user_group']);
+        $values = array(
+            $data['login'], md5($data['password']),  $data['sessionexpire'],
+            $data['email'], $data['name'], $data['firstname'],
+            $data['lastname'], $data['address'], $data['phone'],
+            $data['id_user_group']
+        );
 
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
-            return(false);
+            return false;
         }
         $this->id = $GLOBALS['application']->conn->Insert_ID();
 
@@ -326,7 +317,7 @@ class User
 
         if ($this->isValidEmail($login)) {
             $result = $this->authGoogleClientLogin($login,
-                $password, $loginToken=null, $loginCaptcha=null);
+                $password, $loginToken, $loginCaptcha);
         } else {
             $result = $this->authDatabase($login, $password);
         }
@@ -387,7 +378,12 @@ class User
      * @param  string        $loginCaptcha
      * @return boolean|array
      */
-    public function authGoogleClientLogin($email, $passwd, $loginToken=null, $loginCaptcha=null)
+    public function authGoogleClientLogin(
+        $email,
+        $passwd,
+        $loginToken=null,
+        $loginCaptcha=null
+    )
     {
         require_once 'Zend/Loader.php';
         Zend_Loader::loadClass('Zend_Gdata_ClientLogin');
@@ -404,7 +400,8 @@ class User
             // Check exists account into database
             $data = $this->getUserDataByEmail($email);
 
-            if (empty($data)) { // Don't exist into database
+            // User don't exist into database
+            if (empty($data)) {
 
                 return false;
             }
@@ -530,7 +527,7 @@ class User
         return $contentCategories;
     }
 
-    public function get_access_categories_name()
+    public function getAccessCategoriesName()
     {
         if (!empty($this->accesscategories)) {
             foreach ($this->accesscategories as $category) {
@@ -543,7 +540,7 @@ class User
         return null;
     }
 
-    public function get_access_categories_id($id=null)
+    public function getAccessCategoryIds($id=null)
     {
         if ( empty($this->accesscategories) ) {
             $this->accesscategories = $this->readAccessCategories($id);
@@ -631,7 +628,7 @@ class User
     {
         $sql = 'SELECT name, login FROM users WHERE pk_user='.$id;
         $rs = $GLOBALS['application']->conn->Execute($sql);
-         if (!$rs) {
+        if (!$rs) {
             \Application::logDatabaseError();
 
             return false;
@@ -667,11 +664,11 @@ class User
                 $link = $link['href'];
 
                 $messages['entries'][] = array(
-                    'title'   => (string)$entry->title,
-                    'summary' => (string)$entry->summary,
-                    'link'    => (string)$link[0],
-                    'name'    => (string)$entry->author->name,
-                    'email'   => (string)$entry->author->email
+                    'title'   => (string) $entry->title,
+                    'summary' => (string) $entry->summary,
+                    'link'    => (string) $link[0],
+                    'name'    => (string) $entry->author->name,
+                    'email'   => (string) $entry->author->email
                 );
             }
 

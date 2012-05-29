@@ -48,8 +48,8 @@ if (\Onm\Module\ModuleManager::isActivated('IMAGE_MANAGER')) {
 
         if (!empty($metadatas)) {
 
-            $presentSearch = cSearch::Instance();
-            $arrayIds      = $presentSearch->SearchContentsSelect('pk_content', $metadatas, 'photo', 100);
+            $presentSearch = cSearch::getInstance();
+            $arrayIds      = $presentSearch->searchContentsSelect('pk_content', $metadatas, 'photo', 100);
             if (!empty($arrayIds))
             {
                 $szWhere   = '( FALSE ';
@@ -130,6 +130,6 @@ if (\Onm\Module\ModuleManager::isActivated('IMAGE_MANAGER')) {
 
     // AJAX REQUEST
     $htmlOut .= $tpl->fetch('image/image_gallery.ajax.tpl');
-    Application::ajax_out($htmlOut);
+    Application::ajaxOut($htmlOut);
 }
 

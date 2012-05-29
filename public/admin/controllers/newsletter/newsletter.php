@@ -108,8 +108,8 @@ switch($action) {
         $newsletter = new NewNewsletter();
         $savedNewsletters = $newsletter->search('1=1 ORDER BY created DESC LIMIT 0,30');
 
-        $newsletterContent = isset($_COOKIE['data-newsletter']) ?
-                     json_decode(json_decode($_COOKIE['data-newsletter'])) : '';
+        $newsletterContent = isset($_SESSION['data-newsletter']) ?
+                     json_decode(json_decode($_SESSION['data-newsletter'])) : '';
 
         if (array_key_exists('newsletterHtml', $_SESSION)) {
             unset($_SESSION['newsletterHtml']);
@@ -125,15 +125,15 @@ switch($action) {
 
     case 'loadSavedNewsletter':
 
-        $id = filter_input(INPUT_POST,'saved_newsletters',FILTER_VALIDATE_INT);
+        $id = filter_input(INPUT_POST, 'saved_newsletters', FILTER_VALIDATE_INT);
 
         $newsletter = new NewNewsletter($id);
 
-        setcookie('data-newsletter', $newsletter->data);
+        $_SESSION['data-newsletter'] = $newsletter->data;
 
         $_SESSION['newsletterHtml'] = $newsletter->html;
 
-        $htmlContent = html_entity_decode($newsletter->html, ENT_QUOTES );
+        $htmlContent = htmlspecialchars_decode($newsletter->html, ENT_QUOTES );
 
         $tpl->assign( array(
                     'htmlContent' => $htmlContent,
@@ -145,10 +145,10 @@ switch($action) {
 
     case 'saveNewsletterContent';
         $html = filter_input(INPUT_POST,'html');
-        $html = htmlentities($html, ENT_QUOTES);
+        $html = htmlspecialchars($html, ENT_QUOTES);
         $_SESSION['newsletterHtml'] = $html;
 
-        Application::ajax_out('ok');
+        Application::ajaxOut('ok');
 
    /**
      * Step: preview the message
@@ -160,8 +160,11 @@ switch($action) {
         if( array_key_exists('newsletterHtml', $_SESSION) &&
             !empty($_SESSION['newsletterHtml'])) {
 
-            $htmlContent = html_entity_decode($_SESSION['newsletterHtml'], ENT_QUOTES);
+            $htmlContent = htmlspecialchars_decode($_SESSION['newsletterHtml'], ENT_QUOTES);
         } else {
+            if(array_key_exists('newsletterContent', $_POST)) {
+                $_SESSION['data-newsletter'] = $_POST['newsletterContent'];
+            }
             $htmlContent = $newsletter->render();
         }
 
@@ -228,7 +231,8 @@ switch($action) {
         if( array_key_exists('newsletterHtml', $_SESSION) &&
             !empty($_SESSION['newsletterHtml'])) {
 
-            $htmlContent = html_entity_decode($_SESSION['newsletterHtml'], ENT_QUOTES);
+            $htmlContent = htmlspecialchars_decode($_SESSION['newsletterHtml'], ENT_QUOTES);
+
         } else {
             $htmlContent = $nManager->render();
         }
@@ -236,7 +240,8 @@ switch($action) {
         $newsletter = new NewNewsletter();
 
         // save newsletter
-        $postmaster = $_COOKIE['data-newsletter'];
+        $postmaster = $_SESSION['data-newsletter'];
+
         $newsletter->create( array('content' => $postmaster, 'html'=> $htmlContent));
 
 
@@ -274,8 +279,8 @@ switch($action) {
         ));
 
         unset($_SESSION['newsletterHtml']);
+        unset($_SESSION['data-newsletter']);
         unset($_COOKIE['data-recipients']);
-        unset($_COOKIE['data-newsletter']);
         unset($_COOKIE['data-subject']);
 
         $tpl->display('newsletter/steps/newsletterSend.tpl');

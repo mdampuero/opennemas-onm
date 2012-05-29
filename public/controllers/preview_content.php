@@ -116,8 +116,8 @@ if ( !empty($action) ) {
             /**
              * Fetch suggested contents
              */
-            $objSearch = cSearch::Instance();
-            $arrayResults=$objSearch->SearchSuggestedContents(
+            $objSearch = cSearch::getInstance();
+            $arrayResults=$objSearch->searchSuggestedContents(
                 $article->metadata,
                 'Article',
                 'pk_fk_content_category= '.$article->category.
@@ -207,8 +207,8 @@ if ( !empty($action) ) {
             $tpl->assign('relationed', $relat);
 
             /******* SUGGESTED CONTENTS *******/
-            $objSearch = cSearch::Instance();
-            $arrayResults=$objSearch->SearchSuggestedContents(
+            $objSearch = cSearch::getInstance();
+            $arrayResults=$objSearch->searchSuggestedContents(
                 $article->metadata,
                 'Article',
                 'pk_fk_content_category= '.$article->category.

@@ -166,7 +166,7 @@ switch($action) {
         if(!empty($opinions)){
             $ok='si';
         }
-        Application::ajax_out($ok);
+        Application::ajaxOut($ok);
 
         break;
 

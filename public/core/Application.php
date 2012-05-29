@@ -42,7 +42,7 @@ class Application
     {
         self::initEnvironment(ENVIRONMENT);
 
-        if (!isset($GLOBALS['application']) || $GLOBALS['application']==NULL) {
+        if (!isset($GLOBALS['application']) || $GLOBALS['application']==null) {
             // Setting up static Constants
             self::initInternalConstants();
 
@@ -295,8 +295,8 @@ class Application
         /**
         * Session de usuario
         **/
-        $GLOBALS['USER_ID'] = NULL;
-        $GLOBALS['conn'] = NULL;
+        $GLOBALS['USER_ID'] = null;
+        $GLOBALS['conn'] = null;
 
         define('ITEMS_PAGE', "20"); // TODO: delete from application
     }
@@ -463,12 +463,10 @@ class Application
     /**
     * Wrapper to output content to AJAX requests
     *
-    *
-    * @access static
     * @param string $htmlout, the content to output
     * @return null
     */
-    public static function ajax_out($htmlout)
+    public static function ajaxOut($htmlout)
     {
         header("Cache-Control: no-cache");
         header("Pragma: nocache");
@@ -546,8 +544,8 @@ class Application
                     $foundIP = preg_replace($privateIp, $clientIp, $ipList[1]);
 
                     if ($clientIp != $foundIP) {
-                       $clientIp = $foundIP;
-                       break;
+                        $clientIp = $foundIP;
+                        break;
                     }
                 }
             }
@@ -571,7 +569,7 @@ class Application
      * @return void
      * @author
      **/
-    public static function logContentEvent($action=NULL, $content=NULL)
+    public static function logContentEvent($action=null, $content=null)
     {
         $logger = Application::getLogger();
 

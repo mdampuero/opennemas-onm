@@ -278,29 +278,24 @@ class Widget extends Content
 
         return true;
     }
-    public function put_permalink($end, $type, $title, $cat)
-    {
-
-        return '';
-    }
 
     public function render($params = null)
     {
         switch ($this->renderlet) {
             case 'html':
-                $content = $this->_renderlet_html($params);
-                break;
-
-            case 'smarty':
-                $content = $this->_renderlet_smarty($params);
-                break;
-
-            case 'intelligentwidget':
-                $content = $this->_renderlet_intelligentwidget($params);
+                $content = $this->renderletHTML($params);
                 break;
 
             case 'php':
-                $content = $this->_renderlet_php($params);
+                $content = $this->renderletPHP($params);
+                break;
+
+            case 'smarty':
+                $content = $this->renderletSmarty($params);
+                break;
+
+            case 'intelligentwidget':
+                $content = $this->renderletIntelligentWidget($params);
                 break;
 
             default:
@@ -311,13 +306,13 @@ class Widget extends Content
         return "<div class=\"widget\">" .$content. "</div>";
     }
 
-    private function _renderlet_html()
+    private function renderletHTML()
     {
 
         return $this->content;
     }
 
-    private function _renderlet_php()
+    private function renderletPHP()
     {
         ob_start();
         eval($this->content);
@@ -332,7 +327,7 @@ class Widget extends Content
      * SEE resource.string.php Smarty plugin
      * SEE resource.widget.php Smarty plugin
      */
-    private function _renderlet_smarty()
+    private function renderletSmarty()
     {
         Template::$registry['widget'][$this->pk_widget] = $this->content;
         $resource = 'string:' . $this->content;
@@ -346,9 +341,8 @@ class Widget extends Content
         return $output;
     }
 
-    private function _renderlet_intelligentwidget($params=null)
+    private function renderletIntelligentWidget($params=null)
     {
-        $output = "Not implemented";
         $path = realpath(TEMPLATE_USER_PATH . '/tpl' . '/widgets') . '/';
         ini_set('include_path', get_include_path() . PATH_SEPARATOR . $path);
         $className = 'Widget' . $this->content;
