@@ -121,7 +121,8 @@
                                     {section name=c loop=$newsletterContent}
                                         {assign var='contents' value=$newsletterContent[c]->items}
                                         {if !empty($contents)}
-                                        <div class="container-receiver" data-title="{$newsletterContent[c]->title}" data-id="{$newsletterContent[c]->id}">
+                                        <div class="container-receiver {if $smarty.section.c.first} active{/if}"
+                                            data-title="{$newsletterContent[c]->title}" data-id="{$newsletterContent[c]->id}">
                                             <div class="container-label"><span>{$newsletterContent[c]->title}</span>
                                                 <div class="container-buttons btn-group">
                                                         <i class="icon-chevron-down"></i>

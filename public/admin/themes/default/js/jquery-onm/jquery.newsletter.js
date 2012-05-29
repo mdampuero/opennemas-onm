@@ -399,7 +399,7 @@ function saveRecipients() {
 
 jQuery('#buttons-send').on('click','#prev-button', function() {
 
-    jQuery("#action").val('preview');
+    jQuery("#action").val('updateContents');
     jQuery('#newsletterForm').submit();
 
 });
