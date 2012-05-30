@@ -61,25 +61,27 @@ switch ($action) {
         break;
 
     case 'archive':
+        $ids = $request->request->get('ids');
+        $error = array();
 
-        // saca de todas las portatillas
-        // saca flag de sugerido
-        // y mantiene contenido disponible
-        $content = new Content($id);
+        foreach ($ids as $id) {
+            $id = (int) $id;
+            $content = new Content($id);
 
-        if ($content->id !== null) {
-            try {
-                $content->setArchived();
-            } catch (\Exception $e) {
-                $error = sprintf('Unable to arquive content with id %s: %s', $id, $e->getMessage());
+            if ($content->id !== null) {
+                try {
+                    $content->setArchived();
+                } catch (\Exception $e) {
+                    $error = sprintf(_('Unable to arquive content with id %s: %s'), $id, $e->getMessage());
+                }
+                $content->dropFromAllHomePages();
+            } else {
+                $error = sprintf('Content with id %s no valid', $id);
             }
-            $content->dropFromAllHomePages();
-        } else {
-            $error = sprintf('Content with id %s no valid', $id);
         }
 
-        if (isset($error)) {
-            echo json_encode(array('error' => $error));
+        if (count($error) > 0) {
+            echo json_encode(array('error' => implode("<br>", $error)));
         } else {
             echo json_encode(array('done'));
         }
@@ -114,19 +116,23 @@ switch ($action) {
         break;
 
     case 'toggle-suggested':
-        $content = new Content($id);
+        $ids = $request->request->get('ids');
+        $error = array();
 
-        if ($content->id !== null) {
-            try {
-                $content->toggleSuggested();
-            } catch (\Exception $e) {
-                $error = sprintf('Unable to set suggested to frontpage state to content with id %s: %s', $id, $e->getMessage());
+        foreach ($ids as $id) {
+            $content = new Content($id);
+            if ($content->id !== null) {
+                try {
+                    $content->toggleSuggested();
+                } catch (\Exception $e) {
+                    $error .= sprintf('Unable to set suggested to frontpage state to content with id %s: %s<br>', $id, $e->getMessage());
+                }
+            } else {
+                $error .= sprintf('Content with id %s no valid<br>', $id);
             }
-        } else {
-            $error = sprintf('Content with id %s no valid', $id);
         }
 
-        if (isset($error)) {
+        if (count($error) > 0) {
             echo json_encode(array('error' => $error));
         } else {
             echo json_encode(array('done'));
@@ -134,7 +140,6 @@ switch ($action) {
         break;
 
     case 'send-to-trash':
-
         $content = new Content($id);
 
         if ($content->id !== null) {

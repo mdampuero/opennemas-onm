@@ -73,7 +73,6 @@ function get_tooltip_title (elem) {
 
 function remove_element (element) {
     jQuery(element).each(function(){
-        console.log(jQuery(this));
         jQuery(this).animate({ 'backgroundColor':'#fb6c6c' },300).animate({ 'opacity': 0, 'height': 0 }, 300, function() {
             jQuery(this).remove();
         });
@@ -113,7 +112,6 @@ jQuery(function($){
     /***************************************************************************
     * Batch Actions
     ***************************************************************************/
-
     $("#modal-batch-delete").modal({ backdrop: 'static', keyboard: true });
     $('#modal-batch-delete').on('click', 'a.btn.no', function(e,ui){
         e.preventDefault();
@@ -136,7 +134,19 @@ jQuery(function($){
     $('#modal-batch-arquive').on('click', 'a.btn.yes', function(e, ui){
         e.preventDefault();
         var contents = $('#frontpagemanager .content-provider-element input[type="checkbox"]:checked').closest('.content-provider-element');
-        show_save_frontpage_dialog();
+        var ids = [];
+
+        contents.each(function (){
+            log($(this).closest('.content-provider-element').data('content-id'));
+            ids.push($(this).closest('.content-provider-element').data('content-id'));
+        });
+        $.post("/admin/controllers/common/content.php?action=archive",
+                { 'ids': ids }
+        ).success(function(data) {
+            $('#warnings-validation').html("<div class='success'>"+data+"</div>");
+        }).error(function(data) {
+            $('#warnings-validation').html("<div class='error'>"+data.responseText+"</div>");
+        });
         $("#modal-batch-arquive").modal('hide');
         remove_element(contents);
         e.preventDefault();
@@ -204,19 +214,16 @@ jQuery(function($){
     $('#modal-element-archive').on('click', 'a.btn.yes', function(e, ui){
         var delId = $("#modal-element-archive").data("selected-for-archive");
         if(delId) {
-            $.ajax({
-                url:  "/admin/controllers/common/content.php",
-                type: "GET",
-                data: { action:"archive", id:delId }
+            $.post("/admin/controllers/common/content.php?action=archive",
+                    { 'ids': [delId] }
+            ).success(function(data) {
+                $('#warnings-validation').html("<div class='success'>"+data+"</div>");
+            }).error(function(data) {
+                $('#warnings-validation').html("<div class='error'>"+data.responseText+"</div>");
             });
         }
-        show_save_frontpage_dialog();
         $("#modal-element-archive").modal('hide');
-        $("body").data('element-for-archive')
-            .animate({ 'backgroundColor':'#fb6c6c' },300)
-            .animate({ 'opacity': 0, 'height': 0 }, 300, function() {
-                $(this).remove();
-        });
+        remove_element($("body").data('element-for-archive'));
         e.preventDefault();
     });
 
@@ -239,10 +246,10 @@ jQuery(function($){
         var element = $(this).closest('.content-provider-element');
         var contentId = element.data('content-id');
         if(contentId) {
-            $.ajax({
-                url:  "/admin/controllers/common/content.php",
-                type: "GET",
-                data: { action:"toggle-suggested", id:contentId }
+            $.post("/admin/controllers/common/content.php?action=toggle-suggested",
+                { 'ids': [contentId] }
+            ).success(function(data) {
+            }).error(function(data) {
             });
         }
 
@@ -379,11 +386,6 @@ jQuery(function($){
         });
     });
 
-    $('#button_moreactions').on('click', function (e, ui){
-        e.preventDefault();
-        alert('not implemented');
-    });
-
     $('#button_multiple_delete').on('click', function(e,ui){
         e.preventDefault();
         var contents = $('#frontpagemanager .content-provider-element input[type="checkbox"]:checked').closest('.content-provider-element');
@@ -395,16 +397,25 @@ jQuery(function($){
     $('#button_multiple_arquive').on('click', function(e,ui){
         e.preventDefault();
         var contents = $('#frontpagemanager .content-provider-element input[type="checkbox"]:checked').closest('.content-provider-element');
-        if(contents.length > 0) {
-            $("#modal-batch-delete").modal('show');
+        if (contents.length > 0) {
+            $("#modal-batch-arquive").modal('show');
         }
     });
 
     $('#button_multiple_suggest').on('click', function(e,ui){
         e.preventDefault();
         var contents = $('#frontpagemanager .content-provider-element input[type="checkbox"]:checked').closest('.content-provider-element');
-        if(contents.length > 0) {
-            $("#modal-batch-delete").modal('show');
+        var contentIds = [];
+        $(contents).each(function(){
+            $(this).toggleClass('suggested');
+            contentIds.push($(this).data('content-id'));
+        })
+        if (contentIds) {
+            $.post("/admin/controllers/common/content.php?action=toggle-suggested",
+                { 'ids': contentIds }
+            ).success(function(data) {
+            }).error(function(data) {
+            });
         }
     });
 

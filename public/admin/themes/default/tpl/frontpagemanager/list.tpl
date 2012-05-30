@@ -45,12 +45,13 @@
                                 {t}Arquive{/t}
                             </a>
                         </li>
+                        {if $category_id != 0}
                         <li>
                             <a href="#" id="button_multiple_suggest">
-                                {t}Suggest to frontpage{/t}
+                                {t}Toggle suggest{/t}
                             </a>
                         </li>
-
+                        {/if}
                     </ul>
 
                 </li>
