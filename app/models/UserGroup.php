@@ -35,7 +35,6 @@ class UserGroup
     public function create($data)
     {
 
-
         //Se inserta el grupo
         $sql = "INSERT INTO user_groups (`name`) VALUES (?)";
         $values = array($data['name']);
@@ -98,7 +97,6 @@ class UserGroup
 
     public function update($data)
     {
-
 
         if (!is_null($data['id'])) {
             $this->id = $data['id'];
@@ -176,7 +174,6 @@ class UserGroup
 
     public function contains_privilege($privilegeID)
     {
-
 
         if (isset($this->privileges)) {
 

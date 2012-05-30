@@ -196,7 +196,6 @@ class Content
             `slug`, `category_name`, `urn_source`, `params`)".
            " VALUES (?,?,?, ?,?,?, ?,?,?, ?,?,?,?,?, ?,?,?, ?,?,?, ?,?,?,?)";
 
-
         $data['starttime']        =
             (!isset($data['starttime']) || empty($data['starttime'])
              || ($data['starttime'])=='0000-00-00 00:00:00')
@@ -261,7 +260,6 @@ class Content
             $data['slug'], $catName, $data['urn_source'], $data['params']
         );
 
-
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             Application::logDatabaseError();
 
@@ -288,7 +286,6 @@ class Content
 
         return true;
     }
-
 
     /**
      * Loads the data for an content given its id
@@ -323,8 +320,6 @@ class Content
 
         return $this;
     }
-
-
 
     public function update($data)
     {
@@ -462,7 +457,6 @@ class Content
         /* Notice log of this action */
         Application::logContentEvent(__METHOD__, $this);
     }
-
 
     /**
      * Make unavailable one content, but without deleting it
@@ -1138,7 +1132,6 @@ class Content
         $start = new \DateTime($this->starttime);
         $now   = new \DateTime();
 
-
         // If $start isn't defined then return false
         if ($start->getTimeStamp() > 0) {
             return ($now->getTimeStamp() < $start->getTimeStamp());
@@ -1369,7 +1362,6 @@ class Content
         return false;
     }
 
-
     public static function setNumViews($id=null)
     {
 
@@ -1588,7 +1580,6 @@ class Content
         // Generate the cache file again
         $tplManager->fetch(SITE_URL);
     }
-
 
     /**
      * Removes element with $contentPK from homepage of category.

@@ -166,7 +166,6 @@ class ContentCategoryManager
         return $items;
     }
 
-
     //Devuelve el nombre de una categoria para los upload y posible las urls
     public function get_name($id)
     {
@@ -189,7 +188,6 @@ class ContentCategoryManager
             return false;
         }
     }
-
 
     /**
      * Returns the position in menu
@@ -432,8 +430,7 @@ class ContentCategoryManager
 
         usort(
             $categories,
-            function($a, $b)
-            {
+            function($a, $b) {
                 if ($b->inmenu == 0) {
                     return 0;
                 }
@@ -645,7 +642,6 @@ class ContentCategoryManager
             return $rs->fields['name'];
         }
 
-
         // Singleton version
         $fk_content_category = '';
         // Search fk_content_category
@@ -703,7 +699,6 @@ class ContentCategoryManager
             return;
         }
 
-
         $sql = 'SELECT count(pk_content) AS number '
             . 'FROM `contents`, `contents_categories`
             WHERE `contents`.`fk_content_type`=1
@@ -720,8 +715,6 @@ class ContentCategoryManager
 
         return $rs->fields['number'] == 0 && $rs1->fields[0] == 0;
     }
-
-
 
     /**
      * Returns true if there is no contents in that category id
@@ -877,7 +870,6 @@ class ContentCategoryManager
         //subcat is an array with all subcat form the parentCategories array
         //$categoryData is the info of the category selected
 
-
         //$fullcat = $this->order_by_posmenu($this->categories);
         $fullcat = $this->groupByType($this->categories);
 
@@ -910,14 +902,12 @@ class ContentCategoryManager
             }
         }
 
-
         if (empty($category) && !empty($parentCategories)) {
              $categoryData[] = $parentCategories[0];
         }
 
         return array($parentCategories, $subcat, $categoryData);
     }
-
 
     /**
      *
@@ -969,6 +959,5 @@ class ContentCategoryManager
 
         return null;
     }
-
 
 }

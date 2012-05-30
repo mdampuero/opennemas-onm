@@ -54,7 +54,6 @@ class Advertisement extends Content
         35 => "Button Colunm 3 Position 5",
         36 => "Button Colunm 3 Position 6",
 
-
         /* Intersticial banner noticia interior */
         150 => "[I] Banner Interticial noticia interior",
 
@@ -214,8 +213,6 @@ class Advertisement extends Content
      * @var MethodCacheManager Instance of MethodCacheManager
      **/
     public $cache = null;
-
-
 
     /**
      * @var Advertisement instance, singleton pattern
@@ -457,7 +454,6 @@ class Advertisement extends Content
 
         return $this;
     }
-
 
     /**
      * Deletes one advertisement from db given an id.
@@ -831,6 +827,7 @@ class Advertisement extends Content
         } else {
             $value = null;
         }
+
         return $value;
     }
 

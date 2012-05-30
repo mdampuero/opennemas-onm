@@ -19,7 +19,6 @@ class ContentManager
     public $table = null;
     public $pager = null;
 
-
     public function __construct($contentType = null)
     {
         // Nombre de la tabla en minusculas y
@@ -36,7 +35,6 @@ class ContentManager
         $this->table        = tableize($contentType);
         $this->content_type = underscore($contentType);
     }
-
 
     // Cargar los valores devueltos del sql en objetos.
     public function loadObject($rs, $contentType)
@@ -57,7 +55,6 @@ class ContentManager
 
         return $items;
     }
-
 
     public function find(
         $contentType,
@@ -90,7 +87,6 @@ class ContentManager
 
         return $items;
     }
-
 
     public function find_all(
         $contentType,
@@ -142,7 +138,6 @@ class ContentManager
 
         return $items;
     }
-
 
     /**
     * Fetches all the contents (articles, widgets, etc) for one specific
@@ -980,19 +975,19 @@ class ContentManager
      * This function returns an array of objects all types of the most viewed
      * in the last few days indicated.
      *
-     * @param  boolean $notEmpty If there are no results regarding the days
+     * @param boolean $notEmpty If there are no results regarding the days
      *                           indicated, the query is performed on the
      *                           entire bd. For default is false
-     * @param  integer $category pk_content_category ok the contents. If value
+     * @param integer $category pk_content_category ok the contents. If value
      *                           is 0, then does not filter by categories.
      *                           For default is 0.
-     * @param  integer $days     Interval of days on which the consultation
+     * @param integer $days Interval of days on which the consultation
      *                           takes place. For default is 2.
-     * @param  integer $num      Number of objects that the function returns.
+     * @param integer $num Number of objects that the function returns.
      *                           For default is 8.
-     * @param  boolean $all      Get all the content regardless of
+     * @param boolean $all Get all the content regardless of
      *                           content status.
-     * @return array   of objects
+     * @return array of objects
      */
     public function getAllMostViewed(
         $notEmpty = false,
@@ -1046,19 +1041,19 @@ class ContentManager
      * Objects only have covered the fields pk_content, title, and total_value
      * total_votes
      *
-     * @param  boolean $notEmpty If there are no results regarding the days
+     * @param boolean $notEmpty If there are no results regarding the days
      *                           indicated, the query is performed on the entire
      *                           bd. For default is false
-     * @param  integer $category pk_content_category ok the contents. If value
+     * @param integer $category pk_content_category ok the contents. If value
      *                           is 0, then does not filter by categories.
      *                           For default is 0.
-     * @param  integer $days     Interval of days on which the consultation
+     * @param integer $days Interval of days on which the consultation
      *                           takes place. For default is 2.
-     * @param  integer $num      Number of objects that the function returns.
+     * @param integer $num Number of objects that the function returns.
      *                           For default is 8.
-     * @param  boolean $all      Get all the content regardless of content
+     * @param boolean $all Get all the content regardless of content
      *                           status.
-     * @return array   of objects
+     * @return array of objects
      */
     public function getAllMostVoted(
         $notEmpty = false,
@@ -1112,18 +1107,18 @@ class ContentManager
     /**
      * This function returns an array of objects $content_type of the most
      * commented in the last few days indicated.
-     * @param  string  $content_type type of content
-     * @param  boolean $notEmpty     If there are no results regarding the
+     * @param string  $content_type type of content
+     * @param boolean $notEmpty     If there are no results regarding the
      *                               days indicated, the query is performed on
      *                               the entire bd. For default is false
-     * @param  integer $category     pk_content_category ok the contents. If
+     * @param integer $category pk_content_category ok the contents. If
      *                               value is 0, then does not filter by
      *                               categories. For default is 0.
-     * @param  integer $days         Interval of days on which the consultation
+     * @param integer $days Interval of days on which the consultation
      *                               takes place. For default is 2.
-     * @param  integer $num          Number of objects that the function
+     * @param integer $num Number of objects that the function
      *                               returns. For default is 8.
-     * @param  boolean $all          Get all the content regardless of content
+     * @param boolean $all Get all the content regardless of content
      *                               status and endtime.
      * @return array
      */
@@ -1245,7 +1240,7 @@ class ContentManager
     /**
      * Get suggested Contents for Homepage
      *
-     * @return mixed, instantiated elements suggested for homepage
+     * @return mixed,         instantiated elements suggested for homepage
      * @throws ExceptionClass [description]
      */
     public static function getSuggestedContentsForHomePage()
@@ -1384,16 +1379,16 @@ class ContentManager
      *     $pk_fk_content_category=null);
      * </code>
      *
-     * @param  int         $contentType            Tipo contenido.
-     * @param  string|null $filter                 Clausula where.
-     * @param  string      $_order_by              Orden de visualizacion
-     * @param  int         $page                   Página a visualizar.
-     * @param  int         $items_page             Elementos por pagina.
-     * @param  int|null    $pk_fk_content_category Id de categoria (para
+     * @param int         $contentType            Tipo contenido.
+     * @param string|null $filter                 Clausula where.
+     * @param string      $_order_by              Orden de visualizacion
+     * @param int         $page                   Página a visualizar.
+     * @param int         $items_page             Elementos por pagina.
+     * @param int|null    $pk_fk_content_category Id de categoria (para
      *                                             find_by_category y si null
      *                                             es find).
      *
-     * @return array       Array ($items, $pager)
+     * @return array Array ($items, $pager)
      */
     public function find_pages(
         $contentType,
@@ -1572,7 +1567,6 @@ class ContentManager
         return( $items );
     }
 
-
     //this function returns title,catName and slugs of last headlines from
     //Subcategories of a given category
     public function findHeadlines(/*$filter=null, $_order_by='ORDER BY 1'*/)
@@ -1618,7 +1612,6 @@ class ContentManager
         return $items;
     }
 
-
     //this function returns title,catName and slugs of last headlines from
     //  Subcategories of a given category
     public function getOpinionArticlesWithAuthorInfo(
@@ -1654,7 +1647,6 @@ class ContentManager
             AND '.$_where.' '
             .$_order_by;
 
-
         $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
         $rs    = $GLOBALS['application']->conn->Execute($sql);
 
@@ -1665,7 +1657,6 @@ class ContentManager
 
         return $items ;
     }
-
 
     //FIXME: unificar todos los paginates
     //create_paginate() -
@@ -1705,7 +1696,6 @@ class ContentManager
             $append=false;
             $path = SITE_URL.$params;
 
-
         } elseif ($function != "null") {
             if ($params=='null') {
                 $fun = 'javascript:'.$funcion.'(%d)';
@@ -1741,7 +1731,6 @@ class ContentManager
 
         return $pager;
     }
-
 
     //FIXME: unificar todos los paginates
     //Paginate para contents de numPages
@@ -1785,7 +1774,6 @@ class ContentManager
 
         return $result;
     }
-
 
     //Mantener pagina en frontend comentarios y Planconecta.
     //Paginate para contents de numPages
@@ -1867,7 +1855,6 @@ class ContentManager
         return $items;
     }
 
-
     /**
     * Returns a bidimensional array with properties of articles
     * from one category.
@@ -1912,7 +1899,6 @@ class ContentManager
 
         return $items;
     }
-
 
     /**
       * Get authors for sitemap XML
@@ -1960,7 +1946,6 @@ class ContentManager
         return $items;
     }
 
-
     /// QUITAR - esta en content_category_manager
     //Returns cetegory id
     public function get_id($category)
@@ -1977,7 +1962,6 @@ class ContentManager
 
         return $rs->fields['pk_content_category'];
     }
-
 
     //Returns categoryName with the content Id
     public function getCategoryNameByContentId($contentId)
@@ -1996,7 +1980,6 @@ class ContentManager
 
         return $category_name;
     }
-
 
     //Devuelve un array de objetos segun se pase un array de id's
     public function getContents($pk_contents)
@@ -2148,7 +2131,6 @@ class ContentManager
 
                 $rs->MoveNext();
             }
-
 
             return $contents;
         }

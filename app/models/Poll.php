@@ -21,7 +21,6 @@ class Poll extends Content
     public $used_ips   	= null;
     public $visualization 	= null;
 
-
     public function __construct($id=null)
     {
         parent::__construct($id);
@@ -32,7 +31,6 @@ class Poll extends Content
 
         $this->content_type = 'Poll';
     }
-
 
     public function __get($name)
     {
@@ -60,7 +58,6 @@ class Poll extends Content
                 break;
             }
         }
-
 
         return parent::__get($name);
     }
@@ -100,7 +97,6 @@ class Poll extends Content
             return false;
         }
 
-
         return true;
     }
 
@@ -134,7 +130,6 @@ class Poll extends Content
             $data['metadata'] = $data['metadata'].','.$tags;
             $data['metadata'] = StringUtils::get_tags($data['metadata']);
         }
-
 
         parent::update($data);
         $tags = explode(', ',$tags);//Reinicia los indices del array

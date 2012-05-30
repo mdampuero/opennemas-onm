@@ -37,7 +37,6 @@ class ContentType
      */
     public $fk_template_default = null;
 
-
     /**
      * Initializes the content type for a given id.
      *

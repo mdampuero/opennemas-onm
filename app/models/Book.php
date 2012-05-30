@@ -24,7 +24,6 @@ class Book extends Content
     public $editorial  = null;
     public $books_path = null;
 
-
     public function __construct($id=null)
     {
         parent::__construct($id);
@@ -37,7 +36,6 @@ class Book extends Content
         $this->content_type = 'Book';
         $this->books_path = INSTANCE_MEDIA_PATH.'/books/';
     }
-
 
     public function __get($name)
     {
@@ -104,7 +102,6 @@ class Book extends Content
 
         return $this->id;
     }
-
 
     public function read($id)
     {

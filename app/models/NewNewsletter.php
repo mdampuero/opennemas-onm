@@ -124,5 +124,4 @@ class NewNewsletter
         return $newsletters;
     }
 
-
 }

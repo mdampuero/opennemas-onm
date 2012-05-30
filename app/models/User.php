@@ -73,7 +73,6 @@ class User
             $data['id_user_group']
         );
 
-
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
 
@@ -117,7 +116,6 @@ class User
 
     public function update($data)
     {
-
 
         if (!isset($data['id_user_group']) || empty($data['id_user_group']) ) {
             $data['id_user_group'] =$this->id_user_group;
@@ -288,7 +286,6 @@ class User
 
         return $contentCategories;
     }
-
 
     private function deleteAccessCategoriesDB()
     {
@@ -656,7 +653,7 @@ class User
             }
 
             $xml = simplexml_load_string($result);
-            $messages['total'] = (int)$xml->fullcount;
+            $messages['total'] = (int) $xml->fullcount;
 
             foreach ($xml->entry as $entry) {
                 //$link = $entry->xpath('link[@href]');

@@ -43,7 +43,7 @@ class Attachment extends Content
      * Description
      *
      * @access public
-     * @param integer $id, the id of the Attachment
+     * @param  integer $id, the id of the Attachment
      * @return null
      **/
     public function __construct($id=null)
@@ -89,7 +89,6 @@ class Attachment extends Content
         // all the data is ready to save into the database,
         // so create the general entry for this content
         parent::create($data);
-
 
         // now save all the specific information into the attachment table
         $sql = "INSERT INTO attachments "
@@ -145,7 +144,6 @@ class Attachment extends Content
 
         return intval($rs) > 0;
     }
-
 
     /**
     * Fetches information from one attachment given an id

@@ -67,7 +67,6 @@ class RelatedContent
             $posint, $verport, $verint, $relation
         ); //positions=1
 
-
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
@@ -86,7 +85,6 @@ class RelatedContent
      **/
     public function load($properties)
     {
-
 
         if (is_array($properties)) {
             foreach ($properties as $k => $v) {
@@ -434,7 +432,6 @@ class RelatedContent
 
         return $related;
     }
-
 
     //TODO: Delete
     public function sortArticles($articles)

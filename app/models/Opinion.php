@@ -72,7 +72,6 @@ class Opinion extends Content
                     $authorName = $author->name;
                 }
 
-
                 $uri =  Uri::generate('opinion',
                     array(
                         'id'       => sprintf('%06d', $this->id),
@@ -155,7 +154,6 @@ class Opinion extends Content
 
             return;
         }
-
 
         if ((int) $rs->fields['fk_author'] == 0) {
             if ((int) $rs->fields['type_opinion'] == 1) {
@@ -313,7 +311,6 @@ class Opinion extends Content
              . "`contents`.`in_home`=1 AND `opinions`.`type_opinion`=?"
              ." AND `contents`.`pk_content`= `opinions`.pk_opinion";
 
-
         $rs = $GLOBALS['application']->conn->Execute($sql, array($opinionType));
         if (!$rs) {
             \Application::logDatabaseError();
@@ -357,7 +354,6 @@ class Opinion extends Content
 
         return $tpl->fetch('frontpage/frontpage_opinion.tpl');
     }
-
 
     /**
     * Get latest Opinions without opinions present in frontpage

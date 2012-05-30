@@ -14,7 +14,6 @@
  * @author     Sandra Pereira <sandra@openhost.es>
  **/
 
-
 /*
  *
  *
@@ -154,7 +153,6 @@ class Frontpage extends Content
         $this->load($rs->fields);
     }
 
-
     /**
      * Load properties into this instance
      *
@@ -182,7 +180,6 @@ class Frontpage extends Content
         $this->id = $this->pk_frontpage;
         $this->contents= unserialize($this->content_positions);
     }
-
 
     /**
     * Fetches all the contents (articles, widgets, etc) for one specific category

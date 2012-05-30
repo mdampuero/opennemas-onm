@@ -119,7 +119,6 @@ class Subscriptor
         $this->load($rs->fields);
     }
 
-
     public function load($properties)
     {
         if (is_array($properties)) {
@@ -201,7 +200,6 @@ class Subscriptor
         return $this;
     }
 
-
     public function get_users($filter=null, $limit=null, $_order_by='name')
     {
         $items = array();
@@ -259,7 +257,6 @@ class Subscriptor
         }
     }
 
-
     public function exists_email( $email )
     {
        $sql = 'SELECT count(*) AS num FROM `pc_users` WHERE email = "'.$email.'"';
@@ -275,7 +272,6 @@ class Subscriptor
 
        return( ($rs->fields['num'] > 0) );
     }
-
 
     /**
      * Multiple update property
@@ -308,7 +304,6 @@ class Subscriptor
 
         return true;
     }
-
 
     public function countUsers($where=null)
     {

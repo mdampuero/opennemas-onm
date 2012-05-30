@@ -20,7 +20,6 @@ class Letter extends Content
 
     private static $_instance = null;
 
-
     public function __construct($id = null)
     {
         parent::__construct($id);
@@ -118,13 +117,11 @@ class Letter extends Content
 
     }
 
-
     public function update($data)
     {
         $data['content_status'] = $data['available'];
         $data['position']   =  1;
         $data['category'] = 0;
-
 
         parent::update($data);
         $sql = "UPDATE letters SET `author`=  ?,
@@ -179,7 +176,6 @@ class Letter extends Content
 
         return $weight > 100;
     }
-
 
     public function saveLetter($data)
     {

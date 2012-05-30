@@ -75,10 +75,8 @@ class Kiosko extends Content
             return(false);
         }
 
-
         return(true);
     }
-
 
     public function read($id)
     {
@@ -117,7 +115,6 @@ class Kiosko extends Content
 
             return false;
         }
-
 
         $this->category_name = $this->loadCategoryName($this->id);
         $GLOBALS['application']->dispatch('onAfterUpdate', $this);
@@ -164,7 +161,6 @@ class Kiosko extends Content
 
         return intval($rs) > 0;
     }
-
 
     public function set_favorite($status)
     {

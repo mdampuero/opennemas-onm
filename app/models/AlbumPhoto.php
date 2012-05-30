@@ -59,7 +59,6 @@ class AlbumPhoto
         return $this;
     }
 
-
     /**
     * Loads the photos from a given album id.
     *
