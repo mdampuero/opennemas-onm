@@ -75,7 +75,6 @@ class ModuleManager
         return self::$activatedModules;
     }
 
-
     /**
      * Returns the list of available modules in Onm instance.
      *
@@ -151,7 +150,6 @@ class ModuleManager
         return in_array('ALL', $activatedModules);
     }
 
-
     /**
      * Returns true if a given module is activated.
      *
@@ -205,7 +203,6 @@ class ModuleManager
         }
 
     }
-
 
     /**
      * Check if a given module exists.

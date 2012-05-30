@@ -244,7 +244,6 @@ class SimpleMenu
         }
     }
 
-
     /**
      * Renders the menu
      *

@@ -171,7 +171,6 @@ class Menu
         );
     }
 
-
     /**
      * Get a menu in the frontpage
      *
@@ -265,7 +264,6 @@ class Menu
 
         return $menues;
     }
-
 
     public static function renderMenu($name)
     {

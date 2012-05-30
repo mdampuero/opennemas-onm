@@ -132,7 +132,6 @@ class importerIdeal
         $data['ordenArti']       = "";
         $data['ordenArtiInt']    = "";
 
-
         $metadata = '';//StringUtils::get_title($data['title']);
         $data['metadata'] = str_replace('-', ',', $metadata);
 
@@ -165,6 +164,5 @@ class importerIdeal
 
         return $bodyutf;
     }
-
 
 }

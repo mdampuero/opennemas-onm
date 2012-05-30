@@ -30,7 +30,6 @@ class FTP
 
         $this->serverUrl = parse_url($params['server']);
 
-
         $this->ftpConnection = @ftp_connect($this->serverUrl['host']);
         // test if the connection was successful
         if (!$this->ftpConnection) {
@@ -232,7 +231,6 @@ class FTP
 
         return $structure;
     }
-
 
     /**
      * Converts a byte based file size to a human readable string

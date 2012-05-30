@@ -133,7 +133,6 @@ class Article extends Content
                 ? ''
                 : intval($data['with_comment']);
 
-
         parent::create($data);
 
         $sql = "INSERT INTO articles (`pk_article`, `subtitle`, `agency`,
@@ -204,7 +203,6 @@ class Article extends Content
             }
         }
     }
-
 
     /**
      * Reads the data for one article given one ID
@@ -394,7 +392,6 @@ class Article extends Content
 
         return $permalink;
     }
-
 
     public function createClone($content)
     {

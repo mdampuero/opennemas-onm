@@ -124,8 +124,8 @@ class Newsletter
             'Julio', 'Agosto', 'Septiembre',
             'Octubre', 'Noviembre', 'Diciembre'
         );
-        $fullDate = $days[(int)date('w')].' '.date('j')
-            .' de '.$months[(int)date('n')].' '.date('Y');
+        $fullDate = $days[(int) date('w')].' '.date('j')
+            .' de '.$months[(int) date('n')].' '.date('Y');
         $tpl->assign('current_date', $fullDate);
 
         $publicUrl = preg_replace('@^http[s]?://(.*?)/$@i', 'http://$1',
@@ -734,7 +734,6 @@ class PConecta_Newsletter_Items_Provider extends Newsletter_Items_Provider
                 }
             }
         }
-
 
         $this->items = array();
         $className   = 'PConecta_' . $source . '_Newsletter_Item';

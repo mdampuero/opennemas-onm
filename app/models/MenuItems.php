@@ -114,8 +114,8 @@ class MenuItems
      * This simulates a trash system by setting their available flag to false
      *
      * @access public
-     * @param integer $id
-     * @param integer $last_editor
+     * @param  integer $id
+     * @param  integer $last_editor
      * @return null
      **/
     public function delete($id)

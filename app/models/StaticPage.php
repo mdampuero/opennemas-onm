@@ -52,7 +52,6 @@ class StaticPage extends Content
     public function create($data)
     {
 
-
         // Clear  magic_quotes
         StringUtils::disabled_magic_quotes($data);
         $data['category'] = 0;
@@ -80,7 +79,6 @@ class StaticPage extends Content
     }
     protected function commonData($data)
     {
-
 
         // Merda dependencia Content
         $data['category'] = 0;
@@ -124,7 +122,6 @@ class StaticPage extends Content
     public function load($properties)
     {
 
-
         if (is_array($properties)) {
             foreach ($properties as $k => $v) {
 
@@ -152,7 +149,6 @@ class StaticPage extends Content
     public function update($data)
     {
 
-
         // Clear  magic_quotes
         StringUtils::disabled_magic_quotes($data);
         $data['category'] = 0;
@@ -179,7 +175,6 @@ class StaticPage extends Content
     }
     public function save($data)
     {
-
 
         if ($data['id'] > 0) {
             $this->update($data);
@@ -217,7 +212,6 @@ class StaticPage extends Content
      */
     public function buildSlug($slug, $id, $title = null)
     {
-
 
         if (empty($slug) && !empty($title)) {
             $slug = StringUtils::get_title($title, $useStopList = false);

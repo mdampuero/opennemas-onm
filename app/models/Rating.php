@@ -285,7 +285,7 @@ class Rating
             $actualVotes = 0;
         } else {
             $actualVotes =
-                (int)floor($this->total_value / $this->total_votes);
+                (int) floor($this->total_value / $this->total_votes);
         }
         $htmlOut = "";
 

@@ -64,7 +64,6 @@ if (($tpl->caching == 0)
             $tpl->assign('articlesByCategory', $articlesByCategory);
             $tpl->assign('opinions', $opinions);
 
-
             break;
 
         case 'news':
@@ -113,8 +112,6 @@ if (($tpl->caching == 0)
 }
 $tpl->assign('action', $action);
 $sitemapContents = $tpl->fetch('sitemap/sitemap.tpl', $cacheID);
-
-
 
 $format = $request->query->filter('format', null, FILTER_SANITIZE_STRING);
 

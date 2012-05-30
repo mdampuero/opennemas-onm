@@ -202,7 +202,6 @@ class Author
         }
     }
 
-
     public function load($properties)
     {
         if (is_array($properties)) {
@@ -257,7 +256,6 @@ class Author
         return $authors;
     }
 
-
     /**
      * Returns one dummy object with information about one author
      * given its id.
@@ -294,7 +292,6 @@ class Author
 
         return $author;
     }
-
 
     /**
      * Returns a list of all authors
@@ -340,7 +337,6 @@ class Author
 
         return( $items );
     }
-
 
     /**
      * Returns all the authors that matches given WHERE and ORDER BY clauses.

@@ -14,7 +14,6 @@
  * @author     Sandra Pereira <sandra@openhost.es>, Mon Oct 24 10:07:22 2011
  **/
 
-
 //TODO redefine agenda_colectividad adapt to php 5.3
 class Schedule extends Content
 {
@@ -56,8 +55,6 @@ class Schedule extends Content
          return $calendars;
     }
 
-
-
     // returns all the events for a particular where. Using in sitemap
     public function get_events_by_where($where)
     {
@@ -65,7 +62,6 @@ class Schedule extends Content
         $sql = 'SELECT * FROM phpc_AR_events '
             ."WHERE  ".$where
             ." ORDER BY  starttime DESC";
-
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
@@ -87,7 +83,6 @@ class Schedule extends Content
         }
 
         return( $events);
-
 
     }
 

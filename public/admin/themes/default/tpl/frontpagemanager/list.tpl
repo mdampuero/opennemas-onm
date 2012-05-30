@@ -33,17 +33,38 @@
         <div class="wrapper-content">
             <div class="title"><h2>{t}Frontpage Manager{/t} :: {if $category eq 0}{t}HOME{/t}{else}{$datos_cat[0]->title}{/if}</h2></div>
             <ul class="old-button">
+                <li class="batch-actions">
+                    <a href="#">
+                        <img src="{$params.IMAGE_DIR}/select.png" title="" alt="" />
+                        <br/>{t}Batch actions{/t}
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="#" id="button_multiple_delete">
+                                {t}Remove{/t}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" id="button_multiple_arquive">
+                                {t}Arquive{/t}
+                            </a>
+                        </li>
+                        {if $category_id != 0}
+                        <li>
+                            <a href="#" id="button_multiple_suggest">
+                                {t}Toggle suggest{/t}
+                            </a>
+                        </li>
+                        {/if}
+                    </ul>
+
+                </li>
+
+                <li class="separator batch-actions"></li>
                 <li>
                     <a href="/admin/article.php?action=new&amp;category={$category}" class="admin_add" title="{t}New article{/t}">
                         <img src="{$params.IMAGE_DIR}/article_add.png" title="" alt="" />
                         <br />{t}New article{/t}
-                    </a>
-                </li>
-                <li class="separator"></li>
-                <li>
-                    <a href="#" id="button_multiple_delete">
-                        <img src="{$params.IMAGE_DIR}/trash.png" title="" alt="" /><br>
-                        {t}Remove{/t}
                     </a>
                 </li>
 
@@ -144,4 +165,5 @@
 {include file="frontpagemanager/modals/_modal_archive.tpl"}
 {include file="frontpagemanager/modals/_modal_suggest_to_frontpage.tpl"}
 {include file="frontpagemanager/modals/_modal_drop_selected.tpl"}
+{include file="frontpagemanager/modals/_modal_arquive_selected.tpl"}
 {/block}

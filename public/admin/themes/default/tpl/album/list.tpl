@@ -42,7 +42,7 @@
 
                 {acl isAllowed="ALBUM_CREATE"}
                 <li>
-                    <a href="{$smarty.server.PHP_SELF}?action=new" title="{t}New album{/t}" >
+                    <a href="{$smarty.server.PHP_SELF}?action=new&category={$category}" title="{t}New album{/t}" >
                         <img src="{$params.IMAGE_DIR}/album.png" alt="{t}New album{/t}"><br />{t}New album{/t}
                     </a>
                 </li>

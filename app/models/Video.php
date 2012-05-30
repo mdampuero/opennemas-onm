@@ -72,6 +72,7 @@ class Video extends Content
             default:
                 break;
         }
+
         return parent::__get($name);
     }
 
@@ -173,7 +174,6 @@ class Video extends Content
     {
         $pathUpload = MEDIA_PATH.DS;
         $processedFile = $this->upload($videoFileData, $pathUpload);
-
 
         // If video file was converted/copied successfully insert the video into database
         if (!empty($processedFile)) {
@@ -305,7 +305,6 @@ class Video extends Content
             'big'    =>  array( 'width' => 450, 'height' => 450 ),
         );
 
-
         // Create thumbs in the same directory as the video
         $uploadDir = dirname($flvPath);
 
@@ -416,6 +415,7 @@ class Video extends Content
     public function render($params)
     {
         unset($params);
+
         return "\n<!-- video rendering not implemented -->\n";
     }
 

@@ -97,7 +97,6 @@ class NewsletterManager
         ignore_user_abort(true);
     }
 
-
     public function render()
     {
         $tpl = new Template(TEMPLATE_USER);
@@ -130,7 +129,6 @@ class NewsletterManager
         }
         $tpl->assign('newsletterContent', $newsletterContent);
 
-
         //render menu
         $menuFrontpage= Menu::renderMenu('frontpage');
         $tpl->assign('menuFrontpage',$menuFrontpage->items);
@@ -154,7 +152,7 @@ class NewsletterManager
             'Julio', 'Agosto', 'Septiembre',
             'Octubre', 'Noviembre', 'Diciembre'
         );
-        $tpl->assign('current_date', $days[(int)date('w')] . ' ' . date('j') . ' de ' . $months[(int)date('n')] . ' ' . date('Y'));
+        $tpl->assign('current_date', $days[(int) date('w')] . ' ' . date('j') . ' de ' . $months[(int) date('n')] . ' ' . date('Y'));
 
         $publicUrl = preg_replace('@^http[s]?://(.*?)/$@i', 'http://$1', SITE_URL);
         $tpl->assign('URL_PUBLIC', $publicUrl);

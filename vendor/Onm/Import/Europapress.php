@@ -9,7 +9,6 @@
  **/
 namespace Onm\Import;
 
-use \Onm\Import\Synchronizer\LockException;
 use \Onm\Import\DataSource\Europapress as EuropapressDataSource;
 
 /**
@@ -66,7 +65,6 @@ class Europapress
 
         $this->_lockFile = $this->_syncPath.DIRECTORY_SEPARATOR.".lock";
     }
-
 
     /**
      * gets an array of news from EuropaPress
@@ -133,7 +131,6 @@ class Europapress
 
         return array($counTotalElements, $elements);
     }
-
 
     /*
      * Fetches a DataSource\Europapress object from id

@@ -137,7 +137,6 @@ if (isset($action)
 
                     $mail->AddAddress($to, $to);
 
-
                     if ($mail->Send()) {
                         echo($resp);
                     } else {

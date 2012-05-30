@@ -199,7 +199,6 @@ if ( !empty($action) ) {
             //Filter availables and not inlitter.
             $relat = $cm->cache->getAvailable($relat);
 
-
             //Nombre categoria correcto.
             foreach ($relat as $ril) {
                 $ril->category_name = $ccm->get_category_name_by_content_id($ril->id);

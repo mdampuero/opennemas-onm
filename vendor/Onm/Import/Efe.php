@@ -9,7 +9,6 @@
  **/
 namespace Onm\Import;
 
-use \Onm\Import\Synchronizer\LockException;
 use \Onm\Import\DataSource\NewsMLG1;
 
 /**
@@ -66,7 +65,6 @@ class Efe
 
         $this->_lockFile = $this->_syncPath.DIRECTORY_SEPARATOR.".lock";
     }
-
 
     /**
      * gets an array of news from Efe
@@ -134,7 +132,6 @@ class Efe
 
         return array($counTotalElements, $elements);
     }
-
 
     /*
      * Fetches a DataSource\NewsMLG1 object from id

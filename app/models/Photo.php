@@ -249,7 +249,6 @@ class Photo extends Content
         return $importedID;
     }
 
-
     /**
      * Creates one photo register in the database from data and local file
      * TODO: this function must content the photo local_file

@@ -13,7 +13,6 @@
 */
 require_once('../bootstrap.php');
 
-
 // Redirect Mobile browsers to mobile site unless a cookie exists.
 //$app->mobileRouter();
 

@@ -235,8 +235,6 @@ class PClave
         return $terms;
     }
 
-
-
     /**
      *
      */

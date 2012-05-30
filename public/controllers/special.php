@@ -119,7 +119,6 @@ if (!is_null($action) ) {
                 $tpl->assign('special', $special);
                 $tpl->assign('columns', $columns);
 
-
             }//if available
 
         break;

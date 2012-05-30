@@ -118,7 +118,7 @@ class ContentCategory
             return;
         }
         $this->load($rs->fields);
-        if(!empty($this->params) && is_string($this->params)) {
+        if (!empty($this->params) && is_string($this->params)) {
             $this->params = unserialize($this->params);
         }
 

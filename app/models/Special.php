@@ -203,7 +203,6 @@ class Special extends Content
         return true;
     }
 
-
     public function remove($id)
     {
         parent::remove($id);
@@ -280,7 +279,6 @@ class Special extends Content
 
         return $items;
     }
-
 
     //Define contenidos dentro de un modulo
     public function set_contents(

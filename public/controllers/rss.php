@@ -69,14 +69,17 @@ switch ($action) {
             ) {
                 $category = $ccm->get_id($category_name);
                 $rss_url .= $category_name.SS;
-                $title_rss .= $category_name;
+                $category_title = $ccm->get_title($category_name);
+                $title_rss .= !empty($category_title)?$category_title:$category_name;
 
                 if (isset($subcategory_name)
                     && !empty($subcategory_name)
                 ) {
                     $subcategory = $ccm->get_id($subcategory_name);
                     $rss_url .= $subcategory_name.SS;
-                    $title_rss .= " > ".$subcategory_name;
+                    $subcategory_title = $ccm->get_title($subcategory_name);
+                    $title_rss .= " > ". !empty($subcategory_title)?$subcategory_title:$subcategory_name;
+
                 }
             } else {
                 $rss_url .= "home".SS;
@@ -92,7 +95,6 @@ switch ($action) {
                 // Filter articles if some of them has time scheduling and sort them by position
                 $contentsInHomepage = $cm->getInTime($contentsInHomepage);
                 $articles_home = $cm->sortArrayofObjectsByProperty($contentsInHomepage, 'position');
-
 
                 // Fetch the photo and category name for this element
                 foreach ($articles_home as $i => $article) {

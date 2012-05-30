@@ -256,7 +256,6 @@ class Widget extends Content
         return $allWidgets;
     }
 
-
     /**
      * Delete
      *

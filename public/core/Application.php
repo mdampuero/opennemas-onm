@@ -488,7 +488,6 @@ class Application
             $_SERVER['SERVER_NAME'], isset($_SERVER['HTTPS']), true);
     }
 
-
     // TODO: move to a separated file called functions.php
     /**
      * Try to get the real IP of the client

@@ -78,7 +78,6 @@ class FilesManager
         return true;
     }
 
-
     /**
      * Delete a directory is it exists
      *

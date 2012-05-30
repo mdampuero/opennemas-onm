@@ -34,7 +34,6 @@ abstract class ImporterAbstract
         }
     }
 
-
     /*
      * Delete the lock for avoid concurrent sync by multiple users
      *
@@ -46,7 +45,6 @@ abstract class ImporterAbstract
             unlink($this->_lockFile);
         }
     }
-
 
     /**
      * Fetch the statistics of last synchronization
@@ -65,7 +63,6 @@ abstract class ImporterAbstract
         }
     }
 
-
     /*
      * Gets the minutes from last synchronization of elements
      *
@@ -83,7 +80,6 @@ abstract class ImporterAbstract
         return round((abs($toTime - $fromTime) / 60), 0);
     }
 
-
     /**
      * Returns true if the syncPath exists and is writtable
      *
@@ -98,7 +94,6 @@ abstract class ImporterAbstract
             && is_writable($this->_syncFilePath)
         );
     }
-
 
     /**
      * Creates the syncPath, to allow to work with it
@@ -117,7 +112,6 @@ abstract class ImporterAbstract
 
         return false;
     }
-
 
     /**
      * Update statistics of synchronization file
@@ -159,7 +153,6 @@ abstract class ImporterAbstract
         return $newSyncParams;
     }
 
-
     /**
      * Fetches the files present in $cacheDir.
      *
@@ -182,7 +175,6 @@ abstract class ImporterAbstract
 
         return $fileListingCleaned;
     }
-
 
     /**
      * Sync elements from news agency server and stores them into temporary dir

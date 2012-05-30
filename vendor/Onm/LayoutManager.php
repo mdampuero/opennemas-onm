@@ -172,6 +172,7 @@ class LayoutManager
         $this->tpl->assign('params', $this->params);
         try {
             $contentName = strtolower($content->content_type_name);
+
             return $this->tpl->fetch($contentName.'/content-provider/'.$contentName.".tpl")."\n";
         } catch (\SmartyException $e) {
             return '';

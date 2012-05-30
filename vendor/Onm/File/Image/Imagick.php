@@ -9,7 +9,6 @@
  **/
 namespace Onm\File\Image;
 
-
 /**
  * Handles all the operations with Images using the ImageMagick library
  *
@@ -73,7 +72,7 @@ class Imagick extends Common implements ImageInterface
     public function getWidth()
     {
         if (is_object($this->_image)) {
-            return (int)$this->_image->getImageWidth();
+            return (int) $this->_image->getImageWidth();
         }
         throw new \Exception(_('Please initialize the image before get its width.'));
     }
@@ -86,7 +85,7 @@ class Imagick extends Common implements ImageInterface
     public function getHeight()
     {
         if (is_object($this->_image)) {
-            return (int)$this->_image->getImageHeight();
+            return (int) $this->_image->getImageHeight();
         }
         throw new \Exception(_('Please initialize the image before get its height.'));
     }
