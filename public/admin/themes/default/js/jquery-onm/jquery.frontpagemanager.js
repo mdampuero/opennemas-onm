@@ -352,6 +352,22 @@ jQuery(function($){
         }
     });
 
+    $('#button_multiple_arquive').on('click', function(e,ui){
+        e.preventDefault();
+        var contents = $('#frontpagemanager .content-provider-element input[type="checkbox"]:checked').closest('.content-provider-element');
+        if(contents.length > 0) {
+            $("#modal-batch-delete").modal('show');
+        }
+    });
+
+    $('#button_multiple_suggest').on('click', function(e,ui){
+        e.preventDefault();
+        var contents = $('#frontpagemanager .content-provider-element input[type="checkbox"]:checked').closest('.content-provider-element');
+        if(contents.length > 0) {
+            $("#modal-batch-delete").modal('show');
+        }
+    });
+
 });
 
 

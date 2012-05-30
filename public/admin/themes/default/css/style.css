@@ -1117,6 +1117,8 @@ ul#menu.manager a { color:White !important; }
 
     #menu-acciones-admin > ul li,
     .old-button > li {
+        vertical-align:bottom;
+        display:inline-block;
         padding-left: 0px;
         padding-right: 0px;
         float: right;
@@ -1125,7 +1127,7 @@ ul#menu.manager a { color:White !important; }
         position:relative;
     }
 
-      #menu-acciones-admin > ul li a,
+      #menu-acciones-admin > ul > li a,
       .old-button > li a ,
       .old-button > li button {
         display: block;
@@ -1140,7 +1142,7 @@ ul#menu.manager a { color:White !important; }
         font-family:Arial;
         font-size:11px;
       }
-        #menu-acciones-admin ul li a img {
+        #menu-acciones-admin ul > li a img {
           height:40px !important;
         }
 
@@ -1153,16 +1155,17 @@ ul#menu.manager a { color:White !important; }
           display:none;
           position:absolute;
           top:99%;
-          right:0;
+          right:0%;
         }
 
-        .old-button li:hover ul {
+        .old-button > li:hover ul {
           display:block;
         }
 
-        #menu-acciones-admin ul li a:hover,
-        .old-button li a:hover,
-        .old-button button:hover {
+        #menu-acciones-admin > ul > li a:hover,
+        .old-button > li a:hover,
+        .old-button > button:hover,
+        .old-button > li:hover > a {
             color:Black;
             background:#e4e4e4;
             border: 1px solid #D9D9D9;
@@ -1174,8 +1177,8 @@ ul#menu.manager a { color:White !important; }
             border-radius:4px;
         }
 
-        div#menu-acciones-admin li.separator,
-        .old-button li.separator{
+        div#menu-acciones-admin > li.separator,
+        .old-button > li.separator{
           background:url(../images/separator.png) center center no-repeat;
           border:0 none;
           height:57px;
@@ -1194,14 +1197,17 @@ ul#menu.manager a { color:White !important; }
         }
         .old-button li ul {
             z-index:9999;
-            background:#e4e4e4;
         }
         .old-button li ul li {
             list-style:none;
         }
 
         .old-button .batch-actions {
-            display:none;
+            /*display:none;*/
+        }
+        .old-button .dropdown-menu {
+            right:0px !important;
+            left:auto;
         }
 
 

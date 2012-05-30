@@ -34,19 +34,19 @@
                         <img src="{$params.IMAGE_DIR}/select.png" title="" alt="" />
                         <br/>{t}Batch actions{/t}
                     </a>
-                    <ul>
+                    <ul class="dropdown-menu">
                         <li>
                             <a href="#" id="button_multiple_delete">
                                 {t}Remove{/t}
                             </a>
                         </li>
                         <li>
-                            <a href="#" id="button_multiple_delete">
+                            <a href="#" id="button_multiple_arquive">
                                 {t}Arquive{/t}
                             </a>
                         </li>
                         <li>
-                            <a href="#" id="button_multiple_delete">
+                            <a href="#" id="button_multiple_suggest">
                                 {t}Suggest to frontpage{/t}
                             </a>
                         </li>
