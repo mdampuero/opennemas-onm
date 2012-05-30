@@ -71,27 +71,28 @@ class ImporterXmlfileController extends Controller
         if (count($_FILES["file"]["name"]) >= 1 && !empty($_FILES["file"]["name"][0]) ) {
 
             $dryRun = $this->request->query->filter('dry-run', FILTER_SANITIZE_STRING);
-            for($i=0,$j=0;$i<count($_FILES["file"]["name"]);$i++) {
+            for ($i=0, $j=0; $i<count($_FILES["file"]["name"]); $i++) {
 
                 $nameFile  = $_FILES["file"]["name"][$i];
 
                 $datos     = pathinfo($nameFile);//sacamos info del archivo
 
-                //Preparamos el nuevo nombre YYYYMMDDHHMMSSmmmmmm
+                // Preparamos el nuevo nombre YYYYMMDDHHMMSSmmmmmm
                 $extension = $datos['extension'];
-                $t         = gettimeofday(); //Sacamos los microsegundos
-                $micro     = intval(substr($t['usec'],0,5)); //Le damos formato de 5digitos a los microsegundos
+                $t         = gettimeofday();
+                $micro     = intval(substr($t['usec'], 0, 5));
 
                 $name      = date("YmdHis").$micro.".".$extension;
 
                 if (move_uploaded_file($_FILES["file"]["tmp_name"][$i], $uploaddir.$name)) {
 
-                    $check = !isset($_REQUEST['check_pendientes'][$i])?0:$_REQUEST['check_pendientes'][$i];
+                    $check = !isset($_REQUEST['check_pendientes'][$i])
+                        ? 0 : $_REQUEST['check_pendientes'][$i];
 
                     if ($extension == "zip") {
                         $dataZIP = FilesManager::decompressZIP($uploaddir.$name);
 
-                        @chmod($uploaddir.$name,0775);
+                        @chmod($uploaddir.$name, 0775);
                         sort($dataZIP);
                         foreach ($dataZIP as $elementZIP) {
                             @chmod($uploaddir.$elementZIP, 0775);
@@ -110,7 +111,7 @@ class ImporterXmlfileController extends Controller
                                 $dataXML[$j] = $values;
                                 $j++;
                             } else {
-                            //    m::add(_( 'No valid XML format' ));
+                                //  m::add(_( 'No valid XML format' ));
                             }
                         }
                     } else {

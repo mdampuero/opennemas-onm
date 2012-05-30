@@ -67,7 +67,7 @@ class FrontpagesController extends Controller
         $allcategorys = $parentCategories;
 
         // Check if the user can edit frontpages
-        if(!\Acl::check('ARTICLE_FRONTPAGE')) {
+        if (!\Acl::check('ARTICLE_FRONTPAGE')) {
             \Acl::deny();
         } elseif (!\Acl::_C($categoryID)) {
             $categoryID = $_SESSION['accesscategories'][0];
@@ -83,10 +83,10 @@ class FrontpagesController extends Controller
 
         $menuItems = \Menu::renderMenu('frontpage');
         if (!empty($menuItems->items )) {
-            foreach ($menuItems->items as  &$item) {
+            foreach ($menuItems->items as &$item) {
                 $item->categoryID = $ccm->get_id($item->link);
-                if(!empty($item->submenu)) {
-                    foreach ($item->submenu as  &$subitem) {
+                if (!empty($item->submenu)) {
+                    foreach ($item->submenu as &$subitem) {
                         $subitem->categoryID = $ccm->get_id($subitem->link);
                     }
                 }
@@ -130,7 +130,9 @@ class FrontpagesController extends Controller
      **/
     public function savePositionsAction()
     {
-        if(!\Acl::check('ARTICLE_FRONTPAGE')) { Acl::deny(); }
+        if (!\Acl::check('ARTICLE_FRONTPAGE')) {
+            Acl::deny();
+        }
 
         $category      = $this->request->query->filter('category', null, FILTER_SANITIZE_STRING);
 
@@ -176,7 +178,9 @@ class FrontpagesController extends Controller
 
         }
 
-        if ($categoryID == 0){ $section = 'home'; }
+        if ($categoryID == 0) {
+            $section = 'home';
+        }
 
         $tcacheManager->delete($section . '|RSS');
         $tcacheManager->delete($section . '|0');

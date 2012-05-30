@@ -73,7 +73,8 @@ class AuthenticationController extends Controller
         $user = new \User();
 
         if ($_SESSION['csrf'] !== $token) {
-            $this->view->assign('message', _('Login token is not valid. Try to autenticate again.'));
+            $this->view->assign('message',
+                _('Login token is not valid. Try to autenticate again.'));
         } else {
 
             // Try to autenticate the user
@@ -81,7 +82,8 @@ class AuthenticationController extends Controller
 
                 // Check if user account is activated
                 if ($user->authorize != 1) {
-                    $this->view->assign('message', _('This user was deactivated. Please ask your administrator.'));
+                    $this->view->assign('message',
+                        _('This user was deactivated. Please ask your administrator.'));
                 } else {
 
                     // Increase security by regenerating the id
@@ -107,7 +109,8 @@ class AuthenticationController extends Controller
 
                     // Store default expire time
                     global $app;
-                    $app::setCookieSecure('default_expire', $user->sessionexpire, 0, '/admin/');
+                    $app::setCookieSecure('default_expire',
+                        $user->sessionexpire, 0, '/admin/');
                     \PrivilegesCheck::loadSessionExpireTime();
                     $GLOBALS['Session']->cleanExpiredSessionFiles();
 
@@ -122,7 +125,8 @@ class AuthenticationController extends Controller
                 }
 
             } else {
-                $this->view->assign('message', _('Username or password incorrect.'));
+                $message = _('Username or password incorrect.');
+                $this->view->assign('message', $message);
             }
         }
         $token = md5(uniqid(mt_rand(), true));
@@ -142,7 +146,8 @@ class AuthenticationController extends Controller
     {
         $csrf = filter_input(INPUT_GET, 'csrf');
 
-        // Only perform session destroy if cross-site request forgery matches the session variable.
+        // Only perform session destroy if cross-site request
+        // forgery matches the session variable.
         if ($csrf === $_SESSION['csrf']) {
             $_SESSION = array();
             if (isset($_COOKIE[session_name()])) {

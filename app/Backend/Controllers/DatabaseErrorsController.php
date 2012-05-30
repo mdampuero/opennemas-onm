@@ -32,7 +32,7 @@ class DatabaseErrorsController extends Controller
         //Setup app
         require_once './session_bootstrap.php';
 
-        if(!\Acl::isMaster()) {
+        if (!\Acl::isMaster()) {
             m::add("You don't have permissions");
             Application::forward('/admin/');
         }
@@ -51,11 +51,11 @@ class DatabaseErrorsController extends Controller
         $cm = new \ContentManager();
 
         $page = filter_input(
-            INPUT_GET, 'page' , FILTER_SANITIZE_STRING,
+            INPUT_GET, 'page', FILTER_SANITIZE_STRING,
             array( 'options' => array('default' => 1))
         );
         $search = filter_input(
-            INPUT_GET, 'search' , FILTER_SANITIZE_STRING,
+            INPUT_GET, 'search', FILTER_SANITIZE_STRING,
             array( 'options' => array('default' => ""))
         );
 
@@ -105,7 +105,7 @@ class DatabaseErrorsController extends Controller
         );
         $pager = \Pager::factory($pagerOptions);
 
-        return $this->render('system_information/sql_error_log.tpl',  array(
+        return $this->render('system_information/sql_error_log.tpl', array(
             'errors' => $errors,
             'pagination' => $pager,
             'total_errors' => $rsTotalErrors,

@@ -47,7 +47,7 @@ class KeywordsController extends Controller
         $filter = $this->request->query->get('filter', null);
         $page = $this->request->query->getDigits('page', 1);
 
-        if(isset($filter) && !empty($_REQUEST['filter']['pclave'])) {
+        if (isset($filter) && !empty($_REQUEST['filter']['pclave'])) {
             $filter = '`pclave` LIKE "%' . $_REQUEST['filter']['pclave'] . '%"';
         }
 
@@ -83,13 +83,16 @@ class KeywordsController extends Controller
         $terms   = $pclave->getList();
 
         $matches = array();
-        $terms = array_filter($terms, function($item) use ($id){
-            if (($tiem->id != $id) &&
-                preg_match('/^' . preg_quote($_REQUEST['q']) . '/', $item->pclave)
-            ) {
-                return true;
+        $terms = array_filter(
+            $terms,
+            function($item) use ($id){
+                if (($tiem->id != $id) &&
+                    preg_match('/^' . preg_quote($_REQUEST['q']) . '/', $item->pclave)
+                ) {
+                    return true;
+                }
             }
-        });
+        );
 
         return $this->render('keywords/search.tpl', array(
             'terms' => $matches,
@@ -168,7 +171,7 @@ class KeywordsController extends Controller
     public function autolinkAction()
     {
         $content = json_decode($HTTP_RAW_POST_DATA)->content;
-        if(!empty($content)) {
+        if (!empty($content)) {
             $terms = $pclave->getList();
 
             return $pclave->replaceTerms($content, $terms);

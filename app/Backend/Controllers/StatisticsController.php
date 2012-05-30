@@ -85,7 +85,7 @@ class StatisticsController extends Controller
     {
         $days = $this->request->query->filter('days', null, FILTER_VALIDATE_INT);
         $type = $this->request->query->filter('type', null, FILTER_SANITIZE_STRING);
-        $page = $this->request->query->filter('page',    1, FILTER_VALIDATE_INT);
+        $page = $this->request->query->filter('page', 1, FILTER_VALIDATE_INT);
         $category = $this->request->query->filter('category', null, FILTER_VALIDATE_INT);
 
         $tiempo = "";
@@ -101,17 +101,17 @@ class StatisticsController extends Controller
 
         if ($type=='viewed') {
             $title       = "<h2>".sprintf(_("More seen in %s"), $tiempo)."</h2>";
-            $items       = \Dashboard::getMostViewed('Article',$category,$days);
+            $items       = \Dashboard::getMostViewed('Article', $category, $days);
             \StringUtils :: disabled_magic_quotes($items);
             $output = \Dashboard::viewedTable($items, $title);
         } elseif ($type=='comented') {
             $title       = "<h2>".sprintf(_("Most commented %s"), $tiempo)."</h2>";
-            $items       = \Dashboard::getMostComented('Article',$category,$days);
+            $items       = \Dashboard::getMostComented('Article', $category, $days);
             \StringUtils :: disabled_magic_quotes($items);
             $output = \Dashboard::comentedTable($items, $title);
         } elseif ($type=='voted') {
             $title       = "<h2>".sprintf(_("Most voted %s"), $tiempo)."</h2>";
-            $items       = \Dashboard::getMostVoted('Article',$category,$days);
+            $items       = \Dashboard::getMostVoted('Article', $category, $days);
             \StringUtils :: disabled_magic_quotes($items);
             $output = \Dashboard::votedTable($items, $title);
         }

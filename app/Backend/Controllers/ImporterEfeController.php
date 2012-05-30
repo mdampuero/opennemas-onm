@@ -120,12 +120,15 @@ class ImporterEfeController extends Controller
 
             $alreadyImported = \Content::findByUrn($element->urn);
         } catch (\Exception $e) {
-            // Redirect the user to the list of articles and show him/her an error message
-            m::add(sprintf(_('ID "%d" doesn\'t exist'),$id));
+            // Redirect the user to the list of articles and
+            // show him/her an error message
+            m::add(sprintf(_('ID "%d" doesn\'t exist'), $id));
 
             $page = $this->request->query->filter('page', 0, FILTER_VALIDATE_INT);
 
-            return $this->redirect($this->generateUrl('admin_importer_efe',array('page' => $page)));
+            return $this->redirect(
+                $this->generateUrl('admin_importer_efe', array('page' => $page))
+            );
         }
 
         return $this->render('agency_importer/efe/show.tpl', array(
@@ -177,7 +180,7 @@ class ImporterEfeController extends Controller
         // If the new has photos import them
         if ($element->hasPhotos()) {
             $photos = $element->getPhotos();
-            foreach($photos as $photo) {
+            foreach ($photos as $photo) {
 
                 $filePath = realpath($efe->_syncPath.DIRECTORY_SEPARATOR.$photo->file_path);
 
@@ -207,7 +210,7 @@ class ImporterEfeController extends Controller
         // If the new has videos import them
         if ($element->hasVideos()) {
             $videos = $element->getVideos();
-            foreach($videos as $video) {
+            foreach ($videos as $video) {
 
                 $filepath = realpath($efe->syncPath.DIRECTORY_SEPARATOR.$video->file_path);
 
@@ -269,7 +272,7 @@ class ImporterEfeController extends Controller
         $_SESSION['desde'] = 'efe_press_import';
 
         // TODO: change this redirection when creating the ported article controller
-        if(!empty($newArticleID)) {
+        if (!empty($newArticleID)) {
             $httpParams []= array( 'id' => $newArticleID, 'action' => 'read');
 
             return $this->redirect(SITE_URL_ADMIN.'/article.php' . '?'.\StringUtils::toHttpParams($httpParams));
@@ -362,16 +365,16 @@ class ImporterEfeController extends Controller
                     'agency_string' => s::get('efe_agency_string'),
                     'sync_from'     => array(
                         'no_limits'     => _('No limit'),
-                        '21600'         => sprintf(_('%d hours'),'6'),
-                        '43200'         => sprintf(_('%d hours'),'12'),
+                        '21600'         => sprintf(_('%d hours'), '6'),
+                        '43200'         => sprintf(_('%d hours'), '12'),
                         '86400'         => _('1 day'),
-                        '172800'        => sprintf(_('%d days'),'2'),
-                        '259200'        => sprintf(_('%d days'),'3'),
-                        '345600'        => sprintf(_('%d days'),'4'),
-                        '432000'        => sprintf(_('%d days'),'5'),
-                        '518400'        => sprintf(_('%d days'),'6'),
-                        '604800'        => sprintf(_('%d week'),'1'),
-                        '1209600'       => sprintf(_('%d weeks'),'2'),
+                        '172800'        => sprintf(_('%d days'), '2'),
+                        '259200'        => sprintf(_('%d days'), '3'),
+                        '345600'        => sprintf(_('%d days'), '4'),
+                        '432000'        => sprintf(_('%d days'), '5'),
+                        '518400'        => sprintf(_('%d days'), '6'),
+                        '604800'        => sprintf(_('%d week'), '1'),
+                        '1209600'       => sprintf(_('%d weeks'), '2'),
                     ),
                     'sync_from_setting'=> s::get('efe_sync_from_limit'),
                 ));
@@ -400,8 +403,8 @@ class ImporterEfeController extends Controller
 
             if (s::set('efe_server_auth', $serverAuth)
                 && s::set('efe_sync_from_limit', $syncFrom)
-                && s::set('efe_agency_string', $agencyString))
-            {
+                && s::set('efe_agency_string', $agencyString)
+            ) {
                 m::add(_('EFE module configuration saved successfully'), m::SUCCESS);
             } else {
                 m::add(_('There was an error while saving the EFE module configuration'), m::ERROR);
@@ -424,7 +427,9 @@ class ImporterEfeController extends Controller
 
         $page = $this->request->query->filter('page', null, FILTER_VALIDATE_INT);
 
-        return $this->redirect($this->generateUrl('admin_importer_efe',array('page' => $page)));
+        return $this->redirect(
+            $this->generateUrl('admin_importer_efe', array('page' => $page))
+        );
     }
 
     /**
@@ -461,7 +466,8 @@ class ImporterEfeController extends Controller
             m::add($e->getMessage(), m::ERROR);
         } catch (\Onm\Import\Synchronizer\LockException $e) {
             $errorMessage = $e->getMessage()
-                   .sprintf(_('If you are sure <a href="%s?action=unlock">try to unlock it</a>'),$_SERVER['PHP_SELF']);
+               .sprintf(_('If you are sure <a href="%s?action=unlock">try to unlock it</a>'),
+                $_SERVER['PHP_SELF']);
             m::add( $errorMessage, m::ERROR );
         } catch (\Exception $e) {
             m::add($e->getMessage(), m::ERROR);
@@ -469,7 +475,9 @@ class ImporterEfeController extends Controller
             $e->unlockSync();
         }
 
-        return $this->redirect($this->generateUrl('admin_importer_efe',array('page' => $page)));
+        return $this->redirect(
+            $this->generateUrl('admin_importer_efe', array('page' => $page))
+        );
     }
 
 } // END class ImporterEfeController

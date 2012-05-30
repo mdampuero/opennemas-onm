@@ -74,20 +74,20 @@ class SystemSettingsController extends Controller
         unset($_POST['action']);
         unset($_POST['submit']);
 
-        if(!empty($_FILES) && isset($_FILES['site_logo'])) {
+        if (!empty($_FILES) && isset($_FILES['site_logo'])) {
             $nameFile = $_FILES['site_logo']['name'];
             $uploaddir= MEDIA_PATH.'/sections/'.$nameFile;
 
             if (move_uploaded_file($_FILES["site_logo"]["tmp_name"], $uploaddir)) {
-               $_POST['site_logo'] = $nameFile;
+                $_POST['site_logo'] = $nameFile;
             }
         }
-        if($_POST['section_settings']['allowLogo'] == 1){
+        if ($_POST['section_settings']['allowLogo'] == 1) {
             $path = MEDIA_PATH.'/sections';
             \FilesManager::createDirectory($path);
         }
 
-        foreach ($_POST as $key => $value ) {
+        foreach ($_POST as $key => $value) {
             s::set($key, $value);
         }
 

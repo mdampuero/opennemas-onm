@@ -86,9 +86,17 @@ class SearchController extends Controller
             $szTagsArray  = explode(', ', \StringUtils::get_tags($szTags));
 
             foreach ($contents as &$content) {
-                for($ind=0; $ind < sizeof($szTagsArray); $ind++){
-                    $content['titule']   = \Onm\StringUtils::extStrIreplace($szTagsArray[$ind], '<span style="font-weight:bold; color:blue">$1</span>', $content['titule']);
-                    $content['metadata'] = \Onm\StringUtils::extStrIreplace($szTagsArray[$ind], '<span style="font-weight:bold; color:blue">$1</span>', $content['metadata']);
+                for ($ind=0; $ind < sizeof($szTagsArray); $ind++) {
+                    $content['titule']   = \Onm\StringUtils::extStrIreplace(
+                        $szTagsArray[$ind],
+                        '<span style="font-weight:bold; color:blue">$1</span>',
+                        $content['titule']
+                    );
+                    $content['metadata'] = \Onm\StringUtils::extStrIreplace(
+                        $szTagsArray[$ind],
+                        '<span style="font-weight:bold; color:blue">$1</span>',
+                        $content['metadata']
+                    );
                 }
             }
             $pagination = \Pager::factory(array(
@@ -123,100 +131,112 @@ class SearchController extends Controller
     {
         $arrayTypes = \Content::getContentTypes();
         $szTypes =  '';
-        foreach($arrayTypes as $aType) {
-            if($aType['name']== 'advertisement') {
+        foreach ($arrayTypes as $aType) {
+            if ($aType['name']== 'advertisement') {
                 $aType['name']= 'ads';
             }
-            if($aType['name']== 'attachment'){
+            if ($aType['name']== 'attachment') {
                 $aType['name']= 'file';
             }
-            if($aType['name']== 'photo'){
+            if ($aType['name']== 'photo') {
                 $aType['name']= 'image';
             }
-            if($aType['name']== 'static_page'){
+            if ($aType['name']== 'static_page') {
                 $aType['name']= 'static_pages';
             }
 
             if (mod::moduleExists(strtoupper($aType['name']).'_MANAGER')
-                && mod::isActivated(strtoupper($aType['name']).'_MANAGER'))
-            {
+                && mod::isActivated(strtoupper($aType['name']).'_MANAGER')
+            ) {
                 if (isset($_REQUEST[$aType[1]])) {
                     $szTypes .= $aType[1] . ", ";
-                    $htmlCheck .= '<input id="'.$aType[1] .'" name="' . $aType[1] .'"  type="checkbox" valign="center" checked="true"/>'.$aType['title'];
+                    $htmlCheck .= '<input id="'.$aType[1] .'" name="' . $aType[1]
+                        .'"  type="checkbox" valign="center" checked="true"/>'
+                        .$aType['title'];
                 } else {
-                    $htmlCheck .= '<input id="'. $aType[1].'" name="'.$aType[1].'"  type="checkbox" valign="center"/>'.$aType['title'];
+                    $htmlCheck .= '<input id="'. $aType[1].'" name="'.$aType[1]
+                        .'"  type="checkbox" valign="center"/>'.$aType['title'];
                 }
             }
         }
 
-        try {
-            $szTypes = trim($szTypes);
-            $szTypes = substr($szTypes,0,strlen($szTypes)-1);
-        } catch(\Exception $e) {}
+        $szTypes = trim($szTypes);
+        $szTypes = substr($szTypes, 0, strlen($szTypes)-1);
 
         return $szTypes;
     }
 
     /*
-     * Name: PaginateLink
+     * Crea los link clicables con tres paginas para
+     * seleccionar y un primera y última.
      *
-     * Description: Crea los link clicables con tres paginas para seleccionar y un primera y última.
+     * @param Pager $Pager Paginador de la libreria externa.
+     * @param string $szSearchString  Metadatos a buscar en la base de datos.
+     * @param array $arrayCheckedTypes con los tipos de datos en
+     *                                 los cuales buscaremos.
      *
-     * Input:   $Pager.......: (object) Paginador de la libreria externa.
-     *          $szSearchString..: (strings) Metadatos a buscar en la base de datos.
-     *          $arrayCheckedTypes..: (array) Array con los tipos de datos en los cuales buscaremos.
-     *
-     * Output: codigo html con los links a las diferentes páginas.
+     * @return string codigo html con los links a las diferentes páginas.
     */
     private function _paginateLink($Pager, $szSearchString, $arrayCheckedTypes)
     {
         $szPages=null;
-        if($Pager->_totalPages>1) {
-            $szPages = '<p align="center">';
-            if ($Pager->_currentPage != 1) {
-                $szPages .= '<a style="cursor:pointer;" href="#" onclick="paginate_search(\'search_paging\', 1, \''.
-                            $szSearchString.'\', \'';
-                foreach($arrayCheckedTypes as $itemType)
-                    $szPages .= "&".$itemType."=on";
-                $szPages .= '\'); return false;">Primera</a> ... | ';
+        if ($Pager->_totalPages <= 1) {
+            return $szPages;
+        }
+        $szPages = '<p align="center">';
+        if ($Pager->_currentPage != 1) {
+            $szPages .= '<a style="cursor:pointer;" href="#" onclick="paginate_search(\'search_paging\', 1, \''.
+                        $szSearchString.'\', \'';
+            foreach ($arrayCheckedTypes as $itemType) {
+                $szPages .= "&".$itemType."=on";
             }
+            $szPages .= '\'); return false;">Primera</a> ... | ';
+        }
 
-            for($iIndex=$Pager->_currentPage-1; $iIndex<=$Pager->_currentPage+1 && $iIndex <= $Pager->_totalPages;$iIndex++) {
-                if($Pager->_currentPage == 1) {
-                    if(($iIndex+1) > $Pager->_totalPages)
-                        break;
-                    $szPages .= '<a style="cursor:pointer;" href="#" onclick="paginate_search(\'search_paging\',' .
-                                ($iIndex+1) . ', \''. $szSearchString.'\', \'';
-                    foreach($arrayCheckedTypes as $itemType)
-                        $szPages .= "&".$itemType."=on";
-                    $szPages .= '\'); return false;">';
+        for ($iIndex = $Pager->_currentPage-1;
+            $iIndex<=$Pager->_currentPage+1 && $iIndex <= $Pager->_totalPages;
+            $iIndex++) {
+            if ($Pager->_currentPage == 1) {
+                if (($iIndex+1) > $Pager->_totalPages) {
+                    break;
+                }
+                $szPages .= '<a style="cursor:pointer;" href="#" onclick="paginate_search(\'search_paging\',' .
+                            ($iIndex+1) . ', \''. $szSearchString.'\', \'';
+                foreach ($arrayCheckedTypes as $itemType) {
+                    $szPages .= "&".$itemType."=on";
+                }
+                $szPages .= '\'); return false;">';
 
-                    if($Pager->_currentPage == ($iIndex+1))
-                        $szPages .= '<b>' . ($iIndex+1) . '</b></a> | ';
-                    else
-                        $szPages .= ($iIndex+1) . '</a> | ';
+                if ($Pager->_currentPage == ($iIndex+1)) {
+                    $szPages .= '<b>' . ($iIndex+1) . '</b></a> | ';
                 } else {
-                    $szPages .= '<a style="cursor:pointer;" href="#" onclick="paginate_search(\'search_paging\',' .
-                                $iIndex . ', \''. $szSearchString.'\', \'';
-                    foreach($arrayCheckedTypes as $itemType)
-                        $szPages .= "&".$itemType."=on";
-                    $szPages .= '\'); return false;">';
+                    $szPages .= ($iIndex+1) . '</a> | ';
+                }
+            } else {
+                $szPages .= '<a style="cursor:pointer;" href="#" onclick="paginate_search(\'search_paging\',' .
+                            $iIndex . ', \''. $szSearchString.'\', \'';
+                foreach ($arrayCheckedTypes as $itemType) {
+                    $szPages .= "&".$itemType."=on";
+                }
+                $szPages .= '\'); return false;">';
 
-                    if($Pager->_currentPage == ($iIndex))
-                        $szPages .= '<b>' . $iIndex . '</b></a> | ';
-                    else
-                        $szPages .= $iIndex . '</a> | ';
+                if ($Pager->_currentPage == ($iIndex)) {
+                    $szPages .= '<b>' . $iIndex . '</b></a> | ';
+                } else {
+                    $szPages .= $iIndex . '</a> | ';
                 }
             }
-            if($Pager->_currentPage != $Pager->_lastPageText) {
-                $szPages .= '... <a style="cursor:pointer;" href="#" onclick="paginate_search(\'search_paging\',' .
-                                $Pager->_lastPageText . ', \''. $szSearchString.'\', \'';
-                foreach($arrayCheckedTypes as $itemType)
-                        $szPages .= "&".$itemType."=on";
-                        $szPages .= '\'); return false;">Última</a>';
-            }
-            $szPages .= "</p> ";
         }
+        if ($Pager->_currentPage != $Pager->_lastPageText) {
+            $szPages .= '... <a style="cursor:pointer;" href="#" '
+                .'onclick="paginate_search(\'search_paging\',' .
+                $Pager->_lastPageText . ', \''. $szSearchString.'\', \'';
+            foreach ($arrayCheckedTypes as $itemType) {
+                $szPages .= "&".$itemType."=on";
+            }
+            $szPages .= '\'); return false;">Última</a>';
+        }
+        $szPages .= "</p> ";
 
         return $szPages;
     }

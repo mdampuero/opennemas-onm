@@ -78,8 +78,8 @@ class AclUserController extends Controller
         //user can modify his data
         $id = $this->request->query->getDigits('id');
 
-        // Check if the user is the same as the one that we want edit or if we have
-        // permissions for editting other user information.
+        // Check if the user is the same as the one that we want edit or
+        // if we have permissions for editting other user information.
         if ($id != $_SESSION['userid']) {
             \Acl::checkOrForward('USER_UPDATE');
         }
@@ -108,7 +108,8 @@ class AclUserController extends Controller
     {
 
         $userId = $this->request->request->getDigits('id');
-        $action = $this->request->request->filter('action', 'update', FILTER_SANITIZE_STRING);
+        $action = $this->request->request->filter('action',
+            'update', FILTER_SANITIZE_STRING);
 
         if ($userId != $_SESSION['userid']) {
             \Acl::checkOrForward('USER_UPDATE');
@@ -120,8 +121,11 @@ class AclUserController extends Controller
         if ($action == 'validate') {
             $redirectUrl = url('admin_acl_user_show', array('id' => $userId));
         } else {
-            // If a regular user is upating him/her information redirect to welcome page
-            if (($userId == $_SESSION['userid']) && !Acl::check('USER_UPDATE')) {
+            // If a regular user is upating him/her information
+            // redirect to welcome page
+            if (($userId == $_SESSION['userid'])
+                && !Acl::check('USER_UPDATE')
+            ) {
                 $redirectUrl = url('admin_welcome');
             } else {
                 $redirectUrl = url('admin_acl_user');
@@ -140,13 +144,15 @@ class AclUserController extends Controller
     {
         \Acl::checkOrForward('USER_CREATE');
 
-        $action = $this->request->request->filter('action', null, FILTER_SANITIZE_STRING);
+        $action = $this->request->request->filter('action',
+            null, FILTER_SANITIZE_STRING);
 
         if ($this->request->getMethod() == 'POST') {
             $user = new \User();
             if ($user->create($_POST)) {
                 if ($action == 'validate') {
-                    return $this->redirect(url('admin_acl_user_show', array('id' => $user->id)));
+                    return $this->redirect(url('admin_acl_user_show',
+                        array('id' => $user->id)));
                 }
 
                 return $this->redirect(url('admin_acl_user'));
@@ -191,10 +197,11 @@ class AclUserController extends Controller
 
         if (count($selected) > 0) {
             $user = new \User();
-            foreach($selected as $userId) {
-                $user->delete((int)$userId);
+            foreach ($selected as $userId) {
+                $user->delete((int) $userId);
             }
-            m::add(sprintf(_('You have deleted %d users.'), count($selected)), m::SUCCESS);
+            m::add(sprintf(_('You have deleted %d users.'),
+                count($selected)), m::SUCCESS);
         } else {
             m::add(_('You haven\'t selected any user to delete.'), m::ERROR);
         }

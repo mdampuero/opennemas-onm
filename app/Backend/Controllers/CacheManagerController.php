@@ -50,7 +50,7 @@ class CacheManagerController extends Controller
     public function defaultAction()
     {
         list($this->filter, $this->params, $this->page, $this->itemsPerPage) =
-            $this->_buildFilter($this->request);
+            $this->buildFilter($this->request);
 
         // Get available cache files
         $caches = $this->templateManager->scan($this->filter);
@@ -84,7 +84,7 @@ class CacheManagerController extends Controller
 
         $allAuthors  = array();
         $author      = new \Author();
-        $all_authors = $author->cache->all_authors(NULL,'ORDER BY name');
+        $all_authors = $author->cache->all_authors(null, 'ORDER BY name');
         foreach ($all_authors as $author) {
             $allAuthors[$author->pk_author] = $author->name;
         }
@@ -99,11 +99,12 @@ class CacheManagerController extends Controller
             foreach ($articles as $article) {
 
                 $articleTitles[$article->pk_content] = $article->title;
-                if ($article->fk_content_type == '4'){
-                    $authorName = !empty($allAuthors[$article->fk_author])?$allAuthors[$article->fk_author]:'opinion';
+                if ($article->fk_content_type == '4') {
+                    $authorName = !empty($allAuthors[$article->fk_author])
+                        ? $allAuthors[$article->fk_author]:'opinion';
                     $articleUris[$article->pk_content] = \Uri::generate( 'opinion',
                         array(
-                            'id'       => sprintf('%06d',$article->id),
+                            'id'       => sprintf('%06d', $article->id),
                             'date'     => date('YmdHis', strtotime($article->created)),
                             'category' => $authorName,
                             'slug'     => $article->slug,
@@ -167,7 +168,7 @@ class CacheManagerController extends Controller
             foreach ($itemsSelected as $item) {
                 $result = $this->templateManager->delete($itemsCacheIds[$item], $itemsTemplate[$item]);
             }
-        } elseif(is_string($itemsCacheIds)){
+        } elseif (is_string($itemsCacheIds)) {
             $result = $this->templateManager->delete($itemsCacheIds, $itemsTemplate);
         }
 
@@ -261,7 +262,7 @@ class CacheManagerController extends Controller
      *
      * @return array
      **/
-    private function _buildFilter($request)
+    private function buildFilter($request)
     {
         $section      = $request->query->get('section', null);
         $type         = $request->query->get('type', null);
@@ -274,13 +275,13 @@ class CacheManagerController extends Controller
         // If section is defined include it in filter and params
         $filter = '';
         $params = array();
-        if(isset($section) && !empty($section)) {
+        if (isset($section) && !empty($section)) {
             $filter  .= '^'.preg_quote($section).'\^.*?';
             $params[] = 'section='.$section;
         }
 
         // If cache file type is defined include it in filter and params
-        if(isset($type) && !empty($type)) {
+        if (isset($type) && !empty($type)) {
             $regexp = array(
                 'frontpages' => 'frontpage\.tpl\.php$',
                 'opinions' => 'opinion\.tpl\.php$',
@@ -307,7 +308,7 @@ class CacheManagerController extends Controller
 
 
         $params[] = 'items_page='.$itemsPerPage;
-        if(!empty($filter)) {
+        if (!empty($filter)) {
             $filter = '@'.$filter.'@';
         }
 

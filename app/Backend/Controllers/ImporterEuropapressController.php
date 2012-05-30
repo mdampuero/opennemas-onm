@@ -46,7 +46,8 @@ class ImporterEuropapressController extends Controller
     {
 
         if (is_null(s::get('europapress_server_auth'))) {
-            m::add(_('Please provide your Europapress auth credentials to start to use your Europapress Importer module'));
+            m::add(_('Please provide your Europapress auth credentials '
+                .'to start to use your Europapress Importer module'));
 
             return $this->redirect(url('admin_import_europapress'));
         }
@@ -61,8 +62,8 @@ class ImporterEuropapressController extends Controller
         $itemsPage =  s::get('items_per_page') ?: 20;
 
         $findParams = array(
-            'category'   => $this->request->query->filter('filter_category','*', FILTER_SANITIZE_STRING),
-            'title'      => $this->request->query->filter('filter_title','*', FILTER_SANITIZE_STRING),
+            'category'   => $this->request->query->filter('filter_category', '*', FILTER_SANITIZE_STRING),
+            'title'      => $this->request->query->filter('filter_title', '*', FILTER_SANITIZE_STRING),
             'page'       => $this->request->query->filter('filter_page', 1, FILTER_VALIDATE_INT),
             'items_page' => $itemsPage,
         );
@@ -102,7 +103,7 @@ class ImporterEuropapressController extends Controller
             $element = $ep->findByFileName($id);
         } catch (Exception $e) {
             // Redirect the user to the list of articles and show an error message
-            m::add(sprintf(_('ID "%d" doesn\'t exist'),$id), m::ERROR);
+            m::add(sprintf(_('ID "%d" doesn\'t exist'), $id), m::ERROR);
             $this->redirect(url('admin_importer_europapress'));
         }
 
@@ -154,14 +155,14 @@ class ImporterEuropapressController extends Controller
         $newArticleID      = $article->create($values);
         $_SESSION['desde'] = 'europa_press_import';
 
-        if(!empty($newArticleID)) {
+        if (!empty($newArticleID)) {
 
             $httpParams []= array( 'id' => $newArticleID,
                                   'action' => 'read');
 
             return $this->redirect(SITE_URL_ADMIN.'/article.php' . '?'.\StringUtils::toHttpParams($httpParams));
         } else {
-            m::add(sprintf('Unable to import the file "%s"',$id));
+            m::add(sprintf('Unable to import the file "%s"', $id));
 
             return $this->redirect(url('admin_importer_europapress'));
         }
@@ -188,16 +189,16 @@ class ImporterEuropapressController extends Controller
                     'agency_string' => s::get('europapress_agency_string'),
                     'sync_from'     => array(
                         'no_limits' => _('No limit'),
-                        '21600'     => sprintf(_('%d hours'),'6'),
-                        '43200'     => sprintf(_('%d hours'),'12'),
+                        '21600'     => sprintf(_('%d hours'), '6'),
+                        '43200'     => sprintf(_('%d hours'), '12'),
                         '86400'     => _('1 day'),
-                        '172800'    => sprintf(_('%d days'),'2'),
-                        '259200'    => sprintf(_('%d days'),'3'),
-                        '345600'    => sprintf(_('%d days'),'4'),
-                        '432000'    => sprintf(_('%d days'),'5'),
-                        '518400'    => sprintf(_('%d days'),'6'),
-                        '604800'    => sprintf(_('%d week'),'1'),
-                        '1209600'   => sprintf(_('%d weeks'),'2'),
+                        '172800'    => sprintf(_('%d days'), '2'),
+                        '259200'    => sprintf(_('%d days'), '3'),
+                        '345600'    => sprintf(_('%d days'), '4'),
+                        '432000'    => sprintf(_('%d days'), '5'),
+                        '518400'    => sprintf(_('%d days'), '6'),
+                        '604800'    => sprintf(_('%d week'), '1'),
+                        '1209600'   => sprintf(_('%d weeks'), '2'),
                     ),
                     'sync_from_setting'=> s::get('europapress_sync_from_limit'),
                 ));
@@ -205,8 +206,8 @@ class ImporterEuropapressController extends Controller
 
             return $this->render('agency_importer/europapress/config.tpl');
 
-        } else { // If request was GET show the form
-
+        } else {
+            // If request was GET show the form
             $server       = $this->request->request->filter('server', null, FILTER_SANITIZE_STRING );
             $username     = $this->request->request->filter('username', null, FILTER_SANITIZE_STRING );
             $password     = $this->request->request->filter('password', null, FILTER_SANITIZE_STRING );
@@ -225,8 +226,8 @@ class ImporterEuropapressController extends Controller
 
             if (s::set('europapress_server_auth', $serverAuth)
                 && s::set('europapress_sync_from_limit', $syncFrom)
-                && s::set('europapress_agency_string', $agencyString))
-            {
+                && s::set('europapress_agency_string', $agencyString)
+            ) {
                 m::add(_('Europapress configuration saved successfully'), m::SUCCESS);
             } else {
                 m::add(_('There was an error while saving Europapress configuration'), m::ERROR);
@@ -283,7 +284,8 @@ class ImporterEuropapressController extends Controller
             m::add($e->getMessage(), m::ERROR);
         } catch (\Onm\Import\Synchronizer\LockException $e) {
             $errorMessage = $e->getMessage()
-                   .sprintf(_('If you are sure <a href="%s">try to unlock it</a>'),url('admin_importer_europapress_unlock'));
+               .sprintf(_('If you are sure <a href="%s">try to unlock it</a>'),
+                url('admin_importer_europapress_unlock'));
             m::add( $errorMessage, m::ERROR );
         } catch (\Exception $e) {
             m::add($e->getMessage(), m::ERROR);

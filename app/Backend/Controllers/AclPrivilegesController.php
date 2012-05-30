@@ -32,7 +32,7 @@ class AclPrivilegesController extends Controller
 
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
 
-        if(!\Acl::isMaster()) {
+        if (!\Acl::isMaster()) {
             m::add("You don't have permissions");
 
             return $this->redirect(url('admin_welcome'));
@@ -50,7 +50,7 @@ class AclPrivilegesController extends Controller
     {
 
         $filter = ' 1=1 ';
-        if(isset($_REQUEST['module']) && !empty($_REQUEST['module'])) {
+        if (isset($_REQUEST['module']) && !empty($_REQUEST['module'])) {
             $filter = 'module="'.$_REQUEST['module'].'"';
         }
 
@@ -73,8 +73,8 @@ class AclPrivilegesController extends Controller
         if ($this->request->getMethod() == 'POST') {
             // Try to save the new privilege
             if ($this->privilege->create( $_POST )) {
-                // If privilege was saved successfully and the action is validate
-                // show again the form
+                // If privilege was saved successfully and the action
+                // is validate show again the form
                 if ($this->request->get('action') != 'validate') {
                     $this->redirect(url('admin_acl_privileges'));
                 }
@@ -102,7 +102,7 @@ class AclPrivilegesController extends Controller
         $this->privilege->read($id);
         $modules = $this->privilege->getModuleNames();
 
-        return $this->render('acl/privilege/new.tpl',array(
+        return $this->render('acl/privilege/new.tpl', array(
             'privilege' => $this->privilege,
             'id'        => $this->privilege->pk_privilege,
             'modules'   => $modules,

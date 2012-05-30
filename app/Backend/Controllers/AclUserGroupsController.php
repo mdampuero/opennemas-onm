@@ -86,12 +86,13 @@ class AclUserGroupsController extends Controller
         if ($this->request->getMethod() == 'POST') {
             // Try to save the new privilege
             if ($userGroup->create( $_POST )) {
-                // If user group was saved successfully and the action is validate
-                // show again the form
+                // If user group was saved successfully and the action
+                // is validate show again the form
                 if ($this->request->get('action') == 'validate') {
                     return $this->redirect(url('admin_acl_usergroups'));
                 } else {
-                    return $this->redirect(url('admin_acl_usergroups_show', array('id' => $userGroup->id)));
+                    return $this->redirect(url('admin_acl_usergroups_show',
+                        array('id' => $userGroup->id)));
                 }
             } else {
                 $this->view->assign('errors', $userGroup->errors);
@@ -134,7 +135,10 @@ class AclUserGroupsController extends Controller
         $userGroup = new UserGroup();
         $deleted = $userGroup->delete($id);
         if (!$deleted) {
-            m::add(sprintf(_('Unable to delete the user group with id "%d"')), $id);
+            m::add(sprintf(
+                _('Unable to delete the user group with id "%d"')),
+                $id
+            );
         }
 
         return $this->redirect(url('admin_acl_usergroups'));
