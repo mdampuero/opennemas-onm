@@ -84,11 +84,17 @@ jQuery(function($){
     ***************************************************************************/
     // Toggle content-provider-element checkbox if all the content-provider-elemnt is clicked
     $('div.placeholder').on('click', 'div.content-provider-element .description', function() {
-       checkbox = $(this).find('input[type="checkbox"]');
-       checkbox.attr(
+        checkbox = $(this).find('input[type="checkbox"]');
+        checkbox.attr(
            'checked',
            !checkbox.is(':checked')
-       );
+        );
+        var checked_elements = $('div.placeholder div.content-provider-element input[type="checkbox"]:checked').length
+        if (checked_elements > 0) {
+            $('.old-button .batch-actions').fadeIn('fast');
+        } else {
+            $('.old-button .batch-actions').fadeOut('fast');
+        };
     });
     $('div.placeholder').on('mouseleave', 'div.content-provider-element', function(e) {
         $(this).find('.content-action-buttons').removeClass('open');
