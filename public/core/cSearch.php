@@ -18,6 +18,7 @@ class cSearch
 
     const FULL_TEXT_COLUMN  = 'contents.metadata';
     const FULL_TEXT_COLUMN2 = 'contents.title';
+    const FULL_TEXT_COLUMN0 = 'contents.title,contents.metadata';
 
     const ITEMS_PAGE        = 10;
 
@@ -185,29 +186,19 @@ class cSearch
         $szSourceTags2=array();
         $i = 0;
         foreach ($szSourceTags as $key) {
-            $szSourceTags2[$i] = '+'.$key;
+            $szSourceTags2[$i] = '+'.$key.'*';
             $i++;
         }
         $szSourceTags2 = implode(' ', $szSourceTags2);// Con + obligatorio
-        $szSourceTags = implode(' ', $szSourceTags);// Sin+ no obligatorio
 
+        $szMatch0 = $this->defineMatchOfSentence0($szSourceTags2);//Match with both
 
-        $szMatch = $this->defineMatchOfSentence($szSourceTags2); //Match con metadata
-        $szMatch2 = $this->defineMatchOfSentence2($szSourceTags);//Match con contents.title
+        $szSqlSentence = 'SELECT '. $szReturnValues . ", " . (($szMatch0)) ." as _height";
 
-        if (!stristr($szContentsTypeTitle, 'photo') === false) {
-             $szSqlSentence = 'SELECT '. $szReturnValues. ", " . (($szMatch)). " as _height";
-             $szMatch2 = '1=1';
-        } elseif (!stristr($szContentsTypeTitle, 'comment') === false) {
-             $szSqlSentence = 'SELECT '. $szReturnValues. ", " . (($szMatch2)). " as _height";
-             $szMatch = '1=1';
-        } else {
-            $szSqlSentence = 'SELECT '. $szReturnValues . ", " . (($szMatch)) .'+'.(($szMatch2)) . " as _height";
-        }
         $szSqlSentence .= " FROM contents, " . $szNewTable;
-        $szSqlSentence .= " WHERE " . $szMatch.' AND '. $szMatch2;
+        $szSqlSentence .= " WHERE " . $szMatch0;
         $szSqlSentence .= " AND ( " . $this->parseTypes($szContentsTypeTitle) . ") AND (" . $szWhere . ") ";
-        $szSqlSentence .= " ORDER BY _height DESC, created DESC";
+        $szSqlSentence .= " ORDER BY _height DESC";
         $szSqlSentence .= " LIMIT " . $iLimit;
 
         $resultSet = $GLOBALS['application']->conn->Execute($szSqlSentence);
@@ -392,6 +383,28 @@ class cSearch
      * Output: (String) Parte "WHERE" de la sentencia SQL.
      *
     */
+    public function defineMatchOfSentence0($szSourceTags)
+    {
+        $szSourceTags = trim($szSourceTags);
+        $szSqlMatch = " MATCH (" . cSearch::FULL_TEXT_COLUMN0 .
+            ") AGAINST ( '" . $szSourceTags . "' IN BOOLEAN MODE)";
+
+        return $szSqlMatch;
+    }
+
+    /*
+     * Name:    defineMatchOfSentence
+     *
+     * Description: Crea la parte del Match de la sentencia sql que nos proporciona el vector de pesos.
+     *
+     * Input:
+     *      szSource: (string) Cadena a parsear con los Tags.
+     *      szContentsTypeTitle: (string) titulos de los tipos de contenidos a buscar.
+     *      szColumn: (string) campo de la tabla en la que buscar los tags de szSource.
+     *
+     * Output: (String) Parte "WHERE" de la sentencia SQL.
+     *
+    */
     public function defineMatchOfSentence($szSourceTags)
     {
         $szSourceTags = trim($szSourceTags);
@@ -400,7 +413,6 @@ class cSearch
 
         return $szSqlMatch;
     }
-
     /*
      * Name: 	defineMatchOfSentence2
      *

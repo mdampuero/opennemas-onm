@@ -11,7 +11,7 @@
         {section name=c loop=$arrayResults}
         <tr>
             <td  class="center">
-                {$arrayResults[c].type}
+                {$arrayResults[c].type|htmlentities}
             </td>
             <td style="padding:10px;"><font size="2">{$arrayResults[c].titule|clearslash}</font><br>
                 {if $arrayResults[c].content_type neq 'comment'}
