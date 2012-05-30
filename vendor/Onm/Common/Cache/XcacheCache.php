@@ -70,7 +70,6 @@ class XcacheCache extends AbstractCache
         return xcache_unset($id);
     }
 
-
     /**
      * Checks that xcache.admin.enable_auth is Off
      *

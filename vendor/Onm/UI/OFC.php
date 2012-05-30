@@ -49,7 +49,6 @@ class OFC
         $g->set_y_max($top);
         $g->y_label_steps(10);
 
-
         $g->set_width('100%');
         $g->set_height(250);
 

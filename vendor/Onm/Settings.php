@@ -214,6 +214,4 @@ class Settings
         return true;
     }
 
-
-
 }

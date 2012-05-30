@@ -146,7 +146,6 @@ class StringUtils
         return $metadata;
     }
 
-
     /**
      * Generate a string of key words separated by semicolon
      *

@@ -267,7 +267,6 @@ class InstanceManager
 
             $rs = $dbConection->Execute($sql);
 
-
             if ($rs !== false) {
                 while (!$rs->EOF) {
                     $information[ $rs->fields['name'] ] =
@@ -279,7 +278,6 @@ class InstanceManager
 
         return array($totals, $information);
     }
-
 
     /*
      * Change activated flag for one instance given its id
@@ -299,7 +297,6 @@ class InstanceManager
 
         return true;
     }
-
 
     /*
      * update

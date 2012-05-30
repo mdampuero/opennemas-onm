@@ -47,7 +47,6 @@ class Message
         }
     }
 
-
     /**
      * Adds a message to the message handler
      *
@@ -101,7 +100,6 @@ class Message
 
         return $output;
     }
-
 
     /*
      * Returns html for all the messages from the message handler

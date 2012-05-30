@@ -151,7 +151,6 @@ abstract class Common
         return $position;
     }
 
-
     /**
      * Returns true if the desired image size is bigger than the actual
      *
