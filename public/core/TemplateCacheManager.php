@@ -150,10 +150,9 @@ class TemplateCacheManager
         $this->properties = array();
 
         $_smarty_tpl = $this;
+        $no_render = true;
 
-        preg_match_all("/%%SmartyHeaderCode:(?:.+?)%%\*\/(.+?)\/\*\/%%SmartyHeaderCode%%/s", file_get_contents($file), $result);
-
-        eval($result[1][0]);
+        $output = include($file);
 
         return $this->properties;
     }
