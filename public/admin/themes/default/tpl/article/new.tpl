@@ -167,7 +167,7 @@
                                 <label for="title_int">{t}Inner title:{/t}</label>
                                 <div class="input-append"  id="title_int">
                                     <input type="text" name="title_int" id="title_int_input" style="width:90%"
-                                        value="{$article->title_int|clearslash|escape:"html"}" class="required"
+                                        value="{$article->title_int|clearslash|escape:"html"|default:$article->title}" class="required"
                                         maxlength="256"
                                         tabindex="2"/>
                                     <span class="add-on"></span>
