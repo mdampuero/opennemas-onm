@@ -96,7 +96,6 @@ switch ($action) {
                 $contentsInHomepage = $cm->getInTime($contentsInHomepage);
                 $articles_home = $cm->sortArrayofObjectsByProperty($contentsInHomepage, 'position');
 
-
                 // Fetch the photo and category name for this element
                 foreach ($articles_home as $i => $article) {
 

@@ -10,7 +10,6 @@
 */
 require_once('../bootstrap.php');
 
-
 /**
  * Check general settings
  * if frontpage is displayed as list or as static file.

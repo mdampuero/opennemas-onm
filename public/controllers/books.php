@@ -30,7 +30,6 @@ list($categories, $subcat, $categoryData) = $ccm->getArraysMenu('', $contentType
 
 $tpl->assign('categories', $categories);
 
-
 //*****************************************************************************/
 $tpl->assign('LIBROS_IMG_PATH',  INSTANCE_MEDIA_PATH.'/books/');
 $tpl->assign('LIBROS_FILES_PATH',  INSTANCE_MEDIA_PATH.'/books/');
@@ -40,7 +39,6 @@ $cm = new ContentManager();
 
 $page = $request->query->filter('page', 1, FILTER_VALIDATE_INT);
 $tpl->assign('page', $page);
-
 
 $action = $request->query->filter('action', 'list', FILTER_SANITIZE_STRING);
 switch ($action) {
@@ -60,7 +58,6 @@ switch ($action) {
             }
         }
         $tpl->assign('categoryBooks', $categoryBooks);
-
 
         $tpl->display('books/books_frontpage.tpl');
 
@@ -110,7 +107,6 @@ switch ($action) {
 
          $tpl->assign( array( 'actualCat'=> $category,
                     'libros' => $books) );
-
 
          $html = $tpl->fetch('books/widget_books.tpl');
 

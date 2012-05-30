@@ -52,6 +52,5 @@ foreach ($menuItems->items as $item) {
 
     $result = file_put_contents($newFile, $htmlOut);
 
-
 }
 

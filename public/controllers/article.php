@@ -360,7 +360,6 @@ switch ($action) {
         $mail->Priority = 5; // Low priority
         $mail->IsHTML(true);
 
-
         $mail->From     = $_REQUEST['sender'];
         $mail->FromName = $_REQUEST['name_sender'];
         $mail->Subject  = $_REQUEST['name_sender']
@@ -373,7 +372,6 @@ switch ($action) {
 
         $tplMail->assign('mail', $mail);
         $tplMail->assign('article', $article);
-
 
         // Filter tags before send
         $permalink = preg_replace('@([^:])//@', '\1/', SITE_URL . $article->permalink);
@@ -393,7 +391,6 @@ switch ($action) {
         }
         $tplMail->assign('summary', $summary);
 
-
         if (method_exists($tpl, '_get_plugin_filepath')) {
             //handle with Smarty version 2
             require_once $tpl->_get_plugin_filepath('function', 'articledate');
@@ -406,7 +403,6 @@ switch ($action) {
                 }
             }
         }
-
 
         //require_once $tpl->_get_plugin_filepath('function', 'articledate');
         $params['created'] = $article->created;

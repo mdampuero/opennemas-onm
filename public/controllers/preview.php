@@ -44,7 +44,6 @@ require_once ("index_sections.php");
 //Obtenemos los articulos
 $cm = new ContentManager();
 
-
 /****************************************  NOTICIAS  *******************************************/
 if ($category_name == 'home') {
     /**
