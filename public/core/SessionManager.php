@@ -121,7 +121,6 @@ class SessionManager implements ArrayAccess
         return($_SESSION[$name]);
     }
 
-
     /**
     * Defined by ArrayAccess interface
     * Set a value given it's key e.g. $A['title'] = 'foo';
@@ -166,8 +165,6 @@ class SessionManager implements ArrayAccess
     {
         return isset($_SESSION[$key]);
     }
-
-
 
     /* Métodos para el control de la sesión y los usuarios activos */
     /**

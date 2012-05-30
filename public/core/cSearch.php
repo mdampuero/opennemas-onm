@@ -40,7 +40,6 @@ class cSearch
         return self::$instance;
     }
 
-
     /*
      * Busca en la base de datos todos los contenidos que sean del
      * tipo indicado en szContentsType y los tag tenga alguna coincidencia
@@ -180,7 +179,6 @@ class cSearch
             return -1;
         }
 
-
         //Transform the input string to search like: 'La via del tren' => '+via +tren'
         $szSourceTags = explode(', ', StringUtils::get_tags($szSourceTags));
         $szSourceTags2=array();
@@ -215,8 +213,8 @@ class cSearch
      * (Publicados) que sean del tipo indicado en szContentsType y los tag
      * tengan alguna coincidencia con los proporcionados en szSource.
      *
-     * @param string $szReturnValues Cadena con las columnas a devolver.
-     * @param string $szContentsTags Cadena con los tags a buscar en los fulltext.
+     * @param string $szReturnValues      Cadena con las columnas a devolver.
+     * @param string $szContentsTags      Cadena con los tags a buscar en los fulltext.
      * @param string $szContentsTypeTitle Titulos de los tipos de contenidos
      *                                    en donde buscar.
      *
@@ -250,8 +248,8 @@ class cSearch
      * szContentsType y los tag tengan alguna coincidencia con los
      * proporcionados en szSource.
      *
-     * @param string $szReturnValues Cadena con las columnas a devolver.
-     * @param string $szContentsTags Cadena con los tags a buscar en los fulltext.
+     * @param string $szReturnValues      Cadena con las columnas a devolver.
+     * @param string $szContentsTags      Cadena con los tags a buscar en los fulltext.
      * @param string $szContentsTypeTitle Titulos de los tipos de
      *                                    contenidos en donde buscar.
      * @param string $filter condicion que han de cumplir
@@ -286,7 +284,6 @@ class cSearch
         $szSourceTags2 = implode(' ', $szSourceTags2);// Con + obligatorio
         $szSourceTags = implode(' ', $szSourceTags);// Sin+ no obligatorio
 
-
         $szMatch = $this->defineMatchOfSentence($szSourceTags2); //Match con metadata
         $szMatch2 = $this->defineMatchOfSentence2($szSourceTags);//Match con contents.title
 
@@ -312,7 +309,6 @@ class cSearch
 
         return $result;
     }
-
 
     /*
      * Name: 	Paginate
@@ -451,7 +447,6 @@ class cSearch
         if (($szSource == '') || ($szSource == null) || ($szSource == ' ')) {
             return 'TRUE';
         }
-
 
         $szColumn = 'fk_content_type';
         //Obtener los id de los tipos a traves de su titulo.

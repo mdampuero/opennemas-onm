@@ -19,7 +19,7 @@ class StringUtils
     /**
      * Delete disallowed chars from a sentence and transform it to a url friendly name
      *
-     * @param  string  $name the string to clen
+     * @param  string $name the string to clen
      * @return string the string cleaned
      **/
     public static function normalize_name($name)
@@ -33,7 +33,7 @@ class StringUtils
      * Performs a html_entity_encode, mb_strtolower and mb_ereg_replace
      * disallowed chars
      *
-     * @param  string  $str the string to clen
+     * @param  string $str the string to clen
      * @return string the string cleaned
      **/
     public static function clearSpecialChars($str)
@@ -45,7 +45,7 @@ class StringUtils
     /**
      * Deletes disallowed chars from a sentence and transform it to a url friendly name
      *
-     * @param  string  $name the string to clen
+     * @param  string $name the string to clen
      * @return string the string cleaned
      **/
     public static function setSeparator($str, $separator='-')
@@ -79,7 +79,6 @@ class StringUtils
 
         return \Onm\StringUtils::normalize_metadata($metadata, $separator);
     }
-
 
     /**
      * Generate a string of key words separated by semicolon
@@ -125,7 +124,6 @@ class StringUtils
 
         return \Onm\StringUtils::disabled_magic_quotes($data);
     }
-
 
     public static function clearBadChars($string)
     {

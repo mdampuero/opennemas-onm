@@ -10,8 +10,6 @@
 use Onm\Settings as s,
     Onm\Message  as m;
 
-
-
 /**
  * Class to import news from XML files
  *
@@ -31,7 +29,6 @@ class ImporterXml
    public $labels           = null;
    public $schema           = null;
    public $data             = null;
-
 
       /**
      * Initializes the object and initializes configuration
@@ -66,8 +63,7 @@ class ImporterXml
 
     }
 
-
-    static public function getInstance($config = null)
+    public static function getInstance($config = null)
     {
         if (!self::$instance instanceof self) {
             self::$instance = new self($config);
@@ -77,7 +73,7 @@ class ImporterXml
         return self::$instance;
     }
 
-    static public function importXML($XMLFile)
+    public static function importXML($XMLFile)
     {
         try {
             $simple = simplexml_load_file($XMLFile);
@@ -89,7 +85,6 @@ class ImporterXml
 
         return $simple;
     }
-
 
     public function checkLabels($label)
     {
@@ -115,8 +110,6 @@ class ImporterXml
         }
     }
 
-
-
     public static function parseXMLtoArray($eleto)
     {
         $json = json_encode($eleto);
@@ -124,7 +117,6 @@ class ImporterXml
 
         return $array;
     }
-
 
     public function parseNodes($array)
     {
@@ -239,7 +231,6 @@ class ImporterXml
 
         return false;
     }
-
 
     public function getXMLData($docXML)
     {

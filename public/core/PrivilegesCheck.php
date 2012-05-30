@@ -56,7 +56,6 @@ class PrivilegesCheck
                 return false;
             }
 
-
         } catch (Exception $e) {
             return false;
         }
@@ -123,7 +122,6 @@ class PrivilegesCheck
     {
         Application::forward("/admin/login.php");
     }
-
 
     public static function loadSessionExpireTime()
     {

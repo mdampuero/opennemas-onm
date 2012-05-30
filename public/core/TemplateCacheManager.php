@@ -251,7 +251,6 @@ class TemplateCacheManager
     public function update($timestamp, $cachefile, $tplFilename = null)
     {
 
-
         // To understand this section it's necessary knowledge of smarty internals
 
         if (!is_null($tplFilename)) {
