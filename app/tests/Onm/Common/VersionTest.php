@@ -29,7 +29,6 @@ class VersionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Onm\Common\Version::__construct
      **/
     public function testVersionIsANumberedFormatedVersion()
     {
