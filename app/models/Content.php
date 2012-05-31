@@ -1756,9 +1756,11 @@ class Content
              . "WHERE pk_content_old = ?";
         $value  = array($oldID);
         $refactorID = $GLOBALS['application']->conn->GetOne($sql, $value);
+
         if (!empty($refactorID)) {
             $content = new Content($refactorID);
             $content = $content->get($refactorID);
+
             Application::forward301('/'.$content->uri);
         }
 
@@ -1780,6 +1782,7 @@ class Content
         if (!empty($dirtyID)) {
             if (preg_match('@tribuna@', INSTANCE_UNIQUE_NAME)
                 || preg_match('@retrincos@', INSTANCE_UNIQUE_NAME)
+                || preg_match('@cronicas@', INSTANCE_UNIQUE_NAME)
             ) {
                 $contentID = self::searchInRefactorID($dirtyID);
             }
