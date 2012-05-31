@@ -196,7 +196,7 @@ $menuXml = '<?xml version="1.0"?>
             module_name="SCHEDULE_MANAGER"
             title="'.htmlspecialchars(_("Agenda"), ENT_QUOTES).'"
             id="cronicas_schedule_manager"
-            link="http://www.cronicasdelaemigracion.com/agenda/"
+            link="http://agenda.cronicasdelaemigracion.com/"
             privilege="SCHEDULE_ADMIN" />
         <node
             module_name="EUROPAPRESS_IMPORTER"
@@ -242,6 +242,14 @@ $menuXml = '<?xml version="1.0"?>
             target="external"
             link="https://piwik.openhost.es/admin/index.php?module=Login&amp;action=logme&amp;login=cronicas&amp;password=44bdf5f29c992928c5233b0ec1b87bc2"
             privilege="STATS_ADMIN" />
+        <node
+            module_name="CRONICAS_MODULES"
+            title="'.htmlspecialchars(_("Statistics Google Analytics"), ENT_QUOTES).'"
+            id="analytics_manager"
+            target="external"
+            link="https://www.google.com/analytics/web/#report/visitors-overview/a32255002w59223403p60488603/"
+            privilege="STATS_ADMIN" />
+
 
         <submenu title="'.htmlspecialchars(_("Mailman Manager"), ENT_QUOTES).'" id="mailman" link="#"
                      privilege="NEWSLETTER_ADMIN">

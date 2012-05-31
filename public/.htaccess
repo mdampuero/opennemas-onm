@@ -459,7 +459,7 @@ Options -Indexes
     #--------------------------------------------------------
 
     # provisional cronicas
-    RewriteRule ^agenda/?   http://www.cronicasdelaemigracion.com/agenda/
+    RewriteRule ^agenda/?   http://agenda.cronicasdelaemigracion.com/
 
     #--------------------------------------------------------
     #Redirection from old nuevatribuna.es
