@@ -75,7 +75,7 @@
                                     <tr>
                                         <td style="padding:4px;" nowrap="nowrap" width="5%">
                                          <label style="cursor:pointer;">
-                                        {if $user_group->contains_privilege($privileges[privilege]->id)}
+                                        {if $user_group->containsPrivilege($privileges[privilege]->id)}
                                            <input type="checkbox" name="privileges[]" id="privileges[]" value="{$privileges[privilege]->id}" checked>
                                            <script  type="text/javascript">
                                                 $('{$mod}').setStyle('display:block');
@@ -106,6 +106,6 @@
 
 	<input type="hidden" id="action" name="action" value="" />
 	<input type="hidden" name="id" id="id" value="{$id|default:""}" />
-    
+
 </form>
 {/block}

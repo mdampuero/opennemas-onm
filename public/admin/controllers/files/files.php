@@ -239,7 +239,7 @@ switch($action) {
             $att = new Attachment($id);
             //Delete relations
             $rel= new RelatedContent();
-            $rel->delete_all($id);
+            $rel->deleteAll($id);
             $att->delete( $id ,$_SESSION['userid'] );
         }
 

@@ -57,10 +57,11 @@ class RelatedContent
                            $verport = null, $verint = null, $relation = null)
     {
 
-        $sql = "INSERT INTO related_contents (`pk_content1`, `pk_content2`,
-                                              `position`,  `posinterior`,
-                                              `verportada`, `verinterior`,
-                                              `relationship`) " . "
+        $sql = "INSERT INTO related_contents
+                (`pk_content1`, `pk_content2`,
+                `position`,  `posinterior`,
+                `verportada`, `verinterior`,
+                `relationship`) " . "
                 VALUES (?,?,?,?,?,?,?)";
         $values = array(
             $contentID, $contentID2, $position,
@@ -68,9 +69,7 @@ class RelatedContent
         ); //positions=1
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+            \Application::logDatabaseError();
 
             return (false);
         }
@@ -116,17 +115,15 @@ class RelatedContent
         $rs = $GLOBALS['application']->conn->Execute($sql, array($contentID));
 
         if (!$rs) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+            \Application::logDatabaseError();
 
             return;
         }
         $this->pk_content1 = $rs->fields['pk_content1'];
         $this->pk_content2 = $rs->fields['pk_content2'];
-        $this->position = $rs->fields['position'];
+        $this->position    = $rs->fields['position'];
         $this->posinterior = $rs->fields['posinterior'];
-        $this->verportada = $rs->fields['verportada'];
+        $this->verportada  = $rs->fields['verportada'];
         $this->verinterior = $rs->fields['verinterior'];
     }
 
@@ -148,9 +145,7 @@ class RelatedContent
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+            \Application::logDatabaseError();
 
             return;
         }
@@ -166,9 +161,7 @@ class RelatedContent
         $sql = 'DELETE FROM related_contents WHERE pk_content1=' . ($contentID);
 
         if ($GLOBALS['application']->conn->Execute($sql) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+            \Application::logDatabaseError();
 
             return;
         }
@@ -180,7 +173,7 @@ class RelatedContent
      *
      * @param string $contentID the element id.
      **/
-    public function delete_all($contentID)
+    public function deleteAll($contentID)
     {
         $sql = "DELETE FROM related_contents"
                ." WHERE pk_content1=? OR pk_content2=?";
@@ -188,9 +181,7 @@ class RelatedContent
         $values = array($contentID, $contentID);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+            \Application::logDatabaseError();
 
             return;
         }
@@ -333,16 +324,15 @@ class RelatedContent
                     ." WHERE pk_content1=? AND pk_content2=?";
             $values = array(1, $position, $contentID, $relationID);
         } else {
-            $sql =  "INSERT INTO related_contents (`pk_content1`, `pk_content2`,
-                                                  `position`,`verportada`) "
+            $sql =  "INSERT INTO related_contents
+                    (`pk_content1`, `pk_content2`,
+                    `position`,`verportada`) "
                     . " VALUES (?,?,?,?)";
             $values = array($contentID, $relationID, $position, 1);
         }
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+            \Application::logDatabaseError();
 
             return;
         }
@@ -363,16 +353,15 @@ class RelatedContent
                     ." WHERE pk_content1=? AND pk_content2=?";
             $values = array(1, $position, $contentID, $relationID);
         } else {
-            $sql = "INSERT INTO related_contents (`pk_content1`, `pk_content2`,
-                                                  `posinterior`,`verinterior`) "
+            $sql = "INSERT INTO related_contents
+                    (`pk_content1`, `pk_content2`,
+                    `posinterior`,`verinterior`) "
                     ." VALUES (?,?,?,?)";
             $values = array($contentID, $relationID, $position, 1);
         }
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+            \Application::logDatabaseError();
 
             return;
         }
@@ -398,9 +387,7 @@ class RelatedContent
         }
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+            \Application::logDatabaseError();
 
             return;
         }
@@ -408,16 +395,14 @@ class RelatedContent
 
     public function getHomeRelations($contentID)
     {
-        $sql =  "SELECT DISTINCT pk_content2  FROM related_contents "
-                ." WHERE pk_content1=? AND verportada=2 ORDER BY position DESC";
+        $sql = "SELECT DISTINCT pk_content2 FROM related_contents "
+             . "WHERE pk_content1=? AND verportada=2 ORDER BY position DESC";
         $values = array($contentID);
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
 
         if ($rs === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+            \Application::logDatabaseError();
 
             return;
         }
@@ -455,7 +440,6 @@ class RelatedContent
             }
             foreach ($subcat[$i] as $prima) {
                 foreach ($articles as $article) {
-
                     if (($article->category == $prima->pk_content_category)) {
                         $output[$prima->title][] = $article;
                     }
@@ -463,17 +447,6 @@ class RelatedContent
             }
             $i++;
         }
-
-        /*
-        for ( $counter = 10; $counter <= 20; $counter++) {
-            foreach ($articles as $article) {
-                if (($article->category == $counter)
-                    && ($article->content_status == 1)
-                ) {
-                    $output[ $article->category_name][] = $article;
-                }
-            }
-        }*/
 
         return $output;
     }

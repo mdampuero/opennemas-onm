@@ -307,8 +307,8 @@ switch ($action) {
             $video = new Video($id);
             //Delete relations
             $rel= new RelatedContent();
-            $rel->delete_all($id);
-            $video->delete( $id ,$_SESSION['userid'] );
+            $rel->deleteAll($id);
+            $video->delete($id ,$_SESSION['userid']);
         } else {
             m::add(_('You must give an id for delete the video.'), m::ERROR);
         }

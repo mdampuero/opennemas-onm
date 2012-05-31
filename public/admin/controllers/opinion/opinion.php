@@ -126,7 +126,7 @@ switch ($action) {
                 foreach($editorial as $opin) {
                     $todos = $comment->get_comments( $opin->id );
                     $opin->comments = count($todos);
-                    $opin->ratings = $rating->get_value($opin->id);
+                    $opin->ratings = $rating->getValue($opin->id);
                 }
                 $tpl->assign('editorial', $editorial);
             }
@@ -135,7 +135,7 @@ switch ($action) {
                 foreach($director as $opin) {
                     $todos = $comment->get_comments( $opin->id );
                     $opin->comments = count($todos);
-                    $opin->ratings = $rating->get_value($opin->id);
+                    $opin->ratings = $rating->getValue($opin->id);
                 }
                 $tpl->assign('director', $director);
             }
@@ -151,7 +151,7 @@ switch ($action) {
                 $aut = new Author($opin->fk_author);
                 $names[] = $aut->name;
                 $op_comment[] = count($todos);
-                $op_ratings[] = $rating->get_value($opin->id);
+                $op_ratings[] = $rating->getValue($opin->id);
             }
         }
 
@@ -429,7 +429,7 @@ switch ($action) {
         if($id) {
             //Delete relations
             $rel= new RelatedContent();
-            $rel->delete_all($id);
+            $rel->deleteAll($id);
 
             $opinion = new Opinion($id);
             $opinion->delete($id, $_SESSION['userid']);

@@ -113,7 +113,7 @@ class Content
             case 'ratings':
                 $rating = new Rating();
 
-                return $this->ratings = $rating->get_value($this->id);
+                return $this->ratings = $rating->getValue($this->id);
                 break;
 
             case 'comments':

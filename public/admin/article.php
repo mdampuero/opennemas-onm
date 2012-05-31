@@ -257,11 +257,11 @@ if (isset($_REQUEST['action']) ) {
             $aut=new User();
             $comment = new Comment();
             foreach ($articles as $art){
-                $art->category_name= $art->loadCategoryName($art->id);
-                $art->publisher=$aut->get_user_name($art->fk_publisher);
-                $art->editor=$aut->get_user_name($art->fk_user_last_editor);
-                $art->rating= $rating->get_value($art->id);
-                $art->comment = $comment->count_public_comments( $art->id );
+                $art->category_name = $art->loadCategoryName($art->id);
+                $art->publisher =$aut->get_user_name($art->fk_publisher);
+                $art->editor    =$aut->get_user_name($art->fk_user_last_editor);
+                $art->rating    = $rating->getValue($art->id);
+                $art->comment   = $comment->count_public_comments( $art->id );
             }
             $tpl->assign('articles', $articles);
             $tpl->assign('paginacion', $pager);
@@ -292,18 +292,18 @@ if (isset($_REQUEST['action']) ) {
                 'availableSizes'=>array(16,18,20,22,24,26,28,30,32,34)
             ));
             $tpl->assign(array(
-                    'availableSizes'=> array(
-                        16=>'16',
-                        18=>'18',
-                        20=>'20',
-                        22=>'22',
-                        24=>'24',
-                        26=>'26',
-                        28=>'28',
-                        30=>'30',
-                        32=>'32',
-                        34=>'34'
-                    )
+                'availableSizes'=> array(
+                    16 => '16',
+                    18 => '18',
+                    20 => '20',
+                    22 => '22',
+                    24 => '24',
+                    26 => '26',
+                    28 => '28',
+                    30 => '30',
+                    32 => '32',
+                    34 => '34'
+                )
             ));
 
 
@@ -670,7 +670,7 @@ if (isset($_REQUEST['action']) ) {
 
                 //Delete relations
                 $rel= new RelatedContent();
-                $rel->delete_all($_REQUEST['id']);
+                $rel->deleteAll($_REQUEST['id']);
                 $article->delete( $_REQUEST['id'], $_SESSION['userid'] );
 
                 // If it's clone then remove
