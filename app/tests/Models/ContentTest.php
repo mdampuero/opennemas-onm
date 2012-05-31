@@ -26,31 +26,31 @@ class ContentTest extends PHPUnit_Framework_TestCase
     {
     }
 
-    // /**
-    //  * @covers Content::__get
-    //  */
-    // public function testMagickPropertyUri()
-    // {
-    //     $mock = $this->getMock('Content', array('getUri'));
+    /**
+     * @covers Content::__get
+     */
+    public function testMagickPropertyUri()
+    {
+        // $mock = $this->getMock('Content', array('getUri'));
 
-    //     // Set up the expectation for the update() method
-    //     // to be called only once and with the string ‘something’
-    //     // as its parameter.
-    //     $mock->expects($this->atLeastOnce())
-    //         ->method('getUri')
-    //         ->with($this->returnValue('foo'));
+        // // Set up the expectation for the update() method
+        // // to be called only once and with the string ‘something’
+        // // as its parameter.
+        // $mock->expects($this->atLeastOnce())
+        //     ->method('getUri')
+        //     ->with($this->returnValue('foo'));
 
-    //     // Calling $stub->doSomething() will now return
-    //     // 'foo'.
-    //     $this->assertEquals('foo', $mock->uri);
+        // // Calling $stub->doSomething() will now return
+        // // 'foo'.
+        // $this->assertEquals('foo', $mock->uri);
 
-    //     // $this->object->category_name = 'category';
-    //     // $this->object->slug2 = 'slug-for-this-content';
-    //     // $this->object->content_type_name = 'article';
-    //     // $this->object->id = '00001';
+        // $this->object->category_name = 'category';
+        // $this->object->slug2 = 'slug-for-this-content';
+        // $this->object->content_type_name = 'article';
+        // $this->object->id = '00001';
 
-    //     // $this->assertEquals('articulo/category/slug-for-this-content/19700101010000000001.html', $this->object->uri);
-    // }
+        // $this->assertEquals('articulo/category/slug-for-this-content/19700101010000000001.html', $this->object->uri);
+    }
 
     // /**
     //  * @covers Content::getUri
