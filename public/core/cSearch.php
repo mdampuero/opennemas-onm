@@ -201,7 +201,6 @@ class cSearch
 
         $resultSet = $GLOBALS['application']->conn->Execute($szSqlSentence);
 
-var_dump($resultSet->GetArray());die();
         if ($resultSet!=null) {
             return $resultSet->GetArray();
         }
