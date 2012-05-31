@@ -15,7 +15,7 @@ $tpl->setConfig('sitemap');
 $cm  = new ContentManager();
 $ccm = ContentCategoryManager::get_instance();
 
-$action = $request->query->filter('action', 'web', FILTER_SANITIZE_STRING);
+$action = $request->query->filter('action', null, FILTER_SANITIZE_STRING);
 $cacheID = $tpl->generateCacheId('sitemap', '', $action);
 
 if (($tpl->caching == 0)
