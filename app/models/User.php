@@ -55,7 +55,7 @@ class User
         if ( is_null($this->cache) ) {
             $this->cache = new MethodCacheManager($this, array('ttl' => 60));
         } else {
-            $this->cache->set_cache_life(60); // 60 seconds
+            $this->cache->setCacheLife(60); // 60 seconds
         }
     }
 

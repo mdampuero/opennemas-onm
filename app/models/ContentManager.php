@@ -2059,7 +2059,7 @@ class ContentManager
         $rc  = new RelatedContent();
         $ccm = new ContentCategoryManager();
 
-        $relatedContentIDs = $rc->get_relations($contentID);
+        $relatedContentIDs = $rc->getRelations($contentID);
         $relatedContent = array();
         foreach ($relatedContentIDs as $contentID) {
             $content = new Content($contentID);

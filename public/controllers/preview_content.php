@@ -101,7 +101,7 @@ if ( !empty($action) ) {
              */
             $rel= new RelatedContent();
 
-            $relationes = $rel->cache->get_relations_int($articleID);
+            $relationes = $rel->cache->getRelationsForInner($articleID);
             $relat = $cm->cache->getContents($relationes);
 
             $relat = $cm->getInTime($relat);
@@ -190,7 +190,7 @@ if ( !empty($action) ) {
             $rel= new RelatedContent();
 
             $relationes =
-                $rel->cache->get_relations_int($_REQUEST['id']);
+                $rel->cache->getRelationsForInner($_REQUEST['id']);
             $relat = $cm->cache->getContents($relationes);
 
             // Filter by scheduled {{{

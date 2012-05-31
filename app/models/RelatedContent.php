@@ -194,7 +194,7 @@ class RelatedContent
      *
      * @return array Array of related content IDs
      */
-    public function get_relations($contentID)
+    public function getRelations($contentID)
     {
         $related = array();
 
@@ -226,7 +226,7 @@ class RelatedContent
      *
      * @return array Array of related content IDs
      */
-    public function get_relations_int($contentID)
+    public function getRelationsForInner($contentID)
     {
         $related = array();
 
@@ -251,29 +251,30 @@ class RelatedContent
         return $related;
     }
 
-    public function get_relations_vic($contentID)
-    {
-        $related = array();
+    // Didn't find a real usage in the entire ONM application for this function.
+    // public function get_relations_vic($contentID)
+    // {
+    //     $related = array();
 
-        if ($contentID) {
-            $sql = "SELECT pk_content1 FROM related_contents"
-                   ." WHERE pk_content2=? ORDER BY position ASC";
-            $values = array($contentID);
-            $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+    //     if ($contentID) {
+    //         $sql = "SELECT pk_content1 FROM related_contents"
+    //                ." WHERE pk_content2=? ORDER BY position ASC";
+    //         $values = array($contentID);
+    //         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
 
-            if ($rs !== false) {
-                while (!$rs->EOF) {
-                    $related[] = $rs->fields['pk_content1'];
-                    $rs->MoveNext();
-                }
-            }
-        }
-        $related = array_unique($related);
+    //         if ($rs !== false) {
+    //             while (!$rs->EOF) {
+    //                 $related[] = $rs->fields['pk_content1'];
+    //                 $rs->MoveNext();
+    //             }
+    //         }
+    //     }
+    //     $related = array_unique($related);
 
-        return $related;
-    }
+    //     return $related;
+    // }
 
-    public static function get_content_relations($contentID)
+    public static function getContentRelations($contentID)
     {
         $related = array();
 
@@ -296,7 +297,7 @@ class RelatedContent
     }
 
     //Define relacion entre noticias y entre publi y noticias
-    public function set_relations($contentID, $relations)
+    public function setRelations($contentID, $relations)
     {
         $relations->delete($contentID);
 
@@ -311,7 +312,7 @@ class RelatedContent
     }
 
     //Cambia la posicion en portada
-    public function set_rel_position($contentID, $position, $relationID)
+    public function setRelationPosition($contentID, $position, $relationID)
     {
         $sql =  "SELECT position FROM related_contents"
                 ." WHERE pk_content1=? AND pk_content2 =?  WHERE verportada=1";
@@ -339,7 +340,7 @@ class RelatedContent
     }
 
     //Cambia la posicion en el interior
-    public function set_rel_position_int($contentID, $position, $relationID)
+    public function setRelationPositionForInner($contentID, $position, $relationID)
     {
 
         $sql =  "SELECT position FROM related_contents"

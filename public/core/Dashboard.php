@@ -42,128 +42,134 @@ class Dashboard
 
     public static function viewedTable($items, $title)
     {
-            $output = "<div class=\"dashboardBox\">".$title."";
+        $output = "<div class=\"dashboardBox\">".$title."";
 
-            if (count($items)>0) {
-                $output .= \Onm\UI\OFC::graphicViewed($items);
-                $output .= "<div class=\"table\">";
-                $output .= "<table class=\"adminlist\" border=0><thead><tr>";
-                $output .= "<th align=\"center\" style=\"width:5%;\">Visitas</th>";
-                $output .= "<th>T&iacute;tulo</th>";
-                $output .= "</tr></thead>";
-                foreach ($items as $article) {
-                    $output .= "<tr>";
-                    $output .= "<td align=\"center\">".$article["views"]."</th>";
-                    $output .= "<td><a href=\"".SITE_URL.$article["permalink"]
-                        ."\" target=\"_blank\">".$article["title"]."</th>";
-                    $output .= "</tr>";
-                }
-
-                $output .= "</table>";
-                $output .= "</div>";
-            } else {
-                $output .= "<p style=\"margin:5px;  color:red;\">Sin datos obtenidos para este periodo de tiempo</p>";
+        if (count($items) > 0) {
+            $output .= \Onm\UI\OFC::graphicViewed($items);
+            $output .= "<div class=\"table\">";
+            $output .= "<table class=\"adminlist\" border=0><thead><tr>";
+            $output .= "<th align=\"center\" style=\"width:5%;\">Visitas</th>";
+            $output .= "<th>T&iacute;tulo</th>";
+            $output .= "</tr></thead>";
+            foreach ($items as $article) {
+                $output .= "<tr>";
+                $output .= "<td align=\"center\">".$article["views"]."</th>";
+                $output .= "<td><a href=\"".SITE_URL.$article["permalink"]
+                    ."\" target=\"_blank\">".$article["title"]."</th>";
+                $output .= "</tr>";
             }
 
+            $output .= "</table>";
             $output .= "</div>";
-            $output .= "<div class=\"clearer\"></div>";
+        } else {
+            $output .= "<p style=\"margin:5px;  color:red;\">Sin datos "
+                ."obtenidos para este periodo de tiempo</p>";
+        }
 
-            return $output;
+        $output .= "</div>";
+        $output .= "<div class=\"clearer\"></div>";
+
+        return $output;
     }
 
     public static function getMostComented($contentType,$category=0,$days=3)
     {
         $cm = new ContentManager();
-        $mostComentedContentObjects =
-            $cm->cache->getMostComentedContent($contentType, false, $category, $days, 10, true);
+        $mostComentedContentObjects = $cm->cache->getMostComentedContent(
+            $contentType, false, $category, $days, 10, true
+        );
 
         return $mostComentedContentObjects;
     }
 
     public static function comentedTable($items, $title)
     {
-            $output = "<div class=\"dashboardBox\">".$title."";
+        $output = "<div class=\"dashboardBox\">".$title."";
 
-            if (count($items)>0) {
-                $output .= \Onm\UI\OFC::graphicComented($items);
-                $output .= "<div class=\"table\">";
-                $output .= "<table class=\"adminlist\" border=0>";
-                $output .= "<thead><tr>";
-                $output .= "<th align=\"center\" style=\"width:5%;\">Comentarios</th>";
-                $output .= "<th >T&iacute;tulo</th>";
-                $output .= "</tr></thead>";
-                foreach ($items as $article) {
-                    $output .= "<tr>";
-                    $output .= "<td align=\"center\"".$article["num"]."</th>";
-                    $output .= "<td><a href=\"".SITE_URL.$article["permalink"]
-                        ."\" target=\"_blank\">".$article["title"]."</th>";
-                    $output .= "</tr>";
-                }
-
-                $output .= "</table></div>";
-            } else {
-                $output .= "<p style=\"margin:5px;  color:red;\">Sin datos obtenidos para este periodo de tiempo</p>";
+        if (count($items)>0) {
+            $output .= \Onm\UI\OFC::graphicComented($items);
+            $output .= "<div class=\"table\">";
+            $output .= "<table class=\"adminlist\" border=0>";
+            $output .= "<thead><tr>";
+            $output .=
+                "<th align=\"center\" style=\"width:5%;\">Comentarios</th>";
+            $output .= "<th >T&iacute;tulo</th>";
+            $output .= "</tr></thead>";
+            foreach ($items as $article) {
+                $output .= "<tr>";
+                $output .= "<td align=\"center\"".$article["num"]."</th>";
+                $output .= "<td><a href=\"".SITE_URL.$article["permalink"]
+                    ."\" target=\"_blank\">".$article["title"]."</th>";
+                $output .= "</tr>";
             }
 
-            $output .= "</div>";
-            $output .= "<div class=\"clearer\"></div>";
+            $output .= "</table></div>";
+        } else {
+            $output .= "<p style=\"margin:5px;  color:red;\">Sin datos "
+                ."obtenidos para este periodo de tiempo</p>";
+        }
 
-            return $output;
+        $output .= "</div>";
+        $output .= "<div class=\"clearer\"></div>";
+
+        return $output;
     }
 
     public static function getMostVoted($contentType,$category=0,$days=3)
     {
         $cm = new ContentManager();
-        $contentObjects = $cm->cache->getMostVotedContent($contentType,
+        $contents = $cm->cache->getMostVotedContent($contentType,
             false, $category, 0, $days, 10, true);
 
-        $mostVotedContent = array();
-        for ($i=0;$i<count($contentObjects);$i++) {
-            if ($contentObjects[$i]->total_votes > 0) {
-                $mostVotedContent[$i]['pk_content'] = $contentObjects[$i]->id;
-                $mostVotedContent[$i]['title'] = $contentObjects[$i]->title;
-                $mostVotedContent[$i]['total_votes'] = $contentObjects[$i]->total_votes;
-                $mostVotedContent[$i]['rate'] =
-                    round($contentObjects[$i]->total_value/$contentObjects[$i]->total_votes, 2);
-                $mostVotedContent[$i]['permalink'] = $contentObjects[$i]->permalink;
+        $results = array();
+        for ($i=0; $i<count($contents); $i++) {
+            if ($contents[$i]->total_votes > 0) {
+                $results[$i]['pk_content']  = $contents[$i]->id;
+                $results[$i]['title']       = $contents[$i]->title;
+                $results[$i]['total_votes'] = $contents[$i]->total_votes;
+                $results[$i]['rate']        =
+                round($contents[$i]->total_value/$contents[$i]->total_votes, 2);
+                $results[$i]['permalink']   = $contents[$i]->permalink;
             }
         }
 
-        return $mostVotedContent;
+        return $results;
     }
 
     public static function votedTable($items, $title)
     {
-            $output = "<div class=\"dashboardBox\">".$title."";
+        $output = "<div class=\"dashboardBox\">".$title."";
 
-            if (count($items)>0) {
-                $output .= \Onm\UI\OFC::graphicVoted($items);
-                $output .= "<div class=\"table\">";
-                $output .= "<table class=\"adminlist\" border=0>";
-                $output .= "<thead><tr>";
-                $output .= "<th align=\"center\" style=\"width:5%;\">Votos</th>";
-                $output .= "<th align=\"center\" style=\"width:5%;\">Puntuaci&oacute;n</th>";
-                $output .= "<th>T&iacute;tulo</th>";
-                $output .= "</tr></thead>";
+        if (count($items)>0) {
+            $output .= \Onm\UI\OFC::graphicVoted($items)
+                . "<div class=\"table\">"
+                . "<table class=\"adminlist\" border=0>"
+                . "<thead><tr>"
+                . "<th align=\"center\" style=\"width:5%;\">Votos</th>"
+                . "<th align=\"center\" style=\"width:5%;\">"
+                ."Puntuaci&oacute;n</th>"
+                . "<th>T&iacute;tulo</th>"
+                . "</tr></thead>";
 
-                foreach ($items as $article) {
-                    $output .= "<tr>";
-                    $output .= "<td align=\"center\">".$article["total_votes"]."</th>";
-                    $output .= "<td align=\"center\">".$article["rate"]."</th>";
-                    $output .= "<td><a href=\"".SITE_URL.$article["permalink"]
-                        ."\" target=\"_blank\">".$article["title"]."</th>";
-                    $output .= "</tr>";
-                }
-
-                $output .= "</table></div>";
-            } else {
-                $output .= "<p style=\"margin:5px;  color:red;\">Sin datos obtenidos para este periodo de tiempo</p>";
+            foreach ($items as $article) {
+                $output .= "<tr>"
+                . "<td align=\"center\">".$article["total_votes"]."</th>"
+                . "<td align=\"center\">".$article["rate"]."</th>"
+                . "<td><a href=\"".SITE_URL.$article["permalink"]
+                . "\" target=\"_blank\">".$article["title"]."</th>"
+                . "</tr>";
             }
 
-            $output .= "</div>";
-            $output .= "<div class=\"clearer\"></div>";
+            $output .= "</table></div>";
+        } else {
+            $output .= "<p style=\"margin:5px;  color:red;\">Sin datos "
+                ."obtenidos para este periodo de tiempo</p>";
+        }
 
-            return $output;
+        $output .= "</div>";
+        $output .= "<div class=\"clearer\"></div>";
+
+        return $output;
     }
 
 }

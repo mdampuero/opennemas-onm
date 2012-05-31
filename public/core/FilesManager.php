@@ -24,7 +24,9 @@ class FilesManager
         // /images/, /files/, /ads/, /opinion/
         // /media/images/año/mes/dia/
         //
-        $dirs = array( MEDIA_IMG_DIR, MEDIA_FILE_DIR, MEDIA_ADS_DIR, MEDIA_OPINION_DIR );
+        $dirs = array(
+            MEDIA_IMG_DIR, MEDIA_FILE_DIR, MEDIA_ADS_DIR, MEDIA_OPINION_DIR
+        );
 
         foreach ($dirs as $dir) {
             $path = MEDIA_PATH.$dir.'/'.$dir_date ;
@@ -44,7 +46,9 @@ class FilesManager
         if (!$created) {
             // Register a critical error
             echo '<br> error'.$path;
-            $GLOBALS['application']->logger->emerg("Error creating directory: " . $path);
+            $GLOBALS['application']->logger->emerg(
+                "Error creating directory: " . $path
+            );
         }
     }
 
@@ -57,11 +61,15 @@ class FilesManager
     public static function recursiveCopy($source, $destination)
     {
         // Delete destination if exists
-        if (file_exists($destination)) { unlink($destination); }
+        if (file_exists($destination)) {
+            unlink($destination);
+        }
 
         // if is dir try to recursive copy it, if is a file copy it directly
         if (is_dir($source)) {
-            if (!file_exists($destination)) { mkdir($destination,0775, true); }
+            if (!file_exists($destination)) {
+                mkdir($destination, 0775, true);
+            }
             $files = scandir($source);
             foreach ($files as $file) {
                 if ($file != "." && $file != "..") {
@@ -86,9 +94,11 @@ class FilesManager
     public function deleteDirectory($path)
     {
         if (file_exists($path)) {
-           if (rmdir($path)) {
-              $GLOBALS['application']->logger->emerg("Error deleting directory: " . $path);
-           }
+            if (rmdir($path)) {
+                $GLOBALS['application']->logger->emerg(
+                    "Error deleting directory: " . $path
+                );
+            }
         }
     }
 
@@ -97,10 +107,10 @@ class FilesManager
      *
      * @param string $path Directory concat with filename
      */
-     static public function mkFile($filename)
-     {
+    static public function mkFile($filename)
+    {
         if (!is_file($filename)) {
-            $handle = fopen($filename,"x");
+            $handle = fopen($filename, "x");
             if ($handle) {
                 fclose($handle);
 
@@ -143,7 +153,7 @@ class FilesManager
         $zip = new ZipArchive;
 
         // open archive
-        if ($zip->open($file) !== TRUE) {
+        if ($zip->open($file) !== true) {
             die ("Could not open archive");
         }
 

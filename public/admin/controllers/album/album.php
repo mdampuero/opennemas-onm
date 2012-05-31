@@ -215,7 +215,7 @@ switch($action) {
         $album = new Album($id);
         $relations=array();
         $msg ='';
-        $relations = RelatedContent::get_content_relations($id);
+        $relations = RelatedContent::getContentRelations($id);
 
         if (!empty($relations)) {
             $msg = sprintf(_("<br>The album has some relations"));
@@ -337,7 +337,7 @@ switch($action) {
                     foreach ($fields as $i ) {
                         $album = new Album($i);
                         $relations=array();
-                        $relations = RelatedContent::get_content_relations( $i );
+                        $relations = RelatedContent::getContentRelations($i);
 
                         if(!empty($relations)){
                             $alert =1;

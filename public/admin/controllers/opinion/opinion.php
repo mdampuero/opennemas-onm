@@ -397,7 +397,7 @@ switch ($action) {
 
         $relations=array();
         $msg ='';
-        $relations = RelatedContent::get_content_relations($id);
+        $relations = RelatedContent::getContentRelations($id);
 
         if (!empty($relations)) {
             $msg = sprintf(_("<br>The album has some relations"));
@@ -584,7 +584,7 @@ switch ($action) {
                     $opinion = new Opinion($i);
                     $rel = new RelatedContent();
                     $relationes = array();
-                    $relationes = $rel->get_content_relations( $i );//de portada
+                    $relationes = $rel->getContentRelations($i);//de portada
 
                     if(!empty($relationes)) {
                         $alert = 'ok';

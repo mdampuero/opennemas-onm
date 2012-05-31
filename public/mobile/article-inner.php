@@ -49,7 +49,7 @@ if(($tpl->caching == 0)
     /******* RELATED  CONTENT *******/
     $rel= new RelatedContent();
 
-    $relationes = $rel->cache->get_relations_int($articleID);
+    $relationes = $rel->cache->getRelationsForInner($articleID);
     $relat = $cm->cache->getContents($relationes);
     $relat = $cm->getInTime($relat);
     //Filter availables and not inlitter.

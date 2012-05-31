@@ -160,14 +160,14 @@ class Article extends Content
             $this->saveRelated(
                 $data['relatedFront'],
                 $this->id,
-                'set_rel_position'
+                'setRelationPosition'
             );
         }
         if (!empty($data['relatedInner'])) {
             $this->saveRelated(
                 $data['relatedInner'],
                 $this->id,
-                'set_rel_position_int'
+                'setRelationPositionForInner'
             );
         }
 
@@ -307,14 +307,14 @@ class Article extends Content
             $this->saveRelated(
                 $data['relatedFront'],
                 $data['id'],
-                'set_rel_position'
+                'setRelationPosition'
             );
         }
         if (!empty($data['relatedInner'])) {
             $this->saveRelated(
                 $data['relatedInner'],
                 $data['id'],
-                'set_rel_position_int'
+                'setRelationPositionForInner'
             );
         }
 
@@ -327,12 +327,7 @@ class Article extends Content
         }
 
         $this->category_name = $this->loadCategoryName($this->id);
-        $GLOBALS['application']->dispatch('onAfterUpdate', $this);
 
-        // If has clone then update
-        if ($this->hasClone($this->id)) {
-            $this->updateCloneFromOriginal($this->id, $data);
-        }
 
         return true;
     }
@@ -516,12 +511,12 @@ class Article extends Content
         $this->saveRelated(
             $formValues['ordenArti'],
             $contentPK,
-            'set_rel_position'
+            'setRelationPosition'
         );
         $this->saveRelated(
             $formValues['ordenArtiInt'],
             $contentPK,
-            'set_rel_position_int'
+            'setRelationPositionForInner'
         );
         // }}}
 

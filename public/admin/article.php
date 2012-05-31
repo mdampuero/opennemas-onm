@@ -366,14 +366,14 @@ if (isset($_REQUEST['action']) ) {
             $relationsHandler= new RelatedContent();
 
             $orderFront = array();
-            $relations = $relationsHandler->get_relations( $_REQUEST['id'] );//de portada
+            $relations = $relationsHandler->getRelations( $_REQUEST['id'] );//de portada
             foreach($relations as $aret) {
                 $orderFront[] =  new Content($aret);
             }
             $tpl->assign('orderFront', $orderFront);
 
             $orderInner = array();
-            $relations = $relationsHandler->get_relations_int($_REQUEST['id']);//de interor
+            $relations = $relationsHandler->getRelationsForInner($_REQUEST['id']);//de interor
             foreach($relations as $aret) {
                 $orderInner[] = new Content($aret);
             }
@@ -623,7 +623,7 @@ if (isset($_REQUEST['action']) ) {
                     $rel= new RelatedContent();
                     $relationes=array();
 
-                    $relationes = $rel->get_content_relations( $_REQUEST['id'] );//de portada
+                    $relationes = $rel->getContentRelations($_REQUEST['id']);//de portada
                     $msg ='';
                     if(!empty($relationes)){
                          $msg = "El articulo \"".$article->title."\", está relacionado con los siguientes contenidos:  \n";
@@ -983,7 +983,7 @@ if (isset($_REQUEST['action']) ) {
                         $rel= new RelatedContent();
                         $relationes=array();
 
-                        $relationes = $rel->get_content_relations( $i );//de portada
+                        $relationes = $rel->getContentRelations( $i );//de portada
 
                         if(!empty($relationes)){
                              $nodels[] =$i;
@@ -1005,7 +1005,7 @@ if (isset($_REQUEST['action']) ) {
                        $rel= new RelatedContent();
                         $relationes=array();
 
-                        $relationes = $rel->get_content_relations($i );//de portada
+                        $relationes = $rel->getContentRelations($i );//de portada
 
                         if(!empty($relationes)){
                                 $alert='ok';

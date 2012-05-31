@@ -56,21 +56,21 @@ class MethodCacheManager
         }
     }
 
-    public function set_cache_life($ttl)
+    public function setCacheLife($ttl)
     {
         $this->_ttl = $ttl;
 
         return $this;
     }
 
-    public function clear_cache($key)
+    public function clearCache($key)
     {
         apc_delete($key);
 
         return $this;
     }
 
-    public function clear_all_cache()
+    public function clearAllCaches()
     {
         apc_clear_cache('user');
 

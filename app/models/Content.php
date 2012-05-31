@@ -1871,7 +1871,7 @@ class Content
             && ($category_name == 'home')) {
             $relations = $relationsHandler->getHomeRelations($this->id);
         } else {
-            $relations = $relationsHandler->get_relations($this->id);
+            $relations = $relationsHandler->getRelations($this->id);
         }
 
         if (count($relations) > 0) {
