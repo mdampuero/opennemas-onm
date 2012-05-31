@@ -459,7 +459,8 @@ Options -Indexes
     #--------------------------------------------------------
 
     # provisional cronicas
-    RewriteRule ^agenda/?   http://agenda.cronicasdelaemigracion.com/
+    RewriteRule ^agenda/$   http://agenda.cronicasdelaemigracion.com/ [R=301,L,NC]
+    RewriteRule ^agenda/(.*)$   http://agenda.cronicasdelaemigracion.com/$1 [R=301,L,NC]
 
     #--------------------------------------------------------
     #Redirection from old nuevatribuna.es
@@ -650,6 +651,19 @@ Options -Indexes
     RewriteRule ^portadas-papel/?$ controllers/newsstand.php [L,NC]
     RewriteRule ^portadas-papel/([0-9]{4})/([0-9]{1,2})/?$ controllers/newsstand.php?year=$1&month=$2 [L,NC]
     RewriteRule ^portadas-papel/([a-z0-9\-]+)/([0-9]+).html$ controllers/newsstand.php?category_name=$1&id=$2&action=read [L,NC]
+
+
+    # Temporality cronicas
+    RewriteRule ^cronicas/?$ /seccion/cronicas/ [R=301,L,NC]
+    RewriteRule ^galicia/?$ /seccion/galicia/ [R=301,L,NC]
+    RewriteRule ^castillaleon/?$ /seccion/castillaleon/ [R=301,L,NC]
+    RewriteRule ^asturias/?$ /seccion/asturias/ [R=301,L,NC]
+    RewriteRule ^madrid/?$ /seccion/madrid/ [R=301,L,NC]
+    RewriteRule ^canarias/?$ /seccion/canarias/ [R=301,L,NC]
+    RewriteRule ^andalucia/?$ /seccion/andalucia/ [R=301,L,NC]
+    RewriteRule ^cantabria/?$ /seccion/cantabria/ [R=301,L,NC]
+    RewriteRule ^baleares/?$ /seccion/baleares/ [R=301,L,NC]
+    RewriteRule ^paisvasco/?$ /seccion/paisvasco/ [R=301,L,NC]
 
     #Default Rules
     # RewriteCond %{REQUEST_URI} !^/controllers/index.php
