@@ -8,7 +8,7 @@ jQuery(function($){
         e.preventDefault();
         // Check for id
         var id = $('input#id').val();
-        console.log(id);
+
         // Save tiny content to textarea
         OpenNeMas.tinyMceFunctions.saveTiny('summary');
         OpenNeMas.tinyMceFunctions.saveTiny('body');
