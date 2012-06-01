@@ -116,14 +116,13 @@ JSINTERSTICIAL;
         // Original method
         // $output .= $banner->script;
         // Parallelized method using iframes
-        if ($res = explode('height:', $banner->script)) {
-            $res = explode(',',$res[1]);
-            $height = str_replace('"', ' ', $res[0]);
+        if (preg_match('/iframe/', $banner->script)) {
+            $output .= $banner->script;
+        } else {
+            $output .= '<iframe src="'.SITE_URL.'ads/get/' . date('YmdHis', strtotime($banner->created)).sprintf('%06d', $banner->pk_content)  . '.html" ' .
+                       'scrolling="no" frameborder="0" width="' . $width . '" height="' . $height . '" ' .
+                       'marginwidth="0" marginheight="0" rel="nofollow">Publicidad</iframe>';
         }
-
-        $output .= '<iframe src="'.SITE_URL.'ads/get/' . date('YmdHis', strtotime($banner->created)).sprintf('%06d', $banner->pk_content)  . '.html" ' .
-                   'scrolling="no" frameborder="0" width="' . $width . '" height="' . $height . '" ' .
-                   'marginwidth="0" marginheight="0" rel="nofollow">Publicidad</iframe>';
 
     } elseif( !empty($banner->pk_advertisement) ) {
 
@@ -133,6 +132,9 @@ JSINTERSTICIAL;
             if(!$overlap && !$banner->overlap) {
                 // Flash object
                 // FIXME: build flash object with all tags and params
+
+
+
                 $output .= '<a target="_blank" href="'.SITE_URL.'ads/'. date('YmdHis', strtotime($banner->created)).sprintf('%06d', $banner->pk_advertisement) .'.html" rel="nofollow">';
                 $output .= '<object width="'.$width.'" height="'.$height.'" >
                         <param name="wmode" value="transparent" />
