@@ -581,8 +581,8 @@ Options -Indexes
     RewriteRule ^robots.txt?$ controllers/robots.php [L,NC]
 
     #Advertisement
-    RewriteRule ^publicidade/get/([0-9]+).html$ controllers/advertisement.php?action=get&id=$1 [L,NC]
-    RewriteRule ^publicidade/([0-9]+).html$ controllers/advertisement.php?action=show&publi_id=$1 [L,NC]
+    RewriteRule ^ads/get/([0-9]+).html$ controllers/advertisement.php?action=get&id=$1 [L,NC]
+    RewriteRule ^ads/([0-9]+).html$ controllers/advertisement.php?action=show&publi_id=$1 [L,NC]
 
     #Album
     #album/generic/2011-07-09/prueba/2011070918522200812.html
