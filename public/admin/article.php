@@ -1165,7 +1165,7 @@ if (isset($_REQUEST['action']) ) {
 
             list($articles, $pages) = $cm->find_pages('Article',
                         'fk_content_type=1 and  available=1 ',
-                        'ORDER BY frontpage DESC, starttime DESC,  contents.title ASC ',
+                        'ORDER BY starttime DESC,  contents.title ASC ',
                         $page, $items_page, $category);
 
             $tpl->assign(array(
