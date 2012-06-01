@@ -67,7 +67,7 @@ OpenNeMas.tinyMceConfig.advanced.elements = "htmlContent";
 						<p>
 							<label>{t}Email subject{/t}:</label>
 							<input type="text" name="subject" id="subject" style="width:80%"
-								   value="[{setting name="site_name"}] Boletín de noticias {$smarty.now|date_format:"%d/%m/%Y"}" />
+								   value="{setting name="site_name"} [{$smarty.now|date_format:"%d/%m/%Y"}]" />
 						</p>
 				</div>
 			</td>
