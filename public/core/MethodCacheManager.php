@@ -56,13 +56,6 @@ class MethodCacheManager
         }
     }
 
-    public function set_cache_life($ttl)
-    {
-        $this->_ttl = $ttl;
-
-        return $this;
-    }
-
     public function setCacheLife($ttl)
     {
         $this->_ttl = $ttl;

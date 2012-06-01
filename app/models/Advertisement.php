@@ -244,7 +244,7 @@ class Advertisement extends Content
         if (is_null($this->cache) ) {
             $this->cache = new MethodCacheManager($this, array('ttl' => (20)));
         } else {
-            $this->cache->set_cache_life(20); // 20 seconds
+            $this->cache->setCacheLife(20); // 20 seconds
         }
 
         // Set the content_type
