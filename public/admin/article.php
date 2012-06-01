@@ -1164,7 +1164,7 @@ if (isset($_REQUEST['action']) ) {
             $cm = new ContentManager();
 
             list($articles, $pages) = $cm->find_pages('Article',
-                        'fk_content_type=1 and content_status=1 AND available=1 ',
+                        'fk_content_type=1 and  available=1 ',
                         'ORDER BY frontpage DESC, starttime DESC,  contents.title ASC ',
                         $page, $items_page, $category);
 

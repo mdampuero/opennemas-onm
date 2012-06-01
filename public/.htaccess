@@ -459,7 +459,7 @@ Options -Indexes
     #--------------------------------------------------------
 
     # provisional cronicas
-    RewriteRule ^agenda/$   http://agenda.cronicasdelaemigracion.com/ [R=301,L,NC]
+    RewriteRule ^agenda/?$   http://agenda.cronicasdelaemigracion.com/ [R=301,L,NC]
     RewriteRule ^agenda/(.*)$   http://agenda.cronicasdelaemigracion.com/$1 [R=301,L,NC]
 
     #--------------------------------------------------------

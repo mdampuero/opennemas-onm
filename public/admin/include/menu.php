@@ -196,6 +196,7 @@ $menuXml = '<?xml version="1.0"?>
             module_name="SCHEDULE_MANAGER"
             title="'.htmlspecialchars(_("Agenda"), ENT_QUOTES).'"
             id="cronicas_schedule_manager"
+            target="external"
             link="http://agenda.cronicasdelaemigracion.com/"
             privilege="SCHEDULE_ADMIN" />
         <node
