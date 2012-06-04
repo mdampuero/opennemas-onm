@@ -29,7 +29,7 @@ switch ($action) {
         $cacheID = $tpl->generateCacheId('Index', '', "RSS");
 
         // Fetch information for Advertisements
-        require_once "index_advertisement.php";
+        require_once "article_advertisement.php";
 
         if (($tpl->caching == 0)
             || !$tpl->isCached('rss/index.tpl', $cacheID)
