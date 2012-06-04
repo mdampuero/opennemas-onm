@@ -41,6 +41,8 @@ if (!empty($category_name)) {
     $actual_category_id = $category = 0; //NEED CODE WIDGETS
 }
 
+$cm = new ContentManager();
+
 switch ($action) {
     case 'list':
         # If is not cached process this action
@@ -49,8 +51,6 @@ switch ($action) {
         if (($tpl->caching == 0)
             || !$tpl->isCached('video/video_frontpage.tpl', $cacheID)
         ) {
-
-            $cm = new ContentManager();
 
             $videosSettings = s::get('video_settings');
 
@@ -132,8 +132,6 @@ switch ($action) {
         break;
 
     case 'inner':
-
-        $cm = new ContentManager();
 
         $dirtyID = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
         $videoID = Content::resolveID($dirtyID);
