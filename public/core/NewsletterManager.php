@@ -100,6 +100,7 @@ class NewsletterManager
     public function render()
     {
         $tpl = new Template(TEMPLATE_USER);
+        $cm  = new ContentManager();
 
         $newsletterContent = json_decode(json_decode($_SESSION['data-newsletter']));
 
@@ -110,7 +111,7 @@ class NewsletterManager
         foreach ($newsletterContent as $container) {
             foreach ($container->items as &$item) {
                 if (!empty($item->id) && $item->content_type !='label') {
-                    $content = new Content($item->id);
+                    $content = new $item->content_type($item->id);
 
                     //if is a real content include it in the contents array
                     if (!empty($content) && is_object($content)) {
@@ -128,10 +129,25 @@ class NewsletterManager
                                 ? $content->params['agencyBulletin'] : '';
                         $item->name         = (isset($content->name))?$content->name:'';
                         $item->image        = (isset($content->cover))?$content->cover:'';
+
+                        // Fetch images of articles if exists
+                        if(isset($content->img1)) {
+                            $item->photo = $cm->find('Photo', 'pk_content ='.$content->img1);
+                        }
+
+                        //Fetch opinion author photos
+                        if (!empty($content->fk_author_img)) {
+                            $item->author = new Author($content->fk_author);
+                            $item->authorPhoto = $item->author->get_photo($content->fk_author_img);
+                            $item->authorPhotoWidget = $item->author->get_photo($content->fk_author_img_widget);
+                        }
+
                     }
+
                 }
             }
         }
+
         $tpl->assign('newsletterContent', $newsletterContent);
 
         //render menu
@@ -141,7 +157,6 @@ class NewsletterManager
         //render ads
         $advertisement = Advertisement::getInstance();
         $banners       = $advertisement->getAdvertisements(array(1001, 1009), 0);
-        $cm            = new ContentManager();
         $banners       = $cm->getInTime($banners);
 
         $advertisement->render($banners, $advertisement);
