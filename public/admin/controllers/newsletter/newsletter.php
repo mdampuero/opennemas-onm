@@ -244,14 +244,18 @@ switch($action) {
 
         $newsletter->create( array('content' => $postmaster, 'html'=> $htmlContent));
 
-
+        if ( array_key_exists('sender', $configurations) && !empty($configurations['sender']) ) {
+            $mail_from = $configurations['sender'];
+        } else {
+            $mail_from = MAIL_FROM;
+        }
 
         $params = array(
             'subject'   => $subject,
             'mail_host' => MAIL_HOST,
             'mail_user' => MAIL_USER,
             'mail_pass' => MAIL_PASS,
-            'mail_from' => MAIL_FROM,
+            'mail_from' => $mail_from,
             'mail_from_name' => s::get('site_name'),
         );
 

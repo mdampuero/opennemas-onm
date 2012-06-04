@@ -165,6 +165,16 @@ jQuery(document).ready(function($){
                     </div>
                 </tr>
                 <tr>
+                    <div >
+                        <th scope="row">
+                            <label>{t}Mail sender {/t}:</label>
+                        </th>
+                        <td colspan="2">
+                            <input type="text" name="newsletter_maillist[sender]" value="{$configs['newsletter_maillist']['sender']|default:""}" />
+                        </td>
+                    </div>
+                </tr>
+                <tr>
                     <th scope="row">
                         <label>{t}Enable frontpage subscription{/t}:</label>
                     </th>
