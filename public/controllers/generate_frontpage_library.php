@@ -3,7 +3,11 @@
 /**
  * Start up and setup the app
 */
-$_SERVER['SERVER_NAME'] ='cronicasdelaemigracion.com';
+$_SERVER['SERVER_NAME'] ='onm-cronicas.local';
+
+$_SERVER['HTTP_HOST'] ='cronicasdelaemigracion.com';
+
+//$_SERVER['SERVER_NAME'] ='cronicasdelaemigracion.com';
 $_SERVER['REQUEST_URI'] ='/';
 
 require __DIR__.'/../bootstrap.php';
@@ -12,7 +16,7 @@ require __DIR__.'/../bootstrap.php';
  * Setup view
 */
 $tpl = new Template(TEMPLATE_USER);
-$tpl->setConfig('frontpages');
+//$tpl->setConfig('newslibrary');
 
 $menuItems = Menu::renderMenu('frontpage');
 $date =  new DateTime();
@@ -28,7 +32,7 @@ foreach ($menuItems->items as $item) {
     $cache_page = 0;
     $category_name = $item->link;
 
-    $cacheID = $tpl->generateCacheId($category_name, $subcategory_name, $cache_page);
+ /*   $cacheID = $tpl->generateCacheId($category_name, $subcategory_name, $cache_page);
 
     if(($tpl->caching == 1)
        && $tpl->isCached('frontpage/frontpage.tpl', $cacheID))
@@ -37,7 +41,7 @@ foreach ($menuItems->items as $item) {
 
         $htmlOut = $tpl->fetch('frontpage/frontpage.tpl', $cacheID);
 
-    } else {
+    } else { */
         //get from a index
 
         $url = SITE_URL."seccion/".$category_name."/";
@@ -46,7 +50,7 @@ foreach ($menuItems->items as $item) {
         $htmlOut = curl_exec($ch);
         curl_close($ch);
 
-    }
+   // }
 
     $newFile =  $basePath.$category_name.".html";
 
