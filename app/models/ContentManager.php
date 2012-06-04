@@ -1415,7 +1415,6 @@ class ContentManager
         $countContents=$this->count($contentType, $filter, $pk_fk_content_category);
         if (empty($page)) {
             $page = 1;
-            $items_page=10;
         }
         $_limit=' LIMIT '.($page-1)*$items_page.', '.($items_page);
 
