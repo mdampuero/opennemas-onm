@@ -649,11 +649,14 @@ Options -Indexes
 
     # Newsstand
     RewriteRule ^portadas-papel/?$ controllers/newsstand.php [L,NC]
+    RewriteRule ^portadas-papel/([0-9]{4})/([0-9]{1,2})/([0-3][0-9])/?$ controllers/newsstand.php?year=$1&month=$2&day=$3 [L,NC]
     RewriteRule ^portadas-papel/([0-9]{4})/([0-9]{1,2})/?$ controllers/newsstand.php?year=$1&month=$2 [L,NC]
+    RewriteRule ^portadas-papel/([0-9]{4})/?$ controllers/newsstand.php?year=$1 [L,NC]
+    RewriteRule ^portadas-papel/([a-z0-9\-]+)/([0-9]{4})/([0-9]{1,2})/?$ controllers/newsstand.php?category_name=$1&year=$2&month=$3 [L,NC]
     RewriteRule ^portadas-papel/([a-z0-9\-]+)/([0-9]+).html$ controllers/newsstand.php?category_name=$1&id=$2&action=read [L,NC]
 
 
-    # Temporality cronicas
+    # Temporary cronicas
     RewriteRule ^cronicas/?$ /seccion/cronicas/ [R=301,L,NC]
     RewriteRule ^galicia/?$ /seccion/galicia/ [R=301,L,NC]
     RewriteRule ^castillaleon/?$ /seccion/castillaleon/ [R=301,L,NC]
