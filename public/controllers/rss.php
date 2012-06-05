@@ -111,12 +111,14 @@ switch ($action) {
 
                 $author = $request->query->filter('author', null, FILTER_SANITIZE_STRING);
 
+
                 // get all the authors of opinions
-                if (!isset($author)) {
+                if (!isset($author) || empty($author)) {
                     $articles_home = $cm->getOpinionArticlesWithAuthorInfo(
                         'contents.available=1 and contents.content_status=1',
                         'ORDER BY created DESC LIMIT 0,50'
                     );
+                    $title_rss = 'Últimas Opiniones';
                 } else {
                     // get articles for the author in opinion
 
