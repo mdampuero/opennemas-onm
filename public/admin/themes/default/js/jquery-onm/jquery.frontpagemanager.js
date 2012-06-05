@@ -376,14 +376,28 @@ jQuery(function($){
         e.preventDefault();
         var contents = get_contents_in_frontpage();
         var encodedContents = JSON.stringify(get_contents_in_frontpage());
-        $.colorbox({
-            href: "/admin/controllers/frontpagemanager/frontpagemanager.php?action=preview_frontpage&contents="+encodedContents,
-            data: { 'contents': contents },
-            title: 'Previsualización Portada',
-            iframe: true,
-            width: '90%',
-            height: '90%'
+
+        $.ajax({
+            type: 'POST',
+            url: "/admin/controllers/frontpagemanager/frontpagemanager.php?action=preview_frontpage",
+            data: {
+                'contents': encodedContents
+            },
+            success: function(data) {
+                previewWindow = window.open('','_blank','');
+                previewWindow.document.write(data);
+                previewWindow.focus();
+            }
         });
+
+        // $.colorbox({
+        //     href: "/admin/controllers/frontpagemanager/frontpagemanager.php?action=preview_frontpage&contents="+encodedContents,
+        //     data: { 'contents': contents },
+        //     title: 'Previsualización Portada',
+        //     iframe: true,
+        //     width: '90%',
+        //     height: '90%'
+        // });
     });
 
     $('#button_multiple_delete').on('click', function(e,ui){
@@ -409,7 +423,7 @@ jQuery(function($){
         $(contents).each(function(){
             $(this).toggleClass('suggested');
             contentIds.push($(this).data('content-id'));
-        })
+        });
         if (contentIds) {
             $.post("/admin/controllers/common/content.php?action=toggle-suggested",
                 { 'ids': contentIds }

@@ -199,7 +199,7 @@ switch ($action) {
         $actualCategoryId = $ccm->get_id($actual_category);
 
         $cm = new ContentManager;
-        $contentsRAW = $request->query->filter('contents');
+        $contentsRAW = $request->request->filter('contents');
         $contents = json_decode(json_decode($contentsRAW), true);
 
         $contentsInHomepage = $cm->getContentsForHomepageFromArray($contents);
