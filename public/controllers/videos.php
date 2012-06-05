@@ -48,6 +48,7 @@ switch ($action) {
         # If is not cached process this action
         $cacheID = $tpl->generateCacheId( $category_name, '', $page);
 
+
         if (($tpl->caching == 0)
             || !$tpl->isCached('video/video_frontpage.tpl', $cacheID)
         ) {
@@ -55,10 +56,9 @@ switch ($action) {
             $videosSettings = s::get('video_settings');
 
             $totalVideosFrontpage = isset($videosSettings['total_front'])?:2;
-            $days = isset( $videosSettings['time_last'])?:124;
+            $days = isset( $videosSettings['time_last'])?:365;
 
             if (isset($category_name) && !empty($category_name) ) {
-
                 $front_videos = $cm->find_all(
                     'Video',
                     'available=1 AND `contents_categories`.`pk_fk_content_category` ='
