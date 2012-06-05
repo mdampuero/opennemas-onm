@@ -64,6 +64,7 @@ switch ($action) {
             $ccm = ContentCategoryManager::get_instance();
             $cm = new ContentManager();
             // Setting up some variables to print out in the final rss
+
             if (isset($category_name)
                 && !empty($category_name)
             ) {
@@ -145,6 +146,20 @@ switch ($action) {
                         )
                     );
                 }
+            } elseif ($category_name == 'last') {
+                $articles_home = $cm->find('Article', 'available=1 AND content_status=1 AND fk_content_type=1',
+                           'ORDER BY created DESC, changed DESC LIMIT 0, 50');
+
+                                // Fetch the photo and category name for this element
+                foreach ($articles_home as $i => $article) {
+
+                    if (isset($article->img1) && $article->img1 != 0) {
+                        $photos[$article->id] = new Photo($article->img1);
+                    }
+
+                    $article->category_name = $article->loadCategoryName($article->id);
+                }
+                $title_rss = 'Últimas Noticias';
             } else {
                 // Get the RSS for the rest of categories
 
