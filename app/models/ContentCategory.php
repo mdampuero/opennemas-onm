@@ -346,4 +346,32 @@ class ContentCategory
             return false;
         }
     }
+
+    /**
+     * Changes the rss status (shown, hidden) for the category.
+     *
+     * @param string $status the status to set to the category rss.
+     **/
+    public function set_inrss($status, $data)
+    {
+        if ($this->pk_content_category == null) {
+            return false;
+        }
+
+        $data->params['inrss'] = $status;
+        $data->params = serialize($data->params);
+
+        $sql = "UPDATE content_categories "
+             ." SET `params`=?"
+             ." WHERE pk_content_category=?";
+
+        $values = array($data->params, $this->pk_content_category);
+
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            Application::logDatabaseError();
+
+            return false;
+        }
+
+    }
 }
