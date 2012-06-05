@@ -29,7 +29,7 @@ switch ($action) {
         $cacheID = $tpl->generateCacheId('Index', '', "RSS");
 
         // Fetch information for Advertisements
-        require_once "index_advertisement.php";
+        require_once "article_advertisement.php";
 
         if (($tpl->caching == 0)
             || !$tpl->isCached('rss/index.tpl', $cacheID)
@@ -111,7 +111,7 @@ switch ($action) {
                 $author = $request->query->filter('author', null, FILTER_SANITIZE_STRING);
 
                 // get all the authors of opinions
-                if (!isset ($author)) {
+                if (!isset($author)) {
                     $articles_home = $cm->getOpinionArticlesWithAuthorInfo(
                         'contents.available=1 and contents.content_status=1',
                         'ORDER BY created DESC LIMIT 0,50'
@@ -135,8 +135,16 @@ switch ($action) {
                 //Generate author-name-slug for generate_uri
                 foreach ($articles_home as &$art) {
                     $art['author_name_slug'] = StringUtils::get_title($art['name']);
-                }
 
+                    $art['uri'] = Uri::generate( 'opinion',
+                        array(
+                            'id'       => sprintf('%06d',$art['id']),
+                            'date'     => date('YmdHis', strtotime($art['created'])),
+                            'category' => $art['author_name_slug'],
+                            'slug'     => $art['slug'],
+                        )
+                    );
+                }
             } else {
                 // Get the RSS for the rest of categories
 
