@@ -841,7 +841,7 @@ class Content
 
         $GLOBALS['application']->dispatch('onBeforeArchived', $this);
 
-        $sql = 'UPDATE contents SET `content_status`=0, `available`= 1, '
+        $sql = 'UPDATE contents SET `content_status`=0, `available`= 1, `frontpage` =0, '
              . '`fk_user_last_editor`=?, `changed`=? WHERE `pk_content`=?';
         $stmt = $GLOBALS['application']->conn->Prepare($sql);
 

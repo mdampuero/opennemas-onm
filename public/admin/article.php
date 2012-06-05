@@ -1092,7 +1092,7 @@ if (isset($_REQUEST['action']) ) {
             $category = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_STRING,   array('options' => array( 'default' => 'home')));
             $page     = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_NUMBER_INT,   array('options' => array( 'default' => 1)));
 
-            if ($category == 'home') { $category = 0; }
+            if ($category == 'home' || empty($category) ) { $category = 0; }
 
             $cm = new  ContentManager();
 
@@ -1108,8 +1108,9 @@ if (isset($_REQUEST['action']) ) {
 
             list($articles, $pager) = $cm->find_pages(
                 'Article',
-                'contents.available=1 AND in_litter != 1 AND frontpage=1'. $sqlExcludedOpinions,
-                ' ORDER BY created DESC ', $page, 5
+                ' contents.frontpage=1 AND contents.available=1 AND '.
+                ' contents.content_status=1 AND in_litter != 1 '. $sqlExcludedOpinions,
+                ' ORDER BY created DESC ', $page, 8
             );
 
             $tpl->assign(array(

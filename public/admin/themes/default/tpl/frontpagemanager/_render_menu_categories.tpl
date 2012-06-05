@@ -32,7 +32,7 @@
 <script type="text/javascript">
 function submitFilters(frm) {
     $('action').value='list';
-    console.log($('categoryItem').value);
+    log($('categoryItem').value);
     $('category').value = $('categoryItem').value;
     frm.submit();
 }

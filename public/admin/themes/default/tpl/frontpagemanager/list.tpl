@@ -107,13 +107,13 @@
             <div class="content-provider-block-wrapper wrapper-content clearfix">
                 <ul>
                     {is_module_activated name="ARTICLE_MANAGER"}
-                    {if $category neq 'home'}
+                    {if empty($category) || $category eq 'home' || $category eq 0}
                     <li>
-                        <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/article.php?action=content-provider-category&amp;category={$category}">{t}Other articles in this category{/t}</a>
+                        <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/article.php?action=content-provider-suggested">{t}Suggested articles{/t}</a>
                     </li>
                     {else}
                     <li>
-                        <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/article.php?action=content-provider-suggested">{t}Suggested articles{/t}</a>
+                         <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/article.php?action=content-provider-category&amp;category={$category}">{t}Other articles in this category{/t}</a>
                     </li>
                     {/if}
                     {/is_module_activated}
