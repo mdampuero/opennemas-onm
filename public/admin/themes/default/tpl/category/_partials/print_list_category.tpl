@@ -29,6 +29,17 @@
         <img src="{$params.IMAGE_DIR}publish_r.png" alt="Pendiente" /></a>
     {/if}
     </td>
+    {if $category->internal_category eq '1'}
+        <td class="center">
+        {if $category->params['inrss'] eq 1 || !isset($category->params['inrss'])}
+            <a href="?id={$category->pk_content_category}&amp;action=set_inrss&amp;status=0" title="En rss">
+            <img src="{$params.IMAGE_DIR}publish_g.png" alt="Publicado" /></a>
+        {else}
+            <a href="?id={$category->pk_content_category}&amp;action=set_inrss&amp;status=1" title="No en rss">
+            <img src="{$params.IMAGE_DIR}publish_r.png" alt="Pendiente" /></a>
+        {/if}
+        </td>
+    {/if}
     <td class="center">
         <ul class="action-buttons">
             {acl isAllowed="CATEGORY_UPDATE"}
@@ -81,6 +92,7 @@
             {$num_sub_contents[su].advertisements|default:0}
         </td>
         <td class="center">
+        {if $subcategorys[su]->internal_category eq '1'}
             {if $subcategorys[su]->inmenu==1}
                 {acl isAllowed="CATEGORY_AVAILABLE"}
                     <a href="?id={$subcategorys[su]->pk_content_category}&amp;action=set_inmenu&amp;status=0" title="En menu">
@@ -90,6 +102,16 @@
                 {acl isAllowed="CATEGORY_AVAILABLE"}
                     <a href="?id={$subcategorys[su]->pk_content_category}&amp;action=set_inmenu&amp;status=1" title="No en menu">
                 {/acl}
+                    <img src="{$params.IMAGE_DIR}publish_r.png" alt="Pendiente" /></a>
+            {/if}
+        {/if}
+        </td>
+        <td class="center">
+            {if $subcategorys[su]->params['inrss'] != 0 || $subcategorys[su]->params['inrss'] eq null}
+                    <a href="?id={$subcategorys[su]->pk_content_category}&amp;action=set_inrss&amp;status=0" title="En rss">
+                    <img src="{$params.IMAGE_DIR}publish_g.png" alt="Publicado" /></a>
+            {else}
+                    <a href="?id={$subcategorys[su]->pk_content_category}&amp;action=set_inrss&amp;status=1" title="No en rss">
                     <img src="{$params.IMAGE_DIR}publish_r.png" alt="Pendiente" /></a>
             {/if}
         </td>
