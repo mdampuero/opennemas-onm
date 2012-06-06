@@ -124,7 +124,7 @@ switch ($action) {
         $latestComments = $cm->cache->getLastComentsContent('Video', true, $actual_category_id, 4);
         $tpl->assign('lasts_comments', $latestComments);
 
-        if (isset($category_name) && !empty($category_name) ) {
+        if (isset($category_name) && !empty($category_name) && $category_name != 'home') {
             $tpl->display('video/video_frontpage.tpl', $cacheID);
         } else {
             $tpl->display('video/video_main_frontpage.tpl', $cacheID);
