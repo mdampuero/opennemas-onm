@@ -21,7 +21,7 @@ $category_name = $request->query->filter('category_name', '', FILTER_SANITIZE_ST
 $action = $request->query->filter('action', 'list', FILTER_SANITIZE_STRING);
 $page = $request->query->filter('page', 0, FILTER_VALIDATE_INT);
 
-if (!empty($category_name)) {
+if (!empty($category_name) && $category_name != 'home' ) {
     $ccm = ContentCategoryManager::get_instance();
     $category = $ccm->get_id($category_name);
     $actual_category_id = $category;
@@ -58,7 +58,7 @@ switch ($action) {
             $totalVideosFrontpage = isset($videosSettings['total_front'])?:2;
             $days = isset( $videosSettings['time_last'])?:365;
 
-            if (isset($category_name) && !empty($category_name) ) {
+            if (isset($category_name) && !empty($category_name) && $category_name != 'home') {
                 $front_videos = $cm->find_all(
                     'Video',
                     'available=1 AND `contents_categories`.`pk_fk_content_category` ='
@@ -204,6 +204,10 @@ switch ($action) {
         $itemsPage = 3;
 
         $category_name = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
+        if ($category == 0) {
+            $category = $request->query->filter('category', '', FILTER_SANITIZE_STRING);
+        }
+
         $page = $request->query->filter('page', 1, FILTER_VALIDATE_INT);
 
         $_limit = 'LIMIT ' . ($page - 1) * $itemsPage . ', ' . ($itemsPage);
@@ -238,7 +242,7 @@ switch ($action) {
         $category_name = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
         $page = $request->query->filter('page', 1, FILTER_VALIDATE_INT);
 
-        if ($category == '0') {
+        if ($category == 0) {
             $itemsPage = 6;
         } else {
             $itemsPage = 3;
