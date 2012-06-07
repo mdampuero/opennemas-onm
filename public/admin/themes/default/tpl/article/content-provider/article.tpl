@@ -2,8 +2,8 @@
     <div class="description">
         <input type="checkbox" class="action-button" name="selected-{$smarty.foreach.article_loop.index}">
         <div class="title">
-            <span class="type">{t}Article{/t}</span>
             {if $content->in_frontpage && ($params['home'] != true)}<span class="in_frontpage"></span>{/if}
+            <span class="type">{t}Article{/t}</span>
             {$content->title}
         </div>
     </div>
