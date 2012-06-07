@@ -73,7 +73,7 @@ class Album extends Content
                 $uri =  Uri::generate(
                     'album',
                     array(
-                        'id'       => sprintf('%06d',$this->id),
+                        'id'       => sprintf('%06d', $this->id),
                         'date'     => date('YmdHis', strtotime($this->created)),
                         'category' => $this->category_name,
                         'slug'     => $this->slug,
@@ -252,8 +252,8 @@ class Album extends Content
 
         $sql = 'SELECT DISTINCT pk_photo, description, position'
                .' FROM albums_photos '
-               .' WHERE pk_album = ' .$albumID.' ORDER BY position ASC';
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+               .' WHERE pk_album =? ORDER BY position ASC';
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($albumID));
 
         $photosAlbum = array();
         while (!$rs->EOF) {

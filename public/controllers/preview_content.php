@@ -56,37 +56,40 @@ switch ($action) {
         // Advertisements for single article NO CACHE
         require_once 'article_advertisement.php';
 
-        $tpl->assign('actual_category_title',$actual_category_title);
+        $tpl->assign('actual_category_title', $actual_category_title);
         $tpl->assign('contentId', $article->id); // Used on module_comments.tpl
         $tpl->assign('article', $article);
         $tpl->assign('category_name', $category_name);
 
         // Fetch media associated to the article
         if (isset($article->img2)
-            && ($article->img2 != 0))
-        {
+            && ($article->img2 != 0)
+        ) {
             $photoInt = new Photo($article->img2);
             $tpl->assign('photoInt', $photoInt);
         }
 
         if (isset($article->fk_video2)
-            && ($article->fk_video2 != 09))
-        {
+            && ($article->fk_video2 != 09)
+        ) {
             $videoInt = new Video($article->fk_video2);
             $tpl->assign('videoInt', $videoInt);
         } else {
-            $video =
-                $cm->find_by_category_name('Video',
-                                            $category_name,
-                                            'contents.content_status=1',
-                                            'ORDER BY created DESC LIMIT 0 , 1');
-            if (isset($video[0])) { $tpl->assign('videoInt', $video[0]); }
+            $video = $cm->find_by_category_name(
+                'Video',
+                $category_name,
+                'contents.content_status=1',
+                'ORDER BY created DESC LIMIT 0 , 1'
+            );
+            if (isset($video[0])) {
+                $tpl->assign('videoInt', $video[0]);
+            }
         }
 
 
         // Fetch related contents to the inner article
         $relationes = array();
-        $innerRelations = json_decode(json_decode($article->relatedInner,true));
+        $innerRelations = json_decode(json_decode($article->relatedInner, true));
         foreach ($innerRelations as $key => $value) {
             $relationes[$key] = $value->id;
         }
@@ -96,7 +99,8 @@ switch ($action) {
         $relat = $cm->cache->getAvailable($relat);
 
         foreach ($relat as $ril) {
-            $ril->category_name = $ccm->get_category_name_by_content_id($ril->id);
+            $ril->category_name =
+                $ccm->get_category_name_by_content_id($ril->id);
         }
 
         $tpl->assign('relationed', $relat);

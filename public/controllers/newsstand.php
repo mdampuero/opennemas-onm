@@ -22,7 +22,7 @@ $contentType = Content::getIDContentType('kiosko');
 $category_name    = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
 $subcategory_name = $request->query->filter('subcategory_name', '', FILTER_SANITIZE_STRING);
 
-$action     = $request->query->filter('action', 'list' , FILTER_SANITIZE_STRING);
+$action     = $request->query->filter('action', 'list', FILTER_SANITIZE_STRING);
 $cache_page = $request->query->filter('page', 0, FILTER_VALIDATE_INT);
 $month      = $request->query->filter('month', date('n'), FILTER_VALIDATE_INT);
 $year       = $request->query->filter('year', date('Y'), FILTER_VALIDATE_INT);
@@ -44,15 +44,16 @@ switch ($action) {
 
         if ($order =='grouped') {
 
-            $cache_id = $tpl->generateCacheId('newsstand', $category_name,  $year);
+            $cache_id = $tpl->generateCacheId('newsstand', $category_name, $year);
             $kiosko =array();
-            if( ($tpl->caching == 0)
-               || !$tpl->isCached('newsstand/newsstand.tpl', $cache_id) )
-            {
+            if (($tpl->caching == 0)
+               || !$tpl->isCached('newsstand/newsstand.tpl', $cache_id)
+            ) {
                 $cm = new ContentManager();
                 $ccm = ContentCategoryManager::get_instance();
                 $category = $ccm->get_id($category_name);
-                list($allcategorys, $subcat, $categoryData) = $ccm->getArraysMenu($category, $contentType);
+                list($allcategorys, $subcat, $categoryData) =
+                    $ccm->getArraysMenu($category, $contentType);
                 foreach ($allcategorys as $theCategory) {
 
 
@@ -73,16 +74,17 @@ switch ($action) {
         } elseif ($order =='sections') {
             $day        = $request->query->filter('day', '1', FILTER_VALIDATE_INT);
             $cache_date = $year.$month.$day;
-            $cache_id = $tpl->generateCacheId('newsstand', $category_name,  $cache_date);
+            $cache_id = $tpl->generateCacheId('newsstand', $category_name, $cache_date);
             $kiosko =array();
-            if( ($tpl->caching == 0)
-               || !$tpl->isCached('newsstand/newsstand.tpl', $cache_id) )
-            {
+            if (($tpl->caching == 0)
+               || !$tpl->isCached('newsstand/newsstand.tpl', $cache_id)
+            ) {
                 $cm = new ContentManager();
 
-              /*  $ccm = ContentCategoryManager::get_instance();
-                $category = $ccm->get_id($category_name);
-                list($allcategorys, $subcat, $categoryData) = $ccm->getArraysMenu($category, $contentType); */
+                // $ccm = ContentCategoryManager::get_instance();
+                // $category = $ccm->get_id($category_name);
+                // list($allcategorys, $subcat, $categoryData) =
+                //      $ccm->getArraysMenu($category, $contentType);
 
 
                 $date = "$year-$month-$day";
@@ -103,15 +105,16 @@ switch ($action) {
         } else {
 
             $cache_date = $year.$month;
-            $cache_id = $tpl->generateCacheId('newsstand', $category_name,  $cache_date);
-            $kiosko =array();
-            if( ($tpl->caching == 0)
-               || !$tpl->isCached('newsstand/newsstand.tpl', $cache_id) )
-            {
+            $cache_id   = $tpl->generateCacheId('newsstand', $category_name, $cache_date);
+            $kiosko     = array();
+            if (($tpl->caching == 0)
+               || !$tpl->isCached('newsstand/newsstand.tpl', $cache_id)
+            ) {
                 $cm = new ContentManager();
                 $ccm = ContentCategoryManager::get_instance();
                 $category = $ccm->get_id($category_name);
-                list($allcategorys, $subcat, $categoryData) = $ccm->getArraysMenu($category, $contentType);
+                list($allcategorys, $subcat, $categoryData) =
+                    $ccm->getArraysMenu($category, $contentType);
                 foreach ($allcategorys as $theCategory) {
 
                     $portadas = $cm->find_by_category('Kiosko',
@@ -143,7 +146,7 @@ switch ($action) {
 
     case 'read':
 
-        $dirtyID = $request->query->filter('id', '' , FILTER_SANITIZE_STRING);
+        $dirtyID = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
 
         $epaperId = Content::resolveID($dirtyID);
 
@@ -155,7 +158,7 @@ switch ($action) {
         }
 
 
-        $cache_id = $tpl->generateCacheId('newsstand', $epaperId,  $cache_page);
+        $cache_id = $tpl->generateCacheId('newsstand', $epaperId, $cache_page);
 
         $epaper = new Kiosko($epaperId);
 
@@ -164,7 +167,7 @@ switch ($action) {
 
             $format_date = strtotime($epaper->date);
             $month       = date('m', $format_date);
-            $year        = date('Y',$format_date);
+            $year        = date('Y', $format_date);
             $cm          = new ContentManager();
 
             $portadas = $cm->find_by_category('Kiosko',
@@ -199,7 +202,7 @@ $months_kiosko = $ki->get_months_by_years();
 $tpl->assign('months_kiosko', $months_kiosko);
 
 // advertisement NOCACHE
-require_once('index_advertisement.php');
+require_once 'index_advertisement.php';
 
 // Show in Frontpage
 $tpl->display('newsstand/newsstand.tpl', $cache_id);

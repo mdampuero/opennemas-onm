@@ -21,16 +21,16 @@ use Onm\Settings as s,
 
 class ImporterXml
 {
-   // the instance object
-   static private $instance = null;
+    // the instance object
+    static private $instance = null;
 
-   public $ignoreds         = null;
-   public $alloweds         = null;
-   public $labels           = null;
-   public $schema           = null;
-   public $data             = null;
+    public $ignoreds         = null;
+    public $alloweds         = null;
+    public $labels           = null;
+    public $schema           = null;
+    public $data             = null;
 
-      /**
+    /**
      * Initializes the object and initializes configuration
      *
      * @return void
@@ -67,7 +67,6 @@ class ImporterXml
     {
         if (!self::$instance instanceof self) {
             self::$instance = new self($config);
-
         }
 
         return self::$instance;
@@ -88,13 +87,13 @@ class ImporterXml
 
     public function checkLabels($label)
     {
-       foreach ($this->schema as $value => $pattern) {
+        foreach ($this->schema as $value => $pattern) {
             if ($label == $pattern) {
                 return $value;
             }
-       }
+        }
 
-       return false;
+        return false;
     }
 
     public function checkBeIgnored($text)
@@ -103,6 +102,7 @@ class ImporterXml
             && (in_array($text, $this->ignoreds)
                 || in_array($text, $this->labels))
         ) {
+
             return '';
         } else {
 
@@ -112,7 +112,7 @@ class ImporterXml
 
     public static function parseXMLtoArray($eleto)
     {
-        $json = json_encode($eleto);
+        $json  = json_encode($eleto);
         $array = json_decode($json, true);
 
         return $array;
@@ -120,73 +120,63 @@ class ImporterXml
 
     public function parseNodes($array)
     {
+        if (empty($array)) {
+            return false;
+        }
+
         $tag   = '';
         $end   = '';
-        $texto ='';
-        if (!empty($array)) {
-            foreach ($array as $key => $value) {
-                if ($key =='@attributes') {
-                    $label = $this->checkAttributes($value);
-
-                    if ((is_array($value) &&
-                        array_key_exists('class', $value)
-                        && $this->checkBeImportant($value['class']))
-                        || (!is_array($value)
-                        && $this->checkBeImportant($value['class']))) {
-
-                            $tag = '<b>';
-                            $end = '</b> <br>';
-                    } else {
-                        $tag = '';
-                        $end = ' ';
-                    }
-
-                    if (!empty($label)) {
-
-                        $point = next($array);
-
-                        if (is_object($point) || is_array($point) ) {
-
-                            $this->data[$label] .= $tag.$this->parseNodes($point).$end;
-                        } else {
-
-                            $this->data[$label] .= $tag. $this->checkBeIgnored($point).$end;
-
-                        }
-                    }
-                } elseif (!in_array($key, $this->ignoreds) ) {
-                    $label = $this->checkLabels($key);
-
+        $texto = '';
+        foreach ($array as $key => $value) {
+            if ($key == '@attributes') {
+                $label = $this->checkAttributes($value);
+                if ((is_array($value)
+                    && array_key_exists('class', $value)
+                    && $this->checkBeImportant($value['class']))
+                    || (!is_array($value)
+                    && $this->checkBeImportant($value['class']))
+                ) {
+                    $tag = '<b>';
+                    $end = '</b> <br>';
                 } else {
-                    return '';
+                    $tag = '';
+                    $end = ' ';
                 }
 
-                if ( !empty($label)) {
+                if (!empty($label)) {
+                    $point = next($array);
 
-                    if (!is_object($value) && !is_array($value)) {
-                        $texto = (string) $value;
-
-                        $this->data[$label]  .= $this->checkBeIgnored($texto);
-
+                    if (is_object($point) || is_array($point) ) {
+                        $this->data[$label] .= $tag.$this->parseNodes($point).$end;
                     } else {
-
-                        $this->data[$label]  .= $this->parseNodes($value);
+                        $this->data[$label] .= $tag. $this->checkBeIgnored($point).$end;
                     }
+                }
+            } elseif (!in_array($key, $this->ignoreds) ) {
+                $label = $this->checkLabels($key);
+            } else {
+
+                return '';
+            }
+
+            if (!empty($label)) {
+                if (!is_object($value) && !is_array($value)) {
+                    $texto = (string) $value;
+                    $this->data[$label]  .= $this->checkBeIgnored($texto);
                 } else {
-                    if (!empty($tag)) {
-                        $texto .= $tag;
-                    }
-                    if (is_object($value) || is_array($value)) {
-
-                        $texto .=   $this->parseNodes($value);
-
-                    } else {
-
-                        $texto .= ' <br>'. $this->checkBeIgnored($value);
-                    }
-                    if (!empty($tag)) {
-                        $texto .= $end;
-                    }
+                    $this->data[$label]  .= $this->parseNodes($value);
+                }
+            } else {
+                if (!empty($tag)) {
+                    $texto .= $tag;
+                }
+                if (is_object($value) || is_array($value)) {
+                    $texto .=   $this->parseNodes($value);
+                } else {
+                    $texto .= ' <br>'. $this->checkBeIgnored($value);
+                }
+                if (!empty($tag)) {
+                    $texto .= $end;
                 }
             }
         }
@@ -267,12 +257,14 @@ class ImporterXml
 
         $this->parseNodes($values);
 
-        if (empty($this->data['title_int']))
+        if (empty($this->data['title_int'])) {
             $this->data['title_int'] = $this->data['title'];
+        }
 
-        if (empty($this->data['summary']))
+        if (empty($this->data['summary'])) {
             $this->data['summary'] = strip_tags(
                 substr($this->data['body'], 0, strpos($this->data['body'], '.') ).'.');
+        }
 
         if (!empty($this->data['category_name'])) {
             $ccm = ContentCategoryManager::get_instance();

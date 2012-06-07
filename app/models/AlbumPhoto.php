@@ -66,7 +66,7 @@ class AlbumPhoto
     * @return mixed one array containing the photos of the
     *                album with their information
     */
-    public function read_album($albumID)
+    public function readAlbum($albumID)
     {
         $sql = 'SELECT * FROM albums_photos '
              . 'WHERE pk_album = ?'

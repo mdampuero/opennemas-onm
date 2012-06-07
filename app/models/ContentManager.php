@@ -162,14 +162,17 @@ class ContentManager
             array((int) $categoryID, 0)
         );
 
-        $contentsInFrontpage = array_unique(array_map(function($content) {
-            if ($content['frontpage_id'] == 0) {
+        $contentsInFrontpage = array_unique(array_map(
+            function($content) {
+                if ($content['frontpage_id'] == 0) {
 
-                return $content['content_id'];
-            } else {
-                return null;
-            }
-        }, $contentIds));
+                    return $content['content_id'];
+                } else {
+                    return null;
+                }
+            },
+            $contentIds)
+        );
 
 
         if (is_array($contentIds) && count($contentIds) > 0) {

@@ -76,7 +76,7 @@ class Article extends Content
                 $uri =  Uri::generate(
                     'article',
                     array(
-                        'id'       => sprintf('%06d',$this->id),
+                        'id'       => sprintf('%06d', $this->id),
                         'date'     => date('YmdHis', strtotime($this->created)),
                         'category' => $this->category_name,
                         'slug'     => $this->slug2,
@@ -815,7 +815,7 @@ class Article extends Content
             $tpl = new Template(TEMPLATE_USER);
         //}
 
-        $tpl->assign('item',$this);
+        $tpl->assign('item', $this);
         $tpl->assign('cssclass', $params['cssclass']);
 
         try {
