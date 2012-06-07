@@ -12,7 +12,6 @@ namespace Onm\UI;
  *
  * @package    Onm
  * @subpackage UI
- * @author     Fran Dieguez <fran@openhost.es>
  */
 class SimpleMenu
 {
@@ -109,11 +108,11 @@ class SimpleMenu
         $output =  array();
         switch ($element) {
             case 'submenu':
-                $output []= $this->renderSubMenu($element, $value, $last);
+                $output []= $this->renderSubMenu($element, $value);
                 break;
 
             case 'node':
-                $output []= $this->renderNode($value, $last);
+                $output []= $this->renderNode($value);
                 break;
 
             default:
@@ -129,7 +128,7 @@ class SimpleMenu
      *
      * @return void
      **/
-    private function renderSubMenu($element, $value, $last)
+    private function renderSubMenu($element, $value)
     {
         foreach ($value as $element => $submenuContent) {
             $element = $this->renderElement($element, $submenuContent, false);
@@ -155,7 +154,7 @@ class SimpleMenu
      *
      * @return string the html content for a node
      **/
-    private function renderNode($value, $last)
+    private function renderNode($value)
     {
         $html = null;
         if ((!isset($value['privilege']) || $this->checkAcl($value['privilege']))
@@ -201,50 +200,6 @@ class SimpleMenu
         }
 
         return $html;
-    }
-
-    /**
-     * Returns the HTML for a given XML menu file
-     *
-     * @param array $params the params for this function
-     *
-     * @return string the HTML for this menu
-     */
-    public function getHTML($params = array())
-    {
-        if (is_null($this->_errors)) {
-
-            $html = "";
-            foreach ($this->_menu as $menu) {
-                // Check if the user can se this menu and module activated
-                if ((!isset($menu['privilege']) || $this->checkAcl($menu['privilege']))
-                    && (\Onm\Module\ModuleManager::isActivated((string) $menu['module_name']))
-                ) {
-                    $class = $this->getClass($menu['class']);
-                    $html .= "<li {$class}>"
-                          . $this->getHref($menu['title'], 'menu_'.$menu['id'], $menu['link']);
-
-                    // If there are elements in this submenu and user can see it, print them
-                    if ($menu->count() > 0) {
-
-                        $html .= "<ul>";
-                        foreach ($menu as $submenu) {
-                            $html .= $this->renderMenuComponent($submenu);
-                        }
-
-                        $html .= "</ul>";
-                    }
-
-                    $html.= "</li>";
-                }
-            }
-            $output = "<ul id='menu' class='clearfix'>".$html."</ul>";
-
-            return $output;
-
-        } else {
-            return $this->_errors;
-        }
     }
 
     /**

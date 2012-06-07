@@ -35,7 +35,7 @@ class Timer
      * Initilizes the object
      *
      */
-    public function __construct( $config = array())
+    public function __construct()
     {
         $this->markers = array();
     }
