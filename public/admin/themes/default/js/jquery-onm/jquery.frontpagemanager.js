@@ -22,31 +22,25 @@ function makeContentProviderAndPlaceholdersSortable () {
         tolerance: 'pointer'
         //containment: '#content-with-ticker'
     }).disableSelection();
-};
+}
 
 function get_tooltip_content (elem) {
     var parent_content_div = elem.closest('div.content-provider-element');
     var content_html = '';
 
-    if (parent_content_div.data('popover-content') == undefined) {
+    if (parent_content_div.data('popover-content') === undefined) {
         var id = parent_content_div.data('content-id');
         var url = '/admin/controllers/common/content.php?action=get-info&id='+id;
         var content = '';
-        // jQuery.ajax({
-        //     url: url,
-        //     // async: false,
-        //     dataType: 'json'
-        // }).done(function(data) {
-        //     content = data;
-        // });
+
         content = content_states[id];
 
-        var content_html = "State: "+content.state
-            + "<br>Views: "+content.views
-            + "<br>Category: "+content.category
-            + "<br>Scheduled: <span class='scheduled-state "+content.scheduled_state+"'>"+content.scheduled_state+"</span>"
-            + "<br>Start time: "+content.starttime
-            + "<br>Last author: "+content.last_author;
+        content_html = "State: "+content.state  +
+            "<br>Views: "+content.views +
+            "<br>Category: "+content.category +
+            "<br>Scheduled: <span class='scheduled-state "+content.scheduled_state+"'>"+content.scheduled_state+"</span>"+
+            "<br>Start time: "+content.starttime+
+            "<br>Last author: "+content.last_author;
         parent_content_div.data('popover-content', content_html);
     } else {
         content_html = parent_content_div.data('popover-content');
@@ -59,13 +53,6 @@ function get_tooltip_title (elem) {
     var ajaxdata;
     var id = elem.closest('div.content-provider-element').data('content-id');
     var url = '/admin/controllers/common/content.php?action=get-info&id='+id;
-    // jQuery.ajax({
-    //     url: url,
-    //     // async: false,
-    //     dataType: 'json'
-    // }).done(function(data) {
-    //     ajaxdata = data;
-    // });
 
     content = content_states[id];
     return content.title;
@@ -163,12 +150,12 @@ jQuery(function($){
            'checked',
            !checkbox.is(':checked')
         );
-        var checked_elements = $('div.placeholder div.content-provider-element input[type="checkbox"]:checked').length
+        var checked_elements = $('div.placeholder div.content-provider-element input[type="checkbox"]:checked').length;
         if (checked_elements > 0) {
             $('.old-button .batch-actions').fadeIn('fast');
         } else {
             $('.old-button .batch-actions').fadeOut('fast');
-        };
+        }
     });
     $('div.content').on('mouseleave', 'div.placeholder div.content-provider-element', function(e) {
         $(this).find('.content-action-buttons').removeClass('open');
@@ -190,8 +177,8 @@ jQuery(function($){
             animation: false,
             delay:0,
             title: get_tooltip_title(element),
-            content: get_tooltip_content(element),
-        })
+            content: get_tooltip_content(element)
+        });
     });
 
     /***************************************************************************
@@ -389,15 +376,6 @@ jQuery(function($){
                 previewWindow.focus();
             }
         });
-
-        // $.colorbox({
-        //     href: "/admin/controllers/frontpagemanager/frontpagemanager.php?action=preview_frontpage&contents="+encodedContents,
-        //     data: { 'contents': contents },
-        //     title: 'Previsualización Portada',
-        //     iframe: true,
-        //     width: '90%',
-        //     height: '90%'
-        // });
     });
 
     $('#button_multiple_delete').on('click', function(e,ui){
