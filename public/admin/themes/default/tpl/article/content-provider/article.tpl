@@ -3,7 +3,7 @@
         <input type="checkbox" class="action-button" name="selected-{$smarty.foreach.article_loop.index}">
         <div class="title">
             <span class="type">{t}Article{/t}</span>
-            {if $content->in_frontpage}<span class="in_frontpage"></span>{/if}
+            {if $content->in_frontpage && ($params['home'] != true)}<span class="in_frontpage"></span>{/if}
             {$content->title}
         </div>
     </div>
