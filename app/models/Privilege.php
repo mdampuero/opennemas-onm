@@ -31,17 +31,6 @@ class Privilege
     */
     public function __construct($id=null)
     {
-        $this->Privilege($id);
-    }
-
-    /**
-     * Contructor for PHP4 complaint
-     *
-     * @see Privilege::__construct
-     * @param int $id Privilege Id
-    */
-    public function Privilege($id=null)
-    {
         if (!is_null($id)) {
             $this->read($id);
         }
@@ -59,9 +48,7 @@ class Privilege
         $values = array($data['name'], $data['module'], $data['description']);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
             return false;
         }
@@ -86,9 +73,7 @@ class Privilege
 
         $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
         if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
             return;
         }
@@ -129,14 +114,19 @@ class Privilege
      */
     public function update($data)
     {
-        $sql = "UPDATE `privileges` SET `name`=?, `module`=?, `description`=? WHERE `pk_privilege`=?";
+        $sql = "UPDATE `privileges` "
+             . "SET `name`=?, `module`=?, `description`=? "
+             . "WHERE `pk_privilege`=?";
 
-        $values = array($data['name'], $data['module'], $data['description'], $data['id']);
+        $values = array(
+            $data['name'],
+            $data['module'],
+            $data['description'],
+            $data['id']
+        );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
             return false;
         }
@@ -155,11 +145,11 @@ class Privilege
     public function delete($id)
     {
         $sql = 'DELETE FROM `privileges` WHERE `pk_privilege`=?';
+        $values = array($id);
 
-        if ($GLOBALS['application']->conn->Execute($sql, array($id))===false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        if ($rs === false) {
+            \Application::logDatabaseError();
 
             return false;
         }
@@ -178,7 +168,8 @@ class Privilege
         if (is_null($filter)) {
             $sql = 'SELECT * FROM privileges ORDER BY module';
         } else {
-            $sql = 'SELECT * FROM privileges WHERE '.$filter.' ORDER BY module, pk_privilege';
+            $sql = 'SELECT * FROM privileges WHERE '.$filter
+                 . ' ORDER BY module, pk_privilege';
         }
 
         // Set fetch method to ADODB_FETCH_ASSOC
@@ -205,7 +196,9 @@ class Privilege
     public function getModuleNames()
     {
         $modules = array();
-        $sql = 'SELECT `module` FROM `privileges` WHERE (`module` IS NOT NULL) AND (`module`<> "") GROUP BY `module`';
+        $sql = 'SELECT `module` FROM `privileges` '
+             . 'WHERE (`module` IS NOT NULL) AND (`module`<> "") '
+             . 'GROUP BY `module`';
 
         // Set fetch method to ADODB_FETCH_ASSOC
         $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
@@ -234,7 +227,8 @@ class Privilege
         if (is_null($filter)) {
             $sql = 'SELECT * FROM privileges ORDER BY module';
         } else {
-            $sql = 'SELECT * FROM privileges WHERE '.$filter.' GROUP BY module';
+            $sql = 'SELECT * FROM privileges WHERE '.$filter
+                 . ' GROUP BY module';
         }
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
@@ -267,7 +261,7 @@ class Privilege
               $rs->MoveNext();
         }
 
-        return( $privileges);
+        return $privileges;
     }
 
 }

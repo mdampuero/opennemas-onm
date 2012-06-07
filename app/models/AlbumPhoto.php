@@ -44,9 +44,9 @@ class AlbumPhoto
         $sql = 'SELECT * FROM albums_photos '
              . ' WHERE pk_album=?'
              . ' AND pk_photo=?';
+        $values = array($albumID, $data['pk_photo']);
 
-        $rs = $GLOBALS['application']->conn->Execute($sql,
-            array($albumID, $data['pk_photo']));
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
             return Application::logDatabaseError();
         }

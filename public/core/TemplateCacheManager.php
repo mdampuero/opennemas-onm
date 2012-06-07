@@ -159,13 +159,14 @@ class TemplateCacheManager
      */
     public function getHeaderInfoFromCacheFile($file)
     {
-
         $this->properties = array();
 
         $_smarty_tpl = $this;
         $no_render = true;
 
         $output = include($file);
+
+        unset($no_render);
 
         return $this->properties;
     }

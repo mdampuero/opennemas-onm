@@ -12,7 +12,6 @@ use Onm\Message as m;
  *
  * @package    Onm
  * @subpackage Model
- * @author     Fran Dieguez <fran@openhost.es>
  **/
 class Video extends Content
 {
@@ -205,7 +204,6 @@ class Video extends Content
                 (int) (ini_get('upload_max_filesize'))
             ));
         }
-        $uploads = array();
         $convertedVideo = $this->convertVideotoFLV($file, $baseUploadpath);
 
         if (array_key_exists('relative_path', $convertedVideo)) {
@@ -249,7 +247,6 @@ class Video extends Content
         }
 
         // Calculate the final video name by its extension, current data, ...
-        $fileData = pathinfo($originalVideoPath);
         $t        = gettimeofday();
         $micro    = intval(substr($t['usec'], 0, 5));
         $fileName = date("YmdHis") . $micro . "." . 'flv';
@@ -266,6 +263,7 @@ class Video extends Content
                 $shellCommand = escapeshellcmd($ffmpgePath." -i "
                     .$temporaryVideoPath." -f flv  ".$videoSavePath). " 2>&1";
                 exec($shellCommand, $outputExec, $returnExec);
+                unset($outputExec);
                 if ($returnExec !== 0) {
                     throw new \Exception(
                         _('There was a problem while converting your video. '
@@ -305,20 +303,13 @@ class Video extends Content
             'big'    =>  array( 'width' => 450, 'height' => 450 ),
         );
 
-        // Create thumbs in the same directory as the video
-        $uploadDir = dirname($flvPath);
-
         // Get the thumbnail sizes
         $sizes = array_merge($defaultThumbnailSizes, $sizes);
 
         // init ffmpeg object from flv for getting its thumbnail
         $movie = new ffmpeg_movie($flvPath);
-        // Get The duration of the video in seconds
-        $duration = round($movie->getDuration(), 0);
         // Get the number of frames of the video
         $totalFrames = $movie->getFrameCount();
-        $frameRate = $movie->getFrameRate();
-
         //$height = $movie->getFrameHeight();
         //$width = $movie->getFrameWidth();
 
@@ -342,7 +333,7 @@ class Video extends Content
                         break 1;
                     }
                     $frame = $movie->getFrame($thumbnailFrameNumber);
-                    $valid = gettype($frame);
+                    // $valid = gettype($frame);
                     $thumbnailFrameNumber++;
                 } while (gettype($frame) != 'object');
             }

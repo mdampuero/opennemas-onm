@@ -17,10 +17,10 @@
 class Vote
 {
 
-    public $pk_vote = null;
-    public $value_pos = null;
-    public $value_neg = null;
-    public $karma = null;
+    public $pk_vote        = null;
+    public $value_pos      = null;
+    public $value_neg      = null;
+    public $karma          = null;
     public $ips_count_vote = null;
 
     /**
