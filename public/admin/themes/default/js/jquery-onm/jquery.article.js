@@ -6,69 +6,43 @@ jQuery(function($){
 
     $('a#button_preview').on('click', function(e, ui){
         e.preventDefault();
-        // Check for id
-        var id = $('input#id').val();
 
         // Save tiny content to textarea
         OpenNeMas.tinyMceFunctions.saveTiny('summary');
         OpenNeMas.tinyMceFunctions.saveTiny('body');
+
         // Fetch related news and others
         recolectar();
-        if (id != null) {
-            previewArticle(id,'formulario');
-        } else {
-            previewNonSavedArticle('formulario');
-        }
+        save_related_contents();
+
+        previewArticle('formulario');
+
         return false;
     });
 });
 
 /**
- * Preview of a saved article
+ * Preview of an article
  */
-function previewArticle(id,formID){
-    if(!validateForm(formID))
-        return false;
-
-    $(formID).id.value = id;
-
-    $('formulario').action.value = '';
-    jQuery.colorbox({
-        href: '/controllers/preview_content.php?id='+id+'&action=article',
-        title: 'Previsualización Articulo',
-        iframe: true,
-        width: '90%',
-        height: '90%'
-    });
-
-    return true;
-}
-
-/**
- * Preview of a NON saved article
- */
-function previewNonSavedArticle(formID){
+function previewArticle(formID){
     if(!validateForm(formID))
         return false;
 
     var form = jQuery('#'+formID);
     var contents = form.serializeArray();
 
-    var requestHTML = jQuery.ajax({
-        url: '/controllers/preview_content.php?action=article_new',
-        type: "POST",
-        data: contents,
-        dataType: "html"
+    jQuery.ajax({
+        type: 'POST',
+        url: "/controllers/preview_content.php?action=article",
+        data: {
+            'contents': contents
+        },
+        success: function(data) {
+            previewWindow = window.open('','_blank','');
+            previewWindow.document.write(data);
+            previewWindow.focus();
+        }
     });
-
-
-    requestHTML.done(function(response){
-        jQuery.colorbox({
-            html: response,
-            width: '90%',
-            height: '90%'
-        });
-    })
 
     return true;
 }
