@@ -102,8 +102,8 @@ switch ($action) {
                                      'ORDER BY created DESC ', $page, ITEMS_PAGE);
             $tpl->assign('paginacion', $pager->links);
 
-            $opinions = $cm->find('Opinion', 'in_home=1 and available=1 and type_opinion=0',
-                                  'ORDER BY type_opinion DESC, position ASC, created DESC');
+            // $opinions = $cm->find('Opinion', 'in_home=1 and available=1 and type_opinion=0',
+            //                       'ORDER BY type_opinion DESC, position ASC, created DESC');
 
             if($numEditorial > 0) {
                 $editorial = $cm->find('Opinion', 'in_home=1 and available=1 and type_opinion=1',
