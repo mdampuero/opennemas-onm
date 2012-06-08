@@ -18,9 +18,10 @@ $tpl = new Template(TEMPLATE_USER);
 $tpl->setConfig('opinion');
 
 // HTTP variables
-$action   = $request->query->filter('action', 'list', FILTER_SANITIZE_STRING);
-$authorID = (int) $request->query->filter('author_id', null, FILTER_VALIDATE_INT);
-$page     = $request->query->filter('page', 1, FILTER_VALIDATE_INT);
+$action     = $request->query->filter('action', 'list', FILTER_SANITIZE_STRING);
+$authorID   = (int) $request->query->filter('author_id', null, FILTER_VALIDATE_INT);
+$authorSlug = $request->query->filter('author_slug', null, FILTER_SANITIZE_STRING);
+$page       = $request->query->filter('page', 1, FILTER_VALIDATE_INT);
 
 $tpl->assign('actual_category', 'opinion'); // Used in renderMenu
 
@@ -121,11 +122,11 @@ switch ($action) {
             $author = new Author($authorID);
 
             // Setting filters for the further SQLs
-            if ($authorID == 1) {
+            if ($authorID == 1 && strtolower($authorSlug) == 'editorial') {
                 // Editorial
                 $filter = 'opinions.type_opinion=1';
                 $authorName = 'editorial';
-            } elseif ($authorID == 2) {
+            } elseif ($authorID == 2 && strtolower($authorSlug) == 'director') {
                 // Director
                 $filter =  'opinions.type_opinion=2';
                 $authorName = 'director';
@@ -184,6 +185,7 @@ switch ($action) {
                 'pagination_list' => $pagination,
                 'opinions'        => $opinions,
                 'author_id'       => $authorID,
+                'author_slug'     => strtolower($authorSlug),
                 'author'          => $author,
                 'author_name'     => $author->name,
                 'page'            => $page,
