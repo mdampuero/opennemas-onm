@@ -3,11 +3,13 @@
 /**
  * Start up and setup the app
 */
-$_SERVER['SERVER_NAME'] ='onm-cronicas.local';
+
+//TODO: That cron given this vars.
+//$_SERVER['SERVER_NAME'] ='onm-cronicas.local';
 
 $_SERVER['HTTP_HOST'] ='cronicasdelaemigracion.com';
 
-//$_SERVER['SERVER_NAME'] ='cronicasdelaemigracion.com';
+$_SERVER['SERVER_NAME'] ='cronicasdelaemigracion.com';
 $_SERVER['REQUEST_URI'] ='/';
 
 require __DIR__.'/../bootstrap.php';
@@ -32,6 +34,8 @@ foreach ($menuItems->items as $item) {
     $cache_page = 0;
     $category_name = $item->link;
 
+
+    //TODO: SEARCH SOLUTION. CRON CAN'T ACCESS SMARTY LIBRARY
  /*   $cacheID = $tpl->generateCacheId($category_name, $subcategory_name, $cache_page);
 
     if(($tpl->caching == 1)
