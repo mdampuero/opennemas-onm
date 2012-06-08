@@ -52,6 +52,8 @@ if( isset($_REQUEST['action']) ) {
                               $num_sub_contents[$i][$j]['articles']       = (isset($groups['articles'][$cate->pk_content_category]))? $groups['articles'][$cate->pk_content_category] : 0;
                               $num_sub_contents[$i][$j]['photos']         = (isset($groups['photos'][$cate->pk_content_category]))? $groups['photos'][$cate->pk_content_category] : 0;
                               $num_sub_contents[$i][$j]['advertisements'] = (isset($groups['advertisements'][$cate->pk_content_category]))? $groups['advertisements'][$cate->pk_content_category] : 0;
+                              //Unserialize subcategory param field
+                              $cate->params = unserialize($cate->params);
                               $j++;
                          }
                          $subcategorys[$i]=$resul;

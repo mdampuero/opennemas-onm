@@ -107,7 +107,7 @@
         {/if}
         </td>
         <td class="center">
-            {if $subcategorys[su]->params['inrss'] != 0 || $subcategorys[su]->params['inrss'] eq null}
+            {if $subcategorys[su]->params['inrss'] eq 1 || !isset($subcategorys[su]->params['inrss'])}
                     <a href="?id={$subcategorys[su]->pk_content_category}&amp;action=set_inrss&amp;status=0" title="En rss">
                     <img src="{$params.IMAGE_DIR}publish_g.png" alt="Publicado" /></a>
             {else}
