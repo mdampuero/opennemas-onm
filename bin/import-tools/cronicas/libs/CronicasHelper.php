@@ -209,7 +209,7 @@ class CronicasHelper {
         }
     }
 
-     public function authorIsImported($text)
+    public function authorIsImported($text)
     {
         if(isset($text) && !empty($text)) {
             $sql = 'SELECT * FROM `author_opinion` WHERE `text` LIKE ? ';
@@ -235,9 +235,9 @@ class CronicasHelper {
     public function updateViews($contentID, $views)
     {
         if(isset($contentID) && isset($views)) {
-            $sql = 'UPDATE `contents` SET `views`=?, `available`=? WHERE pk_content=?';
+            $sql = 'UPDATE `contents` SET `views`=? WHERE pk_content=?';
 
-            $values = array($views, 1, $contentID);
+            $values = array($views,  $contentID);
             $views_update_sql = $GLOBALS['application']->conn->Prepare($sql);
             $rss = $GLOBALS['application']->conn->Execute($views_update_sql,
                                                           $values);
@@ -386,4 +386,20 @@ class CronicasHelper {
         echo sprintf("[%s] %s", $date, $text);
     }
 
+    public function exporterLog($text = null) {
+        if(isset($text) && !is_null($text) ) {
+            printf($text);
+
+            $handle = fopen( __DIR__."/../log/exporterLog.txt" , "a");
+
+            if ($handle) {
+                $datawritten = fwrite($handle, $text." \n");
+                fclose($handle);
+                return true;
+            } else {
+                echo "There was a problem while trying to export your message.";
+                return false;
+            }
+        }
+    }
 }

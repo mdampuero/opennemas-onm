@@ -1393,4 +1393,132 @@ echo $sql;
         //UPDATE `contents` SET available=1  WHERE `fk_content_type` =8
     }
 
+
+
+    /**
+     * create articles in new DB.
+     *
+     * @param string $topic string for search articles in old database.
+     *
+     * @return datatype Explanation of returned data
+     *
+     * @throws <b>Exception</b> Explanation of exception.
+     */
+    public function exportArticles($where) {
+
+        $sql = 'SELECT * FROM articles, contents, contents_categories '
+                .' WHERE contents.fk_content_type=1 '.$where
+                .' AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` '
+                .' AND  `articles`.`pk_article` = `contents`.`pk_content` '
+                .$limit;
+
+        $request = self::$originConn->Prepare($sql);
+        $rs = self::$originConn->Execute($request);
+
+        if(!$rs) {
+            echo self::$originConn->ErrorMsg();
+            $this->helper->log(self::$originConn->ErrorMsg());
+        } else {
+             $totalRows = $rs->_numOfRows;
+
+            $current = 1;
+
+            while(!$rs->EOF) {
+
+                $originalArticleID = $rs->fields['pk_article'];
+                if ($this->helper->elementIsImported($originalArticleID, 'article') ) {
+                    echo "[{$current}/{$totalRows}] Article with id {$originalArticleID} already imported\n";
+                } else {
+                    echo "[{$current}/{$totalRows}] Exporting article with id {$originalArticleID} - ";
+                    $title          =  $rs->fields['title'];
+                    $category_name  = $rs->fields['catName'];
+                    $data['params'] = array('titleHome'=>$rs->fields['title_home'],
+                                        'subtitleHome'=>$rs->fields['subtitle_home'],
+                                        'summaryHome'=>$rs->fields['summary_home'],
+                                        'agencyBulletin'=> $rs->fields['agency_web'],
+                                        );
+                    $category       = $this->matchInternalCategory($rs->fields['pk_fk_content_category']);
+                    $data           = array('title' => $rs->fields['title'],
+                                        'category'       => $category,
+                                        'subtitle'       => $rs->fields['subtitle'],
+                                        'agency'         => $rs->fields['agency'],
+                                        'summary'        => $rs->fields['summary'],
+                                        'body'           => $rs->fields['body'],
+                                        'img1'           => $this->helper->imageIsImported($rs->fields['img1'],'image'),
+                                        'img1_footer'    => $rs->fields['img1_footer'],
+                                        'img2'           => $this->helper->imageIsImported($rs->fields['img2'],'image'),
+                                        'img2_footer'    => $rs->fields['img2_footer'],
+                                        'category_name'  => $category_name,
+                                        'description'    => $title,
+                                        'frontpage'      => $rs->fields['frontpage'],
+                                        'content_status' => 0,
+                                        'available'      => 0,
+                                        'in_home'        => $rs->fields['in_home'],
+                                        'position'       => $rs->fields['position'],
+                                        'home_pos'       => $rs->fields['home_pos'],
+                                        'created'        => $rs->fields['created'],
+                                        'changed'        => $rs->fields['changed'],
+                                        'starttime'      => $rs->fields['created'],
+                                        'views'          => $rs->fields['views'],
+                                        'fk_user'        => USER_ID,
+                                        'fk_author'      => USER_ID,
+                                        'slug'           => $rs->fields['slug'],
+                                        'originalId'     => $originalArticleID,
+
+                        );
+                    $text = json_encode($data);
+                    if ($text) {
+                        $result = $this ->helper->exporterLog($text);
+                        if ( !$result ) {
+
+                            $errorMsg = 'Problem '.$originalArticleID.' - '.$title;
+                            $this->helper->log("\n insert article : {$errorMsg}  \n");
+                         //   $this->helper->log(" \n Problem inserting article {$rs->fields['title']} - {$rs->fields['pk_content']} \n ");
+                        }
+                    }
+                }
+
+                $current++;
+                $rs->MoveNext();
+             }
+
+        }
+        $rs->Close(); # optional
+        return true;
+
+    }
+
+    public function processJSONFile($fileName)
+    {
+        $jsonFile = __DIR__."/../log/".$fileName;
+
+        $articles = file($jsonFile);
+
+        if(!empty($articles)) {
+            $article = new Article();
+
+            foreach( $articles as $i => $value) {
+
+                $data = json_decode($value, true);
+
+                $articleID = $article->create($data);
+                $data['content_status'] = 0;
+                $data['available'] = 0;
+                if(!empty($articleID) ) {
+                    $this->helper->insertRefactorID($data['originalId'], $articleID, 'article');
+                    $this->helper->updateViews($articleID, $data['views'] );
+                    echo "   $i - ok $articleID \n ";
+                }else{
+                    $errorMsg = $i. '- Problem '.$originalArticleID.' - '.$title;
+                    $this->helper->log('\n insert article : '.$errorMsg);
+                    $this->helper->log("\n Problem inserting article {$data->title} - {$data->originalId}\n ");
+                }
+
+            }
+        }
+
+        echo " \n  END \n";
+
+    }
+
 }
