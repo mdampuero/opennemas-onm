@@ -27,6 +27,7 @@
 			<th class="center" style="width:110px;">{t}Created in{/t}</th>
 			<th style="width:80px;">{t}In home{/t}</th>
 			<th style="width:40px;">{t}Published{/t}</th>
+            <th style="width:40px;">{t}Favorite{/t}</th>
 			<th class="right" style="width:40px;">{t}Actions{/t}</th>
 	  </tr>
 	</thead>
@@ -82,6 +83,19 @@
 				{/if}
                 {/acl}
 			</td>
+            <td class="center">
+                {acl isAllowed="OPINION_ADMIN"}
+                {if $opinions[c]->favorite == 1 && $opinions[c]->type_opinion == 0}
+                <a href="?id={$polls[c]->id}&amp;action=changeFavorite&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage}" class="favourite_on" title="{t}Favorite{/t}">
+                    &nbsp;
+                </a>
+                {elseif $opinions[c]->type_opinion == 0}
+                <a href="?id={$polls[c]->id}&amp;action=changeFavorite&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage}" class="favourite_off" title="{t}NoFavorite{/t}">
+                    &nbsp;
+                </a>
+                {/if}
+                {/acl}
+            </td>
 			<td class="right">
 				<ul class="action-buttons">
                     {acl isAllowed="OPINION_UPDATE"}
@@ -102,7 +116,7 @@
 		</tr>
         {sectionelse}
         <tr>
-            <td class="empty" colspan=10>
+            <td class="empty" colspan="11">
                 {t}There is no opinions yet.{/t}
             </td>
         </tr>
@@ -110,7 +124,7 @@
 	</tbody>
 	<tfoot>
 		<tr class="pagination">
-			<td colspan="10">
+			<td colspan="11">
 				{$paginacion|default:""}&nbsp;
 			</td>
 		</tr>

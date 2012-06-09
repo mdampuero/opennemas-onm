@@ -51,7 +51,7 @@ class migrationNewslibrary {
     {
 
       $this->categoriesData = ContentCategoryManager::get_instance()->categories;
-      $this->categoryNames = array(/*'0'=>'home', */ '1'=>'cronicas', '2' => 'galicia',
+      $this->categoryNames = array('0'=>'home', '1'=>'cronicas', '2' => 'galicia',
                     '3' => 'asturias', '4' => 'canarias', '5' => 'castillaleon',
                     '6' => 'cantabria', '7' => 'madrid', '8' => 'baleares',
                     '9' => 'andalucia', '15'=>'paisvasco'  );
@@ -66,22 +66,23 @@ class migrationNewslibrary {
             foreach($this->categoryNames as $catName) {
                 $path = OLD_LIBRARY."/{$iniDate}/{$catName}.html";
                 $html =file_get_contents($path);
+                if(!empty($html)) {
+                    $htmlOut = $this->migrateSources( $html );
+                    $htmlOut = $this->migrateSourcesImages( $htmlOut );
+                    $htmlOut = $this->migrateUrls( $htmlOut );
+                    $htmlOut = $this->migrateOtherUrls($htmlOut);
 
-                $htmlOut = $this->migrateSources( $html );
-                $htmlOut = $this->migrateSourcesImages( $htmlOut );
-                $htmlOut = $this->migrateUrls( $htmlOut );
-                $htmlOut = $this->migrateOtherUrls($htmlOut);
 
+                    $date =  new DateTime($iniDate);
+                    $directoryDate = $date->format("/Y/m/d/");
+                    $basePath = MEDIA_PATH.'/library'.$directoryDate;
+                    if( !file_exists($basePath) ) {
+                        mkdir($basePath, 0777, true);
+                    }
+                    $newFile =  $basePath."{$catName}.html"  ;
 
-                $date =  new DateTime($iniDate);
-                $directoryDate = $date->format("/Y/m/d/");
-                $basePath = MEDIA_PATH.'/library'.$directoryDate;
-                if( !file_exists($basePath) ) {
-                    mkdir($basePath, 0777, true);
+                    $result = file_put_contents($newFile, $htmlOut);
                 }
-                $newFile =  $basePath."{$catName}.html"  ;
-
-                $result = file_put_contents($newFile, $htmlOut);
                 if(!$result) {
                     $this->helper->log(" Problem with {$path} file");
                 }
@@ -138,12 +139,14 @@ class migrationNewslibrary {
          * /js/scriptaculous/
          * /themes/default/images/
          * /themes/default/images/facebook.png
+         * /hemeroteca/castillaleon/2012-02-07/
          */
 
         $replacements = array(
                             '@/themes/default/images/@' => '/themes/cronicas/images/old/' ,
                             '@/themes/default/css/@'    => '/themes/cronicas/css/old/',
-                          //  '@/js/(.*)\.js@'            => '/themes/cronicas/js/old/$1.js',
+                            '@/js/(.*)\.js@'            => '/themes/cronicas/js/old/$1.js',
+                            '@/hemeroteca/(.*)/([0-9]{4}-[0-1][0-9]-[0-3][0-9])/@'  => '/hemeroteca/$1/$2.html',
                         );
 
         $htmlResult = preg_replace(
@@ -188,7 +191,7 @@ class migrationNewslibrary {
                 $patterns[] = "@{$res}@";
 
             }else{
-                 $this->helper->log("Problem with image {$img} new {$imageID}.\n");
+                 $this->helper->log("Problem with no image {$img} imported - {$path} .\n");
             }
         }
         $htmlResult = preg_replace($patterns, $replacements, $html);
@@ -227,7 +230,7 @@ class migrationNewslibrary {
                 $patterns[] = "@{$res[0]}@";
                 $replacements[] ='href="/'.$content->uri;
             }else{
-               $this->helper->log("Problem with element {$contentID} new {$elementID}.\n");
+               $this->helper->log("Problem with element {$contentID} -> {$res[0]}.\n");
 
             }
         }
@@ -257,8 +260,6 @@ class migrationNewslibrary {
                             'href="/opinion/"','href="/cartas-al-director/"');
 
          $htmlResult = preg_replace($patterns, $replacements, $html,  -1, $count);
-
-         $htmlResult =preg_replace('@(href ?= ?"/hemeroteca/)(\w+)/(.*)/"@', '\$1\$3/\$2.html"', $htmlResult, -1, $count);
 
 
          return $htmlResult;

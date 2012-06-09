@@ -20,25 +20,25 @@ class Article extends Content
      *
      * @access public
      */
-    var $pk_article    = null;
-    var $subtitle      = null;
-    var $agency        = null;
-    var $summary       = null;
-    var $body          = null;
-    var $img1          = null;
-    var $img1_footer   = null;
-    var $img2          = null;
-    var $img2_footer   = null;
-    var $fk_video      = null;
-    var $fk_video2     = null;
-    var $footer_video2 = null;
-    var $with_comment  = null;
-    var $columns       = null;
-    var $home_columns  = null;
-    var $title_int     = null;
+    public $pk_article    = null;
+    public $subtitle      = null;
+    public $agency        = null;
+    public $summary       = null;
+    public $body          = null;
+    public $img1          = null;
+    public $img1_footer   = null;
+    public $img2          = null;
+    public $img2_footer   = null;
+    public $fk_video      = null;
+    public $fk_video2     = null;
+    public $footer_video2 = null;
+    public $with_comment  = null;
+    public $columns       = null;
+    public $home_columns  = null;
+    public $title_int     = null;
     /**#@-*/
 
-    static $clonesHash = null;
+    public static $clonesHash = null;
 
     /**
      * Initializes the Article object from an ID
@@ -76,10 +76,10 @@ class Article extends Content
                 $uri =  Uri::generate(
                     'article',
                     array(
-                        'id' => sprintf('%06d',$this->id),
-                        'date' => date('YmdHis', strtotime($this->created)),
+                        'id'       => sprintf('%06d', $this->id),
+                        'date'     => date('YmdHis', strtotime($this->created)),
                         'category' => $this->category_name,
-                        'slug' => $this->slug2,
+                        'slug'     => $this->slug2,
                     )
                 );
 
@@ -96,6 +96,7 @@ class Article extends Content
             default:
                 break;
         }
+
         return parent::__get($name);
 
     }
@@ -132,7 +133,6 @@ class Article extends Content
                 ? ''
                 : intval($data['with_comment']);
 
-
         parent::create($data);
 
         $sql = "INSERT INTO articles (`pk_article`, `subtitle`, `agency`,
@@ -156,17 +156,28 @@ class Article extends Content
 
             return false;
         }
+        if (!empty($data['relatedFront'])) {
+            $this->saveRelated(
+                $data['relatedFront'],
+                $this->id,
+                'setRelationPosition'
+            );
+        }
+        if (!empty($data['relatedInner'])) {
+            $this->saveRelated(
+                $data['relatedInner'],
+                $this->id,
+                'setRelationPositionForInner'
+            );
+        }
 
-        $this->saveRelated(
-            $data['ordenArti'],
-            $this->id,
-            'set_rel_position'
-        );
-        $this->saveRelated(
-            $data['ordenArtiInt'],
-            $this->id,
-            'set_rel_position_int'
-        );
+        if (!empty($data['relatedHome'])) {
+            $this->saveRelated(
+                $data['relatedHome'],
+                $this->id,
+                'setHomeRelations'
+            );
+        }
 
         return $this->id;
     }
@@ -192,7 +203,6 @@ class Article extends Content
 
     }
 
-
     /**
      * Reads the data for one article given one ID
      *
@@ -208,9 +218,7 @@ class Article extends Content
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            \Application::logDatabaseError();
 
             return;
         }
@@ -266,46 +274,26 @@ class Article extends Content
         $GLOBALS['application']->dispatch('onBeforeUpdate', $this);
         parent::update($data);
 
-        if (!isset($data['home_columns'])) {
-            $sql = "UPDATE articles "
-                    ."SET `subtitle`=?, `agency`=?, `summary`=?, `body`=?, "
-                    ."`img1`=?, `img1_footer`=?, `img2`=?, `img2_footer`=?, "
-                    ."`fk_video`=?, `fk_video2`=?, `footer_video2`=?, "
-                    ."`columns`=?, `with_comment`=?, `title_int`=? "
-                    ."WHERE pk_article=".($data['id']);
-
-            $values = array(
-                strtoupper($data['subtitle']), $data['agency'],
-                $data['summary'], $data['body'],
-                $data['img1'], $data['img1_footer'], $data['img2'],
-                $data['img2_footer'], $data['fk_video'], $data['fk_video2'],
-                $data['footer_video2'],
-                (isset($data['columns']))?$data['columns']:'',
-                $data['with_comment'], $data['title_int']
-            );
-        } else {
-            $sql =
-                "UPDATE articles"
+        $sql = "UPDATE articles "
                 ."SET `subtitle`=?, `agency`=?, `summary`=?, `body`=?, "
                 ."`img1`=?, `img1_footer`=?, `img2`=?, `img2_footer`=?, "
                 ."`fk_video`=?, `fk_video2`=?, `footer_video2`=?, "
-                ."`home_columns`=?, `with_comment`=?, `title_int`=? "
+                ."`columns`=?, `with_comment`=?, `title_int`=? "
                 ."WHERE pk_article=".($data['id']);
 
-            $values = array(
-                strtoupper($data['subtitle']), $data['agency'],
-                $data['summary'], $data['body'], $data['img1'],
-                $data['img1_footer'], $data['img2'], $data['img2_footer'],
-                $data['fk_video'], $data['fk_video2'], $data['footer_video2'],
-                $data['home_columns'], $data['with_comment'],
-                $data['title_int']
-            );
-        }
+        $values = array(
+            strtoupper($data['subtitle']), $data['agency'],
+            $data['summary'], $data['body'],
+            $data['img1'], $data['img1_footer'], $data['img2'],
+            $data['img2_footer'], $data['fk_video'], $data['fk_video2'],
+            $data['footer_video2'],
+            (isset($data['columns']))?$data['columns']:'',
+            $data['with_comment'], $data['title_int']
+        );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            \Application::logDatabaseError();
+
             return;
         }
 
@@ -315,24 +303,31 @@ class Article extends Content
         //Eliminamos para volver a insertar por si borraron.
         $rel->delete($data['id']);
 
-        $this->saveRelated(
-            $data['ordenArti'],
-            $data['id'],
-            'set_rel_position'
-        );
-        $this->saveRelated(
-            $data['ordenArtiInt'],
-            $data['id'],
-            'set_rel_position_int'
-        );
+        if (!empty($data['relatedFront'])) {
+            $this->saveRelated(
+                $data['relatedFront'],
+                $data['id'],
+                'setRelationPosition'
+            );
+        }
+        if (!empty($data['relatedInner'])) {
+            $this->saveRelated(
+                $data['relatedInner'],
+                $data['id'],
+                'setRelationPositionForInner'
+            );
+        }
+
+        if (!empty($data['relatedHome'])) {
+            $this->saveRelated(
+                $data['relatedHome'],
+                $this->id,
+                'setHomeRelations'
+            );
+        }
 
         $this->category_name = $this->loadCategoryName($this->id);
-        $GLOBALS['application']->dispatch('onAfterUpdate', $this);
 
-        // If has clone then update
-        if ($this->hasClone($this->id)) {
-            $this->updateCloneFromOriginal($this->id, $data);
-        }
 
         return true;
     }
@@ -359,9 +354,8 @@ class Article extends Content
         $this->deleteClone($id); // Eliminar clones
 
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            \Application::logDatabaseError();
+
             return;
         }
     }
@@ -392,7 +386,6 @@ class Article extends Content
 
         return $permalink;
     }
-
 
     public function createClone($content)
     {
@@ -449,8 +442,8 @@ class Article extends Content
     /**
      * Save into table `articles_clone`
      *
-     * @param string $originalPK
-     * @param string $clonePK
+     * @param  string  $originalPK
+     * @param  string  $clonePK
      * @return boolean
      */
     public function saveClone($originalPK, $clonePK)
@@ -461,10 +454,7 @@ class Article extends Content
                 .'VALUES (?, ?)';
 
         if ($GLOBALS['application']->conn->Execute($sql, $values)===false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            \Application::logDatabaseError();
 
             return false;
         }
@@ -477,7 +467,7 @@ class Article extends Content
      * ONLY fields that clone can update
      *
      * @param string $contentPK
-     * @param array $formValues Data values from POST
+     * @param array  $formValues Data values from POST
      */
     public function updateClone($contentPK, $formValues)
     {
@@ -521,12 +511,12 @@ class Article extends Content
         $this->saveRelated(
             $formValues['ordenArti'],
             $contentPK,
-            'set_rel_position'
+            'setRelationPosition'
         );
         $this->saveRelated(
             $formValues['ordenArtiInt'],
             $contentPK,
-            'set_rel_position_int'
+            'setRelationPositionForInner'
         );
         // }}}
 
@@ -605,6 +595,10 @@ class Article extends Content
 
                 $rs->MoveNext();
             }
+        } else {
+            \Application::logDatabaseError();
+
+            return false;
         }
         // }}}
     }
@@ -623,7 +617,7 @@ class Article extends Content
                 .'WHERE (`pk_original` = ?) OR (`pk_clone` = ?)';
 
         if ($GLOBALS['application']->conn->Execute($sql, $values)===false) {
-            $errorMsg = Application::logDatabaseError();
+            Application::logDatabaseError();
 
             return false;
         }
@@ -659,25 +653,10 @@ class Article extends Content
 
     public function getOriginal($clonePK=null)
     {
-        /* if (is_null($clonePK)) {
-            $clonePK = $this->id;
-        }
-
-        $sql = 'SELECT pk_original FROM `articles_clone` WHERE `pk_clone` = ?';
-        $originalPK = $GLOBALS['application']->conn->GetOne(
-            $sql,
-            array($clonePK)
-        );
-
-        if ($originalPK !== false) {
-            return new Article($originalPK);
-        } */
-
         if (is_null($clonePK)) {
             $clonePK = $this->id;
         }
 
-        $values = array();
         foreach (Article::$clonesHash as $clone => $original) {
             if (!strcmp($clone, $clonePK)) {
                 return new Article($original);
@@ -708,17 +687,6 @@ class Article extends Content
      */
     public function isClone($contentPK=null)
     {
-        /* $values = array();
-
-        if (!is_null($contentPK)) {
-            $values = array($contentPK);
-        } else {
-            $values = array($this->id);
-        }
-
-        $sql = 'SELECT count(*) FROM `articles_clone` WHERE `pk_clone` = ?';
-        return $GLOBALS['application']->conn->GetOne($sql, $values) > 0; */
-
         Article::loadHashClones();
 
         if (is_null($contentPK)) {
@@ -733,17 +701,6 @@ class Article extends Content
      */
     public function hasClone($contentPK=null)
     {
-        /* $values = array();
-
-        if (!is_null($contentPK)) {
-            $values = array($contentPK);
-        } else {
-            $values = array($this->id);
-        }
-
-        $sql = 'SELECT count(*) FROM `articles_clone` WHERE `pk_original` = ?';
-        return $GLOBALS['application']->conn->GetOne($sql, $values) > 0; */
-
         Article::loadHashClones();
 
         if (is_null($contentPK)) {
@@ -758,17 +715,6 @@ class Article extends Content
      */
     public function getClones($contentPK=null)
     {
-        /* $values = array();
-
-        if (!is_null($contentPK)) {
-            $values = array($contentPK);
-        } else {
-            $values = array($this->id);
-        }
-
-        $sql = 'SELECT pk_clone FROM `articles_clone` WHERE `pk_original` = ?';
-        return $GLOBALS['application']->conn->GetCol($sql, $values); */
-
         Article::loadHashClones();
 
         if (is_null($contentPK)) {
@@ -785,7 +731,7 @@ class Article extends Content
         return $values;
     }
 
-    static public function loadHashClones()
+    public static function loadHashClones()
     {
         if (is_null(self::$clonesHash)) {
             $sql = 'SELECT `pk_original`, `pk_clone` FROM `articles_clone`';
@@ -814,11 +760,11 @@ class Article extends Content
     public function render($params, $tpl = null)
     {
 
-      //  if (!isset($tpl)) {
+        //  if (!isset($tpl)) {
             $tpl = new Template(TEMPLATE_USER);
         //}
 
-        $tpl->assign('item',$this);
+        $tpl->assign('item', $this);
         $tpl->assign('cssclass', $params['cssclass']);
 
         try {

@@ -8,7 +8,7 @@
 {block name="footer-js" append}
 {script_tag src="/jquery/jquery.cookie.js"}
 {script_tag src="/onm/jquery.content-provider.js"}
-{script_tag src="/jquery-onm/newsletter/jquery.stepContents.js"}
+{script_tag src="/jquery-onm/jquery.newsletter.js"}
 
 {/block}
 
@@ -16,7 +16,7 @@
 
 <form action="#" method="post" name="newsletterForm" id="newsletterForm" {$formAttrs}>
 
-    <div id="buttons" class="top-action-bar clearfix">
+    <div id="buttons-contents" class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title">
                 <h2>{t}Newsletter management{/t}</h2>
@@ -63,10 +63,11 @@
             <table style="margin-bottom:0; width:100%;">
                 <tbody>
                     <tr>
-                        <td style="width:50%; vertical-align:top; padding:4px 0;" >
-                            <div id="savedNewsletter" style="width:100%;background-color:#EEE;padding:10px;">
+                        <td style="width:50%; vertical-align:top;background-color:#EEE;padding:10px;" >
+                            <div id="savedNewsletter" style="width:100%">
                                 <label>Seleccione un boletín guardado y pulse restaurar su contenido.</label>
                                 <select name="saved_newsletters" id="saved_newsletters">
+                                    <option value="0">  </option>
                                     {section loop=$savedNewsletters name=a}
                                         <option value="{$savedNewsletters[a]->id}"> {$savedNewsletters[a]->created|date_format:"%d/%m/%Y - %H:%M:%S"} </option>
                                     {/section}
@@ -75,37 +76,93 @@
                                     <img src="{$params.IMAGE_DIR}template_manager/refresh48x48.png" alt="Cargar" style="width:24px;"/>
                                 </a>
                             </div>
-                            <div id="newsletter-container" class="column-receiver">
-                                <h5>{t}Newsletter contents{/t}</h5>
+                        </td>
+                        <td style="width:50%; vertical-align:top;;background-color:#EEE;padding:10px;" >
+                            <ul>
+                                <li style="float:left; text-align:center;padding-left:10px;">
+                                    <a id="button-add-container" style="cursor:pointer;">
+                                        <img src="{$params.IMAGE_DIR}list-add.png" style="width:24px" border="0" /><br>{t}Add Container{/t}
+                                    </a>
+                                </li>
+                                <li  style="float:left; text-align:center;padding-left:10px;">
+                                    <a id="button-check-all" href="#"  title="{t}Check All{/t}">
+                                        <input id="toggleallcheckbox" type="checkbox" ><br> {t}Check All{/t}
+                                    </a>
+                                </li>
+                                <li  style="float:left; text-align:center;padding-left:10px;">
+                                    <a id="add-selected" href="#"  title="{t}Add Selected items{/t}" >
+                                        <img src="{$params.IMAGE_DIR}list-add.png" alt="{t}Add Selected items{/t}" style="width:24px;"/>
+                                        <br> {t}Add Selected{/t}
+                                    </a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width:50%; vertical-align:top; padding:4px 0;" >
+                            <h5>{t}Newsletter contents{/t}</h5>
                                 <hr>
-                                <ul class="content-receiver" >
-                                    {if !empty($newsletterContent)}
-                                    {section name=d loop=$newsletterContent}
-                                    {if !empty($newsletterContent[d]->title)}
-                                    <li  data-id="{$newsletterContent[d]->id}" data-type="{$newsletterContent[d]->type}">
-                                         {$newsletterContent[d]->type} {$newsletterContent[d]->title}
-                                    </li>
-                                    {/if}
+                            <div id="newsletter-container" class="column-receiver">
+
+                                {if empty($newsletterContent)}
+                                    <div class="container-receiver active"  data-title="En Portada" data-id="1" >
+                                        <div class="container-label"><span>En Portada</span>
+                                            <div class="container-buttons btn-group">
+                                                    <i class="icon-chevron-down"></i>
+                                                    <i class="icon-pencil"></i>
+                                                    <i class="icon-trash"></i>
+                                            </div>
+                                        </div>
+                                        <ul class="content-receiver">
+                                        </ul>
+                                    </div>
+                                {else}
+
+                                    {section name=c loop=$newsletterContent}
+                                        {assign var='contents' value=$newsletterContent[c]->items}
+                                        {if !empty($contents)}
+                                        <div class="container-receiver {if $smarty.section.c.first} active{/if}"
+                                            data-title="{$newsletterContent[c]->title}" data-id="{$newsletterContent[c]->id}">
+                                            <div class="container-label"><span>{$newsletterContent[c]->title}</span>
+                                                <div class="container-buttons btn-group">
+                                                        <i class="icon-chevron-down"></i>
+                                                        <i class="icon-pencil"></i>
+                                                        <i class="icon-trash"></i>
+                                                </div>
+                                            </div>
+                                            <ul class="content-receiver">
+                                                {section name=d loop=$contents}
+                                                    {if !empty($contents[d]->title)}
+                                                    <li  data-id="{$contents[d]->id}"
+                                                        {if $contents[d]->content_type eq 'label'} class="container-label" {/if}
+                                                        data-title="{$contents[d]->title}" data-type="{$contents[d]->content_type}" >
+                                                         {$contents[d]->type} {$contents[d]->title}
+                                                    </li>
+                                                    {/if}
+                                                {/section}
+                                            </ul>
+                                        </div>
+                                        {/if}
                                     {/section}
-                                    {/if}
-                                </ul>
+                                {/if}
+
                             </div>
                         </td>
                         <td style="width:50%; vertical-align:top; padding:4px 0;" >
-                            <div  style="width:100%;background-color:#EEE;padding:10px;">
-                                <a id="button-add-text" style="cursor:pointer;">
-                                    <img src="{$params.IMAGE_DIR}list-add.png" style="width:24px" border="0" /><br>{t}Add Text{/t}
-                                </a>
-                            </div>
+
                             {include file="newsletter/_partials/container_contents.tpl"}
                         </td>
                     </tr>
                 </tbody>
             </table>
+             <textarea style="display:none;" id="newsletterContent" name="newsletterContent" style="width:90%"></textarea>
             <input type="hidden" id="action" name="action" value="preview" />
         </div>
     </div>
 
 </form>
+{include file="newsletter/modals/_add_container_label.tpl"}
+{include file="newsletter/modals/_update_container_label.tpl"}
+{include file="newsletter/modals/_activate_container_alert.tpl"}
 {/block}
 

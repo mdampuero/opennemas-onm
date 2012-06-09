@@ -33,7 +33,7 @@ class ArrayCache extends AbstractCache
     /**
      * {@inheritdoc}
      */
-    protected function _doFetch($id)
+    protected function doFetch($id)
     {
         if (isset($this->_data[$id])) {
             return $this->_data[$id];
@@ -45,7 +45,7 @@ class ArrayCache extends AbstractCache
     /**
      * {@inheritdoc}
      */
-    protected function _doContains($id)
+    protected function doContains($id)
     {
         return isset($this->_data[$id]);
     }
@@ -53,7 +53,7 @@ class ArrayCache extends AbstractCache
     /**
      * {@inheritdoc}
      */
-    protected function _doSave($id, $data, $lifeTime = 0)
+    protected function doSave($id, $data, $lifeTime = 0)
     {
         $this->_data[$id] = $data;
 
@@ -63,7 +63,7 @@ class ArrayCache extends AbstractCache
     /**
      * {@inheritdoc}
      */
-    protected function _doDelete($id)
+    protected function doDelete($id)
     {
         unset($this->_data[$id]);
 

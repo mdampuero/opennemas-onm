@@ -27,8 +27,7 @@ class Author
     public $cache    = null;
 
     // Static members for performance
-    static private $_photos   = null;
-    static private $_authors  = null;
+    private static $_photos   = null;
 
     private $_defaultValues = array(
         'name'=>'',
@@ -76,9 +75,7 @@ class Author
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            Application::logDatabaseError();
 
             return(false);
         }
@@ -96,9 +93,7 @@ class Author
 
                 $rs = $GLOBALS['application']->conn->Execute($sql, $values);
                 if (!$rs) {
-                    $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-                    $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-                    $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+                    Application::logDatabaseError();
                 }
             }
         }
@@ -122,9 +117,7 @@ class Author
         $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            Application::logDatabaseError();
 
             return;
         }
@@ -154,9 +147,8 @@ class Author
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            Application::logDatabaseError();
+
             return;
         }
 
@@ -165,27 +157,25 @@ class Author
         //tabla author_imgs
         $titles = $data['titles'];
         if ($titles) {
-            foreach ($titles as $atid=>$des) {
+            foreach ($titles as $atid => $des) {
                 $sql = "INSERT INTO author_imgs
                         (`fk_author`, `fk_photo`,`path_img`) VALUES ( ?,?,?)";
                 $values = array( $this->pk_author, $atid, $des );
 
                 $rs = $GLOBALS['application']->conn->Execute($sql, $values);
                 if (!$rs) {
-                    $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-                    $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-                    $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+                    Application::logDatabaseError();
                 }
             }
         }
 
         if ($data['del_img']) {
-                $tok = strtok($data['del_img'], ",");
-                while (($tok !== false) AND ($tok !=" ")) {
-                    $sql = "DELETE FROM author_imgs WHERE pk_img=".$tok;
-                    $GLOBALS['application']->conn->Execute($sql);
-                    $tok = strtok(",");
-                }
+            $tok = strtok($data['del_img'], ",");
+            while (($tok !== false) AND ($tok !=" ")) {
+                $sql = "DELETE FROM author_imgs WHERE pk_img=".$tok;
+                $GLOBALS['application']->conn->Execute($sql);
+                $tok = strtok(",");
+            }
         }
     }
 
@@ -199,23 +189,18 @@ class Author
         $sql = 'DELETE FROM authors WHERE pk_author='.($id);
 
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            Application::logDatabaseError();
 
             return;
         }
         $sql = 'DELETE FROM author_imgs WHERE fk_author='.($id);
 
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            Application::logDatabaseError();
 
             return;
         }
     }
-
 
     public function load($properties)
     {
@@ -240,7 +225,7 @@ class Author
     /**
      * Finds authors given a sql WHERE and ORDER BY clause.
      *
-     * @param string $where the SQL WHERE clause
+     * @param string $where   the SQL WHERE clause
      * @param string $orderBy the SQL ORDER BY clause
      *
      * @return array the array of authors that matches the criteria
@@ -271,7 +256,6 @@ class Author
         return $authors;
     }
 
-
     /**
      * Returns one dummy object with information about one author
      * given its id.
@@ -292,9 +276,8 @@ class Author
         $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            Application::logDatabaseError();
+
             return;
         }
 
@@ -310,20 +293,21 @@ class Author
         return $author;
     }
 
-
     /**
      * Returns a list of all authors
      *
-     * @param string $filter, the where sql part to filter authors by
-     * @param string $_orderBy, the ORDER BY sql part to sort authors with
+     * @param  string $filter,   the where sql part to filter authors by
+     * @param  string $_orderBy, the ORDER BY sql part to sort authors with
      * @return mixed, array of all matched authors
      **/
-    static public function list_authors($filter=NULL, $_orderBy='ORDER BY 1')
+    public static function list_authors($filter=null, $_orderBy='ORDER BY 1')
     {
 
         $items = array();
         $_where = '1=1';
-        if ( !is_null($filter) ) $_where = $filter;
+        if (!is_null($filter)) {
+            $_where = $filter;
+        }
 
         $sql = 'SELECT `authors`.`pk_author`, `authors`.`name` ,
                        `authors`.`blog` , `authors`.`politics` ,
@@ -350,9 +334,9 @@ class Author
                   $i++;
             }
         }
+
         return( $items );
     }
-
 
     /**
      * Returns all the authors that matches given WHERE and ORDER BY clauses.
@@ -362,7 +346,7 @@ class Author
      * @return array multidimensional array with information about
      *               matching authors
      **/
-    public function all_authors($filter=NULL, $_orderBy='ORDER BY 1')
+    public function all_authors($filter=null, $_orderBy='ORDER BY 1')
     {
 
         $items = array();
@@ -377,7 +361,7 @@ class Author
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
         $i  = 0;
-        
+
         while (!$rs->EOF) {
             $items[$i] = new stdClass;
             $items[$i]->id         = $rs->fields['pk_author'];
@@ -387,6 +371,7 @@ class Author
               $rs->MoveNext();
               $i++;
         }
+
         return( $items );
 
     }
@@ -410,16 +395,18 @@ class Author
                 while (!$rs->EOF) {
                     $photo = new stdClass();
                     $photo->path_img    = $rs->fields['path_img'];
-                    $photo->path_file    = $rs->fields['path_img'];
-                    $photo->description    = $rs->fields['description'];
+                    $photo->path_file   = $rs->fields['path_img'];
+                    $photo->description = $rs->fields['description'];
 
                     self::$_photos[ $rs->fields['pk_img'] ] = $photo;
                     $rs->MoveNext();
                 }
             }
         }
-        
-        if (isset(self::$_photos[$id])) return self::$_photos[$id];
+
+        if (isset(self::$_photos[$id])) {
+            return self::$_photos[$id];
+        }
 
         return null;
     }
@@ -439,9 +426,7 @@ class Author
         $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            Application::logDatabaseError();
 
             return;
         }
@@ -471,7 +456,7 @@ class Author
      *
      * @return int the number of photos
      **/
-    static public function count_author_photos($id)
+    public static function count_author_photos($id)
     {
         $sql = 'SELECT COUNT(*) FROM author_imgs WHERE fk_author = '.($id);
         $rs  = $GLOBALS['application']->conn->Execute($sql);

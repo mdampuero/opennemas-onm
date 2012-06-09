@@ -51,7 +51,7 @@ class Log extends \Zend_Log
      * @return Zend_Log
      * @throws Zend_Log_Exception
      */
-    static public function factory($config = array())
+    public static function factory($config = array())
     {
         if ($config instanceof \Zend_Config) {
             $config = $config->toArray();
@@ -92,7 +92,7 @@ class Log extends \Zend_Log
     {
         if (s::get('log_db_enabled') == 1) {
             $writer = new \Zend_Log_Writer_Stream(SYS_LOG_PATH.'/onm.log');
-            switch ($loglevel){
+            switch ($loglevel) {
                 case 'normal':
                     $writer->addFilter(new \Zend_Log_Filter_Priority(\Zend_Log::NOTICE, '>='));
                     break;
@@ -107,6 +107,7 @@ class Log extends \Zend_Log
             $writer = new \Zend_Log_Writer_Mock;
         }
         $writer->setFormatter($this->_formatter);
+
         return $writer;
     }
 }

@@ -22,7 +22,7 @@ if (file_exists($configFile)) {
     require $configFile;
     require SITE_LIBS_PATH.'/functions.php';
     require_once 'Application.php';
-    \Application::initAutoloader('*');
+    \Application::initAutoloader();
 
     // Loads one ONM instance from database
     $im = \Onm\Instance\InstanceManager::getInstance();
@@ -39,7 +39,8 @@ if (file_exists($configFile)) {
     $app = \Application::load();
 
 } else {
-    $errorPage =  file_get_contents(dirname(__FILE__).DIRECTORY_SEPARATOR.'500.html');
+    $errorPage =
+        file_get_contents(dirname(__FILE__).DIRECTORY_SEPARATOR.'500.html');
     echo $errorPage;
     die();
 }

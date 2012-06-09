@@ -4,7 +4,7 @@
 <form action="#" method="GET" name="formulario" id="formulario" {$formAttrs|default:""} >
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
-        <div class="title"><h2>{t}Files manager :: {/t}{if $category eq 0}{t}General statistics{/t}{else}{$datos_cat[0]->title}{/if}</h2></div>
+        <div class="title"><h2>{t}Files manager :: {/t}{if $category eq '0'}{t}General statistics{/t}{else}{$datos_cat[0]->title}{/if}</h2></div>
         {if $category!=0}
         <ul class="old-button">
             <li>
@@ -37,17 +37,19 @@
     </div>
 </div>
 <div class="wrapper-content">
-
     <ul class="pills">
         <li>
-            <a href="{$smarty.server.PHP_SELF}?action=list&category=0" id="link_global"  {if $category==0}class="active"{/if}>{t}GLOBAL{/t}</a>
+            <a href="{$smarty.server.PHP_SELF}?action=list&category=0" id="link_global"  {if $category eq '0'}class="active"{/if}>{t}GLOBAL{/t}</a>
+        </li>
+        <li>
+            <a href="{$smarty.server.SCRIPT_NAME}?action=list&amp;category=widget" {if $category eq 'widget'}class="active"{/if}>{t}WIDGET HOME{/t}</a>
         </li>
         {include file="menu_categories.tpl" home="{$smarty.server.PHP_SELF}?action=list"}
     </ul>
 
     {render_messages}
 	<div id="{$category}">
-		{if $category eq 0}
+		{if $category eq '0'}
 			<table class="listing-table">
 				<thead>
 					<tr>
@@ -131,6 +133,8 @@
 						<th>{t}Title{/t}</th>
 						<th>{t}Path{/t}</th>
 						<th class="center" style="width:40px">{t}Availability{/t}</th>
+                        {if $category!='widget'} <th class="center" style="width:35px;">{t}Favorite{/t}</th>{/if}
+                        <th class="center" style="width:35px;">{t}Home{/t}</th>
                         <th class="center" style="width:40px">{t}Published{/t}</th>
 						<th style="width:40px">{t}Actions{/t}</th>
 					</tr>
@@ -146,7 +150,9 @@
 							{$attaches[c]->title|clearslash}
 						</td>
 						<td>
-							{$smarty.const.INSTANCE_MEDIA}{$smarty.const.FILE_DIR}{$attaches[c]->path}
+                            <a href="{$smarty.const.INSTANCE_MEDIA}{$smarty.const.FILE_DIR}{$attaches[c]->path}" target="_blank">
+							    {$smarty.const.INSTANCE_MEDIA}{$smarty.const.FILE_DIR}{$attaches[c]->path}
+                            </a>
 						</td>
 						<td class="center">
 							{if $status[c] eq 1}
@@ -155,6 +161,26 @@
 								<img src="{$params.IMAGE_DIR}icon_aviso.gif" border="0" alt="No" />
 							{/if}
 						</td>
+                        {if $category != 'widget'}
+                        <td class="center">
+                            {acl isAllowed="FILE_AVAILABLE"}
+                                {if $attaches[c]->favorite == 1}
+                                   <a href="{$smarty.server.PHP_SELF}?id={$attaches[c]->id}&amp;action=change_favorite&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="favourite_on" title="{t}Take out from frontpage{/t}"></a>
+                                {else}
+                                    <a href="{$smarty.server.PHP_SELF}?id={$attaches[c]->id}&amp;action=change_favorite&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="favourite_off" title="{t}Put in frontpage{/t}"></a>
+                                {/if}
+                            {/acl}
+                        </td>
+                        {/if}
+                        <td class="center">
+                            {acl isAllowed="FILE_AVAILABLE"}
+                                {if $attaches[c]->in_home == 1}
+                                   <a href="{$smarty.server.PHP_SELF}?id={$attaches[c]->id}&amp;action=change_inHome&amp;status=0&amp;category={$category}&amp;page={$page|default:0}" class="no_home" title="{t}Take out from home{/t}"></a>
+                                {else}
+                                    <a href="{$smarty.server.PHP_SELF}?id={$attaches[c]->id}&amp;action=change_inHome&amp;status=1&amp;category={$category}&amp;page={$page|default:0}" class="go_home" title="{t}Put in home{/t}"></a>
+                                {/if}
+                            {/acl}
+                        </td>
                         <td align="center">
                             {acl isAllowed="FILE_AVAILABLE"}
                                 {if $attaches[c]->available == 1}

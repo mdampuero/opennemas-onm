@@ -15,7 +15,7 @@ namespace Onm\Benchmark;
  * <code>
  * <?php
  *
- * $timer = \Onm\Benchmark\Timer::getInstance();
+ * $timer = new \Onm\Benchmark\Timer();
  * $timer->start();
  * $timer->stop();
  * $timer->display();
@@ -29,37 +29,15 @@ namespace Onm\Benchmark;
  */
 class Timer
 {
-
-    static public $instance = null;
-
-    static public $markers = null;
-
-
-    /**
-     * Ensures that we always get one single instance
-     *
-     * @return  object      the unique instance object
-     *
-     */
-    static public function getInstance($config = array())
-    {
-
-        if (!(self::$instance instanceof self)) {
-            self::$instance = new self($config);
-        }
-        return self::$instance;
-
-    }
+    public $markers = null;
 
     /*
      * Initilizes the object
      *
      */
-    public function __construct( $config = array())
+    public function __construct()
     {
-        if (!isset(self::$markers) && count(self::$markers) < 1) {
-            self::$markers = array();
-        }
+        $this->markers = array();
     }
 
     /**
@@ -69,7 +47,7 @@ class Timer
      */
     public function start($marker = "default")
     {
-        self::$markers[$marker]['starttime'] = $this->_getMicrotime();
+        $this->markers[$marker]['starttime'] = $this->_getMicrotime();
     }
 
     /**
@@ -81,8 +59,8 @@ class Timer
      */
     public function stop( $marker = "default")
     {
-        if (array_key_exists($marker, self::$markers)) {
-            self::$markers[$marker]['endtime'] = $this->_getMicrotime();
+        if (array_key_exists($marker, $this->markers)) {
+            $this->markers[$marker]['endtime'] = $this->_getMicrotime();
         } else {
             throw new \Exception("Marker '{$marker}' doesn't exists.");
         }
@@ -99,13 +77,13 @@ class Timer
     {
         if (extension_loaded('bcmath')) {
             return bcsub(
-                self::$markers[$marker]['endtime'],
-                self::$markers[$marker]['starttime'],
+                $this->markers[$marker]['endtime'],
+                $this->markers[$marker]['starttime'],
                 6
             );
         } else {
-            return self::$markers[$marker]['endtime']
-                    - self::$markers[$marker]['starttime'];
+            return $this->markers[$marker]['endtime']
+                    - $this->markers[$marker]['starttime'];
         }
     }
     /**
@@ -118,6 +96,7 @@ class Timer
     private function _getMicrotime()
     {
         $microtime = explode(' ', microtime());
+
         return $microtime[1] . substr($microtime[0], 1);
     }
 }

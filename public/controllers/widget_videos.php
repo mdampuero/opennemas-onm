@@ -2,12 +2,11 @@
 // Fetching the last 5 available videos
 $videos = $cm->find('Video', 'contents.content_status=1 and videos.author_name != "otro" and contents.available=1', 'ORDER BY favorite DESC, created DESC LIMIT 0 , 4');
 
-
 // For earch video retrieve its information
-foreach($videos as $video){
+foreach ($videos as $video) {
     //$videos_authors[] = new Author($video->fk_user);ç
     //miramos el fuente youtube o vimeo
-    if($video->author_name =='vimeo'){
+    if ($video->author_name =='vimeo') {
         $url="  http://vimeo.com/api/v2/video/'.$video->videoid.'.php";
         $curl = curl_init( 'http://vimeo.com/api/v2/video/'.$video->videoid.'.php');
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
@@ -21,7 +20,7 @@ foreach($videos as $video){
 }
 
 $tpl->assign('videos', $videos);
-if(isset($videos_authors)){
+if (isset($videos_authors)) {
         $tpl->assign('videos_authors', $videos_authors);
 }
 

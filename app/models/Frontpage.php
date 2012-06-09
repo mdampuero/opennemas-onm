@@ -14,7 +14,6 @@
  * @author     Sandra Pereira <sandra@openhost.es>
  **/
 
-
 /*
  *
  *
@@ -80,7 +79,7 @@ class Frontpage extends Content
 
         parent::create($data);
 
-        if( is_null($data['category']) ) {
+        if ( is_null($data['category']) ) {
             return false;
         }
         $date = (!isset($data['date']) || empty($data['date']))? date("Ymd") : $data['date'];
@@ -96,7 +95,7 @@ class Frontpage extends Content
                   array($category,$date)
                 );
 
-        if($resp) {
+        if ($resp) {
             $promoted ="1";
             $sql = "UPDATE frontpages SET  `content_positions`=?,,
                                            `version` =?,
@@ -117,13 +116,14 @@ class Frontpage extends Content
                             $params );
         }
 
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
 
             return(false);
         }
+
         return true;
 
     }
@@ -131,7 +131,7 @@ class Frontpage extends Content
     /**
      * Read, get a specific object
      *
-     * @param int $id Object ID
+     * @param  int       $id Object ID
      * @return Frontpage Return
      */
     public function read($id)
@@ -146,12 +146,12 @@ class Frontpage extends Content
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return null;
         }
 
         $this->load($rs->fields);
     }
-
 
     /**
      * Load properties into this instance
@@ -181,7 +181,6 @@ class Frontpage extends Content
         $this->contents= unserialize($this->content_positions);
     }
 
-
     /**
     * Fetches all the contents (articles, widgets, etc) for one specific category
     * with its placeholder and position
@@ -203,8 +202,8 @@ class Frontpage extends Content
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
-        if($rs !== false) {
-            while(!$rs->EOF) {
+        if ($rs !== false) {
+            while (!$rs->EOF) {
                  $content = array(
                     'pk_fk_content'=> $rs->fields['pk_fk_content'],
                     'content_type'=> $rs->fields['content_type'],
@@ -218,7 +217,7 @@ class Frontpage extends Content
         }
 
         //FIXME: FOR DELETE WITH NEW FRONTPAGE MANAGER
-        if($category == 0) {
+        if ($category == 0) {
             $sql = 'SELECT * FROM contents '
                   .' WHERE available=1 AND in_home=1 AND in_litter=0 '
                   .' ORDER BY  home_placeholder DESC, home_pos ASC ';
@@ -231,8 +230,8 @@ class Frontpage extends Content
         }
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
-        if($rs !== false) {
-            while(!$rs->EOF) {
+        if ($rs !== false) {
+            while (!$rs->EOF) {
                  $content = array(
                     'pk_fk_content'=> $rs->fields['pk_fk_content'],
                     'content_type' => ContentManager::getContentTypeNameFromId($rs->fields['fk_content_type']),
@@ -255,14 +254,15 @@ class Frontpage extends Content
     /**
      * Read, get a specific frontpage
      *
-     * @param int $category category in menu element
-     * @param int $date date of calendar
+     * @param  int    $category category in menu element
+     * @param  int    $date     date of calendar
      * @return Widget Return instance to chaining method
      */
 
-    function getFrontpage($date, $category=0, $version=NULL) {
+    public function getFrontpage($date, $category=0, $version=null)
+    {
         // if category = 0 => home
-        if( is_null($category) && is_null($date)) {
+        if ( is_null($category) && is_null($date)) {
               return false;
         }
 
@@ -274,6 +274,7 @@ class Frontpage extends Content
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return false;
         }
 
@@ -285,14 +286,15 @@ class Frontpage extends Content
      /**
      * Read, get a specific frontpage
      *
-     * @param int $category category in menu element
-     * @param int $date date of calendar
+     * @param  int    $category category in menu element
+     * @param  int    $date     date of calendar
      * @return Widget Return instance to chaining method
      */
 
-    function getCategoriesWithFrontpage($date) {
+    public function getCategoriesWithFrontpage($date)
+    {
         // if category = 0 => home
-        if( is_null($category) && is_null($date)) {
+        if ( is_null($category) && is_null($date)) {
               return false;
         }
 
@@ -304,10 +306,11 @@ class Frontpage extends Content
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return false;
         }
         $items = array();
-        while(!$rs->EOF) {
+        while (!$rs->EOF) {
             $items[] = $rs->fields['category'];
             $rs->MoveNext();
         }

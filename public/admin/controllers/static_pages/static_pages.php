@@ -138,7 +138,7 @@ switch($action) {
             $page = new StaticPage();
             $slug = $page->buildSlug($_POST['slug'], $_POST['id'], $_POST['title']);
 
-            Application::ajax_out($slug);
+            Application::ajaxOut($slug);
         }
 
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list' . $_redirect);
@@ -154,7 +154,7 @@ switch($action) {
             && ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'))
         {
             $output  = StringUtils::normalize_metadata($_POST['metadata']);
-            Application::ajax_out($output);
+            Application::ajaxOut($output);
         }
 
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list' . $_redirect);
@@ -177,7 +177,7 @@ switch($action) {
 
             list($img, $text)  = ($available)? array('g', 'PUBLICADO'): array('r', 'PENDIENTE');
             $output = '<img src="' . $tpl->image_dir . 'publish_' . $img . '.png" border="0" title="' . $text . '" />';
-            Application::ajax_out($output);
+            Application::ajaxOut($output);
         }
 
         Application::forward( $_SERVER['SCRIPT_NAME'].'?action=list' . $_redirect );

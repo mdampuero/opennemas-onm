@@ -16,7 +16,7 @@ OpenNeMas.tinyMceConfig = {
         mode : "exact",
         theme : "advanced",
         language: "es",
-        plugins : "safari,style,advlink,inlinepopups,paste,noneditable,media,searchreplace,xornal,spellchecker,tabfocus,iframe,gtranslator,blockquote",
+        plugins : "wordcount,safari,style,advlink,inlinepopups,paste,noneditable,media,searchreplace,xornal,spellchecker,tabfocus,iframe,gtranslator,blockquote",
 
         /* css */
         content_css: '/admin/themes/default/js/tiny_mce/opennemas-config.css?' + new Date().getTime(),

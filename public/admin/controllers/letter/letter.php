@@ -63,7 +63,7 @@ switch($action) {
             'total' => count($letters),
             'url'=>$_SERVER['SCRIPT_NAME'].'?action=list&letterStatus=' . $letterStatus
         );
- 
+
         $pagination = \Onm\Pager\SimplePager::getPagerUrl($params);
 
         $tpl->assign(array(
@@ -217,7 +217,7 @@ switch($action) {
                     ));
 
         $html_out = $tpl->fetch("common/content_provider/_container-content-list.tpl");
-        Application::ajax_out($html_out);
+        Application::ajaxOut($html_out);
 
     break;
 

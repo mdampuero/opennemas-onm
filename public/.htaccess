@@ -459,7 +459,8 @@ Options -Indexes
     #--------------------------------------------------------
 
     # provisional cronicas
-    RewriteRule ^agenda/?   http://www.cronicasdelaemigracion.com/agenda/
+    RewriteRule ^agenda/?$   http://agenda.cronicasdelaemigracion.com/ [R=301,L,NC]
+    RewriteRule ^agenda/(.*)$   http://agenda.cronicasdelaemigracion.com/$1 [R=301,L,NC]
 
     #--------------------------------------------------------
     #Redirection from old nuevatribuna.es
@@ -541,8 +542,8 @@ Options -Indexes
     RewriteRule ^opinion/?$ controllers/opinion_index.php?category_name=opinion&action=list_opinions [L,NC]
 
     #Opinion Autor index
-    RewriteRule ^opinion/autor/([0-9]+)/(.*)/([0-9]*)/$ controllers/opinion_index.php?alt=pag&category_name=opinion&action=list_op_author&author_id=$1&page=$3 [L,NC]
-    RewriteRule ^opinion/autor/([0-9]+)/(.*)$ controllers/opinion_index.php?alt=nopag&category_name=opinion&action=list_op_author&author_id=$1 [L,NC]
+    RewriteRule ^opinion/autor/([0-9]+)/(.*)/([0-9]*)/$ controllers/opinion_index.php?alt=pag&category_name=opinion&action=list_op_author&author_slug=$2&author_id=$1&page=$3 [L,NC]
+    RewriteRule ^opinion/autor/([0-9]+)/(.*)$ controllers/opinion_index.php?alt=nopag&category_name=opinion&action=list_op_author&author_id=$1&author_slug=$2 [L,NC]
 
     #Opinion Inner
     RewriteRule ^opinion(|/.+)?/([a-z0-9\-]+)?/(.*)?/([0-9]+).html$ controllers/opinion_inner.php?opinion_id=$4&category_name=opinion&action=read&t=$1 [L,NC]
@@ -580,8 +581,8 @@ Options -Indexes
     RewriteRule ^robots.txt?$ controllers/robots.php [L,NC]
 
     #Advertisement
-    RewriteRule ^publicidade/get/([0-9]+).html$ controllers/advertisement.php?action=get&id=$1 [L,NC]
-    RewriteRule ^publicidade/([0-9]+).html$ controllers/advertisement.php?action=show&publi_id=$1 [L,NC]
+    RewriteRule ^ads/get/([0-9]+).html$ controllers/advertisement.php?action=get&id=$1 [L,NC]
+    RewriteRule ^ads/([0-9]+).html$ controllers/advertisement.php?action=show&publi_id=$1 [L,NC]
 
     #Album
     #album/generic/2011-07-09/prueba/2011070918522200812.html
@@ -618,7 +619,7 @@ Options -Indexes
     RewriteRule ^estaticas/([a-z0-9\-]+)(\.html|/)?$ controllers/statics.php?slug=$1 [L,NC]
 
     #Newsletter links
-    RewriteRule ^([a-z0-9\-]+)/([0-9]{4}-[0-1][0-9]-[0-3][0-9])/([0-9]+)/$ /seccion/$1/#$3 [R=301,NE,NC,L]
+    #RewriteRule ^([a-z0-9\-]+)/([0-9]{4}-[0-1][0-9]-[0-3][0-9])/([0-9]+)/$ /seccion/$1/#$3 [R=301,NE,NC,L]
     RewriteRule ^newsletter/?$  controllers/subscriptions.php [L,NC]
     RewriteRule ^boletin/?$  controllers/subscriptions.php [L,NC]
 
@@ -648,8 +649,27 @@ Options -Indexes
 
     # Newsstand
     RewriteRule ^portadas-papel/?$ controllers/newsstand.php [L,NC]
+    RewriteRule ^portadas-papel/([0-9]{4})/([0-9]{1,2})/([0-3][0-9])/?$ controllers/newsstand.php?year=$1&month=$2&day=$3 [L,NC]
     RewriteRule ^portadas-papel/([0-9]{4})/([0-9]{1,2})/?$ controllers/newsstand.php?year=$1&month=$2 [L,NC]
+    RewriteRule ^portadas-papel/([0-9]{4})/?$ controllers/newsstand.php?year=$1 [L,NC]
+    RewriteRule ^portadas-papel/([a-z0-9\-]+)/([0-9]{4})/([0-9]{1,2})/?$ controllers/newsstand.php?category_name=$1&year=$2&month=$3 [L,NC]
     RewriteRule ^portadas-papel/([a-z0-9\-]+)/([0-9]+).html$ controllers/newsstand.php?category_name=$1&id=$2&action=read [L,NC]
+
+
+    # Temporary cronicas
+    #http://www.cronicasdelaemigracion.com/asturias/2012-04-09/16046/
+    RewriteRule ^([a-z]+)/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/([0-9]+)/?$ hemeroteca/$2-$3-$4/$1.html [R=301,L,NC]
+
+    RewriteRule ^cronicas/?$ /seccion/cronicas/ [R=301,L,NC]
+    RewriteRule ^galicia/?$ /seccion/galicia/ [R=301,L,NC]
+    RewriteRule ^castillaleon/?$ /seccion/castillaleon/ [R=301,L,NC]
+    RewriteRule ^asturias/?$ /seccion/asturias/ [R=301,L,NC]
+    RewriteRule ^madrid/?$ /seccion/madrid/ [R=301,L,NC]
+    RewriteRule ^canarias/?$ /seccion/canarias/ [R=301,L,NC]
+    RewriteRule ^andalucia/?$ /seccion/andalucia/ [R=301,L,NC]
+    RewriteRule ^cantabria/?$ /seccion/cantabria/ [R=301,L,NC]
+    RewriteRule ^baleares/?$ /seccion/baleares/ [R=301,L,NC]
+    RewriteRule ^paisvasco/?$ /seccion/paisvasco/ [R=301,L,NC]
 
     #Default Rules
     # RewriteCond %{REQUEST_URI} !^/controllers/index.php

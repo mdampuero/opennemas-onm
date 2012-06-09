@@ -23,8 +23,8 @@ class StaticPage extends Content
      * @var pk_static_page Page identifier
      */
     public $pk_static_page = null;
-  //  public $content_type = __CLASS__;
-      public $content_type = 'static_page';
+    //  public $content_type = __CLASS__;
+    public $content_type = 'static_page';
     /**
      * @var string Content of body
      */
@@ -52,7 +52,6 @@ class StaticPage extends Content
     public function create($data)
     {
 
-
         // Clear  magic_quotes
         StringUtils::disabled_magic_quotes($data);
         $data['category'] = 0;
@@ -72,6 +71,7 @@ class StaticPage extends Content
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return false;
         }
 
@@ -79,7 +79,6 @@ class StaticPage extends Content
     }
     protected function commonData($data)
     {
-
 
         // Merda dependencia Content
         $data['category'] = 0;
@@ -92,7 +91,7 @@ class StaticPage extends Content
     /**
      * Read, get a specific object
      *
-     * @param int $id Object ID
+     * @param  int    $id Object ID
      * @return Static Return instance to chaining method
      */
     public function read($id)
@@ -108,9 +107,11 @@ class StaticPage extends Content
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return null;
         }
         $this->load($rs->fields);
+
         return $this;
     }
     /**
@@ -120,7 +121,6 @@ class StaticPage extends Content
      */
     public function load($properties)
     {
-
 
         if (is_array($properties)) {
             foreach ($properties as $k => $v) {
@@ -143,12 +143,11 @@ class StaticPage extends Content
     /**
      * Update
      *
-     * @param array $data Array values
+     * @param  array   $data Array values
      * @return boolean
      */
     public function update($data)
     {
-
 
         // Clear  magic_quotes
         StringUtils::disabled_magic_quotes($data);
@@ -168,13 +167,14 @@ class StaticPage extends Content
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return false;
         }
+
         return true;
     }
     public function save($data)
     {
-
 
         if ($data['id'] > 0) {
             $this->update($data);
@@ -186,7 +186,7 @@ class StaticPage extends Content
      * Delete static page
      *
      * @see Content::remove()
-     * @param int $id Identifier
+     * @param  int     $id Identifier
      * @return boolean
      */
     public function remove($id, $lastEditor = '')
@@ -201,8 +201,10 @@ class StaticPage extends Content
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return false;
         }
+
         return true;
     }
     /**
@@ -210,7 +212,6 @@ class StaticPage extends Content
      */
     public function buildSlug($slug, $id, $title = null)
     {
-
 
         if (empty($slug) && !empty($title)) {
             $slug = StringUtils::get_title($title, $useStopList = false);
@@ -224,12 +225,13 @@ class StaticPage extends Content
         while (in_array($tmp, $slugs)) {
             $tmp = $slug . '-' . ++$i;
         }
+
         return $tmp;
     }
     /**
      *
      */
-    static public function getPageBySlug($slug)
+    public static function getPageBySlug($slug)
     {
 
         $slug = preg_replace('/\*%_\?/', '', $slug);
@@ -245,6 +247,7 @@ class StaticPage extends Content
         if ($id === false) {
             return null;
         }
+
         return new StaticPage($id);
     }
     /**
@@ -262,6 +265,7 @@ class StaticPage extends Content
         foreach ($pages as $p) {
             $titles[] = $p->slug;
         }
+
         return $titles;
     }
 }

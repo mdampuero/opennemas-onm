@@ -116,11 +116,11 @@ abstract class Common
      * Transforms position integers of strings
      * into proper integers related with the image size
      *
-     * @param  int/string $position the position in the image
-     * @param  int        $size     the size of the image
-     * @param  int        $size     the size of the canvas
+     * @param int/string $position the position in the image
+     * @param int        $size     the size of the image
+     * @param int        $size     the size of the canvas
      *
-     * @return int        the related image position
+     * @return int the related image position
      */
     protected function transformPosition($position, $size, $canvas)
     {
@@ -150,7 +150,6 @@ abstract class Common
 
         return $position;
     }
-
 
     /**
      * Returns true if the desired image size is bigger than the actual

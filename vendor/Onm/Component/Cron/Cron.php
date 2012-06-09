@@ -36,26 +36,28 @@ class Cron
      * Registers a plugin into the plugin list for executing
      *
      * If the $plugin parameter is an string the class tries to initialize and
-     * register the class.
-     * If the $plugin parameter is a plugin object adds it to the registered plugins.
+     * register the class. If the $plugin parameter is a plugin object adds it
+     * to the registered plugins.
      *
      * @return boolean true if the plugin was registered properly
      **/
     public function registerPlugin($plugin)
     {
-        // if the parameter plugin is an object an implements the plugin inteface
-        // register it
-        if (
-            is_object($plugin)
-            && in_array('\Onm\Component\Cron\Plugin\PluginInterface',  class_implements($plugin))
+        // if the parameter plugin is an object an
+        // implements the plugin inteface register it
+        if (is_object($plugin)
+            && in_array('\Onm\Component\Cron\Plugin\PluginInterface',
+                class_implements($plugin))
         ) {
             $this->_registeredPlugins []= $plugin;
+
             return true;
         } elseif (is_string($plugin)) {
             // if the parameter plugin is an string and its the class name of an
             // available plugin register it.
             return true;
         }
+
         return false;
     }
 
@@ -72,6 +74,7 @@ class Cron
                 $loaded &= $this->registerPlugin($plugin);
             }
         }
+
         return $loaded;
     }
 

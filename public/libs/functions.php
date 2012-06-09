@@ -237,3 +237,77 @@ function ajax_out($htmlout)
     echo $htmlout;
     exit(0);
 }
+
+/**
+ * Helper function to check existance one element in translation_ids table
+ */
+function getOriginalIDForContentTypeAndID($content_type, $content_id)
+{
+    $sql = 'SELECT * FROM `translation_ids` WHERE `pk_content_old`=? AND type=? LIMIT 1';
+
+    $_values = array($content_id, $content_type);
+    $_sql = $GLOBALS['application']->conn->Prepare($sql);
+    $rss = $GLOBALS['application']->conn->Execute($_sql, $_values);
+
+    if (!$rss) {
+        $error_msg = $GLOBALS['application']->conn->ErrorMsg();
+        $GLOBALS['application']->logger->debug('Error: '.$error_msg);
+        $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
+        $returnValue = false;
+    } else {
+        if ($rss->_numOfRows > 0) {
+
+            $returnValue =  $rss->fields['pk_content'];
+
+        } else {
+            $returnValue = false;
+        }
+    }
+
+    return $returnValue;
+
+}
+
+
+function getOriginalIdAndContentTypeFromID($content_id)
+{
+    $sql = 'SELECT * FROM `translation_ids` WHERE `pk_content_old`=? LIMIT 1';
+
+    $_values = $content_id;
+    $_sql = $GLOBALS['application']->conn->Prepare($sql);
+    $rss = $GLOBALS['application']->conn->Execute($_sql, $_values);
+
+    if (!$rss) {
+        $error_msg = $GLOBALS['application']->conn->ErrorMsg();
+        $GLOBALS['application']->logger->debug('Error: '.$error_msg);
+        $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
+        $returnValue = false;
+    } else {
+        if ($rss->_numOfRows > 0) {
+
+            $returnValue =  array($rss->fields['type'],
+                                  $rss->fields['pk_content']);
+
+        } else {
+            $returnValue = false;
+        }
+    }
+
+    return $returnValue;
+}
+
+// Used in the Photo class
+function map_entities($str)
+{
+    // $str = mb_convert_encoding($str, 'UTF-8', mb_detect_encoding($str));
+    $str = mb_convert_encoding(
+        $str,
+        "UTF-8",
+        "CP1252,CP1251,ISO-8859-1,UTF-8, ISO-8859-15"
+    );
+
+    return mb_strtolower($str, 'UTF-8');
+    // return htmlentities($str, ENT_COMPAT, 'UTF-8');
+}

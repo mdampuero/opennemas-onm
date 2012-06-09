@@ -109,7 +109,7 @@ switch ($action) {
 
     case 'save_positions':
 
-        if(!Acl::check('ARTICLE_FRONTPAGE')) { Acl::deny(); }
+        if (!Acl::check('ARTICLE_FRONTPAGE')) { Acl::deny(); }
 
         // Setup view
         $tpl = new TemplateCacheManager(TEMPLATE_USER_PATH);
@@ -122,7 +122,9 @@ switch ($action) {
         }
 
         $categoryID = $request->query->filter('category', null, FILTER_SANITIZE_NUMBER_INT);
-        $validReceivedData = is_array($contentsPositions) && !empty($contentsPositions) && !is_null($categoryID);
+        $validReceivedData = is_array($contentsPositions)
+                             && !empty($contentsPositions)
+                             && !is_null($categoryID);
 
         $savedProperly = false;
         if ($validReceivedData) {
@@ -139,10 +141,10 @@ switch ($action) {
                     continue;
                 }
                 $contents[] = array(
-                    'id' => $params['id'],
-                    'category' => $categoryID,
-                    'placeholder' => $params['placeholder'],
-                    'position' => $params['position'],
+                    'id'           => $params['id'],
+                    'category'     => $categoryID,
+                    'placeholder'  => $params['placeholder'],
+                    'position'     => $params['position'],
                     'content_type' => $params['content_type'],
                 );
 
@@ -150,7 +152,6 @@ switch ($action) {
 
             // Save contents
             $savedProperly = ContentManager::saveContentPositionsForHomePage($categoryID, $contents);
-
         }
 
         if ($categoryID == 0){ $section = 'home'; }
@@ -199,7 +200,7 @@ switch ($action) {
         $actualCategoryId = $ccm->get_id($actual_category);
 
         $cm = new ContentManager;
-        $contentsRAW = $request->query->filter('contents');
+        $contentsRAW = $request->request->filter('contents');
         $contents = json_decode(json_decode($contentsRAW), true);
 
         $contentsInHomepage = $cm->getContentsForHomepageFromArray($contents);

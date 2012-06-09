@@ -20,50 +20,50 @@ class MediaItem
 {
 
     /* Absolute path and file name */
-    var $filename = null;
-    var $basename = null;
+    public $filename = null;
+    public $basename = null;
 
     /* Details of media resource */
-    var $size   = null;
-    var $width  = null;
-    var $height = null;
-    var $attrs  = null;
-    var $type   = null;
-    var $internalType = null;
+    public $size   = null;
+    public $width  = null;
+    public $height = null;
+    public $attrs  = null;
+    public $type   = null;
+    public $internalType = null;
 
     /* Details of file */
-    var $atime = null;
-    var $mtime = null;
+    public $atime = null;
+    public $mtime = null;
 
     /* Metadata */
-    var $description = null;
-    var $tags = null;
+    public $description = null;
+    public $tags = null;
 
     public function __construct($file)
     {
-        $this->filename = realpath( $file );
+        $this->filename = realpath($file);
         $this->basename = basename($this->filename);
 
         // Details of file
-        $details = @stat( $this->filename );
+        $details = @stat($this->filename);
 
-		$this->mtime	= $details['mtime'];
-		$this->size     = $details['size'];
-		$dimensions     = $this->getDimensions($this->filename);
-		$this->width    = $dimensions[0];
-		$this->height   = $dimensions[1];
-		$this->attrs    = $dimensions[3];
+        $this->mtime	= $details['mtime'];
+        $this->size     = $details['size'];
+        $dimensions     = $this->getDimensions($this->filename);
+        $this->width    = $dimensions[0];
+        $this->height   = $dimensions[1];
+        $this->attrs    = $dimensions[3];
         $this->type     = $this->getExtension();
         $this->internalType = $dimensions[2];
     }
 
     public function getDimensions($filename=null)
     {
-        if(is_null($filename)) {
-            if(is_null($this->filename)) {
+        if (is_null($filename)) {
+            if (is_null($this->filename)) {
                 return(null);
             }
-		$filename = $this->filename;
+        $filename = $this->filename;
         }
 
         $details = array();
@@ -74,12 +74,12 @@ class MediaItem
 
     public function getExtension($filename=null)
     {
-        if(is_null($filename)) {
-            if(is_null($this->filename)) {
+        if (is_null($filename)) {
+            if (is_null($this->filename)) {
                 return(null);
             }
 
-			$filename = $this->filename;
+            $filename = $this->filename;
         }
 
         $_d = pathinfo($filename);
@@ -89,6 +89,7 @@ class MediaItem
         } else {
             $extension = '';
         }
+
         return $extension;
     }
 

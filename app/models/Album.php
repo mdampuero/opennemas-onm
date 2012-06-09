@@ -18,31 +18,31 @@ class Album extends Content
     /**
      * the album id
      */
-    public $pk_album = NULL;
+    public $pk_album = null;
 
     /**
      * the subtitle for this album
      */
-    public $subtitle = NULL;
+    public $subtitle = null;
 
     /**
      * the agency which created this album originaly
      */
-    public $agency = NULL;
+    public $agency = null;
 
-    public $fuente = NULL;
+    public $fuente = null;
 
     /**
      * the id of the image that is the cover for this album
      */
-    public $cover_id = NULL;
+    public $cover_id = null;
 
     /**
      * Initializes the Album class.
      *
      * @param strin $id the id of the album.
      **/
-    public function __construct($id=NULL)
+    public function __construct($id=null)
     {
         parent::__construct($id);
 
@@ -73,10 +73,10 @@ class Album extends Content
                 $uri =  Uri::generate(
                     'album',
                     array(
-                        'id' => sprintf('%06d',$this->id),
-                        'date' => date('YmdHis', strtotime($this->created)),
+                        'id'       => sprintf('%06d', $this->id),
+                        'date'     => date('YmdHis', strtotime($this->created)),
                         'category' => $this->category_name,
-                        'slug' => $this->slug,
+                        'slug'     => $this->slug,
                     )
                 );
 
@@ -102,6 +102,7 @@ class Album extends Content
                     $returnValue = $this->content_type;
                 }
                 $this->content_type_name = $returnValue;
+
                 return $returnValue;
 
                 break;
@@ -139,7 +140,7 @@ class Album extends Content
             $data["subtitle"],
             $data["agency"],
             $data["fuente"],
-            $this->cover
+            $data['album_frontpage_image'],
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
@@ -148,7 +149,7 @@ class Album extends Content
 
         $data['id'] = $this->id;
 
-        $this->_saveAttachedPhotos($data);
+        $this->saveAttachedPhotos($data);
 
         return $this;
     }
@@ -177,7 +178,6 @@ class Album extends Content
         $this->cover       = $this->cover_image->path_file.$this->cover_image->name;
 
         // var_dump($rs->fields['cover_id'], $this->cover_image, $this);die();
-
 
         return $this;
     }
@@ -210,8 +210,8 @@ class Album extends Content
             return Application::logDatabaseError();
         }
 
-        $this->_removeAttachedImages($data['id']);
-        $this->_saveAttachedPhotos($data);
+        $this->removeAttachedImages($data['id']);
+        $this->saveAttachedPhotos($data);
 
         return $this;
     }
@@ -233,7 +233,7 @@ class Album extends Content
             return Application::logDatabaseError();
         }
 
-        return $this->_removeAttachedImages($id);
+        return $this->removeAttachedImages($id);
     }
 
     /**
@@ -246,14 +246,14 @@ class Album extends Content
     public function _getAttachedPhotos($albumID)
     {
 
-        if ($albumID == NULL) {
+        if ($albumID == null) {
             return false ;
         }
 
         $sql = 'SELECT DISTINCT pk_photo, description, position'
                .' FROM albums_photos '
-               .' WHERE pk_album = ' .$albumID.' ORDER BY position ASC';
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+               .' WHERE pk_album =? ORDER BY position ASC';
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($albumID));
 
         $photosAlbum = array();
         while (!$rs->EOF) {
@@ -275,7 +275,7 @@ class Album extends Content
      *
      * @return void
      **/
-    public function _saveAttachedPhotos($data)
+    public function saveAttachedPhotos($data)
     {
         $albumPhoto = new AlbumPhoto;
         if (isset($data['album_photos_id']) && !empty($data['album_photos_id'])) {
@@ -286,25 +286,27 @@ class Album extends Content
                      ." VALUES (?,?,?,?)";
 
                 $values = array($this->id, $photoID, $position, $photoFooter);
- 
+
                 $rs = $GLOBALS['application']->conn->Execute($sql, $values);
 
                 if ($rs === false) {
                     return Application::logDatabaseError();
                 }
             }
+
             return true;
         }
+
         return $this;
     }
 
     /**
      * Delete one album by a given id
      *
-     * @param int $albumID, the foreighn key for the album
+     * @param  int      $albumID, the foreighn key for the album
      * @return boolean, true if the album was deleted, false if it wasn't
      **/
-    public function _removeAttachedImages($albumID)
+    public function removeAttachedImages($albumID)
     {
         $sql = 'DELETE FROM albums_photos WHERE pk_album=?';
 
@@ -312,6 +314,7 @@ class Album extends Content
         if (!$rs) {
             return Application::logDatabaseError();
         }
+
         return $this;
     }
 

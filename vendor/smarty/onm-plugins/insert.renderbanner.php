@@ -109,19 +109,20 @@ JSINTERSTICIAL;
         $output .= $params['beforeHTML'];
     }
 
-
-
     // Initial container
     $output .= '<div class="'.$cssclass.'">';
 
     if(isset($banner->with_script) && $banner->with_script == 1 ) {
         // Original method
         // $output .= $banner->script;
-
         // Parallelized method using iframes
-        $output .= '<iframe src="'.SITE_URL.'/publicidade/get/' . $banner->pk_content  . '.html" ' .
-                   'scrolling="no" frameborder="0" width="' . $width . '" height="' . $height . '" ' .
-                   'marginwidth="0" marginheight="0" rel="nofollow">Publicidad</iframe>';
+        if (preg_match('/iframe/', $banner->script)) {
+            $output .= $banner->script;
+        } else {
+            $output .= '<iframe src="'.SITE_URL.'ads/get/' . date('YmdHis', strtotime($banner->created)).sprintf('%06d', $banner->pk_content)  . '.html" ' .
+                       'scrolling="no" frameborder="0" width="' . $width . '" height="' . $height . '" ' .
+                       'marginwidth="0" marginheight="0" rel="nofollow">Publicidad</iframe>';
+        }
 
     } elseif( !empty($banner->pk_advertisement) ) {
 
@@ -131,7 +132,10 @@ JSINTERSTICIAL;
             if(!$overlap && !$banner->overlap) {
                 // Flash object
                 // FIXME: build flash object with all tags and params
-                $output .= '<a target="_blank" href="'.SITE_URL.'/publicidade/'. $banner->pk_advertisement .'.html" rel="nofollow">';
+
+
+
+                $output .= '<a target="_blank" href="'.SITE_URL.'ads/'. date('YmdHis', strtotime($banner->created)).sprintf('%06d', $banner->pk_advertisement) .'.html" rel="nofollow">';
                 $output .= '<object width="'.$width.'" height="'.$height.'" >
                         <param name="wmode" value="transparent" />
                         <param name="movie" value="'. MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name. '" />
@@ -145,12 +149,12 @@ JSINTERSTICIAL;
                     $output .= '<div style="position: relative; width: '.$width.'px; height: '.$height.'px;">
                         <div style="left:0px;top:0px;cursor:pointer;background-color:transparent;position:absolute;z-index:100;width:'.
                             $width.'px;height:'.$height.'px;"
-                            onclick="javascript:window.open(\''.SITE_URL.'/publicidade/'.$banner->pk_advertisement.'.html\', \'_blank\');return false;"></div>';
+                            onclick="javascript:window.open(\''.SITE_URL.'ads/'.date('YmdHis', strtotime($banner->created)).sprintf('%06d', $banner->pk_advertisement).'.html\', \'_blank\');return false;"></div>';
                 } else {
                     $output .= '<div style="position: relative; width: '.$width.'px; height: '.$height.'px;">
                         <div style="left:0px;top:0px;cursor:pointer;background-color:#FFF;filter:alpha(opacity=0);position:absolute;z-index:100;width:'.
                             $width.'px;height:'.$height.'px;"
-                            onclick="javascript:window.open(\''.SITE_URL.'/publicidade/'.$banner->pk_advertisement.'.html\', \'_blank\');return false;"></div>';
+                            onclick="javascript:window.open(\''.SITE_URL.'ads/'.date('YmdHis', strtotime($banner->created)).sprintf('%06d', $banner->pk_advertisement).'.html\', \'_blank\');return false;"></div>';
                 }
 
                 $output .= '<div style="position: absolute; z-index: 0; width: '.$width.'px; left: 0px;">
@@ -176,7 +180,7 @@ JSINTERSTICIAL;
             }
         } else {
             // Image
-            $output .= '<a target="_blank" href="'.SITE_URL.'/publicidade/'. $banner->pk_advertisement .'.html" rel="nofollow">';
+            $output .= '<a target="_blank" href="'.SITE_URL.'ads/'. date('YmdHis', strtotime($banner->created)).sprintf('%06d', $banner->pk_advertisement) .'.html" rel="nofollow">';
             $output .= '<img src="'. MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name.'"
                     alt="Publicidad '.$banner->title.'" width="'.$width.'" height="'.$height.'" />';
         }

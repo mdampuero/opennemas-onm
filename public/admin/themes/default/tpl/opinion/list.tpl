@@ -1,8 +1,42 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-    {script_tag src="/utilsopinion.js" language="javascript"}
-    {script_tag src="/photos.js" language="javascript"}
+    {script_tag src="/utilsopinion.js"}
+    {script_tag src="/photos.js"}
+    {script_tag src="/jquery-onm/jquery.inputlength.js"}
+    <script>
+    jQuery(document).ready(function($){
+        $('#title').inputLengthControl();
+    });
+    jQuery('#buton-batchNoInHome').on('click', function(){
+        jQuery('#action').attr('value', "batchInHome");
+        jQuery('#status').attr('value', "0");
+        jQuery('#formulario').attr('method', "POST");
+        jQuery('#formulario').submit();
+        e.preventDefault();
+    });
+    jQuery('#buton-batchInHome').on('click', function(){
+        jQuery('#action').attr('value', "batchInHome");
+        jQuery('#status').attr('value', "1");
+        jQuery('#formulario').attr('method', "POST");
+        jQuery('#formulario').submit();
+        e.preventDefault();
+    });
+    jQuery('#buton-batchnoFrontpage').on('click', function(){
+        jQuery('#action').attr('value', "batchFrontpage");
+        jQuery('#status').attr('value', "0");
+        jQuery('#formulario').attr('method', "POST");
+        jQuery('#formulario').submit();
+        e.preventDefault();
+    });
+    jQuery('#buton-batchFrontpage').on('click', function(){
+        jQuery('#action').attr('value', "batchFrontpage");
+        jQuery('#status').attr('value', "1");
+        jQuery('#formulario').attr('method', "POST");
+        jQuery('#formulario').submit();
+        e.preventDefault();
+    });
+    </script>
 {/block}
 
 
@@ -95,7 +129,7 @@
         <div>
             <ul class="pills clearfix">
                 <li>
-                <a href="{$smarty.server.SCRIPT_NAME}?action=list&amp;type_opinion=-1" id="home" {if $type_opinion==-1}class="active"{/if}>{t}Widgets home{/t}</a>
+                <a href="{$smarty.server.SCRIPT_NAME}?action=list&amp;type_opinion=-1" id="home" {if $type_opinion==-1}class="active"{/if}>{t}Opinion frontpage{/t}</a>
                 </li>
                 <li>
                     <a href="{$smarty.server.SCRIPT_NAME}?action=list&amp;type_opinion=0" id="author" {if $type_opinion=='0'}class="active"{/if}>{t}Author Opinions{/t}</a>
@@ -117,50 +151,12 @@
             </div>
          </div>
 
-        <script type="text/javascript" language="javascript">
-        document.observe('dom:loaded', function() {
-            if($('title')){
-                new OpenNeMas.Maxlength($('title'), { });
-            }
-        });
-        </script>
-
     <input type="hidden" name="category" id="category" value="{$category}" />
     <input type="hidden" id="status" name="status" value="" />
     <input type="hidden" id="action" name="action" value="" />
     <input type="hidden" name="id" id="id" value="{$id|default:""}" />
     </div>
 </form>
-     <script>
-        jQuery('#buton-batchNoInHome').on('click', function(){
-            jQuery('#action').attr('value', "batchInHome");
-            jQuery('#status').attr('value', "0");
-            jQuery('#formulario').attr('method', "POST");
-            jQuery('#formulario').submit();
-            e.preventDefault();
-        });
-        jQuery('#buton-batchInHome').on('click', function(){
-            jQuery('#action').attr('value', "batchInHome");
-            jQuery('#status').attr('value', "1");
-            jQuery('#formulario').attr('method', "POST");
-            jQuery('#formulario').submit();
-            e.preventDefault();
-        });
-        jQuery('#buton-batchnoFrontpage').on('click', function(){
-            jQuery('#action').attr('value', "batchFrontpage");
-            jQuery('#status').attr('value', "0");
-            jQuery('#formulario').attr('method', "POST");
-            jQuery('#formulario').submit();
-            e.preventDefault();
-        });
-        jQuery('#buton-batchFrontpage').on('click', function(){
-            jQuery('#action').attr('value', "batchFrontpage");
-            jQuery('#status').attr('value', "1");
-            jQuery('#formulario').attr('method', "POST");
-            jQuery('#formulario').submit();
-            e.preventDefault();
-        });
-    </script>
     {include file="opinion/modals/_modalDelete.tpl"}
     {include file="opinion/modals/_modalBatchDelete.tpl"}
     {include file="opinion/modals/_modalAccept.tpl"}

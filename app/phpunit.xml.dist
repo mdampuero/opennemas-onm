@@ -15,13 +15,14 @@
 
     <testsuites>
         <testsuite name="Project Test Suite">
-            <directory>tests/*Bundle</directory>
+            <directory>tests/*</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist>
             <directory>models</directory>
+            <directory>../vendor/Onm</directory>
             <directory>bundles</directory>
             <directory suffix=".php">app</directory>
             <exclude>

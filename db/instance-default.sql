@@ -118,7 +118,7 @@ CREATE TABLE IF NOT EXISTS `albums` (
   `subtitle` varchar(250) DEFAULT NULL,
   `agency` varchar(250) DEFAULT NULL,
   `fuente` varchar(250) DEFAULT NULL,
-  `cover` varchar(255) DEFAULT NULL,
+  `cover_id` bigint(255) DEFAULT NULL,
   PRIMARY KEY (`pk_album`),
   UNIQUE KEY `pk_album` (`pk_album`),
   KEY `pk_album_2` (`pk_album`)
@@ -1152,6 +1152,7 @@ INSERT INTO `menu_items` (`pk_item`, `pk_menu`, `title`, `link_name`, `type`, `p
 CREATE TABLE IF NOT EXISTS `newsletter_archive` (
   `pk_newsletter` int(11) NOT NULL AUTO_INCREMENT,
   `data` longtext,
+  `html` longtext,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`pk_newsletter`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
@@ -2164,6 +2165,7 @@ CREATE TABLE IF NOT EXISTS `books` (
   `pk_book` bigint(20) unsigned NOT NULL,
   `author` varchar(250) DEFAULT NULL,
   `file` varchar(250) DEFAULT NULL,
+  `file_img` VARCHAR( 255 ) DEFAULT NULL ,
   `editorial` varchar(250) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

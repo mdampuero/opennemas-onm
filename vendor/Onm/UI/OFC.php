@@ -18,7 +18,7 @@ namespace Onm\UI;
 class OFC
 {
 
-    static function graphicViewed($data)
+    public static function graphicViewed($data)
     {
 
         $bar = new \bar_outline(50, '#87ADD0', '#014687');
@@ -49,7 +49,6 @@ class OFC
         $g->set_y_max($top);
         $g->y_label_steps(10);
 
-
         $g->set_width('100%');
         $g->set_height(250);
 
@@ -59,7 +58,7 @@ class OFC
 
     }
 
-    static function graphicComented($data)
+    public static function graphicComented($data)
     {
 
         $bar = new \bar_outline(50, '#87ADD0', '#014687');
@@ -97,7 +96,7 @@ class OFC
 
     }
 
-    static function graphicVoted($data)
+    public static function graphicVoted($data)
     {
 
         $bar = new \bar_outline(50, '#87ADD0', '#014687');

@@ -14,7 +14,6 @@ $banners = $cm->getInTime($banners);
 //$advertisement->render($banners, &$tpl);
 $advertisement->render($banners, $advertisement);
 
-
 $intersticial = $advertisement->getIntersticial(50, '$category');
 if (!empty($intersticial)) {
     $advertisement->render(array($intersticial), $advertisement);

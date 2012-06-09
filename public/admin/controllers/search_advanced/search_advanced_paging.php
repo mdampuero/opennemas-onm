@@ -31,16 +31,16 @@ if(isset($_REQUEST['action']) )
             $htmlChecks=null;
             $szCheckedTypes = checkTypes();
             $szTags  = trim($_REQUEST['stringSearch']);
-            $objSearch = cSearch::Instance();
+            $objSearch = cSearch::getInstance();
 
-            $arrayResults = $objSearch->SearchContentsSelectMerge("contents.title, permalink, description, created, contents.pk_content as id, catName, content_types.title, contents.available, content_types.name as content_type",
+            $arrayResults = $objSearch->searchContentsSelectMerge("contents.title, permalink, description, created, contents.pk_content as id, catName, content_types.title, contents.available, content_types.name as content_type",
                     $szTags,
                     $szCheckedTypes,
                     "pk_content = pk_fk_content AND fk_content_type = pk_content_type",
                     "contents_categories, content_types",
                     100);
     }
-            
+
 }
 $type2res = array(
     'article' => 'article.php',
@@ -94,7 +94,7 @@ if($arrayResults)
             $htmlList .= '<img src="' . $tpl->image_dir . 'publish_g.png" border="0" alt="En Portada" />';
         else
             $htmlList .= '<img src="' . $tpl->image_dir . 'publish_r.png" border="0" alt="En Pendientes" />';
-            
+
         $htmlList .= '</td>
                 <td style="padding:10px;width:10%;" align="center">
                         <a href="/admin/'.$type2res[$item['content_type']].'?action=read&id=' . $item[4] .'" title="Editar">

@@ -21,13 +21,13 @@ class Version
     /**
      * Current Doctrine Version
      */
-    const VERSION = '0.8.1.3';
+    const VERSION = '0.8.2.1';
 
     /**
      * Compares a Onm version with the current one.
      *
      * @param string $version Onm version to compare.
-     * 
+     *
      * @return int Returns -1 if older, 0 if it is the same, 1 if version
      *             passed as argument is newer.
      */

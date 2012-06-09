@@ -8,7 +8,7 @@ jQuery(document).ready(function() {
         showAnim: "fadeIn",
         dateFormat: 'yy-mm-dd',
         timeFormat: 'hh:mm:ss',
-	minuteGrid: 10,
+	    minuteGrid: 10,
         onClose: function(dateText, inst) {
             var endDateTextBox = jQuery('#endtime');
             if (endDateTextBox.val() != '') {
@@ -31,7 +31,7 @@ jQuery(document).ready(function() {
         showAnim: "fadeIn",
         dateFormat: 'yy-mm-dd',
         timeFormat: 'hh:mm:ss',
-	minuteGrid: 10,
+	    minuteGrid: 10,
         onClose: function(dateText, inst) {
         var startDateTextBox = jQuery('#starttime');
         if (startDateTextBox.val() != '') {
@@ -51,6 +51,7 @@ jQuery(document).ready(function() {
     });
     jQuery('#date').datepicker({
         showAnim: "fadeIn",
+        firstDay: 1,
         dateFormat: 'yy-mm-dd'
     });
 

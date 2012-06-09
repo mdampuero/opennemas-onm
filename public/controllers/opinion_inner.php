@@ -24,9 +24,9 @@ $cm = new ContentManager();
 // Fetch HTTP variables
 $category_name    = $request->query->filter('category_name', 'opinion', FILTER_SANITIZE_STRING);
 $subcategory_name = $request->query->filter('subcategory_name', '', FILTER_SANITIZE_STRING);
-$action           = $request->query->filter('action', null , FILTER_SANITIZE_STRING);
+$action           = $request->query->filter('action', null, FILTER_SANITIZE_STRING);
 
-$dirtyID          = $request->query->filter('opinion_id', '' , FILTER_SANITIZE_STRING);
+$dirtyID          = $request->query->filter('opinion_id', '', FILTER_SANITIZE_STRING);
 $opinionID        = Content::resolveID($dirtyID);
 
 $tpl->assign(array(
@@ -40,7 +40,9 @@ require_once "opinion_inner_advertisement.php";
 switch ($action) {
     case 'read': { //Opinion de un autor
         // Redirect to album frontpage if id_album wasn't provided
-        if (is_null($opinionID)) { Application::forward301('/opinion/'); }
+        if (is_null($opinionID)) {
+            Application::forward301('/opinion/');
+        }
 
         $opinion = new Opinion($opinionID );
 
@@ -53,26 +55,28 @@ switch ($action) {
 
         $cacheID = $tpl->generateCacheId($category_name, $subcategory_name, $opinionID);
 
-        if (($opinion->available == 1) && ($opinion->in_litter == 0)){
+        if (($opinion->available == 1) && ($opinion->in_litter == 0)) {
 
-            if( ($tpl->caching == 0) || !$tpl->isCached('opinion.tpl', $cache_id) ) {
+            if ( ($tpl->caching == 0) || !$tpl->isCached('opinion.tpl', $cacheID) ) {
 
                 // Please SACAR esta broza de aqui {
-                $str = new StringUtils();
-                $title = $str->get_title($opinion->title);
+                $title = \StringUtils::get_title($opinion->title);
                 $print_url = '/imprimir/' . $title. '/'. $opinion->pk_content . '.html';
                 $tpl->assign('print_url', $print_url);
-                $tpl->assign('sendform_url', '/controllers/opinion_inner.php?action=sendform&opinion_id=' . $dirtyID );
+                $tpl->assign(
+                    'sendform_url',
+                    '/controllers/opinion_inner.php?action=sendform&opinion_id=' . $dirtyID
+                );
                 // } Sacar broza
 
                 $opinion->author_name_slug = StringUtils::get_title($opinion->name);
                 // Fetch rating for this opinion
                 $rating = new Rating($opinionID);
-                $tpl->assign('rating_bar', $rating->render('article','vote'));
+                $tpl->assign('rating_bar', $rating->render('article', 'vote'));
 
                 // Fetch suggested contents
-                $objSearch = cSearch::Instance();
-                $suggestedContents = $objSearch->SearchSuggestedContents(
+                $objSearch = cSearch::getInstance();
+                $suggestedContents = $objSearch->searchSuggestedContents(
                     $opinion->metadata,
                     'Opinion',
                     " contents.available=1 AND pk_content = pk_fk_content",
@@ -83,26 +87,24 @@ switch ($action) {
                 $tpl->assign('suggested', $suggestedContents);
 
                 // Fetch the other opinions for this author
-                if ($opinion->type_opinion == 1){
+                if ($opinion->type_opinion == 1) {
                     $where=' opinions.type_opinion = 1';
                     $opinion->name = 'Editorial';
-                } elseif ($opinion->type_opinion == 2){
+                } elseif ($opinion->type_opinion == 2) {
                     $where=' opinions.type_opinion = 2';
                     $opinion->name = 'Director';
                 } else {
                     $where=' opinions.fk_author='.($opinion->fk_author);
                 }
 
-                $otherOpinions = $cm->cache->find(
-                    'Opinion',
+                $otherOpinions = $cm->cache->find(  'Opinion',
                     $where
                     .' AND `pk_opinion` <>' .$opinionID
-                    .' AND available = 1  AND content_status=1'
-                    ,' ORDER BY created DESC '
-                    .' LIMIT 0,9'
+                    .' AND available = 1  AND content_status=1',
+                    ' ORDER BY created DESC LIMIT 0,9'
                 );
-                foreach ($otherOpinions as &$otherOpinion) {
-                    $otherOpinion->author_name_slug  = $opinion->author_name_slug;
+                foreach ($otherOpinions as &$otOpinion) {
+                    $otOpinion->author_name_slug  = $opinion->author_name_slug;
                 }
 
                 $author = new \Author($opinion->fk_author);
@@ -155,7 +157,7 @@ switch ($action) {
         $tpl->assign('token', $token);
 
         $tpl->caching = 0;
-        $tpl->display('opinion/partials/_opinion_sendform.tpl'); // Don't disturb cache
+        $tpl->display('opinion/partials/_opinion_sendform.tpl');
         exit(0);
 
     } break;
@@ -168,8 +170,8 @@ switch ($action) {
         StringUtils::disabled_magic_quotes();
 
         // Check direct access
-        $token = $request->query->filter('token', null , FILTER_SANITIZE_STRING);
-        if($_SESSION['sendformtoken'] != $token) {
+        $token = $request->query->filter('token', null, FILTER_SANITIZE_STRING);
+        if ($_SESSION['sendformtoken'] != $token) {
             Application::forward('/');
         }
 
@@ -190,9 +192,14 @@ switch ($action) {
         $mail->IsHTML(true);
 
 
-        $mail->From       = $request->query->filter('sender',      null, FILTER_SANITIZE_STRING);
-        $mail->FromName   = $request->query->filter('name_sender', null, FILTER_SANITIZE_STRING);
-        $mail->Subject = _(sprintf('%s ha compartido contigo un contenido de %s', $mail->FromName, s::get('site_name')));
+        $mail->From     =
+            $request->query->filter('sender', null, FILTER_SANITIZE_STRING);
+        $mail->FromName =
+            $request->query->filter('name_sender', null, FILTER_SANITIZE_STRING);
+        $mail->Subject = _(sprintf(
+            '%s ha compartido contigo un contenido de %s',
+            $mail->FromName, s::get('site_name'))
+        );
 
         $tplMail->assign('destination', 'amig@,');
 
@@ -213,10 +220,10 @@ switch ($action) {
 
 
         // Filter tags before send
-        $message = $request->query->filter('body', null , FILTER_SANITIZE_STRING);
+        $message = $request->query->filter('body', null, FILTER_SANITIZE_STRING);
         $tplMail->assign('body', $message);
         $agency  = s::get('site_name');
-        $tplMail->assign('agency',$agency);
+        $tplMail->assign('agency', $agency);
         $summary = substr(strip_tags(stripslashes($opinion->body)), 0, 300)."...";
         $tplMail->assign('summary', $summary);
         $tplMail->assign('author', $opinion->author);
@@ -232,54 +239,72 @@ switch ($action) {
         $params['created'] = $opinion->created;
         $params['updated'] = $opinion->updated;
         $params['opinion'] = $opinion;
-        $date = smarty_function_articledate($params,$tpl);
+        $date = smarty_function_articledate($params, $tpl);
         $tplMail->assign('date', $date);
 
         $tplMail->caching = 0;
         $mail->Body = $tplMail->fetch('opinion/email_send_to_friend.tpl');
 
-        $mail->AltBody = $tplMail->fetch('opinion/email_send_to_friend_just_text.tpl');
+        $mail->AltBody =
+            $tplMail->fetch('opinion/email_send_to_friend_just_text.tpl');
 
         /*
             * Implementacion para enviar a multiples destinatarios separados por coma
             */
-        $destinatarios = explode(',', $request->query->filter('destination', null , FILTER_SANITIZE_STRING));
+        $destinatarios = explode(',',
+            $request->query->filter('destination', null, FILTER_SANITIZE_STRING)
+        );
 
         foreach ($destinatarios as $dest) {
             //$mail->AddAddress(trim($dest));
             $mail->AddBCC(trim($dest));
         }
 
-        if( $mail->Send() ) {
+        if ( $mail->Send() ) {
             $tpl->assign('message', 'Correo enviado correctamente.');
         } else {
-            if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')) {
+            if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])
+                && ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')
+            ) {
                 header("HTTP/1.0 404 Not Found");
-        }
-            $tpl->assign('message', 'El artículo de opinión no pudo ser enviado, inténtelo de nuevo más tarde. <br /> Disculpe las molestias.');
+            }
+            $tpl->assign(
+                'message',
+                'El artículo de opinión no pudo ser enviado, inténtelo de '
+                .'nuevo más tarde. <br /> Disculpe las molestias.'
+            );
         }
 
         $tpl->caching = 0;
-        $tpl->display('opinion/partials/_opinion_sendform.tpl'); // Don't disturb cache
+        $tpl->display('opinion/partials/_opinion_sendform.tpl');
         exit(0);
     } break;
 
     case 'get_plus': {
         $cm = new ContentManager();
-        $articles_viewed = $cm->cache->getMostViewedContent($_REQUEST['content'], true, $_REQUEST['category'], $_REQUEST['author'], $_REQUEST['days']);
+        $articles_viewed = $cm->cache->getMostViewedContent(
+            $_REQUEST['content'],
+            true,
+            $_REQUEST['category'],
+            $_REQUEST['author'],
+            $_REQUEST['days']
+        );
 
-        $html_out = "";
+        $output = "";
         foreach ($articles_viewed as $article) {
-            $html_out .= '<div class="CNoticiaMas">';
-            $html_out .= '<div class="CContainerIconoTextoNoticiaMas">';
-            $html_out .= '<div class="iconoNoticiaMas"></div>';
-            $html_out .= '<div class="textoNoticiaMas"><a href="'.$article->permalink.'">'.stripslashes($article->title).'</a></div>';
-            $html_out .= '</div>';
-            $html_out .= '<div class="fileteNoticiaMas"><img src="'.TEMPLATE_USER_PATH.MEDIA_IMG_DIR.'/noticiasRecomendadas/fileteRecomendacion.gif" alt=""/></div>';
-            $html_out .= '</div>';
+            $output .= '<div class="CNoticiaMas">'
+                . '<div class="CContainerIconoTextoNoticiaMas">'
+                . '<div class="iconoNoticiaMas"></div>'
+                . '<div class="textoNoticiaMas"><a href="'.$article->permalink
+                . '">'.stripslashes($article->title).'</a></div>'
+                . '</div>'
+                . '<div class="fileteNoticiaMas"><img src="'
+                . TEMPLATE_USER_PATH.MEDIA_IMG_DIR
+                . '/noticiasRecomendadas/fileteRecomendacion.gif" alt=""/></div>'
+                . '</div>';
         }
 
-        Application::ajax_out($html_out);
+        Application::ajaxOut($output);
     } break;
 
     default: {

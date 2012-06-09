@@ -23,14 +23,14 @@ class ModuleManager
      *
      * @var array
      **/
-    static public $activatedModules = null;
+    public static $activatedModules = null;
 
     /**
      * Stores all the available modules over all instances of ModuleManager
      *
      * @var array
      **/
-    static public $availableModules = null;
+    public static $availableModules = null;
 
     /**
      * Initilizes the object.
@@ -50,7 +50,7 @@ class ModuleManager
      *
      * @throws <b>Exception</b> if something went wrong
      */
-    static public function getActivatedModules()
+    public static function getActivatedModules()
     {
         //global $activatedModules;
         $activatedModules = \Onm\Settings::get('activated_modules');
@@ -71,16 +71,16 @@ class ModuleManager
 
             }
         }
+
         return self::$activatedModules;
     }
-
 
     /**
      * Returns the list of available modules in Onm instance.
      *
      * @return array the list of available modules
      */
-    static public function getAvailableModules()
+    public static function getAvailableModules()
     {
         if ( !isset(self::$availableModules) ) {
             self::$availableModules = array(
@@ -127,7 +127,8 @@ class ModuleManager
                 'LETTER_MANAGER',
                 'SYNC_MANAGER',
                 'FRONTPAGES_LIBRARY',
-                'STATIC_LIBRARY'
+                'STATIC_LIBRARY',
+                'CRONICAS_MODULES'
             );
         }
 
@@ -139,15 +140,15 @@ class ModuleManager
      *
      * @return boolean true if all modules are activated
      */
-    static public function checkAllModulesActivated()
+    public static function checkAllModulesActivated()
     {
         $activatedModules = \Onm\Settings::get('activated_modules');
         if (!isset($activatedModules) or !is_array($activatedModules)) {
             return true;
         }
+
         return in_array('ALL', $activatedModules);
     }
-
 
     /**
      * Returns true if a given module is activated.
@@ -158,7 +159,7 @@ class ModuleManager
      *
      * @throws <b>ModuleException</b> If module is not available.
      */
-    static public function isActivated($module = '')
+    public static function isActivated($module = '')
     {
         // Check if module name is properly setted
         if (!isset($module) || empty($module)) {
@@ -188,7 +189,7 @@ class ModuleManager
      *
      * @throws <b>ModuleException</b> If module is not available.
      */
-    static public function checkActivatedOrForward($module = '')
+    public static function checkActivatedOrForward($module = '')
     {
         try {
             // Check if module exists
@@ -203,7 +204,6 @@ class ModuleManager
 
     }
 
-
     /**
      * Check if a given module exists.
      *
@@ -211,7 +211,7 @@ class ModuleManager
      *
      * @return boolean true if module is in available modules list
      */
-    static public function moduleExists($moduleName)
+    public static function moduleExists($moduleName)
     {
         return in_array($moduleName, self::getAvailableModules());
     }

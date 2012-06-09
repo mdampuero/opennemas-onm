@@ -17,46 +17,33 @@
 {/block}
 
 {block name="footer-js" append}
-{script_tag src="/utilsopinion.js"}
-{script_tag src="/photos.js"}
-{script_tag src="/tiny_mce/opennemas-config.js"}
-<script type="text/javascript">
-    countWords(
-               document.getElementById('title'),
-               document.getElementById('counter_title')
-               );
+    {script_tag src="/utilsopinion.js"}
+    {script_tag src="/photos.js"}
+    {script_tag src="/tiny_mce/opennemas-config.js"}
+    {script_tag src="/jquery-onm/jquery.inputlength.js"}
+    <script>
+        Droppables.add('div_widget', {
+            onDrop: function(element) {
+                    $('widget').src=element.src;
+                    $('fk_author_img_widget').value=element.id;
+            }
+        });
+        Droppables.add('sel', {
+            onDrop: function(element) {
+               $('fk_author_img').value=element.id;
+               $('seleccionada').src=element.src;
+            }
+        });
 
-    countWords(
-               document.getElementById('body'),
-               document.getElementById('counter_body')
-               );
+        tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
+        OpenNeMas.tinyMceConfig.advanced.elements = "body";
+        tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
 
-    Droppables.add('div_widget', {
-        onDrop: function(element) {
-                $('widget').src=element.src;
-                $('fk_author_img_widget').value=element.id;
-        }
-    });
-    Droppables.add('sel', {
-        onDrop: function(element) {
-           $('fk_author_img').value=element.id;
-           $('seleccionada').src=element.src;
-        }
-    });
-
-    tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
-    OpenNeMas.tinyMceConfig.advanced.elements = "body";
-    tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
-
-    document.observe('dom:loaded', function() {
-        if($('title')){
-            new OpenNeMas.Maxlength($('title'), { });
-        }
-    });
-    jQuery(document).ready(function ($){
-        $('#opinion-form').tabs();
-    });
-</script>
+        jQuery(document).ready(function ($){
+            $('#opinion-form').tabs();
+            $('#title').inputLengthControl();
+        });
+    </script>
 {/block}
 
 {block name="content"}
@@ -101,10 +88,10 @@
 
             <ul>
                 <li>
-                    <a href="#edicion-contenido">{t}Opinion content{/t}</a>
+                    <a href="#edicion-contenido">{t}Content{/t}</a>
                 </li>
                 <li>
-                    <a href="#edicion-extra">{t}Opinion parameters{/t}</a>
+                    <a href="#edicion-extra">{t}Parameters{/t}</a>
                 </li>
             </ul>
 
@@ -114,9 +101,15 @@
                         <tr>
                             <td colspan="2">
                                 <label for="title">{t}Title{/t}</label>
-                                <input type="text" id="title" name="title" title="Titulo de la opinion" onkeyup="countWords(this,document.getElementById('counter_title'))"
-                                    value="{$opinion->title|clearslash|escape:"html"}" class="required"  style="width:100%" onBlur="javascript:get_metadata(this.value);" />
-                                <input type="hidden" id="category" name="category" title="opinion" value="opinion" />
+
+                                <div class="input-append"  id="title">
+                                    <input type="text" name="title"
+                                        value="{$opinion->title|clearslash|escape:"html"}" class="required"  style="width:90%"
+                                        onBlur="javascript:get_metadata(this.value);" />
+                                    <input type="hidden" id="category" name="category" title="opinion" value="opinion" />
+                                    <span class="add-on"></span>
+                                </div>
+
                             </td>
                             <td rowspan="3">
                                 <div class="utilities-conf" style="float:right">

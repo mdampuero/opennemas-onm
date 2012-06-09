@@ -23,7 +23,7 @@ abstract class AbstractCache implements Cache
     /**
      * Set the namespace to prefix all cache ids with.
      *
-     * @param string $namespace
+     * @param  string $namespace
      * @return void
      */
     public function setNamespace($namespace)
@@ -36,7 +36,7 @@ abstract class AbstractCache implements Cache
      */
     public function fetch($id)
     {
-        return $this->_doFetch($this->_getNamespacedId($id));
+        return $this->doFetch($this->getNamespacedId($id));
     }
 
     /**
@@ -44,7 +44,7 @@ abstract class AbstractCache implements Cache
      */
     public function contains($id)
     {
-        return $this->_doContains($this->_getNamespacedId($id));
+        return $this->doContains($this->getNamespacedId($id));
     }
 
     /**
@@ -52,7 +52,7 @@ abstract class AbstractCache implements Cache
      */
     public function save($id, $data, $lifeTime = 0)
     {
-        return $this->_doSave($this->_getNamespacedId($id), $data, $lifeTime);
+        return $this->doSave($this->getNamespacedId($id), $data, $lifeTime);
     }
 
     /**
@@ -60,13 +60,13 @@ abstract class AbstractCache implements Cache
      */
     public function delete($id)
     {
-        $id = $this->_getNamespacedId($id);
+        $id = $this->getNamespacedId($id);
 
         if (strpos($id, '*') !== false) {
             return $this->deleteByRegex('/'.str_replace('*', '.*', $id).'/');
         }
 
-        return $this->_doDelete($id);
+        return $this->doDelete($id);
     }
 
     /**
@@ -88,8 +88,8 @@ abstract class AbstractCache implements Cache
     /**
      * Delete cache entries where the id matches a PHP regular expressions
      *
-     * @param string $regex
-     * @return array $deleted  Array of the deleted cache ids
+     * @param  string $regex
+     * @return array  $deleted  Array of the deleted cache ids
      */
     public function deleteByRegex($regex)
     {
@@ -110,14 +110,14 @@ abstract class AbstractCache implements Cache
     /**
      * Delete cache entries where the id has the passed prefix
      *
-     * @param string $prefix
-     * @return array $deleted  Array of the deleted cache ids
+     * @param  string $prefix
+     * @return array  $deleted  Array of the deleted cache ids
      */
     public function deleteByPrefix($prefix)
     {
         $deleted = array();
 
-        $prefix = $this->_getNamespacedId($prefix);
+        $prefix = $this->getNamespacedId($prefix);
         $ids = $this->getIds();
 
         foreach ($ids as $id) {
@@ -133,8 +133,8 @@ abstract class AbstractCache implements Cache
     /**
      * Delete cache entries where the id has the passed suffix
      *
-     * @param string $suffix
-     * @return array $deleted  Array of the deleted cache ids
+     * @param  string $suffix
+     * @return array  $deleted  Array of the deleted cache ids
      */
     public function deleteBySuffix($suffix)
     {
@@ -155,10 +155,10 @@ abstract class AbstractCache implements Cache
     /**
      * Prefix the passed id with the configured namespace value
      *
-     * @param string $id  The id to namespace
+     * @param  string $id The id to namespace
      * @return string $id The namespaced id
      */
-    private function _getNamespacedId($id)
+    private function getNamespacedId($id)
     {
         return $this->_namespace . $id;
     }
@@ -166,18 +166,20 @@ abstract class AbstractCache implements Cache
     /**
      * Fetches an entry from the cache.
      *
-     * @param string $id cache id The id of the cache entry to fetch.
-     * @return string The cached data or FALSE, if no cache entry exists for the given id.
+     * @param  string $id cache id The id of the cache entry to fetch.
+     * @return string The cached data or FALSE, if no cache entry
+     *                exists for the given id.
      */
-    abstract protected function _doFetch($id);
+    abstract protected function doFetch($id);
 
     /**
      * Test if an entry exists in the cache.
      *
-     * @param string $id cache id The cache id of the entry to check for.
-     * @return boolean TRUE if a cache entry exists for the given cache id, FALSE otherwise.
+     * @param  string  $id cache id The cache id of the entry to check for.
+     * @return boolean TRUE if a cache entry exists for
+     *                 the given cache id, FALSE otherwise.
      */
-    abstract protected function _doContains($id);
+    abstract protected function doContains($id);
 
     /**
      * Puts data into the cache.
@@ -187,19 +189,19 @@ abstract class AbstractCache implements Cache
      * @param int    $lifeTime The lifetime. If != false, sets a specific
      *                         lifetime for this cache entry (null => infinite
      *                         lifeTime).
-     * @return boolean         TRUE if the entry was successfully stored in the
+     * @return boolean TRUE if the entry was successfully stored in the
      *                         cache, FALSE otherwise.
      */
-    abstract protected function _doSave($id, $data, $lifeTime = false);
+    abstract protected function doSave($id, $data, $lifeTime = false);
 
     /**
      * Deletes a cache entry.
      *
-     * @param string $id cache id
+     * @param  string  $id cache id
      * @return boolean TRUE if the cache entry was successfully deleted,
      *                 FALSE otherwise.
      */
-    abstract protected function _doDelete($id);
+    abstract protected function doDelete($id);
 
     /**
      * Get an array of all the cache ids stored

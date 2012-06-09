@@ -19,7 +19,8 @@ class ZendDataCache extends AbstractCache
 {
     public function __construct()
     {
-        $this->setNamespace('onm::'); // zend data cache format for namespaces ends in ::
+        // zend data cache format for namespaces ends in ::
+        $this->setNamespace('onm::');
     }
 
     /**
@@ -27,13 +28,15 @@ class ZendDataCache extends AbstractCache
      */
     public function getIds()
     {
-        throw new \BadMethodCallException("getIds() is not supported by ZendDataCache");
+        throw new \BadMethodCallException(
+            "getIds() is not supported by ZendDataCache"
+        );
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function _doFetch($id)
+    protected function doFetch($id)
     {
         return zend_shm_cache_fetch($id);
     }
@@ -41,15 +44,15 @@ class ZendDataCache extends AbstractCache
     /**
      * {@inheritdoc}
      */
-    protected function _doContains($id)
+    protected function doContains($id)
     {
-        return (zend_shm_cache_fetch($id) !== FALSE);
+        return (zend_shm_cache_fetch($id) !== false);
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function _doSave($id, $data, $lifeTime = 0)
+    protected function doSave($id, $data, $lifeTime = 0)
     {
         return zend_shm_cache_store($id, $data, $lifeTime);
     }
@@ -57,7 +60,7 @@ class ZendDataCache extends AbstractCache
     /**
      * {@inheritdoc}
      */
-    protected function _doDelete($id)
+    protected function doDelete($id)
     {
         return zend_shm_cache_delete($id);
     }

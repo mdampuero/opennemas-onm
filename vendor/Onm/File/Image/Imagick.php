@@ -9,7 +9,6 @@
  **/
 namespace Onm\File\Image;
 
-
 /**
  * Handles all the operations with Images using the ImageMagick library
  *
@@ -51,7 +50,7 @@ class Imagick extends Common implements ImageInterface
     /**
      * Writes the image in a given path, if not given overwrites the original
      *
-     * @param string $filePath the path where save the image
+     * @param  string           $filePath the path where save the image
      * @return Onm\File\Imagick object
      **/
     public function save($filePath = '')
@@ -73,7 +72,7 @@ class Imagick extends Common implements ImageInterface
     public function getWidth()
     {
         if (is_object($this->_image)) {
-            return (int)$this->_image->getImageWidth();
+            return (int) $this->_image->getImageWidth();
         }
         throw new \Exception(_('Please initialize the image before get its width.'));
     }
@@ -86,7 +85,7 @@ class Imagick extends Common implements ImageInterface
     public function getHeight()
     {
         if (is_object($this->_image)) {
-            return (int)$this->_image->getImageHeight();
+            return (int) $this->_image->getImageHeight();
         }
         throw new \Exception(_('Please initialize the image before get its height.'));
     }
@@ -122,10 +121,10 @@ class Imagick extends Common implements ImageInterface
     /**
      * Crops the image given a width, height, position x and y
      *
-     * @param int $width   the width of the final image
-     * @param int $height  the height of the final image
-     * @param int $x       the position in the x-axis from where cut the image
-     * @param int $y       the position in the y-axis from where cut the image
+     * @param int $width  the width of the final image
+     * @param int $height the height of the final image
+     * @param int $x      the position in the x-axis from where cut the image
+     * @param int $y      the position in the y-axis from where cut the image
      *
      * @return Onm\File\Imagick object
      **/
@@ -166,8 +165,8 @@ class Imagick extends Common implements ImageInterface
     /**
      * Crop and resize an image to specific dimmensions
      *
-     * @param int $width   the width of the final image
-     * @param int $height  the height of the final image
+     * @param int $width  the width of the final image
+     * @param int $height the height of the final image
      *
      * @return Onm\File\Imagick object
      **/
@@ -190,8 +189,8 @@ class Imagick extends Common implements ImageInterface
     /**
      * Rotates an image
      *
-     * @param int $degrees     the amount of degrees to rotate the image
-     * @param int $background  the background for fill the empty spaces
+     * @param int $degrees    the amount of degrees to rotate the image
+     * @param int $background the background for fill the empty spaces
      *
      * @return Onm\File\Imagick object
      */
@@ -213,9 +212,9 @@ class Imagick extends Common implements ImageInterface
     /**
      * Merge two images in one
      *
-     * @param string        $imagePath  the image path to merge into the actual
-     * @param int/string    $x          the horizontal position where merge the image
-     * @param int/string    $y          the vertical position where merge the image
+     * @param string     $imagePath the image path to merge into the actual
+     * @param int/string $x         the horizontal position where merge the image
+     * @param int/string $y         the vertical position where merge the image
      *
      * @return Onm\File\Imagick object
      */
@@ -240,7 +239,7 @@ class Imagick extends Common implements ImageInterface
     /**
      * Sets the target format
      *
-     * @param string  $targetFormat the desired format to convert the image
+     * @param string $targetFormat the desired format to convert the image
      *
      * @return Onm\File\Imagick object
      */

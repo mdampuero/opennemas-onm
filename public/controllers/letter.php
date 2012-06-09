@@ -28,7 +28,7 @@ $cm  = new ContentManager();
 
 $action = $request->query->filter('action', 'frontpage', FILTER_SANITIZE_STRING);
 
-switch($action) {
+switch ($action) {
     case 'frontpage':
 
         $tpl->setConfig('letter-frontpage');
@@ -41,20 +41,21 @@ switch($action) {
          * Don't execute action logic if was cached before
          */
         if (1==1 ||  ($tpl->caching == 0)
-           || (!$tpl->isCached('letter/letter-frontpage.tpl',$cacheID))) {
+           || (!$tpl->isCached('letter/letter-frontpage.tpl', $cacheID))
+        ) {
 
-                $otherLetters = $cm->find_all('Letter', 'available=1 ',
-                                            'ORDER BY created DESC LIMIT 5');
+            $otherLetters = $cm->find_all(
+                'Letter', 'available=1 ',
+                'ORDER BY created DESC LIMIT 5'
+            );
 
             $tpl->assign( array('otherLetters'=> $otherLetters ) );
-
         }
 
         require_once('letter_advertisement.php');
 
         $tpl->display('letter/letter_frontpage.tpl', $cacheID);
-
-    break;
+        break;
 
     case 'show':
 
@@ -63,51 +64,52 @@ switch($action) {
 
         $letterId = Content::resolveID($dirtyID);
 
-        /**
-         * Redirect to album frontpage if id_album wasn't provided
-         */
-        if (is_null($letterId)) { Application::forward301('/cartas-al-director/'); }
+        // Redirect to album frontpage if id_album wasn't provided
+        if (is_null($letterId)) {
+            Application::forward301('/cartas-al-director/');
+        }
 
         $letter = new Letter($letterId);
 
-        if (!empty($letter)) {
-
-            if (($letter->available==1) && ($letter->in_litter==0)) {
-                // Increment numviews if it's accesible
-                $letter->setNumViews($letterId);
-
-                //if($slug != $letter->slug) { }
-
-                $cacheID = $tpl->generateCacheId('letter-inner','', $letterId );
-
-                if (1==1 || ($tpl->caching == 0) || !$tpl->isCached('letter/letter.tpl', $cacheID) ) {
-
-                    $comment = new Comment();
-                    $comments = $comment->get_public_comments($letterId);
-
-                    $otherLetters = $cm->find('Letter', 'available=1 ',
-                                            'ORDER BY created DESC LIMIT 5');
-
-                    $tpl->assign( array( 'letter'=>$letter,
-                        'num_comments'=> count($comments),
-                        'otherLetters'=>$otherLetters,
-                        ) );
-
-
-                } // end if $tpl->is_cached
-
-                require_once('letter_inner_advertisement.php');
-
-                $tpl->assign('contentId', $letterId); // Used on module_comments.tpl
-
-                $tpl->display('letter/letter.tpl', $cacheID);
-
-            }
-         } else {
+        if (empty($letter)) {
             Application::forward301('/404.html');
         }
 
-    break;
+        if (($letter->available==1) && ($letter->in_litter==0)) {
+            // Increment numviews if it's accesible
+            $letter->setNumViews($letterId);
+
+            //if ($slug != $letter->slug) { }
+
+            $cacheID = $tpl->generateCacheId('letter-inner', '', $letterId );
+
+            if (1==1 || ($tpl->caching == 0)
+                || !$tpl->isCached('letter/letter.tpl', $cacheID)
+            ) {
+
+                $comment  = new Comment();
+                $comments = $comment->get_public_comments($letterId);
+
+                $otherLetters = $cm->find(
+                    'Letter', 'available=1 ',
+                    'ORDER BY created DESC LIMIT 5'
+                );
+
+                $tpl->assign( array( 'letter'=>$letter,
+                    'num_comments'=> count($comments),
+                    'otherLetters'=>$otherLetters,
+                ));
+
+            } // end if $tpl->is_cached
+
+            require_once('letter_inner_advertisement.php');
+
+            $tpl->assign('contentId', $letterId); // Used on module_comments.tpl
+
+            $tpl->display('letter/letter.tpl', $cacheID);
+
+        }
+        break;
 
     case 'save_letter':
 
@@ -116,27 +118,25 @@ switch($action) {
         $recaptcha_response_field = $request->query->
                 filter('recaptcha_response_field', '', FILTER_SANITIZE_STRING);
 
-
         //Get config vars
         $configRecaptcha = s::get('recaptcha');
 
         // Get reCaptcha validate response
-        $resp = recaptcha_check_answer ($configRecaptcha['private_key'],
-                                        $_SERVER["REMOTE_ADDR"],
-                                        $recaptcha_challenge_field,
-                                        $recaptcha_response_field);
+        $resp = recaptcha_check_answer($configRecaptcha['private_key'],
+                $_SERVER["REMOTE_ADDR"],
+                $recaptcha_challenge_field,
+                $recaptcha_response_field);
 
         // What happens when the CAPTCHA was entered incorrectly
         if (!$resp->is_valid) {
             $msg="reCAPTCHA no fue introducido correctamente. Intentelo de nuevo.";
-            echo ($msg);
-            exit();
+            echo($msg);
         } else {
 
             $lettertext = $request->query->filter('lettertext', '', FILTER_SANITIZE_STRING);
             $security_code = $request->query->filter('security_code', '', FILTER_SANITIZE_STRING);
 
-            if(!empty($lettertext) && !empty($security_code) ) {
+            if (!empty($lettertext) && !empty($security_code) ) {
                 $lettertext = $request->query->filter('lettertext', '', FILTER_SANITIZE_STRING);
                 $security_code = $request->query->filter('security_code', '', FILTER_SANITIZE_STRING);
 
@@ -154,14 +154,13 @@ switch($action) {
                 $letter = new Letter();
                 $msg =  $letter->saveLetter($data);
 
-           } else {
-               $msg = 'Su Carta al Director <strong>no</strong> ha sido guardada.';
-           }
-           echo $msg;
-           exit();
+            } else {
+                $msg = 'Su Carta al Director <strong>no</strong> ha sido guardada.';
+            }
+            echo $msg;
         }
 
     default:
-      //  Application::forward301('index.php');
-    break;
+        //  Application::forward301('index.php');
+        break;
 }

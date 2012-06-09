@@ -1,3 +1,6 @@
+--09-05-2012
+ALTER TABLE `newsletter_archive` ADD `html` LONGTEXT NULL DEFAULT NULL;
+
 --20-03-2012
 ALTER TABLE `books` ADD `file_img` VARCHAR( 255 ) NULL ;
 

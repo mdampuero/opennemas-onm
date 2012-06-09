@@ -18,12 +18,12 @@ class SqlHelper
      * Build "update" query using $fields array to write "set" sentence
      *
      * @see SqlHelper::bindAndUpdate
-     * @param string $table
-     * @param array $fields Array with name of fields to update
-     * @param string $filter String for where sentece
-     * @param object|null $conn ADOConnection instance
+     * @param string      $table
+     * @param array       $fields Array with name of fields to update
+     * @param string      $filter String for where sentece
+     * @param object|null $conn   ADOConnection instance
      */
-    static public function update($table, $fields, $filter, $conn=null)
+    public static function update($table, $fields, $filter, $conn=null)
     {
         $sql = 'UPDATE `%s` SET %s WHERE %s';
 
@@ -59,13 +59,13 @@ class SqlHelper
      * </code>
      *
      * @uses SqlHelper::update
-     * @param string $table
-     * @param array $fields Array with name of fields to update
-     * @param array $data Array keyField => valueField, equals to POST
-     * @param string $filter String for where sentece
-     * @param object|null $conn ADOConnection instance
+     * @param string      $table
+     * @param array       $fields Array with name of fields to update
+     * @param array       $data   Array keyField => valueField, equals to POST
+     * @param string      $filter String for where sentece
+     * @param object|null $conn   ADOConnection instance
      */
-    static public function bindAndUpdate($table, $fields,
+    public static function bindAndUpdate($table, $fields,
                                          $data, $filter, $conn=null)
     {
         $merged = array();
@@ -82,9 +82,9 @@ class SqlHelper
      * Build "insert" query using $fields array to write "values" sentence
      *
      * @see SqlHelper::bindAndUpdate
-     * @param string $table
-     * @param array $fields Array with name of fields to update
-     * @param object|null $conn ADOConnection instance
+     * @param string      $table
+     * @param array       $fields Array with name of fields to update
+     * @param object|null $conn   ADOConnection instance
      */
     public function insert($table, $fields, $conn=null)
     {
@@ -122,10 +122,10 @@ class SqlHelper
      * </code>
      *
      * @uses SqlHelper::insert
-     * @param string $table
-     * @param array $fields Array with name of fields to update
-     * @param array $data Array keyField => valueField, equals to POST
-     * @param object|null $conn ADOConnection instance
+     * @param string      $table
+     * @param array       $fields Array with name of fields to update
+     * @param array       $data   Array keyField => valueField, equals to POST
+     * @param object|null $conn   ADOConnection instance
      */
     public function bindAndInsert($table, $fields, $data, $conn=null)
     {

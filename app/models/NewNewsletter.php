@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
@@ -7,14 +6,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  **/
+
 /**
  * Handles all the CRUD actions over newsletter.
  *
  * @package    Onm
  * @subpackage Model
- *
  **/
-
 class NewNewsletter
 {
 
@@ -27,7 +25,9 @@ class NewNewsletter
     {
         $this->cache = new MethodCacheManager($this, array('ttl' => 300));
 
-        if (!is_null($id)) { return $this->read($id); }
+        if (!is_null($id)) {
+            return $this->read($id);
+        }
     }
 
     /**
@@ -42,14 +42,13 @@ class NewNewsletter
 
         $data['created'] = date("Y-m-d H:i:s");
 
-        $sql = 'INSERT INTO `newsletter_archive` (`data`, `created`) VALUES (?,?)';
+        $sql = 'INSERT INTO `newsletter_archive` (`data`, `html`, `created`)'
+             . ' VALUES (?,?,?)';
 
-        $values = array($data['content'], $data['created']);
+        $values = array($data['content'], $data['html'], $data['created']);
 
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            \Application::logDatabaseError();
 
             return false;
         }
@@ -74,9 +73,7 @@ class NewNewsletter
         $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($id)));
 
         if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
             return;
         }
@@ -92,6 +89,7 @@ class NewNewsletter
         $this->pk_newsletter  = $fields['pk_newsletter'];
         $this->data           = $fields['data'];
         $this->created        = $fields['created'];
+        $this->html           = $fields['html'];
     }
 
     /**
@@ -102,31 +100,28 @@ class NewNewsletter
      * @return void
      **/
 
-     public function search($where = '1=1')
+    public function search($where = '1=1')
     {
         $sql = 'SELECT * FROM `newsletter_archive` WHERE '.$where;
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
             return;
         }
 
         $newsletters = array();
         while (!$rs->EOF) {
-                $obj = new NewNewsletter();
-                $obj->loadData($rs->fields);
+            $obj = new NewNewsletter();
+            $obj->loadData($rs->fields);
 
-                $newsletters[] = $obj;
+            $newsletters[] = $obj;
 
-                $rs->MoveNext();
-            }
+            $rs->MoveNext();
+        }
 
         return $newsletters;
     }
-
 
 }

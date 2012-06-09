@@ -25,7 +25,7 @@ require_once('./albums_events.php');
 
 $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 
-$page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT);
+$page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT, array('options' => array('default' => '1')));
 $tpl->assign('page', $page);
 /******************* GESTION CATEGORIAS  *****************************/
 $contentType = Content::getIDContentType('album');
@@ -61,10 +61,11 @@ switch($action) {
         $configurations = s::get('album_settings');
 
         $items_page = s::get('items_per_page') ?: 20;
+
         if (empty($page)) {
             $limit= "LIMIT ".($items_page+1);
         } else {
-            $limit= "LIMIT ".($page-1) * $items_page .', '.$items_page;
+            $limit= "LIMIT ".($page-1) * $items_page .', '.($items_page+1);
         }
 
         $cm = new ContentManager();
@@ -107,6 +108,10 @@ switch($action) {
             'total' => count($albums),
             'url'   => $_SERVER['SCRIPT_NAME'].'?action=list&category='.$category
         ));
+
+        if ( count($albums) > $items_page ) {
+            array_pop($albums);
+        }
 
         $tpl->assign(array(
             'pagination' => $pagination,
@@ -210,7 +215,7 @@ switch($action) {
         $album = new Album($id);
         $relations=array();
         $msg ='';
-        $relations = RelatedContent::get_content_relations($id);
+        $relations = RelatedContent::getContentRelations($id);
 
         if (!empty($relations)) {
             $msg = sprintf(_("<br>The album has some relations"));
@@ -236,7 +241,7 @@ switch($action) {
             $album = new Album($id);
             //Delete relations
             $rel= new RelatedContent();
-            $rel->delete_all($id);
+            $rel->deleteAll($id);
             $album->delete( $id ,$_SESSION['userid'] );
         } else {
             m::add(_('You must give an id for delete the album.'), m::ERROR);
@@ -332,7 +337,7 @@ switch($action) {
                     foreach ($fields as $i ) {
                         $album = new Album($i);
                         $relations=array();
-                        $relations = RelatedContent::get_content_relations( $i );
+                        $relations = RelatedContent::getContentRelations($i);
 
                         if(!empty($relations)){
                             $alert =1;
@@ -400,7 +405,7 @@ switch($action) {
                     ));
 
         $html_out = $tpl->fetch("common/content_provider/_container-content-list.tpl");
-        Application::ajax_out($html_out);
+        Application::ajaxOut($html_out);
 
     break;
 

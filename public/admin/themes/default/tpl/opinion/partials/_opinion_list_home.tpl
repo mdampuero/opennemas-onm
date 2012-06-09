@@ -2,14 +2,15 @@
     <thead>
         <tr>
             <th style="width:30px;"><input type="checkbox" id="toggleallcheckbox"></th>
-            <th style="width:160px;">{t}Author{/t}</th>
-            <th>{t}Title{/t}</th>
+            <th style="width:200px;">{t}Author{/t}</th>
+            <th style="width:330px;">{t}Title{/t}</th>
             <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
-            <th class="center" style="width:80px;">{t}Votes{/t}</th>
+            <th class="center" style="width:90px;">{t}Votes{/t}</th>
             <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}comments.png" alt="{t}Comments{/t}" title="{t}Comments{/t}"></th>
-            <th class="center" style="width:100px;">Fecha</th>
+            <th class="center" style="width:130px;">Fecha</th>
             <th class="center" style="width:30px;">Home</th>
-            <th class="center" style="width:70px;">{t}Actions{/t}</th>
+            <th class="center" style="width:30px;">{t}Favorite{/t}</th>
+            <th class="center" style="width:72px;">{t}Actions{/t}</th>
         </tr>
     </thead>
 </table>
@@ -30,33 +31,36 @@
             {section name=c loop=$director}
                 <table id="{$director[c]->id}" style="width:100%"  id="{$director[c]->id}" class="dir_sort">
                     <tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;" >
-                        <td style="width:35px;">
+                        <td style="width:15px;">
                             <input type="checkbox" class="minput"  id="selected_{$cont}" name="selected_fld[]" value="{$director[c]->id}"  style="cursor:pointer;">
                         </td>
-                        <td onClick="javascript:document.getElementById('selected_{$cont}').click();" style="width:165px;">
+                        <td onClick="javascript:document.getElementById('selected_{$cont}').click();" style="width:160px;">
                             {t}Director{/t}
                         </td>
                         <td onClick="javascript:document.getElementById('selected_{$cont}').click();" >
                             {$director[c]->title|clearslash}
                         </td>
-                        <td class="center" style="width:80px;">
+                        <td class="center" style="width:40px;">
                             {$director[c]->views}
                         </td>
-                        <td class="center" style="width:80px;">
+                        <td class="center" style="width:90px;">
                             {$director[c]->ratings}
                         </td>
-                        <td class="center" style="width:70px;">
+                        <td class="center" style="width:40px;">
                             {$director[c]->comments}
                         </td>
-                        <td class="center" style="width:78px;">
+                        <td class="center" style="width:130px;">
                             {$director[c]->created}
                         </td>
-                        <td class="center" style="width:55px;">
+                        <td class="center" style="width:30px;">
                             {if $director[c]->in_home == 1}
                                 <a href="?id={$director[c]->id}&amp;action=inhome_status&amp;status=0&amp;category={$category}" class="no_home" title="Sacar de portada" ></a>
                             {else}
                                 <a href="?id={$director[0]->id}&amp;action=inhome_status&amp;status=1&amp;category={$category}" class="go_home" title="Meter en portada" ></a>
                             {/if}
+                        </td>
+                        <td class="center" style="width:30px;">
+
                         </td>
                         <td class="center" style="width:72px;">
                             <ul class="action-buttons">
@@ -143,6 +147,9 @@
                                     {else}
                                             <a href="?id={$editorial[c]->id}&amp;action=inhome_status&amp;status=1&amp;category={$category}" class="go_home" title="Meter en portada" ></a>
                                     {/if}
+                                </td>
+                                <td class="center" style="width:30px;">
+
                                 </td>
                                 <td class="center" style="width:72px;">
                                     <ul class="action-buttons">
@@ -245,6 +252,19 @@
                                             &nbsp;
                                         </a>
                                     {/if}
+                                {/acl}
+                            </td>
+                            <td class="center" style="width:30px;">
+                                {acl isAllowed="OPINION_ADMIN"}
+                                {if $opinions[c]->favorite == 1}
+                                <a href="?id={$opinions[c]->id}&amp;action=changeFavorite&amp;status=0&amp;category={$category|default:""}&amp;page={$paginacion->_currentPage|default:""}" class="favourite_on" title="{t}Favorite{/t}">
+                                    &nbsp;
+                                </a>
+                                {else}
+                                <a href="?id={$opinions[c]->id}&amp;action=changeFavorite&amp;status=1&amp;category={$category|default:""}&amp;page={$paginacion->_currentPage|default:""}" class="favourite_off" title="{t}NoFavorite{/t}">
+                                    &nbsp;
+                                </a>
+                                {/if}
                                 {/acl}
                             </td>
                             <td class="center" style="width:72px;">

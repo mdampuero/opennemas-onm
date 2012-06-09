@@ -15,7 +15,7 @@ require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
 */
 $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 
-if(isset($_REQUEST['action']) ) {
+if (isset($_REQUEST['action']) ) {
     switch($_REQUEST['action']) {
         case 'get_tags':
             //Las noticias tienen categorias incluido el nombre como tag.
@@ -32,7 +32,7 @@ if(isset($_REQUEST['action']) ) {
 
             $tags = $cat." ".$_GET['title']." ".$_GET['tags'];
             $tags = StringUtils::get_tags($tags);
-            Application::ajax_out($tags);
+            Application::ajaxOut($tags);
 
             break;
 
@@ -68,16 +68,15 @@ if(isset($_REQUEST['action']) ) {
             $tpl->assign('category', $_GET['category']);
             $tpl->assign('home', $_GET['home']);
             $html_out = $tpl->fetch('menu_subcategorys.tpl');
-            Application::ajax_out($html_out);
+            Application::ajaxOut($html_out);
 
             break;
     }
 }
 
-
-/////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////// Contenidos Relacionados ///////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+////////////////////////////////// Contenidos Relacionados ///////////////
+//////////////////////////////////////////////////////////////////////////
 
 //Print del resultado de noticias relacionadas para ajax
 	function print_search_related($id, $search){
@@ -86,24 +85,25 @@ if(isset($_REQUEST['action']) ) {
 			$relationes=array();
 			$intrelationes=array();
 			$rel= new RelatedContent();
-  		 	$relationes = $rel->get_relations( $id );//de portada
-	        $intrelationes = $rel->get_relations_int( $id );//de interor
+  		 	$relationes = $rel->getRelations( $id );//de portada
+	        $intrelationes = $rel->getRelationsForInner($id);//de interor
 
 			$html_out = "  ";
 			if($search){
 				$html_out .= "<br/><table class='adminlist '>";
 
-				$html_out .= '	<thead>
-									<th>'._('Title').'</th>
-									<th>'._('Category').'</th>
-									<th style="text-align:center">'._('Published').'</th>
-									<th style="text-align:center">'._('Show in frontpage').'</th>
-									<th style="text-align:center">'._('Show in inner article').'</th>
-								</thead>';
+				$html_out .=
+                    '	<thead>
+						<th>'._('Title').'</th>
+						<th>'._('Category').'</th>
+						<th style="text-align:center">'._('Published').'</th>
+						<th style="text-align:center">'._('Show in frontpage').'</th>
+						<th style="text-align:center">'._('Show in inner article').'</th>
+					</thead>';
 
-				$i=0;
-				foreach($search as $art) {
-					if($art['pk_content'] != $id){
+				$i = 0;
+				foreach ($search as $art) {
+					if ($art['pk_content'] != $id){
 						$title=$art['title'];
 						$title = preg_replace('/\\\/', '', $art['title']); //Eliminar comillas
 					    if($art['available'] == 1) {
@@ -152,8 +152,8 @@ if(isset($_REQUEST['action']) ) {
 			$intrelationes=array();
 			if(($id) && ($id != 0)){
 				$rel= new RelatedContent();
-	  		 	$relationes = $rel->get_relations( $id );//de portada
-		        $intrelationes = $rel->get_relations_int( $_REQUEST['id'] );//de interior
+	  		 	$relationes = $rel->getRelations( $id );//de portada
+		        $intrelationes = $rel->getRelationsForInner( $_REQUEST['id'] );//de interior
 			}
 
 			$html_out = "<table class='adminlist '>";

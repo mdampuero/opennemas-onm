@@ -35,9 +35,9 @@ $page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT, array('options' => ar
 /******************* GESTION CATEGORIAS  *****************************/
 $contentType = Content::getIDContentType('attachment');
 
-$category = filter_input(INPUT_GET,'category');
-if(empty($category)) {
-    $category = filter_input(INPUT_POST,'category',FILTER_VALIDATE_INT, array('options' => array('default' => 0 )));
+$category = filter_input(INPUT_GET,'category',FILTER_SANITIZE_STRING);
+if (empty($category)) {
+    $category = filter_input(INPUT_POST,'category',FILTER_SANITIZE_STRING, array('options' => array('default' => '0' )));
 }
 
 $ccm = ContentCategoryManager::get_instance();
@@ -46,6 +46,7 @@ list($parentCategories, $subcat, $datos_cat) = $ccm->getArraysMenu($category, $c
 $tpl->assign('subcat', $subcat);
 $tpl->assign('allcategorys', $parentCategories);
 $tpl->assign('datos_cat', $datos_cat);
+$tpl->assign('category', $category);
 
 
 $action = filter_input( INPUT_POST, 'action' , FILTER_SANITIZE_STRING );
@@ -56,7 +57,7 @@ if (!isset($action)) {
 
 switch($action) {
     case 'list':
-        if($category == 0) {
+        if($category == '0') {
             $nameCategory = 'GLOBAL';
             $cm = new ContentManager();
             $total_num_photos=0;
@@ -67,7 +68,7 @@ switch($action) {
             $fullcat = $ccm->order_by_posmenu($ccm->categories);
 
             foreach($parentCategories as $k => $v) {
-                $num_photos[$k]= $ccm->count_content_by_type($v->pk_content_category, $contentType);
+                $num_photos[$k]= $ccm->countContentByType($v->pk_content_category, $contentType);
                 $total_num_photos += $num_photos[$k];
                 $files[$v->pk_content_category] = $cm->find_all('Attachment',
                                          'fk_content_type = 3 AND category = '.$v->pk_content_category ,
@@ -75,7 +76,7 @@ switch($action) {
                 if(!empty($fullcat)){
                     foreach($fullcat as $child) {
                         if($v->pk_content_category == $child->fk_content_category) {
-                            $num_sub_photos[$k][$child->pk_content_category] = $ccm->count_content_by_type($child->pk_content_category, 3);
+                            $num_sub_photos[$k][$child->pk_content_category] = $ccm->countContentByType($child->pk_content_category, 3);
                             $total_num_photos += $num_sub_photos[$k][$child->pk_content_category];
                             $sub_files[$child->pk_content_category][] = $cm->find_all('Attachment',
                                              'fk_content_type = 3 AND category = '.$child->pk_content_category ,
@@ -134,7 +135,27 @@ switch($action) {
             $tpl->assign('categorys', $parentCategories);
             $tpl->assign('subcategorys', $subcat);
 
+        } elseif ($category == 'widget') {
+            $cm = new ContentManager();
+
+            $attaches = $cm->find_all('Attachment', 'in_home =1',
+                                'ORDER BY created DESC');
+            $status = array();
+            $i=0;
+            if(!empty($attaches)) {
+                foreach ($attaches as &$attach) {
+                    $status[$i]='1'; //Si existe
+                    $attach->category_name = $ccm->get_name($attach->category);
+                    $attach->category_title = $ccm->get_title($attach->category_name);
+                    $i++;
+                }
+
+            }
+            $tpl->assign('status', $status);
+            $tpl->assign('attaches', $attaches);
+
         } else {
+
             $cm = new ContentManager();
 
             list($attaches, $pager)= $cm->find_pages('Attachment', 'fk_content_type=3 ',
@@ -145,7 +166,7 @@ switch($action) {
 
             $status = array();
             if($attaches) {
-                foreach($attaches as $archivo) {
+                foreach($attaches as &$archivo) {
                       $dir_date =preg_replace("/\-/", '/', substr($archivo->created, 0, ITEMS_PAGE));
                       $ruta = MEDIA_PATH.'/'.FILE_DIR.'/'.$archivo->path ;
 
@@ -193,7 +214,7 @@ switch($action) {
 
         $relations=array();
         $msg ='';
-        $relations = RelatedContent::get_content_relations($id);
+        $relations = RelatedContent::getContentRelations($id);
 
         if (!empty($relations)) {
             $msg = sprintf(_("<br>The album has some relations"));
@@ -218,8 +239,8 @@ switch($action) {
             $att = new Attachment($id);
             //Delete relations
             $rel= new RelatedContent();
-            $rel->delete_all($id);
-            $att->delete( $id ,$_SESSION['userid'] );
+            $rel->deleteAll($id);
+            $att->delete($id ,$_SESSION['userid']);
         }
 
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$att->category.'&page='.$page);
@@ -241,6 +262,40 @@ switch($action) {
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$att->category.'&page='.$page);
 
     break;
+
+    case 'change_favorite':
+
+        Acl::checkOrForward('FILE_AVAILABLE');
+
+        $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
+        $status = filter_input(INPUT_GET,'status',FILTER_VALIDATE_INT,
+                                array('options' => array('default'=> 0)));
+        $file = new Attachment($id);
+        if ($file->available == 1) {
+            $file->set_favorite($status);
+        } else {
+            m::add(_("This file is not published so you can't define it as favorite.") );
+        }
+        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category);
+
+        break;
+
+    case 'change_inHome':
+
+        Acl::checkOrForward('FILE_AVAILABLE');
+
+        $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
+        $status = filter_input(INPUT_GET,'status',FILTER_VALIDATE_INT,
+                                array('options' => array('default'=> 0)));
+        $file = new Attachment($id);
+        if ($file->available == 1) {
+            $file->set_inhome($status,$_SESSION['userid']);
+        } else {
+            m::add(_("This file is not published so you can't define it as widget home content.") );
+        }
+        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category);
+
+        break;
 
     case 'batchFrontpage':
 
@@ -276,7 +331,7 @@ switch($action) {
                     $opinion = new Opinion($i);
                     $rel = new RelatedContent();
                     $relationes = array();
-                    $relationes = $rel->get_content_relations( $i );//de portada
+                    $relationes = $rel->getContentRelations($i);//de portada
 
                     if(!empty($relationes)) {
                         $alert = 'ok';
@@ -381,7 +436,7 @@ switch($action) {
                     ));
 
         $html_out = $tpl->fetch("common/content_provider/_container-content-list.tpl");
-        Application::ajax_out($html_out);
+        Application::ajaxOut($html_out);
     break;
 
     default: {

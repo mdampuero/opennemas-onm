@@ -1,25 +1,77 @@
+#!/usr/bin/php5
 <?php
-
 /**
  * Start up and setup the app
 */
-require_once('../bootstrap.php');
+
+//TODO: That cron given this vars.
+//$_SERVER['SERVER_NAME'] ='onm-cronicas.local';
+
+$_SERVER['HTTP_HOST'] ='cronicasdelaemigracion.com';
+
+//$_SERVER['SERVER_NAME'] ='cronicasdelaemigracion.com';
+$_SERVER['REQUEST_URI'] ='/';
+
+require __DIR__.'/../bootstrap.php';
 
 /**
  * Setup view
 */
-$tpl = new Template(TEMPLATE_USER);
-$tpl->setConfig('frontpages');
-$cache_id = $tpl->generateCacheId($category_name, $subcategory_name, $cache_page);
+$tpl           = new Template(TEMPLATE_USER);
+//$tpl->setConfig('newslibrary');
 
-if(($tpl->caching == 0)
-   || !$tpl->isCached('frontpage/frontpage.tpl', $cache_id))
-{
-//generate cache
+$urlBase = SITE_URL."seccion/";
 
-    $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
-    $tplManager->fetch(SITE_URL . 'seccion/' . $this->category_name);
+$menuItems     = Menu::renderMenu('frontpage');
+$date          =  new DateTime();
+$directoryDate = $date->format("/Y/m/d/");
+$basePath      = MEDIA_PATH.'/library'.$directoryDate;
+$curly         = array();
 
-} else{
-//save in a file
+if ( !file_exists($basePath) ) {
+    mkdir($basePath, 0777, true);
 }
+
+// multi handle
+$mh = curl_multi_init();
+
+foreach ($menuItems->items as $id =>$item) {
+    $category_name = $item->link;
+
+    if ( !empty($category_name) ) {
+
+        $curly[$category_name] = curl_init();
+
+        $url = $urlBase. $category_name.'/';
+        curl_setopt($curly[$category_name], CURLOPT_URL,            $url);
+        curl_setopt($curly[$category_name], CURLOPT_HEADER,         0);
+        curl_setopt($curly[$category_name], CURLOPT_RETURNTRANSFER, 1);
+
+        curl_multi_add_handle($mh, $curly[$category_name]);
+    }
+}
+
+  // execute the handles
+$running = null;
+do {
+
+    curl_multi_exec($mh, $running);
+
+} while ($running > 0);
+
+  // get content and remove handles
+foreach ($curly as $category_name => $c) {
+    $htmlOut = curl_multi_getcontent($c);
+    $newFile = $basePath.$category_name.".html";
+
+    $result  = file_put_contents($newFile, $htmlOut);
+
+    curl_multi_remove_handle($mh, $c);
+}
+
+  // all done
+curl_multi_close($mh);
+
+
+
+

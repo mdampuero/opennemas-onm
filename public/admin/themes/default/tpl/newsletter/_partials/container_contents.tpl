@@ -1,21 +1,20 @@
 
  <div id="content-provider" class="related-content-provider clearfix" >
     <ul>
-        {is_module_activated name="ADVANCED_SEARCH"}
+
+        {is_module_activated name="ARTICLE_MANAGER"}
+
+        <li>
+            <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/article.php?action=provider-frontpage&amp;category={$category}">{t}Articles in Frontpage{/t}</a>
+        </li>
+        <li>
+            <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/article.php?action=related-provider-category&amp;category={$category}">{t}Articles{/t}</a>
+        </li>
+        {/is_module_activated}
+         {is_module_activated name="ADVANCED_SEARCH"}
         {*<li>
             <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/search_advanced/search_advanced.php?action=content-provider&amp;">{t}Search{/t}</a>
         </li> *}
-        {/is_module_activated}
-
-        {is_module_activated name="ARTICLE_MANAGER"}
-        {*
-        <li>
-            <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/article.php?action=related-provider-suggested">{t}Suggested articles{/t}</a>
-        </li> *}
-        <li>
-            <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/article.php?action=related-provider-category&amp;category={$category}">{t}Other articles{/t}</a>
-        </li>
-
         {/is_module_activated}
 
         {is_module_activated name="OPINION_MANAGER"}
@@ -23,11 +22,11 @@
             <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/opinion/opinion.php?action=related-provider&amp;category={$category}">{t}Opinions{/t}</a>
         </li>
         {/is_module_activated}
-        {is_module_activated name="VIDEO_MANAGER"}
+        {*is_module_activated name="VIDEO_MANAGER"}
         <li>
             <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/video/video.php?action=related-provider&amp;category={$category}">{t}Videos{/t}</a>
         </li>
-        {/is_module_activated}
+        {/is_module_activated*}
         {is_module_activated name="ALBUM_MANAGER"}
         <li>
             <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/album/album.php?action=related-provider&amp;category={$category}">{t}Albums{/t}</a>

@@ -55,7 +55,7 @@ class SessionManager implements ArrayAccess
      * @return SessionManager The instance for SessionManager
      *
      **/
-    static function getInstance($sessionSavePath)
+    public static function getInstance($sessionSavePath)
     {
         if (!isset($sessionSavePath)) {
             $sessionSavePath = session_save_path();
@@ -63,6 +63,7 @@ class SessionManager implements ArrayAccess
         if ( is_null(self::$_singleton)) {
             self::$_singleton = new SessionManager($sessionSavePath);
         }
+
         return( self::$_singleton );
     }
 
@@ -105,7 +106,7 @@ class SessionManager implements ArrayAccess
     /**
      * Magic method for setting a key-value in the session variable.
      *
-     * @param string $name the name of the variable.
+     * @param string $name  the name of the variable.
      * @param string $value the value for the variable.
      **/
     public function __set($name, $value)
@@ -116,9 +117,9 @@ class SessionManager implements ArrayAccess
     public function __get($name)
     {
         if (!isset($_SESSION[$name])) return null;
+
         return($_SESSION[$name]);
     }
-
 
     /**
     * Defined by ArrayAccess interface
@@ -127,7 +128,7 @@ class SessionManager implements ArrayAccess
     * @param mixed value
     * @return void
     */
-    function offsetSet($key, $value)
+    public function offsetSet($key, $value)
     {
         $_SESSION[$key] = $value;
     }
@@ -138,7 +139,7 @@ class SessionManager implements ArrayAccess
     * @param mixed key (string or integer)
     * @return mixed value
     */
-    function offsetGet($key)
+    public function offsetGet($key)
     {
         return($_SESSION[$key]);
     }
@@ -149,7 +150,7 @@ class SessionManager implements ArrayAccess
     * @param mixed key (string or integer)
     * @return void
     */
-    function offsetUnset($key)
+    public function offsetUnset($key)
     {
         unset($_SESSION[$key]);
     }
@@ -160,12 +161,10 @@ class SessionManager implements ArrayAccess
     * @param mixed key (string or integer)
     * @return boolean
     */
-    function offsetExists($offset)
+    public function offsetExists($key)
     {
         return isset($_SESSION[$key]);
     }
-
-
 
     /* Métodos para el control de la sesión y los usuarios activos */
     /**
@@ -181,8 +180,8 @@ class SessionManager implements ArrayAccess
         if (file_exists($sessionDirectory) && is_dir($sessionDirectory)) {
 
             $sessionFiles = glob($sessionDirectory.DS."sess*");
-            foreach ($sessionFiles as $session) {
-                $contents = file_get_contents($session);
+            foreach ($sessionFiles as $file) {
+                $contents = file_get_contents($file);
                 if (!empty($contents)) {
                     $session =
                         SessionManager::unserializeSession($contents);
@@ -203,7 +202,7 @@ class SessionManager implements ArrayAccess
             }
         }
 
-        return( $sessions );
+        return $sessions;
     }
 
     /**
@@ -211,7 +210,7 @@ class SessionManager implements ArrayAccess
      *
      * @param int $userid the user id.
      **/
-    public function purgeSession($userid)
+    public function purgeSession($userId)
     {
         $sessionDirectory = $this->sessionDirectory;
 
@@ -222,7 +221,7 @@ class SessionManager implements ArrayAccess
                 if (!empty($contents)) {
                     $sessionContents = SessionManager::unserializeSession($contents);
                     if (isset($sessionContents['userid'])
-                        && ($sessionContents['userid'] == $userid)
+                        && ($sessionContents['userid'] == $userId)
                     ) {
                         @unlink($session);
                     }
@@ -256,6 +255,7 @@ class SessionManager implements ArrayAccess
             $result[$vars[$i++]]=@unserialize($vars[$i]);
             $i++;
         }
+
         return $result;
     }
 

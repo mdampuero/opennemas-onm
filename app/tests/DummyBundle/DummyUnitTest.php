@@ -38,9 +38,9 @@ class DummyUnitTest extends \PHPUnit_Framework_TestCase
      */
     public function testFranisHandsome()
     {
-        $article = \Article::isInTime2('-1 day');
-        $article = new \Article('');
-        $this->assertTrue(true, 'Fran is handsome');
+        // $article = \Article::isInTime2('-1 day');
+        // $article = new \Article('');
+        // $this->assertTrue(true, 'Fran is handsome');
     }
 
     /**

@@ -41,8 +41,8 @@ class Acl
      * Shortcut to check privilege and forward
      *
      * @see Privileges_check::CheckPrivileges()
-     * @param string $rule
-     * @param string $module
+     * @param  string  $rule
+     * @param  string  $module
      * @return boolean
      **/
     public static function checkOrForward($rule, $module=null)
@@ -52,9 +52,10 @@ class Acl
         }
 
         if ( !PrivilegesCheck::CheckPrivileges($rule)) {
-            m::add( _("Sorry, you don't have enought privileges") );
+            m::add(_("Sorry, you don't have enought privileges"));
             Application::forward('/admin/');
         }
+
         return true;
     }
 
@@ -99,7 +100,7 @@ class Acl
      * Long explanation
      *
      * @see Privileges_check::CheckAccessCategories()
-     * @param string $category
+     * @param  string  $category
      * @return boolean
     */
     public static function _C($category)
@@ -114,7 +115,7 @@ class Acl
             $message->push();
         }
 
-        m::add( _("Sorry, you don't have enought privileges") );
+        m::add(_("Sorry, you don't have enought privileges") );
         Application::forward('/admin/');
     }
 }

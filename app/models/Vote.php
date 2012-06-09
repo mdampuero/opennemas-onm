@@ -17,11 +17,11 @@
 class Vote
 {
 
-    var $pk_vote = null;
-    var $value_pos = null;
-    var $value_neg = null;
-    var $karma = null;
-    var $ips_count_vote = null;
+    public $pk_vote        = null;
+    public $value_pos      = null;
+    public $value_neg      = null;
+    public $karma          = null;
+    public $ips_count_vote = null;
 
     /**
      * _messages to use in links and image
@@ -52,13 +52,13 @@ class Vote
                                    `value_neg`, `karma`, `ips_count_vote`)
                 VALUES (?,?,?,?,?)";
 
-        if ($vote == '2') { // En contra
-
+        // En contra
+        if ($vote == '2') {
             $negValue = 1;
             $karma = 100 - 1;
             $posValue = 0;
-        } else { // A favor
-
+        } else {
+            // A favor
             $posValue = 1;
             $karma = 100 + 1;
             $negValue = 0;
@@ -72,8 +72,10 @@ class Vote
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return (false);
         }
+
         return (true);
     }
 
@@ -96,6 +98,7 @@ class Vote
                 $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
                 $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
                 return (false);
             }
             $this->pk_vote = $votePK;
@@ -111,6 +114,7 @@ class Vote
             //       $this->karma = $rs->fields['karma'];
             $this->ips_count_vote = unserialize($rs->fields['ips_count_vote']);
         }
+
         return (true);
     }
 
@@ -126,16 +130,18 @@ class Vote
     {
         $this->ips_count_vote = $this->add_count($this->ips_count_vote, $ip);
 
-        if (!$this->ips_count_vote) return false;
+        if (!$this->ips_count_vote) {
+            return false;
+        }
 
         if ($vote == '2') {
             $value = ++$this->value_neg;
             $sql = "UPDATE votes SET  `value_neg`=?,  `ips_count_vote`=?
-            WHERE pk_vote=" . $this->pk_vote;
+                    WHERE pk_vote=" . $this->pk_vote;
         } else {
             $value = ++$this->value_pos;
             $sql = "UPDATE votes SET  `value_pos`=?,  `ips_count_vote`=?
-            WHERE pk_vote=" . $this->pk_vote;
+                    WHERE pk_vote=" . $this->pk_vote;
         }
         $values = array($value, serialize($this->ips_count_vote));
 
@@ -143,15 +149,17 @@ class Vote
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return (false);
         }
 
         //creamos la cookie
-       Application::setCookieSecure(
+        Application::setCookieSecure(
             "vote" . $this->pk_vote,
             'true',
             time() + 60 * 60 * 24 * 30
         );
+
         return true;
     }
 
@@ -160,23 +168,23 @@ class Vote
      **/
     public function render($page, $type, $ajax = 0)
     {
-
-
-        if (isset($_COOKIE["vote" . $this->pk_vote])) $type = "result";
+        if (isset($_COOKIE["vote" . $this->pk_vote])) {
+            $type = "result";
+        }
         $outputHTML = "";
         $results = "";
 
         if ($type == "vote") {
 
             // Render links
-            for ($i = 1;$i <= 2;$i++) {
+            for ($i = 1; $i <= 2; $i++) {
                 $results.= $this->renderLink($i, $this->pk_vote, $value);
             }
             $outputHTML.= "  <div class=\"CVotos\">";
             $outputHTML.= $results;
             $outputHTML.= "  </div>";
         } elseif ($type == "result") {
-            for ($i = 1;$i <= 2;$i++) {
+            for ($i = 1; $i <= 2; $i++) {
                 $results.= $this->renderImg($i);
             }
             $outputHTML.= "  <div class=\"CVotos\">";
@@ -193,6 +201,7 @@ class Vote
                         . $this->pk_vote . "\">" . $outputHTML;
             $outputHTML.= "</div>";
         }
+
         return $outputHTML;
     }
 
@@ -208,15 +217,17 @@ class Vote
         //Se busca si existe algún voto desde la ip
         $countKIP = array_search($ip, $ips);
 
-        if ($countKIP === FALSE) {
-
+        if ($countKIP === false) {
             //No se ha votado desde esa ip
             $countIPs[] = array('ip' => $ip, 'count' => 1);
         } else {
+            if ($countIPs[$countKIP]['count'] == 50) {
 
-            if ($countIPs[$countKIP]['count'] == 50) return FALSE;
+                return false;
+            }
             $countIPs[$countKIP]['count']++;
         }
+
         return $countIPs;
     }
 
@@ -237,8 +248,10 @@ class Vote
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+
             return;
         }
+
         return $rs->fields['karma'];
     }
 
@@ -253,7 +266,13 @@ class Vote
 
         $imgPath = TEMPLATE_USER_URL . "images/utilities/";
         $imageTpl = '<img src="%s%s.png" style="vertical-align:middle;" alt="%s" title="%s" /> ( %d ) ';
-        return sprintf($imageTpl, $imgPath, ($i % 2 == 0) ? "vote-up" : "vote-down", $this->_messages[$i], $this->_messages[$i], ($i % 2 == 1) ? $this->value_pos : $this->value_neg);
+
+        return sprintf($imageTpl,
+            $imgPath, ($i % 2 == 0) ?  "vote-up" : "vote-down",
+            $this->_messages[$i],
+            $this->_messages[$i],
+            ($i % 2 == 1) ? $this->value_pos : $this->value_neg
+        );
     }
 
     /**
@@ -278,6 +297,7 @@ class Vote
                      src="{$imgPath}%s.png"
                      alt="%s" /> </a>   ( %d )
 LINKTPLDOC;
+
         return sprintf(
             $linkTpl,
             $_SERVER['REMOTE_ADDR'],

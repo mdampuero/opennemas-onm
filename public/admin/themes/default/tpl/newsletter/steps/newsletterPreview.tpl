@@ -6,23 +6,22 @@
 {/block}
 
 {block name="footer-js" append}
-{script_tag src="/jquery/jquery.cookie.js"}
-{script_tag src="/jquery-onm/newsletter/jquery.newsletterPreview.js"}
 
+{script_tag src="/jquery/jquery.cookie.js"}
+{script_tag src="/jquery-onm/jquery.newsletter.js"}
 {script_tag src="/tiny_mce/opennemas-config.js"}
 <script type="text/javascript">
 //TinyMce scripts
 tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
 OpenNeMas.tinyMceConfig.advanced.elements = "htmlContent";
 </script>
-
 {/block}
 
 {block name="content"}
 
 <form action="#" method="post" name="newsletterForm" id="newsletterForm" {$formAttrs}>
 
-<div id="buttons" class="top-action-bar clearfix">
+<div id="buttons-preview" class="top-action-bar clearfix">
 	<div class="wrapper-content">
 		<div class="title">
                 <h2>{t}Newsletter management{/t}</h2>
@@ -48,6 +47,11 @@ OpenNeMas.tinyMceConfig.advanced.elements = "htmlContent";
 					{t}Edit{/t}
 				</a>
 			</li>
+			<li id="li-save-button" style="display:none;">
+                <a id="save-button" href="#" class="admin_add" title="Guardar Positions" alt="Guardar Cambios">
+                    <img border="0" src="{$params.IMAGE_DIR}save.png" title="{t}Save changes{/t}" alt="{t}Save changes{/t}" ><br />{t}Save changes{/t}
+                </a>
+            </li>
 
 
 		</ul>
@@ -68,7 +72,7 @@ OpenNeMas.tinyMceConfig.advanced.elements = "htmlContent";
 						<p>
 							<label>{t}Email subject{/t}:</label>
 							<input type="text" name="subject" id="subject" style="width:80%"
-								   value="[{setting name="site_name"}] Boletín de noticias {$smarty.now|date_format:"%d/%m/%Y"}" />
+								   value="{setting name="site_name"} [{$smarty.now|date_format:"%d/%m/%Y"}]" />
 						</p>
 				</div>
 			</td>
@@ -95,4 +99,7 @@ OpenNeMas.tinyMceConfig.advanced.elements = "htmlContent";
 	</div>
 
 </form>
+
+{include file="newsletter/modals/_back_contents_accept.tpl"}
+
 {/block}

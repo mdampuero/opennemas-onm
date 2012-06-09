@@ -14,6 +14,11 @@
             remember_save_positions: "{t}Please, remember save positions after finish.{/t}",
             error_tab_content_provider: "{t}Couldn't load this tab. We'll try to fix this as soon as possible.{/t}"
         }
+        var content_states = {
+            {foreach from=$frontpage_articles item=content}
+            {$content->id}: {$content->getQuickInfo()|json_encode},
+            {/foreach}
+        }
     </script>
     {script_tag src="/jquery-onm/jquery.frontpagemanager.js"}
 {/block}
@@ -24,31 +29,49 @@
         <div class="wrapper-content">
             <div class="title"><h2>{t}Frontpage Manager{/t} :: {if $category eq 0}{t}HOME{/t}{else}{$datos_cat[0]->title}{/if}</h2></div>
             <ul class="old-button">
+                <li class="batch-actions">
+                    <a href="#">
+                        <img src="{$params.IMAGE_DIR}/select.png" title="" alt="" />
+                        <br/>{t}Batch actions{/t}
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="#" id="button_multiple_delete">
+                                {t}Remove{/t}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" id="button_multiple_arquive">
+                                {t}Arquive{/t}
+                            </a>
+                        </li>
+                        {if $category_id != 0}
+                        <li>
+                            <a href="#" id="button_multiple_suggest">
+                                {t}Toggle suggest{/t}
+                            </a>
+                        </li>
+                        {/if}
+                    </ul>
 
-                {if $category!='home'}
+                </li>
+
+                <li class="separator batch-actions"></li>
                 <li>
-                    <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'm_inhome_status', 2);" name="submit_mult" value="Frontpage" title="Sugerir Home">
-                        <img border="0" src="{$params.IMAGE_DIR}gosuggest50.png" title="{t}Suggest to home{/t}" alt="{t}Suggest to home{/t}" ><br />{t}Suggest to home{/t}
+                    <a href="/admin/article.php?action=new&amp;category={$category}" class="admin_add" title="{t}New article{/t}">
+                        <img src="{$params.IMAGE_DIR}/article_add.png" title="" alt="" />
+                        <br />{t}New article{/t}
                     </a>
                 </li>
-                {/if}
-                <!-- <li>
-                    <a title="More actions" id="button_moreactions">
-                        <img border="0" src="{$params.IMAGE_DIR}home_no50.png" title="{t}No home{/t}" alt="More actions" ><br />{t}More actions{/t}
-                    </a>
-                </li>
-                <li class="separator"></li> -->
+
+                <li class="separator"></li>
+
                 <li>
                      <a href="#" data-category="{$category}" id="button_clearcache">
                          <img border="0" src="{$params.IMAGE_DIR}clearcache.png" title="{t}Clean cache{/t}" alt="" /><br />{t}Clean cache{/t}
                      </a>
                 </li>
-                <li style="display:none">
-                    <button type="button" style="cursor:pointer; background-color: #e1e3e5; border: 0px; width: 95px;" onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
-                        <img id="select_button" class="icon" status="0" src="{$params.IMAGE_DIR}select_button.png" title="{t}Select all{/t}" alt="{t}Select all{/t}"  status="0">
-                    </button>
-                </li>
-                <li class="separator"></li>
+
                 <li>
                     <a href="#" id="button_previewfrontpage" title="{t}Preview frontpage with actual content positions{/t}">
                         <img border="0" src="{$params.IMAGE_DIR}preview.png" title="{t}Preview{/t}" alt="{t}Preview{/t}" ><br />{t}Preview{/t}
@@ -84,13 +107,13 @@
             <div class="content-provider-block-wrapper wrapper-content clearfix">
                 <ul>
                     {is_module_activated name="ARTICLE_MANAGER"}
-                    {if $category neq 'home'}
+                    {if empty($category) || $category eq 'home' || $category eq 0}
                     <li>
-                        <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/article.php?action=content-provider-category&amp;category={$category}">{t}Other articles in this category{/t}</a>
+                        <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/article.php?action=content-provider-suggested">{t}Suggested articles{/t}</a>
                     </li>
                     {else}
                     <li>
-                        <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/article.php?action=content-provider-suggested">{t}Suggested articles{/t}</a>
+                         <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/article.php?action=content-provider-category&amp;category={$category}">{t}Other articles in this category{/t}</a>
                     </li>
                     {/if}
                     {/is_module_activated}
@@ -137,4 +160,6 @@
 {include file="frontpagemanager/modals/_modal_send_to_trash.tpl"}
 {include file="frontpagemanager/modals/_modal_archive.tpl"}
 {include file="frontpagemanager/modals/_modal_suggest_to_frontpage.tpl"}
+{include file="frontpagemanager/modals/_modal_drop_selected.tpl"}
+{include file="frontpagemanager/modals/_modal_arquive_selected.tpl"}
 {/block}

@@ -317,7 +317,7 @@ switch($action) {
              if(is_array($fields)) {
                 foreach($fields as $content) {
                     $special=new Special($id_special);
-                    $special->delete_contents($content);
+                    $special->deleteContents($content);
                 }
              }
           }
@@ -326,7 +326,7 @@ switch($action) {
 
     case 'no_in_special':
         $special=new Special($id_special);
-        $special->delete_contents($content);
+        $special->deleteContents($content);
 
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category);
     break;
@@ -412,7 +412,7 @@ switch($action) {
                     ));
 
         $html_out = $tpl->fetch("common/content_provider/_container-content-list.tpl");
-        Application::ajax_out($html_out);
+        Application::ajaxOut($html_out);
 
     break;
     case 'config':

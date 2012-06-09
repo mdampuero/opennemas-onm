@@ -102,8 +102,8 @@ switch ($action) {
                                      'ORDER BY created DESC ', $page, ITEMS_PAGE);
             $tpl->assign('paginacion', $pager->links);
 
-            $opinions = $cm->find('Opinion', 'in_home=1 and available=1 and type_opinion=0',
-                                  'ORDER BY type_opinion DESC, position ASC, created DESC');
+            // $opinions = $cm->find('Opinion', 'in_home=1 and available=1 and type_opinion=0',
+            //                       'ORDER BY type_opinion DESC, position ASC, created DESC');
 
             if($numEditorial > 0) {
                 $editorial = $cm->find('Opinion', 'in_home=1 and available=1 and type_opinion=1',
@@ -126,7 +126,7 @@ switch ($action) {
                 foreach($editorial as $opin) {
                     $todos = $comment->get_comments( $opin->id );
                     $opin->comments = count($todos);
-                    $opin->ratings = $rating->get_value($opin->id);
+                    $opin->ratings = $rating->getValue($opin->id);
                 }
                 $tpl->assign('editorial', $editorial);
             }
@@ -135,7 +135,7 @@ switch ($action) {
                 foreach($director as $opin) {
                     $todos = $comment->get_comments( $opin->id );
                     $opin->comments = count($todos);
-                    $opin->ratings = $rating->get_value($opin->id);
+                    $opin->ratings = $rating->getValue($opin->id);
                 }
                 $tpl->assign('director', $director);
             }
@@ -151,7 +151,7 @@ switch ($action) {
                 $aut = new Author($opin->fk_author);
                 $names[] = $aut->name;
                 $op_comment[] = count($todos);
-                $op_ratings[] = $rating->get_value($opin->id);
+                $op_ratings[] = $rating->getValue($opin->id);
             }
         }
 
@@ -397,7 +397,7 @@ switch ($action) {
 
         $relations=array();
         $msg ='';
-        $relations = RelatedContent::get_content_relations($id);
+        $relations = RelatedContent::getContentRelations($id);
 
         if (!empty($relations)) {
             $msg = sprintf(_("<br>The album has some relations"));
@@ -429,7 +429,7 @@ switch ($action) {
         if($id) {
             //Delete relations
             $rel= new RelatedContent();
-            $rel->delete_all($id);
+            $rel->deleteAll($id);
 
             $opinion = new Opinion($id);
             $opinion->delete($id, $_SESSION['userid']);
@@ -584,7 +584,7 @@ switch ($action) {
                     $opinion = new Opinion($i);
                     $rel = new RelatedContent();
                     $relationes = array();
-                    $relationes = $rel->get_content_relations( $i );//de portada
+                    $relationes = $rel->getContentRelations($i);//de portada
 
                     if(!empty($relationes)) {
                         $alert = 'ok';
@@ -635,7 +635,7 @@ switch ($action) {
         $fields = array('title','fk_user_last_editor');
         $_REQUEST['fk_user_last_editor']=$_SESSION['userid'];
         SqlHelper::bindAndUpdate('contents', $fields, $_REQUEST, $filter);
-        Application::ajax_out('ok');
+        Application::ajaxOut('ok');
     break;
 
     case 'update_author':
@@ -658,7 +658,7 @@ switch ($action) {
         $_REQUEST['fk_user_last_editor']=$_SESSION['userid'];
         $fields1 = array('fk_user_last_editor');
         SqlHelper::bindAndUpdate('contents', $fields1, $_REQUEST, $filter1);
-        Application::ajax_out('ok');
+        Application::ajaxOut('ok');
     break;
 
     case 'get_authors_list':
@@ -666,7 +666,7 @@ switch ($action) {
         $autores = $aut->all_authors(NULL,'ORDER BY name');
         $autores = json_encode($autores);
         header('Content-type: application/json');
-        Application::ajax_out($autores);
+        Application::ajaxOut($autores);
     break;
 
     case 'changeavailable':
@@ -683,6 +683,20 @@ switch ($action) {
         }
 
         Application::forward(SITE_URL_ADMIN.'/article.php?action=list&category='.$_REQUEST['category']);
+    break;
+
+    case 'changeFavorite':
+
+        Acl::checkOrForward('OPINION_ADMIN');
+        $contentID = filter_input ( INPUT_GET, 'id' , FILTER_SANITIZE_NUMBER_INT);
+        $status = filter_input ( INPUT_GET, 'status' , FILTER_SANITIZE_NUMBER_INT);
+
+        $opinion = new Opinion($contentID);
+        $opinion->set_favorite($status,$_SESSION['userid']);
+
+        Application::forward($_SERVER['SCRIPT_NAME'].
+                '?action=list&category='.$_REQUEST['category'].'&page='.$page);
+
     break;
 
     case 'unpublish':
@@ -722,7 +736,7 @@ switch ($action) {
         }
 
         $out.= "</ul>";
-        Application::ajax_out($out);
+        Application::ajaxOut($out);
     break;
 
     case 'content-list-provider':
@@ -742,7 +756,7 @@ switch ($action) {
                     ));
 
         $html_out = $tpl->fetch("common/content_provider/_container-content-list.tpl");
-        Application::ajax_out($html_out);
+        Application::ajaxOut($html_out);
 
     break;
 

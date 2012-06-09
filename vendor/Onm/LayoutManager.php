@@ -3,7 +3,7 @@
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
- * 
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
@@ -17,7 +17,6 @@ namespace Onm;
  **/
 class LayoutManager
 {
-
     /*
      * Initializes the LayoutManager from a xml file
      *
@@ -72,13 +71,14 @@ class LayoutManager
         $total = count($innerValues->children());
         $position = 0;
         $last = false;
-        foreach ($innerValues->children() as $elementTypeInner => $innerValuesInner ) {
+        foreach ($innerValues->children() as $elementTypeInner => $innerValuesInner) {
             $position++;
             $last = ($total == $position);
             $output []= $this->renderElement($elementTypeInner, $innerValuesInner, $last);
 
         }
         $output []= '</div><!-- end wrapper -->';
+
         return implode("\n", $output);
     }
 
@@ -99,12 +99,16 @@ class LayoutManager
         if (!empty($innerValues['class'])) {
             $description = '<div class="title">'.$innerValues['description'].'</div>';
         }
-        $output  =  '<div class="placeholder clearfix '.$innerValues['class'].' span-'.$innerValues['width'].$last.'" data-placeholder="'.$innerValues['name'].'">'
-                    .$description
-                    .'<div class="content">'
-                    .$this->renderContentsForPlaceholder($innerValues['name'])
-                    .'<!-- {placeholder-content-'.$innerValues['name']. '} --></div>'
-                    .'</div><!-- end wrapper -->';
+        $output  =
+            '<div class="placeholder clearfix '.$innerValues['class']
+            .' span-'.$innerValues['width'].$last
+            .'" data-placeholder="'.$innerValues['name'].'">'
+            .$description
+            .'<div class="content">'
+            .$this->renderContentsForPlaceholder($innerValues['name'])
+            .'<!-- {placeholder-content-'.$innerValues['name']. '} --></div>'
+            .'</div><!-- end wrapper -->';
+
         return $output;
     }
 
@@ -125,12 +129,13 @@ class LayoutManager
         if (!empty($innerValues['class'])) {
             $description = '<div class="title">'.$innerValues['description'].'</div>';
         }
-        $output  =  '<div class="static clearfix '.$innerValues['class'].' span-'.$innerValues['width'].$last.'">'
+        $output  =  '<div class="static clearfix '.$innerValues['class']
+                    .' span-'.$innerValues['width'].$last.'">'
                     .$description
                     .'</div><!-- end static -->';
+
         return $output;
     }
-
 
     /**
      * Returns the html for a given placeholder
@@ -147,17 +152,30 @@ class LayoutManager
                     // TODO: Add logic here for delayed, in time or postponed elements
                     // that will be passed to the view
                     if (!empty($contentTypeName)) {
-                        $this->tpl->assign('content',$content);
-                        $this->tpl->assign('params',$this->params);
-                        try {
-                            $output .= $this->tpl->fetch(strtolower($content->content_type_name).'/content-provider/'.strtolower($content->content_type_name).".tpl")."\n";
-                        } catch (\SmartyException $e) {
-                            // Do nothing.
-                        }
+                        $output .= $this->_renderContent($content);
                     }
                 }
             }
+
             return $output;
+        }
+    }
+
+    /**
+     * Returns the html for a given content
+     *
+     * @return string the html for the content
+     **/
+    private function _renderContent($content)
+    {
+        $this->tpl->assign('content', $content);
+        $this->tpl->assign('params', $this->params);
+        try {
+            $contentName = strtolower($content->content_type_name);
+
+            return $this->tpl->fetch($contentName.'/content-provider/'.$contentName.".tpl")."\n";
+        } catch (\SmartyException $e) {
+            return '';
         }
     }
 
@@ -184,10 +202,10 @@ class LayoutManager
         $this->params = $params;
 
         $output = '';
-        foreach ($this->layoutDoc as $element => $value ) {
+        foreach ($this->layoutDoc as $element => $value) {
             $output []= $this->renderElement($element, $value, false);
         }
+
         return implode("\n", $output);
     }
-
 }

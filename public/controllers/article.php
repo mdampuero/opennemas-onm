@@ -1,9 +1,16 @@
 <?php
-
+/**
+ * This file is part of the Onm package.
+ *
+ * (c)  OpenHost S.L. <developers@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ **/
 /**
  * Start up and setup the app
 */
-require_once('../bootstrap.php');
+require_once '../bootstrap.php';
 use Onm\Settings as s;
 
 /**
@@ -32,12 +39,14 @@ $action           = $request->query->filter('action', '', FILTER_SANITIZE_STRING
 
 if (isset($category_name) && !empty($category_name)) {
     $category = $ccm->get_id($category_name);
-} elseif(isset($_REQUEST["action"]) && ( $_REQUEST["action"]!="vote" && $_REQUEST["action"]!="get_plus")) {
+} elseif (isset($_REQUEST["action"])
+    && ( $_REQUEST["action"]!="vote" && $_REQUEST["action"]!="get_plus")
+) {
     Application::forward301('/');
 }
 
-switch($action) {
-    case 'read': {
+switch ($action) {
+    case 'read':
 
         if (empty($articleID) ) {
             Application::forward301('/404.html');
@@ -53,12 +62,11 @@ switch($action) {
         $cm = new ContentManager();
 
         // Advertisements for single article NO CACHE
-        require_once('article_advertisement.php');
+        require_once 'article_advertisement.php';
 
-        $cacheID = $tpl->generateCacheId( $category_name, $subcategory_name, $articleID );
+        $cacheID = $tpl->generateCacheId($category_name, $subcategory_name, $articleID);
 
-        if (($tpl->caching == 0) || !$tpl->isCached('article/article.tpl', $cacheID) )
-        {
+        if (($tpl->caching == 0) || !$tpl->isCached('article/article.tpl', $cacheID) ) {
 
             $article = new Article($articleID);
 
@@ -79,17 +87,20 @@ switch($action) {
 
                 $print_url .= $dirtyID . '.html';
                 $tpl->assign('print_url', $print_url);
-                $tpl->assign('sendform_url', '/controllers/article.php?action=sendform&article_id=' . $_GET['article_id'] . '&category_name=' .
-                                            $category_name . '&subcategory_name=' . $subcategory_name);
+                $tpl->assign('sendform_url',
+                    '/controllers/article.php?action=sendform&article_id='
+                    . $_GET['article_id'] . '&category_name=' .
+                    $category_name . '&subcategory_name=' . $subcategory_name
+                );
 
                 // Check if $section is "in menu" then show breadcrub
                 $cat = $ccm->getByName($category_name);
-                if(!is_null($cat) && $cat->inmenu) {
+                if (!is_null($cat) && $cat->inmenu) {
                     $tpl->assign('breadcrub', $breadcrub);
                 }
 
-               // Categories code ----------------------------------------------
-               // TODO: Seems that this is trash, evaluate its removal
+                // Categories code -------------------------------------------
+                // TODO: Seems that this is trash, evaluate its removal
 
                 $actual_category       =$category_name;
                 $actual_category_id    = $ccm->get_id($actual_category);
@@ -104,7 +115,7 @@ switch($action) {
 
                 $tpl->assign('article', $article);
 
-                // Associated media code ------------------------------------------
+                // Associated media code --------------------------------------
                 if (isset($article->img2) && ($article->img2 != 0)) {
                     $photoInt = new Photo($article->img2);
                     $tpl->assign('photoInt', $photoInt);
@@ -114,12 +125,10 @@ switch($action) {
                     $videoInt = new Video($article->fk_video2);
                     $tpl->assign('videoInt', $videoInt);
                 } else {
-                    $video =  $cm->find_by_category_name(
-                        'Video',
+                    $video =  $cm->find_by_category_name('Video',
                         $actual_category,
                         'contents.content_status=1',
-                        'ORDER BY created DESC LIMIT 0 , 1'
-                    );
+                        'ORDER BY created DESC LIMIT 0 , 1');
                     if (isset($video[0])) {
                         $tpl->assign('videoInt', $video[0]);
                     }
@@ -129,7 +138,7 @@ switch($action) {
                 $relContent      = new RelatedContent();
                 $relatedContents = array();
 
-                $relationIDs     = $relContent->cache->get_relations_int($articleID);
+                $relationIDs     = $relContent->cache->getRelationsForInner($articleID);
                 if (count($relationIDs) > 0) {
                     $relatedContents = $cm->cache->getContents($relationIDs);
 
@@ -140,23 +149,25 @@ switch($action) {
 
                     // Add category name
                     foreach ($relatedContents as &$content) {
-                        $content->category_name = $ccm->get_category_name_by_content_id($content->id);
+                        $content->category_name =
+                            $ccm->get_category_name_by_content_id($content->id);
                     }
                 }
                 $tpl->assign('relationed', $relatedContents);
 
                 // Machine suggested contents code -----------------------------
                 $machineSuggestedContents = array();
-                if(!empty($article->metadata)) {
-                    $objSearch    = cSearch::Instance();
-                    $machineSuggestedContents = $objSearch->SearchSuggestedContents(
-                        $article->metadata,
-                        'Article',
-                        "pk_fk_content_category= ".$article->category.
-                        " AND contents.available=1 AND pk_content = pk_fk_content",
-                        4
-                    );
-                    $machineSuggestedContents = $cm->getInTime($machineSuggestedContents);
+                if (!empty($article->metadata)) {
+                    $objSearch    = cSearch::getInstance();
+                    $machineSuggestedContents =
+                        $objSearch->searchSuggestedContents($article->metadata,
+                            'Article',
+                            "pk_fk_content_category= ".$article->category.
+                            " AND contents.available=1 AND pk_content = pk_fk_content",
+                            4
+                        );
+                    $machineSuggestedContents =
+                        $cm->getInTime($machineSuggestedContents);
                 }
                 $tpl->assign('suggested', $machineSuggestedContents);
 
@@ -167,10 +178,9 @@ switch($action) {
         } // end if $tpl->is_cached
 
         $tpl->display('article/article.tpl', $cacheID);
+        break;
 
-    } break;
-
-    case 'vote': {
+    case 'vote':
 
         $category_name = 'home';
         $subcategory_name = null;
@@ -182,65 +192,81 @@ switch($action) {
 
         $comment_id = $_GET['a'];
 
-        if($ip != $ip_from) {
-            Application::ajax_out("Error no ip vote!");
+        if ($ip != $ip_from) {
+            Application::ajaxOut("Error no ip vote!");
         }
 
         $vote = new Vote($comment_id);
-        if(is_null($vote)) {
-            Application::ajax_out("Error no  vote value!");
+        if (is_null($vote)) {
+            Application::ajaxOut("Error no  vote value!");
         }
-        $update = $vote->update($vote_value,$ip);
+        $update = $vote->update($vote_value, $ip);
 
-        if($update) {
-            $html_out = $vote->render($page,'result',1);
+        if ($update) {
+            $html_out = $vote->render($page, 'result', 1);
         } else {
             $html_out = "Ya ha votado anteriormente este comentario.";
         }
 
-        Application::ajax_out($html_out);
-    } break;
+        Application::ajaxOut($html_out);
+        break;
 
-    case 'get_plus': {
-        if($_GET["content"]=="Comment") {
-
+    case 'get_plus':
+        $output = "";
+        if ($_GET["content"]=="Comment") {
             $cm = new ContentManager();
-            $articles = $cm->cache->getMostComentedContent('Article', true, $_REQUEST['category'], $_REQUEST['days']);
+            $articles = $cm->cache->getMostComentedContent(
+                'Article',
+                true,
+                $_REQUEST['category'],
+                $_REQUEST['days']
+            );
 
             //$tpl->
-            $html_out = "";
             foreach ($articles as $article) {
-                $html_out .= '<div class="CNoticiaMas">';
-                $html_out .= '<div class="CContainerIconoTextoNoticiaMas">';
-                $html_out .= '<div class="iconoNoticiaMas"></div>';
-                $html_out .= '<div class="textoNoticiaMas"><a href="'.$article["uri"].'">'.stripslashes($article["title"]).'</a> ('.$article["num"].' comentarios)</div>';
-                $html_out .= '</div>';
-                $html_out .= '<div class="fileteNoticiaMas"><img src="'.TEMPLATE_USER_PATH.MEDIA_IMG_DIR.'/noticiasRecomendadas/fileteRecomendacion.gif" alt=""/></div>';
-                $html_out .= '</div>';
+                $output =
+                    '<div class="CNoticiaMas">'
+                    . '<div class="CContainerIconoTextoNoticiaMas">'
+                    . '<div class="iconoNoticiaMas"></div>'
+                    . '<div class="textoNoticiaMas"><a href="'
+                    . $article["uri"].'">'.stripslashes($article["title"])
+                    . '</a> ('.$article["num"].' comentarios)</div>'
+                    . '</div>'
+                    . '<div class="fileteNoticiaMas"><img src="'
+                    . TEMPLATE_USER_PATH.MEDIA_IMG_DIR
+                    . '/noticiasRecomendadas/fileteRecomendacion.gif" alt=""/></div>'
+                    . '</div>';
             }
         } else {
-
             $cm = new ContentManager();
 
-            $articles_viewed = $cm->cache->getMostViewedContent('Article', true, $_REQUEST['category'], $_REQUEST['author'], $_REQUEST['days']);
+            $articles = $cm->cache->getMostViewedContent(
+                'Article',
+                true,
+                $_REQUEST['category'],
+                $_REQUEST['author'],
+                $_REQUEST['days']
+            );
 
-            $html_out = "";
-            foreach ($articles_viewed as $article) {
-                $html_out .= '<div class="CNoticiaMas">';
-                $html_out .= '<div class="CContainerIconoTextoNoticiaMas">';
-                $html_out .= '<div class="iconoNoticiaMas"></div>';
-                $html_out .= '<div class="textoNoticiaMas"><a href="'.$article->uri.'">'.stripslashes($article->title).'</a></div>';
-                $html_out .= '</div>';
-                $html_out .= '<div class="fileteNoticiaMas"><img src="'.TEMPLATE_USER_PATH.MEDIA_IMG_DIR.'/noticiasRecomendadas/fileteRecomendacion.gif" alt=""/></div>';
-                $html_out .= '</div>';
+            foreach ($articles as $article) {
+                $output = '<div class="CNoticiaMas">'
+                    . '<div class="CContainerIconoTextoNoticiaMas">'
+                    . '<div class="iconoNoticiaMas"></div>'
+                    . '<div class="textoNoticiaMas"><a href="'
+                    . $article->uri.'">'.stripslashes($article->title)
+                    . '</a></div>'
+                    . '</div>'
+                    . '<div class="fileteNoticiaMas"><img src="'
+                    . TEMPLATE_USER_PATH.MEDIA_IMG_DIR
+                    . '/noticiasRecomendadas/fileteRecomendacion.gif" alt=""/></div>'
+                    . '</div>';
             }
         }
 
-        Application::ajax_out($html_out);
+        Application::ajaxOut($output);
+        break;
 
-    } break;
-
-    case 'print': {
+    case 'print':
 
         $cacheID = $tpl->generateCacheId($category_name, $subcategory_name, $articleID);
 
@@ -260,7 +286,7 @@ switch($action) {
             $title = StringUtils::get_title($article->title);
             $print_url = '/imprimir/' . $title. '/' . $category_name . '/';
 
-            if(!empty($subcategory_name)) {
+            if (!empty($subcategory_name)) {
                 $breadcrub[] = array(
                     'text' => $ccm->get_title($subcategory_name),
                     'link' => '/seccion/' . $category_name . '/' . $subcategory_name . '/'
@@ -273,12 +299,12 @@ switch($action) {
             $tpl->assign('print_url', $print_url);
 
             $cat = $ccm->getByName($category_name);
-            if(!is_null($cat) && $cat->inmenu) {
+            if (!is_null($cat) && $cat->inmenu) {
                 $tpl->assign('breadcrub', $breadcrub);
             }
 
             // Foto interior
-            if(isset($article->img2) and ($article->img2 != 0)){
+            if (isset($article->img2) and ($article->img2 != 0)) {
                 $photoInt = new Photo($article->img2);
                 $tpl->assign('photoInt', $photoInt);
             }
@@ -288,12 +314,10 @@ switch($action) {
         }
 
         $tpl->display('article/article_printer.tpl');
-        exit(0);
-
-    } break;
+        break;
 
 
-    case 'sendform': {
+    case 'sendform':
         require_once('session_bootstrap.php');
         $token = $_SESSION['sendformtoken'] = md5(uniqid('sendform'));
 
@@ -307,17 +331,16 @@ switch($action) {
 
         $tpl->caching = 0;
         $tpl->display('article/article_sendform.tpl'); // Don't disturb cache
-        exit(0);
-    } break;
+        break;
 
-    case 'send': {
+    case 'send':
         require_once('session_bootstrap.php');
 
         // Check if magic_quotes is enabled and clear globals arrays
         StringUtils::disabled_magic_quotes();
 
         // Check direct access
-        if($_SESSION['sendformtoken'] != $_REQUEST['token']) {
+        if ($_SESSION['sendformtoken'] != $_REQUEST['token']) {
             Application::forward('/');
         }
 
@@ -337,10 +360,10 @@ switch($action) {
         $mail->Priority = 5; // Low priority
         $mail->IsHTML(true);
 
-
         $mail->From     = $_REQUEST['sender'];
         $mail->FromName = $_REQUEST['name_sender'];
-        $mail->Subject  = $_REQUEST['name_sender'].' ha compartido contigo un contenido de '.s::get('site_name');  //substr(strip_tags($_REQUEST['body']), 0, 100);
+        $mail->Subject  = $_REQUEST['name_sender']
+            .' ha compartido contigo un contenido de '.s::get('site_name');
 
         $tplMail->assign('destination', 'amig@,');
 
@@ -349,7 +372,6 @@ switch($action) {
 
         $tplMail->assign('mail', $mail);
         $tplMail->assign('article', $article);
-
 
         // Filter tags before send
         $permalink = preg_replace('@([^:])//@', '\1/', SITE_URL . $article->permalink);
@@ -360,7 +382,7 @@ switch($action) {
         } else {
             $agency = s::get('site_name');
         }
-        $tplMail->assign('agency',$agency);
+        $tplMail->assign('agency', $agency);
 
         if (empty($article->summary)) {
             $summary = substr(strip_tags(stripslashes($article->body)), 0, 300)."...";
@@ -369,10 +391,9 @@ switch($action) {
         }
         $tplMail->assign('summary', $summary);
 
-
         if (method_exists($tpl, '_get_plugin_filepath')) {
             //handle with Smarty version 2
-            require_once $tpl->_get_plugin_filepath('function','articledate');
+            require_once $tpl->_get_plugin_filepath('function', 'articledate');
         } else {
             //handle with Smarty version 3 beta 8
             foreach ($tpl->plugins_dir as $value) {
@@ -383,22 +404,23 @@ switch($action) {
             }
         }
 
-
         //require_once $tpl->_get_plugin_filepath('function', 'articledate');
         $params['created'] = $article->created;
         $params['updated'] = $article->updated;
         $params['article'] = $article;
-        $date = smarty_function_articledate($params,$tpl);
+        $date = smarty_function_articledate($params, $tpl);
         $tplMail->assign('date', $date);
 
         $tplMail->caching = 0;
         $mail->Body = $tplMail->fetch('article/email_send_to_friend.tpl');
 
-        $mail->AltBody = $tplMail->fetch('article/email_send_to_friend_just_text.tpl');
+        $mail->AltBody =
+            $tplMail->fetch('article/email_send_to_friend_just_text.tpl');
 
-        /*
-            * Implementacion para enviar a multiples destinatarios separados por coma
-            */
+        /**
+         * Implementacion para enviar a multiples destinatarios
+         * separados por coma
+         */
         $destinatarios = explode(',', $_REQUEST['destination']);
 
         foreach ($destinatarios as $dest) {
@@ -406,21 +428,25 @@ switch($action) {
             $mail->AddBCC(trim($dest));
         }
 
-        if( $mail->Send() ) {
+        if ( $mail->Send() ) {
             $tpl->assign('message', 'Noticia enviada correctamente.');
         } else {
-            if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')) {
+            if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])
+                && ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')
+            ) {
                 header("HTTP/1.0 404 Not Found");
             }
-            $tpl->assign('message', 'La noticia no pudo ser enviada, inténtelo de nuevo más tarde. <br /> Disculpe las molestias.');
+            $tpl->assign('message',
+                'La noticia no pudo ser enviada, inténtelo de nuevo más tarde.'
+                .'<br /> Disculpe las molestias.'
+            );
         }
 
         $tpl->caching = 0;
         $tpl->display('article/article_sendform.tpl'); // Don't disturb cache
-        exit(0);
-    } break;
+        break;
 
-    default: {
+    default:
         Application::forward301('index.php');
-    } break;
+        break;
 }

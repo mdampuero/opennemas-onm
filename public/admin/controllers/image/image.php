@@ -59,7 +59,7 @@ switch($action) {
         $ccm = ContentCategoryManager::get_instance();
         $nameCat = 'GLOBAL'; //Se mete en litter pq category 0
         $fullcat = $ccm->order_by_posmenu($ccm->categories);
-        $photoSet = $ccm->data_media_by_type_group('media_type="image"');
+        $photoSet = $ccm->dataMediaByTypeGroup('media_type="image"');
         $photoSetJPG = $ccm->countMediaByTypeGroup('media_type="image" and type_img="jpg"');
         $photoSetGIF = $ccm->countMediaByTypeGroup('media_type="image" and type_img="gif"');
         $photoSetPNG = $ccm->countMediaByTypeGroup('media_type="image" and type_img="png"');
@@ -383,7 +383,7 @@ switch($action) {
         $forceDelete = filter_input(INPUT_GET, 'force');
         $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
         $foto = new Photo($id);
-        $contents = $foto->is_used($id);
+        $contents = $foto->isUsed($id);
 
         if (count($contents) > 0 && ($forceDelete != 'yes')) {
             $cm = new ContentManager();
@@ -439,7 +439,7 @@ switch($action) {
             if (!empty($id)) {
                 $photo = new Photo($id);
                 if (!empty($photo->id)) {
-                    $photos []= $photo->read_alldata($id);
+                    $photos []= $photo->readAllData($id);
                     $image_url = $path_upload . $photo->path_file . $photo->name;
                 }
             }
@@ -486,7 +486,7 @@ switch($action) {
         foreach ($photos as $id => $photoData) {
             $photo = new Photo($id);
 
-            if ($photo->set_data($photoData)) {
+            if ($photo->setData($photoData)) {
                 $photosSaved++;
             }
         }

@@ -47,6 +47,15 @@
                 </li>
             {/if}
             {/acl}
+            {acl isAllowed="KIOSKO_ADMIN"}
+            <li class="separator"></li>
+                <li>
+                    <a href="{$smarty.server.PHP_SELF}?action=config" title="{t}Config kiosko module{/t}">
+                        <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
+                        {t}Configurations{/t}
+                    </a>
+                </li>
+            {/acl}
         </ul>
     </div>
 </div>

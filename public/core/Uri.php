@@ -20,7 +20,7 @@ class Uri
     /**
      * Uri settings
      **
-    static private $_urlConfigurations = array(
+    private static $_urlConfigurations = array(
        'article'   =>  array( 'articulo/_CATEGORY_/_DATE_/_SLUG_/_ID_.html'),
        'opinion'   =>  array( 'opinion/_CATEGORY_/_DATE_/_SLUG_/_ID_.html'),
        'opinion_author_frontpage'   =>  array( 'opinion/autor/_ID_/_SLUG_'),
@@ -34,9 +34,9 @@ class Uri
     );
      *
      */
-    static private $_urlConfigurations = array(
+    private static $_urlConfigurations = array(
        'article'   =>  array( 'articulo/_CATEGORY_/_SLUG_/_DATE__ID_.html'),
-       'opinion'   =>  array( 'opinion/_CATEGORY_/_SLUG_/_DATE__ID_.html'),
+       'opinion'    =>  array( 'opinion/_CATEGORY_/_SLUG_/_DATE__ID_.html'),
        'opinion_author_frontpage'   =>  array( 'opinion/autor/_ID_/_SLUG_'),
        'section'   =>  array( 'seccion/_ID_'),
        'video'     =>  array( 'video/_CATEGORY_/_SLUG_/_DATE__ID_.html'),
@@ -45,10 +45,10 @@ class Uri
        'static_page'=> array( 'estaticas/_SLUG_.html'),
        'ad'        =>  array( 'publicidad/_ID_.html'),
        'articleNewsletter' => array( 'seccion/_CATEGORY_/#_ID_'),
-       'kiosko'        =>  array( 'portadas-papel/_CATEGORY_/_DATE__ID_.html'),
-       'letter'   =>  array( 'cartas-al-director/_CATEGORY_/_SLUG_/_DATE__ID_.html'),
-       'special'   =>  array( 'especiales/_CATEGORY_/_SLUG_/_DATE__ID_.html'),
-       'book'   =>  array( 'libro/_CATEGORY_/_SLUG_/_DATE__ID_.html'),
+       'kiosko'  =>  array( 'portadas-papel/_CATEGORY_/_DATE__ID_.html'),
+       'letter'  =>  array( 'cartas-al-director/_CATEGORY_/_SLUG_/_DATE__ID_.html'),
+       'special' =>  array( 'especiales/_CATEGORY_/_SLUG_/_DATE__ID_.html'),
+       'book'    =>  array( 'libro/_CATEGORY_/_SLUG_/_DATE__ID_.html'),
     );
 
     /**
@@ -56,12 +56,12 @@ class Uri
      *
      * @param array $params parameters for modify function behaviour.
      **/
-    public function __construct($params = array())
+    public function __construct()
     {
         Uri::getConfig();
     }
 
-    static public function getConfig($params = array())
+    public static function getConfig($params = array())
     {
         if (isset($GLOBALS['url_configurations'])) {
             $config = array_merge(
@@ -72,10 +72,11 @@ class Uri
         } else {
             $config = self::$_urlConfigurations;
         }
+
         return $config;
     }
 
-    static public function generate($contentType, $params = array())
+    public static function generate($contentType, $params = array())
     {
 
         $config = Uri::getConfig();
@@ -103,6 +104,7 @@ class Uri
         $finaluri = preg_replace(
             array_keys($replacements), array_values($replacements), $config
         );
+
         return trim($finaluri[0]);
     }
 }

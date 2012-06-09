@@ -15,29 +15,28 @@
  *
  * @author Alex Rico
  */
-class ContentType 
+class ContentType
 {
     /**
      * @var int(10) with id for a content type
      */
     public $pk_content_type = null;
-    
+
     /**
      * @var string with internal name for content type
      */
     public $name = null;
-    
+
     /**
      * @var string with readable name for content type
      */
     public $title = null;
-    
+
     /**
-     * @var int(10) 
+     * @var int(10)
      */
     public $fk_template_default = null;
-    
-    
+
     /**
      * Initializes the content type for a given id.
      *
@@ -59,24 +58,22 @@ class ContentType
         if (empty($id)) {
             return false;
         }
-        $sql = 'SELECT * FROM content_types WHERE pk_content_type = '.($id);
-        $rs = $GLOBALS['application']->conn->Execute( $sql );
+        $sql = 'SELECT * FROM content_types WHERE pk_content_type =?';
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            \Application::logDatabaseError();
 
             return false;
         }
 
-        $this->load( $rs->fields );
+        $this->load($rs->fields);
 
         // Fire event onAfterXxx
         $GLOBALS['application']->dispatch('onAfterRead', $this);
 
     }
-    
+
     /**
      * Load properties into this instance
      *
@@ -102,33 +99,37 @@ class ContentType
             }
         }
     }
-    
+
     /*
      * Fetches available content types.
      *
      * @return array an array with each content type with id, name and title.
      *
-     * @throw Exception if there was an error while fetching all the content types
+     * @throw Exception if there was an error while fetching all the
+     *                  content types
      */
-    static public function getAllContentTypes()
+    public static function getAllContentTypes()
     {
         $fetchedFromAPC = false;
         if (extension_loaded('apc')) {
-            $resultArray = apc_fetch(APC_PREFIX . "_getContentTypes", $fetchedFromAPC);
+            $resultArray = apc_fetch(APC_PREFIX . "_getContentTypes",
+                $fetchedFromAPC);
         }
 
         // If was not fetched from APC now is turn of DB
         if (!$fetchedFromAPC) {
 
-            $szSqlContentTypes = "SELECT pk_content_type, name, title FROM content_types";
-            $resultSet = $GLOBALS['application']->conn->Execute($szSqlContentTypes);
+            $sqlContTypes = "SELECT pk_content_type, name, title "
+                               . "FROM content_types";
+            $resultSet = $GLOBALS['application']->conn->Execute($sqlContTypes);
 
             if (!$resultSet) {
-                throw new \Exception("There was an error while fetching available content types. '$szSqlContentTypes'.");
+                $message = "There was an error while fetching available "
+                         . "content types. '$sqlContTypes'.";
+                throw new \Exception($message);
             }
 
-            try
-            {
+            try {
                 $resultArray = $resultSet->GetArray();
                 $i=0;
                 foreach ($resultArray as &$res) {
@@ -136,65 +137,59 @@ class ContentType
                     $resultArray[$i]['2'] = htmlentities($res['2']);
                     $i++;
                 }
-            } catch (exception $e) {
-                printf("Excepcion: " . $e.message);
+            } catch (\Exception $e) {
+                printf("Excepcion: " . $e->message);
+
                 return null;
             }
 
             if (extension_loaded('apc')) {
-                    apc_store(APC_PREFIX . "_getContentTypes", $resultArray);
-                }
+                apc_store(APC_PREFIX . "_getContentTypes", $resultArray);
+            }
         }
 
         return $resultArray;
     }
-    
+
     /*
      * Find a content type id given the name of one content type.
      *
-     * @return int pk_content_type.
-     * @param string $name The name of a content type
-     * @throw Exception if there was an error while fetching all the content types
+     * @param  string $name The name of a content type
+     * @return int    pk_content_type.
+     * @throw  Exception  if there was an error while fetching
+     *                    all the content types
      */
-    static public function getIdContentType($name)
+    public static function getIdContentType($name)
     {
         $contenTypes = self::getContentTypes();
 
-         foreach ($contenTypes as $types) {
-             if ($types['name'] == $name) {
-                 return $types['pk_content_type'];
-             }
-         }
+        foreach ($contenTypes as $types) {
+            if ($types['name'] == $name) {
+                return $types['pk_content_type'];
+            }
+        }
 
-         return false;
-
+        return false;
     }
-    
+
     /*
      * Get the content type object given the id of one content.
      *
      * @return int pk_content_type.
-     * @param int $id The id of a content
-     * 
+     * @param  int $id The id of a content
+     *
      */
-    static public function getContentTypeByContentId($id)
+    public static function getContentTypeByContentId($id)
     {
         $sql = 'SELECT fk_content_type FROM contents WHERE pk_content = ?';
-        $rs = $GLOBALS['application']->conn->GetOne($sql,$id);
+        $rs = $GLOBALS['application']->conn->GetOne($sql, $id);
 
         if (!$rs) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            \Application::logDatabaseError();
 
             return false;
         }
 
         return $rs;
-        
-
     }
-
 }
-
-?>

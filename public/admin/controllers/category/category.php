@@ -32,9 +32,9 @@ if( isset($_REQUEST['action']) ) {
             $num_contents=array();
             $num_sub_contents =array();
             // Contabilizar por grupos
-            $groups['articles'] = $ccm->count_content_by_type_group(1);
-            $groups['photos']   = $ccm->count_content_by_type_group(8);
-            $groups['advertisements'] = $ccm->count_content_by_type_group(2);
+            $groups['articles'] = $ccm->countContentsByGroupType(1);
+            $groups['photos']   = $ccm->countContentsByGroupType(8);
+            $groups['advertisements'] = $ccm->countContentsByGroupType(2);
 
             foreach($allcategorys as $cate) {
                if($cate->internal_category !=0 && $cate->fk_content_category == 0 ) {
@@ -42,6 +42,8 @@ if( isset($_REQUEST['action']) ) {
                          $num_contents[$i]['photos']         = (isset($groups['photos'][$cate->pk_content_category]))? $groups['photos'][$cate->pk_content_category] : 0;
                          $num_contents[$i]['advertisements'] = (isset($groups['advertisements'][$cate->pk_content_category]))? $groups['advertisements'][$cate->pk_content_category] : 0;
 
+                         //Unserialize category param field
+                         $cate->params = unserialize($cate->params);
                          $categorys[$i] = $cate;
 
                          $resul = $ccm->getSubcategories( $cate->pk_content_category);
@@ -50,6 +52,8 @@ if( isset($_REQUEST['action']) ) {
                               $num_sub_contents[$i][$j]['articles']       = (isset($groups['articles'][$cate->pk_content_category]))? $groups['articles'][$cate->pk_content_category] : 0;
                               $num_sub_contents[$i][$j]['photos']         = (isset($groups['photos'][$cate->pk_content_category]))? $groups['photos'][$cate->pk_content_category] : 0;
                               $num_sub_contents[$i][$j]['advertisements'] = (isset($groups['advertisements'][$cate->pk_content_category]))? $groups['advertisements'][$cate->pk_content_category] : 0;
+                              //Unserialize subcategory param field
+                              $cate->params = unserialize($cate->params);
                               $j++;
                          }
                          $subcategorys[$i]=$resul;
@@ -162,7 +166,7 @@ if( isset($_REQUEST['action']) ) {
             if($category->create( $_POST )) {
                 $user = new User();
                 $user->addCategoryToUser($_SESSION['userid'],$category->pk_content_category);
-                $_SESSION['accesscategories'] = $user->get_access_categories_id($_SESSION['userid']);
+                $_SESSION['accesscategories'] = $user->getAccessCategoryIds($_SESSION['userid']);
 
                 $ccm->reloadCategories();
             }
@@ -181,7 +185,7 @@ if( isset($_REQUEST['action']) ) {
             if($category->delete( $_POST['id'] )) {
                 $user = new User();
                 $user->delCategoryToUser($_SESSION['userid'],$_POST['id']);
-                $_SESSION['accesscategories'] = $user->get_access_categories_id($_SESSION['userid']);
+                $_SESSION['accesscategories'] = $user->getAccessCategoryIds($_SESSION['userid']);
 
                 $ccm->reloadCategories();
                 $msg = _("Categoy deleted successfully");
@@ -211,13 +215,27 @@ if( isset($_REQUEST['action']) ) {
             // FIXME: evitar otros valores erróneos
             $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
             $category->set_inmenu($status);
-            /* Limpiar la cache de portada de todas las categorias */
-         //   $refresh = Content::refreshFrontpageForAllCategories();
+            // Limpiar la cache de portada de todas las categorias
+            // $refresh = Content::refreshFrontpageForAllCategories();
             $ccm->reloadCategories();
 
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
 
 		break;
+
+        case 'set_inrss':
+
+            $category = new ContentCategory($_REQUEST['id']);
+            // FIXME: evitar otros valores erróneos
+            $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
+            $category->set_inrss($status, $category);
+            // Limpiar la cache de portada de todas las categorias
+            // $refresh = Content::refreshFrontpageForAllCategories();
+            $ccm->reloadCategories();
+
+            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
+
+        break;
 
 		case 'validate':
 
@@ -245,7 +263,7 @@ if( isset($_REQUEST['action']) ) {
                if($category->create( $_POST )) {
                 $user = new User();
                 $user->addCategoryToUser($_SESSION['userid'],$category->pk_content_category);
-                $_SESSION['accesscategories'] = $user->get_access_categories_id($_SESSION['userid']);
+                $_SESSION['accesscategories'] = $user->getAccessCategoryIds($_SESSION['userid']);
 
                    $ccm->reloadCategories();
                }
