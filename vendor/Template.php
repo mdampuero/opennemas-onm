@@ -291,7 +291,6 @@ class TemplateManager extends Template {
         $this->config_dir	 = $this->templateBaseDir.'config/';
         $this->addPluginsDir($this->templateBaseDir.'plugins/');
         $this->caching	     = false;
-        $this->allow_php_tag = true;
 
         // Template variables
         $baseUrl = SITE_URL.SS.'admin'.SS.'themes'.SS.$theme.SS;
