@@ -129,7 +129,7 @@
         <div>
             <ul class="pills clearfix">
                 <li>
-                <a href="{$smarty.server.SCRIPT_NAME}?action=list&amp;type_opinion=-1" id="home" {if $type_opinion==-1}class="active"{/if}>{t}Widgets home{/t}</a>
+                <a href="{$smarty.server.SCRIPT_NAME}?action=list&amp;type_opinion=-1" id="home" {if $type_opinion==-1}class="active"{/if}>{t}Opinion frontpage{/t}</a>
                 </li>
                 <li>
                     <a href="{$smarty.server.SCRIPT_NAME}?action=list&amp;type_opinion=0" id="author" {if $type_opinion=='0'}class="active"{/if}>{t}Author Opinions{/t}</a>

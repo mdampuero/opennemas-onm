@@ -138,7 +138,7 @@ switch ($action) {
                 $relContent      = new RelatedContent();
                 $relatedContents = array();
 
-                $relationIDs     = $relContent->cache->get_relations_int($articleID);
+                $relationIDs     = $relContent->cache->getRelationsForInner($articleID);
                 if (count($relationIDs) > 0) {
                     $relatedContents = $cm->cache->getContents($relationIDs);
 

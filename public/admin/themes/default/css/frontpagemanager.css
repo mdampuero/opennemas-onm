@@ -372,3 +372,11 @@ div#content-provider #toggler{
     z-index:10;
     display:none;
 }
+
+span.in_frontpage {
+    background:url(../images/frontpagemanager/home.png) top right no-repeat;
+    height:20px;
+    width:20px;
+    display:inline-block;
+    vertical-align:middle;
+}

@@ -47,6 +47,11 @@ OpenNeMas.tinyMceConfig.advanced.elements = "htmlContent";
 					{t}Edit{/t}
 				</a>
 			</li>
+			<li id="li-save-button" style="display:none;">
+                <a id="save-button" href="#" class="admin_add" title="Guardar Positions" alt="Guardar Cambios">
+                    <img border="0" src="{$params.IMAGE_DIR}save.png" title="{t}Save changes{/t}" alt="{t}Save changes{/t}" ><br />{t}Save changes{/t}
+                </a>
+            </li>
 
 
 		</ul>
@@ -67,7 +72,7 @@ OpenNeMas.tinyMceConfig.advanced.elements = "htmlContent";
 						<p>
 							<label>{t}Email subject{/t}:</label>
 							<input type="text" name="subject" id="subject" style="width:80%"
-								   value="[{setting name="site_name"}] Boletín de noticias {$smarty.now|date_format:"%d/%m/%Y"}" />
+								   value="{setting name="site_name"} [{$smarty.now|date_format:"%d/%m/%Y"}]" />
 						</p>
 				</div>
 			</td>

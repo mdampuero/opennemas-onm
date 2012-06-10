@@ -55,7 +55,7 @@ class User
         if ( is_null($this->cache) ) {
             $this->cache = new MethodCacheManager($this, array('ttl' => 60));
         } else {
-            $this->cache->set_cache_life(60); // 60 seconds
+            $this->cache->setCacheLife(60); // 60 seconds
         }
     }
 
@@ -196,7 +196,8 @@ class User
             }
 
             // bulk insert
-            if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+            if ($rs === false) {
                 $GLOBALS['application']->conn->RollbackTrans();
 
                 \Application::logDatabaseError();
@@ -216,8 +217,9 @@ class User
     {
         apc_delete(APC_PREFIX . "_readAccessCategories".$idUser);
 
-        $sql = "INSERT INTO users_content_categories (`pk_fk_user`, `pk_fk_content_category`)
-                VALUES (?,?)";
+        $sql = "INSERT INTO users_content_categories "
+             . "(`pk_fk_user`, `pk_fk_content_category`) "
+             .  "VALUES (?,?)";
 
         $values = array($idUser, $idCategory);
 
@@ -230,7 +232,6 @@ class User
         $newUserCategories = self::readAccessCategories($idUser);
 
         return true;
-
     }
 
     public function delCategoryToUser($idUser, $idCategory)
@@ -256,7 +257,8 @@ class User
         $id = (!is_null($id))? $id: $this->id;
         $fetchedFromAPC = false;
         if (extension_loaded('apc')) {
-            $contentCategories = apc_fetch(APC_PREFIX . "_readAccessCategories".$id, $fetchedFromAPC);
+            $key = APC_PREFIX . "_readAccessCategories".$id;
+            $contentCategories = apc_fetch($key, $fetchedFromAPC);
         }
          // If was not fetched from APC now is turn of DB
         if (!$fetchedFromAPC) {
@@ -275,12 +277,14 @@ class User
 
             $contentCategories = array();
             while (!$rs->EOF) {
-                 $contentCategory = new ContentCategory($rs->fields['pk_fk_content_category']);
+                 $contentCategory =
+                    new ContentCategory($rs->fields['pk_fk_content_category']);
                  $contentCategories[] = $contentCategory;
                  $rs->MoveNext();
             }
             if (extension_loaded('apc')) {
-                apc_store(APC_PREFIX . "_readAccessCategories".$id, $contentCategories);
+                $key = APC_PREFIX . "_readAccessCategories".$id;
+                apc_store($key, $contentCategories);
             }
         }
 
@@ -387,8 +391,10 @@ class User
         Zend_Loader::loadClass('Zend_Gdata');
 
         try {
-            $client = Zend_Gdata_ClientLogin::getHttpClient($email, $passwd, 'xapi', null, 'Zend-ZendFramework',
-                                                            $loginToken, $loginCaptcha);
+            $client = Zend_Gdata_ClientLogin::getHttpClient(
+                $email, $passwd, 'xapi', null, 'Zend-ZendFramework',
+                $loginToken, $loginCaptcha
+            );
 
             //$_SESSION['logintoken'] = $client->getAuthSubToken();
             // header('Authorization: AuthSub ' . );
@@ -488,7 +494,8 @@ class User
             $this->fk_user_group= $data['fk_user_group'];
 
             if (isset($data['ids_category'])) {
-                $this->accesscategories = $this->setAccessCategories($data['ids_category']);
+                $this->accesscategories =
+                    $this->setAccessCategories($data['ids_category']);
             }
         }
     }

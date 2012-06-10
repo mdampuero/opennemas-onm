@@ -26,15 +26,16 @@ class Subscriptor
 
     /**
      * status=0 - (mail se le envio pero aun no le dio al link del correo)
-     * status=1 - (tas recibir el mail, el usuario ha clicado en el link y se ha aceptado)
+     * status=1 - (tas recibir el mail, el usuario ha clicado en
+     *             el link y se ha aceptado)
      * status=2 - (El administrador ha aceptado la solicitud)
      * status=3 - (El administrador ha deshabilitado el usuario)
-     */
+     **/
     public $status = null;
 
     /**
      * Flag to check if user will receive the newsletter
-     */
+     **/
     public $subscription = null;
 
     public $_errors = array();
@@ -48,8 +49,7 @@ class Subscriptor
      *
      * @see Privilege::Privilege
      * @param int $id Privilege Id
-    */
-
+     **/
     public function __construct($id=null)
     {
         if (!is_null($id)) {
@@ -75,7 +75,8 @@ class Subscriptor
         $data['status'] = (!isset($data['status']))? 0: $data['status'];
 
         // WARNING!!! By default, subscription=1
-        $data['subscription'] = (isset($data['subscription']))? $data['subscription']: 1;
+        $data['subscription'] =
+            (isset($data['subscription']))? $data['subscription']: 1;
 
         // By default first and last name are ""
         $data['firstname'] = (isset($data['firstname']))? $data['firstname']: "";
@@ -90,10 +91,7 @@ class Subscriptor
                          $data['status'], $data['subscription'] );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
             return false;
         }
@@ -109,9 +107,7 @@ class Subscriptor
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
             return;
         }
@@ -147,31 +143,38 @@ class Subscriptor
     /**
      *
     */
-    public function update($data, $isBackend=FALSE)
+    public function update($data, $isBackend = false)
     {
         if ($isBackend) {
-            $sql = 'UPDATE ' . $this->_tableName . ' SET `subscription`=?, `status`=?,'.
-                    ' `email`=?, `name`=?, `firstname`=?, `lastname`=?  ';
+            $sql = 'UPDATE ' . $this->_tableName
+                 . ' SET `subscription`=?, `status`=?,'
+                 . ' `email`=?, `name`=?, `firstname`=?, `lastname`=?  ';
         } else {
-            $sql = 'UPDATE ' . $this->_tableName . ' SET `subscription`= ?, `status`=?';
+            $sql = 'UPDATE ' . $this->_tableName
+                 . ' SET `subscription`= ?, `status`=?';
         }
 
         $sql .= ' WHERE pk_pc_user=' . intval($data['id']);
 
-        $data['subscription'] = (isset($data['subscription']))? $data['subscription']: 1;
+        $data['subscription'] =
+            (isset($data['subscription']))? $data['subscription']: 1;
         if (!$isBackend) {
             $values = array($data['subscription'],$data['status']);
         } else {
 
-            $values =   array( $data['subscription'], $data['status'],$data['email'],
-                $data['name'], $data['firstname'], $data['lastname'] );
+            $values =   array(
+                $data['subscription'],
+                $data['status'],
+                $data['email'],
+                $data['name'],
+                $data['firstname'],
+                $data['lastname'],
+            );
         }
         $this->id = $data['id'];
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
             return false;
         }
@@ -188,9 +191,7 @@ class Subscriptor
         $rs  = $GLOBALS['application']->conn->Execute($sql, array($email));
 
         if ($rs===false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
             return null;
         }
@@ -233,12 +234,12 @@ class Subscriptor
 
     public function delete($id)
     {
-        $sql = 'DELETE FROM ' . $this->_tableName . ' WHERE pk_pc_user='.intval($id);
+        $sql = 'DELETE FROM ' . $this->_tableName
+             . ' WHERE pk_pc_user=?';
+        $values = array(intval($id));
 
-        if ($GLOBALS['application']->conn->Execute($sql)===false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            \Application::logDatabaseError();
 
             return;
         }
@@ -246,31 +247,29 @@ class Subscriptor
 
     public function set_status($id, $status)
     {
-        $sql = 'UPDATE ' . $this->_tableName . ' SET `status`='.$status.' WHERE pk_pc_user='.intval($id);
+        $sql = 'UPDATE ' . $this->_tableName
+             . ' SET `status`='.$status.' WHERE pk_pc_user='.intval($id);
 
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
             return;
         }
     }
 
-    public function exists_email( $email )
+    public function exists_email($email)
     {
-       $sql = 'SELECT count(*) AS num FROM `pc_users` WHERE email = "'.$email.'"';
-       $rs = $GLOBALS['application']->conn->Execute($sql);
+        $sql = 'SELECT count(*) AS num '
+            . 'FROM `pc_users` WHERE email = "'.$email.'"';
+        $rs = $GLOBALS['application']->conn->Execute($sql);
 
-       if (!$rs) {
-           $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-           $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-           $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+        if (!$rs) {
+            \Application::logDatabaseError();
 
-           return;
-       }
+            return;
+        }
 
-       return( ($rs->fields['num'] > 0) );
+        return ($rs->fields['num'] > 0);
     }
 
     /**
@@ -282,9 +281,11 @@ class Subscriptor
     */
     public function mUpdateProperty($id, $property, $value=null)
     {
-        $sql = 'UPDATE ' . $this->_tableName . ' SET `' . $property . '`=? WHERE pk_pc_user=?';
+        $sql = 'UPDATE ' . $this->_tableName
+             . ' SET `' . $property . '`=? WHERE pk_pc_user=?';
         if (!is_array($id)) {
-            $rs = $GLOBALS['application']->conn->Execute($sql, array($value, $id));
+            $values = array($value, $id);
+            $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         } else {
             $data = array();
             foreach ($id as $item) {
@@ -295,9 +296,7 @@ class Subscriptor
         }
 
         if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
             return false;
         }

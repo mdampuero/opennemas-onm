@@ -215,7 +215,7 @@ switch($action) {
         $album = new Album($id);
         $relations=array();
         $msg ='';
-        $relations = RelatedContent::get_content_relations($id);
+        $relations = RelatedContent::getContentRelations($id);
 
         if (!empty($relations)) {
             $msg = sprintf(_("<br>The album has some relations"));
@@ -241,7 +241,7 @@ switch($action) {
             $album = new Album($id);
             //Delete relations
             $rel= new RelatedContent();
-            $rel->delete_all($id);
+            $rel->deleteAll($id);
             $album->delete( $id ,$_SESSION['userid'] );
         } else {
             m::add(_('You must give an id for delete the album.'), m::ERROR);
@@ -337,7 +337,7 @@ switch($action) {
                     foreach ($fields as $i ) {
                         $album = new Album($i);
                         $relations=array();
-                        $relations = RelatedContent::get_content_relations( $i );
+                        $relations = RelatedContent::getContentRelations($i);
 
                         if(!empty($relations)){
                             $alert =1;

@@ -11,17 +11,54 @@
  *
  * Class to manage frontpage menu in OpenNeMas
  *
+ * Example:
+ * <ul class="clearfix">
+ * {section  name=m loop=$menuFrontpage}
+ *             <li class="cat {$menuFrontpage[m]->link}{if $category_name eq $menuFrontpage[m]->link} active{/if}">
+ *             <li class="cat {$menuFrontpage[m]->link}{if $category_name eq $menuFrontpage[m]->link} active{/if}"
+ *             <li class="cat {$menuFrontpage[m]->link}{if $category_name eq $menuFrontpage[m]->link} active{/if}">
+ *                 <a href="{renderLink item=$menuFrontpage[m]}" title="Sección: {$menuFrontpage[m]->title}">
+ *                 <a href="{renderLink item=$menuFrontpage[m]}" title="Sección: {$menuFrontpage[m]->title}">
+ *                      {$menuFrontpage[m]->title|mb_lower} - {renderLink item=$menuFrontpage[m]}
+ *                  </a>
+ *                  {if count($menuFrontpage[m]->submenu) > 0}
+ *                      {assign value=$menuFrontpage[m]->submenu var=submenu}
+ *                      <ul class="nav">
+ *                           {section  name=s loop=$submenu}
+ *                                  <li class="subcat {if $subcategory_name eq $submenu[s]->link}active{/if}">
+ *                                      <a href="{$section_url}{$menuFrontpage[m]->link}/{$submenu[s]->link}/" title="{$submenu[s]->title|mb_lower}">
+ *                                          {$submenu[s]->title|mb_lower}
+ *                                      </a>
+ *                                  </li>
+ *                          {/section}
+ *                      </ul>
+ *                  {/if}
+ *              </li>
+ *          {/section}
+ *       </ul>
+ *
+ *
+ *  Show:
+ *       -Frontpage
+ *           * mobile
+ *           * opinion
+ *           * album
+ *           * video
+ *       -Internacional
+ *       -Cultura | Ocio
+ *       -América Latina
+ *
  * @package Onm
  * @subpackage Model
  */
 class Menu
 {
-    public $pk_menu = null;
-    public $name    = null;
-    public $type    = null;
-    public $site    = null;
-    public $pk_father  = null;
-    public $params  = null;
+    public $pk_menu   = null;
+    public $name      = null;
+    public $type      = null;
+    public $site      = null;
+    public $pk_father = null;
+    public $params    = null;
 
     public $config = "default_config";
 
@@ -46,10 +83,6 @@ class Menu
      */
     public function create($data)
     {
-
-        //check if name is unique
-        //!(empty($data['name']))? '': $data['name'];
-
         $sql = "INSERT INTO menues ".
                " (`name`, `params`, `site`, `pk_father`, `type`) " .
                " VALUES (?,?,?,?,?)";
@@ -59,9 +92,7 @@ class Menu
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            \Application::logDatabaseError();
 
             return false;
         }
@@ -86,27 +117,25 @@ class Menu
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            \Application::logDatabaseError();
 
             return false;
         }
 
-        $this->name = $rs->fields['name'];
-        $this->pk_menu = $rs->fields['pk_menu'];
-        $this->params = $rs->fields['params'];
-        $this->site = $rs->fields['site'];
-        $this->type = $rs->fields['type'];
+        $this->name      = $rs->fields['name'];
+        $this->pk_menu   = $rs->fields['pk_menu'];
+        $this->params    = $rs->fields['params'];
+        $this->site      = $rs->fields['site'];
+        $this->type      = $rs->fields['type'];
         $this->pk_father = $rs->fields['pk_father'];
 
     }
 
     public function update($data)
     {
-     if (!isset($data['pk_father']) && empty($data['pk_father'])) {
-         $data['pk_father'] = $this->pk_father;
-     }
+        if (!isset($data['pk_father']) && empty($data['pk_father'])) {
+            $data['pk_father'] = $this->pk_father;
+        }
         $sql = "UPDATE menues"
                 ." SET  `name`=?, `params`=?, `site`=?, `pk_father`=? "
                 ." WHERE pk_menu= ?" ;
@@ -117,9 +146,7 @@ class Menu
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            \Application::logDatabaseError();
 
             return false;
         }
@@ -153,10 +180,8 @@ class Menu
 
         $sql = 'DELETE FROM menues WHERE pk_menu='.($id);
 
-        if ($GLOBALS['application']->conn->Execute($sql)===false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+        if ($GLOBALS['application']->conn->Execute($sql) === false) {
+            \Application::logDatabaseError();
 
             return false;
         }
@@ -188,20 +213,18 @@ class Menu
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
 
         if (!$rs) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            \Application::logDatabaseError();
 
             return false;
         }
         $menu = new stdClass();
 
-        $menu->name = $name;
-        $menu->pk_menu = $rs->fields['pk_menu'];
-        $menu->params = $rs->fields['params'];
-        $menu->site = $rs->fields['site'];
+        $menu->name      = $name;
+        $menu->pk_menu   = $rs->fields['pk_menu'];
+        $menu->params    = $rs->fields['params'];
+        $menu->site      = $rs->fields['site'];
         $menu->pk_father = $rs->fields['pk_father'];
-        $menu->type = $rs->fields['type'];
+        $menu->type      = $rs->fields['type'];
 
         $menu->items = MenuItems::getMenuItems('pk_menu='.$menu->pk_menu);
 
@@ -236,9 +259,7 @@ class Menu
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            \Application::logDatabaseError();
 
             return false;
         }
@@ -247,11 +268,11 @@ class Menu
         while (!$rs->EOF) {
             $menues[$i] = new stdClass();
 
-            $menues[$i]->name = $rs->fields['name'];
-            $menues[$i]->pk_menu = $rs->fields['pk_menu'];
-            $menues[$i]->params = $rs->fields['params'];
-            $menues[$i]->site = $rs->fields['site'];
-            $menues[$i]->type = $rs->fields['type'];
+            $menues[$i]->name      = $rs->fields['name'];
+            $menues[$i]->pk_menu   = $rs->fields['pk_menu'];
+            $menues[$i]->params    = $rs->fields['params'];
+            $menues[$i]->site      = $rs->fields['site'];
+            $menues[$i]->type      = $rs->fields['type'];
             $menues[$i]->pk_father = $rs->fields['pk_father'];
 
             $menues[$i]->items =
@@ -280,42 +301,4 @@ class Menu
         return $menu;
 
     }
-
-    /*  Example:
-     *  <ul class="clearfix">
-            {section  name=m loop=$menuFrontpage}
-                 <li class="cat {$menuFrontpage[m]->link}{if $category_name eq $menuFrontpage[m]->link} active{/if}">
-                    <a href="{renderLink item=$menuFrontpage[m]}" title="Sección: {$menuFrontpage[m]->title}">
-                        {$menuFrontpage[m]->title|mb_lower} - {renderLink item=$menuFrontpage[m]}
-                    </a>
-                    {if count($menuFrontpage[m]->submenu) > 0}
-                        {assign value=$menuFrontpage[m]->submenu var=submenu}
-                        <ul class="nav">
-                             {section  name=s loop=$submenu}
-                                    <li class="subcat {if $subcategory_name eq $submenu[s]->link}active{/if}">
-                                        <a href="{$section_url}{$menuFrontpage[m]->link}/{$submenu[s]->link}/" title="{$submenu[s]->title|mb_lower}">
-                                            {$submenu[s]->title|mb_lower}
-                                        </a>
-                                    </li>
-                            {/section}
-                        </ul>
-                    {/if}
-                </li>
-            {/section}
-        </ul>
-
-     *
-     */
-    /*
-     * Show:
-        -Frontpage
-            * mobile
-            * opinion
-            * album
-            * video
-        -Internacional
-        -Cultura | Ocio
-        -América Latina
-     *
-     */
 }

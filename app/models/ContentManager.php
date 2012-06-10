@@ -155,42 +155,110 @@ class ContentManager
         // Initialization of variables
         $contents = array();
 
-        $sql = 'SELECT * FROM content_positions '
-              .'WHERE `fk_category`=? '
-              .'ORDER BY position ASC ';
-
         // Fetch the id, placeholder, position, and content_type
         // in this category's frontpage
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($categoryID));
+        // The second parameter is the id for the homepage category
+        $contentIds = $this->getContentIdsInHomePageWithIDs(
+            array((int) $categoryID, 0)
+        );
 
-        if ($rs !== false) {
+        $contentsInFrontpage = array_unique(array_map(
+            function($content) {
+                if ($content['frontpage_id'] == 0) {
+
+                    return $content['content_id'];
+                } else {
+                    return null;
+                }
+            },
+            $contentIds)
+        );
+
+
+        if (is_array($contentIds) && count($contentIds) > 0) {
 
             // iterate over all found contents and initialize them
-            while (!$rs->EOF) {
-                $content = new $rs->fields['content_type'](
-                    $rs->fields['pk_fk_content']
+            foreach ($contentIds as $element) {
+                // Only add elements for the requested category id
+                if ($element['frontpage_id'] != $categoryID) {
+                    continue;
+                }
+
+                $content = new $element['content_type'](
+                    $element['content_id']
                 );
 
                 // add all the additional properties related with positions
                 // and params
                 if ($content->in_litter == 0) {
                     $content->load(array(
-                        'placeholder' => $rs->fields['placeholder'],
-                        'position'    => $rs->fields['position'],));
+                        'placeholder' => $element['placeholder'],
+                        'position'    => $element['position'],)
+                    );
                     if (is_array($content->params) && $content->params > 0) {
-                        $content->params = array_merge($content->params,
-                            (array) unserialize($rs->fields['params']));
+                        $content->params = array_merge(
+                            $content->params,
+                            (array) $element['params']
+                        );
                     } else {
-                        $content->params = unserialize($rs->fields['params']);
+                        $content->params = $element['params'];
+                    }
+                    if (in_array($element['content_id'], $contentsInFrontpage)) {
+                        $content->in_frontpage = true;
+                    } else {
+                        $content->in_frontpage = false;
                     }
                     $contents[] = $content;
                 }
+            }
+        }
+
+        // Return all the objects of contents initialized
+        return $contents;
+    }
+
+    /**
+    * Fetches content ids (articles, widgets, etc) for one specific
+    * category with its placeholder and position
+    *
+    * This is used for HomePages, fetches all the contents assigned for it and
+    * allows to render an entire homepage
+    *
+    * @param  type $category_id the id of the category we want
+    *                            to get contents from
+    * @return mixed, array of contents
+    */
+    public function getContentIdsInHomePageWithIDs($categories = array())
+    {
+        // Initialization of variables
+        $contents = array();
+
+        if (count($categories) > 0) {
+            $categoriesSQL = implode(', ', $categories);
+            $sql = 'SELECT * FROM content_positions '
+              .'WHERE `fk_category` IN ('.$categoriesSQL.') '
+              .'ORDER BY position ASC ';
+
+
+            // Fetch the id, placeholder, position, and content_type
+            // in this category's frontpage
+            $rs = $GLOBALS['application']->conn->Execute($sql);
+
+            while (!$rs->EOF) {
+                $contents []= array(
+                    'content_id'   => $rs->fields['pk_fk_content'],
+                    'frontpage_id' => $rs->fields['fk_category'],
+                    'position'     => $rs->fields['position'],
+                    'placeholder'  => $rs->fields['placeholder'],
+                    'params'       => unserialize($rs->fields['params']),
+                    'content_type' => $rs->fields['content_type'],
+                );
 
                 $rs->MoveNext();
             }
         }
 
-        // Return all the objects of contents initialized
+        // Return the ids array
         return $contents;
     }
 
@@ -303,6 +371,8 @@ class ContentManager
         if (!$clean) {
             return false;
         }
+        $positions = array();
+        $contentIds = array();
 
         if (count($elements) > 0) {
             // Foreach element setup the sql values statement part
@@ -314,6 +384,7 @@ class ContentManager
                     $element['placeholder'],
                     $element['content_type'],
                 );
+                $contentIds []= $element['id'];
             }
 
             // construct the final sql statement and execute it
@@ -325,11 +396,16 @@ class ContentManager
 
             $rs = $GLOBALS['application']->conn->Execute($sqlPrep, $positions);
 
+
             // Handling if there were some errors into the execution
             if (!$rs) {
                 Application::logDatabaseError();
                 $returnValue = false;
             } else {
+                // Unset suggested flag if saving content positions in frontpage
+                if ($categoryID == 0) {
+                    self::dropSuggestedFlagFromContentIdsArray($contentIds);
+                }
                 $returnValue = true;
             }
         }
@@ -338,6 +414,42 @@ class ContentManager
         $GLOBALS['application']->conn->CompleteTrans();
 
         return $returnValue;
+    }
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public static function dropSuggestedFlagFromContentIdsArray($contentIds)
+    {
+        if (is_array($contentIds) && (count($contentIds) > 0)) {
+            $contentIdsSQL = implode(', ', $contentIds);
+
+            $sql = 'UPDATE contents '
+                 . 'SET `frontpage`=0, `fk_user_last_editor`=?, `changed`=? '
+                 . 'WHERE `pk_content` IN ('.$contentIdsSQL.')';
+            $values = array($_SESSION['userid'], date("Y-m-d H:i:s"));
+            $stmt = $GLOBALS['application']->conn->Prepare($sql, $values);
+
+            if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
+                Application::logDatabaseError();
+
+                return false;
+            }
+
+            /* Notice log of this action */
+            $logger = Application::getLogger();
+            $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid']
+                .') has executed action drop suggested flag at '
+                .$contentIdsSQL.' ids');
+
+
+            return true;
+        }
+        return false;
+
     }
 
     /**
@@ -1415,7 +1527,6 @@ class ContentManager
         $countContents=$this->count($contentType, $filter, $pk_fk_content_category);
         if (empty($page)) {
             $page = 1;
-            $items_page=10;
         }
         $_limit=' LIMIT '.($page-1)*$items_page.', '.($items_page);
 
@@ -2059,7 +2170,7 @@ class ContentManager
         $rc  = new RelatedContent();
         $ccm = new ContentCategoryManager();
 
-        $relatedContentIDs = $rc->get_relations($contentID);
+        $relatedContentIDs = $rc->getRelations($contentID);
         $relatedContent = array();
         foreach ($relatedContentIDs as $contentID) {
             $content = new Content($contentID);

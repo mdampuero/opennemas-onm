@@ -21,7 +21,7 @@ $category_name = $request->query->filter('category_name', '', FILTER_SANITIZE_ST
 $action = $request->query->filter('action', 'list', FILTER_SANITIZE_STRING);
 $page = $request->query->filter('page', 0, FILTER_VALIDATE_INT);
 
-if (!empty($category_name)) {
+if (!empty($category_name) && $category_name != 'home' ) {
     $ccm = ContentCategoryManager::get_instance();
     $category = $ccm->get_id($category_name);
     $actual_category_id = $category;
@@ -41,24 +41,24 @@ if (!empty($category_name)) {
     $actual_category_id = $category = 0; //NEED CODE WIDGETS
 }
 
+$cm = new ContentManager();
+
 switch ($action) {
     case 'list':
         # If is not cached process this action
         $cacheID = $tpl->generateCacheId( $category_name, '', $page);
 
+
         if (($tpl->caching == 0)
             || !$tpl->isCached('video/video_frontpage.tpl', $cacheID)
         ) {
 
-            $cm = new ContentManager();
-
             $videosSettings = s::get('video_settings');
 
             $totalVideosFrontpage = isset($videosSettings['total_front'])?:2;
-            $days = isset( $videosSettings['time_last'])?:124;
+            $days = isset( $videosSettings['time_last'])?:365;
 
-            if (isset($category_name) && !empty($category_name) ) {
-
+            if (isset($category_name) && !empty($category_name) && $category_name != 'home') {
                 $front_videos = $cm->find_all(
                     'Video',
                     'available=1 AND `contents_categories`.`pk_fk_content_category` ='
@@ -124,7 +124,7 @@ switch ($action) {
         $latestComments = $cm->cache->getLastComentsContent('Video', true, $actual_category_id, 4);
         $tpl->assign('lasts_comments', $latestComments);
 
-        if (isset($category_name) && !empty($category_name) ) {
+        if (isset($category_name) && !empty($category_name) && $category_name != 'home') {
             $tpl->display('video/video_frontpage.tpl', $cacheID);
         } else {
             $tpl->display('video/video_main_frontpage.tpl', $cacheID);
@@ -132,8 +132,6 @@ switch ($action) {
         break;
 
     case 'inner':
-
-        $cm = new ContentManager();
 
         $dirtyID = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
         $videoID = Content::resolveID($dirtyID);
@@ -206,6 +204,10 @@ switch ($action) {
         $itemsPage = 3;
 
         $category_name = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
+        if ($category == 0) {
+            $category = $request->query->filter('category', '', FILTER_SANITIZE_STRING);
+        }
+
         $page = $request->query->filter('page', 1, FILTER_VALIDATE_INT);
 
         $_limit = 'LIMIT ' . ($page - 1) * $itemsPage . ', ' . ($itemsPage);
@@ -240,7 +242,7 @@ switch ($action) {
         $category_name = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
         $page = $request->query->filter('page', 1, FILTER_VALIDATE_INT);
 
-        if ($category == '0') {
+        if ($category == 0) {
             $itemsPage = 6;
         } else {
             $itemsPage = 3;

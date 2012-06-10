@@ -371,7 +371,7 @@ EOF;
     {
         $noHtml      = strip_tags($text);
         $description = explode(" ", $noHtml, $numWords + 1);
-        $sobra       = array_pop($description);
+        array_pop($description);
         $words       = implode(" ", $description).'...';
 
         return $words;

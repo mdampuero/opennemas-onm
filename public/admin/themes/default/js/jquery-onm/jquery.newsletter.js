@@ -243,6 +243,7 @@ jQuery('#modal-newsletter-accept a.btn.no').on('click', function(e){
 jQuery('#newsletterForm').on('click','#edit-button', function() {
 
     tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
+    jQuery('#newsletterForm #li-save-button').show();
 
 });
 
@@ -262,6 +263,7 @@ function saveChanges() {
         OpenNeMas.tinyMceFunctions.destroy( 'htmlContent' );
     }
     var htmlContent = jQuery('div#content').find('div#htmlContent').html();
+    log(htmlContent);
     setTimeout(function () {
 
         jQuery.ajax({

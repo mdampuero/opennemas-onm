@@ -37,8 +37,8 @@ class NewsletterManager
         $mail->IsSMTP();
         $mail->Host = $params['mail_host'];
         if (!empty($params['mail_user'])
-            && !empty($params['mail_password']))
-        {
+            && !empty($params['mail_password'])
+        ) {
             $mail->SMTPAuth = true;
         } else {
             $mail->SMTPAuth = false;
@@ -100,43 +100,63 @@ class NewsletterManager
     public function render()
     {
         $tpl = new Template(TEMPLATE_USER);
+        $cm  = new ContentManager();
 
         $newsletterContent = json_decode(json_decode($_SESSION['data-newsletter']));
 
-        if (!empty($newsletterContent)) {
-            foreach ($newsletterContent as  $container) {
-                foreach ($container->items as &$item) {
-                    if (!empty($item->id) && $item->content_type !='label') {
-                        $content = new Content($item->id);
+        if (empty($newsletterContent)) {
+            $newsletterContent = array();
+        }
 
-                        //if is a real content include it in the contents array
-                        if (!empty($content) && is_object($content)) {
-                            $content = $content->get($item->id);
-                            $item->content_type = $content->content_type;
-                            $item->title        = $content->title;
-                            $item->slug         = $content->slug;
-                            $item->uri          = $content->uri;
-                            $item->subtitle     = $content->subtitle;
-                            $item->date         = date('Y-m-d', strtotime(str_replace('/', '-', substr($content->created, 6))));
-                            $item->cat          = $content->category_name;
-                            $item->agency       = (is_array($content->params) && array_key_exists('agencyBulletin', $content->params))?$content->params['agencyBulletin']:'';
-                            $item->name         = (isset($content->name))?$content->name:'';
-                            $item->image        = (isset($content->cover))?$content->cover:'';
+        foreach ($newsletterContent as $container) {
+            foreach ($container->items as &$item) {
+                if (!empty($item->id) && $item->content_type !='label') {
+                    $content = new $item->content_type($item->id);
+
+                    //if is a real content include it in the contents array
+                    if (!empty($content) && is_object($content)) {
+                        $content = $content->get($item->id);
+                        $item->content_type = $content->content_type;
+                        $item->title        = $content->title;
+                        $item->slug         = $content->slug;
+                        $item->uri          = $content->uri;
+                        $item->subtitle     = $content->subtitle;
+                        $item->date         =
+                            date('Y-m-d', strtotime(str_replace('/', '-', substr($content->created, 6))));
+                        $item->cat          = $content->category_name;
+                        $item->agency       =
+                            (is_array($content->params) && array_key_exists('agencyBulletin', $content->params))
+                                ? $content->params['agencyBulletin'] : '';
+                        $item->name         = (isset($content->name))?$content->name:'';
+                        $item->image        = (isset($content->cover))?$content->cover:'';
+
+                        // Fetch images of articles if exists
+                        if(isset($content->img1)) {
+                            $item->photo = $cm->find('Photo', 'pk_content ='.$content->img1);
                         }
+
+                        //Fetch opinion author photos
+                        if (!empty($content->fk_author_img)) {
+                            $item->author = new Author($content->fk_author);
+                            $item->authorPhoto = $item->author->get_photo($content->fk_author_img);
+                            $item->authorPhotoWidget = $item->author->get_photo($content->fk_author_img_widget);
+                        }
+
                     }
+
                 }
             }
         }
+
         $tpl->assign('newsletterContent', $newsletterContent);
 
         //render menu
         $menuFrontpage= Menu::renderMenu('frontpage');
-        $tpl->assign('menuFrontpage',$menuFrontpage->items);
+        $tpl->assign('menuFrontpage', $menuFrontpage->items);
 
         //render ads
         $advertisement = Advertisement::getInstance();
         $banners       = $advertisement->getAdvertisements(array(1001, 1009), 0);
-        $cm            = new ContentManager();
         $banners       = $cm->getInTime($banners);
 
         $advertisement->render($banners, $advertisement);
@@ -152,7 +172,9 @@ class NewsletterManager
             'Julio', 'Agosto', 'Septiembre',
             'Octubre', 'Noviembre', 'Diciembre'
         );
-        $tpl->assign('current_date', $days[(int) date('w')] . ' ' . date('j') . ' de ' . $months[(int) date('n')] . ' ' . date('Y'));
+        $tpl->assign('current_date',
+            $days[(int) date('w')].' '.date('j').' de '.$months[(int) date('n')].' '.date('Y')
+        );
 
         $publicUrl = preg_replace('@^http[s]?://(.*?)/$@i', 'http://$1', SITE_URL);
         $tpl->assign('URL_PUBLIC', $publicUrl);

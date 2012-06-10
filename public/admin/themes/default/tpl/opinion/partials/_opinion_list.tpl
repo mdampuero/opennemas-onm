@@ -116,7 +116,7 @@
 		</tr>
         {sectionelse}
         <tr>
-            <td class="empty" colspan=10>
+            <td class="empty" colspan="11">
                 {t}There is no opinions yet.{/t}
             </td>
         </tr>
@@ -124,7 +124,7 @@
 	</tbody>
 	<tfoot>
 		<tr class="pagination">
-			<td colspan="10">
+			<td colspan="11">
 				{$paginacion|default:""}&nbsp;
 			</td>
 		</tr>

@@ -29,7 +29,7 @@ switch ($action) {
         $cacheID = $tpl->generateCacheId('Index', '', "RSS");
 
         // Fetch information for Advertisements
-        require_once "index_advertisement.php";
+        require_once "article_advertisement.php";
 
         if (($tpl->caching == 0)
             || !$tpl->isCached('rss/index.tpl', $cacheID)
@@ -64,6 +64,7 @@ switch ($action) {
             $ccm = ContentCategoryManager::get_instance();
             $cm = new ContentManager();
             // Setting up some variables to print out in the final rss
+
             if (isset($category_name)
                 && !empty($category_name)
             ) {
@@ -110,12 +111,14 @@ switch ($action) {
 
                 $author = $request->query->filter('author', null, FILTER_SANITIZE_STRING);
 
+
                 // get all the authors of opinions
-                if (!isset ($author)) {
+                if (!isset($author) || empty($author)) {
                     $articles_home = $cm->getOpinionArticlesWithAuthorInfo(
                         'contents.available=1 and contents.content_status=1',
                         'ORDER BY created DESC LIMIT 0,50'
                     );
+                    $title_rss = 'Últimas Opiniones';
                 } else {
                     // get articles for the author in opinion
 
@@ -135,8 +138,30 @@ switch ($action) {
                 //Generate author-name-slug for generate_uri
                 foreach ($articles_home as &$art) {
                     $art['author_name_slug'] = StringUtils::get_title($art['name']);
-                }
 
+                    $art['uri'] = Uri::generate( 'opinion',
+                        array(
+                            'id'       => sprintf('%06d',$art['id']),
+                            'date'     => date('YmdHis', strtotime($art['created'])),
+                            'category' => $art['author_name_slug'],
+                            'slug'     => $art['slug'],
+                        )
+                    );
+                }
+            } elseif ($category_name == 'last') {
+                $articles_home = $cm->find('Article', 'available=1 AND content_status=1 AND fk_content_type=1',
+                           'ORDER BY created DESC, changed DESC LIMIT 0, 50');
+
+                                // Fetch the photo and category name for this element
+                foreach ($articles_home as $i => $article) {
+
+                    if (isset($article->img1) && $article->img1 != 0) {
+                        $photos[$article->id] = new Photo($article->img1);
+                    }
+
+                    $article->category_name = $article->loadCategoryName($article->id);
+                }
+                $title_rss = 'Últimas Noticias';
             } else {
                 // Get the RSS for the rest of categories
 

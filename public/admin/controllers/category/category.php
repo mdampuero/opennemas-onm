@@ -42,6 +42,8 @@ if( isset($_REQUEST['action']) ) {
                          $num_contents[$i]['photos']         = (isset($groups['photos'][$cate->pk_content_category]))? $groups['photos'][$cate->pk_content_category] : 0;
                          $num_contents[$i]['advertisements'] = (isset($groups['advertisements'][$cate->pk_content_category]))? $groups['advertisements'][$cate->pk_content_category] : 0;
 
+                         //Unserialize category param field
+                         $cate->params = unserialize($cate->params);
                          $categorys[$i] = $cate;
 
                          $resul = $ccm->getSubcategories( $cate->pk_content_category);
@@ -50,6 +52,8 @@ if( isset($_REQUEST['action']) ) {
                               $num_sub_contents[$i][$j]['articles']       = (isset($groups['articles'][$cate->pk_content_category]))? $groups['articles'][$cate->pk_content_category] : 0;
                               $num_sub_contents[$i][$j]['photos']         = (isset($groups['photos'][$cate->pk_content_category]))? $groups['photos'][$cate->pk_content_category] : 0;
                               $num_sub_contents[$i][$j]['advertisements'] = (isset($groups['advertisements'][$cate->pk_content_category]))? $groups['advertisements'][$cate->pk_content_category] : 0;
+                              //Unserialize subcategory param field
+                              $cate->params = unserialize($cate->params);
                               $j++;
                          }
                          $subcategorys[$i]=$resul;
@@ -211,13 +215,27 @@ if( isset($_REQUEST['action']) ) {
             // FIXME: evitar otros valores erróneos
             $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
             $category->set_inmenu($status);
-            /* Limpiar la cache de portada de todas las categorias */
-         //   $refresh = Content::refreshFrontpageForAllCategories();
+            // Limpiar la cache de portada de todas las categorias
+            // $refresh = Content::refreshFrontpageForAllCategories();
             $ccm->reloadCategories();
 
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
 
 		break;
+
+        case 'set_inrss':
+
+            $category = new ContentCategory($_REQUEST['id']);
+            // FIXME: evitar otros valores erróneos
+            $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
+            $category->set_inrss($status, $category);
+            // Limpiar la cache de portada de todas las categorias
+            // $refresh = Content::refreshFrontpageForAllCategories();
+            $ccm->reloadCategories();
+
+            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
+
+        break;
 
 		case 'validate':
 

@@ -143,10 +143,12 @@ class InstanceManager
             $onmInstancesConnection = $connectionData;
         }
         $conn = \ADONewConnection($onmInstancesConnection['BD_TYPE']);
-        $conn->Connect($onmInstancesConnection['BD_HOST'],
-                       $onmInstancesConnection['BD_USER'],
-                       $onmInstancesConnection['BD_PASS'],
-                       $onmInstancesConnection['BD_DATABASE']);
+        $conn->Connect(
+            $onmInstancesConnection['BD_HOST'],
+            $onmInstancesConnection['BD_USER'],
+            $onmInstancesConnection['BD_PASS'],
+            $onmInstancesConnection['BD_DATABASE']
+        );
 
         // Check if adodb is log enabled
         $conn->LogSQL();
@@ -178,12 +180,12 @@ class InstanceManager
 
         foreach ($rs as $key) {
             $instance = new \stdClass();
-            $instance->id = $key["id"];
-            $instance->name = $key["name"];
+            $instance->id        = $key["id"];
+            $instance->name      = $key["name"];
             $instance->activated = $rs->fields["activated"];
-            $instance->domains = $key["domains"];
-            $instance->settings = unserialize($key['settings']);
-            $instances []= $instance;
+            $instance->domains   = $key["domains"];
+            $instance->settings  = unserialize($key['settings']);
+            $instances           []= $instance;
         }
 
         return $instances;
@@ -195,7 +197,6 @@ class InstanceManager
      */
     public function read($id)
     {
-
         $instances = array();
 
         $sql = "SELECT SQL_CACHE * FROM instances WHERE id = ?";

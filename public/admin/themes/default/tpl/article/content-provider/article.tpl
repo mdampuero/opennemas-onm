@@ -1,7 +1,8 @@
-<div data-content-id="{$content->id}" data-class="Article" class="content-provider-element {schedule_class item=$content} {suggested_class item=$content} clearfix">
+<div data-content-id="{$content->id}" data-class="Article" class="content-provider-element {schedule_class item=$content} {suggested_class item=$content} {in_frontpage_class item=$content} clearfix">
     <div class="description">
         <input type="checkbox" class="action-button" name="selected-{$smarty.foreach.article_loop.index}">
         <div class="title">
+            {if $content->in_frontpage && ($params['home'] != true)}<span class="in_frontpage"></span>{/if}
             <span class="type">{t}Article{/t}</span>
             {$content->title}
         </div>

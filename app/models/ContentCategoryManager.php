@@ -67,7 +67,7 @@ class ContentCategoryManager
     public function reloadCategories()
     {
         $this->categories = null;
-        $method ='populate_categories';
+        $method ='populateCategories';
         $args   = array();
         $key    = 'ContentCategoryManager'.$method.md5(serialize($args));
         if (defined('APC_PREFIX')) {

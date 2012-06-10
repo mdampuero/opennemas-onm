@@ -157,7 +157,7 @@ class Author
         //tabla author_imgs
         $titles = $data['titles'];
         if ($titles) {
-            foreach ($titles as $atid=>$des) {
+            foreach ($titles as $atid => $des) {
                 $sql = "INSERT INTO author_imgs
                         (`fk_author`, `fk_photo`,`path_img`) VALUES ( ?,?,?)";
                 $values = array( $this->pk_author, $atid, $des );

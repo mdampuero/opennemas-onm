@@ -97,7 +97,8 @@ jQuery(document).ready(function ($){
                             <th style="width:15px;">{t}Articles{/t}</th>
                             <th style="width:15px;">{t}Photos{/t}</th>
                             <th style="width:15px;">{t}Advertisements{/t}</th>
-                            <th style="width:15px;">{t}Published{/t}</th>
+                            <th style="width:15px;">{t}Available{/t}</th>
+                            <th style="width:15px;">{t}Show in rss{/t}</th>
                             <th style="width:70px;">{t}Actions{/t}</th>
                         </tr>
                     </thead>
@@ -120,7 +121,7 @@ jQuery(document).ready(function ($){
                     </tbody>
                     <tfoot>
                         <tr class="pagination">
-                            <td colspan="7">
+                            <td colspan="8">
                                 &nbsp;
                             </td>
                         </tr>
@@ -137,7 +138,7 @@ jQuery(document).ready(function ($){
                             <th style="width:15px;">{t}Articles{/t}</th>
                             <th style="width:15px;">{t}Photos{/t}</th>
                             <th style="width:15px;">{t}Advertisements{/t}</th>
-                            <th style="width:15px;">{t}Published{/t}</th>
+                            <th style="width:15px;">{t}Available{/t}</th>
                             <th style="width:70px;">{t}Actions{/t}</th>
                         </tr>
                     </thead>
@@ -172,7 +173,7 @@ jQuery(document).ready(function ($){
                             <th style="width:15px;">{t}Articles{/t}</th>
                             <th style="width:15px;">{t}Photos{/t}</th>
                             <th style="width:15px;">{t}Advertisements{/t}</th>
-                            <th style="width:15px;">{t}Published{/t}</th>
+                            <th style="width:15px;">{t}Available{/t}</th>
                             <th style="width:70px;">{t}Actions{/t}</th>
                         </tr>
                     </thead>
@@ -208,7 +209,7 @@ jQuery(document).ready(function ($){
                             <th style="width:15px;">{t}Articles{/t}</th>
                             <th style="width:15px;">{t}Photos{/t}</th>
                             <th style="width:15px;">{t}Advertisements{/t}</th>
-                            <th style="width:15px;">{t}Published{/t}</th>
+                            <th style="width:15px;">{t}Available{/t}</th>
                             <th style="width:70px;">{t}Actions{/t}</th>
                         </tr>
                     </thead>
@@ -244,7 +245,7 @@ jQuery(document).ready(function ($){
                             <th style="width:15px;">{t}Articles{/t}</th>
                             <th style="width:15px;">{t}Photos{/t}</th>
                             <th style="width:15px;">{t}Advertisements{/t}</th>
-                            <th style="width:15px;">{t}Published{/t}</th>
+                            <th style="width:15px;">{t}Available{/t}</th>
                             <th style="width:70px;">{t}Actions{/t}</th>
                         </tr>
                     </thead>
@@ -280,7 +281,7 @@ jQuery(document).ready(function ($){
                             <th style="width:15px;">{t}Articles{/t}</th>
                             <th style="width:15px;">{t}Photos{/t}</th>
                             <th style="width:15px;">{t}Advertisements{/t}</th>
-                            <th style="width:15px;">{t}Published{/t}</th>
+                            <th style="width:15px;">{t}Available{/t}</th>
                             <th style="width:70px;">{t}Actions{/t}</th>
                         </tr>
                     </thead>
@@ -316,7 +317,7 @@ jQuery(document).ready(function ($){
                             <th style="width:15px;">{t}Articles{/t}</th>
                             <th style="width:15px;">{t}Photos{/t}</th>
                             <th style="width:15px;">{t}Advertisements{/t}</th>
-                            <th style="width:15px;">{t}Published{/t}</th>
+                            <th style="width:15px;">{t}Available{/t}</th>
                             <th style="width:70px;">{t}Actions{/t}</th>
                         </tr>
                     </thead>

@@ -13,7 +13,6 @@ use \Onm\Settings as s;
  *
  * @package    Onm
  * @subpackage Model
- * @author     Fran Dieguez <fran@openhost.es>
  **/
 class PClave
 {
@@ -38,7 +37,8 @@ class PClave
      */
     public $cache = null;
 
-    public static $instance=null;
+    public static $instance = null;
+
     /**
      * constructor
      *
@@ -61,8 +61,9 @@ class PClave
 
         return self::$instance;
     }
+
     /**
-     * Create a new object
+     * Create a new pclave in database
      *
      * @param  array  $data
      * @return PClave
@@ -72,7 +73,8 @@ class PClave
         // Clear  magic_quotes
         StringUtils::disabled_magic_quotes($data);
 
-        $sql = "INSERT INTO `pclave` (`pclave`, `value`, `tipo`) VALUES (?, ?, ?)";
+        $sql = "INSERT INTO `pclave` (`pclave`, `value`, `tipo`) "
+             . "VALUES (?, ?, ?)";
 
         $values[] = $data['pclave'];
         $values[] = $data['value'];
@@ -80,9 +82,7 @@ class PClave
         /*$this->sanitize( &$data );*/
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
             return null;
         }
@@ -107,9 +107,7 @@ class PClave
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
             return null;
         }
@@ -153,7 +151,9 @@ class PClave
         // Clear  magic_quotes
         StringUtils::disabled_magic_quotes($data);
 
-        $sql = "UPDATE `pclave` SET `pclave`=?, `tipo`=?, `value`=? WHERE `id`=?";
+        $sql = "UPDATE `pclave` "
+             . "SET `pclave`=?, `tipo`=?, `value`=? "
+             . "WHERE `id`=?";
 
         $values[] = $data['pclave'];
         $values[] = $data['tipo'];
@@ -161,9 +161,7 @@ class PClave
         $values[] = $data['id'];
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
             return false;
         }
@@ -172,7 +170,7 @@ class PClave
     }
 
     /**
-     * Save
+     * Save pclave into database
      *
      * @param array $data Post data
      */
@@ -197,11 +195,9 @@ class PClave
         $values = array($id);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
-           return false;
+            return false;
         }
 
         return true;
@@ -243,11 +239,13 @@ class PClave
         if (mb_detect_encoding($text) == "UTF-8") {
             $text = ' '.($text).' ';
         } else {
-            $text = ' '.utf8_decode($text).' '; // spaces necessary to evaluate first and last pattern matching
+            // spaces necessary to evaluate first and last pattern matching
+            $text = ' '.utf8_decode($text).' ';
         }
 
-        if (!function_exists('longestFirst')) {
-            function longestFirst($a, $b)
+        usort(
+            $terms,
+            function ($a, $b)
             {
                 if (strlen($a->pclave) == strlen($b->pclave)) {
                     return 0;
@@ -255,8 +253,7 @@ class PClave
 
                 return (strlen($a->pclave) < strlen($b->pclave)) ? 1 : -1;
             }
-        }
-        usort($terms, "longestFirst");
+        );
 
         foreach ($terms as $term) {
             $method = 'cb_'.$term->tipo;
@@ -264,56 +261,16 @@ class PClave
                 $replacement = $this->$method($term->pclave, $term->value);
 
                 // WARNING: utf8
-                $regexp = '(\W)' .
-                            '(' . preg_quote($term->pclave) . '|' .
-                                  preg_quote(htmlentities(utf8_decode($term->pclave), ENT_COMPAT)) .
-                          ')(?!(</a>|&|"))(\W)';
+                $regexp = '(\W)(' . preg_quote($term->pclave) . '|' .
+                preg_quote(htmlentities(utf8_decode($term->pclave), ENT_COMPAT))
+                .')(?!(</a>|&|"))(\W)';
 
-                $regexp = '/' . preg_replace('@/@', '\/', $regexp) . '/';
+                $regexp = '/' . preg_replace('@/@', '\/', $regexp).'/';
 
-                $text = preg_replace($regexp, '\1' . $replacement . '\4', $text);
+                $text = preg_replace($regexp, '\1'.$replacement.'\4', $text);
             }
         }
 
         return trim($text);
-    }
-
-    /* Callbacks to execute replacement */
-    public function cb_intsearch($pclave, $value)
-    {
-        $text = '<a href="'.SITE_URL.'search.php?cx='. s::get('google_custom_search_api_key') .'&cof=FORID:10&ie=UTF-8&q=%s' .
-            '&destino='.SITE_NAME.'" title="%s">%s</a>';
-
-        if (empty($value)) {
-            $value = $pclave;
-        }
-        $origin = $pclave;
-
-        // optimize search
-        $value = preg_replace('/[\+"\'\-\*&%]/', ' ', $value);
-        $value = preg_replace('/[ ][ ]+/', ' ', $value);
-        $value = '"' .trim($value) . '"';
-        $value = urlencode($value);
-
-        return sprintf($text, $value, 'Buscar m&aacute;s entradas '. s::get('site_name') .'en para: ' . htmlentities($origin, ENT_COMPAT, 'UTF-8'), $pclave);
-    }
-
-    public function cb_url($pclave, $value)
-    {
-        //Añadido target="_blank"
-        $text = '<a target="_blank" href="%s" title="Ir a %s">%s</a>';
-
-        return sprintf($text, $value, $value, $pclave);
-    }
-
-    public function cb_email($pclave, $value)
-    {
-        $matches = array();
-        preg_match('/^(?P<cuenta>[^@]+)@(?P<dominio>[^\.]+)\.(?P<tld>.*?)$/', $value, $matches);
-        $text =<<< MAIL_LINK
-<a href="mailto:{$matches['cuenta']}&#64;{$matches['dominio']}&#46;{$matches['tld']}" title="%s">%s</a>
-MAIL_LINK;
-
-        return sprintf($text, 'Ponerse en contacto con: '.$pclave, $pclave);
     }
 }

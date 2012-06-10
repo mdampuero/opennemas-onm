@@ -76,7 +76,7 @@ class Article extends Content
                 $uri =  Uri::generate(
                     'article',
                     array(
-                        'id'       => sprintf('%06d',$this->id),
+                        'id'       => sprintf('%06d', $this->id),
                         'date'     => date('YmdHis', strtotime($this->created)),
                         'category' => $this->category_name,
                         'slug'     => $this->slug2,
@@ -160,14 +160,14 @@ class Article extends Content
             $this->saveRelated(
                 $data['relatedFront'],
                 $this->id,
-                'set_rel_position'
+                'setRelationPosition'
             );
         }
         if (!empty($data['relatedInner'])) {
             $this->saveRelated(
                 $data['relatedInner'],
                 $this->id,
-                'set_rel_position_int'
+                'setRelationPositionForInner'
             );
         }
 
@@ -308,14 +308,14 @@ class Article extends Content
             $this->saveRelated(
                 $data['relatedFront'],
                 $data['id'],
-                'set_rel_position'
+                'setRelationPosition'
             );
         }
         if (!empty($data['relatedInner'])) {
             $this->saveRelated(
                 $data['relatedInner'],
                 $data['id'],
-                'set_rel_position_int'
+                'setRelationPositionForInner'
             );
         }
 
@@ -328,12 +328,7 @@ class Article extends Content
         }
 
         $this->category_name = $this->loadCategoryName($this->id);
-        $GLOBALS['application']->dispatch('onAfterUpdate', $this);
 
-        // If has clone then update
-        if ($this->hasClone($this->id)) {
-            $this->updateCloneFromOriginal($this->id, $data);
-        }
 
         return true;
     }
@@ -517,12 +512,12 @@ class Article extends Content
         $this->saveRelated(
             $formValues['ordenArti'],
             $contentPK,
-            'set_rel_position'
+            'setRelationPosition'
         );
         $this->saveRelated(
             $formValues['ordenArtiInt'],
             $contentPK,
-            'set_rel_position_int'
+            'setRelationPositionForInner'
         );
         // }}}
 
@@ -623,7 +618,7 @@ class Article extends Content
                 .'WHERE (`pk_original` = ?) OR (`pk_clone` = ?)';
 
         if ($GLOBALS['application']->conn->Execute($sql, $values)===false) {
-            $errorMsg = Application::logDatabaseError();
+            Application::logDatabaseError();
 
             return false;
         }
@@ -659,25 +654,10 @@ class Article extends Content
 
     public function getOriginal($clonePK=null)
     {
-        /* if (is_null($clonePK)) {
-            $clonePK = $this->id;
-        }
-
-        $sql = 'SELECT pk_original FROM `articles_clone` WHERE `pk_clone` = ?';
-        $originalPK = $GLOBALS['application']->conn->GetOne(
-            $sql,
-            array($clonePK)
-        );
-
-        if ($originalPK !== false) {
-            return new Article($originalPK);
-        } */
-
         if (is_null($clonePK)) {
             $clonePK = $this->id;
         }
 
-        $values = array();
         foreach (Article::$clonesHash as $clone => $original) {
             if (!strcmp($clone, $clonePK)) {
                 return new Article($original);
@@ -708,18 +688,6 @@ class Article extends Content
      */
     public function isClone($contentPK=null)
     {
-        /* $values = array();
-
-        if (!is_null($contentPK)) {
-            $values = array($contentPK);
-        } else {
-            $values = array($this->id);
-        }
-
-        $sql = 'SELECT count(*) FROM `articles_clone` WHERE `pk_clone` = ?';
-
-        return $GLOBALS['application']->conn->GetOne($sql, $values) > 0; */
-
         Article::loadHashClones();
 
         if (is_null($contentPK)) {
@@ -734,18 +702,6 @@ class Article extends Content
      */
     public function hasClone($contentPK=null)
     {
-        /* $values = array();
-
-        if (!is_null($contentPK)) {
-            $values = array($contentPK);
-        } else {
-            $values = array($this->id);
-        }
-
-        $sql = 'SELECT count(*) FROM `articles_clone` WHERE `pk_original` = ?';
-
-        return $GLOBALS['application']->conn->GetOne($sql, $values) > 0; */
-
         Article::loadHashClones();
 
         if (is_null($contentPK)) {
@@ -760,18 +716,6 @@ class Article extends Content
      */
     public function getClones($contentPK=null)
     {
-        /* $values = array();
-
-        if (!is_null($contentPK)) {
-            $values = array($contentPK);
-        } else {
-            $values = array($this->id);
-        }
-
-        $sql = 'SELECT pk_clone FROM `articles_clone` WHERE `pk_original` = ?';
-
-        return $GLOBALS['application']->conn->GetCol($sql, $values); */
-
         Article::loadHashClones();
 
         if (is_null($contentPK)) {
@@ -821,7 +765,7 @@ class Article extends Content
             $tpl = new Template(TEMPLATE_USER);
         //}
 
-        $tpl->assign('item',$this);
+        $tpl->assign('item', $this);
         $tpl->assign('cssclass', $params['cssclass']);
 
         try {

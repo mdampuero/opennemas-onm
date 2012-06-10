@@ -54,7 +54,7 @@ class Kiosko extends Content
     public function create($data)
     {
         if ($this->exists($data['path'], $data['category'])) {
-           m::add(_("There's other paper in this date & this category."));
+            m::add(_("There's other paper in this date & this category."));
         }
 
         parent::create($data);
@@ -129,8 +129,8 @@ class Kiosko extends Content
         $sql = 'DELETE FROM kioskos WHERE pk_kiosko='.($this->id);
 
         $paperPdf      = $this->kiosko_path.$this->path.$this->name;
-        $paperImage    = $this->kiosko_path.$this->path.preg_replace("/.pdf$/",".jpg",$this->name);
-        $bigPaperImage = $this->kiosko_path."650-".$this->path.preg_replace("/.pdf$/",".jpg",$this->name);
+        $paperImage    = $this->kiosko_path.$this->path.preg_replace("/.pdf$/", ".jpg", $this->name);
+        $bigPaperImage = $this->kiosko_path."650-".$this->path.preg_replace("/.pdf$/", ".jpg", $this->name);
 
         unlink($paperPdf);
         unlink($paperImage);

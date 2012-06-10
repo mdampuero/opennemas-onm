@@ -31,26 +31,25 @@ $.extend($.ui.tabs.prototype, {
                         selectOnAdd: false,
                         followOnSelect: false
                 };
-                 
+
                 opts = $.extend(opts, options);
 
-                var self = this, initialized = false, currentPage, 
-                        buttonWidth, containerWidth, allTabsWidth, tabWidths, 
-                        maxPageWidth, pages, resizeTimer = null, 
+                var self = this, initialized = false, currentPage,
+                        buttonWidth, containerWidth, allTabsWidth, tabWidths,
+                        maxPageWidth, pages, resizeTimer = null,
                         windowHeight = $(window).height(), windowWidth = $(window).width();
-                
+
                 function init() {
                         destroy();
-                        
+
                         allTabsWidth = 0, currentPage = 0, maxPageWidth = 0, buttonWidth = 0,
                                 pages = new Array(), tabWidths = new Array(), selectedTabWidths = new Array();
-                        
+
                         containerWidth = self.element.width();
-                        console.log(containerWidth);
-                        
+
                         // loops through LIs, get width of each tab when selected and unselected.
                         var maxDiff = 0;  // the max difference between a selected and unselected tab
-                        self.lis.each(function(i) {                     
+                        self.lis.each(function(i) {
                                 if (i == self.options.selected) {
                                         selectedTabWidths[i] = $(this).outerWidth({ margin: true });
                                         tabWidths[i] = self.lis.eq(i).removeClass('ui-tabs-selected').outerWidth({ margin: true });
@@ -67,20 +66,20 @@ $.extend($.ui.tabs.prototype, {
                         });
             // fix padding issues with buttons
             // TODO determine a better way to handle this
-                        allTabsWidth += maxDiff + ($.browser.msie?4:0) + 9;  
+                        allTabsWidth += maxDiff + ($.browser.msie?4:0) + 9;
 
                         // if the width of all tables is greater than the container's width, calculate the pages
                         if (allTabsWidth > containerWidth) {
-                                // create next button                   
+                                // create next button
                                 li = $('<li></li>')
                                         .addClass('ui-state-default ui-tabs-paging-next')
                                         .append($('<a href="#"></a>')
                                                         .click(function() { page('next'); return false; })
                                                         .html(opts.nextButton));
-                                
+
                                 self.lis.eq(self.length()-1).after(li);
                                 buttonWidth = li.outerWidth({ margin: true });
-                                
+
                                 // create prev button
                                 li = $('<li></li>')
                                         .addClass('ui-state-default ui-tabs-paging-prev')
@@ -89,70 +88,70 @@ $.extend($.ui.tabs.prototype, {
                                                         .html(opts.prevButton));
                                 self.lis.eq(0).before(li);
                                 buttonWidth += li.outerWidth({ margin: true });
-                                
+
                                 // TODO determine fix for padding issues to next button
-                                buttonWidth += 19; 
-                                                                
+                                buttonWidth += 19;
+
                                 var pageIndex = 0, pageWidth = 0, maxTabPadding = 0;
-                                
+
                                 // start calculating pageWidths
                                 for (var i = 0; i < tabWidths.length; i++) {
                                         // if first tab of page or selected tab's padding larger than the current max, set the maxTabPadding
                                         if (pageWidth == 0 || selectedTabWidths[i] - tabWidths[i] > maxTabPadding)
                                                 maxTabPadding = (selectedTabWidths[i] - tabWidths[i]);
-                                        
-                                        // if first tab of page, initialize pages variable for page 
+
+                                        // if first tab of page, initialize pages variable for page
                                         if (pages[pageIndex] == null) {
                                                 pages[pageIndex] = { start: i };
-                                        
+
                                         } else if ((i > 0 && (i % opts.tabsPerPage) == 0) || (tabWidths[i] + pageWidth + buttonWidth + 12) > containerWidth) {
-                                                if ((pageWidth + maxTabPadding) > maxPageWidth) 
+                                                if ((pageWidth + maxTabPadding) > maxPageWidth)
                                                         maxPageWidth = (pageWidth + maxTabPadding);
                                                 pageIndex++;
-                                                pages[pageIndex] = { start: i };                        
+                                                pages[pageIndex] = { start: i };
                                                 pageWidth = 0;
                                         }
                                         pages[pageIndex].end = i+1;
                                         pageWidth += tabWidths[i];
                                         if (i == self.options.selected) currentPage = pageIndex;
                                 }
-                                if ((pageWidth + maxTabPadding) > maxPageWidth) 
-                                        maxPageWidth = (pageWidth + maxTabPadding);                             
+                                if ((pageWidth + maxTabPadding) > maxPageWidth)
+                                        maxPageWidth = (pageWidth + maxTabPadding);
 
                             // hide all tabs then show tabs for current page
                                 self.lis.hide().slice(pages[currentPage].start, pages[currentPage].end).show();
-                                if (currentPage == (pages.length - 1) && !opts.cycle) 
-                                        disableButton('next');                  
-                                if (currentPage == 0 && !opts.cycle) 
+                                if (currentPage == (pages.length - 1) && !opts.cycle)
+                                        disableButton('next');
+                                if (currentPage == 0 && !opts.cycle)
                                         disableButton('prev');
-                                
+
                                 // calculate the right padding for the next button
                                 buttonPadding = containerWidth - maxPageWidth - buttonWidth;
-                                if (buttonPadding > 0) 
+                                if (buttonPadding > 0)
                                         $('.ui-tabs-paging-next', self.element).css({ paddingRight: buttonPadding + 'px' });
-                                
+
                                 initialized = true;
                         } else {
                                 destroy();
                         }
-                        
+
                         $(window).bind('resize', handleResize);
                 }
-                
+
                 function page(direction) {
                         currentPage = currentPage + (direction == 'prev'?-1:1);
-                        
+
                         if ((direction == 'prev' && currentPage < 0 && opts.cycle) ||
                                 (direction == 'next' && currentPage >= pages.length && !opts.cycle))
                                 currentPage = pages.length - 1;
-                        else if ((direction == 'prev' && currentPage < 0) || 
+                        else if ((direction == 'prev' && currentPage < 0) ||
                                          (direction == 'next' && currentPage >= pages.length && opts.cycle))
                                 currentPage = 0;
-                        
+
                         var start = pages[currentPage].start;
                         var end = pages[currentPage].end;
                         self.lis.hide().slice(start, end).show();
-                        
+
                         if (direction == 'prev') {
                                 enableButton('next');
                                 if (opts.follow && (self.options.selected < start || self.options.selected > (end-1))) self.select(end-1);
@@ -163,51 +162,51 @@ $.extend($.ui.tabs.prototype, {
                                 if (!opts.cycle && end >= self.length()) disableButton('next');
                         }
                 }
-                
+
                 function disableButton(direction) {
                         $('.ui-tabs-paging-'+direction, self.element).addClass('ui-tabs-paging-disabled');
                 }
-                
+
                 function enableButton(direction) {
                         $('.ui-tabs-paging-'+direction, self.element).removeClass('ui-tabs-paging-disabled');
                 }
-                
+
                 // special function defined to handle IE6 and IE7 resize issues
                 function handleResize() {
                         if (resizeTimer) clearTimeout(resizeTimer);
-                        
-                        if (windowHeight != $(window).height() || windowWidth != $(window).width()) 
+
+                        if (windowHeight != $(window).height() || windowWidth != $(window).width())
                                 resizeTimer = setTimeout(reinit, 100);
                 }
-                
-                function reinit() {     
+
+                function reinit() {
                         windowHeight = $(window).height();
                         windowWidth = $(window).width();
                         init();
                 }
-                
+
                 function destroy() {
                         // remove buttons
                         $('.ui-tabs-paging-next', self.element).remove();
                         $('.ui-tabs-paging-prev', self.element).remove();
-                        
+
                         // show all tabs
                         self.lis.show();
-                        
+
                         initialized = false;
-                        
+
                         $(window).unbind('resize', handleResize);
                 }
-                
+
                 // reconfigure "ui.tabs" add/remove events to reinit paging
                 var tabsAdd = self.add;
                 self.add = function(url, label, index) {
                         // remove paging buttons before adding a tab
                         if (initialized)
                                 destroy();
-                        
+
                         tabsAdd.apply(this, [url, label, index]);
-                    
+
                         if (opts.selectOnAdd) {
                                 if (index == undefined) index = this.lis.length-1;
                                 this.select(index);
@@ -220,9 +219,9 @@ $.extend($.ui.tabs.prototype, {
                         // remove paging buttons before removing a tab
                         if (initialized)
                                 destroy();
-                        
+
                         tabsRemove.apply(this, [index]);
-                        
+
                         // re-initialize paging buttons
                         init();
                 };
@@ -230,12 +229,12 @@ $.extend($.ui.tabs.prototype, {
                 var tabsSelect = self.select;
                 self.select = function(index) {
                         tabsSelect.apply(this, [index]);
-                        
-                        // if paging is not initialized or it is not configured to 
+
+                        // if paging is not initialized or it is not configured to
                         // change pages when a new tab is selected, then do nothing
                         if (!initialized || !opts.followOnSelect)
                                 return;
-                        
+
                         // find the new page based on index of the tab selected
                         for (i in pages) {
                                 var start = pages[i].start;
@@ -244,7 +243,7 @@ $.extend($.ui.tabs.prototype, {
                                         // if the the tab selected is not within the currentPage of tabs, then change pages
                                         if (i != currentPage) {
                                                 self.lis.hide().slice(start, end).show();
-                                                
+
                                                 currentPage = parseInt(i);
                                                 if (currentPage == 0) {
                                                         enableButton('next');
@@ -258,14 +257,14 @@ $.extend($.ui.tabs.prototype, {
                                 }
                         }
                 };
-                
-                // add, remove, and destroy functions specific for paging 
+
+                // add, remove, and destroy functions specific for paging
                 $.extend($.ui.tabs.prototype, {
                         pagingDestroy: function() {
                                 destroy();
                         }
                 });
-                
+
                 init();
         }
 });

@@ -196,7 +196,7 @@ class cSearch
         $szSqlSentence .= " FROM contents, " . $szNewTable;
         $szSqlSentence .= " WHERE " . $szMatch0;
         $szSqlSentence .= " AND ( " . $this->parseTypes($szContentsTypeTitle) . ") AND (" . $szWhere . ") ";
-        $szSqlSentence .= " ORDER BY _height DESC";
+        $szSqlSentence .= " ORDER BY _height DESC, created DESC";
         $szSqlSentence .= " LIMIT " . $iLimit;
 
         $resultSet = $GLOBALS['application']->conn->Execute($szSqlSentence);

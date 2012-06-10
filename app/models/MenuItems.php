@@ -276,8 +276,6 @@ class MenuItems
                     $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
                     $GLOBALS['application']->logger->debug('Error: '.$errorMsg. print_r($valuesUpdate, true));
                     $GLOBALS['application']->errors[] = 'Error: '.$errorMsg. print_r($valuesUpdate, true);
-
-
                 }
             }
 
@@ -287,13 +285,12 @@ class MenuItems
         return false;
     }
 
-   /**
-    * Delete all items in a menu
-    *    *
-    * @access public
-    * @param integer $id
-    * @return null
-    */
+    /**
+     * Delete all items in a menu
+     *
+     * @param integer $id
+     * @return null
+     */
     public static function emptyMenu($id)
     {
         $sql = 'DELETE FROM menu_items WHERE pk_menu ='.($id);
@@ -314,7 +311,7 @@ class MenuItems
 
     public static function deleteItems($items)
     {
-        $sql= "DELETE FROM menu_items WHERE pk_item = ?";
+        $sql = "DELETE FROM menu_items WHERE pk_item = ?";
         $stmt = $GLOBALS['application']->conn->Prepare($sql);
         foreach ($items as $item) {
             $resp = $GLOBALS['application']->conn->Execute($stmt, array($item));
@@ -333,5 +330,4 @@ class MenuItems
 
         return true;
     }
-
 }

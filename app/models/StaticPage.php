@@ -23,8 +23,8 @@ class StaticPage extends Content
      * @var pk_static_page Page identifier
      */
     public $pk_static_page = null;
-  //  public $content_type = __CLASS__;
-      public $content_type = 'static_page';
+    //  public $content_type = __CLASS__;
+    public $content_type = 'static_page';
     /**
      * @var string Content of body
      */

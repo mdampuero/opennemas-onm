@@ -85,8 +85,8 @@ if (isset($_REQUEST['action']) ) {
 			$relationes=array();
 			$intrelationes=array();
 			$rel= new RelatedContent();
-  		 	$relationes = $rel->get_relations( $id );//de portada
-	        $intrelationes = $rel->get_relations_int( $id );//de interor
+  		 	$relationes = $rel->getRelations( $id );//de portada
+	        $intrelationes = $rel->getRelationsForInner($id);//de interor
 
 			$html_out = "  ";
 			if($search){
@@ -152,8 +152,8 @@ if (isset($_REQUEST['action']) ) {
 			$intrelationes=array();
 			if(($id) && ($id != 0)){
 				$rel= new RelatedContent();
-	  		 	$relationes = $rel->get_relations( $id );//de portada
-		        $intrelationes = $rel->get_relations_int( $_REQUEST['id'] );//de interior
+	  		 	$relationes = $rel->getRelations( $id );//de portada
+		        $intrelationes = $rel->getRelationsForInner( $_REQUEST['id'] );//de interior
 			}
 
 			$html_out = "<table class='adminlist '>";

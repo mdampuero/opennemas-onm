@@ -24,7 +24,7 @@ if (!(isset($category_name) && !empty($category_name)) ) {
     $category_name = 'home';
 }
 
-// $tpl->setConfig('newslibrary');
+$tpl->setConfig('newslibrary');
 $cache_id = $tpl->generateCacheId($category_name, $subcategory_name, $date);
 
 $tpl->assign('newslibraryDate', $date);

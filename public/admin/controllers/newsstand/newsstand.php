@@ -99,6 +99,32 @@ switch($action) {
 
     break;
 
+    case 'config':
+
+        Acl::checkOrForward('KIOSKO_ADMIN');
+
+        if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+            $configurationsKeys = array('kiosko_settings',);
+            $configurations = s::get($configurationsKeys);
+            $tpl->assign(array(
+                'configs'   => $configurations,
+            ));
+
+            $tpl->display('newsstand/config.tpl');
+        } else {
+
+            unset($_POST['action']);
+            unset($_POST['submit']);
+
+            foreach ($_POST as $key => $value ) { s::set($key, $value); }
+
+            m::add(_('Settings saved successfully.'), m::SUCCESS);
+
+            $httpParams = array(array('action'=>'list'),);
+            Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
+        }
+
+    break;
     case 'new':
         Acl::checkOrForward('KIOSKO_CREATE');
         $tpl->display('newsstand/new.tpl');

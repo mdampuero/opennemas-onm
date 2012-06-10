@@ -182,7 +182,7 @@ while (isset($articles_home[$aux]) && $articles_home[$aux]->title != "") {
     }
 
     /***** COLUMN1 RELATED NEWS  ****/
-    $relationes = $relia->get_relations($articles_home[$aux]->id);
+    $relationes = $relia->getRelations($articles_home[$aux]->id);
     ////se le pasa el id de cada noticia de la column1
     // devueve array con los id de las noticias relacionadas
 

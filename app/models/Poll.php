@@ -132,7 +132,7 @@ class Poll extends Content
         }
 
         parent::update($data);
-        $tags = explode(', ',$tags);//Reinicia los indices del array
+        $tags = explode(', ', $tags);//Reinicia los indices del array
 
         if ($data['item']) {
             //Eliminamos los antiguos

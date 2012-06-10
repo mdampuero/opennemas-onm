@@ -3,7 +3,13 @@
 /**
  * Start up and setup the app
 */
-$_SERVER['SERVER_NAME'] ='cronicasdelaemigracion.com';
+
+//TODO: That cron given this vars.
+//$_SERVER['SERVER_NAME'] ='onm-cronicas.local';
+
+$_SERVER['HTTP_HOST'] ='cronicasdelaemigracion.com';
+
+//$_SERVER['SERVER_NAME'] ='cronicasdelaemigracion.com';
 $_SERVER['REQUEST_URI'] ='/';
 
 require __DIR__.'/../bootstrap.php';
@@ -11,46 +17,61 @@ require __DIR__.'/../bootstrap.php';
 /**
  * Setup view
 */
-$tpl = new Template(TEMPLATE_USER);
-$tpl->setConfig('frontpages');
+$tpl           = new Template(TEMPLATE_USER);
+//$tpl->setConfig('newslibrary');
 
-$menuItems = Menu::renderMenu('frontpage');
-$date =  new DateTime();
+$urlBase = SITE_URL."seccion/";
+
+$menuItems     = Menu::renderMenu('frontpage');
+$date          =  new DateTime();
 $directoryDate = $date->format("/Y/m/d/");
-$basePath = MEDIA_PATH.'/library'.$directoryDate;
+$basePath      = MEDIA_PATH.'/library'.$directoryDate;
+$curly         = array();
+
 if ( !file_exists($basePath) ) {
     mkdir($basePath, 0777, true);
 }
-require_once "index_advertisement.php";
 
-foreach ($menuItems->items as $item) {
-    $subcategory_name ='';
-    $cache_page = 0;
+// multi handle
+$mh = curl_multi_init();
+
+foreach ($menuItems->items as $id =>$item) {
     $category_name = $item->link;
 
-    $cacheID = $tpl->generateCacheId($category_name, $subcategory_name, $cache_page);
+    if ( !empty($category_name) ) {
 
-    if(($tpl->caching == 1)
-       && $tpl->isCached('frontpage/frontpage.tpl', $cacheID))
-    {
-        //get from cache
+        $curly[$category_name] = curl_init();
 
-        $htmlOut = $tpl->fetch('frontpage/frontpage.tpl', $cacheID);
+        $url = $urlBase. $category_name.'/';
+        curl_setopt($curly[$category_name], CURLOPT_URL,            $url);
+        curl_setopt($curly[$category_name], CURLOPT_HEADER,         0);
+        curl_setopt($curly[$category_name], CURLOPT_RETURNTRANSFER, 1);
 
-    } else {
-        //get from a index
-
-        $url = SITE_URL."seccion/".$category_name."/";
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1) ;
-        $htmlOut = curl_exec($ch);
-        curl_close($ch);
-
+        curl_multi_add_handle($mh, $curly[$category_name]);
     }
-
-    $newFile =  $basePath.$category_name.".html";
-
-    $result = file_put_contents($newFile, $htmlOut);
-
 }
+
+  // execute the handles
+$running = null;
+do {
+
+    curl_multi_exec($mh, $running);
+
+} while ($running > 0);
+
+  // get content and remove handles
+foreach ($curly as $category_name => $c) {
+    $htmlOut = curl_multi_getcontent($c);
+    $newFile = $basePath.$category_name.".html";
+
+    $result  = file_put_contents($newFile, $htmlOut);
+
+    curl_multi_remove_handle($mh, $c);
+}
+
+  // all done
+curl_multi_close($mh);
+
+
+
 

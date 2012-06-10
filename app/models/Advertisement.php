@@ -244,7 +244,7 @@ class Advertisement extends Content
         if (is_null($this->cache) ) {
             $this->cache = new MethodCacheManager($this, array('ttl' => (20)));
         } else {
-            $this->cache->set_cache_life(20); // 20 seconds
+            $this->cache->setCacheLife(20); // 20 seconds
         }
 
         // Set the content_type
@@ -323,7 +323,7 @@ class Advertisement extends Content
         if (isset($data['selectos'])) {
             $pos = 1;
             foreach ($data['selectos'] as $relac) {
-                $rel->set_rel_position($this->id, $pos, $relac);
+                $rel->setRelationPosition($this->id, $pos, $relac);
                 $pos++;
             }
         }
@@ -438,7 +438,7 @@ class Advertisement extends Content
         if (isset($data['selectos'])) {
             $pos=1;
             foreach ($data['selectos'] as $relac) {
-                $rel->set_rel_position($data['id'], $pos, $relac);
+                $rel->setRelationPosition($data['id'], $pos, $relac);
                 $pos++;
             }
         }

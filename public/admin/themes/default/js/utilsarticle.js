@@ -216,7 +216,7 @@ function search_adv(id, metadata,page) {
     for (var i = 0; i < inputs.length; i++) {
         if (inputs[i].type == "checkbox" && inputs[i].className == "search") {
             cbs.push(inputs[i]);
-            console.log(inputs[i].checked);
+         //   console.log(inputs[i].checked);
             if (inputs[i].checked) {
                 checked.push(inputs[i].id);
             }

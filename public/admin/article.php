@@ -257,11 +257,11 @@ if (isset($_REQUEST['action']) ) {
             $aut=new User();
             $comment = new Comment();
             foreach ($articles as $art){
-                $art->category_name= $art->loadCategoryName($art->id);
-                $art->publisher=$aut->get_user_name($art->fk_publisher);
-                $art->editor=$aut->get_user_name($art->fk_user_last_editor);
-                $art->rating= $rating->get_value($art->id);
-                $art->comment = $comment->count_public_comments( $art->id );
+                $art->category_name = $art->loadCategoryName($art->id);
+                $art->publisher =$aut->get_user_name($art->fk_publisher);
+                $art->editor    =$aut->get_user_name($art->fk_user_last_editor);
+                $art->rating    = $rating->getValue($art->id);
+                $art->comment   = $comment->count_public_comments( $art->id );
             }
             $tpl->assign('articles', $articles);
             $tpl->assign('paginacion', $pager);
@@ -292,18 +292,18 @@ if (isset($_REQUEST['action']) ) {
                 'availableSizes'=>array(16,18,20,22,24,26,28,30,32,34)
             ));
             $tpl->assign(array(
-                    'availableSizes'=> array(
-                        16=>'16',
-                        18=>'18',
-                        20=>'20',
-                        22=>'22',
-                        24=>'24',
-                        26=>'26',
-                        28=>'28',
-                        30=>'30',
-                        32=>'32',
-                        34=>'34'
-                    )
+                'availableSizes'=> array(
+                    16 => '16',
+                    18 => '18',
+                    20 => '20',
+                    22 => '22',
+                    24 => '24',
+                    26 => '26',
+                    28 => '28',
+                    30 => '30',
+                    32 => '32',
+                    34 => '34'
+                )
             ));
 
 
@@ -366,14 +366,14 @@ if (isset($_REQUEST['action']) ) {
             $relationsHandler= new RelatedContent();
 
             $orderFront = array();
-            $relations = $relationsHandler->get_relations( $_REQUEST['id'] );//de portada
+            $relations = $relationsHandler->getRelations( $_REQUEST['id'] );//de portada
             foreach($relations as $aret) {
                 $orderFront[] =  new Content($aret);
             }
             $tpl->assign('orderFront', $orderFront);
 
             $orderInner = array();
-            $relations = $relationsHandler->get_relations_int($_REQUEST['id']);//de interor
+            $relations = $relationsHandler->getRelationsForInner($_REQUEST['id']);//de interor
             foreach($relations as $aret) {
                 $orderInner[] = new Content($aret);
             }
@@ -623,7 +623,7 @@ if (isset($_REQUEST['action']) ) {
                     $rel= new RelatedContent();
                     $relationes=array();
 
-                    $relationes = $rel->get_content_relations( $_REQUEST['id'] );//de portada
+                    $relationes = $rel->getContentRelations($_REQUEST['id']);//de portada
                     $msg ='';
                     if(!empty($relationes)){
                          $msg = "El articulo \"".$article->title."\", está relacionado con los siguientes contenidos:  \n";
@@ -670,7 +670,7 @@ if (isset($_REQUEST['action']) ) {
 
                 //Delete relations
                 $rel= new RelatedContent();
-                $rel->delete_all($_REQUEST['id']);
+                $rel->deleteAll($_REQUEST['id']);
                 $article->delete( $_REQUEST['id'], $_SESSION['userid'] );
 
                 // If it's clone then remove
@@ -983,7 +983,7 @@ if (isset($_REQUEST['action']) ) {
                         $rel= new RelatedContent();
                         $relationes=array();
 
-                        $relationes = $rel->get_content_relations( $i );//de portada
+                        $relationes = $rel->getContentRelations( $i );//de portada
 
                         if(!empty($relationes)){
                              $nodels[] =$i;
@@ -1005,7 +1005,7 @@ if (isset($_REQUEST['action']) ) {
                        $rel= new RelatedContent();
                         $relationes=array();
 
-                        $relationes = $rel->get_content_relations($i );//de portada
+                        $relationes = $rel->getContentRelations($i );//de portada
 
                         if(!empty($relationes)){
                                 $alert='ok';
@@ -1092,7 +1092,7 @@ if (isset($_REQUEST['action']) ) {
             $category = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_STRING,   array('options' => array( 'default' => 'home')));
             $page     = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_NUMBER_INT,   array('options' => array( 'default' => 1)));
 
-            if ($category == 'home') { $category = 0; }
+            if ($category == 'home' || empty($category) ) { $category = 0; }
 
             $cm = new  ContentManager();
 
@@ -1108,8 +1108,9 @@ if (isset($_REQUEST['action']) ) {
 
             list($articles, $pager) = $cm->find_pages(
                 'Article',
-                'contents.available=1 AND in_litter != 1 AND frontpage=1'. $sqlExcludedOpinions,
-                ' ORDER BY created DESC ', $page, 5
+                ' contents.frontpage=1 AND contents.available=1 AND '.
+                ' contents.content_status=1 AND in_litter != 1 '. $sqlExcludedOpinions,
+                ' ORDER BY created DESC ', $page, 8
             );
 
             $tpl->assign(array(
@@ -1164,8 +1165,8 @@ if (isset($_REQUEST['action']) ) {
             $cm = new ContentManager();
 
             list($articles, $pages) = $cm->find_pages('Article',
-                        'fk_content_type=1 and content_status=1 AND available=1 ',
-                        'ORDER BY frontpage DESC, starttime DESC,  contents.title ASC ',
+                        'fk_content_type=1 and  available=1 ',
+                        'ORDER BY starttime DESC,  contents.title ASC ',
                         $page, $items_page, $category);
 
             $tpl->assign(array(

@@ -114,7 +114,7 @@ class Rating
         $this->ips_count_rating = unserialize($rs->fields['ips_count_rating']);
     }
 
-    public function get_value($pk_rating)
+    public function getValue($pk_rating)
     {
         $sql = 'SELECT total_votes, total_value
                 FROM ratings WHERE pk_rating =' . $pk_rating;
@@ -142,7 +142,9 @@ class Rating
             $this->ips_count_rating, $ip
         );
 
-        if (!$this->ips_count_rating) return (false);
+        if (!$this->ips_count_rating) {
+            return false;
+        }
         $this->total_votes++;
         $this->total_value = $this->total_value + $vote_value;
         $sql = "UPDATE ratings "
@@ -181,7 +183,7 @@ class Rating
         //Se busca si existe algún voto desde la ip
         $countKIP = array_search($ip, $ips);
 
-        if ($countKIP === FALSE) {
+        if ($countKIP === false) {
             $ips_count[] = array('ip' => $ip, 'count' => 1);
         } else {
 
@@ -234,7 +236,7 @@ class Rating
     {
 
         $votes_on_images = '';
-        for ($i = 1;$i <= $this->num_of_stars;$i++) {
+        for ($i = 1; $i <= $this->num_of_stars; $i++) {
             $votes_on_images.= $this->renderImg($i, $actualVotes, $pageType);
         }
 
@@ -254,7 +256,7 @@ class Rating
     {
 
         $votes_on_links = '';
-        for ($i = 1;$i <= $this->num_of_stars;$i++) {
+        for ($i = 1; $i <= $this->num_of_stars; $i++) {
             $votes_on_links.= $this->renderLink(
                 $i, $pageType, $this->pk_rating, $actualVotes
             );

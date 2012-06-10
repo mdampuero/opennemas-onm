@@ -214,7 +214,7 @@ switch($action) {
 
         $relations=array();
         $msg ='';
-        $relations = RelatedContent::get_content_relations($id);
+        $relations = RelatedContent::getContentRelations($id);
 
         if (!empty($relations)) {
             $msg = sprintf(_("<br>The album has some relations"));
@@ -239,8 +239,8 @@ switch($action) {
             $att = new Attachment($id);
             //Delete relations
             $rel= new RelatedContent();
-            $rel->delete_all($id);
-            $att->delete( $id ,$_SESSION['userid'] );
+            $rel->deleteAll($id);
+            $att->delete($id ,$_SESSION['userid']);
         }
 
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$att->category.'&page='.$page);
@@ -331,7 +331,7 @@ switch($action) {
                     $opinion = new Opinion($i);
                     $rel = new RelatedContent();
                     $relationes = array();
-                    $relationes = $rel->get_content_relations( $i );//de portada
+                    $relationes = $rel->getContentRelations($i);//de portada
 
                     if(!empty($relationes)) {
                         $alert = 'ok';

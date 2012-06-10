@@ -113,7 +113,7 @@ class Content
             case 'ratings':
                 $rating = new Rating();
 
-                return $this->ratings = $rating->get_value($this->id);
+                return $this->ratings = $rating->getValue($this->id);
                 break;
 
             case 'comments':
@@ -841,7 +841,7 @@ class Content
 
         $GLOBALS['application']->dispatch('onBeforeArchived', $this);
 
-        $sql = 'UPDATE contents SET `content_status`=0, `available`= 1, '
+        $sql = 'UPDATE contents SET `content_status`=0, `available`= 1, `frontpage` =0, '
              . '`fk_user_last_editor`=?, `changed`=? WHERE `pk_content`=?';
         $stmt = $GLOBALS['application']->conn->Prepare($sql);
 
@@ -1756,9 +1756,11 @@ class Content
              . "WHERE pk_content_old = ?";
         $value  = array($oldID);
         $refactorID = $GLOBALS['application']->conn->GetOne($sql, $value);
+
         if (!empty($refactorID)) {
             $content = new Content($refactorID);
             $content = $content->get($refactorID);
+
             Application::forward301('/'.$content->uri);
         }
 
@@ -1780,6 +1782,7 @@ class Content
         if (!empty($dirtyID)) {
             if (preg_match('@tribuna@', INSTANCE_UNIQUE_NAME)
                 || preg_match('@retrincos@', INSTANCE_UNIQUE_NAME)
+                || preg_match('@cronicas@', INSTANCE_UNIQUE_NAME)
             ) {
                 $contentID = self::searchInRefactorID($dirtyID);
             }
@@ -1868,7 +1871,7 @@ class Content
             && ($category_name == 'home')) {
             $relations = $relationsHandler->getHomeRelations($this->id);
         } else {
-            $relations = $relationsHandler->get_relations($this->id);
+            $relations = $relationsHandler->getRelations($this->id);
         }
 
         if (count($relations) > 0) {

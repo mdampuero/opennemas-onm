@@ -94,10 +94,10 @@ class Letter extends Content
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
 
-           return false;
+            return false;
         }
 
-       return $this->id;
+        return $this->id;
     }
 
     public function read($id)
@@ -112,9 +112,8 @@ class Letter extends Content
 
             return false;
         }
-      $this->load($rs->fields);
-      $this->ip = $this->params['ip'];
-
+        $this->load($rs->fields);
+        $this->ip = $this->params['ip'];
     }
 
     public function update($data)
@@ -145,7 +144,9 @@ class Letter extends Content
         $GLOBALS['application']->dispatch('onAfterUpdateLetter', $this);
     }
 
-    public function remove($id) { //Elimina definitivamente
+    //Elimina definitivamente
+    public function remove($id)
+    {
         parent::remove($id);
 
         $sql = 'DELETE FROM letters WHERE pk_letter ='.($id);
