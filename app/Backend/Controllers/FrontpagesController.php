@@ -67,9 +67,9 @@ class FrontpagesController extends Controller
         $allcategorys = $parentCategories;
 
         // Check if the user can edit frontpages
-        if(!Acl::check('ARTICLE_FRONTPAGE')) {
-            Acl::deny();
-        } elseif (!Acl::_C($categoryID)) {
+        if(!\Acl::check('ARTICLE_FRONTPAGE')) {
+            \Acl::deny();
+        } elseif (!\Acl::_C($categoryID)) {
             $categoryID = $_SESSION['accesscategories'][0];
             $section = $ccm->get_name($categoryID);
             $_REQUEST['category'] = $categoryID;
@@ -131,7 +131,7 @@ class FrontpagesController extends Controller
     public function savePositionsAction()
     {
         if (!\Acl::check('ARTICLE_FRONTPAGE')) {
-            Acl::deny();
+            \Acl::deny();
         }
 
         $category      = $this->request->query->filter('category', null, FILTER_SANITIZE_STRING);
@@ -149,8 +149,8 @@ class FrontpagesController extends Controller
         }
 
         $categoryID = ($category == 'home') ? 0 : $category;
-        $validReceivedData = is_array($contentsPositions) 
-						     && !empty($contentsPositions) 
+        $validReceivedData = is_array($contentsPositions)
+						     && !empty($contentsPositions)
                              && !is_null($categoryID);
 
         $savedProperly = false;
@@ -176,7 +176,7 @@ class FrontpagesController extends Controller
             }
 
             // Save contents
-            $savedProperly = ContentManager::saveContentPositionsForHomePage($categoryID, $contents);
+            $savedProperly = \ContentManager::saveContentPositionsForHomePage($categoryID, $contents);
         }
 
         $tcacheManager->delete($section . '|RSS');
@@ -194,7 +194,6 @@ class FrontpagesController extends Controller
             if ($savedProperly) {
                 return _("Content positions saved properly");
             } else {
-                header('HTTP/1.1 500 Internal Server Error');
                 if ($validReceivedData == false) {
                     $errorMessage = _("Unable to save content positions: Data sent from the client were not valid.");
                 } else {
