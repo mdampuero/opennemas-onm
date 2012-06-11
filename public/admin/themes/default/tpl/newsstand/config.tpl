@@ -53,7 +53,7 @@
                         <div class="form-wrapper">
 
                              <div>
-                                <label for="kiosko_settings[orderFrontpage]">{t}Order newsletter's frontpage by:{/t}</label>
+                                <label for="kiosko_settings[orderFrontpage]">{t}Order newsstand frontpage by:{/t}</label>
                                  <select name="kiosko_settings[orderFrontpage]" id="kiosko_settings[orderFrontpage]" class="required">
                                     <option value="sections" {if $configs['kiosko_settings']['orderFrontpage'] eq "sections"} selected {/if}>{t}Sections{/t}</option>
                                     <option value="dates" {if $configs['kiosko_settings']['orderFrontpage'] eq "dates"} selected {/if}>{t}Dates{/t}</option>
