@@ -338,6 +338,8 @@ CREATE TABLE IF NOT EXISTS `authors` (
   `fk_user` int(10) DEFAULT '0',
   `condition` varchar(255) DEFAULT NULL,
   `blog` varchar(255) DEFAULT NULL,
+  `params` TEXT NULL DEFAULT NULL,
+
   PRIMARY KEY (`pk_author`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='Opinion Authors' AUTO_INCREMENT=4 ;
 
@@ -1581,7 +1583,9 @@ INSERT INTO `privileges` (`pk_privilege`, `name`, `description`, `module`) VALUE
 (140, 'BOOK_AVAILABLE', 'Aprobar libros', 'BOOK'),
 (139, 'BOOK_FAVORITE', 'Gestionar Widget de libros', 'BOOK'),
 (138, 'BOOK_CREATE', 'Subir libros', 'BOOK'),
-(137, 'BOOK_ADMIN', 'Administrar modulo de libros', 'BOOK'),
+(137, 'BOOK_ADMIN', 'Administrar modulo de libros', 'BOOK');
+
+INSERT INTO `privileges` (`pk_privilege`, `name`, `description`, `module`) VALUES
 (166, 'LETTER_TRASH', 'Vaciar papelera de cartas', 'LETTER'),
 (167, 'LETTER_DELETE', 'Eliminar cartas', 'LETTER'),
 (168, 'LETTER_UPDATE', 'Modificar cartas', 'LETTER'),
@@ -1589,8 +1593,9 @@ INSERT INTO `privileges` (`pk_privilege`, `name`, `description`, `module`) VALUE
 (170, 'LETTER_AVAILABLE', 'Aprobar cartas', 'LETTER'),
 (171, 'LETTER_FAVORITE', 'Gestionar Widget de cartas', 'LETTER'),
 (172, 'LETTER_CREATE', 'Subir cartas', 'LETTER'),
-(173, 'LETTER_ADMIN', 'Admon. cartas', 'LETTER');
-
+(173, 'LETTER_ADMIN', 'Admon. cartas', 'LETTER'),
+(174, 'POLL_FAVORITE', 'Añadir a widgets', 'POLL'),
+(175, 'POLL_HOME', 'Añadir al widget de portada', 'POLL');
 -- --------------------------------------------------------
 
 --
