@@ -527,7 +527,7 @@ INSERTAR;
 
         foreach ($contents as $content) {
 
-            $slug = StringUtils::get_title( $content["title"] );
+            $slug = \Onm\StringUtils::get_title( $content["title"] );
             $content_type = $content["fk_content_type"];
             $contentID = $content['pk_content'];
 

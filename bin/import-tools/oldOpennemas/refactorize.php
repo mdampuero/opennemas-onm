@@ -38,13 +38,13 @@ require  'adodb5/adodb.inc.php';
 */
 require 'db-config.inc.php';
 require 'refactor-ids.php';
-require 'StringUtils.php';
+require 'Onm/StringUtils.php';
 
  $refactor = new refactorIds($config);
 
- $refactor->executeSqlFile('changesForNT.sql');
+ //$refactor->executeSqlFile('changesForNT.sql');
 
- $refactor->executeSqlFile('createPrivileges.sql');
+ //$refactor->executeSqlFile('createPrivileges.sql');
 
  $refactor->modifySchema(); //prepare tables
 
