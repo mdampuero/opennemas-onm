@@ -86,11 +86,11 @@
             <td class="center">
                 {acl isAllowed="OPINION_ADMIN"}
                 {if $opinions[c]->favorite == 1 && $opinions[c]->type_opinion == 0}
-                <a href="?id={$polls[c]->id}&amp;action=changeFavorite&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage}" class="favourite_on" title="{t}Favorite{/t}">
+                <a href="?id={$opinions[c]->id}&amp;action=changeFavorite&amp;status=0&amp;page={$paginacion->_currentPage}" class="favourite_on" title="{t}Favorite{/t}">
                     &nbsp;
                 </a>
                 {elseif $opinions[c]->type_opinion == 0}
-                <a href="?id={$polls[c]->id}&amp;action=changeFavorite&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage}" class="favourite_off" title="{t}NoFavorite{/t}">
+                <a href="?id={$opinions[c]->id}&amp;action=changeFavorite&amp;status=1&amp;page={$paginacion->_currentPage}" class="favourite_off" title="{t}NoFavorite{/t}">
                     &nbsp;
                 </a>
                 {/if}
