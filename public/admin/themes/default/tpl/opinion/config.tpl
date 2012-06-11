@@ -57,6 +57,10 @@
                                 <label for="opinion_settings[total_editorial]">{t}Number of editorial articles in the widget:{/t}</label>
                                 <input type="text" class="required" name="opinion_settings[total_editorial]" value="{$configs['opinion_settings']['total_editorial']|default:"2"}" />
                             </div>
+                            <div>
+                                <label for="opinion_settings[total_opinion_authors]">{t}Number of author opinions in the widget:{/t}</label>
+                                <input type="text" class="required" name="opinion_settings[total_opinion_authors]" value="{$configs['opinion_settings']['total_opinion_authors']|default:"6"}" />
+                            </div>
                             <br />
                         </div>
                     </td>
