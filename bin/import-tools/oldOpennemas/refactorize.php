@@ -42,7 +42,7 @@ require 'StringUtils.php';
 
  $refactor = new refactorIds($config);
 
-/* $refactor->executeSqlFile('changesForNT.sql');
+ $refactor->executeSqlFile('changesForNT.sql');
 
  $refactor->executeSqlFile('createPrivileges.sql');
 
@@ -55,10 +55,10 @@ require 'StringUtils.php';
  $refactor->refactorSecondaryTables(); //change secondary table, example related_contents...
 
  $refactor->refactorImgTables(); //change id images in some tables
-*/
- //$refactor->updateFrontpageArticles(); // create new ids & slug
 
-  $refactor->updateAdvertisements();
+ $refactor->updateFrontpageArticles(); // create new ids & slug
+
+ $refactor->updateAdvertisements();
 
  printf(" \n OpenNemas database {$config['bd_database']} is ok \n ");
  printf("\n ---------Attention: you new change settings values & move media folder -------------- \n ");

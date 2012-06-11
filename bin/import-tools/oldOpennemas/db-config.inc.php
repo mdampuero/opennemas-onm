@@ -6,7 +6,7 @@
 $config = array(
                           'bd_host' => 'localhost',
                           //'bd_database' => 'webdev-tribuna',
-                          'bd_database' => 'onm-ntribuna',
+                          'bd_database' => 'onm-tribuna',
                           'bd_user' => 'root',
                           'bd_pass' => 'root' ,
                           'bd_type' => 'mysql' ,

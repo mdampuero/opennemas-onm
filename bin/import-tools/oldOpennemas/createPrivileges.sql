@@ -76,7 +76,9 @@ INSERT INTO `user_groups_privileges` (`pk_fk_user_group`, `pk_fk_privilege`) VAL
 (6, 134),
 (6, 161),
 (6, 162),
-(6, 164);
+(6, 164),
+(6, 174),
+(6, 175);
 
 -- Drop and recreate table user_groups_privileges
 -- Table structure for table user_groups_privileges
@@ -257,4 +259,4 @@ INSERT INTO `privileges` (`pk_privilege`, `name`, `description`, `module`) VALUE
 (172, 'LETTER_CREATE', 'Subir cartas', 'LETTER'),
 (173, 'LETTER_ADMIN', 'Admon. cartas', 'LETTER'),
 (174, 'POLL_FAVORITE', 'Añadir a widgets', 'POLL'),
-('175', 'POLL_HOME', 'Añadir al widget de portada', 'POLL');
+(175, 'POLL_HOME', 'Añadir al widget de portada', 'POLL');
