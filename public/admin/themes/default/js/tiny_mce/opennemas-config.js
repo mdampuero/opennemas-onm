@@ -40,7 +40,7 @@ OpenNeMas.tinyMceConfig = {
 
         /* Use absolute URIs */
         relative_urls: false,
-        document_base_url: '/',
+    //    document_base_url: '/',
 
         /* Tabfocus plugin */
         tabfocus_elements : ":prev,:next",
@@ -102,6 +102,8 @@ OpenNeMas.tinyMceConfig = {
         /* Use absolute URIs */
         relative_urls: false,
         document_base_url: '/',
+        convert_urls : false,
+
         /* external_image_list_url : "/admin/external_images.js",
         media_external_list_url : "/admin/external_media.js", */
 
