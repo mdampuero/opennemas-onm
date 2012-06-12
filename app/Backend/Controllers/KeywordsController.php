@@ -28,9 +28,6 @@ class KeywordsController extends Controller
      **/
     public function init()
     {
-        // Initializae the session manager
-        require_once './session_bootstrap.php';
-
         \Onm\Module\ModuleManager::checkActivatedOrForward('KEYWORD_MANAGER');
 
         \Acl::checkOrForward('PCLAVE_ADMIN');

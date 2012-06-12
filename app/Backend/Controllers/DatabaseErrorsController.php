@@ -29,9 +29,6 @@ class DatabaseErrorsController extends Controller
      **/
     public function init()
     {
-        //Setup app
-        require_once './session_bootstrap.php';
-
         if (!\Acl::isMaster()) {
             m::add("You don't have permissions");
             Application::forward('/admin/');

@@ -27,9 +27,6 @@ class AuthenticationController extends Controller
      **/
     public function init()
     {
-        require_once '../bootstrap.php';
-        require_once 'session_bootstrap.php';
-
         // Setup view
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
         $this->view->assign('version', \Onm\Common\Version::VERSION);

@@ -28,9 +28,6 @@ class TrashController extends Controller
      **/
     public function init()
     {
-        // Initializae the session manager
-        require_once './session_bootstrap.php';
-
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
 
         $this->filterContentType = $this->request->query->get('mytype', 'article');

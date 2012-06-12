@@ -28,9 +28,6 @@ class SystemSettingsController extends Controller
      **/
     public function init()
     {
-        //Setup app
-        require_once './session_bootstrap.php';
-
         // Check ACL
         \Acl::checkorForward('ONM_SETTINGS');
 

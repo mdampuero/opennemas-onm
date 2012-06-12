@@ -27,12 +27,6 @@ class WelcomeController extends Controller
      **/
     public function init()
     {
-        /**
-         * Setup app
-        */
-        require_once '../bootstrap.php';
-        require_once './session_bootstrap.php';
-
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
     }
     /**

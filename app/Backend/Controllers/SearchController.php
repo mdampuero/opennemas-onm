@@ -29,9 +29,6 @@ class SearchController extends Controller
      **/
     public function init()
     {
-        // Initializae the session manager
-        require_once './session_bootstrap.php';
-
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
         $_SESSION['desde'] = 'search_advanced';
 

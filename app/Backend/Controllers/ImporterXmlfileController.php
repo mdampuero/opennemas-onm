@@ -29,9 +29,6 @@ class ImporterXmlfileController extends Controller
      **/
     public function init()
     {
-        // Initializae the session manager
-        require_once './session_bootstrap.php';
-
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
         if (
             is_null(s::get('xml_file_schema'))

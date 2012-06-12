@@ -29,9 +29,6 @@ class ImporterEfeController extends Controller
      **/
     public function init()
     {
-        // Initializae the session manager
-        require_once './session_bootstrap.php';
-
         // Check ACL
         \Acl::checkOrForward('IMPORT_EFE');
 

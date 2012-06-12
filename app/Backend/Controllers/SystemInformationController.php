@@ -26,9 +26,6 @@ class SystemInformationController extends Controller
      **/
     public function init()
     {
-        // Initializae the session manager
-        require_once './session_bootstrap.php';
-
         if (!\Acl::isMaster()) {
             m::add(_("You don't have permissions to access to the system information."));
 

@@ -11,6 +11,7 @@ namespace Backend\Controllers;
 use Onm\Framework\Controller\Controller,
     Onm\Settings as s,
     Onm\Message as m;
+
 /**
  * Handles the actions for the system information
  *
@@ -57,7 +58,7 @@ class BooksController extends Controller
 
         // Create folder if it doesn't exist
         if (!file_exists($bookSavePath)) {
-            FilesManager::createDirectory($bookSavePath);
+            \FilesManager::createDirectory($bookSavePath);
         }
         // ---------------------------------------------------------------------
     }
@@ -148,7 +149,9 @@ class BooksController extends Controller
         \Acl::checkOrForward('BOOK_UPDATE');
 
         $id = $this->request->query->getInt('id');
-        $book = new Book( $_REQUEST['id'] );
+
+        // TODO check if ID is available
+        $book = new Book($id);
 
         return $this->render('book/new.tpl', array(
             'book'     => $book,

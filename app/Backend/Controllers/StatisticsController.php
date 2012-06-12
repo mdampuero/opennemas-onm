@@ -29,9 +29,6 @@ class StatisticsController extends Controller
      **/
     public function init()
     {
-        // Initializae the session manager
-        require_once './session_bootstrap.php';
-
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
 
         require_once SITE_LIBS_PATH.'ofc1/open-flash-chart.php';

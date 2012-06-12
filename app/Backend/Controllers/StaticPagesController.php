@@ -27,9 +27,6 @@ class StaticPagesController extends Controller
      **/
     public function init()
     {
-        // Initializae the session manager
-        require_once './session_bootstrap.php';
-
         \Acl::checkOrForward('STATIC_ADMIN');
 
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);

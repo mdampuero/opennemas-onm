@@ -20,11 +20,11 @@ use Onm\Framework\Module\ModuleBootstrap;
 class Bootstrap extends ModuleBootstrap
 {
     /**
-     * undocumented function
+     * Initialed the custom error handler
      *
      * @return void
      **/
-    public function initContainer()
+    public function initErrorHandler()
     {
         // $this->container->setParameter('dispatcher.exceptionhandler', 'Backend:Controllers:ErrorController:default');
 
@@ -38,7 +38,24 @@ class Bootstrap extends ModuleBootstrap
      **/
     public function initAuthenticationSystem()
     {
-        require_once './session_bootstrap.php';
+        $GLOBALS['Session'] = \SessionManager::getInstance(OPENNEMAS_BACKEND_SESSIONS);
+        $GLOBALS['Session']->bootstrap();
+
+        $request = $this->container->get('request');
+
+        if (!isset($_SESSION['userid'])
+            && !preg_match('@^/login@', $request->getPathInfo())
+        ) {
+            $url = $request->getPathInfo();
+
+            if (!empty($url)) {
+                $redirectTo = urlencode($request->getUri());
+            }
+            $location = $request->getBaseUrl() .'/login/?forward_to='.$redirectTo;
+
+            header('Location: '.$location);
+            exit(0);
+        }
     }
 
 } // END class Bootstrap
