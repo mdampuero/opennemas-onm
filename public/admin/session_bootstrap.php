@@ -15,9 +15,10 @@ if (!isset($_SESSION['userid']) && !preg_match('@^/login@', $request->getPathInf
     $url = $request->getPathInfo();
 
     if (!empty($url)) {
-        $redirectTo = urlencode($request->getBaseUrl()."/".trim($url['path'], '/'));
+        // $redirectTo = urlencode($request->getBaseUrl()."/".trim($url['path'], '/'));
+        $redirectTo = urlencode($request->getUri());
     }
 
-    header('Location: ' . $request->getBaseUrl() .'/login/?forward_to='.$redirectTo);
+    header('Location: ' . $request->get.$request->getBaseUrl() .'/login/?forward_to='.$redirectTo);
     exit(0);
 }

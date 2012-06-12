@@ -45,14 +45,14 @@ class AuthenticationController extends Controller
         $token = md5(uniqid(mt_rand(), true));
 
         $_SESSION['csrf'] = $token;
-        $languages = \Application::getAvailableLanguages();
-        $currentLanguage = \Application::$language;
+        $languages        = \Application::getAvailableLanguages();
+        $currentLanguage  = \Application::$language;
 
 
         return $this->render('login/login.tpl', array(
-            'languages' => $languages,
+            'languages'        => $languages,
             'current_language' => $currentLanguage,
-            'token' => $token,
+            'token'            => $token,
         ));
     }
 
@@ -117,7 +117,7 @@ class AuthenticationController extends Controller
                     $forwardTo = filter_input(INPUT_POST, 'forward_to');
                     if (!is_null($forwardTo) && !empty($forwardTo)) {
 
-                        return $this->redirect(SITE_URL.$forwardTo);
+                        return $this->redirect($forwardTo);
                     } else {
 
                         return $this->redirect(SITE_URL_ADMIN);
