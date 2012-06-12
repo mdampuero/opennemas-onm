@@ -1,6 +1,10 @@
 {
-    "hash": "93bbaffed28bf8b1534bce4d5104c9ae",
+    "hash": "28a3383273a5a854707553e38c3ee828",
     "packages": [
+        {
+            "package": "frandieguez/panorama-php",
+            "version": "1.0.0"
+        },
         {
             "package": "monolog/monolog",
             "version": "1.1.0"
@@ -12,66 +16,65 @@
         {
             "package": "symfony/class-loader",
             "version": "dev-master",
-            "source-reference": "c57e62c886899f8d88264efad23c857eb198dc09"
+            "source-reference": "dd3f2ad5204df88b8938430e39a25c9a7f53f079"
         },
         {
             "package": "symfony/class-loader",
             "version": "dev-master",
-            "source-reference": "c57e62c886899f8d88264efad23c857eb198dc09",
             "alias-pretty-version": "2.1.x-dev",
             "alias-version": "2.1.9999999.9999999-dev"
         },
         {
             "package": "symfony/dependency-injection",
             "version": "dev-master",
-            "source-reference": "277961f38e534f4f4f8b40bbb5d4d73df70c2ba7",
-            "alias-pretty-version": "2.1.x-dev",
-            "alias-version": "2.1.9999999.9999999-dev"
+            "source-reference": "b6916c7db53e798d8c761e45e6931430369fef2a"
         },
         {
             "package": "symfony/dependency-injection",
             "version": "dev-master",
-            "source-reference": "277961f38e534f4f4f8b40bbb5d4d73df70c2ba7"
-        },
-        {
-            "package": "symfony/event-dispatcher",
-            "version": "dev-master",
-            "source-reference": "eb82542e8ec9506096caf7c528564c740a214f56",
             "alias-pretty-version": "2.1.x-dev",
             "alias-version": "2.1.9999999.9999999-dev"
         },
         {
             "package": "symfony/event-dispatcher",
             "version": "dev-master",
-            "source-reference": "eb82542e8ec9506096caf7c528564c740a214f56"
+            "source-reference": "30d3f5da80c2aeab15bcdb5a7d448d15bc294b23"
+        },
+        {
+            "package": "symfony/event-dispatcher",
+            "version": "dev-master",
+            "alias-pretty-version": "2.1.x-dev",
+            "alias-version": "2.1.9999999.9999999-dev"
         },
         {
             "package": "symfony/http-foundation",
             "version": "dev-master",
-            "source-reference": "3d9f4ce435f6322b9720c209ad610202526373c0"
+            "source-reference": "526d5d663f0b3170a91f916f912075609120e09a"
         },
         {
             "package": "symfony/http-foundation",
             "version": "dev-master",
-            "source-reference": "3d9f4ce435f6322b9720c209ad610202526373c0",
             "alias-pretty-version": "2.1.x-dev",
             "alias-version": "2.1.9999999.9999999-dev"
         },
         {
             "package": "symfony/routing",
             "version": "dev-master",
-            "source-reference": "82a04d3636395d11da7b37968302b34bf647d94f",
-            "alias-pretty-version": "2.1.x-dev",
-            "alias-version": "2.1.9999999.9999999-dev"
+            "source-reference": "4eef37eee0961782dfe66a23df4fc280ff1a9e44"
         },
         {
             "package": "symfony/routing",
             "version": "dev-master",
-            "source-reference": "82a04d3636395d11da7b37968302b34bf647d94f"
+            "alias-pretty-version": "2.1.x-dev",
+            "alias-version": "2.1.9999999.9999999-dev"
         }
     ],
     "packages-dev": null,
     "aliases": [
+
+    ],
+    "minimum-stability": "dev",
+    "stability-flags": [
 
     ]
 }

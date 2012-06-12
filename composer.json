@@ -20,6 +20,7 @@
         "symfony/event-dispatcher"    : "2.1.*",
         "symfony/dependency-injection": "2.1.*",
         "swiftmailer/swiftmailer"     : "4.1.7",
-        "monolog/monolog"             : "1.1.0"
+        "monolog/monolog"             : "1.1.0",
+	    "frandieguez/panorama-php"    : "1.0.0"
     }
 }
