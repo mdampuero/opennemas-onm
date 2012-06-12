@@ -33,7 +33,7 @@
                 {acl isAllowed="BOOK_CREATE"}
                 <li class="separator"></li>
                 <li>
-                    <a href="{$smarty.server.PHP_SELF}?action=new"  title="{t}New book{/t}">
+                    <a href="{url name=admin_books_create}"  title="{t}New book{/t}">
                         <img src="{$params.IMAGE_DIR}/book.gif" alt="{t}New book{/t}"><br />{t}New book{/t}
                     </a>
                 </li>
@@ -45,16 +45,6 @@
                         <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save positions{/t}"><br />{t}Save positions{/t}
                     </a>
                 </li>
-
-                {acl isAllowed="BOOK_SETTINGS"}
-                <li class="separator"></li>
-                <li>
-                    <a href="{$smarty.server.PHP_SELF}?action=config" title="{t}Config book module{/t}">
-                        <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
-                        {t}Configurations{/t}
-                    </a>
-                </li>
-                {/acl}
             </ul>
         </div>
     </div>
@@ -64,9 +54,9 @@
 
         <ul class="pills clearfix">
             <li>
-                <a href="{$smarty.server.SCRIPT_NAME}?action=list&amp;category=favorite" {if $category=='favorite'}class="active"{elseif $ca eq $datos_cat[0]->fk_content_category}{*class="active"*}{/if}>{t}WIDGET HOME{/t}</a>
+                <a href="{url name=admin_books category=favorite}" {if $category=='favorite'}class="active"{elseif $ca eq $datos_cat[0]->fk_content_category}{*class="active"*}{/if}>{t}WIDGET HOME{/t}</a>
             </li>
-           {include file="menu_categories.tpl" home=$smarty.server.SCRIPT_NAME|cat:"?action=list"}
+           {include file="menu_categories.tpl" home={url name=admin_books list=1}}
         </ul>
         {* MENSAJES DE AVISO GUARDAR POS******* *}
         <div id="warnings-validation"></div>
@@ -94,7 +84,7 @@
                     <input type="checkbox" class="minput"  id="selected_{$smarty.section.as.iteration}" name="selected_fld[]" value="{$books[as]->id}"  style="cursor:pointer;" >
                 </td>
                 <td>
-                    <a href="{$smarty.server.PHP_SELF}?action=read&amp;id={$books[as]->pk_book}" title="{$books[as]->title|clearslash}">
+                    <a href="{url name=admin_books_show id=$books[as]->pk_book}" title="{$books[as]->title|clearslash}">
                         {$books[as]->title|clearslash}
                     </a>
                 </td>
@@ -136,7 +126,7 @@
                     <ul class="action-buttons">
                        {acl isAllowed="BOOK_UPDATE"}
                         <li>
-                            <a href="{$smarty.server.PHP_SELF}?action=read&amp;id={$books[as]->pk_book}" title="{t}Edit book{/t}" >
+                            <a href="{url name=admin_books_show id=$books[as]->pk_book}" title="{t}Edit book{/t}" >
                                <img src="{$params.IMAGE_DIR}edit.png" />
                             </a>
                        </li>
@@ -144,9 +134,7 @@
 
                        {acl isAllowed="BOOK_DELETE"}
                        <li>
-                             <a class="del" data-controls-modal="modal-from-dom"
-                               data-id="{$books[as]->pk_book}"
-                               data-title="{$books[as]->title|capitalize}"  href="#" >
+                            <a class="del" data-controls-modal="modal-from-dom" data-id="{$books[as]->pk_book}" data-title="{$books[as]->title|capitalize}"  href="#" >
                                 <img src="{$params.IMAGE_DIR}trash.png" border="0" />
                             </a>
                        </li>

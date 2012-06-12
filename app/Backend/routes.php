@@ -88,6 +88,39 @@ $routes->add(
     '/admin'
 );
 
+
+$routes->add(
+    'admin_books_create',
+    new Route(
+        '/books/create',
+        array('_controller' => 'Backend:Controllers:BooksController:create')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_books_show',
+    new Route(
+        '/books/{id}/show',
+        array('_controller' => 'Backend:Controllers:BooksController:show')
+    ),
+    '/admin'
+);
+
+// Search controller routes
+$routes->add(
+    'admin_books',
+    new Route(
+        '/books/{category}',
+        array(
+            '_controller' => 'Backend:Controllers:BooksController:default',
+            'category'    => 'favorite',
+        )
+    ),
+    '/admin'
+);
+
+
 // Search controller routes
 $routes->add(
     'admin_search',

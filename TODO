@@ -78,3 +78,10 @@ Static pages
 ------------
 - Drop Prototype (SwitcherFlag call) in the list action
 - Problem with delete modal dialogs, the url should be generated with smarty.
+
+Books
+-----
+- Not implemented at all
+- Drop category and menu logic from init method
+- Validate if $id exists on update, show methods and batch actions
+- Fix category menu url

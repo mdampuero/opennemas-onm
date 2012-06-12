@@ -151,7 +151,7 @@ $menuXml = '<?xml version="1.0"?>
             privilege="BOOK_ADMIN"
             title="'.htmlspecialchars(_("Books"), ENT_QUOTES).'"
             id="book_manager"
-            link="/admin/controllers/book/book.php"
+            link="'.url("admin_books").'"
         />
     </submenu>
 
