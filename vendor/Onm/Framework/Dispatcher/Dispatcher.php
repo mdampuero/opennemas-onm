@@ -39,7 +39,7 @@ class Dispatcher
     public function dispatch()
     {
         try {
-            $url = $this->normalizeUrl($this->request->getPathInfo());
+            $url = self::normalizeUrl($this->request->getPathInfo());
 
             $parameters = $this->matcher->match($url);
             foreach ($parameters as $param => $value) {
@@ -66,19 +66,20 @@ class Dispatcher
     /**
      * Handles exceptions and redirect them to a controller
      *
+     * @param  Exception $exception the exception that was raised
      * @return void
-     * @author
      **/
     public function handleException($exception)
     {
         $this->request->request->set('error', serialize($exception));
         $this->container->set('request',$this->request);
-        $this->dispatchClass('Framework:Controllers:ErrorController:default');
+        $this->dispatchClass($this->container->getParameter('dispatcher.exceptionhandler'));
     }
 
     /**
      * Handles the underlying controller
      *
+     * @param  array $routeParameters the route parameter to dispatch
      * @return string the response string
      **/
     public function dispatchRaw($routeParameters)
@@ -95,6 +96,7 @@ class Dispatcher
     /**
      * Dispatches a controller given its filename
      *
+     * @param  string $controllerFileName the controller file path
      * @return string the response
      **/
     public function dispatchControllerFile($controllerFileName)
@@ -113,6 +115,7 @@ class Dispatcher
     /**
      * Dispatches a controller given its class name
      *
+     * @param  string $className the class name to dispatch
      * @return string the response
      **/
     public function dispatchClass($className)
@@ -121,6 +124,8 @@ class Dispatcher
             list($controllerClassName, $actionName) =
                 self::resolveClasNameAndAction($className);
             if (class_exists($controllerClassName)) {
+                $module = self::resolveModuleName($controllerClassName);
+                $this->initializeModule($module);
                 $controller = new $controllerClassName();
                 $controller->setContainer($this->container);
                 $controller->init();
@@ -137,7 +142,8 @@ class Dispatcher
     /**
      * Transforms the Raw ClassName to the proper
      *
-     * @return void
+     * @param string $controllerClassRaw the controller class and action
+     * @return array array with the controller class name and action name
      **/
     public static function resolveClasNameAndAction($controllerClassRaw = '')
     {
@@ -150,12 +156,45 @@ class Dispatcher
     }
 
     /**
+     * Returns the module name given a full controller class name
+     *
+     * @param  string $controllerClassNAme the full controller class name
+     * @return string the module name
+     * @return Dispatcher the dispatcher instance
+     **/
+    public static function resolveModuleName($controllerClassName)
+    {
+        $cleanControllerClassName = ltrim($controllerClassName, '\\');
+        $controllerClassNameParts = explode('\\', $cleanControllerClassName);
+        $moduleName = $controllerClassNameParts[0];
+
+        return $moduleName;
+    }
+
+    /**
+     * Initiales the module that contains the controller to dispatch
+     *
+     * @param string $moduleName the module name
+     * @return Dispatcher the dispatcher instance
+     **/
+    public function initializeModule($moduleName)
+    {
+        $moduleClassName = $moduleName.'\\Bootstrap';
+
+        if (class_exists($moduleClassName)) {
+            $moduleInstance = new $moduleClassName($this->container);
+            $moduleInstance->init();
+        }
+        return $this;
+    }
+
+    /**
      * Cleans double slashes and trailing slash from an string url
      *
-     * @return void
-     * @author
+     * @param string $url the url to normalize
+     * @return string the normalized url
      **/
-    public function normalizeUrl($url)
+    public static function normalizeUrl($url)
     {
         if (strlen($url) > 1) {
             $normalizedUrl = rtrim($url,'/');

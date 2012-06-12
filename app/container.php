@@ -18,5 +18,6 @@ $sc->register('matcher', 'Symfony\Component\Routing\Matcher\UrlMatcher')
     ->setArguments(array($routes, new Reference('context')));
 $sc->register('url_generator', '\Symfony\Component\Routing\Generator\UrlGenerator')
     ->setArguments(array($routes, new Reference('context')));
+$sc->setParameter('dispatcher.exceptionhandler', 'Framework:Controllers:ErrorController:default');
 
 return $sc;
