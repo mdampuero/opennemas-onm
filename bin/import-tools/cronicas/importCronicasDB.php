@@ -59,7 +59,7 @@ $cronicasImporter = new CronicasToOnm($configOldDB,$configNewDB);
 
 
 $cronicasImporter->importCategories();
-
+/*
 $cronicasImporter->importAuthorsOpinion();
 
 $cronicasImporter->importPhotoAuthorsOpinion();
@@ -70,8 +70,6 @@ exit();
 $limit = ' LIMIT 0, 18000';
 $cronicasImporter->importImagesArticles();
 $cronicasImporter->importArticles($limit);
-
-
 
 $cronicasImporter->importOpinions();
 
@@ -95,6 +93,12 @@ $cronicasImporter->updateFrontpageArticles();
 printf("OpenNemas database is ok for Cronicas \n");
 
 $cronicasImporter->helper->printResults();
-
+*/
 
 ////UPDATE `contents` SET available=1  WHERE `fk_content_type` =8
+
+
+$where = 'AND `in_litter` = 0 AND `available` = 0';
+//$cronicasImporter->exportArticles($where);
+
+$cronicasImporter->processJSONFile('exporterLog.txt');

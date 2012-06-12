@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-js" append}
-    {script_tag src="/photos.js" defer="defer" language="javascript"}    
+    {script_tag src="/photos.js" defer="defer" language="javascript"}
 {/block}
 {block name="content"}
 <form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
@@ -81,6 +81,14 @@
                         <input type="text" id="blog" name="blog" title="{t}Blog url{/t}" value="{$author->blog}"  size="50"/>
                     </td>
                 </tr>
+                 <tr>
+                    <td colspan="2">
+                        <label for="params[inrss]">{t}Show in rss:{/t}</label>
+                        <input type="checkbox" id="params[inrss]" name="params[inrss]" value="1"
+                            {if !isset($author->params['inrss']) || $author->params['inrss'] eq 1} checked="checked"{/if}>
+                            {t}If this option is activated this author will be showed in rss{/t}
+                    </td>
+                </tr>
                 <tr>
                     <td valign="top" align="right">
                         <b>{t}Author photos{/t}:</b>
@@ -101,13 +109,14 @@
                                              src="{$smarty.const.MEDIA_IMG_PATH_URL}{$photos[as]->path_img}"
                                           />
                                      </a>
-                                 </li>   
+                                 </li>
                             {/section}
                             </ul>
                         </div>
                         <input type="hidden" id="action" name="action" value="">
                         <input type="hidden" id="del_img" name="del_img" value="">
                         <input type="hidden" id="fk_author_img" name="fk_author_img" value="" />
+                        <input type="hidden" name="id" id="id" value="{$author->id|default:"0"}" />
                     </td>
                 </tr>
                 <tr>

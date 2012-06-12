@@ -1,3 +1,5 @@
+--11-06-2012
+ALTER TABLE `authors` ADD `params` TEXT NULL DEFAULT NULL;
 --09-05-2012
 ALTER TABLE `newsletter_archive` ADD `html` LONGTEXT NULL DEFAULT NULL;
 

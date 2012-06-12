@@ -841,6 +841,51 @@ gettext("ADS");
 /* public/admin/themes/default/tpl//link_control/link_control.tpl */
 gettext("There is no broken links.");
 
+/* public/admin/themes/default/tpl//newsstand/config.tpl */
+gettext("Newsstand :: Configuration");
+
+/* public/admin/themes/default/tpl//newsstand/config.tpl */
+gettext("Go back to list");
+
+/* public/admin/themes/default/tpl//newsstand/config.tpl */
+gettext("Go back to list");
+
+/* public/admin/themes/default/tpl//newsstand/config.tpl */
+gettext("Go back to list");
+
+/* public/admin/themes/default/tpl//newsstand/config.tpl */
+gettext("Go back to list");
+
+/* public/admin/themes/default/tpl//newsstand/config.tpl */
+gettext("Go back to list");
+
+/* public/admin/themes/default/tpl//newsstand/config.tpl */
+gettext("Information about newsstand module settings");
+
+/* public/admin/themes/default/tpl//newsstand/config.tpl */
+gettext("Order newsstand frontpage by:");
+
+/* public/admin/themes/default/tpl//newsstand/config.tpl */
+gettext("Sections");
+
+/* public/admin/themes/default/tpl//newsstand/config.tpl */
+gettext("Dates");
+
+/* public/admin/themes/default/tpl//newsstand/config.tpl */
+gettext("Dates grouped");
+
+/* public/admin/themes/default/tpl//newsstand/config.tpl */
+gettext("Definition values");
+
+/* public/admin/themes/default/tpl//newsstand/config.tpl */
+gettext("Select if order newsstand's frontpage by dates or by section.");
+
+/* public/admin/themes/default/tpl//newsstand/config.tpl */
+gettext("Dates grouped is recommended for weekly newspapers.");
+
+/* public/admin/themes/default/tpl//newsstand/config.tpl */
+gettext("Save");
+
 /* public/admin/themes/default/tpl//newsstand/new.tpl */
 gettext("ePaper Manager");
 
@@ -921,6 +966,12 @@ gettext("New ePaper");
 
 /* public/admin/themes/default/tpl//newsstand/list.tpl */
 gettext("Save positions");
+
+/* public/admin/themes/default/tpl//newsstand/list.tpl */
+gettext("Config kiosko module");
+
+/* public/admin/themes/default/tpl//newsstand/list.tpl */
+gettext("Configurations");
 
 /* public/admin/themes/default/tpl//newsstand/list.tpl */
 gettext("WIDGET");
@@ -2696,6 +2747,12 @@ gettext("Blog url:");
 gettext("Blog url");
 
 /* public/admin/themes/default/tpl//opinion/authors/new.tpl */
+gettext("Show in rss:");
+
+/* public/admin/themes/default/tpl//opinion/authors/new.tpl */
+gettext("If this option is activated this author will be showed in rss");
+
+/* public/admin/themes/default/tpl//opinion/authors/new.tpl */
 gettext("Author photos");
 
 /* public/admin/themes/default/tpl//opinion/authors/new.tpl */
@@ -2850,6 +2907,9 @@ gettext("Number of director articles in the widget:");
 
 /* public/admin/themes/default/tpl//opinion/config.tpl */
 gettext("Number of editorial articles in the widget:");
+
+/* public/admin/themes/default/tpl//opinion/config.tpl */
+gettext("Number of author opinions in the widget:");
 
 /* public/admin/themes/default/tpl//opinion/config.tpl */
 gettext("Save");
@@ -3029,7 +3089,7 @@ gettext("Config album module");
 gettext("Configurations");
 
 /* public/admin/themes/default/tpl//opinion/list.tpl */
-gettext("Widgets home");
+gettext("Opinion frontpage");
 
 /* public/admin/themes/default/tpl//opinion/list.tpl */
 gettext("Author Opinions");
@@ -3284,10 +3344,10 @@ gettext("Add contents");
 gettext("Available contents");
 
 /* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
-gettext("Other articles in this category");
+gettext("Suggested articles");
 
 /* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
-gettext("Suggested articles");
+gettext("Other articles in this category");
 
 /* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
 gettext("Search");
@@ -4169,7 +4229,10 @@ gettext("Photos");
 gettext("Advertisements");
 
 /* public/admin/themes/default/tpl//category/list.tpl */
-gettext("Published");
+gettext("Available");
+
+/* public/admin/themes/default/tpl//category/list.tpl */
+gettext("Show in rss");
 
 /* public/admin/themes/default/tpl//category/list.tpl */
 gettext("Actions");
@@ -4193,7 +4256,7 @@ gettext("Photos");
 gettext("Advertisements");
 
 /* public/admin/themes/default/tpl//category/list.tpl */
-gettext("Published");
+gettext("Available");
 
 /* public/admin/themes/default/tpl//category/list.tpl */
 gettext("Actions");
@@ -4217,7 +4280,7 @@ gettext("Photos");
 gettext("Advertisements");
 
 /* public/admin/themes/default/tpl//category/list.tpl */
-gettext("Published");
+gettext("Available");
 
 /* public/admin/themes/default/tpl//category/list.tpl */
 gettext("Actions");
@@ -4241,7 +4304,7 @@ gettext("Photos");
 gettext("Advertisements");
 
 /* public/admin/themes/default/tpl//category/list.tpl */
-gettext("Published");
+gettext("Available");
 
 /* public/admin/themes/default/tpl//category/list.tpl */
 gettext("Actions");
@@ -4265,7 +4328,7 @@ gettext("Photos");
 gettext("Advertisements");
 
 /* public/admin/themes/default/tpl//category/list.tpl */
-gettext("Published");
+gettext("Available");
 
 /* public/admin/themes/default/tpl//category/list.tpl */
 gettext("Actions");
@@ -4289,7 +4352,7 @@ gettext("Photos");
 gettext("Advertisements");
 
 /* public/admin/themes/default/tpl//category/list.tpl */
-gettext("Published");
+gettext("Available");
 
 /* public/admin/themes/default/tpl//category/list.tpl */
 gettext("Actions");
@@ -4313,7 +4376,7 @@ gettext("Photos");
 gettext("Advertisements");
 
 /* public/admin/themes/default/tpl//category/list.tpl */
-gettext("Published");
+gettext("Available");
 
 /* public/admin/themes/default/tpl//category/list.tpl */
 gettext("Actions");
@@ -7145,6 +7208,9 @@ gettext("Manage newsletter by subscriptors table");
 gettext("Mail address to receive new subscriptions");
 
 /* public/admin/themes/default/tpl//newsletter/config.tpl */
+gettext("Mail sender ");
+
+/* public/admin/themes/default/tpl//newsletter/config.tpl */
 gettext("Enable frontpage subscription");
 
 /* public/admin/themes/default/tpl//newsletter/config.tpl */
@@ -7377,6 +7443,15 @@ gettext("Edit");
 
 /* public/admin/themes/default/tpl//newsletter/steps/newsletterPreview.tpl */
 gettext("Edit");
+
+/* public/admin/themes/default/tpl//newsletter/steps/newsletterPreview.tpl */
+gettext("Save changes");
+
+/* public/admin/themes/default/tpl//newsletter/steps/newsletterPreview.tpl */
+gettext("Save changes");
+
+/* public/admin/themes/default/tpl//newsletter/steps/newsletterPreview.tpl */
+gettext("Save changes");
 
 /* public/admin/themes/default/tpl//newsletter/steps/newsletterPreview.tpl */
 gettext("Newsletter preview");
