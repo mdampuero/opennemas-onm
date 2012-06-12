@@ -128,14 +128,14 @@ CREATE TABLE IF NOT EXISTS `albums` (
 -- Dumping data for table `albums`
 --
 
-INSERT INTO `albums` (`pk_album`, `subtitle`, `agency`, `fuente`, `cover`) VALUES
-(89, '0', 'onm agency', '0', '/2011/09/23//300-240-2011100418284638781.jpg'),
-(90, '0', 'onm agency', '0', '/2011/09/26//300-240-2011100418285770402.jpg'),
-(91, '0', 'onm agency', '0', '/2011/09/26//300-240-2011100418280287451.jpg'),
-(92, '0', 'onm-agency', '0', '/2011/09/26//300-240-2011092811215682275.jpg'),
-(93, '0', 'onm agency', '0', '/2011/09/26//300-240-2011100418273532713.jpg'),
-(94, '0', 'onm agency', '0', '/2011/09/26//300-240-2011100418270514357.jpg'),
-(181, '0', 'onm agency', '0', '/2011/09/29//300-240-2011100623040462625.jpg');
+INSERT INTO `albums` (`pk_album`, `subtitle`, `agency`, `fuente`, `cover_id`) VALUES
+(89, '0', 'onm agency', '0', '3'),
+(90, '0', 'onm agency', '0', '7'),
+(91, '0', 'onm agency', '0', '15'),
+(92, '0', 'onm-agency', '0', '29'),
+(93, '0', 'onm agency', '0', '30'),
+(94, '0', 'onm agency', '0', '16'),
+(181, '0', 'onm agency', '0', '180');
 
 -- --------------------------------------------------------
 
