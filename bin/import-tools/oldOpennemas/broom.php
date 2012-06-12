@@ -41,8 +41,7 @@ class Broom
     public function writeDataInLog()
     {
 
-        //$value = "200701010000000000";
-        $value = "201102010000000000"; //tribuna was in 03-2011
+        $value = "200701010000000000";
 
         $sqls   = array();
         $sqls[] = "SELECT * FROM `contents_categories` WHERE ".
@@ -90,7 +89,7 @@ class Broom
 
     public function clearExecute()
     {
-        $value  = "201102010000000000";
+        $value  = "200702010000000000";
 
         $sqls   = array();
         $sqls[] = "DELETE FROM `contents_categories` WHERE ".
