@@ -26,9 +26,19 @@ class Bootstrap extends ModuleBootstrap
      **/
     public function initContainer()
     {
-        $this->container->setParameter('dispatcher.exceptionhandler', 'Backend:Controllers:ErrorController:default');
+        // $this->container->setParameter('dispatcher.exceptionhandler', 'Backend:Controllers:ErrorController:default');
 
         return $this;
+    }
+
+    /**
+     * Starts the authentication system for the backend
+     *
+     * @return Boostrap the boostrap instance
+     **/
+    public function initAuthenticationSystem()
+    {
+        require_once './session_bootstrap.php';
     }
 
 } // END class Bootstrap
