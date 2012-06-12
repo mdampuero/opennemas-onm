@@ -156,10 +156,10 @@ class AuthenticationController extends Controller
             // Delete the cache that handles the number of active sessions
             apc_delete(APC_PREFIX . "_"."num_sessions");
             session_destroy();
-            $this->redirect(url('admin_login_form'));
+            return $this->redirect(url('admin_login_form'));
 
         } else {
-            echo "Are you hijacking my session dude?!";
+            return Response('Are you hijacking my session dude?!');
         }
     }
 
