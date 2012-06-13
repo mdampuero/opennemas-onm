@@ -15,3 +15,4 @@ parameters:
     secret:            ThisTokenIsNotSoSecretChangeIt
 
     cache_handler:     apc
+    dispatcher.exceptionhandler: "Framework:Controllers:ErrorController:default"
