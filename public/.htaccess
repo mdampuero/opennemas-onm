@@ -466,7 +466,7 @@ Options -Indexes
     #Redirection from old nuevatribuna.es
 
     #Inner Article
-    RewriteRule ^noticia/([0-9]+)/($|.+/$|.+html$) /controllers/redirect-from-editmaker.php?content_type=article&content_id=$1 [L,NC]
+    RewriteRule ^noticia/([0-9]+)($|/$|.+/$|.+html$) /controllers/redirect-from-editmaker.php?content_type=article&content_id=$1 [L,NC]
 
     RewriteCond %{QUERY_STRING} &?ref=([^&]+)&?pos=([^&]+) [OR]
     RewriteCond %{QUERY_STRING} &?ref=([^&]+)
