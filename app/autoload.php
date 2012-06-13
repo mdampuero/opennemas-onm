@@ -42,12 +42,14 @@ if (extension_loaded('apc')) {
 
 // Registering namespaces
 $loader->registerNamespaces(array(
-    'Onm'      => __DIR__.'/../vendor',
-    'Symfony\Component\Routing'  => __DIR__.'/../vendor/symfony/routing',
-    'Symfony\Component\HttpFoundation'  => __DIR__.'/../vendor/symfony/http-foundation',
-    'Symfony\Component\ClasLoader'  => __DIR__.'/../vendor/symfony/class-loader',
-    'Symfony\Component\DepenencyInjection'  => __DIR__.'/../vendor/symfony/dependency-injection',
-    'Panorama' => __DIR__.'/../vendor/Panorama',
+    'Onm'                                  => __DIR__.'/../vendor',
+    'Symfony\Component\Routing'            => __DIR__.'/../vendor/symfony/routing',
+    'Symfony\Component\HttpFoundation'     => __DIR__.'/../vendor/symfony/http-foundation',
+    'Symfony\Component\ClasLoader'         => __DIR__.'/../vendor/symfony/class-loader',
+    'Symfony\Component\DepenencyInjection' => __DIR__.'/../vendor/symfony/dependency-injection',
+    'Symfony\Component\Config'             => __DIR__.'/../vendor/symfony/config',
+    'Symfony\Component\Yaml'               => __DIR__.'/../vendor/symfony/yaml',
+    'Panorama'                             => __DIR__.'/../vendor/Panorama',
 ));
 
 // SessionHandlerInterface
