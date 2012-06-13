@@ -18,7 +18,7 @@ $contentId   = $request->query->filter('content_id',
 $url = SITE_URL;
 
 // All the info is available so lets create url to redirect to
-if (!is_null($contentID)) {
+if (!is_null($contentId)) {
     // Instantiate objects we will use
     $cm  = new ContentManager();
     $ccm = ContentCategoryManager::get_instance();
@@ -26,7 +26,7 @@ if (!is_null($contentID)) {
     switch ($contentType) {
         case 'article':
             list($type,$newContentID) =
-                getOriginalIdAndContentTypeFromID($contentID);
+                getOriginalIdAndContentTypeFromID($contentId);
 
             if ($type == 'article') {
                 $article = new Article($newContentID);
@@ -56,7 +56,7 @@ if (!is_null($contentID)) {
 
         case 'category':
             $newContentID =
-                getOriginalIDForContentTypeAndID( $contentType, $contentID);
+                getOriginalIDForContentTypeAndID( $contentType, $contentId);
 
             $cc = new ContentCategory($newContentID);
 
