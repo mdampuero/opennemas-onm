@@ -9,8 +9,10 @@
  **/
 namespace Backend\Controllers;
 
-use Onm\Framework\Controller\Controller,
-    Onm\Message as m;
+use Onm\Framework\Controller\Controller;
+use Onm\Message as m;
+use Symfony\Component\HttpFoundation\Response;
+
 /**
  * Handles the actions for the system information
  *
@@ -253,6 +255,44 @@ class CacheManagerController extends Controller
         }
     }
 
+    /**
+     * Cleans the category frontpage given its id
+     *
+     * @return Response the response object
+     **/
+    public function cleanFrontpageAction()
+    {
+        $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
+        $category = $this->request->request->filter('category', null, FILTER_SANITIZE_STRING);
+
+        if (isset($category)) {
+            $ccm = \ContentCategoryManager::get_instance();
+            if($category != 'home') {
+                $category_name = $ccm->get_name($category);
+                $title = $ccm->get_title($category_name);
+                $title = sprintf(_("Frontpage for category %s"), $title);
+            } else {
+                $category_name = 'home';
+                $title = _('General frontpage');
+            }
+            $category_name = preg_replace('/[^a-zA-Z0-9\s]+/', '', $category_name);
+
+            $tplManager->delete($category_name . '|RSS');
+            $delete = $tplManager->delete($category_name . '|0');
+
+            $content = "<div class='alert alert-success'>"
+                    ."<button class='close' data-dismiss='alert'>×</button>"
+                    . _("<strong>{$title}</strong> cache deleted succesfully.")
+                ."</div>";
+        } else {
+            $content = "<div class='alert alert-error'>"
+                    ."<button class='close' data-dismiss='alert'>×</button>"
+                    ._("There was an error trying to delete the requested cache page.")
+                ."</div>";
+        }
+
+        return $content;
+    }
 
     /**
      * Builds the search filter for listing the listing cache action

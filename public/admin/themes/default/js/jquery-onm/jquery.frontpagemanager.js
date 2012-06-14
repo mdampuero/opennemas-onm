@@ -361,7 +361,11 @@ jQuery(function($){
         e.preventDefault();
         var category = $(this).data('category');
         $.ajax({
-            url: "/admin/controllers/tpl_manager/refresh_caches.php?category=" + encodeURIComponent(category),
+            type: 'POST',
+            url: frontpage_urls.clean_frontpage,
+            data: {
+                'category' : category
+            },
             success: function(data){
                 $('#warnings-validation').html(data);
             }

@@ -16,7 +16,8 @@
         }
         var frontpage_urls = {
             save_positions: '{url name=admin_frontpage_savepositions category=$category}',
-            preview_frontpage: '{url name=admin_frontpage_preview category=$category}'
+            preview_frontpage: '{url name=admin_frontpage_preview category=$category}',
+            clean_frontpage: '{url name=admin_tpl_manager_cleanfrontpage}'
         };
         var content_states = {
             {foreach from=$frontpage_articles item=content}
@@ -71,9 +72,9 @@
                 <li class="separator"></li>
 
                 <li>
-                     <a href="#" data-category="{$category}" id="button_clearcache">
+                     <button data-category="{$category}" id="button_clearcache">
                          <img border="0" src="{$params.IMAGE_DIR}clearcache.png" title="{t}Clean cache{/t}" alt="" /><br />{t}Clean cache{/t}
-                     </a>
+                     </button>
                 </li>
 
                 <li>

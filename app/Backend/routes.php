@@ -472,6 +472,15 @@ $routes->add(
     '/admin'
 );
 
+$routes->add(
+    'admin_tpl_manager_cleanfrontpage',
+    new Route(
+        '/system/cachemanager/cleanfrontapge',
+        array('_controller' => 'Backend:Controllers:CacheManagerController:cleanFrontpage')
+    ),
+    '/admin'
+);
+
 
 // Database error controller routes
 $routes->add(
