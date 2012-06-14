@@ -28,7 +28,7 @@ class AclUserGroupsController extends Controller
     {
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
 
-        \Acl::checkOrForward('GROUP_ADMIN');
+        $this->checkAclOrForward('GROUP_ADMIN');
 
         $this->privilege = new \Privilege();
     }
@@ -75,7 +75,7 @@ class AclUserGroupsController extends Controller
      **/
     public function createAction()
     {
-        \Acl::checkOrForward('GROUP_GREATE');
+        $this->checkAclOrForward('GROUP_GREATE');
 
         $userGroup = new \UserGroup();
         $privilege = new \Privilege();
@@ -109,7 +109,7 @@ class AclUserGroupsController extends Controller
      **/
     public function updateAction()
     {
-        \Acl::checkOrForward('GROUP_UPDATE');
+        $this->checkAclOrForward('GROUP_UPDATE');
 
         $userGroup = new \UserGroup();
         $userGroup->update( $_REQUEST );
@@ -125,7 +125,7 @@ class AclUserGroupsController extends Controller
      **/
     public function deleteAction()
     {
-        \Acl::checkOrForward('GROUP_DELETE');
+        $this->checkAclOrForward('GROUP_DELETE');
 
         $id = $this->request->query->filter('id', FILTER_VALIDATE_INT);
 

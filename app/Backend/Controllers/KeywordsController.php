@@ -30,7 +30,7 @@ class KeywordsController extends Controller
     {
         \Onm\Module\ModuleManager::checkActivatedOrForward('KEYWORD_MANAGER');
 
-        \Acl::checkOrForward('PCLAVE_ADMIN');
+        $this->checkAclOrForward('PCLAVE_ADMIN');
 
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
     }
@@ -103,7 +103,7 @@ class KeywordsController extends Controller
      **/
     public function readAction()
     {
-        \Acl::checkOrForward('PCLAVE_UPDATE');
+        $this->checkAclOrForward('PCLAVE_UPDATE');
 
         $id = $this->request->query->getDigits('id');
         $pclave->read($id);
@@ -123,10 +123,10 @@ class KeywordsController extends Controller
      **/
     public function createAction()
     {
-        \Acl::checkOrForward('PCLAVE_CREATE');
+        $this->checkAclOrForward('PCLAVE_CREATE');
 
         if ('POST' == $this->request->getMethod()) {
-            \Acl::checkOrForward('PCLAVE_CREATE');
+            $this->checkAclOrForward('PCLAVE_CREATE');
 
             $keywordManager = new \PClave();
             $keywordManager->save($_POST);

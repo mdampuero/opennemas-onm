@@ -27,7 +27,7 @@ class StaticPagesController extends Controller
      **/
     public function init()
     {
-        \Acl::checkOrForward('STATIC_ADMIN');
+        $this->checkAclOrForward('STATIC_ADMIN');
 
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
     }

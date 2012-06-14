@@ -29,7 +29,7 @@ class SystemSettingsController extends Controller
     public function init()
     {
         // Check ACL
-        \Acl::checkorForward('ONM_SETTINGS');
+        $this->checkAclOrForward('ONM_SETTINGS');
 
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
     }

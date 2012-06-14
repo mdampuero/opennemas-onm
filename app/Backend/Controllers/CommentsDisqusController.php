@@ -33,8 +33,7 @@ class CommentsDisqusController extends Controller
         // Check MODULE
         \Onm\Module\ModuleManager::checkActivatedOrForward('COMMENT_DISQUS_MANAGER');
         // Check ACL
-        \Acl::checkOrForward('COMMENT_ADMIN');
-
+        $this->checkAclOrForward('COMMENT_ADMIN');
 
         /**
          * Check if module is configured, if not redirect to configuration form

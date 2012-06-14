@@ -70,7 +70,7 @@ class BooksController extends Controller
      **/
     public function defaultAction()
     {
-        \Acl::checkOrForward('BOOK_ADMIN');
+        $this->checkAclOrForward('BOOK_ADMIN');
 
         $page = $this->request->query->getInt('page');
         $category = $this->request->query->filter('category', 'favorite', FILTER_SANITIZE_STRING);
@@ -135,7 +135,7 @@ class BooksController extends Controller
      **/
     public function createAction()
     {
-        \Acl::checkOrForward('BOOK_CREATE');
+        $this->checkAclOrForward('BOOK_CREATE');
         return $this->render('book/new.tpl');
     }
 
@@ -146,7 +146,7 @@ class BooksController extends Controller
      **/
     public function showAction()
     {
-        \Acl::checkOrForward('BOOK_UPDATE');
+        $this->checkAclOrForward('BOOK_UPDATE');
 
         $id = $this->request->query->getInt('id');
 
