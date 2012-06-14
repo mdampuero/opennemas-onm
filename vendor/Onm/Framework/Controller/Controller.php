@@ -143,4 +143,14 @@ class Controller extends ContainerAware
 
         return $generator->generate($urlName, $params, $absolute);
     }
+
+    /**
+     * Checks if the user can access an specific aclname or redirects him to wellcome page
+     *
+     * @return void
+     **/
+    public function checkAclOrForward($aclName)
+    {
+        return \Acl::checkOrForward($aclName);
+    }
 }
