@@ -45,22 +45,26 @@ class ErrorController extends Controller
         $error = unserialize($this->request->get('error'));
         // var_dump($error);die();
 
-        // print("<html><body>".$error->xdebug_message."</body></html>");die();
+        if ($this->container->hasParameter('environment')
+            && $this->container->getParameter('environment') == 'development'
+        ) {
+            // print("<html><body>".$error->xdebug_message."</body></html>");die();
 
-        $name = join('', array_slice(explode('\\', get_class($error)), -1));
-        switch ($name) {
-            case 'ResourceNotFoundException':
-                $errorMessage = 'Resource path not found';
+            $name = join('', array_slice(explode('\\', get_class($error)), -1));
+            switch ($name) {
+                case 'ResourceNotFoundException':
+                    $errorMessage = 'Resource path not found';
 
-                break;
+                    break;
 
-            default:
-                $errorMessage = '';
-                break;
+                default:
+                    $errorMessage = '';
+                    break;
+            }
+            return include __DIR__."/../Views/ErrorController/default.php";
         }
-
         header('HTTP/1.0 404 Not Found');
-        return include __DIR__."/../Views/ErrorController/default.php";
+        return include __DIR__."/../Views/ErrorController/default-production.php";
     }
 
 } // END class Authentication
