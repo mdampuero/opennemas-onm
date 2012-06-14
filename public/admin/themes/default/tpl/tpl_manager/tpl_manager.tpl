@@ -78,7 +78,7 @@
         </div>
     </div>
     <div class="wrapper-content">
-
+        {render_messages}
         <div class="table-info clearfix">
             <div>
                 <div class="right form-inline">
@@ -314,7 +314,7 @@
                         }
                         // ]]>
                         </script>
-                        {$pager->links} &nbsp;
+                        {$pagination->links} &nbsp;
                     </td>
                 </tr>
             </tfoot>

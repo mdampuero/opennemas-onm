@@ -28,7 +28,7 @@ class CacheManagerController extends Controller
      **/
     public function init()
     {
-        \Acl::checkOrForward('BACKEND_ADMIN');
+        $this->checkAclOrForward('BACKEND_ADMIN');
 
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
 
@@ -58,16 +58,23 @@ class CacheManagerController extends Controller
         }
 
         // Build the pager
-        $pager = \Pager::factory(array(
+        $pagination = \Pager::factory(array(
             'mode'        => 'Sliding',
             'perPage'     => $this->itemsPerPage,
             'append'      => false,
             'path'        => '',
-            'fileName'    => 'javascript:paginate(%d);',
             'delta'       => 4,
             'clearIfVoid' => true,
             'urlVar'      => 'page',
             'totalItems'  => count($caches),
+            'fileName'    => $this->generateUrl(
+                'admin_tpl_manager',
+                array(
+                    'items_page'      => $this->itemsPerPage,
+                    'section'         => $this->request->query->filter('section', '', FILTER_SANITIZE_STRING),
+                    'type'            => $this->request->query->filter('type', '', FILTER_SANITIZE_STRING),
+                )
+            ).'&page=%d',
         ));
 
         // Get only cache files within pagination range
@@ -139,13 +146,14 @@ class CacheManagerController extends Controller
         return $this->render('tpl_manager/tpl_manager.tpl', array(
             'authors'     => $authors,
             'paramsUri'   => $this->params,
-            'pager'       => $pager,
+            'pagination'  => $pagination,
             'sections'    => $sections,
             'ccm'         => $ccm,
             'titles'      => $articleTitles,
             'contentUris' => $articleUris,
             'caches'      => $caches,
             'allAuthors'  => $allAuthors,
+            'page'        => $this->page,
         ));
     }
 
@@ -214,6 +222,8 @@ class CacheManagerController extends Controller
             }
 
             $this->templateManager->saveConfig($config);
+
+            m::add(_('Cache configuration saved successfully.'), m::SUCCESS);
 
             return $this->redirect(url('admin_tpl_manager'));
         } else {
