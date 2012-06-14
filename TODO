@@ -47,14 +47,10 @@ Statistics controller
 
 Europapress Importer
 --------------------
-- Validate if $id exists and handle with redirection (methods show and import)
-- Review pagination
 - Review back button in article editting form when importing
 
 EFE importer
 ------------
-- Move last sync time check from template list.tpl to the controller
-- Review pagination
 - Review back button in article editting form when importing
 
 XML file importer

@@ -56,33 +56,45 @@ class ImporterEuropapressController extends Controller
 
         $categories = \Onm\Import\DataSource\Europapress::getOriginalCategories();
 
+        $queryParams = $this->request->query;
+        $filterCategory = $queryParams->filter('filter_category', '*', FILTER_SANITIZE_STRING);
+        $filterTitle = $queryParams->filter('filter_title', '*', FILTER_SANITIZE_STRING);
+        $page = $queryParams->filter('page', 0, FILTER_VALIDATE_INT);
         $itemsPage =  s::get('items_per_page') ?: 20;
 
         $findParams = array(
-            'category'   => $this->request->query->filter('filter_category', '*', FILTER_SANITIZE_STRING),
-            'title'      => $this->request->query->filter('filter_title', '*', FILTER_SANITIZE_STRING),
-            'page'       => $this->request->query->filter('filter_page', 1, FILTER_VALIDATE_INT),
+            'category'   => $filterCategory,
+            'title'      => $filterTitle,
+            'page'       => $page,
             'items_page' => $itemsPage,
         );
 
         list($countTotalElements, $elements) = $europapress->findAll($findParams);
 
         // Pager
-        $pagerOptions = array(
+        $pagination = \Pager::factory(array(
             'mode'        => 'Sliding',
             'perPage'     => $itemsPage,
             'delta'       => 4,
             'clearIfVoid' => true,
             'urlVar'      => 'page',
+            'append'      => false,
+            'path'        => '',
             'totalItems'  => $countTotalElements,
-        );
-        $pager = \Pager::factory($pagerOptions);
+            'fileName'        => $this->generateUrl(
+                'admin_importer_europapress',
+                array(
+                    'filter_category' => $filterCategory,
+                    'filter_title'    => $filterTitle,
+                )
+            ).'&page=%d',
+        ));
 
         return $this->render('agency_importer/europapress/list.tpl', array(
             'elements'      =>  $elements,
             'categories'    =>  $categories,
             'minutes'       =>  $minutesFromLastSync,
-            'pagination'    =>  $pager,
+            'pagination'    =>  $pagination,
         ));
     }
 
@@ -98,10 +110,10 @@ class ImporterEuropapressController extends Controller
         try {
             $ep = new \Onm\Import\Europapress();
             $element = $ep->findByFileName($id);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             // Redirect the user to the list of articles and show an error message
-            m::add(sprintf(_('ID "%d" doesn\'t exist'), $id), m::ERROR);
-            $this->redirect(url('admin_importer_europapress'));
+            m::add(sprintf(_('Unable to find the nwe with id "%d".'), $id), m::ERROR);
+            return $this->redirect(url('admin_importer_europapress'));
         }
 
         return $this->render('agency_importer/europapress/show.tpl', array(

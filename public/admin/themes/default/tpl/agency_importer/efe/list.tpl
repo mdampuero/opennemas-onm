@@ -81,19 +81,15 @@
     	{render_messages}
 
     	{if ($message || ($minutes > 10))}
-    	<div class="notice">
-    	    <ul>
-        		{if $minutes > 10}
-        		<li>
-        			{if $minutes > 100}
-        			<span class="red">{t}A long time ago from synchronization.{/t}</span>
-        			{else}
-        			<span class="red">{t 1=$minutes}Last sync was %1 minutes ago.{/t}</span>
-        			{/if}
-        			{t}Try syncing the news list from server by clicking in "Sync with server" button above{/t}
-        		</li>
-    		    {/if}
-    	    </ul>
+    	<div class="alert alert-info">
+    		{if $minutes > 10}
+    			{if $minutes > 100}
+    			{t}A long time ago from synchronization.{/t}
+    			{else}
+    			{t 1=$minutes}Last sync was %1 minutes ago.{/t}
+    			{/if}
+    			{t}Try syncing the news list from server by clicking in "Sync with server" button above{/t}
+		    {/if}
     	</div>
     	{/if}
 

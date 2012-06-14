@@ -30,7 +30,7 @@ class ImporterEfeController extends Controller
     public function init()
     {
         // Check ACL
-        \Acl::checkOrForward('IMPORT_EFE');
+        $this->checkAclOrForward('IMPORT_EFE');
 
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
 
@@ -63,28 +63,39 @@ class ImporterEfeController extends Controller
 
         $categories = \Onm\Import\DataSource\NewsMLG1::getOriginalCategories();
 
+        $queryParams = $this->request->query;
+        $filterCategory = $queryParams->filter('filter_category', '*', FILTER_SANITIZE_STRING);
+        $filterTitle = $queryParams->filter('filter_title', '*', FILTER_SANITIZE_STRING);
+        $page = $queryParams->filter('page', 0, FILTER_VALIDATE_INT);
         $itemsPage =  s::get('items_per_page') ?: 20;
 
-        $queryParams = $this->request->query;
         $findParams = array(
-            'category'   => $queryParams->filter('filter_category', '*', FILTER_SANITIZE_STRING),
-            'title'      => $queryParams->filter('filter_title', '*', FILTER_SANITIZE_STRING),
-            'page'       => $queryParams->filter('page', '*', FILTER_VALIDATE_INT),
+            'category'   => $filterCategory,
+            'title'      => $filterTitle,
+            'page'       => $page,
             'items_page' => $itemsPage,
         );
 
         list($countTotalElements, $elements) = $efe->findAll($findParams);
 
-        // Pager
-        $pagerOptions = array(
+        $pagination = \Pager::factory(array(
             'mode'        => 'Sliding',
             'perPage'     => $itemsPage,
             'delta'       => 4,
             'clearIfVoid' => true,
             'urlVar'      => 'page',
+            'append'      => false,
+            'path'        => '',
             'totalItems'  => $countTotalElements,
-        );
-        $pager = \Pager::factory($pagerOptions);
+            'fileName'        => $this->generateUrl(
+                'admin_importer_efe',
+                array(
+                    'filter_category' => $filterCategory,
+                    'filter_title'    => $filterTitle,
+                )
+            ).'&page=%d',
+        ));
+
 
         $urns = array();
         foreach ($elements as $element) {
@@ -97,8 +108,7 @@ class ImporterEfeController extends Controller
             'already_imported' =>  $alreadyImported,
             'categories'       =>  $categories,
             'minutes'          =>  $minutesFromLastSync,
-            'pagination'       =>  $pager,
-            'page'             => $page,
+            'pagination'       =>  $pagination,
         ));
     }
 
