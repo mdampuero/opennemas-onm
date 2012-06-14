@@ -489,15 +489,13 @@ button.btn.small,input[type="submit"].btn.small{*padding-top:3px;*padding-bottom
 a.thumbnail:hover{border-color:#0088cc;-webkit-box-shadow:0 1px 4px rgba(0, 105, 214, 0.25);-moz-box-shadow:0 1px 4px rgba(0, 105, 214, 0.25);box-shadow:0 1px 4px rgba(0, 105, 214, 0.25);}
 .thumbnail>img{display:block;max-width:100%;margin-left:auto;margin-right:auto;}
 .thumbnail .caption{padding:9px;}
-.alert{padding:8px 35px 8px 14px;margin-bottom:18px;text-shadow:0 1px 0 rgba(255, 255, 255, 0.5);background-color:#fcf8e3;border:1px solid #fbeed5;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;}
-.alert,.alert-heading{color:#c09853;}
+.input-block-level{display:block;width:100%;min-height:28px;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;-ms-box-sizing:border-box;box-sizing:border-box;}
+.alert{padding:8px 35px 8px 14px;margin-bottom:18px;text-shadow:0 1px 0 rgba(255, 255, 255, 0.5);background-color:#fcf8e3;border:1px solid #fbeed5;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;color:#c09853;}
+.alert-heading{color:inherit;}
 .alert .close{position:relative;top:-2px;right:-21px;line-height:18px;}
-.alert-success{background-color:#dff0d8;border-color:#d6e9c6;}
-.alert-success,.alert-success .alert-heading{color:#468847;}
-.alert-danger,.alert-error{background-color:#f2dede;border-color:#eed3d7;}
-.alert-danger,.alert-error,.alert-danger .alert-heading,.alert-error .alert-heading{color:#b94a48;}
-.alert-info{background-color:#d9edf7;border-color:#bce8f1;}
-.alert-info,.alert-info .alert-heading{color:#3a87ad;}
+.alert-success{background-color:#dff0d8;border-color:#d6e9c6;color:#468847;}
+.alert-danger,.alert-error{background-color:#f2dede;border-color:#eed3d7;color:#b94a48;}
+.alert-info{background-color:#d9edf7;border-color:#bce8f1;color:#3a87ad;}
 .alert-block{padding-top:14px;padding-bottom:14px;}
 .alert-block>p,.alert-block>ul{margin-bottom:0;}
 .alert-block p+p{margin-top:5px;}
@@ -711,3 +709,5 @@ h3 {
 .modal .popover, .modal .twipsy {
     z-index: 12000;
 }
+
+.alert button { border:0 none; background:none;}

@@ -761,17 +761,11 @@ legend {
  /* -------------------------------------------------------------
   Messages
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-.error, .notice, .success {padding:15px;border:2px solid #ddd; margin:4px auto;}
-.error ul, .notice ul, .success ul { margin:0; padding:0; }
-.error p, .notice p, .success p { margin:0;}
-.error {background:#FBE3E4;color:#8a1f11;border-color:#FBC2C4;}
-.notice {background:#FFF6BF;color:#514721;border-color:#FFD324;}
-.success {background:#E6EFC2;color:#264409;border-color:#C6D880;}
-.error a {color:#8a1f11;}
-.notice a {color:#514721;}
-.success a {color:#264409;}
-.error a, .notice a, .success a { text-decoration:underline !important; }
-.error li, .notice li, .success li { margin-left:20px;}
+.alert-error {background:#FBE3E4;color:#8a1f11;border-color:#FBC2C4;}
+.alert-success {background:#E6EFC2;color:#264409;border-color:#C6D880;}
+.alert-error a {color:#8a1f11;}
+.alert-success a {color:#264409;}
+.alert-error a, .alert-info a, .alert-success a { text-decoration:underline !important; }
 
 /* -------------------------------------------------------------
   Global navigation bar
