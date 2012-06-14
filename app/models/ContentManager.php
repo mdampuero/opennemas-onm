@@ -1508,7 +1508,8 @@ class ContentManager
         $_order_by              = 'ORDER BY 1',
         $page                   = 1,
         $items_page             = 10,
-        $pk_fk_content_category = null
+        $pk_fk_content_category = null,
+        $url                    = null
     ) {
         $this->init($contentType);
         $items = array();
@@ -1556,6 +1557,10 @@ class ContentManager
             'urlVar'      => 'page',
             'totalItems'  => $countContents,
         );
+
+        if ($url != null) {
+            $pager_options['path'] = $url;
+        }
         $pager = Pager::factory($pager_options);
 
         return array($items, $pager);
