@@ -136,16 +136,15 @@ td { vertical-align: top; }
    Author: OpenHost S.L.
    ========================================================================== */
 
-html { /* background: url('../images/general/admin_background.jpg.png') bottom right no-repeat;*/ min-height:100%; overflow-y: scroll; }
+html { min-height:100%; overflow-y: scroll; }
 body {
-  font-family:Arial,"Helvetica Neue",Helvetica,Arial,sans-serif;
-  background:none;
-  width:100%;
-  margin:0;
-  min-height:100%;
-  background: #fff;
-  font-size: 12.1px !important;
-  margin-top: 24px;
+    font-family:Arial,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    width:100%;
+    margin:0;
+    min-height:100%;
+    background: #fff;
+    font-size: 12.1px !important;
+    margin-top: 24px;
 }
 
 img { border: 0 none; }
@@ -1905,7 +1904,7 @@ div.clearfix div.menu-other-categories {
 .pills:before, .tabs:after, .pills:after { content: ""; display: table; }
 .pills:after {  clear: both; }
 .pills > li { float: left; position:relative; }
-.pills > li > a { display: block; border: 1px solid rgba(0, 0, 0, 0.07); }
+.pills > li > a { display: block; border: 1px solid rgba(0, 0, 0, 0.07); background:White; }
 .pills a { -webkit-border-radius: 10px; -moz-border-radius: 10px; border-radius: 10px; line-height: 30px; margin: 5px 3px 5px 0pt; padding: 0pt 10px; }
 .pills > li.with-subcategories:hover > a, .pills a:hover { background: none repeat scroll 0% 0% #0050A3; color: #FFFFFF; text-decoration: none; text-shadow: 0pt 1px 1px rgba(0, 0, 0, 0.25); }
 .pills  a.active { background: none repeat scroll 0% 0% #0069D6; color: #FFFFFF; text-shadow: 0pt 1px 1px rgba(0, 0, 0, 0.25); }
@@ -2354,16 +2353,29 @@ div.newsletter-contents .container-buttons {
 /* =============================================================================
    Welcome page rules
    ========================================================================== */
+.welcome-page .hero-unit {
+    padding: 35px 50px;
+}
 .welcome-page .hero-unit h1 {
     color:#333;
-    font-size:4em !important;
+    font-size:4em;
 }
-.welcome-page .hero-unit p {
-    font-size:1.3em;
+.welcome-page .hero-unit p.lean {
+    font-size:20px;
+    margin-bottom: 18px;
+    font-weight: 300;
+    line-height:27px;
 }
 .welcome-page .welcome-panel-column {
     display:inline-block;
-    width:30%;
+    width:32%;
     margin-right:10px;
     vertical-align: top;
+}
+.welcome-page .welcome-panel-column p {
+  margin-top:5px;
+}
+.welcome-page .welcome-panel-column p,
+.welcome-page .welcome-panel-column ul {
+  margin-left:18px;
 }

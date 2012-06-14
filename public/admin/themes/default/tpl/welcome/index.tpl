@@ -95,11 +95,11 @@
 <div class="wrapper-content welcome-page">
     {render_messages}
     <div class="hero-unit">
-        <h1>{t}Welcome to you OpenNemas site!{/t}</h1>
-        <p>{t escape=off}If you need help getting started, check out our documentation on <a href="#">First Steps with OpenNemas</a>.
+        <h1>{t}Welcome to your OpenNemas site!{/t}</h1>
+        <p class="lead">{t escape=off}If you need help getting started, check out our documentation on <a href="#">First Steps with OpenNemas</a>.
            If you’d rather dive right in, here are a few things most people do first when they set up
-           a new OpenNemas site. If you need help, use the Help tabs in the upper right corner to get
-           information on how to use your current screen and where to go for more assistance.{/t}</p>
+           a new OpenNemas site.{/t}
+        </p>
         <p><a class="onm-button blue">Learn more</a></p>
     </div>
     <div class="welcome-panel-column-container">
@@ -109,15 +109,15 @@
             <ul>
             <li><a href="{url name=admin_system_settings}">{t}Change your site name and preferences{/t}</a></li>
             <li><a href="{url name=admin_system_settings}#misc">{t}Select your tagline and time zone{/t}</a></li>
-            <li><a href="#">{t}Fill in your profile{/t}</a></li>
+            <li><a href="{url name=admin_acl_user_show id=$smarty.session.userid}">{t}Fill in your profile{/t}</a></li>
             </ul>
         </div>
         <div class="welcome-panel-column">
-            <h4><span class="icon16 icon-th-large"></span> Add Real Content</h4>
+            <h4><span class="icon16 icon-th-large"></span> {t}Add your own Content{/t}</h4>
             <p>Check out the <a href="#">sample page</a> &amp; <a href="#">post</a> editors to see how it all works, then delete the default content and write your own!</p>
             <ul>
-            <li>View the <a href="#">sample page</a> and <a href="#">post</a></li>
-            <li>Delete the <a href="#">sample page</a> and <a href="#">post</a></li>
+            <li>View the <a href="{url name=admin_staticpages_create}">sample page</a> and <a href="#">post</a></li>
+            <li>Delete the <a href="{url name=admin_staticpages}">sample page</a> and <a href="#">post</a></li>
             <li><a href="#">Create an About Me page</a></li>
             <li><a href="#">Write your first article</a></li>
             </ul>
