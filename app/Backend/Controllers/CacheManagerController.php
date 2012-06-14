@@ -144,16 +144,17 @@ class CacheManagerController extends Controller
         }
 
         return $this->render('tpl_manager/tpl_manager.tpl', array(
-            'authors'     => $authors,
-            'paramsUri'   => $this->params,
-            'pagination'  => $pagination,
-            'sections'    => $sections,
-            'ccm'         => $ccm,
-            'titles'      => $articleTitles,
-            'contentUris' => $articleUris,
-            'caches'      => $caches,
-            'allAuthors'  => $allAuthors,
-            'page'        => $this->page,
+            'authors'      => $authors,
+            'paramsUri'    => $this->params,
+            'pagination'   => $pagination,
+            'sections'     => $sections,
+            'ccm'          => $ccm,
+            'titles'       => $articleTitles,
+            'contentUris'  => $articleUris,
+            'caches'       => $caches,
+            'allAuthors'   => $allAuthors,
+            'page'         => $this->page,
+            'itemsperpage' => $this->itemsPerPage,
         ));
     }
 
