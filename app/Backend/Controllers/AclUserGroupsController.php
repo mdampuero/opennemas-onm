@@ -59,10 +59,13 @@ class AclUserGroupsController extends Controller
         $id = $this->request->query->filter('id', FILTER_VALIDATE_INT);
 
         $userGroup = new \UserGroup($id);
+        if (is_null($userGroup->id)) {
+            m::add(sprintf(_("Unable to find user group with id '%d'"), $id), m::ERROR);
+            return $this->redirect($this->generateUrl('admin_acl_usergroups'));
+        }
         $privilege = new \Privilege();
 
-        return $this->render(
-            'acl/user_group/new.tpl', array(
+        return $this->render('acl/user_group/new.tpl', array(
             'user_group' => $userGroup,
             'modules'    => $privilege->getPrivilegesByModules(),
         ));
@@ -112,7 +115,7 @@ class AclUserGroupsController extends Controller
         $this->checkAclOrForward('GROUP_UPDATE');
 
         $userGroup = new \UserGroup();
-        $userGroup->update( $_REQUEST );
+        $userGroup->update($_REQUEST);
 
         return $this->redirect(url('admin_acl_usergroups'));
     }

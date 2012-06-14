@@ -66,8 +66,8 @@ jQuery(function($){
                         <input type="checkbox" id="toggleallcheckbox">
                     </th>
 					<th class="left">{t}Full name{/t}</th>
-					<th class="center" style="width:110px">{t}Username{/t}</th>
-					<th class="center" style="width:140px">{t}Group{/t}</th>
+					<th class="left" style="width:110px">{t}Username{/t}</th>
+					<th class="left" style="width:100px">{t}Group{/t}</th>
 					<th class="center" style="width:110px">{t}Actions{/t}</th>
 				</tr>
 			</thead>
@@ -82,10 +82,10 @@ jQuery(function($){
 						<a href="{url name=admin_acl_user_show id=$user->id}" title="{t}Edit user{/t}">
 							{$user->name}&nbsp;{$user->firstname}&nbsp;{$user->lastname}</a>
 					</td>
-					<td class="center">
+					<td class="left">
 						{$user->login}
 					</td>
-					<td class="center">
+					<td class="left">
 						{section name=u loop=$user_groups}
 							{if $user_groups[u]->id == $user->fk_user_group}
 								{$user_groups[u]->name}

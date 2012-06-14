@@ -126,6 +126,7 @@ input[type="password"]{
 	</div>
 
     <div class="wrapper-content">
+        {render_messages}
         <div id="user-editing-form" class="wrapper-content tabs">
             <ul>
                 <li><a href="#basic" title="{t}Basic information{/t}">{t}Basic information{/t}</a></li>

@@ -19,6 +19,7 @@
 <form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
     {block name="action_buttons"}{/block}
     <div class="wrapper-content">
+        {render_messages}
         <table class="listing-table table-striped">
             <thead>
                 <tr>

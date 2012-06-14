@@ -25,14 +25,10 @@ Advanced Search Controller
 User controller
 ---------------
 - Integrate modal dialog when deleting
-- Review pagination of users
-- In some point I could create two users with the same information.
 
 User group controller
 ---------------------
 - Integrate modal dialog when deleting
-- Review pagination of user groups
-- When a user group doesn't exists (on editting or deleting) show error
 
 Tpl cache manager
 -----------------

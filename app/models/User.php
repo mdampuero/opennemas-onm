@@ -61,6 +61,10 @@ class User
 
     public function create($data)
     {
+        if ($this->checkIfUserExists($data)) {
+            throw new \Exception(_('Already exists one user with that information'));
+        }
+
         $sql = "INSERT INTO users (`login`, `password`, `sessionexpire`,
                                       `email`, `name`, `firstname`,
                                       `lastname`, `address`, `phone`,
@@ -181,6 +185,21 @@ class User
         }
 
         return true;
+    }
+
+    /**
+     * Checks if a user exists given some information.
+     *
+     * @return bool true if user exists
+     **/
+    public function checkIfUserExists($data)
+    {
+        $sql = "SELECT login FROM users WHERE login=? OR email=?";
+
+        $values = array($data['login'], $data['email']);
+        $rs = $GLOBALS['application']->conn->GetOne($sql, $values);
+
+        return ($rs != false);
     }
 
     private function createAccessCategoriesDB($IdsCategory)

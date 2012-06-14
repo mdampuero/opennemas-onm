@@ -144,21 +144,38 @@ class AclUserController extends Controller
         $action = $this->request->request->filter('action',
             null, FILTER_SANITIZE_STRING);
 
+
+        $ccm = \ContentCategoryManager::get_instance();
+        $user_group = new \UserGroup();
+        $tree = $ccm->getCategoriesTree();
+
         if ($this->request->getMethod() == 'POST') {
             $user = new \User();
-            if ($user->create($_POST)) {
-                if ($action == 'validate') {
-                    return $this->redirect(url('admin_acl_user_show',
-                        array('id' => $user->id)));
-                }
+            try {
+                if ($user->create($_POST)) {
+                    if ($action == 'validate') {
+                        return $this->redirect($this->generateUrl(
+                            'admin_acl_user_show',
+                            array('id' => $user->id))
+                        );
+                    }
 
-                return $this->redirect(url('admin_acl_user'));
-            } else {
-                $this->view->assign('errors', $user->errors);
+                    return $this->redirect(url('admin_acl_user'));
+                } else {
+                    m::add($user->errors, m::ERROR);
+                    $this->view->assign('errors', $user->errors);
+                }
+            } catch (\Exception $e) {
+                m::add($e->getMessage(), m::ERROR);
             }
         }
 
-        return $this->render('acl/user/new.tpl');
+        return $this->render('acl/user/new.tpl',array(
+            'user'                      => $user,
+            'user_groups'               => $user_group->get_user_groups(),
+            'content_categories'        => $tree,
+            'content_categories_select' => $user->getAccessCategoryIds(),
+        ));
     }
 
     /**
