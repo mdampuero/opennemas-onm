@@ -104,7 +104,7 @@ abstract class ImporterAbstract
     public function setupSyncEnvironment($params = array())
     {
         if (!file_exists($this->_syncPath)) {
-            mkdir($this->syncPath);
+            mkdir($this->_syncPath);
         } elseif (!file_exists($this->_syncFilePath)) {
 
             return touch($this->_syncFilePath);
