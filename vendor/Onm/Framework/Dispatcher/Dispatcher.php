@@ -54,13 +54,13 @@ class Dispatcher
                 $response = new Response($response);
             }
 
-            $response->send();
-
         } catch (ResourceNotFoundException $e) {
-            $this->handleException($e);
+            $response = $this->handleException($e);
         } catch (\Exception $e) {
-            $this->handleException($e);
+            $response = $this->handleException($e);
         }
+
+        $response->send();
     }
 
     /**
@@ -73,7 +73,7 @@ class Dispatcher
     {
         $this->request->request->set('error', serialize($exception));
         $this->container->set('request',$this->request);
-        $this->dispatchClass($this->container->getParameter('dispatcher.exceptionhandler'));
+        return $this->dispatchClass($this->container->getParameter('dispatcher.exceptionhandler'));
     }
 
     /**
