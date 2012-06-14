@@ -23,6 +23,18 @@
     .utilities-conf label {
         text-transform:none;
     }
+
+    div#content-provider .content-provider-block .content-provider-element {
+margin: 5px;
+border: 1px solid #AAA;
+padding: 5px;
+background:
+white;
+    }
+    .content-provider-element .content-action-buttons,
+    .content-provider-element input[type="checkbox"] {
+        display:none;
+    }
     </style>
 {/block}
 

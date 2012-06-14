@@ -15,7 +15,7 @@
     {$pager->links}
 </div><!-- / -->
 {elseif (!empty($search_string))}
-No results
+{t}No results{/t}
 {/if}
 <script>
 (function($){
