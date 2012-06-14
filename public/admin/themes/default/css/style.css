@@ -1575,6 +1575,7 @@ div.action-bar .right{
 .listing-table .pagination a:hover { background:#3c3c3c; }
 
 .listing-table tbody tr td:first-child input[type="checkbox"] {
+  display: inline-block;
   margin-left: 4px;
 }
 .listing-table .btn-group {
@@ -2347,4 +2348,22 @@ div.newsletter-contents .container-buttons {
 
 .popover-title {
   margin-bottom:0 !important;
+}
+
+
+/* =============================================================================
+   Welcome page rules
+   ========================================================================== */
+.welcome-page .hero-unit h1 {
+    color:#333;
+    font-size:4em !important;
+}
+.welcome-page .hero-unit p {
+    font-size:1.3em;
+}
+.welcome-page .welcome-panel-column {
+    display:inline-block;
+    width:30%;
+    margin-right:10px;
+    vertical-align: top;
 }
