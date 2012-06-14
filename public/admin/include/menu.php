@@ -330,11 +330,11 @@ $menuXml = '<?xml version="1.0"?>
 
     </submenu>
 
-    <submenu title="'.htmlspecialchars(_("System"), ENT_QUOTES).'" id="system" link="#"
+    <submenu title="'.htmlspecialchars(_("Settings"), ENT_QUOTES).'" id="system" link="#"
              privilege="ONM_SETTINGS,CACHE_ADMIN,USER_ADMIN,ONLY_MASTERS,SYSTEM_UPDATE_MANAGER,BACKEND_ADMIN">
         <node
             module_name="SETTINGS_MANAGER"
-            title="'.htmlspecialchars(_("System settings"), ENT_QUOTES).'"
+            title="'.htmlspecialchars(_("General"), ENT_QUOTES).'"
             id="settings_manager"
             link="'.url("admin_system_settings", array()).'"
             privilege="ONM_SETTINGS" />
