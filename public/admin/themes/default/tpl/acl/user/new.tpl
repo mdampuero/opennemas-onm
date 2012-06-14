@@ -55,9 +55,6 @@ legend {
     padding:0 10px;
 }
 
-.awesome {
-    border:0;
-}
 .panel {
     margin:0;
 }
