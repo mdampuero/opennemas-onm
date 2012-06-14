@@ -226,7 +226,7 @@ class FrontpagesController extends Controller
         $actualCategoryId = $ccm->get_id($actual_category);
 
         $cm = new \ContentManager;
-        $contentsRAW = $this->request->query->filter('contents');
+        $contentsRAW = $this->request->request->get('contents');
         $contents = json_decode(json_decode($contentsRAW), true);
 
         $contentsInHomepage = $cm->getContentsForHomepageFromArray($contents);

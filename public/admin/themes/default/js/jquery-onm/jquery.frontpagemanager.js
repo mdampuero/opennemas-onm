@@ -339,12 +339,21 @@ jQuery(function($){
         var els = get_contents_in_frontpage();
         var category = $("#frontpagemanager").data("category");
 
-        $.post("frontpagemanager.php?action=save_positions&category=" + category,
+        $.post(frontpage_urls.save_positions,
                 { 'contents_positions': els }
         ).success(function(data) {
-            $('#warnings-validation').html("<div class='success'>"+data+"</div>");
+            $('#warnings-validation').html(
+                "<div class='alert alert-success'>"+
+                    "<button class='close' data-dismiss='alert'>×</button>"+
+                    data+
+                "</div>");
         }).error(function(data) {
-            $('#warnings-validation').html("<div class='error'>"+data.responseText+"</div>");
+            $('#warnings-validation').html(
+                "<div class='alert alert-error'>"+
+                    "<button class='close' data-dismiss='alert'>×</button>"+
+                    data.responseText+
+                "</div>"
+            );
         });
     });
 
@@ -366,7 +375,7 @@ jQuery(function($){
 
         $.ajax({
             type: 'POST',
-            url: "/admin/controllers/frontpagemanager/frontpagemanager.php?action=preview_frontpage",
+            url: frontpage_urls.preview_frontpage,
             data: {
                 'contents': encodedContents
             },
