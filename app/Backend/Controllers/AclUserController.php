@@ -144,13 +144,12 @@ class AclUserController extends Controller
         $action = $this->request->request->filter('action',
             null, FILTER_SANITIZE_STRING);
 
-
+        $user = new \User();
         $ccm = \ContentCategoryManager::get_instance();
         $user_group = new \UserGroup();
         $tree = $ccm->getCategoriesTree();
 
         if ($this->request->getMethod() == 'POST') {
-            $user = new \User();
             try {
                 if ($user->create($_POST)) {
                     if ($action == 'validate') {
