@@ -26,9 +26,7 @@ User controller
 ---------------
 - Integrate modal dialog when deleting
 - Review pagination of users
-- When a user doesn't exists (on editting or deleting) show error
 - In some point I could create two users with the same information.
-- Editting a user: detect if a user is master so hide privilege listing
 
 User group controller
 ---------------------

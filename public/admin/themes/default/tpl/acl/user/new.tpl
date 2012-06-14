@@ -272,7 +272,7 @@ input[type="password"]{
                         </tr>
                         {/acl}
                         {acl isAllowed="USER_CATEGORY"}
-                        <tr>
+                        <tr {if !is_null($user) && $user->id_user_group == 5}style="display:none"{/if}</tr>
                             <th scope="row">
                                 <label for="id_user_group">{t}Sections:{/t}</label>
                             </th>

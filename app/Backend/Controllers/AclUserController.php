@@ -37,29 +37,25 @@ class AclUserController extends Controller
      **/
     public function listAction()
     {
-        \Acl::checkOrForward('USER_ADMIN');
+        $this->checkAclOrForward('USER_ADMIN');
 
         $filter    = $this->request->query->get('filter', null);
 
-        $cm        = new \ContentManager();
         $user      = new \User();
-
         $users     = $user->get_users($filter, ' ORDER BY login ');
-        $users     = $cm->paginate_num($users, ITEMS_PAGE);
 
         $userGroup = new \UserGroup();
-        $group     = $userGroup->get_user_groups();
+        $groups     = $userGroup->get_user_groups();
 
         $groupsOptions = array();
         $groupsOptions[] = _('--All--');
-        foreach ($group as $cat) {
+        foreach ($groups as $cat) {
             $groupsOptions[$cat->id] = $cat->name;
         }
 
         return $this->render('acl/user/list.tpl', array(
             'users'         => $users,
-            'paginacion'    => $cm->pager,
-            'user_groups'   => $group,
+            'user_groups'   => $groups,
             'groupsOptions' => $groupsOptions,
         ));
     }
@@ -78,12 +74,17 @@ class AclUserController extends Controller
         // Check if the user is the same as the one that we want edit or
         // if we have permissions for editting other user information.
         if ($id != $_SESSION['userid']) {
-            \Acl::checkOrForward('USER_UPDATE');
+            $this->checkAclOrForward('USER_UPDATE');
         }
 
         $ccm = new \ContentCategoryManager();
 
         $user = new \User($id);
+        if (is_null($user->id)) {
+            m::add(sprintf(_("Unable to find the user with the id '%d'"), $id), m::ERROR);
+            return $this->redirect($this->generateUrl('admin_acl_user'));
+        }
+
         $user_group = new \UserGroup();
         $tree = $ccm->getCategoriesTree();
 
@@ -103,13 +104,12 @@ class AclUserController extends Controller
      **/
     public function updateAction()
     {
-
         $userId = $this->request->request->getDigits('id');
         $action = $this->request->request->filter('action',
             'update', FILTER_SANITIZE_STRING);
 
         if ($userId != $_SESSION['userid']) {
-            \Acl::checkOrForward('USER_UPDATE');
+            $this->checkAclOrForward('USER_UPDATE');
         }
         // TODO: validar datos
         $user = new \User($userId);
@@ -139,7 +139,7 @@ class AclUserController extends Controller
      **/
     public function createAction()
     {
-        \Acl::checkOrForward('USER_CREATE');
+        $this->checkAclOrForward('USER_CREATE');
 
         $action = $this->request->request->filter('action',
             null, FILTER_SANITIZE_STRING);
@@ -168,7 +168,7 @@ class AclUserController extends Controller
      **/
     public function deleteAction()
     {
-        \Acl::checkOrForward('USER_DELETE');
+        $this->checkAclOrForward('USER_DELETE');
 
         $userId = $this->request->query->getDigits('id');
 
@@ -188,7 +188,7 @@ class AclUserController extends Controller
      **/
     public function batchDeleteAction()
     {
-        \Acl::checkOrForward('USER_DELETE');
+        $this->checkAclOrForward('USER_DELETE');
 
         $selected = $this->request->query->get('selected');
 
