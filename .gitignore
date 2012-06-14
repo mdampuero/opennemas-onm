@@ -11,3 +11,4 @@ tmp/*
 vendor/autoload.php
 vendor/composer
 vendor/.composer
+vendor/

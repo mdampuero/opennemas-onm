@@ -4,13 +4,7 @@
  * Start up and setup the app
 */
 
-//TODO: That cron given this vars.
-//$_SERVER['SERVER_NAME'] ='onm-cronicas.local';
-
-$_SERVER['HTTP_HOST'] ='cronicasdelaemigracion.com';
-
-//$_SERVER['SERVER_NAME'] ='cronicasdelaemigracion.com';
-$_SERVER['REQUEST_URI'] ='/';
+//TODO: use includepath as import-tools.
 
 require __DIR__.'/../bootstrap.php';
 
@@ -21,8 +15,8 @@ $tpl           = new Template(TEMPLATE_USER);
 //$tpl->setConfig('newslibrary');
 
 $urlBase = SITE_URL."seccion/";
-
-$menuItems     = Menu::renderMenu('frontpage');
+//TODO: work with db
+//$menuItems     = Menu::renderMenu('frontpage');
 $date          =  new DateTime();
 $directoryDate = $date->format("/Y/m/d/");
 $basePath      = MEDIA_PATH.'/library'.$directoryDate;
@@ -35,16 +29,20 @@ if ( !file_exists($basePath) ) {
 // multi handle
 $mh = curl_multi_init();
 
-foreach ($menuItems->items as $id =>$item) {
-    $category_name = $item->link;
+$items = array('home', 'cronicas', 'galicia', 'castillaleon', 'asturias',
+    'madrid', 'canarias', 'andalucia', 'cantabria', 'baleares', 'paisvasco');
+
+//foreach ($menuItems->items as $id => $item) {
+foreach ($items as $category_name) {
+   // $category_name = $item->link;
 
     if ( !empty($category_name) ) {
 
         $curly[$category_name] = curl_init();
 
         $url = $urlBase. $category_name.'/';
-        curl_setopt($curly[$category_name], CURLOPT_URL,            $url);
-        curl_setopt($curly[$category_name], CURLOPT_HEADER,         0);
+        curl_setopt($curly[$category_name], CURLOPT_URL, $url);
+        curl_setopt($curly[$category_name], CURLOPT_HEADER, 0);
         curl_setopt($curly[$category_name], CURLOPT_RETURNTRANSFER, 1);
 
         curl_multi_add_handle($mh, $curly[$category_name]);
@@ -68,10 +66,9 @@ foreach ($curly as $category_name => $c) {
 
     curl_multi_remove_handle($mh, $c);
 }
-
   // all done
 curl_multi_close($mh);
-
+echo "generate ok";
 
 
 

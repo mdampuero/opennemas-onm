@@ -36,7 +36,7 @@ require 'refactor-ids.php';
 require 'Onm/StringUtils.php';
 
  $refactor = new refactorIds($config);
-
+/*
  $refactor->executeSqlFile('changesForNT.sql');
 
  $refactor->executeSqlFile('createPrivileges.sql');
@@ -55,6 +55,9 @@ require 'Onm/StringUtils.php';
  $refactor->updateFrontpageArticles(); // create new ids & slug
 
  $refactor->updateAdvertisements();
+*/
+ $result = $refactor->updateContentsBody();
+
 
  printf(" \n OpenNemas database {$config['bd_database']} is ok \n ");
  printf("\n ---------Attention: you new change settings values & move media folder -------------- \n ");

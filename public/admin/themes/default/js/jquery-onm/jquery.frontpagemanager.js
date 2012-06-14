@@ -35,12 +35,12 @@ function get_tooltip_content (elem) {
 
         content = content_states[id];
 
-        content_html = "State: "+content.state  +
-            "<br>Views: "+content.views +
-            "<br>Category: "+content.category +
-            "<br>Scheduled: <span class='scheduled-state "+content.scheduled_state+"'>"+content.scheduled_state+"</span>"+
-            "<br>Start time: "+content.starttime+
-            "<br>Last author: "+content.last_author;
+        content_html = "Estado: "+content.state  +
+            "<br>Vistas: "+content.views +
+            "<br>Categoría: "+content.category +
+            "<br>Programación: <span class='scheduled-state "+content.scheduled_state+"'>"+content.scheduled_state+"</span>"+
+            "<br>Hora inicio: "+content.starttime+
+            "<br>Último autor: "+content.last_author;
         parent_content_div.data('popover-content', content_html);
     } else {
         content_html = parent_content_div.data('popover-content');
