@@ -19,9 +19,6 @@
         font-weight:normal;
     }
 
-    .awesome {
-        border:0;
-    }
     .default-value {
         display:inline;
         color:#666;

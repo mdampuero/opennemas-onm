@@ -501,7 +501,7 @@ class Content
     *
     * @return null
     **/
-    // FIXME:  change name
+    // FIXME:  change name to restoreFromTrash
     public function no_delete($id, $last_editor)
     {
         $changed = date("Y-m-d H:i:s");
@@ -519,6 +519,38 @@ class Content
 
         /* Notice log of this action */
         Application::logContentEvent('recover from litter', $this);
+    }
+
+    /**
+    * Make available one content, restoring it from trash
+    *
+    * This "restores" the content from the trash system by setting their
+    * available flag to true
+    *
+    * @param integer $id
+    * @param integer $last_editor
+    *
+    * @return null
+    **/
+    public function restoreFromTrash()
+    {
+        $changed = date("Y-m-d H:i:s");
+        $sql  =   'UPDATE contents SET `in_litter`=?, '
+                .'`changed`=?'
+                .'WHERE pk_content=?';
+
+        $values = array(0, $changed, $this->id);
+
+        if ($GLOBALS['application']->conn->Execute($sql, $values)===false) {
+            Application::logDatabaseError();
+
+            return false;
+        }
+        $this->in_litter = 0;
+
+        /* Notice log of this action */
+        Application::logContentEvent('recover from litter', $this);
+        return $this;
     }
 
     /**

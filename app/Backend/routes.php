@@ -235,10 +235,28 @@ $routes->add(
 );
 
 $routes->add(
+    'admin_trash_restore',
+    new Route(
+        '/trash/{id}/restore',
+        array('_controller' => 'Backend:Controllers:TrashController:restore')
+    ),
+    '/admin'
+);
+
+$routes->add(
     'admin_trash_batchdelete',
     new Route(
         '/trash/batchdelete',
         array('_controller' => 'Backend:Controllers:TrashController:batchDelete')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_trash_batchrestore',
+    new Route(
+        '/trash/batchrestore',
+        array('_controller' => 'Backend:Controllers:TrashController:batchRestore')
     ),
     '/admin'
 );

@@ -1,12 +1,18 @@
 {extends file="base/admin.tpl"}
 
-{block name="footer-js"}
+{block name="footer-js" append}
 <script>
 jQuery(function($){
-    $('#batch-delete').on('click', function(e, ui) {
-        var form = $('#trashform');
-        form.attr('action', '{url name=admin_trash_batchdelete}');
-    })
+    $('#batch-delete').click(function(e) {
+        //Sets up the modal
+        jQuery("#modal-delete-contents").modal('show');
+        e.preventDefault();
+    });
+    $('#batch-restore').click(function(e) {
+        //Sets up the modal
+        jQuery("#modal-restore-contents").modal('show');
+        e.preventDefault();
+    });
 });
 </script>
 {/block}
@@ -18,20 +24,14 @@ jQuery(function($){
         <ul class="old-button">
             {acl isAllowed="TRASH_ADMIN"}
 			<li>
-				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mremove', 6);"  onmouseover="return escape('<u>E</u>liminar todos');">
-					<img border="0" src="{$params.IMAGE_DIR}trash.png" alt="Eliminar todos"><br />{t}Delete all{/t}
-				</a>
-			</li>
-			<li>
                 <button type="submit" id="batch-delete" title="{t}Deletes the selected elements{/t}">
                     <img border="0" src="{$params.IMAGE_DIR}trash.png" title="Eliminar" alt="Eliminar"><br />{t}Delete{/t}
                 </button>
 			</li>
-            <li class="separator"></li>
 			<li>
-				<a href="#" class="admin_add" onClick="javascript:enviar3(this, '_self', 'm_no_in_litter', 0);" title="Recuperar">
+				<button type="submit" id="batch-restore" title="{t}Restore{/t}">
 				    <img border="0" src="{$params.IMAGE_DIR}trash_no.png" title="Recuperar" alt="Recuperar"><br />{t}Restore{/t}
-				</a>
+				</button>
 			</li>
             {/acl}
 		</ul>
@@ -76,7 +76,7 @@ jQuery(function($){
                     <td class="center">{$contents[c]->created}</td>
                     <td class="right">
                         <div class="btn-group">
-                            <a class="btn" href="{$smarty.server.PHP_SELF}?id={$contents[c]->id}&amp;action=no_in_litter&amp;mytype={$mytype}&amp;page={$paginacion->_currentPage}" title="Recuperar">
+                            <a class="btn" href="{url name=admin_trash_restore id=$contents[c]->id mytype=$mytype page=$paginacion->_currentPage}" title="Recuperar">
                                 <i class="icon-retweet"></i> {t}Restore{/t}
                             </a>
                             <a class="btn btn-danger" href="{url name=admin_trash_delete id=$contents[c]->id mytype=$mytype page=$paginacion->_currentPage}" title="{t}Delete this content{/t}">
@@ -106,4 +106,6 @@ jQuery(function($){
 
     </div>
 </form>
+{include file="trash/modals/_modalDelete.tpl"}
+{include file="trash/modals/_modalRestore.tpl"}
 {/block}

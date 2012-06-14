@@ -40,17 +40,12 @@ Tpl cache manager
 -----------------
 - Show a informational message when saving the configuration
 - Review pagination links (now with js)
-- When selecting a new items per page and push Enter, the deleting tpl alert shows
+- When selecting a new items per page and push Enter, the deleting tpl shows an alert dialog
 - Migrate the clean cache action
 
 Statistics controller
 ---------------------
 - Review articles links as all of them are wrong.
-
-Trash controller
-----------------
-- batch buttons doesnt work
-- Review pagination
 
 Europapress Importer
 --------------------

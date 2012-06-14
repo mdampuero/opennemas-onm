@@ -24,7 +24,6 @@ class TrashController extends Controller
      * Common code for all the actions
      *
      * @return void
-     * @author
      **/
     public function init()
     {
@@ -36,19 +35,30 @@ class TrashController extends Controller
     /**
      * Description of the action
      *
-     * @return void
+     * @return Response the response object
      **/
     public function defaultAction()
     {
         $cm           = new \ContentManager();
         $contentTypes = $cm->getContentTypes();
 
-        // Get paginated elements that are marked as in litter
-        list($elements, $pager) = $cm->find_pages(
-            $this->filterContentType, 'in_litter=1',
-            'ORDER BY changed DESC ', $this->page, 20
+        $url = $this->generateUrl(
+            'admin_trash',
+            array(
+                'mytype' => $this->filterContentType,
+                'page' => $this->page
+            )
         );
-
+        // Get paginated elements that are marked as in litter
+        list($elements, $pagination) = $cm->find_pages(
+            $this->filterContentType,
+            'in_litter=1',
+            'ORDER BY changed DESC ',
+            $this->page,
+            20,
+            null,
+            $url
+        );
 
         // Complete elements information
         $content = new \Content();
@@ -58,18 +68,17 @@ class TrashController extends Controller
         }
 
         return $this->render('trash/trash.tpl', array(
-            'mytype' => $this->filterContentType,
+            'mytype'        => $this->filterContentType,
             'types_content' => $contentTypes,
-            'paginacion'    => $pager,
-            'contents'   => $elements
+            'pagination'    => $pagination,
+            'contents'      => $elements
         ));
     }
 
     /**
      * Deletes trashed element/s given their ids
      *
-     * @return void
-     * @author
+     * @return Response the response object
      **/
     public function deleteAction()
     {
@@ -82,15 +91,18 @@ class TrashController extends Controller
 
                 // TODO: Use parameter binding
                 $name = $GLOBALS['application']->conn->GetOne(
-                    'SELECT name FROM `content_types` WHERE pk_content_type = "'. $contentTypeId.'"'
+                    'SELECT name FROM `content_types` '
+                    .'WHERE pk_content_type = "'. $contentTypeId.'"'
                 );
 
                 $contentTypeName = ucwords($name);
                 $content = new $contentTypeName($contentId);
                 $content->remove($contentId);
             } else {
-                m::add(sprintf(_('Unable to find content with id "%d".'), $contentId));
+                m::add(sprintf(_('Unable to find content with id "%d".'), $contentId), m::ERROR);
             }
+        } else {
+            m::add(sprintf(_('Unable to find content with id "%d".'), $contentId), m::ERROR);
         }
 
         return $this->redirect(url(
@@ -101,10 +113,46 @@ class TrashController extends Controller
     }
 
     /**
-     * undocumented function
+     * Restores trashed element/s given their id
      *
-     * @return void
-     * @author
+     * @return Response the response object
+     **/
+    public function restoreAction()
+    {
+        $contentId = $this->request->query->getDigits('id');
+
+        if ((int) $contentId) {
+            $content = new \Content($contentId);
+            if (!empty($content->id)) {
+                $contentTypeId = $content->content_type;
+
+                // TODO: Use parameter binding
+                $name = $GLOBALS['application']->conn->GetOne(
+                    'SELECT name FROM `content_types` '
+                    .'WHERE pk_content_type = "'. $contentTypeId.'"'
+                );
+
+                $contentTypeName = ucwords($name);
+                $content = new $contentTypeName($contentId);
+                $content->restoreFromTrash($contentId);
+            } else {
+                m::add(sprintf(_('Unable to find content with id "%d".'), $contentId), m::ERROR);
+            }
+        } else {
+            m::add(sprintf(_('Unable to find content with id "%d".'), $contentId), m::ERROR);
+        }
+
+        return $this->redirect(url(
+            'admin_trash',
+            array('mytype' => $this->filterContentType, 'page' => $this->page)
+        ));
+
+    }
+
+    /**
+     * Deletes multiple contents given their ids sent in POST request
+     *
+     * @return Response the response object
      **/
     public function batchDeleteAction()
     {
@@ -112,7 +160,7 @@ class TrashController extends Controller
 
         if (count($contentIDs) > 0) {
             foreach ($contentIDs as $contentId) {
-                $content = new \Content($contentId);
+                $content = new \Content((int) $contentId);
 
                 if (!empty($content->id)) {
                     $name = $GLOBALS['application']->conn->GetOne(
@@ -120,13 +168,15 @@ class TrashController extends Controller
                         .$content->content_type.'"'
                     );
 
-                    $contentClassName = ucwords($name); //Nombre de la clase
-                    $content = new $contentClassName($contentId); //Llamamos a la clase
-                    $content->remove($contentId); // eliminamos
+                    $contentClassName = ucwords($name);
+                    $content = new $contentClassName($contentId);
+                    $content->remove($contentId);
                 } else {
                     m::add(sprintf(_('Unable to find content with id "%d".'), $contentId));
                 }
             }
+        } else {
+            m::add(_('You must specify contents for delete.'));
         }
 
         return $this->redirect(url(
@@ -135,7 +185,43 @@ class TrashController extends Controller
         ));
     }
 
-    // TODO: not finished
+    /**
+     * Deletes multiple contents given their ids sent in POST request
+     *
+     * @return Response the response object
+     **/
+    public function batchRestoreAction()
+    {
+        $contentIDs = $this->request->request->get('selected', array());
+
+        if (count($contentIDs) > 0) {
+            foreach ($contentIDs as $contentId) {
+                $content = new \Content((int) $contentId);
+
+                if (!empty($content->id)) {
+                    $name = $GLOBALS['application']->conn->GetOne(
+                        'SELECT name FROM `content_types` WHERE pk_content_type = "'
+                        .$content->content_type.'"'
+                    );
+
+                    $contentClassName = ucwords($name);
+                    $content = new $contentClassName($contentId);
+                    $content->restoreFromTrash($contentId);
+                } else {
+                    m::add(sprintf(_('Unable to find content with id "%d".'), $contentId));
+                }
+            }
+        } else {
+            m::add(_('You must specify contents for restore.'));
+        }
+
+        return $this->redirect(url(
+            'admin_trash',
+            array('mytype' => $this->filterContentType, 'page' => $this->page)
+        ));
+    }
+
+    // TODO: not finished, but I think that is not neccesary
     /**
      * Deletes all the trashed elements
      *
