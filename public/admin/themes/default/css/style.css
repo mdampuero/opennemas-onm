@@ -2284,6 +2284,9 @@ div#content-provider span.type {
 }
 
 
+div#related-contents div#content-provider.related-content-provider  div.contents ul {
+  padding-left:0px;
+}
 div#newsletter-container.column-receiver ul.content-receiver li,
 div#article-form.tabs div#related-contents div.column-receiver ul.content-receiver li,
 div#related-contents div#content-provider ul li,
