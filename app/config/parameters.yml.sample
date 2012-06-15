@@ -16,3 +16,4 @@ parameters:
 
     cache_handler:     apc
     dispatcher.exceptionhandler: "Framework:Controllers:ErrorController:default"
+    environment:       production

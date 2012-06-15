@@ -13,6 +13,7 @@ require '../bootstrap.php';
 
 $sc = include '../../app/container.php';
 
+$sc->setParameter('dispatcher.exceptionhandler', 'Backend:Controllers:ErrorController:default');
 // Dispatch the response
 $dispatcher = new \Onm\Framework\Dispatcher\Dispatcher($matcher, $request, $sc);
 $dispatcher->dispatch();
