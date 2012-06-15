@@ -5,6 +5,7 @@
     #    RewriteBase /
     #</IfModule>
 
+    RewriteCond $1 !\.(gif|jpg|php|ico|css|js)$ [NC]
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^(.*)$ app.php [QSA,L]
 </IfModule>
