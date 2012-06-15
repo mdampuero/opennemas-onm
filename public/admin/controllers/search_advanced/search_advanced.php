@@ -203,8 +203,10 @@ switch ($action) {
 
             $matchString = implode($matchString, ' AND ');
 
-            $sql = "SELECT pk_content, fk_content_type FROM contents "
-                  ."WHERE contents.available=1 AND".$matchString;
+            $sql = "SELECT pk_content, fk_content_type FROM contents".
+                  " WHERE contents.available=1 AND fk_content_type ".
+                  " IN(1, 2, 3, 4, 7, 9, 10, 11) AND ".$matchString.
+                  " ORDER BY starttime DESC";
             $rs  = $GLOBALS['application']->conn->GetArray($sql);
 
             $results = array();
@@ -219,7 +221,7 @@ switch ($action) {
                 $pagerOptions = array(
                     'mode'        => 'Sliding',
                     'perPage'     => 9,
-                    'delta'       => 4,
+                    'delta'       => 3,
                     'clearIfVoid' => true,
                     'urlVar'      => 'page',
                     'totalItems'  => $resultSetSize,
