@@ -129,7 +129,7 @@ class ImporterEfeController extends Controller
         } catch (\Exception $e) {
             // Redirect the user to the list of articles and
             // show him/her an error message
-            m::add(sprintf(_('ID "%d" doesn\'t exist'), $id));
+            m::add(sprintf(_('Unable to find an element with the id "%d"'), $id), m::ERROR);
 
             $page = $this->request->query->filter('page', 0, FILTER_VALIDATE_INT);
 
@@ -338,7 +338,7 @@ class ImporterEfeController extends Controller
 
             if (array_key_exists($attachmentId, $photos)) {
                 $photo = $photos[$attachmentId];
-                $content = file_get_contents(realpath($ep->syncPath.DIRECTORY_SEPARATOR.$photo->file_path));
+                $content = file_get_contents(realpath($ep->_syncPath.DIRECTORY_SEPARATOR.$photo->file_path));
                 $response = new Response($content, 200, array('content-type' => $photo->file_type));
             } else {
                 $response = new Response('Image not found', 404);
