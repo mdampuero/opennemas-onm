@@ -36,6 +36,31 @@
         jQuery('#formulario').submit();
         e.preventDefault();
     });
+
+    jQuery('#opinion_clearcache').on('click', function(e, ui) {
+        e.preventDefault();
+        jQuery.ajax({
+            url: "/admin/controllers/tpl_manager/refresh_caches.php?category=opinion",
+            success: function(data){
+                jQuery('#warnings-validation').html(data);
+            }
+        });
+    });
+    jQuery('.minput').on('click', function() {
+        checkbox = jQuery(this).find('input[type="checkbox"]');
+        checkbox.attr(
+           'checked',
+           !checkbox.is(':checked')
+        );
+        var checked_elements = jQuery('input[type="checkbox"]:checked').length;
+        if (checked_elements > 0) {
+            jQuery('.old-button .batch-actions').fadeIn('fast');
+        } else {
+            jQuery('.old-button .batch-actions').fadeOut('fast');
+        }
+    });
+
+
     </script>
 {/block}
 
@@ -54,35 +79,42 @@
             </li>
             {/acl}
             {acl isAllowed="OPINION_AVAILABLE"}
-            {if $type_opinion eq '-1'}
-            <li>
-                <button value="batchnoFrontpage" name="buton-batchnoFrontpage" id="buton-batchnoFrontpage" type="submit">
-                    <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="{t}Unpublish{/t}" alt="{t}Unpublish{/t}" ><br />{t}Unpublish{/t}
-                </button>
-            </li>
-            {else}
-            <li>
-                <button value="batchFrontpage" name="buton-batchFrontpage" id="buton-batchFrontpage" type="submit">
-                    <img border="0" src="{$params.IMAGE_DIR}publish.gif" title="{t}Publish{/t}" alt="{t}Publish{/t}" ><br />{t}Publish{/t}
-                </button>
-            </li>
-            {/if}
-            {/acl}
-            {acl isAllowed="OPINION_AVAILABLE"}
-             {if $type_opinion neq '-1'}
-            <li>
-                <button value="batchInHome" name="buton-batchInHome" id="buton-batchInHome" type="submit">
-                     <img border="0" src="{$params.IMAGE_DIR}gohome50.png"  title="Frontpage" alt="Frontpage" ><br />{t}Put in home{/t}
-                </button>
-            </li>
-            {/if}
-            <li>
-                <button value="batchNoInHome" name="buton-batchNoInHome" id="buton-batchNoInHome" type="submit">
-                    <img border="0" src="{$params.IMAGE_DIR}home_no50.png"  title="Frontpage" alt="Frontpage" ><br />{t escape="off"}Delete from home{/t}
-                </button>
-            </li>
-            {/acl}
+            <li class="batch-actions">
 
+                <a href="#">
+                    <img src="{$params.IMAGE_DIR}/select.png" title="" alt="" />
+                    <br/>{t}Batch actions{/t}
+                </a>
+
+                <ul class="dropdown-menu">
+                    <li>
+                        {if $type_opinion eq '-1'}
+                        <a href="#" id="buton-batchnoFrontpage">
+                            {t}Unpublish{/t}
+                        </a>
+                        {else}
+                        <a href="#" id="buton-batchFrontpage">
+                            {t}Publish{/t}
+                        </a>
+                        {/if}
+                    </li>
+                    {if $type_opinion neq '-1'}
+                    <li>
+                        <a href="#" id="buton-batchInHome">
+                            {t}Put in home{/t}
+                        </a>
+                    </li>
+                    {/if}
+                    <li>
+                        <a href="#" id="buton-batchNoInHome">
+                            {t escape="off"}Delete from home{/t}
+                        </a>
+                    </li>
+                </ul>
+
+            </li>
+
+            {/acl}
 
             {acl isAllowed="OPINION_FRONTPAGE"}
              {if $type_opinion eq '-1'}
@@ -108,6 +140,12 @@
                             {t}Configurations{/t}
                         </a>
                     </li>
+                    <li>
+                        <a href="#" id="opinion_clearcache">
+                            <img border="0" src="{$params.IMAGE_DIR}clearcache.png" title="{t}Clean cache{/t}" alt="" />
+                            <br />{t}Clean cache{/t}
+                        </a>
+                    </li>
              {/acl}
              <li class="separator"> </li>
 
@@ -125,6 +163,7 @@
 
         {render_messages}
         <div id="msg"></div>
+        <div id="warnings-validation"></div><!-- /warnings-validation -->
 
         <div>
             <ul class="pills clearfix">
