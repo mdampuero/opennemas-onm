@@ -11,6 +11,7 @@ namespace Backend;
 
 use Onm\Framework\Module\ModuleBootstrap;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Initializes the Backend Module
@@ -39,25 +40,37 @@ class Bootstrap extends ModuleBootstrap
      **/
     public function initAuthenticationSystem()
     {
-        $GLOBALS['Session'] = \SessionManager::getInstance(OPENNEMAS_BACKEND_SESSIONS);
-        $GLOBALS['Session']->bootstrap();
-
         $request = $this->container->get('request');
 
-        if (!isset($_SESSION['userid'])
-            && !preg_match('@^/login@', $request->getPathInfo())
-        ) {
-            $url = $request->getPathInfo();
+        $isAsset = preg_match('@\.(png|gif|jpg|php|ico|css|js)@', $request->getPathInfo());
+        // var_dump($isAsset == 1);die();
 
-            if (!empty($url)) {
-                $redirectTo = urlencode($request->getUri());
+        if ($isAsset != 1) {
+
+            $GLOBALS['Session'] = \SessionManager::getInstance(OPENNEMAS_BACKEND_SESSIONS);
+            $GLOBALS['Session']->bootstrap();
+
+
+            if (!isset($_SESSION['userid'])
+                && !preg_match('@^/login@', $request->getPathInfo())
+            ) {
+                $url = $request->getPathInfo();
+
+                if (!empty($url)) {
+                    $redirectTo = urlencode($request->getUri());
+                }
+                $location = $request->getBaseUrl() .'/login/?forward_to='.$redirectTo;
+
+                $response = new RedirectResponse($location, 301);
+                $response->send();
+                exit(0);
             }
-            $location = $request->getBaseUrl() .'/login/?forward_to='.$redirectTo;
-
-            $response = new RedirectResponse($location, 301);
+        } else {
+            $response = new Response('Content not available', 404);
             $response->send();
-            exit(0);
+            exit();
         }
+
     }
 
 } // END class Bootstrap
