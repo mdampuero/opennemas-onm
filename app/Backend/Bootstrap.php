@@ -42,9 +42,7 @@ class Bootstrap extends ModuleBootstrap
     {
         $request = $this->container->get('request');
 
-        $isAsset = preg_match('@\.(png|gif|jpg|php|ico|css|js)@', $request->getPathInfo());
-        // var_dump($isAsset == 1);die();
-
+        $isAsset = preg_match('@.*\.(png|gif|jpg|ico|css|js)$@', $request->getPathInfo());
         if ($isAsset != 1) {
 
             $GLOBALS['Session'] = \SessionManager::getInstance(OPENNEMAS_BACKEND_SESSIONS);
@@ -66,6 +64,9 @@ class Bootstrap extends ModuleBootstrap
                 exit(0);
             }
         } else {
+            // Log this error event to the webserver logging sysmte
+            error_log("File does not exist: ".$request->getPathInfo(), 0);
+
             $response = new Response('Content not available', 404);
             $response->send();
             exit();
