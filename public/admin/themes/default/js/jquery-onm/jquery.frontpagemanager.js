@@ -5,6 +5,7 @@ function makeContentProviderAndPlaceholdersSortable () {
         placeholder: 'placeholder-element',
         handle : '.description',
         update: function(event,ui) {
+            initializePopovers();
             jQuery('#warnings-validation').html('<div class="notice">'+frontpage_messages.remember_save_positions+'</div>');
         },
         tolerance: 'pointer'
@@ -17,6 +18,7 @@ function makeContentProviderAndPlaceholdersSortable () {
         placeholder: 'placeholder-element',
         handle : '.description',
         update: function(event,ui) {
+            initializePopovers();
             jQuery('#warnings-validation').html('<div class="notice">'+frontpage_messages.remember_save_positions+'</div>');
         },
         tolerance: 'pointer'
@@ -30,18 +32,26 @@ function get_tooltip_content (elem) {
 
     if (parent_content_div.data('popover-content') === undefined) {
         var id = parent_content_div.data('content-id');
-        var url = '/admin/controllers/common/content.php?action=get-info&id='+id;
+        var $url = '/admin/controllers/common/content.php?action=get-info&id='+id;
         var content = '';
 
         content = content_states[id];
-
-        content_html = "Estado: "+content.state  +
-            "<br>Vistas: "+content.views +
-            "<br>Categoría: "+content.category +
-            "<br>Programación: <span class='scheduled-state "+content.scheduled_state+"'>"+content.scheduled_state+"</span>"+
-            "<br>Hora inicio: "+content.starttime+
-            "<br>Último autor: "+content.last_author;
-        parent_content_div.data('popover-content', content_html);
+        if (content === undefined) {
+            jQuery.ajax({
+                url: $url,
+                async: false
+            }).done(function(data) {
+                content_states[id] = data;
+            });
+        } else {
+            content_html = "Estado: "+content.state  +
+                "<br>Vistas: "+content.views +
+                "<br>Categoría: "+content.category +
+                "<br>Programación: <span class='scheduled-state "+content.scheduled_state+"'>"+content.scheduled_state+"</span>"+
+                "<br>Hora inicio: "+content.starttime+
+                "<br>Último autor: "+content.last_author;
+            parent_content_div.data('popover-content', content_html);
+        }
     } else {
         content_html = parent_content_div.data('popover-content');
     }
@@ -52,10 +62,20 @@ function get_tooltip_content (elem) {
 function get_tooltip_title (elem) {
     var ajaxdata;
     var id = elem.closest('div.content-provider-element').data('content-id');
-    var url = '/admin/controllers/common/content.php?action=get-info&id='+id;
+    var $url = '/admin/controllers/common/content.php?action=get-info&id='+id;
 
     content = content_states[id];
-    return content.title;
+    if (content === undefined) {
+        jQuery.ajax({
+            url: $url,
+            async: false
+        }).done(function(data) {
+            content_states[id] = data;
+        });
+        return content_states[id].title;
+    } else {
+        return content.title;
+    }
 }
 
 function remove_element (element) {
@@ -89,6 +109,21 @@ function show_save_frontpage_dialog() {
     jQuery('#warnings-validation').html('<div class="notice">'+frontpage_messages.remember_save_positions+'</div>');
 }
 
+
+function initializePopovers() {
+    jQuery('div.placeholder div.content-provider-element .info').each(function() {
+        var element = jQuery(this);
+
+        jQuery(this).popover({
+            placement: 'left',
+            // trigger: 'manual',
+            animation: false,
+            delay:0,
+            title: get_tooltip_title(element),
+            content: get_tooltip_content(element)
+        });
+    });
+}
 jQuery(function($){
 
     /***************************************************************************
@@ -162,24 +197,14 @@ jQuery(function($){
     });
 
 
-    $('div.placeholder div.content-provider-element .info').hover(function(e, ui) {
+    $('div.placeholder').on('mouseenter', 'div.content-provider-element .info', function(e, ui) {
         $('div.placeholder div.content-provider-element .info').popover('show');
-    }, function(e, ui) {
+    });
+    $('div.placeholder').on('mouseleave', 'div.content-provider-element .info', function(e, ui) {
         $('div.placeholder div.content-provider-element .info').popover('hide');
     });
 
-    $('div.placeholder div.content-provider-element .info').each(function() {
-        var element = $(this);
-
-        $(this).popover({
-            placement: 'left',
-            // trigger: 'manual',
-            animation: false,
-            delay:0,
-            title: get_tooltip_title(element),
-            content: get_tooltip_content(element)
-        });
-    });
+    initializePopovers();
 
     /***************************************************************************
     * Dropdown menu content actions
