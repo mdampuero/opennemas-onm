@@ -10,6 +10,7 @@
 namespace Backend;
 
 use Onm\Framework\Module\ModuleBootstrap;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Initializes the Backend Module
@@ -53,7 +54,8 @@ class Bootstrap extends ModuleBootstrap
             }
             $location = $request->getBaseUrl() .'/login/?forward_to='.$redirectTo;
 
-            header('Location: '.$location);
+            $response = new RedirectResponse($location, 301);
+            $response->send();
             exit(0);
         }
     }

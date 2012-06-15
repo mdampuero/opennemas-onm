@@ -127,11 +127,10 @@ class AuthenticationController extends Controller
             }
         }
         $token = md5(uniqid(mt_rand(), true));
-        $this->view->assign('token', $token);
         $_SESSION['csrf'] = $token;
 
 
-        return $this->render('login/login.tpl');
+        return $this->render('login/login.tpl', array('token', $token));
     }
 
     /**
