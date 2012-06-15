@@ -23,7 +23,7 @@ $urlBase = SITE_URL."seccion/";
 //$menuItems     = Menu::renderMenu('frontpage');
 $date          =  new DateTime();
 $directoryDate = $date->format("/Y/m/d/");
-$basePath      = MEDIA_PATH.'/library'.$directoryDate;
+$basePath      = SITE_PATH."/media/cronicas/library".$directoryDate;
 $curly         = array();
 
 if ( !file_exists($basePath) ) {
@@ -71,7 +71,5 @@ foreach ($curly as $category_name => $c) {
 }
   // all done
 curl_multi_close($mh);
-echo "generate ok";
-
-
+echo "generate ok \n";
 
