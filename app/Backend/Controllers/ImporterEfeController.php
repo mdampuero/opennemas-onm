@@ -103,6 +103,17 @@ class ImporterEfeController extends Controller
         }
         $alreadyImported = \Content::findByUrn($urns);
 
+
+        $message = '';
+        if ($minutesFromLastSync > 100) {
+            $message = _('A long time ago from synchronization.');
+        } elseif ($minutesFromLastSync > 10) {
+            $message = sprintf(_('Last sync was %1 minutes ago.'), $minutes);
+        }
+        if ($message) {
+            m::add($message . _('Try syncing the news list from server by clicking in "Sync with server" button above'), m::NOTICE);
+        }
+
         return $this->render('agency_importer/efe/list.tpl', array(
             'elements'         =>  $elements,
             'already_imported' =>  $alreadyImported,

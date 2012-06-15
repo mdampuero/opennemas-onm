@@ -80,22 +80,9 @@
 
     	{render_messages}
 
-    	{if ($message || ($minutes > 10))}
-    	<div class="alert alert-info">
-    		{if $minutes > 10}
-    			{if $minutes > 100}
-    			{t}A long time ago from synchronization.{/t}
-    			{else}
-    			{t 1=$minutes}Last sync was %1 minutes ago.{/t}
-    			{/if}
-    			{t}Try syncing the news list from server by clicking in "Sync with server" button above{/t}
-		    {/if}
-    	</div>
-    	{/if}
-
         <div class="table-info clearfix">
             <div>
-                <div class="left"><label>Total: {$pagination->_totalItems} articles.</label></div>
+                <div class="left"><label>{t 1=$pagination->_totalItems}Total: %1 articles.{/t}</label></div>
                 <div class="right form-inline">
                     <label for="username">
                         {t}Filter by title or content{/t}

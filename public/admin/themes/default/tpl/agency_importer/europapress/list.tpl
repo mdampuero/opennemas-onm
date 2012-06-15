@@ -49,29 +49,6 @@
 
 	{render_messages}
 
-	{if ($message || ($minutes > 10))}
-	<div class="notice">
-	    <ul>
-    		{if $minutes > 10}
-    		<li>
-    			{if $minutes > 100}
-    			<span class="red">{t}A long time ago from synchronization.{/t}</span>
-    			{else}
-    			<span class="red">{t 1=$minutes}Last sync was %1 minutes ago.{/t}</span>
-    			{/if}
-    			{t}Try syncing the news list from server by clicking in "Sync with server" button above{/t}
-    		</li>
-    		{/if}
-	    </ul>
-	</div>
-	{/if}
-
-	{if (!empty($error))}
-	<div class="error">
-		 {render_error}
-	</div>
-	{/if}
-
     <div class="table-info clearfix">
             <div>
                 <div class="left"><label>Total: {$pagination->_totalItems} articles.</label></div>

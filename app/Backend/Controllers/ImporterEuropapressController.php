@@ -90,6 +90,16 @@ class ImporterEuropapressController extends Controller
             ).'&page=%d',
         ));
 
+        $message = '';
+        if ($minutesFromLastSync > 100) {
+            $message = _('A long time ago from synchronization.');
+        } elseif ($minutesFromLastSync > 10) {
+            $message = sprintf(_('Last sync was %1 minutes ago.'), $minutes);
+        }
+        if ($message) {
+            m::add($message . _('Try syncing the news list from server by clicking in "Sync with server" button above'), m::NOTICE);
+        }
+
         return $this->render('agency_importer/europapress/list.tpl', array(
             'elements'      =>  $elements,
             'categories'    =>  $categories,
