@@ -32,6 +32,7 @@ User group controller
 
 Tpl cache manager
 -----------------
+- Batch delete doesnt work, integrate modal dialog
 - When selecting a new items per page and push Enter, the deleting tpl shows an alert dialog
 
 Statistics controller
