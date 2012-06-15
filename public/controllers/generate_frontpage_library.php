@@ -6,12 +6,16 @@
 
 //TODO: use includepath as import-tools.
 
+$_SERVER['SERVER_NAME'] = 'www.cronicasdelaemigracion.com';
+//$_SERVER['SERVER_NAME'] = 'onm-cronicas.local';
+$_SERVER['REQUEST_URI'] = '/';
+
 require __DIR__.'/../bootstrap.php';
 
 /**
  * Setup view
 */
-$tpl           = new Template(TEMPLATE_USER);
+$tpl = new Template(TEMPLATE_USER);
 //$tpl->setConfig('newslibrary');
 
 $urlBase = SITE_URL."seccion/";
@@ -34,7 +38,7 @@ $items = array('home', 'cronicas', 'galicia', 'castillaleon', 'asturias',
 
 //foreach ($menuItems->items as $id => $item) {
 foreach ($items as $category_name) {
-   // $category_name = $item->link;
+    // $category_name = $item->link;
 
     if ( !empty($category_name) ) {
 
@@ -61,7 +65,6 @@ do {
 foreach ($curly as $category_name => $c) {
     $htmlOut = curl_multi_getcontent($c);
     $newFile = $basePath.$category_name.".html";
-
     $result  = file_put_contents($newFile, $htmlOut);
 
     curl_multi_remove_handle($mh, $c);
