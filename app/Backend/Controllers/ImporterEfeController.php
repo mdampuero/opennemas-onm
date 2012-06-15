@@ -108,7 +108,7 @@ class ImporterEfeController extends Controller
         if ($minutesFromLastSync > 100) {
             $message = _('A long time ago from synchronization.');
         } elseif ($minutesFromLastSync > 10) {
-            $message = sprintf(_('Last sync was %1 minutes ago.'), $minutes);
+            $message = sprintf(_('Last sync was %d minutes ago.'), $minutesFromLastSync);
         }
         if ($message) {
             m::add($message . _('Try syncing the news list from server by clicking in "Sync with server" button above'), m::NOTICE);
