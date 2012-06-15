@@ -63,11 +63,7 @@ class Settings
 
 
                 if (!$rs) {
-                    $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-                    if (!empty($errorMsg)) {
-                        $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-                        $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
-                    }
+                    \Application::logDatabaseError();
 
                     return false;
                 }
@@ -114,9 +110,7 @@ class Settings
                 $rs          = $GLOBALS['application']->conn->Execute($sql);
 
                 if (!$rs) {
-                    $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-                    $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-                    $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+                    \Application::logDatabaseError();
 
                     return false;
                 }
@@ -169,9 +163,7 @@ class Settings
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            \Application::logDatabaseError();
 
             return false;
         }

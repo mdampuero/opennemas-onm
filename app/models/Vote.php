@@ -69,9 +69,7 @@ class Vote
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+            \Application::logDatabaseError();
 
             return (false);
         }
@@ -95,9 +93,7 @@ class Vote
 
             $rs = $GLOBALS['application']->conn->Execute($sql, $values);
             if (!$rs) {
-                $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-                $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-                $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+                \Application::logDatabaseError();
 
                 return (false);
             }
@@ -146,9 +142,7 @@ class Vote
         $values = array($value, serialize($this->ips_count_vote));
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+            \Application::logDatabaseError();
 
             return (false);
         }
@@ -245,9 +239,7 @@ class Vote
         $rs = $GLOBALS['application']->conn->Execute($sql, array($votePk));
 
         if (!$rs) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+            \Application::logDatabaseError();
 
             return;
         }

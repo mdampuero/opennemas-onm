@@ -150,9 +150,7 @@ class Article extends Content
             $data['home_columns'], $data['with_comment'], $data['title_int']);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            \Application::logDatabaseError();
 
             return false;
         }
@@ -641,10 +639,7 @@ class Article extends Content
         $sql = 'DELETE FROM `articles_clone` WHERE (`pk_clone` = ?)';
 
         if ($GLOBALS['application']->conn->Execute($sql, $values)===false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            \Application::logDatabaseError();
 
             return false;
         }

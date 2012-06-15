@@ -51,7 +51,7 @@ class MenuItems
                         $data["type"],$data["position"],$data["pk_father"]);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            Application::logDatabaseError();
+            \Application::logDatabaseError();
 
             return false;
         }
@@ -75,7 +75,7 @@ class MenuItems
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
-            Application::logDatabaseError();
+            \Application::logDatabaseError();
 
             return false;
         }
@@ -100,7 +100,7 @@ class MenuItems
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            Application::logDatabaseError();
+            \Application::logDatabaseError();
 
             return false;
         }
@@ -123,7 +123,7 @@ class MenuItems
         $sql = 'DELETE FROM menu_items WHERE pk_item ='.($id);
 
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
-            Application::logDatabaseError();
+            \Application::logDatabaseError();
 
             return false;
         }
@@ -155,7 +155,7 @@ class MenuItems
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
-            Application::logDatabaseError();
+            \Application::logDatabaseError();
 
             return false;
         }
@@ -188,7 +188,7 @@ class MenuItems
         $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
-            Application::logDatabaseError();
+            \Application::logDatabaseError();
 
             return false;
         }
@@ -266,16 +266,16 @@ class MenuItems
 
             if (!empty($values)) {
                 if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
+                    $logger = Application::getLogger();
                     $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-                    $GLOBALS['application']->logger->debug('Error: '.$errorMsg . print_r($valuesUpdate, true));
-                    $GLOBALS['application']->errors[] = 'Error: '.$errorMsg . print_r($valuesUpdate, true);
+                    $logger->notice('Error: '.$errorMsg.print_r($valuesUpdate, true));
                 }
             }
             if (!empty($valuesUpdate)) {
                 if ($GLOBALS['application']->conn->Execute($stmtUpdate, $valuesUpdate) === false) {
+                    $logger = Application::getLogger();
                     $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-                    $GLOBALS['application']->logger->debug('Error: '.$errorMsg. print_r($valuesUpdate, true));
-                    $GLOBALS['application']->errors[] = 'Error: '.$errorMsg. print_r($valuesUpdate, true);
+                    $logger->notice('Error: '.$errorMsg.print_r($valuesUpdate, true));
                 }
             }
 
@@ -296,7 +296,7 @@ class MenuItems
         $sql = 'DELETE FROM menu_items WHERE pk_menu ='.($id);
 
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
-            Application::logDatabaseError();
+            \Application::logDatabaseError();
 
             return false;
         }
@@ -317,14 +317,14 @@ class MenuItems
             $resp = $GLOBALS['application']->conn->Execute($stmt, array($item));
 
             if ($resp === false) {
-                Application::logDatabaseError();
+                \Application::logDatabaseError();
 
                 return false;
             }
         }
 
         /* Notice log of this action */
-        $logger = Application::getLogger();
+        $logger = \Application::getLogger();
         $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid']
             .') has executed action Remove  at menu_item Id '.$id);
 

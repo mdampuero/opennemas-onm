@@ -62,9 +62,7 @@ class DatabaseErrorsController extends Controller
         $sql = "SELECT count(*) FROM adodb_logsql";
         $rsTotalErrors = $GLOBALS['application']->conn->getOne($sql);
         if (is_null($rsTotalErrors) ) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            \Application::logDatabaseError();
         }
 
 
@@ -85,9 +83,7 @@ class DatabaseErrorsController extends Controller
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if (!$rs) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            \Application::logDatabaseError();
         }
 
         $errors = $rs;
