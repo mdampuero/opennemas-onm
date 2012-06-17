@@ -318,27 +318,33 @@
 {if $type_opinion=='-1'}
 <script type="text/javascript">
  // <![CDATA[
-	Sortable.create('cates',{
-		tag:'table',
-		only:'sortable',
-		dropOnEmpty: true,
-		containment:["cates"],
-		constraint:false
-	});
-	Sortable.create('editoriales',{
-		tag:'table',
-		only:'edits_sort',
-		dropOnEmpty: true,
-		containment:["editoriales"],
-		constraint:false
-	});
-    Sortable.create('deldirector',{
-		tag:'table',
-		only:'dir_sort',
-		dropOnEmpty: true,
-		containment:["deldirector"],
-		constraint:false
-	});
+    if ($('cates') != null) {
+    	Sortable.create('cates',{
+    		tag:'table',
+    		only:'sortable',
+    		dropOnEmpty: true,
+    		containment:["cates"],
+    		constraint:false
+    	});
+    };
+    if ($('editoriales') != null) {
+    	Sortable.create('editoriales',{
+    		tag:'table',
+    		only:'edits_sort',
+    		dropOnEmpty: true,
+    		containment:["editoriales"],
+    		constraint:false
+    	});
+    };
+    if ($('deldirector') != null) {
+        Sortable.create('deldirector',{
+    		tag:'table',
+    		only:'dir_sort',
+    		dropOnEmpty: true,
+    		containment:["deldirector"],
+    		constraint:false
+    	});
+    };
  // ]]>
 </script>
 {/if}
