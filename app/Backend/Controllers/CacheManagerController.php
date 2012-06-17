@@ -278,10 +278,14 @@ class CacheManagerController extends Controller
 
         if (isset($category)) {
             $ccm = \ContentCategoryManager::get_instance();
-            if($category != 'home') {
+            if ($category != 'home' && $category != 'opinion') {
                 $category_name = $ccm->get_name($category);
                 $title = $ccm->get_title($category_name);
                 $title = sprintf(_("Frontpage for category %s"), $title);
+            } elseif ($category == 'opinion') {
+                $category_name = 'opinion';
+                $title = 'Opinion';
+                $tplManager->delete($category_name, 'opinion_frontpage.tpl');
             } else {
                 $category_name = 'home';
                 $title = _('General frontpage');

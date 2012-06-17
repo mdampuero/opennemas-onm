@@ -2282,6 +2282,10 @@ min-height: 30px  !important;
 div#content-provider span.type {
     display: none;
 }
+#related-contents div#content-provider span.type {
+    display: inline-block;
+    font-weight:bold;
+}
 
 
 div#related-contents div#content-provider.related-content-provider  div.contents ul {
