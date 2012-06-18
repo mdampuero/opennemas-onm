@@ -18,7 +18,8 @@ require_once '../bootstrap.php';
  */
 $tpl = new Template(TEMPLATE_USER);
 
-$category_name = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
+$category_name = $request->query->filter('category_name', '',
+                    FILTER_SANITIZE_STRING);
 
 if (!empty($category_name)) {
     $ccm                = new ContentCategoryManager();
@@ -45,12 +46,12 @@ $action = $request->query->filter('action', 'list', FILTER_SANITIZE_STRING);
 
 switch ($action) {
     case 'show':
-        $dirtyID = $request->query->filter('special_id', '', FILTER_SANITIZE_STRING);
+        $dirtyID = $request->query->filter('special_id', '',
+            FILTER_SANITIZE_STRING);
 
         $specialID = Content::resolveID($dirtyID);
-        $cacheID = $tpl->generateCacheId($category_name, null, $specialID);
-
-        $special = new Special($specialID);
+        $cacheID   = $tpl->generateCacheId($category_name, null, $specialID);
+        $special   = new Special($specialID);
 
         if ($special->available == 1) {
 
@@ -59,30 +60,40 @@ switch ($action) {
             $columns  = array();
 
             if (!empty($contents)) {
-                foreach ($contents as $item) {
+                if ((count($contents) == 1)  &&
+                    ($contents[0]['type_content']=='Attachment')) {
 
-                    $content = Content::get($item['fk_content']);
+                    $content = Content::get($contents[0]['fk_content']);
 
-                    if (isset($content->img1)) {
-                        $img                = new Photo($content->img1);
-                        $content->img1_path = $img->path_file.$img->name;
-                        $content->img1      = $img;
+                    $special->pdf_path = $content->path;
+                } else {
+                    foreach ($contents as $item) {
+
+                        $content = Content::get($item['fk_content']);
+
+                        if (isset($content->img1)) {
+                            $img                = new Photo($content->img1);
+                            $content->img1_path = $img->path_file.$img->name;
+                            $content->img1      = $img;
+                        }
+                        if (isset($content->fk_video)) {
+                            $video              = new Video($content->fk_video);
+                            $content->obj_video = $video;
+                        }
+
+                        if (($item['position']%2) == 0) {
+                            $content->placeholder = 'placeholder_0_1';
+                        } else {
+                            $content->placeholder = 'placeholder_1_1';
+                        }
+                        $columns[] = $content;
+
+                        $content->category_name  =
+                            $content->loadCategoryName($item['fk_content']);
+                        $content->category_title =
+                            $content->loadCategoryTitle($item['fk_content']);
+
                     }
-                    if (isset($content->fk_video)) {
-                        $video              = new Video($content->fk_video);
-                        $content->obj_video = $video;
-                    }
-
-                    if (($item['position']%2) == 0) {
-                        $content->placeholder = 'placeholder_0_1';
-                    } else {
-                        $content->placeholder = 'placeholder_1_1';
-                    }
-                    $columns[] = $content;
-
-                    $content->category_name  = $content->loadCategoryName($item['fk_content']);
-                    $content->category_title = $content->loadCategoryTitle($item['fk_content']);
-
                 }
             }
 
@@ -103,13 +114,12 @@ switch ($action) {
 
     case 'list':
 
-        $cacheID = $tpl->generateCacheId($category_name, null, null);
-
-        $cm = new ContentManager();
+        $cacheID  = $tpl->generateCacheId($category_name, null, null);
+        $cm       = new ContentManager();
         $specials = $cm->find_by_category(
-            'Special', $actual_category_id,
-            'available=1',
-            ' ORDER BY starttime DESC LIMIT 10');
+                        'Special', $actual_category_id,
+                        'available=1',
+                        ' ORDER BY starttime DESC LIMIT 10');
 
         if (!empty($specials)) {
             foreach ($specials as &$special) {

@@ -3,26 +3,30 @@
 * Get specials contents for save in database.
 */
 saveSpecialContent = function() {
-    var itemsLeft = [];
-    var itemsRight= [];
 
-    jQuery( "div#cates div#column_right ul.content-receiver li" ).each(function(){
-        itemsRight.push(jQuery(this).data("id"));
+    var els = [];
+    jQuery('#column_right').find('ul.content-receiver li').each(function (index, item) {
+
+        els.push({
+            'id' : jQuery(item).data('id'),
+            'content_type': jQuery(item).data('type'),
+            'position': (index+2)
+        });
     });
-    jQuery( "div#cates div#column_left ul.content-receiver li" ).each(function(){
-        itemsLeft.push(jQuery(this).data("id"));
+
+    jQuery('input#noticias_right').val(JSON.stringify(els));
+
+    els = [];
+
+    jQuery('#column_left').find('ul.content-receiver li').each(function (index, item) {
+
+        els.push({
+            'id' : jQuery(item).data('id'),
+            'content_type': jQuery(item).data('type'),
+            'position': ((index-1)+2)
+        });
     });
-    //test JSON.stringify
-    jQuery('input#noticias_right').val(itemsRight.join(','));
-    jQuery('input#noticias_left').val(itemsLeft.join(','));
 
-}
+    jQuery('input#noticias_left').val(JSON.stringify(els));
 
-/*
- * Toggle divs with specials content.
- */
-setOnlyPdf = function(my){
-    jQuery(my).click(function(){
-        jQuery('div.special-container').toggle();
-	});
 }

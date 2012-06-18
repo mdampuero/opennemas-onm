@@ -1,16 +1,5 @@
 <hr>
 
-<div id="div_pdf" class="special-container" style="display:{if $special->only_pdf eq 1}inline{else}none{/if};">
-    <br />
-    <input type="hidden" size="20" id="my_pdf" name="my_pdf" value="" />
-    <input type="text" size="80" id="pdf" name="pdf" value="{$special->pdf}" />
-    <br />
-    <a onclick="javascript:abrirArchives('my_pdf','{$category}');" href="#">
-        <img border="0" src="images/iconos/examinar.gif"/>
-        Buscar documento pdf
-    </a>
-</div>
-
 <div id="cates" class="special-container" style="display:{if $special->only_pdf eq 0}inline{else}none{/if};">
     <table style="width:100%">
         <tr>

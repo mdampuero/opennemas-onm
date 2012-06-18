@@ -431,7 +431,7 @@ switch($action) {
         $tpl->assign(array('contents'=>$polls,
                             'contentTypeCategories'=>$parentCategories,
                             'category' =>$category,
-                            'contentType'=>'File',
+                            'contentType'=>'Attachment',
                             'pagination'=>$pager->links
                     ));
 
