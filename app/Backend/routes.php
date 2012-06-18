@@ -120,6 +120,66 @@ $routes->add(
     '/admin'
 );
 
+// Search controller routes
+$routes->add(
+    'admin_files_statistics',
+    new Route(
+        '/files/statistics',
+        array(
+            '_controller' => 'Backend:Controllers:FilesController:statistics',
+        )
+    ),
+    '/admin'
+);
+
+// Search controller routes
+$routes->add(
+    'admin_files_widget',
+    new Route(
+        '/files/widget',
+        array(
+            '_controller' => 'Backend:Controllers:FilesController:widget',
+        )
+    ),
+    '/admin'
+);
+
+// Search controller routes
+$routes->add(
+    'admin_files_show',
+    new Route(
+        '/files/{id}/show',
+        array(
+            '_controller' => 'Backend:Controllers:FilesController:read',
+        )
+    ),
+    '/admin'
+);
+
+// Search controller routes
+$routes->add(
+    'admin_files_update',
+    new Route(
+        '/files/{id}/update',
+        array(
+            '_controller' => 'Backend:Controllers:FilesController:update',
+        )
+    ),
+    '/admin'
+);
+
+// Search controller routes
+$routes->add(
+    'admin_files',
+    new Route(
+        '/files',
+        array(
+            '_controller' => 'Backend:Controllers:FilesController:list',
+        )
+    ),
+    '/admin'
+);
+
 
 // Search controller routes
 $routes->add(

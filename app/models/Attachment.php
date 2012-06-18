@@ -185,8 +185,10 @@ class Attachment extends Content
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
+
+        return true;
     }
 
     /**

@@ -68,3 +68,9 @@ Books
 - Drop category and menu logic from init method
 - Validate if $id exists on update, show methods and batch actions
 - Fix category menu url
+
+Files
+-----
+- Refactorize category calculation logic (is a mess and should be improved)
+- Only listing, statistics, widget list, read and update actions are implemented
+- Review listings, widget and statistics actions.
