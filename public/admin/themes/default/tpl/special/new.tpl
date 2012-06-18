@@ -1,7 +1,10 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-js" append}
-
+    <script type="text/javascript">
+        jQuery.noConflict();
+    </script>
+    {script_tag src="/utilsGallery.js"}
 {/block}
 
 {block name="header-css" append}
@@ -9,7 +12,7 @@
 {/block}
 
 {block name="footer-js" append}
-    {script_tag src="/utilsGallery.js"}
+
     {script_tag src="/onm/jquery.content-provider.js"}
     {script_tag src="/onm/jquery.specials.js"}
     {script_tag src="/tiny_mce/opennemas-config.js"}
@@ -29,6 +32,7 @@
         $("#form-validate-button, #form-send-button").on("click", function(event) {
 
             saveSpecialContent();
+
             return true;
         });
     });
@@ -45,7 +49,7 @@
 
                  <li>
                     {acl isAllowed="SPECIAL_CREATE"}
-                    <button type="submit" name="action" value="validate"  id="form-validate-button">
+                    <button  name="action" value="validate"  id="form-validate-button">
                         <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="Guardar y continuar" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
                     </button>
                     {/acl}
@@ -53,7 +57,7 @@
                 <li>
                     {if isset($special->id)}
                         {acl isAllowed="SPECIAL_UPDATE"}
-                        <button type="submit" name="action" value="update" id="form-send-button">
+                        <button   name="action" value="update" id="form-send-button">
                             <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar" alt="{t}Save{/t}" ><br />{t}Save{/t}
                         </button>
                         {/acl}
