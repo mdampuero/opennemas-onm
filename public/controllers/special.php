@@ -61,7 +61,7 @@ switch ($action) {
 
             if (!empty($contents)) {
                 if ((count($contents) == 1)  &&
-                    ($contents[0]['type_content']=='Attachment')) {
+                    ($contents[0]['type_content']=='Attachment') || ($contents[0]['type_content']=='3')) {
 
                     $content = Content::get($contents[0]['fk_content']);
 
