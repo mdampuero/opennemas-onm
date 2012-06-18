@@ -61,7 +61,16 @@ class ErrorController extends Controller
                 break;
 
             default:
-                $content = '';
+                // Change this handle to a more generic error handler
+                $content = $this->renderView(
+                    'error/404.tpl',
+                    array(
+                        'error' => $error,
+                        'environment' => $environment,
+                        'backtrace' => array_reverse($error->getTrace()),
+                    )
+                );
+
                 break;
         }
         return new Response($content, 500);
