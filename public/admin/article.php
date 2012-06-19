@@ -542,7 +542,6 @@ if (isset($_REQUEST['action']) ) {
                     $_SESSION['_from']='home';
                 }
             }
-            Application::forward($_SERVER['HTTP_REFERER']);
 
             if ($_SESSION['desde'] == 'index_portada') {
                 Application::forward('index.php');
