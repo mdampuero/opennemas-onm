@@ -54,9 +54,9 @@
 {/block}
 
 {block name="content"}
-<div class="wrapper-content welcome-page">
+<div class="wrapper-content error-page">
     {if $environment == 'development'}
-        <h1 class="error-title">{$message|default:"Unknown error"}</h1>
+        <h1 class="error-title">{$error_message|default:"Unknown error"}</h1>
         <div class="error-trace">
             <div class="title {if $error->getCode() == 1}error{/if}">
                 <p>
@@ -78,10 +78,14 @@
                             <td>
                                 <a href="file://{$trace_step['file']}"> {$trace_step['file']}</a>
 
-                                <p>Class: {$trace_step['class']}::{$trace_step['function']}()</p>
-                                <p>
-                                    Args:
-                                    {$trace_step['args']|print_r}
+                                <p>Class: {$trace_step['class']}::{$trace_step['function']}(
+                                    {foreach from=$trace_step['args'] item=arg}
+                                    {if gettype($arg) == 'string'}
+                                    '{$arg}',
+                                    {else}
+                                    {$arg},
+                                    {/if}
+                                    {/foreach})</p>
                                 </p>
                             </td>
                             <td>{$trace_step['line']}</td>
@@ -93,7 +97,11 @@
             {/if}
         </div>
     {else}
-        Not content available
+        <div class="error-page-message">
+            <div class="icon">:(</div>
+            <div class="message">{$error_message}</div>
+            <div class="error-tracing">{t 1=$error_id}We already have being informed of this error: %1{/t}</div>
+        </div>
     {/if}
 </div>
 {/block}

@@ -2401,3 +2401,22 @@ div.newsletter-contents .container-buttons {
 .welcome-page .welcome-panel-column ul {
   margin-left:18px;
 }
+
+
+/* =============================================================================
+   Error page rules
+============================================================================= */
+.error-page .error-page-message{
+    max-width:600px;
+    margin:30px auto;
+    margin-bottom:60px;
+}
+.error-page .icon {
+    font-size:11em;
+}
+.error-page .message {
+    font-size:2em;
+    margin-bottom:15px;
+}
+.error-page .error-tracing {
+}

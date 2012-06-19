@@ -47,32 +47,45 @@ class ErrorController extends Controller
 
         $name = join('', array_slice(explode('\\', get_class($error)), -1));
 
+        $errorID = strtoupper(INSTANCE_UNIQUE_NAME.'_'.uniqid());
+
         switch ($name) {
             case 'ResourceNotFoundException':
                 $trace = $error->getTrace();
                 $path = $trace[0]['args'][0];
 
-                $errorMessage = sprintf('Resource path "%s" not found', $path);
-                error_log('File not found: '.$path);
-                $content = $this->renderView(
-                    'error/404.tpl',
-                    array(
-                        'message' => $errorMessage,
-                        'error' => $error,
-                        'environment' => $environment,
-                        'backtrace' => array_reverse($error->getTrace()),
-                    )
-                );
+                $errorMessage = sprintf('Oups! We can\'t find anything at "%s".', $path);
+                error_log('File not found: '.$path.'ERROR_ID: '.$errorID);
+                if ($this->request->isXmlHttpRequest()) {
+                    $content = $errorMesage;
+                } else {
+                    $content = $this->renderView(
+                        'error/404.tpl',
+                        array(
+                            'error_message' => $errorMessage,
+                            'error'         => $error,
+                            'error_id'      => $errorID,
+                            'environment'   => $environment,
+                            'backtrace'     => array_reverse($error->getTrace()),
+                        )
+                    );
+                }
+                return new Response($content, 404);
                 break;
 
             default:
                 // Change this handle to a more generic error template
+                $errorMessage = _('Oups! Seems that we had an unknown problem while trying to run your request.');
+                error_log('Unknown error. ERROR_ID: '.$errorID);
+
                 $content = $this->renderView(
                     'error/404.tpl',
                     array(
-                        'error' => $error,
-                        'environment' => $environment,
-                        'backtrace' => array_reverse($error->getTrace()),
+                        'error_message' => $errorMessage,
+                        'error'         => $error,
+                        'error_id'      => $errorID,
+                        'environment'   => $environment,
+                        'backtrace'     => array_reverse($error->getTrace()),
                     )
                 );
 
