@@ -86,4 +86,12 @@ jQuery(document).ready(function($){
         });
     });
 
+    jQuery('.column-receiver').on('click','span.icon .icon-trash', function() {
+
+        item =  jQuery(this).parent().parent();
+        jQuery("div.column-receiver ul.content-receiver").find(item).remove();
+
+    });
+
+
 });

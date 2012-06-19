@@ -77,7 +77,7 @@ white;
 {/block}
 
 {block name="content"}
-<form action="#" method="POST" name="formulario" id="formulario">
+<form action="{$smarty.server.PHP_SELF}" method="POST" name="formulario" id="formulario">
     {include file="article/partials/_menu.tpl"}
     <div class="wrapper-content">
         {render_messages}
@@ -130,36 +130,24 @@ white;
                                         {if $smarty.session.desde != 'list_hemeroteca'}
                                             {is_module_activated name="COMMENT_MANAGER"}
                                             {t}Allow coments{/t}
-                                            <input type="checkbox" {if (isset($article) && $article->with_comment eq 1)}checked{/if} name="with_comment" id="with_comment" value=1/>
+                                            <input type="checkbox" name="with_comment" id="with_comment"  {if (isset($article) && $article->with_comment eq 1)}checked{/if} value=1/>
                                             <br/>
                                             {/is_module_activated}
 
                                             {acl isAllowed="ARTICLE_AVAILABLE"}
                                                 {t}Available:{/t}
-                                                <input type="checkbox" {if (isset($article) && $article->content_status eq 1)}checked{/if}  name="content_status" id="content_status" value=1/>
+                                                <input type="checkbox" name="content_status" id="content_status" {if (isset($article) && $article->content_status eq 1)}checked{/if}  value=1/>
                                                 <br/>
                                             {/acl}
-                                            {*acl isAllowed="ARTICLE_FRONTPAGE"}
-                                                {t}Put in section frontpage:{/t}
-                                                <input type="checkbox"  name="frontpage" {if (isset($article) && $article->frontpage eq 1)}checked{/if} id="frontpage" value=1/>
+                                            {acl isAllowed="ARTICLE_FRONTPAGE"}
+                                                {t}Put in category frontpage:{/t}
+                                                <input type="checkbox"  name="promoted_to_category_frontpage" {if (isset($article) && $article->promoted_to_category_frontpage == true)}checked{/if} value=1/>
                                                 <br/>
                                             {/acl}
                                             {acl isAllowed="ARTICLE_HOME"}
-                                            {if ($article->in_home neq 1)}
-                                                {t}Suggest for frontpage:{/t}
-                                                <input type="checkbox"
-                                                       name="in_home"
-                                                       {if (isset($article) && $article->in_home eq 2)}
-                                                           checked
-                                                       {/if}
-                                                       id="in_home"
-                                                       value=2/>
-                                                <br/>
-                                            {/if}
-                                           {/acl*}
-                                           <input type="hidden" id="in_home" name="in_home"  value="{$article->in_home|default:"0"}" />
-                                           <input type="hidden" id="frontpage" name="frontpage"  value="{$article->frontpage|default:"0"}" />
-
+                                                {t}Suggested for frontpage:{/t}
+                                                <input type="checkbox" name="frontpage" id="frontpage" {if (isset($article) && $article->frontpage eq '1')} checked {/if} />
+                                            {/acl}
                                         {else} {* else if not list_hemeroteca *}
                                             {t}Archived:{/t}
                                             <input type="checkbox" name="content_status" {if (isset($article) && $article->content_status == 0)}checked{/if} value="0" id="content_status"/>
@@ -168,7 +156,7 @@ white;
                                             <input type="hidden" id="home_columns" name="home_columns"  value="{$article->home_columns}" />
                                             <input type="hidden" id="with_comment" name="with_comment"  value="{$article->with_comment}" />
                                             <input type="hidden" id="available" name="available"  value="{$article->available}" />
-                                            <input type="hidden" id="in_home" name="in_home"  value="{$article->in_home}" />
+                                            <input type="hidden" id="promoted_to_category_frontpage" name="promoted_to_category_frontpage"  value="{$article->promoted_to_category_frontpage}" />
                                         {/if}
                                     </div>
                                 </div>
@@ -371,7 +359,7 @@ white;
             <input type="hidden" id="relatedHome" name="relatedHome" value="" />
             <input type="hidden" id="withGalleryHome" name="params[withGalleryHome]" value="" />
         </div>
-            <input type="hidden" id="action" name="action" value="" />
+            <input type="hidden" id="action" name="action" value="{$action}" />
             <input type="hidden" name="id" id="id" value="{$article->id|default:""}" />
         </div>
     </div>

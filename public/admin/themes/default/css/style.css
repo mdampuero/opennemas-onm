@@ -2282,6 +2282,10 @@ min-height: 30px  !important;
 div#content-provider span.type {
     display: none;
 }
+div#content-provider span.icon {
+    display: none;
+}
+
 #related-contents div#content-provider span.type {
     display: inline-block;
     font-weight:bold;
@@ -2351,6 +2355,16 @@ div.active .container-label {
 div.newsletter-contents .container-buttons {
     float:right;
 }
+
+.icon-clean {
+    background-image: url("../images/clean14.png");
+    background-position: 0px 0px;
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 14px;
+    line-height: 14px;
+    vertical-align: text-top;
+    width: 14px;
 
 .popover-title {
   margin-bottom:0 !important;

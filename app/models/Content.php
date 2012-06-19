@@ -787,10 +787,9 @@ class Content
     }
 
     /**
-     * undocumented function
+     * Sets the state of this content to the trash
      *
-     * @return void
-     * @author
+     * @return boolean true if all went well
      **/
     public function setTrashed()
     {
@@ -1322,6 +1321,7 @@ class Content
         Application::logContentEvent(__METHOD__, $this);
     }
 
+
     /*
      * Fetches available content types.
      *
@@ -1756,6 +1756,19 @@ class Content
         return true;
     }
 
+
+    /**
+     * Inserts this content directly to the category frontpage
+     *
+     * @return boolean true if all went well
+     **/
+    public function putInCategoryFrontpage()
+    {
+
+
+        return true;
+    }
+
     /**
      * Check if $pk_content exists in database
      *
@@ -1963,5 +1976,41 @@ class Content
         }
 
         return $this;
+    }
+
+    /**
+     * Checks if this content is in one category frontpage given the category id
+     *
+     * @return boolean true if it is in the category
+     **/
+    public function isInFrontpageOfCategory($categoryID = null)
+    {
+        if ($categoryID == null) {
+            $categoryID = $this->category;
+        }
+        $sql= 'SELECT * FROM content_positions WHERE pk_fk_content=? AND fk_category=?';
+        $values = array($this->id, $categoryID);
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+
+        return ($rs != false && $rs->_numOfRows > 0);
+    }
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function promoteToCategoryFrontpage($categoryID)
+    {
+        if ($categoryID == null) {
+            $categoryID = $this->category;
+        }
+        $sql = 'INSERT INTO content_positions(pk_fk_content, fk_category, position, placeholder, params, content_type) '
+              .'VALUES(?,?,?,?,?,?)';
+        $values = array($this->id, $categoryID, 0, 'placeholder_0_0', serialize(array()), 'Article');
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+
+        return ($rs != false);
     }
 }
