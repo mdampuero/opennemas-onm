@@ -34,6 +34,8 @@ parameters:
             handler: %cache_handler%
 
     # Session Configuration
+    session_storate_class: "\Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage"
+    session_handler_class: "\Symfony\Component\HttpFoundation\Session\Session"
     session:
         handler: %session_handler%
         params:  %session_params%

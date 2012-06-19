@@ -25,4 +25,10 @@ $sc->register('matcher', 'Symfony\Component\Routing\Matcher\UrlMatcher')
 $sc->register('url_generator', '\Symfony\Component\Routing\Generator\UrlGenerator')
     ->setArguments(array($routes, new Reference('context')));
 
+$sc->register('session_storage', '\Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage')
+    ->setArguments(array('%session_params%'));
+
+$sc->register('session', '%session_handler_class%')
+    ->setArguments(array(new Reference('session_storage')));
+
 return $sc;

@@ -40,6 +40,9 @@ class Bootstrap extends ModuleBootstrap
      **/
     public function initAuthenticationSystem()
     {
+        // $session = $this->container->get('session');
+        // $session->start();
+
         $request = $this->container->get('request');
 
         $isAsset = preg_match('@.*\.(png|gif|jpg|ico|css|js)$@', $request->getPathInfo());
