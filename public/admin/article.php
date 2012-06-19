@@ -73,10 +73,10 @@ if (isset($_REQUEST['action']) ) {
 
             //Comprobación si el usuario tiene acceso a esta categoria/seccion.
             if ($_REQUEST['category'] != 'todos') {
-                 if(!Acl::_C( $_REQUEST['category'])) {
-                      m::add(_("you don't have enought privileges to see this category.") );
-                      Application::forward('/');
-                 }
+                if (!Acl::_C( $_REQUEST['category'])) {
+                    m::add(_("you don't have enought privileges to see this category.") );
+                    Application::forward('/');
+                }
             } elseif (!Acl::_C($categoryID)) {
                 $categoryID           = $_SESSION['accesscategories'][0];
                 $section              = $ccm->get_name($categoryID);
@@ -89,7 +89,10 @@ if (isset($_REQUEST['action']) ) {
             }
 
             $cm = new ContentManager();
-            if (!isset($_REQUEST['category']) || $_REQUEST['category']=='home' || $_REQUEST['category']=='0' ) {
+            if (!isset($_REQUEST['category'])
+                || $_REQUEST['category'] == 'home'
+                || $_REQUEST['category'] == '0'
+            ) {
                 $_REQUEST['category'] = 'todos';
             }
 
@@ -98,11 +101,18 @@ if (isset($_REQUEST['action']) ) {
             $art_editors = array();
 
             if ($_REQUEST['category'] == 'todos') {
-                $articles = $cm->find('Article', 'fk_content_type=1 AND available=0', 'ORDER BY position ASC, created DESC ');
+                $articles = $cm->find(
+                    'Article',
+                    'fk_content_type=1 AND available=0',
+                    'ORDER BY position ASC, created DESC '
+                );
                 $tpl->assign('articles', $articles);
                 if(Acl::check('OPINION_ADMIN')){
-                    $opinions = $cm->find('Opinion', 'fk_content_type=4 AND available=0 ',
-                                            'ORDER BY created DESC, type_opinion DESC, title ASC');
+                    $opinions = $cm->find(
+                        'Opinion',
+                        'fk_content_type=4 AND available=0 ',
+                        'ORDER BY created DESC, type_opinion DESC, title ASC'
+                    );
                     $tpl->assign('opinions', $opinions);
                     if(!empty($opinions)){
                         $aut = new User();
@@ -120,8 +130,11 @@ if (isset($_REQUEST['action']) ) {
 
 
             } elseif ($_REQUEST['category'] == 'opinion'){
-                $opinions = $cm->find('Opinion', 'fk_content_type=4 AND available=0',
-                                      'ORDER BY created DESC, type_opinion DESC, title ASC');
+                $opinions = $cm->find(
+                    'Opinion',
+                    'fk_content_type=4 AND available=0',
+                    'ORDER BY created DESC, type_opinion DESC, title ASC'
+                );
                 $tpl->assign('opinions', $opinions);
                 $aut = new User();
                 foreach ($opinions as $opin) {
@@ -134,7 +147,14 @@ if (isset($_REQUEST['action']) ) {
                 $tpl->assign('opin_editors', $art_publishers);
                 $tpl->assign('opin_editors', $art_editors);
             } else {
-                list($articles, $pager)= $cm->find_pages('Article', 'available=0 AND fk_content_type=1 ', 'ORDER BY  created DESC, title ASC ',$_REQUEST['page'],10, $_REQUEST['category']);
+                list($articles, $pager)= $cm->find_pages(
+                    'Article',
+                    'available=0 AND fk_content_type=1 ',
+                    'ORDER BY  created DESC, title ASC ',
+                    $_REQUEST['page'],
+                    10,
+                    $_REQUEST['category']
+                );
                 $tpl->assign('articles', $articles);
                 $tpl->assign('paginacion', $pager);
             }
@@ -324,15 +344,15 @@ if (isset($_REQUEST['action']) ) {
                 $article->params = unserialize($article->params);
             }
 
+
             $tpl->assign('article', $article);
 
             //Para usar el id de articulo al borrar un comentario
-            $_SESSION['olderId']=$_REQUEST['id'];
+            $_SESSION['olderId'] = $_REQUEST['id'];
             $cm = new ContentManager();
 
-
             //Photos de noticia
-            $img1=$article->img1;
+            $img1 = $article->img1;
             if(!empty($img1)){
                 $photo1 = new Photo($img1);
                 $tpl->assign('photo1', $photo1);
@@ -361,6 +381,10 @@ if (isset($_REQUEST['action']) ) {
             if(!empty($video)) {
                 $video2 = new Video($video);
                 $tpl->assign('video2', $video2);
+            }
+
+            if ($article->isInFrontpageOfCategory((int) $article->category)) {
+                $article->promoted_to_category_frontpage = true;
             }
 
             $relationsHandler= new RelatedContent();
@@ -410,10 +434,13 @@ if (isset($_REQUEST['action']) ) {
                 $_SESSION['_from'] ='search_advanced';
             }
 
-            $tpl->assign(
-                array('availableSizes'=>array(16=>'16',18=>'18',20=>'20',22=>'22',24=>'24',26=>'26',
-                                            28=>'28',30=>'30',32=>'32',34=>'34'))
-            );
+            $tpl->assign(array(
+                'availableSizes' => array(
+                    16 => '16', 18 => '18', 20 => '20', 22 => '22',
+                    24 => '24', 26 => '26', 28 => '28',30 => '30',
+                    32 => '32', 34 => '34'
+                )
+            ));
 
             $tpl->display('article/new.tpl');
             // }}}
@@ -424,8 +451,8 @@ if (isset($_REQUEST['action']) ) {
             Acl::checkOrForward('ARTICLE_CREATE');
 
             if (isset($_POST['with_comment'])) {$_POST['with_comment'] = 1;} else {$_POST['with_comment'] = 0;}
-      //      if (isset($_POST['frontpage'])) {$_POST['frontpage'] = 1;} else {$_POST['frontpage'] = 0;}
-      //      if (isset($_POST['in_home'])) {$_POST['in_home'] = 2;} else {$_POST['in_home'] = 0;}
+            //      if (isset($_POST['frontpage'])) {$_POST['frontpage'] = 1;} else {$_POST['frontpage'] = 0;}
+            //      if (isset($_POST['in_home'])) {$_POST['in_home'] = 2;} else {$_POST['in_home'] = 0;}
             if (isset($_POST['content_status'])) {$_POST['content_status'] = 1;} else {$_POST['content_status'] = 0;}
 
             $article = new Article();
@@ -466,22 +493,20 @@ if (isset($_REQUEST['action']) ) {
                 } else {
                     $_POST['with_comment'] = 0;
                 }
+
                 if (isset($_POST['frontpage'])) {
                     $_POST['frontpage'] = 1;
                 } else {
                     $_POST['frontpage'] = 0;
                 }
-                if (isset($_POST['in_home'])) {$_POST['in_home'] = 2;}
+                $_POST['promoted_to_category_frontpage'] = array_key_exists('promoted_to_category_frontpage', $_POST);
+
             }
             if (isset($_POST['content_status'])) {
                 $_POST['content_status'] = 1;
             } else {
                 $_POST['content_status'] = 0;
             }
-
-            // Register cache control event for updating content
-            $GLOBALS['application']->register('onAfterUpdate', 'onAfterUpdate_refreshCache');
-            $GLOBALS['application']->register('onAfterUpdate', 'onAfterUpdate_saluda');
 
             $articleCheck = new Article();
             $articleCheck->read($_REQUEST['id']);
@@ -492,50 +517,62 @@ if (isset($_REQUEST['action']) ) {
             ) {
                 m::add(_("You can't modify this content because you don't have enought privileges.") );
                 Application::forward($_SERVER['SCRIPT_NAME'].'?action=read&id='.$_REQUEST['id']);
-            } else {
-                $article = new Article();
-                $_REQUEST['fk_user_last_editor'] = $_SESSION['userid'];
-                $data = $_REQUEST;
-                unset($data['action']);
-                unset($data['stringVideoSearch']);
-                unset($data['stringImageSearch']);
-                unset($data['stringSearch']);
+            }
+            $article = new Article();
+            $_REQUEST['fk_user_last_editor'] = $_SESSION['userid'];
+            $data = $_REQUEST;
+            unset($data['action']);
+            unset($data['stringVideoSearch']);
+            unset($data['stringImageSearch']);
+            unset($data['stringSearch']);
 
-                $article->update($data);
-                if (!array_key_exists('content_status', $data)) {
-                    $article->dropFromAllHomePages();
-                }
+            $article->update($data);
+            if (!array_key_exists('content_status', $data)) {
+                $article->dropFromAllHomePages();
             }
 
+            // Promote content to category frontpate if user wants to and is not already promoted
+            if (array_key_exists('promoted_to_category_frontpage', $_POST)
+                && $_POST['promoted_to_category_frontpage']
+                && !$article->isInFrontpageOfCategory($_POST['category'])
+            ) {
+                $article->promoteToCategoryFrontpage($_POST['category']);
+            }
+
+    // {{{ Take this CRAP out of here!!!
             if ($_SESSION['desde'] =='search_advanced'){
-                if(isset($_GET['stringSearch'])){
-                 Application::forward('controllers/search_advanced/search_advanced.php?action=search&stringSearch='.$_GET['stringSearch'].'&category='.$_SESSION['_from'].'&page='.$_REQUEST['page']);
+                if (isset($_GET['stringSearch'])){
+                    Application::forward('controllers/search_advanced/search_advanced.php?action=search&stringSearch='.$_GET['stringSearch'].'&category='.$_SESSION['_from'].'&page='.$_REQUEST['page']);
                 }else{
                     $_SESSION['desde']='list_pendientes';
                     $_SESSION['_from']='home';
                 }
             }
+            Application::forward($_SERVER['HTTP_REFERER']);
 
             if ($_SESSION['desde']=='index_portada') {
                 Application::forward('index.php');
-            }elseif ($_SESSION['desde'] == 'europa_press_import') {
+            } elseif ($_SESSION['desde'] == 'europa_press_import') {
                 Application::forward('controllers/agency_importer/europapress.php?action=list&page=0&message=');
-            }elseif ($_SESSION['desde'] == 'efe_press_import') {
+            } elseif ($_SESSION['desde'] == 'efe_press_import') {
                 Application::forward('controllers/agency_importer/efe.php');
-            }elseif ($_SESSION['desde'] == 'list') {
+            } elseif ($_SESSION['desde'] == 'list') {
                // Application::forward($_SERVER['SCRIPT_NAME'].'?action='.$_SESSION['desde'].'&category='.$_SESSION['_from'].'&page='.$_REQUEST['page']);
                  Application::forward('controllers/frontpagemanager/frontpagemanager.php?action='.$_SESSION['desde'].'&category='.$_SESSION['_from'].'&page='.$_REQUEST['page']);
-            }elseif ($_SESSION['desde'] == 'list_hemeroteca') {
+            } elseif ($_SESSION['desde'] == 'list_hemeroteca') {
                 Application::forward($_SERVER['SCRIPT_NAME'].'?action='.$_SESSION['desde'].'&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
             }
-            if(isset($_REQUEST['available']) && $_REQUEST['available'] == 1){
-                 $_SESSION['desde']='list_pendientes';
-                 $_SESSION['_from'] =$_REQUEST['category'];
-
-            }else{
-                $_SESSION['desde']='list_pendientes';
+            if (isset($_REQUEST['available'])
+                && $_REQUEST['available'] == 1
+            ){
+                $_SESSION['desde'] = 'list_pendientes';
+                $_SESSION['_from'] = $_REQUEST['category'];
+            } else{
+                $_SESSION['desde'] = 'list_pendientes';
             }
             Application::forward($_SERVER['SCRIPT_NAME'].'?action='.$_SESSION['desde'].'&category='.$_SESSION['_from'].'&page='.$_REQUEST['page']);
+
+    // }}}
         break;
 
         case 'validate':
@@ -543,39 +580,50 @@ if (isset($_REQUEST['action']) ) {
             if ($_SESSION['desde'] != 'list_hemeroteca') {
                 if (isset($_POST['with_comment'])) {$_POST['with_comment'] = 1;} else {$_POST['with_comment'] = 0;}
                 if (isset($_POST['frontpage'])) {$_POST['frontpage'] = 1;} else {$_POST['frontpage'] = 0;}
-                if (isset($_POST['in_home'])) {$_POST['in_home'] = 2;}
+                $_POST['promoted_to_category_frontpage'] = array_key_exists('promoted_to_category_frontpage', $_POST);
             }
             if (isset($_POST['content_status'])) {$_POST['content_status'] = 1;}   else {$_POST['content_status'] = 0;}
 
             $article = new Article();
             $_REQUEST['fk_user_last_editor'] = $_SESSION['userid'];
 
-            if(!$_POST["id"]) {
-                Acl::checkOrForward('ARTICLE_CREATE');
+            Acl::checkOrForward('ARTICLE_CREATE');
+            if (!$_POST["id"]) {
                 $_POST['fk_publisher'] = $_SESSION['userid'];
 
                 //Estamos creando un nuevo artículo
-                if(!$article->create( $_POST )) {
+                if (!$article->create( $_POST )) {
                     $tpl->assign('errors', $article->errors);
                 }
             } else {
-                Acl::checkOrForward('ARTICLE_UPDATE');
+
                 $articleCheck = new Article();
                 $articleCheck->read($_REQUEST['id']);
-                if(!Acl::isAdmin() && !Acl::check('CONTENT_OTHER_UPDATE') && $articleCheck->fk_user != $_SESSION['userid']) {
+
+                if (!Acl::isAdmin() && !Acl::check('CONTENT_OTHER_UPDATE') && $articleCheck->fk_user != $_SESSION['userid']) {
                     m::add(_("You can't modify this content because you don't have enought privileges.") );
                     Application::forward($_SERVER['SCRIPT_NAME'].'?action=read&id='.$_REQUEST['id']);
+                }
 
-                } else {
-                    $article->update($_POST);
-                    if ($_POST['content_status'] == 0) {
-                        $article->dropFromAllHomePages();
-                    }
+                $article->update($_POST);
+
+                if ($_POST['content_status'] == 0) {
+                    $article->dropFromAllHomePages();
                 }
             }
 
-            Application::forward($_SERVER['SCRIPT_NAME'] . '?action=read&category=' . $_SESSION['_from'] .
-                                 '&id=' . $article->id);
+            if (array_key_exists('promoted_to_category_frontpage', $_POST)
+                && $_POST['promoted_to_category_frontpage']
+                && !$article->isInFrontpageOfCategory($_POST['category'])
+            ) {
+                $article->promoteToCategoryFrontpage($_POST['category']);
+            }
+
+            Application::forward(
+                $_SERVER['SCRIPT_NAME']
+                .'?action=read&category='.$_SESSION['_from']
+                .'&id='.$article->id
+            );
 
          break;
 
