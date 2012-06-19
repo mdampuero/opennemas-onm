@@ -33,13 +33,13 @@
 				{acl isAllowed="VIDEO_CREATE"}
                 <li class="separator"></li>
 				<li>
-					<a href="{$smarty.server.SCRIPT_NAME}?action=selecttype&category={$category}" accesskey="N" tabindex="1">
+					<a href="{url name=admin_videos_create category=$category}" accesskey="N" tabindex="1">
 						<img border="0" src="{$params.IMAGE_DIR}/video.png" title="Nuevo Video" alt="Nuevo Video"><br />{t}New video{/t}
 					</a>
 				</li>
 				{/acl}
                 {acl isAllowed="VIDEO_WIDGET"}
-                     {if $category eq 'widget'}
+                    {if $category eq 'widget'}
                         <li class="separator"></li>
                         <li>
                             <a href="#" onClick="javascript:saveSortPositions('{$smarty.server.PHP_SELF}');" title="{t}Save positions{/t}">
@@ -51,7 +51,7 @@
                 {acl isAllowed="VIDEO_SETTINGS"}
                 <li class="separator"></li>
                     <li>
-                        <a href="{$smarty.server.PHP_SELF}?action=config" class="admin_add" title="{t}Config video module{/t}">
+                        <a href="{url name=admin_videos_config}" class="admin_add" title="{t}Config video module{/t}">
                             <img border="0" src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
                             {t}Settings{/t}
                         </a>
@@ -62,23 +62,21 @@
 	</div>
 
     <div class="wrapper-content">
-        {render_messages}
-    </div><!-- / -->
 
-    <div class="wrapper-content">
+        {render_messages}
 
         <ul class="pills clearfix">
             <li>
-                <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=widget" {if $category==='widget'}class="active"{elseif $ca eq $datos_cat[0]->fk_content_category}{*class="active"*}{/if}>WIDGET HOME</a>
+                <a href="{url name=admin_videos_widget}" {if $category === 'widget'}class="active"{elseif $ca eq $datos_cat[0]->fk_content_category}{*class="active"*}{/if}>WIDGET HOME</a>
             </li>
 
             <li>
-                <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=all" {if $category==='all'}class="active"{elseif $ca eq $datos_cat[0]->fk_content_category}{*class="active"*}{/if} >{t}All categories{/t}</a>
+                <a href="{url name=admin_videos category=all}" {if $category==='all'}class="active"{/if} >{t}All categories{/t}</a>
             </li>
 
-            {include file="menu_categories.tpl" home="video.php?action=list"}
+            {include file="menu_categories.tpl" home="{url name=admin_videos a=l}"}
         </ul>
-        {* MENSAJES DE AVISO GUARDAR POS******* *}
+
         <div id="warnings-validation"></div>
 
         <table class="listing-table">
@@ -122,6 +120,7 @@
                     </td>
                     <td class="center">
                         {$videos[c]->created}
+                    </td>
                     </td class="center">
                     {if $category=='widget' || $category=='all'}
                         <td >
@@ -163,7 +162,7 @@
                         <ul class="action-buttons">
                             {acl isAllowed="VIDEO_UPDATE"}
                             <li>
-                                <a href="{$smarty.server.PHP_SELF}?action=read&id={$videos[c]->id}" title="{t}Edit{/t}" >
+                                <a href="{url name=admin_videos_show id=$videos[c]->id}" title="{t}Edit{/t}" >
                                     <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
                             </li>
                             {/acl}

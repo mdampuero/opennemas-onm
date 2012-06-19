@@ -9,19 +9,18 @@
         </label>
         <input type="text" id="video_url" name="video_url" title="Video url"
                 value="{$video->video_url|default:""}" class="required" style="width:60%"
-                onChange="javascript:loadVideoInformation(this.value);"/> &nbsp;
-        <a href="#" class="onm-button blue"
-             onClick="javascript:loadVideoInformation($('video_url').value); return false;">
+                /> &nbsp;
+        <a href="#" class="onm-button blue">
             {t}Get video information{/t}
         </a>
     </td>
 </tr>
-    
+
 <tr>
     <td style="width:100%; padding:10px" colspan="2">
         <div id="video-information">
             {* AJAX LOAD *}
-            {if $smarty.request.action eq "read"}
+            {if isset($video)}
                 {include file="video/partials/_video_information.tpl"}
             {/if}
         </div>

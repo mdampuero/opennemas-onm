@@ -30,7 +30,7 @@
         font-size:13px;
         padding:0 10px;
     }
-    
+
     input[type="text"],
     textarea{
         width:400px;
@@ -39,13 +39,18 @@
 </style>
 {/block}
 
-{block name="header-js" append}
+{block name="footer-js" append}
+    <script>
+    var video_manager_url = {
+        get_information: '{url name=admin_videos_get_info}'
+    }
+    </script>
     {script_tag src="/utilsVideo.js" language="javascript"}
 {/block}
 
 {block name="content"}
 
-<form action="{$smarty.server.PHP_SELF}?action=create" method="post" name="formulario" id="formulario" enctype="multipart/form-data">
+<form action="{url name=admin_videos_create}" method="POST" name="formulario" enctype="multipart/form-data">
 
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
@@ -76,7 +81,7 @@
                 {/if}
                 <li class="separator"></li>
                 <li>
-                    <a href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category|default:""}" value="{t}Go Back{/t}" title="{t}Go Back{/t}">
+                    <a href="{url name=admin_videos category=$category|default:""}" value="{t}Go Back{/t}" title="{t}Go Back{/t}">
                         <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Go Back{/t}" alt="{t}Go Back{/t}" ><br />{t}Go Back{/t}
                     </a>
                 </li>
@@ -158,7 +163,6 @@
 			</table>
 
         <input type="hidden" name="type" value="{$smarty.get.type}">
-		<input type="hidden" id="action" name="action" value="" />
 		<input type="hidden" name="id" id="id" value="{$video->id|default:""}" />
 	</div>
 </form>

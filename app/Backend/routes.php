@@ -88,6 +88,90 @@ $routes->add(
     '/admin'
 );
 
+// Videos controller routes
+$routes->add(
+    'admin_videos',
+    new Route(
+        '/videos',
+        array('_controller' => 'Backend:Controllers:VideosController:list')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_videos_create',
+    new Route(
+        '/videos/create',
+        array('_controller' => 'Backend:Controllers:VideosController:create')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_videos_get_info',
+    new Route(
+        '/videos/get-video-information',
+        array('_controller' => 'Backend:Controllers:VideosController:videoInformation')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_videos_show',
+    new Route(
+        '/videos/{id}/show',
+        array('_controller' => 'Backend:Controllers:VideosController:show')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_videos_update',
+    new Route(
+        '/videos/{id}/update',
+        array('_controller' => 'Backend:Controllers:VideosController:update')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_videos_delete',
+    new Route(
+        '/videos/{id}/delete',
+        array('_controller' => 'Backend:Controllers:VideosController:delete')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_videos_widget',
+    new Route(
+        '/videos/widget',
+        array('_controller' => 'Backend:Controllers:VideosController:widget')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_videos_config',
+    new Route(
+        '/videos/config',
+        array('_controller' => 'Backend:Controllers:VideosController:config')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_videos_category',
+    new Route(
+        '/videos/{$category}',
+        array('_controller' => 'Backend:Controllers:VideosController:list')
+    ),
+    '/admin'
+);
+
+
+
 // Books controller routes
 $routes->add(
     'admin_books_create',

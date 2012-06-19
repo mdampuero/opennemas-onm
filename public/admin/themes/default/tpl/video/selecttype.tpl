@@ -20,7 +20,7 @@
         vertical-align:middle;
         margin-right:10px;
     }
-    .video-type-selector li a { 
+    .video-type-selector li a {
         padding:10px;
         display:block;
         width:100%:
@@ -48,19 +48,19 @@
     <div class="wrapper-content">
         <ul class="video-type-selector">
             <li class="file">
-                <a href="{$smarty.server.PHP_SELF}?action=new&type=file&category={$category}" class="clearfix">
+                <a href="{url name=admin_videos_create type=file category=$category}" class="clearfix">
                     <img src="{$params.IMAGE_DIR}video/video-file-source.png" alt="" />
                     {t}Upload file from my computer{/t}
                 </a>
             </li>
             <li class="web">
-                <a href="{$smarty.server.PHP_SELF}?action=new&type=web-source&category={$category}" class="clearfix">
+                <a href="{url name=admin_videos_create type="web-source" category=$category}" class="clearfix">
                     <img src="{$params.IMAGE_DIR}video/video-web-source.png" alt="" />
                     Link video from other web video services<br>
                 </a>
             </li>
         </ul>
-        
+
 	</div>
 </form>
 {/block}

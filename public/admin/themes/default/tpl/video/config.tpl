@@ -22,7 +22,7 @@
 {/block}
 
 {block name="content"}
-<form action="{$smarty.server.PHP_SELF}" method="POST" name="formulario" id="formulario" {$formAttrs}>
+<form action="{url name=admin_videos_config}" method="POST" name="formulario" id="formulario">
     <div class="top-action-bar">
         <div class="wrapper-content">
             <div class="title"><h2>{t}video :: Configuration{/t}</h2></div>
@@ -66,7 +66,7 @@
                                 <input type="text" class="required" id="name" name="video_settings[total_gallery]" value="{$configs['video_settings']['total_gallery']|default:"20"}" />
                             </div>
                             <br />
-                             
+
                         </div>
                     </td>
                     <td> <br/>
