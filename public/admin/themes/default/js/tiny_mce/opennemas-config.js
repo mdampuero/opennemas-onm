@@ -105,6 +105,10 @@ OpenNeMas.tinyMceConfig = {
         document_base_url: '/',
         convert_urls : false,
 
+        // Paste as plain text settings
+        paste_text_use_dialog : true,
+        paste_text_linebreaktype : "p",
+
         /* external_image_list_url : "/admin/external_images.js",
         media_external_list_url : "/admin/external_media.js", */
 
