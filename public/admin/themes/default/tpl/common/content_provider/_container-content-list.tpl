@@ -21,6 +21,7 @@
                 <span class="type">{t}{$contents[n]->content_type_name|ucwords}{/t} -</span>
                 <span class="date">{t}{$contents[n]->starttime|date_format:"%d-%m-%Y"}{/t} -</span>
                 {$contents[n]->title}
+                <span class="icon"><i class="icon-trash"></i></span>
             </li>
         {/section}
     </ul>

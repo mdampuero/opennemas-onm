@@ -116,6 +116,7 @@ jQuery(function($) {
 
     });
 
+
     jQuery("modal-add-label").modal({
         backdrop: 'static', //Show a grey back drop
         keyboard: true, //Can close on escape
@@ -138,7 +139,7 @@ jQuery(function($) {
                 '" class="container-receiver active"><div class="container-label"><span>' +
                 label +'</span> <div class="container-buttons btn-group">' +
                 ' <i class="icon-chevron-down"></i><i class="icon-pencil"></i>' +
-                ' <i class="icon-trash"></i> </div> </div>' +
+                ' <i class="icon-trash"></i> <i class="icon-clean"></i> </div> </div>' +
                 ' <ul class="content-receiver"> </ul> </div>');
 
 
@@ -207,11 +208,21 @@ jQuery(function($) {
 
     });
 
+    jQuery('div#newsletter-container').on('click','.container-label .icon-clean', function() {
 
+        container =  jQuery(this).parent().parent().parent();
+        jQuery(container).find('ul li').remove();
+
+    });
+
+    jQuery('div#newsletter-container').on('click','span.icon .icon-trash', function() {
+
+        item =  jQuery(this).parent().parent();
+        jQuery("div#newsletter-container ul.content-receiver").find(item).remove();
+
+    });
 
 });
-
-
 
 
 /*****************************************************************************/
