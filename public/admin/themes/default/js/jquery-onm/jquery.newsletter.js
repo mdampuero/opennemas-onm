@@ -69,7 +69,6 @@ addSelectedItems  = (function () {
                 item.removeClass('ui-state-disabled');
                 jQuery('div#newsletter-container div.active ul.content-receiver').append(item);
             }
-
         });
 
         jQuery('ul#contentList li').find('input:checked').prop("checked", false);
@@ -209,16 +208,11 @@ jQuery(function($) {
 
     jQuery("div#newsletter-container").on('click','.container-label .icon-chevron-down', function(i, item) {
         var ul = jQuery(this).closest('div.container-receiver').find('ul.content-receiver');
-        jQuery(ul).toggle("blind");
-
         if(jQuery(ul).css('display') == 'none') {
-            jQuery(ul).sortable( "disable" );
-
+          jQuery(ul).show().sortable('enable')
         } else {
-            jQuery(ul).sortable( "enable" );
-
+          jQuery(ul).hide().sortable('disable');
         }
-
 
 
     });
