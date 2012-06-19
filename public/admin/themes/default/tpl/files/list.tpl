@@ -5,10 +5,10 @@
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
         <div class="title"><h2>{t}Files manager :: {/t}{if $category eq '0'}{t}General statistics{/t}{else}{$datos_cat[0]->title}{/if}</h2></div>
-        {if $category!=0}
+        {if $category != ''}
         <ul class="old-button">
             <li>
-				<a href="{$smarty.server.PHP_SELF}?action=upload&amp;category={$category}&amp;op=view" title="{t}Upload file{/t}">
+				<a href="{url name=admin_files_create category=$category page=$page}" title="{t}Upload file{/t}">
 					<img src="{$params.IMAGE_DIR}upload.png" border="0" /><br />
 					{t}Upload file{/t}
 				</a>
@@ -39,10 +39,13 @@
 <div class="wrapper-content">
     <ul class="pills">
         <li>
-            <a href="{url name=admin_files_statistics}" id="link_global" {if $category eq '0'}class="active"{/if}>{t}Statistics{/t}</a>
+            <a href="{url name=admin_files_statistics}" id="link_global" >{t}Statistics{/t}</a>
         </li>
         <li>
             <a href="{url name=admin_files_widget}" {if $category eq 'widget'}class="active"{/if}>{t}WIDGET HOME{/t}</a>
+        </li>
+        <li>
+            <a href="{url name=admin_files}" {if $category eq 0}class="active"{/if}>{t}All{/t}</a>
         </li>
         {include file="menu_categories.tpl" home="{url name=admin_files action=list}"}
     </ul>
@@ -53,13 +56,13 @@
 		<thead>
 			<tr>
                 <th style="width:15px;"><input type="checkbox" id="toggleallcheckbox"></th>
-				<th>{t}Title{/t}</th>
-				<th>{t}Path{/t}</th>
-				<th class="center" style="width:40px">{t}Availability{/t}</th>
-                {if $category!='widget'} <th class="center" style="width:35px;">{t}Favorite{/t}</th>{/if}
-                <th class="center" style="width:35px;">{t}Home{/t}</th>
-                <th class="center" style="width:40px">{t}Published{/t}</th>
-				<th style="width:100px">{t}Actions{/t}</th>
+                <th style="width:20px">{t}Path{/t}</th>
+                <th>{t}Title{/t}</th>
+                <th style="width:80px" class="center">{t}Category{/t}</th>
+                {if $category!='widget'} <th class="center" style="width:20px;">{t}Favorite{/t}</th>{/if}
+                <th class="center" style="width:20px;">{t}Home{/t}</th>
+                <th class="center" style="width:20px">{t}Published{/t}</th>
+				<th style="width:100px" class="center">{t}Actions{/t}</th>
 			</tr>
 		</thead>
 
@@ -67,55 +70,51 @@
 			{section name=c loop=$attaches}
 			 <tr data-id="{$attaches[c]->id}">
                 <td class="center">
-                        <input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$attaches[c]->id}"  style="cursor:pointer;" >
+                    <input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$attaches[c]->id}"  style="cursor:pointer;" >
+                </td>
+                <td>
+                    <a href="{$smarty.const.INSTANCE_MEDIA}{$smarty.const.FILE_DIR}{$attaches[c]->path}" target="_blank">
+                        {t}[Link]{/t}
+                    </a>
                 </td>
                 <td>
 					{$attaches[c]->title|clearslash}
 				</td>
-				<td>
-                    <a href="{$smarty.const.INSTANCE_MEDIA}{$smarty.const.FILE_DIR}{$attaches[c]->path}" target="_blank">
-					    {$smarty.const.INSTANCE_MEDIA}{$smarty.const.FILE_DIR}{$attaches[c]->path}
-                    </a>
-				</td>
-				<td class="center">
-					{if $status[c] eq 1}
-						<img src="{$params.IMAGE_DIR}publish_g.png"  border="0" alt="Si"/>
-					{else}
-						<img src="{$params.IMAGE_DIR}icon_aviso.gif" border="0" alt="No" />
-					{/if}
-				</td>
+                <td class="center">
+                    {$attaches[c]->category_name|clearslash}
+                </td>
                 {if $category != 'widget'}
                 <td class="center">
-                    {acl isAllowed="FILE_AVAILABLE"}
-                        {if $attaches[c]->favorite == 1}
-                           <a href="{$smarty.server.PHP_SELF}?id={$attaches[c]->id}&amp;action=change_favorite&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="favourite_on" title="{t}Take out from frontpage{/t}"></a>
-                        {else}
-                            <a href="{$smarty.server.PHP_SELF}?id={$attaches[c]->id}&amp;action=change_favorite&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="favourite_off" title="{t}Put in frontpage{/t}"></a>
-                        {/if}
-                    {/acl}
+                {acl isAllowed="FILE_AVAILABLE"}
+                    {if $attaches[c]->favorite == 1}
+                       <a href="{url name=admin_files_toggle_favorite id=$attaches[c]->id status=0 category=$category page=$paginacion->_currentPage|default:0}" class="favourite_on" title="{t}Take out from frontpage{/t}"></a>
+                    {else}
+                        <a href="{url name=admin_files_toggle_favorite id=$attaches[c]->id status=1 category=$category page=$paginacion->_currentPage|default:0}" class="favourite_off" title="{t}Put in frontpage{/t}"></a>
+                    {/if}
+                {/acl}
                 </td>
                 {/if}
                 <td class="center">
-                    {acl isAllowed="FILE_AVAILABLE"}
-                        {if $attaches[c]->in_home == 1}
-                           <a href="{$smarty.server.PHP_SELF}?id={$attaches[c]->id}&amp;action=change_inHome&amp;status=0&amp;category={$category}&amp;page={$page|default:0}" class="no_home" title="{t}Take out from home{/t}"></a>
-                        {else}
-                            <a href="{$smarty.server.PHP_SELF}?id={$attaches[c]->id}&amp;action=change_inHome&amp;status=1&amp;category={$category}&amp;page={$page|default:0}" class="go_home" title="{t}Put in home{/t}"></a>
-                        {/if}
-                    {/acl}
+                {acl isAllowed="FILE_AVAILABLE"}
+                    {if $attaches[c]->in_home == 1}
+                        <a href="{url name=admin_files_toggle_in_home id=$attaches[c]->id status=0 category=$category page=$paginacion->_currentPage|default:0}" class="no_home" title="{t}Take out from home{/t}"></a>
+                    {else}
+                        <a href="{url name=admin_files_toggle_in_home id=$attaches[c]->id status=0 category=$category page=$paginacion->_currentPage|default:0}" class="go_home" title="{t}Put in home{/t}"></a>
+                    {/if}
+                {/acl}
                 </td>
-                <td align="center">
-                    {acl isAllowed="FILE_AVAILABLE"}
-                        {if $attaches[c]->available == 1}
-                            <a href="?id={$attaches[c]->id}&amp;action=change_status&amp;status=0&amp;page={$paginacion->_currentPage}&amp;category={$category}" title="Publicado">
-                                <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" />
-                            </a>
-                        {else}
-                            <a href="?id={$attaches[c]->id}&amp;action=change_status&amp;status=1&amp;page={$paginacion->_currentPage}&amp;category={$category}" title="Pendiente">
-                                <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" />
-                            </a>
-                        {/if}
-                    {/acl}
+                <td class="center">
+                {acl isAllowed="FILE_AVAILABLE"}
+                    {if $attaches[c]->available == 1}
+                        <a href="{url name=admin_files_toggle_available id=$attaches[c]->id status=0 category=$category page=$paginacion->_currentPage|default:0}" title="Publicado">
+                            <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" />
+                        </a>
+                    {else}
+                        <a href="{url name=admin_files_toggle_available id=$attaches[c]->id status=1 category=$category page=$paginacion->_currentPage|default:0}" title="Pendiente">
+                            <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" />
+                        </a>
+                    {/if}
+                {/acl}
                 </td>
 				<td class="center">
                     <div class="btn-group">
@@ -125,9 +124,9 @@
                             </a>
                         {/acl}
                         {acl isAllowed="FILE_DELETE"}
-                            <a class="btn btn-danger" data-controls-modal="modal-from-dom"
-                               data-id="{$attaches[c]->id}"
-                               data-title="{$attaches[c]->title|capitalize}"  href="#" >
+                            <a class="btn btn-danger del"
+                               data-url="{url name=admin_files_delete id=$attaches[c]->id}"
+                               data-title="{$attaches[c]->title|capitalize}"  href="{url name=admin_files_delete id=$attaches[c]->id}" >
                                 <i class="icon-trash icon-white"></i>
                             </a>
                         {/acl}
@@ -144,7 +143,7 @@
 		</tbody>
 		<tfoot>
 			<tr>
-				<td colspan="8" class="pagination">
+				<td colspan="9" class="pagination">
 					{$pagination->links}
                     &nbsp;
 				</td>
@@ -152,14 +151,10 @@
 		</tfoot>
 	</table>
 
-	<div id="adjunto" class="adjunto"></div>
 
 	</div>
 
     <input type="hidden" name="category" id="category" value="{$category}" />
-    <input type="hidden" id="status" name="status" value="" />
-    <input type="hidden" id="action" name="action" value="" />
-    <input type="hidden" name="id" id="id" value="{$id|default:""}" />
 
     <script>
         jQuery('#buton-batchnoFrontpage').on('click', function(){
@@ -175,7 +170,6 @@
             e.preventDefault();
         });
     </script>
-</div>
 </form>
 {include file="files/modals/_modalDelete.tpl"}
 {include file="files/modals/_modalBatchDelete.tpl"}

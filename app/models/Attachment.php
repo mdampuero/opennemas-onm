@@ -205,7 +205,6 @@ class Attachment extends Content
             MEDIA_PATH.DIRECTORY_SEPARATOR.FILE_DIR.'/'.$dirDateComponent;
 
         $filename   = $mediaPath.'/'.$this->path;
-
         if (file_exists($filename)) {
             unlink($filename);
         }

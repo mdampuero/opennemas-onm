@@ -414,7 +414,7 @@ div.overlay {
 
 a.go_home {
   background-image: url("../images/home_no.png");
-  display: block;
+  display: inline-block;
   width: 16px;
   height: 16px;
 }
@@ -428,7 +428,7 @@ a.go_home:hover {
 
 a.no_home {
   background-image: url("../images/gohome.png");
-  display: block;
+  display: inline-block;
   width: 16px;
   height: 16px;
 }
@@ -442,7 +442,7 @@ a.no_home:hover {
 
 a.no_suggest {
   background-image: url("../images/gosuggesthome.png");
-  display: block;
+  display: inline-block;
   width: 20px;
   height: 20px;
 }
@@ -457,7 +457,7 @@ a.no_suggest:hover {
 
 a.favourite_on {
   background-image: url("../images/selected.png");
-  display: block;
+  display: inline-block;
   width: 17px;
   height: 17px;
     display:inline-block;
@@ -473,7 +473,7 @@ a.favourite_on:hover {
 
 a.favourite_off {
   background-image: url("../images/no_selected.png");
-    display:inline-block;
+  display:inline-block;
   width: 17px;
   height: 17px;
 }

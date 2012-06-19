@@ -19,27 +19,21 @@ jQuery("#modal-file-delete").modal({
     keyboard: true //Can close on escape
 });
 
-jQuery('.del').click(function(e) {
+jQuery('.del').click(function(e, ui) {
+    e.preventDefault();
     jQuery('#modal-file-delete .modal-body span').html( jQuery(this).data('title') );
     //Sets up the modal
     jQuery("#modal-file-delete ").modal('show');
-    jQuery("body").data("selected-for-del", jQuery(this).data("id"));
-    e.preventDefault();
+    jQuery("body").data("selected-for-del", jQuery(this).data("url"));
+    log(jQuery('#modal-file-delete .modal-body span').html());
 });
 
-jQuery('#modal-file-delete a.btn.yes').on('click', function(){
-    var delId = jQuery("body").data("selected-for-del");
-    if(delId) {
-        jQuery.ajax({
-            url:  "{$smarty.server.SCRIPT_NAME}",
-            type: "POST",
-            data: { action:"delete", id:delId },
-            success: function(){
-                location.reload();
-            }
-        });
-    }
+jQuery('#modal-file-delete a.btn.yes').on('click', function(e, ui){
     e.preventDefault();
+    var delId = jQuery("body").data("selected-for-del");
+    if ( delId ) {
+        location.href = delId;
+    }
 });
 
 jQuery('#modal-file-delete a.btn.no').on('click', function(e){

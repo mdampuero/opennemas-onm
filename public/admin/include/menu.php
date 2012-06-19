@@ -124,7 +124,7 @@ $menuXml = '<?xml version="1.0"?>
             privilege="FILE_ADMIN"
             title="'.htmlspecialchars(_("Files"), ENT_QUOTES).'"
             id="file_manager"
-            link="/admin/controllers/files/files.php"
+            link="'.url('admin_files').'"
         />
         <node
             module_name="VIDEO_MANAGER"

@@ -51,9 +51,77 @@ class FilesController extends Controller
      **/
     public function createAction()
     {
-        $content = 'default content';
+        \Acl::checkOrForward('FILE_CREATE');
 
-        return new Response($content);
+        if ('POST' != $this->request->getMethod()) {
+            $this->view->assign('category', $this->category);
+
+            return $this->render('files/form.tpl');
+        } else {
+            set_time_limit(0);
+            ini_set('upload_max_filesize', 20 * 1024 * 1024 );
+            ini_set('post_max_size', 20 * 1024 * 1024 );
+            ini_set('file_uploads', 'On'  );
+
+            require_once 'attachments_events.php';
+
+            $this->view->assign('filterRegexp', '/^[a-z0-9\-_]+\.[a-z0-9]{2,4}$/i');
+
+            if (isset($_FILES['path']['name'])
+               && !empty($_FILES['path']['name'])
+            ) {
+                $directoryDate = date("/Y/m/d/");
+                $basePath = MEDIA_PATH.'/'.FILE_DIR.$directoryDate ;
+
+                $fileName = $_FILES['path']['name'];
+                $fileType = $_FILES['path']['type'];
+                $fileSize = $_FILES['path']['size'];
+                $fileName = preg_replace('/[^a-z0-9_\-\.]/i', '-', strtolower($fileName));
+
+                $data = array(
+                    'title'        => $request->request->filter('title', null, FILTER_SANITIZE_STRING),
+                    'path'         => $directoryDate.$fileName,
+                    'category'     => $this->category,
+                    'available'    => 1,
+                    'description'  => $request->request->filter('description', null, FILTER_SANITIZE_STRING),
+                    'metadata'     => \StringUtils::get_tags(),
+                    'fk_publisher' => $_SESSION['userid'],
+                );
+
+                // Create folder if it doesn't exist
+                if (!file_exists($basePath)) {
+                    mkdir($basePath, 0777, true);
+                }
+
+                // Move uploaded file
+                $uploadStatus = move_uploaded_file($_FILES['path']['tmp_name'], $basePath.$fileName);
+
+                if ($uploadStatus !== false) {
+                    $attachment = new \Attachment();
+                    if ($attachment->create($data)) {
+                        m::add(_("File created successfuly."), m::SUCCESS);
+
+                    } else {
+                        m::add(_('Unable to upload the file: A file with the same name already exists.'), m::ERROR);
+                    }
+                } else {
+                    m::add(_(
+                        'There was an error while uploading the file. <br />'
+                        .'Please, contact your system administrator.'),
+                        m::ERROR
+                    );
+                }
+                return $this->redirect($this->generateUrl(
+                    'admin_files',
+                    array(
+                        'category' => $this->category,
+                    )
+                ));
+
+            } elseif (!isset($_GET['op'])) {
+                m::add(_('Please select a file before send the form'), m::ERROR);
+            }
+        }
     }
 
     /**
@@ -250,7 +318,7 @@ class FilesController extends Controller
 
         // Show the
         return $this->render('files/form.tpl', array(
-            'attaches' => $attaches
+            'attaches' => $attaches,
         ));
     }
 
@@ -279,6 +347,132 @@ class FilesController extends Controller
             array(
                 'category' => $category,
                 'page'     => $page
+            )
+        ));
+    }
+
+    /**
+     * Deletes a file given its id
+     *
+     * @return Response the response object
+     **/
+    public function deleteAction()
+    {
+        \Acl::checkOrForward('FILE_DELETE');
+
+        $id = $this->request->query->getDigits('id');
+
+        if (is_null($id)){
+            m::add(sprintf(_("Unable to find the file with the id '%d'."), $id), m::ERROR);
+            return $this->redirect($this->generateUrl('admin_files'));
+        }
+        $att = new \Attachment($id);
+
+        //Delete relations
+        $rel= new \RelatedContent();
+        $rel->deleteAll($id);
+
+        $att->delete($id , $_SESSION['userid']);
+        m::add(sprintf(_("File with id '%d' deleted successfuly."), $id), m::SUCCESS);
+
+        return $this->redirect($this->generateUrl(
+            'admin_files' ,
+            array(
+                'category' => $att->category
+            )
+        ));
+    }
+
+    /**
+     * Toggles the content favorite state given the content id
+     *
+     * @return Response the response object
+     **/
+    public function toggleFavoriteAction()
+    {
+        \Acl::checkOrForward('FILE_AVAILABLE');
+
+        $id     = $this->request->query->getDigits('id');
+        $page   = $this->request->query->getDigits('page', 0);
+        $status = $this->request->query->getDigits('status', 0);
+        $file   = new \Attachment($id);
+
+        if (!is_null($file->id)) {
+            if ($file->available == 1) {
+                $file->set_favorite($status);
+            } else {
+                m::add(_("This file is not published so you can't define it as favorite."));
+            }
+        } else {
+            m::add(sprintf(_("Unable to find the file with id '%d'"), $id), m::ERROR);
+        }
+
+        return $this->redirect($this->generateUrl(
+            'admin_files',
+            array(
+                'category' => $this->category,
+                'page'     => $page,
+            )
+        ));
+    }
+
+    /**
+     * Toggles the in home state given the content id
+     *
+     * @return Response the response object
+     **/
+    public function toggleInHomeAction()
+    {
+        \Acl::checkOrForward('FILE_AVAILABLE');
+
+        $id     = $this->request->query->getDigits('id');
+        $page   = $this->request->query->getDigits('page', 0);
+        $status = $this->request->query->getDigits('status', 0);
+        $file   = new \Attachment($id);
+
+        if (!is_null($file->id)) {
+            if ($file->available == 1) {
+                $file->set_inhome($status, $_SESSION['userid']);
+            } else {
+                m::add(_("This file is not published so you can't define it as widget home content."));
+            }
+        } else {
+            m::add(sprintf(_("Unable to find the file with id '%d'"), $id), m::ERROR);
+        }
+
+        return $this->redirect($this->generateUrl(
+            'admin_files',
+            array(
+                'category' => $this->category,
+                'page'     => $page,
+            )
+        ));
+    }
+    /**
+     * Toggles the available status given the content id
+     *
+     * @return Response the response object
+     **/
+    public function toggleAvailableAction()
+    {
+        \Acl::checkOrForward('FILE_AVAILABLE');
+
+        $id     = $this->request->query->getDigits('id');
+        $page   = $this->request->query->getDigits('page', 0);
+        $status = $this->request->query->getDigits('status', 0);
+        $file   = new \Attachment($id);
+
+        if (!is_null($file->id)) {
+            $file->set_available($status, $_SESSION['userid']);
+        } else {
+            m::add(sprintf(_("Unable to find the file with id '%d'"), $id), m::ERROR);
+        }
+
+        return $this->redirect($this->generateUrl(
+            'admin_files',
+            array(
+                'category' => $this->category,
+                'page'     => $page,
             )
         ));
     }

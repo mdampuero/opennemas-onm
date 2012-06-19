@@ -88,7 +88,7 @@ $routes->add(
     '/admin'
 );
 
-
+// Books controller routes
 $routes->add(
     'admin_books_create',
     new Route(
@@ -107,7 +107,6 @@ $routes->add(
     '/admin'
 );
 
-// Search controller routes
 $routes->add(
     'admin_books',
     new Route(
@@ -120,7 +119,7 @@ $routes->add(
     '/admin'
 );
 
-// Search controller routes
+// Files controller routes
 $routes->add(
     'admin_files_statistics',
     new Route(
@@ -132,7 +131,6 @@ $routes->add(
     '/admin'
 );
 
-// Search controller routes
 $routes->add(
     'admin_files_widget',
     new Route(
@@ -144,7 +142,17 @@ $routes->add(
     '/admin'
 );
 
-// Search controller routes
+$routes->add(
+    'admin_files_create',
+    new Route(
+        '/files/create',
+        array(
+            '_controller' => 'Backend:Controllers:FilesController:create',
+        )
+    ),
+    '/admin'
+);
+
 $routes->add(
     'admin_files_show',
     new Route(
@@ -156,7 +164,6 @@ $routes->add(
     '/admin'
 );
 
-// Search controller routes
 $routes->add(
     'admin_files_update',
     new Route(
@@ -168,7 +175,50 @@ $routes->add(
     '/admin'
 );
 
-// Search controller routes
+$routes->add(
+    'admin_files_delete',
+    new Route(
+        '/files/{id}/delete',
+        array(
+            '_controller' => 'Backend:Controllers:FilesController:delete',
+        )
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_files_toggle_favorite',
+    new Route(
+        '/files/{id}/toggle-favorite',
+        array(
+            '_controller' => 'Backend:Controllers:FilesController:toggleFavorite',
+        )
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_files_toggle_in_home',
+    new Route(
+        '/files/{id}/toggle-in-home',
+        array(
+            '_controller' => 'Backend:Controllers:FilesController:toggleInHome',
+        )
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_files_toggle_available',
+    new Route(
+        '/files/{id}/toggle-available',
+        array(
+            '_controller' => 'Backend:Controllers:FilesController:toggleAvailable',
+        )
+    ),
+    '/admin'
+);
+
 $routes->add(
     'admin_files',
     new Route(

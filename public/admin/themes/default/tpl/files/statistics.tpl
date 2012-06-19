@@ -11,10 +11,13 @@
 <div class="wrapper-content">
     <ul class="pills">
         <li>
-            <a href="{url name=admin_files_statistics}" id="link_global" {if $category eq '0'}class="active"{/if}>{t}Statistics{/t}</a>
+            <a href="{url name=admin_files_statistics}" id="link_global" class="active">{t}Statistics{/t}</a>
         </li>
         <li>
-            <a href="{url name=admin_files_widget}" {if $category eq 'widget'}class="active"{/if}>{t}WIDGET HOME{/t}</a>
+            <a href="{url name=admin_files_widget}" >{t}WIDGET HOME{/t}</a>
+        </li>
+        <li>
+            <a href="{url name=admin_files}">{t}All{/t}</a>
         </li>
         {include file="menu_categories.tpl" home="{url name=admin_files action=list}"}
     </ul>
