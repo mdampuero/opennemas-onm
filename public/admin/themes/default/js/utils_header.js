@@ -1,5 +1,3 @@
-
-
 var objForm = null;
 var dialogo = null;
 var editores = null;
@@ -7,7 +5,7 @@ var editores = null;
 function enviar(elto, trg, acc, id) {
     var parentEl = elto.parentNode;
 
-    while(parentEl.nodeName != "FORM") {
+    while (parentEl.nodeName != "FORM") {
         parentEl = parentEl.parentNode;
     }
 
@@ -15,7 +13,7 @@ function enviar(elto, trg, acc, id) {
     parentEl.action.value = acc;
     parentEl.id.value = id;
 
-    if(objForm != null) {
+    if (objForm !== null) {
         objForm.submit();
     } else {
         parentEl.submit();
@@ -26,16 +24,15 @@ function validateForm(formID)
 {
     var checkForm = new Validation(formID, {immediate:true, onSubmit:true});
     if(!checkForm.validate()) {
-        if($$('.validation-advice')) {
-            if($('warnings-validation')) {
-                $('warnings-validation').update('Existen campos sin cumplimentar o errores en el formulario. Por favor, revise todas las pestañas.');
-                new Effect.Highlight('warnings-validation');
+        if(jQuery('.validation-advice')) {
+            if (jQuery('#warnings-validation')) {
+                jQuery('#warnings-validation').html('Existen campos sin cumplimentar o errores en el formulario. Por favor, revise todas las pestañas.');
             }
         }
         return false;
     } else {
-        if($$('.validation-advice') && $('warnings-validation')) {
-            $('warnings-validation').setStyle({display: 'none'});
+        if (jQuery('.validation-advice') && jQuery('#warnings-validation')) {
+            jQuery('#warnings-validation').html('');
         }
     }
     return true;
@@ -48,26 +45,6 @@ function sendFormValidate(elto, trg, acc, id, formID)
 
     enviar(elto, trg, acc, id);
 }
-
-function onSearchKeyEnter(e, elto, trg, acc, id)
-{
-    ekey = (document.all) ? e.keyCode : e.which;
-    if (ekey==13)
-    {
-        return enviar(elto, trg, acc, id);
-    }
-}
-
-function onSearchAdvKeyEnter(e, id, checked)
-{
-    ekey = (document.all) ? e.keyCode : e.which;
-    if (ekey==13)
-    {
-        Effect.Appear('search-div2');
-        return search_adv(id, $('stringSearch').value,1,checked);
-    }
-}
-
 function preview(elto, trg, acc, id)
 {
     this.blur();
@@ -90,8 +67,8 @@ function confirmarDelComment(elto, id) {
 
 
 function confirmar_hemeroteca(eleto,category, id) {
-    if(confirm('¿Está seguro de enviarlo a hemeroteca?')){
-        if(id==0){
+    if (confirm('¿Está seguro de enviarlo a hemeroteca?')){
+        if(id === 0){
             enviar2(eleto, '_self', 'mstatus', 0);
         }else{
             var ruta='article.php?id='+id+'&action=change_status&status=0&category='+category+' ';
@@ -107,23 +84,27 @@ function enviar2(elto, trg, acc, id) {
     var arreglo = $A(Lista);
     var alguno=0;
     arreglo.each(function(el, indice) {
-        if(document.getElementById(el.id).checked!=false){
+        if (document.getElementById(el.id).checked !== false){
           alguno=1;
         }
     });
 
     if ((alguno != 1) && (id != 6)){
         alert("No hay ninguna noticia seleccionada");
-    }else{
-        if((acc=='mdelete') || (acc=='mremove')){
-            if(id == 6){
-                var res = confirm('¿Está seguro de eliminar TODOS los elementos?');
-            }else{
-                var res = confirm('¿Está seguro de eliminar esos elementos?');
-            }
-            if(res) {
+    } else {
+        var parentEl;
 
-                var parentEl = elto.parentNode;
+        if ((acc=='mdelete') || (acc=='mremove')){
+            var res;
+            if(id == 6){
+                res = confirm('¿Está seguro de eliminar TODOS los elementos?');
+            }else{
+                res = confirm('¿Está seguro de eliminar esos elementos?');
+            }
+
+            if (res) {
+
+                parentEl = elto.parentNode;
 
                 while(parentEl.nodeName != "FORM") {
                     parentEl = parentEl.parentNode;
@@ -133,57 +114,21 @@ function enviar2(elto, trg, acc, id) {
                 parentEl.action.value = acc;
                 parentEl.id.value = id;
 
-                if(objForm != null) {
+                if (objForm !== null) {
                     objForm.submit();
                 } else {
                     parentEl.submit();
                 }
             }
         } else {
-
-            var parentEl = elto.parentNode;
-            while(parentEl.nodeName != "FORM") {
+            parentEl = elto.parentNode;
+            while (parentEl.nodeName != "FORM") {
                   parentEl = parentEl.parentNode;
             }
 
-            parentEl.target = trg;
+            parentEl.target       = trg;
             parentEl.action.value = acc;
-            parentEl.id.value = id;
-
-            if(objForm != null) {
-                objForm.submit();
-            } else {
-                parentEl.submit();
-            }
-
-        }
-    }
-}
-
-//Desde papelera litter
-function enviar3(elto, trg, acc, id) {
-    var Lista=document.getElementsByClassName('minput');
-    var arreglo = $A(Lista);
-    var alguno=0;
-    arreglo.each(function(el, indice) {
-        if(document.getElementById(el.id).checked !== false){
-          alguno=1;
-        }
-    });
-    if (alguno != 1){
-        alert("No hay ninguna elemento seleccionada");
-    }else{
-      if(acc=='mremove'){
-        if(confirm('¿Está seguro de eliminar definitivamente esos elementos?'))
-        {
-            var parentEl = elto.parentNode;
-            while(parentEl.nodeName != "FORM") {
-                parentEl = parentEl.parentNode;
-            }
-
-            parentEl.target = trg;
-            parentEl.action.value = acc;
-            parentEl.id.value = id;
+            parentEl.id.value     = id;
 
             if (objForm !== null) {
                 objForm.submit();
@@ -191,22 +136,6 @@ function enviar3(elto, trg, acc, id) {
                 parentEl.submit();
             }
         }
-      }else{
-            var parentEl = elto.parentNode;
-            while(parentEl.nodeName != "FORM") {
-                parentEl = parentEl.parentNode;
-            }
-
-            parentEl.target = trg;
-            parentEl.action.value = acc;
-            parentEl.id.value = id;
-
-            if (objForm !== null) {
-                objForm.submit();
-            } else {
-                parentEl.submit();
-            }
-      }
     }
 }
 
