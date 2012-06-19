@@ -102,6 +102,12 @@ switch($action) {
      * Step: list all contents
      */
     case 'addContents':
+        if (array_key_exists('data-newsletter', $_SESSION)) {
+            $_SESSION['data-newsletter'] = null;
+        }
+        if (array_key_exists('newsletterHtml', $_SESSION)) {
+            $_SESSION['newsletterHtml']  = null;
+        }
     case 'updateContents':
         //Get saved newsletters
         $newsletter       = new NewNewsletter();

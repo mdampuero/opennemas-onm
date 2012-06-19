@@ -26,13 +26,11 @@ jQuery('#savedNewsletter').on('click','#load-saved', function() {
 
 saveNewsletter = (function() {
 
-    var els = [];
+    var els = new Array();
 
    jQuery('div#newsletter-container').find('div.container-receiver').each(function (index, cont) {
-
-        var lis = [];
+       var lis = new Array();
         jQuery(cont).find('li').each(function(i, item) {
-
             lis.push({
                 'id' : jQuery(item).data('id'),
                 'title': jQuery(item).data('title'),
@@ -41,7 +39,6 @@ saveNewsletter = (function() {
             });
         });
 
-
         els.push({
             'id' : jQuery(cont).data('id'),
             'title': jQuery(cont).data('title'),
@@ -49,10 +46,11 @@ saveNewsletter = (function() {
             'position': (index+1),
             'items': lis,
         });
+
     });
-
+   log(els);
+   alert('sdfdsfdsf');
     var encodedContents = JSON.stringify(els);
-
     jQuery('textarea#newsletterContent').text(encodedContents);
 
     return encodedContents;
@@ -65,12 +63,19 @@ addSelectedItems  = (function () {
         jQuery("#modal-container-active").modal('show');
     } else {
         jQuery('ul#contentList li').find('input:checked').each(function() {
-
-            item =  jQuery(this).parent();
-            jQuery('div#newsletter-container div.active ul.content-receiver').append(item);
+            if(this.checked == true) {
+                jQuery(this).prop("checked", false);
+                item =  jQuery(this).parent();
+                item.draggable("disable");
+                item.removeClass('ui-state-disabled');
+                jQuery('div#newsletter-container div.active ul.content-receiver').append(item);
+            }
 
         });
+
+        jQuery('ul#contentList li').find('input:checked').prop("checked", false);
         jQuery('input#toggleallcheckbox').prop("checked", false);
+
     }
 });
 
@@ -204,7 +209,18 @@ jQuery(function($) {
     });
 
     jQuery("div#newsletter-container").on('click','.container-label .icon-chevron-down', function(i, item) {
-        jQuery(this).closest('div.container-receiver').find('ul.content-receiver').toggle("blind");
+        var ul = jQuery(this).closest('div.container-receiver').find('ul.content-receiver');
+        jQuery(ul).toggle("blind");
+
+        if(jQuery(ul).css('display') == 'none') {
+            jQuery(ul).sortable( "disable" );
+
+        } else {
+            jQuery(ul).sortable( "enable" );
+
+        }
+
+
 
     });
 
@@ -274,7 +290,7 @@ function saveChanges() {
         OpenNeMas.tinyMceFunctions.destroy( 'htmlContent' );
     }
     var htmlContent = jQuery('div#content').find('div#htmlContent').html();
-    log(htmlContent);
+
     setTimeout(function () {
 
         jQuery.ajax({
