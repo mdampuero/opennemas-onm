@@ -49,10 +49,15 @@ class ErrorController extends Controller
 
         switch ($name) {
             case 'ResourceNotFoundException':
-                $errorMessage = 'Resource path not found';
+                $trace = $error->getTrace();
+                $path = $trace[0]['args'][0];
+
+                $errorMessage = sprintf('Resource path "%s" not found', $path);
+                error_log('File not found: '.$path);
                 $content = $this->renderView(
                     'error/404.tpl',
                     array(
+                        'message' => $errorMessage,
                         'error' => $error,
                         'environment' => $environment,
                         'backtrace' => array_reverse($error->getTrace()),
@@ -61,7 +66,7 @@ class ErrorController extends Controller
                 break;
 
             default:
-                // Change this handle to a more generic error handler
+                // Change this handle to a more generic error template
                 $content = $this->renderView(
                     'error/404.tpl',
                     array(
