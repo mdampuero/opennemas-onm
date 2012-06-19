@@ -36,8 +36,9 @@
     }
     .error-trace .backtrace table {
         display:block; font-family:monospace; border:1px solid #888;
-        width:100%; padding:0; margin:0;
+        padding:0; margin:0;
         padding-left:10px;
+        border-top:0 none;
     }
     .error-trace .backtrace  table td { padding-right:30px; }
     .error-trace .backtrace table th { font-weight:bold; text-align:left;}
@@ -55,7 +56,7 @@
 {block name="content"}
 <div class="wrapper-content welcome-page">
     {if $environment == 'development'}
-        <h1 class="error-title">There was an error in onm</h1>
+        <h1 class="error-title">{$message|default:"Unknown error"}</h1>
         <div class="error-trace">
             <div class="title {if $error->getCode() == 1}error{/if}">
                 <p>
