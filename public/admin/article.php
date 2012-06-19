@@ -451,14 +451,22 @@ if (isset($_REQUEST['action']) ) {
             Acl::checkOrForward('ARTICLE_CREATE');
 
             if (isset($_POST['with_comment'])) {$_POST['with_comment'] = 1;} else {$_POST['with_comment'] = 0;}
-            //      if (isset($_POST['frontpage'])) {$_POST['frontpage'] = 1;} else {$_POST['frontpage'] = 0;}
+                 if (isset($_POST['frontpage'])) {$_POST['frontpage'] = 1;} else {$_POST['frontpage'] = 0;}
             //      if (isset($_POST['in_home'])) {$_POST['in_home'] = 2;} else {$_POST['in_home'] = 0;}
             if (isset($_POST['content_status'])) {$_POST['content_status'] = 1;} else {$_POST['content_status'] = 0;}
 
             $article = new Article();
-            $_POST['fk_publisher']=$_SESSION['userid'];
+            $_POST['fk_publisher'] = $_SESSION['userid'];
 
-            if ($article->create( $_POST )) {
+            if ($article->create($_POST)) {
+                // Promote content to category frontpate if user wants to and is not already promoted
+                if (array_key_exists('promoted_to_category_frontpage', $_POST)
+                    && $_POST['promoted_to_category_frontpage']
+                    && !$article->isInFrontpageOfCategory($_POST['category'])
+                ) {
+                    $article->promoteToCategoryFrontpage($_POST['category']);
+                }
+
                 if ($_SESSION['desde'] == 'index_portada') {
                     Application::forward('index.php');
                 }
@@ -486,30 +494,10 @@ if (isset($_REQUEST['action']) ) {
 
         case 'update':
 
-           Acl::checkOrForward('ARTICLE_UPDATE');
-           if ($_SESSION['desde'] != 'list_hemeroteca') {
-                if (isset($_POST['with_comment'])) {
-                    $_POST['with_comment'] = 1;
-                } else {
-                    $_POST['with_comment'] = 0;
-                }
+            Acl::checkOrForward('ARTICLE_UPDATE');
 
-                if (isset($_POST['frontpage'])) {
-                    $_POST['frontpage'] = 1;
-                } else {
-                    $_POST['frontpage'] = 0;
-                }
-                $_POST['promoted_to_category_frontpage'] = array_key_exists('promoted_to_category_frontpage', $_POST);
-
-            }
-            if (isset($_POST['content_status'])) {
-                $_POST['content_status'] = 1;
-            } else {
-                $_POST['content_status'] = 0;
-            }
-
-            $articleCheck = new Article();
-            $articleCheck->read($_REQUEST['id']);
+            $article = new Article();
+            $article->read($_REQUEST['id']);
 
             if (!Acl::isAdmin()
                 && !Acl::check('CONTENT_OTHER_UPDATE')
@@ -518,15 +506,21 @@ if (isset($_REQUEST['action']) ) {
                 m::add(_("You can't modify this content because you don't have enought privileges.") );
                 Application::forward($_SERVER['SCRIPT_NAME'].'?action=read&id='.$_REQUEST['id']);
             }
-            $article = new Article();
-            $_REQUEST['fk_user_last_editor'] = $_SESSION['userid'];
-            $data = $_REQUEST;
+
+            $_POST['with_comment'] = array_key_exists('with_comment', $_POST);
+            $_POST['frontpage'] = array_key_exists('frontpage', $_POST);
+            $_POST['content_status'] = array_key_exists('content_status', $_POST);
+            $_POST['promoted_to_category_frontpage'] = array_key_exists('promoted_to_category_frontpage', $_POST);
+
+            $_POST['fk_user_last_editor'] = $_SESSION['userid'];
+            $data = $_POST;
             unset($data['action']);
             unset($data['stringVideoSearch']);
             unset($data['stringImageSearch']);
             unset($data['stringSearch']);
 
             $article->update($data);
+
             if (!array_key_exists('content_status', $data)) {
                 $article->dropFromAllHomePages();
             }
@@ -550,7 +544,7 @@ if (isset($_REQUEST['action']) ) {
             }
             Application::forward($_SERVER['HTTP_REFERER']);
 
-            if ($_SESSION['desde']=='index_portada') {
+            if ($_SESSION['desde'] == 'index_portada') {
                 Application::forward('index.php');
             } elseif ($_SESSION['desde'] == 'europa_press_import') {
                 Application::forward('controllers/agency_importer/europapress.php?action=list&page=0&message=');
@@ -576,23 +570,20 @@ if (isset($_REQUEST['action']) ) {
         break;
 
         case 'validate':
+            \Acl::checkOrForward('ARTICLE_CREATE');
 
-            if ($_SESSION['desde'] != 'list_hemeroteca') {
-                if (isset($_POST['with_comment'])) {$_POST['with_comment'] = 1;} else {$_POST['with_comment'] = 0;}
-                if (isset($_POST['frontpage'])) {$_POST['frontpage'] = 1;} else {$_POST['frontpage'] = 0;}
-                $_POST['promoted_to_category_frontpage'] = array_key_exists('promoted_to_category_frontpage', $_POST);
-            }
+            if (isset($_POST['with_comment'])) {$_POST['with_comment'] = 1;} else {$_POST['with_comment'] = 0;}
+            if (isset($_POST['frontpage'])) {$_POST['frontpage'] = 1;} else {$_POST['frontpage'] = 0;}
+            $_POST['promoted_to_category_frontpage'] = array_key_exists('promoted_to_category_frontpage', $_POST);
             if (isset($_POST['content_status'])) {$_POST['content_status'] = 1;}   else {$_POST['content_status'] = 0;}
 
             $article = new Article();
             $_REQUEST['fk_user_last_editor'] = $_SESSION['userid'];
-
-            Acl::checkOrForward('ARTICLE_CREATE');
             if (!$_POST["id"]) {
                 $_POST['fk_publisher'] = $_SESSION['userid'];
 
                 //Estamos creando un nuevo artículo
-                if (!$article->create( $_POST )) {
+                if (!$article->create($_POST)) {
                     $tpl->assign('errors', $article->errors);
                 }
             } else {
