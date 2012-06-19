@@ -58,7 +58,7 @@
 
     <header class="global-nav clearfix">
         <div class="logoonm pull-right">
-            <a  href="{$smarty.const.SITE_URL}admin/" id="logo-onm" class="clearfix" title="{t}Go to admin main page{/t}">
+            <a  href="{url name=admin_welcome}" id="logo-onm" class="clearfix" title="{t}Go to admin main page{/t}">
                <img src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}images/logo-opennemas-small.png" alt="opennemas" width="132" height="27"/>
             </a>
         </div>
@@ -68,10 +68,9 @@
         <div class="global-user-tools pull-right">
 
             <div class="global-search nofillonhover">
-                <form action="{$smarty.const.SITE_URL_ADMIN}/controllers/search_advanced/search_advanced.php">
-                    <input type="hidden" name="action" value="search" />
-                    <input type="hidden" name="article" value="on" />
+                <form action="{url name=admin_search}">
                     <input type="hidden" name="id" value="0" />
+                    <input type="hidden" name="article" value="on" />
                     <input type="hidden" name="opinion" value="on" />
                     <input type="search" name="stringSearch" placeholder="{t}Search...{/t}" class="string-search">
                 </form>
