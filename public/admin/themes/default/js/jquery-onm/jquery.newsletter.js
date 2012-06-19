@@ -48,8 +48,7 @@ saveNewsletter = (function() {
         });
 
     });
-   log(els);
-   alert('sdfdsfdsf');
+
     var encodedContents = JSON.stringify(els);
     jQuery('textarea#newsletterContent').text(encodedContents);
 
