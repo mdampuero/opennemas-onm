@@ -687,6 +687,10 @@ Options -Indexes
 
     ##### END CRONNICAS ####
 
+
+    RewriteRule ^articulo/(.*)/([0-9]+).htm  /articulo/$1/$2.html [R=301,L,NC]
+    RewriteRule ^opinion/(.*)/([0-9]+).htm  /opinion/$1/$2.html [R=301,L,NC]
+
     #Default Rules
     # RewriteCond %{REQUEST_URI} !^/controllers/index.php
     RewriteCond %{REQUEST_URI} (/|\.php|\.html|\.htm|\.feed|\.pdf|\.raw|/[^.]*)$  [NC]
