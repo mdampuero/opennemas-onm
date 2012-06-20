@@ -35,12 +35,24 @@
         background:#ccc; display:inline-block; text-align:right;
     }
     .error-trace .backtrace table {
-        display:block; font-family:monospace; border:1px solid #888;
+        display:block; font-family:monospace;
         padding:0; margin:0;
         padding-left:10px;
         border-top:0 none;
+        width:100%;
     }
-    .error-trace .backtrace  table td { padding-right:30px; }
+    .error-trace .backtrace table tbody {
+        border:1px solid #888;
+        display:block
+    }
+    .error-trace .backtrace table tr {
+        width:100%;
+    }
+    .error-trace .backtrace  table td:first-child,
+    .error-trace .backtrace  table th:first-child {
+        padding-left:10px;
+    }
+    .error-trace .backtrace  table td:not(:last-child) { padding-right:30px; }
     .error-trace .backtrace table th { font-weight:bold; text-align:left;}
     .error-trace .backtrace .title {
         width:100%; background:#aaa; color:#333; font-size:12px;
@@ -50,13 +62,18 @@
     .error-trace .backtrace .title span {
         padding:3px 10px; display:block
     }
+    .right {
+        text-align:right
+    }
 </style>
 {/block}
 
 {block name="content"}
 <div class="wrapper-content error-page">
-    {if $environment == 'development'}
-        <h1 class="error-title">{$error_message|default:"Unknown error"}</h1>
+{if $environment == 'development'}
+    <div class="error-page-message env-{$environment}">
+        <div class="icon">:(</div>
+        <div class="message">{$error_message|default:"Unknown error"}</div>
         <div class="error-trace">
             <div class="title {if $error->getCode() == 1}error{/if}">
                 <p>
@@ -71,24 +88,23 @@
                     <tbody>
                         <tr>
                             <th>File</th>
-                            <th>Line</th>
+                            <th class="right">Line</th>
                         </tr>
                         {foreach from=$backtrace item=trace_step}
                         <tr>
                             <td>
                                 <a href="file://{$trace_step['file']}"> {$trace_step['file']}</a>
 
-                                <p>Class: {$trace_step['class']}::{$trace_step['function']}(
-                                    {foreach from=$trace_step['args'] item=arg}
-                                    {if gettype($arg) == 'string'}
-                                    '{$arg}',
-                                    {else}
-                                    {$arg},
-                                    {/if}
-                                    {/foreach})</p>
-                                </p>
+                                <p>Class: {$trace_step['class']}::{$trace_step['function']}()</p>
+                                {foreach from=$trace_step['args'] item=arg}
+                                {if gettype($arg) == 'string'}
+                                {$arg|var_dump}
+                                {elseif gettype($arg) == 'array'}
+                                {$arg|var_dump}
+                                {/if}
+                                {/foreach}
                             </td>
-                            <td>{$trace_step['line']}</td>
+                            <td class="right">{$trace_step['line']}</td>
                         </tr>
                         {/foreach}
                     </tbody>
@@ -96,12 +112,13 @@
             </div>
             {/if}
         </div>
-    {else}
-        <div class="error-page-message">
-            <div class="icon">:(</div>
-            <div class="message">{$error_message}</div>
-            <div class="error-tracing">{t 1=$error_id}We already have being informed of this error: %1{/t}</div>
-        </div>
-    {/if}
+    </div>
+{else}
+    <div class="error-page-message error-mini">
+        <div class="icon">:(</div>
+        <div class="message">{$error_message}</div>
+        <div class="error-tracing">{t 1=$error_id}We already have being informed of this error: %1{/t}</div>
+    </div>
+{/if}
 </div>
 {/block}

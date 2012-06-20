@@ -2402,21 +2402,36 @@ div.newsletter-contents .container-buttons {
   margin-left:18px;
 }
 
-
 /* =============================================================================
    Error page rules
 ============================================================================= */
-.error-page .error-page-message{
+.error-page .error-page-message.error-mini{
     max-width:600px;
+}
+.error-page .error-page-message{
+    vertical-align: bottom;
     margin:30px auto;
     margin-bottom:60px;
 }
+.error-page-message.env-development .icon,
+.error-page-message.env-development .message {
+    vertical-align: bottom;
+}
+.error-page-message.env-development .icon {
+    font-size: 5em;
+}
+.error-page-message.env-development .message {
+    margin-left:15px;
+}
 .error-page .icon {
+    display:inline-block;
     font-size:11em;
 }
 .error-page .message {
+    vertical-align: bottom;
+    display:inline-block;
     font-size:2em;
-    margin-bottom:15px;
+    margin:0 0 15px 10px;
 }
 .error-page .error-tracing {
 }

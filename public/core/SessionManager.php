@@ -74,33 +74,35 @@ class SessionManager implements ArrayAccess
      **/
     public function bootstrap($lifetime=null)
     {
-        // Save the actual lifetime for this session in the session manager
-        if (is_null($lifetime)) {
-            $this->lifetime = self::MAX_SESSION_LIFETIME;
-        } else {
-            $this->lifetime = $lifetime;
+        if (strlen(session_id()) < 1) {
+            // Save the actual lifetime for this session in the session manager
+            if (is_null($lifetime)) {
+                $this->lifetime = self::MAX_SESSION_LIFETIME;
+            } else {
+                $this->lifetime = $lifetime;
+            }
+
+            if (is_null($lifetime)
+                && !isset($_COOKIE['default_expire'])
+            ) {
+                $lifetime = self::MAX_SESSION_LIFETIME; // 60 minutes by default
+            } elseif (isset($_COOKIE['default_expire'])) {
+                $lifetime = intval($_COOKIE['default_expire']);
+            }
+
+            // Set session_save_path
+            session_save_path($this->sessionDirectory);
+
+            // set the cache expire to $lifetime minutes
+            session_cache_expire($lifetime);
+
+            // public, private, nocache, private_no_expire
+            //  http://cz.php.net/manual/en/function.session-cache-limiter.php
+            session_cache_limiter('nocache');
+
+            // Now we can call to session_start
+            session_start();
         }
-
-        if (is_null($lifetime)
-            && !isset($_COOKIE['default_expire'])
-        ) {
-            $lifetime = self::MAX_SESSION_LIFETIME; // 60 minutes by default
-        } elseif (isset($_COOKIE['default_expire'])) {
-            $lifetime = intval($_COOKIE['default_expire']);
-        }
-
-        // Set session_save_path
-        session_save_path($this->sessionDirectory);
-
-        // set the cache expire to $lifetime minutes
-        session_cache_expire($lifetime);
-
-        // public, private, nocache, private_no_expire
-        //  http://cz.php.net/manual/en/function.session-cache-limiter.php
-        session_cache_limiter('nocache');
-
-        // Now we can call to session_start
-        session_start();
     }
 
     /**

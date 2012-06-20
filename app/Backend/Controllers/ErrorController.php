@@ -66,7 +66,7 @@ class ErrorController extends Controller
                             'error'         => $error,
                             'error_id'      => $errorID,
                             'environment'   => $environment,
-                            'backtrace'     => array_reverse($error->getTrace()),
+                            'backtrace'     => $error->getTrace(),
                         )
                     );
                 }
@@ -85,7 +85,7 @@ class ErrorController extends Controller
                         'error'         => $error,
                         'error_id'      => $errorID,
                         'environment'   => $environment,
-                        'backtrace'     => array_reverse($error->getTrace()),
+                        'backtrace'     => $error->getTrace(),
                     )
                 );
 
