@@ -37,7 +37,6 @@
     .error-trace .backtrace table {
         display:block; font-family:monospace;
         padding:0; margin:0;
-        padding-left:10px;
         border-top:0 none;
         width:100%;
     }
@@ -77,7 +76,7 @@
         <div class="error-trace">
             <div class="title {if $error->getCode() == 1}error{/if}">
                 <p>
-                    ( ! ) Exception: {$error|get_class} - {$error->getMessage()} {$errorMessage} :  in
+                    ( ! ) Exception: \{$error|get_class} - '{$error->getMessage()}' :  in
                     {$error->getFile()} on line {$error->getLine()}
                 </p>
             </div>
@@ -87,8 +86,8 @@
                 <table>
                     <tbody>
                         <tr>
-                            <th>File</th>
-                            <th class="right">Line</th>
+                            <th style="width:90%">File</th>
+                            <th class="right" style="width:100px">Line</th>
                         </tr>
                         {foreach from=$backtrace item=trace_step}
                         <tr>
@@ -97,14 +96,10 @@
 
                                 <p>Class: {$trace_step['class']}::{$trace_step['function']}()</p>
                                 {foreach from=$trace_step['args'] item=arg}
-                                {if gettype($arg) == 'string'}
                                 {$arg|var_dump}
-                                {elseif gettype($arg) == 'array'}
-                                {$arg|var_dump}
-                                {/if}
                                 {/foreach}
                             </td>
-                            <td class="right">{$trace_step['line']}</td>
+                            <td>{$trace_step['line']}</td>
                         </tr>
                         {/foreach}
                     </tbody>

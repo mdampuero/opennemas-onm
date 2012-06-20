@@ -36,7 +36,7 @@ class WelcomeController extends Controller
      **/
     public function defaultAction()
     {
-        // throw new \Exception('Something really bad happened. A little bit died!');
+        // throw new \Exception('Something really bad happened. A little bird died!');
 
         $_SESSION['desde'] = 'index_portada';
 
