@@ -24,16 +24,19 @@ if (!empty($category_name)) {
     $category = $ccm->get_id($category_name);
     $actual_category_id = $category; // FOR WIDGETS
     $category_real_name = $ccm->get_title($category_name); //used in title
-    $tpl->assign(array( 'category_name' => $category_name ,
-                        'category' => $category ,
-                        'actual_category_id' => $actual_category_id ,
-                        'category_real_name' => $category_real_name ,
+    $tpl->assign(array(
+                        'category_name'         => $category_name ,
+                        'category'              => $category ,
+                        'actual_category_id'    => $actual_category_id ,
+                        'actual_category_title' => $category_real_name,
+                        'category_real_name'    => $category_real_name ,
                 ) );
 } else {
     //$category_name = 'Portada';
     $category_real_name = 'Portada';
     $tpl->assign(array(
-        'category_real_name' => $category_real_name ,
+        'actual_category_title' => $category_real_name,
+        'category_real_name'    => $category_real_name,
     ));
 }
 $tpl->assign('actual_category', $category_name);

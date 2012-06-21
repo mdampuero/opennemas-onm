@@ -1766,10 +1766,10 @@ gettext("Allow coments");
 gettext("Available:");
 
 /* public/admin/themes/default/tpl//article/new.tpl */
-gettext("Put in section frontpage:");
+gettext("Put in category frontpage:");
 
 /* public/admin/themes/default/tpl//article/new.tpl */
-gettext("Suggest for frontpage:");
+gettext("Suggested for frontpage:");
 
 /* public/admin/themes/default/tpl//article/new.tpl */
 gettext("Archived:");
@@ -1841,7 +1841,7 @@ gettext("Search");
 gettext("Suggested articles");
 
 /* public/admin/themes/default/tpl//article/related/_related_provider.tpl */
-gettext("Other articles");
+gettext("Articles");
 
 /* public/admin/themes/default/tpl//article/related/_related_provider.tpl */
 gettext("Opinions");
@@ -3053,19 +3053,10 @@ gettext("Delete");
 gettext("Delete");
 
 /* public/admin/themes/default/tpl//opinion/list.tpl */
-gettext("Unpublish");
+gettext("Batch actions");
 
 /* public/admin/themes/default/tpl//opinion/list.tpl */
 gettext("Unpublish");
-
-/* public/admin/themes/default/tpl//opinion/list.tpl */
-gettext("Unpublish");
-
-/* public/admin/themes/default/tpl//opinion/list.tpl */
-gettext("Publish");
-
-/* public/admin/themes/default/tpl//opinion/list.tpl */
-gettext("Publish");
 
 /* public/admin/themes/default/tpl//opinion/list.tpl */
 gettext("Publish");
@@ -3087,6 +3078,12 @@ gettext("Config album module");
 
 /* public/admin/themes/default/tpl//opinion/list.tpl */
 gettext("Configurations");
+
+/* public/admin/themes/default/tpl//opinion/list.tpl */
+gettext("Clean cache");
+
+/* public/admin/themes/default/tpl//opinion/list.tpl */
+gettext("Clean cache");
 
 /* public/admin/themes/default/tpl//opinion/list.tpl */
 gettext("Opinion frontpage");
@@ -3461,6 +3458,21 @@ gettext("Write here the text for search...");
 gettext("Search");
 
 /* public/admin/themes/default/tpl//search_advanced/content-provider.tpl */
+gettext("No results");
+
+/* public/admin/themes/default/tpl//search_advanced/content-provider.tpl */
+gettext("There was an error while performing the search please reload this tab by changing to another one.");
+
+/* public/admin/themes/default/tpl//search_advanced/content-provider-related.tpl */
+gettext("Write here the text for search...");
+
+/* public/admin/themes/default/tpl//search_advanced/content-provider-related.tpl */
+gettext("Search");
+
+/* public/admin/themes/default/tpl//search_advanced/content-provider-related.tpl */
+gettext("No results");
+
+/* public/admin/themes/default/tpl//search_advanced/content-provider-related.tpl */
 gettext("There was an error while performing the search please reload this tab by changing to another one.");
 
 /* public/admin/themes/default/tpl//search_advanced/index.tpl */
@@ -6494,16 +6506,7 @@ gettext("Remove File");
 gettext("Add File");
 
 /* public/admin/themes/default/tpl//common/content_provider/content_provider.tpl */
-gettext("Available contents");
-
-/* public/admin/themes/default/tpl//common/content_provider/content_provider.tpl */
-gettext("Search");
-
-/* public/admin/themes/default/tpl//common/content_provider/content_provider.tpl */
 gettext("Articles");
-
-/* public/admin/themes/default/tpl//common/content_provider/content_provider.tpl */
-gettext("Widgets");
 
 /* public/admin/themes/default/tpl//common/content_provider/content_provider.tpl */
 gettext("Opinions");
@@ -6512,16 +6515,16 @@ gettext("Opinions");
 gettext("Albums");
 
 /* public/admin/themes/default/tpl//common/content_provider/content_provider.tpl */
+gettext("Polls");
+
+/* public/admin/themes/default/tpl//common/content_provider/content_provider.tpl */
 gettext("Videos");
 
 /* public/admin/themes/default/tpl//common/content_provider/content_provider.tpl */
-gettext("Poll");
+gettext("Files");
 
 /* public/admin/themes/default/tpl//common/content_provider/content_provider.tpl */
-gettext("Letter to the Editor");
-
-/* public/admin/themes/default/tpl//common/content_provider/content_provider.tpl */
-gettext("Advertisement");
+gettext("Search");
 
 /* public/admin/themes/default/tpl//letter/read.tpl */
 gettext("Letter Manager");

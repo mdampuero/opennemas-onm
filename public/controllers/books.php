@@ -35,12 +35,12 @@ $tpl->assign('LIBROS_IMG_PATH', INSTANCE_MEDIA_PATH.'/books/');
 $tpl->assign('LIBROS_FILES_PATH', INSTANCE_MEDIA_PATH.'/books/');
 //*****************************************************************************/
 
-$cm = new ContentManager();
-
 $page = $request->query->filter('page', 1, FILTER_VALIDATE_INT);
 $tpl->assign('page', $page);
 
 $action = $request->query->filter('action', 'list', FILTER_SANITIZE_STRING);
+
+$cm = new ContentManager();
 switch ($action) {
 
     case 'list':
