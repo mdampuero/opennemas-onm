@@ -35,8 +35,8 @@ if (!empty($category_name)) {
     //$category_name = 'Portada';
     $category_real_name = 'Portada';
     $tpl->assign(array(
-        'actual_category_title' => $category_real_name
-        'category_real_name'    => $category_real_name ,
+        'actual_category_title' => $category_real_name,
+        'category_real_name'    => $category_real_name,
     ));
 }
 $tpl->assign('actual_category', $category_name);

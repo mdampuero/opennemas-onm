@@ -145,4 +145,5 @@ switch ($action) {
     break;
 }
 
-
+// Fetch information for Advertisements
+require_once "index_advertisement.php";
