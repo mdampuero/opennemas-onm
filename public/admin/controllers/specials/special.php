@@ -133,6 +133,7 @@ switch($action) {
             $tpl->assign('contentsLeft',$contentsLeft);
         }
         $tpl->assign('special', $special);
+        $tpl->assign('category', $special->category);
 
         $tpl->display('special/new.tpl');
 
