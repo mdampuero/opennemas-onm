@@ -235,11 +235,11 @@ switch($action) {
         } elseif ( $_FILES['file']['size'] > $sizeFile ) {
              m::add( sprintf(_("Sorry, file can't upload. You must check file size.(< %sB)"), $sizeFile ));
 
-        } else {
+        } elseif(!empty($_FILES['file']['name'])) {
              m::add( sprintf(_("Sorry, file can't upload.")));
         }
         if ( (!empty($_FILES['file_img']['name'])) && ($uploadStatusPdf_img !== false) ) {
-            m::add( sprintf(_("Sorry, image file can't upload.")));
+         //   m::add( sprintf(_("Sorry, image file can't upload.")));
         }
 
         if (!empty($id)) {
