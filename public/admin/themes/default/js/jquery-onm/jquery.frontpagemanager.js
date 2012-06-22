@@ -26,6 +26,13 @@ function makeContentProviderAndPlaceholdersSortable () {
     }).disableSelection();
 }
 
+jQuery.fn.flash = function( color, duration )
+{
+    var current = this.css( 'color' );
+    this.animate( { color: 'rgb(' + color + ')' }, duration / 2 );
+    this.animate( { color: current }, duration / 2 );
+};
+
 function get_tooltip_content (elem) {
     var parent_content_div = elem.closest('div.content-provider-element');
     var content_html = '';
@@ -80,9 +87,11 @@ function get_tooltip_title (elem) {
 
 function remove_element (element) {
     jQuery(element).each(function(){
-        jQuery(this).animate({ 'backgroundColor':'#fb6c6c' },300).animate({ 'opacity': 0, 'height': 0 }, 300, function() {
-            jQuery(this).remove();
-        });
+        jQuery(this).fadeTo("slow", 0.01, function(){ //fade
+            jQuery(this).slideUp("slow", function() { //slide up
+                jQuery(this).remove(); //then remove from the DOM
+            });
+         });
     });
 }
 

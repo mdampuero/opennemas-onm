@@ -87,14 +87,14 @@
                         <input type="checkbox" id="toggleallcheckbox">
                     </th>
                     <th>{t}Title{/t}</th>
-                    <th class="center" style="width:35px;">{t}Views{/t}</th>
+                    {if $category=='widget' || $category=='all'}<th class="left">{t}Section{/t}</th>{/if}
                     <th class="center">{t}Service{/t}</th>
                     <th class="center">Created</th>
-                    {if $category=='widget' || $category=='all'}<th class="center">{t}Section{/t}</th>{/if}
+                    <th class="center" style="width:35px;">{t}Views{/t}</th>
                     <th class="center" style="width:35px;">{t}Published{/t}</th>
                     {if $category!='widget' && $category!='all'} <th class="center" style="width:35px;">{t}Favorite{/t}</th>{/if}
                     <th class="center" style="width:35px;">{t}Home{/t}</th>
-                    <th class="center" style="width:35px;">{t}Actions{/t}</th>
+                    <th class="center" style="width:100px;">{t}Actions{/t}</th>
                     {else}
                     <th class="center">
                         &nbsp;
@@ -111,22 +111,22 @@
                     <td onClick="javascript:document.getElementById('selected_{$smarty.section.c.iteration}').click();">
                         {$videos[c]->title|clearslash}
                     </td>
-
-                    <td class="center">
-                        {$videos[c]->views}
+                    {if $category=='widget' || $category=='all'}
+                    <td >
+                         {$videos[c]->category_title}
                     </td>
+                    {/if}
                     <td class="center">
                         {$videos[c]->author_name}
                     </td>
+                    </td class="center">
+
                     <td class="center">
                         {$videos[c]->created}
                     </td>
-                    </td class="center">
-                    {if $category=='widget' || $category=='all'}
-                        <td >
-                             {$videos[c]->category_title}
-                        </td>
-                    {/if}
+                    <td class="center">
+                        {$videos[c]->views}
+                    </td>
                     <td class="center">
                         {acl isAllowed="VIDEO_AVAILABLE"}
                             {if $videos[c]->available == 1}
@@ -159,24 +159,23 @@
                     {/acl}
                     </td>
                     <td style="padding:1px; font-size:11px;" class="center">
-                        <ul class="action-buttons">
-                            {acl isAllowed="VIDEO_UPDATE"}
-                            <li>
-                                <a href="{url name=admin_videos_show id=$videos[c]->id}" title="{t}Edit{/t}" >
-                                    <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
-                            </li>
-                            {/acl}
-
-                            {acl isAllowed="VIDEO_DELETE"}
-                            <li>
-                             <a class="del" data-controls-modal="modal-from-dom"
-                               data-id="{$videos[c]->id}"
-                               data-title="{$videos[c]->title|capitalize}" href="#" >
-                            <img src="{$params.IMAGE_DIR}trash.png" border="0" />
+                        <div class="btn-group">
+                        {acl isAllowed="VIDEO_UPDATE"}
+                            <a class="btn" href="{url name=admin_videos_show id=$videos[c]->id}" title="{t}Edit{/t}" >
+                                <i class="icon-pencil"></i> {t}Edit{/t}
                             </a>
-                            </li>
-                            {/acl}
-                        </ul>
+                        {/acl}
+
+                        {acl isAllowed="VIDEO_DELETE"}
+                            <a class="del btn btn-danger" data-controls-modal="modal-from-dom"
+                               data-id="{$videos[c]->id}"
+                               data-title="{$videos[c]->title|capitalize}"
+                               data-url="{url name=admin_videos_delete id=$videos[c]->id}"
+                               href="{url name=admin_videos_delete id=$videos[c]->id}" >
+                                <i class="icon-trash icon-white"></i>
+                            </a>
+                        {/acl}
+                        </div>
                     </td>
                 </tr>
                 {sectionelse}

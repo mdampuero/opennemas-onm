@@ -174,8 +174,84 @@ class VideosController extends Controller
      **/
     public function createAction()
     {
+        \Acl::checkOrForward('VIDEO_CREATE');
+
         if ('POST' == $this->request->getMethod()) {
-            var_dump('post');die();
+            $request  = $this->request->request;
+
+            $type     = $request->filter('type', null, FILTER_SANITIZE_STRING);
+            $page     = $request->getDigits('page', 0);
+            $category = $request->getDigits('category');
+
+            if ($type === 'file') {
+                // Check if the video file entry was completed
+                if (
+                    !(
+                        isset($_FILES)
+                        && array_key_exists('video_file', $_FILES)
+                        && array_key_exists('name', $_FILES["video_file"])
+                        && !empty($_FILES["video_file"]["name"])
+                    )
+                ) {
+                    m::add(
+                        'There was a problem while uploading the file. '
+                        .'Please check if you have completed all the form fields.',
+                        m::ERROR
+                    );
+                    return $this->redirect($this->generateUrl(
+                        'admin_videos_create',
+                        array('type' => $type)
+                    ));
+                }
+
+                $videoFileData = array(
+                    'file_type'      => $_FILES["video_file"]["type"],
+                    'file_path'      => $_FILES["video_file"]["tmp_name"],
+                    'category'       => $category,
+                    'available'      => $request->filter('available', null, FILTER_SANITIZE_STRING),
+                    'content_status' => $request->filter('content_status', null, FILTER_SANITIZE_STRING),
+                    'title'          => $request->filter('title', null, FILTER_SANITIZE_STRING),
+                    'metadata'       => $request->filter('metadata', null, FILTER_SANITIZE_STRING),
+                    'description'    => $request->filter('description', null, FILTER_SANITIZE_STRING),
+                    'author_name'    => $request->filter('author_name', null, FILTER_SANITIZE_STRING),
+                );
+
+                try {
+                    $video = new \Video();
+                    $video->createFromLocalFile($videoFileData);
+                } catch (\Exception $e) {
+                    m::add($e->getMessage(), m::ERROR);
+                    return $this->redirect($this->generateUrl('admin_videos_create', array('type' => $type)));
+                }
+            } elseif ($type == 'web-source') {
+
+                if (!empty($_POST['information'])) {
+
+                    $video = new \Video();
+                    $_POST['information'] = json_decode($_POST['information'], true);
+                    try {
+                        $video->create($_POST);
+                    } catch (\Exception $e) {
+                        m::add($e->getMessage());
+                        return $this->redirect($this->generateUrl('admin_videos_create', array('type' => $type)));
+                    }
+
+                } else {
+                    m::add('There was an error while uploading the form, not all the required data was sent.');
+                        return $this->redirect($this->generateUrl('admin_videos_create', array('type' => $type)));
+                }
+            } else {
+                m::add('There was an error while uploading the form, the video type is not specified.');
+                return $this->redirect($this->generateUrl('admin_videos_create', array('type' => $type)));
+            }
+
+            return $this->redirect($this->generateUrl(
+                'admin_videos',
+                array(
+                    'category' => $category,
+                    'page' => $page
+                )
+            ));
 
         } else {
             $type = $this->request->query->filter('type', null, FILTER_SANITIZE_STRING);
@@ -198,9 +274,40 @@ class VideosController extends Controller
      **/
     public function updateAction()
     {
-        $content = 'default content';
+        \Acl::checkOrForward('VIDEO_UPDATE');
 
-        return new Response($content);
+        $id = $this->request->query->getDigits('id');
+        $continue = $this->request->request->filter('continue', false, FILTER_SANITIZE_STRING);
+        $video = new \Video($id);
+
+        if ($video->id != null) {
+            $_POST['information'] = json_decode($_POST['information'], true);
+
+            if (!\Acl::isAdmin()
+                && !\Acl::check('CONTENT_OTHER_UPDATE')
+                && $video->pk_user != $_SESSION['userid'])
+            {
+                m::add(_("You can't modify this video because you don't have enought privileges."));
+            } else {
+                $video->update($_POST);
+                m::add(_("Video updated successfully."), m::SUCCESS);
+            }
+            if ($continue) {
+                return $this->redirect($this->generateUrl(
+                    'admin_videos_show',
+                    array('id' => $video->id)
+                ));
+            } else {
+                $page = $this->request->request->getDigits('page', 0);
+                return $this->redirect($this->generateUrl(
+                    'admin_videos',
+                    array(
+                        'category' => $video->category,
+                        'page'     => $page,
+                    )
+                ));
+            }
+        }
     }
 
     /**
@@ -210,9 +317,28 @@ class VideosController extends Controller
      **/
     public function deleteAction()
     {
-        $content = 'default content';
+        \Acl::checkOrForward('VIDEO_DELETE');
 
-        return new Response($content);
+        $request = $this->request;
+        $id = $request->getDigits('id');
+        $page = $request->getDigits('page', 0);
+
+        if (!empty($id)) {
+            $video = new \Video($id);
+            // Delete relations
+            $rel= new \RelatedContent();
+            $rel->deleteAll($id);
+
+            $video->delete($id ,$_SESSION['userid']);
+            m::add(_("Video '{$video->title}' deleted successfully."), m::SUCCESS);
+        } else {
+            m::add(_('You must give an id for delete the video.'), m::ERROR);
+        }
+
+        return $this->redirect($this->generateUrl(
+            'admin_videos',
+            array('category' => $video->category)
+        ));
     }
 
     /**

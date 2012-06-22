@@ -37,30 +37,30 @@
 {/block}
 
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario">
-
 <div class="top-action-bar clearfix">
 	<div class="wrapper-content">
 		<div class="title"><h2>{t}Video manager{/t} :: {t}Which type of video do you want to add?{/t}</h2></div>
 	</div>
 </div>
 
-    <div class="wrapper-content">
-        <ul class="video-type-selector">
-            <li class="file">
-                <a href="{url name=admin_videos_create type=file category=$category}" class="clearfix">
-                    <img src="{$params.IMAGE_DIR}video/video-file-source.png" alt="" />
-                    {t}Upload file from my computer{/t}
-                </a>
-            </li>
-            <li class="web">
-                <a href="{url name=admin_videos_create type="web-source" category=$category}" class="clearfix">
-                    <img src="{$params.IMAGE_DIR}video/video-web-source.png" alt="" />
-                    Link video from other web video services<br>
-                </a>
-            </li>
-        </ul>
+<div class="wrapper-content">
 
-	</div>
-</form>
+    {render_messages}
+
+    <ul class="video-type-selector">
+        <li class="file">
+            <a href="{url name=admin_videos_create type=file category=$category}" class="clearfix">
+                <img src="{$params.IMAGE_DIR}video/video-file-source.png" alt="" />
+                {t}Upload file from my computer{/t}
+            </a>
+        </li>
+        <li class="web">
+            <a href="{url name=admin_videos_create type="web-source" category=$category}" class="clearfix">
+                <img src="{$params.IMAGE_DIR}video/video-web-source.png" alt="" />
+                {t}Link video from other web video services{/t}
+            </a>
+        </li>
+    </ul>
+
+</div>
 {/block}

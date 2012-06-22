@@ -19,6 +19,7 @@ jQuery("#modal-video-delete").modal({
 });
 
 jQuery('.del').click(function(e) {
+    e.preventDefault();
     jQuery('#modal-video-delete .modal-body span').html( jQuery(this).data('title') );
     jQuery.ajax({
             url:  "{$smarty.server.SCRIPT_NAME}",
@@ -34,7 +35,6 @@ jQuery('.del').click(function(e) {
     //Sets up the modal
     jQuery("#modal-video-delete").modal('show');
     jQuery("body").data("selected-for-del", jQuery(this).data("id"));
-    e.preventDefault();
 });
 
 jQuery('#modal-video-delete a.btn.yes').on('click', function(){

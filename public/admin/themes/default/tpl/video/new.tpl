@@ -50,32 +50,32 @@
 
 {block name="content"}
 
-<form action="{url name=admin_videos_create}" method="POST" name="formulario" enctype="multipart/form-data">
+<form action="{if isset($video)}{url name=admin_videos_update id=$video->id}{else}{url name=admin_videos_create}{/if}" method="POST" name="formulario" enctype="multipart/form-data">
 
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Video manager{/t} :: {if $smarty.request.action eq "new"}{t}Creating video{/t}{else}{t}Editing video{/t}{/if}</h2></div>
+            <div class="title"><h2>{t}Video manager{/t} :: {if !isset($video)}{t}Creating video{/t}{else}{t}Editing video{/t}{/if}</h2></div>
             <ul class="old-button">
                 <li>
                 {if isset($video->id)}
                     {acl isAllowed="VIDEO_UPDATE"}
-                        <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'update', '{$video->id|default:""}', 'formulario');" >
+                        <button href="{url name=admin_videos_update id=$video->id}">
                     {/acl}
                 {else}
                     {acl isAllowed="VIDEO_CREATE"}
-                        <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', '0', 'formulario');" >
+                        <button href="{url name=admin_videos_create}">
                     {/acl}
                 {/if}
-                        <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar y salir" alt="Guardar y salir"><br />{t}Save{/t}
-                    </a>
+                        <img src="{$params.IMAGE_DIR}save.png" title="Guardar y salir" alt="{t}Save{/t}"><br />{t}Save{/t}
+                    </button>
                 </li>
                 {if isset($video->id)}
                 {acl isAllowed="VIDEO_CREATE"}
                 <li>
-                    <a href="#" class="admin_add" onClick="sendFormValidate(this, '_self', 'validate', '{$video->id|default:""}', 'formulario');" value="Validar" title="Validar">
+                    <button name="continue" value="1">
                         <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />
                         {t}Save and continue{/t}
-                    </a>
+                    </button>
                 </li>
                 {/acl}
                 {/if}
@@ -93,11 +93,6 @@
 
             {render_messages}
 
-			<table class="adminheading">
-				<tr>
-					<td>{t}Enter video information{/t}</td>
-				</tr>
-			</table>
 			<table class="adminform">
 				<tbody>
 					<tr>
@@ -148,7 +143,7 @@
 
 						</td>
 					</tr>
-                    {if $smarty.get.type == "file" || (isset($video) && $video->author_name == 'internal')}
+                    {if $type == "file" || (isset($video) && $video->author_name == 'internal')}
                         {include file="video/partials/_form_video_internal.tpl"}
                     {else}
                         {include file="video/partials/_form_video_panorama.tpl"}
