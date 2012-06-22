@@ -165,7 +165,7 @@
                     </td>
                     <td style="padding:4px;" nowrap="nowrap" colspan="2">
                         <textarea name="description" id="description"  title="description" style="width:90%; height:10em;">
-                            {t 1=$special->description|clearslash|escape:"html"}%1{/t}
+                            {t 1=$special->description|clearslash}%1{/t}
                         </textarea>
                     </td>
                 </tr>
