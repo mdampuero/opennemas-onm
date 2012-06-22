@@ -1429,10 +1429,14 @@ class Content
         );
 
         $httpUserAgent = preg_quote($_SERVER['HTTP_USER_AGENT']);
+
         foreach ($botStrings as $bot) {
-            if (preg_match("@".strtolower($httpUserAgent)."@", $bot) > 0) {
+            if (stristr($httpUserAgent, $bot) != false) {
                 return false;
             }
+            // if (preg_match("@".strtolower($httpUserAgent)."@", $bot) > 0) {
+            //     return false;
+            // }
         }
 
         if (is_null($id) || empty($id)) {

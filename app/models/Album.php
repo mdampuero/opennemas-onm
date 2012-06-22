@@ -325,6 +325,20 @@ class Album extends Content
      **/
     public function render($params, $smarty)
     {
-        return "\n<!-- album rendering not implemented -->\n";
+
+        //  if (!isset($tpl)) {
+            $tpl = new Template(TEMPLATE_USER);
+        //}
+
+        $tpl->assign('item', $this);
+        $tpl->assign('cssclass', $params['cssclass']);
+
+        try {
+            $html = $tpl->fetch($params['tpl']);
+        } catch (\Exception $e) {
+            $html = 'Album not available';
+        }
+
+        return $html;
     }
 }

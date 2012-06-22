@@ -30,6 +30,7 @@
 
     {block name="js-library"}
         {script_tag src="/jquery/jquery.min.js"}
+        {script_tag src="/jquery/jquery-ui.custom.min.js"}
         <script type="text/javascript">
             jQuery(document).ready(function ($){
                 jQuery.noConflict();
