@@ -30,7 +30,7 @@
 
     {block name="js-library"}
         {script_tag src="/jquery/jquery.min.js"}
-        {script_tag src="/jquery/jquery-ui.min.js"}
+        {script_tag src="/jquery/jquery-ui.custom.min.js"}
         <script type="text/javascript">
             jQuery(document).ready(function ($){
                 jQuery.noConflict();
@@ -40,7 +40,7 @@
 
     {block name="footer-js"}
         {block name="js-library"}{/block}
-        {script_tag src="/modernizr/modernizr-2.0.6.min.js"}
+        {script_tag src="/modernizr/modernizr-2.5.0.min.js"}
     {/block}
 
 </head>
