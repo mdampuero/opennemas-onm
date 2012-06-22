@@ -13,8 +13,6 @@ $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 
 $tpl->assign('titulo_barra', 'Advanced Search');
 
-$_SESSION['desde'] ='search_advanced';
-
 // Assocciate content_type to resource, it has be static array because
 // don't exist a convention, sample attachment go on fichero.php
 $type2res = array(
@@ -35,20 +33,21 @@ $type2res = array(
 
 $action = filter_input(INPUT_POST, 'action', FILTER_SANITIZE_STRING);
 if (is_null($action)) {
-    $action = filter_input(INPUT_GET, 'action', FILTER_SANITIZE_STRING,
-                            array('options' => array('default' => 'index')));
+    $action = filter_input(
+        INPUT_GET, 'action', FILTER_SANITIZE_STRING,
+        array('options' => array('default' => 'index'))
+    );
 }
 
 switch ($action) {
 
     case 'index':
     case 'search':
-
+        $_SESSION['desde'] ='search_advanced';
         // Get all the available content types
         $contentTypes = Content::getContentTypes();
         $tpl->assign('arrayTypes', $contentTypes);
-        $stringSearch = filter_input(INPUT_GET, 'stringSearch',
-                            FILTER_SANITIZE_STRING);
+        $stringSearch = filter_input(INPUT_GET, 'stringSearch', FILTER_SANITIZE_STRING);
         /**
          * if search string is empty skip executing some logic
         */
@@ -58,8 +57,8 @@ switch ($action) {
             $szCheckedTypes = checkTypes($htmlChecks);
             $szTags         = trim($stringSearch);
             $objSearch      = cSearch::getInstance();
-            $arrayResults   =
-                $objSearch->searchContentsSelectMerge("contents.title as titule,
+            $arrayResults   = $objSearch->searchContentsSelectMerge(
+                "contents.title as titule,
                 contents.metadata, contents.slug, contents.description,
                 contents.created, contents.pk_content as id,
                 contents_categories.catName,
@@ -72,7 +71,8 @@ switch ($action) {
                 "pk_content = pk_fk_content ".
                 "AND fk_content_type = pk_content_type",
                 "contents_categories, content_types",
-                100);
+                100
+            );
 
             $Pager        = null;
             $arrayResults = cSearch::Paginate($Pager, $arrayResults, "id", 10);
@@ -83,28 +83,32 @@ switch ($action) {
 
             foreach ($arrayResults as $res ) {
                 for ($ind=0; $ind < sizeof($szTagsArray); $ind++) {
-                    $arrayResults[$indice]['titule']   =
-                        \Onm\StringUtils::extStrIreplace($szTagsArray[$ind],
-                            '<b><span style="color:blue">$1</font></b>',
-                            $arrayResults[$indice]['titule']);
-                    $arrayResults[$indice]['metadata'] =
-                        \Onm\StringUtils::extStrIreplace($szTagsArray[$ind],
-                            '<b><span style="color:blue">$1</font></b>',
-                            $arrayResults[$indice]['metadata']);
+                    $arrayResults[$indice]['titule'] = \Onm\StringUtils::extStrIreplace(
+                        $szTagsArray[$ind],
+                        '<b><span style="color:blue">$1</font></b>',
+                        $arrayResults[$indice]['titule']
+                    );
+                    $arrayResults[$indice]['metadata'] = \Onm\StringUtils::extStrIreplace(
+                        $szTagsArray[$ind],
+                        '<b><span style="color:blue">$1</font></b>',
+                        $arrayResults[$indice]['metadata']
+                    );
                 }
                 $indice++;
             }
 
-            $szPagesLink = paginateLink($Pager, $szTags, explode(", ",
-                $szCheckedTypes));
+            $szPagesLink = paginateLink($Pager, $szTags, explode(", ", $szCheckedTypes));
 
-            $tpl->assign(array(
-                'search_string'    => $stringSearch,
-                'type2res'         => $type2res,
-                'pagination'       => $szPagesLink,
-                'arrayResults'     => $arrayResults,
-                'htmlCheckedTypes' => $htmlChecks
-            ));
+            $tpl->assign(
+                array
+                (
+                    'search_string'    => $stringSearch,
+                    'type2res'         => $type2res,
+                    'pagination'       => $szPagesLink,
+                    'arrayResults'     => $arrayResults,
+                    'htmlCheckedTypes' => $htmlChecks
+                )
+            );
         }
 
         $tpl->display('search_advanced/index.tpl');
@@ -112,9 +116,8 @@ switch ($action) {
     break;
 
     case 'search_paging':
-
-        if (!isset($_REQUEST['stringSearch']) ||
-            empty($_REQUEST['stringSearch'])) {
+        $_SESSION['desde'] ='search_advanced';
+        if (!isset($_REQUEST['stringSearch']) || empty($_REQUEST['stringSearch'])) {
             $Types = Content::getContentTypes();
             break;
         }
@@ -123,8 +126,8 @@ switch ($action) {
         $szCheckedTypes = checkTypes($htmlChecks);
         $szTags         = trim($_REQUEST['stringSearch']);
         $objSearch      = cSearch::getInstance();
-        $arrayResults   =
-            $objSearch->searchContentsSelectMerge("contents.title as titule,
+        $arrayResults   = $objSearch->searchContentsSelectMerge(
+            "contents.title as titule,
             contents.metadata, contents.slug,
             contents.description, contents.created, contents.pk_content as id,
             contents_categories.catName,
@@ -136,7 +139,8 @@ switch ($action) {
             $szCheckedTypes,
             "pk_content = pk_fk_content AND fk_content_type = pk_content_type",
             "contents_categories, content_types",
-            100);
+            100
+        );
 
 
 
@@ -151,27 +155,31 @@ switch ($action) {
 
         foreach ($arrayResults as $res ) {
             for ($ind=0; $ind < sizeof($szTagsArray); $ind++) {
-                $arrayResults[$indice]['titule']   =
-                    \Onm\StringUtils::extStrIreplace($szTagsArray[$ind],
-                        '<b><span style="color:blue">$1</font></b>',
-                        $arrayResults[$indice]['titule']);
-                $arrayResults[$indice]['metadata'] =
-                    \Onm\StringUtils::extStrIreplace($szTagsArray[$ind],
-                        '<b><span style="color:blue">$1</font></b>',
-                        $arrayResults[$indice]['metadata']);
+                $arrayResults[$indice]['titule']   = \Onm\StringUtils::extStrIreplace(
+                    $szTagsArray[$ind],
+                    '<b><span style="color:blue">$1</font></b>',
+                    $arrayResults[$indice]['titule']
+                );
+                $arrayResults[$indice]['metadata'] = \Onm\StringUtils::extStrIreplace(
+                    $szTagsArray[$ind],
+                    '<b><span style="color:blue">$1</font></b>',
+                    $arrayResults[$indice]['metadata']
+                );
             }
 
             $indice++;
         }
 
-        $htmlPaging = paginateLink($Pager, $szTags, explode(", ",
-            $szCheckedTypes));
+        $htmlPaging = paginateLink($Pager, $szTags, explode(", ", $szCheckedTypes));
 
-        $tpl->assign(array(
-            'type2res'     => $type2res,
-            'pagination'   => $htmlPaging,
-            'arrayResults' => $arrayResults
-        ));
+        $tpl->assign(
+            array
+            (
+                'type2res'     => $type2res,
+                'pagination'   => $htmlPaging,
+                'arrayResults' => $arrayResults
+            )
+        );
 
         $html_out = $tpl->fetch('search_advanced/partials/_list.tpl');
         Application::ajaxOut($html_out);
@@ -181,18 +189,22 @@ switch ($action) {
     case 'content-provider-related':
     case 'content-provider':
 
-        $searchString = $request->query->filter('search_string', '',
-                                                FILTER_SANITIZE_STRING);
-        $page         = filter_input(INPUT_GET, 'page',
-                                    FILTER_SANITIZE_NUMBER_INT,
-                                    array('options' => array( 'default' => 1)));
+        $searchString = $request->query->filter('search_string', '', FILTER_SANITIZE_STRING);
+        $page         = filter_input(
+            INPUT_GET,
+            'page',
+            FILTER_SANITIZE_NUMBER_INT,
+            array('options' => array( 'default' => 1)
+            )
+        );
 
         if ($searchString != '') {
 
-            $searchStringArray = array_map(function($element)
-            {
-                return trim($element);
-            }, explode(',', $searchString));
+            $searchStringArray = array_map(
+                function($element) {
+                    return trim($element);
+                }, explode(',', $searchString)
+            );
 
             $searcher    = cSearch::getInstance();
             $matchString = '';
@@ -235,17 +247,19 @@ switch ($action) {
 
         $tpl->assign('search_string', $searchString);
         if ($action == 'content-provider-related') {
-            $html_out =
-                $tpl->fetch('search_advanced/content-provider-related.tpl');
+            $html_out = $tpl->fetch('search_advanced/content-provider-related.tpl');
             if (!empty($results)) {
-                $tpl->assign(array(
+                $tpl->assign(
+                    array
+                    (
+
                         'contents'    => $results,
                         'pagination'  => $pager->links,
                         'contentType' => 'Content',
                         'action'      => $action,
-                ));
-                $html_out .=
-                $tpl->fetch("common/content_provider/_container-content-list.tpl");
+                    )
+                );
+                $html_out .= $tpl->fetch("common/content_provider/_container-content-list.tpl");
             }
             Application::ajaxOut($html_out);
 
