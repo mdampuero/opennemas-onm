@@ -12,7 +12,7 @@ require_once('../bootstrap.php');
 $file      = $request->query->filter('file', null, FILTER_SANITIZE_STRING);
 $transform = $request->query->filter('transform', null, FILTER_SANITIZE_STRING);;
 
-if (preg_match('@(jpg|jpeg|gif|png)@i',$file)) {
+if (preg_match('@(jpg|jpeg|gif|png)@i', $file)) {
     $filePath = MEDIA_PATH.DIRECTORY_SEPARATOR.$file;
     $image = new \Onm\File\Image\Imagick;
     $image->load($filePath);

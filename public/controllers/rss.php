@@ -141,7 +141,7 @@ switch ($action) {
 
                     $art['uri'] = Uri::generate( 'opinion',
                         array(
-                            'id'       => sprintf('%06d',$art['id']),
+                            'id'       => sprintf('%06d', $art['id']),
                             'date'     => date('YmdHis', strtotime($art['created'])),
                             'category' => $art['author_name_slug'],
                             'slug'     => $art['slug'],

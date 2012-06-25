@@ -161,20 +161,21 @@ class ModuleManager
      */
     public static function isActivated($module = '')
     {
-        // Check if module name is properly setted
         if (!isset($module) || empty($module)) {
-            return true;
+            // Check if module name is properly setted
 
-        // Check if all modules are activated
+            return true;
         } elseif (self::checkAllModulesActivated()) {
+            // Check if all modules are activated
+
             return true;
-
-        // Check if module exists
         } elseif (!self::moduleExists($module)) {
-            throw new ModuleException("Module '{$module}'not available");
+            // Check if module exists
 
-        // Finally return if that module is activated
+            throw new ModuleException("Module '{$module}'not available");
         } else {
+            // Finally return if that module is activated
+
             return in_array($module, self::getActivatedModules());
         }
     }

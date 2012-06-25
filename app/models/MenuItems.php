@@ -147,9 +147,9 @@ class MenuItems
 
     public static function getMenuItems($params = array())
     {
-         // ver en europapress
+        // ver en europapress
         //config para sacar solo padres, solo hijos, todo...
-       // $config = array_merge(self::config, $params_config);
+        // $config = array_merge(self::config, $params_config);
 
         $sql = "SELECT * FROM menu_items WHERE {$params} ORDER BY position ASC";
         $rs = $GLOBALS['application']->conn->Execute($sql);
@@ -193,7 +193,7 @@ class MenuItems
             return false;
         }
 
-       // $menu =  $rs->GetRows();
+        // $menu =  $rs->GetRows();
         $menu = array();
         while (!$rs->EOF) {
             $menu[]  = $rs->fields['pk_item'];
