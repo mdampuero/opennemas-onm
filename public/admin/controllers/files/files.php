@@ -418,6 +418,7 @@ switch($action) {
 
     break;
 
+    case 'content-list-provider':
     case 'related-provider':
         $items_page = s::get('items_per_page') ?: 20;
         $category = filter_input( INPUT_GET, 'category' , FILTER_SANITIZE_STRING, array('options' => array('default' => '0')) );
@@ -431,7 +432,7 @@ switch($action) {
         $tpl->assign(array('contents'=>$polls,
                             'contentTypeCategories'=>$parentCategories,
                             'category' =>$category,
-                            'contentType'=>'File',
+                            'contentType'=>'Attachment',
                             'pagination'=>$pager->links
                     ));
 

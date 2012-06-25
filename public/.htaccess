@@ -466,7 +466,7 @@ Options -Indexes
     #Redirection from old nuevatribuna.es
 
     #Inner Article
-    RewriteRule ^noticia/([0-9]+)/($|.+/$|.+html$) /controllers/redirect-from-editmaker.php?content_type=article&content_id=$1 [L,NC]
+    RewriteRule ^noticia/([0-9]+)($|/$|.+/$|.+html$) /controllers/redirect-from-editmaker.php?content_type=article&content_id=$1 [L,NC]
 
     RewriteCond %{QUERY_STRING} &?ref=([^&]+)&?pos=([^&]+) [OR]
     RewriteCond %{QUERY_STRING} &?ref=([^&]+)
@@ -517,6 +517,7 @@ Options -Indexes
 
     #Old Static pages
     RewriteRule ^contacto($|/$) /estaticas/contacto? [R=301,L,NC]
+    RewriteRule ^estaticas/boletin.html /boletin/ [R=301,L,NC]
     #--------------------------------------------------------
 
     #Articles articulo/2008/09/29/galicia/ourense/titulo-noticia-separada-guiones/1222692016.html
@@ -526,7 +527,7 @@ Options -Indexes
     RewriteRule ^artigo/([a-z0-9\-]+)?/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/([a-z0-9\-]+)/([0-9]+).html$ controllers/article.php?category_name=$1&year=$2&month=$3&day=$4&article_id=$6&action=read [L,NC]
     RewriteRule ^artigo/([a-z0-9\-]+)?/.*/([0-9]+).html$ controllers/article.php?category_name=$1&article_id=$2&action=read [L,NC]
 
-    #RewriteRule ^articulo/([a-z0-9\-]+)/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/([a-z0-9\-]+)/(.*)/([0-9]+).html$ controllers/article.php?year=$1&month=$2&day=$3&category_name=$4&subcategory_name=$5&article_title=$6&article_id=$7&action=read [L,NC]
+    RewriteRule ^articulo/([a-z0-9\-]+)/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/(.*)/([0-9]+).html$ controllers/article.php?category_name=$1&article_id=$6&action=read [L,NC]
     RewriteRule ^articulo/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z0-9\-]+)/(.*)/([0-9]+).html$ controllers/article.php?year=$1&month=$2&day=$3&category_name=$4&article_title=$5&article_id=$6&action=read [L,NC]
     RewriteRule ^articulo/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([0-9]+\-[a-z])/(.*)/([0-9]+).html$ controllers/article.php?year=$1&month=$2&day=$3&category_name=$4&article_title=$5&article_id=$6&action=read [L,NC]
     RewriteRule ^artigo/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z0-9\-]+)/(.*)/([0-9]+).html$ controllers/article.php?year=$1&month=$2&day=$3&category_name=$4&article_title=$5&article_id=$6&action=read [L,NC]
@@ -633,8 +634,8 @@ Options -Indexes
     #Especiales
     #especiales/category/slug-slug/20111208174136001340.html
     RewriteRule ^especiales/([a-z0-9\-]+)/(.*)/([0-9]+).html$ controllers/special.php?action=show&category_name=$1&special_id=$3 [L,NC]
-    RewriteRule ^especiales/([a-z]+)/$ controllers/special.php?category_name=$1  [L,NC]
-    RewriteRule ^especiales/$ special.php [L,NC]
+    RewriteRule ^especiales/([a-z]+)/?$ controllers/special.php?category_name=$1  [L,NC]
+    RewriteRule ^especiales/?$ special.php [L,NC]
 
     # HEMEROTECA
     #hemeroteca/yyyy-mm-dd/category_name.html
@@ -656,10 +657,7 @@ Options -Indexes
     RewriteRule ^portadas-papel/([a-z0-9\-]+)/([0-9]+).html$ controllers/newsstand.php?category_name=$1&id=$2&action=read [L,NC]
 
 
-    # Temporary cronicas
-    #http://www.cronicasdelaemigracion.com/asturias/2012-04-09/16046/
-    RewriteRule ^([a-z]+)/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/([0-9]+)/?$ hemeroteca/$2-$3-$4/$1.html [R=301,L,NC]
-
+    #### CRONICAS temporary ####
     RewriteRule ^cronicas/?$ /seccion/cronicas/ [R=301,L,NC]
     RewriteRule ^galicia/?$ /seccion/galicia/ [R=301,L,NC]
     RewriteRule ^castillaleon/?$ /seccion/castillaleon/ [R=301,L,NC]
@@ -670,6 +668,28 @@ Options -Indexes
     RewriteRule ^cantabria/?$ /seccion/cantabria/ [R=301,L,NC]
     RewriteRule ^baleares/?$ /seccion/baleares/ [R=301,L,NC]
     RewriteRule ^paisvasco/?$ /seccion/paisvasco/ [R=301,L,NC]
+    RewriteRule ^opiniones/?$ /opinion/ [R=301,L,NC]
+    RewriteRule ^especiales/?$ /especiales/cronicas/ [R=301,L,NC]
+    RewriteRule ^especiales/home/?$ /especiales/cronicas/ [R=301,L,NC]
+    RewriteRule ^publicidad/([0-9]+).html$ controllers/advertisement.php?action=show&publi_id=$1 [L,NC]
+    RewriteRule ^opinion/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/(.*)/([0-9]+).html controllers/opinion_inner.php?opinion_id=$5&category_name=opinion&action=read [L,NC]
+
+    RewriteRule ^cartas.html?$ /cartas-al-director/ [R=301,L,NC]
+    RewriteRule ^letters?$ /cartas-al-director/ [R=301,L,NC]
+    RewriteRule ^letter/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/(.*)/([0-9]+).html?$ controllers/letter.php?action=show&id=$5&slug=$4 [L,NC]
+     #http://www.cronicasdelaemigracion.com/asturias/2012-04-09/16046/
+    RewriteRule ^([a-z]+)/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/([0-9]+)/?$ hemeroteca/$2-$3-$4/$1.html [R=301,L,NC]
+    #/hemeroteca/galicia/2009-01-06/
+    RewriteRule ^hemeroteca/([a-z]+)/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/(.*)?$ hemeroteca/$2-$3-$4/$1.html [R=301,L,NC]
+    #/articulo/imprimir/ayuntamiento-gijon-aportara-000-euros/2729.html
+    RewriteRule ^articulo/imprimir/([a-z0-9\-_]+)/([0-9]+).html$ controllers/article.php?action=print&article_id=$2&category_name=cronicas [L,NC]
+
+
+    ##### END CRONNICAS ####
+
+
+    RewriteRule ^articulo/(.*)/([0-9]+).htm  /articulo/$1/$2.html [R=301,L,NC]
+    RewriteRule ^opinion/(.*)/([0-9]+).htm  /opinion/$1/$2.html [R=301,L,NC]
 
     #Default Rules
     # RewriteCond %{REQUEST_URI} !^/controllers/index.php

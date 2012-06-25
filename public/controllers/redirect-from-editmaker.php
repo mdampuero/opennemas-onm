@@ -10,43 +10,46 @@
 require_once '../bootstrap.php';
 
 // Fetch HTTP variables
-$contentType = $request->query->filter('content_type',
-    'null', FILTER_SANITIZE_STRING);
-$contentId   = $request->query->filter('content_id',
-    null, FILTER_SANITIZE_STRING);
+$contentType = $request->query->filter(
+    'content_type', null, FILTER_SANITIZE_STRING
+);
+$contentId   = $request->query->filter(
+    'content_id', null, FILTER_SANITIZE_STRING
+);
 
 $url = SITE_URL;
 
 // All the info is available so lets create url to redirect to
-if (!is_null($contentID)) {
-    // Instantiate objects we will use
-    $cm  = new ContentManager();
-    $ccm = ContentCategoryManager::get_instance();
+if (!is_null($contentId)) {
 
     switch ($contentType) {
         case 'article':
-            list($type,$newContentID) =
-                getOriginalIdAndContentTypeFromID($contentID);
+            list($type,$newContentID)
+                = getOriginalIdAndContentTypeFromID($contentId);
+
+            $finalId = Content::resolveID($newContentID);
 
             if ($type == 'article') {
-                $article = new Article($newContentID);
+                $article = new Article($finalId);
                 $article->category_name = $article->catName;
 
-                $url .=  Uri::generate( 'article',
+                $url .=  Uri::generate(
+                    'article',
                     array(
-                        'id' => $article->id,
-                        'date' => date('Y-m-d', strtotime($article->created)),
+                        'id'       => $article->id,
+                        'date'     => date('YmdHis', strtotime($article->created)),
                         'category' => $article->category_name,
-                        'slug' => $article->slug,
+                        'slug'     => $article->slug,
                     )
                 );
             } elseif ($type == 'opinion') {
 
-                $opinion = new Opinion($newContentID);
-                $url .=  Uri::generate( 'opinion',
+                $opinion = new Opinion($finalId);
+                $url .=  Uri::generate(
+                    'opinion',
                     array(
                         'id'       => $opinion->id,
-                        'date'     => date('Y-m-d', strtotime($opinion->created)),
+                        'date'     => date('YmdHis', strtotime($opinion->created)),
                         'category' => StringUtils::get_title($opinion->name),
                         'slug'     => $opinion->slug,
                     )
@@ -55,8 +58,8 @@ if (!is_null($contentID)) {
             break;
 
         case 'category':
-            $newContentID =
-                getOriginalIDForContentTypeAndID( $contentType, $contentID);
+            $newContentID
+                = getOriginalIDForContentTypeAndID($contentType, $contentId);
 
             $cc = new ContentCategory($newContentID);
 
@@ -71,6 +74,6 @@ if (!is_null($contentID)) {
 if (isset($_REQUEST['stop_redirect'])) {
     echo $url;
 } else {
-    header( "HTTP/1.1 301 Moved Permanently" );
-    header( "Location: $url" );
+    header("HTTP/1.1 301 Moved Permanently");
+    header("Location: $url");
 }

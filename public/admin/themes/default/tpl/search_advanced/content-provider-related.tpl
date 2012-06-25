@@ -1,20 +1,12 @@
 <span style="display:block; width:100%; text-align:center;">
     <form action="/admin/controllers/search_advanced/search_advanced.php" method="get" style="display:inline-block;" id="search-form-content-provider">
-        <input type="hidden" name="action" value="content-provider">
+        <input type="hidden" name="action" value="{$action|default:"content-provider-related"}">
         <input type="text" name="search_string" value="{$search_string}" placeholder="{t}Write here the text for search...{/t}">
         <button type="submit" class="btn" id="search-content-provider-button">{t}Search{/t}</button>
     </form>
 </span>
-{if count($results) > 0}
-<div id="search_results_available" class="content-provider-block">
-    {foreach from=$results item=content name=video_loop}
-        {include file="article/content-provider/article.tpl"}
-    {/foreach}
-</div>
-<div class="pagination clearfix">
-    {$pager->links}
-</div><!-- / -->
-{elseif (!empty($search_string))}
+
+{if empty($results) && (!empty($search_string))}
 {t}No results{/t}
 {/if}
 <script>

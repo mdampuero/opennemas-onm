@@ -44,7 +44,7 @@ if(isset($_POST['action'])
 }else{
     $action = filter_input( INPUT_GET, 'action' , FILTER_SANITIZE_STRING, array('options' => array('default' => 'list')) );
 }
-$category = filter_input( INPUT_GET, 'category' , FILTER_SANITIZE_STRING );
+$category = filter_input( INPUT_GET, 'category' , FILTER_VALIDATE_INT, array('options' => array('default' => 'todos' )));
 if(empty($category)) {
     $category = filter_input(INPUT_POST,'category',FILTER_VALIDATE_INT, array('options' => array('default' => 'todos' )));
 }
@@ -289,7 +289,7 @@ switch($action) {
 
     case 'batchFrontpage':
         Acl::checkOrForward('COMMENT_AVAILABLE');
-        
+
         if(isset($_GET['selected_fld']) && count($_GET['selected_fld']) > 0) {
             $fields = $_GET['selected_fld'];
             $status = filter_input ( INPUT_GET, 'status' , FILTER_SANITIZE_NUMBER_INT );

@@ -24,19 +24,19 @@ class Author
     public $condition = null;
     public $date_nac  = null;
 
-    public $cache    = null;
+    public $cache     = null;
 
     // Static members for performance
     private static $_photos   = null;
 
     private $_defaultValues = array(
-        'name'=>'',
-        'gender'=>'',
-        'blog'=>'',
-        'politics'=>'',
-        'condition'=>'',
-        'date_nac'=>'',
-        'titles'=>array(),
+        'name'      =>'',
+        'gender'    =>'',
+        'blog'      =>'',
+        'politics'  =>'',
+        'condition' =>'',
+        'date_nac'  =>'',
+        'titles'    =>array(),
     );
 
     /**
@@ -67,11 +67,11 @@ class Author
         $data = array_merge($this->_defaultValues, $data);
 
         $sql = "INSERT INTO authors
-                (`name`, `fk_user`, `blog`,`politics`, `condition`,`date_nac`)
-                VALUES ( ?,?,?,?,?,?)";
+                (`name`, `fk_user`, `blog`,`politics`, `condition`,`date_nac`, `params`)
+                VALUES ( ?,?,?,?,?,?,?)";
         $values = array(
-            $data['name'], '0', $data['blog'],
-            $data['politics'], $data['condition'], $data['date_nac']
+            $data['name'], '0', $data['blog'], $data['politics'],
+            $data['condition'], $data['date_nac'],  serialize($data['params'])
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
@@ -111,7 +111,7 @@ class Author
         $sql = 'SELECT `authors`.`pk_author`, `authors`.`name` ,
                        `authors`.`blog` , `authors`.`politics` ,
                        `authors`.`date_nac` , `authors`.`fk_user` ,
-                       `authors`.`condition`
+                       `authors`.`condition` , `authors`.`params`
                 FROM authors
                 WHERE `authors`.`pk_author` = ?';
         $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
@@ -137,12 +137,13 @@ class Author
         $data = array_merge($this->_defaultValues, $data);
 
         $sql = "UPDATE `authors`
-                SET `name`=?, `blog`=?, `politics`=?, `condition`=?
+                SET `name`=?, `blog`=?, `politics`=?, `condition`=?, `params`=?
                 WHERE pk_author=?";
 
         $values = array(
             $data['name'], $data['blog'],
             $data['politics'], $data['condition'],
+            serialize($data['params']),
             $data['id']
         );
 
@@ -218,7 +219,7 @@ class Author
                 }
             }
         }
-
+        $this->params = unserialize($this->params);
         $this->id = $this->pk_author;
     }
 
@@ -235,6 +236,7 @@ class Author
         $sql =  'SELECT `authors`.`pk_author`, `authors`.`name` ,
                        `authors`.`blog` , `authors`.`politics` ,
                        `authors`.`date_nac` , `authors`.`fk_user` ,
+                       `authors`.`params` ,
                        `authors`.`condition` FROM authors '.
                 'WHERE ? ?';
         $values = array($where, $orderBy);
@@ -271,6 +273,7 @@ class Author
         $sql = 'SELECT `authors`.`pk_author`, `authors`.`name` ,
                        `authors`.`blog` , `authors`.`politics` ,
                        `authors`.`date_nac` , `authors`.`fk_user` ,
+                       `authors`.`params` ,
                        `authors`.`condition` FROM authors
                 WHERE `author`.`fk_user` = ?';
         $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
@@ -282,13 +285,14 @@ class Author
         }
 
         $author = new stdClass();
-        $author->pk_author    = $rs->fields['pk_author'];
-        $author->fk_user    = $rs->fields['fk_user'];
+        $author->pk_author = $rs->fields['pk_author'];
+        $author->fk_user   = $rs->fields['fk_user'];
         $author->gender    = $rs->fields['blog'];
-        $author->name    = $rs->fields['name'];
-        $author->politics    = $rs->fields['politics'];
-        $author->condition    = $rs->fields['condition'];
-        $author->date_nac    = $rs->fields['date_nac'];
+        $author->name      = $rs->fields['name'];
+        $author->politics  = $rs->fields['politics'];
+        $author->condition = $rs->fields['condition'];
+        $author->date_nac  = $rs->fields['date_nac'];
+        $author->params    = unserialize($rs->fields['params']);
 
         return $author;
     }
@@ -312,7 +316,7 @@ class Author
         $sql = 'SELECT `authors`.`pk_author`, `authors`.`name` ,
                        `authors`.`blog` , `authors`.`politics` ,
                        `authors`.`date_nac` , `authors`.`fk_user` ,
-                       `authors`.`condition`
+                       `authors`.`condition`, `authors`.`params`
                 FROM `authors` WHERE '.$_where. ' '.$_orderBy ;
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
@@ -321,14 +325,15 @@ class Author
             while (!$rs->EOF) {
                 $items[$i] = new stdClass;
                 $items[$i]->id         = $rs->fields['pk_author'];
-                $items[$i]->pk_author     = $rs->fields['pk_author'];
+                $items[$i]->pk_author  = $rs->fields['pk_author'];
                 $items[$i]->fk_user    = $rs->fields['fk_user'];
-                $items[$i]->name    = $rs->fields['name'];
+                $items[$i]->name       = $rs->fields['name'];
                 $items[$i]->gender     = $rs->fields['blog'];
-                $items[$i]->politics    = $rs->fields['politics'];
-                $items[$i]->condition    = $rs->fields['condition'];
-                $num = Author::count_author_photos($rs->fields['pk_author']);
-                $items[$i]->num_photos    = $num;
+                $items[$i]->politics   = $rs->fields['politics'];
+                $items[$i]->condition  = $rs->fields['condition'];
+                $items[$i]->params     = unserialize($rs->fields['params']);
+                $num                   = Author::count_author_photos($rs->fields['pk_author']);
+                $items[$i]->num_photos = $num;
 
                 $rs->MoveNext();
                   $i++;
@@ -363,10 +368,10 @@ class Author
         $i  = 0;
 
         while (!$rs->EOF) {
-            $items[$i] = new stdClass;
-            $items[$i]->id         = $rs->fields['pk_author'];
-            $items[$i]->pk_author     = $rs->fields['pk_author'];
-            $items[$i]->name    = $rs->fields['name'];
+            $items[$i]            = new stdClass;
+            $items[$i]->id        = $rs->fields['pk_author'];
+            $items[$i]->pk_author = $rs->fields['pk_author'];
+            $items[$i]->name      = $rs->fields['name'];
 
               $rs->MoveNext();
               $i++;
@@ -436,11 +441,11 @@ class Author
         while (!$rs->EOF) {
             $photos[$i] = new stdClass();
 
-            $photos[$i]->pk_img = $rs->fields['pk_img'];
-            $photos[$i]->path_img = $rs->fields['path_img'];
-            $photos[$i]->path_file = $rs->fields['path_img'];
+            $photos[$i]->pk_img      = $rs->fields['pk_img'];
+            $photos[$i]->path_img    = $rs->fields['path_img'];
+            $photos[$i]->path_file   = $rs->fields['path_img'];
             $photos[$i]->description = $rs->fields['description'];
-            $photos[$i]->fk_author = $rs->fields['fk_author'];
+            $photos[$i]->fk_author   = $rs->fields['fk_author'];
 
             $i++;
             $rs->MoveNext();

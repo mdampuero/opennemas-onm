@@ -600,6 +600,8 @@ input.validation-passed, textarea.validation-passed {
   background-color: #FF3300;
   color : #FFF;
   font-weight: bold;
+  display:block;
+  clear:both;
 }
 
 
@@ -2325,15 +2327,15 @@ a.btn-primary.active,a.btn-warning.active,a.btn-danger.active,a.btn-success.acti
 }
 div#newsletter-container.column-receiver,
 div#article-form.tabs div#related-contents  div.column-receiver {
-    border: 1px solid gray;
-    margin: 4px;
-    min-height: 140px;
+    margin-bottom:10px;
 }
 
-div#article-form.tabs div#related-contents ul.content-receiver,
-div#related-contents div#content-provider ul#contentList {
+div#article-form.tabs div#related-contents ul.content-receiver {
     min-height: 100px;
     padding: 4px;
+    padding: 10px;
+    border:1px solid #ccc;
+    margin-top:0;
 }
 
 div.newsletter-contents div#content-provider ul {
@@ -2349,8 +2351,19 @@ min-height: 30px  !important;
 div#content-provider span.type {
     display: none;
 }
+div#content-provider span.icon {
+    display: none;
+}
+
+#related-contents div#content-provider span.type {
+    display: inline-block;
+    font-weight:bold;
+}
 
 
+div#related-contents div#content-provider.related-content-provider  div.contents ul {
+  padding-left:0px;
+}
 div#newsletter-container.column-receiver ul.content-receiver li,
 div#article-form.tabs div#related-contents div.column-receiver ul.content-receiver li,
 div#related-contents div#content-provider ul li,
@@ -2358,8 +2371,9 @@ div.newsletter-contents div#content-provider ul li {
     list-style: none outside none;
     cursor:pointer;
     padding:4px;
-    border:1px dashed #AAA;
+    border:1px solid #AAA;
     margin: 2px;
+    background:White;
 }
 
 div#newsletter-container.column-receiver ul{
@@ -2369,8 +2383,20 @@ div#newsletter-container.column-receiver ul{
     margin: 0px 0px 10px 0px;
 }
 
+div#related-contents .column-receiver h5,
 div#newsletter-container.column-receiver h5 {
-    padding:5px;
+    margin-bottom:0;
+    font-size:1em;
+    padding:0;
+    color:#444;
+    font-size:normal;
+    padding:5px 7px;
+    border:1px solid #ccc;
+    margin-bottom:-2px;
+    border-bottom:0 none;
+    border-radius:6px 6px 0 0;
+    background:White;
+    display:inline-block;
 }
 
 input.hidden-element {
@@ -2398,6 +2424,16 @@ div.active .container-label {
 div.newsletter-contents .container-buttons {
     float:right;
 }
+
+.icon-clean {
+    background-image: url("../images/clean14.png");
+    background-position: 0px 0px;
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 14px;
+    line-height: 14px;
+    vertical-align: text-top;
+    width: 14px;
 
 .popover-title {
   margin-bottom:0 !important;

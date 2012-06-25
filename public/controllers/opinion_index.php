@@ -78,7 +78,7 @@ switch ($action) {
             $total_opinions = $cm->count(
                 'Opinion',
                 'in_home=1 and available=1 and type_opinion=0',
-                'ORDER BY type_opinion DESC, position ASC, created DESC '
+                'ORDER BY type_opinion DESC, created DESC '
             );
 
             // Fetch last opinions of contributors and
@@ -86,7 +86,7 @@ switch ($action) {
             $opinions = $cm->find(
                 'Opinion',
                 'in_home=1 and available=1 and type_opinion=0',
-                'ORDER BY type_opinion DESC, position ASC, created DESC '.$_limit
+                'ORDER BY type_opinion DESC, created DESC '.$_limit
             );
 
             foreach ($opinions as &$opinion) {

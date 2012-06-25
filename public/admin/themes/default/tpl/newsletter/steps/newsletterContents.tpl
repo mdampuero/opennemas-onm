@@ -1,4 +1,4 @@
-{extends file="base/admin.tpl"}
+23{extends file="base/admin.tpl"}
 
 {block name="header-css" append}
 {css_tag href="/admin.css"}
@@ -111,6 +111,7 @@
                                                     <i class="icon-chevron-down"></i>
                                                     <i class="icon-pencil"></i>
                                                     <i class="icon-trash"></i>
+                                                    <i class="icon-clean"></i>
                                             </div>
                                         </div>
                                         <ul class="content-receiver">
@@ -128,6 +129,7 @@
                                                         <i class="icon-chevron-down"></i>
                                                         <i class="icon-pencil"></i>
                                                         <i class="icon-trash"></i>
+                                                        <i class="icon-clean"></i>
                                                 </div>
                                             </div>
                                             <ul class="content-receiver">
@@ -137,6 +139,7 @@
                                                         {if $contents[d]->content_type eq 'label'} class="container-label" {/if}
                                                         data-title="{$contents[d]->title}" data-type="{$contents[d]->content_type}" >
                                                          {$contents[d]->type} {$contents[d]->title}
+                                                         <span class="icon"><i class="icon-trash"></i></span>
                                                     </li>
                                                     {/if}
                                                 {/section}

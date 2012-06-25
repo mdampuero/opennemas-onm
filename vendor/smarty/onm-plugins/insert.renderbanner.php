@@ -135,7 +135,9 @@ JSINTERSTICIAL;
 
 
 
-                $output .= '<a target="_blank" href="'.SITE_URL.'ads/'. date('YmdHis', strtotime($banner->created)).sprintf('%06d', $banner->pk_advertisement) .'.html" rel="nofollow">';
+                $output .= '<a target="_blank" href="'
+                            .SITE_URL.'ads/'. date('YmdHis', strtotime($banner->created)).sprintf('%06d', $banner->pk_advertisement)
+                            .'.html" rel="nofollow" style="display:block;cursor:pointer">';
                 $output .= '<object width="'.$width.'" height="'.$height.'" >
                         <param name="wmode" value="transparent" />
                         <param name="movie" value="'. MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name. '" />

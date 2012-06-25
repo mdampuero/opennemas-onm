@@ -1,16 +1,5 @@
 <hr>
 
-<div id="div_pdf" class="special-container" style="display:{if $special->only_pdf eq 1}inline{else}none{/if};">
-    <br />
-    <input type="hidden" size="20" id="my_pdf" name="my_pdf" value="" />
-    <input type="text" size="80" id="pdf" name="pdf" value="{$special->pdf}" />
-    <br />
-    <a onclick="javascript:abrirArchives('my_pdf','{$category}');" href="#">
-        <img border="0" src="images/iconos/examinar.gif"/>
-        Buscar documento pdf
-    </a>
-</div>
-
 <div id="cates" class="special-container" style="display:{if $special->only_pdf eq 0}inline{else}none{/if};">
     <table style="width:100%">
         <tr>
@@ -22,6 +11,7 @@
                         {section name=d loop=$contentsRight}
                             <li class="" data-type="{$contentsRight[d]->content_type}" data-id="{$contentsRight[d]->pk_content}">
                                 {$contentsRight[d]->created|date_format:"%d-%m-%Y"}:{$contentsRight[d]->title|clearslash}
+                                <span class="icon"><i class="icon-trash"></i></span>
                             </li>
                         {/section}
                     </ul>
@@ -34,6 +24,7 @@
                         {section name=d loop=$contentsLeft}
                             <li class="" data-type="{$contentsLeft[d]->content_type}" data-id="{$contentsLeft[d]->pk_content}">
                                 {$contentsLeft[d]->created|date_format:"%d-%m-%Y"}:{$contentsLeft[d]->title|clearslash}
+                                <span class="icon"><i class="icon-trash"></i></span>
                             </li>
                         {/section}
                         </ul>

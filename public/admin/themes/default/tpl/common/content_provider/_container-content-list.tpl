@@ -18,9 +18,10 @@
         {section name=n loop=$contents}
             <li data-id="{$contents[n]->id}" data-type="{$contentType}" data-title="{$contents[n]->title|clearslash}">
                 <input type="checkbox" class="hidden-element" name="selected">
-                <span class="type">{t}{$contentType}{/t} -</span>
+                <span class="type">{t}{$contents[n]->content_type_name|ucwords}{/t} -</span>
                 <span class="date">{t}{$contents[n]->starttime|date_format:"%d-%m-%Y"}{/t} -</span>
                 {$contents[n]->title}
+                <span class="icon"><i class="icon-trash"></i></span>
             </li>
         {/section}
     </ul>

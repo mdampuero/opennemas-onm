@@ -21,7 +21,8 @@
             {acl isAllowed="ARTICLE_UPDATE"}
 			<li>
 				<a href="#"  accesskey="P" id="button_preview">
-				<img src="{$params.IMAGE_DIR}preview.png" title="{t}Preview{/t}" alt="{t}Preview{/t}" /><br />{t}Preview{/t}</a>
+				    <img src="{$params.IMAGE_DIR}preview.png" title="{t}Preview{/t}" alt="{t}Preview{/t}" /><br />{t}Preview{/t}
+                </a>
 			</li>
 			<li class="separator"></li>
 			<li>

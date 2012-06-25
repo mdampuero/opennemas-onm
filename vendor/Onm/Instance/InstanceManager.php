@@ -443,7 +443,7 @@ class InstanceManager
         // Check if the email already exists
         $checkMailSql = "SELECT count(*) as email_exists FROM instances "
               . "WHERE `contact_mail` = ?";
-        $checkMailRs = $this->_connection->Execute($sql2, array($data['user_mail']));
+        $checkMailRs = $this->_connection->Execute($checkMailSql, array($data['user_mail']));
 
         // If doesn´t exist the instance in the database and doesn't exist contact mail proceed
         if ($rs
@@ -492,7 +492,7 @@ class InstanceManager
                 throw new InstanceNotRegisteredException(
                     _("Instance internal name is already in use.")
                 );
-            } elseif ( $rs2 && (bool) $rs2->fields['email_exists']) {
+            } elseif ( $checkMailRs && (bool) $checkMailRs->fields['email_exists']) {
                 throw new InstanceNotRegisteredException(
                     _("Instance contact mail is already in use.")
                 );

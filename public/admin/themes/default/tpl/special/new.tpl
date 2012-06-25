@@ -1,7 +1,10 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-js" append}
-
+    <script type="text/javascript">
+        jQuery.noConflict();
+    </script>
+    {script_tag src="/utilsGallery.js"}
 {/block}
 
 {block name="header-css" append}
@@ -9,7 +12,7 @@
 {/block}
 
 {block name="footer-js" append}
-    {script_tag src="/utilsGallery.js"}
+
     {script_tag src="/onm/jquery.content-provider.js"}
     {script_tag src="/onm/jquery.specials.js"}
     {script_tag src="/tiny_mce/opennemas-config.js"}
@@ -29,6 +32,7 @@
         $("#form-validate-button, #form-send-button").on("click", function(event) {
 
             saveSpecialContent();
+
             return true;
         });
     });
@@ -45,7 +49,7 @@
 
                  <li>
                     {acl isAllowed="SPECIAL_CREATE"}
-                    <button type="submit" name="action" value="validate"  id="form-validate-button">
+                    <button  name="action" value="validate"  id="form-validate-button">
                         <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="Guardar y continuar" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
                     </button>
                     {/acl}
@@ -53,7 +57,7 @@
                 <li>
                     {if isset($special->id)}
                         {acl isAllowed="SPECIAL_UPDATE"}
-                        <button type="submit" name="action" value="update" id="form-send-button">
+                        <button   name="action" value="update" id="form-send-button">
                             <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar" alt="{t}Save{/t}" ><br />{t}Save{/t}
                         </button>
                         {/acl}
@@ -83,25 +87,28 @@
                     </td>
                     <td style="padding:4px;" nowrap="nowrap">
                         <input type="text" id="title" name="title" title={t}"Special"{/t}
-                            size="60" value="{$special->title|clearslash|escape:"html"}"
+                            size="80" value="{$special->title|clearslash|escape:"html"}"
                             class="required" onBlur="javascript:get_metadata(this.value);" />
                     </td>
-                    <td rowspan="4"  style="padding: 4px;">
+                    <td rowspan="2"  style="padding: 4px;">
                         <table  style='background-color:#F5F5F5; padding:8px;'>
                             <tr>
                                 <td valign="top"  style="text-align:right;padding: 4px;" nowrap="nowrap">
                                 <label for="title">Secci&oacute;n:</label>
                                 </td>
                                 <td nowrap="nowrap">
-                                    <select name="category" id="category"  >
+                                    <select name="category" id="category" style="width:98%">
                                         {section name=as loop=$allcategorys}
+                                            {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
                                             <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{t 1=$allcategorys[as]->title}%1{/t}</option>
+                                            {/acl}
                                             {section name=su loop=$subcat[as]}
-                                                <option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;&nbsp;&nbsp;{t 1=$subcat[as][su]->title}%1{/t}</option>
+                                                {acl hasCategoryAccess=$subcat[as]->pk_content_category}
+                                                <option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;|_&nbsp;&nbsp;{t 1=$subcat[as][su]->title}%1{/t}</option>
+                                                {/acl}
                                             {/section}
                                         {/section}
                                     </select>
-                                </td>
                             </tr>
                             <tr>
                                 <td valign="top" style="text-align:right;padding: 4px;" nowrap="nowrap">
@@ -125,7 +132,7 @@
                     </td>
                     <td style="padding:4px;" nowrap="nowrap">
                         <input type="text" id="subtitle" name="subtitle" title={t}"Special"{/t}
-                            size="60" value="{$special->subtitle|clearslash|escape:"html"}" />
+                            size="80" value="{$special->subtitle|clearslash|escape:"html"}" />
                     </td>
                 </tr>
                 <tr>
@@ -133,7 +140,7 @@
                         <label for="metadata">{t}Keywords:{/t}</label>
                     </td>
                     <td style="padding:4px;" nowrap="nowrap">
-                        <input type="text" id="metadata" name="metadata" size="60"
+                        <input type="text" id="metadata" name="metadata" size="80"
                            class="required" title={t}"Metadata"{/t} value="{$special->metadata}" />
                         <br><label align='right'><sub>{t}Separated by coma{/t}</sub></label>
                     </td>
@@ -144,9 +151,9 @@
                     </td>
                     <td style="padding:4px;" nowrap="nowrap">
                         <input 	type="text" id="slug" name="slug" title="{t}slug{/t}"
-                            size="60" maxlength="256" tabindex="5"
-                            {if is_object($article)}
-                                    value="{$article->slug|clearslash|escape:"html"}"
+                            size="80" maxlength="256" tabindex="5"
+                            {if is_object($special)}
+                                    value="{$special->slug|clearslash|escape:"html"}"
                             {else}
                                     value=""
                             {/if}/>
@@ -158,7 +165,7 @@
                     </td>
                     <td style="padding:4px;" nowrap="nowrap" colspan="2">
                         <textarea name="description" id="description"  title="description" style="width:90%; height:10em;">
-                            {t 1=$special->description|clearslash|escape:"html"}%1{/t}
+                            {t 1=$special->description|clearslash}%1{/t}
                         </textarea>
                     </td>
                 </tr>

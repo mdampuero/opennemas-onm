@@ -4,28 +4,26 @@
  * Start up and setup the app
 */
 
-//TODO: That cron given this vars.
-//$_SERVER['SERVER_NAME'] ='onm-cronicas.local';
+//TODO: use includepath as import-tools.
 
-$_SERVER['HTTP_HOST'] ='cronicasdelaemigracion.com';
-
-//$_SERVER['SERVER_NAME'] ='cronicasdelaemigracion.com';
-$_SERVER['REQUEST_URI'] ='/';
+$_SERVER['SERVER_NAME'] = 'www.cronicasdelaemigracion.com';
+//$_SERVER['SERVER_NAME'] = 'onm-cronicas.local';
+$_SERVER['REQUEST_URI'] = '/';
 
 require __DIR__.'/../bootstrap.php';
 
 /**
  * Setup view
 */
-$tpl           = new Template(TEMPLATE_USER);
+$tpl = new Template(TEMPLATE_USER);
 //$tpl->setConfig('newslibrary');
 
 $urlBase = SITE_URL."seccion/";
-
-$menuItems     = Menu::renderMenu('frontpage');
+//TODO: work with db
+//$menuItems     = Menu::renderMenu('frontpage');
 $date          =  new DateTime();
 $directoryDate = $date->format("/Y/m/d/");
-$basePath      = MEDIA_PATH.'/library'.$directoryDate;
+$basePath      = SITE_PATH."/media/cronicas/library".$directoryDate;
 $curly         = array();
 
 if ( !file_exists($basePath) ) {
@@ -35,16 +33,20 @@ if ( !file_exists($basePath) ) {
 // multi handle
 $mh = curl_multi_init();
 
-foreach ($menuItems->items as $id =>$item) {
-    $category_name = $item->link;
+$items = array('home', 'cronicas', 'galicia', 'castillaleon', 'asturias',
+    'madrid', 'canarias', 'andalucia', 'cantabria', 'baleares', 'paisvasco');
+
+//foreach ($menuItems->items as $id => $item) {
+foreach ($items as $category_name) {
+    // $category_name = $item->link;
 
     if ( !empty($category_name) ) {
 
         $curly[$category_name] = curl_init();
 
         $url = $urlBase. $category_name.'/';
-        curl_setopt($curly[$category_name], CURLOPT_URL,            $url);
-        curl_setopt($curly[$category_name], CURLOPT_HEADER,         0);
+        curl_setopt($curly[$category_name], CURLOPT_URL, $url);
+        curl_setopt($curly[$category_name], CURLOPT_HEADER, 0);
         curl_setopt($curly[$category_name], CURLOPT_RETURNTRANSFER, 1);
 
         curl_multi_add_handle($mh, $curly[$category_name]);
@@ -63,15 +65,11 @@ do {
 foreach ($curly as $category_name => $c) {
     $htmlOut = curl_multi_getcontent($c);
     $newFile = $basePath.$category_name.".html";
-
     $result  = file_put_contents($newFile, $htmlOut);
 
     curl_multi_remove_handle($mh, $c);
 }
-
   // all done
 curl_multi_close($mh);
-
-
-
+echo "generate ok \n";
 

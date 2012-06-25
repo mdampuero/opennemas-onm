@@ -1,11 +1,11 @@
 <?php
-/*
+/**
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- */
+ **/
 /**
  * Handles all the CRUD actions over albums.
  *
@@ -18,26 +18,27 @@ class Special extends Content
     /**
      * the special id
      */
-    public $pk_special  = null;
-    /**
+    public $pk_special = null;
+     /**
      * the subtitle for this album
      */
     public $subtitle = null;
-    /**
+     /**
      * path for get a pdf file
      */
-    public $pdf_path  = null;
-    /**
+    public $pdf_path = null;
+     /**
      * the id of the image that is the cover for this album
      */
 
-    public $img1  = null;
+    public $img1 = null;
 
     /**
      * Initializes the Special class.
      *
-     * @param strin $id the id of the album.
+     * @param string $id the id of the album.
      **/
+
     public function __construct($id=null)
     {
         parent::__construct($id);
@@ -67,15 +68,13 @@ class Special extends Content
                     $this->category_name =
                         $this->loadCategoryName($this->pk_content);
                 }
-                $uri =  Uri::generate(
-                    'special',
+                $uri =  Uri::generate('special',
                     array(
                         'id'       => sprintf('%06d', $this->id),
                         'date'     => date('YmdHis', strtotime($this->created)),
                         'category' => $this->category_name,
                         'slug'     => $this->slug,
-                    )
-                );
+                    ));
 
                 return ($uri !== '') ? $uri : $this->permalink;
 
@@ -87,11 +86,10 @@ class Special extends Content
             }
 
             case 'content_type_name': {
-                $contentTypeName = $GLOBALS['application']->conn->Execute(
-                    'SELECT * FROM `content_types` '
+                $contentTypeName = $GLOBALS['application']->conn->
+                    Execute('SELECT * FROM `content_types` '
                     .'WHERE pk_content_type = "'. $this->content_type
-                    .'" LIMIT 1'
-                );
+                    .'" LIMIT 1');
 
                 if (isset($contentTypeName->fields['name'])) {
                     $returnValue = $contentTypeName;
@@ -125,7 +123,7 @@ class Special extends Content
         parent::create($data);
 
         if (!array_key_exists('pdf_path', $data)) {
-            $data['pdf_path']='';
+            $data['pdf_path'] = '';
         }
 
         $sql = "INSERT INTO specials "
@@ -157,13 +155,13 @@ class Special extends Content
         parent::read($id);
 
         $sql = 'SELECT * FROM specials WHERE pk_special = '.intval($id);
-        $rs = $GLOBALS['application']->conn->Execute( $sql );
+        $rs  = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
             \Application::logDatabaseError();
-
             return;
         }
+
         $this->id         = $rs->fields['pk_special'];
         $this->pk_special = $rs->fields['pk_special'];
         $this->subtitle   = $rs->fields['subtitle'];
@@ -180,14 +178,14 @@ class Special extends Content
             $data['pdf_path'] = '';
         }
 
-        $sql = "UPDATE specials "
-             . "SET `subtitle`=?, `img1`=?,  `pdf_path`=?  "
-             . "WHERE pk_special=?";
+        $sql    = "UPDATE specials "
+                 . "SET `subtitle`=?, `img1`=?,  `pdf_path`=?  "
+                 . "WHERE pk_special=?";
         $values = array(
-            $data['subtitle'],
-            $data['img1'],
-            $data['pdf_path'],
-            intval($data['id']),
+                $data['subtitle'],
+                $data['img1'],
+                $data['pdf_path'],
+                intval($data['id']),
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
@@ -196,7 +194,7 @@ class Special extends Content
             return;
         }
 
-        if (empty($data['pdf_path']) ) {
+        if (empty($data['pdf_path'])) {
             $this->saveItems($data);
         }
 
@@ -207,7 +205,7 @@ class Special extends Content
     {
         parent::remove($id);
 
-        $sql = 'DELETE FROM specials WHERE pk_special=?';
+        $sql    = 'DELETE FROM specials WHERE pk_special=?';
         $values = array(intval($id));
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
@@ -216,7 +214,7 @@ class Special extends Content
             return;
         }
 
-        $sql = 'DELETE FROM special_contents WHERE fk_special=?';
+        $sql    = 'DELETE FROM special_contents WHERE fk_special=?';
         $values = array(intval($id));
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
@@ -228,31 +226,29 @@ class Special extends Content
 
     public function saveItems($data)
     {
+
         $this->deleteAllContents($data['id']);
+
         if (isset($data['noticias_left'])) {
-            $tok = strtok($data['noticias_left'], ",");
-            $name = "";
-            $pos = 1;
-            $contentType = 'Article';
-            while (($tok !== false) AND ($tok !=" ")) {
-                // $this->deleteContents($data['id'] ,$tok)  	;
-                $this->set_contents($data['id'], $tok, $pos, $name, $contentType);
-                $tok = strtok(",");
-                $pos+=2;
+            $contents = json_decode(json_decode($data['noticias_left']), true);
+            if (!empty($contents)) {
+                foreach ($contents as $content) {
+                    $this->setContents($data['id'], $content['id'],
+                        $content['position'], "", $content['content_type']);
+                }
             }
         }
 
         if (isset($data['noticias_right'])) {
-            $tok = strtok($data['noticias_right'], ",");
-            $name = "";
-            $pos = 2;
-            $contentType = 'Article';
-            while (($tok !== false) AND ($tok !=" ")) {
-                $this->set_contents($data['id'], $tok, $pos, $name, $contentType);
-                $tok = strtok(",");
-                $pos+=2;
+            $contents = json_decode(json_decode($data['noticias_right']), true);
+            if (!empty($contents)) {
+                foreach ($contents as $content) {
+                    $this->setContents($data['id'], $content['id'],
+                        $content['position'], "", $content['content_type']);
+                }
             }
         }
+
     }
 
     public function get_contents($id)
@@ -260,14 +256,16 @@ class Special extends Content
         if ($id == null) {
             return(false);
         }
+
         $sql = 'SELECT * FROM `special_contents`'
              . ' WHERE fk_special=? ORDER BY position ASC';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($id)));
+        $rs  = $GLOBALS['application']->conn->Execute($sql, array(intval($id)));
 
-        $i = 0;
+        $i     = 0;
         $items = array();
+
         while (!$rs->EOF) {
-            $items []= array(
+            $items[] = array(
                 'fk_content'   => $rs->fields['fk_content'],
                 'name'         => $rs->fields['name'],
                 'position'     => $rs->fields['position'],
@@ -280,29 +278,27 @@ class Special extends Content
         return $items;
     }
 
-    //Define contenidos dentro de un modulo
-    public function set_contents(
-        $id,
-        $pkContent,
-        $position,
-        $name,
-        $typeContent
-    ) {
+    /**
+     *   Set contents into special column
+    **/
+    public function setContents($id,$pkContent,$position,$name,$typeContent)
+    {
         if ($id == null) {
             return false;
         }
 
         $visible = 1;
-        $sql = "INSERT INTO special_contents "
-             . "(`fk_special`, `fk_content`,`position`,`name`,`visible`,`type_content`)"
-             . " VALUES (?,?,?,?,?,?)";
-        $values = array(
-            $id,
-            $pkContent,
-            $position,
-            $name,
-            $visible,
-            $typeContent
+        $sql     = "INSERT INTO special_contents "
+        . "(`fk_special`, `fk_content`,`position`,".
+        "`name`,`visible`,`type_content`)"
+        . " VALUES (?,?,?,?,?,?)";
+        $values  = array(
+                        $id,
+                        $pkContent,
+                        $position,
+                        $name,
+                        $visible,
+                        $typeContent
         );
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
@@ -315,19 +311,21 @@ class Special extends Content
          return true;
     }
 
-    // Elimina contenidos dentro de un modulo
+    /**
+     * Drop one content into a special
+    **/
     public function deleteContents($id, $contentId)
     {
         if (is_null($id)) {
             return false;
         }
-        $sql = 'DELETE FROM special_contents '
-             . 'WHERE fk_content=? AND fk_special=?';
+        $sql    = 'DELETE FROM special_contents '
+                    . 'WHERE fk_content=? AND fk_special=?';
         $values = array(intval($contentId), intval($id));
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        $rs     = $GLOBALS['application']->conn->Execute($sql, $values);
+
         if ($rs === false) {
             \Application::logDatabaseError();
-
             return;
         }
     }
@@ -338,12 +336,11 @@ class Special extends Content
             return false;
         }
         $sql = 'DELETE FROM special_contents '
-             . 'WHERE fk_special=?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($id)));
+               . 'WHERE fk_special=?';
+        $rs  = $GLOBALS['application']->conn->Execute($sql, array(intval($id)));
 
         if ($rs === false) {
             \Application::logDatabaseError();
-
             return;
         }
     }

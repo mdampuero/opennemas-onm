@@ -463,7 +463,6 @@ INSERTAR;
      *
      * @param array $sqlList array with sql prepare staments.
      * @param array $values array with old id and new id for execute sql.
-
      * write in log sql failed
      */
 
@@ -527,7 +526,7 @@ INSERTAR;
 
         foreach ($contents as $content) {
 
-            $slug = StringUtils::get_title( $content["title"] );
+            $slug = \Onm\StringUtils::get_title( $content["title"] );
             $content_type = $content["fk_content_type"];
             $contentID = $content['pk_content'];
 
@@ -686,6 +685,55 @@ INSERTAR;
                 echo "There was a problem while trying to log your message.";
             }
         }
+    }
+
+    public function updateContentsBody() {
+
+        $sql    = 'SELECT pk_article, body FROM `articles`';
+        $rs     =  $this->orig->conn->Execute($sql);
+        $values = array();
+
+        while(!$rs->EOF) {
+
+            $html = $this->migrateSourcesImages($rs->fields['body']);
+            if (!empty($html)) {
+                $values[] = array($html, $rs->fields['pk_article'] );
+                $this->log("\n updateContent Body function: ".  $rs->fields['pk_article'] );
+                printf( " \n updateContent Body function: ". $rs->fields['pk_article'] );
+            }
+            $rs->MoveNext();
+        }
+
+        $sql = 'UPDATE `articles` SET `body`=? WHERE pk_article=? ';
+        $contentSql =  $this->orig->conn->Prepare($sql);
+
+        $rss = $this->orig->conn->Execute($contentSql, $values);
+
+        if (!$rss) {
+            printf( '\n PROBLEM; updateContent Body function: '. $this->orig->conn->ErrorMsg() );
+
+            $this->log('\n  PROBLEM updateContent Body function: '.  $this->orig->conn->ErrorMsg() );
+            return false;
+        }
+
+        return true;
+    }
+
+
+    public function migrateSourcesImages($html) {
+
+        echo '.';
+        $replacements='src="/media/nuevatribuna/' ;
+        $patterns = '@src?=?\"/media/@';
+
+        $htmlResult = preg_replace($patterns, $replacements, $html, '-1', $cont);
+
+        if ($cont>0) {
+            return $htmlResult;
+        } else {
+            return 0;
+        }
+
     }
 
 }

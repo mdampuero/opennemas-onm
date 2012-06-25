@@ -3,16 +3,20 @@
 /**
  * Setup app
 */
-require_once('../../../bootstrap.php');
-require_once('../../session_bootstrap.php');
+require_once '../../../bootstrap.php';
+require_once '../../session_bootstrap.php';
 
 $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
 
-if(isset($_REQUEST['category'])) {
+if (isset($_REQUEST['category'])) {
     $ccm = ContentCategoryManager::get_instance();
-    if($_REQUEST['category']!='home') {
+    if ($_REQUEST['category']!='home' && $_REQUEST['category']!='opinion') {
         $category_name = $ccm->get_name($_REQUEST['category']);
         $title = $ccm->get_title($category_name);
+    } elseif ($_REQUEST['category']=='opinion') {
+        $category_name = 'opinion';
+        $title = 'Opinion';
+        $tplManager->delete($category_name, 'opinion_frontpage.tpl');
     } else {
         $category_name = 'home';
         $title = 'PORTADA';

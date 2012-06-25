@@ -92,6 +92,19 @@ class Opinion extends Content
             case 'content_type_name':
                 return 'Opinion';
                 break;
+
+            case 'author_object':
+                if ((int) $this->type_opinion == 1) {
+                    $authorObj = new Stdclass();
+                    $authorObj->name = 'Editorial';
+                } elseif ((int) $this->type_opinion == 2) {
+                    $authorObj = new Stdclass();
+                    $authorObj->name = 'Director';
+                } else {
+                    $authorObj = new Author($this->fk_author);
+                }
+                return $authorObj;
+                break;
             default: {
                 return parent::__get($name);
                 break;

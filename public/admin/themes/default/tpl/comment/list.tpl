@@ -218,7 +218,6 @@
     </div>
 
     <input type="hidden" name="comment_status" id="comment_status" value="{$comment_status}" />
-    <input type="hidden" name="category" id="category" value="{$category}" />
     <input type="hidden" id="status" name="status" value="" />
 	<input type="hidden" id="action" name="action" value="" />
 	<input type="hidden" name="id" id="id" value="{$id|default:""}" />
