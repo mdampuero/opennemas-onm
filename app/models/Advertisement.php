@@ -573,7 +573,9 @@ class Advertisement extends Content
     /**
      * Set num views
      *
-     * @param int $id
+     * @param int $id The id of the advertisement to increase num_views
+     *
+     * @return void
      **/
     public static function setNumViews($id = null)
     {
@@ -621,17 +623,22 @@ class Advertisement extends Content
      * @param array  $types    Types of advertisement
      * @param string $category Category of advertisement
      *
-     * @return array Array of Advertisement objects
+     * @return array $finalBanners of Advertisement objects
      **/
     public function getAdvertisements($types=array(), $category='home')
     {
         $banners = array();
 
-        // FIXME: falla
+        // See if advertisements are enabled
+        // $types must be an array and not empty
         if (is_array($types) && count($types)>0 && ADVERTISEMENT_ENABLE) {
+            // Check category
             $category = (empty($category) || ($category=='home'))? 0: $category;
+
+            // Get string of types separeted by coma
             $types = implode(',', $types);
 
+            // Generate sql with or without category
             $cm = new ContentManager();
             if ($category!=0) {
                 $rsBanner = $cm->find(
@@ -653,43 +660,71 @@ class Advertisement extends Content
             // If this banner is not in time don't add it to the final results
             $rsBanner = $cm->getInTime($rsBanner);
 
-            // $advertisements is an array of banners,
-            // grouped by advertisement type
+            // $advertisements is an array of all banners, grouped by ad type
             $advertisements = array();
             foreach ($rsBanner as $adv) {
+                // Get array of types for this advertisement
+                $adv->fk_content_categories = explode(',', $adv->fk_content_categories);
 
-                $adv->fk_content_categories =
-                    explode(',', $adv->fk_content_categories);
-
+                // If the ad don't belongs to category and home, skip it
                 if (!in_array($category, $adv->fk_content_categories)
                     && $adv->fk_content_categories != array(0)
                 ) {
                     continue;
                 }
 
+                // Initialize array of advertisements with type as array key
                 if (!isset($advertisements[$adv->type_advertisement])) {
                     $advertisements[$adv->type_advertisement] = array();
                 }
 
-                // Colocar primeiro os da propia sección
-                if ($adv->fk_content_categories == array(0)) {
+                // Check if this advertisement belongs to this category
+                $hasCategoryAdvertisement = in_array($category, $adv->fk_content_categories);
+
+                // Check if this advertisement belongs to home
+                $hasHomeAdvertisement = in_array(0, $adv->fk_content_categories);
+
+                // If ad belongs to (category) or (category + home)
+                if ($hasCategoryAdvertisement || ($hasHomeAdvertisement && $hasCategoryAdvertisement)) {
                     array_push($advertisements[$adv->type_advertisement], $adv);
                 } else {
-                    array_unshift(
-                        $advertisements[$adv->type_advertisement], $adv
-                    );
+                    // If ad belongs to home but not to category
+                    if ($hasHomeAdvertisement) {
+                        array_push($advertisements[$adv->type_advertisement], $adv);
+                    }
                 }
-
             }
 
             // Perform operations for each advertisement type
-            foreach ($advertisements as $advs) {
-                //Select a random banner
-                $banners[] = $advs[array_rand($advs)];
+            foreach ($advertisements as $adType => $advs) {
+                // Initialize banners arrays
+                $banners[$adType] = array();
+                $homeBanners[$adType] = array();
+                if (count($advs) > 1) {
+                    foreach ($advs as $ad) {
+                        if ($ad->fk_content_categories != array(0)) {
+                            array_push($banners[$adType], $ad); // Category banners
+                        } else {
+                            array_push($homeBanners[$adType], $ad); // Home banners
+                        }
+                    }
+                    // If this ad-type don't has any banner, get all from home
+                    if (empty($banners[$adType])) {
+                        $banners[$adType] = $homeBanners[$adType];
+                    }
+                } else {
+                    // If this ad-type only has one ad, add it to array
+                    $banners[$adType] = $advs;
+                }
+            }
+
+            // Generate final banners array with random selection by ad-type
+            foreach ($banners as $adv) {
+                $finalBanners[] = $adv[array_rand($adv)];
             }
         }
 
-        return $banners;
+        return $finalBanners;
     }
 
     /**
@@ -732,6 +767,8 @@ class Advertisement extends Content
      *
      * @param array  $banners Array of Advertisement objects
      * @param Smarty $tpl     Template
+     *
+     * @return void
      **/
     public function render($banners, $tpl)
     {
@@ -761,8 +798,7 @@ class Advertisement extends Content
             // Save selected banners to process after
             $selectedBanners[] = $banner;
 
-            if (
-                isset($banner->type_advertisement)
+            if (isset($banner->type_advertisement)
                 && property_exists($banner, 'type_advertisement')
             ) {
                 $tpl->assign('banner'.$banner->type_advertisement, $banner);
@@ -774,8 +810,11 @@ class Advertisement extends Content
             // the code clean.
             // We should change de content class to return values
             // always initialized.
-            (isset($banner->with_script))?($with_script =
-                    $banner->with_script):($with_script = null);
+            if (isset($banner->with_script)) {
+                $with_script = $banner->with_script;
+            } else {
+                $with_script = null;
+            }
 
             if ($with_script) {
                 $tpl->assign(
