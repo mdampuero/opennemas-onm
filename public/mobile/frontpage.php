@@ -75,10 +75,12 @@ if (($tpl->caching == 0) || !$tpl->isCached('mobile/frontpage-mobile.tpl', $cach
         $contentsInHomepage = $cm->sortArrayofObjectsByProperty($contentsInHomepage, 'starttime');
     }
 
+    // Invert array order to put newest first
+    $contentsInHomepage = array_reverse($contentsInHomepage);
+
     /// Deleting Widgets {{{
     $articles_home = array();
     foreach ($contentsInHomepage as $content) {
-
         if (isset($content->home_placeholder)
             && !empty($content->home_placeholder)
             && ($content->home_placeholder != '')
