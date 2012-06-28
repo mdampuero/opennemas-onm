@@ -35,15 +35,18 @@ class Template extends Smarty
 
         // Parent variables
         $this->templateBaseDir = SITE_PATH.DS.'themes'.DS.$theme.DS;
-        $this->template_dir     = realpath($this->templateBaseDir.'tpl/').'/';
+        $this->template_dir     = realpath($this->templateBaseDir.'tpl').DS;
+
+        $cacheFilePath = CACHE_PATH.DS.'smarty'.DS.'config'.DS.'cache.conf';
+        $templateConfigPath = $this->templateBaseDir.'config';
 
         // If config dir exists copy it to cache directory to make instance aware.
-        if (!file_exists(CACHE_PATH.DS.'smarty'.DS.'config')
-            && file_exists($this->templateBaseDir.'config')
+        if (!file_exists($cacheFilePath)
+            && is_dir($templateConfigPath)
         ) {
             fm::recursiveCopy(
-                $this->templateBaseDir.'config',
-                CACHE_PATH.DS.'smarty'.DS.'config'
+                $templateConfigPath,
+                $cacheFilePath
             );
         }
         $this->config_dir = realpath(CACHE_PATH.DS.'smarty'.DS.'config').'/';
