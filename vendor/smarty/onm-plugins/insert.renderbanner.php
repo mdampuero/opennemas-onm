@@ -19,7 +19,8 @@ function smarty_insert_renderbanner($params, &$smarty) {
                 $content = json_encode($content);
 
                 $timeout = intval($banner->timeout) * 1000; // convert to ms
-                $pk_advertisement = $banner->pk_advertisement;
+                $pk_advertisement = date('YmdHis', strtotime($banner->created)).
+                                    sprintf('%06d', $banner->pk_advertisement);
 
                 /*
                  * intersticial = new IntersticialBanner({iframeSrc: '/sargadelos.html?cacheburst=1254325526',

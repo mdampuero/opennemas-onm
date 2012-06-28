@@ -118,9 +118,11 @@ class SessionManager implements ArrayAccess
 
     public function __get($name)
     {
-        if (!isset($_SESSION[$name])) return null;
+        if (!isset($_SESSION[$name])) {
+            return null;
+        }
 
-        return($_SESSION[$name]);
+        return $_SESSION[$name];
     }
 
     /**
@@ -279,15 +281,14 @@ class SessionManager implements ArrayAccess
             $contents = file_get_contents($file);
             $sessionContents = SessionManager::unserializeSession($contents);
             $time = time();
-            if (
-                $compareTime >= filemtime($file)
-                || (
-                        is_array($sessionContents)
-                        && array_key_exists('expire', $sessionContents)
-                        && ($sessionContents['expire'] < $time)
-                    )
+            if ($compareTime >= filemtime($file)
+                || (is_array($sessionContents)
+                    && array_key_exists('expire', $sessionContents)
+                    && ($sessionContents['expire'] < $time))
             ) {
-                if (unlink($file)) $count++;
+                if (unlink($file)) {
+                    $count++;
+                }
             }
         }
         $GLOBALS['application']->logger->debug("Expired session files deleted. {$count}");

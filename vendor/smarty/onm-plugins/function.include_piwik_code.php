@@ -16,8 +16,8 @@ function smarty_function_include_piwik_code($params, &$smarty) {
         && array_key_exists('page_id', $piwikConfig)
         && array_key_exists('server_url', $piwikConfig)
         && !empty($piwikConfig['page_id'])
-        && !empty($piwikConfig['page_id']))
-    {
+        && !empty($piwikConfig['page_id'])
+    ) {
 
         $httpsHost = preg_replace("@http:@", "https:", $piwikConfig['server_url']);
 
@@ -31,7 +31,7 @@ var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", '. $piwikConfig['pa
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
 } catch( err ) {}
-</script><noscript><p><img src="'. $piwikConfig['server_url'] .'?idsite='. $piwikConfig['page_id'] .'" style="border:0" alt="" /></p></noscript>
+</script><noscript><p><img src="'. $piwikConfig['server_url'] .'piwik.php?idsite='. $piwikConfig['page_id'] .'" style="border:0" alt="" /></p></noscript>
 <!-- End Piwik Tracking Code -->';
 
     }

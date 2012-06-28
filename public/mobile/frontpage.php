@@ -61,7 +61,7 @@ if (($tpl->caching == 0) || !$tpl->isCached('mobile/frontpage-mobile.tpl', $cach
 
         // Filter articles if some of them has time scheduling and sort them by position
         $contentsInHomepage = $cm->getInTime($contentsInHomepage);
-        $contentsInHomepage = $cm->sortArrayofObjectsByProperty($contentsInHomepage, 'position');
+        $contentsInHomepage = $cm->sortArrayofObjectsByProperty($contentsInHomepage, 'starttime');
 
 
     } else {
@@ -72,13 +72,15 @@ if (($tpl->caching == 0) || !$tpl->isCached('mobile/frontpage-mobile.tpl', $cach
 
         // Filter articles if some of them has time scheduling and sort them by position
         $contentsInHomepage = $cm->getInTime($contentsInHomepage);
-        $contentsInHomepage = $cm->sortArrayofObjectsByProperty($contentsInHomepage, 'position');
+        $contentsInHomepage = $cm->sortArrayofObjectsByProperty($contentsInHomepage, 'starttime');
     }
+
+    // Invert array order to put newest first
+    $contentsInHomepage = array_reverse($contentsInHomepage);
 
     /// Deleting Widgets {{{
     $articles_home = array();
     foreach ($contentsInHomepage as $content) {
-
         if (isset($content->home_placeholder)
             && !empty($content->home_placeholder)
             && ($content->home_placeholder != '')

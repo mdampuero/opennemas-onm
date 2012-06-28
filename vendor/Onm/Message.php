@@ -67,7 +67,7 @@ class Message
     {
         self::initMessageHandler();
         if (is_array($message)) {
-            foreach ($message as $msg ) {
+            foreach ($message as $msg) {
                 array_push($_SESSION['messages'][$priority], $msg);
             }
         } else {

@@ -327,7 +327,7 @@ EOF;
      *
      * @param array $data
      **/
-    public static function disabled_magic_quotes(&$data=NULL )
+    public static function disabled_magic_quotes(&$data = null)
     {
         // @codeCoverageIgnoreStart
         if (get_magic_quotes_gpc()) {

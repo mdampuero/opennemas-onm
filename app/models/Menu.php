@@ -14,29 +14,29 @@
  * Example:
  * <ul class="clearfix">
  * {section  name=m loop=$menuFrontpage}
- *             <li class="cat {$menuFrontpage[m]->link}{if $category_name eq $menuFrontpage[m]->link} active{/if}">
- *             <li class="cat {$menuFrontpage[m]->link}{if $category_name eq $menuFrontpage[m]->link} active{/if}"
- *             <li class="cat {$menuFrontpage[m]->link}{if $category_name eq $menuFrontpage[m]->link} active{/if}">
- *                 <a href="{renderLink item=$menuFrontpage[m]}" title="Sección: {$menuFrontpage[m]->title}">
- *                 <a href="{renderLink item=$menuFrontpage[m]}" title="Sección: {$menuFrontpage[m]->title}">
- *                      {$menuFrontpage[m]->title|mb_lower} - {renderLink item=$menuFrontpage[m]}
- *                  </a>
- *                  {if count($menuFrontpage[m]->submenu) > 0}
- *                      {assign value=$menuFrontpage[m]->submenu var=submenu}
- *                      <ul class="nav">
- *                           {section  name=s loop=$submenu}
- *                                  <li class="subcat {if $subcategory_name eq $submenu[s]->link}active{/if}">
- *                                      <a href="{$section_url}{$menuFrontpage[m]->link}/{$submenu[s]->link}/" title="{$submenu[s]->title|mb_lower}">
- *                                          {$submenu[s]->title|mb_lower}
- *                                      </a>
- *                                  </li>
- *                          {/section}
- *                      </ul>
- *                  {/if}
- *              </li>
- *          {/section}
+ *   <li class="cat {$menuFrontpage[m]->link}{if $category_name eq $menuFrontpage[m]->link} active{/if}">
+ *   <li class="cat {$menuFrontpage[m]->link}{if $category_name eq $menuFrontpage[m]->link} active{/if}"
+ *   <li class="cat {$menuFrontpage[m]->link}{if $category_name eq $menuFrontpage[m]->link} active{/if}">
+ *       <a href="{renderLink item=$menuFrontpage[m]}" title="Sección: {$menuFrontpage[m]->title}">
+ *       <a href="{renderLink item=$menuFrontpage[m]}" title="Sección: {$menuFrontpage[m]->title}">
+ *          {$menuFrontpage[m]->title|mb_lower} - {renderLink item=$menuFrontpage[m]}
+ *       </a>
+ *       {if count($menuFrontpage[m]->submenu) > 0}
+ *       {assign value=$menuFrontpage[m]->submenu var=submenu}
+ *       <ul class="nav">
+ *       {section  name=s loop=$submenu}
+ *           <li class="subcat {if $subcategory_name eq $submenu[s]->link}active{/if}">
+ *               <a href="{$section_url}{$menuFrontpage[m]->link}/{$submenu[s]->link}/"
+ *                   title="{$submenu[s]->title|mb_lower}">
+ *                   {$submenu[s]->title|mb_lower}
+ *               </a>
+ *           </li>
+ *       {/section}
  *       </ul>
- *
+ *       {/if}
+ *       </li>
+ * {/section}
+ * </ul>
  *
  *  Show:
  *       -Frontpage

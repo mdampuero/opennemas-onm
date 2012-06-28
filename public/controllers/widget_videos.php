@@ -1,6 +1,10 @@
 <?php
 // Fetching the last 5 available videos
-$videos = $cm->find('Video', 'contents.content_status=1 and videos.author_name != "otro" and contents.available=1', 'ORDER BY favorite DESC, created DESC LIMIT 0 , 4');
+$videos = $cm->find('Video',
+    'contents.content_status=1 AND videos.author_name != "otro"'
+    .' AND contents.available=1',
+    'ORDER BY favorite DESC, created DESC LIMIT 0 , 4'
+);
 
 // For earch video retrieve its information
 foreach ($videos as $video) {

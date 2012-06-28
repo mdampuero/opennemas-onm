@@ -147,7 +147,7 @@ class Opinion extends Content
             return false;
         }
 
-       return $this->id;
+        return $this->id;
     }
 
     public function read($id)
