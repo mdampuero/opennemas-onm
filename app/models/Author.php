@@ -23,6 +23,7 @@ class Author
     public $politics  = null;
     public $condition = null;
     public $date_nac  = null;
+    public $params    = null;
 
     public $cache     = null;
 

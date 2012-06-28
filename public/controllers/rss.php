@@ -92,7 +92,7 @@ switch ($action) {
             // If is home retrive all the articles available in there
             if ($category_name == 'home') {
 
-                $contentsInHomepage = $cm->getContentsForHomepageOfCategory($actualCategoryId);
+                $contentsInHomepage = $cm->getContentsForHomepageOfCategory($category);
                 // Filter articles if some of them has time scheduling and sort them by position
                 $contentsInHomepage = $cm->getInTime($contentsInHomepage);
                 $articles_home = $cm->sortArrayofObjectsByProperty($contentsInHomepage, 'position');

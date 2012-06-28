@@ -628,6 +628,7 @@ class Advertisement extends Content
     public function getAdvertisements($types=array(), $category='home')
     {
         $banners = array();
+        $finalBanners = array();
 
         // See if advertisements are enabled
         // $types must be an array and not empty
