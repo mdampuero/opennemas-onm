@@ -176,6 +176,8 @@ class Application
         require_once SITE_VENDOR_PATH.'/smarty/smarty-legacy/Smarty.class.php';
         require_once SITE_VENDOR_PATH.'/Log.php';
         require_once SITE_VENDOR_PATH.'/Template.php';
+        require_once SITE_VENDOR_PATH.'/Restler/restler.php';
+        require_once SITE_VENDOR_PATH.'/Restler/xmlformat.php';
     }
 
     /*

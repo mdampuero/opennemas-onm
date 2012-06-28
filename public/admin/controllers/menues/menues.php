@@ -99,6 +99,21 @@ switch($action) {
         $staticPages = $cm->find('StaticPage', '1=1', 'ORDER BY created DESC ');
         $menues = Menu::listMenues();
 
+        if ($syncParams = s::get('sync_params')) {
+            // Fetch all elements from settings
+            $colorSites = s::get('sync_colors');
+            $allSites = array();
+            foreach ($syncParams as $siteUrl => $categories) {
+                $allSites[] = array ($siteUrl => $categories);
+                if (array_key_exists($siteUrl, $colorSites)) {
+                    $colors[$siteUrl] = $colorSites[$siteUrl];
+                }
+            }
+
+            $tpl->assign('elements', $allSites);
+            $tpl->assign('colors', $colors);
+        }
+
         $tpl->assign(array( 'categories'=> $parentCategories,
                             'subcat'=> $subcat,
                             'albumCategories'=>$albumCategories,
@@ -135,6 +150,23 @@ switch($action) {
         $staticPages = $cm->find('StaticPage', '1=1', 'ORDER BY created DESC ');
         $menues = Menu::listMenues();
 
+        // Get Sync categories from settings
+        if ($syncParams = s::get('sync_params')) {
+            $colorSites = s::get('sync_colors');
+            $allSites = array();
+            foreach ($syncParams as $siteUrl => $categories) {
+
+                $allSites[] = array ($siteUrl => $categories);
+
+                if (array_key_exists($siteUrl, $colorSites)) {
+                    $colors[$siteUrl] = $colorSites[$siteUrl];
+                }
+            }
+
+            $tpl->assign('elements', $allSites);
+            $tpl->assign('colors', $colors);
+        }
+
         $tpl->assign(array( 'categories'=> $parentCategories,
                             'subcat'=> $subcat,
                             'albumCategories'=>$albumCategories,
@@ -144,7 +176,21 @@ switch($action) {
                             'menues'=> $menues,
                             'pages'=> $pages ));
 
+        // Get categories from menu
         $menu = Menu::getMenu($name);
+
+        // Overload sync category color if exists
+        if ($syncParams) {
+            foreach ($menu->items as &$item) {
+                foreach ($syncParams as $siteUrl => $categories) {
+                    foreach ($categories as $category) {
+                        if ($item->type == 'syncCategory' && $item->link == $category) {
+                            $item->color = $colors[$siteUrl];
+                        }
+                    }
+                }
+            }
+        }
 
         $tpl->assign('menu', $menu);
 
