@@ -1472,6 +1472,7 @@ class ContentManager
                 .'`.`pk_'.$this->content_type.'` ';
         }
 
+
         $rs = $GLOBALS['application']->conn->GetOne($sql);
 
         return $rs;
@@ -1572,22 +1573,23 @@ class ContentManager
      * @return void
      * @author
      **/
-    public function getCountAndSlice($contentType, $categoryId, $filter, $page = 1, $numElements = 10)
+    public function getCountAndSlice($contentType, $categoryId, $filter, $orderBy, $page = 1, $numElements = 10)
     {
         $this->init($contentType);
-        $items = array();
+        $items  = array();
         $_where = '';
 
-        $countContents = $this->count($contentType, $filter, $categoryId);
-
         if (empty($filter)) {
-            $filter = ' ';
+            $filterCount = ' contents.in_litter != 1';
+            $filter = ' AND '. $filterCount;
         } else {
-            $filter = ' AND '.$filter;
+            $filterCount = $filter = ' AND '.$filter;
         }
 
+        $countContents = $this->count($contentType, $filterCount, $categoryId);
+
         if ($page == 1) {
-            $limit =  ' LIMIT '. $numElements;
+            $limit = ' LIMIT '. $numElements;
         } else {
             $limit = ' LIMIT '.($page-1)*$numElements.', '.$numElements;
         }
@@ -1598,11 +1600,15 @@ class ContentManager
                  . ' AND `contents`.`pk_content`=`'.$this->table.'`.`pk_'.$this->content_type.'`'
                  . ' AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` '
                  . $filter
+                 . ' '
+                 . $orderBy
                  . $limit;
         } else {
             $sql = 'SELECT * FROM `contents`, `'.$this->table.'` '
                  . ' WHERE `contents`.`pk_content`=`'.$this->table.'`.`pk_'.$this->content_type.'` '
                  . $filter
+                 . ' '
+                 . $orderBy
                  . $limit;
         }
         $rs = $GLOBALS['application']->conn->Execute($sql);

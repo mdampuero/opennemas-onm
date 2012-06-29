@@ -64,16 +64,12 @@ class VideosController extends Controller
      **/
     public function listAction()
     {
-        $session        = $this->get('session');
-        var_dump($session);die();
-
         $page           = $this->get('request')->query->getDigits('page', 1);
         $category       = $this->get('request')->query->filter('category', 'all', FILTER_SANITIZE_STRING);
         $configurations = s::get('video_settings');
         $numFavorites   = $configurations['total_widget'];
 
         $cm = new \ContentManager();
-
 
         if ($category == 'all') {
             $categoryForLimit = null;
@@ -85,10 +81,12 @@ class VideosController extends Controller
         list($videoCount, $videos) = $cm->getCountAndSlice(
             'video',
             $categoryForLimit,
-            'available=1 ORDER BY created DESC',
+            '',
+            'ORDER BY created DESC',
             $page,
             $itemsPerPage
         );
+
 
         if (!empty($videos)){
             foreach ($videos as &$video) {
@@ -100,7 +98,7 @@ class VideosController extends Controller
         // Build the pager
         $pagination = \Pager::factory(array(
             'mode'        => 'Sliding',
-            'perPage'     => ITEMS_PAGE,
+            'perPage'     => $itemsPerPage,
             'append'      => false,
             'path'        => '',
             'delta'       => 4,
