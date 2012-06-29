@@ -10,7 +10,7 @@ saveSpecialContent = function() {
         els.push({
             'id' : jQuery(item).data('id'),
             'content_type': jQuery(item).data('type'),
-            'position': (index+2)
+            'position': index
         });
     });
 
@@ -23,7 +23,7 @@ saveSpecialContent = function() {
         els.push({
             'id' : jQuery(item).data('id'),
             'content_type': jQuery(item).data('type'),
-            'position': ((index-1)+2)
+            'position': index
         });
     });
 

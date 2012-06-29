@@ -1,6 +1,6 @@
 <ul id="categories" class="pills">
 {section  name=m loop=$menuItems}
-    {if $menuItems[m]->categoryID neq 4}
+    {if $menuItems[m]->categoryID neq 4 && $menuItems[m]->type neq 'syncCategory'}
     {acl hasCategoryAccess=$menuItems[m]->categoryID}
     <li class="cat {if count($menuItems[m]->submenu) > 0}with-subcategories {/if} {if $category eq $menuItems[m]->categoryID} active {/if}">
         <a href="{url name=admin_frontpage_list category=$menuItems[m]->categoryID}" title="Sección: {$menuItems[m]->title}"

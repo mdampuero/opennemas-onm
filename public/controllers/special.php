@@ -60,7 +60,7 @@ switch ($action) {
         if ($special->available == 1) {
 
             Content::setNumViews($specialID);
-            $contents = $special->get_contents($specialID);
+            $contents = $special->getContents($specialID);
             $columns  = array();
 
             if (!empty($contents)) {

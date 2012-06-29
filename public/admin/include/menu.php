@@ -24,6 +24,13 @@ $menuXml = '<?xml version="1.0"?>
             id="widget_manager"
             link="/admin/controllers/widget/widget.php"
         />
+        <node
+            module_name="SYNC_MANAGER"
+            title="'.htmlspecialchars(_("Sync Instances"), ENT_QUOTES).'"
+            privilege="SYNC_ADMIN"
+            id="sync_manager"
+            link="controllers/web_services/client.php"
+        />
         <node class="divider" />
         <node
             module_name="MENU_MANAGER"

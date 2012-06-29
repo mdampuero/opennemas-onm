@@ -217,7 +217,7 @@ class Advertisement extends Content
     /**
      * @var Advertisement instance, singleton pattern
      **/
-    private static $_singleton = null;
+    private static $singleton = null;
 
     /**
      * @var registry of banners
@@ -241,7 +241,7 @@ class Advertisement extends Content
         }
 
         // Store this object into the cache manager for better performance
-        if (is_null($this->cache) ) {
+        if ( is_null($this->cache) ) {
             $this->cache = new MethodCacheManager($this, array('ttl' => (20)));
         } else {
             $this->cache->setCacheLife(20); // 20 seconds
@@ -262,11 +262,11 @@ class Advertisement extends Content
     public static function getInstance()
     {
         // Create a unique instance if not available
-        if (is_null(self::$_singleton) ) {
-            self::$_singleton = new Advertisement();
+        if ( is_null(self::$singleton) ) {
+            self::$singleton = new Advertisement();
         }
 
-        return self::$_singleton;
+        return self::$singleton;
     }
 
     /**
@@ -562,7 +562,8 @@ class Advertisement extends Content
         $ad = new Advertisement($id);
 
         //No publicado
-        if (($ad->type_medida=='CLIC' )
+        if (
+            ($ad->type_medida=='CLIC' )
             && ($ad->num_clic <= $ad->num_clic_count)
         ) {
             $status = 0;
@@ -620,7 +621,7 @@ class Advertisement extends Content
     /**
      * Get advertisement for a given type and category
      *
-     * @param array  $types    Types of advertisement
+     * @param array $types Types of advertisement
      * @param string $category Category of advertisement
      *
      * @return array $finalBanners of Advertisement objects
@@ -731,7 +732,7 @@ class Advertisement extends Content
     /**
      * Return banners for the interstitial position.
      *
-     * @param array  $type     the list of positions to get banners from.
+     * @param array $type the list of positions to get banners from.
      * @param string $category the category to get banners from.
      *
      * @return array
@@ -766,30 +767,41 @@ class Advertisement extends Content
     /**
      * Inject banners into template
      *
-     * @param array  $banners Array of Advertisement objects
-     * @param Smarty $tpl     Template
-     *
-     * @return void
+     * @param array $banners Array of Advertisement objects
+     * @param Smarty $tpl Template
      **/
-    public function render($banners, $tpl)
+    public function render($banners, $tpl, $wsUrl = false)
     {
         // Extract pk_photos to perform one query
-        $photoIds = array();
+        $pk_photos = array();
         foreach ($banners as $banner) {
             if (!empty($banner->path)) {
-                $photoIds[] = $banner->path;
+                $pk_photos[] = $banner->path;
             }
         }
-        $selectedBanners =array();
+        $banners_selected =array();
+
         //Get photos
         $cm = new ContentManager();
-        $objs = $cm->cache->find(
-            'Photo',
-            "pk_content IN ('" . implode("','", $photoIds) . "')"
-        );
+        if (!$wsUrl) {
+            $objs = $cm->cache->find(
+                'Photo',
+                "pk_content IN ('" . implode("','", $pk_photos) . "')"
+            );
+        } else {
+            $objsArray = array();
+            foreach ($pk_photos as $photo) {
+                $objsArray[] = json_decode(file_get_contents($wsUrl.'/ws.php/images/id/'.(int)$photo));
+            }
+            foreach ($objsArray as $item) {
+                $content = new Advertisement();
+                $content->load($item);
+                $objs[] = $content;
+            }
+        }
 
         // Array of photos objects,
-        // key is pk_content array('pk_content' => object )
+        // key is pk_content array( 'pk_content' => object )
         $photos = array();
         foreach ($objs as $obj) {
             $photos[ $obj->pk_content ] = $obj;
@@ -797,7 +809,7 @@ class Advertisement extends Content
 
         foreach ($banners as $banner) {
             // Save selected banners to process after
-            $selectedBanners[] = $banner;
+            $banners_selected[] = $banner;
 
             if (isset($banner->type_advertisement)
                 && property_exists($banner, 'type_advertisement')
@@ -805,7 +817,7 @@ class Advertisement extends Content
                 $tpl->assign('banner'.$banner->type_advertisement, $banner);
             }
 
-            // FIXME: This is a workarround until decide what to do into
+			// FIXME: This is a workarround until decide what to do into
             // the Content class
             // This will avoid the the notice messages but doesn't keep
             // the code clean.
@@ -838,7 +850,7 @@ class Advertisement extends Content
             }
         }
         // Update numviews
-        Advertisement::setNumViews($selectedBanners);
+        Advertisement::setNumViews($banners_selected);
     }
 
     /**
@@ -846,7 +858,7 @@ class Advertisement extends Content
      * workaround for Advertisement::render
      *
      * @param string $entry
-     * @param mixed  $value
+     * @param mixed $value
      **/
     public function assign($entry, $value)
     {
@@ -857,7 +869,7 @@ class Advertisement extends Content
      * Fetch a entry from set of banners,
      * workaround for Advertisement::render
      *
-     * @param  string $entry
+     * @param string $entry
      * @return mixed
      **/
     public function fetch($entry)

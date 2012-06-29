@@ -76,13 +76,13 @@ JSINTERSTICIAL;
      * If the Ad is Flash based try to get the width and height fixed
      */
     if (isset ($photo)) {
-    if ( ($photo->width <= $width)
-         && ($photo->height <= $height)
-         && ($photo->type_img === 'swf'))
-    {
-        $width = $photo->width;
-        $height = $photo->height;
-    }
+		if (($photo->width <= $width)
+		     && ($photo->height <= $height)
+		     && ($photo->type_img === 'swf')
+		) {
+		    $width = $photo->width;
+		    $height = $photo->height;
+		}
     }
     // If $height is equals to * then calculate using GD
     if($height == '*') {
@@ -133,8 +133,6 @@ JSINTERSTICIAL;
             if(!$overlap && !$banner->overlap) {
                 // Flash object
                 // FIXME: build flash object with all tags and params
-
-
 
                 $output .= '<a target="_blank" href="'
                             .SITE_URL.'ads/'. date('YmdHis', strtotime($banner->created)).sprintf('%06d', $banner->pk_advertisement)

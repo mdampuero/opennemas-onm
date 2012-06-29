@@ -31,6 +31,7 @@
                                  data-description="{$photos[n]->description}"
                                  data-tags="{$photos[n]->metadata}"
                                  alt="{$photos[n]->description}"
+                                 title="({$photos[n]->width}x{$photos[n]->height}) {$photos[n]->description}"
                                  />
                         </span>
                     {else}
@@ -50,6 +51,7 @@
                             data-description="{$photos[n]->description|clearslash|escape:'html'}"
                             data-tags="{$photos[n]->metadata}"
                             alt="{$photos[n]->description}"
+                            title="({$photos[n]->width}x{$photos[n]->height}) {$photos[n]->description}"
                             />
                     {/if}
                 </a>

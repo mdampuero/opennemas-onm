@@ -17,7 +17,7 @@ function smarty_function_renderLink($params,&$smarty) {
             } elseif (preg_match('/album.php/',$_SERVER['SCRIPT_NAME']) ) {
                 $name_url='album';
             } elseif (preg_match('/poll.php/',$_SERVER['SCRIPT_NAME']) ) {
-                      $name_url='encuesta';             
+                      $name_url='encuesta';
             }
             $link = "/$name_url/$item->link/";
 
@@ -39,6 +39,9 @@ function smarty_function_renderLink($params,&$smarty) {
         break;
         case 'external':
              $link = "$item->link";
+        break;
+        case 'syncCategory':
+             $link = "/$name_url/$item->link/ext/";
         break;
         default:
              $link = "/$item->link/";
