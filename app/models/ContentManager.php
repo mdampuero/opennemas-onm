@@ -1462,14 +1462,14 @@ class ContentManager
                  . ' AND `contents_categories`.`pk_fk_content_category`='
                  . $pk_fk_content_category
                  . '  AND pk_content=`'.$this->table
-                 .'`.`pk_'.strtolower($this->content_type)
+                 .'`.`pk_'.$this->content_type
                  . '` AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` ';
         } else {
             $sql = 'SELECT COUNT(contents.pk_content) AS total '
                 . 'FROM `contents`, `'.$this->table.'` '
                 . 'WHERE '.$_where
                 .' AND `contents`.`pk_content`=`'.$this->table
-                .'`.`pk_'.strtolower($this->content_type).'` ';
+                .'`.`pk_'.$this->content_type.'` ';
         }
 
         $rs = $GLOBALS['application']->conn->GetOne($sql);
@@ -1564,6 +1564,52 @@ class ContentManager
         $pager = Pager::factory($pager_options);
 
         return array($items, $pager);
+    }
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function getCountAndSlice($contentType, $categoryId, $filter, $page = 1, $numElements = 10)
+    {
+        $this->init($contentType);
+        $items = array();
+        $_where = '';
+
+        $countContents = $this->count($contentType, $filter, $categoryId);
+
+        if (empty($filter)) {
+            $filter = ' ';
+        } else {
+            $filter = ' AND '.$filter;
+        }
+
+        if ($page == 1) {
+            $limit =  ' LIMIT '. $numElements;
+        } else {
+            $limit = ' LIMIT '.($page-1)*$numElements.', '.$numElements;
+        }
+
+        if (!is_null($categoryId)) {
+            $sql = 'SELECT * FROM contents_categories, contents, '.$this->table.' '
+                 . ' WHERE `contents_categories`.`pk_fk_content_category`='.$categoryId
+                 . ' AND `contents`.`pk_content`=`'.$this->table.'`.`pk_'.$this->content_type.'`'
+                 . ' AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` '
+                 . $filter
+                 . $limit;
+        } else {
+            $sql = 'SELECT * FROM `contents`, `'.$this->table.'` '
+                 . ' WHERE `contents`.`pk_content`=`'.$this->table.'`.`pk_'.$this->content_type.'` '
+                 . $filter
+                 . $limit;
+        }
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+
+        $items = $this->loadObject($rs, $contentType);
+
+        return array($countContents, $items);
     }
 
 

@@ -188,8 +188,8 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="10">
-                        {$pagination|default:""}&nbsp;
+                    <td colspan="10" class="pagination">
+                        {$pagination->links}&nbsp;
                     </td>
                 </tr>
             </tfoot>

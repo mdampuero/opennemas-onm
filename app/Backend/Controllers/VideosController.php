@@ -64,45 +64,53 @@ class VideosController extends Controller
      **/
     public function listAction()
     {
-        $page = $this->request->query->getDigits('page', 1);
+        $session        = $this->get('session');
+        var_dump($session);die();
+
+        $page           = $this->get('request')->query->getDigits('page', 1);
+        $category       = $this->get('request')->query->filter('category', 'all', FILTER_SANITIZE_STRING);
+        $configurations = s::get('video_settings');
+        $numFavorites   = $configurations['total_widget'];
+
         $cm = new \ContentManager();
 
-        $configurations = s::get('video_settings');
-        $numFavorites = $configurations['total_widget'];
 
-
-        if (empty($page)) {
-            $limit = "LIMIT ".(ITEMS_PAGE+1);
+        if ($category == 'all') {
+            $categoryForLimit = null;
         } else {
-            $limit = "LIMIT ".($page-1) * ITEMS_PAGE .', '.(ITEMS_PAGE+1);
+            $categoryForLimit = $category;
         }
+        $itemsPerPage = s::get('items_per_page');
 
-        if ($this->category == 'all') {
-            $videos = $cm->find_all(
-                'Video',
-                'available =1',
-                'ORDER BY created DESC '. $limit
-            );
-        } else {
-            $videos = $cm->find_by_category(
-                'Video',
-                $this->category,
-                'fk_content_type = 9 ', 'ORDER BY created DESC '.$limit
-            );
-        }
+        list($videoCount, $videos) = $cm->getCountAndSlice(
+            'video',
+            $categoryForLimit,
+            'available=1 ORDER BY created DESC',
+            $page,
+            $itemsPerPage
+        );
 
-        if(!empty($videos)){
+        if (!empty($videos)){
             foreach ($videos as &$video) {
-                $video->category_name = $this->ccm->get_name($video->category);
+                $video->category_name  = $this->ccm->get_name($video->category);
                 $video->category_title = $this->ccm->get_title($video->category_name);
             }
         }
 
-        $pagination = \Onm\Pager\SimplePager::getPagerUrl(array(
-            'page'  => $page,
-            'items' => ITEMS_PAGE-10,
-            'total' => count($videos),
-            'url'   => $this->generateUrl('admin_videos', array('category' => $this->category)),
+        // Build the pager
+        $pagination = \Pager::factory(array(
+            'mode'        => 'Sliding',
+            'perPage'     => ITEMS_PAGE,
+            'append'      => false,
+            'path'        => '',
+            'delta'       => 4,
+            'clearIfVoid' => true,
+            'urlVar'      => 'page',
+            'totalItems'  => $videoCount,
+            'fileName'    => $this->generateUrl(
+                'admin_videos',
+                array('category' => $category)
+            ).'&page=%d',
         ));
 
         return $this->render('video/list.tpl', array(

@@ -716,7 +716,7 @@ $routes->add(
 $routes->add(
     'admin_acl_user_show',
     new Route(
-        '/acl/user/show/{id}',
+        '/acl/user/{id}/show',
         array('_controller' => 'Backend:Controllers:AclUserController:show')
     ),
     '/admin'
