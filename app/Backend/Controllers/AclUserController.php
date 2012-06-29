@@ -30,8 +30,9 @@ class AclUserController extends Controller
     {
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
     }
+
     /**
-     * Description of the action
+     * Show a paginated list of users
      *
      * @return void
      **/
@@ -115,8 +116,9 @@ class AclUserController extends Controller
         $user = new \User($userId);
         $user->update($_REQUEST);
 
+        m::add(_('User data updated successfully.'), m::SUCCESS);
         if ($action == 'validate') {
-            $redirectUrl = url('admin_acl_user_show', array('id' => $userId));
+            $redirectUrl = $this->generateUrl('admin_acl_user_show', array('id' => $userId));
         } else {
             // If a regular user is upating him/her information
             // redirect to welcome page

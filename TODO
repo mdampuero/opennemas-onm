@@ -75,3 +75,9 @@ Files
 - Batch actions not implemented
 - Review listings and toggle home actions.
 - Review if new.tpl could be deleted, now form.tpl handle create and update (I think)
+
+
+Videos
+------
+- Batch actions doesn't work
+-
