@@ -45,7 +45,7 @@ legend {
 
         <div class"panel" style="border:1px solid #ccc; padding:10px;">
             <fieldset>
-                <legend>Poll section preferences</legend>
+                <legend>{t}Poll section preferences{/t}</legend>
                 <label for="poll[typeValue]">{t}Values type{/t}</label>
                 <select name="poll_settings[typeValue]" id="poll_settings[typeValue]" class="required">
                     <option value="percent" {if $configs['poll_settings']['typeValue'] eq 'percent'} selected {/if}>{t}Percents{/t}</option>
@@ -66,7 +66,7 @@ legend {
             </fieldset>
 
             <fieldset>
-                <legend>Poll home widget preferences</legend>
+                <legend>{t}Poll home widget preferences{/t}</legend>
                 <label for="poll[total_widget]">{t}Elements in frontpage widget{/t}</label>
                 <input type="text" class="required" name="poll_settings[total_widget]" value="{$configs['poll_settings']['total_widget']|default:"1"}" />
                 <br/><br/>
