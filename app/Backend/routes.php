@@ -347,7 +347,7 @@ $routes->add(
 $routes->add(
     'admin_keyword_show',
     new Route(
-        '/keywords/{id}/show}',
+        '/keywords/{id}/show',
         array('_controller' => 'Backend:Controllers:KeywordsController:show')
     ),
     '/admin'
@@ -356,7 +356,7 @@ $routes->add(
 $routes->add(
     'admin_keyword_update',
     new Route(
-        '/keywords/{id}/update}',
+        '/keywords/{id}/update',
         array('_controller' => 'Backend:Controllers:KeywordsController:update')
     ),
     '/admin'
@@ -365,7 +365,7 @@ $routes->add(
 $routes->add(
     'admin_keyword_delete',
     new Route(
-        '/keywords/{id}/delete}',
+        '/keywords/{id}/delete',
         array('_controller' => 'Backend:Controllers:KeywordsController:delete')
     ),
     '/admin'
@@ -389,6 +389,80 @@ $routes->add(
     ),
     '/admin'
 );
+
+// Comments controller routes
+$routes->add(
+    'admin_comments',
+    new Route(
+        '/comments',
+        array(
+            '_controller' => 'Backend:Controllers:CommentsController:list',
+        )
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_comments_show',
+    new Route(
+        '/comments/{id}/show',
+        array(
+            '_controller' => 'Backend:Controllers:CommentsController:show',
+        )
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_comments_update',
+    new Route(
+        '/comments/{id}/update',
+        array(
+            '_controller' => 'Backend:Controllers:CommentsController:update',
+        )
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_comments_delete',
+    new Route(
+        '/comments/{id}/delete',
+        array('_controller' => 'Backend:Controllers:CommentsController:delete')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_comments_toggle_status',
+    new Route(
+        '/comments/{id}/toggle-status',
+        array(
+            '_controller' => 'Backend:Controllers:CommentsController:toggleStatus',
+        )
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_comments_batch_status',
+    new Route(
+        '/comments/batch-status',
+        array('_controller' => 'Backend:Controllers:CommentsController:batchStatus')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_comments_batch_delete',
+    new Route(
+        '/comments/batch-delete',
+        array('_controller' => 'Backend:Controllers:CommentsController:batchDelete')
+    ),
+    '/admin'
+);
+
+
 
 // Comments by Disqus controller routes
 $routes->add(

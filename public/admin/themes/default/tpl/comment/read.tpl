@@ -49,41 +49,27 @@ jQuery(document).ready(function($) {
 {/block}
 
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
+<form action="{url name=admin_comments_update id=$comment->id}" method="POST" name="formulario" id="formulario">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title"><h2>{t}Comment Manager{/t} :: {t}Editing comment{/t}</h2></div>
             <ul class="old-button">
+
                 <li>
-                    <a href="#" class="admin_add" onClick="enviar(this, '_self', 'update', '{$comment->id}');">
-                        <img border="0" src="{$params.IMAGE_DIR}save.png" ="Guardar y salir" alt="Guardar y salir" ><br />{t}Save and exit{/t}
-                    </a>
+                    <button type="submit" name="action" value="admin_videos_update" id="save-exit" title="{t}Save and exit{/t}">
+                        <img src="{$params.IMAGE_DIR}save.png" title="{t}Save and exit{/t}" alt="{t}Save and exit{/t}" /><br />{t}Save and exit{/t}
+                    </button>
                 </li>
+
                 <li>
-                    <a href="#" class="admin_add" onClick="confirmar(this, '{$comment->id}');">
+                    <a href="{url name=admin_comments_delete id=$comment->id}" class="admin_add">
                         <img border="0" src="{$params.IMAGE_DIR}trash.png" title="Eliminar" alt="Eliminar" ><br />{t}Delete{/t}
                     </a>
                 </li>
-                <li>
-                    {if $comment->content_status == 1}
-                        <a href="?id={$comment->id}&amp;action=change_status&amp;status=0&amp;category={$comment->category}" title="Publicar">
-                            <img src="{$params.IMAGE_DIR}publish_no.gif" border="0" alt="Publicado" /><br />{t}Unpublish{/t}
-                        </a>
-                    {else}
-                        <a href="?id={$comment->id}&amp;action=change_status&amp;status=1&amp;category={$comment->category}" title="Despublicar">
-                            <img src="{$params.IMAGE_DIR}publish.gif" border="0" alt="Pendiente" /><br />{t}Publish{/t}
-                        </a>
-                    {/if}
-                </li>
-                <li>
-                    <a href="#" class="admin_add" rel="iframe" onmouseover="return escape('<u>V</u>er Noticia');" onclick="preview(this, '{$article->category}','{$article->subcategory}','{$article->id}');">
-                        <img border="0" src="{$params.IMAGE_DIR}preview.png" title="Ver Noticia" alt="Ver Noticia" ><br />
-                        {t}See article{/t}
-                    </a>
-                </li>
+
                 <li class="separator"></li>
                 <li>
-                    <a href="{$smarty.server.PHP_SELF}?action=list" value="{t}Go back{/t}" title="{t}Go back{/t}">
+                    <a href="{url name=admin_comments}" value="{t}Go back{/t}" title="{t}Go back{/t}">
                         <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" >
                         <br />
                         {t}Go back{/t}
@@ -107,14 +93,20 @@ jQuery(document).ready(function($) {
                     <div style="display:inline-block; width:80%">
                         <label for="title">{t}Title{/t}</label>
                         <input type="text" id="title" name="title" title="Título de la noticia" onkeyup="countWords(this,document.getElementById('counter_title'))" value="{$comment->title|clearslash|escape:"html"}" class="required" style="width:97%" />
-                        <input type="hidden" id="fk_content" name="fk_content" title="pk_article" value="{$comment->fk_content}" />
-                    </div><!-- / -->
+                        <input type="hidden" id="fk_content" name="fk_content"   value="{$comment->fk_content}" />
+                        <input type="hidden" id="category" name="category" value="{$comment->category}" />
+                        <br><br>
+                        <label for="title-content">{$content_types[$content->content_type]}:
+                        {$content->title|clearslash} </label>
+                        <br>
+                    </div>
                     {acl isAllowed="COMMENT_AVAILABLE"}
                     <div style="display:inline-block">
                         <label for="content_status">{t}Published{/t}</label>
                         <select name="content_status" id="content_status" class="required">
                             <option value="1" {if $comment->content_status eq 1} selected {/if}>Si</option>
                             <option value="0" {if $comment->content_status eq 0} selected {/if}>No</option>
+                            <option value="2" {if $comment->content_status eq 2} selected {/if}>{t}Rejected{/t}</option>
                         </select>
                     </div><!-- / -->
                     {/acl}
@@ -148,7 +140,7 @@ jQuery(document).ready(function($) {
                     <div style="display:inline-block">
                         <label for="counter_title">{t}Title{/t}</label>
                         <input type="text" id="counter_title" name="counter_title" title="counter_title" disabled=disabled
-                            value="0" onkeyup="countWords(document.getElementById('title'),this)"/> 
+                            value="0" onkeyup="countWords(document.getElementById('title'),this)"/>
                     </div>
                     <div style="display:inline-block">
                         <label for="counter_body">{t}Inner title{/t} ({t}words{/t})</label>

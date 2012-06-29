@@ -62,7 +62,7 @@ $menuXml = '<?xml version="1.0"?>
             privilege="COMMENT_ADMIN"
             title="'.htmlspecialchars(_("Comments"), ENT_QUOTES).'"
             id="comment_manager"
-            link="/admin/controllers/comment/comment.php?action=list"
+            link="'.url('admin_comments').'"
         />
         <node
             module_name="COMMENT_DISQUS_MANAGER"
