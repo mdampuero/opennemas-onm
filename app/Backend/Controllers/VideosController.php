@@ -124,52 +124,32 @@ class VideosController extends Controller
      **/
     public function widgetAction()
     {
-        $this->category = $this->request->query->filter('category', 'widget', FILTER_SANITIZE_STRING);
+        $request = $this->get('request');
 
-        $page = $this->request->query->getDigits('page', 0);
-        $cm = new \ContentManager();
-
+        $category = $request->query->filter('category', 'widget', FILTER_SANITIZE_STRING);
         $configurations = s::get('video_settings');
-        $numFavorites = $configurations['total_widget'];
+        $numFavorites   = $configurations['total_widget'];
 
+        $cm = new \ContentManager();
+        $videos = $cm->find_all('Video', 'in_home = 1 AND available =1', 'ORDER BY  position ASC ');
 
-        if (empty($page)) {
-            $limit = "LIMIT ".(ITEMS_PAGE+1);
-        } else {
-            $limit = "LIMIT ".($page-1) * ITEMS_PAGE .', '.(ITEMS_PAGE+1);
-        }
-
-        $videos = $cm->find_all(
-            'Video',
-            'in_home = 1 AND available =1',
-            'ORDER BY  created DESC '. $limit
-        );
-
-        if (count($videos) < $numFavorites ) {
+        if (count($videos) < $numFavorites) {
             m::add(sprintf(
                 _("You must put %d videos in the HOME widget"),
                 $numFavorites
             ));
         }
 
-        if(!empty($videos)){
+        if (!empty($videos)){
             foreach ($videos as &$video) {
-                $video->category_name = $this->ccm->get_name($video->category);
+                $video->category_name  = $this->ccm->get_name($video->category);
                 $video->category_title = $this->ccm->get_title($video->category_name);
             }
         }
 
-        $pagination = \Onm\Pager\SimplePager::getPagerUrl(array(
-            'page'  => $page,
-            'items' =>ITEMS_PAGE,
-            'total' => count($videos),
-            'url'   =>$_SERVER['SCRIPT_NAME'].'?action=list&category='.$this->category,
-        ));
-
         return $this->render('video/list.tpl', array(
-            'pagination' => $pagination,
             'videos'     => $videos,
-            'category'   => $this->category,
+            'category'   => $category,
         ));
     }
 
@@ -186,18 +166,15 @@ class VideosController extends Controller
             $request  = $this->request->request;
 
             $type     = $request->filter('type', null, FILTER_SANITIZE_STRING);
-            $page     = $request->getDigits('page', 0);
+            $page     = $request->getDigits('page', 1);
             $category = $request->getDigits('category');
 
             if ($type === 'file') {
                 // Check if the video file entry was completed
-                if (
-                    !(
-                        isset($_FILES)
-                        && array_key_exists('video_file', $_FILES)
-                        && array_key_exists('name', $_FILES["video_file"])
-                        && !empty($_FILES["video_file"]["name"])
-                    )
+                if (!(isset($_FILES)
+                    && array_key_exists('video_file', $_FILES)
+                    && array_key_exists('name', $_FILES["video_file"])
+                    && !empty($_FILES["video_file"]["name"]))
                 ) {
                     m::add(
                         'There was a problem while uploading the file. '
@@ -227,6 +204,7 @@ class VideosController extends Controller
                     $video->createFromLocalFile($videoFileData);
                 } catch (\Exception $e) {
                     m::add($e->getMessage(), m::ERROR);
+
                     return $this->redirect($this->generateUrl('admin_videos_create', array('type' => $type)));
                 }
             } elseif ($type == 'web-source') {
@@ -239,15 +217,18 @@ class VideosController extends Controller
                         $video->create($_POST);
                     } catch (\Exception $e) {
                         m::add($e->getMessage());
+
                         return $this->redirect($this->generateUrl('admin_videos_create', array('type' => $type)));
                     }
 
                 } else {
                     m::add('There was an error while uploading the form, not all the required data was sent.');
-                        return $this->redirect($this->generateUrl('admin_videos_create', array('type' => $type)));
+
+                    return $this->redirect($this->generateUrl('admin_videos_create', array('type' => $type)));
                 }
             } else {
                 m::add('There was an error while uploading the form, the video type is not specified.');
+
                 return $this->redirect($this->generateUrl('admin_videos_create', array('type' => $type)));
             }
 
@@ -304,7 +285,8 @@ class VideosController extends Controller
                     array('id' => $video->id)
                 ));
             } else {
-                $page = $this->request->request->getDigits('page', 0);
+                $page = $this->request->request->getDigits('page', 1);
+
                 return $this->redirect($this->generateUrl(
                     'admin_videos',
                     array(
@@ -327,7 +309,7 @@ class VideosController extends Controller
 
         $request = $this->request;
         $id = $request->getDigits('id');
-        $page = $request->getDigits('page', 0);
+        $page = $request->getDigits('page', 1);
 
         if (!empty($id)) {
             $video = new \Video($id);
@@ -343,7 +325,10 @@ class VideosController extends Controller
 
         return $this->redirect($this->generateUrl(
             'admin_videos',
-            array('category' => $video->category)
+            array(
+                'category' => $video->category,
+                'page' => $page
+            )
         ));
     }
 
@@ -356,12 +341,14 @@ class VideosController extends Controller
     {
         \Acl::checkOrForward('VIDEO_UPDATE');
 
-        $id = $this->request->query->getDigits('id');
-        if (is_null($id)) {
-            m::add(sprintf(_('Unable to find the video with the id "%d"'), $id));
-            $this->redirect($this->generateUrl('admin_videos'));
-        }
+        $id = $this->request->query->getDigits('id', null);
+
         $video = new \Video($id);
+
+        if (is_null($video->id)) {
+            m::add(sprintf(_('Unable to find the video with the id "%d"'), $id));
+            return $this->redirect($this->generateUrl('admin_videos'));
+        }
 
         return $this->render('video/new.tpl', array(
             'information' => $video->information,
@@ -396,6 +383,7 @@ class VideosController extends Controller
         }  else {
             $output = _("Please check the video url, seems to be incorrect");
         }
+
         return new Response($output);
     }
 
@@ -431,6 +419,309 @@ class VideosController extends Controller
                 'configs'   => $configurations,
             ));
         }
+    }
+
+    /**
+     * Deletes multiple videos at once given its ids
+     *
+     * @return Response the response object
+     **/
+    public function batchDeleteAction()
+    {
+        \Acl::checkOrForward('VIDEO_DELETE');
+
+        $request = $this->request;
+        $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
+        $page = $request->query->getDigits('page', 1);
+        $selectedItems = $request->query->get('selected_fld');
+
+        if (is_array($selectedItems)
+            && count($selectedItems) > 0
+        ) {
+            foreach ($selectedItems as $element ) {
+                $video = new \Video($element);
+
+                $relations = array();
+                $relations = \RelatedContent::getContentRelations($element);
+
+                $video->delete($element, $_SESSION['userid']);
+
+                m::add(sprintf(_('Video "%s" deleted successfully.'), $video->title), m::SUCCESS);
+            }
+        }
+
+        return $this->redirect($this->generateUrl(
+            'admin_videos',
+            array(
+                'categoy' => $category,
+                'page'    => $page,
+            )
+        ));
+    }
+
+    /**
+     * Change availability for one video given its id
+     *
+     * @return Response the response object
+     **/
+    public function toggleAvailabilityAction()
+    {
+        \Acl::checkOrForward('VIDEO_AVAILABLE');
+
+        $request  = $this->get('request');
+        $id       = $request->query->getDigits('id', 0);
+        $status   = $request->query->getDigits('status', 0);
+        $page     = $request->query->getDigits('page', 0);
+        $category = $request->query->get('category', 'all');
+
+        $video = new \Video($id);
+        if (is_null($video->id)) {
+            m::add(sprintf(_('Unable to find video with id "%d"'), $id), m::ERROR);
+        } else {
+            $video->toggleAvailable($video->id);
+            if($status == 0){
+                $video->set_favorite($status);
+            }
+            m::add(sprintf(_('Successfully changed availability for video with id "%d"'), $id), m::SUCCESS);
+        }
+
+        return $this->redirect($this->generateUrl(
+            'admin_videos',
+            array(
+                'category' => $category,
+                'page'     => $page
+            )
+        ));
+    }
+
+    /**
+     * Change suggested flag for one video given its id
+     *
+     * @return Response the response object
+     **/
+    public function toggleFavoriteAction()
+    {
+        \Acl::checkOrForward('VIDEO_AVAILABLE');
+
+        $request  = $this->get('request');
+        $id       = $request->query->getDigits('id', 0);
+        $status   = $request->query->getDigits('status', 0);
+        $page     = $request->query->getDigits('page', 0);
+        $category = $request->query->get('category', 'all');
+
+        $video = new \Video($id);
+        if (is_null($video->id)) {
+            m::add(sprintf(_('Unable to find video with id "%d"'), $id), m::ERROR);
+        } else {
+
+            $video->set_favorite($status);
+            m::add(sprintf(_('Successfully changed suggested flag for video with id "%d"'), $id), m::SUCCESS);
+        }
+
+        return $this->redirect($this->generateUrl(
+            'admin_videos',
+            array(
+                'category' => $category,
+                'page'     => $page
+            )
+        ));
+    }
+
+    /**
+     * Change in_home flag for one video given its id
+     * Used for putting this content widgets in home
+     *
+     * @return Response the response object
+     **/
+    public function toggleInHomeAction()
+    {
+        \Acl::checkOrForward('VIDEO_AVAILABLE');
+
+        $request  = $this->get('request');
+        $id       = $request->query->getDigits('id', 0);
+        $status   = $request->query->getDigits('status', 0);
+        $page     = $request->query->getDigits('page', 0);
+        $category = $request->query->get('category', 'all');
+
+        $video = new \Video($id);
+        if (is_null($video->id)) {
+            m::add(sprintf(_('Unable to find video with id "%d"'), $id), m::ERROR);
+        } else {
+            $video->set_inhome($status, $_SESSION['userid']);
+            m::add(sprintf(_('Successfully changed suggested flag for video with id "%d"'), $id), m::SUCCESS);
+        }
+
+        return $this->redirect($this->generateUrl(
+            'admin_videos',
+            array(
+                'category' => $category,
+                'page'     => $page
+            )
+        ));
+    }
+
+    /**
+     * Returns the relations for a given video
+     *
+     * @return void
+     * @author
+     **/
+    public function relationsAction()
+    {
+        $request = $this->get('request');
+
+        $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
+
+        $video = new \Video($id);
+        $relations = array();
+        $msg ='';
+        $relations = \RelatedContent::getContentRelations($id);
+
+        if (!empty($relations)) {
+            $msg = sprintf(_("<br>The video has some relations"));
+            $cm  = new \ContentManager();
+            $relat = $cm->getContents($relations);
+            foreach ($relat as $contents) {
+                $msg.=" <br>- ".strtoupper($contents->category_name).": ".$contents->title;
+            }
+            $msg.="<br> "._("Caution! Are you sure that you want to delete this video and its relations?");
+        }
+
+      return new Response($msg);
+    }
+
+    /**
+     * Save positions for widget
+     *
+     * @return Response the response object
+     **/
+    public function savePositionsAction()
+    {
+        $request = $this->get('request');
+
+        $positions = $request->request->get('positions');
+        $msg = '';
+        if (isset($positions)
+            && is_array($positions)
+            && count($positions) > 0
+        ) {
+            $_positions = array();
+            $pos = 1;
+
+            foreach ($positions as $id) {
+                $_positions[] = array($pos, '1', $id);
+                $pos += 1;
+            }
+
+            $video = new \Video();
+            $msg = $video->set_position($_positions, $_SESSION['userid']);
+
+            // FIXME: buscar otra forma de hacerlo
+            /* Eliminar caché portada cuando actualizan orden opiniones {{{ */
+            $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
+            $tplManager->delete('home|0');
+        }
+
+        if ($msg) {
+            $msg = "<div class='alert alert-success'>"._("Positions saved successfully.").'<button data-dismiss="alert" class="close">×</button></div>';
+        } else{
+            $msg = "<div class='alert alert-error'>"._("Unable to save the new positions. Please contact with your system administrator.").'<button data-dismiss="alert" class="close">×</button></div>';
+        }
+
+        return new Response($msg);
+    }
+
+    /**
+     * Set the published flag for contents in batch
+     *
+     * @return Response the response object
+     **/
+    public function batchPublishAction()
+    {
+        \Acl::checkOrForward('VIDEO_AVAILABLE');
+
+        $request  = $this->request;
+        $status   = $request->query->getDigits('status', 0);
+        $selected = $request->query->get('selected_fld', null);
+        $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
+        $page     = $request->query->getDigits('page', 1);
+
+        if (is_array($selected)
+            && count($selected) > 0
+        ) {
+            foreach ($selected as $id) {
+                $video = new \Video($id);
+                $video->set_available($status, $_SESSION['userid']);
+                if ($status == 0){
+                    $video->set_favorite($status, $_SESSION['userid']);
+                }
+            }
+        }
+
+        return $this->redirect($this->generateUrl(
+            'admin_videos',
+            array(
+                'category' => $category,
+                'page'     => $page,
+            )
+        ));
+    }
+
+    /**
+     * Render the content provider for videos
+     *
+     * @return Response the response object
+     **/
+    public function contentProviderAction()
+    {
+        $request      = $this->get('request');
+        $category     = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
+        $page         = $request->query->getDigits('page', 1);
+        $itemsPerPage = s::get('items_per_page');
+
+        if ($category == 'home') { $category = 0; }
+
+        $cm = new  \ContentManager();
+
+        // Get contents for this home
+        $contentElementsInFrontpage  = $cm->getContentsIdsForHomepageOfCategory($category);
+
+        // Fetching opinions
+        $sqlExcludedOpinions = '';
+        if (count($contentElementsInFrontpage) > 0) {
+            $contentsExcluded    = implode(', ', $contentElementsInFrontpage);
+            $sqlExcludedOpinions = ' AND `pk_video` NOT IN ('.$contentsExcluded.') ';
+        }
+
+        list($countVideos, $videos) = $cm->getCountAndSlice(
+            'Video',
+            null,
+            'contents.available=1 '.$sqlExcludedOpinions,
+            'ORDER BY created DESC ',
+            $page,
+            8
+        );
+
+        // Build the pager
+        $pagination = \Pager::factory(array(
+            'mode'        => 'Sliding',
+            'perPage'     => $itemsPerPage,
+            'append'      => false,
+            'path'        => '',
+            'delta'       => 4,
+            'clearIfVoid' => true,
+            'urlVar'      => 'page',
+            'totalItems'  => $countVideos,
+            'fileName'    => $this->generateUrl(
+                'admin_videos_content_provider',
+                array('category' => $category)
+            ).'&page=%d',
+        ));
+
+        return $this->render('video/content-provider.tpl', array(
+            'videos' => $videos,
+            'pager'  => $pagination,
+        ));
     }
 
 } // END class VideosController

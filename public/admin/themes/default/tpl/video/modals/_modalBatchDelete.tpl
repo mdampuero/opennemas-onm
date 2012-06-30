@@ -17,12 +17,11 @@
 jQuery("#modal-video-batchDelete").modal({
     backdrop: 'static', //Show a grey back drop
     keyboard: true, //Can close on escape
-
 });
 
 jQuery('.delChecked').click(function(e) {
     var number = jQuery(".minput:checked").length;
-    if(number >= 1 ) {
+    if (number >= 1 ) {
         jQuery('#modal-video-batchDelete .modal-body span').html(number);
         jQuery("#modal-video-batchDelete").modal(true);
     }else{
@@ -35,10 +34,9 @@ jQuery('.delChecked').click(function(e) {
     e.preventDefault();
 });
 
-jQuery('#modal-video-batchDelete a.btn.yes').on('click', function(){
-    jQuery('#action').attr('value', "batchDelete");
+jQuery('#modal-video-batchDelete .btn.yes').on('click', function(){
+    jQuery('#formulario').attr('action', video_manager_urls.batchDelete);
     jQuery('#formulario').submit();
-    e.preventDefault();
 });
 
 jQuery('#modal-video-batchDelete a.btn.no').on('click', function(e){

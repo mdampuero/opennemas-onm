@@ -1,16 +1,15 @@
 makeSortable = function(){
-
     var items =  jQuery( "tbody.sortable" ).sortable().disableSelection();
+};
 
 
-}
-
-
-saveSortPositions = function( controller) {
+// In video (Fran), dropped this call and will use a custom function
+saveSortPositions = function(controller) {
     var items_id = [];
+
     jQuery( "tbody.sortable tr" ).each(function(){
         items_id.push(jQuery(this).data("id"));
-    })
+    });
 
     jQuery.ajax({
        type: "GET",
@@ -23,7 +22,5 @@ saveSortPositions = function( controller) {
 
        }
     });
-
-
-
-}
+    return false;
+};

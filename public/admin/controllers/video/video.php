@@ -351,7 +351,7 @@ switch ($action) {
 
         break;
 
-     case 'change_inHome':
+    case 'change_inHome':
 
         Acl::checkOrForward('ALBUM_HOME');
 

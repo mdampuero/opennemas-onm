@@ -54,8 +54,6 @@
 
 </head>
 <body>
-    {script_tag src="/wz_tooltip.js"}
-
     <header class="global-nav clearfix">
         <div class="logoonm pull-right">
             <a  href="{url name=admin_welcome}" id="logo-onm" class="clearfix" title="{t}Go to admin main page{/t}">

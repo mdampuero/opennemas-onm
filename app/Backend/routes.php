@@ -117,7 +117,7 @@ $routes->add(
 );
 
 $routes->add(
-    'admin_videos_show',
+    'admin_video_show',
     new Route(
         '/videos/{id}/show',
         array('_controller' => 'Backend:Controllers:VideosController:show')
@@ -135,7 +135,7 @@ $routes->add(
 );
 
 $routes->add(
-    'admin_videos_delete',
+    'admin_video_delete',
     new Route(
         '/videos/{id}/delete',
         array('_controller' => 'Backend:Controllers:VideosController:delete')
@@ -162,14 +162,76 @@ $routes->add(
 );
 
 $routes->add(
-    'admin_videos_category',
+    'admin_video_save_positions',
     new Route(
-        '/videos/{$category}',
-        array('_controller' => 'Backend:Controllers:VideosController:list')
+        '/videos/save-positions',
+        array('_controller' => 'Backend:Controllers:VideosController:savePositions')
     ),
     '/admin'
 );
 
+$routes->add(
+    'admin_video_toggle_availability',
+    new Route(
+        '/videos/{id}/toggle-availability',
+        array('_controller' => 'Backend:Controllers:VideosController:toggleAvailability')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_video_toggle_favorite',
+    new Route(
+        '/videos/{id}/toggle-favorite',
+        array('_controller' => 'Backend:Controllers:VideosController:toggleFavorite')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_video_toggle_inhome',
+    new Route(
+        '/videos/{id}/toggle-inhome',
+        array('_controller' => 'Backend:Controllers:VideosController:toggleInHome')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_video_get_relations',
+    new Route(
+        '/videos/{id}/relations',
+        array('_controller' => 'Backend:Controllers:VideosController:relations')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_video_batchdelete',
+    new Route(
+        '/videos/batch-delete',
+        array('_controller' => 'Backend:Controllers:VideosController:batchDelete')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_video_batchpublish',
+    new Route(
+        '/videos/batch-publish',
+        array('_controller' => 'Backend:Controllers:VideosController:batchPublish')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_videos_content_provider',
+    new Route(
+        '/videos/content-provider',
+        array('_controller' => 'Backend:Controllers:VideosController:contentProvider')
+    ),
+    '/admin'
+);
 
 
 // Books controller routes

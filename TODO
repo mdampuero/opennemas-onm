@@ -42,10 +42,12 @@ Statistics controller
 Europapress Importer
 --------------------
 - Review back button in article editting form when importing
+- Drop wz_tooltip call
 
 EFE importer
 ------------
 - Review back button in article editting form when importing
+- Drop wz_tooltip call
 
 XML file importer
 -----------------
@@ -85,5 +87,4 @@ Files
 
 Videos
 ------
-- Batch actions doesn't work
--
+- Related content provider: content-list-provider, related-provider

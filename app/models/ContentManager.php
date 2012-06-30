@@ -1443,35 +1443,33 @@ class ContentManager
     ) {
         $this->init($contentType);
         $items  = array();
-        $_where = 'in_litter=0';
+        $_where = 'AND in_litter=0';
 
-        if ( !is_null($filter) ) {
+        if (!is_null($filter) ) {
             if (($filter == ' `contents`.`in_litter`=1')
                 || ($filter == 'in_litter=1')
             ) {
-                  $_where = $filter;
+                $_where = $filter;
             } else {
-                $_where = ' `contents`.`in_litter`=0 AND '.$filter;
+                $_where .= ' AND '.$filter;
             }
         }
 
         if (intval($pk_fk_content_category) > 0) {
             $sql = 'SELECT COUNT(contents.pk_content) '
                  . 'FROM `contents_categories`, `contents`, ' . $this->table . '  '
-                 . ' WHERE '.$_where
-                 . ' AND `contents_categories`.`pk_fk_content_category`='
+                 . ' WHERE `contents_categories`.`pk_fk_content_category`='
                  . $pk_fk_content_category
-                 . '  AND pk_content=`'.$this->table
-                 .'`.`pk_'.$this->content_type
-                 . '` AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` ';
+                 . '  AND pk_content=`'.$this->table. '`.`pk_'.$this->content_type
+                 . '` AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` '
+                 . $_where;
         } else {
             $sql = 'SELECT COUNT(contents.pk_content) AS total '
                 . 'FROM `contents`, `'.$this->table.'` '
-                . 'WHERE '.$_where
-                .' AND `contents`.`pk_content`=`'.$this->table
-                .'`.`pk_'.$this->content_type.'` ';
+                . 'WHERE `contents`.`pk_content`=`'.$this->table
+                . '`.`pk_'.$this->content_type.'` '
+                . $_where;
         }
-
 
         $rs = $GLOBALS['application']->conn->GetOne($sql);
 
@@ -1573,17 +1571,24 @@ class ContentManager
      * @return void
      * @author
      **/
-    public function getCountAndSlice($contentType, $categoryId, $filter, $orderBy, $page = 1, $numElements = 10)
-    {
+    public function getCountAndSlice(
+        $contentType,
+        $categoryId,
+        $filter,
+        $orderBy,
+        $page = 1,
+        $numElements = 10
+    ) {
         $this->init($contentType);
         $items  = array();
         $_where = '';
 
         if (empty($filter)) {
-            $filterCount = ' contents.in_litter != 1';
+            $filterCount = ' contents.in_litter != 1 ';
             $filter = ' AND '. $filterCount;
         } else {
-            $filterCount = $filter = ' AND '.$filter;
+            $filterCount = $filter;
+            $filter = ' AND '. $filter;
         }
 
         $countContents = $this->count($contentType, $filterCount, $categoryId);

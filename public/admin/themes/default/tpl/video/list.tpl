@@ -1,31 +1,40 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-js" append}
-    {script_tag src="/utilsVideo.js" language="javascript"}
     {script_tag src="/onm/jquery-functions.js" language="javascript"}
 {/block}
 
+{block name="footer-js" append}
+    <script>
+    var video_manager_urls = {
+        batchDelete: '{url name=admin_video_batchdelete category=$category page=$page}',
+        saveWidgetPositions: '{url name=admin_video_save_positions category=$category page=$page}'
+    }
+    </script>
+    {script_tag src="/jquery-onm/jquery.video.js" language="javascript"}
+{/block}
+
 {block name="content"}
-<form action="#" method="get" name="formulario">
+<form action="#" method="get" name="formulario" id="formulario">
 	<div class="top-action-bar clearfix">
 		<div class="wrapper-content">
-			<div class="title"><h2>{t}Video Manager :: Listing videos{/t} {if $category eq 0}HOME{else}{$datos_cat[0]->title}{/if}</h2></div>
+			<div class="title"><h2>{t}Video Manager :: Listing videos{/t} {if $category eq 'all'}HOME{elseif $category eq 'widget'}WIDGET{else}{$datos_cat[0]->title}{/if}</h2></div>
 			<ul class="old-button">
 				{acl isAllowed="VIDEO_DELETE"}
 				<li>
-                    <a class="delChecked" data-controls-modal="modal-video-batchDelete" href="#" title="{t}Delete{/t}">
+                    <button type="submit" class="delChecked" data-controls-modal="modal-video-batchDelete" href="#" title="{t}Delete{/t}">
                         <img src="{$params.IMAGE_DIR}trash.png" border="0"  title="{t}Delete{/t}" alt="{t}Delete{/t}" ><br />{t}Delete{/t}
-                    </a>
+                    </button>
 				</li>
 				{/acl}
 				{acl isAllowed="VIDEO_AVAILABLE"}
                 <li>
-                    <button value="batchnoFrontpage" name="buton-batchnoFrontpage" id="buton-batchnoFrontpage" type="submit">
+                    <button id="batch-unpublish" type="submit" name="status" value="0">
                        <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="{t}Unpublish{/t}" alt="{t}Unpublish{/t}" ><br />{t}Unpublish{/t}
                    </button>
                </li>
                <li>
-                   <button value="batchFrontpage" name="buton-batchFrontpage" id="buton-batchFrontpage" type="submit">
+                   <button id="batch-publish" type="submit" name="status" value="1">
                        <img border="0" src="{$params.IMAGE_DIR}publish.gif" title="{t}Publish{/t}" alt="{t}Publish{/t}" ><br />{t}Publish{/t}
                    </button>
                </li>
@@ -33,7 +42,7 @@
 				{acl isAllowed="VIDEO_CREATE"}
                 <li class="separator"></li>
 				<li>
-					<a href="{url name=admin_videos_create category=$category}" accesskey="N" tabindex="1">
+					<a href="{url name=admin_video_create category=$category}" accesskey="N" tabindex="1">
 						<img border="0" src="{$params.IMAGE_DIR}/video.png" title="Nuevo Video" alt="Nuevo Video"><br />{t}New video{/t}
 					</a>
 				</li>
@@ -42,14 +51,14 @@
                     {if $category eq 'widget'}
                         <li class="separator"></li>
                         <li>
-                            <a href="#" onClick="javascript:saveSortPositions('{$smarty.server.PHP_SELF}');" title="{t}Save positions{/t}">
+                            <a href="#" id="save-widget-positions" title="{t}Save positions{/t}">
                                 <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save positions{/t}"><br />{t}Save positions{/t}
                             </a>
                         </li>
                     {/if}
                 {/acl}
                 {acl isAllowed="VIDEO_SETTINGS"}
-                <li class="separator"></li>
+                    <li class="separator"></li>
                     <li>
                         <a href="{url name=admin_videos_config}" class="admin_add" title="{t}Config video module{/t}">
                             <img border="0" src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
@@ -64,6 +73,7 @@
     <div class="wrapper-content">
 
         {render_messages}
+        <div id="warnings-validation"></div>
 
         <ul class="pills clearfix">
             <li>
@@ -76,8 +86,6 @@
 
             {include file="menu_categories.tpl" home="{url name=admin_videos a=l}"}
         </ul>
-
-        <div id="warnings-validation"></div>
 
         <table class="listing-table">
             <thead>
@@ -104,7 +112,7 @@
             </thead>
             <tbody class="sortable">
                 {section name=c loop=$videos}
-                <tr data-id="{$videos[c]->pk_album}" style="cursor:pointer;">
+                <tr data-id="{$videos[c]->id}" style="cursor:pointer;">
                     <td>
                         <input type="checkbox" class="minput" id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$videos[c]->id}"  style="cursor:pointer;">
                     </td>
@@ -129,52 +137,55 @@
                     </td>
                     <td class="center">
                         {acl isAllowed="VIDEO_AVAILABLE"}
-                            {if $videos[c]->available == 1}
-                                <a href="?id={$videos[c]->id}&amp;action=change_status&amp;status=0&amp;category={$category}&amp;page={$page|default:0}" title="Publicado">
-                                        <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" /></a>
-                            {else}
-                                <a href="?id={$videos[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;page={$page|default:0}" title="Pendiente">
-                                        <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" /></a>
-                            {/if}
+                        {if $videos[c]->available == 1}
+                            <a href="{url name=admin_video_toggle_availability id=$videos[c]->id status=0 category=$category page=$page|default:1}" title="{t}Published{/t}">
+                                <img src="{$params.IMAGE_DIR}publish_g.png" alt="{t}Published{/t}" />
+                            </a>
+                        {else}
+                            <a href="{url name=admin_video_toggle_availability id=$videos[c]->id status=1 category=$category page=$page|default:1}" title="{t}Pendiente{/t}">
+                                <img src="{$params.IMAGE_DIR}publish_r.png" alt="{t}Pendiente{/t}" />
+                            </a>
+                        {/if}
                         {/acl}
                     </td>
-                     {if $category!='widget' && $category!='all'}
+                     {if $category!='widget' && $category != 'all'}
                     <td class="center">
                         {acl isAllowed="VIDEO_FAVORITE"}
-                                {if $videos[c]->favorite == 1}
-                                   <a href="?id={$videos[c]->id}&amp;action=change_favorite&amp;status=0&amp;category={$category}&amp;page={$page|default:0}" class="favourite_on" title="Quitar de Portada"></a>
-                                {else}
-                                    <a href="?id={$videos[c]->id}&amp;action=change_favorite&amp;status=1&amp;category={$category}&amp;page={$page|default:0}" class="favourite_off" title="Meter en Portada"></a>
-                                {/if}
-                         {/acl}
+                        {if $videos[c]->favorite == 1}
+                           <a href="{url name=admin_video_toggle_favorite id=$videos[c]->id status=0 category=$category page=$page|default:1}" class="favourite_on" title="Quitar de Portada"></a>
+                        {else}
+                            <a href="{url name=admin_video_toggle_favorite id=$videos[c]->id status=1 category=$category page=$page|default:1}" class="favourite_off" title="Meter en Portada"></a>
+                        {/if}
+                        {/acl}
                     </td>
                     {/if}
                     <td class="center">
                     {acl isAllowed="VIDEO_HOME"}
                         {if $videos[c]->in_home == 1}
-                           <a href="{$smarty.server.PHP_SELF}?id={$videos[c]->id}&amp;action=change_inHome&amp;status=0&amp;category={$category}&amp;page={$page|default:0}" class="no_home" title="{t}Take out from home{/t}"></a>
+                           <a href="{url name=admin_video_toggle_inhome id=$videos[c]->id status=0 category=$category page=$page|default:1}" class="no_home" title="{t}Take out from home{/t}"></a>
                         {else}
-                            <a href="{$smarty.server.PHP_SELF}?id={$videos[c]->id}&amp;action=change_inHome&amp;status=1&amp;category={$category}&amp;page={$page|default:0}" class="go_home" title="{t}Put in home{/t}"></a>
+                            <a href="{url name=admin_video_toggle_inhome id=$videos[c]->id status=1 category=$category page=$page|default:1}" class="go_home" title="{t}Put in home{/t}"></a>
                         {/if}
                     {/acl}
                     </td>
                     <td style="padding:1px; font-size:11px;" class="center">
                         <div class="btn-group">
-                        {acl isAllowed="VIDEO_UPDATE"}
-                            <a class="btn" href="{url name=admin_videos_show id=$videos[c]->id}" title="{t}Edit{/t}" >
+                            {acl isAllowed="VIDEO_UPDATE"}
+                            <a class="btn" href="{url name=admin_video_show id=$videos[c]->id}" title="{t}Edit{/t}" >
                                 <i class="icon-pencil"></i> {t}Edit{/t}
                             </a>
-                        {/acl}
+                            {/acl}
 
-                        {acl isAllowed="VIDEO_DELETE"}
+                            {acl isAllowed="VIDEO_DELETE"}
                             <a class="del btn btn-danger" data-controls-modal="modal-from-dom"
                                data-id="{$videos[c]->id}"
                                data-title="{$videos[c]->title|capitalize}"
-                               data-url="{url name=admin_videos_delete id=$videos[c]->id}"
-                               href="{url name=admin_videos_delete id=$videos[c]->id}" >
+                               data-url="{url name=admin_video_delete id=$videos[c]->id}"
+                               data-url-relations="{url name=admin_video_get_relations id=$videos[c]->id}"
+                               href="{url name=admin_video_delete id=$videos[c]->id}" >
                                 <i class="icon-trash icon-white"></i>
                             </a>
-                        {/acl}
+                            {/acl}
                         </div>
                     </td>
                 </tr>
@@ -196,24 +207,14 @@
         </table>
 
     </div>
-    <input type="hidden" name="page" id="page" value="{$page|default:0}" />
-    <input type="hidden" name="category" id="category" value="{$category}" />
-    <input type="hidden" id="status" name="status" value="" />
-    <input type="hidden" id="action" name="action" value="" />
-    <input type="hidden" name="id" id="id" value="{$id|default:""}" />
 </form>
-     <script>
-        // <![CDATA[
-        jQuery('#buton-batchnoFrontpage').on('click', function(){
-            jQuery('#action').attr('value', "batchFrontpage");
-            jQuery('#status').attr('value', "0");
-            jQuery('#formulario').submit();
-            e.preventDefault();
+    <script>
+    // <![CDATA[
+        jQuery('#batch-publish').on('click', function(){
+            jQuery('#formulario').attr('action', '{url name=admin_video_batchpublish}');
         });
-        jQuery('#buton-batchFrontpage').on('click', function(){
-            jQuery('#action').attr('value', "batchFrontpage");
-            jQuery('#status').attr('value', "1");
-            jQuery('#formulario').submit();
+        jQuery('#batch-unpublish').on('click', function(){
+            jQuery('#formulario').attr('action', '{url name=admin_video_batchpublish}');
             e.preventDefault();
         });
 
@@ -221,8 +222,8 @@
             jQuery(document).ready(function() {
                 makeSortable();
             });
-        // ]]>
         {/if}
+    // ]]>
     </script>
 
     {include file="video/modals/_modalDelete.tpl"}

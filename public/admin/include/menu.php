@@ -138,7 +138,7 @@ $menuXml = '<?xml version="1.0"?>
             privilege="VIDEO_ADMIN"
             title="'.htmlspecialchars(_("Videos"), ENT_QUOTES).'"
             id="video_manager"
-            link="/admin/controllers/video/video.php"
+            link="'.url('admin_videos').'"
         />
         <node
             module_name="ALBUM_MANAGER"

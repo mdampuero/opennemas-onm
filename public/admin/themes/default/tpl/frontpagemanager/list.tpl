@@ -139,7 +139,7 @@
                     {/is_module_activated}
                     {is_module_activated name="VIDEO_MANAGER"}
                     <li>
-                        <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/video/video.php?action=content-provider&amp;category={$category}">{t}Videos{/t}</a>
+                        <a href="{url name=admin_videos_content_provider category=$category}">{t}Videos{/t}</a>
                     </li>
                     {/is_module_activated}
                     {is_module_activated name="ALBUM_MANAGER"}
