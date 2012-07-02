@@ -1863,6 +1863,30 @@ class Content
     }
 
     /**
+     * Search contents by its urn
+     *
+     * @param  array/string $urns one urn string or one array of urn strings
+     * @return array        the array of contents
+     **/
+    public static function findByOriginaNameInUrn($originalName)
+    {
+        $content = null;
+        if (is_string($originalName)) {
+            $name = $GLOBALS['application']->conn->quote('%'.$originalName.'%');
+            $sql  = "SELECT pk_content FROM `contents` "
+                . "WHERE urn_source LIKE {$name}";
+
+            $content = $GLOBALS['application']->conn->GetOne($sql);
+
+        } else {
+            $message = sprintf('The param name is not valid "%s".', $originalName);
+            throw new \InvalidArgumentException($message);
+        }
+
+        return $content;
+    }
+
+    /**
      * Returns true if a match time contraints, is available and is not in trash
      *
      * @return boolean true if is ready

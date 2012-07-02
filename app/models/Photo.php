@@ -8,7 +8,8 @@
  * file that was distributed with this source code.
  */
  use Onm\Message as m,
-     Onm\Settings as s;
+     Onm\Settings as s,
+     Onm\StringUtils;
 /**
  * Photo
  *
@@ -60,6 +61,7 @@ class Photo extends Content
                         $data['author_name'], $data['media_type']);
 
         $execution = $GLOBALS['application']->conn->Execute($sql, $values);
+
         if ($execution === false) {
             Application::logDatabaseError();
 
@@ -264,7 +266,16 @@ class Photo extends Content
 
         if (!empty($filePath)) {
              // Check upload directory
-            $dateForDirectory = date("/Y/m/d/");
+            $date = new DateTime();
+            $urn = "urn:newsml:"
+                .SITE
+                .":"
+                .$date->format("Ymd\THisO")
+                .":"
+                .StringUtils::cleanFileName($originalFileName)
+                .":2";
+
+            $dateForDirectory = $date->format("/Y/m/d/");
             $uploadDir =
                 MEDIA_PATH.DS.IMG_DIR.DS.$dateForDirectory.DIRECTORY_SEPARATOR;
 
@@ -277,7 +288,7 @@ class Photo extends Content
             // Getting information for creating
             $t                  = gettimeofday();
             $micro              = intval(substr($t['usec'], 0, 5));
-            $finalPhotoFileName = date("YmdHis")
+            $finalPhotoFileName = $date->format("YmdHis")
                 . $micro . "." . strtolower($filePathInfo['extension']);
             $fileInformation    = new MediaItem($filePath);
 
@@ -304,6 +315,7 @@ class Photo extends Content
                 'fk_publisher' => $_SESSION['userid'],
                 'description'  => $dataSource['description'],
                 'metadata'     => $dataSource["metadata"],
+                'urn_source'   => $urn,
             );
 
             if (is_dir($uploadDir) && !is_writable($uploadDir)) {
@@ -320,6 +332,7 @@ class Photo extends Content
                 $dataSource['local_file'],
                 realpath($uploadDir).DIRECTORY_SEPARATOR.$finalPhotoFileName
             );
+
             if ($fileCopied) {
 
                 $photo = new Photo();
