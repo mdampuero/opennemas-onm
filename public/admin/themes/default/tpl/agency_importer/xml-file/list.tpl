@@ -27,8 +27,20 @@
                 </li>
                 <li class="separator"></li>
                 <li>
+                    <a href="#" class="admin_add" onclick="delFile()" onmouseover="return escape('<u>R</u>emove File');" name="remove" value="remove">
+                        <img border="0" src="{$params.IMAGE_DIR}list-remove.png" alt="Remove"><br />{t}Remove File{/t}
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="admin_add" onclick="addFile();" onmouseover="return escape('<u>A</u>dd File');" name="add" value="add">
+                        <img border="0" src="{$params.IMAGE_DIR}list-add.png" alt="Add"><br />{t}Add File{/t}
+                    </a>
+                </li>
+                <li class="separator"></li>
+                <li>
                     <a href="{url name=admin_importer_xmlfile_config}" title="{t}Config XML Schema{/t}">
-                    <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="{t}Config XML Schema{/t}" ><br />{t}Config{/t}
+                        <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="{t}Config XML Schema{/t}" ><br />
+                        {t}Config{/t}
                     </a>
                 </li>
             </ul>
@@ -77,19 +89,25 @@
                     {foreach from=$dataXML item=article name=articl}
                         <table style="width: 90%;">
                             <tr><td colspan="2"><h3>{$XMLFile[$smarty.foreach.articl.index]}</h3></td></tr>
-                            {if !empty($article.agency)}<tr><td><b>Agencia: </b></td><td>{$article.agency}</td></tr>{/if}
-                            {if !empty($article.created)}<tr><td><b>Fecha: </b></td><td>{$article.created}</td></tr>{/if}
-                            {if !empty($article.category_name)}<tr><td><b>Sección: </b></td><td>{$article.category_name}   </td></tr>{/if}
-                            {if !empty($article.subtitle)}<tr style="font-size:16px;font-weight:700"><td>Antetitulo: </td><td>{$article.subtitle}</td></tr>{/if}
                             {if !empty($article.title)}<tr style="color:blue;font-size:16px;font-weight:700"><td>Titulo: </td><td>{$article.title}</td></tr>
                             {else}<tr style="color:orangered;font-size:16px;font-weight:700"><td>Titulo: </td><td> No tiene</td></tr>
                             {/if}
                             {if !empty($article.title_int)}<tr style="font-size:16px;font-weight:700"><td>Titulo Interior: </td><td>{$article.title_int}</td></tr>{/if}
+                            {if !empty($article.img1)}
+                            <tr><td>
+                                <strong>{t}Photos:{/t}</strong> </td><td>{$article.img} <br/>
+                                <img style="max-height:120px; max-width:200px;" src="{$article.photo}">
+                                 {$article.img1_footer}
+                            </td></tr>
+                            {/if}}
+                            {if !empty($article.agency)}<tr><td><b>Agencia: </b></td><td>{$article.agency|strip_tags}</td></tr>{/if}
+                            {if !empty($article.created)}<tr><td><b>Fecha: </b></td><td>{$article.created}</td></tr>{/if}
+                            {if !empty($article.category_name)}<tr><td><b>Sección: </b></td><td>{$article.category_name}   </td></tr>{/if}
+                            {if !empty($article.subtitle)}<tr style="font-size:16px;font-weight:700"><td>Antetitulo: </td><td>{$article.subtitle}</td></tr>{/if}
                             {if !empty($article.summary)}<tr><td style="vertical-align:top;"><b>Entradilla: </b></td><td>{$article.summary}</td></tr>{/if}
                             {if !empty($article.body)}<tr><td style="vertical-align:top;" ><b>Cuerpo: </b></td><td>{$article.body}</td></tr>{/if}
                             {if !empty($article.description)}<tr><td><b>Description: </b></td><td>{$article.description}</td></tr>{/if}
                             {if !empty($article.metadata)}<tr><td><b>Metadata: </b></td><td>{$article.metadata}</td></tr>{/if}
-
                         </table>
                         <br>
                     {/foreach}

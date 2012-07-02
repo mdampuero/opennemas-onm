@@ -8,7 +8,8 @@
  * file that was distributed with this source code.
  */
 use Onm\Settings as s,
-    Onm\Message  as m;
+    Onm\Message  as m,
+    Onm\StringUtils;
 
 /**
  * Class to import news from XML files
@@ -233,29 +234,31 @@ class ImporterXml
         }
         $values = self::parseXMLtoArray($docXML);
 
-        $this->data['pk_author'] = $_SESSION['userid'];
+        $this->data['pk_author']      = $_SESSION['userid'];
+        $this->data['content_status'] = 0;
+        $this->data['available']      = 0;
+        $this->data['frontpage']      = 0;
+        $this->data['fk_video']       ="";
+        $this->data['footer_video']   ="";
+        $this->data['fk_video2']      ="";
+        $this->data['footer_video2']  ="";
+        $this->data['ordenArti']      ="";
+        $this->data['ordenArtiInt']   ="";
+
+        $this->parseNodes($values);
 
         $imgImported = null;
         if (!empty( $this->data['img'] )) {
-            s::get('SITE_URL');
-            $urn_source = preg_match( "@*.*{1,3}@", $this->data['img']);
-
-            $imgImported = Content::findByUrn($urn_source);
+            $originalFileName = urldecode($this->data['img']);
+            $originalFileName = StringUtils::cleanFileName($originalFileName);
+            $imgImported      = Content::findByOriginaNameInUrn($originalFileName);
+            var_dump($imgImported);
         }
 
-        $this->data['content_status']=0;
-        $this->data['available']=0;
-        $this->data['frontpage']=0;
-
-        $this->data['img1'] = $imgImported;
+        $this->data['img1']        = $imgImported;
         $this->data['img1_footer'] = $this->data['img_footer'];
-        $this->data['img2'] = $imgImported;
+        $this->data['img2']        = $imgImported;
         $this->data['img2_footer'] = $this->data['img_footer'];
-        $this->data['fk_video']="";  $this->data['footer_video']="";
-        $this->data['fk_video2']=""; $this->data['footer_video2']="";
-        $this->data['ordenArti']=""; $this->data['ordenArtiInt']="";
-
-        $this->parseNodes($values);
 
         if (empty($this->data['title_int'])) {
             $this->data['title_int'] = $this->data['title'];
@@ -264,6 +267,9 @@ class ImporterXml
         if (empty($this->data['summary'])) {
             $this->data['summary'] = strip_tags(
                 substr($this->data['body'], 0, strpos($this->data['body'], '.') ).'.');
+        }
+        if (empty($this->data['agency'])) {
+            $this->data['agency'] = strip_tags($this->data['agency']);
         }
 
         if (!empty($this->data['category_name'])) {

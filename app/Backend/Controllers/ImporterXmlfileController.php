@@ -103,6 +103,11 @@ class ImporterXmlfileController extends Controller
                                 if (!empty($dryRun)) {
                                     $article = new Article();
                                     $article->create($values);
+                                    $photo = new Photo($values['img1']);
+                                    $values['photo'] =
+                                        INSTANCE_MEDIA.IMG_DIR.
+                                        $photo->path_file.$photo->name;
+                                    $dataXML[$j] = $values;
                                 }
 
                                 $dataXML[$j] = $values;
@@ -118,11 +123,15 @@ class ImporterXmlfileController extends Controller
 
                         $XMLFile[$j] = $nameFile;
 
-
                         $values      = $importer->getXMLData($eltoXML);
                         if (!empty($dryRun)) {
                             $article = new Article();
                             $article->create($values);
+                            $photo = new Photo($values['img1']);
+                            $values['photo'] =
+                                INSTANCE_MEDIA.IMG_DIR.
+                                $photo->path_file.$photo->name;
+                            $dataXML[$j] = $values;
                         }
 
                         $dataXML[$j] = $values;
@@ -175,7 +184,7 @@ class ImporterXmlfileController extends Controller
                 'description'   => $config['description'],
                 'category_name' => $config['category_name'],
                 'body'          => $config['body'],
-                'urn_source'    => $config['urn_source'],
+                'img'           => $config['img'],
                 'img_footer'    => $config['img_footer'],
                 'ignored'       => $config['ignored'],
                 'important'     => $config['important'],
@@ -203,7 +212,7 @@ class ImporterXmlfileController extends Controller
                     'description'   => $config['description'],
                     'category_name' => $config['category_name'],
                     'body'          => $config['body'],
-                    'urn_source'    => $config['urn_source'],
+                    'img'           => $config['img'],
                     'img_footer'    => $config['img_footer'],
                     'ignored'       => $config['ignored'],
                     'important'     => $config['important'],

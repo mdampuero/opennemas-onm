@@ -84,12 +84,12 @@
                             <input type="text" class="required" id="category_name" name="config[category_name]" value="{$category_name|default:""}" />
                         </div>
                         <div>
-                            <label for="urn_source">{t}Image:{/t}</label>
-                            <input type="text" class="required" id="urn_source" name="config[urn_source]" value="{$urn_source|default:""}" />
+                            <label for="img">{t}Image:{/t}</label>
+                            <input type="text" class="required" id="img" name="img" value="{$img|default:""}" />
                         </div>
                         <div>
                             <label for="img_footer">{t}Image Footer:{/t}</label>
-                            <input type="text" class="required" id="img_footer" name="config[img_footer]" value="{$img_footer|default:""}" />
+                            <input type="text" class="required" id="img_footer" name="img_footer" value="{$img_footer|default:""}" />
                         </div>
                         <div>
                             <label for="body">{t}Body:{/t}</label>
