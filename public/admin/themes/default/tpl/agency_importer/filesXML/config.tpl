@@ -87,8 +87,8 @@
                                 <input type="text" class="required" id="category_name" name="category_name" value="{$category_name|default:""}" />
                             </div>
                             <div>
-                                <label for="urn_source">{t}Image:{/t}</label>
-                                <input type="text" class="required" id="urn_source" name="urn_source" value="{$urn_source|default:""}" />
+                                <label for="img">{t}Image:{/t}</label>
+                                <input type="text" class="required" id="img" name="img" value="{$img|default:""}" />
                             </div>
                             <div>
                                 <label for="img_footer">{t}Image Footer:{/t}</label>
