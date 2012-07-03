@@ -83,11 +83,15 @@ switch ($action) {
                     4
                 );
 
+                // Get author slug for suggested opinions
                 foreach ($suggestedContents as &$content) {
                     $opinion = new Opinion($content['pk_content']);
-                    $author  = new Author($opinion->fk_author);
-                    $content['author_name'] = $author->name;
-                    $content['author_name_slug'] = StringUtils::get_title($author->name);
+                    if (!empty($opinion->author)) {
+                        $content['author_name'] = $opinion->author;
+                        $content['author_name_slug'] = StringUtils::get_title($opinion->author);
+                    } else {
+                        $content['author_name_slug'] = "author";
+                    }
                 }
 
                 $suggestedContents= $cm->getInTime($suggestedContents);
