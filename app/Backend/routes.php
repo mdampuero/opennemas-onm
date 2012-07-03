@@ -236,6 +236,26 @@ $routes->add(
 
 // Books controller routes
 $routes->add(
+    'admin_books',
+    new Route(
+        '/books',
+        array(
+            '_controller' => 'Backend:Controllers:BooksController:list',
+        )
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_books_widget',
+    new Route(
+        '/books/widget',
+        array('_controller' => 'Backend:Controllers:BooksController:widget')
+    ),
+    '/admin'
+);
+
+$routes->add(
     'admin_books_create',
     new Route(
         '/books/create',
@@ -253,17 +273,70 @@ $routes->add(
     '/admin'
 );
 
+
 $routes->add(
-    'admin_books',
+    'admin_books_update',
     new Route(
-        '/books/{category}',
-        array(
-            '_controller' => 'Backend:Controllers:BooksController:default',
-            'category'    => 'favorite',
-        )
+        '/books/{id}/update',
+        array('_controller' => 'Backend:Controllers:BooksController:update')
     ),
     '/admin'
 );
+
+$routes->add(
+    'admin_books_delete',
+    new Route(
+        '/books/{id}/delete',
+        array('_controller' => 'Backend:Controllers:BooksController:delete')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_books_save_positions',
+    new Route(
+        '/books/save-positions',
+        array('_controller' => 'Backend:Controllers:BooksController:savePositions')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_books_toggle_availability',
+    new Route(
+        '/books/{id}/toggle-availability',
+        array('_controller' => 'Backend:Controllers:BooksController:toggleAvailability')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_books_toggle_inhome',
+    new Route(
+        '/books/{id}/toggle-inhome',
+        array('_controller' => 'Backend:Controllers:BooksController:toggleInHome')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_books_batchdelete',
+    new Route(
+        '/books/batch-delete',
+        array('_controller' => 'Backend:Controllers:BooksController:batchDelete')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_books_batchpublish',
+    new Route(
+        '/books/batch-publish',
+        array('_controller' => 'Backend:Controllers:BooksController:batchPublish')
+    ),
+    '/admin'
+);
+
 
 // Files controller routes
 $routes->add(

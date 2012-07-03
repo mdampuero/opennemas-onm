@@ -19,35 +19,45 @@ jQuery('#starttime').datepicker({
 {/block}
 
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario" enctype="multipart/form-data" {$formAttrs}>
+<form action="{if isset($book)}{url name=admin_books_update id=$book->id}{else}{url name=admin_books_create}{/if}"
+    method="POST" name="formulario" id="formulario" enctype="multipart/form-data">
 
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title"><h2>{t}Book manager{/t} :: {if $smarty.request.action eq "new"}{t}Creating Book{/t}{else}{t}Editing Book{/t}{/if}</h2></div>
             <ul class="old-button">
-                {acl isAllowed="BOOK_CREATE"}
-                <li>
-                    <a class="admin_add" onClick="enviar(this, '_self', 'validate', '{$book->id}');" title="{t}Save and continue{/t}">
-                        <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
-                    </a>
-                </li>
-                {/acl}
-                <li>
-                    {if isset($book->id)}
-                        {acl isAllowed="BOOK_UPDATE"}
-                            <a onClick="javascript:enviar(this, '_self', 'update', '{$book->id}');">
-                        {/acl}
-                    {else}
-                        {acl isAllowed="BOOK_CREATE"}
-                            <a onClick="javascript:enviar(this, '_self', 'create', '0');">
-                        {/acl}
-                    {/if}
-                        <img src="{$params.IMAGE_DIR}save.png" alt="Guardar y salir"><br />{t}Save{/t}
-                    </a>
-                </li>
+                {if isset($book->id)}
+                    {acl isAllowed="BOOK_UPDATE"}
+                    <li>
+                        <button href="{url name=admin_books_update id=$book->id}">
+                            <img src="{$params.IMAGE_DIR}save.png" title="Guardar y salir" alt="{t}Save{/t}"><br />{t}Save{/t}
+                        </button>
+                    </li>
+                    <li>
+                        <button name="continue" value="1">
+                            <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="{t}Save and continue{/t}" alt="{t}Save and continue{/t}" ><br />
+                            {t}Save and continue{/t}
+                        </button>
+                    </li>
+                    {/acl}
+                {else}
+                    {acl isAllowed="BOOK_CREATE"}
+                    <li>
+                        <button href="{url name=admin_books_create}">
+                             <img src="{$params.IMAGE_DIR}save.png" title="Guardar y salir" alt="{t}Save{/t}"><br />{t}Save{/t}
+                        </button>
+                    </li>
+                    <li>
+                        <button name="continue" value="1">
+                            <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="{t}Save and continue{/t}" alt="{t}Save and continue{/t}" ><br />
+                            {t}Save and continue{/t}
+                        </button>
+                    </li>
+                    {/acl}
+                {/if}
                 <li class="separator"></li>
                 <li>
-                    <a href="{$smarty.server.PHP_SELF}?action=list&amp;category={$smarty.request.category}">
+                    <a href="{url name=admin_books category=$category|default:""}" value="{t}Go Back{/t}" title="{t}Go Back{/t}">
                         <img src="{$params.IMAGE_DIR}previous.png" title="Cancelar" alt="Cancelar" ><br />{t}Go back{/t}
                     </a>
                 </li>

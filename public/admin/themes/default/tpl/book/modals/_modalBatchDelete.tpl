@@ -1,7 +1,7 @@
 <div class="modal hide fade" id="modal-book-batchDelete">
     <div class="modal-header">
       <a class="close" href="#">×</a>
-      <h3>{t}Delete specials{/t}</h3>
+      <h3>{t}Delete books{/t}</h3>
     </div>
     <div class="modal-body">
         <p>{t escape=off}Are you sure you want to delete <span>%num%</span> books?{/t}</p>
@@ -35,10 +35,9 @@ jQuery('.delChecked').click(function(e) {
     e.preventDefault();
 });
 
-jQuery('#modal-book-batchDelete a.btn.yes').on('click', function(e){
-    jQuery('#action').attr('value', "batchDelete");
+jQuery('#modal-book-batchDelete a.btn.yes').on('click', function(){
+    jQuery('#formulario').attr('action', book_manager_urls.batchDelete);
     jQuery('#formulario').submit();
-    e.preventDefault();
 });
 
 jQuery('#modal-book-batchDelete a.btn.no').on('click', function(e){

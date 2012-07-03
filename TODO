@@ -72,9 +72,7 @@ Comments
 
 Books
 -----
-- Not implemented at all
 - Drop category and menu logic from init method
-- Validate if $id exists on update, show methods and batch actions
 - Fix category menu url
 
 Files

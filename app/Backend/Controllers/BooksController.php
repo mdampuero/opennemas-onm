@@ -8,9 +8,11 @@
  */
 namespace Backend\Controllers;
 
-use Onm\Framework\Controller\Controller,
-    Onm\Settings as s,
-    Onm\Message as m;
+use Onm\Framework\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
+use Onm\Settings as s;
+use Onm\Message as m;
+use Onm\StringUtils;
 
 /**
  * Handles the actions for the system information
@@ -30,23 +32,26 @@ class BooksController extends Controller
     {
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
 
+        $request = $this->request;
         // Take out this crap from this PLEASE ---------------------------------
         $contentType = \Content::getIDContentType('book');
 
-        $category = $this->request->query->filter('category', 'favorite', FILTER_SANITIZE_STRING);
+        $this->category = $request->query->filter('category', 'all',
+            FILTER_SANITIZE_STRING);
 
-        $ccm = \ContentCategoryManager::get_instance();
-        list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu($category, $contentType);
+        $this->ccm = \ContentCategoryManager::get_instance();
+        list($parentCategories, $subcat, $categoryData) =
+            $this->ccm->getArraysMenu($this->category, $contentType);
 
         $bookCategories = array();
-        foreach ($parentCategories as $bCat){
-            if ($bCat->internal_category == $contentType){
+        foreach ($parentCategories as $bCat) {
+            if ($bCat->internal_category == $contentType) {
                 $bookCategories[] = $bCat;
             }
         }
 
         $this->view->assign(array(
-            'category'     => $category,
+            'category'     => $this->category,
             'subcat'       => $subcat,
             'allcategorys' => $bookCategories,
             'datos_cat'    => $categoryData,
@@ -68,15 +73,19 @@ class BooksController extends Controller
      *
      * @return void
      **/
-    public function defaultAction()
+    public function listAction()
     {
         $this->checkAclOrForward('BOOK_ADMIN');
+        $request        = $this->get('request');
+        $page           = $request->query->getDigits('page', 1);
 
-        $page = $this->request->query->getInt('page');
-        $category = $this->request->query->filter('category', 'favorite', FILTER_SANITIZE_STRING);
-
+        $itemsPerPage   = s::get('items_per_page');
         $configurations = s::get('book_settings');
-        $numFavorites = (isset($configurations['total_widget']) && !empty($configurations['total_widget']))? $configurations['total_widget']: 1;
+        $numFavorites   =  1;
+        if (isset($configurations['total_widget'])
+            && !empty($configurations['total_widget'])) {
+            $numFavorites =  $configurations['total_widget'];
+        }
 
         $cm = new \ContentManager();
 
@@ -86,45 +95,88 @@ class BooksController extends Controller
             $limit = "LIMIT ".($page-1) * ITEMS_PAGE .', '.ITEMS_PAGE;
         }
 
-        if ($category == 'favorite') {
-            $books = $cm->find_all(
-                'Book',
-                'favorite=1 AND available =1',
-                'ORDER BY position, created DESC '.$limit
-            );
-
-            if(!empty($books)) {
-                foreach ($books as &$book) {
-                    $book->category_name  = $ccm->get_name($book->category);
-                    $book->category_title = $ccm->get_title($book->category_name);
-                }
-            }
-            if (count($books) != $numFavorites ) {
-                m::add( sprintf(_("You must put %d books in the HOME widget"), $numFavorites));
-            }
-
+        if ($this->category == 'all') {
+            $categoryForLimit = null;
         } else {
-            $books = $cm->find_by_category(
-                'Book',
-                $category,
-                '1=1',
-               'ORDER BY position ASC, created DESC '.$limit
-            );
+            $categoryForLimit = $this->category;
         }
 
-        $pagination = \Onm\Pager\SimplePager::getPagerUrl(array(
-            'page'  => $page,
-            'items' => ITEMS_PAGE,
-            'total' => count($books),
-            'url'   => $this->generateUrl(
+        list($booksCount, $books) = $cm->getCountAndSlice(
+            'book',
+            $categoryForLimit,
+            'in_litter != 1',
+            'ORDER BY position ASC, created DESC',
+            $page,
+            $itemsPerPage
+        );
+
+        if (!empty($books)) {
+            foreach ($books as &$book) {
+                $book->category_name  = $this->ccm->get_name($book->category);
+                $book->category_title = $this->ccm->get_title($book->category_name);
+            }
+        }
+        if (count($books) != $numFavorites ) {
+            m::add( sprintf(_("You must put %d books in the HOME widget"),
+                $numFavorites));
+        }
+
+        // Build the pager
+        $pagination = \Pager::factory(array(
+            'mode'        => 'Sliding',
+            'perPage'     => $itemsPerPage,
+            'append'      => false,
+            'path'        => '',
+            'delta'       => 4,
+            'clearIfVoid' => true,
+            'urlVar'      => 'page',
+            'totalItems'  => $booksCount,
+            'fileName'    => $this->generateUrl(
                 'admin_books',
-                array('category' => $category)
-            ),
+                array('category' => $this->category)
+            ).'&page=%d',
         ));
 
         return $this->render('book/list.tpl', array(
             'pagination' => $pagination,
+            'page'       => $page,
             'books'      => $books
+        ));
+    }
+
+    /**
+     * List books favorites for widget
+     *
+     * @return void
+     **/
+    public function widgetAction()
+    {
+
+        $this->checkAclOrForward('BOOK_ADMIN');
+
+        $configurations = s::get('books_settings');
+        $numFavorites   = $configurations['total_widget'];
+
+
+        $cm = new \ContentManager();
+        $books = $cm->find_all('book', 'in_home = 1 AND available =1',
+            'ORDER BY  position ASC ');
+
+        if (!empty($books)) {
+            foreach ($books as &$book) {
+                $book->category_name  = $this->ccm->get_name($book->category);
+                $book->category_title = $this->ccm->get_title($book->category_name);
+            }
+        }
+
+        if (count($books) != $numFavorites ) {
+            m::add( sprintf(_("You must put %d books in the HOME widget"),
+                $numFavorites));
+        }
+
+        return $this->render('book/list.tpl', array(
+            'books' => $books,
+            'category' => $this->category,
         ));
     }
 
@@ -136,7 +188,65 @@ class BooksController extends Controller
     public function createAction()
     {
         $this->checkAclOrForward('BOOK_CREATE');
-        return $this->render('book/new.tpl');
+        $request = $this->request;
+        $page    = $request->query->getDigits('page', 1);
+
+        if ('POST' != $request->getMethod()) {
+            $this->view->assign('category', $this->category);
+
+            return $this->render('book/new.tpl');
+
+        } else {
+            $bookSavePath = INSTANCE_MEDIA_PATH.'/books/';
+            $fileName     = StringUtils::cleanFileName($_FILES['file']['name']);
+            $imageName    = StringUtils::cleanFileName($_FILES['file_img']['name']);
+
+            // Move uploaded pdf
+            $uploadStatusPdf    = @move_uploaded_file($_FILES['file']['tmp_name'],
+                $bookSavePath.$fileName);
+            $uploadStatusPdfImg = @move_uploaded_file($$_FILES['file_img']['tmp_name'],
+                $bookSavePath.$imageName);
+
+            $data['id']          = $id;
+            $data['title']       = $request->request->filter('title', '', FILTER_SANITIZE_STRING);
+            $data['author']      = $request->request->filter('author', '', FILTER_SANITIZE_STRING);
+            $data['file_name']   = $fileName;
+            $data['file_img']    = $imageName;
+            $data['editorial']   = $request->request->filter('editorial', '', FILTER_SANITIZE_STRING);
+            $data['description'] = $request->request->filter('description', '', FILTER_SANITIZE_STRING);
+            $data['metadata']    = $request->request->filter('metadata', '', FILTER_SANITIZE_STRING);
+            $data['starttime']   = $request->request->filter('starttime', '', FILTER_SANITIZE_STRING);
+            $data['category']    = $request->request->getInt('category');
+            $data['available']   = $request->request->getInt('available');
+
+            $book = new \Book();
+            $id   =$book->create($data);
+
+            $sizeFile = ini_get('upload_max_filesize');
+            if ( ($uploadStatusPdf !== false) && !empty($id)) {
+                $continue = $request->request->filter('continue',
+                    false, FILTER_SANITIZE_STRING);
+                if ($continue) {
+                    $book = $book->read($id);
+                    return $this->render('book/new.tpl', array(
+                        'book' => $book,
+                    ));
+                }
+                return $this->redirect($this->generateUrl('admin_books',
+                    array(
+                        'category' => $this->category,
+                        'page' => $page
+                        )));
+
+            } elseif ( $_FILES['file']['size'] > $sizeFile ) {
+                 m::add( sprintf(_("Sorry, file can't upload. You must check file size.(< %sB)"), $sizeFile ));
+
+            } else {
+                 m::add( sprintf(_("Sorry, file can't upload.")));
+            }
+
+            return $this->render('book/new.tpl');
+        }
     }
 
     /**
@@ -150,13 +260,304 @@ class BooksController extends Controller
 
         $id = $this->request->query->getInt('id');
 
-        // TODO check if ID is available
-        $book = new Book($id);
+        $book = new \Book($id);
+
+        if (is_null($book->id)) {
+            m::add(sprintf(_('Unable to find the book with the id "%d"'), $id));
+            return $this->redirect($this->generateUrl('admin_books'));
+        }
 
         return $this->render('book/new.tpl', array(
             'book'     => $book,
             'category' => $book->category,
         ));
     }
+
+    /**
+     * Handles the form for update a book given its id
+     *
+     * @return Response the response object
+     **/
+    public function updateAction()
+    {
+        $this->checkAclOrForward('BOOK_UPDATE');
+        $request = $this->request;
+        $id = $request->request->getInt('id');
+
+        $book = new \Book($id);
+
+        if (is_null($book->id)) {
+            m::add(sprintf(_('Unable to find the book with the id "%d"'), $id));
+            return $this->redirect($this->generateUrl('admin_books'));
+        }
+        if (!\Acl::isAdmin()
+            && !\Acl::check('CONTENT_OTHER_UPDATE')
+            && $book->fk_user != $_SESSION['userid']) {
+
+            m::add(_("You can't modify this book data because you don't have enought privileges.") );
+
+        } else {
+            $bookSavePath = INSTANCE_MEDIA_PATH.'/books/';
+            $data = array();
+
+            if (!empty($_FILES['file']['name'])) {
+                $fileName  = StringUtils::cleanFileName($_FILES['file']['name']);
+
+                $uploadStatusPdf = @move_uploaded_file($_FILES['file']['tmp_name'],
+                    $bookSavePath.$fileName);
+            } else {
+                $fileName = $book->file_name;
+            }
+
+            if (!empty($_FILES['file_img']['name'])) {
+                $imageName = StringUtils::cleanFileName($_FILES['file_img']['name']);
+                $uploadStatusPdfImg = @move_uploaded_file($$_FILES['file_img']['tmp_name'],
+                    $bookSavePath.$imageName);
+            } else {
+                $imageName = $book->file_img;
+            }
+
+            $data['id']          = $id;
+            $data['title']       = $request->request->filter('title', '', FILTER_SANITIZE_STRING);
+            $data['author']      = $request->request->filter('author', '', FILTER_SANITIZE_STRING);
+            $data['file_name']   = $fileName;
+            $data['file_img']    = $imageName;
+            $data['editorial']   = $request->request->filter('editorial', '', FILTER_SANITIZE_STRING);
+            $data['description'] = $request->request->filter('description', '', FILTER_SANITIZE_STRING);
+            $data['metadata']    = $request->request->filter('metadata', '', FILTER_SANITIZE_STRING);
+            $data['starttime']   = $request->request->filter('starttime', '', FILTER_SANITIZE_STRING);
+            $data['category']    = $request->request->getInt('category');
+            $data['available']   = $request->request->getInt('available');
+
+            $book->update($data);
+
+            $continue = $request->request->filter('continue',
+                    false, FILTER_SANITIZE_STRING);
+            if ($continue) {
+                return $this->redirect($this->generateUrl('admin_books_show',
+                    array(
+                        'category' => $this->category,
+                        'id'       => $book->id,
+                    )
+                ));
+            }
+
+        }
+
+        return $this->redirect($this->generateUrl('admin_books',
+            array(
+                'category' => $data['category'],
+            )
+        ));
+}
+
+    /**
+     * Deletes a book given its id
+     *
+     * @return Response the response object
+     **/
+    public function deleteAction()
+    {
+        $this->checkAclOrForward('BOOK_DELETE');
+        $request = $this->request;
+        $id = $request->query->getInt('id');
+
+        $book = new \Book($id);
+        if (is_null($book->id)) {
+            m::add(sprintf(_('Unable to find the book with the id "%d"'), $id));
+
+        } else {
+            $book->delete( $id );
+            m::add(_("Book '{$book->title}' deleted successfully."), m::SUCCESS);
+        }
+
+        return $this->redirect($this->generateUrl('admin_books'),
+            array(
+                'category' => $book->category,
+                'page' => $page
+            ));
+    }
+
+    /**
+     * Deletes multiple books at once given its ids
+     *
+     * @return Response the response object
+     **/
+    public function batchDeleteAction()
+    {
+        \Acl::checkOrForward('BOOK_DELETE');
+
+        $request = $this->request;
+        $page = $request->query->getDigits('page', 1);
+        $selectedItems = $request->query->get('selected_fld');
+
+        if (is_array($selectedItems)
+            && count($selectedItems) > 0
+        ) {
+            foreach ($selectedItems as $element) {
+                $book = new \Book($element);
+
+                $relations = array();
+                $relations = \RelatedContent::getContentRelations($element);
+
+                $book->delete($element, $_SESSION['userid']);
+
+                m::add(sprintf(_('Book "%s" deleted successfully.'), $book->title), m::SUCCESS);
+            }
+        }
+
+        return $this->redirect($this->generateUrl(
+            'admin_books',
+            array(
+                'category' => $this->category,
+                'page'    => $page,
+            )
+        ));
+    }
+
+    /**
+     * Change availability for one book given its id
+     *
+     * @return Response the response object
+     **/
+    public function toggleAvailabilityAction()
+    {
+        \Acl::checkOrForward('BOOK_AVAILABLE');
+
+        $request  = $this->get('request');
+        $id       = $request->query->getDigits('id', 0);
+        $status   = $request->query->getDigits('status', 0);
+        $page     = $request->query->getDigits('page', 0);
+
+        $book = new \Book($id);
+        if (is_null($book->id)) {
+            m::add(sprintf(_('Unable to find book with id "%d"'), $id), m::ERROR);
+        } else {
+            $book->toggleAvailable($book->id);
+            if ($status == 0) {
+                $book->set_favorite($status);
+            }
+            m::add(sprintf(_('Successfully changed availability for book with id "%d"'), $id), m::SUCCESS);
+        }
+
+        return $this->redirect($this->generateUrl(
+            'admin_books',
+            array(
+                'category' => $this->category,
+                'page'     => $page
+            )
+        ));
+    }
+
+
+    /**
+     * Change in_home flag for one book given its id
+     * Used for putting this content widgets in home
+     *
+     * @return Response the response object
+     **/
+    public function toggleInHomeAction()
+    {
+        \Acl::checkOrForward('BOOK_AVAILABLE');
+
+        $request  = $this->get('request');
+        $id       = $request->query->getDigits('id', 0);
+        $status   = $request->query->getDigits('status', 0);
+        $page     = $request->query->getDigits('page', 0);
+
+        $book = new \Book($id);
+        if (is_null($book->id)) {
+            m::add(sprintf(_('Unable to find book with id "%d"'), $id), m::ERROR);
+        } else {
+            $book->set_inhome($status, $_SESSION['userid']);
+            m::add(sprintf(_('Successfully changed suggested flag for book with id "%d"'), $id), m::SUCCESS);
+        }
+
+        return $this->redirect($this->generateUrl(
+            'admin_books',
+            array(
+                'category' => $this->category,
+                'page'     => $page
+            )
+        ));
+    }
+
+    /**
+     * Save positions for widget
+     *
+     * @return Response the response object
+     **/
+    public function savePositionsAction()
+    {
+        $request = $this->get('request');
+
+        $positions = $request->request->get('positions');
+
+        $msg = '';
+        if (isset($positions)
+            && is_array($positions)
+            && count($positions) > 0
+        ) {
+            $_positions = array();
+            $pos = 1;
+
+            foreach ($positions as $id) {
+                $_positions[] = array($pos, '1', $id);
+                $pos += 1;
+            }
+
+            $book= new \Book();
+            $msg = $book->set_position($_positions, $_SESSION['userid']);
+
+        }
+
+        if ($msg) {
+            $msg = "<div class='alert alert-success'>"
+                ._("Positions saved successfully.")
+                .'<button data-dismiss="alert" class="close">×</button></div>';
+        } else {
+            $msg = "<div class='alert alert-error'>"
+                ._("Unable to save the new positions. Please contact with your system administrator.")
+                .'<button data-dismiss="alert" class="close">×</button></div>';
+        }
+
+        return new Response($msg);
+    }
+
+    /**
+     * Set the published flag for contents in batch
+     *
+     * @return Response the response object
+     **/
+    public function batchPublishAction()
+    {
+        \Acl::checkOrForward('BOOK_AVAILABLE');
+
+        $request  = $this->request;
+        $status   = $request->query->getDigits('status', 0);
+        $selected = $request->query->get('selected_fld', null);
+        $page     = $request->query->getDigits('page', 1);
+
+        if (is_array($selected)
+            && count($selected) > 0
+        ) {
+            foreach ($selected as $id) {
+                $book = new \Book($id);
+                $book->set_available($status, $_SESSION['userid']);
+                if ($status == 0) {
+                    $book->set_favorite($status, $_SESSION['userid']);
+                }
+            }
+        }
+
+        return $this->redirect($this->generateUrl(
+            'admin_books',
+            array(
+                'category' => $this->category,
+                'page'     => $page,
+            )
+        ));
+    }
+
 
 } // END class BooksController

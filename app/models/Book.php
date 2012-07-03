@@ -127,12 +127,7 @@ class Book extends Content
 
     public function update($data)
     {
-        $file_name = StringUtils::cleanFileName($_FILES['file']['name']);
-        $file_img  = StringUtils::cleanFileName($_FILES['file_img']['name']);
-
         parent::update($data);
-        $data['file_name'] = !empty($file_name)?$file_name:$this->file_name;
-        $data['file_img'] = !empty($file_img)?$file_img:$this->file_img;
 
         $sql = "UPDATE books "
              . "SET  `author`=?,`file`=?,`file_img`=?, `editorial`=? "
@@ -146,7 +141,9 @@ class Book extends Content
             intval($data['id']),
         );
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+
+        if ($rs === false) {
             \Application::logDatabaseError();
 
             return false;

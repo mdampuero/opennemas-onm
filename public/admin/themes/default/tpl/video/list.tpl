@@ -42,7 +42,7 @@
 				{acl isAllowed="VIDEO_CREATE"}
                 <li class="separator"></li>
 				<li>
-					<a href="{url name=admin_video_create category=$category}" accesskey="N" tabindex="1">
+					<a href="{url name=admin_videos_create category=$category}" accesskey="N" tabindex="1">
 						<img border="0" src="{$params.IMAGE_DIR}/video.png" title="Nuevo Video" alt="Nuevo Video"><br />{t}New video{/t}
 					</a>
 				</li>

@@ -20,27 +20,32 @@ jQuery("#modal-book-delete").modal({
 });
 
 jQuery('.del').click(function(e) {
-
+    e.preventDefault();
+    log(jQuery(this).data('url'));
     jQuery('#modal-book-delete .modal-body span').html( jQuery(this).data('title') );
     //Sets up the modal
+    jQuery('#modal-book-delete').data('url', jQuery(this).data('url'));
+
     jQuery("#modal-book-delete").modal('show');
-    jQuery("body").data("selected-for-del", jQuery(this).data("id"));
-    e.preventDefault();
+
+
 });
 
 jQuery('#modal-book-delete a.btn.yes').on('click', function(e){
-    var delId = jQuery("body").data("selected-for-del");
-    if(delId) {
-        jQuery.ajax({
-            url:  "{$smarty.server.SCRIPT_NAME}",
-            type: "POST",
-            data: { action:"delete", id:delId },
-            success: function(){
-                location.reload();
-            }
-        });
-    }
     e.preventDefault();
+    var url = jQuery('#modal-book-delete').data('url');
+
+        if (url) {
+            log(url);
+            jQuery.ajax({
+                url:  url,
+                type: "POST",
+                success: function(){
+                    location.reload();
+                }
+            });
+        }
+        jQuery("#modal-book-delete").modal('hide');
 });
 
 jQuery('#modal-book-delete a.btn.no').on('click', function(e){
