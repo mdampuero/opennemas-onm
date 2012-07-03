@@ -86,12 +86,12 @@
                     <div style="float:right;padding: 10px; width:200px">
                         <div><b>Ficheros:</b> {$total_num}</div>
 
-
                     </div>
 
                     {foreach from=$dataXML item=article name=articl}
                         <table style="width: 90%;">
-                            <tr><td colspan="2"><h3>{$XMLFile[$smarty.foreach.articl.index]}</h3></td></tr>
+                            <tr>
+                                <td colspan="2"><h3>{$XMLFile[$smarty.foreach.articl.index]}</h3></td></tr>
                             {if !empty($article.title)}<tr style="color:blue;font-size:16px;font-weight:700"><td>Titulo: </td><td>{$article.title}</td></tr>
                             {else}<tr style="color:orangered;font-size:16px;font-weight:700"><td>Titulo: </td><td> No tiene</td></tr>
                             {/if}
@@ -102,7 +102,7 @@
                                 <img style="max-height:120px; max-width:200px;" src="{$article.photo}">
                                  {$article.img1_footer}
                             </td></tr>
-                            {/if}}
+                            {/if}
                             {if !empty($article.agency)}<tr><td><b>Agencia: </b></td><td>{$article.agency|strip_tags}</td></tr>{/if}
                             {if !empty($article.created)}<tr><td><b>Fecha: </b></td><td>{$article.created}</td></tr>{/if}
                             {if !empty($article.category_name)}<tr><td><b>Sección: </b></td><td>{$article.category_name}   </td></tr>{/if}
@@ -110,7 +110,7 @@
                             {if !empty($article.summary)}<tr><td style="vertical-align:top;"><b>Entradilla: </b></td><td>{$article.summary}</td></tr>{/if}
                             {if !empty($article.body)}<tr><td style="vertical-align:top;" ><b>Cuerpo: </b></td><td>{$article.body}</td></tr>{/if}
                             {if !empty($article.description)}<tr><td><b>Description: </b></td><td>{$article.description}</td></tr>{/if}
-                            {if !empty($article.metadata)}<tr><td><b>Metadata: </b>{$article.metadata}</td></tr>{/if}
+                            {if !empty($article.metadata)}<tr><td><b>Metadata: </b> </td><td>{$article.metadata}</td></tr>{/if}
 
                         </table>
                         <br>

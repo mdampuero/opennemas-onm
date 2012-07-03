@@ -252,7 +252,6 @@ class ImporterXml
             $originalFileName = urldecode($this->data['img']);
             $originalFileName = StringUtils::cleanFileName($originalFileName);
             $imgImported      = Content::findByOriginaNameInUrn($originalFileName);
-            var_dump($imgImported);
         }
 
         $this->data['img1']        = $imgImported;
