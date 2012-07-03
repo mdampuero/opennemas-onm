@@ -44,7 +44,6 @@ class FrontpagesController extends Controller
         (!isset($_SESSION['_from'])) ? $_SESSION['_from'] = $category : null ;
         (!isset($_SESSION['desde'])) ? $_SESSION['desde'] = 'list' : null ;
 
-
         $this->view->assign('category', $category);
 
         /**
@@ -64,7 +63,7 @@ class FrontpagesController extends Controller
         $allcategorys = $parentCategories;
 
         // Check if the user can edit frontpages
-        if(!\Acl::check('ARTICLE_FRONTPAGE')) {
+        if (!\Acl::check('ARTICLE_FRONTPAGE')) {
             \Acl::deny();
         } elseif (!\Acl::_C($categoryID)) {
             $categoryID = $_SESSION['accesscategories'][0];
@@ -147,7 +146,7 @@ class FrontpagesController extends Controller
 
         $categoryID = ($category == 'home') ? 0 : $category;
         $validReceivedData = is_array($contentsPositions)
-						     && !empty($contentsPositions)
+                             && !empty($contentsPositions)
                              && !is_null($categoryID);
 
         $savedProperly = false;

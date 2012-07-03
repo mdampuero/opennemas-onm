@@ -96,13 +96,11 @@ class ImporterEfeController extends Controller
             ).'&page=%d',
         ));
 
-
         $urns = array();
         foreach ($elements as $element) {
             $urns []= $element->urn;
         }
         $alreadyImported = \Content::findByUrn($urns);
-
 
         $message = '';
         if ($minutesFromLastSync > 100) {
@@ -361,7 +359,6 @@ class ImporterEfeController extends Controller
 
         return $response;
     }
-
 
     /**
      * Shows and handles the configuration form for Efe module

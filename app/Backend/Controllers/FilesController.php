@@ -111,6 +111,7 @@ class FilesController extends Controller
                         m::ERROR
                     );
                 }
+
                 return $this->redirect($this->generateUrl(
                     'admin_files',
                     array(
@@ -233,7 +234,7 @@ class FilesController extends Controller
                 'fk_content_type = 3 AND category = '.$v->pk_content_category ,
                 'ORDER BY created DESC'
             );
-            if (!empty($fullcat)){
+            if (!empty($fullcat)) {
                 foreach ($fullcat as $child) {
                     if ($v->pk_content_category == $child->fk_content_category) {
                         $num_sub_photos[$k][$child->pk_content_category] = $this->ccm->countContentByType($child->pk_content_category, 3);
@@ -266,7 +267,7 @@ class FilesController extends Controller
             }$total_size += $size[$i];
             $i++;
         }
-        if(!empty($parentCategories) && !empty ($aux_categories)) {
+        if (!empty($parentCategories) && !empty ($aux_categories)) {
             foreach ($parentCategories as $k => $v) {
                 foreach ($aux_categories as $ind) {
                     if (!empty ($sub_files[$ind][0])) {
@@ -362,8 +363,9 @@ class FilesController extends Controller
 
         $id = $this->request->query->getDigits('id');
 
-        if (is_null($id)){
+        if (is_null($id)) {
             m::add(sprintf(_("Unable to find the file with the id '%d'."), $id), m::ERROR);
+
             return $this->redirect($this->generateUrl('admin_files'));
         }
         $att = new \Attachment($id);

@@ -34,17 +34,16 @@ class SearchController extends Controller
 
         $this->type2res = array(
             'article'       => 'article.php',
-            'advertisement' => 'controllers/advertisement/advertisement.php',
-            'attachment'    => 'controllers/files/files.php',
-            'opinion'       => 'controllers/opinion/opinion.php',
-            'comment'       => 'controllers/comment/comment.php',
-            'album'         => 'controllers/album/album.php',
-            'photo'         => 'controllers/image/image.php',
-            'video'         => 'controllers/video/video.php',
-            'interviu'      => 'interviu.php',
-            'poll'          => 'controllers/poll/poll.php',
-            'static_page'   => 'controllers/static_pages/static_pages.php',
-            'widget'        => 'controllers/widget/widget.php',
+            'advertisement' => '/admin/controllers/advertisement/advertisement.php',
+            'attachment'    => '/admin/controllers/files/files.php',
+            'opinion'       => '/admin/controllers/opinion/opinion.php',
+            'comment'       => '/admin/controllers/comment/comment.php',
+            'album'         => '/admin/controllers/album/album.php',
+            'photo'         => $this->generateUrl('admin_image_show'),
+            'video'         => '/admin/controllers/video/video.php',
+            'poll'          => '/admin/controllers/poll/poll.php',
+            'static_page'   => '/admin/controllers/static_pages/static_pages.php',
+            'widget'        => '/admin/controllers/widget/widget.php',
         );
     }
 
@@ -167,9 +166,9 @@ class SearchController extends Controller
      * Crea los link clicables con tres paginas para
      * seleccionar y un primera y última.
      *
-     * @param Pager $Pager Paginador de la libreria externa.
-     * @param string $szSearchString  Metadatos a buscar en la base de datos.
-     * @param array $arrayCheckedTypes con los tipos de datos en
+     * @param Pager  $Pager             Paginador de la libreria externa.
+     * @param string $szSearchString    Metadatos a buscar en la base de datos.
+     * @param array  $arrayCheckedTypes con los tipos de datos en
      *                                 los cuales buscaremos.
      *
      * @return string codigo html con los links a las diferentes páginas.

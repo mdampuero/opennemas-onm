@@ -45,7 +45,6 @@ class AuthenticationController extends Controller
         $languages        = \Application::getAvailableLanguages();
         $currentLanguage  = \Application::$language;
 
-
         return $this->render('login/login.tpl', array(
             'languages'        => $languages,
             'current_language' => $currentLanguage,
@@ -89,7 +88,6 @@ class AuthenticationController extends Controller
                     //Delete the cache that handles the number of active sessions
                     apc_delete(APC_PREFIX ."_"."num_sessions");
 
-
                     $_SESSION = array(
                         'userid'           => $user->id,
                         'realname'         => $user->firstname . " " . $user->lastname,
@@ -129,7 +127,6 @@ class AuthenticationController extends Controller
         $token = md5(uniqid(mt_rand(), true));
         $_SESSION['csrf'] = $token;
 
-
         return $this->render('login/login.tpl', array('token', $token));
     }
 
@@ -152,6 +149,7 @@ class AuthenticationController extends Controller
             // Delete the cache that handles the number of active sessions
             apc_delete(APC_PREFIX . "_"."num_sessions");
             session_destroy();
+
             return $this->redirect(url('admin_login_form'));
 
         } else {

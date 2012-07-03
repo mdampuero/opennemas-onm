@@ -154,7 +154,6 @@ class ImporterXmlfileController extends Controller
                 'total_num' => $j,
             ));
 
-
         }
         $tpl->display('agency_importer/xml-file/list.tpl');
     }

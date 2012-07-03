@@ -85,7 +85,6 @@ class StaticPagesController extends Controller
         }
     }
 
-
     /**
      * Handles the creation of a new static page
      *

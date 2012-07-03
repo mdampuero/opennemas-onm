@@ -56,7 +56,6 @@ class DatabaseErrorsController extends Controller
             array( 'options' => array('default' => ""))
         );
 
-
         $filters = (isset($_REQUEST['filter']))? $_REQUEST['filter']: null;
 
         $sql = "SELECT count(*) FROM adodb_logsql";
@@ -64,7 +63,6 @@ class DatabaseErrorsController extends Controller
         if (is_null($rsTotalErrors) ) {
             \Application::logDatabaseError();
         }
-
 
         $where = "";
         $values = array();
@@ -79,7 +77,6 @@ class DatabaseErrorsController extends Controller
         $orderBy = " ORDER BY created DESC";
 
         $sql = "SELECT * FROM adodb_logsql ".$where.$orderBy.$limit;
-
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if (!$rs) {

@@ -157,7 +157,6 @@ class CacheManagerController extends Controller
         ));
     }
 
-
     /**
      * Recreates a template cache
      *
@@ -356,7 +355,6 @@ class CacheManagerController extends Controller
         if (!empty($page)) {
             $params[] = 'page='.$page;
         }
-
 
         $params[] = 'items_page='.$itemsPerPage;
         if (!empty($filter)) {

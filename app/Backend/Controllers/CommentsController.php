@@ -225,6 +225,7 @@ class CommentsController extends Controller
             'category' => $this->category,
             'status'   => $comment->content_status
         );
+
         return $this->redirect($this->generateUrl('admin_comments', $params));
 
     }

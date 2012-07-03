@@ -48,7 +48,6 @@ class AclUserGroupsController extends Controller
         ));
     }
 
-
     /**
      * Shows the form for editting a user group
      *
@@ -61,6 +60,7 @@ class AclUserGroupsController extends Controller
         $userGroup = new \UserGroup($id);
         if (is_null($userGroup->id)) {
             m::add(sprintf(_("Unable to find user group with id '%d'"), $id), m::ERROR);
+
             return $this->redirect($this->generateUrl('admin_acl_usergroups'));
         }
         $privilege = new \Privilege();
@@ -119,7 +119,6 @@ class AclUserGroupsController extends Controller
 
         return $this->redirect(url('admin_acl_usergroups'));
     }
-
 
     /**
      * Deletes a user group given its id

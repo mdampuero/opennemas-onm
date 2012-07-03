@@ -123,6 +123,7 @@ class ImporterEuropapressController extends Controller
         } catch (\Exception $e) {
             // Redirect the user to the list of articles and show an error message
             m::add(sprintf(_('Unable to find the nwe with id "%d".'), $id), m::ERROR);
+
             return $this->redirect(url('admin_importer_europapress'));
         }
 

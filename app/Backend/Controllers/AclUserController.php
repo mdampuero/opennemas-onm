@@ -61,7 +61,6 @@ class AclUserController extends Controller
         ));
     }
 
-
     /**
      * Shows the user information given its id
      *
@@ -83,6 +82,7 @@ class AclUserController extends Controller
         $user = new \User($id);
         if (is_null($user->id)) {
             m::add(sprintf(_("Unable to find the user with the id '%d'"), $id), m::ERROR);
+
             return $this->redirect($this->generateUrl('admin_acl_user'));
         }
 
@@ -96,7 +96,6 @@ class AclUserController extends Controller
             'content_categories_select' => $user->getAccessCategoryIds(),
         ));
     }
-
 
     /**
      * Handles the update action for a user given its id

@@ -11,7 +11,6 @@ namespace Backend\Controllers;
 
 use Onm\Framework\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use Onm\Message as m;
 /**
  * Handles the actions for the system information
  *
@@ -70,6 +69,7 @@ class ErrorController extends Controller
                         )
                     );
                 }
+
                 return new Response($content, 404);
                 break;
 
@@ -91,6 +91,7 @@ class ErrorController extends Controller
 
                 break;
         }
+
         return new Response($content, 500);
     }
 

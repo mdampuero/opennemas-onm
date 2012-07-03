@@ -51,7 +51,6 @@ class KeywordsController extends Controller
         $keywordManager = new \PClave();
         $terms = $keywordManager->getList($filter);
 
-
         $pager = \Pager::factory(array(
             'mode'        => 'Sliding',
             'perPage'     => ITEMS_PAGE,
@@ -82,7 +81,7 @@ class KeywordsController extends Controller
         $matches = array();
         $terms = array_filter(
             $terms,
-            function($item) use ($id){
+            function($item) use ($id) {
                 if (($tiem->id != $id) &&
                     preg_match('/^' . preg_quote($_REQUEST['q']) . '/', $item->pclave)
                 ) {

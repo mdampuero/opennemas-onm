@@ -76,7 +76,7 @@ class VideosController extends Controller
         } else {
             $categoryForLimit = $category;
         }
-        $itemsPerPage = s::get('items_per_page');
+        $itemsPerPage = s::get('items_per_page', 20);
 
         list($videoCount, $videos) = $cm->getCountAndSlice(
             'video',
@@ -87,8 +87,7 @@ class VideosController extends Controller
             $itemsPerPage
         );
 
-
-        if (!empty($videos)){
+        if (!empty($videos)) {
             foreach ($videos as &$video) {
                 $video->category_name  = $this->ccm->get_name($video->category);
                 $video->category_title = $this->ccm->get_title($video->category_name);
@@ -140,7 +139,7 @@ class VideosController extends Controller
             ));
         }
 
-        if (!empty($videos)){
+        if (!empty($videos)) {
             foreach ($videos as &$video) {
                 $video->category_name  = $this->ccm->get_name($video->category);
                 $video->category_title = $this->ccm->get_title($video->category_name);
@@ -181,6 +180,7 @@ class VideosController extends Controller
                         .'Please check if you have completed all the form fields.',
                         m::ERROR
                     );
+
                     return $this->redirect($this->generateUrl(
                         'admin_videos_create',
                         array('type' => $type)
@@ -347,6 +347,7 @@ class VideosController extends Controller
 
         if (is_null($video->id)) {
             m::add(sprintf(_('Unable to find the video with the id "%d"'), $id));
+
             return $this->redirect($this->generateUrl('admin_videos'));
         }
 
@@ -380,7 +381,7 @@ class VideosController extends Controller
             } catch (\Exception $e) {
                 $output = _( "Can't get video information. Check the url");
             }
-        }  else {
+        } else {
             $output = _("Please check the video url, seems to be incorrect");
         }
 
@@ -400,7 +401,7 @@ class VideosController extends Controller
             unset($_POST['action']);
             unset($_POST['submit']);
 
-            foreach ($_POST as $key => $value ) {
+            foreach ($_POST as $key => $value) {
                 s::set($key, $value);
             }
 
@@ -438,7 +439,7 @@ class VideosController extends Controller
         if (is_array($selectedItems)
             && count($selectedItems) > 0
         ) {
-            foreach ($selectedItems as $element ) {
+            foreach ($selectedItems as $element) {
                 $video = new \Video($element);
 
                 $relations = array();
@@ -479,7 +480,7 @@ class VideosController extends Controller
             m::add(sprintf(_('Unable to find video with id "%d"'), $id), m::ERROR);
         } else {
             $video->toggleAvailable($video->id);
-            if($status == 0){
+            if ($status == 0) {
                 $video->set_favorite($status);
             }
             m::add(sprintf(_('Successfully changed availability for video with id "%d"'), $id), m::SUCCESS);
@@ -624,7 +625,7 @@ class VideosController extends Controller
 
         if ($msg) {
             $msg = "<div class='alert alert-success'>"._("Positions saved successfully.").'<button data-dismiss="alert" class="close">×</button></div>';
-        } else{
+        } else {
             $msg = "<div class='alert alert-error'>"._("Unable to save the new positions. Please contact with your system administrator.").'<button data-dismiss="alert" class="close">×</button></div>';
         }
 
@@ -652,7 +653,7 @@ class VideosController extends Controller
             foreach ($selected as $id) {
                 $video = new \Video($id);
                 $video->set_available($status, $_SESSION['userid']);
-                if ($status == 0){
+                if ($status == 0) {
                     $video->set_favorite($status, $_SESSION['userid']);
                 }
             }

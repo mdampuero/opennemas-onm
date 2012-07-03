@@ -86,7 +86,6 @@ class AclPrivilegesController extends Controller
         ));
     }
 
-
     /**
      * Shows the form for editting a privilege
      *
@@ -118,7 +117,6 @@ class AclPrivilegesController extends Controller
         return $this->redirect(url('admin_acl_privileges'));
     }
 
-
     /**
      * Deletes a privilege given its id
      *
@@ -135,7 +133,5 @@ class AclPrivilegesController extends Controller
 
         return $this->redirect(url('admin_acl_privileges'));
     }
-
-
 
 } // END class AclPrivilegesController
