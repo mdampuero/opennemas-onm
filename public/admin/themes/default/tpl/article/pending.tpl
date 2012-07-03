@@ -59,18 +59,6 @@
             <a href="article.php?action=list_pendientes&amp;category=20" id='link_unknown' {if $category=='20'} class="active"{/if}>UNKNOWN</font></a>
         </li>
         {/acl}
-        <script type="text/javascript">
-        // <![CDATA[
-        Event.observe($('link_todos'), 'mouseover', function(event) {
-            $('menu_subcats').setOpacity(0);
-            e = setTimeout("show_subcat('{$category}','{$home|urlencode}');$('menu_subcats').setOpacity(1);",1000);
-        });
-        Event.observe($('link_hunknown'), 'mouseover', function(event) {
-            $('menu_subcats').setOpacity(0);
-            e = setTimeout("show_subcat('{$category}','{$home|urlencode}');$('menu_subcats').setOpacity(1);",1000);
-        });
-        // ]]>
-        </script>
         {include file="menu_categories.tpl" home="article.php?action=list_pendientes"}
     </ul>
     <div id="{$category}">

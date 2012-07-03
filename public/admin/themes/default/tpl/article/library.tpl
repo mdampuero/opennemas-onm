@@ -40,18 +40,9 @@
 
 	<div class="wrapper-content">
 	<ul class="pills">
-
 		<li>
 			<a href="article.php?action=list_hemeroteca&category=todos" id="link_todos" {if $category=='todos'}class="active"{/if}>TODOS</font></a>
 		</li>
-		<script type="text/javascript">
-		// <![CDATA[
-		Event.observe($('link_todos'), 'mouseover', function(event) {
-			$('menu_subcats').setOpacity(0);
-			e = setTimeout("show_subcat('{$category}','{$home|urlencode}');$('menu_subcats').setOpacity(1);",1000);
-		});
-		// ]]>
-		</script>
 		{include file="menu_categories.tpl" home="article.php?action=list_hemeroteca"}
 	</ul>
 
@@ -122,17 +113,8 @@
 								</a>
 							</li>
                             {/acl}
-                            <!--
 							<li>
-								<a href="{$smarty.const.SITE_URL}{generate_uri content_type='article' id=$articles[c]->id date=$articles[c]->created category_name=$articles[c]->category_name title=$articles[c]->title}"
-								   target="_blank" accesskey="P" onmouseover="return escape('<u>P</u>revisualizar');"
-								   onclick="UserVoice.PopIn.showPublic('{$smarty.const.SITE_URL}{generate_uri content_type='article' id=$articles[c]->id date=$articles[c]->created category_name=$articles[c]->category_name title=$articles[c]->title}');return false;" >
-									<img border="0" src="{$params.IMAGE_DIR}preview_small.png" title="Previsualizar" alt="Previsualizar" />
-								</a>
-							</li>-->
-                            
-							<li>
-								<a href="{$smarty.server.PHP_SELF}?action=read&id={$articles[c]->id}" title="Editar">
+								<a href="{$smarty.server.PHP_SELF}?action=read&amp;id={$articles[c]->id}" title="Editar">
 									<img src="{$params.IMAGE_DIR}edit.png" border="0" alt="Editar" />
 								</a>
 							</li>
