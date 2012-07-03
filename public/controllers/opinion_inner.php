@@ -83,6 +83,13 @@ switch ($action) {
                     4
                 );
 
+                foreach ($suggestedContents as &$content) {
+                    $opinion = new Opinion($content['pk_content']);
+                    $author  = new Author($opinion->fk_author);
+                    $content['author_name'] = $author->name;
+                    $content['author_name_slug'] = StringUtils::get_title($author->name);
+                }
+
                 $suggestedContents= $cm->getInTime($suggestedContents);
                 $tpl->assign('suggested', $suggestedContents);
 
