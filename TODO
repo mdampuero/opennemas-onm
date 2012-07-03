@@ -19,6 +19,7 @@ Advanced Search Controller
 --------------------------
 - Integrate the contents paginated
 - Port search content-provider
+- Review content links for editing them (shows old urls)
 - Review all the icons (when a content is trashed, archived, ...)
 - ENHANCEMENT: Improve advanced search capabilities (filter by category, date range, ...)
 
@@ -64,10 +65,8 @@ Static pages
 - Drop Prototype (SwitcherFlag call) in the list action
 - Problem with delete modal dialogs, the url should be generated with smarty.
 
-
 Comments
------
-- Preview content that is comented
+--------
 - Drop wz_tooltip
 
 Books
@@ -86,3 +85,7 @@ Files
 Videos
 ------
 - Related content provider: content-list-provider, related-provider
+
+Images
+------
+- Multiple delete action

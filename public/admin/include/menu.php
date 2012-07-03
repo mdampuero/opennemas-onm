@@ -124,7 +124,7 @@ $menuXml = '<?xml version="1.0"?>
             privilege="IMAGE_ADMIN"
             title="'.htmlspecialchars(_("Images"), ENT_QUOTES).'"
             id="image_manager"
-            link="/admin/controllers/image/image.php"
+            link="'.url('admin_images_statistics').'"
         />
         <node
             module_name="FILE_MANAGER"

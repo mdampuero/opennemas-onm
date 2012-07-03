@@ -25,7 +25,7 @@
 {/block}
 
 {block name="content"}
-<form action="{$smarty.server.PHP_SELF}" method="POST" name="formulario" id="formulario" {$formAttrs}>
+<form action="{url name=admin_images_config}" method="POST" name="formulario" id="formulario" {$formAttrs}>
     <div class="top-action-bar">
         <div class="wrapper-content">
             <div class="title"><h2>{t}Image manager :: Configuration{/t}</h2></div>

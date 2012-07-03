@@ -21,7 +21,7 @@
 
         <div class="photo-basic-information">
             <div class="photo-static-info">
-                <div><label>{t}Name:{/t}</label> {$photo->title}</div>
+                <div><label>{t}Original filename:{/t}</label> {$photo->title}</div>
                 <div><label>{t}File:{/t}</label> {$photo->name}</div>
                 <div><label>{t}Resolution:{/t}</label> {$photo->width} x {$photo->height} (px)</div>
                 <div><label>{t}Size:{/t}</label> {$photo->size} Kb</div>

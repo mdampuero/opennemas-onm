@@ -40,15 +40,13 @@ function toggleAdvanced() {
 {/block}
 
 {block name="content"}
-<form action="{$smarty.server.PHP_SELF}" method="GET">
-    <input type="hidden" id="action" name="action" value="search" />
-
+<form action="{url name=admin_images_search}" method="GET">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title"><h2>{if $action eq 'search'} {t}Search images{/t}{else}{t}Search result{/t}{/if} </h2></div>
             <ul class="old-button">
                 <li>
-                    <a class="admin_add" href="{$smarty.server.PHP_SELF}?action={$smarty.session.desde}" onmouseover="return escape('Listado de Categorias');" name="submit_mult" value="Listado de Categorias">
+                    <a class="admin_add" href="{url name=admin_image}" onmouseover="return escape('Listado de Categorias');" name="submit_mult" value="Listado de Categorias">
                         <img border="0" style="width:50px;"  src="{$params.IMAGE_DIR}previous.png" alt="Información"><br />{t}Go back{/t}
                     </a>
                 </li>
@@ -71,17 +69,19 @@ function toggleAdvanced() {
             </div><!-- /search -->
             <div class="search-form">
                 <div>
-                    <label for="string_search">{t}Image name{/t}</label>
-                    <input type="search" id="string_search" name="string_search" value="{$smarty.request.string_search}" style="width:80%;">
+                    <input type="search" name="string_search" value="{$smarty.request.string_search}" style="width:95%;" placeholder="{t}Image name{/t}">
+                    <p>
+                        <button type="submit" class="onm-button red submit" style="width:100%;">{t}Search{/t}</button>
+                    </p>
 
                     <label for="category">{t}Category{/t}</label>
                     <select name="category">
                         <option value="all" {if $photo1->color eq "all"}selected{/if}>{t}All{/t}</option>
                         <option value="2" {if $category eq "2"} selected {/if}>{t}Advertisement{/t}</option>
                         {section name=as loop=$allcategorys}
-                            <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}">{$allcategorys[as]->title}</option>
+                            <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if}>{$allcategorys[as]->title}</option>
                             {section name=su loop=$subcat[as]}
-                                <option value="{$subcat[as][su]->pk_content_category}" {if $category  eq $subcat[as][su]->pk_content_category} selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
+                                <option value="{$subcat[as][su]->pk_content_category}" {if $category  eq $subcat[as][su]->pk_content_category} selected{/if}>&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
                            {/section}
                         {/section}
                     </select>
@@ -121,9 +121,7 @@ function toggleAdvanced() {
                     <label for="starttime">{t}Date period:{/t}</label>
                     <input type="datetime" id="starttime" name="starttime" value="{$search_criteria['starttime']}"   placeholder="{t}From{/t}"  class="inline"/>
                     <input type="datetime" id="endtime" name="endtime" value="{$search_criteria['endtime']}"  placeholder="{t}To{/t}"  class="inline"/>
-                    <p>
-                        <button type="submit" class="onm-button red submit">{t}Search{/t}</button>
-                    </p>
+
                 </div><!-- /search-form -->
             </div>
         </div><!-- /search -->

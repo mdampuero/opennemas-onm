@@ -188,32 +188,6 @@ function del_photo(id)
     );
 }
 
-
-function delete_fichero(id,page){
-    new Ajax.Request(
-        'files.php?action=delete&id='+id+'&page='+page,
-        {
-            onSuccess: function(transport) {
-                 var msg = transport.responseText;
-                // showMsg({'warn':[msg ]},'growl');
-                   if(confirm(msg)) {
-                      var ruta='files.php?action=yesdel&id='+id+'&page='+page;
-                      location.href= ruta;
-                   }
-                   return false;
-            }
-        }
-    );
-}
-
-
-function  show_subcat(category,home){
-    new Ajax.Updater('menu_subcats', "/admin/controllers/utils_content.php?action=get_subcategories&category="+category+"&home="+home,
-    {
-        evalScripts: true
-    });//
-}
-
 function salir(msg,url) {
 	if(confirm(msg)) {
 		location.href = url;

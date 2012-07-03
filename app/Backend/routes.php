@@ -88,6 +88,107 @@ $routes->add(
     '/admin'
 );
 
+//Images controller
+$routes->add(
+    'admin_images_statistics',
+    new Route(
+        '/images/statistics',
+        array(
+            '_controller' => 'Backend:Controllers:ImagesController:statistics',
+        )
+    ),
+    '/admin'
+);
+$routes->add(
+    'admin_images_search',
+    new Route(
+        '/images/search',
+        array(
+            '_controller' => 'Backend:Controllers:ImagesController:search',
+        )
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_images',
+    new Route(
+        '/images',
+        array(
+            '_controller' => 'Backend:Controllers:ImagesController:list',
+        )
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_image_new',
+    new Route(
+        '/images/new',
+        array(
+            '_controller' => 'Backend:Controllers:ImagesController:new',
+        )
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_image_show',
+    new Route(
+        '/images/show',
+        array(
+            '_controller' => 'Backend:Controllers:ImagesController:show',
+        )
+    ),
+    '/admin'
+);
+
+
+$routes->add(
+    'admin_image_create',
+    new Route(
+        '/image/create',
+        array('_controller' => 'Backend:Controllers:ImagesController:create')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_image_update',
+    new Route(
+        '/image/update',
+        array('_controller' => 'Backend:Controllers:ImagesController:update')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_image_delete',
+    new Route(
+        '/image/{id}/delete',
+        array('_controller' => 'Backend:Controllers:ImagesController:delete')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_images_batchdelete',
+    new Route(
+        '/images/batchdelete',
+        array('_controller' => 'Backend:Controllers:ImagesController:batchDelete')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_images_config',
+    new Route(
+        '/images/config',
+        array('_controller' => 'Backend:Controllers:ImagesController:config')
+    ),
+    '/admin'
+);
+
 // Videos controller routes
 $routes->add(
     'admin_videos',

@@ -67,12 +67,12 @@
 
                             <div class="actions">
                                 {acl isAllowed="IMAGE_UPDATE"}
-                                <a class="edit-button" href="{$smarty.server.PHP_SELF}?action=show&amp;id[]={$photos[n]->pk_photo}">
+                                <a class="edit-button" href="{url name=admin_image_show}?id[]={$photos[n]->pk_photo}">
                                     <img src="{$params.IMAGE_DIR}edit.png" /> {t}Edit{/t}
                                 </a>
                                 {/acl}
                                 {acl isAllowed="IMAGE_DELETE"}
-                                <a class="delete-button" href="#" onclick="javascript:confirmar('?action=delete&amp;id={$photos[n]->pk_photo}');" title="Eliminar fichero">
+                                <a class="del" data-title="{$photos[n]->title}" data-url="{url name=admin_image_delete id=$photos[n]->pk_photo page=$page}" href="{url name=admin_image_delete id=$photos[n]->pk_photo page=$page}" title="{t}Delete{/t}">
                                     <img src="{$params.IMAGE_DIR}template_manager/delete16x16.png" /> {t}Delete{/t}
                                 </a>
                                 {/acl}

@@ -91,7 +91,7 @@ jQuery(function ($) {
         $('.file-id').each(function(){
             fileIds += "&id[]="+$(this).val();
         });
-        window.location = "image.php?action=show"+fileIds;
+        window.location = image_uploader.show_url+fileIds;
         e.preventDefault();
     });
 

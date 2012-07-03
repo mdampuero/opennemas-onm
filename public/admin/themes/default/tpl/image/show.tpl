@@ -1,7 +1,6 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-js" append}
-    {script_tag src="/photos.js"}
     {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
     {script_tag src="/jquery/jquery-ui-sliderAccess.js"}
     {script_tag src="/onm/jquery.datepicker.js"}
@@ -29,7 +28,7 @@
     <script src="http://maps.google.com/maps?file=api&amp;sensor=true&amp;key={setting name=google_maps_api_key}"></script>
 {/block}
 {block name="content"}
-<form id="form_upload" name="form_upload" action="{$smarty.server.SCRIPT_NAME}" method="POST">
+<form id="form_upload" name="form_upload" action="{url name=admin_image_update}" method="POST">
     <div class="top-action-bar">
         <div class="wrapper-content">
             <div class="title"><h2> {t 1=$datos_cat[0]->title}Image manager:: Editing "%1"{/t}</h2></div>
@@ -53,12 +52,12 @@
                 <li class="separator"></li>
                 <li>
                     {if !isset($smarty.request.stringSearch)}
-                        <a href="{$smarty.server.PHP_SELF}?action={$smarty.session.desde}&amp;category={$smarty.session.category}" class="admin_add" value="{t}Cancel{/t}" title="{t}Cancel{/t}">
+                        <a href="{url name=admin_images category=$photos[0]->category}" class="admin_add" title="{t}Go back{/t}">
                     {else}
-                        <a href="{$smarty.const.SITE_URL_ADMIN}/controllers/search_advanced/search_advanced.php?stringSearch={$smarty.get.stringSearch}&photo=on&action=search&id=0"
-                           class="admin_add" value="Cancelar" title="Cancelar">
+                        <a href="{url name=admin_search stringSearch=$smarty.get.stringSearch} photo=on id=0"
+                           title="Cancelar">
                     {/if}
-                         <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
+                        <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
                     </a>
                 </li>
             </ul>

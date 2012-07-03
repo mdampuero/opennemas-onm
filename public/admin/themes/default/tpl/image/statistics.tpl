@@ -18,7 +18,7 @@
             {acl isAllowed="IMAGE_SETTINGS"}
             <li class="separator"></li>
                 <li>
-                    <a href="{$smarty.server.PHP_SELF}?action=config" title="{t}Config video module{/t}">
+                    <a href="{url name=admin_images_config}" title="{t}Config video module{/t}">
                         <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
                         {t}Settings{/t}
                     </a>
@@ -31,21 +31,8 @@
 
     {render_messages}
 
-    <ul class="pills">
-        <li>
-            <a href="{$smarty.server.PHP_SELF}?action=statistics" {if $category==0}class="active"{/if}>
-                {t}Global statistics{/t}
-            </a>
-        </li>
-        {acl isAllowed="ADVERTISEMENT_ADMIN"}
-            <li>
-                <a href="{$smarty.server.PHP_SELF}?action=today_catalog&amp;category=2" {if $category==2}class="active"{/if}>
-                    {t}Advertisement{/t}
-                </a>
-            </li>
-        {/acl}
-        {include file="menu_categories.tpl" home="{$smarty.server.PHP_SELF}?action=today_catalog"}
-    </ul>
+    {include file="image/_partials/categories.tpl" home="{url name=admin_images l=a}"}
+
     <table class="listing-table">
         <thead>
             <tr>
