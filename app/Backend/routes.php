@@ -418,7 +418,10 @@ $routes->add(
     'admin_books_widget',
     new Route(
         '/books/widget',
-        array('_controller' => 'Backend:Controllers:BooksController:widget')
+        array(
+            '_controller' => 'Backend:Controllers:BooksController:widget',
+            'category'    => 'widget',
+        )
     ),
     '/admin'
 );

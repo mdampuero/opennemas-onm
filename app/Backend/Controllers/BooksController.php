@@ -78,10 +78,12 @@ class BooksController extends Controller
         $this->checkAclOrForward('BOOK_ADMIN');
         $request        = $this->get('request');
         $page           = $request->query->getDigits('page', 1);
+        $status         = $request->query->getDigits('status');
 
         $itemsPerPage   = s::get('items_per_page');
         $configurations = s::get('book_settings');
         $numFavorites   =  1;
+
         if (isset($configurations['total_widget'])
             && !empty($configurations['total_widget'])) {
             $numFavorites =  $configurations['total_widget'];
@@ -101,10 +103,15 @@ class BooksController extends Controller
             $categoryForLimit = $this->category;
         }
 
+        $filter = ' contents.in_litter != 1 ';
+        if (($status != '') && ($status != null)) {
+            $filter .= ' AND contents.available = '. $status;
+        }
+
         list($booksCount, $books) = $cm->getCountAndSlice(
             'book',
             $categoryForLimit,
-            'in_litter != 1',
+            $filter,
             'ORDER BY position ASC, created DESC',
             $page,
             $itemsPerPage
@@ -140,6 +147,7 @@ class BooksController extends Controller
         return $this->render('book/list.tpl', array(
             'pagination' => $pagination,
             'page'       => $page,
+            'status'     => $status,
             'books'      => $books
         ));
     }
@@ -207,7 +215,6 @@ class BooksController extends Controller
             $uploadStatusPdfImg = @move_uploaded_file($$_FILES['file_img']['tmp_name'],
                 $bookSavePath.$imageName);
 
-            $data['id']          = $id;
             $data['title']       = $request->request->filter('title', '', FILTER_SANITIZE_STRING);
             $data['author']      = $request->request->filter('author', '', FILTER_SANITIZE_STRING);
             $data['file_name']   = $fileName;
@@ -558,6 +565,5 @@ class BooksController extends Controller
             )
         ));
     }
-
 
 } // END class BooksController

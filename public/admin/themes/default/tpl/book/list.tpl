@@ -36,7 +36,7 @@
 {/block}
 
 {block name="content"}
-<form action="#" method="get" name="formulario" id="formulario">
+<form action="{url name="admin_books"}" method="get" name="formulario" id="formulario">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title">
@@ -89,13 +89,40 @@
 
         <ul class="pills clearfix">
             <li>
-                <a href="{url name=admin_books_widget}" {if $category === 'widget'}class="active"{elseif $ca eq $datos_cat[0]->fk_content_category}{*class="active"*}{/if}>WIDGET HOME</a>
+                <a href="{url name=admin_books_widget}" {if $category == 'widget'}class="active"{elseif $ca eq $datos_cat[0]->fk_content_category}{*class="active"*}{/if}>WIDGET HOME</a>
             </li>
-            <li>
-                <a href="{url name=admin_books category=all}" {if $category==='all'}class="active"{/if} >{t}All categories{/t}</a>
-            </li>
-           {include file="menu_categories.tpl" home={url name=admin_books l=a}}
         </ul>
+
+        <div class="table-info clearfix">
+            <div>
+                <div class="right form-inline">
+                    <label>{t}Status:{/t}
+                    <select name="status" class="form-filters" {if $category == 'widget'} disabled="disabled"{/if}>
+                        <option value="" {if  !isset($status)}selected{/if}> {t}All{/t} </option>
+                        <option value="0" {if $status eq '0'}selected{/if}> {t}Unpublished{/t} </option>
+                        <option value="1" {if $status eq '1'}selected{/if}> {t}Published{/t} </option>
+                    </select>
+                    </label>
+
+                    <label for="category">
+                        {t}Category:{/t}
+                        <select name="category" class="form-filters">
+                            <option value="all" {if $category eq '0'}selected{/if}> {t}All{/t} </option>
+                            {section name=as loop=$allcategorys}
+                                 <option value="{$allcategorys[as]->pk_content_category}" {if isset($category) && ($category eq $allcategorys[as]->pk_content_category)}selected{/if}>{$allcategorys[as]->title}</option>
+                                 {section name=su loop=$subcat[as]}
+                                        {if $subcat[as][su]->internal_category eq 1}
+                                            <option value="{$subcat[as][su]->pk_content_category}"
+                                            {if $category eq $subcat[as][su]->pk_content_category || $article->category eq $subcat[as][su]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;|_&nbsp;&nbsp;{$subcat[as][su]->title}</option>
+                                        {/if}
+                                    {/section}
+                            {/section}
+                        </select>
+                    </label>
+                    <button type="submit" id="search" class="btn">{t}Search{/t}</button>
+                </div>
+            </div>
+        </div>
 
         <table class="listing-table">
             <thead>
@@ -106,7 +133,7 @@
                     </th>
                     <th class="title">{t}Title{/t}</th>
                     <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
-                    {if $category=='widget' || $category=='all'}<th style="width:65px;" class="center">{t}Section{/t}</th>{/if}
+                    <th style="width:65px;" class="center">{t}Section{/t}</th>
                     <th class="center" style="width:100px;">Created</th>
                     <th class="center" style="width:35px;">{t}Published{/t}</th>
                     <th class="center" style="width:35px;">{t}Favorite{/t}</th>
@@ -127,13 +154,11 @@
                  <td class="center">
                     {$books[as]->views}
                 </td>
-                {if $category=='widget' || $category=='all'}
                 <td class="center">
-                     {$books[as]->category_title}
+                    {$books[as]->category_title}
                 </td>
-                {/if}
                 <td class="center">
-                         {$books[as]->created}
+                    {$books[as]->created}
                 </td>
                 <td class="center">
                     {acl isAllowed="BOOK_AVAILABLE"}
