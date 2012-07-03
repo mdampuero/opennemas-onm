@@ -253,6 +253,73 @@ $routes->add(
     '/admin'
 );
 
+
+# Widget manager routes
+$routes->add(
+    'admin_widgets',
+    new Route(
+        '/widgets',
+        array('_controller' => 'Backend:Controllers:WidgetsController:list')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_widget_show',
+    new Route(
+        '/widget/{id}/show',
+        array('_controller' => 'Backend:Controllers:WidgetsController:show')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_widget_delete',
+    new Route(
+        '/widget/{id}/delete',
+        array('_controller' => 'Backend:Controllers:WidgetsController:delete')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_widget_create',
+    new Route(
+        '/widget/create',
+        array('_controller' => 'Backend:Controllers:WidgetsController:create')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_widget_update',
+    new Route(
+        '/widget/{id}/update',
+        array('_controller' => 'Backend:Controllers:WidgetsController:update')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_widget_toogle_available',
+    new Route(
+        '/widget/{id}/toogle_available',
+        array('_controller' => 'Backend:Controllers:WidgetsController:toogleAvailable')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_widgets_content_provider',
+    new Route(
+        '/widget/content-provider',
+        array('_controller' => 'Backend:Controllers:WidgetsController:contentProvider')
+    ),
+    '/admin'
+);
+
+
+
 $routes->add(
     'admin_videos_config',
     new Route(
