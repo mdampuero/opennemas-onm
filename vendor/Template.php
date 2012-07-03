@@ -37,18 +37,20 @@ class Template extends Smarty
         $this->templateBaseDir = SITE_PATH.DS.'themes'.DS.$theme.DS;
         $this->template_dir     = realpath($this->templateBaseDir.'tpl').DS;
 
-        $cacheFilePath = CACHE_PATH.DS.'smarty'.DS.'config'.DS.'cache.conf';
+        $cachePath = CACHE_PATH.DS.'smarty'.DS.'config'.DS;
+        $cacheFilePath = $cachePath.'cache.conf';
         $templateConfigPath = $this->templateBaseDir.'config';
 
         // If config dir exists copy it to cache directory to make instance aware.
-        if (!file_exists($cacheFilePath)
+        if (!is_file($cacheFilePath)
             && is_dir($templateConfigPath)
         ) {
             fm::recursiveCopy(
                 $templateConfigPath,
-                $cacheFilePath
+                $cachePath
             );
         }
+
         $this->config_dir = realpath(CACHE_PATH.DS.'smarty'.DS.'config').'/';
 
         // Create cache and compile dirs if not exists to make template instance aware
@@ -187,17 +189,25 @@ class Template extends Smarty
 
     public function setConfig($section)
     {
+        // Load configuration for the given $section
         $this->configLoad('cache.conf', $section);
         $config = $this->getConfigVars();
 
-        if (!array_key_exists('caching', $config) || empty($config['caching'])) {
-            $config['caching'] = 0;
+        // If configuration says cache is enabled forward this to smarty object
+        if (array_key_exists('caching', $config) && $config['caching'] == true) {
+            // retain current cache lifetime for each specific display call
+            $this->setCaching(SMARTY::CACHING_LIFETIME_SAVED);
+
+            if (!array_key_exists('cache_lifetime', $config)
+                || empty($config['cache_lifetime'])
+            ) {
+                $config['cache_lifetime'] = 86400;
+            }
+
+            $this->setCacheLifetime($config['cache_lifetime']);
+        } else {
+            //$this->setCaching(0);
         }
-        if (!array_key_exists('cache_lifetime', $config) || empty($config['cache_lifetime'])) {
-            $config['cache_lifetime'] = 86400;
-        }
-        $this->caching = $config['caching'];
-        $this->cache_lifetime = $config['cache_lifetime'];
     }
 }
 
