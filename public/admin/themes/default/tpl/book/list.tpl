@@ -127,7 +127,6 @@
         <table class="listing-table">
             <thead>
                 <tr>
-
                     <th style="width:15px;">
                         <input type="checkbox" id="toggleallcheckbox">
                     </th>

@@ -92,9 +92,9 @@ class BooksController extends Controller
         $cm = new \ContentManager();
 
         if (empty($page)) {
-            $limit = "LIMIT ".(ITEMS_PAGE+1);
+            $limit = "LIMIT ".($itemsPerPage+1);
         } else {
-            $limit = "LIMIT ".($page-1) * ITEMS_PAGE .', '.ITEMS_PAGE;
+            $limit = "LIMIT ".($page-1) * $itemsPerPage .', '.$itemsPerPage;
         }
 
         if ($this->category == 'all') {
@@ -215,16 +215,18 @@ class BooksController extends Controller
             $uploadStatusPdfImg = @move_uploaded_file($$_FILES['file_img']['tmp_name'],
                 $bookSavePath.$imageName);
 
-            $data['title']       = $request->request->filter('title', '', FILTER_SANITIZE_STRING);
-            $data['author']      = $request->request->filter('author', '', FILTER_SANITIZE_STRING);
-            $data['file_name']   = $fileName;
-            $data['file_img']    = $imageName;
-            $data['editorial']   = $request->request->filter('editorial', '', FILTER_SANITIZE_STRING);
-            $data['description'] = $request->request->filter('description', '', FILTER_SANITIZE_STRING);
-            $data['metadata']    = $request->request->filter('metadata', '', FILTER_SANITIZE_STRING);
-            $data['starttime']   = $request->request->filter('starttime', '', FILTER_SANITIZE_STRING);
-            $data['category']    = $request->request->getInt('category');
-            $data['available']   = $request->request->getInt('available');
+            $data = array(
+                'title'       => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
+                'author'      => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
+                'file_name'   => $fileName,
+                'file_img'    => $imageName,
+                'editorial'   => $request->request->filter('editorial', '', FILTER_SANITIZE_STRING),
+                'description' => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
+                'metadata'    => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
+                'starttime'   => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
+                'category'    => $request->request->getInt('category'),
+                'available'   => $request->request->getInt('available'),
+            );
 
             $book = new \Book();
             $id   =$book->create($data);
@@ -304,8 +306,8 @@ class BooksController extends Controller
             m::add(_("You can't modify this book data because you don't have enought privileges.") );
 
         } else {
+
             $bookSavePath = INSTANCE_MEDIA_PATH.'/books/';
-            $data = array();
 
             if (!empty($_FILES['file']['name'])) {
                 $fileName  = StringUtils::cleanFileName($_FILES['file']['name']);
@@ -324,17 +326,20 @@ class BooksController extends Controller
                 $imageName = $book->file_img;
             }
 
-            $data['id']          = $id;
-            $data['title']       = $request->request->filter('title', '', FILTER_SANITIZE_STRING);
-            $data['author']      = $request->request->filter('author', '', FILTER_SANITIZE_STRING);
-            $data['file_name']   = $fileName;
-            $data['file_img']    = $imageName;
-            $data['editorial']   = $request->request->filter('editorial', '', FILTER_SANITIZE_STRING);
-            $data['description'] = $request->request->filter('description', '', FILTER_SANITIZE_STRING);
-            $data['metadata']    = $request->request->filter('metadata', '', FILTER_SANITIZE_STRING);
-            $data['starttime']   = $request->request->filter('starttime', '', FILTER_SANITIZE_STRING);
-            $data['category']    = $request->request->getInt('category');
-            $data['available']   = $request->request->getInt('available');
+
+            $data = array(
+                'id'          => $id,
+                'title'       => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
+                'author'      => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
+                'file_name'   => $fileName,
+                'file_img'    => $imageName,
+                'editorial'   => $request->request->filter('editorial', '', FILTER_SANITIZE_STRING),
+                'description' => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
+                'metadata'    => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
+                'starttime'   => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
+                'category'    => $request->request->getInt('category'),
+                'available'   => $request->request->getInt('available'),
+            );
 
             $book->update($data);
 
@@ -434,7 +439,7 @@ class BooksController extends Controller
         $request  = $this->get('request');
         $id       = $request->query->getDigits('id', 0);
         $status   = $request->query->getDigits('status', 0);
-        $page     = $request->query->getDigits('page', 0);
+        $page     = $request->query->getDigits('page', 1);
 
         $book = new \Book($id);
         if (is_null($book->id)) {
@@ -470,7 +475,7 @@ class BooksController extends Controller
         $request  = $this->get('request');
         $id       = $request->query->getDigits('id', 0);
         $status   = $request->query->getDigits('status', 0);
-        $page     = $request->query->getDigits('page', 0);
+        $page     = $request->query->getDigits('page', 1);
 
         $book = new \Book($id);
         if (is_null($book->id)) {
