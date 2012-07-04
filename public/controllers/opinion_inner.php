@@ -83,6 +83,17 @@ switch ($action) {
                     4
                 );
 
+                // Get author slug for suggested opinions
+                foreach ($suggestedContents as &$suggest) {
+                    $element = new Opinion($suggest['pk_content']);
+                    if (!empty($element->author)) {
+                        $suggest['author_name'] = $element->author;
+                        $suggest['author_name_slug'] = StringUtils::get_title($element->author);
+                    } else {
+                        $suggest['author_name_slug'] = "author";
+                    }
+                }
+
                 $suggestedContents= $cm->getInTime($suggestedContents);
                 $tpl->assign('suggested', $suggestedContents);
 

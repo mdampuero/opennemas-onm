@@ -99,7 +99,7 @@
                                 <img style="max-height:120px; max-width:200px;" src="{$article.photo}">
                                  {$article.img1_footer}
                             </td></tr>
-                            {/if}}
+                            {/if}
                             {if !empty($article.agency)}<tr><td><b>Agencia: </b></td><td>{$article.agency|strip_tags}</td></tr>{/if}
                             {if !empty($article.created)}<tr><td><b>Fecha: </b></td><td>{$article.created}</td></tr>{/if}
                             {if !empty($article.category_name)}<tr><td><b>Sección: </b></td><td>{$article.category_name}   </td></tr>{/if}

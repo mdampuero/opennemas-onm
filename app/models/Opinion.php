@@ -70,6 +70,9 @@ class Opinion extends Content
                 } else {
                     $author     = new Author($this->fk_author);
                     $authorName = $author->name;
+                    if (empty($authorName)) {
+                        $authorName = 'author';
+                    }
                 }
 
                 $uri =  Uri::generate('opinion',
