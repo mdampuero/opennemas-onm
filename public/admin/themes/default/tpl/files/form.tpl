@@ -2,25 +2,33 @@
 
 
 {block name="content"}
-<div class="top-action-bar clearfix">
-    <div class="wrapper-content">
-        <div class="title"><h2>{t}Files manager ::{/t} {if $attaches}{t 1=$attaches->title}Editing file "%1"{/t}{else}{t}Creating new file{/t}{/if}</h2></div>
-        <ul class="old-button">
-            <li>
-                <a href="{url name=admin_files}" class="admin_add" value="Cancelar" title="Cancelar">
-                    <img border="0" src="{$params.IMAGE_DIR}previous.png" title="Cancelar" alt="Cancelar" ><br />{t}Go back{/t}
-                </a>
-            </li>
-        </ul>
+
+<form action="{if !is_null($attaches)}{url name=admin_files_update id=$attaches->id}{else}{url name=admin_files_create}{/if}"
+    enctype="multipart/form-data" method="POST" name="formulario" id="formulario" />
+
+    <div class="top-action-bar clearfix">
+        <div class="wrapper-content">
+            <div class="title"><h2>{t}Files manager ::{/t} {if $attaches}{t 1=$attaches->title}Editing file "%1"{/t}{else}{t}Creating new file{/t}{/if}</h2></div>
+            <ul class="old-button">
+                <li>
+                    <button  type="submit" >
+                        <img src="{$params.IMAGE_DIR}save.png" title="Guardar y salir" alt="{t}Save{/t}"><br />{t}Save{/t}
+                    </button>
+                </li>
+                <li>
+                    <a href="{url name=admin_files}" class="admin_add" value="Cancelar" title="Cancelar">
+                        <img border="0" src="{$params.IMAGE_DIR}previous.png" title="Cancelar" alt="Cancelar" ><br />{t}Go back{/t}
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
-</div>
-<div class="wrapper-content">
 
-    {render_messages}
+    <div class="wrapper-content">
 
-	<form {if !is_null($attaches)} action="{url name=admin_files_update id=$attaches->id}" {else} action="{url name=admin_files_create}" enctype="multipart/form-data"{/if}" method="POST" name="formulario" id="formulario">
+        {render_messages}
 
-		<table class="adminform" width="700">
+		<table class="adminform">
 			<tbody>
 				<tr>
 					<td valign="top" align="right" style="padding:4px;" width="30%">
@@ -28,7 +36,8 @@
 					</td>
 					<td style="padding:4px;" nowrap="nowrap" width="70%">
 						<input type="text" id="title" name="title" title="Título de la noticia"
-							value="{$attaches->title|clearslash}" class="required" size="100" onBlur="javascript:get_metadata(this.value);" />
+							value="{$attaches->title|clearslash}" class="required" size="100"
+                            onBlur="javascript:get_metadata(this.value);" />
 						<input type="hidden" id="category" name="category" title="Fichero"
 							value="{$attaches->category}" />
 							<input type="hidden" id="fich" name="fich" title="Fichero"
@@ -104,15 +113,10 @@
                 {if !is_null($attaches)}
                 <input type="hidden" name="id" id="id" value="{$attaches->id|default:""}" />
                 {/if}
-
+                <input type="hidden" name="page" id="page" value="{$page|default:"1"}" />
 			</tbody>
 		</table>
 
-        <div class="action-bar clearfix">
-            <div class="right">
-                <button type="submit" class="onm-button red">{t}Save{/t}</button>
-            </div>
-        </div>
-    </form>
 </div>
+</form>
 {/block}

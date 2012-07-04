@@ -16,10 +16,6 @@
         <li>
             <a href="{url name=admin_files_widget}" >{t}WIDGET HOME{/t}</a>
         </li>
-        <li>
-            <a href="{url name=admin_files}">{t}All{/t}</a>
-        </li>
-        {include file="menu_categories.tpl" home="{url name=admin_files action=list}"}
     </ul>
 
     {render_messages}

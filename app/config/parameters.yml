@@ -1,0 +1,19 @@
+parameters:
+    database_driver:   mysqli
+    database_host:     localhost
+    database_port:     3309
+    database_name:     onm-instance
+    database_user:     root
+    database_password: ~
+
+    mailer_transport:  smtp
+    mailer_host:       localhost
+    mailer_user:       ~
+    mailer_password:   ~
+
+    locale:            en
+    secret:            ThisTokenIsNotSoSecretChangeIt
+
+    cache_handler:     apc
+    dispatcher.exceptionhandler: "Framework:Controllers:ErrorController:default"
+    environment:       development

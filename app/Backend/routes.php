@@ -548,7 +548,7 @@ $routes->add(
     new Route(
         '/files/{id}/show',
         array(
-            '_controller' => 'Backend:Controllers:FilesController:read',
+            '_controller' => 'Backend:Controllers:FilesController:show',
         )
     ),
     '/admin'
@@ -619,6 +619,36 @@ $routes->add(
     ),
     '/admin'
 );
+
+
+$routes->add(
+    'admin_file_save_positions',
+    new Route(
+        '/files/save-positions',
+        array('_controller' => 'Backend:Controllers:FilesController:savePositions')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_files_batchdelete',
+    new Route(
+        '/files/batch-delete',
+        array('_controller' => 'Backend:Controllers:FilesController:batchDelete')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_files_batchpublish',
+    new Route(
+        '/files/batch-publish',
+        array('_controller' => 'Backend:Controllers:FilesController:batchPublish')
+    ),
+    '/admin'
+);
+
+
 
 
 // Search controller routes
