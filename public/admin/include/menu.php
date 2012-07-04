@@ -145,7 +145,7 @@ $menuXml = '<?xml version="1.0"?>
             privilege="ALBUM_ADMIN"
             title="'.htmlspecialchars(_("Albums"), ENT_QUOTES).'"
             id="album_manager"
-            link="/admin/controllers/album/album.php"
+            link="'.url('admin_albums').'"
         />
         <node
             module_name="KIOSKO_MANAGER"

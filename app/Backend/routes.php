@@ -334,6 +334,125 @@ $routes->add(
     '/admin'
 );
 
+// Album controller routes
+$routes->add(
+    'admin_albums',
+    new Route(
+        '/albums',
+        array('_controller' => 'Backend:Controllers:AlbumsController:list')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_albums_config',
+    new Route(
+        '/albums/config',
+        array('_controller' => 'Backend:Controllers:AlbumsController:config')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_albums_widget',
+    new Route(
+        '/albums/widget',
+        array('_controller' => 'Backend:Controllers:AlbumsController:widget')
+    ),
+    '/admin'
+);
+
+
+$routes->add(
+    'admin_album_create',
+    new Route(
+        '/album/create',
+        array('_controller' => 'Backend:Controllers:AlbumsController:create')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_album_update',
+    new Route(
+        '/album/{id}/update',
+        array('_controller' => 'Backend:Controllers:AlbumsController:update')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_album_show',
+    new Route(
+        '/albums/{id}/show',
+        array('_controller' => 'Backend:Controllers:AlbumsController:show')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_album_delete',
+    new Route(
+        '/albums/{id}/delete',
+        array('_controller' => 'Backend:Controllers:AlbumsController:delete')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_album_toggle_availability',
+    new Route(
+        '/album/{id}/toggle-availability',
+        array('_controller' => 'Backend:Controllers:AlbumsController:toggleAvailability')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_album_toggle_favorite',
+    new Route(
+        '/album/{id}/toggle-favorite',
+        array('_controller' => 'Backend:Controllers:AlbumsController:toggleFavorite')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_album_toggle_inhome',
+    new Route(
+        '/album/{id}/toggle-inhome',
+        array('_controller' => 'Backend:Controllers:AlbumsController:toggleInHome')
+    ),
+    '/admin'
+);
+
+
+$routes->add(
+    'admin_album_batchdelete',
+    new Route(
+        '/albums/batch-delete',
+        array('_controller' => 'Backend:Controllers:AlbumsController:batchDelete')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_album_batchpublish',
+    new Route(
+        '/albums/batch-publish',
+        array('_controller' => 'Backend:Controllers:AlbumsController:batchPublish')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_albums_content_provider',
+    new Route(
+        '/albums/content-provider',
+        array('_controller' => 'Backend:Controllers:AlbumsController:contentProvider')
+    ),
+    '/admin'
+);
 
 // Books controller routes
 $routes->add(

@@ -24,17 +24,15 @@ jQuery('.del').click(function(e) {
     jQuery('#modal-album-delete .modal-body span').html( jQuery(this).data('title') );
     //Sets up the modal
     jQuery("#modal-album-delete").modal('show');
-    jQuery("body").data("selected-for-del", jQuery(this).data("id"));
+    jQuery("body").data("selected-for-del", jQuery(this).data("url"));
     e.preventDefault();
 });
 
 jQuery('#modal-album-delete a.btn.yes').on('click', function(){
-    var delId = jQuery("body").data("selected-for-del");
-    if(delId) {
+    var url = jQuery("body").data("selected-for-del");
+    if (url) {
         jQuery.ajax({
-            url:  "{$smarty.server.SCRIPT_NAME}",
-            type: "POST",
-            data: { action:"delete", id:delId },
+            url:  url,
             success: function(){
                 location.reload();
             }

@@ -144,7 +144,8 @@
                     {/is_module_activated}
                     {is_module_activated name="ALBUM_MANAGER"}
                     <li>
-                        <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/album/album.php?action=content-provider&amp;category={$category}">{t}Albums{/t}</a>
+
+                        <a href="{url name=admin_albums_content_provider category=$category}">{t}Albums{/t}</a>
                     </li>
                     {/is_module_activated}
                     {is_module_activated name="ADS_MANAGER"}

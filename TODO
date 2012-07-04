@@ -10,6 +10,7 @@ General
 controllers to find changes. The next lines are the files changed from the commit
 before changes happend to the commit that master was merged into symfony-router
 git diff --name-only e7671812699af6da10fb30b2212673948bd018fc 67180574cd98d75e0a60b7c0459f92a2a1a36731|grep php
+- Drop category and menu logic from init method in Backend Controllers
 
 Onm\Framework\Controller
 ------------------------
@@ -69,18 +70,12 @@ Comments
 --------
 - Drop wz_tooltip
 
-Books
------
-- Drop category and menu logic from init method
-- Fix category menu url
-
 Files
 -----
 - Refactorize category calculation logic (is a mess and should be improved)
 - Batch actions not implemented
 - Review listings and toggle home actions.
 - Review if new.tpl could be deleted, now form.tpl handle create and update (I think)
-
 
 Videos
 ------

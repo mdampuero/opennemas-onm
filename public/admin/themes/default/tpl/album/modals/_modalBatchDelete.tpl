@@ -20,23 +20,21 @@ jQuery("#modal-album-batchDelete").modal({
 
 });
 
-jQuery('.delChecked').click(function(e) {
+jQuery('.delChecked').click(function(e, ui) {
+    e.preventDefault();
     var number = jQuery(".minput:checked").length;
-    if(number >= 1 ) {
+    if (number >= 1 ) {
         jQuery('#modal-album-batchDelete .modal-body span').html(number);
         jQuery("#modal-album-batchDelete").modal(true);
-    }else{
-        jQuery("#modal-album-batchDelete").modal(false);
-        jQuery("#modal-album-accept").modal('show');
+    } else {
         jQuery('#modal-album-accept .modal-body')
             .html("{t}You must select some elements.{/t}");
+        jQuery("#modal-album-accept").modal(true);
     }
-
-    e.preventDefault();
 });
 
 jQuery('#modal-album-batchDelete a.btn.yes').on('click', function(){
-    jQuery('#action').attr('value', "batchDelete");
+    jQuery('#formulario').attr('action', album_manager_urls.batch_delete);
     jQuery('#formulario').submit();
     e.preventDefault();
 });
