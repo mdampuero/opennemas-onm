@@ -84,13 +84,13 @@ switch ($action) {
                 );
 
                 // Get author slug for suggested opinions
-                foreach ($suggestedContents as &$content) {
-                    $opinion = new Opinion($content['pk_content']);
-                    if (!empty($opinion->author)) {
-                        $content['author_name'] = $opinion->author;
-                        $content['author_name_slug'] = StringUtils::get_title($opinion->author);
+                foreach ($suggestedContents as &$suggest) {
+                    $element = new Opinion($suggest['pk_content']);
+                    if (!empty($element->author)) {
+                        $suggest['author_name'] = $element->author;
+                        $suggest['author_name_slug'] = StringUtils::get_title($element->author);
                     } else {
-                        $content['author_name_slug'] = "author";
+                        $suggest['author_name_slug'] = "author";
                     }
                 }
 
