@@ -526,7 +526,7 @@ class AlbumsController extends Controller
         }
 
         return $this->redirect($this->generateUrl(
-            'admin_album',
+            'admin_albums',
             array(
                 'category' => $category,
                 'page'     => $page,

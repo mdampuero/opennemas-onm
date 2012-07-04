@@ -31,12 +31,12 @@
 				{/acl}
 				{acl isAllowed="ALBUM_AVAILABLE"}
                 <li>
-                    <button id="batch-publish" type="submit">
+                    <button id="batch-publish" type="submit" name="status" value="0">
                        <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="{t}Unpublish{/t}" alt="{t}Unpublish{/t}" ><br />{t}Unpublish{/t}
                    </button>
                </li>
                <li>
-                   <button id="batch-unpublish" type="submit">
+                   <button id="batch-unpublish" type="submit" name="status" value="1">
                        <img border="0" src="{$params.IMAGE_DIR}publish.gif" title="{t}Publish{/t}" alt="{t}Publish{/t}" ><br />{t}Publish{/t}
                    </button>
                </li>
@@ -206,10 +206,10 @@
     <script>
     // <![CDATA[
         jQuery('#batch-publish').on('click', function(){
-            jQuery('#formulario').attr('action', '{url name=admin_album_batchpublish status=1}');
+            jQuery('#formulario').attr('action', '{url name=admin_album_batchpublish}');
         });
         jQuery('#batch-unpublish').on('click', function(){
-            jQuery('#formulario').attr('action', '{url name=admin_album_batchpublish status=0}');
+            jQuery('#formulario').attr('action', '{url name=admin_album_batchpublish}');
         });
 
         {if $category eq 'widget'}
