@@ -25,7 +25,7 @@ function smarty_function_include_piwik_code($params, &$smarty) {
             $output = '<img src="'.$piwikConfig['server_url'].
                       'piwik.php?idsite='.$piwikConfig['page_id'].
                       '&amp;rec=1&amp;action_name=Newsletter'.
-                      '&amp;urlref='.SITE_URL.'newsletter/'.date("Ymd").
+                      '&amp;url='.SITE_URL.'newsletter/'.date("YmdHis").
                       '" style="border:0" alt="" />';
         } else {
 
