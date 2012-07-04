@@ -94,6 +94,7 @@
                     <th style="width:15px;">
                         <input type="checkbox" id="toggleallcheckbox">
                     </th>
+                    <th></th>
                     <th>{t}Title{/t}</th>
                     {if $category=='widget' || $category=='all'}<th class="left">{t}Section{/t}</th>{/if}
                     <th class="center">{t}Service{/t}</th>
@@ -115,6 +116,9 @@
                 <tr data-id="{$videos[c]->id}" style="cursor:pointer;">
                     <td>
                         <input type="checkbox" class="minput" id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$videos[c]->id}"  style="cursor:pointer;">
+                    </td>
+                    <td>
+                        <img src="{$videos[c]->information['thumbnail']}" alt="" style="max-width:60px">
                     </td>
                     <td onClick="javascript:document.getElementById('selected_{$smarty.section.c.iteration}').click();">
                         {$videos[c]->title|clearslash}

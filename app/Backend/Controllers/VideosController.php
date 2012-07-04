@@ -89,6 +89,7 @@ class VideosController extends Controller
 
         if (!empty($videos)) {
             foreach ($videos as &$video) {
+                $video->information    = unserialize($video->information);
                 $video->category_name  = $this->ccm->get_name($video->category);
                 $video->category_title = $this->ccm->get_title($video->category_name);
             }
@@ -472,7 +473,7 @@ class VideosController extends Controller
         $request  = $this->get('request');
         $id       = $request->query->getDigits('id', 0);
         $status   = $request->query->getDigits('status', 0);
-        $page     = $request->query->getDigits('page', 0);
+        $page     = $request->query->getDigits('page', 1);
         $category = $request->query->get('category', 'all');
 
         $video = new \Video($id);
@@ -507,7 +508,7 @@ class VideosController extends Controller
         $request  = $this->get('request');
         $id       = $request->query->getDigits('id', 0);
         $status   = $request->query->getDigits('status', 0);
-        $page     = $request->query->getDigits('page', 0);
+        $page     = $request->query->getDigits('page', 1);
         $category = $request->query->get('category', 'all');
 
         $video = new \Video($id);
@@ -541,7 +542,7 @@ class VideosController extends Controller
         $request  = $this->get('request');
         $id       = $request->query->getDigits('id', 0);
         $status   = $request->query->getDigits('status', 0);
-        $page     = $request->query->getDigits('page', 0);
+        $page     = $request->query->getDigits('page', 1);
         $category = $request->query->get('category', 'all');
 
         $video = new \Video($id);
