@@ -22,7 +22,7 @@ $menuXml = '<?xml version="1.0"?>
             privilege="WIDGET_ADMIN"
             title="'.htmlspecialchars(_("Widgets"), ENT_QUOTES).'"
             id="widget_manager"
-            link="/admin/controllers/widget/widget.php"
+            link="'.url('admin_widgets').'"
         />
         <node
             module_name="SYNC_MANAGER"

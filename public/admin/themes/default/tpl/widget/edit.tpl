@@ -15,11 +15,17 @@
 <div class="top-action-bar">
     <div class="wrapper-content">
         <div class="title">
-            <h2>{if $smarty.request.action eq "new"}{t}Creating new widget{/t}{else}{t 1=$widget->title}Editing widget "%1"{/t}{/if}</h2>
+            <h2>
+                {if $action eq "new"}
+                    {t}Creating new widget{/t}
+                {else}
+                    {t 1=$widget->title}Editing widget "%1"{/t}
+                {/if}
+            </h2>
         </div>
         <ul class="old-button">
             <li>
-                <a href="?action=list" class="admin_add" title="{t}Cancel{/t}">
+                <a href="{url name=admin_widgets}" class="admin_add" title="{t}Cancel{/t}">
                     <img src="{$params.IMAGE_DIR}previous.png" title="{t}Cancel{/t}" alt="{t}Cancel{/t}" /><br />
                     {t}Go back{/t}
                 </a>
@@ -27,7 +33,7 @@
         </ul>
     </div>
 </div>
-<form action="{$smarty.server.PHP_SELF}" method="post" name="formulario" id="formulario">
+<form action="{if isset($widget)}{url name=admin_widget_update id=$widget->id page=$page}{else}{url name=admin_widget_create}{/if}" method="post" name="formulario" id="formulario">
     <div class="wrapper-content">
         <input type="hidden" id="id" name="id" value="{$widget->id|default:""}" />
         <input type="hidden" id="action" name="action" value="save" />
@@ -104,11 +110,11 @@
                 </div>-->
             </td>
             <td>
-                <div id="widget_textarea" style="{if isset($widget) && $widget->renderlet == 'intelligentwidget' || $smarty.get.action eq 'new'}display:none{else}display:inline{/if}">
+                <div id="widget_textarea" style="{if isset($widget) && $widget->renderlet == 'intelligentwidget' || $action eq 'new'}display:none{else}display:inline{/if}">
                     <textarea class="required" cols="80" id="widget_content" rows="20" name="content">{$widget->content|default:""}</textarea>
                 </div>
 
-                <div id="select-widget" style="{if isset($widget) && $widget->renderlet == 'intelligentwidget' || $smarty.get.action eq 'new'}display:inline{else}display:none{/if}">
+                <div id="select-widget" style="{if isset($widget) && $widget->renderlet == 'intelligentwidget' || $action eq 'new'}display:inline{else}display:none{/if}">
                     <select name="content" id="all-widgets" {if isset($widget)}disabled="disabled"{/if}>
                         {foreach from=$all_widgets item=w}
                         <option value="{$w}" {if isset($widget) && $widget->content == $w}selected="selected"{/if}>{$w}</option>

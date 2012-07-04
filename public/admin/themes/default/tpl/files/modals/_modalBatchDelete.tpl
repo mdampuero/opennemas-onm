@@ -35,8 +35,8 @@ jQuery('.delChecked').click(function(e) {
     e.preventDefault();
 });
 
-jQuery('#modal-file-batchDelete a.btn.yes').on('click', function(){
-    jQuery('#action').attr('value', "batchDelete");
+jQuery('#modal-file-batchDelete a.btn.yes').on('click', function(e){
+    jQuery('#formulario').attr('action', file_manager_urls.batchDelete);
     jQuery('#formulario').submit();
     e.preventDefault();
 });

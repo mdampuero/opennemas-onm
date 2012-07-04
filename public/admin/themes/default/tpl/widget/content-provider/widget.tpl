@@ -13,7 +13,7 @@
         </a>
         <ul class="dropdown-menu">
             <li>
-                <a title="{t 1=$content->title}Edit '%1'{/t}" href="/admin/controllers/widget/widget.php?action=edit&amp;id={$content->id}&amp;category={$smarty.request.category}">
+                <a title="{t 1=$content->title}Edit '%1'{/t}" href="{url name=admin_widget_show id=$content->id category=$params['category']}">
                     <i class="icon-pencil"></i> {t}Edit{/t}
                 </a>
             </li>

@@ -679,7 +679,7 @@ class VideosController extends Controller
         $request      = $this->get('request');
         $category     = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
         $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = s::get('items_per_page');
+        $itemsPerPage = 8;
 
         if ($category == 'home') { $category = 0; }
 

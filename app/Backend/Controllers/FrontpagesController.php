@@ -106,6 +106,7 @@ class FrontpagesController extends Controller
             'contents'  => $contentElementsInFrontpage,
             'home'      => ($categoryID == 0),
             'smarty'    => $this->view,
+            'category'  => $category,
         ));
 
         $_SESSION['desde'] = 'list';

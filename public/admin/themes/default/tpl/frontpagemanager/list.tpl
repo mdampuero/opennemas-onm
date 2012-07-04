@@ -98,7 +98,6 @@
 
 
     <div class="wrapper-content">
-
         {include file="frontpagemanager/_render_menu_categories.tpl"}
 
         <div id="warnings-validation"></div><!-- /warnings-validation -->
@@ -129,7 +128,7 @@
                     {/is_module_activated}
                     {is_module_activated name="WIDGET_MANAGER"}
                     <li>
-                        <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/widget/widget.php?action=content-provider&amp;category={$category}">{t}Widgets{/t}</a>
+                        <a href="{url name=admin_widgets_content_provider category=$category}">{t}Widgets{/t}</a>
                     </li>
                     {/is_module_activated}
                     {is_module_activated name="OPINION_MANAGER"}

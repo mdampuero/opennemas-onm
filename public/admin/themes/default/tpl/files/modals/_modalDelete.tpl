@@ -4,7 +4,7 @@
       <h3>{t}Delete file{/t}</h3>
     </div>
     <div class="modal-body">
-        <p>{t}Are you sure that do you want delete "<span>%title%</span>"?{/t}</p>
+        <p>{t escape=off}Are you sure that do you want delete "<span>%title%</span>"?{/t}</p>
 
     </div>
     <div class="modal-footer">
