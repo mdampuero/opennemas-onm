@@ -1,6 +1,4 @@
 <?php
-use Symfony\Component\Routing\Route;
-
 /**
  * This file is part of the Onm package.
  *
@@ -9,6 +7,8 @@ use Symfony\Component\Routing\Route;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  **/
+use Symfony\Component\Routing\Route;
+
 $routes->add(
     'manager_instances',
     new Route(
