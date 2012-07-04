@@ -271,9 +271,11 @@ class WidgetsController extends Controller
         $request      = $this->get('request');
         $category     = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
         $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = s::get('items_per_page');
+        $itemsPerPage = 8;
 
         if ($category == 'home') { $category = 0; }
+
+        $cm = new  \ContentManager();
 
         // Get contents for this home
         $contentElementsInFrontpage  = $cm->getContentsIdsForHomepageOfCategory($category);
@@ -285,19 +287,36 @@ class WidgetsController extends Controller
             $sqlExcludedOpinions = ' AND `pk_widget` NOT IN ('.$contentsExcluded.')';
         }
 
-        list($widgets, $pager) = $cm->find_pages(
+        list($countWidgets, $widgets) = $cm->getCountAndSlice(
             'Widget',
-            'contents.available=1 '. $sqlExcludedOpinions,
-            'ORDER BY created DESC ', $page, 5
+            null,
+            'contents.available=1 '.$sqlExcludedOpinions,
+            'ORDER BY created DESC ',
+            $page,
+            8
         );
 
-        $tpl->assign(array(
-            'widgets' => $widgets,
-            'pager'   => $pager,
+        // Build the pager
+        $pagination = \Pager::factory(array(
+            'mode'        => 'Sliding',
+            'perPage'     => $itemsPerPage,
+            'append'      => false,
+            'path'        => '',
+            'delta'       => 4,
+            'clearIfVoid' => true,
+            'urlVar'      => 'page',
+            'totalItems'  => $countWidgets,
+            'fileName'    => $this->generateUrl(
+                'admin_widgets_content_provider',
+                array('category' => $category)
+            ).'&page=%d',
         ));
 
-        $tpl->display('widget/content-provider.tpl');
-    }
+        return $this->render('widget/content-provider.tpl', array(
+            'widgets' => $widgets,
+            'pager'   => $pagination,
+        ));
 
+    }
 
 } // END class WidgetsController
