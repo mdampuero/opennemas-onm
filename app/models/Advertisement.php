@@ -217,7 +217,7 @@ class Advertisement extends Content
     /**
      * @var Advertisement instance, singleton pattern
      **/
-    private static $_singleton = null;
+    private static $singleton = null;
 
     /**
      * @var registry of banners
@@ -241,7 +241,7 @@ class Advertisement extends Content
         }
 
         // Store this object into the cache manager for better performance
-        if (is_null($this->cache) ) {
+        if ( is_null($this->cache) ) {
             $this->cache = new MethodCacheManager($this, array('ttl' => (20)));
         } else {
             $this->cache->setCacheLife(20); // 20 seconds
@@ -262,11 +262,11 @@ class Advertisement extends Content
     public static function getInstance()
     {
         // Create a unique instance if not available
-        if (is_null(self::$_singleton) ) {
-            self::$_singleton = new Advertisement();
+        if ( is_null(self::$singleton) ) {
+            self::$singleton = new Advertisement();
         }
 
-        return self::$_singleton;
+        return self::$singleton;
     }
 
     /**
@@ -562,7 +562,8 @@ class Advertisement extends Content
         $ad = new Advertisement($id);
 
         //No publicado
-        if (($ad->type_medida=='CLIC' )
+        if (
+            ($ad->type_medida=='CLIC' )
             && ($ad->num_clic <= $ad->num_clic_count)
         ) {
             $status = 0;
@@ -573,7 +574,9 @@ class Advertisement extends Content
     /**
      * Set num views
      *
-     * @param int $id
+     * @param int $id The id of the advertisement to increase num_views
+     *
+     * @return void
      **/
     public static function setNumViews($id = null)
     {
@@ -592,7 +595,8 @@ class Advertisement extends Content
                     && is_object($banner)
                     && property_exists($banner, 'type_medida')
                 ) {
-                    $banner->unpublishIfMaxViewsReached();
+                    $ad = new Advertisement($id);
+                    $ad->unpublishIfMaxViewsReached();
                 }
             }
         } else {
@@ -618,20 +622,26 @@ class Advertisement extends Content
     /**
      * Get advertisement for a given type and category
      *
-     * @param array  $types    Types of advertisement
+     * @param array $types Types of advertisement
      * @param string $category Category of advertisement
      *
-     * @return array Array of Advertisement objects
+     * @return array $finalBanners of Advertisement objects
      **/
     public function getAdvertisements($types=array(), $category='home')
     {
         $banners = array();
+        $finalBanners = array();
 
-        // FIXME: falla
+        // See if advertisements are enabled
+        // $types must be an array and not empty
         if (is_array($types) && count($types)>0 && ADVERTISEMENT_ENABLE) {
+            // Check category
             $category = (empty($category) || ($category=='home'))? 0: $category;
+
+            // Get string of types separeted by coma
             $types = implode(',', $types);
 
+            // Generate sql with or without category
             $cm = new ContentManager();
             if ($category!=0) {
                 $rsBanner = $cm->find(
@@ -653,49 +663,77 @@ class Advertisement extends Content
             // If this banner is not in time don't add it to the final results
             $rsBanner = $cm->getInTime($rsBanner);
 
-            // $advertisements is an array of banners,
-            // grouped by advertisement type
+            // $advertisements is an array of all banners, grouped by ad type
             $advertisements = array();
             foreach ($rsBanner as $adv) {
+                // Get array of types for this advertisement
+                $adv->fk_content_categories = explode(',', $adv->fk_content_categories);
 
-                $adv->fk_content_categories =
-                    explode(',', $adv->fk_content_categories);
-
+                // If the ad don't belongs to category and home, skip it
                 if (!in_array($category, $adv->fk_content_categories)
                     && $adv->fk_content_categories != array(0)
                 ) {
                     continue;
                 }
 
+                // Initialize array of advertisements with type as array key
                 if (!isset($advertisements[$adv->type_advertisement])) {
                     $advertisements[$adv->type_advertisement] = array();
                 }
 
-                // Colocar primeiro os da propia sección
-                if ($adv->fk_content_categories == array(0)) {
+                // Check if this advertisement belongs to this category
+                $hasCategoryAdvertisement = in_array($category, $adv->fk_content_categories);
+
+                // Check if this advertisement belongs to home
+                $hasHomeAdvertisement = in_array(0, $adv->fk_content_categories);
+
+                // If ad belongs to (category) or (category + home)
+                if ($hasCategoryAdvertisement || ($hasHomeAdvertisement && $hasCategoryAdvertisement)) {
                     array_push($advertisements[$adv->type_advertisement], $adv);
                 } else {
-                    array_unshift(
-                        $advertisements[$adv->type_advertisement], $adv
-                    );
+                    // If ad belongs to home but not to category
+                    if ($hasHomeAdvertisement) {
+                        array_push($advertisements[$adv->type_advertisement], $adv);
+                    }
                 }
-
             }
 
             // Perform operations for each advertisement type
-            foreach ($advertisements as $advs) {
-                //Select a random banner
-                $banners[] = $advs[array_rand($advs)];
+            foreach ($advertisements as $adType => $advs) {
+                // Initialize banners arrays
+                $banners[$adType] = array();
+                $homeBanners[$adType] = array();
+                if (count($advs) > 1) {
+                    foreach ($advs as $ad) {
+                        if ($ad->fk_content_categories != array(0)) {
+                            array_push($banners[$adType], $ad); // Category banners
+                        } else {
+                            array_push($homeBanners[$adType], $ad); // Home banners
+                        }
+                    }
+                    // If this ad-type don't has any banner, get all from home
+                    if (empty($banners[$adType])) {
+                        $banners[$adType] = $homeBanners[$adType];
+                    }
+                } else {
+                    // If this ad-type only has one ad, add it to array
+                    $banners[$adType] = $advs;
+                }
+            }
+
+            // Generate final banners array with random selection by ad-type
+            foreach ($banners as $adv) {
+                $finalBanners[] = $adv[array_rand($adv)];
             }
         }
 
-        return $banners;
+        return $finalBanners;
     }
 
     /**
      * Return banners for the interstitial position.
      *
-     * @param array  $type     the list of positions to get banners from.
+     * @param array $type the list of positions to get banners from.
      * @param string $category the category to get banners from.
      *
      * @return array
@@ -730,28 +768,41 @@ class Advertisement extends Content
     /**
      * Inject banners into template
      *
-     * @param array  $banners Array of Advertisement objects
-     * @param Smarty $tpl     Template
+     * @param array $banners Array of Advertisement objects
+     * @param Smarty $tpl Template
      **/
-    public function render($banners, $tpl)
+    public function render($banners, $tpl, $wsUrl = false)
     {
         // Extract pk_photos to perform one query
-        $photoIds = array();
+        $pk_photos = array();
         foreach ($banners as $banner) {
             if (!empty($banner->path)) {
-                $photoIds[] = $banner->path;
+                $pk_photos[] = $banner->path;
             }
         }
-        $selectedBanners =array();
+        $banners_selected =array();
+
         //Get photos
         $cm = new ContentManager();
-        $objs = $cm->cache->find(
-            'Photo',
-            "pk_content IN ('" . implode("','", $photoIds) . "')"
-        );
+        if (!$wsUrl) {
+            $objs = $cm->cache->find(
+                'Photo',
+                "pk_content IN ('" . implode("','", $pk_photos) . "')"
+            );
+        } else {
+            $objsArray = array();
+            foreach ($pk_photos as $photo) {
+                $objsArray[] = json_decode(file_get_contents($wsUrl.'/ws.php/images/id/'.(int)$photo));
+            }
+            foreach ($objsArray as $item) {
+                $content = new Advertisement();
+                $content->load($item);
+                $objs[] = $content;
+            }
+        }
 
         // Array of photos objects,
-        // key is pk_content array('pk_content' => object )
+        // key is pk_content array( 'pk_content' => object )
         $photos = array();
         foreach ($objs as $obj) {
             $photos[ $obj->pk_content ] = $obj;
@@ -759,23 +810,25 @@ class Advertisement extends Content
 
         foreach ($banners as $banner) {
             // Save selected banners to process after
-            $selectedBanners[] = $banner;
+            $banners_selected[] = $banner;
 
-            if (
-                isset($banner->type_advertisement)
+            if (isset($banner->type_advertisement)
                 && property_exists($banner, 'type_advertisement')
             ) {
                 $tpl->assign('banner'.$banner->type_advertisement, $banner);
             }
 
-            // FIXME: This is a workarround until decide what to do into
+			// FIXME: This is a workarround until decide what to do into
             // the Content class
             // This will avoid the the notice messages but doesn't keep
             // the code clean.
             // We should change de content class to return values
             // always initialized.
-            (isset($banner->with_script))?($with_script =
-                    $banner->with_script):($with_script = null);
+            if (isset($banner->with_script)) {
+                $with_script = $banner->with_script;
+            } else {
+                $with_script = null;
+            }
 
             if ($with_script) {
                 $tpl->assign(
@@ -798,7 +851,7 @@ class Advertisement extends Content
             }
         }
         // Update numviews
-        Advertisement::setNumViews($selectedBanners);
+        Advertisement::setNumViews($banners_selected);
     }
 
     /**
@@ -806,7 +859,7 @@ class Advertisement extends Content
      * workaround for Advertisement::render
      *
      * @param string $entry
-     * @param mixed  $value
+     * @param mixed $value
      **/
     public function assign($entry, $value)
     {
@@ -817,7 +870,7 @@ class Advertisement extends Content
      * Fetch a entry from set of banners,
      * workaround for Advertisement::render
      *
-     * @param  string $entry
+     * @param string $entry
      * @return mixed
      **/
     public function fetch($entry)

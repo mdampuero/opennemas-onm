@@ -40,7 +40,7 @@ class importerIdeal
             "/Entradilla/"          =>"summary",
             "/Cuadratin/"           =>"summary"
         );
-        foreach ($relation as $pattern=>$value) {
+        foreach ($relation as $pattern => $value) {
             if (preg_match($pattern, $label)) {
 
                 return $value;
@@ -83,14 +83,15 @@ class importerIdeal
                             //El primero que encuentra es con el que se queda
                             $data[$field] = '';
                             foreach ($eleto->p as $span) {
-                                foreach ($span as $texto)
+                                foreach ($span as $texto) {
                                     $data[$field] .=$texto;
+                                }
                             }
                         }
                         // Algunos son nodos inferiores
                         if (count($eleto->children())>0) {
                             foreach ($eleto->children() as $node) {
-                                foreach ($node->attributes() as $c=>$d) {
+                                foreach ($node->attributes() as $c => $d) {
                                     $field = self::check_label($d);
                                     if (!empty($field)
                                         && empty($data[$field])
@@ -140,10 +141,12 @@ class importerIdeal
         $data['frontpage']=0;
         $data['category']=20;
         $data['fk_publisher'] ='';
-        if(empty($data['title_int']))
-            $data['title_int']=$data['title'];
 
-        return ($data);
+        if (empty($data['title_int'])) {
+            $data['title_int']=$data['title'];
+        }
+
+        return $data;
     }
 
     //De xornal pasar a string utils

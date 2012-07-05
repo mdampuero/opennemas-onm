@@ -51,7 +51,7 @@ class StringUtils
             '%'=>'', '^'=>'', '&'=>'', '*'=>'', '('=>'-', ')'=>'-',
             '-'=>'-', '+'=>'', '='=>'', '\\'=>'-', '|'=>'-','`'=>'',
             '~'=>'', '/'=>'-', '\"'=>'-','\''=>'', '<'=>'', '>'=>'',
-            '?'=>'-', ','=>'-', 'ç'=>'c', 'Ç'=>'C', '·'=>'', '.'=>'',
+            '?'=>'-', ','=>'-', 'ç'=>'c', 'Ç'=>'C', '·'=>'',
             ';'=>'-', '['=>'-', ']'=>'-','ñ'=>'n','Ñ'=>'n'
         );
         $name = strtr($name, $trade);
@@ -327,7 +327,7 @@ EOF;
      *
      * @param array $data
      **/
-    public static function disabled_magic_quotes(&$data=NULL )
+    public static function disabled_magic_quotes(&$data = null)
     {
         // @codeCoverageIgnoreStart
         if (get_magic_quotes_gpc()) {
@@ -516,6 +516,25 @@ EOF;
         }
 
         return $password;
+    }
+
+
+     /**
+     * Clean the special chars into a file name
+     *
+     * @access static
+     * @param  string  $name, the string to clean
+     * @return string, the string cleaned
+     **/
+    public static function cleanFileName($name)
+    {
+        $name = trim($name);
+        $name = html_entity_decode($name, ENT_COMPAT, 'UTF-8');
+        $name = mb_strtolower($name, 'UTF-8');
+        $name = preg_replace('/\s/', '-', $name);
+        $name = StringUtils::normalize($name);
+
+        return $name;
     }
 
 }

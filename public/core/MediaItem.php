@@ -63,7 +63,7 @@ class MediaItem
             if (is_null($this->filename)) {
                 return(null);
             }
-        $filename = $this->filename;
+            $filename = $this->filename;
         }
 
         $details = array();

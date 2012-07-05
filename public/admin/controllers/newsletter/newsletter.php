@@ -32,7 +32,8 @@ if (!isset($action)) {
 if ($action != 'config' && $action != 'save_config') {
     if (is_null(s::get('newsletter_maillist'))
       || !(s::get('newsletter_subscriptionType') )
-      || !(s::get('newsletter_enable'))) {
+      || !(s::get('newsletter_enable'))
+	) {
         m::add(_('Please provide your Newsletter configuration to start to use'.
             ' your Newsletter module'));
         $httpParams[] = array( 'action'=>'config' );
@@ -53,8 +54,8 @@ if ($action != 'config' && $action != 'save_config') {
         }
     }
 }
-switch($action) {
 
+switch($action) {
     case 'config':
         $configurationsKeys = array(
                                     'newsletter_maillist',
@@ -68,14 +69,15 @@ switch($action) {
         //Check that user has configured reCaptcha keys if newsletter is enabled
         $missingRecaptcha = false;
         if (empty($configurations['recaptcha']['public_key'])
-             || empty($configurations['recaptcha']['private_key'])) {
+             || empty($configurations['recaptcha']['private_key'])
+		) {
             $missingRecaptcha = true;
         }
 
         $tpl->assign(array(
-                            'configs'   => $configurations,
-                            'missing_recaptcha'   => $missingRecaptcha,
-                    ));
+            'configs'   => $configurations,
+            'missing_recaptcha'   => $missingRecaptcha,
+        ));
 
         $tpl->display('newsletter/config.tpl');
 
@@ -109,6 +111,7 @@ switch($action) {
             $_SESSION['newsletterHtml']  = null;
         }
     case 'updateContents':
+
         //Get saved newsletters
         $newsletter       = new NewNewsletter();
         $savedNewsletters = $newsletter->search('1=1 ORDER BY created DESC LIMIT 0,30');
@@ -121,9 +124,9 @@ switch($action) {
         }
 
         $tpl->assign(array(
-                        'newsletterContent' => $newsletterContent,
-                        'savedNewsletters'  => $savedNewsletters
-                    ));
+            'newsletterContent' => $newsletterContent,
+            'savedNewsletters'  => $savedNewsletters
+        ));
 
         $tpl->display('newsletter/steps/newsletterContents.tpl');
     break;
@@ -139,8 +142,8 @@ switch($action) {
         $htmlContent = htmlspecialchars_decode($newsletter->html, ENT_QUOTES );
 
         $tpl->assign(array(
-                    'htmlContent' => $htmlContent,
-                    ));
+        	'htmlContent' => $htmlContent,
+        ));
 
         $tpl->display('newsletter/steps/newsletterPreview.tpl');
 
@@ -190,11 +193,13 @@ switch($action) {
 
         $configurations = \Onm\Settings::get('newsletter_maillist');
         if (!is_null($configurations)
-                && array_key_exists('email', $configurations)
-                && !empty($configurations['email'])) {
-            $mailList[] = new Newsletter_Account($configurations['email'],
-                                                    $configurations['name']);
-
+            && array_key_exists('email', $configurations)
+            && !empty($configurations['email'])
+		) {
+        	$mailList[] = new Newsletter_Account(
+				$configurations['email'],
+                $configurations['name']
+			);
         }
         $tpl->assign('mailList', $mailList);
 
@@ -222,8 +227,8 @@ switch($action) {
      */
     case 'send':
         $subject  =  json_decode($_COOKIE['data-subject']);
-        $nManager = new NewsletterManager();
 
+        $nManager = new NewsletterManager();
         $nManager->setConfigMailing();
 
         if (array_key_exists('newsletterHtml', $_SESSION) &&
@@ -240,8 +245,10 @@ switch($action) {
         // save newsletter
         $postmaster = $_SESSION['data-newsletter'];
 
-        $newsletter->create(array('content' => $postmaster,
-                                     'html' => $htmlContent));
+        $newsletter->create(array(
+			'content' => $postmaster,
+			'html' => $htmlContent)
+		);
 
         if (array_key_exists('sender', $configurations)
             && !empty($configurations['sender']) ) {
@@ -251,12 +258,12 @@ switch($action) {
         }
 
         $params = array(
-                    'subject'        => $subject,
-                    'mail_host'      => MAIL_HOST,
-                    'mail_user'      => MAIL_USER,
-                    'mail_pass'      => MAIL_PASS,
-                    'mail_from'      => $mail_from,
-                    'mail_from_name' => s::get('site_name'),
+            'subject'        => $subject,
+            'mail_host'      => MAIL_HOST,
+            'mail_user'      => MAIL_USER,
+            'mail_pass'      => MAIL_PASS,
+            'mail_from'      => $mail_from,
+            'mail_from_name' => s::get('site_name'),
         );
 
         $data = json_decode($postmaster);
@@ -283,8 +290,8 @@ switch($action) {
         }
 
         $tpl->assign(array(
-                        'html_final' => $htmlFinal,
-                        'postmaster' => $postmaster,
+            'html_final' => $htmlFinal,
+            'postmaster' => $postmaster,
         ));
 
         unset($_SESSION['newsletterHtml']);

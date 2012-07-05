@@ -30,15 +30,14 @@ class Special extends Content
      /**
      * the id of the image that is the cover for this album
      */
-
     public $img1 = null;
 
     /**
      * Initializes the Special class.
      *
      * @param string $id the id of the album.
+     *
      **/
-
     public function __construct($id=null)
     {
         parent::__construct($id);
@@ -63,7 +62,7 @@ class Special extends Content
 
         switch ($name) {
 
-            case 'uri': {
+            case 'uri':
                 if (empty($this->category_name)) {
                     $this->category_name =
                         $this->loadCategoryName($this->pk_content);
@@ -79,13 +78,13 @@ class Special extends Content
                 return ($uri !== '') ? $uri : $this->permalink;
 
                 break;
-            }
-            case 'slug': {
+
+            case 'slug':
                 return String_Utils::get_title($this->title);
                 break;
-            }
 
-            case 'content_type_name': {
+
+            case 'content_type_name':
                 $contentTypeName = $GLOBALS['application']->conn->
                     Execute('SELECT * FROM `content_types` '
                     .'WHERE pk_content_type = "'. $this->content_type
@@ -101,11 +100,11 @@ class Special extends Content
                 return $returnValue;
 
                 break;
-            }
 
-            default: {
+
+            default:
                 break;
-            }
+
         }
 
         parent::__get($name);
@@ -142,10 +141,8 @@ class Special extends Content
 
             return(false);
         }
+        $this->saveItems($data);
 
-        if (empty($data['pdf_path'])) {
-             $this->saveItems($data);
-        }
 
         return $this->id;
     }
@@ -194,9 +191,8 @@ class Special extends Content
             return;
         }
 
-        if (empty($data['pdf_path'])) {
-            $this->saveItems($data);
-        }
+        $this->saveItems($data);
+
 
         return true;
     }
@@ -233,8 +229,8 @@ class Special extends Content
             $contents = json_decode(json_decode($data['noticias_left']), true);
             if (!empty($contents)) {
                 foreach ($contents as $content) {
-                    $this->setContents($data['id'], $content['id'],
-                        $content['position'], "", $content['content_type']);
+                    $this->setContents($this->id, $content['id'],
+                      ($content['position']*2-1), "", $content['content_type']);
                 }
             }
         }
@@ -243,15 +239,15 @@ class Special extends Content
             $contents = json_decode(json_decode($data['noticias_right']), true);
             if (!empty($contents)) {
                 foreach ($contents as $content) {
-                    $this->setContents($data['id'], $content['id'],
-                        $content['position'], "", $content['content_type']);
+                    $this->setContents($this->id, $content['id'],
+                        ($content['position']*2), "", $content['content_type']);
                 }
             }
         }
 
     }
 
-    public function get_contents($id)
+    public function getContents($id)
     {
         if ($id == null) {
             return(false);

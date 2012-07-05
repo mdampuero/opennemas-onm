@@ -523,6 +523,7 @@ Options -Indexes
     #Articles articulo/2008/09/29/galicia/ourense/titulo-noticia-separada-guiones/1222692016.html
     #Articles articulo/2008/09/29/galicia/titulo-noticia-separada-guiones/1222692016.html
     RewriteRule ^articulo/([a-z0-9\-]+)?/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/([a-z0-9\-]+)/([0-9]+).html$ controllers/article.php?category_name=$1&year=$2&month=$3&day=$4&article_id=$6&action=read [L,NC]
+    RewriteRule ^articulo/([a-z0-9\-]+)?/.*/([0-9]+)/ext.html$ controllers/article_ws.php?category_name=$1&article_id=$2&action=read&ext=1 [L,NC]
     RewriteRule ^articulo/([a-z0-9\-]+)?/.*/([0-9]+).html$ controllers/article.php?category_name=$1&article_id=$2&action=read [L,NC]
     RewriteRule ^artigo/([a-z0-9\-]+)?/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/([a-z0-9\-]+)/([0-9]+).html$ controllers/article.php?category_name=$1&year=$2&month=$3&day=$4&article_id=$6&action=read [L,NC]
     RewriteRule ^artigo/([a-z0-9\-]+)?/.*/([0-9]+).html$ controllers/article.php?category_name=$1&article_id=$2&action=read [L,NC]
@@ -546,8 +547,17 @@ Options -Indexes
     RewriteRule ^opinion/autor/([0-9]+)/(.*)/([0-9]*)/$ controllers/opinion_index.php?alt=pag&category_name=opinion&action=list_op_author&author_slug=$2&author_id=$1&page=$3 [L,NC]
     RewriteRule ^opinion/autor/([0-9]+)/(.*)$ controllers/opinion_index.php?alt=nopag&category_name=opinion&action=list_op_author&author_id=$1&author_slug=$2 [L,NC]
 
+    #Opinion Inner Web Service
+    RewriteRule ^opinion(|/.+)?/([a-z0-9\-]+)?/(.*)?/([0-9]+)/ext.html$ controllers/opinion_inner.php?opinion_id=$4&category_name=opinion&action=read&t=$1 [L,NC]
+
     #Opinion Inner
     RewriteRule ^opinion(|/.+)?/([a-z0-9\-]+)?/(.*)?/([0-9]+).html$ controllers/opinion_inner.php?opinion_id=$4&category_name=opinion&action=read&t=$1 [L,NC]
+    RewriteRule ^opinion(|/.+)?/(.*)?/([0-9]+).html$ controllers/opinion_inner.php?opinion_id=$3&category_name=opinion&action=read&t=$1 [L,NC]
+
+    #Articulos print Web Service
+    RewriteRule ^imprimir/[^/]+/([a-z0-9\-_]+)/([a-z0-9\-_]+)/ext/([0-9]+).html$ controllers/article_ws.php?action=print&article_id=$3&category_name=$1&subcategory_name=$2 [L,NC]
+    RewriteRule ^imprimir/[^/]+/([a-z0-9\-_]+)/ext/([0-9]+).html$ controllers/article_ws.php?action=print&article_id=$2&category_name=$1& [L,NC]
+    RewriteRule ^imprimir/[^/]+/ext/([0-9]+).html$ controllers/opinion_inner_ws.php?action=print&opinion_id=$1 [L,NC]
 
     #articulos print
     RewriteRule ^imprimir/[^/]+/([a-z0-9\-_]+)/([a-z0-9\-_]+)/([0-9]+).html$ controllers/article.php?action=print&article_id=$3&category_name=$1&subcategory_name=$2 [L,NC]
@@ -557,6 +567,12 @@ Options -Indexes
     #Home
     RewriteRule ^/?$ controllers/index.php?category_name=home [L,NC]
     RewriteRule ^home/?$ controllers/index.php?category_name=home [L,NC]
+
+    #Sections external Web service
+    RewriteRule ^seccion/([a-z0-9\-]+)/ext/?$ controllers/index_ws.php?category_name=$1 [L,NC]
+    RewriteRule ^seccion/([a-z0-9\-]+)/([0-9]+)/ext/?$ controllers/index_ws.php?category_name=$1&page=$2 [L,NC]
+    RewriteRule ^seccion/([a-z0-9\-]+)/([a-z0-9\-]+)/ext/?$ controllers/index_ws.php?category_name=$1&subcategory_name=$2 [L,NC]
+    RewriteRule ^seccion/([a-z0-9\-]+)/([a-z0-9\-]+)/([0-9]+)/ext/?$ controllers/index_ws.php?category_name=$1&subcategory_name=$2&page=$3 [L,NC]
 
     #Sections
     RewriteRule ^seccion/([a-z0-9\-]+)/?$ controllers/index.php?category_name=$1 [L,NC]

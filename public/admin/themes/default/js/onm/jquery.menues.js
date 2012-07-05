@@ -97,7 +97,7 @@ updateLink = function() {
 };
 
 hideActions = function() {
-   jQuery('.menuItem').attr( 'style','background:white');
+   // jQuery('.menuItem').attr( 'style','background:white');
    jQuery('div.div-actions').remove();
 };
 
@@ -109,7 +109,7 @@ createActions = function(id) {
 };
 
 showActions = function(id) {
-    jQuery('#'+id).attr( 'style','background:#eee');
+    // jQuery('#'+id).attr( 'style','background:#eee');
     hideActions();
     createActions(id);
 };

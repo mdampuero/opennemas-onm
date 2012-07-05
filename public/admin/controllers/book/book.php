@@ -24,28 +24,28 @@ Acl::checkOrForward('BOOK_ADMIN');
 
 $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 
-$page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT);
+$page = filter_input(INPUT_GET, 'page', FILTER_VALIDATE_INT);
 
 /******************* GESTION CATEGORIAS  *****************************/
 $contentType = Content::getIDContentType('book');
 
-$category = filter_input(INPUT_GET,'category',FILTER_VALIDATE_INT);
+$category = filter_input(INPUT_GET, 'category', FILTER_VALIDATE_INT);
 
-if(empty($category)) {
-    $category = filter_input(INPUT_POST,'category',FILTER_VALIDATE_INT);
+if (empty($category)) {
+    $category = filter_input(INPUT_POST, 'category', FILTER_VALIDATE_INT);
 }
 
 $ccm = ContentCategoryManager::get_instance();
 list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu($category, $contentType);
 
 $bookCategories = array();
-foreach($parentCategories as $bCat){
-    if($bCat->internal_category == $contentType){
+foreach ($parentCategories as $bCat) {
+    if ($bCat->internal_category == $contentType) {
         $bookCategories[] = $bCat;
     }
 
 }
-if(empty($category)) {
+if (empty($category)) {
     $category ='favorite';
 }
 
@@ -58,19 +58,20 @@ $tpl->assign('datos_cat', $categoryData);
 
 /******************* GESTION CATEGORIAS  *****************************/
 
-$action = filter_input( INPUT_POST, 'action' , FILTER_SANITIZE_STRING );
+$action = filter_input(INPUT_POST, 'action', FILTER_SANITIZE_STRING);
 if (!isset($action)) {
-    $action = filter_input( INPUT_GET, 'action' , FILTER_SANITIZE_STRING, array('options' => array('default' => 'list')) );
+    $action = filter_input(INPUT_GET, 'action', FILTER_SANITIZE_STRING,
+            array('options' => array('default' => 'list')));
 }
 
 $configurations = s::get('book_settings');
-$numFavorites = (isset($configurations['total_widget']) && !empty($configurations['total_widget']))? $configurations['total_widget']: 1;
-$sizeFile = (isset($configurations['size_file']) && !empty($configurations['size_file']))? $configurations['size_file']: 5000000;
+$numFavorites   = (isset($configurations['total_widget']) && !empty($configurations['total_widget']))? $configurations['total_widget']: 1;
+$sizeFile       = (isset($configurations['size_file']) && !empty($configurations['size_file']))? $configurations['size_file']: 5000000;
 
  $ruta = INSTANCE_MEDIA_PATH.'/books/';
 
 // Create folder if it doesn't exist
-if( !file_exists($ruta) ) {
+if (!file_exists($ruta)) {
         FilesManager::createDirectory($ruta);
 }
 
@@ -91,13 +92,13 @@ switch($action) {
             $books = $cm->find_all('Book', 'favorite =1 AND available =1',
                 'ORDER BY position, created DESC '.$limit);
 
-            if(!empty($books)) {
+            if (!empty($books)) {
                 foreach ($books as &$book) {
                     $book->category_name = $ccm->get_name($book->category);
                     $book->category_title = $ccm->get_title($book->category_name);
                 }
             }
-            if (count($books) != $numFavorites ) {
+            if (count($books) != $numFavorites) {
                 m::add( sprintf(_("You must put %d books in the HOME widget"), $numFavorites));
             }
 
@@ -139,29 +140,25 @@ switch($action) {
     case 'update':
 
         Acl::checkOrForward('BOOK_UPDATE');
-        $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
+        $id = filter_input(INPUT_POST, 'id', FILTER_DEFAULT);
         $book = new Book($id);
 
-        if(!empty($_FILES['file']['name'])) {
+        if (!empty($_FILES['file']['name'])) {
             $nombre_archivo = FilesManager::cleanFileName($_FILES['file']['name']);
             $archivo_temporal = $_FILES['file']['tmp_name'];
 
             // Move uploaded pdf
             $uploadStatusPdf = @move_uploaded_file($archivo_temporal, $ruta.$nombre_archivo);
-            if($uploadStatusPdf){
-                $nombre_archivo_swf = str_replace('pdf', 'swf', $nombre_archivo);
-                exec('pdf2swf -O 1 '.$ruta.$nombre_archivo.' -o '.$ruta.$nombre_archivo_swf);
-            }
         }
 
-        if(!empty($_FILES['file_img']['name'])) {
+        if (!empty($_FILES['file_img']['name'])) {
                //Book image front
             $nombre_archivo_img = FilesManager::cleanFileName($_FILES['file_img']['name']);
             $archivo_temporal_img = $_FILES['file_img']['tmp_name'];
             $uploadStatusPdf_img = @move_uploaded_file($archivo_temporal_img, $ruta.$nombre_archivo_img);
         }
 
-        if(!Acl::isAdmin() && !Acl::check('CONTENT_OTHER_UPDATE') && $book->fk_user != $_SESSION['userid']) {
+        if (!Acl::isAdmin() && !Acl::check('CONTENT_OTHER_UPDATE') && $book->fk_user != $_SESSION['userid']) {
             m::add(_("You can't modify this book data because you don't have enought privileges.") );
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=read&id='.$id);
         } else {
@@ -189,8 +186,6 @@ switch($action) {
 
         $book = new Book();
         if ( ($uploadStatusPdf !== false) &&  $book->create( $_POST )) {
-            $nombre_archivo_swf = str_replace('pdf', 'swf', $nombre_archivo);
-            exec('pdf2swf -O 1 '.$ruta.$nombre_archivo.' -o '.$ruta.$nombre_archivo_swf);
 
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
 
@@ -207,14 +202,14 @@ switch($action) {
 
     case 'validate':
 
-        $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
+        $id = filter_input(INPUT_POST, 'id', FILTER_DEFAULT);
 
 
         Acl::checkOrForward('BOOK_CREATE');
 
 
         // Create folder if it doesn't exist
-        if( !file_exists($ruta) ) {
+        if (!file_exists($ruta)) {
              FilesManager::createDirectory($ruta);
         }
 
@@ -229,32 +224,32 @@ switch($action) {
         $uploadStatusPdf_img = @move_uploaded_file($archivo_temporal_img, $ruta.$nombre_archivo_img);
 
         $book = new Book();
-        if ( (!empty($_FILES['file']['name'])) && ($uploadStatusPdf !== false) ) {
-            $nombre_archivo_swf = str_replace('pdf', 'swf', $nombre_archivo);
-            exec('pdf2swf -O 1 '.$ruta.$nombre_archivo.' -o '.$ruta.$nombre_archivo_swf);
-        } elseif ( $_FILES['file']['size'] > $sizeFile ) {
+        if ((!empty($_FILES['file']['name'])) && ($uploadStatusPdf !== false)) {
+
+        } elseif ($_FILES['file']['size'] > $sizeFile) {
              m::add( sprintf(_("Sorry, file can't upload. You must check file size.(< %sB)"), $sizeFile ));
 
         } elseif(!empty($_FILES['file']['name'])) {
              m::add( sprintf(_("Sorry, file can't upload.")));
         }
-        if ( (!empty($_FILES['file_img']['name'])) && ($uploadStatusPdf_img !== false) ) {
-         //   m::add( sprintf(_("Sorry, image file can't upload.")));
+        if ((!empty($_FILES['file_img']['name'])) && ($uploadStatusPdf_img !== false)) {
+            //   m::add( sprintf(_("Sorry, image file can't upload.")));
         }
 
         if (!empty($id)) {
             $book->update( $_POST );
-        }else{
+        } else {
             $book->create( $_POST );
         }
 
-        Application::forward($_SERVER['SCRIPT_NAME'].'?action=read&id='.$book->id.'&category='.$category.'&page='.$page);
+        Application::forward($_SERVER['SCRIPT_NAME'].
+            '?action=read&id='.$book->id.'&category='.$category.'&page='.$page);
 
     break;
 
     case 'delete':
 
-        $id = filter_input(INPUT_POST,'id', FILTER_DEFAULT);
+        $id = filter_input(INPUT_POST, 'id', FILTER_DEFAULT);
         Acl::checkOrForward('BOOK_DELETE');
         $book = new Book();
         $book->delete( $id );
@@ -288,10 +283,10 @@ switch($action) {
 
         Acl::checkOrForward('BOOK_AVAILABLE');
 
-        if(isset($_GET['selected_fld']) && count($_GET['selected_fld']) > 0) {
+        if (isset($_GET['selected_fld']) && count($_GET['selected_fld']) > 0) {
             $fields = $_GET['selected_fld'];
 
-            $status = filter_input ( INPUT_GET, 'status' , FILTER_SANITIZE_NUMBER_INT );
+            $status = filter_input(INPUT_GET, 'status', FILTER_SANITIZE_NUMBER_INT);
             if (is_array($fields)) {
                 foreach ($fields as $i) {
                     $book = new Book($i);
@@ -309,10 +304,10 @@ switch($action) {
     case 'batchDelete':
 
         Acl::checkOrForward('BOOK_DELETE');
-        if(isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld'])>0){
+        if (isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld'])>0) {
             $fields = $_REQUEST['selected_fld'];
-            if(is_array($fields)) {
-                foreach($fields as $i ) {
+            if (is_array($fields)) {
+                foreach ($fields as $i) {
                     $book = new Book($i);
                     $book->delete( $i );
                 }
@@ -325,8 +320,8 @@ switch($action) {
     case 'change_favorite':
 
         Acl::checkOrForward('BOOK_FAVORITE');
-        $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
-        $status = filter_input(INPUT_GET,'status',FILTER_VALIDATE_INT,
+        $id = filter_input(INPUT_GET, 'id', FILTER_DEFAULT);
+        $status = filter_input(INPUT_GET, 'status', FILTER_VALIDATE_INT,
                                 array('options' => array('default'=> 0)));
         $book = new Book($id);
         if ($book->available == 1) {
@@ -341,25 +336,26 @@ switch($action) {
     case 'save_positions':
         $positions = $_GET['positions'];
 
-        if (isset($positions)  && is_array($positions)
-                && count($positions) > 0) {
-           $_positions = array();
-           $pos = 1;
+        if (isset($positions)
+            && is_array($positions)
+            && count($positions) > 0) {
+            $_positions = array();
+            $pos        = 1;
 
-           foreach($positions as $id) {
-                    $_positions[] = array($pos, '1', $id);
-                    $pos += 1;
+            foreach ($positions as $id) {
+                $_positions[] = array($pos, '1', $id);
+                $pos += 1;
             }
 
             $book= new Book();
             $msg = $book->set_position($_positions, $_SESSION['userid']);
 
-         }
-         if(!empty($msg) && $msg == true) {
+        }
+        if (!empty($msg) && $msg == true) {
              echo _("Positions saved successfully.");
-         } else{
+        } else {
              echo _("Unable to save the new positions. Please contact with your system administrator.");
-         }
+        }
         exit(0);
     break;
 

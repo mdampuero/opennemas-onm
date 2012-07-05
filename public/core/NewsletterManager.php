@@ -131,7 +131,7 @@ class NewsletterManager
                         $item->image        = (isset($content->cover))?$content->cover:'';
 
                         // Fetch images of articles if exists
-                        if(isset($content->img1)) {
+                        if (isset($content->img1)) {
                             $item->photo = $cm->find('Photo', 'pk_content ='.$content->img1);
                         }
 

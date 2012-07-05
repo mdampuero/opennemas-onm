@@ -51,7 +51,7 @@ class Letter extends Content
             case 'uri': {
                 $uri =  Uri::generate('letter',
                     array(
-                        'id'       => sprintf('%06d',$this->id),
+                        'id'       => sprintf('%06d', $this->id),
                         'date'     => date('YmdHis', strtotime($this->created)),
                         'slug'     => $this->slug,
                         'category' => StringUtils::get_title($this->author),

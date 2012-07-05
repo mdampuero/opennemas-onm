@@ -32,9 +32,9 @@ require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
 $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 $tpl->assign('titulo_barra', 'Import new contents from XML file or Zip XML');
 
-$action = filter_input( INPUT_POST, 'action' , FILTER_SANITIZE_STRING );
+$action = filter_input(INPUT_POST, 'action', FILTER_SANITIZE_STRING);
 if (!isset($action)) {
-    $action = filter_input( INPUT_GET, 'action' ,
+    $action = filter_input(INPUT_GET, 'action',
         FILTER_SANITIZE_STRING, array('options' => array('default' => 'list')));
 }
 
@@ -50,10 +50,10 @@ if (
 }
 
 // TODO : define in settings
-define('SITE_TMP_PATH',  SITE_PATH.'..'.DS.'tmp'.DS.'xml'.DS);
+define('SITE_TMP_PATH', SITE_PATH.'..'.DS.'tmp'.DS.'xml'.DS);
 $uploaddir  = SITE_TMP_PATH;
 
-if(!file_exists($uploaddir)){
+if (!file_exists($uploaddir)) {
     FilesManager::createDirectory($uploaddir);
 }
 
@@ -62,23 +62,23 @@ switch($action) {
 
     case 'config':
 
-
         if ( $schema = s::get('xml_file_schema') ) {
 
             $tpl->assign(array(
-                'title'    => $schema['title'],
-                'title_int' => $schema['title_int'],
-                'subtitle' => $schema['subtitle'],
-                'summary' => $schema['summary'],
-                'agency' => $schema['agency'],
-                'created' => $schema['created'],
-                'metadata'    => $schema['metadata'],
-                'description' => $schema['description'],
+                'title'         => $schema['title'],
+                'title_int'     => $schema['title_int'],
+                'subtitle'      => $schema['subtitle'],
+                'summary'       => $schema['summary'],
+                'agency'        => $schema['agency'],
+                'created'       => $schema['created'],
+                'metadata'      => $schema['metadata'],
+                'description'   => $schema['description'],
                 'category_name' => $schema['category_name'],
-                'urn_source' => $schema['urn_source'],
-                'body' =>$schema['body'],
-                'ignored' =>$schema['ignored'],
-                'important' =>$schema['important'],
+                'img'           => $schema['img'],
+                'img_footer'    => $schema['img_footer'],
+                'body'          => $schema['body'],
+                'ignored'       => $schema['ignored'],
+                'important'     => $schema['important'],
             ));
 
         }
@@ -89,37 +89,38 @@ switch($action) {
 
     case 'save_config':
 
-        $title    = filter_input( INPUT_POST, 'title' , FILTER_SANITIZE_STRING );
-        $title_int = filter_input( INPUT_POST, 'title_int' , FILTER_SANITIZE_STRING );
-        $subtitle = filter_input( INPUT_POST, 'subtitle' , FILTER_SANITIZE_STRING );
-        $summary  = filter_input( INPUT_POST, 'summary' , FILTER_SANITIZE_STRING );
-        $agency   = filter_input( INPUT_POST, 'agency' , FILTER_SANITIZE_STRING );
-        $created   = filter_input( INPUT_POST, 'created' , FILTER_SANITIZE_STRING );
-        $body     = filter_input( INPUT_POST, 'body' , FILTER_SANITIZE_STRING );
-        $metadata = filter_input( INPUT_POST, 'metadata' , FILTER_SANITIZE_STRING );
-        $description = filter_input( INPUT_POST, 'description' , FILTER_SANITIZE_STRING );
-        $category_name = filter_input( INPUT_POST, 'category_name' , FILTER_SANITIZE_STRING );
-        $urn_source = filter_input( INPUT_POST, 'urn_source' , FILTER_SANITIZE_STRING );
-        $body = filter_input( INPUT_POST, 'body' , FILTER_SANITIZE_STRING );
-        $ignored = filter_input( INPUT_POST, 'ignored' , FILTER_SANITIZE_STRING );
-        $important = filter_input( INPUT_POST, 'important' , FILTER_SANITIZE_STRING );
+        $title         = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING);
+        $title_int     = filter_input(INPUT_POST, 'title_int', FILTER_SANITIZE_STRING);
+        $subtitle      = filter_input(INPUT_POST, 'subtitle', FILTER_SANITIZE_STRING);
+        $summary       = filter_input(INPUT_POST, 'summary', FILTER_SANITIZE_STRING);
+        $agency        = filter_input(INPUT_POST, 'agency', FILTER_SANITIZE_STRING);
+        $created       = filter_input(INPUT_POST, 'created', FILTER_SANITIZE_STRING);
+        $body          = filter_input(INPUT_POST, 'body', FILTER_SANITIZE_STRING);
+        $metadata      = filter_input(INPUT_POST, 'metadata', FILTER_SANITIZE_STRING);
+        $description   = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_STRING);
+        $category_name = filter_input(INPUT_POST, 'category_name', FILTER_SANITIZE_STRING);
+        $img           = filter_input(INPUT_POST, 'img', FILTER_SANITIZE_STRING);
+        $img_footer    = filter_input(INPUT_POST, 'img_footer', FILTER_SANITIZE_STRING);
+        $body          = filter_input(INPUT_POST, 'body', FILTER_SANITIZE_STRING);
+        $ignored       = filter_input(INPUT_POST, 'ignored', FILTER_SANITIZE_STRING);
+        $important     = filter_input(INPUT_POST, 'important', FILTER_SANITIZE_STRING);
 
         $schema =  array(
-            'title'    => $title,
-            'title_int' => $title_int,
-            'subtitle' => $subtitle,
-            'summary'  => $summary,
-            'agency'   => $agency,
-            'created'   => $created,
-            'body'     => $body,
-            'metadata' => $metadata,
-            'description' => $description,
+            'title'         => $title,
+            'title_int'     => $title_int,
+            'subtitle'      => $subtitle,
+            'summary'       => $summary,
+            'agency'        => $agency,
+            'created'       => $created,
+            'body'          => $body,
+            'metadata'      => $metadata,
+            'description'   => $description,
             'category_name' => $category_name,
-            'body' =>$body,
-            'urn_source' => $urn_source,
-            'img_footer' => $img_footer,
-            'ignored' =>$ignored,
-            'important' =>$important,
+            'body'          => $body,
+            'img'           => $img,
+            'img_footer'    => $img_footer,
+            'ignored'       => $ignored,
+            'important'     => $important,
         );
 
         if (s::set('xml_file_schema', $schema) ) {
@@ -145,18 +146,19 @@ switch($action) {
 
         if (count($_FILES["file"]["name"]) >= 1 && !empty($_FILES["file"]["name"][0]) ) {
 
-            for($i=0,$j=0;$i<count($_FILES["file"]["name"]);$i++) {
+            for ($i=0, $j=0; $i<count($_FILES["file"]["name"]); $i++) {
 
                 $nameFile = $_FILES["file"]["name"][$i];
 
                 $datos=pathinfo($nameFile);//sacamos info del archivo
 
                 //Preparamos el nuevo nombre YYYYMMDDHHMMSSmmmmmm
-                $extension=$datos['extension'];
-                $t=gettimeofday(); //Sacamos los microsegundos
-                $micro=intval(substr($t['usec'],0,5)); //Le damos formato de 5digitos a los microsegundos
+                $extension = $datos['extension'];
+                $t = gettimeofday(); //Sacamos los microsegundos
+                $micro = intval(substr($t['usec'], 0, 5));
+                //Le damos formato de 5digitos a los microsegundos
 
-                $name= date("YmdHis").$micro.".".$extension;
+                $name = date("YmdHis").$micro.".".$extension;
 
                 if (move_uploaded_file($_FILES["file"]["tmp_name"][$i], $uploaddir.$name)) {
 
@@ -167,26 +169,24 @@ switch($action) {
                         echo "<br><br><br>";
                         $dataZIP = FilesManager::decompressZIP($uploaddir.$name);
 
-                        @chmod($uploaddir.$name,0775);
+                        @chmod($uploaddir.$name, 0775);
                         sort($dataZIP);
-                        foreach($dataZIP as $elementZIP) {
-                            @chmod($uploaddir.$elementZIP,0775);
+                        foreach ($dataZIP as $elementZIP) {
+                            @chmod($uploaddir.$elementZIP, 0775);
 
                             $importer = ImporterXml::getInstance();
                             $eltoXML = $importer->importXML($uploaddir.$elementZIP);
-                            if($eltoXML) {
+                            if ($eltoXML) {
                                  $XMLFile[$j]=$elementZIP;
 
-                                 $values = $importer->getXMLData($eltoXML);
-                                 $article =new Article();
-                                 $article->create($values);
-
-
+                                $values = $importer->getXMLData($eltoXML);
+                                $article =new Article();
+                                $article->create($values);
 
                                 $dataXML[$j] = $values;
                                 $j++;
-                            }else{
-                            //    m::add(_( 'No valid XML format' ));
+                            } else {
+                                //    m::add(_( 'No valid XML format' ));
                             }
                         }
                     } else {
@@ -198,15 +198,17 @@ switch($action) {
 
                         $values = $importer->getXMLData($eltoXML);
 
-                        $article =new Article();
+                        $article = new Article();
                         $article->create($values);
-
+                        $photo = new Photo($values['img1']);
+                        $values['photo'] = INSTANCE_MEDIA.IMG_DIR. $photo->path_file.$photo->name;
                         $dataXML[$j] = $values;
                         $j++;
                     }
 
-                 }else{
-                       m::add( "<br> Ocurrió algún error al subir el fichero ".$uploaddir.$name." - ".$nameFile." . No pudo guardarse,
+                } else {
+                       m::add( "<br> Ocurrió algún error al subir el fichero "
+                        .$uploaddir.$name." - ".$nameFile." . No pudo guardarse,
                        <br> Compruebe su tamaño (MAX 300 MB)");
                  }
             }
@@ -223,53 +225,50 @@ switch($action) {
         }
         $tpl->display('agency_importer/filesXML/list.tpl');
         //Removed all of temp files in SITE_ADMIN_TMP_PATH
-      //  foreach(glob(SITE_ADMIN_TMP_PATH.DS.'xml'.DS.'*.*') as $v){unlink($v);}
+        //foreach(glob(SITE_ADMIN_TMP_PATH.DS.'xml'.DS.'*.*') as $v){unlink($v);}
     break;
 
     case 'check':
 
         if (count($_FILES["file"]["name"]) >= 1 && !empty($_FILES["file"]["name"][0]) ) {
 
-            for($i=0,$j=0;$i<count($_FILES["file"]["name"]);$i++) {
+            for ($i=0, $j=0; $i<count($_FILES["file"]["name"]); $i++) {
 
                 $nameFile = $_FILES["file"]["name"][$i];
-
-                $datos=pathinfo($nameFile);					 //sacamos inofr del archivo
-
+                $datos    = pathinfo($nameFile);
+                //sacamos inofr del archivo
                 //Preparamos el nuevo nombre YYYYMMDDHHMMSSmmmmmm
-                $extension=$datos['extension'];
-                $t=gettimeofday(); //Sacamos los microsegundos
-                $micro=intval(substr($t['usec'],0,5)); //Le damos formato de 5digitos a los microsegundos
+                $extension = $datos['extension'];
+                $t         = gettimeofday(); //Sacamos los microsegundos
+                $micro     = intval(substr($t['usec'], 0, 5));
+                //Le damos formato de 5digitos a los microsegundos
 
                 $name= date("YmdHis").$micro.".".$extension;
 
                 if (move_uploaded_file($_FILES["file"]["tmp_name"][$i], $uploaddir.$name)) {
 
-                  if ($extension == "zip")
-                    {
+                    if ($extension == "zip") {
                         $dataZIP = array();
                         $dataZIP = FilesManager::decompressZIP($uploaddir.$name);
 
                         sort($dataZIP);
-                        foreach($dataZIP as $elementZIP) {
-                            @chmod($uploaddir.$elementZIP,0775);
+                        foreach ($dataZIP as $elementZIP) {
+                            @chmod($uploaddir.$elementZIP, 0775);
                             $importer = ImporterXml::getInstance();
 
                             $eltoXML = $importer->importXML($uploaddir.$elementZIP);
-                            if($eltoXML){
+                            if ($eltoXML) {
                                 $values = $importer->getXMLData($eltoXML);
 
                                 $XMLFile[$j]=$elementZIP;
                                 $dataXML[$j] = $values;
-                            } else{
+                            } else {
                                 m::add(_( 'No valid XML format' ));
 
                             }
                             $j++;
                         }
-                    }
-                    else
-                    {
+                    } else {
                         $importer = ImporterXml::getInstance();
 
                         $eltoXML = $importer->importXML($uploaddir.$name);
@@ -280,10 +279,11 @@ switch($action) {
                             $j++;
                     }
 
-                 }else{
-                       m:add ("<br> Ocurrió algún error al subir el fichero ".$uploaddir.$name." - ".$nameFile." . No pudo guardarse,
+                } else {
+                    m:add ("<br> Ocurrió algún error al subir el fichero ".
+                        $uploaddir.$name." - ".$nameFile." . No pudo guardarse,
                        <br> Compruebe su tamaño (MAX 300 MB)" );
-                 }
+                }
             }
             $tpl->assign('XMLFile', $XMLFile);
             $tpl->assign('dataXML', $dataXML);
@@ -295,12 +295,12 @@ switch($action) {
         }
         $tpl->display('agency_importer/filesXML/list.tpl');
         //Removed all of temp files in SITE_ADMIN_TMP_PATH
-     //   foreach(glob(SITE_ADMIN_TMP_PATH.DS.'xml'.DS.'*.*') as $v){unlink($v);}
+        //foreach(glob(SITE_ADMIN_TMP_PATH.DS.'xml'.DS.'*.*') as $v){unlink($v);}
     break;
 
-default:
-        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
-break;
+    default:
+            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
+    break;
 }
 
 
