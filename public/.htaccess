@@ -461,6 +461,7 @@ Options -Indexes
     # provisional cronicas
     RewriteRule ^agenda/?$   http://agenda.cronicasdelaemigracion.com/ [R=301,L,NC]
     RewriteRule ^agenda/(.*)$   http://agenda.cronicasdelaemigracion.com/$1 [R=301,L,NC]
+    RewriteRule ^agenda_colenctividad/(.*)$   http://agenda.cronicasdelaemigracion.com/$1 [R=301,L,NC]
 
     #--------------------------------------------------------
     #Redirection from old nuevatribuna.es
@@ -700,6 +701,17 @@ Options -Indexes
     #/articulo/imprimir/ayuntamiento-gijon-aportara-000-euros/2729.html
     RewriteRule ^articulo/imprimir/([a-z0-9\-_]+)/([0-9]+).html$ controllers/article.php?action=print&article_id=$2&category_name=cronicas [L,NC]
 
+    RewriteRule ^media/files/cronicas/(.*)?$ /media/cronicas/files/cronicas/$1 [R=301,L,NC]
+    RewriteRule ^media/files/galicia/(.*)?$ /media/cronicas/files/galicia/$1 [R=301,L,NC]
+    RewriteRule ^media/files/castillaleon/(.*)?$ /media/cronicas/files/castillaleon/$1 [R=301,L,NC]
+    RewriteRule ^media/files/madrid/(.*)?$ /media/cronicas/files/madrid/$1 [R=301,L,NC]
+    RewriteRule ^media/files/asturias/(.*)?$ /media/cronicas/files/asturias/$1 [R=301,L,NC]
+    RewriteRule ^media/files/baleares/(.*)?$ /media/cronicas/files/baleares/$1 [R=301,L,NC]
+    RewriteRule ^media/files/paisvasco/(.*)?$ /media/cronicas/files/paisvasco/$1 [R=301,L,NC]
+    RewriteRule ^media/files/canarias/(.*)?$ /media/cronicas/files/canarias/$1 [R=301,L,NC]
+    RewriteRule ^media/files/andalucia/(.*)?$ /media/cronicas/files/andalucia/$1 [R=301,L,NC]
+    RewriteRule ^media/files/cantabria/(.*)?$ /media/cronicas/files/cantabria/$1 [R=301,L,NC]
+    RewriteRule ^media/files/advertisements/(.*)?$ /media/cronicas/files/advertisements/$1 [R=301,L,NC]
 
     ##### END CRONNICAS ####
 
