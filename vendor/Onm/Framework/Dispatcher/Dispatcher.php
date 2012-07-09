@@ -130,7 +130,14 @@ class Dispatcher
                 $controller->setContainer($this->container);
                 $controller->init();
 
-                return $controller->{$actionName}();
+                $reflectionMethod = new \ReflectionMethod($controllerClassName, $actionName);
+                $params = $reflectionMethod->getParameters();
+
+                if (count($params) == 1) {
+                    return $reflectionMethod->invokeArgs($controller, array($this->container->get('request')));
+                } else {
+                    return $controller->{$actionName}();
+                }
             } else {
                 throw new ResourceNotFoundException(
                     "Route class '$controllerClassName' don't exists."
