@@ -652,7 +652,7 @@ Options -Indexes
     #especiales/category/slug-slug/20111208174136001340.html
     RewriteRule ^especiales/([a-z0-9\-]+)/(.*)/([0-9]+).html$ controllers/special.php?action=show&category_name=$1&special_id=$3 [L,NC]
     RewriteRule ^especiales/([a-z]+)/?$ controllers/special.php?category_name=$1  [L,NC]
-    RewriteRule ^especiales/?$ special.php [L,NC]
+    RewriteRule ^especiales/?$ special.php?category_name=cronicas [L,NC]
 
     # HEMEROTECA
     #hemeroteca/yyyy-mm-dd/category_name.html
@@ -715,7 +715,6 @@ Options -Indexes
     RewriteRule ^media/files/advertisements/(.*)?$ /media/cronicas/files/advertisements/$1 [R=301,L,NC]
 
     ##### END CRONNICAS ####
-
 
     RewriteRule ^articulo/(.*)/([0-9]+).htm  /articulo/$1/$2.html [R=301,L,NC]
     RewriteRule ^opinion/(.*)/([0-9]+).htm  /opinion/$1/$2.html [R=301,L,NC]
