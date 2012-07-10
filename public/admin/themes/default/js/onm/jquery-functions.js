@@ -10,7 +10,6 @@ saveSortPositions = function(controller) {
     jQuery( "tbody.sortable tr" ).each(function(){
         items_id.push(jQuery(this).data("id"));
     });
-
     jQuery.ajax({
        type: "GET",
        url: controller,

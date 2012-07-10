@@ -137,7 +137,7 @@ class CoversController extends Controller
             'kiosko',
             $filter,
             'contents.in_litter != 1 AND kioskos.favorite = 1',
-            'ORDER BY date DESC',
+            'ORDER BY position ASC, date DESC',
             $page,
             $itemsPerPage
         );
@@ -145,12 +145,11 @@ class CoversController extends Controller
         $aut = new \User();
         $ccm = \ContentCategoryManager::get_instance();
         foreach ($covers as &$cover) {
-            $cover->publisher = $aut->get_user_name($cover->fk_publisher);
-            $cover->editor = $aut->get_user_name($cover->fk_user_last_editor);
+            $cover->publisher      = $aut->get_user_name($cover->fk_publisher);
+            $cover->editor         = $aut->get_user_name($cover->fk_user_last_editor);
             $cover->category_name  = $ccm->get_name($cover->category);
             $cover->category_title = $ccm->get_title($cover->category_name);
         }
-
 
         // Build the pager
         $pagination = \Pager::factory(array(
@@ -545,25 +544,24 @@ class CoversController extends Controller
     {
         $request = $this->get('request');
 
-        $positions = $request->request->get('positions');
+        $positions = $request->query->get('positions');
+
         $msg = '';
         if (isset($positions)
             && is_array($positions)
             && count($positions) > 0
         ) {
             $_positions = array();
-            $pos = 1;
 
-            foreach ($positions as $id) {
+            foreach ($positions as $pos => $id) {
                 $_positions[] = array($pos, '1', $id);
-                $pos += 1;
             }
 
             $cover = new \Kiosko();
             $msg = $cover->set_position($_positions, $_SESSION['userid']);
         }
 
-        if (empty($msg)) {
+        if ($msg) {
             $msg = "<div class='alert alert-success'>"._("Positions saved successfully.").'<button data-dismiss="alert" class="close">×</button></div>';
         } else {
             $msg = "<div class='alert alert-error'>"._("Unable to save the new positions. Please contact with your system administrator.").'<button data-dismiss="alert" class="close">×</button></div>';

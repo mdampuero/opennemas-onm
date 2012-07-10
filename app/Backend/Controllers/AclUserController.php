@@ -12,10 +12,10 @@ namespace Backend\Controllers;
 use Onm\Framework\Controller\Controller,
     Onm\Message as m;
 /**
- * Handles the actions for the system information
+ * Handles the system users
  *
  * @package Backend_Controllers
- * @author
+ * @author OpenHost Developers <developers@openhost.es>
  **/
 class AclUserController extends Controller
 {
@@ -34,13 +34,13 @@ class AclUserController extends Controller
     /**
      * Show a paginated list of users
      *
-     * @return void
+     * @return Response the response object
      **/
-    public function listAction()
+    public function listAction(Request $request)
     {
         $this->checkAclOrForward('USER_ADMIN');
 
-        $filter    = $this->request->query->get('filter', null);
+        $filter    = $request->query->get('filter', null);
 
         $user      = new \User();
         $users     = $user->get_users($filter, ' ORDER BY login ');
@@ -64,7 +64,7 @@ class AclUserController extends Controller
     /**
      * Shows the user information given its id
      *
-     * @return void
+     * @return Response the response object
      **/
     public function showAction()
     {
@@ -100,7 +100,9 @@ class AclUserController extends Controller
     /**
      * Handles the update action for a user given its id
      *
-     * @return string the response string
+     * After finish the task redirects the user to the proper place
+     *
+     * @return Response the response object
      **/
     public function updateAction()
     {
