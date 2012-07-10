@@ -17,6 +17,17 @@ function underscore($name) {
     return $withUnderscore;
 }
 
+function classify($name) {
+    $parts = explode('_', $name);
+
+    $parts = array_map(function ($token){
+        return ucfirst($token);
+    }, $parts);
+    $className = implode('', $parts);
+
+    return $className;
+}
+
 function tableize($name) {
     return pluralize(underscore($name));
 }

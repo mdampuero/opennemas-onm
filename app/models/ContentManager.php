@@ -43,7 +43,7 @@ class ContentManager
 
         if ($rs !== false) {
             while (!$rs->EOF) {
-                $contentType = ucfirst($contentType);
+                $contentType = classify($contentType);
                 $obj = new $contentType();
                 $obj->load($rs->fields);
 
@@ -1616,6 +1616,8 @@ class ContentManager
                  . $orderBy
                  . $limit;
         }
+        // var_dump($sql);die();
+
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         $items = $this->loadObject($rs, $contentType);
