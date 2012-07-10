@@ -7,12 +7,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  **/
-
 namespace Backend\Controllers;
 
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
+use Onm\Message as m;
+
 /**
  * Handles the actions for the system information
  *

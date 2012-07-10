@@ -9,10 +9,11 @@
  **/
 namespace Backend\Controllers;
 
-use Onm\Framework\Controller\Controller,
-    Symfony\Component\HttpFoundation\Response,
-    Onm\Message as m,
-    Onm\Settings as s;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Onm\Framework\Controller\Controller;
+use Onm\Settings as s;
+use Onm\Message as m;
 
 /**
  * Handles the actions for the efe module

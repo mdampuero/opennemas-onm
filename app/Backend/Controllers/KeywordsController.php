@@ -9,8 +9,12 @@
  **/
 namespace Backend\Controllers;
 
-use Onm\Framework\Controller\Controller,
-    Onm\Message as m;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Onm\Framework\Controller\Controller;
+use Onm\Settings as s;
+use Onm\Message as m;
+
 /**
  * Handles the actions for the system information
  *
@@ -134,7 +138,7 @@ class KeywordsController extends Controller
 
             $this->redirect('admin_keywords');
         } else {
-            return $this->render(url('keywords/new.tpl'), array(
+            return $this->render('keywords/new.tpl', array(
                 'tipos' => array(
                     'url'       => _('URL'),
                     'intsearch' => _('Internal search'),

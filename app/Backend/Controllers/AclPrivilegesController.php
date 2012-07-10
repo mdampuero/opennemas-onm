@@ -9,8 +9,11 @@
  **/
 namespace Backend\Controllers;
 
-use Onm\Framework\Controller\Controller,
-    Onm\Message as m;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Onm\Framework\Controller\Controller;
+use Onm\Settings as s;
+use Onm\Message as m;
 /**
  * Handles the actions for the system information
  *
@@ -32,9 +35,8 @@ class AclPrivilegesController extends Controller
         if (!\Acl::isMaster()) {
             m::add("You don't have permissions");
 
-            return $this->redirect(url('admin_welcome'));
+            return $this->redirect($this->generateUrl('admin_welcome'));
         }
-
         $this->privilege = new \Privilege();
     }
 
@@ -43,19 +45,21 @@ class AclPrivilegesController extends Controller
      *
      * @return void
      **/
-    public function listAction()
+    public function listAction(Request $request)
     {
+        $module = $request->query->filter('module', null, FILTER_SANITIZE_STRING);
+        $privilege = new \Privilege();
 
         $filter = ' 1=1 ';
-        if (isset($_REQUEST['module']) && !empty($_REQUEST['module'])) {
-            $filter = 'module="'.$_REQUEST['module'].'"';
+        if (!is_null($module)) {
+            $filter = 'module="'.$module.'"';
         }
 
-        $privileges = $this->privilege->get_privileges($filter);
+        $privileges = $privilege->get_privileges($filter);
 
         return $this->render('acl/privilege/list.tpl', array(
             'privileges' => $privileges,
-            'modules'    => $this->privilege->getModuleNames()
+            'modules'    => $privilege->getModuleNames()
         ));
     }
 
@@ -64,8 +68,10 @@ class AclPrivilegesController extends Controller
      *
      * @return string the response string
      **/
-    public function createAction()
+    public function createAction(Request $request)
     {
+
+        $this->privilege = new \Privilege();
 
         if ($this->request->getMethod() == 'POST') {
             // Try to save the new privilege
@@ -73,7 +79,7 @@ class AclPrivilegesController extends Controller
                 // If privilege was saved successfully and the action
                 // is validate show again the form
                 if ($this->request->get('action') != 'validate') {
-                    $this->redirect(url('admin_acl_privileges'));
+                    $this->redirect($this->generateUrl('admin_acl_privileges'));
                 }
             } else {
                 $this->view->assign('errors', $privilege->errors);
@@ -91,7 +97,7 @@ class AclPrivilegesController extends Controller
      *
      * @return string the response string
      **/
-    public function showAction()
+    public function showAction(Request $request)
     {
         $id = $this->request->query->filter('id', FILTER_VALIDATE_INT);
 
@@ -110,11 +116,11 @@ class AclPrivilegesController extends Controller
      *
      * @return string the return string
      **/
-    public function updateAction()
+    public function updateAction(Request $request)
     {
         m::add("For now is not possible to update privilege information.");
         //$privilege->update( $_REQUEST );
-        return $this->redirect(url('admin_acl_privileges'));
+        return $this->redirect($this->generateUrl('admin_acl_privileges'));
     }
 
     /**
@@ -122,16 +128,16 @@ class AclPrivilegesController extends Controller
      *
      * @return string the string response
      **/
-    public function deleteAction()
+    public function deleteAction(Request $request)
     {
-        $id = $this->request->query->filter('id', FILTER_VALIDATE_INT);
+        $id = $request->query->filter('id', FILTER_VALIDATE_INT);
 
         $deleted = $this->privilege->delete($id);
         if (!$deleted) {
             m::add(sprintf(_('Unable to delete privilege with id "%d"')), $id);
         }
 
-        return $this->redirect(url('admin_acl_privileges'));
+        return $this->redirect($this->generateUrl('admin_acl_privileges'));
     }
 
 } // END class AclPrivilegesController

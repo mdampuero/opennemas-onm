@@ -9,10 +9,12 @@
  **/
 namespace Backend\Controllers;
 
-use Onm\Framework\Controller\Controller,
-    Onm\Settings as s,
-    Onm\Message as m,
-    Onm\Module\ModuleManager;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Onm\Framework\Controller\Controller;
+use Onm\Settings as s;
+use Onm\Message as m;
+use Onm\Module\ModuleManager;
 /**
  * Handles all the request for Welcome actions
  *
@@ -91,7 +93,7 @@ class SystemSettingsController extends Controller
         m::add(_('Settings saved.'), m::SUCCESS);
 
         // Send the user back to the form
-        return $this->redirect(url('admin_system_settings', array(), true));
+        return $this->redirect($this->generateUrl('admin_system_settings', array(), true));
     }
 
 } // END class SystemSettigns

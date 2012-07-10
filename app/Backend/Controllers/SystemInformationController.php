@@ -9,8 +9,12 @@
  **/
 namespace Backend\Controllers;
 
-use Onm\Framework\Controller\Controller,
-    Onm\Message as m;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Onm\Framework\Controller\Controller;
+use Onm\Settings as s;
+use Onm\Message as m;
+
 /**
  * Handles the actions for the system information
  *
@@ -29,7 +33,7 @@ class SystemInformationController extends Controller
         if (!\Acl::isMaster()) {
             m::add(_("You don't have permissions to access to the system information."));
 
-            return $this->redirect(url('admin_welcome'));
+            return $this->redirect($this->generateUrl('admin_welcome'));
         }
 
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);

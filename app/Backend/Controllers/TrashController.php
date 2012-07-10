@@ -9,10 +9,12 @@
  **/
 namespace Backend\Controllers;
 
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
+use Onm\Message as m;
+
 /**
  * Handles the actions for the system information
  *
@@ -119,7 +121,7 @@ class TrashController extends Controller
             m::add(sprintf(_('Unable to find content with id "%d".'), $contentId), m::ERROR);
         }
 
-        return $this->redirect(url(
+        return $this->redirect($this->generateUrl(
             'admin_trash',
             array('mytype' => $this->filterContentType, 'page' => $this->page)
         ));
@@ -156,7 +158,7 @@ class TrashController extends Controller
             m::add(sprintf(_('Unable to find content with id "%d".'), $contentId), m::ERROR);
         }
 
-        return $this->redirect(url(
+        return $this->redirect($this->generateUrl(
             'admin_trash',
             array('mytype' => $this->filterContentType, 'page' => $this->page)
         ));
@@ -193,7 +195,7 @@ class TrashController extends Controller
             m::add(_('You must specify contents for delete.'));
         }
 
-        return $this->redirect(url(
+        return $this->redirect($this->generateUrl(
             'admin_trash',
             array('mytype' => $this->filterContentType, 'page' => $this->page)
         ));
@@ -229,7 +231,7 @@ class TrashController extends Controller
             m::add(_('You must specify contents for restore.'));
         }
 
-        return $this->redirect(url(
+        return $this->redirect($this->generateUrl(
             'admin_trash',
             array('mytype' => $this->filterContentType, 'page' => $this->page)
         ));

@@ -9,12 +9,12 @@
  **/
 namespace Backend\Controllers;
 
-use Onm\Framework\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Onm\StringUtils;
-use Onm\Message as m;
+use Symfony\Component\HttpFoundation\Request;
+use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
+use Onm\Message as m;
+use Onm\StringUtils;
 
 /**
  * Handles the actions for the system information
