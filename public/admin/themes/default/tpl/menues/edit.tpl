@@ -3,38 +3,16 @@
 {block name="footer-js" append}
     {script_tag src="/utilsMenues.js" language="javascript"}
     {script_tag src="/onm/jquery.menues.js"}
-    <script type="text/javascript">
+    <script>
     jQuery(document).ready(function() {
         jQuery( "#menu-form" ).tabs();
     });
     </script>
 {/block}
 
-{block name="header-js" append}{/block}
-
 {block name="header-css" append}
 {css_tag href="/managerMenu.css" media="screen,projection"}
-<style type="text/css">
-label {
-    display:block;
-    color:#666;
-    text-transform:uppercase;
-}
-.utilities-conf label {
-    text-transform:none;
-}
 
-fieldset {
-    border:none;
-    border-top:1px solid #ccc;
-}
-legend {
-    color:#666;
-    text-transform:uppercase;
-    font-size:13px;
-    padding:0 10px;
-}
-</style>
 {/block}
 
 {block name="content"}
@@ -64,7 +42,7 @@ legend {
                 </li>
                 <li class="separator"></li>
                 <li>
-                    <a  href="{$smarty.server.PHP_SELF}?action=list"  title="{t}Go back{/t}">
+                    <a  href="{url name=admin_menus}"  title="{t}Go back{/t}">
                         <img src="{$params.IMAGE_DIR}previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
                     </a>
                 </li>
@@ -320,11 +298,14 @@ legend {
             </tbody>
         </table>
         <div id="linkInsertions" class="reveal-modal" style="display:none;">
+            <p>{t}Fill the below form with the title and the external URL you want to add to the menu.{/t}</p>
             <label>{t}Title:{/t}</label> <input type="text" name="itemTitle" value="" id="itemTitle" size="60">
             <br><br>
-            <label>{t}Link:{/t}</label> <input type="text" name="link" value="" id="link" size="60"> <br>
-             <input type="hidden" name="IdItem" id="IdItem" value="" />
+            <label>{t}URL:{/t}</label> <input type="text" name="link" value="" id="link" size="60"> <br>
+            <hr>
             <button id="saveButton"  class="save-button onm-button green" type="button">{t}Save{/t}</button>
+
+            <input type="hidden" name="IdItem" id="IdItem" value="" />
             <a title="Close" onclick="hideDiv();" class="close-reveal-modal">&#215;</a></div>
         </div>
         <input type="hidden" id="action" name="action" value="" />

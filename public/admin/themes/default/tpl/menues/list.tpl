@@ -66,28 +66,34 @@
                                        name="selected_fld[]" value="{$menues[m]->pk_menu}" style="cursor:pointer;" >
                             </td>
                             <td>
-                            {acl isAllowed="MENU_UPDATE"}
-                                <a href="{$smarty.server.SCRIPT_NAME}?action=read&name={$menues[m]->name}"
-                             {/acl}
+                                {acl isAllowed="MENU_UPDATE"}
+                                <a href="{url name=admin_menu_show id=$menues[m]->pk_menu}"
                                     title="{t 1=$menues[m]->name}Edit page '%1'{/t}" title={t}"Edit"{/t}>
+                                {/acl}
+                                {acl isAllowed="MENU_UPDATE"}
                                      {$menues[m]->name|capitalize}
-                                 </a>
+                                </a>
+                                {/acl}
                             </td>
                              <td class="right">
+                                <div class="btn-group">
                                 {acl isAllowed="MENU_UPDATE"}
-                                <a href="{$smarty.server.SCRIPT_NAME}?action=read&amp;name={$menues[m]->name}" \
-                                    title="{t 1=$menues[m]->name}Edit page '%1'{/t}" class="btn btn-mini">
-                                    {t}Edit{/t}
+                                <a href="{url name=admin_menu_show id=$menues[m]->pk_menu}" \
+                                    title="{t 1=$menues[m]->name}Edit page '%1'{/t}" class="btn">
+                                    <i class="icon-pencil"></i> {t}Edit{/t}
                                 </a>
                                 {/acl}
                                 {if $menues[m]->type eq 'user'}
                                     {acl isAllowed="MENU_ADMIN"}
-                                        <a  class="del btn btn-mini btn-danger" data-controls-modal="modal-from-dom"
-                                            data-id="{$menues[m]->pk_menu}" data-title="{$menues[m]->name|capitalize}"   href="#" >
-                                            {t}Delete{/t}
+                                        <a  class="del btn btn-danger" data-controls-modal="modal-from-dom"
+                                            data-url="{url name=admin_menu_delete id=$menues[m]->pk_menu}"
+                                            data-title="{$menues[m]->name|capitalize}"
+                                            href="{url name=admin_menus_delete id=$menues[m]->pk_menu}">
+                                            <i class="icon-trash icon-white"></i>
                                         </a>
                                     {/acl}
                                 {/if}
+                                </div>
                             </td>
                         </tr>
 
@@ -103,7 +109,7 @@
                                     <td style="padding-left:20px">
                                         <strong>&rArr; </strong>
                                         {acl isAllowed="MENU_UPDATE"}
-                                        <a href="{$smarty.server.SCRIPT_NAME}?action=read&amp;name={$subMenu[s]->name}"
+                                        <a href="{url name=admin_menu_show id=$subMenu[s]->name}"
                                         {/acl}
                                            title="{t 1=$subMenu[s]->name}Edit page '%1'{/t}" title={t}"Edit"{/t}>
                                             {$subMenu[s]->name|capitalize}
@@ -111,21 +117,24 @@
                                     </td>
 
                                     <td class="right">
+                                        <div class="btn-group">
                                         {acl isAllowed="MENU_UPDATE"}
-                                        <a href="{$smarty.server.SCRIPT_NAME}?action=read&amp;name={$subMenu[s]->name}" \
-                                            title="{t}Edit{/t}" class="btn btn-mini">
-                                            {t}Edit{/t}
+                                        <a href="{url name=admin_menu_show id=$subMenu[s]->name}" \
+                                            title="{t}Edit{/t}" class="btn">
+                                            <i class="icon-pencil"></i> {t}Edit{/t}
                                         </a>
                                         {/acl}
                                         {if $subMenu[s]->type eq 'user'}
                                             {acl isAllowed="MENU_ADMIN"}
-                                                <a  class="del btn btn-mini btn-danger" data-controls-modal="modal-from-dom"
-                                                   data-id="{$subMenu[s]->pk_menu}"
-                                                       data-title="{$subMenu[s]->name|capitalize}" href="#" >
-                                                    {t}Delete{/t}
+                                                <a  class="del btn btn-danger" data-controls-modal="modal-from-dom"
+                                                    data-url="{url name=admin_menu_delete id=$subMenu[s]->pk_menu}"
+                                                    data-title="{$subMenu[s]->name|capitalize}"
+                                                    href="{url name=admin_menu_delete id=$subMenu[s]->pk_menu}">
+                                                    <i class="icon-trash icon-white"></i>
                                                 </a>
                                             {/acl}
                                         {/if}
+                                        </div>
                                     </td>
                                 </tr>
                                  {/section}
@@ -154,21 +163,23 @@
                             </td>
 
                             <td class="right">
+                                <div class="bnt-group">
                                 {acl isAllowed="MENU_UPDATE"}
-                                <a  href="{$smarty.server.SCRIPT_NAME}?action=read&amp;name={$withoutFather[m]->name}"
-                                    title="{t 1=$subMenu[s]->name}Edit page '%1'{/t}" class="btn btn-mini">
-                                    {t}Edit{/t}
-                                </a>
+                                    <a  href="{$smarty.server.SCRIPT_NAME}?action=read&amp;name={$withoutFather[m]->name}"
+                                        title="{t 1=$subMenu[s]->name}Edit page '%1'{/t}" class="btn">
+                                        {t}Edit{/t}
+                                    </a>
                                 {/acl}
                                 {if $withoutFather[m]->type eq 'user'}
                                     {acl isAllowed="MENU_ADMIN"}
-                                        <a  class="del btn btn-mini btn-danger" data-controls-modal="modal-from-dom"
+                                        <a  class="del btn btn-danger" data-controls-modal="modal-from-dom"
                                            data-id="{$withoutFather[m]->pk_menu}" title="{t}Delete{/t}"
                                            data-title="{$widgets[wgt]->title|capitalize}" href="#" >
                                             {t}Delete{/t}
                                         </a>
                                     {/acl}
                                 {/if}
+                                </div>
                             </td>
                         </tr>
                        {/section}

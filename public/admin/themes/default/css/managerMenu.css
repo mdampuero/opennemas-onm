@@ -17,14 +17,12 @@
 #menuelements li:hover, .elementsContainer li:hover { background:#FFF}
 
 .reveal-modal {
-
-    top: 90px;
+    top: 20%;
     left: 50%;
     margin-left: -300px;
     width: 440px;
-    height: 80px;
     background: #FFF;
-    background: rgba(255,255,255,.9);
+    background: #fff;
     position: absolute;
     z-index: 101;
     padding: 30px 40px 34px;
@@ -34,7 +32,7 @@
     -moz-box-shadow: 0 0 10px rgba(0,0,0,.4);
     -webkit-box-shadow: 0 0 10px rgba(0,0,0,.4);
     -box-shadow: 0 0 10px rgba(0,0,0,.4);
-    }
+}
 
 .reveal-modal .close-reveal-modal {
     font-size: 22px;
@@ -46,13 +44,8 @@
     text-shadow: 0 -1px 1px rbga(0,0,0,.6);
     font-weight: bold;
     cursor: pointer;
-    }
-.save-button{
-    position: absolute;
-    top: 110px;
-    right: 20px;
-    cursor: pointer;
-		}
+}
+.save-button { cursor: pointer; }
 
 .div-actions {
     background: #CCCCCC;
@@ -61,4 +54,4 @@
     -webkit-box-shadow: 0 0 10px rgba(0,0,0,.4);
     -box-shadow: 0 0 10px rgba(0,0,0,.4);
     padding: 5px;
-    }
+}

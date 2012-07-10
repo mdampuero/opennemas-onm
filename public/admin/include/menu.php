@@ -37,7 +37,7 @@ $menuXml = '<?xml version="1.0"?>
             privilege="MENU_ADMIN"
             title="'.htmlspecialchars(_("Menu manager"), ENT_QUOTES).'"
             id="menu_manager"
-            link="/admin/controllers/menues/menues.php"
+            link="'.url('admin_menus').'"
         />
     </submenu>
 
