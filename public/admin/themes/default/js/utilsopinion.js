@@ -15,16 +15,16 @@ function changePhotos(fk_author)
                         new Draggable(photos[i].id, { revert:true }  );
                         Imagen = new Image();
                         Imagen.setAttribute('id',photos[i].id);
-	       		    	Imagen.onload=function(){
-       			    		$('widget').src=this.src;
-       			    		$('fk_author_img_widget').value=this.id;
-       			    		$('fk_author_img').value=this.id;
-       		   			    $('seleccionada').src=this.src;
-	       		    	};
-	       		    	Imagen.src=photos[i].src+'?'+Math.random();
-	       		    //	 debugger;
+      	       		    	Imagen.onload=function(){
+             			    		$('widget').src=this.src;
+             			    		$('fk_author_img_widget').value=this.id;
+             			    		$('fk_author_img').value=this.id;
+             		   			    $('seleccionada').src=this.src;
+      	       		    	};
+      	       		    	Imagen.src=photos[i].src+'?'+Math.random();
+      	       		    //	 debugger;
                     } catch(e) {
-                     // console.debug( e );
+                     //  console.debug( e );
                     }
                 }
             }
@@ -109,12 +109,12 @@ function savePositionsOpinion() {
     }
 }
 
-function changeList(author)
+function changeList(author, status)
 {
-    new Ajax.Updater('list_opinion', "opinion.php?action=change_list_byauthor&author="+author );
+    new Ajax.Updater('list_opinion', "opinion.php?action=change_list_byauthor&author="+author+"&opinion-status="+status );
 }
 
-function changepageList(author,page)
+function changepageList(author, page)
 {
     new Ajax.Updater('list_opinion', "opinion.php?action=change_list_byauthor&author="+author+"&page="+page );
 }

@@ -2,8 +2,15 @@
 <table class="adminheading">
 	<tr>
 		<th align="right">
+            {t}Opinion Status:{/t}
+            <select name="opinion-status" id=="opinion-status" onchange="changeList('{$author}',this.options[this.selectedIndex].value);">
+                <option value="all" {if isset($author) && $opinionStatus eq "all"} selected {/if}> {t}All{/t} </option>
+                <option value="1" {if  $opinionStatus eq "1"} selected {/if}> {t}Yes{/t} </option>
+                <option value="0" {if $opinionStatus eq "0"} selected {/if}> {t}No{/t} </option>
+            </select>
+             &nbsp;&nbsp;&nbsp;
             {t}Select an author{/t}
-            <select name="autores" id="autores" class="" onChange='changeList(this.options[this.selectedIndex].value);'>
+            <select name="autores" id="autores" onChange='changeList(this.options[this.selectedIndex].value, "{$opinionStatus|default:"all"}");'>
                 <option value="0" {if isset($author) && $author eq "0"} selected {/if}> {t}All{/t} </option>
                 {section name=as loop=$autores}
                     <option value="{$autores[as]->pk_author}" {if isset($author) && $author eq $autores[as]->pk_author} selected {/if}>{$autores[as]->name}</option>

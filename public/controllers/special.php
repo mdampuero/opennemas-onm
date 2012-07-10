@@ -97,6 +97,9 @@ switch ($action) {
                             $content->loadCategoryName($item['fk_content']);
                         $content->category_title =
                             $content->loadCategoryTitle($item['fk_content']);
+                         // Load attached and related contents from array
+                        $content->loadAttachedVideo()
+                                ->loadRelatedContents($category_name);
 
                     }
                 }

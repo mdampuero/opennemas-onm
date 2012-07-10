@@ -15,7 +15,7 @@ $url = filter_input(INPUT_GET, 'url', FILTER_SANITIZE_URL);
 //Is category initialized redirect the user to /
 preg_match('%^seccion/(?P<category_name>[a-z0-9\-\._]+)/$%i', $url, $sections);
 
-$category_name = isset($section[1])? $section[1] : null;
+$category_name = isset($sections[1])? $sections[1] : null;
 
 $subcategory_name = filter_input(INPUT_GET, 'subcategory_name', FILTER_SANITIZE_STRING);
 $page = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_STRING);
