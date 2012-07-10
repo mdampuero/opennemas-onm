@@ -68,20 +68,23 @@
                     </td>
 
                     <td class="right" >
+                        <div class="btn-group">
+
                         {if ($widgets[wgt]->renderlet != 'intelligentwidget' or true)}
                         {acl isAllowed="WIDGET_UPDATE"}
-                        <a href="{url name=admin_widget_show id=$widgets[wgt]->pk_widget page=$page}" title="{t}Edit{/t}" class="btn btn-mini">
-                            {t}Edit{/t}
+                        <a href="{url name=admin_widget_show id=$widgets[wgt]->pk_widget page=$page}" title="{t}Edit{/t}" class="btn">
+                            <i class="icon-pencil"></i> {t}Edit{/t}
                         </a>
                         {/acl}
                         {acl isAllowed="WIDGET_DELETE"}
-                            <a class="del btn btn-mini btn-danger" data-controls-modal="modal-from-dom"
+                            <a class="del btn btn-danger" data-controls-modal="modal-from-dom"
                                data-url="{url name=admin_widget_delete id=$widgets[wgt]->pk_widget page=$page}" title="{t}Delete{/t}"
                                data-title="{$widgets[wgt]->title|capitalize}" href="{url name=admin_widget_delete id=$widgets[wgt]->pk_widget page=$page}" >
-                                {t}Delete{/t}
+                                <i class="icon-trash icon-white"></i>
                             </a>
                         {/acl}
                         {/if}
+                        </div>
                     </td>
                 </tr>
                 {sectionelse}
