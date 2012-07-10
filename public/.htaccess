@@ -716,6 +716,16 @@ Options -Indexes
 
     ##### END CRONNICAS ####
 
+    #opinion.php?opinion_id=5709&action=read
+    RewriteCond %{QUERY_STRING} &?opinion_id=([^&]+)&?action=read
+    RewriteRule ^opinion.php$ controllers/opinion_inner.php?opinion_id=%1&action=read [L,NC]
+
+    #article.php?article_id=6980&category=1&action=read
+    RewriteCond %{QUERY_STRING} &?article_id=([^&]+)&?category=([^&]+)&?action=read
+    RewriteRule ^article.php$ controllers/article.php?article_id=%1&action=read [L,NC]
+
+
+
     RewriteRule ^articulo/(.*)/([0-9]+).htm  /articulo/$1/$2.html [R=301,L,NC]
     RewriteRule ^opinion/(.*)/([0-9]+).htm  /opinion/$1/$2.html [R=301,L,NC]
 
