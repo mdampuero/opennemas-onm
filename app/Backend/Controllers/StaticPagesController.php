@@ -10,6 +10,7 @@
 namespace Backend\Controllers;
 
 use Onm\Framework\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Onm\StringUtils;
 use Onm\Message as m;
@@ -36,43 +37,63 @@ class StaticPagesController extends Controller
     }
 
     /**
-     * Description of the action
+     * Shows a list of the static pages
+     *
+     * @param Request $request the request object
      *
      * @return Symfony\Component\HttpFoundation\Response the response object
      **/
-    public function listAction()
+    public function listAction(Request $request)
     {
-        $filter        = null;
-        $request       = $this->get('request');
         $requestFilter = $request->query->get('filter');
+        $page          = $request->query->getDigits('page', 1);
+        $itemsPerPage  = s::get('items_per_page', 20);
+
+        $filter        = 'contents.in_litter != 1';
         if (is_array($requestFilter)
             && array_key_exists('title', $requestFilter)) {
-            $filter = '`title` LIKE "%' . $requestFilter['title'] . '%"';
+            $filter .= ' AND `title` LIKE "%' . $requestFilter['title'] . '%"';
         }
 
-        $page       = $request->query->filter('page', 0, FILTER_VALIDATE_INT);
-        $itemsPerPage = s::get('items_per_page') ?: 20;
-
         $cm = new \ContentManager();
-        list($pages, $pager) = $cm->find_pages(
-            'StaticPage', $filter, 'ORDER BY created DESC ', $page, $itemsPerPage
+        list($countPages, $pages) = $cm->getCountAndSlice(
+            'StaticPage',
+            null,
+            $filter,
+            'ORDER BY created DESC ',
+            $page,
+            $itemsPerPage
         );
+
+        // Build the pager
+        $pagination = \Pager::factory(array(
+            'mode'        => 'Sliding',
+            'perPage'     => $itemsPerPage,
+            'append'      => false,
+            'path'        => '',
+            'delta'       => 4,
+            'clearIfVoid' => true,
+            'urlVar'      => 'page',
+            'totalItems'  => $countPages,
+            'fileName'    => $this->generateUrl('admin_staticpages').'?page=%d',
+        ));
 
         return $this->render('static_pages/list.tpl', array(
             'pages' => $pages,
-            'pager' => $pager,
+            'pager' => $pagination,
         ));
     }
 
     /**
      * Shows the edit form
      *
+     * @param Request $request the request object
+     *
      * @return Symfony\Component\HttpFoundation\Response the response object
      **/
-    public function showAction()
+    public function showAction(Request $request)
     {
-        $request = $this->get('request');
-        $id      = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
+        $id = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
 
         if (!is_null($id)) {
             $staticPage = new \StaticPage();
@@ -83,7 +104,7 @@ class StaticPagesController extends Controller
                 'page' => $staticPage,
             ));
         } else {
-            m::add(sprintf(_('Static page with id "%d" doesn\'t exists.'), $id), m::ERROR);
+            m::add(sprintf(_('Unable to find a static page with the id "%d".'), $id), m::ERROR);
 
             return $this->redirect($this->generateUrl('admin_staticpages'));
         }
@@ -92,15 +113,16 @@ class StaticPagesController extends Controller
     /**
      * Handles the creation of a new static page
      *
+     * @param Request $request the request object
+     *
      * @return Symfony\Component\HttpFoundation\Response the response object
      **/
-    public function createAction()
+    public function createAction(Request $request)
     {
-        if ('POST' != $this->request->getMethod()) {
+        if ('POST' != $request->getMethod()) {
             return $this->render('static_pages/read.tpl');
         } else {
 
-            $request    = $this->get('request');
             $staticPage = new \StaticPage();
 
             $data = array(
@@ -122,6 +144,7 @@ class StaticPagesController extends Controller
             );
 
             $staticPage->save($data);
+            m::add(sprintf(_('Static page "%s" created successfully.'), $data['title']));
 
             return $this->redirect($this->generateUrl('admin_staticpages'));
         }
@@ -130,19 +153,19 @@ class StaticPagesController extends Controller
     /**
      * Updates a static page given its id
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
-    public function updateAction()
+    public function updateAction(Request $request)
     {
         $this->checkAclOrForward('STATIC_UPDATE');
 
-        $request    = $this->get('request');
         $id         = $request->query->getDigits('id');
         $continue   = $request->request->filter('continue', false, FILTER_SANITIZE_STRING);
         $staticPage = new \StaticPage($id);
 
-        if ($staticPage->id != null) {
-
+        if (!is_null($staticPage->id)) {
             if (!\Acl::isAdmin()
                 && !\Acl::check('CONTENT_OTHER_UPDATE')
                 && $staticPage->pk_user != $_SESSION['userid']) {
@@ -191,22 +214,23 @@ class StaticPagesController extends Controller
     /**
      * Deletes an static page given its id
      *
+     * @param Request $request the request object
+     *
      * @return Symfony\Component\HttpFoundation\Response the response object
      **/
-    public function deleteAction()
+    public function deleteAction(Request $request)
     {
         $this->checkAclOrForward('STATIC_DELETE');
 
-        $request = $request = $this->get('request');
-        $id      = $request->getDigits('id');
-        $page    = $request->getDigits('page', 1);
-var_dump($id );
+        $id      = $request->query->getDigits('id');
+        $page    = $request->query->getDigits('page', 1);
+
         if (!empty($id)) {
             $staticPage = new \StaticPage($id);
             $staticPage->delete($id, $_SESSION['userid']);
-            m::add(_("Static Page '{$page->title}' deleted successfully."), m::SUCCESS);
+            m::add(sprintf(_("Static Page '%s' deleted successfully."), $staticPage->title), m::SUCCESS);
         } else {
-            m::add(_('You must give an id for delete the static page.'), m::ERROR);
+            m::add(_('You must provide a valid an id for delete the static page.'), m::ERROR);
         }
 
         return $this->redirect($this->generateUrl(
@@ -220,9 +244,11 @@ var_dump($id );
     /**
      * Change availability for one page given its id
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
-    public function toggleAvailabilityAction()
+    public function toggleAvailabilityAction(Request $request)
     {
         \Acl::checkOrForward('STATIC_AVAILABLE');
 
@@ -240,7 +266,7 @@ var_dump($id );
             if ($status == 0) {
                 $staticPage->set_favorite($status);
             }
-            m::add(sprintf(_('Successfully changed availability for page with id "%d"'), $id), m::SUCCESS);
+            m::add(sprintf(_('Successfully changed availability for page with id "%s"'), $staticPage->title), m::SUCCESS);
         }
 
         return $this->redirect($this->generateUrl(
@@ -254,15 +280,14 @@ var_dump($id );
     /**
      * Change slug for one static page given its id
      *
+     * @param Request $request the request object
+     *
      * @return Ajax Response the response object
      **/
 
-    public function  buildSlugAction()
+    public function  buildSlugAction(Request $request)
     {
-        $request  = $this->get('request');
-        /**
-         * If the action is an Ajax request handle it, if not redirect to list
-         */
+        // If the action is an Ajax request handle it, if not redirect to list
         $data = array(
                     'title'    => $request->request->filter('title', null, FILTER_SANITIZE_STRING),
                     'slug'     => $request->request->filter('slug', null, FILTER_SANITIZE_STRING),
@@ -286,27 +311,23 @@ var_dump($id );
     /**
      * Change metadata for one static page given its id
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
-    public function  cleanMetadataAction()
+    public function  cleanMetadataAction(Request $request)
     {
-        $request  = $this->get('request');
         $metadata = $request->request->filter('metadata', null, FILTER_SANITIZE_STRING);
-        /**
-         * If the action is an Ajax request handle it, if not redirect to list
-         */
+        // If the action is an Ajax request handle it, if not redirect to list
         if ($request->isXmlHttpRequest()) {
             try {
                 $output  = StringUtils::normalize_metadata($metadata);
-
             } catch (\Exception $e) {
                 $output = _( "Can't get static page metadata.");
             }
-
         }
 
         return new Response($output);
-
     }
 
 } // END class StaticPagesController

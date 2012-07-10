@@ -23,17 +23,17 @@ jQuery('.del').click(function(e) {
     jQuery('#modal-statics-delete .modal-body span').html( jQuery(this).data('title') );
     //Sets up the modal
     jQuery("#modal-statics-delete").modal('show');
-    jQuery("body").data("selected-for-del", jQuery(this).data("id"));
+    jQuery("body").data("selected-for-del", jQuery(this).data("url"));
     e.preventDefault();
 });
 
 jQuery('#modal-statics-delete a.btn.yes').on('click', function(e){
-    var delId = jQuery("body").data("selected-for-del");
-    if(delId) {
+    var url = jQuery("body").data("selected-for-del");
+
+    if (url) {
         jQuery.ajax({
-            url:  "{url name=admin_staticpages_delete id=DELETE}",
+            url:  url,
             type: "POST",
-            data: { action:"delete", id:delId },
             success: function(){
                 location.reload();
             }

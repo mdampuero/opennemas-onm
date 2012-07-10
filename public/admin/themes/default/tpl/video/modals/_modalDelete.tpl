@@ -25,16 +25,6 @@
         log(jQuery(this));
         jQuery('#modal-video-delete').data('url', jQuery(this).data('url'));
         jQuery('#modal-video-delete .modal-body span').html( jQuery(this).data('title') );
-        // jQuery.ajax({
-        //     url:  videos_manager.get_relations_url,
-        //     type: "GET",
-        //     data: { action:"getRelations", id: jQuery(this).data("id") },
-        //     success: function(response){
-        //         if(response != '') {
-        //             jQuery('#modal-video-delete div.relations').append(response);
-        //         }
-        //     }
-        // });
 
         //Sets up the modal
         jQuery("#modal-video-delete").modal('show');

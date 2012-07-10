@@ -185,7 +185,6 @@ class StaticPage extends Content
      */
     public function remove($id, $lastEditor = '')
     {
-
         parent::remove($id);
         $sql = 'DELETE FROM `static_pages`
                 WHERE `static_pages`.`pk_static_page`=?';

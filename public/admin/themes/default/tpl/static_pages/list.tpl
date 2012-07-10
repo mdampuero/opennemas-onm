@@ -15,6 +15,8 @@
 </div>
 <div class="wrapper-content">
 
+    {render_messages}
+
 	<form action="{url name=admin_staticpages}" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
 
         <div class="table-info clearfix">
@@ -63,11 +65,11 @@
                     <td class="center">
                         {acl isAllowed="STATIC_AVAILABLE"}
                         {if $pages[k]->available eq 1}
-                            <a href="{url name=admin_staticpages_toggle_availability id=$pages[k]->id status=0}" class="unavailable">
+                            <a href="{url name=admin_staticpages_toggle_availability id=$pages[k]->id status=0 page=$page}" class="unavailable">
                                 <img src="{$params.IMAGE_DIR}publish_g.png" border="0" title="{t}Published{/t}" />
                             </a>
                         {else}
-                            <a href="{url name=admin_staticpages_toggle_availability id=$pages[k]->id status=1}" class="available">
+                            <a href="{url name=admin_staticpages_toggle_availability id=$pages[k]->id status=1 page=$page}" class="available">
                                 <img src="{$params.IMAGE_DIR}publish_r.png" border="0" title="{t}Unpublished{/t}" />
                             </a>
                         {/if}
@@ -83,8 +85,9 @@
                         {/acl}
                         {acl isAllowed="STATIC_DELETE"}
                             <a class="del btn btn-danger" data-controls-modal="modal-from-dom"
-                               data-id="{$pages[k]->id}" title="{t}Delete{/t}"
-                               data-title="{$pages[k]->title|capitalize}" href="#" >
+                               data-url="{url name=admin_staticpages_delete id=$pages[k]->id}"
+                               title="{t}Delete{/t}"
+                               data-title="{$pages[k]->title|capitalize}" href="{url name=admin_staticpages_delete id=$pages[k]->id}" >
                                 <i class="icon-trash icon-white"></i>
                             </a>
                         {/acl}
