@@ -47,7 +47,6 @@
         {script_tag src="/modernizr/modernizr-2.5.0.min.js"}
         {script_tag src="/utils.js"}
         {script_tag src="/utils_header.js"}
-        {script_tag src="/utilsopinion.js"}
         {script_tag src="/validation.js"}
         {script_tag src="/tiny_mce/tiny_mce_gzip.js"}
      {/block}

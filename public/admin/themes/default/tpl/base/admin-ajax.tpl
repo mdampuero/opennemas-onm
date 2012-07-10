@@ -44,7 +44,6 @@
         {script_tag src="/control.maxlength.js"}
         {script_tag src="/utils.js"}
         {script_tag src="/utils_header.js"}
-        {script_tag src="/utilsopinion.js"}
         {script_tag src="/validation.js"}
      {/block}
 
