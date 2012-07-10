@@ -9,8 +9,10 @@
  **/
 namespace Backend\Controllers;
 
-use Onm\Framework\Controller\Controller,
-    Onm\Message as m;
+use Symfony\Component\HttpFoundation\Request;
+use Onm\Framework\Controller\Controller;
+use Onm\Message as m;
+use Onm\Settings as s;
 /**
  * Handles the actions for the system information
  *
@@ -37,35 +39,47 @@ class TrashController extends Controller
      *
      * @return Response the response object
      **/
-    public function defaultAction()
+    public function defaultAction(Request $request)
     {
         $cm           = new \ContentManager();
         $contentTypes = $cm->getContentTypes();
+        $page         = $request->query->getDigits('page', 1);
+        $itemsPerPage = s::get('items_per_page', 20);
 
-        $url = $this->generateUrl(
-            'admin_trash',
-            array(
-                'mytype' => $this->filterContentType,
-                'page' => $this->page
-            )
-        );
         // Get paginated elements that are marked as in litter
-        list($elements, $pagination) = $cm->find_pages(
+        list($countElements, $elements) = $cm->getCountAndSlice(
             $this->filterContentType,
+            null,
             'in_litter=1',
             'ORDER BY changed DESC ',
-            $this->page,
-            20,
-            null,
-            $url
+            $page,
+            $itemsPerPage
         );
 
         // Complete elements information
-        $content = new \Content();
         foreach ($elements as &$item) {
-            $item->category_name =  $content->loadCategoryName($item->id);
-            $item->category_title = $content->loadCategoryTitle($item->id);
+            $item->category_name =  $item->loadCategoryName($item->id);
+            $item->category_title = $item->loadCategoryTitle($item->id);
         }
+
+        // Build the pager
+        $pagination = \Pager::factory(array(
+            'mode'        => 'Sliding',
+            'perPage'     => $itemsPerPage,
+            'append'      => false,
+            'path'        => '',
+            'delta'       => 4,
+            'clearIfVoid' => true,
+            'urlVar'      => 'page',
+            'totalItems'  => $countElements,
+            'fileName'    => $this->generateUrl(
+                'admin_staticpages',
+                array(
+                    'mytype' => $this->filterContentType,
+                    'page' => $this->page
+                )
+            ).'?page=%d',
+        ));
 
         return $this->render('trash/trash.tpl', array(
             'mytype'        => $this->filterContentType,
@@ -80,7 +94,7 @@ class TrashController extends Controller
      *
      * @return Response the response object
      **/
-    public function deleteAction()
+    public function deleteAction(Request $request)
     {
         $contentId = $this->request->query->getDigits('id');
 
@@ -117,7 +131,7 @@ class TrashController extends Controller
      *
      * @return Response the response object
      **/
-    public function restoreAction()
+    public function restoreAction(Request $request)
     {
         $contentId = $this->request->query->getDigits('id');
 
@@ -154,7 +168,7 @@ class TrashController extends Controller
      *
      * @return Response the response object
      **/
-    public function batchDeleteAction()
+    public function batchDeleteAction(Request $request)
     {
         $contentIDs = $this->request->request->get('selected', array());
 
@@ -190,9 +204,9 @@ class TrashController extends Controller
      *
      * @return Response the response object
      **/
-    public function batchRestoreAction()
+    public function batchRestoreAction(Request $request)
     {
-        $contentIDs = $this->request->request->get('selected', array());
+        $contentIDs = $request->get('selected', array());
 
         if (count($contentIDs) > 0) {
             foreach ($contentIDs as $contentId) {
@@ -204,7 +218,7 @@ class TrashController extends Controller
                         .$content->content_type.'"'
                     );
 
-                    $contentClassName = ucwords($name);
+                    $contentClassName = classify($name);
                     $content = new $contentClassName($contentId);
                     $content->restoreFromTrash($contentId);
                 } else {
@@ -227,21 +241,25 @@ class TrashController extends Controller
      *
      * @return string the response string
      **/
-    public function deleteAllAction()
+    public function deleteAllAction(Request $request)
     {
+        $type = $request->query->filter('mytype', null, FILTER_SANITIZE_STRING);
         if ($_REQUEST['id'] == 6) {
             //Eliminar todos
             $cm = new ContentManager();
-            $contents = $cm->find($_REQUEST['mytype'], 'in_litter=1', 'ORDER BY created DESC ');
+            $contents = $cm->find($type, 'in_litter=1', 'ORDER BY created DESC ');
 
-            foreach ($contents as $cont) {
-                $content = new Content($cont->id);
-                $content->remove($cont->id);
+            foreach ($contents as &$item) {
+                $content = new Content($item->id);
+                $content->remove($item->id);
             }
 
-            return $this->redirect(url(
+            return $this->redirect($this->generateUrl(
                 'admin_trash',
-                array('mytype' => $this->filterContentType, 'page' => $this->page)
+                array(
+                    'mytype' => $this->filterContentType,
+                    'page' => $this->page
+                )
             ));
         }
     }
