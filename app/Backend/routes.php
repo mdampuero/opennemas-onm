@@ -1,8 +1,10 @@
 <?php
 use Symfony\Component\Routing\Route;
+use Symfony\Component\Routing\RouteCollection;
 
+$adminRoutes = new RouteCollection();
 // Frontpage management routes
-$routes->add(
+$adminRoutes->add(
     'admin_frontpage_list',
     new Route(
         '/frontpages/{category}',
@@ -14,7 +16,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_frontpage_savepositions',
     new Route(
         '/frontpages/{category}/save-positions',
@@ -26,7 +28,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_frontpage_preview',
     new Route(
         '/frontpages/{category}/preview',
@@ -38,7 +40,7 @@ $routes->add(
 );
 
 // Static Pages controller
-$routes->add(
+$adminRoutes->add(
     'admin_staticpages',
     new Route(
         '/static-pages',
@@ -49,7 +51,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_staticpages_show',
     new Route(
         '/static-pages/{id}/show',
@@ -61,7 +63,7 @@ $routes->add(
 );
 
 
-$routes->add(
+$adminRoutes->add(
     'admin_staticpages_create',
     new Route(
         '/static-pages/create',
@@ -70,7 +72,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_staticpages_update',
     new Route(
         '/static-pages/{id}/update',
@@ -79,7 +81,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_staticpages_delete',
     new Route(
         '/static-pages/{id}/delete',
@@ -88,7 +90,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_staticpages_toggle_availability',
     new Route(
         '/static-pages/{id}/toggle_availability',
@@ -98,7 +100,7 @@ $routes->add(
 );
 
 
-$routes->add(
+$adminRoutes->add(
     'admin_staticpages_build_slug',
     new Route(
         '/static-pages/{id}/build_slug',
@@ -108,7 +110,7 @@ $routes->add(
 );
 
 
-$routes->add(
+$adminRoutes->add(
     'admin_staticpages_clean_metadata',
     new Route(
         '/static-pages/{id}/clean_metadata',
@@ -118,7 +120,7 @@ $routes->add(
 );
 
 //Images controller
-$routes->add(
+$adminRoutes->add(
     'admin_images_statistics',
     new Route(
         '/images/statistics',
@@ -128,7 +130,7 @@ $routes->add(
     ),
     '/admin'
 );
-$routes->add(
+$adminRoutes->add(
     'admin_images_search',
     new Route(
         '/images/search',
@@ -139,7 +141,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_images',
     new Route(
         '/images',
@@ -150,7 +152,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_image_new',
     new Route(
         '/images/new',
@@ -161,7 +163,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_image_show',
     new Route(
         '/images/show',
@@ -173,7 +175,7 @@ $routes->add(
 );
 
 
-$routes->add(
+$adminRoutes->add(
     'admin_image_create',
     new Route(
         '/image/create',
@@ -182,7 +184,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_image_update',
     new Route(
         '/image/update',
@@ -191,7 +193,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_image_delete',
     new Route(
         '/image/{id}/delete',
@@ -200,7 +202,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_images_batchdelete',
     new Route(
         '/images/batchdelete',
@@ -209,7 +211,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_images_config',
     new Route(
         '/images/config',
@@ -219,7 +221,7 @@ $routes->add(
 );
 
 // Videos controller routes
-$routes->add(
+$adminRoutes->add(
     'admin_videos',
     new Route(
         '/videos',
@@ -228,7 +230,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_videos_create',
     new Route(
         '/videos/create',
@@ -237,7 +239,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_videos_get_info',
     new Route(
         '/videos/get-video-information',
@@ -246,7 +248,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_video_show',
     new Route(
         '/videos/{id}/show',
@@ -255,7 +257,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_videos_update',
     new Route(
         '/videos/{id}/update',
@@ -264,7 +266,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_video_delete',
     new Route(
         '/videos/{id}/delete',
@@ -273,7 +275,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_videos_widget',
     new Route(
         '/videos/widget',
@@ -284,7 +286,7 @@ $routes->add(
 
 
 # Widget manager routes
-$routes->add(
+$adminRoutes->add(
     'admin_widgets',
     new Route(
         '/widgets',
@@ -293,7 +295,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_widget_show',
     new Route(
         '/widget/{id}/show',
@@ -302,7 +304,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_widget_delete',
     new Route(
         '/widget/{id}/delete',
@@ -311,7 +313,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_widget_create',
     new Route(
         '/widget/create',
@@ -320,7 +322,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_widget_update',
     new Route(
         '/widget/{id}/update',
@@ -329,7 +331,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_widget_toogle_available',
     new Route(
         '/widget/{id}/toogle_available',
@@ -338,7 +340,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_widgets_content_provider',
     new Route(
         '/widget/content-provider',
@@ -349,7 +351,7 @@ $routes->add(
 
 
 
-$routes->add(
+$adminRoutes->add(
     'admin_videos_config',
     new Route(
         '/videos/config',
@@ -358,7 +360,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_video_save_positions',
     new Route(
         '/videos/save-positions',
@@ -367,7 +369,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_video_toggle_availability',
     new Route(
         '/videos/{id}/toggle-availability',
@@ -376,7 +378,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_video_toggle_favorite',
     new Route(
         '/videos/{id}/toggle-favorite',
@@ -385,7 +387,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_video_toggle_inhome',
     new Route(
         '/videos/{id}/toggle-inhome',
@@ -394,7 +396,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_video_get_relations',
     new Route(
         '/videos/{id}/relations',
@@ -403,7 +405,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_video_batchdelete',
     new Route(
         '/videos/batch-delete',
@@ -412,7 +414,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_video_batchpublish',
     new Route(
         '/videos/batch-publish',
@@ -421,7 +423,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_videos_content_provider',
     new Route(
         '/videos/content-provider',
@@ -431,7 +433,7 @@ $routes->add(
 );
 
 // Album controller routes
-$routes->add(
+$adminRoutes->add(
     'admin_albums',
     new Route(
         '/albums',
@@ -440,7 +442,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_albums_config',
     new Route(
         '/albums/config',
@@ -449,7 +451,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_albums_widget',
     new Route(
         '/albums/widget',
@@ -459,7 +461,7 @@ $routes->add(
 );
 
 
-$routes->add(
+$adminRoutes->add(
     'admin_album_create',
     new Route(
         '/album/create',
@@ -468,7 +470,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_album_update',
     new Route(
         '/album/{id}/update',
@@ -477,7 +479,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_album_show',
     new Route(
         '/albums/{id}/show',
@@ -486,7 +488,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_album_delete',
     new Route(
         '/albums/{id}/delete',
@@ -495,7 +497,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_album_toggle_availability',
     new Route(
         '/album/{id}/toggle-availability',
@@ -504,7 +506,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_album_toggle_favorite',
     new Route(
         '/album/{id}/toggle-favorite',
@@ -513,7 +515,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_album_toggle_inhome',
     new Route(
         '/album/{id}/toggle-inhome',
@@ -523,7 +525,7 @@ $routes->add(
 );
 
 
-$routes->add(
+$adminRoutes->add(
     'admin_album_batchdelete',
     new Route(
         '/albums/batch-delete',
@@ -532,7 +534,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_album_batchpublish',
     new Route(
         '/albums/batch-publish',
@@ -541,7 +543,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_albums_content_provider',
     new Route(
         '/albums/content-provider',
@@ -550,8 +552,126 @@ $routes->add(
     '/admin'
 );
 
+// Covers controller routes
+$adminRoutes->add(
+    'admin_covers',
+    new Route(
+        '/covers',
+        array('_controller' => 'Backend:Controllers:CoversController:list')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_cover_create',
+    new Route(
+        '/cover/create',
+        array('_controller' => 'Backend:Controllers:CoversController:create')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_cover_show',
+    new Route(
+        '/covers/{id}/show',
+        array('_controller' => 'Backend:Controllers:CoversController:show')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_cover_update',
+    new Route(
+        '/cover/{id}/update',
+        array('_controller' => 'Backend:Controllers:CoversController:update')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_cover_toggleavailable',
+    new Route(
+        '/cover/{id}/toggle-available',
+        array('_controller' => 'Backend:Controllers:CoversController:toggleAvailable')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_cover_togglefavorite',
+    new Route(
+        '/cover/{id}/toggle-favorite',
+        array('_controller' => 'Backend:Controllers:CoversController:toggleFavorite')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_cover_toggleinhome',
+    new Route(
+        '/cover/{id}/toggle-inhome',
+        array('_controller' => 'Backend:Controllers:CoversController:toggleInHome')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_covers_batchpublish',
+    new Route(
+        '/covers/batch-publish',
+        array('_controller' => 'Backend:Controllers:CoversController:batchPublish')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_covers_batchdelete',
+    new Route(
+        '/covers/batch-delete',
+        array('_controller' => 'Backend:Controllers:CoversController:batchDelete')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_covers_savepositions',
+    new Route(
+        '/covers/save-positions',
+        array('_controller' => 'Backend:Controllers:CoversController:savePositions')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_cover_delete',
+    new Route(
+        '/cover/{id}/delete',
+        array('_controller' => 'Backend:Controllers:CoversController:delete')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_covers_widget',
+    new Route(
+        '/cover/widget',
+        array('_controller' => 'Backend:Controllers:CoversController:widget')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_covers_config',
+    new Route(
+        '/cover/config',
+        array('_controller' => 'Backend:Controllers:CoversController:config')
+    ),
+    '/admin'
+);
+
 // Books controller routes
-$routes->add(
+$adminRoutes->add(
     'admin_books',
     new Route(
         '/books',
@@ -562,7 +682,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_books_widget',
     new Route(
         '/books/widget',
@@ -574,7 +694,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_books_create',
     new Route(
         '/books/create',
@@ -583,7 +703,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_books_show',
     new Route(
         '/books/{id}/show',
@@ -593,7 +713,7 @@ $routes->add(
 );
 
 
-$routes->add(
+$adminRoutes->add(
     'admin_books_update',
     new Route(
         '/books/{id}/update',
@@ -602,7 +722,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_books_delete',
     new Route(
         '/books/{id}/delete',
@@ -611,7 +731,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_books_save_positions',
     new Route(
         '/books/save-positions',
@@ -620,7 +740,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_books_toggle_availability',
     new Route(
         '/books/{id}/toggle-availability',
@@ -629,7 +749,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_books_toggle_inhome',
     new Route(
         '/books/{id}/toggle-inhome',
@@ -638,7 +758,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_books_batchdelete',
     new Route(
         '/books/batch-delete',
@@ -647,7 +767,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_books_batchpublish',
     new Route(
         '/books/batch-publish',
@@ -658,7 +778,7 @@ $routes->add(
 
 
 // Files controller routes
-$routes->add(
+$adminRoutes->add(
     'admin_files_statistics',
     new Route(
         '/files/statistics',
@@ -669,7 +789,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_files_widget',
     new Route(
         '/files/widget',
@@ -680,7 +800,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_files_create',
     new Route(
         '/files/create',
@@ -691,7 +811,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_files_show',
     new Route(
         '/files/{id}/show',
@@ -702,7 +822,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_files_update',
     new Route(
         '/files/{id}/update',
@@ -713,7 +833,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_files_delete',
     new Route(
         '/files/{id}/delete',
@@ -724,7 +844,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_files_toggle_favorite',
     new Route(
         '/files/{id}/toggle-favorite',
@@ -735,7 +855,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_files_toggle_in_home',
     new Route(
         '/files/{id}/toggle-in-home',
@@ -746,7 +866,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_files_toggle_available',
     new Route(
         '/files/{id}/toggle-available',
@@ -757,7 +877,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_files',
     new Route(
         '/files',
@@ -769,7 +889,7 @@ $routes->add(
 );
 
 
-$routes->add(
+$adminRoutes->add(
     'admin_file_save_positions',
     new Route(
         '/files/save-positions',
@@ -778,7 +898,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_files_batchdelete',
     new Route(
         '/files/batch-delete',
@@ -787,7 +907,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_files_batchpublish',
     new Route(
         '/files/batch-publish',
@@ -800,7 +920,7 @@ $routes->add(
 
 
 // Search controller routes
-$routes->add(
+$adminRoutes->add(
     'admin_search',
     new Route(
         '/search',
@@ -810,7 +930,7 @@ $routes->add(
 );
 
 // Keywork controller routes
-$routes->add(
+$adminRoutes->add(
     'admin_keyword',
     new Route(
         '/keywords',
@@ -819,7 +939,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_keyword_create',
     new Route(
         '/keywords/create',
@@ -828,7 +948,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_keyword_show',
     new Route(
         '/keywords/{id}/show',
@@ -837,7 +957,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_keyword_update',
     new Route(
         '/keywords/{id}/update',
@@ -846,7 +966,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_keyword_delete',
     new Route(
         '/keywords/{id}/delete',
@@ -856,7 +976,7 @@ $routes->add(
 );
 
 // Statistics controller routes
-$routes->add(
+$adminRoutes->add(
     'admin_statistics',
     new Route(
         '/statistics',
@@ -865,7 +985,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_statistics_widget',
     new Route(
         '/statistics/widget',
@@ -875,7 +995,7 @@ $routes->add(
 );
 
 // Comments controller routes
-$routes->add(
+$adminRoutes->add(
     'admin_comments',
     new Route(
         '/comments',
@@ -886,7 +1006,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_comments_show',
     new Route(
         '/comments/{id}/show',
@@ -897,7 +1017,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_comments_update',
     new Route(
         '/comments/{id}/update',
@@ -908,7 +1028,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_comments_delete',
     new Route(
         '/comments/{id}/delete',
@@ -917,7 +1037,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_comments_toggle_status',
     new Route(
         '/comments/{id}/toggle-status',
@@ -928,7 +1048,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_comments_batch_status',
     new Route(
         '/comments/batch-status',
@@ -937,7 +1057,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_comments_batch_delete',
     new Route(
         '/comments/batch-delete',
@@ -949,7 +1069,7 @@ $routes->add(
 
 
 // Comments by Disqus controller routes
-$routes->add(
+$adminRoutes->add(
     'admin_comments_disqus',
     new Route(
         '/comments/disqus',
@@ -958,7 +1078,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_comments_disqus_config',
     new Route(
         '/comments/disqus/config',
@@ -968,7 +1088,7 @@ $routes->add(
 );
 
 // Trash controller routes
-$routes->add(
+$adminRoutes->add(
     'admin_trash',
     new Route(
         '/trash',
@@ -977,7 +1097,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_trash_delete',
     new Route(
         '/trash/{id}/delete',
@@ -986,7 +1106,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_trash_restore',
     new Route(
         '/trash/{id}/restore',
@@ -995,7 +1115,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_trash_batchdelete',
     new Route(
         '/trash/batchdelete',
@@ -1004,7 +1124,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_trash_batchrestore',
     new Route(
         '/trash/batchrestore',
@@ -1014,7 +1134,7 @@ $routes->add(
 );
 
 // Importer Europapress controller routes
-$routes->add(
+$adminRoutes->add(
     'admin_importer_europapress',
     new Route(
         '/importer/europapress',
@@ -1023,7 +1143,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_importer_europapress_config',
     new Route(
         '/importer/europapress/config',
@@ -1032,7 +1152,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_importer_europapress_unlock',
     new Route(
         '/importer/europapress/unlock',
@@ -1041,7 +1161,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_importer_europapress_sync',
     new Route(
         '/importer/europapress/sync',
@@ -1050,7 +1170,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_importer_europapress_import',
     new Route(
         '/importer/europapress/{id}/import',
@@ -1059,7 +1179,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_importer_europapress_show',
     new Route(
         '/importer/europapress/{id}/show',
@@ -1069,7 +1189,7 @@ $routes->add(
 );
 
 // Importer Efe controller routes
-$routes->add(
+$adminRoutes->add(
     'admin_importer_efe',
     new Route(
         '/importer/efe',
@@ -1078,7 +1198,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_importer_efe_config',
     new Route(
         '/importer/efe/config',
@@ -1087,7 +1207,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_importer_efe_unlock',
     new Route(
         '/importer/efe/unlock',
@@ -1096,7 +1216,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_importer_efe_sync',
     new Route(
         '/importer/efe/sync',
@@ -1105,7 +1225,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_importer_efe_import',
     new Route(
         '/importer/efe/{id}/import',
@@ -1114,7 +1234,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_importer_efe_show',
     new Route(
         '/importer/efe/{id}/show',
@@ -1123,7 +1243,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_importer_efe_showattachment',
     new Route(
         '/importer/europapress/{id}/attachment/{attachment_id}',
@@ -1132,7 +1252,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_importer_efe_pickcategory',
     new Route(
         '/importer/europapress/{id}/import/pickcategory',
@@ -1142,7 +1262,7 @@ $routes->add(
 );
 
 // Importer XML file controller routes
-$routes->add(
+$adminRoutes->add(
     'admin_importer_xmlfile',
     new Route(
         '/importer/xml-file',
@@ -1150,7 +1270,7 @@ $routes->add(
     ),
     '/admin'
 );
-$routes->add(
+$adminRoutes->add(
     'admin_importer_xmlfile_config',
     new Route(
         '/importer/xml-file/config',
@@ -1159,7 +1279,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_importer_xmlfile_import',
     new Route(
         '/importer/xml-file/import',
@@ -1170,7 +1290,7 @@ $routes->add(
 
 
 // Template cache controller routes
-$routes->add(
+$adminRoutes->add(
     'admin_tpl_manager',
     new Route(
         '/system/cachemanager',
@@ -1179,7 +1299,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_tpl_manager_config',
     new Route(
         '/system/cachemanager/config',
@@ -1188,7 +1308,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_tpl_manager_refresh',
     new Route(
         '/system/cachemanager/refresh',
@@ -1197,7 +1317,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_tpl_manager_update',
     new Route(
         '/system/cachemanager/update',
@@ -1206,7 +1326,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_tpl_manager_delete',
     new Route(
         '/system/cachemanager/delete',
@@ -1215,7 +1335,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_tpl_manager_deleteall',
     new Route(
         '/system/cachemanager/deleteall',
@@ -1224,7 +1344,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_tpl_manager_cleanfrontpage',
     new Route(
         '/system/cachemanager/cleanfrontapge',
@@ -1235,7 +1355,7 @@ $routes->add(
 
 
 // Database error controller routes
-$routes->add(
+$adminRoutes->add(
     'admin_databaseerrors',
     new Route(
         '/system/databaseerrors',
@@ -1243,7 +1363,7 @@ $routes->add(
     ),
     '/admin'
 );
-$routes->add(
+$adminRoutes->add(
     'admin_databaseerrors_purge',
     new Route(
         '/system/databaseerrors/purge',
@@ -1251,7 +1371,7 @@ $routes->add(
     ),
     '/admin'
 );
-$routes->add(
+$adminRoutes->add(
     'admin_php_status',
     new Route(
         '/system/php-status',
@@ -1262,7 +1382,7 @@ $routes->add(
 
 
 // User management routes
-$routes->add(
+$adminRoutes->add(
     'admin_acl_user',
     new Route(
         '/acl/users',
@@ -1271,7 +1391,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_acl_user_show',
     new Route(
         '/acl/user/{id}/show',
@@ -1280,7 +1400,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_acl_user_create',
     new Route(
         '/acl/user/create',
@@ -1289,7 +1409,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_acl_user_update',
     new Route(
         '/acl/user/{id}/update',
@@ -1298,7 +1418,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_acl_user_delete',
     new Route(
         '/acl/user/{id}/delete',
@@ -1307,7 +1427,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_acl_user_batchdelete',
     new Route(
         '/acl/users/batchdelete',
@@ -1317,7 +1437,7 @@ $routes->add(
 );
 
 // Privilege management routes
-$routes->add(
+$adminRoutes->add(
     'admin_acl_privileges',
     new Route(
         '/acl/privileges',
@@ -1326,7 +1446,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_acl_privileges_show',
     new Route(
         '/acl/privilege/show/{id}',
@@ -1335,7 +1455,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_acl_privileges_create',
     new Route(
         '/acl/privileges/create',
@@ -1344,7 +1464,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_acl_privileges_update',
     new Route(
         '/acl/privileges/{id}/update',
@@ -1353,7 +1473,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_acl_privileges_delete',
     new Route(
         '/acl/privileges/{id}/delete',
@@ -1363,7 +1483,7 @@ $routes->add(
 );
 
 // User groups managerment routes
-$routes->add(
+$adminRoutes->add(
     'admin_acl_usergroups',
     new Route(
         '/acl/usergroups',
@@ -1372,7 +1492,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_acl_usergroups_show',
     new Route(
         '/acl/usergroups/show/{id}',
@@ -1381,7 +1501,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_acl_usergroups_create',
     new Route(
         '/acl/usergroups/create',
@@ -1390,7 +1510,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_acl_usergroups_update',
     new Route(
         '/acl/usergroups/{id}/update',
@@ -1399,7 +1519,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_acl_usergroups_delete',
     new Route(
         '/acl/usergroups/{id}/delete',
@@ -1409,7 +1529,7 @@ $routes->add(
 );
 
 
-$routes->add(
+$adminRoutes->add(
     'admin_system_settings',
     new Route(
         '/system/settings',
@@ -1418,7 +1538,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_system_settings_save',
     new Route(
         '/system/settings/save',
@@ -1428,7 +1548,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_system_settings',
     new Route(
         '/system/settings',
@@ -1437,7 +1557,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_system_settings_save',
     new Route(
         '/system/settings/save',
@@ -1447,7 +1567,7 @@ $routes->add(
     '/admin'
 );
 
-$routes->add(
+$adminRoutes->add(
     'admin_login_form',
     new Route(
         '/login',
@@ -1455,7 +1575,7 @@ $routes->add(
     ),
     '/admin'
 );
-$routes->add(
+$adminRoutes->add(
     'admin_login_processform',
     new Route(
         '/login/process',
@@ -1464,7 +1584,7 @@ $routes->add(
     ),
     '/admin'
 );
-$routes->add(
+$adminRoutes->add(
     'admin_logout',
     new Route(
         '/logout',
@@ -1472,7 +1592,7 @@ $routes->add(
     ),
     '/admin'
 );
-$routes->add(
+$adminRoutes->add(
     'admin_welcome',
     new Route(
         '/',
@@ -1481,3 +1601,4 @@ $routes->add(
     '/admin'
 );
 
+$routes->addCollection($adminRoutes);

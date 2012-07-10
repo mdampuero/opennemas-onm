@@ -110,8 +110,8 @@
     </div>
 
     {block name="copyright"}
-    <footer class="wrapper-content">
-        <div class="clearfix">
+    <footer>
+        <div class="wrapper-content clearfix">
             <nav class="left">
                 <ul>
                     <li>&copy; {strftime("%Y")} OpenHost S.L.</li>

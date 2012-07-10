@@ -151,7 +151,7 @@ $menuXml = '<?xml version="1.0"?>
             module_name="KIOSKO_MANAGER"
             title="'.htmlspecialchars(_("News Stand"), ENT_QUOTES).'"
             id="kiosko_manager"
-            link="/admin/controllers/newsstand/newsstand.php"
+            link="'.url('admin_covers').'"
             privilege="KIOSKO_ADMIN" />
         <node
             module_name="BOOK_MANAGER"
