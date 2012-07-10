@@ -139,7 +139,7 @@ class SimpleMenu
             $html  = "<li {$class}>"
                    . $this->getHref($value['title'],
                         'menu_'.$value['id'], $value['link'])
-                   . "<ul>".implode("\n", $output)."</ul>"
+                   . "<ul>".implode("", $output)."</ul>"
                    . "</li>";
         }
 
@@ -163,8 +163,10 @@ class SimpleMenu
                 $external = isset($value['target']);
                 $class = $this->getClass($value['class']);
                 $html .= "<li {$class}>"
-                      . $this->getHref($value['title'],
-                            'submenu_'.$value['id'], $value['link'], $external)
+                      . $this->getHref(
+                            $value['title'],
+                            'submenu_'.$value['id'], $value['link'], $external
+                        )
                       . "</li>";
             }
         }
@@ -188,8 +190,8 @@ class SimpleMenu
                 && \Acl::isMaster()
             ) {
                 $external = isset($submenu['target']);
-                $class = $this->getClass($submenu['class']);
-                $html.= "<li {$class}>";
+                $class = ' '.$this->getClass($submenu['class']);
+                $html.= "<li{$class}>";
                     $html .= $this->getHref($submenu['title'],
                         'submenu_'.$submenu['id'], $submenu['link'], $external);
                 $html.= "</li>";
@@ -216,7 +218,7 @@ class SimpleMenu
         }
 
         $menu = "<ul id='menu' class='clearfix'>"
-              . implode("\n", $output)."</ul>";
+              . implode("", $output)."</ul>";
         if ($params['doctype']) {
             $menu = "<nav>".$menu."</nav>";
         }
