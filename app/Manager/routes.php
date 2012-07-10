@@ -8,14 +8,33 @@
  * file that was distributed with this source code.
  **/
 use Symfony\Component\Routing\Route;
+use Symfony\Component\Routing\RouteCollection;
 
-$routes->add(
+$managerRoutes = new RouteCollection();
+
+$managerRoutes->add(
     'manager_instances',
     new Route(
-        '/instances/',
+        '/instances',
         array(
             '_controller' => 'Manager:Controllers:InstancesController:list',
         )
-    ),
-    '/manager'
+    )
 );
+
+$managerRoutes->add(
+    'manager_welcome',
+    new Route(
+        '/',
+        array('_controller' => 'Manager:Controllers:WelcomeController:default')
+    )
+);
+
+$managerRoutes->addPrefix('/manager');
+// var_dump($managerRoutes);die();
+
+$routes->addCollection($managerRoutes);
+// var_dump($routes);die();
+
+// var_dump($routes);die();
+
