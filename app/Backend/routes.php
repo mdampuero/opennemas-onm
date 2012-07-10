@@ -73,7 +73,7 @@ $routes->add(
 $routes->add(
     'admin_staticpages_update',
     new Route(
-        '/static-pages/{id}/update}',
+        '/static-pages/{id}/update',
         array('_controller' => 'Backend:Controllers:StaticPagesController:update')
     ),
     '/admin'
@@ -82,8 +82,37 @@ $routes->add(
 $routes->add(
     'admin_staticpages_delete',
     new Route(
-        '/static-pages/{id}/delete}',
+        '/static-pages/{id}/delete',
         array('_controller' => 'Backend:Controllers:StaticPagesController:delete')
+    ),
+    '/admin'
+);
+
+$routes->add(
+    'admin_staticpages_toggle_availability',
+    new Route(
+        '/static-pages/{id}/toggle_availability',
+        array('_controller' => 'Backend:Controllers:StaticPagesController:toggleAvailability')
+    ),
+    '/admin'
+);
+
+
+$routes->add(
+    'admin_staticpages_build_slug',
+    new Route(
+        '/static-pages/{id}/build_slug',
+        array('_controller' => 'Backend:Controllers:StaticPagesController:buildSlug')
+    ),
+    '/admin'
+);
+
+
+$routes->add(
+    'admin_staticpages_clean_metadata',
+    new Route(
+        '/static-pages/{id}/clean_metadata',
+        array('_controller' => 'Backend:Controllers:StaticPagesController:cleanMetadata')
     ),
     '/admin'
 );

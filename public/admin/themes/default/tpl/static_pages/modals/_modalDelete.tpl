@@ -27,7 +27,7 @@ jQuery('.del').click(function(e) {
     e.preventDefault();
 });
 
-jQuery('#modal-statics-delete a.btn.yes').on('click', function(){
+jQuery('#modal-statics-delete a.btn.yes').on('click', function(e){
     var delId = jQuery("body").data("selected-for-del");
     if(delId) {
         jQuery.ajax({

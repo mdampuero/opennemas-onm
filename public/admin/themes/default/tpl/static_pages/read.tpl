@@ -116,47 +116,48 @@
 {/block}
 
 {block name="footer-js"}
+
 {script_tag src="/tiny_mce/opennemas-config.js"}
 <script type="text/javascript">
 /* <![CDATA[ */
 tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
-
 OpenNeMas.tinyMceConfig.advanced.elements = "body";
 tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
-var previous = null;
-var updateSlug = function() {
-    var slugy = $('slug').value.strip();
-    if(previous!=slugy) {
 
-        new Ajax.Request('?action=build_slug', {
-            method: 'post',
-            postBody: 'slug=' + slugy + '&id=' + $('id').value + '&title=' + $('title').value,
-            onSuccess: function(transport) {
-                $('slug').value = transport.responseText;
-                previous = $('slug').value;
-            }
-        });
-    }
-};
+jQuery(document).ready(function($){
 
-document.observe('dom:loaded', function() {
-    $('title').observe('blur', function() {
-        var slugy = $('slug').value.strip();
-        if(slugy.length <= 0) {
-            updateSlug();
+
+    var previous = null;
+
+    jQuery("#title").on('blur', '', function(e){
+
+        var slugy = jQuery.trim(jQuery('#slug').attr('value'));
+        if ((slugy.length <= 0) && (previous!=slugy)) {
+
+            jQuery.ajax({
+                url:  "{url name=admin_staticpages_build_slug id=$page->id}",
+                type: "POST",
+                data: { action:"buildSlug", id:{$page->id}, slug:slugy, title:jQuery('#title').attr('value') },
+                success: function(data){
+                    jQuery('#slug').attr('value', data);
+                    previous = jQuery('#slug').value;
+                }
+            });
         }
     });
 
-    $('slug').observe('blur', updateSlug);
+    jQuery("#metadata").on('blur', '', function(e){
 
-    $('metadata').observe('blur', function() {
-        new Ajax.Request('?action=clean_metadata', {
-            method: 'post',
-            postBody: 'metadata=' + $('metadata').value,
-            onSuccess: function(transport) {
-                $('metadata').value = transport.responseText;
-            }
-        });
+        jQuery.ajax({
+                url:  "{url name=admin_staticpages_clean_metadata id=$page->id}",
+                type: "POST",
+                data: { action:"cleanMetadata", id:{$page->id}, metadata:jQuery('#metadata').attr('value') },
+                success: function(data){
+                    jQuery('#slug').attr('value', data);
+                    previous = jQuery('#slug').attr('value');
+                }
+            });
+
     });
 });
 /* ]]> */

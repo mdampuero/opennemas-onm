@@ -62,14 +62,16 @@
 
                     <td class="center">
                         {acl isAllowed="STATIC_AVAILABLE"}
-                        <a href="?action=chg_status&id={$pages[k]->id}" class="available">
-                        {/acl}
-                            {if $pages[k]->available eq 1}
+                        {if $pages[k]->available eq 1}
+                            <a href="{url name=admin_staticpages_toggle_availability id=$pages[k]->id status=0}" class="unavailable">
                                 <img src="{$params.IMAGE_DIR}publish_g.png" border="0" title="{t}Published{/t}" />
-                            {else}
+                            </a>
+                        {else}
+                            <a href="{url name=admin_staticpages_toggle_availability id=$pages[k]->id status=1}" class="available">
                                 <img src="{$params.IMAGE_DIR}publish_r.png" border="0" title="{t}Unpublished{/t}" />
-                            {/if}
-                        </a>
+                            </a>
+                        {/if}
+                        {/acl}
                     </td>
 
                     <td class="center">
@@ -107,12 +109,6 @@
 
     </form>
 
-    {script_tag src="/switcher_flag.js" language="javascript"}
-    <script type="text/javascript" language="javascript">
-        $('gridPages').select('a.available').each(function(item){
-            new SwitcherFlag(item);
-        });
-    </script>
 </div>
      {include file="static_pages/modals/_modalDelete.tpl"}
 {/block}
