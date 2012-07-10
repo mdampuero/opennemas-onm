@@ -99,7 +99,7 @@ class Articles
                 $relationsHandler  = new RelatedContent();
                 $ccm = new ContentCategoryManager();
                 $relatedContents = array();
-                $relationIDs = $relationsHandler->get_relations_int($param1);
+                $relationIDs = $relationsHandler->getRelationsForInner($param1);
 
                 if (count($relationIDs) > 0) {
                     $relatedContents = $this->cm->getContents($relationIDs);
@@ -126,7 +126,7 @@ class Articles
 
                 $machineSuggestedContents = array();
                 if(!empty($article->metadata)) {
-                    $objSearch    = cSearch::Instance();
+                    $objSearch    = cSearch::getInstance();
                     $machineSuggestedContents = $objSearch->SearchSuggestedContents(
                         $article->metadata,
                         'Article',

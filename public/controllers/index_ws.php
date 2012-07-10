@@ -151,7 +151,7 @@ if (
 
         // Load related contents from ws
         $relatedUrl = $wsUrl.'/ws.php/articles/lists/related/'.$content->id;
-        $content->related_contents = json_decode(file_get_contents($relatedUrl));
+        //$content->related_contents = json_decode(file_get_contents($relatedUrl));
 
     }
 
