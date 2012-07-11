@@ -19,6 +19,10 @@ use Symfony\Component\HttpFoundation\Request,
     Symfony\Component\Routing\RequestContext,
     Symfony\Component\Routing\Route;
 
+if (!isset($routes)) {
+    $routes = new RouteCollection();
+}
+
 // Create the request object
 $request = Request::createFromGlobals();
 
