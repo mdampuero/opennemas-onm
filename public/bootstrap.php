@@ -19,12 +19,6 @@ use Symfony\Component\HttpFoundation\Request,
     Symfony\Component\Routing\RequestContext,
     Symfony\Component\Routing\Route;
 
-// Load the available route collection
-$routes = new RouteCollection();
-foreach (glob(APP_PATH.'/*/routes.php') as $routeFile) {
-    require $routeFile;
-}
-
 // Create the request object
 $request = Request::createFromGlobals();
 

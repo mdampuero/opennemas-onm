@@ -29,7 +29,7 @@ class Bootstrap extends ModuleBootstrap
     public function initErrorHandler()
     {
 
-        return $this;
+        // return $this;
     }
 
     /**

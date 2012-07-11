@@ -9,6 +9,9 @@
  **/
 
 require '../../app/autoload.php';
+
+require __DIR__.'/../../app/Manager/routes.php';
+
 require '../bootstrap.php';
 
 $sc = include '../../app/container.php';

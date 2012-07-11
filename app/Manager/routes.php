@@ -10,6 +10,9 @@
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
+// Load the available route collection
+$routes = new RouteCollection();
+
 $managerRoutes = new RouteCollection();
 
 $managerRoutes->add(
@@ -19,7 +22,8 @@ $managerRoutes->add(
         array(
             '_controller' => 'Manager:Controllers:InstancesController:list',
         )
-    )
+    ),
+    'manager'
 );
 
 $managerRoutes->add(
@@ -27,14 +31,8 @@ $managerRoutes->add(
     new Route(
         '/',
         array('_controller' => 'Manager:Controllers:WelcomeController:default')
-    )
+    ),
+    'manager'
 );
 
-$managerRoutes->addPrefix('/manager');
-// var_dump($managerRoutes);die();
-
 $routes->addCollection($managerRoutes);
-// var_dump($routes);die();
-
-// var_dump($routes);die();
-
