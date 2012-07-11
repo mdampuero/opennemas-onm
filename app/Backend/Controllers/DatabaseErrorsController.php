@@ -124,7 +124,7 @@ class DatabaseErrorsController extends Controller
 
         m::add(_('SQL errors registered in database cleaned sucessfully.'). m::SUCCESS);
 
-        return $this->redirect(url('admin_databaseerrors', array(), true));
+        return $this->redirect($this->generateUrl('admin_databaseerrors', array(), true));
     }
 
 } // END class SystemSettigns

@@ -92,9 +92,9 @@ class AclUserGroupsController extends Controller
                 // If user group was saved successfully and the action
                 // is validate show again the form
                 if ($this->request->get('action') == 'validate') {
-                    return $this->redirect(url('admin_acl_usergroups'));
+                    return $this->redirect($this->generateUrl('admin_acl_usergroups'));
                 } else {
-                    return $this->redirect(url('admin_acl_usergroups_show',
+                    return $this->redirect($this->generateUrl('admin_acl_usergroups_show',
                         array('id' => $userGroup->id)));
                 }
             } else {
@@ -120,7 +120,7 @@ class AclUserGroupsController extends Controller
         $userGroup = new \UserGroup();
         $userGroup->update($_REQUEST);
 
-        return $this->redirect(url('admin_acl_usergroups'));
+        return $this->redirect($this->generateUrl('admin_acl_usergroups'));
     }
 
     /**
@@ -143,7 +143,7 @@ class AclUserGroupsController extends Controller
             );
         }
 
-        return $this->redirect(url('admin_acl_usergroups'));
+        return $this->redirect($this->generateUrl('admin_acl_usergroups'));
     }
 
 } // END class AclUserGroupsController

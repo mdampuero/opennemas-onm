@@ -153,7 +153,7 @@ class AuthenticationController extends Controller
             apc_delete(APC_PREFIX . "_"."num_sessions");
             session_destroy();
 
-            return $this->redirect(url('admin_login_form'));
+            return $this->redirect($this->generateUrl('admin_login_form'));
 
         } else {
             return Response('Are you hijacking my session dude?!');

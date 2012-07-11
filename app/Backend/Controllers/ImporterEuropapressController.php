@@ -49,7 +49,7 @@ class ImporterEuropapressController extends Controller
             m::add(_('Please provide your Europapress auth credentials '
                 .'to start to use your Europapress Importer module'));
 
-            return $this->redirect(url('admin_import_europapress'));
+            return $this->redirect($this->generateUrl('admin_import_europapress'));
         }
 
         $europapress = \Onm\Import\Europapress::getInstance();
@@ -127,7 +127,7 @@ class ImporterEuropapressController extends Controller
             // Redirect the user to the list of articles and show an error message
             m::add(sprintf(_('Unable to find the nwe with id "%d".'), $id), m::ERROR);
 
-            return $this->redirect(url('admin_importer_europapress'));
+            return $this->redirect($this->generateUrl('admin_importer_europapress'));
         }
 
         return $this->render('agency_importer/europapress/show.tpl', array(
@@ -187,7 +187,7 @@ class ImporterEuropapressController extends Controller
         } else {
             m::add(sprintf('Unable to import the file "%s"', $id));
 
-            return $this->redirect(url('admin_importer_europapress'));
+            return $this->redirect($this->generateUrl('admin_importer_europapress'));
         }
     }
 
@@ -238,7 +238,7 @@ class ImporterEuropapressController extends Controller
             $agencyString = $this->request->request->filter('agency_string', null, FILTER_SANITIZE_STRING);
 
             if (!isset($server) || !isset($username) || !isset($password)) {
-                return $this->redirect(url('admin_import_europapress_config'));
+                return $this->redirect($this->generateUrl('admin_import_europapress_config'));
             }
 
             $serverAuth =  array(
@@ -271,7 +271,7 @@ class ImporterEuropapressController extends Controller
         $e->unlockSync();
         unset($_SESSION['error']);
 
-        return $this->redirect(url('admin_importer_europapress'));
+        return $this->redirect($this->generateUrl('admin_importer_europapress'));
     }
 
     /**
@@ -308,7 +308,7 @@ class ImporterEuropapressController extends Controller
         } catch (\Onm\Import\Synchronizer\LockException $e) {
             $errorMessage = $e->getMessage()
                .sprintf(_('If you are sure <a href="%s">try to unlock it</a>'),
-                url('admin_importer_europapress_unlock'));
+                $this->generateUrl('admin_importer_europapress_unlock'));
             m::add( $errorMessage, m::ERROR );
         } catch (\Exception $e) {
             m::add($e->getMessage(), m::ERROR);

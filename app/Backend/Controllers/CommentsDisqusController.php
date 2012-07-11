@@ -45,7 +45,7 @@ class CommentsDisqusController extends Controller
         ) {
             m::add(_('Please provide your Disqus configuration to start to use your Disqus Comments module'));
 
-            return $this->redirect(url('admin_comments_disqus_config'));
+            return $this->redirect($this->generateUrl('admin_comments_disqus_config'));
         }
     }
 
@@ -81,7 +81,7 @@ class CommentsDisqusController extends Controller
         } else {
             $shortname = $this->request->request->filter('shortname', null, FILTER_SANITIZE_STRING);
             if (!isset($shortname)) {
-                return $this->redirect(url('admin_comments_disqus_config'));
+                return $this->redirect($this->generateUrl('admin_comments_disqus_config'));
             }
 
             if (s::set('disqus_shortname', $shortname)) {
@@ -90,7 +90,7 @@ class CommentsDisqusController extends Controller
                 m::add(_('There was an error while saving the Disqus module configuration'), m::ERROR);
             }
 
-            return $this->redirect(url('admin_comments_disqus_config'));
+            return $this->redirect($this->generateUrl('admin_comments_disqus_config'));
         }
     }
 } // END class PruebaController

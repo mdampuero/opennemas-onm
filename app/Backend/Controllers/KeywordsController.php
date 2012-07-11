@@ -160,7 +160,7 @@ class KeywordsController extends Controller
         $id = $this->request->query->getDigits('id');
         $pclave->delete($id);
 
-        return $this->redirect(url('admin_keywords'));
+        return $this->redirect($this->generateUrl('admin_keywords'));
     }
 
     /**

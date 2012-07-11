@@ -182,7 +182,7 @@ class CacheManagerController extends Controller
         }
 
         if (!$this->request->isXmlHttpRequest()) {
-            return $this->redirect(url('admin_tpl_manager'));
+            return $this->redirect($this->generateUrl('admin_tpl_manager'));
         }
     }
 
@@ -196,7 +196,7 @@ class CacheManagerController extends Controller
     {
         $this->frontpageTemplate->clearAllCache();
 
-        return $this->redirect(url('admin_tpl_manager'));
+        return $this->redirect($this->generateUrl('admin_tpl_manager'));
     }
 
     /**
@@ -227,7 +227,7 @@ class CacheManagerController extends Controller
 
             m::add(_('Cache configuration saved successfully.'), m::SUCCESS);
 
-            return $this->redirect(url('admin_tpl_manager'));
+            return $this->redirect($this->generateUrl('admin_tpl_manager'));
         } else {
             $config = $this->templateManager->dumpConfig();
 

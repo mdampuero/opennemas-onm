@@ -129,9 +129,9 @@ class AclUserController extends Controller
             if (($userId == $_SESSION['userid'])
                 && !Acl::check('USER_UPDATE')
             ) {
-                $redirectUrl = url('admin_welcome');
+                $redirectUrl = $this->generateUrl('admin_welcome');
             } else {
-                $redirectUrl = url('admin_acl_user');
+                $redirectUrl = $this->generateUrl('admin_acl_user');
             }
         }
 
@@ -165,7 +165,7 @@ class AclUserController extends Controller
                         );
                     }
 
-                    return $this->redirect(url('admin_acl_user'));
+                    return $this->redirect($this->generateUrl('admin_acl_user'));
                 } else {
                     m::add($user->errors, m::ERROR);
                     $this->view->assign('errors', $user->errors);
@@ -198,7 +198,7 @@ class AclUserController extends Controller
             $user = new \User();
             $user->delete($userId);
             if (!$this->request->isXmlHttpRequest()) {
-                return $this->redirect(url('admin_acl_user'));
+                return $this->redirect($this->generateUrl('admin_acl_user'));
             }
         }
     }
@@ -225,7 +225,7 @@ class AclUserController extends Controller
             m::add(_('You haven\'t selected any user to delete.'), m::ERROR);
         }
 
-        return $this->redirect(url('admin_acl_user'));
+        return $this->redirect($this->generateUrl('admin_acl_user'));
     }
 
 } // END class AclUserController
