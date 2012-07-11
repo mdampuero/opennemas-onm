@@ -88,7 +88,11 @@ class Menu
                " VALUES (?,?,?,?,?)";
 
         $values = array(
-            $data["name"],$data["params"], $data["site"],$data['pk_father'], 'user'
+            $data["name"],
+            $data["params"],
+            $data["site"],
+            $data['pk_father'],
+            'user'
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
@@ -96,6 +100,8 @@ class Menu
 
             return false;
         }
+
+        $this->pk_menu = $id;
 
         $id = $GLOBALS['application']->conn->Insert_ID();
 
@@ -128,7 +134,6 @@ class Menu
         $this->site      = $rs->fields['site'];
         $this->type      = $rs->fields['type'];
         $this->pk_father = $rs->fields['pk_father'];
-
     }
 
     public function update($data)
@@ -142,7 +147,8 @@ class Menu
 
         $values = array(
             $data['name'], $data['params'], $data['site'],
-            $data['pk_father'], $data['id']
+            $data['pk_father'],
+            $this->pk_menu
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
@@ -150,17 +156,12 @@ class Menu
 
             return false;
         }
-        $config = array('pk_father'=> $data['pk_father']);
 
-        if (!empty($data['forDelete'])) {
-            $forDelete = explode(', ', $data['forDelete']);
-
-            array_shift($forDelete); //first is empty FIXME
-
-            MenuItems::deleteItems($forDelete);
-        }
-
-        MenuItems::setMenu($data['id'], $data['items'], $config);
+        MenuItems::setMenu(
+            $this->pk_menu,
+            $data['items'],
+            array('pk_father'=> $data['pk_father'])
+        );
 
         return true;
     }
@@ -238,20 +239,18 @@ class Menu
      * @param array
      *
      * @return bool if update ok true
-     */
+     **/
     public static function setMenu($menu, $paramsConfig = array())
     {
         return;
     }
 
-     /**
+    /**
      * List menues
      *
-     * @param array
-     *
-     * @return bool if update ok true
-     */
-    public static function listMenues($paramsConfig = 1)
+     * @param array the list of Menu objects available
+     **/
+    public static function find($paramsConfig = 1)
     {
         $sql =  "SELECT pk_menu, name, site, params, type, pk_father"
                 ." FROM menues WHERE {$paramsConfig}";
@@ -264,21 +263,17 @@ class Menu
             return false;
         }
         $menues = array();
-        $i=0;
         while (!$rs->EOF) {
-            $menues[$i] = new stdClass();
+            $menu = new Menu();
+            $menu->name      = $rs->fields['name'];
+            $menu->pk_menu   = $rs->fields['pk_menu'];
+            $menu->params    = $rs->fields['params'];
+            $menu->site      = $rs->fields['site'];
+            $menu->type      = $rs->fields['type'];
+            $menu->pk_father = $rs->fields['pk_father'];
+            $menu->items = \MenuItems::getMenuItems('pk_menu='.$menu->pk_menu);
 
-            $menues[$i]->name      = $rs->fields['name'];
-            $menues[$i]->pk_menu   = $rs->fields['pk_menu'];
-            $menues[$i]->params    = $rs->fields['params'];
-            $menues[$i]->site      = $rs->fields['site'];
-            $menues[$i]->type      = $rs->fields['type'];
-            $menues[$i]->pk_father = $rs->fields['pk_father'];
-
-            $menues[$i]->items =
-                MenuItems::getMenuItems('pk_menu='.$menues[$i]->pk_menu);
-
-            $i++;
+            $menues []= $menu;
 
             $rs->MoveNext();
         }
@@ -286,15 +281,19 @@ class Menu
         return $menues;
     }
 
+    /**
+     * Renders a menu give its name
+     *
+     * @param array the list of Menu objects available
+     **/
     public static function renderMenu($name)
     {
-
         $menu = self::getMenu($name);
 
         if (!empty($menu->items)) {
             foreach ($menu->items as &$item) {
                 $item->submenu =
-                    MenuItems::getMenuItems('pk_father='.$item->pk_item);
+                    \MenuItems::getMenuItems('pk_father='.$item->pk_item);
             }
         }
 

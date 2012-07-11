@@ -212,9 +212,8 @@ class MenuItems
      */
     public static function setMenu($id, $items =array(), $params_config = array())
     {
+        self::emptyMenu($id);
         $config['pk_father'] = !empty($params_config['pk_father'])? $params_config['pk_father']: 0;
-
-        $items = json_decode($items);
 
         if (!empty($id) && !empty($items)) {
 
@@ -222,60 +221,24 @@ class MenuItems
                " (`pk_menu`,`title`,`link_name`, `type`,`position`,`pk_father`) ".
                " VALUES (?,?,?,?,?,?)");
 
-            $stmtUpdate = $GLOBALS['application']->conn->Prepare("UPDATE menu_items ".
-               " SET  `title` =?, `position` =?, `pk_father`=?  ".
-               " WHERE pk_item = ?");
-
-
-            $menu = MenuItems::getPkItems($id);
-
-            $values =array();
-            $valuesUpdate =array();
-            $i=1;
+            $values = array();
+            $i = 1;
 
             foreach ($items as $item) {
-                //update item if exists in menu
-                $update = 0;
-
-                if (!empty($item->pk_item)
-                    && in_array($item->pk_item, $menu)
-                ) {
-                    $valuesUpdate[] = array(
-                        $item->title,
-                        $i,
-                        $config['pk_father'],
-                        $item->pk_item
-                    );
-                    $update = 1;
-
-                }
-
-                if ($update != 1) {
-                    $values[] = array(
-                        $id,
-                        $item->title,
-                        $item->link,
-                        $item->type,
-                        $i,
-                        $config['pk_father']
-                    );
-                }
+                $values[] = array(
+                    $id,
+                    $item->title,
+                    $item->link,
+                    $item->type,
+                    $i,
+                    $config['pk_father']
+                );
                 $i++;
-
             }
 
             if (!empty($values)) {
                 if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
-                    $logger = Application::getLogger();
-                    $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-                    $logger->notice('Error: '.$errorMsg.print_r($valuesUpdate, true));
-                }
-            }
-            if (!empty($valuesUpdate)) {
-                if ($GLOBALS['application']->conn->Execute($stmtUpdate, $valuesUpdate) === false) {
-                    $logger = Application::getLogger();
-                    $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-                    $logger->notice('Error: '.$errorMsg.print_r($valuesUpdate, true));
+                    \Application::logDatabaseError();
                 }
             }
 
@@ -293,9 +256,9 @@ class MenuItems
      */
     public static function emptyMenu($id)
     {
-        $sql = 'DELETE FROM menu_items WHERE pk_menu ='.($id);
+        $sql = 'DELETE FROM menu_items WHERE pk_menu =?';
 
-        if ($GLOBALS['application']->conn->Execute($sql)===false) {
+        if ($GLOBALS['application']->conn->Execute($sql, array($id))===false) {
             \Application::logDatabaseError();
 
             return false;

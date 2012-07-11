@@ -45,7 +45,7 @@ class MenusController extends Controller
     }
 
     /**
-     * Description of the action
+     * Lists all the available menus
      *
      * @param  Request $request the resquest object
      *
@@ -55,10 +55,8 @@ class MenusController extends Controller
     {
         $this->checkAclOrForward('MENU_ADMIN');
 
-        $menues    = \Menu::listMenues();
-        $subMenues = array();
-        $list      = array();
-        $subList   = array();
+        $menues    = \Menu::find();
+        $subMenues = $list = $subList = array();
 
         foreach ($menues as $menu) {
             if (empty($menu->pk_father)) {
@@ -69,18 +67,18 @@ class MenusController extends Controller
         }
 
         $withoutFather = array();
-        foreach ($subMenues as $submenu){
+        foreach ($subMenues as $submenu) {
             //TODO: mejorar, buscamos su menu padre para pintarlo ya que solo sabemos el item
             $without = true;
             foreach ($list as $menu) {
-                foreach ($menu->items as $item){
+                foreach ($menu->items as $item) {
                     if ($item->pk_item == $submenu->pk_father) {
                         $subList[$item->pk_menu][] = $submenu;
                         $without = false;
                     }
                 }
-
             }
+
             if ($submenu->pk_father != 0 && $without) {
                 $withoutFather[] = $submenu;
             }
@@ -105,7 +103,7 @@ class MenusController extends Controller
     {
         $this->checkAclOrForward('MENU_AVAILABLE');
 
-        $name = $request->query->filter('id', null,FILTER_SANITIZE_STRING);
+        $id = $request->query->filter('id', null,FILTER_SANITIZE_STRING);
 
         $ccm = \ContentCategoryManager::get_instance();
         $cm = new \ContentManager();
@@ -122,7 +120,7 @@ class MenusController extends Controller
             }
         }
         $staticPages = $cm->find('StaticPage', '1=1', 'ORDER BY created DESC ');
-        $menues = \Menu::listMenues();
+        $menues = \Menu::find();
 
         // Get Sync categories from settings
         if ($syncParams = s::get('sync_params')) {
@@ -141,7 +139,10 @@ class MenusController extends Controller
         }
 
         // Get categories from menu
-        $menu = \Menu::getMenu($name);
+        $menu = new \Menu();
+        $menu->read($id);
+        $menu->params = unserialize($menu->params);
+        $menu->items = \MenuItems::getMenuItems('pk_menu='.$menu->pk_menu);
 
         // Overload sync category color if exists
         if ($syncParams) {
@@ -167,6 +168,175 @@ class MenusController extends Controller
             'pages'           => $this->pages,
             'menu'            => $menu
         ));
+    }
+
+    /**
+     * Handles the creating of new menus
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function createAction(Request $request)
+    {
+        $this->checkAclOrForward('MENU_CREATE');
+
+
+        if ('POST' == $request->getMethod()) {
+            $continue = $this->request->request->filter('continue', false, FILTER_SANITIZE_STRING);
+            $data = array(
+                'name'      => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
+                'params'    => serialize(array(
+                    'description' => $request->request->filter('description', null, FILTER_SANITIZE_STRING)
+                )),
+                'site'      => SITE,
+                'pk_father' => $request->request->filter('pk_father', 'user', FILTER_SANITIZE_STRING),
+                'items'     => json_decode(json_decode($request->request->get('items'))),
+            );
+
+            $menu = new \Menu();
+            if ($menu->create($data)) {
+                m::add(sprintf(_("Menu '%s' created successfully."), $data['name']), m::SUCCESS);
+            } else {
+                m::add(sprintf(_("Unable to create the menu")), m::SUCCESS);
+            }
+
+            if ($continue) {
+
+                return $this->redirect($this->generateUrl(
+                    'admin_menu_show',
+                    array('id' => $menu->pk_menu)
+                ));
+            } else {
+
+                return $this->redirect($this->generateUrl('admin_menus'));
+            }
+
+        } else {
+
+            $cm  = new \ContentManager();
+            $ccm = \ContentCategoryManager::get_instance();
+
+            list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu(0);
+            $albumCategories = $videoCategories = $pollCategories = array();
+            foreach ($ccm->categories as $category) {
+                if ($category->internal_category == $this->pages['album']) {
+                    $albumCategories[] = $category;
+                } elseif ($category->internal_category == $this->pages['video']) {
+                    $videoCategories[] = $category;
+                } elseif ($category->internal_category == $this->pages['poll']) {
+                    $pollCategories[] = $category;
+                }
+            }
+            $staticPages = $cm->find('StaticPage', '1=1', 'ORDER BY created DESC ');
+            $menues = \Menu::find();
+
+            if ($syncParams = s::get('sync_params')) {
+                // Fetch all elements from settings
+                $colorSites = s::get('sync_colors');
+                $allSites = array();
+                foreach ($syncParams as $siteUrl => $categories) {
+                    $allSites[] = array ($siteUrl => $categories);
+                    if (array_key_exists($siteUrl, $colorSites)) {
+                        $colors[$siteUrl] = $colorSites[$siteUrl];
+                    }
+                }
+
+                $this->view->assign('elements', $allSites);
+                $this->view->assign('colors', $colors);
+            }
+
+            return $this->render(
+                'menues/edit.tpl',
+                array(
+                    'categories'=> $parentCategories,
+                    'subcat'=> $subcat,
+                    'albumCategories'=>$albumCategories,
+                    'videoCategories'=>$videoCategories,
+                    'pollCategories'=>$pollCategories,
+                    'staticPages'=> $staticPages,
+                    'menues'=> $menues,
+                    'pages'=> $this->pages
+                )
+            );
+        }
+    }
+
+    /**
+     * Updates the menu information
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function updateAction(Request $request)
+    {
+        $this->checkAclOrForward('MENU_UPDATE');
+
+        $id = $this->request->query->getDigits('id');
+        $continue = $this->request->request->filter('continue', false, FILTER_SANITIZE_STRING);
+
+        $menu = new \Menu($id);
+
+        if ($menu->pk_menu == null) {
+            m::add(sprintf(_('Unable to find a menu with the id "%s"'), $id), m::ERROR);
+
+            return $this->redirect($this->generateUrl('admin_menus'));
+        } else {
+            $data = array(
+                'name'      => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
+                'params'    => serialize(array(
+                    'description' => $request->request->filter('description', null, FILTER_SANITIZE_STRING)
+                )),
+                'site'      => SITE,
+                'pk_father' => $request->request->filter('pk_father', 'user', FILTER_SANITIZE_STRING),
+                'items'     => json_decode(json_decode($request->request->get('items'))),
+            );
+            $menu->update($data);
+
+            m::add(_("Menu updated successfully."), m::SUCCESS);
+            if ($continue) {
+
+                return $this->redirect($this->generateUrl(
+                    'admin_menu_show',
+                    array('id' => $menu->pk_menu)
+                ));
+            } else {
+
+                return $this->redirect($this->generateUrl('admin_menus'));
+            }
+        }
+    }
+
+    /**
+     * Deletes a menu given its id
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function deleteAction(Request $request)
+    {
+        $this->checkAclOrForward('MENU_DELETE');
+        $id = $request->query->getDigits('id');
+
+        if (empty($id)) {
+            m::add(_('You must give an id for delete the menu.'), m::ERROR);
+        } else {
+            $menu = new \Menu($id);
+            $menu->delete($id ,$_SESSION['userid']);
+            \MenuItems::emptyMenu($id);
+
+            m::add(sprintf(_("Menu '%s' deleted successfully."), $menu->name), m::SUCCESS);
+        }
+
+        return $this->redirect($this->generateUrl(
+            'admin_menus',
+            array(
+                'category' => $menu->category
+            )
+        ));
+
     }
 
 } // END class MenusController

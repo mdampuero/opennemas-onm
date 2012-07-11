@@ -1,0 +1,62 @@
+<div class="modal hide fade" id="modal-add-item">
+    <div class="modal-header">
+      <a class="close" href="#">×</a>
+      <h3>{t}Add an external link item.{/t}</h3>
+    </div>
+    <div class="modal-body">
+        <p>{t}Fill the below form with the title and the external URL you want to add to the menu.{/t}</p>
+        <p>
+            <label>{t}Title:{/t}</label>
+            <input type="text" name="itemTitle" value="" id="itemTitle" size="60">
+        </p>
+        <p>
+            <label>{t}URL:{/t}</label>
+            <input type="text" name="link" value="" id="link" size="60"> <br>
+        </p>
+        <input type="hidden" name="itemID" id="itemID" value=""/>
+    </div>
+    <div class="modal-footer">
+        <a class="btn primary yes" href="#">{t}Add element{/t}</a>
+    </div>
+</div>
+
+<script>
+jQuery("#modal-add-item").modal({
+    backdrop: 'static', //Show a grey back drop
+    keyboard: true, //Can close on escape
+});
+
+jQuery('#add-external-link').click(function(e, ui) {
+    e.preventDefault();
+    jQuery("#modal-add-item").modal('show');
+});
+
+jQuery('#modal-add-item a.btn.yes').on('click', function(e, ui){
+    e.preventDefault();
+    var name = jQuery('#itemTitle').val();
+    var link = jQuery('#link').val();
+
+    if (jQuery('#itemID').attr('value') == "") {
+        if (name && link) {
+            ul = jQuery('#menuelements');
+
+            var li = document.createElement('li');
+
+            ul.append( '<li title="'+ name +'" link="'+ link +
+                        '" class="menuItem" name="'+ name +'" id ="'+ name +
+                        '" pk_item="" type="external">'+name+
+                        '<div class="btn-group actions" style="float:right;">'+
+                            '<a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a> '+
+                            '<a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>'+
+                        '</div></li>' );
+
+            jQuery('#itemTitle').attr('value','');
+            jQuery('#link').attr('value','');
+            jQuery('#linkInsertions').hide();
+        }
+    } else {
+        alert('updating an element not implemented')
+    };
+    jQuery('#modal-add-item').modal('hide');
+});
+</script>

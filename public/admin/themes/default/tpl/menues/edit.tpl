@@ -1,41 +1,56 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-    {script_tag src="/utilsMenues.js" language="javascript"}
     {script_tag src="/onm/jquery.menues.js"}
     <script>
-    jQuery(document).ready(function() {
-        jQuery( "#menu-form" ).tabs();
+    jQuery(document).ready(function($) {
+        jQuery("#menu-form").accordion({
+            autoHeight: false,
+            navigation: true
+        });
+
+        jQuery('#formulario').on('submit', function(e, ui) {
+            var items = [];
+            jQuery('#menuelements li').each(function(pos, item) {
+                if ($(item).attr('id')) {
+                    items.push({
+                        'id':      $(item).attr('id'),
+                        'title':   $(item).attr('title'),
+                        'type':    $(item).attr('type'),
+                        'link':    $(item).attr('link'),
+                        'pk_item': $(item).attr('pk_item')
+                    });
+                }
+            });
+
+            jQuery('#items').attr('value', JSON.stringify(items));
+        });
     });
     </script>
 {/block}
 
 {block name="header-css" append}
-{css_tag href="/managerMenu.css" media="screen,projection"}
-
+    {css_tag href="/managerMenu.css" media="screen,projection"}
 {/block}
 
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario">
+<form action="{if isset($menu->pk_menu)}{url name=admin_menu_update id=$menu->pk_menu}{else}{url name=admin_menu_create}{/if}" method="post" name="formulario" id="formulario">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Menu manager{/t} :: {t 1=$menu->name}Editing menu "%1"{/t}</h2></div>
+            <div class="title"><h2>{t}Menu manager{/t} :: {if isset($menu->id)}{t 1=$menu->name}Editing menu "%1"{/t}{else}{t}Creating new menu{/t}{/if}</h2></div>
             <ul class="old-button">
                 <li>
-                    <a href="#" class="admin_add" onClick="saveMenu();sendFormValidate(this, '_self', 'validate', '{$menu->pk_menu|default:""}', 'formulario');" value="Validar" title="Validar">
+                    <button type="submit" name="continue" value="1">
                         <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="{t}Save and continue{/t}" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
-                    </a>
+                    </button>
                 </li>
                 <li>
-                    {if isset($menu->pk_menu)}
-                       <a href="#" onClick="javascript:saveMenu();sendFormValidate(this, '_self', 'update', '{$menu->pk_menu|default:""}', 'formulario');">
-                    {else}
-                       <a href="#" onClick="javascript:saveMenu();sendFormValidate(this, '_self', 'create', '0', 'formulario');">
-                    {/if}
-                    <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar y salir" alt="Guardar y salir"><br />{t}Save and Exit{/t}</a>
+                    <button type="submit">
+                        <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar y salir" alt="Guardar y salir"><br />{t}Save and Exit{/t}
+                    </button>
                 </li>
                 <li>
-                    <a onClick="addLink();" style="cursor:pointer;">
+                    <a id="add-external-link" style="cursor:pointer;">
                         <img src="{$params.IMAGE_DIR}list-add.png" border="0" />
                         <br>{t}Add External Link{/t}
                     </a>
@@ -51,45 +66,24 @@
 
     </div>
     <div class="wrapper-content">
+
+        {render_messages}
+
         <table class="adminform">
-            {if isset($menu)}
-                {assign var=menuParams value=$menu->params|unserialize}
-            {/if}
             <tbody>
                  <tr>
                     <td>
-                        <table  style="margin:10px ">
+                        <table  style="width:100%; margin:10px;">
                             <tr>
                                 <td style="width:70%; padding:4px 0;">
                                     <label for="name">{t}Name{/t}</label>
                                     <input type="text" name="name" class="required"
                                            id="name" value="{$menu->name|default:""}"  style="width:97%"
                                            {if (!empty($menu) && $menu->type neq 'user')} readonly="readonly" {/if}/>
+                                    <!--<label for="description">{t}Description{/t}</label>
+                                    <textarea name="description" id="description"   style="width:97%">{$menu->params['description']|clearslash|default:""}</textarea>-->
                                 </td>
-                                <td rowspan="3" valign="top" style="padding:10px">
-                                    <div class="help-block">
-                                        <div class="title"><h4>{t}Help{/t}</h4></div>
-                                        <div class="content">
-                                            <ul>
-                                                <li>{t} Sort items from bottom lists into menu element list.  {/t}</li>
-                                                <li>{t} Drag menu items to order the menu.  {/t}</li>
-                                                <li>{t} Use add button for create a new link in the menu{/t}</li>
-                                                <li>{t} Use dobleClick if you want delete or edit one element{/t}</li>
-                                                <li>{t} Only allow two levels in menus{/t}</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="padding:4px 0;">
-                                    <label for="description">{t}Description{/t}</label>
-                                    <textarea name="description" id="description"   style="width:97%">{$menuParams['description']|clearslash|default:""}</textarea>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td valign="top" style="padding:4px 0;">
+                                <td>
                                     <label for="description">{t}Father menu{/t}</label>
                                     <select id='pk_father' name='pk_father' {if (!empty($menu) && $menu->type neq 'user')} disabled="disabled" {/if}>
                                         <option value="0" title="Ninguno">{t}- Root menu -{/t}</option>
@@ -111,185 +105,225 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan=3>
-                                    <fieldset>
-                                        <legend>{t}Menu components{/t}</legend>
-                                        <div class="left">
-                                        <h3>{t}Menu elements{/t}</h3>
-                                        <ul id="menuelements" class="menuelements">
-                                        {if isset($menu) && !empty($menu->items)}
-                                            {section name=c loop=$menu->items}
-                                                <li class="menuItem" id="item_{$menu->items[c]->pk_item}" pk_item="{$menu->items[c]->pk_item}" title="{$menu->items[c]->title}"
-                                                    link="{$menu->items[c]->link}" type="{$menu->items[c]->type}"
-                                                    title="{t 1=$menu->items[c]->title}Synchronized from %1{/t}"
-                                                    style="background: #{$menu->items[c]->color|default:'FFFFFF'} !important;">
-                                                    {$menu->items[c]->title}
-                                                    {if $menu->items[c]->type == 'syncCategory'}
-                                                        <img src="{$params.IMAGE_DIR}sync-icon.png"
-                                                             alt="{t}Sync{/t}">
-                                                    {/if}
-                                                </li>
-                                            {/section}
-                                        {/if}
-                                        </ul>
-                                    </div>
-                                    <br/>
-                                    <div id="menu-form" class="left tabs">
-                                        <ul>
-                                            <li>
-                                                <a href="#listado">{t}Global Categories{/t}</a>
-                                            </li>
-                                            <li>
-                                                <a href="#subcategories">{t}Subcategories{/t}</a>
-                                            </li>
-                                            {is_module_activated name="ALBUM_MANAGER"}
-                                            <li>
-                                                <a href="#listadoAlbum">{t}Album Categories{/t}</a>
-                                            </li>
-                                            {/is_module_activated}
-                                            {is_module_activated name="VIDEO_MANAGER"}
-                                            <li>
-                                                <a href="#listadoVideo">{t}Video Categories{/t}</a>
-                                            </li>
-                                            {/is_module_activated}
-                                            {is_module_activated name="POLL_MANAGER"}
-                                            <li>
-                                                <a href="#listadoPoll">{t}Poll Categories{/t}</a>
-                                            </li>
-                                            {/is_module_activated}
-                                            <li>
-                                                <a href="#frontpages">{t}Available Modules{/t}</a>
-                                            </li>
-                                            <li>
-                                                <a href="#staticPages">{t}Static Pages{/t}</a>
-                                            </li>
-                                            <li>
-                                                <a href="#syncCategories">{t}Sync Categories{/t}</a>
-                                            </li>
+                                <td colspan=2>
+                                    <label>{t}Menu components{/t}</label>
+                                    <p>{t}Pick elements from the right column and drag them to the left column to include them as elements of this menu.{/t}</p>
+                                    <table  style="width:98%">
+                                    <tr>
+                                        <td style="width:60%">
+                                            <div class="left">
+                                                <ul id="menuelements" class="menuelements">
+                                                {if isset($menu) && !empty($menu->items)}
+                                                    {section name=c loop=$menu->items}
+                                                        <li class="menuItem" id="item_{$menu->items[c]->pk_item}" pk_item="{$menu->items[c]->pk_item}" title="{$menu->items[c]->title}"
+                                                            link="{$menu->items[c]->link}" type="{$menu->items[c]->type}"
+                                                            title="{t 1=$menu->items[c]->title}Synchronized from %1{/t}"
+                                                            style="background: #{$menu->items[c]->color|default:'FFFFFF'} !important;">
+                                                            {$menu->items[c]->title}
+                                                            {if $menu->items[c]->type == 'syncCategory'}
+                                                                <img src="{$params.IMAGE_DIR}sync-icon.png"
+                                                                     alt="{t}Sync{/t}">
+                                                            {/if}
+                                                            <div class="btn-group actions" style="float:right;">
+                                                                <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
+                                                                <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
+                                                            </div>
+                                                        </li>
+                                                    {/section}
+                                                {/if}
+                                                </ul>
+                                            </div>
+                                        </td>
+                                        <td style="width:40%">
+                                            <div id="menu-form" style="width:100%">
 
-                                        </ul>
+                                                {if count($categories) > 0}
+                                                <h3 href="#listado">{t}Global Categories{/t}</h3>
+                                                <div id="listado">
+                                                    <ul id='availableCategories' class="elementsContainer">
+                                                        {section name=as loop=$categories}
+                                                            <li id="cat_{$categories[as]->pk_content_category}" title="{$categories[as]->title}"
+                                                                type="category" link="{$categories[as]->name}"
+                                                                pk_item="{$categories[as]->pk_content_category}"
+                                                                class="drag-category" pk_menu="">
+                                                                {$categories[as]->title}
+                                                            </li>
+                                                        {/section}
+                                                    </ul>
+                                                </div>
+                                                {/if}
 
-                                        <div id="listado">
-                                            <ul id='availableCategories' class="elementsContainer">
-                                                {section name=as loop=$categories}
-                                                    <li id="cat_{$categories[as]->pk_content_category}" title="{$categories[as]->title}"
-                                                        type="category" link="{$categories[as]->name}"
-                                                        pk_item="{$categories[as]->pk_content_category}"
-                                                        class="drag-category" pk_menu="">
-                                                        {$categories[as]->title}
-                                                    </li>
-                                                {/section}
-                                            </ul>
-                                         </div>
-                                        <div id="listadoAlbum">
-                                            <ul id='albumCategories' class="elementsContainer">
-                                                {section name=as loop=$albumCategories}
-                                                <li id="album_{$albumCategories[as]->pk_content_category}" title="{$albumCategories[as]->title}"
-                                                    type="albumCategory" link="{$albumCategories[as]->name}"
-                                                    pk_item="{$albumCategories[as]->pk_content_category}"
-                                                    class="drag-category" pk_menu="">
-                                                    {$albumCategories[as]->title}
-                                                </li>
-                                                {/section}
-                                            </ul>
-                                         </div>
-                                        <div id="listadoVideo">
-                                            <ul id='videoCategories' class="elementsContainer">
-                                                {section name=as loop=$videoCategories}
+                                                {if count($categories) > 0}
+                                                <h3 href="#subcategories">{t}Subcategories{/t}</h3>
+                                                <div id="subcategories" style="border:1px solid #CCCCCC;padding: 4px;">
+                                                    {section name=as loop=$categories}
+                                                        {if !empty($subcat[as])}
+                                                            <strong>{$categories[as]->title}</strong>
+                                                            <ul  class="elementsContainer" id="subCategories{$categories[as]->pk_content_category}">
+                                                            {section name=su loop=$subcat[as]}
+                                                                 <li id="subcat_{$subcat[as][su]->pk_content_category}" title="{$subcat[as][su]->title}"
+                                                                     type="category" link="{$subcat[as][su]->name}"
+                                                                     pk_item="{$subcat[as][su]->pk_content_category}" class="drag-category" pk_menu="">
+                                                                    {$subcat[as][su]->title}
+                                                                    <div class="btn-group actions" style="float:right;">
+                                                                        <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
+                                                                        <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
+                                                                    </div>
+                                                                </li>
+                                                            {/section}
+                                                            </ul>
+                                                        {/if}
+                                                    {/section}
+                                                </div>
+                                                {/if}
+
+                                                {is_module_activated name="ALBUM_MANAGER"}
+                                                {if count($albumCategories) > 0}
+                                                <h3 href="#listadoAlbum">{t}Album Categories{/t}</h3>
+                                                <div id="listadoAlbum">
+                                                    <ul id='albumCategories' class="elementsContainer">
+                                                        {section name=as loop=$albumCategories}
+                                                        <li id="album_{$albumCategories[as]->pk_content_category}" title="{$albumCategories[as]->title}"
+                                                            type="albumCategory" link="{$albumCategories[as]->name}"
+                                                            pk_item="{$albumCategories[as]->pk_content_category}"
+                                                            class="drag-category" pk_menu="">
+                                                            {$albumCategories[as]->title}
+                                                            <div class="btn-group actions" style="float:right;">
+                                                                <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
+                                                                <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
+                                                            </div>
+                                                        </li>
+                                                        {/section}
+                                                    </ul>
+                                                 </div>
+                                                {/if}
+                                                {/is_module_activated}
+
+                                                {is_module_activated name="VIDEO_MANAGER"}
+                                                {if count($videoCategories) > 0}
+                                                <h3 href="#listadoVideo">{t}Video Categories{/t}</h3>
+                                                <div id="listadoVideo">
+                                                    <ul id='videoCategories' class="elementsContainer">
+                                                        {section name=as loop=$videoCategories}
                                                         <li id="video_{$videoCategories[as]->pk_content_category}" title="{$videoCategories[as]->title}"
                                                             type="videoCategory" link="{$videoCategories[as]->name}"
                                                              pk_item="{$videoCategories[as]->pk_content_category}"
                                                              class="drag-category" pk_menu="">
                                                             {$videoCategories[as]->title}
+                                                            <div class="btn-group actions" style="float:right;">
+                                                                <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
+                                                                <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
+                                                            </div>
                                                         </li>
-                                                {/section}
-                                            </ul>
-                                         </div>
-                                         <div id="listadoPoll">
-                                            <ul id='pollCategories' class="elementsContainer">
-                                                {section name=as loop=$pollCategories}
+                                                        {/section}
+                                                    </ul>
+                                                </div>
+                                                {/if}
+                                                {/is_module_activated}
+
+                                                {is_module_activated name="POLL_MANAGER"}
+                                                {if count($pollCategories) > 0}
+                                                <h3 href="#listadoPoll">{t}Poll Categories{/t}</h3>
+                                                <div id="listadoPoll">
+                                                    <ul id='pollCategories' class="elementsContainer">
+                                                        {section name=as loop=$pollCategories}
                                                         <li id="video_{$pollCategories[as]->pk_content_category}" title="{$pollCategories[as]->title}"
                                                          type="pollCategory" link="{$pollCategories[as]->name}"
                                                              pk_item="{$pollCategories[as]->pk_content_category}"
                                                             class="drag-category" pk_menu="">
                                                             {$pollCategories[as]->title}
+                                                            <div class="btn-group actions" style="float:right;">
+                                                                <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
+                                                                <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
+                                                            </div>
                                                         </li>
-                                                {/section}
-                                            </ul>
-                                         </div>
-                                         <div id="frontpages">
-                                            <ul id='availablePages' class="elementsContainer">
-                                                {foreach from=$pages item=value key=page}
-                                                    <li id="page_{$page}" pk_item="{$value}"  title="{$page}"
-                                                        link={if $page eq 'frontpage'}"home"
-                                                                {elseif $page eq 'poll'}"encuesta"
-                                                                {elseif $page eq 'letter'}"cartas-al-director"
-                                                                {elseif $page eq 'kiosko'}"portadas-papel"
-                                                                {elseif $page eq 'letter'}"cartas-al-director"
-                                                                {elseif $page eq 'boletin'}"newsletter"
-                                                                {else}{$page}{/if}
-                                                        type="internal"  class="drag-category" pk_menu="">
-                                                        {if $page eq 'frontpage'}home
-                                                                {elseif $page eq 'poll'}Encuesta
-                                                                {elseif $page eq 'letter'}Cartas Al Director
-                                                                 {elseif $page eq 'kiosko'}Portadas Papel
-                                                                 {elseif $page eq 'boletin'}Bolet&iacute;n
-                                                                {else}{$page}{/if}
-                                                    </li>
-                                                {/foreach}
-                                            </ul>
-                                        </div>
-                                         <div id="staticPages">
-                                              <ul id='availableStatics' class="elementsContainer">
-                                                 {section name=k loop=$staticPages}
-                                                     <li id="static_{$staticPages[k]->id}" title="{$staticPages[k]->title}" pk_menu=""
-                                                         type="static" link="{$staticPages[k]->slug}"
-                                                          pk_item="{$staticPages[k]->id}"
-                                                          class="drag-category">
-                                                            {$staticPages[k]->title}
-                                                     </li>
-                                                 {/section}
-                                             </ul>
-                                         </div>
-                                        <div id="subcategories" style="border:1px solid #CCCCCC;padding: 4px;">
-                                            {section name=as loop=$categories}
-                                                {if !empty($subcat[as])}
-                                                    <strong>{$categories[as]->title}</strong>
-                                                    <ul  class="elementsContainer" id="subCategories{$categories[as]->pk_content_category}">
-                                                    {section name=su loop=$subcat[as]}
-                                                         <li id="subcat_{$subcat[as][su]->pk_content_category}" title="{$subcat[as][su]->title}"
-                                                             type="category" link="{$subcat[as][su]->name}"
-                                                             pk_item="{$subcat[as][su]->pk_content_category}" class="drag-category" pk_menu="">
-                                                            {$subcat[as][su]->title}</li>
-                                                    {/section}
+                                                        {/section}
                                                     </ul>
+                                                </div>
                                                 {/if}
-                                            {/section}
-                                        </div>
+                                                {/is_module_activated}
 
-                                        <div id="syncCategories" style="border:1px solid #CCCCCC;padding: 4px;">
-                                            {foreach $elements as $config name=colors}
-                                                {foreach from=$config key=site item=categories}
-                                                <strong>{$site}</strong>
-                                                <ul id='availableSync' class="elementsContainer">
-                                                    {foreach $categories as $category}
-                                                    <li id="sync_category" title="{$category|capitalize}"
-                                                        type="syncCategory" link="{$category}"
-                                                        class="drag-category" pk_menu=""
-                                                        style="background-color: #{$colors[$site]}">
-                                                        {$category|capitalize}
-                                                        <img src="{$params.IMAGE_DIR}sync-icon.png"
-                                                             alt="{t}Sync{/t}" >
-                                                    </li>
+                                                {if count($pages) > 0}
+                                                <h3 href="#frontpages">{t}Modules{/t}</h3>
+                                                <div id="frontpages">
+                                                    <ul id='availablePages' class="elementsContainer">
+                                                        {foreach from=$pages item=value key=page}
+                                                            <li id="page_{$page}" pk_item="{$value}"  title="{$page}"
+                                                                link={if $page eq 'frontpage'}"home"
+                                                                        {elseif $page eq 'poll'}"encuesta"
+                                                                        {elseif $page eq 'letter'}"cartas-al-director"
+                                                                        {elseif $page eq 'kiosko'}"portadas-papel"
+                                                                        {elseif $page eq 'letter'}"cartas-al-director"
+                                                                        {elseif $page eq 'boletin'}"newsletter"
+                                                                        {else}{$page}{/if}
+                                                                type="internal"  class="drag-category" pk_menu="">
+                                                                {if $page eq 'frontpage'}home
+                                                                        {elseif $page eq 'poll'}Encuesta
+                                                                        {elseif $page eq 'letter'}Cartas Al Director
+                                                                         {elseif $page eq 'kiosko'}Portadas Papel
+                                                                         {elseif $page eq 'boletin'}Bolet&iacute;n
+                                                                        {else}{$page}{/if}
+                                                                <div class="btn-group actions" style="float:right;">
+                                                                    <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
+                                                                    <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
+                                                                </div>
+                                                            </li>
+                                                        {/foreach}
+                                                    </ul>
+                                                </div>
+                                                {/if}
+
+                                                {if count($staticPages) > 0}
+                                                <h3 href="#staticPages">{t}Static Pages{/t}</h3>
+                                                <div id="staticPages">
+                                                      <ul id='availableStatics' class="elementsContainer">
+                                                         {section name=k loop=$staticPages}
+                                                             <li id="static_{$staticPages[k]->id}" title="{$staticPages[k]->title}" pk_menu=""
+                                                                 type="static" link="{$staticPages[k]->slug}"
+                                                                  pk_item="{$staticPages[k]->id}"
+                                                                  class="drag-category">
+                                                                {$staticPages[k]->title}
+                                                                <div class="btn-group actions" style="float:right;">
+                                                                    <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
+                                                                    <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
+                                                                </div>
+                                                             </li>
+                                                         {/section}
+                                                     </ul>
+                                                </div>
+                                                {/if}
+
+                                                {if count($elements) > 0}
+                                                <h3 href="#syncCategories">{t}Sync Categories{/t}</h3>
+                                                <div id="syncCategories" style="border:1px solid #CCCCCC;padding: 4px;">
+                                                    {foreach $elements as $config name=colors}
+                                                        {foreach from=$config key=site item=categories}
+                                                        <strong>{$site}</strong>
+                                                        <ul id='availableSync' class="elementsContainer">
+                                                            {foreach $categories as $category}
+                                                            <li id="sync_category" title="{$category|capitalize}"
+                                                                type="syncCategory" link="{$category}"
+                                                                class="drag-category" pk_menu=""
+                                                                style="background-color: #{$colors[$site]}">
+                                                                {$category|capitalize}
+                                                                <img src="{$params.IMAGE_DIR}sync-icon.png"
+                                                                     alt="{t}Sync{/t}" >
+                                                                <div class="btn-group actions" style="float:right;">
+                                                                    <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
+                                                                    <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
+                                                                </div>
+                                                            </li>
+                                                            {/foreach}
+                                                        </ul>
+                                                        {/foreach}
                                                     {/foreach}
-                                                </ul>
-                                                {/foreach}
-                                            {/foreach}
-                                        </div>
+                                                </div>
+                                                {/if}
 
-                                    </div>
-                                    </fieldset>
-
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
                                 </td>
                             </tr>
                         </table>
@@ -297,23 +331,10 @@
                 </tr>
             </tbody>
         </table>
-        <div id="linkInsertions" class="reveal-modal" style="display:none;">
-            <p>{t}Fill the below form with the title and the external URL you want to add to the menu.{/t}</p>
-            <label>{t}Title:{/t}</label> <input type="text" name="itemTitle" value="" id="itemTitle" size="60">
-            <br><br>
-            <label>{t}URL:{/t}</label> <input type="text" name="link" value="" id="link" size="60"> <br>
-            <hr>
-            <button id="saveButton"  class="save-button onm-button green" type="button">{t}Save{/t}</button>
-
-            <input type="hidden" name="IdItem" id="IdItem" value="" />
-            <a title="Close" onclick="hideDiv();" class="close-reveal-modal">&#215;</a></div>
-        </div>
-        <input type="hidden" id="action" name="action" value="" />
-
-        <input type="hidden" name="id" id="id" value="{$menu->pk_menu|default:""}" />
-        <input type="hidden" size="100" name="items" id="items" value="" />
+        <input type="hidden" name="items" id="items" value="" />
         <input type="hidden" id="forDelete" name="forDelete" value="" />
     </div><!--fin wrapper-content-->
-
 </form>
+
+{include file="menues/modals/_modalAddItem.tpl"}
 {/block}

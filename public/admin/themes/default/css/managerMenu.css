@@ -1,57 +1,31 @@
-.panel {
-    margin:0;
-    border:none;
-    padding:0 !important;
-}
-#menuelements { height:60px; border:1px solid #ccc; width:97%; }
-#menuelements, .elementsContainer { width:100%; margin:0; padding:10px; }
+#menuelements { border:1px solid #ccc;}
+#menuelements, .elementsContainer { margin:0; padding:10px; }
 #menuelements li, .elementsContainer li, .placeholder-element {
     padding:5px 9px;
     list-style:none;
     border:1px solid #ddd;
     cursor:pointer;
-    margin:2px;
-    display:inline-block;
+    margin:2px 0;
     font-size:1.1em;
+    min-height:20px;
 }
-#menuelements li:hover, .elementsContainer li:hover { background:#FFF}
+#menuelements li:hover, .elementsContainer li:hover { background:#FFF; }
 
-.reveal-modal {
-    top: 20%;
-    left: 50%;
-    margin-left: -300px;
-    width: 440px;
-    background: #FFF;
-    background: #fff;
-    position: absolute;
-    z-index: 101;
-    padding: 30px 40px 34px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    border-radius: 5px;
-    -moz-box-shadow: 0 0 10px rgba(0,0,0,.4);
-    -webkit-box-shadow: 0 0 10px rgba(0,0,0,.4);
-    -box-shadow: 0 0 10px rgba(0,0,0,.4);
+
+#menu-form > h3 { padding: 5px 10px 5px 30px !important;}
+#menu-form > div ul {
+    margin:0;
+    padding:0;
+}
+#menu-form > div {
+    padding:1em;
 }
 
-.reveal-modal .close-reveal-modal {
-    font-size: 22px;
-    line-height: .5;
-    position: absolute;
-    top: 8px;
-    right: 11px;
-    color: #aaa;
-    text-shadow: 0 -1px 1px rbga(0,0,0,.6);
-    font-weight: bold;
-    cursor: pointer;
+#menu-form .actions {
+    display:none;
 }
-.save-button { cursor: pointer; }
 
-.div-actions {
-    background: #CCCCCC;
-    background: rgba(255,255,255,.9);
-    -moz-box-shadow: 0 0 10px rgba(0,0,0,.4);
-    -webkit-box-shadow: 0 0 10px rgba(0,0,0,.4);
-    -box-shadow: 0 0 10px rgba(0,0,0,.4);
-    padding: 5px;
+.placeholder-element {
+    border:1px dashed #ccc !important;
+    background:#efefef;
 }

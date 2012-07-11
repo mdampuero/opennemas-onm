@@ -214,6 +214,24 @@ $adminRoutes->add(
 );
 
 $adminRoutes->add(
+    'admin_menu_create',
+    new Route(
+        '/menu/create',
+        array('_controller' => 'Backend:Controllers:MenusController:create')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_menu_update',
+    new Route(
+        '/menu/{id}/update',
+        array('_controller' => 'Backend:Controllers:MenusController:update')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
     'admin_menu_delete',
     new Route(
         '/menus/{id}/delete',
