@@ -724,6 +724,9 @@ Options -Indexes
     RewriteCond %{QUERY_STRING} &?article_id=([^&]+)&?category=([^&]+)&?action=read
     RewriteRule ^article.php$ controllers/article.php?article_id=%1&action=read [L,NC]
 
+    #album.php?category=2&album_id=6095&action=read
+    RewriteCond %{QUERY_STRING} &?category=([^&]+)
+    RewriteRule ^album.php$ /album/ [R=301,L,NC]
 
 
     RewriteRule ^articulo/(.*)/([0-9]+).htm  /articulo/$1/$2.html [R=301,L,NC]
