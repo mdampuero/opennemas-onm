@@ -80,9 +80,9 @@ class Book extends Content
         }
 
         $this->file_name =
-            StringUtils::cleanFileName($_FILES['file']['name'], '');
+            FilesManager::cleanFileName($_FILES['file']['name'], '');
         $this->file_img  =
-            StringUtils::cleanFileName($_FILES['file_img']['name'], '');
+            FilesManager::cleanFileName($_FILES['file_img']['name'], '');
 
         $this->createThumb();
 
@@ -127,8 +127,8 @@ class Book extends Content
 
     public function update($data)
     {
-        $file_name = StringUtils::cleanFileName($_FILES['file']['name']);
-        $file_img  = StringUtils::cleanFileName($_FILES['file_img']['name']);
+        $file_name = FilesManager::cleanFileName($_FILES['file']['name']);
+        $file_img  = FilesManager::cleanFileName($_FILES['file_img']['name']);
 
         parent::update($data);
         $data['file_name'] = !empty($file_name)?$file_name:$this->file_name;
