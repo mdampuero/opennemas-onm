@@ -791,12 +791,13 @@ legend {
 
   .global-nav div.info-left { float:right; display:inline-block; }
   .global-nav .logoonm, .global-nav > nav { float:left; display:inline-block; }
-  .global-nav .logoonm:hover, .global-nav .logoonm:active { text-decoration:none; outline: none;}
+  .global-nav .logoonm:hover, .global-nav .logoonm:active { text-decoration:none; outline: none; }
 
   .global-nav a, .global-nav{ color:#ddd; white-space:nowrap; }
   .global-nav .logoonm { width:140px; margin:0; padding:0; height:35px;}
     .global-nav .logoonm a{ color: White; height:35px; vertical-align:center;}
     .global-nav .logoonm div { display:block; float:left; }
+    .global-nav .logoonm a#logo-onm { display:block !important; text-indent:-9999px; width:132px; height:38px; background-image:url(../images/logo-opennemas-small.png); background-position:center center; background-repeat: no-repeat;}
     .global-nav .logoonm img{ vertical-align:middle; outline:none; padding-top:5px }
     .global-nav .logoonm div.site-name{ padding-top:10px; }
 
@@ -1027,6 +1028,38 @@ legend {
 
 .action-buttons img { max-height:16px; }
 
+
+/* =============================================================================
+   logoonm rules
+   ========================================================================== */
+   .logoonm {
+    position:relative;
+   }
+.logoonm:hover ul {
+    display:block;
+}
+.logoonm ul {
+  position:absolute;
+  top:100%;
+  left:0px;
+  display:none;
+  margin:0;
+  padding:0;
+  background-color: #1d1d1d; box-shadow: 0 0px 5px rgba(0, 0, 0, 0.9) inset, 0 1px 2px rgba(0, 0, 0, 0.6);
+  border-radius:0 0 5px 5px;
+  min-width:100%
+}
+.logoonm ul li {
+  padding:4px 10px 4px 20px;
+}
+.logoonm ul li:last-child {
+
+}
+.logoonm ul a:hover {
+  color:White; background-color: rgba(255, 255, 255, 0.1);
+  display:block;
+}
+
 /* -------------------------------------------------------------
   Main admin menu   //// Root = Horizontal, Secondary = Vertical
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -1036,7 +1069,7 @@ ul#menu a { display: block; color: #CCCCCC; white-space:nowrap; vertical-align:m
   ul#menu li:hover > a, ul#menu a:hover,
   ul#menu li:focus > a, ul#menu a:focus { color:White; background-color: rgba(255, 255, 255, 0.1); }
 
-ul#menu ul {margin: 0; padding: 0; position: absolute; top: 99%; left: 0px; background-color: #232323; box-shadow: 0 0px 5px rgba(0, 0, 0, 0.9) inset, 0 1px 2px rgba(0, 0, 0, 0.6); }
+ul#menu ul {margin: 0; padding: 0; position: absolute; top: 99%; left: 0px; background-color: #1d1d1d; box-shadow: 0 0px 5px rgba(0, 0, 0, 0.9) inset, 0 1px 2px rgba(0, 0, 0, 0.6); }
   ul#menu li { display: block; position:relative; list-style: none; margin: 0; padding: 0; border: 0 none;}
     ul#menu a:hover, ul#menu a:focus { color: White; }
   ul#menu > li ul { border-radius: 0 0 5px 5px ; }
