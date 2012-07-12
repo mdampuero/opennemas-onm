@@ -13,6 +13,10 @@
     table.adminlist img {
         height:auto;
     }
+
+    div#opinion-form  div#sel img, div#opinion-form  div#div_widget img{
+        max-width: 140px;
+    }
 	</style>
 {/block}
 

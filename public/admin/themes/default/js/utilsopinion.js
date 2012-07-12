@@ -8,20 +8,25 @@ function changePhotos(fk_author)
             evalScripts: true,
             onComplete: function() {
                 $('fk_author_img_widget').value='';
+                var selected = 0;
                 var photos = $('photos').select('img');
                 for(var i=0; i<photos.length; i++) {
-
                     try {
+
                         new Draggable(photos[i].id, { revert:true }  );
-                        Imagen = new Image();
-                        Imagen.setAttribute('id',photos[i].id);
-      	       		    	Imagen.onload=function(){
-             			    		$('widget').src=this.src;
-             			    		$('fk_author_img_widget').value=this.id;
-             			    		$('fk_author_img').value=this.id;
-             		   			    $('seleccionada').src=this.src;
-      	       		    	};
-      	       		    	Imagen.src=photos[i].src+'?'+Math.random();
+                        if(selected == 0) {
+
+                          Imagen = new Image();
+                          Imagen.setAttribute('id',photos[i].id);
+        	       		    	Imagen.onload=function(){
+               			    		$('widget').src=this.src;
+               			    		$('fk_author_img_widget').value=this.id;
+               			    		$('fk_author_img').value=this.id;
+               		   			  $('seleccionada').src=this.src;
+        	       		    	};
+        	       		    	Imagen.src=photos[i].src+'?'+Math.random();
+                          selected = photos[i].id;
+                        }
       	       		    //	 debugger;
                     } catch(e) {
                      //  console.debug( e );

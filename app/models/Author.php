@@ -428,7 +428,7 @@ class Author
     {
         $sql = 'SELECT author_imgs.fk_author, author_imgs.pk_img,
                        author_imgs.path_img, author_imgs.description
-                FROM author_imgs WHERE fk_author = ? ORDER BY pk_img ASC';
+                FROM author_imgs WHERE fk_author = ? ORDER BY pk_img DESC';
         $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
