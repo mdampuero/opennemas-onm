@@ -727,6 +727,7 @@ Options -Indexes
     RewriteCond %{QUERY_STRING} &?category=([^&]+)
     RewriteRule ^album.php$ /album/ [R=301,L,NC]
 
+    RewriteRule ^(.*)/boletin/?$  /boletin/ [R=301,L,NC]
 
     RewriteRule ^articulo/(.*)/([0-9]+).htm  /articulo/$1/$2.html [R=301,L,NC]
     RewriteRule ^opinion/(.*)/([0-9]+).htm  /opinion/$1/$2.html [R=301,L,NC]
