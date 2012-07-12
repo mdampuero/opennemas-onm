@@ -624,7 +624,7 @@ class ImagesController extends Controller
                             'category'          => $category,
                             'category_name'     => $category_name,
                             'description'       => '',
-                            'metadata'          => StringUtils::get_tags($local_file),
+                            'metadata'          => \StringUtils::get_tags($upload['tmp_name'][$index]),
                         );
                         try {
                             $photo = new \Photo();
