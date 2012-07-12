@@ -124,10 +124,21 @@ switch ($action) {
 
         $cacheID  = $tpl->generateCacheId($category_name, null, null);
         $cm       = new ContentManager();
-        $specials = $cm->find_by_category(
-                        'Special', $actual_category_id,
-                        'available=1',
-                        ' ORDER BY starttime DESC LIMIT 10');
+
+        if ( isset($actual_category_id) && !empty($actual_category_id) ) {
+            $specials = $cm->find_by_category(
+                'Special',
+                $actual_category_id,
+                'available=1',
+                ' ORDER BY starttime DESC LIMIT 14');
+        } else {
+            $specials = $cm->find(
+                'Special',
+                'available=1',
+                ' ORDER BY starttime DESC LIMIT 14');
+        }
+
+
 
         if (!empty($specials)) {
             foreach ($specials as &$special) {
