@@ -188,7 +188,7 @@ jQuery(function($){
     * Content elements in frontpage code
     ***************************************************************************/
     // Toggle content-provider-element checkbox if all the content-provider-elemnt is clicked
-    $('div.content').on('click', 'div.placeholder div.content-provider-element .description', function() {
+    $('div.content').on('click', 'div.placeholder div.content-provider-element input[type="checkbox"]', function() {
         checkbox = $(this).find('input[type="checkbox"]');
         checkbox.attr(
            'checked',

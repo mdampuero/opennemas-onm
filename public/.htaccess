@@ -652,7 +652,7 @@ Options -Indexes
     #especiales/category/slug-slug/20111208174136001340.html
     RewriteRule ^especiales/([a-z0-9\-]+)/(.*)/([0-9]+).html$ controllers/special.php?action=show&category_name=$1&special_id=$3 [L,NC]
     RewriteRule ^especiales/([a-z]+)/?$ controllers/special.php?category_name=$1  [L,NC]
-    RewriteRule ^especiales/?$ special.php?category_name=cronicas [L,NC]
+    RewriteRule ^especiales/?$ controllers/special.php?category_name=home [L,NC]
 
     # HEMEROTECA
     #hemeroteca/yyyy-mm-dd/category_name.html
@@ -688,7 +688,6 @@ Options -Indexes
     RewriteRule ^paisvasco/?$ /seccion/paisvasco/ [R=301,L,NC]
     RewriteRule ^opiniones/?$ /opinion/ [R=301,L,NC]
     RewriteRule ^especiales/?$ /especiales/cronicas/ [R=301,L,NC]
-    RewriteRule ^especiales/home/?$ /especiales/cronicas/ [R=301,L,NC]
     RewriteRule ^publicidad/([0-9]+).html$ controllers/advertisement.php?action=show&publi_id=$1 [L,NC]
     RewriteRule ^opinion/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/(.*)/([0-9]+).html controllers/opinion_inner.php?opinion_id=$5&category_name=opinion&action=read [L,NC]
 
@@ -724,7 +723,11 @@ Options -Indexes
     RewriteCond %{QUERY_STRING} &?article_id=([^&]+)&?category=([^&]+)&?action=read
     RewriteRule ^article.php$ controllers/article.php?article_id=%1&action=read [L,NC]
 
+    #album.php?category=2&album_id=6095&action=read
+    RewriteCond %{QUERY_STRING} &?category=([^&]+)
+    RewriteRule ^album.php$ /album/ [R=301,L,NC]
 
+    RewriteRule ^(.*)/boletin/?$  /boletin/ [R=301,L,NC]
 
     RewriteRule ^articulo/(.*)/([0-9]+).htm  /articulo/$1/$2.html [R=301,L,NC]
     RewriteRule ^opinion/(.*)/([0-9]+).htm  /opinion/$1/$2.html [R=301,L,NC]

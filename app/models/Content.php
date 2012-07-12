@@ -1996,11 +1996,12 @@ class Content
      **/
     public function loadAttachedVideo($force = false)
     {
+
         if (
-            ($force || empty($content->img1))
-            && !empty($content->fk_video)
+            ($force || empty($this->img1))
+            && !empty($this->fk_video)
         ) {
-            $content->obj_video = new Video($content->fk_video);;
+            $this->obj_video = new Video($this->fk_video);
         }
 
         return $this;
