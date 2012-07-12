@@ -36,7 +36,7 @@ jQuery('.delChecked').click(function(e) {
 });
 
 jQuery('#modal-menu-batchDelete a.btn.yes').on('click', function(){
-    jQuery('#action').attr('value', "batchDelete");
+    jQuery('#formulario').attr('action', "{url name=admin_menu_batchdelete}");
     jQuery('#formulario').submit();
     e.preventDefault();
 });

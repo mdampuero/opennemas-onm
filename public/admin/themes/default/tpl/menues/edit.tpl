@@ -2,6 +2,7 @@
 
 {block name="footer-js" append}
     {script_tag src="/onm/jquery.menues.js"}
+    {script_tag src="/jquery/jquery.nestedSortable.js"}
     <script>
     jQuery(document).ready(function($) {
         jQuery("#menu-form").accordion({
@@ -84,7 +85,7 @@
                                     <textarea name="description" id="description"   style="width:97%">{$menu->params['description']|clearslash|default:""}</textarea>-->
                                 </td>
                                 <td>
-                                    <label for="description">{t}Father menu{/t}</label>
+                                    <!-- <label for="description">{t}Father menu{/t}</label>
                                     <select id='pk_father' name='pk_father' {if (!empty($menu) && $menu->type neq 'user')} disabled="disabled" {/if}>
                                         <option value="0" title="Ninguno">{t}- Root menu -{/t}</option>
                                         {section loop=$menues name=m}
@@ -101,7 +102,7 @@
                                             {/section}
                                             {/if}
                                         {/section}
-                                    </select>
+                                    </select> -->
                                 </td>
                             </tr>
                             <tr>
@@ -111,22 +112,25 @@
                                     <table  style="width:98%">
                                     <tr>
                                         <td style="width:60%">
-                                            <div class="left">
-                                                <ul id="menuelements" class="menuelements">
+                                            <div class="wrapper-menu-items">
+                                                <ol id="menuelements">
                                                 {if isset($menu) && !empty($menu->items)}
                                                     {section name=c loop=$menu->items}
                                                         <li class="menuItem" id="item_{$menu->items[c]->pk_item}" pk_item="{$menu->items[c]->pk_item}" title="{$menu->items[c]->title}"
                                                             link="{$menu->items[c]->link}" type="{$menu->items[c]->type}"
                                                             title="{t 1=$menu->items[c]->title}Synchronized from %1{/t}"
                                                             style="background: #{$menu->items[c]->color|default:'FFFFFF'} !important;">
-                                                            {$menu->items[c]->title}
-                                                            {if $menu->items[c]->type == 'syncCategory'}
-                                                                <img src="{$params.IMAGE_DIR}sync-icon.png"
-                                                                     alt="{t}Sync{/t}">
-                                                            {/if}
-                                                            <div class="btn-group actions" style="float:right;">
-                                                                <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
-                                                                <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
+                                                            <div>
+                                                                {$menu->items[c]->title}
+                                                                {if $menu->items[c]->type == 'syncCategory'}
+                                                                    <img src="{$params.IMAGE_DIR}sync-icon.png"
+                                                                         alt="{t}Sync{/t}">
+                                                                {/if}
+                                                                <div class="btn-group actions" style="float:right;">
+                                                                    <a href="#" class="add-item"><i class="icon-plus"></i></a>
+                                                                    <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
+                                                                    <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
+                                                                </div>
                                                             </div>
                                                         </li>
                                                     {/section}
@@ -146,7 +150,14 @@
                                                                 type="category" link="{$categories[as]->name}"
                                                                 pk_item="{$categories[as]->pk_content_category}"
                                                                 class="drag-category" pk_menu="">
-                                                                {$categories[as]->title}
+                                                                <div>
+                                                                    {$categories[as]->title}
+                                                                    <div class="btn-group actions" style="float:right;">
+                                                                        <a href="#" class="add-item"><i class="icon-plus"></i></a>
+                                                                        <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
+                                                                        <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
+                                                                    </div>
+                                                                </div>
                                                             </li>
                                                         {/section}
                                                     </ul>
@@ -164,10 +175,13 @@
                                                                  <li id="subcat_{$subcat[as][su]->pk_content_category}" title="{$subcat[as][su]->title}"
                                                                      type="category" link="{$subcat[as][su]->name}"
                                                                      pk_item="{$subcat[as][su]->pk_content_category}" class="drag-category" pk_menu="">
-                                                                    {$subcat[as][su]->title}
-                                                                    <div class="btn-group actions" style="float:right;">
-                                                                        <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
-                                                                        <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
+                                                                    <div>
+                                                                        {$subcat[as][su]->title}
+                                                                        <div class="btn-group actions" style="float:right;">
+                                                                            <a href="#" class="add-item"><i class="icon-plus"></i></a>
+                                                                            <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
+                                                                            <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
+                                                                        </div>
                                                                     </div>
                                                                 </li>
                                                             {/section}
@@ -187,10 +201,13 @@
                                                             type="albumCategory" link="{$albumCategories[as]->name}"
                                                             pk_item="{$albumCategories[as]->pk_content_category}"
                                                             class="drag-category" pk_menu="">
-                                                            {$albumCategories[as]->title}
-                                                            <div class="btn-group actions" style="float:right;">
-                                                                <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
-                                                                <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
+                                                            <div>
+                                                                {$albumCategories[as]->title}
+                                                                <div class="btn-group actions" style="float:right;">
+                                                                    <a href="#" class="add-item"><i class="icon-plus"></i></a>
+                                                                    <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
+                                                                    <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
+                                                                </div>
                                                             </div>
                                                         </li>
                                                         {/section}
@@ -209,10 +226,13 @@
                                                             type="videoCategory" link="{$videoCategories[as]->name}"
                                                              pk_item="{$videoCategories[as]->pk_content_category}"
                                                              class="drag-category" pk_menu="">
-                                                            {$videoCategories[as]->title}
-                                                            <div class="btn-group actions" style="float:right;">
-                                                                <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
-                                                                <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
+                                                            <div>
+                                                                {$videoCategories[as]->title}
+                                                                <div class="btn-group actions" style="float:right;">
+                                                                    <a href="#" class="add-item"><i class="icon-plus"></i></a>
+                                                                    <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
+                                                                    <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
+                                                                </div>
                                                             </div>
                                                         </li>
                                                         {/section}
@@ -231,10 +251,13 @@
                                                          type="pollCategory" link="{$pollCategories[as]->name}"
                                                              pk_item="{$pollCategories[as]->pk_content_category}"
                                                             class="drag-category" pk_menu="">
-                                                            {$pollCategories[as]->title}
-                                                            <div class="btn-group actions" style="float:right;">
-                                                                <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
-                                                                <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
+                                                            <div>
+                                                                {$pollCategories[as]->title}
+                                                                <div class="btn-group actions" style="float:right;">
+                                                                    <a href="#" class="add-item"><i class="icon-plus"></i></a>
+                                                                    <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
+                                                                    <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
+                                                                </div>
                                                             </div>
                                                         </li>
                                                         {/section}
@@ -248,7 +271,7 @@
                                                 <div id="frontpages">
                                                     <ul id='availablePages' class="elementsContainer">
                                                         {foreach from=$pages item=value key=page}
-                                                            <li id="page_{$page}" pk_item="{$value}"  title="{$page}"
+                                                            <li id="page_{$page}" pk_item="{$value}" title="{$page}"
                                                                 link={if $page eq 'frontpage'}"home"
                                                                         {elseif $page eq 'poll'}"encuesta"
                                                                         {elseif $page eq 'letter'}"cartas-al-director"
@@ -257,15 +280,18 @@
                                                                         {elseif $page eq 'boletin'}"newsletter"
                                                                         {else}{$page}{/if}
                                                                 type="internal"  class="drag-category" pk_menu="">
-                                                                {if $page eq 'frontpage'}home
+                                                                <div>
+                                                                    {if $page eq 'frontpage'}home
                                                                         {elseif $page eq 'poll'}Encuesta
                                                                         {elseif $page eq 'letter'}Cartas Al Director
                                                                          {elseif $page eq 'kiosko'}Portadas Papel
                                                                          {elseif $page eq 'boletin'}Bolet&iacute;n
                                                                         {else}{$page}{/if}
-                                                                <div class="btn-group actions" style="float:right;">
-                                                                    <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
-                                                                    <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
+                                                                    <div class="btn-group actions" style="float:right;">
+                                                                    <a href="#" class="add-item"><i class="icon-plus"></i></a>
+                                                                        <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
+                                                                        <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
+                                                                    </div>
                                                                 </div>
                                                             </li>
                                                         {/foreach}
@@ -282,10 +308,13 @@
                                                                  type="static" link="{$staticPages[k]->slug}"
                                                                   pk_item="{$staticPages[k]->id}"
                                                                   class="drag-category">
-                                                                {$staticPages[k]->title}
-                                                                <div class="btn-group actions" style="float:right;">
-                                                                    <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
-                                                                    <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
+                                                                <div>
+                                                                    {$staticPages[k]->title}
+                                                                    <div class="btn-group actions" style="float:right;">
+                                                                        <a href="#" class="add-item"><i class="icon-plus"></i></a>
+                                                                        <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
+                                                                        <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
+                                                                    </div>
                                                                 </div>
                                                              </li>
                                                          {/section}
@@ -305,13 +334,16 @@
                                                                 type="syncCategory" link="{$category}"
                                                                 class="drag-category" pk_menu=""
                                                                 style="background-color: #{$colors[$site]}">
-                                                                {$category|capitalize}
-                                                                <img src="{$params.IMAGE_DIR}sync-icon.png"
-                                                                     alt="{t}Sync{/t}" >
-                                                                <div class="btn-group actions" style="float:right;">
-                                                                    <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
-                                                                    <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
-                                                                </div>
+                                                                <div>
+                                                                    {$category|capitalize}
+                                                                    <img src="{$params.IMAGE_DIR}sync-icon.png"
+                                                                         alt="{t}Sync{/t}" >
+                                                                    <div class="btn-group actions" style="float:right;">
+                                                                        <a href="#" class="add-item"><i class="icon-plus"></i></a>
+                                                                        <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
+                                                                        <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
+                                                                    </div>
+                                                                    </div>
                                                             </li>
                                                             {/foreach}
                                                         </ul>

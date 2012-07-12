@@ -324,7 +324,7 @@ class MenusController extends Controller
             m::add(_('You must give an id for delete the menu.'), m::ERROR);
         } else {
             $menu = new \Menu($id);
-            $menu->delete($id ,$_SESSION['userid']);
+            $menu->delete($_SESSION['userid']);
             \MenuItems::emptyMenu($id);
 
             m::add(sprintf(_("Menu '%s' deleted successfully."), $menu->name), m::SUCCESS);
@@ -337,6 +337,44 @@ class MenusController extends Controller
             )
         ));
 
+    }
+
+    /**
+     * Deletes multiple menus at once give them ids
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function batchDeleteAction(Request $request)
+    {
+        $this->checkAclOrForward('MENU_DELETE');
+
+        $page          = $request->query->getDigits('page', 1);
+        $selectedItems = $request->query->get('selected_fld');
+
+        if (is_array($selectedItems)
+            && count($selectedItems) > 0
+        ) {
+            foreach ($selectedItems as $id) {
+                $menu = new \Menu($id);
+
+                if ($menu->type == 'user') {
+                    $menu->delete($_SESSION['userid']);
+                    m::add(sprintf(_('Menu "%s" deleted successfully.'), $menu->name), m::SUCCESS);
+                } else {
+                    m::add(sprintf(_('Unable to delete the menu "%s" as is system internal.'), $menu->name), m::ERROR);
+
+                }
+            }
+        }
+
+        return $this->redirect($this->generateUrl(
+            'admin_menus',
+            array(
+                'page'    => $page,
+            )
+        ));
     }
 
 } // END class MenusController

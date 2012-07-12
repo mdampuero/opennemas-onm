@@ -3,30 +3,23 @@
 * Management menu: drag-drop items, delete item, add item.
 */
 jQuery(document).ready(function($){
-    makeSortable = function(){
-
-        jQuery( 'ul.elementsContainer' ).sortable({
-            connectWith: ".menuelements",
-            placeholder: 'placeholder-element',
-            tolerance: 'pointer'
-        }).disableSelection();
-
-        jQuery( '.menuelements' ).sortable({
-            connectWith: 'ul.elementsContainer',
-            placeholder: 'placeholder-element',
-            tolerance: 'pointer'
-        }).disableSelection();
-
-    }();
 
     jQuery('#menuelements').on('click', '.delete-menu-item', function(e, ui){
         e.preventDefault();
         var element = $(this);
-        element.closest('li.menuItem')
+        element.closest('li')
             .animate({ 'backgroundColor':'#fb6c6c' },300)
             .animate({ 'opacity': 0, 'height': 0 }, 300, function() {
                 $(this).remove();
             });
+    });
+
+    jQuery('#menu-form').on('click', '.add-item', function(e, ui){
+        e.preventDefault();
+        var element = $(this).closest('li');
+        var clone = element.clone(true);
+        jQuery('#menuelements').append(clone);
+
     });
 
     jQuery('#menuelements').on('click', '.edit-menu-item', function(e, ui){
@@ -36,5 +29,20 @@ jQuery(document).ready(function($){
         $('#modal-add-item #itemID').attr('value', element.attr('pk_item'));
         $("#modal-add-item").modal('show');
         alert('not-implemented');
+    });
+
+    nestable = $('ol#menuelements').nestedSortable({
+        disableNesting: 'no-nest',
+        forcePlaceholderSize: true,
+        handle: 'div',
+        helper: 'clone',
+        items: 'li',
+        maxLevels: 3,
+        opacity: 0.6,
+        placeholder: 'placeholder',
+        revert: 250,
+        tabSize: 25,
+        tolerance: 'pointer',
+        toleranceElement: '> div'
     });
 });

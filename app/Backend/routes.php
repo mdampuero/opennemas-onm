@@ -207,7 +207,7 @@ $adminRoutes->add(
 $adminRoutes->add(
     'admin_menu_show',
     new Route(
-        '/menus/{id}/show',
+        '/menu/{id}/show',
         array('_controller' => 'Backend:Controllers:MenusController:show')
     ),
     '/admin'
@@ -234,8 +234,17 @@ $adminRoutes->add(
 $adminRoutes->add(
     'admin_menu_delete',
     new Route(
-        '/menus/{id}/delete',
+        '/menu/{id}/delete',
         array('_controller' => 'Backend:Controllers:MenusController:delete')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_menu_batchdelete',
+    new Route(
+        '/menus/batchdelete',
+        array('_controller' => 'Backend:Controllers:MenusController:batchDelete')
     ),
     '/admin'
 );

@@ -179,13 +179,16 @@ class Menu
     public function delete($id)
     {
 
-        $sql = 'DELETE FROM menues WHERE pk_menu='.($id);
+        $sql = 'DELETE FROM menues WHERE pk_menu=?';
 
-        if ($GLOBALS['application']->conn->Execute($sql) === false) {
+        if ($GLOBALS['application']->conn->Execute($sql, array($this->pk_menu)) === false) {
             \Application::logDatabaseError();
 
             return false;
         }
+
+        $items = new \MenuItems();
+        $items->delete($id);
 
         return true;
 

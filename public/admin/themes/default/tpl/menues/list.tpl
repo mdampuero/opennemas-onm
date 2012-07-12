@@ -18,7 +18,7 @@
 
 
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario">
+<form action="{url name=admin_menus}" method="GET" name="formulario" id="formulario">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title"><h2>{t}Menu manager{/t} :: {t}Listing menues{/t}</h2></div>

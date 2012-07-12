@@ -44,11 +44,11 @@ jQuery('#modal-add-item a.btn.yes').on('click', function(e, ui){
 
             ul.append( '<li title="'+ name +'" link="'+ link +
                         '" class="menuItem" name="'+ name +'" id ="'+ name +
-                        '" pk_item="" type="external">'+name+
+                        '" pk_item="" type="external"><div>'+name+
                         '<div class="btn-group actions" style="float:right;">'+
                             '<a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a> '+
                             '<a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>'+
-                        '</div></li>' );
+                        '</div></div></li>' );
 
             jQuery('#itemTitle').attr('value','');
             jQuery('#link').attr('value','');
@@ -57,6 +57,6 @@ jQuery('#modal-add-item a.btn.yes').on('click', function(e, ui){
     } else {
         alert('updating an element not implemented')
     };
-    jQuery('#modal-add-item').modal('hide');
+    jQuery('#modal-add-item').modal('hide');   n
 });
 </script>

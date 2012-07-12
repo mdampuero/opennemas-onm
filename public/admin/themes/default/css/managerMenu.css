@@ -1,6 +1,10 @@
-#menuelements { border:1px solid #ccc;}
-#menuelements, .elementsContainer { margin:0; padding:10px; }
-#menuelements li, .elementsContainer li, .placeholder-element {
+.wrapper-menu-items {
+    border:1px solid #ccc;
+    padding:10px;
+    height:100%;
+}
+.elementsContainer { margin:0; padding:10px; }
+.elementsContainer li {
     padding:5px 9px;
     list-style:none;
     border:1px solid #ddd;
@@ -21,11 +25,72 @@
     padding:1em;
 }
 
-#menu-form .actions {
+#menu-form .actions .edit-menu-item,
+#menu-form .actions .delete-menu-item {
+    display:none;
+}
+
+#menuelements .actions .add-item {
     display:none;
 }
 
 .placeholder-element {
     border:1px dashed #ccc !important;
     background:#efefef;
+}
+
+ol {
+    margin: 0;
+    padding: 0;
+    padding-left: 30px;
+}
+
+#menuelements, #menuelements ol {
+    margin: 0 0 0 25px;
+    padding: 0;
+    list-style-type: none;
+}
+
+#menuelements {
+    margin: 0;
+}
+
+#menuelements > li:first-child {
+    margin-top:0;
+}
+#menuelements li {
+    margin: 5px 0 0 0;
+    padding: 0;
+}
+
+#menuelements li > div  {
+    border: 1px solid #d4d4d4;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    border-color: #D4D4D4 #D4D4D4 #BCBCBC;
+    padding: 6px;
+    margin: 0;
+    cursor: move;
+    background: #f6f6f6;
+    background: -moz-linear-gradient(top,  #ffffff 0%, #f6f6f6 47%, #ededed 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(47%,#f6f6f6), color-stop(100%,#ededed));
+    background: -webkit-linear-gradient(top,  #ffffff 0%,#f6f6f6 47%,#ededed 100%);
+    background: -o-linear-gradient(top,  #ffffff 0%,#f6f6f6 47%,#ededed 100%);
+    background: -ms-linear-gradient(top,  #ffffff 0%,#f6f6f6 47%,#ededed 100%);
+    background: linear-gradient(top,  #ffffff 0%,#f6f6f6 47%,#ededed 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed',GradientType=0 );
+
+}
+
+.placeholder {
+    border: 1px dashed #4183C4;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+
+.mjs-nestedSortable-error {
+    background: #fbe3e4;
+    border-color: transparent;
 }
