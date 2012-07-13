@@ -8,6 +8,7 @@
  * file that was distributed with this source code.
  **/
 // Start and setup the app
+
 require_once('../bootstrap.php');
 use Onm\Settings as s;
 
@@ -26,8 +27,10 @@ $category_name    = $request->query->filter('category_name', 'opinion', FILTER_S
 $subcategory_name = $request->query->filter('subcategory_name', '', FILTER_SANITIZE_STRING);
 $action           = $request->query->filter('action', null, FILTER_SANITIZE_STRING);
 
-$dirtyID          = $request->query->filter('opinion_id', '', FILTER_SANITIZE_STRING);
-$opinionID        = Content::resolveID($dirtyID);
+$dirtyID     = $request->query->filter('opinion_id', '', FILTER_SANITIZE_STRING);
+$slug        = $request->query->filter('opinion_title', '', FILTER_SANITIZE_STRING);
+$author_name = $request->query->filter('author_name', '', FILTER_SANITIZE_STRING);
+$opinionID   = Content::resolveID($dirtyID);
 
 $tpl->assign(array(
     'contentId' => $opinionID,
@@ -70,6 +73,11 @@ switch ($action) {
                 // } Sacar broza
 
                 $opinion->author_name_slug = StringUtils::get_title($opinion->name);
+                //Check slug
+                if (empty($slug) || ($opinion->slug != $slug)
+                    || ($opinion->author_name_slug != $author_name)) {
+                    Application::forward301(SITE_URL.$opinion->uri);
+                }
                 // Fetch rating for this opinion
                 $rating = new Rating($opinionID);
                 $tpl->assign('rating_bar', $rating->render('article', 'vote'));
