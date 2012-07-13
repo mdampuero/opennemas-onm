@@ -113,7 +113,7 @@ $menuXml = '<?xml version="1.0"?>
             privilege="CATEGORY_ADMIN"
             title="'.htmlspecialchars(_("Category manager"), ENT_QUOTES).'"
             id="category_manager"
-            link="/admin/controllers/category/category.php"
+            link="'.url('admin_categories').'"
         />
      </submenu>
 

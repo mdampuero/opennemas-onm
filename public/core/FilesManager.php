@@ -41,7 +41,12 @@ class FilesManager
      */
     public static function createDirectory($path)
     {
-        $created =  mkdir($path, 0775, true);
+        if (!is_dir($path)) {
+            $created =  mkdir($path, 0775, true);
+        } else {
+            $created = true;
+        }
+
         chmod($path, 0755);
         if (!$created) {
             // Register a critical error

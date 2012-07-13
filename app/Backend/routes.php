@@ -249,6 +249,91 @@ $adminRoutes->add(
     '/admin'
 );
 
+// Category manager routes
+$adminRoutes->add(
+    'admin_categories',
+    new Route(
+        '/categories',
+        array('_controller' => 'Backend:Controllers:CategoriesController:list')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_categories_config',
+    new Route(
+        '/categories/config',
+        array('_controller' => 'Backend:Controllers:CategoriesController:config')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_category_create',
+    new Route(
+        '/category/create',
+        array('_controller' => 'Backend:Controllers:CategoriesController:create')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_category_show',
+    new Route(
+        '/category/{id}/show',
+        array('_controller' => 'Backend:Controllers:CategoriesController:show')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_category_update',
+    new Route(
+        '/category/{id}/update',
+        array('_controller' => 'Backend:Controllers:CategoriesController:update')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_category_delete',
+    new Route(
+        '/category/{id}/delete',
+        array('_controller' => 'Backend:Controllers:CategoriesController:delete')
+    ),
+    '/admin'
+);
+
+
+$adminRoutes->add(
+    'admin_category_empty',
+    new Route(
+        '/category/{id}/empty',
+        array('_controller' => 'Backend:Controllers:CategoriesController:empty')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_category_toggleavailable',
+    new Route(
+        '/category/{id}/toggle-available',
+        array('_controller' => 'Backend:Controllers:CategoriesController:toggleAvailable')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_category_togglerss',
+    new Route(
+        '/category/{id}/toggle-rss',
+        array('_controller' => 'Backend:Controllers:CategoriesController:toggleRss')
+    ),
+    '/admin'
+);
+
+
+
 // Image manager routes
 $adminRoutes->add(
     'admin_images_statistics',

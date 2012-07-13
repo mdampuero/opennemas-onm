@@ -12,10 +12,6 @@ before changes happend to the commit that master was merged into symfony-router
 git diff --name-only e7671812699af6da10fb30b2212673948bd018fc 67180574cd98d75e0a60b7c0459f92a2a1a36731|grep php
 - Drop category and menu logic from init method in Backend Controllers
 
-Onm\Framework\Controller
-------------------------
-- Evaluate if the request should be passed as parameter when calling a action method.
-
 Advanced Search Controller
 --------------------------
 - Integrate the contents paginated
@@ -34,7 +30,7 @@ User group controller
 
 Tpl cache manager
 -----------------
-- Batch delete doesnt work, integrate modal dialog
+- Integrate modal dialog
 - When selecting a new items per page and push Enter, the deleting tpl shows an alert dialog
 
 Statistics controller
@@ -61,20 +57,13 @@ XML file importer
 - Import and check actions was merged (check doesn't save files, review it).
 - Rework in UX.
 
-Static pages
-------------
-- Drop Prototype (SwitcherFlag call) in the list action
-- Problem with delete modal dialogs, the url should be generated with smarty.
-
 Comments
 --------
 - Drop wz_tooltip
 
 Files
 -----
-- Refactorize category calculation logic (is a mess and should be improved)
-- Batch actions not implemented
-- Review listings and toggle home actions.
+- Review redirections in listing an toggle home actions.
 - Review if new.tpl could be deleted, now form.tpl handle create and update (I think)
 
 Videos
@@ -88,3 +77,11 @@ Images
 Albums
 ------
 - Implement the related content provider
+
+Menus
+-----
+- Allow to edit available elements in menu (change name, link, ...).
+
+Categories
+----------
+- Review create and update actions (assign subsection, subsection change sideeffects??)

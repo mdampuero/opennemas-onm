@@ -74,6 +74,7 @@ class ContentCategory
             }
             $data['name'] = $name;
         }
+
         $sql = "INSERT INTO content_categories
                     (`name`, `title`,`inmenu`,`fk_content_category`,
                     `internal_category`, `logo_path`,`color`, `params`)
@@ -107,9 +108,8 @@ class ContentCategory
      **/
     public function read($id)
     {
-        $this->pk_content_category = ($id);
         $sql = 'SELECT * FROM content_categories WHERE pk_content_category =?';
-        $values = $this->pk_content_category;
+        $values = $id;
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
 
         if (!$rs) {
@@ -117,6 +117,7 @@ class ContentCategory
 
             return;
         }
+        $this->pk_content_category = ($id);
         $this->load($rs->fields);
         if (!empty($this->params) && is_string($this->params)) {
             $this->params = unserialize($this->params);
@@ -133,8 +134,6 @@ class ContentCategory
      **/
     public function update($data)
     {
-        $this->read($data['id']);
-
         $data['params'] = serialize($data['params']);
         if (empty($data['logo_path'])) {
             $data['logo_path'] = $this->logo_path;
@@ -146,9 +145,15 @@ class ContentCategory
                        " `logo_path`=?,`color`=?, `params`=? ".
                    " WHERE pk_content_category=" . ($data['id']);
 
-        $values = array($data['title'], $data['inmenu'],
-                    $data['subcategory'], $data['internal_category'],
-                    $data['logo_path'], $data['color'], $data['params']);
+        $values = array(
+            $data['title'],
+            $data['inmenu'],
+            $data['subcategory'],
+            $data['internal_category'],
+            $data['logo_path'],
+            $data['color'],
+            $data['params']
+        );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             Application::logDatabaseError();
@@ -231,14 +236,14 @@ class ContentCategory
      *
      * @return boolean true if all the contents was deleted sucessfully
      **/
-    public function empty_category($id)
+    public function deleteContents()
     {
         $sql = 'SELECT pk_fk_content FROM contents_categories '
              . 'WHERE pk_fk_content_category=?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($this->pk_content_category));
 
         if (!$rs) {
-            Application::logDatabaseError();
+            \Application::logDatabaseError();
 
             return false;
         }
@@ -290,7 +295,7 @@ class ContentCategory
 
             foreach ($sqls as $sql) {
                 if ($GLOBALS['application']->conn->Execute($sql) === false) {
-                    Application::logDatabaseError();
+                    \Application::logDatabaseError();
 
                     return false;
                 }
@@ -352,26 +357,26 @@ class ContentCategory
      *
      * @param string $status the status to set to the category rss.
      **/
-    public function set_inrss($status, $data)
+    public function setInRss($status)
     {
-        if ($this->pk_content_category == null) {
-            return false;
+        if (!is_array($this->params)) {
+            $this->params = array();
         }
-
-        $data->params['inrss'] = $status;
-        $data->params = serialize($data->params);
+        $this->params['inrss'] = $status;
+        $this->params = serialize($this->params);
 
         $sql = "UPDATE content_categories "
              ." SET `params`=?"
              ." WHERE pk_content_category=?";
 
-        $values = array($data->params, $this->pk_content_category);
+        $values = array($this->params, $this->pk_content_category);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            Application::logDatabaseError();
+            \Application::logDatabaseError();
 
             return false;
         }
+        return $this;
 
     }
 }
