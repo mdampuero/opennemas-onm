@@ -45,8 +45,8 @@
 {block name="header-js" prepend}
 <script type="text/javascript">
     jQuery(document).ready(function (){
-        jQuery('.sync_with_server').click(function() {
-           jQuery('.warnings-validation').html('<div class="ui-blocker"></div><div class="ui-blocker-message"><img src="/admin/themes/default/images/ajax-loader.gif" /><br />{t}Downloading articles from EFE, please wait...{/t}</div>');
+        jQuery('.sync_with_server').on('click',function() {
+           jQuery('.warnings-validation').html('<div class="ui-blocker"></div><div class="ui-blocker-message"><progress style="width:100%"></progress><br /><br />{t}Downloading articles from EFE, please wait...{/t}</div>');
         });
     });
 </script>
@@ -75,6 +75,7 @@
     </div>
 </div>
 <div class="wrapper-content">
+    <div class="warnings-validation"></div><!-- / -->
 
     <form action="{url name=admin_importer_efe}" method="GET">
 

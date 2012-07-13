@@ -13,7 +13,7 @@
     <script>
     jQuery(document).ready(function (){
         jQuery('.sync_with_server').click(function() {
-           jQuery('.warnings-validation').html('<div class="ui-blocker"></div><div class="ui-blocker-message"><img src="/admin/themes/default/images/ajax-loader.gif" /><br />{t}Downloading articles from EuropaPress, please wait...{/t}</div>');
+           jQuery('.warnings-validation').html('<div class="ui-blocker"></div><div class="ui-blocker-message"><progress style="width:100%"></progress><br /><br />{t}Downloading articles from EuropaPress, please wait...{/t}</div>');
         });
     });
     </script>
