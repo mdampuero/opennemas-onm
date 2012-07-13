@@ -12,7 +12,7 @@
             <div><label>{t}Image size{/t}</label>    <span class="image_size"></span></div>
             <div><label>{t}File size{/t}</label>     <span class="file_size"></span></div>
             <div><label>{t}Description{/t}</label>
-                <textarea name="footer_image" id="footer_image" class="footer_image"></textarea>
+                <textarea name="footer_image" id="footer_image" class="footer_image" autofocus></textarea>
                 <input type="hidden" name="id_image" id="id_image" value="">
             </div>
         </div>
