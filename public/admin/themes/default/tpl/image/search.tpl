@@ -46,7 +46,7 @@ function toggleAdvanced() {
             <div class="title"><h2>{if $action eq 'search'} {t}Search images{/t}{else}{t}Search result{/t}{/if} </h2></div>
             <ul class="old-button">
                 <li>
-                    <a class="admin_add" href="{url name=admin_image}" onmouseover="return escape('Listado de Categorias');" name="submit_mult" value="Listado de Categorias">
+                    <a class="admin_add" href="{url name=admin_images category=$category}" name="submit_mult" value="Listado de Categorias">
                         <img border="0" style="width:50px;"  src="{$params.IMAGE_DIR}previous.png" alt="Información"><br />{t}Go back{/t}
                     </a>
                 </li>
