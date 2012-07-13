@@ -185,6 +185,7 @@ switch ($action) {
     case 'preview_frontpage':
 
         $categoryName    = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+        $category   = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
         $subCategoryName = $request->query->filter('subcategory_name', null, FILTER_SANITIZE_STRING);
 
         $tpl     = new Template(TEMPLATE_USER);
@@ -194,10 +195,14 @@ switch ($action) {
         $ccm = ContentCategoryManager::get_instance();
         list($category_name, $subcategory_name) = $ccm->normalize($categoryName, $subCategoryName);
 
-        $actual_category = (is_null($subcategory_name))? $category_name : $subcategory_name;
+        $actual_category = (empty($subcategory_name))? $category_name : $subcategory_name;
 
-        $tpl->assign('actual_category', $actual_category);
+
         $actualCategoryId = $ccm->get_id($actual_category);
+        $tpl->assign(array(
+            'category_name'   => $actual_category,
+            'actual_category' => $actualCategoryId,
+            ));
 
         $cm = new ContentManager;
         $contentsRAW = $request->request->filter('contents');

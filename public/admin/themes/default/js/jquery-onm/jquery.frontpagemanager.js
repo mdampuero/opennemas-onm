@@ -387,13 +387,15 @@ jQuery(function($){
     $('#button_previewfrontpage').on('click', function (e, ui){
         e.preventDefault();
         var contents = get_contents_in_frontpage();
+        var category = $(this).data('category-name');
         var encodedContents = JSON.stringify(get_contents_in_frontpage());
 
         $.ajax({
             type: 'POST',
-            url: "/admin/controllers/frontpagemanager/frontpagemanager.php?action=preview_frontpage",
+            url: "/admin/controllers/frontpagemanager/frontpagemanager.php?action=preview_frontpage&category_name=" + encodeURIComponent(category),
             data: {
                 'contents': encodedContents
+
             },
             success: function(data) {
                 previewWindow = window.open('','_blank','');

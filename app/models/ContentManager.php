@@ -283,18 +283,20 @@ class ContentManager
         foreach ($contentsArray as $element) {
             $content = new $element['content_type']($element['id']);
 
-            if (!array_key_exists('params', $element)
-                || empty($element['params'])
-            ) {
-                $element['params'] = serialize(array());
-            }
             // only add it to the final results if is not in litter
             if ($content->in_litter == 0) {
                 $content->load(array(
                     'placeholder' => $element['placeholder'],
                     'position'    => $element['position'],
-                    'params'      => unserialize($element['params']),
                 ));
+                if (is_array($content->params) && $content->params > 0) {
+                    $content->params = array_merge(
+                        $content->params,
+                        (array) $element['params']
+                    );
+                } else {
+                    $content->params = $element['params'];
+                }
                 $contents[] = $content;
             }
         }
