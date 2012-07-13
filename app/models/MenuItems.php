@@ -68,6 +68,7 @@ class MenuItems
             $rs->MoveNext();
             $i++;
         }
+// var_dump($id, $rs);die();
 
         foreach ($menuItems as $id => $element) {
             if ((int) $element->pk_father > 0) {
@@ -87,35 +88,39 @@ class MenuItems
      *
      * @return bool if update ok true
      */
-    public static function setMenu($id, $items =array(), $params_config = array())
+    public static function setMenuElements($id, $items = array())
     {
         self::emptyMenu($id);
-        $config['pk_father'] = !empty($params_config['pk_father'])? $params_config['pk_father']: 0;
 
         if (!empty($id) && !empty($items)) {
 
-            $stmt = $GLOBALS['application']->conn->Prepare("INSERT INTO menu_items ".
-               " (`pk_menu`,`title`,`link_name`, `type`,`position`,`pk_father`) ".
-               " VALUES (?,?,?,?,?,?)");
+            $stmt = "INSERT INTO menu_items ".
+                    " (`pk_item`, `pk_menu`,`title`,`link_name`, `type`,`position`,`pk_father`) ".
+                    " VALUES (?,?,?,?,?,?,?)";
 
             $values = array();
             $i = 1;
 
             foreach ($items as $item) {
                 $values[] = array(
-                    $id,
-                    $item->title,
-                    $item->link,
-                    $item->type,
+                    filter_var($item->id, FILTER_VALIDATE_INT),
+                    (int) $id,
+                    filter_var($item->title, FILTER_SANITIZE_STRING),
+                    filter_var($item->link, FILTER_SANITIZE_STRING),
+                    filter_var($item->type, FILTER_SANITIZE_STRING),
                     $i,
-                    $config['pk_father']
+                    filter_var($item->parent_id, FILTER_VALIDATE_INT) ?: 0,
                 );
                 $i++;
             }
 
             if (!empty($values)) {
-                if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
+                $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
+
+                if ($rs === false) {
                     \Application::logDatabaseError();
+
+                    return false;
                 }
             }
 

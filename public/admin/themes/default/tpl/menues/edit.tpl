@@ -1,40 +1,8 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-    {script_tag src="/onm/jquery.menues.js"}
     {script_tag src="/jquery/jquery.nestedSortable.js"}
-    <script>
-    jQuery(document).ready(function($) {
-        jQuery("#elements-provider").accordion({
-            autoHeight: false,
-            navigation: true
-        });
-
-        jQuery('#formulario').on('submit', function(e, ui) {
-            var items = [];
-            jQuery('#menuelements li').each(function(pos, item) {
-                if ($(item).attr('id')) {
-                    items.push({
-                        'title':   $(item).data('title'),
-                        'type':    $(item).data('type'),
-                        'link':    $(item).data('link'),
-                        'id':      $(item).data('item-id')
-                    });
-                }
-            });
-            var itemshierarchy = $('ol#menuelements').nestedSortable('toArray').map(function(item){
-                if (item['id'] !== null) {
-                    return {
-                        id: item['item_id'],
-                        parent_id: item['parent_id']
-                    }
-                };
-            })
-            jQuery('#items').attr('value', JSON.stringify(items));
-            jQuery('#items-hierarchy').attr('value', JSON.stringify(itemshierarchy));
-        });
-    });
-    </script>
+    {script_tag src="/onm/jquery.menues.js"}
 {/block}
 
 {block name="header-css" append}
@@ -56,12 +24,6 @@
                     <button type="submit">
                         <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar y salir" alt="Guardar y salir"><br />{t}Save and Exit{/t}
                     </button>
-                </li>
-                <li>
-                    <a id="add-external-link" style="cursor:pointer;">
-                        <img src="{$params.IMAGE_DIR}list-add.png" border="0" />
-                        <br>{t}Add External Link{/t}
-                    </a>
                 </li>
                 <li class="separator"></li>
                 <li>
@@ -111,15 +73,35 @@
                                         <td style="width:40%">
                                             <div id="elements-provider" style="width:100%">
 
+                                                <h3 href="#external-link">{t}External link{/t}</h3>
+                                                <div id="external-link" style="border:1px solid #CCCCCC;padding: 14px;">
+                                                    <form action="#" name="external-link">
+                                                        <p>{t}Fill the below form with the title and the external URL you want to add to the menu.{/t}</p>
+                                                        <p>
+                                                            <label>{t}Title:{/t}</label>
+                                                            <input type="text" name="external-link-title" value="" id="external-link-title" size="60">
+                                                        </p>
+                                                        <p>
+                                                            <label>{t}URL:{/t}</label>
+                                                            <input type="text" name="external-link-link" value="" id="external-link-link" size="60"> <br>
+                                                        </p>
+                                                        <a class="onm-button" id="add-external-link">{t}Add{/t}</a>
+                                                    </form>
+                                                </div>
+
+
                                                 {if count($categories) > 0}
                                                 <h3 href="#listado">{t}Global Categories{/t}</h3>
                                                 <div id="listado">
                                                     <ul id='availableCategories' class="elementsContainer">
                                                         {section name=as loop=$categories}
-                                                            <li id="cat_{$categories[as]->pk_content_category}" title="{$categories[as]->title}"
-                                                                type="category" link="{$categories[as]->name}"
-                                                                pk_item="{$categories[as]->pk_content_category}"
-                                                                class="drag-category" pk_menu="">
+                                                            <li id="cat_{$categories[as]->pk_content_category}"
+                                                                data-title="{$categories[as]->title}"
+                                                                data-type="category"
+                                                                data-link="{$categories[as]->name}"
+                                                                data-item-id="{$categories[as]->pk_content_category}"
+                                                                class="drag-category"
+                                                                pk_menu="">
                                                                 <div>
                                                                     {$categories[as]->title}
                                                                     <div class="btn-group actions" style="float:right;">
@@ -142,9 +124,13 @@
                                                             <strong>{$categories[as]->title}</strong>
                                                             <ul  class="elementsContainer" id="subCategories{$categories[as]->pk_content_category}">
                                                             {section name=su loop=$subcat[as]}
-                                                                 <li id="subcat_{$subcat[as][su]->pk_content_category}" title="{$subcat[as][su]->title}"
-                                                                     type="category" link="{$subcat[as][su]->name}"
-                                                                     pk_item="{$subcat[as][su]->pk_content_category}" class="drag-category" pk_menu="">
+                                                                 <li id="subcat_{$subcat[as][su]->pk_content_category}"
+                                                                    data-title="{$subcat[as][su]->title}"
+                                                                    data-type="category"
+                                                                    data-link="{$subcat[as][su]->name}"
+                                                                    data-item-id="{$subcat[as][su]->pk_content_category}"
+                                                                    class="drag-category"
+                                                                    pk_menu="">
                                                                     <div>
                                                                         {$subcat[as][su]->title}
                                                                         <div class="btn-group actions" style="float:right;">
@@ -167,10 +153,13 @@
                                                 <div id="listadoAlbum">
                                                     <ul id='albumCategories' class="elementsContainer">
                                                         {section name=as loop=$albumCategories}
-                                                        <li id="album_{$albumCategories[as]->pk_content_category}" title="{$albumCategories[as]->title}"
-                                                            type="albumCategory" link="{$albumCategories[as]->name}"
-                                                            pk_item="{$albumCategories[as]->pk_content_category}"
-                                                            class="drag-category" pk_menu="">
+                                                        <li id="album_{$albumCategories[as]->pk_content_category}"
+                                                            data-title="{$albumCategories[as]->title}"
+                                                            data-type="albumCategory"
+                                                            data-link="{$albumCategories[as]->name}"
+                                                            data-item-id="{$albumCategories[as]->pk_content_category}"
+                                                            class="drag-category"
+                                                            pk_menu="">
                                                             <div>
                                                                 {$albumCategories[as]->title}
                                                                 <div class="btn-group actions" style="float:right;">
@@ -192,10 +181,13 @@
                                                 <div id="listadoVideo">
                                                     <ul id='videoCategories' class="elementsContainer">
                                                         {section name=as loop=$videoCategories}
-                                                        <li id="video_{$videoCategories[as]->pk_content_category}" title="{$videoCategories[as]->title}"
-                                                            type="videoCategory" link="{$videoCategories[as]->name}"
-                                                             pk_item="{$videoCategories[as]->pk_content_category}"
-                                                             class="drag-category" pk_menu="">
+                                                        <li id="video_{$videoCategories[as]->pk_content_category}"
+                                                            data-title="{$videoCategories[as]->title}"
+                                                            data-type="videoCategory"
+                                                            data-link="{$videoCategories[as]->name}"
+                                                            data-item-id="{$videoCategories[as]->pk_content_category}"
+                                                            class="drag-category"
+                                                            pk_menu="">
                                                             <div>
                                                                 {$videoCategories[as]->title}
                                                                 <div class="btn-group actions" style="float:right;">
@@ -217,9 +209,11 @@
                                                 <div id="listadoPoll">
                                                     <ul id='pollCategories' class="elementsContainer">
                                                         {section name=as loop=$pollCategories}
-                                                        <li id="video_{$pollCategories[as]->pk_content_category}" title="{$pollCategories[as]->title}"
-                                                         type="pollCategory" link="{$pollCategories[as]->name}"
-                                                             pk_item="{$pollCategories[as]->pk_content_category}"
+                                                        <li id="video_{$pollCategories[as]->pk_content_category}"
+                                                            data-title="{$pollCategories[as]->title}"
+                                                            data-type="pollCategory"
+                                                            data-link="{$pollCategories[as]->name}"
+                                                            data-item-id="{$pollCategories[as]->pk_content_category}"
                                                             class="drag-category" pk_menu="">
                                                             <div>
                                                                 {$pollCategories[as]->title}
@@ -241,15 +235,19 @@
                                                 <div id="frontpages">
                                                     <ul id='availablePages' class="elementsContainer">
                                                         {foreach from=$pages item=value key=page}
-                                                            <li id="page_{$page}" pk_item="{$value}" title="{$page}"
-                                                                link={if $page eq 'frontpage'}"home"
+                                                            <li id="page_{$page}"
+                                                                data-item-id="{$value}"
+                                                                data-title="{$page}"
+                                                                data-link={if $page eq 'frontpage'}"home"
                                                                         {elseif $page eq 'poll'}"encuesta"
                                                                         {elseif $page eq 'letter'}"cartas-al-director"
                                                                         {elseif $page eq 'kiosko'}"portadas-papel"
                                                                         {elseif $page eq 'letter'}"cartas-al-director"
                                                                         {elseif $page eq 'boletin'}"newsletter"
                                                                         {else}{$page}{/if}
-                                                                type="internal"  class="drag-category" pk_menu="">
+                                                                data-type="internal"
+                                                                class="drag-category"
+                                                                pk_menu="">
                                                                 <div>
                                                                     {if $page eq 'frontpage'}home
                                                                         {elseif $page eq 'poll'}Encuesta
@@ -274,10 +272,13 @@
                                                 <div id="staticPages">
                                                       <ul id='availableStatics' class="elementsContainer">
                                                          {section name=k loop=$staticPages}
-                                                             <li id="static_{$staticPages[k]->id}" title="{$staticPages[k]->title}" pk_menu=""
-                                                                 type="static" link="{$staticPages[k]->slug}"
-                                                                  pk_item="{$staticPages[k]->id}"
-                                                                  class="drag-category">
+                                                             <li id="static_{$staticPages[k]->id}"
+                                                                data-title="{$staticPages[k]->title}"
+                                                                data-item-id=""
+                                                                data-type="static"
+                                                                data-link="{$staticPages[k]->slug}"
+                                                                pk_menu="{$staticPages[k]->id}"
+                                                                class="drag-category">
                                                                 <div>
                                                                     {$staticPages[k]->title}
                                                                     <div class="btn-group actions" style="float:right;">
@@ -297,12 +298,15 @@
                                                 <div id="syncCategories" style="border:1px solid #CCCCCC;padding: 4px;">
                                                     {foreach $elements as $config name=colors}
                                                         {foreach from=$config key=site item=categories}
-                                                        <strong>{$site}</strong>
+                                                        <strong>{$site}                    </strong>
                                                         <ul id='availableSync' class="elementsContainer">
                                                             {foreach $categories as $category}
-                                                            <li id="sync_category" title="{$category|capitalize}"
-                                                                type="syncCategory" link="{$category}"
-                                                                class="drag-category" pk_menu=""
+                                                            <li id="sync_category"
+                                                                data-title="{$category|capitalize}"
+                                                                data-type="syncCategory"
+                                                                data-link="{$category}"
+                                                                class="drag-category"
+                                                                pk_menu=""
                                                                 style="background-color: #{$colors[$site]}">
                                                                 <div>
                                                                     {$category|capitalize}
@@ -321,6 +325,7 @@
                                                     {/foreach}
                                                 </div>
                                                 {/if}
+
 
                                             </div>
                                         </td>

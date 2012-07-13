@@ -107,8 +107,8 @@ class MenusController extends Controller
                 }
             }
 
-            $tpl->assign('elements', $allSites);
-            $tpl->assign('colors', $colors);
+            $this->view->assign('elements', $allSites);
+            $this->view->assign('colors', $colors);
 
             foreach ($menu->items as &$item) {
                 foreach ($syncParams as $siteUrl => $categories) {
@@ -155,7 +155,6 @@ class MenusController extends Controller
                 'site'      => SITE,
                 'pk_father' => $request->request->filter('pk_father', 'user', FILTER_SANITIZE_STRING),
                 'items'     => json_decode(json_decode($request->request->get('items'))),
-                'items-hierarchy' => json_decode(json_decode($request->request->get('items-hierarchy'))),
             );
 
             $menu = new \Menu();
@@ -239,8 +238,6 @@ class MenusController extends Controller
 
         $id = $this->request->query->getDigits('id');
         $continue = $this->request->request->filter('continue', false, FILTER_SANITIZE_STRING);
-
-var_dump(json_decode(json_decode($request->request->get('items'))), json_decode(json_decode($request->request->get('items-hierarchy'))));die();
 
         $menu = new \Menu($id);
 
