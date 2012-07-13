@@ -33,13 +33,13 @@ class VideosController extends Controller
         \Onm\Module\ModuleManager::checkActivatedOrForward('VIDEO_MANAGER');
 
         // Check if the user can admin video
-        \Acl::checkOrForward('VIDEO_ADMIN');
+        $this->checkAclOrForward('VIDEO_ADMIN');
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
 
         /******************* GESTION CATEGORIAS  *****************************/
         $this->contentType = \Content::getIDContentType('video');
 
-        $this->category = $this->request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
+        $this->category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
 
         $this->ccm = \ContentCategoryManager::get_instance();
         list($this->parentCategories, $this->subcat, $this->categoryData) =
@@ -64,10 +64,10 @@ class VideosController extends Controller
      *
      * @return void
      **/
-    public function listAction()
+    public function listAction(Request $request)
     {
-        $page           = $this->get('request')->query->getDigits('page', 1);
-        $category       = $this->get('request')->query->filter('category', 'all', FILTER_SANITIZE_STRING);
+        $page           = $request->query->getDigits('page', 1);
+        $category       = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
         $configurations = s::get('video_settings');
         $numFavorites   = $configurations['total_widget'];
 
@@ -124,10 +124,8 @@ class VideosController extends Controller
      *
      * @return void
      **/
-    public function widgetAction()
+    public function widgetAction(Request $request)
     {
-        $request = $this->get('request');
-
         $category = $request->query->filter('category', 'widget', FILTER_SANITIZE_STRING);
         $configurations = s::get('video_settings');
         $numFavorites   = $configurations['total_widget'];
@@ -160,12 +158,12 @@ class VideosController extends Controller
      *
      * @return Response the response object
      **/
-    public function createAction()
+    public function createAction(Request $request)
     {
-        \Acl::checkOrForward('VIDEO_CREATE');
+        $this->checkAclOrForward('VIDEO_CREATE');
 
-        if ('POST' == $this->request->getMethod()) {
-            $request  = $this->request->request;
+        if ('POST' == $request->getMethod()) {
+            $request  = $request->request;
 
             $type     = $request->filter('type', null, FILTER_SANITIZE_STRING);
             $page     = $request->getDigits('page', 1);
@@ -244,7 +242,7 @@ class VideosController extends Controller
             ));
 
         } else {
-            $type = $this->request->query->filter('type', null, FILTER_SANITIZE_STRING);
+            $type = $request->query->filter('type', null, FILTER_SANITIZE_STRING);
             if (empty($type)) {
 
                 return $this->render('video/selecttype.tpl');
@@ -262,12 +260,12 @@ class VideosController extends Controller
      *
      * @return Response the response object
      **/
-    public function updateAction()
+    public function updateAction(Request $request)
     {
-        \Acl::checkOrForward('VIDEO_UPDATE');
+        $this->checkAclOrForward('VIDEO_UPDATE');
 
-        $id = $this->request->query->getDigits('id');
-        $continue = $this->request->request->filter('continue', false, FILTER_SANITIZE_STRING);
+        $id = $request->query->getDigits('id');
+        $continue = $request->request->filter('continue', false, FILTER_SANITIZE_STRING);
         $video = new \Video($id);
 
         if ($video->id != null) {
@@ -288,7 +286,7 @@ class VideosController extends Controller
                     array('id' => $video->id)
                 ));
             } else {
-                $page = $this->request->request->getDigits('page', 1);
+                $page = $request->request->getDigits('page', 1);
 
                 return $this->redirect($this->generateUrl(
                     'admin_videos',
@@ -306,11 +304,10 @@ class VideosController extends Controller
      *
      * @return Response the response object
      **/
-    public function deleteAction()
+    public function deleteAction(Request $request)
     {
-        \Acl::checkOrForward('VIDEO_DELETE');
+        $this->checkAclOrForward('VIDEO_DELETE');
 
-        $request = $this->request;
         $id = $request->getDigits('id');
         $page = $request->getDigits('page', 1);
 
@@ -340,11 +337,11 @@ class VideosController extends Controller
      *
      * @return Response the response object
      **/
-    public function showAction()
+    public function showAction(Request $request)
     {
-        \Acl::checkOrForward('VIDEO_UPDATE');
+        $this->checkAclOrForward('VIDEO_UPDATE');
 
-        $id = $this->request->query->getDigits('id', null);
+        $id = $request->query->getDigits('id', null);
 
         $video = new \Video($id);
 
@@ -367,9 +364,9 @@ class VideosController extends Controller
      *
      * @return Response the response object
      **/
-    public function videoInformationAction()
+    public function videoInformationAction(Request $request)
     {
-        $url = $this->request->query->get('url', null, FILTER_DEFAULT);
+        $url = $request->query->get('url', null, FILTER_DEFAULT);
         $url = rawurldecode($url);
 
         if ($url) {
@@ -396,11 +393,11 @@ class VideosController extends Controller
      *
      * @return Response the response object
      **/
-    public function configAction()
+    public function configAction(Request $request)
     {
-        \Acl::checkOrForward('VIDEO_SETTINGS');
+        $this->checkAclOrForward('VIDEO_SETTINGS');
 
-        if ('POST' == $this->request->getMethod()) {
+        if ('POST' == $request->getMethod()) {
             unset($_POST['action']);
             unset($_POST['submit']);
 
@@ -430,11 +427,10 @@ class VideosController extends Controller
      *
      * @return Response the response object
      **/
-    public function batchDeleteAction()
+    public function batchDeleteAction(Request $request)
     {
         \Acl::checkOrForward('VIDEO_DELETE');
 
-        $request = $this->request;
         $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
         $page = $request->query->getDigits('page', 1);
         $selectedItems = $request->query->get('selected_fld');
@@ -468,11 +464,10 @@ class VideosController extends Controller
      *
      * @return Response the response object
      **/
-    public function toggleAvailabilityAction()
+    public function toggleAvailabilityAction(Request $request)
     {
         \Acl::checkOrForward('VIDEO_AVAILABLE');
 
-        $request  = $this->get('request');
         $id       = $request->query->getDigits('id', 0);
         $status   = $request->query->getDigits('status', 0);
         $page     = $request->query->getDigits('page', 1);
@@ -503,11 +498,10 @@ class VideosController extends Controller
      *
      * @return Response the response object
      **/
-    public function toggleFavoriteAction()
+    public function toggleFavoriteAction(Request $request)
     {
         \Acl::checkOrForward('VIDEO_AVAILABLE');
 
-        $request  = $this->get('request');
         $id       = $request->query->getDigits('id', 0);
         $status   = $request->query->getDigits('status', 0);
         $page     = $request->query->getDigits('page', 1);
@@ -537,11 +531,10 @@ class VideosController extends Controller
      *
      * @return Response the response object
      **/
-    public function toggleInHomeAction()
+    public function toggleInHomeAction(Request $request)
     {
         \Acl::checkOrForward('VIDEO_AVAILABLE');
 
-        $request  = $this->get('request');
         $id       = $request->query->getDigits('id', 0);
         $status   = $request->query->getDigits('status', 0);
         $page     = $request->query->getDigits('page', 1);
@@ -570,11 +563,9 @@ class VideosController extends Controller
      * @return void
      * @author
      **/
-    public function relationsAction()
+    public function relationsAction(Request $request)
     {
-        $request = $this->get('request');
-
-        $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
+        $id = $request->query->filter('id', null, FILTER_DEFAULT);
 
         $video = new \Video($id);
         $relations = array();
@@ -599,10 +590,8 @@ class VideosController extends Controller
      *
      * @return Response the response object
      **/
-    public function savePositionsAction()
+    public function savePositionsAction(Request $request)
     {
-        $request = $this->get('request');
-
         $positions = $request->request->get('positions');
         $msg = '';
         if (isset($positions)
@@ -640,11 +629,10 @@ class VideosController extends Controller
      *
      * @return Response the response object
      **/
-    public function batchPublishAction()
+    public function batchPublishAction(Request $request)
     {
         \Acl::checkOrForward('VIDEO_AVAILABLE');
 
-        $request  = $this->request;
         $status   = $request->query->getDigits('status', 0);
         $selected = $request->query->get('selected_fld', null);
         $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
@@ -676,9 +664,8 @@ class VideosController extends Controller
      *
      * @return Response the response object
      **/
-    public function contentProviderAction()
+    public function contentProviderAction(Request $request)
     {
-        $request      = $this->get('request');
         $category     = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
         $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = 8;
