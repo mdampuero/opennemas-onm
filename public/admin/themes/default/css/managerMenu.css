@@ -8,29 +8,28 @@
     padding:5px 9px;
     list-style:none;
     border:1px solid #ddd;
-    cursor:pointer;
     margin:2px 0;
     font-size:1.1em;
     min-height:20px;
 }
-#menuelements li:hover, .elementsContainer li:hover { background:#FFF; }
+.nested-sortable li:hover, .elementsContainer li:hover { background:#FFF; }
 
 
-#menu-form > h3 { padding: 5px 10px 5px 30px !important;}
-#menu-form > div ul {
+#elements-provider > h3 { padding: 5px 10px 5px 30px !important;}
+#elements-provider > div ul {
     margin:0;
     padding:0;
 }
-#menu-form > div {
+#elements-provider > div {
     padding:1em;
 }
 
-#menu-form .actions .edit-menu-item,
-#menu-form .actions .delete-menu-item {
+#elements-provider .actions .edit-menu-item,
+#elements-provider .actions .delete-menu-item {
     display:none;
 }
 
-#menuelements .actions .add-item {
+.nested-sortable .actions .add-item {
     display:none;
 }
 
@@ -39,31 +38,31 @@
     background:#efefef;
 }
 
-ol {
+ol.placeholder-element {
     margin: 0;
     padding: 0;
     padding-left: 30px;
 }
 
-#menuelements, #menuelements ol {
+.nested-sortable, .nested-sortable ol {
     margin: 0 0 0 25px;
     padding: 0;
     list-style-type: none;
 }
 
-#menuelements {
+.nested-sortable {
     margin: 0;
 }
 
-#menuelements > li:first-child {
+.nested-sortable > li:first-child {
     margin-top:0;
 }
-#menuelements li {
+.nested-sortable li {
     margin: 5px 0 0 0;
     padding: 0;
 }
 
-#menuelements li > div  {
+.nested-sortable li > div  {
     border: 1px solid #d4d4d4;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;

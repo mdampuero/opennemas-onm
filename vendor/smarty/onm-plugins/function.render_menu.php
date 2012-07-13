@@ -16,11 +16,13 @@ function smarty_function_render_menu($params, &$smarty) {
         return $output;
     }
 
-    $menuItems = Menu::renderMenu($menuName);
-    if (!empty($menuItems->items)) {
-        $smarty->assign('menuItems', $menuItems->items);
+    $menu = new Menu();
+    $menu->getMenu($menuName);
 
-    }else {
+    if (!empty($menu->items)) {
+        $smarty->assign('menuItems', $menu->items);
+
+    } else {
        $smarty->assign('menuItems', array());
     }
 

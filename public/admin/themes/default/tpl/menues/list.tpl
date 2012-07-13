@@ -44,7 +44,9 @@
     </div>
 
     <div class="wrapper-content">
+
         {render_messages}
+
         <table class="listing-table">
             <thead>
                 <tr>
@@ -56,36 +58,36 @@
                 </tr>
             </thead>
             <tbody>
-                {section loop=$menues name=m}
+                {foreach from=$menues item=menu}
                     <tr>
                          <td class="center">
-                            <input type="checkbox" class="minput"  id="selected_{$smarty.section.as.iteration}"
-                                   name="selected_fld[]" value="{$menues[m]->pk_menu}" style="cursor:pointer;" >
+                            <input type="checkbox" class="minput"  id="{$menu->pk_menu}"
+                                   name="selected_fld[]" value="{$menu->pk_menu}">
                         </td>
                         <td>
                             {acl isAllowed="MENU_UPDATE"}
-                            <a href="{url name=admin_menu_show id=$menues[m]->pk_menu}"
-                                title="{t 1=$menues[m]->name}Edit page '%1'{/t}" title={t}"Edit"{/t}>
+                            <a href="{url name=admin_menu_show id=$menu->pk_menu}"
+                                title="{t 1=$menu->name}Edit page '%1'{/t}" title={t}"Edit"{/t}>
                             {/acl}
                             {acl isAllowed="MENU_UPDATE"}
-                                 {$menues[m]->name|capitalize}
+                                 {$menu->name|capitalize}
                             </a>
                             {/acl}
                         </td>
-                         <td class="right">
+                        <td class="right">
                             <div class="btn-group">
                             {acl isAllowed="MENU_UPDATE"}
-                            <a href="{url name=admin_menu_show id=$menues[m]->pk_menu}" \
-                                title="{t 1=$menues[m]->name}Edit page '%1'{/t}" class="btn">
+                            <a href="{url name=admin_menu_show id=$menu->pk_menu}"
+                                title="{t 1=$menu->name}Edit page '%1'{/t}" class="btn">
                                 <i class="icon-pencil"></i> {t}Edit{/t}
                             </a>
                             {/acl}
-                            {if $menues[m]->type eq 'user'}
+                            {if $menu->type eq 'user'}
                                 {acl isAllowed="MENU_ADMIN"}
                                     <a  class="del btn btn-danger" data-controls-modal="modal-from-dom"
-                                        data-url="{url name=admin_menu_delete id=$menues[m]->pk_menu}"
-                                        data-title="{$menues[m]->name|capitalize}"
-                                        href="{url name=admin_menus_delete id=$menues[m]->pk_menu}">
+                                        data-url="{url name=admin_menu_delete id=$menu->pk_menu}"
+                                        data-title="{$menu->name|capitalize}"
+                                        href="{url name=admin_menus_delete id=$menu->pk_menu}">
                                         <i class="icon-trash icon-white"></i>
                                     </a>
                                 {/acl}
@@ -93,95 +95,7 @@
                             </div>
                         </td>
                     </tr>
-
-                    {foreach key=k item=subMenu from=$subMenues}
-                        {if $k eq $menues[m]->pk_menu}
-                            {section loop=$subMenu name=s}
-                            <tr>
-                                 <td class="center">
-                                     <input type="checkbox" class="minput"
-                                            id="selected_{$smarty.section.as.iteration}"
-                                            name="selected_fld[]" value="{$subMenu[s]->pk_menu}"  style="cursor:pointer;" >
-                                </td>
-                                <td style="padding-left:20px">
-                                    <strong>&rArr; </strong>
-                                    {acl isAllowed="MENU_UPDATE"}
-                                    <a href="{url name=admin_menu_show id=$subMenu[s]->pk_menu}"
-                                    {/acl}
-                                       title="{t 1=$subMenu[s]->name}Edit page '%1'{/t}" title={t}"Edit"{/t}>
-                                        {$subMenu[s]->name|capitalize}
-                                    </a>
-                                </td>
-
-                                <td class="right">
-                                    <div class="btn-group">
-                                    {acl isAllowed="MENU_UPDATE"}
-                                    <a href="{url name=admin_menu_show id=$subMenu[s]->pk_menu}" \
-                                        title="{t}Edit{/t}" class="btn">
-                                        <i class="icon-pencil"></i> {t}Edit{/t}
-                                    </a>
-                                    {/acl}
-                                    {if $subMenu[s]->type eq 'user'}
-                                        {acl isAllowed="MENU_ADMIN"}
-                                            <a  class="del btn btn-danger" data-controls-modal="modal-from-dom"
-                                                data-url="{url name=admin_menu_delete id=$subMenu[s]->pk_menu}"
-                                                data-title="{$subMenu[s]->name|capitalize}"
-                                                href="{url name=admin_menu_delete id=$subMenu[s]->pk_menu}">
-                                                <i class="icon-trash icon-white"></i>
-                                            </a>
-                                        {/acl}
-                                    {/if}
-                                    </div>
-                                </td>
-                            </tr>
-                             {/section}
-                         {/if}
-                    {/foreach}
-                {/section}
-                {if !empty($withoutFather)}
-                    <tr>
-                        <td colspan="3">
-                            {t}The next menus don't have a parent. Maybe you have deleted id?{/t}
-                        </td>
-                    </tr>
-                    {section loop=$withoutFather name=m}
-                    <tr>
-                         <td class="center">
-                             <input type="checkbox" class="minput"  id="selected_{$smarty.section.as.iteration}"
-                                    name="selected_fld[]" value="{$withoutFather[m]->id}"  style="cursor:pointer;" >
-                        </td>
-                        <td>
-                            {acl isAllowed="MENU_UPDATE"}
-                             <a href="{$smarty.server.SCRIPT_NAME}?action=read&amp;name={$withoutFather[m]->name}"
-                            {/acl}
-                                title="{t 1=$withoutFather[m]->name}Edit page '%1'{/t}" title={t}"Edit"{/t}>
-                                 {$withoutFather[m]->name|capitalize}
-                             </a>
-                        </td>
-
-                        <td class="right">
-                            <div class="bnt-group">
-                            {acl isAllowed="MENU_UPDATE"}
-                                <a  href="{url name=admin_menu_show id=$withoutFather[m]->pk_menu}"
-                                    title="{t 1=$subMenu[s]->name}Edit page '%1'{/t}" class="btn">
-                                    {t}Edit{/t}
-                                </a>
-                            {/acl}
-                            {if $withoutFather[m]->type eq 'user'}
-                                {acl isAllowed="MENU_ADMIN"}
-                                    <a  class="del btn btn-danger" data-controls-modal="modal-from-dom"
-                                       data-url="{url name=admin_menu_delete id=$withoutFather[m]->pk_menu}" title="{t}Delete{/t}"
-                                       data-title="{$widgets[wgt]->title|capitalize}"
-                                       href="{url name=admin_menu_delete id=$withoutFather[m]->pk_menu}" >
-                                        {t}Delete{/t}
-                                    </a>
-                                {/acl}
-                            {/if}
-                            </div>
-                        </td>
-                    </tr>
-                    {/section}
-                {/if}
+                {/foreach}
             </tbody>
             <tfoot>
                 <tr class="pagination">

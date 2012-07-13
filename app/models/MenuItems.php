@@ -34,108 +34,6 @@ class MenuItems
 
     }
 
-    /**
-     * Create a new menu
-     *
-     * @param array $data .
-     *
-     * @return bool If create in database
-     */
-    public function create($data)
-    {
-        $sql = "INSERT INTO menu_items ".
-               " (`pk_menu`,`title`,`link_name`, `type`,`position`,`pk_father`) " .
-               " VALUES (?,?,?,?,?,?)";
-
-        $values = array($data['pk_menu'],$data["title"],$data["link_name"],
-                        $data["type"],$data["position"],$data["pk_father"]);
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Explanation for this function.
-     *
-     * @param datatype $varname Var explanation.
-     *
-     * @return datatype Explanation of returned data
-     *
-     * @throws <b>Exception</b> Explanation of exception.
-     */
-    public function read($id)
-    {
-
-        $sql = 'SELECT * FROM menues WHERE pk_item = '.($id);
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        if (!$rs) {
-            \Application::logDatabaseError();
-
-            return false;
-        }
-
-        return $rs->fields;
-
-    }
-
-    public function update($data)
-    {
-
-        $sql = "UPDATE album_items "
-             . "SET  `title`=?, `name`=?, `params`=?,`type`=?,`site`=? "
-             . "WHERE pk_album= ?";
-
-        $values = array(
-            $data['name'],
-            $data['params'],
-            $data['type'],
-            $data['site'],
-            $data['id']
-        );
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Delete definetelly one content
-     *
-     * This simulates a trash system by setting their available flag to false
-     *
-     * @access public
-     * @param  integer $id
-     * @param  integer $last_editor
-     * @return null
-     **/
-    public function delete($id)
-    {
-        $sql = 'DELETE FROM menu_items WHERE pk_item ='.($id);
-
-        if ($GLOBALS['application']->conn->Execute($sql)===false) {
-            \Application::logDatabaseError();
-
-            return false;
-        }
-
-        return true;
-
-        /* Notice log of this action */
-        $logger = Application::getLogger();
-        $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid']
-            .') has executed action Remove  at menu_item Id '.$id);
-    }
-
 
     /**
      * Get a menu in the frontpage
@@ -145,14 +43,10 @@ class MenuItems
      * @return array with categories order by positions
      */
 
-    public static function getMenuItems($params = array())
+    public static function getMenuItems($id)
     {
-        // ver en europapress
-        //config para sacar solo padres, solo hijos, todo...
-        // $config = array_merge(self::config, $params_config);
-
-        $sql = "SELECT * FROM menu_items WHERE {$params} ORDER BY position ASC";
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $sql = "SELECT * FROM menu_items WHERE pk_menu=? ORDER BY position ASC";
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
             \Application::logDatabaseError();
@@ -160,47 +54,30 @@ class MenuItems
             return false;
         }
 
-        $menu = array();
+        $menuItems = array();
         $i=0;
         while (!$rs->EOF) {
-            $menu[$i] = new stdClass();
-            $menu[$i]->pk_item   = $rs->fields['pk_item'];
-            $menu[$i]->pk_menu   = $rs->fields['pk_menu'];
-            $menu[$i]->title     = $rs->fields['title'];
-            $menu[$i]->link      = $rs->fields['link_name'];
-            $menu[$i]->position  = $rs->fields['position'];
-            $menu[$i]->type      = $rs->fields['type'];
-            $menu[$i]->pk_father = $rs->fields['pk_father'];
+            $menuItems[$rs->fields['pk_item']] = new stdClass();
+            $menuItems[$rs->fields['pk_item']]->pk_item   = $rs->fields['pk_item'];
+            $menuItems[$rs->fields['pk_item']]->title     = $rs->fields['title'];
+            $menuItems[$rs->fields['pk_item']]->link      = $rs->fields['link_name'];
+            $menuItems[$rs->fields['pk_item']]->position  = $rs->fields['position'];
+            $menuItems[$rs->fields['pk_item']]->type      = $rs->fields['type'];
+            $menuItems[$rs->fields['pk_item']]->pk_father = $rs->fields['pk_father'];
+            $menuItems[$rs->fields['pk_item']]->submenu = array();
             $rs->MoveNext();
             $i++;
         }
 
-        return $menu;
+        foreach ($menuItems as $id => $element) {
+            if ((int) $element->pk_father > 0) {
+                array_push($menuItems[$element->pk_father]->submenu, $element);
+                unset($menuItems[$id]);
 
-    }
-
-    public static function getPkItems($id)
-    {
-        // ver en europapress
-        //config para sacar solo padres, solo hijos, todo...
-        // $config = array_merge(self::config, $params_config);
-        $sql = "SELECT pk_item FROM menu_items WHERE pk_menu = ? ORDER BY position ASC";
-        $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
-
-        if (!$rs) {
-            \Application::logDatabaseError();
-
-            return false;
+            }
         }
 
-        // $menu =  $rs->GetRows();
-        $menu = array();
-        while (!$rs->EOF) {
-            $menu[]  = $rs->fields['pk_item'];
-            $rs->MoveNext();
-        }
-
-        return $menu;
+        return $menuItems;
     }
 
     /**
@@ -272,25 +149,4 @@ class MenuItems
         return true;
     }
 
-    public static function deleteItems($items)
-    {
-        $sql = "DELETE FROM menu_items WHERE pk_item = ?";
-        $stmt = $GLOBALS['application']->conn->Prepare($sql);
-        foreach ($items as $item) {
-            $resp = $GLOBALS['application']->conn->Execute($stmt, array($item));
-
-            if ($resp === false) {
-                \Application::logDatabaseError();
-
-                return false;
-            }
-        }
-
-        /* Notice log of this action */
-        $logger = \Application::getLogger();
-        $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid']
-            .') has executed action Remove  at menu_item Id '.$id);
-
-        return true;
-    }
 }

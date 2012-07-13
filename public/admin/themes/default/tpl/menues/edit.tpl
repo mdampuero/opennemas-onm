@@ -5,7 +5,7 @@
     {script_tag src="/jquery/jquery.nestedSortable.js"}
     <script>
     jQuery(document).ready(function($) {
-        jQuery("#menu-form").accordion({
+        jQuery("#elements-provider").accordion({
             autoHeight: false,
             navigation: true
         });
@@ -15,16 +15,23 @@
             jQuery('#menuelements li').each(function(pos, item) {
                 if ($(item).attr('id')) {
                     items.push({
-                        'id':      $(item).attr('id'),
-                        'title':   $(item).attr('title'),
-                        'type':    $(item).attr('type'),
-                        'link':    $(item).attr('link'),
-                        'pk_item': $(item).attr('pk_item')
+                        'title':   $(item).data('title'),
+                        'type':    $(item).data('type'),
+                        'link':    $(item).data('link'),
+                        'id':      $(item).data('item-id')
                     });
                 }
             });
-
+            var itemshierarchy = $('ol#menuelements').nestedSortable('toArray').map(function(item){
+                if (item['id'] !== null) {
+                    return {
+                        id: item['item_id'],
+                        parent_id: item['parent_id']
+                    }
+                };
+            })
             jQuery('#items').attr('value', JSON.stringify(items));
+            jQuery('#items-hierarchy').attr('value', JSON.stringify(itemshierarchy));
         });
     });
     </script>
@@ -76,33 +83,12 @@
                     <td>
                         <table  style="width:100%; margin:10px;">
                             <tr>
-                                <td style="width:70%; padding:4px 0;">
+                                <td colspan="2">
                                     <label for="name">{t}Name{/t}</label>
                                     <input type="text" name="name" class="required"
-                                           id="name" value="{$menu->name|default:""}"  style="width:97%"
+                                           id="name" value="{$menu->name|default:""}"  style="width:57%"
                                            {if (!empty($menu) && $menu->type neq 'user')} readonly="readonly" {/if}/>
-                                    <!--<label for="description">{t}Description{/t}</label>
-                                    <textarea name="description" id="description"   style="width:97%">{$menu->params['description']|clearslash|default:""}</textarea>-->
-                                </td>
-                                <td>
-                                    <!-- <label for="description">{t}Father menu{/t}</label>
-                                    <select id='pk_father' name='pk_father' {if (!empty($menu) && $menu->type neq 'user')} disabled="disabled" {/if}>
-                                        <option value="0" title="Ninguno">{t}- Root menu -{/t}</option>
-                                        {section loop=$menues name=m}
-                                            {assign var=items value=$menues[m]->items}
-                                            <option value="{$items[0]->pk_item}" name="{$items[0]->title} in {$menues[m]->name|default:""}" style="font-weight:bold;" >
-                                                   Menu {$menues[m]->name}
-                                            </option>
-                                            {if isset($items) && !empty($items)}
-                                            {section name=su loop=$items}
-                                            <option value="{$items[su]->pk_item}" name="{$items[su]->name|default:""}"
-                                                {if isset($menu) && $menu->pk_father eq $items[su]->pk_item} selected {/if}>
-                                                &nbsp;&nbsp;&nbsp;&nbsp;{$items[su]->title}
-                                            </option>
-                                            {/section}
-                                            {/if}
-                                        {/section}
-                                    </select> -->
+                                    <hr>
                                 </td>
                             </tr>
                             <tr>
@@ -113,33 +99,17 @@
                                     <tr>
                                         <td style="width:60%">
                                             <div class="wrapper-menu-items">
-                                                <ol id="menuelements">
-                                                {if isset($menu) && !empty($menu->items)}
-                                                    {section name=c loop=$menu->items}
-                                                        <li class="menuItem" id="item_{$menu->items[c]->pk_item}" pk_item="{$menu->items[c]->pk_item}" title="{$menu->items[c]->title}"
-                                                            link="{$menu->items[c]->link}" type="{$menu->items[c]->type}"
-                                                            title="{t 1=$menu->items[c]->title}Synchronized from %1{/t}"
-                                                            style="background: #{$menu->items[c]->color|default:'FFFFFF'} !important;">
-                                                            <div>
-                                                                {$menu->items[c]->title}
-                                                                {if $menu->items[c]->type == 'syncCategory'}
-                                                                    <img src="{$params.IMAGE_DIR}sync-icon.png"
-                                                                         alt="{t}Sync{/t}">
-                                                                {/if}
-                                                                <div class="btn-group actions" style="float:right;">
-                                                                    <a href="#" class="add-item"><i class="icon-plus"></i></a>
-                                                                    <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
-                                                                    <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                    {/section}
+                                                <ol id="menuelements" class="nested-sortable">
+                                                {if isset($menu) && is_array($menu->items) && count($menu->items) > 0}
+                                                    {foreach from=$menu->items item=menuItem}
+                                                        {include file="menues/partials/_menu_item.tpl" menuItem=$menuItem}
+                                                    {/foreach}
                                                 {/if}
                                                 </ul>
                                             </div>
                                         </td>
                                         <td style="width:40%">
-                                            <div id="menu-form" style="width:100%">
+                                            <div id="elements-provider" style="width:100%">
 
                                                 {if count($categories) > 0}
                                                 <h3 href="#listado">{t}Global Categories{/t}</h3>
@@ -364,7 +334,7 @@
             </tbody>
         </table>
         <input type="hidden" name="items" id="items" value="" />
-        <input type="hidden" id="forDelete" name="forDelete" value="" />
+        <input type="hidden" name="items-hierarchy" id="items-hierarchy" value="" />
     </div><!--fin wrapper-content-->
 </form>
 

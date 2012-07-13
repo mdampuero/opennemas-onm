@@ -56,39 +56,9 @@ class MenusController extends Controller
         $this->checkAclOrForward('MENU_ADMIN');
 
         $menues    = \Menu::find();
-        $subMenues = $list = $subList = array();
-
-        foreach ($menues as $menu) {
-            if (empty($menu->pk_father)) {
-                $list[] = $menu;
-            } else {
-               $subMenues[] = $menu;
-            }
-        }
-
-        $withoutFather = array();
-        foreach ($subMenues as $submenu) {
-            //TODO: mejorar, buscamos su menu padre para pintarlo ya que solo sabemos el item
-            $without = true;
-            foreach ($list as $menu) {
-                foreach ($menu->items as $item) {
-                    if ($item->pk_item == $submenu->pk_father) {
-                        $subList[$item->pk_menu][] = $submenu;
-                        $without = false;
-                    }
-                }
-            }
-
-            if ($submenu->pk_father != 0 && $without) {
-                $withoutFather[] = $submenu;
-            }
-        }
 
         return $this->render('menues/list.tpl', array(
-            'menues'        => $list,
-            'subMenues'     => $subList,
-            'withoutFather' => $withoutFather,
-            'pages'         => $this->pages,
+            'menues'        => $menues,
         ));
     }
 
@@ -120,9 +90,12 @@ class MenusController extends Controller
             }
         }
         $staticPages = $cm->find('StaticPage', '1=1', 'ORDER BY created DESC ');
-        $menues = \Menu::find();
 
-        // Get Sync categories from settings
+        // Get categories from menu
+        $menu = new \Menu($id);
+        $menu->loadItems();
+
+        // Overload sync category color if exists
         if ($syncParams = s::get('sync_params')) {
             $colorSites = s::get('sync_colors');
             $allSites = array();
@@ -136,16 +109,7 @@ class MenusController extends Controller
 
             $tpl->assign('elements', $allSites);
             $tpl->assign('colors', $colors);
-        }
 
-        // Get categories from menu
-        $menu = new \Menu();
-        $menu->read($id);
-        $menu->params = unserialize($menu->params);
-        $menu->items = \MenuItems::getMenuItems('pk_menu='.$menu->pk_menu);
-
-        // Overload sync category color if exists
-        if ($syncParams) {
             foreach ($menu->items as &$item) {
                 foreach ($syncParams as $siteUrl => $categories) {
                     foreach ($categories as $category) {
@@ -164,7 +128,6 @@ class MenusController extends Controller
             'videoCategories' => $videoCategories,
             'pollCategories'  => $pollCategories,
             'staticPages'     => $staticPages,
-            'menues'          => $menues,
             'pages'           => $this->pages,
             'menu'            => $menu
         ));
@@ -192,6 +155,7 @@ class MenusController extends Controller
                 'site'      => SITE,
                 'pk_father' => $request->request->filter('pk_father', 'user', FILTER_SANITIZE_STRING),
                 'items'     => json_decode(json_decode($request->request->get('items'))),
+                'items-hierarchy' => json_decode(json_decode($request->request->get('items-hierarchy'))),
             );
 
             $menu = new \Menu();
@@ -275,6 +239,8 @@ class MenusController extends Controller
 
         $id = $this->request->query->getDigits('id');
         $continue = $this->request->request->filter('continue', false, FILTER_SANITIZE_STRING);
+
+var_dump(json_decode(json_decode($request->request->get('items'))), json_decode(json_decode($request->request->get('items-hierarchy'))));die();
 
         $menu = new \Menu($id);
 

@@ -14,7 +14,7 @@ jQuery(document).ready(function($){
             });
     });
 
-    jQuery('#menu-form').on('click', '.add-item', function(e, ui){
+    jQuery('#elements-provider').on('click', '.add-item', function(e, ui){
         e.preventDefault();
         var element = $(this).closest('li');
         var clone = element.clone(true);
@@ -37,7 +37,7 @@ jQuery(document).ready(function($){
         handle: 'div',
         helper: 'clone',
         items: 'li',
-        maxLevels: 3,
+        maxLevels: 2,
         opacity: 0.6,
         placeholder: 'placeholder',
         revert: 250,

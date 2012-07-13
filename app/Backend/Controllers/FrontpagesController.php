@@ -80,9 +80,10 @@ class FrontpagesController extends Controller
             $this->view->assign('category', $_REQUEST['category']);
         }
 
-        $menuItems = \Menu::renderMenu('frontpage');
-        if (!empty($menuItems->items )) {
-            foreach ($menuItems->items as &$item) {
+        $menu = new \Menu();
+        $menu->getMenu('frontpage');
+        if (!empty($menu->items )) {
+            foreach ($menu->items as &$item) {
                 $item->categoryID = $ccm->get_id($item->link);
                 if (!empty($item->submenu)) {
                     foreach ($item->submenu as &$subitem) {
@@ -90,7 +91,7 @@ class FrontpagesController extends Controller
                     }
                 }
             }
-            $this->view->assign('menuItems', $menuItems->items);
+            $this->view->assign('menuItems', $menu->items);
         }
 
         $cm = new \ContentManager();
