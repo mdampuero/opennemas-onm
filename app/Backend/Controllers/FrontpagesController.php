@@ -214,20 +214,14 @@ class FrontpagesController extends Controller
      **/
     public function previewAction()
     {
-        $categoryName    = $this->request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
-        $subCategoryName = $this->request->query->filter('subcategory_name', null, FILTER_SANITIZE_STRING);
-
-        $this->view     = new \Template(TEMPLATE_USER);
+        $categoryName        = $this->request->request->get('category_name', 'home', FILTER_SANITIZE_STRING);
+        $this->view          = new \Template(TEMPLATE_USER);
         $this->view->caching = false;
 
-        // Initialize the Content and Database object
-        $ccm = \ContentCategoryManager::get_instance();
-        list($category_name, $subcategory_name) = $ccm->normalize($categoryName, $subCategoryName);
+        $this->view->assign(array(
+            'category_name' => $categoryName,
 
-        $actual_category = (is_null($subcategory_name))? $category_name : $subcategory_name;
-
-        $this->view->assign('actual_category', $actual_category);
-        $actualCategoryId = $ccm->get_id($actual_category);
+        ));
 
         $cm = new \ContentManager;
         $contentsRAW = $this->request->request->get('contents');
