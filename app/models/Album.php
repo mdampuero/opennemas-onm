@@ -97,7 +97,7 @@ class Album extends Content
                 );
 
                 if (isset($contentTypeName->fields['name'])) {
-                    $returnValue = $contentTypeName;
+                    $returnValue = $contentTypeName->fields['name'];
                 } else {
                     $returnValue = $this->content_type;
                 }
