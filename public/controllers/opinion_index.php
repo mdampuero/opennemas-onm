@@ -79,7 +79,7 @@ switch ($action) {
                 $opinions = $cm->find(
                     'Opinion',
                     'in_home=1 and available=1 and type_opinion=0',
-                    'ORDER BY position DESC, starttime DESC '
+                    'ORDER BY position ASC, starttime DESC '
                 );
                 $totalHome = count($opinions);
 
