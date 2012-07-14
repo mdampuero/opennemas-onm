@@ -93,8 +93,8 @@ switch ($action) {
                     'ORDER BY starttime DESC '.$_limit
                 );
             }
-
-            $total_opinions =  $totalHome + $cm->count(
+            // Added ITEMS_PAGE for count first page
+            $total_opinions =  ITEMS_PAGE + $cm->count(
                 'Opinion',
                 'in_home=1 and available=1 and type_opinion=0',
                 'ORDER BY type_opinion DESC, created DESC '
