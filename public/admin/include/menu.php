@@ -98,7 +98,7 @@ $menuXml = '<?xml version="1.0"?>
             privilege="LETTER_ADMIN"
             title="'.htmlspecialchars(_("Letter to the editor"), ENT_QUOTES).'"
             id="letter_manager"
-            link="/admin/controllers/letter/letter.php"
+            link="'.url('admin_letters').'"
         />
         <node
             module_name="ARTICLE_MANAGER"

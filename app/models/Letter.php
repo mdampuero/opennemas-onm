@@ -138,10 +138,12 @@ class Letter extends Content
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
 
         $GLOBALS['application']->dispatch('onAfterUpdateLetter', $this);
+
+        return true;
     }
 
     //Elimina definitivamente

@@ -23,17 +23,16 @@ jQuery('.del').click(function(e) {
     jQuery('#modal-letter-delete .modal-body span').html( jQuery(this).data('title') );
     //Sets up the modal
     jQuery("#modal-letter-delete").modal('show');
-    jQuery("body").data("selected-for-del", jQuery(this).data("id"));
+    jQuery("body").data("selected-for-del", jQuery(this).data("url"));
     e.preventDefault();
 });
 
 jQuery('#modal-letter-delete a.btn.yes').on('click', function(){
-    var delId = jQuery("body").data("selected-for-del");
-    if(delId) {
+    var url = jQuery("body").data("selected-for-del");
+    if (url) {
         jQuery.ajax({
-            url:  "{$smarty.server.SCRIPT_NAME}",
+            url:  url,
             type: "POST",
-            data: { action:"delete", id:delId },
             success: function(){
                 location.reload();
             }

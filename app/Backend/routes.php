@@ -249,6 +249,61 @@ $adminRoutes->add(
     '/admin'
 );
 
+// Letter manager routes
+$adminRoutes->add(
+    'admin_letters',
+    new Route(
+        '/letters',
+        array('_controller' => 'Backend:Controllers:LettersController:list')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_letter_create',
+    new Route(
+        '/letter/create',
+        array('_controller' => 'Backend:Controllers:LettersController:create')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_letter_show',
+    new Route(
+        '/letter/{id}/show',
+        array('_controller' => 'Backend:Controllers:LettersController:show')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_letter_update',
+    new Route(
+        '/letter/{id}/update',
+        array('_controller' => 'Backend:Controllers:LettersController:update')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_letter_delete',
+    new Route(
+        '/letter/{id}/delete',
+        array('_controller' => 'Backend:Controllers:LettersController:delete')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_letter_toggleavailable',
+    new Route(
+        '/letter/{id}/toggle-available',
+        array('_controller' => 'Backend:Controllers:LettersController:toggleAvailable')
+    ),
+    '/admin'
+);
+
 // Category manager routes
 $adminRoutes->add(
     'admin_categories',

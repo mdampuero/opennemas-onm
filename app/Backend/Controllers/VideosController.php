@@ -39,6 +39,8 @@ class VideosController extends Controller
         /******************* GESTION CATEGORIAS  *****************************/
         $this->contentType = \Content::getIDContentType('video');
 
+        $request = $this->get('request');
+
         $this->category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
 
         $this->ccm = \ContentCategoryManager::get_instance();

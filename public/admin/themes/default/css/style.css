@@ -800,6 +800,7 @@ legend {
     .global-nav .logoonm a#logo-onm { display:block !important; text-indent:-9999px; width:132px; height:38px; background-image:url(../images/logo-opennemas-small.png); background-position:center center; background-repeat: no-repeat;}
     .global-nav .logoonm img{ vertical-align:middle; outline:none; padding-top:5px }
     .global-nav .logoonm div.site-name{ padding-top:10px; }
+    .global-nav .logoonm > a { text-indent:-9999px; }
 
 .global-nav.manager {
     background: #049CDB !important;
@@ -823,7 +824,6 @@ legend {
 
 .global-nav, .global-nav .fill {
     background-color: #222222;
-    background-image: -moz-linear-gradient(center top , #333333, #222222);
     background-repeat: repeat-x;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), 0 -1px 0 rgba(0, 0, 0, 0.1) inset;
 }
