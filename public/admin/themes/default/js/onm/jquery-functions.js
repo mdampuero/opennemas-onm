@@ -16,8 +16,7 @@ saveSortPositions = function(controller) {
        data: {action: "save_positions", positions : items_id },
        success: function( msg ){
 
-           jQuery('#warnings-validation').html("<div class=\"success\">"+msg+"</div>")
-                                         .effect("highlight", {}, 3000);
+           jQuery('#warnings-validation').html("<div class=\"alert\" ><button class=\"close\" data-dismiss=\"alert\">×</button>"+msg+"</div>");
 
        }
     });

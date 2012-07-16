@@ -18,9 +18,9 @@
             {acl isAllowed="IMAGE_SETTINGS"}
             <li class="separator"></li>
                 <li>
-                    <a href="{url name=admin_images_config}" title="{t}Config video module{/t}">
-                        <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
-                        {t}Settings{/t}
+                    <a href="{url name=admin_images}" title="{t}Go back{/t}">
+                        <img src="{$params.IMAGE_DIR}previous.png" alt="" /><br />
+                        {t}Go back{/t}
                     </a>
                 </li>
             {/acl}
@@ -30,8 +30,6 @@
 <div class="wrapper-content">
 
     {render_messages}
-
-    {include file="image/_partials/categories.tpl" home="{url name=admin_images l=a}"}
 
     <table class="listing-table">
         <thead>

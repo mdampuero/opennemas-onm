@@ -121,6 +121,8 @@ class Special extends Content
     {
         parent::create($data);
 
+        $data['id'] = $this->id;
+
         if (!array_key_exists('pdf_path', $data)) {
             $data['pdf_path'] = '';
         }
@@ -143,8 +145,9 @@ class Special extends Content
         }
         $this->saveItems($data);
 
+        $this->read($this->id);
 
-        return $this->id;
+        return $this;
     }
 
     public function read($id)
@@ -222,25 +225,34 @@ class Special extends Content
 
     public function saveItems($data)
     {
-
         $this->deleteAllContents($data['id']);
 
         if (isset($data['noticias_left'])) {
-            $contents = json_decode(json_decode($data['noticias_left']), true);
+            $contents = $data['noticias_left'];
             if (!empty($contents)) {
                 foreach ($contents as $content) {
-                    $this->setContents($this->id, $content['id'],
-                      ($content['position']*2-1), "", $content['content_type']);
+                    $this->setContents(
+                        $this->pk_special,
+                        $content->id,
+                        ($content->position *2-1),
+                        "",
+                        $content->content_type
+                    );
                 }
             }
         }
 
         if (isset($data['noticias_right'])) {
-            $contents = json_decode(json_decode($data['noticias_right']), true);
+            $contents = $data['noticias_right'];
             if (!empty($contents)) {
                 foreach ($contents as $content) {
-                    $this->setContents($this->id, $content['id'],
-                        ($content['position']*2), "", $content['content_type']);
+                    $this->setContents(
+                        $this->pk_special,
+                        $content->id,
+                        ($content->position *2),
+                        "",
+                        $content->content_type
+                    );
                 }
             }
         }
@@ -277,24 +289,24 @@ class Special extends Content
     /**
      *   Set contents into special column
     **/
-    public function setContents($id,$pkContent,$position,$name,$typeContent)
+    public function setContents($id, $pkContent, $position, $name, $typeContent)
     {
         if ($id == null) {
             return false;
         }
 
         $visible = 1;
-        $sql     = "INSERT INTO special_contents "
-        . "(`fk_special`, `fk_content`,`position`,".
-        "`name`,`visible`,`type_content`)"
-        . " VALUES (?,?,?,?,?,?)";
+        $sql = "INSERT INTO special_contents "
+            . "(`fk_special`, `fk_content`,`position`,"
+            . "`name`,`visible`,`type_content`)"
+            . " VALUES (?,?,?,?,?,?)";
         $values  = array(
-                        $id,
-                        $pkContent,
-                        $position,
-                        $name,
-                        $visible,
-                        $typeContent
+            $id,
+            $pkContent,
+            $position,
+            $name,
+            $visible,
+            $typeContent
         );
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
@@ -316,7 +328,7 @@ class Special extends Content
             return false;
         }
         $sql    = 'DELETE FROM special_contents '
-                    . 'WHERE fk_content=? AND fk_special=?';
+                . 'WHERE fk_content=? AND fk_special=?';
         $values = array(intval($contentId), intval($id));
         $rs     = $GLOBALS['application']->conn->Execute($sql, $values);
 

@@ -91,7 +91,7 @@ $menuXml = '<?xml version="1.0"?>
             privilege="SPECIAL_ADMIN"
             title="'.htmlspecialchars(_("Specials"), ENT_QUOTES).'"
             id="specials_manager"
-            link="/admin/controllers/specials/special.php"
+            link="'.url('admin_specials').'"
         />
          <node
             module_name="LETTER_MANAGER"
@@ -124,7 +124,7 @@ $menuXml = '<?xml version="1.0"?>
             privilege="IMAGE_ADMIN"
             title="'.htmlspecialchars(_("Images"), ENT_QUOTES).'"
             id="image_manager"
-            link="'.url('admin_images_statistics').'"
+            link="'.url('admin_images').'"
         />
         <node
             module_name="FILE_MANAGER"

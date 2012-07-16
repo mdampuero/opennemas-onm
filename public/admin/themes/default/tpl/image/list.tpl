@@ -48,6 +48,11 @@
                     </a>
                 </li>
                 {/acl}
+                <li>
+                    <a href="{url name=admin_images_statistics}">
+                        <img src="{$params.IMAGE_DIR}statistics.png" alt="{t}Statistics{/t}"><br />{t}Statistics{/t}
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

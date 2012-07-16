@@ -12,12 +12,10 @@
 {/block}
 
 {block name="footer-js" append}
-
     {script_tag src="/onm/jquery.content-provider.js"}
-    {script_tag src="/onm/jquery.specials.js"}
     {script_tag src="/tiny_mce/opennemas-config.js"}
 
-    <script type="text/javascript">
+    <script>
         tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
         OpenNeMas.tinyMceConfig.simple.elements = "description";
         tinyMCE.init( OpenNeMas.tinyMceConfig.simple );
@@ -29,18 +27,38 @@
     } catch(e) { }
 
     jQuery(document).ready(function($){
-        $("#form-validate-button, #form-send-button").on("click", function(event) {
+        $("#formulario").on("submit", function(e, ui) {
+            var els = [];
+            jQuery('#column_right').find('ul.content-receiver li').each(function (index, item) {
 
-            saveSpecialContent();
+                els.push({
+                    'id' : jQuery(item).data('id'),
+                    'content_type': jQuery(item).data('type'),
+                    'position': index
+                });
+            });
 
-            return true;
+            jQuery('input#noticias_right').val(JSON.stringify(els));
+
+            els = [];
+
+            jQuery('#column_left').find('ul.content-receiver li').each(function (index, item) {
+
+                els.push({
+                    'id' : jQuery(item).data('id'),
+                    'content_type': jQuery(item).data('type'),
+                    'position': index
+                });
+            });
+
+            jQuery('input#noticias_left').val(JSON.stringify(els));
         });
     });
     </script>
 {/block}
 
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
+<form action="{if $special->id}{url name=admin_special_update id=$special->id}{else}{url name=admin_special_create}{/if}" method="post" name="formulario" id="formulario">
 
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
@@ -49,30 +67,30 @@
 
                  <li>
                     {acl isAllowed="SPECIAL_CREATE"}
-                    <button  name="action" value="validate"  id="form-validate-button">
-                        <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="Guardar y continuar" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
+                    <button type="submit" name="continue" value="1">
+                        <img src="{$params.IMAGE_DIR}save_and_continue.png" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
                     </button>
                     {/acl}
                 </li>
                 <li>
-                    {if isset($special->id)}
-                        {acl isAllowed="SPECIAL_UPDATE"}
-                        <button   name="action" value="update" id="form-send-button">
-                            <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar" alt="{t}Save{/t}" ><br />{t}Save{/t}
-                        </button>
-                        {/acl}
-                    {else}
-                        {acl isAllowed="SPECIAL_CREATE"}
-                        <button type="submit" name="action" value="create" id="form-send-button">
-                            <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />{t}Save{/t}
-                        </button>
-                        {/acl}
-                    {/if}
+                {if isset($special->id)}
+                    {acl isAllowed="SPECIAL_UPDATE"}
+                    <button type="submit">
+                        <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}" ><br />{t}Save{/t}
+                    </button>
+                    {/acl}
+                {else}
+                    {acl isAllowed="SPECIAL_CREATE"}
+                    <button type="submit">
+                        <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}" ><br />{t}Save{/t}
+                    </button>
+                    {/acl}
+                {/if}
                 </li>
                 <li class="separator"></li>
                 <li>
-                    <a href="{$smarty.server.PHP_SELF}?action=list&category={$smarty.request.category}">
-                        <img border="0" src="{$params.IMAGE_DIR}previous.png" title="Cancelar" alt="Cancelar" ><br />{t}Go back{/t}
+                    <a href="{url name=admin_specials category=$category}">
+                        <img src="{$params.IMAGE_DIR}previous.png" title="Cancelar" alt="Cancelar" ><br />{t}Go back{/t}
                     </a>
                 </li>
             </ul>

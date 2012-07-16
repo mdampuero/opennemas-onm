@@ -1,10 +1,5 @@
 <ul class="pills">
     <li>
-        <a href="{url name=admin_images_statistics}" {if $category== 'statistics'}class="active"{/if}>
-            {t}Statistics{/t}
-        </a>
-    </li>
-    <li>
         <a href="{url name=admin_images category=all}" {if $category == 'all'}class="active"{/if}>
             {t}All{/t}
         </a>

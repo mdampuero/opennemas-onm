@@ -251,6 +251,133 @@ $adminRoutes->add(
 
 // Letter manager routes
 $adminRoutes->add(
+    'admin_specials',
+    new Route(
+        '/specials',
+        array('_controller' => 'Backend:Controllers:SpecialsController:list')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_specials_widget',
+    new Route(
+        '/specials/widget',
+        array('_controller' => 'Backend:Controllers:SpecialsController:widget')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_special_create',
+    new Route(
+        '/special/create',
+        array('_controller' => 'Backend:Controllers:SpecialsController:create')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_special_show',
+    new Route(
+        '/special/{id}/show',
+        array('_controller' => 'Backend:Controllers:SpecialsController:show')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_special_update',
+    new Route(
+        '/special/{id}/update',
+        array('_controller' => 'Backend:Controllers:SpecialsController:update')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_special_delete',
+    new Route(
+        '/special/{id}/delete',
+        array('_controller' => 'Backend:Controllers:SpecialsController:delete')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_special_widget_save_positions',
+    new Route(
+        '/specials/widget/save-positions',
+        array('_controller' => 'Backend:Controllers:SpecialsController:savePositions')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_specials_config',
+    new Route(
+        '/specials/config',
+        array('_controller' => 'Backend:Controllers:SpecialsController:config')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_special_toggleavailable',
+    new Route(
+        '/special/{id}/toggle-available',
+        array('_controller' => 'Backend:Controllers:SpecialsController:toggleAvailable')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_special_togglefavorite',
+    new Route(
+        '/special/{id}/toggle-favorite',
+        array('_controller' => 'Backend:Controllers:SpecialsController:toggleFavorite')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_special_togglefavorite',
+    new Route(
+        '/special/{id}/toggle-favorite',
+        array('_controller' => 'Backend:Controllers:SpecialsController:toggleFavorite')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_special_toggleinhome',
+    new Route(
+        '/special/{id}/toggle-in-home',
+        array('_controller' => 'Backend:Controllers:SpecialsController:toggleInHome')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_specials_batchpublish',
+    new Route(
+        '/special/batch-publish',
+        array('_controller' => 'Backend:Controllers:SpecialsController:batchPublish')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_specials_batchdelete',
+    new Route(
+        '/special/batch-delete',
+        array('_controller' => 'Backend:Controllers:SpecialsController:batchDelete')
+    ),
+    '/admin'
+);
+
+// Letter manager routes
+$adminRoutes->add(
     'admin_letters',
     new Route(
         '/letters',
