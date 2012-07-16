@@ -243,11 +243,12 @@ class LettersController extends Controller
         $letterStatus     = $request->query->getDigits('letterStatus', 1);
 
         $letter = new \Letter($id);
+
         if (is_null($letter->id)) {
             m::add(sprintf(_('Unable to find a letter with the id "%d"'), $id), m::ERROR);
         } else {
             $letter->set_available($status, $_SESSION['user_id']);
-            m::add(sprintf(_('Successfully changed availability for the letter with id "%d"'), $id), m::SUCCESS);
+            m::add(sprintf(_('Successfully changed availability for the letter "%s"'), $letter->title), m::SUCCESS);
         }
 
         return $this->redirect($this->generateUrl(
@@ -258,4 +259,129 @@ class LettersController extends Controller
             )
         ));
     }
+
+    /**
+     * Deletes multiple letters at once given their ids
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function batchDeleteAction(Request $request)
+    {
+        $this->checkAclOrForward('LETTER_DELETE');
+
+        $selected = $request->query->get('selected_fld', null);
+
+        if (is_array($selected)
+            && count($selected) > 0
+        ) {
+            $changes = 0;
+            foreach ($selected as $id) {
+                $letter = new \Letter((int) $id);
+                if (!is_null($letter->id)) {
+                    $letter->delete($id, $_SESSION['userid']);
+                    $changes++;
+                } else {
+                    m::add(sprintf(_('Unable to find a letter with the id "%d"'), $id));
+                }
+            }
+        }
+        if ($changes > 0) {
+            m::add(sprintf(_('Successfully deleted %d letters'), $changes));
+        }
+
+        return $this->redirect($this->generateUrl(
+            'admin_letters',
+            array(
+                'letterStatus' => $status,
+            )
+        ));
+
+    }
+
+    /**
+     * Changes the available status for letters given their ids
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function batchPublishAction(Request $request)
+    {
+        $this->checkAclOrForward('LETTER_AVAILABLE');
+
+        $status   = $request->query->getDigits('status', 0);
+        $selected = $request->query->get('selected_fld', null);
+
+        if (is_array($selected)
+            && count($selected) > 0
+        ) {
+            $changes = 0;
+            foreach ($selected as $id) {
+                $letter = new \Letter((int) $id);
+                if (!is_null($letter->id)) {
+                    $letter->set_available($status, $_SESSION['userid']);
+                    $changes++;
+                } else {
+                    m::add(sprintf(_('Unable to find a letter with the id "%d"'), $id), m::ERROR);
+                }
+            }
+        }
+        if ($changes > 0) {
+            m::add(sprintf(_('Successfully changed the available status of %d letters'), $changes), m::SUCCESS);
+        }
+
+        return $this->redirect($this->generateUrl(
+            'admin_letters',
+            array(
+                'letterStatus' => $status,
+            )
+        ));
+    }
+
+    /**
+     * Implementes the content list provider for letters
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function contentListProviderAction(Request $request)
+    {
+        $itemsPerPage = s::get('items_per_page') ?: 20;
+        $page = $request->query->getDigits('page', 1);
+        $cm = new \ContentManager();
+
+        list($countLetters, $letters)= $cm->getCountAndSlice(
+            'Letter',
+            "content_status=1",
+            "ORDER BY starttime DESC",
+            $page,
+            $itemsPerPage
+        );
+
+
+        // Build the pager
+        $pagination = \Pager::factory(array(
+            'mode'        => 'Sliding',
+            'perPage'     => $itemsPerPage,
+            'append'      => false,
+            'path'        => '',
+            'delta'       => 4,
+            'clearIfVoid' => true,
+            'urlVar'      => 'page',
+            'totalItems'  => $countLetters,
+            'fileName'    => $this->generateUrl('admin_letters').'?page=%d',
+        ));
+
+        return $this->render(
+            "common/content_provider/_container-content-list.tpl",
+            array(
+                'contents'   => $letters,
+                'pagination' => $pagination->links
+            )
+        );
+    }
+
 } // END class LettersController

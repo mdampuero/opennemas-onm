@@ -20,8 +20,9 @@ jQuery("#modal-letter-batchDelete").modal({
 
 });
 
-jQuery('.delChecked').click(function(e) {
+jQuery('.batch-delete').click(function(e,ui) {
     var number = jQuery(".minput:checked").length;
+    log(number)
     if(number >= 1 ) {
         jQuery('#modal-letter-batchDelete .modal-body span').html(number);
         jQuery("#modal-letter-batchDelete").modal(true);
@@ -35,13 +36,12 @@ jQuery('.delChecked').click(function(e) {
     e.preventDefault();
 });
 
-jQuery('#modal-letter-batchDelete a.btn.yes').on('click', function(){
-    jQuery('#action').attr('value', "batchDelete");
+jQuery('#modal-letter-batchDelete a.btn.yes').on('click', function(e,ui){
+    jQuery('#formulario').attr('action', "{url name=admin_letters_batchdelete}");
     jQuery('#formulario').submit();
-    e.preventDefault();
 });
 
-jQuery('#modal-letter-batchDelete a.btn.no').on('click', function(e){
+jQuery('#modal-letter-batchDelete a.btn.no').on('click', function(e,ui){
     jQuery("#modal-letter-batchDelete").modal('hide');
     e.preventDefault();
 });

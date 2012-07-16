@@ -1272,7 +1272,7 @@ h2.disqus {
 /* -------------------------------------------------------------
   Footer
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-footer{font-size:11px;border-top:1px solid #fff;}
+footer{font-size:11px; }
 
 footer {
   display:block;

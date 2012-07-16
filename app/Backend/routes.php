@@ -304,6 +304,33 @@ $adminRoutes->add(
     '/admin'
 );
 
+$adminRoutes->add(
+    'admin_letters_batchpublish',
+    new Route(
+        '/letter/batch-publish',
+        array('_controller' => 'Backend:Controllers:LettersController:batchPublish')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_letters_batchdelete',
+    new Route(
+        '/letter/batch-delete',
+        array('_controller' => 'Backend:Controllers:LettersController:batchDelete')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_letters_content_list_provider',
+    new Route(
+        '/letters/content-list-provider',
+        array('_controller' => 'Backend:Controllers:LettersController:contentListProvider')
+    ),
+    '/admin'
+);
+
 // Category manager routes
 $adminRoutes->add(
     'admin_categories',
