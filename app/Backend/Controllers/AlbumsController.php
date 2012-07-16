@@ -35,7 +35,7 @@ class AlbumsController extends Controller
         \Onm\Module\ModuleManager::checkActivatedOrForward('ALBUM_MANAGER');
 
          // Check if the user can admin album
-        \Acl::checkOrForward('ALBUM_ADMIN');
+        $this->checkAclOrForward('ALBUM_ADMIN');
 
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
 
@@ -64,7 +64,7 @@ class AlbumsController extends Controller
      **/
     public function listAction()
     {
-        \Acl::checkOrForward('ALBUM_ADMIN');
+        $this->checkAclOrForward('ALBUM_ADMIN');
 
         $itemsPerPage = s::get('items_per_page');
 
@@ -126,7 +126,7 @@ class AlbumsController extends Controller
      **/
     public function widgetAction()
     {
-        \Acl::checkOrForward('ALBUM_ADMIN');
+        $this->checkAclOrForward('ALBUM_ADMIN');
 
         $page           = $this->get('request')->query->getDigits('page', 1);
         $category       = $this->get('request')->query->filter('category', 'widget', FILTER_SANITIZE_STRING);
@@ -192,7 +192,7 @@ class AlbumsController extends Controller
      **/
     public function createAction()
     {
-        \Acl::checkOrForward('ALBUM_CREATE');
+        $this->checkAclOrForward('ALBUM_CREATE');
 
         if ('POST' == $this->request->getMethod()) {
             $request  = $this->request->request;
@@ -240,7 +240,7 @@ class AlbumsController extends Controller
      **/
     public function deleteAction()
     {
-        \Acl::checkOrForward('ALBUM_DELETE');
+        $this->checkAclOrForward('ALBUM_DELETE');
 
         $request = $this->get('request');
         $id = $request->query->getDigits('id');
@@ -271,7 +271,7 @@ class AlbumsController extends Controller
      **/
     public function showAction()
     {
-        \Acl::checkOrForward('ALBUM_UPDATE');
+        $this->checkAclOrForward('ALBUM_UPDATE');
 
         $request = $this->get('request');
         $id = $request->query->getDigits('id');
@@ -301,7 +301,7 @@ class AlbumsController extends Controller
      **/
     public function updateAction()
     {
-        \Acl::checkOrForward('ALBUM_UPDATE');
+        $this->checkAclOrForward('ALBUM_UPDATE');
 
         $request = $this->get('request');
         $id = $request->request->getDigits('id');
@@ -367,7 +367,7 @@ class AlbumsController extends Controller
      **/
     public function toggleAvailabilityAction()
     {
-        \Acl::checkOrForward('ALBUM_AVAILABLE');
+        $this->checkAclOrForward('ALBUM_AVAILABLE');
 
         $request  = $this->get('request');
         $id       = $request->query->getDigits('id', 0);
@@ -402,7 +402,7 @@ class AlbumsController extends Controller
      **/
     public function toggleFavoriteAction()
     {
-        \Acl::checkOrForward('ALBUM_AVAILABLE');
+        $this->checkAclOrForward('ALBUM_AVAILABLE');
 
         $request  = $this->get('request');
         $id       = $request->query->getDigits('id', 0);
@@ -436,7 +436,7 @@ class AlbumsController extends Controller
      **/
     public function toggleInHomeAction()
     {
-        \Acl::checkOrForward('ALBUM_AVAILABLE');
+        $this->checkAclOrForward('ALBUM_AVAILABLE');
 
         $request  = $this->get('request');
         $id       = $request->query->getDigits('id', 0);
@@ -468,7 +468,7 @@ class AlbumsController extends Controller
      **/
     public function batchDeleteAction()
     {
-        \Acl::checkOrForward('ALBUM_DELETE');
+        $this->checkAclOrForward('ALBUM_DELETE');
 
         $request       = $this->request;
         $category      = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
@@ -506,7 +506,7 @@ class AlbumsController extends Controller
      **/
     public function batchPublishAction()
     {
-        \Acl::checkOrForward('ALBUM_AVAILABLE');
+        $this->checkAclOrForward('ALBUM_AVAILABLE');
 
         $request  = $this->request;
         $status   = $request->query->getDigits('status', 0);
@@ -600,7 +600,7 @@ class AlbumsController extends Controller
      **/
     public function configAction()
     {
-        \Acl::checkOrForward('ALBUM_SETTINGS');
+        $this->checkAclOrForward('ALBUM_SETTINGS');
 
         if ('POST' == $this->request->getMethod()) {
 

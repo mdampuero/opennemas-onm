@@ -333,7 +333,7 @@ class CoversController extends Controller
      **/
     public function deleteAction(Request $request)
     {
-        \Acl::checkOrForward('KIOSKO_DELETE');
+        $this->checkAclOrForward('KIOSKO_DELETE');
 
         $request = $this->request;
         $id = $request->query->getDigits('id');
@@ -367,7 +367,7 @@ class CoversController extends Controller
      **/
     public function toggleAvailableAction()
     {
-        \Acl::checkOrForward('KIOSKO_AVAILABLE');
+        $this->checkAclOrForward('KIOSKO_AVAILABLE');
 
         $request  = $this->get('request');
         $id       = $request->query->getDigits('id', 0);
@@ -402,7 +402,7 @@ class CoversController extends Controller
      **/
     public function toggleFavoriteAction()
     {
-        \Acl::checkOrForward('VIDEO_AVAILABLE');
+        $this->checkAclOrForward('VIDEO_AVAILABLE');
 
         $request  = $this->get('request');
         $id       = $request->query->getDigits('id', 0);
@@ -436,7 +436,7 @@ class CoversController extends Controller
      **/
     public function toggleInHomeAction()
     {
-        \Acl::checkOrForward('KIOSKO_AVAILABLE');
+        $this->checkAclOrForward('KIOSKO_AVAILABLE');
 
         $request  = $this->get('request');
         $id       = $request->query->getDigits('id', 0);

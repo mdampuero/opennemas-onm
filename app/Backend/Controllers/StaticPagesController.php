@@ -250,7 +250,7 @@ class StaticPagesController extends Controller
      **/
     public function toggleAvailabilityAction(Request $request)
     {
-        \Acl::checkOrForward('STATIC_AVAILABLE');
+        $this->checkAclOrForward('STATIC_AVAILABLE');
 
         $request  = $this->get('request');
         $id       = $request->query->getDigits('id', 0);

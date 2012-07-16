@@ -716,7 +716,7 @@ class ImagesController extends Controller
     public function batchDeleteAction()
     {
 
-        \Acl::checkOrForward('IMAGE_DELETE');
+        $this->checkAclOrForward('IMAGE_DELETE');
 
         $request = $this->get('request');
         $category = $request->request->filter('category', 'all', FILTER_SANITIZE_STRING);

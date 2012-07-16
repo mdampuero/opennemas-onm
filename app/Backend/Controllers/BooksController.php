@@ -398,7 +398,7 @@ class BooksController extends Controller
      **/
     public function batchDeleteAction()
     {
-        \Acl::checkOrForward('BOOK_DELETE');
+        $this->checkAclOrForward('BOOK_DELETE');
 
         $request = $this->request;
         $page = $request->query->getDigits('page', 1);
@@ -435,7 +435,7 @@ class BooksController extends Controller
      **/
     public function toggleAvailabilityAction()
     {
-        \Acl::checkOrForward('BOOK_AVAILABLE');
+        $this->checkAclOrForward('BOOK_AVAILABLE');
 
         $request  = $this->get('request');
         $id       = $request->query->getDigits('id', 0);
@@ -471,7 +471,7 @@ class BooksController extends Controller
      **/
     public function toggleInHomeAction()
     {
-        \Acl::checkOrForward('BOOK_AVAILABLE');
+        $this->checkAclOrForward('BOOK_AVAILABLE');
 
         $request  = $this->get('request');
         $id       = $request->query->getDigits('id', 0);
@@ -544,7 +544,7 @@ class BooksController extends Controller
      **/
     public function batchPublishAction()
     {
-        \Acl::checkOrForward('BOOK_AVAILABLE');
+        $this->checkAclOrForward('BOOK_AVAILABLE');
 
         $request  = $this->request;
         $status   = $request->query->getDigits('status', 0);

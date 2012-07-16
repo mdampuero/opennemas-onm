@@ -431,7 +431,7 @@ class VideosController extends Controller
      **/
     public function batchDeleteAction(Request $request)
     {
-        \Acl::checkOrForward('VIDEO_DELETE');
+        $this->checkAclOrForward('VIDEO_DELETE');
 
         $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
         $page = $request->query->getDigits('page', 1);
@@ -468,7 +468,7 @@ class VideosController extends Controller
      **/
     public function toggleAvailabilityAction(Request $request)
     {
-        \Acl::checkOrForward('VIDEO_AVAILABLE');
+        $this->checkAclOrForward('VIDEO_AVAILABLE');
 
         $id       = $request->query->getDigits('id', 0);
         $status   = $request->query->getDigits('status', 0);
@@ -502,7 +502,7 @@ class VideosController extends Controller
      **/
     public function toggleFavoriteAction(Request $request)
     {
-        \Acl::checkOrForward('VIDEO_AVAILABLE');
+        $this->checkAclOrForward('VIDEO_AVAILABLE');
 
         $id       = $request->query->getDigits('id', 0);
         $status   = $request->query->getDigits('status', 0);
@@ -535,7 +535,7 @@ class VideosController extends Controller
      **/
     public function toggleInHomeAction(Request $request)
     {
-        \Acl::checkOrForward('VIDEO_AVAILABLE');
+        $this->checkAclOrForward('VIDEO_AVAILABLE');
 
         $id       = $request->query->getDigits('id', 0);
         $status   = $request->query->getDigits('status', 0);
@@ -633,7 +633,7 @@ class VideosController extends Controller
      **/
     public function batchPublishAction(Request $request)
     {
-        \Acl::checkOrForward('VIDEO_AVAILABLE');
+        $this->checkAclOrForward('VIDEO_AVAILABLE');
 
         $status   = $request->query->getDigits('status', 0);
         $selected = $request->query->get('selected_fld', null);

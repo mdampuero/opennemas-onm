@@ -59,7 +59,6 @@ class LettersController extends Controller
             $itemsPerPage
         );
 
-
         // Build the pager
         $pagination = \Pager::factory(array(
             'mode'        => 'Sliding',
@@ -157,7 +156,7 @@ class LettersController extends Controller
      **/
     public function updateAction(Request $request)
     {
-        $this->checkAclOrForward('VIDEO_UPDATE');
+        $this->checkAclOrForward('LETTER_UPDATE');
 
         $id = $request->query->getDigits('id');
         $continue = $request->request->filter('continue', false, FILTER_SANITIZE_STRING);
@@ -235,7 +234,7 @@ class LettersController extends Controller
      **/
     public function toggleAvailableAction(Request $request)
     {
-        \Acl::checkOrForward('VIDEO_AVAILABLE');
+        $this->checkAclOrForward('VIDEO_AVAILABLE');
 
         $id       = $request->query->getDigits('id', 0);
         $status   = $request->query->getDigits('status', 0);
@@ -372,7 +371,7 @@ class LettersController extends Controller
             'clearIfVoid' => true,
             'urlVar'      => 'page',
             'totalItems'  => $countLetters,
-            'fileName'    => $this->generateUrl('admin_letters').'?page=%d',
+            'fileName'    => $this->generateUrl('admin_letters_content_list_provider').'?page=%d',
         ));
 
         return $this->render(
