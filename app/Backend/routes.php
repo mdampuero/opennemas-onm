@@ -251,6 +251,124 @@ $adminRoutes->add(
 
 // Letter manager routes
 $adminRoutes->add(
+    'admin_polls',
+    new Route(
+        '/polls',
+        array('_controller' => 'Backend:Controllers:PollsController:list')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_polls_widget',
+    new Route(
+        '/polls/widget',
+        array('_controller' => 'Backend:Controllers:PollsController:widget')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_poll_create',
+    new Route(
+        '/polls/create',
+        array('_controller' => 'Backend:Controllers:PollsController:create')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_poll_show',
+    new Route(
+        '/poll/{id}/show',
+        array('_controller' => 'Backend:Controllers:PollsController:show')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_poll_update',
+    new Route(
+        '/poll/{id}/update',
+        array('_controller' => 'Backend:Controllers:PollsController:update')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_poll_delete',
+    new Route(
+        '/poll/{id}/delete',
+        array('_controller' => 'Backend:Controllers:PollsController:delete')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_poll_delete',
+    new Route(
+        '/poll/{id}/delete',
+        array('_controller' => 'Backend:Controllers:PollsController:delete')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_polls_config',
+    new Route(
+        '/polls/config',
+        array('_controller' => 'Backend:Controllers:PollsController:config')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_polls_batchpublish',
+    new Route(
+        '/polls/batch-publish',
+        array('_controller' => 'Backend:Controllers:PollsController:batchPublish')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_polls_batchdelete',
+    new Route(
+        '/polls/batch-delete',
+        array('_controller' => 'Backend:Controllers:PollsController:batchDelete')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_poll_toggleavailable',
+    new Route(
+        '/poll/{id}/toggle-available',
+        array('_controller' => 'Backend:Controllers:PollsController:toggleAvailable')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_poll_togglefavorite',
+    new Route(
+        '/poll/{id}/toggle-favorite',
+        array('_controller' => 'Backend:Controllers:PollsController:toggleFavorite')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_poll_toggleinhome',
+    new Route(
+        '/poll/{id}/toggle-inhome',
+        array('_controller' => 'Backend:Controllers:PollsController:toggleInHome')
+    ),
+    '/admin'
+);
+
+// Letter manager routes
+$adminRoutes->add(
     'admin_specials',
     new Route(
         '/specials',

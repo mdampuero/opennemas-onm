@@ -51,10 +51,16 @@
         <li><a href="{url name=admin_trash mytype=poll}" {if $mytype=='poll'}class="active"{/if}>{t}Polls{/t}</a></li>
     {/acl}{/is_module_activated}
 
+    {is_module_activated name="SPECIAL_MANAGER"}
+    {acl isAllowed="SPECIAL_DELETE"}
+        <li><a href="{url name=admin_trash mytype=special}" {if $mytype=='special'}class="active"{/if}>{t}Specials{/t}</a></li>
+    {/acl}{/is_module_activated}
+
     {is_module_activated name="STATIC_PAGES_MANAGER"}
     {acl isAllowed="STATIC_DELETE"}
         <li><a href="{url name=admin_trash mytype=static_page}" {if $mytype=='static_page'}class="active"{/if}>{t}Static Pages{/t}</a></li>
     {/acl}{/is_module_activated}
+
     {is_module_activated name="WIDGET_MANAGER"}
     {acl isAllowed="WIDGET_DELETE"}
         <li><a href="{url name=admin_trash mytype=widget}" {if $mytype=='widget'}class="active"{/if}>{t}Widgets{/t}</a></li>

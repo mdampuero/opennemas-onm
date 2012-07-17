@@ -166,6 +166,7 @@ class Poll extends Content
         }
 
         $this->pk_poll = $data['id'];
+        return $this;
     }
 
     public function remove($id)
@@ -177,14 +178,15 @@ class Poll extends Content
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
         $sql='DELETE FROM poll_items WHERE fk_pk_poll ='.($id);
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
+        return true;
     }
 
     public function get_items($pkPoll)

@@ -254,7 +254,7 @@ class SpecialsController extends Controller
         ));
     }
 
-        /**
+    /**
      * Updates the special information
      *
      * @param Request $request the request object
@@ -606,4 +606,5 @@ class SpecialsController extends Controller
             ));
         }
     }
+
 } // END class SpecialsController

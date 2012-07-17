@@ -17,35 +17,32 @@
 {/block}
 
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
+<form action="{if $poll->id}{url name=admin_poll_update id=$poll->id}{else}{url name=admin_poll_create}{/if}" method="post" id="formulario">
     <div class="top-action-bar">
         <div class="wrapper-content">
-            <div class="title"><h2>{$titulo_barra} :: {t}Creating a poll{/t}</h2></div>
+            <div class="title"><h2>{t}Poll manager{/t} :: {if $poll->id}{t}Editing poll{/t}{else}{t}Creating a poll{/t}{/if}</h2></div>
             <ul class="old-button">
                 <li>
-                {if isset($poll->id)}
-                   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'update', '{$poll->id}', 'formulario');">
-                {else}
-                   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', '0', 'formulario');">
-                {/if}
-                        <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar y salir" alt="Guardar y salir"><br />{t}Save{/t}
-                    </a>
+                    <button type="submit">
+                        <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}"><br />{t}Save{/t}
+                    </button>
                 </li>
                 <li>
-                    <a href="#" class="admin_add" onClick="sendFormValidate(this, '_self', 'validate', '{$poll->id}', 'formulario');" value="Validar" title="Validar">
-                        <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />{t}Save and continue{/t}
-                    </a>
+                    <button type="submit" name="continue" value="1">
+                        <img src="{$params.IMAGE_DIR}save_and_continue.png" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
+                    </button>
                 </li>
                 <li class="separator"></li>
                 <li>
-                    <a href="#" class="admin_add" onClick="enviar(this, '_self', 'list', 0);" onmouseover="return escape('<u>C</u>ancelar');" value="Cancelar" title="Cancelar">
-                        <img border="0" src="{$params.IMAGE_DIR}previous.png" title="Cancelar" alt="Cancelar" ><br />{t}Go back{/t}
+                    <a href="{url name=admin_polls_list category=$category}">
+                        <img src="{$params.IMAGE_DIR}previous.png" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
                     </a>
                 </li>
             </ul>
         </div>
     </div>
     <div class="wrapper-content">
+        {render_messages}
         <table class="adminform" style="padding:10px;">
              <tbody>
                  <tr>
@@ -148,7 +145,7 @@
                              <p style="font-weight: bold;" >Item #{$smarty.section.i.iteration}:  Votos:  {$items[i].votes} / {$poll->total_votes} </p>
                              Item: <input type="text" name="item[{$smarty.section.i.iteration}]" value="{$items[i].item}" id="item[{$smarty.section.i.iteration}]" size="45"/>
                               <input type="hidden" readonly name="votes[{$smarty.section.i.iteration}]" value="{$items[i].votes}" id="votes[{$smarty.section.i.iteration}]" size="8"/>
-                             <a onclick="del_this_item('item{$smarty.section.i.iteration}')" style="cursor:pointer;"><img src="{$params.IMAGE_DIR}del.png" border="0" />Eliminar item</a>
+                             <a onclick="del_this_item('item{$smarty.section.i.iteration}')" style="cursor:pointer;"><img src="{$params.IMAGE_DIR}del.png" />Eliminar item</a>
                              </div>
                              {assign var='num' value=$smarty.section.i.iteration}
                          {/section}
@@ -157,8 +154,8 @@
                  </tr>
                  <tr>
                      <td valign="top" style="padding:4px;" nowrap="nowrap">
-                         <a onClick="add_item_poll({$num})" style="cursor:pointer;"><img src="{$params.IMAGE_DIR}add.png" border="0" />{t}Add new answer{/t} </a> &nbsp;
-                         <a onclick="del_item_poll()" style="cursor:pointer;"><img src="{$params.IMAGE_DIR}del.png" border="0"   /> {t}Delete last answer{/t}</a>
+                         <a onClick="add_item_poll({$num})" style="cursor:pointer;"><img src="{$params.IMAGE_DIR}add.png" />{t}Add new answer{/t} </a> &nbsp;
+                         <a onclick="del_item_poll()" style="cursor:pointer;"><img src="{$params.IMAGE_DIR}del.png"   /> {t}Delete last answer{/t}</a>
                          <div id="items" name="items">
                          </div>
                      </td>

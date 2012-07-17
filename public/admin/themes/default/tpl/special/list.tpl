@@ -32,7 +32,7 @@
                 {acl isAllowed="SPECIAL_CREATE"}
                 <li>
                     <a href="{url name=admin_special_create}">
-                        <img src="{$params.IMAGE_DIR}special.png" alt="Nuevo Special"><br />Nuevo Special
+                        <img src="{$params.IMAGE_DIR}special.png" alt="Nuevo Special"><br />{t}New special{/t}
                     </a>
                 </li>
                 {/acl}

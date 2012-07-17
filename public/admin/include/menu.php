@@ -76,7 +76,7 @@ $menuXml = '<?xml version="1.0"?>
             privilege="POLL_ADMIN"
             title="'.htmlspecialchars(_("Polls"), ENT_QUOTES).'"
             id="poll_manager"
-            link="/admin/controllers/poll/poll.php"
+            link="'.url('admin_polls').'"
         />
         <node
             module_name="ADS_MANAGER"
