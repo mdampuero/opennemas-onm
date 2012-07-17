@@ -360,7 +360,6 @@ class LettersController extends Controller
             $itemsPerPage
         );
 
-
         // Build the pager
         $pagination = \Pager::factory(array(
             'mode'        => 'Sliding',

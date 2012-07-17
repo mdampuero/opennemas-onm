@@ -157,6 +157,7 @@ class WidgetsController extends Controller
                 $widget->create($widgetData);
             } catch (\Exception $e) {
                 m::add($e->getMessage(), m::ERROR);
+
                 return $this->redirect($this->generateUrl('admin_widget_create'));
             }
 
@@ -164,9 +165,9 @@ class WidgetsController extends Controller
             if (isset($_SESSION['desde'])) {
                 if ($_SESSION['desde'] == 'list') {
                     Application::forward('/admin/controllers/frontpagemanager/frontpagemanager.php?action='.$_SESSION['desde'].'&category='.$_SESSION['categoria']);
-                }elseif ($_SESSION['desde'] == 'widget') {
+                } elseif ($_SESSION['desde'] == 'widget') {
                     Application::forward('?action=list');
-                }elseif ($_SESSION['desde'] == 'search_advanced') {
+                } elseif ($_SESSION['desde'] == 'search_advanced') {
                     Application::forward('/admin/controllers/search_advanced/search_advanced.php');
                 }
             }
@@ -211,6 +212,7 @@ class WidgetsController extends Controller
         $widget = new \Widget();
         if (!$widget->update($widgetData)) {
             m::add(_('There was an error while updating widget data.'), m::ERROR);
+
             return $this->redirect($this->generateUrl(
                 'admin_widgets',
                 array(

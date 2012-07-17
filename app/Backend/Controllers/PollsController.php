@@ -38,14 +38,14 @@ class PollsController extends Controller
         $contentType = \Content::getIDContentType('poll');
 
         $category = filter_input(INPUT_GET,'category', FILTER_SANITIZE_STRING);
-        if(empty($category)) {
+        if (empty($category)) {
             $category = filter_input(INPUT_POST,'category',FILTER_SANITIZE_STRING, array('options' => array('default' => 0 )));
         }
 
         $ccm = \ContentCategoryManager::get_instance();
         list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu($category, $contentType);
 
-        if(empty($category)) {$category ='home';}
+        if (empty($category)) {$category ='home';}
 
         $this->view->assign(array(
             'category'     => $category,
@@ -122,7 +122,6 @@ class PollsController extends Controller
     {
         $page = $request->query->getDigits('page', 1);
         $itemsPerPage = s::get('items_per_page') ?: 20;
-
 
         $configurations = s::get('poll_settings');
         if (array_key_exists('total_widget', $configurations)) {
@@ -438,7 +437,6 @@ class PollsController extends Controller
             )
         ));
     }
-
 
     /**
      * Deletes multiple polls at once given their ids

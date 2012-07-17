@@ -47,7 +47,7 @@ class MenusController extends Controller
     /**
      * Lists all the available menus
      *
-     * @param  Request $request the resquest object
+     * @param Request $request the resquest object
      *
      * @return Response the response object
      **/
@@ -143,7 +143,6 @@ class MenusController extends Controller
     public function createAction(Request $request)
     {
         $this->checkAclOrForward('MENU_CREATE');
-
 
         if ('POST' == $request->getMethod()) {
             $continue = $this->request->request->filter('continue', false, FILTER_SANITIZE_STRING);

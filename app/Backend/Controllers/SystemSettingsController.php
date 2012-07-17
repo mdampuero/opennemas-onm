@@ -14,7 +14,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 use Onm\Message as m;
-use Onm\Module\ModuleManager;
 /**
  * Handles all the request for Welcome actions
  *

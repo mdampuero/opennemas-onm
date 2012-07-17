@@ -302,9 +302,9 @@ class StaticPagesController extends Controller
             } catch (\Exception $e) {
                 $output = _( "Can't get static page title. Check the title");
             }
+
              return new Response($output);
         }
-
 
     }
 

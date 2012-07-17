@@ -673,6 +673,4 @@ class FilesController extends Controller
         Application::ajaxOut($html_out);
     }
 
-
-
 } // END class FilesController

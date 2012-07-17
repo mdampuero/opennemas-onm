@@ -592,7 +592,6 @@ class AlbumsController extends Controller
         ));
     }
 
-
     /**
      * Handles and shows the album configuration form
      *

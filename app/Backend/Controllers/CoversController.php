@@ -110,7 +110,6 @@ class CoversController extends Controller
             ).'&page=%d',
         ));
 
-
         return $this->render('newsstand/list.tpl', array(
             'KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR,
             'pagination'     => $pagination,
@@ -166,7 +165,6 @@ class CoversController extends Controller
                 array('category' => $category)
             ).'&page=%d',
         ));
-
 
         return $this->render('newsstand/list.tpl', array(
             'KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR,
@@ -257,6 +255,7 @@ class CoversController extends Controller
                 if (!$kiosko->create($coverData)) {
                     throw new \Exception(_('There was a problem with the cover data. Try again'));
                 }
+
                 return $this->redirect($this->generateUrl(
                     'admin_covers',
                     array(
@@ -594,13 +593,14 @@ class CoversController extends Controller
                 )
             );
 
-            foreach ($settings as $key => $value ) {
+            foreach ($settings as $key => $value) {
                 s::set($key, $value);
             }
 
             m::add(_('Settings saved successfully.'), m::SUCCESS);
 
             $httpParams = array(array('action'=>'list'),);
+
             return $this->redirect($this->generateUrl('admin_covers'));
         }
     }

@@ -53,7 +53,7 @@ class CategoriesController extends Controller
 
         $i = 0;
         foreach ($allcategorys as $category) {
-           if ($category->internal_category !=0
+            if ($category->internal_category !=0
                 && $category->fk_content_category == 0
             ) {
                 if (isset($groups['articles'][$category->pk_content_category])) {
@@ -91,7 +91,7 @@ class CategoriesController extends Controller
                 }
                 $subcategorys[$i]=$resul;
                  $i++;
-           }
+            }
         }
 
         return $this->render('category/list.tpl', array(
@@ -117,8 +117,6 @@ class CategoriesController extends Controller
 
         $configurations = s::get('section_settings');
         $ccm = \ContentCategoryManager::get_instance();
-
-
 
         if ('POST' == $request->getMethod()) {
 
@@ -168,11 +166,11 @@ class CategoriesController extends Controller
             $allcategorys  = $ccm->categories;
             $categories = array();
             foreach ($allcategorys as $category) {
-               if ($category->internal_category != 0
+                if ($category->internal_category != 0
                     && $category->fk_content_category == 0
                 ) {
                    $categories[] = $category;
-               }
+                }
             }
 
             return $this->render('category/form.tpl', array(
@@ -199,7 +197,6 @@ class CategoriesController extends Controller
 
         $category = new \ContentCategory($id);
         if ($category->pk_content_category != null) {
-
             $allcategorys = $ccm->categories;
             $subcategorys = $ccm->getSubcategories($id);
 
@@ -303,7 +300,6 @@ class CategoriesController extends Controller
 
         if ($category->pk_content_category != null) {
 
-
             if ($category->delete($id)) {
                 $user = new \User();
                 $user->delCategoryToUser($_SESSION['userid'], $id);
@@ -313,7 +309,7 @@ class CategoriesController extends Controller
 
                 $ccm->reloadCategories();
                 m::add(_("Category deleted successfully."), m::SUCCESS);
-            }else{
+            } else {
                 m::add(_("To delete a category previously you have to empty it."), m::ERROR);
             }
 
@@ -442,7 +438,7 @@ class CategoriesController extends Controller
 
         if ('POST' == $request->getMethod()) {
             $sectionSettings = $request->request->get('section_settings');
-            if ($sectionSettings['allowLogo'] == 1){
+            if ($sectionSettings['allowLogo'] == 1) {
                 $path = MEDIA_PATH.'/sections';
                 \FilesManager::createDirectory($path);
             }

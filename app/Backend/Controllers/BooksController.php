@@ -238,17 +238,19 @@ class BooksController extends Controller
                     false, FILTER_SANITIZE_STRING);
                 if ($continue) {
                     $book = $book->read($id);
+
                     return $this->render('book/new.tpl', array(
                         'book' => $book,
                     ));
                 }
+
                 return $this->redirect($this->generateUrl('admin_books',
                     array(
                         'category' => $this->category,
                         'page' => $page
                         )));
 
-            } elseif ( $_FILES['file']['size'] > $sizeFile ) {
+            } elseif ($_FILES['file']['size'] > $sizeFile) {
                  m::add( sprintf(_("Sorry, file can't upload. You must check file size.(< %sB)"), $sizeFile ));
 
             } else {
@@ -274,6 +276,7 @@ class BooksController extends Controller
 
         if (is_null($book->id)) {
             m::add(sprintf(_('Unable to find the book with the id "%d"'), $id));
+
             return $this->redirect($this->generateUrl('admin_books'));
         }
 
@@ -298,6 +301,7 @@ class BooksController extends Controller
 
         if (is_null($book->id)) {
             m::add(sprintf(_('Unable to find the book with the id "%d"'), $id));
+
             return $this->redirect($this->generateUrl('admin_books'));
         }
         if (!\Acl::isAdmin()
