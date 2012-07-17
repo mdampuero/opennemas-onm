@@ -411,7 +411,7 @@ jQuery(function($){
         var contents = get_contents_in_frontpage();
         var category = $(this).data('category-name');
         var encodedContents = JSON.stringify(get_contents_in_frontpage());
-        var category = $(this).data('category-name');
+
         $.ajax({
             type: 'POST',
             url: frontpage_urls.preview_frontpage,
@@ -419,7 +419,6 @@ jQuery(function($){
                 'contents': encodedContents,
                 'category_name': category
             },
-
             success: function(data) {
                 previewWindow = window.open('','_blank','');
                 previewWindow.document.write(data);

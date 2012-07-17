@@ -83,13 +83,6 @@ switch ($action) {
                 }
                 **/
 
-                //Check slug
-                if (empty($slug) || ($article->slug != $slug)
-                    || empty($category_name) || $article->category_name != $category_name)
-                {
-                    Application::forward301(SITE_URL.$article->uri);
-                }
-
                 // Print url, breadcrumb code ----------------------------------
                 // TODO: Seems that this is trash, evaluate its removal
 
