@@ -103,7 +103,7 @@ switch ($action) {
             }
         } else {
             list($opinions, $pager)= $cm->find_pages('Opinion', 'in_home=1 and available=1 and type_opinion=0',
-                                     'ORDER BY created DESC ', $page, ITEMS_PAGE);
+                                     'ORDER BY position ASC , created DESC ', $page, ITEMS_PAGE);
             $tpl->assign('paginacion', $pager->links);
 
             // $opinions = $cm->find('Opinion', 'in_home=1 and available=1 and type_opinion=0',
@@ -115,7 +115,7 @@ switch ($action) {
             }
             if ($numDirector >0) {
                 $director = $cm->find('Opinion', 'in_home=1 and available=1 and type_opinion=2',
-                                  'ORDER BY created DESC LIMIT 0,'.$numDirector);
+                                  'ORDER BY position ASC , created DESC LIMIT 0,'.$numDirector);
             }
             if (($numEditorial>0) && (count($editorial) != $numEditorial)) {
                 $type = 'editorial';

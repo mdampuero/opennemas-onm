@@ -72,31 +72,43 @@ switch ($action) {
                 $tpl->assign('director', $director[0]);
             }
 
-            $_limit ='LIMIT '.(($page-1)*ITEMS_PAGE).', '.(($page)*ITEMS_PAGE);
-            $url    ='opinion';
+            if ($page == 1) {
 
-            $total_opinions = $cm->count(
+                // Fetch home opinions of contributors and
+                // paginate them by ITEM_PAGE
+                $opinions = $cm->find(
+                    'Opinion',
+                    'in_home=1 and available=1 and type_opinion=0',
+                    'ORDER BY position ASC, starttime DESC '
+                );
+                $totalHome = count($opinions);
+
+            } else {
+                $_limit ='LIMIT '.(($page-2)*ITEMS_PAGE).', '.(($page-1)*ITEMS_PAGE);
+                // Fetch last opinions of contributors and
+                // paginate them by ITEM_PAGE
+                $opinions = $cm->find(
+                    'Opinion',
+                    'in_home=0 and available=1 and type_opinion=0',
+                    'ORDER BY starttime DESC '.$_limit
+                );
+            }
+            // Added ITEMS_PAGE for count first page
+            $total_opinions =  ITEMS_PAGE + $cm->count(
                 'Opinion',
-                'in_home=1 and available=1 and type_opinion=0',
+                'in_home=0 and available=1 and type_opinion=0',
                 'ORDER BY type_opinion DESC, created DESC '
-            );
-
-            // Fetch last opinions of contributors and
-            // paginate them by ITEM_PAGE
-            $opinions = $cm->find(
-                'Opinion',
-                'in_home=1 and available=1 and type_opinion=0',
-                'ORDER BY type_opinion DESC, created DESC '.$_limit
             );
 
             foreach ($opinions as &$opinion) {
                 $opinion->author           = new Author($opinion->fk_author);
                 $opinion->author->photo    =
-                    $opinion->author->get_photo($opinion->fk_author_img);
+                        $opinion->author->get_photo($opinion->fk_author_img);
                 $opinion->name             = $opinion->author->name;
                 $opinion->author_name_slug = StringUtils::get_title($opinion->name);
             }
 
+            $url    ='opinion';
             $pagination = $cm->create_paginate(
                 $total_opinions,
                 ITEMS_PAGE, 2, 'URL', $url, ''

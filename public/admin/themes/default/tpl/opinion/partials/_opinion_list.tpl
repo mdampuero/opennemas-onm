@@ -2,11 +2,11 @@
 <table class="adminheading">
 	<tr>
 		<th align="right">
-            {t}Opinion Status:{/t}
+            {t}Status:{/t}
             <select name="opinion-status" id=="opinion-status" onchange="changeList('{$author}',this.options[this.selectedIndex].value);">
-                <option value="all" {if isset($author) && $opinionStatus eq "all"} selected {/if}> {t}All{/t} </option>
-                <option value="1" {if  $opinionStatus eq "1"} selected {/if}> {t}Yes{/t} </option>
-                <option value="0" {if $opinionStatus eq "0"} selected {/if}> {t}No{/t} </option>
+                <option value="all" {if isset($author) && $opinionStatus eq "all"} selected {/if}> {t}-- All --{/t} </option>
+                <option value="1" {if  $opinionStatus eq "1"} selected {/if}> {t}Published{/t} </option>
+                <option value="0" {if $opinionStatus eq "0"} selected {/if}> {t}No published{/t} </option>
             </select>
              &nbsp;&nbsp;&nbsp;
             {t}Select an author{/t}

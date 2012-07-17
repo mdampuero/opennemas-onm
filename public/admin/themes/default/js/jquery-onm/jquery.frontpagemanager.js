@@ -409,10 +409,12 @@ jQuery(function($){
     $('#button_previewfrontpage').on('click', function (e, ui){
         e.preventDefault();
         var contents = get_contents_in_frontpage();
+        var category = $(this).data('category-name');
         var encodedContents = JSON.stringify(get_contents_in_frontpage());
         var category = $(this).data('category-name');
         $.ajax({
             type: 'POST',
+
             url: frontpage_urls.preview_frontpage,
             data: {
                 'contents': encodedContents,
