@@ -214,13 +214,13 @@ class FrontpagesController extends Controller
      **/
     public function previewAction()
     {
-        $categoryName        = $this->request->request->get('category_name', 'home', FILTER_SANITIZE_STRING);
+        $categoryName        = $this->request->request->get('category_name',
+                'home', FILTER_SANITIZE_STRING);
         $this->view          = new \Template(TEMPLATE_USER);
         $this->view->caching = false;
 
         $this->view->assign(array(
             'category_name' => $categoryName,
-
         ));
 
         $cm = new \ContentManager;
