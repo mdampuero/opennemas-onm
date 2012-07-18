@@ -49,7 +49,8 @@ class SystemSettingsController extends Controller
             'facebook','facebook_page','facebook_id','twitter_page',
             'google_analytics','piwik', 'section_settings',
             'items_per_page','refresh_interval',
-            'webmastertools_google', 'webmastertools_bing'
+            'webmastertools_google', 'webmastertools_bing',
+            'max_session_lifetime'
         );
 
         $configurations = s::get($configurationsKeys);

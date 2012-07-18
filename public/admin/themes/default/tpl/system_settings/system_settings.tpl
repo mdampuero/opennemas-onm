@@ -334,6 +334,14 @@
                                     <input type="number" id="items_per_page" name="items_per_page" value="{$configs['items_per_page']|default:20}">
                                 </td>
                             </tr>
+                            <tr>
+                                <th scope="row">
+                                    <label for="max_session_lifetime">{t}Max session lifetime:{/t}</label>
+                                </th>
+                                <td>
+                                    <input type="number" id="max_session_lifetime" name="max_session_lifetime" value="{$configs['max_session_lifetime']|default:30}"> <small>(in minutes)</small>
+                                </td>
+                            </tr>
 
                         </tbody>
                     </table>

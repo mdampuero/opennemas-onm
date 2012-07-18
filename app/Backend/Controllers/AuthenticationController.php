@@ -106,8 +106,7 @@ class AuthenticationController extends Controller
 
                     // Store default expire time
                     global $app;
-                    $app::setCookieSecure('default_expire',
-                        $user->sessionexpire, 0, '/admin/');
+                    $app::setCookieSecure('_onm_session_'.session_id(), time()+($user->sessionexpire)*60, 0, '/admin/');
                     \PrivilegesCheck::loadSessionExpireTime();
                     $GLOBALS['Session']->cleanExpiredSessionFiles();
 

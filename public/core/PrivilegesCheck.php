@@ -134,6 +134,7 @@ class PrivilegesCheck
 
     private static function checkSessionExpireTime()
     {
+
         if (isset($_SESSION)
             && array_key_exists('expire', $_SESSION)
             && (time() > $_SESSION['expire'])
@@ -143,7 +144,7 @@ class PrivilegesCheck
 
             return true;
         }
-        //Actuliza la sesion
+        // Actualiza la sesion
         self::loadSessionExpireTime();
 
         return false;

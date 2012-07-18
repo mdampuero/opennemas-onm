@@ -42,9 +42,17 @@ class SessionManager implements ArrayAccess
      *
      * @param string $sessionSavePath path where save session files into.
      */
-    private function __construct($sessionSavePath)
+    private function __construct($sessionSavePath, $lifetime = null)
     {
         $this->sessionDirectory = realpath($sessionSavePath);
+
+
+        // Save the actual lifetime for this session in the session manager
+        if (is_null($lifetime)) {
+            $this->lifetime = self::MAX_SESSION_LIFETIME;
+        } else {
+            $this->lifetime = $lifetime;
+        }
     }
 
     /**
@@ -55,13 +63,14 @@ class SessionManager implements ArrayAccess
      * @return SessionManager The instance for SessionManager
      *
      **/
-    public static function getInstance($sessionSavePath)
+    public static function getInstance($sessionSavePath, $lifetime = null)
     {
         if (!isset($sessionSavePath)) {
             $sessionSavePath = session_save_path();
         }
+
         if ( is_null(self::$_singleton)) {
-            self::$_singleton = new SessionManager($sessionSavePath);
+            self::$_singleton = new SessionManager($sessionSavePath, $lifetime);
         }
 
         return( self::$_singleton );
@@ -72,33 +81,18 @@ class SessionManager implements ArrayAccess
      *
      * @param int $lifetime the time in seconds that the sessions will be valid.
      **/
-    public function bootstrap($lifetime=null)
+    public function bootstrap()
     {
+        session_name('_onm_sess');
+
+        ini_set('session.gc_maxlifetime', $this->lifetime);
+
+        // Set session_save_path
+        session_save_path($this->sessionDirectory);
+
         if (strlen(session_id()) < 1) {
-            // Save the actual lifetime for this session in the session manager
-            if (is_null($lifetime)) {
-                $this->lifetime = self::MAX_SESSION_LIFETIME;
-            } else {
-                $this->lifetime = $lifetime;
-            }
-
-            if (is_null($lifetime)
-                && !isset($_COOKIE['default_expire'])
-            ) {
-                $lifetime = self::MAX_SESSION_LIFETIME; // 60 minutes by default
-            } elseif (isset($_COOKIE['default_expire'])) {
-                $lifetime = intval($_COOKIE['default_expire']);
-            }
-
-            // Set session_save_path
-            session_save_path($this->sessionDirectory);
-
             // set the cache expire to $lifetime minutes
-            session_cache_expire($lifetime);
-
-            // public, private, nocache, private_no_expire
-            //  http://cz.php.net/manual/en/function.session-cache-limiter.php
-            session_cache_limiter('nocache');
+            session_cache_expire($this->lifetime);
 
             // Now we can call to session_start
             session_start();
@@ -274,7 +268,7 @@ class SessionManager implements ArrayAccess
     public function cleanExpiredSessionFiles()
     {
         $sessionDir = $this->sessionDirectory;  // your sessions directory
-        $compareTime = time() - self::MAX_SESSION_LIFETIME;  // Expire 72 hours
+        $compareTime = time() - $this->lifetime;  // Expire 72 hours
         $count = 0;
 
         foreach (glob($sessionDir."/*") as $file) {
