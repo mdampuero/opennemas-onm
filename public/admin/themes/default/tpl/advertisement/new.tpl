@@ -15,15 +15,6 @@
             var $tabs = $('#position-adv').tabs();
             $tabs.tabs('select', '#{$smarty.get.place}' );
         });
-
-        function testScript(frm)  {
-            frm.action.value = 'test_script';
-            frm.target = 'test_script'; // abrir noutra ventá
-            frm.submit();
-
-            frm.target = ''; // cambiar o target para que siga facendo peticións na mesma ventá
-            frm.action.value = '';
-        }
     </script>
 {/block}
 {block name="header-css" append}
@@ -70,7 +61,7 @@ input, select, textarea {
 {/block}
 
 {block name="content" append}
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
+<form action="{if $advertisement->id}{url name=admin_ad_update id=$advertisement->id}{else}{url name=admin_ad_create}{/if}" method="post" id="formulario">
 
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
@@ -79,13 +70,9 @@ input, select, textarea {
             </div>
             <ul class="old-button">
                 <li>
-                {if isset($advertisement->id)}
-                   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'update', '{$advertisement->id}', 'formulario');">
-                {else}
-                   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', '0', 'formulario');">
-                {/if}
-                        <img src="{$params.IMAGE_DIR}save.png" title="{t}Save and exit{/t}" alt="Guardar y salir"><br />{t}Save and exit{/t}
-                        </a>
+                    <button type="submit">
+                        <img src="{$params.IMAGE_DIR}save.png" title="{t}Save and exit{/t}" alt="{t}Save{/t}"><br />{t}Save{/t}
+                    </button>
                 </li>
                 <li class="separator"></li>
                 <li>
@@ -98,9 +85,6 @@ input, select, textarea {
 </div>
 
 <div class="wrapper-content">
-
-    {if isset($smarty.request.action) && ($smarty.request.action eq "new" || $smarty.request.action eq "read")}
-
 
         <div class="panel clearfix" style="display:block">
             <fieldset style="vertical-align:top">
@@ -262,9 +246,6 @@ input, select, textarea {
                             new GeoipHelper('geoip_select', 'script');
                         </script>
                     </div>
-                    <div style="width:40%; float:right; text-align:right;">
-                        <button class="onm-button blue" onclick="testScript(this.form);return false;">{t}Test Javascript code{/t}</button>
-                    </div>
                 </div>
 
             </fieldset>
@@ -348,9 +329,6 @@ input, select, textarea {
         <input type="hidden" name="filter[type_advertisement]" value="{$smarty.request.filter.type_advertisement|default:""}" />
         <input type="hidden" name="filter[available]" value="{$smarty.request.filter.available|default:""}" />
         <input type="hidden" name="filter[type]" value="{$smarty.request.filter.type|default:""}" />
-    {/if}
-        <input type="hidden" id="action" name="action" value="" />
-        <input type="hidden" name="id" value="{$id|default:""}" />
     </div>
 </form>
 {/block}

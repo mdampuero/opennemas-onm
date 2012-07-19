@@ -19,21 +19,19 @@ jQuery("#modal-advertisement-delete").modal({
     keyboard: true, //Can close on escape
 });
 
-jQuery('.del').click(function(e) {
+jQuery('.del').click(function(e, ui) {
     jQuery('#modal-advertisement-delete .modal-body span').html( jQuery(this).data('title') );
     //Sets up the modal
     jQuery("#modal-advertisement-delete").modal('show');
-    jQuery("body").data("selected-for-del", jQuery(this).data("id"));
+    jQuery("body").data("selected-for-del", jQuery(this).data("url"));
     e.preventDefault();
 });
 
-jQuery('#modal-advertisement-delete a.btn.yes').on('click', function(){
-    var delId = jQuery("body").data("selected-for-del");
-    if(delId) {
+jQuery('#modal-advertisement-delete a.btn.yes').on('click', function(e, ui){
+    var url = jQuery("body").data("selected-for-del");
+    if (url) {
         jQuery.ajax({
-            url:  "{$smarty.server.SCRIPT_NAME}",
-            type: "POST",
-            data: { action:"delete", id:delId },
+            url:  url,
             success: function(){
                 location.reload();
             }
@@ -42,7 +40,7 @@ jQuery('#modal-advertisement-delete a.btn.yes').on('click', function(){
     e.preventDefault();
 });
 
-jQuery('#modal-advertisement-delete a.btn.no').on('click', function(e){
+jQuery('#modal-advertisement-delete a.btn.no').on('click', function(e, ui){
     jQuery("#modal-advertisement-delete ").modal('hide');
     e.preventDefault();
 });

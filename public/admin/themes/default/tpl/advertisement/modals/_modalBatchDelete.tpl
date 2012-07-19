@@ -20,7 +20,7 @@ jQuery("#modal-advertisement-batchDelete").modal({
 
 });
 
-jQuery('.delChecked').click(function(e) {
+jQuery('.delChecked').click(function(e, ui) {
     var number = jQuery(".minput:checked").length;
     if(number >= 1 ) {
         jQuery('#modal-advertisement-batchDelete .modal-body span').html(number);
@@ -35,14 +35,14 @@ jQuery('.delChecked').click(function(e) {
     e.preventDefault();
 });
 
-jQuery('#modal-advertisement-batchDelete a.btn.yes').on('click', function(){
+jQuery('#modal-advertisement-batchDelete a.btn.yes').on('click', function(e, ui){
     jQuery('#action').attr('value', "batchDelete");
     jQuery('#formulario').attr('method', "POST");
     jQuery('#formulario').submit();
     e.preventDefault();
 });
 
-jQuery('#modal-advertisement-batchDelete a.btn.no').on('click', function(e){
+jQuery('#modal-advertisement-batchDelete a.btn.no').on('click', function(e, ui){
     jQuery("#modal-advertisement-batchDelete").modal('hide');
     e.preventDefault();
 });

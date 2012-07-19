@@ -367,7 +367,81 @@ $adminRoutes->add(
     '/admin'
 );
 
-// Letter manager routes
+// Ads manager routes
+$adminRoutes->add(
+    'admin_ads',
+    new Route(
+        '/ads',
+        array('_controller' => 'Backend:Controllers:AdsController:list')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_ad_create',
+    new Route(
+        '/ads/create',
+        array('_controller' => 'Backend:Controllers:AdsController:create')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_ad_show',
+    new Route(
+        '/ad/{id}/show',
+        array('_controller' => 'Backend:Controllers:AdsController:show')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_ad_update',
+    new Route(
+        '/ads/{id}/update',
+        array('_controller' => 'Backend:Controllers:AdsController:update')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_ad_delete',
+    new Route(
+        '/ad/{id}/delete',
+        array('_controller' => 'Backend:Controllers:AdsController:delete')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_ads_batchpublish',
+    new Route(
+        '/ads/batch-publish',
+        array('_controller' => 'Backend:Controllers:AdsController:batchPublish')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_ads_batchdelete',
+    new Route(
+        '/ads/batch-delete',
+        array('_controller' => 'Backend:Controllers:AdsController:batchDelete')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_ad_toggleavailable',
+    new Route(
+        '/ads/{id}/toggle-available',
+        array('_controller' => 'Backend:Controllers:AdsController:toggleAvailable')
+    ),
+    '/admin'
+);
+
+
+// Special manager routes
 $adminRoutes->add(
     'admin_specials',
     new Route(

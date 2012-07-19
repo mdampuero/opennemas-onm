@@ -83,7 +83,7 @@ $menuXml = '<?xml version="1.0"?>
             privilege="ADVERTISEMENT_ADMIN"
             title="'.htmlspecialchars(_("Advertisements"), ENT_QUOTES).'"
             id="ads_manager"
-            link="/admin/controllers/advertisement/advertisement.php"
+            link="'.url('admin_ads').'"
         />
 
          <node

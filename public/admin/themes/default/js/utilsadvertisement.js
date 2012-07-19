@@ -46,9 +46,9 @@ function isflash(name) {
 	var extension= name.substring(posic);
 
 	if (extension =='.swf')
-	   return true;
+		return true;
 	else
-	   return false;
+		return false;
 }
 function noticiasshow(my) {
   if( $(my.id).checked===true){

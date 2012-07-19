@@ -278,9 +278,7 @@ class Advertisement extends Content
      **/
     public function create($data)
     {
-        // Clear magic_quotes StringUtils::fixScriptDeclaration
-        // & StringUtils::disabled_magic_quotes
-        StringUtils::disabled_magic_quotes($data);
+// var_dump($data);die();
 
         parent::create($data);
 
@@ -396,10 +394,6 @@ class Advertisement extends Content
     {
         parent::update($data);
 
-        // Remove magic_quotes, StringUtils::fixScriptDeclaration
-        // & StringUtils::disabled_magic_quotes
-        StringUtils::disabled_magic_quotes($data);
-
         if (!empty($data['script'])) {
             //$data['script'] = StringUtils::fixScriptDeclaration($data['script']);
             $data['script'] = base64_encode($data['script']);
@@ -420,7 +414,7 @@ class Advertisement extends Content
                 WHERE pk_advertisement=".($data['id']);
 
         $values = array(
-            $data['type_advertisement'], $data['category'],
+            $data['type_advertisement'], $data['categories'],
             $data['img'], $data['url'], $data['type_medida'],
             $data['num_clic'], $data['num_clic_count'],
             $data['num_view'], $data['with_script'], $data['script'],
