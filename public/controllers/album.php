@@ -8,7 +8,7 @@
  */
 use Onm\Settings as s;
 // Start up and setup the app
-require_once('../bootstrap.php');
+require_once '../bootstrap.php';
 
 // Setup view
 $tpl = new Template(TEMPLATE_USER);
@@ -19,25 +19,30 @@ $ccm = new ContentCategoryManager();
 $category_name = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
 $subcategory_name = null;
 $action = $request->query->filter('action', 'frontpage', FILTER_SANITIZE_STRING);
+$page = $request->query->filter('page', 1, FILTER_VALIDATE_INT);
 
 if (!empty($category_name)) {
     $category = $ccm->get_id($category_name);
     $actual_category_id = $category; // FOR WIDGETS
     $category_real_name = $ccm->get_title($category_name); //used in title
-    $tpl->assign(array(
-                        'category_name'         => $category_name ,
-                        'category'              => $category ,
-                        'actual_category_id'    => $actual_category_id ,
-                        'actual_category_title' => $category_real_name,
-                        'category_real_name'    => $category_real_name ,
-                ) );
+    $tpl->assign(
+        array(
+            'category_name'         => $category_name ,
+            'category'              => $category ,
+            'actual_category_id'    => $actual_category_id ,
+            'actual_category_title' => $category_real_name,
+            'category_real_name'    => $category_real_name ,
+        )
+    );
 } else {
     //$category_name = 'Portada';
     $category_real_name = 'Portada';
-    $tpl->assign(array(
-        'actual_category_title' => $category_real_name,
-        'category_real_name'    => $category_real_name,
-    ));
+    $tpl->assign(
+        array(
+            'actual_category_title' => $category_real_name,
+            'category_real_name'    => $category_real_name,
+        )
+    );
 }
 $tpl->assign('actual_category', $category_name);
 
@@ -48,8 +53,6 @@ if (!is_null($action) ) {
     switch ($action) {
 
         case 'frontpage':
-            $page = $request->query->filter('page', 0, FILTER_VALIDATE_INT);
-
             //Setup caching system
             $tpl->setConfig('gallery-frontpage');
             $cacheID = $tpl->generateCacheId($category_name, '', $page);
@@ -104,12 +107,10 @@ if (!is_null($action) ) {
             break;
 
         case 'show':
-
-            $dirtyID = $request->query->filter('album_id',
-                null, FILTER_SANITIZE_STRING);
-
-            $albumID = Content::resolveID($dirtyID);
-
+            // Items_page refers to the widget
+            $dirtyID    = $request->query->filter('album_id', null, FILTER_SANITIZE_STRING);
+            $albumID    = Content::resolveID($dirtyID);
+            $items_page = 8;
             // Redirect to album frontpage if id_album wasn't provided
             if (is_null($albumID)) {
                 Application::forward301('/albumes/');
@@ -123,7 +124,7 @@ if (!is_null($action) ) {
 
             $tpl->assign('contentId', $albumID);
 
-            require_once "album_inner_ads.php";
+            include_once "album_inner_ads.php";
 
             if (($tpl->caching == 0)
                 || (!$tpl->isCached('gallery/gallery.tpl', $cacheID))
@@ -140,23 +141,82 @@ if (!is_null($action) ) {
 
                 $otherAlbums = $cm->find(
                     'Album',
-                    $category,
                     'available=1 AND pk_content !='.$albumID
                     .' AND created >=DATE_SUB(CURDATE(), INTERVAL '
                     . $days . ' DAY) ',
                     ' ORDER BY views DESC,  created DESC LIMIT '.$total
                 );
+
+                foreach ($otherAlbums as &$content) {
+                    $content->cover_image    = new Photo($content->cover_id);
+                    $content->cover          = $content->cover_image->path_file.$content->cover_image->name;
+                    $content->category_name  = $content->loadCategoryName($content->id);
+                    $content->category_title = $content->loadCategoryTitle($content->id);
+                }
+
                 $tpl->assign('gallerys', $otherAlbums);
 
-                $album->category_name = $album->loadCategoryName($album->id);
+                $album->category_name  = $album->loadCategoryName($album->id);
                 $album->category_title = $album->loadCategoryTitle($album->id);
-                $_albumArray = $album->_getAttachedPhotos($album->id);
+                $_albumArray           = $album->_getAttachedPhotos($album->id);
+                $_albumArrayPaged      = $album->getAttachedPhotosPaged($album->id, 8, $page);
 
-                $tpl->assign('album_photos', $_albumArray);
+                if ( count($_albumArrayPaged) > $items_page ) {
+                    array_pop($_albumArrayPaged);
+                }
+
+                $tpl->assign(
+                    array(
+                        'album_photos'       => $_albumArray,
+                        'album_photos_paged' => $_albumArrayPaged,
+                        'page'               => $page,
+                        'items_page'         => $items_page,
+                    )
+                );
 
             } // END iscached
 
             $tpl->display('album/album.tpl', $cacheID);
+            break;
+
+        case 'thumbs_paginate':
+            // Items_page refers to the widget
+            $albumID    = $request->query->filter('album_id', null, FILTER_SANITIZE_STRING);
+            $page = $request->query->filter('page', 1, FILTER_VALIDATE_INT);
+            $items_page = 8;
+            if ($page == 0) {
+                $page = 1;
+            }
+            // Redirect to album frontpage if id_album wasn't provided
+            if (is_null($albumID)) {
+                Application::forward301('/albumes/');
+            }
+
+            // Get the album from the id and increment the numviews for it
+            $album = new Album($albumID);
+            $tpl->assign('album', $album);
+
+            $album->category_name  = $album->loadCategoryName($album->id);
+            $album->category_title = $album->loadCategoryTitle($album->id);
+            $_albumArray           = $album->_getAttachedPhotos($album->id);
+            $_albumArrayPaged      = $album->getAttachedPhotosPaged($album->id, 8, $page);
+
+            if ( count($_albumArrayPaged) > $items_page ) {
+                array_pop($_albumArrayPaged);
+            }
+
+            $tpl->assign(
+                array(
+                    'album_photos'       => $_albumArray,
+                    'album_photos_paged' => $_albumArrayPaged,
+                    'page'               => $page,
+                    'items_page'         => $items_page,
+                )
+            );
+
+            $html = $tpl->fetch('widgets/widget_gallery_thumbs.tpl');
+            echo $html;
+
             break;
 
         default:

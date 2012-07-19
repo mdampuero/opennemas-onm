@@ -271,6 +271,49 @@ class Album extends Content
     }
 
     /**
+     * Returns a multidimensional array with the images related to this album
+     * and results are separated by pages
+     *
+     * @param int $albumID    the album id
+     * @param int $items_page the number of page to get
+     * @param int $page       the number of page to get
+     *
+     * @return mixed array of array(pk_photo, position, description)
+     */
+    public function getAttachedPhotosPaged($albumID, $items_page, $page=1)
+    {
+
+        if ($albumID == null) {
+            return false ;
+        }
+
+        if (empty($page)) {
+            $limit= "LIMIT ".($items_page+1);
+        } else {
+            $limit= "LIMIT ".($page-1) * $items_page .', '.($items_page+1);
+        }
+
+        $sql = 'SELECT DISTINCT pk_photo, description, position'
+               .' FROM albums_photos '
+               .' WHERE pk_album =? ORDER BY position ASC '.$limit;
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($albumID));
+
+        $photosAlbum = array();
+        while (!$rs->EOF) {
+            $photosAlbum []= array(
+                'id'       => $rs->fields['pk_photo'],
+                'position' => $rs->fields['position'],
+                'description' => $rs->fields['description'],
+                'photo'    => new Photo($rs->fields['pk_photo']),
+            );
+
+            $rs->MoveNext();
+        }
+
+        return $photosAlbum;
+    }
+
+    /**
      * Saves the photos attached to one album
      *
      * @return void
