@@ -97,3 +97,8 @@ Specials
 Polls
 -----
 - Implement the related content provider
+
+Advertisement
+-------------
+- Review AdPosition.js script if it could be deleted
+- Review pagination and filtering

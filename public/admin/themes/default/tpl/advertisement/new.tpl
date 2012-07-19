@@ -11,10 +11,41 @@
 {block name="footer-js" append}
     {script_tag src="/utilsGallery.js"}
     <script type="text/javascript">
-        jQuery(document).ready(function ($){
-            var $tabs = $('#position-adv').tabs();
-            $tabs.tabs('select', '#{$smarty.get.place}' );
+    jQuery(document).ready(function($) {
+        $('#with_script').on('click', function(e, ui) {
+            if ($(this).is(':checked') === true){
+                $('#div_script').show();
+                $('#div_url1').hide();
+                $('#advertisement-images').hide();
+            } else {
+                $('#advertisement-images').show();
+                $('#photos').show();
+                $('#div_url1').show();
+                $('#div_script').hide();
+            }
         });
+
+        $('#type_medida').on('change', function(e, ui){
+            var selected_option = $("#type_medida option:selected").attr('value');
+            log(selected_option);
+            if (selected_option=='CLIC') {
+                $('#porclic').show();
+                $('#porview, #porfecha').hide();
+                $('').hide();
+            } else if (selected_option == 'VIEW') {
+                $('#porview').show();
+                $('#porclic, #porfecha').hide();
+            } else if (selected_option=='DATE') {
+                $('#porfecha').show();
+                $('#porclic, #porview').hide();
+            } else {
+                $('#porclic, #porview, #porfecha').hide();
+            }
+        });
+
+        var tabs = $('#position-adv').tabs();
+        tabs.tabs('select', '{$place}');
+    });
     </script>
 {/block}
 {block name="header-css" append}
@@ -150,7 +181,7 @@ input, select, textarea {
 
                     <div style="display:inline-block; width:30%; vertical-align:top">
                         <label>{t}View restrictions:{/t}</label>
-                        <select name="type_medida" onChange="permanencia(this);">
+                        <select name="type_medida" id="type_medida">
                             <option value="NULL" {if !isset($advertisement) || is_null($advertisement->type_medida)}selected="selected"{/if}>{t}Without limits{/t}</option>
                             <option value="CLIC" {if isset($advertisement) && isset($advertisement->type_medida) && $advertisement->type_medida == 'CLIC'}selected="selected"{/if}>{t}Click count{/t}</option>
                             <option value="VIEW" {if isset($advertisement) && isset($advertisement->type_medida) && $advertisement->type_medida == 'VIEW'}checked="checked"{/if}>{t}Views count{/t}</option>
@@ -177,13 +208,10 @@ input, select, textarea {
                             <label for="title">{t}Max views{/t}</label>
                             <input type="text" id="num_view" name="num_view" title="Numero de visionados"
                                 value="{$advertisement->num_view}" />
-                            {if $smarty.request.action eq "read"}
-                                {if isset($advertisement) && $advertisement->type_medida == 'VIEW'}
-                                    Actuales: {$advertisement->views}
-                                {/if}
+                            {if isset($advertisement) && $advertisement->type_medida == 'VIEW' && $advertisement->views > 0}
+                                Actuales: {$advertisement->views}
                             {/if}
                         </div>
-
 
                         <div id="porfecha" style="width:190px;{if  $advertisement->type_medida neq 'DATE'} display:none{else}display:block{/if};">
                             <label for="title">{t}Date range{/t}</label>
@@ -197,12 +225,10 @@ input, select, textarea {
                 </div><!-- / -->
 
                 <div style="display:inline-block; width:20%">
-
                     <label for="available">{t}Published:{/t}</label>
-                    <select name="available" id="available" style="width:50px;"
-                        {acl isNotAllowed="ADVERTISEMENT_AVAILA"} disabled="disabled" {/acl} >
-                        <option value="1" {if isset($advertisement->available) &&  $advertisement->available == 1}selected="selected"{/if}>Si</option>
-                        <option value="0" {if isset($advertisement->available) &&  $advertisement->available == 0}selected="selected"{/if}>No</option>
+                    <select name="available" id="available" style="width:50px;" {acl isNotAllowed="ADVERTISEMENT_AVAILA"}disabled="disabled"{/acl}>
+                        <option value="1" {if isset($advertisement->available) && $advertisement->available == 1}selected="selected"{/if}>Si</option>
+                        <option value="0" {if isset($advertisement->available) && $advertisement->available == 0}selected="selected"{/if}>No</option>
                     </select>
                     <br/>
 
@@ -221,10 +247,9 @@ input, select, textarea {
             <fieldset>
                 <legend>{t}Content{/t}</legend>
 
-
                 <label for="with_script" style="display:inline-block;">{t}Ad with JavaScript:{/t}</label>
                 <input type="checkbox" id="with_script" name="with_script" value="1" tabindex=5
-                    {if isset($advertisement) && $advertisement->with_script == 1}checked="checked"{/if} onClick="with_without_script(this);" />
+                    {if isset($advertisement) && $advertisement->with_script == 1}checked="checked"{/if} />
 
 
                 <div id="div_url1" style="display:{if !isset($advertisement) || $advertisement->with_script==0}block{else}none{/if};">

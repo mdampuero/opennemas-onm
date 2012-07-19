@@ -41,9 +41,6 @@
             </div><!-- /related-images -->
 		</td>
 		<td id="photos_container">
-			<div style="cursor:pointer; border:1px double #ccc; background-color:#EEE; padding:7px;">
-					<strong>{t}Available multimedia for ads{/t}</strong>
-			</div>
 			<div id="photos" class="photos clearfix"
                  style="border:1px solid #ccc;
                  {if isset($advertisement) && $advertisement->with_script == 1}

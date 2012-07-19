@@ -358,6 +358,51 @@ class AdsController extends Controller
     }
 
     /**
+     * Deletes multiple ads at once given their ids
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function batchDeleteAction(Request $request)
+    {
+        $this->checkAclOrForward('SPECIAL_DELETE');
+
+        $selected = $request->query->get('selected_fld', null);
+        $category = $request->query->getDigits('category', 'all');
+        $page     = $request->query->getDigits('page', 1);
+
+        if (is_array($selected)
+            && count($selected) > 0
+        ) {
+            $changes = 0;
+            foreach ($selected as $id) {
+                $ad = new \Advertisement((int) $id);
+                if (!is_null($ad->id)) {
+                    $ad->delete($id, $_SESSION['userid']);
+                    $changes++;
+                } else {
+                    m::add(sprintf(_('Unable to find an ad with the id "%d"'), $id), m::ERROR);
+                }
+            }
+        }
+        if ($changes > 0) {
+            m::add(sprintf(_('Successfully deleted %d ads'), $changes), m::SUCCESS);
+        }
+
+        if (!$request->isXmlHttpRequest()) {
+            return $this->redirect($this->generateUrl(
+                'admin_ads',
+                array(
+                    'category' => $category,
+                    'page' => $page,
+                )
+            ));
+        }
+
+    }
+
+    /**
      * Sets the available status for multiple ads at once
      *
      * @param Request $request the request object
