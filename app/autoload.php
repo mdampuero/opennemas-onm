@@ -29,6 +29,7 @@ define('SITE_WS_API_PATH', realpath(APPLICATION_PATH.DIRECTORY_SEPARATOR."app/re
 set_include_path(implode(PATH_SEPARATOR, array(
     SITE_CORE_PATH, SITE_LIBS_PATH, SITE_VENDOR_PATH, SITE_MODELS_PATH, APP_PATH, SITE_WS_API_PATH, get_include_path(),
 )));
+define('INSTALLATION_HASH', substr(hash('md5', APPLICATION_PATH), 0, 8));
 
 require_once __DIR__.'/../vendor/Symfony/Component/ClassLoader/UniversalClassLoader.php';
 
@@ -36,7 +37,7 @@ require_once __DIR__.'/../vendor/Symfony/Component/ClassLoader/UniversalClassLoa
 use Symfony\Component\ClassLoader\UniversalClassLoader;
 if (extension_loaded('apc')) {
     require_once __DIR__.'/../vendor/Symfony/Component/ClassLoader/ApcUniversalClassLoader.php';
-    $loader = new Symfony\Component\ClassLoader\ApcUniversalClassLoader('onm.framework.autoloader.');
+    $loader = new Symfony\Component\ClassLoader\ApcUniversalClassLoader(INSTALLATION_HASH.'.');
 } else {
     $loader = new UniversalClassLoader();
 }
