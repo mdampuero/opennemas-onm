@@ -31,23 +31,6 @@
 </style>
 {/block}
 
-{block name="footer-js" append}
-    {script_tag src="http://www.google.com/jsapi?key=ABQIAAAAm85YhpjwWOAjVRurtFoZeBTmeauUFXdDTHxXlqQ2gYMcEYi9-xS0s4NcIHse4XpBCrOhkmD7LoZW6A" external=1}
-    {script_tag src="/feed/feed.js"}
-    {if $feeds neq null}
-    <script>
-    {section name="feed" loop=$feeds}
-        jQuery(document).ready(function() {
-            jQuery("#feed-{$smarty.section.feed.index}").gFeed ({
-                url: '{$feeds[feed].url}',
-                max: 3
-            });
-        });
-    {/section}
-    </script>
-    {/if}
-{/block}
-
 {block name="content"}
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
@@ -133,40 +116,6 @@
         </div>
     </div>
     <hr>
-    {*<table class="adminheading">
-        <tbody>
-            <tr>
-                <th>{t}News in other online newspapers...{/t}</th>
-            </tr>
-        </tbody>
-    </table>
-
-    <table class="adminform" >
-
-        <tbody>
-        {if $feeds neq null}
-            <tr style=" display:block; padding:10px !important;">
-
-            {section name="feed" loop=$feeds|default:array()}
-                <td style="vertical-align:top">
-                    <h3>{t 1=$feeds[feed].name}News from "%1"{/t}</h3>
-                    <div id="feed-{$smarty.section.feed.index}"></div>
-                </td>
-            {sectionelse}
-                <td>{t}You don't have RSS configured to show here{/t}</td>
-            {/section}
-            </tr>
-        {/if}
-        </tbody>
-
-        <tfoot>
-            <tr>
-                <td colspan="{$feeds|count}">
-                    &nbsp;
-                </td>
-            </tr>
-        </tfoot>
-    </table>*}
 
 </div>
 {/block}
