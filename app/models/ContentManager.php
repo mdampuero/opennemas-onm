@@ -1579,7 +1579,8 @@ class ContentManager
         $filter,
         $orderBy,
         $page = 1,
-        $numElements = 10
+        $numElements = 10,
+        $debug = false
     ) {
         $this->init($contentType);
         $items  = array();
@@ -1618,7 +1619,9 @@ class ContentManager
                  . $orderBy
                  . $limit;
         }
-        // var_dump($sql);die();
+        if ($debug == true) {
+            var_dump($sql);die();
+        }
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
 

@@ -305,7 +305,7 @@ class Author
      * @param  string $_orderBy, the ORDER BY sql part to sort authors with
      * @return mixed, array of all matched authors
      **/
-    public static function list_authors($filter=null, $_orderBy='ORDER BY 1')
+    public static function list_authors($filter=null, $_orderBy='ORDER BY 1', $page = null, $itemsPerPage = 20)
     {
 
         $items = array();
@@ -313,12 +313,21 @@ class Author
         if (!is_null($filter)) {
             $_where = $filter;
         }
+        $limit = '';
+        if (!is_null($page)) {
+            if ($page > 1) {
+                $limit = 'LIMIT '.(($page-1)*$itemsPerPage).', '.$itemsPerPage;
+            } else {
+                $limit = 'LIMIT '.$itemsPerPage;
+            }
+        }
 
         $sql = 'SELECT `authors`.`pk_author`, `authors`.`name` ,
                        `authors`.`blog` , `authors`.`politics` ,
                        `authors`.`date_nac` , `authors`.`fk_user` ,
                        `authors`.`condition`, `authors`.`params`
-                FROM `authors` WHERE '.$_where. ' '.$_orderBy ;
+                FROM `authors`
+                WHERE '.$_where. ' '.$_orderBy.' '.$limit ;
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
         $i  = 0;

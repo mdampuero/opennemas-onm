@@ -222,8 +222,11 @@ class Opinion extends Content
             ? $data['fk_author_img'] : $data['fk_author_img'] = null ;
         (isset($data['fk_author_img_widget']))
             ? $data['fk_author_img_widget'] : $data['fk_author_img_widget']=null;
+
         parent::update($data);
-        $sql = "UPDATE opinions SET `fk_author`=?, `body`=?,`fk_author_img`=?, "
+
+        $sql = "UPDATE opinions "
+             . "SET `fk_author`=?, `body`=?,`fk_author_img`=?, "
              . "`with_comment`=?, `type_opinion`=?, `fk_author_img_widget`=? "
              . "WHERE pk_opinion=?";
 
@@ -240,10 +243,11 @@ class Opinion extends Content
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
 
         $GLOBALS['application']->dispatch('onAfterUpdateOpinion', $this);
+        return true;
     }
 
     public function remove($id)
