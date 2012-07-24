@@ -15,7 +15,6 @@ function toggleAdvanced() {
 
 {block name="footer-js" append}
     {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
-    {script_tag src="/photos.js" defer="defer" language="javascript"}
     <script>
     jQuery(document).ready(function() {
         jQuery('#starttime').datetimepicker({

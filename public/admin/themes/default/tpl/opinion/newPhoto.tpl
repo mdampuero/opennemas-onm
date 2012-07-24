@@ -5,9 +5,7 @@
         <!--[if IE]{css_tag href="/ieadmin.css.css"}[endif]-->
         {script_tag src="/prototype.js" language="javascript"}
         {script_tag src="/scriptaculous/scriptaculous.js" language="javascript"}
-        {script_tag src="/photos.js" language="javascript"}
         {$script|default:""}
-
     </head>
 
     <body topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">

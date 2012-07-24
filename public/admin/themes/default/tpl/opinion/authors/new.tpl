@@ -1,8 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-js" append}
-    {script_tag src="/photos.js" defer="defer" language="javascript"}
-{/block}
 {block name="content"}
 <form action="{if $author->id}{url name=admin_opinion_author_update id=$author->id}{else}{url name=admin_opinion_author_create}{/if}" method="POST" enctype="multipart/form-data" id="formulario" >
     <div class="top-action-bar">

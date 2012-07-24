@@ -1,10 +1,5 @@
 {extends file="base/admin.tpl"}
 
-
-{block name="footer-js" append}
-    {script_tag src="/photos.js" defer="defer"}
-{/block}
-
 {block name="content"}
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">

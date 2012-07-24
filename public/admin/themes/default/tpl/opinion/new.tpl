@@ -15,7 +15,6 @@
 
 {block name="footer-js" append}
     {script_tag src="/utilsopinion.js"}
-    {script_tag src="/photos.js"}
     {script_tag src="/tiny_mce/opennemas-config.js"}
     {script_tag src="/jquery-onm/jquery.inputlength.js"}
     <script>

@@ -1,9 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-js" append}
-    {script_tag src="/utilsBook.js"}
-{/block}
-
 {block name="header-css" append}
 <style type="text/css">
 div.book-preview {
