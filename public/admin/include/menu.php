@@ -50,13 +50,19 @@ $menuXml = '<?xml version="1.0"?>
             id="article_manager"
             link="/admin/article.php?action=list_pendientes"
         />
-        <node
-            module_name="OPINION_MANAGER"
+        <submenu module_name="OPINION_MANAGER"
             privilege="OPINION_ADMIN"
             title="'.htmlspecialchars(_("Opinions"), ENT_QUOTES).'"
             id="opinion_manager"
-            link="/admin/controllers/opinion/opinion.php"
-        />
+            link="'.url('admin_opinions_frontpage').'">
+            <node
+                module_name="OPINION_MANAGER"
+                privilege="OPINION_ADMIN"
+                title="'.htmlspecialchars(_("Authors"), ENT_QUOTES).'"
+                id="mailman"
+                link="'.url('admin_opinion_authors').'"
+            />
+        </submenu>
         <node
             module_name="COMMENT_MANAGER"
             privilege="COMMENT_ADMIN"

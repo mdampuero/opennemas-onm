@@ -10,13 +10,6 @@
 	.utilities-conf label {
 		text-transform:none;
 	}
-    table.adminlist img {
-        height:auto;
-    }
-
-    div#opinion-form  div#sel img, div#opinion-form  div#div_widget img{
-        max-width: 140px;
-    }
 	</style>
 {/block}
 
@@ -51,42 +44,33 @@
 {/block}
 
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
+<form action="{iF $opinion->id}{url name=admin_opinion_update id=$opinion->id}{else}{url name=admin_opinion_create}{/if}" method="POST" id="formulario">
 <div class="top-action-bar">
     <div class="wrapper-content">
-        <div class="title"><h2>{t}Opinion Manager :: New opinion{/t}</h2></div>
+        <div class="title"><h2>{t}Opinion Manager{/t} :: {if $opinion->id}{t 1=$opinion->title}Editing opinion "%1"{/t}{else}{t}Creating new opinion{/t}{/if}</h2></div>
         <ul class="old-button">
-
             <li>
-                <a href="#" class="admin_add" onClick="sendFormValidate(this, '_self', 'validate', '{$opinion->id}', 'formulario');" title="Validar">
+                <button type="submit" name="continue" value="1">
                     <img src="{$params.IMAGE_DIR}save_and_continue.png" title="{t}Save and continue{/t}" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
                 </a>
             </li>
             <li>
-                {if isset($opinion->id)}
-                   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'update', '{$opinion->id}', 'formulario');">
-                {else}
-                   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', '0', 'formulario');">
-                {/if}
-                    <img src="{$params.IMAGE_DIR}save.png" title="{t}Save and exit{/t}" alt="{t}Save and exit{/t}"><br />{t}Save and exit{/t}</a>
+                <button type="submit">
+                    <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save and exit{/t}"><br />{t}Save{/t}
+                </button>
             </li>
             <li class="separator"></li>
             <li>
-                {if $smarty.session.desde eq 'search_advanced'}
-                     <a href="/admin/controllers/search_advanced/search_advanced.php?action=search&stringSearch={$smarty.get.stringSearch}">
-                        <img src="{$params.IMAGE_DIR}cancel.png" title="{t}Cancel{/t}" alt="{t}Cancel{/t}" ><br />{t}Cancel{/t}
-                     </a>
-                {else}
-                    <a href="#" onClick="cancel('{$smarty.session.desde}','{$smarty.request.category}','{$smarty.request.page}');" title="{t}Go back{/t}">
-                        <img src="{$params.IMAGE_DIR}previous.png" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
-                    </a>
-
-                {/if}
+                <a href="{url name=admin_opinions}" title="{t}Go back{/t}">
+                    <img src="{$params.IMAGE_DIR}previous.png" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
+                </a>
             </li>
         </ul>
     </div>
 </div>
 <div class="wrapper-content">
+
+        {render_messages}
 
         <div id="opinion-form" class="tabs">
 
@@ -124,21 +108,15 @@
                                                 <label for="title">{t}Available:{/t}</label>
                                             </td>
                                             <td>
-                                                <select name="available" id="available" class="required">
-                                                    <option value="0" {if $opinion->available eq 0} selected {/if}>{t}No{/t}</option>
-                                                    <option value="1"  {if $opinion->available eq 1} selected {/if}>{t}Yes{/t}</option>
-                                                </select>
+                                                <input type="checkbox" name="available" id="available" class="required" {if $opinion->available eq 1}checked="checked"{/if} />
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>
-                                                <label for="title">{t}Put in homepage:{/t}</label>
+                                                <label for="title">{t}In homepage:{/t}</label>
                                             </td>
                                             <td>
-                                                <select name="in_home" id="in_home" class="required">
-                                                    <option value="1"  {if $opinion->in_home eq 1} selected {/if}>{t}Yes{/t}</option>
-                                                    <option value="0"  {if $opinion->in_home eq 0} selected {/if}>{t}No{/t}</option>
-                                                </select>
+                                                <input type="checkbox" name="in_home" id="in_home" class="required" {if $opinion->in_home eq 1}checked="checked"{/if}>
                                             </td>
                                         </tr>
                                         {is_module_activated name="COMMENT_MANAGER"}
@@ -147,31 +125,10 @@
                                                 <label for="title">{t}Allow comments:{/t}</label>
                                             </td>
                                             <td>
-                                                <select name="with_comment" id="with_comment" class="required">
-                                                    <option value="0"  {if $opinion->with_comment eq 0} selected {/if}>{t}No{/t}</option>
-                                                    <option value="1" {if $opinion->with_comment eq 1} selected {/if}>{t}Yes{/t}</option>
-                                                </select>
+                                                <input type="checkbox" name="with_comment" id="with_comment" class="required" {if $opinion->with_comment eq 1}checked="checked"{/if} />
                                             </td>
                                         </tr>
                                         {/is_module_activated}
-                                        <tr>
-                                            <td>
-                                                    <label for="title">{t}Title words-count:{/t}</label>
-                                            </td>
-                                            <td >
-                                                <input  type="text" id="counter_title" name="counter_title" title="counter_title"
-                                                        value="0" class="required" size="5" onkeyup="countWords(document.getElementById('title'),this)"/>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                    <label for="title">{t}Body words-count:{/t}</label>
-                                            </td>
-                                            <td >
-                                                    <input type="text" id="counter_body" name="counter_body" title="counter_body"
-                                                            value="0" class="required" size="5"  onkeyup="counttiny(document.getElementById('counter_body'));"/>
-                                            </td>
-                                        </tr>
                                     </table>
                                 </div>
 
@@ -194,9 +151,9 @@
                                 <div id="div_author2" {if $opinion->type_opinion eq 0} style="display:inline;" {else} style="display:none;"{/if}>
                                     <select id="fk_author" name="fk_author" class="validate-selection" onChange='changePhotos(this.options[this.selectedIndex].value);'>
                                         <option value="0" {if isset($author) && $author eq "0"}selected{/if}>{t} - Select one author - {/t}</option>
-                                        {section name=as loop=$todos}
-                                                <option value="{$todos[as]->pk_author}" {if $opinion->fk_author eq $todos[as]->pk_author}selected{/if}>{$todos[as]->name}</option>
-                                        {/section}
+                                        {foreach from=$all_authors item=author}
+                                        <option value="{$author->pk_author}" {if $opinion->fk_author eq $author->pk_author}selected{/if}>{$author->name}</option>
+                                        {/foreach}
                                     </select>
                                 </div>
                                 <input type="hidden" id="fk_user_last_editor" name="fk_user_last_editor" title="publisher" value="{$publisher|default:""}"/>
@@ -273,7 +230,5 @@
             </div>
         </div>
     </div>
-    <input type="hidden" id="action" name="action" value="" />
-    <input type="hidden" name="id" id="id" value="{$id|default:""}" />
 </form>
 {/block}

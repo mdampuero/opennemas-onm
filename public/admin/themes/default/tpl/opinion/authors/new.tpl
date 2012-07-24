@@ -4,36 +4,26 @@
     {script_tag src="/photos.js" defer="defer" language="javascript"}
 {/block}
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
+<form action="{if $author->id}{url name=admin_opinion_author_update id=$author->id}{else}{url name=admin_opinion_author_create}{/if}" method="POST" enctype="multipart/form-data" id="formulario" >
     <div class="top-action-bar">
         <div class="wrapper-content">
-            <div class="title"><h2>{if $smarty.request.action eq "new"}{t}Opinion Manager :: New author{/t}{else}{t}Opinion Manager :: Edit author{/t}{/if}</div>
+            <div class="title"><h2>{if !isset($author)}{t}Opinion Manager :: New author{/t}{else}{t}Opinion Manager :: Edit author{/t}{/if}</div>
             <ul class="old-button">
                 <li>
-                    {if isset($author->pk_author)}
-                    <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'update', {$author->pk_author|default:""}, 'formulario');">
-                    {else}
-                    <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', 0, 'formulario');">
-                    {/if}
-                    <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar y salir" alt="Guardar y salir"><br />Guardar
-                    </a>
+                    <button type="submit">
+                        <img src="{$params.IMAGE_DIR}save.png" alt="Guardar y salir"><br />{t}Save{/t}
+                    </button>
                 </li>
                 <li>
-                    <a href="#" class="admin_add" onClick="sendFormValidate(this, '_self', 'validate', '{$author->pk_author|default:""}', 'formulario');" value="Validar" title="Validar">
-                        <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />Guardar y continuar
-                    </a>
+                    <button type="submit" name="continue" value="1">
+                        <img src="{$params.IMAGE_DIR}save_and_continue.png" alt="Guardar y continuar" ><br />{t}Save and continue{/t}
+                    </button>
                 </li>
                 <li class="separator"></li>
                 <li>
-                    {if $smarty.session._from eq 'opinion.php'}
-                    <a href="opinion.php" class="admin_add">
-                        <img border="0" src="{$params.IMAGE_DIR}previous.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
+                    <a href="{url name=admin_opinions page=$page}" title="Cancelar">
+                        <img src="{$params.IMAGE_DIR}previous.png" alt="Cancelar" ><br />{t}Go back{/t}
                     </a>
-                    {else}
-                    <a href="{$smarty.server.PHP_SELF}?action=list&page=0" class="admin_add" title="Cancelar">
-                        <img border="0" src="{$params.IMAGE_DIR}previous.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
-                    </a>
-                    {/if}
                 </li>
 
             </ul>
@@ -105,7 +95,6 @@
                                 <li id='{$photos[as]->pk_img}'>
                                     <a class="album" title="{t}Show image{/t}">
                                          <img ondblclick="del_photo('{$photos[as]->pk_img}');"
-                                             style="{cssimagescale resolution=67 photo=$photos[as]}"
                                              src="{$smarty.const.MEDIA_IMG_PATH_URL}{$photos[as]->path_img}"
                                           />
                                      </a>
@@ -113,20 +102,13 @@
                             {/section}
                             </ul>
                         </div>
-                        <input type="hidden" id="action" name="action" value="">
-                        <input type="hidden" id="del_img" name="del_img" value="">
                         <input type="hidden" id="fk_author_img" name="fk_author_img" value="" />
-                        <input type="hidden" name="id" id="id" value="{$author->id|default:"0"}" />
                     </td>
                 </tr>
                 <tr>
                     <td valign="top" align="right">
-                        <b>{t}Upload an image{/t}:</b>
-                    </td>
-                    <td style="padding:4px;" nowrap="nowrap"    >
-                        <div id="iframe" style="display: inline;">
-                            <iframe src="newPhoto.php?nameCat=authors&category=7" style=" background:#fff; height:300px; width:100%" align="center" frameborder="0" framespacing="0" scrolling="none" border="0"></iframe>
-                        </div>
+                        <strong>{t}Upload an image{/t}:</strong>
+                        <input type="file">
                     </td>
                 </tr>
             </tbody>

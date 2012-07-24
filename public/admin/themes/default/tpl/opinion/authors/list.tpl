@@ -21,6 +21,7 @@
                     </a>
                 </li>
                 {/acl}
+                <li class="separator"></li>
                 {acl isAllowed="OPINION_ADMIN"}
                 <li >
                     <a href="opinion.php?action=list&amp;desde=author" class="admin_add" name="submit_mult" value="Listado Opiniones" title="Listado Opiniones">
@@ -33,20 +34,9 @@
 	</div>
 
     <div class="wrapper-content">
-         {render_messages}
-        <table class="adminheading">
-            <tr align="right">
-                <th>
-                    Seleccione autor:
-                    <select name="autores" id="autores" class="" onChange="window.location='{$smarty.server.SCRIPT_NAME}?action=read&id='+this.options[this.selectedIndex].value;">
-                        <option> -- </option>
-                        {section name=as loop=$authors_list}
-                            <option value="{$authors_list[as]->pk_author}" >{$authors_list[as]->name}</option>
-                        {/section}
-                    </select>
-                </th>
-            </tr>
-        </table>
+
+        {render_messages}
+
         <table class="listing-table">
             <thead>
                 <tr>
@@ -58,67 +48,63 @@
                     <th>{t}Blog name{/t}</th>
                     <th>{t}Blog url{/t}</th>
                     <th class="title" style="text-align:center">{t}Photos (#){/t}</th>
-                    <th class="right" style="width:60px;">{t}Actions{/t}</th>
+                    <th class="right" style="width:100px;">{t}Actions{/t}</th>
                 </tr>
             </thead>
-            {section name=c loop=$authors}
+            {foreach from=$authors item=author name=c}
                 <tr bgcolor="{cycle values="#eeeeee,#ffffff"}">
                      <td style="text-align:center;">
-                        <input type="checkbox" class="minput" id="selected_{$smarty.section.c.iteration}" name="selected_fld[]"
-                            value="{$authors[c]->pk_author}" />
-                    </td>
-                    <td style="padding:5px;">
-                        {$authors[c]->name}&nbsp;&nbsp;{*if $authors[c]->fk_user != 0}(usuario){/if*}
+                        <input type="checkbox" class="minput" id="selected_{$smarty.foreach.c.iteration}" name="selected_fld[]"
+                            value="{$author->pk_author}" />
                     </td>
                     <td>
-                        {$authors[c]->condition}
+                        {$author->name}&nbsp;&nbsp;{*if $author->fk_user != 0}(usuario){/if*}
                     </td>
                     <td>
-                        {$authors[c]->politics}
+                        {$author->condition}
                     </td>
                     <td>
-                        {$authors[c]->gender}
+                        {$author->politics}
+                    </td>
+                    <td>
+                        {$author->gender}
                     </td>
                     <td style="text-align:center">
-                        {$authors[c]->num_photos}
+                        {$author->num_photos}
                     </td>
                     <td class="right">
-						<ul class="action-buttons">
+						<div class="btn-group">
                             {acl isAllowed="AUTHOR_UPDATE"}
-							<li>
-								<a href="{$smarty.server.PHP_SELF}?action=read&id={$authors[c]->pk_author}" title="Modificar">
-									<img src="{$params.IMAGE_DIR}edit.png" border="0" />
+								<a class="btn" href="{url name=admin_opinion_author_show id=$author->pk_author}" title="Modificar">
+									<i class="icon-pencil"></i>
 								</a>
-							</li>
                             {/acl}
                             {acl isAllowed="AUTHOR_DELETE"}
-							<li>
-								<a class="del" data-controls-modal="modal-from-dom"
-                                           data-id="{$authors[c]->pk_author}"
-                                           data-title="{$authors[c]->name|capitalize}"  href="#" ><img src="{$params.IMAGE_DIR}trash.png" border="0" />
+								<a class="del btn btn-danger" data-controls-modal="modal-from-dom"
+                                   data-id="{url name=admin_opinion_authors_delete id=$author->pk_author}"
+                                   data-title="{$author->name|capitalize}"
+                                   href="{url name=admin_opinion_authors_delete id=$author->pk_author}">
+                                   <i class="icon-trash icon-white"></i>
 								</a>
-							</li>
                             {/acl}
-						</ul>
+						</div>
                     </td>
                 </tr>
 
-            {sectionelse}
+            {foreachelse}
                 <tr>
-                    <td align="center"><b>{t}There is no available authors{/t}</b></td>
+                    <td align="center" colspan="7"><b>{t}There is no available authors{/t}</b></td>
                 </tr>
-            {/section}
+            {/foreach}
             <tfoot>
                 <tr class="pagination">
                     <td colspan="7" align="center">
-                        {$paginacion->links}
+                        {$pagination->links}
                     </td>
                 </tr>
             </tfoot>
         </table>
     </div><!--fin wrapper-content-->
-    <input type="hidden" id="action" name="action" value="">
-    <input type="hidden" id="id" name="id" value={$id}>
 </form>
     {include file="opinion/authors/modals/_modalDelete.tpl"}
     {include file="opinion/authors/modals/_modalBatchDelete.tpl"}

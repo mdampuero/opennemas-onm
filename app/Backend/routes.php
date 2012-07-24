@@ -432,6 +432,15 @@ $adminRoutes->add(
 );
 
 $adminRoutes->add(
+    'admin_ads_content_provider',
+    new Route(
+        '/ads/content-provider',
+        array('_controller' => 'Backend:Controllers:AdsController:contentProvider')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
     'admin_ad_toggleavailable',
     new Route(
         '/ads/{id}/toggle-available',
@@ -1539,6 +1548,227 @@ $adminRoutes->add(
     new Route(
         '/statistics/widget',
         array('_controller' => 'Backend:Controllers:StatisticsController:getWidget')
+    ),
+    '/admin'
+);
+
+// Opinion controller routes
+$adminRoutes->add(
+    'admin_opinions',
+    new Route(
+        '/opinions',
+        array(
+            '_controller' => 'Backend:Controllers:OpinionsController:list',
+        )
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_opinions_frontpage',
+    new Route(
+        '/opinions/frontpage',
+        array(
+            '_controller' => 'Backend:Controllers:OpinionsController:frontpage',
+        )
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_opinion_create',
+    new Route(
+        '/opinion/create',
+        array(
+            '_controller' => 'Backend:Controllers:OpinionsController:create',
+        )
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_opinion_show',
+    new Route(
+        '/opinion/{id}/show',
+        array(
+            '_controller' => 'Backend:Controllers:OpinionsController:show',
+        )
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_opinion_update',
+    new Route(
+        '/opinion/{id}/update',
+        array(
+            '_controller' => 'Backend:Controllers:OpinionsController:update',
+        )
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_opinion_delete',
+    new Route(
+        '/opinion/{id}/delete',
+        array(
+            '_controller' => 'Backend:Controllers:OpinionsController:delete',
+        )
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_opinion_toggleavailable',
+    new Route(
+        '/opinion/{id}/toggle-available',
+        array(
+            '_controller' => 'Backend:Controllers:OpinionsController:toggleAvailable',
+        )
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_opinion_toggleinhome',
+    new Route(
+        '/opinion/{id}/toggle-inhome',
+        array(
+            '_controller' => 'Backend:Controllers:OpinionsController:toggleInHome',
+        )
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_opinion_togglefavorite',
+    new Route(
+        '/opinion/{id}/toggle-favorite',
+        array(
+            '_controller' => 'Backend:Controllers:OpinionsController:toggleFavorite',
+        )
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_opinions_batch_delete',
+    new Route(
+        '/opinions/batch-delete',
+        array('_controller' => 'Backend:Controllers:OpinionsController:batchDelete')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_opinions_batch_publish',
+    new Route(
+        '/opinions/batch-publish',
+        array('_controller' => 'Backend:Controllers:OpinionsController:batchPublish')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_opinions_batch_inhome',
+    new Route(
+        '/opinions/batch-inhome',
+        array('_controller' => 'Backend:Controllers:OpinionsController:batchInHome')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_opinions_batch_inhome',
+    new Route(
+        '/opinions/save-positions',
+        array('_controller' => 'Backend:Controllers:OpinionsController:batchInHome')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_opinions_savepositions',
+    new Route(
+        '/opinions/batch-inhome',
+        array('_controller' => 'Backend:Controllers:OpinionsController:savePositions')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_opinions_content_provider',
+    new Route(
+        '/opinions/content-provider',
+        array('_controller' => 'Backend:Controllers:OpinionsController:contentProvider')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_opinions_config',
+    new Route(
+        '/opinions/config',
+        array(
+            '_controller' => 'Backend:Controllers:OpinionsController:config',
+        )
+    ),
+    '/admin'
+);
+
+// Opinion author controller routes
+$adminRoutes->add(
+    'admin_opinion_authors',
+    new Route(
+        '/opinion/authors',
+        array(
+            '_controller' => 'Backend:Controllers:OpinionAuthorsController:list',
+        )
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_opinion_author_show',
+    new Route(
+        '/opinion/author/{id}/show',
+        array(
+            '_controller' => 'Backend:Controllers:OpinionAuthorsController:show',
+        )
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_opinion_author_create',
+    new Route(
+        '/opinion/author/{id}/create',
+        array(
+            '_controller' => 'Backend:Controllers:OpinionAuthorsController:create',
+        )
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_opinion_author_delete',
+    new Route(
+        '/opinion/author/{id}/delete',
+        array(
+            '_controller' => 'Backend:Controllers:OpinionAuthorsController:delete',
+        )
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_opinion_author_update',
+    new Route(
+        '/opinion/author/{id}/update',
+        array(
+            '_controller' => 'Backend:Controllers:OpinionAuthorsController:update',
+        )
     ),
     '/admin'
 );

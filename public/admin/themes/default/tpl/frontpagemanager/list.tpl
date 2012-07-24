@@ -135,7 +135,7 @@
                     {/is_module_activated}
                     {is_module_activated name="OPINION_MANAGER"}
                     <li>
-                        <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/opinion/opinion.php?action=content-provider&amp;category={$category}">{t}Opinions{/t}</a>
+                        <a href="{url name=admin_opinions_content_provider category=$category}">{t}Opinions{/t}</a>
                     </li>
                     {/is_module_activated}
                     {is_module_activated name="VIDEO_MANAGER"}

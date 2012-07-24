@@ -8,52 +8,41 @@
 
     </div>
     <div class="modal-footer">
-        <a class="btn primary yes" href="#">{t}Yes, delete{/t}</a>
+        <a class="btn btn-primary yes" href="#">{t}Yes, delete{/t}</a>
         <a class="btn secondary no" href="#">{t}No{/t}</a>
     </div>
 </div>
 
 <script>
-jQuery("#modal-opinion-delete").modal({
-    backdrop: 'static', //Show a grey back drop
-    keyboard: true //Can close on escape
-});
+jQuery(document).ready(function($) {
+    $("#modal-opinion-delete").modal({
+        backdrop: 'static', //Show a grey back drop
+        keyboard: true //Can close on escape
+    });
 
-jQuery('.del').click(function(e) {
-     jQuery('#modal-opinion-delete .modal-body span').html( jQuery(this).data('title') );
-     jQuery.ajax({
-        url:  "{$smarty.server.SCRIPT_NAME}",
-        type: "GET",
-        data: { action:"getRelations", id: jQuery(this).data("id") },
-        success: function(response){
-            if(response != '') {
-                jQuery('#modal-opinion-delete p').append(response);
-            }
+    $('.del').click(function(e, ui) {
+        e.preventDefault();
+        $('#modal-opinion-delete .modal-body span').html( $(this).data('title') );
+        $("#modal-opinion-delete ").modal('show');
+        $("body").data("selected-for-del", $(this).data("url"));
+    });
+
+    $('#modal-opinion-delete a.btn.yes').on('click', function(e, ui) {
+        e.preventDefault();
+        var url = $("body").data("selected-for-del");
+        if (url) {
+            $.ajax({
+                url:  url,
+                success: function(){
+                    location.reload();
+                }
+            });
         }
     });
-    //Sets up the modal
-    jQuery("#modal-opinion-delete ").modal('show');
-    jQuery("body").data("selected-for-del", jQuery(this).data("id"));
-    e.preventDefault();
-});
 
-jQuery('#modal-opinion-delete a.btn.yes').on('click', function(){
-    var delId = jQuery("body").data("selected-for-del");
-    if(delId) {
-        jQuery.ajax({
-            url:  "{$smarty.server.SCRIPT_NAME}",
-            type: "POST",
-            data: { action:"delete", id:delId },
-            success: function(){
-                location.reload();
-            }
-        });
-    }
-    e.preventDefault();
-});
-
-jQuery('#modal-opinion-delete a.btn.no').on('click', function(e){
-    jQuery("#modal-opinion-delete").modal('hide');
-    e.preventDefault();
+    $('#modal-opinion-delete a.btn.no').on('click', function(e, ui){
+        $("#modal-opinion-delete").modal('hide');
+        e.preventDefault();
+    });
 });
 </script>
