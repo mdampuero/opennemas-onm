@@ -107,7 +107,7 @@ input, select, textarea {
                 </li>
                 <li class="separator"></li>
                 <li>
-                    <a href="{$smarty.server.PHP_SELF}?action={$smarty.request.desde|default:""}&amp;category={$_REQUEST['category']|default:0}&amp;page={$_GET['page']|default:0}" title="Cancelar">
+                    <a href="{url name=admin_ads category=$category page=$page}" title="{t}Go back{/t}">
                         <img src="{$params.IMAGE_DIR}previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
                     </a>
                 </li>
@@ -139,7 +139,7 @@ input, select, textarea {
                     <div style="display:inline-block; width:30%; vertical-align:top">
                         <label for="category">{t}Sections{/t}</label>
                         <select name="category[]" id="category" class="required" multiple tabindex=4 style="width:95%">
-                        {if $smarty.request.action eq "read"}
+                        {if isset($advertisement->id)}
                             <option value="0" {if isset($advertisement) && in_array(0,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Frontpage{/t}</option>
                             <option value="4" {if isset($advertisement) && in_array(4,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Opinion{/t}</option>
 
@@ -197,7 +197,7 @@ input, select, textarea {
                                 value="{$advertisement->num_clic|default:""}" />
                             {if $smarty.request.action eq "read"}
                                 {if isset($advertisement) && $advertisement->type_medida == 'CLIC'}
-                                    Actuales: {$advertisement->num_clic_count}
+                                    {t}Actual click count:{/t} {$advertisement->num_clic_count}
                                 {/if}
                                 <input type="hidden" id="num_clic_count" name="num_clic_count" title="Numero de clic"
                                     value="{$advertisement->num_clic_count|default:""}" />
@@ -209,7 +209,7 @@ input, select, textarea {
                             <input type="text" id="num_view" name="num_view" title="Numero de visionados"
                                 value="{$advertisement->num_view}" />
                             {if isset($advertisement) && $advertisement->type_medida == 'VIEW' && $advertisement->views > 0}
-                                Actuales: {$advertisement->views}
+                                {t}Actual views count:{/t} {$advertisement->views}
                             {/if}
                         </div>
 
