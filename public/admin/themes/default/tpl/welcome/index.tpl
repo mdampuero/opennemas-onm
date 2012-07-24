@@ -1,36 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-<style type="text/css">
-    .gf-title, .gf-title:hover{
-        font-size:1.1em;
-        margin-bottom:10px;
-        color: #0B55C4;
-    }
-    .gf-title:hover {
-        text-decoration:underline;
-    }
-    .gf-snippet {
-        margin:5px;
-        margin-bottom:15px;
-    }
-    .gf-author {
-        margin-left:5px;
-    }
-    .gf-author,
-    .gf-relativePublishedDate {
-        font-size:.9em;
-        color:#888
-    }
-    .gf-relativePublishedDate {
-        display:block;
-    }
-    .gfc-result {
-        min-height:100px !important;
-    }
-</style>
-{/block}
-
 {block name="content"}
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">

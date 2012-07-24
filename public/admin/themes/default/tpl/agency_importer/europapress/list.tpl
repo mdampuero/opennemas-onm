@@ -1,20 +1,25 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
-    <style type="text/css">
+<style type="text/css">
     .adminlist td {
     	padding-top:4px;
     	padding-bottom:4px;
     }
-    </style>
+    .tooltip-inner {
+        max-width:500px !important;
+        text-align: justify;
+    }
+</style>
 {/block}
 
 {block name="header-js" prepend}
     <script>
-    jQuery(document).ready(function (){
-        jQuery('.sync_with_server').click(function() {
-           jQuery('.warnings-validation').html('<div class="ui-blocker"></div><div class="ui-blocker-message"><progress style="width:100%"></progress><br /><br />{t}Downloading articles from EuropaPress, please wait...{/t}</div>');
+    jQuery(document).ready(function ($){
+        $('.sync_with_server').click(function() {
+           $('.warnings-validation').html('<div class="ui-blocker"></div><div class="ui-blocker-message"><progress style="width:100%"></progress><br /><br />{t}Downloading articles from EuropaPress, please wait...{/t}</div>');
         });
+        $('[rel="tooltip"]').tooltip({ placement: 'bottom' });
     });
     </script>
 {/block}
@@ -97,7 +102,7 @@
                 <td style="text-align:center;">
                    <img src="{$params.IMAGE_DIR}notifications/level-{$elements[c]->priorityNumber}.png" alt="{t 1=$elements[c]->priorityNumber}Priority %1{/t}" title="{t 1=$elements[c]->priorityNumber}Priority %1{/t}">
                 </td>
-                <td onmouseout="UnTip()" onmouseover="Tip('{$elements[c]->body|regex_replace:"/[\r\t\n]/":" "|clearslash|regex_replace:"/'/":"\'"|escape:'html'}', SHADOW, false, ABOVE, false, WIDTH, 800)">
+                <td  rel="tooltip" data-original-title="{$elements[c]->body|clearslash|regex_replace:"/'/":"\'"|escape:'html'}">
                     <a href="{url name=admin_importer_europapress_show id=$elements[c]->xmlFile|urlencode}" title="Importar">
                         {$elements[c]->title}
                     </a>
