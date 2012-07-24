@@ -21,7 +21,9 @@
         };
         var content_states = {
             {foreach from=$frontpage_articles item=content}
+            {if $content->id}
             {$content->id}: {$content->getQuickInfo()|json_encode},
+            {/if}
             {/foreach}
         }
     </script>
@@ -149,7 +151,7 @@
                     {/is_module_activated}
                     {is_module_activated name="ADS_MANAGER"}
                     <li>
-                        <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/advertisement/advertisement.php?action=content-provider&amp;category={$category}">{t}Advertisement{/t}</a>
+                        <a href="{url name=admin_ads_content_provider category=$category}">{t}Advertisement{/t}</a>
                     </li>
                     {/is_module_activated}
                 </ul>

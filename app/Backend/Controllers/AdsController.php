@@ -481,6 +481,63 @@ class AdsController extends Controller
     }
 
     /**
+     * Lists the available advertisements for the frontpage manager
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function contentProviderAction(Request $request)
+    {
+        $category = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
+        $page = $request->query->getDigits('page', 1);
+        if ($category == 'home') {
+            $category = 0;
+        }
+        $itemsPerPage = 8;
+
+        $cm = new \ContentManager();
+
+        // Get contents for this home
+        $contentElementsInFrontpage  = $cm->getContentsIdsForHomepageOfCategory($category);
+
+        // Fetching opinions
+        $sqlExcludedOpinions = '';
+        if (count($contentElementsInFrontpage) > 0) {
+            $opinionsExcluded    = implode(', ', $contentElementsInFrontpage);
+            $sqlExcludedOpinions = ' AND `pk_advertisement` NOT IN ('.$opinionsExcluded.')';
+        }
+
+        list($countAds, $ads) = $cm->getCountAndSlice(
+            'Advertisement',
+            null,
+            'contents.available=1 AND in_litter != 1'. $sqlExcludedOpinions,
+            'ORDER BY created DESC ',
+            $page,
+            $itemsPerPage
+        );
+
+        $pagination = \Pager::factory(array(
+            'mode'        => 'Sliding',
+            'perPage'     => $itemsPerPage,
+            'append'      => false,
+            'path'        => '',
+            'delta'       => 4,
+            'clearIfVoid' => true,
+            'urlVar'      => 'page',
+            'totalItems'  => $countAds,
+            'fileName'    => $this->generateUrl('admin_ads_content_provider', array(
+                'category' => $category,
+            )).'&page=%d',
+        ));
+
+        return $this->render('advertisement/content-provider.tpl', array(
+            'ads'        => $ads,
+            'pagination' => $pagination,
+        ));
+    }
+
+    /**
      * Builds the sql
      *
      * @param Request $request the request object
