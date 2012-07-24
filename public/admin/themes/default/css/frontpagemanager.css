@@ -380,3 +380,7 @@ span.in_frontpage {
     display:inline-block;
     vertical-align:middle;
 }
+
+[class*="span"] {
+    margin-left:0 !important;
+}

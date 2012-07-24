@@ -50,7 +50,7 @@
 </div>
 <div class="wrapper-content">
     <div class="warnings-validation"></div><!-- / -->
-    <form action="{$smarty.server.PHP_SELF}" method="get" name="formulario" id="formulario">
+    <form action="{url name=admin_importer_europapress}" method="get" name="formulario" id="formulario">
 
 	{render_messages}
 
@@ -102,8 +102,9 @@
                 <td style="text-align:center;">
                    <img src="{$params.IMAGE_DIR}notifications/level-{$elements[c]->priorityNumber}.png" alt="{t 1=$elements[c]->priorityNumber}Priority %1{/t}" title="{t 1=$elements[c]->priorityNumber}Priority %1{/t}">
                 </td>
-                <td  rel="tooltip" data-original-title="{$elements[c]->body|clearslash|regex_replace:"/'/":"\'"|escape:'html'}">
-                    <a href="{url name=admin_importer_europapress_show id=$elements[c]->xmlFile|urlencode}" title="Importar">
+                <td>
+                    <a href="{url name=admin_importer_europapress_show id=$elements[c]->xmlFile|urlencode}"
+                        rel="tooltip" data-original-title="{$elements[c]->body|clearslash|regex_replace:"/'/":"\'"|escape:'html'}">
                         {$elements[c]->title}
                     </a>
                 </td>

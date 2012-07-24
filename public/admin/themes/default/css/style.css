@@ -802,6 +802,16 @@ legend {
     .global-nav .logoonm div.site-name{ padding-top:10px; }
     .global-nav .logoonm > a { text-indent:-9999px; }
 
+  .global-nav .brand {
+    -moz-transition: all 0.2s linear 0s;
+    color: #000000;
+    float: right;
+    font-weight: bold;
+    margin-left: 20px;
+    padding-left: 0;
+    padding-right: 0;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.1), 0 0 30px rgba(255, 255, 255, 0.125);
+  }
 .global-nav.manager {
     background: #049CDB !important;
     background-color: #049CDB !important;
