@@ -307,7 +307,7 @@ class CacheManagerController extends Controller
                 ."</div>";
         }
 
-        return Response($content);
+        return new Response($content);
     }
 
     /**
