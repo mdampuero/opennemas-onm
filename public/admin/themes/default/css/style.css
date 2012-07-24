@@ -1676,6 +1676,7 @@ div.action-bar .right{
   margin:10px;
   min-height:300px;
   position:relative;
+  display: inline-block;
 }
 #album-images .list-of-images .image,
 #album-images .list-of-images .image-moving {
