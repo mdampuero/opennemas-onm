@@ -9,7 +9,10 @@
             </label>
         </td>
         <td rowspan="7">
-            {include file="advertisement/partials/advertisement_map_positions_video_interior.tpl"}
+            <div id="advertisement-mosaic-videointerior" style=" ">
+                <div id="advertisement-mosaic-videointerior-frame"></div>
+                <img src="{$params.IMAGE_DIR}advertisement/videoAds.png" width="240" height="435" usemap="#mapVideoInterior" />
+            </div>
         </td>
     </tr>
      <tr>
@@ -61,27 +64,3 @@
 
 </tbody>
 </table>
-
-<script type="text/javascript">
-/* <![CDATA[ */
-var adPositionVideoInterior = null;
-
-var positions_video_interior = new Array();
-positions_video_interior[301] = '2,0,176,24';
-positions_video_interior[302] = '178,0,55,24';
-positions_video_interior[303] = '170,182,64,30';
-positions_video_interior[309] = '2,382,176,24';
-positions_video_interior[310] = '178,382,55,24';
-positions_video_interior[350] = '0,0,240,435';
-
-var options = { 'positions': positions_video_interior, 'radios': $('ads_type_interior_video').select('input[name=type_advertisement]') };
-// adPositionVideoInterior = new AdPosition('advertisement-mosaic-videointerior', options );
-document.observe('dom:loaded', function() {
-
-    {if isset($advertisement) && !empty($advertisement->type_advertisement) && ($advertisement->type_advertisement gt 100) && $category == '4'}
-   // adPositionVideoInterior.selectPosition({$advertisement->type_advertisement});
-    {/if}
-
-});
-/* ]]> */
-</script>

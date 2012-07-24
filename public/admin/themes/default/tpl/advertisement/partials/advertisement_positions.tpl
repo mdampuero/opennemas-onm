@@ -8,7 +8,10 @@
             </label>
         </td>
         <td rowspan="11">
-            {include file="advertisement/partials/advertisement_map_positions.tpl"}
+            <div id="advertisement-mosaic">
+                <div id="advertisement-mosaic-frame"></div>
+                <img src="{$params.IMAGE_DIR}advertisement/front_advertisement.png" style="width:240px;height:628px;" usemap="#mapPortada" />
+            </div>
         </td>
     </tr>
     <tr>

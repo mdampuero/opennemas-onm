@@ -8,7 +8,10 @@
             </label>
         </td>
         <td rowspan="7">
-            {include file="advertisement/partials/advertisement_map_positions_gallery.tpl"}
+            <div id="advertisement-mosaic-gallery">
+                <div id="advertisement-mosaic-frame-gallery"></div>
+                <img src="{$params.IMAGE_DIR}advertisement/right2Ads.png" width="240" usemap="#mapGallery" />
+            </div>
         </td>
     </tr>
      <tr>
@@ -67,29 +70,3 @@
     </tr>
 </tbody>
 </table>
-
-<script type="text/javascript">
-/* <![CDATA[ */
-var adPositionGallery = null;
-
-var positions_gallery = new Array();
-positions_gallery[1] = '2,0,176,24';
-positions_gallery[2] = '178,0,55,24';
-positions_gallery[3] = '158,106,74,72';
-positions_gallery[5] = '158,445,74,60';
-positions_gallery[9] = '2,297,176,24';
-positions_gallery[10] = '178,297,55,24';
-positions_gallery[50] = '0,0,240,352';
-
-
-var options = { 'positions': positions_gallery, 'radios': $('ads_type_gallery').select('input[name=type_advertisement]') };
-//adPositionGallery = new AdPosition('advertisement-mosaic-gallery', options );
-document.observe('dom:loaded', function() {
-
-    {if !empty($advertisement->type_advertisement) && $category == '3'}
-  //      adPositionGallery.selectPosition({$advertisement->type_advertisement});
-    {/if}
-
-});
-/* ]]> */
-</script>
