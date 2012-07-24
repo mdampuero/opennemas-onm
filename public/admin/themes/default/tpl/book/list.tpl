@@ -2,7 +2,6 @@
 
 {block name="header-js" append}
     {script_tag src="/onm/jquery-functions.js" language="javascript"}
-    {script_tag src="/utilsBook.js" language="javascript"}
 {/block}
 
 {block name="footer-js" append}
@@ -86,6 +85,8 @@
     <div class="wrapper-content">
 
         {render_messages}
+
+        <div id="warnings-validation"></div>
 
         <ul class="pills clearfix">
             <li>

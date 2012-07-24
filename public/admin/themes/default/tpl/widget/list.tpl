@@ -2,7 +2,6 @@
 
 {block name="footer-js" append}
     {script_tag src="/prototype.js" language="javascript"}
-    {script_tag src="/prototype-date-extensions.js" language="javascript"}
     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}scriptaculous/scriptaculous.js?load=effects,dragdrop"></script>
     {* Ajax button to change availability *}
     {script_tag src="/switcher_flag.js" language="javascript"}

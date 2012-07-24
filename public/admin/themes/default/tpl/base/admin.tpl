@@ -28,7 +28,6 @@
         {script_tag src="/prototype.js"}
         {script_tag src="/scriptaculous/scriptaculous.js"}
         {script_tag src="/scriptaculous/effects.js"}
-        {script_tag src="/prototype-date-extensions.js"}
     {/block}
 
     {block name="js-library"}

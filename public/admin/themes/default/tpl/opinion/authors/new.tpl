@@ -30,12 +30,10 @@
         </div>
     </div>
     <div class="wrapper-content">
+
+        {render_messages}
+
         <div id="warnings-validation"></div>
-        <table class="adminheading">
-            <tr align="right">
-                <td>&nbsp;</td>
-            </tr>
-        </table>
         <table  class="adminform">
             <tbody>
                 <tr>
