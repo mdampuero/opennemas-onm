@@ -7,7 +7,7 @@
         <p>{t}Are you sure you want to delete the selected contents?{/t}</p>
     </div>
     <div class="modal-footer">
-        <a class="btn primary yes" href="#">{t}Yes, delete{/t}</a>
+        <a class="btn btn-primary yes" href="#">{t}Yes, delete{/t}</a>
         <a class="btn secondary no" href="#">{t}No{/t}</a>
     </div>
 </div>

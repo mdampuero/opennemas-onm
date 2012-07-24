@@ -7,7 +7,7 @@
         <p>{t}If you go back, you may lose some changes in newsletter{/t}</p>
     </div>
     <div class="modal-footer">
-        <a class="btn primary accept" href="#">{t}Yes, Go Back{/t}</a>
+        <a class="btn btn-primary accept" href="#">{t}Yes, Go Back{/t}</a>
         <a class="btn secondary no" href="#">{t}Cancel{/t}</a>
     </div>
 </div>

@@ -12,6 +12,6 @@
         </div>
     </div>
     <div class="modal-footer">
-        <a class="btn primary save" href="#">{t}Save{/t}</a>
+        <a class="btn btn-primary save" href="#">{t}Save{/t}</a>
     </div>
 </div>

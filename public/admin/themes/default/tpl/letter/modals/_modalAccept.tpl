@@ -7,7 +7,7 @@
         <p>{t}You must select some elements.{/t}</p>
     </div>
     <div class="modal-footer">
-        <a class="btn primary accept" href="#">{t}Accept{/t}</a>
+        <a class="btn btn-primary accept" href="#">{t}Accept{/t}</a>
     </div>
 </div>
 

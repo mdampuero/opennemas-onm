@@ -16,7 +16,7 @@
         <input type="hidden" name="itemID" id="itemID" value=""/>
     </div>
     <div class="modal-footer">
-        <a class="btn primary yes" href="#">{t}Add element{/t}</a>
+        <a class="btn btn-primary yes" href="#">{t}Add element{/t}</a>
     </div>
 </div>
 

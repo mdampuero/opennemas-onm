@@ -1,25 +1,26 @@
-{if $type_opinion eq '0'}
 <table class="adminheading">
 	<tr>
 		<th align="right">
             {t}Status:{/t}
-            <select name="opinion-status" id=="opinion-status" onchange="changeList('{$author}',this.options[this.selectedIndex].value);">
-                <option value="all" {if isset($author) && $opinionStatus eq "all"} selected {/if}> {t}-- All --{/t} </option>
-                <option value="1" {if  $opinionStatus eq "1"} selected {/if}> {t}Published{/t} </option>
-                <option value="0" {if $opinionStatus eq "0"} selected {/if}> {t}No published{/t} </option>
+            <select name="status">
+                <option value="-1" {if $status === -1} selected {/if}> {t}-- All --{/t} </option>
+                <option value="1" {if  $status === 1} selected {/if}> {t}Published{/t} </option>
+                <option value="0" {if $status === 0} selected {/if}> {t}No published{/t} </option>
             </select>
              &nbsp;&nbsp;&nbsp;
             {t}Select an author{/t}
-            <select name="autores" id="autores" onChange='changeList(this.options[this.selectedIndex].value, "{$opinionStatus|default:"all"}");'>
+            <select name="author" id="author">
                 <option value="0" {if isset($author) && $author eq "0"} selected {/if}> {t}All{/t} </option>
+                <option value="-1" {if isset($author) && $author eq "-1"} selected {/if}> {t}Director{/t} </option>
+                <option value="-2" {if isset($author) && $author eq "-2"} selected {/if}> {t}Editorial{/t} </option>
                 {section name=as loop=$autores}
-                    <option value="{$autores[as]->pk_author}" {if isset($author) && $author eq $autores[as]->pk_author} selected {/if}>{$autores[as]->name}</option>
+                    <option value="{$autores[as]->pk_author}" {if isset($author) && $author == $autores[as]->pk_author} selected {/if}>{$autores[as]->name}</option>
                 {/section}
             </select>
+            <button type="submit" class="btn">Search</button>
 		</th>
 	</tr>
 </table>
-{/if}
 <table class="listing-table">
 	<thead>
 		<tr>
@@ -32,34 +33,33 @@
 			<th style="width:40px;">{t}Ratings{/t}</th>
             <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}comments.png" alt="{t}Comments{/t}" title="{t}Comments{/t}"></th>
 			<th class="center" style="width:110px;">{t}Created in{/t}</th>
-			<th style="width:80px;">{t}In home{/t}</th>
-			<th style="width:40px;">{t}Published{/t}</th>
-            <th style="width:40px;">{t}Favorite{/t}</th>
-			<th class="right" style="width:40px;">{t}Actions{/t}</th>
+			<th class="center" style="width:70px;">{t}In home{/t}</th>
+			<th class="center" style="width:20px;">{t}Published{/t}</th>
+            <th class="center" style="width:20px;">{t}Favorite{/t}</th>
+			<th class="center" style="width:70px;">{t}Actions{/t}</th>
 	  </tr>
 	</thead>
 	<tbody>
-		{section name=c loop=$opinions}
+		{foreach from=$opinions item=opinion name=c}
 		<tr>
 			<td>
-				<input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$opinions[c]->id}">
+				<input type="checkbox" class="minput"  id="selected_{$smarty.foreach.c.iteration}" name="selected_fld[]" value="{$opinion->id}">
 			</td>
 			 {if  $type_opinion eq '0'}
-			<td  onClick="javascript:document.getElementById('selected_{$smarty.section.c.iteration}').click();">
-                <a href="author.php?action=read&amp;id={$opinions[c]->fk_author}">
+			<td  onClick="javascript:document.getElementById('selected_{$smarty.foreach.c.iteration}').click();">
+                <a href="author.php?action=read&amp;id={$opinion->fk_author}">
                     {$names[c]}
                 </a>
 
 			</td>
 			{/if}
-			<td style="" onClick="javascript:document.getElementById('selected_{$smarty.section.c.iteration}').click();">
-				<a href="{$smarty.server.PHP_SELF}?action=read&amp;id={$opinions[c]->id}" title="Modificar">
-					{$opinions[c]->title|clearslash}
+			<td style="" onClick="javascript:document.getElementById('selected_{$smarty.foreach.c.iteration}').click();">
+				<a href="{url name=admin_opinion_show id=$opinion->id}" title="Modificar">
+					{$opinion->title|clearslash}
                 </a>
 			</td>
-
 			<td class="center">
-				{$opinions[c]->views}
+				{$opinion->views}
 			</td>
 			<td class="center">
 				{$op_rating[c]|default:0}
@@ -68,71 +68,74 @@
 				{$op_comment[c]|default:0}
 			</td>
 			<td class="center">
-				{$opinions[c]->created}
+				{$opinion->created}
 			</td>
 			<td class="center">
                 {acl isAllowed="OPINION_FRONTPAGE"}
-                {if $opinions[c]->in_home == 1}
-                <a href="?id={$opinions[c]->id}&amp;action=inhome_status&amp;status=0&amp;page={$paginacion->_currentPage|default:0}" class="no_home" title="Sacar de portada" ></a>
+                {if $opinion->in_home == 1}
+                <a href="{url name=admin_opinion_toggleinhome id=$opinion->id status=0 type=$type page=$page}" class="no_home" title="Sacar de portada" ></a>
                 {else}
-                <a href="?id={$opinions[c]->id}&amp;action=inhome_status&amp;status=1&amp;page={$paginacion->_currentPage|default:0}" class="go_home" title="Meter en portada" ></a>
+                <a href="{url name=admin_opinion_toggleinhome id=$opinion->id status=1 type=$type page=$page}" class="go_home" title="Meter en portada" ></a>
                 {/if}
                 {/acl}
 			</td>
 			<td class="center">
                 {acl isAllowed="OPINION_AVAILABLE"}
-				{if $opinions[c]->content_status == 1}
-					<a href="?id={$opinions[c]->id}&amp;action=change_status&amp;status=0&amp;page={$paginacion->_currentPage|default:0}" title="Publicado">
-						<img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" /></a>
+				{if $opinion->content_status == 1}
+					<a href="{url name=admin_opinion_toggleavailable id=$opinion->id status=0  type=$type page=$page}" title="Publicado">
+						<img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" />
+                    </a>
 				{else}
-					<a href="?id={$opinions[c]->id}&amp;action=change_status&amp;status=1&amp;page={$paginacion->_currentPage|default:0}" title="Pendiente">
-						<img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" /></a>
+					<a href="{url name=admin_opinion_toggleavailable id=$opinion->id status=1  type=$type page=$page}" title="Pendiente">
+						<img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" />
+                    </a>
 				{/if}
                 {/acl}
 			</td>
             <td class="center">
                 {acl isAllowed="OPINION_ADMIN"}
-                {if $opinions[c]->favorite == 1 && $opinions[c]->type_opinion == 0}
-                <a href="?id={$opinions[c]->id}&amp;action=changeFavorite&amp;status=0&amp;page={$paginacion->_currentPage}" class="favourite_on" title="{t}Favorite{/t}">
+                {if $opinion->favorite == 1 && $opinion->type_opinion == 0}
+                <a href="{url name=admin_opinion_togglefavorite id=$opinion->id status=0  type=$type page=$page}" class="favourite_on" title="{t}Favorite{/t}">
                     &nbsp;
                 </a>
-                {elseif $opinions[c]->type_opinion == 0}
-                <a href="?id={$opinions[c]->id}&amp;action=changeFavorite&amp;status=1&amp;page={$paginacion->_currentPage}" class="favourite_off" title="{t}NoFavorite{/t}">
+                {elseif $opinion->type_opinion == 0}
+                <a href="{url name=admin_opinion_togglefavorite id=$opinion->id status=1  type=$type page=$page}" class="favourite_off" title="{t}NoFavorite{/t}">
                     &nbsp;
                 </a>
                 {/if}
                 {/acl}
             </td>
 			<td class="right">
-				<ul class="action-buttons">
+				<div class="btn-group">
                     {acl isAllowed="OPINION_UPDATE"}
-					<li>
-						<a href="{$smarty.server.PHP_SELF}?action=read&amp;id={$opinions[c]->id}" title="{t}Edit{/t}">
-							<img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
-					</li>
+					<a class="btn" href="{$smarty.server.PHP_SELF}?action=read&amp;id={$opinion->id}" title="{t}Edit{/t}">
+						<i class="icon-pencil"></i>
+                    </a>
                     {/acl}
                     {acl isAllowed="OPINION_DELETE"}
-					<li>
-						 <a class="del" data-controls-modal="modal-from-dom" data-id="{$opinions[c]->id}"
-                            data-title="{$opinions[c]->title|capitalize}" href="#" title="{t}Delete{/t}">
-                                <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
-					</li>
+					<a class="del btn btn-danger" data-controls-modal="modal-from-dom"
+                        data-url="{url name=admin_opinion_delete id=$opinion->id}"
+                        data-title="{$opinion->title|capitalize}"
+                        href="{url name=admin_opinion_delete id=$opinion->id}"
+                        title="{t}Delete{/t}">
+                        <i class="icon-trash icon-white"></i>
+                    </a>
                     {/acl}
 				</ul>
 			</td>
 		</tr>
-        {sectionelse}
+        {foreachelse}
         <tr>
             <td class="empty" colspan="11">
                 {t}There is no opinions yet.{/t}
             </td>
         </tr>
-		{/section}
+		{/foreach}
 	</tbody>
 	<tfoot>
 		<tr class="pagination">
 			<td colspan="11">
-				{$paginacion|default:""}&nbsp;
+				{$pagination->links|default:""}&nbsp;
 			</td>
 		</tr>
 	</tfoot>

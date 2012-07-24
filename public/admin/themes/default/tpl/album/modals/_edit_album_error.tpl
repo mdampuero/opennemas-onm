@@ -10,7 +10,7 @@
         </ul><!-- / -->
     </div>
     <div class="modal-footer">
-        <a class="btn primary accept" href="#">{t}Close{/t}</a>
+        <a class="btn btn-primary accept" href="#">{t}Close{/t}</a>
     </div>
 </div>
 

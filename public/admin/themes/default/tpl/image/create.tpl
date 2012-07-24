@@ -82,7 +82,7 @@ var image_uploader ={
             </div>
             <div class="modal-body"></div>
             <div class="modal-footer">
-                <a class="btn primary next">Next</a>
+                <a class="btn btn-primary next">Next</a>
                 <a class="btn info prev">Previous</a>
                 <a class="btn success download" target="_blank">Download</a>
             </div>
