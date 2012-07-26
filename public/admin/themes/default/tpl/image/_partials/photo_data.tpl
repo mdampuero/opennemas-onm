@@ -35,7 +35,8 @@
                 </div>
             </div>
             <div>
-                <label>{t}Description:{/t}</label> <br /><textarea class="required" id="description[{$photo->id}]" name="description[{$photo->id}]"
+                <label>{t}Description:{/t}</label> <br />
+                <textarea class="required" id="description[{$photo->id}]" name="description[{$photo->id}]"
                     title="descripcion" rows="2" style="width:96%"
                     onBlur="javascript:get_metadata_imagen(this.value,'{$photo->id}');">{$photo->description|clearslash|escape:'html'}</textarea>
                 <label for="title">{t}Keywords:{/t}</label>
@@ -74,13 +75,13 @@
 
             <div class="photo-geolocation-canvas" id="map_canvas[{$photo->id}]" style="height:200px"></div>
 
-            <div class="help-block ">
+            <div class="onm-help-block ">
                 <div class="title"><h4>{t}Geolocalization{/t}</h4></div>
                 <div class="content">{t escape=off}Help OpenNeMas to get all the photos geolocalized. In the future you will enjoy geolocalized search results.{/t}</div>
             </div>
         {else}
             <input type="hidden" value="{$photo->address}"  id="address[{$photo->id}]" name="address[{$photo->id}]" size="30">
-            <div class="help-block ">
+            <div class="onm-help-block ">
                 <div class="title"><h4>{t}Set your Google maps key{/t}</h4></div>
                 <div class="content">{t escape=off}Help OpenNeMas to get all the photos geolocalized. For this you have to configure your Google Maps API key from
                 the <a href="/admin/controllers/system_settings/system_settings.php?action=list#external" title="Go to the system settings dialog">system settings dialog</a>{/t}</div>

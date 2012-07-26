@@ -91,7 +91,7 @@
                         </div>
                     </td>
                     <td> <br/>
-                        <div class="help-block">
+                        <div class="onm-help-block">
 								<div class="title"><h4>{t}Definition values{/t}</h4></div>
                                 <div class="content">
                                     <ul>

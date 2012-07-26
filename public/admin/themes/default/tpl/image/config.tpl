@@ -90,7 +90,7 @@
                         </div>
                     </td>
                     <td valign="top">
-                        <div class="help-block">
+                        <div class="onm-help-block">
                                 <div class="title"><h4>{t}Settings{/t}</h4></div>
                                 <div class="content">
                                     <ul>

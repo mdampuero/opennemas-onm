@@ -50,32 +50,32 @@
             <table class="adminform" border="0">
                 <tr>
                     <td>
-                        <div class="form-wrapper">                                                     
+                        <div class="form-wrapper">
                             <div>
                                 <label for="book[total_widget]">{t}Total in widget home:{/t}</label>
                                 <input type="text" class="required" name="book_settings[total_widget]" value="{$configs['book_settings']['book_widget']|default:"4"}" />
                             </div>
-                            <br />                            
+                            <br />
                             <div>
                                 <label for="book[crop_width]">{t}Max file size:{/t}</label>
                                 <input type="text" class="required" id="name" name="book_settings[size_file]" value="{$configs['book_settings']['size_file']|default:"5000000"}" />
                             </div>
-                            <br /> 
+                            <br />
                             <div>
                                 <label for="book[time_last]">{t}Time of the last books most viewed (days):{/t}</label>
                                 <input type="text" class="required" id="name" name="book_settings[time_last]" value="{$configs['book_settings']['time_last']|default:"1"}" />
                             </div>
                             <br />
-                             
+
                         </div>
                     </td>
                     <td> <br/>
-                        <div class="help-block">
+                        <div class="onm-help-block">
 								<div class="title"><h4>{t}Definition values{/t}</h4></div>
                                 <div class="content">
                                     <ul>
                                         <li>{t} Use  total in widget books for define how many books can see in widgets in newspaper frontpage{/t}</li>
-                                        <li>{t} Book file size for define max size in bytes{/t}</li>                                       
+                                        <li>{t} Book file size for define max size in bytes{/t}</li>
                                          <li>{t}Used to define the frontpage books, the time range of the latest albums are the most viewed{/t}</li>
                                     </ul>
                                 </div>

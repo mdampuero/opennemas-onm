@@ -117,7 +117,7 @@
                                     <input type="text" id="site_name" name="site_name" value="{$configs['site_name']|default:""}">
                                 </td>
                                 <td rowspan=7>
-                                    <div class="help-block margin-left-1">
+                                    <div class="onm-help-block margin-left-1">
                                         <div class="title"><h4>{t}Basic parameters{/t}</h4></div>
                                         <div class="content">
                                             <dl>
@@ -219,7 +219,7 @@
                                     <textarea id="site_title" name="site_title" cols="50" rows="7">{$configs['site_title']|default:""}</textarea>
                                 </td>
                                 <td>
-                                    <div class="help-block margin-left-1">
+                                    <div class="onm-help-block margin-left-1">
                                         <div class="title"><h4>{t}Edit your Site title{/t}</h4></div>
                                         <div class="content">{t escape=off}You can edit here the site title. This one will be displayed on the browsers title bar.{/t}</div>
                                     </div>
@@ -233,7 +233,7 @@
                                     <textarea id="site_description" name="site_description" cols="50" rows="7">{$configs['site_description']|default:""}</textarea>
                                 </td>
                                 <td>
-                                    <div class="help-block margin-left-1">
+                                    <div class="onm-help-block margin-left-1">
                                         <div class="title"><h4>{t}Edit your Site description{/t}</h4></div>
                                         <div class="content">{t escape=off}You can edit here the site description. This will be used on meta tag description.{/t}</div>
                                     </div>
@@ -247,7 +247,7 @@
                                     <textarea id="site_keywords" name="site_keywords" cols="50" rows="5">{$configs['site_keywords']|default:""}</textarea>
                                 </td>
                                 <td>
-                                    <div class="help-block margin-left-1">
+                                    <div class="onm-help-block margin-left-1">
                                         <div class="title"><h4>{t}Edit your Site footer{/t}</h4></div>
                                         <div class="content">{t escape=off}You can edit here the site keywords. This will be used on meta tag keywords.{/t}</div>
                                     </div>
@@ -297,7 +297,7 @@
                                     {html_options name=site_language options=$languages selected=$configs['site_language']}
                                 </td>
                                 <td rowspan=4>
-                                    <div class="help-block margin-left-1">
+                                    <div class="onm-help-block margin-left-1">
                                         <div class="title"><h4>{t}Basic parameters{/t}</h4></div>
                                         <div class="content">
                                             <dl>
@@ -362,7 +362,7 @@
                                     <input type="text" id="facebook_page" name="facebook_page" value="{$configs['facebook_page']|default:""}">
                                 </td>
                                 <td rowspan=3>
-                                    <div class="help-block margin-left-1">
+                                    <div class="onm-help-block margin-left-1">
                                         <div class="title"><h4>{t}Customize Social Networks{/t}</h4></div>
                                         <div class="content">{t escape=off}If you have a <b>facebook page</b>, please complete the form with your facebook page url and Id.<br/>
                                                                 If you also have a <b>twitter page</b>, add your profile name on the form. <br/>Default will be set with Opennemas.{/t}</div>
@@ -403,7 +403,7 @@
                                     <input type="text" id="google_maps_api_key" name="google_maps_api_key" value="{$configs['google_maps_api_key']|default:""}">
                                 </td>
                                 <td rowspan=2>
-                                    <div class="help-block margin-left-1">
+                                    <div class="onm-help-block margin-left-1">
                                         <div class="title"><h4>{t}Get API keys{/t}</h4></div>
                                         <div class="content">
                                             {t escape=off}You can get your Google <strong>Maps</strong> API Key from <a href="http://code.google.com/apis/maps/signup.html"  target="_blank">Google maps sign up website</a>.{/t}<br>
@@ -437,7 +437,7 @@
                                     <input type="text" id="facebook_api_key" name="facebook[api_key]" value="{$configs['facebook']['api_key']|default:""}">
                                 </td>
                                 <td rowspan=2>
-                                    <div class="help-block margin-left-1">
+                                    <div class="onm-help-block margin-left-1">
                                         <div class="title"><h4>{t}Get API keys{/t}</h4></div>
                                         <div class="content">{t escape=off}You can get your Facebook App Keys from <a href="https://developers.facebook.com/apps">Facebook Developers website</a>.{/t}</div>
                                     </div>
@@ -469,7 +469,7 @@
                                     <input type="text" id="google_analytics_api_key" name="google_analytics[api_key]" value="{$configs['google_analytics']['api_key']|default:""}">
                                 </td>
                                 <td rowspan=2>
-                                    <div class="help-block margin-left-1">
+                                    <div class="onm-help-block margin-left-1">
                                         <div class="title"><h4>{t}Get API keys{/t}</h4></div>
                                         <div class="content">{t escape=off}You can get your Google Analytics Site ID from <a href="https://www.google.com/analytics/">GAnalytics site</a> under the General Overview list (should be something like UA-546457-3) you can left blank the base domain field.{/t}</div>
                                     </div>
@@ -500,7 +500,7 @@
                                     <input type="text" id="piwik_page_id" name="piwik[page_id]" value="{$configs['piwik']['page_id']|default:""}">
                                 </td>
                                 <td rowspan=2>
-                                    <div class="help-block margin-left-1">
+                                    <div class="onm-help-block margin-left-1">
                                         <div class="title"><h4>{t}Get API keys{/t}</h4></div>
                                         <div class="content">{t escape=off}You can get your Piwik Site information from <a href="https://piwik.openhost.es/admin">our Piwik server</a>.{/t}</div>
                                     </div>
@@ -539,7 +539,7 @@
                                     <input type="text" id="recaptcha_public_key" name="recaptcha[public_key]" value="{$configs['recaptcha']['public_key']|default:""}">
                                 </td>
                                 <td rowspan=2>
-                                    <div class="help-block margin-left-1">
+                                    <div class="onm-help-block margin-left-1">
                                         <div class="title"><h4>{t}Get API keys{/t}</h4></div>
                                         <div class="content">{t escape=off}You can get your recaptcha API Keys from <a href="https://www.google.com/recaptcha/admin/create">reCATPCHA website</a>.{/t}</div>
                                     </div>

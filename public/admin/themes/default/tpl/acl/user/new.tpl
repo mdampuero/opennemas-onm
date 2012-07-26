@@ -145,7 +145,7 @@ input[type="password"]{
                                 value="{$user->name}" class="required"  size="50"/>
                         </td>
                         <td rowspan=5>
-                            <div class="help-block margin-left-1">
+                            <div class="onm-help-block margin-left-1">
                                 <div class="title"><h4>{t}User information{/t}</h4></div>
                                 <div class="content">
                                     {t escape=off}Please complete the user information by filling the aside form.{/t}

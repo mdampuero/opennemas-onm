@@ -50,7 +50,7 @@
                                value="{$configs['opinion_settings']['total_director']|default:"1"}" />
                     </td>
                     <td rowspan="3">
-                        <div class="help-block margin-left-1">
+                        <div class="onm-help-block margin-left-1">
                             <div class="title"><h4>{t}Opinion settings{/t}</h4></div>
                             <div class="content">
                                 <dl>

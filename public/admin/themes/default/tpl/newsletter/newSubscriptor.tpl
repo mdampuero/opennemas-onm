@@ -72,7 +72,7 @@
                         value="{$user->email}" class="required validate-email" />
                 </td>
                 <td rowspan="6">
-                    <div class="help-block margin-left-1">
+                    <div class="onm-help-block margin-left-1">
                         <div class="title"><h4>{t}Basic parameters{/t}</h4></div>
                         <div class="content">
                             <dl>

@@ -126,7 +126,7 @@ jQuery(document).ready(function($) {
                                 <textarea id="domains" name="domains" cols="50" rows="5">{$instance->domains}</textarea>
                             </td>
                             <td>
-                                <div class="help-block margin-left-1 red">
+                                <div class="onm-help-block margin-left-1 red">
                                     <div class="title"><h4>List of domains</h4></div>
                                     <div class="content">{t escape=off}List of domains separated by commas. You can use wildcards, i.e. *.example.com{/t}</div>
                                 </div>
@@ -284,7 +284,7 @@ jQuery(document).ready(function($) {
 
                             </td>
                             <td>
-                                <div class="help-block margin-left-1 red">
+                                <div class="onm-help-block margin-left-1 red">
                                     <div class="title"><h4>Alphanumeric, without spaces.</h4></div>
                                     <div class="content">{t escape=off}Used for cache prefixes and internal ONM operations{/t}</div>
                                 </div>
@@ -362,7 +362,7 @@ jQuery(document).ready(function($) {
                                 </select>
                             </td>
                             <td rowspan="5" valign=top>
-                                <div class="help-block margin-left-1 red">
+                                <div class="onm-help-block margin-left-1 red">
                                     <div class="title"><h4>Database connection.</h4></div>
                                     <div class="content">{t escape=off}Please doble check your database settings, those will be used as the default Database data access for this instance.{/t}</div>
                                 </div>
@@ -506,7 +506,7 @@ jQuery(document).ready(function($) {
                                     <input type="text" id="google_maps_api_key" name="google_maps_api_key" value="{$configs['google_maps_api_key']|default:""}">
                                 </td>
                                 <td rowspan=2 valign="top">
-                                    <div class="help-block margin-left-1">
+                                    <div class="onm-help-block margin-left-1">
                                         <div class="title"><h4>{t}Get API keys{/t}</h4></div>
                                         <div class="content">{t escape=off}You can get your Google Maps API Key from <a href="http://code.google.com/intl/gl-GL/apis/maps/signup.html">Google maps sign up website</a>.{/t}</div>
                                     </div>
@@ -537,7 +537,7 @@ jQuery(document).ready(function($) {
                                     <input type="text" id="facebook_api_key" name="facebook[api_key]" value="{$configs['facebook']['api_key']|default:""}">
                                 </td>
                                 <td rowspan=2>
-                                    <div class="help-block margin-left-1">
+                                    <div class="onm-help-block margin-left-1">
                                         <div class="title"><h4>{t}Get API keys{/t}</h4></div>
                                         <div class="content">{t escape=off}You can get your Facebook App Keys from <a href="https://developers.facebook.com/apps">Facebook Developers website</a>.{/t}</div>
                                     </div>
@@ -569,7 +569,7 @@ jQuery(document).ready(function($) {
                                     <input type="text" id="google_analytics_api_key" name="google_analytics[api_key]" value="{$configs['google_analytics']['api_key']|default:""}">
                                 </td>
                                 <td rowspan=2 valign="top">
-                                    <div class="help-block margin-left-1">
+                                    <div class="onm-help-block margin-left-1">
                                         <div class="title"><h4>{t}Get API keys{/t}</h4></div>
                                         <div class="content">{t escape=off}You can get your Google Analytics Site ID from <a href="https://www.google.com/analytics/">GAnalytics site</a> under the General Overview list (should be something like UA-546457-3) you can left blank the base domain field.{/t}</div>
                                     </div>
@@ -600,7 +600,7 @@ jQuery(document).ready(function($) {
                                     <input type="text" id="piwik_page_id" name="piwik[page_id]" value="{$configs['piwik']['page_id']|default:""}">
                                 </td>
                                 <td rowspan=2 valign="top">
-                                    <div class="help-block margin-left-1">
+                                    <div class="onm-help-block margin-left-1">
                                         <div class="title"><h4>{t}Get API keys{/t}</h4></div>
                                         <div class="content">{t escape=off}You can get your Piwik Site information from <a href="https://piwik.openhost.es/admin">our Piwik server</a>.{/t}</div>
                                     </div>
@@ -631,7 +631,7 @@ jQuery(document).ready(function($) {
                                     <input type="text" id="recaptcha_public_key" name="recaptcha[public_key]" value="{$configs['recaptcha']['public_key']|default:""}">
                                 </td>
                                 <td rowspan=2 valign="top">
-                                    <div class="help-block margin-left-1">
+                                    <div class="onm-help-block margin-left-1">
                                         <div class="title"><h4>{t}Get API keys{/t}</h4></div>
                                         <div class="content">{t escape=off}You can get your recaptcha API Keys from <a href="https://www.google.com/recaptcha/admin/create">reCATPCHA website</a>.{/t}</div>
                                     </div>
@@ -664,7 +664,7 @@ jQuery(document).ready(function($) {
                                 {html_checkboxes name='activated_modules' values=$available_modules output=$available_modules selected=$configs['activated_modules']  separator='<br />'}
                             </td>
                             <td>
-                                <div class="help-block warning margin-left-1">
+                                <div class="onm-help-block warning margin-left-1">
                                     <div class="title"><h4>{t}Dragons Ahead!{/t}</h4></div>
                                     <div class="content">{t escape=off}This section is experimental and could not work as espected{/t}</div>
                                 </div>
