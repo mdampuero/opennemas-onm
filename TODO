@@ -98,11 +98,20 @@ Polls
 
 Advertisement
 -------------
-- Review AdPosition.js script if it could be deleted
 - Review pagination and filtering
-- Frontpage provider
 
 Opinion
 -------
 - Review redirections after update an opnion (search, ...)
 - Related provider
+
+Opinion Authors
+---------------
+- Implement avatar upload for authors
+- Batch actions
+
+Articles
+--------
+- Toggle available action
+- Batch actions
+- Refactorice show method

@@ -2349,3 +2349,23 @@ progress {
 @-moz-document url-prefix(http://) {
   progress {width:60px; height:10px;}
 }
+
+
+/* =============================================================================
+   Author management rules
+   ========================================================================== */
+.author-photos {
+  width:100%;
+}
+.author-photos .thumbnail {
+  display:inline-block;
+  background:White;
+  margin-right:5px;
+}
+  .author-photos .thumbnail img {
+      max-height:100px;
+  }
+  .author-photos .thumbnail .delete {
+    margin-top:5px;
+    float: right;
+  }

@@ -58,27 +58,3 @@ function get_metadata_imagen(description,id)
    ajax.send(null);
 }
 
-function del_photo(id)
-{
-    new Ajax.Request(
-        "author.php?action=check_img_author&id_img="+id+"",
-        {
-            method: 'get',
-
-            onSuccess: function(transport) {
-                if( transport.responseText =='no' ){
-                    if(confirm('¿Seguro que desea eliminar la foto?')){
-                        $('del_img').value =$('del_img').value + ","+ id;
-                        var li = $(id);
-
-                        li.parentNode.removeChild(li);
-
-                    }
-                }else{
-                    alert('No se puede eliminar, está asociado a alguna opinion. ');
-                }
-            }
-        }
-    );
-}
-

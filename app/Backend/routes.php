@@ -1552,6 +1552,62 @@ $adminRoutes->add(
     '/admin'
 );
 
+// Article controller routes
+$adminRoutes->add(
+    'admin_articles',
+    new Route(
+        '/articles',
+        array(
+            '_controller' => 'Backend:Controllers:ArticlesController:list',
+        )
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_article_create',
+    new Route(
+        '/article/create',
+        array(
+            '_controller' => 'Backend:Controllers:ArticlesController:create',
+        )
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_article_show',
+    new Route(
+        '/article/{id}/show',
+        array(
+            '_controller' => 'Backend:Controllers:ArticlesController:show',
+        )
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_article_delete',
+    new Route(
+        '/article/{id}/delete',
+        array(
+            '_controller' => 'Backend:Controllers:ArticlesController:delete',
+        )
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_article_update',
+    new Route(
+        '/article/{id}/update',
+        array(
+            '_controller' => 'Backend:Controllers:ArticlesController:update',
+        )
+    ),
+    '/admin'
+);
+
 // Opinion controller routes
 $adminRoutes->add(
     'admin_opinions',

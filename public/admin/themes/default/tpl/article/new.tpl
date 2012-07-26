@@ -9,33 +9,23 @@
     {script_tag src="/jquery-onm/jquery.article.js"}
     {script_tag src="/utilsGallery.js"}
     {script_tag src="/swfobject.js"}
-
 {/block}
 
 {block name="header-css" append}
-    {css_tag href="/jquery/colorbox.css" media="screen"}
-    <style type="text/css">
-    label {
-        display:block;
-        color:#666;
-        text-transform:uppercase;
-    }
-    .utilities-conf label {
-        text-transform:none;
-    }
-
+{css_tag href="/jquery/colorbox.css" media="screen"}
+<style type="text/css">
     div#content-provider .content-provider-block .content-provider-element {
-margin: 5px;
-border: 1px solid #AAA;
-padding: 5px;
-background:
-white;
+        margin: 5px;
+        border: 1px solid #AAA;
+        padding: 5px;
+        background:
+        white;
     }
     .content-provider-element .content-action-buttons,
     .content-provider-element input[type="checkbox"] {
         display:none;
     }
-    </style>
+</style>
 {/block}
 
 {block name="footer-js" append}
@@ -78,7 +68,48 @@ white;
 
 {block name="content"}
 <form action="{$smarty.server.PHP_SELF}" method="POST" name="formulario" id="formulario">
-    {include file="article/partials/_menu.tpl"}
+    <div class="top-action-bar">
+        <div class="wrapper-content">
+            <div class="title"><h2>{t}Article manager{/t} :: {if isset($article->id)}{t}Creating new article{/t}{else}{t}Editing article{/t}{/if}</h2></div>
+            <ul class="old-button">
+                {if ($article->content_status eq 0) && ($article->available eq 1)}
+                <li>
+                    <a href="#" class="admin_add" onClick="sendFormValidate(this, '_self', 'restore', '{$article->id|default:""}', 'formulario');" onmouseover="return escape('Recuperar');" name="submit_mult" value="noFrontpage">
+                        <img src="{$params.IMAGE_DIR}archive_no.png" alt="{t}Restore{/t}"><br />{t}Restore{/t}
+                    </a>
+                </li>
+                {/if}
+
+                {acl isAllowed="ARTICLE_UPDATE"}
+                <li>
+                    <a href="#" class="admin_add" id="save-button" onClick="save_related_contents();sendFormValidate(this, '_self', 'validate', '{$article->id|default:""}', 'formulario');" title="{t}Save and continue{/t}">
+                        <img src="{$params.IMAGE_DIR}save_and_continue.png" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
+                    </a>
+                </li>
+                 {/acl}
+                {acl isAllowed="ARTICLE_UPDATE"}
+                <li>
+                    <a href="#" class="admin_add" id="validate-button" onClick="save_related_contents();sendFormValidate(this, '_self', 'update', '{$article->id|default:""}', 'formulario');" id="button_save">
+                        <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save and exit{/t}" ><br />{t}Save and exit{/t}
+                    </a>
+                </li>
+                {/acl}
+
+                <li>
+                    <a href="#" accesskey="P" id="button_preview">
+                        <img src="{$params.IMAGE_DIR}preview.png" alt="{t}Preview{/t}" /><br />{t}Preview{/t}
+                    </a>
+                </li>
+                <li class="separator"></li>
+                <li>
+                    <a href="{url name=admin_articles category=$category page=$page}" title="{t}Cancel{/t}">
+                        <img src="{$params.IMAGE_DIR}previous.png" alt="{t}Cancel{/t}" ><br />{t}Go back{/t}
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
     <div class="wrapper-content">
         {render_messages}
         <div id="article-form" class="tabs">

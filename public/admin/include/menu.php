@@ -48,7 +48,7 @@ $menuXml = '<?xml version="1.0"?>
             privilege="ARTICLE_PENDINGS"
             title="'.htmlspecialchars(_("Articles"), ENT_QUOTES).'"
             id="article_manager"
-            link="/admin/article.php?action=list_pendientes"
+            link="'.url('admin_articles').'"
         />
         <submenu module_name="OPINION_MANAGER"
             privilege="OPINION_ADMIN"
