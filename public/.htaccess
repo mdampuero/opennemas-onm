@@ -694,10 +694,10 @@ Options -Indexes
     RewriteRule ^cartas.html?$ /cartas-al-director/ [R=301,L,NC]
     RewriteRule ^letters?$ /cartas-al-director/ [R=301,L,NC]
     RewriteRule ^letter/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/(.*)/([0-9]+).html?$ controllers/letter.php?action=show&id=$5&slug=$4 [L,NC]
-     #http://www.cronicasdelaemigracion.com/asturias/2012-04-09/16046/
-    RewriteRule ^([a-z]+)/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/([0-9]+)/?$ hemeroteca/$2-$3-$4/$1.html [R=301,L,NC]
     #/hemeroteca/galicia/2009-01-06/
-    RewriteRule ^hemeroteca/([a-z]+)/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/(.*)?$ hemeroteca/$2-$3-$4/$1.html [R=301,L,NC]
+    RewriteRule ^([a-z]+)/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/([0-9]+)/?$ hemeroteca/$2-$3-$4/$1.html [R=301,L,NC]
+    #http://www.cronicasdelaemigracion.com/asturias/2012-04-09/16046/
+    RewriteRule ^hemeroteca/([a-z]+)/([0-9]{4})-([0-1][0-9])-([0-3][0-9])(.*)?$ hemeroteca/$2-$3-$4/$1.html [R=301,L,NC]
     #/articulo/imprimir/ayuntamiento-gijon-aportara-000-euros/2729.html
     RewriteRule ^articulo/imprimir/([a-z0-9\-_]+)/([0-9]+).html$ controllers/article.php?action=print&article_id=$2&category_name=cronicas [L,NC]
 
