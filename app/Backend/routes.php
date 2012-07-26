@@ -1773,6 +1773,17 @@ $adminRoutes->add(
     '/admin'
 );
 
+$adminRoutes->add(
+    'admin_opinion_author_delete',
+    new Route(
+        '/opinion/author/{id}/delete',
+        array(
+            '_controller' => 'Backend:Controllers:OpinionAuthorsController:delete',
+        )
+    ),
+    '/admin'
+);
+
 // Comments controller routes
 $adminRoutes->add(
     'admin_comments',

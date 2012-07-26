@@ -142,43 +142,41 @@ class Author
                 WHERE pk_author=?";
 
         $values = array(
-            $data['name'], $data['blog'],
-            $data['politics'], $data['condition'],
+            $data['name'],
+            $data['blog'],
+            $data['politics'],
+            $data['condition'],
             serialize($data['params']),
             $data['id']
         );
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            Application::logDatabaseError();
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        if ($rs === false) {
+            \Application::logDatabaseError();
 
-            return;
+            return false;
         }
 
         $this->pk_author = $data['id'];
+return true;
+        // Drop image assignment
+        $sql = "DELETE FROM author_imgs WHERE fk_author=?";
+        $GLOBALS['application']->conn->Execute($sql, array($this->id));
 
-        //tabla author_imgs
-        $titles = $data['titles'];
-        if ($titles) {
-            foreach ($titles as $atid => $des) {
-                $sql = "INSERT INTO author_imgs
-                        (`fk_author`, `fk_photo`,`path_img`) VALUES ( ?,?,?)";
-                $values = array( $this->pk_author, $atid, $des );
+        foreach ($data['photos'] as $index => $photo) {
+            $sql = "INSERT INTO author_imgs
+                    (`fk_author`, `fk_photo`,`path_img`) VALUES ( ?,?,?)";
+            $values = array($this->pk_author, $index, $photo );
 
-                $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-                if (!$rs) {
-                    Application::logDatabaseError();
-                }
+            $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+            if (!$rs) {
+                \Application::logDatabaseError();
+
+                return false;
             }
         }
 
-        if ($data['del_img']) {
-            $tok = strtok($data['del_img'], ",");
-            while (($tok !== false) AND ($tok !=" ")) {
-                $sql = "DELETE FROM author_imgs WHERE pk_img=".$tok;
-                $GLOBALS['application']->conn->Execute($sql);
-                $tok = strtok(",");
-            }
-        }
+        return true;
     }
 
     /**
@@ -460,6 +458,7 @@ class Author
             $i++;
             $rs->MoveNext();
         }
+        $this->photos = $photos;
 
         return $photos;
     }
@@ -471,12 +470,12 @@ class Author
      *
      * @return int the number of photos
      **/
-    public static function count_author_photos($id)
+    public static function count_author_photos($id = null)
     {
-        $sql = 'SELECT COUNT(*) FROM author_imgs WHERE fk_author = '.($id);
-        $rs  = $GLOBALS['application']->conn->Execute($sql);
+        $sql = 'SELECT COUNT(*) FROM author_imgs WHERE fk_author = ?';
+        $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
 
-        return($rs->fields['COUNT(*)']);
+        return $rs->fields['COUNT(*)'];
     }
 
 }

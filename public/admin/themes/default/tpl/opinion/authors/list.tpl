@@ -58,7 +58,7 @@
                             value="{$author->pk_author}" />
                     </td>
                     <td>
-                        {$author->name}&nbsp;&nbsp;{*if $author->fk_user != 0}(usuario){/if*}
+                        {$author->name}
                     </td>
                     <td>
                         {$author->condition}
@@ -80,10 +80,10 @@
 								</a>
                             {/acl}
                             {acl isAllowed="AUTHOR_DELETE"}
-								<a class="del btn btn-danger" data-controls-modal="modal-from-dom"
-                                   data-id="{url name=admin_opinion_authors_delete id=$author->pk_author}"
+								<a class="del btn btn-danger"
+                                   data-url="{url name=admin_opinion_author_delete id=$author->pk_author}"
                                    data-title="{$author->name|capitalize}"
-                                   href="{url name=admin_opinion_authors_delete id=$author->pk_author}">
+                                   href="{url name=admin_opinion_author_delete id=$author->pk_author}">
                                    <i class="icon-trash icon-white"></i>
 								</a>
                             {/acl}

@@ -19,40 +19,28 @@ jQuery("#modal-author-delete").modal({
     keyboard: true //Can close on escape
 });
 
-jQuery('.del').click(function(e) {
-     jQuery('#modal-author-delete .modal-body span').html( jQuery(this).data('title') );
-     jQuery.ajax({
-        url:  "{$smarty.server.SCRIPT_NAME}",
-        type: "GET",
-        data: { action:"getOpinions", id: jQuery(this).data("id") },
-        success: function(response){
-            if(response != '') {
-                jQuery('#modal-author-delete p').append(response);
-            }
-        }
-    });
-    //Sets up the modal
-    jQuery("#modal-author-delete ").modal('show');
-    jQuery("body").data("selected-for-del", jQuery(this).data("id"));
+jQuery('.del').click(function(e, ui) {
     e.preventDefault();
+    //Sets up the modal
+    jQuery("body").data("selected-for-del", jQuery(this).data("url"));
+    jQuery('#modal-author-delete .modal-body span').html( jQuery(this).data('title') );
+    jQuery("#modal-author-delete ").modal('show');
 });
 
-jQuery('#modal-author-delete a.btn.yes').on('click', function(){
-    var delId = jQuery("body").data("selected-for-del");
-    if(delId) {
+jQuery('#modal-author-delete a.btn.yes').on('click', function(e, ui){
+    e.preventDefault();
+    var url = jQuery("body").data("selected-for-del");
+    if (url) {
         jQuery.ajax({
-            url:  "{$smarty.server.SCRIPT_NAME}",
-            type: "POST",
-            data: { action:"delete", id:delId },
+            url:  url,
             success: function(){
                 location.reload();
             }
         });
     }
-    e.preventDefault();
 });
 
-jQuery('#modal-author-delete a.btn.no').on('click', function(e){
+jQuery('#modal-author-delete a.btn.no').on('click', function(e, ui){
     jQuery("#modal-author-delete").modal('hide');
     e.preventDefault();
 });
