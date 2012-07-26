@@ -77,4 +77,42 @@ class Bootstrap extends ModuleBootstrap
 
     }
 
+    public function initI18nSystem()
+    {
+        $timezone = s::get('time_zone');
+        if (isset($timezone)) {
+            $availableTimezones = \DateTimeZone::listIdentifiers();
+            date_default_timezone_set($availableTimezones[$timezone]);
+        }
+
+        /* Set internal character encoding to UTF-8 */
+        mb_internal_encoding("UTF-8");
+
+        $availableLanguages = \Application::getAvailableLanguages();
+        $forceLanguage = filter_input(INPUT_GET,
+            'language', FILTER_SANITIZE_STRING);
+
+        if ($forceLanguage !== null
+            && in_array($forceLanguage, array_keys($availableLanguages))
+        ) {
+            \Application::$language = $forceLanguage;
+        } else {
+            \Application::$language = s::get('site_language');
+        }
+
+        $locale = \Application::$language.".UTF-8";
+        $domain = 'messages';
+
+        $localeDir = SITE_ADMIN_PATH.DS.'locale'.DS;
+
+        if (isset($_GET["locale"])) {
+            $locale = $_GET["locale"].'.UTF-8';
+        }
+
+        putenv("LC_MESSAGES=$locale");
+        setlocale(LC_ALL, $locale);
+        bindtextdomain($domain, $localeDir);
+        textdomain($domain);
+    }
+
 } // END class Bootstrap

@@ -115,36 +115,33 @@ class Application
         /* Set internal character encoding to UTF-8 */
         mb_internal_encoding("UTF-8");
 
-        $availableLanguages = self::getAvailableLanguages();
-        $forceLanguage = filter_input(INPUT_GET,
-            'language', FILTER_SANITIZE_STRING);
+        if (!self::isBackend()) {
+            $availableLanguages = self::getAvailableLanguages();
+            $forceLanguage = filter_input(INPUT_GET,
+                'language', FILTER_SANITIZE_STRING);
 
-        if ($forceLanguage !== null
-            && in_array($forceLanguage, array_keys($availableLanguages))
-        ) {
-            self::$language = $forceLanguage;
-        } else {
-            self::$language = s::get('site_language');
-        }
+            if ($forceLanguage !== null
+                && in_array($forceLanguage, array_keys($availableLanguages))
+            ) {
+                self::$language = $forceLanguage;
+            } else {
+                self::$language = s::get('site_language');
+            }
 
-        $locale = self::$language.".UTF-8";
-        $domain = 'messages';
+            $locale = self::$language.".UTF-8";
+            $domain = 'messages';
 
-        if (self::isBackend()) {
-            $localeDir = SITE_ADMIN_PATH.DS.'locale'.DS;
-        } else {
             $localeDir = SITE_PATH.DS.'locale'.DS;
+
+            if (isset($_GET["locale"])) {
+                $locale = $_GET["locale"].'.UTF-8';
+            }
+
+            putenv("LC_MESSAGES=$locale");
+            setlocale(LC_ALL, $locale);
+            bindtextdomain($domain, $localeDir);
+            textdomain($domain);
         }
-
-        if (isset($_GET["locale"])) {
-            $locale = $_GET["locale"].'.UTF-8';
-        }
-
-        putenv("LC_MESSAGES=$locale");
-        setlocale(LC_ALL, $locale);
-        bindtextdomain($domain, $localeDir);
-        textdomain($domain);
-
     }
 
     /**
