@@ -463,6 +463,9 @@ Options -Indexes
     RewriteRule ^agenda/(.*)$   http://agenda.cronicasdelaemigracion.com/$1 [R=301,L,NC]
     RewriteRule ^agenda_colenctividad/(.*)$   http://agenda.cronicasdelaemigracion.com/$1 [R=301,L,NC]
 
+    # provisional sermos
+    RewriteRule ^media/prepro-sermosgaliza/(.*)$ http://www.sermosgaliza.com/media/sermosgaliza/$1 [R=301,L]
+
     #--------------------------------------------------------
     #Redirection from old nuevatribuna.es
 
