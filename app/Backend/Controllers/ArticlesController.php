@@ -74,15 +74,17 @@ class ArticlesController extends Controller
         }
 
         $page   =  $request->query->getDigits('page', 1);
-        $author =  $request->query->filter('author', 0, FILTER_VALIDATE_INT);
+        $title =  $request->query->filter('title', 0, FILTER_VALIDATE_INT);
         $status =  (int) $request->query->filter('status', -1, FILTER_VALIDATE_INT);
 
         $itemsPerPage = s::get('items_per_page');
 
         $filterSQL = array('in_litter != 1');
-        $filterStatus = $filterAuthor = '';
         if ($status >= 0) {
             $filterSQL []= ' content_status='.$status;
+        }
+        if (!empty($title)) {
+            $filterSQL []= ' title LIKE \'%'.$title.'%\'';
         }
 
         $filterSQL = implode(' AND ', $filterSQL);
@@ -108,6 +110,7 @@ class ArticlesController extends Controller
             'totalItems'  => $countArticles,
             'fileName'    => $this->generateUrl('admin_articles', array(
                 'status' => $status,
+                'title'  => $title
             )).'&page=%d',
         ));
 
@@ -128,10 +131,11 @@ class ArticlesController extends Controller
         }
 
         return $this->render('article/list.tpl', array(
-            'articles' => $articles,
-            'page'     => $page,
-            'status'   => $status,
-            'pagination' => $pagination,
+            'articles'    => $articles,
+            'page'        => $page,
+            'status'      => $status,
+            'title' => $title,
+            'pagination'  => $pagination,
         ));
     }
 
@@ -473,6 +477,39 @@ class ArticlesController extends Controller
             }
         }
 
+    }
+
+    /**
+     * Change available status for one article given its id
+     *
+     * @return Response the response object
+     **/
+    public function toggleAvailableAction(Request $request)
+    {
+        $this->checkAclOrForward('OPINION_AVAILABLE');
+
+        $id       = $request->query->getDigits('id', 0);
+        $status   = $request->query->getDigits('status', 0);
+        $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
+        $page     = $request->query->getDigits('page', 1);
+
+        $article = new \Article($id);
+
+        if (is_null($article->id)) {
+            m::add(sprintf(_('Unable to find an article with the id "%d"'), $id), m::ERROR);
+        } else {
+            $article->set_available($status, $_SESSION['userid']);
+            m::add(sprintf(_('Successfully changed availability for the article "%s"'), $article->title), m::SUCCESS);
+        }
+
+        return $this->redirect($this->generateUrl(
+            'admin_articles',
+            array(
+                'category' => $category,
+                'page'     => $page,
+                'status'   => $status,
+            )
+        ));
     }
 
     /**

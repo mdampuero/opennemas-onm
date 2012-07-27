@@ -2,18 +2,6 @@
 //Funciones llamadas en article.tpl
 //
 
-/**
- * Eliminar desde botonera las cachés
- */
-function clearcache(category) {
-	new Ajax.Request('controllers/tpl_manager/refresh_caches.php?category=' + encodeURIComponent(category), {
-		onSuccess: function(transport) {
-			$('warnings-validation').update(transport.responseText);
-			new Effect.Highlight( $('warnings-validation') );
-		}
-	});
-}
-
 
 //////////////////////////// CUADROS IMAGEN Y VIDEO //////////////////////////////////////////////////////////
 
@@ -59,13 +47,6 @@ function  get_others_articles(category,page){
 }
 
 //////////////////////////// CONTENIDOS RELACIONADOS //////////////////////////////////////////////////////////
-
-// make sortable las listas para poder ordenarlas
-function mover(){
-    Sortable.create('thelist2',{constraint: 'false',scroll:'scroll-container2'});
-    Sortable.create('thelist2int',{constraint: 'false',scroll:'scroll-container2int'});
-
-}
 
 // Recoge los li de las listas ver portada, ver interior y los mete en input de relacionados portada o interior
 function recolectar() {
@@ -307,19 +288,6 @@ function  get_div_contents(id,content,category,page)
             Effect.Appear(div,  { duration: 0.1 });
 }
     });
-}
-
-//Muestra el div adecuado y oculta el resto.
-function  divs_hide(mydiv)
-{
-	var divs=$$('div.div_lists');
-	for (var i=0;i < divs.length;i++) {
-		if(divs[i].id!=mydiv){
-			Effect.DropOut(divs[i], { duration: 0.2 });
-		}
-	 }
-	 Effect.Appear(mydiv,  { duration: 0.1 });
-	 return false;
 }
 
 function delete_article(id,category,page){

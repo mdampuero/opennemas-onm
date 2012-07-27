@@ -1608,6 +1608,17 @@ $adminRoutes->add(
     '/admin'
 );
 
+$adminRoutes->add(
+    'admin_article_toggleavailable',
+    new Route(
+        '/article/{id}/toggle-available',
+        array(
+            '_controller' => 'Backend:Controllers:ArticlesController:toggleAvailable',
+        )
+    ),
+    '/admin'
+);
+
 // Opinion controller routes
 $adminRoutes->add(
     'admin_opinions',

@@ -52,6 +52,7 @@
         <table class="adminheading">
             <tr>
                 <th align="right">
+                    <input type="text" placeholder="{t}Search by title:{/t}" name="title" value="{$title}"/>
                     {t}Status:{/t}
                     <select name="status">
                         <option value="-1" {if $status === -1} selected {/if}> {t}-- All --{/t} </option>
@@ -104,14 +105,13 @@
                     </td>
                     <td class="center">
                         {if !empty($article->category) && $article->category != 20}
-                        <small>available_status</small>
                         {acl isAllowed="ARTICLE_AVAILABLE"}
                         {if $article->content_status == 1}
-                            <a href="{url name=admin_article_toggleavailable id=$article->id status=0  status=$status page=$page}" title="Publicado">
+                            <a href="{url name=admin_article_toggleavailable id=$article->id status=0 category=$category status=$status page=$page}" title="Publicado">
                                 <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" />
                             </a>
                         {else}
-                            <a href="{url name=admin_article_toggleavailable id=$article->id status=1  status=$status page=$page}" title="Pendiente">
+                            <a href="{url name=admin_article_toggleavailable id=$article->id status=1  category=$category status=$status page=$page}" title="Pendiente">
                                 <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" />
                             </a>
                         {/if}
