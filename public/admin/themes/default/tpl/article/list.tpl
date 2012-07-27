@@ -37,6 +37,9 @@
     </div>
 
     <div class="wrapper-content">
+
+        {render_messages}
+
         <ul class="pills" style="margin-bottom:28px;">
             {acl hasCategoryAccess=0}
             <li>

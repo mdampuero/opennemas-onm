@@ -45,7 +45,12 @@
                 title_int_element.val(title.val());
             };
             fill_tags(title.val() + " " + category.data('name') + " " + metatags.val(), '#metadata');
-        })
+        });
+        $('#formulario').on('submit', function(){
+            save_related_contents();
+            log(validateForm('formulario'));
+            return validateForm('formulario');
+        });
     });
     </script>
 
@@ -67,31 +72,21 @@
 {/block}
 
 {block name="content"}
-<form action="{$smarty.server.PHP_SELF}" method="POST" name="formulario" id="formulario">
+<form action="{if isset($article->id)}{url name=admin_article_update id=$article->id}{else}{url name=admin_article_create}{/if}" method="POST" name="formulario" id="formulario">
     <div class="top-action-bar">
         <div class="wrapper-content">
             <div class="title"><h2>{t}Article manager{/t} :: {if isset($article->id)}{t}Creating new article{/t}{else}{t}Editing article{/t}{/if}</h2></div>
             <ul class="old-button">
-                {if ($article->content_status eq 0) && ($article->available eq 1)}
-                <li>
-                    <a href="#" class="admin_add" onClick="sendFormValidate(this, '_self', 'restore', '{$article->id|default:""}', 'formulario');" onmouseover="return escape('Recuperar');" name="submit_mult" value="noFrontpage">
-                        <img src="{$params.IMAGE_DIR}archive_no.png" alt="{t}Restore{/t}"><br />{t}Restore{/t}
-                    </a>
-                </li>
-                {/if}
-
                 {acl isAllowed="ARTICLE_UPDATE"}
                 <li>
-                    <a href="#" class="admin_add" id="save-button" onClick="save_related_contents();sendFormValidate(this, '_self', 'validate', '{$article->id|default:""}', 'formulario');" title="{t}Save and continue{/t}">
+                    <button type="submit" name="continue" value="1">
                         <img src="{$params.IMAGE_DIR}save_and_continue.png" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
-                    </a>
+                    </button>
                 </li>
-                 {/acl}
-                {acl isAllowed="ARTICLE_UPDATE"}
                 <li>
-                    <a href="#" class="admin_add" id="validate-button" onClick="save_related_contents();sendFormValidate(this, '_self', 'update', '{$article->id|default:""}', 'formulario');" id="button_save">
+                    <button type="submit">
                         <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save and exit{/t}" ><br />{t}Save and exit{/t}
-                    </a>
+                    </button>
                 </li>
                 {/acl}
 
@@ -111,7 +106,9 @@
     </div>
 
     <div class="wrapper-content">
+
         {render_messages}
+
         <div id="article-form" class="tabs">
 
             <ul>
@@ -177,7 +174,7 @@
                                             {/acl}
                                             {acl isAllowed="ARTICLE_HOME"}
                                                 {t}Suggested for frontpage:{/t}
-                                                <input type="checkbox" name="frontpage" id="frontpage" {if (isset($article) && $article->frontpage eq '1')} checked {/if} />
+                                                <input type="checkbox" name="frontpage" id="frontpage" {if (isset($article) && $article->frontpage eq '1')} checked {/if} value=1/>
                                             {/acl}
                                         {else} {* else if not list_hemeroteca *}
                                             {t}Archived:{/t}
