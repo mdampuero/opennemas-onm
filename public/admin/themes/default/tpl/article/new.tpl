@@ -48,7 +48,6 @@
         });
         $('#formulario').on('submit', function(){
             save_related_contents();
-            log(validateForm('formulario'));
             return validateForm('formulario');
         });
     });

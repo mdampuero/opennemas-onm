@@ -157,7 +157,7 @@ class ArticlesController extends Controller
 
             $data = array(
                 'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
-                'title_int'      => $request->request->filter('withComment', '', FILTER_SANITIZE_STRING),
+                'title_int'      => $request->request->filter('title_int', '', FILTER_SANITIZE_STRING),
                 'content_status'                 => (empty($contentStatus)) ? 0 : 1,
                 'promoted_to_category_frontpage' => (empty($inhome)) ? 0 : 1,
                 'with_comment'                   => (empty($withComment)) ? 0 : 1,
@@ -215,14 +215,14 @@ class ArticlesController extends Controller
             if ($continue) {
 
                 return $this->redirect($this->generateUrl(
-                    'admin_articles',
-                    array('category' => $data['category'])
+                    'admin_article_show',
+                    array('id' => $article->id)
                 ));
             } else {
 
                 return $this->redirect($this->generateUrl(
-                    'admin_article_show',
-                    array('id' => $article->id)
+                    'admin_articles',
+                    array('status' => $data['content_status'])
                 ));
             }
         } else {
@@ -376,14 +376,14 @@ class ArticlesController extends Controller
 
         $id = $request->query->getDigits('id');
 
-        $opinion = new \Opinion($id);
+        $article = new \Article($id);
 
-        if ($opinion->id != null) {
+        if ($article->id != null) {
             if (!\Acl::isAdmin()
                 && !\Acl::check('CONTENT_OTHER_UPDATE')
-                && $opinionCheck->fk_user != $_SESSION['userid']
+                && $article->fk_user != $_SESSION['userid']
             ) {
-                m::add(_("You can't modify this opinion because you don't have enought privileges.") );
+                m::add(_("You can't modify this article because you don't have enought privileges.") );
 
                 return $this->redirect($this->generateUrl('admin_articles'));
             }
@@ -399,7 +399,7 @@ class ArticlesController extends Controller
             $data = array(
                 'id'             => $id,
                 'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
-                'title_int'      => $request->request->filter('withComment', '', FILTER_SANITIZE_STRING),
+                'title_int'      => $request->request->filter('title_int', '', FILTER_SANITIZE_STRING),
                 'content_status'                 => (empty($contentStatus)) ? 0 : 1,
                 'promoted_to_category_frontpage' => (empty($inhome)) ? 0 : 1,
                 'with_comment'                   => (empty($withComment)) ? 0 : 1,
@@ -462,7 +462,7 @@ class ArticlesController extends Controller
             if ($continue) {
                 return $this->redirect($this->generateUrl(
                     'admin_article_show',
-                    array('id' => $opinion->id)
+                    array('id' => $article->id)
                 ));
             } else {
 
@@ -473,6 +473,20 @@ class ArticlesController extends Controller
             }
         }
 
+    }
+
+    /**
+     * Previews an article in frontend by sending the article info by POST
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function previewAction(Request $request)
+    {
+        $content = 'default content';
+
+        return new Response($content);
     }
 
 } // END class ArticlesController
