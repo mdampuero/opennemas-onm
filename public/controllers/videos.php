@@ -149,9 +149,9 @@ switch ($action) {
         );
 
         if (count($others_videos) > 0) {
-            foreach ($others_videos as &$video) {
-                $video->category_name = $video->loadCategoryName($video->id);
-                $video->category_title = $video->loadCategoryTitle($video->id);
+            foreach ($others_videos as &$otherVideo) {
+                $otherVideo->category_name  = $otherVideo->loadCategoryName($otherVideo->id);
+                $otherVideo->category_title = $otherVideo->loadCategoryTitle($otherVideo->id);
             }
         }
 

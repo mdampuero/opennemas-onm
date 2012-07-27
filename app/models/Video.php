@@ -409,9 +409,20 @@ class Video extends Content
      **/
     public function render($params)
     {
-        unset($params);
+         //  if (!isset($tpl)) {
+            $tpl = new Template(TEMPLATE_USER);
+        //}
 
-        return "\n<!-- video rendering not implemented -->\n";
+        $tpl->assign('item', $this);
+        $tpl->assign('cssclass', $params['cssclass']);
+
+        try {
+            $html = $tpl->fetch('frontpage/contents/_video.tpl');
+        } catch (\Exception $e) {
+            $html = 'Video not available';
+        }
+
+        return $html;
     }
 
 }
