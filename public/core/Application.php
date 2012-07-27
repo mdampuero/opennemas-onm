@@ -192,9 +192,13 @@ class Application
         define('STATUS', "1");
         define('CHARSET', "text/html; charset=UTF-8");
 
-        $protocol = 'http://';
-        if (preg_match('@^/admin/@', $_SERVER['REQUEST_URI'])) {
-            $protocol = (!empty($_SERVER['HTTPS']))? 'https://': 'http://';
+        if (!empty($_SERVER['HTTPS'])
+            && $_SERVER['HTTPS'] !== 'off'
+            || $_SERVER['SERVER_PORT'] == 443
+        ) {
+            $protocol = "https://";
+        } else {
+            $protocol = "http://";
         }
 
         define('SS', "/");
