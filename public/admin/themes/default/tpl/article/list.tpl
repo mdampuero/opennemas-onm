@@ -43,7 +43,7 @@
         <ul class="pills" style="margin-bottom:28px;">
             {acl hasCategoryAccess=0}
             <li>
-                <a href="{url name=admin_articles}"  {if $category=='all'}class="active"{/if}>{t}All categories{/t}</font></a>
+                <a href="{url name=admin_articles}"  {if $category=='all' || $category == 0}class="active"{/if}>{t}All categories{/t}</font></a>
             </li>
             {/acl}
             {include file="menu_categories.tpl" home="{url name=admin_articles l=1 status=$status}"}
@@ -67,7 +67,7 @@
             <thead>
                 <th style="width:15px;"><input type="checkbox" id="toggleallcheckbox"></th>
                 <th class="left" >{t}Title{/t}</th>
-                {if $category eq 'all'}
+                {if $category eq 'all' || $category == 0}
                     <th class="center" style="width:100px;">{t}Section{/t}</th>
                 {/if}
                 <th  class="center" style="width:100px;">{t}Author{/t}</th>
@@ -85,7 +85,7 @@
                     <td class="left">
                         {$article->title|clearslash}
                     </td>
-                    {if $category eq 'todos'}
+                    {if $category eq 'all' || $category == 0}
                     <td class="center">
                         {if $article->category_name == 'unknown'}
                             {t}Unasigned{/t}
@@ -148,5 +148,6 @@
         </table>
 
     </div>
+    <input type="hidden" name="category" value="{$category}">
 </form>
 {/block}

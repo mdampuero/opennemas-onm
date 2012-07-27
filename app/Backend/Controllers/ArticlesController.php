@@ -74,8 +74,15 @@ class ArticlesController extends Controller
         }
 
         $page   =  $request->query->getDigits('page', 1);
-        $title =  $request->query->filter('title', 0, FILTER_VALIDATE_INT);
+        $title =  $request->query->filter('title', null, FILTER_VALIDATE_INT);
         $status =  (int) $request->query->filter('status', -1, FILTER_VALIDATE_INT);
+        $category =  $request->query->filter('category', 0, FILTER_VALIDATE_INT);
+
+        if (is_null($category) || $category == 0) {
+            $categoryFilter = null;
+        } else {
+            $categoryFilter = (int) $category;
+        }
 
         $itemsPerPage = s::get('items_per_page');
 
@@ -92,7 +99,7 @@ class ArticlesController extends Controller
         $cm      = new \ContentManager();
         list($countArticles, $articles)= $cm->getCountAndSlice(
             'Article',
-            null,
+            $categoryFilter,
             $filterSQL,
             'ORDER BY content_status ASC, changed, created DESC',
             $page,
@@ -109,8 +116,9 @@ class ArticlesController extends Controller
             'urlVar'      => 'page',
             'totalItems'  => $countArticles,
             'fileName'    => $this->generateUrl('admin_articles', array(
-                'status' => $status,
-                'title'  => $title
+                'status'   => $status,
+                'title'    => $title,
+                'category' => $category
             )).'&page=%d',
         ));
 
@@ -131,11 +139,11 @@ class ArticlesController extends Controller
         }
 
         return $this->render('article/list.tpl', array(
-            'articles'    => $articles,
-            'page'        => $page,
-            'status'      => $status,
-            'title' => $title,
-            'pagination'  => $pagination,
+            'articles'   => $articles,
+            'page'       => $page,
+            'status'     => $status,
+            'title'      => $title,
+            'pagination' => $pagination,
         ));
     }
 
