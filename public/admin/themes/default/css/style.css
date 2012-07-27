@@ -1673,7 +1673,8 @@ div.action-bar .right{
 #album-images .list-of-images {
 }
 #album-images .list-of-images > ul {
-  margin:10px;
+  margin:0px;
+  width:570px;
   min-height:300px;
   position:relative;
   display: inline-block;
