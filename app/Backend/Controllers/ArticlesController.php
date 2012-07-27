@@ -513,6 +513,113 @@ class ArticlesController extends Controller
     }
 
     /**
+     * Lists all the articles with the suggested flag activated
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function contentProviderSuggestedAction(Request $request)
+    {
+        $category = $request->query->getDigits('category', 0);
+        $page     = $request->query->getDigits('page', 1);
+
+        $cm = new  \ContentManager();
+
+        // Get contents for this home
+        $contentElementsInFrontpage  = $cm->getContentsIdsForHomepageOfCategory($category);
+
+        // Fetching opinions
+        $sqlExcludedOpinions = '';
+        if (count($contentElementsInFrontpage) > 0) {
+            $contentsExcluded = implode(', ', $contentElementsInFrontpage);
+            $sqlExcludedOpinions = ' AND `pk_article` NOT IN ('.$contentsExcluded.')';
+        }
+
+        list($countArticles, $articles) = $cm->getCountAndSlice(
+            'Article',
+            null,
+            ' contents.frontpage=1 AND contents.available=1 AND '.
+            ' contents.content_status=1 AND in_litter != 1 '. $sqlExcludedOpinions,
+            ' ORDER BY created DESC ',
+            $page,
+            8
+        );
+
+        $pagination = \Pager::factory(array(
+            'mode'        => 'Sliding',
+            'perPage'     => 8,
+            'append'      => false,
+            'path'        => '',
+            'delta'       => 4,
+            'clearIfVoid' => true,
+            'urlVar'      => 'page',
+            'totalItems'  => $countArticles,
+            'fileName'    => $this->generateUrl('admin_articles_content_provider_suggested', array(
+                'category' => $category,
+            )).'&page=%d',
+        ));
+
+        return $this->render('article/content-provider-suggested.tpl', array(
+            'articles' => $articles,
+            'pager'   => $pagination,
+        ));
+    }
+
+    /**
+     * Lists all the articles withing a category
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function contentProviderCategoryAction(Request $request)
+    {
+        $category = $request->query->getDigits('category', 0);
+        $page     = $request->query->getDigits('page', 1);
+
+        $cm = new  \ContentManager();
+
+        // Get contents for this home
+        $contentElementsInFrontpage  = $cm->getContentsIdsForHomepageOfCategory($category);
+
+        // Fetching opinions
+        $sqlExcludedOpinions = '';
+        if (count($contentElementsInFrontpage) > 0) {
+            $contentsExcluded = implode(', ', $contentElementsInFrontpage);
+            $sqlExcludedOpinions = ' AND `pk_article` NOT IN ('.$contentsExcluded.')';
+        }
+
+        list($countArticles, $articles) = $cm->getCountAndSlice(
+            'Article',
+            $category,
+            'contents.available=1 AND in_litter != 1 ' . $sqlExcludedOpinions,
+            ' ORDER BY created DESC ',
+            $page,
+            8
+        );
+
+        $pagination = \Pager::factory(array(
+            'mode'        => 'Sliding',
+            'perPage'     => 8,
+            'append'      => false,
+            'path'        => '',
+            'delta'       => 4,
+            'clearIfVoid' => true,
+            'urlVar'      => 'page',
+            'totalItems'  => $countArticles,
+            'fileName'    => $this->generateUrl('admin_articles_content_provider_category', array(
+                'category' => $category,
+            )).'&page=%d',
+        ));
+
+        return $this->render('article/content-provider-category.tpl', array(
+            'articles' => $articles,
+            'pager'   => $pagination,
+        ));
+    }
+
+    /**
      * Previews an article in frontend by sending the article info by POST
      *
      * @param Request $request the request object

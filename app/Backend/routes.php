@@ -1619,6 +1619,28 @@ $adminRoutes->add(
     '/admin'
 );
 
+$adminRoutes->add(
+    'admin_articles_content_provider_suggested',
+    new Route(
+        '/articles/content-provider-suggested',
+        array(
+            '_controller' => 'Backend:Controllers:ArticlesController:contentProviderSuggested',
+        )
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_articles_content_provider_category',
+    new Route(
+        '/articles/content-provider-category',
+        array(
+            '_controller' => 'Backend:Controllers:ArticlesController:contentProviderCategory',
+        )
+    ),
+    '/admin'
+);
+
 // Opinion controller routes
 $adminRoutes->add(
     'admin_opinions',
