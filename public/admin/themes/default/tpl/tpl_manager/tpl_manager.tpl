@@ -2,17 +2,11 @@
 
 {block name="footer-js" append}
 <style type="text/css">
-.expired { color:#DA4F49; font-weight:bold; }
+    .expired { color:#DA4F49; font-weight:bold; }
 </style>
 {/block}
 {block name="footer-js" append}
 <script>
-    function sendForm(actionValue) {
-        alert('not implemented');
-        return;
-        $('action').value = actionValue;// FIXME: chequeos de seguridad
-        $('formulario').submit();
-    }
     jQuery(function($){
         $('#caches').on('click','.delete-cache-button', function(e, ui) {
             e.preventDefault();
@@ -30,15 +24,6 @@
                 }
             });
         });
-
-        $('#delete-caches').on('click', function(e, ui){
-            if (confirm('{t}Are you sure that you want to delete this selected cache files?{/t}')){
-                var form = $('#tplform');
-                form.attr('action', '{url name="admin_tpl_manager_delete"}');
-            }
-        })
-
-
     });
 </script>
 {/block}
@@ -53,7 +38,7 @@
             </div>
             <ul class="old-button">
                 <li>
-                    <button type="submit" title="{t}Delete cache{/t}" id="delete-caches">
+                    <button type="submit" title="{t}Delete cache{/t}" id="delete-caches" class="delChecked">
                         <img src="{$params.IMAGE_DIR}template_manager/delete48x48.png" />
                         <br />
                         {t}Delete{/t}
@@ -140,7 +125,7 @@
                      {else}
                     <tr class="cache-element">
                         <td>
-                            <input type="checkbox" name="selected[]" value="{$smarty.section.c.index}" />
+                            <input type="checkbox" name="selected[]" value="{$smarty.section.c.index}"  class="minput"/>
                             <input type="hidden"   name="cacheid[]"  value="{$caches[c].category}|{$caches[c].resource}" />
                             <input type="hidden"   name="tpl[]"      value="{$caches[c].template}.tpl" />
                         </td>
@@ -337,4 +322,6 @@
     <input type="hidden" id="action" name="action" value="" />
 </div>
 </form>
+{include file="tpl_manager/modals/_modalBatchDelete.tpl"}
+{include file="tpl_manager/modals/_modalAccept.tpl"}
 {/block}
