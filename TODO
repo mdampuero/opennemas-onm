@@ -60,10 +60,10 @@ Articles
 - Review toggle available action
 - Refactorice show method, CRAPPY
 - Finish related provider (pagination, category filtering, search provider)
-- Finish save related contents positions
 - Check related when delete an article
 - While editing an article in the related manager when selecting a different
   category the screen goes blank
+- Port image and video providers to symfony controller actions
 
 
 LOW PRIORITY TASKS OR IDEAS

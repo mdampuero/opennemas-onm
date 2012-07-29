@@ -193,11 +193,10 @@ class Article extends Content
     {
         $rel = new RelatedContent();
 
-        $contents = json_decode(json_decode($data), true);
+        if (is_array($data) && count($data) > 0) {
+            foreach ($data as $content) {
 
-        if (is_array($contents) && count($contents) > 0) {
-            foreach ($contents as $content) {
-                $rel->{$method}($id, $content['position'], $content['id']);
+                $rel->{$method}($id, $content->position, $content->id);
             }
         }
     }
@@ -326,7 +325,6 @@ class Article extends Content
         }
 
         $this->category_name = $this->loadCategoryName($this->id);
-
 
         return true;
     }

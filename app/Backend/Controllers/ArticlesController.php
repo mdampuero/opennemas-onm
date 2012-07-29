@@ -354,7 +354,7 @@ class ArticlesController extends Controller
             $relations = $relationsHandler->getHomeRelations($id);//de portada
             if (!empty($relations)) {
                 foreach($relations as $aret) {
-                    $orderHome[] = new Content($aret);
+                    $orderHome[] = new \Content($aret);
                 }
                 $this->view->assign('orderHome', $orderHome);
             }
