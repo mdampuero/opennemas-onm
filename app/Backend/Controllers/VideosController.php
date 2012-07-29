@@ -738,7 +738,7 @@ class VideosController extends Controller
         $cm = new  \ContentManager();
 
         list($countVideos, $videos) = $cm->getCountAndSlice(
-            'Article',
+            'Video',
             $categoryFilter,
             'contents.available=1',
             ' ORDER BY created DESC ',

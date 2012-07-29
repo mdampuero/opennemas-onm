@@ -1847,6 +1847,17 @@ $adminRoutes->add(
 );
 
 $adminRoutes->add(
+    'admin_opinions_content_provider_related',
+    new Route(
+        '/opinions/content-provider-related',
+        array(
+            '_controller' => 'Backend:Controllers:OpinionsController:contentProviderRelated',
+        )
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
     'admin_opinions_config',
     new Route(
         '/opinions/config',

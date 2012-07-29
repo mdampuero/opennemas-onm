@@ -755,6 +755,48 @@ class OpinionsController extends Controller
         ));
     }
 
+    /**
+     * Lists the latest opinions for the related manager
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function contentProviderRelatedAction(Request $request)
+    {
+        $page     = $request->query->getDigits('page', 1);
+        $itemsPerPage = s::get('items_per_page') ?: 20;
+
+        $cm = new  \ContentManager();
+
+        list($countOpinions, $opinions) = $cm->getCountAndSlice(
+            'Opinion',
+            null,
+            'contents.available=1',
+            ' ORDER BY created DESC ',
+            $page,
+            $itemsPerPage
+        );
+
+        $pagination = \Pager::factory(array(
+            'mode'        => 'Sliding',
+            'perPage'     => 8,
+            'append'      => false,
+            'path'        => '',
+            'delta'       => 4,
+            'clearIfVoid' => true,
+            'urlVar'      => 'page',
+            'totalItems'  => $countOpinions,
+            'fileName'    => $this->generateUrl('admin_opinions_content_provider_related').'?page=%d',
+        ));
+
+        return $this->render('common/content_provider/_container-content-list.tpl', array(
+            'contentType'           => 'Opinion',
+            'contents'              => $opinions,
+            'pagination'            => $pagination->links
+        ));
+    }
+
 
     /**
      * Handles the configuration for the opinion manager

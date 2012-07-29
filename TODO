@@ -76,14 +76,6 @@ Categories
 ----------
 - Review create and update actions (assign subsection, subsection change sideeffects??)
 
-Letters
--------
-- Review the related content provider
-
-Specials
---------
-- Implement the related content provider
-
 Advertisement
 -------------
 - Review pagination and filtering
@@ -91,7 +83,6 @@ Advertisement
 Opinion
 -------
 - Review redirections after update an opnion (search, ...)
-- Related provider
 
 Opinion Authors
 ---------------
@@ -103,3 +94,5 @@ Articles
 - Toggle available action
 - Batch actions
 - Refactorice show method
+- Finish related provider (pagination, category filtering, search provider)
+- Finish save related contents positions
