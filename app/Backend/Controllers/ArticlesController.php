@@ -488,6 +488,45 @@ class ArticlesController extends Controller
     }
 
     /**
+     * Deletes an article given its id
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function deleteAction(Request $request)
+    {
+        $this->checkAclOrForward('ARTICLE_DELETE');
+
+        $id       = $request->query->getDigits('id');
+        $category = $request->query->getDigits('category', 0);
+        $page     = $request->query->getDigits('page', 0);
+        $title    = $request->query->filter('title', null, FILTER_SANITIZE_STRING);
+        $status   = $request->query->filter('status', -1);
+
+        if (!empty($id)) {
+            $article = new \Article($id);
+
+            $article->delete($id ,$_SESSION['userid']);
+            m::add(_("Article deleted successfully."), m::SUCCESS);
+        } else {
+            m::add(_('You must give an id for delete an article.'), m::ERROR);
+        }
+
+        if (!$request->isXmlHttpRequest()) {
+            return $this->redirect($this->generateUrl(
+                'admin_articles',
+                array(
+                    'category' => $category,
+                    'page'     => $page,
+                    'status'   => $status,
+                    'title'   => $title,
+                )
+            ));
+        }
+    }
+
+    /**
      * Change available status for one article given its id
      *
      * @return Response the response object

@@ -82,7 +82,7 @@ Advertisement
 
 Opinion
 -------
-- Review redirections after update an opnion (search, ...)
+- Review redirections after update an opinion (search, ...)
 
 Opinion Authors
 ---------------
@@ -91,8 +91,9 @@ Opinion Authors
 
 Articles
 --------
-- Toggle available action
+- Review toggle available action
 - Batch actions
 - Refactorice show method
 - Finish related provider (pagination, category filtering, search provider)
 - Finish save related contents positions
+- Check related when delete a content

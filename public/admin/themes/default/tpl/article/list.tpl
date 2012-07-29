@@ -178,7 +178,10 @@
                                 <i class="icon-pencil"></i>
                             </a>
 
-                            <a class="btn btn-danger" href="{url name=admin_article_delete id=$article->id}">
+                            <a class="del btn btn-danger"
+                                data-title="{$article->title}"
+                                data-url="{url name=admin_article_delete id=$article->id category=$category page=$page title=$title status=$status}"
+                                href="{url name=admin_article_delete id=$article->id category=$category page=$page title=$title status=$status}">
                                 <i class="icon-trash icon-white"></i>
                             </a>
                         </div>
@@ -204,4 +207,5 @@
     </div>
     <input type="hidden" name="category" value="{$category}">
 </form>
+{include file="article/modals/_modalDelete.tpl"}
 {/block}
