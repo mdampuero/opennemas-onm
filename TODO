@@ -1,28 +1,17 @@
 TODO
 ====
 
-General
--------
-- Include the logger initialization into the container and make use of it
-- Include the mailer initialization into the container and make use of it
-  (maybe using the Swift Mailer library)
-- Jenkins had highlighted some changes in files of backend. We must review new
-controllers to find changes. The next lines are the files changed from the commit
-before changes happend to the commit that master was merged into symfony-router
-git diff --name-only e7671812699af6da10fb30b2212673948bd018fc 67180574cd98d75e0a60b7c0459f92a2a1a36731|grep php
-- Drop category and menu logic from init method in Backend Controllers
-
 Advanced Search Controller
 --------------------------
 - Integrate the contents paginated
 - Port search content-provider
 - Review content links for editing them (shows old urls)
 - Review all the icons (when a content is trashed, archived, ...)
-- ENHANCEMENT: Improve advanced search capabilities (filter by category, date range, ...)
 
 Tpl cache manager
 -----------------
-- When selecting a new items per page and push nEter, the deleting tpl shows an alert dialog
+- When selecting a new "items per page" option
+  and push nEter, the deleting tpl shows an alert dialog
 
 Statistics controller
 ---------------------
@@ -36,24 +25,9 @@ EFE importer
 ------------
 - Review back button in article editting form when importing
 
-XML file importer
------------------
-- CAUTION: this was a quick port, without checking if it works.
-- Complete refactorize the import method as is a mess
-- Use Symfony HttpFoundation for handling uploaded files.
-- Check if all works well
-- Add buttons to add and remove more files in form.
-- Import and check actions was merged (check doesn't save files, review it).
-- Rework in UX.
-
-Comments
---------
-- Drop wz_tooltip
-
 Files
 -----
 - Review redirections in listing an toggle home actions.
-- Review if new.tpl could be deleted, now form.tpl handle create and update (I think)
 
 Images
 ------
@@ -82,9 +56,44 @@ Opinion Authors
 
 Articles
 --------
-- Review toggle available action
 - Batch actions
-- Refactorice show method
+- Review toggle available action
+- Refactorice show method, CRAPPY
 - Finish related provider (pagination, category filtering, search provider)
 - Finish save related contents positions
 - Check related when delete an article
+- While editing an article in the related manager when selecting a different
+  category the screen goes blank
+
+
+LOW PRIORITY TASKS OR IDEAS
+--------------------------------------------------------------------------------
+
+Files
+-----
+- Review if new.tpl could be deleted, now form.tpl handle create and update (I think)
+
+XML file importer
+-----------------
+- CAUTION: this was a quick port, without checking if it works.
+- Complete refactorize the import method as is a mess
+- Use Symfony HttpFoundation for handling uploaded files.
+- Check if all works well
+- Add buttons to add and remove more files in form.
+- Import and check actions was merged (check doesn't save files, review it).
+- Rework in UX.
+
+General
+-------
+- Include the logger initialization into the container and make use of it
+- Include the mailer initialization into the container and make use of it
+  (maybe using the Swift Mailer library)
+- Jenkins had highlighted some changes in files of backend. We must review new
+controllers to find changes. The next lines are the files changed from the commit
+before changes happend to the commit that master was merged into symfony-router
+git diff --name-only e7671812699af6da10fb30b2212673948bd018fc 67180574cd98d75e0a60b7c0459f92a2a1a36731|grep php
+- Drop category and menu logic from init method in Backend Controllers
+
+Search advanced
+---------------
+- ENHANCEMENT: Improve advanced search capabilities (filter by category, date range, ...)
