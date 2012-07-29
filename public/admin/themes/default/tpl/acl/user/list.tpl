@@ -98,7 +98,11 @@ jQuery(function($){
 								<i class="icon-pencil"></i> {t}Edit{/t}
 							</a>
 
-							<a class="btn btn-danger" href="{url name=admin_acl_user_delete id=$user->id}" title="{t}Delete this user{/t}">
+							<a class="del btn btn-danger"
+								href="{url name=admin_acl_user_delete id=$user->id}"
+								data-url="{url name=admin_acl_user_delete id=$user->id}"
+								data-title="{$user->name}"
+								title="{t}Delete this user{/t}">
 								<i class="icon-trash icon-white"></i>
 							</a>
 						</div>
@@ -123,4 +127,5 @@ jQuery(function($){
 		</table>
 	</div>
 </form>
+{include file="acl/user/modal/_modalDelete.tpl"}
 {/block}

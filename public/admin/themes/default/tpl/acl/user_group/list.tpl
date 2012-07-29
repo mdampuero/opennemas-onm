@@ -1,25 +1,25 @@
 {extends file="base/admin.tpl"}
 
-{block name="action_buttons"}
-	<div class="top-action-bar clearfix">
-		<div class="wrapper-content">
-			<div class="title"><h2>{t}User group management{/t}</h2></div>
-			<ul class="old-button">
-				<li>
+{block name="content"}
+<form action="{url name=admin_usergroups}" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
+
+    <div class="top-action-bar clearfix">
+        <div class="wrapper-content">
+            <div class="title"><h2>{t}User group management{/t}</h2></div>
+            <ul class="old-button">
+                <li>
                     <a href="{url name="admin_acl_usergroups_create"}">
                         <img src="{$params.IMAGE_DIR}usergroup_add.png" title="{t}New Privilege{/t}" alt="{t}New User Group{/t}"><br />{t}New User group{/t}
                     </a>
                 </li>
-			</ul>
-		</div>
-	</div>
-{/block}
+            </ul>
+        </div>
+    </div>
 
-{block name="content"}
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
-    {block name="action_buttons"}{/block}
     <div class="wrapper-content">
+
         {render_messages}
+
         <table class="listing-table table-striped">
             <thead>
                 <tr>
@@ -40,7 +40,11 @@
 							<a class="btn" href="{url name="admin_acl_usergroups_show" id="{$user_groups[c]->id}"}" title="{t}Edit group{/t}">
 								<i class="icon-pencil"></i> {t}Edit{/t}
 							</a>
-							<a class="btn btn-danger" href="#" onClick="javascript:confirmar(this, {$user_groups[c]->id});" title="{t}Delete group{/t}">
+							<a class="del btn btn-danger"
+                                href="{url name=admin_acl_usergroups_delete id=$user_groups[c]->id}"
+                                data-url="{url name=admin_acl_usergroups_delete id=$user_groups[c]->id}"
+                                data-title="{$user_groups[c]->name}"
+                                title="{t}Delete group{/t}">
 								<i class="icon-trash icon-white"></i>
 							</a>
                         </div>
@@ -67,4 +71,5 @@
         <input type="hidden" name="id" id="id" value="{$id|default:""}" />
     </div>
 </form>
+{include file="acl/user_group/modal/_modalDelete.tpl"}
 {/block}

@@ -132,15 +132,17 @@ class AclUserGroupsController extends Controller
     {
         $this->checkAclOrForward('GROUP_DELETE');
 
-        $id = $this->request->query->filter('id', FILTER_VALIDATE_INT);
+        $id = $this->request->query->getDigits('id');
 
-        $userGroup = new UserGroup();
+        $userGroup = new \UserGroup();
         $deleted = $userGroup->delete($id);
-        if (!$deleted) {
+        if ($deleted) {
+            m::add(_('User group deleted successfully.'));
+        } else {
             m::add(sprintf(
-                _('Unable to delete the user group with id "%d"')),
+                _('Unable to delete the user group with id "%d"'),
                 $id
-            );
+            ));
         }
 
         return $this->redirect($this->generateUrl('admin_acl_usergroups'));
