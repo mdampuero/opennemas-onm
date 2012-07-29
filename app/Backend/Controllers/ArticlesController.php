@@ -497,7 +497,7 @@ class ArticlesController extends Controller
         $this->checkAclOrForward('OPINION_AVAILABLE');
 
         $id       = $request->query->getDigits('id', 0);
-        $status   = $request->query->getDigits('status', 0);
+        $status   = (int) $request->query->getDigits('status', 0);
         $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
         $page     = $request->query->getDigits('page', 1);
 
@@ -624,6 +624,58 @@ class ArticlesController extends Controller
         return $this->render('article/content-provider-category.tpl', array(
             'articles' => $articles,
             'pager'   => $pagination,
+        ));
+    }
+
+    /**
+     * Lists all the articles withing a category for the related manager
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function contentProviderRelatedAction(Request $request)
+    {
+        $category = $request->query->getDigits('category', 0);
+        $page     = $request->query->getDigits('page', 1);
+        $itemsPerPage = s::get('items_per_page') ?: 20;
+
+        if ($category == 0) {
+            $categoryFilter = null;
+        } else {
+            $categoryFilter = $category;
+        }
+        $cm = new  \ContentManager();
+
+        list($countArticles, $articles) = $cm->getCountAndSlice(
+            'Article',
+            $categoryFilter,
+            'contents.available=1',
+            ' ORDER BY created DESC ',
+            $page,
+            $itemsPerPage
+        );
+
+        $pagination = \Pager::factory(array(
+            'mode'        => 'Sliding',
+            'perPage'     => 8,
+            'append'      => false,
+            'path'        => '',
+            'delta'       => 4,
+            'clearIfVoid' => true,
+            'urlVar'      => 'page',
+            'totalItems'  => $countArticles,
+            'fileName'    => $this->generateUrl('admin_articles_content_provider_related', array(
+                'category' => $category,
+            )).'&page=%d',
+        ));
+
+        return $this->render('common/content_provider/_container-content-list.tpl', array(
+            'contentType'           => 'Article',
+            'contents'              => $articles,
+            'contentTypeCategories' => $this->parentCategories,
+            'category'              => $this->category,
+            'pagination'            => $pagination->links
         ));
     }
 

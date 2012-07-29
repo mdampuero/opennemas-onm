@@ -2,13 +2,32 @@
 
 {block name="header-js" append}
     {script_tag src="/utilsarticle.js" language="javascript"}
+
+    <script>
+    jQuery(document).ready(function ($){
+        $('[rel="tooltip"]').tooltip();
+        $('.minput, #toggleallcheckbox').on('click', function() {
+            checkbox = $(this).find('input[type="checkbox"]');
+            checkbox.attr(
+               'checked',
+               !checkbox.is(':checked')
+            );
+            var checked_elements = $('input[type="checkbox"]:checked').length;
+            if (checked_elements > 0) {
+                $('.old-button .batch-actions').fadeIn('fast');
+            } else {
+                $('.old-button .batch-actions').fadeOut('fast');
+            }
+        });
+    });
+    </script>
 {/block}
 
 {block name="content"}
 <form action="{url name=admin_articles}" method="GET" name="formulario" id="formulario">
     <div class="top-action-bar">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Article Manager{/t} :: Listing articles</h2></div>
+            <div class="title"><h2>{t}Article Manager{/t} :: {t}Listing articles{/t}</h2></div>
             <ul class="old-button">
                 {acl isAllowed="ARTICLE_DELETE"}
                 <li>
@@ -18,11 +37,44 @@
                 </li>
                 {/acl}
                 {acl isAllowed="ARTICLE_AVAILABLE"}
-                <li>
-                    <a href="#">
-                        Batch actions
-                    </a>
-                </li>
+                <li class="batch-actions">
+
+                <a href="#">
+                    <img src="{$params.IMAGE_DIR}/select.png" title="" alt="" />
+                    <br/>{t}Batch actions{/t}
+                </a>
+
+                <ul class="dropdown-menu">
+                    <li>
+                        <button type="submit" name="status" value="0" href="#" id="batch-publish">
+                            {t}Batch publish{/t}
+                        </button>
+                    </li>
+                    <li>
+                        <button type="submit" name="status" value="1" id="batch-unpublish">
+                            {t}Batch unpublish{/t}
+                        </a>
+                    </li>
+                    <li>
+                        <button type="submit" name="status" value="0" id="batch-inhome">
+                            {t escape="off"}Batch in home{/t}
+                        </a>
+                    </li>
+                    <li>
+                        <button type="submit" name="status" value="1" id="batch-noinhome">
+                            {t escape="off"}Batch drop from home{/t}
+                        </a>
+                    </li>
+                    {acl isAllowed="OPINION_DELETE"}
+                    <li>
+                        <button type="submit" id="batch-delete" title="{t}Delete{/t}">
+                            {t}Delete{/t}
+                        </button>
+                    </li>
+                    {/acl}
+                </ul>
+
+            </li>
                 {/acl}
                 <li class="separator"></li>
                 {acl isAllowed="ARTICLE_CREATE"}
@@ -54,12 +106,14 @@
                 <th align="right">
                     <input type="text" placeholder="{t}Search by title:{/t}" name="title" value="{$title}"/>
                     {t}Status:{/t}
-                    <select name="status">
-                        <option value="-1" {if $status === -1} selected {/if}> {t}-- All --{/t} </option>
-                        <option value="1" {if  $status === 1} selected {/if}> {t}Published{/t} </option>
-                        <option value="0" {if $status === 0} selected {/if}> {t}No published{/t} </option>
-                    </select>
-                    <button type="submit" class="btn">Search</button>
+                    <div class="input-append">
+                        <select name="status">
+                            <option value="-1" {if $status === -1} selected {/if}> {t}-- All --{/t} </option>
+                            <option value="1" {if  $status === 1} selected {/if}> {t}Published{/t} </option>
+                            <option value="0" {if $status === 0} selected {/if}> {t}No published{/t} </option>
+                        </select>
+                        <button type="submit" class="btn">Search</button>
+                    </div>
                 </th>
             </tr>
         </table>
@@ -68,9 +122,9 @@
                 <th style="width:15px;"><input type="checkbox" id="toggleallcheckbox"></th>
                 <th class="left" >{t}Title{/t}</th>
                 {if $category eq 'all' || $category == 0}
-                    <th class="center" style="width:100px;">{t}Section{/t}</th>
+                    <th class="left">{t}Section{/t}</th>
                 {/if}
-                <th  class="center" style="width:100px;">{t}Author{/t}</th>
+                <th  class="left">{t}Author{/t}</th>
                 <th class="center" style="width:100px;">{t}Created{/t}</th>
                 <th class="center" style="width:80px;">{t}Last Editor{/t}</th>
                 <th class="center" style="width:10px;">{t}Available{/t}</th>
@@ -83,10 +137,10 @@
                         <input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$article->id}"  style="cursor:pointer;" />
                     </td>
                     <td class="left">
-                        {$article->title|clearslash}
+                        <span rel="tooltip" data-original-title="{t 1=$article->editor}Last author %1{/t}">{$article->title|clearslash}</span>
                     </td>
                     {if $category eq 'all' || $category == 0}
-                    <td class="center">
+                    <td class="left">
                         {if $article->category_name == 'unknown'}
                             {t}Unasigned{/t}
                         {else}
@@ -94,7 +148,7 @@
                         {/if}
                     </td>
                     {/if}
-                    <td class="center">
+                    <td class="left">
                         {$article->agency}
                     </td>
                     <td class="center">

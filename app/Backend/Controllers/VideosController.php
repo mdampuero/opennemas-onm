@@ -717,4 +717,56 @@ class VideosController extends Controller
         ));
     }
 
+    /**
+     * Lists all the videos withing a category for the related manager
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function contentProviderRelatedAction(Request $request)
+    {
+        $category = $request->query->getDigits('category', 0);
+        $page     = $request->query->getDigits('page', 1);
+        $itemsPerPage = s::get('items_per_page') ?: 20;
+
+        if ($category == 0) {
+            $categoryFilter = null;
+        } else {
+            $categoryFilter = $category;
+        }
+        $cm = new  \ContentManager();
+
+        list($countVideos, $videos) = $cm->getCountAndSlice(
+            'Article',
+            $categoryFilter,
+            'contents.available=1',
+            ' ORDER BY created DESC ',
+            $page,
+            $itemsPerPage
+        );
+
+        $pagination = \Pager::factory(array(
+            'mode'        => 'Sliding',
+            'perPage'     => 8,
+            'append'      => false,
+            'path'        => '',
+            'delta'       => 4,
+            'clearIfVoid' => true,
+            'urlVar'      => 'page',
+            'totalItems'  => $countVideos,
+            'fileName'    => $this->generateUrl('admin_videos_content_provider_related', array(
+                'category' => $category,
+            )).'&page=%d',
+        ));
+
+        return $this->render('common/content_provider/_container-content-list.tpl', array(
+            'contentType'           => 'Video',
+            'contents'              => $videos,
+            'contentTypeCategories' => $this->parentCategories,
+            'category'              => $this->category,
+            'pagination'            => $pagination->links
+        ));
+    }
+
 } // END class VideosController

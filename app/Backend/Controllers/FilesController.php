@@ -651,26 +651,32 @@ class FilesController extends Controller
      *
      * @return Response the response object
      **/
-    public function contentListProvider()
+    public function contentListProviderAction(Request $request)
     {
-        $items_page = s::get('items_per_page') ?: 20;
-        $category = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_STRING, array('options' => array('default' => '0')));
-        $page = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_STRING, array('options' => array('default' => '1')));
-        $cm = new ContentManager();
+        $category     = $request->query->getDigits('category', 0);
+        $page         = $request->query->getDigits('page', 1);
 
-        list($polls, $pager) = $cm->find_pages('Attachment', 'available=1 ',
-                    'ORDER BY starttime DESC,  contents.title ASC ',
-                    $page, $items_page, $category);
+        $itemsPerPage = s::get('items_per_page') ?: 20;
 
-        $tpl->assign(array('contents'=>$polls,
-                            'contentTypeCategories'=>$parentCategories,
-                            'category' =>$category,
-                            'contentType'=>'Attachment',
-                            'pagination'=>$pager->links
-                    ));
+        $cm = new \ContentManager();
+        list($polls, $pager) = $cm->find_pages('Attachment',
+            'available=1 ',
+            'ORDER BY starttime DESC,  contents.title ASC ',
+            $page,
+            $itemsPerPage,
+            $category
+        );
 
-        $html_out = $tpl->fetch("common/content_provider/_container-content-list.tpl");
-        Application::ajaxOut($html_out);
+        return $this->render(
+            'common/content_provider/_container-content-list.tpl',
+            array(
+                'contentType'           => 'Attachment',
+                'contents'              => $polls,
+                'contentTypeCategories' => $this->parentCategories,
+                'category'              => $this->category,
+                'pagination'            => $pager->links
+            )
+        );
     }
 
 } // END class FilesController

@@ -1,5 +1,4 @@
-
- <div id="content-provider" class="related-content-provider clearfix" >
+ <div id="content-provider" class="related-content-provider tabs clearfix" >
     <ul>
         {is_module_activated name="ADVANCED_SEARCH"}
         <li>
@@ -8,14 +7,12 @@
         {/is_module_activated}
 
         {is_module_activated name="ARTICLE_MANAGER"}
-        {*
-        <li>
+        {* <li>
             <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/article.php?action=related-provider-suggested">{t}Suggested articles{/t}</a>
         </li> *}
         <li>
-            <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/article.php?action=related-provider-category&amp;category={$category}">{t}Articles{/t}</a>
+            <a href="{url name=admin_articles_content_provider_related category=$category}">{t}Articles{/t}</a>
         </li>
-
         {/is_module_activated}
 
         {is_module_activated name="OPINION_MANAGER"}
@@ -23,29 +20,34 @@
             <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/opinion/opinion.php?action=related-provider&amp;category={$category}">{t}Opinions{/t}</a>
         </li>
         {/is_module_activated}
+
         {is_module_activated name="VIDEO_MANAGER"}
         <li>
-            <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/video/video.php?action=related-provider&amp;category={$category}">{t}Videos{/t}</a>
+            <a href="{url name=admin_videos_content_provider_related category=$category}">{t}Videos{/t}</a>
         </li>
         {/is_module_activated}
+
         {is_module_activated name="ALBUM_MANAGER"}
         <li>
-            <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/album/album.php?action=related-provider&amp;category={$category}">{t}Albums{/t}</a>
+            <a href="{url name=admin_albums_content_provider_related category=$category}">{t}Albums{/t}</a>
         </li>
         {/is_module_activated}
-            {is_module_activated name="POLL_MANAGER"}
+
+        {is_module_activated name="POLL_MANAGER"}
         <li>
-            <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/poll/poll.php?action=related-provider&amp;category={$category}">{t}Polls{/t}</a>
+            <a href="{url name=admin_polls_content_provider_related category=$category}">{t}Polls{/t}</a>
         </li>
         {/is_module_activated}
+
         {is_module_activated name="SPECIAL_MANAGER"}
         {*<li>
-            <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/special/special.php?action=related-provider&amp;category={$category}">{t}Specials{/t}</a>
+            <a href="{url name=admin_specials_content_provider_related category=$category}">{t}Specials{/t}</a>
         </li> *}
         {/is_module_activated}
+
         {is_module_activated name="FILE_MANAGER"}
         <li>
-            <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/files/files.php?action=related-provider&amp;category={$category}">{t}Files{/t}</a>
+            <a href="{url name=admin_files_content_provider category=$category}">{t}Files{/t}</a>
         </li>
         {/is_module_activated}
     </ul>

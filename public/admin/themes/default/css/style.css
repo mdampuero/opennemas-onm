@@ -231,8 +231,11 @@ table.adminheading input:hover {
   box-shadow:none !important;
   background:White;
   padding:3px;
+  margin-bottom:0;
 }
-
+table.adminheading .input-append {
+  display:inline-block;
+}
 table.adminheading input[type='text']:focus,
 table.adminheading input[type='password']:focus,
 table.adminheading textarea:focus {

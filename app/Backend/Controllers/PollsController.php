@@ -43,15 +43,15 @@ class PollsController extends Controller
         }
 
         $ccm = \ContentCategoryManager::get_instance();
-        list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu($category, $contentType);
+        list($this->parentCategories, $this->subcat, $this->categoryData) = $ccm->getArraysMenu($category, $contentType);
 
         if (empty($category)) {$category ='home';}
 
         $this->view->assign(array(
             'category'     => $category,
-            'subcat'       => $subcat,
-            'allcategorys' => $parentCategories,
-            'datos_cat'    => $categoryData
+            'subcat'       => $this->subcat,
+            'allcategorys' => $this->parentCategories,
+            'datos_cat'    => $this->categoryData
         ));
     }
 
@@ -526,6 +526,58 @@ class PollsController extends Controller
                 'category' => $category,
                 'page'     => $page,
             )
+        ));
+    }
+
+    /**
+     * Lists all the polls withing a category for the related manager
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function contentProviderRelatedAction(Request $request)
+    {
+        $category = $request->query->getDigits('category', 0);
+        $page     = $request->query->getDigits('page', 1);
+        $itemsPerPage = s::get('items_per_page') ?: 20;
+
+        if ($category == 0) {
+            $categoryFilter = null;
+        } else {
+            $categoryFilter = $category;
+        }
+        $cm = new  \ContentManager();
+
+        list($countPolls, $polls) = $cm->getCountAndSlice(
+            'Poll',
+            $categoryFilter,
+            'contents.available=1',
+            ' ORDER BY starttime DESC, contents.title ASC ',
+            $page,
+            $itemsPerPage
+        );
+
+        $pagination = \Pager::factory(array(
+            'mode'        => 'Sliding',
+            'perPage'     => 8,
+            'append'      => false,
+            'path'        => '',
+            'delta'       => 4,
+            'clearIfVoid' => true,
+            'urlVar'      => 'page',
+            'totalItems'  => $countPolls,
+            'fileName'    => $this->generateUrl('admin_polls_content_provider_related', array(
+                'category' => $category,
+            )).'&page=%d',
+        ));
+
+        return $this->render('common/content_provider/_container-content-list.tpl', array(
+            'contentType'           => 'Poll',
+            'contents'              => $polls,
+            'contentTypeCategories' => $this->parentCategories,
+            'category'              => $category,
+            'pagination'            => $pagination->links
         ));
     }
 

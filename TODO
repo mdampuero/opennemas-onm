@@ -64,17 +64,9 @@ Files
 - Review redirections in listing an toggle home actions.
 - Review if new.tpl could be deleted, now form.tpl handle create and update (I think)
 
-Videos
-------
-- Related content provider: content-list-provider, related-provider
-
 Images
 ------
 - Review all search filters
-
-Albums
-------
-- Implement the related content provider
 
 Menus
 -----
@@ -90,10 +82,6 @@ Letters
 
 Specials
 --------
-- Implement the related content provider
-
-Polls
------
 - Implement the related content provider
 
 Advertisement

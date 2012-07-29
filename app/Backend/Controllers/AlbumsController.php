@@ -593,6 +593,58 @@ class AlbumsController extends Controller
     }
 
     /**
+     * Lists all the albums withing a category for the related manager
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function contentProviderRelatedAction(Request $request)
+    {
+        $category = $request->query->getDigits('category', 0);
+        $page     = $request->query->getDigits('page', 1);
+        $itemsPerPage = s::get('items_per_page') ?: 20;
+
+        if ($category == 0) {
+            $categoryFilter = null;
+        } else {
+            $categoryFilter = $category;
+        }
+        $cm = new  \ContentManager();
+
+        list($countAlbums, $albums) = $cm->getCountAndSlice(
+            'Album',
+            $categoryFilter,
+            'contents.available=1',
+            ' ORDER BY starttime DESC, contents.title ASC ',
+            $page,
+            $itemsPerPage
+        );
+
+        $pagination = \Pager::factory(array(
+            'mode'        => 'Sliding',
+            'perPage'     => 8,
+            'append'      => false,
+            'path'        => '',
+            'delta'       => 4,
+            'clearIfVoid' => true,
+            'urlVar'      => 'page',
+            'totalItems'  => $countAlbums,
+            'fileName'    => $this->generateUrl('admin_albums_content_provider_related', array(
+                'category' => $category,
+            )).'&page=%d',
+        ));
+
+        return $this->render('common/content_provider/_container-content-list.tpl', array(
+            'contentType'           => 'Album',
+            'contents'              => $albums,
+            'contentTypeCategories' => $this->parentCategories,
+            'category'              => $category,
+            'pagination'            => $pagination->links
+        ));
+    }
+
+    /**
      * Handles and shows the album configuration form
      *
      * @return Response the response object

@@ -367,6 +367,17 @@ $adminRoutes->add(
     '/admin'
 );
 
+$adminRoutes->add(
+    'admin_polls_content_provider_related',
+    new Route(
+        '/polls/content-provider-related',
+        array(
+            '_controller' => 'Backend:Controllers:PollsController:contentProviderRelated',
+        )
+    ),
+    '/admin'
+);
+
 // Ads manager routes
 $adminRoutes->add(
     'admin_ads',
@@ -990,6 +1001,17 @@ $adminRoutes->add(
     '/admin'
 );
 
+$adminRoutes->add(
+    'admin_videos_content_provider_related',
+    new Route(
+        '/videos/content-provider-related',
+        array(
+            '_controller' => 'Backend:Controllers:VideosController:contentProviderRelated',
+        )
+    ),
+    '/admin'
+);
+
 // Album controller routes
 $adminRoutes->add(
     'admin_albums',
@@ -1106,6 +1128,17 @@ $adminRoutes->add(
     new Route(
         '/albums/content-provider',
         array('_controller' => 'Backend:Controllers:AlbumsController:contentProvider')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_albums_content_provider_related',
+    new Route(
+        '/albums/content-provider-related',
+        array(
+            '_controller' => 'Backend:Controllers:AlbumsController:contentProviderRelated',
+        )
     ),
     '/admin'
 );
@@ -1474,8 +1507,14 @@ $adminRoutes->add(
     '/admin'
 );
 
-
-
+$adminRoutes->add(
+    'admin_files_content_provider',
+    new Route(
+        '/files/content-provider',
+        array('_controller' => 'Backend:Controllers:FilesController:contentListProvider')
+    ),
+    '/admin'
+);
 
 // Search controller routes
 $adminRoutes->add(
@@ -1640,6 +1679,18 @@ $adminRoutes->add(
     ),
     '/admin'
 );
+
+$adminRoutes->add(
+    'admin_articles_content_provider_related',
+    new Route(
+        '/articles/content-provider-related',
+        array(
+            '_controller' => 'Backend:Controllers:ArticlesController:contentProviderRelated',
+        )
+    ),
+    '/admin'
+);
+
 
 // Opinion controller routes
 $adminRoutes->add(
