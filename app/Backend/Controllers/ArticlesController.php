@@ -144,6 +144,7 @@ class ArticlesController extends Controller
             'status'     => $status,
             'title'      => $title,
             'pagination' => $pagination,
+            'totalArticles' => $countArticles
         ));
     }
 

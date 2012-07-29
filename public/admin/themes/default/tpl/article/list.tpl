@@ -92,7 +92,7 @@
 
         {render_messages}
 
-        <ul class="pills" style="margin-bottom:28px;">
+        <ul class="pills">
             {acl hasCategoryAccess=0}
             <li>
                 <a href="{url name=admin_articles}"  {if $category=='all' || $category == 0}class="active"{/if}>{t}All categories{/t}</font></a>
@@ -103,6 +103,9 @@
 
         <table class="adminheading">
             <tr>
+                <th class="left">
+                    <span style="margin-left:5px;">{t 1=$totalArticles}%1 articles{/t}</span>
+                </th>
                 <th align="right">
                     <input type="text" placeholder="{t}Search by title:{/t}" name="title" value="{$title}"/>
                     {t}Status:{/t}
