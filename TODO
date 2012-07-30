@@ -8,11 +8,6 @@ Advanced Search Controller
 - Review content links for editing them (shows old urls)
 - Review all the icons (when a content is trashed, archived, ...)
 
-Tpl cache manager
------------------
-- When selecting a new "items per page" option
-  and push enter, the deleting tpl shows an alert dialog
-
 Europapress Importer
 --------------------
 - Review back button in article editting form when importing
@@ -28,6 +23,7 @@ Files
 Images
 ------
 - Review all search filters
+- Color property is not save propertly
 
 Menus
 -----
@@ -89,3 +85,9 @@ git diff --name-only e7671812699af6da10fb30b2212673948bd018fc 67180574cd98d75e0a
 Search advanced
 ---------------
 - ENHANCEMENT: Improve advanced search capabilities (filter by category, date range, ...)
+
+
+Tpl cache manager
+-----------------
+- When selecting a new "items per page" option
+  and push enter, the deleting tpl shows an alert dialog

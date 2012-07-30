@@ -376,7 +376,7 @@ class ImagesController extends Controller
             );
 
             foreach ($photos as &$photo) {
-                $extension              = strtolower($photo->type_img);
+                $photo->extension       = strtolower($photo->type_img);
                 $photo->description_utf = html_entity_decode($photo->description);
                 $photo->metadata_utf    = html_entity_decode($photo->metadata);
             }
@@ -386,7 +386,7 @@ class ImagesController extends Controller
                 'perPage'     => $itemsPerPage,
                 'append'      => false,
                 'path'        => '',
-                'fileName'    => $_SERVER['REQUEST_URI'].'&page=%d',
+                'fileName'    => $this->generateUrl('admin_images_search').'?page=%d',
                 'delta'       => 4,
                 'clearIfVoid' => true,
                 'urlVar'      => 'page',

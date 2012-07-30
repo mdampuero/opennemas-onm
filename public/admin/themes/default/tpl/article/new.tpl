@@ -57,11 +57,6 @@
     <script>
         tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
 
-        {if isset($article) && $article->isClone()}
-            OpenNeMas.tinyMceConfig.simple.readonly   = 1;
-            OpenNeMas.tinyMceConfig.advanced.readonly = 1;
-        {/if}
-
         OpenNeMas.tinyMceConfig.simple.elements = "summary";
         tinyMCE.init( OpenNeMas.tinyMceConfig.simple );
 
