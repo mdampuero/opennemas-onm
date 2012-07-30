@@ -92,7 +92,7 @@ class AdsController extends Controller
             $categoryFilter = $this->category;
         }
 
-        $itemsPerPage = s::get('items_per_page');
+        $itemsPerPage = 1;//s::get('items_per_page');
 
         $cm = new \ContentManager();
         list($countAds, $ads)= $cm->getCountAndSlice(
@@ -103,7 +103,6 @@ class AdsController extends Controller
             $page,
             $itemsPerPage
         );
-// var_dump($countAds, $ads, $filter, $queryString);die();
 
         $advertisementsCleaned = array();
 
@@ -138,8 +137,9 @@ class AdsController extends Controller
             'clearIfVoid' => true,
             'urlVar'      => 'page',
             'totalItems'  => $countAds,
-            'fileName'    => $this->generateUrl('admin_ads').'?page=%d',
+            'fileName'    => $this->generateUrl('admin_ads').'?'.$queryString.'&page=%d',
         ));
+
 
         $_SESSION['desde'] = 'advertisement';
 
@@ -549,9 +549,11 @@ class AdsController extends Controller
         $filters = array();
         $url = array();
 
-        $filters[] = $filter;
+        $filters []= $filter;
 
         $definedFilters = $request->query->get('filter');
+
+        $url []= 'category='.$request->query->getDigits('category', 0);
 
         if (isset($definedFilters['type_advertisement'])
            && ($definedFilters['type_advertisement'] >= 0)
@@ -585,7 +587,7 @@ class AdsController extends Controller
             $url[] = 'filter[type]=' . $definedFilters['type'];
         }
 
-        return array( implode(' AND ',$filters), implode('&amp;', $url) );
+        return array( implode(' AND ',$filters), implode('&', $url),  );
     }
 
 } // END class AdsController
