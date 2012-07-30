@@ -2146,9 +2146,9 @@ class ContentManager
     //Returns categoryName with the content Id
     public function getCategoryNameByContentId($contentId)
     {
-        $sql = 'SELECT pk_fk_contents_category FROM `contents_categories` '
+        $sql = 'SELECT pk_fk_content_category, catName FROM `contents_categories` '
              . 'WHERE pk_fk_content = ?';
-        $rs  = $GLOBALS['application']->conn->GetOne($sql, array($contentId));
+        $rs  = $GLOBALS['application']->conn->Execute($sql, array($contentId));
 
         if (!$rs) {
             Application::logDatabaseError();
@@ -2156,9 +2156,7 @@ class ContentManager
             return false;
         }
 
-        $category_name=$this->get_title($rs);
-
-        return $category_name;
+        return $rs->fields['catName'];
     }
 
     //Devuelve un array de objetos segun se pase un array de id's

@@ -23,16 +23,20 @@ class Dashboard
 
         $contents = array();
         foreach ($contentObjects as $content) {
+
             $contents [] = array(
                 'pk_content' => $content->id,
                 'title'      => $content->title,
                 'views'      => $content->views,
-                'permalink'  => Uri::generate('article', array(
-                    'id'       => $content->id,
-                    'date'     => date('Y-m-d', strtotime($content->created)),
-                    'category' => $cm->getCategoryNameByContentId($content->id),
-                    'slug'     => StringUtils::get_title($content->title),
-                )),
+                'permalink'  => Uri::generate(
+                    'article',
+                    array(
+                        'id'       => sprintf('%06d', $content->id),
+                        'date'     => date('YmdHis', strtotime($content->created)),
+                        'category' => $cm->getCategoryNameByContentId($content->id),
+                        'slug'     => \Onm\StringUtils::get_title($content->title),
+                    )
+                ),
 
             );
         }

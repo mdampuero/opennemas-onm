@@ -11,11 +11,7 @@ Advanced Search Controller
 Tpl cache manager
 -----------------
 - When selecting a new "items per page" option
-  and push nEter, the deleting tpl shows an alert dialog
-
-Statistics controller
----------------------
-- Review articles links as all of them are wrong.
+  and push enter, the deleting tpl shows an alert dialog
 
 Europapress Importer
 --------------------
