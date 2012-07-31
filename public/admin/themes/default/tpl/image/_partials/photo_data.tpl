@@ -59,8 +59,8 @@
                 <div style="display:inline-block; width:25%">
                     <label>{t}Color:{/t}</label><br/>
                     <select name="color[{$photo->id}]" id="color[{$photo->id}]" style="width:80px;height:28px;margin-left:20px;"/>
-                        <option value="{t}Color{/t}" {if $photo->color eq 'color'} selected {/if}>{t}Color{/t}</option>
-                        <option value="{t}B/W{/t}" {if $photo->color eq 'BN'} selected {/if}>{t}B/W{/t}</option>
+                        <option value="{t}color{/t}" {if $photo->color eq 'color'} selected {/if}>{t}Color{/t}</option>
+                        <option value="{t}bw{/t}" {if $photo->color eq 'bw'} selected {/if}>{t}B/W{/t}</option>
                     </select>
                 </div><!-- / -->
             </div>

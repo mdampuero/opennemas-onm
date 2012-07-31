@@ -109,9 +109,9 @@ function toggleAdvanced() {
                     </select>
                     <label for="color">{t}Color:{/t}</label>
                     <select name="color" id="color" />
-                         <option value="" selected>{t} - All types - {/t}</option>
-                        <option value="BN" >{t}Black and white{/t}</option>
-                        <option value="color" >{t}Color{/t}</option>
+                        <option value="" {if empty($search_criteria['color'])}selected{/if}>{t} - All types - {/t}</option>
+                        <option value="bn" {if $search_criteria['color'] == 'bn'}selected{/if}>{t}Black and white{/t}</option>
+                        <option value="color" {if $search_criteria['color'] == 'color'}selected{/if}>{t}Color{/t}</option>
                     </select>
 
                     <label for="author">{t}Author:{/t}</label>
