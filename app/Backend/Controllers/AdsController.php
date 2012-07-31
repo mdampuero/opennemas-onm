@@ -140,7 +140,6 @@ class AdsController extends Controller
             'fileName'    => $this->generateUrl('admin_ads').'?'.$queryString.'&page=%d',
         ));
 
-
         $_SESSION['desde'] = 'advertisement';
 
         return $this->render('advertisement/list.tpl', array(
@@ -236,11 +235,12 @@ class AdsController extends Controller
 
         $ad->fk_content_categories = explode(',', $ad->fk_content_categories);
 
-        if(!empty($ad->img)) {
+        if (!empty($ad->img)) {
             //Buscar foto where pk_foto=img1
             $photo1 = new \Photo($ad->img);
             $this->view->assign('photo1', $photo1);
         }
+
         return $this->render('advertisement/new.tpl', array(
             'advertisement' => $ad,
         ));

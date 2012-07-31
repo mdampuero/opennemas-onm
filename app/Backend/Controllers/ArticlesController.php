@@ -9,7 +9,6 @@
  **/
 namespace Backend\Controllers;
 
-use Symfony\Component\HttpFoundation\Reponse;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Message as m;
@@ -292,13 +291,13 @@ class ArticlesController extends Controller
         $cm = new \ContentManager();
 
         // Photos de noticia
-        if (!empty($article->img1)){
+        if (!empty($article->img1)) {
             $photo1 = new \Photo($article->img1);
             $this->view->assign('photo1', $photo1);
         }
 
         $img2 = $article->img2;
-        if (!empty($img2)){
+        if (!empty($img2)) {
             $photo2 = new \Photo($img2);
             $this->view->assign('photo2', $photo2);
         }
@@ -338,7 +337,7 @@ class ArticlesController extends Controller
 
         $orderInner = array();
         $relations = $relationsHandler->getRelationsForInner($id);//de interor
-        foreach($relations as $aret) {
+        foreach ($relations as $aret) {
             $orderInner[] = new \Content($aret);
         }
         $this->view->assign('orderInner', $orderInner);
@@ -353,7 +352,7 @@ class ArticlesController extends Controller
             $orderHome = array();
             $relations = $relationsHandler->getHomeRelations($id);//de portada
             if (!empty($relations)) {
-                foreach($relations as $aret) {
+                foreach ($relations as $aret) {
                     $orderHome[] = new \Content($aret);
                 }
                 $this->view->assign('orderHome', $orderHome);

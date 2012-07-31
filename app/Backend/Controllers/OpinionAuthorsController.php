@@ -54,7 +54,6 @@ class OpinionAuthorsController extends Controller
         );
         $authorsPage = array_slice($authors, ($page-1)*$itemsPerPage, $itemsPerPage);
 
-
         // Build the pager
         $pagination = \Pager::factory(array(
             'mode'        => 'Sliding',

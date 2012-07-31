@@ -468,9 +468,9 @@ class OpinionsController extends Controller
                 )
             );
         }
+
          return $this->redirect($url);
     }
-
 
     /**
      * Change in_home status for one opinion given its id
@@ -511,6 +511,7 @@ class OpinionsController extends Controller
                 )
             );
         }
+
          return $this->redirect($url);
     }
 
@@ -553,6 +554,7 @@ class OpinionsController extends Controller
                 )
             );
         }
+
          return $this->redirect($url);
     }
 
@@ -796,7 +798,6 @@ class OpinionsController extends Controller
             'pagination'            => $pagination->links
         ));
     }
-
 
     /**
      * Handles the configuration for the opinion manager
