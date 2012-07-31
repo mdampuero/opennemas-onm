@@ -455,11 +455,11 @@ class cSearch
         $vWordsTemp = preg_split(cSearch::PARSE_STRING,
                 $szContentsTypeId);
 
-        $szIdTypes  = "( FALSE ";
+        $szIdTypes  = array();
         foreach ($vWordsTemp as $szId) {
-            $szIdTypes .= " OR " . $szColumn . " LIKE '" . $szId . "'";
+            $szIdTypes []= $szColumn . " LIKE '" . $szId . "'";
         }
-        $szIdTypes .= " )";
+        $szIdTypes = "( FALSE OR ". implode(' OR ', $szIdTypes)." )";
 
         return $szIdTypes;
     }

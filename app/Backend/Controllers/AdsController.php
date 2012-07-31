@@ -92,7 +92,7 @@ class AdsController extends Controller
             $categoryFilter = $this->category;
         }
 
-        $itemsPerPage = 1;//s::get('items_per_page');
+        $itemsPerPage = s::get('items_per_page');
 
         $cm = new \ContentManager();
         list($countAds, $ads)= $cm->getCountAndSlice(

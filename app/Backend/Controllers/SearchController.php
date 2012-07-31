@@ -32,21 +32,6 @@ class SearchController extends Controller
     public function init()
     {
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
-        $_SESSION['desde'] = 'search_advanced';
-
-        $this->type2res = array(
-            'article'       => 'article.php',
-            'advertisement' => '/admin/controllers/advertisement/advertisement.php',
-            'attachment'    => '/admin/controllers/files/files.php',
-            'opinion'       => '/admin/controllers/opinion/opinion.php',
-            'comment'       => '/admin/controllers/comment/comment.php',
-            'album'         => '/admin/controllers/album/album.php',
-            'photo'         => $this->generateUrl('admin_image_show'),
-            'video'         => '/admin/controllers/video/video.php',
-            'poll'          => '/admin/controllers/poll/poll.php',
-            'static_page'   => '/admin/controllers/static_pages/static_pages.php',
-            'widget'        => '/admin/controllers/widget/widget.php',
-        );
     }
 
     /**
@@ -56,17 +41,20 @@ class SearchController extends Controller
      **/
     public function defaultAction()
     {
-        // Get all the available content types
-        $contentTypes = \Content::getContentTypes();
-        $stringSearch = $this->request->query->filter('stringSearch', null, FILTER_SANITIZE_STRING);
+        $contentTypes = $this->getContentTypesFiltered();
+
+        $searchString = $this->request->query->filter('search_string', null, FILTER_SANITIZE_STRING);
+        $contentTypesSelected = $this->request->get('content_types', array());
         $page         = $this->request->query->filter('page', null, FILTER_VALIDATE_INT);
 
+        $itemsPerPage = s::get('items_per_page') ?: 20;
+
         // If search string is empty skip executing some logic
-        if (!empty($stringSearch)) {
+        if (!empty($searchString)) {
 
             $htmlChecks     = null;
-            $contentTypesChecked = $this->_checkTypes($htmlChecks);
-            $szTags         = trim($stringSearch);
+            $contentTypesChecked = $this->_checkTypes($contentTypesSelected);
+            $szTags         = trim($searchString);
             $objSearch      = new \cSearch();
             $contents   = $objSearch->SearchContentsSelectMerge(
                 "contents.title as titule, contents.metadata, contents.slug,
@@ -87,31 +75,22 @@ class SearchController extends Controller
                 for ($ind=0; $ind < sizeof($szTagsArray); $ind++) {
                     $content['titule']   = \Onm\StringUtils::extStrIreplace(
                         $szTagsArray[$ind],
-                        '<span style="font-weight:bold; color:blue">$1</span>',
+                        '<span class="highlighted">$1</span>',
                         $content['titule']
                     );
                     $content['metadata'] = \Onm\StringUtils::extStrIreplace(
                         $szTagsArray[$ind],
-                        '<span style="font-weight:bold; color:blue">$1</span>',
+                        '<span class="highlighted">$1</span>',
                         $content['metadata']
                     );
                 }
             }
-            $pagination = \Pager::factory(array(
-                'mode'        => 'Sliding',
-                'perPage'     => 10,
-                'delta'       => 0,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => count($contents),
-            ));
 
             $this->view->assign(array(
-                'search_string'    => $stringSearch,
-                'type2res'         => $this->type2res,
-                'pagination'       => $pagination,
-                'arrayResults'     => $contents,
-                'htmlCheckedTypes' => $htmlChecks
+                'search_string'          => $searchString,
+                'contents'               => $contents,
+                'content_types'          => $contentTypes,
+                'content_types_selected' => $contentTypesSelected,
             ));
         }
 
@@ -121,122 +100,133 @@ class SearchController extends Controller
     }
 
     /**
+     * Shows a list of contents that matches a search for content-providers
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function contentProviderAction(Request $request)
+    {
+        $searchString = $request->query->filter('search_string', '', FILTER_SANITIZE_STRING);
+        $page         = $request->query->getDigits('page', 1);
+        $related         = $request->query->filter('related', false, FILTER_SANITIZE_STRING);
+
+        if (!empty($searchString)) {
+
+            $searchStringArray = array_map(
+                function($element) {
+                    return trim($element);
+                }, explode(',', $searchString)
+            );
+
+            $searcher    = \cSearch::getInstance();
+            $matchString = '';
+
+            foreach ($searchStringArray as $key) {
+                $matchString[] = $searcher->defineMatchOfSentence($key);
+            }
+
+            $matchString = implode($matchString, ' AND ');
+
+            $sql = "SELECT pk_content, fk_content_type FROM contents".
+                  " WHERE contents.available=1 AND fk_content_type ".
+                  " IN(1, 2, 3, 4, 7, 9, 10, 11) AND ".$matchString.
+                  " ORDER BY starttime DESC";
+            $rs  = $GLOBALS['application']->conn->GetArray($sql);
+
+            $results = array();
+            if ($rs !== false) {
+                $resultSetSize = count($rs);
+                $rs            = array_splice($rs, ($page-1)*9, 9);
+
+                foreach ($rs as $content) {
+                    $results[] = new \Content($content['pk_content']);
+                }
+
+                $pager = \Pager::factory(array(
+                    'mode'        => 'Sliding',
+                    'perPage'     => 9,
+                    'delta'       => 3,
+                    'clearIfVoid' => true,
+                    'urlVar'      => 'page',
+                    'totalItems'  => $resultSetSize,
+                ));
+                $this->view->assign('pager', $pager);
+            }
+            $this->view->assign('results', $results);
+
+            $this->view->assign('search_string', $searchString);
+            if (!is_null($related)) {
+
+                return $this->render("common/content_provider/_container-content-list.tpl", array(
+                    'contents'    => $results,
+                    'pagination'  => $pager->links,
+                    'contentType' => 'Content',
+                ));
+
+            } else {
+
+                return $this->render('search_advanced/content-provider.tpl');
+            }
+        } else {
+            if (!is_null($related)) {
+
+                return $this->render('search_advanced/content-provider-related.tpl');
+            } else {
+
+                return $this->render('search_advanced/content-provider.tpl');
+            }
+        }
+    }
+
+    /**
      * Name: checkTypes
      * Description: Parsea el $_REQUEST y obtiene un string con los tipos de contenidos enviados a la página.
      * Output: cadena de texto con los nombre de los tipos de contenidos separados por comas.
      */
-    private function _checkTypes(& $htmlCheck)
+    private function _checkTypes($selected)
     {
-        $arrayTypes = \Content::getContentTypes();
+        $contentTypes = \Content::getContentTypes();
         $szTypes =  '';
-        foreach ($arrayTypes as $aType) {
-            if ($aType['name']== 'advertisement') {
-                $aType['name']= 'ads';
+        foreach ($contentTypes as $contentType) {
+            if ($contentType['name']== 'advertisement') {
+                $contentType['name']= 'ads';
             }
-            if ($aType['name']== 'attachment') {
-                $aType['name']= 'file';
+            if ($contentType['name']== 'attachment') {
+                $contentType['name']= 'file';
             }
-            if ($aType['name']== 'photo') {
-                $aType['name']= 'image';
+            if ($contentType['name']== 'photo') {
+                $contentType['name']= 'image';
             }
-            if ($aType['name']== 'static_page') {
-                $aType['name']= 'static_pages';
+            if ($contentType['name']== 'static_page') {
+                $contentType['name']= 'static_pages';
             }
 
-            if (mod::moduleExists(strtoupper($aType['name']).'_MANAGER')
-                && mod::isActivated(strtoupper($aType['name']).'_MANAGER')
+            if (mod::moduleExists(strtoupper($contentType['name']).'_MANAGER')
+                && mod::isActivated(strtoupper($contentType['name']).'_MANAGER')
             ) {
-                if (isset($_REQUEST[$aType[1]])) {
-                    $szTypes .= $aType[1] . ", ";
-                    $htmlCheck .= '<input id="'.$aType[1] .'" name="' . $aType[1]
-                        .'"  type="checkbox" valign="center" checked="true"/>'
-                        .$aType['title'];
-                } else {
-                    $htmlCheck .= '<input id="'. $aType[1].'" name="'.$aType[1]
-                        .'"  type="checkbox" valign="center"/>'.$aType['title'];
-                }
+                $szTypes []= $contentType['name'];
             }
         }
 
-        $szTypes = trim($szTypes);
-        $szTypes = substr($szTypes, 0, strlen($szTypes)-1);
-
-        return $szTypes;
+        return implode(',', $szTypes);
     }
 
-    /*
-     * Crea los link clicables con tres paginas para
-     * seleccionar y un primera y última.
-     *
-     * @param Pager  $Pager             Paginador de la libreria externa.
-     * @param string $szSearchString    Metadatos a buscar en la base de datos.
-     * @param array  $arrayCheckedTypes con los tipos de datos en
-     *                                 los cuales buscaremos.
-     *
-     * @return string codigo html con los links a las diferentes páginas.
-    */
-    private function _paginateLink($Pager, $szSearchString, $arrayCheckedTypes)
+    public function getContentTypesFiltered()
     {
-        $szPages=null;
-        if ($Pager->_totalPages <= 1) {
-            return $szPages;
-        }
-        $szPages = '<p align="center">';
-        if ($Pager->_currentPage != 1) {
-            $szPages .= '<a style="cursor:pointer;" href="#" onclick="paginate_search(\'search_paging\', 1, \''.
-                        $szSearchString.'\', \'';
-            foreach ($arrayCheckedTypes as $itemType) {
-                $szPages .= "&".$itemType."=on";
-            }
-            $szPages .= '\'); return false;">Primera</a> ... | ';
-        }
+        $contentTypes = \Content::getContentTypes();
+        $contentTypesFiltered = array();
 
-        for ($iIndex = $Pager->_currentPage-1;
-            $iIndex<=$Pager->_currentPage+1 && $iIndex <= $Pager->_totalPages;
-            $iIndex++) {
-            if ($Pager->_currentPage == 1) {
-                if (($iIndex+1) > $Pager->_totalPages) {
-                    break;
-                }
-                $szPages .= '<a style="cursor:pointer;" href="#" onclick="paginate_search(\'search_paging\',' .
-                            ($iIndex+1) . ', \''. $szSearchString.'\', \'';
-                foreach ($arrayCheckedTypes as $itemType) {
-                    $szPages .= "&".$itemType."=on";
-                }
-                $szPages .= '\'); return false;">';
-
-                if ($Pager->_currentPage == ($iIndex+1)) {
-                    $szPages .= '<b>' . ($iIndex+1) . '</b></a> | ';
-                } else {
-                    $szPages .= ($iIndex+1) . '</a> | ';
-                }
-            } else {
-                $szPages .= '<a style="cursor:pointer;" href="#" onclick="paginate_search(\'search_paging\',' .
-                            $iIndex . ', \''. $szSearchString.'\', \'';
-                foreach ($arrayCheckedTypes as $itemType) {
-                    $szPages .= "&".$itemType."=on";
-                }
-                $szPages .= '\'); return false;">';
-
-                if ($Pager->_currentPage == ($iIndex)) {
-                    $szPages .= '<b>' . $iIndex . '</b></a> | ';
-                } else {
-                    $szPages .= $iIndex . '</a> | ';
-                }
+        foreach ($contentTypes as $contentType) {
+            if (mod::moduleExists(strtoupper($contentType['name']).'_MANAGER')
+                && mod::isActivated(strtoupper($contentType['name']).'_MANAGER')
+            ) {
+                $contentTypesFiltered [] = $contentType;
             }
         }
-        if ($Pager->_currentPage != $Pager->_lastPageText) {
-            $szPages .= '... <a style="cursor:pointer;" href="#" '
-                .'onclick="paginate_search(\'search_paging\',' .
-                $Pager->_lastPageText . ', \''. $szSearchString.'\', \'';
-            foreach ($arrayCheckedTypes as $itemType) {
-                $szPages .= "&".$itemType."=on";
-            }
-            $szPages .= '\'); return false;">Última</a>';
-        }
-        $szPages .= "</p> ";
 
-        return $szPages;
+        return $contentTypesFiltered;
     }
 
 } // END class SearchController

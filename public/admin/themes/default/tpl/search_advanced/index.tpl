@@ -1,18 +1,21 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
-<style type="text/css" media="screen">
-#stringSearch {
-    width:80%;
+<style type="text/css">
+#search-form button {
+    width:100%;
 }
-label {
-    font-weight:normal;
+#search_string{
+    width:96%
 }
-.content-type-picker {
-    display:inline-block;
-    padding:3px 0;
-    min-width:90px;
-    margin-right:5px;
+#content_types {
+    min-height:150px;
+}
+#search-form {
+    height:100%
+}
+span.highlighted {
+    color:Red
 }
 </style>
 {/block}
@@ -29,45 +32,39 @@ label {
             <div class="search clearfix">
                 <div class="search-results">
                     <div id="search-results">
-
-                        {if !is_null($smarty.get.stringSearch)}
+                        {if !is_null($search_string)}
                             {include file="search_advanced/partials/_list.tpl"}
                         {else}
-
-                            <div class="empty">
-                                <p>
-                                    <img src="{$params.IMAGE_DIR}/search/search-images.png">
-                                </p>
-                                {t escape="off"}Please fill the form of<br> the side to search contents{/t}
-                            </div><!-- / -->
+                        <div class="empty">
+                            <p>
+                                <img src="{$params.IMAGE_DIR}/search/search-images.png">
+                            </p>
+                            {t escape="off"}Please fill the form for searching contents{/t}
+                        </div><!-- / -->
                         {/if}
                     </div><!-- /search-results -->
                 </div><!-- /search -->
                 <div class="search-form">
                     <div>
-                        <label for="string_search">
-                            {t}Content name{/t}
-                            <input type="search" id="stringSearch" name="stringSearch" title="stringSearch" value="{$search_string}"
-                                class="input-medium search-query" /> &nbsp;
 
-                        </label>
+                        <label for="string_search">{t}Content name{/t}</label>
+                        <input type="search" id="search_string" name="search_string" title="stringSearch" value="{$search_string}"
+                                class="input-medium search-query" />
+                        <button type="submit" class="onm-button red submit" style="width:100%">{t}Search{/t}</button>
+
+                        <br>
 
                         <div class="search-bar-title">{t}Content type{/t}</div>
-
+                        <select name="content_types[]" id="content_types" multiple>
                         {foreach name=contentTypes item=type from=$arrayTypes}
-                        <div class="content-type-picker type-picker">
-                            {if $type[0] == 1 || $type[0] == 4}
-                            <input class="{$type[0]}" name="{$type[1]}" id="{$type[1]}" type="checkbox" checked="checked"/>
-                            <label for="{$type[1]}">{$type[2]|mb_capitalize}</label>
+                            {if (!empty($string_search) && ($type['pk_content_type'] == 1 || $type['pk_content_type'] == 4))
+                                || (in_array($type['name'], $content_types_selected))}
+                            <option value="{$type['name']}" selected="selected"/>{$type['name']|ucfirst}</option>
                             {else}
-                            <input class="{$type[0]}" name="{$type[1]}" id="{$type[1]}" type="checkbox" />
-                            <label for="{$type[1]}">{$type[2]|mb_capitalize}</label>
+                            <option value="{$type['name']}" />{$type['name']|ucfirst}</option>
                             {/if}
-                        </div>
-
                         {/foreach}
-                        <br>
-                        <button type="submit" class="btn btn-danger">{t}Search content{/t}</button>
+                        </select>
                     </div><!-- /search-form -->
                 </div>
             </div><!-- /search -->

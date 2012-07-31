@@ -2,14 +2,11 @@
     <ul>
         {is_module_activated name="ADVANCED_SEARCH"}
         <li>
-            <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/search_advanced/search_advanced.php?action=content-provider-related&amp;">{t}Search{/t}</a>
+            <a href="{url name=admin_search_content_provider related=1 category=$category}">{t}Search{/t}</a>
         </li>
         {/is_module_activated}
 
         {is_module_activated name="ARTICLE_MANAGER"}
-        {* <li>
-            <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/article.php?action=related-provider-suggested">{t}Suggested articles{/t}</a>
-        </li> *}
         <li>
             <a href="{url name=admin_articles_content_provider_related category=$category}">{t}Articles{/t}</a>
         </li>

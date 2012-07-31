@@ -3,9 +3,7 @@ TODO
 
 Advanced Search Controller
 --------------------------
-- Integrate the contents paginated
 - Port search content-provider
-- Review content links for editing them (shows old urls)
 - Review all the icons (when a content is trashed, archived, ...)
 
 Europapress Importer

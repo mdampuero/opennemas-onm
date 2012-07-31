@@ -1526,6 +1526,15 @@ $adminRoutes->add(
     '/admin'
 );
 
+$adminRoutes->add(
+    'admin_search_content_provider',
+    new Route(
+        '/search/content-provider',
+        array('_controller' => 'Backend:Controllers:SearchController:contentProvider')
+    ),
+    '/admin'
+);
+
 // Keywork controller routes
 $adminRoutes->add(
     'admin_keyword',
