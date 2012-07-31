@@ -62,13 +62,12 @@ class FilesController extends Controller
      * Lists the files for a given category
      * @return Response the response object
      **/
-    public function listAction()
+    public function listAction(Request $request)
     {
         $this->checkAclOrForward('FILE_ADMIN');
         $cm           = new \ContentManager();
         $itemsPerPage = s::get('items_per_page');
 
-        $request  = $this->get('request');
         $page     = $request->query->getDigits('page', 1);
         $listingStatus   = $request->query->getDigits('listing-status');
 
@@ -496,7 +495,12 @@ class FilesController extends Controller
         }
 
         return $this->redirect($this->generateUrl(
-            'admin_files_widget'
+            'admin_files',
+            array(
+                'page' => $page,
+                'status' => $status,
+                'category' => $this->category,
+            )
         ));
     }
     /**
@@ -524,8 +528,9 @@ class FilesController extends Controller
         return $this->redirect($this->generateUrl(
             'admin_files',
             array(
+                'page' => $page,
+                'status' => $status,
                 'category' => $this->category,
-                'page'     => $page,
             )
         ));
     }
@@ -563,8 +568,9 @@ class FilesController extends Controller
         return $this->redirect($this->generateUrl(
             'admin_files',
             array(
+                'page' => $page,
+                'status' => $status,
                 'category' => $this->category,
-                'page'    => $page,
             )
         ));
     }
@@ -597,8 +603,9 @@ class FilesController extends Controller
         return $this->redirect($this->generateUrl(
             'admin_files',
             array(
+                'page' => $page,
+                'status' => $status,
                 'category' => $this->category,
-                'page'     => $page,
             )
         ));
     }
