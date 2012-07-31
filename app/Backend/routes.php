@@ -1370,6 +1370,17 @@ $adminRoutes->add(
 
 // Files controller routes
 $adminRoutes->add(
+    'admin_files',
+    new Route(
+        '/files',
+        array(
+            '_controller' => 'Backend:Controllers:FilesController:list',
+        )
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
     'admin_files_statistics',
     new Route(
         '/files/statistics',
@@ -1463,17 +1474,6 @@ $adminRoutes->add(
         '/files/{id}/toggle-available',
         array(
             '_controller' => 'Backend:Controllers:FilesController:toggleAvailable',
-        )
-    ),
-    '/admin'
-);
-
-$adminRoutes->add(
-    'admin_files',
-    new Route(
-        '/files',
-        array(
-            '_controller' => 'Backend:Controllers:FilesController:list',
         )
     ),
     '/admin'

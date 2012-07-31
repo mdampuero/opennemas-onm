@@ -656,7 +656,7 @@ class Photo extends Content
         }
         parent::update($data);
 
-        $sql = "UPDATE `photos` SET `author_name`=?,`address`=?, `color`=?, "
+        $sql = "UPDATE `photos` SET `author_name`=?, `address`=?, `color`=?, "
              . "`date`=?, `resolution`=? WHERE `pk_photo`=?";
 
         $values = array(

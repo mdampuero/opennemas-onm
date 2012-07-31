@@ -25,19 +25,18 @@ $menuXml = '<?xml version="1.0"?>
             link="'.url('admin_widgets').'"
         />
         <node
+            module_name="MENU_MANAGER"
+            privilege="MENU_ADMIN"
+            title="'.htmlspecialchars(_("Menus"), ENT_QUOTES).'"
+            id="menu_manager"
+            link="'.url('admin_menus').'"
+        />
+        <node
             module_name="SYNC_MANAGER"
             title="'.htmlspecialchars(_("Sync Instances"), ENT_QUOTES).'"
             privilege="SYNC_ADMIN"
             id="sync_manager"
             link="controllers/web_services/client.php"
-        />
-        <node class="divider" />
-        <node
-            module_name="MENU_MANAGER"
-            privilege="MENU_ADMIN"
-            title="'.htmlspecialchars(_("Menu manager"), ENT_QUOTES).'"
-            id="menu_manager"
-            link="'.url('admin_menus').'"
         />
     </submenu>
 
