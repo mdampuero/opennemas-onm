@@ -4,24 +4,6 @@ TODO
 Advanced Search Controller
 --------------------------
 - Port search content-provider
-- Review all the icons (when a content is trashed, archived, ...)
-
-Europapress Importer
---------------------
-- Review back button in article editting form when importing
-
-EFE importer
-------------
-- Review back button in article editting form when importing
-
-Files
------
-- Review redirections in listing an toggle home actions.
-
-Images
-------
-- Review all search filters
-- Color property is not save propertly
 
 Menus
 -----
@@ -30,10 +12,6 @@ Menus
 Categories
 ----------
 - Review create and update actions (assign subsection, subsection change sideeffects??)
-
-Opinion
--------
-- Review redirections after update an opinion (search, ...)
 
 Opinion Authors
 ---------------
@@ -44,7 +22,6 @@ Articles
 --------
 - Batch actions
 - Review toggle available action
-- Refactorice show method, CRAPPY
 - Finish related provider (pagination, category filtering, search provider)
 - Check related when delete an article
 - While editing an article in the related manager when selecting a different
@@ -54,6 +31,18 @@ Articles
 
 LOW PRIORITY TASKS OR IDEAS
 --------------------------------------------------------------------------------
+
+Opinion
+-------
+- Review redirections after update an opinion (search, ...)
+
+Europapress Importer
+--------------------
+- Review back button in article editting form when importing
+
+EFE importer
+------------
+- Review back button in article editting form when importing
 
 Files
 -----
@@ -74,18 +63,17 @@ General
 - Include the logger initialization into the container and make use of it
 - Include the mailer initialization into the container and make use of it
   (maybe using the Swift Mailer library)
-- Jenkins had highlighted some changes in files of backend. We must review new
-controllers to find changes. The next lines are the files changed from the commit
-before changes happend to the commit that master was merged into symfony-router
-git diff --name-only e7671812699af6da10fb30b2212673948bd018fc 67180574cd98d75e0a60b7c0459f92a2a1a36731|grep php
 - Drop category and menu logic from init method in Backend Controllers
 
 Search advanced
 ---------------
 - ENHANCEMENT: Improve advanced search capabilities (filter by category, date range, ...)
 
-
 Tpl cache manager
 -----------------
 - When selecting a new "items per page" option
   and push enter, the deleting tpl shows an alert dialog
+
+Images
+------
+- Review color filter in search
