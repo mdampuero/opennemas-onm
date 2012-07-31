@@ -11,9 +11,6 @@
 <div class="wrapper-content">
     <ul class="pills">
         <li>
-            <a href="{url name=admin_files_statistics}" id="link_global" class="active">{t}Statistics{/t}</a>
-        </li>
-        <li>
             <a href="{url name=admin_files_widget}" >{t}WIDGET HOME{/t}</a>
         </li>
     </ul>

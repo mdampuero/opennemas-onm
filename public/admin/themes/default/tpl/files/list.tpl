@@ -72,15 +72,18 @@
                         </li>
                     {/if}
                 {/acl}
+                <li class="separator"></li>
+                <li>
+                    <a href="{url name=admin_files_statistics}">
+                        <img src="{$params.IMAGE_DIR}statistics.png" alt="Statistics"><br>Statistics
+                    </a>
+                </li>
             </ul>
             {/if}
         </div>
     </div>
     <div class="wrapper-content">
         <ul class="pills">
-            <li>
-                <a href="{url name=admin_files_statistics}" id="link_global" >{t}Statistics{/t}</a>
-            </li>
             <li>
                 <a href="{url name=admin_files_widget}" {if $category eq 'widget'}class="active"{/if}>{t}WIDGET HOME{/t}</a>
             </li>
