@@ -1,10 +1,6 @@
 TODO
 ====
 
-Advanced Search Controller
---------------------------
-- Port search content-provider
-
 Menus
 -----
 - Allow to edit available elements in menu (change name, link, ...).
@@ -22,11 +18,14 @@ Articles
 --------
 - Batch actions
 - Review toggle available action
-- Finish related provider (pagination, category filtering, search provider)
+- Review D&D of search content provider
 - Check related when delete an article
-- While editing an article in the related manager when selecting a different
-  category the screen goes blank
 - Port image and video providers to symfony controller actions
+
+Newsletter
+----------
+- Only initial work done
+- Review content provider
 
 
 LOW PRIORITY TASKS OR IDEAS

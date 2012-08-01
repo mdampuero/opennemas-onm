@@ -1,6 +1,6 @@
 {if isset($contentTypeCategories) && !empty($contentTypeCategories)}
-<select id="contentTypeCategories" data-href="{$smarty.server.SCRIPT_NAME}?action={$action|default:'content-list-provider'}">
-
+<select id="contentTypeCategories" data-href="{$contentProviderUrl}">
+        <option value="0">{t}-- All categories --{/t}</option>
         {section name=as loop=$contentTypeCategories}
             <option value="{$contentTypeCategories[as]->pk_content_category}"
                 {if $category eq $contentTypeCategories[as]->pk_content_category}selected{/if}>
@@ -14,6 +14,10 @@
 {/if}
 
 <div class="contents">
+    {if !empty($pagination)}
+        <div class="pagination"> {$pagination} </div>
+    {/if}
+
     <ul id='contentList'>
         {section name=n loop=$contents}
             <li data-id="{$contents[n]->id}" data-type="{$contentType}" data-title="{$contents[n]->title|clearslash}">
@@ -25,6 +29,7 @@
             </li>
         {/section}
     </ul>
-{if !empty($pagination)}
-    <div class="pagination"> {$pagination} </div>
-{/if}
+    {if !empty($pagination)}
+        <div class="pagination"> {$pagination} </div>
+    {/if}
+</div>

@@ -697,7 +697,7 @@ class ArticlesController extends Controller
 
         $pagination = \Pager::factory(array(
             'mode'        => 'Sliding',
-            'perPage'     => 8,
+            'perPage'     => $itemsPerPage,
             'append'      => false,
             'path'        => '',
             'delta'       => 4,
@@ -714,7 +714,8 @@ class ArticlesController extends Controller
             'contents'              => $articles,
             'contentTypeCategories' => $this->parentCategories,
             'category'              => $this->category,
-            'pagination'            => $pagination->links
+            'pagination'            => $pagination->links,
+            'contentProviderUrl'    => $this->generateUrl('admin_articles_content_provider_related'),
         ));
     }
 

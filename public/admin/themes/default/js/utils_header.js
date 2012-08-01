@@ -1,6 +1,4 @@
 var objForm = null;
-var dialogo = null;
-var editores = null;
 
 function enviar(elto, trg, acc, id) {
     var parentEl = elto.parentNode;
@@ -44,13 +42,6 @@ function sendFormValidate(elto, trg, acc, id, formID)
         return;
 
     enviar(elto, trg, acc, id);
-}
-function preview(elto, trg, acc, id)
-{
-    this.blur();
-    try { UserVoice.PopIn.show(id); return false; }
-    catch(e){}
-
 }
 
 function confirmar(elto, id) {
@@ -136,25 +127,5 @@ function enviar2(elto, trg, acc, id) {
                 parentEl.submit();
             }
         }
-    }
-}
-
-function cancel(action,category,page) {
-    if(/index_portada/.test(action)) {
-        location.href ='/admin/index.php';
-    }else if(/opinion/.test(action)) {
-        location.href ='/admin/controllers/opinion/opinion.php';
-    }else if(/advertisement/.test(action)) {
-        location.href ='controllers/advertisement/advertisement.php';
-    }else if(/europa_press_import/.test(action)) {
-        location.href ='controllers/agency_importer/europapress.php';
-    }else if(/search_advanced/.test(action)) {
-        location.href ='/admin/controllers/search_advanced/search_advanced.php';
-    }else if(/widget/.test(action)) {
-        location.href ='widget.php';
-    }else if (action=='new' && category=='opinion') {
-        location.href ='/admin/controllers/opinion/opinion.php';
-    }else{
-        location.href= '/admin/article.php?action='+action+'&amp;category='+category+'&amp;page='+page;
     }
 }

@@ -61,8 +61,9 @@ jQuery(document).ready(function($){
         e.preventDefault();
 
         var category = $(this).val();
-        var href   = $(this).data('href')+'&category='+category;
+        var href   = $(this).data('href')+'?category='+category;
         var parent = $(this).closest('.ui-tabs-panel');
+
         $.ajax({
             url: href,
             success: function(data){

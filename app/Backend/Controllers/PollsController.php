@@ -560,7 +560,7 @@ class PollsController extends Controller
 
         $pagination = \Pager::factory(array(
             'mode'        => 'Sliding',
-            'perPage'     => 8,
+            'perPage'     => $itemsPerPage,
             'append'      => false,
             'path'        => '',
             'delta'       => 4,
@@ -577,7 +577,8 @@ class PollsController extends Controller
             'contents'              => $polls,
             'contentTypeCategories' => $this->parentCategories,
             'category'              => $category,
-            'pagination'            => $pagination->links
+            'pagination'            => $pagination->links,
+            'contentProviderUrl'    => $this->generateUrl('admin_polls_content_provider_related'),
         ));
     }
 

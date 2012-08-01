@@ -144,15 +144,15 @@ class SearchController extends Controller
                     $results[] = new \Content($content['pk_content']);
                 }
 
-                $pager = \Pager::factory(array(
+                $pagination = \Pager::factory(array(
                     'mode'        => 'Sliding',
-                    'perPage'     => 9,
+                    'perPage'     => s::get('items_per_page') ?: 20,
                     'delta'       => 3,
                     'clearIfVoid' => true,
                     'urlVar'      => 'page',
                     'totalItems'  => $resultSetSize,
                 ));
-                $this->view->assign('pager', $pager);
+                $this->view->assign('pagination', $pagination->links);
             }
             $this->view->assign('results', $results);
 
@@ -161,13 +161,15 @@ class SearchController extends Controller
 
                 return $this->render("common/content_provider/_container-content-list.tpl", array(
                     'contents'    => $results,
-                    'pagination'  => $pager->links,
                     'contentType' => 'Content',
                 ));
 
             } else {
 
-                return $this->render('search_advanced/content-provider.tpl');
+                return $this->render('search_advanced/content-provider.tpl', array(
+                    'contents'    => $results,
+                    'contentType' => 'Content',
+                ));
             }
         } else {
             if (!is_null($related)) {

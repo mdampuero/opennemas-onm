@@ -748,7 +748,7 @@ class VideosController extends Controller
 
         $pagination = \Pager::factory(array(
             'mode'        => 'Sliding',
-            'perPage'     => 8,
+            'perPage'     => $itemsPerPage,
             'append'      => false,
             'path'        => '',
             'delta'       => 4,
@@ -765,7 +765,8 @@ class VideosController extends Controller
             'contents'              => $videos,
             'contentTypeCategories' => $this->parentCategories,
             'category'              => $this->category,
-            'pagination'            => $pagination->links
+            'pagination'            => $pagination->links,
+            'contentProviderUrl'    => $this->generateUrl('admin_videos_content_provider_related'),
         ));
     }
 

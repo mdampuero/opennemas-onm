@@ -250,7 +250,7 @@
                 </table>
                 <br>
                 <div id="videos">
-                    {*AJAX videoGallery *}
+                    <!-- Ajax -->
                </div>
             </div>
         </td>
@@ -277,9 +277,13 @@ jQuery(document).ready(function($){
         };
     });
 
+    $.ajax('{url name=admin_images_content_provider_gallery category=$category}', {
+        success: function(data) {
+            $('#photos').html(data);
+        }
+    })
 
 });
-getGalleryImages('listByCategory','{$category}','','1');
 </script>
 {/is_module_activated}
 

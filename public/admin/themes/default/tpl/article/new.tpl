@@ -28,7 +28,6 @@
 
 {block name="footer-js" append}
     {script_tag src="/onm/jquery.content-provider.js"}
-    {script_tag src="/jquery-onm/jquery.articlerelated.js"}
     {script_tag src="/jquery-onm/jquery.inputlength.js"}
     <script>
     jQuery(document).ready(function($){

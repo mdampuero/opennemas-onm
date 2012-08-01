@@ -660,30 +660,43 @@ class FilesController extends Controller
      **/
     public function contentListProviderAction(Request $request)
     {
-        $category     = $request->query->getDigits('category', 0);
-        $page         = $request->query->getDigits('page', 1);
-
+        $category = $request->query->getDigits('category', 0);
+        $page     = $request->query->getDigits('page', 1);
         $itemsPerPage = s::get('items_per_page') ?: 20;
 
-        $cm = new \ContentManager();
-        list($polls, $pager) = $cm->find_pages('Attachment',
-            'available=1 ',
-            'ORDER BY starttime DESC,  contents.title ASC ',
+        $cm = new  \ContentManager();
+
+        list($countPolls, $polls) = $cm->getCountAndSlice(
+            'Attachment',
+            $null,
+            'contents.available=1',
+            ' ORDER BY starttime DESC, contents.title ASC ',
             $page,
-            $itemsPerPage,
-            $category
+            $itemsPerPage
         );
 
-        return $this->render(
-            'common/content_provider/_container-content-list.tpl',
-            array(
-                'contentType'           => 'Attachment',
-                'contents'              => $polls,
-                'contentTypeCategories' => $this->parentCategories,
-                'category'              => $this->category,
-                'pagination'            => $pager->links
-            )
-        );
+        $pagination = \Pager::factory(array(
+            'mode'        => 'Sliding',
+            'perPage'     => $itemsPerPage,
+            'append'      => false,
+            'path'        => '',
+            'delta'       => 4,
+            'clearIfVoid' => true,
+            'urlVar'      => 'page',
+            'totalItems'  => $countPolls,
+            'fileName'    => $this->generateUrl('admin_files_content_provider', array(
+                'category' => $category,
+            )).'&page=%d',
+        ));
+
+        return $this->render('common/content_provider/_container-content-list.tpl', array(
+            'contentType'           => 'Attachment',
+            'contents'              => $polls,
+            'contentTypeCategories' => $this->parentCategories,
+            'category'              => $this->category,
+            'pagination'            => $pagination->links,
+            'contentProviderUrl'    => $this->generateUrl('admin_files_content_provider'),
+        ));
     }
 
 } // END class FilesController

@@ -623,7 +623,7 @@ class AlbumsController extends Controller
 
         $pagination = \Pager::factory(array(
             'mode'        => 'Sliding',
-            'perPage'     => 8,
+            'perPage'     => $itemsPerPage,
             'append'      => false,
             'path'        => '',
             'delta'       => 4,
@@ -640,7 +640,8 @@ class AlbumsController extends Controller
             'contents'              => $albums,
             'contentTypeCategories' => $this->parentCategories,
             'category'              => $category,
-            'pagination'            => $pagination->links
+            'pagination'            => $pagination->links,
+            'contentProviderUrl'    => $this->generateUrl('admin_albums_content_provider_related'),
         ));
     }
 

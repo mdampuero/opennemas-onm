@@ -782,7 +782,7 @@ class OpinionsController extends Controller
 
         $pagination = \Pager::factory(array(
             'mode'        => 'Sliding',
-            'perPage'     => 8,
+            'perPage'     => $itemsPerPage,
             'append'      => false,
             'path'        => '',
             'delta'       => 4,
@@ -795,7 +795,8 @@ class OpinionsController extends Controller
         return $this->render('common/content_provider/_container-content-list.tpl', array(
             'contentType'           => 'Opinion',
             'contents'              => $opinions,
-            'pagination'            => $pagination->links
+            'pagination'            => $pagination->links,
+            'contentProviderUrl'    => $this->generateUrl('admin_opinions_content_provider_related'),
         ));
     }
 
