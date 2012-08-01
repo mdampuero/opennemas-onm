@@ -1,8 +1,6 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-js" append}
-    {script_tag src="/utilsarticle.js" language="javascript"}
-
     <script>
     jQuery(document).ready(function ($){
         $('[rel="tooltip"]').tooltip();

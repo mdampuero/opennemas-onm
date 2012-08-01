@@ -5,9 +5,7 @@
     {script_tag src="/jquery/jquery-ui-sliderAccess.js"}
     {script_tag src="/jquery/jquery.colorbox-min.js"}
     {script_tag src="/onm/jquery.datepicker.js"}
-    {script_tag src="/utilsarticle.js"}
     {script_tag src="/jquery-onm/jquery.article.js"}
-    {script_tag src="/utilsGallery.js"}
     {script_tag src="/swfobject.js"}
 {/block}
 
@@ -259,7 +257,6 @@
                                 <input type="text" id="metadata" name="metadata"
                                    {if isset($article) && is_object($article)}
                                    value="{$article->metadata}"
-                                   onChange="search_related('{$article->pk_article|default:""}',$('metadata').value);"
                                    {/if} title="Metadatos" tabindex="6" style="width:100%"/>
                             </td>
                         </tr>

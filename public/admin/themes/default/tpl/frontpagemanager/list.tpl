@@ -65,7 +65,7 @@
 
                 <li class="separator batch-actions"></li>
                 <li>
-                    <a href="/admin/article.php?action=new&amp;category={$category}" class="admin_add" title="{t}New article{/t}">
+                    <a href="{url name=admin_article_create}" class="admin_add" title="{t}New article{/t}">
                         <img src="{$params.IMAGE_DIR}/article_add.png" title="" alt="" />
                         <br />{t}New article{/t}
                     </a>

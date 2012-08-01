@@ -1,7 +1,6 @@
 /***************************************************************************
 * Jquery functions and helpers for manage article
 ***************************************************************************/
-
 jQuery(function($){
 
     $('a#button_preview').on('click', function(e, ui){
@@ -12,7 +11,6 @@ jQuery(function($){
         OpenNeMas.tinyMceFunctions.saveTiny('body');
 
         // Fetch related news and others
-        recolectar();
         save_related_contents();
 
         previewArticle('formulario');
