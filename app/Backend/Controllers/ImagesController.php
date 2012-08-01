@@ -741,4 +741,92 @@ class ImagesController extends Controller
             )
         ));
     }
+
+    /**
+     * Shows a paginated list of images from a category
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function contentProviderGalleryAction(Request $request)
+    {
+        $category = $request->query->getDigits('category', 0);
+
+        $filterby = $request->query->filter('filter_by', 'listByMetadatas');
+
+        $page = $request->query->getDigits('page', 1);
+        $itemsPerPage = s::get('items_per_page') + 1;
+        $numItems = $itemsPerPage + 1;
+
+        if (empty($page)) {
+            $limit    = "LIMIT {$numItems}";
+        } else {
+            $limit    = "LIMIT ".($page-1) * $itemsPerPage .', '.$numItems;
+        }
+
+        $cm = new \ContentManager();
+
+        // Take one more than $itemsPerPage for implement pagination
+        $metadatas = $request->query->filter('metadatas', '', FILTER_SANITIZE_STRING);
+
+        if (!empty($metadatas)) {
+
+            $presentSearch = \cSearch::getInstance();
+            $arrayIds      = $presentSearch->searchContentsSelect('pk_content', $metadatas, 'photo', 100);
+            if (!empty($arrayIds))
+            {
+                $szWhere   = '( FALSE ';
+                foreach ($arrayIds as $id) {
+                    $szWhere .= ' OR pk_content = ' . $id[0];
+                }
+                $szWhere .= ')';
+            } else {
+                $szWhere = "TRUE";
+
+                return new Response(sprintf(_(
+                    "<div>"
+                    ."<p>Unable to find any content matching your search criterira.</p>"
+                    ."<p>Your search string <strong>%s</strong> doesn't have any matched content.</p>"
+                    ."</div>"
+                ), $metadatas));
+            }
+
+        } else {
+            $szWhere = "TRUE";
+        }
+
+        if (empty($category)) {
+            $photos = $cm->find(
+                'Photo',
+                'contents.fk_content_type = 8 AND photos.media_type="image" AND contents.content_status=1 AND ' . $szWhere,
+                'ORDER BY created DESC '.$limit
+            );
+        } else {
+            $photos = $cm->find_by_category(
+                'Photo',
+                $category,
+                'fk_content_type = 8 AND photos.media_type="image" AND contents.content_status=1 AND ' . $szWhere,
+                'ORDER BY created DESC '.$limit
+            );
+        }
+
+        if (count($photos) > $itemsPerPage) {
+            array_pop($photos);
+        }
+
+        $imagePager = \Onm\Pager\SimplePager::getPager(array(
+            'page'     => $page,
+            'items'    => $itemsPerPage,
+            'total'    =>  count($photos),
+            'function' => 'getGalleryImages',
+            'others'   => '"listByMetadatas", "'.$category.'", "'.$metadatas.'"'
+        ));
+
+        return $this->render('image/image_gallery.ajax.tpl', array(
+            'imagePager' => $imagePager,
+            'photos'     => $photos,
+
+        ));
+    }
 } // END class ImagesController
