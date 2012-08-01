@@ -1537,6 +1537,36 @@ $adminRoutes->add(
 
 // Keywork controller routes
 $adminRoutes->add(
+    'admin_newsletter',
+    new Route(
+        '/newsletters',
+        array('_controller' => 'Backend:Controllers:NewsletterController:list')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_newsletter_config',
+    new Route(
+        '/newsletters/config',
+        array('_controller' => 'Backend:Controllers:NewsletterController:config')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_newsletter_subscriptors',
+    new Route(
+        '/newsletters/subscriptors',
+        array('_controller' => 'Backend:Controllers:NewsletterSubscriptorsController:list')
+    ),
+    '/admin'
+);
+
+
+
+// Keywork controller routes
+$adminRoutes->add(
     'admin_keyword',
     new Route(
         '/keywords',

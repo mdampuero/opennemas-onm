@@ -248,9 +248,8 @@ class ImagesController extends Controller
      *
      * @return Response the response object
      **/
-    public function configAction()
+    public function configAction(Request $request)
     {
-        $request = $this->request;
         if ('POST' == $request->getMethod()) {
             $configurations = array(
                 'image_thumb_size'       => $request->request->get('image_thumb_size'),

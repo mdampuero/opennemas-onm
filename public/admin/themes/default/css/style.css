@@ -2114,27 +2114,6 @@ a.btn-primary.active,a.btn-warning.active,a.btn-danger.active,a.btn-success.acti
   width: 440px;
 }
 
-.related-content-provider .ui-tabs-nav .ui-state-default a {
-    background-color: white;
-    border-color: #DFDFDF #DFDFDF white;
-    border-style: solid;
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
-    border-width: 1px;
-    color: #333333;
-    font-weight: normal;
-    outline: medium none !important;
-    padding: 4px 6px 6px;
-}
-
-.related-content-provider .ui-tabs-nav .ui-state-active  a {
-  font-weight:bold;
-  text-decoration: underline;
-}
-#related-content-provider .ui-tabs-nav .ui-tabs-paging-prev a,
-#related-content-provider .ui-tabs-nav .ui-tabs-paging-next a {
-    border-color: #DFDFDF;
-}
 div#newsletter-container.column-receiver,
 div#article-form.tabs div#related-contents  div.column-receiver {
     margin-bottom:10px;
@@ -2185,6 +2164,10 @@ div.newsletter-contents div#content-provider ul li {
     margin: 2px;
     background:White;
 }
+div#newsletter-contents li span.icon {
+  float:right;
+  vertical-align:top;
+}
 
 div#newsletter-container.column-receiver ul{
     border-bottom: 1px solid;
@@ -2233,17 +2216,6 @@ div.active .container-label {
 
 div.newsletter-contents .container-buttons {
     float:right;
-}
-
-.icon-clean {
-    background-image: url("../images/clean14.png");
-    background-position: 0px 0px;
-    background-repeat: no-repeat;
-    display: inline-block;
-    height: 14px;
-    line-height: 14px;
-    vertical-align: text-top;
-    width: 14px;
 }
 
 .popover-title {

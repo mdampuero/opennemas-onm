@@ -1,5 +1,5 @@
 
- <div id="content-provider" class="related-content-provider clearfix" >
+ <div id="content-provider" class="related-content-provider clearfix tabs" >
     <ul>
 
         {is_module_activated name="ARTICLE_MANAGER"}

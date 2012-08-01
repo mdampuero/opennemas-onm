@@ -8,34 +8,33 @@ jQuery('#buttons-contents').on('click','#next-button', function() {
 
 });
 
-jQuery('#buttons-contents').on('click','#clean-button', function() {
+jQuery('#clean-button').on('click', function() {
 
     jQuery("div#newsletter-container").find('ul li').remove();
 
     jQuery.cookie("data-newsletter", null);
+    return false;
 });
 
 jQuery('#savedNewsletter').on('click','#load-saved', function() {
-
     jQuery.cookie("data-newsletter", '');
     jQuery("#action").val('loadSavedNewsletter');
     jQuery('#newsletterForm').submit();
-
 
 });
 
 saveNewsletter = (function() {
 
-    var els = new Array();
+    var els = [];
 
    jQuery('div#newsletter-container').find('div.container-receiver').each(function (index, cont) {
-       var lis = new Array();
+       var lis = [];
         jQuery(cont).find('li').each(function(i, item) {
             lis.push({
                 'id' : jQuery(item).data('id'),
                 'title': jQuery(item).data('title'),
                 'content_type': jQuery(item).data('type'),
-                'position': (i+1),
+                'position': (i+1)
             });
         });
 
@@ -44,7 +43,7 @@ saveNewsletter = (function() {
             'title': jQuery(cont).data('title'),
             'content_type': 'container',
             'position': (index+1),
-            'items': lis,
+            'items': lis
         });
 
     });
@@ -58,11 +57,11 @@ saveNewsletter = (function() {
 
 addSelectedItems  = (function () {
 
-    if((jQuery('div#newsletter-container div.active').length == 0)) {
+    if((jQuery('div#newsletter-container div.active').length === 0)) {
         jQuery("#modal-container-active").modal('show');
     } else {
         jQuery('ul#contentList li').find('input:checked').each(function() {
-            if(this.checked == true) {
+            if (this.checked === true) {
                 jQuery(this).prop("checked", false);
                 item =  jQuery(this).parent();
                 item.draggable("disable");
@@ -80,19 +79,17 @@ addSelectedItems  = (function () {
 toggleProviderCheckbox  = (function (item) {
     var toggleElement = jQuery('input#toggleallcheckbox');
 
+    var toggle = jQuery(document).data('toggle');
+    if (toggle === undefined) {
+        toggle = true;
+    }
+
     if (toggleElement) {
-
-        var toggle = toggleElement.prop("checked");
-        if (jQuery(item).attr('id') != 'toggleallcheckbox') {
-            toggle = !toggle;
-            toggleElement.prop("checked",  toggle);
-        }
-
         jQuery('ul#contentList li input[type=checkbox]').each(function() {
             jQuery(this).prop("checked", toggle);
         });
     }
-
+    jQuery(document).data('toggle', !toggle);
 });
 
 //OPERATIONS
@@ -114,16 +111,16 @@ jQuery(function($) {
 
     });
 
-    jQuery('div.newsletter-contents').on('click','#button-add-container', function(event) {
+    jQuery('#button-add-container').on('click',function(event) {
         jQuery("#modal-add-label").modal('show');
-
+        return false;
     });
 
 
     jQuery("modal-add-label").modal({
         backdrop: 'static', //Show a grey back drop
         keyboard: true, //Can close on escape
-        show: false,
+        show: false
     });
 
     jQuery('#modal-add-label a.btn.save').on('click', function(e) {
@@ -239,7 +236,7 @@ jQuery(function($) {
 //SETP 2 - Preview
 jQuery('#buttons-preview').on('click','#next-button', function() {
     saveChanges();
-    jQuery('#newsletterForm').submit();
+    return true;
 });
 
 jQuery('#buttons-preview').on('click','#prev-button', function() {
@@ -292,7 +289,6 @@ function saveChanges() {
             data: { action:"saveNewsletterContent", html:htmlContent },
             error:function (xhr, ajaxOptions, thrownError){
                 log(xhr.status + 'problem saving html code ');
-
             },
             success: function() {
                 log('ok');

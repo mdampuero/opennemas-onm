@@ -48,6 +48,10 @@ Files
 -----
 - Review if new.tpl could be deleted, now form.tpl handle create and update (I think)
 
+Images
+------
+- Review color filter in search
+
 XML file importer
 -----------------
 - CAUTION: this was a quick port, without checking if it works.
@@ -74,6 +78,3 @@ Tpl cache manager
 - When selecting a new "items per page" option
   and push enter, the deleting tpl shows an alert dialog
 
-Images
-------
-- Review color filter in search
