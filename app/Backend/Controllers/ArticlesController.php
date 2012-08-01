@@ -87,7 +87,7 @@ class ArticlesController extends Controller
 
         $filterSQL = array('in_litter != 1');
         if ($status >= 0) {
-            $filterSQL []= ' content_status='.$status;
+            $filterSQL []= ' available='.$status;
         }
         if (!empty($title)) {
             $filterSQL []= ' title LIKE \'%'.$title.'%\'';
@@ -533,20 +533,23 @@ class ArticlesController extends Controller
      **/
     public function toggleAvailableAction(Request $request)
     {
-        $this->checkAclOrForward('OPINION_AVAILABLE');
+        $this->checkAclOrForward('ARTICLE_AVAILABLE');
 
         $id       = $request->query->getDigits('id', 0);
-        $status   = (int) $request->query->getDigits('status', 0);
-        $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
+        $status   = $request->query->getDigits('status', 0);
+        $redirectStatus   = $request->query->filter('redirectstatus', -1, FILTER_SANITIZE_STRING);
         $page     = $request->query->getDigits('page', 1);
+        $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
 
         $article = new \Article($id);
-
         if (is_null($article->id)) {
-            m::add(sprintf(_('Unable to find an article with the id "%d"'), $id), m::ERROR);
+            m::add(sprintf(_('Unable to find article with id "%d"'), $id), m::ERROR);
         } else {
-            $article->set_available($status, $_SESSION['userid']);
-            m::add(sprintf(_('Successfully changed availability for the article "%s"'), $article->title), m::SUCCESS);
+            $article->toggleAvailable($article->id);
+            if ($status == 0) {
+                $article->set_favorite($status);
+            }
+            m::add(sprintf(_('Successfully changed availability for article with id "%d"'), $id), m::SUCCESS);
         }
 
         return $this->redirect($this->generateUrl(
@@ -554,7 +557,7 @@ class ArticlesController extends Controller
             array(
                 'category' => $category,
                 'page'     => $page,
-                'status'   => $status,
+                'status'   => $redirectStatus,
             )
         ));
     }

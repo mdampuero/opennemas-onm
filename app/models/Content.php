@@ -633,6 +633,7 @@ class Content
         if (count($values)>0) {
             $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
             if ($rs === false) {
+
                 Application::logDatabaseError();
 
                 return false;
@@ -648,6 +649,8 @@ class Content
         }
 
         $GLOBALS['application']->dispatch('onAfterAvailable', $this);
+
+        return true;
     }
 
     /**

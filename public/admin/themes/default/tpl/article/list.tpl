@@ -161,12 +161,12 @@
                     <td class="center">
                         {if !empty($article->category) && $article->category != 20}
                         {acl isAllowed="ARTICLE_AVAILABLE"}
-                        {if $article->content_status == 1}
-                            <a href="{url name=admin_article_toggleavailable id=$article->id status=0 category=$category status=$status page=$page}" title="Publicado">
+                        {if $article->available == 1}
+                            <a href="{url name=admin_article_toggleavailable id=$article->id status=0 redirectstatus=$status category=$category page=$page}" title="Publicado">
                                 <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" />
                             </a>
                         {else}
-                            <a href="{url name=admin_article_toggleavailable id=$article->id status=1  category=$category status=$status page=$page}" title="Pendiente">
+                            <a href="{url name=admin_article_toggleavailable id=$article->id status=1 redirectstatus=$status category=$category page=$page}" title="Pendiente">
                                 <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" />
                             </a>
                         {/if}

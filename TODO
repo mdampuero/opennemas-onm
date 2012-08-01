@@ -17,19 +17,21 @@ Opinion Authors
 Articles
 --------
 - Batch actions
-- Review toggle available action
 - Review D&D of search content provider
-- Check related when delete an article
 - Port image and video providers to symfony controller actions
 
 Newsletter
 ----------
 - Only initial work done
-- Review content provider
+- Review content provider and port its actions to the created ones
 
 
 LOW PRIORITY TASKS OR IDEAS
 --------------------------------------------------------------------------------
+
+Article
+-------
+- Check/Delete content relations when delete an article
 
 Opinion
 -------
