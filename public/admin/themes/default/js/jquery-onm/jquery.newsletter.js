@@ -55,27 +55,6 @@ saveNewsletter = (function() {
 
 });
 
-addSelectedItems  = (function () {
-
-    if((jQuery('div#newsletter-container div.active').length === 0)) {
-        jQuery("#modal-container-active").modal('show');
-    } else {
-        jQuery('ul#contentList li').find('input:checked').each(function() {
-            if (this.checked === true) {
-                jQuery(this).prop("checked", false);
-                item =  jQuery(this).parent();
-                item.draggable("disable");
-                item.removeClass('ui-state-disabled');
-                jQuery('div#newsletter-container div.active ul.content-receiver').append(item);
-            }
-        });
-
-        jQuery('ul#contentList li').find('input:checked').prop("checked", false);
-        jQuery('input#toggleallcheckbox').prop("checked", false);
-
-    }
-});
-
 toggleProviderCheckbox  = (function (item) {
     var toggleElement = jQuery('input#toggleallcheckbox');
 
@@ -96,19 +75,32 @@ toggleProviderCheckbox  = (function (item) {
 jQuery(function($) {
 
     jQuery('div.newsletter-contents').on('click', ' div.container-receiver .container-label', function(event) {
-        jQuery(this).closest('div.container-receiver').addClass('active').siblings().removeClass('active')
+        jQuery(this).closest('div.container-receiver').addClass('active').siblings().removeClass('active');
     });
 
     jQuery('div.newsletter-contents').on('click','#button-check-all', function(event) {
-
-        toggleProviderCheckbox(event.target);
-
+        jQuery('#content-provider div:not(.ui-tabs-hide) ul#contentList li input[type=checkbox]').each(function() {
+            jQuery(this).prop("checked", !jQuery(this).prop("checked"));
+        });
     });
 
     jQuery('div.newsletter-contents').on('click','#add-selected', function(event) {
+        if((jQuery('div#newsletter-container div.active').length === 0)) {
+            jQuery("#modal-container-active").modal('show');
+        } else {
+            jQuery('ul#contentList li').find('input:checked').each(function() {
+                if (this.checked === true) {
+                    jQuery(this).prop("checked", false);
+                    item =  jQuery(this).parent();
+                    item.draggable("disable");
+                    item.removeClass('ui-state-disabled');
+                    jQuery('div#newsletter-container div.active ul.content-receiver').append(item);
+                }
+            });
 
-        addSelectedItems();
-
+            jQuery('ul#contentList li').find('input:checked').prop("checked", false);
+            jQuery('input#toggleallcheckbox').prop("checked", false);
+        }
     });
 
     jQuery('#button-add-container').on('click',function(event) {
