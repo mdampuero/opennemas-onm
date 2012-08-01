@@ -113,9 +113,9 @@ switch ($action) {
 
     case 'save_letter':
 
-        $recaptcha_challenge_field = $request->query->
+        $recaptcha_challenge_field = $request->request->
                 filter('recaptcha_challenge_field', '', FILTER_SANITIZE_STRING);
-        $recaptcha_response_field = $request->query->
+        $recaptcha_response_field = $request->request->
                 filter('recaptcha_response_field', '', FILTER_SANITIZE_STRING);
 
         //Get config vars
@@ -133,29 +133,28 @@ switch ($action) {
             echo($msg);
         } else {
 
-            $lettertext = $request->query->filter('lettertext', '', FILTER_SANITIZE_STRING);
-            $security_code = $request->query->filter('security_code', '', FILTER_SANITIZE_STRING);
+            $lettertext    = $request->request->filter('lettertext', '', FILTER_SANITIZE_STRING);
+            $security_code = $request->request->filter('security_code', '', FILTER_SANITIZE_STRING);
 
-            if (!empty($lettertext) && !empty($security_code) ) {
-                $lettertext = $request->query->filter('lettertext', '', FILTER_SANITIZE_STRING);
-                $security_code = $request->query->filter('security_code', '', FILTER_SANITIZE_STRING);
+            if (!empty($lettertext) && empty($security_code) ) {
 
                 /*  Anonymous comment ************************* */
                 $data = array();
-                $name = $request->query->filter('name', '', FILTER_SANITIZE_STRING);
-                $subject = $request->query->filter('subject', '', FILTER_SANITIZE_STRING);
-                $mail = $request->query->filter('mail', '', FILTER_SANITIZE_STRING);
-                $data['body']     = $lettertext;
-                $data['author']   = $name;
-                $data['title']    = $subject;
-                $data['email']    = $mail;
+                $name    = $request->request->filter('name', '', FILTER_SANITIZE_STRING);
+                $subject = $request->request->filter('subject', '', FILTER_SANITIZE_STRING);
+                $mail    = $request->request->filter('mail', '', FILTER_SANITIZE_STRING);
+
+                $data['body']      = $lettertext;
+                $data['author']    = $name;
+                $data['title']     = $subject;
+                $data['email']     = $mail;
                 $data['available'] = 0; //pendding
 
                 $letter = new Letter();
                 $msg =  $letter->saveLetter($data);
 
             } else {
-                $msg = 'Su Carta al Director <strong>no</strong> ha sido guardada.';
+                $msg = _('Su Carta al Director <strong>no</strong> ha sido guardada.');
             }
             echo $msg;
         }
