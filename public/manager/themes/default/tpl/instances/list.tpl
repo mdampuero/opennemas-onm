@@ -40,6 +40,7 @@
                     <input type="hidden" name="page" value="1" />
                     <button type="submit" class="btn">{t}Search{/t}</button>
                 </th>
+                <th><a href="{url name=manager_instances_list_export}">{image_tag src="/themes/default/images/csv.png" base_url="/manager"} Export list</a></th>
             </tr>
         </table>
 

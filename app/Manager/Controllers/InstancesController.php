@@ -38,7 +38,7 @@ class InstancesController extends Controller
     }
 
     /**
-     * Description of the action
+     * Shows a list of instances
      *
      * @return void
      **/
@@ -78,6 +78,38 @@ class InstancesController extends Controller
             'instances'     => $instances,
             'per_page'      => $itemsPerPage,
             'pagination'    =>  $pager,
+        ));
+    }
+
+
+    /**
+     * Returns a CSV file with all the instances information
+     *
+     * @return void
+     **/
+    public function listExportAction(Request $request)
+    {
+        $page = $request->query->getDigits('page', 1);
+        $findParams = array(
+            'name' => $request->query->filter('filter_name', '*', FILTER_SANITIZE_STRING),
+            'per_page' => $request->query->filter('filter_per_page', 20, FILTER_SANITIZE_STRING),
+        );
+
+        $instances = $this->instanceManager->findAll($findParams);
+
+        foreach ($instances as &$instance) {
+            list($instance->totals, $instance->configs) =
+                $this->instanceManager->getDBInformation($instance->settings);
+
+            $instance->domains = preg_split("@, @", $instance->domains);
+        }
+
+        $content = $this->renderView('instances/csv.tpl', array(
+            'instances'     => $instances,
+        ));
+
+        return new Response($content, 200, array(
+            "Content-Type" => "application/csv",
         ));
     }
 

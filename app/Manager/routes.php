@@ -26,6 +26,18 @@ $managerRoutes->add(
     'manager'
 );
 
+
+$managerRoutes->add(
+    'manager_instances_list_export',
+    new Route(
+        '/instance/list-export.csv',
+        array(
+            '_controller' => 'Manager:Controllers:InstancesController:listExport',
+        )
+    ),
+    'manager'
+);
+
 $managerRoutes->add(
     'manager_instance_show',
     new Route(
