@@ -158,7 +158,67 @@ class InstancesController extends Controller
     public function createAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
-            m::add(sprintf(_('Instance create action not implemented'), $id), m::ERROR);
+            //Get internal_name from domains
+            $internalName = "";
+            if (isset($_POST['internal_name']) && !empty($_POST['internal_name'])) {
+                $internalName = $_POST['internal_name'];
+            } else {
+                $internal = explode(".", filter_input(INPUT_POST, 'domains' , FILTER_SANITIZE_STRING) );
+                $internalName = $internal[0];
+            }
+            //Force internal_name lowercase
+            $internalName = strtolower($internalName);
+
+            //If is creating a new instance, get DB params on the fly
+            $internalNameShort = trim(substr($internalName, 0, 11));
+
+            $password = \Onm\StringUtils::generatePassword(16);
+            $settings = array(
+                'TEMPLATE_USER' => "retrincos",
+                'MEDIA_URL' => "http://media.opennemas.com",
+                'BD_TYPE' => "mysqli",
+                'BD_HOST' => "localhost",
+                'BD_USER' => $internalNameShort,
+                'BD_PASS' => $password,
+                'BD_DATABASE' => "c-".$internalNameShort,
+            );
+
+            //Get all the Post data
+            $data = array(
+                'contact_IP'    => $request->request->filter('contact_IP', '', FILTER_SANITIZE_STRING),
+                'name'          => $request->request->filter('site_name', '', FILTER_SANITIZE_STRING),
+                'user_name'     => $request->request->filter('contact_name', '', FILTER_SANITIZE_STRING),
+                'user_mail'     => $request->request->filter('contact_mail', '', FILTER_SANITIZE_STRING),
+                'user_pass'     => $request->request->filter('password', '', FILTER_SANITIZE_STRING),
+                'internal_name' => $internalName,
+                'domains'       => $request->request->filter('domains', '', FILTER_SANITIZE_STRING),
+                'activated'     => $request->request->filter('activated', '', FILTER_SANITIZE_NUMBER_INT),
+                'settings'      => $settings,
+                'site_created'  => $request->request->filter('site_created', date("d-m-Y - H:m"), FILTER_SANITIZE_STRING)
+            );
+
+            // Also get timezone if comes from openhost form
+            $timezone = $request->request->filter('timezone', '', FILTER_SANITIZE_STRING);
+            if (!empty ($timezone)) {
+                $allTimezones = \DateTimeZone::listIdentifiers();
+                foreach ($allTimezones as $key => $value) {
+                    if ($timezone == $value) {
+                        $data['timezone'] = $key;
+                    }
+                }
+            }
+
+            $errors = array();
+            // Check for reapeted internalnameshort and if so, add a number at the end
+            $data = $this->instanceManager->checkInternalShortName($data);
+
+            $errors = $this->instanceManager->create($data);
+
+            if (is_array($errors) && count($errors) > 0) {
+                m::add($errors, m::ERROR);
+            } else {
+                m::add('Instance saved successfully.', m::SUCCESS);
+            }
 
             return $this->redirect($this->generateUrl('manager_instances'));
         } else {
@@ -185,8 +245,6 @@ class InstancesController extends Controller
     public function updateAction(Request $request)
     {
         $id = $request->query->getDigits('id');
-
-        // m::add(sprintf(_('Instance update action not implemented, %d'), $id), m::ERROR);
 
         //Get internal_name from domains
         $internalName = "";
