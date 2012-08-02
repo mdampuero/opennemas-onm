@@ -47,7 +47,7 @@ function confirmarDelete(action) {
         </div>
         <ul class="old-button">
             <li>
-                <a href="{$smarty.server.PHP_SELF}?action=new" class="admin_add"
+                <a href="{url name=manager_instance_create}" class="admin_add"
                    title="{t}New widget{/t}">
                     <img border="0" src="{$params.IMAGE_DIR}list-add.png" title="" alt="" />
                     <br />{t}New{/t}
@@ -60,7 +60,7 @@ function confirmarDelete(action) {
     {render_messages}
 </div>
 <div class="wrapper-content">
-<form action="{$smarty.server.PHP_SELF}" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
+<form action="{url name=manager_instances}" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
     <table class="adminheading">
         <tr>
             <th align="left">Total: {$pagination->_totalItems} instances.</th>
@@ -97,7 +97,7 @@ function confirmarDelete(action) {
             <th>{t}Ads{/t}</th>
             <th width="100px">{t}Created{/t}</th>
             <th class="center" width="50px">{t}Activated{/t}</th>
-            <th class="center" width="50px">{t}Actions{/t}</th>
+            <th class="center" width="110px">{t}Actions{/t}</th>
             {else}
             <th scope="col" colspan=4>&nbsp;</th>
             {/if}
@@ -146,18 +146,14 @@ function confirmarDelete(action) {
                 </td>
 
                 <td class="right">
-                    <ul class="action-buttons clearfix">
-
-                        <li>
-                            <a href="instances.php?action=edit&id={$instance->id}" title="{t}Edit{/t}">
-                            <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
-                        </li>
-
-                        <li>
-                            <a href="instances.php?action=delete&id={$instance->id}" onclick="confirmarDelete(this);return false;" title="{t}Delete{/t}">
-                            <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
-                        </li>
-                    </ul>
+                    <div class="btn-group">
+                        <a class="btn" href="{url name=manager_instance_show id=$instance->id}" title="{t}Edit{/t}">
+                            <i class="icon-pencil"></i>
+                        </a>
+                        <a class="btn btn-danger" href="instances.php?action=delete&id={$instance->id}" onclick="confirmarDelete(this);return false;" title="{t}Delete{/t}">
+                            <i class="icon-trash icon-white"></i>
+                        </a>
+                    </div>
                 </td>
             </tr>
             {foreachelse}

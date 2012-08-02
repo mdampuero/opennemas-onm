@@ -9,8 +9,13 @@
  **/
 namespace Manager\Controllers;
 
-use Onm\Framework\Controller\Controller,
-    Onm\Message as m;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Onm\Module\ModuleManager as ModuleManager;
+use Onm\Framework\Controller\Controller;
+use Onm\Instance\InstanceManager as im;
+use Onm\Message as m;
+use Onm\Settings as s;
 /**
  * Handles the actions for the system information
  *
@@ -27,7 +32,9 @@ class InstancesController extends Controller
      **/
     public function init()
     {
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
+        global $onmInstancesConnection;
+        $this->instanceManager = new im($onmInstancesConnection);
+        $this->view = new \TemplateManager(TEMPLATE_ADMIN);
     }
 
     /**
@@ -35,9 +42,122 @@ class InstancesController extends Controller
      *
      * @return void
      **/
-    public function listAction()
+    public function listAction(Request $request)
     {
-        return $this->render('template.tpl', array('template_var', ));
+        $page = $request->query->getDigits('page', 1);
+        $findParams = array(
+            'name' => $request->query->filter('filter_name', '*', FILTER_SANITIZE_STRING),
+            'per_page' => $request->query->filter('filter_per_page', 20, FILTER_SANITIZE_STRING),
+        );
+
+        $instances = $this->instanceManager->findAll($findParams);
+
+        foreach ($instances as &$instance) {
+            list($instance->totals, $instance->configs) =
+                $this->instanceManager->getDBInformation($instance->settings);
+
+            $instance->domains = preg_split("@, @", $instance->domains);
+        }
+
+        $itemsPerPage =  $findParams['per_page'];
+
+        // Pager
+        $pager_options = array(
+            'mode'        => 'Sliding',
+            'perPage'     => $itemsPerPage,
+            'delta'       => 4,
+            'clearIfVoid' => true,
+            'urlVar'      => 'page',
+            'totalItems'  => count($instances),
+        );
+        $pager = \Pager::factory($pager_options);
+
+        $instances = array_slice($instances, ($page-1)*$itemsPerPage, $itemsPerPage);
+
+        return $this->render('instances/list.tpl', array(
+            'instances'     => $instances,
+            'per_page'      => $itemsPerPage,
+            'pagination'    =>  $pager,
+        ));
+    }
+
+    /**
+     * Shows the information form of a instance given its id
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function showAction(Request $request)
+    {
+        $id = $request->query->getDigits('id');
+
+        $templates = im::getAvailableTemplates();
+
+        $instance = $this->instanceManager->read($id);
+
+        if ($instance === false) {
+            m::add(sprintf(_('Unable to find an instance with the id "%d"'), $id), m::ERROR);
+
+            return $this->redirect($this->generateUrl('manager_instances'));
+        }
+
+        list($instance->totals, $instance->configs) =
+            $this->instanceManager->getDBInformation($instance->settings);
+
+        return $this->render('instances/edit.tpl', array(
+            'configs'           => $instance->configs,
+            'available_modules' => ModuleManager::getAvailableModules(),
+            'timezones'         => \DateTimeZone::listIdentifiers(),
+            'languages'         => array('en_US' => _("English"), 'es_ES' => _("Spanish"), 'gl_ES' => _("Galician")),
+            'logLevels'         => array('normal' => _('Normal'), 'verbose' => _('Verbose'), 'all' => _('All (Paranoic mode)') ),
+            'instance'          => $instance,
+            'templates'         => $templates,
+        ));
+    }
+
+    /**
+     * Handles the form for create a new instance
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function createAction(Request $request)
+    {
+        if ('POST' == $request->getMethod()) {
+            m::add(sprintf(_('Instance create action not implemented'), $id), m::ERROR);
+
+            return $this->redirect($this->generateUrl('manager_instances'));
+        } else {
+            $templates = im::getAvailableTemplates();
+
+            return $this->render('instances/edit.tpl', array(
+                'configs' => array( 'activated_modules' => ModuleManager::getAvailableModules()),
+                'available_modules' => ModuleManager::getAvailableModules(),
+                'timezones' => \DateTimeZone::listIdentifiers(),
+                'languages' => array('en_US' => _("English"), 'es_ES' => _("Spanish"), 'gl_ES' => _("Galician")),
+                'logLevels' => array('normal' => _('Normal'), 'verbose' => _('Verbose'), 'all' => _('All (Paranoic mode)') ),
+                'templates' => $templates,
+            ));
+        }
+    }
+
+    /**
+     * Updates the instance information gives its id
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function updateAction(Request $request)
+    {
+        $id = $request->query->getDigits('id');
+
+        m::add(sprintf(_('Instance update action not implemented, %d'), $id), m::ERROR);
+
+        return $this->redirect($this->generateUrl('manager_instances'));
+
     }
 
 } // END class InstancesController

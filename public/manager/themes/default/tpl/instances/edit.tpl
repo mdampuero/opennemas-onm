@@ -61,11 +61,11 @@ jQuery(document).ready(function($) {
 <div class="top-action-bar">
     <div class="wrapper-content">
         <div class="title">
-            <h2>{if $smarty.request.action eq "new"}{t}Creating new intance{/t}{else}{t 1=$instance->name}Editing instance "%1"{/t}{/if}</h2>
+            <h2>{if !isset($instance->id)}{t}Creating new intance{/t}{else}{t 1=$instance->name}Editing instance "%1"{/t}{/if}</h2>
         </div>
         <ul class="old-button">
             <li>
-                <a href="?action=list" class="admin_add" value="{t}Cancel{/t}" title="{t}Cancel{/t}">
+                <a href="{url name=manager_instances}" class="admin_add" value="{t}Cancel{/t}" title="{t}Cancel{/t}">
                     <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Cancel{/t}" alt="{t}Cancel{/t}" /><br />
                     {t}Go back{/t}
                 </a>
@@ -76,7 +76,7 @@ jQuery(document).ready(function($) {
 <div class="wrapper-content">
     {render_messages}
 </div><!-- / -->
-<form action="{$smarty.server.PHP_SELF}" method="post" name="formulario" id="formulario">
+<form action="{if !isset($instance->id)}{url name=manager_instance_create}{else}{url name=manager_instance_update id=$instance->id}{/if}" method="post" name="formulario" id="formulario">
     <div class="wrapper-content">
 
         <div id="instance-edit" class="tabs">
@@ -674,12 +674,8 @@ jQuery(document).ready(function($) {
                 </table>
             </div>
             {/if}
-            <input type="hidden" name="action_name" id="action_name" value="{$smarty.get.action}"></input>
-            <input type="hidden" id="id" name="id" value="{$instance->id|default:""}" />
-            <input type="hidden" id="action" name="action" value="save" />
-
-
         </div>
+
         <div class="action-bar clearfix">
             <div class="right">
                 <button type="submit" class="onm-button red">{t}Save{/t}</button>

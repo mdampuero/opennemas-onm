@@ -27,6 +27,51 @@ $managerRoutes->add(
 );
 
 $managerRoutes->add(
+    'manager_instance_show',
+    new Route(
+        '/instance/{id}/show',
+        array(
+            '_controller' => 'Manager:Controllers:InstancesController:show',
+        )
+    ),
+    'manager'
+);
+
+$managerRoutes->add(
+    'manager_instance_create',
+    new Route(
+        '/instance/create',
+        array(
+            '_controller' => 'Manager:Controllers:InstancesController:create',
+        )
+    ),
+    'manager'
+);
+
+
+$managerRoutes->add(
+    'manager_instance_update',
+    new Route(
+        '/instance/{id}/update',
+        array(
+            '_controller' => 'Manager:Controllers:InstancesController:update',
+        )
+    ),
+    'manager'
+);
+
+$managerRoutes->add(
+    'manager_framework_status',
+    new Route(
+        '/framework/status',
+        array(
+            '_controller' => 'Manager:Controllers:FrameworkStatusController:status',
+        )
+    ),
+    'manager'
+);
+
+$managerRoutes->add(
     'manager_welcome',
     new Route(
         '/',

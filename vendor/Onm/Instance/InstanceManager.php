@@ -208,6 +208,10 @@ class InstanceManager
             return false;
         }
 
+        if ($rs->fields === false) {
+            return false;
+        }
+
         $instance = new \stdClass();
         foreach ($rs->fields as $key => $value) {
             $instance->{$key} = $value;
