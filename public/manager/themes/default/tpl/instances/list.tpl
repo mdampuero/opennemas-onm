@@ -137,10 +137,10 @@ function confirmarDelete(action) {
                 </td>
                 <td class="center">
                     {if $instance->activated == 1}
-                    <a href="?id={$instance->id}&action=changeactivated" class="switchable" title="{t}Published{/t}">
+                    <a href="{url name=manager_instance_toggleavailable id=$instance->id}" title="{t}Published{/t}">
                         <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="{t}Published{/t}" /></a>
                     {else}
-                    <a href="?id={$instance->id}&action=changeactivated" class="switchable" title="{t}Unpublished{/t}">
+                    <a href="{url name=manager_instance_toggleavailable id=$instance->id}" title="{t}Unpublished{/t}">
                         <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="{t}Unpublished{/t}" /></a>
                     {/if}
                 </td>
@@ -150,7 +150,7 @@ function confirmarDelete(action) {
                         <a class="btn" href="{url name=manager_instance_show id=$instance->id}" title="{t}Edit{/t}">
                             <i class="icon-pencil"></i>
                         </a>
-                        <a class="btn btn-danger" href="instances.php?action=delete&id={$instance->id}" onclick="confirmarDelete(this);return false;" title="{t}Delete{/t}">
+                        <a class="btn btn-danger" href="{url name=manger_instance_delete id=$instance->id}" title="{t}Delete{/t}">
                             <i class="icon-trash icon-white"></i>
                         </a>
                     </div>

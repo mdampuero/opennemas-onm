@@ -160,4 +160,33 @@ class InstancesController extends Controller
 
     }
 
+    /**
+     * Toggle the availability of an instance given its id
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function toggleAvailableAction(Request $request)
+    {
+        $id = $request->query->getDigits('id');
+        $instance = $this->instanceManager->read($id);
+
+        if ($instance === false) {
+            m::add(sprintf(_('Unable to find the instance with the id %d'), $id), m::ERROR);
+
+            return $this->redirect($this->generateUrl('manager_instances'));
+        }
+
+        $this->instanceManager->changeActivated(
+            $instance->id,
+            ($instance->activated+1) % 2
+        );
+
+        return $this->redirect($this->generateUrl('manager_instances'));
+
+    }
+
+
+
 } // END class InstancesController

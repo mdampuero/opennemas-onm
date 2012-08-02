@@ -61,6 +61,17 @@ $managerRoutes->add(
 );
 
 $managerRoutes->add(
+    'manager_instance_toggleavailable',
+    new Route(
+        '/instance/{id}/toggle-available',
+        array(
+            '_controller' => 'Manager:Controllers:InstancesController:toggleAvailable',
+        )
+    ),
+    'manager'
+);
+
+$managerRoutes->add(
     'manager_framework_status',
     new Route(
         '/framework/status',
