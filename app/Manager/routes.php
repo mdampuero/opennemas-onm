@@ -61,6 +61,17 @@ $managerRoutes->add(
 );
 
 $managerRoutes->add(
+    'manager_instance_delete',
+    new Route(
+        '/instance/{id}/delete',
+        array(
+            '_controller' => 'Manager:Controllers:InstancesController:delete',
+        )
+    ),
+    'manager'
+);
+
+$managerRoutes->add(
     'manager_instance_toggleavailable',
     new Route(
         '/instance/{id}/toggle-available',

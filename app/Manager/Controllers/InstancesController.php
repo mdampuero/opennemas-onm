@@ -161,6 +161,33 @@ class InstancesController extends Controller
     }
 
     /**
+     * Deletes an instance given its id
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function deleteAction(Request $request)
+    {
+        $id = $request->query->getDigits('id');
+
+        if (!empty($id)) {
+            if ($deletion = $this->instanceManager->delete($id)) {
+                m::add(_("Instance deleted successfully."), m::SUCCESS);
+            } else {
+                m::add(_("Unable to delete the instance."), m::ERROR);
+            }
+
+        } else {
+            m::add(_('You must provide an id for delete an instance.'), m::ERROR);
+        }
+
+        if (!$request->isXmlHttpRequest()) {
+            return $this->redirect($this->generateUrl('manager_instances'));
+        }
+    }
+
+    /**
      * Toggle the availability of an instance given its id
      *
      * @param Request $request the request object
@@ -184,9 +211,6 @@ class InstancesController extends Controller
         );
 
         return $this->redirect($this->generateUrl('manager_instances'));
-
     }
-
-
 
 } // END class InstancesController

@@ -1,5 +1,5 @@
 -- 13-07-2012
-ALTER TABLE  `onm-sermos`.`menu_items` DROP PRIMARY KEY , ADD PRIMARY KEY (  `pk_item` ,  `pk_menu` )
+ALTER TABLE  `menu_items` DROP PRIMARY KEY , ADD PRIMARY KEY (  `pk_item` ,  `pk_menu` )
 
 --11-06-2012
 ALTER TABLE `authors` ADD `params` TEXT NULL DEFAULT NULL;
