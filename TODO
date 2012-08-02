@@ -25,6 +25,10 @@ Newsletter
 - Only initial work done
 - Review content provider and port its actions to the created ones
 
+Manager
+-------
+- Implemente the delete, update and create actions
+- Add authentication layer
 
 LOW PRIORITY TASKS OR IDEAS
 --------------------------------------------------------------------------------

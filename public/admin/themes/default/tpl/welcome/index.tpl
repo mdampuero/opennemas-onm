@@ -6,21 +6,21 @@
         <div class="title"><h2>{t 1="OpenNemas"}Welcome to %1{/t}</h2></div>
         <ul class="old-button">
             <li>
-                <a href="controllers/image/image.php" class="admin_add"
+                <a href="{url name=admin_images}" class="admin_add"
                    title="{t}Media manager{/t}">
                     <img src="{$params.IMAGE_DIR}/icons.png" title="" alt="" />
                     <br />{t}Media manager{/t}
                 </a>
             </li>
             <li>
-                <a href="controllers/opinion/opinion.php?action=new" class="admin_add"
+                <a href="{url name=admin_opinion_create}" class="admin_add"
                    title="{t}New opinion{/t}">
                     <img src="{$params.IMAGE_DIR}opinion.png" title="" alt="" />
                     <br />{t}New opinion{/t}
                 </a>
             </li>
             <li>
-                <a href="article.php?action=new" class="admin_add"
+                <a href="{url name=admin_article_create}" class="admin_add"
                    title="{t}New article{/t}">
                         <img src="{$params.IMAGE_DIR}/article_add.png" title="" alt="" />
                     <br />{t}New article{/t}
