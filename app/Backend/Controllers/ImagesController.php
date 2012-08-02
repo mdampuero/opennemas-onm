@@ -751,15 +751,14 @@ class ImagesController extends Controller
      **/
     public function contentProviderGalleryAction(Request $request)
     {
+        $metadatas = $request->query->filter('metadatas', '', FILTER_SANITIZE_STRING);
         $category = $request->query->getDigits('category', 0);
+        $page     = $request->query->getDigits('page', 1);
 
-        $filterby = $request->query->filter('filter_by', 'listByMetadatas');
-
-        $page = $request->query->getDigits('page', 1);
-        $itemsPerPage = s::get('items_per_page') + 1;
+        $itemsPerPage = 16;
         $numItems = $itemsPerPage + 1;
 
-        if (empty($page)) {
+        if ($page == 1) {
             $limit    = "LIMIT {$numItems}";
         } else {
             $limit    = "LIMIT ".($page-1) * $itemsPerPage .', '.$numItems;
@@ -767,15 +766,10 @@ class ImagesController extends Controller
 
         $cm = new \ContentManager();
 
-        // Take one more than $itemsPerPage for implement pagination
-        $metadatas = $request->query->filter('metadatas', '', FILTER_SANITIZE_STRING);
-
         if (!empty($metadatas)) {
-
-            $presentSearch = \cSearch::getInstance();
-            $arrayIds      = $presentSearch->searchContentsSelect('pk_content', $metadatas, 'photo', 100);
-            if (!empty($arrayIds))
-            {
+            $search = \cSearch::getInstance();
+            $arrayIds      = $search->searchContentsSelect('pk_content', $metadatas, 'photo', 100);
+            if (!empty($arrayIds)) {
                 $szWhere   = '( FALSE ';
                 foreach ($arrayIds as $id) {
                     $szWhere .= ' OR pk_content = ' . $id[0];
@@ -787,7 +781,6 @@ class ImagesController extends Controller
                 return new Response(sprintf(_(
                     "<div>"
                     ."<p>Unable to find any content matching your search criterira.</p>"
-                    ."<p>Your search string <strong>%s</strong> doesn't have any matched content.</p>"
                     ."</div>"
                 ), $metadatas));
             }
@@ -810,21 +803,23 @@ class ImagesController extends Controller
                 'ORDER BY created DESC '.$limit
             );
         }
-
-        if (count($photos) > $itemsPerPage) {
+        $total = count($photos);
+        if ($total > $itemsPerPage) {
             array_pop($photos);
         }
 
-        $imagePager = \Onm\Pager\SimplePager::getPager(array(
-            'page'     => $page,
-            'items'    => $itemsPerPage,
-            'total'    =>  count($photos),
-            'function' => 'getGalleryImages',
-            'others'   => '"listByMetadatas", "'.$category.'", "'.$metadatas.'"'
+        $pagination = \Onm\Pager\SimplePager::getPagerUrl(array(
+            'page'  => $page,
+            'items' => $itemsPerPage,
+            'total' => $total,
+            'url'   => $this->generateUrl('admin_images_content_provider_gallery', array(
+                'category'  => $category,
+                'metadatas' => $metadatas,
+            ))
         ));
 
         return $this->render('image/image_gallery.ajax.tpl', array(
-            'imagePager' => $imagePager,
+            'imagePager' => $pagination,
             'photos'     => $photos,
 
         ));

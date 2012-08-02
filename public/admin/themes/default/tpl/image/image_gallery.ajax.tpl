@@ -58,11 +58,11 @@
             </div>
         </li>
         {assign var=num value=$num+1}
+    {sectionelse}
+    {t}No available images with your search criteria{/t}
     {/section}
 </ul>
-{if !empty($imagePager)}
-    <div class="pagination"> {$imagePager} </div>
-{/if}
+<div class="pagination">{$imagePager}</div>
 <script>
 jQuery(document).ready(function($){
     $( "#photos_container #photos .draggable-handler" ).draggable({ opacity: 0.5, helper: "clone"});

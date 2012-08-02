@@ -107,18 +107,17 @@
         </td>
         <td style="width:430px">
             <div style="border:1px double #ccc; border-bottom:0 none; background-color:#EEE; padding:10px;">
-                <a onclick="new Effect.toggle($('photos_container'),'blind')" ><strong>{t}Available images{/t}</strong></a>
+                <strong>{t}Available images{/t}</strong>
             </div>
             <div id="photos_container" class="photos" style="border:1px solid #ccc;  padding:7px;">
                 <table>
                     <tr>
                         <td >
                             <input id="stringImageSearch" name="stringImageSearch" type="text"
-                               onkeypress="onImageKeyEnter(event, $('category_imag').options[$('category_imag').selectedIndex].value,encodeURIComponent($('stringImageSearch').value),1);"
-                               onclick="this.select();" placeholder="{t}Search images by title...{/t}" style="width: 150px;"/>
+                               placeholder="{t}Search images by title...{/t}" style="width: 150px;"/>
                         </td>
                         <td>
-                            <select style="width:140px" id="category_imag" name="category_imag" class="required" onChange="getGalleryImages('listByCategory',this.options[this.selectedIndex].value,'', 1);">
+                            <select style="width:140px" id="category_imag" name="category_imag" class="required">
                                 <option value="0">GLOBAL</option>
                                     {section name=as loop=$allcategorys}
                                         <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if}>{$allcategorys[as]->title}</option>
@@ -236,7 +235,7 @@
                             </div>
                         </td>
                         <td>
-                            <select style="width:140px"  id="category_video" name="category_video" class="required" onChange="getGalleryVideos('listByCategory',this.options[this.selectedIndex].value,'', 1,'videos');">
+                            <select style="width:140px"  id="category_video" name="category_video">
                                 <option value="0">GLOBAL</option>
                                 {section name=as loop=$allcategorys}
                                     <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if}>{$allcategorys[as]->title}</option>
@@ -277,11 +276,36 @@ jQuery(document).ready(function($){
         };
     });
 
-    $.ajax('{url name=admin_images_content_provider_gallery category=$category}', {
-        success: function(data) {
-            $('#photos').html(data);
-        }
-    })
+    function load_ajax_in_container(url, container) {
+        $.ajax({
+            url: url,
+            async: true,
+            beforeSend: function() {
+                container.html('{t escape=off}<div class="spinner"></div>Loading request...{/t}');
+            },
+            success: function(data) {
+                container.html(data);
+            }
+        });
+    }
+
+    load_ajax_in_container('{url name=admin_images_content_provider_gallery category=$category}', $('#photos'));
+
+    $('#stringImageSearch, #category_imag').on('change', function(e, ui) {
+        var category = $('#category_imag option:selected').val();
+        var text = $('#stringImageSearch').val();
+        var url = '{url name=admin_images_content_provider_gallery}?'+'category='+category+'&metadatas='+encodeURIComponent(text);
+        load_ajax_in_container(
+            url,
+            $('#photos')
+        );
+    });
+
+    $('#photos').on('click', '.pagination a', function(e, ui) {
+        e.preventDefault();
+        var link = $(this);
+        load_ajax_in_container(link.attr('href'), $('#photos'));
+    });
 
 });
 </script>
@@ -305,7 +329,7 @@ jQuery(document).ready(function($){
         };
     });
 });
-getGalleryVideos('listByCategory','{$category}','','1', 'videos');
+// getGalleryVideos('listByCategory','{$category}','','1', 'videos');
 </script>
 {/is_module_activated}
 <script>
