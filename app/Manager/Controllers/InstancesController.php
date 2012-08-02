@@ -154,10 +154,107 @@ class InstancesController extends Controller
     {
         $id = $request->query->getDigits('id');
 
-        m::add(sprintf(_('Instance update action not implemented, %d'), $id), m::ERROR);
+        // m::add(sprintf(_('Instance update action not implemented, %d'), $id), m::ERROR);
+
+        //Get internal_name from domains
+        $internalName = "";
+        if (isset($_POST['internal_name']) && !empty($_POST['internal_name'])) {
+            $internalName = $_POST['internal_name'];
+        } else {
+            $internal = explode(".", filter_input(INPUT_POST, 'domains' , FILTER_SANITIZE_STRING) );
+            $internalName = $internal[0];
+        }
+        //Force internal_name lowercase
+        $internalName = strtolower($internalName);
+
+        //If is creating a new instance, get DB params on the fly
+        $internalNameShort = trim(substr($internalName, 0, 11));
+
+        $settingsRAW = $request->request->get('settings');
+        $settings = array(
+            'TEMPLATE_USER' => filter_var($settingsRAW['TEMPLATE_USER'], FILTER_SANITIZE_STRING),
+            'MEDIA_URL'     => filter_var($settingsRAW['MEDIA_URL'], FILTER_SANITIZE_STRING),
+            'BD_TYPE'       => filter_var($settingsRAW['BD_TYPE'], FILTER_SANITIZE_STRING),
+            'BD_HOST'       => filter_var($settingsRAW['BD_HOST'], FILTER_SANITIZE_STRING),
+            'BD_DATABASE'   => filter_var($settingsRAW['BD_DATABASE'], FILTER_SANITIZE_STRING),
+            'BD_USER'       => filter_var($settingsRAW['BD_USER'], FILTER_SANITIZE_STRING),
+            'BD_PASS'       => filter_var($settingsRAW['BD_PASS'], FILTER_SANITIZE_STRING),
+        );
+
+        //Get all the Post data
+        $data = array(
+            'id'            => $request->query->getDigits('id'),
+            'contact_IP'    => $request->request->filter('contact_IP', '', FILTER_SANITIZE_STRING),
+            'name'          => $request->request->filter('site_name', '', FILTER_SANITIZE_STRING),
+            'user_name'     => $request->request->filter('contact_name', '', FILTER_SANITIZE_STRING),
+            'user_mail'     => $request->request->filter('contact_mail', '', FILTER_SANITIZE_STRING),
+            'user_pass'     => $request->request->filter('password', '', FILTER_SANITIZE_STRING),
+            'internal_name' => $internalName,
+            'domains'       => $request->request->filter('domains', '', FILTER_SANITIZE_STRING),
+            'activated'     => $request->request->filter('activated', '', FILTER_SANITIZE_NUMBER_INT),
+            'settings'      => $settings,
+            'site_created'  => $request->request->filter('site_created', date("d-m-Y - H:m"), FILTER_SANITIZE_STRING)
+        );
+
+        // Also get timezone if comes from openhost form
+        $timezone = $request->request->filter('timezone', '', FILTER_SANITIZE_STRING);
+        if (!empty ($timezone)) {
+            $allTimezones = \DateTimeZone::listIdentifiers();
+            foreach ($allTimezones as $key => $value) {
+                if ($timezone == $value) {
+                    $data['timezone'] = $key;
+                }
+            }
+        }
+
+        $errors = array();
+        // Check for reapeted internalnameshort and if so, add a number at the end
+        $data = $this->instanceManager->checkInternalShortName($data);
+
+        $configurationsKeys = array(
+            'site_title', 'site_description','site_keywords',
+            'site_agency','site_name','site_created',
+            'contact_mail','contact_name','contact_IP',
+            'time_zone','site_language','mail_server',
+            'mail_username','mail_password','google_maps_api_key',
+            'google_custom_search_api_key','facebook',
+            'google_analytics','piwik',
+            'recaptcha',
+            'items_per_page',
+            'refresh_interval',
+            'advertisements_enabled',
+            'log_enabled', 'log_db_enabled', 'log_level',
+            'activated_modules'
+        );
+
+        // Delete the 'activated_modules' apc_cache for this instance
+        s::invalidate('activated_modules', $data['internal_name']);
+        // Delete the 'site_name' apc_cache for this instance
+        s::invalidate('site_name', $data['internal_name']);
+
+        //TODO: PROVISIONAL WHILE DONT DELETE $GLOBALS['application']->conn // is used in settings set
+        $GLOBALS['application']->conn = $this->instanceManager->getConnection($settings);
+
+        foreach ($request->request->all() as $key => $value ) {
+            if (in_array($key, $configurationsKeys)) {
+                s::set($key, $value);
+            }
+        }
+        $errors = $this->instanceManager->update($data);
+
+        if (is_array($errors) && count($errors) > 0) {
+            m::add($errors);
+
+            return $this->redirect($this->generateUrl('manager_instance_show'), array(
+                'id' => $id
+            ));
+        }
+
+        if ($errors){
+            m::add('Instance saved successfully.');
+        }
 
         return $this->redirect($this->generateUrl('manager_instances'));
-
     }
 
     /**
