@@ -26,7 +26,7 @@
                 <th class="right form-inline">
                     <label for="username">
                         {t}Filter by name{/t}</label>
-                        <input id="username" class="" name="filter_name" onchange="this.form.submit();" value="{$smarty.request.filter_title}" />
+                        <input id="username" class="" name="filter_name" onchange="this.form.submit();" value="{$filter_title}" />
                     </label>
                     <label for="usergroup">
                         {t}Per page{/t}
@@ -40,7 +40,7 @@
                     <input type="hidden" name="page" value="1" />
                     <button type="submit" class="btn">{t}Search{/t}</button>
                 </th>
-                <th><a href="{url name=manager_instances_list_export}">{image_tag src="/themes/default/images/csv.png" base_url="/manager"} Export list</a></th>
+                <th><a href="{url name=manager_instances_list_export filter_name=$filter_name}">{image_tag src="/themes/default/images/csv.png" base_url="/manager"} Export list</a></th>
             </tr>
         </table>
 

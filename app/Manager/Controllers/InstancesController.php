@@ -72,12 +72,13 @@ class InstancesController extends Controller
         );
         $pager = \Pager::factory($pager_options);
 
-        $instances = array_slice($instances, ($page-1)*$itemsPerPage, $itemsPerPage);
+        $instances = array_slice($instances, ($page-1) * $itemsPerPage, $itemsPerPage);
 
         return $this->render('instances/list.tpl', array(
             'instances'     => $instances,
             'per_page'      => $itemsPerPage,
-            'pagination'    =>  $pager,
+            'filter_name'   => $findParams['name'],
+            'pagination'    => $pager,
         ));
     }
 
@@ -85,14 +86,12 @@ class InstancesController extends Controller
     /**
      * Returns a CSV file with all the instances information
      *
-     * @return void
+     * @return Response the csv file of instances
      **/
     public function listExportAction(Request $request)
     {
-        $page = $request->query->getDigits('page', 1);
         $findParams = array(
             'name' => $request->query->filter('filter_name', '*', FILTER_SANITIZE_STRING),
-            'per_page' => $request->query->filter('filter_per_page', 20, FILTER_SANITIZE_STRING),
         );
 
         $instances = $this->instanceManager->findAll($findParams);
@@ -106,6 +105,7 @@ class InstancesController extends Controller
 
         $content = $this->renderView('instances/csv.tpl', array(
             'instances'     => $instances,
+            'filter_name'  => $findParams['name'],
         ));
 
         return new Response($content, 200, array(
