@@ -368,9 +368,6 @@ class ArticlesController extends Controller
 
         }
 
-        $comment = new \Comment();
-        $comments = $cm->find('Comment', ' fk_content="'.$id.'"', NULL);
-
         return $this->render('article/new.tpl', array(
             'article'      => $article,
             'availableSizes' => array(
@@ -378,7 +375,6 @@ class ArticlesController extends Controller
                 24 => '24', 26 => '26', 28 => '28',30 => '30',
                 32 => '32', 34 => '34'
             ),
-            'comments' => $comments
         ));
 
     }

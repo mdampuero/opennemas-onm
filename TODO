@@ -17,8 +17,6 @@ Articles
 --------
 - Batch actions
 - Review content_status and available flags when edit and listing
-- Evaluate if comments tab could be dropped from here, it overloads the
-  controller and UI. YAAAAAAAAAAAAAAAAAAAAAAa
 
 Newsletter
 ----------

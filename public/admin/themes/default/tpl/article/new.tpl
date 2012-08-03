@@ -114,13 +114,6 @@
                     <a id="avanced-custom-button" href="#avanced-custom">{t}Customize{/t}</a>
                 </li>
                 {/is_module_activated}
-                {is_module_activated name="COMMENT_MANAGER"}
-                {if isset($article) && is_object($article)}
-                <li>
-                    <a href="#comments">{t}Comments{/t}</a>
-                </li>
-                {/if}
-                {/is_module_activated}
                 <li>
                     <a href="#related-contents">{t}Related contents{/t}</a>
                 </li>
@@ -358,12 +351,6 @@
         <div id="avanced-custom">
             {include file ="article/partials/_article_avanced_customize.tpl"}
         </div>
-        {/is_module_activated}
-
-        {is_module_activated name="COMMENT_MANAGER"}
-            {if isset($article) && is_object($article)}
-                {include file="article/partials/_comments.tpl"}
-            {/if}
         {/is_module_activated}
 
         <div id="related-contents">
