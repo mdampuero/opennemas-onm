@@ -3,7 +3,8 @@ TODO
 
 Session Management
 ------------------
-- IMPORTANT: When logged in user, if another logs in, the first one is logged out
+- IMPORTANT: When a given logged in user (user1), if another logs in (user2),
+  the first one is logged out (user1).
 
 Menus
 -----
@@ -11,7 +12,8 @@ Menus
 
 Categories
 ----------
-- Review create and update actions (assign subsection, subsection change sideeffects??)
+- Review create and update actions (assign subsection, subsection
+  change side effects??)
 
 Opinion Authors
 ---------------
@@ -21,8 +23,8 @@ Opinion Authors
 Articles
 --------
 - Batch actions
-- Comments tab, while editing could be deleted as this tab don't make sense and
-  overload the controller and UI
+- Evaluate if comments tab could be dropped from here, overloads the
+  controller and UI
 
 Newsletter
 ----------

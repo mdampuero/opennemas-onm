@@ -37,7 +37,7 @@ class FrameworkStatusController extends Controller
      *
      * @return Response the response object
      **/
-    public function statusAction(Request $request)
+    public function checkDependenciesAction(Request $request)
     {
         ob_start();
         include(APPLICATION_PATH.'/bin/check-dependencies.php');
@@ -47,6 +47,16 @@ class FrameworkStatusController extends Controller
         return $this->render('framework/status.tpl', array(
             'status' => $status
         ));
+    }
+
+    /**
+     * Shows the APC information iframe
+     *
+     * @return void
+     **/
+    public function apcStatusAction(Request $request)
+    {
+        return $this->render('framework/apc_iframe.tpl');
     }
 
 } // END class StatusController

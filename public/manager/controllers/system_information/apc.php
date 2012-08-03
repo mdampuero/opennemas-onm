@@ -4,12 +4,7 @@
  * Setup app
 */
 require_once '../../../bootstrap.php' ;
-require_once '../../session_bootstrap.php';
-
-if(!Acl::isMaster()) {
-    m::add("You don't have permissions");
-    Application::forward('/admin/');
-}
+// require_once '../../session_bootstrap.php';
 
 /*
   +----------------------------------------------------------------------+

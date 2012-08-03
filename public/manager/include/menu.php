@@ -13,7 +13,12 @@ $menuXml = '<?xml version="1.0"?>
         <node
             title="'.htmlspecialchars(_("Status"), ENT_QUOTES).'"
             id="support_help"
-            link="'.url('manager_framework_status').'"
+            link="'.url('manager_framework_check_dependencies').'"
+        />
+        <node
+            title="'.htmlspecialchars(_("Status"), ENT_QUOTES).'"
+            id="support_help"
+            link="'.url('manager_framework_apc').'"
         />
     </submenu>
 </menu>';

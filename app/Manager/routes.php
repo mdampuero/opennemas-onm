@@ -95,11 +95,22 @@ $managerRoutes->add(
 );
 
 $managerRoutes->add(
-    'manager_framework_status',
+    'manager_framework_check_dependencies',
     new Route(
-        '/framework/status',
+        '/framework/check-dependencies',
         array(
-            '_controller' => 'Manager:Controllers:FrameworkStatusController:status',
+            '_controller' => 'Manager:Controllers:FrameworkStatusController:checkDependencies',
+        )
+    ),
+    'manager'
+);
+
+$managerRoutes->add(
+    'manager_framework_apc',
+    new Route(
+        '/framework/apc',
+        array(
+            '_controller' => 'Manager:Controllers:FrameworkStatusController:apcStatus',
         )
     ),
     'manager'

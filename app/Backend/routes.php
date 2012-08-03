@@ -2369,15 +2369,6 @@ $adminRoutes->add(
     ),
     '/admin'
 );
-$adminRoutes->add(
-    'admin_php_status',
-    new Route(
-        '/system/php-status',
-        array('_controller' => 'Backend:Controllers:SystemInformationController:default')
-    ),
-    '/admin'
-);
-
 
 // User management routes
 $adminRoutes->add(

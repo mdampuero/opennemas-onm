@@ -1,4 +1,4 @@
-{extends file="base/admin.tpl"}
+{extends file="base/base.tpl"}
 
 {block name="header-css" append}
     <style type="text/css">
@@ -29,6 +29,6 @@ iframe {
 
 {block name="content"}
 <div style="height:100%; text-align:right;">
-    <iframe src="/admin/controllers/system_information/apc.php" width="99%"></iframe>
+    <iframe src="/manager/controllers/system_information/apc.php" width="99%"></iframe>
 </div>
 {/block}

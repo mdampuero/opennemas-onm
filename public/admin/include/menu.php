@@ -382,12 +382,6 @@ $menuXml = '<?xml version="1.0"?>
             id="cache_manager"
             link="'.url("admin_tpl_manager", array()).'"
             privilege="CACHE_ADMIN" />
-        <node
-            module_name="PHP_CACHE_MANAGER"
-            title="'.htmlspecialchars(_("PHP Cache manager"), ENT_QUOTES).'"
-            id="php_cache__manager"
-            link="'.url("admin_php_status", array()).'"
-            privilege="ONLY_MASTERS" />
         <node class="divider" />
         <node
             module_name="LOG_SQL"
