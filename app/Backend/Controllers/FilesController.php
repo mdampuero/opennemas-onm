@@ -668,7 +668,7 @@ class FilesController extends Controller
 
         list($countPolls, $polls) = $cm->getCountAndSlice(
             'Attachment',
-            $null,
+            null,
             'contents.available=1',
             ' ORDER BY starttime DESC, contents.title ASC ',
             $page,

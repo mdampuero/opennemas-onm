@@ -340,6 +340,7 @@ class ArticlesController extends Controller
         foreach ($relations as $aret) {
             $orderFront[] =  new \Content($aret);
         }
+
         $this->view->assign('orderFront', $orderFront);
 
         $orderInner = array();
