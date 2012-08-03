@@ -10,8 +10,6 @@ Opinion Authors
 ---------------
 - Implement avatar upload for authors
 - Batch actions
-- Move condition and politics to params
-- Add Title for blog, unless "Opinions of XXXX" say "Custom title"
 
 Articles
 --------
@@ -48,6 +46,11 @@ Article
 Opinion
 -------
 - Review redirections after update an opinion (search, ...)
+
+Opinion authors
+---------------
+- Move condition and politics to params
+- Add Title for blog, unless "Opinions of XXXX" say "Custom title"
 
 Images
 ------

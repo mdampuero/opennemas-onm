@@ -443,7 +443,7 @@ class Author
     public function get_author_photos($id)
     {
         $sql = 'SELECT *
-                FROM author_imgs WHERE fk_author = ? ORDER BY pk_img DESC';
+                FROM author_imgs WHERE fk_author = ? ORDER BY pk_img ASC';
         $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {

@@ -1,3 +1,6 @@
+-- 03-08-2012
+ALTER TABLE  `author_imgs` DROP PRIMARY KEY , ADD PRIMARY KEY (  `pk_img` ,  `fk_author` )
+
 -- 13-07-2012
 ALTER TABLE  `menu_items` DROP PRIMARY KEY , ADD PRIMARY KEY (  `pk_item` ,  `pk_menu` )
 
