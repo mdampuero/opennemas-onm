@@ -108,7 +108,7 @@ class AuthenticationController extends Controller
                     global $app;
                     $app::setCookieSecure('_onm_session_'.session_id(), time()+($user->sessionexpire)*60, 0, '/admin/');
                     \PrivilegesCheck::loadSessionExpireTime();
-                    $GLOBALS['Session']->cleanExpiredSessionFiles();
+                    // $GLOBALS['Session']->cleanExpiredSessionFiles();
 
                     $forwardTo = filter_input(INPUT_POST, 'forward_to');
                     if (!is_null($forwardTo) && !empty($forwardTo)) {
