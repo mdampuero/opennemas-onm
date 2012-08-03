@@ -13,7 +13,7 @@
         </a>
         <ul class="dropdown-menu">
             <li>
-                <a title="{t 1=$content->title}Edit '%1'{/t}" href="/admin/controllers/video/video.php?action=delete&amp;id={$content->id}">
+                <a title="{t 1=$content->title}Edit '%1'{/t}" href="{url name=admin_video_show id=$content->id}">
                     <i class="icon-pencil"></i> {t}Edit{/t}
                 </a>
             </li>
@@ -36,7 +36,7 @@
             </li>
             <li class="divider"></li>
             <li>
-                <a href="{$smarty.server.PHP_SELF}?action=delete&amp;id={$content->id}&amp;category={$category}" title="{t}Delete{/t}" class="send-to-trash">
+                <a href="{url name=admin_video_delete id=$content->id category=$category}" title="{t}Delete{/t}" class="send-to-trash">
                     <i class="icon-trash"></i> {t}Send to trash{/t}
                 </a>
             </li>

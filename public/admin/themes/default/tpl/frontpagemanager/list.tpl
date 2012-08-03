@@ -125,7 +125,7 @@
                     {/is_module_activated}
                     {is_module_activated name="ADVANCED_SEARCH"}
                     <li>
-                        <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/search_advanced/search_advanced.php?action=content-provider&amp;">{t}Search{/t}</a>
+                        <a href="{url name=admin_search_content_provider}">{t}Search{/t}</a>
                     </li>
                     {/is_module_activated}
                     {is_module_activated name="WIDGET_MANAGER"}
