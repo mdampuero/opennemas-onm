@@ -31,7 +31,7 @@
                 <div class="control-group">
                     <label for="link{$menuItem->pk_item}" class="control-label">{t}Link{/t}</label>
                     <div class="controls">
-                        <input type="text" id="link{$menuItem->pk_item}" class="link" value="{$menuItem->link}" placeholder="{t}Menu title...{/t}">
+                        <input type="text" id="link{$menuItem->pk_item}" class="link" value="{$menuItem->link}" placeholder="{t}Menu link...{/t}">
                     </div>
                 </div>
                 {/if}

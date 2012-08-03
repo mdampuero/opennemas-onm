@@ -1,11 +1,6 @@
 TODO
 ====
 
-Session Management
-------------------
-- IMPORTANT: When a given logged in user (user1), if another logs in (user2),
-  the first one is logged out (user1).
-
 Categories
 ----------
 - Review create and update actions (assign subsection, subsection

@@ -104,10 +104,31 @@ jQuery(document).ready(function($){
                     '" class="menuItem" data-name="'+ name +'" id ="'+ name +
                     '" data-item-id="" data-type="external">'+
                     '<div>'+
+                        '<span class="menu-title">'+
                         name+
+                        '</span>'+
                         '<div class="btn-group actions" style="float:right;">'+
                             '<a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a> '+
                             '<a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>'+
+                        '</div>'+
+                        '<div class="form-horizontal edit-menu-form">'+
+                            '<fieldset>'+
+                            '<div class="control-group">'+
+                                    '<label class="control-label">Title</label>'+
+                                    '<div class="controls">'+
+                                        '<input type="text" class="title" value="'+name+'">'+
+                                    '</div>'+
+                                '</div>'+
+                                '<div class="control-group">'+
+                                    '<label class="control-label">Link</label>'+
+                                    '<div class="controls">'+
+                                        '<input type="text"class="link" value="'+link+'">'+
+                                    '</div>'+
+                                '</div>'+
+                                '<div class="send-button-wrapper">'+
+                                    '<button type="submit" class="btn save-menuitem-button">Update</button>'+
+                                '</div>'+
+                            '</fieldset>'+
                         '</div>'+
                     '</div>'+
                 '</li>' );
