@@ -105,6 +105,29 @@ class OpinionAuthorsController extends Controller
     }
 
     /**
+     * Creates a new author given its information
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function createAction(Request $request)
+    {
+
+        $this->checkAclOrForward('AUTHOR_CREATE');
+
+        if ('POST' == $request->getMethod()) {
+            m::add('Not implemented.');
+
+            return $this->redirect($this->generateUrl('admin_opinion_authors'));
+        } else {
+            return $this->render('opinion/authors/new.tpl');
+        }
+
+    }
+
+
+    /**
      * Updates the author information
      *
      * @param Request $request the request object

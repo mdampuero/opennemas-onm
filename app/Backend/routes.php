@@ -1951,7 +1951,7 @@ $adminRoutes->add(
 $adminRoutes->add(
     'admin_opinion_author_create',
     new Route(
-        '/opinion/author/{id}/create',
+        '/opinion/authors/create',
         array(
             '_controller' => 'Backend:Controllers:OpinionAuthorsController:create',
         )

@@ -16,7 +16,7 @@
                 {/acl}
                 {acl isAllowed="AUTHOR_CREATE"}
                 <li>
-                    <a href="{$smarty.server.PHP_SELF}?action=new&amp;page=0" class="admin_add"  accesskey="N" tabindex="1">
+                    <a href="{url name=admin_opinion_author_create}" class="admin_add"  accesskey="N" tabindex="1">
                         <img border="0" src="{$params.IMAGE_DIR}authors_add.png" title="{t}New author{/t}" alt="{t}New author{/t}"><br />{t}New author{/t}
                     </a>
                 </li>
