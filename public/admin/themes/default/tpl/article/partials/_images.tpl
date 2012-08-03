@@ -110,25 +110,19 @@
                 <strong>{t}Available images{/t}</strong>
             </div>
             <div id="photos_container" class="photos" style="border:1px solid #ccc;  padding:7px;">
-                <table>
-                    <tr>
-                        <td >
-                            <input id="stringImageSearch" name="stringImageSearch" type="text"
-                               placeholder="{t}Search images by title...{/t}" style="width: 150px;"/>
-                        </td>
-                        <td>
-                            <select style="width:140px" id="category_imag" name="category_imag" class="required">
-                                <option value="0">GLOBAL</option>
-                                    {section name=as loop=$allcategorys}
-                                        <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if}>{$allcategorys[as]->title}</option>
-                                        {section name=su loop=$subcat[as]}
-                                                <option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category}selected{/if}>&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
-                                        {/section}
-                                    {/section}
-                            </select>
-                        </td>
-                    </tr>
-                </table>
+                <div class="input-append">
+                    <input id="stringImageSearch" name="stringImageSearch" type="text"
+                       placeholder="{t}Search images by title...{/t}" style="width: 150px;" class="noentersubmit"/>
+                    <select style="width:140px" id="category_imag" name="category_imag">
+                        <option value="0">GLOBAL</option>
+                            {section name=as loop=$allcategorys}
+                                <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if}>{$allcategorys[as]->title}</option>
+                                {section name=su loop=$subcat[as]}
+                                        <option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category}selected{/if}>&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
+                                {/section}
+                            {/section}
+                    </select>
+                </div>
                 <div id="photos">
                     {*AJAX imageGallery *}
                 </div>
@@ -179,7 +173,7 @@
                             </div>
                         </div><!-- / -->
                         <div class="article-resource-footer">
-                            <label for="title">{t}Footer text for frontpage image:{/t}</label>
+                            <!-- <label for="title">{t}Footer text for frontpage image:{/t}</label> -->
                             <!-- <textarea name="img1_footer" style="width:95%" class="related-element-footer">{$article->img1_footer|clearslash|escape:'html'}</textarea> -->
                             <input type="hidden" name="fk_video" value="{$article->fk_video|default:""}" class="related-element-id" />
                         </div>
@@ -224,30 +218,20 @@
                 <strong>{t}Available videos{/t}</strong>
             </div>
             <div id="videos-container" class="photos" style=" border:1px solid #ccc;  padding:7px;">
-                <table>
-                    <tr>
-                        <td>
-                            <div class="cajaBusqueda" style="width:100%;" >
-                                <input class="textoABuscar" id="stringVideoSearch" name="stringVideoSearch" type="text"
-                                       onkeypress="onVideoKeyEnter(event, $('category_imag').options[$('category_video').selectedIndex].value, $('stringVideoSearch').value,1);"
-                                       onclick="this.select();" placeholder="{t}Search videos by title...{/t}"  style="width: 150px;"
-                                       />
-                            </div>
-                        </td>
-                        <td>
-                            <select style="width:140px"  id="category_video" name="category_video">
-                                <option value="0">GLOBAL</option>
-                                {section name=as loop=$allcategorys}
-                                    <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if}>{$allcategorys[as]->title}</option>
-                                    {section name=su loop=$subcat[as]}
-                                            <option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category}selected{/if}>&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
-                                    {/section}
-                                {/section}
-                            </select>
-                        </td>
-                    </tr>
-                </table>
-                <br>
+                <div class="input-append">
+                    <input class="textoABuscar noentersubmit" id="stringVideoSearch" name="stringVideoSearch" type="text"
+                           placeholder="{t}Search videos by title...{/t}"  style="width: 150px;"
+                           />
+                    <select style="width:140px"  id="category_video" name="category_video">
+                        <option value="0">GLOBAL</option>
+                        {section name=as loop=$allcategorys}
+                            <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if}>{$allcategorys[as]->title}</option>
+                            {section name=su loop=$subcat[as]}
+                                    <option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category}selected{/if}>&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
+                            {/section}
+                        {/section}
+                    </select>
+                </div>
                 <div id="videos">
                     <!-- Ajax -->
                </div>
@@ -307,6 +291,30 @@ jQuery(document).ready(function($){
         load_ajax_in_container(link.attr('href'), $('#photos'));
     });
 
+    load_ajax_in_container('{url name=admin_videos_content_provider_gallery category=$category}', $('#videos'));
+
+    $('#stringVideoSearch, #category_video').on('change', function(e, ui) {
+        var category = $('#category_video option:selected').val();
+        var text = $('#stringVideoSearch').val();
+        var url = '{url name=admin_videos_content_provider_gallery}?'+'category='+category+'&metadatas='+encodeURIComponent(text);
+        load_ajax_in_container(
+            url,
+            $('#videos')
+        );
+    });
+
+    $('#videos').on('click', '.pagination a', function(e, ui) {
+        e.preventDefault();
+        var link = $(this);
+        load_ajax_in_container(link.attr('href'), $('#videos'));
+    });
+
+    $('.noentersubmit').keydown(function(event){
+        if (event.keyCode == 13) {
+          event.preventDefault();
+          return false;
+        }
+    });
 });
 </script>
 {/is_module_activated}

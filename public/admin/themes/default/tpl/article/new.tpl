@@ -129,7 +129,7 @@
 
             {* Pestaña de edición-contenido*}
             <div id="edicion-contenido">
-                <table style="margin-bottom:0; width:100%;">
+                <table style="margin-bottom:0; width:100%;" >
                     <tbody>
                         <tr>
                             <td style="width:75%; vertical-align:top; padding:4px 0;" >

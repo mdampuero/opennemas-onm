@@ -1021,6 +1021,15 @@ $adminRoutes->add(
     '/admin'
 );
 
+$adminRoutes->add(
+    'admin_videos_content_provider_gallery',
+    new Route(
+        '/videos/content-provider-gallery',
+        array('_controller' => 'Backend:Controllers:VideosController:contentProviderGallery')
+    ),
+    '/admin'
+);
+
 // Album controller routes
 $adminRoutes->add(
     'admin_albums',

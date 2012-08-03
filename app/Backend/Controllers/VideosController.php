@@ -770,4 +770,87 @@ class VideosController extends Controller
         ));
     }
 
+    /**
+     * Shows a paginated list of images from a category
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function contentProviderGalleryAction(Request $request)
+    {
+        $metadatas = $request->query->filter('metadatas', '', FILTER_SANITIZE_STRING);
+        $category = $request->query->getDigits('category', 0);
+        $page     = $request->query->getDigits('page', 1);
+
+        $itemsPerPage = 16;
+        $numItems = $itemsPerPage + 1;
+
+        if ($page == 1) {
+            $limit    = "LIMIT {$numItems}";
+        } else {
+            $limit    = "LIMIT ".($page-1) * $itemsPerPage .', '.$numItems;
+        }
+
+        $cm = new \ContentManager();
+
+        if (!empty($metadatas)) {
+            $search = \cSearch::getInstance();
+            $arrayIds      = $search->searchContentsSelect('pk_content', $metadatas, 'video', 100);
+            if (!empty($arrayIds)) {
+                $szWhere   = '( FALSE ';
+                foreach ($arrayIds as $id) {
+                    $szWhere .= ' OR pk_content = ' . $id[0];
+                }
+                $szWhere .= ')';
+            } else {
+                $szWhere = "TRUE";
+
+                return new Response(sprintf(_(
+                    "<div>"
+                    ."<p>Unable to find any content matching your search criterira.</p>"
+                    ."</div>"
+                ), $metadatas));
+            }
+
+        } else {
+            $szWhere = "TRUE";
+        }
+
+        if ($category == 0) {
+            $videos = $cm->find(
+                'Video',
+                'contents.fk_content_type = 9 AND contents.content_status=1 AND ' . $szWhere,
+                'ORDER BY created DESC '.$limit
+            );
+        } else {
+            $videos = $cm->find_by_category(
+                'Video',
+                $category,
+                'fk_content_type = 9 AND contents.content_status=1 AND ' . $szWhere,
+                'ORDER BY created DESC '.$limit
+            );
+        }
+        $total = count($videos);
+        if ($total > $itemsPerPage) {
+            array_pop($videos);
+        }
+
+        $pagination = \Onm\Pager\SimplePager::getPagerUrl(array(
+            'page'  => $page,
+            'items' => $itemsPerPage,
+            'total' => $total,
+            'url'   => $this->generateUrl('admin_videos_content_provider_gallery', array(
+                'category'  => $category,
+                'metadatas' => $metadatas,
+            ))
+        ));
+
+        return $this->render('video/video_gallery.ajax.tpl', array(
+            'pagination' => $pagination,
+            'videos'     => $videos,
+
+        ));
+    }
+
 } // END class VideosController
