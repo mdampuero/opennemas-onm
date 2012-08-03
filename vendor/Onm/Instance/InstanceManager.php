@@ -621,83 +621,94 @@ class InstanceManager
         $rs3 = $conn->Execute($sql3);
         $rs4 = $conn->Execute($sql4);
 
-        // If the database was created sucessfully now import the default data.
-        if ($rs && $rs2 && $rs3 && $rs4) {
-            $connection2         = self::getConnection($data['settings']);
-            $exampleDatabasePath = realpath(APPLICATION_PATH.DS.'db'.DS.'instance-default.sql');
-            $execLine = "mysql -h {$onmInstancesConnection['BD_HOST']} "
-                ."-u {$onmInstancesConnection['BD_USER']}"
-                ." -p{$onmInstancesConnection['BD_PASS']} "
-                ."{$data['settings']['BD_DATABASE']} < {$exampleDatabasePath}";
-            exec($execLine, $output, $exitCode);
-            if ($exitCode > 0) {
-                throw new DatabaseForInstanceNotCreatedException(
-                    'Could not create the default database for the instance:'
-                    .' EXEC_LINE: {$execLine} \n OUTPUT: {$output}'
-                );
-            }
-
-            // Insert user with data from the openhost form
-            //TODO: PROVISIONAL WHILE DONT DELETE $GLOBALS['application']->conn
-            //// is used in settings set
-            $im = $this->getInstance();
-            $GLOBALS['application']->conn =
-                $im->getConnection($data['settings']);
-
-            if (isset($data['user_name'])
-                && isset ($data['user_pass'])
-                && isset ($data['user_mail'])
-            ) {
-                $sql = "INSERT INTO users (`login`, `password`, `sessionexpire`,
-                                           `email`, `name`, `fk_user_group`)
-                        VALUES (?,?,?,?,?,?)";
-
-                $values = array($data['user_name'], md5($data['user_pass']),  60,
-                                $data['user_mail'], $data['user_name'],6);
-
-                if (!$connection2->Execute($sql, $values)) {
-                    return false;
-                }
-
-                $userPrivSql = "INSERT INTO `users_content_categories` "
-                        ."(`pk_fk_user`, `pk_fk_content_category`)"
-                        ."VALUES (134, 0), (134, 22), (134, 23), (134, 24), "
-                        ."       (134, 25), (134, 26), (134, 27), "
-                        ."       (134, 28), (134, 29), (134, 30), (134, 31)";
-
-                if (!$connection2->Execute($userPrivSql)) {
-                    return false;
-                }
-
-                s::set('contact_mail', $data['user_mail']);
-                s::set('contact_name', $data['user_name']);
-                s::set('contact_IP', $data['contact_IP']);
-            }
-
-            //Change and insert some data with instance information
-            s::set('site_name', $data['name']);
-            s::set('site_created', $data['site_created']);
-            s::set('site_title',
-                $data['name'].' - OpenNemas - Servicio online para tu periódico'
-                .' digital - Online service for digital newspapers');
-            s::set('site_description',
-                $data['name'].' - OpenNemas - Servicio online para tu periódico'
-                .' digital - Online service for digital newspapers');
-            s::set('site_keywords',
-                $data['internal_name'].', openNemas, servicio, online, '
-                .'periódico, digital, service, newspapers');
-            s::set('site_agency', $data['internal_name'].'.opennemas.com');
-            if (isset ($data['timezone'])) {
-                s::set('time_zone', $data['timezone']);
-            }
-
-        } else {
+        if (!$rs) {
             throw new DatabaseForInstanceNotCreatedException(
-                'Could not create the default database/user/grant/privileges'
-                .' for the instance/user...'
+                'Could not create the default database for the instance'
             );
+        }
+        if (!$rs2) {
+            throw new DatabaseForInstanceNotCreatedException(
+                'Could not create the default user for the instance'
+            );
+        }
 
-            return false;
+        if (!$rs3) {
+            throw new DatabaseForInstanceNotCreatedException(
+                'Could not grant usage to the default user for the instance database'
+            );
+        }
+        if (!$rs4) {
+            throw new DatabaseForInstanceNotCreatedException(
+                'Could not grant all privileges to the default user for the instance database'
+            );
+        }
+        // If the database was created sucessfully now import the default data.
+        $connection2         = self::getConnection($data['settings']);
+        $exampleDatabasePath = realpath(APPLICATION_PATH.DS.'db'.DS.'instance-default.sql');
+        $execLine = "mysql -h {$onmInstancesConnection['BD_HOST']} "
+            ."-u {$onmInstancesConnection['BD_USER']}"
+            ." -p{$onmInstancesConnection['BD_PASS']} "
+            ."{$data['settings']['BD_DATABASE']} < {$exampleDatabasePath}";
+        exec($execLine, $output, $exitCode);
+        if ($exitCode > 0) {
+            throw new DatabaseForInstanceNotCreatedException(
+                'Could not create the default database for the instance:'
+                .' EXEC_LINE: {$execLine} \n OUTPUT: {$output}'
+            );
+        }
+
+        // Insert user with data from the openhost form
+        //TODO: PROVISIONAL WHILE DONT DELETE $GLOBALS['application']->conn
+        //// is used in settings set
+        $im = $this->getInstance();
+        $GLOBALS['application']->conn =
+            $im->getConnection($data['settings']);
+
+        if (isset($data['user_name'])
+            && isset ($data['user_pass'])
+            && isset ($data['user_mail'])
+        ) {
+            $sql = "INSERT INTO users (`login`, `password`, `sessionexpire`,
+                                       `email`, `name`, `fk_user_group`)
+                    VALUES (?,?,?,?,?,?)";
+
+            $values = array($data['user_name'], md5($data['user_pass']),  60,
+                            $data['user_mail'], $data['user_name'],6);
+
+            if (!$connection2->Execute($sql, $values)) {
+                return false;
+            }
+
+            $userPrivSql = "INSERT INTO `users_content_categories` "
+                    ."(`pk_fk_user`, `pk_fk_content_category`)"
+                    ."VALUES (134, 0), (134, 22), (134, 23), (134, 24), "
+                    ."       (134, 25), (134, 26), (134, 27), "
+                    ."       (134, 28), (134, 29), (134, 30), (134, 31)";
+
+            if (!$connection2->Execute($userPrivSql)) {
+                return false;
+            }
+
+            s::set('contact_mail', $data['user_mail']);
+            s::set('contact_name', $data['user_name']);
+            s::set('contact_IP', $data['contact_IP']);
+        }
+
+        //Change and insert some data with instance information
+        s::set('site_name', $data['name']);
+        s::set('site_created', $data['site_created']);
+        s::set('site_title',
+            $data['name'].' - OpenNemas - Servicio online para tu periódico'
+            .' digital - Online service for digital newspapers');
+        s::set('site_description',
+            $data['name'].' - OpenNemas - Servicio online para tu periódico'
+            .' digital - Online service for digital newspapers');
+        s::set('site_keywords',
+            $data['internal_name'].', openNemas, servicio, online, '
+            .'periódico, digital, service, newspapers');
+        s::set('site_agency', $data['internal_name'].'.opennemas.com');
+        if (isset ($data['timezone'])) {
+            s::set('time_zone', $data['timezone']);
         }
 
         return true;
@@ -712,7 +723,7 @@ class InstanceManager
      **/
     public function deleteDatabaseForInstance($settings)
     {
-        $sql = "DROP DATABASE `{$settings['BD_DATABASE']}`";
+        $sql = "DROP DATABASE `{$settings['settings']['BD_DATABASE']}`";
 
         if (!$this->_connection->Execute($sql)) {
             return false;
@@ -730,7 +741,7 @@ class InstanceManager
      **/
     public function deleteInstanceUserFromDatabaseManager($settings)
     {
-        $sql = "DROP USER `{$settings['BD_USER']}`@'localhost'";
+        $sql = "DROP USER `{$settings['settings']['BD_USER']}`@'localhost'";
 
         if (!$this->_connection->Execute($sql)) {
             return false;

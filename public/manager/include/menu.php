@@ -16,7 +16,7 @@ $menuXml = '<?xml version="1.0"?>
             link="'.url('manager_framework_check_dependencies').'"
         />
         <node
-            title="'.htmlspecialchars(_("Status"), ENT_QUOTES).'"
+            title="'.htmlspecialchars(_("APC status"), ENT_QUOTES).'"
             id="support_help"
             link="'.url('manager_framework_apc').'"
         />
