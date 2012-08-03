@@ -45,9 +45,23 @@ jQuery(document).ready(function($){
     jQuery('#menuelements').on('click', '.edit-menu-item', function(e, ui){
         e.preventDefault();
         var element = $(this).closest('li.menuItem');
-        $('#modal-add-item #itemTitle').attr('value', element.data('title'));
-        $('#modal-add-item #itemID').attr('value', element.data('pk_item'));
-        $("#modal-add-item").modal('show');
+        element.find('> div >.edit-menu-form').slideToggle('fast');
+    });
+
+    jQuery('#menuelements').on('click', '.save-menuitem-button', function(e, ui){
+        e.preventDefault();
+        var form = $(this).closest('.edit-menu-form');
+        var menuItem = $(this).closest('li.menuItem');
+
+        var title = form.find('.title').val();
+        menuItem.data('title', title);
+        menuItem.find('> div > .menu-title').html(title);
+
+        var link = form.find('.link');
+        if (link) {
+            var url = link.val();
+            menuItem.data('link', url);
+        }
     });
 
 

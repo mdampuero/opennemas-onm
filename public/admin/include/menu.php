@@ -105,13 +105,6 @@ $menuXml = '<?xml version="1.0"?>
             id="letter_manager"
             link="'.url('admin_letters').'"
         />
-        <node
-            module_name="ARTICLE_MANAGER"
-            privilege="ARTICLE_ARCHIVE"
-            title="'.htmlspecialchars(_("Library"), ENT_QUOTES).'"
-            id="library_manager"
-            link="article.php?action=list_hemeroteca"
-        />
         <node class="divider" />
         <node
             module_name="CATEGORY_MANAGER"

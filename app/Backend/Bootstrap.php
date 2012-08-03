@@ -29,7 +29,6 @@ class Bootstrap extends ModuleBootstrap
      **/
     public function initErrorHandler()
     {
-        // $this->container->setParameter('dispatcher.exceptionhandler', 'Backend:Controllers:ErrorController:default');
 
         return $this;
     }

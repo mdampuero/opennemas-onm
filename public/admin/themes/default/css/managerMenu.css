@@ -93,3 +93,20 @@ ol.placeholder-element {
     background: #fbe3e4;
     border-color: transparent;
 }
+
+.menuItem > div {
+    position:relative;
+}
+.menuItem .edit-menu-form {
+    display:none;
+    width:100%;
+    background:White;
+    border-top:1px solid #ccc;
+    margin:3px -10px -3px -5px !important;
+    padding:5px;
+    margin-top:3px;
+
+}
+.menuItem .edit-menu-form .send-button-wrapper {
+    padding-left: 160px;
+}
