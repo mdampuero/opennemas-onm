@@ -49,12 +49,13 @@
     </div>
 </div>
 <div class="wrapper-content">
+
+    {render_messages}
+
     <div class="warnings-validation"></div><!-- / -->
     <form action="{url name=admin_importer_europapress}" method="get" name="formulario" id="formulario">
 
-	{render_messages}
-
-    <div class="table-info clearfix">
+        <div class="table-info clearfix">
             <div>
                 <div class="left"><label>Total: {$pagination->_totalItems} articles.</label></div>
                 <div class="right form-inline">

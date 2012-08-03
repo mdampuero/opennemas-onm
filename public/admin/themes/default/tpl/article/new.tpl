@@ -88,7 +88,7 @@
                 </li>
                 <li class="separator"></li>
                 <li>
-                    <a href="{url name=admin_articles category=$category page=$page}" title="{t}Cancel{/t}">
+                    <a href="{if !empty($smarty.session._from)}{$smarty.session._from}{else}{url name=admin_articles category=$category page=$page}{/if}" title="{t}Cancel{/t}">
                         <img src="{$params.IMAGE_DIR}previous.png" alt="{t}Cancel{/t}" ><br />{t}Go back{/t}
                     </a>
                 </li>

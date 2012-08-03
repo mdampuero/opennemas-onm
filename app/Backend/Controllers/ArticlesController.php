@@ -137,6 +137,13 @@ class ArticlesController extends Controller
             $articles = array();
         }
 
+        $_SESSION['_from'] = $this->generateUrl('admin_articles', array(
+            'status'   => $status,
+            'title'    => $title,
+            'category' => $category,
+            'page'     => $page
+        ));
+
         return $this->render('article/list.tpl', array(
             'articles'   => $articles,
             'page'       => $page,

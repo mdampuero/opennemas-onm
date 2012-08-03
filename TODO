@@ -1,6 +1,10 @@
 TODO
 ====
 
+Session Management
+------------------
+- IMPORTANT: When logged in user, if another logs in, the first one is logged out
+
 Menus
 -----
 - Allow to edit available elements in menu (change name, link, ...).
@@ -18,12 +22,10 @@ Articles
 --------
 - Batch actions
 - Review D&D of search content provider
-- Port videos provider to symfony controller actions
 
 Newsletter
 ----------
 - Only initial work done
-- Review content provider and port its actions to the created ones
 
 LOW PRIORITY TASKS OR IDEAS
 --------------------------------------------------------------------------------
@@ -43,18 +45,6 @@ Opinion
 -------
 - Review redirections after update an opinion (search, ...)
 
-Europapress Importer
---------------------
-- Review back button in article editting form when importing
-
-EFE importer
-------------
-- Review back button in article editting form when importing
-
-Files
------
-- Review if new.tpl could be deleted, now form.tpl handle create and update (I think)
-
 Images
 ------
 - Review color filter in search
@@ -68,7 +58,6 @@ XML file importer
 - Add buttons to add and remove more files in form.
 - Import and check actions was merged (check doesn't save files, review it).
 - Rework in UX.
-
 
 Search advanced
 ---------------

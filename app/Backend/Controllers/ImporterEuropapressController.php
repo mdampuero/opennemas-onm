@@ -103,6 +103,12 @@ class ImporterEuropapressController extends Controller
             m::add($message . _('Try syncing the news list from server by clicking in "Sync with server" button above'), m::NOTICE);
         }
 
+        $_SESSION['_from'] = $this->generateUrl('admin_importer_europapress',array(
+            'filter_category' => $filterCategory,
+            'filter_title'    => $filterTitle,
+            'page'            => $page
+        ));
+
         return $this->render('agency_importer/europapress/list.tpl', array(
             'elements'      =>  $elements,
             'categories'    =>  $categories,
@@ -180,10 +186,7 @@ class ImporterEuropapressController extends Controller
 
         if (!empty($newArticleID)) {
 
-            $httpParams []= array( 'id' => $newArticleID,
-                                  'action' => 'read');
-
-            return $this->redirect(SITE_URL_ADMIN.'/article.php' . '?'.\StringUtils::toHttpParams($httpParams));
+            return $this->redirect($this->generateUrl('admin_article_show', array('id' => $newArticleID)));
         } else {
             m::add(sprintf('Unable to import the file "%s"', $id));
 
