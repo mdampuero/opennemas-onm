@@ -4,6 +4,12 @@
 <script type="text/javascript">
     jQuery( ".author-photos" ).sortable();
     jQuery( ".author-photos" ).disableSelection();
+    jQuery(document).ready(function($) {
+        $('.delete-author-photo').on('click', function(e, ui) {
+            var element = $(this);
+            element.parent('.thumbnail').remove();
+        })
+    });
 </script>
 {/block}
 
@@ -87,8 +93,8 @@
                         {foreach name=as from=$photos|default:array() item=photo}
                         <div id='{$photo->pk_img}' class="thumbnail">
                             <img src="{$smarty.const.MEDIA_IMG_PATH_URL}{$photo->path_img}" />
-                            <input type="hidden" name="photos[]" value="{$photo->pk_img}">
-                                <a class="btn btn-danger btn-mini delete" href="#">{t}Delete{/t}</a>
+                            <input type="hidden" name="photos[]" value="{$photo->fk_photo}">
+                            <a class="btn btn-danger btn-mini delete-author-photo" href="#">{t}Delete{/t}</a>
                         </div>
                         {/foreach}
                     </div>

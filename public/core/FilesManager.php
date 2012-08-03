@@ -49,12 +49,11 @@ class FilesManager
 
         chmod($path, 0755);
         if (!$created) {
-            // Register a critical error
-            echo '<br> error'.$path;
             $GLOBALS['application']->logger->emerg(
                 "Error creating directory: " . $path
             );
         }
+        return $created;
     }
 
     /**

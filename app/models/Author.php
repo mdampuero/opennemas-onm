@@ -134,7 +134,6 @@ class Author
      **/
     public function update($data)
     {
-
         $data = array_merge($this->_defaultValues, $data);
 
         $sql = "UPDATE `authors`
@@ -158,15 +157,25 @@ class Author
         }
 
         $this->pk_author = $data['id'];
-return true;
+
         // Drop image assignment
         $sql = "DELETE FROM author_imgs WHERE fk_author=?";
         $GLOBALS['application']->conn->Execute($sql, array($this->id));
 
-        foreach ($data['photos'] as $index => $photo) {
+        $photoInstances = array();
+        foreach ($data['photos'] as $photoId) {
+            $photoInstances []= new \Photo($photoId);
+        }
+
+        if (array_key_exists('new_photo_id', $data) && !empty($data['new_photo_id'])) {
+            $photoInstances []= new \Photo($data['new_photo_id']);
+        }
+
+        foreach ($photoInstances as $photo) {
             $sql = "INSERT INTO author_imgs
                     (`fk_author`, `fk_photo`,`path_img`) VALUES ( ?,?,?)";
-            $values = array($this->pk_author, $index, $photo );
+
+            $values = array($this->pk_author, $photo->id, $photo->path_file.'/'.$photo->name);
 
             $rs = $GLOBALS['application']->conn->Execute($sql, $values);
             if (!$rs) {
@@ -433,8 +442,7 @@ return true;
      **/
     public function get_author_photos($id)
     {
-        $sql = 'SELECT author_imgs.fk_author, author_imgs.pk_img,
-                       author_imgs.path_img, author_imgs.description
+        $sql = 'SELECT *
                 FROM author_imgs WHERE fk_author = ? ORDER BY pk_img DESC';
         $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
 
@@ -450,10 +458,11 @@ return true;
             $photos[$i] = new stdClass();
 
             $photos[$i]->pk_img      = $rs->fields['pk_img'];
+            $photos[$i]->fk_author   = $rs->fields['fk_author'];
+            $photos[$i]->fk_photo    = $rs->fields['fk_photo'];
             $photos[$i]->path_img    = $rs->fields['path_img'];
             $photos[$i]->path_file   = $rs->fields['path_img'];
             $photos[$i]->description = $rs->fields['description'];
-            $photos[$i]->fk_author   = $rs->fields['fk_author'];
 
             $i++;
             $rs->MoveNext();

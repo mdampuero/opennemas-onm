@@ -9,6 +9,7 @@
  **/
 namespace Backend\Controllers;
 
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Message as m;
@@ -121,8 +122,6 @@ class OpinionAuthorsController extends Controller
 
         if ($author->id != null) {
 
-var_dump($request->files->get('photo-file'));die();
-
             $data = array(
                 'id'            => $id,
                 'name'          => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
@@ -131,15 +130,26 @@ var_dump($request->files->get('photo-file'));die();
                 'blog'          => $request->request->filter('blog', '', FILTER_SANITIZE_STRING),
                 'fk_author_img' => $request->request->filter('fk_author_img', '', FILTER_SANITIZE_STRING),
                 'params'        => $request->request->get('params'),
-                'photos'        => $request->request->get('photos'),
-                'file'         => $file,
+                'photos'        => $request->request->get('photos', array()),
             );
-var_dump($data, $request->files);die();
 
-            if ($author->update($data)) {
-                m::add(_('Author successfully updated.'), m::SUCCESS);
-            } else {
-                m::add(_('Unable to update the author.'), m::ERROR);
+            $file = $request->files->get('photo-file');
+
+            try {
+                if (!is_null($file)) {
+                    $photoId = $this->uploadAuthorPhoto($file, $data['name']);
+
+                    $data['new_photo_id'] = $photoId;
+                }
+
+                if ($author->update($data)) {
+                    m::add(_('Author successfully updated.'), m::SUCCESS);
+                } else {
+                    m::add(_('Unable to update the author.'), m::ERROR);
+                }
+            } catch (FileException $e) {
+
+                m::add(_('Unable to upload the new author image.'), m::ERROR);
             }
 
             if ($continue) {
@@ -186,6 +196,67 @@ var_dump($data, $request->files);die();
                 )
             ));
         }
+    }
+
+    /**
+     * Process an uploaded photo author
+     *
+     * @return string the string of the local file
+     * @author
+     **/
+    public function uploadAuthorPhoto($file, $authorName)
+    {
+        $authorName = \Onm\StringUtils::normalize_name($authorName);
+
+        $relativeAuthorImagePath ="/authors/".$authorName;
+        $uploadDirectory =  MEDIA_IMG_PATH .$relativeAuthorImagePath;
+
+        $nameFile = $file->getClientOriginalName();    //Nombre del archivo a subir
+        $originalFileData    = pathinfo($nameFile);                  //sacamos inofr del archivo
+
+
+
+        $extension = $originalFileData['extension'];
+        $t         = gettimeofday();
+        $micro     = intval(substr($t['usec'],0,5));
+
+        $name      = date("YmdHis").$micro.".".$extension;
+
+        if(!is_dir($uploadDirectory)) {
+            FilesManager::createDirectory($uploadDirectory);
+        }
+
+        $file->move($uploadDirectory, $name);
+
+        //Preparamos el nuevo nombre YYYYMMDDHHMMSSmmmmmm
+        $extension = strtolower($originalFileData['extension']);
+
+        $data = array(
+            'title'       => $nameFile,
+            'name'        => $name,
+            'path_file'   => $relativeAuthorImagePath,
+            'nameCat'     => $authorName,
+            'category'    => '',
+        );
+
+        $infor               = new \MediaItem($uploadDirectory.'/'.$name);
+
+        $data['created']     = $infor->atime;
+        $data['changed']     = $infor->mtime;
+        $data['date']        = $infor->mtime;
+        $data['size']        = round($infor->size/1024,2) ;
+        $data['width']       = $infor->width;
+        $data['height']      = $infor->height;
+        $data['type']        = $infor->type;
+        $data['type_img']    = $extension;
+        $data['media_type']  = 'image';
+        $data['author_name'] = '';
+
+
+        $photo = new \Photo();
+        $elid = $photo->create($data);
+
+        return $elid;
     }
 
 } // END class OpinionsController
