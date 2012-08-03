@@ -18,6 +18,7 @@
         <div class="pagination"> {$pagination} </div>
     {/if}
 
+    {if count($contents) > 0}
     <ul id='contentList'>
         {section name=n loop=$contents}
             <li data-id="{$contents[n]->id}" data-type="{$contentType}" data-title="{$contents[n]->title|clearslash}">
@@ -29,6 +30,9 @@
             </li>
         {/section}
     </ul>
+    {elseif $hidenoavailable != true}
+        {t}No available contents{/t}
+    {/if}
     {if !empty($pagination)}
         <div class="pagination"> {$pagination} </div>
     {/if}

@@ -21,7 +21,8 @@ Opinion Authors
 Articles
 --------
 - Batch actions
-- Review D&D of search content provider
+- Comments tab, while editing could be deleted as this tab don't make sense and
+  overload the controller and UI
 
 Newsletter
 ----------

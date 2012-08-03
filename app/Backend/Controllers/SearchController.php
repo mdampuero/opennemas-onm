@@ -159,7 +159,7 @@ class SearchController extends Controller
             $this->view->assign('search_string', $searchString);
             if (!is_null($related)) {
 
-                return $this->render("common/content_provider/_container-content-list.tpl", array(
+                return $this->render('search_advanced/content-provider-related.tpl', array(
                     'contents'    => $results,
                     'contentType' => 'Content',
                 ));

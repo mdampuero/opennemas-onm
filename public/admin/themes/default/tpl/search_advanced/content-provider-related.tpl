@@ -5,9 +5,7 @@
     </form>
 </span>
 
-{if empty($results) && (!empty($search_string))}
-{t}No results{/t}
-{/if}
+{include file="common/content_provider/_container-content-list.tpl" hidenoavailable=true}
 <script>
 (function($){
     makeContentProviderAndPlaceholdersSortable();
