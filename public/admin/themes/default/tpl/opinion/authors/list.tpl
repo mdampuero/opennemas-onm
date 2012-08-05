@@ -21,14 +21,6 @@
                     </a>
                 </li>
                 {/acl}
-                <li class="separator"></li>
-                {acl isAllowed="OPINION_ADMIN"}
-                <li >
-                    <a href="opinion.php?action=list&amp;desde=author" class="admin_add" name="submit_mult" value="Listado Opiniones" title="Listado Opiniones">
-                        <img border="0" src="{$params.IMAGE_DIR}previous.png" title="Listado Opiniones" alt="Listado Opiniones"><br />{t escape="off"}Go back{/t}
-                    </a>
-                </li>
-                {/acl}
             </ul>
         </div>
 	</div>

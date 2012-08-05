@@ -2,7 +2,9 @@
 
 {block name="footer-js" append}
 <script type="text/javascript">
-    jQuery( ".author-photos" ).sortable();
+    jQuery( ".author-photos" ).sortable({
+        containment : '.author-photos'
+    });
     jQuery( ".author-photos" ).disableSelection();
     jQuery(document).ready(function($) {
         $('.delete-author-photo').on('click', function(e, ui) {
