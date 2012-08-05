@@ -103,14 +103,27 @@ class InstancesController extends Controller
             $instance->domains = preg_split("@, @", $instance->domains);
         }
 
-        $content = $this->renderView('instances/csv.tpl', array(
-            'instances'     => $instances,
-            'filter_name'  => $findParams['name'],
+        $response = $this->render('instances/csv.tpl', array(
+            'instances'   => $instances,
+            'filter_name' => $findParams['name'],
         ));
 
-        return new Response($content, 200, array(
-            "Content-Type" => "application/csv",
-        ));
+        if ($findParams['name'] != '*') {
+            $fileNameFilter = '-'.\Onm\StringUtils::get_title($findParams['name']);
+        } else {
+            $fileNameFilter = '-complete';
+        }
+        $fileName = 'opennemas-instances'.$fileNameFilter.'-'.date("Y_m_d_His").'.csv';
+
+        $response->setStatusCode(200);
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Description', 'Submissions Export');
+        $response->headers->set('Content-Disposition', 'attachment; filename='.$fileName);
+        $response->headers->set('Content-Transfer-Encoding', 'binary');
+        $response->headers->set('Pragma', 'no-cache');
+        $response->headers->set('Expires', '0');
+
+        return $response;
     }
 
     /**
