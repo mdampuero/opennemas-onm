@@ -14,8 +14,12 @@ require_once('../session_bootstrap.php');
 
 $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 
-if (!isset($_REQUEST['page']) || empty($_REQUEST['page'])) {$_REQUEST['page'] = 1;}
-if (!isset($_REQUEST['category'])) {$_REQUEST['category'] = 1;}
+if (!isset($_REQUEST['page']) || empty($_REQUEST['page'])) {
+    $_REQUEST['page'] = 1;
+}
+if (!isset($_REQUEST['category'])) {
+    $_REQUEST['category'] = 1;
+}
 $tpl->assign('category', $_REQUEST['category']);
 
 $cc = new ContentCategoryManager();
@@ -23,67 +27,72 @@ $cc = new ContentCategoryManager();
 $allcategorys = $cc->find('inmenu=1', 'ORDER BY posmenu');
 // FIXME: Set pagination
 $tpl->assign('allcategorys', $allcategorys);
-$datos_cat = $cc->find('pk_content_category='.$_REQUEST['category'], NULL);
+$datos_cat = $cc->find('pk_content_category='.$_REQUEST['category'], null);
 $tpl->assign('datos_cat', $datos_cat);
 
 
-if (!isset($_REQUEST['mytype'])) {$_REQUEST['mytype'] = 'article';}
+if (!isset($_REQUEST['mytype'])) {
+    $_REQUEST['mytype'] = 'article';
+}
 $tpl->assign('mytype', $_REQUEST['mytype']);
 
-if(isset($_REQUEST['action']) ) {
-	switch($_REQUEST['action']) {
-		case 'list':
-			$cm = new ContentManager();
+if (isset($_REQUEST['action'])) {
+    switch ($_REQUEST['action']) {
+        case 'list':
+            $cm            = new ContentManager();
+            $types_content = $cm->getContentTypes();
 
-			$types_content = $cm->getContentTypes();
+            $tpl->assign('types_content', $types_content);
 
-			$tpl->assign('types_content', $types_content);
-
-            list($litterelems, $pager)= $cm->find_pages($_REQUEST['mytype'], 'in_litter=1', 'ORDER BY changed DESC ',$_REQUEST['page'],20);
+            list($litterelems, $pager)= $cm->find_pages($_REQUEST['mytype'],
+                'in_litter=1', 'ORDER BY changed DESC ', $_REQUEST['page'], 20);
             $content = new Content();
 
-            foreach($litterelems as &$elem ) {
+            foreach ($litterelems as &$elem) {
 
-				$elem->category_name =  $content->loadCategoryName($elem->id);
-				$elem->category_title = $content->loadCategoryTitle($elem->id);
+                $elem->category_name  =  $content->loadCategoryName($elem->id);
+                $elem->category_title = $content->loadCategoryTitle($elem->id);
 
             }
 
-			$tpl->assign('paginacion', $pager);
+            $tpl->assign('paginacion', $pager);
 
-			$tpl->assign('litterelems', $litterelems);
-			/* Ponemos en la plantilla la referencia al objeto pager */
+            $tpl->assign('litterelems', $litterelems);
+            /* Ponemos en la plantilla la referencia al objeto pager */
 
-			$tpl->display('trash/trash.tpl');
+            $tpl->display('trash/trash.tpl');
 
-		break;
+        break;
 
-		case 'm_no_in_litter':
+        case 'm_no_in_litter':
 
-			if(isset($_REQUEST['selected_fld'])
-			   && count($_REQUEST['selected_fld'])>0)
-			{
+            if (isset($_REQUEST['selected_fld'])
+               && count($_REQUEST['selected_fld'])>0) {
 
-			    $fields = $_REQUEST['selected_fld'];
-					if(is_array($fields)) {
-						foreach($fields as $i ) {
-							$contenido=new content($i);
-							$contenido->no_delete($i,$_SESSION['userid']);
-						}
-        		    }
-			}
-			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&mytype='.$_REQUEST['mytype'].'&page='.$_REQUEST['page']);
+                $fields = $_REQUEST['selected_fld'];
+                if (is_array($fields)) {
+                    foreach ($fields as $i) {
+                        $contenido = new Content($i);
+                        $contenido->no_delete($i, $_SESSION['userid']);
+                    }
+                }
+            }
+            Application::forward($_SERVER['SCRIPT_NAME'].
+                '?action=list&mytype='.$_REQUEST['mytype'].
+                '&page='.$_REQUEST['page']);
 
-		break;
+        break;
 
-		case 'no_in_litter':
+        case 'no_in_litter':
 
-			$contenido=new Content($_REQUEST['id']);
-			$contenido->no_delete($_REQUEST['id'],$_SESSION['userid']);
+            $contenido = new Content($_REQUEST['id']);
+            $contenido->no_delete($_REQUEST['id'], $_SESSION['userid']);
 
-			if(isset($_REQUEST['desde']) && ($_REQUEST['desde']=='search')){
+            if (isset($_REQUEST['desde']) && ($_REQUEST['desde']=='search')) {
 
-				$name = $GLOBALS['application']->conn->GetOne('SELECT name FROM `content_types` WHERE pk_content_type = "'. $contenido->content_type.'"');
+                $name = $GLOBALS['application']->conn->GetOne(
+                    'SELECT name FROM `content_types` WHERE pk_content_type = "'.
+                     $contenido->content_type.'"');
                 $action='list';
                 switch ($contenido->content_type){
                     case '1':
@@ -132,81 +141,89 @@ if(isset($_REQUEST['action']) ) {
                         break;
                 }
 
-				//if($name=='article'){$action='list_pendientes';}
-				Application::forward('/admin/'.$archive_php.'?action='.$action.'&category='.$_REQUEST['category']);
+                //if($name=='article'){$action='list_pendientes';}
+                Application::forward('/admin/'.$archive_php.'?action='.$action.'&category='.$_REQUEST['category']);
 
-			}else{
+            } else {
 
-				Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&mytype='.$_REQUEST['mytype'].'&page='.$_REQUEST['page']);
+                Application::forward($_SERVER['SCRIPT_NAME'].
+                    '?action=list&mytype='.
+                    $_REQUEST['mytype'].'&page='.$_REQUEST['page']);
 
             }
 
-		break;
+        break;
 
-		case 'remove':
+        case 'remove':
 
-            $id = filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
-			$contenido = new Content($id);
+            $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+            $contenido = new Content($id);
 
-			$type = $contenido->content_type;
+            $type = $contenido->content_type;
 
-			$name = $GLOBALS['application']->conn->
-				GetOne('SELECT name FROM `content_types` WHERE pk_content_type = "'. $type.'"');
+            $name = $GLOBALS['application']->conn->
+                GetOne('SELECT name FROM `content_types` WHERE pk_content_type = "'. $type.'"');
 
-			$name_type = ucwords($name); //Nombre de la clase
-			$eleto = new $name_type($id); //Llamamos a la clase
+            $name_type = ucwords($name); //Nombre de la clase
+            $eleto = new $name_type($id); //Llamamos a la clase
 
-			$eleto->remove($id); // eliminamos
+            $eleto->remove($id); // eliminamos
 
-			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&mytype='.$_REQUEST['mytype'].'&page='.$_REQUEST['page']);
+            Application::forward($_SERVER['SCRIPT_NAME'].
+                '?action=list&mytype='.$_REQUEST['mytype'].
+                '&page='.$_REQUEST['page']);
 
-		break;
+        break;
 
 
-		case 'mremove':
+        case 'mremove':
 
-			if ($_REQUEST['id'] == 6){ //Eliminar todos
+            //Eliminar todos
+            if ($_REQUEST['id'] == 6) {
 
-				$cm = new ContentManager();
-				$contents = $cm->find($_REQUEST['mytype'], 'in_litter=1', 'ORDER BY created DESC ');
-				foreach ($contents as $cont){
-					$content = new Content($cont->id);
-					$content->remove($cont->id);
-				}
-				Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&mytype='.$_REQUEST['mytype'].'&page='.$_REQUEST['page']);
-			}
+                $cm = new ContentManager();
+                $contents = $cm->find($_REQUEST['mytype'], 'in_litter=1', 'ORDER BY created DESC ');
+                foreach ($contents as $cont) {
+                    $content = new Content($cont->id);
+                    $content->remove($cont->id);
+                }
+                Application::forward($_SERVER['SCRIPT_NAME'].
+                    '?action=list&mytype='.$_REQUEST['mytype'].
+                    '&page='.$_REQUEST['page']);
+            }
 
-			if(isset($_REQUEST['selected_fld'])
-			   && count($_REQUEST['selected_fld'])>0)
-			{
-			    $fields = $_REQUEST['selected_fld'];
+            if (isset($_REQUEST['selected_fld'])
+               && count($_REQUEST['selected_fld'])>0) {
+                $fields = $_REQUEST['selected_fld'];
 
-		        if(is_array($fields)) {
-					foreach($fields as $i ) {
+                if (is_array($fields)) {
+                    foreach ($fields as $i) {
 
-						$contenido=new Content($i);
+                        $contenido=new Content($i);
 
-						$type=$contenido->content_type;
+                        $type=$contenido->content_type;
 
-						 $name = $GLOBALS['application']->conn->
-							GetOne('SELECT name FROM `content_types` WHERE pk_content_type = "'. $type.'"');
+                         $name = $GLOBALS['application']->conn->
+                            GetOne('SELECT name FROM `content_types` WHERE pk_content_type = "'. $type.'"');
 
-						$name_type=ucwords($name); //Nombre de la clase
-						$eleto=new $name_type($i); //Llamamos a la clase
-						$eleto->remove($i); // eliminamos
+                        $name_type=ucwords($name); //Nombre de la clase
+                        $eleto=new $name_type($i); //Llamamos a la clase
+                        $eleto->remove($i); // eliminamos
 
-			        }
-        		}
-			}
+                    }
+                }
+            }
 
-			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&mytype='.$_REQUEST['mytype'].'&page='.$_REQUEST['page']);
+            Application::forward($_SERVER['SCRIPT_NAME'].
+                '?action=list&mytype='.$_REQUEST['mytype'].
+                '&page='.$_REQUEST['page']);
 
-		break;
+        break;
 
-		default:
-			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$_REQUEST['page']);
-		break;
-	}
+        default:
+            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$_REQUEST['page']);
+        break;
+    }
 } else {
-	Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$_REQUEST['page']);
+    Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$_REQUEST['page']);
 }
