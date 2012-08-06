@@ -27,8 +27,7 @@
     </div>
 </div>
 <div class="wrapper-content">
-    ̈́{render_messages}
-
+    {render_messages}
     <div id="pagina">
         <table class="listing-table" >
 
@@ -37,7 +36,7 @@
                 <th>{t}Name{/t}</th>
                 <th style="width:70px">{t}Type{/t}</th>
                 <th class="center" style="width:20px">{t}Published{/t}</th>
-                <th class="right" style="width:100px">Actions</th>
+                <th class="right" style="width:120px">Actions</th>
                 {else}
                 <th scope="col" colspan=4>&nbsp;</th>
                 {/if}
