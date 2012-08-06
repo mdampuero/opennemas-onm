@@ -58,7 +58,7 @@ jQuery(function($){
                     <th style="width:40px">{t}Section{/t}</th>
                     <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
                     <th class="center" style="width:110px;">{t}Date{/t}</th>
-                    <th class="center" style="width:120px;">{t}Actions{/t}</th>
+                    <th class="center" style="width:140px;">{t}Actions{/t}</th>
                </tr>
             </thead>
 
