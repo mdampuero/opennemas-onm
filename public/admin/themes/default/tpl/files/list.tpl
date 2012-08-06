@@ -223,7 +223,7 @@
 				<tfoot>
 					<tr>
 						<td colspan="7" class="pagination">
-							{$pagination->links}
+							{$paginacion->links}
                             &nbsp;
 						</td>
 					</tr>
