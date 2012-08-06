@@ -102,12 +102,9 @@ switch ($action) {
                 m::add( sprintf(_("You must put %d opinions %s in the home widget"), $number, $type) );
             }
         } else {
-            list($opinions, $pager)= $cm->find_pages('Opinion', 'in_home=1 and available=1 and type_opinion=0',
-                                     'ORDER BY position ASC , created DESC ', $page, ITEMS_PAGE);
-            $tpl->assign('paginacion', $pager->links);
 
-            // $opinions = $cm->find('Opinion', 'in_home=1 and available=1 and type_opinion=0',
-            //                       'ORDER BY type_opinion DESC, position ASC, created DESC');
+            $opinions = $cm->find('Opinion', 'in_home=1 and available=1 and type_opinion=0',
+                                   'ORDER BY position ASC, created DESC');
 
             if ($numEditorial > 0) {
                 $editorial = $cm->find('Opinion', 'in_home=1 and available=1 and type_opinion=1',
