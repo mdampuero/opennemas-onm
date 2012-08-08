@@ -1,5 +1,4 @@
 <?php
-/* -*- Mode: PHP; tab-width: 4 -*- */
 /**
  * OpenNeMas project
  *
@@ -23,8 +22,7 @@ use Onm\Settings as s,
 /**
  * Setup app
  */
-require_once('bootstrap.php');
-
+require_once 'bootstrap.php';
 
 $r = new Restler();
 $r->setSupportedFormats('JsonFormat', 'XmlFormat');

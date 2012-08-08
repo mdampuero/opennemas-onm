@@ -527,7 +527,7 @@ Options -Indexes
     #Articles articulo/2008/09/29/galicia/ourense/titulo-noticia-separada-guiones/1222692016.html
     #Articles articulo/2008/09/29/galicia/titulo-noticia-separada-guiones/1222692016.html
     RewriteRule ^articulo/([a-z0-9\-]+)?/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/([a-z0-9\-]+)/([0-9]+).html$ controllers/article.php?category_name=$1&year=$2&month=$3&day=$4&article_id=$6&action=read&article_title=$5 [L,NC]
-    RewriteRule ^articulo/([a-z0-9\-]+)?/.*/([0-9]+)/ext.html$ controllers/article_ws.php?category_name=$1&article_id=$2&action=read&ext=1 [L,NC]
+    RewriteRule ^extarticulo/([a-z0-9\-]+)?/.*/([0-9]+).html$ controllers/article_ws.php?category_name=$1&article_id=$2&action=read&ext=1 [L,NC]
     RewriteRule ^articulo/([a-z0-9\-]+)?/(.*)/([0-9]+).html$ controllers/article.php?category_name=$1&article_id=$3&action=read&article_title=$2 [L,NC]
     RewriteRule ^artigo/([a-z0-9\-]+)?/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/([a-z0-9\-]+)/([0-9]+).html$ controllers/article.php?category_name=$1&year=$2&month=$3&day=$4&article_id=$6&action=read&article_title=$5 [L,NC]
     RewriteRule ^artigo/([a-z0-9\-]+)?/.*/([0-9]+).html$ controllers/article.php?category_name=$1&article_id=$2&action=read [L,NC]
@@ -552,7 +552,7 @@ Options -Indexes
     RewriteRule ^opinion/autor/([0-9]+)/(.*)$ controllers/opinion_index.php?alt=nopag&category_name=opinion&action=list_op_author&author_id=$1&author_slug=$2 [L,NC]
 
     #Opinion Inner Web Service
-    RewriteRule ^opinion(|/.+)?/([a-z0-9\-]+)?/(.*)?/([0-9]+)/ext.html$ controllers/opinion_inner.php?opinion_id=$4&category_name=opinion&action=read&t=$1 [L,NC]
+    RewriteRule ^extopinion(|/.+)?/([a-z0-9\-]+)?/(.*)?/([0-9]+).html$ controllers/opinion_inner.php?opinion_id=$4&category_name=opinion&action=read&t=$1 [L,NC]
 
     #Opinion Inner
     RewriteRule ^opinion(|/.+)?/([a-z0-9\-]+)?/(.*)?/([0-9]+).html$ controllers/opinion_inner.php?opinion_id=$4&category_name=opinion&action=read&t=$1&author_name=$2&opinion_title=$3 [L,NC]

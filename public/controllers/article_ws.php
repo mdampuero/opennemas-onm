@@ -3,7 +3,7 @@
 /**
  * Start up and setup the app
 */
-require_once('../bootstrap.php');
+require_once '../bootstrap.php';
 use Onm\Settings as s;
 
 /**
@@ -26,6 +26,8 @@ $category_name = $request->query->filter('category_name', 'home', FILTER_SANITIZ
 $subcategory_name = null;
 $action = $request->query->filter('action', '', FILTER_SANITIZE_STRING);
 $ext = $request->query->filter('ext', 0, FILTER_VALIDATE_INT);
+$tpl->assign('ext', $ext); // Used on _other-contents.tpl
+
 /**
  * Getting Synchronize setting params
  **/
@@ -40,19 +42,21 @@ foreach ($syncParams as $siteUrl => $categoriesToSync) {
 }
 
 /**
- * Getting resolved Id
+ * Getting resolved Id and category title
  */
 $articleID = json_decode(file_get_contents($wsUrl.'/ws.php/contents/resolve/'.$dirtyID));
+$actualCategoryTitle = json_decode(file_get_contents($wsUrl.'/ws.php/categories/title/'.$category_name));
 $tpl->assign('contentId', $articleID); // Used on module_comments.tpl
+$tpl->assign('actual_category_title', $actualCategoryTitle); // Used on module_comments.tpl
 
 if (isset($category_name) && !empty($category_name)) {
         $category = $ccm->get_id($category_name);
-} elseif(isset($_REQUEST["action"]) && ( $_REQUEST["action"]!="vote" && $_REQUEST["action"]!="get_plus")) {
+} elseif (isset($_REQUEST["action"]) && ( $_REQUEST["action"]!="vote" && $_REQUEST["action"]!="get_plus")) {
     Application::forward301('/');
 }
 
 // Redirect if no action
-if( empty($action) ) {
+if ( empty($action) ) {
     Application::forward301('/404.html');
 }
 switch($action) {
@@ -65,11 +69,14 @@ switch($action) {
         $tpl->assign('category_name', $category_name);
 
         // Increment numviews if it's accesible
-//        Content::setNumViews($articleID);
+        //Content::setNumViews($articleID);
 
         // Get category id correspondence with ws
-        $wsActualCategoryId = file_get_contents($wsUrl.'/ws.php/categories/id/'.$category_name );
+        $wsActualCategoryId = file_get_contents($wsUrl.'/ws.php/categories/id/'.$category_name);
+
         // Fetch information for Advertisements
+        include_once 'article_advertisement.php';
+        /*
         $ads = json_decode(file_get_contents($wsUrl.'/ws.php/ads/article/'.$wsActualCategoryId));
 
         $intersticial = $ads[0];
@@ -77,22 +84,23 @@ switch($action) {
 
         //Render ads
         $advertisement = Advertisement::getInstance();
-        $advertisement->render($banners, $advertisement,$wsUrl);
+        $advertisement->render($banners, $advertisement, $wsUrl);
+        */
 
         // Render intersticial banner
         if (!empty($intersticial)) {
-            $advertisement->render(array($intersticial), $advertisement,$wsUrl);
+            $advertisement->render(array($intersticial), $advertisement, $wsUrl);
         }
 
-        $cacheID = $tpl->generateCacheId( $category_name, $subcategory_name, $articleID );
+        $cacheID = $tpl->generateCacheId($category_name, $subcategory_name, $articleID);
 
-        if (($tpl->caching == 0) || !$tpl->isCached('article/article.tpl', $cacheID) )
-        {
+        if (($tpl->caching == 0) || !$tpl->isCached('article/article.tpl', $cacheID)) {
 
             // Fetch and load article information
             $ext = json_decode(file_get_contents($wsUrl.'/ws.php/articles/'.(int)$articleID));
             $article = new Article();
             $article->load($ext);
+            $article->category_name = $category_name;
 
             if (($article->available==1) && ($article->in_litter==0)
                 && ($article->isStarted())
@@ -106,7 +114,7 @@ switch($action) {
                                             '&subcategory_name=' . $subcategory_name;
 
                 $tpl->assign('print_url', $printUrl);
-                $tpl->assign('sendform_url',$sendMailUrl);
+                $tpl->assign('sendform_url', $sendMailUrl);
 
                 $tpl->assign('article', $article);
 
@@ -115,6 +123,7 @@ switch($action) {
                     $photoWs = json_decode(file_get_contents($wsUrl.'/ws.php/images/id/'.$article->img2));
                     $photoInt = new Photo();
                     $photoInt->load($photoWs);
+                    $photoInt->media_url = json_decode(file_get_contents($wsUrl.'/ws.php/instances/mediaurl/'));
                     $tpl->assign('photoInt', $photoInt);
                 }
 
@@ -131,7 +140,21 @@ switch($action) {
                 }
 
                 // Get inner Related contents
-                $relatedContents = json_decode(file_get_contents($wsUrl.'/ws.php/articles/lists/related-inner/'.$articleID));
+                $relatedContentsWs = json_decode(file_get_contents($wsUrl.'/ws.php/articles/lists/related-inner/'.$articleID));
+
+                $relatedContents = array();
+                foreach ($relatedContentsWs as $item) {
+                    $getContentUrl = $wsUrl.'/ws.php/contents/contenttype/'.(int)$item->fk_content_type;
+                    $contentType = file_get_contents($getContentUrl);
+                    $contentType = str_replace('"', '', $contentType);
+                    $content = new $contentType();
+                    $content->load($item);
+                    // Load category related information
+                    $content->category_name  = $category_name;
+                    $content->category_title = $content->loadCategoryTitle($content->id);
+                    $content->uri = 'ext'.$content->uri;
+                    $relatedContents[] = $content;
+                }
 
                 $tpl->assign('relationed', $relatedContents);
 
