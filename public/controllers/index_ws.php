@@ -150,7 +150,7 @@ if (
         //Change uri for href links except widgets
         if ($content->content_type != 'Widget') {
             //$content->uri = preg_replace('@.html@', '/ext.html', $content->uri);
-            $content->uri = "ext-".$content->uri;
+            $content->uri = "ext".$content->uri;
         }
 
         // Load attached  from array
@@ -169,7 +169,7 @@ if (
             $contentRelated = new $contentType();
             $contentRelated->load($item);
             $contentRelated->category_name = $category_name;
-            $contentRelated->uri = "ext-".$contentRelated->uri;
+            $contentRelated->uri = "ext".$contentRelated->uri;
             $item = $contentRelated;
         }
     }
