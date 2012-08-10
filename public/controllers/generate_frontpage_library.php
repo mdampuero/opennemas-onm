@@ -9,6 +9,7 @@
 $_SERVER['SERVER_NAME'] = 'www.cronicasdelaemigracion.com';
 //$_SERVER['SERVER_NAME'] = 'onm-cronicas.local';
 $_SERVER['REQUEST_URI'] = '/';
+$_SERVER['REQUEST_PORT'] = '80';
 
 require __DIR__.'/../bootstrap.php';
 
