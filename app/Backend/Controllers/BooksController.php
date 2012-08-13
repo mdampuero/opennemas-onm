@@ -437,7 +437,7 @@ class BooksController extends Controller
      *
      * @return Response the response object
      **/
-    public function toggleAvailabilityAction()
+    public function toggleAvailableAction()
     {
         $this->checkAclOrForward('BOOK_AVAILABLE');
 

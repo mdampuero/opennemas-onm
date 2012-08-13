@@ -102,10 +102,10 @@ $adminRoutes->add(
 );
 
 $adminRoutes->add(
-    'admin_staticpages_toggle_availability',
+    'admin_staticpages_toggle_available',
     new Route(
-        '/static-pages/{id}/toggle_availability',
-        array('_controller' => 'Backend:Controllers:StaticPagesController:toggleAvailability')
+        '/static-pages/{id}/toggle-available',
+        array('_controller' => 'Backend:Controllers:StaticPagesController:toggleAvailable')
     ),
     '/admin'
 );
@@ -114,7 +114,7 @@ $adminRoutes->add(
 $adminRoutes->add(
     'admin_staticpages_build_slug',
     new Route(
-        '/static-pages/{id}/build_slug',
+        '/static-pages/{id}/build-slug',
         array('_controller' => 'Backend:Controllers:StaticPagesController:buildSlug')
     ),
     '/admin'
@@ -948,10 +948,10 @@ $adminRoutes->add(
 );
 
 $adminRoutes->add(
-    'admin_video_toggle_availability',
+    'admin_video_toggle_available',
     new Route(
-        '/videos/{id}/toggle-availability',
-        array('_controller' => 'Backend:Controllers:VideosController:toggleAvailability')
+        '/videos/{id}/toggle-available',
+        array('_controller' => 'Backend:Controllers:VideosController:toggleAvailable')
     ),
     '/admin'
 );
@@ -1096,10 +1096,10 @@ $adminRoutes->add(
 );
 
 $adminRoutes->add(
-    'admin_album_toggle_availability',
+    'admin_album_toggle_available',
     new Route(
-        '/album/{id}/toggle-availability',
-        array('_controller' => 'Backend:Controllers:AlbumsController:toggleAvailability')
+        '/album/{id}/toggle-available',
+        array('_controller' => 'Backend:Controllers:AlbumsController:toggleAvailable')
     ),
     '/admin'
 );
@@ -1350,10 +1350,10 @@ $adminRoutes->add(
 );
 
 $adminRoutes->add(
-    'admin_books_toggle_availability',
+    'admin_books_toggle_available',
     new Route(
-        '/books/{id}/toggle-availability',
-        array('_controller' => 'Backend:Controllers:BooksController:toggleAvailability')
+        '/books/{id}/toggle-available',
+        array('_controller' => 'Backend:Controllers:BooksController:toggleAvailable')
     ),
     '/admin'
 );

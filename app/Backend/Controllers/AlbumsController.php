@@ -243,8 +243,8 @@ class AlbumsController extends Controller
         $this->checkAclOrForward('ALBUM_DELETE');
 
         $request = $this->get('request');
-        $id = $request->query->getDigits('id');
-        $page = $request->query->getDigits('page', 1);
+        $id      = $request->query->getDigits('id');
+        $page    = $request->query->getDigits('page', 1);
 
         $album = new \Album($id);
 
@@ -303,8 +303,8 @@ class AlbumsController extends Controller
     {
         $this->checkAclOrForward('ALBUM_UPDATE');
 
-        $request = $this->get('request');
-        $id = $request->request->getDigits('id');
+        $request  = $this->get('request');
+        $id       = $request->request->getDigits('id');
         $continue = $this->request->request->filter('continue', false, FILTER_SANITIZE_STRING);
 
         $album = new \Album($id);
@@ -365,7 +365,7 @@ class AlbumsController extends Controller
      *
      * @return Response the response object
      **/
-    public function toggleAvailabilityAction()
+    public function toggleAvailableAction()
     {
         $this->checkAclOrForward('ALBUM_AVAILABLE');
 

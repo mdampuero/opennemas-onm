@@ -466,7 +466,7 @@ class VideosController extends Controller
      *
      * @return Response the response object
      **/
-    public function toggleAvailabilityAction(Request $request)
+    public function toggleAvailableAction(Request $request)
     {
         $this->checkAclOrForward('VIDEO_AVAILABLE');
 

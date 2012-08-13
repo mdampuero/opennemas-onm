@@ -248,7 +248,7 @@ class StaticPagesController extends Controller
      *
      * @return Response the response object
      **/
-    public function toggleAvailabilityAction(Request $request)
+    public function toggleAvailableAction(Request $request)
     {
         $this->checkAclOrForward('STATIC_AVAILABLE');
 
