@@ -34,8 +34,8 @@ check(function_exists('session_start'), 'Checking that the session_start() is av
 check(function_exists('ctype_alpha'), 'Checking that the ctype_alpha() is available', 'Install and enable the ctype extension', true);
 check(function_exists('token_get_all'), 'Checking that the token_get_all() is available', 'Install and enable the tokenizer extension', true);
 check(!(function_exists('apc_store') && ini_get('apc.enabled')) || version_compare(phpversion('apc'), '3.0.17', '>='), 'Checking that the APC version is at least 3.0.17', 'Upgrade your APC extension (3.0.17+)', true);
-check(extension_loaded('ffmpeg'), 'Checking that the ffmpeg extension is installed', 'Install and enable the ffmpeg extension', true);
-check(extension_loaded('memcached'), 'Checking that the memcached extension is installed', 'Install and enable the memcached extension', true);
+//check(extension_loaded('ffmpeg'), 'Checking that the ffmpeg extension is installed', 'Install and enable the ffmpeg extension', true);
+check(extension_loaded('memcache'), 'Checking that the memcached extension is installed', 'Install and enable the memcached extension', true);
 check(extension_loaded('curl'), 'Checking that the ffmpeg extension is installed', 'Install and enable the curl extension', true);
 check(extension_loaded('imagick'), 'Checking that the ffmpeg extension is installed', 'Install and enable the imagick extension', true);
 check((extension_loaded('mysqli') || extension_loaded('mysql')), 'Checking that the mysql(i) extension is installed', 'Install and enable the mysql or mysqli extension', true);
