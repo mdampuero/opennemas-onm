@@ -3,12 +3,10 @@
     <div class="menu-categories">
         {include file="frontpagemanager/partials/_render_menu.tpl"}
     </div>
-
-    <div  class="menu-other-categories">
-        {assign var="url" value="/admin/controllers/frontpagemanager/frontpagemanager.php?action=list&amp;category="}
-        <select name="category" id="categoryItem" onchange="submitFilters(this.form);">
+    <div class="menu-other-categories">
+        <select name="category" id="categoryItem">
             <option> --- </option>
-            <option value="0" {if $category eq 0}selected{/if}> {t}Home{/t} </option>
+            <option value="0" {if $category eq 0}selected{/if}>{t}Home{/t}</option>
             {section name=as loop=$allcategorys}
                 {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
                 <option value="{$allcategorys[as]->pk_content_category}"  name="{$allcategorys[as]->title}"
@@ -30,10 +28,11 @@
 </div>
 
 <script type="text/javascript">
-function submitFilters(frm) {
-    $('action').value='list';
-    log($('categoryItem').value);
-    $('category').value = $('categoryItem').value;
-    frm.submit();
-}
+var frontpage_url= '{url name=admin_frontpage_list}'
+jQuery(document).ready(function($) {
+    $('#categoryItem').on('change', function(){
+        var category_value = $('#categoryItem option:checked').val();
+        window.location = frontpage_url+'/'+category_value;
+    });
+})
 </script>

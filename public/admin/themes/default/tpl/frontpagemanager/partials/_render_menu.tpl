@@ -1,6 +1,9 @@
 <ul id="categories" class="pills">
+    <li>
+        <a href="{url name=admin_frontpage_list category=0}" class="{if $category == 'home' || $category == 0}active{/if}">{t}Home{/t}</a>
+    </li>
 {foreach from=$menuItems item=menuItem}
-    {if $menuItem->categoryID neq 4 && $menuItem->type neq 'syncCategory'}
+    {if $menuItem->type == 'category'}
     {acl hasCategoryAccess=$menuItem->categoryID}
     <li class="cat {if count($menuItem->submenu) > 0}with-subcategories {/if} {if $category eq $menuItem->categoryID} active {/if}">
         <a href="{url name=admin_frontpage_list category=$menuItem->categoryID}" title="Sección: {$menuItem->title}"
