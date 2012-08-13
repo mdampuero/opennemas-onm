@@ -623,7 +623,7 @@ class ImagesController extends Controller
                             'category'          => $category,
                             'category_name'     => $category_name,
                             'description'       => '',
-                            'metadata'          => \StringUtils::get_tags($upload['tmp_name'][$index]),
+                            'metadata'          => '',
                         );
                         try {
                             $photo = new \Photo();
