@@ -25,10 +25,8 @@
 	<thead>
 		<tr>
 			<th style="width:15px;"><input type="checkbox" id="toggleallcheckbox"></th>
-			{if  $type_opinion eq '0'}
-			<th style="width:150px;">{t}Author name{/t}</th> {/if}
+			<th style="width:150px;">{t}Author name{/t}</th>
 			<th>{t}Title{/t}</th>
-
             <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
 			<th style="width:40px;">{t}Ratings{/t}</th>
             <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}comments.png" alt="{t}Comments{/t}" title="{t}Comments{/t}"></th>
@@ -45,15 +43,12 @@
 			<td>
 				<input type="checkbox" class="minput"  id="selected_{$smarty.foreach.c.iteration}" name="selected_fld[]" value="{$opinion->id}">
 			</td>
-			 {if  $type_opinion eq '0'}
-			<td  onClick="javascript:document.getElementById('selected_{$smarty.foreach.c.iteration}').click();">
-                <a href="author.php?action=read&amp;id={$opinion->fk_author}">
-                    {$names[c]}
+			<td>
+                <a href="{url name=admin_opinion_author_show id=$opinion->author->pk_author}">
+                    {$opinion->author->name}
                 </a>
-
 			</td>
-			{/if}
-			<td style="" onClick="javascript:document.getElementById('selected_{$smarty.foreach.c.iteration}').click();">
+			<td>
 				<a href="{url name=admin_opinion_show id=$opinion->id}" title="Modificar">
 					{$opinion->title|clearslash}
                 </a>

@@ -1,15 +1,11 @@
 TODO
 ====
 
-Categories
-----------
-- Review create and update actions (assign subsection, subsection
-  change side effects??)
-
 Opinion Authors
 ---------------
 - Implement avatar upload for authors
 - Batch actions
+- Create action
 
 Articles
 --------

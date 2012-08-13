@@ -98,6 +98,10 @@ class OpinionAuthorsController extends Controller
 
         $photos = $author->get_author_photos($id);
 
+        if (count($photos) < 1) {
+            m::add(sprintf(_('This author doesn\'t have an image associated please select one.')));
+        }
+
         return $this->render('opinion/authors/new.tpl', array(
             'author'  => $author,
             'photos' => $photos,
