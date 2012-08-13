@@ -302,9 +302,9 @@ class Content
             return false;
         }
         $sql = 'SELECT * FROM contents, contents_categories
-                WHERE pk_content = '.($id).' AND pk_content = pk_fk_content';
+                WHERE pk_content = ? AND pk_content = pk_fk_content';
 
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
         if (!$rs) {
             Application::logDatabaseError();
 
