@@ -21,11 +21,15 @@ require_once '../bootstrap.php';
 $category_name    = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
 $subcategory_name = $request->query->filter('subcategory_name', '', FILTER_SANITIZE_STRING);
 $cache_page       = $request->query->filter('page', 0, FILTER_VALIDATE_INT);
+$ext = $request->query->filter('ext', 0, FILTER_VALIDATE_INT);
 
 // Setup view
 $tpl = new Template(TEMPLATE_USER);
 $tpl->setConfig('frontpages');
 $cacheID = $tpl->generateCacheId($category_name, $subcategory_name, 0);
+
+// Fetch advertisement information from local
+require_once "index_advertisement.php";
 
 
 // Avoid to run the entire app logic if is available a cache for this page
@@ -75,7 +79,9 @@ if (
 
     // Get category id correspondence with ws
     $wsActualCategoryId = file_get_contents($wsUrl.'/ws.php/categories/id/'.$category_name );
-    // Fetch information for Advertisements
+
+/*
+    // Fetch information for Advertisements from Web service
     $ads = json_decode(file_get_contents($wsUrl.'/ws.php/ads/frontpage/'.$wsActualCategoryId));
 
     $intersticial = $ads[0];
@@ -89,14 +95,15 @@ if (
     if (!empty($intersticial)) {
         $advertisement->render(array($intersticial), $advertisement,$wsUrl);
     }
-
+*/
     $getContentsUrl = $wsUrl.'/ws.php/categories/allcontent/'.$wsActualCategoryId;
     $allContentsInHomepage = json_decode(file_get_contents($getContentsUrl), true);
 
 
     $contentsInHomepage = array();
     foreach ($allContentsInHomepage as $item) {
-        $contentType = file_get_contents($wsUrl.'/ws.php/contents/contenttype/'.(int)$item['fk_content_type'] );
+        $getContentUrl = $wsUrl.'/ws.php/contents/contenttype/'.(int)$item['fk_content_type'];
+        $contentType = file_get_contents($getContentUrl);
         $contentType = str_replace('"', '', $contentType);
         $content = new $contentType();
         $content->load($item);
@@ -142,7 +149,8 @@ if (
 
         //Change uri for href links except widgets
         if ($content->content_type != 'Widget') {
-            $content->uri = preg_replace('@.html@', '/ext.html', $content->uri);
+            //$content->uri = preg_replace('@.html@', '/ext.html', $content->uri);
+            $content->uri = "ext".$content->uri;
         }
 
         // Load attached  from array
@@ -151,8 +159,19 @@ if (
 
         // Load related contents from ws
         $relatedUrl = $wsUrl.'/ws.php/articles/lists/related/'.$content->id;
-        //$content->related_contents = json_decode(file_get_contents($relatedUrl));
+        $content->related_contents = json_decode(file_get_contents($relatedUrl));
 
+
+        foreach ($content->related_contents as &$item) {
+            $getContentUrl = $wsUrl.'/ws.php/contents/contenttype/'.(int)$item->fk_content_type;
+            $contentType = file_get_contents($getContentUrl);
+            $contentType = str_replace('"', '', $contentType);
+            $contentRelated = new $contentType();
+            $contentRelated->load($item);
+            $contentRelated->category_name = $category_name;
+            $contentRelated->uri = "ext".$contentRelated->uri;
+            $item = $contentRelated;
+        }
     }
 
     $tpl->assign('column', $contentsInHomepage);

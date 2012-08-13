@@ -40,6 +40,16 @@ class Categories
     }
 
     /*
+    * @url GET /categories/title/:category_name
+    */
+    function title ($actualCategory)
+    {
+        $ccm = new ContentCategoryManager();
+
+        return $ccm->get_title($actualCategory);
+    }
+
+    /*
     * @url GET /categories/lists
     */
     function lists ()

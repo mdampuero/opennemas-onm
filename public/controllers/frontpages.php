@@ -94,14 +94,14 @@ if (($tpl->caching == 0)
         $path = preg_replace('/(\d{4})(\d{2})(\d{2})/', '/$1/$2/$3', $date);
 
         if ( !empty($date) ) {
-            $html = file_get_contents(INSTANCE_MEDIA."library/{$path}/{$category_name}.html");
+            $html='';
+            if (file_exists(MEDIA_PATH."/library/{$path}/{$category_name}.html")) {
+                $html = file_get_contents(INSTANCE_MEDIA."library/{$path}/{$category_name}.html");
+            }
             if (!empty($html)) {
                 echo $html;
             } else {
-                $output = $tpl->fetch('frontpage/not_found.tpl');
-                $response = new Response($output,
-                    404, array('content-type' => 'text/html'));
-                $response->send();
+                Application::forward301('/404.html');
                 exit(0);
             }
 
