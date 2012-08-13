@@ -181,6 +181,7 @@ var image_uploader ={
     <!--[if gte IE 8]><script src="cors/jquery.xdr-transport.js"></script><![endif]-->
     <!--<script id="template-upload" type="text/html" src="{$params.JS_DIR}/image/template_upload.js"></script>-->
     <!--<script id="template-download" type="text/html" src="{$params.JS_DIR}/image/template_download.js"></script>-->
+    {include file="image/modals/_edit_uploaded_files.tpl"}
 
 {/block}
 

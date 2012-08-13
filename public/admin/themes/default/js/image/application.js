@@ -79,20 +79,7 @@ jQuery(function ($) {
 
     // When an image was uploaded sucessfully show the edit uploaded button
     $('#fileupload').bind('fileuploaddone', function (e, data){
-        $('.edit-uploaded').each(function() {
-            $(this).css('display','block');
-        });
-    });
-
-    // When clicking in edit uploaded button redirect to the show form with
-    // the photo uploaded ids
-    $("#edit-uploaded-button").on('click', function(e, ui){
-        var fileIds = '';
-        $('.file-id').each(function(){
-            fileIds += "&id[]="+$(this).val();
-        });
-        window.location = image_uploader.show_url+fileIds;
-        e.preventDefault();
+        $("#modal-edit-uploaded-files").modal('show');
     });
 
 });

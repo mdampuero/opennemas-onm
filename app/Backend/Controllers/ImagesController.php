@@ -87,7 +87,7 @@ class ImagesController extends Controller
 
         foreach ($images as &$image) {
             $extension              = strtolower($image->type_img);
-            $image->description_utf = html_entity_decode(($image->description));
+            $image->description_utf = html_entity_decode($image->description);
             $image->metadata_utf    = html_entity_decode($image->metadata);
         }
 
