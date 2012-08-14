@@ -4,7 +4,13 @@
 {css_tag href="/admin.css"}
 {css_tag href="/newsletter.css" media="screen"}
 {/block}
-
+<style type="text/css">
+#htmlContent {
+	border:1px solid #ccc;
+	padding:20px;
+	background-color: white;
+}
+</style>
 {block name="footer-js" append}
 
 {script_tag src="/jquery/jquery.cookie.js"}
@@ -19,12 +25,12 @@ OpenNeMas.tinyMceConfig.advanced.elements = "htmlContent";
 
 {block name="content"}
 
-<form action="#" method="post" name="newsletterForm" id="newsletterForm" {$formAttrs}>
+<form action="{url name=admin_newsletter_savecontents id=$newsletter->id}" method="post" name="newsletterForm" id="newsletterForm" {$formAttrs}>
 
 <div id="buttons-preview" class="top-action-bar clearfix">
 	<div class="wrapper-content">
 		<div class="title">
-                <h2>{t}Newsletter management{/t}</h2>
+                <h2>{t}Newsletter{/t} :: {t}Content preview{/t}</h2>
         </div>
 
 		<ul class="old-button">
@@ -52,6 +58,13 @@ OpenNeMas.tinyMceConfig.advanced.elements = "htmlContent";
                     <img border="0" src="{$params.IMAGE_DIR}save.png" title="{t}Save changes{/t}" alt="{t}Save changes{/t}" ><br />{t}Save changes{/t}
                 </a>
             </li>
+            <li class="separator"></li>
+            <li>
+                <a href="{url name=admin_newsletters}" class="admin_add" title="{t}Back to list{/t}">
+                    <img src="{$params.IMAGE_DIR}previous.png" alt="" /><br />
+                    {t}Go back{/t}
+                </a>
+            </li>
 
 
 		</ul>
@@ -72,7 +85,7 @@ OpenNeMas.tinyMceConfig.advanced.elements = "htmlContent";
 						<p>
 							<label>{t}Email subject{/t}:</label>
 							<input type="text" name="subject" id="subject" style="width:80%"
-								   value="{setting name="site_name"} [{$smarty.now|date_format:"%d/%m/%Y"}]" />
+								   value="{$newsletter->subject}" />
 						</p>
 				</div>
 			</td>
@@ -80,9 +93,7 @@ OpenNeMas.tinyMceConfig.advanced.elements = "htmlContent";
 		<tr>
 			<td>
 				<div style="width:85%; margin:0 auto;">
-					<div id="htmlContent" style="border:1px solid #ccc; padding:20px;background-color: white;">
-						{$htmlContent}
-					</div>
+					<div id="htmlContent">{$newsletter->html}</div>
 					<br>
 				</div>
 			</td>

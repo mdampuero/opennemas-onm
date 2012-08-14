@@ -31,12 +31,12 @@
 
 {block name="content"}
 
-<form action="{url name=admin_newsletter}" method="POST" name="newsletterForm" id="newsletterForm">
+<form action="{url name=admin_newsletter_save_contents}" method="POST" name="newsletterForm" id="newsletterForm">
 
     <div id="buttons-contents" class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title">
-                <h2>{t}Newsletter management{/t}</h2>
+                <h2>{t}Newsletter management{/t} :: Newsletter contents{t}{/t}</h2>
             </div>
 
             <ul class="old-button">
@@ -48,15 +48,9 @@
                 </li>
                 <li class="separator"></li>
                 <li>
-                    <a href="{url name=admin_newsletter_config}" class="admin_add" title="{t}Config newsletter module{/t}">
-                        <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
-                        {t}Settings{/t}
-                    </a>
-                </li>
-
-                <li >
-                    <a href="{url name=admin_newsletter_subscriptors}" class="admin_add" id="submit_mult" title="{t}Subscriptors{/t}">
-                        <img src="{$params.IMAGE_DIR}authors.png" title="{t}Subscriptors{/t}" alt="{t}Subscriptors{/t}"><br />{t}Subscriptors{/t}
+                    <a href="{url name=admin_newsletters}" class="admin_add" title="{t}Back to list{/t}">
+                        <img src="{$params.IMAGE_DIR}previous.png" alt="" /><br />
+                        {t}Go back{/t}
                     </a>
                 </li>
             </ul>
@@ -71,8 +65,6 @@
         <div class="alert alert-info">{t}Drag elements from the right column to include them into the newsletter{/t}</div>
 
         <div class="newsletter-contents">
-
-
 
             <div id="newsletter-contents">
                 <div class="btn-group toolbar">
@@ -154,7 +146,8 @@
                 {include file="newsletter/_partials/container_contents.tpl"}
             </div>
 
-            <textarea style="display:none;" id="newsletterContent" name="newsletterContent" style="width:90%"></textarea>
+            <textarea style="display:none;" id="contentids" name="contentids" style="width:90%"></textarea>
+            <input type="hidden" name="id" value="{$id}">
         </div>
     </div>
 

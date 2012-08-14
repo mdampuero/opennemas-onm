@@ -49,7 +49,7 @@ saveNewsletter = (function() {
     });
 
     var encodedContents = JSON.stringify(els);
-    jQuery('textarea#newsletterContent').text(encodedContents);
+    jQuery('#contentids').text(encodedContents);
 
     return encodedContents;
 
@@ -227,12 +227,12 @@ jQuery(function($) {
 
 //SETP 2 - Preview
 jQuery('#buttons-preview').on('click','#next-button', function() {
-    saveChanges();
+    saveHTMLChanges();
     return true;
 });
 
 jQuery('#buttons-preview').on('click','#prev-button', function() {
-    saveChanges();
+    saveHTMLChanges();
     jQuery("#modal-newsletter-accept").modal('show');
 });
 
@@ -260,7 +260,7 @@ jQuery('#newsletterForm').on('click','#save-button', function() {
     saveChanges();
 });
 
-function saveChanges() {
+function saveHTMLChanges() {
 
     //Save subject
     var subject = jQuery('div#content').find('input#subject').val();

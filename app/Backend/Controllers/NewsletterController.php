@@ -37,7 +37,9 @@ class NewsletterController extends Controller
     }
 
     /**
-     * List the form for create or load contents in a newsletter
+     * Lists all the available newsletters
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -49,7 +51,123 @@ class NewsletterController extends Controller
             return $configuredRedirection;
         }
 
-        return $this->render('newsletter/steps/pick-elements.tpl', array('template_var', ));
+        $nm = new \NewsletterManager();
+        $newsletters = $nm->find();
+
+        return $this->render('newsletter/list.tpl', array(
+            'newsletters'     => $newsletters
+        ));
+    }
+
+    /**
+     * List the form for create or load contents in a newsletter
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function createAction(Request $request)
+    {
+
+        return $this->render('newsletter/steps/1-pick-elements.tpl');
+    }
+
+    /**
+     * Saves the newsletter items
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function saveContentsAction(Request $request)
+    {
+        $id = (int) $request->request->getDigits('id');
+        $contentsRAW = $request->request->get('contentids');
+        $contents = json_decode(json_decode($contentsRAW));
+
+        $newsletter = new \NewNewsletter();
+        $nm         = new \NewsletterManager();
+
+        if ($id > 0) {
+            $newsletter->update(array(
+                'data' => $contentsRAW,
+            ));
+        } else {
+            $newsletter->create(array(
+                'subject' => s::get('site_name') + ' ['.date('%d/%m/%Y').']',
+                'data'    => $contentsRAW,
+                'html'    => $nm->render($contents),
+            ));
+        }
+
+        return $this->redirect($this->generateUrl('admin_newsletter_preview', array('id' => $newsletter->id)));
+    }
+
+    /**
+     * Previews the html contents for a newsletter given its id
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function previewAction(Request $request)
+    {
+        $id = (int) $request->query->getDigits('id');
+
+        $newsletter = new \NewNewsletter($id);
+
+        return $this->render('newsletter/steps/2-preview.tpl', array(
+            'newsletter' => $newsletter,
+        ));
+    }
+
+    /**
+     * Description of this action
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function saveHTMLContentAction(Request $request)
+    {
+        $id = (int) $request->request->getDigits('id');
+
+        $newsletter = new \NewNewsletter($id);
+
+        $newsletter->update(array(
+            'subject' => $request->request->filter('subject', FILTER_SANITIZE_STRING),
+            'html'    => $request->request->filter('subject', FILTER_SANITIZE_STRING),
+        ));
+
+        return $this->redirect($this->generateUrl(
+            'admin_newsletter_pick_recipients',
+            array('id' => $newsletter->id))
+        );
+    }
+
+    /**
+     * Deletes an newsletter given its id
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function deleteAction(Request $request)
+    {
+        $id = $request->query->getDigits('id');
+
+        if (!empty($id)) {
+            $newsletter = new \NewNewsletter($id);
+            $newsletter->delete();
+
+            m::add(_("Newsletter deleted successfully."), m::SUCCESS);
+        } else {
+            m::add(_('You must give an id for delete a newsletter.'), m::ERROR);
+        }
+
+        if (!$request->isXmlHttpRequest()) {
+            return $this->redirect($this->generateUrl('admin_newsletters'));
+        }
     }
 
     /**
@@ -74,7 +192,7 @@ class NewsletterController extends Controller
 
             m::add(_('Newsletter module settings saved successfully.'), m::SUCCESS);
 
-            return $this->redirect($this->generateUrl('admin_newsletter'));
+            return $this->redirect($this->generateUrl('admin_newsletters'));
         } else {
             $configurations = s::get(array(
                 'newsletter_maillist',

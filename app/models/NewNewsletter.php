@@ -1,18 +1,19 @@
 <?php
-/*
+/**
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 
 /**
  * Handles all the CRUD actions over newsletter.
  *
  * @package    Onm
  * @subpackage Model
- **/
+ *
+ */
 class NewNewsletter
 {
 
@@ -20,6 +21,8 @@ class NewNewsletter
      * Initializes the newsletter for a given id.
      *
      * @param string $id the content id to initilize.
+     *
+     * @return NewNewsletter the object instance
      **/
     public function __construct($id=null)
     {
@@ -35,17 +38,16 @@ class NewNewsletter
      *
      * @param array $data array with data for saved
      *
-     * @return void
+     * @return NewNewsletter the object instance
      **/
     public function create($data)
     {
-
         $data['created'] = date("Y-m-d H:i:s");
 
-        $sql = 'INSERT INTO `newsletter_archive` (`data`, `html`, `created`)'
-             . ' VALUES (?,?,?)';
+        $sql = 'INSERT INTO `newsletter_archive` (`subject`, `data`, `html`, `created`)'
+             . ' VALUES (?,?,?,?)';
 
-        $values = array($data['content'], $data['html'], $data['created']);
+        $values = array($data['data'], $data['html'], $data['created']);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
@@ -62,9 +64,9 @@ class NewNewsletter
     /**
      * Loads the data for an newsletter given its id
      *
-     * @param  $id
+     * @param int $id the object id to load
      *
-     * @return void
+     * @return NewNewsletter the object instance loaded
      **/
 
     public function read($id)
@@ -83,6 +85,32 @@ class NewNewsletter
         return $this;
     }
 
+    /**
+     * Deletes a newsletter given
+     *
+     * @return boolean
+     **/
+    public function delete()
+    {
+        $sql = 'DELETE FROM `newsletter_archive` WHERE pk_newsletter=?';
+        $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($this->id)));
+
+        if (!$rs) {
+            \Application::logDatabaseError();
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Loads the object properties from an array
+     *
+     * @param Array $fields the database fields to load into the object
+     *
+     * @return NewNewsletter the object instance
+     **/
     public function loadData($fields)
     {
         $this->id             = $fields['pk_newsletter'];
@@ -90,38 +118,8 @@ class NewNewsletter
         $this->data           = $fields['data'];
         $this->created        = $fields['created'];
         $this->html           = $fields['html'];
-    }
 
-    /**
-     * Loads the data for some newsletters
-     *
-     * @param string $where clausule with condition  for sql execute.
-     *
-     * @return void
-     **/
-
-    public function search($where = '1=1')
-    {
-        $sql = 'SELECT * FROM `newsletter_archive` WHERE '.$where;
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        if (!$rs) {
-            \Application::logDatabaseError();
-
-            return;
-        }
-
-        $newsletters = array();
-        while (!$rs->EOF) {
-            $obj = new NewNewsletter();
-            $obj->loadData($rs->fields);
-
-            $newsletters[] = $obj;
-
-            $rs->MoveNext();
-        }
-
-        return $newsletters;
+        return $this;
     }
 
 }

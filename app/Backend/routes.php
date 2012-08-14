@@ -1555,13 +1555,59 @@ $adminRoutes->add(
 
 // Keywork controller routes
 $adminRoutes->add(
-    'admin_newsletter',
+    'admin_newsletters',
     new Route(
         '/newsletters',
         array('_controller' => 'Backend:Controllers:NewsletterController:list')
     ),
     '/admin'
 );
+
+$adminRoutes->add(
+    'admin_newsletter_create',
+    new Route(
+        '/newsletter/create',
+        array('_controller' => 'Backend:Controllers:NewsletterController:create')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_newsletter_save_contents',
+    new Route(
+        '/newsletter/save-contents',
+        array('_controller' => 'Backend:Controllers:NewsletterController:saveContents')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_newsletter_preview',
+    new Route(
+        '/newsletter/{id}/preview',
+        array('_controller' => 'Backend:Controllers:NewsletterController:preview')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_newsletter_save_html',
+    new Route(
+        '/newsletter/{id}/save-html',
+        array('_controller' => 'Backend:Controllers:NewsletterController:saveHTMLContent')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_newsletter_delete',
+    new Route(
+        '/newsletter/{id}/delete',
+        array('_controller' => 'Backend:Controllers:NewsletterController:delete')
+    ),
+    '/admin'
+);
+
 
 $adminRoutes->add(
     'admin_newsletter_config',

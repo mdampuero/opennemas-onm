@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
@@ -11,13 +11,68 @@ use Onm\Settings as s,
 
 /**
  * Newsletter
- **/
+ */
 class NewsletterManager
 {
 
     /**
+     * Performs searches in newsletters
+     *
+     * @param string $whereClause  the where clause to insert into the search
+     * @param string $order        the order clause for the search
+     * @param int    $page         the page where start the paginated results
+     * @param int    $itemsPerPage the number of items per page in paginated results
+     *
+     * @return Array the newsletters that matches the search criterias
+     **/
+    public function find(
+        $whereClause  = '1 = 1',
+        $order        = 'created DESC',
+        $page         = null,
+        $itemsPerPage = 20
+    )
+    {
+        if (!is_null($page) ) {
+            if ($page == 1) {
+                $limit = ' LIMIT '. $itemsPerPage;
+            } else {
+                $limit = ' LIMIT '.($page-1) * $itemsPerPage.', '.$itemsPerPage;
+            }
+        } else {
+            $limit = '';
+        }
+
+        $sql = 'SELECT * FROM `newsletter_archive` WHERE '.$whereClause. ' ORDER BY '.$order.' '.$limit;
+
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+
+        if (!$rs) {
+            \Application::logDatabaseError();
+
+            return;
+        }
+
+        $newsletters = array();
+        while (!$rs->EOF) {
+            $obj = new \NewNewsletter();
+            $obj->loadData($rs->fields);
+
+            $newsletters[] = $obj;
+
+            $rs->MoveNext();
+        }
+
+        return $newsletters;
+    }
+
+    /**
      * Send mail to all users
      *
+     * @param array  $mailboxes   the list of the email addresses to send the mail to
+     * @param string $htmlContent the html content for the mail
+     * @param array  $params      an array of configurations
+     *
+     * @return void
      */
     public function send($mailboxes, $htmlContent, $params)
     {
@@ -28,9 +83,18 @@ class NewsletterManager
         }
     }
 
+    /**
+     * Send mail to all users
+     *
+     * @param string $mailbox     the email addresses to send the mail to
+     * @param string $htmlcontent the html content for the mail
+     * @param array  $params      an array of configurations
+     *
+     * @return void
+     */
     public function sendToUser($mailbox, $htmlcontent, $params)
     {
-        require_once(SITE_LIBS_PATH.'phpmailer/class.phpmailer.php');
+        include_once SITE_LIBS_PATH.'phpmailer/class.phpmailer.php';
 
         $mail = new PHPMailer();
         $mail->SetLanguage('es');
@@ -90,6 +154,8 @@ class NewsletterManager
      * set_time_limit(0);
      * ignore_user_abort(true);
      * </code>
+     *
+     * @return void
     */
     public function setConfigMailing()
     {
@@ -97,12 +163,19 @@ class NewsletterManager
         ignore_user_abort(true);
     }
 
-    public function render()
+    /**
+     * Renders the newsletter from a list of contents
+     *
+     * @param array $contents the list of the contents
+     *
+     * @return string the generated html for the newsletter
+     **/
+    public function render($contents)
     {
         $tpl = new Template(TEMPLATE_USER);
         $cm  = new ContentManager();
 
-        $newsletterContent = json_decode(json_decode($_SESSION['data-newsletter']));
+        $newsletterContent = $contents;
 
         if (empty($newsletterContent)) {
             $newsletterContent = array();
@@ -121,12 +194,17 @@ class NewsletterManager
                         $item->slug         = $content->slug;
                         $item->uri          = $content->uri;
                         $item->subtitle     = $content->subtitle;
-                        $item->date         =
-                            date('Y-m-d', strtotime(str_replace('/', '-', substr($content->created, 6))));
+                        $item->date         = date(
+                            'Y-m-d',
+                            strtotime(str_replace('/', '-', substr($content->created, 6)))
+                        );
                         $item->cat          = $content->category_name;
-                        $item->agency       =
-                            (is_array($content->params) && array_key_exists('agencyBulletin', $content->params))
-                                ? $content->params['agencyBulletin'] : '';
+                        $item->agency       = '';
+                        if (is_array($content->params)
+                            && array_key_exists('agencyBulletin', $content->params)
+                        ) {
+                            $item->agency   = $content->params['agencyBulletin'];
+                        }
                         $item->name         = (isset($content->name))?$content->name:'';
                         $item->image        = (isset($content->cover))?$content->cover:'';
 
@@ -151,7 +229,8 @@ class NewsletterManager
         $tpl->assign('newsletterContent', $newsletterContent);
 
         //render menu
-        $menuFrontpage= Menu::renderMenu('frontpage');
+        $menuManager = new \Menu();
+        $menuFrontpage= $menuManager->getMenu('frontpage');
         $tpl->assign('menuFrontpage', $menuFrontpage->items);
 
         //render ads
@@ -172,7 +251,8 @@ class NewsletterManager
             'Julio', 'Agosto', 'Septiembre',
             'Octubre', 'Noviembre', 'Diciembre'
         );
-        $tpl->assign('current_date',
+        $tpl->assign(
+            'current_date',
             $days[(int) date('w')].' '.date('j').' de '.$months[(int) date('n')].' '.date('Y')
         );
 

@@ -81,7 +81,7 @@ jQuery(document).ready(function($){
                 </li>
                 <li class="separator"></li>
                 <li>
-                    <a href="{url name=admin_newsletter}" class="admin_add" title="{t}Go back to list{/t}">
+                    <a href="{url name=admin_newsletters}" class="admin_add" title="{t}Go back to list{/t}">
                     <img src="{$params.IMAGE_DIR}previous.png" title="{t}Sync list  with server{/t}" alt="{t}Go back to list{/t}" ><br />{t}Go back to list{/t}
                     </a>
                 </li>

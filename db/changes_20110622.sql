@@ -1,3 +1,6 @@
+-- 14-08-2012
+ALTER TABLE `newsletter_archive` ADD `subject` VARCHAR( 255 ) NOT NULL AFTER `pk_newsletter`
+
 -- 03-08-2012
 ALTER TABLE  `author_imgs` DROP PRIMARY KEY , ADD PRIMARY KEY (  `pk_img` ,  `fk_author` )
 
