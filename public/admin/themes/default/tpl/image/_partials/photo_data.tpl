@@ -84,7 +84,7 @@
             <div class="onm-help-block ">
                 <div class="title"><h4>{t}Set your Google maps key{/t}</h4></div>
                 <div class="content">{t escape=off}Help OpenNeMas to get all the photos geolocalized. For this you have to configure your Google Maps API key from
-                the <a href="/admin/controllers/system_settings/system_settings.php?action=list#external" title="Go to the system settings dialog">system settings dialog</a>{/t}</div>
+                the <a href="{url name=admin_system_settings}#external" title="Go to the system settings dialog">system settings dialog</a>{/t}</div>
             </div>
         {/if}
     </div><!-- /geolocation -->

@@ -265,12 +265,6 @@ OpenNeMas.tinyMceConfig = {
     }
 };
 
-// No es necesaria esta configuración para todos los casos
-//if(document.getElementById('category')) {
-//    OpenNeMas.tinyMceConfig.external_image_list_url = "/admin/images_tiny_external_list.php?category=" + document.getElementById('category').value;
-//    OpenNeMas.tinyMceConfig.media_external_list_url = "/admin/images_tiny_external_list.php?category=" + document.getElementById('category').value;
-//}
-
 OpenNeMas.tinyMceFunctions = {
     toggle: function(refId) {
         var ed = tinyMCE.get(refId);
