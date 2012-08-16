@@ -117,8 +117,6 @@ class User
         $this->name             = $rs->fields['name'];
         $this->firstname        = $rs->fields['firstname'];
         $this->lastname         = $rs->fields['lastname'];
-        $this->address          = $rs->fields['address'];
-        $this->phone            = $rs->fields['phone'];
         $this->authorize        = $rs->fields['authorize'];
         $this->id_user_group    = $rs->fields['fk_user_group'];
         $this->accesscategories = $this->readAccessCategories();
@@ -138,27 +136,35 @@ class User
             $sql = "UPDATE users
                     SET `login`=?, `password`= ?, `sessionexpire`=?,
                         `email`=?, `name`=?, `firstname`=?, `lastname`=?,
-                        `address`=?, `phone`=?, `fk_user_group`=?
+                        `fk_user_group`=?
                     WHERE pk_user=".intval($data['id']);
 
             $values = array(
-                $data['login'], md5($data['password']), $data['sessionexpire'],
-                $data['email'], $data['name'], $data['firstname'],
-                $data['lastname'], $data['address'],
-                $data['phone'], $data['id_user_group']
+                $data['login'],
+                md5($data['password']),
+                $data['sessionexpire'],
+                $data['email'],
+                $data['name'],
+                $data['firstname'],
+                $data['lastname'],
+                $data['id_user_group']
             );
 
         } else {
             $sql = "UPDATE users
                     SET `login`=?, `sessionexpire`=?, `email`=?,
                         `name`=?, `firstname`=?, `lastname`=?,
-                        `address`=?, `phone`=?, `fk_user_group`=?
+                        `fk_user_group`=?
                     WHERE pk_user=".intval($data['id']);
 
             $values = array(
-                $data['login'], $data['sessionexpire'], $data['email'],
-                $data['name'], $data['firstname'], $data['lastname'],
-                $data['address'], $data['phone'], $data['id_user_group']
+                $data['login'],
+                $data['sessionexpire'],
+                $data['email'],
+                $data['name'],
+                $data['firstname'],
+                $data['lastname'],
+                $data['id_user_group']
             );
         }
 
@@ -395,64 +401,6 @@ class User
         return false;
     }
 
-    /**
-     * Try authenticate from google account
-     *
-     * @param  string        $email
-     * @param  string        $passwd
-     * @param  string        $loginToken
-     * @param  string        $loginCaptcha
-     * @return boolean|array
-     */
-    public function authGoogleClientLogin(
-        $email,
-        $passwd,
-        $loginToken=null,
-        $loginCaptcha=null
-    )
-    {
-        require_once 'Zend/Loader.php';
-        Zend_Loader::loadClass('Zend_Gdata_ClientLogin');
-        Zend_Loader::loadClass('Zend_Gdata');
-
-        try {
-            $client = Zend_Gdata_ClientLogin::getHttpClient(
-                $email, $passwd, 'xapi', null, 'Zend-ZendFramework',
-                $loginToken, $loginCaptcha
-            );
-
-            //$_SESSION['logintoken'] = $client->getAuthSubToken();
-            // header('Authorization: AuthSub ' . );
-            $this->clientLoginToken = $client->getClientLoginToken();
-
-            // Check exists account into database
-            $data = $this->getUserDataByEmail($email);
-
-            // User don't exist into database
-            if (empty($data)) {
-
-                return false;
-            }
-
-            // Set values to instance $this
-            $this->set_values($data);
-        } catch (Zend_Gdata_App_CaptchaRequiredException $cre) {
-            // Incorrect credentials, retry with captcha challenge
-            return array(
-                'token'   => $cre->getCaptchaToken(),
-                'captcha' => $cre->getCaptchaUrl()
-            );
-        } catch (Zend_Gdata_App_AuthException $ae) {
-            return false;
-        } catch (Exception $exp) {
-            return false;
-        }
-
-        // If wasn't thrown any exception then return true
-        $this->authMethod = 'google_clientlogin';
-
-        return true;
-    }
 
     /**
      * Get a password from a login
@@ -513,8 +461,6 @@ class User
             $this->name         = $data['name'];
             $this->firstname    = $data['firstname'];
             $this->lastname     = $data['lastname'];
-            $this->address      = $data['address'];
-            $this->phone        = $data['phone'];
             $this->authorize    = $data['authorize'];
             $this->fk_user_group= $data['fk_user_group'];
 
@@ -594,13 +540,6 @@ class User
         return $ids;
     }
 
-    public function users_online()
-    {
-        $sql = 'SELECT COUNT (*) FROM users WHERE online=1';
-
-        return( $GLOBALS['application']->conn->Execute($sql));
-    }
-
     public function get_users($filter=null, $_order_by='ORDER BY 1')
     {
         $items = array();
@@ -664,74 +603,5 @@ class User
         }
         //Se cambia name por login.
         return $rs->fields['login'];
-    }
-
-    public function parseGmailInbox($token)
-    {
-        $messages = array('total' => 0, 'entries' => array());
-
-        if (function_exists('curl_init')) {
-            $curl = curl_init('https://mail.google.com/mail/feed/atom');
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
-            //curl_setopt($curl, CURLOPT_HEADER, 1);
-            curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
-            curl_setopt($curl, CURLOPT_USERPWD, $token); //$username.':'.$password);
-            $result = curl_exec($curl);
-            $code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-
-            if ($code != 200) {
-                return $messages;
-            }
-
-            $xml = simplexml_load_string($result);
-            $messages['total'] = (int) $xml->fullcount;
-
-            foreach ($xml->entry as $entry) {
-                //$link = $entry->xpath('link[@href]');
-                $link = $entry->link->attributes();
-                $link = $link['href'];
-
-                $messages['entries'][] = array(
-                    'title'   => (string) $entry->title,
-                    'summary' => (string) $entry->summary,
-                    'link'    => (string) $link[0],
-                    'name'    => (string) $entry->author->name,
-                    'email'   => (string) $entry->author->email
-                );
-            }
-
-            return $messages;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Functions that manages the state of an user Enabled=1/Disabled=0
-     *
-     * @param  type $id
-     * @return type
-     */
-    public function unauthorize_user($id)
-    {
-        $sql = "UPDATE users SET `authorize`=0 WHERE pk_user=".intval($id);
-
-        if ($GLOBALS['application']->conn->Execute($sql) === false) {
-            \Application::logDatabaseError();
-
-            return;
-        }
-    }
-
-    public function authorize_user($id)
-    {
-        $sql = "UPDATE users SET `authorize`=1 WHERE pk_user=".intval($id);
-
-        if ($GLOBALS['application']->conn->Execute($sql) === false) {
-            \Application::logDatabaseError();
-
-            return;
-        }
     }
 }

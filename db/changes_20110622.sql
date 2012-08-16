@@ -1,3 +1,6 @@
+-- 16-08-2012
+ALTER TABLE  `users` DROP  `address` , DROP  `phone` ;
+
 -- 14-08-2012
 ALTER TABLE `newsletter_archive` ADD `subject` VARCHAR( 255 ) NOT NULL AFTER `pk_newsletter`
 
