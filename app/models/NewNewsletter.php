@@ -44,16 +44,17 @@ class NewNewsletter
     {
         $data['created'] = date("Y-m-d H:i:s");
 
-        $sql = 'INSERT INTO `newsletter_archive` (`subject`, `data`, `html`, `created`)'
+        $sql = 'INSERT INTO `newsletter_archive` (`title`, `data`, `html`, `created`)'
              . ' VALUES (?,?,?,?)';
 
-        $values = array($data['data'], $data['html'], $data['created']);
+        $values = array($data['subject'], $data['data'], $data['html'], $data['created']);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
 
             return false;
         }
+
 
         $this->id = $GLOBALS['application']->conn->Insert_ID();
         $this->read($this->id);

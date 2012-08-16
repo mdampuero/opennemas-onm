@@ -25,12 +25,12 @@ OpenNeMas.tinyMceConfig.advanced.elements = "htmlContent";
 
 {block name="content"}
 
-<form action="{url name=admin_newsletter_savecontents id=$newsletter->id}" method="post" name="newsletterForm" id="newsletterForm" {$formAttrs}>
+<form action="{url name=admin_newsletter_save_html id=$newsletter->id}" method="POST">
 
 <div id="buttons-preview" class="top-action-bar clearfix">
 	<div class="wrapper-content">
 		<div class="title">
-                <h2>{t}Newsletter{/t} :: {t}Content preview{/t}</h2>
+                <h2>{t}Newsletter{/t} :: {t}Preview{/t}</h2>
         </div>
 
 		<ul class="old-button">
@@ -48,14 +48,14 @@ OpenNeMas.tinyMceConfig.advanced.elements = "htmlContent";
 				</a>
 			</li>
 			<li>
-				<a href="#" class="admin_add" title="{t}Edit{/t}" id="edit-button">
+				<a href="#" title="{t}Edit{/t}" id="edit-button">
 					<img src="{$params.IMAGE_DIR}edit.png" alt="{t}Edit{/t}" /><br />
 					{t}Edit{/t}
 				</a>
 			</li>
 			<li id="li-save-button" style="display:none;">
-                <a id="save-button" href="#" class="admin_add" title="Guardar Positions" alt="Guardar Cambios">
-                    <img border="0" src="{$params.IMAGE_DIR}save.png" title="{t}Save changes{/t}" alt="{t}Save changes{/t}" ><br />{t}Save changes{/t}
+                <a id="save-button" href="#" class="admin_add" title="{t}Save changes{/t}">
+                    <img border="0" src="{$params.IMAGE_DIR}save.png" alt="{t}Save changes{/t}" ><br />{t}Save changes{/t}
                 </a>
             </li>
             <li class="separator"></li>
@@ -71,13 +71,6 @@ OpenNeMas.tinyMceConfig.advanced.elements = "htmlContent";
 	</div>
 </div>
 <div class="wrapper-content">
-	<table class="adminheading">
-        <tr>
-            <th>
-                {t}Newsletter preview{/t}
-            </th>
-        </tr>
-	</table>
 	<table class="adminlist">
 		<tr>
 			<td>
