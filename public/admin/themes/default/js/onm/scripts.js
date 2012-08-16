@@ -13,41 +13,6 @@ function salir(msg,url) {
     }
 }
 
-function onChangeGroup(evaluateControl, ids)
-{
-    if (document.getElementById)
-    {
-        var combo = document.getElementById('ids_category');
-        //se define la variable "el" igual a nuestro div
-        if (evaluateControl.options[evaluateControl.selectedIndex].text.toLowerCase() == "administrador")
-        {
-            for (iIndex=0; iIndex<ids.length; iIndex++)
-            {
-                var hideDiv = document.getElementById(ids[iIndex]);
-                hideDiv.style.display = 'none'; //damos un atributo display:none que oculta el div
-            }
-            combo.options[0].selected = false;
-            for(iIndex=1; iIndex<combo.options.length;  iIndex++)
-                combo.options[iIndex].selected = true;
-        }
-        else
-        {
-            for (iIndex=0; iIndex<ids.length; iIndex++)
-            {
-                var showDiv = document.getElementById(ids[iIndex]);
-                if (showDiv) {
-                    showDiv.style.display = 'block'; //damos un atributo display:block que muestra el div
-                }
-            }
-            if (combo) {
-                for(iIndex=0; iIndex<combo.options.length;  iIndex++)
-                    combo.options[iIndex].selected = false;
-            }
-        }
-
-    }
-}
-
 function countWords(text,counter){
 
     var y=text.value;

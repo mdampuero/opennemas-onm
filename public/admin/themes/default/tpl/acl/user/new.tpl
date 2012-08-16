@@ -1,34 +1,22 @@
 {extends file="base/admin.tpl"}
 
+{block name="prototype"}{/block}
+
 {block name="footer-js" append}
-    {include file="acl/user/modal/_modal_edit_user_group.tpl"}
-    {script_tag src="/SpinnerControl.js"}
     <script>
         jQuery(document).ready(function($){
             $("#user-editing-form").tabs();
+
         })
-        document.observe('dom:loaded', function(){
-            onChangeGroup( document.formulario.id_user_group, new Array('comboAccessCategory','labelAccessCategory') );
-
-            // Refrescar los elementos seleccionados
-            $('ids_category').select('option').each(function(item){
-                if( item.getAttribute('selected') ) {
-                    item.selected=true;
-                    item.setAttribute('selected', 'selected');
-                }
-            });
-
-            new SpinnerControl('sessionexpire', 'up', 'dn', { interval: 5,  min: 15, max: 250 });
-        });
     </script>
 {/block}
 
 
 {block name="header-css" append}
 <style type="text/css">
-    label {
-        font-weight:normal;
-    }
+label {
+    font-weight:normal;
+}
 </style>
 {/block}
 
