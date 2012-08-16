@@ -36,7 +36,7 @@ class User
     public $clientLoginToken = null;
 
     /**
-     * Compatible PHP4 constructor
+     * Initializes the object instance
      *
      * @see MethodCacheManager
      * @param int $id User Id
@@ -95,7 +95,7 @@ class User
             $this->createAccessCategoriesDB($data['ids_category']);
         }
 
-        return(true);
+        return true;
     }
 
     public function read($id)
@@ -124,9 +124,8 @@ class User
 
     public function update($data)
     {
-
         if (!isset($data['id_user_group']) || empty($data['id_user_group']) ) {
-            $data['id_user_group'] =$this->id_user_group;
+            $data['id_user_group'] = $this->id_user_group;
         }
 
         // Init transaction
@@ -137,7 +136,7 @@ class User
                     SET `login`=?, `password`= ?, `sessionexpire`=?,
                         `email`=?, `name`=?, `firstname`=?, `lastname`=?,
                         `fk_user_group`=?
-                    WHERE pk_user=".intval($data['id']);
+                    WHERE pk_user=?";
 
             $values = array(
                 $data['login'],
@@ -147,7 +146,8 @@ class User
                 $data['name'],
                 $data['firstname'],
                 $data['lastname'],
-                $data['id_user_group']
+                $data['id_user_group'],
+                intval($data['id'])
             );
 
         } else {
@@ -155,7 +155,7 @@ class User
                     SET `login`=?, `sessionexpire`=?, `email`=?,
                         `name`=?, `firstname`=?, `lastname`=?,
                         `fk_user_group`=?
-                    WHERE pk_user=".intval($data['id']);
+                    WHERE pk_user=?";
 
             $values = array(
                 $data['login'],
@@ -164,7 +164,8 @@ class User
                 $data['name'],
                 $data['firstname'],
                 $data['lastname'],
-                $data['id_user_group']
+                $data['id_user_group'],
+                intval($data['id'])
             );
         }
 
@@ -188,9 +189,9 @@ class User
 
     public function delete($id)
     {
-        $sql = 'DELETE FROM users WHERE pk_user='.intval($id);
+        $sql = 'DELETE FROM users WHERE pk_user=?';
 
-        if ($GLOBALS['application']->conn->Execute($sql)===false) {
+        if ($GLOBALS['application']->conn->Execute($sql, array(intval($id)))===false) {
             \Application::logDatabaseError();
 
             return false;
@@ -344,7 +345,8 @@ class User
         $password,
         $loginToken=null,
         $loginCaptcha=null
-    ) {
+    )
+    {
         $result = false;
 
         if ($this->isValidEmail($login)) {
