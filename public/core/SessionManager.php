@@ -126,7 +126,7 @@ class SessionManager
                             'username'   => $session['username'],
                             'isAdmin'    => $session['isAdmin'],
                             'expire'     => $session['expire'],
-                            'authMethod' => $session['authMethod'],
+                            'authMethod' => '',
                         );
                    }
 

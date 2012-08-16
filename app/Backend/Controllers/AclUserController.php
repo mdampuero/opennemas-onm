@@ -242,4 +242,20 @@ class AclUserController extends Controller
         return $this->redirect($this->generateUrl('admin_acl_user'));
     }
 
+    /**
+     * Returns a connected users panel
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function connectedUsersAction(Request $request)
+    {
+        $sessions = $GLOBALS['Session']->getSessions();
+
+        return $this->render('acl/panel/show_panel.ajax.html', array(
+            'users' => $sessions
+        ));
+    }
+
 } // END class AclUserController

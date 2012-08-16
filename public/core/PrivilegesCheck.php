@@ -141,7 +141,6 @@ class PrivilegesCheck
         ) {
             foreach ($_COOKIE as $name => $value) {
                 if (preg_match('@^_onm_session_.*@', $name)) {
-                    var_dump($name);
                     setcookie($name, '', time() - 60000);
                 }
             }

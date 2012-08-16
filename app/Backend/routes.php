@@ -2471,6 +2471,15 @@ $adminRoutes->add(
     '/admin'
 );
 
+$adminRoutes->add(
+    'admin_acl_user_connected_users',
+    new Route(
+        '/acl/users/connected-users',
+        array('_controller' => 'Backend:Controllers:AclUserController:connectedUsers')
+    ),
+    '/admin'
+);
+
 // Privilege management routes
 $adminRoutes->add(
     'admin_acl_privileges',
