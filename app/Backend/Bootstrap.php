@@ -47,9 +47,11 @@ class Bootstrap extends ModuleBootstrap
             // $session = $this->container->get('session');
             // $session->start();
 
-            $GLOBALS['Session'] = \SessionManager::getInstance(OPENNEMAS_BACKEND_SESSIONS);
+            $sessionHandler = \SessionManager::getInstance(OPENNEMAS_BACKEND_SESSIONS);
+            $sessionHandler->bootstrap();
 
-            $GLOBALS['Session']->bootstrap();
+            $GLOBALS['Session'] = $sessionHandler;
+            $this->container->set('session', $sessionHandler);
 
             if (!isset($_SESSION['userid'])
                 && !preg_match('@^/login@', $request->getPathInfo())

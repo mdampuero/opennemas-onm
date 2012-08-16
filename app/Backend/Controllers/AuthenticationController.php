@@ -92,21 +92,23 @@ class AuthenticationController extends Controller
 
                     $_SESSION = array(
                         'userid'           => $user->id,
-                        'realname'         => $user->firstname . " " . $user->lastname,
+                        'realname'         => $user->name,
                         'username'         => $user->login,
                         'email'            => $user->email,
                         'isAdmin'          => ( \UserGroup::getGroupName($user->fk_user_group)=='Administrador' ),
                         'isMaster'         => ( \UserGroup::getGroupName($user->fk_user_group)=='Masters' ),
                         'privileges'       => \Privilege::get_privileges_by_user($user->id),
                         'accesscategories' => $user->getAccessCategoryIds(),
-                        'authMethod'       => $user->authMethod,
                         'default_expire'   => $user->sessionexpire,
                         'csrf'             => md5(uniqid(mt_rand(), true))
                     );
 
                     // Store default expire time
                     global $app;
-                    $app::setCookieSecure('_onm_session_'.session_id(), time()+($user->sessionexpire)*60, 0, '/admin/');
+                    // $app::setCookieSecure(
+                    //     '_onm_session_'.session_id(),
+                    //     time()+($user->sessionexpire)*60, 0, '/admin/'
+                    // );
                     \PrivilegesCheck::loadSessionExpireTime();
                     // $GLOBALS['Session']->cleanExpiredSessionFiles();
 

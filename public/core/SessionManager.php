@@ -13,7 +13,7 @@
  * @subpackage Utils
  * @author     Fran Dieguez <fran@openhost.es>
  **/
-class SessionManager implements ArrayAccess
+class SessionManager
 {
 
     /**
@@ -45,7 +45,6 @@ class SessionManager implements ArrayAccess
     private function __construct($sessionSavePath, $lifetime = null)
     {
         $this->sessionDirectory = realpath($sessionSavePath);
-
 
         // Save the actual lifetime for this session in the session manager
         if (is_null($lifetime)) {
@@ -99,70 +98,7 @@ class SessionManager implements ArrayAccess
         }
     }
 
-    /**
-     * Magic method for setting a key-value in the session variable.
-     *
-     * @param string $name  the name of the variable.
-     * @param string $value the value for the variable.
-     **/
-    public function __set($name, $value)
-    {
-        $_SESSION[$name] = $value;
-    }
 
-    public function __get($name)
-    {
-        if (!isset($_SESSION[$name])) {
-            return null;
-        }
-
-        return $_SESSION[$name];
-    }
-
-    /**
-    * Defined by ArrayAccess interface
-    * Set a value given it's key e.g. $A['title'] = 'foo';
-    * @param mixed key (string or integer)
-    * @param mixed value
-    * @return void
-    */
-    public function offsetSet($key, $value)
-    {
-        $_SESSION[$key] = $value;
-    }
-
-    /**
-    * Defined by ArrayAccess interface
-    * Return a value given it's key e.g. echo $A['title'];
-    * @param mixed key (string or integer)
-    * @return mixed value
-    */
-    public function offsetGet($key)
-    {
-        return($_SESSION[$key]);
-    }
-
-    /**
-    * Defined by ArrayAccess interface
-    * Unset a value by it's key e.g. unset($A['title']);
-    * @param mixed key (string or integer)
-    * @return void
-    */
-    public function offsetUnset($key)
-    {
-        unset($_SESSION[$key]);
-    }
-
-    /**
-    * Defined by ArrayAccess interface
-    * Check value exists, given it's key e.g. isset($A['title'])
-    * @param mixed key (string or integer)
-    * @return boolean
-    */
-    public function offsetExists($key)
-    {
-        return isset($_SESSION[$key]);
-    }
 
     /* Métodos para el control de la sesión y los usuarios activos */
     /**

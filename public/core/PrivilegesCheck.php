@@ -139,10 +139,19 @@ class PrivilegesCheck
             && array_key_exists('expire', $_SESSION)
             && (time() > $_SESSION['expire'])
         ) {
+            foreach ($_COOKIE as $name => $value) {
+                if (preg_match('@^_onm_session_.*@', $name)) {
+                    var_dump($name);
+                    setcookie($name, '', time() - 60000);
+                }
+            }
+
             session_destroy();
             unset($_SESSION);
 
             return true;
+        } else {
+
         }
         // Actualiza la sesion
         self::loadSessionExpireTime();
