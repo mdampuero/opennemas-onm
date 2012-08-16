@@ -27,7 +27,6 @@ class AclUserController extends Controller
      * Common code for all the actions
      *
      * @return void
-     * @author
      **/
     public function init()
     {
@@ -69,10 +68,10 @@ class AclUserController extends Controller
      *
      * @return Response the response object
      **/
-    public function showAction()
+    public function showAction(Request $request)
     {
         //user can modify his data
-        $id = $this->request->query->getDigits('id');
+        $id = $request->query->getDigits('id');
 
         // Check if the user is the same as the one that we want edit or
         // if we have permissions for editting other user information.
@@ -107,18 +106,34 @@ class AclUserController extends Controller
      *
      * @return Response the response object
      **/
-    public function updateAction()
+    public function updateAction(Request $request)
     {
-        $userId = $this->request->request->getDigits('id');
-        $action = $this->request->request->filter('action',
-            'update', FILTER_SANITIZE_STRING);
+        $userId = $request->query->getDigits('id');
+        $action = $request->request->filter('action', 'update', FILTER_SANITIZE_STRING);
 
         if ($userId != $_SESSION['userid']) {
             $this->checkAclOrForward('USER_UPDATE');
         }
+
+        $data = array(
+            'id'              => $userId,
+            'login'           => $request->request->filter('login', null, FILTER_SANITIZE_STRING),
+            'email'           => $request->request->filter('email', null, FILTER_SANITIZE_STRING),
+            'password'        => $request->request->filter('password', null, FILTER_SANITIZE_STRING),
+            'passwordconfirm' => $request->request->filter('passwordconfirm', null, FILTER_SANITIZE_STRING),
+            'name'            => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
+            'firstname'       => $request->request->filter('firstname', null, FILTER_SANITIZE_STRING),
+            'lastname'        => $request->request->filter('lastname', null, FILTER_SANITIZE_STRING),
+            'sessionexpire'   => $request->request->getDigits('sessionexpire'),
+            'id_user_group'   => $request->request->getDigits('id_user_group'),
+            'ids_category'    => $request->request->get('ids_category'),
+            'address'         => '',
+            'phone'         => '',
+        );
+
         // TODO: validar datos
         $user = new \User($userId);
-        $user->update($_REQUEST);
+        $user->update($data);
 
         m::add(_('User data updated successfully.'), m::SUCCESS);
         if ($action == 'validate') {
@@ -127,7 +142,7 @@ class AclUserController extends Controller
             // If a regular user is upating him/her information
             // redirect to welcome page
             if (($userId == $_SESSION['userid'])
-                && !Acl::check('USER_UPDATE')
+                && !\Acl::check('USER_UPDATE')
             ) {
                 $redirectUrl = $this->generateUrl('admin_welcome');
             } else {
@@ -143,19 +158,18 @@ class AclUserController extends Controller
      *
      * @return string the response string
      **/
-    public function createAction()
+    public function createAction(Request $request)
     {
         $this->checkAclOrForward('USER_CREATE');
 
-        $action = $this->request->request->filter('action',
-            null, FILTER_SANITIZE_STRING);
+        $action = $request->request->filter('action', null, FILTER_SANITIZE_STRING);
 
         $user = new \User();
         $ccm = \ContentCategoryManager::get_instance();
         $user_group = new \UserGroup();
         $tree = $ccm->getCategoriesTree();
 
-        if ($this->request->getMethod() == 'POST') {
+        if ($request->getMethod() == 'POST') {
             try {
                 if ($user->create($_POST)) {
                     if ($action == 'validate') {
@@ -175,7 +189,7 @@ class AclUserController extends Controller
             }
         }
 
-        return $this->render('acl/user/new.tpl',array(
+        return $this->render('acl/user/new.tpl', array(
             'user'                      => $user,
             'user_groups'               => $user_group->get_user_groups(),
             'content_categories'        => $tree,
@@ -188,16 +202,16 @@ class AclUserController extends Controller
      *
      * @return string the response string
      **/
-    public function deleteAction()
+    public function deleteAction(Request $request)
     {
         $this->checkAclOrForward('USER_DELETE');
 
-        $userId = $this->request->query->getDigits('id');
+        $userId = $request->query->getDigits('id');
 
         if (!is_null($userId)) {
             $user = new \User();
             $user->delete($userId);
-            if (!$this->request->isXmlHttpRequest()) {
+            if (!$request->isXmlHttpRequest()) {
                 return $this->redirect($this->generateUrl('admin_acl_user'));
             }
         }
@@ -208,11 +222,11 @@ class AclUserController extends Controller
      *
      * @return string the string resposne
      **/
-    public function batchDeleteAction()
+    public function batchDeleteAction(Request $request)
     {
         $this->checkAclOrForward('USER_DELETE');
 
-        $selected = $this->request->query->get('selected');
+        $selected = $request->query->get('selected');
 
         if (count($selected) > 0) {
             $user = new \User();

@@ -71,9 +71,15 @@ class User
                                       `fk_user_group`)
                     VALUES (?,?,?,?,?,?,?,?,?,?)";
         $values = array(
-            $data['login'], md5($data['password']),  $data['sessionexpire'],
-            $data['email'], $data['name'], $data['firstname'],
-            $data['lastname'], $data['address'], $data['phone'],
+            $data['login'],
+            md5($data['password']),
+            $data['sessionexpire'],
+            $data['email'],
+            $data['name'],
+            $data['firstname'],
+            $data['lastname'],
+            $data['address'],
+            $data['phone'],
             $data['id_user_group']
         );
 

@@ -26,71 +26,9 @@
 
 {block name="header-css" append}
 <style type="text/css">
-table th, table label {
-    color: #888;
-    text-shadow: white 0 1px 0;
-    font-size: 13px;
-}
-th {
-    vertical-align: top;
-    text-align: left;
-    padding: 10px;
-    width: 200px;
-    font-size: 13px;
-}
-label{
-    font-weight:normal;
-}
-.panel {
-    background:White;
-}
-fieldset {
-    border:none;
-    border-top:1px solid #ccc;
-}
-legend {
-    color:#666;
-    text-transform:uppercase;
-    font-size:13px;
-    padding:0 10px;
-}
-
-.panel {
-    margin:0;
-}
-.default-value {
-    display:inline;
-    color:#666;
-    margin-left:10px;
-    vertical-align:middle
-}
-input[type="text"],
-input[type="password"]{
-    width:300px;
-    max-height:80%
-}
-.spinner_button {
-    width: 18px;
-    height: 18px;
-
-    color: #204A87;
-    font-weight: bold;
-    background-color: #DDD;
-
-    border-top: 1px solid #CCC;
-    border-right: 1px solid #999;
-    border-bottom: 1px solid #999;
-    border-left: 1px solid #CCC;
-}
-
-.spinner_button:hover {
-    background-color: #EEE;
-
-    border-top: 1px solid #DDD;
-    border-right: 1px solid #CCC;
-    border-bottom: 1px solid #CCC;
-    border-left: 1px solid #DDD;
-}
+    label {
+        font-weight:normal;
+    }
 </style>
 {/block}
 
@@ -130,122 +68,77 @@ input[type="password"]{
         <div id="user-editing-form" class="wrapper-content tabs">
             <ul>
                 <li><a href="#basic" title="{t}Basic information{/t}">{t}Basic information{/t}</a></li>
-                <li><a href="#personal" title="{t}Personal information{/t}">{t}Personal information{/t}</a></li>
                 <li><a href="#privileges" title="{t}Privileges{/t}">{t}Privileges{/t}</a></li>
             </ul><!-- / -->
-            <div id="basic">
-                <table>
-                    <tbody>
-                    <tr>
-                        <th scope="row">
-                            <label for="name">{t}Name:{/t}</label>
-                        </th>
-                        <td>
-                            <input type="text" id="name" name="name" title="{t}Name:{/t}"
-                                value="{$user->name}" class="required"  size="50"/>
-                        </td>
-                        <td rowspan=5>
-                            <div class="onm-help-block margin-left-1">
-                                <div class="title"><h4>{t}User information{/t}</h4></div>
-                                <div class="content">
-                                    {t escape=off}Please complete the user information by filling the aside form.{/t}
-                                    {t escape=off}Sign up in <a href="http://www.gravatar.com">gravatar.com</a> and ensure that you use the same email as you have here in OpenNemas{/t}
-                                </div>
+            <div id="basic" class="form-horizontal">
+                <fieldset>
+                    <div class="control-group">
+                        <label for="login" class="control-label">{t}User name{/t}</label>
+                        <div class="controls">
+                            <input type="text" id="login" name="login" value="{$user->login|default:""}" class="input-xlarge required" maxlength="20"/>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="login" class="control-label">{t}Email{/t}</label>
+                        <div class="controls">
+                            <div class="input-prepend">
+                                <span class="add-on">@</span><input class="span2" id="email" type="email" name="email" value="{$user->email}" class="required validate-email"  size="50">
                             </div>
-                        </td>
-                    </tr>
+                            <div class="help-block">
+                                {t escape=off}Sign up in <a href="http://www.gravatar.com">gravatar.com</a> and ensure that you use the same email as you have here in OpenNemas{/t}
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
 
-                    <tr>
-                        <th scope="row">
-                            <label for="firstname">{t}Surname:{/t}</label>
-                        </th>
-                        <td>
-                            <input type="text" id="firstname" name="firstname" value="{$user->firstname}" class="required"  size="50"/>
-                        </td>
-                    </tr>
+                <fieldset>
+                    <div class="control-group">
+                        <label for="password" class="control-label">{t}Password{/t}</label>
+                        <div class="controls">
+                            <input type="password" id="password" name="password" value="" class="input-medium {if $smarty.request.action eq "new"}required{/if}" maxlength="20"/>
+                        </div>
+                    </div>
 
-                    <tr>
-                        <th scope="row">
-                            <label for="lastname">{t}Maiden surname:{/t}</label>
-                        </th>
-                        <td>
-                            <input type="text" id="lastname" name="lastname" value="{$user->lastname}"  size="50"/>
-                        </td>
-                    </tr>
+                    <div class="control-group">
+                        <label for="passwordconfirm" class="control-label">{t}Confirm password{/t}</label>
+                        <div class="controls">
+                            <input type="password" id="passwordconfirm" name="passwordconfirm" value="" class="input-medium {if $smarty.request.action eq "new"}required{/if} validate-password-confirm" maxlength="20"/>
+                        </div>
+                    </div>
+                <fieldset>
 
-                    <tr>
-                        <th scope="row">
-                            <label for="address">{t}Address:{/t}</label>
-                        </th>
-                        <td>
-                            <textarea id="address" name="address" cols=60>{$user->address}</textarea>
-                        </td>
-                    </tr>
+                <fieldset>
+                    <div class="control-group">
+                        <label for="name" class="control-label">{t}Name{/t}</label>
+                        <div class="controls">
+                            <input type="text" id="name" name="name" value="{$user->name|default:""}" class="input-xlarge required" maxlength="50"/>
+                        </div>
+                    </div>
 
-                    <tr>
-                        <th scope="row">
-                            <label for="phone">{t}Telephone:{/t}</label>
-                        </th>
-                        <td>
-                            <input type="text" id="phone" name="phone" class="validate-digits" value="{$user->phone}"  size="15"/>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div><!-- /basic -->
-            <div id="personal">
-                <table>
-                    <tbody>
-                        <tr>
-                            <th scope="row">
-                                <label for="login">{t}Login:{/t}</label>
-                            </th>
-                            <td>
-                                <input type="text" id="login" name="login"
-                                    value="{$user->login}" class="required"  size="14" maxlength="20" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">
-                                <label for="password">{t}Password:{/t}</label>
-                            </th>
-                            <td>
-                                <input type="password" id="password" name="password" size="20" autocomplete="off"
-                                    value="" class="{if $smarty.request.action eq "new"}required validate-password{/if}" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">
-                                <label for="passwordconfirm">{t}Re-enter password:{/t}</label>
-                            </th>
-                            <td>
-                                <input type="password" id="passwordconfirm" name="passwordconfirm" size="20"
-                                        value="" autocomplete="off" class="{if $smarty.request.action eq "new"}required{/if} validate-password-confirm" />
-                            </td>
-                        </tr>
+                    <div class="control-group">
+                        <label for="firstname" class="control-label">{t}Surname{/t}</label>
+                        <div class="controls">
+                            <input type="text" id="firstname" name="firstname" value="{$user->firstname|default:""}" class="input-xlarge required" maxlength="50"/>
+                        </div>
+                    </div>
 
-                        <tr>
-                            <th scope="row">
-                                <label for="sessionexpire">{t}Session expire time:{/t}</label>
-                            </th>
-                            <td>
-                                <input type="number" id="sessionexpire" name="sessionexpire"
-                                    value="{$user->sessionexpire|default:"15"}" class="required validate-digits" style="text-align:right" />
-                                <span>{t}minutes{/t}</span>
-                        </tr>
-
-                        <tr>
-                            <th scope="row">
-                                <label for="email">{t}Email adress:{/t}</label>
-                            </th>
-                            <td>
-                                <div class="input-prepend">
-                                    <span class="add-on">@</span><input class="span2" id="email" type="email" name="email" value="{$user->email}" class="required validate-email"  size="50">
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                    <div class="control-group">
+                        <label for="lastname" class="control-label">{t}Maiden surname{/t}</label>
+                        <div class="controls">
+                            <input type="text" id="lastname" name="lastname" value="{$user->lastname|default:""}" class="input-xlarge required" maxlength="50"/>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <div class="control-group">
+                        <label for="sessionexpire" class="control-label">{t}Session expire time:{/t}</label>
+                        <div class="controls">
+                            <input type="number" id="sessionexpire" name="sessionexpire" value="{$user->sessionexpire|default:"15"}" class="input-mini validate-digits" maxlength="20"/>
+                            <span>{t}minutes{/t}</span>
+                        </div>
+                    </div>
+                </fieldset>
             </div><!-- /personal -->
             <div id="privileges">
                 <table style="margin:1em;">
@@ -266,16 +159,13 @@ input[type="password"]{
                                         {/if}
                                     {/section}
                                 </select>
-
-                                <a href="javascript:void(0);" title="{t}Edit groups and privileges{/t}" id="show-user-group-modal">
-                                    <img src="{$params.IMAGE_DIR}users_edit.png" style="vertical-align: middle;" /></a>
                             </td>
                         </tr>
                         {/acl}
                         {acl isAllowed="USER_CATEGORY"}
                         <tr {if !is_null($user) && $user->id_user_group == 5}style="display:none"{/if}</tr>
                             <th scope="row">
-                                <label for="id_user_group">{t}Sections:{/t}</label>
+                                <label for="id_user_group">{t}Categories{/t}</label>
                             </th>
                             <td>
                                 <div id="comboAccessCategory">
@@ -313,9 +203,7 @@ input[type="password"]{
                     </tbody>
                 </table>
             </div><!-- /privileges -->
-
-    </div><!-- / -->
-		<input type="hidden" name="id" id="id" value="{$user->id}" />
+        </div>
     </div>
 </form>
 {/block}
