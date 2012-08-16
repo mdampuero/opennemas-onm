@@ -589,8 +589,7 @@ class Advertisement extends Content
                     && is_object($banner)
                     && property_exists($banner, 'type_medida')
                 ) {
-                    $ad = new Advertisement($id);
-                    $ad->unpublishIfMaxViewsReached();
+                    $banner->unpublishIfMaxViewsReached();
                 }
             }
         } else {
@@ -844,6 +843,7 @@ class Advertisement extends Content
                 }
             }
         }
+
         // Update numviews
         Advertisement::setNumViews($banners_selected);
     }
