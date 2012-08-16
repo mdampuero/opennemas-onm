@@ -22,7 +22,7 @@ use Onm\Settings as s,
 /**
  * Setup app
  */
-require_once 'bootstrap.php';
+require_once '../bootstrap.php';
 
 $r = new Restler();
 $r->setSupportedFormats('JsonFormat', 'XmlFormat');
@@ -35,4 +35,5 @@ $r->addAPIClass('Comments');
 $r->addAPIClass('Images');
 $r->addAPIClass('Videos');
 $r->addAPIClass('Categories');
+
 $r->handle();

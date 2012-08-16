@@ -41,7 +41,7 @@ foreach ($syncParams as $siteUrl => $categoriesToSync) {
 /**
  * Getting resolved Id
  */
-$opinionID = json_decode(file_get_contents($wsUrl.'/ws.php/contents/resolve/'.$dirtyID));
+$opinionID = json_decode(file_get_contents($wsUrl.'/ws/contents/resolve/'.$dirtyID));
 $tpl->assign('contentId',$opinionID); // Used on module_comments.tpl
 
 // Redirect if no action
@@ -58,9 +58,9 @@ switch($action) {
         // Content::setNumViews($opinionID);
 
         // Get category id correspondence with ws
-        $wsActualCategoryId = file_get_contents($wsUrl.'/ws.php/categories/id/'.$category_name );
+        $wsActualCategoryId = file_get_contents($wsUrl.'/ws/categories/id/'.$category_name );
         // Fetch information for Advertisements
-        $ads = json_decode(file_get_contents($wsUrl.'/ws.php/ads/opinion/'.$wsActualCategoryId));
+        $ads = json_decode(file_get_contents($wsUrl.'/ws/ads/opinion/'.$wsActualCategoryId));
 
         $intersticial = $ads[0];
         $banners = $ads[1];
@@ -75,7 +75,7 @@ switch($action) {
         }
 
         // Fetch and load opinion information
-        $ext = json_decode(file_get_contents($wsUrl.'/ws.php/articles/'.(int)$opinionID));
+        $ext = json_decode(file_get_contents($wsUrl.'/ws/articles/'.(int)$opinionID));
         $opinion = new Opinion();
         $opinion->load($ext);
 
@@ -88,7 +88,7 @@ switch($action) {
                 // Please SACAR esta broza de aqui {
                 $str = new StringUtils();
                 $title = $str->get_title($opinion->title);
-                $print_url = '/imprimir/' . $title. '/'. $opinion->pk_content . '.html';
+                $print_url = '/extimprimir/' . $title. '/'. $opinion->pk_content . '.html';
                 $tpl->assign('print_url', $print_url);
                 $tpl->assign('sendform_url', '/controllers/opinion_inner.php?action=sendform&opinion_id=' . $dirtyID );
                 // } Sacar broza

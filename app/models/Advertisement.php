@@ -792,7 +792,7 @@ class Advertisement extends Content
         } else {
             $objsArray = array();
             foreach ($pk_photos as $photo) {
-                $objsArray[] = json_decode(file_get_contents($wsUrl.'/ws.php/images/id/'.(int)$photo));
+                $objsArray[] = json_decode(file_get_contents($wsUrl.'/ws/images/id/'.(int)$photo));
             }
             foreach ($objsArray as $item) {
                 $content = new Advertisement();
