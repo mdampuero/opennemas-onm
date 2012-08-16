@@ -44,8 +44,8 @@ foreach ($syncParams as $siteUrl => $categoriesToSync) {
 /**
  * Getting resolved Id and category title
  */
-$articleID = json_decode(file_get_contents($wsUrl.'/ws.php/contents/resolve/'.$dirtyID));
-$actualCategoryTitle = json_decode(file_get_contents($wsUrl.'/ws.php/categories/title/'.$category_name));
+$articleID = json_decode(file_get_contents($wsUrl.'/ws/contents/resolve/'.$dirtyID));
+$actualCategoryTitle = json_decode(file_get_contents($wsUrl.'/ws/categories/title/'.$category_name));
 $tpl->assign('contentId', $articleID); // Used on module_comments.tpl
 $tpl->assign('actual_category_title', $actualCategoryTitle); // Used on module_comments.tpl
 
@@ -72,12 +72,12 @@ switch($action) {
         //Content::setNumViews($articleID);
 
         // Get category id correspondence with ws
-        $wsActualCategoryId = file_get_contents($wsUrl.'/ws.php/categories/id/'.$category_name);
+        $wsActualCategoryId = file_get_contents($wsUrl.'/ws/categories/id/'.$category_name);
 
         // Fetch information for Advertisements
         include_once 'article_advertisement.php';
         /*
-        $ads = json_decode(file_get_contents($wsUrl.'/ws.php/ads/article/'.$wsActualCategoryId));
+        $ads = json_decode(file_get_contents($wsUrl.'/ws/ads/article/'.$wsActualCategoryId));
 
         $intersticial = $ads[0];
         $banners = $ads[1];
@@ -97,7 +97,7 @@ switch($action) {
         if (($tpl->caching == 0) || !$tpl->isCached('article/article.tpl', $cacheID)) {
 
             // Fetch and load article information
-            $ext = json_decode(file_get_contents($wsUrl.'/ws.php/articles/'.(int)$articleID));
+            $ext = json_decode(file_get_contents($wsUrl.'/ws/articles/'.(int)$articleID));
             $article = new Article();
             $article->load($ext);
             $article->category_name = $category_name;
@@ -107,7 +107,7 @@ switch($action) {
             ) {
 
                 $title = StringUtils::get_title($article->title);
-                $printUrl = '/imprimir/'.$title.'/'.$category_name.'/ext/'.$dirtyID.'.html';
+                $printUrl = '/extimprimir/'.$title.'/'.$category_name.'/'.$dirtyID.'.html';
                 $sendMailUrl ='/controllers/article.php?action=sendform
                                              &article_id='.$dirtyID.
                                             '&category_name='.$category_name .
@@ -120,31 +120,31 @@ switch($action) {
 
                 // Get associated media code from Web service
                 if (isset($article->img2) && ($article->img2 != 0)) {
-                    $photoWs = json_decode(file_get_contents($wsUrl.'/ws.php/images/id/'.$article->img2));
+                    $photoWs = json_decode(file_get_contents($wsUrl.'/ws/images/id/'.$article->img2));
                     $photoInt = new Photo();
                     $photoInt->load($photoWs);
-                    $photoInt->media_url = json_decode(file_get_contents($wsUrl.'/ws.php/instances/mediaurl/'));
+                    $photoInt->media_url = json_decode(file_get_contents($wsUrl.'/ws/instances/mediaurl/'));
                     $tpl->assign('photoInt', $photoInt);
                 }
 
                 if (isset($article->fk_video2) && ($article->fk_video2 != 0)) {
-                    $videoWs = json_decode(file_get_contents($wsUrl.'/ws.php/videos/id/'.$article->fk_video2));
+                    $videoWs = json_decode(file_get_contents($wsUrl.'/ws/videos/id/'.$article->fk_video2));
                     $videoInt = new Video();
                     $videoInt->load($videoWs);
                     $tpl->assign('videoInt', $videoInt);
                 } else {
-                    $videoWs = json_decode(file_get_contents($wsUrl.'/ws.php/videos/category/'.$wsActualCategoryId));
+                    $videoWs = json_decode(file_get_contents($wsUrl.'/ws/videos/category/'.$wsActualCategoryId));
                     $videoInt = new Video();
                     $videoInt->load($videoWs);
                     $tpl->assign('videoInt', $videoInt);
                 }
 
                 // Get inner Related contents
-                $relatedContentsWs = json_decode(file_get_contents($wsUrl.'/ws.php/articles/lists/related-inner/'.$articleID));
+                $relatedContentsWs = json_decode(file_get_contents($wsUrl.'/ws/articles/lists/related-inner/'.$articleID));
 
                 $relatedContents = array();
                 foreach ($relatedContentsWs as $item) {
-                    $getContentUrl = $wsUrl.'/ws.php/contents/contenttype/'.(int)$item->fk_content_type;
+                    $getContentUrl = $wsUrl.'/ws/contents/contenttype/'.(int)$item->fk_content_type;
                     $contentType = file_get_contents($getContentUrl);
                     $contentType = str_replace('"', '', $contentType);
                     $content = new $contentType();
@@ -159,7 +159,7 @@ switch($action) {
                 $tpl->assign('relationed', $relatedContents);
 
                 // Get Machine suggested contents
-                $machineRelated = json_decode(file_get_contents($wsUrl.'/ws.php/articles/lists/machine-related/'.$articleID));
+                $machineRelated = json_decode(file_get_contents($wsUrl.'/ws/articles/lists/machine-related/'.$articleID));
 
                 $machineSuggestedContents = array();
                 foreach ($machineRelated as $content) {
@@ -255,9 +255,9 @@ switch($action) {
         if (!$tpl->isCached('article/article_printer.tpl', $cacheID)) {
 
             // Get cleaned article Id
-            $articleID = json_decode(file_get_contents($wsUrl.'/ws.php/contents/resolve/'.$dirtyID));
+            $articleID = json_decode(file_get_contents($wsUrl.'/ws/contents/resolve/'.$dirtyID));
             // Get article
-            $articleWs  = json_decode(file_get_contents($wsUrl.'/ws.php/articles/'.$articleID));
+            $articleWs  = json_decode(file_get_contents($wsUrl.'/ws/articles/'.$articleID));
             $article = new Article();
             $article->load($articleWs);
 
@@ -292,7 +292,7 @@ switch($action) {
 
             // Inner Photo
             if (isset($article->img2) && ($article->img2 != 0)) {
-                $photoWs = json_decode(file_get_contents($wsUrl.'/ws.php/images/id/'.$article->img2));
+                $photoWs = json_decode(file_get_contents($wsUrl.'/ws/images/id/'.$article->img2));
                 $photoInt = new Photo();
                 $photoInt->load($photoWs);
                 $tpl->assign('photoInt', $photoInt);

@@ -55,7 +55,7 @@ if (
         }
     }
 
-    $existsCategory =file_get_contents($wsUrl.'/ws.php/categories/exist/'.$category_name );
+    $existsCategory =file_get_contents($wsUrl.'/ws/categories/exist/'.$category_name );
 
     // If no home category name
     if ($category_name != 'home') {
@@ -78,11 +78,11 @@ if (
     ));
 
     // Get category id correspondence with ws
-    $wsActualCategoryId = file_get_contents($wsUrl.'/ws.php/categories/id/'.$category_name );
+    $wsActualCategoryId = file_get_contents($wsUrl.'/ws/categories/id/'.$category_name );
 
 /*
     // Fetch information for Advertisements from Web service
-    $ads = json_decode(file_get_contents($wsUrl.'/ws.php/ads/frontpage/'.$wsActualCategoryId));
+    $ads = json_decode(file_get_contents($wsUrl.'/ws/ads/frontpage/'.$wsActualCategoryId));
 
     $intersticial = $ads[0];
     $banners = $ads[1];
@@ -96,13 +96,13 @@ if (
         $advertisement->render(array($intersticial), $advertisement,$wsUrl);
     }
 */
-    $getContentsUrl = $wsUrl.'/ws.php/categories/allcontent/'.$wsActualCategoryId;
-    $allContentsInHomepage = json_decode(file_get_contents($getContentsUrl), true);
 
+    $getContentsUrl = $wsUrl.'/ws/categories/allcontent/'.$wsActualCategoryId;
+    $allContentsInHomepage = json_decode(file_get_contents($getContentsUrl), true);
 
     $contentsInHomepage = array();
     foreach ($allContentsInHomepage as $item) {
-        $getContentUrl = $wsUrl.'/ws.php/contents/contenttype/'.(int)$item['fk_content_type'];
+        $getContentUrl = $wsUrl.'/ws/contents/contenttype/'.(int)$item['fk_content_type'];
         $contentType = file_get_contents($getContentUrl);
         $contentType = str_replace('"', '', $contentType);
         $content = new $contentType();
@@ -118,9 +118,9 @@ if (
     $imageList = array();
     foreach ($contentsInHomepage as $content) {
         if (isset($content->img1) && $content->img1 != 0) {
-            $image = json_decode(file_get_contents($wsUrl.'/ws.php/images/id/'.(int)$content->img1));
+            $image = json_decode(file_get_contents($wsUrl.'/ws/images/id/'.(int)$content->img1));
             if (!empty($image)) {
-                $image->media_url = json_decode(file_get_contents($wsUrl.'/ws.php/instances/mediaurl/'));
+                $image->media_url = json_decode(file_get_contents($wsUrl.'/ws/instances/mediaurl/'));
                 $imageList []= $image;
             }
         }
@@ -158,12 +158,12 @@ if (
                 ->loadAttachedVideo();
 
         // Load related contents from ws
-        $relatedUrl = $wsUrl.'/ws.php/articles/lists/related/'.$content->id;
+        $relatedUrl = $wsUrl.'/ws/articles/lists/related/'.$content->id;
         $content->related_contents = json_decode(file_get_contents($relatedUrl));
 
 
         foreach ($content->related_contents as &$item) {
-            $getContentUrl = $wsUrl.'/ws.php/contents/contenttype/'.(int)$item->fk_content_type;
+            $getContentUrl = $wsUrl.'/ws/contents/contenttype/'.(int)$item->fk_content_type;
             $contentType = file_get_contents($getContentUrl);
             $contentType = str_replace('"', '', $contentType);
             $contentRelated = new $contentType();

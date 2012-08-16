@@ -94,7 +94,7 @@ switch($action) {
         $siteUrl = filter_input( INPUT_POST, 'site_url' , FILTER_VALIDATE_URL );
 
         if (isset($siteUrl) && !empty($siteUrl)) {
-            $connectionUrl = $siteUrl.'/ws.php/categories/lists.xml';
+            $connectionUrl = $siteUrl.'/ws/categories/lists.xml';
             $xmlString = @file_get_contents($connectionUrl);
             if ($xmlString) {
                 $categories = simplexml_load_string($xmlString);
@@ -118,7 +118,7 @@ switch($action) {
         $currentSiteUrl = filter_input( INPUT_GET, 'site_url' , FILTER_VALIDATE_URL );
 
         // Fetch all categories from site url
-        $connectionUrl = $currentSiteUrl.'/ws.php/categories/lists.xml';
+        $connectionUrl = $currentSiteUrl.'/ws/categories/lists.xml';
         $xmlString = file_get_contents($connectionUrl);
         $categories = simplexml_load_string($xmlString);
 

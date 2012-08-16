@@ -559,9 +559,9 @@ Options -Indexes
     RewriteRule ^opinion(|/.+)?/(.*)?/([0-9]+).html$ controllers/opinion_inner.php?opinion_id=$3&category_name=opinion&action=read&t=$1 [L,NC]
 
     #Articulos print Web Service
-    RewriteRule ^imprimir/[^/]+/([a-z0-9\-_]+)/([a-z0-9\-_]+)/ext/([0-9]+).html$ controllers/article_ws.php?action=print&article_id=$3&category_name=$1&subcategory_name=$2 [L,NC]
-    RewriteRule ^imprimir/[^/]+/([a-z0-9\-_]+)/ext/([0-9]+).html$ controllers/article_ws.php?action=print&article_id=$2&category_name=$1& [L,NC]
-    RewriteRule ^imprimir/[^/]+/ext/([0-9]+).html$ controllers/opinion_inner_ws.php?action=print&opinion_id=$1 [L,NC]
+    RewriteRule ^extimprimir/[^/]+/([a-z0-9\-_]+)/([a-z0-9\-_]+)/([0-9]+).html$ controllers/article_ws.php?action=print&article_id=$3&category_name=$1&subcategory_name=$2 [L,NC]
+    RewriteRule ^extimprimir/[^/]+/([a-z0-9\-_]+)/([0-9]+).html$ controllers/article_ws.php?action=print&article_id=$2&category_name=$1& [L,NC]
+    RewriteRule ^extimprimir/[^/]+/([0-9]+).html$ controllers/opinion_inner_ws.php?action=print&opinion_id=$1 [L,NC]
 
     #articulos print
     RewriteRule ^imprimir/[^/]+/([a-z0-9\-_]+)/([a-z0-9\-_]+)/([0-9]+).html$ controllers/article.php?action=print&article_id=$3&category_name=$1&subcategory_name=$2 [L,NC]
@@ -573,10 +573,10 @@ Options -Indexes
     RewriteRule ^home/?$ controllers/index.php?category_name=home [L,NC]
 
     #Sections external Web service
-    RewriteRule ^seccion/([a-z0-9\-]+)/ext/?$ controllers/index_ws.php?category_name=$1 [L,NC]
-    RewriteRule ^seccion/([a-z0-9\-]+)/([0-9]+)/ext/?$ controllers/index_ws.php?category_name=$1&page=$2 [L,NC]
-    RewriteRule ^seccion/([a-z0-9\-]+)/([a-z0-9\-]+)/ext/?$ controllers/index_ws.php?category_name=$1&subcategory_name=$2 [L,NC]
-    RewriteRule ^seccion/([a-z0-9\-]+)/([a-z0-9\-]+)/([0-9]+)/ext/?$ controllers/index_ws.php?category_name=$1&subcategory_name=$2&page=$3 [L,NC]
+    RewriteRule ^extseccion/([a-z0-9\-]+)/?$ controllers/index_ws.php?category_name=$1 [L,NC]
+    RewriteRule ^extseccion/([a-z0-9\-]+)/([0-9]+)/?$ controllers/index_ws.php?category_name=$1&page=$2 [L,NC]
+    RewriteRule ^extseccion/([a-z0-9\-]+)/([a-z0-9\-]+)/?$ controllers/index_ws.php?category_name=$1&subcategory_name=$2 [L,NC]
+    RewriteRule ^extseccion/([a-z0-9\-]+)/([a-z0-9\-]+)/([0-9]+)/?$ controllers/index_ws.php?category_name=$1&subcategory_name=$2&page=$3 [L,NC]
 
     #Sections
     RewriteRule ^seccion/([a-z0-9\-]+)/?$ controllers/index.php?category_name=$1 [L,NC]
