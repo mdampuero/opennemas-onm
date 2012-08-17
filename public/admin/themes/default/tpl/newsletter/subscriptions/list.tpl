@@ -1,61 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-    {css_tag href="/admin.css"}
-{/block}
-
-{block name="footer-js" append}
-    {script_tag src="/switcher_flag.js"}
-    <script type="text/javascript">
-    /* <![CDATA[ */
-    /* Utils filter functions */
-    function paginate(page) {
-        $('filters_page').value = page;
-        $('formulario').submit();
-    }
-
-    function filterList() {
-        $('filters_page').value = '1';
-
-        $('action').value='list';
-        $('formulario').submit();
-    }
-
-    /* Init list actions */
-    $('gridUsers').select('a.newsletterFlag').each(function(item){
-        new SwitcherFlag(item);
-    });
-
-    document.observe('dom:loaded', function() {
-
-        $$('a.subscribe').each(function(lnk) {
-            lnk.observe('click', function() {
-                var frm = $('formulario');
-                $('action').value = 'msubscribe';
-                frm.submit();
-            });
-        });
-
-        $$('a.unsubscribe').each(function(lnk) {
-            lnk.observe('click', function() {
-                var frm = $('formulario');
-                $('action').value = 'munsubscribe';
-                frm.submit();
-            });
-        });
-
-        $$('a.mdelete').each(function(lnk) {
-            lnk.observe('click', function() {
-                var frm = $('formulario');
-                $('action').value = 'mdelete';
-                frm.submit();
-            });
-        });
-    });
-    /* ]]> */
-    </script>
-{/block}
-
 {block name="content"}
 <form action="{url name=admin_newsletter_subscriptors}" name="formulario" id="formulario">
     <div class="top-action-bar clearfix">
@@ -63,39 +7,39 @@
             <div class="title"><h2>{t}Newsletter Subscriptions{/t}</h2></div>
             <ul class="old-button">
                 <li>
-                    <a href="#" class="admin_add mdelete" id="submit_mult" title="Eliminar">
-                        <img src="{$params.IMAGE_DIR}trash.png" title="Eliminar" alt="Eliminar"><br />
-                        {t}Delete{/t}
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="admin_add unsubscribe" accesskey="U">
-                        <img class="icon" src="{$params.IMAGE_DIR}subscription_0.png"
-                             title="Desuscribir seleccionados" alt="Desuscribir seleccionados" height="50" /><br />
-                        {t}Unsubscribe{/t}
-                    </a>
-                </li>
-
-                <li>
-                    <a href="#" class="admin_add subscribe" accesskey="S">
-                        <img class="icon" src="{$params.IMAGE_DIR}subscription_1.png"
-                             title="Suscribir seleccionados" alt="Suscribir seleccionados" height="50" /><br />
-                        {t}Subscribe{/t}
-                    </a>
-                </li>
-
-                <li class="separator"></li>
-                <li>
-                    <a href="{url name=admin_newsletter_subscription_create}" class="admin_add" accesskey="N">
+                    <a href="{url name=admin_newsletter_subscriptor_create}" class="admin_add" accesskey="N">
                         <img src="{$params.IMAGE_DIR}authors_add.png" title="Nuevo Usuario" alt="Nuevo Usuario"><br />
                         {t}New{/t}
                     </a>
                 </li>
                 <li class="separator"></li>
                 <li>
+                    <button class="admin_add batchDeleteButton" accesskey="d">
+                        <img src="{$params.IMAGE_DIR}trash.png" alt="{t}Delete{/t}"><br />
+                        {t}Delete{/t}
+                    </button>
+                </li>
+                <li>
+                    <button data-subscribe="0" class="batchSubscribeButton">
+                        <img class="icon" src="{$params.IMAGE_DIR}subscription_0.png"
+                             title="Desuscribir seleccionados" alt="Desuscribir seleccionados" height="50" /><br />
+                        {t}Unsubscribe{/t}
+                    </button>
+                </li>
+
+                <li>
+                    <button data-subscribe="1" class="batchSubscribeButton">
+                        <img class="icon" src="{$params.IMAGE_DIR}subscription_1.png"
+                             title="Suscribir seleccionados" alt="Suscribir seleccionados" height="50" /><br />
+                        {t}Subscribe{/t}
+                    </button>
+                </li>
+
+                <li class="separator"></li>
+                <li>
                     <a href="{url name=admin_newsletters}" title="Cancelar">
                         <img src="{$params.IMAGE_DIR}previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />
-                        {t}Newsletter{/t}
+                        {t}Newsletters{/t}
                     </a>
                 </li>
             </ul>
@@ -128,7 +72,7 @@
         <table class="listing-table">
             <thead>
                 <tr>
-                    <th style="width:10px"><input type="checkbox" class="minput" id="toggleallcheckbox" name="cid[]" value="" style="cursor:pointer;" /></th>
+                    <th style="width:10px"><input type="checkbox" id="toggleallcheckbox" style="cursor:pointer;" /></th>
                     <th>{t}Name{/t}</th>
                     <th>{t}Email{/t}</th>
                     <th class="center">{t}Status{/t}</th>
@@ -179,7 +123,11 @@
                             <a href="{url name=admin_newsletter_subscriptor_show id=$user->id}" title="{t}Edit user{/t}" class="btn">
                                 <i class="icon-pencil"></i>
                             </a>
-                            <a href ="{url name=admin_newsletter_subscriptor_delete id=$user->id}" class="btn btn-danger" title="{t}Delete user{/t}">
+                            <a  href ="{url name=admin_newsletter_subscriptor_delete id=$user->id}"
+                                class="del btn btn-danger"
+                                data-title="{$user->email}"
+                                data-url="{url name=admin_newsletter_subscriptor_delete id=$user->id}"
+                                title="{t}Delete user{/t}">
                                 <i class="icon-white icon-trash"></i>
                             </a>
                         </div>
@@ -201,5 +149,11 @@
             </tfoot>
         </table>
     </div>
+    <input type="hidden" id="subscribe" name="subscribe" value="">
 </form>
+
+{include file="newsletter/subscriptions/modals/_modalDelete.tpl"}
+{include file="newsletter/subscriptions/modals/_modalBatchDelete.tpl"}
+{include file="newsletter/subscriptions/modals/_modalBatchSubscribe.tpl"}
+{include file="newsletter/subscriptions/modals/_modalAccept.tpl"}
 {/block}

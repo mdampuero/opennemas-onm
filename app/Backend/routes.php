@@ -1681,6 +1681,24 @@ $adminRoutes->add(
     '/admin'
 );
 
+$adminRoutes->add(
+    'admin_newsletter_subscriptor_batch_delete',
+    new Route(
+        '/newsletters/subscriptors/batch-delete',
+        array('_controller' => 'Backend:Controllers:NewsletterSubscriptorsController:batchDelete')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_newsletter_subscriptors_batch_subscribe',
+    new Route(
+        '/newsletters/subscriptors/batch-subscribe',
+        array('_controller' => 'Backend:Controllers:NewsletterSubscriptorsController:batchSubscribe')
+    ),
+    '/admin'
+);
+
 // Keywork controller routes
 $adminRoutes->add(
     'admin_keyword',
@@ -2351,7 +2369,7 @@ $adminRoutes->add(
 $adminRoutes->add(
     'admin_importer_efe_pickcategory',
     new Route(
-        '/importer/europapress/{id}/import/pickcategory',
+        '/importer/europapress/{id}/pickcategory',
         array('_controller' => 'Backend:Controllers:ImporterEfeController:selectCategoryWhereToImport')
     ),
     '/admin'
@@ -2383,7 +2401,6 @@ $adminRoutes->add(
     ),
     '/admin'
 );
-
 
 // Template cache controller routes
 $adminRoutes->add(
@@ -2479,19 +2496,19 @@ $adminRoutes->add(
 );
 
 $adminRoutes->add(
-    'admin_acl_user_show',
+    'admin_acl_user_create',
     new Route(
-        '/acl/user/{id}/show',
-        array('_controller' => 'Backend:Controllers:AclUserController:show')
+        '/acl/user/create',
+        array('_controller' => 'Backend:Controllers:AclUserController:create')
     ),
     '/admin'
 );
 
 $adminRoutes->add(
-    'admin_acl_user_create',
+    'admin_acl_user_show',
     new Route(
-        '/acl/user/create',
-        array('_controller' => 'Backend:Controllers:AclUserController:create')
+        '/acl/user/{id}/show',
+        array('_controller' => 'Backend:Controllers:AclUserController:show')
     ),
     '/admin'
 );
@@ -2554,7 +2571,7 @@ $adminRoutes->add(
 $adminRoutes->add(
     'admin_acl_privileges_create',
     new Route(
-        '/acl/privileges/create',
+        '/acl/privilege/create',
         array('_controller' => 'Backend:Controllers:AclPrivilegesController:create')
     ),
     '/admin'
@@ -2563,7 +2580,7 @@ $adminRoutes->add(
 $adminRoutes->add(
     'admin_acl_privileges_update',
     new Route(
-        '/acl/privileges/{id}/update',
+        '/acl/privilege/{id}/update',
         array('_controller' => 'Backend:Controllers:AclPrivilegesController:update')
     ),
     '/admin'
@@ -2572,7 +2589,7 @@ $adminRoutes->add(
 $adminRoutes->add(
     'admin_acl_privileges_delete',
     new Route(
-        '/acl/privileges/{id}/delete',
+        '/acl/privilege/{id}/delete',
         array('_controller' => 'Backend:Controllers:AclPrivilegesController:delete')
     ),
     '/admin'
@@ -2591,7 +2608,7 @@ $adminRoutes->add(
 $adminRoutes->add(
     'admin_acl_usergroups_show',
     new Route(
-        '/acl/usergroups/show/{id}',
+        '/acl/usergroup/{id}/show',
         array('_controller' => 'Backend:Controllers:AclUserGroupsController:show')
     ),
     '/admin'
@@ -2600,7 +2617,7 @@ $adminRoutes->add(
 $adminRoutes->add(
     'admin_acl_usergroups_create',
     new Route(
-        '/acl/usergroups/create',
+        '/acl/usergroup/create',
         array('_controller' => 'Backend:Controllers:AclUserGroupsController:create')
     ),
     '/admin'
@@ -2609,7 +2626,7 @@ $adminRoutes->add(
 $adminRoutes->add(
     'admin_acl_usergroups_update',
     new Route(
-        '/acl/usergroups/{id}/update',
+        '/acl/usergroup/{id}/update',
         array('_controller' => 'Backend:Controllers:AclUserGroupsController:update')
     ),
     '/admin'
@@ -2618,31 +2635,12 @@ $adminRoutes->add(
 $adminRoutes->add(
     'admin_acl_usergroups_delete',
     new Route(
-        '/acl/usergroups/{id}/delete',
+        '/acl/usergroup/{id}/delete',
         array('_controller' => 'Backend:Controllers:AclUserGroupsController:delete')
     ),
     '/admin'
 );
 
-
-$adminRoutes->add(
-    'admin_system_settings',
-    new Route(
-        '/system/settings',
-        array('_controller' => 'Backend:Controllers:SystemSettingsController:default')
-    ),
-    '/admin'
-);
-
-$adminRoutes->add(
-    'admin_system_settings_save',
-    new Route(
-        '/system/settings/save',
-        array('_controller' => 'Backend:Controllers:SystemSettingsController:save'),
-        array('_method' => 'POST')
-    ),
-    '/admin'
-);
 
 $adminRoutes->add(
     'admin_system_settings',

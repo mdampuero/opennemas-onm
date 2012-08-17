@@ -241,8 +241,9 @@ class Subscriptor
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
+        return true;
     }
 
     public function set_status($id, $status)

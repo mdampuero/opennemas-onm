@@ -201,7 +201,10 @@ class NewsletterSubscriptorsController extends Controller
             m::add(sprintf(_('Subscritor with id "%d" deleted sucessfully'), $id));
         }
 
-        return $this->redirect($this->generateUrl('admin_newsletter_subscriptors'));
+        if (!$request->isXmlHttpRequest()) {
+
+            return $this->redirect($this->generateUrl('admin_newsletter_subscriptors'));
+        }
     }
 
     /**
@@ -240,6 +243,68 @@ class NewsletterSubscriptorsController extends Controller
 
         $status = ($user->status == 2) ? 3: 2;
         $user->set_status($id, $status);
+
+        return $this->redirect($this->generateUrl('admin_newsletter_subscriptors'));
+    }
+
+    /**
+     * Deletes multiple subscriptors at once given its ids
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function batchDeleteAction(Request $request)
+    {
+        $ids = $request->query->get('cid');
+
+        if (is_array($ids) && count($ids) > 0) {
+            $user = new \Subscriptor();
+            $count = 0;
+            foreach ($ids as $id) {
+                if ($user->delete($id)) {
+                    $count++;
+                } else {
+                    m::add(sprintf(_('Unable to delete the subscriptor with the id %d.'), $id), m::ERROR);
+                }
+            }
+
+            m::add(sprintf(_('Successfully deleted %d subscriptors.'), $count), m::SUCCESS);
+        } else {
+            m::add(_('Please specify a subscriptor id for delete it.'), m::ERROR);
+        }
+
+        return $this->redirect($this->generateUrl('admin_newsletter_subscriptors'));
+    }
+
+    /**
+     * Deletes multiple subscriptors at once given its ids
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function batchSubscribeAction(Request $request)
+    {
+        $ids = $request->query->get('cid');
+        $state = $request->query->getDigits('subscribe', 1);
+
+        if (is_array($ids) && count($ids) > 0) {
+            $user = new \Subscriptor();
+
+            foreach ($ids as $id) {
+                $data[] = array(
+                    'id'    => $id,
+                    'value' => $state
+                );
+            }
+
+            $user->mUpdateProperty($data, 'subscription');
+
+            m::add(sprintf(_('Successfully changed subscribed state for %d subscriptors.'), count($ids)), m::SUCCESS);
+        } else {
+            m::add(_('Please specify a subscriptor id for change its subscribed state it.'), m::ERROR);
+        }
 
         return $this->redirect($this->generateUrl('admin_newsletter_subscriptors'));
     }

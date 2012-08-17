@@ -49,6 +49,8 @@
 
     <div class="wrapper-content">
 
+        {render_messages}
+
         <div class="form-horizontal panel">
             <fieldset>
                 <div class="control-group">
