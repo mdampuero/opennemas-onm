@@ -26,13 +26,6 @@ function makeContentProviderAndPlaceholdersSortable () {
     }).disableSelection();
 }
 
-jQuery.fn.flash = function( color, duration )
-{
-    var current = this.css( 'color' );
-    this.animate( { color: 'rgb(' + color + ')' }, duration / 2 );
-    this.animate( { color: current }, duration / 2 );
-};
-
 function get_tooltip_content (elem) {
     var parent_content_div = elem.closest('div.content-provider-element');
     var content_html = '';
