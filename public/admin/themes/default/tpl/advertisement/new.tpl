@@ -262,15 +262,6 @@ input, select, textarea {
 
                 <div id="div_script" style="display:{if isset($advertisement) && $advertisement->with_script ==1}block{else}none{/if};">
                     <textarea name="script" id="script" class="validate-script" title="script de publicidad" style="width:99%; height:8em;">{$advertisement->script|default:'&lt;script type="text/javascript"&gt;/* Código javascript */&lt;/script&gt;'}</textarea>
-
-                    <div style="width:40%; float:left; ">
-                        <label style="display:inline-block">{t}GeoIP JS snippets{/t}</label>
-                        <span id="geoip_select"></span>
-                        {script_tag src="/GeoipHelper.js" charset="utf-8"}
-                        <script type="text/javascript">
-                            new GeoipHelper('geoip_select', 'script');
-                        </script>
-                    </div>
                 </div>
 
             </fieldset>

@@ -1,6 +1,4 @@
-
 //Mensajes alerta para contenedores de noticias.
-
 getGalleryImages = function(action, category, metadatas, page) {
     if (metadatas === 0){
 		action = 'listByCategory';
