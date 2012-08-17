@@ -4,7 +4,6 @@
     {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
     {script_tag src="/jquery/jquery-ui-sliderAccess.js"}
     {script_tag src="/onm/jquery.datepicker.js"}
-    {script_tag src="/utilsadvertisement.js"}
     {script_tag src="/AdPosition.js"}
     {script_tag src="/swfobject.js"}
 {/block}
