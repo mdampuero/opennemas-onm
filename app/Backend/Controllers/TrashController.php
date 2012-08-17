@@ -34,7 +34,7 @@ class TrashController extends Controller
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
 
         $this->filterContentType = $this->request->query->get('mytype', 'article');
-        $this->page              = $this->request->query->getDigits('page', 0);
+        $this->page              = $this->request->query->getDigits('page', 1);
     }
     /**
      * Description of the action
