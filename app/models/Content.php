@@ -560,10 +560,15 @@ class Content
      *
      * @return boolean true if it was changed successfully
      **/
-    public function toggleAvailable($id)
+    public function toggleAvailable($id = null)
     {
-        $sql = 'UPDATE `contents` SET `available` = (`available` + 1) % 2 '
-             . 'WHERE `pk_content`=?';
+        if ($id == null) {
+            $id = $this->id;
+        }
+        $sql = 'UPDATE `contents` '
+               .'SET `available` = (`available` + 1) % 2, '
+                    .'`content_status` = (`content_status` + 1) % 2 '
+               . 'WHERE `pk_content`=?';
 
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
         if ($rs === false) {
@@ -781,7 +786,7 @@ class Content
         /* Notice log of this action */
         Application::logContentEvent(__METHOD__, $this);
 
-        // Set status for it's updated to next event
+        // Set status for it's updated state to next event
         $this->available = 0;
 
         $GLOBALS['application']->dispatch('onAfterAvailable', $this);
@@ -875,7 +880,7 @@ class Content
 
         $GLOBALS['application']->dispatch('onBeforeArchived', $this);
 
-        $sql = 'UPDATE contents SET `content_status`=0, `available`= 1, `frontpage` =0, '
+        $sql = 'UPDATE contents SET `content_status`=1, `available`= 1, `frontpage` =0, '
              . '`fk_user_last_editor`=?, `changed`=? WHERE `pk_content`=?';
         $stmt = $GLOBALS['application']->conn->Prepare($sql);
 
