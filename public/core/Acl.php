@@ -14,7 +14,6 @@ use Onm\Message as m;
  *
  * @package    Onm
  * @subpackage Acl
- * @version    $Id: PrivilegesCheck.class.php 1 2010-10-07 17:44:01Z Fran Dieguez $
  */
 class Acl
 {

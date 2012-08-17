@@ -84,7 +84,7 @@ class NewsletterManager
     }
 
     /**
-     * Send mail to all users
+     * Send mail to a given mailbox
      *
      * @param string $mailbox     the email addresses to send the mail to
      * @param string $htmlcontent the html content for the mail

@@ -22,16 +22,6 @@ loadGalleryImages = function(action, category, metadatas, page, div) {
     );
 };
 
-onGalleryKeyEnter = function(e, category, metadatas, page, div)
-{
-    eKey = (document.all) ? e.keyCode : e.which;
-    if (eKey==13)
-    {
-        loadGalleryImages('listByMetadatas', category, metadatas, page, div);
-    }
-};
-
-
 onImageKeyEnter = function(e, category, metadatas, page)
 {
     eKey = (document.all) ? e.keyCode : e.which;
@@ -52,13 +42,4 @@ function getGalleryVideos(action, category, metadatas, page, div)
         "/admin/controllers/video/videoGallery.php?action="+action+"&page="+page+"&category="+category+"&metadatas="+metadatas,
         { evalScripts: true }
     );
-}
-
-function onVideoKeyEnter(e, category, metadatas, page)
-{
-    ekey = (document.all) ? e.keyCode : e.which;
-    if (ekey==13)
-    {
-        getGalleryVideos('listByMetadatas',category, metadatas, page);
-    }
 }
