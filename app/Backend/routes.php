@@ -14,6 +14,86 @@ use Symfony\Component\Routing\RouteCollection;
 $routes = new RouteCollection();
 
 $adminRoutes = new RouteCollection();
+
+// Common content management routes
+$adminRoutes->add(
+    'admin_content_set_available',
+    new Route(
+        '/content/set-available',
+        array(
+            '_controller' => 'Backend:Controllers:ContentController:setAvailable',
+        )
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_content_set_draft',
+    new Route(
+        '/content/set-draft',
+        array(
+            '_controller' => 'Backend:Controllers:ContentController:setDraft',
+        )
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_content_toggle_available',
+    new Route(
+        '/content/toggle-available',
+        array(
+            '_controller' => 'Backend:Controllers:ContentController:toggleAvailable',
+        )
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_content_set_archived',
+    new Route(
+        '/content/set-archived',
+        array(
+            '_controller' => 'Backend:Controllers:ContentController:setArchived',
+        )
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_content_toggle_suggested',
+    new Route(
+        '/content/toggle-suggested',
+        array(
+            '_controller' => 'Backend:Controllers:ContentController:toggleSuggested',
+        )
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_content_quick_info',
+    new Route(
+        '/content/quick-info',
+        array(
+            '_controller' => 'Backend:Controllers:ContentController:quickInfo',
+        )
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_content_send_to_trash',
+    new Route(
+        '/content/send-to-trash',
+        array(
+            '_controller' => 'Backend:Controllers:ContentController:sendToTrash',
+        )
+    ),
+    '/admin'
+);
+
+
 // Frontpage management routes
 $adminRoutes->add(
     'admin_frontpage_list',
