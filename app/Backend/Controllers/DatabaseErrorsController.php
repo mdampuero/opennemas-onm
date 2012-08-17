@@ -32,11 +32,6 @@ class DatabaseErrorsController extends Controller
      **/
     public function init()
     {
-        if (!\Acl::isMaster()) {
-            m::add("You don't have permissions");
-            Application::forward('/admin/');
-        }
-
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
     }
 
@@ -48,6 +43,11 @@ class DatabaseErrorsController extends Controller
      **/
     public function defaultAction()
     {
+        if (!\Acl::isMaster()) {
+            m::add("You don't have permissions");
+            return $this->redirect($this->generateUrl('admin_welcome'));
+        }
+
         $cm = new \ContentManager();
 
         $page = filter_input(
@@ -115,6 +115,11 @@ class DatabaseErrorsController extends Controller
      **/
     public function purgeAction()
     {
+        if (!\Acl::isMaster()) {
+            m::add("You don't have permissions");
+            return $this->redirect($this->generateUrl('admin_welcome'));
+        }
+
         $sql = "TRUNCATE TABLE `adodb_logsql`";
 
         $rs = $GLOBALS['application']->conn->Execute($sql);

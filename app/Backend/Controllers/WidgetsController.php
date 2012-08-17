@@ -27,7 +27,6 @@ class WidgetsController extends Controller
      * Common code for all the actions
      *
      * @return void
-     * @author
      **/
     public function init()
     {
@@ -39,10 +38,8 @@ class WidgetsController extends Controller
      *
      * @return Response the response object
      **/
-    public function listAction()
+    public function listAction(Request $request)
     {
-        $request = $this->get('request');
-
         $page = $request->query->getDigits('page', 1);
         $itemsPerPage = s::get('items_per_page', 20);
 
@@ -83,11 +80,9 @@ class WidgetsController extends Controller
      *
      * @return Response the response object
      **/
-    public function showAction()
+    public function showAction(Request $request)
     {
-        $request = $this->get('request');
-
-        $id = $request->query->getDigits('id');
+        $id   = $request->query->getDigits('id');
         $page = $request->query->getDigits('page', 1);
         // Need category to redirect to frontpage manager
         $category = $request->query->get('category', 'home');
@@ -118,11 +113,9 @@ class WidgetsController extends Controller
      *
      * @return Response the response object
      **/
-    public function deleteAction()
+    public function deleteAction(Request $request)
     {
-        $request = $this->get('request');
-
-        $id = $request->query->getDigits('id');
+        $id   = $request->query->getDigits('id');
         $page = $request->query->getDigits('page', 1);
 
         $widget = new \Widget();
@@ -136,20 +129,20 @@ class WidgetsController extends Controller
      *
      * @return Response the response object
      **/
-    public function createAction()
+    public function createAction(Request $request)
     {
-        if ('POST' == $this->request->getMethod()) {
-            $request = $this->request->request;
+        if ('POST' == $request->getMethod()) {
+            $post = $request->request;
 
             $widgetData = array(
-                'id'          => $request->getDigits('id'),
-                'action'      => $request->filter('action', null, FILTER_SANITIZE_STRING),
-                'title'       => $request->filter('title', null, FILTER_SANITIZE_STRING),
-                'available'   => $request->filter('available', null, FILTER_SANITIZE_STRING),
-                'renderlet'   => $request->filter('renderlet', null, FILTER_SANITIZE_STRING),
-                'metadata'    => $request->filter('metadata', null, FILTER_SANITIZE_STRING),
-                'description' => $request->filter('description', null, FILTER_SANITIZE_STRING),
-                'content'     => $request->filter('content', null, FILTER_SANITIZE_STRING),
+                'id'          => $post->getDigits('id'),
+                'action'      => $post->filter('action', null, FILTER_SANITIZE_STRING),
+                'title'       => $post->filter('title', null, FILTER_SANITIZE_STRING),
+                'available'   => $post->filter('available', null, FILTER_SANITIZE_STRING),
+                'renderlet'   => $post->filter('renderlet', null, FILTER_SANITIZE_STRING),
+                'metadata'    => $post->filter('metadata', null, FILTER_SANITIZE_STRING),
+                'description' => $post->filter('description', null, FILTER_SANITIZE_STRING),
+                'content'     => $post->filter('content', null, FILTER_SANITIZE_STRING),
             );
 
             try {
@@ -159,17 +152,6 @@ class WidgetsController extends Controller
                 m::add($e->getMessage(), m::ERROR);
 
                 return $this->redirect($this->generateUrl('admin_widget_create'));
-            }
-
-            // TODO: Fix this logic for redirection
-            if (isset($_SESSION['desde'])) {
-                if ($_SESSION['desde'] == 'list') {
-                    Application::forward('/admin/controllers/frontpagemanager/frontpagemanager.php?action='.$_SESSION['desde'].'&category='.$_SESSION['categoria']);
-                } elseif ($_SESSION['desde'] == 'widget') {
-                    Application::forward('?action=list');
-                } elseif ($_SESSION['desde'] == 'search_advanced') {
-                    Application::forward('/admin/controllers/search_advanced/search_advanced.php');
-                }
             }
 
             m::add(_('Widget created successfully.'), m::SUCCESS);
@@ -191,22 +173,22 @@ class WidgetsController extends Controller
      *
      * @return Response the response object
      **/
-    public function updateAction()
+    public function updateAction(Request $request)
     {
-        $request = $this->request->request;
-        $page = $this->request->query->getDigits('page', 1);
+        $post = $request->request;
+        $page = $request->query->getDigits('page', 1);
         // Need category to redirect to frontpage manager
-        $category = $this->request->query->get('category', null);
+        $category = $request->query->get('category', null);
 
         $widgetData = array(
-            'id'          => $request->getDigits('id'),
-            'action'      => $request->filter('action', null, FILTER_SANITIZE_STRING),
-            'title'       => $request->filter('title', null, FILTER_SANITIZE_STRING),
-            'available'   => $request->filter('available', null, FILTER_SANITIZE_STRING),
-            'renderlet'   => $request->filter('renderlet', null, FILTER_SANITIZE_STRING),
-            'metadata'    => $request->filter('metadata', null, FILTER_SANITIZE_STRING),
-            'description' => $request->filter('description', null, FILTER_SANITIZE_STRING),
-            'content'     => $request->filter('content', null, FILTER_SANITIZE_STRING),
+            'id'          => $post->getDigits('id'),
+            'action'      => $post->filter('action', null, FILTER_SANITIZE_STRING),
+            'title'       => $post->filter('title', null, FILTER_SANITIZE_STRING),
+            'available'   => $post->filter('available', null, FILTER_SANITIZE_STRING),
+            'renderlet'   => $post->filter('renderlet', null, FILTER_SANITIZE_STRING),
+            'metadata'    => $post->filter('metadata', null, FILTER_SANITIZE_STRING),
+            'description' => $post->filter('description', null, FILTER_SANITIZE_STRING),
+            'content'     => $post->filter('content', null, FILTER_SANITIZE_STRING),
         );
 
         $widget = new \Widget();
@@ -240,10 +222,8 @@ class WidgetsController extends Controller
      *
      * @return Response the response object
      **/
-    public function toogleAvailableAction()
+    public function toogleAvailableAction(Request $request)
     {
-        $request = $this->get('request');
-
         $id = $request->query->getDigits('id');
         $page = $request->query->getDigits('page', 1);
 
@@ -270,14 +250,15 @@ class WidgetsController extends Controller
      *
      * @return Response the response object
      **/
-    public function contentProviderAction()
+    public function contentProviderAction(Request $request)
     {
-        $request      = $this->get('request');
         $category     = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
         $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = 8;
 
-        if ($category == 'home') { $category = 0; }
+        if ($category == 'home') {
+            $category = 0;
+        }
 
         $cm = new  \ContentManager();
 
