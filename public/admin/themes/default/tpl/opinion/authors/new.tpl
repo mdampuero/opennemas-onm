@@ -54,7 +54,7 @@
                 <div class="controls">
                     <input type="text" id="name" name="name" value="{$author->name|default:""}" class="input-xlarge"/>
                 </div>
-             </div>
+            </div>
 
             <div class="control-group">
                 <label for="condition" class="control-label">{t}Condition{/t}</label>

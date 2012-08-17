@@ -1627,7 +1627,59 @@ $adminRoutes->add(
     '/admin'
 );
 
+$adminRoutes->add(
+    'admin_newsletter_subscriptor_create',
+    new Route(
+        '/newsletters/subscriptor/create',
+        array('_controller' => 'Backend:Controllers:NewsletterSubscriptorsController:create')
+    ),
+    '/admin'
+);
 
+$adminRoutes->add(
+    'admin_newsletter_subscriptor_show',
+    new Route(
+        '/newsletters/subscriptor/{id}/show',
+        array('_controller' => 'Backend:Controllers:NewsletterSubscriptorsController:show')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_newsletter_subscriptor_update',
+    new Route(
+        '/newsletters/subscriptor/{id}/update',
+        array('_controller' => 'Backend:Controllers:NewsletterSubscriptorsController:update')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_newsletter_subscriptor_delete',
+    new Route(
+        '/newsletters/subscriptor/{id}/delete',
+        array('_controller' => 'Backend:Controllers:NewsletterSubscriptorsController:delete')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_newsletter_subscriptor_toggle_subscription',
+    new Route(
+        '/newsletters/subscriptor/{id}/toggle-subscription',
+        array('_controller' => 'Backend:Controllers:NewsletterSubscriptorsController:toggleSubscription')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_newsletter_subscriptor_toggle_activated',
+    new Route(
+        '/newsletters/subscriptor/{id}/toggle-activated',
+        array('_controller' => 'Backend:Controllers:NewsletterSubscriptorsController:toggleActivated')
+    ),
+    '/admin'
+);
 
 // Keywork controller routes
 $adminRoutes->add(

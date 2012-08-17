@@ -131,7 +131,7 @@ jQuery(document).ready(function($){
                         <option value="create_subscriptor" {if $configs['newsletter_subscriptionType'] eq 'create_subscriptor'} selected {/if}>{t}Manage newsletter by subscriptors table{/t}</option>
                     </select>
                     <div class="help-block">
-                        {t escape=off}You can choose to receive new subscriptions with a checking email or using the <a href="/admin/controllers/newsletter/subscriptors.php?action=list" target="_blank">table of subscribers of the application</a>.
+                        {t escape=off}You can choose to receive new subscriptions with a checking email or using the <a href="{url name=admin_newsletter_subscriptions}" target="_blank">table of subscribers of the application</a>.
                         </br>If you choose email subscription, you must enter the address on a field that will appear{/t}
                     </div>
                 </div>

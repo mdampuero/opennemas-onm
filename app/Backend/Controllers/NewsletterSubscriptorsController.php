@@ -1,0 +1,279 @@
+<?php
+/**
+ * This file is part of the Onm package.
+ *
+ * (c)  OpenHost S.L. <developers@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ **/
+namespace Backend\Controllers;
+
+use Symfony\Component\HttpFoundation\Request;
+use Onm\Framework\Controller\Controller;
+use Onm\Message as m;
+use Onm\Settings as s;
+
+/**
+ * Handles the actions for the newsletter subscriptors
+ *
+ * @package Backend_Controllers
+ **/
+class NewsletterSubscriptorsController extends Controller
+{
+    /**
+     * Common code for all the actions
+     *
+     * @return void
+     **/
+    public function init()
+    {
+        $this->checkAclOrForward('NEWSLETTER_ADMIN');
+
+        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
+    }
+
+    /**
+     * Description of the action
+     *
+     * @return Response the response object
+     **/
+    public function listAction(Request $request)
+    {
+        $filters = $request->query->get('filters');
+        $page = $request->query->getDigits('page', 1);
+        list($where, $orderBy) = $this->buildFilter($filters);
+        $itemsPerPage = 40;
+
+        $user = new \Subscriptor();
+        $users = $user->get_users($where, ($itemsPerPage*($page-1)) . ',' . $itemsPerPage, $orderBy);
+
+        $total = $user->countUsers($where);
+        $pager = $user->getPager($itemsPerPage, $total);
+
+        return $this->render('newsletter/subscriptions/list.tpl', array(
+            'pager' => $pager,
+            'users' => $users,
+            'total' => $total,
+        ));
+    }
+
+    /**
+     * Handles the form for creating a new article
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function createAction(Request $request)
+    {
+        $this->checkAclOrForward('ARTICLE_CREATE');
+
+        if ('POST' == $request->getMethod()) {
+            $user = new \Subscriptor();
+
+            $data = array(
+                'email'        => $request->request->filter('email', '', FILTER_SANITIZE_STRING),
+                'name'         => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
+                'firstname'    => $request->request->filter('firstname', '', FILTER_SANITIZE_STRING),
+                'lastname'     => $request->request->filter('lastname', '', FILTER_SANITIZE_STRING),
+                'subscription' => $request->request->getDigits('subscription', 1),
+                'status'       => $request->request->getDigits('status', 2),
+            );
+
+            if ($user->create($data)) {
+                m::add(_('Subscription successfully created.'), m::SUCCESS);
+            } else {
+                m::add(sprintf(_('Unable to create the new subscriptor: %s', $user->_errors)), m::ERROR);
+            }
+
+            $continue = $request->request->filter('continue', 0);
+            if ($continue) {
+
+                return $this->redirect($this->generateUrl(
+                    'admin_newsletter_subscriptor_show',
+                    array('id' => $user->id)
+                ));
+            } else {
+
+                return $this->redirect($this->generateUrl(
+                    'admin_newsletter_subscriptors'
+                ));
+            }
+        } else {
+
+            return $this->render('newsletter/subscriptions/new.tpl');
+        }
+    }
+
+    /**
+     * Handles the form for creating a new article
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function updateAction(Request $request)
+    {
+        $this->checkAclOrForward('ARTICLE_CREATE');
+
+        if ('POST' == $request->getMethod()) {
+            $id = $request->query->getDigits('id');
+
+            $data = array(
+                'id'           => $id,
+                'email'        => $request->request->filter('email', '', FILTER_SANITIZE_STRING),
+                'name'         => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
+                'firstname'    => $request->request->filter('firstname', '', FILTER_SANITIZE_STRING),
+                'lastname'     => $request->request->filter('lastname', '', FILTER_SANITIZE_STRING),
+                'subscription' => $request->request->getDigits('subscription', 1),
+                'status'       => $request->request->getDigits('status', 2),
+            );
+
+            $user = new \Subscriptor();
+            if ($user->update($data, true)) {
+                m::add(_('Subscription successfully updated.'), m::SUCCESS);
+            } else {
+                m::add(_('Unable to update the subscriptor information'), m::ERROR);
+            }
+
+            $continue = $request->request->filter('continue', 0);
+            if ($continue) {
+
+                return $this->redirect($this->generateUrl(
+                    'admin_newsletter_subscriptor_show',
+                    array('id' => $user->id)
+                ));
+            } else {
+
+                return $this->redirect($this->generateUrl(
+                    'admin_newsletter_subscriptors'
+                ));
+            }
+        } else {
+
+            return $this->render('newsletter/subscriptions/new.tpl');
+        }
+    }
+
+    /**
+     * Shows the information about an subscriptor
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function showAction(Request $request)
+    {
+        $id = $request->query->getDigits('id', null);
+
+        $user = new \Subscriptor($id);
+
+        if (is_null($user->id)) {
+            m::add(sprintf(_('Unable to find the user with the id "%d"'), $id));
+
+            return $this->redirect($this->generateUrl('admin_newsletter_subscriptors'));
+        }
+
+        return $this->render('newsletter/subscriptions/new.tpl', array(
+            'user'      => $user,
+        ));
+    }
+
+    /**
+     * Deletes an subscriptor given its id
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function deleteAction(Request $request)
+    {
+        $id = $request->query->getDigits('id', null);
+
+        $user = new \Subscriptor($id);
+
+        if (is_null($user->id)) {
+            m::add(sprintf(_('Unable to find the user with the id "%d"'), $id));
+        } else {
+            $user->delete($id);
+
+            m::add(sprintf(_('Subscritor with id "%d" deleted sucessfully'), $id));
+        }
+
+        return $this->redirect($this->generateUrl('admin_newsletter_subscriptors'));
+    }
+
+    /**
+     * Toggles the subscription state for a given subscription
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function toggleSubscriptionAction(Request $request)
+    {
+        $id   = $request->query->getDigits('id', null);
+        $page = $request->query->getDigits('page', 1);
+
+        $user = new \Subscriptor($id);
+
+        $subscription = ($user->subscription + 1) % 2;
+        $user->mUpdateProperty($user->id, 'subscription', $subscription);
+
+        return $this->redirect($this->generateUrl('admin_newsletter_subscriptors'));
+    }
+
+    /**
+     * Toggles the activated state for a given subscription
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function toggleActivatedAction(Request $request)
+    {
+        $id   = $request->query->getDigits('id', null);
+        $page = $request->query->getDigits('page', 1);
+
+        $user = new \Subscriptor($id);
+
+        $status = ($user->status == 2) ? 3: 2;
+        $user->set_status($id, $status);
+
+        return $this->redirect($this->generateUrl('admin_newsletter_subscriptors'));
+    }
+
+    /**
+     * Builds the search filter
+     *
+     * @return void
+     **/
+    private function buildFilter($filters)
+    {
+        $orderBy = 'name, email';
+
+        $fltr = array();
+        if (isset($filters['text'])
+            && !empty($filters['text'])
+        ) {
+            $fltr[] = 'MATCH (name, email) AGAINST ("'.addslashes($filters['text']).'" IN BOOLEAN MODE)';
+        }
+
+        if (isset($filters['subscription']) && ($filters['subscription']>=0)) {
+            $fltr[] = '`subscription`=' . $filters['subscription'];
+        }
+
+        if (isset($filters['status']) && ($filters['status']>=0)) {
+            $fltr[] = '`status`=' . $filters['status'];
+        }
+
+        $where = null;
+        if (count($fltr) > 0) {
+            $where = implode(' AND ', $fltr);
+        }
+
+        return array($where, $orderBy);
+    }
+
+} // END class NewsletterSubscriptorsControlle
