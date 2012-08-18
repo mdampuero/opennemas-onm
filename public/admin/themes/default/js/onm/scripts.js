@@ -29,21 +29,6 @@ function countWords(text,counter){
     counter.value=r;
 }
 
-function counttiny(counter, editor){
-
-    //var codigo = document.getElementById('body_ifr').contentWindow.document.getElementById('tinymce').innerHTML;
-    var codigo = editor.getContent();
-
-    resul=codigo.replace(/<[^>]+>/g,''); //Quitamos html;
-    var y=resul;
-    var r = 0;
-    a=y.replace(/\s/g,' ');
-    a=a.split(' ');
-    for (z=0; z<a.length; z++) {if (a[z].length > 0) r++;}
-    counter.value=r;
-
-}
-
 function fill_tags (raw_info, target_element) {
     jQuery.ajax({
         url: "/admin/controllers/common/content.php?action=calculate-tags&data="+raw_info

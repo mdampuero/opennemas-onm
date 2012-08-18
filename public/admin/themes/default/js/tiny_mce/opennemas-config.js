@@ -64,21 +64,7 @@ OpenNeMas.tinyMceConfig = {
         theme_advanced_resize_horizontal : false,
         theme_advanced_resizing : true,
 
-        spellchecker_languages : "+Castellano=es,Galego=gl,English=en",
-
-        setup : function(ed) {
-            ed.onKeyUp.add(function(ed, e) {
-                if(counttiny && document.getElementById('counter_body')) {
-                    counttiny(document.getElementById('counter_body'), ed);
-                }
-            });
-
-            ed.onChange.add(function(ed, e) {
-                if(counttiny && document.getElementById('counter_body')) {
-                    counttiny(document.getElementById('counter_body'), ed);
-                }
-            });
-        }
+        spellchecker_languages : "+Castellano=es,Galego=gl,English=en"
     },
 
     'simple': {
