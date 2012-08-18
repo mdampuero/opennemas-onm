@@ -136,7 +136,7 @@ class KeywordsController extends Controller
 
             m::add(_('Keyword created sucessfully'), m::SUCCESS);
 
-            $this->redirect('admin_keywords');
+            return $this->redirect('admin_keywords');
         } else {
             return $this->render('keywords/new.tpl', array(
                 'tipos' => array(

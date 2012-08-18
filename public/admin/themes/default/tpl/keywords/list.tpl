@@ -7,7 +7,7 @@
 			<div class="title"><h2>{t}Keyword Manager{/t} :: {t}Listing keywords{/t}</h2></div>
 			<ul class="old-button">
 				<li>
-					<a href="{$smarty.server.PHP_SELF}?action=new" class="admin_add" title="Nueva palabra clave">
+					<a href="{url name=admin_keywords_create}" class="admin_add" title="Nueva palabra clave">
 						<img border="0" src="{$params.IMAGE_DIR}list-add.png" title="Nueva palabra clave" alt="" ><br />{t}New{/t}
 					</a>
 				</li>
