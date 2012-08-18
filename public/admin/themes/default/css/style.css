@@ -553,10 +553,6 @@ input.validation-passed, textarea.validation-passed {
 }
 
 
-
-label {
-  font-weight: bold;
-}
 :focus { -moz-outline-style: none; }
 
 
