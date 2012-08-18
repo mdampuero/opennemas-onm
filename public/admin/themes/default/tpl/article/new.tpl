@@ -260,14 +260,11 @@
                             <td>
                                 <label for="summary">
                                     {t}Summary{/t}
-                                    {if is_object($article)}
-                                        <a href="#" onclick="OpenNeMas.tinyMceFunctions.toggle('summary');return false;" title="Habilitar/Deshabilitar editor">
-                                            <img src="{$params.IMAGE_DIR}/users_edit.png" alt=""  />
-                                        </a>
-                                    {/if}
+                                    <a href="#" onclick="OpenNeMas.tinyMceFunctions.toggle('summary');return false;" title="Habilitar/Deshabilitar editor">
+                                        <img src="{$params.IMAGE_DIR}/users_edit.png" />
+                                    </a>
                                 </label>
-                                <textarea tabindex="6" name="summary" id="summary" title="Resumen de la noticia" style="width:100%; min-height:70px;">{$article->summary|clearslash|escape:"html"}
-                                </textarea>
+                                <textarea tabindex="6" name="summary" id="summary" style="width:100%; min-height:70px;">{$article->summary|clearslash|escape:"html"}</textarea>
                             </td>
                         </tr>
                         <tr>
@@ -276,15 +273,12 @@
                         <tr>
                             <td style="padding:0 4px;">
                                 <label for="body">{t}Body{/t}
-                                {if is_object($article)}
                                     <a href="#" onclick="OpenNeMas.tinyMceFunctions.toggle('body');return false;" title="{t}Enable/disable enhanced editor{/t}">
                                         <img src="{$params.IMAGE_DIR}/users_edit.png" alt=""  />
                                     </a>
-                                {/if}
                                 </label>
-                                <textarea tabindex="7" name="body" id="body" title="Cuerpo de la noticia"
-                                        style="width:100%;  height:20em;"
-                                        onChange="counttiny(document.getElementById('counter_body'));" >{$article->body|clearslash}</textarea>
+                                <textarea tabindex="7" name="body" id="body"
+                                        style="width:100%;  height:20em;" >{$article->body|clearslash}</textarea>
                             </td>
                         </tr>
                     </tbody>
@@ -335,13 +329,6 @@
                                            value="{$article->endtime}" tabindex="-1" />
                                 </div>
                                 <sub>{t}Server hour:{/t} {$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}</sub>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="padding:4px;">
-                                <label for="description">{t}Description{/t}</label>
-                                <textarea name="description" id="description"
-                                        title="Descripción interna de la noticia" style="width:98%; height:8em;" tabindex="-1">{$article->description|clearslash}</textarea>
                             </td>
                         </tr>
                     </tbody>

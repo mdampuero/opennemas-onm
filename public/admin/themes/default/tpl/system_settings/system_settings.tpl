@@ -134,7 +134,7 @@
                     </div>
                     {/if}
 
-                    <div class="control-group" id="site_logo_block" {if $configs['section_settings']['allowLogo'] eq "0"}style="display:none"{/if}>
+                    <div class="control-group" id="site_logo_block" >
                         <label for="site_footer" class="control-label">{t}Footer text{/t}</label>
                         <div class="controls">
                             <textarea id="site_footer" name="site_footer" cols="50" rows="7">{$configs['site_footer']|default:""}</textarea>
