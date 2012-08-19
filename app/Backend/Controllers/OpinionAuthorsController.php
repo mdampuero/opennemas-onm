@@ -47,12 +47,9 @@ class OpinionAuthorsController extends Controller
 
         $itemsPerPage = s::get('items_per_page') ?: 20;
 
-        $cm         = new \ContentManager();
-        $author     = new \Author();
-        $authors    = $author->list_authors(
-            NULL,
-            'ORDER BY name ASC'
-        );
+        $cm          = new \ContentManager();
+        $author      = new \Author();
+        $authors     = $author->list_authors(null, 'ORDER BY name ASC');
         $authorsPage = array_slice($authors, ($page-1)*$itemsPerPage, $itemsPerPage);
 
         // Build the pager
@@ -121,9 +118,50 @@ class OpinionAuthorsController extends Controller
         $this->checkAclOrForward('AUTHOR_CREATE');
 
         if ('POST' == $request->getMethod()) {
-            m::add('Not implemented.');
 
-            return $this->redirect($this->generateUrl('admin_opinion_authors'));
+            $continue = $request->request->filter('continue', false, FILTER_SANITIZE_STRING);
+            $author = new \Author();
+
+            $data = array(
+                'name'          => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
+                'condition'     => $request->request->filter('condition', '', FILTER_SANITIZE_STRING),
+                'politics'      => $request->request->filter('politics', '', FILTER_SANITIZE_STRING),
+                'blog'          => $request->request->filter('blog', '', FILTER_SANITIZE_STRING),
+                'fk_author_img' => $request->request->filter('fk_author_img', '', FILTER_SANITIZE_STRING),
+                'params'        => $request->request->get('params'),
+                'photos'        => $request->request->get('photos', array()),
+            );
+
+            $file = $request->files->get('photo-file');
+
+            try {
+                if (!is_null($file)) {
+                    $photoId = $this->uploadAuthorPhoto($file, $data['name']);
+
+                    $data['new_photo_id'] = $photoId;
+                }
+
+                if ($author->create($data)) {
+                    m::add(_('Author successfully created.'), m::SUCCESS);
+                } else {
+                    m::add(_('Unable to create the author.'), m::ERROR);
+                }
+            } catch (FileException $e) {
+
+                m::add(_('Unable to upload the new author image.'), m::ERROR);
+            }
+
+            if ($continue) {
+
+                return $this->redirect($this->generateUrl(
+                    'admin_opinion_author_show',
+                    array('id' => $author->pk_author)
+                ));
+            } else {
+
+                return $this->redirect($this->generateUrl('admin_opinion_authors'));
+            }
+
         } else {
             return $this->render('opinion/authors/new.tpl');
         }
@@ -209,7 +247,7 @@ class OpinionAuthorsController extends Controller
         if (!empty($id)) {
             $author = new \Author($id);
 
-            $author->delete($id ,$_SESSION['userid']);
+            $author->delete($id, $_SESSION['userid']);
             m::add(_("Author deleted successfully."), m::SUCCESS);
         } else {
             m::add(_('You must give an id for delete an opinion author.'), m::ERROR);
@@ -245,12 +283,12 @@ class OpinionAuthorsController extends Controller
 
         $extension = $originalFileData['extension'];
         $t         = gettimeofday();
-        $micro     = intval(substr($t['usec'],0,5));
+        $micro     = intval(substr($t['usec'], 0, 5));
 
         $name      = date("YmdHis").$micro.".".$extension;
 
-        if(!is_dir($uploadDirectory)) {
-            FilesManager::createDirectory($uploadDirectory);
+        if (!is_dir($uploadDirectory)) {
+            \FilesManager::createDirectory($uploadDirectory);
         }
 
         $file->move($uploadDirectory, $name);
@@ -271,7 +309,7 @@ class OpinionAuthorsController extends Controller
         $data['created']     = $infor->atime;
         $data['changed']     = $infor->mtime;
         $data['date']        = $infor->mtime;
-        $data['size']        = round($infor->size/1024,2) ;
+        $data['size']        = round($infor->size/1024, 2);
         $data['width']       = $infor->width;
         $data['height']      = $infor->height;
         $data['type']        = $infor->type;
