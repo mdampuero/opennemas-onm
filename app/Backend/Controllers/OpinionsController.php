@@ -47,7 +47,7 @@ class OpinionsController extends Controller
     public function listAction(Request $request)
     {
         $page   =  $request->query->getDigits('page', 1);
-        $author =  $request->query->filter('author', 0, FILTER_VALIDATE_INT);
+        $author =  (int) $request->query->filter('author', 0, FILTER_VALIDATE_INT);
         $status =  (int) $request->query->filter('status', -1);
 
         $itemsPerPage = s::get('items_per_page');
@@ -61,12 +61,13 @@ class OpinionsController extends Controller
         if ($author != 0) {
             if ($author > 0) {
                 $filterSQL []= 'opinions.fk_author='.$author;
-            } else {
-                $filterSQL []= 'opinions.type_opinion='.$author;
+            } elseif ($author == -1) {
+                $filterSQL []= 'opinions.type_opinion=2';
+            } elseif ($author == -2) {
+                $filterSQL []= 'opinions.type_opinion=1';
             }
-        } else {
-            $filterSQL []= 'opinions.type_opinion=0';
         }
+
         $filterSQL = implode(' AND ', $filterSQL);
 
         $cm      = new \ContentManager();
@@ -77,7 +78,7 @@ class OpinionsController extends Controller
             'Opinion',
             null,
             $filterSQL,
-            'ORDER BY created DESC',
+            'ORDER BY content_status, available, created DESC',
             $page,
             $itemsPerPage
         );
@@ -408,7 +409,7 @@ class OpinionsController extends Controller
         if (!empty($id)) {
             $opinion = new \Opinion($id);
 
-            $opinion->delete($id ,$_SESSION['userid']);
+            $opinion->delete($id, $_SESSION['userid']);
             m::add(_("Opinion deleted successfully."), m::SUCCESS);
         } else {
             m::add(_('You must give an id for delete an opinion.'), m::ERROR);
@@ -449,11 +450,14 @@ class OpinionsController extends Controller
             if ($status == 0) {
                 $opinion->set_inhome($status, $_SESSION['userid']);
             }
-            m::add(sprintf(_('Successfully changed availability for the opinion "%s"'), $opinion->title), m::SUCCESS);
+            m::add(
+                sprintf(_('Successfully changed availability for the opinion "%s"'), $opinion->title),
+                m::SUCCESS
+            );
         }
 
         if ($type != 'frontpage') {
-           $url = $this->generateUrl(
+            $url = $this->generateUrl(
                 'admin_opinions',
                 array(
                     'type' => $type,
@@ -496,19 +500,13 @@ class OpinionsController extends Controller
         }
 
         if ($type != 'frontpage') {
-           $url = $this->generateUrl(
-                'admin_opinions',
-                array(
-                    'type' => $type,
-                    'page' => $page
-                )
+            $url = $this->generateUrl('admin_opinions',
+                array('type' => $type, 'page' => $page)
             );
         } else {
             $url = $this->generateUrl(
                 'admin_opinions_frontpage',
-                array(
-                    'page' => $page
-                )
+                array('page' => $page)
             );
         }
 
@@ -535,12 +533,15 @@ class OpinionsController extends Controller
             m::add(sprintf(_('Unable to find an opinion with the id "%d"'), $id), m::ERROR);
         } else {
             $opinion->set_favorite($status, $_SESSION['userid']);
-            m::add(sprintf(_('Successfully changed favorite state for the opinion "%s"'), $opinion->title), m::SUCCESS);
+            m::add(sprintf(
+                _('Successfully changed favorite state for the opinion "%s"'), $opinion->title
+                ),
+                m::SUCCESS
+            );
         }
 
         if ($type != 'frontpage') {
-           $url = $this->generateUrl(
-                'admin_opinions',
+            $url = $this->generateUrl('admin_opinions',
                 array(
                     'type' => $type,
                     'page' => $page
@@ -594,10 +595,16 @@ class OpinionsController extends Controller
 
         if (!empty($msg) && $msg == true) {
             $message = _('Positions saved successfully.');
-            $output = sprintf('<div class="alert alert-success">%s<button data-dismiss="alert" class="close">×</button></div>', $message);
+            $output = sprintf(
+                '<div class="alert alert-success">%s<button data-dismiss="alert" class="close">×</button></div>',
+                $message
+            );
         } else {
             $output = _('Unable to save positions for the specials widget.');
-            $output = sprintf('<div class="alert alert-error">%s<button data-dismiss="alert" class="close">×</button></div>', $message);
+            $output = sprintf(
+                '<div class="alert alert-error">%s<button data-dismiss="alert" class="close">×</button></div>',
+                $message
+            );
         }
 
         return new Response($output);
