@@ -75,7 +75,8 @@ class Author
             $data['condition'], $data['date_nac'],  serialize($data['params'])
         );
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        if ($rs === false) {
             Application::logDatabaseError();
 
             return(false);

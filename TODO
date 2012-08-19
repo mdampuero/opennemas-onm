@@ -3,14 +3,11 @@ TODO
 
 Opinion Authors
 ---------------
-- Implement avatar upload for authors
 - Batch actions
-- Create action
 
 Articles
 --------
 - Batch actions
-- Review content_status and available flags when edit and listing
 
 Newsletter
 -------- --
@@ -20,6 +17,10 @@ Trash
 -----
 - All types pill doesn't work
 - Unable to (batch) delete static pages
+
+Books
+-----
+- Port the config action
 
 LOW PRIORITY TASKS OR IDEAS
 --------------------------------------------------------------------------------
