@@ -98,7 +98,7 @@ label {
 
                 <fieldset>
                     <div class="control-group">
-                        <label for="name" class="control-label">{t}Name{/t}</label>
+                        <label for="name" class="control-label">{t}Display name{/t}</label>
                         <div class="controls">
                             <input type="text" id="name" name="name" value="{$user->name|default:""}" class="input-xlarge required" maxlength="50"/>
                         </div>

@@ -94,18 +94,18 @@
                         <label for="site_name" class="control-label">{t}Site name{/t}</label>
                         <div class="controls">
                             <input type="text" id="site_name" name="site_name" value="{$configs['site_name']|default:""}" class="input-xlarge">
-                            <div class="help-block">{t}You can change the name of your site here. This will be displayed as your site name{/t}</div>
+                            <div class="help-block">{t}This will be displayed as your site name.{/t}</div>
                         </div>
                         <label for="site_agency" class="control-label">{t}Site agency{/t}</label>
                         <div class="controls">
                             <input type="text" id="site_agency" name="site_agency" value="{$configs['site_agency']|default:""}" class="input-xlarge">
-                            <div class="help-block">{t}You can edit the site agency for the articles here. This will be displayed as your article agency{/t}</div>
+                            <div class="help-block">{t}This will be displayed as your article agency.{/t}</div>
                         </div>
                         <label for="site_color" class="control-label">{t}Site color{/t}</label>
                         <div class="controls">
                             <input type="text" id="site_color" name="site_color" class="colorpicker_input" value="{$configs['site_color']|default:""}" class="input-xlarge">
                             <div class="colopicker_viewer" style="background-color:#{$configs['site_color']}"></div>
-                            <div class="help-block">{t}Color used for links, menus and widgets.{/t}</div>
+                            <div class="help-block">{t}Color used for links, menus and some widgets.{/t}</div>
                         </div>
                         <label for="section_settings[allowLogo]" class="control-label">{t}Use logo in frontpage{/t}</label>
                         <div class="controls">
@@ -120,7 +120,6 @@
                         <label for="site_logo" class="control-label">{t}Site logo{/t}</label>
                         <div class="controls">
                             <input type="file" id="site_logo" name="site_logo">
-                            <div class="help-block">{t}You can enable Logos and category colors for your site here.{/t}</div>
                         </div>
 
                         {if isset($configs['site_logo']) && $configs['section_settings']['allowLogo'] neq "0"}
@@ -135,7 +134,7 @@
                         <label for="site_footer" class="control-label">{t}Footer text{/t}</label>
                         <div class="controls">
                             <textarea id="site_footer" name="site_footer" cols="50" rows="7">{$configs['site_footer']|default:""}</textarea>
-                            <div class="help-block">{t}You can edit here the footer of the site.{/t}</div>
+                            <div class="help-block">{t}Text showed at the bottom of your page. Usually used for copyright notice.{/t}</div>
                         </div>
                     </div>
 
