@@ -6,9 +6,20 @@
     .ui-widget-content a {
         color: #0B55C4 !important;
     }
-    legend {
-        font-size: 14px;
+    .help-block {
+        color:#999;
+        font-size:.95em;
+        margin-top:0px !important;
+        margin-bottom:10px !important;
+    }
+    .settings-header {
         font-weight: bold;
+        color: #333;
+        font-size:14px;
+    }
+    .colorpicker_input, colorpicker_viewer {
+        display:inline-block;
+        float:none;
     }
     </style>
 {/block}
@@ -85,56 +96,42 @@
                             <input type="text" id="site_name" name="site_name" value="{$configs['site_name']|default:""}" class="input-xlarge">
                             <div class="help-block">{t}You can change the name of your site here. This will be displayed as your site name{/t}</div>
                         </div>
-                    </div>
-
-                    <div class="control-group">
                         <label for="site_agency" class="control-label">{t}Site agency{/t}</label>
                         <div class="controls">
                             <input type="text" id="site_agency" name="site_agency" value="{$configs['site_agency']|default:""}" class="input-xlarge">
                             <div class="help-block">{t}You can edit the site agency for the articles here. This will be displayed as your article agency{/t}</div>
                         </div>
-                    </div>
-
-                    <div class="control-group">
                         <label for="site_color" class="control-label">{t}Site color{/t}</label>
                         <div class="controls">
                             <input type="text" id="site_color" name="site_color" class="colorpicker_input" value="{$configs['site_color']|default:""}" class="input-xlarge">
                             <div class="colopicker_viewer" style="background-color:#{$configs['site_color']}"></div>
+                            <div class="help-block">{t}Color used for links, menus and widgets.{/t}</div>
                         </div>
-                    </div>
-
-                    <div class="control-group">
                         <label for="section_settings[allowLogo]" class="control-label">{t}Use logo in frontpage{/t}</label>
                         <div class="controls">
-
                             <select name="section_settings[allowLogo]" id="section_settings[allowLogo]" onChange="toogleSiteLogo(this.value);">
                                 <option value="0">{t}No{/t}</option>
                                 <option value="1" {if $configs['section_settings']['allowLogo'] eq "1"} selected {/if}>{t}Yes{/t}</option>
                             </select>
-                            <div class="help-block">
-                                {t}Change the color of the menu bars. If you wanna change the categorys color, go to the Category Manager and edit a category.{/t}
-                            </div>
                         </div>
                     </div>
 
-                    <div class="control-group" id="site_logo_block" {if $configs['section_settings']['allowLogo'] eq "0"}style="display:none"{/if}>
+                    <div class="control-group" {if $configs['section_settings']['allowLogo'] eq "0"}style="display:none"{/if}>
                         <label for="site_logo" class="control-label">{t}Site logo{/t}</label>
                         <div class="controls">
                             <input type="file" id="site_logo" name="site_logo">
                             <div class="help-block">{t}You can enable Logos and category colors for your site here.{/t}</div>
                         </div>
+
+                        {if isset($configs['site_logo']) && $configs['section_settings']['allowLogo'] neq "0"}
+                            <label for="site_logo"></label>
+                            <div class="controls" >
+                                <img src="{$smarty.const.MEDIA_URL}/{$smarty.const.MEDIA_DIR}/sections/{$configs['site_logo']}" style="max-height:100px">
+                            </div>
+                        {/if}
                     </div>
 
-                    {if isset($configs['site_logo'])}
-                    <div class="control-group" id="site_logo_block" {if $configs['section_settings']['allowLogo'] eq "0"}style="display:none"{/if}>
-                        <label for="site_logo"></label>
-                        <div class="controls" >
-                            <img src="{$smarty.const.MEDIA_URL}/{$smarty.const.MEDIA_DIR}/sections/{$configs['site_logo']}" style="max-height:100px">
-                        </div>
-                    </div>
-                    {/if}
-
-                    <div class="control-group" id="site_logo_block" >
+                    <div class="control-group">
                         <label for="site_footer" class="control-label">{t}Footer text{/t}</label>
                         <div class="controls">
                             <textarea id="site_footer" name="site_footer" cols="50" rows="7">{$configs['site_footer']|default:""}</textarea>
@@ -147,7 +144,7 @@
 
             <div id="seo" class="form-horizontal">
                 <fieldset>
-                    <legend>{t}SEO options{/t}</legend>
+                    <h3 class="settings-header">{t}SEO options{/t}</h3>
 
                     <div class="control-group">
                         <label for="site_title" class="control-label">{t}Site title{/t}</label>
@@ -170,9 +167,9 @@
                         </div>
                     </div>
                 </fieldset>
-
+                <hr>
                 <fieldset>
-                    <legend>{t}Web Master Tools{/t}</legend>
+                    <h3 class="settings-header">{t}Web Master Tools{/t}</h3>
 
                     <div class="control-group">
                         <label for="webmastertools_google" class="control-label">{t}Google Web Master Tools{/t}</label>
@@ -192,12 +189,13 @@
 
             <div id="misc" class="form-horizontal">
                 <fieldset>
-                    <legend>{t}Opennemas settings{/t}</legend>
+                    <h3 class="settings-header">{t}Language & Time{/t}</h3>
 
                     <div class="control-group">
-                        <label for="site_language" class="control-label">{t}Language{/t}</label>
+                        <label for="site_language" class="control-label">{t}Default language{/t}</label>
                         <div class="controls">
                             {html_options name=site_language options=$languages selected=$configs['site_language']}
+                            <div class="help-block">{t}Used for displayed messages, interface and measures in your page.{/t}</div>
                         </div>
                     </div>
 
@@ -205,29 +203,26 @@
                         <label for="time_zone" class="control-label">{t}Time Zone{/t}</label>
                         <div class="controls">
                             {html_options name=time_zone options=$timezones selected=$configs['time_zone']}
+                            <div class="help-block">{t}Used for all the dates used used in your webpage.{/t}</div>
                         </div>
                     </div>
+                </fieldset>
+                <hr>
+                <fieldset>
+                    <h3 class="settings-header">{t}Listing & sorting{/t}</h3>
 
                     <div class="control-group">
-                        <label for="time_zone" class="control-label">{t}Refresh page interval{/t}</label>
+                        <label for="refresh_interval" class="control-label">{t}Refresh page interval{/t}</label>
                         <div class="controls">
                             <input type="number" id="refresh_interval" name="refresh_interval" value="{$configs['refresh_interval']|default:900}">
-                            <small>(seconds)</small>
+                            <small>seconds</small>
+                            <div class="help-block">{t}When a user visits pages and stay on it for a while, this setting allows to refresh the loaded page for updated it.{/t}</div>
                         </div>
                     </div>
-
                     <div class="control-group">
-                        <label for="time_zone" class="control-label">{t}Items per page{/t}</label>
+                        <label for="items_per_page" class="control-label">{t}Items per page{/t}</label>
                         <div class="controls">
                             <input type="number" id="items_per_page" name="items_per_page" value="{$configs['items_per_page']|default:20}">
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label for="max_session_lifetime" class="control-label">{t}Max session lifetime{/t}</label>
-                        <div class="controls">
-                            <input type="number" id="max_session_lifetime" name="max_session_lifetime" value="{$configs['max_session_lifetime']|default:30}">
-                            <small>(minutes)</small>
                         </div>
                     </div>
                 </fieldset>
@@ -236,7 +231,7 @@
 
             <div id="external" class="form-horizontal">
                 <fieldset>
-                    <legend>{t}Social networks{/t}</legend>
+                    <h3 class="settings-header">{t}Social networks{/t}</h3>
 
                     <div class="control-group">
                         <label for="facebook_page" class="control-label">{t}Facebook Page Url{/t}</label>
@@ -261,9 +256,9 @@
                         </div>
                     </div>
                 </fieldset>
-
+                <hr>
                 <fieldset>
-                    <legend>{t}Google Services{/t}</legend>
+                    <h3 class="settings-header">{t}Google Services{/t}</h3>
 
                     <div class="control-group">
                         <label for="google_maps_api_key" class="control-label">{t}Google Maps API key{/t}</label>
@@ -281,9 +276,9 @@
                         </div>
                     </div>
                 </fieldset>
-
+                <hr>
                 <fieldset>
-                    <legend>{t}Facebook{/t}</legend>
+                    <h3 class="settings-header">{t}Facebook{/t}</h3>
 
                     <div class="control-group">
                         <label for="facebook_api_key" class="control-label">{t}APP key{/t}</label>
@@ -301,9 +296,9 @@
                     </div>
 
                 </fieldset>
-
+                <hr>
                 <fieldset>
-                    <legend>{t}Google Analytics Statistics{/t}</legend>
+                    <h3 class="settings-header">{t}Google Analytics Statistics{/t}</h3>
 
                     <div class="control-group">
                         <label for="google_analytics_api_key" class="control-label">{t}API key{/t}</label>
@@ -314,8 +309,9 @@
                     </div>
                 </fieldset>
                 {acl isAllowed="ONLY_MASTERS"}
+                <hr>
                 <fieldset>
-                    <legend>{t}Piwik Statistics{/t}</legend>
+                    <h3 class="settings-header">{t}Piwik Statistics{/t}</h3>
 
                     <div class="control-group">
                         <label for="piwik_page_id" class="control-label">{t}Page ID{/t}</label>
@@ -339,13 +335,15 @@
                     </div>
                 </fieldset>
                 {/acl}
+                <hr>
                 <fieldset>
-                    <legend>{t}Recaptcha{/t}</legend>
+                    <h3 class="settings-header">{t}Recaptcha{/t}</h3>
 
                     <div class="control-group">
                         <label for="recaptcha_public_key" class="control-label">{t}Public key{/t}</label>
                         <div class="controls">
                             <input type="text" id="recaptcha_public_key" name="recaptcha[public_key]" value="{$configs['recaptcha']['public_key']|default:""}" class="input-xlarge">
+                            <div class="help-block">{t escape=off}Get your reCaptcha key from <a href="http://www.google.com/recaptcha/whyrecaptcha">this page</a>.{/t}<br>{t}Used when we want to test if the user is an human and not a robot.{/t}</div>
                         </div>
                     </div>
 
@@ -366,8 +364,6 @@
                 <input type="submit" name="submit" value="{t}Save{/t}"  class="onm-button red">
             </div>
         </div>
-
-        <input type="hidden" id="action" name="action" value="save"/>
 
     </form>
 </div>
