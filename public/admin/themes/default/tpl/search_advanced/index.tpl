@@ -23,7 +23,7 @@ span.highlighted {
 {block name="content"}
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
-        <div class="title"><h2>{t}Advanced search{/t}</h2></div>
+        <div class="title"><h2>{t}Global search{/t}</h2></div>
     </div>
 </div>
 <div class="wrapper-content">

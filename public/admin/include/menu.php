@@ -165,7 +165,7 @@ $menuXml = '<?xml version="1.0"?>
         <node
             module_name="ADVANCED_SEARCH"
             privilege="SEARCH_ADMIN"
-            title="'.htmlspecialchars(_("Advanced Search"), ENT_QUOTES).'"
+            title="'.htmlspecialchars(_("Global Search"), ENT_QUOTES).'"
             id="advanced_search"
             link="'.url('admin_search').'"
         />
