@@ -37,12 +37,6 @@
    <form action="{url name=admin_importer_xmlfile_config}" method="POST">
         {render_messages}
 
-        <table class="adminheading">
-            <tr>
-                <th align="left">{t}XML file schema{/t}</th>
-            </tr>
-        </table>
-
         <table class="adminform">
             <tr>
                 <td width="60%">

@@ -29,12 +29,6 @@
 
     	{render_messages}
 
-        <table class="adminheading">
-    	<tr>
-    	    <th>{t}Synchronization Status{/t}</th>
-    	</tr>
-        </table>
-
         <table class="listing-table">
             <thead>
                 <tr>

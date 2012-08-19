@@ -35,11 +35,6 @@
         <div class="form">
             <input type="hidden" id="action"  name="action" value="preview" />
         </div>
-        <table class="adminheading">
-            <tr>
-                <td></td>
-            </tr>
-        </table>
 
         <table class="adminlist">
             <tr>

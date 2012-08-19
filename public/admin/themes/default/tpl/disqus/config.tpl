@@ -41,12 +41,6 @@
    <form action="{url name=admin_comments_disqus_config}" method="POST">
         {render_messages}
         <div>
-             <table class="adminheading">
-                 <tr>
-                     <th align="left">{t}Auth credentials{/t}</th>
-                 </tr>
-             </table>
-
              <table class="adminform" border=0>
 
                 <tr>

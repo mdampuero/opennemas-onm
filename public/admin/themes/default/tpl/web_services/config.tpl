@@ -90,12 +90,6 @@
 
         <div>
 
-             <table class="adminheading">
-                 <tr>
-                     <th>{t}Synchronization settings{/t}</th>
-                 </tr>
-             </table>
-
              <table class="adminform">
                 <tr>
                     <td>

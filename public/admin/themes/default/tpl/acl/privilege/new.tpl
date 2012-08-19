@@ -110,11 +110,6 @@ new PrivilegeHelper('module', 'name', { modules: {json_encode value=$modules} })
 		</div>
 	</div>
     <div class="wrapper-content">
-        <table class="adminheading">
-            <tr>
-                <td>{t}Privilege information{/t}</td>
-            </tr>
-        </table>
         <table class="adminform">
 			<tbody>
 				<tr>

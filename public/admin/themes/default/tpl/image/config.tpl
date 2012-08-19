@@ -44,12 +44,6 @@
 
         <div id="{$category}">
 
-            <table class="adminheading">
-                 <tr>
-                     <th align="left">{t}Information about video module settings{/t}</th>
-                 </tr>
-            </table>
-
             <table class="adminform" border="0" style="padding:10px;">
                 <tr>
                     <td>

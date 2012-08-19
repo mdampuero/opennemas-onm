@@ -40,14 +40,6 @@
 
         <div id="warnings-validation"></div>
 
-        <table class="adminheading">
-            <tbody>
-                <tr>
-                    <th>{t}Widget data{/t}</th>
-                </tr>
-            </tbody>
-        </table>
-
         <table class="adminform">
         <tbody>
         <tr>

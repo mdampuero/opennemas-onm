@@ -22,13 +22,6 @@
    <form action="{$smarty.server.PHP_SELF}" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
 
    <div id="{$category|default:""}">
-
-        <table class="adminheading">
-	    <tr>
-                <th align="left">&nbsp;</th>
-	    </tr>
-	</table>
-
 	<table class="adminform" border=0>
 
 	    <tr>

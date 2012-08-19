@@ -38,12 +38,6 @@
 
         <div id="c-{$category}">
 
-            <table class="adminheading">
-                 <tr>
-                     <th>{t}Information about sections module settings{/t}</th>
-                 </tr>
-            </table>
-
             <table class="adminform">
                 <tbody>
                     <tr>
