@@ -88,8 +88,9 @@
                 </div>
             </div>
 
+            {if count($photos) > 0}
             <div class="control-group">
-                <label for="author-photos" class="control-label">{t}Author photo{/t}</label>
+                <label for="author-photos" class="control-label">{t}Author photos{/t}</label>
                 <div class="controls">
                     <div class="author-photos">
                         {foreach name=as from=$photos|default:array() item=photo}
@@ -103,6 +104,7 @@
                     <p class="help-block">{t}You can change the image order by drag and drop them.{/t}</p>
                 </div>
             </div>
+            {/if}
 
             <div class="control-group">
                 <label for="fileInput" class="control-label">{t}Add new photo{/t}</label>

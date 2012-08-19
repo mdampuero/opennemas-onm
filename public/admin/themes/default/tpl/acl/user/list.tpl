@@ -33,17 +33,17 @@ jQuery(function($){
 		</div>
 	</div>
 	<div class="wrapper-content">
+
 		{render_messages}
+
 		<table class="adminheading">
 			<tr>
 				<th class="form-inline">
-					<label for="username">{t}Filter by name{/t}
-						<input id="username" name="filter[name]" value="{$smarty.request.filter.name|default:""}" class  />
-					</label>
+					<input id="username" name="filter[name]" value="{$smarty.request.filter.name|default:""}" placeholder="{t}Filter by name{/t}"  />
 
-					<label for="userlogin">{t}or username:{/t}
-						<input id="userlogin" name="filter[login]" value="{$smarty.request.filter.login|default:""}" />
-					</label>
+					<label for="userlogin">{t}or{/t}</label>
+					<input id="userlogin" name="filter[login]" value="{$smarty.request.filter.login|default:""}" placeholder="{t}username{/t}" />
+
 
 					<label for="usergroup">{t}and group:{/t}
 						<select id="usergroup" name="filter[group]" class="span2">

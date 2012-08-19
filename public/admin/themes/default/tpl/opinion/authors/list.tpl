@@ -37,8 +37,6 @@
                     </th>
                     <th class="title">{t}Author name{/t}</th>
                     <th class="title">{t}Condition{/t}</th>
-                    <th>{t}Blog name{/t}</th>
-                    <th>{t}Blog url{/t}</th>
                     <th class="title" style="text-align:center">{t}Photos (#){/t}</th>
                     <th class="right" style="width:100px;">{t}Actions{/t}</th>
                 </tr>
@@ -54,12 +52,6 @@
                     </td>
                     <td>
                         {$author->condition}
-                    </td>
-                    <td>
-                        {$author->politics}
-                    </td>
-                    <td>
-                        {$author->gender}
                     </td>
                     <td style="text-align:center">
                         {$author->num_photos}
