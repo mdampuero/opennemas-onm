@@ -61,9 +61,11 @@ class ErrorController extends Controller
                     $errorMessage = '';
                     break;
             }
+
             return include __DIR__."/../Views/ErrorController/default.php";
         }
         header('HTTP/1.0 404 Not Found');
+
         return include __DIR__."/../Views/ErrorController/default-production.php";
     }
 

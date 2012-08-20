@@ -57,7 +57,7 @@
 <div class="wrapper">
     <h1 class="error-title">There was an error in onm</h1>
     <div class="error-trace">
-        <div class="title <?php if($error->getCode() == 1) { echo "error"; } ?>">
+        <div class="title <?php if ($error->getCode() == 1) { echo "error"; } ?>">
             <p>
                 ( ! ) Exception: <?php echo get_class($error);?> - <?php echo $error->getMessage(). $errorMessage ?> :  in
                 <?php echo $error->getFile() ?> on line <?php echo $error->getLine(); ?>
@@ -77,7 +77,7 @@
                             <th>File</th>
                             <th>Line</th>
                         </tr>
-                        <?php foreach($backtrace as $trace_step) { ?>
+                        <?php foreach ($backtrace as $trace_step) { ?>
                         <tr>
                             <td>
                                 <a href="file://{$file}"> <?php echo $trace_step['file']; ?></a>
@@ -102,4 +102,3 @@
 
 </body>
 </html>
-
