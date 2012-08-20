@@ -39,17 +39,18 @@ class Bootstrap extends ModuleBootstrap
      **/
     public function initAuthenticationSystem()
     {
-        // $session = $this->container->get('session');
-        // $session->start();
-
         // $request = $this->container->get('request');
 
         // $isAsset = preg_match('@.*\.(png|gif|jpg|ico|css|js)$@', $request->getPathInfo());
         // if ($isAsset != 1) {
+        //     // $session = $this->container->get('session');
+        //     // $session->start();
 
-        //     $GLOBALS['Session'] = \SessionManager::getInstance(OPENNEMAS_BACKEND_SESSIONS);
-        //     $GLOBALS['Session']->bootstrap();
+        //     $sessionHandler = \SessionManager::getInstance(OPENNEMAS_BACKEND_SESSIONS);
+        //     $sessionHandler->bootstrap();
 
+        //     $GLOBALS['Session'] = $sessionHandler;
+        //     $this->container->set('session', $sessionHandler);
 
         //     if (!isset($_SESSION['userid'])
         //         && !preg_match('@^/login@', $request->getPathInfo())

@@ -125,4 +125,30 @@ $managerRoutes->add(
     'manager'
 );
 
+$managerRoutes->add(
+    'manager_login_form',
+    new Route(
+        '/login',
+        array('_controller' => 'Manager:Controllers:AuthenticationController:default')
+    ),
+    'manager'
+);
+$managerRoutes->add(
+    'manager_login_processform',
+    new Route(
+        '/login/process',
+        array('_controller' => 'Manager:Controllers:AuthenticationController:processform'),
+        array('_method' => 'POST')
+    ),
+    'manager'
+);
+$managerRoutes->add(
+    'manager_logout',
+    new Route(
+        '/logout',
+        array('_controller' => 'Manager:Controllers:AuthenticationController:logout')
+    ),
+    'manager'
+);
+
 $routes->addCollection($managerRoutes);
