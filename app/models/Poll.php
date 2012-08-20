@@ -15,11 +15,11 @@
  **/
 class Poll extends Content
 {
-    public $pk_poll = null;
-    public $subtitle = null;
-    public $total_votes   	= null;
-    public $used_ips   	= null;
-    public $visualization 	= null;
+    public $pk_poll       = null;
+    public $subtitle      = null;
+    public $total_votes   = null;
+    public $used_ips      = null;
+    public $visualization = null;
 
     public function __construct($id=null)
     {
@@ -64,7 +64,6 @@ class Poll extends Content
 
     public function create($data)
     {
-        //Modificamos los metadatos con los tags de cada item
         $tags = '';
         if (isset($data['item']) && !empty($data['item'] )) {
             $tags = implode(',', $data['item']);
@@ -77,8 +76,8 @@ class Poll extends Content
         $i=1;
         if ($data['item']) {
             foreach ($data['item'] as $item) {
-                $sql='INSERT INTO poll_items (`fk_pk_poll`, `item`, `metadata`) VALUES (?,?,?)';
-                $tags = StringUtils::get_tags($item);
+                $sql    ='INSERT INTO poll_items (`fk_pk_poll`, `item`, `metadata`) VALUES (?,?,?)';
+                $tags   = StringUtils::get_tags($item);
                 $values = array($this->id,$item, $tags);
                 $i++;
 
@@ -87,9 +86,15 @@ class Poll extends Content
                 }
             }
         }
-           $sql = 'INSERT INTO polls (`pk_poll`, `subtitle`,`total_votes`, `visualization`, `with_comment`)
+        $sql = 'INSERT INTO polls (`pk_poll`, `subtitle`,`total_votes`, `visualization`, `with_comment`)
                 VALUES (?,?,?,?,?)';
-        $values = array($this->id,$data['subtitle'], 0,$data['visualization'],$data['with_comment']);
+        $values = array(
+            $this->id,
+            $data['subtitle'],
+            0,
+            $data['visualization'],
+            $data['with_comment']
+        );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
@@ -104,22 +109,23 @@ class Poll extends Content
     {
         parent::read($id);
 
-        $sql = 'SELECT * FROM polls WHERE pk_poll = '.($id);
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $sql = 'SELECT * FROM polls WHERE pk_poll = ?';
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
             \Application::logDatabaseError();
 
-            return;
+            return null;
         }
 
-        $this->pk_poll       			= $rs->fields['pk_poll'];
-        $this->subtitle       			= $rs->fields['subtitle'];
-        $this->total_votes       		= $rs->fields['total_votes'];
-        $this->with_comment             = $rs->fields['with_comment'];
-        $this->visualization            = $rs->fields['visualization'];
-        $this->used_ips       			= unserialize($rs->fields['used_ips']);
+        $this->pk_poll       = $rs->fields['pk_poll'];
+        $this->subtitle      = $rs->fields['subtitle'];
+        $this->total_votes   = $rs->fields['total_votes'];
+        $this->with_comment  = $rs->fields['with_comment'];
+        $this->visualization = $rs->fields['visualization'];
+        $this->used_ips      = unserialize($rs->fields['used_ips']);
 
+        return $this;
     }
 
     public function update($data)
@@ -136,8 +142,9 @@ class Poll extends Content
 
         if ($data['item']) {
             //Eliminamos los antiguos
-            $sql='DELETE FROM poll_items WHERE fk_pk_poll ='.($data['id']);
-            if ($GLOBALS['application']->conn->Execute($sql) === false) {
+            $sql='DELETE FROM poll_items WHERE fk_pk_poll =?';
+            $rs = $GLOBALS['application']->conn->Execute($sql, array($data['id']));
+            if ($rs === false) {
                 \Application::logDatabaseError();
             }
             //Insertamos
@@ -146,7 +153,7 @@ class Poll extends Content
 
             $votes = $data['votes'];
             foreach ($data['item'] as $item) {
-                $sql='INSERT INTO poll_items (`fk_pk_poll`, `item`,`votes`) VALUES (?,?,?)';
+                $sql    ='INSERT INTO poll_items (`fk_pk_poll`, `item`,`votes`) VALUES (?,?,?)';
                 $values = array($data['id'], $item, $votes[$i]);
                 $i++;
 
@@ -158,7 +165,12 @@ class Poll extends Content
         $sql = "UPDATE polls SET `subtitle`=?, `visualization`=?, `with_comment`=?
                         WHERE pk_poll= ?";
 
-        $values = array($data['subtitle'],  $data['visualization'],$data['with_comment'], $data['id']);
+        $values = array(
+            $data['subtitle'],
+            $data['visualization'],
+            $data['with_comment'],
+            $data['id']
+        );
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
 
@@ -166,6 +178,7 @@ class Poll extends Content
         }
 
         $this->pk_poll = $data['id'];
+
         return $this;
     }
 
@@ -186,6 +199,7 @@ class Poll extends Content
 
             return false;
         }
+
         return true;
     }
 
@@ -201,11 +215,11 @@ class Poll extends Content
         $total=0;
         $items = array();
         while (!$rs->EOF) {
-            $items[$i]['pk_item']=$rs->fields['pk_item'];
-            $items[$i]['item']=$rs->fields['item'];
-            $items[$i]['votes']=$rs->fields['votes'];
-            $items[$i]['metadata']=$rs->fields['metadata'];
-            $total += $items[$i]['votes'];
+            $items[$i]['pk_item']  = $rs->fields['pk_item'];
+            $items[$i]['item']     = $rs->fields['item'];
+            $items[$i]['votes']    = $rs->fields['votes'];
+            $items[$i]['metadata'] = $rs->fields['metadata'];
+            $total                 += $items[$i]['votes'];
             $rs->MoveNext();
             $i++;
         }
@@ -215,7 +229,10 @@ class Poll extends Content
             foreach ($items as &$item) {
                 $item['percent'] = 0;
                 if (!empty($item['votes'])) {
-                    $item['percent'] = sprintf("%.0f", ($item['votes']*100 / $total));
+                    $item['percent'] = sprintf(
+                        "%.0f",
+                        ($item['votes'] * 100 / $total)
+                    );
                 }
             }
         }
@@ -234,14 +251,11 @@ class Poll extends Content
 
         $this->total_votes++;
 
-        $sql = 'SELECT votes FROM `poll_items` WHERE pk_item = "'. $pkItem.'"';
-        $votes = $GLOBALS['application']->conn->GetOne($sql);
-        $votes++;
-        $sql = "UPDATE poll_items SET `votes`=?
-                WHERE pk_item=? ";
+        $sql = "UPDATE poll_items SET `votes`=`votes`+1 WHERE pk_item=? ";
         $values = array($votes, $pkItem);
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        if ($rs === false) {
             \Application::logDatabaseError();
 
             return false;
@@ -250,7 +264,6 @@ class Poll extends Content
         $sql = "UPDATE polls SET `total_votes`=?, `used_ips`=?
                 WHERE pk_poll=?";
 
-        //$values = array($this->total_votes, serialize($this->ips_count_rating));
         $values = array(
             $this->total_votes,
             serialize($this->used_ips),
