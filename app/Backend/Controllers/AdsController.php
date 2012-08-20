@@ -312,7 +312,6 @@ class AdsController extends Controller
                 array('id' => $ad->id)
             ));
         } else {
-
             return $this->redirect($this->generateUrl(
                 'admin_ads',
                 array('category' => $data['category'])

@@ -304,7 +304,6 @@ class ImagesController extends Controller
 
         // If the form was not completed show the form
         if (empty($searchStringRAW)) {
-
             return $this->render('image/search.tpl', array(
                 'category' => $category,
             ));
@@ -547,7 +546,6 @@ class ImagesController extends Controller
 
             return $this->redirect($this->generateUrl('admin_image_show').'?id[]='.$queryIDs);
         } else {
-
             return $this->redirect($this->generateUrl('admin_images', array(
                 'category' => $_SESSION['category'],
                 'page'     => $page,

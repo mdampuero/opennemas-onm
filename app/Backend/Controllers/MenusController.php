@@ -164,13 +164,11 @@ class MenusController extends Controller
             }
 
             if ($continue) {
-
                 return $this->redirect($this->generateUrl(
                     'admin_menu_show',
                     array('id' => $menu->pk_menu)
                 ));
             } else {
-
                 return $this->redirect($this->generateUrl('admin_menus'));
             }
 
@@ -258,13 +256,11 @@ class MenusController extends Controller
 
             m::add(_("Menu updated successfully."), m::SUCCESS);
             if ($continue) {
-
                 return $this->redirect($this->generateUrl(
                     'admin_menu_show',
                     array('id' => $menu->pk_menu)
                 ));
             } else {
-
                 return $this->redirect($this->generateUrl('admin_menus'));
             }
         }

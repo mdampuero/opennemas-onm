@@ -228,7 +228,6 @@ class AlbumsController extends Controller
                 'page'     => $page
             )));
         } else {
-
             return $this->render('album/new.tpl');
         }
     }

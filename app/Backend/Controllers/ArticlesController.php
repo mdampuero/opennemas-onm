@@ -232,13 +232,11 @@ class ArticlesController extends Controller
 
             $continue = $request->request->filter('continue', 0);
             if ($continue) {
-
                 return $this->redirect($this->generateUrl(
                     'admin_article_show',
                     array('id' => $article->id)
                 ));
             } else {
-
                 return $this->redirect($this->generateUrl(
                     'admin_articles',
                     array('status' => $data['content_status'])
@@ -481,7 +479,6 @@ class ArticlesController extends Controller
                     array('id' => $article->id)
                 ));
             } else {
-
                 return $this->redirect($this->generateUrl(
                     'admin_articles',
                     array('status' => $data['content_status'])

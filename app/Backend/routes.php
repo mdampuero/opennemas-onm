@@ -93,7 +93,6 @@ $adminRoutes->add(
     '/admin'
 );
 
-
 // Frontpage management routes
 $adminRoutes->add(
     'admin_frontpage_list',
@@ -153,7 +152,6 @@ $adminRoutes->add(
     '/admin'
 );
 
-
 $adminRoutes->add(
     'admin_staticpages_create',
     new Route(
@@ -190,7 +188,6 @@ $adminRoutes->add(
     '/admin'
 );
 
-
 $adminRoutes->add(
     'admin_staticpages_build_slug',
     new Route(
@@ -199,7 +196,6 @@ $adminRoutes->add(
     ),
     '/admin'
 );
-
 
 $adminRoutes->add(
     'admin_staticpages_clean_metadata',
@@ -540,7 +536,6 @@ $adminRoutes->add(
     '/admin'
 );
 
-
 // Special manager routes
 $adminRoutes->add(
     'admin_specials',
@@ -805,7 +800,6 @@ $adminRoutes->add(
     '/admin'
 );
 
-
 $adminRoutes->add(
     'admin_category_empty',
     new Route(
@@ -832,8 +826,6 @@ $adminRoutes->add(
     ),
     '/admin'
 );
-
-
 
 // Image manager routes
 $adminRoutes->add(
@@ -889,7 +881,6 @@ $adminRoutes->add(
     ),
     '/admin'
 );
-
 
 $adminRoutes->add(
     'admin_image_create',
@@ -1138,7 +1129,6 @@ $adminRoutes->add(
     '/admin'
 );
 
-
 $adminRoutes->add(
     'admin_album_create',
     new Route(
@@ -1201,7 +1191,6 @@ $adminRoutes->add(
     ),
     '/admin'
 );
-
 
 $adminRoutes->add(
     'admin_album_batchdelete',
@@ -1401,7 +1390,6 @@ $adminRoutes->add(
     '/admin'
 );
 
-
 $adminRoutes->add(
     'admin_books_update',
     new Route(
@@ -1464,7 +1452,6 @@ $adminRoutes->add(
     ),
     '/admin'
 );
-
 
 // Files controller routes
 $adminRoutes->add(
@@ -1577,7 +1564,6 @@ $adminRoutes->add(
     '/admin'
 );
 
-
 $adminRoutes->add(
     'admin_file_save_positions',
     new Route(
@@ -1687,7 +1673,6 @@ $adminRoutes->add(
     ),
     '/admin'
 );
-
 
 $adminRoutes->add(
     'admin_newsletter_config',
@@ -1943,7 +1928,6 @@ $adminRoutes->add(
     ),
     '/admin'
 );
-
 
 // Opinion controller routes
 $adminRoutes->add(
@@ -2260,8 +2244,6 @@ $adminRoutes->add(
     '/admin'
 );
 
-
-
 // Comments by Disqus controller routes
 $adminRoutes->add(
     'admin_comments_disqus',
@@ -2546,7 +2528,6 @@ $adminRoutes->add(
     '/admin'
 );
 
-
 // Database error controller routes
 $adminRoutes->add(
     'admin_databaseerrors',
@@ -2720,7 +2701,6 @@ $adminRoutes->add(
     ),
     '/admin'
 );
-
 
 $adminRoutes->add(
     'admin_system_settings',

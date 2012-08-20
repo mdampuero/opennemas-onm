@@ -158,14 +158,12 @@ class SearchController extends Controller
 
             $this->view->assign('search_string', $searchString);
             if (!is_null($related)) {
-
                 return $this->render('search_advanced/content-provider-related.tpl', array(
                     'contents'    => $results,
                     'contentType' => 'Content',
                 ));
 
             } else {
-
                 return $this->render('search_advanced/content-provider.tpl', array(
                     'contents'    => $results,
                     'contentType' => 'Content',
@@ -173,10 +171,8 @@ class SearchController extends Controller
             }
         } else {
             if (!is_null($related)) {
-
                 return $this->render('search_advanced/content-provider-related.tpl');
             } else {
-
                 return $this->render('search_advanced/content-provider.tpl');
             }
         }

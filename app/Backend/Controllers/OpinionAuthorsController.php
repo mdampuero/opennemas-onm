@@ -152,13 +152,11 @@ class OpinionAuthorsController extends Controller
             }
 
             if ($continue) {
-
                 return $this->redirect($this->generateUrl(
                     'admin_opinion_author_show',
                     array('id' => $author->pk_author)
                 ));
             } else {
-
                 return $this->redirect($this->generateUrl('admin_opinion_authors'));
             }
 
@@ -167,7 +165,6 @@ class OpinionAuthorsController extends Controller
         }
 
     }
-
 
     /**
      * Updates the author information
@@ -218,13 +215,11 @@ class OpinionAuthorsController extends Controller
             }
 
             if ($continue) {
-
                 return $this->redirect($this->generateUrl(
                     'admin_opinion_author_show',
                     array('id' => $author->id)
                 ));
             } else {
-
                 return $this->redirect($this->generateUrl('admin_opinion_authors'));
             }
         }
@@ -279,8 +274,6 @@ class OpinionAuthorsController extends Controller
         $nameFile = $file->getClientOriginalName();    //Nombre del archivo a subir
         $originalFileData    = pathinfo($nameFile);                  //sacamos inofr del archivo
 
-
-
         $extension = $originalFileData['extension'];
         $t         = gettimeofday();
         $micro     = intval(substr($t['usec'], 0, 5));
@@ -316,7 +309,6 @@ class OpinionAuthorsController extends Controller
         $data['type_img']    = $extension;
         $data['media_type']  = 'image';
         $data['author_name'] = '';
-
 
         $photo = new \Photo();
         $elid = $photo->create($data);

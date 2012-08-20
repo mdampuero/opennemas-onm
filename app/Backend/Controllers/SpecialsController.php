@@ -299,7 +299,6 @@ class SpecialsController extends Controller
                     array('id' => $special->id)
                 ));
             } else {
-
                 return $this->redirect($this->generateUrl(
                     'admin_specials',
                     array('category' => $data['category'])

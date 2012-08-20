@@ -246,10 +246,8 @@ class VideosController extends Controller
         } else {
             $type = $request->query->filter('type', null, FILTER_SANITIZE_STRING);
             if (empty($type)) {
-
                 return $this->render('video/selecttype.tpl');
             } else {
-
                 return $this->render('video/new.tpl', array(
                     'type' => $type
                 ));

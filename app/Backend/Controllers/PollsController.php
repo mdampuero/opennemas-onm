@@ -290,7 +290,6 @@ class PollsController extends Controller
                     array('id' => $poll->id)
                 ));
             } else {
-
                 return $this->redirect($this->generateUrl(
                     'admin_polls',
                     array('category' => $data['category'])

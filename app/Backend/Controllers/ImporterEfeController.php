@@ -300,7 +300,6 @@ class ImporterEfeController extends Controller
 
         // TODO: change this redirection when creating the ported article controller
         if (!empty($newArticleID)) {
-
             return $this->redirect($this->generateUrl('admin_article_show', array('id' => $newArticleID)));
         } else {
             m::add(sprintf('Unable to import the file "%s"', $id));

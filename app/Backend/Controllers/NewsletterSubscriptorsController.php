@@ -89,19 +89,16 @@ class NewsletterSubscriptorsController extends Controller
 
             $continue = $request->request->filter('continue', 0);
             if ($continue) {
-
                 return $this->redirect($this->generateUrl(
                     'admin_newsletter_subscriptor_show',
                     array('id' => $user->id)
                 ));
             } else {
-
                 return $this->redirect($this->generateUrl(
                     'admin_newsletter_subscriptors'
                 ));
             }
         } else {
-
             return $this->render('newsletter/subscriptions/new.tpl');
         }
     }
@@ -139,19 +136,16 @@ class NewsletterSubscriptorsController extends Controller
 
             $continue = $request->request->filter('continue', 0);
             if ($continue) {
-
                 return $this->redirect($this->generateUrl(
                     'admin_newsletter_subscriptor_show',
                     array('id' => $user->id)
                 ));
             } else {
-
                 return $this->redirect($this->generateUrl(
                     'admin_newsletter_subscriptors'
                 ));
             }
         } else {
-
             return $this->render('newsletter/subscriptions/new.tpl');
         }
     }
@@ -202,7 +196,6 @@ class NewsletterSubscriptorsController extends Controller
         }
 
         if (!$request->isXmlHttpRequest()) {
-
             return $this->redirect($this->generateUrl('admin_newsletter_subscriptors'));
         }
     }

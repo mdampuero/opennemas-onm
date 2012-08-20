@@ -12,7 +12,6 @@ namespace Backend\Controllers;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -93,7 +92,6 @@ class ContentController extends Controller
             'Content-Type' => 'application/json'
         ));
     }
-
 
     /**
      * Sets the draft state for a content given its id
@@ -285,7 +283,5 @@ class ContentController extends Controller
             'Content-Type' => 'application/json'
         ));
     }
-
-
 
 } // END class ContentController

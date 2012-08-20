@@ -68,7 +68,6 @@ class NewsletterController extends Controller
      **/
     public function createAction(Request $request)
     {
-
         return $this->render('newsletter/steps/1-pick-elements.tpl');
     }
 
@@ -237,6 +236,7 @@ class NewsletterController extends Controller
                 if ($key != 'receiver' && empty($value)) {
                     m::add(_('Your newsletter configuration is not complete. Please'.
                         ' go to settings and complete the form.'), m::ERROR);
+
                     return $this->redirect($this->generateUrl('admin_newsletter_config'));
                 }
             }

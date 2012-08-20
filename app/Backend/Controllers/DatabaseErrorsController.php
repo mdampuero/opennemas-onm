@@ -45,6 +45,7 @@ class DatabaseErrorsController extends Controller
     {
         if (!\Acl::isMaster()) {
             m::add("You don't have permissions");
+
             return $this->redirect($this->generateUrl('admin_welcome'));
         }
 
@@ -117,6 +118,7 @@ class DatabaseErrorsController extends Controller
     {
         if (!\Acl::isMaster()) {
             m::add("You don't have permissions");
+
             return $this->redirect($this->generateUrl('admin_welcome'));
         }
 

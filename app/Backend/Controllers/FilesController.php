@@ -269,7 +269,6 @@ class FilesController extends Controller
         $request = $this->request;
 
         if ('POST' != $request->getMethod()) {
-
             return $this->render('files/form.tpl',
                 array(
                     'category' => $this->category,

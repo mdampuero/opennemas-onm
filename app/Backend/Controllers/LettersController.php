@@ -186,7 +186,6 @@ class LettersController extends Controller
                     array('id' => $letter->id)
                 ));
             } else {
-
                 return $this->redirect($this->generateUrl('admin_letters'));
             }
         }

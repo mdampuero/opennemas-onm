@@ -380,7 +380,6 @@ class OpinionsController extends Controller
                     array('id' => $opinion->id)
                 ));
             } else {
-
                 return $this->redirect($this->generateUrl(
                     'admin_opinions',
                     array('category' => $data['category'])

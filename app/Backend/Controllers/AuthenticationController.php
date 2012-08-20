@@ -114,10 +114,8 @@ class AuthenticationController extends Controller
 
                     $forwardTo = filter_input(INPUT_POST, 'forward_to');
                     if (!is_null($forwardTo) && !empty($forwardTo)) {
-
                         return $this->redirect($forwardTo);
                     } else {
-
                         return $this->redirect(SITE_URL_ADMIN);
                     }
                 }
