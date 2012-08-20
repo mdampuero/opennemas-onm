@@ -376,6 +376,7 @@ class ContentCategory
 
             return false;
         }
+
         return $this;
 
     }

@@ -50,7 +50,6 @@ class Opinion extends Content
 
             return self::$_instance;
         } else {
-
             return self::$_instance;
         }
     }
@@ -83,7 +82,6 @@ class Opinion extends Content
                         'category' => StringUtils::get_title($authorName),
                     ));
                 //'opinion/_AUTHOR_/_DATE_/_SLUG_/_ID_.html'
-
                 return $uri;
 
                 break;
@@ -106,6 +104,7 @@ class Opinion extends Content
                 } else {
                     $authorObj = new Author($this->fk_author);
                 }
+
                 return $authorObj;
                 break;
             default: {
@@ -247,6 +246,7 @@ class Opinion extends Content
         }
 
         $GLOBALS['application']->dispatch('onAfterUpdateOpinion', $this);
+
         return true;
     }
 

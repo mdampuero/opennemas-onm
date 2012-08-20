@@ -286,7 +286,6 @@ class ContentCategoryManager
             if (($category->internal_category == $categoryType)
                 && ($category->inmenu==1)
             ) {
-
                 return $category->name;
             }
         }

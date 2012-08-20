@@ -403,7 +403,6 @@ class User
         return false;
     }
 
-
     /**
      * Get a password from a login
      *

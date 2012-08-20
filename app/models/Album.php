@@ -178,7 +178,6 @@ class Album extends Content
         $this->cover       = $this->cover_image->path_file.$this->cover_image->name;
 
         // var_dump($rs->fields['cover_id'], $this->cover_image, $this);die();
-
         return $this;
     }
 

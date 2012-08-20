@@ -83,7 +83,6 @@ class Special extends Content
                 return String_Utils::get_title($this->title);
                 break;
 
-
             case 'content_type_name':
                 $contentTypeName = $GLOBALS['application']->conn->
                     Execute('SELECT * FROM `content_types` '
@@ -100,7 +99,6 @@ class Special extends Content
                 return $returnValue;
 
                 break;
-
 
             default:
                 break;
@@ -159,6 +157,7 @@ class Special extends Content
 
         if (!$rs) {
             \Application::logDatabaseError();
+
             return;
         }
 
@@ -195,7 +194,6 @@ class Special extends Content
         }
 
         $this->saveItems($data);
-
 
         return true;
     }
@@ -334,6 +332,7 @@ class Special extends Content
 
         if ($rs === false) {
             \Application::logDatabaseError();
+
             return;
         }
     }
@@ -349,6 +348,7 @@ class Special extends Content
 
         if ($rs === false) {
             \Application::logDatabaseError();
+
             return;
         }
     }

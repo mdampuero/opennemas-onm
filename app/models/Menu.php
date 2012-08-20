@@ -205,6 +205,7 @@ class Menu
     public function loadItems()
     {
         $this->items = \MenuItems::getMenuItems($this->pk_menu);
+
         return $this;
     }
 

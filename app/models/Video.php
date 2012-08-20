@@ -39,7 +39,6 @@ class Video extends Content
     {
         switch ($name) {
             case 'uri':
-
                 return $this->getUri();
                 break;
             case 'slug':
@@ -65,7 +64,6 @@ class Video extends Content
 
                 break;
             case 'thumb':
-
                 return $this->getThumb();
 
             default:

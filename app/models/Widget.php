@@ -307,7 +307,6 @@ class Widget extends Content
 
     private function renderletHTML()
     {
-
         return $this->content;
     }
 

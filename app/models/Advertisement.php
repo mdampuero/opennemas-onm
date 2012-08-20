@@ -615,7 +615,7 @@ class Advertisement extends Content
     /**
      * Get advertisement for a given type and category
      *
-     * @param array $types Types of advertisement
+     * @param array  $types    Types of advertisement
      * @param string $category Category of advertisement
      *
      * @return array $finalBanners of Advertisement objects
@@ -726,7 +726,7 @@ class Advertisement extends Content
     /**
      * Return banners for the interstitial position.
      *
-     * @param array $type the list of positions to get banners from.
+     * @param array  $type     the list of positions to get banners from.
      * @param string $category the category to get banners from.
      *
      * @return array
@@ -761,8 +761,8 @@ class Advertisement extends Content
     /**
      * Inject banners into template
      *
-     * @param array $banners Array of Advertisement objects
-     * @param Smarty $tpl Template
+     * @param array  $banners Array of Advertisement objects
+     * @param Smarty $tpl     Template
      **/
     public function render($banners, $tpl, $wsUrl = false)
     {
@@ -785,7 +785,7 @@ class Advertisement extends Content
         } else {
             $objsArray = array();
             foreach ($pk_photos as $photo) {
-                $objsArray[] = json_decode(file_get_contents($wsUrl.'/ws/images/id/'.(int)$photo));
+                $objsArray[] = json_decode(file_get_contents($wsUrl.'/ws/images/id/'.(int) $photo));
             }
             foreach ($objsArray as $item) {
                 $content = new Advertisement();
@@ -811,7 +811,7 @@ class Advertisement extends Content
                 $tpl->assign('banner'.$banner->type_advertisement, $banner);
             }
 
-			// FIXME: This is a workarround until decide what to do into
+            // FIXME: This is a workarround until decide what to do into
             // the Content class
             // This will avoid the the notice messages but doesn't keep
             // the code clean.
@@ -853,7 +853,7 @@ class Advertisement extends Content
      * workaround for Advertisement::render
      *
      * @param string $entry
-     * @param mixed $value
+     * @param mixed  $value
      **/
     public function assign($entry, $value)
     {
@@ -864,7 +864,7 @@ class Advertisement extends Content
      * Fetch a entry from set of banners,
      * workaround for Advertisement::render
      *
-     * @param string $entry
+     * @param  string $entry
      * @return mixed
      **/
     public function fetch($entry)

@@ -133,7 +133,7 @@ class MenuItems
     /**
      * Delete all items in a menu
      *
-     * @param integer $id
+     * @param  integer $id
      * @return null
      */
     public static function emptyMenu($id)

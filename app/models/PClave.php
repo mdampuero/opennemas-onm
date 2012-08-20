@@ -206,8 +206,7 @@ class PClave
 
         usort(
             $terms,
-            function ($a, $b)
-            {
+            function ($a, $b) {
                 if (strlen($a->pclave) == strlen($b->pclave)) {
                     return 0;
                 }

@@ -80,7 +80,6 @@ class Attachment extends Content
         //  $data['path'] = MEDIA_PATH.MEDIA_FILE_DIR.$dir_date ;
 
         if ($this->exists($data['path'], $data['category'])) {
-
             return false;
         }
 

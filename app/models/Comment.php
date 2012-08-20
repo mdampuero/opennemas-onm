@@ -271,7 +271,6 @@ class Comment extends \Content
     public function count_public_comments($contentID)
     {
         if (empty($contentID)) {
-
             return false;
         }
         $sql = 'SELECT count(pk_comment)

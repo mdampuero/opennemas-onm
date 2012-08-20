@@ -51,7 +51,6 @@ class UserGroup
         if (!is_null($data['privileges'])
             && count($data['privileges'] > 0)
         ) {
-
             return $this->insertPrivileges($data['privileges']);
         }
 
@@ -99,7 +98,7 @@ class UserGroup
 
             $rs = $GLOBALS['application']->conn->Execute($sql, $values);
 
-            if ( !$rs) {
+            if (!$rs) {
                 \Application::logDatabaseError();
 
                 return;
@@ -162,7 +161,6 @@ class UserGroup
     public function containsPrivilege($privilegeID)
     {
         if (isset($this->privileges)) {
-
             return in_array(intval($privilegeID), $this->privileges);
         }
 

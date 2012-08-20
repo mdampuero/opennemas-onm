@@ -216,7 +216,6 @@ class Vote
             $countIPs[] = array('ip' => $ip, 'count' => 1);
         } else {
             if ($countIPs[$countKIP]['count'] == 50) {
-
                 return false;
             }
             $countIPs[$countKIP]['count']++;

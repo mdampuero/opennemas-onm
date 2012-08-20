@@ -40,7 +40,6 @@ class Letter extends Content
             return self::$_instance;
 
         } else {
-
             return self::$_instance;
         }
     }
@@ -58,7 +57,6 @@ class Letter extends Content
                     )
                 );
                 //'cartas-al-director/_AUTHOR_/_SLUG_/_DATE__ID_.html'
-
                 return $uri;
 
                 break;

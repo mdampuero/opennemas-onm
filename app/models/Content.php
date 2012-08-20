@@ -82,7 +82,6 @@ class Content
                 break;
 
             case 'slug2':
-
                 return StringUtils::get_title($this->title);
                 break;
 
@@ -91,7 +90,6 @@ class Content
                 break;
 
             case 'category_name':
-
                 return $this->category_name =
                     $this->loadCategoryName($this->id);
                 break;
@@ -550,6 +548,7 @@ class Content
 
         /* Notice log of this action */
         Application::logContentEvent('recover from litter', $this);
+
         return $this;
     }
 
@@ -1329,7 +1328,6 @@ class Content
         Application::logContentEvent(__METHOD__, $this);
     }
 
-
     /*
      * Fetches available content types.
      *
@@ -1466,7 +1464,6 @@ class Content
                 }
             }
             if (empty($ads)) {
-
                 return false;
             }
 
@@ -1768,7 +1765,6 @@ class Content
         return true;
     }
 
-
     /**
      * Inserts this content directly to the category frontpage
      *
@@ -1776,8 +1772,6 @@ class Content
      **/
     public function putInCategoryFrontpage()
     {
-
-
         return true;
     }
 

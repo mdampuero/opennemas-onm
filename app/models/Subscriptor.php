@@ -65,7 +65,6 @@ class Subscriptor
             return self::$_instance;
 
         } else {
-
             return self::$_instance;
         }
     }
@@ -243,6 +242,7 @@ class Subscriptor
 
             return false;
         }
+
         return true;
     }
 

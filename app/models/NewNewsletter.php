@@ -55,7 +55,6 @@ class NewNewsletter
             return false;
         }
 
-
         $this->id = $GLOBALS['application']->conn->Insert_ID();
         $this->read($this->id);
 
