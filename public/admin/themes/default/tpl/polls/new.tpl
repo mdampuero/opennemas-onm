@@ -34,7 +34,7 @@
                 </li>
                 <li class="separator"></li>
                 <li>
-                    <a href="{url name=admin_polls_list category=$category}">
+                    <a href="{url name=admin_polls category=$category}">
                         <img src="{$params.IMAGE_DIR}previous.png" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
                     </a>
                 </li>
@@ -128,36 +128,38 @@
                         </div><!-- / -->
                     </td>
                 </tr>
-                 <tr>
-                     <td style="padding:4px;">
-                         <label for="title">{t}Keywords{/t}</label>
-                         <input 	type="text" id="metadata" name="metadata" title="Titulo de la noticia"
-                                 value="{$poll->metadata|clearslash}" class="required" size="80" />
-                     </td>
+                <tr>
+                    <td style="padding:4px;">
+                        <label for="title">{t}Keywords{/t}</label>
+                        <input 	type="text" id="metadata" name="metadata"
+                                value="{$poll->metadata|clearslash}" class="required" size="80" />
+                    </td>
                 </tr>
                 <tr>
-                     <td valign="top" style="padding:4px;" nowrap="nowrap">
-                             <label for="title">{t}Allowed answers{/t}</label>
+                     <td valign="top">
+                        <label for="title">{t}Answers{/t}</label>
+                        <a onClick="add_item_poll({$num})" class="btn">
+                            <i class="icon-plus"></i>
+                            {t}Add new answer{/t}
+                        </a>
+                        <div id="items" name="items"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="top" style="padding:4px;" nowrap="nowrap">
+                    {assign var='num' value='0'}
+                    {section name=i loop=$items}
+                        <div id="item{$smarty.section.i.iteration}" class="marcoItem" style='display:inline;'>
+                            <a onclick="del_this_item('item{$smarty.section.i.iteration}')">
+                                <img src="{$params.IMAGE_DIR}del.png" />
+                            </a>
+                            <input type="text" name="item[{$smarty.section.i.iteration}]" value="{$items[i].item}" id="item[{$smarty.section.i.iteration}]" size="45"/>
+                            <input type="hidden" readonly name="votes[{$smarty.section.i.iteration}]" value="{$items[i].votes}" id="votes[{$smarty.section.i.iteration}]"/>
+                            <small>{t}Votes{/t}:  {$items[i].votes} / {$poll->total_votes}</small>
 
-                         {assign var='num' value='0'}
-                         {section name=i loop=$items}
-                             <div id="item{$smarty.section.i.iteration}" class="marcoItem" style='display:inline;'>
-                             <p style="font-weight: bold;" >Item #{$smarty.section.i.iteration}:  Votos:  {$items[i].votes} / {$poll->total_votes} </p>
-                             Item: <input type="text" name="item[{$smarty.section.i.iteration}]" value="{$items[i].item}" id="item[{$smarty.section.i.iteration}]" size="45"/>
-                              <input type="hidden" readonly name="votes[{$smarty.section.i.iteration}]" value="{$items[i].votes}" id="votes[{$smarty.section.i.iteration}]" size="8"/>
-                             <a onclick="del_this_item('item{$smarty.section.i.iteration}')" style="cursor:pointer;"><img src="{$params.IMAGE_DIR}del.png" />Eliminar item</a>
-                             </div>
-                             {assign var='num' value=$smarty.section.i.iteration}
-                         {/section}
-
-                     </td>
-                 </tr>
-                 <tr>
-                     <td valign="top" style="padding:4px;" nowrap="nowrap">
-                         <a onClick="add_item_poll({$num})" style="cursor:pointer;"><img src="{$params.IMAGE_DIR}add.png" />{t}Add new answer{/t} </a> &nbsp;
-                         <a onclick="del_item_poll()" style="cursor:pointer;"><img src="{$params.IMAGE_DIR}del.png"   /> {t}Delete last answer{/t}</a>
-                         <div id="items" name="items">
-                         </div>
+                        </div>
+                        {assign var='num' value=$smarty.section.i.iteration}
+                    {/section}
                      </td>
                  </tr>
              </tbody>

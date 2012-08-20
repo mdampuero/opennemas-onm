@@ -37,15 +37,15 @@ class PollsController extends Controller
 
         $contentType = \Content::getIDContentType('poll');
 
-        $category = filter_input(INPUT_GET,'category', FILTER_SANITIZE_STRING);
-        if (empty($category)) {
-            $category = filter_input(INPUT_POST,'category',FILTER_SANITIZE_STRING, array('options' => array('default' => 0 )));
-        }
+        $category = $this->request->query->filter(INPUT_GET, 0, FILTER_SANITIZE_STRING);
 
         $ccm = \ContentCategoryManager::get_instance();
-        list($this->parentCategories, $this->subcat, $this->categoryData) = $ccm->getArraysMenu($category, $contentType);
+        list($this->parentCategories, $this->subcat, $this->categoryData) =
+            $ccm->getArraysMenu($category, $contentType);
 
-        if (empty($category)) {$category ='home';}
+        if (empty($category)) {
+            $category ='home';
+        }
 
         $this->view->assign(array(
             'category'     => $category,
@@ -264,16 +264,17 @@ class PollsController extends Controller
         if ($poll->id != null) {
 
             $data = array(
-                'id'           => $id,
-                'title'        => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
-                'subtitle'     => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING),
-                'description'  => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
-                'metadata'     => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
-                'favorite'     => $request->request->getDigits('favorite', 0),
-                'with_comment' => $request->request->getDigits('with_comment', 0),
-                'category'     => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
-                'available'    => $request->request->filter('available', 0, FILTER_SANITIZE_STRING),
-                'item'         => $request->request->get('item'),
+                'id'            => $id,
+                'title'         => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
+                'subtitle'      => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING),
+                'description'   => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
+                'visualization' => $request->request->filter('visualization', '', FILTER_SANITIZE_STRING),
+                'metadata'      => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
+                'favorite'      => $request->request->getDigits('favorite', 0),
+                'with_comment'  => $request->request->getDigits('with_comment', 0),
+                'category'      => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
+                'available'     => $request->request->filter('available', 0, FILTER_SANITIZE_STRING),
+                'item'          => $request->request->get('item'),
                 'votes'         => $request->request->get('votes'),
             );
 

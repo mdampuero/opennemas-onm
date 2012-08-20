@@ -1,8 +1,7 @@
 {extends file="base/admin.tpl"}
 
-
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
+<form action="#" method="post" name="formulario" id="formulario">
 	<div class="top-action-bar">
 		<div class="wrapper-content">
             <div class="title"><h2>{t}Opinion Manager :: Author list{/t}</div>
