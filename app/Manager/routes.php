@@ -26,7 +26,6 @@ $managerRoutes->add(
     'manager'
 );
 
-
 $managerRoutes->add(
     'manager_instances_list_export',
     new Route(
@@ -59,7 +58,6 @@ $managerRoutes->add(
     ),
     'manager'
 );
-
 
 $managerRoutes->add(
     'manager_instance_update',

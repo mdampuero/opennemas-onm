@@ -82,7 +82,6 @@ class InstancesController extends Controller
         ));
     }
 
-
     /**
      * Returns a CSV file with all the instances information
      *
@@ -353,7 +352,7 @@ class InstancesController extends Controller
             ));
         }
 
-        if ($errors){
+        if ($errors) {
             m::add('Instance saved successfully.');
         }
 

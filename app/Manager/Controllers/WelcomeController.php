@@ -11,7 +11,6 @@ namespace Manager\Controllers;
 
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -38,7 +37,6 @@ class WelcomeController extends Controller
      **/
     public function defaultAction(Request $request)
     {
-
         return $this->render('index/index.tpl');
     }
 
