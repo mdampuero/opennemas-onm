@@ -1,7 +1,6 @@
 <?php
 namespace DefaultBundle\Controller;
 
-
 // require_once '/home/fran/Projects/OpenHost/onm-framework/app/bundles/DefaultBundle/Controller/ErrorController.php';
 
 /**
@@ -75,4 +74,3 @@ class DummyUnitTest extends \PHPUnit_Framework_TestCase
     //     );
     // }
 }
-?>

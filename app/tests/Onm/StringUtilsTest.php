@@ -151,9 +151,6 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-
-
-
     /**
      * @covers Onm\StringUtils::remove_shorts
      */
