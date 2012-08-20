@@ -126,7 +126,7 @@ class CategoriesController extends Controller
                 $uploaddir= MEDIA_PATH.'/sections/'.$nameFile;
 
                 if (move_uploaded_file($_FILES["logo_path"]["tmp_name"], $uploaddir)) {
-                   $logoPath = $nameFile;
+                    $logoPath = $nameFile;
                 }
             }
 
@@ -169,7 +169,7 @@ class CategoriesController extends Controller
                 if ($category->internal_category != 0
                     && $category->fk_content_category == 0
                 ) {
-                   $categories[] = $category;
+                    $categories[] = $category;
                 }
             }
 
@@ -202,10 +202,11 @@ class CategoriesController extends Controller
 
             $categories = array();
             foreach ($allcategorys as $categoryItem) {
-               if ($categoryItem->pk_content_category != $id  &&
-                   ($categoryItem->internal_category != 0 && $categoryItem->fk_content_category == 0)) {
-                   $categories[] = $categoryItem;
-               }
+                if ($categoryItem->pk_content_category != $id &&
+                   ($categoryItem->internal_category != 0 && $categoryItem->fk_content_category == 0)
+                ) {
+                    $categories[] = $categoryItem;
+                }
             }
 
             return $this->render('category/form.tpl', array(
@@ -270,7 +271,7 @@ class CategoriesController extends Controller
 
         /* Limpiar la cache de portada de todas las categorias */
         if ($data['inmenu'] == 1) {
-           \Content::refreshFrontpageForAllCategories();
+            \Content::refreshFrontpageForAllCategories();
         }
 
         $continue = $request->request->getDigits('continue', 0);
@@ -341,7 +342,10 @@ class CategoriesController extends Controller
             if ($category->deleteContents()) {
                 m::add(_("Category emptied successfully."), m::SUCCESS);
             } else {
-                m::add(sprintf(_("Unable to delete all the contents in the category '%s'"), $category->title), m::ERROR);
+                m::add(sprintf(
+                    _("Unable to delete all the contents in the category '%s'"),
+                    $category->title
+                ), m::ERROR);
             }
 
         } else {

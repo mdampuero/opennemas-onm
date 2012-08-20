@@ -100,10 +100,15 @@ class ImporterEuropapressController extends Controller
             $message = sprintf(_('Last sync was %d minutes ago.'), $minutesFromLastSync);
         }
         if ($message) {
-            m::add($message . _('Try syncing the news list from server by clicking in "Sync with server" button above'), m::NOTICE);
+            m::add(
+                $message
+                ._('Try syncing the news list from server by clicking '
+                    .'in "Sync with server" button above'),
+                m::NOTICE
+            );
         }
 
-        $_SESSION['_from'] = $this->generateUrl('admin_importer_europapress',array(
+        $_SESSION['_from'] = $this->generateUrl('admin_importer_europapress', array(
             'filter_category' => $filterCategory,
             'filter_title'    => $filterTitle,
             'page'            => $page

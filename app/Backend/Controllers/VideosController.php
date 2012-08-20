@@ -275,8 +275,8 @@ class VideosController extends Controller
 
             if (!\Acl::isAdmin()
                 && !\Acl::check('CONTENT_OTHER_UPDATE')
-                && $video->pk_user != $_SESSION['userid'])
-            {
+                && $video->pk_user != $_SESSION['userid']
+            ) {
                 m::add(_("You can't modify this video because you don't have enought privileges."));
             } else {
                 $video->update($_POST);
@@ -319,7 +319,7 @@ class VideosController extends Controller
             $rel= new \RelatedContent();
             $rel->deleteAll($id);
 
-            $video->delete($id ,$_SESSION['userid']);
+            $video->delete($id, $_SESSION['userid']);
             m::add(_("Video '{$video->title}' deleted successfully."), m::SUCCESS);
         } else {
             m::add(_('You must give an id for delete the video.'), m::ERROR);
@@ -584,7 +584,7 @@ class VideosController extends Controller
             $msg.="<br> "._("Caution! Are you sure that you want to delete this video and its relations?");
         }
 
-      return new Response($msg);
+        return new Response($msg);
     }
 
     /**
@@ -618,9 +618,13 @@ class VideosController extends Controller
         }
 
         if ($msg) {
-            $msg = "<div class='alert alert-success'>"._("Positions saved successfully.").'<button data-dismiss="alert" class="close">×</button></div>';
+            $msg = "<div class='alert alert-success'>"
+                ._("Positions saved successfully.")
+                .'<button data-dismiss="alert" class="close">×</button></div>';
         } else {
-            $msg = "<div class='alert alert-error'>"._("Unable to save the new positions. Please contact with your system administrator.").'<button data-dismiss="alert" class="close">×</button></div>';
+            $msg = "<div class='alert alert-error'>"
+                ._("Unable to save the new positions. Please contact with your system administrator.")
+                .'<button data-dismiss="alert" class="close">×</button></div>';
         }
 
         return new Response($msg);
@@ -672,7 +676,9 @@ class VideosController extends Controller
         $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = 8;
 
-        if ($category == 'home') { $category = 0; }
+        if ($category == 'home') {
+            $category = 0;
+        }
 
         $cm = new  \ContentManager();
 

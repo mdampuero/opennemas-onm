@@ -37,7 +37,8 @@ class ImagesController extends Controller
         $this->ccm = \ContentCategoryManager::get_instance();
         $this->category = $request->query->filter('category', 'all', FILTER_SANITIZE_NUMBER_INT);
         $this->contentType = \Content::getIDContentType('album');
-        list($this->parentCategories, $this->subcat, $this->datos_cat) = $this->ccm->getArraysMenu($this->category,$this->contentType);
+        list($this->parentCategories, $this->subcat, $this->datos_cat) =
+            $this->ccm->getArraysMenu($this->category, $this->contentType);
 
         $this->pathUpload = MEDIA_PATH.DS.IMG_DIR.DS;
         $this->imgUrl     = MEDIA_URL.SS.MEDIA_DIR.SS.IMG_DIR.SS;
@@ -134,10 +135,22 @@ class ImagesController extends Controller
         $photoSetBN  = $ccm->countMediaByTypeGroup('media_type="image" and color="BN"');
 
         $statistics = array(
-            'num_photos' => array('jpg' => 0, 'gif' => 0, 'png' => 0, 'other' => 0, 'bn' => 0, 'color' => 0, 'size' => 0),
-            'num_sub_photos' => array('jpg' => 0, 'gif' => 0, 'png' => 0, 'other' => 0, 'bn' => 0, 'color' => 0, 'size' => 0),
-            'num_especials' => array('jpg' => 0, 'gif' => 0, 'png' => 0, 'other' => 0, 'bn' => 0, 'color' => 0, 'size' => 0),
-            'totals' =>  array('jpg' => 0, 'gif' => 0, 'png' => 0, 'other' => 0, 'bn' => 0, 'color' => 0, 'size' => 0),
+            'num_photos' => array(
+                'jpg' => 0, 'gif' => 0, 'png' => 0, 'other' => 0,
+                'bn' => 0, 'color' => 0, 'size' => 0
+            ),
+            'num_sub_photos' => array(
+                'jpg' => 0, 'gif' => 0, 'png' => 0, 'other' => 0,
+                'bn' => 0, 'color' => 0, 'size' => 0
+            ),
+            'num_especials' => array(
+                'jpg' => 0, 'gif' => 0, 'png' => 0, 'other' => 0,
+                'bn' => 0, 'color' => 0, 'size' => 0
+            ),
+            'totals' =>  array(
+                'jpg' => 0, 'gif' => 0, 'png' => 0, 'other' => 0,
+                'bn' => 0, 'color' => 0, 'size' => 0
+            ),
         );
 
         $num_sub_photos = array();
@@ -194,7 +207,7 @@ class ImagesController extends Controller
         // FIXME: eliminar as dependencias xeradas por un mal
         // Eliminada categoria album del array $especials:  3 => 'album'
         $especials = array(2 => _('Advertisement'));
-        foreach ($especials as $key=>$cat) {
+        foreach ($especials as $key => $cat) {
             $num_especials[$j] =  new \stdClass;
             $num_especials[$j]->id    = $key;
             $num_especials[$j]->title = $cat;
@@ -792,7 +805,8 @@ class ImagesController extends Controller
         if (empty($category)) {
             $photos = $cm->find(
                 'Photo',
-                'contents.fk_content_type = 8 AND photos.media_type="image" AND contents.content_status=1 AND ' . $szWhere,
+                'contents.fk_content_type = 8 AND photos.media_type="image" '
+                .'AND contents.content_status=1 AND ' . $szWhere,
                 'ORDER BY created DESC '.$limit
             );
         } else {

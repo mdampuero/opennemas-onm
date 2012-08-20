@@ -266,7 +266,13 @@ class StaticPagesController extends Controller
             if ($status == 0) {
                 $staticPage->set_favorite($status);
             }
-            m::add(sprintf(_('Successfully changed availability for page with id "%s"'), $staticPage->title), m::SUCCESS);
+            m::add(
+                sprintf(
+                    _('Successfully changed availability for page with id "%s"'),
+                    $staticPage->title
+                ),
+                m::SUCCESS
+            );
         }
 
         return $this->redirect($this->generateUrl(

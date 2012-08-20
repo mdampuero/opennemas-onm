@@ -344,7 +344,7 @@ class CoversController extends Controller
             $rel= new \RelatedContent();
             $rel->deleteAll($id);
 
-            $cover->delete($id ,$_SESSION['userid']);
+            $cover->delete($id, $_SESSION['userid']);
             m::add(_("Cover '{$cover->title}' deleted successfully."), m::SUCCESS);
         } else {
             m::add(_('You must give an id for delete the cover.'), m::ERROR);
@@ -561,9 +561,13 @@ class CoversController extends Controller
         }
 
         if ($msg) {
-            $msg = "<div class='alert alert-success'>"._("Positions saved successfully.").'<button data-dismiss="alert" class="close">×</button></div>';
+            $msg = "<div class='alert alert-success'>"
+                ._("Positions saved successfully.")
+                .'<button data-dismiss="alert" class="close">×</button></div>';
         } else {
-            $msg = "<div class='alert alert-error'>"._("Unable to save the new positions. Please contact with your system administrator.").'<button data-dismiss="alert" class="close">×</button></div>';
+            $msg = "<div class='alert alert-error'>"
+                ._("Unable to save the new positions. Please contact with your system administrator.")
+                .'<button data-dismiss="alert" class="close">×</button></div>';
         }
 
         return new Response($msg);

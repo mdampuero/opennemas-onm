@@ -104,8 +104,6 @@ class AdsController extends Controller
             $itemsPerPage
         );
 
-        $advertisementsCleaned = array();
-
         foreach ($ads as &$ad) {
             //Distinguir entre flash o no flash
             $img = new \Photo($ad->path);
@@ -120,7 +118,7 @@ class AdsController extends Controller
             $adv_placeholder = $ad->getNameOfAdvertisementPlaceholder($ad->type_advertisement);
             $ad->advertisement_placeholder = $adv_placeholder;
 
-            if(!in_array($this->category, $ad->fk_content_categories)
+            if (!in_array($this->category, $ad->fk_content_categories)
                || $ad->fk_content_categories != array(0)
             ) {
                 unset($ad);
@@ -340,7 +338,7 @@ class AdsController extends Controller
         if (!empty($id)) {
             $ad = new \Advertisement($id);
 
-            $ad->delete($id ,$_SESSION['userid']);
+            $ad->delete($id, $_SESSION['userid']);
             m::add(_("Advertisement deleted successfully."), m::SUCCESS);
         } else {
             m::add(_('You must give an id for delete an advertisement.'), m::ERROR);
@@ -547,7 +545,7 @@ class AdsController extends Controller
     private function buildFilter($request, $filter)
     {
         $filters = array();
-        $url = array();
+        $url     = array();
 
         $filters []= $filter;
 
@@ -587,7 +585,10 @@ class AdsController extends Controller
             $url[] = 'filter[type]=' . $definedFilters['type'];
         }
 
-        return array( implode(' AND ',$filters), implode('&', $url),  );
+        return array(
+            implode(' AND ', $filters),
+            implode('&', $url)
+        );
     }
 
 } // END class AdsController

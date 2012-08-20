@@ -110,10 +110,14 @@ class ImporterEfeController extends Controller
             $message = sprintf(_('Last sync was %d minutes ago.'), $minutesFromLastSync);
         }
         if ($message) {
-            m::add($message . _('Try syncing the news list from server by clicking in "Sync with server" button above'), m::NOTICE);
+            m::add(
+                $message
+                . _('Try syncing the news list from server by clicking '
+                    .'in "Sync with server" button above'), m::NOTICE
+            );
         }
 
-        $_SESSION['_from'] = $this->generateUrl('admin_importer_efe',array(
+        $_SESSION['_from'] = $this->generateUrl('admin_importer_efe', array(
             'filter_category' => $filterCategory,
             'filter_title'    => $filterTitle,
             'page'            => $page

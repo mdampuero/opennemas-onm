@@ -547,7 +547,9 @@ class AlbumsController extends Controller
         $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = s::get('items_per_page');
 
-        if ($category == 'home') { $category = 0; }
+        if ($category == 'home') {
+            $category = 0;
+        }
 
         $cm = new  \ContentManager();
 
