@@ -7,6 +7,7 @@
 
     <path id="project.paths.php">
         <pathelement path="${basedir}/app/Backend" />
+        <pathelement path="${basedir}/app/Manager" />
         <pathelement path="${basedir}/app/models" />
         <pathelement path="${basedir}/public/core" />
         <pathelement path="${basedir}/public/controllers" />
