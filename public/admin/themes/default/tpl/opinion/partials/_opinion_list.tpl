@@ -103,7 +103,7 @@
 			<td class="right">
 				<div class="btn-group">
                     {acl isAllowed="OPINION_UPDATE"}
-					<a class="btn" href="{$smarty.server.PHP_SELF}?action=read&amp;id={$opinion->id}" title="{t}Edit{/t}">
+					<a class="btn" href="{url name=admin_opinion_show id=$opinion->id}" title="{t}Edit{/t}">
 						<i class="icon-pencil"></i>
                     </a>
                     {/acl}

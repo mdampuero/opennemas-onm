@@ -184,7 +184,7 @@
                 <a href="{url name=admin_opinions_frontpage}" {if $home}class="active"{/if}>{t}Opinion frontpage{/t}</a>
                 </li>
                 <li>
-                    <a href="{url name=admin_opinions type=0}" id="author" {if !$home}class="active"{/if}>{t}Listing{/t}</a>
+                    <a href="{url name=admin_opinions}" {if !$home}class="active"{/if}>{t}Listing{/t}</a>
                 </li>
             </ul>
 
