@@ -1,5 +1,5 @@
 {
-    "hash": "dcd45a6dad4ee28280964ac6fa143fa9",
+    "hash": "831fff81cd07413e5e4702162aa03ded",
     "packages": [
         {
             "package": "frandieguez/panorama-php",
@@ -90,7 +90,7 @@
     "aliases": [
 
     ],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "stability-flags": [
 
     ]
