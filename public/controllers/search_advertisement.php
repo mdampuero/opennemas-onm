@@ -13,5 +13,5 @@ $cm = new ContentManager();
 $banners = $cm->getInTime($banners);
 //$advertisement->render($banners, &$tpl);
 if (!empty($intersticial)) {
-    $advertisement->render($banners, &$advertisement);
+    $advertisement->render($banners, $advertisement);
 }

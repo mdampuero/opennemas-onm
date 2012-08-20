@@ -9,5 +9,5 @@ $advertisement = Advertisement::getInstance();
 $banners = $advertisement->getAdvertisements(array(1, 2, 3, 6, 7, 8, 11, 13), $category);
 //$advertisement->render($banners, &$tpl);
 if (!empty($intersticial)) {
-    $advertisement->render($banners, &$advertisement);
+    $advertisement->render($banners, $advertisement);
 }
