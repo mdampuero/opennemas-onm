@@ -20,6 +20,12 @@ a:link    { color: #0B55C4; text-decoration: none; }
 a:visited { color: #0B55C4; text-decoration: none; }
 a:hover   { text-decoration: underline; }
 
+ul, ol {
+  margin:0;
+}
+td {
+  vertical-align: top;
+}
 
 ::-moz-selection { background: #357AE8; color: #fff; text-shadow: none; }
 ::selection { background: #357AE8; color: #fff; text-shadow: none; }

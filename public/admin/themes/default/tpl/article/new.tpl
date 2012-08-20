@@ -138,7 +138,6 @@
                             <td style="width:20%; text-align:right;"  rowspan="5">
                                 <div class="utilities-conf" style="width:99%;">
                                     <div style="text-align:right">
-                                        <h3>{t}Options{/t}</h3>
                                         {if $smarty.session.desde != 'list_hemeroteca'}
                                             {is_module_activated name="COMMENT_MANAGER"}
                                             {t}Allow coments{/t}
