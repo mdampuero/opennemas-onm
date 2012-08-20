@@ -7,7 +7,7 @@ class Images
     /*
     * @url GET /images/id/:id
     */
-    function id ($id)
+    public function id($id)
     {
         $this->_validateInt(func_get_args());
 
@@ -16,7 +16,7 @@ class Images
         return $image;
     }
 
-    private function _validateInt ($number)
+    private function _validateInt($number)
     {
         foreach ($number as $value) {
             if (!is_numeric($value)) {

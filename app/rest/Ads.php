@@ -7,7 +7,7 @@ class Ads
     /*
     * @url GET /ads/frontpage/:categoryId
     */
-    function frontpage ($category)
+    public function frontpage($category)
     {
         $this->_validateInt(func_get_args());
 
@@ -30,7 +30,7 @@ class Ads
     /*
     * @url GET /ads/article/:categoryId
     */
-    function article ($category)
+    public function article($category)
     {
         $this->_validateInt(func_get_args());
 
@@ -53,7 +53,7 @@ class Ads
     /*
     * @url GET /ads/opinion/:categoryId
     */
-    function opinion ($category)
+    public function opinion($category)
     {
         $this->_validateInt(func_get_args());
 
@@ -73,7 +73,7 @@ class Ads
         return array($intersticial,$banners);
     }
 
-    private function _validateInt ($number)
+    private function _validateInt($number)
     {
         foreach ($number as $value) {
             if (!is_numeric($value)) {
@@ -86,4 +86,3 @@ class Ads
     }
 
 }
-

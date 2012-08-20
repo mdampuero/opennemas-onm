@@ -7,7 +7,7 @@ class Categories
     /*
     * @url GET /categories/allcontent/:id
     */
-    function allContent ($n1)
+    public function allContent($n1)
     {
         $this->_validateInt(func_get_args());
 
@@ -20,19 +20,18 @@ class Categories
     /*
     * @url GET /categories/id/:title
     */
-    function id ($actualCategory)
+    public function id($actualCategory)
     {
         $ccm = new ContentCategoryManager();
         $actualCategoryId = $ccm->get_id($actualCategory);
 
-
-        return (int)$actualCategoryId;
+        return (int) $actualCategoryId;
     }
 
     /*
     * @url GET /categories/exist/:category_name
     */
-    function exist ($actualCategory)
+    public function exist($actualCategory)
     {
         $ccm = new ContentCategoryManager();
 
@@ -42,7 +41,7 @@ class Categories
     /*
     * @url GET /categories/title/:category_name
     */
-    function title ($actualCategory)
+    public function title($actualCategory)
     {
         $ccm = new ContentCategoryManager();
 
@@ -52,14 +51,14 @@ class Categories
     /*
     * @url GET /categories/lists
     */
-    function lists ()
+    public function lists()
     {
         $menuCategories = Menu::getMenu('frontpage');
 
         return $menuCategories->items;
     }
 
-    private function _validateInt ($number)
+    private function _validateInt($number)
     {
         foreach ($number as $value) {
             if (!is_numeric($value)) {
