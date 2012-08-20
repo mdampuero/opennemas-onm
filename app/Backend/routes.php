@@ -1781,10 +1781,10 @@ $adminRoutes->add(
 
 // Keywork controller routes
 $adminRoutes->add(
-    'admin_keyword',
+    'admin_keywords',
     new Route(
         '/keywords',
-        array('_controller' => 'Backend:Controllers:KeywordsController:default')
+        array('_controller' => 'Backend:Controllers:KeywordsController:list')
     ),
     '/admin'
 );

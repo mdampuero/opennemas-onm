@@ -28,7 +28,6 @@ class KeywordsController extends Controller
      * Common code for all the actions
      *
      * @return void
-     * @author
      **/
     public function init()
     {
@@ -43,59 +42,32 @@ class KeywordsController extends Controller
      *
      * @return void
      **/
-    public function defaultAction()
+    public function listAction(Request $request)
     {
         $filter = $this->request->query->get('filter', null);
-        $page = $this->request->query->getDigits('page', 1);
+        $page   = $this->request->query->getDigits('page', 1);
 
-        if (isset($filter) && !empty($_REQUEST['filter']['pclave'])) {
-            $filter = '`pclave` LIKE "%' . $_REQUEST['filter']['pclave'] . '%"';
+        if (isset($filter) && !empty($filter['pclave'])) {
+            $filter = '`pclave` LIKE "%' . $filter['pclave'] . '%"';
         }
 
         $keywordManager = new \PClave();
-        $terms = $keywordManager->getList($filter);
+        $keywords = $keywordManager->find($filter);
 
-        $pager = \Pager::factory(array(
+        $pagination = \Pager::factory(array(
             'mode'        => 'Sliding',
             'perPage'     => ITEMS_PAGE,
             'delta'       => 4,
             'clearIfVoid' => true,
             'urlVar'      => 'page',
-            'totalItems'  => count($terms),
+            'totalItems'  => count($keywords),
         ));
 
-        $terms = array_slice($terms, ($page-1) * ITEMS_PAGE, ITEMS_PAGE);
+        $keywords = array_slice($keywords, ($page-1) * ITEMS_PAGE, ITEMS_PAGE);
 
         return $this->render('keywords/list.tpl', array(
-            'pclaves' => $terms,
-            'pager'   => $pager,
-        ));
-    }
-
-    /**
-     * Performs the searches over all the keywords
-     *
-     * @return void
-     **/
-    public function searchAction()
-    {
-        $id      = $this->request->query->getDigits('id', null);
-        $terms   = $pclave->getList();
-
-        $matches = array();
-        $terms = array_filter(
-            $terms,
-            function($item) use ($id) {
-                if (($tiem->id != $id) &&
-                    preg_match('/^' . preg_quote($_REQUEST['q']) . '/', $item->pclave)
-                ) {
-                    return true;
-                }
-            }
-        );
-
-        return $this->render('keywords/search.tpl', array(
-            'terms' => $matches,
+            'keywords'   => $keywords,
+            'pagination' => $pagination,
         ));
     }
 
@@ -104,18 +76,22 @@ class KeywordsController extends Controller
      *
      * @return Response the response object
      **/
-    public function readAction()
+    public function showAction(Request $request)
     {
         $this->checkAclOrForward('PCLAVE_UPDATE');
 
         $id = $this->request->query->getDigits('id');
-        $pclave->read($id);
+
+        $keyword = new \PClave();
+        $keyword->read($id);
 
         return $this->render('keywords/new.tpl', array(
-            'id'     => $id,
-            'pclave' => $pclave,
+            'keyword' => $keyword,
             'tipos'  => array(
-            )
+                'url'       => _('URL'),
+                'intsearch' => _('Internal search'),
+                'email'     => _('Email')
+            ),
         ));
     }
 
@@ -124,19 +100,28 @@ class KeywordsController extends Controller
      *
      * @return Response the response object
      **/
-    public function createAction()
+    public function createAction(Request $request)
     {
         $this->checkAclOrForward('PCLAVE_CREATE');
 
         if ('POST' == $this->request->getMethod()) {
             $this->checkAclOrForward('PCLAVE_CREATE');
 
-            $keywordManager = new \PClave();
-            $keywordManager->save($_POST);
+            $data = array(
+                'pclave' => $request->request->filter('pclave', '', FILTER_SANITIZE_STRING),
+                'tipo'   => $request->request->filter('tipo', '', FILTER_SANITIZE_STRING),
+                'value'  => $request->request->filter('value', '', FILTER_SANITIZE_STRING),
+            );
+
+            $keyword = new \PClave();
+            $keyword->create($data);
 
             m::add(_('Keyword created sucessfully'), m::SUCCESS);
 
-            return $this->redirect('admin_keywords');
+            return $this->redirect($this->generateUrl(
+                'admin_keyword_show',
+                array('id' => $keyword->id)
+            ));
         } else {
             return $this->render('keywords/new.tpl', array(
                 'tipos' => array(
@@ -149,16 +134,45 @@ class KeywordsController extends Controller
     }
 
     /**
+     * Updates the Pclave information given its new data
+     *
+     * @return Response the response object
+     **/
+    public function updateAction(Request $request)
+    {
+        $this->checkAclOrForward('PCLAVE_UPDATE');
+
+        $data = array(
+            'id'     => $request->query->getDigits('id'),
+            'pclave' => $request->request->filter('pclave', '', FILTER_SANITIZE_STRING),
+            'tipo'   => $request->request->filter('tipo', '', FILTER_SANITIZE_STRING),
+            'value'  => $request->request->filter('value', '', FILTER_SANITIZE_STRING),
+        );
+
+        $keyword = new \PClave();
+        $keyword->update($data);
+
+        m::add(_('Keyword updated sucessfully'), m::SUCCESS);
+
+        return $this->redirect($this->generateUrl(
+            'admin_keyword_show',
+            array('id' => $data['id'])
+        ));
+    }
+
+    /**
      * Deletes a keyword given its id.
      *
      * @return Response the response object
      **/
-    public function deleteAction()
+    public function deleteAction(Request $request)
     {
-        Acl::checkOrForward('PCLAVE_DELETE');
+        \Acl::checkOrForward('PCLAVE_DELETE');
 
         $id = $this->request->query->getDigits('id');
-        $pclave->delete($id);
+
+        $keyword = new \PClave();
+        $keyword->delete($id);
 
         return $this->redirect($this->generateUrl('admin_keywords'));
     }
@@ -168,7 +182,7 @@ class KeywordsController extends Controller
      *
      * @return Reponse the response object
      **/
-    public function autolinkAction()
+    public function autolinkAction(Request $request)
     {
         $content = json_decode($HTTP_RAW_POST_DATA)->content;
         if (!empty($content)) {

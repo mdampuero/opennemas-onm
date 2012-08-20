@@ -187,7 +187,7 @@ $menuXml = '<?xml version="1.0"?>
             module_name="KEYWORD_MANAGER"
             title="'.htmlspecialchars(_("Keywords"), ENT_QUOTES).'"
             id="keyword_manager"
-            link="'.url('admin_keyword', array()).'"
+            link="'.url('admin_keywords', array()).'"
             privilege="PCLAVE_ADMIN" />
         <node class="divider" />
          <node

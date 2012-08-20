@@ -18,6 +18,11 @@ Trash
 - All types pill doesn't work
 - Unable to (batch) delete static pages
 
+Polls
+-----
+- Review add items
+- Port js code to jQuery
+
 Books
 -----
 - Port the config action

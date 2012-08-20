@@ -16,28 +16,15 @@ use \Onm\Settings as s;
  **/
 class PClave
 {
-    /**
-     * @var int Identifier of class
-     */
     public $id = null;
-
-    /**#@+
-     * Object value
-     *
-     * @access public
-     * @var string
-     */
     public $pclave = null;
     public $value  = null;
     public $tipo   = null;
-    /**#@-*/
 
     /**
      * @var MethodCacheManager Handler to call method cached
      */
     public $cache = null;
-
-    public static $instance = null;
 
     /**
      * constructor
@@ -53,13 +40,26 @@ class PClave
         $this->cache = new MethodCacheManager($this, array('ttl' => 330));
     }
 
-    public function getInstance()
+    /**
+     * Read, get a specific object
+     *
+     * @param  int    $id Object ID
+     * @return PClave Return instance to chaining method
+     */
+    public function read($id)
     {
-        if (is_null(self::$instance)) {
-            self::$instance = new PClave();
+        $sql = "SELECT * FROM pclave WHERE id=?";
+
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
+        if ($rs === false) {
+            \Application::logDatabaseError();
+
+            return null;
         }
 
-        return self::$instance;
+        $this->load($rs->fields);
+
+        return $this;
     }
 
     /**
@@ -70,18 +70,17 @@ class PClave
      */
     public function create($data)
     {
-        // Clear  magic_quotes
-        StringUtils::disabled_magic_quotes($data);
-
         $sql = "INSERT INTO `pclave` (`pclave`, `value`, `tipo`) "
              . "VALUES (?, ?, ?)";
 
-        $values[] = $data['pclave'];
-        $values[] = $data['value'];
-        $values[] = $data['tipo'];
-        /*$this->sanitize( &$data );*/
+        $values = array(
+            $data['pclave'],
+            $data['tipo'],
+            $data['value'],
+        );
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        if ($rs === false) {
             \Application::logDatabaseError();
 
             return null;
@@ -94,27 +93,52 @@ class PClave
     }
 
     /**
-     * Read, get a specific object
+     * Update
      *
-     * @param  int    $id Object ID
-     * @return PClave Return instance to chaining method
+     * @param  array   $data Array values
+     * @return boolean
      */
-    public function read($id)
+    public function update($data)
     {
-        $sql = "SELECT * FROM pclave WHERE id=?";
+        $sql = "UPDATE `pclave` "
+             . "SET `pclave`=?, `tipo`=?, `value`=? "
+             . "WHERE `id`=?";
 
-        $values = array($id);
+        $values = array(
+            $data['pclave'],
+            $data['tipo'],
+            $data['value'],
+            $data['id'],
+        );
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
             \Application::logDatabaseError();
 
-            return null;
+            return false;
         }
 
-        $this->load($rs->fields);
+        return true;
+    }
 
-        return $this;
+    /**
+     * Delete
+     *
+     * @param  int     $id Identifier
+     * @return boolean
+     */
+    public function delete($id)
+    {
+        $sql = "DELETE FROM pclave WHERE id=?";
+
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
+        if ($rs === false) {
+            \Application::logDatabaseError();
+
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -141,74 +165,11 @@ class PClave
     }
 
     /**
-     * Update
-     *
-     * @param  array   $data Array values
-     * @return boolean
-     */
-    public function update($data)
-    {
-        // Clear  magic_quotes
-        StringUtils::disabled_magic_quotes($data);
-
-        $sql = "UPDATE `pclave` "
-             . "SET `pclave`=?, `tipo`=?, `value`=? "
-             . "WHERE `id`=?";
-
-        $values[] = $data['pclave'];
-        $values[] = $data['tipo'];
-        $values[] = $data['value'];
-        $values[] = $data['id'];
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Save pclave into database
-     *
-     * @param array $data Post data
-     */
-    public function save($data)
-    {
-        if (empty($data['id'])) {
-            $this->create($data);
-        } else {
-            $this->update($data);
-        }
-    }
-
-    /**
-     * Delete
-     *
-     * @param  int     $id Identifier
-     * @return boolean
-     */
-    public function delete($id)
-    {
-        $sql = "DELETE FROM pclave WHERE id=?";
-        $values = array($id);
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * Get list of terms to substitute
      *
      * @return array Terms
      */
-    public function getList($filter=null)
+    public function find($filter=null)
     {
         $sql = 'SELECT * FROM `pclave`';
         if (!is_null($filter)) {
