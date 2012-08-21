@@ -31,6 +31,10 @@ Specials
 --------
 Review d&d of contents in specials
 
+ALL
+---
+- Review modals to insert show:false and after that remove bootstrap-modal.js file
+
 LOW PRIORITY TASKS OR IDEAS
 --------------------------------------------------------------------------------
 

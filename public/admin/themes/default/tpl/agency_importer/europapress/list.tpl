@@ -103,9 +103,8 @@
                 <td style="text-align:center;">
                    <img src="{$params.IMAGE_DIR}notifications/level-{$elements[c]->priorityNumber}.png" alt="{t 1=$elements[c]->priorityNumber}Priority %1{/t}" title="{t 1=$elements[c]->priorityNumber}Priority %1{/t}">
                 </td>
-                <td>
-                    <a href="{url name=admin_importer_europapress_show id=$elements[c]->xmlFile|urlencode}"
-                        rel="tooltip" data-original-title="{$elements[c]->body|clearslash|regex_replace:"/'/":"\'"|escape:'html'}">
+                <td rel="tooltip" data-original-title="{$elements[c]->body|clearslash|regex_replace:"/'/":"\'"|escape:'html'}">
+                    <a href="{url name=admin_importer_europapress_show id=$elements[c]->xmlFile|urlencode}">
                         {$elements[c]->title}
                     </a>
                 </td>

@@ -27,11 +27,7 @@ label {
 			<div class="title"><h2>{t}User manager{/t} :: {t}Editing user information{/t}</h2></div>
 			<ul class="old-button">
                 <li>
-                {if isset($user->id)}
-                    <button action="submit" name="action" value="update">
-                {else}
-                    <button action="submit" name="action" value="create">
-                {/if}
+                    <button action="submit">
                         <img src="{$params.IMAGE_DIR}save.png" title="{t}Save and exit{/t}" alt="{t}Save and exit{/t}"><br />{t}Save{/t}
                     </button>
                 </li>

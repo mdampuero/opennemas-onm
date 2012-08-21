@@ -8,6 +8,10 @@
         border:1px solid #ccc;
         margin-bottom:10px;
     }
+    .photo > *{
+        float: left;
+        display:inline-block;
+    }
 </style>
 {/block}
 
@@ -89,15 +93,15 @@
                 </fieldset>
         </div>
         {if count($element->photos) > 0}
-        <div id="photos">
-            <ul>
+        <div id="photos" class="clearfix">
             {foreach from=$element->photos item=photo}
-                <li style="vertical-align: top" class="clearfix">
-                    <img style="float:left;" width="220" src="{url name=admin_importer_efe_showattachment id=$element->id attachment_id=$photo->id}" alt="{$photo->title}">
-                    &nbsp;{$photo->title}
-                </li>
+            <div class="photo">
+                <img style="width:220px" src="{url name=admin_importer_efe_showattachment id=$element->id attachment_id=$photo->id}" alt="{$photo->title}" class="thumbnail">
+                <div>
+                    <p>{$photo->title}</p>
+                </div>
+            </div>
             {/foreach}
-            </ul>
         </div><!-- /photos -->
         {/if}
         {if count($element->videos) > 0}

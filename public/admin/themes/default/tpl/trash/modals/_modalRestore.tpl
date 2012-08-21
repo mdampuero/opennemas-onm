@@ -16,6 +16,7 @@
 jQuery("#modal-restore-contents").modal({
     backdrop: 'static', //Show a grey back drop
     keyboard: true, //Can close on escape
+    show: false
 });
 
 jQuery('#modal-restore-contents a.btn.yes').on('click', function(){

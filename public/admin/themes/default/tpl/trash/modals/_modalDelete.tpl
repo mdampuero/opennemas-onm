@@ -16,6 +16,7 @@
 jQuery("#modal-delete-contents").modal({
     backdrop: 'static', //Show a grey back drop
     keyboard: true, //Can close on escape
+    show: false
 });
 
 jQuery('#modal-delete-contents a.btn.yes').on('click', function(){

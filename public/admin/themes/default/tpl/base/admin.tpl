@@ -36,7 +36,7 @@
         jQuery.noConflict();
         </script>
         {script_tag src="/libs/bootstrap.js"}
-        {script_tag src="/jquery/bootstrap-modal.js"}
+        {script_tag src="/libs/bootstrap-modal.js"}
         {block name="prototype"}{/block}
     {/block}
 
