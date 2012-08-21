@@ -53,7 +53,7 @@ $loader->registerNamespaces(array(
     'Symfony\Component\DependencyInjection' => __DIR__.'/../vendor/symfony/dependency-injection',
     'Symfony\Component\Config'             => __DIR__.'/../vendor/symfony/config',
     'Symfony\Component\Yaml'               => __DIR__.'/../vendor/symfony/yaml',
-    'Panorama'                             => __DIR__.'/../vendor/frandieguez/panorama-php',
+    'Panorama'                             => __DIR__.'/../vendor/frandieguez/panorama-php/lib',
 ));
 
 // SessionHandlerInterface
