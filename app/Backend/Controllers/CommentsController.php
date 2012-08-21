@@ -210,26 +210,32 @@ class CommentsController extends Controller
      *
      * @return Response the response object
      **/
-    public function updateAction()
+    public function updateAction(Request $request)
     {
         $this->checkAclOrForward('COMMENT_UPDATE');
 
-        $request = $this->get('request');
         $id      = $request->query->getDigits('id');
         $comment = new \Comment($id);
 
+        $data = array(
+            'id'             => $id,
+            'author'         => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
+            'email'          => $request->request->filter('email', '', FILTER_SANITIZE_STRING),
+            'date'           => $request->request->filter('date', '', FILTER_SANITIZE_STRING),
+            'ip'             => $request->request->filter('ip', '', FILTER_SANITIZE_STRING),
+            'content_status' => $request->request->getDigits('content_status', '', FILTER_SANITIZE_STRING),
+            'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
+            'body'           => $request->request->filter('body', '', FILTER_SANITIZE_STRING),
+            'fk_content'     => $request->request->getDigits('fk_content'),
+            'category'       => $request->request->getDigits('category'),
+        );
+
         if (!is_null($comment->pk_comment)) {
-            $comment->update( $_POST );
+            $comment->update($data);
             m::add(_('Comment saved successfully.'), m::SUCCESS);
         }
 
-        $params = array(
-            'page'     => $request->query->getDigits('page', 1),
-            'category' => $this->category,
-            'status'   => $comment->content_status
-        );
-
-        return $this->redirect($this->generateUrl('admin_comments', $params));
+        return $this->redirect($this->generateUrl('admin_comments_show', array('id' => $id)));
 
     }
 
