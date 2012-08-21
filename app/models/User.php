@@ -67,9 +67,8 @@ class User
 
         $sql = "INSERT INTO users (`login`, `password`, `sessionexpire`,
                                       `email`, `name`, `firstname`,
-                                      `lastname`, `address`, `phone`,
-                                      `fk_user_group`)
-                    VALUES (?,?,?,?,?,?,?,?,?,?)";
+                                      `lastname`, `fk_user_group`)
+                    VALUES (?,?,?,?,?,?,?,?)";
         $values = array(
             $data['login'],
             md5($data['password']),
@@ -78,8 +77,6 @@ class User
             $data['name'],
             $data['firstname'],
             $data['lastname'],
-            $data['address'],
-            $data['phone'],
             $data['id_user_group']
         );
 

@@ -168,10 +168,24 @@ class AclUserController extends Controller
         $ccm = \ContentCategoryManager::get_instance();
         $user_group = new \UserGroup();
         $tree = $ccm->getCategoriesTree();
+        $data = array(
+            'login'           => $request->request->filter('login', null, FILTER_SANITIZE_STRING),
+            'email'           => $request->request->filter('email', null, FILTER_SANITIZE_STRING),
+            'password'        => $request->request->filter('password', null, FILTER_SANITIZE_STRING),
+            'passwordconfirm' => $request->request->filter('passwordconfirm', null, FILTER_SANITIZE_STRING),
+            'name'            => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
+            'firstname'       => $request->request->filter('firstname', null, FILTER_SANITIZE_STRING),
+            'lastname'        => $request->request->filter('lastname', null, FILTER_SANITIZE_STRING),
+            'sessionexpire'   => $request->request->getDigits('sessionexpire'),
+            'id_user_group'   => $request->request->getDigits('id_user_group'),
+            'ids_category'    => $request->request->get('ids_category'),
+            'address'         => '',
+            'phone'         => '',
+        );
 
         if ($request->getMethod() == 'POST') {
             try {
-                if ($user->create($_POST)) {
+                if ($user->create($data)) {
                     if ($action == 'validate') {
                         return $this->redirect($this->generateUrl(
                             'admin_acl_user_show',
@@ -181,8 +195,7 @@ class AclUserController extends Controller
 
                     return $this->redirect($this->generateUrl('admin_acl_user'));
                 } else {
-                    m::add($user->errors, m::ERROR);
-                    $this->view->assign('errors', $user->errors);
+                    m::add(_('Unable to create the user with that information'), m::ERROR);
                 }
             } catch (\Exception $e) {
                 m::add($e->getMessage(), m::ERROR);
