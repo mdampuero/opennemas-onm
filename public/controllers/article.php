@@ -74,7 +74,7 @@ switch ($action) {
             if (($article->available==1) && ($article->in_litter==0)
                 && ($article->isStarted())
             ) {
-/*
+                /*
                 //Check slug
                 if (empty($slug) || ($article->slug != $slug)
                     || empty($category_name) || $article->category_name != $category_name)
