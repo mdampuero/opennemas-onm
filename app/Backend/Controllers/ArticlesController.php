@@ -37,8 +37,7 @@ class ArticlesController extends Controller
 
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
 
-        $this->category = $this->get('request')
-                               ->query
+        $this->category = $this->get('request')->query
                                ->filter('category', 'all', FILTER_SANITIZE_STRING);
 
         $this->ccm        = \ContentCategoryManager::get_instance();
@@ -213,9 +212,15 @@ class ArticlesController extends Controller
                 'starttime'         => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
                 'endtime'           => $request->request->filter('endtime', '', FILTER_SANITIZE_STRING),
                 'description'       => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
-                'relatedFront'      => json_decode(json_decode($request->request->filter('relatedFront', '', FILTER_SANITIZE_STRING))),
-                'relatedInner'      => json_decode(json_decode($request->request->filter('relatedInner', '', FILTER_SANITIZE_STRING))),
-                'relatedHome'       => json_decode(json_decode($request->request->filter('relatedHome', '', FILTER_SANITIZE_STRING))),
+                'relatedFront'      => json_decode(json_decode(
+                    $request->request->filter('relatedFront', '', FILTER_SANITIZE_STRING)
+                )),
+                'relatedInner'      => json_decode(json_decode(
+                    $request->request->filter('relatedInner', '', FILTER_SANITIZE_STRING)
+                )),
+                'relatedHome'       => json_decode(json_decode(
+                    $request->request->filter('relatedHome', '', FILTER_SANITIZE_STRING)
+                )),
             );
 
             if ($article->create($data)) {
@@ -350,9 +355,24 @@ class ArticlesController extends Controller
 
         if (ModuleManager::isActivated('AVANCED_ARTICLE_MANAGER') && is_array($article->params)) {
             $galleries = array();
-            $galleries['home'] = (array_key_exists('withGalleryHome',$article->params))? new \Album($article->params['withGalleryHome']): null;
-            $galleries['front'] = (array_key_exists('withGalleryHome',$article->params))? new \Album($article->params['withGallery']): null;
-            $galleries['inner'] = (array_key_exists('withGalleryHome',$article->params))? new \Album($article->params['withGalleryInt']): null;
+            if (array_key_exists('withGalleryHome', $article->params)) {
+                $galleries['home'] = new \Album($article->params['withGalleryHome']);
+            } else {
+                $galleries['home'] = null;
+            }
+
+            if (array_key_exists('withGallery', $article->params)) {
+                $galleries['front'] = new \Album($article->params['withGallery']);
+            } else {
+                $galleries['front'] = null;
+            }
+
+            if (array_key_exists('withGalleryInt', $article->params)) {
+                $galleries['inner'] = new \Album($article->params['withGalleryInt']);
+            } else {
+                $galleries['inner'] = null;
+            }
+
             $this->view->assign('galleries', $galleries);
 
             $orderHome = array();
@@ -450,9 +470,15 @@ class ArticlesController extends Controller
                 'starttime'         => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
                 'endtime'           => $request->request->filter('endtime', '', FILTER_SANITIZE_STRING),
                 'description'       => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
-                'relatedFront'      => json_decode(json_decode($request->request->filter('relatedFront', '', FILTER_SANITIZE_STRING))),
-                'relatedInner'      => json_decode(json_decode($request->request->filter('relatedInner', '', FILTER_SANITIZE_STRING))),
-                'relatedHome'       => json_decode(json_decode($request->request->filter('relatedHome', '', FILTER_SANITIZE_STRING))),
+                'relatedFront'      => json_decode(json_decode(
+                    $request->request->filter('relatedFront', '', FILTER_SANITIZE_STRING)
+                )),
+                'relatedInner'      => json_decode(json_decode(
+                    $request->request->filter('relatedInner', '', FILTER_SANITIZE_STRING)
+                )),
+                'relatedHome'       => json_decode(json_decode(
+                    $request->request->filter('relatedHome', '', FILTER_SANITIZE_STRING)
+                )),
             );
 
             if ($article->update($data)) {
@@ -508,7 +534,7 @@ class ArticlesController extends Controller
         if (!empty($id)) {
             $article = new \Article($id);
 
-            $article->delete($id ,$_SESSION['userid']);
+            $article->delete($id, $_SESSION['userid']);
             m::add(_("Article deleted successfully."), m::SUCCESS);
         } else {
             m::add(_('You must give an id for delete an article.'), m::ERROR);

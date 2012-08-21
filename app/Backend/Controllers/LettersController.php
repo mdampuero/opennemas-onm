@@ -209,7 +209,7 @@ class LettersController extends Controller
         if (!empty($id)) {
             $letter = new \Letter($id);
 
-            $letter->delete($id ,$_SESSION['userid']);
+            $letter->delete($id, $_SESSION['userid']);
             m::add(_("Letter deleted successfully."), m::SUCCESS);
         } else {
             m::add(_('You must give an id for delete the letter.'), m::ERROR);

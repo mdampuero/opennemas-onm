@@ -153,8 +153,16 @@ class InstancesController extends Controller
             'configs'           => $instance->configs,
             'available_modules' => ModuleManager::getAvailableModules(),
             'timezones'         => \DateTimeZone::listIdentifiers(),
-            'languages'         => array('en_US' => _("English"), 'es_ES' => _("Spanish"), 'gl_ES' => _("Galician")),
-            'logLevels'         => array('normal' => _('Normal'), 'verbose' => _('Verbose'), 'all' => _('All (Paranoic mode)') ),
+            'languages'         => array(
+                'en_US' => _("English"),
+                'es_ES' => _("Spanish"),
+                'gl_ES' => _("Galician")
+            ),
+            'logLevels'         => array(
+                'normal'  => _('Normal'),
+                'verbose' => _('Verbose'),
+                'all'     => _('All (Paranoic mode)')
+            ),
             'instance'          => $instance,
             'templates'         => $templates,
         ));
@@ -175,7 +183,7 @@ class InstancesController extends Controller
             if (isset($_POST['internal_name']) && !empty($_POST['internal_name'])) {
                 $internalName = $_POST['internal_name'];
             } else {
-                $internal = explode(".", filter_input(INPUT_POST, 'domains' , FILTER_SANITIZE_STRING) );
+                $internal = explode(".", filter_input(INPUT_POST, 'domains', FILTER_SANITIZE_STRING) );
                 $internalName = $internal[0];
             }
             //Force internal_name lowercase
@@ -206,7 +214,8 @@ class InstancesController extends Controller
                 'domains'       => $request->request->filter('domains', '', FILTER_SANITIZE_STRING),
                 'activated'     => $request->request->filter('activated', '', FILTER_SANITIZE_NUMBER_INT),
                 'settings'      => $settings,
-                'site_created'  => $request->request->filter('site_created', date("d-m-Y - H:m"), FILTER_SANITIZE_STRING)
+                'site_created'  => $request->request
+                    ->filter('site_created', date("d-m-Y - H:m"), FILTER_SANITIZE_STRING)
             );
 
             // Also get timezone if comes from openhost form
@@ -240,8 +249,16 @@ class InstancesController extends Controller
                 'configs' => array( 'activated_modules' => ModuleManager::getAvailableModules()),
                 'available_modules' => ModuleManager::getAvailableModules(),
                 'timezones' => \DateTimeZone::listIdentifiers(),
-                'languages' => array('en_US' => _("English"), 'es_ES' => _("Spanish"), 'gl_ES' => _("Galician")),
-                'logLevels' => array('normal' => _('Normal'), 'verbose' => _('Verbose'), 'all' => _('All (Paranoic mode)') ),
+                'languages' => array(
+                    'en_US' => _("English"),
+                    'es_ES' => _("Spanish"),
+                    'gl_ES' => _("Galician")
+                ),
+                'logLevels' => array(
+                    'normal'  => _('Normal'),
+                    'verbose' => _('Verbose'),
+                    'all'     => _('All (Paranoic mode)')
+                ),
                 'templates' => $templates,
             ));
         }
@@ -260,10 +277,12 @@ class InstancesController extends Controller
 
         //Get internal_name from domains
         $internalName = "";
-        if (isset($_POST['internal_name']) && !empty($_POST['internal_name'])) {
+        if (isset($_POST['internal_name'])
+            && !empty($_POST['internal_name'])
+        ) {
             $internalName = $_POST['internal_name'];
         } else {
-            $internal = explode(".", filter_input(INPUT_POST, 'domains' , FILTER_SANITIZE_STRING) );
+            $internal = explode(".", filter_input(INPUT_POST, 'domains', FILTER_SANITIZE_STRING));
             $internalName = $internal[0];
         }
         //Force internal_name lowercase
@@ -337,7 +356,7 @@ class InstancesController extends Controller
         //TODO: PROVISIONAL WHILE DONT DELETE $GLOBALS['application']->conn // is used in settings set
         $GLOBALS['application']->conn = $this->instanceManager->getConnection($settings);
 
-        foreach ($request->request->all() as $key => $value ) {
+        foreach ($request->request->all() as $key => $value) {
             if (in_array($key, $configurationsKeys)) {
                 s::set($key, $value);
             }

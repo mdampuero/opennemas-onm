@@ -21,11 +21,11 @@ $ccm = ContentCategoryManager::get_instance();
 /**
  * Getting request params
  **/
-$dirtyID = $request->query->filter('article_id', '', FILTER_SANITIZE_STRING);
-$category_name = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+$dirtyID          = $request->query->filter('article_id', '', FILTER_SANITIZE_STRING);
+$category_name    = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
 $subcategory_name = null;
-$action = $request->query->filter('action', '', FILTER_SANITIZE_STRING);
-$ext = $request->query->filter('ext', 0, FILTER_VALIDATE_INT);
+$action           = $request->query->filter('action', '', FILTER_SANITIZE_STRING);
+$ext              = $request->query->filter('ext', 0, FILTER_VALIDATE_INT);
 $tpl->assign('ext', $ext); // Used on _other-contents.tpl
 
 /**
@@ -59,7 +59,7 @@ if (isset($category_name) && !empty($category_name)) {
 if ( empty($action) ) {
     Application::forward301('/404.html');
 }
-switch($action) {
+switch ($action) {
     case 'read': {
 
         // Load config
@@ -97,7 +97,7 @@ switch($action) {
         if (($tpl->caching == 0) || !$tpl->isCached('article/article.tpl', $cacheID)) {
 
             // Fetch and load article information
-            $ext = json_decode(file_get_contents($wsUrl.'/ws/articles/'.(int)$articleID));
+            $ext = json_decode(file_get_contents($wsUrl.'/ws/articles/'.(int) $articleID));
             $article = new Article();
             $article->load($ext);
             $article->category_name = $category_name;
@@ -140,11 +140,13 @@ switch($action) {
                 }
 
                 // Get inner Related contents
-                $relatedContentsWs = json_decode(file_get_contents($wsUrl.'/ws/articles/lists/related-inner/'.$articleID));
+                $relatedContentsWs = json_decode(file_get_contents(
+                    $wsUrl.'/ws/articles/lists/related-inner/'.$articleID
+                ));
 
                 $relatedContents = array();
                 foreach ($relatedContentsWs as $item) {
-                    $getContentUrl = $wsUrl.'/ws/contents/contenttype/'.(int)$item->fk_content_type;
+                    $getContentUrl = $wsUrl.'/ws/contents/contenttype/'.(int) $item->fk_content_type;
                     $contentType = file_get_contents($getContentUrl);
                     $contentType = str_replace('"', '', $contentType);
                     $content = new $contentType();
@@ -159,7 +161,9 @@ switch($action) {
                 $tpl->assign('relationed', $relatedContents);
 
                 // Get Machine suggested contents
-                $machineRelated = json_decode(file_get_contents($wsUrl.'/ws/articles/lists/machine-related/'.$articleID));
+                $machineRelated = json_decode(file_get_contents(
+                    $wsUrl.'/ws/articles/lists/machine-related/'.$articleID
+                ));
 
                 $machineSuggestedContents = array();
                 foreach ($machineRelated as $content) {
@@ -190,18 +194,18 @@ switch($action) {
 
         $comment_id = $_GET['a'];
 
-        if($ip != $ip_from) {
+        if ($ip != $ip_from) {
             Application::ajax_out("Error no ip vote!");
         }
 
         $vote = new Vote($comment_id);
-        if(is_null($vote)) {
+        if (is_null($vote)) {
             Application::ajax_out("Error no  vote value!");
         }
-        $update = $vote->update($vote_value,$ip);
+        $update = $vote->update($vote_value, $ip);
 
-        if($update) {
-            $html_out = $vote->render($page,'result',1);
+        if ($update) {
+            $html_out = $vote->render($page, 'result', 1);
         } else {
             $html_out = "Ya ha votado anteriormente este comentario.";
         }
@@ -210,7 +214,7 @@ switch($action) {
     } break;
 
     case 'get_plus': {
-        if($_GET["content"]=="Comment") {
+        if ($_GET["content"]=="Comment") {
 
             $cm = new ContentManager();
             $articles = $cm->cache->getMostComentedContent('Article', true, $_REQUEST['category'], $_REQUEST['days']);
@@ -221,25 +225,39 @@ switch($action) {
                 $html_out .= '<div class="CNoticiaMas">';
                 $html_out .= '<div class="CContainerIconoTextoNoticiaMas">';
                 $html_out .= '<div class="iconoNoticiaMas"></div>';
-                $html_out .= '<div class="textoNoticiaMas"><a href="'.$article["uri"].'">'.stripslashes($article["title"]).'</a> ('.$article["num"].' comentarios)</div>';
+                $html_out .= '<div class="textoNoticiaMas"><a href="'
+                    .$article["uri"].'">'.stripslashes($article["title"]).'</a> ('
+                    .$article["num"].' comentarios)</div>';
                 $html_out .= '</div>';
-                $html_out .= '<div class="fileteNoticiaMas"><img src="'.TEMPLATE_USER_PATH.MEDIA_IMG_DIR.'/noticiasRecomendadas/fileteRecomendacion.gif" alt=""/></div>';
+                $html_out .= '<div class="fileteNoticiaMas"><img src="'
+                    .TEMPLATE_USER_PATH.MEDIA_IMG_DIR
+                    .'/noticiasRecomendadas/fileteRecomendacion.gif" alt=""/></div>';
                 $html_out .= '</div>';
             }
         } else {
 
             $cm = new ContentManager();
 
-            $articles_viewed = $cm->cache->getMostViewedContent('Article', true, $_REQUEST['category'], $_REQUEST['author'], $_REQUEST['days']);
+            $articles_viewed = $cm->cache->getMostViewedContent(
+                'Article',
+                true,
+                $_REQUEST['category'],
+                $_REQUEST['author'],
+                $_REQUEST['days']
+            );
 
             $html_out = "";
             foreach ($articles_viewed as $article) {
                 $html_out .= '<div class="CNoticiaMas">';
                 $html_out .= '<div class="CContainerIconoTextoNoticiaMas">';
                 $html_out .= '<div class="iconoNoticiaMas"></div>';
-                $html_out .= '<div class="textoNoticiaMas"><a href="'.$article->uri.'">'.stripslashes($article->title).'</a></div>';
+                $html_out .= '<div class="textoNoticiaMas"><a href="'
+                    .$article->uri.'">'.stripslashes($article->title)
+                    .'</a></div>';
                 $html_out .= '</div>';
-                $html_out .= '<div class="fileteNoticiaMas"><img src="'.TEMPLATE_USER_PATH.MEDIA_IMG_DIR.'/noticiasRecomendadas/fileteRecomendacion.gif" alt=""/></div>';
+                $html_out .= '<div class="fileteNoticiaMas"><img src="'
+                    .TEMPLATE_USER_PATH.MEDIA_IMG_DIR
+                    .'/noticiasRecomendadas/fileteRecomendacion.gif" alt=""/></div>';
                 $html_out .= '</div>';
             }
         }
@@ -273,7 +291,7 @@ switch($action) {
             $title = StringUtils::get_title($article->title);
             $print_url = '/imprimir/' . $title. '/' . $category_name . '/';
 
-            if(!empty($subcategory_name)) {
+            if (!empty($subcategory_name)) {
                 $breadcrub[] = array(
                     'text' => $ccm->get_title($subcategory_name),
                     'link' => '/seccion/' . $category_name . '/' . $subcategory_name . '/'
@@ -286,7 +304,7 @@ switch($action) {
             $tpl->assign('print_url', $print_url);
 
             $cat = $ccm->getByName($category_name);
-            if(!is_null($cat) && $cat->inmenu) {
+            if (!is_null($cat) && $cat->inmenu) {
                 $tpl->assign('breadcrub', $breadcrub);
             }
 
@@ -313,7 +331,7 @@ switch($action) {
 
 
     case 'sendform': {
-        require_once('session_bootstrap.php');
+        require_once 'session_bootstrap.php';
         $token = $_SESSION['sendformtoken'] = md5(uniqid('sendform'));
 
         $article = new Article($_REQUEST['article_id']);
@@ -330,13 +348,13 @@ switch($action) {
     } break;
 
     case 'send': {
-        require_once('session_bootstrap.php');
+        require_once 'session_bootstrap.php';
 
         // Check if magic_quotes is enabled and clear globals arrays
         StringUtils::disabled_magic_quotes();
 
         // Check direct access
-        if($_SESSION['sendformtoken'] != $_REQUEST['token']) {
+        if ($_SESSION['sendformtoken'] != $_REQUEST['token']) {
             Application::forward('/');
         }
 
@@ -359,7 +377,9 @@ switch($action) {
 
         $mail->From     = $_REQUEST['sender'];
         $mail->FromName = $_REQUEST['name_sender'];
-        $mail->Subject  = $_REQUEST['name_sender'].' ha compartido contigo un contenido de '.s::get('site_name');  //substr(strip_tags($_REQUEST['body']), 0, 100);
+        $mail->Subject  = $_REQUEST['name_sender']
+            .' ha compartido contigo un contenido de '.s::get('site_name');
+              //substr(strip_tags($_REQUEST['body']), 0, 100);
 
         $tplMail->assign('destination', 'amig@,');
 
@@ -379,7 +399,7 @@ switch($action) {
         } else {
             $agency = s::get('site_name');
         }
-        $tplMail->assign('agency',$agency);
+        $tplMail->assign('agency', $agency);
 
         if (empty($article->summary)) {
             $summary = substr(strip_tags(stripslashes($article->body)), 0, 300)."...";
@@ -391,7 +411,7 @@ switch($action) {
 
         if (method_exists($tpl, '_get_plugin_filepath')) {
             //handle with Smarty version 2
-            require_once $tpl->_get_plugin_filepath('function','articledate');
+            require_once $tpl->_get_plugin_filepath('function', 'articledate');
         } else {
             //handle with Smarty version 3 beta 8
             foreach ($tpl->plugins_dir as $value) {
@@ -407,7 +427,7 @@ switch($action) {
         $params['created'] = $article->created;
         $params['updated'] = $article->updated;
         $params['article'] = $article;
-        $date = smarty_function_articledate($params,$tpl);
+        $date = smarty_function_articledate($params, $tpl);
         $tplMail->assign('date', $date);
 
         $tplMail->caching = 0;
@@ -425,13 +445,17 @@ switch($action) {
             $mail->AddBCC(trim($dest));
         }
 
-        if( $mail->Send() ) {
+        if ( $mail->Send() ) {
             $tpl->assign('message', 'Noticia enviada correctamente.');
         } else {
-            if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')) {
+            if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')) {
                 header("HTTP/1.0 404 Not Found");
             }
-            $tpl->assign('message', 'La noticia no pudo ser enviada, inténtelo de nuevo más tarde. <br /> Disculpe las molestias.');
+            $tpl->assign(
+                'message',
+                'La noticia no pudo ser enviada, inténtelo de nuevo '
+                .'más tarde. <br /> Disculpe las molestias.'
+            );
         }
 
         $tpl->caching = 0;

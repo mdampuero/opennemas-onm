@@ -80,7 +80,7 @@ if (
     // Get category id correspondence with ws
     $wsActualCategoryId = file_get_contents($wsUrl.'/ws/categories/id/'.$category_name );
 
-/*
+    /*
     // Fetch information for Advertisements from Web service
     $ads = json_decode(file_get_contents($wsUrl.'/ws/ads/frontpage/'.$wsActualCategoryId));
 
@@ -95,14 +95,14 @@ if (
     if (!empty($intersticial)) {
         $advertisement->render(array($intersticial), $advertisement,$wsUrl);
     }
-*/
+    */
 
     $getContentsUrl = $wsUrl.'/ws/categories/allcontent/'.$wsActualCategoryId;
     $allContentsInHomepage = json_decode(file_get_contents($getContentsUrl), true);
 
     $contentsInHomepage = array();
     foreach ($allContentsInHomepage as $item) {
-        $getContentUrl = $wsUrl.'/ws/contents/contenttype/'.(int)$item['fk_content_type'];
+        $getContentUrl = $wsUrl.'/ws/contents/contenttype/'.(int) $item['fk_content_type'];
         $contentType = file_get_contents($getContentUrl);
         $contentType = str_replace('"', '', $contentType);
         $content = new $contentType();
@@ -118,7 +118,7 @@ if (
     $imageList = array();
     foreach ($contentsInHomepage as $content) {
         if (isset($content->img1) && $content->img1 != 0) {
-            $image = json_decode(file_get_contents($wsUrl.'/ws/images/id/'.(int)$content->img1));
+            $image = json_decode(file_get_contents($wsUrl.'/ws/images/id/'.(int) $content->img1));
             if (!empty($image)) {
                 $image->media_url = json_decode(file_get_contents($wsUrl.'/ws/instances/mediaurl/'));
                 $imageList []= $image;
@@ -163,7 +163,7 @@ if (
 
 
         foreach ($content->related_contents as &$item) {
-            $getContentUrl = $wsUrl.'/ws/contents/contenttype/'.(int)$item->fk_content_type;
+            $getContentUrl = $wsUrl.'/ws/contents/contenttype/'.(int) $item->fk_content_type;
             $contentType = file_get_contents($getContentUrl);
             $contentType = str_replace('"', '', $contentType);
             $contentRelated = new $contentType();

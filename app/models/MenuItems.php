@@ -68,7 +68,6 @@ class MenuItems
             $rs->MoveNext();
             $i++;
         }
-// var_dump($id, $rs);die();
 
         foreach ($menuItems as $id => $element) {
             if ((int) $element->pk_father > 0) {

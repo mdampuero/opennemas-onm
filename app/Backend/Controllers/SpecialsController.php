@@ -325,7 +325,7 @@ class SpecialsController extends Controller
         if (!empty($id)) {
             $special = new \Special($id);
 
-            $special->delete($id ,$_SESSION['userid']);
+            $special->delete($id, $_SESSION['userid']);
             m::add(_("Special deleted successfully."), m::SUCCESS);
         } else {
             m::add(_('You must give an id for delete a special.'), m::ERROR);
