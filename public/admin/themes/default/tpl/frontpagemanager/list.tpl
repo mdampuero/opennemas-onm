@@ -17,7 +17,11 @@
         var frontpage_urls = {
             save_positions: '{url name=admin_frontpage_savepositions category=$category}',
             preview_frontpage: '{url name=admin_frontpage_preview category=$category}',
-            clean_frontpage: '{url name=admin_tpl_manager_cleanfrontpage}'
+            clean_frontpage: '{url name=admin_tpl_manager_cleanfrontpage}',
+            toggle_suggested: '{url name=admin_content_toggle_suggested}',
+            quick_info: '{url name=admin_content_quick_info}',
+            set_arquived: '{url name=admin_content_set_archived}',
+            send_to_trash: '{url name=admin_content_send_to_trash}',
         };
         var content_states = {
             {foreach from=$frontpage_articles item=content}

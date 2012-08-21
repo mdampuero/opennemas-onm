@@ -32,7 +32,7 @@ function get_tooltip_content (elem) {
 
     if (parent_content_div.data('popover-content') === undefined) {
         var id = parent_content_div.data('content-id');
-        var $url = '/admin/controllers/common/content.php?action=get-info&id='+id;
+        var $url = frontpage_urls.quick_info+'?id='+id;
         var content = '';
 
         content = content_states[id];
@@ -62,7 +62,7 @@ function get_tooltip_content (elem) {
 function get_tooltip_title (elem) {
     var ajaxdata;
     var id = elem.closest('div.content-provider-element').data('content-id');
-    var $url = '/admin/controllers/common/content.php?action=get-info&id='+id;
+    var $url = frontpage_urls.quick_info+'?id='+id;
 
     content = content_states[id];
     if (content === undefined) {
@@ -164,8 +164,9 @@ jQuery(function($){
             log($(this).closest('.content-provider-element').data('content-id'));
             ids.push($(this).closest('.content-provider-element').data('content-id'));
         });
-        $.post("/admin/controllers/common/content.php?action=archive",
-                { 'ids': ids }
+        $.get(
+            frontpage_urls.set_arquived,
+            { 'ids': ids }
         ).success(function(data) {
             $('#warnings-validation').html("<div class='success'>"+data+"</div>");
         }).error(function(data) {
@@ -228,8 +229,9 @@ jQuery(function($){
     $('#modal-element-archive').on('click', 'a.btn.yes', function(e, ui){
         var delId = $("#modal-element-archive").data("selected-for-archive");
         if(delId) {
-            $.post("/admin/controllers/common/content.php?action=archive",
-                    { 'ids': [delId] }
+            $.get(
+                frontpage_urls.set_arquived,
+                { 'ids': [delId] }
             ).success(function(data) {
                 $('#warnings-validation').html("<div class='success'>"+data+"</div>");
             }).error(function(data) {
@@ -260,7 +262,8 @@ jQuery(function($){
         var element = $(this).closest('.content-provider-element');
         var contentId = element.data('content-id');
         if(contentId) {
-            $.post("/admin/controllers/common/content.php?action=toggle-suggested",
+            $.get(
+                frontpage_urls.toggle_suggested,
                 { 'ids': [contentId] }
             ).success(function(data) {
             }).error(function(data) {
@@ -287,11 +290,9 @@ jQuery(function($){
     $('#modal-element-send-trash').on('click', 'a.btn.yes', function(e, ui){
         var delId = $("#modal-element-send-trash").data("selected-for-del");
         if(delId) {
-            $.ajax({
-                url:  "/admin/controllers/common/content.php",
-                type: "GET",
-                data: { action:"send-to-trash", id:delId }
-            });
+            $.get( frontpage_urls.send_to_trash,
+                { id: delId }
+            );
         }
         show_save_frontpage_dialog();
         $("#modal-element-send-trash").modal('hide');
@@ -445,7 +446,9 @@ jQuery(function($){
             contentIds.push($(this).data('content-id'));
         });
         if (contentIds) {
-            $.post("/admin/controllers/common/content.php?action=toggle-suggested",
+            log(frontpage_urls.toggle_suggested, contentIds);
+            $.get(
+                frontpage_urls.toggle_suggested,
                 { 'ids': contentIds }
             ).success(function(data) {
             }).error(function(data) {

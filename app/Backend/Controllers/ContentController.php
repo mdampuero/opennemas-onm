@@ -272,7 +272,7 @@ class ContentController extends Controller
 
             } else {
                 $code = 404;
-                $message = array('error' => $error);
+                $message = sprintf(_('Content not available'), $id);
             }
         } else {
             $code = 400;
