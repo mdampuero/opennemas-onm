@@ -249,7 +249,7 @@ class AclUserController extends Controller
      *
      * @return Response the response object
      **/
-    public function connectedUsersAction(Request $request)
+    public function connectedUsersAction()
     {
         $sessions = $GLOBALS['Session']->getSessions();
 

@@ -73,12 +73,12 @@ class AclPrivilegesController extends Controller
 
         $this->privilege = new \Privilege();
 
-        if ($this->request->getMethod() == 'POST') {
+        if ($request->getMethod() == 'POST') {
             // Try to save the new privilege
             if ($this->privilege->create( $_POST )) {
                 // If privilege was saved successfully and the action
                 // is validate show again the form
-                if ($this->request->get('action') != 'validate') {
+                if ($request->request->filter('action') != 'validate') {
                     $this->redirect($this->generateUrl('admin_acl_privileges'));
                 }
             } else {
@@ -99,7 +99,7 @@ class AclPrivilegesController extends Controller
      **/
     public function showAction(Request $request)
     {
-        $id = $this->request->query->filter('id', FILTER_VALIDATE_INT);
+        $id = $request->query->filter('id', FILTER_VALIDATE_INT);
 
         $this->privilege->read($id);
         $modules = $this->privilege->getModuleNames();

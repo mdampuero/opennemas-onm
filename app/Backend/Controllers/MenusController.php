@@ -73,7 +73,7 @@ class MenusController extends Controller
     {
         $this->checkAclOrForward('MENU_AVAILABLE');
 
-        $id = $request->query->filter('id', null,FILTER_SANITIZE_STRING);
+        $id = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
 
         $ccm = \ContentCategoryManager::get_instance();
         $cm = new \ContentManager();

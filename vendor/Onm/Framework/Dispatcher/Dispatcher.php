@@ -107,7 +107,7 @@ class Dispatcher
             return $response;
         } catch (Exception $e) {
             throw new ResourceNotFoundException(
-                "Route '$className' don't exists."
+                "File '$controllerFileName' matched by the route don't exists."
             );
         }
     }

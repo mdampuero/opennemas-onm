@@ -175,33 +175,6 @@ class SimpleMenu
     }
 
     /**
-     * Renders an submenu
-     *
-     * @return string the html for the submenu
-     **/
-    private function renderMenuComponent($submenu)
-    {
-
-        if ((!isset($submenu['privilege']) || $this->checkAcl($submenu['privilege']))
-            && (\Onm\Module\ModuleManager::isActivated((string) $submenu['module_name']))
-        ) {
-            if (($submenu['privilege']!='ONLY_MASTERS')
-                || ($submenu['privilege']=='ONLY_MASTERS')
-                && \Acl::isMaster()
-            ) {
-                $external = isset($submenu['target']);
-                $class = ' '.$this->getClass($submenu['class']);
-                $html.= "<li{$class}>";
-                    $html .= $this->getHref($submenu['title'],
-                        'submenu_'.$submenu['id'], $submenu['link'], $external);
-                $html.= "</li>";
-            }
-        }
-
-        return $html;
-    }
-
-    /**
      * Renders the menu
      *
      * @return string the final html content for the menu

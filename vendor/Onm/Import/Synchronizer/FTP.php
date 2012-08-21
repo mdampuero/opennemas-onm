@@ -179,7 +179,6 @@ class FTP
             }
 
             foreach ($localFileList as $file) {
-                $filePath = $cacheDir.'/'.$file;
                 if (!in_array($file, $serverFileList)) {
                     unlink($cacheDir.'/'.$file);
                     $deletedFiles++;

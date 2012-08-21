@@ -24,7 +24,7 @@ class InstanceManager
     /**
      * The connection to the database
      **/
-    private $_connnection = null;
+    private $_connection = null;
 
     /**
      * @var Onm\Request Singleton instance
@@ -173,7 +173,6 @@ class InstanceManager
         $rs = $this->_connection->Execute($sql);
 
         if (!$rs) {
-            $connection->ErrorMsg();
 
             return false;
         }
@@ -201,10 +200,7 @@ class InstanceManager
 
         $sql = "SELECT SQL_CACHE * FROM instances WHERE id = ?";
         $rs = $this->_connection->Execute($sql, array($id));
-
         if (!$rs) {
-            $rs->ErrorMsg();
-
             return false;
         }
 
@@ -295,8 +291,6 @@ class InstanceManager
         $rs = $this->_connection->Execute($sql, array($flag, $id));
 
         if (!$rs) {
-            $connection->ErrorMsg();
-
             return false;
         }
 
@@ -323,8 +317,6 @@ class InstanceManager
 
         $rs = $this->_connection->Execute($sql, $values);
         if (!$rs) {
-            $connection->ErrorMsg();
-
             return false;
         }
 
@@ -345,8 +337,6 @@ class InstanceManager
         $sql = "DELETE FROM instances WHERE id=?";
         $rs = $this->_connection->Execute($sql, array($instance->id));
         if (!$rs) {
-            $this->_connection->ErrorMsg();
-
             return false;
         }
 
@@ -563,8 +553,6 @@ class InstanceManager
             if (file_put_contents($instanceConfigPath, $apacheConfString)) {
                 exec("sudo apachectl graceful", $output, $exitCode);
                 if ($exitCode > 0) {
-                    //"Unable to reload apache configuration
-                    //(exit code {$exitCode}): ".$output);
 
                     return false;
                 }
