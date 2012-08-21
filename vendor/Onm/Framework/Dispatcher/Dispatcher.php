@@ -46,7 +46,7 @@ class Dispatcher
                 $this->request->query->set($param, $value);
             }
 
-            $this->container->set('request',$this->request);
+            $this->container->set('request', $this->request);
 
             $response = $this->dispatchRaw($parameters);
 
@@ -72,7 +72,7 @@ class Dispatcher
     public function handleException($exception)
     {
         $this->request->request->set('error', serialize($exception));
-        $this->container->set('request',$this->request);
+        $this->container->set('request', $this->request);
         return $this->dispatchClass($this->container->getParameter('dispatcher.exceptionhandler'));
     }
 
@@ -204,7 +204,7 @@ class Dispatcher
     public static function normalizeUrl($url)
     {
         if (strlen($url) > 1) {
-            $normalizedUrl = rtrim($url,'/');
+            $normalizedUrl = rtrim($url, '/');
         } else {
             $normalizedUrl = $url;
         }

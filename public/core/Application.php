@@ -486,7 +486,8 @@ class Application
         $value,
         $expires =0,
         $domain  ='/'
-    ) {
+    )
+    {
         setcookie($name, $value, $expires, $domain,
             $_SERVER['SERVER_NAME'], isset($_SERVER['HTTPS']), true);
     }

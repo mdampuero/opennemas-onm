@@ -156,13 +156,25 @@ class ImagesController extends Controller
         $num_sub_photos = array();
         foreach ($this->parentCategories as $k => $v) {
             if (isset($photoSet[$v->pk_content_category])) {
-                $num_photos[$k]        = $photoSet[$v->pk_content_category];
-                $num_photos[$k]->jpg   = (isset($photoSetJPG[$v->pk_content_category]))? $photoSetJPG[$v->pk_content_category] : 0;
-                $num_photos[$k]->gif   = (isset($photoSetGIF[$v->pk_content_category]))? $photoSetGIF[$v->pk_content_category] : 0;
-                $num_photos[$k]->png   = (isset($photoSetPNG[$v->pk_content_category]))? $photoSetPNG[$v->pk_content_category] : 0;
-                $num_photos[$k]->other = $photoSet[$v->pk_content_category]->total - $num_photos[$k]->jpg - $num_photos[$k]->gif - $num_photos[$k]->png;
-                $num_photos[$k]->BN    = (isset($photoSetBN[$v->pk_content_category]))? $photoSetBN[$v->pk_content_category] : 0;
-                $num_photos[$k]->color = $photoSet[$v->pk_content_category]->total - $num_photos[$k]->BN;
+                $num_photos[$k]      = $photoSet[$v->pk_content_category];
+                $num_photos[$k]->jpg = (isset($photoSetJPG[$v->pk_content_category]))
+                                        ? $photoSetJPG[$v->pk_content_category]
+                                        : 0;
+                $num_photos[$k]->gif = (isset($photoSetGIF[$v->pk_content_category]))
+                                        ? $photoSetGIF[$v->pk_content_category]
+                                        : 0;
+                $num_photos[$k]->png = (isset($photoSetPNG[$v->pk_content_category]))
+                                        ? $photoSetPNG[$v->pk_content_category]
+                                        : 0;
+                $num_photos[$k]->other = $photoSet[$v->pk_content_category]->total
+                                        - $num_photos[$k]->jpg
+                                        - $num_photos[$k]->gif
+                                        - $num_photos[$k]->png;
+                $num_photos[$k]->BN    = (isset($photoSetBN[$v->pk_content_category]))
+                                        ? $photoSetBN[$v->pk_content_category]
+                                        : 0;
+                $num_photos[$k]->color = $photoSet[$v->pk_content_category]->total
+                                        - $num_photos[$k]->BN;
                 // TOTALES
                 $statistics['num_photos']['jpg']   += $num_photos[$k]->jpg;
                 $statistics['num_photos']['gif']   += $num_photos[$k]->gif;
@@ -179,15 +191,27 @@ class ImagesController extends Controller
                     && isset($photoSet[$child->pk_content_category])
                 ) {
                     $num_sub_photos[$k][$j] = $photoSet[$child->pk_content_category];
-                    $num_sub_photos[$k][$j]->jpg   = (isset($photoSetJPG[$child->pk_content_category]))? $photoSetJPG[$child->pk_content_category] : 0;
+                    $num_sub_photos[$k][$j]->jpg = (isset($photoSetJPG[$child->pk_content_category]))
+                                                    ? $photoSetJPG[$child->pk_content_category]
+                                                    : 0;
 
-                    $num_sub_photos[$k][$j]->gif   = (isset($photoSetGIF[$child->pk_content_category]))? $photoSetGIF[$child->pk_content_category] : 0;
-                    $num_sub_photos[$k][$j]->png   = (isset($photoSetPNG[$child->pk_content_category]))? $photoSetPNG[$child->pk_content_category] : 0;
-                    $num_sub_photos[$k][$j]->other = $photoSet[$child->pk_content_category]->total - $num_sub_photos[$k][$j]->jpg  - $num_sub_photos[$k][$j]->gif  - $num_sub_photos[$k][$j]->png ;
-                    $num_sub_photos[$k][$j]->BN    = (isset($photoSetBN[$child->pk_content_category]))? $photoSetBN[$child->pk_content_category] : 0;
-                    $num_sub_photos[$k][$j]->color = $photoSet[$child->pk_content_category]->total - $num_sub_photos[$k][$j]->BN ;
+                    $num_sub_photos[$k][$j]->gif = (isset($photoSetGIF[$child->pk_content_category]))
+                                                    ? $photoSetGIF[$child->pk_content_category]
+                                                    : 0;
+                    $num_sub_photos[$k][$j]->png = (isset($photoSetPNG[$child->pk_content_category]))
+                                                    ? $photoSetPNG[$child->pk_content_category]
+                                                    : 0;
+                    $num_sub_photos[$k][$j]->other = $photoSet[$child->pk_content_category]->total
+                                                     - $num_sub_photos[$k][$j]->jpg
+                                                     - $num_sub_photos[$k][$j]->gif
+                                                     - $num_sub_photos[$k][$j]->png ;
+                    $num_sub_photos[$k][$j]->BN    = (isset($photoSetBN[$child->pk_content_category]))
+                                                    ? $photoSetBN[$child->pk_content_category]
+                                                    : 0;
+                    $num_sub_photos[$k][$j]->color = $photoSet[$child->pk_content_category]->total
+                                                     - $num_sub_photos[$k][$j]->BN ;
+
                     // TOTALES
-
                     $statistics['num_sub_photos']['jpg']   += $num_sub_photos[$k][$j]->jpg;
                     $statistics['num_sub_photos']['gif']   += $num_sub_photos[$k][$j]->gif;
                     $statistics['num_sub_photos']['png']   += $num_sub_photos[$k][$j]->png;
@@ -216,7 +240,10 @@ class ImagesController extends Controller
             $num_especials[$j]->jpg   = (isset($photoSetJPG[$key]))? $photoSetJPG[$key] : 0;
             $num_especials[$j]->gif   = (isset($photoSetGIF[$key]))? $photoSetGIF[$key] : 0;
             $num_especials[$j]->png   = (isset($photoSetPNG[$key]))? $photoSetPNG[$key] : 0;
-            $num_especials[$j]->other = $photoSet[$key]->total - $num_especials[$j]->jpg  - $num_especials[$j]->gif  - $num_especials[$j]->png  ;
+            $num_especials[$j]->other = $photoSet[$key]->total
+                                        - $num_especials[$j]->jpg
+                                        - $num_especials[$j]->gif
+                                        - $num_especials[$j]->png;
             $num_especials[$j]->BN    = (isset($photoSetBN[$key]))? $photoSetBN[$key] : 0;
             $num_especials[$j]->color = $photoSet[$key]->total - $num_especials[$j]->BN ;
 
@@ -639,13 +666,21 @@ class ImagesController extends Controller
                         try {
                             $photo = new \Photo();
                             $photo = $photo->createFromLocalFileAjax($data);
+
+                            $thumbnailUrl = $this->imgUrl.$photo->path_file."/"
+                                            .$fileSizesSettings['image_thumb_size']['width']."-"
+                                            .$fileSizesSettings['image_thumb_size']['height']
+                                            ."-".$photo->name;
+
                             $info [] = array(
                                 'id'            => $photo->id,
                                 'name'          => $photo->name,
                                 'url'           => $this->generateUrl('admin_image_show', array('id[]' => $photo->id)),
-                                'thumbnail_url' => $this->imgUrl.$photo->path_file."/".$fileSizesSettings['image_thumb_size']['width']."-".$fileSizesSettings['image_thumb_size']['height']."-".$photo->name,
+                                'thumbnail_url' => $thumbnailUrl,
                                 'size'          => $photo->size,
-                                'type'          => isset($_SERVER['HTTP_X_FILE_TYPE']) ? $_SERVER['HTTP_X_FILE_TYPE'] : $upload['type'][$index],
+                                'type'          => isset($_SERVER['HTTP_X_FILE_TYPE'])
+                                                    ? $_SERVER['HTTP_X_FILE_TYPE']
+                                                    : $upload['type'][$index],
                                 'error'         => '',
                                 'delete_url'    => '',
                                 "delete_type"   => "DELETE",
@@ -672,13 +707,20 @@ class ImagesController extends Controller
                         $photo = new Photo();
                         $photo = $photo->createFromLocalFileAjax($data);
 
+                        $thumbnailUrl = $this->imgUrl.$photo->path_file."/"
+                                        .$fileSizesSettings['image_thumb_size']['width']."-"
+                                        .$fileSizesSettings['image_thumb_size']['height']
+                                        ."-".$photo->name;
+
                         $info [] = array(
                             'id'            => $photo->id,
                             'name'          => $photo->name,
                             'url'           => $this->generateUrl('admin_image_show', array('id[]' => $photo->id)),
-                            'thumbnail_url' => $this->imgUrl.$photo->path_file."/".$fileSizesSettings['image_thumb_size']['width']."-".$fileSizesSettings['image_thumb_size']['height']."-".$photo->name,
+                            'thumbnail_url' => $thumbnailUrl,
                             'size'          => $photo->size,
-                            'type'          => isset($_SERVER['HTTP_X_FILE_TYPE']) ? $_SERVER['HTTP_X_FILE_TYPE'] : $upload['type'][$index],
+                            'type'          => isset($_SERVER['HTTP_X_FILE_TYPE'])
+                                                ? $_SERVER['HTTP_X_FILE_TYPE']
+                                                : $upload['type'][$index],
                             'error'         => '',
                             'delete_url'    => '',
                             "delete_type"   => "DELETE",

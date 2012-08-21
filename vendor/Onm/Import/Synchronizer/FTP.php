@@ -79,7 +79,8 @@ class FTP
         $cacheDir,
         $excludedFiles = array(),
         $maxAge = null
-    ) {
+    )
+    {
         $files = ftp_rawlist(
             $this->ftpConnection, ftp_pwd($this->ftpConnection), true
         );
@@ -167,7 +168,8 @@ class FTP
         $serverFiles,
         $localFileList,
         $maxAge
-    ) {
+    )
+    {
         $deletedFiles = 0;
 
         if (count($localFileList) > 0) {

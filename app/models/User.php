@@ -523,15 +523,16 @@ class User
         }
 
         $categories = $this->accesscategories;
-        function sortInMenu($a, $b)
-        {
-            if ($a->posmenu == $b->posmenu) {
-                return 0;
-            }
 
-            return ($a->posmenu < $b->posmenu) ? -1 : 1;
-        }
-        usort($categories, 'sortInMenu');
+        usort(
+            $categories,
+            function ($a, $b)
+            {
+                if ($a->posmenu == $b->posmenu) {
+                    return 0;
+                }
+                return ($a->posmenu < $b->posmenu) ? -1 : 1;
+            });
 
         $ids = array();
         foreach ($categories as $category) {

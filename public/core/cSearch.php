@@ -55,7 +55,8 @@ class cSearch
         $szSourceTags,
         $szContentsTypeTitle,
         $iLimit=null,
-        $_where=null)
+        $_where=null
+    )
     {
         // If $szSourceTags is array
         // convert it in one string of words separated by blank
@@ -172,7 +173,8 @@ class cSearch
         $szWhere,
         $szNewTable,
         $iLimit
-    ) {
+    )
+    {
         if (!isset($szNewTable) || empty($szNewTable)
             || !isset($szWhere) || empty($szWhere)
         ) {

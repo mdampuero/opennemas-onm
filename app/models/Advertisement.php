@@ -278,8 +278,6 @@ class Advertisement extends Content
      **/
     public function create($data)
     {
-// var_dump($data);die();
-
         parent::create($data);
 
         if (!empty($data['script'])) {

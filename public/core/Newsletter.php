@@ -443,7 +443,8 @@ abstract class Newsletter_Accounts_Provider
         $fields,
         $filter=null,
         $database=null
-    ) {
+    )
+    {
         // TODO: control errors
         $this->conn     = $conn;
         $this->database = $database;

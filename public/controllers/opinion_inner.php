@@ -70,7 +70,7 @@ switch ($action) {
                     '/controllers/opinion_inner.php?action=sendform&opinion_id=' . $dirtyID
                 );
                 // } Sacar broza
-/*
+                /*
                 $opinion->author_name_slug = StringUtils::get_title($opinion->name);
                 //Check slug
                 if (empty($slug) || ($opinion->slug != $slug)

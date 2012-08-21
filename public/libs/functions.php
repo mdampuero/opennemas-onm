@@ -335,3 +335,12 @@ function map_entities($str)
     return mb_strtolower($str, 'UTF-8');
     // return htmlentities($str, ENT_COMPAT, 'UTF-8');
 }
+
+function stripslashes_deep($value)
+{
+    $value = is_array($value) ?
+                array_map('stripslashes_deep', $value) :
+                stripslashes($value);
+
+    return $value;
+}

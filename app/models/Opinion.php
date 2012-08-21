@@ -476,7 +476,8 @@ class Opinion extends Content
     public static function getLatestOpinionsForAuthor(
         $authorID,
         $params = array()
-    ) {
+    )
+    {
         $contents = array();
 
         // Setting up default parameters

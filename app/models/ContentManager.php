@@ -482,29 +482,6 @@ class ContentManager
         return $returnValue;
     }
 
-    // TODO: I think that this method is not used anymore
-    public static function filterContentsbyProperty(
-        $array,
-        $property
-    )
-    {
-
-        $filterKeys   = array_keys($property);
-        $filterKey    = $filterKeys[0];
-        $filterValues = array_values($property);
-        $filterKey    = $filterKeys[0];
-        $filterValues = $filterValues[0];
-
-        $finalArray   = array();
-        foreach ($array as $element) {
-            if ($element->{$filterKey} == $filterValue) {
-                $finalArray[] = $element;
-            }
-        }
-
-        return $finalArray;
-    }
-
     public function sortByPosition($a, $b)
     {
         return ($a->position == $b->position)
@@ -512,12 +489,12 @@ class ContentManager
     }
 
     /**
-    * Sort one array of object by one of the object's property
-    *
-    * @param mixed $array, the array of objects
-    * @param mixed $property, the property to sort with
-    * @return mixed, the sorted $array
-    */
+     * Sort one array of object by one of the object's property
+     *
+     * @param mixed $array, the array of objects
+     * @param mixed $property, the property to sort with
+     * @return mixed, the sorted $array
+     */
     public static function sortArrayofObjectsByProperty($array, $property)
     {
         // Y si el array es vacio ????
@@ -571,11 +548,11 @@ class ContentManager
     }
 
     /**
-    * Gets the name of one content type by its ID
-    *
-    * @param int $contentID, the id of the content we want to work with
-    * @return string, the name of the content
-    */
+     * Gets the name of one content type by its ID
+     *
+     * @param int $contentID, the id of the content we want to work with
+     * @return string, the name of the content
+     */
     public static function getContentTypeNameFromId(
         $contentID,
         $ucfirst = false
@@ -608,12 +585,12 @@ class ContentManager
 
     }
 
-        /**
-    * Gets the path of one file type by its ID
-    *
-    * @param int $contentID, the id of the content we want to work with
-    * @return string, the name of the content
-    */
+    /**
+     * Gets the path of one file type by its ID
+     *
+     * @param int $contentID, the id of the content we want to work with
+     * @return string, the name of the content
+     */
     public static function getFilePathFromId($contentID, $ucfirst = false)
     {
         // Raise an error if $contentID is not a number
@@ -1518,7 +1495,7 @@ class ContentManager
         if (!is_null($filter)) {
             if ($filter == ' `contents`.`in_litter`=1'
                || $filter == 'in_litter=1'
-) {
+            ) {
                 //se busca desde la litter.php
                 $_where = $filter;
             } else {
@@ -1702,48 +1679,6 @@ class ContentManager
         $items = $this->loadObject($rs, $contentType);
 
         return $items;
-    }
-
-    //this function returns last contents of Subcategories of a given category
-    // TODO: I think that this method is no used anymore
-    public function find_inSubcategory_by_categoryName(
-        $contentType,
-        $category_name,
-        $filter    = null,
-        $_order_by = 'ORDER BY 1'
-    )
-    {
-        $this->init($contentType);
-        $items = array();
-        $where = '1=1  AND in_litter=0';
-
-        if ( !is_null($filter) ) {
-            if ($filter == 'in_litter=1') {
-                //se busca desde la litter.php
-                $where = $filter;
-            }
-
-            $where = $filter.' AND in_litter=0';
-        }
-
-        $sql = 'SELECT contents.pk_content '
-            . 'FROM contents,content_categories, contents_categories '
-            . $where
-            . ' AND content_categories.fk_content_category=\''.$this->get_id($category_name).'\''
-            . ' WHERE content_categories.pk_content_category=contents_categories.pk_fk_content_category '
-            . ' AND contents.pk_content = contents_categories.pk_fk_content '
-            . $_order_by;
-
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        if (!$rs) {
-            return( $items );
-
-        } else {
-            $items=$this->loadObject($rs, $contentType);
-        }
-
-        return( $items );
     }
 
     //this function returns title,catName and slugs of last headlines from
@@ -1964,7 +1899,8 @@ class ContentManager
         $delta,
         $funcion,
         $params='null'
-    ) {
+    )
+    {
         if (!isset($numPages)) {
             $numPages = 20;
         }

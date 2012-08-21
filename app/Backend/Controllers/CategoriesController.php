@@ -81,9 +81,22 @@ class CategoriesController extends Controller
                 $resul = $ccm->getSubcategories( $category->pk_content_category);
                 $j=0;
                 foreach ($resul as $category) {
-                    $subContentsCount[$i][$j]['articles']       = (isset($groups['articles'][$category->pk_content_category]))? $groups['articles'][$category->pk_content_category] : 0;
-                    $subContentsCount[$i][$j]['photos']         = (isset($groups['photos'][$category->pk_content_category]))? $groups['photos'][$category->pk_content_category] : 0;
-                    $subContentsCount[$i][$j]['advertisements'] = (isset($groups['advertisements'][$category->pk_content_category]))? $groups['advertisements'][$category->pk_content_category] : 0;
+                    if (isset($groups['articles'][$category->pk_content_category])) {
+                        $subContentsCount[$i][$j]['articles'] = $groups['articles'][$category->pk_content_category];
+                    } else {
+                        $subContentsCount[$i][$j]['articles'] = 0;
+                    }
+                    if (isset($groups['photos'][$category->pk_content_category])) {
+                        $subContentsCount[$i][$j]['photos'] = $groups['photos'][$category->pk_content_category];
+                    } else {
+                        $subContentsCount[$i][$j]['photos'] = 0;
+                    }
+                    if (isset($groups['advertisements'][$category->pk_content_category])) {
+                        $subContentsCount[$i][$j]['advertisements'] =
+                            $groups['advertisements'][$category->pk_content_category];
+                    } else {
+                        $subContentsCount[$i][$j]['advertisements'] = 0;
+                    }
 
                     //Unserialize subcategory param field
                     $category->params = unserialize($category->params);

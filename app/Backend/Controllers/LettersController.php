@@ -49,7 +49,6 @@ class LettersController extends Controller
         $letterStatus = $request->query->getDigits('letterStatus', 0);
         $itemsPerPage = s::get('items_per_page') ?: 20;
 
-        // ContentManager::find_pages(<TIPO>, <WHERE>, <ORDER>, <PAGE>, <ITEMS_PER_PAGE>, <CATEGORY>);
         list($countLetters, $letters) =$cm->getCountAndSlice(
             'Letter',
             null,

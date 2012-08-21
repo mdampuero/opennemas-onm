@@ -332,7 +332,8 @@ class AlbumsController extends Controller
                 'agency'      => $request->request->filter('agency', '', FILTER_SANITIZE_STRING),
                 'description' => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
                 'metadata'    => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
-                'album_frontpage_image' => $request->request->filter('album_frontpage_image', '', FILTER_SANITIZE_STRING),
+                'album_frontpage_image' =>
+                    $request->request->filter('album_frontpage_image', '', FILTER_SANITIZE_STRING),
                 'album_photos_id'       => $request->request->get('album_photos_id'),
                 'album_photos_footer'   => $request->request->get('album_photos_footer'),
             );
@@ -664,7 +665,8 @@ class AlbumsController extends Controller
                     'total_widget'   => $formValues->getDigits('album_settings_total_widget'),
                     'crop_width'     => $formValues->getDigits('album_settings_crop_width'),
                     'crop_height'    => $formValues->getDigits('album_settings_crop_height'),
-                    'orderFrontpage' => $formValues->filter('album_settings_orderFrontpage', '', FILTER_SANITIZE_STRING),
+                    'orderFrontpage' =>
+                        $formValues->filter('album_settings_orderFrontpage', '', FILTER_SANITIZE_STRING),
                     'time_last'      => $formValues->getDigits('album_settings_time_last'),
                     'total_front'    => $formValues->getDigits('album_settings_total_front'),
                 )
