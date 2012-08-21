@@ -19,19 +19,9 @@ function salir(msg,url) {
     }
 }
 
-function countWords(text,counter){
-
-    var y=text.value;
-    var r = 0;
-    a=y.replace(/\s/g,' ');
-    a=a.split(' ');
-    for (z=0; z<a.length; z++) {if (a[z].length > 0) r++;}
-    counter.value=r;
-}
-
-function fill_tags (raw_info, target_element) {
+function fill_tags(raw_info, target_element, url) {
     jQuery.ajax({
-        url: "/admin/controllers/common/content.php?action=calculate-tags&data="+raw_info
+        url: url+'?data='+raw_info
     }).done(function(data) {
         log(data);
         jQuery(target_element).val(data);

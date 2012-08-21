@@ -41,7 +41,7 @@
             if (title_int_element.val().length == 0) {
                 title_int_element.val(title.val());
             };
-            fill_tags(title.val() + " " + category.data('name') + " " + metatags.val(), '#metadata');
+            fill_tags(title.val() + " " + category.data('name') + " " + metatags.val(), '#metadata', '{url name=admin_utils_calculate_tags}');
         });
         $('#formulario').on('submit', function(){
             save_related_contents();

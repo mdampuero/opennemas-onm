@@ -6,7 +6,6 @@
     <script>
         jQuery(document).ready(function($){
             $("#user-editing-form").tabs();
-
         })
     </script>
 {/block}

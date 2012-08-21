@@ -9,9 +9,11 @@
  **/
 namespace Backend\Controllers;
 
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
+use Onm\StringUtils;
 
 /**
  * Handles the common actions for misc purposes
@@ -35,9 +37,12 @@ class UtilsController extends Controller
      *
      * @return Response the response object
      **/
-    public function defaultAction(Request $request)
+    public function calculateTagsAction(Request $request)
     {
+        $tags = $request->query->filter('data', '', FILTER_SANITIZE_STRING);
 
+        $tags = StringUtils::get_tags($tags);
+        return new Response($tags, 200);
     }
 
 } // END class UtilsController

@@ -2722,6 +2722,15 @@ $adminRoutes->add(
 );
 
 $adminRoutes->add(
+    'admin_utils_calculate_tags',
+    new Route(
+        '/utils/calculate-tags',
+        array('_controller' => 'Backend:Controllers:UtilsController:calculateTags')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
     'admin_login_form',
     new Route(
         '/login',
