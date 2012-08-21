@@ -152,7 +152,7 @@ class UserGroup
         $rs = $GLOBALS['application']->conn->Execute($sql);
         while (!$rs->EOF) {
             $userGroup = new UserGroup();
-            $userGroup->set_values($rs->fields);
+            $userGroup->load($rs->fields);
             $types[] = $userGroup;
             $rs->MoveNext();
         }
