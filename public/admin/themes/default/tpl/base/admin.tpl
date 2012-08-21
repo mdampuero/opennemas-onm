@@ -35,16 +35,15 @@
         <script type="text/javascript">
         jQuery.noConflict();
         </script>
-        {script_tag src="/bootstrap/bootstrap.js"}
+        {script_tag src="/libs/bootstrap.js"}
         {script_tag src="/jquery/bootstrap-modal.js"}
         {block name="prototype"}{/block}
     {/block}
 
     {block name="header-js"}
+        {script_tag src="/libs/modernizr-2.5.0.min.js"}
         {block name="js-library"}{/block}
         {script_tag src="/onm/scripts.js"}
-        {script_tag src="/modernizr/modernizr-2.5.0.min.js"}
-        {script_tag src="/utils.js"}
         {script_tag src="/validation.js"}
         {script_tag src="/tiny_mce/tiny_mce_gzip.js"}
      {/block}
