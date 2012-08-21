@@ -42,10 +42,11 @@
 {block name="footer-js" append}
     <script>
     var video_manager_url = {
-        get_information: '{url name=admin_videos_get_info}'
+        get_information: '{url name=admin_videos_get_info}',
+        fill_tags: '{url name=admin_utils_calculate_tags}'
     }
     </script>
-    {script_tag src="/utilsVideo.js" language="javascript"}
+    {script_tag src="/jquery-onm/jquery.video.js" language="javascript"}
 {/block}
 
 {block name="content"}

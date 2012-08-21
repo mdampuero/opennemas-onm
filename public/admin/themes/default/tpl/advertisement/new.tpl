@@ -44,6 +44,10 @@
 
         var tabs = $('#position-adv').tabs();
         tabs.tabs('select', '{$place}');
+
+        jQuery('#title').on('change', function(e, ui) {
+            fill_tags(jQuery('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
+        });
     });
     </script>
 {/block}
@@ -127,8 +131,7 @@ input, select, textarea {
                             tabindex=1
                             value="{$advertisement->title|clearslash|escape:"html"|default:""}"
                             class="required"
-                            style="width:90%"
-                            onBlur="javascript:get_metadata(this.value);"/>
+                            style="width:90%"/>
 
                     <label for="metadata">{t}Keywords:{/t} <small>{t}Separated by commas{/t}</small></label>
 

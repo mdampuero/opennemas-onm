@@ -6,13 +6,21 @@
     {script_tag language="javascript" src="/onm/jquery.datepicker.js"}
 {/block}
 
+{block name="footer-js" append}
+    <script type="text/javascript">
+    jQuery('#title').on('change', function(e, ui) {
+        fill_tags(jQuery('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
+    });
+    </script>
+{/block}
+
 {block name="content"}
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
         <div class="title"><h2>{t}ePaper Manager{/t} :: {t}New ePaper{/t}</h2></div>
         <ul class="old-button">
             <li>
-                <a href="{$smarty.server.PHP_SELF}?action=list" title="Cancelar">
+                <a href="{url name=admin_covers}" title="Cancelar">
                     <img border="0" src="{$params.IMAGE_DIR}previous.png" title="Cancelar" alt="Cancelar" ><br />{t}Cancel{/t}
                 </a>
             </li>
@@ -29,7 +37,7 @@
                         <label for="title">Titulo:</label>
                     </td>
                     <td style="padding:4px;" nowrap="nowrap">
-                        <input type="text" id="title" name="title" title="Portada" size="80" value="{$kiosko->title|clearslash|default:""}" class="required" onBlur="javascript:get_metadata(this.value);" />
+                        <input type="text" id="title" name="title" title="Portada" size="80" value="{$kiosko->title|clearslash|default:""}" class="required" />
                     </td>
                 </tr>
                 <tr>

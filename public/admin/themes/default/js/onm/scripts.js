@@ -23,7 +23,6 @@ function fill_tags(raw_info, target_element, url) {
     jQuery.ajax({
         url: url+'?data='+raw_info
     }).done(function(data) {
-        log(data);
         jQuery(target_element).val(data);
     });
 }

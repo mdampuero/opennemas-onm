@@ -17,9 +17,12 @@ input[type="text"].required {
 
 {block name="footer-js" append}
 <script>
-jQuery('#starttime').datepicker({
+    jQuery('#starttime').datepicker({
         showAnim: "fadeIn",
         dateFormat: 'yy-mm-dd'
+    });
+    jQuery('#title').on('change', function(e, ui) {
+        fill_tags(jQuery('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
     });
 </script>
 {/block}
@@ -95,8 +98,7 @@ jQuery('#starttime').datepicker({
                 </td>
                 <td>
                     <input type="text" id="title" name="title" title={t}"Album"{/t}
-                        value="{$book->title|clearslash|escape:"html"}"
-                        class="required" onBlur="javascript:get_metadata(this.value);" />
+                        value="{$book->title|clearslash|escape:"html"}" />
                 </td>
             </tr>
             <tr>

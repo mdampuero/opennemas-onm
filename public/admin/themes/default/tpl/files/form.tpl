@@ -1,5 +1,12 @@
 {extends file="base/admin.tpl"}
 
+{block name="footer-js" append}
+    <script type="text/javascript">
+    jQuery('#title').on('change', function(e, ui) {
+        fill_tags(jQuery('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
+    });
+    </script>
+{/block}
 
 {block name="content"}
 
@@ -36,11 +43,10 @@
 					</td>
 					<td style="padding:4px;" nowrap="nowrap" width="70%">
 						<input type="text" id="title" name="title" title="Título de la noticia"
-							value="{$attaches->title|clearslash}" class="required" size="100"
-                            onBlur="javascript:get_metadata(this.value);" />
+							value="{$attaches->title|clearslash}" class="required" size="100" />
 						<input type="hidden" id="category" name="category" title="Fichero"
 							value="{$attaches->category}" />
-							<input type="hidden" id="fich" name="fich" title="Fichero"
+						<input type="hidden" id="fich" name="fich" title="Fichero"
 							value="{$attaches->pk_attachment}" />
 
 					</td>

@@ -6,13 +6,12 @@
         </td>
         <td valign="top">
             <input  type="text" id="title" name="title" title="Título de la noticia"  style="width:60%"
-                    onChange="javascript:get_metadata(this.value);"
-                    {if (!empty($video->title))}
-                        value="{$video->title|clearslash|escape:"html"}"
-                    {else}
-                        value="{$information['title']|clearslash|escape:"html"}"
-                    {/if}
-                    class="required" />
+                {if (!empty($video->title))}
+                    value="{$video->title|clearslash|escape:"html"}"
+                {else}
+                    value="{$information['title']|clearslash|escape:"html"}"
+                {/if}
+                class="required" />
         </td>
     </tr>
     <tr>
@@ -60,7 +59,7 @@
             <label>{t}Preview:{/t}</label>
         </td>
         <td colspan=2 style="padding:5px; text-align:left;">
-            
+
             <div class="video_player" style="max-width:500px; overflow:hidden;">
                  {$information['embedHTML']}
             </div>

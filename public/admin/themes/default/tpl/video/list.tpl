@@ -118,7 +118,9 @@
                         <input type="checkbox" class="minput" id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$videos[c]->id}"  style="cursor:pointer;">
                     </td>
                     <td>
+                        {if is_array($videos[c]->information) && array_key_exists('thumbnail', $videos[c]->information)}
                         <img src="{$videos[c]->information['thumbnail']}" alt="" style="max-width:60px">
+                        {/if}
                     </td>
                     <td onClick="javascript:document.getElementById('selected_{$smarty.section.c.iteration}').click();">
                         {$videos[c]->title|clearslash}

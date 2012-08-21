@@ -36,11 +36,17 @@
             </div>
             <div>
                 <label>{t}Description:{/t}</label> <br />
-                <textarea class="required" id="description[{$photo->id}]" name="description[{$photo->id}]"
-                    title="descripcion" rows="2" style="width:96%"
-                    onBlur="javascript:get_metadata_imagen(this.value,'{$photo->id}');">{$photo->description|clearslash|escape:'html'}</textarea>
+                <textarea class="required" id="description-{$photo->id}" name="description[{$photo->id}]"
+                    title="descripcion" rows="2" style="width:96%">{$photo->description|clearslash|escape:'html'}</textarea>
+                    <script type="text/javascript">
+                    jQuery(document).ready(function() {
+                        jQuery('#description-{$photo->id}').on('change', function(e, ui) {
+                            fill_tags(jQuery('#description-{$photo->id}').val(),'#metadata-{$photo->id}', '{url name=admin_utils_calculate_tags}');
+                        });
+                    });
+                    </script>
                 <label for="title">{t}Keywords:{/t}</label>
-                <textarea id="metadata[{$photo->id}]" name="metadata[{$photo->id}]"
+                <textarea id="metadata-{$photo->id}" name="metadata[{$photo->id}]"
                     title="Metadatos"  rows="2"  style="width:96%" >{$photo->metadata|strip}</textarea>
 
                 <div style="display:inline-block; width:35%; margin-right:20px;">

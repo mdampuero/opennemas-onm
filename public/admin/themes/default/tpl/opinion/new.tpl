@@ -1,36 +1,9 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-	<style type="text/css">
-	label {
-		display:block;
-		color:#666;
-		text-transform:uppercase;
-	}
-	.utilities-conf label {
-		text-transform:none;
-	}
-	</style>
-{/block}
-
 {block name="footer-js" append}
-    {script_tag src="/utilsopinion.js"}
     {script_tag src="/tiny_mce/opennemas-config.js"}
     {script_tag src="/jquery-onm/jquery.inputlength.js"}
     <script>
-        Droppables.add('div_widget', {
-            onDrop: function(element) {
-                    $('widget').src=element.src;
-                    $('fk_author_img_widget').value=element.id;
-            }
-        });
-        Droppables.add('sel', {
-            onDrop: function(element) {
-               $('fk_author_img').value=element.id;
-               $('seleccionada').src=element.src;
-            }
-        });
-
         tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
         OpenNeMas.tinyMceConfig.advanced.elements = "body";
         tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
@@ -38,6 +11,9 @@
         jQuery(document).ready(function ($){
             $('#opinion-form').tabs();
             $('#title').inputLengthControl();
+            $('#title').on('change', function(e, ui) {
+                fill_tags($('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
+            });
         });
     </script>
 {/block}
@@ -91,8 +67,7 @@
 
                                 <div class="input-append"  id="title">
                                     <input type="text" name="title"
-                                        value="{$opinion->title|clearslash|escape:"html"}" class="required"  style="width:90%"
-                                        onBlur="javascript:get_metadata(this.value);" />
+                                        value="{$opinion->title|clearslash|escape:"html"}" class="required"  style="width:90%" />
                                     <input type="hidden" id="category" name="category" title="opinion" value="opinion" />
                                     <span class="add-on"></span>
                                 </div>
@@ -100,7 +75,6 @@
                             </td>
                             <td rowspan="3">
                                 <div class="utilities-conf" style="float:right">
-                                    <h3>{t}Opinion parameters{/t}</h3>
                                     <table>
                                         <tr>
                                             <td>
@@ -167,7 +141,7 @@
                         <tr>
                             <td colspan="3">
                                 <label for="body">{t}Body{/t}</label>
-                                <textarea name="body" id="body" title="Opinion" style="width:100%;">{$opinion->body|clearslash}</textarea>
+                                <textarea name="body" id="body" title="Opinion" style="width:100%; min-height:400px;">{$opinion->body|clearslash}</textarea>
                             </td>
                         </tr>
 

@@ -1,20 +1,14 @@
 {extends file="base/admin.tpl"}
 {block name="footer-js" append}
-    {script_tag src="/utilspoll.js" language="javascript"}
+    <script type="text/javascript">
+    jQuery(document).ready(function ($){
+        $('#title').on('change', function(e, ui) {
+            fill_tags($('#title').val(), '#metadata', '{url name=admin_utils_calculate_tags}');
+        });
+    });
+    </script>
 {/block}
 
-{block name="header-css" append}
-    <style type="text/css">
-    label {
-        display:block;
-        color:#666;
-        text-transform:uppercase;
-    }
-    .utilities-conf label {
-        text-transform:none;
-    }
-    </style>
-{/block}
 
 {block name="content"}
 <form action="{if $poll->id}{url name=admin_poll_update id=$poll->id}{else}{url name=admin_poll_create}{/if}" method="post" id="formulario">
@@ -95,7 +89,7 @@
                      <td style="padding:4px;">
                          <label for="title">{t}Title{/t}</label>
                          <input 	type="text" id="title" name="title" title="Titulo de la noticia"
-                                 value="{$poll->title|clearslash|escape:"html"}" class="required" size="80" onChange="javascript:get_metadata(this.value);"  />
+                                 value="{$poll->title|clearslash|escape:"html"}" class="required" size="80" />
                      </td>
                  </tr>
                  <tr>

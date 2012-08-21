@@ -6,6 +6,14 @@
     {script_tag src="/onm/jquery.datepicker.js" language="javascript"}
 {/block}
 
+{block name="footer-js" append}
+    <script type="text/javascript">
+    jQuery('#title').on('change', function(e, ui) {
+        fill_tags(jQuery('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
+    });
+    </script>
+{/block}
+
 {block name="content"}
 <form id="formulario" name="formulario" action="{if !empty($cover->id)}{url name=admin_cover_update id=$cover->id}{else}{url name=admin_cover_create}{/if}" method="POST">
 
@@ -42,8 +50,7 @@
 
 <div class="wrapper-content">
 
-{render_messages}
-
+    {render_messages}
 
     <div id="content-wrapper">
         <table class="adminform">
@@ -53,7 +60,7 @@
                     <label for="title">{t}Title:{/t}</label>
                 </td>
                 <td style="padding:4px;" nowrap="nowrap">
-                    <input type="text" id="title" name="title" size="80" value="{$cover->title|clearslash}" onBlur="javascript:get_metadata(this.value);" />
+                    <input type="text" id="title" name="title" size="80" value="{$cover->title|clearslash}" />
                 </td>
                 <td rowspan=3>
                     <table style='background-color:#F5F5F5; padding:18px; width:99%;'>

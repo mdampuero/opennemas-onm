@@ -161,6 +161,10 @@
             $("#modal-edit-album-photo").modal('show');
         });
 
+        jQuery('#title').on('change', function(e, ui) {
+            fill_tags(jQuery('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
+        });
+
     });
     </script>
 
@@ -217,7 +221,6 @@
                             <input type="text" id="title" name="title" title={t}"Album"{/t}
                                 value="{$album->title|clearslash|escape:"html"}"
                                 class="required"
-                                onBlur="javascript:get_metadata(this.value);"
                                 style="width:98%;" />
                         </td>
                         <td rowspan="4" style="width:200px">

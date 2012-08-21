@@ -53,6 +53,9 @@
 
             jQuery('input#noticias_left').val(JSON.stringify(els));
         });
+        $('#title').on('change', function(e, ui) {
+            fill_tags($('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
+        });
     });
     </script>
 {/block}
@@ -105,8 +108,7 @@
                     </td>
                     <td style="padding:4px;" nowrap="nowrap">
                         <input type="text" id="title" name="title" title={t}"Special"{/t}
-                            size="80" value="{$special->title|clearslash|escape:"html"}"
-                            class="required" onBlur="javascript:get_metadata(this.value);" />
+                            size="80" value="{$special->title|clearslash|escape:"html"}"/>
                     </td>
                     <td rowspan="2"  style="padding: 4px;">
                         <table  style='background-color:#F5F5F5; padding:8px;'>

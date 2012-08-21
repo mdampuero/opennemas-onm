@@ -3,7 +3,7 @@ function getVideoInformation(url) {
         url: video_manager_url.get_information + '?url=' +encodeURIComponent(url),
         success: function(data) {
             jQuery('#video-information').html(data);
-            get_metadata(jQuery('#title').val());
+            fill_tags(jQuery('#title').val(),'#metadata', video_manager_url.fill_tags);
         }
     });
 }
@@ -13,6 +13,10 @@ function getVideoInformation(url) {
     jQuery('#video_url').on('change', function() {
         var url =  $(this).val();
         getVideoInformation(url);
+    });
+
+    jQuery('#title').on('change', function(){
+        fill_tags(jQuery('#title').val(),'#metadata', video_manager_url.fill_tags);
     });
 
     jQuery('#video_url').on('click', function(e, ui) {
