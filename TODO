@@ -28,7 +28,7 @@ Books
 - Port the config action
 
 Specials
-========
+--------
 Review d&d of contents in specials
 
 LOW PRIORITY TASKS OR IDEAS
@@ -84,3 +84,11 @@ Tpl cache manager
 Manager
 -------
 - Add authentication layer
+
+Users
+-----
+- Allow to upload an avatar
+
+UserGroups
+----------
+- Drop inline prototype js code

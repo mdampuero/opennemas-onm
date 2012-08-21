@@ -48,7 +48,7 @@ class AclUserController extends Controller
         $users     = $user->get_users($filter, ' ORDER BY login ');
 
         $userGroup = new \UserGroup();
-        $groups     = $userGroup->get_user_groups();
+        $groups     = $userGroup->find();
 
         $groupsOptions = array();
         $groupsOptions[] = _('--All--');
@@ -88,12 +88,12 @@ class AclUserController extends Controller
             return $this->redirect($this->generateUrl('admin_acl_user'));
         }
 
-        $user_group = new \UserGroup();
+        $userGroup = new \UserGroup();
         $tree = $ccm->getCategoriesTree();
 
         return $this->render('acl/user/new.tpl', array(
             'user'                      => $user,
-            'user_groups'               => $user_group->get_user_groups(),
+            'user_groups'               => $userGroup->find(),
             'content_categories'        => $tree,
             'content_categories_select' => $user->getAccessCategoryIds(),
         ));
@@ -166,7 +166,7 @@ class AclUserController extends Controller
 
         $user = new \User();
         $ccm = \ContentCategoryManager::get_instance();
-        $user_group = new \UserGroup();
+        $userGroup = new \UserGroup();
         $tree = $ccm->getCategoriesTree();
         $data = array(
             'login'           => $request->request->filter('login', null, FILTER_SANITIZE_STRING),
@@ -204,7 +204,7 @@ class AclUserController extends Controller
 
         return $this->render('acl/user/new.tpl', array(
             'user'                      => $user,
-            'user_groups'               => $user_group->get_user_groups(),
+            'user_groups'               => $userGroup->find(),
             'content_categories'        => $tree,
             'content_categories_select' => $user->getAccessCategoryIds(),
         ));

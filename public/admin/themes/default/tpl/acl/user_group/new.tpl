@@ -8,16 +8,12 @@
             <div class="title"><h2>{t}User group manager{/t} :: {t 1=$user_group->name}Editing %1{/t}</h2></div>
             <ul class="old-button">
                 <li>
-                    <button type="submit" name="action" name="validate">
+                    <button type="submit" name="action" value="validate">
                         <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="{t}Save and continue{/t}" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
                     </button>
                 </li>
                 <li>
-                {if isset($user_group->id)}
-                    <button type="submit" name="action" name="update">
-                {else}
-                    <button type="submit" name="action" name="create">
-                {/if}
+                    <button type="submit">
                         <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}"><br />{t}Save{/t}
                     </button>
                 </li>
@@ -31,40 +27,27 @@
         </div>
     </div>
     <div class="wrapper-content">
-        <table class="adminform">
-            <tbody>
-            <tr>
-                <td align="right" style="padding:4px;" width="20%">
-                    <label for="id">{* Id: *}</label>
-                </td>
-                <td style="padding:4px;" nowrap="nowrap" width="80%">
-                    <input type="hidden" id="idReadOnly" name="idReadOnly" title="{t}Id{/t}"
-                        value="{$user_group->id}" readonly />
-                </td>
-            </tr>
-            <tr>
-                <td valign="top" align="right" style="padding:4px;" width="20%">
-                    <label for="name">{t}Name:{/t}</label>
-                </td>
-                <td style="padding:4px;" nowrap="nowrap" width="80%">
-                    <input type="text" id="name" name="name" title="{t}Group name{/t}"
-                        value="{$user_group->name}" class="required"
-                        {if $user_group->name eq $smarty.const.SYS_NAME_GROUP_ADMIN}disabled="disabled"{/if} />
-                </td>
-            </tr>
-            <tr>
-                <td valign="top" align="right" style="padding:4px;" width="20%">
-                    <label for="privileges">{t}Grants:{/t}</label>
-                </td>
 
-                <td style="padding:4px;" nowrap="nowrap" width="80%">
+        {render_messages}
+
+        <div class="form-horizontal panel">
+            <div class="control-group">
+                <label for="name" class="control-label">{t}Group name{/t}</label>
+                <div class="controls">
+                    <input type="text" id="name" name="name" value="{$user_group->name}" class="required input-xlarge"
+                        {if $user_group->name eq $smarty.const.SYS_NAME_GROUP_ADMIN}disabled="disabled"{/if} />
+                </div>
+            </div>
+            <div class="control-group">
+                <label for="privileges" class="control-label">{t}Privileges{/t}</label>
+                <div class="controls">
                     {foreach item=privileges from=$modules key=mod name=priv}
                     <div style="width:90%">
                         <div>
                             <table  class="listing-table">
                                 <thead>
                                     <tr>
-                                        <th colspan=2 onClick="Element.toggle('{$mod}');" style="cursor:pointer;">{t}{$mod}{/t}</th>
+                                        <th colspan=2 onClick="Element.toggle('{$mod}');" style="cursor:pointer;">{$mod}</th>
                                     </tr>
                                 </thead>
                                 <tbody id="{$mod}" style="display:none">
@@ -90,16 +73,10 @@
                         </div>
                     </div>
                     {/foreach}
-                </td>
-            </tr>
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="3" align="center">{$paginacion->links|default:""}</td>
-                </tr>
-            </tfoot>
-        </table>
+                </div>
+            </div>
+        </div>
+
 	</div>
-	<input type="hidden" name="id" id="id" value="{$id|default:""}" />
 </form>
 {/block}

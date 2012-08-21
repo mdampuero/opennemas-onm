@@ -47,7 +47,6 @@ class UserGroup
         $this->name = $data['name'];
 
         //Se insertan los privilegios
-
         if (!is_null($data['privileges'])
             && count($data['privileges'] > 0)
         ) {
@@ -67,7 +66,7 @@ class UserGroup
 
             return;
         }
-        $this->set_values($rs->fields);
+        $this->load($rs->fields);
 
         //Se cargan los privileges asociados
         $sql =  "SELECT pk_fk_privilege"
@@ -91,17 +90,20 @@ class UserGroup
         if (!is_null($data['id'])) {
             $this->id = $data['id'];
 
-            //print('Antes de update:' . $this->id . ';'.$data['id']);
-            $sql = "UPDATE user_groups SET `name`=?
-                    WHERE pk_user_group=" . intval($data['id']);
-            $values = array($data['name']);
+            $sql = "UPDATE user_groups
+                    SET `name`=?
+                    WHERE pk_user_group=?";
+            $values = array(
+                $data['name'],
+                $data['id']
+            );
 
             $rs = $GLOBALS['application']->conn->Execute($sql, $values);
 
             if (!$rs) {
                 \Application::logDatabaseError();
 
-                return;
+                return false;
             }
 
             // Se actualizan los privileges
@@ -142,7 +144,7 @@ class UserGroup
         return $rs;
     }
 
-    public function get_user_groups()
+    public function find()
     {
         $types = array();
         $sql = "SELECT pk_user_group, name "
@@ -198,7 +200,7 @@ class UserGroup
         }
     }
 
-    private function set_values($data)
+    private function load($data)
     {
         $this->id   = $data['pk_user_group'];
         $this->name = $data['name'];

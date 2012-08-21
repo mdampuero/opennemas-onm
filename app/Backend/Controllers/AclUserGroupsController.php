@@ -41,10 +41,10 @@ class AclUserGroupsController extends Controller
      *
      * @return void
      **/
-    public function listAction()
+    public function listAction(Request $request)
     {
         $userGroup  = new \UserGroup();
-        $userGroups = $userGroup->get_user_groups();
+        $userGroups = $userGroup->find();
 
         return $this->render('acl/user_group/list.tpl', array(
             'user_groups' => $userGroups
@@ -56,9 +56,9 @@ class AclUserGroupsController extends Controller
      *
      * @return string the response string
      **/
-    public function showAction()
+    public function showAction(Request $request)
     {
-        $id = $this->request->query->filter('id', FILTER_VALIDATE_INT);
+        $id = $request->query->filter('id', FILTER_VALIDATE_INT);
 
         $userGroup = new \UserGroup($id);
         if (is_null($userGroup->id)) {
@@ -79,16 +79,21 @@ class AclUserGroupsController extends Controller
      *
      * @return string the response string
      **/
-    public function createAction()
+    public function createAction(Request $request)
     {
         $this->checkAclOrForward('GROUP_GREATE');
 
         $userGroup = new \UserGroup();
         $privilege = new \Privilege();
 
+        $data = array(
+            'name'       => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
+            'privileges' => $request->request->get('privileges'),
+        );
+
         if ($this->request->getMethod() == 'POST') {
             // Try to save the new privilege
-            if ($userGroup->create( $_POST )) {
+            if ($userGroup->create($data)) {
                 // If user group was saved successfully and the action
                 // is validate show again the form
                 if ($this->request->get('action') == 'validate') {
@@ -113,14 +118,35 @@ class AclUserGroupsController extends Controller
      *
      * @return string the return string
      **/
-    public function updateAction()
+    public function updateAction(Request $request)
     {
         $this->checkAclOrForward('GROUP_UPDATE');
 
         $userGroup = new \UserGroup();
-        $userGroup->update($_REQUEST);
 
-        return $this->redirect($this->generateUrl('admin_acl_usergroups'));
+        $data = array(
+            'id' => $request->query->getDigits('id'),
+            'name'       => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
+            'privileges' => $request->request->get('privileges'),
+        );
+
+        if ($userGroup->update($data)) {
+            m::add(_('User group updated successfully.'), m::SUCCESS);
+        } else {
+            m::add(sprintf(
+                _('Unable to update the user group with id "%d"'),
+                $id
+            ), m::ERROR);
+        }
+
+        if ($request->request->filter('action') != 'validate') {
+            return $this->redirect($this->generateUrl('admin_acl_usergroups'));
+        }
+
+        return $this->redirect($this->generateUrl(
+            'admin_acl_usergroups_show',
+            array('id' => $userGroup->id)
+        ));
     }
 
     /**
@@ -128,11 +154,11 @@ class AclUserGroupsController extends Controller
      *
      * @return string the string response
      **/
-    public function deleteAction()
+    public function deleteAction(Request $request)
     {
         $this->checkAclOrForward('GROUP_DELETE');
 
-        $id = $this->request->query->getDigits('id');
+        $id = $request->query->getDigits('id');
 
         $userGroup = new \UserGroup();
         $deleted = $userGroup->delete($id);
