@@ -183,11 +183,6 @@ class Application
      */
     public static function initInternalConstants()
     {
-        /**
-         * System setup
-         **/
-        define('STATUS', "1");
-        define('CHARSET', "text/html; charset=UTF-8");
 
         if (!empty($_SERVER['HTTPS'])
             && $_SERVER['HTTPS'] !== 'off'
@@ -225,18 +220,18 @@ class Application
          **/
         define('SYS_LOG_PATH', realpath(SITE_PATH.DS.'..'.DS."tmp/logs"));
         define('SYS_LOG_FILENAME', SYS_LOG_PATH.DS.'application.log');
-        define('SYS_SESSION_PATH', $cachepath.DS."/sessions".DS);
-        define('OPENNEMAS_BACKEND_SESSIONS', SYS_SESSION_PATH.'backend/');
-        define('OPENNEMAS_FRONTEND_SESSIONS', SYS_SESSION_PATH.'frontend/');
-        if (!file_exists(SYS_SESSION_PATH) ) {
-            mkdir(SYS_SESSION_PATH);
-        }
-        if (!file_exists(OPENNEMAS_BACKEND_SESSIONS) ) {
-            mkdir(OPENNEMAS_BACKEND_SESSIONS);
-        }
-        if (!file_exists(OPENNEMAS_FRONTEND_SESSIONS)) {
-            mkdir(OPENNEMAS_FRONTEND_SESSIONS);
-        }
+        // define('SYS_SESSION_PATH', $cachepath.DS."/sessions".DS);
+        // define('OPENNEMAS_BACKEND_SESSIONS', SYS_SESSION_PATH.'backend/');
+        // define('OPENNEMAS_FRONTEND_SESSIONS', SYS_SESSION_PATH.'frontend/');
+        // if (!file_exists(SYS_SESSION_PATH) ) {
+        //     mkdir(SYS_SESSION_PATH);
+        // }
+        // if (!file_exists(OPENNEMAS_BACKEND_SESSIONS) ) {
+        //     mkdir(OPENNEMAS_BACKEND_SESSIONS);
+        // }
+        // if (!file_exists(OPENNEMAS_FRONTEND_SESSIONS)) {
+        //     mkdir(OPENNEMAS_FRONTEND_SESSIONS);
+        // }
 
         // TODO: delete from application
         define('SYS_NAME_GROUP_ADMIN', 'Administrador');
