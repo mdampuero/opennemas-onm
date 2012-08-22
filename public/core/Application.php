@@ -215,6 +215,12 @@ class Application
         }
         define('CACHE_PATH', realpath($cachepath));
 
+        $commonCachepath = APPLICATION_PATH.DS.'tmp'.DS.'instances'.DS.'common';
+        if (!file_exists($commonCachepath)) {
+            mkdir($commonCachepath, 0755, true);
+        }
+        define('COMMON_CACHE_PATH', realpath($commonCachepath));
+
         /**
          * Logging settings
          **/

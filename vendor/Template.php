@@ -24,7 +24,7 @@ class Template extends Smarty
     public $relative_path = null;
     static public $registry = array();
 
-    function __construct($theme, $filters=array())
+    public function __construct($theme, $filters=array())
     {
         // Call the parent constructor
         parent::__construct();
@@ -54,7 +54,7 @@ class Template extends Smarty
         $this->config_dir = realpath(CACHE_PATH.DS.'smarty'.DS.'config').'/';
 
         // Create cache and compile dirs if not exists to make template instance aware
-        foreach (array('cache', 'compile') as $key => $value ) {
+        foreach (array('cache', 'compile') as $key => $value) {
             $directory = CACHE_PATH.DS.'smarty'.DS.$value;
             if (!is_dir($directory)) {
                 mkdir($directory, 0755);
@@ -127,9 +127,9 @@ class Template extends Smarty
         $filename = $this->config_dir . $configFile;
         if ( file_exists($filename) ) {
             $fp = fopen($filename, 'w');
-            foreach($data as $sectionName => $vars) {
+            foreach ($data as $sectionName => $vars) {
                 fwrite($fp, '[' . $sectionName . ']' . "\n");
-                foreach($vars as $k => $v) {
+                foreach ($vars as $k => $v) {
                     fwrite($fp, $k . '=' . $v . "\n");
                 }
             }
@@ -138,13 +138,13 @@ class Template extends Smarty
         }
     }
 
-    function readConfig($filename)
+    public function readConfig($filename)
     {
         $vars = parse_ini_file($this->config_dir . $filename, true);
         return $vars;
     }
 
-    function readKeyConfig($filename, $key, $iniSection='default')
+    public function readKeyConfig($filename, $key, $iniSection='default')
     {
         $vars = parse_ini_file($this->config_dir . $filename, true);
         if (isset($vars[$iniSection][$key])) {
@@ -209,11 +209,26 @@ class Template extends Smarty
             //$this->setCaching(0);
         }
     }
+
+    public function setUpLocale()
+    {
+        /* GetText configuration **********************************************/
+        // I18N support information here
+        $language = (isset($_REQUEST['lang']))? $_REQUEST['lang']: 'en';
+        putenv("LANG=$language");
+        setlocale(LC_ALL, $language);
+
+        // Set the text domain as 'messages'
+        $domain = 'messages';
+        bindtextdomain($domain, $this->locale_dir);
+        textdomain($domain);
+        /**********************************************************************/
+    }
 }
 
 class TemplateAdmin extends Template {
 
-    function __construct($theme, $filters = array())
+    public function __construct($theme, $filters = array())
     {
 
         // Call the parent constructor
@@ -224,10 +239,11 @@ class TemplateAdmin extends Template {
         // Parent variables
         $this->templateBaseDir = SITE_PATH.DS.ADMIN_DIR.DS.'themes'.DS.$theme.DS;
 
-        foreach (array('cache', 'compile') as $key => $value ) {
-            $directory = CACHE_PATH.DS.'smarty'.DS.'admin-'.$value;
+        foreach (array('cache', 'compile') as $key => $value) {
+            $directory = COMMON_CACHE_PATH.DS.'smarty'.DS.'admin'.DS.$value;
+
             if (!is_dir($directory)) {
-                mkdir($directory);
+                mkdir($directory, 0755, true);
             }
             $this->{$value."_dir"} = realpath($directory).'/';
         }
@@ -258,26 +274,11 @@ class TemplateAdmin extends Template {
         $this->assign('THEME', $theme);
 
     }
-
-    function setUpLocale()
-    {
-        /* GetText configuration **********************************************/
-        // I18N support information here
-        $language = (isset($_REQUEST['lang']))? $_REQUEST['lang']: 'en';
-        putenv("LANG=$language");
-        setlocale(LC_ALL, $language);
-
-        // Set the text domain as 'messages'
-        $domain = 'messages';
-        bindtextdomain($domain, $this->locale_dir);
-        textdomain($domain);
-        /**********************************************************************/
-    }
 }
 
 class TemplateManager extends Template {
 
-    function __construct($theme, $filters = array())
+    public function __construct($theme, $filters = array())
     {
 
         // Call the parent constructor
@@ -289,11 +290,11 @@ class TemplateManager extends Template {
         // Parent variables
         $this->templateBaseDir = SITE_PATH.DS.'manager'.DS.'themes'.DS.'default'.DS;
 
-        foreach (array('cache', 'compile') as $key => $value ) {
-            $directory = CACHE_PATH.DS.'smarty'.DS.'manager-'.$value;
+        foreach (array('cache', 'compile') as $key => $value) {
+            $directory = COMMON_CACHE_PATH.DS.'smarty'.DS.'manager'.DS.$value;
 
             if (!file_exists($directory)) {
-                mkdir($directory);
+                mkdir($directory, 0755, true);
             }
             $this->{$value."_dir"} = realpath($directory).'/';
         }
@@ -303,39 +304,23 @@ class TemplateManager extends Template {
         $this->config_dir	 = $this->templateBaseDir.'config/';
         $this->plugins_dir   []= $this->templateBaseDir.'plugins/';
         $this->caching	     = false;
-        $this->allow_php_tag = true;
 
         // Template variables
         $baseUrl = SITE_URL.SS.'admin'.SS.'themes'.SS.$theme.SS;
 
-        $this->locale_dir	= $baseUrl.'locale/';
-        $this->css_dir	        = $baseUrl.'css/';
-        $this->image_dir	= $baseUrl.'images/';
-        $this->js_dir	        = $baseUrl.'js/';
+        $this->locale_dir = $baseUrl.'locale/';
+        $this->css_dir    = $baseUrl.'css/';
+        $this->image_dir  = $baseUrl.'images/';
+        $this->js_dir     = $baseUrl.'js/';
 
         $this->assign('params', array(
             'LOCALE_DIR' =>    $this->locale_dir,
-            'CSS_DIR'	 =>    $this->css_dir,
+            'CSS_DIR'    =>    $this->css_dir,
             'IMAGE_DIR'  =>    $this->image_dir,
-            'JS_DIR'	 =>    $this->js_dir )
-        );
+            'JS_DIR'     =>    $this->js_dir
+        ));
 
         $this->theme = $theme;
         $this->assign('THEME', $theme);
-    }
-
-    function setUpLocale()
-    {
-        /* GetText configuration **********************************************/
-        // I18N support information here
-        $language = (isset($_REQUEST['lang']))? $_REQUEST['lang']: 'en';
-        putenv("LANG=$language");
-        setlocale(LC_ALL, $language);
-
-        // Set the text domain as 'messages'
-        $domain = 'messages';
-        bindtextdomain($domain, $this->locale_dir);
-        textdomain($domain);
-        /**********************************************************************/
     }
 }
