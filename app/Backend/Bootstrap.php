@@ -43,14 +43,15 @@ class Bootstrap extends ModuleBootstrap
 
         $isAsset = preg_match('@.*\.(png|gif|jpg|ico|css|js)$@', $request->getPathInfo());
         if ($isAsset != 1) {
-            // $session = $this->container->get('session');
-            // $session->start();
 
-            $sessionHandler = \SessionManager::getInstance(OPENNEMAS_BACKEND_SESSIONS);
-            $sessionHandler->bootstrap();
+            session_name('_onm_sess');
+            // session_save_path(OPENNEMAS_BACKEND_SESSIONS);
+            $session = $this->container->get('session');
+            $session->start();
 
-            $GLOBALS['Session'] = $sessionHandler;
-            $this->container->set('session', $sessionHandler);
+
+            // $sessionHandler = \SessionManager::getInstance(OPENNEMAS_BACKEND_SESSIONS);
+            // $sessionHandler->bootstrap();
 
             if (!isset($_SESSION['userid'])
                 && !preg_match('@^/login@', $request->getPathInfo())
