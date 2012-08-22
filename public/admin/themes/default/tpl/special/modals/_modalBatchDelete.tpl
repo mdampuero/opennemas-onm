@@ -24,9 +24,9 @@ jQuery('.delChecked').click(function(e) {
     var number = jQuery(".minput:checked").length;
     if(number >= 1 ) {
         jQuery('#modal-special-batchDelete .modal-body span').html(number);
-        jQuery("#modal-special-batchDelete").modal(true);
+        jQuery("#modal-special-batchDelete").modal('show');
     }else{
-        jQuery("#modal-special-batchDelete").modal(false);
+        jQuery("#modal-special-batchDelete").modal('hide');
         jQuery("#modal-special-accept").modal('show');
         jQuery('#modal-special-accept .modal-body')
             .html("{t}You must select some elements.{/t}");

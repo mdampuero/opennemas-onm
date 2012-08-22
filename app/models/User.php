@@ -604,7 +604,6 @@ class User
         return $rs->fields['login'];
     }
 
-
     /**
      * Sets user configurations given a named array
      *

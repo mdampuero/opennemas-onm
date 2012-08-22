@@ -25,11 +25,11 @@ jQuery('.delChecked').click(function(e, ui) {
     var number = jQuery(".minput:checked").length;
     if (number >= 1 ) {
         jQuery('#modal-album-batchDelete .modal-body span').html(number);
-        jQuery("#modal-album-batchDelete").modal(true);
+        jQuery("#modal-album-batchDelete").modal('show');
     } else {
         jQuery('#modal-album-accept .modal-body')
             .html("{t}You must select some elements.{/t}");
-        jQuery("#modal-album-accept").modal(true);
+        jQuery("#modal-album-accept").modal('show');
     }
 });
 

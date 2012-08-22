@@ -25,9 +25,9 @@ jQuery('.batch-delete').click(function(e,ui) {
     log(number)
     if(number >= 1 ) {
         jQuery('#modal-letter-batchDelete .modal-body span').html(number);
-        jQuery("#modal-letter-batchDelete").modal(true);
+        jQuery("#modal-letter-batchDelete").modal('show');
     }else{
-        jQuery("#modal-letter-batchDelete").modal(false);
+        jQuery("#modal-letter-batchDelete").modal('hide');
         jQuery("#modal-letter-accept").modal('show');
         jQuery('#modal-letter-accept .modal-body')
             .html("{t}You must select some elements.{/t}");
