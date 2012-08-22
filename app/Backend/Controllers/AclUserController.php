@@ -271,4 +271,32 @@ class AclUserController extends Controller
         ));
     }
 
+    /**
+     * Sets a user configuration given the meta key and the meta value
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function setMetaAction(Request $request)
+    {
+        $user = new \User();
+
+        $settings = array(
+            'test' => 1,
+            'test2' => 1
+        );
+
+        $setted = $user->setMeta($_SESSION['userid'], $settings);
+        if ($setted) {
+            $message = 'Done';
+            $httpCode = 200;
+        } else {
+            $message = 'Failed';
+            $httpCode = 500;
+        }
+
+        return new Response($message, $httpCode);
+    }
+
 } // END class AclUserController

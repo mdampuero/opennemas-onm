@@ -2610,6 +2610,15 @@ $adminRoutes->add(
     '/admin'
 );
 
+$adminRoutes->add(
+    'admin_acl_user_set_meta',
+    new Route(
+        '/acl/user/set-meta',
+        array('_controller' => 'Backend:Controllers:AclUserController:setMeta')
+    ),
+    '/admin'
+);
+
 // Privilege management routes
 $adminRoutes->add(
     'admin_acl_privileges',

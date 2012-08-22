@@ -593,8 +593,8 @@ class User
 
     public function get_user_name($id)
     {
-        $sql = 'SELECT name, login FROM users WHERE pk_user='.$id;
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $sql = 'SELECT name, login FROM users WHERE pk_user=?';
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
         if (!$rs) {
             \Application::logDatabaseError();
 
@@ -602,5 +602,31 @@ class User
         }
         //Se cambia name por login.
         return $rs->fields['login'];
+    }
+
+
+    /**
+     * Sets user configurations given a named array
+     *
+     * @param int $userId   the user id to set configs to
+     * @param array  $userMeta a named array with settings and its values
+     *
+     * @return  boolean true if all went well
+     */
+    public function setMeta($userId, $userMeta = array())
+    {
+        $sql = 'REPLACE INTO usermeta (`user_id`, `meta_key`, `meta_value`) VALUES (?, ?, ?)';
+
+        $values = array();
+        foreach ($userMeta as $key => $value) {
+            $values []= array($userId, $key, $value);
+        }
+
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        if (!$rs) {
+            return false;
+        }
+
+        return true;
     }
 }

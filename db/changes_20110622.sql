@@ -1,3 +1,15 @@
+-- 22-08-2012
+CREATE TABLE IF NOT EXISTS `usermeta` (
+  `user_id` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `meta_key` varchar(255) DEFAULT NULL,
+  `meta_value` longtext,
+  PRIMARY KEY (`user_id`, `meta_key`),
+  KEY `user_id` (`user_id`),
+  KEY `meta_key` (`meta_key`)
+);
+DROP TABLE  `articles_clone`;
+
+
 -- 16-08-2012
 ALTER TABLE  `users` DROP  `address` , DROP  `phone`, DROP `online` ;
 
