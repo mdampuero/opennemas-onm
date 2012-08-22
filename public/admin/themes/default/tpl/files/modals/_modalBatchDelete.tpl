@@ -17,7 +17,7 @@
 jQuery("#modal-file-batchDelete").modal({
     backdrop: 'static', //Show a grey back drop
     keyboard: true, //Can close on escape
-
+    show: false
 });
 
 jQuery('.delChecked').click(function(e) {

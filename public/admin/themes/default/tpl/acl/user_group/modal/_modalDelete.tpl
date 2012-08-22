@@ -17,7 +17,8 @@
 jQuery(document).ready(function($) {
     $("#modal-user-group-delete").modal({
         backdrop: 'static', //Show a grey back drop
-        keyboard: true //Can close on escape
+        keyboard: true, //Can close on escape
+        show: false,
     });
 
     $('.del').click(function(e, ui) {

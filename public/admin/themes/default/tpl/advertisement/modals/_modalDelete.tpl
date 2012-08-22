@@ -17,6 +17,7 @@
 jQuery("#modal-advertisement-delete").modal({
     backdrop: 'static', //Show a grey back drop
     keyboard: true, //Can close on escape
+    show: false,
 });
 
 jQuery('.del').click(function(e, ui) {

@@ -17,7 +17,8 @@
 jQuery(document).ready(function ($){
     $("#modal-cache-batchDelete").modal({
         backdrop: 'static', //Show a grey back drop
-        keyboard: true //Can close on escape
+        keyboard: true, //Can close on escape
+        show: false,
     });
 
     $('.delChecked').click(function(e, ui) {

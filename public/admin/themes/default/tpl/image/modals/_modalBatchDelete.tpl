@@ -18,6 +18,7 @@ jQuery(function(){
     jQuery("#modal-image-batch-delete").modal({
         backdrop: 'static', //Show a grey back drop
         keyboard: true, //Can close on escape
+        show: false,
     });
 
     jQuery('.batch-delete-button').on('click', function(e, ui) {

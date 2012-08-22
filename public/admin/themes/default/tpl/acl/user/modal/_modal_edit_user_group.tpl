@@ -10,7 +10,8 @@
 jQuery(document).ready(function($) {
     jQuery("#modal-edit-user-group").modal({
         backdrop: 'static', //Show a grey back drop
-        keyboard: true
+        keyboard: true, //Can close on escape
+        show: false,
     });
     jQuery("#modal-edit-user-group").bind('show', function (){
         selectedGroup = $('#id_user_group').val();

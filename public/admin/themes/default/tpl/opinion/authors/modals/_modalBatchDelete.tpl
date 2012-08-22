@@ -16,7 +16,8 @@
 <script>
 jQuery("#modal-author-batchDelete").modal({
     backdrop: 'static', //Show a grey back drop
-    keyboard: true //Can close on escape
+    keyboard: true, //Can close on escape
+    show: false
 
 });
 

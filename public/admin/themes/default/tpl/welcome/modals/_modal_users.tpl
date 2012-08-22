@@ -11,6 +11,7 @@ jQuery(document).ready(function($) {
     jQuery("#modal-logged-users").modal({
         backdrop: 'static', //Show a grey back drop
         keyboard: true, //Can close on escape
+        show: false,
     });
     jQuery("#modal-logged-users").bind('show', function (){
         jQuery.get(

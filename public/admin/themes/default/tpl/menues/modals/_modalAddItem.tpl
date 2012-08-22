@@ -24,6 +24,7 @@
 jQuery("#modal-add-item").modal({
     backdrop: 'static', //Show a grey back drop
     keyboard: true, //Can close on escape
+    show: false
 });
 
 jQuery('#modal-add-item a.btn.yes').on('click', function(e, ui){

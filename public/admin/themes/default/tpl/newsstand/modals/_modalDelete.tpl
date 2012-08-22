@@ -18,7 +18,8 @@
     var modal_delete = $("#modal-kiosko-delete");
     modal_delete.modal({
         backdrop: 'static', //Show a grey back drop
-        keyboard: true //Can close on escape
+        keyboard: true, //Can close on escape
+        show: false
     });
 
     $('.del').click(function(e) {

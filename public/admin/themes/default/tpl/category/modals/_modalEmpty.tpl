@@ -16,7 +16,8 @@
 <script>
 jQuery("#modal-category-empty").modal({
     backdrop: 'static', //Show a grey back drop
-    keyboard: true //Can close on escape
+    keyboard: true, //Can close on escape
+    show: false,
 });
 
 jQuery('.empty-category').click(function(e, ui) {

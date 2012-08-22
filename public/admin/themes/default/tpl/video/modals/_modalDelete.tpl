@@ -17,7 +17,8 @@
 (function($) {
     jQuery("#modal-video-delete").modal({
         backdrop: 'static', //Show a grey back drop
-        keyboard: true //Can close on escape
+        keyboard: true, //Can close on escape
+        show: false
     });
 
     jQuery('.del').click(function(e, ui) {

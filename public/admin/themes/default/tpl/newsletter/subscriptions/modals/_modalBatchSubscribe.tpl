@@ -17,6 +17,7 @@
 jQuery("#modal-subscriptors-batchSubscribe").modal({
     backdrop: 'static', //Show a grey back drop
     keyboard: true, //Can close on escape
+    show: false,
 });
 
 jQuery('.batchSubscribeButton').click(function(e) {
