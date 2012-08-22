@@ -1,3 +1,3 @@
 <?php
-$GLOBALS['Session'] = SessionManager::getInstance(OPENNEMAS_FRONTEND_SESSIONS);
+$GLOBALS['Session'] = SessionManager::getInstance();
 $GLOBALS['Session']->bootstrap();

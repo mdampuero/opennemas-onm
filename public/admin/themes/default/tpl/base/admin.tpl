@@ -73,7 +73,7 @@
             {if {count_pending_comments} gt 0}
             <div class="notification-messages">
                 <a  class="comments-available" title="{t}There are new comments to moderate{/t}"
-                    href="{$smarty.const.SITE_URL_ADMIN}/controllers/comment/comment.php?action=list&amp;category=todos">
+                    href="{url name=admin_comments}">
                     <span class="icon">{count_pending_comments}</span>
                 </a>
             </div>

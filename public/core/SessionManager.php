@@ -28,7 +28,7 @@ class SessionManager
      *
      * @var sessionDirectory
      **/
-    protected $sessionDirectory = SYS_SESSION_PATH;
+    protected $sessionDirectory = '';
 
     /**
      * The singleton instance for this object.
@@ -42,9 +42,13 @@ class SessionManager
      *
      * @param string $sessionSavePath path where save session files into.
      */
-    private function __construct($sessionSavePath, $lifetime = null)
+    private function __construct($sessionSavePath = null, $lifetime = null)
     {
-        $this->sessionDirectory = realpath($sessionSavePath);
+        if (is_null($sessionSavePath)) {
+            $this->sessionSavePath = session_save_path();
+        } else {
+            $this->sessionDirectory = realpath($sessionSavePath);
+        }
 
         // Save the actual lifetime for this session in the session manager
         if (is_null($lifetime)) {
@@ -62,12 +66,8 @@ class SessionManager
      * @return SessionManager The instance for SessionManager
      *
      **/
-    public static function getInstance($sessionSavePath, $lifetime = null)
+    public static function getInstance($sessionSavePath = null, $lifetime = null)
     {
-        if (!isset($sessionSavePath)) {
-            $sessionSavePath = session_save_path();
-        }
-
         if ( is_null(self::$_singleton)) {
             self::$_singleton = new SessionManager($sessionSavePath, $lifetime);
         }
