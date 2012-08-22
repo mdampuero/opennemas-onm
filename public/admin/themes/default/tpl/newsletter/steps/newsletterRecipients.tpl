@@ -68,12 +68,14 @@
 			{t}Please select your desired persons to sent the newsletter to.{/t}
 		</div>
 
-		<table class="adminheading">
-			<tr style="text-align:center;font-size: 0.85em;">
-				<th>{t}Subscriptors available (Drag&drop subscritor to add to recipients){/t}</th>
-				<th>{t}Subscriptors selected (please drag out a subscritor to delete from recipients){/t}</th>
-			</tr>
-		</table>
+        <div class="table-info clearfix">
+            <div class="pull-left">
+                {t}Subscriptors available (Drag&drop subscritor to add to recipients){/t}
+            </div>
+            <div class="pull-right">
+                {t}Subscriptors selected (please drag out a subscritor to delete from recipients){/t}
+            </div>
+        </div>
 		<table class="adminlist" style="min-height:500px">
 			<tr class="noHover">
 				<td style="width:50%">

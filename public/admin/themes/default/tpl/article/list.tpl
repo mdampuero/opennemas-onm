@@ -99,12 +99,10 @@
             {include file="menu_categories.tpl" home="{url name=admin_articles l=1 status=$status}"}
         </ul>
 
-        <table class="adminheading">
-            <tr>
-                <th class="left">
-                    <span style="margin-left:5px;">{t 1=$totalArticles}%1 articles{/t}</span>
-                </th>
-                <th align="right">
+        <div class="table-info clearfix">
+            <div class="pull-left"><strong>{t 1=$totalArticles}%1 articles{/t}</strong></div>
+            <div class="pull-right">
+                <div class="form-inline">
                     <input type="text" placeholder="{t}Search by title:{/t}" name="title" value="{$title}"/>
                     {t}Status:{/t}
                     <div class="input-append">
@@ -115,9 +113,9 @@
                         </select>
                         <button type="submit" class="btn">Search</button>
                     </div>
-                </th>
-            </tr>
-        </table>
+                </div>
+            </div>
+        </div>
         <table class="listing-table">
             <thead>
                 <th style="width:15px;"><input type="checkbox" id="toggleallcheckbox"></th>

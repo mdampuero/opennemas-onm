@@ -8,7 +8,6 @@ body {
     margin:0;
     min-height:100%;
     background: #fff;
-    font-size: 12.1px !important;
     margin-top: 24px;
 }
 
@@ -28,7 +27,7 @@ td {
 ::selection { background: #357AE8; color: #fff; text-shadow: none; }
 
 
-#content{ margin-top: 52px;width:100% }
+#content { margin-top: 52px; width:100% }
 
 .wrapper-content {
     margin: 0 auto;
@@ -50,41 +49,7 @@ label, input, button, select, textarea { font-size:12px;}
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 table {border-spacing:0;}
 
-table.adminheading {
-  margin:0 auto;
-  /*margin-top:3px;*/
-  background-color: #FFF;
-  width: 100%;
-  text-align: left;
-  height: 30px;
-  width: 100%;
-  padding: 5px;
-  border-top:1px solid #d9d9d9;
-  background: #f1f1f1; /* for non-css3 browsers */
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f1f1f1', endColorstr='#d9d9d9'); /* for IE */
-  background: -webkit-gradient(linear, left top, left bottom, from(#f1f1f1), to(#d9d9d9)); /* for webkit browsers */
-  background: -moz-linear-gradient(top,  #f1f1f1, #d9d9d9); /* for firefox 3.6+ */
-  text-shadow:0 1px 0 #FFFFFF;
-}
-table.adminheading input,
-table.adminheading input:hover {
-  border:1px solid silver !important;
-  border-radius:3px;
-  box-shadow:none !important;
-  background:White;
-  padding:3px;
-  margin-bottom:0;
-}
-table.adminheading .input-append {
-  display:inline-block;
-}
-table.adminheading input[type='text']:focus,
-table.adminheading input[type='password']:focus,
-table.adminheading textarea:focus {
-  box-shadow: 0 1px 3px rgba(0,0,0, 0.2) inset;
-  border-color:#3079ED;
-}
-table.adminlist img, table.adminheading img { vertical-align:middle; }
+table.adminlist img { vertical-align:middle; }
 table.adminlist,
 table.adminform {
   width:100%;
@@ -1246,9 +1211,24 @@ div.action-bar .right{
 /* -------------------------------------------------------------
   upper header for filtering... no yet finished. NEEDS WORK.
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-.table-info { background:#F1F1F1; border:1px solid #D2D2D2; border-right:none; border-left:none; clear: both; margin:5px 0; position: relative; width: 100%; font-size: 12px; }
-.table-info > div { padding:5px; }
+.table-info {
+    margin:0 auto;
+    background-color: #FFF;
+    width: 100%;
+    text-align: left;
+    width: 100%;
+    border-top:1px solid #d9d9d9;
+    background: #f1f1f1; /* for non-css3 browsers */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f1f1f1', endColorstr='#d9d9d9'); /* for IE */
+    background: -webkit-gradient(linear, left top, left bottom, from(#f1f1f1), to(#d9d9d9)); /* for webkit browsers */
+    background: -moz-linear-gradient(top,  #f1f1f1, #d9d9d9); /* for firefox 3.6+ */
+    text-shadow:0 1px 0 #FFFFFF;
+    position: relative; width: 100%;
+    padding:2px 0;
+}
+.table-info > div { padding:0 3px; }
 .table-info div {vertical-align:middle; height:100% }
+.table-info label {margin-bottom:0}
 .table-info .right { float:right; text-align:right; }
 .table-info .left { float:left; text-align:left; }
 .table-info .center { text-align:center }
@@ -1256,13 +1236,7 @@ div.action-bar .right{
 /* -------------------------------------------------------------
   Article edit form: image assignment
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-.thumbnail{
-  border: 1px solid #DDDDDD;
-  border-radius: 4px 4px 4px 4px;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
-  display: block;
-  padding: 4px;
-}
+
 .thumbnail:hover {
   border-color: #0088CC;
   box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
@@ -1533,6 +1507,9 @@ html.draganddrop #dropzone {
       width:90%;
       margin-top:10px;
       font-weight:bold;
+    }
+    .search .search-form input[type="search"] {
+        border-radius: 3px;
     }
     .search .search-form input.inline {
       width:40%;

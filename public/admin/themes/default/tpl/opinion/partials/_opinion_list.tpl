@@ -1,14 +1,14 @@
-<table class="adminheading">
-	<tr>
-		<th align="right">
-            {t}Status:{/t}
-            <select name="status">
-                <option value="-1" {if $status === -1} selected {/if}> {t}-- All --{/t} </option>
-                <option value="1" {if  $status === 1} selected {/if}> {t}Published{/t} </option>
-                <option value="0" {if $status === 0} selected {/if}> {t}No published{/t} </option>
-            </select>
-             &nbsp;&nbsp;&nbsp;
-            {t}Select an author{/t}
+<div class="table-info clearfix">
+    <div class="pull-right form-inline">
+        {t}Status:{/t}
+        <select name="status">
+            <option value="-1" {if $status === -1} selected {/if}> {t}-- All --{/t} </option>
+            <option value="1" {if  $status === 1} selected {/if}> {t}Published{/t} </option>
+            <option value="0" {if $status === 0} selected {/if}> {t}No published{/t} </option>
+        </select>
+         &nbsp;
+        {t}Select an author{/t}
+        <div class="input-append">
             <select name="author" id="author">
                 <option value="0" {if isset($author) && $author eq "0"} selected {/if}> {t}All{/t} </option>
                 <option value="-1" {if isset($author) && $author eq "-1"} selected {/if}> {t}Director{/t} </option>
@@ -17,10 +17,10 @@
                     <option value="{$autores[as]->pk_author}" {if isset($author) && $author == $autores[as]->pk_author} selected {/if}>{$autores[as]->name}</option>
                 {/section}
             </select>
-            <button type="submit" class="btn">Search</button>
-		</th>
-	</tr>
-</table>
+            <button type="submit" class="btn">{t}Search{/t}</button>
+        </div>
+    </div>
+</div>
 <table class="listing-table">
 	<thead>
 		<tr>

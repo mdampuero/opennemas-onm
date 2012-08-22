@@ -19,30 +19,27 @@
 </div>
 <div class="wrapper-content">
     {render_messages}
-    <form action="{url name=manager_instances}" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
-        <table class="adminheading">
-            <tr>
-                <th align="left">Total: {$pagination->_totalItems} instances.</th>
-                <th class="right form-inline">
-                    <label for="username">
-                        {t}Filter by name{/t}</label>
-                        <input id="username" class="" name="filter_name" onchange="this.form.submit();" value="{$filter_title}" />
-                    </label>
-                    <label for="usergroup">
-                        {t}Per page{/t}
-                        <select id="usergroup" name="filter_per_page" onchange="this.form.submit();">
-                             <option value="10" {if $per_page eq 10}selected{/if}>10</option>
-                             <option value="20" {if $per_page eq 20}selected{/if}>20</option>
-                             <option value="50" {if $per_page eq 50}selected{/if}>50</option>
-                             <option value="100" {if $per_page eq 100}selected{/if}>100</option>
-                        </select>
-                    </label>
-                    <input type="hidden" name="page" value="1" />
-                    <button type="submit" class="btn">{t}Search{/t}</button>
-                </th>
-                <th><a href="{url name=manager_instances_list_export filter_name=$filter_name}">{image_tag src="/themes/default/images/csv.png" base_url="/manager"} Export list</a></th>
-            </tr>
-        </table>
+    <form action="{url name=manager_instances}" method="get" name="formulario" id="formulario">
+        <div class="table-info clearfix">
+            <div class="pull-left">Total: {$pagination->_totalItems} instances.</div>
+            <div class="pull-right form-inline">
+                <label for="username">{t}Filter by name{/t}</label>
+                <input type="text" id="username" class="" name="filter_name" onchange="this.form.submit();" value="{$filter_title}" />
+                <label for="usergroup">
+                    {t}Per page{/t}
+                    <select id="usergroup" name="filter_per_page" onchange="this.form.submit();">
+                         <option value="10" {if $per_page eq 10}selected{/if}>10</option>
+                         <option value="20" {if $per_page eq 20}selected{/if}>20</option>
+                         <option value="50" {if $per_page eq 50}selected{/if}>50</option>
+                         <option value="100" {if $per_page eq 100}selected{/if}>100</option>
+                    </select>
+                </label>
+                <input type="hidden" name="page" value="1" />
+                <button type="submit" class="btn">{t}Search{/t}</button>
+            </th>
+            <a href="{url name=manager_instances_list_export filter_name=$filter_name}">{image_tag src="/themes/default/images/csv.png" base_url="/manager"} Export list</a>
+            </div>
+        </div>
 
         <table class="listing-table" >
 

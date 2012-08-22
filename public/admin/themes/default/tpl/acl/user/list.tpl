@@ -36,28 +36,25 @@ jQuery(function($){
 
 		{render_messages}
 
-		<table class="adminheading">
-			<tr>
-				<th class="form-inline">
-					<input id="username" name="filter[name]" value="{$smarty.request.filter.name|default:""}" placeholder="{t}Filter by name{/t}"  />
+		<div class="table-info clearfix">
+			<div class="pull-right form-inline">
+				<input type="text" id="username" name="filter[name]" value="{$smarty.request.filter.name|default:""}" placeholder="{t}Filter by name{/t}"  />
 
-					<label for="userlogin">{t}or{/t}</label>
-					<input id="userlogin" name="filter[login]" value="{$smarty.request.filter.login|default:""}" placeholder="{t}username{/t}" />
+				<label for="userlogin">{t}or{/t}</label>
+				<input type="text" id="userlogin" name="filter[login]" value="{$smarty.request.filter.login|default:""}" placeholder="{t}username{/t}" />
 
 
-					<label for="usergroup">{t}and group:{/t}
-						<select id="usergroup" name="filter[group]" class="span2">
-							{if isset($smarty.request.filter) && isset($smarty.request.filter.group)}
-								{assign var=filter_selected value=$smarty.request.filter.group}
-							{/if}
-							{html_options options=$groupsOptions selected=$filter_selected|default:""}
-						</select>
-					</label>
-					<button type="submit" class="btn">{t}Search{/t}</button>
-				</th>
-			</tr>
-		</table>
-
+				<label for="usergroup">{t}and group:{/t}
+					<select id="usergroup" name="filter[group]" class="span2">
+						{if isset($smarty.request.filter) && isset($smarty.request.filter.group)}
+							{assign var=filter_selected value=$smarty.request.filter.group}
+						{/if}
+						{html_options options=$groupsOptions selected=$filter_selected|default:""}
+					</select>
+				</label>
+				<button type="submit" class="btn">{t}Search{/t}</button>
+			</div>
+		</div>
 		<table class="listing-table table-striped">
 			{if count($users) gt 0}
 			<thead>

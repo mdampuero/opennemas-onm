@@ -50,24 +50,21 @@
 
         {render_messages}
 
-        <table class="adminheading">
-            <tr>
-                <th></th>
-                <th class="right">
-                    <input type="search" name="filters[text]" id="filters_text" value="{$smarty.request.filters.text}" placeholder="{t}Search by name{/t}"/>
+        <div class="table-info clearfix">
+            <div class="pull-right form-inline">
+                <input type="search" name="filters[text]" id="filters_text" value="{$smarty.request.filters.text}" placeholder="{t}Search by name{/t}"/>
 
-                    <select name="filters[subscription]" id="filters_subscription">
-                        <option value="-1">{t}All{/t}</option>
-                        <option value="1"{if $smarty.request.filters.subscription==1} selected="selected"{/if}>{t}Subscribed{/t}</option>
-                        <option value="0"{if isset($smarty.request.filters.subscription) && $smarty.request.filters.subscription==0} selected="selected"{/if}>{t}No subscribed{/t}</option>
-                    </select>
+                <select name="filters[subscription]" id="filters_subscription">
+                    <option value="-1">{t}All{/t}</option>
+                    <option value="1"{if $smarty.request.filters.subscription==1} selected="selected"{/if}>{t}Subscribed{/t}</option>
+                    <option value="0"{if isset($smarty.request.filters.subscription) && $smarty.request.filters.subscription==0} selected="selected"{/if}>{t}No subscribed{/t}</option>
+                </select>
 
-                    <input type="hidden" name="page" id="filters_page" value="{$smarty.request.page|default:'1'}" />
+                <input type="hidden" name="page" id="filters_page" value="{$smarty.request.page|default:'1'}" />
 
-                    <button type="submit" class="btn btn-search">{t}Filter{/t}</button>
-                </th>
-            </tr>
-        </table>
+                <button type="submit" class="btn btn-search">{t}Filter{/t}</button>
+            </div>
+        </div>
 
         <table class="listing-table">
             <thead>

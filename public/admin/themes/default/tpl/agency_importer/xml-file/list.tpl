@@ -48,30 +48,22 @@
     </div>
 
     <div class="wrapper-content">
-         <br>
 
-       {render_messages}
-        <br>
-        <div>
+        {render_messages}
 
-            <table class="adminheading">
-                <tr>
-                    <th nowrap>&nbsp;</th>
-                </tr>
-            </table>
-                <table class="adminlist">
-                    <tr><td colspan="2"><br />
-                              <div id="FileContainer">
-                                    <div class="marcoFoto" id="File0">
-                                        <p style="font-weight: bold;">File #0:
-                                         <input type="file" name="file[0]" id="fFile0" class="required" size="50" onChange="ckeckName(this,'fileCat[0]');"/> <span style="text-align:right;width:240px;"> </span>
-                                         <div id="fileCat[0]" name="fileCat[0]" style="display:none;"><table border='0' bgcolor='red'   cellpadding='4'><tr><td>El nombre es incorrecto. Contiene espacios en blanco o caracteres especiales.</td></tr></table></div>
-                                        </p>
-                                    </div>
-                              </div>
-                          <p>&nbsp;</p>
-                    </td></tr>
-                </table><br />
+        <table class="adminlist">
+            <tr><td colspan="2"><br />
+                      <div id="FileContainer">
+                            <div class="marcoFoto" id="File0">
+                                <p style="font-weight: bold;">File #0:
+                                 <input type="file" name="file[0]" id="fFile0" class="required" size="50" onChange="ckeckName(this,'fileCat[0]');"/> <span style="text-align:right;width:240px;"> </span>
+                                 <div id="fileCat[0]" name="fileCat[0]" style="display:none;"><table border='0' bgcolor='red'   cellpadding='4'><tr><td>El nombre es incorrecto. Contiene espacios en blanco o caracteres especiales.</td></tr></table></div>
+                                </p>
+                            </div>
+                      </div>
+                  <p>&nbsp;</p>
+            </td></tr>
+        </table><br />
 
 
             {if isset($dataXML) && !empty($dataXML)}

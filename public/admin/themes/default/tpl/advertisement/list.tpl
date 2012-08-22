@@ -63,44 +63,43 @@
             {include file="menu_categories.tpl" home={url name=admin_ads l=1}}
         </ul>
 
-        <div id="{$category}">
 
-            <table class="adminheading">
-                <tr>
-                    <th class="form-inline">
-                        <label for="filter[type_advertisement]">{t}Banner type:{/t}</label>
-                        <select name="filter[type_advertisement]" id="filter[type_advertisement]" onchange="submitFilters(this.form);">
-                            {if !isset($smarty.request.filter) && !isset($smarty.request.filter.type_advertisement)}
-                                {assign var=filterType value=""}
-                            {else}
-                                {assign var=filterType value=$smarty.request.filter.type_advertisement|default:""}
-                            {/if}
-                            {html_options options=$filter_options.type_advertisement selected=$filterType}
-                        </select>
-                        &nbsp;&nbsp;&nbsp;
-                        <label>{t}Status:{/t}</label>
-                        <select name="filter[available]" onchange="submitFilters(this.form);">
-                            {if !isset($smarty.request.filter) && !isset($smarty.request.filter.type_advertisement)}
-                                {assign var=filterAvailable value=""}
-                            {else}
-                                {assign var=filterAvailable value=$smarty.request.filter.available|default:""}
-                            {/if}
-                            {html_options options=$filter_options.available selected=$filterAvailable}
-                        </select>
-                         &nbsp;&nbsp;&nbsp;
-                        <label>{t}Type:{/t}</label>
-                        <select name="filter[type]" onchange="submitFilters(this.form);">
-                            {if !isset($smarty.request.filter) && !isset($smarty.request.filter.type)}
-                                {assign var=filterType value=""}
-                            {else}
-                                {assign var=filterType value=$smarty.request.filter.type|default:""}
-                            {/if}
-                            {html_options options=$filter_options.type selected=$filterType}
-                        </select>
-                        <button type="submit">{t}Search{/t}</button>
-                    </th>
-                </tr>
-            </table>
+        <div class="table-info clearfix">
+            <div class="pull-right form-inline">
+                <label for="filter[type_advertisement]">{t}Banner type:{/t}</label>
+                <select name="filter[type_advertisement]" id="filter[type_advertisement]" onchange="submitFilters(this.form);">
+                    {if !isset($smarty.request.filter) && !isset($smarty.request.filter.type_advertisement)}
+                        {assign var=filterType value=""}
+                    {else}
+                        {assign var=filterType value=$smarty.request.filter.type_advertisement|default:""}
+                    {/if}
+                    {html_options options=$filter_options.type_advertisement selected=$filterType}
+                </select>
+                &nbsp;&nbsp;&nbsp;
+                <label>{t}Status:{/t}</label>
+                <select name="filter[available]" onchange="submitFilters(this.form);">
+                    {if !isset($smarty.request.filter) && !isset($smarty.request.filter.type_advertisement)}
+                        {assign var=filterAvailable value=""}
+                    {else}
+                        {assign var=filterAvailable value=$smarty.request.filter.available|default:""}
+                    {/if}
+                    {html_options options=$filter_options.available selected=$filterAvailable}
+                </select>
+                 &nbsp;&nbsp;&nbsp;
+                <label>{t}Type:{/t}</label>
+                <select name="filter[type]" onchange="submitFilters(this.form);">
+                    {if !isset($smarty.request.filter) && !isset($smarty.request.filter.type)}
+                        {assign var=filterType value=""}
+                    {else}
+                        {assign var=filterType value=$smarty.request.filter.type|default:""}
+                    {/if}ubmit">{t}Search{/t}</button>
+                    {html_options options=$filter_options.type selected=$filterType}
+                </select>
+                <button type="submit">{t}Search{/t}</button>
+            </div>
+        </div>
+
+        <div id="{$category}">
 
             <table class="listing-table">
                 <thead>

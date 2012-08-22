@@ -6,7 +6,8 @@
     width:100%;
 }
 #search_string{
-    width:96%
+    width:195px;
+    margin-bottom:5px;
 }
 #content_types {
     min-height:150px;
