@@ -20,9 +20,6 @@ a:link    { color: #0B55C4; text-decoration: none; }
 a:visited { color: #0B55C4; text-decoration: none; }
 a:hover   { text-decoration: underline; }
 
-ul, ol {
-  margin:0;
-}
 td {
   vertical-align: top;
 }
@@ -31,46 +28,7 @@ td {
 ::selection { background: #357AE8; color: #fff; text-shadow: none; }
 
 
-h1 { margin: 0; padding-bottom: 8px; color: #0B55C4; font-size: 20px; font-weight: bold; }
-
-dd { margin-bottom:10px; }
-
-select { background:White; }
-
-form { margin: 0; padding: 0; }
-button,input,select,textarea{margin:0;vertical-align:baseline;*vertical-align:middle;}
-button,input{line-height:normal;*overflow:visible;}
-button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0;}
-button,input[type="button"],input[type="reset"],input[type="submit"]{cursor:pointer;-webkit-appearance:button;}
-form .input{margin-left:150px;}
-input[type=checkbox],input[type=radio]{cursor:pointer;}
-input,textarea,select,.uneditable-input{display:inline-block;height:18px;padding:4px;color:#808080;border:1px solid #ccc;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;}
-select{padding:initial;}
-input[type=checkbox],input[type=radio]{width:auto;height:auto;padding:0;margin:3px 0;*margin-top:0;line-height:normal;border:none;}
-input[type=file]{background-color:#ffffff;padding:initial;border:initial;line-height:initial;-webkit-box-shadow:none;-moz-box-shadow:none;box-shadow:none;}
-input[type=button],input[type=reset],input[type=submit]{width:auto;height:auto;}
-select,input[type=file]{height:30px;*height:auto;line-height:27px;*margin-top:4px;}
-select[multiple]{height:inherit;background-color:#ffffff;}
-textarea{height:auto;}
-.uneditable-input{background-color:#ffffff;display:block;border-color:#eee;-webkit-box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.025);-moz-box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.025);box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.025);cursor:not-allowed;}
-:-moz-placeholder{color:#bfbfbf;}
-::-webkit-input-placeholder{color:#bfbfbf;}
-input,textarea{-webkit-transition:border linear 0.2s,box-shadow linear 0.2s;-moz-transition:border linear 0.2s,box-shadow linear 0.2s;-ms-transition:border linear 0.2s,box-shadow linear 0.2s;-o-transition:border linear 0.2s,box-shadow linear 0.2s;transition:border linear 0.2s,box-shadow linear 0.2s;-webkit-box-shadow:inset 0 1px 3px rgba(0, 0, 0, 0.1);-moz-box-shadow:inset 0 1px 3px rgba(0, 0, 0, 0.1);box-shadow:inset 0 1px 3px rgba(0, 0, 0, 0.1);}
-input:focus,textarea:focus{outline:0;border-color:rgba(82, 168, 236, 0.8);-webkit-box-shadow:inset 0 1px 3px rgba(0, 0, 0, 0.1),0 0 8px rgba(82, 168, 236, 0.6);-moz-box-shadow:inset 0 1px 3px rgba(0, 0, 0, 0.1),0 0 8px rgba(82, 168, 236, 0.6);box-shadow:inset 0 1px 3px rgba(0, 0, 0, 0.1),0 0 8px rgba(82, 168, 236, 0.6);}
-input[type=file]:focus,input[type=checkbox]:focus,select:focus{-webkit-box-shadow:none;-moz-box-shadow:none;box-shadow:none;outline:1px dotted #666;}
-
-input[type="text"], input[type="file"], textarea {  border: 1px solid silver; }
-input[type="checkbox"] { vertical-align:middle; }
-
-input.disabled { background-color: #F0F0F0; }
-input.button  { cursor: pointer; }
 #content{ margin-top: 52px;width:100% }
-
-input[readonly="readonly"] { background:#eee !important; }
-input[type='text'], input[type='file'], input[type='password'], textarea {  background:White; border: 1px solid #B5B8C8; color:#555; vertical-align:middle; border-radius:2px; }
-input[type='text']:focus, input[type='file']:focus, input[type='password']:focus, textarea:focus,select:fofus { box-shadow: 0 1px 3px rgba(0,0,0, 0.2) inset; border-color:#3079ED; }
-
-label {padding: 1px 3px 1px 0px;}
 
 .wrapper-content {
     margin: 0 auto;
@@ -78,6 +36,14 @@ label {padding: 1px 3px 1px 0px;}
     position: relative;
     width: 100%;
 }
+
+
+/* =============================================================================
+   Bootstrap customization
+   ========================================================================== */
+
+label, input, button, select, textarea { font-size:12px;}
+.input-append input, .input-prepend input, .input-append select, .input-prepend select, .input-append .uneditable-input, .input-prepend .uneditable-input { font-size:12px;}
 
 /* -------------------------------------------------------------
   LISTINGS

@@ -136,7 +136,7 @@ jQuery(function($){
     /***************************************************************************
     * Batch Actions
     ***************************************************************************/
-    $("#modal-batch-delete").modal({ backdrop: 'static', keyboard: true });
+    $("#modal-batch-delete").modal({ backdrop: 'static', keyboard: true, show: false });
     $('#modal-batch-delete').on('click', 'a.btn.no', function(e,ui){
         e.preventDefault();
         $("#modal-batch-delete").modal('hide');
@@ -150,7 +150,7 @@ jQuery(function($){
         e.preventDefault();
     });
 
-    $("#modal-batch-arquive").modal({ backdrop: 'static', keyboard: true });
+    $("#modal-batch-arquive").modal({ backdrop: 'static', keyboard: true, show: false });
     $('#modal-batch-arquive').on('click', 'a.btn.no', function(e,ui){
         e.preventDefault();
         $("#modal-batch-arquive").modal('hide');
@@ -213,7 +213,7 @@ jQuery(function($){
     * Dropdown menu content actions
     ***************************************************************************/
     // arquive
-    $("#modal-element-archive").modal({ backdrop: 'static', keyboard: true });
+    $("#modal-element-archive").modal({ backdrop: 'static', keyboard: true, show: false });
     $('div.content').on('click', 'div.placeholder div.content-provider-element a.arquive', function(e) {
         var element = $(this).closest('.content-provider-element');
         var elementID = element.data('content-id');
@@ -275,7 +275,7 @@ jQuery(function($){
     });
 
     // send-to-trash
-    $("#modal-element-send-trash").modal({ backdrop: 'static', keyboard: true });
+    $("#modal-element-send-trash").modal({ backdrop: 'static', keyboard: true, show: false });
     $('div.content').on('click', 'div.placeholder div.content-provider-element a.send-to-trash', function(e, ui) {
         var element = $(this).closest('.content-provider-element');
         var elementID = element.data('content-id');

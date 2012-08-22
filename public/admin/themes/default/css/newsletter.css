@@ -129,17 +129,6 @@ div.form {
 	margin: 8px 0;
 }
 
-div#menu-acciones-admin li.separator {
-	border: 0;
-
-	width: 20px;
-	height: 70px;
-
-	background-image: url(../images/newsletter/separator.gif);
-	background-repeat: no-repeat;
-	background-position: center bottom;
-}
-
 /* Splitpane */
 #container {
 	border: 1px solid #EEE;
