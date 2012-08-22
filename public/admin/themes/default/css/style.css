@@ -40,9 +40,7 @@ td {
 /* =============================================================================
    Bootstrap customization
    ========================================================================== */
-
-label, input, button, select, textarea { font-size:12px;}
-.input-append input, .input-prepend input, .input-append select, .input-prepend select, .input-append .uneditable-input, .input-prepend .uneditable-input { font-size:12px;}
+.btn { padding:4px 9px;}
 
 /* -------------------------------------------------------------
   LISTINGS
