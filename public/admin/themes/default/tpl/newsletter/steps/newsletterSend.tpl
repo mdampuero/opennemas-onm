@@ -36,7 +36,7 @@
             <input type="hidden" id="action"  name="action" value="preview" />
         </div>
 
-        <table class="adminlist">
+        <table class="table table-hover table-condensed">
             <tr>
                 <td>
                     {$html_final}

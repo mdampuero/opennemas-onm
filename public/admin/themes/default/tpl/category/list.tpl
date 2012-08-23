@@ -77,7 +77,7 @@ jQuery(document).ready(function ($){
             </ul>
 
             <div id="global">
-                <table class="listing-table">
+                <table class="table table-hover table-condensed">
                     <thead>
                         <tr>
                             <th>{t}Title{/t}</th>
@@ -86,7 +86,7 @@ jQuery(document).ready(function ($){
                             <th style="width:15px;">{t}Photos{/t}</th>
                             <th style="width:15px;">{t}Advertisements{/t}</th>
                             <th style="width:15px;">{t}Available{/t}</th>
-                            <th style="width:15px;">{t}Show in rss{/t}</th>
+                            <th style="width:15px;" class="nowrap">{t}Show in rss{/t}</th>
                             <th style="width:100px;">{t}Actions{/t}</th>
                         </tr>
                     </thead>
@@ -108,7 +108,7 @@ jQuery(document).ready(function ($){
                         {/section}
                     </tbody>
                     <tfoot>
-                        <tr class="pagination">
+                        <tr>
                             <td colspan="8">
                                 &nbsp;
                             </td>
@@ -118,7 +118,7 @@ jQuery(document).ready(function ($){
             </div>
              {is_module_activated name="ALBUM_MANAGER"}
             <div id="album">
-                <table class="listing-table">
+                <table class="table table-hover table-condensed">
                     <thead>
                         <tr>
                             <th>{t}Title{/t}</th>
@@ -148,7 +148,7 @@ jQuery(document).ready(function ($){
                         {/section}
                     </tbody>
                     <tfoot>
-                        <tr class="pagination">
+                        <tr>
                             <td colspan="7"> </td>
                         </tr>
                     </tfoot>
@@ -157,7 +157,7 @@ jQuery(document).ready(function ($){
             {/is_module_activated}
             {is_module_activated name="VIDEO_MANAGER"}
             <div id="video">
-                <table class="listing-table">
+                <table class="table table-hover table-condensed">
                     <thead>
                         <tr>
                             <th>{t}Title{/t}</th>
@@ -188,7 +188,7 @@ jQuery(document).ready(function ($){
 
                     </tbody>
                     <tfoot>
-                        <tr class="pagination">
+                        <tr>
                             <td colspan="7" > </td>
                         </tr>
                     </tfoot>
@@ -197,7 +197,7 @@ jQuery(document).ready(function ($){
             {/is_module_activated}
             {is_module_activated name="KIOSKO_MANAGER"}
             <div id="epapel">
-                <table class="listing-table">
+                <table class="table table-hover table-condensed">
                     <thead>
                         <tr>
                             <th>{t}Title{/t}</th>
@@ -227,7 +227,7 @@ jQuery(document).ready(function ($){
                         {/section}
                     </tbody>
                     <tfoot>
-                        <tr class="pagination">
+                        <tr>
                             <td colspan="7">
                             </td>
                         </tr>
@@ -237,7 +237,7 @@ jQuery(document).ready(function ($){
              {/is_module_activated}
              {is_module_activated name="POLL_MANAGER"}
             <div id="poll">
-                <table class="listing-table">
+                <table class="table table-hover table-condensed">
                     <thead>
                         <tr>
                             <th>{t}Title{/t}</th>
@@ -267,7 +267,7 @@ jQuery(document).ready(function ($){
                         {/section}
                     </tbody>
                     <tfoot>
-                        <tr class="pagination">
+                        <tr >
                             <td colspan="7">
                             </td>
                         </tr>
@@ -277,7 +277,7 @@ jQuery(document).ready(function ($){
             {/is_module_activated}
             {is_module_activated name="SPECIAL_MANAGER"}
             <div id="special">
-                <table class="listing-table">
+                <table class="table table-hover table-condensed">
                     <thead>
                         <tr>
                             <th>{t}Title{/t}</th>
@@ -307,7 +307,7 @@ jQuery(document).ready(function ($){
                         {/section}
                     </tbody>
                     <tfoot>
-                        <tr class="pagination">
+                        <tr >
                             <td colspan="7">
                             </td>
                         </tr>
@@ -317,7 +317,7 @@ jQuery(document).ready(function ($){
             {/is_module_activated}
             {is_module_activated name="BOOK_MANAGER"}
             <div id="book">
-                <table class="listing-table">
+                <table class="table table-hover table-condensed">
                     <thead>
                         <tr>
                             <th>{t}Title{/t}</th>
@@ -347,7 +347,7 @@ jQuery(document).ready(function ($){
                         {/section}
                     </tbody>
                     <tfoot>
-                        <tr class="pagination">
+                        <tr>
                             <td colspan="7">
                             </td>
                         </tr>

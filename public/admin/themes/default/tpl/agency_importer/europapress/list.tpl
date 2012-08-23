@@ -2,10 +2,6 @@
 
 {block name="header-css" append}
 <style type="text/css">
-    .adminlist td {
-    	padding-top:4px;
-    	padding-bottom:4px;
-    }
     .tooltip-inner {
         max-width:500px !important;
         text-align: justify;
@@ -53,6 +49,7 @@
     {render_messages}
 
     <div class="warnings-validation"></div><!-- / -->
+
     <form action="{url name=admin_importer_europapress}" method="get" name="formulario" id="formulario">
 
         <div class="table-info clearfix">
@@ -60,8 +57,7 @@
                 <div class="left"><label>Total: {$pagination->_totalItems} articles.</label></div>
                 <div class="right form-inline">
                     <label for="username">
-                        {t}Filter by title or content{/t}
-                        <input id="username" name="filter_title" onchange="this.form.submit();" value="{$smarty.request.filter_title}" class="input-medium search-query"/>
+                        <input type="search" id="username" name="filter_title" onchange="this.form.submit();" value="{$smarty.request.filter_title}" class="input-medium search-query" placeholder="{t}Filter by title or content{/t}"/>
                     </label>
 
                     <label for="usergroup">
@@ -78,7 +74,7 @@
         </div>
 
 
-    <table class="listing-table">
+    <table class="table table-hover table-condensed">
         <thead>
             <tr>
             {if count($elements) >0}
@@ -86,7 +82,7 @@
                 <th>{t}Title{/t}</th>
                 <th>{t}Date{/t}</th>
                 <th>{t}Section{/t}</th>
-                <th style="width:20px;">{t}Actions{/t}</th>
+                <th style="width:20px;" class="nowrap">{t}Actions{/t}</th>
             </tr>
             {else}
             <tr>
@@ -97,29 +93,29 @@
 
 
         <tbody>
-            {section name=c loop=$elements}
+            {foreach name=c from=$elements item=element}
             <tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;" >
 
                 <td style="text-align:center;">
-                   <img src="{$params.IMAGE_DIR}notifications/level-{$elements[c]->priorityNumber}.png" alt="{t 1=$elements[c]->priorityNumber}Priority %1{/t}" title="{t 1=$elements[c]->priorityNumber}Priority %1{/t}">
+                   <img src="{$params.IMAGE_DIR}notifications/level-{$element->priorityNumber}.png" alt="{t 1=$element->priorityNumber}Priority %1{/t}" title="{t 1=$element->priorityNumber}Priority %1{/t}">
                 </td>
-                <td rel="tooltip" data-original-title="{$elements[c]->body|clearslash|regex_replace:"/'/":"\'"|escape:'html'}">
-                    <a href="{url name=admin_importer_europapress_show id=$elements[c]->xmlFile|urlencode}">
-                        {$elements[c]->title}
+                <td rel="tooltip" data-original-title="{$element->body|clearslash|regex_replace:"/'/":"\'"|escape:'html'}">
+                    <a href="{url name=admin_importer_europapress_show id=$element->xmlFile|urlencode}">
+                        {$element->title}
                     </a>
                 </td>
                 <td>
-                        {$elements[c]->created_time->getTimestamp()|relative_date}
+                    {$element->created_time->getTimestamp()|relative_date}
                 </td>
 
                 <td>
-                    {$elements[c]->category|default:""}
+                    {$element->category|default:""}
                 </td>
 
-                <td class="right">
+                <td class="right nowrap">
                     <ul class="action-buttons">
                         <li>
-                            <a class="btn btn-mini" href="{url name=admin_importer_europapress_import id=$elements[c]->xmlFile|urlencode}" title="{t}Import{/t}">
+                            <a class="btn btn-mini" href="{url name=admin_importer_europapress_import id=$element->xmlFile|urlencode}" title="{t}Import{/t}">
                                 {t}Import{/t}
                             </a>
                         </li>
@@ -127,8 +123,7 @@
                 </td>
 
                </tr>
-
-            {sectionelse}
+            {foreachelse}
             <tr>
                 <td colspan=5 class="empty">
                     <h2>
@@ -137,17 +132,19 @@
                     <p>{t}Try syncing from server by click over the "Sync with server" button above.{/t}</p>
                 </td>
             </tr>
-            {/section}
+            {/foreach}
         </tbody>
         <tfoot>
-             <tr class="pagination" >
-                 <td colspan="5">{$pagination->links|default:""}&nbsp;</td>
+            <tr>
+                <td colspan="5"  class="center">
+                    <div class="pagination">
+                        {$pagination->links}
+                    </div>
+                </td>
              </tr>
         </tfoot>
 
     </table>
-
-	<input type="hidden" id="action" name="action" value="list" />
 	</form>
 </div>
 {/block}

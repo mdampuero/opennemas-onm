@@ -213,25 +213,25 @@
                 <tr>
                     <td colspan="3">
                         <label>{t}Subsections:{/t}</label>
-                        <table class="adminlist" id="cates">
+                        <table class="table table-hover table-condensed" id="cates">
                             <thead>
                                 <tr>
                                     <th>{t}Title{/t}</th>
                                     <th>{t}Internal name{/t}</th>
                                     <th>{t}Type{/t}</th>
                                     <th>{t}In menu{/t}</th>
-                                    <th>{t}Actions{/t}</th>
+                                    <th class="right">{t}Actions{/t}</th>
                                 </tr>
                             </thead>
                             {section name=s loop=$subcategorys}
                             <tr>
-                                <td>
+                                <td class="left">
                                      {$subcategorys[s]->title}
                                 </td>
-                                <td>
+                                <td class="left">
                                      {$subcategorys[s]->name}
                                 </td>
-                                <td>
+                                <td class="left">
                                   {if $subcategorys[s]->internal_category eq 3}
                                      <img style="width:20px;" src="{$params.IMAGE_DIR}album.png" alt="Sección de Album" />
                                   {elseif $subcategorys[s]->internal_category eq 5}
@@ -240,16 +240,13 @@
                                       <img  style="width:20px;" src="{$params.IMAGE_DIR}advertisement.png" alt="Sección Global" />
                                   {/if}
                                 </td>
-                                <td>
+                                <td class="left">
                                     {if $subcategorys[s]->inmenu==1} {t}Yes{/t} {else}{t}No{/t}{/if}
                                 </td>
                                 <td class="right">
                                     <div class="btn-group">
                                         <a class="btn btn-mini" href="{url name=admin_category_show id=$subcategorys[s]->pk_content_category}" title="Modificar">
                                             <i class="icon-pencil"></i>
-                                        </a>
-                                        <a class="btn btn-mini btn-danger" href="{url name=admin_category_show id=$subcategorys[s]->pk_content_category}" title="Eliminar">
-                                            <i class="icon-trash icon-white"></i>
                                         </a>
                                     </div>
                                 </td>

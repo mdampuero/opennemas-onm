@@ -1,14 +1,4 @@
 {extends file="base/admin.tpl"}
-
-{block name="header-css" append}
-<style>
-	table.adminlist td,
-	table.adminlist th {
-		padding: 8px;
-	}
-</style>
-{/block}
-
 {block name="content"}
 
 

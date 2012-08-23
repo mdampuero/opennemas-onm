@@ -44,7 +44,7 @@
         {/if}
     </td>
     {/if}
-    <td class="center">
+    <td class="right nowrap">
         <div class="btn-group">
             {acl isAllowed="CATEGORY_UPDATE"}
                 {if $category->internal_category != 0 && $category->internal_category != 2}
@@ -127,7 +127,7 @@
             {/if}
         </td>
 
-        <td class="center">
+        <td class="right nowrap">
             <div class="btn-group">
                 {acl isAllowed="CATEGORY_UPDATE"}
                     <a class="btn btn-mini" href="{url name=admin_category_show id=$subcategory->pk_content_category}" title="Modificar">

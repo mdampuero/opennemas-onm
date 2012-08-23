@@ -76,7 +76,7 @@
                 {t}Subscriptors selected (please drag out a subscritor to delete from recipients){/t}
             </div>
         </div>
-		<table class="adminlist" style="min-height:500px">
+		<table class="table table-hover table-condensed" style="min-height:500px">
 			<tr class="noHover">
 				<td style="width:50%">
 	                 <div id="mailList"  style="min-height:50px;">

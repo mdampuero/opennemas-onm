@@ -21,7 +21,7 @@
 <form action="{url name=admin_menus}" method="GET" name="formulario" id="formulario">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Menu manager{/t} :: {t}Listing menues{/t}</h2></div>
+            <div class="title"><h2>{t}Menu manager{/t}</h2></div>
               <ul class="old-button">
                   {acl isAllowed="MENU_DELETE"}
                 <li>
@@ -47,7 +47,7 @@
 
         {render_messages}
 
-        <table class="listing-table">
+        <table class="table table-hover table-condensed">
             <thead>
                 <tr>
                     <th style="width:15px;">
@@ -98,7 +98,7 @@
                 {/foreach}
             </tbody>
             <tfoot>
-                <tr class="pagination">
+                <tr>
                     <td colspan="3">&nbsp;</td>
                 </tr>
             </tfoot>

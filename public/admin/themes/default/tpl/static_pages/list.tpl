@@ -3,7 +3,7 @@
 {block name="content"}
 <div class="top-action-bar">
 	<div class="wrapper-content">
-		<div class="title"><h2>{t}Static Pages Manager{/t} :: {t}Listing static pages{/t}</h2></div>
+		<div class="title"><h2>{t}Static Pages Manager{/t} :: {t}Listing{/t}</h2></div>
 		<ul class="old-button">
 			<li>
 				<a href="{url name=admin_staticpages_create}" title="{t}Create new page{/t}">
@@ -23,15 +23,15 @@
             <div>
                 <div class="right form-inline">
                     <label>
-                        {t}Title:{/t}
-                        <input type="search" class="search-query" name="filter[title]" for="submit" value="{$smarty.request.filter.title|default:""}" />
+
+                        <input type="search" class="search-query" name="filter[title]" for="submit" value="{$smarty.request.filter.title|default:""}" placeholder="{t}Title{/t}"/>
                     </label>
                     <button type="submit" id="search" class="btn">{t}Search{/t}</button>
                 </div>
             </div>
         </div>
 
-        <table class="listing-table table table-striped">
+        <table class="table table-hover table-condensed">
             <thead>
                 <tr>
                 {if count($pages) > 0}
@@ -76,7 +76,7 @@
                         {/acl}
                     </td>
 
-                    <td class="center">
+                    <td class="center nowrap">
                         <div class="btn-group">
                         {acl isAllowed="STATIC_UPDATE"}
                             <a class="btn" href="{url name=admin_staticpages_show id=$pages[k]->id}" title="{t}Modify{/t}">
@@ -100,14 +100,14 @@
                     <td class="empty">{t}There is no static pages.{/t}</td>
                 </tr>
                 {/section}
-            </tbody><!--menu-adminlist-->
-            {if count($pages) > 0}
+            </tbody>
             <tfoot>
-                <tr class="pagination">
-                    <td colspan=5>{$pager->links}</td>
+                <tr>
+                    <td colspan=5 class="center">
+                        <div class="pagination">{$pager->links}</div>
+                    </td>
                 </tr>
             </tfoot>
-            {/if}
         </table>
 
     </form>

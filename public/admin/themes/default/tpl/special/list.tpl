@@ -74,7 +74,7 @@
         </ul>
 
         {* MENSAJES DE AVISO GUARDAR POS******* *}
-        <table class="listing-table">
+        <table class="table table-hover table-condensed">
             <thead>
                 <tr>
 
@@ -88,7 +88,7 @@
                     <th class="center" style="width:35px;">{t}Published{/t}</th>
                      {if $category!='widget'} <th class="center" style="width:35px;">{t}Favorite{/t}</th>{/if}
                     <th class="center" style="width:35px;">{t}Home{/t}</th>
-                    <th class="center" style="width:110px;">{t}Actions{/t}</th>
+                    <th class="right" style="width:110px;">{t}Actions{/t}</th>
                 </tr>
             </thead>
              <tbody class="sortable">
@@ -146,7 +146,7 @@
                         {/if}
                     {/acl}
                 </td>
-                <td class="center">
+                <td class="right">
                     <div class="btn-group">
                        {acl isAllowed="SPECIAL_UPDATE"}
                         <a class="btn"
@@ -176,9 +176,11 @@
             {/foreach}
             </tbody>
             <tfoot>
-              <tr class="pagination">
+              <tr>
                   <td colspan="9" >
-                    {$pagination->links|default:""}&nbsp;
+                    <div class="pagination">
+                        {$pagination->links|default:""}
+                    </div>
                   </td>
               </tr>
             </tfoot>

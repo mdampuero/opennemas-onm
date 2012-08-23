@@ -51,7 +51,7 @@
 
         {render_messages}
 
-        <table class="adminlist">
+        <table class="table table-hover table-condensed">
             <tr><td colspan="2"><br />
                       <div id="FileContainer">
                             <div class="marcoFoto" id="File0">

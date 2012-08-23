@@ -88,7 +88,7 @@
         {* MENSAJES DE AVISO GUARDAR POS******* *}
         <div id="warnings-validation"></div>
 
-        <table class="listing-table">
+        <table class="table table-hover table-condensed">
             <thead>
                 <tr>
                     <th style="width:15px;">
@@ -96,52 +96,48 @@
                     </th>
                     <th></th>
                     <th class="title">{t}Title{/t}</th>
+                    {if $category=='widget' || $category=='all'}<th style="width:65px;" class="left">{t}Section{/t}</th>{/if}
+                    <th class="left nowrap" style="width:100px;">Created</th>
                     <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
-                    {if $category=='widget' || $category=='all'}<th style="width:65px;" class="center">{t}Section{/t}</th>{/if}
-                    <th class="center" style="width:100px;">Created</th>
                     <th class="center" style="width:35px;">{t}Published{/t}</th>
                     {if $category!='widget' && $category!='all'} <th class="center" style="width:35px;">{t}Favorite{/t}</th>{/if}
                     <th class="center" style="width:35px;">{t}Home{/t}</th>
-                    <th class="center" style="width:110px;">{t}Actions{/t}</th>
+                    <th class="right" style="width:110px;">{t}Actions{/t}</th>
                 </tr>
             </thead>
             <tbody class="sortable">
-            {section name=as loop=$albums}
-            <tr data-id="{$albums[as]->pk_album}">
+            {foreach name=as from=$albums item=album}
+            <tr data-id="{$album->pk_album}">
                 <td class="center">
-                    <input type="checkbox" class="minput"  id="selected_{$smarty.section.as.iteration}" name="selected_fld[]" value="{$albums[as]->id}"  style="cursor:pointer;" >
+                    <input type="checkbox" class="minput"  id="selected_{$smarty.section.as.iteration}" name="selected_fld[]" value="{$album->id}"  style="cursor:pointer;" >
                 </td>
                 <td>
-                    {if !empty($albums[as]->cover)}
-                        <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$albums[as]->cover}" style="max-height:60px; max-width:80px;"/>
+                    {if !empty($album->cover)}
+                        <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$album->cover}" style="max-height:60px; max-width:80px;"/>
                     {else}
                         <img src="http://placehold.it/80x60" />
                     {/if}
 
                 </td>
                 <td>
-                    <a href="{url name=admin_album_show id=$albums[as]->pk_album}" title="{$albums[as]->title|clearslash}">
-                        {$albums[as]->title|clearslash}
+                    <a href="{url name=admin_album_show id=$album->pk_album}" title="{$album->title|clearslash}">
+                        {$album->title|clearslash}
                     </a>
                 </td>
-                 <td class="center">
-                    {$albums[as]->views}
-                </td>
                 {if $category=='widget' || $category=='all'}
-                <td class="center">
-                     {$albums[as]->category_name}
+                <td class="left">
+                     {$album->category_name}
                 </td>
                 {/if}
-                <td class="center">
-                         {$albums[as]->created}
-                </td>
+                <td class="center nowrap">{$album->created}</td>
+                <td class="center">{$album->views}</td>
                 <td class="center">
                     {acl isAllowed="ALBUM_AVAILABLE"}
-                        {if $albums[as]->available == 1}
-                                <a href="{url name=admin_album_toggle_availability id=$albums[as]->pk_album status=0 category=$category page=$paginacion->_currentPage|default:1}" title="{t}Published{/t}">
+                        {if $album->available == 1}
+                                <a href="{url name=admin_album_toggle_availability id=$album->pk_album status=0 category=$category page=$paginacion->_currentPage|default:1}" title="{t}Published{/t}">
                                         <img src="{$params.IMAGE_DIR}publish_g.png" alt="{t}Published{/t}" /></a>
                         {else}
-                                <a href="{url name=admin_album_toggle_availability id=$albums[as]->pk_album status=1 category=$category page=$paginacion->_currentPage|default:1}" title="{t}Pending{/t}">
+                                <a href="{url name=admin_album_toggle_availability id=$album->pk_album status=1 category=$category page=$paginacion->_currentPage|default:1}" title="{t}Pending{/t}">
                                         <img src="{$params.IMAGE_DIR}publish_r.png" alt="{t}Pending{/t}"/></a>
                         {/if}
                     {/acl}
@@ -149,37 +145,37 @@
                  {if $category!='widget' && $category!='all'}
                 <td class="center">
                     {acl isAllowed="ALBUM_FAVORITE"}
-                        {if $albums[as]->favorite == 1}
-                           <a href="{url name=admin_album_toggle_favorite id=$albums[as]->pk_album status=0 category=$category page=$paginacion->_currentPage|default:1}" class="favourite_on" title="{t}Take out from frontpage{/t}"></a>
+                        {if $album->favorite == 1}
+                           <a href="{url name=admin_album_toggle_favorite id=$album->pk_album status=0 category=$category page=$paginacion->_currentPage|default:1}" class="favourite_on" title="{t}Take out from frontpage{/t}"></a>
                         {else}
-                            <a href="{url name=admin_album_toggle_favorite id=$albums[as]->pk_album status=1 category=$category page=$paginacion->_currentPage|default:1}" class="favourite_off" title="{t}Put in frontpage{/t}"></a>
+                            <a href="{url name=admin_album_toggle_favorite id=$album->pk_album status=1 category=$category page=$paginacion->_currentPage|default:1}" class="favourite_off" title="{t}Put in frontpage{/t}"></a>
                         {/if}
                     {/acl}
                 </td>
                 {/if}
                 <td class="center">
                     {acl isAllowed="ALBUM_HOME"}
-                        {if $albums[as]->in_home == 1}
-                           <a href="{url name=admin_album_toggle_inhome id=$albums[as]->pk_album status=0 category=$category page=$paginacion->_currentPage|default:1}" class="no_home" title="{t}Take out from home{/t}"></a>
+                        {if $album->in_home == 1}
+                           <a href="{url name=admin_album_toggle_inhome id=$album->pk_album status=0 category=$category page=$paginacion->_currentPage|default:1}" class="no_home" title="{t}Take out from home{/t}"></a>
                         {else}
-                            <a href="{url name=admin_album_toggle_inhome id=$albums[as]->pk_album status=1 category=$category page=$paginacion->_currentPage|default:1}" class="go_home" title="{t}Put in home{/t}"></a>
+                            <a href="{url name=admin_album_toggle_inhome id=$album->pk_album status=1 category=$category page=$paginacion->_currentPage|default:1}" class="go_home" title="{t}Put in home{/t}"></a>
                         {/if}
                     {/acl}
                 </td>
-                <td class="center">
+                <td class="right">
                     <div class="btn-group">
                         {acl isAllowed="ALBUM_UPDATE"}
-                        <a class="btn" href="{url name=admin_album_show id=$albums[as]->id}" title="{t}Edit{/t}" >
+                        <a class="btn" href="{url name=admin_album_show id=$album->id}" title="{t}Edit{/t}" >
                             <i class="icon-pencil"></i> {t}Edit{/t}
                         </a>
                         {/acl}
 
                         {acl isAllowed="ALBUM_DELETE"}
                         <a class="del btn btn-danger" data-controls-modal="modal-from-dom"
-                           data-id="{$albums[as]->id}"
-                           data-title="{$albums[as]->title|capitalize}"
-                           data-url="{url name=admin_album_delete id=$albums[as]->id}"
-                           href="{url name=admin_album_delete id=$albums[as]->id}" >
+                           data-id="{$album->id}"
+                           data-title="{$album->title|capitalize}"
+                           data-url="{url name=admin_album_delete id=$album->id}"
+                           href="{url name=admin_album_delete id=$album->id}" >
                             <i class="icon-trash icon-white"></i>
                         </a>
                         {/acl}
@@ -187,15 +183,17 @@
                 </td>
 
             </tr>
-            {sectionelse}
+            {foreachelse}
             <tr>
                 <td class="empty" colspan=9>{t}There is no albums yet{/t}</td>
             </tr>
-            {/section}
+            {/foreach}
             </tbody>
             <tfoot>
-              <td colspan="9" class="pagination">
-                {$pagination->links|default:""}&nbsp;
+              <td colspan="9" class="center">
+                <div class="pagination">
+                    {$pagination->links|default:""}
+                </div>
               </td>
             </tfoot>
         </table>

@@ -29,10 +29,6 @@ div.autocomplete ul li {
     list-style-type:none;
     cursor:pointer;
 }
-table.adminlist td,
-table.adminlist th {
-    padding: 8px;
-}
 </style>
 {/block}
 

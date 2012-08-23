@@ -31,9 +31,14 @@ Specials
 --------
 Review d&d of contents in specials
 
-ALL
+CSS
 ---
-- Review modals to insert show:false and after that remove bootstrap-modal.js file
+Drop remaining listing-table tables and related CSS
+
+Image Galleries
+---------------
+- Review image galleries: article, album
+
 
 LOW PRIORITY TASKS OR IDEAS
 --------------------------------------------------------------------------------

@@ -21,10 +21,12 @@
     {render_messages}
     <form action="{url name=manager_instances}" method="get" name="formulario" id="formulario">
         <div class="table-info clearfix">
-            <div class="pull-left">Total: {$pagination->_totalItems} instances.</div>
+            <div class="pull-left">
+                {$pagination->_totalItems} instances
+                <a href="{url name=manager_instances_list_export filter_name=$filter_name}">{image_tag src="/themes/default/images/csv.png" base_url="/manager"} Export list</a>
+            </div>
             <div class="pull-right form-inline">
-                <label for="username">{t}Filter by name{/t}</label>
-                <input type="text" id="username" class="" name="filter_name" onchange="this.form.submit();" value="{$filter_title}" />
+                <input type="text" id="username" placeholder="{t}Filter by name{/t}" name="filter_name" onchange="this.form.submit();" value="{$filter_title}" />
                 <label for="usergroup">
                     {t}Per page{/t}
                     <select id="usergroup" name="filter_per_page" onchange="this.form.submit();">
@@ -37,11 +39,11 @@
                 <input type="hidden" name="page" value="1" />
                 <button type="submit" class="btn">{t}Search{/t}</button>
             </th>
-            <a href="{url name=manager_instances_list_export filter_name=$filter_name}">{image_tag src="/themes/default/images/csv.png" base_url="/manager"} Export list</a>
+
             </div>
         </div>
 
-        <table class="listing-table" >
+        <table class="table table-hover table-condensed" >
 
             <thead>
                 {if count($instances) > 0}
@@ -54,7 +56,7 @@
                 <th>{t}Ads{/t}</th>
                 <th width="100px">{t}Created{/t}</th>
                 <th class="center" width="10px">{t}Activated{/t}</th>
-                <th class="center" width="80px">{t}Actions{/t}</th>
+                <th class="center" width="10px">{t}Actions{/t}</th>
                 {else}
                 <th scope="col" colspan=4>&nbsp;</th>
                 {/if}
@@ -90,7 +92,7 @@
                     <td>
                         {$instance->totals[2]}
                     </td>
-                     <td>
+                     <td class="nowrap">
                         {$instance->configs['site_created']}
                     </td>
                     <td class="center">
@@ -103,7 +105,7 @@
                         {/if}
                     </td>
 
-                    <td class="right">
+                    <td class="right nowrap">
                         <div class="btn-group">
                             <a class="btn" href="{url name=manager_instance_show id=$instance->id}" title="{t}Edit{/t}">
                                 <i class="icon-pencil"></i>
@@ -125,9 +127,11 @@
             </tbody>
 
             <tfoot>
-                <tr class="pagination">
-                    <td colspan="11">
-                        {$pagination->links}&nbsp;
+                <tr>
+                    <td colspan="11" class="center">
+                        <div class="pagination">
+                            {$pagination->links}
+                        </div>
                     </td>
                 </tr>
             </tfoot>

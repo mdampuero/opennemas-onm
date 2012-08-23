@@ -56,10 +56,6 @@
 object {
     z-index:0;
 }
-table.adminlist img {
-    height:auto !important;
-    max-height:400px;
-}
 label {
     display:block;
     color:#666;

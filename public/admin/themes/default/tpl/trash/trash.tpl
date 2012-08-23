@@ -47,7 +47,7 @@ jQuery(function($){
 
         {include file="trash/partials/_pills.tpl"}
 
-        <table class="listing-table">
+        <table class="table table-hover table-condensed">
 
             <thead>
                <tr>
@@ -56,9 +56,9 @@ jQuery(function($){
                     </th>
                     <th class='left'>{t}Title{/t}</th>
                     <th style="width:40px">{t}Section{/t}</th>
-                    <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
-                    <th class="center" style="width:110px;">{t}Date{/t}</th>
-                    <th class="center" style="width:140px;">{t}Actions{/t}</th>
+                    <th class="left" style="width:110px;">{t}Date{/t}</th>
+                    <th class="center" style="width:20px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
+                    <th class="nowrap center" style="width:40px;">{t}Actions{/t}</th>
                </tr>
             </thead>
 
@@ -68,13 +68,11 @@ jQuery(function($){
                     <td >
                         <input type="checkbox" name="selected[]" value="{$contents[c]->id}">
                     </td>
-                    <td>
-                        {$contents[c]->title|clearslash}
-                    </td>
-                    <td class="center">{$contents[c]->category_title}</td>
-                    <td class="center">{$contents[c]->views}</td>
+                    <td>{$contents[c]->title|clearslash}</td>
+                    <td class="left">{$contents[c]->category_title}</td>
                     <td class="center">{$contents[c]->created}</td>
-                    <td class="right">
+                    <td class="center">{$contents[c]->views}</td>
+                    <td class="nowrap right">
                         <div class="btn-group">
                             <a class="btn" href="{url name=admin_trash_restore id=$contents[c]->id mytype=$mytype page=$paginacion->_currentPage}" title="Recuperar">
                                 <i class="icon-retweet"></i> {t}Restore{/t}
@@ -95,9 +93,11 @@ jQuery(function($){
             </tbody>
 
             <tfoot>
-                <tr class="pagination">
-                    <td colspan="6">
-                        {$pagination->links}&nbsp;
+                <tr>
+                    <td colspan="6" class="center">
+                        <div class="pagination">
+                            {$pagination->links}
+                        </div>
                     </td>
                 </tr>
             </tfoot>

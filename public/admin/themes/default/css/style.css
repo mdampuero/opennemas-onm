@@ -9,6 +9,7 @@ body {
     min-height:100%;
     background: #fff;
     margin-top: 24px;
+    font-size:13px;
 }
 
 img { border: 0 none; }
@@ -36,19 +37,25 @@ td {
     width: 100%;
 }
 
+.nowrap {white-space: nowrap}
 
 /* =============================================================================
    Bootstrap customization
    ========================================================================== */
 .btn { padding:4px 9px;}
-
+.table {color:#424E51; font-size:12px;}
+.table-condensed th, .table-condensed td{ padding:8px 5px;vertical-align: middle}
+.pagination { vertical-align:middle; }
+.table .pagination { margin-top:0;margin-bottom:0;display:inline-block;}
+.table a {font-weight:bold;}
+.table a.btn {font-weight:normal}
+.table tfoot td { padding:3px 9px !important; }
+.table tbody td.empty { padding:30px; text-align: center; font-size:13px;}
 /* -------------------------------------------------------------
   LISTINGS
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 table {border-spacing:0;}
 
-table.adminlist img { vertical-align:middle; }
-table.adminlist,
 table.adminform {
   width:100%;
   background-color: #FFFFFF;
@@ -63,71 +70,11 @@ table.adminform {
   border-top:1px solid #bfbfbf
 }
 
-table.adminlist thead th {
-  margin: 0px;
-  background-repeat: repeat;
-  font-size: 11px;
-  color: #000;
-  padding: 1px;
-  background: #e1e2e1; /* for non-css3 browsers */
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fefefe', endColorstr='#e1e2e1'); /* for IE */
-  background: -webkit-gradient(linear, left top, left bottom, from(#fefefe), to(#e1e2e1)); /* for webkit browsers */
-  background: -moz-linear-gradient(top,  #fefefe,  #e1e2e1); /* for firefox 3.6+ */
-  padding:4px 4px;
-  border:1px solid #ccc;
-  border-left-width:0px;
-  text-shadow:0 1px 0 #FFFFFF;
-}
-table.adminlist thead th:hover {
-  background: #d1d2d1; /* for non-css3 browsers */
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fefefe', endColorstr='#d1d2d1'); /* for IE */
-  background: -webkit-gradient(linear, left top, left bottom, from(#fefefe), to(#d1d2d1)); /* for webkit browsers */
-  background: -moz-linear-gradient(top,  #fefefe,  #d1d2d1); /* for firefox 3.6+ */
-}
-table.adminlist thead tr {
-  border-bottom:1px solid #ccc !important;
-}
-table.adminlist thead th:last-child {
-  border-right:none !important
-}
-table.adminlist thead img {
-  max-height:12px;
-}
-table.adminlist img{
-  vertical-align:middle;
-}
-table.adminlist tr.row0,
-table.adminlist tr:nth-child(even) {
-  background-color: #f3f3f3;
-}
-table.adminlist tr.row1,
-table.adminlist tr:nth-child(odd) {
-  background-color: #fff;
-}
-table.adminlist tr.row2 {
-  background-color: #FFF;
-  border-bottom: 1px;
-  text-align: right;
-}
-table.adminlist tr:hover {
-  background-color: #EEEEEE;
-}
-
-table.adminlist tr.noHover:hover {
-  background-color: #FFF;
-}
-
-table.adminlist thead a:hover { text-decoration: none; }
-table.adminlist thead th img { vertical-align: middle; }
-table.adminlist tbody th { font-weight: bold; }
-table.adminlist tbody tr      { background-color: #fff;  text-align: left; }
-table.adminlist tbody tr td      { background:transparent;}
-table.adminlist tfoot tr, table.adminform tfoot tr { text-align: center;  color: #333; }
+table.adminform tfoot tr { text-align: center;  color: #333; }
 
 .pagination a { border:1px solid #ddd; padding:4px 6px; background:#fafafa;}
 .pagination a:hover { background:#fff;}
 
-table.adminlist tfoot tr td,
 table.adminform tfoot tr td{
   background:#F1F1F1;
   border-top:1px solid #D2D2D2;
@@ -1169,7 +1116,9 @@ div.action-bar .right{
 }
 
 .listing-table th,
-.listing-table tfoot td {
+.listing-table tfoot td,
+.table th,
+.table tfoot td {
     background: #343434;
     color: #FFFFFF;
     font-size: 12px;
@@ -1188,16 +1137,19 @@ div.action-bar .right{
 
 .listing-table th img, .listing-table td img { vertical-align:middle; }
 
-.listing-table th input[type="checkbox"]{ margin-left:0px; }
+/*.listing-table th input[type="checkbox"]{ margin-left:0px; }*/
 
-.listing-table .left { text-align:left !important; }
-.listing-table .right { text-align:right !important; }
-.listing-table .center { text-align:center !important; }
+.left { text-align:left !important; }
+.right { text-align:right !important; }
+.center { text-align:center !important; }
 
 
-.listing-table .pagination { color:#aaa !important; }
-.listing-table .pagination a { background: #3f3f3f; border: 1px solid #666; color:White !important; text-shadow:none; }
-.listing-table .pagination a:hover { background:#3c3c3c; }
+.listing-table .pagination,
+.table .pagination { color:#aaa !important; }
+.listing-table .pagination a,
+.table .pagination a { background: #3f3f3f !important; border: 1px solid #666; color:White !important; text-shadow:none; }
+.listing-table .pagination a:hover,
+.table .pagination a:hover { background:#3c3c3c; }
 
 .listing-table tbody tr td:first-child input[type="checkbox"] {
   display: inline-block;
@@ -1230,6 +1182,7 @@ div.action-bar .right{
 .table-info .right { float:right; text-align:right; }
 .table-info .left { float:left; text-align:left; }
 .table-info .center { text-align:center }
+.table-info form {margin:0;}
 
 /* -------------------------------------------------------------
   Article edit form: image assignment

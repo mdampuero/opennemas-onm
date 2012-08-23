@@ -19,7 +19,7 @@
 	<form action="{url name=admin_tpl_manager_config}" method="POST">
 
 		<div style="width:700px; margin:0 auto;">
-            <table class="listing-table table table-striped">
+            <table class="table table-hover table-condensed">
                 <thead>
                     <tr>
 						<th class="center" style="width:10px">

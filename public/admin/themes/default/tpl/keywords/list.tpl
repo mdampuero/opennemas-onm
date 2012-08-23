@@ -33,13 +33,13 @@
                 </div>
             </div>
         </div>
-		<table class="listing-table">
+		<table class="table table-hover table-condensed">
 			<thead>
 				<tr>
 					<th style="width:20px;">{t}Type{/t}</th>
 					<th scope=col>{t}Keyword{/t}</th>
 					<th scope=col>{t}Replacement value{/t}</th>
-					<th scope=col style="width:100px;">{t}Actions{/t}</th>
+					<th scope=col style="width:100px;" class="right nowrap">{t}Actions{/t}</th>
 				</tr>
 			</thead>
 
@@ -70,15 +70,19 @@
 				</tr>
 				{foreachelse}
 				<tr>
-					<td class="empty" align="center" colspan=4>{t}No available keywords yet.{/t}</td>
+					<td class="empty" colspan=4>
+						{t}No available keywords yet.{/t}
+					</td>
 				</tr>
 				{/foreach}
 			</tbody>
 
-			<tfoot class="pagination">
+			<tfoot>
 				<tr>
 					<td colspan="5" class="center">
-						{$pagination->links}&nbsp;
+						<div class="pagination">
+							{$pagination->links}
+						</div>
 					</td>
 				</tr>
 			</tfoot>

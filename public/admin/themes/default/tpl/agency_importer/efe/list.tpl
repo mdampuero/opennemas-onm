@@ -2,10 +2,6 @@
 
 {block name="header-css" append}
     <style type="text/css">
-    .adminlist td {
-	padding-top:4px;
-	padding-bottom:4px;
-    }
     .tags-hidden {
         position:absolute;
         width:30px;
@@ -88,11 +84,10 @@
 
         <div class="table-info clearfix">
             <div>
-                <div class="left"><label>{t 1=$pagination->_totalItems}Total: %1 articles.{/t}</label></div>
+                <div class="left"><strong>{t 1=$pagination->_totalItems}%1 articles{/t}</strong></div>
                 <div class="right form-inline">
                     <label for="username">
-                        {t}Filter by title or content{/t}
-                        <input id="username" name="filter_title" onchange="this.form.submit();" value="{$smarty.request.filter_title}" class="input-medium search-query" />
+                        <input type="search" id="username" name="filter_title" onchange="this.form.submit();" value="{$smarty.request.filter_title}" class="input-medium search-query" placeholder="{t}Filter by title or content{/t}"/>
                     </label>
 
                     <label for="usergroup">
@@ -108,7 +103,7 @@
             </div>
         </div>
 
-        <table class="listing-table">
+        <table class="table table-hover table-condensed">
             <thead>
                 <tr>
                 {if count($elements) >0}
@@ -127,48 +122,48 @@
             </thead>
 
             <tbody>
-                {section name=c loop=$elements}
-                <tr class="{if is_array($already_imported) &&  in_array($elements[c]->urn,$already_imported)}already-imported{/if}"  style="cursor:pointer;" >
+                {foreach name=c from=$elements item=element}
+                <tr class="{if is_array($already_imported) &&  in_array($element->urn,$already_imported)}already-imported{/if}"  style="cursor:pointer;" >
 
                     <td style="text-align:center;">
-                       <img src="{$params.IMAGE_DIR}notifications/level-{if $elements[c]->priority > 4}4{else}{$elements[c]->priority}{/if}.png" alt="{t 1=$elements[c]->priority}Priority %1{/t}" title="{t 1=$elements[c]->priority}Priority %1{/t}">
+                       <img src="{$params.IMAGE_DIR}notifications/level-{if $element->priority > 4}4{else}{$element->priority}{/if}.png" alt="{t 1=$element->priority}Priority %1{/t}" title="{t 1=$element->priority}Priority %1{/t}">
                     </td>
-                    <td rel="tooltip" data-original-title="{$elements[c]->body|clearslash|regex_replace:"/'/":"\'"|escape:'html'}">
-                        <a href="{url name=admin_importer_efe_show id=$elements[c]->xmlFile|urlencode}" >
-                            {$elements[c]->title}
+                    <td rel="tooltip" data-original-title="{$element->body|clearslash|regex_replace:"/'/":"\'"|escape:'html'}">
+                        <a href="{url name=admin_importer_efe_show id=$element->xmlFile|urlencode}" >
+                            {$element->title}
                         </a>
                     </td>
 
                     <td>
-                        {if $elements[c]->hasPhotos()}
+                        {if $element->hasPhotos()}
                             <img src="{$params.IMAGE_DIR}template_manager/elements/gallery16x16.png" alt="[{t}With image{/t}] " title="{t}This new has attached images{/t}">
                         {/if}
-                        {if $elements[c]->hasVideos()}
+                        {if $element->hasVideos()}
                             <img src="{$params.IMAGE_DIR}template_manager/elements/video16x16.png" alt="[{t}With video{/t}] " title="{t}This new has attached videos{/t}">
                         {/if}
 
-                        {if $elements[c]->hasPhotos() && false}
+                        {if $element->hasPhotos() && false}
                             <img src="{$params.IMAGE_DIR}template_manager/elements/polls.png" alt="[{t}With files{/t}] " title="{t}This new has attached videos{/t}">
                         {/if}
 
-                        {if $elements[c]->hasPhotos() && false}
+                        {if $element->hasPhotos() && false}
                             <img src="{$params.IMAGE_DIR}template_manager/elements/article16x16.png" alt="[{t}With documentary modules{/t}] " title="{t}This new has attached videos{/t}">
                         {/if}
                     </td>
                     <td>
-                        {$elements[c]->created_time->getTimestamp()|relative_date}
+                        {$element->created_time->getTimestamp()|relative_date}
                     </td>
 
                     <td>
                         <div style="position:relative">
                             <div class="tags-hidden" >
                                 <span class="list-tags">
-                                {foreach from=$elements[c]->tags  key=key item=value name=loop1}
+                                {foreach from=$element->tags  key=key item=value name=loop1}
                                     {$key}
                                 {/foreach}
                                 </span>
                                 <ul>
-                                {foreach from=$elements[c]->tags item=tag name=loop1}
+                                {foreach from=$element->tags item=tag name=loop1}
                                     <li>{$tag}</li>
                                 {/foreach}
                                 </ul><!-- / -->
@@ -176,10 +171,10 @@
                         </div><!-- / -->
                     </td>
 
-                    <td class="right">
+                    <td class="right nowrap">
                         <ul class="action-buttons">
                             <li>
-                                <a class="btn btn-mini" href="{url name=admin_importer_efe_import id=$elements[c]->xmlFile|urlencode}" title="{t}Import{/t}">
+                                <a class="btn btn-mini" href="{url name=admin_importer_efe_import id=$element->xmlFile|urlencode}" title="{t}Import{/t}">
                                     {t}Import{/t}
                                 </a>
                             </li>
@@ -187,8 +182,7 @@
                     </td>
 
                 </tr>
-
-                {sectionelse}
+                {foreachelse}
                 <tr>
                     <td colspan=6 class="empty">
                         <h2>
@@ -197,11 +191,15 @@
                         <p>{t}Try syncing from server by click over the "Sync with server" button above.{/t}</p>
                     </td>
                 </tr>
-                {/section}
+                {/foreach}
             </tbody>
             <tfoot>
-                 <tr class="pagination">
-                     <td colspan="6">{$pagination->links|default:""}&nbsp;</td>
+                <tr>
+                    <td colspan="6" class="center">
+                        <div class="pagination">
+                            {$pagination->links|default:""}
+                        </div>
+                     </td>
                  </tr>
             </tfoot>
 

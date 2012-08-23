@@ -1,5 +1,11 @@
 {extends file="base/admin.tpl"}
 
+{block name="header-css" append}
+<style type="text/css">
+    .table td { line-height:14px; }
+</style>
+{/block}
+
 {block name="content"}
 <form action="#" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
     <div class="top-action-bar" class="clearfix">
@@ -81,131 +87,130 @@
                 </div>
             </div>
         </div>
-		<div id="{$category}">
 
-			<table class="listing-table">
-				<thead>
-        			{if count($comments) > 0}
-                    <tr>
-                        <th style='width:15px'>
-                            <input type="checkbox" id="toggleallcheckbox">
-                        </th>
-                        <th>{t}Title{/t} - {t}Comment (50 chars){/t}</th>
-                        <th style='width:200px;'>{t}Commented on{/t}</th>
-                        <th style='width:6%;' class="center">{t}IP{/t}</th>
-                        {if $category eq 'all'}
-                            <th class="center" style="width:5%;">{t}Category{/t}</th>
+		<table class="table table-hover table-condensed">
+			<thead>
+    			{if count($comments) > 0}
+                <tr>
+                    <th style='width:15px'>
+                        <input type="checkbox" id="toggleallcheckbox">
+                    </th>
+                    <th>{t}Title{/t} - {t}Comment (50 chars){/t}</th>
+                    <th style='width:6%;' class="left">{t}IP{/t}</th>
+                    {if $category eq 'all'}
+                        <th class="left">{t}Category{/t}</th>
+                    {/if}
+                    <th style='width:110px;' class="left">{t}Date{/t}</th>
+                    <th style='width:20px;' class="center">{t}Votes{/t}</th>
+                    <th style="width:10px;" class="center">{t}Published{/t}</th>
+                    <th style='width:80px;' class="right">{t}Actions{/t}</th>
+			   </tr>
+               {else}
+               <tr>
+                    <th>
+                        &nbsp;
+                    </th>
+               </tr>
+			   {/if}
+            </thead>
+
+			<tbody>
+            	{section name=c loop=$comments|default:array()}
+				<tr style="cursor:pointer;" >
+					<td >
+						<input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}"
+                            name="selected_fld[]" value="{$comments[c]->id}">
+					</td>
+					<td>
+						<a href="{url name=admin_comments_show id=$comments[c]->id}" title="{t 1=$articles[c]->title}Edit comment %1{/t}">
+                            <strong>[{$comments[c]->title|strip_tags|clearslash|truncate:40:"..."}]</strong>
+                            {$comments[c]->body|strip_tags|clearslash|truncate:50}
+                        </a>
+                        <br>
+                        <strong>{t}Author{/t}</strong>
+                        {$comments[c]->author|strip_tags}
+                        {if preg_match('/@proxymail\.facebook\.com$/i', $comments[c]->email)}
+                            &lt;<span title="{$comments[c]->email}">{t}from facebook{/t}</span>&gt;
+                        {else}
+                            &lt;{$comments[c]->email}&gt;
                         {/if}
-                        <th style='width:110px;' class="center">{t}Date{/t}</th>
-                        <th style='width:20px;' class="center">{t}Votes{/t}</th>
-                        <th style="width:60px;" class="center">{t}Published{/t}</th>
-                        <th style='width:100px;' class="center">{t}Actions{/t}</th>
-				   </tr>
-                   {else}
-                   <tr>
-                        <th>
-                            &nbsp;
-                        </th>
-                   </tr>
-    			   {/if}
-                </thead>
-
-				<tbody>
-                	{section name=c loop=$comments|default:array()}
-					<tr style="cursor:pointer;" >
-						<td >
-							<input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}"
-                                name="selected_fld[]" value="{$comments[c]->id}"  style="cursor:pointer;" >
-						</td>
-						<td>
-							<a href="{url name=admin_comments_show id=$comments[c]->id}" title="{t 1=$articles[c]->title}Edit comment %1{/t}">
-                                {$comments[c]->author|strip_tags}
-                                {if preg_match('/@proxymail\.facebook\.com$/i', $comments[c]->email)}
-                                    &lt;<span title="{$comments[c]->email}">{t}from facebook{/t}</span>&gt;
-                                {else}
-                                    &lt;{$comments[c]->email}&gt;
-                                {/if}<br>
-								<strong>[{$comments[c]->title|strip_tags|clearslash|truncate:40:"..."}]</strong>
-                                {$comments[c]->body|strip_tags|clearslash|truncate:50}
-                            </a>
-						</td>
-						<td >
-                            {assign var=type value=$contents[c]->content_type}
-							<strong>[{$content_types[$type]}]</strong>
-							{$contents[c]->title|strip_tags|clearslash}
-						</td>
-						<td class="center">
-							{$comments[c]->ip}
-						</td>
-						{if $category eq 'all'}
-						<td class="center">
-							{$contents[c]->category_name}
-                            {if $contents[c]->content_type==4}Opini&oacute;n{/if}
-						</td>
-						{/if}
-						<td class="center">
-							{$comments[c]->created}
-						</td>
-						<td class="center">
-							{$votes[c]->value_pos} /  {$votes[c]->value_pos}
-						</td>
-						<td class="right">
-                            {acl isAllowed="COMMENT_AVAILABLE"}
-								{if $status eq 0}
-									<a href="{url name=admin_comments_toggle_status id=$comments[c]->id status=1 category=$category page=$page}" title="Publicar">
-											<img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicar" /></a>
-									<a href="{url name=admin_comments_toggle_status id=$comments[c]->id status=2 category=$category page=$page}" title="Rechazar">
-											<img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Rechazar" /></a>
-								{elseif $status eq 2}
-									<a href="{url name=admin_comments_toggle_status id=$comments[c]->id status=1 category=$category page=$page}" title="Publicar">
-										<img border="0" src="{$params.IMAGE_DIR}publish_r.png">
-									</a>
-								{else}
-									<a class="publishing" href="{url name=admin_comments_toggle_status id=$comments[c]->id status=1 category=$category page=$page}" title="Rechazar">
-										<img border="0" src="{$params.IMAGE_DIR}publish_g.png">
-									</a>
-								{/if}
+                        <br>
+                        {assign var=type value=$contents[c]->content_type}
+                        <strong>[{$content_types[$type]}]</strong>
+                        {$contents[c]->title|strip_tags|clearslash}
+					</td>
+					<td class="left">
+						{$comments[c]->ip}
+					</td>
+					{if $category eq 'all'}
+					<td class="left">
+						{$contents[c]->category_name}
+                        {if $contents[c]->content_type==4}Opini&oacute;n{/if}
+					</td>
+					{/if}
+					<td class="left">
+						{$comments[c]->created}
+					</td>
+					<td class="center">
+						{$votes[c]->value_pos} /  {$votes[c]->value_pos}
+					</td>
+					<td class="center">
+                        {acl isAllowed="COMMENT_AVAILABLE"}
+							{if $status eq 0}
+								<a href="{url name=admin_comments_toggle_status id=$comments[c]->id status=1 category=$category page=$page}" title="Publicar">
+									<img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicar" /></a>
+								<a href="{url name=admin_comments_toggle_status id=$comments[c]->id status=2 category=$category page=$page}" title="Rechazar">
+									<img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Rechazar" /></a>
+							{elseif $status eq 2}
+								<a href="{url name=admin_comments_toggle_status id=$comments[c]->id status=1 category=$category page=$page}" title="Publicar">
+									<img border="0" src="{$params.IMAGE_DIR}publish_r.png">
+								</a>
+							{else}
+								<a class="publishing" href="{url name=admin_comments_toggle_status id=$comments[c]->id status=1 category=$category page=$page}" title="Rechazar">
+									<img border="0" src="{$params.IMAGE_DIR}publish_g.png">
+								</a>
+							{/if}
+                        {/acl}
+					</td>
+                    <td style="padding:1px; font-size:11px;" class="right">
+                        <div class="btn-group">
+                            {acl isAllowed="COMMENT_UPDATE"}
+                                <a class="btn" href="{url name=admin_comments_show id=$comments[c]->id}" title="{t}Edit{/t}" >
+                                    <i class="icon-pencil"></i>
+                                </a>
                             {/acl}
+                            {acl isAllowed="COMMENT_DELETE"}
+								<a class="del btn btn-danger" data-controls-modal="modal-from-dom"
+                                   data-id="{$comments[c]->id}"
+                                   data-title="{$comments[c]->title|capitalize}"
+                                   data-url="{url name=admin_comments_delete id=$comments[c]->id}"
+                                   href="{url name=admin_comments_delete id=$comments[c]->id}" >
+								   <i class="icon-trash icon-white"></i>
+                                </a>
+                            {/acl}
+						</div>
+					</td>
+				</tr>
 
-						</td>
-                        <td style="padding:1px; font-size:11px;" class="center">
-                            <div class="btn-group">
-                                {acl isAllowed="COMMENT_UPDATE"}
-                                    <a class="btn" href="{url name=admin_comments_show id=$comments[c]->id}" title="{t}Edit{/t}" >
-                                        <i class="icon-pencil"></i> {t}Edit{/t}
-                                    </a>
-                                {/acl}
-                                {acl isAllowed="COMMENT_DELETE"}
-									<a class="del btn btn-danger" data-controls-modal="modal-from-dom"
-                                       data-id="{$comments[c]->id}"
-                                       data-title="{$comments[c]->title|capitalize}"
-                                       data-url="{url name=admin_comments_delete id=$comments[c]->id}"
-                                       href="{url name=admin_comments_delete id=$comments[c]->id}" >
-									   <i class="icon-trash icon-white"></i>
-                                    </a>
-                                {/acl}
-							</div>
-						</td>
-					</tr>
+				{sectionelse}
+				<tr>
+					<td class="empty" colspan=10>
+						{t}There is no comments here.{/t}
+					</td>
+				</tr>
+				{/section}
+			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan="13">
+                        <div class="pagination">
+                            {$paginacion->links|default:""}
+                        </div>
+                    </td>
+				</tr>
+			</tfoot>
 
-					{sectionelse}
-					<tr>
-						<td class="empty" colspan=10>
-							{t}There is no comments here.{/t}
-						</td>
-					</tr>
-					{/section}
-				</tbody>
-				<tfoot>
-					<tr class="pagination">
-						<td colspan="13">
-                            {$paginacion->links|default:""}&nbsp;
-                        </td>
-					</tr>
-				</tfoot>
-
-			</table>
-		</div>
+		</table>
     </div>
 
 </form>

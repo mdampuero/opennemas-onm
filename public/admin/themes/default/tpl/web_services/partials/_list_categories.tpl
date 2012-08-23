@@ -1,4 +1,4 @@
-<table class="listing-table">
+<table class="table table-hover table-condensed">
     <tr>
         <td>
             <strong>{t}Categories to availables to sync{/t}</strong>

@@ -27,14 +27,14 @@
 <div class="wrapper-content">
     {render_messages}
     <div id="pagina">
-        <table class="listing-table" >
+        <table class="table table-hover table-condensed" >
 
             <thead>
                 {if count($widgets) > 0}
                 <th>{t}Name{/t}</th>
                 <th style="width:70px">{t}Type{/t}</th>
                 <th class="center" style="width:20px">{t}Published{/t}</th>
-                <th class="right" style="width:120px">Actions</th>
+                <th class="right" style="width:10px">Actions</th>
                 {else}
                 <th scope="col" colspan=4>&nbsp;</th>
                 {/if}
@@ -63,7 +63,7 @@
                         {/acl}
                     </td>
 
-                    <td class="right" >
+                    <td class="right nowrap" >
                         <div class="btn-group">
 
                         {if ($widgets[wgt]->renderlet != 'intelligentwidget' or true)}
@@ -85,15 +85,19 @@
                 </tr>
                 {sectionelse}
                 <tr>
-                    <td class="empty" colspan="5">{t}There is no available widgets{/t}</td>
+                    <td class="empty" colspan="5">
+                        {t}There is no available widgets{/t}
+                    </td>
                 </tr>
                 {/section}
             </tbody>
 
             <tfoot>
-                <tr class="pagination">
-                    <td colspan="5">
-                        {$pagination->links}&nbsp;
+                <tr>
+                    <td colspan="5" class="center">
+                        <div class="pagination">
+                            {$pagination->links}
+                        </div>
                     </td>
                 </tr>
             </tfoot>

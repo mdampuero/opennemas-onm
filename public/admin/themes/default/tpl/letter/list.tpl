@@ -70,96 +70,94 @@
 
         </div>
 
-        <div id="letter">
 
-            <table class="listing-table">
-                <thead>
-                    {if count($letters) > 0}
-                    <tr>
-                        <th style='width:15px'>
-                            <input type="checkbox" id="toggleallcheckbox">
-                        </th>
-                        <th>{t}Title{/t}</th>
-                        <th style='width:200px;'>{t}Author{/t}</th>
-                        <th  style='width:110px;' class="center">{t}Date{/t}</th>
-                        <th class="center">{t}Available{/t}</th>
-                        <th style='width:90px;' class="center">{t}Actions{/t}</th>
-                   </tr>
-                   {else}
-                   <tr>
-                        <th>
-                            &nbsp;
-                        </th>
-                   </tr>
-                   {/if}
-                </thead>
+        <table class="table table-hover table-condensed">
+            <thead>
+                {if count($letters) > 0}
+                <tr>
+                    <th style='width:15px'>
+                        <input type="checkbox" id="toggleallcheckbox">
+                    </th>
+                    <th>{t}Title{/t}</th>
+                    <th>{t}Author{/t}</th>
+                    <th  style='width:110px;' class="left">{t}Date{/t}</th>
+                    <th class="center" style='width:40px;'>{t}Available{/t}</th>
+                    <th style='width:90px;' class="right">{t}Actions{/t}</th>
+               </tr>
+               {else}
+               <tr>
+                    <th>
+                        &nbsp;
+                    </th>
+               </tr>
+               {/if}
+            </thead>
 
-                <tbody>
-                    {foreach from=$letters item=letter}
-                    <tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;" >
-                        <td >
-                            <input type="checkbox" class="minput" id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$letter->id}"  style="cursor:pointer;" >
-                        </td>
-                        <td>{$letter->title}</td>
-                        <td>{$letter->author}: {$letter->email}</td>
-                        <td class="center">
-                            {$letter->created}
-                        </td>
-                        <td class="center">
-                        {acl isAllowed="LETTER_AVAILABLE"}
-                            {if $letter->content_status eq 0}
-                                <a href="{url name=admin_letter_toggleavailable status=1 id=$letter->id letterStatus=$letterStatus page=$page}" title="Publicar">
-                                        <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicar" /></a>
-                                <a href="{url name=admin_letter_toggleavailable id=$letter->id status=2 letterStatus=$letterStatus page=$page}" title="Rechazar">
-                                        <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Rechazar" /></a>
-                            {elseif $letter->content_status eq 2}
-                                <a href="{url name=admin_letter_toggleavailable id=$letter->id status=1 letterStatus=$letterStatus page=$page}" title="Publicar">
-                                    <img border="0" src="{$params.IMAGE_DIR}publish_g.png">
+            <tbody>
+                {foreach from=$letters item=letter}
+                <tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;" >
+                    <td >
+                        <input type="checkbox" class="minput" id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$letter->id}"  style="cursor:pointer;" >
+                    </td>
+                    <td>{$letter->title}</td>
+                    <td>{$letter->author}: {$letter->email}</td>
+                    <td class="left"> {$letter->created} </td>
+                    <td class="center">
+                    {acl isAllowed="LETTER_AVAILABLE"}
+                        {if $letter->content_status eq 0}
+                            <a href="{url name=admin_letter_toggleavailable status=1 id=$letter->id letterStatus=$letterStatus page=$page}" title="Publicar">
+                                    <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicar" /></a>
+                            <a href="{url name=admin_letter_toggleavailable id=$letter->id status=2 letterStatus=$letterStatus page=$page}" title="Rechazar">
+                                    <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Rechazar" /></a>
+                        {elseif $letter->content_status eq 2}
+                            <a href="{url name=admin_letter_toggleavailable id=$letter->id status=1 letterStatus=$letterStatus page=$page}" title="Publicar">
+                                <img border="0" src="{$params.IMAGE_DIR}publish_g.png">
+                            </a>
+                        {else}
+                            <a class="publishing" href="{url name=admin_letter_toggleavailable id=$letter->id status=2 letterStatus=$letterStatus page=$page}" title="Rechazar">
+                                <img border="0" src="{$params.IMAGE_DIR}publish_r.png">
+                            </a>
+                        {/if}
+                    {/acl}
+                    </td>
+                    <td class="right">
+                        <div class="btn-group">
+                            {acl isAllowed="LETTER_UPDATE"}
+                                <a class="btn" href="{url name=admin_letter_show id=$letter->id}" title="Modificar">
+                                    <i class="icon-pencil"></i>
                                 </a>
-                            {else}
-                                <a class="publishing" href="{url name=admin_letter_toggleavailable id=$letter->id status=2 letterStatus=$letterStatus page=$page}" title="Rechazar">
-                                    <img border="0" src="{$params.IMAGE_DIR}publish_r.png">
+                            {/acl}
+                            {acl isAllowed="LETTER_DELETE"}
+                                <a class="del btn btn-danger" data-controls-modal="modal-from-dom"
+                                    data-url="{url name=admin_letter_delete id=$letter->id contentStatus=$contentStatus page=$page}"
+                                    data-title="{$letter->title|capitalize}"
+                                    href="{url name=admin_letter_delete id=$letter->id contentStatus=$contentStatus page=$page}" >
+                                    <i class="icon-trash icon-white"></i>
                                 </a>
-                            {/if}
-                        {/acl}
-                        </td>
-                        <td class="right">
-                            <div class="btn-group">
-                                {acl isAllowed="LETTER_UPDATE"}
-                                    <a class="btn" href="{url name=admin_letter_show id=$letter->id}" title="Modificar">
-                                        <i class="icon-pencil"></i>
-                                    </a>
-                                {/acl}
-                                {acl isAllowed="LETTER_DELETE"}
-                                    <a class="del btn btn-danger" data-controls-modal="modal-from-dom"
-                                        data-url="{url name=admin_letter_delete id=$letter->id contentStatus=$contentStatus page=$page}"
-                                        data-title="{$letter->title|capitalize}"
-                                        href="{url name=admin_letter_delete id=$letter->id contentStatus=$contentStatus page=$page}" >
-                                        <i class="icon-trash icon-white"></i>
-                                    </a>
-                                {/acl}
-                            </div>
-                        </td>
-                    </tr>
+                            {/acl}
+                        </div>
+                    </td>
+                </tr>
 
-                    {foreachelse}
-                    <tr>
-                        <td class="empty" colspan=10>
-                            {t}There is no letters here.{/t}
-                        </td>
-                    </tr>
-                    {/foreach}
-                </tbody>
-                <tfoot>
-                    <tr class="pagination">
-                        <td colspan="13">
-                            {$pagination->links|default:""} &nbsp;
-                        </td>
-                    </tr>
-                </tfoot>
+                {foreachelse}
+                <tr>
+                    <td class="empty" colspan=10>
+                        {t}There is no letters here.{/t}
+                    </td>
+                </tr>
+                {/foreach}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="13" class="center">
+                        <div class="pagination">
+                            {$pagination->links|default:""}
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
 
-            </table>
-        </div>
+        </table>
     </div>
 
     <script>

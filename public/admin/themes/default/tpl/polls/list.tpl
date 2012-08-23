@@ -62,14 +62,13 @@
         </ul>
 
 
-        <table class="listing-table">
+        <table class="table table-hover table-condensed">
 
             <thead>
                <tr>
                     {if count($polls) > 0}
                         <th style="width:15px;"><input type="checkbox" id="toggleallcheckbox"></th>
                         <th>{t}Title{/t}</th>
-                        <th>{t}Subtitle{/t}</th>
                         {if $category == 'widget' || $category == 'all'}
                             <th style="width:65px;" class="center">{t}Section{/t}</th>
                         {/if}
@@ -79,46 +78,43 @@
                         <th style="width:40px;" class="center">{t}Published{/t}</th>
                         <th class="center" style="width:35px;">{t}Favorite{/t}</th>
                         <th style="width:40px;" class="center">{t}Home{/t}</th>
-                        <th style="width:110px;" class="center">{t}Actions{/t}</th>
+                        <th style="width:110px;" class="right">{t}Actions{/t}</th>
                     {else}
                         <th scope="col" colspan="10">&nbsp;</th>
                     {/if}
                 </tr>
             </thead>
             <tbody>
-                {section name=c loop=$polls}
+                {foreach name=c from=$polls item=poll}
                 <tr >
                     <td>
-                        <input type="checkbox" class="minput" id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$polls[c]->id}">
+                        <input type="checkbox" class="minput" id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$poll->id}">
                     </td>
                     <td onClick="javascript:document.getElementById('selected_{$smarty.section.c.iteration}').click();" >
-                        {$polls[c]->title|clearslash}
-                    </td>
-                    <td onClick="javascript:document.getElementById('selected_{$smarty.section.c.iteration}').click();"  >
-                        {$polls[c]->subtitle|clearslash}
+                        {$poll->title|clearslash}
                     </td>
                     {if $category == 'widget' || $category == 'all'}
                     <td class="center">
-                        {$polls[c]->category_title}
+                        {$poll->category_title}
                     </td>
                     {/if}
                     <td class="center">
-                        {$polls[c]->total_votes}
+                        {$poll->total_votes}
                     </td>
                     <td class="center">
-                        {$polls[c]->views}
+                        {$poll->views}
                     </td>
                     <td class="center">
-                        {$polls[c]->created}
+                        {$poll->created}
                     </td>
                     <td class="center">
                         {acl isAllowed="POLL_AVAILABLE"}
-                        {if $polls[c]->available == 1}
-                        <a href="{url name=admin_poll_toggleavailable id=$polls[c]->id status=0 category=$category page=$page}" title="Publicado">
+                        {if $poll->available == 1}
+                        <a href="{url name=admin_poll_toggleavailable id=$poll->id status=0 category=$category page=$page}" title="Publicado">
                             <img src="{$params.IMAGE_DIR}publish_g.png" alt="Publicado" />
                         </a>
                         {else}
-                        <a href="{url name=admin_poll_toggleavailable id=$polls[c]->id status=1 category=$category page=$page}" title="Pendiente">
+                        <a href="{url name=admin_poll_toggleavailable id=$poll->id status=1 category=$category page=$page}" title="Pendiente">
                             <img src="{$params.IMAGE_DIR}publish_r.png" alt="Pendiente" />
                         </a>
                         {/if}
@@ -126,12 +122,12 @@
                     </td>
                     <td class="center">
                         {acl isAllowed="POLL_FAVORITE"}
-                        {if $polls[c]->favorite == 1}
-                        <a href="{url name=admin_poll_togglefavorite id=$polls[c]->id status=0 category=$category page=$page}" class="favourite_on" title="{t}Favorite{/t}">
+                        {if $poll->favorite == 1}
+                        <a href="{url name=admin_poll_togglefavorite id=$poll->id status=0 category=$category page=$page}" class="favourite_on" title="{t}Favorite{/t}">
                             &nbsp;
                         </a>
                         {else}
-                        <a href="{url name=admin_poll_togglefavorite id=$polls[c]->id status=1 category=$category page=$page}" class="favourite_off" title="{t}NoFavorite{/t}">
+                        <a href="{url name=admin_poll_togglefavorite id=$poll->id status=1 category=$category page=$page}" class="favourite_off" title="{t}NoFavorite{/t}">
                             &nbsp;
                         </a>
                         {/if}
@@ -139,18 +135,18 @@
                     </td>
                     <td class="center">
                     {acl isAllowed="POLL_HOME"}
-                        {if $polls[c]->in_home == 1}
-                           <a href="{url name=admin_poll_toggleinhome id=$polls[c]->id status=0 category=$category page=$page}" class="no_home" title="{t}Take out from home{/t}"></a>
+                        {if $poll->in_home == 1}
+                           <a href="{url name=admin_poll_toggleinhome id=$poll->id status=0 category=$category page=$page}" class="no_home" title="{t}Take out from home{/t}"></a>
                         {else}
-                            <a href="{url name=admin_poll_toggleinhome id=$polls[c]->id status=1 category=$category page=$page}" class="go_home" title="{t}Put in home{/t}"></a>
+                            <a href="{url name=admin_poll_toggleinhome id=$poll->id status=1 category=$category page=$page}" class="go_home" title="{t}Put in home{/t}"></a>
                         {/if}
                     {/acl}
                     </td>
-                    <td class="center">
+                    <td class="right">
                         <div class="btn-group">
                             {acl isAllowed="POLL_UPDATE"}
                             <a class="btn"
-                                href="{url name=admin_poll_show id=$polls[c]->id}"
+                                href="{url name=admin_poll_show id=$poll->id}"
                                 title="Modificar">
                                 <i class="icon-pencil"></i> {t}Edit{/t}
                             </a>
@@ -158,9 +154,9 @@
                             {acl isAllowed="POLL_DELETE"}
                             <a class="del btn btn-danger"
                                 data-controls-modal="modal-from-dom"
-                                data-url="{url name=admin_poll_delete id=$polls[c]->id}"
-                                data-title="{$polls[c]->title|capitalize}"
-                                href="{url name=admin_poll_delete id=$polls[c]->id}" >
+                                data-url="{url name=admin_poll_delete id=$poll->id}"
+                                data-title="{$poll->title|capitalize}"
+                                href="{url name=admin_poll_delete id=$poll->id}" >
                                 <i class="icon-trash icon-white"></i>
                             </a>
                             {/acl}
@@ -168,19 +164,21 @@
                     </td>
                 </tr>
 
-               {sectionelse}
+               {foreachelse}
                <tr>
                    <td class="empty" colspan="10">
                         {t}There is no polls yet.{/t}
                    </td>
                </tr>
-               {/section}
+               {/foreach}
             </tbody>
 
             <tfoot>
                 <tr>
                     <td colspan="11">
-                        {$paginacion->links}&nbsp;
+                        <div class="pagination">
+                            {$paginacion->links}&nbsp;
+                        </div>
                     </td>
                 </tr>
             </tfoot>

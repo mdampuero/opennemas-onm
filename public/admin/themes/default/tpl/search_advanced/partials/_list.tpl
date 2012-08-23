@@ -1,29 +1,21 @@
-<table class="listing-table">
+<table class="table table-hover table-condensed">
     <thead>
-        <th class="center" style="width:30px;">{t}Type{/t}</th>
-        <th class="title" style="width:40%;">{t}Title{/t}</th>
-        <th class="center" style="width:50px;">{t}Category{/t}</th>
-        <th class="center" style="width:80px;">{t}Creation date{/t}</th>
+        <th class="title">{t}Title{/t}</th>
         <th class="center" style="width:10px;"></th>
-        <th class="center" style="width:10px;">{t}Actions{/t}</th>
+        <th class="right" style="width:10px;">{t}Actions{/t}</th>
     </thead>
     <tbody>
         {foreach name=c from=$contents item=content}
         <tr>
-            <td  class="center">
-                {$content.type|htmlentities}
-            </td>
             <td style="padding:10px;">
-                {$content.titule|clearslash}<br>
+                <strong>[{$content.content_type|ucfirst|htmlentities}] {$content.titule|clearslash}</strong>
+                <br>
                 {if $content.content_type neq 'comment'}
-                    <strong>{t}Metatags:{/t}</strong>  {$content.metadata|clearslash}
-                {/if}
-            </td>
-            <td class="center">
-                {$content.catName}
-            </td>
-            <td class="center">
-                {$content.created}
+                <img src="{$params.IMAGE_DIR}/icons/tag_red.png" alt="">  {$content.metadata|clearslash}
+                {/if}<br>
+                <strong>{t}Category{/t}:</strong> {$content.catName}
+                <br>
+                <strong>{t}Created{/t}:</strong> {$content.created}
             </td>
             <td class="center">
                 {if ($content.in_litter == 1)}
@@ -53,7 +45,6 @@
                  {/if}
             </td>
             <td class="right">
-
                 <div class="btn-group right">
                     <a class="btn" href="{url name="admin_"|cat:$content['content_type']|cat:"_show" id=$content.id}" title="Editar">
                         <i class="icon-pencil"></i>
@@ -64,7 +55,7 @@
 
         {foreachelse}
         <tr>
-            <td class="empty" colspan=4>
+            <td class="empty" colspan=3>
                 {t}There isn't any existent elements that matches your search criteria{/t}
             </td>
         </tr>
@@ -72,8 +63,10 @@
     </tbody>
 
     <tfoot>
-        <td colspan="8" class="pagination">
-            {$pagination->links}
+        <td colspan="3" class="center">
+            <div class="pagination">
+                {$pagination->links}
+            </div>
         </td>
     </tfoot>
 </table>

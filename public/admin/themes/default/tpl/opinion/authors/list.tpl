@@ -4,7 +4,7 @@
 <form action="#" method="post" name="formulario" id="formulario">
 	<div class="top-action-bar">
 		<div class="wrapper-content">
-            <div class="title"><h2>{t}Opinion Manager :: Author list{/t}</div>
+            <div class="title"><h2>{t}Opinion Manager{/t} :: {t}Authors list{/t}</div>
             <ul class="old-button">
                  {acl isAllowed="AUTHOR_CREATE"}
                 <li>
@@ -28,7 +28,7 @@
 
         {render_messages}
 
-        <table class="listing-table">
+        <table class="table table-hover table-condensed">
             <thead>
                 <tr>
                     <th style="width:15px">
@@ -40,7 +40,8 @@
                     <th class="right" style="width:100px;">{t}Actions{/t}</th>
                 </tr>
             </thead>
-            {foreach from=$authors item=author name=c}
+            <tbody>
+                {foreach from=$authors item=author name=c}
                 <tr bgcolor="{cycle values="#eeeeee,#ffffff"}">
                      <td style="text-align:center;">
                         <input type="checkbox" class="minput" id="selected_{$smarty.foreach.c.iteration}" name="selected_fld[]"
@@ -55,34 +56,36 @@
                     <td style="text-align:center">
                         {$author->num_photos}
                     </td>
-                    <td class="right">
-						<div class="btn-group">
+                    <td class="right nowrap">
+                        <div class="btn-group">
                             {acl isAllowed="AUTHOR_UPDATE"}
-								<a class="btn" href="{url name=admin_opinion_author_show id=$author->pk_author}" title="Modificar">
-									<i class="icon-pencil"></i>
-								</a>
+                                <a class="btn" href="{url name=admin_opinion_author_show id=$author->pk_author}" title="Modificar">
+                                    <i class="icon-pencil"></i>
+                                </a>
                             {/acl}
                             {acl isAllowed="AUTHOR_DELETE"}
-								<a class="del btn btn-danger"
+                                <a class="del btn btn-danger"
                                    data-url="{url name=admin_opinion_author_delete id=$author->pk_author}"
                                    data-title="{$author->name|capitalize}"
                                    href="{url name=admin_opinion_author_delete id=$author->pk_author}">
                                    <i class="icon-trash icon-white"></i>
-								</a>
+                                </a>
                             {/acl}
-						</div>
+                        </div>
                     </td>
                 </tr>
-
-            {foreachelse}
+                {foreachelse}
                 <tr>
                     <td align="center" colspan="7"><b>{t}There is no available authors{/t}</b></td>
                 </tr>
-            {/foreach}
+                {/foreach}
+            </tbody>
             <tfoot>
-                <tr class="pagination">
-                    <td colspan="7" align="center">
-                        {$pagination->links}
+                <tr>
+                    <td colspan="7" class="center">
+                        <div class="pagination">
+                            {$pagination->links}
+                        </div>
                     </td>
                 </tr>
             </tfoot>

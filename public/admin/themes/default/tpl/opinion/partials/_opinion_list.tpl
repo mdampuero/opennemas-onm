@@ -21,7 +21,7 @@
         </div>
     </div>
 </div>
-<table class="listing-table">
+<table class="table table-hover table-condensed">
 	<thead>
 		<tr>
 			<th style="width:15px;"><input type="checkbox" id="toggleallcheckbox"></th>
@@ -128,9 +128,11 @@
 		{/foreach}
 	</tbody>
 	<tfoot>
-		<tr class="pagination">
-			<td colspan="11">
-				{$pagination->links|default:""}&nbsp;
+		<tr >
+			<td colspan="11" class="center">
+                <div class="pagination">
+    				{$pagination->links|default:""}&nbsp;
+                </div>
 			</td>
 		</tr>
 	</tfoot>

@@ -66,16 +66,16 @@
             </div>
         </div>
 
-        <table class="listing-table">
+        <table class="table table-hover table-condensed">
             <thead>
                 <tr>
                     <th style="width:10px"><input type="checkbox" id="toggleallcheckbox" style="cursor:pointer;" /></th>
                     <th>{t}Name{/t}</th>
                     <th>{t}Email{/t}</th>
-                    <th class="center">{t}Status{/t}</th>
-                    <th class="center" style="width:50px">{t}Activated{/t}</th>
+                    <th class="left">{t}Status{/t}</th>
+                    <th class="center" style="width:10px">{t}Activated{/t}</th>
                     <th class="center" style="width:10px">{t}Subscribed{/t}</th>
-                    <th class="center" style="width:100px">{t}Actions{/t}</th>
+                    <th class="center nowrap" style="width:10px">{t}Actions{/t}</th>
                 </tr>
             </thead>
             <tbody>
@@ -90,7 +90,7 @@
                     <td class="left">
                         {$user->email}
                     </td>
-                    <td class="center">
+                    <td class="left">
                         {if      $user->status eq 0} {t}Mail sent.Waiting for user{/t}
                         {elseif  $user->status eq 1} {t}Accepted by user{/t}
                         {elseif  $user->status eq 2} {t}Accepted by administrator{/t}
@@ -115,7 +115,7 @@
                         {/if}
                         </a>
                     </td>
-                    <td class="center">
+                    <td class="right nowrap">
                         <div class="btn-group">
                             <a href="{url name=admin_newsletter_subscriptor_show id=$user->id}" title="{t}Edit user{/t}" class="btn">
                                 <i class="icon-pencil"></i>
@@ -139,8 +139,10 @@
 
             <tfoot>
                 <tr>
-                    <td colspan="7">
-                        {$paginacion->links|default:""}&nbsp;
+                    <td colspan="7" class="center">
+                        <div class="pagintaion">
+                            {$paginacion->links|default:""}
+                        </div>
                     </td>
                 </tr>
             </tfoot>

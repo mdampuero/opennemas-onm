@@ -25,20 +25,18 @@
         {render_messages}
 
         <div class="table-info clearfix">
-            <div>
-                <div class="left">
-                    {$total_errors} registered SQL errors
-                </div>
-                <div class="right">
-                    <form method="GET" action="{$smarty.server.PHP_SELF}" class="form-inline form-search">
-                        <input type="search" name="search" value="{$search}" class="input-medium search-query">
-                        <button type="submit" class="btn">{t}Search{/t}</button>
-                    </form>
-                </div>
+            <div class="pull-left">
+                {$total_errors} registered SQL errors
+            </div>
+            <div class="pull-right">
+                <form method="GET" action="{$smarty.server.PHP_SELF}" class="form-inline form-search">
+                    <input type="search" name="search" value="{$search}" class="input-medium search-query" placeholder="{t}Filter{/t}">
+                    <button type="submit" class="btn">{t}Search{/t}</button>
+                </form>
             </div>
         </div>
 
-        <table class="listing-table">
+        <table class="table table-hover table-condensed">
 
             <thead>
                <tr>
@@ -51,24 +49,15 @@
             <tbody>
                 {foreach from=$errors item=error name=errors}
                 <tr>
-                    <td class="center">
-                        {$smarty.foreach.errors.iteration+$elements_page}
-                    </td>
-                    <td class="center">
-                        {$error['created']}
-                    </td>
+                    <td class="center">{$smarty.foreach.errors.iteration+$elements_page}</td>
+                    <td class="center">{$error['created']}</td>
                     <td>
-                        <strong>{$error['tracer']}</strong>
-                        <br>
-                        <strong>SQL:</strong> {$error['sql1']}
-                        <br>
-                        <strong>Params:</strong> {$error['params']}
-                        <br>
+                        <strong>{$error['tracer']}</strong><br>
+                        <strong>SQL:</strong> {$error['sql1']}<br>
+                        <strong>Params:</strong> {$error['params']}<br>
                         <strong>Other info:</strong> {$error['sql0']}
                     </td>
-                    <td class="center">
-                        {$error['timer']}
-                    </td>
+                    <td class="center">{$error['timer']}</td>
                 </tr>
                 {foreachelse}
                     <tr>
@@ -80,15 +69,16 @@
             </tbody>
 
             <tfoot>
-                <tr class="pagination">
-                    <td colspan="4">{$pagination->links}</td>
+                <tr>
+                    <td colspan="4" class="center">
+                        <div class="pagination">
+                            {$pagination->links}
+                        </div>
+                    </td>
                 </tr>
             </tfoot>
 
          </table>
-
-        <input type="hidden" id="action" name="action" value="" />
-        <input type="hidden" name="id" id="id" value="{$id|default:""}" />
 
     </div>
 {/block}

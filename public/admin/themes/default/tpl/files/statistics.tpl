@@ -18,7 +18,7 @@
     {render_messages}
 
     <div id="{$category}">
-        <table class="listing-table">
+        <table class="table table-hover table-condensed">
             <thead>
                 <tr>
                     <th class="title" align="left">{t}Title{/t}</th>

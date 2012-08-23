@@ -158,9 +158,3 @@ div.form {
 	cursor: move;
 }
 
-/*#items-list, #items-selected {*/
-/*	overflow: auto;*/
-/*}*/
-table.adminlist tbody td {
-	border-right:1px solid #bfbfbf
-}

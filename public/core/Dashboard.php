@@ -51,7 +51,7 @@ class Dashboard
         if (count($items) > 0) {
             $output .= \Onm\UI\OFC::graphicViewed($items);
             $output .= "<div class=\"table\">";
-            $output .= "<table class=\"adminlist\" border=0><thead><tr>";
+            $output .= "<table class=\"table table-hover table-condensed\" border=0><thead><tr>";
             $output .= "<th align=\"center\" style=\"width:5%;\">Visitas</th>";
             $output .= "<th>T&iacute;tulo</th>";
             $output .= "</tr></thead>";
@@ -93,7 +93,7 @@ class Dashboard
         if (count($items)>0) {
             $output .= \Onm\UI\OFC::graphicComented($items);
             $output .= "<div class=\"table\">";
-            $output .= "<table class=\"adminlist\" border=0>";
+            $output .= "<table class=\"table table-hover table-condensed\" border=0>";
             $output .= "<thead><tr>";
             $output .=
                 "<th align=\"center\" style=\"width:5%;\">Comentarios</th>";
@@ -147,7 +147,7 @@ class Dashboard
         if (count($items)>0) {
             $output .= \Onm\UI\OFC::graphicVoted($items)
                 . "<div class=\"table\">"
-                . "<table class=\"adminlist\" border=0>"
+                . "<table class=\"table table-hover table-condensed\" border=0>"
                 . "<thead><tr>"
                 . "<th align=\"center\" style=\"width:5%;\">Votos</th>"
                 . "<th align=\"center\" style=\"width:5%;\">"

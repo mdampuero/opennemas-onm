@@ -116,27 +116,27 @@
                 </div>
             </div>
         </div>
-        <table class="listing-table">
+        <table class="table table-hover table-condensed">
             <thead>
                 <th style="width:15px;"><input type="checkbox" id="toggleallcheckbox"></th>
                 <th class="left" >{t}Title{/t}</th>
                 {if $category eq 'all' || $category == 0}
                     <th class="left">{t}Section{/t}</th>
                 {/if}
-                <th  class="left">{t}Author{/t}</th>
-                <th class="center" style="width:100px;">{t}Created{/t}</th>
+                <th  class="left" style="width:80px;">{t}Author{/t}</th>
+                <th class="center" style="width:130px;">{t}Created{/t}</th>
                 <th class="center" style="width:80px;">{t}Last Editor{/t}</th>
                 <th class="center" style="width:10px;">{t}Available{/t}</th>
-                <th class="center" style="width:90px;">{t}Actions{/t}</th>
+                <th class="right" style="width:70px;">{t}Actions{/t}</th>
             </thead>
-            {foreach name=c from=$articles item=article}
             <tbody>
+            {foreach name=c from=$articles item=article}
                 <tr>
                     <td>
                         <input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$article->id}"  style="cursor:pointer;" />
                     </td>
-                    <td class="left">
-                        <span rel="tooltip" data-original-title="{t 1=$article->editor}Last author %1{/t}">{$article->title|clearslash}</span>
+                    <td class="left" rel="tooltip" data-original-title="{t 1=$article->editor}Last author: %1{/t}">
+                        {$article->title|clearslash}
                     </td>
                     {if $category eq 'all' || $category == 0}
                     <td class="left">
@@ -147,15 +147,9 @@
                         {/if}
                     </td>
                     {/if}
-                    <td class="left">
-                        {$article->agency}
-                    </td>
-                    <td class="center">
-                        {$article->created}
-                    </td>
-                    <td class="center">
-                        <span style="cursor:pointer;" title="editor" id="editor_{$article->id}">{$article->editor}</span>
-                    </td>
+                    <td class="left">{$article->agency}</td>
+                    <td class="center">{$article->created}</td>
+                    <td class="center">{$article->editor}</td>
                     <td class="center">
                         {if !empty($article->category) && $article->category != 20}
                         {acl isAllowed="ARTICLE_AVAILABLE"}
@@ -186,18 +180,18 @@
                         </div>
                     </td>
                 </tr>
-            </tbody>
             {foreachelse}
-            <tbody>
                 <tr>
                     <td class="empty" colspan="10">{t}No available articles.{/t}</td>
                 </tr>
-            </tbody>
             {/foreach}
+            </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="10" class="pagination">
-                        {$pagination->links}&nbsp;
+                    <td colspan="10" class="center">
+                        <div class="pagination">
+                            {$pagination->links}&nbsp;
+                        </div>
                     </td>
                 </tr>
             </tfoot>

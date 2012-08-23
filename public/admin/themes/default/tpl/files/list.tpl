@@ -122,7 +122,7 @@
             </div>
         </div>
 
-        <table class="listing-table">
+        <table class="table table-hover table-condensed">
             <thead>
                 <tr>
                     <th style="width:15px;">
@@ -130,7 +130,7 @@
                     </th>
                     <th style="width:20px">{t}Path{/t}</th>
                     <th>{t}Title{/t}</th>
-                    <th style="width:80px" class="center">{t}Category{/t}</th>
+                    <th class="left">{t}Category{/t}</th>
                     {if $category!='widget'} <th class="center" style="width:20px;">{t}Favorite{/t}</th>{/if}
                     <th class="center" style="width:20px;">{t}Home{/t}</th>
                     <th class="center" style="width:20px">{t}Published{/t}</th>
@@ -151,7 +151,7 @@
                     <td>
                         {$attaches[c]->title|clearslash}
                     </td>
-                    <td class="center">
+                    <td class="left">
                         {$attaches[c]->category_name|clearslash}
                     </td>
                     {if $category != 'widget'}
@@ -214,9 +214,10 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="9" class="pagination">
-                        {$pagination->links}
-                        &nbsp;
+                    <td colspan="9" class="center">
+                        <div class="pagination">
+                            {$pagination->links}
+                        </div>
                     </td>
                 </tr>
             </tfoot>

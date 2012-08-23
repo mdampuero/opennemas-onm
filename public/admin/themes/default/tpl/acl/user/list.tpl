@@ -55,7 +55,7 @@ jQuery(function($){
 				<button type="submit" class="btn">{t}Search{/t}</button>
 			</div>
 		</div>
-		<table class="listing-table table-striped">
+		<table class="table table-hover table-condensed">
 			{if count($users) gt 0}
 			<thead>
 				<tr>
@@ -64,8 +64,8 @@ jQuery(function($){
                     </th>
 					<th class="left">{t}Full name{/t}</th>
 					<th class="left" style="width:110px">{t}Username{/t}</th>
-					<th class="left" style="width:100px">{t}Group{/t}</th>
-					<th class="center" style="width:110px">{t}Actions{/t}</th>
+					<th class="left" >{t}Group{/t}</th>
+					<th class="center" style="width:10px">{t}Actions{/t}</th>
 				</tr>
 			</thead>
 			{/if}
@@ -89,7 +89,7 @@ jQuery(function($){
 							{/if}
 						{/section}
 					</td>
-					<td class="right">
+					<td class="right nowrap">
 						<div class="btn-group">
 							<a class="btn" href="{url name=admin_acl_user_show id=$user->id}" title="{t}Edit user{/t}">
 								<i class="icon-pencil"></i> {t}Edit{/t}

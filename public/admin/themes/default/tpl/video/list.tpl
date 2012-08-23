@@ -87,7 +87,7 @@
             {include file="menu_categories.tpl" home="{url name=admin_videos a=l}"}
         </ul>
 
-        <table class="listing-table">
+        <table class="table table-hover table-condensed">
             <thead>
                 <tr>
                     {if count($videos) > 0}
@@ -96,14 +96,13 @@
                     </th>
                     <th></th>
                     <th>{t}Title{/t}</th>
-                    {if $category=='widget' || $category=='all'}<th class="left">{t}Section{/t}</th>{/if}
-                    <th class="center">{t}Service{/t}</th>
-                    <th class="center">Created</th>
+                    {if $category=='widget' || $category=='all'}<th class="left">{t}Category{/t}</th>{/if}
+                    <th class="left nowrap">Created</th>
                     <th class="center" style="width:35px;">{t}Views{/t}</th>
                     <th class="center" style="width:35px;">{t}Published{/t}</th>
                     {if $category!='widget' && $category!='all'} <th class="center" style="width:35px;">{t}Favorite{/t}</th>{/if}
                     <th class="center" style="width:35px;">{t}Home{/t}</th>
-                    <th class="center" style="width:100px;">{t}Actions{/t}</th>
+                    <th class="right" style="width:100px;">{t}Actions{/t}</th>
                     {else}
                     <th class="center">
                         &nbsp;
@@ -112,43 +111,38 @@
                 </tr>
             </thead>
             <tbody class="sortable">
-                {section name=c loop=$videos}
-                <tr data-id="{$videos[c]->id}" style="cursor:pointer;">
+                {foreach name=c from=$videos item=video}
+                <tr data-id="{$video->id}" style="cursor:pointer;">
                     <td>
-                        <input type="checkbox" class="minput" id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$videos[c]->id}"  style="cursor:pointer;">
+                        <input type="checkbox" class="minput" id="selected_{$smarty.foreach.c.iteration}" name="selected_fld[]" value="{$video->id}"  style="cursor:pointer;">
                     </td>
-                    <td>
-                        {if is_array($videos[c]->information) && array_key_exists('thumbnail', $videos[c]->information)}
-                        <img src="{$videos[c]->information['thumbnail']}" alt="" style="max-width:60px">
-                        {/if}
+                    <td style="width:15px;">
+                        <img src="{$video->thumb}" alt="" style="max-width:60px">
                     </td>
-                    <td onClick="javascript:document.getElementById('selected_{$smarty.section.c.iteration}').click();">
-                        {$videos[c]->title|clearslash}
+                    <td onClick="javascript:document.getElementById('selected_{$smarty.foreach.c.iteration}').click();">
+                        {if $video->author_name != 'internal'}<strong>{$video->author_name}</strong> {/if}{$video->title|clearslash}
                     </td>
                     {if $category=='widget' || $category=='all'}
                     <td >
-                         {$videos[c]->category_title}
+                         {$video->category_title}
                     </td>
                     {/if}
-                    <td class="center">
-                        {$videos[c]->author_name}
-                    </td>
                     </td class="center">
 
-                    <td class="center">
-                        {$videos[c]->created}
+                    <td class="left nowrap">
+                        {$video->created}
                     </td>
                     <td class="center">
-                        {$videos[c]->views}
+                        {$video->views}
                     </td>
                     <td class="center">
                         {acl isAllowed="VIDEO_AVAILABLE"}
-                        {if $videos[c]->available == 1}
-                            <a href="{url name=admin_video_toggle_availability id=$videos[c]->id status=0 category=$category page=$page|default:1}" title="{t}Published{/t}">
+                        {if $video->available == 1}
+                            <a href="{url name=admin_video_toggle_availability id=$video->id status=0 category=$category page=$page|default:1}" title="{t}Published{/t}">
                                 <img src="{$params.IMAGE_DIR}publish_g.png" alt="{t}Published{/t}" />
                             </a>
                         {else}
-                            <a href="{url name=admin_video_toggle_availability id=$videos[c]->id status=1 category=$category page=$page|default:1}" title="{t}Pendiente{/t}">
+                            <a href="{url name=admin_video_toggle_availability id=$video->id status=1 category=$category page=$page|default:1}" title="{t}Pendiente{/t}">
                                 <img src="{$params.IMAGE_DIR}publish_r.png" alt="{t}Pendiente{/t}" />
                             </a>
                         {/if}
@@ -157,56 +151,58 @@
                      {if $category!='widget' && $category != 'all'}
                     <td class="center">
                         {acl isAllowed="VIDEO_FAVORITE"}
-                        {if $videos[c]->favorite == 1}
-                           <a href="{url name=admin_video_toggle_favorite id=$videos[c]->id status=0 category=$category page=$page|default:1}" class="favourite_on" title="Quitar de Portada"></a>
+                        {if $video->favorite == 1}
+                           <a href="{url name=admin_video_toggle_favorite id=$video->id status=0 category=$category page=$page|default:1}" class="favourite_on" title="Quitar de Portada"></a>
                         {else}
-                            <a href="{url name=admin_video_toggle_favorite id=$videos[c]->id status=1 category=$category page=$page|default:1}" class="favourite_off" title="Meter en Portada"></a>
+                            <a href="{url name=admin_video_toggle_favorite id=$video->id status=1 category=$category page=$page|default:1}" class="favourite_off" title="Meter en Portada"></a>
                         {/if}
                         {/acl}
                     </td>
                     {/if}
                     <td class="center">
                     {acl isAllowed="VIDEO_HOME"}
-                        {if $videos[c]->in_home == 1}
-                           <a href="{url name=admin_video_toggle_inhome id=$videos[c]->id status=0 category=$category page=$page|default:1}" class="no_home" title="{t}Take out from home{/t}"></a>
+                        {if $video->in_home == 1}
+                           <a href="{url name=admin_video_toggle_inhome id=$video->id status=0 category=$category page=$page|default:1}" class="no_home" title="{t}Take out from home{/t}"></a>
                         {else}
-                            <a href="{url name=admin_video_toggle_inhome id=$videos[c]->id status=1 category=$category page=$page|default:1}" class="go_home" title="{t}Put in home{/t}"></a>
+                            <a href="{url name=admin_video_toggle_inhome id=$video->id status=1 category=$category page=$page|default:1}" class="go_home" title="{t}Put in home{/t}"></a>
                         {/if}
                     {/acl}
                     </td>
-                    <td style="padding:1px; font-size:11px;" class="center">
+                    <td class="right">
                         <div class="btn-group">
                             {acl isAllowed="VIDEO_UPDATE"}
-                            <a class="btn" href="{url name=admin_video_show id=$videos[c]->id}" title="{t}Edit{/t}" >
+                            <a class="btn" href="{url name=admin_video_show id=$video->id}" title="{t}Edit{/t}" >
                                 <i class="icon-pencil"></i> {t}Edit{/t}
                             </a>
                             {/acl}
 
                             {acl isAllowed="VIDEO_DELETE"}
                             <a class="del btn btn-danger" data-controls-modal="modal-from-dom"
-                               data-id="{$videos[c]->id}"
-                               data-title="{$videos[c]->title|capitalize}"
-                               data-url="{url name=admin_video_delete id=$videos[c]->id}"
-                               data-url-relations="{url name=admin_video_get_relations id=$videos[c]->id}"
-                               href="{url name=admin_video_delete id=$videos[c]->id}" >
+                               data-id="{$video->id}"
+                               data-title="{$video->title|capitalize}"
+                               data-url="{url name=admin_video_delete id=$video->id}"
+                               data-url-relations="{url name=admin_video_get_relations id=$video->id}"
+                               href="{url name=admin_video_delete id=$video->id}" >
                                 <i class="icon-trash icon-white"></i>
                             </a>
                             {/acl}
                         </div>
                     </td>
                 </tr>
-                {sectionelse}
+                {foreachelse}
                 <tr>
                     <td class="empty" colspan="8">
                         {t}There is no videos yet.{/t}
                     </td>
                 </tr>
-                {/section}
+                {/foreach}
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="10" class="pagination">
-                        {$pagination->links}&nbsp;
+                    <td colspan="10" class="center">
+                        <div class="pagination">
+                            {$pagination->links}
+                        </div>
                     </td>
                 </tr>
             </tfoot>

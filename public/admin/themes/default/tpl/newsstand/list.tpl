@@ -58,7 +58,7 @@
                 <li>
                     <a href="{url name=admin_covers_config}" title="{t}Config covers module{/t}">
                         <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
-                        {t}Configurations{/t}
+                        {t}Settings{/t}
                     </a>
                 </li>
             {/acl}
@@ -80,11 +80,9 @@
          </li>
          {include file="menu_categories.tpl" home={url name=admin_covers l=1}}
     </ul>
-
-    <br />
     <div id="warnings-validation"></div>
 
-    <table class="listing-table">
+    <table class="table table-hover table-condensed">
 
         {if count($covers) > 0}
         <thead>
@@ -93,18 +91,18 @@
                 <th class="center" style="width:80px;">{t}Thumbnail{/t}</th>
                 <th class="left">{t}Title{/t}</th>
                 {if $category=='widget' || $category == 'all'}<th style="width:65px;" class="center">{t}Section{/t}</th>{/if}
-                <th class="center" style="width:90px;">{t}Date{/t}</th>
-                <th class="center" style="width:90px;">{t}Last editor{/t}</th>
+                <th class="left" style="width:90px;">{t}Date{/t}</th>
+                <th class="left nowrap" style="width:90px;">{t}Last editor{/t}</th>
                 <th class="center" style="width:10px;">{t}Published{/t}</th>
                 <th class="center" style="width:35px;">{t}Favorite{/t}</th>
                 <th class="center" style="width:10px;">{t}Home{/t}</th>
-                <th class="center" style="width:110px;">{t}Actions{/t}</th>
+                <th class="right" style="width:110px;">{t}Actions{/t}</th>
             </tr>
         </thead>
         {else}
         <thead>
             <tr>
-                <th colspan="9">
+                <th colspan="10">
                     &nbsp;
                 </th>
 
@@ -129,10 +127,10 @@
                  {$cover->category_title}
             </td>
             {/if}
-            <td class="center">
+            <td class="left nowrap">
                 {$cover->date}
             </td>
-            <td  class="center">
+            <td  class="left">
                 {$cover->editor}
             </td>
              <td class="center">
@@ -166,7 +164,7 @@
                 {/if}
             {/acl}
             </td>
-            <td align="center">
+            <td align="right">
                 <div class="btn-group">
                     {acl isAllowed="KIOSKO_UPDATE"}
                     <a class="btn" href="{url name=admin_cover_show id=$cover->pk_kiosko}" title="{t}Edit{/t}">
@@ -192,8 +190,10 @@
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="10" class="pagination">
-                    {$pagination->links|default:"&nbsp;"}
+                <td colspan="10" class="center">
+                    <div class="pagination">
+                        {$pagination->links}
+                    </div>
                 </td>
             </tr>
         </tfoot>

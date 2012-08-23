@@ -1,13 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-
-{/block}
-
-{block name="header-js" prepend}
-
-{/block}
-
 {block name="content"}
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
@@ -29,11 +21,11 @@
 
     	{render_messages}
 
-        <table class="listing-table">
+        <table class="table table-hover table-condensed">
             <thead>
                 <tr>
                 {if count($elements) >0}
-                    <th style='width:40% !important;'>{t}Site Url{/t}</th>
+                    <th>{t}Site Url{/t}</th>
                     <th style='width:45% !important;'>{t}Categories to Sync{/t}</th>
                     <th style="width:10% !important;">{t}Color{/t}</th>
                     <th style="width:5% !important;">{t}Actions{/t}</th>
@@ -49,10 +41,7 @@
                 {foreach $elements as $num => $config}
                     {foreach $config as $site => $categories}
                     <tr>
-                        <td>
-                            {$site}
-
-                        </td>
+                        <td>{$site}</td>
                         <td>
                             {foreach $categories as $category}
                                 {$category}
@@ -65,7 +54,7 @@
                                         border-bottom-right-radius: 3px !important;">
                             </div>
                         </td>
-                        <td class="right">
+                        <td class="right nowrap">
                             <ul class="action-buttons">
                                 <li>
                                     <a href="{$smarty.server.PHP_SELF}?action=edit&amp;site_url={$site}"
@@ -96,14 +85,15 @@
                 {/foreach}
             </tbody>
             <tfoot>
-                 <tr class="pagination">
-                     <td colspan="4">{$pagination->links|default:""}&nbsp;</td>
-                 </tr>
+                <tr class="pagination">
+                    <td colspan="4">
+                        <div class="pagination">
+                            {$pagination->links|default:""}
+                        </div>
+                    </td>
+                </tr>
             </tfoot>
-
         </table>
-
-    	<input type="hidden" id="action" name="action" value="" />
 	</form>
 </div>
 {/block}

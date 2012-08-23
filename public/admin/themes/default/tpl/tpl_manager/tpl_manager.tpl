@@ -104,7 +104,7 @@
         </div>
         <div id="caches">
             {if count($caches)>0}
-            <table class="listing-table">
+            <table class="table table-hover table-condensed">
                 <thead>
                     <tr>
                         <th  style="width:10px;">
@@ -274,12 +274,12 @@
                     <!-- <td class="left">{$caches[c].created|date_format:"%H:%M:%S %d/%m/%Y"}</td> -->
 
                     <td class="left">
-                        <div class="valid-until-date {if $caches[c].expires < $smarty.now}expired{else}valid{/if}">
+                        <div class="valid-until-date {if $caches[c].expires < $smarty.now}expired{else}valid{/if} nowrap">
                             {$caches[c].expires|date_format:"%H:%M:%S %d/%m/%Y"}
                         </div>
                     </td>
-                    <td class="center">{$caches[c].size} KB</td>
-                    <td class="right">
+                    <td class="center nowrap">{$caches[c].size} KB</td>
+                    <td class="right nowrap">
                         <a class="btn btn-danger delete-cache-button" href="{url name=admin_tpl_manager_delete cacheid=$caches[c].cache_id  tpl=$caches[c].tpl}"
                             title="{t}Delete cache file{/t}"><i class="icon-trash icon-white"></i></a>
                     </td>
@@ -290,16 +290,10 @@
 
             <tfoot>
                 <tr>
-                    <td colspan="8" class="pagination">
-                        <script>
-                        // <![CDATA[
-                        function paginate(page) {
-                            $('page').value = page;
-                            $('formulario').submit();
-                        }
-                        // ]]>
-                        </script>
-                        {$pagination->links} &nbsp;
+                    <td colspan="8" class="center">
+                        <div class="pagination">
+                            {$pagination->links}
+                        </div>
                     </td>
                 </tr>
             </tfoot>

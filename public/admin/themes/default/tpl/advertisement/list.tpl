@@ -99,122 +99,121 @@
             </div>
         </div>
 
-        <div id="{$category}">
+        <table class="table table-hover table-condensed">
+            <thead>
+                <tr>
+                    <th  style="width:15px">
+                        <input type="checkbox" id="toggleallcheckbox" />
+                    </th>
+                    <th class="title"  style="width:250px">{t}Type{/t}</th>
+                    <th>{t}Title{/t}</th>
+                    <th class="center" style="width:30px">{t}Permanence{/t}</th>
+                    <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}clicked.png" alt="{t}Clicks{/t}" title="{t}Clicks{/t}"></th>
+                    <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
+                    {acl isAllowed="ADVERTISEMENT_AVAILA"}
+                    <th class="center">{t}Available{/t}</th>
+                    {/acl}
+                    <th class="right" style="width:70px">{t}Actions{/t}</th>
+                </tr>
+            </thead>
 
-            <table class="listing-table">
-                <thead>
-                    <tr>
-                        <th  style="width:15px">
-                            <input type="checkbox" id="toggleallcheckbox" />
-                        </th>
-                        <th class="title"  style="width:250px">{t}Type{/t}</th>
-                        <th>{t}Title{/t}</th>
-                        <th class="center" style="width:30px">{t}Permanence{/t}</th>
-                        <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}clicked.png" alt="{t}Clicks{/t}" title="{t}Clicks{/t}"></th>
-                        <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
-                        {acl isAllowed="ADVERTISEMENT_AVAILA"}
-                        <th class="center">{t}Available{/t}</th>
-                        {/acl}
-                        <th class="center" style="width:70px">{t}Actions{/t}</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {foreach from=$advertisements item=ad}
-                    <tr {cycle values="class=row0,class=row1"}>
-                        <td style="text-align:center;">
-                            <input type="checkbox" class="minput" id="selected_{$smarty.section.c.iteration}" name="selected_fld[]"
-                                value="{$ad->pk_advertisement}" />
-                        </td>
-                        <td style="">
-                            <label>
-                                {if $ad->with_script == 1}
-                                    <img src="{$params.IMAGE_DIR}iconos/script_code_red.png"
-                                         alt="Javascript" title="Javascript" />
-                                {elseif $ad->is_flash == 1}
-                                    <img src="{$params.IMAGE_DIR}flash.gif" alt="{t}Media flash{/t}"
-                                         title="{t}Media flash element (swf){/t}" style="width: 16px; height: 16px;"/>
-                                {else}
-                                    <img src="{$params.IMAGE_DIR}iconos/picture.png" alt="{t}Media{/t}"
-                                         title="{t}Media element (jpg, image, gif){/t}" />
-                                {/if}
-                                {assign var="type_advertisement" value=$ad->type_advertisement}
-                                {$map.$type_advertisement}
-                            </label>
-                        </td>
-                        <td style="">
-                            {$ad->title|clearslash}
-                        </td>
-
-                        <td style="text-align:center;" class="center">
-                            {if $ad->type_medida == 'NULL'} {t}Undefined{/t} {/if}
-                            {if $ad->type_medida == 'CLIC'} {t}Clicks:{/t} {$ad->num_clic} {/if}
-                            {if $ad->type_medida == 'VIEW'} {t}Viewed:{/t} {$ad->num_view} {/if}
-                            {if $ad->type_medida == 'DATE'}
-                                {t}Date:{/t} {$ad->starttime|date_format:"%d:%m:%Y"}-{$ad->endtime|date_format:"%d:%m:%Y"}
-                            {/if}
-                        </td>
-
-                        <td style="text-align:center;">
-                            {$ad->num_clic_count|number_format:0:',':'.'}
-                        </td>
-                        <td style="text-align:center;">
-                             {$ad->views|number_format:0:',':'.'}
-                        </td>
-                        {acl isAllowed="ADVERTISEMENT_AVAILA"}
-                        <td class="center">
-                            {if $ad->available == 1}
-                                <a href="{url name=admin_ad_toggleavailable id=$ad->id category=$category status=0 page=$page}"
-                                    title={t}"Published"{/t}>
-                                    <img src="{$params.IMAGE_DIR}publish_g.png" alt="{t}Published{/t}" /></a>
+            <tbody>
+                {foreach from=$advertisements item=ad}
+                <tr {cycle values="class=row0,class=row1"}>
+                    <td style="text-align:center;">
+                        <input type="checkbox" class="minput" id="selected_{$smarty.section.c.iteration}" name="selected_fld[]"
+                            value="{$ad->pk_advertisement}" />
+                    </td>
+                    <td style="">
+                        <label>
+                            {if $ad->with_script == 1}
+                                <img src="{$params.IMAGE_DIR}iconos/script_code_red.png"
+                                     alt="Javascript" title="Javascript" />
+                            {elseif $ad->is_flash == 1}
+                                <img src="{$params.IMAGE_DIR}flash.gif" alt="{t}Media flash{/t}"
+                                     title="{t}Media flash element (swf){/t}" style="width: 16px; height: 16px;"/>
                             {else}
-                                <a href="{url name=admin_ad_toggleavailable id=$ad->id category=$category status=1 page=$page}"
-                                    title={t escape=off}"Unresolved"{/t}>
-                                    <img src="{$params.IMAGE_DIR}publish_r.png" alt="{t}Pending{/t}" /></a>
+                                <img src="{$params.IMAGE_DIR}iconos/picture.png" alt="{t}Media{/t}"
+                                     title="{t}Media element (jpg, image, gif){/t}" />
                             {/if}
-                            </li>
-                        </td>
+                            {assign var="type_advertisement" value=$ad->type_advertisement}
+                            {$map.$type_advertisement}
+                        </label>
+                    </td>
+                    <td style="">
+                        {$ad->title|clearslash}
+                    </td>
+
+                    <td style="text-align:center;" class="center">
+                        {if $ad->type_medida == 'NULL'} {t}Undefined{/t} {/if}
+                        {if $ad->type_medida == 'CLIC'} {t}Clicks:{/t} {$ad->num_clic} {/if}
+                        {if $ad->type_medida == 'VIEW'} {t}Viewed:{/t} {$ad->num_view} {/if}
+                        {if $ad->type_medida == 'DATE'}
+                            {t}Date:{/t} {$ad->starttime|date_format:"%d:%m:%Y"}-{$ad->endtime|date_format:"%d:%m:%Y"}
+                        {/if}
+                    </td>
+
+                    <td style="text-align:center;">
+                        {$ad->num_clic_count|number_format:0:',':'.'}
+                    </td>
+                    <td style="text-align:center;">
+                         {$ad->views|number_format:0:',':'.'}
+                    </td>
+                    {acl isAllowed="ADVERTISEMENT_AVAILA"}
+                    <td class="center">
+                        {if $ad->available == 1}
+                            <a href="{url name=admin_ad_toggleavailable id=$ad->id category=$category status=0 page=$page}"
+                                title={t}"Published"{/t}>
+                                <img src="{$params.IMAGE_DIR}publish_g.png" alt="{t}Published{/t}" /></a>
+                        {else}
+                            <a href="{url name=admin_ad_toggleavailable id=$ad->id category=$category status=1 page=$page}"
+                                title={t escape=off}"Unresolved"{/t}>
+                                <img src="{$params.IMAGE_DIR}publish_r.png" alt="{t}Pending{/t}" /></a>
+                        {/if}
+                        </li>
+                    </td>
+                    {/acl}
+                    <td class="right">
+                        <div class="btn-group">
+                        {acl isAllowed="ADVERTISEMENT_UPDATE"}
+                            <a class="btn" href="{url name=admin_ad_show id=$ad->id}" title="{t}Edit{/t}">
+                                <i class="icon-pencil"></i>
+                            </a>
                         {/acl}
-                        <td style="text-align:center;" class="center">
-                            <div class="btn-group">
-                            {acl isAllowed="ADVERTISEMENT_UPDATE"}
-                                <a class="btn" href="{url name=admin_ad_show id=$ad->id}" title="{t}Edit{/t}">
-                                    <i class="icon-pencil"></i>
-                                </a>
-                            {/acl}
-                            {acl isAllowed="ADVERTISEMENT_DELETE"}
-                              <a class="del btn btn-danger"
-                                    data-controls-modal="modal-from-dom"
-                                    data-url="{url name=admin_ad_delete id=$ad->id}"
-                                    data-title="{$ad->title|capitalize}"
-                                    href="{url name=admin_ad_delete id=$ad->id}" >
-                                    <i class="icon-trash icon-white"></i>
-                                </a>
-                            {/acl}
-                            </ul>
-                        </td>
+                        {acl isAllowed="ADVERTISEMENT_DELETE"}
+                          <a class="del btn btn-danger"
+                                data-controls-modal="modal-from-dom"
+                                data-url="{url name=admin_ad_delete id=$ad->id}"
+                                data-title="{$ad->title|capitalize}"
+                                href="{url name=admin_ad_delete id=$ad->id}" >
+                                <i class="icon-trash icon-white"></i>
+                            </a>
+                        {/acl}
+                        </ul>
+                    </td>
 
-                    </tr>
-                    {foreachelse}
-                    <tr>
-                        <td class="empty" colspan="10">
-                            {t}There is no advertisement stored in this section{/t}
-                        </td>
-                    </tr>
-                    {/foreach}
-                </tbody>
+                </tr>
+                {foreachelse}
+                <tr>
+                    <td class="empty" colspan="10">
+                        {t}There is no advertisement stored in this section{/t}
+                    </td>
+                </tr>
+                {/foreach}
+            </tbody>
 
-                <tfoot >
-                    <tr class="pagination">
-                        <td colspan="8">
-                            {$pagination->links}&nbsp;
-                        </td>
-                    </tr>
-                </tfoot>
+            <tfoot >
+                <tr>
+                    <td colspan="8" class="center">
+                        <div class="pagination">
+                            {$pagination->links}
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
 
-            </table>
+        </table>
 
-        </div><!--fin id="$category"-->
     </div> <!--end wrapper-->
     <input type="hidden" id="page" name="page" value="{$page}" />
     <input type="hidden" name="category" id="category" value="{$category}" />

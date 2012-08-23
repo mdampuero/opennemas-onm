@@ -1,18 +1,20 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
-{css_tag href="/admin.css"}
 {css_tag href="/newsletter.css" media="screen"}
-{/block}
 <style type="text/css">
 #htmlContent {
-	border:1px solid #ccc;
-	padding:20px;
-	background-color: white;
+    border:1px solid #ccc;
+    padding:20px;
+    background-color: white;
+    max-width:80%;
+    margin:0 auto;
+    display:block;
 }
 </style>
-{block name="footer-js" append}
+{/block}
 
+{block name="footer-js" append}
 {script_tag src="/jquery/jquery.cookie.js"}
 {script_tag src="/jquery-onm/jquery.newsletter.js"}
 {script_tag src="/tiny_mce/opennemas-config.js"}
@@ -71,37 +73,21 @@ OpenNeMas.tinyMceConfig.advanced.elements = "htmlContent";
 	</div>
 </div>
 <div class="wrapper-content">
-	<table class="adminlist">
-		<tr>
-			<td>
-				<div  style="width:80%; margin:0 auto;">
-						<p>
-							<label>{t}Email subject{/t}:</label>
-							<input type="text" name="subject" id="subject" style="width:80%"
-								   value="{$newsletter->subject}" />
-						</p>
-				</div>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<div style="width:85%; margin:0 auto;">
-					<div id="htmlContent">{$newsletter->html}</div>
-					<br>
-				</div>
-			</td>
-		</tr>
-		<tfoot>
-			<tr>
-				<td></td>
-			</tr>
-		</tfoot>
-	</table>
+    <div class="form-vertical panel">
+        <div class="control-group">
+            <label for="name" class="control-label">{t}Email subject{/t}</label>
+            <div class="controls">
+                <input type="text" name="subject" id="subject" style="width:80%" value="{$newsletter->subject}" required class="input-xlarge"/>
+            </div>
+        </div>
 
-        <input type="hidden" id="action" name="action" value="listRecipients" />
-	    <div id="separator"></div>
-	</div>
-
+        <div class="control-group">
+            <label for="htmlContent" class="control-label">{t}Preview{/t}</label>
+            <div class="controls">
+                <div id="htmlContent">{$newsletter->html}</div>
+            </div>
+        </div>
+    </div>
 </form>
 
 {include file="newsletter/modals/_back_contents_accept.tpl"}

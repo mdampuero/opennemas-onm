@@ -1,7 +1,7 @@
 {if !(is_null($hideheaders)) && !($hideheaders)}
 <div  id="media-browser">
 {else}
-<table class="listing-table nofill border" id="media-browser">
+<table class="table table-hover table-condensed" id="media-browser">
     <thead>
         <tr>
             <th>{t}List of images{/t}</th>
@@ -100,9 +100,9 @@
         </tr>
     </tbody>
     <tfoot>
-        <tr class="pagination">
-            <td>
-                {$pages->links}
+        <tr>
+            <td class="center">
+                <div class="pagination">{$pages->links}</div>
             </td>
         </tr>
     </tfoot>

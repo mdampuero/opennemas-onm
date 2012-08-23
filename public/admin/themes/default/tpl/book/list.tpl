@@ -86,13 +86,13 @@
 
         {render_messages}
 
-        <div id="warnings-validation"></div>
-
         <ul class="pills clearfix">
             <li>
                 <a href="{url name=admin_books_widget}" {if $category == 'widget'}class="active"{elseif $ca eq $datos_cat[0]->fk_content_category}{*class="active"*}{/if}>WIDGET HOME</a>
             </li>
         </ul>
+
+        <div id="warnings-validation"></div>
 
         <div class="table-info clearfix">
             <div>
@@ -125,19 +125,19 @@
             </div>
         </div>
 
-        <table class="listing-table">
+        <table class="table table-hover table-condensed">
             <thead>
                 <tr>
                     <th style="width:15px;">
                         <input type="checkbox" id="toggleallcheckbox">
                     </th>
                     <th class="title">{t}Title{/t}</th>
-                    <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
                     <th style="width:65px;" class="center">{t}Section{/t}</th>
                     <th class="center" style="width:100px;">Created</th>
-                    <th class="center" style="width:35px;">{t}Published{/t}</th>
-                    <th class="center" style="width:35px;">{t}Favorite{/t}</th>
-                    <th class="center" style="width:110px;">{t}Actions{/t}</th>
+                    <th class="center" style="width:20px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
+                    <th class="center" style="width:10px;">{t}Published{/t}</th>
+                    <th class="center" style="width:10px;">{t}Favorite{/t}</th>
+                    <th class="right" style="width:110px;">{t}Actions{/t}</th>
                 </tr>
             </thead>
             <tbody class="sortable">
@@ -151,14 +151,14 @@
                         {$books[as]->title|clearslash}
                     </a>
                 </td>
-                 <td class="center">
-                    {$books[as]->views}
-                </td>
                 <td class="center">
                     {$books[as]->category_title}
                 </td>
                 <td class="center">
                     {$books[as]->created}
+                </td>
+                 <td class="center">
+                    {$books[as]->views}
                 </td>
                 <td class="center">
                     {acl isAllowed="BOOK_AVAILABLE"}
@@ -183,7 +183,7 @@
                         {/if}
                     {/acl}
                 </td>
-                <td class="center">
+                <td class="right">
                     <div class="btn-group">
                        {acl isAllowed="BOOK_UPDATE"}
                             <a class="btn"  href="{url name=admin_books_show id=$books[as]->pk_book}" title="{t}Edit book{/t}" >

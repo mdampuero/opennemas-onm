@@ -45,7 +45,7 @@
 
         <div id="warnings-validation"></div>
 
-        <table class="listing-table">
+        <table class="table table-hover table-condensed">
             <thead>
                 <tr>
                     {if count($newsletters) > 0}
@@ -53,8 +53,8 @@
                         <input type="checkbox" id="toggleallcheckbox">
                     </th>
                     <th>{t}Title{/t}</th>
-                    <th class="center">Created</th>
-                    <th class="center" style="width:100px;">{t}Actions{/t}</th>
+                    <th class="left"  style="width:150px;">Created</th>
+                    <th class="right" style="width:100px;">{t}Actions{/t}</th>
                     {else}
                     <th class="center">
                         &nbsp;
@@ -68,13 +68,13 @@
                     <td>
                         <input type="checkbox" class="minput" id="selected_{$smarty.foreach.c.iteration}" name="selected_fld[]" value="{$newsletter->id}"  style="cursor:pointer;">
                     </td>
-                    <td class="center">
-                        {$newsletter->title}
+                    <td class="left">
+                        {$newsletter->title|default:"No title"}
                     </td>
-                    <td class="center">
+                    <td class="left">
                         {$newsletter->created}
                     </td>
-                    <td style="padding:1px; font-size:11px;" class="center">
+                    <td style="padding:1px; font-size:11px;" class="right">
                         <div class="btn-group">
                             {acl isAllowed="NEWSLETTER_UPDATE"}
                             <a class="btn" href="{url name=admin_newsletter_preview id=$newsletter->id}" title="{t}Edit{/t}" >
@@ -102,8 +102,10 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="10" class="pagination">
-                        {$pagination->links}&nbsp;
+                    <td colspan="10" class="center">
+                        <div class="pagination">
+                            {$pagination->links}
+                        </div>
                     </td>
                 </tr>
             </tfoot>
