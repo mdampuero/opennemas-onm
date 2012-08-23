@@ -1,10 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="footer-js" append}
-    {script_tag src="/prototype.js" language="javascript"}
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}scriptaculous/scriptaculous.js?load=effects,dragdrop"></script>
-{/block}
-
 {block name="content"}
 <div class="top-action-bar">
     <div class="wrapper-content">
