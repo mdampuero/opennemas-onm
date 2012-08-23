@@ -303,5 +303,5 @@ class WidgetsController extends Controller
         ));
 
     }
+}
 
-} // END class WidgetsController

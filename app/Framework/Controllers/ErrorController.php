@@ -69,4 +69,4 @@ class ErrorController extends Controller
         return include __DIR__."/../Views/ErrorController/default-production.php";
     }
 
-} // END class Authentication
+}

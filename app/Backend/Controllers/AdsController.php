@@ -590,4 +590,4 @@ class AdsController extends Controller
         );
     }
 
-} // END class AdsController
+}

@@ -845,4 +845,4 @@ class OpinionsController extends Controller
         }
     }
 
-} // END class OpinionsController
+}

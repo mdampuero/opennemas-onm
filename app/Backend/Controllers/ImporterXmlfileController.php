@@ -225,4 +225,4 @@ class ImporterXmlfileController extends Controller
             return $this->render('agency_importer/xml-file/config.tpl');
         }
     }
-} // END class ImporterXmlfileController
+}

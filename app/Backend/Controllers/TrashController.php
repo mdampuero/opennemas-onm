@@ -266,4 +266,4 @@ class TrashController extends Controller
         }
     }
 
-} // END class TrashController
+}

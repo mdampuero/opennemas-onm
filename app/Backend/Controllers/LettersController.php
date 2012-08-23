@@ -380,4 +380,4 @@ class LettersController extends Controller
         );
     }
 
-} // END class LettersController
+}

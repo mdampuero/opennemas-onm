@@ -90,8 +90,7 @@ class Bootstrap extends ModuleBootstrap
         mb_internal_encoding("UTF-8");
 
         $availableLanguages = \Application::getAvailableLanguages();
-        $forceLanguage = filter_input(INPUT_GET,
-            'language', FILTER_SANITIZE_STRING);
+        $forceLanguage = filter_input(INPUT_GET, 'language', FILTER_SANITIZE_STRING);
 
         if ($forceLanguage !== null
             && in_array($forceLanguage, array_keys($availableLanguages))
@@ -115,5 +114,5 @@ class Bootstrap extends ModuleBootstrap
         bindtextdomain($domain, $localeDir);
         textdomain($domain);
     }
+}
 
-} // END class Bootstrap

@@ -299,4 +299,4 @@ class AclUserController extends Controller
         return new Response($message, $httpCode);
     }
 
-} // END class AclUserController
+}

@@ -40,4 +40,4 @@ class WelcomeController extends Controller
         return $this->render('index/index.tpl');
     }
 
-} // END class WelcomeController
+}

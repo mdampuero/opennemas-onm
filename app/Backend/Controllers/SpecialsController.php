@@ -606,4 +606,4 @@ class SpecialsController extends Controller
         }
     }
 
-} // END class SpecialsController
+}

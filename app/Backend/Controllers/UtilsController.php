@@ -45,4 +45,4 @@ class UtilsController extends Controller
         return new Response($tags, 200);
     }
 
-} // END class UtilsController
+}

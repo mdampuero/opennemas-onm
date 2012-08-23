@@ -879,4 +879,4 @@ class ImagesController extends Controller
         ));
     }
 
-} // END class ImagesController
+}

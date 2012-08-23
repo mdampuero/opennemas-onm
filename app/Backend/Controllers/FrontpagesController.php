@@ -261,4 +261,4 @@ class FrontpagesController extends Controller
 
         return $this->render('frontpage/frontpage.tpl');
     }
-} // END class FrontpagesController
+}

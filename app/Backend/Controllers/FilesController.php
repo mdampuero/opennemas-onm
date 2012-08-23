@@ -698,4 +698,4 @@ class FilesController extends Controller
         ));
     }
 
-} // END class FilesController
+}

@@ -576,4 +576,4 @@ class BooksController extends Controller
         ));
     }
 
-} // END class BooksController
+}

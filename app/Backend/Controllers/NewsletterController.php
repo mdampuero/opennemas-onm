@@ -245,4 +245,4 @@ class NewsletterController extends Controller
         return false;
     }
 
-} // END class NewsletterController
+}

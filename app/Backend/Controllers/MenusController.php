@@ -335,4 +335,4 @@ class MenusController extends Controller
         ));
     }
 
-} // END class MenusController
+}

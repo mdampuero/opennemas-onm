@@ -763,4 +763,4 @@ class ArticlesController extends Controller
         return new Response($content);
     }
 
-} // END class ArticlesController
+}

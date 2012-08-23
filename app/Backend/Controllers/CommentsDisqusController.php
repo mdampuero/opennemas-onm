@@ -93,4 +93,4 @@ class CommentsDisqusController extends Controller
             return $this->redirect($this->generateUrl('admin_comments_disqus_config'));
         }
     }
-} // END class PruebaController
+}

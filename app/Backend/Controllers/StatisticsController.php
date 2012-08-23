@@ -37,13 +37,16 @@ class StatisticsController extends Controller
         require_once SITE_LIBS_PATH.'ofc1/open_flash_chart_object.php';
 
         // Assign a content types for don't reinvent the wheel into template
-        $this->view->assign('content_types', array(
-            1 => 'Noticia' ,
-            7 => 'Galeria',
-            9 => 'Video',
-            4 => 'Opinion',
-            3 => 'Fichero'
-        ));
+        $this->view->assign(
+            'content_types',
+            array(
+                1 => 'Noticia' ,
+                7 => 'Galeria',
+                9 => 'Video',
+                4 => 'Opinion',
+                3 => 'Fichero'
+            )
+        );
 
         // Fetch vars
         $this->category = $this->request->query->filter('category', 0, FILTER_SANITIZE_STRING);
@@ -118,4 +121,4 @@ class StatisticsController extends Controller
         return $output;
     }
 
-} // END class StatisticsController
+}

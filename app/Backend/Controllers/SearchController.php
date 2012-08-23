@@ -227,4 +227,4 @@ class SearchController extends Controller
         return $contentTypesFiltered;
     }
 
-} // END class SearchController
+}

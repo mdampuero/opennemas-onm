@@ -334,4 +334,4 @@ class NewsletterSubscriptorsController extends Controller
         return array($where, $orderBy);
     }
 
-} // END class NewsletterSubscriptorsControlle
+}

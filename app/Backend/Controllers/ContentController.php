@@ -284,4 +284,4 @@ class ContentController extends Controller
         ));
     }
 
-} // END class ContentController
+}

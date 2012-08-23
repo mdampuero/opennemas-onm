@@ -139,5 +139,5 @@ class AclPrivilegesController extends Controller
 
         return $this->redirect($this->generateUrl('admin_acl_privileges'));
     }
+}
 
-} // END class AclPrivilegesController

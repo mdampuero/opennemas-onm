@@ -77,4 +77,4 @@ class Bootstrap extends ModuleBootstrap
 
     }
 
-} // END class Bootstrap
+}

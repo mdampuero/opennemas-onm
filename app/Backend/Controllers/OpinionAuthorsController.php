@@ -316,4 +316,4 @@ class OpinionAuthorsController extends Controller
         return $elid;
     }
 
-} // END class OpinionsController
+}

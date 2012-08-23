@@ -857,4 +857,4 @@ class VideosController extends Controller
         ));
     }
 
-} // END class VideosController
+}

@@ -689,4 +689,4 @@ class AlbumsController extends Controller
         }
     }
 
-} // END class AlbumsController
+}

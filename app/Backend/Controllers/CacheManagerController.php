@@ -368,4 +368,4 @@ class CacheManagerController extends Controller
         return array($filter, implode('&', $params), $page, $itemsPerPage);
     }
 
-} // END class CacheManagerController
+}

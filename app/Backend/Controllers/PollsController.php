@@ -621,4 +621,4 @@ class PollsController extends Controller
         }
     }
 
-} // END class PollsController
+}

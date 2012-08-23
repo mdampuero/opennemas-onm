@@ -431,4 +431,4 @@ class InstancesController extends Controller
         return $this->redirect($this->generateUrl('manager_instances'));
     }
 
-} // END class InstancesController
+}

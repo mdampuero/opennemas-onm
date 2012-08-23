@@ -474,4 +474,4 @@ class CategoriesController extends Controller
         }
     }
 
-} // END class CategoriesController
+}

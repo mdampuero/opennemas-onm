@@ -134,4 +134,4 @@ class DatabaseErrorsController extends Controller
         return $this->redirect($this->generateUrl('admin_databaseerrors', array(), true));
     }
 
-} // END class SystemSettigns
+}

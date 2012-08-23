@@ -609,4 +609,4 @@ class CoversController extends Controller
         }
     }
 
-} // END class CoversController
+}
