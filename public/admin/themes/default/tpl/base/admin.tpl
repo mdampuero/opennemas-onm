@@ -36,6 +36,8 @@
         jQuery.noConflict();
         </script>
         {script_tag src="/libs/bootstrap.js"}
+        {script_tag src="/libs/jquery.tools.min.js"}
+        {script_tag src="/jquery-onm/jquery.onmvalidate.js"}
         {block name="prototype"}{/block}
     {/block}
 
@@ -43,7 +45,6 @@
         {script_tag src="/libs/modernizr-2.5.0.min.js"}
         {block name="js-library"}{/block}
         {script_tag src="/onm/scripts.js"}
-        {script_tag src="/validation.js"}
         {script_tag src="/tiny_mce/tiny_mce_gzip.js"}
      {/block}
 

@@ -8,6 +8,7 @@ Opinion Authors
 Articles
 --------
 - Batch actions
+- In the listing mark those that are in frontpage with a mark.
 
 Newsletter
 -------- --
@@ -19,6 +20,11 @@ Trash
 - Unable to (batch) delete static pages
 
 Polls
+-----
+- Review add items
+- Port js code to jQuery
+
+Files
 -----
 - Review add items
 - Port js code to jQuery

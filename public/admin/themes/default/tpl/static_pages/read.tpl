@@ -1,22 +1,16 @@
 {extends file="base/admin.tpl"}
-{block name="header-css" append}
-    <style type="text/css">
-    label {
-        display:block;
-        color:#666;
-        text-transform:uppercase;
-        padding: 5px;
-    }
-    td {
-        padding: 10px;
-    }
-    .utilities-conf label {
-        text-transform:none;
-    }
-    </style>
+{block name="footer-js" append}
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+    $('#formulario').onmValidate({
+        'lang' : 'gl'
+    });
+});
+
+</script>
 {/block}
 {block name="content"}
-<form action="{if isset($page->id)}{url name=admin_staticpages_update id=$page->id}{else}{url name=admin_staticpages_create}{/if}" method="POST">
+<form action="{if isset($page->id)}{url name=admin_staticpages_update id=$page->id}{else}{url name=admin_staticpages_create}{/if}" method="POST" id="formulario">
     <div class="top-action-bar">
         <div class="wrapper-content">
             <div class="title"><h2>{t}Static Pages Manager{/t} :: {t}Editing page{/t}</h2></div>
@@ -41,72 +35,59 @@
     	</div>
     </div>
     <div class="wrapper-content">
-        <table class="adminform" style="padding:10px;">
-            <tbody>
-            <tr>
-                <td>
-                    <label for="title">{t}Title{/t}</label>
-                    <input type="text" id="title" name="title" title="{t}Page title{/t}" value="{$page->title|default:""}"
-                           class="required" style="width:99%" maxlength="120" tabindex="1" />
-                </td>
-                <td>
-                    {acl isAllowed="STATIC_AVAILABLE"}
-                    <div>
-                        <label for="available">{t}Published{/t}</label>
-                        <select name="available" id="available" class="required" tabindex="4">
-                            <option value="1"{if isset($page->available) && $page->available eq 1} selected="selected"{/if}>{t}Yes{/t}</option>
-                            <option value="0"{if isset($page->available) && $page->available eq 0} selected="selected"{/if}>{t}No{/t}</option>
-                        </select>
-                    </div>
-                    {/acl}
-                </td>
-            </tr>
 
-            <tr>
-                <td>
-                    <label for="slug">{t}Direction:{/t}</label>
-                    <span>{$smarty.const.SITE_URL}{$smarty.const.STATIC_PAGE_PATH} </span>
-                    <input type="text" id="slug" name="slug" title="{t}Keywords{/t}" value="{$page->slug|default:""}"
-                           class="required" style="width:60%;display:inline;" maxlength="120" tabindex="2" />
-                    <span>.html</span>
-                </td>
-                <td>
+        <div class="form-horizontal panel">
+            <div class="control-group">
+                <label for="name" class="control-label">{t}Title{/t}</label>
+                <div class="controls">
+                    <input type="text" id="title" name="title" value="{$page->title|default:""}"
+                           maxlength="120" tabindex="1" required="required"  class="input-xlarge"/>
+                </div>
+            </div>
 
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label for="metadata">{t}Keywords{/t} <small>{t}(separated with comas){/t}</small> </label>
-                    <input type="text" name="metadata" id="metadata" style="width:99%" tabindex="6" value="{$page->metadata|default:""}" />
-                </td>
-                <td>
+            <div class="control-group">
+                <label for="url" class="control-label">{t}URL{/t}</label>
+                <div class="controls">
+                    <input type="text" id="slug" name="slug" value="{$page->slug|default:""}"
+                           maxlength="120" tabindex="2" required="required"  class="input-xxlarge"/>
+                    <span class="help-block">{t}The slug component in the url{/t}: {$smarty.const.SITE_URL}{$smarty.const.STATIC_PAGE_PATH}/slug.html
+                </div>
+            </div>
 
-                </td>
+            {acl isAllowed="STATIC_AVAILABLE"}
+            <div class="control-group">
+                <label for="name" class="control-label">{t}Published{/t}</label>
+                <div class="controls">
+                    <select name="available" id="available" tabindex="4">
+                        <option value="1"{if isset($page->available) && $page->available eq 1} selected="selected"{/if}>{t}Yes{/t}</option>
+                        <option value="0"{if isset($page->available) && $page->available eq 0} selected="selected"{/if}>{t}No{/t}</option>
+                    </select>
+                </div>
+            </div>
+            {/acl}
 
-            </tr>
+            <div class="control-group">
+                <label for="description" class="control-label">{t}Description{/t}</label>
+                <div class="controls">
+                    <input type="text" name="description" id="description" rows="4" tabindex="5" class="input-xxlarge" value="{$page->description|default:""}">
+                </div>
+            </div>
 
-            <tr>
-                <td>
-                    <label for="description">{t}Description:{/t}</label> <br />
-                    <textarea name="description" id="description" rows="4" cols="30" style="width:99%"  tabindex="5">{$page->description|default:""}</textarea>
-                </td>
-                <td>
+            <div class="control-group">
+                <label for="body" class="control-label">{t}Body{/t}</label>
+                <div class="controls">
+                    <textarea name="body" id="body" rows="4" required="required" tabindex="7" style="width:100%; height:20em;">{$page->body|default:""}</textarea>
+                </div>
+            </div>
 
-                </td>
-            </tr>
-
-            <tr>
-                <td>
-                    <label for="body">{t}Body{/t}</label>
-                    <textarea name="body" id="body" tabindex="3" title="{t}Page content{/t}" style="width:100%; height:20em;">{$page->body|default:""}</textarea>
-                </td>
-                <td>
-
-                </td>
-            </tr>
-
-            </tbody>
-        </table>
+            <div class="control-group">
+                <label for="metadata" class="control-label">{t}Metadata{/t}</label>
+                <div class="controls">
+                    <input type="text" id="metadata" name="metadata" value="{$page->metadata|default:""}"
+                           tabindex="6" required="required"  class="input-xxlarge"/>
+                </div>
+            </div>
+        </div>
     </div>
 
 
