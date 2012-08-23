@@ -103,6 +103,8 @@ class Bootstrap extends ModuleBootstrap
         $locale = \Application::$language.".UTF-8";
         $domain = 'messages';
 
+        define('CURRENT_LANGUAGE', \Application::$language);
+
         $localeDir = SITE_ADMIN_PATH.DS.'locale'.DS;
 
         if (isset($_GET["locale"])) {
