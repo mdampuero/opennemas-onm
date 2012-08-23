@@ -1,26 +1,28 @@
-<div id="photo-{$photo->id}" class="photo-edit tabs">
+<div id="photo-{$photo->id}" class="form-vertical photo-edit tabs">
     <ul>
         <li><a href="#basic-{$photo->id}" title="">{t}Basic information{/t}</a></li>
         <li><a href="#geolocation-{$photo->id}" title="">{t}Geolocation{/t}</a></li>
         <li><a href="#additional-info-{$photo->id}" title="">{t escape=off}EXIF &amp; IPTC{/t}</a></li>
     </ul><!-- / -->
-    <div id="basic-{$photo->id}">
-        <div class="image-preview">
-            {if preg_match('/^swf$/i', $photo->type_img)}
-                <object width="" height="">
-                    <param name="wmode" value="transparent"
-                           value="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}"/>
-                    <embed wmode="transparent"
-                           src="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}"></embed>
-                </object>
-                <!-- <img style="width:16px;height:16px;border:none;"  src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/flash.gif" /> -->
-            {else}
-                <img src="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}" onunload="GUnload()" />
-            {/if}
-        </div>
+    <div id="basic-{$photo->id}" class="clearfix">
+        <div style="width:330px; display:inline-block;" class="pull-left clearfix">
+            <div class="thumbnail">
+                {if preg_match('/^swf$/i', $photo->type_img)}
+                    <object width="" height="">
+                        <param name="wmode" value="transparent"
+                               value="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}"/>
+                        <embed wmode="transparent"
+                               src="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}"></embed>
+                    </object>
+                    <!-- <img style="width:16px;height:16px;border:none;"  src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/flash.gif" /> -->
+                {else}
+                    <img src="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}" onunload="GUnload()" />
+                {/if}
+            </div>
 
-        <div class="photo-basic-information">
-            <div class="photo-static-info">
+            <br>
+
+            <div class="well">
                 <div><label>{t}Original filename:{/t}</label> {$photo->title}</div>
                 <div><label>{t}File:{/t}</label> {$photo->name}</div>
                 <div><label>{t}Resolution:{/t}</label> {$photo->width} x {$photo->height} (px)</div>
@@ -34,10 +36,17 @@
                     </a>
                 </div>
             </div>
+        </div>
+
+        <div class="photo-basic-information">
+
             <div>
-                <label>{t}Description:{/t}</label> <br />
-                <textarea class="required" id="description-{$photo->id}" name="description[{$photo->id}]"
-                    title="descripcion" rows="2" style="width:96%">{$photo->description|clearslash|escape:'html'}</textarea>
+                <div class="control-group">
+                    <label for="description-{$photo->id}" class="control-label">{t}Description{/t}</label>
+                    <div class="controls">
+                        <textarea required="required" id="description-{$photo->id}" name="description[{$photo->id}]"  class="input-xxlarge"
+                            rows="2">{$photo->description|clearslash|escape:'html'}</textarea>
+                    </div>
                     <script type="text/javascript">
                     jQuery(document).ready(function() {
                         jQuery('#description-{$photo->id}').on('change', function(e, ui) {
@@ -45,30 +54,40 @@
                         });
                     });
                     </script>
-                <label for="title">{t}Keywords:{/t}</label>
-                <textarea id="metadata-{$photo->id}" name="metadata[{$photo->id}]"
-                    title="Metadatos"  rows="2"  style="width:96%" >{$photo->metadata|strip}</textarea>
-
-                <div style="display:inline-block; width:35%; margin-right:20px;">
-                    <label for="author_name[{$photo->id}]">Autor:</label><br>
-
-                    <input type="text" id="author_name[{$photo->id}]" name="author_name[{$photo->id}]"
-                        value='{$photo->author_name|clearslash|escape:'html'}' />
                 </div>
-                <div style="display:inline-block; width:35%">
-                    <label for="date-{$photo->id}">{t}Date:{/t}</label><br>
-
-                    <input type="text" id="date-{$photo->id}" name="date[{$photo->id}]"
-                        value="{$photo->date|date_format:"%Y-%m-%d %H:%M:%S"}" />
+                <div class="control-group">
+                    <label for="metadata-{$photo->id}" class="control-label">{t}Keywords{/t}</label>
+                    <div class="controls">
+                        <textarea id="metadata-{$photo->id}" name="metadata[{$photo->id}]" rows="2"  class="input-xxlarge" required="required">{$photo->metadata|strip}</textarea>
+                        <div class="help-block">{t}Used for searches and automated suggestions.{/t}</div>
+                    </div>
                 </div>
 
-                <div style="display:inline-block; width:25%">
-                    <label>{t}Color:{/t}</label><br/>
-                    <select name="color[{$photo->id}]" id="color[{$photo->id}]" style="width:80px;height:28px;margin-left:20px;"/>
-                        <option value="{t}color{/t}" {if $photo->color eq 'color'} selected {/if}>{t}Color{/t}</option>
-                        <option value="{t}bw{/t}" {if $photo->color eq 'bw'} selected {/if}>{t}B/W{/t}</option>
-                    </select>
-                </div><!-- / -->
+                <div class="control-group">
+                    <label for="author_name[{$photo->id}]" class="control-label">{t}Copyright{/t}</label>
+                    <div class="controls">
+                        <input type="text" id="author_name[{$photo->id}]" name="author_name[{$photo->id}]"
+                            value='{$photo->author_name|clearslash|escape:'html'}'/>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label for="date-{$photo->id}" class="control-label">{t}Date{/t}</label>
+                    <div class="controls">
+                        <input type="text" id="date-{$photo->id}" name="date[{$photo->id}]"
+                            value='{$photo->date|date_format:"%Y-%m-%d %H:%M:%S"}'/>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label for="color[{$photo->id}]" class="control-label">{t}Color{/t}</label>
+                    <div class="controls">
+                        <select name="color[{$photo->id}]" id="color[{$photo->id}]" style="width:80px;height:28px;margin-left:20px;"/>
+                            <option value="{t}color{/t}" {if $photo->color eq 'color'} selected {/if}>{t}Color{/t}</option>
+                            <option value="{t}bw{/t}" {if $photo->color eq 'bw'} selected {/if}>{t}B/W{/t}</option>
+                        </select>
+                    </div>
+                </div>
             </div>
         </div><!-- /basic -->
     </div>

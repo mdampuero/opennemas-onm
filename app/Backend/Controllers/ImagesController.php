@@ -565,7 +565,7 @@ class ImagesController extends Controller
         }
 
         if (count($ids) > 0) {
-            m::add(sprintf(_('Data successfully saved for %d photos'), $photosSaved));
+            m::add(sprintf(_('Data successfully saved for %d photos'), $photosSaved), m::SUCCESS);
         }
 
         if ($action == 'validate') {

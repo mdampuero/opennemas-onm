@@ -2,9 +2,15 @@
 
 {block name="footer-js" append}
     <script type="text/javascript">
-    jQuery('#title').on('change', function(e, ui) {
-        fill_tags(jQuery('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
-    });
+        jQuery(document).ready(function($) {
+            $('#title').on('change', function(e, ui) {
+                fill_tags(jQuery('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
+            });
+            $('#formulario').onmValidate({
+                'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
+            });
+        });
+
     </script>
 {/block}
 
@@ -31,98 +37,76 @@
         </div>
     </div>
 
-    <div class="wrapper-content">
+    <div class="wrapper-content panel">
 
         {render_messages}
 
-		<table class="adminform">
-			<tbody>
-				<tr>
-					<td valign="top" align="right" style="padding:4px;" width="30%">
-						<label for="title">{t}Title:{/t}</label>
-					</td>
-					<td style="padding:4px;" nowrap="nowrap" width="70%">
-						<input type="text" id="title" name="title" title="Título de la noticia"
-							value="{$attaches->title|clearslash}" class="required" size="100" />
-						<input type="hidden" id="category" name="category" title="Fichero"
-							value="{$attaches->category}" />
-						<input type="hidden" id="fich" name="fich" title="Fichero"
-							value="{$attaches->pk_attachment}" />
+        <div class="form-horizontal">
+            <div class="control-group">
+                <label for="" class="control-label">{t}Title{/t}</label>
+                <div class="controls">
+                    <input type="text" id="title" name="title" value="{$attaches->title|clearslash}"
+                        class="input-xlarge" required="required">
+                </div>
+            </div>
 
-					</td>
-				</tr>
+            <div class="control-group">
+                <label for="metadata" class="control-label">{t}Metadata{/t}</label>
+                <div class="controls">
+                    <input type="text" id="metadata" name="metadata" value="{$attaches->metadata|clearslash}" class="input-xlarge" required="required">
+                </div>
+            </div>
 
-                <tr>
-                    <td valign="top" align="right" style="padding:4px;" width="30%">
-                        <label for="title">{t}Metadata:{/t}</label>
-                    </td>
-                    <td style="padding:4px;" nowrap="nowrap" width="70%">
-                        <input type="text" id="metadata" name="metadata" title="path"
-                            value="{$attaches->metadata|clearslash}" class="required" size="100" />
-                    </td>
-                </tr>
+            <div class="control-group">
+                <label for="description" class="control-label">{t}Description{/t}</label>
+                <div class="controls">
+                    <textarea id="description" name="description" class="input-xlarge" required="required"
+                                    class="required">{$attaches->description|clearslash}</textarea>
+                </div>
+            </div>
 
-                {if !is_null($attaches)}
-				<tr>
-					<td valign="top" align="right" style="padding:4px;" width="30%">
-						<label for="title">{t}Path:{/t}</label>
-					</td>
-					<td style="padding:4px;" nowrap="nowrap" width="70%">
-						<input type="text" id="path" name="path" title="path" readonly
-							value="{$attaches->path|clearslash}" class="required" size="100" />
-					</td>
-				</tr>
-                {else}
-                <tr>
-                    <td valign="top" align="right" style="padding:4px;" width="30%">
-                        <label for="title">{t}Path:{/t}</label>
-                    </td>
-                    <td style="padding:4px;" nowrap="nowrap" width="70%">
-                        <input type="file" id="path" name="path" value="" class="required" />
-                    </td>
-                </tr>
-                {/if}
+            <div class="control-group">
+                <label for="path" class="control-label">{t}Path{/t}</label>
+                <div class="controls">
+                    {if !is_null($attaches)}
+                    <input type="text" id="path" name="path" value="{$attaches->path|clearslash}" class="input-xlarge" required="required" readonly="readonly">
+                    {else}
+                    <input type="file" id="path" name="path" value="" required="required" />
+                    {/if}
+                </div>
+            </div>
 
-                <tr>
-                    <td valign="top" align="right" style="padding:4px;" width="30%">
-                        <label for="title">{t}Category:{/t}</label>
-                    </td>
-                    <td style="padding:4px;" nowrap="nowrap" width="70%">
-                        <select name="category" id="category" class="validate-section">
-                            <option value="20" data-name="{t}Unknown{/t}" {if !isset($category)}selected{/if}>{t}Unknown{/t}</option>
-                            {section name=as loop=$allcategorys}
-                                {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
-                                <option value="{$allcategorys[as]->pk_content_category}" data-name="{$allcategorys[as]->title}"
-                                {if (($category == $allcategorys[as]->pk_content_category))
-                                || $attaches->category eq $allcategorys[as]->pk_content_category}selected{/if}>{$allcategorys[as]->title}</option>
-                                {section name=su loop=$subcat[as]}
-                                    {if $subcat[as][su]->internal_category eq 1}
-                                        <option value="{$subcat[as][su]->pk_content_category}" data-name="{$subcat[as][su]->title}"
-                                        {if $category eq $subcat[as][su]->pk_content_category || $attaches->category eq $subcat[as][su]->pk_content_category}selected{/if} >&nbsp;&nbsp;|_&nbsp;&nbsp;{$subcat[as][su]->title}</option>
-                                    {/if}
-                                {/section}
-                                {/acl}
+            <div class="control-group">
+                <label for="category" class="control-label">{t}Category{/t}</label>
+                <div class="controls">
+                    <select name="category" id="category" required="required">
+                        <option value="20" data-name="{t}Unknown{/t}" {if !isset($category)}selected{/if}>{t}Unknown{/t}</option>
+                        {section name=as loop=$allcategorys}
+                            {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
+                            <option value="{$allcategorys[as]->pk_content_category}" data-name="{$allcategorys[as]->title}"
+                            {if (($category == $allcategorys[as]->pk_content_category))
+                            || $attaches->category eq $allcategorys[as]->pk_content_category}selected{/if}>{$allcategorys[as]->title}</option>
+                            {section name=su loop=$subcat[as]}
+                                {if $subcat[as][su]->internal_category eq 1}
+                                    <option value="{$subcat[as][su]->pk_content_category}" data-name="{$subcat[as][su]->title}"
+                                    {if $category eq $subcat[as][su]->pk_content_category || $attaches->category eq $subcat[as][su]->pk_content_category}selected{/if} >&nbsp;&nbsp;|_&nbsp;&nbsp;{$subcat[as][su]->title}</option>
+                                {/if}
                             {/section}
-                        </select>
-                    </td>
-                </tr>
+                            {/acl}
+                        {/section}
+                    </select>
+                </div>
+            </div>
+        </div>
 
-				<tr>
-					<td valign="top" align="right" style="padding:4px;" width="30%">
-						<label for="title">{t}Descripcion:{/t}</label>
-					</td>
-					<td style="padding:4px;" nowrap="nowrap" width="70%">
-						<textarea id="description" name="description" title="path"
-							class="required">{$attaches->description|clearslash}</textarea>
-					</td>
-				</tr>
-                {if !is_null($attaches)}
-                <input type="hidden" name="id" id="id" value="{$attaches->id|default:""}" />
-                {/if}
-                <input type="hidden" name="page" id="page" value="{$page|default:"1"}" />
-			</tbody>
-		</table>
-
-</div>
+        {if !is_null($attaches)}
+        <input type="hidden" name="id" id="id" value="{$attaches->id|default:""}" />
+        <input type="hidden" id="category" name="category" title="Fichero"
+            value="{$attaches->category}" />
+        <input type="hidden" id="fich" name="fich" title="Fichero"
+            value="{$attaches->pk_attachment}" />
+        {/if}
+        <input type="hidden" name="page" id="page" value="{$page|default:"1"}" />
+    </div>
 </form>
 {/block}

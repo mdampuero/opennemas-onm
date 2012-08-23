@@ -4,31 +4,22 @@
     {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
     {script_tag src="/jquery/jquery-ui-sliderAccess.js"}
     {script_tag src="/onm/jquery.datepicker.js"}
-    <script>
-    try {
-        new Validation('form_upload', { immediate : true });
-        Validation.addAllThese([
-            [
-                'validate-password',
-                '{t}Your password must contain 5 characters and dont contain the word <password> or your user name.{/t}',
-                {
-                    minLength : 6,
-                    notOneOf : ['password','PASSWORD','Password'],
-                    notEqualToField : 'login'
-                }
-            ],
-            [
-                'validate-password-confirm',
-                '{t}Please check your first password and check again.{/t}',
-                { equalToField : 'password' }
-            ]
-        ]);
-    } catch(e) { }
-    </script>
+
     <script src="http://maps.google.com/maps?file=api&amp;sensor=true&amp;key={setting name=google_maps_api_key}"></script>
 {/block}
+
+{block name="footer-js" append}
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+    $('#formulario').onmValidate({
+        'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
+    });
+});
+</script>
+{/block}
+
 {block name="content"}
-<form id="form_upload" name="form_upload" action="{url name=admin_image_update}" method="POST">
+<form id="formulario" name="form_upload" action="{url name=admin_image_update}" method="POST">
     <div class="top-action-bar">
         <div class="wrapper-content">
             <div class="title"><h2> {t 1=$datos_cat[0]->title}Image manager:: Editing "%1"{/t}</h2></div>

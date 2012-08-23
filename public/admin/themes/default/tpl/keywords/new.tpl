@@ -2,28 +2,16 @@
 
 {block name="footer-js" append}
 <script type="text/javascript">
-    var searching = false;
-
-    new Form.Element.Observer(
-        'pclave',
-        0.4,
-        function() {
-            var valor = $('pclave').value;
-            if((valor.length >= 4) && (!searching)) {
-                searching = true;
-                new Ajax.Updater('similarKeywords', '?action=search&q='+valor+'&id='+$('id').value, {
-                    onSuccess: function() {
-                        searching = false;
-                    }
-                });
-            }
-        }
-    );
+jQuery(document).ready(function($) {
+    $('#formulario').onmValidate({
+        'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
+    });
+});
 </script>
 {/block}
 
 {block name="content"}
-<form id="formulario" name="formulario" action="{if $keyword->id}{url name=admin_keyword_update id=$keyword->id}{else}{url name=admin_keyword_create}{/if}" method="POST">
+<form id="formulario" name="formulario" action="{if $keyword->id}{url name=admin_keyword_update id=$keyword->id}{else}{url name=admin_keyword_create}{/if}" method="POST" id="formulario">
 
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
@@ -54,13 +42,13 @@
                     <label class="control-label" for="pclave">{t}Name{/t}</label>
                     <div class="controls">
                         <input type="text" id="pclave" name="pclave" value="{$keyword->pclave|default:""}"
-                               class="required input-xlarge" size="30" maxlength="60" />
+                               class="input-xlarge" size="30" maxlength="60" required="required"/>
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="tipo">{t}Type{/t}</label>
                     <div class="controls">
-                        <select name="tipo" id="tipo">
+                        <select name="tipo" id="tipo" required="required">
                             {html_options options=$tipos selected=$keyword->tipo|default:""}
                         </select>
                     </div>
@@ -68,7 +56,7 @@
                 <div class="control-group">
                     <label class="control-label" for="value">{t}Value{/t}</label>
                     <div class="controls">
-                       <input type="text" id="value" name="value" value="{$keyword->value|default:""}" class="required input-xlarge"/>
+                       <input type="text" id="value" name="value" value="{$keyword->value|default:""}" class="input-xlarge" required="required"/>
                     </div>
                 </div>
             </fieldset>

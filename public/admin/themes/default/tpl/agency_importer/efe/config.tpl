@@ -1,25 +1,17 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-    <style type="text/css">
-    label {
-        width:150px;
-        padding-left:10px;
-        display:inline-block;
-    }
-    input[type="text"],
-    input[type="password"] {
-        width:300px;
-    }
-    .form-wrapper {
-        margin:10px auto;
-        width:50%;
-    }
-    </style>
+{block name="footer-js" append}
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+    $('#formulario').onmValidate({
+        'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
+    });
+});
+</script>
 {/block}
 
 {block name="content"}
-<form action="{url name=admin_importer_efe_config}" method="POST">
+<form action="{url name=admin_importer_efe_config}" method="POST" id="formulario">
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
         <div class="title"><h2>{t}EFE importer{/t} :: {t}Module configuration{/t}</h2></div>
@@ -46,35 +38,35 @@
         <div class="control-group">
             <label for="server" class="control-label">{t}Server{/t}</label>
             <div class="controls">
-                <input type="text" id="server" name="server" value="{$server}" class="required input-xlarge" required/>
+                <input type="text" id="server" name="server" value="{$server}" class="input-xlarge" required="required"/>
             </div>
         </div>
 
         <div class="control-group">
             <label for="username" class="control-label">{t}Username{/t}</label>
             <div class="controls">
-                <input type="text" id="username" name="username" value="{$username}" class="required input-xlarge" required/>
+                <input type="text" id="username" name="username" value="{$username}" class="input-xlarge" required="required"/>
             </div>
         </div>
 
         <div class="control-group">
             <label for="password" class="control-label">{t}Password{/t}</label>
             <div class="controls">
-                <input type="text" id="password" name="password" value="{$password}" class="required input-xlarge" required/>
+                <input type="text" id="password" name="password" value="{$password}" class="input-xlarge" required="required"/>
             </div>
         </div>
 
         <div class="control-group">
             <label for="agency_string" class="control-label">{t}Agency{/t}</label>
             <div class="controls">
-                <input type="text" id="agency_string" name="agency_string" value="{$agency_string}" class="required input-xlarge" required/>
+                <input type="text" id="agency_string" name="agency_string" value="{$agency_string}" class="input-xlarge" required="required"/>
             </div>
         </div>
 
         <div class="control-group">
             <label for="sync_from" class="control-label">{t}Sync elements newer than{/t}</label>
             <div class="controls">
-                <select name="sync_from" required>
+                <select name="sync_from" required="required">
                     {html_options options=$sync_from selected=$sync_from_setting|default:""}
                 </select>
             </div>
