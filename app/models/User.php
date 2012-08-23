@@ -220,7 +220,7 @@ class User
                     VALUES (?,?)";
 
             $values = array();
-            for ($iIndex=0; $iIndex<count($IdsCategory); $iIndex++) {
+            for ($iIndex = 0; $iIndex < count($IdsCategory); $iIndex++) {
                 $values[] = array($this->id, $IdsCategory[$iIndex]);
             }
 
@@ -513,7 +513,7 @@ class User
         return null;
     }
 
-    public function getAccessCategoryIds($id=null)
+    public function getAccessCategoryIds($id = null)
     {
         if ( empty($this->accesscategories) ) {
             $this->accesscategories = $this->readAccessCategories($id);
@@ -539,7 +539,7 @@ class User
         return $ids;
     }
 
-    public function get_users($filter=null, $_order_by='ORDER BY 1')
+    public function get_users($filter = null, $_order_by = 'ORDER BY 1')
     {
         $items = array();
         $_where = $this->buildFilter($filter);

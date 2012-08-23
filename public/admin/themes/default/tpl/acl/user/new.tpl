@@ -3,11 +3,15 @@
 {block name="prototype"}{/block}
 
 {block name="footer-js" append}
-    <script>
-        jQuery(document).ready(function($){
-            $("#user-editing-form").tabs();
-        })
-    </script>
+<script>
+    jQuery(document).ready(function($){
+        $("#user-editing-form").tabs();
+
+        $('#formulario').onmValidate({
+            'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
+        });
+    });
+</script>
 {/block}
 
 
@@ -20,7 +24,7 @@ label {
 {/block}
 
 {block name="content"}
-<form action="{if isset($user->id)}{url name=admin_acl_user_update id=$user->id}{else}{url name=admin_acl_user_create}{/if}" method="POST">
+<form action="{if isset($user->id)}{url name=admin_acl_user_update id=$user->id}{else}{url name=admin_acl_user_create}{/if}" method="POST" id="formulario">
 
 	<div class="top-action-bar clearfix">
 		<div class="wrapper-content">
@@ -58,7 +62,7 @@ label {
                     <div class="control-group">
                         <label for="login" class="control-label">{t}User name{/t}</label>
                         <div class="controls">
-                            <input type="text" id="login" name="login" value="{$user->login|default:""}" class="input-xlarge required" maxlength="20"/>
+                            <input type="text" id="login" name="login" value="{$user->login|default:""}" class="input-xlarge" required=required maxlength="20"/>
                         </div>
                     </div>
 
@@ -66,7 +70,7 @@ label {
                         <label for="login" class="control-label">{t}Email{/t}</label>
                         <div class="controls">
                             <div class="input-prepend">
-                                <span class="add-on">@</span><input class="span2" id="email" type="email" name="email" value="{$user->email}" class="required validate-email"  size="50">
+                                <span class="add-on">@</span><input class="span2" id="email" type="email" name="email" value="{$user->email}" required="required"  size="50">
                             </div>
                             <div class="help-block">
                                 {t escape=off}Sign up in <a href="http://www.gravatar.com">gravatar.com</a> and ensure that you use the same email as you have here in OpenNemas{/t}

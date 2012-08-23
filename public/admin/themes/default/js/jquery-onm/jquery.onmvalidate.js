@@ -2,29 +2,32 @@
 
     var helpers = {
         find_container : function(input) {
-            return input.parent().parent();
+            return input.closest('.control-group');
         },
         remove_validation_markup: function(input) {
-            var cont = helpers.find_container(input);
-            cont.removeClass('error success warning');
-            $('.help-inline.error, .help-inline.success, .help-inline.warning', cont).remove();
+            var container = helpers.find_container(input);
+            container.removeClass('error success warning');
+            $('.help-inline.error, .help-inline.success, .help-inline.warning', container).remove();
         },
-        add_validation_markup: function (input, cls, caption) {
-            var cont = helpers.find_container(input);
-            cont.addClass(cls);
-            input.addClass(cls);
+        add_validation_markup: function (input, css_class, caption) {
+            var container = helpers.find_container(input);
+            container.addClass(css_class);
+            input.addClass(css_class);
 
             if (caption) {
                 var msg = $('<span class="help-inline"/>');
-                msg.addClass(cls);
+                msg.addClass(css_class);
                 msg.text(caption);
-                input.after(msg);
+                if (input.parent().is('.input-prepend, .input-append')) {
+                    input.parent().after(msg);
+                } else {
+                    input.after(msg);
+                }
             }
         },
-        remove_all_validation_markup: function (form) {
-            $('.help-inline.error, .help-inline.success, .help-inline.warning',
-                form).remove();
-            $('.error, .success, .warning', form).removeClass('error success warning');
+        remove_all_validation_markup: function (container) {
+            $('.help-inline.error, .help-inline.success, .help-inline.warning', container).remove();
+            $('.error, .success, .warning', container).removeClass('error success warning');
         }
     };
 
@@ -72,6 +75,11 @@
                             $.each(errors, function() {
                                 var err = this;
                                 var input = $(err.input);
+                                var panel = input.closest('.ui-tabs-panel');
+                                if (panel) {
+                                    var panel_id = panel.attr('id');
+                                    var tabs = $(panel.closest('.ui-tabs')).tabs('select', panel_id);
+                                }
                                 helpers.remove_validation_markup(input);
                                 helpers.add_validation_markup(input, 'error', err.messages.join(' '));
                             });

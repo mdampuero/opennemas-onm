@@ -1,7 +1,17 @@
 {extends file="base/admin.tpl"}
 
+{block name="footer-js" append}
+    <script type="text/javascript">
+    jQuery(document).ready(function($) {
+        $('#formulario').onmValidate({
+            'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
+        });
+    });
+    </script>
+{/block}
+
 {block name="content"}
-<form action="{if isset($user_group->id)}{url name="admin_acl_usergroups_update" id=$user_group->id}{else}{url name="admin_acl_usergroups_create"}{/if}" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
+<form action="{if isset($user_group->id)}{url name="admin_acl_usergroups_update" id=$user_group->id}{else}{url name="admin_acl_usergroups_create"}{/if}" method="post" name="formulario" id="formulario">
 
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
@@ -34,44 +44,39 @@
             <div class="control-group">
                 <label for="name" class="control-label">{t}Group name{/t}</label>
                 <div class="controls">
-                    <input type="text" id="name" name="name" value="{$user_group->name}" class="required input-xlarge"
+                    <input type="text" id="name" name="name" value="{$user_group->name}" class="input-xlarge" required="required"
                         {if $user_group->name eq $smarty.const.SYS_NAME_GROUP_ADMIN}disabled="disabled"{/if} />
                 </div>
             </div>
-            <div class="control-group">
+            <div class="control-group" id="privileges">
                 <label for="privileges" class="control-label">{t}Privileges{/t}</label>
                 <div class="controls">
-                    {foreach item=privileges from=$modules key=mod name=priv}
-                    <div style="width:90%">
-                        <div>
-                            <table  class="listing-table">
-                                <thead>
-                                    <tr>
-                                        <th colspan=2 onClick="Element.toggle('{$mod}');" style="cursor:pointer;">{$mod}</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="{$mod}" style="display:none">
-                                {section name=privilege loop=$privileges}
-                                    <tr>
-                                        <td style="padding:4px;" nowrap="nowrap" width="5%">
-                                         <label style="cursor:pointer;">
-                                        {if $user_group->containsPrivilege($privileges[privilege]->id)}
-                                           <input type="checkbox" name="privileges[]" id="privileges[]" value="{$privileges[privilege]->id}" checked>
-                                           <script  type="text/javascript">
-                                                $('{$mod}').setStyle('display:block');
-                                           </script>
 
-                                        {else}
-                                           <input type="checkbox" name="privileges[]" id="privileges[]" value="{$privileges[privilege]->id}">
-                                        {/if}
-                                              {t}{$privileges[privilege]->description}{/t} </label>
-                                        </td>
-                                    </tr>
-                                {/section}
+                    {foreach item=privileges from=$modules key=mod name=priv}
+                    {if $smarty.foreach.priv.first || $smarty.foreach.priv.index % 2 == 0}<div style="display:block; width:100%" class="clearfix">{/if}
+                        <table  class="listing-table" style="display:inline-block; width:49%; float:left; margin-right:2px;">
+                            <thead>
+                                <tr>
+                                    <th colspan=2>{$mod}</th>
+                                </tr>
+                            </thead>
+                            <tbody id="{$mod}">
+                            {section name=privilege loop=$privileges}
+                                <tr>
+                                    <td style="padding:4px;" nowrap="nowrap" width="5%">
+                                     <label style="cursor:pointer;">
+                                    {if $user_group->containsPrivilege($privileges[privilege]->id)}
+                                       <input type="checkbox" name="privileges[]" id="privileges[]" value="{$privileges[privilege]->id}" checked>
+                                    {else}
+                                       <input type="checkbox" name="privileges[]" id="privileges[]" value="{$privileges[privilege]->id}">
+                                    {/if}
+                                        {t}{$privileges[privilege]->description}{/t} </label>
+                                    </td>
+                                </tr>
+                            {/section}
                             </tbody>
-                            </table>
-                        </div>
-                    </div>
+                        </table>
+                    {if $smarty.foreach.priv.last || $smarty.foreach.priv.index % 2 == 1}</div>{/if}
                     {/foreach}
                 </div>
             </div>

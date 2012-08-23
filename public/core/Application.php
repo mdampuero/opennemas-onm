@@ -353,12 +353,12 @@ class Application
 
 
     /* Events system */
-    public function register($event, $callback, $args=array())
+    public function register($event, $callback, $args = array())
     {
         $this->events[$event][] = array($callback, $args);
     }
 
-    public function dispatch($eventName, $instance, $args=array())
+    public function dispatch($eventName, $instance, $args = array())
     {
         if (isset($this->events[$eventName])) {
             $events = $this->events[$eventName];
@@ -486,10 +486,9 @@ class Application
     public static function setCookieSecure(
         $name,
         $value,
-        $expires =0,
-        $domain  ='/'
-    )
-    {
+        $expires = 0,
+        $domain = '/'
+    ) {
         setcookie($name, $value, $expires, $domain,
             $_SERVER['SERVER_NAME'], isset($_SERVER['HTTPS']), true);
     }
@@ -574,7 +573,7 @@ class Application
      * @return void
      * @author
      **/
-    public static function logContentEvent($action=null, $content=null)
+    public static function logContentEvent($action = null, $content = null)
     {
         $logger = Application::getLogger();
 
@@ -606,5 +605,5 @@ class Application
 
         return $errorMsg;
     }
-
 }
+

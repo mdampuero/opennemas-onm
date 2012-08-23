@@ -25,7 +25,6 @@
 {/block}
 
 {block name="footer-js" append}
-    {script_tag src="/jquery/jquery.min.js"}
     {script_tag src="/jquery/jquery_colorpicker/js/colorpicker.js"}
     {script_tag src="/tiny_mce/opennemas-config.js"}
 
@@ -34,7 +33,7 @@
     OpenNeMas.tinyMceConfig.footer.elements = "site_footer";
     tinyMCE.init( OpenNeMas.tinyMceConfig.footer );
 
-    jQuery(document).ready(function() {
+    jQuery(document).ready(function($) {
         jQuery("#system-settings-tabbed").tabs();
         //Color Picker jQuery
         jQuery('#site_color').ColorPicker({
@@ -59,6 +58,10 @@
                 jQuery('#site_logo_block').show();
             }
         }
+
+        $('#formulario').onmValidate({
+            'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
+        });
     });
     </script>
 {/block}
@@ -79,7 +82,7 @@
 
     {render_messages}
 
-    <form action="{url name="admin_system_settings_save"}" enctype="multipart/form-data" method="post">
+    <form action="{url name="admin_system_settings_save"}" enctype="multipart/form-data" method="POST" id="formulario">
         <div id="system-settings-tabbed" class="tabs">
             <ul>
                 <li><a href="#general">{t}General{/t}</a></li>
@@ -93,20 +96,26 @@
                     <div class="control-group">
                         <label for="site_name" class="control-label">{t}Site name{/t}</label>
                         <div class="controls">
-                            <input type="text" id="site_name" name="site_name" value="{$configs['site_name']|default:""}" class="input-xlarge">
+                            <input type="text" id="site_name" name="site_name" value="{$configs['site_name']|default:""}" class="input-xlarge" required="required">
                             <div class="help-block">{t}This will be displayed as your site name.{/t}</div>
                         </div>
+                    </div>
+                    <div class="control-group">
                         <label for="site_agency" class="control-label">{t}Site agency{/t}</label>
                         <div class="controls">
                             <input type="text" id="site_agency" name="site_agency" value="{$configs['site_agency']|default:""}" class="input-xlarge">
                             <div class="help-block">{t}This will be displayed as your article agency.{/t}</div>
                         </div>
+                    </div>
+                    <div class="control-group">
                         <label for="site_color" class="control-label">{t}Site color{/t}</label>
                         <div class="controls">
                             <input type="text" id="site_color" name="site_color" class="colorpicker_input" value="{$configs['site_color']|default:""}" class="input-xlarge">
                             <div class="colopicker_viewer" style="background-color:#{$configs['site_color']}"></div>
                             <div class="help-block">{t}Color used for links, menus and some widgets.{/t}</div>
                         </div>
+                    </div>
+                    <div class="control-group">
                         <label for="section_settings[allowLogo]" class="control-label">{t}Use logo in frontpage{/t}</label>
                         <div class="controls">
                             <select name="section_settings[allowLogo]" id="section_settings[allowLogo]" onChange="toogleSiteLogo(this.value);">
@@ -121,7 +130,9 @@
                         <div class="controls">
                             <input type="file" id="site_logo" name="site_logo">
                         </div>
+                    </div>
 
+                    <div class="control-group">
                         {if isset($configs['site_logo']) && $configs['section_settings']['allowLogo'] neq "0"}
                             <label for="site_logo"></label>
                             <div class="controls" >
