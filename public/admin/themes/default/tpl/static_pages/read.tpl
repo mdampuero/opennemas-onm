@@ -105,7 +105,6 @@ jQuery(document).ready(function($){
     var previous = null;
 
     jQuery("#title").on('blur', '', function(e){
-
         var slugy = jQuery.trim(jQuery('#slug').attr('value'));
         if ((slugy.length <= 0) && (previous!=slugy)) {
 
@@ -122,17 +121,15 @@ jQuery(document).ready(function($){
     });
 
     jQuery("#metadata").on('change', '', function(e){
-
         jQuery.ajax({
-                url:  "{url name=admin_staticpages_clean_metadata id=$page->id}",
-                type: "POST",
-                data: { action:"cleanMetadata", id:{$page->id}, metadata:jQuery('#metadata').attr('value') },
-                success: function(data){
-                    jQuery('#slug').attr('value', data);
-                    previous = jQuery('#slug').attr('value');
-                }
-            });
-
+            url:  "{url name=admin_staticpages_clean_metadata id=$page->id}",
+            type: "POST",
+            data: { action:"cleanMetadata", id:{$page->id}, metadata:jQuery('#metadata').attr('value') },
+            success: function(data){
+                jQuery('#slug').attr('value', data);
+                previous = jQuery('#slug').attr('value');
+            }
+        });
     });
 });
 /* ]]> */
