@@ -1,14 +1,5 @@
 {extends file="base/admin.tpl"}
-{block name="footer-js" append}
-<script type="text/javascript">
-jQuery(document).ready(function($) {
-    $('#formulario').onmValidate({
-        'lang' : 'gl'
-    });
-});
 
-</script>
-{/block}
 {block name="content"}
 <form action="{if isset($page->id)}{url name=admin_staticpages_update id=$page->id}{else}{url name=admin_staticpages_create}{/if}" method="POST" id="formulario">
     <div class="top-action-bar">
@@ -58,7 +49,7 @@ jQuery(document).ready(function($) {
             <div class="control-group">
                 <label for="name" class="control-label">{t}Published{/t}</label>
                 <div class="controls">
-                    <select name="available" id="available" tabindex="4">
+                    <select name="available" id="available" tabindex="3">
                         <option value="1"{if isset($page->available) && $page->available eq 1} selected="selected"{/if}>{t}Yes{/t}</option>
                         <option value="0"{if isset($page->available) && $page->available eq 0} selected="selected"{/if}>{t}No{/t}</option>
                     </select>
@@ -76,7 +67,7 @@ jQuery(document).ready(function($) {
             <div class="control-group">
                 <label for="body" class="control-label">{t}Body{/t}</label>
                 <div class="controls">
-                    <textarea name="body" id="body" rows="4" required="required" tabindex="7" style="width:100%; height:20em;">{$page->body|default:""}</textarea>
+                    <textarea name="body" id="body" rows="5" required="required" tabindex="5" style="height:20em;" class="input-xxxlarge">{$page->body|default:""}</textarea>
                 </div>
             </div>
 
@@ -96,7 +87,7 @@ jQuery(document).ready(function($) {
 </form>
 {/block}
 
-{block name="footer-js"}
+{block name="footer-js" append}
 
 {script_tag src="/tiny_mce/opennemas-config.js"}
 <script type="text/javascript">
@@ -107,6 +98,9 @@ tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
 
 jQuery(document).ready(function($){
 
+    $('#formulario').onmValidate({
+        'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
+    });
 
     var previous = null;
 
@@ -127,7 +121,7 @@ jQuery(document).ready(function($){
         }
     });
 
-    jQuery("#metadata").on('blur', '', function(e){
+    jQuery("#metadata").on('change', '', function(e){
 
         jQuery.ajax({
                 url:  "{url name=admin_staticpages_clean_metadata id=$page->id}",

@@ -69,7 +69,6 @@
                             });
                         })
                         .bind('onFail', function (e, errors) {
-                            log(errors)
                             $.each(errors, function() {
                                 var err = this;
                                 var input = $(err.input);

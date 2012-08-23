@@ -51,6 +51,7 @@ td {
 .table a.btn {font-weight:normal}
 .table tfoot td { padding:3px 9px !important; }
 .table tbody td.empty { padding:30px; text-align: center; font-size:13px;}
+.input-xxxlarge{ margin-left:630px}
 /* -------------------------------------------------------------
   LISTINGS
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */

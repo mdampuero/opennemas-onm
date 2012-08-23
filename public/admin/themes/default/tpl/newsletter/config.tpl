@@ -107,7 +107,7 @@ jQuery(document).ready(function($){
             <div class="control-group">
                 <label for="email" class="control-label">{t}Mailing list address{/t}</label>
                 <div class="controls">
-                    <input name="newsletter_maillist[email]" value="{$configs['newsletter_maillist']['email']|default:""}" id="email" class="input-xlarge" />
+                    <input type="email" name="newsletter_maillist[email]" value="{$configs['newsletter_maillist']['email']|default:""}" id="email" class="input-xlarge" />
                     <div class="help-block">{t}If you have a mailing list service to deliver newsletters add the address here{/t}</div>
                 </div>
             </div>
