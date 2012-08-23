@@ -157,9 +157,7 @@ class Menu
             return false;
         }
 
-        \MenuItems::setMenuElements($this->pk_menu, $data['items']);
-
-        return true;
+        return \MenuItems::setMenuElements($this->pk_menu, $data['items']);
     }
 
      /**

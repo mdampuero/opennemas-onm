@@ -252,9 +252,13 @@ class MenusController extends Controller
                 'pk_father' => $request->request->filter('pk_father', 'user', FILTER_SANITIZE_STRING),
                 'items'     => json_decode(json_decode($request->request->get('items'))),
             );
-            $menu->update($data);
 
-            m::add(_("Menu updated successfully."), m::SUCCESS);
+            if ($menu->update($data)) {
+                m::add(_("Menu updated successfully."), m::SUCCESS);
+            } else {
+                m::add(_("There was an error while updating the menu."), m::ERROR);
+            }
+
             if ($continue) {
                 return $this->redirect($this->generateUrl(
                     'admin_menu_show',

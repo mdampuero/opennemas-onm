@@ -29,7 +29,7 @@ class MenuItems
      *
      * @param int $id Privilege Id
     */
-    public function __construct($id=null)
+    public function __construct($id = null)
     {
 
     }
@@ -94,14 +94,15 @@ class MenuItems
         if (!empty($id) && !empty($items)) {
 
             $stmt = "INSERT INTO menu_items ".
-                    " (`pk_item`, `pk_menu`,`title`,`link_name`, `type`,`position`,`pk_father`) ".
-                    " VALUES (?,?,?,?,?,?,?)";
+                    " (`pk_item`, `pk_menu`, `title`, `link_name`, `type`, `position`, `pk_father`) ".
+                    " VALUES (?, ?, ?, ?, ?, ?, ?)";
 
             $values = array();
             $i = 1;
+            $saved = true;
 
             foreach ($items as $item) {
-                $values[] = array(
+                $values = array(
                     filter_var($item->id, FILTER_VALIDATE_INT),
                     (int) $id,
                     filter_var($item->title, FILTER_SANITIZE_STRING),
@@ -111,19 +112,15 @@ class MenuItems
                     filter_var($item->parent_id, FILTER_VALIDATE_INT) ?: 0,
                 );
                 $i++;
-            }
 
-            if (!empty($values)) {
                 $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
-
                 if ($rs === false) {
                     \Application::logDatabaseError();
-
-                    return false;
+                    $saved = $saved && ($rs !== false);
                 }
             }
 
-            return true;
+            return $saved;
         }
 
         return false;
@@ -152,5 +149,5 @@ class MenuItems
 
         return true;
     }
-
 }
+
