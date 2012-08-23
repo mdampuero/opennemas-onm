@@ -1427,7 +1427,7 @@ class ContentManager
             if (($filter == ' `contents`.`in_litter`=1')
                 || ($filter == 'in_litter=1')
             ) {
-                $_where = $filter;
+                $_where = ' AND '.$filter;
             } else {
                 $_where .= ' AND '.$filter;
             }

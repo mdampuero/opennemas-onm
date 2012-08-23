@@ -338,6 +338,7 @@ class Author
                 WHERE '.$_where. ' '.$_orderBy.' '.$limit ;
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
+
         $i  = 0;
         if ($rs) {
             while (!$rs->EOF) {
