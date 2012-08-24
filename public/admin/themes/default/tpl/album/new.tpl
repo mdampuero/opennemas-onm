@@ -13,11 +13,11 @@
 {block name="footer-js" append}
     {script_tag src="/utilsGallery.js" language="javascript"}
     <script>
-    try {
-        new Validation('formulario', { immediate : true });
-    } catch(e) { }
-
     jQuery(document).ready(function($){
+        $('#formulario').onmValidate({
+            'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
+        });
+
         $("#form-validate-button, #form-send-button").on("click", function(event) {
 
             var frontpage_image =  $(".album-frontpage-image");
@@ -34,15 +34,6 @@
             };
             return true;
         });
-    });
-    </script>
-
-    {script_tag src="/tiny_mce/opennemas-config.js"}
-    <script>
-    document.observe('dom:loaded', function() {
-        getGalleryImages('listByCategory','{$category}','','1');
-    });
-    jQuery(document).ready(function($){
 
         $('#album-contents').tabs();
         $( ".list-of-images ul" ).sortable({
@@ -165,13 +156,31 @@
             fill_tags(jQuery('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
         });
 
+        load_ajax_in_container('{url name=admin_images_content_provider_gallery category=$category}', $('#photos'));
+
+        $('#stringImageSearch, #category_imag').on('change', function(e, ui) {
+            var category = $('#category_imag option:selected').val();
+            var text = $('#stringImageSearch').val();
+            var url = '{url name=admin_images_content_provider_gallery}?'+'category='+category+'&metadatas='+encodeURIComponent(text);
+            load_ajax_in_container(
+                url,
+                $('#photos')
+            );
+        });
+
+        $('#photos').on('click', '.pagination a', function(e, ui) {
+            e.preventDefault();
+            var link = $(this);
+            load_ajax_in_container(link.attr('href'), $('#photos'));
+        });
+
     });
     </script>
 
 {/block}
 
 {block name="content"}
-<form action="{if isset($album->id)}{url name=admin_album_update id=$album->id}{else}{url name=admin_album_create}{/if}" method="POST">
+<form action="{if isset($album->id)}{url name=admin_album_update id=$album->id}{else}{url name=admin_album_create}{/if}" method="POST" id="formulario">
 
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
@@ -212,62 +221,66 @@
 
         {render_messages}
 
-        <div class="album-edit-form panel">
-            <table class="album-information">
-                <tbody>
-                    <tr>
-                        <td>
-                            <label for="title">{t}Title:{/t}</label>
-                            <input type="text" id="title" name="title" title={t}"Album"{/t}
-                                value="{$album->title|clearslash|escape:"html"}"
-                                class="required"
-                                style="width:98%;" />
-                        </td>
-                        <td rowspan="4" style="width:200px">
-                            <label for="title">{t}Available:{/t}</label>
-                            <input type="checkbox" value="{$album->available}" id="available" name="available" {if $album->available eq 1}checked="checked"{/if}>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div style="display:inline-block;width:30%;">
-                                <label for="category">{t}Category{/t}</label>
-                                <select name="category" id="category" style="width:98%">
-                                    {section name=as loop=$allcategorys}
-                                    {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
-                                    <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{t 1=$allcategorys[as]->title}%1{/t}</option>
-                                    {/acl}
-                                    {section name=su loop=$subcat[as]}
-                                        {acl hasCategoryAccess=$subcat[as]->pk_content_category}
-                                        <option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;|_&nbsp;&nbsp;{t 1=$subcat[as][su]->title}%1{/t}</option>
-                                        {/acl}
-                                    {/section}
-                                    {/section}
-                                </select>
-                            </div>
-                            <div style="display:inline-block;width:69%;">
-                                <label for="agency">{t}Agency{/t}</label>
-                                <input type="text" id="agency" name="agency" style="width:98%"
-                                    value="{$album->agency|clearslash|escape:"html"}" />
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label for="description">{t}Description{/t}</label>
-                            <textarea name="description" id="description" style="width:98%;" >{t 1=$album->description|clearslash|escape:"html"}%1{/t}</textarea>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label for="metadata">{t}Keywords:{/t}<small> ({t}Separated by coma{/t})</small></label>
-                            <input type="text" id="metadata" name="metadata" style="width:98%"
-                                   class="required" title={t}"Metadata"{/t} value="{$album->metadata}" />
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="form-horizontal album-edit-form panel">
+
+            <div class="control-group">
+                <label for="title" class="control-label">{t}Title{/t}</label>
+                <div class="controls">
+                    <input type="text" id="title" name="title" value="{$album->title|default:""}" class="input-xlarge" required="required"/>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="title" class="control-label">{t}Available{/t}</label>
+                <div class="controls">
+                    <input type="checkbox" value="{$album->available}" id="available" name="available" {if $album->available eq 1}checked="checked"{/if}>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="category" class="control-label">{t}Category{/t}</label>
+                <div class="controls">
+                    <select name="category" id="category">
+                        {section name=as loop=$allcategorys}
+                        {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
+                        <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{t 1=$allcategorys[as]->title}%1{/t}</option>
+                        {/acl}
+                        {section name=su loop=$subcat[as]}
+                            {acl hasCategoryAccess=$subcat[as]->pk_content_category}
+                            <option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;|_&nbsp;&nbsp;{t 1=$subcat[as][su]->title}%1{/t}</option>
+                            {/acl}
+                        {/section}
+                        {/section}
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="agency" class="control-label">{t}Agency{/t}</label>
+                <div class="controls">
+                    <input type="text" id="agency" name="agency" required="required"
+                        value="{$album->agency|clearslash|escape:"html"}" class="input-xlarge"/>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="description" class="control-label">{t}Description{/t}</label>
+                <div class="controls">
+                    <textarea name="description" id="description" required="required">{t 1=$album->description|clearslash|escape:"html"}%1{/t}</textarea>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="metadata" class="control-label">{t}Keywords{/t}</label>
+                <div class="controls">
+                    <input type="text" id="metadata" name="metadata" class="input-xlarge"
+                        required="required" value="{$album->metadata}" />
+                    <div class="help-block">{t}List of terms separated by comas{/t}</div>
+                </div>
+            </div>
+
             <div id="album-images">
+                <h5>{t}Album images{/t}</h5>
                 <div id="album-contents" style="width:590px;display:inline-block;" class="tabs resource-container clearfix">
                     <ul>
                         <li><a href="#list-of-images">{t}Images in this album{/t}</a></li>
@@ -341,18 +354,17 @@
                         <strong>{t}Available images{/t}</strong>
                     </div>
                     <div id="photos_container" class="photos" style="border:1px solid #ccc; border-top:0 none;  padding:7px;">
-                        <form id="image_search">
+                        <form id="image_search" class="form-inline">
                         <table>
                             <tr>
                                 <td>
                                     <div class="cajaBusqueda">
                                         <input id="stringImageSearch" name="stringImageSearch" type="text" style="width:90%"
-                                           onkeypress="onImageKeyEnter(event, $('category_imag').options[$('category_imag').selectedIndex].value,encodeURIComponent($('stringImageSearch').value),1);"
                                            placeholder="{t}Search images by title...{/t}" form="image_search"/>
                                     </div>
                                 </td>
                                 <td class="right">
-                                    <select id="category_imag" name="category_imag" class="required" onChange="getGalleryImages('list_by_category',this.options[this.selectedIndex].value,'',1);"  style="width:90%" form="image_search">
+                                    <select id="category_imag" name="category_imag" class="required"style="width:90%" form="image_search">
                                         <option value="0">GLOBAL</option>
                                         {section name=as loop=$allcategorys}
                                         <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if}>{$allcategorys[as]->title}</option>
