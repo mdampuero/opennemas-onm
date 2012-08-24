@@ -1929,6 +1929,17 @@ $adminRoutes->add(
     '/admin'
 );
 
+$adminRoutes->add(
+    'admin_articles_content_provider_in_frontpage',
+    new Route(
+        '/articles/content-provider-in-frontpage',
+        array(
+            '_controller' => 'Backend:Controllers:ArticlesController:contentProviderInFrontpage',
+        )
+    ),
+    '/admin'
+);
+
 // Opinion controller routes
 $adminRoutes->add(
     'admin_opinions',

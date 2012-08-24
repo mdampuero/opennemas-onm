@@ -22,11 +22,10 @@
         <div class="table-info clearfix">
             <div>
                 <div class="right form-inline">
-                    <label>
-
-                        <input type="search" class="search-query" name="filter[title]" for="submit" value="{$smarty.request.filter.title|default:""}" placeholder="{t}Title{/t}"/>
-                    </label>
-                    <button type="submit" id="search" class="btn"><i class="icon-search"></i></button>
+                    <div class="input-append">
+                        <input type="search" name="filter[title]" for="submit" value="{$smarty.request.filter.title|default:""}" placeholder="{t}Filter by title{/t}"/>
+                        <button type="submit" id="search" class="btn"><i class="icon-search"></i></button>
+                    </div>
                 </div>
             </div>
         </div>
