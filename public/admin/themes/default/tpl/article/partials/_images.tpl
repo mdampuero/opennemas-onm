@@ -260,19 +260,6 @@ jQuery(document).ready(function($){
         };
     });
 
-    function load_ajax_in_container(url, container) {
-        $.ajax({
-            url: url,
-            async: true,
-            beforeSend: function() {
-                container.html('{t escape=off}<div class="spinner"></div>Loading request...{/t}');
-            },
-            success: function(data) {
-                container.html(data);
-            }
-        });
-    }
-
     load_ajax_in_container('{url name=admin_images_content_provider_gallery category=$category}', $('#photos'));
 
     $('#stringImageSearch, #category_imag').on('change', function(e, ui) {

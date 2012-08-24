@@ -44,3 +44,16 @@ function validateForm(formID)
     }
     return true;
 }
+
+function load_ajax_in_container(url, container) {
+    jQuery.ajax({
+        url: url,
+        async: true,
+        beforeSend: function() {
+            container.html('{t escape=off}<div class="spinner"></div>Loading request...{/t}');
+        },
+        success: function(data) {
+            container.html(data);
+        }
+    });
+}
