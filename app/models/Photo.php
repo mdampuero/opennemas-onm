@@ -487,7 +487,16 @@ class Photo extends Content
         $photo->color       = $this->color;
         $photo->date        = $this->date;
         $photo->address     = $this->address;
+        $photo->latlong     = '';
         $photo->infor       = '';
+
+        if (!empty($photo->address)) {
+            $positions = explode(',', $photo->address);
+            $photo->latlong = array(
+                'lat' => $positions[0],
+                'long' => $positions[1],
+            );
+        }
 
         $image = MEDIA_IMG_PATH . $this->path_file.$this->name;
 

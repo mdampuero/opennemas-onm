@@ -50,7 +50,7 @@ function load_ajax_in_container(url, container) {
         url: url,
         async: true,
         beforeSend: function() {
-            container.html('{t escape=off}<div class="spinner"></div>Loading request...{/t}');
+            container.html('<div class="spinner"></div>Loading request...');
         },
         success: function(data) {
             container.html(data);

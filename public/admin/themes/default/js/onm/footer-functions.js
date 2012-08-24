@@ -33,5 +33,14 @@ jQuery(document).ready(function($) {
             e.preventDefault();
         });
     })();
+
+    noentersubmit = (function(){
+        $('.noentersubmit').keydown(function(event){
+            if (event.keyCode == 13) {
+              event.preventDefault();
+              return false;
+            }
+        });
+    })();
 });
 

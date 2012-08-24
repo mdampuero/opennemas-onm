@@ -130,6 +130,8 @@
     </tr>
     {/is_module_activated}
 
+
+    {acl isAllowed="VIDEO_ADMIN"}
     {is_module_activated name="VIDEO_MANAGER"}
     <tr>
         <td colspan=2><hr></td>
@@ -237,8 +239,8 @@
             </div>
         </td>
     </tr>
-
     {/is_module_activated}
+    {/acl}
 </table>
 
 {is_module_activated name="IMAGE_MANAGER"}
@@ -295,12 +297,6 @@ jQuery(document).ready(function($){
         load_ajax_in_container(link.attr('href'), $('#videos'));
     });
 
-    $('.noentersubmit').keydown(function(event){
-        if (event.keyCode == 13) {
-          event.preventDefault();
-          return false;
-        }
-    });
 });
 </script>
 {/is_module_activated}
