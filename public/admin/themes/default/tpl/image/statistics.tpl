@@ -7,7 +7,7 @@
         <ul class="old-button">
             <li>
                 <a class="admin_add" href="{url name=admin_images_search}">
-                    <img src="{$params.IMAGE_DIR}search.png" alt="Buscar Imágenes"><br />{t}Search{/t}
+                    <img src="{$params.IMAGE_DIR}search.png" alt="Buscar Imágenes"><br /><i class="icon-search"></i>
                 </a>
             </li>
             {acl isAllowed="IMAGE_SETTINGS"}

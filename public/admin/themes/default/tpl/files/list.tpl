@@ -102,22 +102,24 @@
                     </select>
                     </label>
 
-                    <label for="category">
-                        {t}Category:{/t}
-                        <select name="category" class="form-filters">
-                            <option value="all" {if $category eq '0'}selected{/if}> {t}All{/t} </option>
-                            {section name=as loop=$allcategorys}
-                                 <option value="{$allcategorys[as]->pk_content_category}" {if isset($category) && ($category eq $allcategorys[as]->pk_content_category)}selected{/if}>{$allcategorys[as]->title}</option>
-                                 {section name=su loop=$subcat[as]}
-                                        {if $subcat[as][su]->internal_category eq 1}
-                                            <option value="{$subcat[as][su]->pk_content_category}"
-                                            {if $category eq $subcat[as][su]->pk_content_category || $article->category eq $subcat[as][su]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;|_&nbsp;&nbsp;{$subcat[as][su]->title}</option>
-                                        {/if}
-                                    {/section}
-                            {/section}
-                        </select>
-                    </label>
-                    <button type="submit" id="search" class="btn">{t}Search{/t}</button>
+                    <div class="input-append">
+                        <label for="category">
+                            {t}Category:{/t}
+                            <select name="category" class="form-filters">
+                                <option value="all" {if $category eq '0'}selected{/if}> {t}All{/t} </option>
+                                {section name=as loop=$allcategorys}
+                                     <option value="{$allcategorys[as]->pk_content_category}" {if isset($category) && ($category eq $allcategorys[as]->pk_content_category)}selected{/if}>{$allcategorys[as]->title}</option>
+                                     {section name=su loop=$subcat[as]}
+                                            {if $subcat[as][su]->internal_category eq 1}
+                                                <option value="{$subcat[as][su]->pk_content_category}"
+                                                {if $category eq $subcat[as][su]->pk_content_category || $article->category eq $subcat[as][su]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;|_&nbsp;&nbsp;{$subcat[as][su]->title}</option>
+                                            {/if}
+                                        {/section}
+                                {/section}
+                            </select>
+                        </label>
+                        <button type="submit" id="search" class="btn"><i class="icon-search"></i></button>
+                    </div>
                 </div>
             </div>
         </div>

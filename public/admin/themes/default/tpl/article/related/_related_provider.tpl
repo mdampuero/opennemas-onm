@@ -2,7 +2,7 @@
     <ul>
         {is_module_activated name="ADVANCED_SEARCH"}
         <li>
-            <a href="{url name=admin_search_content_provider related=1 category=$category}">{t}Search{/t}</a>
+            <a href="{url name=admin_search_content_provider related=1 category=$category}"><i class="icon-search"></i></a>
         </li>
         {/is_module_activated}
 

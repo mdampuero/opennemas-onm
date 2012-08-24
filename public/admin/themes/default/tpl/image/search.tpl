@@ -70,7 +70,7 @@ function toggleAdvanced() {
                 <div>
                     <input type="search" name="string_search" value="{$smarty.request.string_search}" style="width:95%;" placeholder="{t}Image name{/t}">
                     <p>
-                        <button type="submit" class="onm-button red submit" style="width:100%;">{t}Search{/t}</button>
+                        <button type="submit" class="onm-button red submit" style="width:100%;"><i class="icon-search"></i></button>
                     </p>
 
                     <label for="category">{t}Category{/t}</label>

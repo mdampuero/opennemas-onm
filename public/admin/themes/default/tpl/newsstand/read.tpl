@@ -7,15 +7,32 @@
 {/block}
 
 {block name="footer-js" append}
-    <script type="text/javascript">
-    jQuery('#title').on('change', function(e, ui) {
-        fill_tags(jQuery('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
+{capture assign="language"}{setting name=site_language}{/capture}
+{assign var="lang" value=$language|truncate:2:""}
+{if !empty($lang)}
+    {assign var="js" value="/jquery/jquery_i18n/jquery.ui.datepicker-"|cat:$lang|cat:".js"}
+    {script_tag language="javascript" src=$js}
+    <script>
+    jQuery(document).ready(function() {
+        jQuery.datepicker.setDefaults( jQuery.datepicker.regional[ "{$lang}" ] );
     });
     </script>
+{/if}
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+    $('#title').on('change', function(e, ui) {
+        fill_tags(jQuery('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
+    });
+    $('#formulario').onmValidate({
+        'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
+    });
+});
+
+</script>
 {/block}
 
 {block name="content"}
-<form id="formulario" name="formulario" action="{if !empty($cover->id)}{url name=admin_cover_update id=$cover->id}{else}{url name=admin_cover_create}{/if}" method="POST">
+<form id="formulario" name="formulario" action="{if !empty($cover->id)}{url name=admin_cover_update id=$cover->id}{else}{url name=admin_cover_create}{/if}" method="POST"  enctype="multipart/form-data">
 
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
@@ -53,90 +70,83 @@
     {render_messages}
 
     <div id="content-wrapper">
-        <table class="adminform">
-        <tbody>
-            <tr>
-                <td valign="top" align="right" style="padding:4px;">
-                    <label for="title">{t}Title:{/t}</label>
-                </td>
-                <td style="padding:4px;" nowrap="nowrap">
-                    <input type="text" id="title" name="title" size="80" value="{$cover->title|clearslash}" />
-                </td>
-                <td rowspan=3>
-                    <table style='background-color:#F5F5F5; padding:18px; width:99%;'>
-                        <tr>
-                            <td valign="top"  align="right" nowrap="nowrap">
-                                <label for="title">{t}Category:{/t}</label>
-                            </td>
-                            <td nowrap="nowrap">
-                                <select name="category" id="category" class="required" {acl isNotAllowed="KIOSKO_AVAILABLE"} disabled="disabled" {/acl}>
-                                     {section name=as loop=$allcategorys}
-                                            {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
-                                            <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category || $cover->category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{t 1=$allcategorys[as]->title}%1{/t}</option>
-                                            {/acl}
-                                            {section name=su loop=$subcat[as]}
-                                                {acl hasCategoryAccess=$subcat[as]->pk_content_category}
-                                                <option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category || $cover->category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;|_&nbsp;&nbsp;{t 1=$subcat[as][su]->title}%1{/t}</option>
-                                                {/acl}
-                                            {/section}
-                                        {/section}
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td valign="top"  align="right" nowrap="nowrap">
-                                <label for="title">{t}Available:{/t}</label>
-                            </td>
-                            <td valign="top" nowrap="nowrap">
-                                <select name="available" id="available" class="required" {acl isNotAllowed="KIOSKO_AVAILABLE"} disabled="disabled" {/acl}>
-                                    <option value="0" {if $cover->available==0}selected{/if}>No</option>
-                                    <option value="1" {if empty($cover) || $cover->available==1}selected{/if}>Si</option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td valign="top"  align="right" nowrap="nowrap">
-                                <label for="title">{t}Favorite:{/t}</label>
-                            </td>
-                            <td valign="top" nowrap="nowrap">
-                                <select name="favorite" id="favorite" class="required" {acl isNotAllowed="KIOSKO_AVAILABLE"} disabled="disabled" {/acl}>
-                                    <option value="0" {if $cover->favorite==0}selected{/if}>{t}No{/t}</option>
-                                    <option value="1" {if empty($cover) || $cover->favorite==1}selected{/if}>{t}Yes{/t}</option>
-                                </select>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-            <tr>
-                <td valign="top" align="right" style="padding:4px;">
-                    <label for="metadata">{t}Keywords:{/t}</label>
-                </td>
-                <td style="padding:4px;" nowrap="nowrap"">
-                    <input type="text" id="metadata" name="metadata" size="80" title="Metadatos" value="{$cover->metadata}" /><br>
-                    <label align='right'><sub>{t}Comma separated{/t}</sub></label><br>
-                </td>
-            </tr>
-            <tr>
-                <td valign="top" align="right" style="padding:4px;">
-                    <label for="title">Fecha:</label>
-                </td>
-                <td style="padding:4px;" nowrap="nowrap">
-                    <input type="text" id="date" name="date" size="18" title="Fecha de portada" value="{$cover->date|default:""}" tabindex="-1" class="required" />
-                </td>
-            </tr>
-            <tr>
-                <td valign="top" colspan="3">
-                    <p style="text-align: center;">
+
+        <div class="form-horizontal panel">
+            <div class="control-group">
+                <label for="title" class="control-label">{t}Title{/t}</label>
+                <div class="controls">
+                    <input type="text" id="title" name="title" value="{$cover->title|default:""}" required="required" class="input-xxlarge"/>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="metadata" class="control-label">{t}Keywords{/t}</label>
+                <div class="controls">
+                    <input type="text" id="metadata" name="metadata" value="{$cover->metadata}" required="required" class="input-xxlarge"/>
+                    <div class="help">List of words separated by commas.</div>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="category" class="control-label">{t}Category{/t}</label>
+                <div class="controls">
+                    <select name="category" id="category" required="required" {acl isNotAllowed="KIOSKO_AVAILABLE"} disabled="disabled" {/acl}>
+                    {section name=as loop=$allcategorys}
+                        {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
+                        <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category || $cover->category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{t 1=$allcategorys[as]->title}%1{/t}</option>
+                        {/acl}
+                        {section name=su loop=$subcat[as]}
+                            {acl hasCategoryAccess=$subcat[as]->pk_content_category}
+                            <option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category || $cover->category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;|_&nbsp;&nbsp;{t 1=$subcat[as][su]->title}%1{/t}</option>
+                            {/acl}
+                        {/section}
+                    {/section}
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="available" class="control-label">{t}Available{/t}</label>
+                <div class="controls">
+                    <select name="available" id="available" required="required" {acl isNotAllowed="KIOSKO_AVAILABLE"} disabled="disabled" {/acl}>
+                        <option value="0" {if $cover->available==0}selected{/if}>{t}No{/t}</option>
+                        <option value="1" {if empty($cover) || $cover->available==1}selected{/if}>{t}Yes{/t}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="favorite" class="control-label">{t}Favorite{/t}</label>
+                <div class="controls">
+                    <select name="favorite" id="favorite" required="required" {acl isNotAllowed="KIOSKO_AVAILABLE"} disabled="disabled" {/acl}>
+                        <option value="0" {if $cover->favorite==0}selected{/if}>{t}No{/t}</option>
+                        <option value="1" {if empty($cover) || $cover->favorite==1}selected{/if}>{t}Yes{/t}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="date" class="control-label">{t}Date{/t}</label>
+                <div class="controls">
+                    <input type="text" id="date" name="date" value="{$cover->date}" required="required"/>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="date" class="control-label">{t}File{/t}</label>
+                <div class="controls">
+                    {if is_object($cover)}
+                    <div class="thumbnail" style="display:inline-block;">
                         <img src="{$KIOSKO_IMG_URL}{$cover->path}{$cover->name|regex_replace:"/.pdf$/":".jpg"}" title="{$cover->title|clearslash}" alt="{$cover->title|clearslash}" />
-                    </p>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+                    </div>
+                    {else}
+                    <input type="file" id="file" name="file" required="required" /></div>
+                    {/if}
+                </div>
+            </div>
+        </div>
 
-    <input type="hidden" id="id" name="id" value="{$cover->id}" />
+        <input type="hidden" id="id" name="id" value="{$cover->id}" />
     </div><!--fin content-wrapper-->
-
 </form>
 {/block}

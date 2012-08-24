@@ -72,13 +72,15 @@
                             });
                         })
                         .bind('onFail', function (e, errors) {
+                            var tab_changed = false;
                             $.each(errors, function() {
                                 var err = this;
                                 var input = $(err.input);
                                 var panel = input.closest('.ui-tabs-panel');
-                                if (panel) {
+                                if (panel && !tab_changed) {
                                     var panel_id = panel.attr('id');
                                     var tabs = $(panel.closest('.ui-tabs')).tabs('select', panel_id);
+                                    tab_changed = true;
                                 }
                                 helpers.remove_validation_markup(input);
                                 helpers.add_validation_markup(input, 'error', err.messages.join(' '));

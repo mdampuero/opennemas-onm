@@ -236,10 +236,12 @@ class CoversController extends Controller
                     \FilesManager::createDirectory($path);
                 }
                 $uploadStatus = false;
+
                 foreach ($request->files as $file) {
                     // Move uploaded file
                     $uploadStatus = $file->isValid() && $file->move(realpath($path), $coverData['name']);
                 }
+
                 if (!$uploadStatus) {
                     throw new \Exception(sprintf(
                         _('There was an error while uploading the file. '
@@ -276,7 +278,7 @@ class CoversController extends Controller
                 ));
             }
         } else {
-            return $this->render('newsstand/new.tpl');
+            return $this->render('newsstand/read.tpl');
         }
     }
 
@@ -608,5 +610,5 @@ class CoversController extends Controller
             return $this->redirect($this->generateUrl('admin_covers'));
         }
     }
-
 }
+

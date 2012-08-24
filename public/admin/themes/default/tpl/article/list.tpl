@@ -111,7 +111,7 @@
                             <option value="1" {if  $status === 1} selected {/if}> {t}Published{/t} </option>
                             <option value="0" {if $status === 0} selected {/if}> {t}No published{/t} </option>
                         </select>
-                        <button type="submit" class="btn">Search</button>
+                        <button type="submit" class="btn"><i class="icon-search"></i> </button>
                     </div>
                 </div>
             </div>

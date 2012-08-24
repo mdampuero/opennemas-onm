@@ -42,7 +42,10 @@ td {
 /* =============================================================================
    Bootstrap customization
    ========================================================================== */
-.btn { padding:4px 9px;}
+a.btn:not(.btn-mini) { color: #333; padding:4px 8px;}
+a.btn-primary,a.btn-primary:hover,a.btn-warning,a.btn-warning:hover,a.btn-danger,a.btn-danger:hover,a.btn-success,a.btn-success:hover,a.btn-info,a.btn-info:hover,a.btn-inverse,a.btn-inverse:hover{text-shadow:0 -1px 0 rgba(0, 0, 0, 0.25);color:#ffffff;}
+a.btn-primary.active,a.btn-warning.active,a.btn-danger.active,a.btn-success.active,a.btn-info.active,a.btn-dark.active{color:rgba(255, 255, 255, 0.75);}
+
 .table {color:#424E51; font-size:12px;}
 .table-condensed th, .table-condensed td{ padding:8px 5px;vertical-align: middle}
 .pagination { vertical-align:middle; }
@@ -52,6 +55,15 @@ td {
 .table tfoot td { padding:3px 9px !important; }
 .table tbody td.empty { padding:30px; text-align: center; font-size:13px;}
 .input-xxxlarge{ margin-left:630px}
+select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {margin-bottom:0px}
+label { font-size:13px;}
+
+
+.form-inline-block > *{ vertical-align: top; }
+.form-inline-block .control-group { display:inline-block; }
+.form-inline-block .control-label, .form-inline-block .controls { display:block; }
+.form-inline-block .help-inline {display:block; padding-left:0;}
+.help-block {color: #999;font-size: .95em;margin-top: 0px !important;margin-bottom: 10px !important;}
 /* -------------------------------------------------------------
   LISTINGS
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -246,6 +258,7 @@ a.unpublishing:hover {
   border: 1px solid #CCC;
   width: 100%;
   margin-bottom: 10px;
+  position:relative;
 }
 .panel > * {
   margin: 1em;
@@ -275,7 +288,7 @@ a.unpublishing:hover {
 div.utilities-conf{
     vertical-align:middle;
 }
-div.utilities-color td *{
+div.utilities-color td{
     vertical-align:middle !important;
 }
 div.utilities-conf h3 {
@@ -293,6 +306,8 @@ div.utilities-conf input[type="text"]{
     box-shadow: none;
     display:inline !important;
 }
+.utilities-conf label { display: inline-block; vertical-align: middle;}
+.utilities-conf input[type="checkbox"], .utilities-conf label { margin:0}
 
 /* -------------------------------------------------------------
   Cleaned styles
@@ -1791,9 +1806,6 @@ div.dashboardBox div.table {
 }
 
 .pagination a{float:none !important; }
-a.btn { color: #333; }
-a.btn-primary,a.btn-primary:hover,a.btn-warning,a.btn-warning:hover,a.btn-danger,a.btn-danger:hover,a.btn-success,a.btn-success:hover,a.btn-info,a.btn-info:hover,a.btn-inverse,a.btn-inverse:hover{text-shadow:0 -1px 0 rgba(0, 0, 0, 0.25);color:#ffffff;}
-a.btn-primary.active,a.btn-warning.active,a.btn-danger.active,a.btn-success.active,a.btn-info.active,a.btn-dark.active{color:rgba(255, 255, 255, 0.75);}
 
 .content-action-buttons .btn .caret { margin-top: 5px; margin-left: 0; }
 .modal-header h3 {
@@ -1815,7 +1827,7 @@ div#article-form.tabs div#related-contents ul.content-receiver {
     padding: 4px;
     padding: 10px;
     border:1px solid #ccc;
-    margin-top:0;
+    margin:0 10px 0 0;
 }
 
 div.newsletter-contents div#content-provider ul {

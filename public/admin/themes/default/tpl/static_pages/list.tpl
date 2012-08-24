@@ -26,7 +26,7 @@
 
                         <input type="search" class="search-query" name="filter[title]" for="submit" value="{$smarty.request.filter.title|default:""}" placeholder="{t}Title{/t}"/>
                     </label>
-                    <button type="submit" id="search" class="btn">{t}Search{/t}</button>
+                    <button type="submit" id="search" class="btn"><i class="icon-search"></i></button>
                 </div>
             </div>
         </div>

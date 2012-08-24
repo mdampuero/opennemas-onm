@@ -34,28 +34,29 @@
     tinyMCE.init( OpenNeMas.tinyMceConfig.footer );
 
     jQuery(document).ready(function($) {
-        jQuery("#system-settings-tabbed").tabs();
+        $("#system-settings-tabbed").tabs();
         //Color Picker jQuery
-        jQuery('#site_color').ColorPicker({
+        $('#site_color').ColorPicker({
             onSubmit: function(hsb, hex, rgb, el) {
-                jQuery(el).val(hex);
-                jQuery(el).ColorPickerHide();
+                $(el).val(hex);
+                $(el).ColorPickerHide();
             },
             onChange: function (hsb, hex, rgb) {
-                jQuery('.colopicker_viewer').css('background-color', '#' + hex);
+                $('#site_color').val(hex);
+                $('.colopicker_viewer').css('background-color', '#' + hex);
             },
             onBeforeShow: function () {
-                jQuery(this).ColorPickerSetColor(this.value);
+                $(this).ColorPickerSetColor(this.value);
             }
         }).bind('keyup', function(){
-            jQuery(this).ColorPickerSetColor(this.value);
+            $(this).ColorPickerSetColor(this.value);
         });
 
         toogleSiteLogo = function(value) {
             if(value == 0) {
-                jQuery('#site_logo_block').hide();
+                $('#site_logo_block').hide();
             } else {
-                jQuery('#site_logo_block').show();
+                $('#site_logo_block').show();
             }
         }
 
@@ -104,7 +105,7 @@
                         <label for="site_agency" class="control-label">{t}Site agency{/t}</label>
                         <div class="controls">
                             <input type="text" id="site_agency" name="site_agency" value="{$configs['site_agency']|default:""}" class="input-xlarge">
-                            <div class="help-block">{t}This will be displayed as your article agency.{/t}</div>
+                            <div class="help-block">{t}This will be displayed as the article signature.{/t}</div>
                         </div>
                     </div>
                     <div class="control-group">

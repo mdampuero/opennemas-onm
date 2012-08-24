@@ -44,15 +44,16 @@ jQuery(function($){
 				<input type="text" id="userlogin" name="filter[login]" value="{$smarty.request.filter.login|default:""}" placeholder="{t}username{/t}" />
 
 
-				<label for="usergroup">{t}and group:{/t}
+				<label for="usergroup">{t}and group:{/t}</label>
+				<div class="input-append">
 					<select id="usergroup" name="filter[group]" class="span2">
 						{if isset($smarty.request.filter) && isset($smarty.request.filter.group)}
 							{assign var=filter_selected value=$smarty.request.filter.group}
 						{/if}
 						{html_options options=$groupsOptions selected=$filter_selected|default:""}
 					</select>
-				</label>
-				<button type="submit" class="btn">{t}Search{/t}</button>
+					<button type="submit" class="btn"><i class="icon-search"></i></button>
+				</div>
 			</div>
 		</div>
 		<table class="table table-hover table-condensed">

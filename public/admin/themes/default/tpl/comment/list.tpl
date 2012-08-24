@@ -83,7 +83,7 @@
                         {/foreach}
                     </select>
                     </label>
-                    <button type="submit" class="btn">{t}Search{/t}</button>
+                    <button type="submit" class="btn"><i class="icon-search"></i></button>
                 </div>
             </div>
         </div>

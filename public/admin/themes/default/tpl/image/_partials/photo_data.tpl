@@ -86,26 +86,16 @@
         </div><!-- /basic -->
     </div>
     <div id="geolocation-{$photo->id}">
-        {if {setting name=google_maps_api_key} != ''}
-            <label for="address[{$photo->id}]">Geolocalization</label>
-
-            <input type="text" value="{$photo->address}"  id="address[{$photo->id}]" name="address[{$photo->id}]" size="30">
-            <input class="onm-button blue" type="button" value="IR" onClick="showAddress(); return false;" />
-
-            <div class="photo-geolocation-canvas" id="map_canvas[{$photo->id}]" style="height:200px"></div>
-
-            <div class="onm-help-block ">
-                <div class="title"><h4>{t}Geolocalization{/t}</h4></div>
-                <div class="content">{t escape=off}Help OpenNeMas to get all the photos geolocalized. In the future you will enjoy geolocalized search results.{/t}</div>
+            <div style="text-align:center">
+                <div class="input-append">
+                    <input type="text" value="{$photo->address}"  id="address_{$photo->id}" name="address[{$photo->id}]" class="input-xxlarge">
+                    <button class="btn" id="geocode_buttom_{$photo->id}"/><i class="icon-search"></i> </button>
+                </div>
             </div>
-        {else}
-            <input type="hidden" value="{$photo->address}"  id="address[{$photo->id}]" name="address[{$photo->id}]" size="30">
-            <div class="onm-help-block ">
-                <div class="title"><h4>{t}Set your Google maps key{/t}</h4></div>
-                <div class="content">{t escape=off}Help OpenNeMas to get all the photos geolocalized. For this you have to configure your Google Maps API key from
-                the <a href="{url name=admin_system_settings}#external" title="Go to the system settings dialog">system settings dialog</a>{/t}</div>
+
+            <div class="map">
+                <div id="map_canvas_{$photo->id}"></div>
             </div>
-        {/if}
     </div><!-- /geolocation -->
 
     <div id="additional-info-{$photo->id}">
@@ -176,30 +166,43 @@
             minuteGrid: 10
         });
 
-        jQuery('#ui-datepicker-div').css('clip', 'auto');
-    });
-    {if {setting name=google_maps_api_key} != ''}
-    var map = new GMap2(document.getElementById("map_canvas[{$photo->id}]"));
-    map.setCenter(new GLatLng(42.339806,-7.866068), 13);
-    function initialize() { }
+        // $('#photo-{$photo->id}').bind("tabsselect", function(e, ui){
+        //     map = new GMaps({
+        //         div: '#map_canvas_{$photo->id}'
+        //     });
+        // })
 
-    function showAddress() {
-         var address = document.getElementById('address[{$photo->id}]').value;
-         if(address){
-             var geocoder = new GClientGeocoder();
-             if (geocoder) {
-                   geocoder.getLatLng(address, function(point) {
-                   if (!point) {
-                     alert("{t}We can't geolocalize that direction{/t}" + address);
-                   } else {
-                     map.setCenter(point, 7);
-                     var marker = new GMarker(point);
-                     map.addOverlay(marker);
-                     marker.openInfoWindowHtml(address);
-                   }
-                 });
+        jQuery('#ui-datepicker-div').css('clip', 'auto');
+
+        $(document).ready(function($){
+            map = new GMaps({
+                div: '#map_canvas_{$photo->id}'
+            });
+            $('#geocode_buttom_{$photo->id}').on('click', function(e,ui){
+                e.preventDefault();
+                geolocate_photo()
+                return false;
+            });
+            $('#address_{$photo->id}').on('blur', function(e,ui){
+                e.preventDefault();
+                geolocate_photo()
+                return false;
+            });
+            function geolocate_photo() {
+                GMaps.geocode({
+                    address: $('#address_{$photo->id}').val().trim(),
+                    callback: function(results, status){
+                        if(status == 'OK'){
+                            var latlng = results[0].geometry.location;
+                            map.setCenter(latlng.lat(), latlng.lng());
+                            map.addMarker({
+                                lat: latlng.lat(),
+                                lng: latlng.lng()
+                            });
+                        }
+                    }
+                });
             }
-        }
-     }
-    {/if}
+        });
+    });
 </script>

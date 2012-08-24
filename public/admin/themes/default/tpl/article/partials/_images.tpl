@@ -1,5 +1,4 @@
 {is_module_activated name="IMAGE_MANAGER,VIDEO_MANAGER"}
-<h2>{t}Multimedia associated to this article:{/t}</h2>
 <table style="width:100%">
     {is_module_activated name="IMAGE_MANAGER"}
     <tr>

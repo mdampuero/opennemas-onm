@@ -10,7 +10,11 @@
         $('.delete-author-photo').on('click', function(e, ui) {
             var element = $(this);
             element.parent('.thumbnail').remove();
-        })
+        });
+
+        $('#formulario').onmValidate({
+            'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
+        });
     });
 </script>
 {/block}
@@ -52,7 +56,7 @@
             <div class="control-group">
                 <label for="name" class="control-label">{t}Name{/t}</label>
                 <div class="controls">
-                    <input type="text" id="name" name="name" value="{$author->name|default:""}" class="input-xlarge"/>
+                    <input type="text" id="name" name="name" value="{$author->name|default:""}" class="input-xlarge" required="required" autofocus/>
                 </div>
             </div>
 

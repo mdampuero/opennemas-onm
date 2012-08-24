@@ -87,15 +87,17 @@
                 </select>
                  &nbsp;&nbsp;&nbsp;
                 <label>{t}Type:{/t}</label>
-                <select name="filter[type]" onchange="submitFilters(this.form);">
-                    {if !isset($smarty.request.filter) && !isset($smarty.request.filter.type)}
-                        {assign var=filterType value=""}
-                    {else}
-                        {assign var=filterType value=$smarty.request.filter.type|default:""}
-                    {/if}ubmit">{t}Search{/t}</button>
-                    {html_options options=$filter_options.type selected=$filterType}
-                </select>
-                <button type="submit">{t}Search{/t}</button>
+                <div class="input-append">
+                    <select name="filter[type]" onchange="submitFilters(this.form);">
+                        {if !isset($smarty.request.filter) && !isset($smarty.request.filter.type)}
+                            {assign var=filterType value=""}
+                        {else}
+                            {assign var=filterType value=$smarty.request.filter.type|default:""}
+                        {/if}ubmit"><i class="icon-search"></i></button>
+                        {html_options options=$filter_options.type selected=$filterType}
+                    </select>
+                    <button type="submit" class="btn"><i class="icon-search"></i></button>
+                </div>
             </div>
         </div>
 

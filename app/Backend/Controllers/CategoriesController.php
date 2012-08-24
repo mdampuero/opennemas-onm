@@ -261,6 +261,7 @@ class CategoriesController extends Controller
             'color'               => $request->request->getDigits('color'),
             'params'  => array(
                 'inrss' => $inrss,
+                'title' => $params['title'],
             ),
         );
 
@@ -279,7 +280,7 @@ class CategoriesController extends Controller
         if ($category->update($data)) {
             $ccm = \ContentCategoryManager::get_instance();
             $ccm->reloadCategories();
-            m::add(sprintf(_('Category "%s" updated successfully.'), $data->title), m::SUCCESS);
+            m::add(sprintf(_('Category "%s" updated successfully.'), $data['title']), m::SUCCESS);
         }
 
         /* Limpiar la cache de portada de todas las categorias */

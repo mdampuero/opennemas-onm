@@ -29,9 +29,11 @@
                 {$total_errors} registered SQL errors
             </div>
             <div class="pull-right">
-                <form method="GET" action="{$smarty.server.PHP_SELF}" class="form-inline form-search">
-                    <input type="search" name="search" value="{$search}" class="input-medium search-query" placeholder="{t}Filter{/t}">
-                    <button type="submit" class="btn">{t}Search{/t}</button>
+                <form method="GET" action="{$smarty.server.PHP_SELF}" class="form-inline">
+                    <div class="input-append">
+                        <input type="search" name="search" value="{$search}" class="input-medium" placeholder="{t}Filter{/t}">
+                        <button type="submit" class="btn"><i class="icon-search"></i></button>
+                    </div>
                 </form>
             </div>
         </div>

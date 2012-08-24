@@ -38,7 +38,7 @@
                 <li class="separator"></li>
                 <li>
                     <a class="admin_add" href="{url name=admin_images_search category=$category}">
-                        <img src="{$params.IMAGE_DIR}search.png" alt="{t}Search images{/t}"><br />{t}Search{/t}
+                        <img src="{$params.IMAGE_DIR}search.png" alt="{t}Search images{/t}"><br /><i class="icon-search"></i>
                     </a>
                 </li>
                 {acl isAllowed="IMAGE_CREATE"}

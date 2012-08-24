@@ -25,11 +25,13 @@
 						&& isset({$smarty.request.filter.pclave})}
 						{assign var=filterPClave value=$smarty.request.filter.pclave}
 					{/if}
-					<label for="filter">
-						{t}Search keyworks containing {/t}
-						<input type="search" name="filter[pclave]" value="{$filterPClave|default:""}" class="input-medium search-query" />
-					</label>
-					<button type="submit" class="btn">{t}Buscar{/t}</button>
+					<div class="input-append">
+						<label for="filter">
+							{t}Search keyworks containing {/t}
+							<input type="search" name="filter[pclave]" value="{$filterPClave|default:""}" class="input-medium" />
+						</label>
+						<button type="submit" class="btn"><i class="icon-search"></i></button>
+					</div>
                 </div>
             </div>
         </div>

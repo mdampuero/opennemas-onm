@@ -17,7 +17,7 @@
                     <option value="{$autores[as]->pk_author}" {if isset($author) && $author == $autores[as]->pk_author} selected {/if}>{$autores[as]->name}</option>
                 {/section}
             </select>
-            <button type="submit" class="btn">{t}Search{/t}</button>
+            <button type="submit" class="btn"><i class="icon-search"></i></button>
         </div>
     </div>
 </div>

@@ -1,11 +1,27 @@
 {extends file="base/admin.tpl"}
 
+{block name="header-css" append}
+<style type="text/css">
+    .map {
+        background: white;
+        padding: 15px;
+        box-shadow: 0 0 20px #999;
+        border-radius: 2px;
+        margin:10px 0;
+    }
+    .map > div {
+        height:300px;
+    }
+</style>
+{/block}
+
 {block name="header-js" append}
     {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
     {script_tag src="/jquery/jquery-ui-sliderAccess.js"}
     {script_tag src="/onm/jquery.datepicker.js"}
 
-    <script src="http://maps.google.com/maps?file=api&amp;sensor=true&amp;key={setting name=google_maps_api_key}"></script>
+    <script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=true"></script>
+    {script_tag src="/libs/gmaps.js"}
 {/block}
 
 {block name="footer-js" append}
