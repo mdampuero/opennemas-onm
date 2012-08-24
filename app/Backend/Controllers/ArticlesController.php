@@ -9,6 +9,7 @@
  **/
 namespace Backend\Controllers;
 
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Message as m;
@@ -750,6 +751,43 @@ class ArticlesController extends Controller
     }
 
     /**
+     * Description of this action
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function contentProviderInFrontpageAction(Request $request)
+    {
+        $category = $request->query->getDigits('category', 0);
+        $page     = $request->query->getDigits('page', 1);
+        $itemsPerPage = s::get('items_per_page') ?: 20;
+
+        $cm = new  \ContentManager();
+
+        // Get contents for this home
+        $contentElementsInFrontpage  = $cm->getContentsForHomepageOfCategory($category);
+
+        // Sort all the elements by its position
+        $contentElementsInFrontpage  = $cm->sortArrayofObjectsByProperty($contentElementsInFrontpage, 'position');
+
+        $articles = array();
+        foreach ($contentElementsInFrontpage as $content) {
+            if ($content->content_type =='1') {
+                $articles[] = $content;
+            }
+        }
+
+        return $this->render('common/content_provider/_container-content-list.tpl', array(
+            'contentType'           => 'Article',
+            'contents'              => $articles,
+            'contentTypeCategories' => $this->parentCategories,
+            'category'              => $this->category,
+            'contentProviderUrl'    => $this->generateUrl('admin_articles_content_provider_in_frontpage'),
+        ));
+    }
+
+    /**
      * Previews an article in frontend by sending the article info by POST
      *
      * @param Request $request the request object
@@ -762,5 +800,5 @@ class ArticlesController extends Controller
 
         return new Response($content);
     }
-
 }
+
