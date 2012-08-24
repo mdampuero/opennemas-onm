@@ -22,19 +22,13 @@
 
             <br>
 
-            <div class="well">
-                <div><label>{t}Original filename:{/t}</label> {$photo->title}</div>
-                <div><label>{t}File:{/t}</label> {$photo->name}</div>
-                <div><label>{t}Resolution:{/t}</label> {$photo->width} x {$photo->height} (px)</div>
-                <div><label>{t}Size:{/t}</label> {$photo->size} Kb</div>
-                <div>
-                    <label>{t}URL:{/t}</label>
-                    <a href="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}"
+            <div class="well well-small">
+                <div><strong>{t}Original filename:{/t}</strong> {$photo->title}</div>
+                <div><strong>{t}File:{/t}</strong> <a href="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}"
                        title="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}"
-                       target="_blank">
-                       {$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}
-                    </a>
-                </div>
+                       target="_blank">{$photo->name}</a></div>
+                <div><strong>{t}Resolution:{/t}</strong> {$photo->width} x {$photo->height} (px)</div>
+                <div><strong>{t}Size:{/t}</strong> {$photo->size} Kb</div>
             </div>
         </div>
 
@@ -67,7 +61,7 @@
                     <label for="author_name[{$photo->id}]" class="control-label">{t}Copyright{/t}</label>
                     <div class="controls">
                         <input type="text" id="author_name[{$photo->id}]" name="author_name[{$photo->id}]"
-                            value='{$photo->author_name|clearslash|escape:'html'}'/>
+                            value='{$photo->author_name|clearslash|escape:'html'}' required="required"/>
                     </div>
                 </div>
 
@@ -116,7 +110,7 @@
 
     <div id="additional-info-{$photo->id}">
         <div style="display:inline-block; width:49%; margin-right:10px">
-            <h3>{t}EXIF Data:{/t}</h3>
+            <h5>{t}EXIF Data:{/t}</h5>
             {if is_null($photo->exif) neq true}
             <div id="exif" class="photo-static-info" style="max-height:400px; overflow-y:scroll">
                 <table>
@@ -140,7 +134,7 @@
         </div>
 
         <div style="display:inline-block; width:49%;">
-            <h3>{t}IPTC Data:{/t}</h3>
+            <h5>{t}IPTC Data:{/t}</h5>
             {if isset($photo->myiptc)}
             <div id="iptc" class="photo-static-info"  style="max-height:400px; overflow-y:scroll">
                 <table>
