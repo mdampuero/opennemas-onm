@@ -20,3 +20,4 @@ $sc->setParameter('dispatcher.exceptionhandler', 'Backend:Controllers:ErrorContr
 // Dispatch the response
 $dispatcher = new \Onm\Framework\Dispatcher\Dispatcher($matcher, $request, $sc);
 $dispatcher->dispatch();
+

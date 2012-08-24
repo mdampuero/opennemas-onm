@@ -563,7 +563,7 @@ class User
 
     private function buildFilter($filter)
     {
-        $newFilter = ' WHERE fk_user_group != 4';
+        $newFilter = ' WHERE 1=1 ';
 
         if (!is_null($filter) && is_string($filter)) {
             if (preg_match('/^[ ]*where/i', $filter)) {
@@ -571,6 +571,11 @@ class User
             }
         } elseif (!is_null($filter) && is_array($filter)) {
             $parts = array();
+
+            if (isset($filter['base']) && !empty($filter['base'])) {
+                $parts[] = $filter['base'];
+            }
+
             if (isset($filter['login']) && !empty($filter['login'])) {
                 $parts[] = '`login` LIKE "' . $filter['login'] . '%"';
             }

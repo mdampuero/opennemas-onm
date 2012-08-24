@@ -42,7 +42,11 @@ class AclUserController extends Controller
     {
         $this->checkAclOrForward('USER_ADMIN');
 
-        $filter    = $request->query->get('filter', null);
+        $filter    = $request->query->get('filter', array());
+
+        if (!$_SESSION['isMaster']) {
+            $filter ['base'] = 'fk_user_group != 4';
+        }
 
         $user      = new \User();
         $users     = $user->get_users($filter, ' ORDER BY login ');
