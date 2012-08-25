@@ -42,6 +42,10 @@ td {
 /* =============================================================================
    Bootstrap customization
    ========================================================================== */
+select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {margin-bottom:0px}
+label { font-size:13px;}
+.input-xxxlarge{ margin-left:630px}
+
 a.btn:not(.btn-mini) { color: #333; padding:4px 8px;}
 a.btn-primary,a.btn-primary:hover,a.btn-warning,a.btn-warning:hover,a.btn-danger,a.btn-danger:hover,a.btn-success,a.btn-success:hover,a.btn-info,a.btn-info:hover,a.btn-inverse,a.btn-inverse:hover{text-shadow:0 -1px 0 rgba(0, 0, 0, 0.25);color:#ffffff;}
 a.btn-primary.active,a.btn-warning.active,a.btn-danger.active,a.btn-success.active,a.btn-info.active,a.btn-dark.active{color:rgba(255, 255, 255, 0.75);}
@@ -54,19 +58,31 @@ a.btn-primary.active,a.btn-warning.active,a.btn-danger.active,a.btn-success.acti
 .table a.btn {font-weight:normal}
 .table tfoot td { padding:3px 9px !important; }
 .table tbody td.empty { padding:30px; text-align: center; font-size:13px;}
-.input-xxxlarge{ margin-left:630px}
-select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {margin-bottom:0px}
-label { font-size:13px;}
+.table th, .table tfoot td { background: #343434; color: #FFFFFF; font-size: 12px; font-weight: normal; padding: 9px; text-align: left; }
+
+
+.table .pagination { color:#aaa !important; }
+.table .pagination a { background: #3f3f3f !important; border: 1px solid #666; color:White !important; text-shadow:none; }
+.table .pagination a:hover { background:#3c3c3c; }
 
 
 .form-inline-block > *{ vertical-align: top; }
 .form-inline-block .control-group { display:inline-block; }
 .form-inline-block .control-label, .form-inline-block .controls { display:block; }
 .form-inline-block .help-inline {display:block; padding-left:0;}
-.help-block {color: #999;font-size: .95em;margin-top: 0px !important;margin-bottom: 10px !important;}
+.help-block {color: #999;font-size: .95em;margin-top: 0;}
+
+
+.dropdown-menu a { color:#555555;}
+.dropdown-menu li>a:hover,.dropdown-menu .active>a,.dropdown-menu .active>a:hover{color:#ffffff;}
+
 /* -------------------------------------------------------------
   LISTINGS
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+.left { text-align:left !important; }
+.right { text-align:right !important; }
+.center { text-align:center !important; }
+
 table {border-spacing:0;}
 
 table.adminform {
@@ -262,10 +278,6 @@ a.unpublishing:hover {
 }
 .panel > * {
   margin: 1em;
-}
-
-.panel .listing-table {
-  margin: 0;
 }
 
 .panel.active-tab-body {
@@ -576,15 +588,6 @@ div.utilities-conf input[type="text"]{
       height:100%
     }
 
-/* -------------------------------------------------------------
-  Action buttons for listings
- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-.action-buttons { margin:0; width:100; padding:0;}
-.action-buttons li { display:inline-block; list-style:none; }
-
-.action-buttons img { max-height:16px; }
-
-
 /* =============================================================================
    logoonm rules
    ========================================================================== */
@@ -848,25 +851,6 @@ footer nav a, footer nav a:active {
 }
 
 /* -------------------------------------------------------------
-  Simple pager
- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-#simplepager {
-  margin:0;
-  padding:0;
-  border:0 none;
-}
-  #simplepager li{
-    display:inline-block;
-    list-style:none;
-    margin-right:10px
-  }
-
-  #simplepager li a {
-    cursor:pointer;
-  }
-
-
-/* -------------------------------------------------------------
   Video module
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
@@ -1083,74 +1067,8 @@ div.action-bar .right{
   width:580px;
   margin-left:10px;
 }
-/* -------------------------------------------------------------
-  New layout for listing tables.
- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-.listing-table {
-  border:0 none;
-  color: #424E51;
-  font-size: 11px;
-  text-align: left;
-  vertical-align: middle;
-  width:100%;
-}
-.listing-table td {
-    color: #424E51;
-    font-size: 11px;
-    line-height: 140%;
-    padding: 8px 5px;
-    text-align: left;
-    vertical-align: middle;
-    border-collapse:collapse
-}
-
-.listing-table tr:not(:last-child) {
-    border-bottom: 1px dotted #D9D9D9;
-}
-
-.listing-table th,
-.listing-table tfoot td,
-.table th,
-.table tfoot td {
-    background: #343434;
-    color: #FFFFFF;
-    font-size: 12px;
-    font-weight: normal;
-    padding: 9px;
-    text-align: left;
-}
-.listing-table.withborder tbody { border:1px solid #ccc; }
-.listing-table tr:hover { background:#F1F1F1; }
-.listing-table.nofill tr:hover { background:none !important;}
-.listing-table th td { text-align:center; }
-.listing-table td.empty{ text-align:center; font-size:13px; padding:30px; }
-.listing-table td a:not(.btn) { color:#0069D6; font-weight: bold; text-decoration:none; text-shadow: 0px 0 5px white;}
-.listing-table tfoot td { text-align:center; border: 0 none; min-height:33px;}
-.listing-table tbody .family_type { background:#F5F5F5; font-weight: bold; padding: 8px; }
-
-.listing-table th img, .listing-table td img { vertical-align:middle; }
-
-/*.listing-table th input[type="checkbox"]{ margin-left:0px; }*/
-
-.left { text-align:left !important; }
-.right { text-align:right !important; }
-.center { text-align:center !important; }
 
 
-.listing-table .pagination,
-.table .pagination { color:#aaa !important; }
-.listing-table .pagination a,
-.table .pagination a { background: #3f3f3f !important; border: 1px solid #666; color:White !important; text-shadow:none; }
-.listing-table .pagination a:hover,
-.table .pagination a:hover { background:#3c3c3c; }
-
-.listing-table tbody tr td:first-child input[type="checkbox"] {
-  display: inline-block;
-  margin-left: 4px;
-}
-.listing-table .btn-group {
-  float:right;
-}
 /* -------------------------------------------------------------
   upper header for filtering... no yet finished. NEEDS WORK.
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -1522,12 +1440,6 @@ div.clearfix div.menu-other-categories {
 .ui-timepicker-div dl dd { margin: 0 10px 10px 65px; }
 .ui-timepicker-div td { font-size: 90%; }
 .ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
-
-/* -------------------------------------------------------------
-  Twitter bootstrap buttons and dropdowns
- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-.dropdown-menu a { color:#555555;}
-.dropdown-menu li>a:hover,.dropdown-menu .active>a,.dropdown-menu .active>a:hover{color:#ffffff;}
 
 /* -------------------------------------------------------------
   Tabs

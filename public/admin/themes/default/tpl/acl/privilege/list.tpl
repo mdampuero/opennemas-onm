@@ -33,7 +33,7 @@
             </div>
         </div>
 
-        <table class="listing-table table-striped">
+        <table class="table table-condensed">
             <thead>
                 <tr>
                     <th>{t}Privilege name{/t}</th>
@@ -83,7 +83,7 @@
                     </td>
                 </tr>
             </tfoot>
-        </table> <!--.listing-table-->
+        </table> <!--.table-->
 
     	<input type="hidden" id="action" name="action" value="" />
 		<input type="hidden" name="id" id="id" value="{$id|default:""}" />

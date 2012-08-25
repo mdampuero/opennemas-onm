@@ -44,7 +44,7 @@
             <div class="control-group">
                 <label for="name" class="control-label">{t}Group name{/t}</label>
                 <div class="controls">
-                    <input type="text" id="name" name="name" value="{$user_group->name}" class="input-xlarge" required="required"
+                    <input type="text" id="name" name="name" value="{$user_group->name}" class="input-xxlarge" required="required"
                         {if $user_group->name eq $smarty.const.SYS_NAME_GROUP_ADMIN}disabled="disabled"{/if} />
                 </div>
             </div>
@@ -54,7 +54,7 @@
 
                     {foreach item=privileges from=$modules key=mod name=priv}
                     {if $smarty.foreach.priv.first || $smarty.foreach.priv.index % 2 == 0}<div style="display:block; width:100%" class="clearfix">{/if}
-                        <table  class="listing-table" style="display:inline-block; width:49%; float:left; margin-right:2px;">
+                        <table  class="table table-condensed table-hover" style="display:inline-block; width:49%; float:left; margin-right:2px;">
                             <thead>
                                 <tr>
                                     <th colspan=2>{$mod}</th>

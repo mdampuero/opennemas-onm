@@ -273,7 +273,7 @@ jQuery(document).ready(function($){
         );
     });
 
-    $('#photos').on('click', '.pagination a', function(e, ui) {
+    $('#photos').on('click', '.pager a', function(e, ui) {
         e.preventDefault();
         var link = $(this);
         load_ajax_in_container(link.attr('href'), $('#photos'));
@@ -291,7 +291,7 @@ jQuery(document).ready(function($){
         );
     });
 
-    $('#videos').on('click', '.pagination a', function(e, ui) {
+    $('#videos').on('click', '.pager a', function(e, ui) {
         e.preventDefault();
         var link = $(this);
         load_ajax_in_container(link.attr('href'), $('#videos'));

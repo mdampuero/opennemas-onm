@@ -3,8 +3,8 @@ jQuery(document).ready(function($) {
         var toggleElement = $('#toggleallcheckbox');
         if (toggleElement !== null) {
             var allChecked = true;
-            if ($('table.listing-table tbody input[type=checkbox], .table tbody input[type=checkbox]').size() > 0) {
-                $('table.listing-table tbody input[type=checkbox], .table tbody input[type=checkbox]').each(function() {
+            if ($('.table tbody input[type=checkbox]').size() > 0) {
+                $('.table tbody input[type=checkbox]').each(function() {
                     allChecked = allChecked && $(this).prop("checked");
                 });
                 if (allChecked) {toggleElement.prop("checked", "checked");}
@@ -12,7 +12,7 @@ jQuery(document).ready(function($) {
 
             toggleElement.on('click',function () {
                 var toggle = toggleElement.attr("checked") == "checked";
-                $('table.listing-table tbody input[type=checkbox], .table tbody input[type=checkbox]').each(function() {
+                $('.table tbody input[type=checkbox]').each(function() {
                     $(this).prop("checked", toggle);
                 });
                 if(toggle){

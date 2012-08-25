@@ -1,7 +1,7 @@
 <div id="photo-{$photo->id}" class="form-vertical photo-edit tabs">
     <ul>
         <li><a href="#basic-{$photo->id}" title="">{t}Basic information{/t}</a></li>
-        <li><a href="#geolocation-{$photo->id}" title="">{t}Geolocation{/t}</a></li>
+        <li><a href="#geolocation-{$photo->id}" title="" class="has-map">{t}Geolocation{/t}</a></li>
         <li><a href="#additional-info-{$photo->id}" title="">{t escape=off}EXIF &amp; IPTC{/t}</a></li>
     </ul><!-- / -->
     <div id="basic-{$photo->id}" class="clearfix">
@@ -169,58 +169,65 @@
 
         jQuery('#ui-datepicker-div').css('clip', 'auto');
 
-        $(document).ready(function($){
-            map = new GMaps({
-                div: '#map_canvas_{$photo->id}',
-                {if is_array($photo->latlong)}
-                lat: {$photo->latlong['lat']},
-                lng: {$photo->latlong['long']}
-                {else}
-                lat: -12.043333,
-                lng: -77.028333
-                {/if}
-            });
+        var map_initialized = false
+        $("#photo-{$photo->id}").bind("tabsshow", function(event, ui) {
+            if ($(ui).is('has-map')  && !map_initialized) {
+                map_initialized = true;
 
-            {if empty($photo->address)}
-            GMaps.geolocate({
-                success: function(position) {
-                    map.setCenter(position.coords.latitude, position.coords.longitude);
-                },
-                error: function(error) {
-                    // alert('Geolocation failed: '+error.message);
-                },
-                not_supported: function() {
-                    // alert("Your browser does not support geolocation");
-                },
-                always: function() {
-                    // alert("Geolocated done!");
-                }
-            });
-            {/if}
-            $('#geocode_buttom_{$photo->id}').on('click', function(e,ui){
-                e.preventDefault();
-                geolocate_photo()
-            });
-            $('#address_search_{$photo->id}').on('blur', function(e,ui){
-                e.preventDefault();
-                geolocate_photo()
-            });
-            function geolocate_photo() {
-                GMaps.geocode({
-                    address: $('#address_search_{$photo->id}').val().trim(),
-                    callback: function(results, status){
-                        if (status == 'OK'){
-                            var latlng = results[0].geometry.location;
-                            map.setCenter(latlng.lat(), latlng.lng());
-                            map.addMarker({
-                                lat: latlng.lat(),
-                                lng: latlng.lng()
-                            });
-                        }
-                        $('#address_{$photo->id}').val(latlng.lat() + ', '+ latlng.lng());
-                    }
-                });
+
             }
         });
+
+        map = new GMaps({
+            div: '#map_canvas_{$photo->id}',
+            {if is_array($photo->latlong)}
+            lat: {$photo->latlong['lat']},
+            lng: {$photo->latlong['long']}
+            {else}
+            lat: -12.043333,
+            lng: -77.028333
+            {/if}
+        });
+
+        {if empty($photo->address)}
+        GMaps.geolocate({
+            success: function(position) {
+                map.setCenter(position.coords.latitude, position.coords.longitude);
+            },
+            error: function(error) {
+                // alert('Geolocation failed: '+error.message);
+            },
+            not_supported: function() {
+                // alert("Your browser does not support geolocation");
+            },
+            always: function() {
+                // alert("Geolocated done!");
+            }
+        });
+        {/if}
+        $('#geocode_buttom_{$photo->id}').on('click', function(e,ui){
+            e.preventDefault();
+            geolocate_photo()
+        });
+        $('#address_search_{$photo->id}').on('blur', function(e,ui){
+            e.preventDefault();
+            geolocate_photo()
+        });
+        function geolocate_photo() {
+            GMaps.geocode({
+                address: $('#address_search_{$photo->id}').val().trim(),
+                callback: function(results, status){
+                    if (status == 'OK'){
+                        var latlng = results[0].geometry.location;
+                        map.setCenter(latlng.lat(), latlng.lng());
+                        map.addMarker({
+                            lat: latlng.lat(),
+                            lng: latlng.lng()
+                        });
+                    }
+                    $('#address_{$photo->id}').val(latlng.lat() + ', '+ latlng.lng());
+                }
+            });
+        }
     });
 </script>

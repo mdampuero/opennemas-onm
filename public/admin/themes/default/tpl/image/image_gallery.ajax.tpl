@@ -62,7 +62,9 @@
     {t}No available images with your search criteria{/t}
     {/section}
 </ul>
-<div class="pagination">{$imagePager}</div>
+
+{$imagePager}
+
 <script>
 jQuery(document).ready(function($){
     $( "#photos_container #photos .draggable-handler" ).draggable({ opacity: 0.5, helper: "clone"});

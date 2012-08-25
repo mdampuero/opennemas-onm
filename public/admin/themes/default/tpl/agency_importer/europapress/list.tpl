@@ -113,7 +113,7 @@
                 </td>
 
                 <td class="right nowrap">
-                    <ul class="action-buttons">
+                    <ul class="btn-group">
                         <li>
                             <a class="btn btn-mini" href="{url name=admin_importer_europapress_import id=$element->xmlFile|urlencode}" title="{t}Import{/t}">
                                 {t}Import{/t}

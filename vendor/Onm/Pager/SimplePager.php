@@ -96,24 +96,24 @@ class SimplePager
             if ($total <= $items) {
                 $html ='';
             } else {
-                $html.= "<li>";
+                $html.= "<li class='next'>";
                 $html.= $next;
                 $html.= "</li>";
             }
         } elseif ($total <= $items) {
-            $html .= "<li>";
+            $html .= "<li class='previous'>";
             $html .= $previous;
             $html .= "</li>";
         } else {
-            $html .= "<li>";
+            $html .= "<li class='previous'>";
             $html .= $previous;
             $html .= "</li>";
-            $html .= "<li>";
+            $html .= "<li class='next'>";
             $html .= $next;
             $html .= "</li>";
         }
 
-        $output = "<ul id='menu' class='clearfix'>".$html."</ul>";
+        $output = "<ul class='pager'>".$html."</ul>";
 
         return $output;
     }

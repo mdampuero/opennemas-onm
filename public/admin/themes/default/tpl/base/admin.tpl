@@ -64,10 +64,7 @@
 
             <div class="global-search nofillonhover">
                 <form action="{url name=admin_search}">
-                    <input type="hidden" name="id" value="0" />
-                    <input type="hidden" name="article" value="on" />
-                    <input type="hidden" name="opinion" value="on" />
-                    <input type="search" name="stringSearch" placeholder="{t}Search...{/t}" class="string-search">
+                    <input type="search" name="search_string" placeholder="{t}Search...{/t}" class="string-search">
                 </form>
             </div>
 

@@ -55,7 +55,7 @@
                             </div>
                         </td>
                         <td class="right nowrap">
-                            <ul class="action-buttons">
+                            <ul class="btn-group">
                                 <li>
                                     <a href="{$smarty.server.PHP_SELF}?action=edit&amp;site_url={$site}"
                                        title="{t}Edit{/t}">
