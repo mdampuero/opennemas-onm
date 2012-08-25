@@ -24,11 +24,11 @@
         {css_tag href="/jquery/jquery-ui.css" media="all" type="text/css"}
 	{/block}
 
-    {block name="prototype"}
+    {*block name="prototype"}
         {script_tag src="/prototype.js"}
         {script_tag src="/scriptaculous/scriptaculous.js"}
         {script_tag src="/scriptaculous/effects.js"}
-    {/block}
+    {/block*}
 
     {block name="js-library"}
         {script_tag src="/jquery/jquery.min.js"}

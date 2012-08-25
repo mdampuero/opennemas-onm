@@ -30,16 +30,3 @@ onImageKeyEnter = function(e, category, metadatas, page)
         getGalleryImages('listByMetadatas', category, metadatas, page);
     }
 };
-
-
-function getGalleryVideos(action, category, metadatas, page, div)
-{
-    if (metadatas === 0) {
-		action = 'listByCategory';
-    }
-    new Ajax.Updater(
-        div,
-        "/admin/controllers/video/videoGallery.php?action="+action+"&page="+page+"&category="+category+"&metadatas="+metadatas,
-        { evalScripts: true }
-    );
-}
