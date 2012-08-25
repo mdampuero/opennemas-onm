@@ -69,9 +69,8 @@ function toggleAdvanced() {
             <div class="search-form">
                 <div>
                     <input type="search" name="string_search" value="{$smarty.request.string_search}" style="width:95%;" placeholder="{t}Image name{/t}">
-                    <p>
-                        <button type="submit" class="onm-button red submit" style="width:100%;"><i class="icon-search"></i></button>
-                    </p>
+                    &nbsp;
+                    <button type="submit" class="onm-button red submit" style="width:100%;"><i class="icon-search icon-white"></i></button>
 
                     <label for="category">{t}Category{/t}</label>
                     <select name="category">
@@ -84,6 +83,11 @@ function toggleAdvanced() {
                            {/section}
                         {/section}
                     </select>
+
+                    <label for="starttime">{t}Date period:{/t}</label>
+                    <input type="datetime" id="starttime" name="starttime" value="{$search_criteria['starttime']}"   placeholder="{t}From{/t}"  class="inline"/>
+                    <input type="datetime" id="endtime" name="endtime" value="{$search_criteria['endtime']}"  placeholder="{t}To{/t}"  class="inline"/>
+
 
                     <label for="min_width">{t}Width (px.){/t}</label>
                     <input type="number" id="min_width" name="min_width" placeholder="{t}Min{/t}" value="{$search_criteria['minWidth']}" class="inline"/>
@@ -116,11 +120,6 @@ function toggleAdvanced() {
 
                     <label for="author">{t}Author:{/t}</label>
                     <input type="text" id="author" name="author" value="{$search_criteria['author']}" size="15" />
-
-                    <label for="starttime">{t}Date period:{/t}</label>
-                    <input type="datetime" id="starttime" name="starttime" value="{$search_criteria['starttime']}"   placeholder="{t}From{/t}"  class="inline"/>
-                    <input type="datetime" id="endtime" name="endtime" value="{$search_criteria['endtime']}"  placeholder="{t}To{/t}"  class="inline"/>
-
                 </div><!-- /search-form -->
             </div>
         </div><!-- /search -->

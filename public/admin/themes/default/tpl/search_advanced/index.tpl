@@ -50,8 +50,8 @@ span.highlighted {
 
                         <label for="string_search">{t}Content name{/t}</label>
                         <input type="search" id="search_string" name="search_string" title="stringSearch" value="{$search_string}"
-                                class="input-medium search-query" />
-                        <button type="submit" class="onm-button red submit" style="width:100%"><i class="icon-search"></i></button>
+                                style="width:95%"/>
+                        <button type="submit" class="onm-button red submit" style="width:100%"><i class="icon-search icon-white"></i></button>
 
                         <br>
 
