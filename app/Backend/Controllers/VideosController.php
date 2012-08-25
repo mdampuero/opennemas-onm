@@ -282,7 +282,7 @@ class VideosController extends Controller
             }
             if ($continue) {
                 return $this->redirect($this->generateUrl(
-                    'admin_videos_show',
+                    'admin_video_show',
                     array('id' => $video->id)
                 ));
             } else {

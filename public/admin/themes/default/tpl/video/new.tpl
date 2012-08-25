@@ -2,39 +2,10 @@
 
 {block name="header-css" append}
 <style type="text/css">
-	.utilities-conf label {
-		text-transform:none;
-	}
-    table.adminform tbody {
-        padding:5px;
-    }
-
-    table th, table label {
-        color: #888;
-        text-shadow: white 0 1px 0;
-        font-size: 13px;
-    }
-    th {
-        vertical-align: top;
-        text-align: left;
-        padding: 10px;
-        width: 200px;
-        font-size: 13px;
-    }
-    label{
-        font-weight:normal;
-    }
-    legend {
-        color:#666;
-        text-transform:uppercase;
-        font-size:13px;
-        padding:0 10px;
-    }
-
-    input[type="text"],
-    textarea{
-        width:400px;
-        max-height:80%
+    .utilities-conf {
+        position:absolute;
+        top:0;
+        right:0;
     }
 </style>
 {/block}
@@ -45,13 +16,18 @@
         get_information: '{url name=admin_videos_get_info}',
         fill_tags: '{url name=admin_utils_calculate_tags}'
     }
+
+    jQuery(document).ready(function($){
+        $('#formulario').onmValidate({
+            'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
+        });
+    });
     </script>
     {script_tag src="/jquery-onm/jquery.video.js" language="javascript"}
 {/block}
 
 {block name="content"}
-
-<form action="{if isset($video)}{url name=admin_videos_update id=$video->id}{else}{url name=admin_videos_create}{/if}" method="POST" name="formulario" enctype="multipart/form-data">
+<form action="{if isset($video)}{url name=admin_videos_update id=$video->id}{else}{url name=admin_videos_create}{/if}" method="POST" name="formulario" id="formulario" enctype="multipart/form-data">
 
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
@@ -90,74 +66,45 @@
         </div>
     </div>
 
-        <div class="wrapper-content">
+    <div class="wrapper-content ">
 
-            {render_messages}
+        {render_messages}
 
-			<table class="adminform">
-				<tbody>
-					<tr>
-                        <td colspan=2></td>
-						<td rowspan=3 style="padding:10px; width:30%; vertical-align:top;">
-							<div class="utilities-conf">
-								<table>
-									<tr>
-										<td>
-											<label for="title">{t}Section:{/t}</label>
-										</td>
-										<td>
-											<select name="category" id="category">
-												{section name=as loop=$allcategorys}
-													<option value="{$allcategorys[as]->pk_content_category}" {if isset($video) && ($video->category eq $allcategorys[as]->pk_content_category || $category eq $allcategorys[as]->pk_content_category)}selected{/if} name="{$allcategorys[as]->title}" >{$allcategorys[as]->title}</option>
-													{section name=su loop=$subcat[as]}
-														<option value="{$subcat[as][su]->pk_content_category}" {if isset($video) && ($video->category eq $subcat[as][su]->pk_content_category || $category eq $allcategorys[as]->pk_content_category)}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
-													{/section}
-												{/section}
-											</select>
-										</td>
-									</tr>
-									<tr>
-										<td><label for="title">{t}Available:{/t}</label></td>
-										<td>
-											<select name="available" id="available"
-												{acl isNotAllowed="ALBUM_AVAILABLE"} disabled="disabled" {/acl} class="required">
-												 <option value="1" {if isset($video) && $video->available eq '1'} selected {/if}>Si</option>
-												 <option value="0" {if isset($video) && $video->available eq '0'} selected {/if}>No</option>
-											</select>
-										</td>
-									</tr>
-								</table>
-							</div>
+        <div class="form-horizontal panel clearfix">
+            <div class="utilities-conf form-vertical">
+                <div class="control-group">
+                    <label for="category" class="control-label">{t}Section:{/t}</label>
+                    <div class="controls">
+                        <select name="category" id="category">
+                        {section name=as loop=$allcategorys}
+                            <option value="{$allcategorys[as]->pk_content_category}" {if isset($video) && ($video->category eq $allcategorys[as]->pk_content_category || $category eq $allcategorys[as]->pk_content_category)}selected{/if} name="{$allcategorys[as]->title}" >{$allcategorys[as]->title}</option>
+                            {section name=su loop=$subcat[as]}
+                            <option value="{$subcat[as][su]->pk_content_category}" {if isset($video) && ($video->category eq $subcat[as][su]->pk_content_category || $category eq $allcategorys[as]->pk_content_category)}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
+                            {/section}
+                        {/section}
+                    </select>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="available" class="control-label">{t}Available{/t}</label>
+                    <div class="controls">
+                        <select name="available" id="available"
+                            {acl isNotAllowed="VIDEO_AVAILABLE"} disabled="disabled" {/acl} class="required">
+                             <option value="1" {if isset($video) && $video->available eq '1'} selected {/if}>Si</option>
+                             <option value="0" {if isset($video) && $video->available eq '0'} selected {/if}>No</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
 
-							<br>
+            {if $type == "file" || (isset($video) && $video->author_name == 'internal')}
+                {include file="video/partials/_form_video_internal.tpl"}
+            {else}
+                {include file="video/partials/_form_video_panorama.tpl"}
+            {/if}
+        </div>
 
-							<input type="hidden" value="1" name="content_status">
-                            {if $smarty.get.type != "file" && ( ($video->author_name != 'internal'))}
-							<div class="onm-help-block">
-								<div class="title"><h4>{t}Allowed video sources:{/t}</h4></div>
-								<div class="content">
-									{t}For now OpenNeMas only accepts videos from:{/t}:
-									{include file="video/partials/_sourceinfo.tpl"}
-								</div>
-                                {/if}
-							</div>
-
-						</td>
-					</tr>
-                    {if $type == "file" || (isset($video) && $video->author_name == 'internal')}
-                        {include file="video/partials/_form_video_internal.tpl"}
-                    {else}
-                        {include file="video/partials/_form_video_panorama.tpl"}
-                    {/if}
-
-				</tbody>
-				<tfooter>
-					<tr>
-						<td></td>
-					</tr>
-				</tfooter>
-			</table>
-
+        <input type="hidden" value="1" name="content_status">
         <input type="hidden" name="type" value="{$smarty.get.type}">
 		<input type="hidden" name="id" id="id" value="{$video->id|default:""}" />
 	</div>
