@@ -1,17 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="footer-js" append}
-    {script_tag src="/AdPosition.js"}
-    <script type="text/javascript">
-        function submitFilters(frm) {
-            $('action').value='list';
-            $('page').value = 1;
-
-            frm.submit();
-        }
-    </script>
-{/block}
-
 
 {block name="content"}
 <form action="{url name=admin_ads}" method="get" name="formulario" id="formulario">
@@ -67,7 +55,7 @@
         <div class="table-info clearfix">
             <div class="pull-right form-inline">
                 <label for="filter[type_advertisement]">{t}Banner type:{/t}</label>
-                <select name="filter[type_advertisement]" id="filter[type_advertisement]" onchange="submitFilters(this.form);">
+                <select name="filter[type_advertisement]" id="filter[type_advertisement]">
                     {if !isset($smarty.request.filter) && !isset($smarty.request.filter.type_advertisement)}
                         {assign var=filterType value=""}
                     {else}
@@ -77,7 +65,7 @@
                 </select>
                 &nbsp;&nbsp;&nbsp;
                 <label>{t}Status:{/t}</label>
-                <select name="filter[available]" onchange="submitFilters(this.form);">
+                <select name="filter[available]"x>
                     {if !isset($smarty.request.filter) && !isset($smarty.request.filter.type_advertisement)}
                         {assign var=filterAvailable value=""}
                     {else}
@@ -88,7 +76,7 @@
                  &nbsp;&nbsp;&nbsp;
                 <label>{t}Type:{/t}</label>
                 <div class="input-append">
-                    <select name="filter[type]" onchange="submitFilters(this.form);">
+                    <select name="filter[type]">
                         {if !isset($smarty.request.filter) && !isset($smarty.request.filter.type)}
                             {assign var=filterType value=""}
                         {else}
