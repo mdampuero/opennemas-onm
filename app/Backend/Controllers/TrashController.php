@@ -102,6 +102,7 @@ class TrashController extends Controller
 
         if ((int) $contentId) {
             $content = new \Content($contentId);
+
             if (!empty($content->id)) {
                 $contentTypeId = $content->content_type;
 
@@ -111,7 +112,7 @@ class TrashController extends Controller
                     .'WHERE pk_content_type = "'. $contentTypeId.'"'
                 );
 
-                $contentTypeName = ucwords($name);
+                $contentTypeName = classify($name);
                 $content = new $contentTypeName($contentId);
                 $content->remove($contentId);
             } else {
@@ -265,5 +266,5 @@ class TrashController extends Controller
             ));
         }
     }
-
 }
+
