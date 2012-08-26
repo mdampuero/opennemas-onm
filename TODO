@@ -1,10 +1,6 @@
 TODO
 ====
 
-Opinion Authors
----------------
-- Batch actions
-
 Articles
 --------
 - Batch actions
@@ -14,28 +10,13 @@ Newsletter
 -------- --
 - Only initial work done
 
-Trash
------
-- All types pill doesn't work
-- Unable to (batch) delete static pages
-
 Polls
 -----
-- Review add items
-- Port js code to jQuery
-
-Files
------
-- Review add items
-- Port js code to jQuery
+- Review drop poll elements that doesn't work
 
 Specials
 --------
 Review d&d of contents in specials
-
-CSS
----
-Drop remaining listing-table tables and related CSS
 
 Image Galleries
 ---------------
@@ -50,6 +31,10 @@ General
 - Include the mailer initialization into the container and make use of it
   (maybe using the Swift Mailer library)
 - Drop category and menu logic from init method in Backend Controllers
+
+Opinion Authors
+---------------
+- Batch actions
 
 Opinion
 -------

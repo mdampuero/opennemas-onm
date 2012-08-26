@@ -1,5 +1,4 @@
 <ul class="pills clearfix">
-    <li><a href="{url name=admin_trash mytype=all}" {if $mytype=='all'}class="active"{/if}>{t}All types{/t}</a></li>
     {is_module_activated name="ARTICLE_MANAGER"}
     {acl isAllowed="ARTICLE_TRASH"}
         <li><a href="{url name=admin_trash mytype=article}" {if $mytype=='article'}class="active"{/if}>{t}Articles{/t}</a></li>
