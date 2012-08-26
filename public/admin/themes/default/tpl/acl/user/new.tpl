@@ -90,7 +90,7 @@ label {
                     <div class="control-group">
                         <label for="passwordconfirm" class="control-label">{t}Confirm password{/t}</label>
                         <div class="controls">
-                            <input type="password" id="passwordconfirm" name="passwordconfirm" value="" class="input-medium {if $smarty.request.action eq "new"}required{/if} validate-password-confirm" maxlength="20"/>
+                            <input type="password" id="passwordconfirm" name="passwordconfirm" value="" data-password-equals="password" class="input-medium {if $smarty.request.action eq "new"}required{/if} validate-password-confirm" maxlength="20"/>
                         </div>
                     </div>
                 <fieldset>
