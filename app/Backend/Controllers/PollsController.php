@@ -273,10 +273,10 @@ class PollsController extends Controller
                 'favorite'      => $request->request->getDigits('favorite', 0),
                 'with_comment'  => $request->request->getDigits('with_comment', 0),
                 'category'      => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
-                'available'     => $request->request->filter('available', 0, FILTER_SANITIZE_STRING),
+                'available'     => $request->request->getDigits('available', 0),
                 'item'          => $request->request->get('item'),
-                'votes'         => $request->request->get('votes'),
             );
+
 
             if ($poll->update($data)) {
                 m::add(_('Poll successfully updated.'), m::SUCCESS);
@@ -597,9 +597,9 @@ class PollsController extends Controller
             $settingsRAW = $request->request->get('poll_settings');
             $data = array(
                 'poll_settings' => array(
-                    'typeValue'  => $settingsRAW['typeValue'] ?: 0,
-                    'heightPoll' => $settingsRAW['heightPoll'] ?: 0,
-                    'widthPoll'  => $settingsRAW['widthPoll'] ?: 0,
+                    'typeValue'    => $settingsRAW['typeValue'] ?: 0,
+                    'heightPoll'   => $settingsRAW['heightPoll'] ?: 0,
+                    'widthPoll'    => $settingsRAW['widthPoll'] ?: 0,
                     'total_widget' => $settingsRAW['total_widget'] ?: 0,
                     'widthWidget'  => $settingsRAW['widthWidget'] ?: 0,
                     'heightWidget' => $settingsRAW['heightWidget'] ?: 0,
@@ -620,5 +620,5 @@ class PollsController extends Controller
             ));
         }
     }
-
 }
+

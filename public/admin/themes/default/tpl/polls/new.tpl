@@ -8,14 +8,42 @@
         $('#formulario').onmValidate({
             'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
         });
+
+        $('#answers').on('click', '.del', function() {
+            var button = $(this);
+            log(button)
+            button.closest('.poll_answer').each(function(){
+                log($(this));
+                $(this).remove();
+            });
+        })
+
+        $('#add_answer').on('click', function(){
+            var source = $('#poll-template').html();
+            $('#answers').append(source);
+        });
+
     });
     </script>
+<script id="poll-template" type="text/x-handlebars-template">
+<div class="poll_answer">
+    <div class="input-append">
+        <input type="text" name="item[]" value=""/>
+        <div class="btn addon del">
+            <i class="icon-trash"></i>
+        </div>
+    </div>
+</div>
+</script>
 {/block}
 
 {block name="header-css" append}
 <style type="text/css">
     .controls label {
         display:inline-block;
+    }
+    .poll_answer {
+        margin-bottom:5px;
     }
 </style>
 {/block}
@@ -102,14 +130,14 @@
             <div class="control-group">
                 <label class="control-label"></label>
                 <div class="controls">
-                    <input id="available" name="available" type="checkbox" {if $poll->available eq 1}checked="checked"{/if} />
+                    <input id="available" name="available" type="checkbox" {if $poll->available eq 1}checked="checked"{/if} value="1"/>
                     <label for="available">{t}Available{/t}</label>
                     <br>
-                    <input id="favorite" name="favorite" type="checkbox" {if $poll->favorite eq 1}checked="checked"{/if} />
+                    <input id="favorite" name="favorite" type="checkbox" {if $poll->favorite eq 1}checked="checked"{/if} value="1" />
                     <label for="favorite">{t}Favorite{/t}</label>
                     <br>
                     {is_module_activated name="COMMENT_MANAGER"}
-                    <input id="with_comment" name="with_comment" type="checkbox" {if $poll->with_comment eq 1}checked="checked"{/if} />
+                    <input id="with_comment" name="with_comment" type="checkbox" {if $poll->with_comment eq 1}checked="checked"{/if} value="1" />
                     <label for="with_comment">{t}Allow comments{/t}</label>
                     {/is_module_activated}
                 </div>
@@ -120,23 +148,21 @@
                     <label class="control-label" for="answers">{t}Allowed answers{/t}</label>
                     <div class="controls">
                         <div id="answers">
-                            {assign var='num' value='0'}
-                            {section name=i loop=$items}
-                                <div id="item{$smarty.section.i.iteration}" class="marcoItem">
-                                    <input type="hidden" readonly name="votes[{$smarty.section.i.iteration}]" value="{$items[i].votes}" id="votes[{$smarty.section.i.iteration}]"/>
+                            {foreach name=i from=$items item=answer}
+                                <div class="poll_answer">
                                     <div class="input-append">
-                                        <input type="text" name="item[{$smarty.section.i.iteration}]" value="{$items[i].item}" id="item[{$smarty.section.i.iteration}]" size="45"/>
-                                        <div class="btn addon">
+                                        <input type="text" name="item[]" value="{$answer.item}"/>
+                                        <input type="hidden" name="votes[]" value="{$answer.votes}">
+                                        <div class="btn addon del">
                                             <i class="icon-trash"></i>
                                         </div>
                                     </div>
-                                    <small>{t}Votes{/t}:  {$items[i].votes} / {$poll->total_votes}</small>
+                                    <small>{t}Votes{/t}:  {$answer.votes} / {$poll->total_votes}</small>
                                 </div>
-                                {assign var='num' value=$smarty.section.i.iteration}
-                            {/section}
+                            {/foreach}
                             </div>
                         <br>
-                        <a onClick="add_item_poll({$num})" class="btn">
+                        <a id="add_answer" class="btn">
                             <i class="icon-plus"></i>
                             {t}Add new answer{/t}
                         </a>
