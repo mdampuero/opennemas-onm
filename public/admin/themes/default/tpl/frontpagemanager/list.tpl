@@ -78,24 +78,24 @@
                 <li class="separator"></li>
 
                 <li>
-                     <button data-category="{$category}" id="button_clearcache">
-                         <img border="0" src="{$params.IMAGE_DIR}clearcache.png" title="{t}Clean cache{/t}" alt="" /><br />{t}Clean cache{/t}
+                     <button data-category="{$category}" id="button_clearcache" title="{t}Clean cache{/t}">
+                         <img src="{$params.IMAGE_DIR}clearcache.png" alt="" /><br />{t}Clean cache{/t}
                      </button>
                 </li>
 
                 <li>
                     <a href="#" id="button_previewfrontpage"  data-category-name="{if $category eq 0}{t}home{/t}{else}{$datos_cat[0]->name}{/if}" title="{t}Preview frontpage with actual content positions{/t}">
-                        <img border="0" src="{$params.IMAGE_DIR}preview.png" title="{t}Preview{/t}" alt="{t}Preview{/t}" ><br />{t}Preview{/t}
+                        <img src="{$params.IMAGE_DIR}preview.png" alt="{t}Preview{/t}" ><br />{t}Preview{/t}
                     </a>
                 </li>
                 <li>
-                    <a id="button_savepositions" href="#" class="admin_add" title="Guardar Positions" alt="Guardar Cambios">
-                        <img border="0" src="{$params.IMAGE_DIR}save.png" title="{t}Save changes{/t}" alt="{t}Save changes{/t}" ><br />{t}Save changes{/t}
+                    <a id="button_savepositions" href="#" class="admin_add"  title="{t}Save changes{/t}">
+                        <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save changes{/t}" ><br />{t}Save changes{/t}
                     </a>
                 </li>
                 <li>
-                     <a href="#" id="button_addnewcontents">
-                         <img border="0" src="{$params.IMAGE_DIR}list-add.png" title="{t}Add contents{/t}" alt="" /><br />{t}Add contents{/t}
+                     <a href="#" id="button_addnewcontents" title="{t}Add contents{/t}">
+                         <img src="{$params.IMAGE_DIR}list-add.png" alt="" /><br />{t}Add contents{/t}
                      </a>
                 </li>
             </ul><!-- /old-button -->

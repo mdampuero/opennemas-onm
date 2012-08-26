@@ -9,14 +9,14 @@
             <option value="0" {if $category eq 0}selected{/if}>{t}Home{/t}</option>
             {section name=as loop=$allcategorys}
                 {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
-                <option value="{$allcategorys[as]->pk_content_category}"  name="{$allcategorys[as]->title}"
+                <option value="{$allcategorys[as]->pk_content_category}"
                     {if $category eq $allcategorys[as]->pk_content_category} selected ="selected" {/if} >
                         {t 1=$allcategorys[as]->title}%1{/t}
                 </option>
                 {/acl}
                 {section name=su loop=$subcat[as]}
                     {acl hasCategoryAccess=$subcat[as]->pk_content_category}
-                    <option value="{$subcat[as][su]->pk_content_category}" name="{$subcat[as][su]->title}"
+                    <option value="{$subcat[as][su]->pk_content_category}"
                         {if $category eq $subcat[as][su]->pk_content_category} selected ="selected" {/if} >
                         &nbsp;&nbsp;|_&nbsp;&nbsp;{t 1=$subcat[as][su]->title}%1{/t}
                     </option>

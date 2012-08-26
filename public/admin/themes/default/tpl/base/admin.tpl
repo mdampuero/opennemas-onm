@@ -6,8 +6,6 @@
 <head>
     <meta charset="utf-8">
 
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-
     <meta name="author"    content="OpenHost,SL">
     <meta name="generator" content="OpenNemas - News Management System">
     <meta name="viewport"  content="width=device-width">
@@ -32,9 +30,6 @@
 
     {block name="js-library"}
         {script_tag src="/jquery/jquery.min.js"}
-        <script type="text/javascript">
-        jQuery.noConflict();
-        </script>
         {script_tag src="/libs/bootstrap.js"}
         {script_tag src="/libs/jquery.tools.min.js"}
         {script_tag src="/jquery-onm/jquery.onmvalidate.js"}

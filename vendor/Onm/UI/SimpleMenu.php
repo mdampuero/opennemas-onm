@@ -68,6 +68,7 @@ class SimpleMenu
         if (preg_match("@#@", $url)) {
             $url = $url;
         }
+        $url = htmlentities($url);
 
         $target = '';
         if ($external) {

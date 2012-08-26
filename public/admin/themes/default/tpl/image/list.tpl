@@ -43,7 +43,7 @@
                 </li>
                 {acl isAllowed="IMAGE_CREATE"}
                 <li>
-                    <a class="admin_add" href="{url name=admin_image_new category=$category}" name="submit_mult" value="Subir Fotos">
+                    <a class="admin_add" href="{url name=admin_image_new category=$category}">
                         <img src="{$params.IMAGE_DIR}upload.png" alt="{t}Upload{/t}"><br />{t}Upload{/t}
                     </a>
                 </li>
