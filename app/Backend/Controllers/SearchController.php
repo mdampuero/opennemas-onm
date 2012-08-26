@@ -39,7 +39,7 @@ class SearchController extends Controller
      *
      * @return Response the response object
      **/
-    public function defaultAction()
+    public function defaultAction(Request $request)
     {
         $contentTypes = $this->getContentTypesFiltered();
 
@@ -115,7 +115,7 @@ class SearchController extends Controller
         if (!empty($searchString)) {
 
             $searchStringArray = array_map(
-                function($element) {
+                function ($element) {
                     return trim($element);
                 }, explode(',', $searchString)
             );
@@ -226,5 +226,5 @@ class SearchController extends Controller
 
         return $contentTypesFiltered;
     }
-
 }
+

@@ -71,7 +71,7 @@ class CommentsController extends Controller
      *
      * @return Symfony\Component\HttpFoundation\Response the response object
      **/
-    public function listAction()
+    public function listAction(Request $request)
     {
 
         $request = $this->get('request');
@@ -180,7 +180,7 @@ class CommentsController extends Controller
      *
      * @return Symfony\Component\HttpFoundation\Response the response object
      **/
-    public function showAction()
+    public function showAction(Request $request)
     {
         $this->checkAclOrForward('COMMENT_UPDATE');
 
@@ -244,7 +244,7 @@ class CommentsController extends Controller
      *
      * @return Symfony\Component\HttpFoundation\Response the response object
      **/
-    public function deleteAction()
+    public function deleteAction(Request $request)
     {
         $this->checkAclOrForward('COMMENT_DELETE');
 
@@ -268,7 +268,7 @@ class CommentsController extends Controller
      *
      * @return Symfony\Component\HttpFoundation\Response the response object
      **/
-    public function toggleStatusAction()
+    public function toggleStatusAction(Request $request)
     {
         $this->checkAclOrForward('COMMENT_AVAILABLE');
 
@@ -300,7 +300,7 @@ class CommentsController extends Controller
      *
      * @return Symfony\Component\HttpFoundation\Response the response object
      **/
-    public function batchStatusAction()
+    public function batchStatusAction(Request $request)
     {
         $this->checkAclOrForward('COMMENT_AVAILABLE');
 
@@ -340,7 +340,7 @@ class CommentsController extends Controller
      *
      * @return Symfony\Component\HttpFoundation\Response the response object
      **/
-    public function batchDeleteAction()
+    public function batchDeleteAction(Request $request)
     {
         $this->checkAclOrForward('COMMENT_DELETE');
 
@@ -366,7 +366,6 @@ class CommentsController extends Controller
             );
 
         return $this->redirect($this->generateUrl('admin_comments', $params));
-
     }
-
 }
+

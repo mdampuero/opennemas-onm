@@ -53,7 +53,7 @@ class ImporterEfeController extends Controller
      *
      * @return Response the response object
      **/
-    public function listAction()
+    public function listAction(Request $request)
     {
         $page = $this->request->query->filter('page', 0, FILTER_VALIDATE_INT);
 
@@ -137,7 +137,7 @@ class ImporterEfeController extends Controller
      *
      * @return Response the response object
      **/
-    public function showAction()
+    public function showAction(Request $request)
     {
         $id = $this->request->query->filter('id', null, FILTER_SANITIZE_STRING);
 
@@ -170,7 +170,7 @@ class ImporterEfeController extends Controller
      *
      * @return Response the response object
      **/
-    public function importAction()
+    public function importAction(Request $request)
     {
         $id       = $this->request->query->filter('id', null, FILTER_SANITIZE_STRING);
         $category = $this->request->request->filter('category', null, FILTER_SANITIZE_STRING);
@@ -313,7 +313,7 @@ class ImporterEfeController extends Controller
      *
      * @return Response the response object
      **/
-    public function selectCategoryWhereToImportAction()
+    public function selectCategoryWhereToImportAction(Request $request)
     {
         $id       = $this->request->query->filter('id', null, FILTER_SANITIZE_STRING);
         $category = $this->request->query->filter('category', null, FILTER_SANITIZE_STRING);
@@ -347,7 +347,7 @@ class ImporterEfeController extends Controller
      *
      * @return Response the response object
      **/
-    public function showAttachmentAction()
+    public function showAttachmentAction(Request $request)
     {
         $id           = $this->request->query->filter('id', null, FILTER_SANITIZE_STRING);
         $attachmentId = $this->request->query->filter('attachment_id', null, FILTER_SANITIZE_STRING);
@@ -378,7 +378,7 @@ class ImporterEfeController extends Controller
      *
      * @return Response the response object
      **/
-    public function configAction()
+    public function configAction(Request $request)
     {
         if (count($_POST) <= 0) {
             if ($serverAuth = s::get('efe_server_auth')) {
@@ -447,7 +447,7 @@ class ImporterEfeController extends Controller
      *
      * @return Response the response object
      **/
-    public function unlockAction()
+    public function unlockAction(Request $request)
     {
         $e = new \Onm\Import\Efe();
         $e->unlockSync();
@@ -465,7 +465,7 @@ class ImporterEfeController extends Controller
      *
      * @return Response the response object
      **/
-    public function syncAction()
+    public function syncAction(Request $request)
     {
         $page = $this->request->query->filter('page', 0, FILTER_VALIDATE_INT);
         try {
@@ -507,5 +507,5 @@ class ImporterEfeController extends Controller
             $this->generateUrl('admin_importer_efe', array('page' => $page))
         );
     }
-
 }
+

@@ -41,7 +41,7 @@ class DatabaseErrorsController extends Controller
      *
      * @return string the response
      **/
-    public function defaultAction()
+    public function defaultAction(Request $request)
     {
         if (!\Acl::isMaster()) {
             m::add("You don't have permissions");
@@ -114,7 +114,7 @@ class DatabaseErrorsController extends Controller
      *
      * @return string the response
      **/
-    public function purgeAction()
+    public function purgeAction(Request $request)
     {
         if (!\Acl::isMaster()) {
             m::add("You don't have permissions");
@@ -133,5 +133,5 @@ class DatabaseErrorsController extends Controller
 
         return $this->redirect($this->generateUrl('admin_databaseerrors', array(), true));
     }
-
 }
+

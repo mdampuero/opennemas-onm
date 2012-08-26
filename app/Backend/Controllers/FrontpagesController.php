@@ -38,7 +38,7 @@ class FrontpagesController extends Controller
      *
      * @return Response the response object
      **/
-    public function showAction()
+    public function showAction(Request $request)
     {
         $page     = $this->request->query->filter('page', 1, FILTER_SANITIZE_NUMBER_INT);
         $category = $this->request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
@@ -128,7 +128,7 @@ class FrontpagesController extends Controller
      *
      * @return Response the response object
      **/
-    public function savePositionsAction()
+    public function savePositionsAction(Request $request)
     {
         if (!\Acl::check('ARTICLE_FRONTPAGE')) {
             \Acl::deny();
@@ -211,7 +211,7 @@ class FrontpagesController extends Controller
      * @return void
      * @author
      **/
-    public function previewAction()
+    public function previewAction(Request $request)
     {
         $categoryName        = $this->request->request->get('category_name',
                 'home', FILTER_SANITIZE_STRING);
@@ -262,3 +262,4 @@ class FrontpagesController extends Controller
         return $this->render('frontpage/frontpage.tpl');
     }
 }
+

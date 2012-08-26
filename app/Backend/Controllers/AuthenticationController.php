@@ -39,7 +39,7 @@ class AuthenticationController extends Controller
      *
      * @return string the response string
      **/
-    public function defaultAction()
+    public function defaultAction(Request $request)
     {
         $token = md5(uniqid(mt_rand(), true));
 
@@ -60,7 +60,7 @@ class AuthenticationController extends Controller
      *
      * @return string the response
      **/
-    public function processformAction()
+    public function processformAction(Request $request)
     {
         //  Get values from post
         $login    = $this->request->request->filter('login', null, FILTER_SANITIZE_STRING);
@@ -136,7 +136,7 @@ class AuthenticationController extends Controller
      *
      * @return string the response
      **/
-    public function logoutAction()
+    public function logoutAction(Request $request)
     {
         $csrf = filter_input(INPUT_GET, 'csrf');
 
@@ -157,5 +157,5 @@ class AuthenticationController extends Controller
             return Response('Are you hijacking my session dude?!');
         }
     }
-
 }
+

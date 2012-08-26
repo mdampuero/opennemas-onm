@@ -62,7 +62,7 @@ class AlbumsController extends Controller
      *
      * @return void
      **/
-    public function listAction()
+    public function listAction(Request $request)
     {
         $this->checkAclOrForward('ALBUM_ADMIN');
 
@@ -124,7 +124,7 @@ class AlbumsController extends Controller
      *
      * @return Response the response object
      **/
-    public function widgetAction()
+    public function widgetAction(Request $request)
     {
         $this->checkAclOrForward('ALBUM_ADMIN');
 
@@ -190,7 +190,7 @@ class AlbumsController extends Controller
      *
      * @return Response the response object
      **/
-    public function createAction()
+    public function createAction(Request $request)
     {
         $this->checkAclOrForward('ALBUM_CREATE');
 
@@ -237,7 +237,7 @@ class AlbumsController extends Controller
      *
      * @return Response the response object
      **/
-    public function deleteAction()
+    public function deleteAction(Request $request)
     {
         $this->checkAclOrForward('ALBUM_DELETE');
 
@@ -268,7 +268,7 @@ class AlbumsController extends Controller
      *
      * @return Response the response object
      **/
-    public function showAction()
+    public function showAction(Request $request)
     {
         $this->checkAclOrForward('ALBUM_UPDATE');
 
@@ -298,7 +298,7 @@ class AlbumsController extends Controller
      *
      * @return Response the response object
      **/
-    public function updateAction()
+    public function updateAction(Request $request)
     {
         $this->checkAclOrForward('ALBUM_UPDATE');
 
@@ -365,7 +365,7 @@ class AlbumsController extends Controller
      *
      * @return Response the response object
      **/
-    public function toggleAvailableAction()
+    public function toggleAvailableAction(Request $request)
     {
         $this->checkAclOrForward('ALBUM_AVAILABLE');
 
@@ -400,7 +400,7 @@ class AlbumsController extends Controller
      *
      * @return Response the response object
      **/
-    public function toggleFavoriteAction()
+    public function toggleFavoriteAction(Request $request)
     {
         $this->checkAclOrForward('ALBUM_AVAILABLE');
 
@@ -434,7 +434,7 @@ class AlbumsController extends Controller
      *
      * @return Response the response object
      **/
-    public function toggleInHomeAction()
+    public function toggleInHomeAction(Request $request)
     {
         $this->checkAclOrForward('ALBUM_AVAILABLE');
 
@@ -466,7 +466,7 @@ class AlbumsController extends Controller
      *
      * @return Response the response object
      **/
-    public function batchDeleteAction()
+    public function batchDeleteAction(Request $request)
     {
         $this->checkAclOrForward('ALBUM_DELETE');
 
@@ -504,7 +504,7 @@ class AlbumsController extends Controller
      *
      * @return Response the response object
      **/
-    public function batchPublishAction()
+    public function batchPublishAction(Request $request)
     {
         $this->checkAclOrForward('ALBUM_AVAILABLE');
 
@@ -540,7 +540,7 @@ class AlbumsController extends Controller
      *
      * @return Response the response object
      **/
-    public function contentProviderAction()
+    public function contentProviderAction(Request $request)
     {
         $request      = $this->get('request');
         $category     = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
@@ -652,7 +652,7 @@ class AlbumsController extends Controller
      *
      * @return Response the response object
      **/
-    public function configAction()
+    public function configAction(Request $request)
     {
         $this->checkAclOrForward('ALBUM_SETTINGS');
 
@@ -688,5 +688,5 @@ class AlbumsController extends Controller
             ));
         }
     }
-
 }
+

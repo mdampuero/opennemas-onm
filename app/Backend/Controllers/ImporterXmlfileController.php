@@ -48,7 +48,7 @@ class ImporterXmlfileController extends Controller
      *
      * @return void
      **/
-    public function defaultAction()
+    public function defaultAction(Request $request)
     {
         return $this->render('agency_importer/xml-file/list.tpl');
     }
@@ -58,7 +58,7 @@ class ImporterXmlfileController extends Controller
      *
      * @return Response the response object
      **/
-    public function importAction()
+    public function importAction(Request $request)
     {
         if ('POST' != $this->request->getMethod()) {
             m::add(_('Form was sent in the wrong way.'));
@@ -166,13 +166,16 @@ class ImporterXmlfileController extends Controller
      *
      * @return Response the response object
      **/
-    public function configAction()
+    public function configAction(Request $request)
     {
         if ('POST' == $this->request->getMethod()) {
 
-            $config = array_map(function($item) {
-                return filter_var($item, FILTER_SANITIZE_STRING);
-            }, $config);
+            $config = array_map(
+                function ($item) {
+                    return filter_var($item, FILTER_SANITIZE_STRING);
+                },
+                $config
+            );
 
             $schema =  array(
                 'title'         => $config['title'],
@@ -226,3 +229,4 @@ class ImporterXmlfileController extends Controller
         }
     }
 }
+

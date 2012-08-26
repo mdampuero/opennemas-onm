@@ -63,7 +63,7 @@ class ImagesController extends Controller
      *
      * @return Response the response object
      **/
-    public function listAction()
+    public function listAction(Request $request)
     {
         $request           = $this->request;
         $page              = $request->query->getDigits('page', 1);
@@ -121,7 +121,7 @@ class ImagesController extends Controller
      *
      * @return Response the response object
      **/
-    public function statisticsAction()
+    public function statisticsAction(Request $request)
     {
         unset($_SESSION['where']);
 
@@ -322,7 +322,7 @@ class ImagesController extends Controller
      *
      * @return Response the response object
      **/
-    public function searchAction()
+    public function searchAction(Request $request)
     {
         $request  = $this->request;
         $page     = $request->query->getDigits('page', 1);
@@ -450,7 +450,7 @@ class ImagesController extends Controller
      *
      * @return Response the response object
      **/
-    public function newAction()
+    public function newAction(Request $request)
     {
         $request = $this->request;
         $category = $request->query->getDigits('category', '');
@@ -482,7 +482,7 @@ class ImagesController extends Controller
      *
      * @return Response the response object
      **/
-    public function showAction()
+    public function showAction(Request $request)
     {
         $request  = $this->request;
         // $category = $_SESSION['category'];
@@ -535,7 +535,7 @@ class ImagesController extends Controller
      *
      * @return Response the response object
      **/
-    public function updateAction()
+    public function updateAction(Request $request)
     {
         $request   = $this->request;
         $photosRAW = $request->request->get('description');
@@ -585,7 +585,7 @@ class ImagesController extends Controller
      *
      * @return Response the response object
      **/
-    public function deleteAction()
+    public function deleteAction(Request $request)
     {
         $request = $this->get('request');
         $id   = $request->query->getDigits('id', null);
@@ -611,7 +611,7 @@ class ImagesController extends Controller
      *
      * @return Response the response object
      **/
-    public function createAction()
+    public function createAction(Request $request)
     {
         $response = new Response();
         $response->headers->add(array(
@@ -765,7 +765,7 @@ class ImagesController extends Controller
      *
      * @return Response the response object
      **/
-    public function batchDeleteAction()
+    public function batchDeleteAction(Request $request)
     {
 
         $this->checkAclOrForward('IMAGE_DELETE');
@@ -878,5 +878,5 @@ class ImagesController extends Controller
 
         ));
     }
-
 }
+

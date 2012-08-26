@@ -54,7 +54,7 @@ class CommentsDisqusController extends Controller
      *
      * @return void
      **/
-    public function defaultAction()
+    public function defaultAction(Request $request)
     {
         $disqusConfig = s::get('disqus_shortname');
 
@@ -68,7 +68,7 @@ class CommentsDisqusController extends Controller
      *
      * @return string the response string
      **/
-    public function configAction()
+    public function configAction(Request $request)
     {
         if ($this->request->getMethod() != 'POST') {
             if ($disqusConfig = s::get('disqus_shortname')) {
@@ -94,3 +94,4 @@ class CommentsDisqusController extends Controller
         }
     }
 }
+

@@ -135,7 +135,7 @@ class FilesController extends Controller
      *
      * @return Response the response object
      **/
-    public function widgetAction()
+    public function widgetAction(Request $request)
     {
         $this->checkAclOrForward('FILE_ADMIN');
         $request = $this->request;
@@ -167,7 +167,7 @@ class FilesController extends Controller
      *
      * @return Response the response object
      **/
-    public function statisticsAction()
+    public function statisticsAction(Request $request)
     {
         $nameCategory     = 'GLOBAL';
         $cm               = new \ContentManager();
@@ -262,7 +262,7 @@ class FilesController extends Controller
      *
      * @return Response the response object
      **/
-    public function createAction()
+    public function createAction(Request $request)
     {
         $this->checkAclOrForward('FILE_CREATE');
 
@@ -339,7 +339,7 @@ class FilesController extends Controller
      *
      * @return Response the response object
      **/
-    public function showAction()
+    public function showAction(Request $request)
     {
         $this->checkAclOrForward('FILE_UPDATE');
 
@@ -369,7 +369,7 @@ class FilesController extends Controller
      *
      * @return Response the response object
      **/
-    public function updateAction()
+    public function updateAction(Request $request)
     {
         $this->checkAclOrForward('FILE_UPDATE');
 
@@ -401,7 +401,7 @@ class FilesController extends Controller
      *
      * @return Response the response object
      **/
-    public function deleteAction()
+    public function deleteAction(Request $request)
     {
         $this->checkAclOrForward('FILE_DELETE');
 
@@ -436,7 +436,7 @@ class FilesController extends Controller
      *
      * @return Response the response object
      **/
-    public function toggleFavoriteAction()
+    public function toggleFavoriteAction(Request $request)
     {
 
         $this->checkAclOrForward('FILE_AVAILABLE');
@@ -472,7 +472,7 @@ class FilesController extends Controller
      *
      * @return Response the response object
      **/
-    public function toggleInHomeAction()
+    public function toggleInHomeAction(Request $request)
     {
         $this->checkAclOrForward('FILE_AVAILABLE');
 
@@ -507,7 +507,7 @@ class FilesController extends Controller
      *
      * @return Response the response object
      **/
-    public function toggleAvailableAction()
+    public function toggleAvailableAction(Request $request)
     {
         $this->checkAclOrForward('FILE_AVAILABLE');
 
@@ -541,7 +541,7 @@ class FilesController extends Controller
      *
      * @return Response the response object
      **/
-    public function batchDeleteAction()
+    public function batchDeleteAction(Request $request)
     {
         $this->checkAclOrForward('FILE_DELETE');
 
@@ -578,7 +578,7 @@ class FilesController extends Controller
      *
      * @return Response the response object
      **/
-    public function batchPublishAction()
+    public function batchPublishAction(Request $request)
     {
         $this->checkAclOrForward('FILE_AVAILABLE');
 
@@ -614,7 +614,7 @@ class FilesController extends Controller
      *
      * @return Response the response object
      **/
-    public function savePositionsAction()
+    public function savePositionsAction(Request $request)
     {
         $request = $this->get('request');
 
@@ -697,5 +697,5 @@ class FilesController extends Controller
             'contentProviderUrl'    => $this->generateUrl('admin_files_content_provider'),
         ));
     }
-
 }
+

@@ -366,7 +366,7 @@ class CoversController extends Controller
      *
      * @return Response the response object
      **/
-    public function toggleAvailableAction()
+    public function toggleAvailableAction(Request $request)
     {
         $this->checkAclOrForward('KIOSKO_AVAILABLE');
 
@@ -401,7 +401,7 @@ class CoversController extends Controller
      *
      * @return Response the response object
      **/
-    public function toggleFavoriteAction()
+    public function toggleFavoriteAction(Request $request)
     {
         $this->checkAclOrForward('VIDEO_AVAILABLE');
 
@@ -435,7 +435,7 @@ class CoversController extends Controller
      *
      * @return Response the response object
      **/
-    public function toggleInHomeAction()
+    public function toggleInHomeAction(Request $request)
     {
         $this->checkAclOrForward('KIOSKO_AVAILABLE');
 
@@ -467,7 +467,7 @@ class CoversController extends Controller
      *
      * @return Response the response object
      **/
-    public function batchDeleteAction()
+    public function batchDeleteAction(Request $request)
     {
         $this->checkAclOrForward('VIDEO_DELETE');
 
@@ -505,7 +505,7 @@ class CoversController extends Controller
      *
      * @return Response the response object
      **/
-    public function batchPublishAction()
+    public function batchPublishAction(Request $request)
     {
         $this->checkAclOrForward('KIOSKO_AVAILABLE');
 
@@ -541,7 +541,7 @@ class CoversController extends Controller
      *
      * @return Response the response object
      **/
-    public function savePositionsAction()
+    public function savePositionsAction(Request $request)
     {
         $request = $this->get('request');
 

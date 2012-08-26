@@ -48,7 +48,7 @@ class CacheManagerController extends Controller
      *
      * @return string the string response
      **/
-    public function defaultAction()
+    public function defaultAction(Request $request)
     {
         list($this->filter, $this->params, $this->page, $this->itemsPerPage) =
             $this->buildFilter($this->request);
@@ -165,7 +165,7 @@ class CacheManagerController extends Controller
      *
      * @return string the string response
      **/
-    public function deleteAction()
+    public function deleteAction(Request $request)
     {
         $itemsSelected = $this->request->query->get('selected', null);
         $itemsCacheIds = $this->request->query->get('cacheid');
@@ -192,7 +192,7 @@ class CacheManagerController extends Controller
      *
      * @return string the result string
      **/
-    public function deleteAllAction()
+    public function deleteAllAction(Request $request)
     {
         $this->frontpageTemplate->clearAllCache();
 
@@ -204,7 +204,7 @@ class CacheManagerController extends Controller
      *
      * @return string the string response
      **/
-    public function configAction()
+    public function configAction(Request $request)
     {
         if ($this->request->getMethod() == 'POST') {
             $config = array();
@@ -272,7 +272,7 @@ class CacheManagerController extends Controller
      *
      * @return Response the response object
      **/
-    public function cleanFrontpageAction()
+    public function cleanFrontpageAction(Request $request)
     {
         $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
         $category = $this->request->request->filter('category', null, FILTER_SANITIZE_STRING);
@@ -367,5 +367,5 @@ class CacheManagerController extends Controller
         // return $filter and URI $params
         return array($filter, implode('&', $params), $page, $itemsPerPage);
     }
-
 }
+

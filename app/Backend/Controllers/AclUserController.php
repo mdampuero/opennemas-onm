@@ -266,7 +266,7 @@ class AclUserController extends Controller
      *
      * @return Response the response object
      **/
-    public function connectedUsersAction()
+    public function connectedUsersAction(Request $request)
     {
         $sessions = $GLOBALS['Session']->getSessions();
 
@@ -302,5 +302,5 @@ class AclUserController extends Controller
 
         return new Response($message, $httpCode);
     }
-
 }
+

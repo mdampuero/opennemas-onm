@@ -37,7 +37,7 @@ class WelcomeController extends Controller
      *
      * @return void
      **/
-    public function defaultAction()
+    public function defaultAction(Request $request)
     {
         // throw new \Exception('Something really bad happened. A little bird died!');
 
@@ -56,3 +56,4 @@ class WelcomeController extends Controller
 
     }
 }
+

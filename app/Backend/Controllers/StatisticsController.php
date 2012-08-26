@@ -72,7 +72,7 @@ class StatisticsController extends Controller
      *
      * @return void
      **/
-    public function defaultAction()
+    public function defaultAction(Request $request)
     {
         return $this->render('statistics/statistics.tpl');
     }
@@ -83,7 +83,7 @@ class StatisticsController extends Controller
      *
      * @return string the string response
      **/
-    public function getWidgetAction()
+    public function getWidgetAction(Request $request)
     {
         $days = $this->request->query->filter('days', null, FILTER_VALIDATE_INT);
         $type = $this->request->query->filter('type', null, FILTER_SANITIZE_STRING);
@@ -120,5 +120,5 @@ class StatisticsController extends Controller
 
         return $output;
     }
-
 }
+

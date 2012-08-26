@@ -42,7 +42,7 @@ class ImporterEuropapressController extends Controller
      *
      * @return Response the response object
      **/
-    public function listAction()
+    public function listAction(Request $request)
     {
 
         if (is_null(s::get('europapress_server_auth'))) {
@@ -127,7 +127,7 @@ class ImporterEuropapressController extends Controller
      *
      * @return Response the response object
      **/
-    public function showAction()
+    public function showAction(Request $request)
     {
         $id = $this->request->query->filter('id', null, FILTER_SANITIZE_STRING);
 
@@ -151,7 +151,7 @@ class ImporterEuropapressController extends Controller
      *
      * @return Response the response object
      **/
-    public function importAction()
+    public function importAction(Request $request)
     {
         $id = $this->request->query->filter('id', null, FILTER_SANITIZE_STRING);
 
@@ -203,7 +203,7 @@ class ImporterEuropapressController extends Controller
      *
      * @return Response the response object
      **/
-    public function configAction()
+    public function configAction(Request $request)
     {
         // If request is post save the information
         if ('POST' != $this->request->getMethod()) {
@@ -272,7 +272,7 @@ class ImporterEuropapressController extends Controller
      *
      * @return Response the response object
      **/
-    public function unlockAction()
+    public function unlockAction(Request $request)
     {
         $e = new \Onm\Import\Europapress();
         $e->unlockSync();
@@ -286,7 +286,7 @@ class ImporterEuropapressController extends Controller
      *
      * @return Response the response object
      **/
-    public function syncAction()
+    public function syncAction(Request $request)
     {
         try {
 
@@ -325,5 +325,5 @@ class ImporterEuropapressController extends Controller
 
         return $this->redirect($this->generateUrl('admin_importer_europapress'));
     }
-
 }
+

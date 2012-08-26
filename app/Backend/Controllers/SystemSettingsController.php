@@ -40,7 +40,7 @@ class SystemSettingsController extends Controller
      *
      * @return string the response
      **/
-    public function defaultAction()
+    public function defaultAction(Request $request)
     {
         $configurationsKeys = array(
             'site_title', 'site_logo', 'site_description','site_keywords','site_agency', 'site_footer',
@@ -68,7 +68,7 @@ class SystemSettingsController extends Controller
      *
      * @return string the response
      **/
-    public function saveAction()
+    public function saveAction(Request $request)
     {
         unset($_POST['action']);
         unset($_POST['submit']);
@@ -95,5 +95,5 @@ class SystemSettingsController extends Controller
         // Send the user back to the form
         return $this->redirect($this->generateUrl('admin_system_settings', array(), true));
     }
-
 }
+
