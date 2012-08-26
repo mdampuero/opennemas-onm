@@ -73,7 +73,7 @@ $menuXml = '<?xml version="1.0"?>
             module_name="COMMENT_DISQUS_MANAGER"
             privilege="COMMENT_ADMIN"
             title="'.htmlspecialchars(_("Comments (Disqus)"), ENT_QUOTES).'"
-            id="comment_manager"
+            id="comment_disqus_manager"
             link="'.url('admin_comments_disqus').'"
         />
         <node
@@ -248,7 +248,7 @@ $menuXml = '<?xml version="1.0"?>
                 privilege="NEWSLETTER_ADMIN"
                 target="external"
                 title="'.htmlspecialchars(_("Mailman Newsletter"), ENT_QUOTES).'"
-                id="mailman"
+                id="mailman_1"
                 link="https://listas.cronicasdelaemigracion.com/cgi-bin/mailman/admin/boletin"
             />
             <node
@@ -256,7 +256,7 @@ $menuXml = '<?xml version="1.0"?>
                 privilege="NEWSLETTER_ADMIN"
                 target="external"
                 title="'.htmlspecialchars(_("Mailman Priority"), ENT_QUOTES).'"
-                id="mailman"
+                id="mailman_2"
                 link="https://listas.cronicasdelaemigracion.com/cgi-bin/mailman/admin/boletinprioridad"
             />
             <node
@@ -264,7 +264,7 @@ $menuXml = '<?xml version="1.0"?>
                 privilege="NEWSLETTER_ADMIN"
                 target="external"
                 title="'.htmlspecialchars(_("Mailman Crónicas"), ENT_QUOTES).'"
-                id="mailman"
+                id="mailman_3"
                 link="https://listas.cronicasdelaemigracion.com/cgi-bin/mailman/admin/cronicas"
             />
             <node
@@ -272,7 +272,7 @@ $menuXml = '<?xml version="1.0"?>
                 privilege="NEWSLETTER_ADMIN"
                 target="external"
                 title="'.htmlspecialchars(_("Mailman Galicia"), ENT_QUOTES).'"
-                id="mailman"
+                id="mailman_4"
                 link="https://listas.cronicasdelaemigracion.com/cgi-bin/mailman/admin/galicia"
             />
             <node
@@ -280,7 +280,7 @@ $menuXml = '<?xml version="1.0"?>
                 privilege="NEWSLETTER_ADMIN"
                 target="external"
                 title="'.htmlspecialchars(_("Mailman Asturias"), ENT_QUOTES).'"
-                id="mailman"
+                id="mailman_5"
                 link="https://listas.cronicasdelaemigracion.com/cgi-bin/mailman/admin/asturias"
             />
             <node
@@ -288,7 +288,7 @@ $menuXml = '<?xml version="1.0"?>
                 privilege="NEWSLETTER_ADMIN"
                 target="external"
                 title="'.htmlspecialchars(_("Mailman Madrid"), ENT_QUOTES).'"
-                id="mailman"
+                id="mailman_6"
                 link="https://listas.cronicasdelaemigracion.com/cgi-bin/mailman/admin/madrid"
             />
             <node
@@ -296,7 +296,7 @@ $menuXml = '<?xml version="1.0"?>
                 privilege="NEWSLETTER_ADMIN"
                 target="external"
                 title="'.htmlspecialchars(_("Mailman Castilla y León"), ENT_QUOTES).'"
-                id="mailman"
+                id="mailman_7"
                 link="https://listas.cronicasdelaemigracion.com/cgi-bin/mailman/admin/castillayleon"
             />
             <node
@@ -304,7 +304,7 @@ $menuXml = '<?xml version="1.0"?>
                 privilege="NEWSLETTER_ADMIN"
                 target="external"
                 title="'.htmlspecialchars(_("Mailman Canarias"), ENT_QUOTES).'"
-                id="mailman"
+                id="mailman_8"
                 link="https://listas.cronicasdelaemigracion.com/cgi-bin/mailman/admin/canarias"
             />
             <node
@@ -312,7 +312,7 @@ $menuXml = '<?xml version="1.0"?>
                 privilege="NEWSLETTER_ADMIN"
                 target="external"
                 title="'.htmlspecialchars(_("Mailman Cantabria"), ENT_QUOTES).'"
-                id="mailman"
+                id="mailman_9"
                 link="https://listas.cronicasdelaemigracion.com/cgi-bin/mailman/admin/cantabria"
             />
             <node
@@ -320,7 +320,7 @@ $menuXml = '<?xml version="1.0"?>
                 privilege="NEWSLETTER_ADMIN"
                 target="external"
                 title="'.htmlspecialchars(_("Mailman Baleares"), ENT_QUOTES).'"
-                id="mailman"
+                id="mailman_10"
                 link="https://listas.cronicasdelaemigracion.com/cgi-bin/mailman/admin/baleares"
             />
             <node
@@ -328,7 +328,7 @@ $menuXml = '<?xml version="1.0"?>
                 privilege="NEWSLETTER_ADMIN"
                 target="external"
                 title="'.htmlspecialchars(_("Mailman Andalucía"), ENT_QUOTES).'"
-                id="mailman"
+                id="mailman_11"
                 link="https://listas.cronicasdelaemigracion.com/cgi-bin/mailman/admin/andalucia"
             />
         </submenu>
