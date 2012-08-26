@@ -2,11 +2,10 @@
     <thead>
         <tr>
             <th style="width:30px;"><input type="checkbox" id="toggleallcheckbox"></th>
-            <th style="width:200px;">{t}Author{/t}</th>
-            <th style="width:330px;">{t}Title{/t}</th>
-            <th class="center" style="width:10px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
-            <th class="center" style="width:30px;">{t}Votes{/t}</th>
-            <th class="center" style="width:10px"><img src="{$params.IMAGE_DIR}comments.png" alt="{t}Comments{/t}" title="{t}Comments{/t}"></th>
+            <th style="width:200px;">{t}Author{/t} - {t}Title{/t}</th>
+            <th class="center" style="width:10px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}"></th>
+            <th class="center"><img src="{$params.IMAGE_DIR}votes.png" alt="{t}Votes{/t}" width="22"></th>
+            <th class="center" style="width:10px"><img src="{$params.IMAGE_DIR}comments.png" alt="{t}Comments{/t}"></th>
             <th class="center" style="width:130px;">Fecha</th>
             <th class="center" style="width:10px;">Home</th>
             <th class="center" style="width:10px;">{t}Available{/t}</th>
@@ -28,8 +27,7 @@
             </td>
             <td>
                 {t}Director{/t}
-            </td>
-            <td>
+                -
                 {$opinion->title|clearslash}
             </td>
             <td class="center">
@@ -102,9 +100,7 @@
             <input type="checkbox" class="minput"  id="selected_{$cont}" name="selected_fld[]" value="{$opinion->id}">
         </td>
         <td onClick="javascript:document.getElementById('selected_{$cont}').click();">
-            Editorial
-        </td>
-        <td onClick="javascript:document.getElementById('selected_{$cont}').click();">
+            {t}Editorial{/t} -
             {$opinion->title|clearslash}
         </td>
         <td class="center">
@@ -186,8 +182,7 @@
                 </a>
                 {/acl}
             {/if}
-        </td>
-        <td onClick="javascript:document.getElementById('selected_{$cont}').click();">
+            -
             {$opinion->title|clearslash}
         </td>
 

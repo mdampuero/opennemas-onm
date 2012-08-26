@@ -25,10 +25,9 @@
 	<thead>
 		<tr>
 			<th style="width:15px;"><input type="checkbox" id="toggleallcheckbox"></th>
-			<th style="width:150px;">{t}Author name{/t}</th>
-			<th>{t}Title{/t}</th>
+			<th>{t}Author name{/t} - {t}Title{/t}</th>
             <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
-			<th style="width:40px;">{t}Ratings{/t}</th>
+			<th class="center"><img src="{$params.IMAGE_DIR}votes.png" alt="{t}Votes{/t}" width="22"></th>
             <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}comments.png" alt="{t}Comments{/t}" title="{t}Comments{/t}"></th>
 			<th class="center" style="width:110px;">{t}Created in{/t}</th>
 			<th class="center" style="width:70px;">{t}In home{/t}</th>
@@ -47,8 +46,7 @@
                 <a href="{url name=admin_opinion_author_show id=$opinion->author->pk_author}">
                     {$opinion->author->name}
                 </a>
-			</td>
-			<td>
+                -
 				<a href="{url name=admin_opinion_show id=$opinion->id}" title="Modificar">
 					{$opinion->title|clearslash}
                 </a>
