@@ -1,15 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-<style type="text/css" media="screen">
-    label {
-        display:block;
-        color:#666;
-        text-transform:uppercase;
-    }
-</style>
-{/block}
-
 {block name="footer-js" append}
     {script_tag src="/utilsGallery.js" language="javascript"}
     <script>
