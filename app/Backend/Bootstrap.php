@@ -103,7 +103,10 @@ class Bootstrap extends ModuleBootstrap
         $locale = \Application::$language.".UTF-8";
         $domain = 'messages';
 
-        define('CURRENT_LANGUAGE', \Application::$language);
+        $languageComposed = explode('_', $locale);
+        $shortLanguage =  $languageComposed[0];
+
+        define('CURRENT_LANGUAGE', $shortLanguage);
 
         $localeDir = SITE_ADMIN_PATH.DS.'locale'.DS;
 
