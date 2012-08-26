@@ -286,7 +286,7 @@ class FilesController extends Controller
 
                 $fileType      = $_FILES['path']['type'];
                 $fileSize      = $_FILES['path']['size'];
-                $fileName      = StringUtils::cleanFileName($_FILES['path']['name']);
+                $fileName      = \Onm\StringUtils::cleanFileName($_FILES['path']['name']);
                 // Create folder if it doesn't exist
                 if (!file_exists($basePath)) {
                      \FilesManager::createDirectory($basePath);

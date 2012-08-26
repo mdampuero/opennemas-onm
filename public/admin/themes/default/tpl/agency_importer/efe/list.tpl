@@ -83,22 +83,20 @@
     	{render_messages}
 
         <div class="table-info clearfix">
-            <div>
-                <div class="left"><strong>{t 1=$pagination->_totalItems}%1 articles{/t}</strong></div>
-                <div class="right form-inline">
-                    <input type="search" id="username" name="filter_title" onchange="this.form.submit();" value="{$smarty.request.filter_title}" class="input-medium" placeholder="{t}Filter by title or content{/t}"/>
+            <div class="left"><strong>{t 1=$pagination->_totalItems}%1 articles{/t}</strong></div>
+            <div class="right form-inline">
+                <input type="search" id="username" name="filter_title" onchange="this.form.submit();" value="{$smarty.request.filter_title}" class="input-medium" placeholder="{t}Filter by title or content{/t}"/>
 
-                    <div class="input-append">
-                        <label for="usergroup">
-                            {t}and in{/t}
-                            <select id="usergroup" name="filter_category" onchange="this.form.submit();">
-                                <option value="*">{t}All categories{/t}</option>
-                                {html_options options=$categories selected=$smarty.request.filter_group|default:""}
-                            </select>
-                        </label>
+                <div class="input-append">
+                    <label for="usergroup">
+                        {t}and in{/t}
+                        <select id="usergroup" name="filter_category" onchange="this.form.submit();">
+                            <option value="*">{t}All categories{/t}</option>
+                            {html_options options=$categories selected=$smarty.request.filter_group|default:""}
+                        </select>
+                    </label>
 
-                        <button type="submit" class="btn"><i class="icon-search"></i></button>
-                    </
+                    <button type="submit" class="btn"><i class="icon-search"></i></button>
                 </div>
             </div>
         </div>
