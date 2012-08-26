@@ -57,5 +57,5 @@ class FrameworkStatusController extends Controller
     {
         return $this->render('framework/apc_iframe.tpl');
     }
-
 }
+

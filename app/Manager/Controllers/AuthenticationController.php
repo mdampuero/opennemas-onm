@@ -132,7 +132,7 @@ class AuthenticationController extends Controller
      *
      * @return string the response
      **/
-    public function logoutAction()
+    public function logoutAction(Request $request)
     {
         $csrf = filter_input(INPUT_GET, 'csrf');
 
@@ -151,5 +151,5 @@ class AuthenticationController extends Controller
             return Response('Are you hijacking my session dude?!');
         }
     }
-
 }
+

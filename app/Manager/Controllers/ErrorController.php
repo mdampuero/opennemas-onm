@@ -35,7 +35,7 @@ class ErrorController extends Controller
      *
      * @return void
      **/
-    public function defaultAction()
+    public function defaultAction(Request $request)
     {
         global $error;
         $error = unserialize($this->request->get('error'));
@@ -94,5 +94,5 @@ class ErrorController extends Controller
 
         return new Response($content, 500);
     }
-
 }
+

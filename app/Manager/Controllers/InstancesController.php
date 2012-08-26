@@ -28,7 +28,6 @@ class InstancesController extends Controller
      * Common code for all the actions
      *
      * @return void
-     * @author
      **/
     public function init()
     {
@@ -430,5 +429,5 @@ class InstancesController extends Controller
 
         return $this->redirect($this->generateUrl('manager_instances'));
     }
-
 }
+
