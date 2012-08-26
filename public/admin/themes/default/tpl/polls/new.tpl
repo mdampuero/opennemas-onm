@@ -122,7 +122,7 @@
                 <div class="controls">
                     <select name="visualization" id="visualization" class="required">
                         <option value="0" {if $poll->visualization eq 0} selected {/if}>{t}Circular{/t}</option>
-                        <option value="1" {if $poll->visualization eq 1} selected {/if}>{t}Barras{/t}</option>
+                        <option value="1" {if $poll->visualization eq 1} selected {/if}>{t}Bars{/t}</option>
                     </select>
                 </div>
             </div>

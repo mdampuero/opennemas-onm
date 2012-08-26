@@ -77,8 +77,8 @@
                     <label for="color[{$photo->id}]" class="control-label">{t}Color{/t}</label>
                     <div class="controls">
                         <select name="color[{$photo->id}]" id="color[{$photo->id}]"/>
-                            <option value="{t}color{/t}" {if $photo->color eq 'color'} selected {/if}>{t}Color{/t}</option>
-                            <option value="{t}bw{/t}" {if $photo->color eq 'bw'} selected {/if}>{t}B/W{/t}</option>
+                            <option value="color" {if $photo->color eq 'color'}selected="selected"{/if}>{t}Color{/t}</option>
+                            <option value="bw" {if $photo->color eq 'bw'}selected="selected"{/if}>{t}B/W{/t}</option>
                         </select>
                     </div>
                 </div>

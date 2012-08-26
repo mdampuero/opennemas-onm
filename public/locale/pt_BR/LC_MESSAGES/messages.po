@@ -1,3 +1,7 @@
+#: public/controllers/letter.php:157
+msgid "Su Carta al Director <strong>no</strong> ha sido guardada."
+msgstr ""
+
 #: public/controllers/rating.php:15
 msgid "Action not recognized!"
 msgstr ""

@@ -105,7 +105,7 @@
                         <label for="site_agency" class="control-label">{t}Site agency{/t}</label>
                         <div class="controls">
                             <input type="text" id="site_agency" name="site_agency" value="{$configs['site_agency']|default:""}" class="input-xlarge">
-                            <div class="help-block">{t}This will be displayed as the article signature.{/t}</div>
+                            <div class="help-block">{t}This will be displayed as the default article signature.{/t}</div>
                         </div>
                     </div>
                     <div class="control-group">
@@ -117,7 +117,7 @@
                         </div>
                     </div>
                     <div class="control-group">
-                        <label for="section_settings[allowLogo]" class="control-label">{t}Use logo in frontpage{/t}</label>
+                        <label for="section_settings[allowLogo]" class="control-label">{t}Use custom logo{/t}</label>
                         <div class="controls">
                             <select name="section_settings[allowLogo]" id="section_settings[allowLogo]" onChange="toogleSiteLogo(this.value);">
                                 <option value="0">{t}No{/t}</option>
@@ -214,7 +214,7 @@
                         <label for="time_zone" class="control-label">{t}Time Zone{/t}</label>
                         <div class="controls">
                             {html_options name=time_zone options=$timezones selected=$configs['time_zone']}
-                            <div class="help-block">{t}Used for all the dates used used in your webpage.{/t}</div>
+                            <div class="help-block">{t}Used for all the dates used in your webpage.{/t}</div>
                         </div>
                     </div>
                 </fieldset>
