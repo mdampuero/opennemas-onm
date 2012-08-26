@@ -108,7 +108,7 @@ class Bootstrap extends ModuleBootstrap
 
         define('CURRENT_LANGUAGE', $shortLanguage);
 
-        $localeDir = SITE_ADMIN_PATH.DS.'locale'.DS;
+        $localeDir = realpath(APP_PATH.'/Backend/Resources/locale/');
 
         if (isset($_GET["locale"])) {
             $locale = $_GET["locale"].'.UTF-8';

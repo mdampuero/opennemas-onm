@@ -447,7 +447,7 @@ class Application
     */
     public static function isBackend()
     {
-        return strncasecmp($_SERVER['REQUEST_URI'], '/admin/', 7) == 0 ;
+        return strncasecmp($_SERVER['REQUEST_URI'], '/admin/', 7) === 0;
     }
 
     /**
