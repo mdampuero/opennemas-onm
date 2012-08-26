@@ -85,7 +85,7 @@
             </div>
         </div><!-- /basic -->
     </div>
-    <div id="geolocation-{$photo->id}">
+    <div id="geolocation-{$photo->id}" class="has-map">
             <div style="text-align:center">
                 <div class="input-append">
                     <input type="text" id="address_search_{$photo->id}" value="{$photo->address}" class="input-xxlarge noentersubmit">
@@ -169,12 +169,18 @@
 
         jQuery('#ui-datepicker-div').css('clip', 'auto');
 
-        var map_initialized = false
         $("#photo-{$photo->id}").bind("tabsshow", function(event, ui) {
-            if ($(ui).is('has-map')  && !map_initialized) {
-                map_initialized = true;
-
-
+            if ($(ui.panel).is('.has-map')) {
+                map.refresh();
+                map.setCenter(
+                    {if is_array($photo->latlong)}
+                        {$photo->latlong['lat']},
+                        {$photo->latlong['long']}
+                    {else}
+                        -12.043333,
+                        -77.028333
+                    {/if}
+                );
             }
         });
 
@@ -193,6 +199,10 @@
         GMaps.geolocate({
             success: function(position) {
                 map.setCenter(position.coords.latitude, position.coords.longitude);
+                map.addMarker({
+                  lat: position.coords.latitude,
+                  lng: position.coords.longitude
+                });
             },
             error: function(error) {
                 // alert('Geolocation failed: '+error.message);
@@ -203,6 +213,11 @@
             always: function() {
                 // alert("Geolocated done!");
             }
+        });
+        {else}
+        map.addMarker({
+          lat: {$photo->latlong['lat']},
+          lng: {$photo->latlong['long']}
         });
         {/if}
         $('#geocode_buttom_{$photo->id}').on('click', function(e,ui){

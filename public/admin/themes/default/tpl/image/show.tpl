@@ -10,7 +10,7 @@
         margin:10px 0;
     }
     .map > div {
-        height:300px;
+        height:500px;
     }
 </style>
 {/block}
