@@ -130,7 +130,7 @@
             <div class="control-group">
                 <label class="control-label"></label>
                 <div class="controls">
-                    <input id="available" name="available" type="checkbox" {if $poll->available eq 1}checked="checked"{/if} value="1"/>
+                    <input id="available" name="available" type="checkbox" {if !isset($poll) || $poll->available eq 1}checked="checked"{/if} value="1"/>
                     <label for="available">{t}Available{/t}</label>
                     <br>
                     <input id="favorite" name="favorite" type="checkbox" {if $poll->favorite eq 1}checked="checked"{/if} value="1" />

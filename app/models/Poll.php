@@ -21,7 +21,7 @@ class Poll extends Content
     public $used_ips      = null;
     public $visualization = null;
 
-    public function __construct($id=null)
+    public function __construct($id = null)
     {
         parent::__construct($id);
 
@@ -62,24 +62,38 @@ class Poll extends Content
         return parent::__get($name);
     }
 
-    public function create($data)
+    public function read($id)
     {
-        $tags = '';
-        if (isset($data['item']) && !empty($data['item'] )) {
-            $tags = implode(',', $data['item']);
-            $data['metadata'] = $data['metadata'].','.$tags;
-            $data['metadata'] = StringUtils::get_tags($data['metadata']);
+        parent::read($id);
+
+        $sql = 'SELECT * FROM polls WHERE pk_poll = ?';
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
+
+        if (!$rs) {
+            \Application::logDatabaseError();
+
+            return null;
         }
 
+        $this->pk_poll       = $rs->fields['pk_poll'];
+        $this->subtitle      = $rs->fields['subtitle'];
+        $this->total_votes   = $rs->fields['total_votes'];
+        $this->with_comment  = $rs->fields['with_comment'];
+        $this->visualization = $rs->fields['visualization'];
+        $this->used_ips      = unserialize($rs->fields['used_ips']);
+
+        return $this;
+    }
+
+    public function create($data)
+    {
         parent::create($data);
 
-        $i=1;
         if ($data['item']) {
             foreach ($data['item'] as $item) {
-                $sql    ='INSERT INTO poll_items (`fk_pk_poll`, `item`, `metadata`) VALUES (?,?,?)';
+                $sql    = 'INSERT INTO poll_items (`fk_pk_poll`, `item`, `metadata`) VALUES (?,?,?)';
                 $tags   = StringUtils::get_tags($item);
                 $values = array($this->id,$item, $tags);
-                $i++;
 
                 if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
                     \Application::logDatabaseError();
@@ -105,57 +119,15 @@ class Poll extends Content
         return true;
     }
 
-    public function read($id)
-    {
-        parent::read($id);
-
-        $sql = 'SELECT * FROM polls WHERE pk_poll = ?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
-
-        if (!$rs) {
-            \Application::logDatabaseError();
-
-            return null;
-        }
-
-        $this->pk_poll       = $rs->fields['pk_poll'];
-        $this->subtitle      = $rs->fields['subtitle'];
-        $this->total_votes   = $rs->fields['total_votes'];
-        $this->with_comment  = $rs->fields['with_comment'];
-        $this->visualization = $rs->fields['visualization'];
-        $this->used_ips      = unserialize($rs->fields['used_ips']);
-
-        return $this;
-    }
-
     public function update($data)
     {
-        if (isset($data['item']) && !empty($data['item'] )) {
-            $tags = implode(',', $data['item']);
-
-            $data['metadata'] = $data['metadata'].','.$tags;
-            $data['metadata'] = StringUtils::get_tags($data['metadata']);
-        }
-
         parent::update($data);
-        $tags = explode(', ', $tags);//Reinicia los indices del array
 
         if ($data['item']) {
-            //Eliminamos los antiguos
-            $sql='DELETE FROM poll_items WHERE fk_pk_poll =?';
-            $rs = $GLOBALS['application']->conn->Execute($sql, array($data['id']));
-            if ($rs === false) {
-                \Application::logDatabaseError();
-            }
             //Insertamos
-            $i=1;
-            $totalvotes=0;
-
-            $votes = $data['votes'];
             foreach ($data['item'] as $item) {
-                $sql    ='INSERT INTO poll_items (`fk_pk_poll`, `item`,`votes`) VALUES (?,?,?)';
-                $values = array($data['id'], $item, $votes[$i]);
-                $i++;
+                $sql    ='REPLACE INTO poll_items (`fk_pk_poll`, `item`,`votes`) VALUES (?,?)';
+                $values = array((int) $data['id'], $item);
 
                 if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
                     \Application::logDatabaseError();
@@ -305,5 +277,5 @@ class Poll extends Content
 
         return $ips_count;
     }
-
 }
+
