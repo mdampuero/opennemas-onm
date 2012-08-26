@@ -29,10 +29,6 @@ Files
 - Review add items
 - Port js code to jQuery
 
-Books
------
-- Port the config action
-
 Specials
 --------
 Review d&d of contents in specials
@@ -43,8 +39,7 @@ Drop remaining listing-table tables and related CSS
 
 Image Galleries
 ---------------
-- Review image galleries: article, album
-
+- Review image galleries: specials, advertisement
 
 LOW PRIORITY TASKS OR IDEAS
 --------------------------------------------------------------------------------

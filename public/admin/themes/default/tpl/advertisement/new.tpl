@@ -1,5 +1,15 @@
 {extends file="base/admin.tpl"}
 
+{block name="header-css" append}
+<style type="text/css">
+    .utilities-conf {
+        position:absolute;
+        top:10px;
+        right:10px;
+    }
+</style>
+{/block}
+
 {block name="header-js" append}
     {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
     {script_tag src="/jquery/jquery-ui-sliderAccess.js"}
@@ -10,22 +20,24 @@
     {script_tag src="/utilsGallery.js"}
     <script type="text/javascript">
     jQuery(document).ready(function($) {
-        $('#with_script').on('click', function(e, ui) {
-            if ($(this).is(':checked') === true){
-                $('#div_script').show();
-                $('#div_url1').hide();
-                $('#advertisement-images').hide();
+        $("input[name='with_script']").on('change', function(e, ui) {
+            if ($(this).val() == '1') {
+                $('#script_content').show();
+                $('#normal_content').hide();
+                $('#hide_flash').hide();
             } else {
-                $('#advertisement-images').show();
-                $('#photos').show();
-                $('#div_url1').show();
-                $('#div_script').hide();
+                $('#normal_content').show();
+                $('#script_content').hide();
+                $('#hide_flash').show();
             }
+        });
+
+        $('#formulario').onmValidate({
+            'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
         });
 
         $('#type_medida').on('change', function(e, ui){
             var selected_option = $("#type_medida option:selected").attr('value');
-            log(selected_option);
             if (selected_option=='CLIC') {
                 $('#porclic').show();
                 $('#porview, #porfecha').hide();
@@ -55,36 +67,11 @@
 object {
     z-index:0;
 }
-label {
-    display:block;
-    color:#666;
-    text-transform:uppercase;
-}
-.panel {
-    background:White;
-}
-fieldset {
-    border:none;
-    border-top:1px solid #ccc;
-}
-legend {
-    color:#666;
-    text-transform:uppercase;
-    font-size:13px;
-    padding:0;
-    padding-bottom:4px;
-    margin:0;
-    line-height:14px;
-    border-bottom:1px solid #ccc;
-}
 .panel {
     margin:0;
 }
 .panel-ads label {
     text-transform:none;
-}
-input, select, textarea {
-    margin-bottom:10px;
 }
 </style>
 {/block}
@@ -95,7 +82,7 @@ input, select, textarea {
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
             <div class="title">
-                <h2>{t}Ad manager{/t} :: {if $smarty.request.action eq "new"}{t}Creating banner{/t}{else}{t}Editing banner{/t}{/if}</h2>
+                <h2>{t}Ad manager{/t} :: {if $advertisement}{t}Creating banner{/t}{else}{t}Editing banner{/t}{/if}</h2>
             </div>
             <ul class="old-button">
                 <li>
@@ -115,157 +102,160 @@ input, select, textarea {
 
 <div class="wrapper-content">
 
-        <div class="panel clearfix" style="display:block">
-            <fieldset style="vertical-align:top">
-                <legend>{t}Basic information{/t}</legend>
+    <div class="form-horizontal panel">
+        <div class="control-group">
+            <label for="title" class="control-label">{t}Title{/t}</label>
+            <div class="controls">
+                <input  type="text" id="title" name="title" required="required" class="input-xxlarge"
+                    value="{$advertisement->title|clearslash|escape:"html"|default:""}" />
+            </div>
+        </div>
+        <div class="control-group">
+            <label for="metadata" class="control-label">{t}Keywords{/t}</label>
+            <div class="controls">
+                <input type="text" id="metadata" name="metadata" class="input-xxlarge" required="required"
+                    title="Metadatos" value="{$advertisement->metadata|strip|default:""}">
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label for="metadata" class="control-label">{t}Actived{/t}</label>
+            <div class="controls">
+                <input type="checkbox" name="available" id="available" {if isset($advertisement->available) && $advertisement->available == 1}checked="checked"{/if} {acl isNotAllowed="ADVERTISEMENT_AVAILA"}disabled="disabled"{/acl} />
+
+            </div>
+        </div>
+
+        <div class="control-group" id="div_url1" style="display:{if !isset($advertisement) || $advertisement->with_script==0}block{else}none{/if};">
+            <label for="url" class="control-label">{t}Url{/t}</label>
+            <div class="controls">
+                <input type="text" id="url" name="url" class="input-xxlarge" required="required"
+                    value="{$advertisement->url}" placeholder="http://" />
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label for="category" class="control-label">{t}Category{/t}</label>
+            <div class="controls">
+                <select name="category[]" id="category" required="required" multiple>
+                {if isset($advertisement->id)}
+                    <option value="0" {if isset($advertisement) && in_array(0,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Frontpage{/t}</option>
+                    <option value="4" {if isset($advertisement) && in_array(4,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Opinion{/t}</option>
+
+                    {section name=as loop=$allcategorys}
+                        <option value="{$allcategorys[as]->pk_content_category}"
+                            {if isset($advertisement) && in_array($allcategorys[as]->pk_content_category,$advertisement->fk_content_categories)}selected="selected"{/if}>
+                            {$allcategorys[as]->title}
+                        </option>
+                        {section name=su loop=$subcat[as]}
+                            <option value="{$subcat[as][su]->pk_content_category}"
+                                {if isset($advertisement) && in_array($allcategorys[as]->pk_content_category,$advertisement->fk_content_categories)}selected="selected"{/if}>
+                                &nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}
+                            </option>
+                        {/section}
+                    {/section}
+                {else}
+                    <option value="0" {if $category == 0}selected="selected"{/if}>{t}Frontpage{/t}</option>
+                    {is_module_activated name="OPINION_MANAGER"}
+                    <option value="4" {if $category == 4}selected="selected"{/if}>{t}Opinion{/t}</option>
+                    {/is_module_activated}
 
 
-                <div style="display:inline-block; width:78%; vertical-align:top">
-                    <label for="title">{t}Name{/t}</label>
-                    <input  type="text" id="title" name="title" title="Publicidad"
-                            tabindex=1
-                            value="{$advertisement->title|clearslash|escape:"html"|default:""}"
-                            class="required"
-                            style="width:90%"/>
+                    {section name=as loop=$allcategorys}
+                        <option value="{$allcategorys[as]->pk_content_category}"
+                            {if $category eq $allcategorys[as]->pk_content_category}selected="selected"{/if}>
+                            {$allcategorys[as]->title}
+                        </option>
+                        {section name=su loop=$subcat[as]}
+                            <option value="{$subcat[as][su]->pk_content_category}"
+                                {if $category eq $subcat[as][su]->pk_content_category}selected="selected"{/if}>
+                                &nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}
+                            </option>
+                        {/section}
+                    {/section}
+                {/if}
+                </select>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">{t}Restrictions{/t}</label>
+            <div class="controls">
+                <select name="type_medida" id="type_medida">
+                    <option value="NULL" {if !isset($advertisement) || is_null($advertisement->type_medida)}selected="selected"{/if}>{t}Without limits{/t}</option>
+                    <option value="CLIC" {if isset($advertisement) && isset($advertisement->type_medida) && $advertisement->type_medida == 'CLIC'}selected="selected"{/if}>{t}Click count{/t}</option>
+                    <option value="VIEW" {if isset($advertisement) && isset($advertisement->type_medida) && $advertisement->type_medida == 'VIEW'}selected="selected"{/if}>{t}Views count{/t}</option>
+                    <option value="DATE" {if isset($advertisement) && isset($advertisement->type_medida) && $advertisement->type_medida == 'DATE'}selected="selected"{/if}>{t}Date range{/t}</option>
+                </select>
+                <div class="help-block">{t}Show this ad if satisfy one condition{/t}.</div>
+            </div>
+        </div>
+        <div class="control-group" id="porclic" style="{if $advertisement->type_medida!='CLIC'}display:none{/if};">
+            <label for="num_clic" class="control-label">{t}# of clics{/t}</label>
+            <div class="controls">
+                <input type="text" id="num_clic" name="num_clic" value="{$advertisement->num_clic|default:""}" />
+                <input type="hidden" id="num_clic_count" name="num_clic_count" title="Numero de clic" value="{$advertisement->num_clic_count|default:""}" />
+                {if isset($advertisement) && $advertisement->type_medida == 'CLIC'}<div class="help-inline">{t}Actual click count:{/t} {$advertisement->num_clic_count}</div>{/if}
+                <div class="help-block">{t}Show this ad only if users had clicked in it less than a number of times.{/t}.</div>
+            </div>
+        </div>
+        <div class="control-group" id="porview" style="{if $advertisement->type_medida!='VIEW'}display:none{/if};">
+            <label for="num_view" class="control-label">{t}Max views{/t}</label>
+            <div class="controls">
+                <input type="text" id="num_view" name="num_view" value="{$advertisement->num_view}" />
+                {if isset($advertisement) && $advertisement->type_medida == 'VIEW' && $advertisement->views > 0}<div class="help-inline">{t}Actual views count:{/t} {$advertisement->views}</div>{/if}
+                <div class="help-block">{t}Show this ad only if this add had been printed less than a number of times.{/t}.</div>
+            </div>
+        </div>
+        <div class="control-group" id="porfecha" style="{if $advertisement->type_medida neq 'DATE'}display:none{/if};">
+            <label for="starttime" class="control-label">{t}Date range{/t}</label>
+            <div class="controls">
+                <label for="starttime">{t}From{/t}</label>
+                <input type="text" id="starttime"  name="starttime" title="Fecha inicio publicacion"
+                    value="{if isset($advertisement) && $advertisement->starttime != '0000-00-00 00:00:00'}{$advertisement->starttime}{/if}" />
+                <label for="endtime">{t}Until{/t}</label>
+                <input type="text" id="endtime" name="endtime" title="Fecha fin publicacion"
+                    value="{if isset($advertisement) && $advertisement->endtime != '0000-00-00 00:00:00'}{$advertisement->endtime}{/if}" />
+                <div class="help-block">{t}Show this ad within a range of dates.{/t}.</div>
+            </div>
+        </div>
 
-                    <label for="metadata">{t}Keywords:{/t} <small>{t}Separated by commas{/t}</small></label>
+        <div class="control-group">
+            <label class="control-label">{t}Content{/t}</label>
+            <div class="controls">
+                <label for="with_script_0"><input type="radio" name="with_script" id="with_script_0" value="0" {if !isset($advertisement) || $advertisement->with_script == 0}checked="checked"{/if}> {t}Image or flash from library{/t}</label>
+                <label for="with_script_1"><input type="radio" name="with_script" id="with_script_1" value="1" {if isset($advertisement) && $advertisement->with_script == 1}checked="checked"{/if}> {t}Custom HTML or Javascript code{/t}</label>
+            </div>
+        </div>
 
-                    <input type="text" id="metadata" name="metadata" style="width:90%" tabindex=2
-                       title="Metadatos" value="{$advertisement->metadata|strip|default:""}">
-
-                    <div style="display:inline-block; width:30%; vertical-align:top">
-                        <label for="category">{t}Sections{/t}</label>
-                        <select name="category[]" id="category" class="required" multiple tabindex=4 style="width:95%">
-                        {if isset($advertisement->id)}
-                            <option value="0" {if isset($advertisement) && in_array(0,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Frontpage{/t}</option>
-                            <option value="4" {if isset($advertisement) && in_array(4,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Opinion{/t}</option>
-
-                            {section name=as loop=$allcategorys}
-                                <option value="{$allcategorys[as]->pk_content_category}"
-                                    {if isset($advertisement) && in_array($allcategorys[as]->pk_content_category,$advertisement->fk_content_categories)}selected="selected"{/if}>
-                                    {$allcategorys[as]->title}
-                                </option>
-                                {section name=su loop=$subcat[as]}
-                                    <option value="{$subcat[as][su]->pk_content_category}"
-                                        {if isset($advertisement) && in_array($allcategorys[as]->pk_content_category,$advertisement->fk_content_categories)}selected="selected"{/if}>
-                                        &nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}
-                                    </option>
-                                {/section}
-                            {/section}
-                        {else}
-                            <option value="0" {if $category == 0}selected="selected"{/if}>{t}Frontpage{/t}</option>
-                            {is_module_activated name="OPINION_MANAGER"}
-                            <option value="4" {if $category == 4}selected="selected"{/if}>{t}Opinion{/t}</option>
-                            {/is_module_activated}
-
-
-                            {section name=as loop=$allcategorys}
-                                <option value="{$allcategorys[as]->pk_content_category}"
-                                    {if $category eq $allcategorys[as]->pk_content_category}selected="selected"{/if}>
-                                    {$allcategorys[as]->title}
-                                </option>
-                                {section name=su loop=$subcat[as]}
-                                    <option value="{$subcat[as][su]->pk_content_category}"
-                                        {if $category eq $subcat[as][su]->pk_content_category}selected="selected"{/if}>
-                                        &nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}
-                                    </option>
-                                {/section}
-                            {/section}
-                        {/if}
-                        </select>
-
-                    </div><!-- / -->
-
-                    <div style="display:inline-block; width:30%; vertical-align:top">
-                        <label>{t}View restrictions:{/t}</label>
-                        <select name="type_medida" id="type_medida">
-                            <option value="NULL" {if !isset($advertisement) || is_null($advertisement->type_medida)}selected="selected"{/if}>{t}Without limits{/t}</option>
-                            <option value="CLIC" {if isset($advertisement) && isset($advertisement->type_medida) && $advertisement->type_medida == 'CLIC'}selected="selected"{/if}>{t}Click count{/t}</option>
-                            <option value="VIEW" {if isset($advertisement) && isset($advertisement->type_medida) && $advertisement->type_medida == 'VIEW'}checked="checked"{/if}>{t}Views count{/t}</option>
-                            <option value="DATE" {if isset($advertisement) && isset($advertisement->type_medida) && $advertisement->type_medida == 'DATE'}checked="checked"{/if}>{t}Date range{/t}</option>
-                        </select>
-                    </div>
-
-                    <div style="display:{if $advertisement->with_script==1}none{else}inline-block{/if}; width:30%; vertical-align:top">
-
-                        <div id="porclic" style="display:{if $advertisement->type_medida!='CLIC'}none{/if};">
-                            <label for="title">{t}# of clicks:{/t}</label>
-                            <input type="text" id="num_clic" name="num_clic" title="Numero de clic"
-                                value="{$advertisement->num_clic|default:""}" />
-                            {if $smarty.request.action eq "read"}
-                                {if isset($advertisement) && $advertisement->type_medida == 'CLIC'}
-                                    {t}Actual click count:{/t} {$advertisement->num_clic_count}
-                                {/if}
-                                <input type="hidden" id="num_clic_count" name="num_clic_count" title="Numero de clic"
-                                    value="{$advertisement->num_clic_count|default:""}" />
-                            {/if}
-                        </div>
-
-                        <div id="porview" style="display:{if $advertisement->type_medida!='VIEW'}none{/if};">
-                            <label for="title">{t}Max views{/t}</label>
-                            <input type="text" id="num_view" name="num_view" title="Numero de visionados"
-                                value="{$advertisement->num_view}" />
-                            {if isset($advertisement) && $advertisement->type_medida == 'VIEW' && $advertisement->views > 0}
-                                {t}Actual views count:{/t} {$advertisement->views}
-                            {/if}
-                        </div>
-
-                        <div id="porfecha" style="width:190px;{if  $advertisement->type_medida neq 'DATE'} display:none{else}display:block{/if};">
-                            <label for="title">{t}Date range{/t}</label>
-                            {t}From:{/t} <input type="text" id="starttime"  name="starttime" title="Fecha inicio publicacion"
-                                value="{if isset($advertisement) && $advertisement->starttime != '0000-00-00 00:00:00'}{$advertisement->starttime}{/if}" />
-                            {t}To:{/t} <input type="text" id="endtime" name="endtime" title="Fecha fin publicacion"
-                                value="{if isset($advertisement) && $advertisement->endtime != '0000-00-00 00:00:00'}{$advertisement->endtime}{/if}" />
-                        </div>
-
-                    </div>
-                </div><!-- / -->
-
-                <div style="display:inline-block; width:20%">
-                    <label for="available">{t}Published:{/t}</label>
-                    <select name="available" id="available" style="width:50px;" {acl isNotAllowed="ADVERTISEMENT_AVAILA"}disabled="disabled"{/acl}>
-                        <option value="1" {if isset($advertisement->available) && $advertisement->available == 1}selected="selected"{/if}>Si</option>
-                        <option value="0" {if isset($advertisement->available) && $advertisement->available == 0}selected="selected"{/if}>No</option>
-                    </select>
-                    <br/>
-
-                    <label for="overlap" style="display:inline-block;">{t}Hide Flash events:{/t}</label>
-                    <input type="checkbox" name="overlap" id="overlap" value="1" {if isset($advertisement->overlap) && $advertisement->overlap == 1}checked="checked"{/if} />
-
-                    <div id="timeout_container" style="display:{if !isset($advertisement) || $advertisement->type_advertisement!=50}none{/if};">
-                        <label for="timeout">{t escape="off"}Display during<br/><small>( -1 allways visible)</small>{/t}:</label>
-                        <input type="text" id="timeout" name="timeout" size="2" title="Segundos antes de desaparecer"
-                            value="{$advertisement->timeout|default:"4"}" style="text-align: right;" />
-                    </div>
-                </div><!-- / -->
-
-            </fieldset>
-
-            <fieldset>
-                <legend>{t}Content{/t}</legend>
-
-                <label for="with_script" style="display:inline-block;">{t}Ad with JavaScript:{/t}</label>
-                <input type="checkbox" id="with_script" name="with_script" value="1" tabindex=5
-                    {if isset($advertisement) && $advertisement->with_script == 1}checked="checked"{/if} />
-
-
-                <div id="div_url1" style="display:{if !isset($advertisement) || $advertisement->with_script==0}block{else}none{/if};">
-                    <label for="title" style="display:inline-block;">{t}Ad url:{/t}</label>
-                    <input type="text" id="url" name="url" class="validate-url" title="Direccion web Publicidad"
-                        style="width:90%" value="{$advertisement->url|default:"http://"}" tabindex=3 />
+        <div class="control-group">
+            <label class="control-label">&nbsp;</label>
+            <div class="controls">
+                <div id="normal_content" style="{if !isset($advertisement) || $advertisement->with_script == 0}display:block{else}display:none{/if};">
+                    {include file="advertisement/partials/advertisement_images.tpl"}
                 </div>
-
-                {include file="advertisement/partials/advertisement_images.tpl"}
-
-                <div id="div_script" style="display:{if isset($advertisement) && $advertisement->with_script ==1}block{else}none{/if};">
-                    <textarea name="script" id="script" class="validate-script" title="script de publicidad" style="width:99%; height:8em;">{$advertisement->script|default:'&lt;script type="text/javascript"&gt;/* Código javascript */&lt;/script&gt;'}</textarea>
+                <div id="script_content" style="{if isset($advertisement) && $advertisement->with_script ==1}display:block{else}display:none{/if};">
+                    <textarea name="script" id="script" class="input-xxlarge" rows="10">{$advertisement->script|default:'&lt;script type="text/javascript"&gt;/* JS code */&lt;/script&gt;'}</textarea>
                 </div>
+            </div>
+        </div>
+        <div class="control-group" id="hide_flash" style="{if isset($advertisement->overlap) && $advertisement->with_script == 0}display:block{else}display:block{/if}">
+            <label for="overlap" class="control-label">{t}Hide Flash events{/t}</label>
+            <div class="controls">
+                <input type="checkbox" name="overlap" id="overlap" value="1" {if isset($advertisement->overlap) && $advertisement->overlap == 1}checked="checked"{/if} />
+                <div class="help-inline">{t}Mark this if you want to overide the default click handler for Flash based ads.{/t}</div>
+            </div>
+        </div>
+        <div class="control-group" style="{if !isset($advertisement) || $advertisement->type_advertisement != 50}display:none{/if};">
+            <label for="with_script" class="control-label">{t}Display time{/t}</label>
+            <div class="controls">
+                <input type="text" id="timeout" name="timeout" value="{$advertisement->timeout|default:"4"}" />
+                <div class="help-block">{t}This banner blocks all the page so hide it after this amount of seconds.{/t}</div>
+            </div>
+        </div>
 
-            </fieldset>
-
-            <fieldset>
-                <legend>{t}Position{/t}</legend>
-
+        <div class="control-group">
+            <label for="position" class="control-label">{t}Position{/t}</label>
+            <div class="controls">
                 <div id="position-adv" class="tabs">
                     <ul>
                         <li><a href="#publi-portada">{t}Frontpage{/t}</a></li>
@@ -336,12 +326,13 @@ input, select, textarea {
                     </div>
                     {/is_module_activated}
                 </div><!-- /position-adv -->
-            </fieldset>
-        </div><!-- / -->
+            </div>
+        </div>
 
-        <input type="hidden" name="filter[type_advertisement]" value="{$smarty.request.filter.type_advertisement|default:""}" />
-        <input type="hidden" name="filter[available]" value="{$smarty.request.filter.available|default:""}" />
-        <input type="hidden" name="filter[type]" value="{$smarty.request.filter.type|default:""}" />
     </div>
+
+    <input type="hidden" name="filter[type_advertisement]" value="{$smarty.request.filter.type_advertisement|default:""}" />
+    <input type="hidden" name="filter[available]" value="{$smarty.request.filter.available|default:""}" />
+    <input type="hidden" name="filter[type]" value="{$smarty.request.filter.type|default:""}" />
 </form>
 {/block}

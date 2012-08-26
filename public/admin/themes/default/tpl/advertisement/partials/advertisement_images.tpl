@@ -1,8 +1,6 @@
-<h2>{t}Multimedia for this ad:{/t}</h2>
-<table id="advertisement-images" style="{if isset($advertisement) && $advertisement->
-    with_script == 1} display:none;{else}display:block;{/if}">
+<table id="advertisement-images">
     <tr>
-        <td style="width:430px">
+        <td>
             <div id="related-images" class="resource-container">
                 <div class="droppable-image-position droppable-position">
                     <div>
@@ -64,14 +62,7 @@
                 <!-- /frontpage-image --> </div>
             <!-- /related-images --> </td>
         <td id="photos_container">
-            <div id="photos" class="photos clearfix"
-                 style="border:1px solid #ccc;
-                 {if isset($advertisement) && $advertisement->
-                with_script == 1}
-                     display:none;
-                 {else}
-                     display:block;
-                 {/if}" >
+            <div id="photos" class="photos clearfix">
             </div>
         </td>
     </tr>
