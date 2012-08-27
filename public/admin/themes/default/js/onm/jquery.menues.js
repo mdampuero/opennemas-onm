@@ -75,7 +75,7 @@ jQuery(document).ready(function($){
             if ($(item).attr('id')) {
                 // log(item);
                 var parent_id = 0;
-                items_hierarchy.each(function(item_hierarchy){
+                $(items_hierarchy).each(function(item_hierarchy){
                     if ($(item).data('item-id') == item_hierarchy['item_id']) {
                         parent_id = parseInt(item_hierarchy['parent_id']);
                     }
@@ -90,7 +90,6 @@ jQuery(document).ready(function($){
                 items.push(newitem);
             }
         });
-
         jQuery('#items').attr('value', JSON.stringify(items));
     });
 

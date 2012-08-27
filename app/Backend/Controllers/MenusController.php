@@ -250,7 +250,7 @@ class MenusController extends Controller
                 )),
                 'site'      => SITE,
                 'pk_father' => $request->request->filter('pk_father', 'user', FILTER_SANITIZE_STRING),
-                'items'     => json_decode(json_decode($request->request->get('items'))),
+                'items'     => json_decode($request->request->get('items')),
             );
 
             if ($menu->update($data)) {
@@ -338,5 +338,5 @@ class MenusController extends Controller
             )
         ));
     }
-
 }
+

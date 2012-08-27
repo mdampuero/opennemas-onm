@@ -115,8 +115,10 @@ class MenuItems
 
                 $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
                 if ($rs === false) {
+                    $saved = $saved && false;
                     \Application::logDatabaseError();
-                    $saved = $saved && ($rs !== false);
+                } else {
+                    $saved = $saved && true;
                 }
             }
 
