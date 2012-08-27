@@ -58,7 +58,7 @@ class Content
      *
      * @param string $id the content id to initilize.
      **/
-    public function __construct($id=null)
+    public function __construct($id = null)
     {
         $this->cache = new MethodCacheManager($this, array('ttl' => 30));
 
@@ -609,7 +609,7 @@ class Content
     }
 
     //Cambia available y estatus, paso de pendientes a disponibles y viceversa.
-    public function set_available($status,$last_editor)
+    public function set_available($status, $lastEditor)
     {
         $GLOBALS['application']->dispatch('onBeforeAvailable', $this);
 
@@ -626,7 +626,7 @@ class Content
             $values = array(
                 $status,
                 $status,
-                $last_editor,
+                $lastEditor,
                 $changed,
                 $this->id
             );
@@ -1101,7 +1101,7 @@ class Content
      *
      * @return boolean
      **/
-    public static function isInTime2($starttime=null, $endtime=null, $time=null)
+    public static function isInTime2($starttime = null, $endtime = null, $time = null)
     {
 
         $start = strtotime($starttime);
@@ -1400,7 +1400,7 @@ class Content
         return false;
     }
 
-    public static function setNumViews($id=null)
+    public static function setNumViews($id = null)
     {
 
         if (!array_key_exists('HTTP_USER_AGENT', $_SERVER)
@@ -1648,7 +1648,7 @@ class Content
             array($category, $pkContent));
 
         if (!$rs) {
-            Application::logDatabaseError();
+            \Application::logDatabaseError();
 
             return false;
         } else {
@@ -1937,13 +1937,13 @@ class Content
      * Loads all the related contents for this content
      *
      **/
-    public function loadRelatedContents($category_name='')
+    public function loadRelatedContents($categoryName = '')
     {
         $relationsHandler  = new RelatedContent();
         $ccm = new ContentCategoryManager();
         $this->related_contents = array();
         if (\Onm\Module\ModuleManager::isActivated('AVANCED_ARTICLE_MANAGER')
-            && ($category_name == 'home')) {
+            && ($categoryName == 'home')) {
             $relations = $relationsHandler->getHomeRelations($this->id);
         } else {
             $relations = $relationsHandler->getRelations($this->id);
@@ -1955,8 +1955,7 @@ class Content
 
                 // Only include content is is in time and available.
                 if ($content->isReadyForPublish()) {
-                    $content->category_name =
-                        $ccm->get_name($content->category);
+                    $content->categoryName = $ccm->get_name($content->category);
                     $this->related_contents []= $content;
                 }
             }
@@ -2045,3 +2044,4 @@ class Content
         return ($rs != false);
     }
 }
+
