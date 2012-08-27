@@ -76,14 +76,14 @@
                 <div class="control-group">
                     <label for="site_url" class="control-label">{t}Site URL{/t}</label>
                     <div class="controls">
-                        <input type="text" class="required" name="site_url" id="site_url" value="{$site_url}" placeholder="http://example.com"/>
+                        <input type="text" required="required" name="site_url" id="site_url" value="{$site_url}" placeholder="http://example.com"/>
                         <input type="button" name="connect" value="{t}Connect{/t}" id="connect" class="onm-button blue">
                     </div>
                 </div>
                 <div class="control-group" id="colorDiv" {if !$site_color}style="display:none;"{/if}>
                     <label for="site_color" class="control-label">{t}Site color{/t}</label>
                     <div class="controls">
-                        <input readonly="readonly" type="text" class="colorpicker_input" id="color-picker" name="site_color" value="{$site_color}">
+                        <input readonly="readonly" type="text" class="colorpicker_input" id="color-picker" name="site_color" value="{$site_color}" required="required">
                         <div class="colorpicker_viewer" style="background-color:#{$site_color}"></div>
                     </div>
                 </div>
