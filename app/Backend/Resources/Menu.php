@@ -36,7 +36,7 @@ $menuXml = '<?xml version="1.0"?>
             title="'.htmlspecialchars(_("Sync Instances"), ENT_QUOTES).'"
             privilege="SYNC_ADMIN"
             id="sync_manager"
-            link="controllers/web_services/client.php"
+            link="'.url('admin_instance_sync').'"
         />
     </submenu>
 
