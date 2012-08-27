@@ -131,23 +131,23 @@
                     <div class="utilities-conf" style="width:200px; position:absolute; top:0px; right:0px">
                         {is_module_activated name="COMMENT_MANAGER"}
                         <input type="checkbox" name="with_comment" id="with_comment"  {if (isset($article) && $article->with_comment eq 1)}checked{/if} value=1/>
-                        {t}Allow coments{/t}
+                        <label for="with_comment">{t}Allow coments{/t}</label>
                         <br/>
                         {/is_module_activated}
 
                         {acl isAllowed="ARTICLE_AVAILABLE"}
                             <input type="checkbox" name="content_status" id="content_status" {if (isset($article) && $article->content_status eq 1)}checked{/if}  value=1/>
-                            {t}Available:{/t}
+                            <label for="content_status">{t}Available{/t}</label>
                             <br/>
                         {/acl}
                         {acl isAllowed="ARTICLE_FRONTPAGE"}
                             <input type="checkbox"  name="promoted_to_category_frontpage" id="promoted" {if (isset($article) && $article->promoted_to_category_frontpage == true)}checked{/if} value=1/>
-                            <label for="promoted">{t}Put in category frontpage:{/t}</label>
+                            <label for="promoted">{t}Put in category frontpage{/t}</label>
                             <br/>
                         {/acl}
                         {acl isAllowed="ARTICLE_HOME"}
                             <input type="checkbox" name="frontpage" id="frontpage" {if (isset($article) && $article->frontpage eq '1')} checked {/if} value=1/>
-                            {t}Suggested for frontpage:{/t}
+                            <label for="frontpage">{t}Suggested for frontpage{/t}</label>
                         {/acl}
                     </div>
 

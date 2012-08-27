@@ -1729,6 +1729,9 @@ div.dashboardBox div.table {
 .related-content-provider {
   width: 440px;
 }
+.related-content-provider .pagination {
+  margin:5px 0;
+}
 
 div#newsletter-container.column-receiver,
 div#article-form.tabs div#related-contents  div.column-receiver {
