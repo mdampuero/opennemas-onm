@@ -82,7 +82,7 @@
                         <div class="complete-name">{$smarty.session.realname|ucfirst}</div>
                         <div class="login-name">{$smarty.session.username}</div>
                         <ul class="links">
-                            <li><a id="settings" title="{t}Edit my profile{/t}" href="{url name=admin_acl_user_show id=$smarty.session.userid}">{t}Edit my profile{/t}</a></li>
+                            <li><a id="settings" title="{t}Edit my profile{/t}" href="{url name=admin_acl_user_show id=me}">{t}Edit my profile{/t}</a></li>
                             {if Acl::check('BACKEND_ADMIN') eq true}
                             {*<li><a href="#" id="user_activity" title="{t}Active users in backend{/t}">{t}Connected users{/t} ({count_sessions})</a></li>*}
                             {/if}

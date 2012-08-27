@@ -75,7 +75,12 @@ class AclUserController extends Controller
     public function showAction(Request $request)
     {
         //user can modify his data
-        $id = $request->query->getDigits('id');
+        $idRAW = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
+        if ($idRAW === 'me') {
+            $id = $_SESSION['userid'];
+        } else {
+            $id = $request->query->getDigits('id');
+        }
 
         // Check if the user is the same as the one that we want edit or
         // if we have permissions for editting other user information.
