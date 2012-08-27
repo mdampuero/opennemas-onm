@@ -54,7 +54,8 @@ label {
         {render_messages}
         <div id="user-editing-form" class="wrapper-content tabs">
             <ul>
-                <li><a href="#basic" title="{t}Basic information{/t}">{t}Basic information{/t}</a></li>
+                <li><a href="#basic" title="{t}Basic information{/t}">{t}User info{/t}</a></li>
+                <li><a href="#settings" title="{t}Settings{/t}">{t}Settings{/t}</a></li>
                 <li><a href="#privileges" title="{t}Privileges{/t}">{t}Privileges{/t}</a></li>
             </ul><!-- / -->
             <div id="basic" class="form-horizontal">
@@ -117,16 +118,26 @@ label {
                         </div>
                     </div>
                 </fieldset>
-                <fieldset>
-                    <div class="control-group">
+            </div><!-- /personal -->
+            <div id="settings">
+                <div class="form-horizontal">
+                        <div class="control-group">
                         <label for="sessionexpire" class="control-label">{t}Session expire time:{/t}</label>
                         <div class="controls">
                             <input type="number" id="sessionexpire" name="sessionexpire" value="{$user->sessionexpire|default:"15"}" class="input-mini validate-digits" maxlength="20"/>
                             <span>{t}minutes{/t}</span>
                         </div>
                     </div>
-                </fieldset>
-            </div><!-- /personal -->
+
+                    <div class="control-group">
+                        <label for="site_language" class="control-label">{t}User language{/t}</label>
+                        <div class="controls">
+                            {html_options name="meta[user_language]" options=$languages selected=$user->meta['default_language']}
+                            <div class="help-block">{t}Used for displayed messages, interface and measures in your page.{/t}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div id="privileges">
                 <table style="margin:1em;">
                     <tbody>

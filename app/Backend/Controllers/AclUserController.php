@@ -92,12 +92,19 @@ class AclUserController extends Controller
             return $this->redirect($this->generateUrl('admin_acl_user'));
         }
 
+        $user->meta = array();
+        $user->meta['default_language'] = $user->getMeta('default_language') ?: 'default';
+
         $userGroup = new \UserGroup();
         $tree = $ccm->getCategoriesTree();
+        $languages = \Application::getAvailableLanguages();
+        $languages ['default']= _('Default system language');
+
 
         return $this->render('acl/user/new.tpl', array(
             'user'                      => $user,
             'user_groups'               => $userGroup->find(),
+            'languages'                 => $languages,
             'content_categories'        => $tree,
             'content_categories_select' => $user->getAccessCategoryIds(),
         ));
@@ -287,7 +294,7 @@ class AclUserController extends Controller
         $user = new \User();
 
         $settings = array(
-            'test' => 1,
+            'default_language' => 'gl_ES',
             'test2' => 1
         );
 

@@ -633,4 +633,48 @@ class User
 
         return true;
     }
+
+    /**
+     * Returns the values of a user meta option
+     *
+     * @param string/array $meta an array or an string with the user meta name
+     *
+     * @return array/string an 2-dimensional array or an string with the user option values
+     * @author
+     **/
+    public function getMeta($meta = array())
+    {
+        if (is_string($meta)) {
+            $cleanMeta = array($meta);
+        } else {
+            $cleanMeta = $meta;
+        }
+
+        $metaNameSQL = array();
+        foreach ($cleanMeta as $key) {
+            $metaNameSQL []= $GLOBALS['application']->conn->qstr($key);
+        }
+        $metaNameSQL = implode(', ', $metaNameSQL);
+
+        $sql = 'SELECT * FROM usermeta WHERE `user_id` = ? AND `meta_key` IN ('.$metaNameSQL.')';
+
+        $GLOBALS['application']->conn->fetchMode = ADODB_FETCH_ASSOC;
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($this->id));
+
+        if (!$rs) {
+            return false;
+        }
+
+        if (is_array($meta)) {
+            $returnValues = array();
+            foreach ($rs as $value) {
+                $returnValues [$rs->fields['meta_key']] = $rs->fields['meta_value'];
+            }
+        } else {
+            $returnValues = $rs->fields['meta_value'];
+        }
+
+        return $returnValues;
+    }
 }
+
