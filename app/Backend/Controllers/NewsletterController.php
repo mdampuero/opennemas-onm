@@ -82,7 +82,7 @@ class NewsletterController extends Controller
     {
         $id = (int) $request->request->getDigits('id');
         $contentsRAW = $request->request->get('contentids');
-        $contents = json_decode(json_decode($contentsRAW));
+        $contents = json_decode($contentsRAW);
 
         $newsletter = new \NewNewsletter();
         $nm         = new \NewsletterManager();
@@ -143,6 +143,54 @@ class NewsletterController extends Controller
             array('id' => $newsletter->id))
         );
     }
+
+    /**
+     * Lists all the available recipients and allos to select them before send
+     * the newsletter
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function pickRecipientsAction(Request $request)
+    {
+        $newsletter = new \Newsletter(array('namespace' => 'PConecta_'));
+        $account    = $newsletter->getAccountsProvider();
+        $accounts   = $account->getAccounts();
+        $receiver   = array();
+        $mailList   = array();
+
+        $configurations = \Onm\Settings::get('newsletter_maillist');
+        if (!is_null($configurations)
+            && array_key_exists('email', $configurations)
+            && !empty($configurations['email'])
+        ) {
+            $mailList[] = new \Newsletter_Account(
+                $configurations['email'],
+                $configurations['name']
+            );
+        }
+        $this->view->assign('mailList', $mailList);
+
+        // Ajax request
+        if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
+           ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')) {
+            header('Content-type: application/json');
+            echo json_encode($accounts);
+            exit(0);
+        }
+
+        $tpl->assign('accounts', $accounts);
+
+        if (isset($_SESSION['data-recipients-'.$newsletter->id])) {
+            $recipients = json_decode($_SESSION['data-recipients-'.$newsletter->id]);
+            $this->assign('recipients', $recipients);
+        }
+
+        return $this->render('newsletter/steps/newsletterRecipients.tpl');
+    }
+
+
 
     /**
      * Deletes an newsletter given its id

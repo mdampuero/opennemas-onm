@@ -213,15 +213,15 @@ class ArticlesController extends Controller
                 'starttime'         => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
                 'endtime'           => $request->request->filter('endtime', '', FILTER_SANITIZE_STRING),
                 'description'       => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
-                'relatedFront'      => json_decode(json_decode(
+                'relatedFront'      => json_decode(
                     $request->request->filter('relatedFront', '', FILTER_SANITIZE_STRING)
-                )),
-                'relatedInner'      => json_decode(json_decode(
+                ),
+                'relatedInner'      => json_decode(
                     $request->request->filter('relatedInner', '', FILTER_SANITIZE_STRING)
-                )),
-                'relatedHome'       => json_decode(json_decode(
+                ),
+                'relatedHome'       => json_decode(
                     $request->request->filter('relatedHome', '', FILTER_SANITIZE_STRING)
-                )),
+                ),
             );
 
             if ($article->create($data)) {
@@ -471,15 +471,15 @@ class ArticlesController extends Controller
                 'starttime'         => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
                 'endtime'           => $request->request->filter('endtime', '', FILTER_SANITIZE_STRING),
                 'description'       => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
-                'relatedFront'      => json_decode(json_decode(
+                'relatedFront'      => json_decode(
                     $request->request->filter('relatedFront', '', FILTER_SANITIZE_STRING)
-                )),
-                'relatedInner'      => json_decode(json_decode(
+                ),
+                'relatedInner'      => json_decode(
                     $request->request->filter('relatedInner', '', FILTER_SANITIZE_STRING)
-                )),
-                'relatedHome'       => json_decode(json_decode(
+                ),
+                'relatedHome'       => json_decode(
                     $request->request->filter('relatedHome', '', FILTER_SANITIZE_STRING)
-                )),
+                ),
             );
 
             if ($article->update($data)) {
