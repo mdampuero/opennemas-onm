@@ -73,9 +73,8 @@ jQuery(document).ready(function($){
 
         menu_elements.each(function(pos, item) {
             if ($(item).attr('id')) {
-                // log(item);
                 var parent_id = 0;
-                $(items_hierarchy).each(function(item_hierarchy){
+                $.each(items_hierarchy, function(index, item_hierarchy){
                     if ($(item).data('item-id') == item_hierarchy['item_id']) {
                         parent_id = parseInt(item_hierarchy['parent_id']);
                     }
