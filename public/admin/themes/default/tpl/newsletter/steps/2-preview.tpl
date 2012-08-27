@@ -32,19 +32,19 @@ OpenNeMas.tinyMceConfig.advanced.elements = "htmlContent";
 <div id="buttons-preview" class="top-action-bar clearfix">
 	<div class="wrapper-content">
 		<div class="title">
-                <h2>{t}Newsletter{/t} :: {t}Preview{/t}</h2>
+            <h2>{t}Newsletter{/t} :: {t}Preview{/t}</h2>
         </div>
 
 		<ul class="old-button">
 			<li>
-				<a href="#" class="admin_add" title="{t}Next{/t}" id="next-button">
+				<a href="{url name=admin_newsletter_pick_recipients id=$newsletter->id}" class="admin_add" title="{t}Next{/t}" id="next-button">
 					<img src="{$params.IMAGE_DIR}arrow_next.png" alt="{t}Next{/t}" /><br />
 					{t}Next step{/t}
 				</a>
 			</li>
 
 			<li>
-				<a href="#" class="admin_add" title="{t}Previous{/t}" id="prev-button">
+				<a href="{url name=admin_newsletter_show_contents id=$newsletter->id}" class="admin_add" title="{t}Previous{/t}" id="prev-button">
 					<img src="{$params.IMAGE_DIR}arrow_previous.png" alt="{t}Previous{/t}" /><br />
 					{t}Previous step{/t}
 				</a>
@@ -64,7 +64,7 @@ OpenNeMas.tinyMceConfig.advanced.elements = "htmlContent";
             <li>
                 <a href="{url name=admin_newsletters}" class="admin_add" title="{t}Back to list{/t}">
                     <img src="{$params.IMAGE_DIR}previous.png" alt="" /><br />
-                    {t}Go back{/t}
+                    {t}Back to list{/t}
                 </a>
             </li>
 

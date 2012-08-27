@@ -72,6 +72,26 @@ class NewsletterController extends Controller
     }
 
     /**
+     * Description of this action
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function showContentsAction(Request $request)
+    {
+        $id = $request->query->getDigits('id');
+        $newsletter = new \NewNewsletter($id);
+
+        return $this->render(
+            'newsletter/steps/1-pick-elements.tpl',
+            array(
+                'newsletterContent' => $newsletter->data,
+            )
+        );
+    }
+
+    /**
      * Saves the newsletter items
      *
      * @param Request $request the request object
@@ -127,7 +147,7 @@ class NewsletterController extends Controller
      *
      * @return Response the response object
      **/
-    public function saveHTMLContentAction(Request $request)
+    public function saveHtmlContentAction(Request $request)
     {
         $id = (int) $request->request->getDigits('id');
 
@@ -154,8 +174,11 @@ class NewsletterController extends Controller
      **/
     public function pickRecipientsAction(Request $request)
     {
-        $newsletter = new \Newsletter(array('namespace' => 'PConecta_'));
-        $account    = $newsletter->getAccountsProvider();
+        $id = $request->query->getDigits('id');
+
+        $newsletter = new \NewNewsletter($id);
+        $newsletterOld = new \Newsletter(array('namespace' => 'PConecta_'));
+        $account    = $newsletterOld->getAccountsProvider();
         $accounts   = $account->getAccounts();
         $receiver   = array();
         $mailList   = array();
@@ -170,24 +193,28 @@ class NewsletterController extends Controller
                 $configurations['name']
             );
         }
-        $this->view->assign('mailList', $mailList);
 
         // Ajax request
-        if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
-           ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')) {
+        if ($request->isXmlHttpRequest()) {
             header('Content-type: application/json');
             echo json_encode($accounts);
             exit(0);
         }
 
-        $tpl->assign('accounts', $accounts);
-
+        $recipients = array();
         if (isset($_SESSION['data-recipients-'.$newsletter->id])) {
             $recipients = json_decode($_SESSION['data-recipients-'.$newsletter->id]);
-            $this->assign('recipients', $recipients);
         }
 
-        return $this->render('newsletter/steps/newsletterRecipients.tpl');
+        return $this->render(
+            'newsletter/steps/3-pick-recipients.tpl',
+            array(
+                'id'         => $id,
+                'accounts'   => $accounts,
+                'mailList'   => $mailList,
+                'recipients' => $recipients,
+            )
+        );
     }
 
 
@@ -292,5 +319,5 @@ class NewsletterController extends Controller
 
         return false;
     }
-
 }
+

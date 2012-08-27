@@ -1684,6 +1684,15 @@ $adminRoutes->add(
 );
 
 $adminRoutes->add(
+    'admin_newsletter_show_contents',
+    new Route(
+        '/newsletter/{id}/contents',
+        array('_controller' => 'Backend:Controllers:NewsletterController:showContents')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
     'admin_newsletter_save_contents',
     new Route(
         '/newsletter/save-contents',
@@ -1705,7 +1714,16 @@ $adminRoutes->add(
     'admin_newsletter_save_html',
     new Route(
         '/newsletter/{id}/save-html',
-        array('_controller' => 'Backend:Controllers:NewsletterController:saveHTMLContent')
+        array('_controller' => 'Backend:Controllers:NewsletterController:saveHtmlContent')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_newsletter_pick_recipients',
+    new Route(
+        '/newsletter/{id}/pick-recipients',
+        array('_controller' => 'Backend:Controllers:NewsletterController:pickRecipients')
     ),
     '/admin'
 );

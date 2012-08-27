@@ -53,7 +53,7 @@
                         <input type="checkbox" id="toggleallcheckbox">
                     </th>
                     <th>{t}Title{/t}</th>
-                    <th class="left"  style="width:150px;">Created</th>
+                    <th class="left"  style="width:150px;">{t}Created{/t}</th>
                     <th class="right" style="width:100px;">{t}Actions{/t}</th>
                     {else}
                     <th class="center">
@@ -69,7 +69,11 @@
                         <input type="checkbox" class="minput" id="selected_{$smarty.foreach.c.iteration}" name="selected_fld[]" value="{$newsletter->id}"  style="cursor:pointer;">
                     </td>
                     <td class="left">
-                        {$newsletter->title|default:"No title"}
+                        {if !empty($newsletter->title)}
+                            {$newsletter->title}
+                        {else}
+                            {t}Newsletter{/t}  - {date("d-m-Y")}
+                        {/if}
                     </td>
                     <td class="left">
                         {$newsletter->created}

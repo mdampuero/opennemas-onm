@@ -140,7 +140,7 @@ jQuery(function($) {
             dropOnEmpty: true,
             placeholder: 'placeholder-element',
             tolerance: 'pointer',
-            items: "li:not(.container-label)",
+            items: "li:not(.container-label)"
         }).disableSelection();
 
         jQuery("#modal-add-label input#container_label").val('');
@@ -152,13 +152,13 @@ jQuery(function($) {
     jQuery('div#newsletter-container').sortable({
         axis: "y",
         handle: "span",
-        tolerance: 'pointer',
+        tolerance: 'pointer'
     }).disableSelection();
 
     jQuery("modal-update-label").modal({
         backdrop: 'static', //Show a grey back drop
         keyboard: true, //Can close on escape
-        show: false,
+        show: false
     });
 
     jQuery('#modal-update-label a.btn.save').on('click', function(e) {
@@ -198,7 +198,7 @@ jQuery(function($) {
     jQuery("div#newsletter-container").on('click','.container-label .icon-chevron-down', function(i, item) {
         var ul = jQuery(this).closest('div.container-receiver').find('ul.content-receiver');
         if(jQuery(ul).css('display') == 'none') {
-          jQuery(ul).show().sortable('enable')
+          jQuery(ul).show().sortable('enable');
         } else {
           jQuery(ul).hide().sortable('disable');
         }
@@ -268,7 +268,7 @@ function saveHTMLChanges() {
 
     //Save updates
     if(tinyMCE.get('htmlContent')) {
-        OpenNeMas.tinyMceFunctions.saveTiny( 'htmlContent' )
+        OpenNeMas.tinyMceFunctions.saveTiny( 'htmlContent' );
         OpenNeMas.tinyMceFunctions.destroy( 'htmlContent' );
     }
     var htmlContent = jQuery('div#content').find('div#htmlContent').html();
@@ -292,10 +292,10 @@ function saveHTMLChanges() {
 
 /*****************************************************************************/
 
-//SETP 3 - ADD recipients
+// SETP 3 - ADD recipients
+jQuery('#accounts-provider').tabs();
 
 jQuery('div#dbList').on('click','#add-selected', function () {
-
     jQuery('ul#contentList li').find('input:checked').each(function() {
 
         item =  jQuery(this).parent();
@@ -303,105 +303,33 @@ jQuery('div#dbList').on('click','#add-selected', function () {
 
     });
     jQuery('input#toggleallcheckbox').prop("checked", false);
-
-
 });
 
 
 jQuery('div#dbList').on('click','#button-check-all', function(event) {
-
     toggleProviderCheckbox(event.target);
-
 });
 
-jQuery('#buttons-recipients').on('click','#next-button', function() {
+jQuery('div#dbList ul#contentList').sortable({
+    connectWith: "ul#items-recipients",
+    dropOnEmpty: true,
+    placeholder: 'placeholder-element',
+    tolerance: 'pointer'
+}).disableSelection();
 
-    var contents = saveRecipients();
-    jQuery('#newsletterForm').submit();
+jQuery('div#mailList ul#items-mailList').sortable({
+    connectWith: "ul#items-recipients",
+    dropOnEmpty: true,
+    placeholder: 'placeholder-element',
+    tolerance: 'pointer'
+}).disableSelection();
 
-});
-
-
-jQuery('#buttons-recipients').on('click','#prev-button', function() {
-
-    jQuery("#action").val('preview');
-    jQuery('#newsletterForm').submit();
-
-});
-
-
-jQuery('#buttons-recipients').on('click','#clean-button', function() {
-
-    jQuery.cookie("data-recipients", null);
-    jQuery("#action").val('listRecipients');
-    jQuery('#newsletterForm').submit();
-
-});
-
-jQuery(document).ready(function($){
-    makeRecipientsListSortables();
-});
-
-
-makeRecipientsListSortables = function () {
-
-
-    jQuery('div#dbList ul#contentList').sortable({
-            connectWith: "ul#items-recipients",
-            dropOnEmpty: true,
-            placeholder: 'placeholder-element',
-            tolerance: 'pointer',
-        }).disableSelection();
-
-    jQuery('div#mailList ul#items-mailList').sortable({
-            connectWith: "ul#items-recipients",
-            dropOnEmpty: true,
-            placeholder: 'placeholder-element',
-            tolerance: 'pointer',
-        }).disableSelection();
-
-    jQuery('div#recipients ul#items-recipients').sortable({
-            connectWith: "ul#contentList, ul#items-mailList",
-            dropOnEmpty: true,
-            placeholder: 'placeholder-element',
-            tolerance: 'pointer',
-        }).disableSelection();
-
-}
-
-function saveRecipients() {
-
-    var rec = [];
-
-    jQuery('div#recipients').find('ul#items-recipients li').each(function (index, item) {
-
-        rec.push({
-            'name': jQuery(item).data('name'),
-            'email': jQuery(item).data('email'),
-        });
-    });
-
-
-    var othersMails = jQuery('div#manualList').find('textarea#othersMails').val();
-
-    if (othersMails.length >0) {
-        var list = othersMails.replace(',', '\n').split('\n');
-        list.each(function (item) {
-            rec.push({
-                'name': item,
-                'email':item,
-            });
-        });
-
-    }
-
-    var encodedContents = JSON.stringify(rec);
-    jQuery.cookie("data-recipients", encodedContents);
-
-    return encodedContents;
-
-}
-
+jQuery('div#recipients ul#items-recipients').sortable({
+    connectWith: "ul#contentList, ul#items-mailList",
+    dropOnEmpty: true,
+    placeholder: 'placeholder-element',
+    tolerance: 'pointer'
+}).disableSelection();
 
 /*****************************************************************************/
 
