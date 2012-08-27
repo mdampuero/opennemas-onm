@@ -160,21 +160,21 @@
                     <div class="control-group">
                         <label for="site_title" class="control-label">{t}Site title{/t}</label>
                         <div class="controls">
-                            <input type="text" id="site_title" name="site_title" class="input-xlarge" value="{$configs['site_title']|default:""}">
+                            <input type="text" id="site_title" name="site_title" class="input-xxlarge" value="{$configs['site_title']|default:""}">
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label for="site_description" class="control-label">{t}Site description{/t}</label>
                         <div class="controls">
-                            <textarea id="site_description" name="site_description" class="input-xlarge" cols=50 rows=5>{$configs['site_description']|default:""}</textarea>
+                            <textarea id="site_description" name="site_description" class="input-xxlarge" cols=50 rows=5>{$configs['site_description']|default:""}</textarea>
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label for="site_description" class="control-label">{t}Site keywords{/t}</label>
                         <div class="controls">
-                            <textarea id="site_keywords" name="site_keywords" class="input-xlarge">{$configs['site_keywords']|default:""}</textarea>
+                            <textarea id="site_keywords" name="site_keywords" class="input-xxlarge">{$configs['site_keywords']|default:""}</textarea>
                         </div>
                     </div>
                 </fieldset>
@@ -245,9 +245,17 @@
                     <h3 class="settings-header">{t}Social networks{/t}</h3>
 
                     <div class="control-group">
+                        <label for="twitter_page" class="control-label">{t}Twitter Page{/t}</label>
+                        <div class="controls">
+                            <input type="text" id="twitter_page" name="twitter_page" value="{$configs['twitter_page']|default:""}" class="input-xxlarge">
+                            <div class="help-block">{t escape=off}If you also have a <b>twitter page</b>, add your profile name on the form. <br/>Default will be set with Opennemas.{/t}</div>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
                         <label for="facebook_page" class="control-label">{t}Facebook Page Url{/t}</label>
                         <div class="controls">
-                            <input type="text" id="facebook_page" name="facebook_page" value="{$configs['facebook_page']|default:""}" class="input-xlarge">
+                            <input type="text" id="facebook_page" name="facebook_page" value="{$configs['facebook_page']|default:""}" class="input-xxlarge">
                             <div class="help-block">{t escape=off}If you have a <b>facebook page</b>, please complete the form with your facebook page url and Id.{/t}</div>
                         </div>
                     </div>
@@ -259,13 +267,6 @@
                         </div>
                     </div>
 
-                    <div class="control-group">
-                        <label for="twitter_page" class="control-label">{t}Twitter Page{/t}</label>
-                        <div class="controls">
-                            <input type="text" id="twitter_page" name="twitter_page" value="{$configs['twitter_page']|default:""}" class="input-xlarge">
-                            <div class="help-block">{t escape=off}If you also have a <b>twitter page</b>, add your profile name on the form. <br/>Default will be set with Opennemas.{/t}</div>
-                        </div>
-                    </div>
                 </fieldset>
                 <hr>
                 <fieldset>
