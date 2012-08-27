@@ -81,7 +81,7 @@ class ImagesController extends Controller
             'photo',
             $filterCategory,
             'contents.in_litter != 1 AND contents.fk_content_type=8',
-            'ORDER BY photos.date ASC',
+            'ORDER BY pk_content DESC',
             $page,
             $itemsPerPage
         );

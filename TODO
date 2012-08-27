@@ -11,10 +11,6 @@ Newsletter
 -------- --
 - Only initial work done
 
-Polls
------
-- Review drop poll elements that doesn't work
-
 Specials
 --------
 Review d&d of contents in specials
@@ -22,6 +18,10 @@ Review d&d of contents in specials
 Image Galleries
 ---------------
 - Review image galleries: specials, advertisement
+
+Opinion
+-------
+- Allow to delay or schedule opinions
 
 LOW PRIORITY TASKS OR IDEAS
 --------------------------------------------------------------------------------
@@ -37,10 +37,6 @@ Opinion Authors
 ---------------
 - Batch actions
 
-Opinion
--------
-- Allow to delay or schedule opinions
-
 Article
 -------
 - Check/Delete content relations when delete an article
@@ -53,10 +49,6 @@ Opinion authors
 ---------------
 - Move condition and politics to params
 - Add Title for blog, unless "Opinions of XXXX" say "Custom title"
-
-Images
-------
-- Review color filter in search
 
 XML file importer
 -----------------
@@ -84,7 +76,3 @@ Manager
 Users
 -----
 - Allow to upload an avatar
-
-UserGroups
-----------
-- Drop inline prototype js code
