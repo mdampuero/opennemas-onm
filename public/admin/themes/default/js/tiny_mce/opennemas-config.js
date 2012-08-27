@@ -119,17 +119,6 @@ OpenNeMas.tinyMceConfig = {
         spellchecker_languages : "+Castellano=es,Galego=gl,English=en",
 
         setup : function(ed) {
-            ed.onKeyUp.add(function(ed, e) {
-                if(counttiny && document.getElementById('counter_summary')) {
-                    counttiny(document.getElementById('counter_summary'), ed);
-                }
-            });
-
-            ed.onChange.add(function(ed, e) {
-                if(counttiny && document.getElementById('counter_summary')) {
-                    counttiny(document.getElementById('counter_summary'), ed);
-                }
-            });
         }
     },
 
