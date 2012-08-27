@@ -81,7 +81,7 @@
                     <td style="padding:1px; font-size:11px;" class="right">
                         <div class="btn-group">
                             {acl isAllowed="NEWSLETTER_UPDATE"}
-                            <a class="btn" href="{url name=admin_newsletter_preview id=$newsletter->id}" title="{t}Edit{/t}" >
+                            <a class="btn" href="{url name=admin_newsletter_show_contents id=$newsletter->id}" title="{t}Edit{/t}" >
                                 <i class="icon-pencil"></i> {t}Edit{/t}
                             </a>
                             {/acl}

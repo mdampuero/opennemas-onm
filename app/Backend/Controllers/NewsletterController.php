@@ -86,7 +86,7 @@ class NewsletterController extends Controller
         return $this->render(
             'newsletter/steps/1-pick-elements.tpl',
             array(
-                'newsletterContent' => $newsletter->data,
+                'newsletterContent' => json_decode($newsletter->data),
             )
         );
     }
