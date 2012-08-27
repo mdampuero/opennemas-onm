@@ -133,8 +133,8 @@ class InstanceSyncController extends Controller
             }
 
             // Fetch sync categories in config
-            $syncParams = s::get('sync_params');
-            $syncColors = s::get('sync_colors');
+            $syncParams = s::get('sync_params', array());
+            $syncColors = s::get('sync_colors', array());
             $categoriesChecked = array();
             foreach ($syncParams as $siteUrl => $categories) {
                 if (preg_match('@'.$siteUrl.'@', $siteUrl)) {
