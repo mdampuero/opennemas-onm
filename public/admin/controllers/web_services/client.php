@@ -37,7 +37,8 @@ $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
 // Initialize request parameters
 $action = filter_input( INPUT_POST, 'action' , FILTER_SANITIZE_STRING );
 if (!isset($action)) {
-    $action = filter_input( INPUT_GET, 'action' , FILTER_SANITIZE_STRING, array('options' => array('default' => 'list')) );
+    $action = filter_input( INPUT_GET, 'action' , FILTER_SANITIZE_STRING,
+        array('options' => array('default' => 'list')) );
 }
 
 /**
@@ -47,6 +48,7 @@ if (!isset($action)) {
 
 switch($action) {
 
+    // create
     case 'config':
 
         if (isset($_POST['categories']) && !empty($_POST['categories'])) {
@@ -71,8 +73,9 @@ switch($action) {
                 $syncColors = array($siteUrl => $siteColor);
             }
 
-            if (s::set('sync_params', $syncParams) && s::set('sync_colors', $syncColors))
-            {
+            if (s::set('sync_params', $syncParams)
+                && s::set('sync_colors', $syncColors)
+            ) {
                 m::add(_('EFE module configuration saved successfully'), m::SUCCESS);
             } else {
                 m::add(_('There was an error while saving the EFE module configuration'), m::ERROR);
@@ -89,6 +92,7 @@ switch($action) {
 
     break;
 
+    // AJAX connect
     case 'connect':
 
         $siteUrl = filter_input( INPUT_POST, 'site_url' , FILTER_VALIDATE_URL );
@@ -113,6 +117,7 @@ switch($action) {
 
     break;
 
+    // show
     case 'edit':
 
         $currentSiteUrl = filter_input( INPUT_GET, 'site_url' , FILTER_VALIDATE_URL );
@@ -174,8 +179,9 @@ switch($action) {
         $syncParams = array_diff_assoc($syncParams, $syncParamsToDelete);
         $syncColors = array_diff_assoc($syncColors, $syncColorToDelete);
 
-        if (s::set('sync_params', $syncParams) && s::set('sync_colors', $syncColors))
-        {
+        if (s::set('sync_params', $syncParams)
+            && s::set('sync_colors', $syncColors)
+        ) {
             m::add(_('Site configuration deleted successfully'), m::SUCCESS);
         } else {
             m::add(_('There was an error while deleting this configuration'), m::ERROR);
@@ -210,3 +216,4 @@ switch($action) {
 
     break;
 }
+

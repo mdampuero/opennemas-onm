@@ -1,4 +1,14 @@
 {extends file="base/admin.tpl"}
+{block name="header-css" append}
+<style type="text/css">
+    .colorpicker_viewer {
+        border-top-right-radius: 3px !important;
+        border-bottom-right-radius: 3px !important;
+        display:block;
+
+    }
+</style>
+{/block}
 
 {block name="content"}
 <div class="top-action-bar clearfix">
@@ -6,7 +16,7 @@
         <div class="title"><h2>{t}Sync Manager{/t} :: {t}Client side{/t}</h2></div>
         <ul class="old-button">
             <li>
-                <a href="{$smarty.server.PHP_SELF}?action=config" class="admin_add" title="{t}Add site to sync{/t}">
+                <a href="{url name=admin_instance_sync_create}" class="admin_add" title="{t}Add site to sync{/t}">
                     <img src="{$params.IMAGE_DIR}sync.png" title="{t}Add site to sync{/t}" alt="{t}Add site to sync{/t}" ><br />{t}Add site to sync{/t}
                 </a>
             </li>
@@ -17,7 +27,7 @@
 
     <div class="warnings-validation"></div>
 
-    <form action="{$smarty.server.PHP_SELF}" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
+    <form action="{url name=admin_instance_create}" method="GET" id="formulario">
 
     	{render_messages}
 
@@ -29,12 +39,10 @@
                     <th style='width:45% !important;'>{t}Categories to Sync{/t}</th>
                     <th style="width:10% !important;">{t}Color{/t}</th>
                     <th style="width:5% !important;">{t}Actions{/t}</th>
-                </tr>
                 {else}
-                <tr>
                     <th coslpan=4>&nbsp;</th>
-                </tr>
                 {/if}
+                </tr>
             </thead>
 
             <tbody>
@@ -43,32 +51,22 @@
                     <tr>
                         <td>{$site}</td>
                         <td>
-                            {foreach $categories as $category}
-                                {$category}
-                            {/foreach}
+                            {$categories|implode:", "}
                         </td>
                         <td>
-                            <div class="colopicker_viewer"
-                                 style="background-color: #{$site_color[$site]};
-                                        border-top-right-radius: 3px !important;
-                                        border-bottom-right-radius: 3px !important;">
-                            </div>
+                            <div class="colorpicker_viewer" style="background-color:#{$site_color[$site]};"></div>
                         </td>
                         <td class="right nowrap">
-                            <ul class="btn-group">
-                                <li>
-                                    <a href="{$smarty.server.PHP_SELF}?action=edit&amp;site_url={$site}"
-                                       title="{t}Edit{/t}">
-                                        <img src="{$params.IMAGE_DIR}edit.png" />
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{$smarty.server.PHP_SELF}?action=delete&amp;site_url={$site}"
-                                       title="{t}Delete{/t}">
-                                        <img src="{$params.IMAGE_DIR}trash.png" />
-                                    </a>
-                                </li>
-                            </ul>
+                            <div class="btn-group">
+                                <a href="{url name=admin_instance_sync_show site_url=$site}"
+                                   title="{t}Edit{/t}" class="btn">
+                                    <i class="icon-pencil"></i>
+                                </a>
+                                <a href="{url name=admin_instance_sync_delete site_url=$site}"
+                                   title="{t}Delete{/t}"  class="btn btn-danger">
+                                    <i class="icon-trash icon-white"></i>
+                                </a>
+                            </div>
                         </td>
 
                     </tr>
@@ -76,19 +74,17 @@
                 {foreachelse}
                 <tr>
                     <td colspan=4 class="empty">
-                        <h2>
-                            <b>{t}There are no synchorinize settings available{/t}</b>
-                        </h2>
+                        <h4>{t}There are no synchorinize settings available{/t}</h4>
                         <p>{t}Try adding one site to synchronize on the config button above.{/t}</p>
                     </td>
                 </tr>
                 {/foreach}
             </tbody>
             <tfoot>
-                <tr class="pagination">
+                <tr>
                     <td colspan="4">
                         <div class="pagination">
-                            {$pagination->links|default:""}
+                            {$pagination->links|default:"&nbsp;"}
                         </div>
                     </td>
                 </tr>

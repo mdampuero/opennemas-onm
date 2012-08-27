@@ -43,7 +43,7 @@
             },
             onChange: function (hsb, hex, rgb) {
                 $('#site_color').val(hex);
-                $('.colopicker_viewer').css('background-color', '#' + hex);
+                $('.colorpicker_viewer').css('background-color', '#' + hex);
             },
             onBeforeShow: function () {
                 $(this).ColorPickerSetColor(this.value);
@@ -112,7 +112,7 @@
                         <label for="site_color" class="control-label">{t}Site color{/t}</label>
                         <div class="controls">
                             <input type="text" id="site_color" name="site_color" class="colorpicker_input" value="{$configs['site_color']|default:""}" class="input-xlarge">
-                            <div class="colopicker_viewer" style="background-color:#{$configs['site_color']}"></div>
+                            <div class="colorpicker_viewer" style="background-color:#{$configs['site_color']}"></div>
                             <div class="help-block">{t}Color used for links, menus and some widgets.{/t}</div>
                         </div>
                     </div>

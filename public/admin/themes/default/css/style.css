@@ -56,6 +56,7 @@ a.btn-primary.active,a.btn-warning.active,a.btn-danger.active,a.btn-success.acti
 .table .pagination { margin-top:0;margin-bottom:0;display:inline-block;}
 .table a {font-weight:bold;}
 .table a.btn {font-weight:normal}
+.table input[type="checkbox"] {margin-top:0;}
 .table tfoot td { padding:3px 9px !important; }
 .table tbody td.empty { padding:30px; text-align: center; font-size:13px;}
 .table th, .table tfoot td { background: #343434; color: #FFFFFF; font-size: 12px; font-weight: normal; padding: 9px; text-align: left; }
@@ -1429,7 +1430,7 @@ div.clearfix div.menu-other-categories {
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 .colorpicker input[type="text"] { width: 28px; }
 .colorpicker_hex input[type="text"] { width: 50px; }
-.colopicker_viewer { height:28px; border: 1px solid #B5B8C8; border-right:0 !important; width:30px !important; display:inline-block; border-top-left-radius: 3px; border-bottom-left-radius: 3px; float: left; margin-left:-2px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset;}
+.colorpicker_viewer { height:28px; border: 1px solid #B5B8C8; border-right:0 !important; width:30px !important; display:inline-block; border-top-left-radius: 3px; border-bottom-left-radius: 3px; float: left; margin-left:-2px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset;}
 .colorpicker_input { width:50px !important; display:inline-block; border-top-left-radius: 0px; border-bottom-left-radius: 0px; border-left:0 !important; }
 .colorpicker { z-index:9999; }
 

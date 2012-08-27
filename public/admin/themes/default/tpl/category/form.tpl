@@ -29,7 +29,7 @@
 <script>
     jQuery(document).ready(function($) {
 
-        var color = $('.colopicker_viewer');
+        var color = $('.colorpicker_viewer');
         var inpt  = $('#color');
         var btn   = $('.onm-button');
 
@@ -185,7 +185,7 @@
                 <label for="color" class="control-label">{t}Color{/t}</label>
                 <div class="controls">
                     <input readonly="readonly" size="6" type="text" id="color" name="color" value="{$category->color|default:$smarty.capture.websiteColor|trim}">
-                    <div id="colopicker_viewer" class="colopicker_viewer" style="background-color:#{$category->color|default:$smarty.capture.websiteColor|trim}"></div>
+                    <div id="colorpicker_viewer" class="colorpicker_viewer" style="background-color:#{$category->color|default:$smarty.capture.websiteColor|trim}"></div>
 
                     <button class="onm-button">{t}Reset color{/t}</button>
                 </div>

@@ -28,7 +28,7 @@
                     jQuery(el).ColorPickerHide();
                 },
                 onChange: function (hsb, hex, rgb) {
-                    jQuery('.colopicker_viewer').css('background-color', '#' + hex);
+                    jQuery('.colorpicker_viewer').css('background-color', '#' + hex);
                 },
                 onBeforeShow: function () {
                     jQuery(this).ColorPickerSetColor(this.value);
@@ -57,23 +57,6 @@
 </div>
 <div class="wrapper-content">
    <form action="{$smarty.server.PHP_SELF}" method="POST" name="formulario" id="formulario">
-        <br>
-
-        {if $message}
-        <div class="error">
-             <ul>
-                {foreach from=$message item=msg}
-                <li>{$msg}</li>
-                {/foreach}
-             </ul>
-        </div>
-        {/if}
-
-        {if (!empty($error))}
-        <div class="error">
-             {render_error}
-        </div>
-        {/if}
 
         <div>
 
@@ -83,7 +66,7 @@
                         <div id="colorDiv">
                             <label for="site_color">{t}Site color:{/t}</label>
                             <input readonly="readonly" type="text" class="colorpicker_input" id="color-picker" name="site_color" value="{$site_color}">
-                            <div class="colopicker_viewer" style="background-color:#{$site_color}"></div>
+                            <div class="colorpicker_viewer" style="background-color:#{$site_color}"></div>
                         </div>
                         <div class="categories">
                             {$output}

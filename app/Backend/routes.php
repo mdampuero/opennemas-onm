@@ -325,6 +325,51 @@ $adminRoutes->add(
     '/admin'
 );
 
+$adminRoutes->add(
+    'admin_instance_sync',
+    new Route(
+        '/instance-sync',
+        array('_controller' => 'Backend:Controllers:InstanceSyncController:list')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_instance_sync_create',
+    new Route(
+        '/instance-sync/create',
+        array('_controller' => 'Backend:Controllers:InstanceSyncController:create')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_instance_sync_fetch_categories',
+    new Route(
+        '/instance-sync/fetch-categories',
+        array('_controller' => 'Backend:Controllers:InstanceSyncController:fetchCategories')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_instance_sync_show',
+    new Route(
+        '/instance-sync/show',
+        array('_controller' => 'Backend:Controllers:InstanceSyncController:show')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_instance_sync_delete',
+    new Route(
+        '/instance-sync/delete',
+        array('_controller' => 'Backend:Controllers:InstanceSyncController:delete')
+    ),
+    '/admin'
+);
+
 // Letter manager routes
 $adminRoutes->add(
     'admin_polls',
@@ -2785,3 +2830,4 @@ $adminRoutes->add(
 );
 
 $routes->addCollection($adminRoutes);
+

@@ -130,7 +130,7 @@ class Bootstrap extends ModuleBootstrap
         $GLOBALS['application']->register('onAfterUpdate',       'onUpdateClearCacheContent');
         $GLOBALS['application']->register('onAfterSetFrontpage', 'refreshFrontpage');
         $GLOBALS['application']->register('onAfterPosition',     'refreshFrontpage');
-        $GLOBALS['application']->register('onAfterSetInhome', 'refreshHome');
+        $GLOBALS['application']->register('onAfterSetInhome',    'refreshHome');
         $GLOBALS['application']->register('onAfterHomePosition', 'refreshHome');
         $GLOBALS['application']->register('onAfterAvailable',   'onUpdateClearCacheContent');
         $GLOBALS['application']->register('onAfterSetFrontpage', 'onAfterSetFrontpage');
