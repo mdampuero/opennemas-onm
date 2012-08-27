@@ -36,6 +36,7 @@ class Kiosko extends Content
 
         $this->kiosko_path = INSTANCE_MEDIA_PATH.'kiosko'.DS;
         $this->content_type = 'Kiosko';
+        $this->content_type_l10n_name = _('Cover');
     }
 
     public function initialize($data)

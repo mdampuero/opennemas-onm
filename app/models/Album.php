@@ -50,6 +50,7 @@ class Album extends Content
             $this->read($id);
         }
         $this->content_type = __CLASS__;
+        $this->content_type_l10n_name = _('Album');
 
         return $this;
     }

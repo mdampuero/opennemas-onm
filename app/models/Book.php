@@ -33,6 +33,7 @@ class Book extends Content
         }
 
         $this->content_type = 'Book';
+        $this->content_type_l10n_name = _('Book');
         $this->books_path = INSTANCE_MEDIA_PATH.'/books/';
     }
 

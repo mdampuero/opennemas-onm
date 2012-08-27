@@ -29,7 +29,7 @@ class Letter extends Content
         }
 
         $this->content_type = __CLASS__;
-
+        $this->content_type_l10n_name = _('Letter');
     }
 
     public function get_instance()

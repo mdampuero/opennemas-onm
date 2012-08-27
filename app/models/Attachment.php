@@ -58,6 +58,7 @@ class Attachment extends Content
         }
 
         $this->content_type = 'attachment';
+        $this->content_type_l10n_name = _('File');
         $this->file_path = MEDIA_PATH.DIRECTORY_SEPARATOR.FILE_DIR;
     }
 

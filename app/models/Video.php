@@ -33,6 +33,7 @@ class Video extends Content
             $this->read($id);
         }
         $this->content_type = 'Video';
+        $this->content_type_l10n_name = _('Video');
     }
 
     public function __get($name)
@@ -46,23 +47,9 @@ class Video extends Content
                 break;
 
             case 'content_type_name':
-                $sql = 'SELECT * FROM `content_types`"
-                            ." WHERE pk_content_type = "?" LIMIT 1';
-                $values = array($this->content_type);
-                $contentTypeName = $GLOBALS['application']->conn->Execute(
-                    $sql,
-                    $values
-                );
-                if (isset($contentTypeName->fields['name'])) {
-                    $returnValue = $contentTypeName;
-                } else {
-                    $returnValue = $this->content_type;
-                }
-                $this->content_type_name = $returnValue;
-
-                return $returnValue;
-
+                return 'Video';
                 break;
+
             case 'thumb':
                 return $this->getThumb();
 
@@ -422,5 +409,5 @@ class Video extends Content
 
         return $html;
     }
-
 }
+

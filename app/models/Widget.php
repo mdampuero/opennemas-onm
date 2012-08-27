@@ -42,6 +42,7 @@ class Widget extends Content
         }
         $this->cache = new MethodCacheManager($this, array('ttl' => 30));
         $this->content_type = __CLASS__;
+        $this->content_type_l10n_name = _('Widget');
     }
 
     /**

@@ -38,6 +38,7 @@ class Photo extends Content
         }
 
         $this->content_type = 'Photo';
+        $this->content_type_l10n_name = _('Image');
     }
 
     public function create($data)

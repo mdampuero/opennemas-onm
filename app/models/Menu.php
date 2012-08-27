@@ -72,6 +72,7 @@ class Menu
         if (!is_null($id)) {
             $this->read($id);
         }
+        $this->content_type_l10n_name = _('Menu');
     }
 
     /**

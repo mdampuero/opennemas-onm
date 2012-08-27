@@ -38,7 +38,7 @@ class Special extends Content
      * @param string $id the id of the album.
      *
      **/
-    public function __construct($id=null)
+    public function __construct($id = null)
     {
         parent::__construct($id);
 
@@ -46,8 +46,7 @@ class Special extends Content
             $this->read($id);
         }
         $this->content_type = __CLASS__;
-
-        return $this;
+        $this->content_type_l10n_name = _('Special');
     }
 
     /**
@@ -352,5 +351,5 @@ class Special extends Content
             return;
         }
     }
-
 }
+

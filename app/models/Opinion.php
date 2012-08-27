@@ -41,6 +41,7 @@ class Opinion extends Content
         }
 
         $this->content_type = 'Opinion';
+        $this->content_type_l10n_name = _('Opinion');
     }
 
     public function get_instance()

@@ -30,6 +30,7 @@ class Poll extends Content
         }
 
         $this->content_type = 'Poll';
+        $this->content_type_l10n_name = _('Poll');
     }
 
     public function __get($name)

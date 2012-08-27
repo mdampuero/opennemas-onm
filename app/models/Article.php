@@ -57,6 +57,7 @@ class Article extends Content
         }
 
         $this->content_type = 'Article';
+        $this->content_type_l10n_name = _('Article');
     }
 
     /**
