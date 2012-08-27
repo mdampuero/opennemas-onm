@@ -1736,13 +1736,13 @@ gettext("Related contents");
 gettext("Allow coments");
 
 /* public/admin/themes/default/tpl//article/new.tpl */
-gettext("Available:");
+gettext("Available");
 
 /* public/admin/themes/default/tpl//article/new.tpl */
-gettext("Put in category frontpage:");
+gettext("Put in category frontpage");
 
 /* public/admin/themes/default/tpl//article/new.tpl */
-gettext("Suggested for frontpage:");
+gettext("Suggested for frontpage");
 
 /* public/admin/themes/default/tpl//article/new.tpl */
 gettext("Title");
@@ -6452,6 +6452,12 @@ gettext("Items per page");
 gettext("Social networks");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Twitter Page");
+
+/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
+gettext("If you also have a <b>twitter page</b>, add your profile name on the form. <br/>Default will be set with Opennemas.");
+
+/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("Facebook Page Url");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
@@ -6459,12 +6465,6 @@ gettext("If you have a <b>facebook page</b>, please complete the form with your 
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("Facebook Id");
-
-/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
-gettext("Twitter Page");
-
-/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
-gettext("If you also have a <b>twitter page</b>, add your profile name on the form. <br/>Default will be set with Opennemas.");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("Google Services");
@@ -7121,10 +7121,10 @@ gettext("Yes, Go Back");
 gettext("Cancel");
 
 /* public/admin/themes/default/tpl//newsletter/steps/1-pick-elements.tpl */
-gettext("Newsletter management");
+gettext("Newsletter manager");
 
 /* public/admin/themes/default/tpl//newsletter/steps/1-pick-elements.tpl */
-gettext("");
+gettext("Newsletter contents");
 
 /* public/admin/themes/default/tpl//newsletter/steps/1-pick-elements.tpl */
 gettext("Next");

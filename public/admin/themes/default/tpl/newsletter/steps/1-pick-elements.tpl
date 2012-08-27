@@ -26,7 +26,6 @@
 {script_tag src="/jquery/jquery.cookie.js"}
 {script_tag src="/onm/jquery.content-provider.js"}
 {script_tag src="/jquery-onm/jquery.newsletter.js"}
-
 {/block}
 
 {block name="content"}
@@ -36,7 +35,7 @@
     <div id="buttons-contents" class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title">
-                <h2>{t}Newsletter management{/t} :: Newsletter contents{t}{/t}</h2>
+                <h2>{t}Newsletter manager{/t} :: {t}Newsletter contents{/t}</h2>
             </div>
 
             <ul class="old-button">

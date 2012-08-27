@@ -3,13 +3,12 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: app/Backend/Resources/locale/extracted_strings.c:7127
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-27 01:02+0200\n"
+"POT-Creation-Date: 2012-08-27 02:25+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -246,29 +245,29 @@ msgstr ""
 msgid "Settings saved."
 msgstr ""
 
-#: public/admin/controllers/comment/comment.php:91
+#: public/admin/controllers/comment/comment.php:91 app/models/Article.php:60
 #: app/Backend/Resources/locale/extracted_strings.c:1655
 msgid "Article"
 msgstr ""
 
-#: public/admin/controllers/comment/comment.php:91
+#: public/admin/controllers/comment/comment.php:91 app/models/Album.php:53
 msgid "Album"
 msgstr ""
 
-#: public/admin/controllers/comment/comment.php:91
+#: public/admin/controllers/comment/comment.php:91 app/models/Video.php:36
 #: app/Backend/Resources/locale/extracted_strings.c:3863
 msgid "Video"
 msgstr ""
 
 #: public/admin/controllers/comment/comment.php:91
-#: vendor/Onm/Import/DataSource/Europapress.php:204
+#: vendor/Onm/Import/DataSource/Europapress.php:204 app/models/Opinion.php:44
 #: app/Backend/Resources/locale/extracted_strings.c:2579
 #: app/Backend/Resources/locale/extracted_strings.c:4874
 #: app/Backend/Resources/locale/extracted_strings.c:4880
 msgid "Opinion"
 msgstr ""
 
-#: public/admin/controllers/comment/comment.php:91
+#: public/admin/controllers/comment/comment.php:91 app/models/Poll.php:33
 #: app/Backend/Resources/locale/extracted_strings.c:3866
 #: app/Backend/Resources/locale/extracted_strings.c:4979
 msgid "Poll"
@@ -1063,40 +1062,78 @@ msgstr ""
 msgid "Directory %s is not writable."
 msgstr ""
 
+#: app/models/Attachment.php:61
+#: app/Backend/Resources/locale/extracted_strings.c:956
+msgid "File"
+msgstr ""
+
+#: app/models/Book.php:36
+#: app/Backend/Resources/locale/extracted_strings.c:3875
+msgid "Book"
+msgstr ""
+
+#: app/models/Comment.php:39
+msgid "Comment"
+msgstr ""
+
 #: app/models/Content.php:1599
 #, php-format
 msgid "Homepage for category %s cleaned sucessfully."
 msgstr ""
 
-#: app/models/Kiosko.php:56
+#: app/models/Frontpage.php:64
+#: app/Backend/Resources/locale/extracted_strings.c:4871
+#: app/Backend/Resources/locale/extracted_strings.c:4877
+#: app/Backend/Resources/locale/extracted_strings.c:4955
+msgid "Frontpage"
+msgstr ""
+
+#: app/models/Kiosko.php:39
+msgid "Cover"
+msgstr ""
+
+#: app/models/Kiosko.php:57
 msgid "There's other paper in this date & this category."
 msgstr ""
 
-#: app/models/Kiosko.php:72
+#: app/models/Kiosko.php:73
 msgid "Unable to save the cover data into the database."
 msgstr ""
 
-#: app/models/Photo.php:508
+#: app/models/Letter.php:32
+msgid "Letter"
+msgstr ""
+
+#: app/models/Menu.php:75
+msgid "Menu"
+msgstr ""
+
+#: app/models/Photo.php:41
+#: app/Backend/Resources/locale/extracted_strings.c:305
+msgid "Image"
+msgstr ""
+
+#: app/models/Photo.php:509
 msgid "The image type is GIF </br>"
 msgstr ""
 
-#: app/models/Photo.php:512
+#: app/models/Photo.php:513
 msgid "The image type is PNG </br>"
 msgstr ""
 
-#: app/models/Photo.php:516
+#: app/models/Photo.php:517
 msgid "The image type is BMP </br>"
 msgstr ""
 
-#: app/models/Photo.php:537
+#: app/models/Photo.php:538
 msgid "No availabel EXIF data</br>"
 msgstr ""
 
-#: app/models/Photo.php:622
+#: app/models/Photo.php:623
 msgid "No availabel IPTC data</br>"
 msgstr ""
 
-#: app/models/Photo.php:629
+#: app/models/Photo.php:630
 msgid "Invalid image file"
 msgstr ""
 
@@ -1104,30 +1141,44 @@ msgstr ""
 msgid "This content type has not support for the voting system"
 msgstr ""
 
+#: app/models/Special.php:49
+#: app/Backend/Resources/locale/extracted_strings.c:3872
+msgid "Special"
+msgstr ""
+
+#: app/models/StaticPage.php:51
+msgid "Static Page"
+msgstr ""
+
 #: app/models/User.php:65
 msgid "Already exists one user with that information"
 msgstr ""
 
-#: app/models/Video.php:186
+#: app/models/Video.php:173
 msgid "There was an error while processing your video file"
 msgstr ""
 
-#: app/models/Video.php:199
+#: app/models/Video.php:186
 #, php-format
 msgid ""
 "Seems that the server limits file uploads up to %s Mb. Try to upload files "
 "smaller than that size or contact with your administrator"
 msgstr ""
 
-#: app/models/Video.php:267
+#: app/models/Video.php:254
 msgid ""
 "There was a problem while converting your video. Please contact with your "
 "adminstrator."
 msgstr ""
 
-#: app/models/Video.php:279
+#: app/models/Video.php:266
 #, php-format
 msgid "Video format \"%s\" not supported"
+msgstr ""
+
+#: app/models/Widget.php:45
+#: app/Backend/Resources/locale/extracted_strings.c:4463
+msgid "Widget"
 msgstr ""
 
 #: app/Backend/Resources/locale/extracted_strings.c:2
@@ -1455,7 +1506,6 @@ msgid "%1"
 msgstr ""
 
 #: app/Backend/Resources/locale/extracted_strings.c:80
-#: app/Backend/Resources/locale/extracted_strings.c:1739
 #: app/Backend/Resources/locale/extracted_strings.c:4238
 msgid "Available:"
 msgstr ""
@@ -2257,10 +2307,6 @@ msgstr ""
 msgid "Tags:"
 msgstr ""
 
-#: app/Backend/Resources/locale/extracted_strings.c:305
-msgid "Image"
-msgstr ""
-
 #: app/Backend/Resources/locale/extracted_strings.c:308
 msgid "Footer image:"
 msgstr ""
@@ -2576,6 +2622,7 @@ msgstr ""
 #: app/Backend/Resources/locale/extracted_strings.c:635
 #: app/Backend/Resources/locale/extracted_strings.c:935
 #: app/Backend/Resources/locale/extracted_strings.c:1220
+#: app/Backend/Resources/locale/extracted_strings.c:1739
 #: app/Backend/Resources/locale/extracted_strings.c:1916
 #: app/Backend/Resources/locale/extracted_strings.c:2279
 #: app/Backend/Resources/locale/extracted_strings.c:2699
@@ -2748,10 +2795,6 @@ msgstr ""
 
 #: app/Backend/Resources/locale/extracted_strings.c:893
 msgid "New ePaper"
-msgstr ""
-
-#: app/Backend/Resources/locale/extracted_strings.c:956
-msgid "File"
 msgstr ""
 
 #: app/Backend/Resources/locale/extracted_strings.c:959
@@ -3173,11 +3216,11 @@ msgid "Allow coments"
 msgstr ""
 
 #: app/Backend/Resources/locale/extracted_strings.c:1742
-msgid "Put in category frontpage:"
+msgid "Put in category frontpage"
 msgstr ""
 
 #: app/Backend/Resources/locale/extracted_strings.c:1745
-msgid "Suggested for frontpage:"
+msgid "Suggested for frontpage"
 msgstr ""
 
 #: app/Backend/Resources/locale/extracted_strings.c:1751
@@ -4590,14 +4633,6 @@ msgstr ""
 msgid "ePaper"
 msgstr ""
 
-#: app/Backend/Resources/locale/extracted_strings.c:3872
-msgid "Special"
-msgstr ""
-
-#: app/Backend/Resources/locale/extracted_strings.c:3875
-msgid "Book"
-msgstr ""
-
 #: app/Backend/Resources/locale/extracted_strings.c:3878
 msgid "Subsection of"
 msgstr ""
@@ -4798,10 +4833,6 @@ msgstr ""
 
 #: app/Backend/Resources/locale/extracted_strings.c:4451
 msgid "Smarty"
-msgstr ""
-
-#: app/Backend/Resources/locale/extracted_strings.c:4463
-msgid "Widget"
 msgstr ""
 
 #: app/Backend/Resources/locale/extracted_strings.c:4496
@@ -5029,12 +5060,6 @@ msgstr ""
 
 #: app/Backend/Resources/locale/extracted_strings.c:4865
 msgid "Url"
-msgstr ""
-
-#: app/Backend/Resources/locale/extracted_strings.c:4871
-#: app/Backend/Resources/locale/extracted_strings.c:4877
-#: app/Backend/Resources/locale/extracted_strings.c:4955
-msgid "Frontpage"
 msgstr ""
 
 #: app/Backend/Resources/locale/extracted_strings.c:4883
@@ -6008,27 +6033,27 @@ msgid "Social networks"
 msgstr ""
 
 #: app/Backend/Resources/locale/extracted_strings.c:6455
-msgid "Facebook Page Url"
+msgid "Twitter Page"
 msgstr ""
 
 #: app/Backend/Resources/locale/extracted_strings.c:6458
+msgid ""
+"If you also have a <b>twitter page</b>, add your profile name on the form. "
+"<br/>Default will be set with Opennemas."
+msgstr ""
+
+#: app/Backend/Resources/locale/extracted_strings.c:6461
+msgid "Facebook Page Url"
+msgstr ""
+
+#: app/Backend/Resources/locale/extracted_strings.c:6464
 msgid ""
 "If you have a <b>facebook page</b>, please complete the form with your "
 "facebook page url and Id."
 msgstr ""
 
-#: app/Backend/Resources/locale/extracted_strings.c:6461
-msgid "Facebook Id"
-msgstr ""
-
-#: app/Backend/Resources/locale/extracted_strings.c:6464
-msgid "Twitter Page"
-msgstr ""
-
 #: app/Backend/Resources/locale/extracted_strings.c:6467
-msgid ""
-"If you also have a <b>twitter page</b>, add your profile name on the form. "
-"<br/>Default will be set with Opennemas."
+msgid "Facebook Id"
 msgstr ""
 
 #: app/Backend/Resources/locale/extracted_strings.c:6470
@@ -6500,8 +6525,11 @@ msgid "Yes, Go Back"
 msgstr ""
 
 #: app/Backend/Resources/locale/extracted_strings.c:7124
-#: app/Backend/Resources/locale/extracted_strings.c:7178
-msgid "Newsletter management"
+msgid "Newsletter manager"
+msgstr ""
+
+#: app/Backend/Resources/locale/extracted_strings.c:7127
+msgid "Newsletter contents"
 msgstr ""
 
 #: app/Backend/Resources/locale/extracted_strings.c:7130
@@ -6569,6 +6597,10 @@ msgstr ""
 
 #: app/Backend/Resources/locale/extracted_strings.c:7175
 msgid "Add selected contents"
+msgstr ""
+
+#: app/Backend/Resources/locale/extracted_strings.c:7178
+msgid "Newsletter management"
 msgstr ""
 
 #: app/Backend/Resources/locale/extracted_strings.c:7190

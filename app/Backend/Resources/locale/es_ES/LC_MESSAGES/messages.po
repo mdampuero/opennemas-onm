@@ -5,13 +5,12 @@
 # Fran Diéguez <frandieguez@gnome.org>, 2011.
 # Fran Dieguez <frandieguez@gnome.org>, 2011, 2012.
 # sandra <sandra@openhost.es>, 2012.
-#: app/Backend/Resources/locale/extracted_strings.c:7127
 msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-27 01:02+0200\n"
-"PO-Revision-Date: 2012-08-27 01:02+0200\n"
+"POT-Creation-Date: 2012-08-27 02:23+0200\n"
+"PO-Revision-Date: 2012-08-27 02:25+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -262,29 +261,29 @@ msgstr "La categoría fué vaciada correctamente"
 msgid "Settings saved."
 msgstr "Opciones guardadas."
 
-#: public/admin/controllers/comment/comment.php:91
+#: public/admin/controllers/comment/comment.php:91 app/models/Article.php:60
 #: app/Backend/Resources/locale/extracted_strings.c:1655
 msgid "Article"
 msgstr "Artículo"
 
-#: public/admin/controllers/comment/comment.php:91
+#: public/admin/controllers/comment/comment.php:91 app/models/Album.php:53
 msgid "Album"
 msgstr "Álbum"
 
-#: public/admin/controllers/comment/comment.php:91
+#: public/admin/controllers/comment/comment.php:91 app/models/Video.php:36
 #: app/Backend/Resources/locale/extracted_strings.c:3863
 msgid "Video"
 msgstr "Vídeo"
 
 #: public/admin/controllers/comment/comment.php:91
-#: vendor/Onm/Import/DataSource/Europapress.php:204
+#: vendor/Onm/Import/DataSource/Europapress.php:204 app/models/Opinion.php:44
 #: app/Backend/Resources/locale/extracted_strings.c:2579
 #: app/Backend/Resources/locale/extracted_strings.c:4874
 #: app/Backend/Resources/locale/extracted_strings.c:4880
 msgid "Opinion"
 msgstr "Opinión"
 
-#: public/admin/controllers/comment/comment.php:91
+#: public/admin/controllers/comment/comment.php:91 app/models/Poll.php:33
 #: app/Backend/Resources/locale/extracted_strings.c:3866
 #: app/Backend/Resources/locale/extracted_strings.c:4979
 msgid "Poll"
@@ -1116,40 +1115,78 @@ msgstr ""
 msgid "Directory %s is not writable."
 msgstr "No se puede escribir en el directorio «%s»."
 
+#: app/models/Attachment.php:61
+#: app/Backend/Resources/locale/extracted_strings.c:956
+msgid "File"
+msgstr "Archivos"
+
+#: app/models/Book.php:36
+#: app/Backend/Resources/locale/extracted_strings.c:3875
+msgid "Book"
+msgstr "Libro"
+
+#: app/models/Comment.php:39
+msgid "Comment"
+msgstr "Comentario"
+
 #: app/models/Content.php:1599
 #, php-format
 msgid "Homepage for category %s cleaned sucessfully."
 msgstr "Portada de la categoría «%s» limpiada correctamente."
 
-#: app/models/Kiosko.php:56
+#: app/models/Frontpage.php:64
+#: app/Backend/Resources/locale/extracted_strings.c:4871
+#: app/Backend/Resources/locale/extracted_strings.c:4877
+#: app/Backend/Resources/locale/extracted_strings.c:4955
+msgid "Frontpage"
+msgstr "Portada"
+
+#: app/models/Kiosko.php:39
+msgid "Cover"
+msgstr "Portada"
+
+#: app/models/Kiosko.php:57
 msgid "There's other paper in this date & this category."
 msgstr "Ya existe otra portada para esta fecha y categoría."
 
-#: app/models/Kiosko.php:72
+#: app/models/Kiosko.php:73
 msgid "Unable to save the cover data into the database."
 msgstr "No fue posible guardar los datos de la portada en la base de datos."
 
-#: app/models/Photo.php:508
+#: app/models/Letter.php:32
+msgid "Letter"
+msgstr "Carta"
+
+#: app/models/Menu.php:75
+msgid "Menu"
+msgstr "Menú"
+
+#: app/models/Photo.php:41
+#: app/Backend/Resources/locale/extracted_strings.c:305
+msgid "Image"
+msgstr "Imagen"
+
+#: app/models/Photo.php:509
 msgid "The image type is GIF </br>"
 msgstr "La imagen es de tipo GIF </br>"
 
-#: app/models/Photo.php:512
+#: app/models/Photo.php:513
 msgid "The image type is PNG </br>"
 msgstr "La imagen es de tipo PNG </br>"
 
-#: app/models/Photo.php:516
+#: app/models/Photo.php:517
 msgid "The image type is BMP </br>"
 msgstr "La imagen es de tipo BMP </br>"
 
-#: app/models/Photo.php:537
+#: app/models/Photo.php:538
 msgid "No availabel EXIF data</br>"
 msgstr "No está disponible ningún dato EXIF.</br>"
 
-#: app/models/Photo.php:622
+#: app/models/Photo.php:623
 msgid "No availabel IPTC data</br>"
 msgstr "No está disponible ningún dato IPTC.</br>"
 
-#: app/models/Photo.php:629
+#: app/models/Photo.php:630
 msgid "Invalid image file"
 msgstr "Fichero de imagen inválido"
 
@@ -1157,15 +1194,24 @@ msgstr "Fichero de imagen inválido"
 msgid "This content type has not support for the voting system"
 msgstr "No es posible votar este tipo de contenido"
 
+#: app/models/Special.php:49
+#: app/Backend/Resources/locale/extracted_strings.c:3872
+msgid "Special"
+msgstr "Especial"
+
+#: app/models/StaticPage.php:51
+msgid "Static Page"
+msgstr "Página estática"
+
 #: app/models/User.php:65
 msgid "Already exists one user with that information"
 msgstr "Ya existe un usuario con esa información"
 
-#: app/models/Video.php:186
+#: app/models/Video.php:173
 msgid "There was an error while processing your video file"
 msgstr "Se ha producido un error al procesar su ficheiro de vídeo"
 
-#: app/models/Video.php:199
+#: app/models/Video.php:186
 #, php-format
 msgid ""
 "Seems that the server limits file uploads up to %s Mb. Try to upload files "
@@ -1174,7 +1220,7 @@ msgstr ""
 "Parece que su servidor limita la subida de archivos a %s Mb. Intente subir "
 "un ficheiro más pequeño o contacte con su administrador"
 
-#: app/models/Video.php:267
+#: app/models/Video.php:254
 msgid ""
 "There was a problem while converting your video. Please contact with your "
 "adminstrator."
@@ -1182,10 +1228,15 @@ msgstr ""
 "Se ha producido un error al convertir el archivo. <br />Por favor, contacte "
 "con el administrador de sistema"
 
-#: app/models/Video.php:279
+#: app/models/Video.php:266
 #, php-format
 msgid "Video format \"%s\" not supported"
 msgstr "Formato de vídeo «%s» no admitido"
+
+#: app/models/Widget.php:45
+#: app/Backend/Resources/locale/extracted_strings.c:4463
+msgid "Widget"
+msgstr "Widget"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2
 msgid "Special :: Configuration"
@@ -1516,7 +1567,6 @@ msgid "%1"
 msgstr "%1"
 
 #: app/Backend/Resources/locale/extracted_strings.c:80
-#: app/Backend/Resources/locale/extracted_strings.c:1739
 #: app/Backend/Resources/locale/extracted_strings.c:4238
 msgid "Available:"
 msgstr "Disponible:"
@@ -2321,10 +2371,6 @@ msgstr "Imagen predeterminada:"
 msgid "Tags:"
 msgstr "Etiquetas:"
 
-#: app/Backend/Resources/locale/extracted_strings.c:305
-msgid "Image"
-msgstr "Imagen"
-
 #: app/Backend/Resources/locale/extracted_strings.c:308
 msgid "Footer image:"
 msgstr "Imágenes en footer:"
@@ -2646,6 +2692,7 @@ msgstr "Sección:"
 #: app/Backend/Resources/locale/extracted_strings.c:635
 #: app/Backend/Resources/locale/extracted_strings.c:935
 #: app/Backend/Resources/locale/extracted_strings.c:1220
+#: app/Backend/Resources/locale/extracted_strings.c:1739
 #: app/Backend/Resources/locale/extracted_strings.c:1916
 #: app/Backend/Resources/locale/extracted_strings.c:2279
 #: app/Backend/Resources/locale/extracted_strings.c:2699
@@ -2820,10 +2867,6 @@ msgstr "Gestor de ePapel"
 #: app/Backend/Resources/locale/extracted_strings.c:893
 msgid "New ePaper"
 msgstr "Nueva ePapel"
-
-#: app/Backend/Resources/locale/extracted_strings.c:956
-msgid "File"
-msgstr "Archivos"
 
 #: app/Backend/Resources/locale/extracted_strings.c:959
 msgid "Covers Manager"
@@ -3260,12 +3303,12 @@ msgid "Allow coments"
 msgstr "Permitir comentarios"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1742
-msgid "Put in category frontpage:"
-msgstr "Poner en portada de categoría:"
+msgid "Put in category frontpage"
+msgstr "Poner en portada de categoría"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1745
-msgid "Suggested for frontpage:"
-msgstr "Sugerir en portada principal:"
+msgid "Suggested for frontpage"
+msgstr "Sugerir en portada principal"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1751
 #: app/Backend/Resources/locale/extracted_strings.c:5582
@@ -3693,7 +3736,7 @@ msgstr "Circular"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2276
 msgid "Bars"
-msgstr ""
+msgstr "Barras"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2285
 #: app/Backend/Resources/locale/extracted_strings.c:2705
@@ -4710,14 +4753,6 @@ msgstr "Todos los contenidos"
 msgid "ePaper"
 msgstr "ePapel"
 
-#: app/Backend/Resources/locale/extracted_strings.c:3872
-msgid "Special"
-msgstr "Especial"
-
-#: app/Backend/Resources/locale/extracted_strings.c:3875
-msgid "Book"
-msgstr "Libro"
-
 #: app/Backend/Resources/locale/extracted_strings.c:3878
 msgid "Subsection of"
 msgstr "Subsección de"
@@ -4921,10 +4956,6 @@ msgstr "PHP"
 #: app/Backend/Resources/locale/extracted_strings.c:4451
 msgid "Smarty"
 msgstr "Smarty"
-
-#: app/Backend/Resources/locale/extracted_strings.c:4463
-msgid "Widget"
-msgstr "Widget"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4496
 msgid "Widget Manager"
@@ -5155,12 +5186,6 @@ msgstr "Activado"
 msgid "Url"
 msgstr "Url"
 
-#: app/Backend/Resources/locale/extracted_strings.c:4871
-#: app/Backend/Resources/locale/extracted_strings.c:4877
-#: app/Backend/Resources/locale/extracted_strings.c:4955
-msgid "Frontpage"
-msgstr "Portada"
-
 #: app/Backend/Resources/locale/extracted_strings.c:4883
 msgid "Restrictions"
 msgstr "Restricciones"
@@ -5221,11 +5246,11 @@ msgstr "Desde"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4925
 msgid "Until"
-msgstr ""
+msgstr "Hasta"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4928
 msgid "Show this ad within a range of dates."
-msgstr ""
+msgstr "Muestra esta publicidad durante un rango de fechas."
 
 #: app/Backend/Resources/locale/extracted_strings.c:4934
 msgid "Image or flash from library"
@@ -6048,7 +6073,6 @@ msgid "Site agency"
 msgstr "Agencia del sitio"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6377
-#, fuzzy
 msgid "This will be displayed as the default article signature."
 msgstr "Usado como firma en los artículos por omisión."
 
@@ -6062,7 +6086,7 @@ msgstr "Color usado para enlaces, menús y algunos widgets."
 
 #: app/Backend/Resources/locale/extracted_strings.c:6386
 msgid "Use custom logo"
-msgstr ""
+msgstr "Usar logotipo personalizado"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6395
 msgid "Site logo"
@@ -6124,9 +6148,8 @@ msgid "Time Zone"
 msgstr "Zona horaria"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6437
-#, fuzzy
 msgid "Used for all the dates used in your webpage."
-msgstr "Usado para las fechas usadas en su página web."
+msgstr "Usado en todas las fechas usadas en su página web."
 
 #: app/Backend/Resources/locale/extracted_strings.c:6440
 msgid "Listing & sorting"
@@ -6153,28 +6176,32 @@ msgid "Social networks"
 msgstr "Redes Sociales"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6455
-msgid "Facebook Page Url"
-msgstr "Url de la página de Facebook"
-
-#: app/Backend/Resources/locale/extracted_strings.c:6458
-msgid ""
-"If you have a <b>facebook page</b>, please complete the form with your "
-"facebook page url and Id."
-msgstr ""
-
-#: app/Backend/Resources/locale/extracted_strings.c:6461
-msgid "Facebook Id"
-msgstr "Id de Facebook"
-
-#: app/Backend/Resources/locale/extracted_strings.c:6464
 msgid "Twitter Page"
 msgstr "Página en Twitter"
 
-#: app/Backend/Resources/locale/extracted_strings.c:6467
+#: app/Backend/Resources/locale/extracted_strings.c:6458
 msgid ""
 "If you also have a <b>twitter page</b>, add your profile name on the form. "
 "<br/>Default will be set with Opennemas."
 msgstr ""
+"Si tiene una <b>página en Twitter</b>, a;ada su nombre de perfíl en el form."
+"<br/>Por omisión se usará el de OpenNemas"
+
+#: app/Backend/Resources/locale/extracted_strings.c:6461
+msgid "Facebook Page Url"
+msgstr "Url de la página de Facebook"
+
+#: app/Backend/Resources/locale/extracted_strings.c:6464
+msgid ""
+"If you have a <b>facebook page</b>, please complete the form with your "
+"facebook page url and Id."
+msgstr ""
+"Si tiene un a <b>página en Facebook</b>, complete el formulario con la URL "
+"de la página de Facebook y el Id."
+
+#: app/Backend/Resources/locale/extracted_strings.c:6467
+msgid "Facebook Id"
+msgstr "Id de Facebook"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6470
 #: app/Backend/Resources/locale/extracted_strings.c:8003
@@ -6191,8 +6218,9 @@ msgid ""
 "code.google.com/apis/maps/signup.html\"  target=\"_blank\">Google maps sign "
 "up website</a>."
 msgstr ""
-"Puede obtener sus llaves de Google Maps desde <a href=\"http://code.google."
-"com/apis/maps/signup.html\">el sitio web Google Maps sign up</a>."
+"Puede obtener sus llaves de Google Maps desde <a "
+"href=\"http://code.google.com/apis/maps/signup.html\">el sitio web Google Maps "
+"sign up</a>."
 
 #: app/Backend/Resources/locale/extracted_strings.c:6479
 #: app/Backend/Resources/locale/extracted_strings.c:8015
@@ -6276,13 +6304,12 @@ msgid "Public key"
 msgstr "Llave pública"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6524
-#, fuzzy
 msgid ""
 "Get your reCaptcha key from <a href=\"http://www.google.com/recaptcha/"
 "whyrecaptcha\">this page</a>."
 msgstr ""
-"Puede obtener sus llaves de reCAPTCHA desde <a href=\"https://www.google.com/"
-"recaptcha/admin/create\">el sitio web de reCAPTCHA</a>."
+"Puede obtener sus llaves de reCAPTCHA desde <a "
+"href=\"http://www.google.com/recaptcha/whyrecaptcha\">esta página</a>."
 
 #: app/Backend/Resources/locale/extracted_strings.c:6527
 msgid "Used when we want to test if the user is an human and not a robot."
@@ -6675,9 +6702,12 @@ msgid "Yes, Go Back"
 msgstr "Si, volver atrás"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7124
-#: app/Backend/Resources/locale/extracted_strings.c:7178
-msgid "Newsletter management"
-msgstr "Gestión de boletín"
+msgid "Newsletter manager"
+msgstr "Gestor de boletín"
+
+#: app/Backend/Resources/locale/extracted_strings.c:7127
+msgid "Newsletter contents"
+msgstr ""
 
 #: app/Backend/Resources/locale/extracted_strings.c:7130
 #: app/Backend/Resources/locale/extracted_strings.c:7133
@@ -6702,6 +6732,8 @@ msgstr "Volver al listado"
 #: app/Backend/Resources/locale/extracted_strings.c:7145
 msgid "Drag elements from the right column to include them into the newsletter"
 msgstr ""
+"Arrastre elementos desde la columna de la derecha para incluirlos en el "
+"boletín"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7148
 msgid "Add Container"
@@ -6745,6 +6777,10 @@ msgstr "Añadir elementos seleccionados"
 #: app/Backend/Resources/locale/extracted_strings.c:7175
 msgid "Add selected contents"
 msgstr "Añadir elementos seleccionados"
+
+#: app/Backend/Resources/locale/extracted_strings.c:7178
+msgid "Newsletter management"
+msgstr "Gestión de boletín"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7190
 #: app/Backend/Resources/locale/extracted_strings.c:7193
@@ -7127,7 +7163,7 @@ msgstr ""
 
 #: app/Backend/Resources/locale/extracted_strings.c:7688
 msgid "Edit them"
-msgstr ""
+msgstr "Editarlos"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7694
 msgid "Search result"
@@ -7410,8 +7446,9 @@ msgid ""
 "You can get your Google Maps API Key from <a href=\"http://code.google.com/"
 "intl/gl-GL/apis/maps/signup.html\">Google maps sign up website</a>."
 msgstr ""
-"Puede obtener sus llaves de Google Maps desde <a href=\"http://code.google."
-"com/intl/gl-GL/apis/maps/signup.html\">el sitio web Google Maps sign up</a>."
+"Puede obtener sus llaves de Google Maps desde <a "
+"href=\"http://code.google.com/intl/gl-GL/apis/maps/signup.html\">el sitio web "
+"Google Maps sign up</a>."
 
 #: app/Backend/Resources/locale/extracted_strings.c:8021
 msgid "APP key:"
@@ -7431,10 +7468,10 @@ msgid ""
 "com/analytics/\">GAnalytics site</a> under the General Overview list (should "
 "be something like UA-546457-3) you can left blank the base domain field."
 msgstr ""
-"Puede obtener su ID de sitio web de Google Analytics desde <a href=\"https://"
-"www.google.com/analytics/\">el sitio web de GAnalytics</a> bajo la lista de "
-"la Vista previa (debería ser algo semejante a UA-546457-3). Puede dejar el "
-"campo Dominio base en blanco si lo desea."
+"Puede obtener su ID de sitio web de Google Analytics desde <a "
+"href=\"https://www.google.com/analytics/\">el sitio web de GAnalytics</a> bajo "
+"la lista de la Vista previa (debería ser algo semejante a UA-546457-3). "
+"Puede dejar el campo Dominio base en blanco si lo desea."
 
 #: app/Backend/Resources/locale/extracted_strings.c:8045
 msgid "Base domain:"
@@ -7449,8 +7486,8 @@ msgid ""
 "You can get your Piwik Site information from <a href=\"https://piwik."
 "openhost.es/admin\">our Piwik server</a>."
 msgstr ""
-"Puede obtener información del sitio de Piwik desde <a href=\"https://piwik."
-"openhost.es/admin\">nuestro servidor de Piwik</a>."
+"Puede obtener información del sitio de Piwik desde <a "
+"href=\"https://piwik.openhost.es/admin\">nuestro servidor de Piwik</a>."
 
 #: app/Backend/Resources/locale/extracted_strings.c:8060
 #: app/Backend/Resources/locale/extracted_strings.c:8075
@@ -7466,8 +7503,9 @@ msgid ""
 "You can get your recaptcha API Keys from <a href=\"https://www.google.com/"
 "recaptcha/admin/create\">reCATPCHA website</a>."
 msgstr ""
-"Puede obtener sus llaves de reCAPTCHA desde <a href=\"https://www.google.com/"
-"recaptcha/admin/create\">el sitio web de reCAPTCHA</a>."
+"Puede obtener sus llaves de reCAPTCHA desde <a "
+"href=\"https://www.google.com/recaptcha/admin/create\">el sitio web de "
+"reCAPTCHA</a>."
 
 #: app/Backend/Resources/locale/extracted_strings.c:8078
 msgid "Activated modules"
@@ -8337,9 +8375,6 @@ msgstr "Bienvenido al Gestor de instancias de OpenNeMas"
 
 #~ msgid "Subscription"
 #~ msgstr "Subscripción"
-
-#~ msgid "Letters"
-#~ msgstr "Cartas"
 
 #~ msgid "Subscriptor data"
 #~ msgstr "Datos del subscriptor"
