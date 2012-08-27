@@ -64,6 +64,7 @@ a.btn-primary.active,a.btn-warning.active,a.btn-danger.active,a.btn-success.acti
 .table .pagination { color:#aaa !important; }
 .table .pagination a { background: #3f3f3f !important; border: 1px solid #666; color:White !important; text-shadow:none; }
 .table .pagination a:hover { background:#3c3c3c; }
+.form-horizontal .help-block {margin-top:3px;}
 
 
 .form-inline-block > *{ vertical-align: top; }

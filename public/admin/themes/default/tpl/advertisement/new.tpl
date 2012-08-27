@@ -119,7 +119,7 @@ object {
         </div>
 
         <div class="control-group">
-            <label for="metadata" class="control-label">{t}Actived{/t}</label>
+            <label for="available" class="control-label">{t}Actived{/t}</label>
             <div class="controls">
                 <input type="checkbox" name="available" id="available" {if isset($advertisement->available) && $advertisement->available == 1}checked="checked"{/if} {acl isNotAllowed="ADVERTISEMENT_AVAILA"}disabled="disabled"{/acl} />
 
@@ -178,7 +178,7 @@ object {
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label">{t}Restrictions{/t}</label>
+            <label for="typ_medida" class="control-label">{t}Restrictions{/t}</label>
             <div class="controls">
                 <select name="type_medida" id="type_medida">
                     <option value="NULL" {if !isset($advertisement) || is_null($advertisement->type_medida)}selected="selected"{/if}>{t}Without limits{/t}</option>
@@ -192,7 +192,7 @@ object {
         <div class="control-group" id="porclic" style="{if $advertisement->type_medida!='CLIC'}display:none{/if};">
             <label for="num_clic" class="control-label">{t}# of clics{/t}</label>
             <div class="controls">
-                <input type="text" id="num_clic" name="num_clic" value="{$advertisement->num_clic|default:""}" />
+                <input type="number" id="num_clic" name="num_clic" value="{$advertisement->num_clic|default:""}" />
                 <input type="hidden" id="num_clic_count" name="num_clic_count" title="Numero de clic" value="{$advertisement->num_clic_count|default:""}" />
                 {if isset($advertisement) && $advertisement->type_medida == 'CLIC'}<div class="help-inline">{t}Actual click count:{/t} {$advertisement->num_clic_count}</div>{/if}
                 <div class="help-block">{t}Show this ad only if users had clicked in it less than a number of times.{/t}.</div>
@@ -201,7 +201,7 @@ object {
         <div class="control-group" id="porview" style="{if $advertisement->type_medida!='VIEW'}display:none{/if};">
             <label for="num_view" class="control-label">{t}Max views{/t}</label>
             <div class="controls">
-                <input type="text" id="num_view" name="num_view" value="{$advertisement->num_view}" />
+                <input type="number" id="num_view" name="num_view" value="{$advertisement->num_view}" />
                 {if isset($advertisement) && $advertisement->type_medida == 'VIEW' && $advertisement->views > 0}<div class="help-inline">{t}Actual views count:{/t} {$advertisement->views}</div>{/if}
                 <div class="help-block">{t}Show this ad only if this add had been printed less than a number of times.{/t}.</div>
             </div>
@@ -210,10 +210,10 @@ object {
             <label for="starttime" class="control-label">{t}Date range{/t}</label>
             <div class="controls">
                 <label for="starttime">{t}From{/t}</label>
-                <input type="text" id="starttime"  name="starttime" title="Fecha inicio publicacion"
+                <input type="datetime" id="starttime"  name="starttime" title="Fecha inicio publicacion"
                     value="{if isset($advertisement) && $advertisement->starttime != '0000-00-00 00:00:00'}{$advertisement->starttime}{/if}" />
                 <label for="endtime">{t}Until{/t}</label>
-                <input type="text" id="endtime" name="endtime" title="Fecha fin publicacion"
+                <input type="datetime" id="endtime" name="endtime" title="Fecha fin publicacion"
                     value="{if isset($advertisement) && $advertisement->endtime != '0000-00-00 00:00:00'}{$advertisement->endtime}{/if}" />
                 <div class="help-block">{t}Show this ad within a range of dates.{/t}.</div>
             </div>
