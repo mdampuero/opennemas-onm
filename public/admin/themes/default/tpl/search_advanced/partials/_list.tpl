@@ -11,7 +11,7 @@
                 <strong>[{$content.content_type|ucfirst|htmlentities}] {$content.titule|clearslash}</strong>
                 <br>
                 {if $content.content_type neq 'comment'}
-                <img src="{$params.IMAGE_DIR}/icons/tag_red.png" alt="">  {$content.metadata|clearslash}
+                <img src="{$params.IMAGE_DIR}/tag_red.png" alt="">  {$content.metadata|clearslash}
                 {/if}<br>
                 <strong>{t}Category{/t}:</strong> {$content.catName}
                 <br>

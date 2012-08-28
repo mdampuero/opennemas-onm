@@ -42,7 +42,7 @@
         <td>
             {if !empty($photo->description)}{$photo->description|clearslash|escape:'html'}{else}{t}No available description{/t}{/if}
             <br>
-            <span class="tags"><img src="{$params.IMAGE_DIR}icons/tag_red.png" /> {if !empty($photo->metadata_utf)}{$photo->metadata_utf|clearslash|escape:'html'}{else}{t}No tags{/t}{/if}</span>
+            <span class="tags"><img src="{$params.IMAGE_DIR}tag_red.png" /> {if !empty($photo->metadata_utf)}{$photo->metadata_utf|clearslash|escape:'html'}{else}{t}No tags{/t}{/if}</span>
             {if !empty($photo->author_name)}
                 <span class="author"><strong>{t}Author:{/t}</strong> {$photo->author_name|clearslash|escape:'html'|default:""}</span>
             {/if}
