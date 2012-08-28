@@ -12,7 +12,6 @@
 
 {block name="header-js" append}
     {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
-    {script_tag src="/jquery/jquery-ui-sliderAccess.js"}
     {script_tag src="/onm/jquery.datepicker.js"}
     {script_tag src="/swfobject.js"}
 {/block}

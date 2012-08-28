@@ -17,7 +17,6 @@
 
 {block name="header-js" append}
     {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
-    {script_tag src="/jquery/jquery-ui-sliderAccess.js"}
     {script_tag src="/onm/jquery.datepicker.js"}
 
     <script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=true"></script>

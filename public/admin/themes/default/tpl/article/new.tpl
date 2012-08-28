@@ -2,7 +2,6 @@
 
 {block name="header-js" append}
     {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
-    {script_tag src="/jquery/jquery-ui-sliderAccess.js"}
     {script_tag src="/jquery/jquery.colorbox-min.js"}
     {script_tag src="/onm/jquery.datepicker.js"}
     {script_tag src="/onm/article.js"}
@@ -289,7 +288,7 @@
                     <div class="control-group">
                         <label for="starttime" class="control-label">{t}Publication start date{/t}</label>
                         <div class="controls">
-                            <input type="datetime" id="starttime" name="starttime" value="{$article->starttime}" required="required">
+                            <input type="datetime" id="starttime" name="starttime" value="{$article->starttime}">
                             <div class="help-block">{t}Server hour:{/t} {$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}</div>
                         </div>
                     </div>
