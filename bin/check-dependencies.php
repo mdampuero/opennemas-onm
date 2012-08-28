@@ -106,7 +106,7 @@ function check($boolean, $message, $help = '', $fatal = false)
     if (!$boolean) {
         echo "            *** $help ***\n";
         if ($fatal) {
-            exit("You must fix this problem before resuming the check.\n");
+            echo("You must fix this problem before resuming the check.\n");
         }
     }
 }
