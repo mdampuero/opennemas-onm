@@ -5,7 +5,7 @@
 jQuery(document).ready(function() {
     jQuery('#starttime').datetimepicker({
         hourGrid: 4,
-        showAnim: "fadeIn",
+        showAnim: 'fadeIn',
         dateFormat: 'yy-mm-dd',
         timeFormat: 'hh:mm:ss',
 	    minuteGrid: 10,
@@ -21,14 +21,14 @@ jQuery(document).ready(function() {
                 endDateTextBox.val(dateText);
             }
         },
-        onSelect: function (selectedDateTime){
+        onSelect: function(selectedDateTime) {
             var start = jQuery(this).datetimepicker('getDate');
             jQuery('#endtime').datetimepicker('option', 'minDate', new Date(start.getTime()));
         }
     });
     jQuery('#endtime').datetimepicker({
         hourGrid: 4,
-        showAnim: "fadeIn",
+        showAnim: 'fadeIn',
         dateFormat: 'yy-mm-dd',
         timeFormat: 'hh:mm:ss',
 	    minuteGrid: 10,
@@ -44,13 +44,13 @@ jQuery(document).ready(function() {
                 startDateTextBox.val(dateText);
             }
         },
-        onSelect: function (selectedDateTime){
+        onSelect: function(selectedDateTime) {
             var end = jQuery(this).datetimepicker('getDate');
-            jQuery('#starttime').datetimepicker('option', 'maxDate', new Date(end.getTime()) );
+            jQuery('#starttime').datetimepicker('option', 'maxDate', new Date(end.getTime()));
         }
     });
     jQuery('#date').datepicker({
-        showAnim: "fadeIn",
+        showAnim: 'fadeIn',
         firstDay: 1,
         dateFormat: 'yy-mm-dd'
     });

@@ -2,9 +2,9 @@
 * jquery functions
 * Management menu: drag-drop items, delete item, add item.
 */
-jQuery(document).ready(function($){
+jQuery(document).ready(function($) {
 
-    jQuery("#elements-provider").accordion({
+    jQuery('#elements-provider').accordion({
         autoHeight: false,
         navigation: true
     });
@@ -24,17 +24,17 @@ jQuery(document).ready(function($){
         toleranceElement: '> div'
     });
 
-    jQuery('#menuelements').on('click', '.delete-menu-item', function(e, ui){
+    jQuery('#menuelements').on('click', '.delete-menu-item', function(e, ui) {
         e.preventDefault();
         var element = $(this);
         element.closest('li')
-            .animate({ 'backgroundColor':'#fb6c6c' },300)
+            .animate({ 'backgroundColor': '#fb6c6c' },300)
             .animate({ 'opacity': 0, 'height': 0 }, 300, function() {
                 $(this).remove();
             });
     });
 
-    jQuery('#elements-provider').on('click', '.add-item', function(e, ui){
+    jQuery('#elements-provider').on('click', '.add-item', function(e, ui) {
         e.preventDefault();
         var element = $(this).closest('li');
         var clone = element.clone(true);
@@ -42,13 +42,13 @@ jQuery(document).ready(function($){
 
     });
 
-    jQuery('#menuelements').on('click', '.edit-menu-item', function(e, ui){
+    jQuery('#menuelements').on('click', '.edit-menu-item', function(e, ui) {
         e.preventDefault();
         var element = $(this).closest('li.menuItem');
         element.find('> div >.edit-menu-form').slideToggle('fast');
     });
 
-    jQuery('#menuelements').on('click', '.save-menuitem-button', function(e, ui){
+    jQuery('#menuelements').on('click', '.save-menuitem-button', function(e, ui) {
         e.preventDefault();
         var form = $(this).closest('.edit-menu-form');
         var menuItem = $(this).closest('li.menuItem');
@@ -74,16 +74,16 @@ jQuery(document).ready(function($){
         menu_elements.each(function(pos, item) {
             if ($(item).attr('id')) {
                 var parent_id = 0;
-                $.each(items_hierarchy, function(index, item_hierarchy){
+                $.each(items_hierarchy, function(index, item_hierarchy) {
                     if ($(item).data('item-id') == item_hierarchy['item_id']) {
                         parent_id = parseInt(item_hierarchy['parent_id']);
                     }
                 });
                 var newitem = {
-                    'id':      $(item).data('item-id'),
-                    'title':   $(item).data('title'),
-                    'type':    $(item).data('type'),
-                    'link':    $(item).data('link'),
+                    'id': $(item).data('item-id'),
+                    'title': $(item).data('title'),
+                    'type': $(item).data('type'),
+                    'link': $(item).data('link'),
                     'parent_id': parent_id
                 };
                 items.push(newitem);
@@ -92,47 +92,47 @@ jQuery(document).ready(function($){
         jQuery('#items').attr('value', JSON.stringify(items));
     });
 
-    jQuery('#add-external-link').on('click', function(e, ui){
+    jQuery('#add-external-link').on('click', function(e, ui) {
         e.preventDefault();
         var name = jQuery('#external-link-title').val();
         var link = jQuery('#external-link-link').val();
         if (name && link) {
             jQuery('#menuelements').append(
-                '<li data-title="'+ name +'" data-link="'+ link +
-                    '" class="menuItem" data-name="'+ name +'" id ="'+ name +
-                    '" data-item-id="" data-type="external">'+
-                    '<div>'+
-                        '<span class="menu-title">'+
-                        name+
-                        '</span>'+
-                        '<div class="btn-group actions" style="float:right;">'+
-                            '<a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a> '+
-                            '<a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>'+
-                        '</div>'+
-                        '<div class="form-horizontal edit-menu-form">'+
-                            '<fieldset>'+
-                            '<div class="control-group">'+
-                                    '<label class="control-label">Title</label>'+
-                                    '<div class="controls">'+
-                                        '<input type="text" class="title" value="'+name+'">'+
-                                    '</div>'+
-                                '</div>'+
-                                '<div class="control-group">'+
-                                    '<label class="control-label">Link</label>'+
-                                    '<div class="controls">'+
-                                        '<input type="text"class="link" value="'+link+'">'+
-                                    '</div>'+
-                                '</div>'+
-                                '<div class="send-button-wrapper">'+
-                                    '<button type="submit" class="btn save-menuitem-button">Update</button>'+
-                                '</div>'+
-                            '</fieldset>'+
-                        '</div>'+
-                    '</div>'+
-                '</li>' );
+                '<li data-title="' + name + '" data-link="' + link +
+                    '" class="menuItem" data-name="' + name + '" id ="' + name +
+                    '" data-item-id="" data-type="external">' +
+                    '<div>' +
+                        '<span class="menu-title">' +
+                        name +
+                        '</span>' +
+                        '<div class="btn-group actions" style="float:right;">' +
+                            '<a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a> ' +
+                            '<a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>' +
+                        '</div>' +
+                        '<div class="form-horizontal edit-menu-form">' +
+                            '<fieldset>' +
+                            '<div class="control-group">' +
+                                    '<label class="control-label">Title</label>' +
+                                    '<div class="controls">' +
+                                        '<input type="text" class="title" value="' + name + '">' +
+                                    '</div>' +
+                                '</div>' +
+                                '<div class="control-group">' +
+                                    '<label class="control-label">Link</label>' +
+                                    '<div class="controls">' +
+                                        '<input type="text"class="link" value="' + link + '">' +
+                                    '</div>' +
+                                '</div>' +
+                                '<div class="send-button-wrapper">' +
+                                    '<button type="submit" class="btn save-menuitem-button">Update</button>' +
+                                '</div>' +
+                            '</fieldset>' +
+                        '</div>' +
+                    '</div>' +
+                '</li>');
 
-            jQuery('#external-link-title').attr('value','');
-            jQuery('#external-link-link').attr('value','');
+            jQuery('#external-link-title').attr('value', '');
+            jQuery('#external-link-link').attr('value', '');
         }
     });
 });

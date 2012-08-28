@@ -23,12 +23,12 @@ function save_related_contents() {
 function get_related_contents(container) {
     var els = [];
 
-    jQuery('#'+container).find('ul.content-receiver li').each(function (index, item) {
+    jQuery('#' + container).find('ul.content-receiver li').each(function(index, item) {
 
         els.push({
             'id' : jQuery(item).data('id'),
             'content_type': jQuery(item).data('type'),
-            'position': (index+1)
+            'position': (index + 1)
         });
     });
 
@@ -39,8 +39,8 @@ function get_related_contents(container) {
 
 function get_gallery(container) {
 
-    var item= jQuery('#'+container).find('ul.content-receiver li:first');
-    if( jQuery(item).data('type') == 'Album') {
+    var item = jQuery('#' + container).find('ul.content-receiver li:first');
+    if (jQuery(item).data('type') == 'Album') {
 
         var id = jQuery(item).data('id');
 
@@ -52,22 +52,22 @@ function get_gallery(container) {
 /**
  * Preview of an article
  */
-function previewArticle(formID){
+function previewArticle(formID) {
     if (!validateForm(formID)) {
         return false;
     }
 
-    var form = jQuery('#'+formID);
+    var form = jQuery('#' + formID);
     var contents = form.serializeArray();
 
     jQuery.ajax({
         type: 'POST',
-        url: "/controllers/preview_content.php?action=article",
+        url: '/controllers/preview_content.php?action=article',
         data: {
             'contents': contents
         },
         success: function(data) {
-            previewWindow = window.open('','_blank','');
+            previewWindow = window.open('', '_blank', '');
             previewWindow.document.write(data);
             previewWindow.focus();
         }
@@ -76,9 +76,9 @@ function previewArticle(formID){
     return true;
 }
 
-jQuery(function($){
+jQuery(function($) {
 
-    $('a#button_preview').on('click', function(e, ui){
+    $('a#button_preview').on('click', function(e, ui) {
         e.preventDefault();
 
         // Save tiny content to textarea

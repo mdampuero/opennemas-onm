@@ -1,12 +1,12 @@
-function makeContentProviderAndPlaceholdersSortable () {
+function makeContentProviderAndPlaceholdersSortable() {
     // Make content providers sortable and allow to D&D over the placeholders
     jQuery('div#content-provider .ui-tabs-panel > div:not(.pagination)').sortable({
-        connectWith: "div.placeholder div.content",
+        connectWith: 'div.placeholder div.content',
         placeholder: 'placeholder-element',
-        handle : '.description',
+        handle: '.description',
         update: function(event,ui) {
             initializePopovers();
-            jQuery('#warnings-validation').html('<div class="notice">'+frontpage_messages.remember_save_positions+'</div>');
+            jQuery('#warnings-validation').html('<div class="notice">' + frontpage_messages.remember_save_positions + '</div>');
         },
         tolerance: 'pointer'
         //containment: '#content-with-ticker'
@@ -14,25 +14,25 @@ function makeContentProviderAndPlaceholdersSortable () {
 
     // Make content providers sortable and allow to D&D over placeholders and content provider
     jQuery('div.placeholder div.content').sortable({
-        connectWith: "div#content-provider .ui-tabs-panel > div:not(.pagination), div.placeholder div.content",
+        connectWith: 'div#content-provider .ui-tabs-panel > div:not(.pagination), div.placeholder div.content',
         placeholder: 'placeholder-element',
-        handle : '.description',
+        handle: '.description',
         update: function(event,ui) {
             initializePopovers();
-            jQuery('#warnings-validation').html('<div class="notice">'+frontpage_messages.remember_save_positions+'</div>');
+            jQuery('#warnings-validation').html('<div class="notice">' + frontpage_messages.remember_save_positions + '</div>');
         },
         tolerance: 'pointer'
         //containment: '#content-with-ticker'
     }).disableSelection();
 }
 
-function get_tooltip_content (elem) {
+function get_tooltip_content(elem) {
     var parent_content_div = elem.closest('div.content-provider-element');
     var content_html = '';
 
     if (parent_content_div.data('popover-content') === undefined) {
         var id = parent_content_div.data('content-id');
-        var $url = frontpage_urls.quick_info+'?id='+id;
+        var $url = frontpage_urls.quick_info + '?id=' + id;
         var content = '';
 
         content = content_states[id];
@@ -44,12 +44,12 @@ function get_tooltip_content (elem) {
                 content_states[id] = data;
             });
         } else {
-            content_html = "Estado: "+content.state  +
-                "<br>Vistas: "+content.views +
-                "<br>Categoría: "+content.category +
-                "<br>Programación: <span class='scheduled-state "+content.scheduled_state+"'>"+content.scheduled_state+"</span>"+
-                "<br>Hora inicio: "+content.starttime+
-                "<br>Último autor: "+content.last_author;
+            content_html = 'Estado: '+ content.state +
+                '<br>Vistas: '+ content.views +
+                '<br>Categoría: '+ content.category +
+                "<br>Programación: <span class='scheduled-state " + content.scheduled_state + "'>" + content.scheduled_state + '</span>'+
+                '<br>Hora inicio: '+ content.starttime +
+                '<br>Último autor: '+ content.last_author;
             parent_content_div.data('popover-content', content_html);
         }
     } else {
@@ -59,10 +59,10 @@ function get_tooltip_content (elem) {
     return content_html;
 }
 
-function get_tooltip_title (elem) {
+function get_tooltip_title(elem) {
     var ajaxdata;
     var id = elem.closest('div.content-provider-element').data('content-id');
-    var $url = frontpage_urls.quick_info+'?id='+id;
+    var $url = frontpage_urls.quick_info + '?id=' + id;
 
     content = content_states[id];
     if (content === undefined) {
@@ -78,10 +78,10 @@ function get_tooltip_title (elem) {
     }
 }
 
-function remove_element (element) {
-    jQuery(element).each(function(){
-        jQuery(this).fadeTo("slow", 0.01, function(){ //fade
-            jQuery(this).slideUp("slow", function() { //slide up
+function remove_element(element) {
+    jQuery(element).each(function() {
+        jQuery(this).fadeTo('slow', 0.01, function() { //fade
+            jQuery(this).slideUp('slow', function() { //slide up
                 jQuery(this).remove(); //then remove from the DOM
             });
          });
@@ -91,9 +91,9 @@ function remove_element (element) {
 function get_contents_in_frontpage() {
     var els = [];
 
-    jQuery('div.placeholder').each(function (){
+    jQuery('div.placeholder').each(function() {
         var placeholder = jQuery(this).data('placeholder');
-        jQuery(this).find('div.content-provider-element').each(function (index){
+        jQuery(this).find('div.content-provider-element').each(function(index) {
             els.push({
                 'id' : jQuery(this).data('content-id'),
                 'content_type': jQuery(this).data('class'),
@@ -108,7 +108,7 @@ function get_contents_in_frontpage() {
 }
 
 function show_save_frontpage_dialog() {
-    jQuery('#warnings-validation').html('<div class="notice">'+frontpage_messages.remember_save_positions+'</div>');
+    jQuery('#warnings-validation').html('<div class="notice">' + frontpage_messages.remember_save_positions + '</div>');
 }
 
 
@@ -120,13 +120,13 @@ function initializePopovers() {
             placement: 'left',
             // trigger: 'manual',
             animation: false,
-            delay:0,
+            delay: 0,
             title: get_tooltip_title(element),
             content: get_tooltip_content(element)
         });
     });
 }
-jQuery(function($){
+jQuery(function($) {
 
     /***************************************************************************
     * Sortable handlers
@@ -136,31 +136,31 @@ jQuery(function($){
     /***************************************************************************
     * Batch Actions
     ***************************************************************************/
-    $("#modal-batch-delete").modal({ backdrop: 'static', keyboard: true, show: false });
-    $('#modal-batch-delete').on('click', 'a.btn.no', function(e,ui){
+    $('#modal-batch-delete').modal({ backdrop: 'static', keyboard: true, show: false });
+    $('#modal-batch-delete').on('click', 'a.btn.no', function(e,ui) {
         e.preventDefault();
-        $("#modal-batch-delete").modal('hide');
+        $('#modal-batch-delete').modal('hide');
     });
-    $('#modal-batch-delete').on('click', 'a.btn.yes', function(e, ui){
+    $('#modal-batch-delete').on('click', 'a.btn.yes', function(e, ui) {
         e.preventDefault();
         var contents = $('#frontpagemanager .content-provider-element input[type="checkbox"]:checked').closest('.content-provider-element');
         show_save_frontpage_dialog();
-        $("#modal-batch-delete").modal('hide');
+        $('#modal-batch-delete').modal('hide');
         remove_element(contents);
         e.preventDefault();
     });
 
-    $("#modal-batch-arquive").modal({ backdrop: 'static', keyboard: true, show: false });
-    $('#modal-batch-arquive').on('click', 'a.btn.no', function(e,ui){
+    $('#modal-batch-arquive').modal({ backdrop: 'static', keyboard: true, show: false });
+    $('#modal-batch-arquive').on('click', 'a.btn.no', function(e,ui) {
         e.preventDefault();
-        $("#modal-batch-arquive").modal('hide');
+        $('#modal-batch-arquive').modal('hide');
     });
-    $('#modal-batch-arquive').on('click', 'a.btn.yes', function(e, ui){
+    $('#modal-batch-arquive').on('click', 'a.btn.yes', function(e, ui) {
         e.preventDefault();
         var contents = $('#frontpagemanager .content-provider-element input[type="checkbox"]:checked').closest('.content-provider-element');
         var ids = [];
 
-        contents.each(function (){
+        contents.each(function() {
             log($(this).closest('.content-provider-element').data('content-id'));
             ids.push($(this).closest('.content-provider-element').data('content-id'));
         });
@@ -168,11 +168,11 @@ jQuery(function($){
             frontpage_urls.set_arquived,
             { 'ids': ids }
         ).success(function(data) {
-            $('#warnings-validation').html("<div class='success'>"+data+"</div>");
+            $('#warnings-validation').html("<div class='success'>" + data + '</div>');
         }).error(function(data) {
-            $('#warnings-validation').html("<div class='error'>"+data.responseText+"</div>");
+            $('#warnings-validation').html("<div class='error'>" + data.responseText + '</div>');
         });
-        $("#modal-batch-arquive").modal('hide');
+        $('#modal-batch-arquive').modal('hide');
         remove_element(contents);
         e.preventDefault();
     });
@@ -213,38 +213,38 @@ jQuery(function($){
     * Dropdown menu content actions
     ***************************************************************************/
     // arquive
-    $("#modal-element-archive").modal({ backdrop: 'static', keyboard: true, show: false });
+    $('#modal-element-archive').modal({ backdrop: 'static', keyboard: true, show: false });
     $('div.content').on('click', 'div.placeholder div.content-provider-element a.arquive', function(e) {
         var element = $(this).closest('.content-provider-element');
         var elementID = element.data('content-id');
-        $("body").data('element-for-archive', element);
+        $('body').data('element-for-archive', element);
         var modal = $('#modal-element-archive');
         modal.data('selected-for-archive', elementID);
 
-        modal.find('.modal-body span.title').html( '<strong>' + element.find('.title').html() + '</strong>');
+        modal.find('.modal-body span.title').html('<strong>' + element.find('.title').html() + '</strong>');
         modal.modal('show');
         e.preventDefault();
     });
 
-    $('#modal-element-archive').on('click', 'a.btn.yes', function(e, ui){
-        var delId = $("#modal-element-archive").data("selected-for-archive");
-        if(delId) {
+    $('#modal-element-archive').on('click', 'a.btn.yes', function(e, ui) {
+        var delId = $('#modal-element-archive').data('selected-for-archive');
+        if (delId) {
             $.get(
                 frontpage_urls.set_arquived,
                 { 'ids': [delId] }
             ).success(function(data) {
-                $('#warnings-validation').html("<div class='success'>"+data+"</div>");
+                $('#warnings-validation').html("<div class='success'>" + data + '</div>');
             }).error(function(data) {
-                $('#warnings-validation').html("<div class='error'>"+data.responseText+"</div>");
+                $('#warnings-validation').html("<div class='error'>" + data.responseText + '</div>');
             });
         }
-        $("#modal-element-archive").modal('hide');
-        remove_element($("body").data('element-for-archive'));
+        $('#modal-element-archive').modal('hide');
+        remove_element($('body').data('element-for-archive'));
         e.preventDefault();
     });
 
-    $('#modal-element-archive').on('click', 'a.btn.no', function(e){
-        $("#modal-element-archive").modal('hide');
+    $('#modal-element-archive').on('click', 'a.btn.no', function(e) {
+        $('#modal-element-archive').modal('hide');
         e.preventDefault();
     });
 
@@ -261,7 +261,7 @@ jQuery(function($){
     $('div.content').on('click', 'div.placeholder div.content-provider-element a.suggest-to-home', function(e) {
         var element = $(this).closest('.content-provider-element');
         var contentId = element.data('content-id');
-        if(contentId) {
+        if (contentId) {
             $.get(
                 frontpage_urls.toggle_suggested,
                 { 'ids': [contentId] }
@@ -275,35 +275,35 @@ jQuery(function($){
     });
 
     // send-to-trash
-    $("#modal-element-send-trash").modal({ backdrop: 'static', keyboard: true, show: false });
+    $('#modal-element-send-trash').modal({ backdrop: 'static', keyboard: true, show: false });
     $('div.content').on('click', 'div.placeholder div.content-provider-element a.send-to-trash', function(e, ui) {
         var element = $(this).closest('.content-provider-element');
         var elementID = element.data('content-id');
-        $("body").data('element-for-del', element);
+        $('body').data('element-for-del', element);
         $('#modal-element-send-trash').data('selected-for-del', elementID);
 
-        $('#modal-element-send-trash .modal-body span.title').html( '<strong>' + element.find('.title').html() + '</strong>');
-        $("#modal-element-send-trash ").modal('show');
+        $('#modal-element-send-trash .modal-body span.title').html('<strong>' + element.find('.title').html() + '</strong>');
+        $('#modal-element-send-trash ').modal('show');
         e.preventDefault();
     });
 
-    $('#modal-element-send-trash').on('click', 'a.btn.yes', function(e, ui){
-        var delId = $("#modal-element-send-trash").data("selected-for-del");
-        if(delId) {
-            $.get( frontpage_urls.send_to_trash,
+    $('#modal-element-send-trash').on('click', 'a.btn.yes', function(e, ui) {
+        var delId = $('#modal-element-send-trash').data('selected-for-del');
+        if (delId) {
+            $.get(frontpage_urls.send_to_trash,
                 { id: delId }
             );
         }
         show_save_frontpage_dialog();
-        $("#modal-element-send-trash").modal('hide');
-        $("body").data('element-for-del').animate({ 'backgroundColor':'#fb6c6c' },300).animate({ 'opacity': 0, 'height': 0 }, 300, function() {
+        $('#modal-element-send-trash').modal('hide');
+        $('body').data('element-for-del').animate({ 'backgroundColor': '#fb6c6c' },300).animate({ 'opacity': 0, 'height': 0 }, 300, function() {
             $(this).remove();
         });
         e.preventDefault();
     });
 
-    $('#modal-element-send-trash').on('click', 'a.btn.no', function(e){
-        $("#modal-element-send-trash").modal('hide');
+    $('#modal-element-send-trash').on('click', 'a.btn.no', function(e) {
+        $('#modal-element-send-trash').modal('hide');
         e.preventDefault();
     });
 
@@ -311,18 +311,18 @@ jQuery(function($){
     * Content provider code
     ***************************************************************************/
 
-    $( "#content-provider").dialog({ minWidth: 600, autoOpen: false, maxHeight: 500 });
+    $('#content-provider').dialog({ minWidth: 600, autoOpen: false, maxHeight: 500 });
 
-    $( "#content-provider .content-provider-block-wrapper").tabs({
+    $('#content-provider .content-provider-block-wrapper').tabs({
         ajaxOptions: {
-            error: function( xhr, status, index, anchor ) {
-                $( anchor.hash ).html(
-                    "<div>"+frontpage_messages.error_tab_content_provider+"</div>" );
+            error: function(xhr, status, index, anchor ) {
+                $(anchor.hash).html(
+                    '<div>'+ frontpage_messages.error_tab_content_provider + '</div>');
             },
             complete: function() {
                 $('#content-provider .spinner').hide();
             },
-            beforeSend: function(){
+            beforeSend: function() {
                 $('#content-provider .spinner').show();
             }
         },
@@ -332,20 +332,20 @@ jQuery(function($){
         fx: { opacity: 'toggle', duration: 'fast' }
     });
 
-    $( "#content-provider").on('click', '.pagination a', function(e, ui){
+    $('#content-provider').on('click', '.pagination a', function(e, ui) {
         e.preventDefault();
-        var href   = $(this).attr('href');
+        var href = $(this).attr('href');
         var parent = $(this).closest('.ui-tabs-panel');
         $.ajax({
             url: $(this).attr('href'),
-            success: function(data){
+            success: function(data) {
                 parent.html(data);
                 makeContentProviderAndPlaceholdersSortable();
             },
             complete: function() {
                 $('#content-provider .spinner').hide();
             },
-            beforeSend: function(){
+            beforeSend: function() {
                 $('#content-provider .spinner').show();
 
            }
@@ -359,28 +359,28 @@ jQuery(function($){
 
     $('#button_addnewcontents').on('click', function(e, ui) {
         e.preventDefault();
-        $( "#content-provider").dialog('open');
+        $('#content-provider').dialog('open');
     });
 
-    $('#button_savepositions').on('click',function(e, ui) {
+    $('#button_savepositions').on('click', function(e, ui) {
         e.preventDefault();
         var els = get_contents_in_frontpage();
-        var category = $("#frontpagemanager").data("category");
+        var category = $('#frontpagemanager').data('category');
 
         $.post(frontpage_urls.save_positions,
                 { 'contents_positions': els }
         ).success(function(data) {
             $('#warnings-validation').html(
-                "<div class='alert alert-success'>"+
-                    "<button class='close' data-dismiss='alert'>×</button>"+
-                    data+
-                "</div>");
+                "<div class='alert alert-success'>" +
+                    "<button class='close' data-dismiss='alert'>×</button>" +
+                    data +
+                '</div>');
         }).error(function(data) {
             $('#warnings-validation').html(
-                "<div class='alert alert-error'>"+
-                    "<button class='close' data-dismiss='alert'>×</button>"+
-                    data.responseText+
-                "</div>"
+                "<div class='alert alert-error'>" +
+                    "<button class='close' data-dismiss='alert'>×</button>" +
+                    data.responseText +
+                '</div>'
             );
         });
     });
@@ -394,13 +394,13 @@ jQuery(function($){
             data: {
                 'category' : category
             },
-            success: function(data){
+            success: function(data) {
                 $('#warnings-validation').html(data);
             }
         });
     });
 
-    $('#button_previewfrontpage').on('click', function (e, ui){
+    $('#button_previewfrontpage').on('click', function(e, ui) {
         e.preventDefault();
         var contents = get_contents_in_frontpage();
         var category = $(this).data('category-name');
@@ -414,34 +414,34 @@ jQuery(function($){
                 'category_name': category
             },
             success: function(data) {
-                previewWindow = window.open('','_blank','');
+                previewWindow = window.open('', '_blank', '');
                 previewWindow.document.write(data);
                 previewWindow.focus();
             }
         });
     });
 
-    $('#button_multiple_delete').on('click', function(e,ui){
-        e.preventDefault();
-        var contents = $('#frontpagemanager .content-provider-element input[type="checkbox"]:checked').closest('.content-provider-element');
-        if(contents.length > 0) {
-            $("#modal-batch-delete").modal('show');
-        }
-    });
-
-    $('#button_multiple_arquive').on('click', function(e,ui){
+    $('#button_multiple_delete').on('click', function(e,ui) {
         e.preventDefault();
         var contents = $('#frontpagemanager .content-provider-element input[type="checkbox"]:checked').closest('.content-provider-element');
         if (contents.length > 0) {
-            $("#modal-batch-arquive").modal('show');
+            $('#modal-batch-delete').modal('show');
         }
     });
 
-    $('#button_multiple_suggest').on('click', function(e,ui){
+    $('#button_multiple_arquive').on('click', function(e,ui) {
+        e.preventDefault();
+        var contents = $('#frontpagemanager .content-provider-element input[type="checkbox"]:checked').closest('.content-provider-element');
+        if (contents.length > 0) {
+            $('#modal-batch-arquive').modal('show');
+        }
+    });
+
+    $('#button_multiple_suggest').on('click', function(e,ui) {
         e.preventDefault();
         var contents = $('#frontpagemanager .content-provider-element input[type="checkbox"]:checked').closest('.content-provider-element');
         var contentIds = [];
-        $(contents).each(function(){
+        $(contents).each(function() {
             $(this).toggleClass('suggested');
             contentIds.push($(this).data('content-id'));
         });
