@@ -9,8 +9,10 @@
  **/
 namespace Manager\Controllers;
 
-use Onm\Framework\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Onm\Framework\Controller\Controller;
+
 /**
  * Handles the actions for the system information
  *
