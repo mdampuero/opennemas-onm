@@ -23,7 +23,7 @@
         });
     });
     </script>
-    {script_tag src="/jquery-onm/jquery.video.js" language="javascript"}
+    {script_tag src="/onm/video.js" language="javascript"}
 {/block}
 
 {block name="content"}

@@ -12,7 +12,7 @@
 {/block}
 
 {block name="footer-js" append}
-    {script_tag src="/onm/jquery.content-provider.js"}
+    {script_tag src="/onm/content-provider.js"}
     {script_tag src="/tiny_mce/opennemas-config.js"}
 
     <script>

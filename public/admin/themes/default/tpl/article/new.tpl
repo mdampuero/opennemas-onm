@@ -5,7 +5,7 @@
     {script_tag src="/jquery/jquery-ui-sliderAccess.js"}
     {script_tag src="/jquery/jquery.colorbox-min.js"}
     {script_tag src="/onm/jquery.datepicker.js"}
-    {script_tag src="/jquery-onm/jquery.article.js"}
+    {script_tag src="/onm/article.js"}
     {script_tag src="/swfobject.js"}
 {/block}
 
@@ -27,7 +27,7 @@
 {/block}
 
 {block name="footer-js" append}
-    {script_tag src="/onm/jquery.content-provider.js"}
+    {script_tag src="/onm/content-provider.js"}
     {script_tag src="/jquery-onm/jquery.inputlength.js"}
     <script>
     jQuery(document).ready(function($){
@@ -229,7 +229,7 @@
                         <label for="subtitle" class="control-label">{t}Pretitle{/t}</label>
                         <div class="controls">
                             <div class="input-append" id="subtitle">
-                                <input  type="text" name="subtitle" required="required" value="{$article->subtitle|clearslash|escape:"html"}" class="input-xxlarge"/>
+                                <input  type="text" name="subtitle" value="{$article->subtitle|clearslash|escape:"html"}" class="input-xxlarge"/>
                                 <span class="add-on"></span>
                             </div>
                         </div>

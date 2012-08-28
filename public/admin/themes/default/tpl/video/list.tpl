@@ -11,7 +11,7 @@
         saveWidgetPositions: '{url name=admin_video_save_positions category=$category page=$page}'
     }
     </script>
-    {script_tag src="/jquery-onm/jquery.video.js" language="javascript"}
+    {script_tag src="/onm/video.js"}
 {/block}
 
 {block name="content"}

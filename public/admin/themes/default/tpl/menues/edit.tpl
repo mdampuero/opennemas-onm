@@ -2,7 +2,7 @@
 
 {block name="footer-js" append}
     {script_tag src="/jquery/jquery.nestedSortable.js"}
-    {script_tag src="/onm/jquery.menues.js"}
+    {script_tag src="/onm/menues.js"}
     <script type="text/javascript">
     $('#formulario').onmValidate({
         'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'

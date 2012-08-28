@@ -31,7 +31,7 @@
             {/foreach}
         }
     </script>
-    {script_tag src="/jquery-onm/jquery.frontpagemanager.js"}
+    {script_tag src="/onm/frontpagemanager.js"}
 {/block}
 
 {block name="content"}
