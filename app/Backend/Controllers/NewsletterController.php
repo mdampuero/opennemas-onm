@@ -9,6 +9,7 @@
  **/
 namespace Backend\Controllers;
 
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Message as m;
@@ -86,6 +87,7 @@ class NewsletterController extends Controller
         return $this->render(
             'newsletter/steps/1-pick-elements.tpl',
             array(
+                'newsletter' => $newsletter,
                 'newsletterContent' => json_decode($newsletter->data),
             )
         );
@@ -101,19 +103,34 @@ class NewsletterController extends Controller
     public function saveContentsAction(Request $request)
     {
         $id = (int) $request->request->getDigits('id');
-        $contentsRAW = $request->request->get('contentids');
+        $contentsRAW = $request->request->get('content_ids');
         $contents = json_decode($contentsRAW);
+        $title = $request->request->filter(
+            'title',
+            s::get('site_name') + ' ['.date('%d/%m/%Y').']',
+            FILTER_SANITIZE_STRING
+        );
 
-        $newsletter = new \NewNewsletter();
-        $nm         = new \NewsletterManager();
 
         if ($id > 0) {
-            $newsletter->update(array(
-                'data' => $contentsRAW,
-            ));
+            $newsletter = new \NewNewsletter($id);
+            $nm = new \NewsletterManager();
+
+            $newValues = array(
+                'title' => $title,
+                'data'  => $contentsRAW,
+            );
+
+            if (is_null($newsletter->html)) {
+                $newValues['html'] = $nm->render($contents);
+            }
+
+            $newsletter->update($newValues);
         } else {
+            $newsletter = new \NewNewsletter();
+            $nm = new \NewsletterManager();
             $newsletter->create(array(
-                'subject' => s::get('site_name') + ' ['.date('%d/%m/%Y').']',
+                'title'   => $title,
                 'data'    => $contentsRAW,
                 'html'    => $nm->render($contents),
             ));
@@ -149,19 +166,18 @@ class NewsletterController extends Controller
      **/
     public function saveHtmlContentAction(Request $request)
     {
-        $id = (int) $request->request->getDigits('id');
+        $id = (int) $request->query->getDigits('id');
 
         $newsletter = new \NewNewsletter($id);
 
-        $newsletter->update(array(
-            'subject' => $request->request->filter('subject', FILTER_SANITIZE_STRING),
-            'html'    => $request->request->filter('subject', FILTER_SANITIZE_STRING),
-        ));
-
-        return $this->redirect($this->generateUrl(
-            'admin_newsletter_pick_recipients',
-            array('id' => $newsletter->id))
+        $values = array(
+            'title' => $request->request->filter('title', FILTER_SANITIZE_STRING),
+            'html'  => $request->request->filter('html', FILTER_SANITIZE_STRING),
         );
+
+        $newsletter->update($values);
+
+        return new Response('ok', 200);
     }
 
     /**
@@ -202,7 +218,9 @@ class NewsletterController extends Controller
         }
 
         $recipients = array();
-        if (isset($_SESSION['data-recipients-'.$newsletter->id])) {
+
+        $sessId = 'data-recipients-'.$newsletter->id;
+        if (array_key_exists($id, $_SESSION) && is_string($_SESSION[$sessID])) {
             $recipients = json_decode($_SESSION['data-recipients-'.$newsletter->id]);
         }
 
@@ -213,6 +231,72 @@ class NewsletterController extends Controller
                 'accounts'   => $accounts,
                 'mailList'   => $mailList,
                 'recipients' => $recipients,
+            )
+        );
+    }
+
+    /**
+     * Sends
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function sendAction(Request $request)
+    {
+        $id = $request->query->getDigits('id');
+
+        $recipients = $request->request->get('recipients');
+
+        $recipients = json_decode($recipients);
+
+        $newsletter = new \NewNewsletter($id);
+
+        $_SESSION['data-recipients-'.$newsletter->id] = array();
+
+        $nManager = new \NewsletterManager();
+        $nManager->setConfigMailing();
+
+        $htmlContent = htmlspecialchars_decode($newsletter->html, ENT_QUOTES);
+
+        $configurations = \Onm\Settings::get('newsletter_maillist');
+        if (array_key_exists('sender', $configurations)
+            && !empty($configurations['sender']) ) {
+            $mail_from = $configurations['sender'];
+        } else {
+            $mail_from = MAIL_FROM;
+        }
+
+        // TODO: Fetch this params from the container
+        $params = array(
+            'subject'        => $newsletter->title,
+            'mail_host'      => MAIL_HOST,
+            'mail_user'      => MAIL_USER,
+            'mail_pass'      => MAIL_PASS,
+            'mail_from'      => $mail_from,
+            'mail_from_name' => s::get('site_name'),
+        );
+
+        $sentResult = array();
+        foreach ($recipients as $mailbox) {
+            // Replace name destination
+            $emailHtmlContent = str_replace('###DESTINATARIO###', $mailbox->name, $htmlContent);
+
+            // Send the mail
+            $properlySent = $nManager->sendToUser($mailbox, $emailHtmlContent, $params);
+
+            // Register the
+            $sentResult []= array(
+                $mailbox,
+                $properlySent
+            );
+        }
+
+        return $this->render(
+            'newsletter/steps/4-send.tpl',
+            array(
+                'sent_result' => $sentResult,
+                'newsletter'  => $newsletter,
             )
         );
     }

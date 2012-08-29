@@ -1,33 +1,38 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
-{css_tag href="/newsletter.css" media="screen"}
 <style type="text/css">
 #htmlContent {
     border:1px solid #ccc;
-    padding:20px;
+    padding:10px;
     background-color: white;
-    max-width:80%;
-    margin:0 auto;
+    max-width:100%;
     display:block;
+}
+#html-content-textarea {
+    display:block;
+    width:100%;
+    display:none;
+    min-height:500px;
 }
 </style>
 {/block}
 
 {block name="footer-js" append}
 {script_tag src="/jquery/jquery.cookie.js"}
-{script_tag src="/jquery-onm/jquery.newsletter.js"}
 {script_tag src="/tiny_mce/opennemas-config.js"}
+{script_tag src="/onm/newsletter.js"}
 <script type="text/javascript">
-//TinyMce scripts
-tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
-OpenNeMas.tinyMceConfig.advanced.elements = "htmlContent";
+$(document).data('saved', true);
+var  newsletter_urls = {
+    save_contents : '{url name=admin_newsletter_save_html id=$newsletter->id}'
+}
 </script>
 {/block}
 
 {block name="content"}
 
-<form action="{url name=admin_newsletter_save_html id=$newsletter->id}" method="POST">
+<form action="{url name=admin_newsletter_save_html id=$newsletter->id}" method="POST" id="newsletter-preview-form">
 
 <div id="buttons-preview" class="top-action-bar clearfix">
 	<div class="wrapper-content">
@@ -73,23 +78,22 @@ OpenNeMas.tinyMceConfig.advanced.elements = "htmlContent";
 	</div>
 </div>
 <div class="wrapper-content">
-    <div class="form-vertical panel">
+    <div class="form-horizontal panel">
         <div class="control-group">
             <label for="name" class="control-label">{t}Email subject{/t}</label>
             <div class="controls">
-                <input type="text" name="subject" id="subject" style="width:80%" value="{$newsletter->subject}" required class="input-xlarge"/>
+                <input type="text" name="subject" id="title" value="{$newsletter->title}" required class="input-xxlarge"/>
             </div>
         </div>
 
         <div class="control-group">
             <label for="htmlContent" class="control-label">{t}Preview{/t}</label>
-            <div class="controls">
-                <div id="htmlContent">{$newsletter->html}</div>
+            <div class="controls" >
+                <div id="html-content">{$newsletter->html}</div>
             </div>
         </div>
     </div>
 </form>
 
 {include file="newsletter/modals/_back_contents_accept.tpl"}
-
 {/block}

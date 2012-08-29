@@ -1729,6 +1729,15 @@ $adminRoutes->add(
 );
 
 $adminRoutes->add(
+    'admin_newsletter_send',
+    new Route(
+        '/newsletter/{id}/send',
+        array('_controller' => 'Backend:Controllers:NewsletterController:send')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
     'admin_newsletter_delete',
     new Route(
         '/newsletter/{id}/delete',

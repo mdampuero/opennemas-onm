@@ -3,11 +3,21 @@
 {block name="header-css" append}
 {css_tag href="/admin.css"}
 {css_tag href="/newsletter.css" media="screen"}
+<style type="text/css">
+    .ok, .failed {
+        font-weight: bold;
+    }
+    .ok {
+        color: green;
+    }
+    .failed {
+        color: red;
+    }
+</style>
 {/block}
 
 {block name="footer-js" append}
 {script_tag src="/jquery/jquery.cookie.js"}
-{script_tag src="/jquery-onm/jquery.newsletter.js"}
 {/block}
 
 {block name="content"}
@@ -21,9 +31,9 @@
 
             <ul class="old-button">
                 <li>
-                    <a href="#" id="prev-button" class="admin_add" title="{t}Back{/t}">
+                    <a href="{url name=admin_newsletter_pick_recipients id=$newsletter->id}" id="prev-button" class="admin_add" title="{t}Back{/t}">
                         <img src="{$params.IMAGE_DIR}arrow_previous.png" alt="{t}Back{/t}" /><br />
-                        {t}Previous step{/t}
+                        {t}View recipients{/t}
                     </a>
                 </li>
             </ul>
@@ -31,22 +41,28 @@
     </div>
 
     <div class="wrapper-content">
+        <table class="table table-condensed">
+            {foreach from=$sent_result item=result}
+            <tr><td>
+                {$result[0]->name} &lt;{$result[0]->email}&gt; ::
+                {if $result[1]}
+                    <span class="ok">{t}OK{/t}</span>
+                {else}
+                    <span class="failed">{t}failed{/t}</span>
+                {/if}
+            </td></tr>
+            {foreachelse}
+                <tr>
+                    <td>
+                        {t}There was no recipients to sent to{/t}
+                    </td>
+                </tr>
+            {/foreach}
 
-        <div class="form">
-            <input type="hidden" id="action"  name="action" value="preview" />
-        </div>
-
-        <table class="table table-hover table-condensed">
-            <tr>
-                <td>
-                    {$html_final}
-                </td>
-            </tr>
             <tfoot>
                 <tr>
                     <td colspan=2>
                         <strong>Envío finalizado.</strong>
-
                     </td>
                 </tr>
             </tfoot>

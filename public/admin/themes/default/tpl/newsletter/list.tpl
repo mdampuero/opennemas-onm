@@ -4,9 +4,6 @@
     {script_tag src="/onm/jquery-functions.js" language="javascript"}
 {/block}
 
-{block name="footer-js" append}
-{/block}
-
 {block name="content"}
 <form action="#" method="get" name="formulario" id="formulario">
     <div class="top-action-bar clearfix">
@@ -85,6 +82,10 @@
                                 <i class="icon-pencil"></i> {t}Edit{/t}
                             </a>
                             {/acl}
+
+                            <a href="{url name=admin_newsletter_preview id=$newsletter->id}" title="{t}Preview{/t}" class="btn">
+                                <i class="icon-eye-open"></i>
+                            </a>
 
                             {acl isAllowed="NEWSLETTER_DELETE"}
                             <a class="del btn btn-danger"

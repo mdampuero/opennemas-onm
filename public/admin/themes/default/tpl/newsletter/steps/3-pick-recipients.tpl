@@ -1,7 +1,6 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
-{css_tag href="/newsletter.css" media="screen"}
 <style type="text/css">
     .btn-group .btn {
         display:inline-block;
@@ -18,17 +17,25 @@
         padding:3px;
         border:1px solid #ccc;
     }
+    #othersMails {
+        min-height:300px;
+        margin-top:10px;
+        width:96%;
+    }
+
+    #items-recipients {
+        min-height:200px;
+    }
 </style>
 {/block}
 
 {block name="footer-js" append}
-{script_tag src="/jquery/jquery.cookie.js"}
-{script_tag src="/jquery-onm/jquery.newsletter.js"}
+{script_tag src="/onm/newsletter.js"}
 {/block}
 
 {block name="content"}
 
-<form action="#" method="post" name="newsletterForm" id="newsletterForm" {$formAttrs}>
+<form action="{url name=admin_newsletter_send id=$id}" method="POST" name="newsletterForm" id="pick-recipients-form">
 
     <div id="buttons-recipients" class="top-action-bar clearfix">
         <div class="wrapper-content">
@@ -39,10 +46,10 @@
             <ul class="old-button">
 
                 <li>
-                    <a href="#" class="admin_add" title="{t}Next{/t}" id="next-button">
+                    <button type="submit" title="{t}Next{/t}" id="next-button">
                         <img src="{$params.IMAGE_DIR}arrow_next.png" alt="{t}Next{/t}" /><br />
                         {t}Send newsletter{/t}
-                    </a>
+                    </button>
                 </li>
                  <li>
                     <a href="{url name=admin_newsletter_preview id=$id}" class="admin_add" title="{t}Previous{/t}" id="prev-button">
@@ -74,7 +81,7 @@
                     </ul>
 
                     <div id="maillist-account">
-                        <ul>
+                        <ul id="maillist-account-list">
                             {foreach name=d from=$mailList item=mail}
                             <li  data-email="{$mail->email}"  data-name="{$mail->name}">
                                 {$mail->name}:{$mail->email}
@@ -92,7 +99,7 @@
                                 <i class="icon-plus"></i>{t}Add selected{/t}
                             </a>
                         </div>
-                        <ul>
+                        <ul id="database-accounts-list">
                             {foreach name=d from=$accounts item=account}
                                 <li  data-email="{$account->email}" data-name="{$account->name}">
                                     <label>
@@ -105,10 +112,14 @@
                     </div>
 
                     <div id="custom-accounts" class="form-vertical">
+                        <div class="btn-group">
+                            <a id="parse-and-add" href="#" class="btn">
+                                <i class="icon-check"></i>{t}Parse list & add{/t}
+                            </a>
+                        </div>
                         <div class="control-group">
                             <div class="controls">
-                                <textarea id="othersMails" name="othersMails" style="width:90%"></textarea>
-                                <div class="help-block">{t}Write them separated by commas or in different lines.{/t}</div>
+                                <textarea id="othersMails" name="othersMails" placeholder="{t}Write a list of email address by writing one per line.{/t}"></textarea>
                             </div>
                         </div>
                     </div>
@@ -131,8 +142,7 @@
             </div>
         </div>
 
-        <input type="hidden" id="action" name="action" value="send" />
-	    <div id="separator"></div>
+        <input type="hidden" id="recipients_hidden" name="recipients" />
 	</div>
 
 </form>
