@@ -23,7 +23,7 @@
                 <thead>
                     <tr>
 						<th class="center" style="width:10px">
-                            <input type="checkbox" id="toggleallcheckbox" value="" />
+                            <input type="checkbox" class="toggleallcheckbox" value="" />
                         </th>
 						<th >{t}Cache group{/t}</th>
 						<th class="right">{t}Expire time{/t}  <small>({t}seconds{/t})</small></th>

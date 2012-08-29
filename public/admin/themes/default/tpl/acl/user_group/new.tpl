@@ -57,20 +57,24 @@
                         <table  class="table table-condensed table-hover" style="display:inline-block; width:49%; float:left; margin-right:2px;">
                             <thead>
                                 <tr>
-                                    <th colspan=2>{$mod}</th>
+                                    <th><input type="checkbox" class="toggleallcheckbox"></th>
+                                    <th>{$mod}</th>
                                 </tr>
                             </thead>
                             <tbody id="{$mod}">
                             {section name=privilege loop=$privileges}
                                 <tr>
                                     <td style="padding:4px;" nowrap="nowrap" width="5%">
-                                     <label style="cursor:pointer;">
-                                    {if $user_group->containsPrivilege($privileges[privilege]->id)}
-                                       <input type="checkbox" name="privileges[]" id="privileges[]" value="{$privileges[privilege]->id}" checked>
-                                    {else}
-                                       <input type="checkbox" name="privileges[]" id="privileges[]" value="{$privileges[privilege]->id}">
-                                    {/if}
-                                        {t}{$privileges[privilege]->description}{/t} </label>
+                                        <label for="{$privileges[privilege]->id}" style="cursor:pointer;">
+                                            {if $user_group->containsPrivilege($privileges[privilege]->id)}
+                                               <input type="checkbox" name="privileges[]" id="privileges[]" value="{$privileges[privilege]->id}" checked>
+                                            {else}
+                                               <input type="checkbox" name="privileges[]" id="privileges[]" value="{$privileges[privilege]->id}">
+                                            {/if}
+                                        </label>
+                                    </td>
+                                    <td>
+                                        {t}{$privileges[privilege]->description}{/t}
                                     </td>
                                 </tr>
                             {/section}

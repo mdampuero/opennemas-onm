@@ -92,7 +92,7 @@
                 <tr>
                     {if count($videos) > 0}
                     <th style="width:15px;">
-                        <input type="checkbox" id="toggleallcheckbox">
+                        <input type="checkbox" class="toggleallcheckbox">
                     </th>
                     <th></th>
                     <th>{t}Title{/t}</th>

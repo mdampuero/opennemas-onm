@@ -67,7 +67,7 @@
             <thead>
                <tr>
                     {if count($polls) > 0}
-                        <th style="width:15px;"><input type="checkbox" id="toggleallcheckbox"></th>
+                        <th style="width:15px;"><input type="checkbox" class="toggleallcheckbox"></th>
                         <th>{t}Title{/t}</th>
                         {if $category == 'widget' || $category == 'all'}
                             <th style="width:65px;" class="center">{t}Section{/t}</th>

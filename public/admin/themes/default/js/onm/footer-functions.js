@@ -1,18 +1,21 @@
 jQuery(document).ready(function($) {
     toggleCheckbox = (function() {
-        var toggleElement = $('#toggleallcheckbox');
+        var toggleElement = $('.table .toggleallcheckbox');
         if (toggleElement !== null) {
-            var allChecked = true;
-            if ($('.table tbody input[type=checkbox]').size() > 0) {
-                $('.table tbody input[type=checkbox]').each(function() {
+
+            // check element if all its dependent checkboxes are checked
+            toggleElement.each(function() {
+                var allChecked = true;
+
+                $(this).closest('.table').find('tbody input[type=checkbox]').each(function() {
                     allChecked = allChecked && $(this).prop('checked');
                 });
-                if (allChecked) {toggleElement.prop('checked', 'checked');}
-            }
+                if (allChecked) {$(this).prop('checked', 'checked');}
+            });
 
-            toggleElement.on('click', function() {
-                var toggle = toggleElement.attr('checked') == 'checked';
-                $('.table tbody input[type=checkbox]').each(function() {
+            $('.table').on('click', '.toggleallcheckbox', function() {
+                var toggle = $(this).attr('checked') == 'checked';
+                $(this).closest('.table').find('tbody input[type=checkbox]').each(function() {
                     $(this).prop('checked', toggle);
                 });
                 if (toggle) {

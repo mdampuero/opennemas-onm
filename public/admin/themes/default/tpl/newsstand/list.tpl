@@ -87,7 +87,7 @@
         {if count($covers) > 0}
         <thead>
             <tr>
-                <th style="width:15px;"><input type="checkbox" id="toggleallcheckbox"></th>
+                <th style="width:15px;"><input type="checkbox" class="toggleallcheckbox"></th>
                 <th class="center" style="width:80px;">{t}Thumbnail{/t}</th>
                 <th class="left">{t}Title{/t}</th>
                 {if $category=='widget' || $category == 'all'}<th style="width:65px;" class="center">{t}Section{/t}</th>{/if}

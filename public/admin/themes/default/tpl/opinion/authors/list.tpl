@@ -32,7 +32,7 @@
             <thead>
                 <tr>
                     <th style="width:15px">
-                        <input type="checkbox" id="toggleallcheckbox" />
+                        <input type="checkbox" class="toggleallcheckbox" />
                     </th>
                     <th class="title">{t}Author name{/t}</th>
                     <th class="title">{t}Condition{/t}</th>

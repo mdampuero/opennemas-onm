@@ -93,7 +93,7 @@
     			{if count($comments) > 0}
                 <tr>
                     <th style='width:15px'>
-                        <input type="checkbox" id="toggleallcheckbox">
+                        <input type="checkbox" class="toggleallcheckbox">
                     </th>
                     <th>{t}Title{/t} - {t}Comment (50 chars){/t}</th>
                     <th style='width:6%;' class="left">{t}IP{/t}</th>

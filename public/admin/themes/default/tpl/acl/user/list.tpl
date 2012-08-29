@@ -61,7 +61,7 @@ jQuery(function($){
 			<thead>
 				<tr>
 					<th style="width:15px;">
-                        <input type="checkbox" id="toggleallcheckbox">
+                        <input type="checkbox" class="toggleallcheckbox">
                     </th>
 					<th class="left">{t}Full name{/t}</th>
 					<th class="left" style="width:110px">{t}Username{/t}</th>

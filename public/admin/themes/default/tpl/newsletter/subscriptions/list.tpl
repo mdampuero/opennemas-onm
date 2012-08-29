@@ -69,7 +69,7 @@
         <table class="table table-hover table-condensed">
             <thead>
                 <tr>
-                    <th style="width:10px"><input type="checkbox" id="toggleallcheckbox" style="cursor:pointer;" /></th>
+                    <th style="width:10px"><input type="checkbox" class="toggleallcheckbox" style="cursor:pointer;" /></th>
                     <th>{t}Name{/t}</th>
                     <th>{t}Email{/t}</th>
                     <th class="left">{t}Status{/t}</th>

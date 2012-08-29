@@ -47,7 +47,7 @@
                 <tr>
                     {if count($newsletters) > 0}
                     <th style="width:15px;">
-                        <input type="checkbox" id="toggleallcheckbox">
+                        <input type="checkbox" class="toggleallcheckbox">
                     </th>
                     <th>{t}Title{/t}</th>
                     <th class="left"  style="width:150px;">{t}Created{/t}</th>

@@ -131,7 +131,7 @@
             <thead>
                 <tr>
                     <th style="width:15px;">
-                        <input type="checkbox" id="toggleallcheckbox">
+                        <input type="checkbox" class="toggleallcheckbox">
                     </th>
                     <th class="title">{t}Title{/t}</th>
                     <th style="width:65px;" class="center">{t}Section{/t}</th>

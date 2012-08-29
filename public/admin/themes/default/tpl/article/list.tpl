@@ -118,7 +118,7 @@
         </div>
         <table class="table table-hover table-condensed">
             <thead>
-                <th style="width:15px;"><input type="checkbox" id="toggleallcheckbox"></th>
+                <th style="width:15px;"><input type="checkbox" class="toggleallcheckbox"></th>
                 <th class="left" >{t}Title{/t}</th>
                 {if $category eq 'all' || $category == 0}
                     <th class="left">{t}Section{/t}</th>

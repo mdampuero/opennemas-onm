@@ -93,7 +93,7 @@
             <thead>
                 <tr>
                     <th  style="width:15px">
-                        <input type="checkbox" id="toggleallcheckbox" />
+                        <input type="checkbox" class="toggleallcheckbox" />
                     </th>
                     <th class="title"  style="width:250px">{t}Type{/t}</th>
                     <th>{t}Title{/t}</th>

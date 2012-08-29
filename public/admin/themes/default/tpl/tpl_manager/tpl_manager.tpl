@@ -108,7 +108,7 @@
                 <thead>
                     <tr>
                         <th  style="width:10px;">
-                            <input type="checkbox" id="toggleallcheckbox" value="" />
+                            <input type="checkbox" class="toggleallcheckbox" value="" />
                         </th>
                         <th class="left">{t}Resource{/t}</th>
                         <th class="left" scope=col style="width:30px;">{t}Category{/t}</th>

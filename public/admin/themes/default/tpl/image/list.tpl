@@ -33,11 +33,6 @@
                     </a>
                 </li>
                 {/acl}
-                <li>
-                    <a href="#" class="check-all">
-                        <img id="select_button" class="icon" src="{$params.IMAGE_DIR}select_button.png" alt="{t}Select all{/t}" >
-                    </a>
-                </li>
                 <li class="separator"></li>
                 <li>
                     <a class="admin_add" href="{url name=admin_images_search category=$category}">

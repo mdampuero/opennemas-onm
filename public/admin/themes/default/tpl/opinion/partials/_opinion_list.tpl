@@ -24,7 +24,7 @@
 <table class="table table-hover table-condensed">
 	<thead>
 		<tr>
-			<th style="width:15px;"><input type="checkbox" id="toggleallcheckbox"></th>
+			<th style="width:15px;"><input type="checkbox" class="toggleallcheckbox"></th>
 			<th>{t}Author name{/t} - {t}Title{/t}</th>
             <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
 			<th class="center"><img src="{$params.IMAGE_DIR}votes.png" alt="{t}Votes{/t}" width="22"></th>

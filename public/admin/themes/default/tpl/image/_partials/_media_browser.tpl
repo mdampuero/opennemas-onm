@@ -2,7 +2,7 @@
     {if !($hideheaders)}
     <thead>
         <tr>
-            <th style="width:15px"></th>
+            <th style="width:15px"><input type="checkbox" class="toggleallcheckbox"></th>
             <th>{t}Preview{/t}</th>
             <th>{t}Information{/t}</th>
             <th>{t}Created{/t}</th>

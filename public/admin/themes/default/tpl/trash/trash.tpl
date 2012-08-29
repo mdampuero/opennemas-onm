@@ -52,7 +52,7 @@ jQuery(function($){
             <thead>
                <tr>
                     <th style="width:15px;">
-                        <input type="checkbox" id="toggleallcheckbox">
+                        <input type="checkbox" class="toggleallcheckbox">
                     </th>
                     <th class='left'>{t}Title{/t}</th>
                     <th style="width:40px">{t}Section{/t}</th>

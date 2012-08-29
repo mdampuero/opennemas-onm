@@ -1,7 +1,7 @@
 <table class="table table-hover table-condensed">
     <thead>
         <tr>
-            <th style="width:30px;"><input type="checkbox" id="toggleallcheckbox"></th>
+            <th style="width:30px;"><input type="checkbox" class="toggleallcheckbox"></th>
             <th style="width:200px;">{t}Author{/t} - {t}Title{/t}</th>
             <th class="center" style="width:10px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}"></th>
             <th class="center"><img src="{$params.IMAGE_DIR}votes.png" alt="{t}Votes{/t}" width="22"></th>

@@ -128,7 +128,7 @@
             <thead>
                 <tr>
                     <th style="width:15px;">
-                        <input type="checkbox" id="toggleallcheckbox">
+                        <input type="checkbox" class="toggleallcheckbox">
                     </th>
                     <th style="width:20px">{t}Path{/t}</th>
                     <th>{t}Title{/t}</th>
