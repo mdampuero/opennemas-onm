@@ -46,6 +46,13 @@ class NewNewsletter
     public $created;
 
     /**
+     * Whether if the newsletter was sent
+     *
+     * @var string
+     **/
+    public $sent;
+
+    /**
      * Initializes the newsletter for a given id.
      *
      * @param string $id the content id to initilize.
@@ -94,34 +101,40 @@ class NewNewsletter
      *
      * @return NewNewsletter the object instance
      **/
-    public function update($data)
+    public function update($newdata)
     {
 
-        $sql = 'UPDATE `newsletter_archive` SET `title` = ?, `data` = ?, `html` = ?'
+        $sql = 'UPDATE `newsletter_archive` SET `title` = ?, `data` = ?, `html` = ?, `sent` = ? '
             . ' WHERE pk_newsletter = ?';
 
-        if (array_key_exists('title', $data) && !is_null($data['title'])) {
-            $title = $data['title'];
+        if (array_key_exists('title', $newdata) && !is_null($newdata['title'])) {
+            $title = $newdata['title'];
         } else {
             $title = $this->title;
         }
 
-        if (array_key_exists('html', $data) && !is_null($data['html'])) {
-            $html = $data['html'];
+        if (array_key_exists('html', $newdata) && !is_null($newdata['html'])) {
+            $html = $newdata['html'];
         } else {
             $html = $this->html;
         }
 
-        if (array_key_exists('data', $data) &&!is_null($data['data'])) {
-            $data = $data['data'];
+        if (array_key_exists('data', $newdata) && !is_null($newdata['data'])) {
+            $data = $newdata['data'];
         } else {
             $data = $this->data;
+        }
+        if (array_key_exists('sent', $newdata) && !is_null($newdata['sent'])) {
+            $sent = $newdata['sent'];
+        } else {
+            $sent = $this->sent;
         }
 
         $values = array(
             $title,
             $data,
             $html,
+            $sent,
             $this->pk_newsletter
         );
 
@@ -198,6 +211,7 @@ class NewNewsletter
         $this->data          = $fields['data'];
         $this->created       = $fields['created'];
         $this->html          = $fields['html'];
+        $this->sent          = $fields['sent'];
 
         return $this;
     }

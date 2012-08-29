@@ -295,6 +295,8 @@ class NewsletterController extends Controller
             );
         }
 
+        $newsletter->update(array('sent' => 1));
+
         return $this->render(
             'newsletter/steps/4-send.tpl',
             array(
