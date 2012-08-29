@@ -288,6 +288,8 @@ class OpinionsController extends Controller
                 'fk_author_img'        => $request->request->getDigits('fk_author_img'),
                 'fk_author_img_widget' => $request->request->getDigits('fk_author_img_widget'),
                 'publisher'            => $_SESSION['userid'],
+                'starttime'         => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
+                'endtime'           => $request->request->filter('endtime', '', FILTER_SANITIZE_STRING),
             );
 
             if ($opinion->create($data)) {
@@ -361,6 +363,8 @@ class OpinionsController extends Controller
                 'fk_author_img'        => $request->request->getDigits('fk_author_img'),
                 'fk_author_img_widget' => $request->request->getDigits('fk_author_img_widget'),
                 'publisher'            => $_SESSION['userid'],
+                'starttime'         => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
+                'endtime'           => $request->request->filter('endtime', '', FILTER_SANITIZE_STRING),
             );
 
             if ($opinion->update($data)) {
@@ -677,7 +681,6 @@ class OpinionsController extends Controller
             $changes = 0;
             foreach ($selected as $id) {
                 $opinion = new \Opinion((int) $id);
-                var_dump($opinion, $status);die();
 
                 if (!is_null($opinion->id)) {
                     $opinion->set_available($status, $_SESSION['userid']);
@@ -844,5 +847,5 @@ class OpinionsController extends Controller
             ));
         }
     }
-
 }
+

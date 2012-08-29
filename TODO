@@ -7,6 +7,10 @@ Articles
 - Preview action
 - In the listing mark those that are in frontpage with a mark.
 
+Opinion Authors
+---------------
+- Batch actions
+
 Specials
 --------
 Review d&d of contents in specials
@@ -14,14 +18,6 @@ Review d&d of contents in specials
 Image Galleries
 ---------------
 - Review image galleries: specials, advertisement
-
-Opinion
--------
-- Allow to delay or schedule opinions
-
-User Group
-----------
-- Check all privileges in
 
 LOW PRIORITY TASKS OR IDEAS
 --------------------------------------------------------------------------------
@@ -33,9 +29,6 @@ General
   (maybe using the Swift Mailer library)
 - Drop category and menu logic from init method in Backend Controllers
 
-Opinion Authors
----------------
-- Batch actions
 
 Article
 -------
