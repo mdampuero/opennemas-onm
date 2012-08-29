@@ -5,26 +5,67 @@
     .btn-group .btn {
         display:inline-block;
     }
-    #accounts-provider > div {
+    #accounts-provider > div,
+    #items-recipients {
         min-height:400px;
     }
+
+
     #accounts-provider ul {
         margin-top:10px;
         display:block;
     }
 
-    #accounts-provider ul li {
-        padding:3px;
-        border:1px solid #ccc;
-    }
     #othersMails {
         min-height:300px;
         margin-top:10px;
         width:96%;
     }
 
+    #accounts-provider ul {
+        margin:0px;
+    }
+    #accounts-provider ul,
     #items-recipients {
-        min-height:200px;
+        list-style: none;
+    }
+
+    #accounts-provider ul li,
+    #items-recipients li {
+        padding:3px;
+        border:1px solid #ccc;
+        margin-bottom: 4px;
+        position:relative;
+    }
+
+    #accounts-provider ul li .icon,
+    #items-recipients li .icon {
+        position:absolute;
+        right:5px;
+        top:3px;
+        cursor: pointer;
+    }
+
+    #items-recipients li input[type=checkbox] { display:none;}
+
+    #items-recipients {
+        padding:10px;
+        display:block;
+        margin:0;
+    }
+    .placeholder-element {
+        min-height:24px !important;
+        background:#efefef !important;
+        border:1px dashed Gray !important;
+    }
+
+    #database-accounts-list {
+        margin:0px;
+        margin-top:50px !important;
+        min-height:300px;
+    }
+    #recipients {
+        border:1px solid #ccc;
     }
 </style>
 {/block}
@@ -83,8 +124,9 @@
                     <div id="maillist-account">
                         <ul id="maillist-account-list">
                             {foreach name=d from=$mailList item=mail}
-                            <li  data-email="{$mail->email}"  data-name="{$mail->name}">
+                            <li class="account"  data-email="{$mail->email}"  data-name="{$mail->name}">
                                 {$mail->name}:{$mail->email}
+                                <i class="icon icon-trash"></i>
                             </li>
                             {/foreach}
                         </ul>
@@ -101,10 +143,11 @@
                         </div>
                         <ul id="database-accounts-list">
                             {foreach name=d from=$accounts item=account}
-                                <li  data-email="{$account->email}" data-name="{$account->name}">
+                                <li class="account"  data-email="{$account->email}" data-name="{$account->name}">
                                     <label>
                                         <input type="checkbox" name="selected" class="">
                                         {$account->name}:{$account->email}
+                                        <i class="icon icon-trash"></i>
                                     </label>
                                 </li>
                             {/foreach}
@@ -128,8 +171,8 @@
 
             <div class="pull-right" style="width:49%">
                 <p>{t}Receivers{/t}</p>
-                <div id="recipients" style="min-height:150px; border:1px solid Gray;">
-                    <ul id="items-recipients" style="min-height:50px;margin:0; padding:0">
+                <div id="recipients">
+                    <ul id="items-recipients">
                         {if !empty($recipients)}
                         {foreach name=d from=$recipients item=recipient}
                         <li  data-email="{$recipient->email}" data-name="{$recipient->name}">

@@ -301,8 +301,14 @@ $('#pick-recipients-form #database-accounts').on('click', '#add-selected', funct
 $('#database-accounts').on('click', '#button-check-all', function(e, ui) {
     e.preventDefault();
     $(this).data('toggled', !$(this).data('toggled'));
+    var toggle = $(this).data('toggled');
     jQuery('#database-accounts ul li input[type=checkbox]').each(function() {
-        $(this).prop('checked', $(this).data('toggled'));
+        if (toggle) {
+            $(this).attr('checked', 'checked');
+        } else {
+            $(this).attr('checked', '');
+        }
+
     });
 });
 
@@ -319,8 +325,19 @@ $('#parse-and-add').on('click', function (e, ui) {
                 final_list.push(item);
             }
         });
-        log(final_list);
+        $.each(final_list, function(index, item) {
+            item = $('<li></li>', {
+                'data-email' : item,
+                'data-name' : item,
+                'class' : 'account'
+            }).html(item).append('<i class="icon icon-trash"></i>');
+            $('#items-recipients').append(item);
+        });
     }
+});
+
+$('#items-recipients').on('click', '.icon', function () {
+    $(this).closest('.account').remove();
 });
 
 $('#database-accounts-list').sortable({
@@ -338,7 +355,7 @@ $('#maillist-account-list').sortable({
 }).disableSelection();
 
 $('div#recipients ul#items-recipients').sortable({
-    connectWith: 'ul#contentList, ul#items-mailList',
+    connectWith: '#database-accounts-list, #maillist-account-list',
     dropOnEmpty: true,
     placeholder: 'placeholder-element',
     tolerance: 'pointer'
