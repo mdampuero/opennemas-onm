@@ -5,6 +5,9 @@
     var image_manager_urls = {
         batchDelete: '{url name=admin_images_batchdelete}'
     }
+    jQuery(document).ready(function($) {
+        $("img[rel]").overlay();
+    });
 </script>
 {/block}
 

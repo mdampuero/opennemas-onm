@@ -25,19 +25,33 @@
                            src="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}"
                            width="140" height="80" ></embed>
                 </object>
-                <img style="width:16px;height:16px;border:none;"  src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/flash.gif" />
+                <img class="image-preview" style="width:16px;height:16px;border:none;"  src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/flash.gif" />
             {elseif preg_match('/^(jpeg|jpg|gif|png)$/i', $photo->type_img)}
-                <img src='{$MEDIA_IMG_URL}{$photo->path_file}140-100-{$photo->name}'
-                     />
-            {else}
-                <object>
-                    <param name="wmode" value="transparent"
-                           value="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}" />
-                    <embed wmode="transparent"
-                           src="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}"
-                           width="140" height="80" ></embed>
-                </object>
+                <img class="image-preview" rel="#image-{$smarty.foreach.n.index}" src='{$MEDIA_IMG_URL}{$photo->path_file}140-100-{$photo->name}' />
             {/if}
+            <div class="simple_overlay" id="image-{$smarty.foreach.n.index}">
+                <div class="resource">
+                    {if preg_match('/^swf$/i', $photo->type_img)}
+                        <object>
+                            <param name="wmode" value="transparent" value="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}" />
+                            <embed wmode="transparent" width="400" height="400"
+                                   src="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}"></embed>
+                        </object>
+                        <img style="width:16px;height:16px;border:none;"  src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/flash.gif" />
+                    {elseif preg_match('/^(jpeg|jpg|gif|png)$/i', $photo->type_img)}
+                        <img src='{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}'/>
+                    {/if}
+                </div>
+
+                <div class="details">
+                    <h3>{if !empty($photo->description)}{$photo->description|clearslash|escape:'html'}{else}{t}No available description{/t}{/if}</h3>
+                    <p><strong>{t}Filename{/t}</strong> {$photo->title}</p>
+                    {if !empty($photo->author_name)}
+                        <p><span class="author"><strong>{t}Author:{/t}</strong> {$photo->author_name|clearslash|escape:'html'|default:""}</span></p>
+                    {/if}
+                    <p><strong>{t}Created{/t}</strong> {$photo->date|date_format:"%Y-%m-%d %H:%M:%S"|default:""}</p>
+                </div>
+            </div>
         </td>
         <td>
             {if !empty($photo->description)}{$photo->description|clearslash|escape:'html'}{else}{t}No available description{/t}{/if}
