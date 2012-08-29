@@ -22,11 +22,9 @@ function smarty_function_renderplaceholder($params, &$smarty) {
     $smarty->caching = 0;
     if (isset($items) && count($items>0)) {
         foreach ($items as $i => $item) {
-
             if ($item->placeholder == $placeholder && ($item->available == 1)) {
                 $outputHTML .= $item->render($params, $smarty);
             }
-
         }
     }
 

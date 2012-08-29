@@ -231,7 +231,7 @@ class Advertisement extends Content
      *
      * return Advertisement the instance of the advertisement class
      **/
-    public function __construct($id=null)
+    public function __construct($id = null)
     {
         // Fetch information from Content class
         parent::__construct($id);
@@ -618,7 +618,7 @@ class Advertisement extends Content
      *
      * @return array $finalBanners of Advertisement objects
      **/
-    public function getAdvertisements($types=array(), $category='home')
+    public function getAdvertisements($types = array(), $category = 'home')
     {
         $banners = array();
         $finalBanners = array();
@@ -729,7 +729,7 @@ class Advertisement extends Content
      *
      * @return array
      **/
-    public function getIntersticial($type, $category='home')
+    public function getIntersticial($type, $category = 'home')
     {
         $interstitial = null;
 
@@ -911,3 +911,4 @@ class Advertisement extends Content
         }
     }
 }
+
