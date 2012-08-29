@@ -136,7 +136,10 @@ class NewsletterController extends Controller
             ));
         }
 
-        return $this->redirect($this->generateUrl('admin_newsletter_preview', array('id' => $newsletter->id)));
+        return $this->redirect($this->generateUrl(
+            'admin_newsletter_preview',
+            array('id' => $newsletter->pk_newsletter))
+        );
     }
 
     /**
