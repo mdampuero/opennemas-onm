@@ -1,13 +1,13 @@
 <div class="modal hide fade" id="modal-newsletter-accept">
     <div class="modal-header">
       <a class="close" href="#">×</a>
-      <h3>{t}Back to list contents{/t}</h3>
+      <h3>{t}Potential lose of the actual generated HTML.{/t}</h3>
     </div>
     <div class="modal-body">
-        <p>{t}If you go back, you may lose some changes in newsletter{/t}</p>
+        <p>{t escape=off}This newsletter alreay have a generated HTML, potentially changed by you.<br>If you update the newsletter contents the HTML will overwrite the actual HTML.{/t}</p>
     </div>
     <div class="modal-footer">
-        <a class="btn btn-primary accept" href="#">{t}Yes, Go Back{/t}</a>
+        <a class="btn btn-primary accept" href="#">{t}Overwrite actual HTML{/t}</a>
         <a class="btn secondary no" href="#">{t}Cancel{/t}</a>
     </div>
 </div>
@@ -18,5 +18,4 @@ jQuery("#modal-newsletter-accept").modal({
     keyboard: true, //Can close on escape
     show: false
 });
-
 </script>

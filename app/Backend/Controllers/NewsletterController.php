@@ -87,7 +87,8 @@ class NewsletterController extends Controller
         return $this->render(
             'newsletter/steps/1-pick-elements.tpl',
             array(
-                'newsletter' => $newsletter,
+                'with_html'         => true,
+                'newsletter'        => $newsletter,
                 'newsletterContent' => json_decode($newsletter->data),
             )
         );
@@ -111,6 +112,7 @@ class NewsletterController extends Controller
             FILTER_SANITIZE_STRING
         );
 
+        $nm = new \NewsletterManager();
 
         if ($id > 0) {
             $newsletter = new \NewNewsletter($id);
@@ -119,6 +121,7 @@ class NewsletterController extends Controller
             $newValues = array(
                 'title' => $title,
                 'data'  => $contentsRAW,
+                'html'    => $nm->render($contents),
             );
 
             if (is_null($newsletter->html)) {
@@ -128,7 +131,6 @@ class NewsletterController extends Controller
             $newsletter->update($newValues);
         } else {
             $newsletter = new \NewNewsletter();
-            $nm = new \NewsletterManager();
             $newsletter->create(array(
                 'title'   => $title,
                 'data'    => $contentsRAW,

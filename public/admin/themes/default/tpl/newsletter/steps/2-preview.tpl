@@ -95,5 +95,4 @@ var  newsletter_urls = {
     </div>
 </form>
 
-{include file="newsletter/modals/_back_contents_accept.tpl"}
 {/block}

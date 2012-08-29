@@ -59,7 +59,11 @@
             'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
         });
     });
-
+    {if $with_html}
+    var has_contents = true;
+    {else}
+    var has_contents = false;
+    {/if}
     </script>
 {/block}
 
@@ -189,5 +193,6 @@
 {include file="newsletter/modals/_add_container_label.tpl"}
 {include file="newsletter/modals/_update_container_label.tpl"}
 {include file="newsletter/modals/_activate_container_alert.tpl"}
+{include file="newsletter/modals/_back_contents_accept.tpl"}
 {/block}
 

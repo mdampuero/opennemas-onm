@@ -6,6 +6,32 @@ $('#clean-button').on('click', function() {
 });
 
 $('#newsletter-pick-elements-form').on('submit', function(e, ui) {
+    log('submit');
+    saveContents();
+});
+
+$("#newsletter-pick-elements-form").on('click', '#next-button', function(e, ui) {
+    if (has_contents) {
+        e.preventDefault();
+        $("#modal-newsletter-accept").modal('show');
+    } else {
+        $("#modal-newsletter-accept").modal('hide');
+        $('#newsletter-pick-elements-form').submit();
+    }
+});
+
+$("#modal-newsletter-accept").on('click', '.accept', function(e, ui) {
+    $("#modal-newsletter-accept").modal('hide');
+    log('yes clicked');
+    $('#newsletter-pick-elements-form').submit();
+});
+
+$('#modal-newsletter-accept a.btn.no').on('click', function(e) {
+    e.preventDefault();
+    $('#modal-newsletter-accept').modal('hide');
+});
+
+saveContents = function() {
     var els = [];
 
     $('div#newsletter-container').find('div.container-receiver').each(function(index, container) {
@@ -31,9 +57,7 @@ $('#newsletter-pick-elements-form').on('submit', function(e, ui) {
 
     var encodedContents = JSON.stringify(els);
     $('#content_ids').val(encodedContents);
-
-    return encodedContents;
-});
+};
 
 toggleProviderCheckbox = (function(item) {
     var toggleElement = $('input#toggleallcheckbox');
@@ -188,6 +212,7 @@ $('div#newsletter-container').on('click', '.container-label .icon-pencil', funct
     e.preventDefault();
 
 });
+
 /*****************************************************************************/
 
 //SETP 2 - Preview
@@ -240,19 +265,6 @@ $('#newsletter-preview-form').on('click', '#next-button, #prev-button', function
         log('not saved');
         return false;
     }
-});
-
-$('#modal-newsletter-accept a.btn.accept').on('click', function(e) {
-    $('#modal-newsletter-accept').modal('hide');
-    $('#action').val('updateContents');
-    $('#newsletterForm').submit();
-    e.preventDefault();
-});
-
-$('#modal-newsletter-accept a.btn.no').on('click', function(e) {
-    $('#modal-newsletter-accept').modal('hide');
-    e.preventDefault();
-
 });
 
 /*****************************************************************************/
