@@ -1,8 +1,18 @@
 {extends file="base/admin.tpl"}
 
+{block name="footer-js" append}
+<script type="text/javascript">
+    $('[rel=tooltip]').tooltip({ placement : 'bottom' });
+</script>
+{/block}
+
 {block name="header-css" append}
 <style type="text/css">
     .table td { line-height:14px; }
+    .tooltip-inner {
+        max-width:500px !important;
+        text-align: justify;
+    }
 </style>
 {/block}
 
@@ -121,8 +131,8 @@
 						<input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}"
                             name="selected_fld[]" value="{$comments[c]->id}">
 					</td>
-					<td>
-						<a href="{url name=admin_comments_show id=$comments[c]->id}" title="{t 1=$articles[c]->title}Edit comment %1{/t}">
+					<td rel="tooltip" data-original-title="{$comments[c]->body|strip_tags|clearslash}">
+						<a href="{url name=admin_comments_show id=$comments[c]->id}"title="{t 1=$articles[c]->title}Edit comment %1{/t}">
                             <strong>[{$comments[c]->title|strip_tags|clearslash|truncate:40:"..."}]</strong>
                             {$comments[c]->body|strip_tags|clearslash|truncate:50}
                         </a>
