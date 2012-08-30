@@ -12,3 +12,4 @@ vendor/autoload.php
 vendor/composer
 vendor/.composer
 vendor/
+app/config/parameters.yml

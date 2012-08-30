@@ -766,7 +766,7 @@ class Content
 
         $GLOBALS['application']->dispatch('onBeforeAvailable', $this);
 
-        $sql = 'UPDATE contents SET `available`=0, `fk_user_last_editor`=?, '
+        $sql = 'UPDATE contents SET `available`=0, `content_status` = 0, `fk_user_last_editor`=?, '
              . '`changed`=? WHERE `pk_content`=?';
         $stmt = $GLOBALS['application']->conn->Prepare($sql);
 

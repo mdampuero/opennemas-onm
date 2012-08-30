@@ -1,12 +1,12 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario">
+<form action="{url name=admin_opinion_authors}" method="GET" name="formulario" id="formulario">
 	<div class="top-action-bar">
 		<div class="wrapper-content">
             <div class="title"><h2>{t}Opinion Manager{/t} :: {t}Authors list{/t}</div>
             <ul class="old-button">
-                 {acl isAllowed="AUTHOR_CREATE"}
+                 {acl isAllowed="AUTHOR_DELETE"}
                 <li>
                     <a class="delChecked" data-controls-modal="modal-author-batchDelete" href="#" title="{t}Delete{/t}">
                         <img border="0" src="{$params.IMAGE_DIR}trash.png" title="Eliminar" alt="Eliminar"><br />{t}Delete{/t}

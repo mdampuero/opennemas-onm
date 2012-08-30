@@ -1,7 +1,6 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-    {script_tag src="article.js"}
     <script>
     jQuery(document).ready(function ($){
         $('[rel="tooltip"]').tooltip();
@@ -15,6 +14,15 @@
                 $('.old-button .batch-actions').fadeOut('fast');
             }
         });
+
+        var form = $('#formulario');
+        $('#batch-publish, #batch-unpublish').on('click', function (e, ui) {
+            form.attr('action', '{url name=admin_articles_batchpublish}');
+        });
+
+        $('#batch-delete').on('click', function (e, ui) {
+            form.attr('action', '{url name=admin_articles_batchdelete}');
+        });
     });
     </script>
 {/block}
@@ -27,7 +35,7 @@
             <ul class="old-button">
                 {acl isAllowed="ARTICLE_DELETE"}
                 <li>
-                    <button type="submit" class="batch-delete">
+                    <button type="submit" id="batch-delete">
                         <img border="0" src="{$params.IMAGE_DIR}trash.png" alt="Eliminar"><br />{t}Delete{/t}
                     </button>
                 </li>
@@ -42,32 +50,15 @@
 
                 <ul class="dropdown-menu">
                     <li>
-                        <button type="submit" name="status" value="0" href="#" id="batch-publish">
+                        <button type="submit" name="new_status" value="1" href="#" id="batch-publish">
                             {t}Batch publish{/t}
                         </button>
                     </li>
                     <li>
-                        <button type="submit" name="status" value="1" id="batch-unpublish">
+                        <button type="submit" name="new_status" value="0" id="batch-unpublish">
                             {t}Batch unpublish{/t}
                         </button>
                     </li>
-                    <li>
-                        <button type="submit" name="status" value="0" id="batch-inhome">
-                            {t escape="off"}Batch in home{/t}
-                        </button>
-                    </li>
-                    <li>
-                        <button type="submit" name="status" value="1" id="batch-noinhome">
-                            {t escape="off"}Batch drop from home{/t}
-                        </button>
-                    </li>
-                    {acl isAllowed="ARTICLE_DELETE"}
-                    <li>
-                        <button type="submit" id="batch-delete" title="{t}Delete{/t}">
-                            {t}Delete{/t}
-                        </button>
-                    </li>
-                    {/acl}
                 </ul>
 
             </li>

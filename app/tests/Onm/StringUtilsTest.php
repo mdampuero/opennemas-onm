@@ -70,13 +70,19 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     public function testSetSeparator()
     {
         $this->assertEquals(
-            'Lorem-ipsum-dolor-sit-amet,-consectetur-adipiscing-elit.-Cras-elit-sapien,-porttitor-non-aliquam-ac,-sagittis-a-urna.',
-            $this->object->setSeparator('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras elit sapien, porttitor non aliquam ac, sagittis a urna.')
+            'Lorem-ipsum-dolor-sit-amet,-consectetur-adipiscing-elit.-Cras-elit-sapien,'.
+            '-porttitor-non-aliquam-ac,-sagittis-a-urna.',
+            $this->object->setSeparator(
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras elit '.
+                'sapien, porttitor non aliquam ac, sagittis a urna.'
+            )
         );
         $this->assertEquals(
-            'Lorem=ipsum=dolor=sit=amet,=consectetur=adipiscing=elit.=Cras=elit=sapien,=porttitor=non=aliquam=ac,=sagittis=a=urna.',
+            'Lorem=ipsum=dolor=sit=amet,=consectetur=adipiscing=elit.=Cras=elit=sapien,'.
+            '=porttitor=non=aliquam=ac,=sagittis=a=urna.',
             $this->object->setSeparator(
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras elit sapien, porttitor non aliquam ac, sagittis a urna.',
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras elit '.
+                'sapien, porttitor non aliquam ac, sagittis a urna.',
                 '='
             )
         );
@@ -88,8 +94,12 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     public function testGetTitle()
     {
         $this->assertEquals(
-            'lorem-ipsum-dolor-sit-amet-consectetur-adipiscing-elit-cras-elit-sapien-porttitor-non-aliquam-ac-sagittis-a-urna',
-            $this->object->get_title('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras elit sapien, porttitor non aliquam ac, sagittis a urna.')
+            'lorem-ipsum-dolor-sit-amet-consectetur-adipiscing-elit-cras-elit-sapien-'.
+            'porttitor-non-aliquam-ac-sagittis-a-urna',
+            $this->object->get_title(
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras elit sapien,'.
+                ' porttitor non aliquam ac, sagittis a urna.'
+            )
         );
     }
 
@@ -124,8 +134,10 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     public function testGetTags()
     {
         $this->assertEquals(
-            'lorem, ipsum, dolor, sit, amet, consectetur, adipiscing, elit, cras, sapien, porttitor, non, aliquam, ac, sagittis, urna',
-            $this->object->get_tags('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras elit sapien, porttitor non aliquam ac, sagittis a urna.')
+            'lorem, ipsum, dolor, sit, amet, consectetur, adipiscing, elit, cras, '.
+            'sapien, porttitor, non, aliquam, ac, sagittis, urna',
+            $this->object->get_tags('Lorem ipsum dolor sit amet, consectetur adipiscing'.
+            ' elit. Cras elit sapien, porttitor non aliquam ac, sagittis a urna.')
         );
     }
 
@@ -135,8 +147,12 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     public function testGetTagsReturnsStringWithUniqueElements()
     {
         $this->assertEquals(
-            'lorem, ipsum, dolor, sit, amet, consectetur, adipiscing, elit, cras, sapien, porttitor, non, aliquam, ac, sagittis, urna',
-            $this->object->get_tags('Lorem, Lorem, ipsum dolor sit amet, consectetur adipiscing elit. Cras elit sapien, porttitor non aliquam ac, sagittis a urna.')
+            'lorem, ipsum, dolor, sit, amet, consectetur, adipiscing, elit, cras, '.
+            'sapien, porttitor, non, aliquam, ac, sagittis, urna',
+            $this->object->get_tags(
+                'Lorem, Lorem, ipsum dolor sit amet, consectetur adipiscing elit. '.
+                'Cras elit sapien, porttitor non aliquam ac, sagittis a urna.'
+            )
         );
     }
 
@@ -146,8 +162,12 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     public function testGetTagsRemovesUnnecesaryWords()
     {
         $this->assertEquals(
-            'lorem, ipsum, dolor, sit, amet, consectetur, adipiscing, elit, cras, sapien, porttitor, non, aliquam, ac, sagittis, urna',
-            $this->object->get_tags('de en al lo Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras elit sapien, porttitor non aliquam ac, sagittis a urna.')
+            'lorem, ipsum, dolor, sit, amet, consectetur, adipiscing, elit, cras, '.
+            'sapien, porttitor, non, aliquam, ac, sagittis, urna',
+            $this->object->get_tags(
+                'de en al lo Lorem ipsum dolor sit amet, consectetur adipiscing elit.'.
+                ' Cras elit sapien, porttitor non aliquam ac, sagittis a urna.'
+            )
         );
     }
 

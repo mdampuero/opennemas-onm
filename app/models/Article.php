@@ -47,7 +47,7 @@ class Article extends Content
      *
      * @return void
      **/
-    public function __construct($id=null)
+    public function __construct($id = null)
     {
         parent::__construct($id);
 
@@ -179,27 +179,6 @@ class Article extends Content
         }
 
         return $this->id;
-    }
-
-    /**
-     * Relates a list of content ids to another one
-     *
-     * @param string $data   list of related content IDs
-     * @param int    $id     the id of the content we want to relate other contents
-     * @param string $method the method to bind related contents
-     *
-     * @return void
-     **/
-    public function saveRelated($data, $id, $method)
-    {
-        $rel = new RelatedContent();
-
-        if (is_array($data) && count($data) > 0) {
-            foreach ($data as $content) {
-
-                $rel->{$method}($id, $content->position, $content->id);
-            }
-        }
     }
 
     /**
@@ -349,8 +328,6 @@ class Article extends Content
         $rel = new Comment();
         $rel->delete_comments($id); //Eliminamos  los comentarios.
 
-        $this->deleteClone($id); // Eliminar clones
-
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
             \Application::logDatabaseError();
 
@@ -366,7 +343,7 @@ class Article extends Content
      *
      * @return string The new permalink
      */
-    public function rebuildPermalink($articlePK, $catName=null)
+    public function rebuildPermalink($articlePK, $catName = null)
     {
         $article = new Article($articlePK);
         $slug = StringUtils::get_title($article->title, false);
@@ -385,283 +362,7 @@ class Article extends Content
         return $permalink;
     }
 
-    public function createClone($content)
-    {
-        $id = null;
-        $data = array();
-
-        if (!is_array($content)) {
-            $id = $content;
-
-            $commonProperties = array(
-                'title', 'category', 'with_comment', 'in_home', 'metadata',
-                'title_int', 'subtitle', 'agency', 'summary', 'body',
-                'fk_video', 'img1', 'img1_footer', 'img2', 'img2_footer',
-                'fk_video2', 'footer_video2', 'starttime', 'endtime',
-                'description', 'fk_publisher'
-            );
-
-            // Default properties
-            $data['content_status'] = 0;
-            $data['fk_publisher'] = $_SESSION['userid'];
-            $data['fk_author']    = $_SESSION['userid'];
-
-            // Copy other properties from original article
-            $article = new Article($id);
-
-            foreach ($commonProperties as $property) {
-                if (property_exists($article, $property)) {
-                    $data[ $property ] = $article->{$property};
-                }
-            }
-        } else {
-            $id   = $content['id'];
-            $data = $content;
-            $data['content_status'] = 0;
-            $data['fk_publisher']   = $_SESSION['userid']; // ghost value
-        }
-
-        // To forward action
-        $_SESSION['_from'] = $data['category'];
-
-        // Clear slash
-        StringUtils::disabled_magic_quotes($data);
-
-        if ($this->create($data)) {
-            // Save into table of cloned articles
-            $this->saveClone($id, $this->id);
-
-            return new Article($this->id);
-        }
-
-        return null;
-    }
-
-    /**
-     * Save into table `articles_clone`
-     *
-     * @param  string  $originalPK
-     * @param  string  $clonePK
-     * @return boolean
-     */
-    public function saveClone($originalPK, $clonePK)
-    {
-        $values = array($originalPK, $clonePK);
-
-        $sql = 'INSERT INTO `articles_clone` (`pk_original`, `pk_clone`)'
-                .'VALUES (?, ?)';
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values)===false) {
-            \Application::logDatabaseError();
-
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Update from clone edition
-     * ONLY fields that clone can update
-     *
-     * @param string $contentPK
-     * @param array  $formValues Data values from POST
-     */
-    public function updateClone($contentPK, $formValues)
-    {
-        $formValues['fk_user_last_editor'] = $_SESSION['userid'];
-
-        // Update category {{{
-        $cm = ContentCategoryManager::get_instance();
-        $catName = $cm->get_name($formValues['category']);
-
-        $filter = 'pk_fk_content=' . $contentPK;
-        $fields = array(
-            'pk_fk_content_category' => $formValues['category'],
-            'catName' => $catName
-        );
-        SqlHelper::update('contents_categories', $fields, $filter);
-        // }}}
-
-        // Update articles table {{{
-        $filter = '`pk_article` = ' . $contentPK;
-        $fields = array('with_comment', 'columns', 'home_columns');
-        SqlHelper::bindAndUpdate('articles', $fields, $formValues, $filter);
-        // }}}
-
-        // Update contents table {{{
-        $formValues['permalink']      = $this->rebuildPermalink(
-            $contentPK, $catName
-        );
-        $formValues['content_status'] = $formValues['available'];
-        $formValues['fk_publisher']   = $_SESSION['userid'];
-        $formValues['fk_user_last_editor'] = $_SESSION['userid'];
-
-        $filter = '`pk_content` = ' . $contentPK;
-        $fields = array(
-            'starttime', 'endtime', 'content_status', 'available',
-            'fk_user_last_editor', 'frontpage', 'in_home', 'permalink'
-        );
-        SqlHelper::bindAndUpdate('contents', $fields, $formValues, $filter);
-        // }}}
-
-        // Update related content {{{
-        $this->saveRelated(
-            $formValues['ordenArti'],
-            $contentPK,
-            'setRelationPosition'
-        );
-        $this->saveRelated(
-            $formValues['ordenArtiInt'],
-            $contentPK,
-            'setRelationPositionForInner'
-        );
-        // }}}
-
-        $this->clearCacheClone(array($contentPK));
-
-        // Set to forward actions
-        $_SESSION['_from'] = $formValues['category'];
-        $this->id = $contentPK;
-    }
-
-    /**
-     * Update from original edition
-     * Once that original save values update clone values
-     *
-     * @param string $originalPK
-     */
-    public function updateCloneFromOriginal($originalPK, $formValues)
-    {
-        $clonesId = $this->getClones($originalPK);
-
-        // Update articles table {{{
-        $formValues['subtitle'] = strtoupper($formValues['subtitle']);
-
-        $filter = '`pk_article` IN (' . implode(',', $clonesId) . ')';
-        $fields = array('subtitle', 'agency', 'summary', 'body', 'img1',
-                        'img1_footer', 'img2', 'img2_footer', 'fk_video',
-                        'fk_video2', 'footer_video2');
-        SqlHelper::bindAndUpdate('articles', $fields, $formValues, $filter);
-        // }}}
-
-        // Update articles table {{{
-        $formValues['fk_user_last_editor'] = $_SESSION['userid'];
-        $filter = '`pk_content` IN (' . implode(',', $clonesId) . ')';
-        $fields = array(
-            'title', 'description',
-            'metadata', 'changed',
-            'fk_user_last_editor'
-        );
-        SqlHelper::bindAndUpdate('contents', $fields, $formValues, $filter);
-        // }}}
-
-        // Remove caches
-        $this->clearCacheClone($clonesId);
-    }
-
-    /**
-     *
-     * @param array $clonesId Array of clone pk_content
-     */
-    public function clearCacheClone($clonesId)
-    {
-        // remove caches {{{
-        $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
-        $ccm = ContentCategoryManager::get_instance();
-
-        $sql = 'SELECT `pk_fk_content`,`pk_fk_content_category`'
-            .'FROM `contents_categories` '
-            .'WHERE `pk_fk_content` IN (' . implode(',', $clonesId) . ')';
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        $cleanedYet = array();
-        if ($rs !== false) {
-            while (!$rs->EOF) {
-                $id = $rs->fields['pk_fk_content'];
-                $catName = $ccm->get_name(
-                    $rs->fields['pk_fk_content_category']
-                );
-
-                $tplManager->delete($catName . '|' . $id);
-                $frontpage = $catName . '|0';
-
-                if (!in_array($frontpage, $cleanedYet)) {
-                    $tplManager->delete($frontpage);
-                    $cleanedYet[] = $frontpage;
-                }
-
-                $rs->MoveNext();
-            }
-        } else {
-            \Application::logDatabaseError();
-
-            return false;
-        }
-        // }}}
-    }
-
-    /**
-     * Search into articles_clone for an article to delete
-     * Delete by pk_clone and also pk_original
-     *
-     * @param string $contentPK
-     */
-    public function deleteClone($contentPK)
-    {
-        $values = array($contentPK, $contentPK);
-
-        $sql =  'DELETE FROM `articles_clone` '
-                .'WHERE (`pk_original` = ?) OR (`pk_clone` = ?)';
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values)===false) {
-            Application::logDatabaseError();
-
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Unlink article from original
-     *
-     * @param string $contentPK
-     */
-    public function unlinkClone($clonePK=null)
-    {
-        if (is_null($clonePK)) {
-            $clonePK = $this->id;
-        }
-        $values = array($clonePK);
-
-        $sql = 'DELETE FROM `articles_clone` WHERE (`pk_clone` = ?)';
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values)===false) {
-            \Application::logDatabaseError();
-
-            return false;
-        }
-
-        return true;
-    }
-
-    public function getOriginal($clonePK=null)
-    {
-        if (is_null($clonePK)) {
-            $clonePK = $this->id;
-        }
-
-        foreach (Article::$clonesHash as $clone => $original) {
-            if (!strcmp($clone, $clonePK)) {
-                return new Article($original);
-            }
-        }
-
-        return null;
-    }
-
-    public function getOriginalPk($clonePK=null)
+    public function getOriginalPk($clonePK = null)
     {
         if (is_null($clonePK)) {
             $clonePK = $this->id;
@@ -680,53 +381,7 @@ class Article extends Content
     /**
      *
      */
-    public function isClone($contentPK=null)
-    {
-        Article::loadHashClones();
-
-        if (is_null($contentPK)) {
-            $contentPK = $this->id;
-        }
-
-        return in_array($contentPK, array_keys(Article::$clonesHash));
-    }
-
-    /**
-     *
-     */
-    public function hasClone($contentPK=null)
-    {
-        Article::loadHashClones();
-
-        if (is_null($contentPK)) {
-            $contentPK = $this->id;
-        }
-
-        return in_array($contentPK, array_values(Article::$clonesHash));
-    }
-
-    /**
-     *
-     */
-    public function getClones($contentPK=null)
-    {
-        Article::loadHashClones();
-
-        if (is_null($contentPK)) {
-            $contentPK = $this->id;
-        }
-
-        $values = array();
-        foreach (Article::$clonesHash as $clone => $original) {
-            if (!strcmp($original, $contentPK)) {
-                $values[] = $clone;
-            }
-        }
-
-        return $values;
-    }
-
-    public static function loadHashClones()
+    public function isClone($contentPK = null)
     {
         if (is_null(self::$clonesHash)) {
             $sql = 'SELECT `pk_original`, `pk_clone` FROM `articles_clone`';
@@ -743,6 +398,12 @@ class Article extends Content
                 }
             }
         }
+
+        if (is_null($contentPK)) {
+            $contentPK = $this->id;
+        }
+
+        return in_array($contentPK, array_keys(Article::$clonesHash));
     }
 
     /* }}} methods clone */
@@ -754,7 +415,6 @@ class Article extends Content
      **/
     public function render($params, $tpl = null)
     {
-
         //  if (!isset($tpl)) {
             $tpl = new Template(TEMPLATE_USER);
         //}
@@ -771,4 +431,25 @@ class Article extends Content
         return $html;
     }
 
+    /**
+     * Relates a list of content ids to another one
+     *
+     * @param string $data   list of related content IDs
+     * @param int    $id     the id of the content we want to relate other contents
+     * @param string $method the method to bind related contents
+     *
+     * @return void
+     **/
+    public function saveRelated($data, $id, $method)
+    {
+        $rel = new RelatedContent();
+
+        if (is_array($data) && count($data) > 0) {
+            foreach ($data as $content) {
+
+                $rel->{$method}($id, $content->position, $content->id);
+            }
+        }
+    }
 }
+

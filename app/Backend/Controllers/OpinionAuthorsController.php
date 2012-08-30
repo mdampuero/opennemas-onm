@@ -316,4 +316,38 @@ class OpinionAuthorsController extends Controller
         return $elid;
     }
 
+    /**
+     * Set the published flag for contents in batch
+     *
+     * @return Response the response object
+     **/
+    public function batchDeleteAction(Request $request)
+    {
+        $this->checkAclOrForward('AUTHOR_DELETE');
+
+        $selected = $request->query->get('selected_fld', null);
+        $page     = $request->query->getDigits('page', 1);
+
+        if (is_array($selected)
+            && count($selected) > 0
+        ) {
+            foreach ($selected as $id) {
+                $author = new \Author($id);
+
+                if ($author->id != null && $author->delete($id)) {
+                    m::add(sprintf(_('Deleted the author successfully.'), $id), m::SUCCESS);
+                } else {
+                    m::add(sprintf(_('Unable to delete the author with the id %s.'), $id), m::ERROR);
+                }
+            }
+        }
+
+        return $this->redirect($this->generateUrl(
+            'admin_opinion_authors',
+            array(
+                'page'     => $page,
+            )
+        ));
+    }
 }
+

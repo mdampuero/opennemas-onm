@@ -2023,6 +2023,30 @@ $adminRoutes->add(
     '/admin'
 );
 
+
+$adminRoutes->add(
+    'admin_articles_batchdelete',
+    new Route(
+        '/articles/batch-delete',
+        array(
+            '_controller' => 'Backend:Controllers:ArticlesController:batchDelete',
+        )
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_articles_batchpublish',
+    new Route(
+        '/articles/batch-publish',
+        array(
+            '_controller' => 'Backend:Controllers:ArticlesController:batchPublish',
+        )
+    ),
+    '/admin'
+);
+
+
 // Opinion controller routes
 $adminRoutes->add(
     'admin_opinions',
@@ -2261,6 +2285,17 @@ $adminRoutes->add(
         '/opinion/author/{id}/delete',
         array(
             '_controller' => 'Backend:Controllers:OpinionAuthorsController:delete',
+        )
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_opinion_author_batchdelete',
+    new Route(
+        '/opinion/authors/batch-delete',
+        array(
+            '_controller' => 'Backend:Controllers:OpinionAuthorsController:batchDelete',
         )
     ),
     '/admin'

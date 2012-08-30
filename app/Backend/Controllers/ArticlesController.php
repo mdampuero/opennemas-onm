@@ -788,6 +788,76 @@ class ArticlesController extends Controller
     }
 
     /**
+     * Set the published flag for contents in batch
+     *
+     * @return Response the response object
+     **/
+    public function batchPublishAction(Request $request)
+    {
+        $this->checkAclOrForward('ARTICLE_AVAILABLE');
+
+        $status         = $request->query->getDigits('new_status', 0);
+        $redirectStatus = $request->query->filter('status', '-1', FILTER_SANITIZE_STRING);
+        $selected       = $request->query->get('selected_fld', null);
+        $category       = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
+        $page           = $request->query->getDigits('page', 1);
+
+        if (is_array($selected)
+            && count($selected) > 0
+        ) {
+            foreach ($selected as $id) {
+                $article = new \Article($id);
+                $article->set_available($status, $_SESSION['userid']);
+                if ($status == 0) {
+                    $article->set_favorite($status, $_SESSION['userid']);
+                }
+            }
+        }
+
+        return $this->redirect($this->generateUrl(
+            'admin_articles',
+            array(
+                'category' => $category,
+                'page'     => $page,
+                'status'   => $redirectStatus,
+            )
+        ));
+    }
+
+    /**
+     * Set the published flag for contents in batch
+     *
+     * @return Response the response object
+     **/
+    public function batchDeleteAction(Request $request)
+    {
+        $this->checkAclOrForward('ARTICLE_DELETE');
+
+        $selected       = $request->query->get('selected_fld', null);
+        $redirectStatus = $request->query->filter('status', '-1', FILTER_SANITIZE_STRING);
+        $category       = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
+        $page           = $request->query->getDigits('page', 1);
+
+        if (is_array($selected)
+            && count($selected) > 0
+        ) {
+            foreach ($selected as $id) {
+                $article = new \Article($id);
+                $article->delete($id);
+            }
+        }
+
+        return $this->redirect($this->generateUrl(
+            'admin_articles',
+            array(
+                'category' => $category,
+                'page'     => $page,
+                'status'   => $redirectStatus,
+            )
+        ));
+    }
+
+    /**
      * Previews an article in frontend by sending the article info by POST
      *
      * @param Request $request the request object

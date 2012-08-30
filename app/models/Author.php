@@ -45,7 +45,7 @@ class Author
      *
      * @param strin $id the id of the author.
      **/
-    public function __construct($id=null)
+    public function __construct($id = null)
     {
 
         // Posibilidad de cachear resultados de métodos
@@ -196,20 +196,22 @@ class Author
      **/
     public function delete($id)
     {
-        $sql = 'DELETE FROM authors WHERE pk_author='.($id);
+        $sql = 'DELETE FROM authors WHERE pk_author = ?';
 
-        if ($GLOBALS['application']->conn->Execute($sql)===false) {
+        if ($GLOBALS['application']->conn->Execute($sql, array($id))===false) {
             Application::logDatabaseError();
 
-            return;
+            return false;
         }
-        $sql = 'DELETE FROM author_imgs WHERE fk_author='.($id);
+        $sql = 'DELETE FROM author_imgs WHERE fk_author = ?';
 
-        if ($GLOBALS['application']->conn->Execute($sql)===false) {
+        if ($GLOBALS['application']->conn->Execute($sql, array($id))===false) {
             Application::logDatabaseError();
 
-            return;
+            return false;
         }
+
+        return true;
     }
 
     public function load($properties)
@@ -240,7 +242,7 @@ class Author
      *
      * @return array the array of authors that matches the criteria
      **/
-    public function find($where, $orderBy='ORDER BY 1')
+    public function find($where, $orderBy = 'ORDER BY 1')
     {
         $sql =  'SELECT `authors`.`pk_author`, `authors`.`name` ,
                        `authors`.`blog` , `authors`.`politics` ,
@@ -313,7 +315,7 @@ class Author
      * @param  string $_orderBy, the ORDER BY sql part to sort authors with
      * @return mixed, array of all matched authors
      **/
-    public static function list_authors($filter=null, $_orderBy='ORDER BY 1', $page = null, $itemsPerPage = 20)
+    public static function list_authors($filter = null, $_orderBy = 'ORDER BY 1', $page = null, $itemsPerPage = 20)
     {
 
         $items = array();
@@ -370,9 +372,8 @@ class Author
      * @return array multidimensional array with information about
      *               matching authors
      **/
-    public function all_authors($filter=null, $_orderBy='ORDER BY 1')
+    public function all_authors($filter = null, $_orderBy = 'ORDER BY 1')
     {
-
         $items = array();
         $_where = '1=1';
         if ( !is_null($filter) ) {
@@ -488,5 +489,5 @@ class Author
 
         return $rs->fields['COUNT(*)'];
     }
-
 }
+
