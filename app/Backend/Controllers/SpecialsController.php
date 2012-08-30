@@ -283,8 +283,8 @@ class SpecialsController extends Controller
                 'available'      => $request->request->filter('available', 0, FILTER_SANITIZE_STRING),
                 'img1'           => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
                 'category_imag'  => $request->request->filter('category_imag', '', FILTER_SANITIZE_STRING),
-                'noticias_right' => json_decode(json_decode($request->request->get('noticias_right'))),
-                'noticias_left'  => json_decode(json_decode($request->request->get('noticias_left'))),
+                'noticias_right' => json_decode($request->request->get('noticias_right')),
+                'noticias_left'  => json_decode($request->request->get('noticias_left')),
             );
 
             if ($special->update($data)) {
@@ -491,7 +491,7 @@ class SpecialsController extends Controller
         if (is_null($special->id)) {
             m::add(sprintf(_('Unable to find a special with the id "%d"'), $id), m::ERROR);
         } else {
-            $special->set_available($status, $_SESSION['user_id']);
+            $special->set_available($status, $_SESSION['userid']);
             if ($status == 0) {
                 $special->set_favorite($status);
             }

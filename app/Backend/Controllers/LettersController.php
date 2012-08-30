@@ -244,7 +244,7 @@ class LettersController extends Controller
         if (is_null($letter->id)) {
             m::add(sprintf(_('Unable to find a letter with the id "%d"'), $id), m::ERROR);
         } else {
-            $letter->set_available($status, $_SESSION['user_id']);
+            $letter->set_available($status, $_SESSION['userid']);
             m::add(sprintf(_('Successfully changed availability for the letter "%s"'), $letter->title), m::SUCCESS);
         }
 

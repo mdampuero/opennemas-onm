@@ -358,7 +358,7 @@ class PollsController extends Controller
         if (is_null($poll->id)) {
             m::add(sprintf(_('Unable to find a poll with the id "%d"'), $id), m::ERROR);
         } else {
-            $poll->set_available($status, $_SESSION['user_id']);
+            $poll->set_available($status, $_SESSION['userid']);
             if ($status == 0) {
                 $poll->set_favorite($status);
             }
