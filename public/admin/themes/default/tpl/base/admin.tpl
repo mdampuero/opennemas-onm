@@ -1,8 +1,8 @@
-<!doctype html>
-<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
-<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
-<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
 
@@ -37,7 +37,7 @@
     {/block}
 
     {block name="header-js"}
-        {script_tag src="/libs/modernizr-2.5.0.min.js"}
+        {script_tag src="/libs/modernizr.min.js"}
         {block name="js-library"}{/block}
         {script_tag src="/onm/scripts.js"}
         {script_tag src="/tiny_mce/tiny_mce_gzip.js"}
@@ -123,15 +123,9 @@
         {script_tag src="/onm/footer-functions.js"}
 	{/block}
 
-
     {if Acl::check('USER_ADMIN') eq true}
     {*include file="welcome/modals/_modal_users.tpl"*}
     {/if}
-
-    <!--[if lt IE 7 ]>
-        <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.2/CFInstall.min.js"></script>
-        <script>window.attachEvent("onload",function(){ CFInstall.check({ mode:"overlay" }) })</script>
-    <![endif]-->
 
 </body>
 </html>
