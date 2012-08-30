@@ -81,14 +81,14 @@ class InstanceSyncController extends Controller
 
             // Get saved settings if exists
             if ($syncSettings = s::get('sync_params')) {
-                $syncParams = array_merge($syncSettings,array($siteUrl => $categoriesToSync));
+                $syncParams = array_merge($syncSettings, array($siteUrl => $categoriesToSync));
             } else {
                 $syncParams = array($siteUrl => $categoriesToSync);
             }
 
             // Get site colors
             if ($syncColorSettings = s::get('sync_colors')) {
-                $syncColors = array_merge($syncColorSettings,array($siteUrl => $siteColor));
+                $syncColors = array_merge($syncColorSettings, array($siteUrl => $siteColor));
             } else {
                 $syncColors = array($siteUrl => $siteColor);
             }

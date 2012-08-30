@@ -157,7 +157,7 @@ switch ($action) {
                     $message = "Su comentario fue rechazado debido al uso de palabras malsonantes.";
                 }
             } else {
-                $ip = Application::getRealIP();
+                $ip = Application::getRealIp();
                 if ($comment->create( array( 'id' => $_POST['id'], 'data' => $data, 'ip' => $ip) ) ) {
                     if (preg_match('@territoris@', $_SERVER['SERVER_NAME'])) {
                         $message = "El seu comentari ha estat emmagatzemat i està pendent de publicar-se.";

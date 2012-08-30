@@ -41,7 +41,9 @@ $menuXml = '<?xml version="1.0"?>
     </submenu>
 
     <submenu title="'.htmlspecialchars(_("Contents"), ENT_QUOTES).'" id="contents_manager" link="#"
-             privilege="ARTICLE_PENDINGS,OPINION_ADMIN,COMMENT_ADMIN,POLL_ADMIN,ADVERTISEMENT_ADMIN,STATIC_ADMIN,SPECIAL_ADMIN,ARTICLE_ARCHIVE,CATEGORY_ADMIN,MENU_ADMIN">
+             privilege="ARTICLE_PENDINGS,OPINION_ADMIN,COMMENT_ADMIN,POLL_ADMIN,'
+                       .'ADVERTISEMENT_ADMIN,STATIC_ADMIN,SPECIAL_ADMIN,ARTICLE_ARCHIVE,'
+                       .'CATEGORY_ADMIN,MENU_ADMIN">
         <node
             module_name="ARTICLE_MANAGER"
             privilege="ARTICLE_PENDINGS"
@@ -161,7 +163,8 @@ $menuXml = '<?xml version="1.0"?>
     </submenu>
 
     <submenu title="'.htmlspecialchars(_("Utilities"), ENT_QUOTES).'" id="util" link="#"
-        privilege="SEARCH_ADMIN,TRASH_ADMIN,NEWSLETTER_ADMIN,PCLAVE_ADMIN,SCHEDULE_ADMIN,IMPORT_EPRESS,IMPORT_EFE,IMPORT_EFE_FILE,IMPORT_XML,BACKEND_ADMIN">
+        privilege="SEARCH_ADMIN,TRASH_ADMIN,NEWSLETTER_ADMIN,PCLAVE_ADMIN,SCHEDULE_ADMIN,'
+                  .'IMPORT_EPRESS,IMPORT_EFE,IMPORT_EFE_FILE,IMPORT_XML,BACKEND_ADMIN">
         <node
             module_name="ADVANCED_SEARCH"
             privilege="SEARCH_ADMIN"
@@ -231,7 +234,8 @@ $menuXml = '<?xml version="1.0"?>
             title="'.htmlspecialchars(_("Statistics Piwik"), ENT_QUOTES).'"
             id="piwik_manager"
             target="external"
-            link="https://piwik.openhost.es/admin/index.php?module=Login&amp;action=logme&amp;login=cronicas&amp;password=44bdf5f29c992928c5233b0ec1b87bc2"
+            link="https://piwik.openhost.es/admin/index.php?module=Login&amp;action=logme&amp;'
+                .'login=cronicas&amp;password=44bdf5f29c992928c5233b0ec1b87bc2"
             privilege="STATS_ADMIN" />
         <node
             module_name="CRONICAS_MODULES"
@@ -389,3 +393,4 @@ $menuXml = '<?xml version="1.0"?>
             target="external"/>
     </submenu>
 </menu>';
+

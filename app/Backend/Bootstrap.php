@@ -135,15 +135,15 @@ class Bootstrap extends ModuleBootstrap
      **/
     public function initEventSystem()
     {
-        $GLOBALS['application']->register('onAfterUpdate',       'onUpdateClearCacheContent');
+        $GLOBALS['application']->register('onAfterUpdate', 'onUpdateClearCacheContent');
         $GLOBALS['application']->register('onAfterSetFrontpage', 'refreshFrontpage');
-        $GLOBALS['application']->register('onAfterPosition',     'refreshFrontpage');
-        $GLOBALS['application']->register('onAfterSetInhome',    'refreshHome');
+        $GLOBALS['application']->register('onAfterPosition', 'refreshFrontpage');
+        $GLOBALS['application']->register('onAfterSetInhome', 'refreshHome');
         $GLOBALS['application']->register('onAfterHomePosition', 'refreshHome');
-        $GLOBALS['application']->register('onAfterAvailable',   'onUpdateClearCacheContent');
+        $GLOBALS['application']->register('onAfterAvailable', 'onUpdateClearCacheContent');
         $GLOBALS['application']->register('onAfterSetFrontpage', 'onAfterSetFrontpage');
-        $GLOBALS['application']->register('onAfterSetInhome',    'refreshHome');
-        $GLOBALS['application']->register('onAfterPosition',     'refreshFrontpage');
+        $GLOBALS['application']->register('onAfterSetInhome', 'refreshHome');
+        $GLOBALS['application']->register('onAfterPosition', 'refreshFrontpage');
         $GLOBALS['application']->register('onAfterCreateAttach', 'refreshHome');
     }
 }

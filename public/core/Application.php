@@ -483,12 +483,8 @@ class Application
     /**
     * Stablishes a cookie value in a secure way
     */
-    public static function setCookieSecure(
-        $name,
-        $value,
-        $expires = 0,
-        $domain = '/'
-    ) {
+    public static function setCookieSecure($name, $value, $expires = 0, $domain = '/')
+    {
         setcookie($name, $value, $expires, $domain,
             $_SERVER['SERVER_NAME'], isset($_SERVER['HTTPS']), true);
     }
@@ -499,7 +495,7 @@ class Application
      *
      * @return string the client ip
      **/
-    public static function getRealIP()
+    public static function getRealIp()
     {
         // REMOTE_ADDR: dirección ip del cliente
         // HTTP_X_FORWARDED_FOR: si no está vacío indica que se ha utilizado
