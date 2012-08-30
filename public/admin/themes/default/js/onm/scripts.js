@@ -27,24 +27,6 @@ function fill_tags(raw_info, target_element, url) {
     });
 }
 
-function validateForm(formID)
-{
-    var checkForm = new Validation(formID, {immediate: true, onSubmit: true});
-    if (!checkForm.validate()) {
-        if (jQuery('.validation-advice')) {
-            if (jQuery('#warnings-validation')) {
-                jQuery('#warnings-validation').html('Existen campos sin cumplimentar o errores en el formulario. Por favor, revise todas las pestañas.');
-            }
-        }
-        return false;
-    } else {
-        if (jQuery('.validation-advice') && jQuery('#warnings-validation')) {
-            jQuery('#warnings-validation').html('');
-        }
-    }
-    return true;
-}
-
 function load_ajax_in_container(url, container) {
     jQuery.ajax({
         url: url,

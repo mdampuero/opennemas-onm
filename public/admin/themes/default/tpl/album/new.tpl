@@ -1,7 +1,6 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-    {script_tag src="/utilsGallery.js" language="javascript"}
     <script>
     jQuery(document).ready(function($){
         $('#formulario').onmValidate({
@@ -147,6 +146,12 @@
         });
 
         load_ajax_in_container('{url name=admin_images_content_provider_gallery category=$category}', $('#photos'));
+
+        $('#photos').on('click', '.pager a', function(e, ui) {
+            e.preventDefault();
+            var link = $(this);
+            load_ajax_in_container(link.attr('href'), $('#photos'));
+        });
 
         $('#stringImageSearch, #category_imag').on('change', function(e, ui) {
             var category = $('#category_imag option:selected').val();

@@ -22,7 +22,6 @@
     {script_tag src="/swfobject.js"}
 {/block}
 {block name="footer-js" append}
-    {script_tag src="/utilsGallery.js"}
     <script type="text/javascript">
     jQuery(document).ready(function($) {
         $("input[name='with_script']").on('change', function(e, ui) {

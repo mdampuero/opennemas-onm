@@ -10,10 +10,6 @@
 
 {/block}
 
-{block name="footer-js" append}
-    {script_tag src="/utilsGallery.js" language="javascript"}
-{/block}
-
 {block name="content"}
 <form action="#" method="get" name="formulario" id="formulario">
     <div class="top-action-bar clearfix">

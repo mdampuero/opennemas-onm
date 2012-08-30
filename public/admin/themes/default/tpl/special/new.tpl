@@ -1,14 +1,7 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-js" append}
-    <script type="text/javascript">
-        jQuery.noConflict();
-    </script>
-    {script_tag src="/utilsGallery.js"}
-{/block}
-
 {block name="header-css" append}
- {css_tag href="/parts/specials.css"}
+    {css_tag href="/parts/specials.css"}
 {/block}
 
 {block name="footer-js" append}
