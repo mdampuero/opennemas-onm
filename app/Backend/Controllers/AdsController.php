@@ -283,7 +283,7 @@ class AdsController extends Controller
             'metadata'           => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
             'category'           => $firstCategory,
             'categories'         => implode(',', $categories),
-            'available'          => $request->request->filter('available', 0, FILTER_SANITIZE_STRING),
+            'content_status'     => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'img1'               => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
             'overlap'            => $request->request->filter('overlap', '', FILTER_SANITIZE_STRING),
             'type_medida'        => $request->request->filter('type_medida', '', FILTER_SANITIZE_STRING),
@@ -313,8 +313,8 @@ class AdsController extends Controller
             ));
         } else {
             return $this->redirect($this->generateUrl(
-                'admin_ads',
-                array('category' => $data['category'])
+                'admin_ad_show',
+                array('id' => $data['id'])
             ));
         }
     }
@@ -589,5 +589,5 @@ class AdsController extends Controller
             implode('&', $url)
         );
     }
-
 }
+

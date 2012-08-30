@@ -62,6 +62,9 @@
                 <!-- /frontpage-image --> </div>
             <!-- /related-images --> </td>
         <td id="photos_container">
+            <div style="border:1px double #ccc; border-bottom:0 none; background-color:#EEE; padding:7px;">
+                <strong>{t}Images videos{/t}</strong>
+            </div>
             <div id="photos" class="photos clearfix">
             </div>
         </td>
@@ -72,6 +75,15 @@
 </style>
 <script type="text/javascript">
     jQuery(document).ready(function ($){
+
+        load_ajax_in_container('{url name=admin_images_content_provider_gallery category=2}', $('#photos'));
+
+        $('#photos').on('click', '.pager a', function(e, ui) {
+            e.preventDefault();
+            var link = $(this);
+            load_ajax_in_container(link.attr('href'), $('#photos'));
+        });
+
         jQuery('#related-images .delete-button').on('click', function () {
             var parent = jQuery(this).parent();
             var elementID = parent.find('.related-element-id');

@@ -7,6 +7,12 @@
         top:10px;
         right:10px;
     }
+    .resource-container {
+        width:500px;
+    }
+    .article-resource-image, .article-resource-image-info {
+        width:200px;
+    }
 </style>
 {/block}
 
@@ -61,19 +67,6 @@
     });
     </script>
 {/block}
-{block name="header-css" append}
-<style type="text/css">
-object {
-    z-index:0;
-}
-.panel {
-    margin:0;
-}
-.panel-ads label {
-    text-transform:none;
-}
-</style>
-{/block}
 
 {block name="content" append}
 <form action="{if $advertisement->id}{url name=admin_ad_update id=$advertisement->id}{else}{url name=admin_ad_create}{/if}" method="post" id="formulario">
@@ -118,9 +111,9 @@ object {
         </div>
 
         <div class="control-group">
-            <label for="available" class="control-label">{t}Actived{/t}</label>
+            <label for="available" class="control-label">{t}Actived{/t} {$advertisement->content_status|var_dump}</label>
             <div class="controls">
-                <input type="checkbox" name="available" id="available" {if isset($advertisement->available) && $advertisement->available == 1}checked="checked"{/if} {acl isNotAllowed="ADVERTISEMENT_AVAILA"}disabled="disabled"{/acl} />
+                <input type="checkbox" name="content_status" id="available" {if isset($advertisement->content_status) && $advertisement->content_status == 1}checked="checked"{/if} {acl isNotAllowed="ADVERTISEMENT_AVAILA"}disabled="disabled"{/acl} />
 
             </div>
         </div>

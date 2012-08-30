@@ -390,6 +390,7 @@ class Advertisement extends Content
      **/
     public function update($data)
     {
+        $data['available'] = $data['content_status'];
         parent::update($data);
 
         if (!empty($data['script'])) {
@@ -407,14 +408,14 @@ class Advertisement extends Content
         $sql = "UPDATE advertisements
                 SET `type_advertisement`=?, `fk_content_categories`=?,
                     `path`=?, `url`=?, `type_medida`=?, `num_clic`=?,
-                    `num_clic_count`=?, `num_view`=?,`with_script`=?,
+                    `num_view`=?,`with_script`=?,
                     `script`=?, `overlap`=?, `timeout`=?
                 WHERE pk_advertisement=".($data['id']);
 
         $values = array(
             $data['type_advertisement'], $data['categories'],
             $data['img'], $data['url'], $data['type_medida'],
-            $data['num_clic'], $data['num_clic_count'],
+            $data['num_clic'],
             $data['num_view'], $data['with_script'], $data['script'],
             $data['overlap'], $data['timeout']
         );
@@ -437,7 +438,7 @@ class Advertisement extends Content
 
         // Necesarios para evento
         $this->pk_advertisement      = $this->id;
-        $this->available             = $data['available'];
+        $this->content_status        = $data['content_status'];
         $this->type_advertisement    = $data['type_advertisement'];
         $this->fk_content_categories = $data['category'];
 
