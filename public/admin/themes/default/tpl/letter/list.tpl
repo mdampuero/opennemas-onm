@@ -12,7 +12,7 @@
 {/block}
 
 {block name="content"}
-<form action="{$smarty.server.PHP_SELF}" method="GET" name="formulario" id="formulario" {$formAttrs|default:""}>
+<form action="{url name=admin_letters}" method="GET" name="formulario" id="formulario">
     <div class="top-action-bar" class="clearfix">
         <div class="wrapper-content">
             <div class="title">
@@ -54,20 +54,20 @@
 
         {render_messages}
 
-        <div class="clearfix">
-
-            <ul class="pills">
-                <li>
-                    <a id="pending-tab" href="{url name=admin_letters letterStatus=0}" {if $letterStatus==0}class="active"{/if} >{t}Pending{/t}</a>
-                </li>
-                <li>
-                    <a id="published-tab" href="{url name=admin_letters letterStatus=1}" {if $letterStatus==1}class="active"{/if}>{t}Published{/t}</a>
-                </li>
-                <li>
-                    <a id="rejected-tab" href="{url name=admin_letters letterStatus=2}" {if $letterStatus==2}class="active"{/if}>{t}Rejected{/t}</a>
-                </li>
-            </ul>
-
+        <div class="table-info clearfix">
+            <div class="pull-right form-inline">
+                <div class="input-append">
+                    <label>
+                        {t}Status:{/t}
+                        <select name="letterStatus" class="form-filters">
+                            <option value="0" {if $letterStatus eq '0'}selected{/if}> {t}Pending{/t} </option>
+                            <option value="1" {if $letterStatus eq '1'}selected{/if}> {t}Published{/t} </option>
+                            <option value="2" {if $letterStatus eq '2'}selected{/if}> {t}Rejected{/t} </option>
+                        </select>
+                    </label>
+                    <button type="submit" class="btn"><i class="icon-search"></i></button>
+                </div>
+            </div>
         </div>
 
 

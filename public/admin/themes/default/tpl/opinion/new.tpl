@@ -30,6 +30,10 @@
                     $('#author').show();
                 }
             });
+
+            $('#formulario').on('change', function () {
+                OpenNeMas.tinyMceFunctions.saveTiny('body');
+            })
         });
     </script>
 {/block}

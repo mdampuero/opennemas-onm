@@ -26,7 +26,9 @@
             </div>
             <ul class="old-button">
                 <li>
-                    <button type="submit" class="onm-button red">{t}Save{/t}</button>
+                    <button type="submit">
+                        <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}"><br>{t}Save{/t}
+                    </button>
                 </li>
                 <li class="separator"></li>
                 <li>

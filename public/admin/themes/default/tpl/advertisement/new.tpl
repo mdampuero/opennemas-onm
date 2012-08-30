@@ -111,7 +111,7 @@
         </div>
 
         <div class="control-group">
-            <label for="available" class="control-label">{t}Actived{/t} {$advertisement->content_status|var_dump}</label>
+            <label for="available" class="control-label">{t}Actived{/t}</label>
             <div class="controls">
                 <input type="checkbox" name="content_status" id="available" {if isset($advertisement->content_status) && $advertisement->content_status == 1}checked="checked"{/if} {acl isNotAllowed="ADVERTISEMENT_AVAILA"}disabled="disabled"{/acl} />
 

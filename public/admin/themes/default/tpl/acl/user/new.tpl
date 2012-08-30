@@ -5,6 +5,7 @@
 {block name="footer-js" append}
 <script>
     jQuery(document).ready(function($){
+        $('[rel=tooltip]').tooltip({ placement: 'bottom' });
         $("#user-editing-form").tabs();
 
         $('#formulario').onmValidate({
@@ -72,7 +73,7 @@ label {
             </ul><!-- / -->
             <div id="basic">
                 <div class="avatar">
-                    <div class="avatar-image thumbnail">
+                    <div class="avatar-image thumbnail" rel="tooltip" data-original-title="{t escape=off}If you want a custom avatar sign up in <a href='http://www.gravatar.com'>gravatar.com</a> with the same email address as you have here in OpenNemas{/t}">
                         {if $user}
                             {gravatar email=$user->email image_dir=$params.IMAGE_DIR image=true size=150}
                         {else}
@@ -94,9 +95,6 @@ label {
                             <div class="controls">
                                 <div class="input-prepend">
                                     <span class="add-on">@</span><input class="span2" id="email" type="email" name="email" value="{$user->email}" required="required"  size="50">
-                                </div>
-                                <div class="help-block">
-                                    {t escape=off}Sign up in <a href="http://www.gravatar.com">gravatar.com</a> and ensure that you use the same email as you have here in OpenNemas{/t}
                                 </div>
                             </div>
                         </div>

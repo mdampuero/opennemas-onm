@@ -1,10 +1,16 @@
 TODO
 ====
 
+Frontpage manager
+-----------------
+- Review scheduling and colors
+
 Articles
 --------
 - Batch actions
 - In the listing mark those that are in frontpage with a mark.
+- Coming from frontpagemanager for create a new article if you push the back button raises an exception
+
 
 Opinion Authors
 ---------------
@@ -13,6 +19,14 @@ Opinion Authors
 Advertisement
 -------------
 - Check the damned available, content_status issue
+
+Images
+------
+- In the popup listing if the image is small it goes to the upper left corner.
+
+Comments
+--------
+- In the comments listing put the comment content into a tootip
 
 LOW PRIORITY TASKS OR IDEAS
 --------------------------------------------------------------------------------

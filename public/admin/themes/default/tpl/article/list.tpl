@@ -1,9 +1,20 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
+    {script_tag src="article.js"}
     <script>
     jQuery(document).ready(function ($){
         $('[rel="tooltip"]').tooltip();
+
+        $('.minput').on('click', function() {
+            checkbox = $(this).find('input[type="checkbox"]');
+            var checked_elements = $('.table tbody input[type="checkbox"]:checked').length;
+            if (checked_elements > 0) {
+                $('.old-button .batch-actions').fadeIn('fast');
+            } else {
+                $('.old-button .batch-actions').fadeOut('fast');
+            }
+        });
     });
     </script>
 {/block}
@@ -50,7 +61,7 @@
                             {t escape="off"}Batch drop from home{/t}
                         </button>
                     </li>
-                    {acl isAllowed="OPINION_DELETE"}
+                    {acl isAllowed="ARTICLE_DELETE"}
                     <li>
                         <button type="submit" id="batch-delete" title="{t}Delete{/t}">
                             {t}Delete{/t}
