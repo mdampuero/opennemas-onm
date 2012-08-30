@@ -1,6 +1,6 @@
 <div class="modal hide fade" id="modal-kiosko-delete">
     <div class="modal-header">
-      <a class="close" href="#">×</a>
+      <button type="button" class="close" data-dismiss="modal-kiosko-delete" aria-hidden="true">×</button>
       <h3>{t}Delete kiosko{/t}</h3>
     </div>
     <div class="modal-body">

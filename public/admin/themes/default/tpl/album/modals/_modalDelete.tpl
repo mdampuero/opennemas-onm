@@ -1,6 +1,6 @@
 <div class="modal hide fade" id="modal-album-delete">
     <div class="modal-header">
-      <a class="close" href="#">×</a>
+      <button type="button" class="close" data-dismiss="modal-album-delete" aria-hidden="true">×</button>
       <h3>{t}Delete album{/t}</h3>
     </div>
     <div class="modal-body">

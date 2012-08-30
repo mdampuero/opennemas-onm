@@ -1,6 +1,6 @@
 <div class="modal hide fade" id="modal-image-batch-delete">
     <div class="modal-header">
-      <a class="close" href="#">×</a>
+      <button type="button" class="close" data-dismiss="modal-image-batch-delete" aria-hidden="true">×</button>
       <h3>{t}Delete multiple images{/t}</h3>
     </div>
     <div class="modal-body">

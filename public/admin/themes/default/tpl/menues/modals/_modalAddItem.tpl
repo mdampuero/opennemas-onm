@@ -1,6 +1,6 @@
 <div class="modal hide fade" id="modal-add-item">
     <div class="modal-header">
-      <a class="close" href="#">×</a>
+      <button type="button" class="close" data-dismiss="modal-add-item" aria-hidden="true">×</button>
       <h3>{t}Add an external link item.{/t}</h3>
     </div>
     <div class="modal-body">

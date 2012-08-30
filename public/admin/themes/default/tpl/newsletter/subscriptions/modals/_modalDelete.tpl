@@ -1,6 +1,6 @@
 <div class="modal hide fade" id="modal-subscriptor-delete">
     <div class="modal-header">
-      <a class="close" href="#">×</a>
+      <button type="button" class="close" data-dismiss="modal-subscriptor-delete" aria-hidden="true">×</button>
       <h3>{t}Delete subscriptor{/t}</h3>
     </div>
     <div class="modal-body">

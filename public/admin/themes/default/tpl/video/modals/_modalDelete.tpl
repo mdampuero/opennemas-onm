@@ -1,6 +1,6 @@
 <div class="modal hide fade" id="modal-video-delete">
     <div class="modal-header">
-      <a class="close" href="#">×</a>
+      <button type="button" class="close" data-dismiss="modal-video-delete" aria-hidden="true">×</button>
       <h3>{t}Delete video{/t}</h3>
     </div>
     <div class="modal-body">
@@ -9,7 +9,7 @@
     <div class="relations"></div>
     <div class="modal-footer">
         <a class="btn btn-primary yes" href="#">{t}Yes, delete{/t}</a>
-        <a class="btn secondary no" href="#">{t}No{/t}</a>
+        <a class="btn secondary no" data-dismiss="modal-video-delete" href="#">{t}No{/t}</a>
     </div>
 </div>
 
@@ -23,7 +23,6 @@
 
     jQuery('.del').click(function(e, ui) {
         e.preventDefault();
-        log(jQuery(this));
         jQuery('#modal-video-delete').data('url', jQuery(this).data('url'));
         jQuery('#modal-video-delete .modal-body span').html( jQuery(this).data('title') );
 

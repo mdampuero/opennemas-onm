@@ -1,6 +1,6 @@
 <div class="modal hide fade" id="modal-newsletter-accept">
     <div class="modal-header">
-      <a class="close" href="#">×</a>
+      <button type="button" class="close" data-dismiss="modal-newsletter-accept" aria-hidden="true">×</button>
       <h3>{t}Potential lose of the actual generated HTML.{/t}</h3>
     </div>
     <div class="modal-body">

@@ -11,7 +11,6 @@ Articles
 - In the listing mark those that are in frontpage with a mark.
 - Coming from frontpagemanager for create a new article if you push the back button raises an exception
 
-
 Opinion Authors
 ---------------
 - Batch actions
@@ -19,10 +18,6 @@ Opinion Authors
 Advertisement
 -------------
 - Check the damned available, content_status issue
-
-Images
-------
-- In the popup listing if the image is small it goes to the upper left corner.
 
 Comments
 --------
