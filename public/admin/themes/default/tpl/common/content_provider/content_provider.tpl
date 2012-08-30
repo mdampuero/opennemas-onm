@@ -40,3 +40,36 @@
 
     </ul>
 </div><!-- /content-provider -->
+
+
+{/is_module_activated}
+{is_module_activated name="ADVANCED_SEARCH"}
+<li>
+    <a href="{url name=admin_search_content_provider}"><i class="icon-search"></i></a>
+</li>
+{/is_module_activated}
+{is_module_activated name="WIDGET_MANAGER"}
+<li>
+    <a href="{url name=admin_widgets_content_provider category=$category}">{t}Widgets{/t}</a>
+</li>
+{/is_module_activated}
+{is_module_activated name="OPINION_MANAGER"}
+<li>
+    <a href="{url name=admin_opinions_content_provider category=$category}">{t}Opinions{/t}</a>
+</li>
+{/is_module_activated}
+{is_module_activated name="VIDEO_MANAGER"}
+<li>
+    <a href="{url name=admin_videos_content_provider category=$category}">{t}Videos{/t}</a>
+</li>
+{/is_module_activated}
+{is_module_activated name="ALBUM_MANAGER"}
+<li>
+
+    <a href="{url name=admin_albums_content_provider category=$category}">{t}Albums{/t}</a>
+</li>
+{/is_module_activated}
+{is_module_activated name="ADS_MANAGER"}
+<li>
+    <a href="{url name=admin_ads_content_provider category=$category}">{t}Advertisement{/t}</a>
+</li>

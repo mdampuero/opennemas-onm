@@ -16,15 +16,9 @@
     {script_tag src="/tiny_mce/opennemas-config.js"}
 
     <script>
-        tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
-        OpenNeMas.tinyMceConfig.simple.elements = "description";
-        tinyMCE.init( OpenNeMas.tinyMceConfig.simple );
-    </script>
-
-      <script>
-    try {
-        new Validation('formulario', { immediate : true });
-    } catch(e) { }
+    tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
+    OpenNeMas.tinyMceConfig.simple.elements = "description";
+    tinyMCE.init( OpenNeMas.tinyMceConfig.simple );
 
     jQuery(document).ready(function($){
         $("#formulario").on("submit", function(e, ui) {
@@ -55,6 +49,25 @@
         });
         $('#title').on('change', function(e, ui) {
             fill_tags($('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
+        });
+
+
+        load_ajax_in_container('{url name=admin_images_content_provider_gallery category=$category}', $('#photos'));
+
+        $('#stringImageSearch, #category_imag').on('change', function(e, ui) {
+            var category = $('#category_imag option:selected').val();
+            var text = $('#stringImageSearch').val();
+            var url = '{url name=admin_images_content_provider_gallery}?'+'category='+category+'&metadatas='+encodeURIComponent(text);
+            load_ajax_in_container(
+                url,
+                $('#photos')
+            );
+        });
+
+        $('#photos').on('click', '.pager a', function(e, ui) {
+            e.preventDefault();
+            var link = $(this);
+            load_ajax_in_container(link.attr('href'), $('#photos'));
         });
     });
     </script>
@@ -100,114 +113,72 @@
         </div>
     </div>
     <div class="wrapper-content">
-        <table class="adminform">
-            <tbody>
-                <tr>
-                    <td valign="top" align="right" style="padding:4px;">
-                        <label for="title">{t}Title:{/t}</label>
-                    </td>
-                    <td style="padding:4px;" nowrap="nowrap">
-                        <input type="text" id="title" name="title" title={t}"Special"{/t}
-                            size="80" value="{$special->title|clearslash|escape:"html"}"/>
-                    </td>
-                    <td rowspan="2"  style="padding: 4px;">
-                        <table  style='background-color:#F5F5F5; padding:8px;'>
-                            <tr>
-                                <td valign="top"  style="text-align:right;padding: 4px;" nowrap="nowrap">
-                                <label for="title">Secci&oacute;n:</label>
-                                </td>
-                                <td nowrap="nowrap">
-                                    <select name="category" id="category" style="width:98%">
-                                        {section name=as loop=$allcategorys}
-                                            {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
-                                            <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{t 1=$allcategorys[as]->title}%1{/t}</option>
-                                            {/acl}
-                                            {section name=su loop=$subcat[as]}
-                                                {acl hasCategoryAccess=$subcat[as]->pk_content_category}
-                                                <option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;|_&nbsp;&nbsp;{t 1=$subcat[as][su]->title}%1{/t}</option>
-                                                {/acl}
-                                            {/section}
-                                        {/section}
-                                    </select>
-                            </tr>
-                            <tr>
-                                <td valign="top" style="text-align:right;padding: 4px;" nowrap="nowrap">
-                                    <label for="title"> {t}Available:{/t} </label>
-                                </td>
-                                <td valign="top" nowrap="nowrap">
-                                        <select name="available" id="available"
-                                            class="required" {acl isNotAllowed="SPECIAL_AVAILABLE"} disabled="disabled" {/acl}>
-                                            <option value="0" {if $special->available eq 0} selected {/if}>{t}No{/t}</option>
-                                            <option value="1" {if $special->available eq 1} selected {/if}>{t}Yes{/t}</option>
+        <div class="form-horizontal panel">
+            <div class="control-group">
+                <label for="title" class="control-label">{t}Title{/t}</label>
+                <div class="controls">
+                    <input type="text" id="title" name="title" required="required" class="input-xxlarge"
+                            value="{$special->title|clearslash|escape:"html"}"/>
+                </div>
+            </div>
 
-                                        </select>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-                <tr>
-                    <td valign="top" align="right" style="padding:4px;" >
-                        <label for="title">Subtitle:</label>
-                    </td>
-                    <td style="padding:4px;" nowrap="nowrap">
-                        <input type="text" id="subtitle" name="subtitle" title={t}"Special"{/t}
-                            size="80" value="{$special->subtitle|clearslash|escape:"html"}" />
-                    </td>
-                </tr>
-                <tr>
-                    <td valign="top" align="right" style="padding:4px;">
-                        <label for="metadata">{t}Keywords:{/t}</label>
-                    </td>
-                    <td style="padding:4px;" nowrap="nowrap">
-                        <input type="text" id="metadata" name="metadata" size="80"
-                           class="required" title={t}"Metadata"{/t} value="{$special->metadata}" />
-                        <br><label align='right'><sub>{t}Separated by coma{/t}</sub></label>
-                    </td>
-                </tr>
-                <tr>
-                    <td valign="top" align="right" style="padding:4px;">
-                        <label for="slug">{t}Slug{/t}</label>
-                    </td>
-                    <td style="padding:4px;" nowrap="nowrap">
-                        <input 	type="text" id="slug" name="slug" title="{t}slug{/t}"
-                            size="80" maxlength="256" tabindex="5"
-                            {if is_object($special)}
-                                    value="{$special->slug|clearslash|escape:"html"}"
-                            {else}
-                                    value=""
-                            {/if}/>
-                     </td>
-                </tr>
-                 <tr>
-                    <td valign="top" align="right" style="padding:4px;">
-                        <label for="title">Descripci&oacute;n:</label>
-                    </td>
-                    <td style="padding:4px;" nowrap="nowrap" colspan="2">
-                        <textarea name="description" id="description"  title="description" style="width:90%; height:10em;">
-                            {t 1=$special->description|clearslash}%1{/t}
-                        </textarea>
-                    </td>
-                </tr>
+            <div class="control-group">
+                <label for="metadata" class="control-label">{t}Title{/t}</label>
+                <div class="controls">
+                    <input type="text" id="metadata" name="metadata" required="required" class="input-xxlarge"
+                            value="{$special->metadata|clearslash|escape:"html"}"/>
+                    <div class="help-block">{t}List of words separated by words.{/t}</div>
+                </div>
+            </div>
+            <div class="control-group">
+                <label for="category" class="control-label">{t}Category{/t}</label>
+                <div class="controls">
+                    <select name="category" id="category">
+                    {section name=as loop=$allcategorys}
+                        {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
+                        <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{t 1=$allcategorys[as]->title}%1{/t}</option>
+                        {/acl}
+                        {section name=su loop=$subcat[as]}
+                            {acl hasCategoryAccess=$subcat[as]->pk_content_category}
+                            <option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;|_&nbsp;&nbsp;{t 1=$subcat[as][su]->title}%1{/t}</option>
+                            {/acl}
+                        {/section}
+                    {/section}
+                    </select>
+                </div>
+            </div>
+            <div class="control-group">
+                <label for="available" class="control-label">{t}Available{/t}</label>
+                <div class="controls">
+                    <input type="checkbox" name="avilable" id="available" value="1" {if $special->available eq 1}checked="checked"{/if}>
+                </div>
+            </div>
+            <div class="control-group">
+                <label for="subtitle" class="control-label">{t}Subtitle{/t}</label>
+                <div class="controls">
+                    <input type="text" id="subtitle" name="subtitle" class="input-xxlarge" required="required" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label for="slug" class="control-label">{t}Slug{/t}</label>
+                <div class="controls">
+                    <input  type="text" id="slug" name="slug" class="input-xlarge" required="required"
+                            value="{$special->slug|clearslash|escape:"html"}" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label for="description" class="control-label">{t}Description{/t}</label>
+                <div class="controls">
+                    <textarea name="description" id="description" required="required" class="input-xxlarge">{t 1=$special->description|clearslash}%1{/t}</textarea>
+                </div>
+            </div>
+            {include file="special/partials/_load_images.tpl"}
 
-                <tr>
-                    <td valign="top" align="right" colspan="3">
-                        {include file="special/partials/_load_images.tpl"}
-                    </td>
-                </tr>
-                <tr>
-                    <td valign="top" align="right" colspan="3">
-                        {include file="special/partials/_contents_containers.tpl"}
-                    </td>
-                </tr>
-          </tbody>
-        </table>
+            {include file="special/partials/_contents_containers.tpl"}
+        </div>
     </div>
     <input type="hidden" id="noticias_right" name="noticias_right" value="">
     <input type="hidden" id="noticias_left" name="noticias_left" value="">
 
-    <input type="hidden" name="id" id="id" value="{$special->id|default:""}" />
-
 </form>
-
 {/block}
