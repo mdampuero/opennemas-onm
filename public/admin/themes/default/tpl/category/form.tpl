@@ -99,6 +99,16 @@
                 </div>
             </div>
 
+            {if isset($category) && !empty($category->name)}
+            <div class="control-group">
+                <label for="name" class="control-label">{t}Slug{/t}</label>
+                <div class="controls">
+                    <input type="text" id="name" name="name" readonly
+                                  value="{$category->name|clearslash|default:""}"  required="required"/>
+                </div>
+            </div>
+            {/if}
+
             <div class="control-group">
                 <label for="inmenu" class="control-label">{t}Available{/t}</label>
                 <div class="controls">
@@ -160,24 +170,6 @@
                 </div>
             </div>
 
-            {if isset($category) && !empty($category->name)}
-            <div class="control-group">
-                <label for="name" class="control-label">{t}Slug{/t}</label>
-                <div class="controls">
-                    <input type="text" id="name" name="name" readonly
-                                  value="{$category->name|clearslash|default:""}"  required="required"/>
-                </div>
-            </div>
-            {/if}
-
-            <div class="control-group">
-                <label for="params[title]" class="control-label">{t}Page Title{/t}</label>
-                <div class="controls">
-                    <input type="text" id="params[title]" name="params[title]"
-                          value="{$category->params['title']}"  required="required" class="input-xxlarge"/>
-                </div>
-            </div>
-
             <div class="control-group">
                 {capture "websiteColor"}
                     {setting name="site_color"}
@@ -191,10 +183,10 @@
                 </div>
             </div>
 
+            {if isset($configurations) && !empty($configurations['allowLogo'])}
             <div class="control-group">
                 <label for="logo_path" class="control-label">{t}Category logo{/t}</label>
                 <div class="controls">
-                {if isset($configurations) && !empty($configurations['allowLogo'])}
                     <input type="file" id="logo_path" name="logo_path"  />
                     <br>
 
@@ -202,9 +194,9 @@
                         <label>{t}Image logo:{/t}</label>
                         <img src="{$smarty.const.MEDIA_URL}/{$smarty.const.MEDIA_DIR}/sections/{$category->logo_path}" style="max-width:200px;" >
                     {/if}
-                {/if}
                 </div>
             </div>
+            {/if}
 
 
             {if !empty($subcategorys)}

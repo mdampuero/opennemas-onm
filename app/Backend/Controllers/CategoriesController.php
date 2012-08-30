@@ -261,7 +261,6 @@ class CategoriesController extends Controller
             'color'               => $request->request->getDigits('color'),
             'params'  => array(
                 'inrss' => $inrss,
-                'title' => $params['title'],
             ),
         );
 
