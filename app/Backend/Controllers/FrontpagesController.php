@@ -43,8 +43,7 @@ class FrontpagesController extends Controller
         $page     = $this->request->query->filter('page', 1, FILTER_SANITIZE_NUMBER_INT);
         $category = $this->request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
 
-        (!isset($_SESSION['_from'])) ? $_SESSION['_from'] = $category : null ;
-        (!isset($_SESSION['desde'])) ? $_SESSION['desde'] = 'list' : null ;
+        $_SESSION['_from'] = $this->generateUrl('admin_frontpage_list', array('category' => $category));
 
         $this->view->assign('category', $category);
 
@@ -111,9 +110,6 @@ class FrontpagesController extends Controller
             'smarty'    => $this->view,
             'category'  => $category,
         ));
-
-        $_SESSION['desde'] = 'list';
-        $_SESSION['_from'] = $category;
 
         return $this->render('frontpagemanager/list.tpl', array(
             'category'           => $category,
