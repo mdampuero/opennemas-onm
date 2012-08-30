@@ -1969,6 +1969,17 @@ $adminRoutes->add(
 );
 
 $adminRoutes->add(
+    'admin_article_preview',
+    new Route(
+        '/article/preview',
+        array(
+            '_controller' => 'Backend:Controllers:ArticlesController:preview',
+        )
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
     'admin_articles_content_provider_suggested',
     new Route(
         '/articles/content-provider-suggested',

@@ -1,10 +1,6 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-js" append}
-    {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
-    {script_tag src="/jquery/jquery.colorbox-min.js"}
-    {script_tag src="/onm/jquery.datepicker.js"}
-    {script_tag src="/onm/article.js"}
     {script_tag src="/swfobject.js"}
 {/block}
 
@@ -26,35 +22,40 @@
 {/block}
 
 {block name="footer-js" append}
+    {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
+    {script_tag src="/jquery/jquery.colorbox-min.js"}
+    {script_tag src="/onm/jquery.datepicker.js"}
+    {script_tag src="/onm/article.js"}
     {script_tag src="/onm/content-provider.js"}
     {script_tag src="/jquery-onm/jquery.inputlength.js"}
-    <script>
-    jQuery(document).ready(function($){
-        $('#formulario').onmValidate({
-            'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
-        });
-
-        $('#article-form').tabs();
-        $('#title, #title_int, #subtitle').inputLengthControl();
-        $('#title_input, #category').on('change', function() {
-            var title = $('#title_input');
-            var category = $('#category option:selected');
-            var metatags = $('#metadata');
-            var title_int_element = $('#title_int_input');
-            if (title_int_element.val().length == 0) {
-                title_int_element.val(title.val());
-            };
-            fill_tags(title.val() + " " + category.data('name') + " " + metatags.val(), '#metadata', '{url name=admin_utils_calculate_tags}');
-        });
-        $('#formulario').on('submit', function(){
-            save_related_contents();
-        });
-
-    });
-    </script>
-
     {script_tag src="/tiny_mce/opennemas-config.js"}
     <script>
+        var article_urls = {
+            preview : '{url name=admin_article_preview}'
+        };
+
+        jQuery(document).ready(function($){
+            $('#formulario').onmValidate({
+                'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
+            });
+
+            $('#article-form').tabs();
+            $('#title, #title_int, #subtitle').inputLengthControl();
+            $('#title_input, #category').on('change', function() {
+                var title = $('#title_input');
+                var category = $('#category option:selected');
+                var metatags = $('#metadata');
+                var title_int_element = $('#title_int_input');
+                if (title_int_element.val().length == 0) {
+                    title_int_element.val(title.val());
+                };
+                fill_tags(title.val() + " " + category.data('name') + " " + metatags.val(), '#metadata', '{url name=admin_utils_calculate_tags}');
+            });
+            $('#formulario').on('submit', function(){
+                save_related_contents();
+            });
+
+        });
         tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
 
         OpenNeMas.tinyMceConfig.simple.elements = "summary";

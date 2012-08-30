@@ -53,16 +53,12 @@ function get_gallery(container) {
  * Preview of an article
  */
 function previewArticle(formID) {
-    if (!validateForm(formID)) {
-        return false;
-    }
-
     var form = jQuery('#' + formID);
     var contents = form.serializeArray();
 
     jQuery.ajax({
         type: 'POST',
-        url: '/controllers/preview_content.php?action=article',
+        url: article_urls.preview,
         data: {
             'contents': contents
         },

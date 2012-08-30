@@ -1,22 +1,9 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-js" append}
+{block name="footer-js" append}
     <script>
     jQuery(document).ready(function ($){
         $('[rel="tooltip"]').tooltip();
-        $('.minput, #toggleallcheckbox').on('click', function() {
-            checkbox = $(this).find('input[type="checkbox"]');
-            checkbox.attr(
-               'checked',
-               !checkbox.is(':checked')
-            );
-            var checked_elements = $('input[type="checkbox"]:checked').length;
-            if (checked_elements > 0) {
-                $('.old-button .batch-actions').fadeIn('fast');
-            } else {
-                $('.old-button .batch-actions').fadeOut('fast');
-            }
-        });
     });
     </script>
 {/block}
@@ -51,17 +38,17 @@
                     <li>
                         <button type="submit" name="status" value="1" id="batch-unpublish">
                             {t}Batch unpublish{/t}
-                        </a>
+                        </button>
                     </li>
                     <li>
                         <button type="submit" name="status" value="0" id="batch-inhome">
                             {t escape="off"}Batch in home{/t}
-                        </a>
+                        </button>
                     </li>
                     <li>
                         <button type="submit" name="status" value="1" id="batch-noinhome">
                             {t escape="off"}Batch drop from home{/t}
-                        </a>
+                        </button>
                     </li>
                     {acl isAllowed="OPINION_DELETE"}
                     <li>
