@@ -222,14 +222,6 @@ $menuXml = '<?xml version="1.0"?>
 
         <node class="divider" />
         <node
-            module_name="ONM_STATISTICS"
-            title="'.htmlspecialchars(_("Statistics"), ENT_QUOTES).'"
-            id="statistics"
-            link="'.url('admin_statistics').'"
-            privilege="STATS_ADMIN"
-        />
-
-        <node
             module_name="CRONICAS_MODULES"
             title="'.htmlspecialchars(_("Statistics Piwik"), ENT_QUOTES).'"
             id="piwik_manager"
