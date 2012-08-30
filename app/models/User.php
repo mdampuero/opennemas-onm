@@ -617,13 +617,13 @@ class User
      *
      * @return  boolean true if all went well
      */
-    public function setMeta($userId, $userMeta = array())
+    public function setMeta($userMeta = array())
     {
         $sql = 'REPLACE INTO usermeta (`user_id`, `meta_key`, `meta_value`) VALUES (?, ?, ?)';
 
         $values = array();
         foreach ($userMeta as $key => $value) {
-            $values []= array($userId, $key, $value);
+            $values []= array($this->id, $key, $value);
         }
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
@@ -673,6 +673,7 @@ class User
         } else {
             $returnValues = $rs->fields['meta_value'];
         }
+
 
         return $returnValues;
     }

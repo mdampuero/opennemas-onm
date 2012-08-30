@@ -100,6 +100,7 @@ class AuthenticationController extends Controller
                         'privileges'       => \Privilege::get_privileges_by_user($user->id),
                         'accesscategories' => $user->getAccessCategoryIds(),
                         'default_expire'   => $user->sessionexpire,
+                        'user_language'    => $user->getMeta('user_language'),
                         'csrf'             => md5(uniqid(mt_rand(), true))
                     );
 

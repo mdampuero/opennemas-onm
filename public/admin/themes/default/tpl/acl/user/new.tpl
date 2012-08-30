@@ -130,9 +130,9 @@ label {
                     </div>
 
                     <div class="control-group">
-                        <label for="site_language" class="control-label">{t}User language{/t}</label>
+                        <label for="user_language" class="control-label">{t}User language{/t}</label>
                         <div class="controls">
-                            {html_options name="meta[user_language]" options=$languages selected=$user->meta['default_language']}
+                            {html_options name="user_language" options=$languages selected=$user->meta['user_language']}
                             <div class="help-block">{t}Used for displayed messages, interface and measures in your page.{/t}</div>
                         </div>
                     </div>

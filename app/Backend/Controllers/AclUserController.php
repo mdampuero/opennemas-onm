@@ -98,7 +98,7 @@ class AclUserController extends Controller
         }
 
         $user->meta = array();
-        $user->meta['default_language'] = $user->getMeta('default_language') ?: 'default';
+        $user->meta['user_language'] = $user->getMeta('user_language') ?: 'default';
 
         $userGroup = new \UserGroup();
         $tree = $ccm->getCategoriesTree();
@@ -150,6 +150,13 @@ class AclUserController extends Controller
         // TODO: validar datos
         $user = new \User($userId);
         $user->update($data);
+
+        $userLanguage = $request->request->filter('user_language', 'default', FILTER_SANITIZE_STRING);
+        $user->setMeta(array('user_language' => $userLanguage));
+
+        if ($user->id == $_SESSION['userid']) {
+            $_SESSION['user_language'] = $userLanguage;
+        }
 
         m::add(_('User data updated successfully.'), m::SUCCESS);
         if ($action == 'validate') {

@@ -45,13 +45,8 @@ class Bootstrap extends ModuleBootstrap
         if ($isAsset != 1) {
 
             session_name('_onm_sess');
-            // session_save_path(OPENNEMAS_BACKEND_SESSIONS);
             $session = $this->container->get('session');
             $session->start();
-
-
-            // $sessionHandler = \SessionManager::getInstance(OPENNEMAS_BACKEND_SESSIONS);
-            // $sessionHandler->bootstrap();
 
             if (!isset($_SESSION['userid'])
                 && !preg_match('@^/login@', $request->getPathInfo())
@@ -80,6 +75,7 @@ class Bootstrap extends ModuleBootstrap
 
     public function initI18nSystem()
     {
+
         $timezone = s::get('time_zone');
         if (isset($timezone)) {
             $availableTimezones = \DateTimeZone::listIdentifiers();
@@ -97,7 +93,19 @@ class Bootstrap extends ModuleBootstrap
         ) {
             \Application::$language = $forceLanguage;
         } else {
-            \Application::$language = s::get('site_language');
+
+            $language = s::get('site_language');
+            if (array_key_exists('user_language', $_SESSION)) {
+                $userLanguage = $_SESSION['user_language'] ?: 'default';
+            } else {
+                $userLanguage = 'default';
+            }
+
+            if ($userLanguage != 'default') {
+                $language = $userLanguage;
+            }
+
+            \Application::$language = $language;
         }
 
         $locale = \Application::$language.".UTF-8";
