@@ -175,8 +175,8 @@ div#content-provider div.content-action-buttons {
 div.content .content-action-buttons{
     display:none;
     position:absolute;
-    top:5px;
-    right:5px;
+    top:3px;
+    right:3px;
     max-height:18px !important;
 }
 #frontpagemanager div.content div:hover .content-action-buttons {
