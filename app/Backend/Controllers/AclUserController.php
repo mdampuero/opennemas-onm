@@ -103,7 +103,7 @@ class AclUserController extends Controller
         $userGroup = new \UserGroup();
         $tree = $ccm->getCategoriesTree();
         $languages = \Application::getAvailableLanguages();
-        $languages ['default']= _('Default system language');
+        $languages = array_merge(array('default' => _('Default system language')), $languages);
 
 
         return $this->render('acl/user/new.tpl', array(
@@ -188,27 +188,29 @@ class AclUserController extends Controller
         $action = $request->request->filter('action', null, FILTER_SANITIZE_STRING);
 
         $user = new \User();
-        $ccm = \ContentCategoryManager::get_instance();
-        $userGroup = new \UserGroup();
-        $tree = $ccm->getCategoriesTree();
-        $data = array(
-            'login'           => $request->request->filter('login', null, FILTER_SANITIZE_STRING),
-            'email'           => $request->request->filter('email', null, FILTER_SANITIZE_STRING),
-            'password'        => $request->request->filter('password', null, FILTER_SANITIZE_STRING),
-            'passwordconfirm' => $request->request->filter('passwordconfirm', null, FILTER_SANITIZE_STRING),
-            'name'            => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
-            'firstname'       => $request->request->filter('firstname', null, FILTER_SANITIZE_STRING),
-            'lastname'        => $request->request->filter('lastname', null, FILTER_SANITIZE_STRING),
-            'sessionexpire'   => $request->request->getDigits('sessionexpire'),
-            'id_user_group'   => $request->request->getDigits('id_user_group'),
-            'ids_category'    => $request->request->get('ids_category'),
-            'address'         => '',
-            'phone'         => '',
-        );
 
         if ($request->getMethod() == 'POST') {
+            $data = array(
+                'login'           => $request->request->filter('login', null, FILTER_SANITIZE_STRING),
+                'email'           => $request->request->filter('email', null, FILTER_SANITIZE_STRING),
+                'password'        => $request->request->filter('password', null, FILTER_SANITIZE_STRING),
+                'passwordconfirm' => $request->request->filter('passwordconfirm', null, FILTER_SANITIZE_STRING),
+                'name'            => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
+                'firstname'       => $request->request->filter('firstname', null, FILTER_SANITIZE_STRING),
+                'lastname'        => $request->request->filter('lastname', null, FILTER_SANITIZE_STRING),
+                'sessionexpire'   => $request->request->getDigits('sessionexpire'),
+                'id_user_group'   => $request->request->getDigits('id_user_group'),
+                'ids_category'    => $request->request->get('ids_category'),
+                'address'         => '',
+                'phone'         => '',
+            );
+
             try {
                 if ($user->create($data)) {
+
+                    $userLanguage = $request->request->filter('user_language', 'default', FILTER_SANITIZE_STRING);
+                    $user->setMeta(array('user_language' => $userLanguage));
+
                     if ($action == 'validate') {
                         return $this->redirect($this->generateUrl(
                             'admin_acl_user_show',
@@ -225,10 +227,18 @@ class AclUserController extends Controller
             }
         }
 
+        $ccm = \ContentCategoryManager::get_instance();
+        $userGroup = new \UserGroup();
+        $tree = $ccm->getCategoriesTree();
+
+        $languages = \Application::getAvailableLanguages();
+        $languages = array_merge(array('default' => _('Default system language')), $languages);
+
         return $this->render('acl/user/new.tpl', array(
             'user'                      => $user,
             'user_groups'               => $userGroup->find(),
             'content_categories'        => $tree,
+            'languages'                 => $languages,
             'content_categories_select' => $user->getAccessCategoryIds(),
         ));
     }
