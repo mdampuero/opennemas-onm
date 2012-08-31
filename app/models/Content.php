@@ -196,21 +196,16 @@ class Content
 
         $data['starttime']        =
             (!isset($data['starttime']) || empty($data['starttime'])
-             || ($data['starttime'])=='0000-00-00 00:00:00')
-                ? date("Y-m-d H:i:s"): $data['starttime'];
+             || ($data['starttime'])=='0000-00-00 00:00:00') ? date("Y-m-d H:i:s"): $data['starttime'];
         $data['endtime']          = (empty($data['endtime']))? '0000-00-00 00:00:00': $data['endtime'];
         $data['content_status']   = (empty($data['content_status']))? 0: intval($data['content_status']);
         $data['available']        = (empty($data['available']))? 0: intval($data['available']);
-        $data['frontpage']        =
-            (!isset($data['frontpage'])
-                || empty($data['frontpage'])) ? 0: intval($data['frontpage']);
-        $data['placeholder']      =
-            (!isset($data['placeholder']) || empty($data['placeholder']))
-                ? 'placeholder_0_1': $data['placeholder'];
-        $data['home_placeholder'] =
-            (!isset($data['home_placeholder'])
-                || empty($data['home_placeholder']))
-                ? 'placeholder_0_1': $data['home_placeholder'];
+        $data['frontpage']        = (!isset($data['frontpage']) || empty($data['frontpage']))
+                                    ? 0: intval($data['frontpage']);
+        $data['placeholder']      = (!isset($data['placeholder']) || empty($data['placeholder']))
+                                    ? 'placeholder_0_1': $data['placeholder'];
+        $data['home_placeholder'] = (!isset($data['home_placeholder']) || empty($data['home_placeholder']))
+                                    ? 'placeholder_0_1': $data['home_placeholder'];
         $data['position']         = (empty($data['position']))? '2': $data['position'];
         $data['in_home']          = (empty($data['in_home']))? 0: $data['in_home'];
         $data['home_pos']         = 100;
@@ -1063,7 +1058,7 @@ class Content
         if (($start->getTimeStamp() - $end->getTimeStamp()) == 0) {
             return false;
         }
-        if (($start->getTimeStamp() > 0 && $start != $created)
+        if (($start->getTimeStamp() > 0 && $start->getTimeStamp() != $created->getTimeStamp())
             || $end->getTimeStamp() > 0
         ) {
             return true;
