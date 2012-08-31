@@ -493,10 +493,12 @@ class Photo extends Content
 
         if (!empty($photo->address)) {
             $positions = explode(',', $photo->address);
-            $photo->latlong = array(
-                'lat' => $positions[0],
-                'long' => $positions[1],
-            );
+            if (is_array($positions)) {
+                $photo->latlong = array(
+                    'lat' => $positions[0],
+                    'long' => $positions[1],
+                );
+            }
         }
 
         $image = MEDIA_IMG_PATH . $this->path_file.$this->name;
