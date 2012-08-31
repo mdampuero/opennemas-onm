@@ -33,6 +33,10 @@ label {
     height:150px;
 }
 
+.tooltip {
+    max-width:160px;
+}
+
 </style>
 {/block}
 
@@ -73,9 +77,9 @@ label {
             </ul><!-- / -->
             <div id="basic">
                 <div class="avatar">
-                    <div class="avatar-image thumbnail" rel="tooltip" data-original-title="{t escape=off}If you want a custom avatar sign up in <a href='http://www.gravatar.com'>gravatar.com</a> with the same email address as you have here in OpenNemas{/t}">
+                    <div class="avatar-image thumbnail"  rel="tooltip" data-original-title="{t escape=off}If you want a custom avatar sign up in <a href='http://www.gravatar.com'>gravatar.com</a> with the same email address as you have here in OpenNemas{/t}">
                         {if $user}
-                            {gravatar email=$user->email image_dir=$params.IMAGE_DIR image=true size=150}
+                            <img src="{$params.IMAGE_DIR}default_avatar.png" alt="Default avatar" width=150>
                         {else}
                             {gravatar email="fake@mail.com" image_dir=$params.IMAGE_DIR image=true size=150}
                         {/if}
