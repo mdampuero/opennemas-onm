@@ -476,7 +476,7 @@ class ContentTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Content::isInTime
+     * @covers Content::isStarted
      */
     public function testIsStartedWithInTimecontentContent()
     {
@@ -492,7 +492,7 @@ class ContentTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Content::isInTime
+     * @covers Content::isStarted
      */
     public function testIsStartedWithPostponedContent()
     {
@@ -567,6 +567,70 @@ class ContentTest extends PHPUnit_Framework_TestCase
         $content->endtime   = '2012-08-23 03:03:12';
 
         $result = $content->isPostponed($now);
+
+        $this->assertFalse($result);
+    }
+
+    /**
+     * @covers Content::isDued
+     */
+    public function testIsDuedWithInTimeContent()
+    {
+        $content = new \Content();
+
+        $now                = '2012-08-22 03:03:12';
+        $content->starttime = '2012-08-21 03:03:12';
+        $content->endtime   = '2012-08-23 03:03:12';
+
+        $result = $content->isDued($now);
+
+        $this->assertFalse($result);
+    }
+
+    /**
+     * @covers Content::isDued
+     */
+    public function testIsDuedWithInPostponedContent()
+    {
+        $content = new \Content();
+
+        $now                = '2012-08-20 03:03:12';
+        $content->starttime = '2012-08-21 03:03:12';
+        $content->endtime   = '2012-08-23 03:03:12';
+
+        $result = $content->isDued($now);
+
+        $this->assertFalse($result);
+    }
+
+    /**
+     * @covers Content::isDued
+     */
+    public function testIsDuedWithInDuedContent()
+    {
+        $content = new \Content();
+
+        $now                = '2012-08-24 03:03:12';
+        $content->starttime = '2012-08-21 03:03:12';
+        $content->endtime   = '2012-08-23 03:03:12';
+
+        $result = $content->isDued($now);
+
+        $this->assertTrue($result);
+    }
+
+        /**
+     * @covers Content::isDued
+     */
+    public function testIsDuedWithInNowAndEntTimeEqualsContent()
+    {
+        $content = new \Content();
+
+        $now                = '2012-08-23 03:03:12';
+        $content->starttime = '2012-08-21 03:03:12';
+        $content->endtime   = '2012-08-23 03:03:12';
+
+        $result = $content->isDued($now);
 
         $this->assertFalse($result);
     }
