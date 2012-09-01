@@ -62,6 +62,8 @@ $loader->registerNamespaces(array(
     'Symfony\Component\Config'             => __DIR__.'/../vendor/symfony/config',
     'Symfony\Component\Yaml'               => __DIR__.'/../vendor/symfony/yaml',
     'Panorama'                             => __DIR__.'/../vendor/frandieguez/panorama-php/lib',
+    'Monolog'                              => __DIR__.'/../vendor/monolog/monolog/src',
+
 ));
 
 // SessionHandlerInterface

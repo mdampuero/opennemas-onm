@@ -114,7 +114,9 @@ class Bootstrap extends ModuleBootstrap
         $languageComposed = explode('_', $locale);
         $shortLanguage =  $languageComposed[0];
 
-        define('CURRENT_LANGUAGE', $shortLanguage);
+        if (!defined('CURRENT_LANGUAGE')) {
+            define('CURRENT_LANGUAGE', $shortLanguage);
+        }
 
         $localeDir = realpath(APP_PATH.'/Backend/Resources/locale/');
 

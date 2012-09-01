@@ -16,14 +16,11 @@ $sc = new ContainerBuilder();
 
 // Load parameters from an configuration file
 $loader = new YamlFileLoader($sc, new FileLocator(__DIR__.'/config/'));
-$loader->load('app.yml');
 
-$sc->register('context', 'Symfony\Component\Routing\RequestContext')
-    ->addMethodCall('fromRequest', array($request));
-$sc->register('matcher', 'Symfony\Component\Routing\Matcher\UrlMatcher')
-    ->setArguments(array($routes, new Reference('context')));
-$sc->register('url_generator', '\Symfony\Component\Routing\Generator\UrlGenerator')
-    ->setArguments(array($routes, new Reference('context')));
+$sc->setParameter('routes', $routes);
+$sc->setParameter('request', $request);
+
+$loader->load('app.yml');
 
 return $sc;
 
