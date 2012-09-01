@@ -306,27 +306,6 @@ class ContentCategory
     }
 
     /**
-     * Sets the priority of the category.
-     *
-     * @param int $weight the weight of the category.
-     **/
-    public function set_priority($weight)
-    {
-        if ($this->pk_content_category == null) {
-            return false;
-        }
-        $sql = "UPDATE content_categories SET `posmenu`=?
-                WHERE pk_content_category=?";
-        $values = array($weight, $this->pk_content_category);
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            Application::logDatabaseError();
-
-            return false;
-        }
-    }
-
-    /**
      * Changes the menu status (shown, hidden) for the category.
      *
      * @param string $status the status to set to the category.

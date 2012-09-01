@@ -285,7 +285,8 @@ class Comment extends \Content
         return intval($rs);
     }
 
-    public function get_home_comments($filter = null)
+    // TODO: not used, should be dropped
+    public function getHomeComments($filter = null)
     {
         if (is_null($filter)) {
             $filter = "1=1";
@@ -324,7 +325,7 @@ class Comment extends \Content
     /**
      * Gets the number of pending comments
      **/
-    public function count_pending_comments()
+    public function countPendingComments()
     {
         $sql = 'SELECT count(pk_content)
                 FROM `contents`
@@ -338,3 +339,4 @@ class Comment extends \Content
         return intval($rs->fields['count(pk_content)']);
     }
 }
+

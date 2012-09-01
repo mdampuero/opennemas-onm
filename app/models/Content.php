@@ -97,22 +97,19 @@ class Content
                 break;
 
             case 'category_name':
-                return $this->category_name =
-                    $this->loadCategoryName($this->id);
+                return $this->category_name = $this->loadCategoryName($this->id);
                 break;
 
             case 'publisher':
                 $user  = new User();
 
-                return $this->publisher =
-                    $user->get_user_name($this->fk_publisher);
+                return $this->publisher = $user->get_user_name($this->fk_publisher);
                 break;
 
             case 'last_editor':
                 $user  = new User();
 
-                return $this->last_editor =
-                    $user->get_user_name($this->fk_user_last_editor);
+                return $this->last_editor = $user->get_user_name($this->fk_user_last_editor);
                 break;
 
             case 'ratings':
@@ -124,8 +121,7 @@ class Content
             case 'comments':
                 $comment = new Comment();
 
-                return $this->comments =
-                    $comment->count_public_comments($this->id);
+                return $this->comments = $comment->count_public_comments($this->id);
                 break;
 
             default:
@@ -144,13 +140,15 @@ class Content
             $this->category_name =
                 $this->loadCategoryName($this->pk_content);
         }
-        $uri =  Uri::generate(strtolower($this->content_type_name),
+        $uri =  Uri::generate(
+            strtolower($this->content_type_name),
             array(
                 'id'       => sprintf('%06d', $this->id),
                 'date'     => date('YmdHis', strtotime($this->created)),
                 'category' => $this->category_name,
                 'slug'     => $this->slug2,
-            ));
+            )
+        );
 
         return ($uri !== '') ? $uri : $this->permalink;
     }
@@ -501,37 +499,6 @@ class Content
     *
     * @return null
     **/
-    // FIXME:  change name to restoreFromTrash
-    public function no_delete($id, $last_editor)
-    {
-        $changed = date("Y-m-d H:i:s");
-        $sql  =   'UPDATE contents SET `in_litter`=?, `available`=?, '
-                .'`content_status`=?, `changed`=?, `fk_user_last_editor`=? '
-                .'WHERE pk_content='.($id);
-
-        $values = array(0, 1, 1, $changed, $last_editor);
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values)===false) {
-            Application::logDatabaseError();
-
-            return false;
-        }
-
-        /* Notice log of this action */
-        Application::logContentEvent('recover from litter', $this);
-    }
-
-    /**
-    * Make available one content, restoring it from trash
-    *
-    * This "restores" the content from the trash system by setting their
-    * available flag to true
-    *
-    * @param integer $id
-    * @param integer $last_editor
-    *
-    * @return null
-    **/
     public function restoreFromTrash()
     {
         $changed = date("Y-m-d H:i:s");
@@ -549,7 +516,7 @@ class Content
         $this->in_litter = 0;
 
         /* Notice log of this action */
-        Application::logContentEvent('recover from litter', $this);
+        Application::logContentEvent('recover from trash', $this);
 
         return $this;
     }
@@ -618,10 +585,10 @@ class Content
         if (($this->id == null) && !is_array($status)) {
             return false;
         }
-        $changed = date("Y-m-d H:i:s");
 
-        $sql = 'UPDATE contents SET `available`=?, `content_status`=?, '
-             . '`fk_user_last_editor`=?, `starttime`=? WHERE `pk_content`=?';
+        $sql = 'UPDATE contents '
+             . 'SET `available`=?, `content_status`=?, '
+             . '`fk_user_last_editor`=? WHERE `pk_content`=?';
         $stmt = $GLOBALS['application']->conn->Prepare($sql);
 
         if (!is_array($status)) {
@@ -669,11 +636,11 @@ class Content
         $state = '';
 
         if ($this->in_litter == 1) {
-            $state = 'trashed';
+            $state = self::TRASHED;
         } elseif ($this->available == 0) {
-            $state = 'draft';
+            $state = self::PENDING;
         } elseif ($this->content_status == 1 && $this->available == 1) {
-            $state = 'available';
+            $state = self::AVAILABLE;
         }
 
         return $state;
@@ -721,7 +688,7 @@ class Content
             return false;
         }
 
-        $GLOBALS['application']->dispatch('onBeforeAvailable', $this);
+        $GLOBALS['application']->dipsatch('onBeforeAvailable', $this);
 
         $sql = 'UPDATE contents SET `available`=1, `content_status`=1, '
                 .'`fk_user_last_editor`=?, `starttime`=? WHERE `pk_content`=?';
@@ -1308,36 +1275,6 @@ class Content
         }
 
         $GLOBALS['application']->dispatch('onAfterSetInhome', $this);
-
-        /* Notice log of this action */
-        Application::logContentEvent(__METHOD__, $this);
-    }
-
-    public function set_home_position($position, $lastEditor)
-    {
-        if (($this->id == null) && !is_array($position)) {
-            return false;
-        }
-
-        $sql = 'UPDATE contents '
-             . 'SET `in_home`=1, `home_pos`=?, `home_placeholder`=? '
-             . 'WHERE `pk_content`=?';
-        $stmt = $GLOBALS['application']->conn->Prepare($sql);
-
-        if (!is_array($position)) {
-            $values = array($position, $this->id);
-        } else {
-            $values =  $position;
-        }
-
-        if (count($values) > 0) {
-            $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
-            if ($rs === false) {
-                Application::logDatabaseError();
-
-                return;
-            }
-        }
 
         /* Notice log of this action */
         Application::logContentEvent(__METHOD__, $this);
