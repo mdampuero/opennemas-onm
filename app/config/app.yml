@@ -1,6 +1,3 @@
-imports:
-    - { resource: parameters.yml }
-
 parameters:
     # Framework Base Configuration
     framework:
@@ -34,8 +31,12 @@ parameters:
             handler: %cache_handler%
 
     # Session Configuration
-    session_storate_class: "\Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage"
-    session_handler_class: "\Symfony\Component\HttpFoundation\Session\Session"
+    session_storage_class: "Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage"
+    session_handler_class: "Symfony\Component\HttpFoundation\Session\Session"
     session:
         handler: %session_handler%
         params:  %session_params%
+
+imports:
+    - { resource: parameters.yml }
+    - { resource: services.yml }

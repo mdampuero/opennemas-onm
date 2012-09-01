@@ -43,7 +43,6 @@ if (file_exists($configFile)) {
     require $configFile;
     require SITE_LIBS_PATH.'/functions.php';
     require_once 'Application.php';
-    \Application::initAutoloader();
 
     // Loads one ONM instance from database
     $im = new \Onm\Instance\InstanceManager($onmInstancesConnection);
@@ -65,3 +64,4 @@ if (file_exists($configFile)) {
     echo $errorPage;
     die();
 }
+

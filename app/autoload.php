@@ -33,6 +33,14 @@ set_include_path(implode(PATH_SEPARATOR, array(
 )));
 define('INSTALLATION_HASH', substr(hash('md5', APPLICATION_PATH), 0, 8));
 
+
+require_once SITE_LIBS_PATH.'/functions.php';
+require_once SITE_VENDOR_PATH.'/adodb5/adodb.inc.php';
+require_once SITE_VENDOR_PATH.'/Pager/Pager.php';
+require_once SITE_VENDOR_PATH.'/smarty/smarty-legacy/Smarty.class.php';
+require_once SITE_VENDOR_PATH.'/Log.php';
+require_once SITE_VENDOR_PATH.'/Template.php';
+
 require_once __DIR__.'/../vendor/symfony/class-loader/Symfony/Component/ClassLoader/UniversalClassLoader.php';
 
 // Initialize the autoloader (use apc if available)
@@ -58,7 +66,11 @@ $loader->registerNamespaces(array(
 
 // SessionHandlerInterface
 if (!interface_exists('SessionHandlerInterface')) {
-    $loader->registerPrefixFallback(realpath(__DIR__.'/../vendor/symfony/http-foundation/Symfony/Component/HttpFoundation/Resources/stubs'));
+    $loader->registerPrefixFallback(
+        realpath(
+            __DIR__.'/../vendor/symfony/http-foundation/Symfony/Component/HttpFoundation/Resources/stubs'
+        )
+    );
 }
 
 // Ŕegistering prefixes
@@ -75,3 +87,4 @@ $loader->registerNamespaceFallback(SITE_WS_API_PATH);
 $loader->useIncludePath(true);
 
 $loader->register();
+

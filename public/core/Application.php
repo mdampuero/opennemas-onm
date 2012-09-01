@@ -158,26 +158,6 @@ class Application
         }
     }
 
-    /**
-    * Loads all the common libraries and the packages passed as argument
-    *
-    * @param array $packages list of packages to load
-    */
-    public static function initAutoloader()
-    {
-
-        // TODO: move to autoload.php
-        // Load required libraries
-        require_once SITE_LIBS_PATH.'/functions.php';
-        require_once SITE_VENDOR_PATH.'/adodb5/adodb.inc.php';
-        require_once SITE_VENDOR_PATH.'/Pager/Pager.php';
-        require_once SITE_VENDOR_PATH.'/smarty/smarty-legacy/Smarty.class.php';
-        require_once SITE_VENDOR_PATH.'/Log.php';
-        require_once SITE_VENDOR_PATH.'/Template.php';
-        require_once SITE_VENDOR_PATH.'/Restler/restler.php';
-        require_once SITE_VENDOR_PATH.'/Restler/xmlformat.php';
-    }
-
     /*
      * Initializes all the internal application constants
      *

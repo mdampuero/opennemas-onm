@@ -1,0 +1,14 @@
+services:
+    db_conn:
+        class: Onm\DatabaseConnection
+        arguments: [%database_driver%]
+        calls:
+            - [ connect, [ %database_host%, %database_user%, %database_password%, %database_name% ] ]
+
+    session_storage:
+        class: Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage
+        arguments: [ %session_params% ]
+
+    session:
+        class: %session_handler_class%
+        arguments: [ @session_storage ]
