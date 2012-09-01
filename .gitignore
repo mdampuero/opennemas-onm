@@ -11,5 +11,8 @@ tmp/*
 vendor/autoload.php
 vendor/composer
 vendor/.composer
-vendor/
+vendor/frandieguez
+vendor/symfony
+vendor/monolog
+vendor/swiftmailer
 app/config/parameters.yml
