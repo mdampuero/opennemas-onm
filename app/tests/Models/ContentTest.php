@@ -316,41 +316,260 @@ class ContentTest extends PHPUnit_Framework_TestCase
     //     );
     // }
 
-    // /**
-    //  * @covers Content::getSchedulingState
-    //  * @todo   Implement testGetSchedulingState().
-    //  */
-    // public function testGetSchedulingState()
-    // {
-    //     // Remove the following lines when you implement this test.
-    //     $this->markTestIncomplete(
-    //       'This test has not been implemented yet.'
-    //     );
-    // }
+    /**
+     * @covers Content::getSchedulingState
+     */
+    public function testGetSchedulingStateWithDuedContent()
+    {
+        $content = new \Content();
 
-    // /**
-    //  * @covers Content::isScheduled
-    //  * @todo   Implement testIsScheduled().
-    //  */
-    // public function testIsScheduled()
-    // {
-    //     // Remove the following lines when you implement this test.
-    //     $this->markTestIncomplete(
-    //       'This test has not been implemented yet.'
-    //     );
-    // }
+        $now                = '2012-08-23 03:03:12';
+        $content->starttime = '2012-08-21 03:03:12';
+        $content->endtime   = '2012-08-22 03:03:12';
 
-    // /**
-    //  * @covers Content::isInTime
-    //  * @todo   Implement testIsInTime().
-    //  */
-    // public function testIsInTime()
-    // {
-    //     // Remove the following lines when you implement this test.
-    //     $this->markTestIncomplete(
-    //       'This test has not been implemented yet.'
-    //     );
-    // }
+        $result = $content->getSchedulingState($now);
+
+        $this->assertEquals($result, Content::DUED);
+    }
+
+    /**
+     * @covers Content::getSchedulingState
+     */
+    public function testGetSchedulingStateWithInTimeContent()
+    {
+        $content = new \Content();
+
+        $now                = '2012-08-22 03:03:12';
+        $content->starttime = '2012-08-21 03:03:12';
+        $content->endtime   = '2012-08-23 03:03:12';
+
+        $result = $content->getSchedulingState($now);
+
+        $this->assertEquals($result, Content::IN_TIME);
+    }
+
+    /**
+     * @covers Content::getSchedulingState
+     */
+    public function testGetSchedulingStateWithPostponedContent()
+    {
+        $content = new \Content();
+
+        $now                = '2012-08-20 03:03:12';
+        $content->starttime = '2012-08-21 03:03:12';
+        $content->endtime   = '2012-08-23 03:03:12';
+
+        $result = $content->getSchedulingState($now);
+
+        $this->assertEquals($result, Content::POSTPONED);
+    }
+
+    /**
+     * @covers Content::getSchedulingState
+     */
+    public function testGetSchedulingStateWithPostponedAndNotEndtimeContent()
+    {
+        $content = new \Content();
+
+        $now                = '2012-08-20 03:03:12';
+        $content->starttime = '2012-08-21 03:03:12';
+        $content->endtime   = '0000-00-00 00:00:00';
+
+        $result = $content->getSchedulingState($now);
+
+        $this->assertEquals($result, Content::POSTPONED);
+    }
+
+    /**
+     * @covers Content::getSchedulingState
+     */
+    public function testGetSchedulingStateWithNotScheduledContent()
+    {
+        $content = new \Content();
+
+        $now                = '2012-08-22 03:03:12';
+        $content->starttime = '2012-08-21 03:03:12';
+        $content->endtime   = '0000-00-00 00:00:00';
+
+        $result = $content->getSchedulingState($now);
+
+        $this->assertEquals($result, Content::NOT_SCHEDULED);
+    }
+
+    /**
+     * @covers Content::isScheduled
+     *
+     *   starttime   actual
+     * ------(----------|----------
+     */
+    public function testIsScheduledWithNotScheduledContent()
+    {
+        $content = new \Content();
+
+        $now                = '2012-08-22 03:03:12';
+        $content->starttime = '2012-08-21 03:03:12';
+        $content->endtime   = '0000-00-00 00:00:00';
+
+        $result = $content->isScheduled($now);
+
+        $this->assertFalse($result);
+    }
+
+
+    /**
+     * @covers Content::isScheduled
+     *
+     *    actual
+     *   starttime
+     * ------(--------------------
+     */
+    public function testIsScheduledWithStartAndActualTimesEquals()
+    {
+        $content = new \Content();
+
+        $now                = '2012-08-21 03:03:12';
+        $content->starttime = '2012-08-21 03:03:12';
+        $content->endtime   = '0000-00-00 00:00:00';
+
+        $result = $content->isScheduled($now);
+
+        $this->assertFalse($result);
+    }
+
+    /**
+     * @covers Content::isScheduled
+     *
+     *   starttime    actual
+     * ------(----------|----------
+     */
+    public function testIsScheduledWithInTimeScheduledContent()
+    {
+        $content = new \Content();
+
+        $now                = '2012-08-22 03:03:12';
+        $content->starttime = '2012-08-21 03:03:12';
+        $content->endtime   = '2012-08-24 03:03:12';
+
+        $result = $content->isScheduled($now);
+
+        $this->assertTrue($result);
+    }
+
+
+    /**
+     * @covers Content::isScheduled
+     *
+     *   starttime    actual
+     * ------(----------|----------
+     */
+    public function testIsScheduledWithPostponedContent()
+    {
+        $content = new \Content();
+
+        $now                = '2012-08-19 03:03:12';
+        $content->starttime = '2012-08-21 03:03:12';
+        $content->endtime   = '0000-00-00 00:00:00';
+
+        $result = $content->isScheduled($now);
+
+        $this->assertTrue($result);
+    }
+
+    /**
+     * @covers Content::isInTime
+     */
+    public function testIsStartedWithInTimecontentContent()
+    {
+        $content = new \Content();
+
+        $now                = '2012-08-22 03:03:12';
+        $content->starttime = '2012-08-21 03:03:12';
+        $content->endtime   = '0000-00-00 00:00:00';
+
+        $result = $content->isStarted($now);
+
+        $this->assertTrue($result);
+    }
+
+    /**
+     * @covers Content::isInTime
+     */
+    public function testIsStartedWithPostponedContent()
+    {
+        $content = new \Content();
+
+        $now                = '2012-08-19 03:03:12';
+        $content->starttime = '2012-08-21 03:03:12';
+        $content->endtime   = '0000-00-00 00:00:00';
+
+        $result = $content->isStarted($now);
+
+        $this->assertFalse($result);
+    }
+
+    /**
+     * @covers Content::isInTime
+     */
+    public function testIsStartedWithDuedContent()
+    {
+        $content = new \Content();
+
+        $now                = '2012-08-23 03:03:12';
+        $content->starttime = '2012-08-21 03:03:12';
+        $content->endtime   = '2012-08-22 03:03:12';
+
+        $result = $content->isStarted($now);
+
+        $this->assertTrue($result);
+    }
+
+    /**
+     * @covers Content::isPostponed
+     */
+    public function testIsPostponedWithInTimeContent()
+    {
+        $content = new \Content();
+
+        $now                = '2012-08-22 03:03:12';
+        $content->starttime = '2012-08-21 03:03:12';
+        $content->endtime   = '0000-00-00 00:00:00';
+
+        $result = $content->isPostponed($now);
+
+        $this->assertFalse($result);
+    }
+
+        /**
+     * @covers Content::isPostponed
+     */
+    public function testIsPostponedWithPostponedContent()
+    {
+        $content = new \Content();
+
+        $now                = '2012-08-20 03:03:12';
+        $content->starttime = '2012-08-21 03:03:12';
+        $content->endtime   = '0000-00-00 00:00:00';
+
+        $result = $content->isPostponed($now);
+
+        $this->assertTrue($result);
+    }
+
+    /**
+     * @covers Content::isPostponed
+     */
+    public function testIsPostponedWithDuedContent()
+    {
+        $content = new \Content();
+
+        $now                = '2012-08-24 03:03:12';
+        $content->starttime = '2012-08-21 03:03:12';
+        $content->endtime   = '2012-08-23 03:03:12';
+
+        $result = $content->isPostponed($now);
+
+        $this->assertFalse($result);
+    }
 
     // /**
     //  * @covers Content::isInTime2
@@ -712,3 +931,4 @@ class ContentTest extends PHPUnit_Framework_TestCase
     //     );
     // }
 }
+

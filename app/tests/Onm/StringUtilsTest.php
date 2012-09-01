@@ -226,29 +226,29 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @covers Onm\StringUtils::unhtmlentities
-     * @todo   Implement testUnhtmlentities().
-     */
-    public function testUnhtmlentities()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
+    // /**
+    //  * @covers Onm\StringUtils::unhtmlentities
+    //  * @todo   Implement testUnhtmlentities().
+    //  */
+    // public function testUnhtmlentities()
+    // {
+    //     // Remove the following lines when you implement this test.
+    //     $this->markTestIncomplete(
+    //       'This test has not been implemented yet.'
+    //     );
+    // }
 
-    /**
-     * @covers Onm\StringUtils::disabled_magic_quotes
-     * @todo   Implement testDisabled_magic_quotes().
-     */
-    public function testDisabled_magic_quotes()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
+    // /**
+    //  * @covers Onm\StringUtils::disabled_magic_quotes
+    //  * @todo   Implement testDisabled_magic_quotes().
+    //  */
+    // public function testDisabled_magic_quotes()
+    // {
+    //     // Remove the following lines when you implement this test.
+    //     $this->markTestIncomplete(
+    //       'This test has not been implemented yet.'
+    //     );
+    // }
 
     /**
      * @covers Onm\StringUtils::clearBadChars
@@ -403,17 +403,17 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @covers Onm\StringUtils::ext_str_ireplace
-     * @todo   Implement testExt_str_ireplace().
-     */
-    public function testExt_str_ireplace()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
+    // /**
+    //  * @covers Onm\StringUtils::ext_str_ireplace
+    //  * @todo   Implement testExt_str_ireplace().
+    //  */
+    // public function testExt_str_ireplace()
+    // {
+    //     // Remove the following lines when you implement this test.
+    //     $this->markTestIncomplete(
+    //       'This test has not been implemented yet.'
+    //     );
+    // }
 
     /**
      * @covers Onm\StringUtils::generatePassword

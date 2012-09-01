@@ -49,9 +49,16 @@ class Content
     public $cache               = null;
 
     // Content status
-    const AVAILABLE = 'available';
-    const TRASHED = 'trashed';
-    const PENDING = 'pending';
+    const AVAILABLE             = 'available';
+    const TRASHED               = 'trashed';
+    const PENDING               = 'pending';
+
+
+    const NOT_SCHEDULED         = 'not-scheduled';
+    const SCHEDULED             = 'scheduled';
+    const DUED                  = 'dued';
+    const IN_TIME               = 'in-time';
+    const POSTPONED             = 'postponed';
 
     /**
      * Initializes the content for a given id.
@@ -1028,18 +1035,18 @@ class Content
      *
      * @return string the scheduling state
      **/
-    public function getSchedulingState()
+    public function getSchedulingState($now = null)
     {
-        if ($this->isScheduled()) {
-            if ($this->isInTime()) {
-                return 'in-time';
-            } elseif ($this->isDued()) {
-                return 'dued';
-            } elseif ($this->isPostponed()) {
-                return 'postponed';
+        if ($this->isScheduled($now)) {
+            if ($this->isInTime($now)) {
+                return self::IN_TIME;
+            } elseif ($this->isDued($now)) {
+                return self::DUED;
+            } elseif ($this->isPostponed($now)) {
+                return self::POSTPONED;
             }
         } else {
-            return 'not-scheduled';
+            return self::NOT_SCHEDULED;
         }
     }
 
@@ -1047,24 +1054,36 @@ class Content
      * Check if this content is scheduled or, in others words, if this
      * content has a starttime and/or endtime defined
      *
+     * @param string $now string that represents the actual
+     *                    time, useful for testing purposes
+     *
      * @return boolean
     */
-    public function isScheduled()
+    public function isScheduled($now = null)
     {
-        $created = new \DateTime($this->created);
+        if (is_null($now)) {
+            $actual  = new \DateTime();
+        } else {
+            $actual  = new \DateTime($now);
+        }
         $start   = new \DateTime($this->starttime);
         $end     = new \DateTime($this->endtime);
 
+        // If for whatever reason the start and end times are equals return that
+        // this contents is not scheduled
         if (($start->getTimeStamp() - $end->getTimeStamp()) == 0) {
             return false;
         }
-        if (($start->getTimeStamp() > 0 && $start->getTimeStamp() != $created->getTimeStamp())
-            || $end->getTimeStamp() > 0
+
+        // If the start time is in the past from now and this content has no end
+        // time limit this content is not scheduled
+        if ($start->getTimeStamp() <= $actual->getTimeStamp() &&
+            $end->getTimeStamp() < 0
         ) {
-            return true;
+            return false;
         }
 
-        return false;
+        return true;
     }
 
     /**
@@ -1076,10 +1095,11 @@ class Content
      *
      * @return boolean
      **/
-    public function isInTime()
+    public function isInTime($now = null)
     {
-        if ($this->isScheduled()) {
-            if ($this->isDued() || $this->isPostponed()) {
+
+        if ($this->isScheduled($now)) {
+            if ($this->isDued($now) || $this->isPostponed($now)) {
                 return false;
             }
         }
@@ -1139,10 +1159,10 @@ class Content
      * @link https://redmine.openhost.es/issues/show/1058#note-8
      * @return boolean
     */
-    public function isStarted()
+    public function isStarted($now = null)
     {
         $start = new \DateTime($this->starttime);
-        $now = new \DateTime();
+        $now = new \DateTime($now);
 
         // If $start isn't defined then return true
         if ($start->getTimeStamp() > 0) {
@@ -1160,10 +1180,10 @@ class Content
      *
      * @return boolean
      */
-    public function isPostponed()
+    public function isPostponed($now = null)
     {
         $start = new \DateTime($this->starttime);
-        $now   = new \DateTime();
+        $now   = new \DateTime($now);
 
         // If $start isn't defined then return false
         if ($start->getTimeStamp() > 0) {
@@ -1179,10 +1199,10 @@ class Content
      * -------]--------|-----------
      * @return boolean
      */
-    public function isDued()
+    public function isDued($now = null)
     {
         $end = new \DateTime($this->endtime);
-        $now = new \DateTime();
+        $now = new \DateTime($now);
 
         // If $end isn't defined then return false
         if ($end->getTimeStamp() > 0) {
