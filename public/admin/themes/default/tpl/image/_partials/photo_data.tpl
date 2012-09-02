@@ -158,8 +158,14 @@
 <hr>
 <script defer="defer">
     jQuery(document).ready(function($){
+
+        var default_location = {
+            lat : 42.60548720000001,
+            lng:  -8.643296200000009
+        }
+
         $('#photo-{$photo->id}').tabs();
-            jQuery('#date-{$photo->id}').datetimepicker({
+        $('#date-{$photo->id}').datetimepicker({
             hourGrid: 4,
             showAnim: "fadeIn",
             dateFormat: 'yy-mm-dd',
@@ -171,16 +177,9 @@
 
         $("#photo-{$photo->id}").bind("tabsshow", function(event, ui) {
             if ($(ui.panel).is('.has-map')) {
+                var pos = map.getCenter();
                 map.refresh();
-                map.setCenter(
-                    {if is_array($photo->latlong)}
-                        {$photo->latlong['lat']},
-                        {$photo->latlong['long']}
-                    {else}
-                        -12.043333,
-                        -77.028333
-                    {/if}
-                );
+                map.setCenter(pos.Xa, pos.Ya)
             }
         });
 
@@ -190,8 +189,8 @@
             lat: {$photo->latlong['lat']},
             lng: {$photo->latlong['long']}
             {else}
-            lat: -12.043333,
-            lng: -77.028333
+            lat: default_location.lat,
+            lng: default_location.lng
             {/if}
         });
 
@@ -199,10 +198,7 @@
         GMaps.geolocate({
             success: function(position) {
                 map.setCenter(position.coords.latitude, position.coords.longitude);
-                map.addMarker({
-                  lat: position.coords.latitude,
-                  lng: position.coords.longitude
-                });
+                map.setZoom(6);
             },
             error: function(error) {
                 // alert('Geolocation failed: '+error.message);
@@ -219,6 +215,7 @@
           lat: {$photo->latlong['lat']},
           lng: {$photo->latlong['long']}
         });
+        map.setCenter({$photo->latlong['lat']}, {$photo->latlong['long']});
         {/if}
         $('#geocode_buttom_{$photo->id}').on('click', function(e,ui){
             e.preventDefault();
@@ -232,6 +229,7 @@
             GMaps.geocode({
                 address: $('#address_search_{$photo->id}').val().trim(),
                 callback: function(results, status){
+                    map.removeMarkers();
                     if (status == 'OK'){
                         var latlng = results[0].geometry.location;
                         map.setCenter(latlng.lat(), latlng.lng());
