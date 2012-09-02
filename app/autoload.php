@@ -33,7 +33,6 @@ set_include_path(implode(PATH_SEPARATOR, array(
 )));
 define('INSTALLATION_HASH', substr(hash('md5', APPLICATION_PATH), 0, 8));
 
-
 require_once SITE_LIBS_PATH.'/functions.php';
 require_once SITE_VENDOR_PATH.'/adodb5/adodb.inc.php';
 require_once SITE_VENDOR_PATH.'/Pager/Pager.php';
