@@ -1,5 +1,5 @@
 {
-    "hash": "831fff81cd07413e5e4702162aa03ded",
+    "hash": "33afaa5cb37c004bbd113a3d38d8b03c",
     "packages": [
         {
             "package": "frandieguez/panorama-php",
@@ -22,14 +22,20 @@
         {
             "package": "symfony/class-loader",
             "version": "dev-master",
-            "source-reference": "v2.1.0-BETA4",
-            "commit-date": "1342347231"
+            "source-reference": "v2.1.0-RC2",
+            "commit-date": "1346082709"
         },
         {
             "package": "symfony/config",
-            "version": "2.0.x-dev",
-            "source-reference": "0cebe6b3d71f09e0728c9a961f4f9efef1a1c2cd",
-            "commit-date": "1344264656"
+            "version": "dev-master",
+            "alias-pretty-version": "2.1.x-dev",
+            "alias-version": "2.1.9999999.9999999-dev"
+        },
+        {
+            "package": "symfony/config",
+            "version": "dev-master",
+            "source-reference": "v2.1.0-RC2",
+            "commit-date": "1345643321"
         },
         {
             "package": "symfony/dependency-injection",
@@ -40,8 +46,8 @@
         {
             "package": "symfony/dependency-injection",
             "version": "dev-master",
-            "source-reference": "98fa735a7ef5dc07c43bfe6faa4367a983b6ba6f",
-            "commit-date": "1344599303"
+            "source-reference": "3adaf5f41b1dfa17b1b6c75559be77df938abcb5",
+            "commit-date": "1346406727"
         },
         {
             "package": "symfony/event-dispatcher",
@@ -52,8 +58,8 @@
         {
             "package": "symfony/event-dispatcher",
             "version": "dev-master",
-            "source-reference": "76c76f62702b09e0f182ae618be0f1d79e2a711f",
-            "commit-date": "1345066712"
+            "source-reference": "v2.1.0-RC2",
+            "commit-date": "1345643321"
         },
         {
             "package": "symfony/http-foundation",
@@ -64,8 +70,8 @@
         {
             "package": "symfony/http-foundation",
             "version": "dev-master",
-            "source-reference": "8d5e7f909fa519853e71bcfc57a1da8c637ebcbb",
-            "commit-date": "1345191498"
+            "source-reference": "c61c023d2e9e9ad2edcc9227bd0ec5f79d616e18",
+            "commit-date": "1346312580"
         },
         {
             "package": "symfony/routing",
@@ -76,14 +82,20 @@
         {
             "package": "symfony/routing",
             "version": "dev-master",
-            "source-reference": "v2.1.0-RC1",
-            "commit-date": "1343744077"
+            "source-reference": "475c0550543c882a7e31b9aca7a5dc0615f59547",
+            "commit-date": "1346394981"
         },
         {
             "package": "symfony/yaml",
-            "version": "2.0.x-dev",
-            "source-reference": "v2.0.16",
-            "commit-date": "1341837830"
+            "version": "dev-master",
+            "alias-pretty-version": "2.1.x-dev",
+            "alias-version": "2.1.9999999.9999999-dev"
+        },
+        {
+            "package": "symfony/yaml",
+            "version": "dev-master",
+            "source-reference": "v2.1.0-RC2",
+            "commit-date": "1345643321"
         }
     ],
     "packages-dev": null,

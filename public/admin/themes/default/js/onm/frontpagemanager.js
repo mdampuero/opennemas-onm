@@ -69,10 +69,15 @@ function get_tooltip_title(elem) {
         jQuery.ajax({
             url: $url,
             async: false
-        }).done(function(data) {
+        }).success(function(data) {
             content_states[id] = data;
+            if (content_states.hasOwnProperty('id') && content_states[id].hasOwnProperty('title')) {
+                return content_states[id].title;
+            } else {
+                return null;
+            }
         });
-        return content_states[id].title;
+        return null;
     } else {
         return content.title;
     }
@@ -214,7 +219,7 @@ jQuery(function($) {
     ***************************************************************************/
     // arquive
     $('#modal-element-archive').modal({ backdrop: 'static', keyboard: true, show: false });
-    $('div.content').on('click', 'div.placeholder div.content-provider-element a.arquive', function(e) {
+    $('#frontpagemanager').on('click', 'div.placeholder div.content-provider-element a.arquive', function(e) {
         var element = $(this).closest('.content-provider-element');
         var elementID = element.data('content-id');
         $('body').data('element-for-archive', element);
@@ -250,7 +255,7 @@ jQuery(function($) {
 
 
     // Drop element button
-    $('div.content').on('click', 'div.placeholder div.content-provider-element a.drop-element', function(e) {
+    $('#frontpagemanager').on('click', 'div.placeholder div.content-provider-element a.drop-element', function(e) {
         e.preventDefault();
         var parent = $(this).closest('.content-provider-element');
         remove_element(parent);
@@ -258,7 +263,7 @@ jQuery(function($) {
     });
 
     // suggest-home
-    $('div.content').on('click', 'div.placeholder div.content-provider-element a.suggest-to-home', function(e) {
+    $('#frontpagemanager').on('click', 'div.placeholder div.content-provider-element a.suggest-to-home', function(e) {
         var element = $(this).closest('.content-provider-element');
         var contentId = element.data('content-id');
         if (contentId) {
@@ -276,7 +281,7 @@ jQuery(function($) {
 
     // send-to-trash
     $('#modal-element-send-trash').modal({ backdrop: 'static', keyboard: true, show: false });
-    $('div.content').on('click', 'div.placeholder div.content-provider-element a.send-to-trash', function(e, ui) {
+    $('#frontpagemanager').on('click', 'div.placeholder div.content-provider-element a.send-to-trash', function(e, ui) {
         var element = $(this).closest('.content-provider-element');
         var elementID = element.data('content-id');
         $('body').data('element-for-del', element);
