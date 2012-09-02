@@ -105,14 +105,14 @@ class ErrorController extends Controller
      * Returns an exceprt HTML with the content of the file highlighting
      * the line that produces the error.
      *
-     * @param string $fileName The name of the file where is the error.
-     * @param string $fileName The line inside the file where is the error.
-     * @param int $showLines The number of lines to show before and after
+     * @param string $fileName  The name of the file where is the error.
+     * @param string $fileName  The line inside the file where is the error.
+     * @param int    $showLines The number of lines to show before and after
      *                       the error line.
      *
      * @return strin The HTML with the highlighted source.
      **/
-    static public function highlightSource($fileName, $lineNumber, $showLines)
+    public static function highlightSource($fileName, $lineNumber, $showLines)
     {
 
         $lines = htmlspecialchars(file_get_contents($fileName));

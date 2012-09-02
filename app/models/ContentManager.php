@@ -58,11 +58,10 @@ class ContentManager
 
     public function find(
         $contentType,
-        $filter  = null,
+        $filter = null,
         $orderBy = 'ORDER BY 1',
-        $fields  = '*'
-    )
-    {
+        $fields = '*'
+    ) {
         $this->init($contentType);
         $items = array();
 
@@ -91,11 +90,10 @@ class ContentManager
 
     public function find_all(
         $contentType,
-        $filter  =null,
-        $orderBy ='ORDER BY 1',
-        $fields  ='*'
-    )
-    {
+        $filter = null,
+        $orderBy = 'ORDER BY 1',
+        $fields = '*'
+    ) {
         return $this->findAll($contentType, $filter, $orderBy, $fields);
     }
 
@@ -111,11 +109,10 @@ class ContentManager
      **/
     public function findAll(
         $contentType,
-        $filter  = null,
+        $filter = null,
         $orderBy = 'ORDER BY 1',
-        $fields  ='*'
-    )
-    {
+        $fields = '*'
+    ) {
         $this->init($contentType);
         $items = array();
 
@@ -166,7 +163,8 @@ class ContentManager
         );
 
         $contentsInFrontpage = array_unique(array_map(
-            function($content) {
+            function ($content)
+            {
                 if ($content['frontpage_id'] == 0) {
                     return $content['content_id'];
                 } else {
@@ -186,9 +184,7 @@ class ContentManager
                     continue;
                 }
 
-                $content = new $element['content_type'](
-                    $element['content_id']
-                );
+                $content = new $element['content_type']($element['content_id']);
 
                 // add all the additional properties related with positions
                 // and params
@@ -361,8 +357,7 @@ class ContentManager
     public static function saveContentPositionsForHomePage(
         $categoryID,
         $elements =  array()
-    )
-    {
+    ) {
 
         // Starting the Transaction
         $GLOBALS['application']->conn->StartTrans();
@@ -464,8 +459,7 @@ class ContentManager
     */
     public static function clearContentPositionsForHomePageOfCategory(
         $categoryID
-    )
-    {
+    ) {
         // clean actual contents for the homepage of this category
         $sql = 'DELETE FROM content_positions '
               .'WHERE `fk_category`='.$categoryID;
@@ -556,8 +550,7 @@ class ContentManager
     public static function getContentTypeNameFromId(
         $contentID,
         $ucfirst = false
-    )
-    {
+    ) {
         // Raise an error if $contentID is not a number
         if (!is_numeric($contentID)) {
             // Try to uniformize this, cause if $contentID comes from an widget
@@ -645,13 +638,12 @@ class ContentManager
     public function getMostViewedContent(
         $contentType,
         $notEmpty = false,
-        $category  = 0,
-        $author    =0,
-        $days      =2,
-        $num       =9,
-        $all       =false
-    )
-    {
+        $category = 0,
+        $author = 0,
+        $days = 2,
+        $num = 9,
+        $all = false
+    ) {
         $this->init($contentType);
 
         $items   = array();
@@ -725,12 +717,11 @@ class ContentManager
     public function getMostComentedContent(
         $contentType,
         $notEmpty = false,
-        $category  = 0,
-        $days      =2,
-        $num       =9,
-        $all       =false
-    )
-    {
+        $category = 0,
+        $days = 2,
+        $num = 9,
+        $all = false
+    ) {
         $this->init($contentType);
         $items = array();
 
@@ -835,7 +826,8 @@ class ContentManager
 
         uasort(
             $articles,
-            function($a, $b) {
+            function ($a, $b)
+            {
                 if ($a['num'] == $b['num']) {
                     return 0;
                 }
@@ -874,13 +866,12 @@ class ContentManager
     public function getMostVotedContent(
         $contentType,
         $not_empty = false,
-        $category  = 0,
-        $author    = 0,
-        $days      = 2,
-        $num       = 8,
-        $all       = false
-    )
-    {
+        $category = 0,
+        $author = 0,
+        $days = 2,
+        $num = 8,
+        $all = false
+    ) {
         $this->init($contentType);
         $items = array();
 
@@ -950,11 +941,10 @@ class ContentManager
     public function getLastComentsContent(
         $contentType,
         $not_empty = false,
-        $category  = 0,
-        $num       =6,
-        $all       =false
-    )
-    {
+        $category = 0,
+        $num = 6,
+        $all = false
+    ) {
         $this->init($contentType);
         $items = array();
 
@@ -1082,11 +1072,10 @@ class ContentManager
     public function getAllMostViewed(
         $notEmpty = false,
         $category = 0,
-        $days=2,
-        $num=6,
-        $all=false
-    )
-    {
+        $days = 2,
+        $num = 6,
+        $all = false
+    ) {
         $items = array();
         $_tables = '`contents`  ';
         $_where = '`contents`.`in_litter`=0 AND `fk_content_type` IN (1,3,4,7,9,11) ';
@@ -1149,11 +1138,10 @@ class ContentManager
     public function getAllMostVoted(
         $notEmpty = false,
         $category = 0,
-        $days     = 2,
-        $num      = 6,
-        $all      = false
-    )
-    {
+        $days = 2,
+        $num = 6,
+        $all = false
+    ) {
         $items = array();
 
         $_tables = '`contents`, `ratings` ';
@@ -1220,8 +1208,7 @@ class ContentManager
         $days = 2,
         $num = 6,
         $all = false
-    )
-    {
+    ) {
         $items = array();
 
         $_where_slave = '';
@@ -1358,7 +1345,7 @@ class ContentManager
      *
      * @return array Items filtered
     */
-    public function getInTime($items, $time=null)
+    public function getInTime($items, $time = null)
     {
         $filtered = array();
         if (is_array($items)) {
@@ -1415,10 +1402,9 @@ class ContentManager
      */
     public function count(
         $contentType,
-        $filter                 = null,
+        $filter = null,
         $pk_fk_content_category = null
-    )
-    {
+    ) {
         $this->init($contentType);
         $items  = array();
         $_where = 'AND in_litter=0';
@@ -1480,14 +1466,13 @@ class ContentManager
      */
     public function find_pages(
         $contentType,
-        $filter                 = null,
-        $_order_by              = 'ORDER BY 1',
-        $page                   = 1,
-        $items_page             = 10,
+        $filter = null,
+        $_order_by = 'ORDER BY 1',
+        $page = 1,
+        $items_page = 10,
         $pk_fk_content_category = null,
-        $url                    = null
-    )
-    {
+        $url = null
+    ) {
         $this->init($contentType);
         $items = array();
         $_where = '`contents`.`in_litter`=0';
@@ -1556,8 +1541,7 @@ class ContentManager
         $page = 1,
         $numElements = 10,
         $debug = false
-    )
-    {
+    ) {
         $this->init($contentType);
         $items  = array();
         $_where = '';
@@ -1596,7 +1580,8 @@ class ContentManager
                  . $limit;
         }
         if ($debug == true) {
-            var_dump($sql);die();
+            var_dump($sql);
+            die();
         }
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
@@ -1609,10 +1594,9 @@ class ContentManager
     public function find_by_category(
         $contentType,
         $pk_fk_content_category,
-        $filter=null,
-        $_order_by='ORDER BY 1'
-    )
-    {
+        $filter = null,
+        $_order_by = 'ORDER BY 1'
+    ) {
         $this->init($contentType);
 
         $items = array();
@@ -1649,10 +1633,9 @@ class ContentManager
     public function find_by_category_name(
         $contentType,
         $category_name,
-        $filter=null,
-        $_order_by='ORDER BY 1'
-    )
-    {
+        $filter = null,
+        $_order_by = 'ORDER BY 1'
+    ) {
         // recupera el id de la categoria del array.
         $this->init($contentType);
         $pk_fk_content_category=$this->get_id($category_name);
@@ -1683,7 +1666,7 @@ class ContentManager
 
     //this function returns title,catName and slugs of last headlines from
     //Subcategories of a given category
-    public function findHeadlines(/*$filter=null, $_order_by='ORDER BY 1'*/)
+    public function findHeadlines()
     {
         $sql =
         'SELECT `contents`.`title`, `contents`.`pk_content` ,
@@ -1731,8 +1714,7 @@ class ContentManager
     public function getOpinionArticlesWithAuthorInfo(
         $filter = null,
         $_order_by = 'ORDER BY 1'
-    )
-    {
+    ) {
         $items = array();
         $_where = '1=1  AND in_litter=0';
 
@@ -1787,11 +1769,10 @@ class ContentManager
         $totalItems,
         $numPages,
         $delta,
-        $funcion   ='null',
-        $params    ='null',
+        $funcion = 'null',
+        $params = 'null',
         $separator = " | "
-    )
-    {
+    ) {
         if (!isset($numPages)) {
             $numPages = 5;
         }
@@ -1853,7 +1834,7 @@ class ContentManager
     //index_paginate_articles
     //Admin  advertisement.php, advertisement_images.php,
     //opinion.php, preview_content.php
-    public function paginate_num($items, $numPages=20)
+    public function paginate_num($items, $numPages = 20)
     {
         $_items = array();
 
@@ -1898,9 +1879,8 @@ class ContentManager
         $numPages,
         $delta,
         $funcion,
-        $params='null'
-    )
-    {
+        $params = 'null'
+    ) {
         if (!isset($numPages)) {
             $numPages = 20;
         }
@@ -1985,11 +1965,10 @@ class ContentManager
     */
     public function getArrayOfArticlesInCategory(
         $categoryID,
-        $filter    = null,
-        $orderBy ='ORDER BY 1',
-        $limit    = 50
-    )
-    {
+        $filter = null,
+        $orderBy = 'ORDER BY 1',
+        $limit = 50
+    ) {
         $items  = array();
         $where = '1=1  AND in_litter=0';
 
@@ -2028,8 +2007,7 @@ class ContentManager
     public function getOpinionAuthorsPermalinks(
         $filter = null,
         $orderBy = 'ORDER BY 1'
-    )
-    {
+    ) {
         $items = array();
         $_where = '1=1  AND in_litter=0';
 
@@ -2255,3 +2233,4 @@ class ContentManager
         return false;
     }
 }
+

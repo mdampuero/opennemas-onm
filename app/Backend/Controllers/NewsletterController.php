@@ -308,8 +308,6 @@ class NewsletterController extends Controller
         );
     }
 
-
-
     /**
      * Deletes an newsletter given its id
      *

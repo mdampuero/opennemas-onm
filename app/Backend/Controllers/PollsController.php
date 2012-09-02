@@ -277,7 +277,6 @@ class PollsController extends Controller
                 'item'          => $request->request->get('item'),
             );
 
-
             if ($poll->update($data)) {
                 m::add(_('Poll successfully updated.'), m::SUCCESS);
             } else {

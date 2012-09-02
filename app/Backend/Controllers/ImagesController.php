@@ -43,12 +43,14 @@ class ImagesController extends Controller
         $this->pathUpload = MEDIA_PATH.DS.IMG_DIR.DS;
         $this->imgUrl     = MEDIA_URL.SS.MEDIA_DIR.SS.IMG_DIR.SS;
 
-        $this->view->assign(array(
-            'subcat'       => $this->subcat,
-            'allcategorys' => $this->parentCategories,
-            'datos_cat'    => $this->datos_cat,
-            'MEDIA_IMG_URL' => $this->imgUrl,
-        ));
+        $this->view->assign(
+            array(
+                'subcat'       => $this->subcat,
+                'allcategorys' => $this->parentCategories,
+                'datos_cat'    => $this->datos_cat,
+                'MEDIA_IMG_URL' => $this->imgUrl,
+            )
+        );
 
         if ($this->category != 'GLOBAL'
             && $this->category != 0
@@ -87,33 +89,37 @@ class ImagesController extends Controller
         );
 
         foreach ($images as &$image) {
-            $extension              = strtolower($image->type_img);
             $image->description_utf = html_entity_decode($image->description);
             $image->metadata_utf    = html_entity_decode($image->metadata);
         }
 
         // Build the pager
-        $pagination = \Pager::factory(array(
-            'mode'        => 'Sliding',
-            'perPage'     => $itemsPerPage,
-            'append'      => false,
-            'path'        => '',
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => $countImages,
-            'fileName'    => $this->generateUrl(
-                'admin_images',
-                array('category' => $this->category)
-            ).'&page=%d',
-        ));
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => $countImages,
+                'fileName'    => $this->generateUrl(
+                    'admin_images',
+                    array('category' => $this->category)
+                ).'&page=%d',
+            )
+        );
 
-        return $this->render('image/list.tpl', array(
-            'pages'    => $pagination,
-            'photos'   => $images,
-            'category' => $this->category,
-            'page'     => $page
-        ));
+        return $this->render(
+            'image/list.tpl',
+            array(
+                'pages'    => $pagination,
+                'photos'   => $images,
+                'category' => $this->category,
+                'page'     => $page
+            )
+        );
     }
 
     /**
@@ -126,7 +132,6 @@ class ImagesController extends Controller
         unset($_SESSION['where']);
 
         $ccm = \ContentCategoryManager::get_instance();
-        $nameCat     = 'GLOBAL'; //Se mete en litter pq category 0
         $fullcat     = $ccm->order_by_posmenu($ccm->categories);
         $photoSet    = $ccm->dataMediaByTypeGroup('media_type="image"');
         $photoSetJPG = $ccm->countMediaByTypeGroup('media_type="image" and type_img="jpg"');
@@ -261,7 +266,6 @@ class ImagesController extends Controller
 
         $photoFileTypes = array('jpg', 'gif', 'png', 'other', 'bn', 'color', 'size');
         foreach ($photoFileTypes as $type) {
-            $typeUpper = strtoupper($type);
             $statistics['totals'][$type] = $statistics['num_photos'][$type]  + $statistics['num_sub_photos'][$type]
                 + $statistics['num_especials'][$type];
         }
@@ -269,18 +273,19 @@ class ImagesController extends Controller
             + $statistics['totals']['gif'] + $statistics['totals']['png']
             + $statistics['totals']['other'];
 
-        return $this->render('image/statistics.tpl', array(
-            'totals'         => $statistics['totals'],
-            'categorys'      => $this->parentCategories,
-            'subcategorys'   => $this->subcat,
-            'num_photos'     => $num_photos,
-            'num_sub_photos' => $num_sub_photos,
-            'especials'      => $especials,
-            'num_especials'  => $num_especials,
-            'category'       => 'statistics',
-        ));
-
-        $_SESSION['desde'] = 'statistics';
+        return $this->render(
+            'image/statistics.tpl',
+            array(
+                'totals'         => $statistics['totals'],
+                'categorys'      => $this->parentCategories,
+                'subcategorys'   => $this->subcat,
+                'num_photos'     => $num_photos,
+                'num_sub_photos' => $num_sub_photos,
+                'especials'      => $especials,
+                'num_especials'  => $num_especials,
+                'category'       => 'statistics',
+            )
+        );
     }
 
     /**
@@ -305,15 +310,20 @@ class ImagesController extends Controller
 
             return $this->redirect($this->generateUrl('admin_videos'));
         } else {
-            $configurations = s::get(array(
-                'image_thumb_size',
-                'image_inner_thumb_size',
-                'image_front_thumb_size',
-            ));
+            $configurations = s::get(
+                array(
+                    'image_thumb_size',
+                    'image_inner_thumb_size',
+                    'image_front_thumb_size',
+                )
+            );
 
-            return $this->render('image/config.tpl', array(
-                'configs'   => $configurations,
-            ));
+            return $this->render(
+                'image/config.tpl',
+                array(
+                    'configs'   => $configurations,
+                )
+            );
         }
     }
 
@@ -324,16 +334,18 @@ class ImagesController extends Controller
      **/
     public function searchAction(Request $request)
     {
-        $request  = $this->request;
         $page     = $request->query->getDigits('page', 1);
         $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
         $searchStringRAW = $request->query->filter('string_search', null, FILTER_SANITIZE_STRING);
 
         // If the form was not completed show the form
         if (empty($searchStringRAW)) {
-            return $this->render('image/search.tpl', array(
-                'category' => $category,
-            ));
+            return $this->render(
+                'image/search.tpl',
+                array(
+                    'category' => $category,
+                )
+            );
         } else {
             $cm     = new \ContentManager();
             $search = "";
@@ -419,29 +431,34 @@ class ImagesController extends Controller
                 $photo->metadata_utf    = html_entity_decode($photo->metadata);
             }
 
-            $pagination = \Pager::factory(array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'fileName'    => $this->generateUrl('admin_images_search').'?page=%d',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $countPhotos,
-            ));
+            $pagination = \Pager::factory(
+                array(
+                    'mode'        => 'Sliding',
+                    'perPage'     => $itemsPerPage,
+                    'append'      => false,
+                    'path'        => '',
+                    'fileName'    => $this->generateUrl('admin_images_search').'?page=%d',
+                    'delta'       => 4,
+                    'clearIfVoid' => true,
+                    'urlVar'      => 'page',
+                    'totalItems'  => $countPhotos,
+                )
+            );
 
             $_SESSION['desde'] = 'search';
 
-            return $this->render('image/search.tpl', array(
-                'photos'          => $photos,
-                'search_criteria' => $searchCriteria,
-                'search_string'   => $searchStringRAW,
-                'paginacion'      => $pagination,
-                'search'          => $search,
-                'pages'           => $pagination,
-                'category'        => $category,
-            ));
+            return $this->render(
+                'image/search.tpl',
+                array(
+                    'photos'          => $photos,
+                    'search_criteria' => $searchCriteria,
+                    'search_string'   => $searchStringRAW,
+                    'paginacion'      => $pagination,
+                    'search'          => $search,
+                    'pages'           => $pagination,
+                    'category'        => $category,
+                )
+            );
         }
     }
 
@@ -461,9 +478,9 @@ class ImagesController extends Controller
         if (empty($category) || !array_key_exists($category, $ccm->categories)) {
             m::add(_('Please provide a valid category for upload images.'), m::ERROR);
 
-            return $this->redirect($this->generateUrl('admin_images', array(
-                'category' => $category,
-            )));
+            return $this->redirect(
+                $this->generateUrl('admin_images', array('category' => $category,))
+            );
         }
 
         $maxUpload      = (int) (ini_get('upload_max_filesize'));
@@ -471,10 +488,13 @@ class ImagesController extends Controller
         $memoryLimit    = (int) (ini_get('memory_limit'));
         $maxAllowedSize = min($maxUpload, $maxPost, $memoryLimit);
 
-        return $this->render('image/create.tpl', array(
-            'category'         => $category,
-            'max_allowed_size' => $maxAllowedSize,
-        ));
+        return $this->render(
+            'image/create.tpl',
+            array(
+                'category'         => $category,
+                'max_allowed_size' => $maxAllowedSize,
+            )
+        );
     }
 
     /**
@@ -484,18 +504,17 @@ class ImagesController extends Controller
      **/
     public function showAction(Request $request)
     {
-        $request  = $this->request;
-        // $category = $_SESSION['category'];
-        $ids      = $request->query->get('id');
+        $request     = $this->request;
+        $ids         = $request->query->get('id');
+        $page        = $request->query->getDigits('page', 1);
 
         // Check if ids was passed as params
         if (!is_array($ids) || !(count($ids) > 0)) {
             m::add(_('Please provide a image id for show it.'), m::ERROR);
 
-            return $this->redirect($this->generateUrl(
-                'admin_images',
-                array('category' => $category)
-            ));
+            return $this->redirect(
+                $this->generateUrl('admin_images', array('category' => $category))
+            );
         }
 
         $photos = array();
@@ -505,7 +524,6 @@ class ImagesController extends Controller
                 $photo = new \Photo($id);
                 if (!empty($photo->id)) {
                     $photos []= $photo->readAllData($id);
-                    $imageUrl = $this->pathUpload.$photo->path_file.$photo->name;
                 }
             }
         }
@@ -524,10 +542,13 @@ class ImagesController extends Controller
             );
         }
 
-        return $this->render('image/show.tpl', array(
-            'photos'        => $photos,
-            'MEDIA_IMG_URL' => $this->imgUrl,
-        ));
+        return $this->render(
+            'image/show.tpl',
+            array(
+                'photos'        => $photos,
+                'MEDIA_IMG_URL' => $this->imgUrl,
+            )
+        );
     }
 
     /**
@@ -542,7 +563,7 @@ class ImagesController extends Controller
         $action    = $request->request->filter('action', 'update');
         $page      = $request->request->getDigits('page', 1);
 
-        $photos = $ids = array();
+        $ids = array();
         $photosSaved = 0;
         foreach ($photosRAW as $id => $value) {
             $photoData = array(
@@ -573,10 +594,15 @@ class ImagesController extends Controller
 
             return $this->redirect($this->generateUrl('admin_image_show').'?id[]='.$queryIDs);
         } else {
-            return $this->redirect($this->generateUrl('admin_images', array(
-                'category' => $_SESSION['category'],
-                'page'     => $page,
-            )));
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_images',
+                    array(
+                        'category' => $_SESSION['category'],
+                        'page'     => $page,
+                    )
+                )
+            );
         }
     }
 
@@ -600,10 +626,15 @@ class ImagesController extends Controller
         // $contents = $photo->isUsed($id);
         $photo->delete($id, $_SESSION['userid']);
 
-        return $this->redirect($this->generateUrl('admin_images', array(
-            'category' => $photo->category,
-            'page'     => $page,
-        )));
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_images',
+                array(
+                    'category' => $photo->category,
+                    'page'     => $page,
+                )
+            )
+        );
     }
 
     /**
@@ -614,15 +645,17 @@ class ImagesController extends Controller
     public function createAction(Request $request)
     {
         $response = new Response();
-        $response->headers->add(array(
-            'Pragma' => 'text/plain',
-            'Cache-Control' => 'private, no-cache',
-            'Content-Disposition' => 'inline; filename="files.json"',
-            'X-Content-Type-Options' => 'nosniff',
-            'Access-Control-Allow-Origin' => '*',
-            'Access-Control-Allow-Methods' => 'OPTIONS, HEAD, GET, POST, PUT, DELETE',
-            'Access-Control-Allow-Headers' => 'X-File-Name, X-File-Type, X-File-Size',
-        ));
+        $response->headers->add(
+            array(
+                'Pragma' => 'text/plain',
+                'Cache-Control' => 'private, no-cache',
+                'Content-Disposition' => 'inline; filename="files.json"',
+                'X-Content-Type-Options' => 'nosniff',
+                'Access-Control-Allow-Origin' => '*',
+                'Access-Control-Allow-Methods' => 'OPTIONS, HEAD, GET, POST, PUT, DELETE',
+                'Access-Control-Allow-Headers' => 'X-File-Name, X-File-Type, X-File-Size',
+            )
+        );
 
         switch ($_SERVER['REQUEST_METHOD']) {
             case 'HEAD':
@@ -641,11 +674,13 @@ class ImagesController extends Controller
                 }
                 $category_name = $this->ccm->categories[$category]->name;
 
-                $fileSizesSettings = s::get(array(
-                    'image_thumb_size',
-                    'image_inner_thumb_size',
-                    'image_front_thumb_size',
-                ));
+                $fileSizesSettings = s::get(
+                    array(
+                        'image_thumb_size',
+                        'image_inner_thumb_size',
+                        'image_front_thumb_size',
+                    )
+                );
 
                 $upload = isset($_FILES['files']) ? $_FILES['files'] : null;
                 $info = array();
@@ -737,7 +772,7 @@ class ImagesController extends Controller
 
                 $response->headers->add(array('Vary' =>'Accept'));
 
-                $redirect = $this->request->request->filter('redirect', null, FILTER_SANITIZE_STRING);
+                $redirect = $request->request->filter('redirect', null, FILTER_SANITIZE_STRING);
                 if (!empty($redirect)) {
                     return $this->redirect(sprintf($redirect, rawurlencode($json)));
                 }
@@ -750,7 +785,6 @@ class ImagesController extends Controller
 
                 return $response;
                 break;
-
             case 'DELETE':
                 break;
             default:
@@ -780,19 +814,21 @@ class ImagesController extends Controller
         ) {
             foreach ($selectedItems as $element) {
                 $photo = new \Photo($element);
-                $photo->delete($element, $_SESSION['userid'] );
+                $photo->delete($element, $_SESSION['userid']);
 
                 m::add(sprintf(_('Image "%s" deleted successfully.'), $photo->title), m::SUCCESS);
             }
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_images',
-            array(
-                'categoy' => $category,
-                'page'    => $page,
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_images',
+                array(
+                    'categoy' => $category,
+                    'page'    => $page,
+                )
             )
-        ));
+        );
     }
 
     /**
@@ -831,11 +867,12 @@ class ImagesController extends Controller
             } else {
                 $szWhere = "TRUE";
 
-                return new Response(sprintf(_(
-                    "<div>"
-                    ."<p>Unable to find any content matching your search criterira.</p>"
-                    ."</div>"
-                ), $metadatas));
+                return new Response(
+                    sprintf(
+                        "<div><p>"._("Unable to find any content matching your search criterira.")."</p></div>",
+                        $metadatas
+                    )
+                );
             }
 
         } else {
@@ -862,21 +899,28 @@ class ImagesController extends Controller
             array_pop($photos);
         }
 
-        $pagination = \Onm\Pager\SimplePager::getPagerUrl(array(
-            'page'  => $page,
-            'items' => $itemsPerPage,
-            'total' => $total,
-            'url'   => $this->generateUrl('admin_images_content_provider_gallery', array(
-                'category'  => $category,
-                'metadatas' => $metadatas,
-            ))
-        ));
+        $pagination = \Onm\Pager\SimplePager::getPagerUrl(
+            array(
+                'page'  => $page,
+                'items' => $itemsPerPage,
+                'total' => $total,
+                'url'   => $this->generateUrl(
+                    'admin_images_content_provider_gallery',
+                    array(
+                        'category'  => $category,
+                        'metadatas' => $metadatas,
+                    )
+                )
+            )
+        );
 
-        return $this->render('image/image_gallery.ajax.tpl', array(
-            'imagePager' => $pagination,
-            'photos'     => $photos,
-
-        ));
+        return $this->render(
+            'image/image_gallery.ajax.tpl',
+            array(
+                'imagePager' => $pagination,
+                'photos'     => $photos,
+            )
+        );
     }
 }
 

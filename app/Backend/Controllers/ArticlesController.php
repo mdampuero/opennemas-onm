@@ -948,6 +948,7 @@ class ArticlesController extends Controller
         );
 
         $this->view->caching = 0;
+
         return $this->render(
             'article/article.tpl',
             array(

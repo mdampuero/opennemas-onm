@@ -42,6 +42,7 @@ class UtilsController extends Controller
         $tags = $request->query->filter('data', '', FILTER_SANITIZE_STRING);
 
         $tags = StringUtils::get_tags($tags);
+
         return new Response($tags, 200);
     }
 
