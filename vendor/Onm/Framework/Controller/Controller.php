@@ -87,9 +87,13 @@ class Controller extends ContainerAware
      */
     public function render($view, array $parameters = array(), Response $response = null)
     {
-        $response = $this->renderView($view, $parameters);
+        $contents = $this->renderView($view, $parameters);
 
-        return new Response($response);
+        if (is_null($response)) {
+            return new Response($contents);
+        } else {
+            return $response->setContent($contents);
+        }
         // return $this->container->get('templating')->renderResponse($view, $parameters, $response);
     }
 
@@ -154,3 +158,4 @@ class Controller extends ContainerAware
         return \Acl::checkOrForward($aclName);
     }
 }
+
