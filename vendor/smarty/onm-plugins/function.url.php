@@ -18,6 +18,8 @@ function smarty_function_url($params, &$smarty) {
                 $url = $generator->generate($name, $params, $absolute);
             } catch (\Symfony\Component\Routing\Exception\RouteNotFoundException $e) {
                 $url = '#not-found-'.$params['name'];
+            } catch (\Exception $e) {
+                $url = '#not-found';
             }
         }
     } else {
