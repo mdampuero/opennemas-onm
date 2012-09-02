@@ -58,6 +58,8 @@ while (!$rs->EOF) {
 
         $privileges->MoveNext();
     }
+    echo ");";
 
     $rs->MoveNext();
 }
+
