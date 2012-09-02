@@ -51,6 +51,9 @@ class ErrorController extends Controller
 
         $errorID = strtoupper(INSTANCE_UNIQUE_NAME.'_'.uniqid());
 
+        $preview = self::highlightSource($error->getFile(), $error->getLine(), 7);
+        $this->view->assign('preview', $preview);
+
         switch ($name) {
             case 'ResourceNotFoundException':
                 $trace = $error->getTrace();
@@ -68,7 +71,7 @@ class ErrorController extends Controller
                             'error'         => $error,
                             'error_id'      => $errorID,
                             'environment'   => $environment,
-                            'backtrace'     => $error->getTrace(),
+                            'backtrace'     => array_reverse($error->getTrace()),
                         )
                     );
                 }
@@ -88,7 +91,7 @@ class ErrorController extends Controller
                         'error'         => $error,
                         'error_id'      => $errorID,
                         'environment'   => $environment,
-                        'backtrace'     => $error->getTrace(),
+                        'backtrace'     => array_reverse($error->getTrace()),
                     )
                 );
 
@@ -96,6 +99,48 @@ class ErrorController extends Controller
         }
 
         return new Response($content, 500);
+    }
+
+    /**
+     * Returns an exceprt HTML with the content of the file highlighting
+     * the line that produces the error.
+     *
+     * @param string $fileName The name of the file where is the error.
+     * @param string $fileName The line inside the file where is the error.
+     * @param int $showLines The number of lines to show before and after
+     *                       the error line.
+     *
+     * @return strin The HTML with the highlighted source.
+     **/
+    static public function highlightSource($fileName, $lineNumber, $showLines)
+    {
+
+        $lines = htmlspecialchars(file_get_contents($fileName));
+        $lines = nl2br($lines);
+        $lines = explode("<br />", $lines);
+
+        $offset = max(0, $lineNumber - ceil($showLines / 2));
+
+        $lines = array_slice($lines, $offset, $showLines);
+
+        $html = '';
+        foreach ($lines as $line) {
+            $offset++;
+            $line = preg_replace("@\s@", "&nbsp;", $line);
+
+            if ($offset == $lineNumber) {
+                $line = '<em class="lineno highlighted">'
+                        . sprintf('%4d', $offset) . ' </em>' . $line . '<br/>';
+                $html .= '<div class="code highlighted">'
+                        . $line . '</div>';
+            } else {
+                $line = '<em class="lineno">'
+                        . sprintf('%4d', $offset) . ' </em>' . $line . '<br/>';
+                $html .= $line;
+            }
+        }
+
+        return $html;
     }
 }
 
