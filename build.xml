@@ -116,7 +116,7 @@
         description="Find coding standard violations using PHP_CodeSniffer">
         <exec executable="phpcs">
             <arg line="-n" />
-            <arg value="--standard=PSR" />
+            <arg value="--standard=PSR2" />
             <arg line="${project.paths.php.space-separated}" />
         </exec>
     </target>
@@ -126,7 +126,7 @@
         <exec executable="phpcs" output="${basedir}/build/logs/checkstyle.xml">
             <arg line="-n" />
             <arg line="--report=checkstyle" />
-            <arg value="--standard=PSR" />
+            <arg value="--standard=PSR2" />
             <arg line="${project.paths.php.space-separated}" />
         </exec>
     </target>
