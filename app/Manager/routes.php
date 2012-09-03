@@ -150,3 +150,4 @@ $managerRoutes->add(
 );
 
 $routes->addCollection($managerRoutes);
+

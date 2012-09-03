@@ -16,6 +16,7 @@ use Onm\Framework\Controller\Controller;
 use Onm\Instance\InstanceManager as im;
 use Onm\Message as m;
 use Onm\Settings as s;
+
 /**
  * Handles the actions for the system information
  *
@@ -73,12 +74,15 @@ class InstancesController extends Controller
 
         $instances = array_slice($instances, ($page-1) * $itemsPerPage, $itemsPerPage);
 
-        return $this->render('instances/list.tpl', array(
-            'instances'     => $instances,
-            'per_page'      => $itemsPerPage,
-            'filter_name'   => $findParams['name'],
-            'pagination'    => $pager,
-        ));
+        return $this->render(
+            'instances/list.tpl',
+            array(
+                'instances'     => $instances,
+                'per_page'      => $itemsPerPage,
+                'filter_name'   => $findParams['name'],
+                'pagination'    => $pager,
+            )
+        );
     }
 
     /**
@@ -101,10 +105,13 @@ class InstancesController extends Controller
             $instance->domains = preg_split("@, @", $instance->domains);
         }
 
-        $response = $this->render('instances/csv.tpl', array(
-            'instances'   => $instances,
-            'filter_name' => $findParams['name'],
-        ));
+        $response = $this->render(
+            'instances/csv.tpl',
+            array(
+                'instances'   => $instances,
+                'filter_name' => $findParams['name'],
+            )
+        );
 
         if ($findParams['name'] != '*') {
             $fileNameFilter = '-'.\Onm\StringUtils::get_title($findParams['name']);
@@ -148,23 +155,26 @@ class InstancesController extends Controller
         list($instance->totals, $instance->configs) =
             $this->instanceManager->getDBInformation($instance->settings);
 
-        return $this->render('instances/edit.tpl', array(
-            'configs'           => $instance->configs,
-            'available_modules' => ModuleManager::getAvailableModules(),
-            'timezones'         => \DateTimeZone::listIdentifiers(),
-            'languages'         => array(
-                'en_US' => _("English"),
-                'es_ES' => _("Spanish"),
-                'gl_ES' => _("Galician")
-            ),
-            'logLevels'         => array(
-                'normal'  => _('Normal'),
-                'verbose' => _('Verbose'),
-                'all'     => _('All (Paranoic mode)')
-            ),
-            'instance'          => $instance,
-            'templates'         => $templates,
-        ));
+        return $this->render(
+            'instances/edit.tpl',
+            array(
+                'configs'           => $instance->configs,
+                'available_modules' => ModuleManager::getAvailableModules(),
+                'timezones'         => \DateTimeZone::listIdentifiers(),
+                'languages'         => array(
+                    'en_US' => _("English"),
+                    'es_ES' => _("Spanish"),
+                    'gl_ES' => _("Galician")
+                ),
+                'logLevels'         => array(
+                    'normal'  => _('Normal'),
+                    'verbose' => _('Verbose'),
+                    'all'     => _('All (Paranoic mode)')
+                ),
+                'instance'          => $instance,
+                'templates'         => $templates,
+            )
+        );
     }
 
     /**
@@ -182,7 +192,7 @@ class InstancesController extends Controller
             if (isset($_POST['internal_name']) && !empty($_POST['internal_name'])) {
                 $internalName = $_POST['internal_name'];
             } else {
-                $internal = explode(".", filter_input(INPUT_POST, 'domains', FILTER_SANITIZE_STRING) );
+                $internal = explode(".", filter_input(INPUT_POST, 'domains', FILTER_SANITIZE_STRING));
                 $internalName = $internal[0];
             }
             //Force internal_name lowercase
@@ -244,22 +254,25 @@ class InstancesController extends Controller
         } else {
             $templates = im::getAvailableTemplates();
 
-            return $this->render('instances/edit.tpl', array(
-                'configs' => array( 'activated_modules' => ModuleManager::getAvailableModules()),
-                'available_modules' => ModuleManager::getAvailableModules(),
-                'timezones' => \DateTimeZone::listIdentifiers(),
-                'languages' => array(
-                    'en_US' => _("English"),
-                    'es_ES' => _("Spanish"),
-                    'gl_ES' => _("Galician")
-                ),
-                'logLevels' => array(
-                    'normal'  => _('Normal'),
-                    'verbose' => _('Verbose'),
-                    'all'     => _('All (Paranoic mode)')
-                ),
-                'templates' => $templates,
-            ));
+            return $this->render(
+                'instances/edit.tpl',
+                array(
+                    'configs' => array( 'activated_modules' => ModuleManager::getAvailableModules()),
+                    'available_modules' => ModuleManager::getAvailableModules(),
+                    'timezones' => \DateTimeZone::listIdentifiers(),
+                    'languages' => array(
+                        'en_US' => _("English"),
+                        'es_ES' => _("Spanish"),
+                        'gl_ES' => _("Galician")
+                    ),
+                    'logLevels' => array(
+                        'normal'  => _('Normal'),
+                        'verbose' => _('Verbose'),
+                        'all'     => _('All (Paranoic mode)')
+                    ),
+                    'templates' => $templates,
+                )
+            );
         }
     }
 
@@ -365,9 +378,9 @@ class InstancesController extends Controller
         if (is_array($errors) && count($errors) > 0) {
             m::add($errors);
 
-            return $this->redirect($this->generateUrl('manager_instance_show'), array(
-                'id' => $id
-            ));
+            return $this->redirect(
+                $this->generateUrl('manager_instance_show', array('id' => $id))
+            );
         }
 
         if ($errors) {

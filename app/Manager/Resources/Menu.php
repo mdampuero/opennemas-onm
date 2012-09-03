@@ -22,3 +22,4 @@ $menuXml = '<?xml version="1.0"?>
         />
     </submenu>
 </menu>';
+

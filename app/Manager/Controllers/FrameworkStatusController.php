@@ -43,9 +43,10 @@ class FrameworkStatusController extends Controller
         $status = ob_get_contents();
         ob_end_clean();
 
-        return $this->render('framework/status.tpl', array(
-            'status' => $status
-        ));
+        return $this->render(
+            'framework/status.tpl',
+            array('status' => $status)
+        );
     }
 
     /**
