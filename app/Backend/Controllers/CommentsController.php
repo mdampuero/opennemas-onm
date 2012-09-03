@@ -279,11 +279,12 @@ class CommentsController extends Controller
     {
         $this->checkAclOrForward('COMMENT_AVAILABLE');
 
-        $request = $this->get('request');
-        $status  = $request->query->getDigits('status');
-        $id      = $request->query->getDigits('id');
+        $status       = $request->query->getDigits('status');
+        $returnStatus = $request->query->getDigits('return_status', 0);
+        $id           = $request->query->getDigits('id');
 
         $comment = new \Comment($id);
+
         if ($status == 2) {
             $comment->set_status($status, $_SESSION['userid']);
             m::add(_('Comment was rejected successfully.'), m::SUCCESS);
@@ -295,11 +296,10 @@ class CommentsController extends Controller
         $params = array(
             'page'     => $request->query->getDigits('page', 1),
             'category' => $request->query->filter('category'),
-            'status'   => $status
+            'status'   => $returnStatus
         );
 
         return $this->redirect($this->generateUrl('admin_comments', $params));
-
     }
 
     /**
