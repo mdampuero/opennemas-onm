@@ -597,7 +597,6 @@ class Content
                 $status,
                 $status,
                 $lastEditor,
-                $changed,
                 $this->id
             );
         } else {
