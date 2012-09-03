@@ -14,7 +14,7 @@ DROP TABLE  `articles_clone`;
 ALTER TABLE  `users` DROP  `address` , DROP  `phone`, DROP `online` ;
 
 -- 14-08-2012
-ALTER TABLE `newsletter_archive` ADD `subject` VARCHAR( 255 ) NOT NULL AFTER `pk_newsletter`;
+ALTER TABLE `newsletter_archive` ADD `title` VARCHAR( 255 ) NOT NULL AFTER `pk_newsletter`;
 ALTER TABLE `newsletter_archive` ADD `sent` VARCHAR( 255 ) NOT NULL
 
 -- 03-08-2012

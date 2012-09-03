@@ -225,15 +225,17 @@ class ImporterEfeController extends Controller
 
                 $filePath = realpath($efe->_syncPath.DIRECTORY_SEPARATOR.$photo->file_path);
 
+
                 // Check if the file exists
                 if ($filePath) {
                     $data = array(
-                        'title'         => $photo->title,
-                        'description'   => '',
+                        'title'         => $photo->file_path,
+                        'description'   => $photo->title,
                         'local_file'    => realpath($efe->_syncPath.DIRECTORY_SEPARATOR.$photo->file_path),
                         'fk_category'   => $category,
                         'category_name' => $categoryInstance->name,
                         'metadata'      => \StringUtils::get_tags($photo->title),
+                        'author_name'   => '&copy; EFE '.date('Y')
                     );
 
                     $photo = new \Photo();
