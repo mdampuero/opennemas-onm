@@ -26,18 +26,22 @@ if (!empty($category_name) && $category_name != 'home' ) {
     $category = $ccm->get_id($category_name);
     $actual_category_id = $category;
     $category_real_name = $ccm->get_title($category_name);
-    $tpl->assign(array(
-        'category_name'      => $category_name ,
-        'category'           => $category ,
-        'actual_category_id' => $actual_category_id ,
-        'category_real_name' => $category_real_name ,
-        'actual_category'    => $category_name,
-    ));
+    $tpl->assign(
+        array(
+            'category_name'      => $category_name ,
+            'category'           => $category ,
+            'actual_category_id' => $actual_category_id ,
+            'category_real_name' => $category_real_name ,
+            'actual_category'    => $category_name,
+        )
+    );
 } else {
-     $category_real_name = 'Portada';
-     $tpl->assign(array(
-        'category_real_name' => $category_real_name ,
-    ));
+    $category_real_name = 'Portada';
+    $tpl->assign(
+        array(
+            'category_real_name' => $category_real_name ,
+        )
+    );
     $actual_category_id = $category = 0; //NEED CODE WIDGETS
 }
 
@@ -46,7 +50,7 @@ $cm = new ContentManager();
 switch ($action) {
     case 'list':
         # If is not cached process this action
-        $cacheID = $tpl->generateCacheId( $category_name, '', $page);
+        $cacheID = $tpl->generateCacheId($category_name, '', $page);
 
 
         if (($tpl->caching == 0)
@@ -58,7 +62,10 @@ switch ($action) {
             $totalVideosFrontpage = isset($videosSettings['total_front'])?:2;
             $days = isset( $videosSettings['time_last'])?:365;
 
-            if (isset($category_name) && !empty($category_name) && $category_name != 'home') {
+            if (isset($category_name)
+                && !empty($category_name)
+                && $category_name != 'home'
+            ) {
                 $front_videos = $cm->find_all(
                     'Video',
                     'available=1 AND `contents_categories`.`pk_fk_content_category` ='
@@ -74,7 +81,7 @@ switch ($action) {
                 $others_videos = $cm->find_all(
                     'Video',
                     'available=1 AND created >=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY)  ',
-                    'ORDER BY views DESC LIMIT 3'
+                    'ORDER BY views DESC LIMIT 3, 9'
                 );
 
                 if (count($front_videos) > 0) {
@@ -83,23 +90,25 @@ switch ($action) {
                         $video->category_title = $video->loadCategoryTitle($video->id);
                     }
                 }
-                $tpl->assign( 'front_videos', $front_videos);
+                $tpl->assign('front_videos', $front_videos);
 
             } else {
-                $videos = $cm->find_all( 'Video',
+                $videos = $cm->find_all(
+                    'Video',
                     ' available=1 ',
                     'ORDER BY created DESC LIMIT 3'
                 );
 
-                $others_videos = $cm->find_all('Video',
+                $others_videos = $cm->find_all(
+                    'Video',
                     ' available=1 AND created >=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY)  ',
-                    'ORDER BY views DESC LIMIT 8'
+                    'ORDER BY starttime DESC LIMIT 3,12'
                 );
             }
 
             if (count($videos) > 0) {
                 foreach ($videos as &$video) {
-                    $video->category_name = $video->loadCategoryName($video->id);
+                    $video->category_name  = $video->loadCategoryName($video->id);
                     $video->category_title = $video->loadCategoryTitle($video->id);
                 }
             } else {
@@ -113,9 +122,13 @@ switch ($action) {
                 }
             }
 
-            $tpl->assign( array( 'videos' => $videos,
-                                 'others_videos' => $others_videos,
-                                 'page' => '1' ) );
+            $tpl->assign(
+                array(
+                    'videos' => $videos,
+                    'others_videos' => $others_videos,
+                    'page' => '1'
+                )
+            );
         }
 
         require_once("video_advertisement.php");
@@ -124,7 +137,10 @@ switch ($action) {
         $latestComments = $cm->cache->getLastComentsContent('Video', true, $actual_category_id, 4);
         $tpl->assign('lasts_comments', $latestComments);
 
-        if (isset($category_name) && !empty($category_name) && $category_name != 'home') {
+        if (isset($category_name)
+            && !empty($category_name)
+            && $category_name != 'home'
+        ) {
             $tpl->display('video/video_frontpage.tpl', $cacheID);
         } else {
             $tpl->display('video/video_main_frontpage.tpl', $cacheID);
@@ -143,7 +159,8 @@ switch ($action) {
 
         //Get other_videos for widget video most
         $days = isset( $videosSettings['time_last'])?:124;
-        $others_videos = $cm->find_all('Video',
+        $others_videos = $cm->find_all(
+            'Video',
             ' available=1 AND pk_content <> '.$videoID,
             ' ORDER BY created DESC LIMIT 4'
         );
@@ -156,9 +173,9 @@ switch ($action) {
             }
         }
 
-        $tpl->assign( 'others_videos', $others_videos );
+        $tpl->assign('others_videos', $others_videos);
         # If is not cached process this action
-        $cacheID = $tpl->generateCacheId( $category_name, '', $videoID);
+        $cacheID = $tpl->generateCacheId($category_name, '', $videoID);
 
         if (($tpl->caching == 0)
             || !$tpl->isCached('video/video_inner.tpl', $videoID)
@@ -171,13 +188,16 @@ switch ($action) {
             Content::setNumViews($video->id);
             $video->category_name = $video->loadCategoryName($video->id);
             $video->category_title = $video->loadCategoryTitle($video->id);
-            $tpl->assign(array(
-                'category' => $category,
-                'category_name' => $video->category_name,
-                'contentId' => $videoID,
-                'video' => $video,
-                'action' => 'inner',
-            ));
+            $tpl->assign(
+                array(
+                    'category' => $category,
+                    'category_name' => $video->category_name,
+                    'contentId' => $videoID,
+                    'video' => $video,
+                    'action' => 'inner',
+                )
+            );
+
             require_once "video_inner_advertisement.php";
 
         } //end iscached
@@ -221,7 +241,7 @@ switch ($action) {
 
         if (count($videos) > 0) {
             foreach ($videos as &$video) {
-                $video->category_name = $video->loadCategoryName($video->id);
+                $video->category_name  = $video->loadCategoryName($video->id);
                 $video->category_title = $video->loadCategoryTitle($video->id);
             }
         } else {
@@ -259,7 +279,7 @@ switch ($action) {
 
         if (count($others_videos) > 0) {
             foreach ($others_videos as &$video) {
-                $video->category_name = $video->loadCategoryName($video->id);
+                $video->category_name  = $video->loadCategoryName($video->id);
                 $video->category_title = $video->loadCategoryTitle($video->id);
             }
         } else {
