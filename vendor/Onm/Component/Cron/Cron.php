@@ -8,6 +8,7 @@
  * file that was distributed with this source code.
  **/
 namespace Onm\Component\Cron;
+
 /**
  * Handles all the cron actions, stores its parameters and provides statefull executions
  *
@@ -46,8 +47,10 @@ class Cron
         // if the parameter plugin is an object an
         // implements the plugin inteface register it
         if (is_object($plugin)
-            && in_array('\Onm\Component\Cron\Plugin\PluginInterface',
-                class_implements($plugin))
+            && in_array(
+                '\Onm\Component\Cron\Plugin\PluginInterface',
+                class_implements($plugin)
+            )
         ) {
             $this->_registeredPlugins []= $plugin;
 
@@ -77,5 +80,5 @@ class Cron
 
         return $loaded;
     }
+}
 
-} // END class Cron

@@ -23,7 +23,7 @@ class APCCache extends AbstractCache
      *
      * @param $options
      */
-    public function __construct($options= array())
+    public function __construct($options = array())
     {
         $this->initialize($options);
     }
@@ -91,3 +91,4 @@ class APCCache extends AbstractCache
         return apc_delete($id);
     }
 }
+

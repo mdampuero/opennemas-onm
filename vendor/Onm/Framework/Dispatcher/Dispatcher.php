@@ -9,8 +9,9 @@
  **/
 namespace Onm\Framework\Dispatcher;
 
-use \Symfony\Component\Routing\Exception\ResourceNotFoundException,
-    \Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\HttpFoundation\Response;
+
 /**
  * Dispatches url to a matched controller
  *
@@ -215,4 +216,5 @@ class Dispatcher
 
         return $normalizedUrl;
     }
-} // END class Dispatcher
+}
+

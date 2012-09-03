@@ -10,6 +10,7 @@
 namespace Onm\Import;
 
 use Onm\Import\Synchronizer\LockException;
+
 /**
  * Handles all the common methods in the importers
  *
@@ -164,8 +165,10 @@ abstract class ImporterAbstract
     {
         $fileListing = glob($cacheDir.DIRECTORY_SEPARATOR.'*.xml');
 
-        usort($fileListing,
-            create_function('$a,$b', 'return filemtime($b) - filemtime($a);'));
+        usort(
+            $fileListing,
+            create_function('$a,$b', 'return filemtime($b) - filemtime($a);')
+        );
 
         $fileListingCleaned = array();
 
@@ -203,8 +206,11 @@ abstract class ImporterAbstract
         $excludedFiles = self::getLocalFileList($this->_syncPath);
 
         $synchronizer = new \Onm\Import\Synchronizer\FTP($params);
-        $ftpSync = $synchronizer->downloadFilesToCacheDir($this->_syncPath,
-            $excludedFiles, $params['max_age']);
+        $ftpSync = $synchronizer->downloadFilesToCacheDir(
+            $this->_syncPath,
+            $excludedFiles,
+            $params['max_age']
+        );
 
         $this->unlockSync();
 
@@ -222,5 +228,5 @@ abstract class ImporterAbstract
     {
 
     }
+}
 
-} // END abstract class ImporterAbstract

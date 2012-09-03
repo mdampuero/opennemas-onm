@@ -45,5 +45,5 @@ class ModuleBootstrap
         }
         return $this;
     }
+}
 
-} // END class ModuleBootstrap

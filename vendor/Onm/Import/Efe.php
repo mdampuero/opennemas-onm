@@ -17,21 +17,19 @@ use \Onm\Import\DataSource\NewsMLG1;
  * @package    Onm
  * @subpackage Import
  */
-class Efe
-    extends    ImporterAbstract
-    implements ImporterInterface
+class Efe extends ImporterAbstract implements ImporterInterface
 {
     // the instance object
-    private static $_instance = null;
+    private static $instance = null;
 
     // the configuration to access to the server
-    private $_defaultConfig = array(
+    private $defaultConfig = array(
         'port' => 21,
     );
 
-    private $_config = array();
+    private $config = array();
 
-    protected $_lockFile = '';
+    protected $lockFile = '';
 
     public $_syncPath = '';
 
@@ -42,11 +40,11 @@ class Efe
      */
     public static function getInstance($config = array())
     {
-        if (!self::$_instance instanceof self) {
-            self::$_instance = new self($config);
+        if (!self::$instance instanceof self) {
+            self::$instance = new self($config);
         }
 
-        return self::$_instance;
+        return self::$instance;
     }
 
     /**
@@ -56,14 +54,16 @@ class Efe
      */
     public function __construct($config = array())
     {
-        $this->_syncPath = implode(DIRECTORY_SEPARATOR,
-            array(CACHE_PATH, 'efe_import_cache'));
+        $this->_syncPath = implode(
+            DIRECTORY_SEPARATOR,
+            array(CACHE_PATH, 'efe_import_cache')
+        );
         $this->_syncFilePath = $this->_syncPath.DIRECTORY_SEPARATOR.".sync";
 
         // Merging default configurations with new ones
-        $this->_config   = array_merge($this->_defaultConfig, $config);
+        $this->config   = array_merge($this->defaultConfig, $config);
 
-        $this->_lockFile = $this->_syncPath.DIRECTORY_SEPARATOR.".lock";
+        $this->lockFile = $this->_syncPath.DIRECTORY_SEPARATOR.".lock";
     }
 
     /**
@@ -80,9 +80,11 @@ class Efe
         if (array_key_exists('items_page', $params)
             && array_key_exists('page', $params)
         ) {
-            $files = array_slice($filesSynced,
+            $files = array_slice(
+                $filesSynced,
                 $params['items_page'] * ($params['page']-1),
-                $params['items_page']);
+                $params['items_page']
+            );
         } else {
             $files = $filesSynced;
         }
@@ -126,9 +128,14 @@ class Efe
             $elementsCount++;
         }
 
-        usort($elements, create_function('$a,$b',
-            'return  $b->created_time->getTimestamp() '
-                    .'- $a->created_time->getTimestamp();'));
+        usort(
+            $elements,
+            create_function(
+                '$a,$b',
+                'return  $b->created_time->getTimestamp() '
+                .'- $a->created_time->getTimestamp();'
+            )
+        );
 
         return array($counTotalElements, $elements);
     }
@@ -162,5 +169,5 @@ class Efe
 
         return  $element;
     }
-
 }
+

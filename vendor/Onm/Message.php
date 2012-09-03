@@ -8,6 +8,7 @@
  * file that was distributed with this source code.
  **/
 namespace Onm;
+
 /**
  * Class for handling Messages for showing to the user.
  *
@@ -121,8 +122,8 @@ class Message
             }
             $noticeHTML = sprintf(
                 "<div class=\"alert alert-info\">"
-                    ."<button class=\"close\" data-dismiss=\"alert\">×</button>"
-                    ."%s"
+                ."<button class=\"close\" data-dismiss=\"alert\">×</button>"
+                ."%s"
                 ."</div>",
                 $messages
             );
@@ -135,8 +136,8 @@ class Message
             }
             $noticeHTML .= sprintf(
                 "<div class=\"alert alert-error\">"
-                    ."<button class=\"close\" data-dismiss=\"alert\">×</button>"
-                    ."%s"
+                ."<button class=\"close\" data-dismiss=\"alert\">×</button>"
+                ."%s"
                 ."</div>",
                 $messages
             );
@@ -149,8 +150,8 @@ class Message
             }
             $noticeHTML .= sprintf(
                 "<div class=\"alert alert-success\">"
-                    ."<button class=\"close\" data-dismiss=\"alert\">×</button>"
-                    ."%s"
+                ."<button class=\"close\" data-dismiss=\"alert\">×</button>"
+                ."%s"
                 ."</div>",
                 $messages
             );
@@ -171,3 +172,4 @@ class Message
         }
     }
 }
+

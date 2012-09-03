@@ -101,16 +101,6 @@ class DatabaseConnection
         }
     }
 
-    /**
-     * undocumented function
-     *
-     * @return void
-     **/
-    public function __get($property)
-    {
-        return $this->conn->{$property};
-    }
-
     public function __call($method, $params)
     {
         $connection = $this->getConnection($method, $params);

@@ -7,6 +7,7 @@
  * file that was distributed with this source code.
  */
 namespace Onm;
+
 /**
  * Wrapper class to get/set settings in db with support of APC caching.
  *
@@ -41,7 +42,7 @@ class Settings
      * @return array  if was provided an array of names this function returns an array of name/values
      * @return false  if the key doesn't exists or is not setted
      */
-    public static function get( $settingName )
+    public static function get($settingName)
     {
         // the setting name must be setted
         if (!isset($settingName) || empty($settingName)) {
@@ -205,5 +206,5 @@ class Settings
 
         return true;
     }
-
 }
+

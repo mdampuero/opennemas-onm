@@ -7,7 +7,9 @@
  * file that was distributed with this source code.
  */
 namespace Onm;
+
 use Onm\Settings as s;
+
 /**
  * Explanation for this class.
  *
@@ -33,7 +35,7 @@ use Onm\Settings as s;
 class Log extends \Zend_Log
 {
 
-    public function __construct($loglevel='normal')
+    public function __construct($loglevel = 'normal')
     {
         // set formatter, add %class% to save class name
         $format = date('Y-m-d H:i:s', time()).' (%priorityName%-%priority%) %message%'
@@ -111,3 +113,4 @@ class Log extends \Zend_Log
         return $writer;
     }
 }
+

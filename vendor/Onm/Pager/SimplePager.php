@@ -118,3 +118,4 @@ class SimplePager
         return $output;
     }
 }
+

@@ -8,6 +8,7 @@
  * file that was distributed with this source code.
  **/
 namespace Onm\File\Image;
+
 /**
  * Interface for image handling clases
  *
@@ -39,5 +40,5 @@ interface ImageInterface
     public function convert($format);
 
     public function output();
+}
 
-} // END interface ImageInterface

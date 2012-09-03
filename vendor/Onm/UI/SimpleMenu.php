@@ -7,6 +7,7 @@
  * file that was distributed with this source code.
  */
 namespace Onm\UI;
+
 /**
  * Class for generate a menu from XML file, with support for ACLs system.
  *
@@ -107,12 +108,12 @@ class SimpleMenu
         switch ($element) {
             case 'submenu':
                 $output []= $this->renderSubMenu($element, $value);
-                break;
 
+                break;
             case 'node':
                 $output []= $this->renderNode($value);
-                break;
 
+                break;
             default:
                 # code...
                 break;
@@ -138,10 +139,13 @@ class SimpleMenu
         if (count($output) > 0) {
             $class = $this->getClass($value['class']);
             $html  = "<li {$class}>"
-                   . $this->getHref($value['title'],
-                        'menu_'.$value['id'], $value['link'])
-                   . "<ul>".implode("", $output)."</ul>"
-                   . "</li>";
+                    .$this->getHref(
+                        $value['title'],
+                        'menu_'.$value['id'],
+                        $value['link']
+                    )
+                    . "<ul>".implode("", $output)."</ul>"
+                    . "</li>";
         }
 
         return $html;
@@ -164,11 +168,13 @@ class SimpleMenu
                 $external = isset($value['target']);
                 $class = $this->getClass($value['class']);
                 $html .= "<li {$class}>"
-                      . $this->getHref(
+                        .$this->getHref(
                             $value['title'],
-                            'submenu_'.$value['id'], $value['link'], $external
+                            'submenu_'.$value['id'],
+                            $value['link'],
+                            $external
                         )
-                      . "</li>";
+                        ."</li>";
             }
         }
 
@@ -199,5 +205,5 @@ class SimpleMenu
 
         return $menu;
     }
-
 }
+

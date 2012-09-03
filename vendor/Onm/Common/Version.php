@@ -39,3 +39,4 @@ class Version
         return version_compare($version, $currentVersion);
     }
 }
+

@@ -7,6 +7,7 @@
  * file that was distributed with this source code.
  */
 namespace Onm;
+
 /**
  * Library for handling unusual string operations.
  *
@@ -86,7 +87,7 @@ class StringUtils
      * @param  string  $name, the string to clen
      * @return string, the string cleaned
      **/
-    public static function setSeparator($str, $separator='-')
+    public static function setSeparator($str, $separator = '-')
     {
         $str = trim($str);
         $str = preg_replace('/[ ]+/', $separator, $str);
@@ -101,7 +102,7 @@ class StringUtils
      * @param  boolean $useStopList
      * @return string
      **/
-    public static function get_title($title, $useStopList=true)
+    public static function get_title($title, $useStopList = true)
     {
         $title = self::clearSpecialChars($title);
         $title = self::normalize_name($title);
@@ -130,7 +131,7 @@ class StringUtils
      *
      * @return string
      **/
-    public static function normalize_metadata($metadata, $separator=',')
+    public static function normalize_metadata($metadata, $separator = ',')
     {
         $items = explode(',', $metadata);
 
@@ -294,7 +295,7 @@ EOF;
         return $string;
     }
 
-    public static function str_stop($string, $maxLength=30, $suffix='...')
+    public static function str_stop($string, $maxLength = 30, $suffix = '...')
     {
         if (strlen($string) > $maxLength) {
             $string = substr($string, 0, $maxLength);
@@ -400,7 +401,7 @@ EOF;
     /**
      * filterBadWords
      **/
-    public static function filterBadWords($text, $weight=0, $replaceStr=' ')
+    public static function filterBadWords($text, $weight = 0, $replaceStr = ' ')
     {
         $words = self::loadBadWords();
         $text = ' ' . $text . ' ';
@@ -527,5 +528,5 @@ EOF;
 
         return $name;
     }
-
 }
+
