@@ -24,16 +24,16 @@
 
     {block name="js-library"}
         {script_tag src="/jquery/jquery.min.js"}
-        {script_tag src="/bootstrap/bootstrap.js"}
-        {script_tag src="/jquery/bootstrap-modal.js"}
+        {script_tag src="/libs/bootstrap.js"}
+        {script_tag src="/libs/jquery.tools.min.js"}
+        {script_tag src="/jquery-onm/jquery.onmvalidate.js"}
         {block name="prototype"}{/block}
     {/block}
 
     {block name="header-js"}
+        {script_tag src="/libs/modernizr.min.js"}
         {block name="js-library"}{/block}
         {script_tag src="/onm/scripts.js"}
-        {script_tag src="/modernizr/modernizr-2.5.0.min.js"}
-        {script_tag src="/validation.js"}
         {script_tag src="/tiny_mce/tiny_mce_gzip.js"}
      {/block}
 
