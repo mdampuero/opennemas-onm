@@ -53,6 +53,7 @@ class Advertisement extends Content
         34 => "Button Colunm 3 Position 4",
         35 => "Button Colunm 3 Position 5",
         36 => "Button Colunm 3 Position 6",
+        37 => "Floating banner",
 
         /* Intersticial banner noticia interior */
         150 => "[I] Banner Interticial noticia interior",
@@ -758,12 +759,22 @@ class Advertisement extends Content
     }
 
     /**
+     * Renders the advertisement given some parameteres
+     *
+     * @return string the HTML for this add
+     **/
+    public function render($params, $tpl)
+    {
+
+    }
+
+    /**
      * Inject banners into template
      *
      * @param array  $banners Array of Advertisement objects
      * @param Smarty $tpl     Template
      **/
-    public function render($banners, $tpl, $wsUrl = false)
+    public function renderMultiple($banners, $tpl, $wsUrl = false)
     {
         // Extract pk_photos to perform one query
         $pk_photos = array();
@@ -837,7 +848,8 @@ class Advertisement extends Content
                 //Evitar undefined index
                 if (isset($photos[$adv])) {
                     $tpl->assign(
-                        'photo'.$banner->type_advertisement, $photos[$adv]
+                        'photo'.$banner->type_advertisement,
+                        $photos[$adv]
                     );
                 }
             }

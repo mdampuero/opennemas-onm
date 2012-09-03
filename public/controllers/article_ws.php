@@ -84,12 +84,12 @@ switch ($action) {
 
         //Render ads
         $advertisement = Advertisement::getInstance();
-        $advertisement->render($banners, $advertisement, $wsUrl);
+        $advertisement->renderMultiple($banners, $advertisement, $wsUrl);
         */
 
         // Render intersticial banner
         if (!empty($intersticial)) {
-            $advertisement->render(array($intersticial), $advertisement, $wsUrl);
+            $advertisement->renderMultiple(array($intersticial), $advertisement, $wsUrl);
         }
 
         $cacheID = $tpl->generateCacheId($category_name, $subcategory_name, $articleID);

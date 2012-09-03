@@ -12,10 +12,10 @@ $advertisement = Advertisement::getInstance();
 $banners = $advertisement->getAdvertisements(array(901, 902, 903, 905, 909, 910), $category);
 $cm = new ContentManager();
 $banners = $cm->getInTime($banners);
-//$advertisement->render($banners, &$tpl);
-$advertisement->render($banners, $advertisement);
+//$advertisement->renderMultiple($banners, &$tpl);
+$advertisement->renderMultiple($banners, $advertisement);
 
 $intersticial = $advertisement->getIntersticial(950, '$category');
 if (!empty($intersticial)) {
-    $advertisement->render(array($intersticial), $advertisement);
+    $advertisement->renderMultiple(array($intersticial), $advertisement);
 }
