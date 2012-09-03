@@ -28,6 +28,14 @@
 
         {render_messages}
 
+        <div class="table-info clearfix">
+            <div class="pull-right form-inline">
+                <div class="input-append">
+                    <input type="text" id="username" name="name" value="{$name|default:""}" placeholder="{t}Filter by name{/t}"  />
+                    <button type="submit" class="btn"><i class="icon-search"></i></button>
+                </div>
+            </div>
+        </div>
         <table class="table table-hover table-condensed">
             <thead>
                 <tr>
@@ -54,7 +62,7 @@
                         {$author->condition}
                     </td>
                     <td style="text-align:center">
-                        {$author->num_photos}
+                        {$author->numphotos}
                     </td>
                     <td class="right nowrap">
                         <div class="btn-group">

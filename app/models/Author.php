@@ -26,8 +26,7 @@ class Author
 
     public $cache     = null;
 
-    // Static members for performance
-    private static $photos   = null;
+    private $photos   = array();
 
     private $defaultValues = array(
         'name'      =>'',
@@ -335,32 +334,24 @@ class Author
             }
         }
 
-        $sql = 'SELECT `authors`.`pk_author`, `authors`.`name` ,
-                       `authors`.`blog` , `authors`.`politics` ,
-                       `authors`.`date_nac` , `authors`.`fk_user` ,
-                       `authors`.`condition`, `authors`.`params`
-                FROM `authors`
-                WHERE '.$_where. ' '.$_orderBy.' '.$limit ;
-
+        $sql = 'SELECT * FROM `authors` WHERE '.$_where. ' '.$_orderBy.' '.$limit ;
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
-        $i  = 0;
         if ($rs) {
             while (!$rs->EOF) {
-                $items[$i] = new stdClass;
-                $items[$i]->id         = $rs->fields['pk_author'];
-                $items[$i]->pk_author  = $rs->fields['pk_author'];
-                $items[$i]->fk_user    = $rs->fields['fk_user'];
-                $items[$i]->name       = $rs->fields['name'];
-                $items[$i]->gender     = $rs->fields['blog'];
-                $items[$i]->politics   = $rs->fields['politics'];
-                $items[$i]->condition  = $rs->fields['condition'];
-                $items[$i]->params     = unserialize($rs->fields['params']);
-                $num                   = Author::count_authorphotos($rs->fields['pk_author']);
-                $items[$i]->numphotos = $num;
+                $author = new Author();
+                $author->id        = $rs->fields['pk_author'];
+                $author->pk_author = $rs->fields['pk_author'];
+                $author->fk_user   = $rs->fields['fk_user'];
+                $author->name      = $rs->fields['name'];
+                $author->gender    = $rs->fields['blog'];
+                $author->politics  = $rs->fields['politics'];
+                $author->condition = $rs->fields['condition'];
+                $author->params    = unserialize($rs->fields['params']);
+                $author->numphotos = \Author::count_author_photos($rs->fields['pk_author']);
 
+                $items []= $author;
                 $rs->MoveNext();
-                  $i++;
             }
         }
 
@@ -413,7 +404,7 @@ class Author
      **/
     public function get_photo($id)
     {
-        if (is_null(self::$photos)) {
+        if (count($this->photos) <= 0) {
             $sql = 'SELECT author_imgs.pk_img, author_imgs.path_img,
                            author_imgs.description
                     FROM author_imgs';
@@ -426,14 +417,14 @@ class Author
                     $photo->path_file   = $rs->fields['path_img'];
                     $photo->description = $rs->fields['description'];
 
-                    self::$photos[ $rs->fields['pk_img'] ] = $photo;
+                    $this->photos[ $rs->fields['pk_img'] ] = $photo;
                     $rs->MoveNext();
                 }
             }
         }
 
-        if (isset(self::$photos[$id])) {
-            return self::$photos[$id];
+        if (isset($this->photos[$id])) {
+            return $this->photos[$id];
         }
 
         return null;
@@ -446,7 +437,7 @@ class Author
      *
      * @return array list of dummy photo objects
      **/
-    public function get_authorphotos($id)
+    public function get_author_photos($id)
     {
         $sql = 'SELECT *
                 FROM author_imgs WHERE fk_author = ? ORDER BY pk_img ASC';
@@ -489,6 +480,8 @@ class Author
     {
         $sql = 'SELECT COUNT(*) FROM author_imgs WHERE fk_author = ?';
         $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
+        // var_dump($rs);die();
+
 
         return $rs->fields['COUNT(*)'];
     }

@@ -44,12 +44,20 @@ class OpinionAuthorsController extends Controller
         $this->checkAclOrForward('AUTHOR_ADMIN');
 
         $page = $request->query->getDigits('page', 1);
+        $name = $request->query->filter('name', null, FILTER_SANITIZE_STRING);
 
         $itemsPerPage = s::get('items_per_page') ?: 20;
 
+        if (isset($name) && !empty($name)) {
+            $filter = 'MATCH(`name`) AGAINST ("'.$name.'" IN BOOLEAN MODE)';
+        } else {
+            $filter = null;
+        }
+
         $cm          = new \ContentManager();
         $author      = new \Author();
-        $authors     = $author->list_authors(null, 'ORDER BY name ASC');
+        $authors     = $author->list_authors($filter, 'ORDER BY name ASC');
+
         $authorsPage = array_slice($authors, ($page-1)*$itemsPerPage, $itemsPerPage);
 
         // Build the pager
@@ -70,6 +78,7 @@ class OpinionAuthorsController extends Controller
         return $this->render(
             'opinion/authors/list.tpl',
             array(
+                'name'          => $name,
                 'authors'       => $authorsPage,
                 'pagination'    => $pagination,
             )
