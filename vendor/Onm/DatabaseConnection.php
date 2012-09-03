@@ -20,11 +20,27 @@ class DatabaseConnection
      *
      * @var string
      **/
-    private $conn;
+    public $conn = null;
 
-    public function __construct($dbType = 'mysqli')
+    /**
+     * undocumented class variable
+     *
+     * @var string
+     **/
+    public $conn_read_only = null;
+
+
+    /**
+     * undocumented class variable
+     *
+     * @var string
+     **/
+    private $useReplication = false;
+
+    private $connnection_params = null;
+
+    public function __construct()
     {
-        $this->conn = \ADONewConnection($dbType);
     }
 
     /**
@@ -32,40 +48,78 @@ class DatabaseConnection
      *
      * @return DatabaseConnection the object
      **/
-    public function connect($dbHost, $dbUser, $dbPass, $dbDatabase)
+    public function connect($params)
     {
-        $this->conn->Connect($dbHost, $dbUser, $dbPass, $dbDatabase);
+        $this->connection_params = $params;
+        $this->useReplication = false;
 
-        $this->conn->bulkBind = true;
+        if (array_key_exists('database_replication', $params)
+            && $params['database_replication'] == true
+        ) {
+            $this->useReplication = true;
+        };
 
-        return $this->conn;
+        $this->connection_params = $params['connections'];
+
+        foreach ($this->connection_params as $conn_params) {
+
+            $connection = \ADONewConnection($conn_params['database_driver']);
+            $connection->Connect(
+                $conn_params['database_host'],
+                $conn_params['database_user'],
+                $conn_params['database_password'],
+                $conn_params['database_name'],
+                $conn_params['database_driver']
+            );
+            $connection->bulkBind = true;
+
+            if ($this->useReplication
+                && array_key_exists('slave', $conn_params)
+                && $conn_params['slave'] == true) {
+                $this->conn_read_only []= $connection;
+            } else {
+                $this->conn []= $connection;
+            }
+        }
+
+        return $this;
     }
 
     /**
-     * Forward all the undefined functions to Adodb object
+     * Returns the proper connection whether is a read or a write query
      *
+     * @return the database connection
      **/
-    public function __call($method, $args)
+    public function getConnection($method, $params)
     {
-        return call_user_func_array(array($this->conn, $method), $args);
+        $isReadOnlyQuery = stripos($params[0], 'SELECT') !== false;
+
+        if ($this->useReplication && $isReadOnlyQuery) {
+            return $this->conn_read_only[0];
+        } else {
+            return $this->conn[0];
+        }
     }
 
     /**
-     * Forward all the property getters to the Adodb object
+     * undocumented function
      *
+     * @return void
      **/
-    public function __get($prop)
+    public function __get($property)
     {
-        return $this->conn->{$prop};
+        return $this->conn->{$property};
     }
 
-    /**
-     * Forward all the property setters to the Adodb object
-     *
-     **/
-    public function __set($method, $value)
+    public function __call($method, $params)
     {
-        return $this->conn->{$property} = $value;
+        $connection = $this->getConnection($method, $params);
+        // $rs = $connection->Execute('SELECT * FROM articles');
+        $rs = call_user_func_array(array($connection, $method), $params);
+
+        $this->error = $connection->ErrorMsg();
+
+        return $rs;
     }
 }
 

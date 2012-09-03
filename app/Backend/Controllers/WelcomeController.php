@@ -39,9 +39,7 @@ class WelcomeController extends Controller
      **/
     public function defaultAction(Request $request)
     {
-        // throw new \Exception('Something really bad happened. A little bird died!');
-
-        $_SESSION['desde'] = 'index_portada';
+        // $instances = $this->get('db_conn')->Execute('SELECT count(*) FROM instances');
 
         $feeds = array (
             array('name' => 'El pais', 'url'=> 'http://www.elpais.com/rss/feed.html?feedId=1022'),
@@ -50,9 +48,12 @@ class WelcomeController extends Controller
             array('name' => 'El mundo', 'url'=> 'http://elmundo.feedsportal.com/elmundo/rss/portada.xml'),
         );
 
-        return $this->render('welcome/index.tpl', array(
-            'feeds' => $feeds
-        ));
+        return $this->render(
+            'welcome/index.tpl',
+            array(
+                'feeds' => $feeds
+            )
+        );
 
     }
 }
