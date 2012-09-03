@@ -771,7 +771,6 @@ class Advertisement extends Content
         //}
 
         $tpl->assign('item', $this);
-        $tpl->assign('cssclass', $params['cssclass']);
 
         try {
             $html = $tpl->fetch($params['tpl']);

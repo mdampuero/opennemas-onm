@@ -237,7 +237,7 @@ class NewsletterManager
         $banners       = $advertisement->getAdvertisements(array(1001, 1009), 0);
         $banners       = $cm->getInTime($banners);
 
-        $advertisement->render($banners, $advertisement);
+        $advertisement->renderMultiple($banners, $advertisement);
 
          // VIERNES 4 DE SEPTIEMBRE 2009
         $days = array(

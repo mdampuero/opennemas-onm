@@ -54,12 +54,12 @@
                                 {/if}
                             </div>
                             <div class="article-resource-image-info">
-                                <div><label>{t}File name{/t}</label>     <span class="filename">{$photo2->name|default:'default_img.jpg'}</span></div>
-                                <div><label>{t}Image size{/t}</label>    <span class="image_size">{$photo2->width|default:0} x {$photo1->height|default:0} (px)</span></div>
-                                <div><label>{t}File size{/t}</label>     <span class="file_size">{$photo2->size|default:0} Kb</span></div>
-                                <div><label>{t}Creation date{/t}</label> <span class="created_time">{$photo2->created|default:""}</span></div>
-                                <div><label>{t}Description{/t}</label>   <span class="description">{$photo2->description|escape:'html'}</span></div>
-                                <div><label>{t}Tags{/t}</label>          <span class="tags">{$photo2->metadata|default:""}</span></div>
+                                <div><strong>{t}File name{/t}</strong>     <span class="filename">{$photo2->name|default:'default_img.jpg'}</span></div>
+                                <div><strong>{t}Image size{/t}</strong>    <span class="image_size">{$photo2->width|default:0} x {$photo1->height|default:0} (px)</span></div>
+                                <div><strong>{t}File size{/t}</strong>     <span class="file_size">{$photo2->size|default:0} Kb</span></div>
+                                <div><strong>{t}Creation date{/t}</strong> <span class="created_time">{$photo2->created|default:""}</span></div>
+                                <div><strong>{t}Description{/t}</strong>   <span class="description">{$photo2->description|escape:'html'}</span></div>
+                                <div><strong>{t}Tags{/t}</strong>          <span class="tags">{$photo2->metadata|default:""}</span></div>
                             </div>
                         </div>
                         <div id="footer_img_interior" class="article-resource-footer">
