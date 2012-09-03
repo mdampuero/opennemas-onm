@@ -7,6 +7,7 @@
  * file that was distributed with this source code.
  */
 use Onm\Message as m;
+
 /**
  * Class for handling user access to sections in backend
  *
@@ -27,7 +28,7 @@ class Acl
      *
      * @return boolean
      **/
-    public static function check($rule, $module=null)
+    public static function check($rule, $module = null)
     {
         if (!is_null($module)) {
             $rule = strtoupper($module) . '_' . strtoupper($rule);
@@ -44,7 +45,7 @@ class Acl
      * @param  string  $module
      * @return boolean
      **/
-    public static function checkOrForward($rule, $module=null)
+    public static function checkOrForward($rule, $module = null)
     {
         if (!is_null($module)) {
             $rule = strtoupper($module) . '_' . strtoupper($rule);
@@ -107,14 +108,15 @@ class Acl
         return PrivilegesCheck::CheckAccessCategories($category);
     }
 
-    public static function deny($message='Acceso no permitido')
+    public static function deny($message = 'Acceso no permitido')
     {
         if (strlen($message) > 0) {
             $message = new Message($message, 'error');
             $message->push();
         }
 
-        m::add(_("Sorry, you don't have enought privileges") );
+        m::add(_("Sorry, you don't have enought privileges"));
         Application::forward('/admin/');
     }
 }
+

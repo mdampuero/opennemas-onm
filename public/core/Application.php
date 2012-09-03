@@ -7,6 +7,7 @@
  * file that was distributed with this source code.
  */
 use Onm\Settings as s;
+
 /**
  * Main application class, handles all the initialization of the app
  *
@@ -94,8 +95,12 @@ class Application
             $conf = array('mode' => 0600,
                           'timeFormat' => '[%Y-%m-%d %H:%M:%S]',
                           'lineFormat' => '%1$s %2$s [%3$s] %4$s %5$s %6$s');
-            $fileLogger = &Log::singleton('file',
-                SYS_LOG_FILENAME, 'application', $conf);
+            $fileLogger = &Log::singleton(
+                'file',
+                SYS_LOG_FILENAME,
+                'application',
+                $conf
+            );
             $GLOBALS['application']->logger->addChild($fileLogger);
         } else {
             $GLOBALS['application']->logger = \Log::singleton('null');
@@ -118,8 +123,7 @@ class Application
 
         if (!self::isBackend()) {
             $availableLanguages = self::getAvailableLanguages();
-            $forceLanguage = filter_input(INPUT_GET,
-                'language', FILTER_SANITIZE_STRING);
+            $forceLanguage = filter_input(INPUT_GET, 'language', FILTER_SANITIZE_STRING);
 
             if ($forceLanguage !== null
                 && in_array($forceLanguage, array_keys($availableLanguages))
@@ -228,8 +232,7 @@ class Application
          **/
         //TODO: All the MEDIA_* should be ported to use this constant
         define('INSTANCE_MEDIA', MEDIA_URL.INSTANCE_UNIQUE_NAME.DS);
-        define('INSTANCE_MEDIA_PATH',
-            SITE_PATH.DS."media".DS.INSTANCE_UNIQUE_NAME.DS);
+        define('INSTANCE_MEDIA_PATH', SITE_PATH.DS."media".DS.INSTANCE_UNIQUE_NAME.DS);
 
         define('STATIC_PAGE_PATH', 'estaticas');
 
@@ -259,12 +262,9 @@ class Application
         define('TEMPLATE_USER_URL', SITE_URL."themes".SS.TEMPLATE_USER.SS);
 
         define('TEMPLATE_ADMIN', "default");
-        define('TEMPLATE_ADMIN_PATH',
-                SITE_PATH.DS.ADMIN_DIR.DS."themes".DS.TEMPLATE_ADMIN);
-        define('TEMPLATE_ADMIN_PATH_WEB',
-                SS.ADMIN_DIR.SS."themes".SS.TEMPLATE_ADMIN.SS);
-        define('TEMPLATE_ADMIN_URL',
-                SITE_URL_ADMIN.SS."themes".SS.TEMPLATE_ADMIN.SS);
+        define('TEMPLATE_ADMIN_PATH', SITE_PATH.DS.ADMIN_DIR.DS."themes".DS.TEMPLATE_ADMIN);
+        define('TEMPLATE_ADMIN_PATH_WEB', SS.ADMIN_DIR.SS."themes".SS.TEMPLATE_ADMIN.SS);
+        define('TEMPLATE_ADMIN_URL', SITE_URL_ADMIN.SS."themes".SS.TEMPLATE_ADMIN.SS);
         define('ADVERTISEMENT_ENABLE', true);
 
 
@@ -351,13 +351,11 @@ class Application
                     if (is_object($instance)) {
                         if (method_exists($instance, $callback)) {
                             // Call to the instance
-                            call_user_func_array(array(&$instance, $callback),
-                                $args);
+                            call_user_func_array(array(&$instance, $callback), $args);
                         }
                     } else {
                         // Static call
-                        call_user_func_array(array($instance, $callback),
-                            $args);
+                        call_user_func_array(array($instance, $callback), $args);
                     }
                 }
             }
@@ -399,7 +397,7 @@ class Application
         require APPLICATION_PATH .DS.'vendor'.DS.'Browscap.php';
 
         // Creates a new Browscap object (loads or creates the cache)
-        $bc = new Browscap( APPLICATION_PATH .DS.'tmp'.DS.'cache');
+        $bc = new \Browscap(APPLICATION_PATH .DS.'tmp'.DS.'cache');
         $browser = $bc->getBrowser(); //isBanned
 
         if (
@@ -465,8 +463,7 @@ class Application
     */
     public static function setCookieSecure($name, $value, $expires = 0, $domain = '/')
     {
-        setcookie($name, $value, $expires, $domain,
-            $_SERVER['SERVER_NAME'], isset($_SERVER['HTTPS']), true);
+        setcookie($name, $value, $expires, $domain, $_SERVER['SERVER_NAME'], isset($_SERVER['HTTPS']), true);
     }
 
     // TODO: move to a separated file called functions.php
@@ -510,8 +507,7 @@ class Application
             reset($entries);
             while (list(, $entry) = each($entries)) {
                 $entry = trim($entry);
-                $foundRegExp = preg_match("/^([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)/",
-                    $entry, $ipList);
+                $foundRegExp = preg_match("/^([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)/", $entry, $ipList);
                 if ($foundRegExp) {
                     // http://www.faqs.org/rfcs/rfc1918.html
                     $privateIp = array(

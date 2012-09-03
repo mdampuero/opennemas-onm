@@ -72,7 +72,8 @@ class TemplateCacheManager
                         'resource' => $matches['resource'],
                         'template' => $matches['tplname'],
                         'size' => number_format(
-                            $item->current()->getSize()/1024, 2
+                            $item->current()->getSize() / 1024,
+                            2
                         ),
                         'filename' => $filename,
                     );
@@ -320,7 +321,9 @@ class TemplateCacheManager
         curl_setopt($ch, CURLOPT_HEADER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
-        curl_setopt($ch, CURLOPT_USERAGENT,
+        curl_setopt(
+            $ch,
+            CURLOPT_USERAGENT,
             'Mozilla/5.0 (Windows; U; Windows NT 5.1; '
             .'pl; rv:1.9) Gecko/2008052906 Firefox/3.0'
         );
@@ -385,5 +388,5 @@ class TemplateCacheManager
             throw new Exception('Error open file: ' . $filename);
         }
     }
-
 }
+

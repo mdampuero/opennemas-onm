@@ -15,17 +15,17 @@
  **/
 class MethodCacheManager
 {
-    private $_ttl       = 300;
-    private $_object    = null;
-    private $_methods   = null;
-    private $_classname = null;
+    private $ttl       = 300;
+    private $object    = null;
+    private $methods   = null;
+    private $classname = null;
 
-    public function __construct($object, $options=array())
+    public function __construct($object, $options = array())
     {
-        $this->_object = $object;
+        $this->object = $object;
 
         if (isset($options['ttl'])) {
-            $this->_ttl = $options['ttl'];
+            $this->ttl = $options['ttl'];
         }
     }
 
@@ -34,31 +34,29 @@ class MethodCacheManager
         $class_methods = $this->getInternalObjectMethods();
 
         if (in_array($method, $class_methods)) {
-            $key = $this->_classname.$method.md5(serialize($args));
+            $key = $this->classname.$method.md5(serialize($args));
             if (defined('APC_PREFIX')) {
                 $key = APC_PREFIX . $key;
             }
 
             if (false === ($result = apc_fetch($key))) {
-                $result = call_user_func_array(array($this->_object,
-                    $method), $args);
-                apc_store($key, serialize($result), $this->_ttl);
+                $result = call_user_func_array(array($this->object, $method), $args);
+                apc_store($key, serialize($result), $this->ttl);
 
                 return $result;
             }
 
             return unserialize($result);
         } else {
-            throw new Exception(" Method " . $method
-                . " does not exist in this class "
-                . get_class($this->_object) . "."
+            throw new Exception(
+                " Method ".$method." does not exist in this class ".get_class($this->object)."."
             );
         }
     }
 
     public function setCacheLife($ttl)
     {
-        $this->_ttl = $ttl;
+        $this->ttl = $ttl;
 
         return $this;
     }
@@ -79,11 +77,12 @@ class MethodCacheManager
 
     protected function getInternalObjectMethods()
     {
-        if ($this->_methods === null && $this->_object !== null) {
-            $this->_classname = get_class($this->_object);
-            $this->_methods   = get_class_methods($this->_classname);
+        if ($this->methods === null && $this->object !== null) {
+            $this->classname = get_class($this->object);
+            $this->methods   = get_class_methods($this->classname);
         }
 
-        return $this->_methods;
+        return $this->methods;
     }
 }
+

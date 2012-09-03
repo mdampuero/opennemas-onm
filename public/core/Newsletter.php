@@ -13,8 +13,8 @@
  * @subpackage ControllerHelper
  **/
 
-use Onm\Settings as s,
-    Onm\Message  as m;
+use Onm\Settings as s;
+use Onm\Message  as m;
 
 class Newsletter
 {
@@ -65,8 +65,7 @@ class Newsletter
         $i = 0;
         foreach ($data->articles as $tok) {
             $category = $ccm->get_name($tok->category);
-            $date = date('Y-m-d', strtotime(str_replace('/', '-',
-                substr($tok->created, 6))));
+            $date = date('Y-m-d', strtotime(str_replace('/', '-', substr($tok->created, 6))));
             $data->articles[$i]->date= $date;
             $data->articles[$i]->cat = $category;
             if (is_array($tok->params)
@@ -81,8 +80,7 @@ class Newsletter
         $i = 0;
         if (isset($data->opinions) && !empty($data->opinions)) {
             foreach ($data->opinions as $tok) {
-                $date = date('Y-m-d',
-                    strtotime(str_replace('/', '-', substr($tok->created, 6))));
+                $date = date('Y-m-d', strtotime(str_replace('/', '-', substr($tok->created, 6))));
                 $data->opinions[$i]->date = $date;
                 $slug = StringUtils::get_title($data->opinions[$i]->author);
                 $data->opinions[$i]->slug= $slug;
@@ -104,8 +102,11 @@ class Newsletter
         $advertisement->render($banners, $advertisement);
 
         /*Fetch inmenu categorys*/
-        $categoriesInMenu = $ccm->find('internal_category != 0 '
-            .'AND fk_content_category =0 AND inmenu=1', 'ORDER BY posmenu');
+        $categoriesInMenu = $ccm->find(
+            'internal_category != 0 '
+            .'AND fk_content_category =0 AND inmenu=1',
+            'ORDER BY posmenu'
+        );
         $tpl->assign('inmenu_categorys', $categoriesInMenu);
 
         // VIERNES 4 DE SEPTIEMBRE 2009
@@ -128,14 +129,15 @@ class Newsletter
             .' de '.$months[(int) date('n')].' '.date('Y');
         $tpl->assign('current_date', $fullDate);
 
-        $publicUrl = preg_replace('@^http[s]?://(.*?)/$@i', 'http://$1',
-            SITE_URL);
+        $publicUrl = preg_replace('@^http[s]?://(.*?)/$@i', 'http://$1', SITE_URL);
         $tpl->assign('URL_PUBLIC', $publicUrl);
 
-        $configurations = s::get(array(
-            'newsletter_maillist',
-            'newsletter_subscriptionType',
-        ));
+        $configurations = s::get(
+            array(
+                'newsletter_maillist',
+                'newsletter_subscriptionType',
+            )
+        );
 
         $tpl->assign('conf', $configurations);
         $htmlContent = $tpl->fetch('newsletter/newsletter.tpl');
@@ -184,17 +186,14 @@ class Newsletter
         $mail->AddAddress($mailbox->email, $mailbox->name);
 
         // embed image logo
-        $mail->AddEmbeddedImage(SITE_PATH
-            .'themes/xornal/images/xornal-boletin.jpg', 'logo-cid', 'Logotipo');
+        $mail->AddEmbeddedImage(SITE_PATH.'themes/xornal/images/xornal-boletin.jpg', 'logo-cid', 'Logotipo');
 
         $subject = (!isset($params['subject']))? '[Xornal]': $params['subject'];
         $mail->Subject  = $subject;
 
         // TODO: crear un filtro
-        $this->HTML = preg_replace('/(>[^<"]*)["]+([^<"]*<)/', "$1&#34;$2",
-            $this->HTML);
-        $this->HTML = preg_replace("/(>[^<']*)[']+([^<']*<)/", "$1&#39;$2",
-            $this->HTML);
+        $this->HTML = preg_replace('/(>[^<"]*)["]+([^<"]*<)/', "$1&#34;$2", $this->HTML);
+        $this->HTML = preg_replace("/(>[^<']*)[']+([^<']*<)/", "$1&#39;$2", $this->HTML);
         $this->HTML = str_replace('“', '&#8220;', $this->HTML);
         $this->HTML = str_replace('”', '&#8221;', $this->HTML);
         $this->HTML = str_replace('‘', '&#8216;', $this->HTML);
@@ -311,7 +310,7 @@ class Newsletter
         $this->created        = $fields['created'];
     }
 
-    public function search($filter=null)
+    public function search($filter = null)
     {
         $newsletters = array();
 
@@ -368,7 +367,7 @@ class Newsletter_Account
     public $email = null;
     public $name  = null;
 
-    public function __construct($email, $name='')
+    public function __construct($email, $name = '')
     {
         $this->email = $email;
         $this->name  = $name;
@@ -399,7 +398,7 @@ class Newsletter_Item
 {
     protected $values = null;
 
-    public function __construct($values=array())
+    public function __construct($values = array())
     {
         $this->values = $values;
     }
@@ -441,10 +440,9 @@ abstract class Newsletter_Accounts_Provider
         $conn,
         $table,
         $fields,
-        $filter=null,
-        $database=null
-    )
-    {
+        $filter = null,
+        $database = null
+    ) {
         // TODO: control errors
         $this->conn     = $conn;
         $this->database = $database;
@@ -511,9 +509,9 @@ abstract class Newsletter_Items_Provider
 
     abstract public function fetch(
         $source,
-        $filter=null,
-        $orderBy=null,
-        $limit=null
+        $filter = null,
+        $orderBy = null,
+        $limit = null
     );
 
     /**
@@ -539,7 +537,7 @@ abstract class Newsletter_Items_Provider
      *   );
      * </code>
     */
-    public function __construct($conn, $sources, $database=null)
+    public function __construct($conn, $sources, $database = null)
     {
         // TODO: control errors
         $this->conn     = $conn;
@@ -550,7 +548,7 @@ abstract class Newsletter_Items_Provider
     /**
      * Get items
      */
-    public function getItems($source, $filter=null, $orderBy=null, $limit=null)
+    public function getItems($source, $filter = null, $orderBy = null, $limit = null)
     {
         //Newsletter_Item
         $this->items = $this->fetch($source, $filter, $orderBy, $limit);
@@ -592,10 +590,12 @@ class PConecta_Newsletter_Accounts_Provider extends Newsletter_Accounts_Provider
     public function __construct()
     {
         // Inject dependencies
-        parent::__construct($GLOBALS['application']->conn,
+        parent::__construct(
+            $GLOBALS['application']->conn,
             'pc_users',
             'email,name,firstname,lastname',
-            'status > 0 AND subscription = 1');
+            'status > 0 AND subscription = 1'
+        );
     }
 
     public function fetch()
@@ -617,10 +617,12 @@ class PConecta_Newsletter_Accounts_Provider extends Newsletter_Accounts_Provider
                     $rs->fields['email'],
 
                     /* firstname lastname, name */
-                    $this->buildName($rs->fields['firstname'],
-                                     $rs->fields['lastname'],
-                                     $rs->fields['name'],
-                                     $rs->fields['email'])
+                    $this->buildName(
+                        $rs->fields['firstname'],
+                        $rs->fields['lastname'],
+                        $rs->fields['name'],
+                        $rs->fields['email']
+                    )
                 ); // Newsletter_Account
 
                 $rs->moveNext();
@@ -680,7 +682,7 @@ class PConecta_Newsletter_Items_Provider extends Newsletter_Items_Provider
     /**
      *
      */
-    public function fetch($source, $filters=null, $order_by=null, $limit=null)
+    public function fetch($source, $filters = null, $order_by = null, $limit = null)
     {
         $cm = new ContentManager();
 
@@ -705,21 +707,23 @@ class PConecta_Newsletter_Items_Provider extends Newsletter_Items_Provider
             $category = $filters['category'];
             unset($filters['category']);
 
-            $filter = $this->_cond2str($filters,
-                $this->sources[$source]['conditions']);
+            $filter = $this->_cond2str(
+                $filters,
+                $this->sources[$source]['conditions']
+            );
 
-            $items = $cm->find_by_category($source, $category,
-               $filter, 'ORDER BY ' . $order_by . ' ' . $limit);
+            $items = $cm->find_by_category($source, $category, $filter, 'ORDER BY ' . $order_by . ' ' . $limit);
 
             // Filter in time {{{
             $items = $cm->getInTime($items);
             // }}}
 
         } else {
-            $filter = $this->_cond2str($filters,
-                $this->sources[$source]['conditions']);
-            $items = $cm->find($source, $filter,
-               'ORDER BY ' . $order_by . ' ' . $limit);
+            $filter = $this->_cond2str(
+                $filters,
+                $this->sources[$source]['conditions']
+            );
+            $items = $cm->find($source, $filter, 'ORDER BY ' . $order_by . ' ' . $limit);
 
             // Filter in time {{{
             $items = $cm->getInTime($items);
@@ -745,8 +749,7 @@ class PConecta_Newsletter_Items_Provider extends Newsletter_Items_Provider
             foreach ($this->sources[$source]['fields'] as $fld) {
                 // Format date
                 if ($fld == 'created') {
-                    $content->{$fld} = date('H:i d/m/Y',
-                        strtotime($content->{$fld}));
+                    $content->{$fld} = date('H:i d/m/Y', strtotime($content->{$fld}));
                 }
 
                 $item->{$fld} = clearslash(strip_tags($content->{$fld}));
@@ -771,7 +774,7 @@ class PConecta_Newsletter_Items_Provider extends Newsletter_Items_Provider
         return $this->items;
     }
 
-    public function buildQuery($source, $filter=null)
+    public function buildQuery($source, $filter = null)
     {
         return null; // hide method
     }
@@ -835,3 +838,4 @@ class PConecta_Opinion_Newsletter_Item extends Newsletter_Item
     public $author;
     public $type_opinion;
 }
+

@@ -35,7 +35,7 @@ class SessionManager
      *
      * @var SessionManager
      **/
-    protected static $_singleton = null;
+    protected static $singleton = null;
 
     /**
      * Initializes this object.
@@ -68,11 +68,11 @@ class SessionManager
      **/
     public static function getInstance($sessionSavePath = null, $lifetime = null)
     {
-        if ( is_null(self::$_singleton)) {
-            self::$_singleton = new SessionManager($sessionSavePath, $lifetime);
+        if ( is_null(self::$singleton)) {
+            self::$singleton = new SessionManager($sessionSavePath, $lifetime);
         }
 
-        return( self::$_singleton );
+        return( self::$singleton );
     }
 
     /**
@@ -128,7 +128,7 @@ class SessionManager
                             'expire'     => $session['expire'],
                             'authMethod' => '',
                         );
-                   }
+                    }
 
                 } else {
                     @unlink($sessionDirectory.'/'.$file);
@@ -223,5 +223,5 @@ class SessionManager
         }
         $GLOBALS['application']->logger->debug("Expired session files deleted. {$count}");
     }
-
 }
+

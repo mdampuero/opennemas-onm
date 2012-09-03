@@ -23,7 +23,7 @@ class SqlHelper
      * @param string      $filter String for where sentece
      * @param object|null $conn   ADOConnection instance
      */
-    public static function update($table, $fields, $filter, $conn=null)
+    public static function update($table, $fields, $filter, $conn = null)
     {
         $sql = 'UPDATE `%s` SET %s WHERE %s';
 
@@ -65,9 +65,13 @@ class SqlHelper
      * @param string      $filter String for where sentece
      * @param object|null $conn   ADOConnection instance
      */
-    public static function bindAndUpdate($table, $fields,
-                                         $data, $filter, $conn=null)
-    {
+    public static function bindAndUpdate(
+        $table,
+        $fields,
+        $data,
+        $filter,
+        $conn = null
+    ) {
         $merged = array();
         foreach ($fields as $field) {
             if (isset($data[$field])) {
@@ -86,7 +90,7 @@ class SqlHelper
      * @param array       $fields Array with name of fields to update
      * @param object|null $conn   ADOConnection instance
      */
-    public function insert($table, $fields, $conn=null)
+    public function insert($table, $fields, $conn = null)
     {
         $sql = 'INSERT INTO `%s` (%s) VALUES (%s)';
 
@@ -127,7 +131,7 @@ class SqlHelper
      * @param array       $data   Array keyField => valueField, equals to POST
      * @param object|null $conn   ADOConnection instance
      */
-    public function bindAndInsert($table, $fields, $data, $conn=null)
+    public function bindAndInsert($table, $fields, $data, $conn = null)
     {
         $merged = array();
         foreach ($fields as $field) {
@@ -138,5 +142,5 @@ class SqlHelper
 
         SqlHelper::insert($table, $merged, $conn);
     }
-
 }
+

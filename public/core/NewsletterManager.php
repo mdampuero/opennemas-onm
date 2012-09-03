@@ -6,8 +6,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Onm\Settings as s,
-    Onm\Message  as m;
+use Onm\Settings as s;
+use Onm\Message  as m;
 
 /**
  * Newsletter
@@ -26,12 +26,11 @@ class NewsletterManager
      * @return Array the newsletters that matches the search criterias
      **/
     public function find(
-        $whereClause  = '1 = 1',
-        $order        = 'created DESC',
-        $page         = null,
+        $whereClause = '1 = 1',
+        $order = 'created DESC',
+        $page = null,
         $itemsPerPage = 20
-    )
-    {
+    ) {
         if (!is_null($page) ) {
             if ($page == 1) {
                 $limit = ' LIMIT '. $itemsPerPage;
@@ -259,10 +258,12 @@ class NewsletterManager
         $publicUrl = preg_replace('@^http[s]?://(.*?)/$@i', 'http://$1', SITE_URL);
         $tpl->assign('URL_PUBLIC', $publicUrl);
 
-        $configurations = s::get(array(
-            'newsletter_maillist',
-            'newsletter_subscriptionType',
-        ));
+        $configurations = s::get(
+            array(
+                'newsletter_maillist',
+                'newsletter_subscriptionType',
+            )
+        );
 
         $tpl->assign('conf', $configurations);
         $htmlContent = $tpl->fetch('newsletter/newNewsletter.tpl');
@@ -275,3 +276,4 @@ class NewsletterManager
         json_encode($htmlContent);
     }
 }
+

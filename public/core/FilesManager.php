@@ -111,7 +111,7 @@ class FilesManager
      *
      * @param string $path Directory concat with filename
      */
-    static public function mkFile($filename)
+    public static function mkFile($filename)
     {
         if (!is_file($filename)) {
             $handle = fopen($filename, "x");
@@ -197,5 +197,5 @@ class FilesManager
 
         return $name;
     }
-
 }
+

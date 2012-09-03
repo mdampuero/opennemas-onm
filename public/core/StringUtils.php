@@ -48,7 +48,7 @@ class StringUtils
      * @param  string $name the string to clen
      * @return string the string cleaned
      **/
-    public static function setSeparator($str, $separator='-')
+    public static function setSeparator($str, $separator = '-')
     {
 
         return \Onm\StringUtils::setSeparator($str, $separator);
@@ -61,7 +61,7 @@ class StringUtils
      * @param  boolean $useStopList
      * @return string
      **/
-    public static function get_title($title, $useStopList=true)
+    public static function get_title($title, $useStopList = true)
     {
 
         return \Onm\StringUtils::get_title($title, $useStopList);
@@ -74,7 +74,7 @@ class StringUtils
      * @param  string $separator By default ','
      * @return string
      **/
-    public static function normalize_metadata($metadata, $separator=',')
+    public static function normalize_metadata($metadata, $separator = ',')
     {
 
         return \Onm\StringUtils::normalize_metadata($metadata, $separator);
@@ -102,7 +102,7 @@ class StringUtils
         return \Onm\StringUtils::remove_shorts($string);
     }
 
-    public static function str_stop($string, $maxLength=30, $suffix='...')
+    public static function str_stop($string, $maxLength = 30, $suffix = '...')
     {
 
         return \Onm\StringUtils::str_stop($string, $maxLength, $suffix);
@@ -139,7 +139,7 @@ class StringUtils
      * @return string
      * @example StringUtils::get_num_words('hello world', 1)
      **/
-    public static function get_num_words($text,$num_words)
+    public static function get_num_words($text, $num_words)
     {
 
         return \Onm\StringUtils::get_num_words($text, $num_words);
@@ -184,3 +184,4 @@ class StringUtils
         return \Onm\StringUtils::generatePassword($length);
     }
 }
+

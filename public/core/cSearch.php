@@ -54,10 +54,9 @@ class cSearch
     public function searchRelatedContents(
         $szSourceTags,
         $szContentsTypeTitle,
-        $iLimit=null,
-        $_where=null
-    )
-    {
+        $iLimit = null,
+        $_where = null
+    ) {
         // If $szSourceTags is array
         // convert it in one string of words separated by blank
         if (is_array($szSourceTags)) {
@@ -129,11 +128,12 @@ class cSearch
      * @return array array de los pk_content de todos los contendios ordenado
      *               por el n�mero de coincidencias.
     */
-    public function searchContentsSelect($szReturnValues,
+    public function searchContentsSelect(
+        $szReturnValues,
         $szSourceTags,
         $szContentsTypeTitle,
-        $iLimit)
-    {
+        $iLimit
+    ) {
         $szMatch = $this->defineMatchOfSentence($szSourceTags);
         $szSqlSentence = 'SELECT '. $szReturnValues.", ".$szMatch." as _height";
         $szSqlSentence .= " FROM contents ";
@@ -173,8 +173,7 @@ class cSearch
         $szWhere,
         $szNewTable,
         $iLimit
-    )
-    {
+    ) {
         if (!isset($szNewTable) || empty($szNewTable)
             || !isset($szWhere) || empty($szWhere)
         ) {
@@ -326,7 +325,7 @@ class cSearch
      *
     */
 
-    public static function Paginate(& $PageReturn, $cItems, $szId, $iPaging)
+    public static function Paginate(&$PageReturn, $cItems, $szId, $iPaging)
     {
         $items = array();
         $itemsPerPage = (empty($iPaging) && define(ITEMS_PAGE))?ITEMS_PAGE: $iPaging;
@@ -454,8 +453,7 @@ class cSearch
         //Obtener los id de los tipos a traves de su titulo.
         $szContentsTypeId = $this->getPkContentsType($szSource);
 
-        $vWordsTemp = preg_split(cSearch::PARSE_STRING,
-                $szContentsTypeId);
+        $vWordsTemp = preg_split(cSearch::PARSE_STRING, $szContentsTypeId);
 
         $szIdTypes  = array();
         foreach ($vWordsTemp as $szId) {
@@ -480,8 +478,7 @@ class cSearch
     {
         $szContentsType    = trim($szContentsType);
         $szSqlContentTypes = "SELECT `pk_content_type` FROM `content_types`";
-        $vWordsTemp = preg_split(cSearch::PARSE_STRING,
-                strtolower($szContentsType));
+        $vWordsTemp = preg_split(cSearch::PARSE_STRING, strtolower($szContentsType));
 
         $szSqlContentTypes .= " WHERE FALSE ";
         for ($iIndex=0; $iIndex<sizeof($vWordsTemp); $iIndex++) {
@@ -489,8 +486,10 @@ class cSearch
         }
         $resultSet = $GLOBALS['application']->conn->Execute($szSqlContentTypes);
         if (!$resultSet) {
-            printf("Get Content Types: Error al obtener el record Set.<br/>" .
-                "<pre>" . $szSqlContentTypes . "</pre><br/><br/>");
+            printf(
+                "Get Content Types: Error al obtener el record Set.<br/>" .
+                "<pre>" . $szSqlContentTypes . "</pre><br/><br/>"
+            );
 
             return null;
         }
@@ -510,3 +509,4 @@ class cSearch
         return trim($szResult);
     }
 }
+

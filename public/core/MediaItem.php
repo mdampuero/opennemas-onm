@@ -57,7 +57,7 @@ class MediaItem
         $this->internalType = $dimensions[2];
     }
 
-    public function getDimensions($filename=null)
+    public function getDimensions($filename = null)
     {
         if (is_null($filename)) {
             if (is_null($this->filename)) {
@@ -72,7 +72,7 @@ class MediaItem
         return($details);
     }
 
-    public function getExtension($filename=null)
+    public function getExtension($filename = null)
     {
         if (is_null($filename)) {
             if (is_null($this->filename)) {
@@ -98,3 +98,4 @@ class MediaItem
 
     }
 }
+

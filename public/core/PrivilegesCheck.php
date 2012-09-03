@@ -157,5 +157,5 @@ class PrivilegesCheck
 
         return false;
     }
-
 }
+

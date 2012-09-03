@@ -7,9 +7,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Onm\Settings as s,
-    Onm\Message  as m,
-    Onm\StringUtils;
+use Onm\Settings as s;
+use Onm\Message  as m;
+use Onm\StringUtils;
 
 /**
  * Class to import news from XML files
@@ -73,14 +73,14 @@ class ImporterXml
         return self::$instance;
     }
 
-    public static function importXML($XMLFile)
+    public static function importXML($xmlFile)
     {
         try {
-            $simple = simplexml_load_file($XMLFile);
+            $simple = simplexml_load_file($xmlFile);
 
         } catch (Exception $e) {
-            m::add(_( "Can't read file. Please check xml file..."));
-            exit();
+            m::add(_("Can't read file. Please check xml file..."));
+            return false;
         }
 
         return $simple;
@@ -223,7 +223,7 @@ class ImporterXml
         return false;
     }
 
-    public function getXMLData($docXML)
+    public function getXMLData($docXml)
     {
         //Clear data
         $this->data = array();
@@ -232,7 +232,7 @@ class ImporterXml
                 $this->data[$k] ='';
             }
         }
-        $values = self::parseXMLtoArray($docXML);
+        $values = self::parseXMLtoArray($docXml);
 
         $this->data['pk_author']      = $_SESSION['userid'];
         $this->data['content_status'] = 0;
@@ -265,7 +265,8 @@ class ImporterXml
 
         if (empty($this->data['summary'])) {
             $this->data['summary'] = strip_tags(
-                substr($this->data['body'], 0, strpos($this->data['body'], '.') ).'.');
+                substr($this->data['body'], 0, strpos($this->data['body'], '.')).'.'
+            );
         }
         if (empty($this->data['agency'])) {
             $this->data['agency'] = strip_tags($this->data['agency']);
@@ -273,8 +274,7 @@ class ImporterXml
 
         if (!empty($this->data['category_name'])) {
             $ccm = ContentCategoryManager::get_instance();
-            $current_category = strtolower(
-                StringUtils::normalize_name($this->data['category_name']));
+            $current_category = strtolower(StringUtils::normalize_name($this->data['category_name']));
             $this->data['category'] = $ccm->get_id($current_category);
 
         } else {
@@ -285,5 +285,5 @@ class ImporterXml
 
         return ($this->data);
     }
-
 }
+
