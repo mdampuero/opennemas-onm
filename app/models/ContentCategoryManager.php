@@ -46,7 +46,7 @@ class ContentCategoryManager
         }
     }
 
-    public static function getInstance()
+    public static function get_instance()
     {
         if (is_null(self::$instance)) {
             self::$instance = new ContentCategoryManager();
