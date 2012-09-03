@@ -46,8 +46,12 @@ class ImporterEuropapressController extends Controller
     {
 
         if (is_null(s::get('europapress_server_auth'))) {
-            m::add(_('Please provide your Europapress auth credentials '
-                .'to start to use your Europapress Importer module'));
+            m::add(
+                _(
+                    'Please provide your Europapress auth credentials to '
+                    .'start to use your Europapress Importer module'
+                )
+            );
 
             return $this->redirect($this->generateUrl('admin_import_europapress'));
         }
@@ -75,23 +79,25 @@ class ImporterEuropapressController extends Controller
         list($countTotalElements, $elements) = $europapress->findAll($findParams);
 
         // Pager
-        $pagination = \Pager::factory(array(
-            'mode'        => 'Sliding',
-            'perPage'     => $itemsPage,
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'append'      => false,
-            'path'        => '',
-            'totalItems'  => $countTotalElements,
-            'fileName'        => $this->generateUrl(
-                'admin_importer_europapress',
-                array(
-                    'filter_category' => $filterCategory,
-                    'filter_title'    => $filterTitle,
-                )
-            ).'&page=%d',
-        ));
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPage,
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'append'      => false,
+                'path'        => '',
+                'totalItems'  => $countTotalElements,
+                'fileName'        => $this->generateUrl(
+                    'admin_importer_europapress',
+                    array(
+                        'filter_category' => $filterCategory,
+                        'filter_title'    => $filterTitle,
+                    )
+                ).'&page=%d',
+            )
+        );
 
         $message = '';
         if ($minutesFromLastSync > 100) {
@@ -102,24 +108,32 @@ class ImporterEuropapressController extends Controller
         if ($message) {
             m::add(
                 $message
-                ._('Try syncing the news list from server by clicking '
-                    .'in "Sync with server" button above'),
+                ._(
+                    'Try syncing the news list from server by clicking '
+                    .'in "Sync with server" button above'
+                ),
                 m::NOTICE
             );
         }
 
-        $_SESSION['_from'] = $this->generateUrl('admin_importer_europapress', array(
-            'filter_category' => $filterCategory,
-            'filter_title'    => $filterTitle,
-            'page'            => $page
-        ));
+        $_SESSION['_from'] = $this->generateUrl(
+            'admin_importer_europapress',
+            array(
+                'filter_category' => $filterCategory,
+                'filter_title'    => $filterTitle,
+                'page'            => $page
+            )
+        );
 
-        return $this->render('agency_importer/europapress/list.tpl', array(
-            'elements'      =>  $elements,
-            'categories'    =>  $categories,
-            'minutes'       =>  $minutesFromLastSync,
-            'pagination'    =>  $pagination,
-        ));
+        return $this->render(
+            'agency_importer/europapress/list.tpl',
+            array(
+                'elements'      =>  $elements,
+                'categories'    =>  $categories,
+                'minutes'       =>  $minutesFromLastSync,
+                'pagination'    =>  $pagination,
+            )
+        );
     }
 
     /**
@@ -141,9 +155,10 @@ class ImporterEuropapressController extends Controller
             return $this->redirect($this->generateUrl('admin_importer_europapress'));
         }
 
-        return $this->render('agency_importer/europapress/show.tpl', array(
-            'element' => $element
-        ));
+        return $this->render(
+            'agency_importer/europapress/show.tpl',
+            array('element' => $element)
+        );
     }
 
     /**
@@ -211,37 +226,39 @@ class ImporterEuropapressController extends Controller
 
                 $message    = $this->request->query->filter('message', null, FILTER_SANITIZE_STRING);
 
-                $this->view->assign(array(
-                    'server'        => $serverAuth['server'],
-                    'username'      => $serverAuth['username'],
-                    'password'      => $serverAuth['password'],
-                    'message'       => $message,
-                    'agency_string' => s::get('europapress_agency_string'),
-                    'sync_from'     => array(
-                        'no_limits' => _('No limit'),
-                        '21600'     => sprintf(_('%d hours'), '6'),
-                        '43200'     => sprintf(_('%d hours'), '12'),
-                        '86400'     => _('1 day'),
-                        '172800'    => sprintf(_('%d days'), '2'),
-                        '259200'    => sprintf(_('%d days'), '3'),
-                        '345600'    => sprintf(_('%d days'), '4'),
-                        '432000'    => sprintf(_('%d days'), '5'),
-                        '518400'    => sprintf(_('%d days'), '6'),
-                        '604800'    => sprintf(_('%d week'), '1'),
-                        '1209600'   => sprintf(_('%d weeks'), '2'),
-                    ),
-                    'sync_from_setting'=> s::get('europapress_sync_from_limit'),
-                ));
+                $this->view->assign(
+                    array(
+                        'server'        => $serverAuth['server'],
+                        'username'      => $serverAuth['username'],
+                        'password'      => $serverAuth['password'],
+                        'message'       => $message,
+                        'agency_string' => s::get('europapress_agency_string'),
+                        'sync_from'     => array(
+                            'no_limits' => _('No limit'),
+                            '21600'     => sprintf(_('%d hours'), '6'),
+                            '43200'     => sprintf(_('%d hours'), '12'),
+                            '86400'     => _('1 day'),
+                            '172800'    => sprintf(_('%d days'), '2'),
+                            '259200'    => sprintf(_('%d days'), '3'),
+                            '345600'    => sprintf(_('%d days'), '4'),
+                            '432000'    => sprintf(_('%d days'), '5'),
+                            '518400'    => sprintf(_('%d days'), '6'),
+                            '604800'    => sprintf(_('%d week'), '1'),
+                            '1209600'   => sprintf(_('%d weeks'), '2'),
+                        ),
+                        'sync_from_setting'=> s::get('europapress_sync_from_limit'),
+                    )
+                );
             }
 
             return $this->render('agency_importer/europapress/config.tpl');
 
         } else {
             // If request was GET show the form
-            $server       = $this->request->request->filter('server', null, FILTER_SANITIZE_STRING );
-            $username     = $this->request->request->filter('username', null, FILTER_SANITIZE_STRING );
-            $password     = $this->request->request->filter('password', null, FILTER_SANITIZE_STRING );
-            $syncFrom     = $this->request->request->filter('sync_from', null, FILTER_SANITIZE_STRING );
+            $server       = $this->request->request->filter('server', null, FILTER_SANITIZE_STRING);
+            $username     = $this->request->request->filter('username', null, FILTER_SANITIZE_STRING);
+            $password     = $this->request->request->filter('password', null, FILTER_SANITIZE_STRING);
+            $syncFrom     = $this->request->request->filter('sync_from', null, FILTER_SANITIZE_STRING);
             $agencyString = $this->request->request->filter('agency_string', null, FILTER_SANITIZE_STRING);
 
             if (!isset($server) || !isset($username) || !isset($password)) {
@@ -305,18 +322,22 @@ class ImporterEuropapressController extends Controller
             $epSynchronizer->updateSyncFile();
 
             m::add(
-                sprintf( _('Downloaded %d new articles and deleted %d old ones.'),
-                        $message['downloaded'],
-                        $message['deleted'])
+                sprintf(
+                    _('Downloaded %d new articles and deleted %d old ones.'),
+                    $message['downloaded'],
+                    $message['deleted']
+                )
             );
 
         } catch (\Onm\Import\SynchronizationException $e) {
             m::add($e->getMessage(), m::ERROR);
         } catch (\Onm\Import\Synchronizer\LockException $e) {
             $errorMessage = $e->getMessage()
-               .sprintf(_('If you are sure <a href="%s">try to unlock it</a>'),
-                $this->generateUrl('admin_importer_europapress_unlock'));
-            m::add( $errorMessage, m::ERROR );
+                .sprintf(
+                    _('If you are sure <a href="%s">try to unlock it</a>'),
+                    $this->generateUrl('admin_importer_europapress_unlock')
+                );
+            m::add($errorMessage, m::ERROR);
         } catch (\Exception $e) {
             m::add($e->getMessage(), m::ERROR);
         }

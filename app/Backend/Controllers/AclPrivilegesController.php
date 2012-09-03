@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 use Onm\Message as m;
+
 /**
  * Handles the actions for the system information
  *
@@ -57,10 +58,13 @@ class AclPrivilegesController extends Controller
 
         $privileges = $privilege->get_privileges($filter);
 
-        return $this->render('acl/privilege/list.tpl', array(
-            'privileges' => $privileges,
-            'modules'    => $privilege->getModuleNames()
-        ));
+        return $this->render(
+            'acl/privilege/list.tpl',
+            array(
+                'privileges' => $privileges,
+                'modules'    => $privilege->getModuleNames()
+            )
+        );
     }
 
     /**
@@ -75,7 +79,7 @@ class AclPrivilegesController extends Controller
 
         if ($request->getMethod() == 'POST') {
             // Try to save the new privilege
-            if ($this->privilege->create( $_POST )) {
+            if ($this->privilege->create($_POST)) {
                 // If privilege was saved successfully and the action
                 // is validate show again the form
                 if ($request->request->filter('action') != 'validate') {
@@ -87,9 +91,10 @@ class AclPrivilegesController extends Controller
         }
         $modules = $this->privilege->getModuleNames();
 
-        return $this->render('acl/privilege/new.tpl', array(
-            'modules' => $modules,
-        ));
+        return $this->render(
+            'acl/privilege/new.tpl',
+            array('modules' => $modules,)
+        );
     }
 
     /**
@@ -104,11 +109,14 @@ class AclPrivilegesController extends Controller
         $this->privilege->read($id);
         $modules = $this->privilege->getModuleNames();
 
-        return $this->render('acl/privilege/new.tpl', array(
-            'privilege' => $this->privilege,
-            'id'        => $this->privilege->pk_privilege,
-            'modules'   => $modules,
-        ));
+        return $this->render(
+            'acl/privilege/new.tpl',
+            array(
+                'privilege' => $this->privilege,
+                'id'        => $this->privilege->pk_privilege,
+                'modules'   => $modules,
+            )
+        );
     }
 
     /**

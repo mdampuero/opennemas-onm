@@ -79,23 +79,25 @@ class ImporterEfeController extends Controller
 
         list($countTotalElements, $elements) = $efe->findAll($findParams);
 
-        $pagination = \Pager::factory(array(
-            'mode'        => 'Sliding',
-            'perPage'     => $itemsPage,
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'append'      => false,
-            'path'        => '',
-            'totalItems'  => $countTotalElements,
-            'fileName'        => $this->generateUrl(
-                'admin_importer_efe',
-                array(
-                    'filter_category' => $filterCategory,
-                    'filter_title'    => $filterTitle,
-                )
-            ).'&page=%d',
-        ));
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPage,
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'append'      => false,
+                'path'        => '',
+                'totalItems'  => $countTotalElements,
+                'fileName'        => $this->generateUrl(
+                    'admin_importer_efe',
+                    array(
+                        'filter_category' => $filterCategory,
+                        'filter_title'    => $filterTitle,
+                    )
+                ).'&page=%d',
+            )
+        );
 
         $urns = array();
         foreach ($elements as $element) {
@@ -112,24 +114,33 @@ class ImporterEfeController extends Controller
         if ($message) {
             m::add(
                 $message
-                . _('Try syncing the news list from server by clicking '
-                    .'in "Sync with server" button above'), m::NOTICE
+                . _(
+                    'Try syncing the news list from server by clicking '
+                    .'in "Sync with server" button above'
+                ),
+                m::NOTICE
             );
         }
 
-        $_SESSION['_from'] = $this->generateUrl('admin_importer_efe', array(
-            'filter_category' => $filterCategory,
-            'filter_title'    => $filterTitle,
-            'page'            => $page
-        ));
+        $_SESSION['_from'] = $this->generateUrl(
+            'admin_importer_efe',
+            array(
+                'filter_category' => $filterCategory,
+                'filter_title'    => $filterTitle,
+                'page'            => $page
+            )
+        );
 
-        return $this->render('agency_importer/efe/list.tpl', array(
-            'elements'         =>  $elements,
-            'already_imported' =>  $alreadyImported,
-            'categories'       =>  $categories,
-            'minutes'          =>  $minutesFromLastSync,
-            'pagination'       =>  $pagination,
-        ));
+        return $this->render(
+            'agency_importer/efe/list.tpl',
+            array(
+                'elements'         =>  $elements,
+                'already_imported' =>  $alreadyImported,
+                'categories'       =>  $categories,
+                'minutes'          =>  $minutesFromLastSync,
+                'pagination'       =>  $pagination,
+            )
+        );
     }
 
     /**
@@ -158,10 +169,13 @@ class ImporterEfeController extends Controller
             );
         }
 
-        return $this->render('agency_importer/efe/show.tpl', array(
-            'element'   => $element,
-            'imported'       => count($alreadyImported) > 0,
-        ));
+        return $this->render(
+            'agency_importer/efe/show.tpl',
+            array(
+                'element'   => $element,
+                'imported'       => count($alreadyImported) > 0,
+            )
+        );
 
     }
 
@@ -334,11 +348,14 @@ class ImporterEfeController extends Controller
         $ep = new \Onm\Import\Efe();
         $element = $ep->findByFileName($id);
 
-        return $this->render('agency_importer/efe/import_select_category.tpl', array(
-            'id' => $id,
-            'article' => $element,
-            'categories' => $categories,
-        ));
+        return $this->render(
+            'agency_importer/efe/import_select_category.tpl',
+            array(
+                'id' => $id,
+                'article' => $element,
+                'categories' => $categories,
+            )
+        );
     }
 
     /**
@@ -385,27 +402,29 @@ class ImporterEfeController extends Controller
 
                 $message = $this->request->query->filter('message', null, FILTER_SANITIZE_STRING);
 
-                $this->view->assign(array(
-                    'server'        => $serverAuth['server'],
-                    'username'      => $serverAuth['username'],
-                    'password'      => $serverAuth['password'],
-                    'message'       => $message,
-                    'agency_string' => s::get('efe_agency_string'),
-                    'sync_from'     => array(
-                        'no_limits'     => _('No limit'),
-                        '21600'         => sprintf(_('%d hours'), '6'),
-                        '43200'         => sprintf(_('%d hours'), '12'),
-                        '86400'         => _('1 day'),
-                        '172800'        => sprintf(_('%d days'), '2'),
-                        '259200'        => sprintf(_('%d days'), '3'),
-                        '345600'        => sprintf(_('%d days'), '4'),
-                        '432000'        => sprintf(_('%d days'), '5'),
-                        '518400'        => sprintf(_('%d days'), '6'),
-                        '604800'        => sprintf(_('%d week'), '1'),
-                        '1209600'       => sprintf(_('%d weeks'), '2'),
-                    ),
-                    'sync_from_setting'=> s::get('efe_sync_from_limit'),
-                ));
+                $this->view->assign(
+                    array(
+                        'server'        => $serverAuth['server'],
+                        'username'      => $serverAuth['username'],
+                        'password'      => $serverAuth['password'],
+                        'message'       => $message,
+                        'agency_string' => s::get('efe_agency_string'),
+                        'sync_from'     => array(
+                            'no_limits'     => _('No limit'),
+                            '21600'         => sprintf(_('%d hours'), '6'),
+                            '43200'         => sprintf(_('%d hours'), '12'),
+                            '86400'         => _('1 day'),
+                            '172800'        => sprintf(_('%d days'), '2'),
+                            '259200'        => sprintf(_('%d days'), '3'),
+                            '345600'        => sprintf(_('%d days'), '4'),
+                            '432000'        => sprintf(_('%d days'), '5'),
+                            '518400'        => sprintf(_('%d days'), '6'),
+                            '604800'        => sprintf(_('%d week'), '1'),
+                            '1209600'       => sprintf(_('%d weeks'), '2'),
+                        ),
+                        'sync_from_setting'=> s::get('efe_sync_from_limit'),
+                    )
+                );
 
             }
 
@@ -413,11 +432,11 @@ class ImporterEfeController extends Controller
         } else {
 
             $requestParams = $this->request->request;
-            $server       = $requestParams->filter('server', null, FILTER_SANITIZE_STRING );
-            $username     = $requestParams->filter('username', null, FILTER_SANITIZE_STRING );
-            $password     = $requestParams->filter('password', null, FILTER_SANITIZE_STRING );
-            $syncFrom     = $requestParams->filter('sync_from', null, FILTER_SANITIZE_STRING );
-            $agencyString = $requestParams->filter('agency_string', null, FILTER_SANITIZE_STRING );
+            $server       = $requestParams->filter('server', null, FILTER_SANITIZE_STRING);
+            $username     = $requestParams->filter('username', null, FILTER_SANITIZE_STRING);
+            $password     = $requestParams->filter('password', null, FILTER_SANITIZE_STRING);
+            $syncFrom     = $requestParams->filter('sync_from', null, FILTER_SANITIZE_STRING);
+            $agencyString = $requestParams->filter('agency_string', null, FILTER_SANITIZE_STRING);
 
             if (!isset($server) || !isset($username) || !isset($password)) {
                 return $this->redirect($this->generateUrl('admin_importer_efe_config'));
@@ -485,18 +504,22 @@ class ImporterEfeController extends Controller
             $efeSynchronizer->updateSyncFile();
 
             m::add(
-                sprintf( _('Downloaded %d new articles and deleted %d old ones.'),
-                        $message['downloaded'],
-                        $message['deleted'])
+                sprintf(
+                    _('Downloaded %d new articles and deleted %d old ones.'),
+                    $message['downloaded'],
+                    $message['deleted']
+                )
             );
 
         } catch (\Onm\Import\SynchronizationException $e) {
             m::add($e->getMessage(), m::ERROR);
         } catch (\Onm\Import\Synchronizer\LockException $e) {
             $errorMessage = $e->getMessage()
-               .sprintf(_('If you are sure <a href="%s?action=unlock">try to unlock it</a>'),
-                $_SERVER['PHP_SELF']);
-            m::add( $errorMessage, m::ERROR );
+                .sprintf(
+                    _('If you are sure <a href="%s?action=unlock">try to unlock it</a>'),
+                    $_SERVER['PHP_SELF']
+                );
+            m::add($errorMessage, m::ERROR);
         } catch (\Exception $e) {
             m::add($e->getMessage(), m::ERROR);
             $e = new \Onm\Import\Efe();

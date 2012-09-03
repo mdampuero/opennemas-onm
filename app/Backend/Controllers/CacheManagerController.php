@@ -39,7 +39,8 @@ class CacheManagerController extends Controller
 
         // Initialization of the template cache manager
         $this->templateManager = new \TemplateCacheManager(
-            $this->frontpageTemplate->templateBaseDir, $this->frontpageTemplate
+            $this->frontpageTemplate->templateBaseDir,
+            $this->frontpageTemplate
         );
 
     }
@@ -60,24 +61,26 @@ class CacheManagerController extends Controller
         }
 
         // Build the pager
-        $pagination = \Pager::factory(array(
-            'mode'        => 'Sliding',
-            'perPage'     => $this->itemsPerPage,
-            'append'      => false,
-            'path'        => '',
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => count($caches),
-            'fileName'    => $this->generateUrl(
-                'admin_tpl_manager',
-                array(
-                    'items_page'      => $this->itemsPerPage,
-                    'section'         => $this->request->query->filter('section', '', FILTER_SANITIZE_STRING),
-                    'type'            => $this->request->query->filter('type', '', FILTER_SANITIZE_STRING),
-                )
-            ).'&page=%d',
-        ));
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $this->itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => count($caches),
+                'fileName'    => $this->generateUrl(
+                    'admin_tpl_manager',
+                    array(
+                        'items_page'      => $this->itemsPerPage,
+                        'section'         => $this->request->query->filter('section', '', FILTER_SANITIZE_STRING),
+                        'type'            => $this->request->query->filter('type', '', FILTER_SANITIZE_STRING),
+                    )
+                ).'&page=%d',
+            )
+        );
 
         // Get only cache files within pagination range
         $caches = array_slice($caches, ($this->page-1)*$this->itemsPerPage, $this->itemsPerPage);
@@ -110,7 +113,8 @@ class CacheManagerController extends Controller
                 if ($article->fk_content_type == '4') {
                     $authorName = !empty($allAuthors[$article->fk_author])
                         ? $allAuthors[$article->fk_author]:'opinion';
-                    $articleUris[$article->pk_content] = \Uri::generate( 'opinion',
+                    $articleUris[$article->pk_content] = \Uri::generate(
+                        'opinion',
                         array(
                             'id'       => sprintf('%06d', $article->id),
                             'date'     => date('YmdHis', strtotime($article->created)),
@@ -145,19 +149,22 @@ class CacheManagerController extends Controller
             $cache['tpl'] = $cache["template"] . ".tpl";
         }
 
-        return $this->render('tpl_manager/tpl_manager.tpl', array(
-            'authors'      => $authors,
-            'paramsUri'    => $this->params,
-            'pagination'   => $pagination,
-            'sections'     => $sections,
-            'ccm'          => $ccm,
-            'titles'       => $articleTitles,
-            'contentUris'  => $articleUris,
-            'caches'       => $caches,
-            'allAuthors'   => $allAuthors,
-            'page'         => $this->page,
-            'itemsperpage' => $this->itemsPerPage,
-        ));
+        return $this->render(
+            'tpl_manager/tpl_manager.tpl',
+            array(
+                'authors'      => $authors,
+                'paramsUri'    => $this->params,
+                'pagination'   => $pagination,
+                'sections'     => $sections,
+                'ccm'          => $ccm,
+                'titles'       => $articleTitles,
+                'contentUris'  => $articleUris,
+                'caches'       => $caches,
+                'allAuthors'   => $allAuthors,
+                'page'         => $this->page,
+                'itemsperpage' => $this->itemsPerPage,
+            )
+        );
     }
 
     /**
@@ -231,39 +238,42 @@ class CacheManagerController extends Controller
         } else {
             $config = $this->templateManager->dumpConfig();
 
-            return $this->render('tpl_manager/config.tpl', array(
-                'config'    => $config,
-                'groupName' => array(
-                    'frontpages'        => _('Frontpage'),
-                    'frontpage-mobile'  => _('Frontpage mobile version'),
-                    'articles'          => _('Inner Article'),
-                    'articles-mobile'   => _('Inner Article mobile version'),
-                    'opinion'           => _('Inner Opinion'),
-                    'rss'               => _('RSS'),
-                    'video'             => _('Frontpage videos'),
-                    'video-inner'       => _('Inner video'),
-                    'gallery-frontpage' => _('Gallery frontpage'),
-                    'gallery-inner'     => _('Gallery Inner'),
-                    'poll-frontpage'    => _('Polls frontpage'),
-                    'poll-inner'        => _('Poll inner'),
-                    'sitemap'           => _('Sitemap'),
-                ),
-                'groupIcon' => array(
-                    'frontpages'        => 'home16x16.png',
-                    'frontpage-mobile'  => 'phone16x16.png',
-                    'articles'          => 'article16x16.png',
-                    'articles-mobile'   => 'phone16x16.png',
-                    'opinion'           => 'opinion16x16.png',
-                    'rss'               => 'rss16x16.png',
-                    'video'             => 'video16x16.png',
-                    'video-inner'       => 'video16x16.png',
-                    'gallery-frontpage' => 'gallery16x16.png',
-                    'gallery-inner'     => 'gallery16x16.png',
-                    'poll-frontpage'    => 'polls.png',
-                    'poll-inner'        => 'polls.png',
-                    'sitemap'           => 'sitemap.png',
-                ),
-            ));
+            return $this->render(
+                'tpl_manager/config.tpl',
+                array(
+                    'config'    => $config,
+                    'groupName' => array(
+                        'frontpages'        => _('Frontpage'),
+                        'frontpage-mobile'  => _('Frontpage mobile version'),
+                        'articles'          => _('Inner Article'),
+                        'articles-mobile'   => _('Inner Article mobile version'),
+                        'opinion'           => _('Inner Opinion'),
+                        'rss'               => _('RSS'),
+                        'video'             => _('Frontpage videos'),
+                        'video-inner'       => _('Inner video'),
+                        'gallery-frontpage' => _('Gallery frontpage'),
+                        'gallery-inner'     => _('Gallery Inner'),
+                        'poll-frontpage'    => _('Polls frontpage'),
+                        'poll-inner'        => _('Poll inner'),
+                        'sitemap'           => _('Sitemap'),
+                    ),
+                    'groupIcon' => array(
+                        'frontpages'        => 'home16x16.png',
+                        'frontpage-mobile'  => 'phone16x16.png',
+                        'articles'          => 'article16x16.png',
+                        'articles-mobile'   => 'phone16x16.png',
+                        'opinion'           => 'opinion16x16.png',
+                        'rss'               => 'rss16x16.png',
+                        'video'             => 'video16x16.png',
+                        'video-inner'       => 'video16x16.png',
+                        'gallery-frontpage' => 'gallery16x16.png',
+                        'gallery-inner'     => 'gallery16x16.png',
+                        'poll-frontpage'    => 'polls.png',
+                        'poll-inner'        => 'polls.png',
+                        'sitemap'           => 'sitemap.png',
+                    ),
+                )
+            );
         }
     }
 
@@ -336,19 +346,19 @@ class CacheManagerController extends Controller
         // If cache file type is defined include it in filter and params
         if (isset($type) && !empty($type)) {
             $regexp = array(
-                'frontpages' => 'frontpage\.tpl\.php$',
-                'opinions' => 'opinion\.tpl\.php$',
+                'frontpages'         => 'frontpage\.tpl\.php$',
+                'opinions'           => 'opinion\.tpl\.php$',
                 'frontpage-opinions' => 'opinion_author_index\.tpl\.php$',
-                'articles' => 'article\.tpl\.php$',
-                'rss' => '\^RSS[0-9]*\^',
-                'mobilepages' => 'frontpage-mobile\.tpl\.php$',
-                'poll' => 'poll\.tpl\.php$',
-                'video-frontpage' => 'video_frontpage\.tpl\.php$',
-                'video-inner' => 'video_inner\.tpl\.php$',
-                'gallery-frontpage' => 'album_frontpage\.tpl\.php$',
-                'gallery-inner' => 'album\.tpl\.php$',
-                'poll-frontpage' => 'poll_frontpage\.tpl\.php$',
-                'poll-inner' => 'poll.tpl\.php$',
+                'articles'           => 'article\.tpl\.php$',
+                'rss'                => '\^RSS[0-9]*\^',
+                'mobilepages'        => 'frontpage-mobile\.tpl\.php$',
+                'poll'               => 'poll\.tpl\.php$',
+                'video-frontpage'    => 'video_frontpage\.tpl\.php$',
+                'video-inner'        => 'video_inner\.tpl\.php$',
+                'gallery-frontpage'  => 'album_frontpage\.tpl\.php$',
+                'gallery-inner'      => 'album\.tpl\.php$',
+                'poll-frontpage'     => 'poll_frontpage\.tpl\.php$',
+                'poll-inner'         => 'poll.tpl\.php$',
             );
             $filter  .= $regexp[ $_REQUEST['type'] ];
             $params[] = 'type='.$_REQUEST['type'];

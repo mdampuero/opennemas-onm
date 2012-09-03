@@ -47,12 +47,14 @@ class PollsController extends Controller
             $category ='home';
         }
 
-        $this->view->assign(array(
-            'category'     => $category,
-            'subcat'       => $this->subcat,
-            'allcategorys' => $this->parentCategories,
-            'datos_cat'    => $this->categoryData
-        ));
+        $this->view->assign(
+            array(
+                'category'     => $category,
+                'subcat'       => $this->subcat,
+                'allcategorys' => $this->parentCategories,
+                'datos_cat'    => $this->categoryData
+            )
+        );
     }
 
     /**
@@ -91,24 +93,29 @@ class PollsController extends Controller
         }
 
         // Build the pager
-        $pagination = \Pager::factory(array(
-            'mode'        => 'Sliding',
-            'perPage'     => $itemsPerPage,
-            'append'      => false,
-            'path'        => '',
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => $countPolls,
-            'fileName'    => $this->generateUrl('admin_polls').'?page=%d',
-        ));
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => $countPolls,
+                'fileName'    => $this->generateUrl('admin_polls').'?page=%d',
+            )
+        );
 
-        return $this->render('polls/list.tpl', array(
-            'polls'      => $polls,
-            'pagination' => $pagination,
-            'category'   => $category,
-            'page'       => $page,
-        ));
+        return $this->render(
+            'polls/list.tpl',
+            array(
+                'polls'      => $polls,
+                'pagination' => $pagination,
+                'category'   => $category,
+                'page'       => $page,
+            )
+        );
     }
 
     /**
@@ -147,7 +154,7 @@ class PollsController extends Controller
         );
 
         if (count($polls) != $totalWidget ) {
-            m::add( sprintf(_("You must put %d polls in the HOME"), $totalWidget));
+            m::add(sprintf(_("You must put %d polls in the HOME"), $totalWidget));
         }
 
         foreach ($polls as &$poll) {
@@ -156,24 +163,29 @@ class PollsController extends Controller
         }
 
         // Build the pager
-        $pagination = \Pager::factory(array(
-            'mode'        => 'Sliding',
-            'perPage'     => $itemsPerPage,
-            'append'      => false,
-            'path'        => '',
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => $countPolls,
-            'fileName'    => $this->generateUrl('admin_polls').'?page=%d',
-        ));
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => $countPolls,
+                'fileName'    => $this->generateUrl('admin_polls').'?page=%d',
+            )
+        );
 
-        return $this->render('polls/list.tpl', array(
-            'polls'      => $polls,
-            'pagination' => $pagination,
-            'category'   => 'widget',
-            'page'       => $page,
-        ));
+        return $this->render(
+            'polls/list.tpl',
+            array(
+                'polls'      => $polls,
+                'pagination' => $pagination,
+                'category'   => 'widget',
+                'page'       => $page,
+            )
+        );
     }
 
     /**
@@ -208,9 +220,10 @@ class PollsController extends Controller
                 m::add(_('Unable to create the new v.'), m::ERROR);
             }
 
-            return $this->redirect($this->generateUrl(
-                'admin_polls',
-                array('category' => $data['category'])
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_polls',
+                    array('category' => $data['category'])
                 )
             );
         } else {
@@ -240,10 +253,13 @@ class PollsController extends Controller
 
         $items = $poll->get_items($id);
 
-        return $this->render('polls/new.tpl', array(
-            'poll'  => $poll,
-            'items' => $items,
-        ));
+        return $this->render(
+            'polls/new.tpl',
+            array(
+                'poll'  => $poll,
+                'items' => $items,
+            )
+        );
     }
 
     /**
@@ -284,23 +300,20 @@ class PollsController extends Controller
             }
 
             if ($continue) {
-                return $this->redirect($this->generateUrl(
-                    'admin_poll_show',
-                    array('id' => $poll->id)
-                ));
+                return $this->redirect(
+                    $this->generateUrl('admin_poll_show', array('id' => $poll->id))
+                );
             } else {
-                return $this->redirect($this->generateUrl(
-                    'admin_polls',
-                    array('category' => $data['category'])
-                ));
+                return $this->redirect(
+                    $this->generateUrl('admin_polls', array('category' => $data['category']))
+                );
             }
         } else {
             m::add(sprintf(_('Unable to find a poll with the id "%s".'), $id), m::ERROR);
 
-            return $this->redirect($this->generateUrl(
-                'admin_polls',
-                array('category' => $data['category'])
-            ));
+            return $this->redirect(
+                $this->generateUrl('admin_polls', array('category' => $data['category']))
+            );
         }
     }
 
@@ -328,13 +341,15 @@ class PollsController extends Controller
         }
 
         if (!$request->isXmlHttpRequest()) {
-            return $this->redirect($this->generateUrl(
-                'admin_polls',
-                array(
-                    'category' => $category,
-                    'page'     => $page
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_polls',
+                    array(
+                        'category' => $category,
+                        'page'     => $page
+                    )
                 )
-            ));
+            );
         }
     }
 
@@ -364,13 +379,15 @@ class PollsController extends Controller
             m::add(sprintf(_('Successfully changed availability for the poll "%s"'), $poll->title), m::SUCCESS);
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_polls',
-            array(
-                'category' => $category,
-                'page'     => $page
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_polls',
+                array(
+                    'category' => $category,
+                    'page'     => $page
+                )
             )
-        ));
+        );
     }
 
     /**
@@ -396,13 +413,15 @@ class PollsController extends Controller
             m::add(sprintf(_('Successfully changed suggested flag for the poll "%s"'), $poll->title), m::SUCCESS);
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_polls',
-            array(
-                'category' => $category,
-                'page'     => $page
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_polls',
+                array(
+                    'category' => $category,
+                    'page'     => $page
+                )
             )
-        ));
+        );
     }
 
     /**
@@ -428,13 +447,15 @@ class PollsController extends Controller
             m::add(sprintf(_('Successfully changed suggested flag for the poll "%s"'), $poll->title), m::SUCCESS);
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_polls',
-            array(
-                'category' => $category,
-                'page'     => $page
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_polls',
+                array(
+                    'category' => $category,
+                    'page'     => $page
+                )
             )
-        ));
+        );
     }
 
     /**
@@ -471,13 +492,15 @@ class PollsController extends Controller
         }
 
         if (!$request->isXmlHttpRequest()) {
-            return $this->redirect($this->generateUrl(
-                'admin_polls',
-                array(
-                    'category' => $category,
-                    'page'     => $page,
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_polls',
+                    array(
+                        'category' => $category,
+                        'page'     => $page,
+                    )
                 )
-            ));
+            );
         }
 
     }
@@ -519,13 +542,15 @@ class PollsController extends Controller
             m::add(sprintf(_('Successfully changed the available status of %d polls.'), $changes), m::SUCCESS);
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_polls',
-            array(
-                'category' => $category,
-                'page'     => $page,
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_polls',
+                array(
+                    'category' => $category,
+                    'page'     => $page,
+                )
             )
-        ));
+        );
     }
 
     /**
@@ -557,28 +582,34 @@ class PollsController extends Controller
             $itemsPerPage
         );
 
-        $pagination = \Pager::factory(array(
-            'mode'        => 'Sliding',
-            'perPage'     => $itemsPerPage,
-            'append'      => false,
-            'path'        => '',
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => $countPolls,
-            'fileName'    => $this->generateUrl('admin_polls_content_provider_related', array(
-                'category' => $category,
-            )).'&page=%d',
-        ));
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => $countPolls,
+                'fileName'    => $this->generateUrl(
+                    'admin_polls_content_provider_related',
+                    array('category' => $category,)
+                ).'&page=%d',
+            )
+        );
 
-        return $this->render('common/content_provider/_container-content-list.tpl', array(
-            'contentType'           => 'Poll',
-            'contents'              => $polls,
-            'contentTypeCategories' => $this->parentCategories,
-            'category'              => $category,
-            'pagination'            => $pagination->links,
-            'contentProviderUrl'    => $this->generateUrl('admin_polls_content_provider_related'),
-        ));
+        return $this->render(
+            'common/content_provider/_container-content-list.tpl',
+            array(
+                'contentType'           => 'Poll',
+                'contents'              => $polls,
+                'contentTypeCategories' => $this->parentCategories,
+                'category'              => $category,
+                'pagination'            => $pagination->links,
+                'contentProviderUrl'    => $this->generateUrl('admin_polls_content_provider_related'),
+            )
+        );
     }
 
     /**
@@ -614,9 +645,10 @@ class PollsController extends Controller
         } else {
             $configurations = s::get(array('poll_settings',));
 
-            return $this->render('polls/config.tpl', array(
-                'configs'   => $configurations,
-            ));
+            return $this->render(
+                'polls/config.tpl',
+                array('configs' => $configurations,)
+            );
         }
     }
 }

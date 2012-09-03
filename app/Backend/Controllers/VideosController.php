@@ -50,13 +50,15 @@ class VideosController extends Controller
             $this->category ='widget';
         }
 
-        $this->view->assign(array(
-            'category'     => $this->category,
-            'subcat'       => $this->subcat,
-            'allcategorys' => $this->parentCategories,
-            //TODO: ¿datoscat?¿
-            'datos_cat'    => $this->categoryData
-        ));
+        $this->view->assign(
+            array(
+                'category'     => $this->category,
+                'subcat'       => $this->subcat,
+                'allcategorys' => $this->parentCategories,
+                //TODO: ¿datoscat?¿
+                'datos_cat'    => $this->categoryData
+            )
+        );
 
         /******************* GESTION CATEGORIAS  *****************************/
     }
@@ -100,25 +102,30 @@ class VideosController extends Controller
         }
 
         // Build the pager
-        $pagination = \Pager::factory(array(
-            'mode'        => 'Sliding',
-            'perPage'     => $itemsPerPage,
-            'append'      => false,
-            'path'        => '',
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => $videoCount,
-            'fileName'    => $this->generateUrl(
-                'admin_videos',
-                array('category' => $category)
-            ).'&page=%d',
-        ));
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => $videoCount,
+                'fileName'    => $this->generateUrl(
+                    'admin_videos',
+                    array('category' => $category)
+                ).'&page=%d',
+            )
+        );
 
-        return $this->render('video/list.tpl', array(
-            'pagination' => $pagination,
-            'videos'     => $videos
-        ));
+        return $this->render(
+            'video/list.tpl',
+            array(
+                'pagination' => $pagination,
+                'videos'     => $videos
+            )
+        );
     }
 
      /**
@@ -136,10 +143,12 @@ class VideosController extends Controller
         $videos = $cm->find_all('Video', 'in_home = 1 AND available =1', 'ORDER BY  position ASC ');
 
         if (count($videos) < $numFavorites) {
-            m::add(sprintf(
-                _("You must put %d videos in the HOME widget"),
-                $numFavorites
-            ));
+            m::add(
+                sprintf(
+                    _("You must put %d videos in the HOME widget"),
+                    $numFavorites
+                )
+            );
         }
 
         if (!empty($videos)) {
@@ -149,10 +158,13 @@ class VideosController extends Controller
             }
         }
 
-        return $this->render('video/list.tpl', array(
-            'videos'     => $videos,
-            'category'   => $category,
-        ));
+        return $this->render(
+            'video/list.tpl',
+            array(
+                'videos'     => $videos,
+                'category'   => $category,
+            )
+        );
     }
 
     /**
@@ -184,10 +196,9 @@ class VideosController extends Controller
                         m::ERROR
                     );
 
-                    return $this->redirect($this->generateUrl(
-                        'admin_videos_create',
-                        array('type' => $type)
-                    ));
+                    return $this->redirect(
+                        $this->generateUrl('admin_videos_create', array('type' => $type))
+                    );
                 }
 
                 $videoFileData = array(
@@ -235,22 +246,25 @@ class VideosController extends Controller
                 return $this->redirect($this->generateUrl('admin_videos_create', array('type' => $type)));
             }
 
-            return $this->redirect($this->generateUrl(
-                'admin_videos',
-                array(
-                    'category' => $category,
-                    'page' => $page
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_videos',
+                    array(
+                        'category' => $category,
+                        'page' => $page
+                    )
                 )
-            ));
+            );
 
         } else {
             $type = $request->query->filter('type', null, FILTER_SANITIZE_STRING);
             if (empty($type)) {
                 return $this->render('video/selecttype.tpl');
             } else {
-                return $this->render('video/new.tpl', array(
-                    'type' => $type
-                ));
+                return $this->render(
+                    'video/new.tpl',
+                    array('type' => $type)
+                );
             }
         }
     }
@@ -281,20 +295,24 @@ class VideosController extends Controller
                 m::add(_("Video updated successfully."), m::SUCCESS);
             }
             if ($continue) {
-                return $this->redirect($this->generateUrl(
-                    'admin_video_show',
-                    array('id' => $video->id)
-                ));
+                return $this->redirect(
+                    $this->generateUrl(
+                        'admin_video_show',
+                        array('id' => $video->id)
+                    )
+                );
             } else {
                 $page = $request->request->getDigits('page', 1);
 
-                return $this->redirect($this->generateUrl(
-                    'admin_videos',
-                    array(
-                        'category' => $video->category,
-                        'page'     => $page,
+                return $this->redirect(
+                    $this->generateUrl(
+                        'admin_videos',
+                        array(
+                            'category' => $video->category,
+                            'page'     => $page,
+                        )
                     )
-                ));
+                );
             }
         }
     }
@@ -323,13 +341,15 @@ class VideosController extends Controller
             m::add(_('You must give an id for delete the video.'), m::ERROR);
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_videos',
-            array(
-                'category' => $video->category,
-                'page' => $page
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_videos',
+                array(
+                    'category' => $video->category,
+                    'page' => $page
+                )
             )
-        ));
+        );
     }
 
     /**
@@ -351,10 +371,13 @@ class VideosController extends Controller
             return $this->redirect($this->generateUrl('admin_videos'));
         }
 
-        return $this->render('video/new.tpl', array(
-            'information' => $video->information,
-            'video'       => $video,
-        ));
+        return $this->render(
+            'video/new.tpl',
+            array(
+                'information' => $video->information,
+                'video'       => $video,
+            )
+        );
 
         return new Response($content);
     }
@@ -374,12 +397,13 @@ class VideosController extends Controller
                 $videoP = new \Panorama\Video($url);
                 $information = $videoP->getVideoDetails();
 
-                $output = $this->renderView('video/partials/_video_information.tpl', array(
-                    'information' => $information,
-                ));
+                $output = $this->renderView(
+                    'video/partials/_video_information.tpl',
+                    array('information' => $information,)
+                );
 
             } catch (\Exception $e) {
-                $output = _( "Can't get video information. Check the url");
+                $output = _("Can't get video information. Check the url");
             }
         } else {
             $output = _("Please check the video url, seems to be incorrect");
@@ -416,9 +440,10 @@ class VideosController extends Controller
 
             $configurations = s::get($configurationsKeys);
 
-            return $this->render('video/config.tpl', array(
-                'configs'   => $configurations,
-            ));
+            return $this->render(
+                'video/config.tpl',
+                array('configs' => $configurations,)
+            );
         }
     }
 
@@ -450,13 +475,15 @@ class VideosController extends Controller
             }
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_videos',
-            array(
-                'categoy' => $category,
-                'page'    => $page,
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_videos',
+                array(
+                    'categoy' => $category,
+                    'page'    => $page,
+                )
             )
-        ));
+        );
     }
 
     /**
@@ -484,13 +511,15 @@ class VideosController extends Controller
             m::add(sprintf(_('Successfully changed availability for video with id "%d"'), $id), m::SUCCESS);
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_videos',
-            array(
-                'category' => $category,
-                'page'     => $page
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_videos',
+                array(
+                    'category' => $category,
+                    'page'     => $page
+                )
             )
-        ));
+        );
     }
 
     /**
@@ -516,13 +545,15 @@ class VideosController extends Controller
             m::add(sprintf(_('Successfully changed suggested flag for video with id "%d"'), $id), m::SUCCESS);
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_videos',
-            array(
-                'category' => $category,
-                'page'     => $page
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_videos',
+                array(
+                    'category' => $category,
+                    'page'     => $page
+                )
             )
-        ));
+        );
     }
 
     /**
@@ -548,13 +579,15 @@ class VideosController extends Controller
             m::add(sprintf(_('Successfully changed suggested flag for video with id "%d"'), $id), m::SUCCESS);
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_videos',
-            array(
-                'category' => $category,
-                'page'     => $page
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_videos',
+                array(
+                    'category' => $category,
+                    'page'     => $page
+                )
             )
-        ));
+        );
     }
 
     /**
@@ -654,13 +687,15 @@ class VideosController extends Controller
             }
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_videos',
-            array(
-                'category' => $category,
-                'page'     => $page,
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_videos',
+                array(
+                    'category' => $category,
+                    'page'     => $page,
+                )
             )
-        ));
+        );
     }
 
     /**
@@ -700,25 +735,30 @@ class VideosController extends Controller
         );
 
         // Build the pager
-        $pagination = \Pager::factory(array(
-            'mode'        => 'Sliding',
-            'perPage'     => $itemsPerPage,
-            'append'      => false,
-            'path'        => '',
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => $countVideos,
-            'fileName'    => $this->generateUrl(
-                'admin_videos_content_provider',
-                array('category' => $category)
-            ).'&page=%d',
-        ));
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => $countVideos,
+                'fileName'    => $this->generateUrl(
+                    'admin_videos_content_provider',
+                    array('category' => $category)
+                ).'&page=%d',
+            )
+        );
 
-        return $this->render('video/content-provider.tpl', array(
-            'videos' => $videos,
-            'pager'  => $pagination,
-        ));
+        return $this->render(
+            'video/content-provider.tpl',
+            array(
+                'videos' => $videos,
+                'pager'  => $pagination,
+            )
+        );
     }
 
     /**
@@ -750,28 +790,34 @@ class VideosController extends Controller
             $itemsPerPage
         );
 
-        $pagination = \Pager::factory(array(
-            'mode'        => 'Sliding',
-            'perPage'     => $itemsPerPage,
-            'append'      => false,
-            'path'        => '',
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => $countVideos,
-            'fileName'    => $this->generateUrl('admin_videos_content_provider_related', array(
-                'category' => $category,
-            )).'&page=%d',
-        ));
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => $countVideos,
+                'fileName'    => $this->generateUrl(
+                    'admin_videos_content_provider_related',
+                    array('category' => $category,)
+                ).'&page=%d',
+            )
+        );
 
-        return $this->render('common/content_provider/_container-content-list.tpl', array(
-            'contentType'           => 'Video',
-            'contents'              => $videos,
-            'contentTypeCategories' => $this->parentCategories,
-            'category'              => $this->category,
-            'pagination'            => $pagination->links,
-            'contentProviderUrl'    => $this->generateUrl('admin_videos_content_provider_related'),
-        ));
+        return $this->render(
+            'common/content_provider/_container-content-list.tpl',
+            array(
+                'contentType'           => 'Video',
+                'contents'              => $videos,
+                'contentTypeCategories' => $this->parentCategories,
+                'category'              => $this->category,
+                'pagination'            => $pagination->links,
+                'contentProviderUrl'    => $this->generateUrl('admin_videos_content_provider_related'),
+            )
+        );
     }
 
     /**
@@ -810,11 +856,12 @@ class VideosController extends Controller
             } else {
                 $szWhere = "TRUE";
 
-                return new Response(sprintf(_(
-                    "<div>"
-                    ."<p>Unable to find any content matching your search criterira.</p>"
-                    ."</div>"
-                ), $metadatas));
+                return new Response(
+                    sprintf(
+                        _("<div><p>Unable to find any content matching your search criterira.</p></div>"),
+                        $metadatas
+                    )
+                );
             }
 
         } else {
@@ -840,21 +887,28 @@ class VideosController extends Controller
             array_pop($videos);
         }
 
-        $pagination = \Onm\Pager\SimplePager::getPagerUrl(array(
-            'page'  => $page,
-            'items' => $itemsPerPage,
-            'total' => $total,
-            'url'   => $this->generateUrl('admin_videos_content_provider_gallery', array(
-                'category'  => $category,
-                'metadatas' => $metadatas,
-            ))
-        ));
+        $pagination = \Onm\Pager\SimplePager::getPagerUrl(
+            array(
+                'page'  => $page,
+                'items' => $itemsPerPage,
+                'total' => $total,
+                'url'   => $this->generateUrl(
+                    'admin_videos_content_provider_gallery',
+                    array(
+                        'category'  => $category,
+                        'metadatas' => $metadatas,
+                    )
+                )
+            )
+        );
 
-        return $this->render('video/video_gallery.ajax.tpl', array(
-            'pagination' => $pagination,
-            'videos'     => $videos,
-
-        ));
+        return $this->render(
+            'video/video_gallery.ajax.tpl',
+            array(
+                'pagination' => $pagination,
+                'videos'     => $videos,
+            )
+        );
     }
-
 }
+

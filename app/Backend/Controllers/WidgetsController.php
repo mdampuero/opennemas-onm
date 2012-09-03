@@ -54,25 +54,30 @@ class WidgetsController extends Controller
         );
 
         // Build the pager
-        $pagination = \Pager::factory(array(
-            'mode'        => 'Sliding',
-            'perPage'     => $itemsPerPage,
-            'append'      => false,
-            'path'        => '',
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => $countWidgets,
-            'fileName'    => $this->generateUrl(
-                'admin_widgets'
-            ).'?page=%d',
-        ));
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => $countWidgets,
+                'fileName'    => $this->generateUrl(
+                    'admin_widgets'
+                ).'?page=%d',
+            )
+        );
 
-        return $this->render('widget/list.tpl', array(
-            'widgets'    => $widgets,
-            'pagination' => $pagination,
-            'page'       => $page,
-        ));
+        return $this->render(
+            'widget/list.tpl',
+            array(
+                'widgets'    => $widgets,
+                'pagination' => $pagination,
+                'page'       => $page,
+            )
+        );
     }
 
     /**
@@ -99,13 +104,16 @@ class WidgetsController extends Controller
 
         $_SESSION['from'] = $request->server->get("HTTP_REFERER").'?'.$request->getQueryString();
 
-        return $this->render('widget/edit.tpl', array(
-            'all_widgets' => $allInteligentWidgets,
-            'id'          => $id,
-            'widget'      => $widget,
-            'page'        => $page,
-            'category'    => $category
-        ));
+        return $this->render(
+            'widget/edit.tpl',
+            array(
+                'all_widgets' => $allInteligentWidgets,
+                'id'          => $id,
+                'widget'      => $widget,
+                'page'        => $page,
+                'category'    => $category
+            )
+        );
     }
 
     /**
@@ -161,10 +169,13 @@ class WidgetsController extends Controller
         } else {
             $allInteligentWidgets = \Widget::getAllInteligentWidgets();
 
-            return $this->render('widget/edit.tpl', array(
-                'all_widgets' => $allInteligentWidgets,
-                'action'      => 'new',
-            ));
+            return $this->render(
+                'widget/edit.tpl',
+                array(
+                    'all_widgets' => $allInteligentWidgets,
+                    'action'      => 'new',
+                )
+            );
         }
     }
 
@@ -195,12 +206,9 @@ class WidgetsController extends Controller
         if (!$widget->update($widgetData)) {
             m::add(_('There was an error while updating widget data.'), m::ERROR);
 
-            return $this->redirect($this->generateUrl(
-                'admin_widgets',
-                array(
-                    'page' => $page,
-                )
-            ));
+            return $this->redirect(
+                $this->generateUrl('admin_widgets', array('page' => $page,))
+            );
         }
 
         m::add(_('Widget data updated successfully.'), m::SUCCESS);
@@ -209,12 +217,9 @@ class WidgetsController extends Controller
             return $this->redirect($_SESSION['from']);
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_widgets',
-            array(
-                'page' => $page,
-            )
-        ));
+        return $this->redirect(
+            $this->generateUrl('admin_widgets', array('page' => $page,))
+        );
     }
 
     /**
@@ -237,12 +242,9 @@ class WidgetsController extends Controller
             m::add(sprintf(_('Successfully changed availability for "%s" widget'), $widget->title), m::SUCCESS);
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_widgets',
-            array(
-                'page' => $page,
-            )
-        ));
+        return $this->redirect(
+            $this->generateUrl('admin_widgets', array('page' => $page,))
+        );
     }
 
     /**
@@ -282,26 +284,30 @@ class WidgetsController extends Controller
         );
 
         // Build the pager
-        $pagination = \Pager::factory(array(
-            'mode'        => 'Sliding',
-            'perPage'     => $itemsPerPage,
-            'append'      => false,
-            'path'        => '',
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => $countWidgets,
-            'fileName'    => $this->generateUrl(
-                'admin_widgets_content_provider',
-                array('category' => $category)
-            ).'&page=%d',
-        ));
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => $countWidgets,
+                'fileName'    => $this->generateUrl(
+                    'admin_widgets_content_provider',
+                    array('category' => $category)
+                ).'&page=%d',
+            )
+        );
 
-        return $this->render('widget/content-provider.tpl', array(
-            'widgets' => $widgets,
-            'pager'   => $pagination,
-        ));
-
+        return $this->render(
+            'widget/content-provider.tpl',
+            array(
+                'widgets' => $widgets,
+                'pager'   => $pagination,
+            )
+        );
     }
 }
 

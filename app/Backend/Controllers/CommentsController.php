@@ -57,13 +57,15 @@ class CommentsController extends Controller
             11 => _('Poll')
         );
 
-        $this->view->assign(array(
-            'category'      => $this->category,
-            'subcat'        => $this->subcat,
-            'allcategorys'  => $this->parentCategories,
-            'datos_cat'     => $this->categoryData,
-            'content_types' => $content_types,
-        ));
+        $this->view->assign(
+            array(
+                'category'      => $this->category,
+                'subcat'        => $this->subcat,
+                'allcategorys'  => $this->parentCategories,
+                'datos_cat'     => $this->categoryData,
+                'content_types' => $content_types,
+            )
+        );
     }
 
     /**
@@ -106,8 +108,7 @@ class CommentsController extends Controller
         $itemsPerPage = s::get('items_per_page');
 
         if ($module != 0) {
-            $allComments   = $cm->find_all('Comment', $filter,
-                ' ORDER BY  created DESC');
+            $allComments   = $cm->find_all('Comment', $filter, ' ORDER BY  created DESC');
             $comments      = array();
             $commentsCount = 0;
             foreach ($allComments as $comm) {
@@ -131,20 +132,22 @@ class CommentsController extends Controller
         }
 
         // Build the pager
-        $pagination = \Pager::factory(array(
-            'mode'        => 'Sliding',
-            'perPage'     => $itemsPerPage,
-            'append'      => false,
-            'path'        => '',
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => $commentsCount,
-            'fileName'    => $this->generateUrl(
-                'admin_comments',
-                array('category' => $this->category)
-            ).'&page=%d',
-        ));
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => $commentsCount,
+                'fileName'    => $this->generateUrl(
+                    'admin_comments',
+                    array('category' => $this->category)
+                ).'&page=%d',
+            )
+        );
 
         $contents = array();
         $votes = array();
@@ -153,26 +156,29 @@ class CommentsController extends Controller
             $i = 0;
 
             foreach ($comments as $comment) {
-                $contents[$i] = new \Content( $comment->fk_content );
+                $contents[$i] = new \Content($comment->fk_content);
 
                 $contents[$i]->category_name  =
                     $contents[$i]->loadCategoryName($comment->fk_content);
                 $contents[$i]->category_title =
                     $this->ccm->get_title($comment->category_name);
 
-                $votes[$i] = new \Vote( $comment->pk_comment );
+                $votes[$i] = new \Vote($comment->pk_comment);
                 $i++;
             }
         }
 
-        return $this->render('comment/list.tpl', array(
-            'comments'   => $comments,
-            'pagination' => $pagination,
-            'contents'   => $contents,
-            'votes'      => $votes,
-            'module'     => $module,
-            'status'     => $status,
-        ));
+        return $this->render(
+            'comment/list.tpl',
+            array(
+                'comments'   => $comments,
+                'pagination' => $pagination,
+                'contents'   => $contents,
+                'votes'      => $votes,
+                'module'     => $module,
+                'status'     => $status,
+            )
+        );
     }
 
     /**
@@ -190,16 +196,18 @@ class CommentsController extends Controller
         if (!is_null($id)) {
             $comment = new \Comment();
             $comment->read($id);
-            $content = new \Content( $comment->fk_content );
+            $content = new \Content($comment->fk_content);
 
-            return $this->render('comment/read.tpl', array(
-                'id'      => $id,
-                'comment' => $comment,
-                'content' => $content,
-            ));
+            return $this->render(
+                'comment/read.tpl',
+                array(
+                    'id'      => $id,
+                    'comment' => $comment,
+                    'content' => $content,
+                )
+            );
         } else {
-            m::add(sprintf(_('Comment with id "%d" doesn\'t exists.'), $id),
-                m::ERROR);
+            m::add(sprintf(_('Comment with id "%d" doesn\'t exists.'), $id), m::ERROR);
 
             return $this->redirect($this->generateUrl('admin_comments'));
         }
@@ -236,7 +244,6 @@ class CommentsController extends Controller
         }
 
         return $this->redirect($this->generateUrl('admin_comments_show', array('id' => $id)));
-
     }
 
     /**

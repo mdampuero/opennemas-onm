@@ -35,8 +35,7 @@ class BooksController extends Controller
         // Take out this crap from this PLEASE ---------------------------------
         $contentType = \Content::getIDContentType('book');
 
-        $this->category = $this->request->query->filter('category', 'all',
-            FILTER_SANITIZE_STRING);
+        $this->category = $this->request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
 
         $this->ccm = \ContentCategoryManager::get_instance();
         list($parentCategories, $subcat, $categoryData) =
@@ -49,12 +48,14 @@ class BooksController extends Controller
             }
         }
 
-        $this->view->assign(array(
-            'category'     => $this->category,
-            'subcat'       => $subcat,
-            'allcategorys' => $bookCategories,
-            'datos_cat'    => $categoryData,
-        ));
+        $this->view->assign(
+            array(
+                'category'     => $this->category,
+                'subcat'       => $subcat,
+                'allcategorys' => $bookCategories,
+                'datos_cat'    => $categoryData,
+            )
+        );
         // ---------------------------------------------------------------------
 
         // Optimize  this crap from this ---------------------------------------
@@ -123,32 +124,36 @@ class BooksController extends Controller
             }
         }
         if (count($books) != $numFavorites ) {
-            m::add( sprintf(_("You must put %d books in the HOME widget"),
-                $numFavorites));
+            m::add(sprintf(_("You must put %d books in the HOME widget"), $numFavorites));
         }
 
         // Build the pager
-        $pagination = \Pager::factory(array(
-            'mode'        => 'Sliding',
-            'perPage'     => $itemsPerPage,
-            'append'      => false,
-            'path'        => '',
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => $booksCount,
-            'fileName'    => $this->generateUrl(
-                'admin_books',
-                array('category' => $this->category)
-            ).'&page=%d',
-        ));
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => $booksCount,
+                'fileName'    => $this->generateUrl(
+                    'admin_books',
+                    array('category' => $this->category)
+                ).'&page=%d',
+            )
+        );
 
-        return $this->render('book/list.tpl', array(
-            'pagination' => $pagination,
-            'page'       => $page,
-            'status'     => $status,
-            'books'      => $books
-        ));
+        return $this->render(
+            'book/list.tpl',
+            array(
+                'pagination' => $pagination,
+                'page'       => $page,
+                'status'     => $status,
+                'books'      => $books
+            )
+        );
     }
 
     /**
@@ -166,8 +171,7 @@ class BooksController extends Controller
 
 
         $cm = new \ContentManager();
-        $books = $cm->find_all('book', 'in_home = 1 AND available =1',
-            'ORDER BY  position ASC ');
+        $books = $cm->find_all('book', 'in_home = 1 AND available =1', 'ORDER BY  position ASC ');
 
         if (!empty($books)) {
             foreach ($books as &$book) {
@@ -177,14 +181,16 @@ class BooksController extends Controller
         }
 
         if (count($books) != $numFavorites ) {
-            m::add( sprintf(_("You must put %d books in the HOME widget"),
-                $numFavorites));
+            m::add(sprintf(_("You must put %d books in the HOME widget"), $numFavorites));
         }
 
-        return $this->render('book/list.tpl', array(
-            'books' => $books,
-            'category' => $this->category,
-        ));
+        return $this->render(
+            'book/list.tpl',
+            array(
+                'books' => $books,
+                'category' => $this->category,
+            )
+        );
     }
 
     /**
@@ -209,10 +215,8 @@ class BooksController extends Controller
             $imageName    = StringUtils::cleanFileName($_FILES['file_img']['name']);
 
             // Move uploaded pdf
-            $uploadStatusPdf    = @move_uploaded_file($_FILES['file']['tmp_name'],
-                $bookSavePath.$fileName);
-            $uploadStatusPdfImg = @move_uploaded_file($$_FILES['file_img']['tmp_name'],
-                $bookSavePath.$imageName);
+            $uploadStatusPdf    = @move_uploaded_file($_FILES['file']['tmp_name'], $bookSavePath.$fileName);
+            $uploadStatusPdfImg = @move_uploaded_file($$_FILES['file_img']['tmp_name'], $bookSavePath.$imageName);
 
             $data = array(
                 'title'       => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
@@ -232,27 +236,28 @@ class BooksController extends Controller
 
             $sizeFile = ini_get('upload_max_filesize');
             if ( ($uploadStatusPdf !== false) && !empty($id)) {
-                $continue = $request->request->filter('continue',
-                    false, FILTER_SANITIZE_STRING);
+                $continue = $request->request->filter('continue', false, FILTER_SANITIZE_STRING);
                 if ($continue) {
                     $book = $book->read($id);
 
-                    return $this->render('book/new.tpl', array(
-                        'book' => $book,
-                    ));
+                    return $this->render('book/new.tpl', array( 'book' => $book, ));
                 }
 
-                return $this->redirect($this->generateUrl('admin_books',
-                    array(
-                        'category' => $this->category,
-                        'page' => $page
-                        )));
+                return $this->redirect(
+                    $this->generateUrl(
+                        'admin_books',
+                        array(
+                            'category' => $this->category,
+                            'page' => $page
+                        )
+                    )
+                );
 
             } elseif ($_FILES['file']['size'] > $sizeFile) {
-                 m::add( sprintf(_("Sorry, file can't upload. You must check file size.(< %sB)"), $sizeFile ));
+                 m::add(sprintf(_("Sorry, file can't upload. You must check file size.(< %sB)"), $sizeFile));
 
             } else {
-                 m::add( sprintf(_("Sorry, file can't upload.")));
+                 m::add(sprintf(_("Sorry, file can't upload.")));
             }
 
             return $this->render('book/new.tpl');
@@ -278,10 +283,13 @@ class BooksController extends Controller
             return $this->redirect($this->generateUrl('admin_books'));
         }
 
-        return $this->render('book/new.tpl', array(
-            'book'     => $book,
-            'category' => $book->category,
-        ));
+        return $this->render(
+            'book/new.tpl',
+            array(
+                'book'     => $book,
+                'category' => $book->category,
+            )
+        );
     }
 
     /**
@@ -306,7 +314,7 @@ class BooksController extends Controller
             && !\Acl::check('CONTENT_OTHER_UPDATE')
             && $book->fk_user != $_SESSION['userid']) {
 
-            m::add(_("You can't modify this book data because you don't have enought privileges.") );
+            m::add(_("You can't modify this book data because you don't have enought privileges."));
 
         } else {
 
@@ -315,16 +323,14 @@ class BooksController extends Controller
             if (!empty($_FILES['file']['name'])) {
                 $fileName  = StringUtils::cleanFileName($_FILES['file']['name']);
 
-                $uploadStatusPdf = @move_uploaded_file($_FILES['file']['tmp_name'],
-                    $bookSavePath.$fileName);
+                $uploadStatusPdf = @move_uploaded_file($_FILES['file']['tmp_name'], $bookSavePath.$fileName);
             } else {
                 $fileName = $book->file_name;
             }
 
             if (!empty($_FILES['file_img']['name'])) {
                 $imageName = StringUtils::cleanFileName($_FILES['file_img']['name']);
-                $uploadStatusPdfImg = @move_uploaded_file($$_FILES['file_img']['tmp_name'],
-                    $bookSavePath.$imageName);
+                $uploadStatusPdfImg = @move_uploaded_file($$_FILES['file_img']['tmp_name'], $bookSavePath.$imageName);
             } else {
                 $imageName = $book->file_img;
             }
@@ -346,24 +352,24 @@ class BooksController extends Controller
 
             $book->update($data);
 
-            $continue = $request->request->filter('continue',
-                    false, FILTER_SANITIZE_STRING);
+            $continue = $request->request->filter('continue', false, FILTER_SANITIZE_STRING);
             if ($continue) {
-                return $this->redirect($this->generateUrl('admin_books_show',
-                    array(
-                        'category' => $this->category,
-                        'id'       => $book->id,
+                return $this->redirect(
+                    $this->generateUrl(
+                        'admin_books_show',
+                        array(
+                            'category' => $this->category,
+                            'id'       => $book->id,
+                        )
                     )
-                ));
+                );
             }
 
         }
 
-        return $this->redirect($this->generateUrl('admin_books',
-            array(
-                'category' => $data['category'],
-            )
-        ));
+        return $this->redirect(
+            $this->generateUrl('admin_books', array('category' => $data['category'],))
+        );
     }
 
     /**
@@ -382,15 +388,19 @@ class BooksController extends Controller
             m::add(sprintf(_('Unable to find the book with the id "%d"'), $id));
 
         } else {
-            $book->delete( $id );
+            $book->delete($id);
             m::add(_("Book '{$book->title}' deleted successfully."), m::SUCCESS);
         }
 
-        return $this->redirect($this->generateUrl('admin_books'),
-            array(
-                'category' => $book->category,
-                'page' => $page
-            ));
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_books',
+                array(
+                    'category' => $book->category,
+                    'page' => $page
+                )
+            )
+        );
     }
 
     /**
@@ -420,13 +430,15 @@ class BooksController extends Controller
             }
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_books',
-            array(
-                'category' => $this->category,
-                'page'    => $page,
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_books',
+                array(
+                    'category' => $this->category,
+                    'page'    => $page,
+                )
             )
-        ));
+        );
     }
 
     /**
@@ -453,13 +465,15 @@ class BooksController extends Controller
             m::add(sprintf(_('Successfully changed availability for book with id "%d"'), $id), m::SUCCESS);
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_books',
-            array(
-                'category' => $this->category,
-                'page'     => $page
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_books',
+                array(
+                    'category' => $this->category,
+                    'page'     => $page
+                )
             )
-        ));
+        );
     }
 
 
@@ -485,13 +499,15 @@ class BooksController extends Controller
             m::add(sprintf(_('Successfully changed suggested flag for book with id "%d"'), $id), m::SUCCESS);
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_books',
-            array(
-                'category' => $this->category,
-                'page'     => $page
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_books',
+                array(
+                    'category' => $this->category,
+                    'page'     => $page
+                )
             )
-        ));
+        );
     }
 
     /**
@@ -559,13 +575,15 @@ class BooksController extends Controller
             }
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_books',
-            array(
-                'category' => $this->category,
-                'page'     => $page,
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_books',
+                array(
+                    'category' => $this->category,
+                    'page'     => $page,
+                )
             )
-        ));
+        );
     }
 }
 

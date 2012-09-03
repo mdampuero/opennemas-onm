@@ -46,12 +46,14 @@ class ArticlesController extends Controller
         list($this->parentCategories, $this->subcat, $this->categoryData) =
             $this->ccm->getArraysMenu($this->category);
 
-        $this->view->assign(array(
-            'category'     => $this->category,
-            'subcat'       => $this->subcat,
-            'allcategorys' => $this->parentCategories,
-            'datos_cat'    => $this->categoryData,
-        ));
+        $this->view->assign(
+            array(
+                'category'     => $this->category,
+                'subcat'       => $this->subcat,
+                'allcategorys' => $this->parentCategories,
+                'datos_cat'    => $this->categoryData,
+            )
+        );
     }
 
     /**
@@ -66,7 +68,7 @@ class ArticlesController extends Controller
         // Check if the user has access to this category
         if ($this->category != 'all') {
             if (!\Acl::_C($this->category)) {
-                m::add(_("You don't have enought privileges to see this category.") );
+                m::add(_("You don't have enought privileges to see this category."));
 
                 return $this->redirect($this->generateUrl('admin_welcome'));
             }
@@ -105,21 +107,26 @@ class ArticlesController extends Controller
             $itemsPerPage
         );
 
-        $pagination = \Pager::factory(array(
-            'mode'        => 'Sliding',
-            'perPage'     => $itemsPerPage,
-            'append'      => false,
-            'path'        => '',
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => $countArticles,
-            'fileName'    => $this->generateUrl('admin_articles', array(
-                'status'   => $status,
-                'title'    => $title,
-                'category' => $category
-            )).'&page=%d',
-        ));
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => $countArticles,
+                'fileName'    => $this->generateUrl(
+                    'admin_articles',
+                    array(
+                        'status'   => $status,
+                        'title'    => $title,
+                        'category' => $category
+                    )
+                ).'&page=%d',
+            )
+        );
 
         if (isset($articles) && is_array($articles)) {
             $user    = new \User();
@@ -137,21 +144,27 @@ class ArticlesController extends Controller
             $articles = array();
         }
 
-        $_SESSION['_from'] = $this->generateUrl('admin_articles', array(
-            'status'   => $status,
-            'title'    => $title,
-            'category' => $category,
-            'page'     => $page
-        ));
+        $_SESSION['_from'] = $this->generateUrl(
+            'admin_articles',
+            array(
+                'status'   => $status,
+                'title'    => $title,
+                'category' => $category,
+                'page'     => $page
+            )
+        );
 
-        return $this->render('article/list.tpl', array(
-            'articles'   => $articles,
-            'page'       => $page,
-            'status'     => $status,
-            'title'      => $title,
-            'pagination' => $pagination,
-            'totalArticles' => $countArticles
-        ));
+        return $this->render(
+            'article/list.tpl',
+            array(
+                'articles'   => $articles,
+                'page'       => $page,
+                'status'     => $status,
+                'title'      => $title,
+                'pagination' => $pagination,
+                'totalArticles' => $countArticles
+            )
+        );
     }
 
     /**
@@ -238,37 +251,44 @@ class ArticlesController extends Controller
 
             $continue = $request->request->filter('continue', 0);
             if ($continue) {
-                return $this->redirect($this->generateUrl(
-                    'admin_article_show',
-                    array('id' => $article->id)
-                ));
+                return $this->redirect(
+                    $this->generateUrl(
+                        'admin_article_show',
+                        array('id' => $article->id)
+                    )
+                );
             } else {
-                return $this->redirect($this->generateUrl(
-                    'admin_articles',
-                    array('status' => $data['content_status'])
-                ));
+                return $this->redirect(
+                    $this->generateUrl(
+                        'admin_articles',
+                        array('status' => $data['content_status'])
+                    )
+                );
             }
         } else {
             $category = $request->request->getDigits('category', 0);
 
             $cm = new \ContentManager();
 
-            return $this->render('article/new.tpl', array(
-                'availableSizes'=> array(
-                    16 => '16',
-                    18 => '18',
-                    20 => '20',
-                    22 => '22',
-                    24 => '24',
-                    26 => '26',
-                    28 => '28',
-                    30 => '30',
-                    32 => '32',
-                    34 => '34'
-                ),
-                // TODO: clean this from here
-                'MEDIA_IMG_PATH_WEB' => MEDIA_IMG_PATH_WEB,
-            ));
+            return $this->render(
+                'article/new.tpl',
+                array(
+                    'availableSizes'=> array(
+                        16 => '16',
+                        18 => '18',
+                        20 => '20',
+                        22 => '22',
+                        24 => '24',
+                        26 => '26',
+                        28 => '28',
+                        30 => '30',
+                        32 => '32',
+                        34 => '34'
+                    ),
+                    // TODO: clean this from here
+                    'MEDIA_IMG_PATH_WEB' => MEDIA_IMG_PATH_WEB,
+                )
+            );
         }
     }
 
@@ -387,14 +407,17 @@ class ArticlesController extends Controller
 
         }
 
-        return $this->render('article/new.tpl', array(
-            'article'      => $article,
-            'availableSizes' => array(
-                16 => '16', 18 => '18', 20 => '20', 22 => '22',
-                24 => '24', 26 => '26', 28 => '28',30 => '30',
-                32 => '32', 34 => '34'
-            ),
-        ));
+        return $this->render(
+            'article/new.tpl',
+            array(
+                'article'      => $article,
+                'availableSizes' => array(
+                    16 => '16', 18 => '18', 20 => '20', 22 => '22',
+                    24 => '24', 26 => '26', 28 => '28',30 => '30',
+                    32 => '32', 34 => '34'
+                ),
+            )
+        );
 
     }
 
@@ -418,7 +441,7 @@ class ArticlesController extends Controller
                 && !\Acl::check('CONTENT_OTHER_UPDATE')
                 && $article->fk_user != $_SESSION['userid']
             ) {
-                m::add(_("You can't modify this article because you don't have enought privileges.") );
+                m::add(_("You can't modify this article because you don't have enought privileges."));
 
                 return $this->redirect($this->generateUrl('admin_articles'));
             }
@@ -501,15 +524,19 @@ class ArticlesController extends Controller
 
             $continue = $request->request->filter('continue', false, FILTER_SANITIZE_STRING);
             if ($continue) {
-                return $this->redirect($this->generateUrl(
-                    'admin_article_show',
-                    array('id' => $article->id)
-                ));
+                return $this->redirect(
+                    $this->generateUrl(
+                        'admin_article_show',
+                        array('id' => $article->id)
+                    )
+                );
             } else {
-                return $this->redirect($this->generateUrl(
-                    'admin_articles',
-                    array('status' => $data['content_status'])
-                ));
+                return $this->redirect(
+                    $this->generateUrl(
+                        'admin_articles',
+                        array('status' => $data['content_status'])
+                    )
+                );
             }
         }
 
@@ -542,15 +569,17 @@ class ArticlesController extends Controller
         }
 
         if (!$request->isXmlHttpRequest()) {
-            return $this->redirect($this->generateUrl(
-                'admin_articles',
-                array(
-                    'category' => $category,
-                    'page'     => $page,
-                    'status'   => $status,
-                    'title'   => $title,
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_articles',
+                    array(
+                        'category' => $category,
+                        'page'     => $page,
+                        'status'   => $status,
+                        'title'   => $title,
+                    )
                 )
-            ));
+            );
         }
     }
 
@@ -580,14 +609,16 @@ class ArticlesController extends Controller
             m::add(sprintf(_('Successfully changed availability for article with id "%d"'), $id), m::SUCCESS);
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_articles',
-            array(
-                'category' => $category,
-                'page'     => $page,
-                'status'   => $redirectStatus,
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_articles',
+                array(
+                    'category' => $category,
+                    'page'     => $page,
+                    'status'   => $redirectStatus,
+                )
             )
-        ));
+        );
     }
 
     /**
@@ -624,24 +655,30 @@ class ArticlesController extends Controller
             8
         );
 
-        $pagination = \Pager::factory(array(
-            'mode'        => 'Sliding',
-            'perPage'     => 8,
-            'append'      => false,
-            'path'        => '',
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => $countArticles,
-            'fileName'    => $this->generateUrl('admin_articles_content_provider_suggested', array(
-                'category' => $category,
-            )).'&page=%d',
-        ));
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => 8,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => $countArticles,
+                'fileName'    => $this->generateUrl(
+                    'admin_articles_content_provider_suggested',
+                    array('category' => $category,)
+                ).'&page=%d',
+            )
+        );
 
-        return $this->render('article/content-provider-suggested.tpl', array(
-            'articles' => $articles,
-            'pager'   => $pagination,
-        ));
+        return $this->render(
+            'article/content-provider-suggested.tpl',
+            array(
+                'articles' => $articles,
+                'pager'   => $pagination,
+            )
+        );
     }
 
     /**
@@ -677,24 +714,30 @@ class ArticlesController extends Controller
             8
         );
 
-        $pagination = \Pager::factory(array(
-            'mode'        => 'Sliding',
-            'perPage'     => 8,
-            'append'      => false,
-            'path'        => '',
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => $countArticles,
-            'fileName'    => $this->generateUrl('admin_articles_content_provider_category', array(
-                'category' => $category,
-            )).'&page=%d',
-        ));
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => 8,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => $countArticles,
+                'fileName'    => $this->generateUrl(
+                    'admin_articles_content_provider_category',
+                    array('category' => $category,)
+                ).'&page=%d',
+            )
+        );
 
-        return $this->render('article/content-provider-category.tpl', array(
-            'articles' => $articles,
-            'pager'   => $pagination,
-        ));
+        return $this->render(
+            'article/content-provider-category.tpl',
+            array(
+                'articles' => $articles,
+                'pager'   => $pagination,
+            )
+        );
     }
 
     /**
@@ -726,28 +769,35 @@ class ArticlesController extends Controller
             $itemsPerPage
         );
 
-        $pagination = \Pager::factory(array(
-            'mode'        => 'Sliding',
-            'perPage'     => $itemsPerPage,
-            'append'      => false,
-            'path'        => '',
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => $countArticles,
-            'fileName'    => $this->generateUrl('admin_articles_content_provider_related', array(
-                'category' => $category,
-            )).'&page=%d',
-        ));
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => $countArticles,
+                'fileName'    => $this->generateUrl(
+                    'admin_articles_content_provider_related',
+                    array(
+                        'category' => $category,)
+                ).'&page=%d',
+            )
+        );
 
-        return $this->render('common/content_provider/_container-content-list.tpl', array(
-            'contentType'           => 'Article',
-            'contents'              => $articles,
-            'contentTypeCategories' => $this->parentCategories,
-            'category'              => $this->category,
-            'pagination'            => $pagination->links,
-            'contentProviderUrl'    => $this->generateUrl('admin_articles_content_provider_related'),
-        ));
+        return $this->render(
+            'common/content_provider/_container-content-list.tpl',
+            array(
+                'contentType'           => 'Article',
+                'contents'              => $articles,
+                'contentTypeCategories' => $this->parentCategories,
+                'category'              => $this->category,
+                'pagination'            => $pagination->links,
+                'contentProviderUrl'    => $this->generateUrl('admin_articles_content_provider_related'),
+            )
+        );
     }
 
     /**
@@ -778,13 +828,16 @@ class ArticlesController extends Controller
             }
         }
 
-        return $this->render('common/content_provider/_container-content-list.tpl', array(
-            'contentType'           => 'Article',
-            'contents'              => $articles,
-            'contentTypeCategories' => $this->parentCategories,
-            'category'              => $this->category,
-            'contentProviderUrl'    => $this->generateUrl('admin_articles_content_provider_in_frontpage'),
-        ));
+        return $this->render(
+            'common/content_provider/_container-content-list.tpl',
+            array(
+                'contentType'           => 'Article',
+                'contents'              => $articles,
+                'contentTypeCategories' => $this->parentCategories,
+                'category'              => $this->category,
+                'contentProviderUrl'    => $this->generateUrl('admin_articles_content_provider_in_frontpage'),
+            )
+        );
     }
 
     /**
@@ -814,14 +867,16 @@ class ArticlesController extends Controller
             }
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_articles',
-            array(
-                'category' => $category,
-                'page'     => $page,
-                'status'   => $redirectStatus,
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_articles',
+                array(
+                    'category' => $category,
+                    'page'     => $page,
+                    'status'   => $redirectStatus,
+                )
             )
-        ));
+        );
     }
 
     /**
@@ -847,14 +902,16 @@ class ArticlesController extends Controller
             }
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_articles',
-            array(
-                'category' => $category,
-                'page'     => $page,
-                'status'   => $redirectStatus,
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_articles',
+                array(
+                    'category' => $category,
+                    'page'     => $page,
+                    'status'   => $redirectStatus,
+                )
             )
-        ));
+        );
     }
 
     /**

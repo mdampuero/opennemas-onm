@@ -55,9 +55,10 @@ class NewsletterController extends Controller
         $nm = new \NewsletterManager();
         $newsletters = $nm->find();
 
-        return $this->render('newsletter/list.tpl', array(
-            'newsletters'     => $newsletters
-        ));
+        return $this->render(
+            'newsletter/list.tpl',
+            array('newsletters'     => $newsletters)
+        );
     }
 
     /**
@@ -131,16 +132,20 @@ class NewsletterController extends Controller
             $newsletter->update($newValues);
         } else {
             $newsletter = new \NewNewsletter();
-            $newsletter->create(array(
-                'title'   => $title,
-                'data'    => $contentsRAW,
-                'html'    => $nm->render($contents),
-            ));
+            $newsletter->create(
+                array(
+                    'title'   => $title,
+                    'data'    => $contentsRAW,
+                    'html'    => $nm->render($contents),
+                )
+            );
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_newsletter_preview',
-            array('id' => $newsletter->pk_newsletter))
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_newsletter_preview',
+                array('id' => $newsletter->pk_newsletter)
+            )
         );
     }
 
@@ -157,9 +162,10 @@ class NewsletterController extends Controller
 
         $newsletter = new \NewNewsletter($id);
 
-        return $this->render('newsletter/steps/2-preview.tpl', array(
-            'newsletter' => $newsletter,
-        ));
+        return $this->render(
+            'newsletter/steps/2-preview.tpl',
+            array('newsletter' => $newsletter,)
+        );
     }
 
     /**
@@ -357,12 +363,14 @@ class NewsletterController extends Controller
 
             return $this->redirect($this->generateUrl('admin_newsletters'));
         } else {
-            $configurations = s::get(array(
-                'newsletter_maillist',
-                'newsletter_subscriptionType',
-                'newsletter_enable',
-                'recaptcha',
-            ));
+            $configurations = s::get(
+                array(
+                    'newsletter_maillist',
+                    'newsletter_subscriptionType',
+                    'newsletter_enable',
+                    'recaptcha',
+                )
+            );
 
             // Check that user has configured reCaptcha keys if newsletter is enabled
             $missingRecaptcha = false;
@@ -372,10 +380,13 @@ class NewsletterController extends Controller
                 $missingRecaptcha = true;
             }
 
-            return $this->render('newsletter/config.tpl', array(
-                'configs'           => $configurations,
-                'missing_recaptcha' => $missingRecaptcha,
-            ));
+            return $this->render(
+                'newsletter/config.tpl',
+                array(
+                    'configs'           => $configurations,
+                    'missing_recaptcha' => $missingRecaptcha,
+                )
+            );
         }
     }
 
@@ -390,16 +401,22 @@ class NewsletterController extends Controller
           || !(s::get('newsletter_subscriptionType') )
           || !(s::get('newsletter_enable'))
         ) {
-            m::add(_('Please provide your Newsletter configuration to start to use'.
-                ' your Newsletter module'));
+            m::add(
+                _('Please provide your Newsletter configuration to start to use your Newsletter module')
+            );
 
             return $this->redirect($this->generateUrl('admin_newsletter_config'));
         } else {
             $configurations = s::get('newsletter_maillist');
             foreach ($configurations as $key => $value) {
                 if ($key != 'receiver' && empty($value)) {
-                    m::add(_('Your newsletter configuration is not complete. Please'.
-                        ' go to settings and complete the form.'), m::ERROR);
+                    m::add(
+                        _(
+                            'Your newsletter configuration is not complete. Please'.
+                            ' go to settings and complete the form.'
+                        ),
+                        m::ERROR
+                    );
 
                     return $this->redirect($this->generateUrl('admin_newsletter_config'));
                 }

@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 use Onm\Module\ModuleManager as mod;
+
 /**
  * Handles the actions for the system information
  *
@@ -53,7 +54,7 @@ class SearchController extends Controller
         if (!empty($searchString)) {
 
             $htmlChecks     = null;
-            $contentTypesChecked = $this->_checkTypes($contentTypesSelected);
+            $contentTypesChecked = $this->checkTypes($contentTypesSelected);
             $szTags         = trim($searchString);
             $objSearch      = new \cSearch();
             $contents   = $objSearch->SearchContentsSelectMerge(
@@ -86,17 +87,20 @@ class SearchController extends Controller
                 }
             }
 
-            $this->view->assign(array(
-                'search_string'          => $searchString,
-                'contents'               => $contents,
-                'content_types'          => $contentTypes,
-                'content_types_selected' => $contentTypesSelected,
-            ));
+            $this->view->assign(
+                array(
+                    'search_string'          => $searchString,
+                    'contents'               => $contents,
+                    'content_types'          => $contentTypes,
+                    'content_types_selected' => $contentTypesSelected,
+                )
+            );
         }
 
-        return $this->render('search_advanced/index.tpl', array(
-            'arrayTypes' => $contentTypes
-        ));
+        return $this->render(
+            'search_advanced/index.tpl',
+            array('arrayTypes' => $contentTypes)
+        );
     }
 
     /**
@@ -117,7 +121,8 @@ class SearchController extends Controller
             $searchStringArray = array_map(
                 function ($element) {
                     return trim($element);
-                }, explode(',', $searchString)
+                },
+                explode(',', $searchString)
             );
 
             $searcher    = \cSearch::getInstance();
@@ -144,30 +149,38 @@ class SearchController extends Controller
                     $results[] = new \Content($content['pk_content']);
                 }
 
-                $pagination = \Pager::factory(array(
-                    'mode'        => 'Sliding',
-                    'perPage'     => s::get('items_per_page') ?: 20,
-                    'delta'       => 3,
-                    'clearIfVoid' => true,
-                    'urlVar'      => 'page',
-                    'totalItems'  => $resultSetSize,
-                ));
+                $pagination = \Pager::factory(
+                    array(
+                        'mode'        => 'Sliding',
+                        'perPage'     => s::get('items_per_page') ?: 20,
+                        'delta'       => 3,
+                        'clearIfVoid' => true,
+                        'urlVar'      => 'page',
+                        'totalItems'  => $resultSetSize,
+                    )
+                );
                 $this->view->assign('pagination', $pagination->links);
             }
             $this->view->assign('results', $results);
 
             $this->view->assign('search_string', $searchString);
             if (!is_null($related)) {
-                return $this->render('search_advanced/content-provider-related.tpl', array(
-                    'contents'    => $results,
-                    'contentType' => 'Content',
-                ));
+                return $this->render(
+                    'search_advanced/content-provider-related.tpl',
+                    array(
+                        'contents'    => $results,
+                        'contentType' => 'Content',
+                    )
+                );
 
             } else {
-                return $this->render('search_advanced/content-provider.tpl', array(
-                    'contents'    => $results,
-                    'contentType' => 'Content',
-                ));
+                return $this->render(
+                    'search_advanced/content-provider.tpl',
+                    array(
+                        'contents'    => $results,
+                        'contentType' => 'Content',
+                    )
+                );
             }
         } else {
             if (!is_null($related)) {
@@ -183,7 +196,7 @@ class SearchController extends Controller
      * Description: Parsea el $_REQUEST y obtiene un string con los tipos de contenidos enviados a la página.
      * Output: cadena de texto con los nombre de los tipos de contenidos separados por comas.
      */
-    private function _checkTypes($selected)
+    private function checkTypes($selected)
     {
         $contentTypes = \Content::getContentTypes();
         $szTypes =  '';

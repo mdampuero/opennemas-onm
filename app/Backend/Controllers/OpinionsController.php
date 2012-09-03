@@ -83,20 +83,25 @@ class OpinionsController extends Controller
             $itemsPerPage
         );
 
-        $pagination = \Pager::factory(array(
-            'mode'        => 'Sliding',
-            'perPage'     => $itemsPerPage,
-            'append'      => false,
-            'path'        => '',
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => $countOpinions,
-            'fileName'    => $this->generateUrl('admin_opinions', array(
-                'status' => $status,
-                'author' => $author,
-            )).'&page=%d',
-        ));
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => $countOpinions,
+                'fileName'    => $this->generateUrl(
+                    'admin_opinions',
+                    array(
+                        'status' => $status,
+                        'author' => $author,
+                    )
+                ).'&page=%d',
+            )
+        );
 
         if (isset($opinions) && is_array($opinions)) {
             foreach ($opinions as &$opinion) {
@@ -111,15 +116,18 @@ class OpinionsController extends Controller
         $aut     = new \Author();
         $authors = $aut->all_authors(null, 'ORDER BY name');
 
-        return $this->render('opinion/list.tpl', array(
-            'autores'  => $authors,
-            'opinions' => $opinions,
-            'page'     => $page,
-            'status'   => $status,
-            'author'   => $author,
-            'home'     => false,
-            'pagination' => $pagination,
-        ));
+        return $this->render(
+            'opinion/list.tpl',
+            array(
+                'autores'  => $authors,
+                'opinions' => $opinions,
+                'page'     => $page,
+                'status'   => $status,
+                'author'   => $author,
+                'home'     => false,
+                'pagination' => $pagination,
+            )
+        );
     }
 
     /**
@@ -153,8 +161,9 @@ class OpinionsController extends Controller
 
         if ($numEditorial > 0) {
             $editorial = $cm->find(
-                'Opinion', 'in_home=1 and available=1 and type_opinion=1',
-               'ORDER BY position ASC, created DESC LIMIT 0,'.$numEditorial
+                'Opinion',
+                'in_home=1 and available=1 and type_opinion=1',
+                'ORDER BY position ASC, created DESC LIMIT 0,'.$numEditorial
             );
         }
         if ($numDirector >0) {
@@ -166,16 +175,16 @@ class OpinionsController extends Controller
         }
         if (($numEditorial > 0) && (count($editorial) != $numEditorial)) {
             $type = 'editorial';
-            m::add( sprintf(_("You must put %d opinions %s in the home widget"), $numEditorial, $type) );
+            m::add(sprintf(_("You must put %d opinions %s in the home widget"), $numEditorial, $type));
         }
         if (($numDirector>0) && (count($director) != $numDirector)) {
              $type = 'opinion del director';
-             m::add( sprintf(_("You must put %d opinions %s in the home widget"), $numDirector, $type) );
+             m::add(sprintf(_("You must put %d opinions %s in the home widget"), $numDirector, $type));
         }
 
         if (isset($editorial) && is_array($editorial)) {
             foreach ($editorial as &$opin) {
-                $todos = $comment->get_comments( $opin->id );
+                $todos = $comment->get_comments($opin->id);
                 $opin->comments = count($todos);
                 $opin->ratings = $rating->getValue($opin->id);
             }
@@ -185,7 +194,7 @@ class OpinionsController extends Controller
 
         if (isset($director) && is_array($director)) {
             foreach ($director as &$opin) {
-                $todos = $comment->get_comments( $opin->id );
+                $todos = $comment->get_comments($opin->id);
                 $opin->comments = count($todos);
                 $opin->ratings = $rating->getValue($opin->id);
             }
@@ -206,15 +215,18 @@ class OpinionsController extends Controller
         $aut     = new \Author();
         $authors = $aut->all_authors(null, 'ORDER BY name');
 
-        return $this->render('opinion/list.tpl', array(
-            'autores'    => $authors,
-            'opinions'   => $opinions,
-            'director'   => $director,
-            'editorial'  => $editorial,
-            'type'       => 'frontpage',
-            'page'       => $page,
-            'home'       => true,
-        ));
+        return $this->render(
+            'opinion/list.tpl',
+            array(
+                'autores'    => $authors,
+                'opinions'   => $opinions,
+                'director'   => $director,
+                'editorial'  => $editorial,
+                'type'       => 'frontpage',
+                'page'       => $page,
+                'home'       => true,
+            )
+        );
     }
 
     /**
@@ -246,14 +258,17 @@ class OpinionsController extends Controller
         $photoWidget = $author->get_photo($opinion->fk_author_img_widget);
         $photos      = $author->get_author_photos($opinion->fk_author);
 
-        return $this->render('opinion/new.tpl', array(
-            'opinion'      => $opinion,
-            'all_authors'  => $allAuthors,
-            'author'       => $author->name,
-            'photo'        => $photo,
-            'photo_widget' => $photoWidget,
-            'photos'       => $photos,
-        ));
+        return $this->render(
+            'opinion/new.tpl',
+            array(
+                'opinion'      => $opinion,
+                'all_authors'  => $allAuthors,
+                'author'       => $author->name,
+                'photo'        => $photo,
+                'photo_widget' => $photoWidget,
+                'photos'       => $photos,
+            )
+        );
     }
 
     /**
@@ -299,23 +314,22 @@ class OpinionsController extends Controller
             }
 
             if ($continue) {
-                return $this->redirect($this->generateUrl(
-                    'admin_opinions',
-                    array('type_opinion' => $data['category'])
-                ));
+                return $this->redirect(
+                    $this->generateUrl('admin_opinions', array('type_opinion' => $data['category']))
+                );
             } else {
-                return $this->redirect($this->generateUrl(
-                    'admin_opinion_show',
-                    array('id' => $opinion->id)
-                ));
+                return $this->redirect(
+                    $this->generateUrl('admin_opinion_show', array('id' => $opinion->id))
+                );
             }
         } else {
             $author   = new \Author();
             $authors = $author->all_authors(null, 'ORDER BY name');
 
-            return $this->render('opinion/new.tpl', array(
-                'all_authors' => $authors,
-            ));
+            return $this->render(
+                'opinion/new.tpl',
+                array('all_authors' => $authors,)
+            );
         }
     }
 
@@ -339,7 +353,7 @@ class OpinionsController extends Controller
                 && !\Acl::check('CONTENT_OTHER_UPDATE')
                 && $opinionCheck->fk_user != $_SESSION['userid']
             ) {
-                m::add(_("You can't modify this opinion because you don't have enought privileges.") );
+                m::add(_("You can't modify this opinion because you don't have enought privileges."));
 
                 return $this->redirect($this->generateUrl('admin_opinions'));
             }
@@ -379,15 +393,13 @@ class OpinionsController extends Controller
 
             $continue = $request->request->filter('continue', false, FILTER_SANITIZE_STRING);
             if ($continue) {
-                return $this->redirect($this->generateUrl(
-                    'admin_opinion_show',
-                    array('id' => $opinion->id)
-                ));
+                return $this->redirect(
+                    $this->generateUrl('admin_opinion_show', array('id' => $opinion->id))
+                );
             } else {
-                return $this->redirect($this->generateUrl(
-                    'admin_opinions',
-                    array('category' => $data['category'])
-                ));
+                return $this->redirect(
+                    $this->generateUrl('admin_opinions', array('category' => $data['category']))
+                );
             }
         }
 
@@ -419,14 +431,16 @@ class OpinionsController extends Controller
         }
 
         if (!$request->isXmlHttpRequest()) {
-            return $this->redirect($this->generateUrl(
-                'admin_opinions',
-                array(
-                    'page'     => $page,
-                    'author'   => $author,
-                    'status'   => $status,
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_opinions',
+                    array(
+                        'page'     => $page,
+                        'author'   => $author,
+                        'status'   => $status,
+                    )
                 )
-            ));
+            );
         }
     }
 
@@ -503,7 +517,8 @@ class OpinionsController extends Controller
         }
 
         if ($type != 'frontpage') {
-            $url = $this->generateUrl('admin_opinions',
+            $url = $this->generateUrl(
+                'admin_opinions',
                 array('type' => $type, 'page' => $page)
             );
         } else {
@@ -536,15 +551,18 @@ class OpinionsController extends Controller
             m::add(sprintf(_('Unable to find an opinion with the id "%d"'), $id), m::ERROR);
         } else {
             $opinion->set_favorite($status, $_SESSION['userid']);
-            m::add(sprintf(
-                _('Successfully changed favorite state for the opinion "%s"'), $opinion->title
+            m::add(
+                sprintf(
+                    _('Successfully changed favorite state for the opinion "%s"'),
+                    $opinion->title
                 ),
                 m::SUCCESS
             );
         }
 
         if ($type != 'frontpage') {
-            $url = $this->generateUrl('admin_opinions',
+            $url = $this->generateUrl(
+                'admin_opinions',
                 array(
                     'type' => $type,
                     'page' => $page
@@ -648,13 +666,15 @@ class OpinionsController extends Controller
         }
 
         if (!$request->isXmlHttpRequest()) {
-            return $this->redirect($this->generateUrl(
-                'admin_opinions',
-                array(
-                    'status' => $status,
-                    'author' => $author,
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_opinions',
+                    array(
+                        'status' => $status,
+                        'author' => $author,
+                    )
                 )
-            ));
+            );
         }
 
     }
@@ -697,12 +717,14 @@ class OpinionsController extends Controller
             m::add(sprintf(_('Successfully changed the available status of %d opinions'), $changes), m::SUCCESS);
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_opinions',
-            array(
-                'author' => $author,
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_opinions',
+                array(
+                    'author' => $author,
+                )
             )
-        ));
+        );
     }
 
     /**
@@ -746,24 +768,30 @@ class OpinionsController extends Controller
             $opinion->author = new \Author($opinion->fk_author);
         }
 
-        $pagination = \Pager::factory(array(
-            'mode'        => 'Sliding',
-            'perPage'     => $itemsPerPage,
-            'append'      => false,
-            'path'        => '',
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => $countOpinions,
-            'fileName'    => $this->generateUrl('admin_opinions_content_provider', array(
-                'category' => $category,
-            )).'&page=%d',
-        ));
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => $countOpinions,
+                'fileName'    => $this->generateUrl(
+                    'admin_opinions_content_provider',
+                    array('category' => $category,)
+                ).'&page=%d',
+            )
+        );
 
-        return $this->render('opinion/content-provider.tpl', array(
-            'opinions' => $opinions,
-            'pager'    => $pagination,
-        ));
+        return $this->render(
+            'opinion/content-provider.tpl',
+            array(
+                'opinions' => $opinions,
+                'pager'    => $pagination,
+            )
+        );
     }
 
     /**
@@ -789,24 +817,29 @@ class OpinionsController extends Controller
             $itemsPerPage
         );
 
-        $pagination = \Pager::factory(array(
-            'mode'        => 'Sliding',
-            'perPage'     => $itemsPerPage,
-            'append'      => false,
-            'path'        => '',
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => $countOpinions,
-            'fileName'    => $this->generateUrl('admin_opinions_content_provider_related').'?page=%d',
-        ));
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => $countOpinions,
+                'fileName'    => $this->generateUrl('admin_opinions_content_provider_related').'?page=%d',
+            )
+        );
 
-        return $this->render('common/content_provider/_container-content-list.tpl', array(
-            'contentType'           => 'Opinion',
-            'contents'              => $opinions,
-            'pagination'            => $pagination->links,
-            'contentProviderUrl'    => $this->generateUrl('admin_opinions_content_provider_related'),
-        ));
+        return $this->render(
+            'common/content_provider/_container-content-list.tpl',
+            array(
+                'contentType'           => 'Opinion',
+                'contents'              => $opinions,
+                'pagination'            => $pagination->links,
+                'contentProviderUrl'    => $this->generateUrl('admin_opinions_content_provider_related'),
+            )
+        );
     }
 
     /**
@@ -842,9 +875,10 @@ class OpinionsController extends Controller
         } else {
             $configurations = s::get(array('opinion_settings',));
 
-            return $this->render('opinion/config.tpl', array(
-                'configs'   => $configurations,
-            ));
+            return $this->render(
+                'opinion/config.tpl',
+                array('configs'   => $configurations,)
+            );
         }
     }
 }

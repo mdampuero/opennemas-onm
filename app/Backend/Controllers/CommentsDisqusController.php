@@ -58,9 +58,7 @@ class CommentsDisqusController extends Controller
     {
         $disqusConfig = s::get('disqus_shortname');
 
-        return $this->render('disqus/list.tpl', array(
-            'disqus_shortname' => $disqusConfig,
-        ));
+        return $this->render('disqus/list.tpl', array('disqus_shortname' => $disqusConfig,));
     }
 
     /**
@@ -75,9 +73,7 @@ class CommentsDisqusController extends Controller
                 $message = $this->request->query->filter('message', null, FILTER_SANITIZE_STRING);
             }
 
-            return $this->render('disqus/config.tpl', array(
-                'shortname'    => $disqusConfig,
-            ));
+            return $this->render('disqus/config.tpl', array('shortname' => $disqusConfig,));
         } else {
             $shortname = $this->request->request->filter('shortname', null, FILTER_SANITIZE_STRING);
             if (!isset($shortname)) {

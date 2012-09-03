@@ -51,16 +51,10 @@ class DatabaseErrorsController extends Controller
 
         $cm = new \ContentManager();
 
-        $page = filter_input(
-            INPUT_GET, 'page', FILTER_SANITIZE_STRING,
-            array( 'options' => array('default' => 1))
-        );
-        $search = filter_input(
-            INPUT_GET, 'search', FILTER_SANITIZE_STRING,
-            array( 'options' => array('default' => ""))
-        );
+        $page = $request->query->getDigits('page', 1);
+        $search = $request->query->filter('search', '', FILTER_SANITIZE_STRING);
 
-        $filters = (isset($_REQUEST['filter']))? $_REQUEST['filter']: null;
+        $filters = (isset($_REQUEST['filter'])) ? $_REQUEST['filter']: null;
 
         $sql = "SELECT count(*) FROM adodb_logsql";
         $rsTotalErrors = $GLOBALS['application']->conn->getOne($sql);
@@ -99,14 +93,17 @@ class DatabaseErrorsController extends Controller
         );
         $pager = \Pager::factory($pagerOptions);
 
-        return $this->render('system_information/sql_error_log.tpl', array(
-            'errors' => $errors,
-            'pagination' => $pager,
-            'total_errors' => $rsTotalErrors,
-            'sql' => $sql,
-            'elements_page' => ($itemsPerPage*($page-1)),
-            'search' => $search,
-        ));
+        return $this->render(
+            'system_information/sql_error_log.tpl',
+            array(
+                'errors' => $errors,
+                'pagination' => $pager,
+                'total_errors' => $rsTotalErrors,
+                'sql' => $sql,
+                'elements_page' => ($itemsPerPage*($page-1)),
+                'search' => $search,
+            )
+        );
     }
 
     /**

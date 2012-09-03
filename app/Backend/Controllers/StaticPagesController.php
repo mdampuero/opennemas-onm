@@ -66,22 +66,27 @@ class StaticPagesController extends Controller
         );
 
         // Build the pager
-        $pagination = \Pager::factory(array(
-            'mode'        => 'Sliding',
-            'perPage'     => $itemsPerPage,
-            'append'      => false,
-            'path'        => '',
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => $countPages,
-            'fileName'    => $this->generateUrl('admin_staticpages').'?page=%d',
-        ));
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => $countPages,
+                'fileName'    => $this->generateUrl('admin_staticpages').'?page=%d',
+            )
+        );
 
-        return $this->render('static_pages/list.tpl', array(
-            'pages' => $pages,
-            'pager' => $pagination,
-        ));
+        return $this->render(
+            'static_pages/list.tpl',
+            array(
+                'pages' => $pages,
+                'pager' => $pagination,
+            )
+        );
     }
 
     /**
@@ -99,10 +104,13 @@ class StaticPagesController extends Controller
             $staticPage = new \StaticPage();
             $staticPage->read($id);
 
-            return $this->render('static_pages/read.tpl', array(
-                'id'   => $id,
-                'page' => $staticPage,
-            ));
+            return $this->render(
+                'static_pages/read.tpl',
+                array(
+                    'id'   => $id,
+                    'page' => $staticPage,
+                )
+            );
         } else {
             m::add(sprintf(_('Unable to find a static page with the id "%d".'), $id), m::ERROR);
 
@@ -194,19 +202,15 @@ class StaticPagesController extends Controller
             }
 
             if ($continue) {
-                return $this->redirect($this->generateUrl(
-                    'admin_staticpage_show',
-                    array('id' => $staticPage->id)
-                ));
+                return $this->redirect(
+                    $this->generateUrl('admin_staticpage_show', array('id' => $staticPage->id))
+                );
             } else {
                 $page = $request->request->getDigits('page', 1);
 
-                return $this->redirect($this->generateUrl(
-                    'admin_staticpages',
-                    array(
-                        'page'     => $page,
-                    )
-                ));
+                return $this->redirect(
+                    $this->generateUrl('admin_staticpages', array('page' => $page,))
+                );
             }
         }
     }
@@ -233,12 +237,9 @@ class StaticPagesController extends Controller
             m::add(_('You must provide a valid an id for delete the static page.'), m::ERROR);
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_staticpages',
-            array(
-                'page' => $staticPage
-            )
-        ));
+        return $this->redirect(
+            $this->generateUrl('admin_staticpages', array('page' => $staticPage))
+        );
     }
 
     /**
@@ -275,12 +276,9 @@ class StaticPagesController extends Controller
             );
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_staticpages',
-            array(
-                'page'     => $page
-            )
-        ));
+        return $this->redirect(
+            $this->generateUrl('admin_staticpages', array('page' => $page))
+        );
     }
 
     /**
@@ -291,7 +289,7 @@ class StaticPagesController extends Controller
      * @return Ajax Response the response object
      **/
 
-    public function  buildSlugAction(Request $request)
+    public function buildSlugAction(Request $request)
     {
         // If the action is an Ajax request handle it, if not redirect to list
         $data = array(
@@ -306,7 +304,7 @@ class StaticPagesController extends Controller
                 $output = $page->buildSlug($data['slug'], $data['id'], $data['title']);
 
             } catch (\Exception $e) {
-                $output = _( "Can't get static page title. Check the title");
+                $output = _("Can't get static page title. Check the title");
             }
 
              return new Response($output);
@@ -321,7 +319,7 @@ class StaticPagesController extends Controller
      *
      * @return Response the response object
      **/
-    public function  cleanMetadataAction(Request $request)
+    public function cleanMetadataAction(Request $request)
     {
         $metadata = $request->request->filter('metadata', null, FILTER_SANITIZE_STRING);
         // If the action is an Ajax request handle it, if not redirect to list
@@ -329,11 +327,11 @@ class StaticPagesController extends Controller
             try {
                 $output  = StringUtils::normalize_metadata($metadata);
             } catch (\Exception $e) {
-                $output = _( "Can't get static page metadata.");
+                $output = _("Can't get static page metadata.");
             }
         }
 
         return new Response($output);
     }
-
 }
+

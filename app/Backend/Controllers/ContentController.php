@@ -55,9 +55,11 @@ class ContentController extends Controller
             $message = 'Please specify an content id';
         }
 
-        return new Response($message, $code, array(
-            'Content-Type' => 'application/json'
-        ));
+        return new Response(
+            $message,
+            $code,
+            array('Content-Type' => 'application/json')
+        );
     }
 
     /**
@@ -88,9 +90,11 @@ class ContentController extends Controller
             $message = 'Please specify an content id';
         }
 
-        return new Response($message, $code, array(
-            'Content-Type' => 'application/json'
-        ));
+        return new Response(
+            $message,
+            $code,
+            array('Content-Type' => 'application/json')
+        );
     }
 
     /**
@@ -124,9 +128,11 @@ class ContentController extends Controller
             $message = 'Please specify an content id';
         }
 
-        return new Response($message, $code, array(
-            'Content-Type' => 'application/json'
-        ));
+        return new Response(
+            $message,
+            $code,
+            array('Content-Type' => 'application/json')
+        );
     }
 
     /**
@@ -167,9 +173,11 @@ class ContentController extends Controller
             $error = 'Done';
         }
 
-        return new Response(json_encode($error), $code, array(
-            'Content-Type' => 'application/json'
-        ));
+        return new Response(
+            $message,
+            $code,
+            array('Content-Type' => 'application/json')
+        );
     }
 
     /**
@@ -213,9 +221,11 @@ class ContentController extends Controller
             $error = 'Done';
         }
 
-        return new Response(json_encode($error), $code, array(
-            'Content-Type' => 'application/json'
-        ));
+        return new Response(
+            json_encode($error),
+            $code,
+            array('Content-Type' => 'application/json')
+        );
     }
 
     /**
@@ -243,9 +253,11 @@ class ContentController extends Controller
             $message = 'Please specify an content id';
         }
 
-        return new Response(json_encode($message), $code, array(
-            'Content-Type' => 'application/json'
-        ));
+        return new Response(
+            json_encode($message),
+            $code,
+            array('Content-Type' => 'application/json')
+        );
     }
 
     /**
@@ -279,9 +291,11 @@ class ContentController extends Controller
             $message = 'Please specify an content id';
         }
 
-        return new Response(json_encode($message), $code, array(
-            'Content-Type' => 'application/json'
-        ));
+        return new Response(
+            json_encode($message),
+            $code,
+            array('Content-Type' => 'application/json')
+        );
     }
-
 }
+

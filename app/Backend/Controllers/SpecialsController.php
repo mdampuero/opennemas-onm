@@ -45,12 +45,14 @@ class SpecialsController extends Controller
         list($this->parentCategories, $this->subcat, $this->categoryData) =
                 $this->ccm->getArraysMenu($this->category, $this->contentType);
 
-        $this->view->assign(array(
-            'category'     => $this->category,
-            'subcat'       => $this->subcat,
-            'allcategorys' => $this->parentCategories,
-            'datos_cat'    => $this->categoryData
-        ));
+        $this->view->assign(
+            array(
+                'category'     => $this->category,
+                'subcat'       => $this->subcat,
+                'allcategorys' => $this->parentCategories,
+                'datos_cat'    => $this->categoryData
+            )
+        );
     }
 
     /**
@@ -84,24 +86,29 @@ class SpecialsController extends Controller
         );
 
         // Build the pager
-        $pagination = \Pager::factory(array(
-            'mode'        => 'Sliding',
-            'perPage'     => $itemsPerPage,
-            'append'      => false,
-            'path'        => '',
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => $countSpecials,
-            'fileName'    => $this->generateUrl('admin_specials', array('category' => $category)).'&page=%d',
-        ));
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => $countSpecials,
+                'fileName'    => $this->generateUrl('admin_specials', array('category' => $category)).'&page=%d',
+            )
+        );
 
-        return $this->render('special/list.tpl', array(
-            'pagination' => $pagination,
-            'specials'   => $specials,
-            'category'   => $category,
-            'page'       => $page
-        ));
+        return $this->render(
+            'special/list.tpl',
+            array(
+                'pagination' => $pagination,
+                'specials'   => $specials,
+                'category'   => $category,
+                'page'       => $page
+            )
+        );
     }
 
         /**
@@ -138,27 +145,32 @@ class SpecialsController extends Controller
         }
 
         if (count($specials) != $numFavorites ) {
-            m::add( sprintf(_("You must put %d specials in the HOME widget"), $numFavorites));
+            m::add(sprintf(_("You must put %d specials in the HOME widget"), $numFavorites));
         }
 
-        $pagination = \Pager::factory(array(
-            'mode'        => 'Sliding',
-            'perPage'     => $itemsPerPage,
-            'append'      => false,
-            'path'        => '',
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => $countSpecials,
-            'fileName'    => $this->generateUrl('admin_specials_widget').'?page=%d',
-        ));
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => $countSpecials,
+                'fileName'    => $this->generateUrl('admin_specials_widget').'?page=%d',
+            )
+        );
 
-        return $this->render('special/list.tpl', array(
-            'pagination' => $pagination,
-            'specials'   => $specials,
-            'category'   => 'widget',
-            'page'       => $page
-        ));
+        return $this->render(
+            'special/list.tpl',
+            array(
+                'pagination' => $pagination,
+                'specials'   => $specials,
+                'category'   => 'widget',
+                'page'       => $page
+            )
+        );
     }
 
     /**
@@ -195,9 +207,10 @@ class SpecialsController extends Controller
                 m::add(_('Unable to create the new special.'), m::ERROR);
             }
 
-            return $this->redirect($this->generateUrl(
-                'admin_specials',
-                array('category' => $data['category'])
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_specials',
+                    array('category' => $data['category'])
                 )
             );
         } else {
@@ -242,16 +255,21 @@ class SpecialsController extends Controller
                     $contentsLeft[] = new \Content($content['fk_content']);
                 }
             }
-            $this->view->assign(array(
-                'contentsRight' => $contentsRight,
-                'contentsLeft'  => $contentsLeft,
-            ));
+            $this->view->assign(
+                array(
+                    'contentsRight' => $contentsRight,
+                    'contentsLeft'  => $contentsLeft,
+                )
+            );
         }
 
-        return $this->render('special/new.tpl', array(
-            'special'  => $special,
-            'category' => $special->category,
-        ));
+        return $this->render(
+            'special/new.tpl',
+            array(
+                'special'  => $special,
+                'category' => $special->category,
+            )
+        );
     }
 
     /**
@@ -294,15 +312,19 @@ class SpecialsController extends Controller
             }
 
             if ($continue) {
-                return $this->redirect($this->generateUrl(
-                    'admin_special_show',
-                    array('id' => $special->id)
-                ));
+                return $this->redirect(
+                    $this->generateUrl(
+                        'admin_special_show',
+                        array('id' => $special->id)
+                    )
+                );
             } else {
-                return $this->redirect($this->generateUrl(
-                    'admin_specials',
-                    array('category' => $data['category'])
-                ));
+                return $this->redirect(
+                    $this->generateUrl(
+                        'admin_specials',
+                        array('category' => $data['category'])
+                    )
+                );
             }
         }
     }
@@ -332,13 +354,15 @@ class SpecialsController extends Controller
         }
 
         if (!$request->isXmlHttpRequest()) {
-            return $this->redirect($this->generateUrl(
-                'admin_specials',
-                array(
-                    'category' => $category,
-                    'page'     => $page
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_specials',
+                    array(
+                        'category' => $category,
+                        'page'     => $page
+                    )
                 )
-            ));
+            );
         }
     }
 
@@ -415,13 +439,15 @@ class SpecialsController extends Controller
         }
 
         if (!$request->isXmlHttpRequest()) {
-            return $this->redirect($this->generateUrl(
-                'admin_specials',
-                array(
-                    'category' => $category,
-                    'page' => $page,
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_specials',
+                    array(
+                        'category' => $category,
+                        'page'     => $page,
+                    )
                 )
-            ));
+            );
         }
 
     }
@@ -463,13 +489,15 @@ class SpecialsController extends Controller
             m::add(sprintf(_('Successfully changed the available status of %d specials'), $changes), m::SUCCESS);
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_specials',
-            array(
-                'category' => $category,
-                'page' => $page,
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_specials',
+                array(
+                    'category' => $category,
+                    'page' => $page,
+                )
             )
-        ));
+        );
     }
 
     /**
@@ -498,13 +526,15 @@ class SpecialsController extends Controller
             m::add(sprintf(_('Successfully changed availability for the special "%s"'), $special->title), m::SUCCESS);
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_specials',
-            array(
-                'category' => $category,
-                'page'     => $page
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_specials',
+                array(
+                    'category' => $category,
+                    'page'     => $page
+                )
             )
-        ));
+        );
     }
 
     /**
@@ -530,13 +560,15 @@ class SpecialsController extends Controller
             m::add(sprintf(_('Successfully changed suggested flag for the special "%s"'), $special->title), m::SUCCESS);
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_specials',
-            array(
-                'category' => $category,
-                'page'     => $page
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_specials',
+                array(
+                    'category' => $category,
+                    'page'     => $page
+                )
             )
-        ));
+        );
     }
 
     /**
@@ -562,13 +594,15 @@ class SpecialsController extends Controller
             m::add(sprintf(_('Successfully changed suggested flag for the special "%s"'), $special->title), m::SUCCESS);
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_specials',
-            array(
-                'category' => $category,
-                'page'     => $page
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_specials',
+                array(
+                    'category' => $category,
+                    'page'     => $page
+                )
             )
-        ));
+        );
     }
 
     /**
@@ -600,10 +634,11 @@ class SpecialsController extends Controller
         } else {
             $configurations = s::get(array('special_settings',));
 
-            return $this->render('special/config.tpl', array(
-                'configs'   => $configurations,
-            ));
+            return $this->render(
+                'special/config.tpl',
+                array('configs'   => $configurations,)
+            );
         }
     }
-
 }
+

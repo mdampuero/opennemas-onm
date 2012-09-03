@@ -49,12 +49,14 @@ class AlbumsController extends Controller
         list($this->parentCategories, $this->subcat, $this->categoryData) =
             $this->ccm->getArraysMenu($category, $contentType);
 
-        $this->view->assign(array(
-            'category'     => $category,
-            'subcat'       => $this->subcat,
-            'allcategorys' => $this->parentCategories,
-            'datos_cat'    => $this->categoryData
-        ));
+        $this->view->assign(
+            array(
+                'category'     => $category,
+                'subcat'       => $this->subcat,
+                'allcategorys' => $this->parentCategories,
+                'datos_cat'    => $this->categoryData
+            )
+        );
     }
 
     /**
@@ -97,26 +99,31 @@ class AlbumsController extends Controller
         }
 
         // Build the pager
-        $pagination = \Pager::factory(array(
-            'mode'        => 'Sliding',
-            'perPage'     => $itemsPerPage,
-            'append'      => false,
-            'path'        => '',
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => $albumCount,
-            'fileName'    => $this->generateUrl(
-                'admin_albums',
-                array('category' => $category)
-            ).'&page=%d',
-        ));
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => $albumCount,
+                'fileName'    => $this->generateUrl(
+                    'admin_albums',
+                    array('category' => $category)
+                ).'&page=%d',
+            )
+        );
 
-        return $this->render('album/list.tpl', array(
-            'pagination' => $pagination,
-            'albums'     => $albums,
-            'page'       => $page,
-        ));
+        return $this->render(
+            'album/list.tpl',
+            array(
+                'pagination' => $pagination,
+                'albums'     => $albums,
+                'page'       => $page,
+            )
+        );
     }
 
     /**
@@ -150,7 +157,7 @@ class AlbumsController extends Controller
         );
 
         if (count($albums) != $numFavorites ) {
-            m::add( sprintf(_("You must put %d albums in the HOME widget"), $numFavorites));
+            m::add(sprintf(_("You must put %d albums in the HOME widget"), $numFavorites));
         }
 
         if (count($albums) > 0) {
@@ -162,27 +169,32 @@ class AlbumsController extends Controller
         }
 
         // Build the pager
-        $pagination = \Pager::factory(array(
-            'mode'        => 'Sliding',
-            'perPage'     => $itemsPerPage,
-            'append'      => false,
-            'path'        => '',
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => $albumCount,
-            'fileName'    => $this->generateUrl(
-                'admin_albums',
-                array('category' => $category)
-            ).'&page=%d',
-        ));
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => $albumCount,
+                'fileName'    => $this->generateUrl(
+                    'admin_albums',
+                    array('category' => $category)
+                ).'&page=%d',
+            )
+        );
 
-        return $this->render('album/list.tpl', array(
-            'pagination' => $pagination,
-            'albums'     => $albums,
-            'category'   => $category,
-            'page'       => $page,
-        ));
+        return $this->render(
+            'album/list.tpl',
+            array(
+                'pagination' => $pagination,
+                'albums'     => $albums,
+                'category'   => $category,
+                'page'       => $page,
+            )
+        );
     }
 
     /**
@@ -207,26 +219,32 @@ class AlbumsController extends Controller
             m::add(_('Album created successfully'), m::SUCCESS);
 
             if ($continue) {
-                return $this->redirect($this->generateUrl(
-                    'admin_album_show',
-                    array('id' => $album->id)
-                ));
+                return $this->redirect(
+                    $this->generateUrl('admin_album_show', array('id' => $album->id))
+                );
             } else {
                 $page = $this->request->request->getDigits('page', 1);
 
-                return $this->redirect($this->generateUrl(
-                    'admin_albums',
-                    array(
-                        'category' => $album->category,
-                        'page'     => $page,
+                return $this->redirect(
+                    $this->generateUrl(
+                        'admin_albums',
+                        array(
+                            'category' => $album->category,
+                            'page'     => $page,
+                        )
                     )
-                ));
+                );
             }
 
-            return $this->redirect($this->generateUrl('admin_videos', array(
-                'category' => $category,
-                'page'     => $page
-            )));
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_videos',
+                    array(
+                        'category' => $category,
+                        'page'     => $page
+                    )
+                )
+            );
         } else {
             return $this->render('album/new.tpl');
         }
@@ -257,10 +275,15 @@ class AlbumsController extends Controller
 
         m::add(_('Album delete successfully.'), m::SUCCESS);
 
-        return $this->redirect($this->generateUrl('admin_albums', array(
-            'category' => $album->category,
-            'page'     => $page,
-        )));
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_albums',
+                array(
+                    'category' => $album->category,
+                    'page'     => $page,
+                )
+            )
+        );
     }
 
     /**
@@ -286,11 +309,14 @@ class AlbumsController extends Controller
         $photos = array();
         $photos = $album->_getAttachedPhotos($id);
 
-        return $this->render('album/new.tpl', array(
-            'category' => $album->category,
-            'photos'   => $photos,
-            'album'    => $album,
-        ));
+        return $this->render(
+            'album/new.tpl',
+            array(
+                'category' => $album->category,
+                'photos'   => $photos,
+                'album'    => $album,
+            )
+        );
     }
 
     /**
@@ -320,9 +346,12 @@ class AlbumsController extends Controller
         ) {
             m::add(_("You don't have enought privileges for modify this album."), m::SUCCESS);
 
-            return $this->redirect($this->generateUrl('admin_albums', array(
-                'category' => $album->category,
-            )));
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_albums',
+                    array('category' => $album->category,)
+                )
+            );
         } else {
             $data = array(
                 'id'          => $id,
@@ -342,20 +371,21 @@ class AlbumsController extends Controller
             m::add(_("Album updated successfully."), m::SUCCESS);
 
             if ($continue) {
-                return $this->redirect($this->generateUrl(
-                    'admin_album_show',
-                    array('id' => $album->id)
-                ));
+                return $this->redirect(
+                    $this->generateUrl('admin_album_show', array('id' => $album->id))
+                );
             } else {
                 $page = $this->request->request->getDigits('page', 1);
 
-                return $this->redirect($this->generateUrl(
-                    'admin_albums',
-                    array(
-                        'category' => $album->category,
-                        'page'     => $page,
+                return $this->redirect(
+                    $this->generateUrl(
+                        'admin_albums',
+                        array(
+                            'category' => $album->category,
+                            'page'     => $page,
+                        )
                     )
-                ));
+                );
             }
         }
     }
@@ -386,13 +416,15 @@ class AlbumsController extends Controller
             m::add(sprintf(_('Successfully changed availability for album with id "%d"'), $id), m::SUCCESS);
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_albums',
-            array(
-                'category' => $category,
-                'page'     => $page
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_albums',
+                array(
+                    'category' => $category,
+                    'page'     => $page
+                )
             )
-        ));
+        );
     }
 
     /**
@@ -419,13 +451,15 @@ class AlbumsController extends Controller
             m::add(sprintf(_('Successfully changed suggested flag for album with id "%d"'), $id), m::SUCCESS);
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_albums',
-            array(
-                'category' => $category,
-                'page'     => $page
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_albums',
+                array(
+                    'category' => $category,
+                    'page'     => $page
+                )
             )
-        ));
+        );
     }
 
     /**
@@ -452,13 +486,15 @@ class AlbumsController extends Controller
             m::add(sprintf(_('Successfully changed suggested flag for album with id "%d"'), $id), m::SUCCESS);
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_albums',
-            array(
-                'category' => $category,
-                'page'     => $page
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_albums',
+                array(
+                    'category' => $category,
+                    'page'     => $page
+                )
             )
-        ));
+        );
     }
 
     /**
@@ -490,13 +526,15 @@ class AlbumsController extends Controller
             }
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_albums',
-            array(
-                'categoy' => $category,
-                'page'    => $page,
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_albums',
+                array(
+                    'categoy' => $category,
+                    'page'    => $page,
+                )
             )
-        ));
+        );
     }
 
     /**
@@ -526,13 +564,15 @@ class AlbumsController extends Controller
             }
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_albums',
-            array(
-                'category' => $category,
-                'page'     => $page,
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_albums',
+                array(
+                    'category' => $category,
+                    'page'     => $page,
+                )
             )
-        ));
+        );
     }
 
     /**
@@ -573,25 +613,30 @@ class AlbumsController extends Controller
         );
 
         // Build the pager
-        $pagination = \Pager::factory(array(
-            'mode'        => 'Sliding',
-            'perPage'     => $itemsPerPage,
-            'append'      => false,
-            'path'        => '',
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => $countAlbums,
-            'fileName'    => $this->generateUrl(
-                'admin_albums_content_provider',
-                array('category' => $category)
-            ).'&page=%d',
-        ));
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => $countAlbums,
+                'fileName'    => $this->generateUrl(
+                    'admin_albums_content_provider',
+                    array('category' => $category)
+                ).'&page=%d',
+            )
+        );
 
-        return $this->render('album/content-provider.tpl', array(
-            'albums' => $albums,
-            'pager'  => $pagination,
-        ));
+        return $this->render(
+            'album/content-provider.tpl',
+            array(
+                'albums' => $albums,
+                'pager'  => $pagination,
+            )
+        );
     }
 
     /**
@@ -623,28 +668,34 @@ class AlbumsController extends Controller
             $itemsPerPage
         );
 
-        $pagination = \Pager::factory(array(
-            'mode'        => 'Sliding',
-            'perPage'     => $itemsPerPage,
-            'append'      => false,
-            'path'        => '',
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => $countAlbums,
-            'fileName'    => $this->generateUrl('admin_albums_content_provider_related', array(
-                'category' => $category,
-            )).'&page=%d',
-        ));
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => $countAlbums,
+                'fileName'    => $this->generateUrl(
+                    'admin_albums_content_provider_related',
+                    array( 'category' => $category,)
+                ).'&page=%d',
+            )
+        );
 
-        return $this->render('common/content_provider/_container-content-list.tpl', array(
-            'contentType'           => 'Album',
-            'contents'              => $albums,
-            'contentTypeCategories' => $this->parentCategories,
-            'category'              => $category,
-            'pagination'            => $pagination->links,
-            'contentProviderUrl'    => $this->generateUrl('admin_albums_content_provider_related'),
-        ));
+        return $this->render(
+            'common/content_provider/_container-content-list.tpl',
+            array(
+                'contentType'           => 'Album',
+                'contents'              => $albums,
+                'contentTypeCategories' => $this->parentCategories,
+                'category'              => $category,
+                'pagination'            => $pagination->links,
+                'contentProviderUrl'    => $this->generateUrl('admin_albums_content_provider_related'),
+            )
+        );
     }
 
     /**
@@ -683,9 +734,10 @@ class AlbumsController extends Controller
             $configurationsKeys = array('album_settings',);
             $configurations = s::get($configurationsKeys);
 
-            return $this->render('album/config.tpl', array(
-                'configs'   => $configurations,
-            ));
+            return $this->render(
+                'album/config.tpl',
+                array('configs'   => $configurations,)
+            );
         }
     }
 }

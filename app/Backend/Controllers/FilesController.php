@@ -42,12 +42,14 @@ class FilesController extends Controller
         list($this->parentCategories, $this->subcat, $this->datos_cat) =
             $this->ccm->getArraysMenu($this->category, $this->contentType);
 
-        $this->view->assign(array(
-            'subcat'       => $this->subcat,
-            'allcategorys' => $this->parentCategories,
-            'datos_cat'    => $this->datos_cat,
-            'category'     => $this->category,
-        ));
+        $this->view->assign(
+            array(
+                'subcat'       => $this->subcat,
+                'allcategorys' => $this->parentCategories,
+                'datos_cat'    => $this->datos_cat,
+                'category'     => $this->category,
+            )
+        );
 
         // Optimize  this crap from this ---------------------------------------
         $this->fileSavePath = INSTANCE_MEDIA_PATH.FILE_DIR;
@@ -105,27 +107,31 @@ class FilesController extends Controller
         }
 
          // Build the pager
-        $pagination = \Pager::factory(array(
-            'mode'        => 'Sliding',
-            'perPage'     => $itemsPerPage,
-            'append'      => false,
-            'path'        => '',
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => $filesCount,
-            'fileName'    => $this->generateUrl(
-                'admin_files',
-                array('category' => $this->category)
-            ).'&page=%d',
-        ));
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => $filesCount,
+                'fileName'    => $this->generateUrl(
+                    'admin_files',
+                    array('category' => $this->category)
+                ).'&page=%d',
+            )
+        );
 
-        $this->view->assign(array(
-            'listingStatus' => $listingStatus,
-            'pagination'    => $pagination,
-            'attaches'      => $files,
-            'page'          => $page,
-        ));
+        $this->view->assign(
+            array(
+                'listingStatus' => $listingStatus,
+                'pagination'    => $pagination,
+                'attaches'      => $files,
+                'page'          => $page,
+            )
+        );
 
         return $this->render('files/list.tpl');
     }
@@ -156,10 +162,13 @@ class FilesController extends Controller
             }
         }
 
-        return $this->render('files/list.tpl', array(
-            'attaches' => $files,
-            'category' => 'widget'
-        ));
+        return $this->render(
+            'files/list.tpl',
+            array(
+                'attaches' => $files,
+                'category' => 'widget'
+            )
+        );
     }
 
     /**
@@ -199,10 +208,10 @@ class FilesController extends Controller
                             $num_sub_photos[$k][$child->pk_content_category];
                         $sub_files[$child->pk_content_category][] =
                             $cm->find_all(
-                                    'Attachment',
-                                    'fk_content_type = 3 AND category = '.$child->pk_content_category,
-                                    'ORDER BY created DESC'
-                                    );
+                                'Attachment',
+                                'fk_content_type = 3 AND category = '.$child->pk_content_category,
+                                'ORDER BY created DESC'
+                            );
                         $aux_categories[] = $child->pk_content_category;
                         $sub_size[$k][$child->pk_content_category] = 0;
                         $this->view->assign('num_sub_photos', $num_sub_photos);
@@ -246,15 +255,18 @@ class FilesController extends Controller
             }
         }
 
-        return $this->render('files/statistics.tpl', array(
-            'total_img'    => $total_num_photos,
-            'total_size'   => $total_size,
-            'size'         => $size,
-            'sub_size'     => $sub_size,
-            'num_photos'   => $num_photos,
-            'categorys'    => $this->parentCategories,
-            'subcategorys' => $this->subcat,
-        ));
+        return $this->render(
+            'files/statistics.tpl',
+            array(
+                'total_img'    => $total_num_photos,
+                'total_size'   => $total_size,
+                'size'         => $size,
+                'sub_size'     => $sub_size,
+                'num_photos'   => $num_photos,
+                'categorys'    => $this->parentCategories,
+                'subcategorys' => $this->subcat,
+            )
+        );
     }
 
     /**
@@ -269,10 +281,7 @@ class FilesController extends Controller
         $request = $this->request;
 
         if ('POST' != $request->getMethod()) {
-            return $this->render('files/form.tpl',
-                array(
-                    'category' => $this->category,
-                ));
+            return $this->render('files/form.tpl', array('category' => $this->category,));
 
         } else {
             set_time_limit(0);
@@ -314,19 +323,23 @@ class FilesController extends Controller
                         m::add(_('Unable to upload the file: A file with the same name already exists.'), m::ERROR);
                     }
                 } else {
-                    m::add(_(
-                        'There was an error while uploading the file. <br />'
-                        .'Please, contact your system administrator.'),
+                    m::add(
+                        _(
+                            'There was an error while uploading the file. <br />'
+                            .'Please, contact your system administrator.'
+                        ),
                         m::ERROR
                     );
                 }
 
-                return $this->redirect($this->generateUrl(
-                    'admin_files',
-                    array(
-                        'category' => $this->category,
+                return $this->redirect(
+                    $this->generateUrl(
+                        'admin_files',
+                        array(
+                            'category' => $this->category,
+                        )
                     )
-                ));
+                );
 
             } else {
                 m::add(_('Please select a file before send the form'), m::ERROR);
@@ -358,10 +371,13 @@ class FilesController extends Controller
         }
 
         // Show the
-        return $this->render('files/form.tpl', array(
-            'attaches' => $file,
-            'page'     => $page,
-        ));
+        return $this->render(
+            'files/form.tpl',
+            array(
+                'attaches' => $file,
+                'page'     => $page,
+            )
+        );
     }
 
     /**
@@ -387,13 +403,15 @@ class FilesController extends Controller
             m::add(sprintf(_('There was a problem while saving the file information.')), m::ERROR);
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_files',
-            array(
-                'category' => $category,
-                'page'     => $page
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_files',
+                array(
+                    'category' => $category,
+                    'page'     => $page
+                )
             )
-        ));
+        );
     }
 
     /**
@@ -423,12 +441,14 @@ class FilesController extends Controller
         $file->delete($id, $_SESSION['userid']);
         m::add(sprintf(_("File with id '%d' deleted successfuly."), $id), m::SUCCESS);
 
-        return $this->redirect($this->generateUrl(
-            'admin_files',
-            array(
-                'category' => $this->category
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_files',
+                array(
+                    'category' => $this->category
+                )
             )
-        ));
+        );
     }
 
     /**
@@ -458,13 +478,15 @@ class FilesController extends Controller
             m::add(sprintf(_("Unable to find the file with id '%d'"), $id), m::ERROR);
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_files',
-            array(
-                'category' => $this->category,
-                'page'     => $page,
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_files',
+                array(
+                    'category' => $this->category,
+                    'page'     => $page,
+                )
             )
-        ));
+        );
     }
 
     /**
@@ -493,14 +515,16 @@ class FilesController extends Controller
             m::add(sprintf(_("Unable to find the file with id '%d'"), $id), m::ERROR);
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_files',
-            array(
-                'page' => $page,
-                'status' => $status,
-                'category' => $this->category,
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_files',
+                array(
+                    'page' => $page,
+                    'status' => $status,
+                    'category' => $this->category,
+                )
             )
-        ));
+        );
     }
     /**
      * Toggles the available status given the content id
@@ -524,14 +548,16 @@ class FilesController extends Controller
             m::add(sprintf(_("Unable to find the file with id '%d'"), $id), m::ERROR);
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_files',
-            array(
-                'page' => $page,
-                'status' => $status,
-                'category' => $this->category,
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_files',
+                array(
+                    'page' => $page,
+                    'status' => $status,
+                    'category' => $this->category,
+                )
             )
-        ));
+        );
     }
 
 
@@ -564,14 +590,16 @@ class FilesController extends Controller
             }
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_files',
-            array(
-                'page' => $page,
-                'status' => $status,
-                'category' => $this->category,
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_files',
+                array(
+                    'page' => $page,
+                    'status' => $status,
+                    'category' => $this->category,
+                )
             )
-        ));
+        );
     }
     /**
      * Set the published flag for contents in batch
@@ -599,14 +627,16 @@ class FilesController extends Controller
             }
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_files',
-            array(
-                'page' => $page,
-                'status' => $status,
-                'category' => $this->category,
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_files',
+                array(
+                    'page' => $page,
+                    'status' => $status,
+                    'category' => $this->category,
+                )
             )
-        ));
+        );
     }
 
     /**
@@ -674,28 +704,34 @@ class FilesController extends Controller
             $itemsPerPage
         );
 
-        $pagination = \Pager::factory(array(
-            'mode'        => 'Sliding',
-            'perPage'     => $itemsPerPage,
-            'append'      => false,
-            'path'        => '',
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => $countPolls,
-            'fileName'    => $this->generateUrl('admin_files_content_provider', array(
-                'category' => $category,
-            )).'&page=%d',
-        ));
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => $countPolls,
+                'fileName'    => $this->generateUrl(
+                    'admin_files_content_provider',
+                    array( 'category' => $category,)
+                ).'&page=%d',
+            )
+        );
 
-        return $this->render('common/content_provider/_container-content-list.tpl', array(
-            'contentType'           => 'Attachment',
-            'contents'              => $polls,
-            'contentTypeCategories' => $this->parentCategories,
-            'category'              => $this->category,
-            'pagination'            => $pagination->links,
-            'contentProviderUrl'    => $this->generateUrl('admin_files_content_provider'),
-        ));
+        return $this->render(
+            'common/content_provider/_container-content-list.tpl',
+            array(
+                'contentType'           => 'Attachment',
+                'contents'              => $polls,
+                'contentTypeCategories' => $this->parentCategories,
+                'category'              => $this->category,
+                'pagination'            => $pagination->links,
+                'contentProviderUrl'    => $this->generateUrl('admin_files_content_provider'),
+            )
+        );
     }
 }
 

@@ -65,30 +65,35 @@ class TrashController extends Controller
         }
 
         // Build the pager
-        $pagination = \Pager::factory(array(
-            'mode'        => 'Sliding',
-            'perPage'     => $itemsPerPage,
-            'append'      => false,
-            'path'        => '',
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => $countElements,
-            'fileName'    => $this->generateUrl(
-                'admin_staticpages',
-                array(
-                    'mytype' => $this->filterContentType,
-                    'page' => $this->page
-                )
-            ).'?page=%d',
-        ));
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => $countElements,
+                'fileName'    => $this->generateUrl(
+                    'admin_staticpages',
+                    array(
+                        'mytype' => $this->filterContentType,
+                        'page' => $this->page
+                    )
+                ).'?page=%d',
+            )
+        );
 
-        return $this->render('trash/trash.tpl', array(
-            'mytype'        => $this->filterContentType,
-            'types_content' => $contentTypes,
-            'pagination'    => $pagination,
-            'contents'      => $elements
-        ));
+        return $this->render(
+            'trash/trash.tpl',
+            array(
+                'mytype'        => $this->filterContentType,
+                'types_content' => $contentTypes,
+                'pagination'    => $pagination,
+                'contents'      => $elements
+            )
+        );
     }
 
     /**
@@ -122,10 +127,12 @@ class TrashController extends Controller
             m::add(sprintf(_('Unable to find content with id "%d".'), $contentId), m::ERROR);
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_trash',
-            array('mytype' => $this->filterContentType, 'page' => $this->page)
-        ));
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_trash',
+                array('mytype' => $this->filterContentType, 'page' => $this->page)
+            )
+        );
 
     }
 
@@ -159,10 +166,12 @@ class TrashController extends Controller
             m::add(sprintf(_('Unable to find content with id "%d".'), $contentId), m::ERROR);
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_trash',
-            array('mytype' => $this->filterContentType, 'page' => $this->page)
-        ));
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_trash',
+                array('mytype' => $this->filterContentType, 'page' => $this->page)
+            )
+        );
 
     }
 
@@ -196,10 +205,12 @@ class TrashController extends Controller
             m::add(_('You must specify contents for delete.'));
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_trash',
-            array('mytype' => $this->filterContentType, 'page' => $this->page)
-        ));
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_trash',
+                array('mytype' => $this->filterContentType, 'page' => $this->page)
+            )
+        );
     }
 
     /**
@@ -232,10 +243,12 @@ class TrashController extends Controller
             m::add(_('You must specify contents for restore.'));
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_trash',
-            array('mytype' => $this->filterContentType, 'page' => $this->page)
-        ));
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_trash',
+                array('mytype' => $this->filterContentType, 'page' => $this->page)
+            )
+        );
     }
 
     // TODO: not finished, but I think that is not neccesary
@@ -257,13 +270,15 @@ class TrashController extends Controller
                 $content->remove($item->id);
             }
 
-            return $this->redirect($this->generateUrl(
-                'admin_trash',
-                array(
-                    'mytype' => $this->filterContentType,
-                    'page' => $this->page
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_trash',
+                    array(
+                        'mytype' => $this->filterContentType,
+                        'page' => $this->page
+                    )
                 )
-            ));
+            );
         }
     }
 }

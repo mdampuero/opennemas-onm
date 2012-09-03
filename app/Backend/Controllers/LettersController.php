@@ -59,24 +59,29 @@ class LettersController extends Controller
         );
 
         // Build the pager
-        $pagination = \Pager::factory(array(
-            'mode'        => 'Sliding',
-            'perPage'     => $itemsPerPage,
-            'append'      => false,
-            'path'        => '',
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => $countLetters,
-            'fileName'    => $this->generateUrl('admin_letters').'?page=%d',
-        ));
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => $countLetters,
+                'fileName'    => $this->generateUrl('admin_letters').'?page=%d',
+            )
+        );
 
-        return $this->render('letter/list.tpl', array(
-            'pagination'   => $pagination,
-            'letters'      => $letters,
-            'letterStatus' => $letterStatus,
-            'page'         => $page,
-        ));
+        return $this->render(
+            'letter/list.tpl',
+            array(
+                'pagination'   => $pagination,
+                'letters'      => $letters,
+                'letterStatus' => $letterStatus,
+                'page'         => $page,
+            )
+        );
     }
 
     /**
@@ -97,12 +102,12 @@ class LettersController extends Controller
             $letter = new \Letter();
 
             $data = array(
-                'title' => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
+                'title'     => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
                 'available' => $request->request->filter('available', '', FILTER_SANITIZE_STRING),
-                'author' => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
-                'email' => $request->request->filter('email', '', FILTER_SANITIZE_STRING),
-                'params' => $request->request->get('params'),
-                'body' => $request->request->filter('body', '', FILTER_SANITIZE_STRING),
+                'author'    => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
+                'email'     => $request->request->filter('email', '', FILTER_SANITIZE_STRING),
+                'params'    => $request->request->get('params'),
+                'body'      => $request->request->filter('body', '', FILTER_SANITIZE_STRING),
             );
 
             if ($letter->create($data)) {
@@ -139,9 +144,10 @@ class LettersController extends Controller
             return $this->redirect($this->generateUrl('admin_letters'));
         }
 
-        return $this->render('letter/read.tpl', array(
-            'letter'       => $letter,
-        ));
+        return $this->render(
+            'letter/read.tpl',
+            array('letter' => $letter,)
+        );
 
         return new Response($content);
     }
@@ -180,10 +186,12 @@ class LettersController extends Controller
             }
 
             if ($continue) {
-                return $this->redirect($this->generateUrl(
-                    'admin_letter_show',
-                    array('id' => $letter->id)
-                ));
+                return $this->redirect(
+                    $this->generateUrl(
+                        'admin_letter_show',
+                        array('id' => $letter->id)
+                    )
+                );
             } else {
                 return $this->redirect($this->generateUrl('admin_letters'));
             }
@@ -215,13 +223,15 @@ class LettersController extends Controller
         }
 
         if (!$request->isXmlHttpRequest()) {
-            return $this->redirect($this->generateUrl(
-                'admin_letters',
-                array(
-                    'contentStatus' => $contentStatus,
-                    'page' => $page
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_letters',
+                    array(
+                        'contentStatus' => $contentStatus,
+                        'page' => $page
+                    )
                 )
-            ));
+            );
         }
     }
 
@@ -248,13 +258,15 @@ class LettersController extends Controller
             m::add(sprintf(_('Successfully changed availability for the letter "%s"'), $letter->title), m::SUCCESS);
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_letters',
-            array(
-                'letterStatus' => $letterStatus,
-                'page'     => $page
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_letters',
+                array(
+                    'letterStatus' => $letterStatus,
+                    'page'     => $page
+                )
             )
-        ));
+        );
     }
 
     /**
@@ -288,12 +300,12 @@ class LettersController extends Controller
             m::add(sprintf(_('Successfully deleted %d letters'), $changes));
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_letters',
-            array(
-                'letterStatus' => $status,
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_letters',
+                array('letterStatus' => $status,)
             )
-        ));
+        );
 
     }
 
@@ -329,12 +341,12 @@ class LettersController extends Controller
             m::add(sprintf(_('Successfully changed the available status of %d letters'), $changes), m::SUCCESS);
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_letters',
-            array(
-                'letterStatus' => $status,
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_letters',
+                array('letterStatus' => $status,)
             )
-        ));
+        );
     }
 
     /**
@@ -359,17 +371,19 @@ class LettersController extends Controller
         );
 
         // Build the pager
-        $pagination = \Pager::factory(array(
-            'mode'        => 'Sliding',
-            'perPage'     => $itemsPerPage,
-            'append'      => false,
-            'path'        => '',
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => $countLetters,
-            'fileName'    => $this->generateUrl('admin_letters_content_list_provider').'?page=%d',
-        ));
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => $countLetters,
+                'fileName'    => $this->generateUrl('admin_letters_content_list_provider').'?page=%d',
+            )
+        );
 
         return $this->render(
             "common/content_provider/_container-content-list.tpl",
@@ -379,5 +393,5 @@ class LettersController extends Controller
             )
         );
     }
-
 }
+

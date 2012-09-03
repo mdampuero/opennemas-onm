@@ -54,21 +54,26 @@ class KeywordsController extends Controller
         $keywordManager = new \PClave();
         $keywords = $keywordManager->find($filter);
 
-        $pagination = \Pager::factory(array(
-            'mode'        => 'Sliding',
-            'perPage'     => ITEMS_PAGE,
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => count($keywords),
-        ));
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => ITEMS_PAGE,
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => count($keywords),
+            )
+        );
 
         $keywords = array_slice($keywords, ($page-1) * ITEMS_PAGE, ITEMS_PAGE);
 
-        return $this->render('keywords/list.tpl', array(
-            'keywords'   => $keywords,
-            'pagination' => $pagination,
-        ));
+        return $this->render(
+            'keywords/list.tpl',
+            array(
+                'keywords'   => $keywords,
+                'pagination' => $pagination,
+            )
+        );
     }
 
     /**
@@ -85,14 +90,17 @@ class KeywordsController extends Controller
         $keyword = new \PClave();
         $keyword->read($id);
 
-        return $this->render('keywords/new.tpl', array(
-            'keyword' => $keyword,
-            'tipos'  => array(
-                'url'       => _('URL'),
-                'intsearch' => _('Internal search'),
-                'email'     => _('Email')
-            ),
-        ));
+        return $this->render(
+            'keywords/new.tpl',
+            array(
+                'keyword' => $keyword,
+                'tipos'  => array(
+                    'url'       => _('URL'),
+                    'intsearch' => _('Internal search'),
+                    'email'     => _('Email')
+                ),
+            )
+        );
     }
 
     /**
@@ -118,18 +126,23 @@ class KeywordsController extends Controller
 
             m::add(_('Keyword created sucessfully'), m::SUCCESS);
 
-            return $this->redirect($this->generateUrl(
-                'admin_keyword_show',
-                array('id' => $keyword->id)
-            ));
-        } else {
-            return $this->render('keywords/new.tpl', array(
-                'tipos' => array(
-                    'url'       => _('URL'),
-                    'intsearch' => _('Internal search'),
-                    'email'     => _('Email')
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_keyword_show',
+                    array('id' => $keyword->id)
                 )
-            ));
+            );
+        } else {
+            return $this->render(
+                'keywords/new.tpl',
+                array(
+                    'tipos' => array(
+                        'url'       => _('URL'),
+                        'intsearch' => _('Internal search'),
+                        'email'     => _('Email')
+                    )
+                )
+            );
         }
     }
 
@@ -154,10 +167,12 @@ class KeywordsController extends Controller
 
         m::add(_('Keyword updated sucessfully'), m::SUCCESS);
 
-        return $this->redirect($this->generateUrl(
-            'admin_keyword_show',
-            array('id' => $data['id'])
-        ));
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_keyword_show',
+                array('id' => $data['id'])
+            )
+        );
     }
 
     /**
@@ -191,5 +206,5 @@ class KeywordsController extends Controller
             return $pclave->replaceTerms($content, $terms);
         }
     }
-
 }
+

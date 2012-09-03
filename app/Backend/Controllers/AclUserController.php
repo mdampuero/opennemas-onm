@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 use Onm\Message as m;
+
 /**
  * Handles the system users
  *
@@ -60,11 +61,14 @@ class AclUserController extends Controller
             $groupsOptions[$cat->id] = $cat->name;
         }
 
-        return $this->render('acl/user/list.tpl', array(
-            'users'         => $users,
-            'user_groups'   => $groups,
-            'groupsOptions' => $groupsOptions,
-        ));
+        return $this->render(
+            'acl/user/list.tpl',
+            array(
+                'users'         => $users,
+                'user_groups'   => $groups,
+                'groupsOptions' => $groupsOptions,
+            )
+        );
     }
 
     /**
@@ -106,13 +110,16 @@ class AclUserController extends Controller
         $languages = array_merge(array('default' => _('Default system language')), $languages);
 
 
-        return $this->render('acl/user/new.tpl', array(
-            'user'                      => $user,
-            'user_groups'               => $userGroup->find(),
-            'languages'                 => $languages,
-            'content_categories'        => $tree,
-            'content_categories_select' => $user->getAccessCategoryIds(),
-        ));
+        return $this->render(
+            'acl/user/new.tpl',
+            array(
+                'user'                      => $user,
+                'user_groups'               => $userGroup->find(),
+                'languages'                 => $languages,
+                'content_categories'        => $tree,
+                'content_categories_select' => $user->getAccessCategoryIds(),
+            )
+        );
     }
 
     /**
@@ -212,9 +219,11 @@ class AclUserController extends Controller
                     $user->setMeta(array('user_language' => $userLanguage));
 
                     if ($action == 'validate') {
-                        return $this->redirect($this->generateUrl(
-                            'admin_acl_user_show',
-                            array('id' => $user->id))
+                        return $this->redirect(
+                            $this->generateUrl(
+                                'admin_acl_user_show',
+                                array('id' => $user->id)
+                            )
                         );
                     }
 
@@ -234,13 +243,16 @@ class AclUserController extends Controller
         $languages = \Application::getAvailableLanguages();
         $languages = array_merge(array('default' => _('Default system language')), $languages);
 
-        return $this->render('acl/user/new.tpl', array(
-            'user'                      => $user,
-            'user_groups'               => $userGroup->find(),
-            'content_categories'        => $tree,
-            'languages'                 => $languages,
-            'content_categories_select' => $user->getAccessCategoryIds(),
-        ));
+        return $this->render(
+            'acl/user/new.tpl',
+            array(
+                'user'                      => $user,
+                'user_groups'               => $userGroup->find(),
+                'content_categories'        => $tree,
+                'languages'                 => $languages,
+                'content_categories_select' => $user->getAccessCategoryIds(),
+            )
+        );
     }
 
     /**
@@ -279,8 +291,7 @@ class AclUserController extends Controller
             foreach ($selected as $userId) {
                 $user->delete((int) $userId);
             }
-            m::add(sprintf(_('You have deleted %d users.'),
-                count($selected)), m::SUCCESS);
+            m::add(sprintf(_('You have deleted %d users.'), count($selected)), m::SUCCESS);
         } else {
             m::add(_('You haven\'t selected any user to delete.'), m::ERROR);
         }
@@ -299,9 +310,10 @@ class AclUserController extends Controller
     {
         $sessions = $GLOBALS['Session']->getSessions();
 
-        return $this->render('acl/panel/show_panel.ajax.html', array(
-            'users' => $sessions
-        ));
+        return $this->render(
+            'acl/panel/show_panel.ajax.html',
+            array('users' => $sessions)
+        );
     }
 
     /**

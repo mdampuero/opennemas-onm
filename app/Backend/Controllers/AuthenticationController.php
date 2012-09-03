@@ -47,11 +47,14 @@ class AuthenticationController extends Controller
         $languages        = \Application::getAvailableLanguages();
         $currentLanguage  = \Application::$language;
 
-        return $this->render('login/login.tpl', array(
-            'languages'        => $languages,
-            'current_language' => $currentLanguage,
-            'token'            => $token,
-        ));
+        return $this->render(
+            'login/login.tpl',
+            array(
+                'languages'        => $languages,
+                'current_language' => $currentLanguage,
+                'token'            => $token,
+            )
+        );
     }
 
     // TODO: Move session management logic to a specialized class
@@ -73,8 +76,10 @@ class AuthenticationController extends Controller
         if (array_key_exists('csrf', $_SESSION)
             && $_SESSION['csrf'] !== $token
         ) {
-            $this->view->assign('message',
-                _('Login token is not valid. Try to autenticate again.'));
+            $this->view->assign(
+                'message',
+                _('Login token is not valid. Try to autenticate again.')
+            );
         } else {
 
             // Try to autenticate the user
@@ -82,8 +87,7 @@ class AuthenticationController extends Controller
 
                 // Check if user account is activated
                 if ($user->authorize != 1) {
-                    $this->view->assign('message',
-                        _('This user was deactivated. Please ask your administrator.'));
+                    $this->view->assign('message', _('This user was deactivated. Please ask your administrator.'));
                 } else {
 
                     // Increase security by regenerating the id

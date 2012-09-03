@@ -78,7 +78,7 @@ class CategoriesController extends Controller
                 $category->params = unserialize($category->params);
                 $categorygorys[$i] = $category;
 
-                $resul = $ccm->getSubcategories( $category->pk_content_category);
+                $resul = $ccm->getSubcategories($category->pk_content_category);
                 $j=0;
                 foreach ($resul as $category) {
                     if (isset($groups['articles'][$category->pk_content_category])) {
@@ -107,14 +107,17 @@ class CategoriesController extends Controller
             }
         }
 
-        return $this->render('category/list.tpl', array(
-            'categorys'        => $categorygorys,
-            'num_contents'     => $contentsCount,
-            'num_sub_contents' => $subContentsCount,
-            'subcategorys'     => $subcategorys,
-            'ordercategorys'   => $allcategorys,
-            'allcategorys'     => $allcategorys
-        ));
+        return $this->render(
+            'category/list.tpl',
+            array(
+                'categorys'        => $categorygorys,
+                'num_contents'     => $contentsCount,
+                'num_sub_contents' => $subContentsCount,
+                'subcategorys'     => $subcategorys,
+                'ordercategorys'   => $allcategorys,
+                'allcategorys'     => $allcategorys
+            )
+        );
     }
 
     /**
@@ -168,10 +171,12 @@ class CategoriesController extends Controller
 
             $continue = $request->request->getDigits('continue', 0);
             if ($continue) {
-                return $this->redirect($this->generateUrl(
-                    'admin_category_show',
-                    array('id' => $category->pk_content_category)
-                ));
+                return $this->redirect(
+                    $this->generateUrl(
+                        'admin_category_show',
+                        array('id' => $category->pk_content_category)
+                    )
+                );
             } else {
                 return $this->redirect($this->generateUrl('admin_categories'));
             }
@@ -186,10 +191,13 @@ class CategoriesController extends Controller
                 }
             }
 
-            return $this->render('category/form.tpl', array(
-                'configurations' => $configurations,
-                'allcategorys'   => $categories,
-            ));
+            return $this->render(
+                'category/form.tpl',
+                array(
+                    'configurations' => $configurations,
+                    'allcategorys'   => $categories,
+                )
+            );
         }
     }
 
@@ -222,12 +230,15 @@ class CategoriesController extends Controller
                 }
             }
 
-            return $this->render('category/form.tpl', array(
-                'allcategorys'   => $categories,
-                'configurations' => s::get('section_settings'),
-                'category'       => $category,
-                'subcategorys'   => $subcategorys
-            ));
+            return $this->render(
+                'category/form.tpl',
+                array(
+                    'allcategorys'   => $categories,
+                    'configurations' => s::get('section_settings'),
+                    'category'       => $category,
+                    'subcategorys'   => $subcategorys
+                )
+            );
         } else {
             m::add(_('Unable to find a category for the give id.'), m::ERROR);
 
@@ -355,10 +366,13 @@ class CategoriesController extends Controller
             if ($category->deleteContents()) {
                 m::add(_("Category emptied successfully."), m::SUCCESS);
             } else {
-                m::add(sprintf(
-                    _("Unable to delete all the contents in the category '%s'"),
-                    $category->title
-                ), m::ERROR);
+                m::add(
+                    sprintf(
+                        _("Unable to delete all the contents in the category '%s'"),
+                        $category->title
+                    ),
+                    m::ERROR
+                );
             }
 
         } else {
@@ -401,9 +415,7 @@ class CategoriesController extends Controller
             m::add(sprintf(_('Successfully changed availability for category with id "%d"'), $id), m::SUCCESS);
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_categories'
-        ));
+        return $this->redirect($this->generateUrl('admin_categories'));
     }
 
     /**
@@ -437,9 +449,7 @@ class CategoriesController extends Controller
             m::add(sprintf(_('Successfully changed availability for category with id "%d"'), $id), m::SUCCESS);
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_categories'
-        ));
+        return $this->redirect($this->generateUrl('admin_categories'));
     }
 
     /**
@@ -468,10 +478,11 @@ class CategoriesController extends Controller
         } else {
             $configurations = s::get(array('section_settings',));
 
-            return $this->render('category/config.tpl', array(
-                'configs'   => $configurations,
-            ));
+            return $this->render(
+                'category/config.tpl',
+                array('configs'   => $configurations,)
+            );
         }
     }
-
 }
+

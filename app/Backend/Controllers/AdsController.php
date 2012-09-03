@@ -46,11 +46,13 @@ class AdsController extends Controller
 
         $this->view->assign('category', $this->category);
 
-        $this->view->assign(array(
-            'subcat'       => $this->subcat,
-            'allcategorys' => $this->parentCategories,
-            'datos_cat'    => $this->categoryData,
-        ));
+        $this->view->assign(
+            array(
+                'subcat'       => $this->subcat,
+                'allcategorys' => $this->parentCategories,
+                'datos_cat'    => $this->categoryData,
+            )
+        );
     }
 
     /**
@@ -126,27 +128,32 @@ class AdsController extends Controller
         }
 
         // Build the pager
-        $pagination = \Pager::factory(array(
-            'mode'        => 'Sliding',
-            'perPage'     => $itemsPerPage,
-            'append'      => false,
-            'path'        => '',
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => $countAds,
-            'fileName'    => $this->generateUrl('admin_ads').'?'.$queryString.'&page=%d',
-        ));
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => $countAds,
+                'fileName'    => $this->generateUrl('admin_ads').'?'.$queryString.'&page=%d',
+            )
+        );
 
         $_SESSION['desde'] = 'advertisement';
 
-        return $this->render('advertisement/list.tpl', array(
-            'pagination'     => $pagination,
-            'advertisements' => $ads,
-            'filter_options' => $filterOptions,
-            'map'            => $map,
-            'page'           => $page,
-        ));
+        return $this->render(
+            'advertisement/list.tpl',
+            array(
+                'pagination'     => $pagination,
+                'advertisements' => $ads,
+                'filter_options' => $filterOptions,
+                'map'            => $map,
+                'page'           => $page,
+            )
+        );
     }
 
     /**
@@ -195,10 +202,12 @@ class AdsController extends Controller
                 m::add(_('Unable to create the new advertisement.'), m::ERROR);
             }
 
-            return $this->redirect($this->generateUrl(
-                'admin_ads',
-                array('category' => $firstCategory, 'page' => $page)
-            ));
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_ads',
+                    array('category' => $firstCategory, 'page' => $page)
+                )
+            );
         } else {
             return $this->render('advertisement/new.tpl');
         }
@@ -226,7 +235,7 @@ class AdsController extends Controller
         if ($ad->fk_user != $_SESSION['userid']
             && (!\Acl::check('CONTENT_OTHER_UPDATE'))
         ) {
-            m::add(_("You can't modify this content because you don't have enought privileges.") );
+            m::add(_("You can't modify this content because you don't have enought privileges."));
 
             return $this->redirect($this->generateUrl('admin_ads'));
         }
@@ -239,9 +248,10 @@ class AdsController extends Controller
             $this->view->assign('photo1', $photo1);
         }
 
-        return $this->render('advertisement/new.tpl', array(
-            'advertisement' => $ad,
-        ));
+        return $this->render(
+            'advertisement/new.tpl',
+            array('advertisement' => $ad,)
+        );
 
     }
     /**
@@ -269,7 +279,7 @@ class AdsController extends Controller
         if ($ad->fk_user != $_SESSION['userid']
             && (!\Acl::check('CONTENT_OTHER_UPDATE'))
         ) {
-            m::add(_("You can't modify this content because you don't have enought privileges.") );
+            m::add(_("You can't modify this content because you don't have enought privileges."));
 
             return $this->redirect($this->generateUrl('admin_ads'));
         }
@@ -307,15 +317,13 @@ class AdsController extends Controller
         }
 
         if ($continue) {
-            return $this->redirect($this->generateUrl(
-                'admin_ad_show',
-                array('id' => $ad->id)
-            ));
+            return $this->redirect(
+                $this->generateUrl('admin_ad_show', array('id' => $ad->id))
+            );
         } else {
-            return $this->redirect($this->generateUrl(
-                'admin_ad_show',
-                array('id' => $data['id'])
-            ));
+            return $this->redirect(
+                $this->generateUrl('admin_ad_show', array('id' => $data['id']))
+            );
         }
     }
 
@@ -344,13 +352,15 @@ class AdsController extends Controller
         }
 
         if (!$request->isXmlHttpRequest()) {
-            return $this->redirect($this->generateUrl(
-                'admin_ads',
-                array(
-                    'category' => $category,
-                    'page'     => $page
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_ads',
+                    array(
+                        'category' => $category,
+                        'page'     => $page
+                    )
                 )
-            ));
+            );
         }
     }
 
@@ -388,13 +398,15 @@ class AdsController extends Controller
         }
 
         if (!$request->isXmlHttpRequest()) {
-            return $this->redirect($this->generateUrl(
-                'admin_ads',
-                array(
-                    'category' => $category,
-                    'page' => $page,
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_ads',
+                    array(
+                        'category' => $category,
+                        'page' => $page,
+                    )
                 )
-            ));
+            );
         }
 
     }
@@ -434,13 +446,15 @@ class AdsController extends Controller
             m::add(sprintf(_('Successfully changed the available status of %d ads'), $changes), m::SUCCESS);
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_ads',
-            array(
-                'category' => $category,
-                'page'     => $page,
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_ads',
+                array(
+                    'category' => $category,
+                    'page'     => $page,
+                )
             )
-        ));
+        );
     }
 
     /**
@@ -467,14 +481,16 @@ class AdsController extends Controller
             m::add(sprintf(_('Successfully changed availability for the ad "%s"'), $ad->title), m::SUCCESS);
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_ads',
-            array(
-                'category'    => $category,
-                'page'        => $page,
-                'queryString' => $queryString,
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_ads',
+                array(
+                    'category'    => $category,
+                    'page'        => $page,
+                    'queryString' => $queryString,
+                )
             )
-        ));
+        );
     }
 
     /**
@@ -514,24 +530,30 @@ class AdsController extends Controller
             $itemsPerPage
         );
 
-        $pagination = \Pager::factory(array(
-            'mode'        => 'Sliding',
-            'perPage'     => $itemsPerPage,
-            'append'      => false,
-            'path'        => '',
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => $countAds,
-            'fileName'    => $this->generateUrl('admin_ads_content_provider', array(
-                'category' => $category,
-            )).'&page=%d',
-        ));
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => $countAds,
+                'fileName'    => $this->generateUrl(
+                    'admin_ads_content_provider',
+                    array('category' => $category,)
+                ).'&page=%d',
+            )
+        );
 
-        return $this->render('advertisement/content-provider.tpl', array(
-            'ads'        => $ads,
-            'pagination' => $pagination,
-        ));
+        return $this->render(
+            'advertisement/content-provider.tpl',
+            array(
+                'ads'        => $ads,
+                'pagination' => $pagination,
+            )
+        );
     }
 
     /**

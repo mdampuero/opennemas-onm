@@ -51,11 +51,14 @@ class NewsletterSubscriptorsController extends Controller
         $total = $user->countUsers($where);
         $pager = $user->getPager($itemsPerPage, $total);
 
-        return $this->render('newsletter/subscriptions/list.tpl', array(
-            'pager' => $pager,
-            'users' => $users,
-            'total' => $total,
-        ));
+        return $this->render(
+            'newsletter/subscriptions/list.tpl',
+            array(
+                'pager' => $pager,
+                'users' => $users,
+                'total' => $total,
+            )
+        );
     }
 
     /**
@@ -89,14 +92,13 @@ class NewsletterSubscriptorsController extends Controller
 
             $continue = $request->request->filter('continue', 0);
             if ($continue) {
-                return $this->redirect($this->generateUrl(
-                    'admin_newsletter_subscriptor_show',
-                    array('id' => $user->id)
-                ));
+                return $this->redirect(
+                    $this->generateUrl('admin_newsletter_subscriptor_show', array('id' => $user->id))
+                );
             } else {
-                return $this->redirect($this->generateUrl(
-                    'admin_newsletter_subscriptors'
-                ));
+                return $this->redirect(
+                    $this->generateUrl('admin_newsletter_subscriptors')
+                );
             }
         } else {
             return $this->render('newsletter/subscriptions/new.tpl');
@@ -136,14 +138,11 @@ class NewsletterSubscriptorsController extends Controller
 
             $continue = $request->request->filter('continue', 0);
             if ($continue) {
-                return $this->redirect($this->generateUrl(
-                    'admin_newsletter_subscriptor_show',
-                    array('id' => $user->id)
-                ));
+                return $this->redirect(
+                    $this->generateUrl('admin_newsletter_subscriptor_show', array('id' => $user->id))
+                );
             } else {
-                return $this->redirect($this->generateUrl(
-                    'admin_newsletter_subscriptors'
-                ));
+                return $this->redirect($this->generateUrl('admin_newsletter_subscriptors'));
             }
         } else {
             return $this->render('newsletter/subscriptions/new.tpl');
@@ -169,9 +168,10 @@ class NewsletterSubscriptorsController extends Controller
             return $this->redirect($this->generateUrl('admin_newsletter_subscriptors'));
         }
 
-        return $this->render('newsletter/subscriptions/new.tpl', array(
-            'user'      => $user,
-        ));
+        return $this->render(
+            'newsletter/subscriptions/new.tpl',
+            array('user' => $user,)
+        );
     }
 
     /**
@@ -333,5 +333,5 @@ class NewsletterSubscriptorsController extends Controller
 
         return array($where, $orderBy);
     }
-
 }
+

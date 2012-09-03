@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 use Onm\Message as m;
+
 /**
  * Handles the actions for the system information
  *
@@ -46,9 +47,10 @@ class AclUserGroupsController extends Controller
         $userGroup  = new \UserGroup();
         $userGroups = $userGroup->find();
 
-        return $this->render('acl/user_group/list.tpl', array(
-            'user_groups' => $userGroups
-        ));
+        return $this->render(
+            'acl/user_group/list.tpl',
+            array( 'user_groups' => $userGroups)
+        );
     }
 
     /**
@@ -68,10 +70,13 @@ class AclUserGroupsController extends Controller
         }
         $privilege = new \Privilege();
 
-        return $this->render('acl/user_group/new.tpl', array(
-            'user_group' => $userGroup,
-            'modules'    => $privilege->getPrivilegesByModules(),
-        ));
+        return $this->render(
+            'acl/user_group/new.tpl',
+            array(
+                'user_group' => $userGroup,
+                'modules'    => $privilege->getPrivilegesByModules(),
+            )
+        );
     }
 
     /**
@@ -99,18 +104,25 @@ class AclUserGroupsController extends Controller
                 if ($this->request->get('action') == 'validate') {
                     return $this->redirect($this->generateUrl('admin_acl_usergroups'));
                 } else {
-                    return $this->redirect($this->generateUrl('admin_acl_usergroups_show',
-                        array('id' => $userGroup->id)));
+                    return $this->redirect(
+                        $this->generateUrl(
+                            'admin_acl_usergroups_show',
+                            array('id' => $userGroup->id)
+                        )
+                    );
                 }
             } else {
                 $this->view->assign('errors', $userGroup->errors);
             }
         }
 
-        return $this->render('acl/user_group/new.tpl', array(
-            'user_group' => $userGroup,
-            'modules'    => $privilege->getPrivilegesByModules(),
-        ));
+        return $this->render(
+            'acl/user_group/new.tpl',
+            array(
+                'user_group' => $userGroup,
+                'modules'    => $privilege->getPrivilegesByModules(),
+            )
+        );
     }
 
     /**
@@ -133,20 +145,19 @@ class AclUserGroupsController extends Controller
         if ($userGroup->update($data)) {
             m::add(_('User group updated successfully.'), m::SUCCESS);
         } else {
-            m::add(sprintf(
-                _('Unable to update the user group with id "%d"'),
-                $id
-            ), m::ERROR);
+            m::add(
+                sprintf(_('Unable to update the user group with id "%d"'), $id),
+                m::ERROR
+            );
         }
 
         if ($request->request->filter('action') != 'validate') {
             return $this->redirect($this->generateUrl('admin_acl_usergroups'));
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_acl_usergroups_show',
-            array('id' => $userGroup->id)
-        ));
+        return $this->redirect(
+            $this->generateUrl('admin_acl_usergroups_show', array('id' => $userGroup->id))
+        );
     }
 
     /**
@@ -165,13 +176,15 @@ class AclUserGroupsController extends Controller
         if ($deleted) {
             m::add(_('User group deleted successfully.'));
         } else {
-            m::add(sprintf(
-                _('Unable to delete the user group with id "%d"'),
-                $id
-            ));
+            m::add(
+                sprintf(
+                    _('Unable to delete the user group with id "%d"'),
+                    $id
+                )
+            );
         }
 
         return $this->redirect($this->generateUrl('admin_acl_usergroups'));
     }
-
 }
+

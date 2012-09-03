@@ -78,7 +78,6 @@ class ErrorController extends Controller
 
                 return new Response($content, 404);
                 break;
-
             default:
                 // Change this handle to a more generic error template
                 $errorMessage = _('Oups! Seems that we had an unknown problem while trying to run your request.');

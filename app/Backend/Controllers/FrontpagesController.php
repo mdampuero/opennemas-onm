@@ -56,11 +56,13 @@ class FrontpagesController extends Controller
         $categoryID = ($category == 'home') ? 0 : $category;
         list($parentCategories, $subcat, $datos_cat) = $ccm->getArraysMenu($categoryID);
 
-        $this->view->assign(array(
-            'subcat' => $subcat,
-            'allcategorys' => $parentCategories,
-            'datos_cat' => $datos_cat
-        ));
+        $this->view->assign(
+            array(
+                'subcat' => $subcat,
+                'allcategorys' => $parentCategories,
+                'datos_cat' => $datos_cat
+            )
+        );
         $allcategorys = $parentCategories;
 
         // Check if the user can edit frontpages
@@ -104,19 +106,24 @@ class FrontpagesController extends Controller
             SITE_PATH."/themes/".TEMPLATE_USER."/layouts/default.xml"
         );
 
-        $layout = $lm->render(array(
-            'contents'  => $contentElementsInFrontpage,
-            'home'      => ($categoryID == 0),
-            'smarty'    => $this->view,
-            'category'  => $category,
-        ));
+        $layout = $lm->render(
+            array(
+                'contents'  => $contentElementsInFrontpage,
+                'home'      => ($categoryID == 0),
+                'smarty'    => $this->view,
+                'category'  => $category,
+            )
+        );
 
-        return $this->render('frontpagemanager/list.tpl', array(
-            'category'           => $category,
-            'category_id'        => $categoryID,
-            'frontpage_articles' => $contentElementsInFrontpage,
-            'layout'             => $layout,
-        ));
+        return $this->render(
+            'frontpagemanager/list.tpl',
+            array(
+                'category'           => $category,
+                'category_id'        => $categoryID,
+                'frontpage_articles' => $contentElementsInFrontpage,
+                'layout'             => $layout,
+            )
+        );
     }
 
     /**
@@ -209,14 +216,11 @@ class FrontpagesController extends Controller
      **/
     public function previewAction(Request $request)
     {
-        $categoryName        = $this->request->request->get('category_name',
-                'home', FILTER_SANITIZE_STRING);
+        $categoryName        = $this->request->request->get('category_name', 'home', FILTER_SANITIZE_STRING);
         $this->view          = new \Template(TEMPLATE_USER);
         $this->view->caching = false;
 
-        $this->view->assign(array(
-            'category_name' => $categoryName,
-        ));
+        $this->view->assign(array( 'category_name' => $categoryName,));
 
         $cm = new \ContentManager;
         $contentsRAW = $this->request->request->get('contents');

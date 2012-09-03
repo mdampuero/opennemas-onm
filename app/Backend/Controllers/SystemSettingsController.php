@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 use Onm\Message as m;
+
 /**
  * Handles all the request for Welcome actions
  *
@@ -55,11 +56,14 @@ class SystemSettingsController extends Controller
 
         $configurations = s::get($configurationsKeys);
 
-        return $this->render('system_settings/system_settings.tpl', array(
-            'configs'   => $configurations,
-            'timezones' => \DateTimeZone::listIdentifiers(),
-            'languages' => array('en_US' => _("English"), 'es_ES' => _("Spanish"), 'gl_ES' => _("Galician")),
-        ));
+        return $this->render(
+            'system_settings/system_settings.tpl',
+            array(
+                'configs'   => $configurations,
+                'timezones' => \DateTimeZone::listIdentifiers(),
+                'languages' => array('en_US' => _("English"), 'es_ES' => _("Spanish"), 'gl_ES' => _("Galician")),
+            )
+        );
     }
 
     // TODO: use symfony request instead of $_POST and $_FILES variables

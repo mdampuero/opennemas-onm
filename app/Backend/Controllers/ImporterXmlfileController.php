@@ -142,20 +142,25 @@ class ImporterXmlfileController extends Controller
                     }
 
                 } else {
-                    m::add(sprintf(
-                        _("There was an error while uploading «%s» - «%s». Check its size before send it."),
-                        $uploaddir.$name, $nameFile
-                    ));
+                    m::add(
+                        sprintf(
+                            _("There was an error while uploading «%s» - «%s». Check its size before send it."),
+                            $uploaddir.$name,
+                            $nameFile
+                        )
+                    );
                 }
             }
 
-            $this->view->assign(array(
-                'numCategories' => $numCategories,
-                'XMLFile' => $XMLFile,
-                'dataXML' => $dataXML,
-                'action' => "import",
-                'total_num' => $j,
-            ));
+            $this->view->assign(
+                array(
+                    'numCategories' => $numCategories,
+                    'XMLFile' => $XMLFile,
+                    'dataXML' => $dataXML,
+                    'action' => "import",
+                    'total_num' => $j,
+                )
+            );
 
         }
         $tpl->display('agency_importer/xml-file/list.tpl');
@@ -205,23 +210,25 @@ class ImporterXmlfileController extends Controller
         } else {
             if ( $config = s::get('xml_file_schema') ) {
 
-                $this->view->assign(array(
-                    'title'         => $config['title'],
-                    'title_int'     => $config['title_int'],
-                    'subtitle'      => $config['subtitle'],
-                    'summary'       => $config['summary'],
-                    'agency'        => $config['agency'],
-                    'created'       => $config['created'],
-                    'body'          => $config['body'],
-                    'metadata'      => $config['metadata'],
-                    'description'   => $config['description'],
-                    'category_name' => $config['category_name'],
-                    'body'          => $config['body'],
-                    'img'           => $config['img'],
-                    'img_footer'    => $config['img_footer'],
-                    'ignored'       => $config['ignored'],
-                    'important'     => $config['important'],
-                ));
+                $this->view->assign(
+                    array(
+                        'title'         => $config['title'],
+                        'title_int'     => $config['title_int'],
+                        'subtitle'      => $config['subtitle'],
+                        'summary'       => $config['summary'],
+                        'agency'        => $config['agency'],
+                        'created'       => $config['created'],
+                        'body'          => $config['body'],
+                        'metadata'      => $config['metadata'],
+                        'description'   => $config['description'],
+                        'category_name' => $config['category_name'],
+                        'body'          => $config['body'],
+                        'img'           => $config['img'],
+                        'img_footer'    => $config['img_footer'],
+                        'ignored'       => $config['ignored'],
+                        'important'     => $config['important'],
+                    )
+                );
 
             }
 

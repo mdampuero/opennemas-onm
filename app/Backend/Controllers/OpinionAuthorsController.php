@@ -53,22 +53,27 @@ class OpinionAuthorsController extends Controller
         $authorsPage = array_slice($authors, ($page-1)*$itemsPerPage, $itemsPerPage);
 
         // Build the pager
-        $pagination = \Pager::factory(array(
-            'mode'        => 'Sliding',
-            'perPage'     => $itemsPerPage,
-            'append'      => false,
-            'path'        => '',
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => count($authors),
-            'fileName'    => $this->generateUrl('admin_opinion_authors').'?page=%d',
-        ));
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => count($authors),
+                'fileName'    => $this->generateUrl('admin_opinion_authors').'?page=%d',
+            )
+        );
 
-        return $this->render('opinion/authors/list.tpl', array(
-            'authors'       => $authorsPage,
-            'pagination'    => $pagination,
-        ));
+        return $this->render(
+            'opinion/authors/list.tpl',
+            array(
+                'authors'       => $authorsPage,
+                'pagination'    => $pagination,
+            )
+        );
     }
 
     /**
@@ -99,10 +104,13 @@ class OpinionAuthorsController extends Controller
             m::add(sprintf(_('This author doesn\'t have an image associated please select one.')));
         }
 
-        return $this->render('opinion/authors/new.tpl', array(
-            'author'  => $author,
-            'photos' => $photos,
-        ));
+        return $this->render(
+            'opinion/authors/new.tpl',
+            array(
+                'author'  => $author,
+                'photos' => $photos,
+            )
+        );
     }
 
     /**
@@ -152,10 +160,9 @@ class OpinionAuthorsController extends Controller
             }
 
             if ($continue) {
-                return $this->redirect($this->generateUrl(
-                    'admin_opinion_author_show',
-                    array('id' => $author->pk_author)
-                ));
+                return $this->redirect(
+                    $this->generateUrl('admin_opinion_author_show', array('id' => $author->pk_author))
+                );
             } else {
                 return $this->redirect($this->generateUrl('admin_opinion_authors'));
             }
@@ -215,10 +222,12 @@ class OpinionAuthorsController extends Controller
             }
 
             if ($continue) {
-                return $this->redirect($this->generateUrl(
-                    'admin_opinion_author_show',
-                    array('id' => $author->id)
-                ));
+                return $this->redirect(
+                    $this->generateUrl(
+                        'admin_opinion_author_show',
+                        array('id' => $author->id)
+                    )
+                );
             } else {
                 return $this->redirect($this->generateUrl('admin_opinion_authors'));
             }
@@ -249,12 +258,9 @@ class OpinionAuthorsController extends Controller
         }
 
         if (!$request->isXmlHttpRequest()) {
-            return $this->redirect($this->generateUrl(
-                'admin_opinion_authors',
-                array(
-                    'page'     => $page
-                )
-            ));
+            return $this->redirect(
+                $this->generateUrl('admin_opinion_authors', array('page' => $page))
+            );
         }
     }
 
@@ -342,12 +348,9 @@ class OpinionAuthorsController extends Controller
             }
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_opinion_authors',
-            array(
-                'page'     => $page,
-            )
-        ));
+        return $this->redirect(
+            $this->generateUrl('admin_opinion_authors', array('page' => $page,))
+        );
     }
 }
 

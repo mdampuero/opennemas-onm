@@ -49,12 +49,14 @@ class CoversController extends Controller
         list($parentCategories, $subcat, $categoryData) =
             $ccm->getArraysMenu($category, $contentType);
 
-        $this->view->assign(array(
-            'category'     => $category,
-            'subcat'       => $subcat,
-            'allcategorys' => $parentCategories,
-            'datos_cat'    => $categoryData
-        ));
+        $this->view->assign(
+            array(
+                'category'     => $category,
+                'subcat'       => $subcat,
+                'allcategorys' => $parentCategories,
+                'datos_cat'    => $categoryData
+            )
+        );
     }
 
     /**
@@ -95,27 +97,32 @@ class CoversController extends Controller
         }
 
         // Build the pager
-        $pagination = \Pager::factory(array(
-            'mode'        => 'Sliding',
-            'perPage'     => $itemsPerPage,
-            'append'      => false,
-            'path'        => '',
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => $countCovers,
-            'fileName'    => $this->generateUrl(
-                'admin_covers',
-                array('category' => $category)
-            ).'&page=%d',
-        ));
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => $countCovers,
+                'fileName'    => $this->generateUrl(
+                    'admin_covers',
+                    array('category' => $category)
+                ).'&page=%d',
+            )
+        );
 
-        return $this->render('newsstand/list.tpl', array(
-            'KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR,
-            'pagination'     => $pagination,
-            'covers'         => $covers,
-            'category'       => $category,
-        ));
+        return $this->render(
+            'newsstand/list.tpl',
+            array(
+                'KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR,
+                'pagination'     => $pagination,
+                'covers'         => $covers,
+                'category'       => $category,
+            )
+        );
     }
 
     /**
@@ -151,27 +158,32 @@ class CoversController extends Controller
         }
 
         // Build the pager
-        $pagination = \Pager::factory(array(
-            'mode'        => 'Sliding',
-            'perPage'     => $itemsPerPage,
-            'append'      => false,
-            'path'        => '',
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => $countCovers,
-            'fileName'    => $this->generateUrl(
-                'admin_covers',
-                array('category' => $category)
-            ).'&page=%d',
-        ));
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => $countCovers,
+                'fileName'    => $this->generateUrl(
+                    'admin_covers',
+                    array('category' => $category)
+                ).'&page=%d',
+            )
+        );
 
-        return $this->render('newsstand/list.tpl', array(
-            'KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR,
-            'pagination'     => $pagination,
-            'covers'         => $covers,
-            'category'       => $category,
-        ));
+        return $this->render(
+            'newsstand/list.tpl',
+            array(
+                'KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR,
+                'pagination'     => $pagination,
+                'covers'         => $covers,
+                'category'       => $category,
+            )
+        );
     }
 
     /**
@@ -195,10 +207,13 @@ class CoversController extends Controller
             return $this->redirect($this->generateUrl('admin_videos'));
         }
 
-        return $this->render('newsstand/read.tpl', array(
-            'cover'          => $cover,
-            'KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR,
-        ));
+        return $this->render(
+            'newsstand/read.tpl',
+            array(
+                'cover'          => $cover,
+                'KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR,
+            )
+        );
     }
 
     /**
@@ -243,13 +258,16 @@ class CoversController extends Controller
                 }
 
                 if (!$uploadStatus) {
-                    throw new \Exception(sprintf(
-                        _('There was an error while uploading the file. '
-                        .'Try to upload a file smaller than %d MB or contact with '
-                        .'your administrator'
-                        ),
-                        (int) ini_get('upload_max_filesize')
-                    ));
+                    throw new \Exception(
+                        sprintf(
+                            _(
+                                'There was an error while uploading the file. '
+                                .'Try to upload a file smaller than %d MB or contact with '
+                                .'your administrator'
+                            ),
+                            (int) ini_get('upload_max_filesize')
+                        )
+                    );
                 }
 
                 $kiosko = new \Kiosko();
@@ -258,24 +276,21 @@ class CoversController extends Controller
                     throw new \Exception(_('There was a problem with the cover data. Try again'));
                 }
 
-                return $this->redirect($this->generateUrl(
-                    'admin_covers',
-                    array(
-                        'category' => $postInfo->getDigits('category')
-                    )
-                ));
-
-            } catch (\Exception $e) {
-                m::add(
-                    $e->getMessage(), m::ERROR
+                return $this->redirect(
+                    $this->generateUrl('admin_covers', array('category' => $postInfo->getDigits('category')))
                 );
 
-                return $this->redirect($this->generateUrl(
-                    'admin_covers',
-                    array(
-                        'category' => $postInfo->getDigits('category'),
+            } catch (\Exception $e) {
+                m::add($e->getMessage(), m::ERROR);
+
+                return $this->redirect(
+                    $this->generateUrl(
+                        'admin_covers',
+                        array(
+                            'category' => $postInfo->getDigits('category'),
+                        )
                     )
-                ));
+                );
             }
         } else {
             return $this->render('newsstand/read.tpl');
@@ -309,20 +324,24 @@ class CoversController extends Controller
                 m::add(_("Cover updated successfully."), m::SUCCESS);
             }
             if ($continue) {
-                return $this->redirect($this->generateUrl(
-                    'admin_cover_show',
-                    array('id' => $cover->id)
-                ));
+                return $this->redirect(
+                    $this->generateUrl(
+                        'admin_cover_show',
+                        array('id' => $cover->id)
+                    )
+                );
             } else {
                 $page = $this->request->request->getDigits('page', 1);
 
-                return $this->redirect($this->generateUrl(
-                    'admin_covers',
-                    array(
-                        'category' => $cover->category,
-                        'page'     => $page,
+                return $this->redirect(
+                    $this->generateUrl(
+                        'admin_covers',
+                        array(
+                            'category' => $cover->category,
+                            'page'     => $page,
+                        )
                     )
-                ));
+                );
             }
         }
     }
@@ -352,13 +371,15 @@ class CoversController extends Controller
             m::add(_('You must give an id for delete the cover.'), m::ERROR);
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_covers',
-            array(
-                'category' => $cover->category,
-                'page'     => $page
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_covers',
+                array(
+                    'category' => $cover->category,
+                    'page'     => $page
+                )
             )
-        ));
+        );
     }
 
     /**
@@ -387,13 +408,15 @@ class CoversController extends Controller
             m::add(sprintf(_('Successfully changed availability for the cover "%s"'), $cover->title), m::SUCCESS);
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_covers',
-            array(
-                'category' => $category,
-                'page'     => $page
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_covers',
+                array(
+                    'category' => $category,
+                    'page'     => $page
+                )
             )
-        ));
+        );
     }
 
     /**
@@ -420,13 +443,15 @@ class CoversController extends Controller
             m::add(sprintf(_('Successfully changed suggested flag for cover "%s"'), $cover->title), m::SUCCESS);
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_covers',
-            array(
-                'category' => $category,
-                'page'     => $page
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_covers',
+                array(
+                    'category' => $category,
+                    'page'     => $page
+                )
             )
-        ));
+        );
     }
 
     /**
@@ -453,13 +478,15 @@ class CoversController extends Controller
             m::add(sprintf(_('Successfully changed suggested flag for cover "%s"'), $cover->title), m::SUCCESS);
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_covers',
-            array(
-                'category' => $category,
-                'page'     => $page
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_covers',
+                array(
+                    'category' => $category,
+                    'page'     => $page
+                )
             )
-        ));
+        );
     }
 
     /**
@@ -491,13 +518,15 @@ class CoversController extends Controller
             }
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_covers',
-            array(
-                'categoy' => $category,
-                'page'    => $page,
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_covers',
+                array(
+                    'categoy' => $category,
+                    'page'    => $page,
+                )
             )
-        ));
+        );
     }
 
     /**
@@ -527,13 +556,15 @@ class CoversController extends Controller
             }
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_covers',
-            array(
-                'category' => $category,
-                'page'     => $page,
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_covers',
+                array(
+                    'category' => $category,
+                    'page'     => $page,
+                )
             )
-        ));
+        );
     }
 
     /**
@@ -588,9 +619,10 @@ class CoversController extends Controller
             $configurationsKeys = array('kiosko_settings',);
             $configurations = s::get($configurationsKeys);
 
-            return $this->render('newsstand/config.tpl', array(
-                'configs'   => $configurations,
-            ));
+            return $this->render(
+                'newsstand/config.tpl',
+                array('configs'   => $configurations,)
+            );
         } else {
             $settingsRAW = $request->request->get('kiosko_settings');
             $settings = array(

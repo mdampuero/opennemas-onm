@@ -57,9 +57,7 @@ class MenusController extends Controller
 
         $menues    = \Menu::find();
 
-        return $this->render('menues/list.tpl', array(
-            'menues'        => $menues,
-        ));
+        return $this->render('menues/list.tpl', array('menues' => $menues,));
     }
 
     /**
@@ -121,16 +119,19 @@ class MenusController extends Controller
             }
         }
 
-        return $this->render('menues/edit.tpl', array(
-            'categories'      => $parentCategories,
-            'subcat'          => $subcat,
-            'albumCategories' => $albumCategories,
-            'videoCategories' => $videoCategories,
-            'pollCategories'  => $pollCategories,
-            'staticPages'     => $staticPages,
-            'pages'           => $this->pages,
-            'menu'            => $menu
-        ));
+        return $this->render(
+            'menues/edit.tpl',
+            array(
+                'categories'      => $parentCategories,
+                'subcat'          => $subcat,
+                'albumCategories' => $albumCategories,
+                'videoCategories' => $videoCategories,
+                'pollCategories'  => $pollCategories,
+                'staticPages'     => $staticPages,
+                'pages'           => $this->pages,
+                'menu'            => $menu
+            )
+        );
     }
 
     /**
@@ -148,9 +149,11 @@ class MenusController extends Controller
             $continue = $this->request->request->filter('continue', false, FILTER_SANITIZE_STRING);
             $data = array(
                 'name'      => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
-                'params'    => serialize(array(
-                    'description' => $request->request->filter('description', null, FILTER_SANITIZE_STRING)
-                )),
+                'params'    => serialize(
+                    array(
+                        'description' => $request->request->filter('description', null, FILTER_SANITIZE_STRING)
+                    )
+                ),
                 'site'      => SITE,
                 'pk_father' => $request->request->filter('pk_father', 'user', FILTER_SANITIZE_STRING),
                 'items'     => json_decode(json_decode($request->request->get('items'))),
@@ -164,10 +167,12 @@ class MenusController extends Controller
             }
 
             if ($continue) {
-                return $this->redirect($this->generateUrl(
-                    'admin_menu_show',
-                    array('id' => $menu->pk_menu)
-                ));
+                return $this->redirect(
+                    $this->generateUrl(
+                        'admin_menu_show',
+                        array('id' => $menu->pk_menu)
+                    )
+                );
             } else {
                 return $this->redirect($this->generateUrl('admin_menus'));
             }
@@ -245,9 +250,11 @@ class MenusController extends Controller
         } else {
             $data = array(
                 'name'      => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
-                'params'    => serialize(array(
-                    'description' => $request->request->filter('description', null, FILTER_SANITIZE_STRING)
-                )),
+                'params'    => serialize(
+                    array(
+                        'description' => $request->request->filter('description', null, FILTER_SANITIZE_STRING)
+                    )
+                ),
                 'site'      => SITE,
                 'pk_father' => $request->request->filter('pk_father', 'user', FILTER_SANITIZE_STRING),
                 'items'     => json_decode($request->request->get('items')),
@@ -260,10 +267,12 @@ class MenusController extends Controller
             }
 
             if ($continue) {
-                return $this->redirect($this->generateUrl(
-                    'admin_menu_show',
-                    array('id' => $menu->pk_menu)
-                ));
+                return $this->redirect(
+                    $this->generateUrl(
+                        'admin_menu_show',
+                        array('id' => $menu->pk_menu)
+                    )
+                );
             } else {
                 return $this->redirect($this->generateUrl('admin_menus'));
             }
@@ -292,12 +301,14 @@ class MenusController extends Controller
             m::add(sprintf(_("Menu '%s' deleted successfully."), $menu->name), m::SUCCESS);
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_menus',
-            array(
-                'category' => $menu->category
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_menus',
+                array(
+                    'category' => $menu->category
+                )
             )
-        ));
+        );
 
     }
 
@@ -331,12 +342,14 @@ class MenusController extends Controller
             }
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_menus',
-            array(
-                'page'    => $page,
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_menus',
+                array(
+                    'page'    => $page,
+                )
             )
-        ));
+        );
     }
 }
 
