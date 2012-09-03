@@ -25,14 +25,14 @@ class Opinion extends Content
     public $with_comment          = null;
     public $fk_author_img_widget  = null;
 
-    private static $_instance     = null;
+    private static $instance     = null;
 
     /**
     * Array of authors
     */
-    private $_authorNames         = null;
+    private $authorNames         = null;
 
-    public function __construct($id=null)
+    public function __construct($id = null)
     {
         parent::__construct($id);
 
@@ -44,21 +44,21 @@ class Opinion extends Content
         $this->content_type_l10n_name = _('Opinion');
     }
 
-    public function get_instance()
+    public function getInstance()
     {
-        if (is_null(self::$_instance)) {
-            self::$_instance = new Opinion();
+        if (is_null(self::$instance)) {
+            self::$instance = new Opinion();
 
-            return self::$_instance;
+            return self::$instance;
         } else {
-            return self::$_instance;
+            return self::$instance;
         }
     }
 
     public function __get($name)
     {
         switch ($name) {
-            case 'uri': {
+            case 'uri':
                 if ($this->fk_author == 0) {
 
                     if ((int) $this->type_opinion == 1) {
@@ -75,26 +75,27 @@ class Opinion extends Content
                     }
                 }
 
-                $uri =  Uri::generate('opinion',
+                $uri =  Uri::generate(
+                    'opinion',
                     array(
                         'id'       => sprintf('%06d', $this->id),
                         'date'     => date('YmdHis', strtotime($this->created)),
                         'slug'     => $this->slug,
                         'category' => StringUtils::get_title($authorName),
-                    ));
+                    )
+                );
                 //'opinion/_AUTHOR_/_DATE_/_SLUG_/_ID_.html'
                 return $uri;
 
                 break;
-            }
-            case 'slug': {
+            case 'slug':
                 return StringUtils::get_title($this->title);
+
                 break;
-            }
             case 'content_type_name':
                 return 'Opinion';
-                break;
 
+                break;
             case 'author_object':
                 if ((int) $this->type_opinion == 1) {
                     $authorObj = new Stdclass();
@@ -107,11 +108,12 @@ class Opinion extends Content
                 }
 
                 return $authorObj;
+
                 break;
-            default: {
+            default:
                 return parent::__get($name);
+
                 break;
-            }
         }
     }
 
@@ -193,23 +195,23 @@ class Opinion extends Content
      */
     public function get_author_name($fkAuthor)
     {
-        if (is_null($this->_authorNames)) {
+        if (is_null($this->authorNames)) {
             $sql = 'SELECT pk_author, name FROM `authors`';
             $rs = $GLOBALS['application']->conn->Execute($sql);
 
             while (!$rs->EOF) {
-                $this->_authorNames[ $rs->fields['pk_author'] ] =
+                $this->authorNames[ $rs->fields['pk_author'] ] =
                     $rs->fields['name'];
 
                 $rs->MoveNext();
             }
         }
 
-        if (!isset($this->_authorNames[$fkAuthor])) {
+        if (!isset($this->authorNames[$fkAuthor])) {
             return '';
         }
 
-        return $this->_authorNames[$fkAuthor];
+        return $this->authorNames[$fkAuthor];
     }
 
     public function update($data)
@@ -321,7 +323,7 @@ class Opinion extends Content
         }
     }
 
-    public function count_inhome_type($opinionType=null)
+    public function count_inhome_type($opinionType = null)
     {
         if ($opinionType == null && $this->type_opinion) {
             $opinionType = $this->type_opinion;
@@ -394,7 +396,7 @@ class Opinion extends Content
         $_sql_limit = " LIMIT {$options['limit']}";
 
         $cm = new ContentManager();
-        $ccm = ContentCategoryManager::get_instance();
+        $ccm = ContentCategoryManager::getInstance();
 
         // Excluding opinions already present in this frontpage
         $category = (isset($_REQUEST['category']))
@@ -414,9 +416,11 @@ class Opinion extends Content
         }
 
         // Getting latest opinions taking in place later considerations
-        $contents = $cm->find('Opinion',
+        $contents = $cm->find(
+            'Opinion',
             'contents.content_status=1 AND contents.available=1'. $sqlExcludedContents,
-            'ORDER BY contents.created DESC, contents.title ASC ' .$_sql_limit);
+            'ORDER BY contents.created DESC, contents.title ASC ' .$_sql_limit
+        );
 
         // For each opinion get its author and photo
         foreach ($contents as $content) {
@@ -451,9 +455,11 @@ class Opinion extends Content
         $cm = new ContentManager();
 
         // Getting All latest opinions
-        $contents = $cm->find('Opinion',
+        $contents = $cm->find(
+            'Opinion',
             'contents.available=1 ',
-            'ORDER BY  contents.created DESC,  contents.title ASC ' .$limitSql);
+            'ORDER BY  contents.created DESC,  contents.title ASC ' .$limitSql
+        );
 
         // For each opinion get its author and photo
         foreach ($contents as $content) {
@@ -477,8 +483,7 @@ class Opinion extends Content
     public static function getLatestOpinionsForAuthor(
         $authorID,
         $params = array()
-    )
-    {
+    ) {
         $contents = array();
 
         // Setting up default parameters
@@ -495,9 +500,11 @@ class Opinion extends Content
         $cm = new ContentManager();
 
         // Getting All latest opinions
-        $contents = $cm->find('Opinion',
+        $contents = $cm->find(
+            'Opinion',
             'contents.available=1 AND opinions.fk_author = '.$authorID,
-            'ORDER BY  contents.created DESC,  contents.title ASC ' .$sqlLimit);
+            'ORDER BY  contents.created DESC,  contents.title ASC ' .$sqlLimit
+        );
 
         $author = new Author($authorID);
 
@@ -514,5 +521,5 @@ class Opinion extends Content
 
         return $contents;
     }
-
 }
+

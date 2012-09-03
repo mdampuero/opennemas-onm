@@ -25,7 +25,7 @@ class Kiosko extends Content
     /**
       * Constructor PHP5
     */
-    public function __construct($id=null)
+    public function __construct($id = null)
     {
         parent::__construct($id);
 
@@ -227,5 +227,5 @@ class Kiosko extends Content
 
         return $items;
     }
-
 }
+

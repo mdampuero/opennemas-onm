@@ -42,7 +42,7 @@ class ContentType
      *
      * @param string $id the content type id to initilize.
      **/
-    public function __construct($id=null)
+    public function __construct($id = null)
     {
         $this->cache = new MethodCacheManager($this, array('ttl' => 30));
 
@@ -112,8 +112,7 @@ class ContentType
     {
         $fetchedFromAPC = false;
         if (extension_loaded('apc')) {
-            $resultArray = apc_fetch(APC_PREFIX . "_getContentTypes",
-                $fetchedFromAPC);
+            $resultArray = apc_fetch(APC_PREFIX . "_getContentTypes", $fetchedFromAPC);
         }
 
         // If was not fetched from APC now is turn of DB
@@ -193,3 +192,4 @@ class ContentType
         return $rs;
     }
 }
+

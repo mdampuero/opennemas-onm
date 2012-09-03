@@ -67,7 +67,7 @@ class Menu
      *
      * @param int $id Privilege Id
      */
-    public function __construct($id=null)
+    public function __construct($id = null)
     {
         if (!is_null($id)) {
             $this->read($id);
@@ -287,6 +287,6 @@ class Menu
         $menu = self::getMenu($name);
 
         return $menu;
-
     }
 }
+

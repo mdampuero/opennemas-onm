@@ -162,16 +162,19 @@ class ContentManager
             array((int) $categoryID, 0)
         );
 
-        $contentsInFrontpage = array_unique(array_map(
-            function ($content)
-            {
-                if ($content['frontpage_id'] == 0) {
-                    return $content['content_id'];
-                } else {
-                    return null;
-                }
-            },
-            $contentIds)
+        $contentsInFrontpage = array_unique(
+            array_map(
+                function (
+                    $content
+                ) {
+                    if ($content['frontpage_id'] == 0) {
+                        return $content['content_id'];
+                    } else {
+                        return null;
+                    }
+                },
+                $contentIds
+            )
         );
 
 
@@ -189,9 +192,11 @@ class ContentManager
                 // add all the additional properties related with positions
                 // and params
                 if ($content->in_litter == 0) {
-                    $content->load(array(
-                        'placeholder' => $element['placeholder'],
-                        'position'    => $element['position'],)
+                    $content->load(
+                        array(
+                            'placeholder' => $element['placeholder'],
+                            'position'    => $element['position'],
+                        )
                     );
                     if (is_array($content->params) && $content->params > 0) {
                         $content->params = array_merge(
@@ -282,10 +287,12 @@ class ContentManager
 
             // only add it to the final results if is not in litter
             if ($content->in_litter == 0) {
-                $content->load(array(
-                    'placeholder' => $element['placeholder'],
-                    'position'    => $element['position'],
-                ));
+                $content->load(
+                    array(
+                        'placeholder' => $element['placeholder'],
+                        'position'    => $element['position'],
+                    )
+                );
                 if (is_array($content->params) && $content->params > 0) {
                     $content->params = array_merge(
                         $content->params,
@@ -439,9 +446,10 @@ class ContentManager
 
             /* Notice log of this action */
             $logger = Application::getLogger();
-            $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid']
-                .') has executed action drop suggested flag at '
-                .$contentIdsSQL.' ids');
+            $logger->notice(
+                'User '.$_SESSION['username'].' ('.$_SESSION['userid']
+                .') has executed action drop suggested flag at '.$contentIdsSQL.' ids'
+            );
 
             return true;
         }
@@ -737,8 +745,11 @@ class ContentManager
 
         if (intval($category)>0) {
 
-            $pks = $this->find_by_category($contentType, $category,
-                $_where_slave.$_days.$_comented);
+            $pks = $this->find_by_category(
+                $contentType,
+                $category,
+                $_where_slave.$_days.$_comented
+            );
             if (!$all) {
                 $pks = $this->getInTime($pks);
             }
@@ -746,18 +757,24 @@ class ContentManager
             if (count($pks)<$num && $notEmpty) {
                 // En caso de que existan menos de 6 contenidos,
                 // lo hace referente a los 200 últimos contenidos
-                $pks = $this->find_by_category($contentType,
-                    $category, $_where_slave.$_comented,
+                $pks = $this->find_by_category(
+                    $contentType,
+                    $category,
+                    $_where_slave.$_comented,
                     'ORDER BY `contents`.`content_status` DESC, created DESC LIMIT 200',
-                    'pk_content, starttime, endtime');
+                    'pk_content, starttime, endtime'
+                );
                 if (!$all) {
                     $pks = $this->getInTime($pks);
                 }
             }
         } else {
-            $pks = $this->find($contentType,
+            $pks = $this->find(
+                $contentType,
                 $_where_slave.$_days.$_comented,
-                null, 'pk_content, starttime, endtime');
+                null,
+                'pk_content, starttime, endtime'
+            );
 
             if (!$all) {
                 $pks = $this->getInTime($pks);
@@ -766,10 +783,14 @@ class ContentManager
             if (count($pks)< $num && $notEmpty) {
                 // En caso de que existan menos de $num contenidos,
                 // lo hace referente a los 200 últimos contenidos
-                $pks = $this->getInTime($this->find($contentType,
-                    $_where_slave.$_comented,
-                    'ORDER BY created DESC LIMIT 200',
-                    'pk_content, starttime, endtime'));
+                $pks = $this->getInTime(
+                    $this->find(
+                        $contentType,
+                        $_where_slave.$_comented,
+                        'ORDER BY created DESC LIMIT 200',
+                        'pk_content, starttime, endtime'
+                    )
+                );
                 if (!$all) {
                     $pks = $this->getInTime($pks);
                 }
@@ -786,10 +807,12 @@ class ContentManager
         }
         $pk_list = substr($pk_list, 0, strlen($pk_list)-1);
 
-        $comments = $this->find('Comment',
+        $comments = $this->find(
+            'Comment',
             'available=1 AND fk_content IN ('.$pk_list.')',
             ' GROUP BY fk_content ORDER BY num DESC LIMIT 0 , 80',
-            ' fk_content, count(pk_comment) AS num');
+            ' fk_content, count(pk_comment) AS num'
+        );
 
         $pk_list = '';
         foreach ($comments as $comment) {
@@ -801,9 +824,12 @@ class ContentManager
         }
 
         $pk_list = substr($pk_list, 0, strlen($pk_list)-1);
-        $items = $this->find($contentType,
-            'pk_content IN('.$pk_list.')', $_limit,
-            '`contents`.`pk_content`, `contents`.`title`, `contents`.`slug`');
+        $items = $this->find(
+            $contentType,
+            'pk_content IN('.$pk_list.')',
+            $_limit,
+            '`contents`.`pk_content`, `contents`.`title`, `contents`.`slug`'
+        );
         if (empty($items)) {
             return array();
         }
@@ -826,8 +852,10 @@ class ContentManager
 
         uasort(
             $articles,
-            function ($a, $b)
-            {
+            function (
+                $a,
+                $b
+            ) {
                 if ($a['num'] == $b['num']) {
                     return 0;
                 }
@@ -948,8 +976,11 @@ class ContentManager
         $this->init($contentType);
         $items = array();
 
-        $comments = $this->find('Comment', 'available=1 ',
-                            ' GROUP BY fk_content ORDER BY changed DESC LIMIT 0 , 50');
+        $comments = $this->find(
+            'Comment',
+            'available=1 ',
+            ' GROUP BY fk_content ORDER BY changed DESC LIMIT 0 , 50'
+        );
 
         $pk_list = '';
         $pk_comment_list ='';
@@ -965,14 +996,18 @@ class ContentManager
         $pk_list = substr($pk_list, 0, strlen($pk_list)-1);
         $pk_comment_list = substr($pk_comment_list, 0, strlen($pk_comment_list)-1);
 
-        $items = $this->find($contentType, 'pk_content IN('.$pk_list.')', '',
-            '`contents`.`pk_content`, `contents`.`title`, `contents`.`slug`');
+        $items = $this->find(
+            $contentType,
+            'pk_content IN('.$pk_list.')',
+            '',
+            '`contents`.`pk_content`, `contents`.`title`, `contents`.`slug`'
+        );
         if (empty($items)) {
             return array();
         }
 
         $sql = 'SELECT * FROM `contents` '
-             . 'WHERE `pk_content` IN('.$pk_comment_list.')';
+             . 'WHERE `pk_content` IN ('.$pk_comment_list.')';
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
@@ -1304,7 +1339,10 @@ class ContentManager
 
         uasort(
             $articles,
-            function ($a, $b) {
+            function (
+                $a,
+                $b
+            ) {
                 if ($a['num'] == $b['num']) {
                     return 0;
                 }
@@ -1327,10 +1365,12 @@ class ContentManager
         $contents = array();
 
         $cm       = new ContentManager();
-        $contents = $cm->find_all('Article',
+        $contents = $cm->find_all(
+            'Article',
             'content_status=1 AND available=1 AND frontpage=1'.
             ' AND in_home=2',
-            'ORDER BY  created DESC,  title ASC ');
+            'ORDER BY  created DESC,  title ASC '
+        );
 
         return $contents;
     }
@@ -1806,25 +1846,27 @@ class ContentManager
             $append = true;
         }
 
-        $pager = Pager::factory(array(
-            'mode'        => 'Sliding',
-            'perPage'     => $numPages,
-            'delta'       => $delta,
-            'clearIfVoid' => true,
-            'urlVar'      => $page,
-            'separator'   => $separator,
-            'spacesBeforeSeparator' => 1,
-            'spacesAfterSeparator' => 1,
-            'totalItems'  => $totalItems,
-            'append'      => $append,
-            'path'        => $path,
-            'fileName'    => $fun,
-            'altPage'     => 'Página %d',
-            'altFirst'    => 'Primera',
-            'altLast'     => 'Última',
-            'altPrev'     => 'Página previa',
-            'altNext'     => 'Siguiente página'
-        ));
+        $pager = Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $numPages,
+                'delta'       => $delta,
+                'clearIfVoid' => true,
+                'urlVar'      => $page,
+                'separator'   => $separator,
+                'spacesBeforeSeparator' => 1,
+                'spacesAfterSeparator' => 1,
+                'totalItems'  => $totalItems,
+                'append'      => $append,
+                'path'        => $path,
+                'fileName'    => $fun,
+                'altPage'     => 'Página %d',
+                'altFirst'    => 'Primera',
+                'altLast'     => 'Última',
+                'altPrev'     => 'Página previa',
+                'altNext'     => 'Siguiente página'
+            )
+        );
 
         return $pager;
     }
@@ -1842,24 +1884,26 @@ class ContentManager
             $_items[] = $v->id;
         }
 
-        $this->pager = &Pager::factory(array(
-            'itemData'    => $_items,
-            'perPage'     => $numPages,
-            'delta'       => 1, //Num de paginas antes y despues de la actual
-            'append'      => true,
-            'separator'   => '|',
-            'spacesBeforeSeparator' => 1,
-            'spacesAfterSeparator'  => 1,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'mode'        => 'Sliding',
-            'linkClass'   => 'pagination',
-            'altFirst'    => 'primera p&aacute;gina',
-            'altLast'     => '&uacute;ltima p&aacute;gina',
-            'altNext'     => 'p&aacute;gina seguinte',
-            'altPrev'     => 'p&aacute;gina anterior',
-            'altPage'     => 'p&aacute;gina'
-        ));
+        $this->pager = &Pager::factory(
+            array(
+                'itemData'    => $_items,
+                'perPage'     => $numPages,
+                'delta'       => 1, //Num de paginas antes y despues de la actual
+                'append'      => true,
+                'separator'   => '|',
+                'spacesBeforeSeparator' => 1,
+                'spacesAfterSeparator'  => 1,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'mode'        => 'Sliding',
+                'linkClass'   => 'pagination',
+                'altFirst'    => 'primera p&aacute;gina',
+                'altLast'     => '&uacute;ltima p&aacute;gina',
+                'altNext'     => 'p&aacute;gina seguinte',
+                'altPrev'     => 'p&aacute;gina anterior',
+                'altPage'     => 'p&aacute;gina'
+            )
+        );
         $data  = $this->pager->getPageData();
 
         $result = array();
@@ -1903,27 +1947,29 @@ class ContentManager
 
         $itemsPerPage = (defined(ITEMS_PAGE))? ITEMS_PAGE: $numPages;
 
-        $this->pager = &Pager::factory(array(
-            'itemData'      => $_items,
-            'perPage'       => $itemsPerPage,
-            'delta'         => $delta, // # of pages before and after this one
-            'append'        => true,
-            'separator'     => '|',
-            'spacesBeforeSeparator' => 1,
-            'spacesAfterSeparator' => 1,
-            'clearIfVoid'   => true,
-            'urlVar'        => 'page',
-            'mode'          => 'Sliding',
-            'append'        => false,
-             'path'         => '',
-            'fileName'      => 'javascript:'.$fun,
-            'linkClass'     => 'pagination',
-            'altFirst'      => 'primera p&aacute;gina',
-            'altLast'       => '&uacute;ltima p&aacute;gina',
-            'altNext'       => 'p&aacute;gina seguinte',
-            'altPrev'       => 'p&aacute;gina anterior',
-            'altPage'       => 'p&aacute;gina'
-        ));
+        $this->pager = &Pager::factory(
+            array(
+                'itemData'      => $_items,
+                'perPage'       => $itemsPerPage,
+                'delta'         => $delta, // # of pages before and after this one
+                'append'        => true,
+                'separator'     => '|',
+                'spacesBeforeSeparator' => 1,
+                'spacesAfterSeparator' => 1,
+                'clearIfVoid'   => true,
+                'urlVar'        => 'page',
+                'mode'          => 'Sliding',
+                'append'        => false,
+                 'path'         => '',
+                'fileName'      => 'javascript:'.$fun,
+                'linkClass'     => 'pagination',
+                'altFirst'      => 'primera p&aacute;gina',
+                'altLast'       => '&uacute;ltima p&aacute;gina',
+                'altNext'       => 'p&aacute;gina seguinte',
+                'altPrev'       => 'p&aacute;gina anterior',
+                'altPage'       => 'p&aacute;gina'
+            )
+        );
         $data  = $this->pager->getPageData();
 
         $result = array();

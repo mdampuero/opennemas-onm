@@ -24,9 +24,9 @@ class Vote
     public $ips_count_vote = null;
 
     /**
-     * _messages to use in links and image
+     * messages to use in links and image
      */
-    private $_messages = array('', 'A Favor', 'En Contra');
+    private $messages = array('', 'A Favor', 'En Contra');
 
     /**
      * Constructor PHP5
@@ -258,10 +258,12 @@ class Vote
         $imgPath = TEMPLATE_USER_URL . "images/utilities/";
         $imageTpl = '<img src="%s%s.png" style="vertical-align:middle;" alt="%s" title="%s" /> ( %d ) ';
 
-        return sprintf($imageTpl,
-            $imgPath, ($i % 2 == 0) ?  "vote-up" : "vote-down",
-            $this->_messages[$i],
-            $this->_messages[$i],
+        return sprintf(
+            $imageTpl,
+            $imgPath,
+            ($i % 2 == 0) ?  "vote-up" : "vote-down",
+            $this->messages[$i],
+            $this->messages[$i],
             ($i % 2 == 1) ? $this->value_pos : $this->value_neg
         );
     }
@@ -294,12 +296,14 @@ LINKTPLDOC;
             $_SERVER['REMOTE_ADDR'],
             $i,
             $votePK,
-            $this->_messages[$i],
+            $this->messages[$i],
             // $votePK, $i,
             $i,
             $votePK,
             ($i % 2 == 0) ? "vote-up" : "vote-down",
-            $this->_messages[$i], ($i % 2 == 1) ? $this->value_pos : $this->value_neg
+            $this->messages[$i],
+            ($i % 2 == 1) ? $this->value_pos : $this->value_neg
         );
     }
 }
+

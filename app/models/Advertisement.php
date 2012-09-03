@@ -758,14 +758,28 @@ class Advertisement extends Content
         return $interstitial;
     }
 
-    /**
-     * Renders the advertisement given some parameteres
-     *
-     * @return string the HTML for this add
-     **/
-    public function render($params, $tpl)
-    {
 
+    /**
+     * Renders the advertisment given a set of parameters
+     *
+     * @return string the final html for the ad
+     **/
+    public function render($params, $tpl = null)
+    {
+        //  if (!isset($tpl)) {
+            $tpl = new Template(TEMPLATE_USER);
+        //}
+
+        $tpl->assign('item', $this);
+        $tpl->assign('cssclass', $params['cssclass']);
+
+        try {
+            $html = $tpl->fetch($params['tpl']);
+        } catch (\Exception $e) {
+            $html = 'Advertisement not available';
+        }
+
+        return $this->title;//$html;
     }
 
     /**

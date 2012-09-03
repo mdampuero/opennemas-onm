@@ -146,8 +146,10 @@ class MenuItems
 
         /* Notice log of this action */
         $logger = Application::getLogger();
-        $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid']
-            .') has executed action Remove  at menu_item Id '.$id);
+        $logger->notice(
+            'User '.$_SESSION['username'].' ('.$_SESSION['userid']
+            .') has executed action Remove  at menu_item Id '.$id
+        );
 
         return true;
     }

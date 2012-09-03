@@ -60,33 +60,34 @@ class Special extends Content
     {
 
         switch ($name) {
-
             case 'uri':
                 if (empty($this->category_name)) {
                     $this->category_name =
                         $this->loadCategoryName($this->pk_content);
                 }
-                $uri =  Uri::generate('special',
+                $uri =  Uri::generate(
+                    'special',
                     array(
                         'id'       => sprintf('%06d', $this->id),
                         'date'     => date('YmdHis', strtotime($this->created)),
                         'category' => $this->category_name,
                         'slug'     => $this->slug,
-                    ));
+                    )
+                );
 
                 return ($uri !== '') ? $uri : $this->permalink;
 
                 break;
-
             case 'slug':
                 return String_Utils::get_title($this->title);
-                break;
 
+                break;
             case 'content_type_name':
-                $contentTypeName = $GLOBALS['application']->conn->
-                    Execute('SELECT * FROM `content_types` '
+                $contentTypeName = $GLOBALS['application']->conn->Execute(
+                    'SELECT * FROM `content_types` '
                     .'WHERE pk_content_type = "'. $this->content_type
-                    .'" LIMIT 1');
+                    .'" LIMIT 1'
+                );
 
                 if (isset($contentTypeName->fields['name'])) {
                     $returnValue = $contentTypeName;
@@ -98,10 +99,9 @@ class Special extends Content
                 return $returnValue;
 
                 break;
-
             default:
-                break;
 
+                break;
         }
 
         parent::__get($name);

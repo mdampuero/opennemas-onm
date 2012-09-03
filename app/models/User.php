@@ -41,7 +41,7 @@ class User
      * @see MethodCacheManager
      * @param int $id User Id
      */
-    public function __construct($id=null)
+    public function __construct($id = null)
     {
         if (!is_null($id)) {
             $this->read($id);
@@ -281,7 +281,7 @@ class User
         return true;
     }
 
-    private function readAccessCategories($id=null)
+    private function readAccessCategories($id = null)
     {
         $id = (!is_null($id))? $id: $this->id;
         $fetchedFromAPC = false;
@@ -340,15 +340,18 @@ class User
     public function login(
         $login,
         $password,
-        $loginToken=null,
-        $loginCaptcha=null
-    )
-    {
+        $loginToken = null,
+        $loginCaptcha = null
+    ) {
         $result = false;
 
         if ($this->isValidEmail($login)) {
-            $result = $this->authGoogleClientLogin($login,
-                $password, $loginToken, $loginCaptcha);
+            $result = $this->authGoogleClientLogin(
+                $login,
+                $password,
+                $loginToken,
+                $loginCaptcha
+            );
         } else {
             $result = $this->authDatabase($login, $password);
         }
@@ -377,7 +380,7 @@ class User
     public function authDatabase($login, $password)
     {
         $sql = 'SELECT * FROM users WHERE login=\''.strval($login).'\'';
-        $rs = $GLOBALS['application']->conn->Execute( $sql );
+        $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
             \Application::logDatabaseError();
@@ -409,7 +412,7 @@ class User
     public function getPwd($login)
     {
         $sql = 'SELECT password FROM users WHERE login=\''.strval($login).'\'';
-        $rs = $GLOBALS['application']->conn->Execute( $sql );
+        $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
             \Application::logDatabaseError();
@@ -523,13 +526,16 @@ class User
 
         usort(
             $categories,
-            function ($a, $b)
-            {
+            function (
+                $a,
+                $b
+            ) {
                 if ($a->posmenu == $b->posmenu) {
                     return 0;
                 }
                 return ($a->posmenu < $b->posmenu) ? -1 : 1;
-            });
+            }
+        );
 
         $ids = array();
         foreach ($categories as $category) {
@@ -539,12 +545,12 @@ class User
         return $ids;
     }
 
-    public function get_users($filter = null, $_order_by = 'ORDER BY 1')
+    public function get_users($filter = null, $orderBy = 'ORDER BY 1')
     {
         $items = array();
         $_where = $this->buildFilter($filter);
 
-        $sql = 'SELECT * FROM `users` ' . $_where . ' ' . $_order_by;
+        $sql = 'SELECT * FROM `users` ' . $_where . ' ' . $orderBy;
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
         if ($rs !== false) {
@@ -673,7 +679,6 @@ class User
         } else {
             $returnValues = $rs->fields['meta_value'];
         }
-
 
         return $returnValues;
     }

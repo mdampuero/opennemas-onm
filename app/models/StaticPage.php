@@ -251,8 +251,10 @@ class StaticPage extends Content
         $titles = array();
         $cm = new ContentManager();
         $pages = $cm->find(
-            'Static_Page', $filter,
-            'ORDER BY created DESC ', 'pk_content, pk_static_page, slug'
+            'Static_Page',
+            $filter,
+            'ORDER BY created DESC ',
+            'pk_content, pk_static_page, slug'
         );
         foreach ($pages as $p) {
             $titles[] = $p->slug;
@@ -261,3 +263,4 @@ class StaticPage extends Content
         return $titles;
     }
 }
+

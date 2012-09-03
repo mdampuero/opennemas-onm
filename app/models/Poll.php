@@ -37,11 +37,12 @@ class Poll extends Content
     {
 
         switch ($name) {
-            case 'uri': {
+            case 'uri':
                 if (empty($this->category_name)) {
                     $this->category_name = $this->loadCategoryName($this->pk_content);
                 }
-                $uri =  Uri::generate('poll',
+                $uri =  Uri::generate(
+                    'poll',
                     array(
                         'id'   => sprintf('%06d', $this->id),
                         'date' => date('YmdHis', strtotime($this->created)),
@@ -53,11 +54,8 @@ class Poll extends Content
                 return ($uri !== '') ? $uri : $this->permalink;
 
                 break;
-            }
-
-            default: {
+            default:
                 break;
-            }
         }
 
         return parent::__get($name);

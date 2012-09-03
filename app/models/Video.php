@@ -7,6 +7,7 @@
  * file that was distributed with this source code.
  */
 use Onm\Message as m;
+
 /**
  * Handles video CRUD actions.
  *
@@ -44,15 +45,16 @@ class Video extends Content
                 break;
             case 'slug':
                 return StringUtils::get_title($this->title);
-                break;
 
+                break;
             case 'content_type_name':
                 return 'Video';
-                break;
 
+                break;
             case 'thumb':
                 return $this->getThumb();
 
+                break;
             default:
                 break;
         }
@@ -182,12 +184,16 @@ class Video extends Content
         $videoInformation = array();
 
         if (empty($file["file_path"])) {
-            throw new Exception(sprintf(
-                _('Seems that the server limits file uploads up to %s Mb. '
-                  .'Try to upload files smaller than that size or '
-                  .'contact with your administrator'),
-                (int) (ini_get('upload_max_filesize'))
-            ));
+            throw new Exception(
+                sprintf(
+                    _(
+                        'Seems that the server limits file uploads up to %s Mb. '
+                        .'Try to upload files smaller than that size or '
+                        .'contact with your administrator'
+                    ),
+                    (int) ini_get('upload_max_filesize')
+                )
+            );
         }
         $convertedVideo = $this->convertVideotoFLV($file, $baseUploadpath);
 
@@ -245,26 +251,30 @@ class Video extends Content
             case 'video/msvideo':
             case 'video/x-msvideo':
                 // Dropped option -s 320x240
-                $shellCommand = escapeshellcmd($ffmpgePath." -i "
-                    .$temporaryVideoPath." -f flv  ".$videoSavePath). " 2>&1";
+                $shellCommand = escapeshellcmd(
+                    $ffmpgePath." -i "
+                    .$temporaryVideoPath." -f flv  ".$videoSavePath
+                ). " 2>&1";
                 exec($shellCommand, $outputExec, $returnExec);
                 unset($outputExec);
                 if ($returnExec !== 0) {
                     throw new \Exception(
-                        _('There was a problem while converting your video. '
-                            .'Please contact with your adminstrator.')
+                        _(
+                            'There was a problem while converting your video. '
+                            .'Please contact with your adminstrator.'
+                        )
                     );
                 };
-                break;
 
+                break;
             case 'video/x-flv':
                 copy($temporaryVideoPath, $videoSavePath);
-                break;
 
+                break;
             default:
-                $message =
-                    sprintf(_('Video format "%s" not supported'), $fileType);
+                $message = sprintf(_('Video format "%s" not supported'), $fileType);
                 throw new \Exception($message);
+
                 break;
         }
 

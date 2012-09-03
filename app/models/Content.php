@@ -86,45 +86,46 @@ class Content
         switch ($name) {
             case 'uri':
                 return $this->getUri();
-                break;
 
+                break;
             case 'slug2':
                 return StringUtils::get_title($this->title);
-                break;
 
+                break;
             case 'content_type_name':
                 return $this->getContentTypeName();
-                break;
 
+                break;
             case 'category_name':
                 return $this->category_name = $this->loadCategoryName($this->id);
-                break;
 
+                break;
             case 'publisher':
                 $user  = new User();
 
                 return $this->publisher = $user->get_user_name($this->fk_publisher);
-                break;
 
+                break;
             case 'last_editor':
                 $user  = new User();
 
                 return $this->last_editor = $user->get_user_name($this->fk_user_last_editor);
-                break;
 
+                break;
             case 'ratings':
                 $rating = new Rating();
 
                 return $this->ratings = $rating->getValue($this->id);
-                break;
 
+                break;
             case 'comments':
                 $comment = new Comment();
 
                 return $this->comments = $comment->count_public_comments($this->id);
-                break;
 
+                break;
             default:
+
                 break;
         }
     }
@@ -903,9 +904,10 @@ class Content
 
         /* Notice log of this action */
         $logger = Application::getLogger();
-        $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid']
-            .') has executed action suggestToHomepage at '
-            .$this->content_type.' Id '.$this->id);
+        $logger->notice(
+            'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed '
+            .'action suggestToHomepage at '.$this->content_type.' Id '.$this->id
+        );
 
         // Set status for it's updated to next event
         $this->in_home = 2;
@@ -1487,8 +1489,9 @@ class Content
         $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
 
         if (property_exists($this, 'pk_article')) {
-            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '',
-                $this->category_name) . '|' . $this->pk_article);
+            $tplManager->delete(
+                preg_replace('/[^a-zA-Z0-9\s]+/', '', $this->category_name) . '|' . $this->pk_article
+            );
 
             // Deleting home cache files
             if (isset($this->in_home) && $this->in_home) {
@@ -1497,13 +1500,14 @@ class Content
                 $tplManager->delete('home|RSS');
             }
 
-            if (isset($this->frontpage) && $this->frontpage) {
-                $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '',
-                    $this->category_name) . '|0');
-                $tplManager->fetch(SITE_URL . 'seccion/' .
-                    $this->category_name);
-                $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '',
-                    $this->category_name) . '|RSS');
+            if (isset($this->frontpage)
+                && $this->frontpage
+            ) {
+                $tplManager->delete(
+                    preg_replace('/[^a-zA-Z0-9\s]+/', '', $this->category_name) . '|0'
+                );
+                $tplManager->fetch(SITE_URL . 'seccion/' .$this->category_name);
+                $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $this->category_name) . '|RSS');
             }
         }
     }
@@ -1519,10 +1523,8 @@ class Content
         if (isset($_REQUEST['category'])) {
             $ccm = ContentCategoryManager::get_instance();
             $categoryName = $ccm->get_name($_REQUEST['category']);
-            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '',
-                $categoryName) . '|RSS');
-            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '',
-                $categoryName) . '|0');
+            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName) . '|RSS');
+            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName) . '|0');
 
             $tplManager->fetch(SITE_URL . '/seccion/' . $categoryName);
         }
@@ -1544,10 +1546,8 @@ class Content
         $output ='';
 
         foreach ($availableCategories as $category) {
-            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '',
-                $category->name) . '|RSS');
-            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '',
-                $category->name) . '|0');
+            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $category->name) . '|RSS');
+            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $category->name) . '|0');
             $message = _("Homepage for category %s cleaned sucessfully.");
             $output .= sprintf($message, $category->name);
         }
@@ -1596,8 +1596,7 @@ class Content
         $sql = 'DELETE FROM content_positions '
              . 'WHERE fk_category=? AND pk_fk_content=?';
 
-        $rs = $GLOBALS['application']->conn->Execute($sql,
-            array($category, $pkContent));
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($category, $pkContent));
 
         if (!$rs) {
             \Application::logDatabaseError();
@@ -1607,10 +1606,10 @@ class Content
             $type = $cm->getContentTypeNameFromId($this->content_type, true);
             /* Notice log of this action */
             $logger = Application::getLogger();
-            $logger->notice('User '
-                .$_SESSION['username'].' ('.$_SESSION['userid'].') has executed'
-                .' action Drop from frontpage at category '.$categoryName
-                .' an '.$type.' Id '.$pkContent);
+            $logger->notice(
+                'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed'
+                .' action Drop from frontpage at category '.$categoryName.' an '.$type.' Id '.$pkContent
+            );
 
             return true;
         }
@@ -1639,10 +1638,10 @@ class Content
             $type = $cm->getContentTypeNameFromId($this->content_type, true);
             /* Notice log of this action */
             $logger = Application::getLogger();
-            $logger->notice('User '
-                .$_SESSION['username'].' ('.$_SESSION['userid']
-                .') has executed '
-                .'action Drop from frontpage '.$type.' with id '.$this->id);
+            $logger->notice(
+                'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed '
+                .'action Drop from frontpage '.$type.' with id '.$this->id
+            );
 
             return true;
         }

@@ -42,7 +42,7 @@ class Album extends Content
      *
      * @param strin $id the id of the album.
      **/
-    public function __construct($id=null)
+    public function __construct($id = null)
     {
         parent::__construct($id);
 
@@ -65,9 +65,9 @@ class Album extends Content
     public function __get($name)
     {
 
-        switch ($name) {
-
-            case 'uri': {
+        switch ($name)
+        {
+            case 'uri':
                 if (empty($this->category_name)) {
                     $this->category_name = $this->loadCategoryName($this->pk_content);
                 }
@@ -84,13 +84,11 @@ class Album extends Content
                 return ($uri !== '') ? $uri : $this->permalink;
 
                 break;
-            }
-            case 'slug': {
+            case 'slug':
                 return StringUtils::get_title($this->title);
-                break;
-            }
 
-            case 'content_type_name': {
+                break;
+            case 'content_type_name':
                 $contentTypeName = $GLOBALS['application']->conn->Execute(
                     'SELECT * FROM `content_types` '
                     .'WHERE pk_content_type = "'. $this->content_type
@@ -107,11 +105,9 @@ class Album extends Content
                 return $returnValue;
 
                 break;
-            }
+            default:
 
-            default: {
                 break;
-            }
         }
 
         parent::__get($name);
@@ -280,7 +276,7 @@ class Album extends Content
      *
      * @return mixed array of array(pk_photo, position, description)
      */
-    public function getAttachedPhotosPaged($albumID, $items_page, $page=1)
+    public function getAttachedPhotosPaged($albumID, $items_page, $page = 1)
     {
 
         if ($albumID == null) {
@@ -385,3 +381,4 @@ class Album extends Content
         return $html;
     }
 }
+

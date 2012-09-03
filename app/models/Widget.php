@@ -55,9 +55,10 @@ class Widget extends Content
         switch ($name) {
             case 'content_type_name':
                 return 'Widget';
-                break;
 
+                break;
             default:
+
                 break;
         }
 
@@ -130,7 +131,8 @@ class Widget extends Content
 
         $sqlSearchWidget = "SELECT * FROM `widgets` WHERE `content`=?";
         $rs = $GLOBALS['application']->conn->Execute(
-            $sqlSearchWidget, $content
+            $sqlSearchWidget,
+            $content
         );
 
         if ($rs === false) {
@@ -284,22 +286,23 @@ class Widget extends Content
         switch ($this->renderlet) {
             case 'html':
                 $content = $this->renderletHTML($params);
-                break;
 
+                break;
             case 'php':
                 $content = $this->renderletPHP($params);
-                break;
 
+                break;
             case 'smarty':
                 $content = $this->renderletSmarty($params);
-                break;
 
+                break;
             case 'intelligentwidget':
                 $content = $this->renderletIntelligentWidget($params);
-                break;
 
+                break;
             default:
                 $content = '';
+
                 break;
         }
 
@@ -340,7 +343,7 @@ class Widget extends Content
         return $output;
     }
 
-    private function renderletIntelligentWidget($params=null)
+    private function renderletIntelligentWidget($params = null)
     {
         $path = realpath(TEMPLATE_USER_PATH . '/tpl' . '/widgets') . '/';
         ini_set('include_path', get_include_path() . PATH_SEPARATOR . $path);
@@ -372,3 +375,4 @@ class Widget extends Content
         return $class->render($params);
     }
 }
+

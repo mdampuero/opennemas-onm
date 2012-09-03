@@ -85,15 +85,16 @@ class Article extends Content
                 );
 
                 return $uri;
-                break;
 
+                break;
             case 'slug2':
                 return StringUtils::get_title($this->title);
-                break;
 
+                break;
             case 'content_type_name':
                 return 'Article';
 
+                break;
             default:
                 break;
         }

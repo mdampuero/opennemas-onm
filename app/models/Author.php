@@ -15,7 +15,6 @@
  **/
 class Author
 {
-
     public $pk_author = null;
     public $name      = null;
     public $fk_user   = null;
@@ -28,9 +27,9 @@ class Author
     public $cache     = null;
 
     // Static members for performance
-    private static $_photos   = null;
+    private static $photos   = null;
 
-    private $_defaultValues = array(
+    private $defaultValues = array(
         'name'      =>'',
         'gender'    =>'',
         'blog'      =>'',
@@ -65,7 +64,7 @@ class Author
      */
     public function create($data)
     {
-        $data = array_merge($this->_defaultValues, $data);
+        $data = array_merge($this->defaultValues, $data);
 
         $sql = "INSERT INTO authors
                 (`name`, `fk_user`, `blog`,`politics`, `condition`,`date_nac`, `params`)
@@ -135,7 +134,7 @@ class Author
      **/
     public function update($data)
     {
-        $data = array_merge($this->_defaultValues, $data);
+        $data = array_merge($this->defaultValues, $data);
 
         $sql = "UPDATE `authors`
                 SET `name`=?, `blog`=?, `politics`=?, `condition`=?, `params`=?
@@ -315,8 +314,12 @@ class Author
      * @param  string $_orderBy, the ORDER BY sql part to sort authors with
      * @return mixed, array of all matched authors
      **/
-    public static function list_authors($filter = null, $_orderBy = 'ORDER BY 1', $page = null, $itemsPerPage = 20)
-    {
+    public static function list_authors(
+        $filter = null,
+        $_orderBy = 'ORDER BY 1',
+        $page = null,
+        $itemsPerPage = 20
+    ) {
 
         $items = array();
         $_where = '1=1';
@@ -353,8 +356,8 @@ class Author
                 $items[$i]->politics   = $rs->fields['politics'];
                 $items[$i]->condition  = $rs->fields['condition'];
                 $items[$i]->params     = unserialize($rs->fields['params']);
-                $num                   = Author::count_author_photos($rs->fields['pk_author']);
-                $items[$i]->num_photos = $num;
+                $num                   = Author::count_authorphotos($rs->fields['pk_author']);
+                $items[$i]->numphotos = $num;
 
                 $rs->MoveNext();
                   $i++;
@@ -372,7 +375,7 @@ class Author
      * @return array multidimensional array with information about
      *               matching authors
      **/
-    public function all_authors($filter = null, $_orderBy = 'ORDER BY 1')
+    public function all_authors($filter = null, $orderBy = 'ORDER BY 1')
     {
         $items = array();
         $_where = '1=1';
@@ -382,7 +385,7 @@ class Author
 
         $sql = 'SELECT authors.pk_author, authors.name
                 FROM authors
-                WHERE '.$_where.' '.$_orderBy;
+                WHERE '.$_where.' '.$orderBy;
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
         $i  = 0;
@@ -410,7 +413,7 @@ class Author
      **/
     public function get_photo($id)
     {
-        if (is_null(self::$_photos)) {
+        if (is_null(self::$photos)) {
             $sql = 'SELECT author_imgs.pk_img, author_imgs.path_img,
                            author_imgs.description
                     FROM author_imgs';
@@ -423,14 +426,14 @@ class Author
                     $photo->path_file   = $rs->fields['path_img'];
                     $photo->description = $rs->fields['description'];
 
-                    self::$_photos[ $rs->fields['pk_img'] ] = $photo;
+                    self::$photos[ $rs->fields['pk_img'] ] = $photo;
                     $rs->MoveNext();
                 }
             }
         }
 
-        if (isset(self::$_photos[$id])) {
-            return self::$_photos[$id];
+        if (isset(self::$photos[$id])) {
+            return self::$photos[$id];
         }
 
         return null;
@@ -443,7 +446,7 @@ class Author
      *
      * @return array list of dummy photo objects
      **/
-    public function get_author_photos($id)
+    public function get_authorphotos($id)
     {
         $sql = 'SELECT *
                 FROM author_imgs WHERE fk_author = ? ORDER BY pk_img ASC';

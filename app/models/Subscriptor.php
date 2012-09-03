@@ -42,7 +42,7 @@ class Subscriptor
 
     private $_tableName = '`pc_users`';
 
-    private static $_instance    = null;
+    private static $_instance = null;
 
     /**
      * Constructor
@@ -50,7 +50,7 @@ class Subscriptor
      * @see Privilege::Privilege
      * @param int $id Privilege Id
      **/
-    public function __construct($id=null)
+    public function __construct($id = null)
     {
         if (!is_null($id)) {
             $this->read($id);
@@ -200,7 +200,7 @@ class Subscriptor
         return $this;
     }
 
-    public function get_users($filter=null, $limit=null, $_order_by='name')
+    public function get_users($filter = null, $limit = null, $_order_by = 'name')
     {
         $items = array();
         $_where = '1=1';
@@ -280,7 +280,7 @@ class Subscriptor
      * @param string    $property
      * @param mixed     $value
     */
-    public function mUpdateProperty($id, $property, $value=null)
+    public function mUpdateProperty($id, $property, $value = null)
     {
         $sql = 'UPDATE ' . $this->_tableName
              . ' SET `' . $property . '`=? WHERE pk_pc_user=?';
@@ -305,7 +305,7 @@ class Subscriptor
         return true;
     }
 
-    public function countUsers($where=null)
+    public function countUsers($where = null)
     {
         $sql = 'SELECT count(*) FROM ' . $this->_tableName;
         if (!is_null($where)) {
@@ -320,7 +320,7 @@ class Subscriptor
         return $rs;
     }
 
-    public function getPager($items_page=40, $total=null)
+    public function getPager($itemsPage = 40, $total = null)
     {
         if (is_null($total)) {
             $total = $this->countUsers();
@@ -329,7 +329,7 @@ class Subscriptor
         // Pager
         $pager_options = array(
             'mode'        => 'Sliding',
-            'perPage'     => $items_page,
+            'perPage'     => $itemsPage,
             'delta'       => 4,
             'clearIfVoid' => true,
             'append'      => false,
@@ -343,5 +343,5 @@ class Subscriptor
 
         return $pager;
     }
-
 }
+

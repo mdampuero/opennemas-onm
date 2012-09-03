@@ -23,7 +23,7 @@ class Book extends Content
     public $editorial  = null;
     public $books_path = null;
 
-    public function __construct($id=null)
+    public function __construct($id = null)
     {
         parent::__construct($id);
 
@@ -41,12 +41,13 @@ class Book extends Content
     {
 
         switch ($name) {
-            case 'uri': {
+            case 'uri':
                 if (empty($this->category_name)) {
                     $this->category_name =
                         $this->loadCategoryName($this->pk_content);
                 }
-                $uri =  Uri::generate('book',
+                $uri =  Uri::generate(
+                    'book',
                     array(
                         'id'       => sprintf('%06d', $this->id),
                         'date'     => date('YmdHis', strtotime($this->created)),
@@ -56,12 +57,11 @@ class Book extends Content
                 );
 
                 return ($uri !== '') ? $uri : $this->permalink;
-                break;
-            }
 
-            default: {
                 break;
-            }
+            default:
+
+                break;
         }
 
         return parent::__get($name);
@@ -208,3 +208,4 @@ class Book extends Content
         }
     }
 }
+

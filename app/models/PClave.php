@@ -31,7 +31,7 @@ class PClave
      *
      * @param int $id
      */
-    public function __construct($id=null)
+    public function __construct($id = null)
     {
         if (!is_null($id)) {
             $this->read($id);
@@ -169,7 +169,7 @@ class PClave
      *
      * @return array Terms
      */
-    public function find($filter=null)
+    public function find($filter = null)
     {
         $sql = 'SELECT * FROM `pclave`';
         if (!is_null($filter)) {
@@ -206,7 +206,10 @@ class PClave
 
         usort(
             $terms,
-            function ($a, $b) {
+            function (
+                $a,
+                $b
+            ) {
                 if (strlen($a->pclave) == strlen($b->pclave)) {
                     return 0;
                 }
@@ -234,3 +237,4 @@ class PClave
         return trim($text);
     }
 }
+

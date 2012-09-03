@@ -46,7 +46,7 @@ class Attachment extends Content
      * @param  integer $id, the id of the Attachment
      * @return null
      **/
-    public function __construct($id=null)
+    public function __construct($id = null)
     {
         $this->content_type = 'attachment';
         parent::__construct($id);
@@ -123,8 +123,11 @@ class Attachment extends Content
         }
 
         if ($data['category']==8) {
-            $GLOBALS['application']->dispatch('onAfterCreateAttach',
-                $this, array('category'=>$data['category']));
+            $GLOBALS['application']->dispatch(
+                'onAfterCreateAttach',
+                $this,
+                array('category' => $data['category'])
+            );
         }
 
         return true;
@@ -399,3 +402,4 @@ class Attachment extends Content
         return $html;
     }
 }
+

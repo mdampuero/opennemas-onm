@@ -88,13 +88,13 @@ class Frontpage extends Content
         $contents = (!isset($data['contents']) || empty($data['contents']))? null: serialize($data['contents']);
         $params = (!isset($data['params']) || empty($data['params']))? null: serialize($data['params']);
         $version = (empty($data['version']))? 0: $data['version'];
-        $promoted = (empty($data['promoted']))? null: intval($data['promoted']);;
-        $day_frontpage = (empty($data['day_frontpage']))? null: intval($data['day_frontpage']);;
+        $promoted = (empty($data['promoted'])) ? null : intval($data['promoted']);
+        $day_frontpage = (empty($data['day_frontpage'])) ? null: intval($data['day_frontpage']);
 
-        $resp = $GLOBALS['application']->conn->
-          GetOne('SELECT pk_frontpage FROM `frontpages` WHERE category = ? AND date= ?',
-                  array($category,$date)
-                );
+        $resp = $GLOBALS['application']->conn->GetOne(
+            'SELECT pk_frontpage FROM `frontpages` WHERE category = ? AND date= ?',
+            array($category,$date)
+        );
 
         if ($resp) {
             $promoted ="1";
@@ -256,7 +256,7 @@ class Frontpage extends Content
      * @return Widget Return instance to chaining method
      */
 
-    public function getFrontpage($date, $category=0, $version=null)
+    public function getFrontpage($date, $category = 0, $version = null)
     {
         // if category = 0 => home
         if ( is_null($category) && is_null($date)) {
@@ -310,5 +310,5 @@ class Frontpage extends Content
 
         return $items;
     }
+}
 
-} //end class
