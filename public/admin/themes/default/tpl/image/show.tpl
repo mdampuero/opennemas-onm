@@ -29,6 +29,7 @@ jQuery(document).ready(function($) {
     $('#formulario').onmValidate({
         'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
     });
+    $('[rel="tooltip"]').tooltip();
 });
 </script>
 {/block}

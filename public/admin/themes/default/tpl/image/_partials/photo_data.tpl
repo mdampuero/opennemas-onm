@@ -89,6 +89,7 @@
             <div style="text-align:center">
                 <div class="input-append">
                     <input type="text" id="address_search_{$photo->id}" value="{$photo->address}" class="input-xxlarge noentersubmit">
+                    <button class="btn" id="geolocate_user_button_{$photo->id}" rel="tooltip" data-original-title="{t}Geolocate photo with my position{/t}"><i class="icon-screenshot"></i></button>
                     <button class="btn" id="geocode_buttom_{$photo->id}"/><i class="icon-search"></i> </button>
                 </div>
                 <input type="hidden" id="address_{$photo->id}" name="address[{$photo->id}]" value="{$photo->address}">
@@ -195,21 +196,7 @@
         });
 
         {if empty($photo->address)}
-        GMaps.geolocate({
-            success: function(position) {
-                map.setCenter(position.coords.latitude, position.coords.longitude);
-                map.setZoom(6);
-            },
-            error: function(error) {
-                // alert('Geolocation failed: '+error.message);
-            },
-            not_supported: function() {
-                // alert("Your browser does not support geolocation");
-            },
-            always: function() {
-                // alert("Geolocated done!");
-            }
-        });
+        geolocate_user();
         {else}
         map.addMarker({
           lat: {$photo->latlong['lat']},
@@ -221,6 +208,11 @@
             e.preventDefault();
             geolocate_photo()
         });
+        $('#geolocate_user_button_{$photo->id}').on('click', function(e,ui){
+            e.preventDefault();
+            geolocate_user()
+        });
+
         $('#address_search_{$photo->id}').on('blur', function(e,ui){
             e.preventDefault();
             geolocate_photo()
@@ -239,6 +231,27 @@
                         });
                     }
                     $('#address_{$photo->id}').val(latlng.lat() + ', '+ latlng.lng());
+                }
+            });
+        }
+        function geolocate_user() {
+            GMaps.geolocate({
+                success: function(position) {
+                    map.removeMarkers();
+                    map.setCenter(position.coords.latitude, position.coords.longitude);
+                    map.addMarker({
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    });
+                },
+                error: function(error) {
+                    // alert('Geolocation failed: '+error.message);
+                },
+                not_supported: function() {
+                    // alert("Your browser does not support geolocation");
+                },
+                always: function() {
+                    // alert("Geolocated done!");
                 }
             });
         }
