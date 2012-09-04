@@ -15,8 +15,9 @@ if ($csrf === $_SESSION['csrf']) {
     }
 
     session_destroy();
-    header ('Location: ' . SITE_URL );
+    header('Location: '.SITE_URL);
 
 } else {
     echo "Are you hijacking my session dude?!";
 }
+

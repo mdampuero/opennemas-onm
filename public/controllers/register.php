@@ -8,6 +8,7 @@
  * file that was distributed with this source code.
  **/
 use Onm\Settings as s;
+
 // Setup app
 require_once '../bootstrap.php';
 require_once 'session_bootstrap.php';
@@ -32,10 +33,14 @@ switch ($action) {
         $configSiteName = s::get('site_name');
 
         $recaptcha_challenge_field = $request->request->filter(
-            'recaptcha_challenge_field', null, FILTER_SANITIZE_STRING
+            'recaptcha_challenge_field',
+            null,
+            FILTER_SANITIZE_STRING
         );
         $recaptcha_response_field = $request->request->filter(
-            'recaptcha_response_field', null, FILTER_SANITIZE_STRING
+            'recaptcha_response_field',
+            null,
+            FILTER_SANITIZE_STRING
         );
 
         // Get reCaptcha validate response
@@ -67,9 +72,11 @@ switch ($action) {
             //Build mail body
             $mailSubject  = utf8_decode("Alta usuario - ".$configSiteName);
             $mailBody = "Estimad@ ". $data['name'] .", \r\n";
-            $mailBody.= "Bienvenido a  ".$configSiteName. ". Para activar su cuenta clica en el siguiente enlace:\r\n";
+            $mailBody.= "Bienvenido a  ".$configSiteName;
+            $mailBody.= "Para activar su cuenta clica en el siguiente enlace:\r\n";
             $mailBody.= SITE_URL."activate/".$data['token']."/\r\n\n";
-            $mailBody.= "Una vez activada, podrás modificar tus datos siempre que quieras en las opciones de usuario\r\n";
+            $mailBody.= "Una vez activada, ";
+            $mailBody.= "podrás modificar tus datos siempre que quieras en las opciones de usuario\r\n";
             $mailBody.= "Gracias por formar parte de la comunidad de ".$configSiteName.".\r\n";
             $mailBody.= "Un saludo,\r\n";
             $mailBody.= "El equipo de ".$configSiteName;
@@ -124,11 +131,16 @@ switch ($action) {
 
                 if ($mail->Send()) {
                     $sentMail = true;
-                    if (!$user->create( $data )) {
-                        $error = 'A ocurrido un erro. Intente completar o formulario con datos válidos.';
-                        $tpl->assign('error', $error);
+                    if (!$user->create($data)) {
+                        $tpl->assign(
+                            'error',
+                            'A ocurrido un erro. Intente completar o formulario con datos válidos.'
+                        );
                     } else {
-                        $tpl->assign('success', 'A sua conta xa está creada.\nComprobe o seu correo para activala.');
+                        $tpl->assign(
+                            'success',
+                            'A sua conta xa está creada.\nComprobe o seu correo para activala.'
+                        );
                     }
                 } else {
                     $sentMail = false;
@@ -139,7 +151,6 @@ switch ($action) {
 
         $tpl->display('login/register.tpl');
         break;
-
     case 'activate':
         // When user confirms registration from email
         $token = $request->query->filter('token', null, FILTER_SANITIZE_STRING);
@@ -147,11 +158,10 @@ switch ($action) {
         $user = new User();
         $userData = $user->getUserByToken($token);
 
-        if($userData){
+        if ($userData) {
             $user->authorize_user($userData['pk_user']);
 
-            if ($user->login($userData['login'], $userData['password'], $userData['token'], $captcha))
-            {
+            if ($user->login($userData['login'], $userData['password'], $userData['token'], $captcha)) {
                 // Increase security by regenerating the id
                 session_regenerate_id();
 
@@ -177,25 +187,26 @@ switch ($action) {
         Application::forward(SITE_URL.'estaticas/subscricion-semanario/');
 
         break;
-
     case 'user_box':
         $tpl->display('login/user_box.tpl');
         break;
-
     case 'recover_pass':
         $tpl->display('login/recover_pass.tpl');
         break;
-
     case 'recover_send_mail':
         //Get config vars
         $configRecaptcha = s::get('recaptcha');
         $configSiteName = s::get('site_name');
 
         $recaptcha_challenge_field = $request->request->filter(
-            'recaptcha_challenge_field', null, FILTER_SANITIZE_STRING
+            'recaptcha_challenge_field',
+            null,
+            FILTER_SANITIZE_STRING
         );
         $recaptcha_response_field = $request->request->filter(
-            'recaptcha_response_field', null, FILTER_SANITIZE_STRING
+            'recaptcha_response_field',
+            null,
+            FILTER_SANITIZE_STRING
         );
 
         // Get reCaptcha validate response
@@ -281,7 +292,6 @@ switch ($action) {
         $tpl->display('login/recover_pass.tpl');
 
         break;
-
     case 'regenerate_pass_check':
         // Get token
         $token = $request->query->filter('token', null, FILTER_SANITIZE_STRING);
@@ -303,7 +313,6 @@ switch ($action) {
         $tpl->display('login/regenerate_pass.tpl');
 
         break;
-
     case 'regenerate_pass':
         // Get token
         $token = $request->query->filter('token', null, FILTER_SANITIZE_STRING);
@@ -322,8 +331,7 @@ switch ($action) {
 
             $user->updateUserPassword($userData['pk_user'], md5($pass));
 
-            if ($user->login($userData['login'], $pass, $token, $captcha))
-            {
+            if ($user->login($userData['login'], $pass, $token, $captcha)) {
                 // Increase security by regenerating the id
                 session_regenerate_id();
 
@@ -354,7 +362,6 @@ switch ($action) {
         $tpl->display('login/regenerate_pass.tpl');
 
         break;
-
     case 'edit_user':
         // Get user id from GET
         $userId = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
@@ -376,7 +383,6 @@ switch ($action) {
         }
 
         break;
-
     case 'save-edit-user':
         // Get variables from GET
         $userId = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
@@ -395,7 +401,7 @@ switch ($action) {
             // Get user data, check token and confirm pass
             $user = new User($userId);
             if ($user->getUserByToken($token) != 0
-                && $data['password'] == $data['cpwd']){
+                && $data['password'] == $data['cpwd']) {
 
                 if ($user->update($data)) {
                     $resp = true;
@@ -417,10 +423,10 @@ switch ($action) {
         $tpl->display('login/register.tpl');
 
         break;
-
     default:
 
         $tpl->display('login/register.tpl');
 
         break;
 }
+

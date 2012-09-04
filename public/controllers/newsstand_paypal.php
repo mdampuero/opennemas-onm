@@ -61,11 +61,12 @@ switch ($action) {
                 list($allcategorys, $subcat, $categoryData) =
                     $ccm->getArraysMenu($category, $contentType);
                 foreach ($allcategorys as $theCategory) {
-                    $portadas = $cm->find_by_category('Kiosko',
+                    $portadas = $cm->find_by_category(
+                        'Kiosko',
                         $theCategory->pk_content_category,
-                        ' `contents`.`available`=1 '.
-                        'AND YEAR(`kioskos`.date)='.$year.'',
-                        'ORDER BY `kioskos`.date DESC ');
+                        ' `contents`.`available`=1 '.'AND YEAR(`kioskos`.date)='.$year.'',
+                        'ORDER BY `kioskos`.date DESC '
+                    );
                     if (!empty($portadas)) {
                         $kiosko[] = array (
                             'category' => $theCategory->title,
@@ -74,7 +75,7 @@ switch ($action) {
                     }
                 }
             }
-        // Order by categories
+            // Order by categories
         } elseif ($order =='sections') {
             $day        = $request->query->filter('day', '1', FILTER_VALIDATE_INT);
             $cache_date = $year.$month.$day;
@@ -92,9 +93,11 @@ switch ($action) {
 
 
                 $date = "$year-$month-$day";
-                $portadas = $cm->findAll('Kiosko',
-                        ' `contents`.`available`=1 AND  `kioskos`.date ="'.$date.'"',
-                        'ORDER BY `kioskos`.date DESC ');
+                $portadas = $cm->findAll(
+                    'Kiosko',
+                    ' `contents`.`available`=1 AND  `kioskos`.date ="'.$date.'"',
+                    'ORDER BY `kioskos`.date DESC '
+                );
 
                 if (!empty($portadas)) {
                     $kiosko[] = array (
@@ -104,7 +107,7 @@ switch ($action) {
                 }
 
             }
-        // Order by simple date
+            // Order by simple date
         } else {
 
             $cache_date = $year.$month;
@@ -119,13 +122,13 @@ switch ($action) {
                 list($allcategorys, $subcat, $categoryData) =
                     $ccm->getArraysMenu($category, $contentType);
                 foreach ($allcategorys as $theCategory) {
-
-                    $portadas = $cm->find_by_category('Kiosko',
+                    $portadas = $cm->find_by_category(
+                        'Kiosko',
                         $theCategory->pk_content_category,
-                        ' `contents`.`available`=1   '.
-                        'AND MONTH(`kioskos`.date)='.$month.' AND'.
+                        ' `contents`.`available`=1 AND MONTH(`kioskos`.date)='.$month.' AND'.
                         ' YEAR(`kioskos`.date)='.$year.'',
-                        'ORDER BY `kioskos`.date DESC ');
+                        'ORDER BY `kioskos`.date DESC '
+                    );
                     if (!empty($portadas)) {
                         $kiosko[] = array (
                             'category' => $theCategory->title,
@@ -133,7 +136,6 @@ switch ($action) {
                         );
                     }
                 }
-
             }
         }
 
@@ -147,8 +149,7 @@ switch ($action) {
             )
         );
 
-    break;
-
+        break;
     case 'read':
 
         $dirtyID = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
@@ -175,10 +176,12 @@ switch ($action) {
             $year        = date('Y', $format_date);
             $cm          = new ContentManager();
 
-            $portadas = $cm->find_by_category('Kiosko',
+            $portadas = $cm->find_by_category(
+                'Kiosko',
                 $epaper->category,
-                ' `contents`.`available`=1   ',
-                'ORDER BY `kioskos`.date DESC  LIMIT 4');
+                ' `contents`.`available`=1 ',
+                'ORDER BY `kioskos`.date DESC  LIMIT 4'
+            );
             $kiosko =array();
             if (!empty($portadas)) {
                 $kiosko[] = array (
@@ -186,18 +189,21 @@ switch ($action) {
                     'portadas' => $portadas
                 );
             }
-            $tpl->assign(array('KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR,
-                 'date' => '1-'.$month.'-'.$year,
-                 'MONTH' =>$month,
-                 'YEAR' => $year
-            ));
+            $tpl->assign(
+                array(
+                    'KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR,
+                    'date' => '1-'.$month.'-'.$year,
+                    'MONTH' =>$month,
+                    'YEAR' => $year
+                )
+            );
 
             $tpl->assign('kiosko', $kiosko);
 
         } else {
             Application::forward301('/portadas_papel/');
         }
-    break;
+        break;
 }
 
 //for widget_newsstand_dates
@@ -211,3 +217,4 @@ require_once 'index_advertisement.php';
 
 // Show in Frontpage
 $tpl->display('newsstand/newsstand.tpl', $cache_id);
+

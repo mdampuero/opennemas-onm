@@ -42,7 +42,10 @@ switch ($action) {
 
                 // Check if user account is activated
                 if ($user->authorize != 1) {
-                    $tpl->assign('message', _('You have to accept your subscription by e-mail first. Please check your inbox.'));
+                    $tpl->assign(
+                        'message',
+                        _('You have to accept your subscription by e-mail first. Please check your inbox.')
+                    );
                 } else {
 
                     // Increase security by regenerating the id
@@ -81,8 +84,7 @@ switch ($action) {
         $_SESSION['csrf'] = $token;
         $tpl->display('login/login_form.tpl');
 
-    break;
-
+        break;
     default:
         $token = md5(uniqid(mt_rand(), true));
         $tpl->assign('token', $token);
@@ -90,3 +92,4 @@ switch ($action) {
         $tpl->display('login/login_form.tpl');
         break;
 }
+
