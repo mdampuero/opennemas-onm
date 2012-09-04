@@ -93,6 +93,8 @@
 
 <div class="wrapper-content">
 
+    {render_messages}
+
     <div class="form-horizontal panel">
         <div class="control-group">
             <label for="title" class="control-label">{t}Title{/t}</label>
@@ -112,7 +114,7 @@
         <div class="control-group">
             <label for="available" class="control-label">{t}Actived{/t}</label>
             <div class="controls">
-                <input type="checkbox" name="content_status" id="available" {if isset($advertisement->available) && $advertisement->available == 1}checked="checked"{/if} {acl isNotAllowed="ADVERTISEMENT_AVAILA"}disabled="disabled"{/acl} />
+                <input type="checkbox" name="content_status" id="available" value="1" {if isset($advertisement->available) && $advertisement->available == 1}checked="checked"{/if} {acl isNotAllowed="ADVERTISEMENT_AVAILA"}disabled="disabled"{/acl} />
 
             </div>
         </div>

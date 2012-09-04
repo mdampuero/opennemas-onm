@@ -36,6 +36,16 @@
     </tr>
     <tr>
         <td colspan="2">
+            <label>{t}Floating ads (for drop them into columns){/t}
+                <input type="radio" name="type_advertisement" value="37" {if isset($advertisement) && $advertisement->type_advertisement == 37}checked="checked" {/if}/>
+            </label>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"><hr /></td>
+    </tr>
+    <tr>
+        <td colspan="2">
             <table>
                 <tr>
                     <td>

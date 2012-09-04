@@ -180,6 +180,7 @@ class AdsController extends Controller
                 'category'           => $firstCategory,
                 'categories'         => implode(',', $categories),
                 'available'          => $request->request->filter('available', 0, FILTER_SANITIZE_STRING),
+                'content_status'          => $request->request->filter('available', 0, FILTER_SANITIZE_STRING),
                 'img1'               => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
                 'overlap'            => $request->request->filter('overlap', '', FILTER_SANITIZE_STRING),
                 'type_medida'        => $request->request->filter('type_medida', '', FILTER_SANITIZE_STRING),
@@ -293,6 +294,7 @@ class AdsController extends Controller
             'metadata'           => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
             'category'           => $firstCategory,
             'categories'         => implode(',', $categories),
+            'available'          => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'content_status'     => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'img1'               => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
             'overlap'            => $request->request->filter('overlap', '', FILTER_SANITIZE_STRING),
@@ -515,16 +517,16 @@ class AdsController extends Controller
         $contentElementsInFrontpage  = $cm->getContentsIdsForHomepageOfCategory($category);
 
         // Fetching opinions
-        $sqlExcludedOpinions = '';
+        $sqlExcludedAds = '';
         if (count($contentElementsInFrontpage) > 0) {
-            $opinionsExcluded    = implode(', ', $contentElementsInFrontpage);
-            $sqlExcludedOpinions = ' AND `pk_advertisement` NOT IN ('.$opinionsExcluded.')';
+            $adsExcluded    = implode(', ', $contentElementsInFrontpage);
+            $sqlExcludedAds = ' AND `pk_advertisement` NOT IN ('.$adsExcluded.')';
         }
 
         list($countAds, $ads) = $cm->getCountAndSlice(
             'Advertisement',
             null,
-            'contents.available=1 AND in_litter != 1'. $sqlExcludedOpinions,
+            'contents.available=1 AND in_litter != 1 AND type_advertisement = 37 '. $sqlExcludedAds,
             'ORDER BY created DESC ',
             $page,
             $itemsPerPage
