@@ -41,7 +41,6 @@ $generator = new \Symfony\Component\Routing\Generator\UrlGenerator($routes, $con
 if (file_exists($configFile)) {
 
     require $configFile;
-    require SITE_LIBS_PATH.'/functions.php';
     require_once 'Application.php';
 
     // Loads one ONM instance from database
