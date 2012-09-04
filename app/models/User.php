@@ -22,9 +22,10 @@ class User
     public $name             = null;
     public $firstname        = null;
     public $lastname         = null;
-    public $address          = null;
-    public $phone            = null;
     public $authorize        = null;
+    public $deposit          = null;
+    public $type             = null;
+    public $token            = null;
     public $id_user_group    = null;
     public $accesscategories = null;
     public $fk_user_group    = null;
@@ -41,7 +42,7 @@ class User
      * @see MethodCacheManager
      * @param int $id User Id
      */
-    public function __construct($id=null)
+    public function __construct($id = null)
     {
         if (!is_null($id)) {
             $this->read($id);
@@ -61,15 +62,20 @@ class User
 
     public function create($data)
     {
+        $data['authorize'] = (!isset($data['authorize']))? 1: $data['authorize'];
+        $data['firstname'] = (!isset($data['firstname']))? '': $data['firstname'];
+        $data['lastname']  = (!isset($data['lastname']))? '': $data['lastname'];
+        $data['id_user_group'] = (!isset($data['id_user_group']))? 'null': $data['id_user_group'];
+
         $sql = "INSERT INTO users (`login`, `password`, `sessionexpire`,
                                       `email`, `name`, `firstname`,
-                                      `lastname`, `address`, `phone`,
+                                      `lastname`, `type`, `token`, `authorize`,
                                       `fk_user_group`)
-                    VALUES (?,?,?,?,?,?,?,?,?,?)";
+                    VALUES (?,?,?,?,?,?,?,?,?,?,?)";
         $values = array(
             $data['login'], md5($data['password']),  $data['sessionexpire'],
             $data['email'], $data['name'], $data['firstname'],
-            $data['lastname'], $data['address'], $data['phone'],
+            $data['lastname'], $data['type'], $data['token'], $data['authorize'],
             $data['id_user_group']
         );
 
@@ -107,8 +113,9 @@ class User
         $this->name             = $rs->fields['name'];
         $this->firstname        = $rs->fields['firstname'];
         $this->lastname         = $rs->fields['lastname'];
-        $this->address          = $rs->fields['address'];
-        $this->phone            = $rs->fields['phone'];
+        $this->deposit          = $rs->fields['deposit'];
+        $this->type             = $rs->fields['type'];
+        $this->token            = $rs->fields['token'];
         $this->authorize        = $rs->fields['authorize'];
         $this->id_user_group    = $rs->fields['fk_user_group'];
         $this->accesscategories = $this->readAccessCategories();
@@ -128,7 +135,7 @@ class User
             $sql = "UPDATE users
                     SET `login`=?, `password`= ?, `sessionexpire`=?,
                         `email`=?, `name`=?, `firstname`=?, `lastname`=?,
-                        `address`=?, `phone`=?, `fk_user_group`=?
+                        `fk_user_group`=?
                     WHERE pk_user=".intval($data['id']);
 
             $values = array(
@@ -142,13 +149,13 @@ class User
             $sql = "UPDATE users
                     SET `login`=?, `sessionexpire`=?, `email`=?,
                         `name`=?, `firstname`=?, `lastname`=?,
-                        `address`=?, `phone`=?, `fk_user_group`=?
+                        `fk_user_group`=?
                     WHERE pk_user=".intval($data['id']);
 
             $values = array(
                 $data['login'], $data['sessionexpire'], $data['email'],
                 $data['name'], $data['firstname'], $data['lastname'],
-                $data['address'], $data['phone'], $data['id_user_group']
+                $data['id_user_group']
             );
         }
 
@@ -252,7 +259,7 @@ class User
         return true;
     }
 
-    private function readAccessCategories($id=null)
+    private function readAccessCategories($id = null)
     {
         $id = (!is_null($id))? $id: $this->id;
         $fetchedFromAPC = false;
@@ -311,14 +318,13 @@ class User
     public function login(
         $login,
         $password,
-        $loginToken=null,
-        $loginCaptcha=null
+        $loginToken = null,
+        $loginCaptcha = null
     ) {
         $result = false;
 
         if ($this->isValidEmail($login)) {
-            $result = $this->authGoogleClientLogin($login,
-                $password, $loginToken, $loginCaptcha);
+            $result = $this->authGoogleClientLogin($login, $password, $loginToken, $loginCaptcha);
         } else {
             $result = $this->authDatabase($login, $password);
         }
@@ -347,7 +353,7 @@ class User
     public function authDatabase($login, $password)
     {
         $sql = 'SELECT * FROM users WHERE login=\''.strval($login).'\'';
-        $rs = $GLOBALS['application']->conn->Execute( $sql );
+        $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
             \Application::logDatabaseError();
@@ -359,6 +365,11 @@ class User
         if ($this->password === md5($password)) {
             // Set access categories
             $this->accesscategories = $this->readAccessCategories();
+            $this->authMethod = 'database';
+
+            return true;
+        } elseif ($this->password === $password) {
+            // Frontend login from mail activation
             $this->authMethod = 'database';
 
             return true;
@@ -382,18 +393,22 @@ class User
     public function authGoogleClientLogin(
         $email,
         $passwd,
-        $loginToken=null,
-        $loginCaptcha=null
-    )
-    {
+        $loginToken = null,
+        $loginCaptcha = null
+    ) {
         require_once 'Zend/Loader.php';
         Zend_Loader::loadClass('Zend_Gdata_ClientLogin');
         Zend_Loader::loadClass('Zend_Gdata');
 
         try {
             $client = Zend_Gdata_ClientLogin::getHttpClient(
-                $email, $passwd, 'xapi', null, 'Zend-ZendFramework',
-                $loginToken, $loginCaptcha
+                $email,
+                $passwd,
+                'xapi',
+                null,
+                'Zend-ZendFramework',
+                $loginToken,
+                $loginCaptcha
             );
 
             //$_SESSION['logintoken'] = $client->getAuthSubToken();
@@ -438,7 +453,7 @@ class User
     public function getPwd($login)
     {
         $sql = 'SELECT password FROM users WHERE login=\''.strval($login).'\'';
-        $rs = $GLOBALS['application']->conn->Execute( $sql );
+        $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
             \Application::logDatabaseError();
@@ -480,18 +495,19 @@ class User
     public function set_values($data)
     {
         if (!empty($data)) {
-            $this->id           = $data['pk_user'];
-            $this->login        = $data['login'];
-            $this->password     = $data['password'];
-            $this->sessionexpire= $data['sessionexpire'];
-            $this->email        = $data['email'];
-            $this->name         = $data['name'];
-            $this->firstname    = $data['firstname'];
-            $this->lastname     = $data['lastname'];
-            $this->address      = $data['address'];
-            $this->phone        = $data['phone'];
-            $this->authorize    = $data['authorize'];
-            $this->fk_user_group= $data['fk_user_group'];
+            $this->id            = $data['pk_user'];
+            $this->login         = $data['login'];
+            $this->password      = $data['password'];
+            $this->sessionexpire = $data['sessionexpire'];
+            $this->email         = $data['email'];
+            $this->name          = $data['name'];
+            $this->firstname     = $data['firstname'];
+            $this->lastname      = $data['lastname'];
+            $this->deposit       = $data['deposit'];
+            $this->type          = $data['type'];
+            $this->token         = $data['token'];
+            $this->authorize     = $data['authorize'];
+            $this->fk_user_group = $data['fk_user_group'];
 
             if (isset($data['ids_category'])) {
                 $this->accesscategories =
@@ -544,7 +560,7 @@ class User
         return null;
     }
 
-    public function getAccessCategoryIds($id=null)
+    public function getAccessCategoryIds($id = null)
     {
         if ( empty($this->accesscategories) ) {
             $this->accesscategories = $this->readAccessCategories($id);
@@ -569,14 +585,7 @@ class User
         return $ids;
     }
 
-    public function users_online()
-    {
-        $sql = 'SELECT COUNT (*) FROM users WHERE online=1';
-
-        return( $GLOBALS['application']->conn->Execute($sql));
-    }
-
-    public function get_users($filter=null, $_order_by='ORDER BY 1')
+    public function get_users($filter = null, $_order_by = 'ORDER BY 1')
     {
         $items = array();
         $_where = $this->buildFilter($filter);
@@ -683,7 +692,7 @@ class User
     }
 
     /**
-     * Functions that manages the state of an user Enabled=1/Disabled=0
+     * Sets an user state to disabled/not authorized
      *
      * @param  type $id
      * @return type
@@ -695,10 +704,16 @@ class User
         if ($GLOBALS['application']->conn->Execute($sql) === false) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
     }
 
+    /**
+     * Sets an users state to enabled/authorized/activated
+     *
+     * @param  type $id
+     * @return type
+     */
     public function authorize_user($id)
     {
         $sql = "UPDATE users SET `authorize`=1 WHERE pk_user=".intval($id);
@@ -706,7 +721,108 @@ class User
         if ($GLOBALS['application']->conn->Execute($sql) === false) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
     }
+
+    /**
+     * Checks if an email is already in use by frontend users
+     *
+     * @param  email $email
+     * @return bool if is in use this email
+     */
+    public function checkIfExistsFrontUserEmail($email)
+    {
+        $sql = 'SELECT count(*) AS num '
+            . 'FROM `users` WHERE email = "'.$email.'" AND type = 1';
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+
+        if (!$rs) {
+            \Application::logDatabaseError();
+
+            return;
+        }
+
+        return ($rs->fields['num'] > 0);
+    }
+
+    /**
+     * Checks if an user name (login) is already in use by frontend users
+     *
+     * @param  $userName The user name to log in
+     * @return bool if is in use this user name (login)
+     */
+    public function checkIfExistsFrontUserName($userName)
+    {
+        $sql = 'SELECT count(*) AS num '
+            . 'FROM `users` WHERE login = "'.$userName.'" AND type = 1';
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+
+        if (!$rs) {
+            \Application::logDatabaseError();
+
+            return;
+        }
+
+        return ($rs->fields['num'] > 0);
+    }
+
+    /**
+     * Check if the token for registration is same user token and get user data
+     *
+     * @return user if exists false otherwise
+     **/
+    public function getUserByToken($token)
+    {
+        $sql   = 'SELECT count(*) FROM users WHERE token=?';
+        $rs = $GLOBALS['application']->conn->GetOne($sql, $token);
+
+        if ($rs === false) {
+            return 0;
+        } elseif ($rs != 1) {
+            return 0;
+        }
+
+        $sql2   = 'SELECT * FROM users WHERE token=?';
+        $rs2 = $GLOBALS['application']->conn->Execute($sql2, $token);
+
+        return $rs2->fields;
+    }
+
+    /**
+     * Generate new token and update user with it
+     *
+     * @return true|false
+     **/
+    public function updateUserToken($id, $token)
+    {
+        $sql = "UPDATE users SET `token`= '".$token."' WHERE pk_user=".intval($id);
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+
+        if ($rs === false) {
+            \Application::logDatabaseError();
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Update users password
+     *
+     * @return true|false
+     **/
+    public function updateUserPassword($id, $pass)
+    {
+        $sql = "UPDATE users SET `password`= '".$pass."' WHERE pk_user=".intval($id);
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+
+        if ($rs === false) {
+            \Application::logDatabaseError();
+            return false;
+        }
+
+        return true;
+    }
 }
+

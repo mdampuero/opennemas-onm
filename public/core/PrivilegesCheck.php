@@ -132,7 +132,7 @@ class PrivilegesCheck
         }
     }
 
-    private static function checkSessionExpireTime()
+    public static function checkSessionExpireTime()
     {
         if (isset($_SESSION)
             && array_key_exists('expire', $_SESSION)
@@ -148,5 +148,5 @@ class PrivilegesCheck
 
         return false;
     }
-
 }
+

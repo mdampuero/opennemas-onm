@@ -72,7 +72,7 @@ class SessionManager implements ArrayAccess
      *
      * @param int $lifetime the time in seconds that the sessions will be valid.
      **/
-    public function bootstrap($lifetime=null)
+    public function bootstrap($lifetime = null)
     {
         // Save the actual lifetime for this session in the session manager
         if (is_null($lifetime)) {
@@ -188,6 +188,7 @@ class SessionManager implements ArrayAccess
                     $session =
                         SessionManager::unserializeSession($contents);
 
+
                     if (isset($session['userid'])) {
                         $sessions[] = array(
                             'userid'     => $session['userid'],
@@ -196,7 +197,7 @@ class SessionManager implements ArrayAccess
                             'expire'     => $session['expire'],
                             'authMethod' => $session['authMethod'],
                         );
-                   }
+                    }
 
                 } else {
                     @unlink($sessionDirectory.'/'.$file);
@@ -278,6 +279,7 @@ class SessionManager implements ArrayAccess
         foreach (glob($sessionDir."/*") as $file) {
             $contents = file_get_contents($file);
             $sessionContents = SessionManager::unserializeSession($contents);
+
             $time = time();
             if ($compareTime >= filemtime($file)
                 || (is_array($sessionContents)
@@ -292,4 +294,35 @@ class SessionManager implements ArrayAccess
         $GLOBALS['application']->logger->debug("Expired session files deleted. {$count}");
     }
 
+    /**
+     * Deletes all empty session files from instance tmp folder
+     *
+     * This function deletes all the empty session files from the instance tmp
+     * folder. A session file is marked as expired if it has a modification time
+     * greater than 72 hours.
+     * @return void
+     **/
+    public function cleanEmptySessionFiles()
+    {
+        $sessionDir = $this->sessionDirectory;  // your sessions directory
+        $count = 0;
+
+        foreach (glob($sessionDir."/*") as $file) {
+
+
+            $contents = file_get_contents($file);
+            if (empty($contents)) {
+                @unlink($file);
+                $count ++;
+            } else {
+                $sessionContents = SessionManager::unserializeSession($contents);
+                if (isset($sessionContents['csrf']) && !isset($sessionContents['userid'])) {
+                    @unlink($file);
+                    $count ++;
+                }
+            }
+        }
+        $GLOBALS['application']->logger->debug("Empty session files deleted. {$count}");
+    }
 }
+

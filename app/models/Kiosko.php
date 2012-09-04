@@ -16,17 +16,18 @@ use Onm\Message as m;
  **/
 class Kiosko extends Content
 {
-    public $pk_kiosko  = null;
-    public $name  = null;
-    public $path  = null;
-    public $date  = null;
-    public $favorite  = 0;
-    public $kiosko_path =null;
+    public $pk_kiosko   = null;
+    public $name        = null;
+    public $path        = null;
+    public $date        = null;
+    public $favorite    = 0;
+    public $price       = 0;
+    public $kiosko_path = null;
 
     /**
       * Constructor PHP5
     */
-    public function __construct($id=null)
+    public function __construct($id = null)
     {
         parent::__construct($id);
 
@@ -45,6 +46,7 @@ class Kiosko extends Content
         $this->name=$data['name'];
         $this->path=$data['path'];
         $this->date=$data['date'];
+        $this->date=$data['price'];
 
         $this->category=$data['category'];
         $this->available=$data['available'];
@@ -57,16 +59,20 @@ class Kiosko extends Content
             m::add(_("There's other paper in this date & this category."));
         }
 
+        if (!isset($data['price'])) {
+            $data['price'] = 0;
+        }
+
         parent::create($data);
 
-        $sql  = "INSERT INTO kioskos (`pk_kiosko`, `name`, `path`, `date` ) "
-                ." VALUES (?,?,?,?)";
+        $sql  = "INSERT INTO kioskos (`pk_kiosko`, `name`, `path`, `date`, `price` ) "
+                ." VALUES (?,?,?,?, ?)";
 
         $this->createThumb($data['name'], $data['path']);
 
         $values = array(
             $this->id, $data['name'], $data['path'],
-            $data['date']
+            $data['date'], $data['price']
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
@@ -82,7 +88,7 @@ class Kiosko extends Content
     {
         parent::read($id);
 
-        $sql = 'SELECT pk_kiosko, name, path, date FROM kioskos WHERE pk_kiosko=?';
+        $sql = 'SELECT pk_kiosko, name, path, date, price FROM kioskos WHERE pk_kiosko=?';
 
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
         if (!$rs) {
@@ -103,12 +109,13 @@ class Kiosko extends Content
 
         $GLOBALS['application']->dispatch('onBeforeUpdate', $this);
 
+
         parent::update($data);
 
-        $sql  = "UPDATE kioskos SET `date`=?"
+        $sql  = "UPDATE kioskos SET `date`=?, `price`=?"
                 ." WHERE pk_kiosko=?";
 
-        $values = array($data['date'],  $data['id']);
+        $values = array($data['date'], (float)$data['price'], $data['id']);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             Application::logDatabaseError();
@@ -228,5 +235,5 @@ class Kiosko extends Content
 
         return $items;
     }
-
 }
+

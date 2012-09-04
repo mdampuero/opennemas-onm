@@ -18,25 +18,19 @@
 class Subscriptor
 {
     public $id        = null;
-
     public $email     = null;
     public $name      = null;
     public $firstname = null;
     public $lastname  = null;
-
+    public $status = null;
     /**
      * status=0 - (mail se le envio pero aun no le dio al link del correo)
-     * status=1 - (tas recibir el mail, el usuario ha clicado en
-     *             el link y se ha aceptado)
+     * status=1 - (tras recibir el mail, el usuario ha clicado en el link y se ha aceptado)
      * status=2 - (El administrador ha aceptado la solicitud)
      * status=3 - (El administrador ha deshabilitado el usuario)
      **/
-    public $status = null;
-
-    /**
-     * Flag to check if user will receive the newsletter
-     **/
     public $subscription = null;
+    public $token = null;
 
     public $_errors = array();
 
@@ -50,7 +44,7 @@ class Subscriptor
      * @see Privilege::Privilege
      * @param int $id Privilege Id
      **/
-    public function __construct($id=null)
+    public function __construct($id = null)
     {
         if (!is_null($id)) {
             $this->read($id);
@@ -75,20 +69,18 @@ class Subscriptor
         $data['status'] = (!isset($data['status']))? 0: $data['status'];
 
         // WARNING!!! By default, subscription=1
-        $data['subscription'] =
-            (isset($data['subscription']))? $data['subscription']: 1;
-
+        $data['subscription'] = (isset($data['subscription']))? $data['subscription']: 1;
         // By default first and last name are ""
         $data['firstname'] = (isset($data['firstname']))? $data['firstname']: "";
         $data['lastname'] = (isset($data['lastname']))? $data['lastname']: "";
 
         $sql = 'INSERT INTO ' . $this->_tableName . ' (
                   `email`, `name`, `firstname`, `lastname`,
-                 `status`, `subscription`) VALUES
-                ( ?,?,?,?, ?,?)';
-        $values = array( $data['email'],
-                         $data['name'], $data['firstname'],$data['lastname'],
-                         $data['status'], $data['subscription'] );
+                 `status`, `subscription`, `token`) VALUES
+                ( ?,?,?,?,?,?,?)';
+        $values = array( $data['email'], $data['name'], $data['firstname'],
+                         $data['lastname'], $data['status'], $data['subscription'],
+                         $data['token'] );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
@@ -201,7 +193,7 @@ class Subscriptor
         return $this;
     }
 
-    public function get_users($filter=null, $limit=null, $_order_by='name')
+    public function get_users($filter = null, $limit = null, $_order_by = 'name')
     {
         $items = array();
         $_where = '1=1';
@@ -279,7 +271,7 @@ class Subscriptor
      * @param string    $property
      * @param mixed     $value
     */
-    public function mUpdateProperty($id, $property, $value=null)
+    public function mUpdateProperty($id, $property, $value = null)
     {
         $sql = 'UPDATE ' . $this->_tableName
              . ' SET `' . $property . '`=? WHERE pk_pc_user=?';
@@ -304,7 +296,7 @@ class Subscriptor
         return true;
     }
 
-    public function countUsers($where=null)
+    public function countUsers($where = null)
     {
         $sql = 'SELECT count(*) FROM ' . $this->_tableName;
         if (!is_null($where)) {
@@ -319,7 +311,7 @@ class Subscriptor
         return $rs;
     }
 
-    public function getPager($items_page=40, $total=null)
+    public function getPager($items_page = 40, $total = null)
     {
         if (is_null($total)) {
             $total = $this->countUsers();
@@ -342,5 +334,5 @@ class Subscriptor
 
         return $pager;
     }
-
 }
+

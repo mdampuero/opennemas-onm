@@ -58,7 +58,7 @@ class Content
      *
      * @param string $id the content id to initilize.
      **/
-    public function __construct($id=null)
+    public function __construct($id = null)
     {
         $this->cache = new MethodCacheManager($this, array('ttl' => 30));
 
@@ -80,49 +80,42 @@ class Content
             case 'uri':
                 return $this->getUri();
                 break;
-
             case 'slug2':
 
                 return StringUtils::get_title($this->title);
                 break;
-
             case 'content_type_name':
+
                 return $this->getContentTypeName();
                 break;
-
             case 'category_name':
 
                 return $this->category_name =
                     $this->loadCategoryName($this->id);
                 break;
-
             case 'publisher':
                 $user  = new User();
 
                 return $this->publisher =
                     $user->get_user_name($this->fk_publisher);
                 break;
-
             case 'last_editor':
                 $user  = new User();
 
                 return $this->last_editor =
                     $user->get_user_name($this->fk_user_last_editor);
                 break;
-
             case 'ratings':
                 $rating = new Rating();
 
                 return $this->ratings = $rating->getValue($this->id);
                 break;
-
             case 'comments':
                 $comment = new Comment();
 
                 return $this->comments =
                     $comment->count_public_comments($this->id);
                 break;
-
             default:
                 break;
         }
@@ -139,13 +132,15 @@ class Content
             $this->category_name =
                 $this->loadCategoryName($this->pk_content);
         }
-        $uri =  Uri::generate(strtolower($this->content_type_name),
+        $uri =  Uri::generate(
+            strtolower($this->content_type_name),
             array(
                 'id'       => sprintf('%06d', $this->id),
                 'date'     => date('YmdHis', strtotime($this->created)),
                 'category' => $this->category_name,
                 'slug'     => $this->slug2,
-            ));
+            )
+        );
 
         return ($uri !== '') ? $uri : $this->permalink;
     }
@@ -406,7 +401,7 @@ class Content
             $data['available'], $data['content_status'],
             $data['placeholder'],$data['home_placeholder'],
             $data['fk_user_last_editor'], $data['slug'],
-            $this->category_name, $data['params'], $data['id']
+            $catName, $data['params'], $data['id']
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
@@ -573,7 +568,7 @@ class Content
     }
 
     //Cambia available y estatus, paso de pendientes a disponibles y viceversa.
-    public function set_available($status,$last_editor)
+    public function set_available($status, $last_editor)
     {
         $GLOBALS['application']->dispatch('onBeforeAvailable', $this);
 
@@ -895,9 +890,11 @@ class Content
 
         /* Notice log of this action */
         $logger = Application::getLogger();
-        $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid']
+        $logger->notice(
+            'User '.$_SESSION['username'].' ('.$_SESSION['userid']
             .') has executed action suggestToHomepage at '
-            .$this->content_type.' Id '.$this->id);
+            .$this->content_type.' Id '.$this->id
+        );
 
         // Set status for it's updated to next event
         $this->in_home = 2;
@@ -1062,7 +1059,7 @@ class Content
      *
      * @return boolean
      **/
-    public static function isInTime2($starttime=null, $endtime=null, $time=null)
+    public static function isInTime2($starttime = null, $endtime = null, $time = null)
     {
 
         $start = strtotime($starttime);
@@ -1362,7 +1359,7 @@ class Content
         return false;
     }
 
-    public static function setNumViews($id=null)
+    public static function setNumViews($id = null)
     {
 
         if (!array_key_exists('HTTP_USER_AGENT', $_SERVER)
@@ -1498,8 +1495,10 @@ class Content
         $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
 
         if (property_exists($this, 'pk_article')) {
-            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '',
-                $this->category_name) . '|' . $this->pk_article);
+            $tplManager->delete(
+                preg_replace('/[^a-zA-Z0-9\s]+/', '', $this->category_name)
+                . '|' . $this->pk_article
+            );
 
             // Deleting home cache files
             if (isset($this->in_home) && $this->in_home) {
@@ -1509,12 +1508,13 @@ class Content
             }
 
             if (isset($this->frontpage) && $this->frontpage) {
-                $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '',
-                    $this->category_name) . '|0');
-                $tplManager->fetch(SITE_URL . 'seccion/' .
-                    $this->category_name);
-                $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '',
-                    $this->category_name) . '|RSS');
+                $tplManager->delete(
+                    preg_replace('/[^a-zA-Z0-9\s]+/', '', $this->category_name).'|0'
+                );
+                $tplManager->fetch(SITE_URL.'seccion/'.$this->category_name);
+                $tplManager->delete(
+                    preg_replace('/[^a-zA-Z0-9\s]+/', '', $this->category_name).'|RSS'
+                );
             }
         }
     }
@@ -1530,10 +1530,12 @@ class Content
         if (isset($_REQUEST['category'])) {
             $ccm = ContentCategoryManager::get_instance();
             $categoryName = $ccm->get_name($_REQUEST['category']);
-            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '',
-                $categoryName) . '|RSS');
-            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '',
-                $categoryName) . '|0');
+            $tplManager->delete(
+                preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName) . '|RSS'
+            );
+            $tplManager->delete(
+                preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName) . '|0'
+            );
 
             $tplManager->fetch(SITE_URL . '/seccion/' . $categoryName);
         }
@@ -1555,10 +1557,12 @@ class Content
         $output ='';
 
         foreach ($availableCategories as $category) {
-            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '',
-                $category->name) . '|RSS');
-            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '',
-                $category->name) . '|0');
+            $tplManager->delete(
+                preg_replace('/[^a-zA-Z0-9\s]+/', '', $category->name) . '|RSS'
+            );
+            $tplManager->delete(
+                preg_replace('/[^a-zA-Z0-9\s]+/', '', $category->name) . '|0'
+            );
             $message = _("Homepage for category %s cleaned sucessfully.");
             $output .= sprintf($message, $category->name);
         }
@@ -1607,8 +1611,7 @@ class Content
         $sql = 'DELETE FROM content_positions '
              . 'WHERE fk_category=? AND pk_fk_content=?';
 
-        $rs = $GLOBALS['application']->conn->Execute($sql,
-            array($category, $pkContent));
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($category, $pkContent));
 
         if (!$rs) {
             Application::logDatabaseError();
@@ -1618,10 +1621,11 @@ class Content
             $type = $cm->getContentTypeNameFromId($this->content_type, true);
             /* Notice log of this action */
             $logger = Application::getLogger();
-            $logger->notice('User '
-                .$_SESSION['username'].' ('.$_SESSION['userid'].') has executed'
+            $logger->notice(
+                'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed'
                 .' action Drop from frontpage at category '.$categoryName
-                .' an '.$type.' Id '.$pkContent);
+                .' an '.$type.' Id '.$pkContent
+            );
 
             return true;
         }
@@ -1650,10 +1654,10 @@ class Content
             $type = $cm->getContentTypeNameFromId($this->content_type, true);
             /* Notice log of this action */
             $logger = Application::getLogger();
-            $logger->notice('User '
-                .$_SESSION['username'].' ('.$_SESSION['userid']
-                .') has executed '
-                .'action Drop from frontpage '.$type.' with id '.$this->id);
+            $logger->notice(
+                'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed '
+                .'action Drop from frontpage '.$type.' with id '.$this->id
+            );
 
             return true;
         }
@@ -1903,7 +1907,7 @@ class Content
      * Loads all the related contents for this content
      *
      **/
-    public function loadRelatedContents($category_name='')
+    public function loadRelatedContents($category_name = '')
     {
         $relationsHandler  = new RelatedContent();
         $ccm = new ContentCategoryManager();
@@ -2011,3 +2015,4 @@ class Content
         return ($rs != false);
     }
 }
+
