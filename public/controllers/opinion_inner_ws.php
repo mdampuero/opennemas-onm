@@ -212,7 +212,7 @@ switch($action) {
         }
 
         // Send opinion to friend
-        require(SITE_LIBS_PATH."/phpmailer/class.phpmailer.php");
+        require_once SITE_VENDOR_PATH."/phpmailer/class.phpmailer.php";
 
         $tplMail = new Template(TEMPLATE_USER);
 

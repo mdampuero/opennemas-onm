@@ -10,7 +10,7 @@
 use Onm\Settings as s;
 // Setup app
 require_once '../bootstrap.php';
-require_once '../libs/phpmailer/class.phpmailer.php';
+require_once SITE_VENDOR_PATH."/phpmailer/class.phpmailer.php";
 require_once 'recaptchalib.php';
 
 // Setup view

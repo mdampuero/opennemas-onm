@@ -93,7 +93,7 @@ class NewsletterManager
      */
     public function sendToUser($mailbox, $htmlcontent, $params)
     {
-        include_once SITE_LIBS_PATH.'phpmailer/class.phpmailer.php';
+        require_once SITE_VENDOR_PATH."/phpmailer/class.phpmailer.php";
 
         $mail = new PHPMailer();
         $mail->SetLanguage('es');
