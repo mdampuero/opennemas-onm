@@ -49,22 +49,22 @@ compiletranslations-backend:
 extracttrans:
 	@echo "Extracting translations";
 	@xgettext public/controllers/* \
-		  -o public/locale/onmfront.pot --from-code=UTF-8
+		  -o app/Frontend/Resources/locale/onmfront.pot --from-code=UTF-8
 
 updatepofiles:
 	@echo "Updating translations";
 	@for i in $(LINGUAS); do \
 		echo " - $$i";	\
-		msgmerge -U "public/locale/$$i/LC_MESSAGES/messages.po" \
-			'public/locale/onmfront.pot'; \
+		msgmerge -U "app/Frontend/Resources/locale/$$i/LC_MESSAGES/messages.po" \
+			'app/Frontend/Resources/locale/onmfront.pot'; \
 	done
 
 compiletranslations:
 	@echo "Compiling translations";
 	@for i in $(LINGUAS); do \
 		echo " - $$i: " && \
-		msgfmt -vf "public/locale/$$i/LC_MESSAGES/messages.po" \
-			-o "public/locale/$$i/LC_MESSAGES/messages.mo"; \
+		msgfmt -vf "app/Frontend/Resources/locale/$$i/LC_MESSAGES/messages.po" \
+			-o "app/Frontend/Resources/locale/$$i/LC_MESSAGES/messages.mo"; \
 	done
 
 clean: cleancache cleaninstancefiles cleanlogs

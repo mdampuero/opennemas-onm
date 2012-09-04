@@ -136,7 +136,7 @@ class Application
             $locale = self::$language.".UTF-8";
             $domain = 'messages';
 
-            $localeDir = SITE_PATH.DS.'locale'.DS;
+            $localeDir = realpath(APP_PATH.'/Frontend/Resources/locale/');
 
             if (isset($_GET["locale"])) {
                 $locale = $_GET["locale"].'.UTF-8';
