@@ -20,10 +20,10 @@ all: l10n
 l10n: extracttrans updatepofiles compiletranslations extracttrans-backend updatepofiles-backend compiletranslations-backend
 
 extracttrans-backend:
-	@echo "Extracting translations";
+	@echo "Extracting backend translations";
 	@tsmarty2c $(TPL_FOLDER) > app/Backend/Resources/locale/extracted_strings.c
-	@xgettext public/admin/controllers/**/* \
-	        app/Backend/Resources/Menu.php public/core/*.php \
+	@xgettext app/Backend/Controllers/* \
+	        app/Backend/Resources/Menu.php vendor/core/*.php \
         	vendor/Onm/**/**/*.php \
 	        app/models/*.php \
         	public/admin/themes/default/**/*.php \
@@ -31,7 +31,7 @@ extracttrans-backend:
 		  -o app/Backend/Resources/locale/onmadmin.pot --from-code=UTF-8
 
 updatepofiles-backend:
-	@echo "Updating translations";
+	@echo "Updating backend translations";
 	@for i in $(LINGUAS); do \
 		echo " - $$i";	\
 		msgmerge -U "app/Backend/Resources/locale/$$i/LC_MESSAGES/messages.po" \
@@ -39,7 +39,7 @@ updatepofiles-backend:
 	done
 
 compiletranslations-backend:
-	@echo "Compiling translations";
+	@echo "Compiling backend translations";
 	@for i in $(LINGUAS); do \
 		echo " - $$i: " && \
 		msgfmt -vf "app/Backend/Resources/locale/$$i/LC_MESSAGES/messages.po" \
