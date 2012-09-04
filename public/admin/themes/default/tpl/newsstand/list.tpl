@@ -84,16 +84,17 @@
         <thead>
             <tr>
                 <th style="width:15px;"><input type="checkbox" id="toggleallcheckbox"></th>
-                <th align="center" style="width:100px;">{t}Cover{/t}</th>
-                <th align="center">{t}Title{/t}</th>
-                {if $category=='widget' || $category=='all'}<th style="width:65px;" class="center">{t}Section{/t}</th>{/if}
-                <th align="center" style="width:90px;">{t}Date{/t}</th>
-                <th align="center" style="width:10px;">{t}Publisher{/t}</th>
-                <th align="center" style="width:90px;">{t}Last editor{/t}</th>
-                <th align="center" style="width:10px;">{t}Published{/t}</th>
-                {if $category!='widget' && $category!='all'} <th class="center" style="width:35px;">{t}Favorite{/t}</th>{/if}
-                <th align="center" style="width:10px;">{t}Home{/t}</th>
-                <th align="center" style="width:50px;">{t}Actions{/t}</th>
+                <th class="center" style="width:100px;">{t}Cover{/t}</th>
+                <th class="center">{t}Title{/t}</th>
+                {if $category=='favorite' || $category=='all'}<th style="width:65px;" class="center">{t}Section{/t}</th>{/if}
+                <th style="width:50px;" class="center">{t}Price{/t}</th>
+                <th class="center" style="width:90px;">{t}Date{/t}</th>
+<!--                 <th class="center" style="width:10px;">{t}Publisher{/t}</th>
+                <th class="center" style="width:90px;">{t}Last editor{/t}</th> -->
+                <th class="center" style="width:10px;">{t}Published{/t}</th>
+                {if $category!='favorite' && $category!='all'} <th class="center" style="width:35px;">{t}Favorite{/t}</th>{/if}
+                <th class="center" style="width:10px;">{t}Home{/t}</th>
+                <th class="center" style="width:50px;">{t}Actions{/t}</th>
             </tr>
         </thead>
         {else}
@@ -113,28 +114,31 @@
                     <input type="checkbox" class="minput"  id="selected_{$smarty.section.as.iteration}" name="selected_fld[]" value="{$portadas[as]->id}"  style="cursor:pointer;" >
             </td>
             <td >
-                <img src="{$KIOSKO_IMG_URL}{$portadas[as]->path}{$portadas[as]->name|regex_replace:"/.pdf$/":".jpg"}"
-                     title="{$portadas[as]->title|clearslash}" alt="{$portadas[as]->title|clearslash}" height="80"
-                     onmouseover="Tip('<img src={$KIOSKO_IMG_URL}{$portadas[as]->path}650-{$portadas[as]->name|regex_replace:"/.pdf$/":".jpg"} >', SHADOW, true, ABOVE, true, WIDTH, 640)" onmouseout="UnTip()" />
+                <img width="100px" src="{$KIOSKO_IMG_URL}{$portadas[as]->path}{$portadas[as]->name|regex_replace:"/.pdf$/":".jpg"}"
+                     title="{$portadas[as]->title|clearslash}" alt="{$portadas[as]->title|clearslash}"
+                     onmouseover="Tip('<img src={$KIOSKO_IMG_URL}{$portadas[as]->path}650-{$portadas[as]->name|regex_replace:"/.pdf$/":".jpg"} >', SHADOW, true, ABOVE, false, WIDTH, 640)" onmouseout="UnTip()" />
             </td>
-            <td >
+            <td class="center">
                 {$portadas[as]->title|clearslash}
             </td>
-            {if $category=='widget' || $category=='all'}
+            {if $category=='favorite' || $category=='all'}
                 <td class="center">
-                     {$albums[as]->category_title}
+                     {$portadas[as]->category_name|ucfirst}
                 </td>
             {/if}
-            <td align="center">
+            <td class="center">
+                {$portadas[as]->price|string_format:"%.2f"} €
+            </td>
+            <td class="center">
                 {$portadas[as]->date}
             </td>
-            <td  align="center">
+<!--             <td  class="center">
                 {$portadas[as]->publisher}
             </td>
-            <td  align="center">
+            <td  class="center">
                 {$portadas[as]->editor}
-            </td>
-             <td align="center">
+            </td> -->
+             <td class="center">
                 {acl isAllowed="KIOSKO_AVAILABLE"}
                     {if $portadas[as]->available == 1}
                         <a href="?id={$portadas[as]->pk_kiosko}&amp;action=change_status&amp;status=0&amp;page={$paginacion->_currentPage}&amp;category={$category}" title="Publicado">
@@ -147,8 +151,8 @@
                     {/if}
                 {/acl}
             </td>
-            {if $category!='widget' && $category!='all'}
-            <td align="center">
+            {if $category!='favorite' && $category!='all'}
+            <td class="center">
             {acl isAllowed="KIOSKO_UPDATE"}
                 {if $portadas[as]->favorite == 1}
                     <a href="?id={$portadas[as]->id}&amp;action=change_favorite&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage}" class="favourite_on" title="Quitar de favorito"></a>
@@ -167,7 +171,7 @@
                     {/if}
                 {/acl}
             </td>
-            <td align="center">
+            <td class="center">
                 <ul class="action-buttons">
                     <li>
                         {acl isAllowed="KIOSKO_UPDATE"}
