@@ -3,9 +3,9 @@
 /**
  * Start up and setup the app
 */
-require_once('../bootstrap.php');
+require_once '../bootstrap.php';
 
-require_once('../admin/session_bootstrap.php');
+require_once '../admin/session_bootstrap.php';
 
 /**
  * Check admin session
@@ -21,18 +21,17 @@ $tpl = new Template(TEMPLATE_USER);
 $cm  = new ContentManager();
 $ccm = ContentCategoryManager::get_instance();
 
-
 /**
  * Getting action for the controller
  **/
 $action = $request->query->filter('action', null, FILTER_SANITIZE_STRING);
 
 switch ($action) {
-    case 'article': {
+    case 'article':
 
-    } break;
-
-    default: {
+        break;
+    default:
         Application::forward301('index.php');
-    } break;
+        break;
 }
+

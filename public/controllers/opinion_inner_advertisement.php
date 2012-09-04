@@ -20,3 +20,4 @@ $intersticial = $advertisement->getIntersticial(750, $category);
 if (!empty($intersticial)) {
     $advertisement->renderMultiple(array($intersticial), $advertisement);
 }
+

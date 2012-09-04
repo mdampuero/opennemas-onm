@@ -52,7 +52,6 @@ switch ($action) {
         # If is not cached process this action
         $cacheID = $tpl->generateCacheId($category_name, '', $page);
 
-
         if (($tpl->caching == 0)
             || !$tpl->isCached('video/video_frontpage.tpl', $cacheID)
         ) {
@@ -69,13 +68,15 @@ switch ($action) {
                 $front_videos = $cm->find_all(
                     'Video',
                     'available=1 AND `contents_categories`.`pk_fk_content_category` ='
-                    . $actual_category_id . '', 'ORDER BY created DESC LIMIT '.$totalVideosFrontpage
+                    . $actual_category_id . '',
+                    'ORDER BY created DESC LIMIT '.$totalVideosFrontpage
                 );
 
                 $videos = $cm->find_all(
                     'Video',
                     'available=1 AND `contents_categories`.`pk_fk_content_category` ='
-                    . $actual_category_id . '', 'ORDER BY views DESC LIMIT 3'
+                    . $actual_category_id . '',
+                    'ORDER BY views DESC LIMIT 3'
                 );
 
                 $others_videos = $cm->find_all(
@@ -131,7 +132,7 @@ switch ($action) {
             );
         }
 
-        require_once("video_advertisement.php");
+        require_once 'video_advertisement.php';
 
         // Get last comments to show in video frontpage
         $latestComments = $cm->cache->getLastComentsContent('Video', true, $actual_category_id, 4);
@@ -145,8 +146,8 @@ switch ($action) {
         } else {
             $tpl->display('video/video_main_frontpage.tpl', $cacheID);
         }
-        break;
 
+        break;
     case 'inner':
 
         $dirtyID = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
@@ -198,7 +199,7 @@ switch ($action) {
                 )
             );
 
-            require_once "video_inner_advertisement.php";
+            require_once 'video_inner_advertisement.php';
 
         } //end iscached
 
@@ -208,7 +209,8 @@ switch ($action) {
         /******* SUGGESTED CONTENTS *******/
         $objSearch = cSearch::getInstance();
         $arrayResults=$objSearch->searchSuggestedContents(
-            $video->metadata, 'Video',
+            $video->metadata,
+            'Video',
             "pk_fk_content_category= ".$video->category.
             " AND contents.available=1 AND pk_content = pk_fk_content",
             4
@@ -217,9 +219,10 @@ switch ($action) {
 
         Content::setNumViews($videoID);
         $tpl->display('video/video_inner.tpl', $cacheID);
-        break;
 
+        break;
     case 'videos_incategory':
+
         $video = null;
 
         $itemsPage = 3;
@@ -254,8 +257,8 @@ switch ($action) {
         $tpl->assign('total_incategory', '9');
         $html = $tpl->fetch('video/partials/_widget_video_incategory.tpl');
         echo $html;
-        break;
 
+        break;
     case 'videos_more':
 
         $video = null;
@@ -292,9 +295,11 @@ switch ($action) {
         $tpl->assign('total_more', '4');
         $html = $tpl->fetch('video/partials/_widget_video_more_interesting.tpl');
         echo $html;
-        break;
 
+        break;
     default:
+
         Application::forward301('/');
         break;
 }
+

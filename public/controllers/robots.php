@@ -2,7 +2,7 @@
 /**
  * Start up and setup the app
 */
-require_once('../bootstrap.php');
+require_once '../bootstrap.php';
 header("Content-Type: text/plain");
 ?>
 User-Agent: *

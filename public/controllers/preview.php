@@ -39,7 +39,7 @@ $preview_time = isset($_REQUEST['preview_time'])? $_REQUEST['preview_time'] : 20
 /**
  * Fecth categories and subcategories
  */
-require_once ("index_sections.php");
+require_once 'index_sections.php';
 
 //Obtenemos los articulos
 $cm = new ContentManager();
@@ -49,13 +49,14 @@ if ($category_name == 'home') {
     /**
      * Get the articles in home page
     */
-    $articles_home =
-        $cm->find_all(  'Article',
-                        'contents.in_home=1 AND contents.frontpage=1'
-                        .' AND contents.available=1 AND contents.content_status=1'
-                        .' AND contents.fk_content_type=1'
-                        .' AND contents.home_placeholder != \'\'',
-                        'ORDER BY home_pos ASC, created DESC');
+    $articles_home = $cm->find_all(
+        'Article',
+        'contents.in_home=1 AND contents.frontpage=1'
+        .' AND contents.available=1 AND contents.content_status=1'
+        .' AND contents.fk_content_type=1'
+        .' AND contents.home_placeholder != \'\'',
+        'ORDER BY home_pos ASC, created DESC'
+    );
 
     /**
      * Filter articles if some of them has time scheduling
@@ -82,10 +83,13 @@ if ($category_name == 'home') {
     }
 } else {
     $articles_home =
-        $cm->find_by_category('Article', $category_name,
-                                'contents.frontpage=1 AND contents.content_status=1 '.
-                                'AND contents.available=1  AND contents.fk_content_type=1 ',
-                                'ORDER BY placeholder ASC, position ASC, created DESC');
+        $cm->find_by_category(
+            'Article',
+            $category_name,
+            'contents.frontpage=1 AND contents.content_status=1 '.
+            'AND contents.available=1  AND contents.fk_content_type=1 ',
+            'ORDER BY placeholder ASC, position ASC, created DESC'
+        );
 
     $articles_home = $cm->getInTime($articles_home);
 
@@ -213,7 +217,8 @@ while (isset($articles_home[$aux]) && $articles_home[$aux]->title != "") {
     // $rating_bar_col1[$articles_home[$aux]->id] = $rating->render('home','vote');
     /******* END COLUMN1 RATINGS **********/
 
-    $c++; $aux ++;
+    $c++;
+    $aux ++;
 }
 
 //  $tpl->assign('rating_bar_col1', $rating_bar_col1);
@@ -225,7 +230,8 @@ $tpl->assign('column', $column);
 
 
 /********************************* ADVERTISEMENTS  *********************************************/
-require_once ("index_advertisement.php");
+require_once 'index_advertisement.php';
 /********************************* ADVERTISEMENTS  *********************************************/
 
 $tpl->display('frontpage/frontpage.tpl');
+

@@ -16,7 +16,6 @@ if (is_null($action)) {
 }
 
 switch ($action) {
-
     case 'get':
         $contentID = $request->query->filter('content_id', null, FILTER_SANITIZE_NUMBER_INT);
 
@@ -25,12 +24,14 @@ switch ($action) {
             // Getting comments for current article
             $comment = new Comment();
             $comments = $comment->get_public_comments($contentID);
-            $tpl->assign(array(
-                'num_comments' => count($comments),
-                'comments'     => $comments,
-                'contentId'    => $contentID,
-                'content'      => $contentID,
-            ));
+            $tpl->assign(
+                array(
+                    'num_comments' => count($comments),
+                    'comments'     => $comments,
+                    'contentId'    => $contentID,
+                    'content'      => $contentID,
+                )
+            );
 
             $output = $tpl->fetch('comments/comments.tpl');
 
@@ -41,7 +42,6 @@ switch ($action) {
         $response->send();
 
         break;
-
     case 'vote':
 
         $category_name    = 'home';
@@ -71,8 +71,8 @@ switch ($action) {
         }
 
         Application::ajaxOut($html_out);
-        break;
 
+        break;
     case 'paginate_comments':
 
         $comment = new Comment();
@@ -81,8 +81,7 @@ switch ($action) {
         $tpl->assign('num_comments_total', count($comments));
         //  if (count($comments) >0) {
         $cm = new ContentManager();
-        $comments = $cm->paginate_num_js(
-            $comments, 9, 1, 'get_paginate_comments', "'".$_REQUEST['id']."'");
+        $comments = $cm->paginate_num_js($comments, 9, 1, 'get_paginate_comments', "'".$_REQUEST['id']."'");
 
         $tpl->assign('paginacion', $cm->pager);
         $tpl->assign('comments', $comments);
@@ -93,8 +92,8 @@ switch ($action) {
         $tpl->caching = $caching;
         //}
         Application::ajaxOut($output);
-    break;
 
+        break;
     case 'save_comment':
 
         $text     = $request->request->filter('textareacomentario', '', FILTER_SANITIZE_STRING);
@@ -158,7 +157,14 @@ switch ($action) {
                 }
             } else {
                 $ip = Application::getRealIp();
-                if ($comment->create( array( 'id' => $_POST['id'], 'data' => $data, 'ip' => $ip) ) ) {
+                $created = $comment->create(
+                    array(
+                        'id'   => $_POST['id'],
+                        'data' => $data, '
+                        ip'    => $ip
+                    )
+                );
+                if ($created) {
                     if (preg_match('@territoris@', $_SERVER['SERVER_NAME'])) {
                         $message = "El seu comentari ha estat emmagatzemat i està pendent de publicar-se.";
                     } else {
@@ -179,5 +185,5 @@ switch ($action) {
         $response = new Response($message, 200);
         $response->send();
         break;
-
 }
+

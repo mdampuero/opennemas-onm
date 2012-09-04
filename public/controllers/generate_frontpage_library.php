@@ -74,4 +74,3 @@ foreach ($curly as $category_name => $c) {
   // all done
 curl_multi_close($mh);
 echo "generate ok \n";
-

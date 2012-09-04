@@ -27,12 +27,15 @@ $tpl->setConfig('frontpages');
 $cacheID = $tpl->generateCacheId($category_name, $subcategory_name, 0 /*$cache_page*/);
 
 $actualCategory = (empty($subcategory_name))? $category_name : $subcategory_name;
-$tpl->assign(array(
+$tpl->assign(
+    array(
         'category_name' => $category_name,
-        'actual_category' => $actualCategory));
+        'actual_category' => $actualCategory
+    )
+);
 
 // Fetch information for Advertisements
-require_once "index_advertisement.php";
+require_once 'index_advertisement.php';
 
 // Avoid to run the entire app logic if is available a cache for this page
 if (
@@ -58,10 +61,12 @@ if (
 
 
     $actualCategoryId = $actual_category_id = $ccm->get_id($actualCategory);
-    $tpl->assign(array(
-        'actual_category_id' => $actualCategoryId,
-        'actual_category_title' => $ccm->get_title($category_name),
-    ));
+    $tpl->assign(
+        array(
+            'actual_category_id' => $actualCategoryId,
+            'actual_category_title' => $ccm->get_title($category_name),
+        )
+    );
 
     $cm = new ContentManager;
 
@@ -102,3 +107,4 @@ if (
 } // $tpl->is_cached('index.tpl')
 
 $tpl->display('frontpage/frontpage.tpl', $cacheID);
+

@@ -60,7 +60,7 @@ if ( empty($action) ) {
     Application::forward301('/404.html');
 }
 switch ($action) {
-    case 'read': {
+    case 'read':
 
         // Load config
         $tpl->setConfig('articles');
@@ -140,9 +140,9 @@ switch ($action) {
                 }
 
                 // Get inner Related contents
-                $relatedContentsWs = json_decode(file_get_contents(
-                    $wsUrl.'/ws/articles/lists/related-inner/'.$articleID
-                ));
+                $relatedContentsWs = json_decode(
+                    file_get_contents($wsUrl.'/ws/articles/lists/related-inner/'.$articleID)
+                );
 
                 $relatedContents = array();
                 foreach ($relatedContentsWs as $item) {
@@ -161,9 +161,9 @@ switch ($action) {
                 $tpl->assign('relationed', $relatedContents);
 
                 // Get Machine suggested contents
-                $machineRelated = json_decode(file_get_contents(
-                    $wsUrl.'/ws/articles/lists/machine-related/'.$articleID
-                ));
+                $machineRelated = json_decode(
+                    file_get_contents($wsUrl.'/ws/articles/lists/machine-related/'.$articleID)
+                );
 
                 $machineSuggestedContents = array();
                 foreach ($machineRelated as $content) {
@@ -180,9 +180,8 @@ switch ($action) {
 
         $tpl->display('article/article.tpl', $cacheID);
 
-    } break;
-
-    case 'vote': {
+        break;
+    case 'vote':
 
         $category_name = 'home';
         $subcategory_name = null;
@@ -211,9 +210,10 @@ switch ($action) {
         }
 
         Application::ajax_out($html_out);
-    } break;
 
-    case 'get_plus': {
+        break;
+    case 'get_plus':
+
         if ($_GET["content"]=="Comment") {
 
             $cm = new ContentManager();
@@ -261,12 +261,10 @@ switch ($action) {
                 $html_out .= '</div>';
             }
         }
-
         Application::ajax_out($html_out);
 
-    } break;
-
-    case 'print': {
+        break;
+    case 'print':
 
         $cacheID = $tpl->generateCacheId($category_name, $subcategory_name, $articleID);
 
@@ -325,12 +323,10 @@ switch ($action) {
         }
 
         $tpl->display('article/article_printer.tpl');
-        exit(0);
 
-    } break;
+        break;
+    case 'sendform':
 
-
-    case 'sendform': {
         require_once 'session_bootstrap.php';
         $token = $_SESSION['sendformtoken'] = md5(uniqid('sendform'));
 
@@ -344,10 +340,10 @@ switch ($action) {
 
         $tpl->caching = 0;
         $tpl->display('article/article_sendform.tpl'); // Don't disturb cache
-        exit(0);
-    } break;
 
-    case 'send': {
+        break;
+    case 'send':
+
         require_once 'session_bootstrap.php';
 
         // Check if magic_quotes is enabled and clear globals arrays
@@ -460,10 +456,10 @@ switch ($action) {
 
         $tpl->caching = 0;
         $tpl->display('article/article_sendform.tpl'); // Don't disturb cache
-        exit(0);
-    } break;
 
-    default: {
+        break;
+    default:
         Application::forward301('index.php');
-    } break;
+        break;
 }
+

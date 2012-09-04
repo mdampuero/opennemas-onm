@@ -3,7 +3,7 @@
 /**
  * Start up and setup the app
 */
-require_once('../bootstrap.php');
+require_once '../bootstrap.php';
 
 /**
  * Set up view
@@ -26,9 +26,7 @@ if (($tpl->caching == 0)
     list($availableCategories, $subcats, $other) = $ccm->getArraysMenu(0, 1);
 
     switch ($action) {
-
         case 'web':
-
             //FIXME: add this value in a config file for easy editing
             $maxArticlesByCategory = 250;
             $numContents = 50;
@@ -65,7 +63,6 @@ if (($tpl->caching == 0)
             $tpl->assign('opinions', $opinions);
 
             break;
-
         case 'news':
 
             $articlesByCategory = array();
@@ -129,3 +126,4 @@ if ($format == 'gz') {
     header('Content-type: application/xml charset=utf-8');
     echo $sitemapContents;
 }
+

@@ -96,7 +96,8 @@ switch ($action) {
 
                 $print_url .= $dirtyID . '.html';
                 $tpl->assign('print_url', $print_url);
-                $tpl->assign('sendform_url',
+                $tpl->assign(
+                    'sendform_url',
                     '/controllers/article.php?action=sendform&article_id='
                     . $_GET['article_id'] . '&category_name=' .
                     $category_name . '&subcategory_name=' . $subcategory_name
@@ -115,12 +116,14 @@ switch ($action) {
                 $actual_category_id    = $ccm->get_id($actual_category);
                 $actual_category_title = $ccm->get_title($actual_category);
 
-                $tpl->assign(array(
-                    'category_name'         => $actual_category ,
-                    'actual_category_title' => $actual_category_title,
-                    'actual_category'       => $actual_category,
-                    'actual_category_id'    =>$actual_category_id,
-                ));
+                $tpl->assign(
+                    array(
+                        'category_name'         => $actual_category ,
+                        'actual_category_title' => $actual_category_title,
+                        'actual_category'       => $actual_category,
+                        'actual_category_id'    =>$actual_category_id,
+                    )
+                );
 
                 $tpl->assign('article', $article);
 
@@ -134,10 +137,12 @@ switch ($action) {
                     $videoInt = new Video($article->fk_video2);
                     $tpl->assign('videoInt', $videoInt);
                 } else {
-                    $video =  $cm->find_by_category_name('Video',
+                    $video =  $cm->find_by_category_name(
+                        'Video',
                         $actual_category,
                         'contents.content_status=1',
-                        'ORDER BY created DESC LIMIT 0 , 1');
+                        'ORDER BY created DESC LIMIT 0 , 1'
+                    );
                     if (isset($video[0])) {
                         $tpl->assign('videoInt', $video[0]);
                     }
@@ -169,7 +174,8 @@ switch ($action) {
                 if (!empty($article->metadata)) {
                     $objSearch    = cSearch::getInstance();
                     $machineSuggestedContents =
-                        $objSearch->searchSuggestedContents($article->metadata,
+                        $objSearch->searchSuggestedContents(
+                            $article->metadata,
                             'Article',
                             "pk_fk_content_category= ".$article->category.
                             " AND contents.available=1 AND pk_content = pk_fk_content",
@@ -187,8 +193,8 @@ switch ($action) {
         } // end if $tpl->is_cached
 
         $tpl->display('article/article.tpl', $cacheID);
-        break;
 
+        break;
     case 'vote':
 
         $category_name = 'home';
@@ -218,8 +224,8 @@ switch ($action) {
         }
 
         Application::ajaxOut($html_out);
-        break;
 
+        break;
     case 'get_plus':
         $output = "";
         if ($_GET["content"]=="Comment") {
@@ -273,8 +279,8 @@ switch ($action) {
         }
 
         Application::ajaxOut($output);
-        break;
 
+        break;
     case 'print':
 
         $cacheID = $tpl->generateCacheId($category_name, $subcategory_name, $articleID);
@@ -323,11 +329,11 @@ switch ($action) {
         }
 
         $tpl->display('article/article_printer.tpl');
+
         break;
-
-
     case 'sendform':
-        require_once('session_bootstrap.php');
+
+        require_once 'session_bootstrap.php';
         $token = $_SESSION['sendformtoken'] = md5(uniqid('sendform'));
 
         $article = new Article($_REQUEST['article_id']);
@@ -340,10 +346,11 @@ switch ($action) {
 
         $tpl->caching = 0;
         $tpl->display('article/article_sendform.tpl'); // Don't disturb cache
-        break;
 
+        break;
     case 'send':
-        require_once('session_bootstrap.php');
+
+        require_once 'session_bootstrap.php';
 
         // Check if magic_quotes is enabled and clear globals arrays
         StringUtils::disabled_magic_quotes();
@@ -445,7 +452,8 @@ switch ($action) {
             ) {
                 header("HTTP/1.0 404 Not Found");
             }
-            $tpl->assign('message',
+            $tpl->assign(
+                'message',
                 'La noticia no pudo ser enviada, inténtelo de nuevo más tarde.'
                 .'<br /> Disculpe las molestias.'
             );
@@ -453,9 +461,11 @@ switch ($action) {
 
         $tpl->caching = 0;
         $tpl->display('article/article_sendform.tpl'); // Don't disturb cache
-        break;
 
+        break;
     default:
+
         Application::forward301('index.php');
         break;
 }
+

@@ -21,7 +21,7 @@ $category_name = $request->query->filter(
     'category_name', 'home', FILTER_SANITIZE_STRING
 );
 
-require_once("statics_advertisement.php");
+require_once 'statics_advertisement.php';
 
 //If the form was sent
 $action = $request->request->filter('action', null, FILTER_SANITIZE_STRING);

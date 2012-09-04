@@ -13,7 +13,6 @@ require_once '../bootstrap.php';
 $action = $request->query->filter('action', null, FILTER_SANITIZE_STRING);
 
 switch ($action) {
-
     case 'get':
         // Banner Id
         $id = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
@@ -29,8 +28,8 @@ switch ($action) {
             $tpl->assign('banner', $banner);
             $tpl->display('ads/advertisement.tpl');
         }
-        break;
 
+        break;
     case 'show': // Redirect to advertisement
 
         $publi_id = $request->query->filter('publi_id', null, FILTER_SANITIZE_STRING);
@@ -48,9 +47,10 @@ switch ($action) {
                 echo '<script type="text/javascript">window.close();</script>';
             }
         }
-        break;
 
+        break;
     default:
         // EMPTY ACTION
         break;
 }
+

@@ -11,7 +11,7 @@
 /**
  * Start up and setup the app
 */
-require_once('../bootstrap.php');
+require_once '../bootstrap.php';
 
 // Redirect Mobile browsers to mobile site unless a cookie exists.
 //$app->mobileRouter();
@@ -24,7 +24,8 @@ $tpl = new Template(TEMPLATE_USER);
 /**
  * Fetch advertisements
  */
-require_once ("index_advertisement.php");
+require_once 'index_advertisement.php';
 
 // Display template
 $tpl->display('search/search.tpl');
+

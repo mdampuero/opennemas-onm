@@ -3,7 +3,7 @@
 /**
  * Start up and setup the app
 */
-require_once('../bootstrap.php');
+require_once '../bootstrap.php';
 use Onm\Settings as s;
 
 /**
@@ -48,17 +48,15 @@ $tpl->assign('contentId', $opinionID); // Used on module_comments.tpl
 if (empty($action)) {
     Application::forward301('/404.html');
 }
-switch($action) {
-    case 'read': {
-
-        // Load config
+switch ($action) {
+    case 'read':
         $tpl->setConfig('opinion');
 
         // Increment numviews if it's accesible
         // Content::setNumViews($opinionID);
 
         // Get category id correspondence with ws
-        $wsActualCategoryId = file_get_contents($wsUrl.'/ws/categories/id/'.$category_name );
+        $wsActualCategoryId = file_get_contents($wsUrl.'/ws/categories/id/'.$category_name);
         // Fetch information for Advertisements
         $ads = json_decode(file_get_contents($wsUrl.'/ws/ads/opinion/'.$wsActualCategoryId));
 
@@ -90,7 +88,10 @@ switch($action) {
                 $title = $str->get_title($opinion->title);
                 $print_url = '/extimprimir/' . $title. '/'. $opinion->pk_content . '.html';
                 $tpl->assign('print_url', $print_url);
-                $tpl->assign('sendform_url', '/controllers/opinion_inner.php?action=sendform&opinion_id=' . $dirtyID );
+                $tpl->assign(
+                    'sendform_url',
+                    '/controllers/opinion_inner.php?action=sendform&opinion_id=' . $dirtyID
+                );
                 // } Sacar broza
 
 
@@ -105,11 +106,12 @@ switch($action) {
 
                 // Fetch suggested contents
                 $objSearch = cSearch::Instance();
-                $suggestedContents =
-                    $objSearch->SearchSuggestedContents($opinion->metadata,
-                                                        'Opinion',
-                                                        " contents.available=1 AND pk_content = pk_fk_content",
-                                                        4);
+                $suggestedContents = $objSearch->SearchSuggestedContents(
+                    $opinion->metadata,
+                    'Opinion',
+                    " contents.available=1 AND pk_content = pk_fk_content",
+                    4
+                );
 
                 $suggestedContents= $cm->getInTime($suggestedContents);
                 $tpl->assign('suggested', $suggestedContents);
@@ -120,7 +122,7 @@ switch($action) {
                 if ($opinion->type_opinion == 1) {
                         $where=' opinions.type_opinion = 1';
                         $opinion->name ='Editorial';
-                } elseif ($opinion->type_opinion == 2){
+                } elseif ($opinion->type_opinion == 2) {
                         $where=' opinions.type_opinion = 2';
                         $opinion->name ='Director';
                 } else {
@@ -150,21 +152,24 @@ switch($action) {
         } else {
             Application::forward301('/404.html');
         }
-    } break;
 
-    case 'captcha': {
+        break;
+    case 'captcha':
+
         $width  = isset($_GET['width']) ? $_GET['width'] : '176';
         $height = isset($_GET['height']) ? $_GET['height'] : '49';
         $characters = isset($_GET['characters']) && $_GET['characters'] > 1 ? $_GET['characters'] : '5';
-        $captcha    = new CaptchaSecurityImages($width, $height, $characters,
-                                                realpath(dirname(__FILE__).'/media/fonts/monofont.ttf') );
-
+        $captcha    = new CaptchaSecurityImages(
+            $width,
+            $height,
+            $characters,
+            realpath(dirname(__FILE__).'/media/fonts/monofont.ttf')
+        );
         exit(0);
-    } break;
 
-    case 'print': {
+        break;
+    case 'print':
 
-        // Article
         $opinion = new Opinion($dirtyID);
         $opinion->category_name = 'opinion';
         $opinion->author_name_slug = StringUtils::get_title($opinion->name);
@@ -179,12 +184,10 @@ switch($action) {
         $tpl->display('opinion/opinion_printer.tpl');
         exit(0);
 
-    } break;
+        break;
+    case 'sendform':
 
-
-    case 'sendform': {
-
-        require_once('session_bootstrap.php');
+        require_once 'session_bootstrap.php';
         $token = $_SESSION['sendformtoken'] = md5(uniqid('sendform'));
 
         $opinion = new Opinion($opinionID);
@@ -196,11 +199,10 @@ switch($action) {
         $tpl->display('opinion/partials/_opinion_sendform.tpl'); // Don't disturb cache
         exit(0);
 
-    } break;
+        break;
+    case 'send':
 
-    case 'send': {
-
-        require_once('session_bootstrap.php');
+        require_once 'session_bootstrap.php';
 
         // Check if magic_quotes is enabled and clear globals arrays
         StringUtils::disabled_magic_quotes();
@@ -227,7 +229,6 @@ switch($action) {
         $mail->Priority = 5; // Low priority
         $mail->IsHTML(true);
 
-
         $mail->From     = $request->query->filter('sender', null, FILTER_SANITIZE_STRING);
         $mail->FromName = $request->query->filter('name_sender', null, FILTER_SANITIZE_STRING);
         $mail->Subject  = $request->query->filter('name_sender', null, FILTER_SANITIZE_STRING).
@@ -250,7 +251,6 @@ switch($action) {
         $tplMail->assign('opinionType', $opinionType);
         $tplMail->assign('mail', $mail);
         $tplMail->assign('opinion', $opinion);
-
 
         // Filter tags before send
         $message = $request->query->filter('body', null, FILTER_SANITIZE_STRING);
@@ -300,9 +300,11 @@ switch($action) {
             $tpl->assign('message', 'Opinión enviada correctamente.');
         } else {
             if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])
-                && ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')) {
+                && ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')
+            ) {
                 header("HTTP/1.0 404 Not Found");
-        }
+            }
+
             $tpl->assign(
                 'message',
                 'El artículo de opinión no pudo ser enviado, inténtelo de '
@@ -313,9 +315,10 @@ switch($action) {
         $tpl->caching = 0;
         $tpl->display('opinion/partials/_opinion_sendform.tpl'); // Don't disturb cache
         exit(0);
-    } break;
 
-    case 'get_plus': {
+        break;
+    case 'get_plus':
+
         $cm = new ContentManager();
         $articles_viewed = $cm->cache->getMostViewedContent(
             $_REQUEST['content'],
@@ -339,9 +342,10 @@ switch($action) {
         }
 
         Application::ajax_out($html_out);
-    } break;
 
-    default: {
+        break;
+    default:
         Application::forward301('index.php');
-    } break;
+        break;
 }
+

@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 // Start up and setup the app
-require_once('../bootstrap.php');
+require_once '../bootstrap.php';
 
 // Setup view
 $tpl       = new Template(TEMPLATE_USER);
@@ -18,7 +18,7 @@ $errorCode     = $request->query->filter('errordoc', null, FILTER_SANITIZE_STRIN
 $category_name = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
 $cache_page    = $request->query->filter('page', 0, FILTER_VALIDATE_INT);
 
-require_once "statics_advertisement.php";
+require_once 'statics_advertisement.php';
 
 if ($errorCode =='404') {
     $tpl->display('static_pages/404.tpl');
@@ -35,3 +35,4 @@ if ($errorCode =='404') {
 
     $tpl->display('static_pages/statics.tpl');
 }
+

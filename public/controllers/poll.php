@@ -7,6 +7,7 @@
  * file that was distributed with this source code.
  **/
 use Onm\Settings as s;
+
 // Start up and setup the app
 require_once '../bootstrap.php';
 
@@ -38,20 +39,22 @@ if (!empty($category_name)) {
     $actual_category_id = 0;
 }
 
-$tpl->assign(array(
-    'category_name'         => $category_name,
-    'category'              => $category,
-    'actual_category_id'    => $actual_category_id,
-    'category_real_name'    => $category_real_name,
-    'actual_category_title' => $category_real_name,
-    'actual_category'       => $category_name,
-));
+$tpl->assign(
+    array(
+        'category_name'         => $category_name,
+        'category'              => $category,
+        'actual_category_id'    => $actual_category_id,
+        'category_real_name'    => $category_real_name,
+        'actual_category_title' => $category_real_name,
+        'actual_category'       => $category_name,
+    )
+);
 
 $pollSettings = s::get('poll_settings');
 
-$tpl->assign(array (
-    'settings' => $pollSettings
-));
+$tpl->assign(
+    array('settings' => $pollSettings)
+);
 
 switch ($action) {
     case 'frontpage':
@@ -67,37 +70,51 @@ switch ($action) {
            || (!$tpl->isCached('poll/poll-frontpage.tpl', $cacheID))) {
 
             if (isset($category) && !empty($category)) {
-                $polls = $cm->find_by_category('Poll', $category, 'available=1',
-                    'ORDER BY created DESC LIMIT 2');
+                $polls = $cm->find_by_category(
+                    'Poll',
+                    $category,
+                    'available=1',
+                    'ORDER BY created DESC LIMIT 2'
+                );
 
-                $otherPolls = $cm->find('Poll', 'available=1',
-                    'ORDER BY created DESC LIMIT 5');
+                $otherPolls = $cm->find(
+                    'Poll',
+                    'available=1',
+                    'ORDER BY created DESC LIMIT 5'
+                );
             } else {
-                $polls      = $cm->find('Poll', 'available=1 and in_home=1',
-                    'ORDER BY created DESC LIMIT 2');
-                $otherPolls = $cm->find('Poll', 'available=1',
-                    'ORDER BY created DESC LIMIT 2,7');
+                $polls = $cm->find(
+                    'Poll',
+                    'available=1 and in_home=1',
+                    'ORDER BY created DESC LIMIT 2'
+                );
+                $otherPolls = $cm->find(
+                    'Poll',
+                    'available=1',
+                    'ORDER BY created DESC LIMIT 2,7'
+                );
             }
 
             if (!empty($polls)) {
                 foreach ($polls as &$poll) {
                     $poll->items   = $poll->get_items($poll->id);
-                    $poll->dirtyId = date('YmdHis',
-                        strtotime($poll->created)).sprintf('%06d', $poll->id);
+                    $poll->dirtyId = date('YmdHis', strtotime($poll->created)).sprintf('%06d', $poll->id);
                 }
             }
 
-            $tpl->assign(array(
-                'polls'=> $polls,
-                'otherPolls'=> $otherPolls
-            ));
+            $tpl->assign(
+                array(
+                    'polls'      => $polls,
+                    'otherPolls' => $otherPolls
+                )
+            );
         }
 
-        require_once "poll_advertisement.php";
+        require_once 'poll_advertisement.php';
 
         $tpl->display('poll/poll_frontpage.tpl', $cacheID);
-        break;
 
+        break;
     case 'show':
 
         $tpl->setConfig('poll-inner');
@@ -133,14 +150,20 @@ switch ($action) {
                 $comment  = new Comment();
                 $comments = $comment->get_public_comments($pollId);
 
-                $otherPolls = $cm->find('Poll', 'available=1 ',
-                    'ORDER BY created DESC LIMIT 5');
+                $otherPolls = $cm->find(
+                    'Poll',
+                    'available=1 ',
+                    'ORDER BY created DESC LIMIT 5'
+                );
 
-                $tpl->assign( array( 'poll'=>$poll,
-                    'items'        => $items,
-                    'num_comments' => count($comments),
-                    'otherPolls'   => $otherPolls,
-                ));
+                $tpl->assign(
+                    array(
+                        'poll'=>$poll,
+                        'items'        => $items,
+                        'num_comments' => count($comments),
+                        'otherPolls'   => $otherPolls,
+                    )
+                );
 
                 $cookie = "polls".$pollId;
                 $msg    = '';
@@ -164,8 +187,8 @@ switch ($action) {
 
             $tpl->display('poll/poll.tpl', $cacheID);
         }
-        break;
 
+        break;
     case 'addVote':
 
         $dirtyID = $request->request->filter('id', '', FILTER_SANITIZE_STRING);
@@ -184,8 +207,7 @@ switch ($action) {
             if (isset($_COOKIE[$cookie])) {
                  Application::setCookieSecure($cookie, 'tks');
             }
-            $respEncuesta = $request->request->filter('respEncuesta', '',
-                    FILTER_SANITIZE_STRING);
+            $respEncuesta = $request->request->filter('respEncuesta', '', FILTER_SANITIZE_STRING);
 
             if (!empty($respEncuesta) && !isset($_COOKIE[$cookie])) {
                 $ip = $_SERVER['REMOTE_ADDR'];
@@ -201,9 +223,10 @@ switch ($action) {
 
             Application::forward(SITE_URL.$poll->uri);
         }
-        break;
 
+        break;
     default:
         // Application::forward301('index.php');
         break;
 }
+

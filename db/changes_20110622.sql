@@ -1,3 +1,9 @@
+-- Changes for alex branch
+ALTER TABLE `kioskos` ADD `price` DECIMAL NOT NULL DEFAULT '0';
+ALTER TABLE `users` ADD `type` TINYINT NOT NULL DEFAULT '0' COMMENT '0-backend, 1-frontend' AFTER `lastname`;
+ALTER TABLE `users` ADD `token` VARCHAR( 50 ) NULL DEFAULT NULL AFTER `type`;
+ALTER TABLE `users` ADD `deposit` DECIMAL NOT NULL DEFAULT '0' AFTER  `type`;
+
 -- 22-08-2012
 CREATE TABLE IF NOT EXISTS `usermeta` (
   `user_id` bigint(20) unsigned NOT NULL DEFAULT '0',

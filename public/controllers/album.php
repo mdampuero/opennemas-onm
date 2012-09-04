@@ -7,6 +7,7 @@
  * file that was distributed with this source code.
  */
 use Onm\Settings as s;
+
 // Start up and setup the app
 require_once '../bootstrap.php';
 
@@ -51,7 +52,6 @@ $cm = new ContentManager();
 if (!is_null($action) ) {
 
     switch ($action) {
-
         case 'frontpage':
             //Setup caching system
             $tpl->setConfig('gallery-frontpage');
@@ -71,7 +71,8 @@ if (!is_null($action) ) {
                 if ( isset($category) && !empty($category) ) {
                     $albums = $cm->find_by_category(
                         'Album',
-                        $category, 'fk_content_type=7 AND available=1',
+                        $category,
+                        'fk_content_type=7 AND available=1',
                         'ORDER BY  created DESC LIMIT 2'
                     );
                 } else {
@@ -100,12 +101,12 @@ if (!is_null($action) ) {
 
             }
 
-            require_once "album_front_ads.php";
+            require_once 'album_front_ads.php';
 
             // Send the response to the user
             $tpl->display('album/album_frontpage.tpl', $cacheID);
-            break;
 
+            break;
         case 'show':
             // Items_page refers to the widget
             $dirtyID    = $request->query->filter('album_id', null, FILTER_SANITIZE_STRING);
@@ -124,7 +125,7 @@ if (!is_null($action) ) {
 
             $tpl->assign('contentId', $albumID);
 
-            include_once "album_inner_ads.php";
+            include_once 'album_inner_ads.php';
 
             if (($tpl->caching == 0)
                 || (!$tpl->isCached('gallery/gallery.tpl', $cacheID))
@@ -177,8 +178,8 @@ if (!is_null($action) ) {
             } // END iscached
 
             $tpl->display('album/album.tpl', $cacheID);
-            break;
 
+            break;
         case 'thumbs_paginate':
             // Items_page refers to the widget
             $albumID    = $request->query->filter('album_id', null, FILTER_SANITIZE_STRING);
@@ -218,7 +219,6 @@ if (!is_null($action) ) {
             echo $html;
 
             break;
-
         default:
             Application::forward301('/');
             break;
@@ -227,3 +227,4 @@ if (!is_null($action) ) {
 } else {
     Application::forward301('/');
 }
+

@@ -15,3 +15,4 @@ $banners = $cm->getInTime($banners);
 if (!empty($intersticial)) {
     $advertisement->renderMultiple($banners, $advertisement);
 }
+

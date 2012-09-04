@@ -10,3 +10,4 @@ $cm = new ContentManager();
 $banners = $cm->getInTime($banners);
 //$advertisement->renderMultiple($banners, &$tpl);
 $advertisement->renderMultiple($banners, $advertisement);
+
