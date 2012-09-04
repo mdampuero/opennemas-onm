@@ -9,9 +9,9 @@
         <pathelement path="${basedir}/app/Backend" />
         <pathelement path="${basedir}/app/Manager" />
         <pathelement path="${basedir}/app/models" />
-        <pathelement path="${basedir}/public/core" />
         <pathelement path="${basedir}/public/controllers" />
         <pathelement path="${basedir}/vendor/Onm" />
+        <pathelement path="${basedir}/vendor/core" />
         <!-- Take a look at lint target should be updated -->
     </path>
     <pathconvert pathsep=" " property="project.paths.php.space-separated" refid="project.paths.php"/>
