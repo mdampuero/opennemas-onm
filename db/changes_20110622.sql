@@ -1,3 +1,9 @@
+--17-08-2012
+ALTER TABLE `kioskos` ADD `price` DECIMAL NOT NULL DEFAULT '0';
+ALTER TABLE `users` ADD `type` TINYINT NOT NULL DEFAULT '0' COMMENT '0-backend, 1-frontend' AFTER `lastname`;
+ALTER TABLE `users` ADD `token` VARCHAR( 50 ) NULL DEFAULT NULL AFTER `type`;
+ALTER TABLE `users` ADD `deposit` DECIMAL NOT NULL DEFAULT '0' AFTER  `type`;
+
 --11-06-2012
 ALTER TABLE `authors` ADD `params` TEXT NULL DEFAULT NULL;
 --09-05-2012
@@ -9,8 +15,8 @@ ALTER TABLE `books` ADD `file_img` VARCHAR( 255 ) NULL ;
 --27-02-2012
 INSERT INTO `privileges` (`pk_privilege`, `name`, `description`, `module`) VALUES
 (173, 'LETTER_ADMIN', 'Admon. cartas', 'LETTER'),
- (174, 'POLL_FAVORITE', 'Añadir a widgets', 'POLL'),
-('175', 'POLL_HOME', 'Añadir al widget de portada', 'POLL');
+(174, 'POLL_FAVORITE', 'Añadir a widgets', 'POLL'),
+(175, 'POLL_HOME', 'Añadir al widget de portada', 'POLL');
 
 --09-02-2012
 ALTER TABLE  `albums` CHANGE  `cover`  `cover_id` BIGINT( 255 ) NULL DEFAULT NULL;
