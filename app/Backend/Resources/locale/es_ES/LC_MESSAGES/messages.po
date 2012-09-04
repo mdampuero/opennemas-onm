@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-09-04 10:57+0200\n"
-"PO-Revision-Date: 2012-08-27 02:25+0200\n"
+"PO-Revision-Date: 2012-09-04 15:38+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -21,69 +21,63 @@ msgstr ""
 "X-Generator: Virtaal 0.7.0\n"
 
 #: app/Backend/Controllers/AclPrivilegesController.php:145
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to delete privilege with id \"%d\""
-msgstr "No se pudo arquivar o contido co identificador %s: %s"
+msgstr "No se pudo eliminar el privilegio con el id «%d» "
 
 #: app/Backend/Controllers/AclUserController.php:59
 msgid "--All--"
 msgstr "--Todos--"
 
 #: app/Backend/Controllers/AclUserController.php:99
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find the user with the id '%d'"
-msgstr "No fué posible encontrar una foto con ese identificador"
+msgstr "No es posible encontrar un usuario con el id «%d»"
 
 #: app/Backend/Controllers/AclUserController.php:110
 #: app/Backend/Controllers/AclUserController.php:244
-#, fuzzy
 msgid "Default system language"
-msgstr "Idioma por omisión"
+msgstr "Idioma predeterminado del sistema"
 
 #: app/Backend/Controllers/AclUserController.php:168
-#, fuzzy
 msgid "User data updated successfully."
-msgstr "Ficheros subidos correctamente"
+msgstr "Datos del usuario actualizados correctamente."
 
 #: app/Backend/Controllers/AclUserController.php:232
-#, fuzzy
 msgid "Unable to create the user with that information"
-msgstr "Ya existe un usuario con esa información"
+msgstr "No se pudo crear el usuario con la información proporcionada"
 
 #: app/Backend/Controllers/AclUserController.php:294
 #, php-format
 msgid "You have deleted %d users."
-msgstr ""
+msgstr "Se han eliminado %d usuarios."
 
 #: app/Backend/Controllers/AclUserController.php:296
-#, fuzzy
 msgid "You haven't selected any user to delete."
-msgstr "Debe seleccionar algún elemento."
+msgstr "Non seleccionou ningún usuario para eliminar."
 
 #: app/Backend/Controllers/AclUserGroupsController.php:67
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find user group with id '%d'"
-msgstr "No fué posible encontrar una foto con ese identificador"
+msgstr "No se pudo encontrar un grupo de usuarios con el id «%d»"
 
 #: app/Backend/Controllers/AclUserGroupsController.php:146
-#, fuzzy
 msgid "User group updated successfully."
-msgstr "Archivo creado con éxito."
+msgstr "Grupo de usuario actualizado con éxito."
 
 #: app/Backend/Controllers/AclUserGroupsController.php:149
 #, php-format
 msgid "Unable to update the user group with id \"%d\""
-msgstr ""
+msgstr "No se pudo actualizar el grupo de usuario con el id «%d»"
 
 #: app/Backend/Controllers/AclUserGroupsController.php:177
-#, fuzzy
 msgid "User group deleted successfully."
-msgstr "Categoría eliminada correctamente"
+msgstr "Grupo de usuario eliminado con éxito."
 
 #: app/Backend/Controllers/AclUserGroupsController.php:181
 #, php-format
 msgid "Unable to delete the user group with id \"%d\""
-msgstr ""
+msgstr "No se pudo eliminar el grupo de usuario con el id «%d»"
 
 #: app/Backend/Controllers/AdsController.php:78
 #: app/Backend/Controllers/AdsController.php:80
@@ -153,20 +147,18 @@ msgid "Javascript"
 msgstr "Javascript"
 
 #: app/Backend/Controllers/AdsController.php:201
-#, fuzzy
 msgid "Advertisement successfully created."
-msgstr "Configuraciones guardadas con éxito."
+msgstr "Publicidad creada correctamente."
 
 #: app/Backend/Controllers/AdsController.php:203
-#, fuzzy
 msgid "Unable to create the new advertisement."
-msgstr "Publicidad habilitada:"
+msgstr "No se pudo crear la nueva publicidad."
 
 #: app/Backend/Controllers/AdsController.php:232
 #: app/Backend/Controllers/AdsController.php:276
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find the advertisement with the id \"%d\""
-msgstr "No fué posible encontrar una foto con ese identificador"
+msgstr "No se pudo encontrar una publicidad con el id «%d»"
 
 #: app/Backend/Controllers/AdsController.php:239
 #: app/Backend/Controllers/AdsController.php:283
@@ -176,50 +168,46 @@ msgstr ""
 "No puede modificar este contenido porque no tiene permisos suficientes."
 
 #: app/Backend/Controllers/AdsController.php:316
-#, fuzzy
 msgid "Advertisement successfully updated."
-msgstr "Configuraciones guardadas con éxito."
+msgstr "Publicidad actualizada correctamente."
 
 #: app/Backend/Controllers/AdsController.php:318
-#, fuzzy
 msgid "Unable to update the advertisement data."
-msgstr "No fue posible guardar los datos de la portada en la base de datos."
+msgstr "No se pudo actualizar la información de la publicidad."
 
 #: app/Backend/Controllers/AdsController.php:351
-#, fuzzy
 msgid "Advertisement deleted successfully."
-msgstr "Categoría eliminada correctamente"
+msgstr "Publicidad eliminada correctamente."
 
 #: app/Backend/Controllers/AdsController.php:353
-#, fuzzy
 msgid "You must give an id for delete an advertisement."
-msgstr "Debe proporcionar un identificador para eliminar un vídeo."
+msgstr "Debe proporcionar un identificador para eliminar una publicidad."
 
 #: app/Backend/Controllers/AdsController.php:394
 #: app/Backend/Controllers/AdsController.php:480
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find an ad with the id \"%d\""
-msgstr "No fué posible encontrar una foto con ese identificador"
+msgstr "No es posible encontrar una publicidad con el id «%d»"
 
 #: app/Backend/Controllers/AdsController.php:399
 #, php-format
 msgid "Successfully deleted %d ads"
-msgstr ""
+msgstr "Se han eliminado %d publicidades con éxito"
 
 #: app/Backend/Controllers/AdsController.php:442
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find an advertisement with the id \"%d\""
-msgstr "No fué posible encontrar una foto con ese identificador"
+msgstr "No se pudo encontrar una publicidad con el id «%d»"
 
 #: app/Backend/Controllers/AdsController.php:448
 #, php-format
 msgid "Successfully changed the available status of %d ads"
-msgstr ""
+msgstr "Estado de disponibilidad cambiado correctamente para %d publicidades"
 
 #: app/Backend/Controllers/AdsController.php:483
 #, php-format
 msgid "Successfully changed availability for the ad \"%s\""
-msgstr ""
+msgstr "Estado de disponibilidad cambiado correctamente para la publicidad «%s»"
 
 #: app/Backend/Controllers/AlbumsController.php:160
 #, php-format
@@ -227,60 +215,56 @@ msgid "You must put %d albums in the HOME widget"
 msgstr "Debe tener %d álbumes en el widget de portada"
 
 #: app/Backend/Controllers/AlbumsController.php:219
-#, fuzzy
 msgid "Album created successfully"
-msgstr "Archivo creado con éxito."
+msgstr "Álbum creado correctamente"
 
 #: app/Backend/Controllers/AlbumsController.php:269
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find an album with the id \"%d\"."
-msgstr "No fué posible encontrar una foto con ese identificador"
+msgstr "No es posible encontrar un álbum con el id «%d»"
 
 #: app/Backend/Controllers/AlbumsController.php:276
-#, fuzzy
 msgid "Album delete successfully."
-msgstr "Categoría eliminada correctamente"
+msgstr "Álbum eliminado correctamente"
 
 #: app/Backend/Controllers/AlbumsController.php:304
 #: app/Backend/Controllers/AlbumsController.php:338
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find the album with the id \"%d\""
-msgstr "No fué posible encontrar una foto con ese identificador"
+msgstr "No se pudo encontrar un álbum con el id «%d»"
 
 #: app/Backend/Controllers/AlbumsController.php:347
-#, fuzzy
 msgid "You don't have enought privileges for modify this album."
 msgstr ""
-"Lo sentimos, pero usted no tienes suficientes permisos para realizar esta "
-"acción"
+"Lo sentimos, usted no tienes suficientes permisos para modificar este álbum."
 
 #: app/Backend/Controllers/AlbumsController.php:371
-#, fuzzy
 msgid "Album updated successfully."
-msgstr "Ficheros subidos correctamente"
+msgstr "Álbum actualizado correctamente."
 
 #: app/Backend/Controllers/AlbumsController.php:410
 #: app/Backend/Controllers/AlbumsController.php:447
 #: app/Backend/Controllers/AlbumsController.php:483
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find album with id \"%d\""
-msgstr "No fué posible encontrar una foto con ese identificador"
+msgstr "No se pudo encontrar un álbum con el id «%d»"
 
 #: app/Backend/Controllers/AlbumsController.php:416
 #, php-format
 msgid "Successfully changed availability for album with id \"%d\""
 msgstr ""
+"Estado de disponibilidad cambiado correctamente para el álbum con id «%s»"
 
 #: app/Backend/Controllers/AlbumsController.php:451
 #: app/Backend/Controllers/AlbumsController.php:486
 #, php-format
 msgid "Successfully changed suggested flag for album with id \"%d\""
-msgstr ""
+msgstr "Estado de sugerido cambiado correctamente para el álbum con id «%s»"
 
 #: app/Backend/Controllers/AlbumsController.php:525
-#, fuzzy, php-format
+#, php-format
 msgid "Album \"%s\" deleted successfully."
-msgstr "Categoría eliminada correctamente"
+msgstr "Álbum «%s» eliminado correctamente."
 
 #: app/Backend/Controllers/AlbumsController.php:730
 #: app/Backend/Controllers/CoversController.php:638
@@ -291,25 +275,22 @@ msgid "Settings saved successfully."
 msgstr "Configuraciones guardadas con éxito."
 
 #: app/Backend/Controllers/ArticlesController.php:71
-#, fuzzy
 msgid "You don't have enought privileges to see this category."
 msgstr ""
-"Lo sentimos, pero usted no tienes suficientes permisos para realizar esta "
-"acción"
+"Lo sentimos, usted no tiene suficientes permisos para ver esta categoría."
 
 #: app/Backend/Controllers/ArticlesController.php:247
 msgid "Article successfully created."
-msgstr ""
+msgstr "Actículo creado correctamente."
 
 #: app/Backend/Controllers/ArticlesController.php:249
-#, fuzzy
 msgid "Unable to create the new article."
-msgstr "Crear nuevo artículo"
+msgstr "No se pudo crear el nuevo artículo."
 
 #: app/Backend/Controllers/ArticlesController.php:311
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find the artucle with the id \"%d\""
-msgstr "No fué posible encontrar una foto con ese identificador"
+msgstr "No se pudo encontrar un artículo con el id «%d»"
 
 #: app/Backend/Controllers/ArticlesController.php:444
 msgid ""
@@ -318,47 +299,42 @@ msgstr "No puede modificar este artículo porque no tiene permisos suficientes."
 
 #: app/Backend/Controllers/ArticlesController.php:520
 msgid "Article successfully updated."
-msgstr ""
+msgstr "Artículo actualizado correctamente."
 
 #: app/Backend/Controllers/ArticlesController.php:522
-#, fuzzy
 msgid "Unable to update the article."
-msgstr "No fué posible encontrar una foto con ese identificador"
+msgstr "No se pudo actualizar el artículo."
 
 #: app/Backend/Controllers/ArticlesController.php:566
-#, fuzzy
 msgid "Article deleted successfully."
-msgstr "Categoría eliminada correctamente"
+msgstr "Artículo eliminado correctamente."
 
 #: app/Backend/Controllers/ArticlesController.php:568
-#, fuzzy
 msgid "You must give an id for delete an article."
-msgstr "Debe proporcionar un identificador para eliminar un álbum."
+msgstr "Debe proporcionar un identificador para eliminar un artículo."
 
 #: app/Backend/Controllers/ArticlesController.php:603
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find article with id \"%d\""
-msgstr "No fué posible encontrar una foto con ese identificador"
+msgstr "No se pudo encontrar un artículo con el id «%d»"
 
 #: app/Backend/Controllers/ArticlesController.php:609
 #, php-format
 msgid "Successfully changed availability for article with id \"%d\""
 msgstr ""
+"Estado de disponibilidad cambiado correctamente para el artículo con id «%s»"
 
 #: app/Backend/Controllers/AuthenticationController.php:81
 msgid "Login token is not valid. Try to autenticate again."
-msgstr ""
+msgstr "Su token de inicio de sesión no es válido. Intente acceder de nuevo."
 
 #: app/Backend/Controllers/AuthenticationController.php:90
-#, fuzzy
 msgid "This user was deactivated. Please ask your administrator."
-msgstr ""
-"Se ha producido un error al convertir el archivo. <br />Por favor, contacte "
-"con el administrador de sistema"
+msgstr "Este usuario se ha desactivado. Consulte a su administrador."
 
 #: app/Backend/Controllers/AuthenticationController.php:131
 msgid "Username or password incorrect."
-msgstr ""
+msgstr "Nombre de usuario o contraseña incorrecta."
 
 #: app/Backend/Controllers/BooksController.php:127
 #: app/Backend/Controllers/BooksController.php:184
@@ -381,9 +357,9 @@ msgstr "Lo sentimos, no se ha podido subir el archivo."
 #: app/Backend/Controllers/BooksController.php:281
 #: app/Backend/Controllers/BooksController.php:309
 #: app/Backend/Controllers/BooksController.php:388
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find the book with the id \"%d\""
-msgstr "No fué posible encontrar una foto con ese identificador"
+msgstr "No se pudo encontrar un libro con el id «%d»"
 
 #: app/Backend/Controllers/BooksController.php:317
 msgid ""
@@ -391,25 +367,26 @@ msgid ""
 msgstr "No puede modificar este libro porque no tiene permisos suficientes."
 
 #: app/Backend/Controllers/BooksController.php:429
-#, fuzzy, php-format
+#, php-format
 msgid "Book \"%s\" deleted successfully."
-msgstr "Categoría eliminada correctamente"
+msgstr "Libro «%s» eliminado correctamente."
 
 #: app/Backend/Controllers/BooksController.php:459
 #: app/Backend/Controllers/BooksController.php:496
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find book with id \"%d\""
-msgstr "No fué posible encontrar una foto con ese identificador"
+msgstr "No se pudo encontrar un libro con el id «%d»"
 
 #: app/Backend/Controllers/BooksController.php:465
 #, php-format
 msgid "Successfully changed availability for book with id \"%d\""
 msgstr ""
+"Estado de disponibilidad cambiado correctamente para el libro con id «%s»"
 
 #: app/Backend/Controllers/BooksController.php:499
 #, php-format
 msgid "Successfully changed suggested flag for book with id \"%d\""
-msgstr ""
+msgstr "Estado de sugerido cambiado correctamente para el libro con id «%s»"
 
 #: app/Backend/Controllers/BooksController.php:542
 #: app/Backend/Controllers/CoversController.php:598
@@ -433,12 +410,11 @@ msgstr ""
 
 #: app/Backend/Controllers/CacheManagerController.php:144
 msgid "FRONTPAGE"
-msgstr ""
+msgstr "PORTADA"
 
 #: app/Backend/Controllers/CacheManagerController.php:235
-#, fuzzy
 msgid "Cache configuration saved successfully."
-msgstr "Configuración de Disqus guardada correctamente"
+msgstr "Configuración de caché guardada correctamente."
 
 #: app/Backend/Controllers/CacheManagerController.php:246
 #: app/models/Frontpage.php:64
@@ -500,71 +476,68 @@ msgid "Sitemap"
 msgstr "Mapa del sitio"
 
 #: app/Backend/Controllers/CacheManagerController.php:295
-#, fuzzy, php-format
+#, php-format
 msgid "Frontpage for category %s"
-msgstr "Portada de artículos"
+msgstr "Portada de la categoría %s"
 
 #: app/Backend/Controllers/CacheManagerController.php:302
-#, fuzzy
 msgid "General frontpage"
-msgstr "Álbum: portadas"
+msgstr "Portada general"
 
 #: app/Backend/Controllers/CacheManagerController.php:316
-#, fuzzy
 msgid "There was an error trying to delete the requested cache page."
-msgstr "Se ha detectado que su navegador ha enviado datos corruptos."
+msgstr ""
+"Se ha producido un error al intentar eliminar la caché de página solicitada."
 
 #: app/Backend/Controllers/CategoriesController.php:243
-#, fuzzy
 msgid "Unable to find a category for the give id."
-msgstr "No fué posible encontrar una foto con ese identificador"
+msgstr "No se pudo encontrar una categoría con el id proporcionado."
 
 #: app/Backend/Controllers/CategoriesController.php:293
-#, fuzzy, php-format
+#, php-format
 msgid "Category \"%s\" updated successfully."
-msgstr "Categoría eliminada correctamente"
+msgstr "Categoría «%s» actualizada correctamente."
 
 #: app/Backend/Controllers/CategoriesController.php:336
-#, fuzzy
 msgid "Category deleted successfully."
-msgstr "Categoría eliminada correctamente"
+msgstr "Categoría eliminada correctamente."
 
 #: app/Backend/Controllers/CategoriesController.php:338
-#, fuzzy
 msgid "To delete a category previously you have to empty it."
-msgstr "Para eliminar una categoría primero debe eliminar sus contenidos"
+msgstr "Para eliminar una categoría primero debe eliminar sus contenidos."
 
 #: app/Backend/Controllers/CategoriesController.php:342
-#, fuzzy
 msgid "You must give a valid id for delete the category."
-msgstr "Debe proporcionar un identificador para eliminar un vídeo."
+msgstr "Debe proporcionar un identificador para eliminar una categoría."
 
 #: app/Backend/Controllers/CategoriesController.php:367
-#, fuzzy
 msgid "Category emptied successfully."
-msgstr "Categoría eliminada correctamente"
+msgstr "Categoría vaciada correctamente."
 
 #: app/Backend/Controllers/CategoriesController.php:371
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to delete all the contents in the category '%s'"
-msgstr "Eliminar todos los contenidos en esta categoría"
+msgstr "No se pudieron eliminar todos los contenidos de la categoría «%s»"
 
 #: app/Backend/Controllers/CategoriesController.php:379
-#, fuzzy
 msgid "You must give a valid id for delete contents in a category."
-msgstr "Debe proporcionar un identificador para eliminar un vídeo."
+msgstr ""
+"Debe proporcionar un identificador para eliminar los contenidos de una "
+"categoría."
 
 #: app/Backend/Controllers/CategoriesController.php:405
 #: app/Backend/Controllers/CategoriesController.php:439
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find a category with the id \"%d\""
-msgstr "No fué posible encontrar una foto con ese identificador"
+msgstr "No se pudo encontrar una categoría con el id «%d»"
 
 #: app/Backend/Controllers/CategoriesController.php:415
 #: app/Backend/Controllers/CategoriesController.php:449
 #, php-format
 msgid "Successfully changed availability for category with id \"%d\""
 msgstr ""
+"Estado de disponibilidad cambiado correctamente para la categoría con id «%"
+"s»"
 
 #: app/Backend/Controllers/CategoriesController.php:475
 #: app/Backend/Controllers/SystemSettingsController.php:97
@@ -601,54 +574,46 @@ msgid "Poll"
 msgstr "Encuesta"
 
 #: app/Backend/Controllers/CommentsController.php:210
-#, fuzzy, php-format
+#, php-format
 msgid "Comment with id \"%d\" doesn't exists."
-msgstr "El ID «%d» no existe"
+msgstr "El comentario con el id «%d» no existe."
 
 #: app/Backend/Controllers/CommentsController.php:243
-#, fuzzy
 msgid "Comment saved successfully."
-msgstr "Configuraciones guardadas con éxito."
+msgstr "Comentario guardado correctamente."
 
 #: app/Backend/Controllers/CommentsController.php:268
-#, fuzzy
 msgid "Comment deleted successfully."
-msgstr "Categoría eliminada correctamente"
+msgstr "Comentario eliminado correctamente."
 
 #: app/Backend/Controllers/CommentsController.php:290
-#, fuzzy
 msgid "Comment was rejected successfully."
-msgstr "Archivo creado con éxito."
+msgstr "Comentario rechazado correctamente."
 
 #: app/Backend/Controllers/CommentsController.php:293
 #: app/Backend/Controllers/CommentsController.php:329
-#, fuzzy
 msgid "Comment was published successfully."
-msgstr "Configuraciones guardadas con éxito."
+msgstr "El comentario se ha publicado correctamente."
 
 #: app/Backend/Controllers/CommentsController.php:332
-#, fuzzy
 msgid "Comment was unpublished successfully."
-msgstr "Ficheros subidos correctamente"
+msgstr "El comentario se ha despublicado correctamente."
 
 #: app/Backend/Controllers/CommentsController.php:364
-#, fuzzy
 msgid "Comments deleted successfully."
-msgstr "Categoría eliminada correctamente"
+msgstr "Comentarios eliminados correctamente."
 
 #: app/Backend/Controllers/CommentsController.php:366
-#, fuzzy
 msgid "You haven't selected any comment to delete."
-msgstr "Debe seleccionar algún elemento."
+msgstr "No ha seleccionado ningún comentario para eliminar."
 
 #: app/Backend/Controllers/CommentsDisqusController.php:46
-#, fuzzy
 msgid ""
 "Please provide your Disqus configuration to start to use your Disqus "
 "Comments module"
 msgstr ""
-"Por favor complete la configuración para empezar a usar el módulo de Boletín "
-"de noticias"
+"Complete la configuración de Disqus para comenzar a usar su módulo de "
+"comentarios de Disqus"
 
 #: app/Backend/Controllers/CommentsDisqusController.php:84
 msgid "Disqus configuration saved successfully"
@@ -662,84 +627,81 @@ msgstr ""
 #: app/Backend/Controllers/ContentController.php:159
 #, php-format
 msgid "Unable to arquive content with id %s: %s"
-msgstr "No se pudo arquivar o contido co identificador %s: %s"
+msgstr "No se pudo archivar el contenido con el identificador %s: %s"
 
 #: app/Backend/Controllers/ContentController.php:205
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to set suggested to frontpage state to content with id %s: %s"
-msgstr "No se pudo arquivar o contido co identificador %s: %s"
+msgstr "No se pudo sugerir a portada el contenido con id %s: %s"
 
 #: app/Backend/Controllers/ContentController.php:287
-#, fuzzy, php-format
+#, php-format
 msgid "Content not available"
-msgstr "Categoría disponible"
+msgstr "Contenido no disponible"
 
 #: app/Backend/Controllers/CoversController.php:205
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find the cover with the id \"%d\""
-msgstr "No fué posible encontrar una foto con ese identificador"
+msgstr "No fué posible encontrar una portada con el identificador «%d»"
 
 #: app/Backend/Controllers/CoversController.php:264
-#, fuzzy, php-format
+#, php-format
 msgid ""
 "There was an error while uploading the file. Try to upload a file smaller "
 "than %d MB or contact with your administrator"
 msgstr ""
-"Se ha producido un error al subir el archivo. <br />Intente subir archivos "
-"más pequeños o contacte con su administrador"
+"Se ha producido un error al subir el archivo. Intente subir ficheros más "
+"pequeños que %d MB o contacte con su administrador"
 
 #: app/Backend/Controllers/CoversController.php:276
-#, fuzzy
 msgid "There was a problem with the cover data. Try again"
-msgstr "Se ha produ"
+msgstr ""
+"Se ha producido un problema al analizar los datos de la portada. Inténtelo "
+"de nuevo."
 
 #: app/Backend/Controllers/CoversController.php:321
-#, fuzzy
 msgid "You can't modify this cover because you don't have enought privileges."
-msgstr ""
-"No puede modificar este contenido porque no tiene permisos suficientes."
+msgstr "No puede modificar esta portada porque no tiene permisos suficientes."
 
 #: app/Backend/Controllers/CoversController.php:324
-#, fuzzy
 msgid "Cover updated successfully."
-msgstr "Ficheros subidos correctamente"
+msgstr "Portada actualizada correctamente"
 
 #: app/Backend/Controllers/CoversController.php:371
-#, fuzzy
 msgid "You must give an id for delete the cover."
-msgstr "Debe proporcionar un identificador para eliminar un vídeo."
+msgstr "Debe proporcionar un identificador para eliminar la portada."
 
 #: app/Backend/Controllers/CoversController.php:402
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find a cover with id \"%d\""
-msgstr "No fué posible encontrar una foto con ese identificador"
+msgstr "No fué posible encontrar una foto con el identificador «%d»"
 
 #: app/Backend/Controllers/CoversController.php:408
 #, php-format
 msgid "Successfully changed availability for the cover \"%s\""
-msgstr ""
+msgstr "Estado de disponibilidad cambiado correctamente para la portada «%s»"
 
 #: app/Backend/Controllers/CoversController.php:439
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find cover with id \"%d\""
-msgstr "No fué posible encontrar una foto con ese identificador"
+msgstr "No se pudo encontrar una portada con el id «%d»"
 
 #: app/Backend/Controllers/CoversController.php:443
 #: app/Backend/Controllers/CoversController.php:478
 #, php-format
 msgid "Successfully changed suggested flag for cover \"%s\""
-msgstr ""
+msgstr "Estado de sugerido cambiado correctamente para la portada «%s»"
 
 #: app/Backend/Controllers/CoversController.php:475
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find a cover with the id \"%d\""
-msgstr "No fué posible encontrar una foto con ese identificador"
+msgstr "No fué posible encontrar una portada con el identificador «%d»"
 
 #: app/Backend/Controllers/CoversController.php:517
 #: app/Backend/Controllers/VideosController.php:474
-#, fuzzy, php-format
+#, php-format
 msgid "Video \"%s\" deleted successfully."
-msgstr "Categoría eliminada correctamente"
+msgstr "Categoría «%s» eliminada correctamente."
 
 #: app/Backend/Controllers/DatabaseErrorsController.php:129
 msgid "SQL errors registered in database cleaned sucessfully."
@@ -749,16 +711,15 @@ msgstr ""
 #: app/Backend/Controllers/ErrorController.php:83
 msgid ""
 "Oups! Seems that we had an unknown problem while trying to run your request."
-msgstr ""
+msgstr "Oups! Parece que hemos tenido un problema al ejecutar tu consulta."
 
 #: app/Backend/Controllers/FilesController.php:320
 msgid "File created successfuly."
-msgstr "Archivo creado con éxito."
+msgstr "Archivo creado correctamente."
 
 #: app/Backend/Controllers/FilesController.php:323
-#, fuzzy
 msgid "Unable to upload the file: A file with the same name already exists."
-msgstr "Ya existe un archivo con el mismo nombre."
+msgstr "No se pudo subir el archivo: Ya existe un archivo con el mismo nombre."
 
 #: app/Backend/Controllers/FilesController.php:328
 msgid ""
@@ -766,36 +727,37 @@ msgid ""
 "system administrator."
 msgstr ""
 "Se ha producido un error al subir el archivo. <br />Por favor, contacte con "
-"el administrador de sistema"
+"el administrador de sistema."
 
 #: app/Backend/Controllers/FilesController.php:345
 msgid "Please select a file before send the form"
 msgstr "Seleccione un archivo antes de enviar el formulario"
 
 #: app/Backend/Controllers/FilesController.php:368
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find the file with the id \"%s\""
-msgstr "No fué posible encontrar una foto con ese identificador"
+msgstr "No se pudo encontrar el archivo con el id «%d»"
 
 #: app/Backend/Controllers/FilesController.php:401
-#, fuzzy, php-format
+#, php-format
 msgid "File information updated successfuly."
-msgstr "Archivo creado con éxito."
+msgstr "Información del archivo actualizada correctamente."
 
 #: app/Backend/Controllers/FilesController.php:403
-#, fuzzy, php-format
+#, php-format
 msgid "There was a problem while saving the file information."
-msgstr "Se ha producido un error al guardar la configuración del módulo de EFE"
+msgstr ""
+"Se ha producido un error al guardar la configuración del módulo de Archivos."
 
 #: app/Backend/Controllers/FilesController.php:430
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find the file with the id '%d'."
-msgstr "No fué posible encontrar una foto con ese identificador"
+msgstr "No se pudo encontrar el archivo con el id «%d»."
 
 #: app/Backend/Controllers/FilesController.php:442
-#, fuzzy, php-format
+#, php-format
 msgid "File with id '%d' deleted successfuly."
-msgstr "Archivo creado con éxito."
+msgstr "El archivo con el id «%d» fué eliminado correctamente. "
 
 #: app/Backend/Controllers/FilesController.php:475
 msgid "This file is not published so you can't define it as favorite."
@@ -805,9 +767,9 @@ msgstr ""
 #: app/Backend/Controllers/FilesController.php:478
 #: app/Backend/Controllers/FilesController.php:515
 #: app/Backend/Controllers/FilesController.php:548
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find the file with id '%d'"
-msgstr "No fué posible encontrar una foto con ese identificador"
+msgstr "No se pudo encontrar el fichero con el id «%d»"
 
 #: app/Backend/Controllers/FilesController.php:512
 msgid ""
@@ -817,9 +779,9 @@ msgstr ""
 "del widget de portada."
 
 #: app/Backend/Controllers/FilesController.php:589
-#, fuzzy, php-format
+#, php-format
 msgid "Files \"%s\" deleted successfully."
-msgstr "Archivo creado con éxito."
+msgstr "Se han eliminado correctamente «%s»."
 
 #: app/Backend/Controllers/FrontpagesController.php:198
 msgid "Content positions saved properly"
@@ -853,9 +815,8 @@ msgid "Please provide a valid category for upload images."
 msgstr "Seleccione una categoría válida donde subir imágenes."
 
 #: app/Backend/Controllers/ImagesController.php:513
-#, fuzzy
 msgid "Please provide a image id for show it."
-msgstr "Seleccione una categoría válida donde subir imágenes."
+msgstr "Proporcione un identificador de una imagen para mostrarla."
 
 #: app/Backend/Controllers/ImagesController.php:532
 msgid "Unable to find any photo with that id"
@@ -867,19 +828,21 @@ msgid "Data successfully saved for %d photos"
 msgstr "Datos guardados correctamente para %d fotos"
 
 #: app/Backend/Controllers/ImagesController.php:622
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find the photo with the id \"%d\""
-msgstr "No fué posible encontrar una foto con ese identificador"
+msgstr "No se pudo encontrar una foto con el identificador «%d»"
 
 #: app/Backend/Controllers/ImagesController.php:819
-#, fuzzy, php-format
+#, php-format
 msgid "Image \"%s\" deleted successfully."
-msgstr "Categoría eliminada correctamente"
+msgstr "Imagen «%s» eliminada correctamente."
 
 #: app/Backend/Controllers/ImagesController.php:872
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find any content matching your search criterira."
-msgstr "No fue posible encontrar ningún contenido con su criterio de búsqueda."
+msgstr ""
+"No se pudo encontrar ningún contenido que coincida con su criterio de "
+"búsqueda."
 
 #: app/Backend/Controllers/ImporterEfeController.php:46
 msgid ""
@@ -896,7 +859,7 @@ msgstr "La última sincronización fue hace cierto tiempo."
 
 #: app/Backend/Controllers/ImporterEfeController.php:112
 #: app/Backend/Controllers/ImporterEuropapressController.php:106
-#, fuzzy, php-format
+#, php-format
 msgid "Last sync was %d minutes ago."
 msgstr "La última sincronización se llevó a cabo hace %1 minuto/s."
 
@@ -910,9 +873,9 @@ msgstr ""
 "con servidor» de arriba."
 
 #: app/Backend/Controllers/ImporterEfeController.php:163
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find an element with the id \"%d\""
-msgstr "No fué posible encontrar una foto con ese identificador"
+msgstr "No se pudo encontrar un elemento con el identificador «%d»"
 
 #: app/Backend/Controllers/ImporterEfeController.php:193
 #: app/Backend/Controllers/ImporterEfeController.php:216
@@ -928,9 +891,8 @@ msgid "The category you have chosen doesn't exists."
 msgstr "La categoría que seleccionó no existe."
 
 #: app/Backend/Controllers/ImporterEfeController.php:338
-#, fuzzy
 msgid "The article you want to import doesn't exists."
-msgstr "La categoría que seleccionó no existe."
+msgstr "El artículo que quiere importar no existe."
 
 #: app/Backend/Controllers/ImporterEfeController.php:415
 #: app/Backend/Controllers/ImporterEuropapressController.php:237
@@ -1004,9 +966,9 @@ msgstr ""
 "módulo de importación de EuropaPress"
 
 #: app/Backend/Controllers/ImporterEuropapressController.php:153
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find the nwe with id \"%d\"."
-msgstr "No se pudo arquivar o contido co identificador %s: %s"
+msgstr "No se pudo encontrar la noticia con el identificador «%d»."
 
 #: app/Backend/Controllers/ImporterEuropapressController.php:278
 msgid "Europapress configuration saved successfully"
@@ -1017,9 +979,9 @@ msgid "There was an error while saving Europapress configuration"
 msgstr "Se ha producido un error al guardar la configuración de Europapress"
 
 #: app/Backend/Controllers/ImporterEuropapressController.php:337
-#, fuzzy, php-format
+#, php-format
 msgid "If you are sure <a href=\"%s\">try to unlock it</a>"
-msgstr "Si está seguro <a href=\"%s?action=unlock\">intente desbloquearlo</a>"
+msgstr "Si está seguro <a href=\"%s\">intente desbloquearlo</a>"
 
 #: app/Backend/Controllers/ImporterXmlfileController.php:40
 msgid "Please provide XML file schema"
@@ -1027,7 +989,7 @@ msgstr "Por favor proporcione el esquema de archivo XML"
 
 #: app/Backend/Controllers/ImporterXmlfileController.php:64
 msgid "Form was sent in the wrong way."
-msgstr ""
+msgstr "El formulario se ha enviado de forma incorrecta."
 
 #: app/Backend/Controllers/ImporterXmlfileController.php:147
 #, php-format
@@ -1035,6 +997,8 @@ msgid ""
 "There was an error while uploading «%s» - «%s». Check its size before send "
 "it."
 msgstr ""
+"Se ha producido un error durante la subida «%s» - «%s». Compruebe su tamaño "
+"antes de enviarlo."
 
 #: app/Backend/Controllers/ImporterXmlfileController.php:204
 msgid "Importer XML configuration saved successfully"
@@ -1045,15 +1009,16 @@ msgid "There was an error while saving importer XML configuration"
 msgstr "Se ha producido un error al guardar la configuración del módulo de XML"
 
 #: app/Backend/Controllers/InstanceSyncController.php:99
-#, fuzzy
 msgid "Instance sync module configuration saved successfully"
-msgstr "Configuración del módulo de EFE guardada correctamente"
+msgstr ""
+"Configuración del módulo de Sincronización de instancias guardada "
+"correctamente"
 
 #: app/Backend/Controllers/InstanceSyncController.php:101
-#, fuzzy
 msgid "There was an error while saving the Instance sync module configuration"
 msgstr ""
-"Se ha producido un error al guardar la configuración del módulo de Disqus"
+"Se ha producido un error al guardar la configuración del módulo de "
+"Sincronización de instancias"
 
 #: app/Backend/Controllers/InstanceSyncController.php:246
 msgid "Site configuration deleted successfully"
@@ -1086,132 +1051,118 @@ msgid "Email"
 msgstr "Email"
 
 #: app/Backend/Controllers/KeywordsController.php:127
-#, fuzzy
 msgid "Keyword created sucessfully"
-msgstr "Archivo creado con éxito."
+msgstr "Palabra clave creada correctamente"
 
 #: app/Backend/Controllers/KeywordsController.php:168
-#, fuzzy
 msgid "Keyword updated sucessfully"
-msgstr "Ficheros subidos correctamente"
+msgstr "Palabra clave actualizada correctamente"
 
 #: app/Backend/Controllers/LettersController.php:114
-#, fuzzy
 msgid "Letter successfully created."
-msgstr "Configuraciones guardadas con éxito."
+msgstr "Carta creada correctamente."
 
 #: app/Backend/Controllers/LettersController.php:116
 msgid "Unable to create the new letter."
-msgstr ""
+msgstr "No se pudo crear la nueva carta."
 
 #: app/Backend/Controllers/LettersController.php:142
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find the letter with the id \"%d\""
-msgstr "No fué posible encontrar una foto con ese identificador"
+msgstr "No se pudo encontrar una carta con el identificador «%d»"
 
 #: app/Backend/Controllers/LettersController.php:183
-#, fuzzy
 msgid "Letter successfully updated."
-msgstr "Configuraciones guardadas con éxito."
+msgstr "Carta actualizada con éxito."
 
 #: app/Backend/Controllers/LettersController.php:185
-#, fuzzy
 msgid "Unable to update the letter."
-msgstr "Obtener lista de cachés actualizada"
+msgstr "No se pudo actualizar la carta."
 
 #: app/Backend/Controllers/LettersController.php:220
-#, fuzzy
 msgid "Letter deleted successfully."
-msgstr "Categoría eliminada correctamente"
+msgstr "Carta eliminada con éxito."
 
 #: app/Backend/Controllers/LettersController.php:222
-#, fuzzy
 msgid "You must give an id for delete the letter."
-msgstr "Debe proporcionar un identificador para eliminar un álbum."
+msgstr "Debe proporcionar un identificador para eliminar una carta."
 
 #: app/Backend/Controllers/LettersController.php:255
 #: app/Backend/Controllers/LettersController.php:295
 #: app/Backend/Controllers/LettersController.php:336
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find a letter with the id \"%d\""
-msgstr "No fué posible encontrar una foto con ese identificador"
+msgstr "No se pudo encontrar una carta con el identificador «%d»"
 
 #: app/Backend/Controllers/LettersController.php:258
 #, php-format
 msgid "Successfully changed availability for the letter \"%s\""
-msgstr ""
+msgstr "Estado de disponibilidad cambiado correctamente para la carta «%s»"
 
 #: app/Backend/Controllers/LettersController.php:300
 #, php-format
 msgid "Successfully deleted %d letters"
-msgstr ""
+msgstr "Se han eliminado %d cartas con éxito"
 
 #: app/Backend/Controllers/LettersController.php:341
 #, php-format
 msgid "Successfully changed the available status of %d letters"
-msgstr ""
+msgstr "Estado de disponibilidad cambiado correctamente para %d cartas"
 
 #: app/Backend/Controllers/MenusController.php:164
-#, fuzzy, php-format
+#, php-format
 msgid "Menu '%s' created successfully."
-msgstr "Archivo creado con éxito."
+msgstr "Menú «%s» creado correctamente."
 
 #: app/Backend/Controllers/MenusController.php:166
 #, php-format
 msgid "Unable to create the menu"
-msgstr ""
+msgstr "No se pudo crear el menú"
 
 #: app/Backend/Controllers/MenusController.php:247
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find a menu with the id \"%s\""
-msgstr "No fué posible encontrar una foto con ese identificador"
+msgstr "No se pudo encontrar un menú con el id «%s»"
 
 #: app/Backend/Controllers/MenusController.php:264
-#, fuzzy
 msgid "Menu updated successfully."
-msgstr "Ficheros subidos correctamente"
+msgstr "Menú actualizado con éxito."
 
 #: app/Backend/Controllers/MenusController.php:266
-#, fuzzy
 msgid "There was an error while updating the menu."
-msgstr "Se ha producido un error al eliminar la configuración"
+msgstr "Se ha producido un error al actualizar el menú."
 
 #: app/Backend/Controllers/MenusController.php:295
-#, fuzzy
 msgid "You must give an id for delete the menu."
-msgstr "Debe proporcionar un identificador para eliminar un álbum."
+msgstr "Debe proporcionar un identificador para eliminar un menú."
 
 #: app/Backend/Controllers/MenusController.php:301
-#, fuzzy, php-format
+#, php-format
 msgid "Menu '%s' deleted successfully."
-msgstr "Categoría eliminada correctamente"
+msgstr "Menú «%s» eliminado correctamente."
 
 #: app/Backend/Controllers/MenusController.php:337
-#, fuzzy, php-format
+#, php-format
 msgid "Menu \"%s\" deleted successfully."
-msgstr "Categoría eliminada correctamente"
+msgstr "Menú «%s» eliminado correctamente."
 
 #: app/Backend/Controllers/MenusController.php:339
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to delete the menu \"%s\" as is system internal."
-msgstr ""
-"No fué posible eliminar esta foto directamente ya que está siendo usada por "
-"algunos contenidos."
+msgstr "No se pudo eliminar el menú «%s» ya que es un menú interno."
 
 #: app/Backend/Controllers/NewsletterController.php:332
-#, fuzzy
 msgid "Newsletter deleted successfully."
-msgstr "Categoría eliminada correctamente"
+msgstr "Boletín de noticias eliminado correctamente."
 
 #: app/Backend/Controllers/NewsletterController.php:334
-#, fuzzy
 msgid "You must give an id for delete a newsletter."
-msgstr "Debe proporcionar un identificador para eliminar un álbum."
+msgstr ""
+"Debe proporcionar un identificador para eliminar un boletín de noticias."
 
 #: app/Backend/Controllers/NewsletterController.php:362
-#, fuzzy
 msgid "Newsletter module settings saved successfully."
-msgstr "Configuraciones guardadas correctamente."
+msgstr "Configuración del módulo de boletín de noticias guardado correctamente."
 
 #: app/Backend/Controllers/NewsletterController.php:405
 msgid ""
@@ -1230,50 +1181,46 @@ msgstr ""
 "configuración y complete el formulario."
 
 #: app/Backend/Controllers/NewsletterSubscriptorsController.php:88
-#, fuzzy
 msgid "Subscription successfully created."
-msgstr "Posiciones guardadas con éxito."
+msgstr "Subscripción creada correctamente."
 
 #: app/Backend/Controllers/NewsletterSubscriptorsController.php:90
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to create the new subscriptor: %s"
-msgstr "Dirección de correo para recibir nuevas subscripciones"
+msgstr "No se pudo crear el nuevo subscriptor: %s"
 
 #: app/Backend/Controllers/NewsletterSubscriptorsController.php:134
-#, fuzzy
 msgid "Subscription successfully updated."
-msgstr "Posiciones guardadas con éxito."
+msgstr "Subscripción actualizada correctamente."
 
 #: app/Backend/Controllers/NewsletterSubscriptorsController.php:136
-#, fuzzy
 msgid "Unable to update the subscriptor information"
-msgstr "Activar la suscripción en portada"
+msgstr "No se pudo actualizar la información de la subscripción"
 
 #: app/Backend/Controllers/NewsletterSubscriptorsController.php:166
 #: app/Backend/Controllers/NewsletterSubscriptorsController.php:191
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find the user with the id \"%d\""
-msgstr "No fué posible encontrar una foto con ese identificador"
+msgstr "No se pudo encontrar el usuario con el identificador «%d»"
 
 #: app/Backend/Controllers/NewsletterSubscriptorsController.php:195
-#, fuzzy, php-format
+#, php-format
 msgid "Subscritor with id \"%d\" deleted sucessfully"
-msgstr "Configuración eliminada correctamente"
+msgstr "Subscripción con identificador «%d» eliminada correctamente"
 
 #: app/Backend/Controllers/NewsletterSubscriptorsController.php:261
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to delete the subscriptor with the id %d."
-msgstr "No fué posible encontrar una foto con ese identificador"
+msgstr "No se pudo eliminar la subscripción con el id %d."
 
 #: app/Backend/Controllers/NewsletterSubscriptorsController.php:265
-#, fuzzy, php-format
+#, php-format
 msgid "Successfully deleted %d subscriptors."
-msgstr "Eliminar subscriptor"
+msgstr "Se han eliminado %d subscripciones con éxito."
 
 #: app/Backend/Controllers/NewsletterSubscriptorsController.php:267
-#, fuzzy
 msgid "Please specify a subscriptor id for delete it."
-msgstr "Especifique el articulo a importar."
+msgstr "Especifique un identificador de un subscriptor para eliminarlo."
 
 #: app/Backend/Controllers/NewsletterSubscriptorsController.php:297
 #, php-format
@@ -1283,57 +1230,57 @@ msgstr ""
 #: app/Backend/Controllers/NewsletterSubscriptorsController.php:299
 msgid "Please specify a subscriptor id for change its subscribed state it."
 msgstr ""
+"Especifique el identificador de un subscriptor para cambiar el estado de su "
+"subscripción."
 
 #: app/Backend/Controllers/OpinionAuthorsController.php:105
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find the author with the id \"%d\""
-msgstr "No fué posible encontrar una foto con ese identificador"
+msgstr "No se pudo encontrar el autor con el identificador «%d»"
 
 #: app/Backend/Controllers/OpinionAuthorsController.php:113
 #, php-format
 msgid "This author doesn't have an image associated please select one."
-msgstr ""
+msgstr "Este autor no tiene una imagen asociada, seleccione una."
 
 #: app/Backend/Controllers/OpinionAuthorsController.php:162
 msgid "Author successfully created."
-msgstr ""
+msgstr "Autor creado correctamente."
 
 #: app/Backend/Controllers/OpinionAuthorsController.php:164
 msgid "Unable to create the author."
-msgstr ""
+msgstr "No se pudo crear el autor."
 
 #: app/Backend/Controllers/OpinionAuthorsController.php:168
 #: app/Backend/Controllers/OpinionAuthorsController.php:230
 msgid "Unable to upload the new author image."
-msgstr ""
+msgstr "No se pudo subir la nueva imagen del autor."
 
 #: app/Backend/Controllers/OpinionAuthorsController.php:224
 msgid "Author successfully updated."
-msgstr ""
+msgstr "Autor actualizado correctamente."
 
 #: app/Backend/Controllers/OpinionAuthorsController.php:226
 msgid "Unable to update the author."
-msgstr ""
+msgstr "No se pudo actualizar el autor."
 
 #: app/Backend/Controllers/OpinionAuthorsController.php:264
-#, fuzzy
 msgid "Author deleted successfully."
-msgstr "Categoría eliminada correctamente"
+msgstr "Autor eliminado correctamente."
 
 #: app/Backend/Controllers/OpinionAuthorsController.php:266
-#, fuzzy
 msgid "You must give an id for delete an opinion author."
-msgstr "Debe proporcionar un identificador para eliminar un álbum."
+msgstr "Debe proporcionar un identificador para eliminar un autor."
 
 #: app/Backend/Controllers/OpinionAuthorsController.php:353
-#, fuzzy, php-format
+#, php-format
 msgid "Deleted the author successfully."
-msgstr "Archivo creado con éxito."
+msgstr "Autor eliminado con éxito."
 
 #: app/Backend/Controllers/OpinionAuthorsController.php:355
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to delete the author with the id %s."
-msgstr "No fué posible encontrar una foto con ese identificador"
+msgstr "No se pudo eliminar el autor con el identificador %s."
 
 #: app/Backend/Controllers/OpinionsController.php:178
 #: app/Backend/Controllers/OpinionsController.php:182
@@ -1342,21 +1289,20 @@ msgid "You must put %d opinions %s in the home widget"
 msgstr "Debe poner %d opiniones %s en el Widget de portada"
 
 #: app/Backend/Controllers/OpinionsController.php:248
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find the opinion with the id \"%d\""
-msgstr "No fué posible encontrar una foto con ese identificador"
+msgstr "No se pudo encontrar la opinion con el identificador «%d»"
 
 #: app/Backend/Controllers/OpinionsController.php:311
 #: app/Backend/Controllers/PollsController.php:218
 #: app/Backend/Controllers/SpecialsController.php:205
-#, fuzzy
 msgid "Special successfully created."
-msgstr "Configuraciones guardadas con éxito."
+msgstr "Especial creado con éxito."
 
 #: app/Backend/Controllers/OpinionsController.php:313
 #: app/Backend/Controllers/SpecialsController.php:207
 msgid "Unable to create the new special."
-msgstr ""
+msgstr "No se pudo crear el nuevo especial."
 
 #: app/Backend/Controllers/OpinionsController.php:356
 msgid ""
@@ -1366,69 +1312,63 @@ msgstr ""
 "suficientes."
 
 #: app/Backend/Controllers/OpinionsController.php:385
-#, fuzzy
 msgid "Opinion successfully updated."
-msgstr "Posiciones guardadas con éxito."
+msgstr "Opinión actualizada correctamente."
 
 #: app/Backend/Controllers/OpinionsController.php:387
 msgid "Unable to update the opinion."
-msgstr ""
+msgstr "No se pudo actualizar la opinión."
 
 #: app/Backend/Controllers/OpinionsController.php:428
-#, fuzzy
 msgid "Opinion deleted successfully."
-msgstr "Categoría eliminada correctamente"
+msgstr "Opinión eliminada correctamente"
 
 #: app/Backend/Controllers/OpinionsController.php:430
-#, fuzzy
 msgid "You must give an id for delete an opinion."
-msgstr "Debe proporcionar un identificador para eliminar un vídeo."
+msgstr "Debe proporcionar un identificador para eliminar una opinión."
 
 #: app/Backend/Controllers/OpinionsController.php:464
 #: app/Backend/Controllers/OpinionsController.php:513
 #: app/Backend/Controllers/OpinionsController.php:551
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find an opinion with the id \"%d\""
-msgstr "No fué posible encontrar una foto con ese identificador"
+msgstr "No se pudo encontrar la opinion con el identificador «%d»"
 
 #: app/Backend/Controllers/OpinionsController.php:471
 #, php-format
 msgid "Successfully changed availability for the opinion \"%s\""
-msgstr ""
+msgstr "Estado de disponibilidad cambiado correctamente para la opinión «%s»"
 
 #: app/Backend/Controllers/OpinionsController.php:516
 #, php-format
 msgid "Successfully changed in home state for the opinion \"%s\""
-msgstr ""
+msgstr "Estado de «En Portada» cambiado correctamente para la opinión «%s»"
 
 #: app/Backend/Controllers/OpinionsController.php:556
 #, php-format
 msgid "Successfully changed favorite state for the opinion \"%s\""
-msgstr ""
+msgstr "Estado de «Favorito» cambiado correctamente para la opinión «%s»"
 
 #: app/Backend/Controllers/OpinionsController.php:624
 #: app/Backend/Controllers/SpecialsController.php:402
-#, fuzzy
 msgid "Unable to save positions for the specials widget."
-msgstr ""
-"No se pudo guardar las posiciones de los contenidos: Los datos enviados por "
-"el cliente no son válidos."
+msgstr "No se pudieron guardar las posiciones de los widget."
 
 #: app/Backend/Controllers/OpinionsController.php:660
 #: app/Backend/Controllers/OpinionsController.php:712
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find a opinion with the id \"%d\""
-msgstr "No fué posible encontrar una foto con ese identificador"
+msgstr "No se pudo encontrar la opinion con el identificador «%d»"
 
 #: app/Backend/Controllers/OpinionsController.php:665
-#, fuzzy, php-format
+#, php-format
 msgid "Successfully deleted %d opinions"
-msgstr "Datos guardados correctamente para %d fotos"
+msgstr "Se han eliminado %d opiniones con éxito"
 
 #: app/Backend/Controllers/OpinionsController.php:717
 #, php-format
 msgid "Successfully changed the available status of %d opinions"
-msgstr ""
+msgstr "Estado de disponibilidad cambiado correctamente para %d opiniones"
 
 #: app/Backend/Controllers/PollsController.php:157
 #, php-format
@@ -1440,27 +1380,26 @@ msgid "Unable to create the new v."
 msgstr ""
 
 #: app/Backend/Controllers/PollsController.php:249
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find the poll with the id \"%d\""
-msgstr "No fué posible encontrar una foto con ese identificador"
+msgstr "No se pudo encontrar la encuesta con el identificador «%d»"
 
 #: app/Backend/Controllers/PollsController.php:297
 msgid "Poll successfully updated."
-msgstr ""
+msgstr "Encuesta actualizada correctamente"
 
 #: app/Backend/Controllers/PollsController.php:299
 msgid "Unable to update the poll."
-msgstr ""
+msgstr "No se pudo actualizar la encuesta."
 
 #: app/Backend/Controllers/PollsController.php:312
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find a poll with the id \"%s\"."
-msgstr "No fué posible encontrar una foto con ese identificador"
+msgstr "No se pudo encontrar la encuesta con el identificador «%s»."
 
 #: app/Backend/Controllers/PollsController.php:338
-#, fuzzy
 msgid "Poll deleted successfully."
-msgstr "Categoría eliminada correctamente"
+msgstr "Encuesta eliminada con éxito."
 
 #: app/Backend/Controllers/PollsController.php:340
 #, fuzzy
@@ -2067,7 +2006,7 @@ msgstr "Soporte y ayuda"
 #: vendor/core/Acl.php:55 vendor/core/Acl.php:118
 msgid "Sorry, you don't have enought privileges"
 msgstr ""
-"Lo sentimos, pero usted no tienes suficientes permisos para realizar esta "
+"Lo sentimos, pero usted no tiene suficientes permisos para realizar esta "
 "acción"
 
 #: vendor/core/ImporterXml.php:82
@@ -6538,9 +6477,9 @@ msgid ""
 "com'>gravatar.com</a> with the same email address as you have here in "
 "OpenNemas"
 msgstr ""
-"Regístrese en <a href=\"http://www.gravatar.com\">gravatar.com</a> y "
-"asegúrese de usar el mismo correo electrónico que tiene registrado aquí en "
-"OpenNemas"
+"Si quiere usar un avatar personalizado regístrese en <a "
+"href='http://www.gravatar.com'>gravatar.com</a> y asegúrese de usar el mismo "
+"correo electrónico que tiene aquí en OpenNemas"
 
 #: app/Backend/Resources/locale/extracted_strings.c:5201
 msgid "User name"

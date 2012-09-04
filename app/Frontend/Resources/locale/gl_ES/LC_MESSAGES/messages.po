@@ -1,4 +1,4 @@
-#: public/controllers/letter.php:157
+#: public/controllers/letter.php:165
 msgid "Su Carta al Director <strong>no</strong> ha sido guardada."
 msgstr ""
 
