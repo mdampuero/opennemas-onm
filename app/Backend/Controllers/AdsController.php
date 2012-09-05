@@ -180,7 +180,8 @@ class AdsController extends Controller
                 'category'           => $firstCategory,
                 'categories'         => implode(',', $categories),
                 'available'          => $request->request->filter('available', 0, FILTER_SANITIZE_STRING),
-                'content_status'          => $request->request->filter('available', 0, FILTER_SANITIZE_STRING),
+                'content_status'     => $request->request->filter('available', 0, FILTER_SANITIZE_STRING),
+                'with_script'        => $request->request->getDigits('with_script', 0),
                 'img1'               => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
                 'overlap'            => $request->request->filter('overlap', '', FILTER_SANITIZE_STRING),
                 'type_medida'        => $request->request->filter('type_medida', '', FILTER_SANITIZE_STRING),
@@ -195,6 +196,10 @@ class AdsController extends Controller
                 'type_advertisement' => $request->request->filter('type_advertisement', '', FILTER_SANITIZE_STRING),
                 'fk_author'          => $_SESSION['userid'],
                 'publisher'          => $_SESSION['userid'],
+                'params'             => array(
+                    'width'          => $request->request->getDigits('params_width', ''),
+                    'height'         => $request->request->getDigits('params_height', ''),
+                )
             );
 
             if ($advertisement->create($data)) {
@@ -296,6 +301,7 @@ class AdsController extends Controller
             'categories'         => implode(',', $categories),
             'available'          => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'content_status'     => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
+            'with_script'        => $request->request->getDigits('with_script', 0),
             'img1'               => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
             'overlap'            => $request->request->filter('overlap', '', FILTER_SANITIZE_STRING),
             'type_medida'        => $request->request->filter('type_medida', '', FILTER_SANITIZE_STRING),
@@ -310,6 +316,10 @@ class AdsController extends Controller
             'type_advertisement' => $request->request->filter('type_advertisement', '', FILTER_SANITIZE_STRING),
             'fk_author'          => $_SESSION['userid'],
             'publisher'          => $_SESSION['userid'],
+            'params'             => array(
+                'width'          => $request->request->getDigits('params_width', ''),
+                'height'         => $request->request->getDigits('params_height', ''),
+            )
         );
 
         if ($ad->update($data)) {

@@ -766,19 +766,139 @@ class Advertisement extends Content
      **/
     public function render($params, $tpl = null)
     {
-        //  if (!isset($tpl)) {
-            $tpl = new Template(TEMPLATE_USER);
-        //}
+        $output = '';
 
-        $tpl->assign('item', $this);
+        $params['beforeHTML'] = "<div class=\"ad_in_column ad_horizontal_marker clearfix\"><div>";
+        $params['afterHTML'] = "</div></div>";
 
-        try {
-            $html = $tpl->fetch($params['tpl']);
-        } catch (\Exception $e) {
-            $html = 'Advertisement not available';
+        if (defined('ADVERTISEMENT_ENABLE')  && !ADVERTISEMENT_ENABLE) {
+            return $output;
         }
 
-        return $this->title;//$html;
+        $banner = $this;
+
+        $width  = $params['width'];
+        $height = $params['height'];
+
+        if ($this->with_script == 1) {
+            $photo = new \Photo($this->img);
+        }
+
+        $photo = new \Photo($this->img);
+
+        // Overlap flash?
+        $overlap  = (isset($params['overlap']))? $params['overlap']: false;
+        $isBastardIE = preg_match('/MSIE /', $_SERVER['HTTP_USER_AGENT']);
+
+        if (isset($params['beforeHTML'])) {
+            $output .= $params['beforeHTML'];
+        }
+
+        // Initial container
+        $output .= '<div class="'.$cssclass.'">';
+
+        if ($this->with_script == 1) {
+            // Original method
+            // $output .= $banner->script;
+            // Parallelized method using iframes
+            if (preg_match('/<iframe/', $this->script)) {
+                $output .= $this->script;
+            } else {
+                $output .=
+                    '<iframe src="'.SITE_URL.'ads/get/' . date('YmdHis', strtotime($this->created))
+                    .sprintf('%06d', $this->pk_content)  . '.html" ' .
+                   'scrolling="no" frameborder="0" width="'.$this->params['width']
+                   .'" height="'.$this->params['height'].'" ' .
+                   'marginwidth="0" marginheight="0" rel="nofollow"></iframe>';
+            }
+
+        } elseif( !empty($banner->pk_advertisement) ) {
+
+            // TODO: controlar los banners swf especiales con div por encima
+            if (strtolower($photo->type_img)=='swf') {
+
+                if (!$overlap && !$banner->overlap) {
+                    // Flash object
+                    // FIXME: build flash object with all tags and params
+
+                    $output .= '<a target="_blank" href="'
+                                .SITE_URL.'ads/'. date('YmdHis', strtotime($banner->created))
+                                .sprintf('%06d', $banner->pk_advertisement)
+                                .'.html" rel="nofollow" style="display:block;cursor:pointer">';
+                    $output .= '<object width="'.$width.'" height="'.$height.'" >
+                            <param name="wmode" value="transparent" />
+                            <param name="movie" value="'. MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name. '" />
+                            <param name="width" value="'.$width.'" />
+                            <param name="height" value="'.$height.'" />
+                            <embed src="'. MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name. '"
+                                width="100%" height="100%" SCALE="exactfit" alt="Publicidad '.$banner->title
+                                .'" wmode="transparent"></embed>
+                        </object>';
+                } else {
+                    if (!$isBastardIE) {
+                        $output .= '<div style="position: relative; width: 100%; height: '.$height.'px;">
+                            <div style="left:0px;top:0px;cursor:pointer;background-color:transparent;'
+                                .'position:absolute;z-index:100;width:'.
+                                $width.'px;height:'.$height.'px;"
+                                onclick="javascript:window.open(\''.SITE_URL.'ads/'
+                                .date('YmdHis', strtotime($banner->created)).sprintf('%06d', $banner->pk_advertisement)
+                                .'.html\', \'_blank\');return false;"></div>';
+                    } else {
+                        $output .= '<div style="position: relative; width: '.$width.'px; height: '.$height.'px;">
+                            <div style="left:0px;top:0px;cursor:pointer;background-color:#FFF;'
+                                .'filter:alpha(opacity=0);position:absolute;z-index:100;width:'.
+                                $width.'px;height:'.$height.'px;"
+                                onclick="javascript:window.open(\''.SITE_URL.'ads/'
+                                .date('YmdHis', strtotime($banner->created))
+                                .sprintf('%06d', $banner->pk_advertisement)
+                                .'.html\', \'_blank\');return false;"></div>';
+                    }
+
+                    $output .= '<div style="position: absolute; z-index: 0; width: '.$width.'px; left: 0px;">
+                            <object width="'.$width.'" height="'.$height.'">
+                                <param name="movie" value="'. MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name. '" />
+                                <param name="wmode" value="opaque" />
+                                <param name="width" value="'.$width.'" />
+                                <param name="height" value="'.$height.'" />
+                                <embed src="'. MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name. '" wmode="opaque"
+                                    width="100%" height="100%" alt="Publicidad '. $banner->title. '"></embed>
+                            </object>
+                        </div>
+                      </div>';
+
+                    $output .= '</div>';
+
+                    if (isset($params['afterHTML'])) {
+                        $output .= $params['afterHTML'];
+                    }
+
+
+                    return render_output($output, $banner);
+                }
+            } else {
+                // Image
+                $output .= '<a target="_blank" href="'.SITE_URL.'ads/'
+                        .date('YmdHis', strtotime($banner->created))
+                        .sprintf('%06d', $banner->pk_advertisement) .'.html" rel="nofollow">';
+                $output .= '<img src="'. MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name.'"
+                        alt="Publicidad '.$banner->title.'" width="'.$width.'" height="'.$height.'" />';
+            }
+
+            $output .= '</a>';
+        } else {
+            // Empty banner, don't return anything
+            $output = '';
+            return render_output($output, $banner);
+        }
+
+        $output .= '</div>';
+
+        // Post content of banner
+        if (isset($params['afterHTML'])) {
+            $output .= $params['afterHTML'];
+        }
+
+        return $output;
     }
 
     /**

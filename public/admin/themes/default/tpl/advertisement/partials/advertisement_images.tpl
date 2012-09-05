@@ -14,7 +14,7 @@
                                 <!-- /flash-container-replace -->
                                 <script>
                                         var flashvars = {};
-                                        var params = {};
+                                        var params = { wmode: "opaque" };
                                         var attributes = {};
                                         swfobject.embedSWF("{$smarty.const.MEDIA_IMG_PATH_URL}{$photo1->path_file}{$photo1->name}", "flash-container-replace", "270", "150", "9.0.0", false, flashvars, params, attributes);
                                     </script>
@@ -107,7 +107,8 @@
                     // Change the image thumbnail to the new one
                     parent.find('.article-resource-image').html("<img src=\"" + image.data("url") + "\" />");
                 } else {
-                    parent.find('.article-resource-image').html( "<div id=\"flash-container-replace\"><\/div><script> var flashvars = {}; var params = {}; var attributes = {};" +
+                    parent.find('.article-resource-image').html(
+                        "<div id=\"flash-container-replace\"><\/div>"+"<script> var flashvars = {}; var params = { wmode:\"opaque\" }; var attributes = {};" +
                         "swfobject.embedSWF(\"" + image.data("url") + image.data("filename")  + "\",  \"flash-container-replace\", \"270\", \"150\", \"9.0.0\", false, flashvars, params, attributes);<\/script>"
                     );
                 };
@@ -125,6 +126,9 @@
                 var article_inputs = parent.find(".article-resource-footer");
                 article_inputs.find("input[type='hidden']").attr('value', image.data("id"));
                 article_inputs.find("textarea").attr('value', image.data("description"));
+
+                $('#params_width').val(image.data("width"));
+                $('#params_height').val(image.data("height"));
             }
         });
     });

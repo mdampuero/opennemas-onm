@@ -8,10 +8,10 @@
         right:10px;
     }
     .resource-container {
-        width:500px;
+        width:440px;
     }
     .article-resource-image, .article-resource-image-info {
-        width:200px;
+        width:auto !important;
     }
 </style>
 {/block}
@@ -22,48 +22,11 @@
     {script_tag src="/swfobject.js"}
 {/block}
 {block name="footer-js" append}
+    {script_tag src="/onm/advertisement.js"}
     <script type="text/javascript">
-    jQuery(document).ready(function($) {
-        $("input[name='with_script']").on('change', function(e, ui) {
-            if ($(this).val() == '1') {
-                $('#script_content').show();
-                $('#normal_content').hide();
-                $('#hide_flash').hide();
-            } else {
-                $('#normal_content').show();
-                $('#script_content').hide();
-                $('#hide_flash').show();
-            }
-        });
-
-        $('#formulario').onmValidate({
-            'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
-        });
-
-        $('#type_medida').on('change', function(e, ui){
-            var selected_option = $("#type_medida option:selected").attr('value');
-            if (selected_option=='CLIC') {
-                $('#porclic').show();
-                $('#porview, #porfecha').hide();
-                $('').hide();
-            } else if (selected_option == 'VIEW') {
-                $('#porview').show();
-                $('#porclic, #porfecha').hide();
-            } else if (selected_option=='DATE') {
-                $('#porfecha').show();
-                $('#porclic, #porview').hide();
-            } else {
-                $('#porclic, #porview, #porfecha').hide();
-            }
-        });
-
-        var tabs = $('#position-adv').tabs();
-        tabs.tabs('select', '{$place}');
-
-        jQuery('#title').on('change', function(e, ui) {
-            fill_tags(jQuery('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
-        });
-    });
+    var advertisement_urls = {
+        calculate_tags : '{url name=admin_utils_calculate_tags}'
+    }
     </script>
 {/block}
 
@@ -215,6 +178,7 @@
         <div class="control-group">
             <label class="control-label">{t}Content{/t}</label>
             <div class="controls">
+                {$advertisement->with_script|var_dump}
                 <label for="with_script_0"><input type="radio" name="with_script" id="with_script_0" value="0" {if !isset($advertisement) || $advertisement->with_script == 0}checked="checked"{/if}> {t}Image or flash from library{/t}</label>
                 <label for="with_script_1"><input type="radio" name="with_script" id="with_script_1" value="1" {if isset($advertisement) && $advertisement->with_script == 1}checked="checked"{/if}> {t}Custom HTML or Javascript code{/t}</label>
             </div>
@@ -228,6 +192,26 @@
                 </div>
                 <div id="script_content" style="{if isset($advertisement) && $advertisement->with_script ==1}display:block{else}display:none{/if};">
                     <textarea name="script" id="script" class="input-xxlarge" rows="10">{$advertisement->script|default:'&lt;script type="text/javascript"&gt;/* JS code */&lt;/script&gt;'}</textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">{t}Size{/t}</label>
+            <div class="controls">
+                <div class="form-inline-block">
+                    <div class="control-group">
+                        <label for="params_width" class="control-label">{t}Width{/t}</label>
+                        <div class="controls">
+                            <input type="number" id="params_width" name="params_width" value="{$advertisement->params['width']}" placeholder="" required="required">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="params_height" class="control-label">{t}Height{/t}</label>
+                        <div class="controls">
+                            <input type="number" id="params_height" name="params_height" value="{$advertisement->params['height']}" required="required">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
