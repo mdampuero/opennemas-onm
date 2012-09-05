@@ -27,7 +27,7 @@
         calculate_tags : '{url name=admin_utils_calculate_tags}'
     }
     </script>
-    {script_tag src="/onm/advertisement.js"}
+    {script_tag src="/onm/bannermanager.js"}
 {/block}
 
 {block name="content" append}

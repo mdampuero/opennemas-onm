@@ -27,29 +27,29 @@
                             </div>
                             <div id="image-information" class="article-resource-image-info">
                                 <div>
-                                    <label>{t}File name{/t}</label>
+                                    <strong>{t}File name{/t}</strong>
                                     <span class="filename">{$photo1->name|default:'default_img.jpg'}</span>
                                 </div>
                                 <div>
-                                    <label>{t}Image size{/t}</label>
+                                    <strong>{t}Image size{/t}</strong>
                                     <span class="image_size">{$photo1->width|default:0} x {$photo1->height|default:0}</span>
                                     (px)
                                 </div>
                                 <div>
-                                    <label>{t}File size{/t}</label>
+                                    <strong>{t}File size{/t}</strong>
                                     <span class="file_size">{$photo1->size|default:0}</span>
                                     Kb
                                 </div>
                                 <div>
-                                    <label>{t}Creation date{/t}</label>
+                                    <strong>{t}Creation date{/t}</strong>
                                     <span class="created_time">{$photo1->created|default:""}</span>
                                 </div>
                                 <div>
-                                    <label>{t}Description{/t}</label>
+                                    <strong>{t}Description{/t}</strong>
                                     <span class="description">{$photo1->description|escape:'html'}</span>
                                 </div>
                                 <div>
-                                    <label>{t}Tags{/t}</label>
+                                    <strong>{t}Tags{/t}</strong>
                                     <span class="tags">{$photo1->metadata|default:""}</span>
                                 </div>
                             </div>
