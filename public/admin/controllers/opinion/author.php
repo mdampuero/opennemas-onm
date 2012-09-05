@@ -1,13 +1,12 @@
 <?php
-
-/**
+/*}
  * Setup app
 */
 require_once(dirname(__FILE__).'/../../../bootstrap.php');
 require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
 
-use Onm\Settings as s,
-    Onm\Message as m;
+use Onm\Settings as s;
+use Onm\Message as m;
 
 /**
  * Setup view
@@ -19,24 +18,33 @@ $tpl->assign('titulo_barra', 'Author Opinion Management');
 Acl::checkOrForward('AUTHOR_ADMIN');
 
 
-$page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT, array('options' => array('default' => '1')) );
+$page = filter_input(
+    INPUT_GET,
+    'page',
+    FILTER_VALIDATE_INT,
+    array('options' => array('default' => '1'))
+);
 
 
 $tpl->assign('MEDIA_IMG_PATH_URL', MEDIA_IMG_PATH_WEB);
-$action = filter_input( INPUT_POST, 'action' , FILTER_SANITIZE_STRING );
+$action = filter_input(INPUT_POST, 'action', FILTER_SANITIZE_STRING);
 if (!isset($action)) {
-    $action = filter_input( INPUT_GET, 'action' , FILTER_SANITIZE_STRING, array('options' => array('default' => 'list')) );
+    $action = filter_input(
+        INPUT_GET,
+        'action',
+        FILTER_SANITIZE_STRING,
+        array('options' => array('default' => 'list'))
+    );
 }
 
 switch($action) {
-
     case 'list':
 
         Acl::checkOrForward('AUTHOR_ADMIN');
 
         $cm         = new ContentManager();
         $author     = new Author();
-        $authors    = $author->list_authors(NULL,'ORDER BY name ASC');
+        $authors    = $author->list_authors(null, 'ORDER BY name ASC');
         $authorsPag = $cm->paginate_num($authors, 20);
 
         $tpl->assign(
@@ -51,20 +59,18 @@ switch($action) {
 
         $tpl->display('opinion/authors/list.tpl');
 
-    break;
-
+        break;
     case 'new':
 
         $tpl->display('opinion/authors/new.tpl');
 
-    break;
-
+        break;
     case 'read':
 
         Acl::checkOrForward('AUTHOR_UPDATE');
 
-        $id     = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
-        $author = new Author( $id );
+        $id     = filter_input(INPUT_GET, 'id', FILTER_DEFAULT);
+        $author = new Author($id);
         $photos = $author->get_author_photos($id);
 
         $tpl->assign('photos', $photos);
@@ -72,31 +78,38 @@ switch($action) {
 
         $tpl->display('opinion/authors/new.tpl');
 
-    break;
-
+        break;
     case 'update':
         Acl::checkOrForward('AUTHOR_UPDATE');
 
-        if ( isset($_POST['params']['inrss'] )) {$_POST['params']['inrss'] = 1;} else {$_POST['params']['inrss'] = 0;}
+        if ( isset($_POST['params']['inrss'] )) {
+            $_POST['params']['inrss'] = 1;
+        } else {
+            $_POST['params']['inrss'] = 0;
+        }
 
         $author = new Author();
-        $author->update( $_POST );
+        $author->update($_POST);
 
         if ($_SESSION['_from']=='opinion.php') {
             Application::forward('controllers/opinion/opinion.php?action=list&page=1');
-        }else{
+        } else {
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$page);
         }
-    break;
 
+        break;
     case 'create':
 
         Acl::checkOrForward('AUTHOR_CREATE');
 
-        if (isset($_POST['params']['inrss'])) {$_POST['params']['inrss'] = 1;} else {$_POST['params']['inrss'] = 0;}
+        if (isset($_POST['params']['inrss'])) {
+            $_POST['params']['inrss'] = 1;
+        } else {
+            $_POST['params']['inrss'] = 0;
+        }
 
         $author = new Author();
-        if ($author->create( $_POST )) {
+        if ($author->create($_POST)) {
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$page);
         } else {
             $tpl->assign('errors', $author->errors);
@@ -104,11 +117,10 @@ switch($action) {
 
         $tpl->display('opinion/authors/new.tpl');
 
-    break;
-
+        break;
     case 'getOpinions':
 
-        $id       = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
+        $id       = filter_input(INPUT_GET, 'id', FILTER_DEFAULT);
         $msg      ='';
         $opinion  = new Opinion();
         $opinions = $opinion->getLatestOpinionsForAuthor($id);
@@ -122,56 +134,64 @@ switch($action) {
         }
 
         exit(0);
-    break;
 
+        break;
     case 'delete':
 
         Acl::checkOrForward('AUTHOR_DELETE');
 
-        $id       = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
+        $id       = filter_input(INPUT_POST, 'id', FILTER_DEFAULT);
+
         $author   = new Author();
+        $opinion  = new Opinion();
         $opinions = $opinion->getLatestOpinionsForAuthor($id);
-        $author->delete( $id );
+
+        $author->delete($id);
         if (!empty($opinions) && count($opinions>0)) {
-            foreach($opinions as $op){
+            foreach ($opinions as $op) {
                 $opinion->delete($op->pk_opinion, $_SESSION['userid']);
             }
         }
 
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$page);
 
-    break;
-
+        break;
     case 'validate':
 
-        if (isset($_POST['params']['inrss'])) {$_POST['params']['inrss'] = 1;} else {$_POST['params']['inrss'] = 0;}
+        if (isset($_POST['params']['inrss'])) {
+            $_POST['params']['inrss'] = 1;
+        } else {
+            $_POST['params']['inrss'] = 0;
+        }
 
         $author = new Author();
         if ($_GET['action'] == 'new') {
-            if (!$author->create( $_POST )) {
+            if (!$author->create($_POST)) {
                 $tpl->assign('errors', $author->errors);
             }
         } else {
-            $author->update( $_POST );
+            $author->update($_POST);
         }
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=read&id='.$author->pk_author);
 
         break;
-
     case 'check_img_author':
 
         $ok  ='no';
         $img =$_REQUEST['id_img'];
         $cm  = new ContentManager();
 
-        $opinions = $cm->find('Opinion', 'fk_content_type=4 and (fk_author_img = '.$img.' OR fk_author_img_widget = '.$img.') ' , 'ORDER BY type_opinion DESC');
+        $opinions = $cm->find(
+            'Opinion',
+            'fk_content_type=4 and (fk_author_img = '.$img.' OR fk_author_img_widget = '.$img.') ',
+            'ORDER BY type_opinion DESC'
+        );
         if (!empty($opinions)) {
             $ok='si';
         }
         Application::ajaxOut($ok);
 
         break;
-
     case 'batchDelete':
 
         if (isset($_POST['selected_fld']) && count($_POST['selected_fld']) > 0) {
@@ -190,22 +210,22 @@ switch($action) {
                         $msg  .= " \"" . $author->name . "\",    \n";
 
                     } else {
-                        $author->delete($i, $_SESSION['userid'] );
+                        $author->delete($i, $_SESSION['userid']);
                     }
                 }
             }
         }
-        if(isset($alert) && $alert =='ok') {
+        if (isset($alert) && $alert =='ok') {
             $msg .= " have opinions.  Delete them one by one";
             m::add($msg);
         }
 
         Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&page=' . $page);
-    break;
-
+        break;
     default:
 
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$page);
 
-    break;
+        break;
 }
+
