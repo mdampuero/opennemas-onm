@@ -777,8 +777,8 @@ class Advertisement extends Content
 
         $banner = $this;
 
-        $width  = $params['width'];
-        $height = $params['height'];
+        $width  = $this->params['width'];
+        $height = $this->params['height'];
 
         if ($this->with_script == 1) {
             $photo = new \Photo($this->img);
