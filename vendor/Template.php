@@ -1,5 +1,6 @@
 <?php
 use FilesManager as fm;
+
 /**
  * Template class
  *
@@ -24,7 +25,7 @@ class Template extends Smarty
     public $relative_path = null;
     static public $registry = array();
 
-    public function __construct($theme, $filters=array())
+    public function __construct($theme, $filters = array())
     {
         // Call the parent constructor
         parent::__construct();
@@ -81,17 +82,15 @@ class Template extends Smarty
         // Set filters: $filters = array('pre' => array(), 'post' => array(), 'output' => array())
         $this->setFilters($filters);
 
-        // $this->loadFilter("output","trimwhitespace");
-
         $this->assign(
             'params',
-                array(
-                    'LOCALE_DIR' =>    $this->locale_dir,
-                    'CSS_DIR'	 =>    $this->css_dir,
-                    'IMAGE_DIR'  =>    $this->image_dir,
-                    'JS_DIR'	 =>    $this->js_dir,
-                    'THEME'      =>    $theme,
-                )
+            array(
+                'LOCALE_DIR' =>    $this->locale_dir,
+                'CSS_DIR'	 =>    $this->css_dir,
+                'IMAGE_DIR'  =>    $this->image_dir,
+                'JS_DIR'	 =>    $this->js_dir,
+                'THEME'      =>    $theme,
+            )
         );
 
         $this->theme = $theme;
@@ -107,7 +106,7 @@ class Template extends Smarty
     }
 
 
-    public function generateCacheId($seccion, $subseccion=null, $resource=null)
+    public function generateCacheId($seccion, $subseccion = null, $resource = null)
     {
         $cacheId = '';
 
@@ -144,7 +143,7 @@ class Template extends Smarty
         return $vars;
     }
 
-    public function readKeyConfig($filename, $key, $iniSection='default')
+    public function readKeyConfig($filename, $key, $iniSection = 'default')
     {
         $vars = parse_ini_file($this->config_dir . $filename, true);
         if (isset($vars[$iniSection][$key])) {
@@ -164,7 +163,7 @@ class Template extends Smarty
      * @param string $section Load this section if it's possible
      * @param string $defaultSection If $section don't exists then use $defaultSection
      */
-    public function loadConfigOrDefault($configFile, $section, $defaultSection='default')
+    public function loadConfigOrDefault($configFile, $section, $defaultSection = 'default')
     {
         $configFile = $this->config_dir . $configFile;
         if ( $this->existsConfigSection($configFile, $section) ) {
@@ -226,7 +225,8 @@ class Template extends Smarty
     }
 }
 
-class TemplateAdmin extends Template {
+class TemplateAdmin extends Template
+{
 
     public function __construct($theme, $filters = array())
     {
@@ -235,6 +235,8 @@ class TemplateAdmin extends Template {
         parent::__construct($theme, $filters);
 
         $this->setFilters($filters);
+
+        $this->loadFilter("output", "trimwhitespace");
 
         // Parent variables
         $this->templateBaseDir = SITE_PATH.DS.ADMIN_DIR.DS.'themes'.DS.$theme.DS;
@@ -262,12 +264,14 @@ class TemplateAdmin extends Template {
         $this->image_dir  = $baseUrl.'images/';
         $this->js_dir     = $baseUrl.'js/';
 
-        $this->assign('params',
-                array(
-                    'LOCALE_DIR' =>    $this->locale_dir,
-                    'CSS_DIR'	 =>    $this->css_dir,
-                    'IMAGE_DIR'  =>    $this->image_dir,
-                    'JS_DIR'	 =>    $this->js_dir )
+        $this->assign(
+            'params',
+            array(
+                'LOCALE_DIR' =>    $this->locale_dir,
+                'CSS_DIR'	 =>    $this->css_dir,
+                'IMAGE_DIR'  =>    $this->image_dir,
+                'JS_DIR'	 =>    $this->js_dir
+            )
         );
 
         $this->theme = $theme;
@@ -276,7 +280,8 @@ class TemplateAdmin extends Template {
     }
 }
 
-class TemplateManager extends Template {
+class TemplateManager extends Template
+{
 
     public function __construct($theme, $filters = array())
     {
@@ -313,14 +318,18 @@ class TemplateManager extends Template {
         $this->image_dir  = $baseUrl.'images/';
         $this->js_dir     = $baseUrl.'js/';
 
-        $this->assign('params', array(
-            'LOCALE_DIR' =>    $this->locale_dir,
-            'CSS_DIR'    =>    $this->css_dir,
-            'IMAGE_DIR'  =>    $this->image_dir,
-            'JS_DIR'     =>    $this->js_dir
-        ));
+        $this->assign(
+            'params',
+            array(
+                'LOCALE_DIR' =>    $this->locale_dir,
+                'CSS_DIR'    =>    $this->css_dir,
+                'IMAGE_DIR'  =>    $this->image_dir,
+                'JS_DIR'     =>    $this->js_dir
+            )
+        );
 
         $this->theme = $theme;
         $this->assign('THEME', $theme);
     }
 }
+
