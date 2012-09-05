@@ -170,7 +170,6 @@ switch ($action) {
             foreach ($others_videos as &$otherVideo) {
                 $otherVideo->category_name  = $otherVideo->loadCategoryName($otherVideo->id);
                 $otherVideo->category_title = $otherVideo->loadCategoryTitle($otherVideo->id);
-                $otherVideo->information    = unserialize($otherVideo->information);
             }
         }
 
