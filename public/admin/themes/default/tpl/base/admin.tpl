@@ -121,6 +121,10 @@
     {block name="footer-js"}
         {browser_update}
         {script_tag src="/onm/footer-functions.js"}
+        {script_tag src="/libs/tinycon.min.js"}
+        <script type="text/javascript">
+        Tinycon.setBubble({count_pending_comments});
+        </script>
 	{/block}
 
     {if Acl::check('USER_ADMIN') eq true}
