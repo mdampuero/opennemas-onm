@@ -22,12 +22,12 @@
     {script_tag src="/swfobject.js"}
 {/block}
 {block name="footer-js" append}
-    {script_tag src="/onm/advertisement.js"}
     <script type="text/javascript">
     var advertisement_urls = {
         calculate_tags : '{url name=admin_utils_calculate_tags}'
     }
     </script>
+    {script_tag src="/onm/advertisement.js"}
 {/block}
 
 {block name="content" append}
@@ -178,7 +178,6 @@
         <div class="control-group">
             <label class="control-label">{t}Content{/t}</label>
             <div class="controls">
-                {$advertisement->with_script|var_dump}
                 <label for="with_script_0"><input type="radio" name="with_script" id="with_script_0" value="0" {if !isset($advertisement) || $advertisement->with_script == 0}checked="checked"{/if}> {t}Image or flash from library{/t}</label>
                 <label for="with_script_1"><input type="radio" name="with_script" id="with_script_1" value="1" {if isset($advertisement) && $advertisement->with_script == 1}checked="checked"{/if}> {t}Custom HTML or Javascript code{/t}</label>
             </div>
