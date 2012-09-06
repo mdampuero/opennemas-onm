@@ -167,7 +167,7 @@ switch ($action) {
 
                 $machineSuggestedContents = array();
                 foreach ($machineRelated as $content) {
-                    $machineSuggestedContents[] = object_to_array($content);
+                    $machineSuggestedContents[] = (array)$content;
                 }
 
                 $tpl->assign('suggested', $machineSuggestedContents);
