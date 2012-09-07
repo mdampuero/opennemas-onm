@@ -53,7 +53,8 @@ class Categories
     */
     public function lists()
     {
-        $menuCategories = Menu::getMenu('frontpage');
+        $menu = new Menu();
+        $menuCategories = $menu->getMenu('frontpage');
 
         return $menuCategories->items;
     }
@@ -69,5 +70,5 @@ class Categories
             }
         }
     }
-
 }
+
