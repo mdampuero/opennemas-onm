@@ -19,6 +19,7 @@ $loader = new YamlFileLoader($sc, new FileLocator(__DIR__.'/config/'));
 
 $sc->setParameter('routes', $routes);
 $sc->setParameter('request', $request);
+$sc->setParameter('instance', $instance);
 
 $loader->load('app.yml');
 

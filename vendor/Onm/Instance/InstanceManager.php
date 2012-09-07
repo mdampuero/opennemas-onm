@@ -11,6 +11,7 @@ namespace Onm\Instance;
 use FilesManager as fm;
 use Onm\Message as m;
 use Onm\Settings as s;
+use Onm\Instance\Instance;
 
 /**
  * Class for manage ONM instances.
@@ -81,40 +82,29 @@ class InstanceManager
         }
 
         if (preg_match("@\/manager@", $_SERVER["PHP_SELF"])) {
-            $instance = new \stdClass();
-            $instance->internalName = 'onm_manager';
+            $instance = new Instance();
+            $instance->internal_name = 'onm_manager';
             $instance->activated = true;
-            $configs = array(
-                'INSTANCE_UNIQUE_NAME' => $instance->internalName,
-                'MEDIA_URL' => '',
-                'TEMPLATE_USER' => '',
+            $instance->settings = array(
+                'INSTANCE_UNIQUE_NAME' => $instance->internal_name,
+                'MEDIA_URL'            => '',
+                'TEMPLATE_USER'        => '',
             );
-            foreach ($configs as $key => $value) {
-                define($key, $value);
-            }
+
+            $instance->boot();
 
             return $instance;
         }
         //If found matching instance initialize its contants and return it
         if ($rs->fields) {
 
-            $instance = new \stdClass();
+            $instance = new Instance();
             foreach ($rs->fields as $key => $value) {
                 $instance->{$key} = $value;
             }
             define('INSTANCE_UNIQUE_NAME', $instance->internal_name);
 
-            // Transform all the intance settings into application constants.
-            $instance->settings = unserialize($instance->settings);
-            if (empty($instance->settings['MEDIA_URL'])) {
-                $instance->settings['MEDIA_URL'] = implode(
-                    '',
-                    array('http://' , $_SERVER['HTTP_HOST'], '/media'.'/')
-                );
-            }
-            foreach ($instance->settings as $key => $value) {
-                define($key, $value);
-            }
+            $instance->boot();
 
             // If this instance is not activated throw an exception
             if ($instance->activated != '1') {

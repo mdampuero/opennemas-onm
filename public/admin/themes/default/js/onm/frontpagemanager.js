@@ -19,7 +19,7 @@ function makeContentProviderAndPlaceholdersSortable() {
         handle: '.description',
         update: function(event,ui) {
             initializePopovers();
-            jQuery('#warnings-validation').html('<div class="notice">' + frontpage_messages.remember_save_positions + '</div>');
+            jQuery('#warnings-validation').html('<div class="alert alert-notice"><button class="close" data-dismiss="alert">×</button>' + frontpage_messages.remember_save_positions + '</div>');
         },
         tolerance: 'pointer'
         //containment: '#content-with-ticker'
@@ -459,6 +459,10 @@ jQuery(function($) {
             }).error(function(data) {
             });
         }
+    });
+
+    $('#pick-layout').click('click', function(e, ui) {
+        $('.settings-panel').slideToggle();
     });
 
 });

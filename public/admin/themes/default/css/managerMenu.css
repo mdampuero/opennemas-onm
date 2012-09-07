@@ -9,7 +9,6 @@
     list-style:none;
     border:1px solid #ddd;
     margin:2px 0;
-    font-size:1.1em;
     min-height:20px;
 }
 .nested-sortable li:hover, .elementsContainer li:hover { background:#FFF; }

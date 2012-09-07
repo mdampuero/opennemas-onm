@@ -357,7 +357,6 @@ class ContentCategory
         }
 
         return $this;
-
     }
 }
 

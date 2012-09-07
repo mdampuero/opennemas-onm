@@ -665,9 +665,8 @@ class Content
                 'scheduled_state' => $this->getSchedulingState(),
                 'state'           => $this->getStatus(),
                 'views'           => $this->views,
-                'last_author'     => $author->firstname. " " .$author->lastname,
+                'last_author'     => $author->name,
             );
-
         }
     }
 

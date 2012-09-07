@@ -109,7 +109,7 @@ $adminRoutes->add(
 $adminRoutes->add(
     'admin_frontpage_savepositions',
     new Route(
-        '/frontpages/{category}/save-positions',
+        '/frontpage/{category}/save-positions',
         array(
             '_controller' => 'Backend:Controllers:FrontpagesController:savePositions',
             'category' => 'home',
@@ -124,6 +124,17 @@ $adminRoutes->add(
         '/frontpages/{category}/preview',
         array(
             '_controller' => 'Backend:Controllers:FrontpagesController:preview',
+        )
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_frontpage_pick_layout',
+    new Route(
+        '/frontpages/{category}/pick-layout',
+        array(
+            '_controller' => 'Backend:Controllers:FrontpagesController:pickLayout',
         )
     ),
     '/admin'

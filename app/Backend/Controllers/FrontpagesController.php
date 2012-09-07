@@ -102,8 +102,10 @@ class FrontpagesController extends Controller
         // Sort all the elements by its position
         $contentElementsInFrontpage  = $cm->sortArrayofObjectsByProperty($contentElementsInFrontpage, 'position');
 
+        $layout = s::get('frontpage_layout_'.$category, 'default');
+
         $lm  = new LayoutManager(
-            SITE_PATH."/themes/".TEMPLATE_USER."/layouts/default.xml"
+            SITE_PATH."/themes/".TEMPLATE_USER."/layouts/".$layout.".xml"
         );
 
         $layout = $lm->render(
@@ -115,6 +117,8 @@ class FrontpagesController extends Controller
             )
         );
 
+        $layouts = $this->container->getParameter('instance')->theme->getLayouts();
+
         return $this->render(
             'frontpagemanager/list.tpl',
             array(
@@ -122,6 +126,7 @@ class FrontpagesController extends Controller
                 'category_id'        => $categoryID,
                 'frontpage_articles' => $contentElementsInFrontpage,
                 'layout'             => $layout,
+                'available_layouts'  => $layouts,
             )
         );
     }
@@ -138,6 +143,9 @@ class FrontpagesController extends Controller
         }
 
         $category      = $this->request->query->filter('category', null, FILTER_SANITIZE_STRING);
+        if ($category == '0') {
+            $category = 'home';
+        }
 
         $tcacheManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
 
@@ -170,10 +178,10 @@ class FrontpagesController extends Controller
                     continue;
                 }
                 $contents[] = array(
-                    'id' => $params['id'],
-                    'category' => $categoryID,
-                    'placeholder' => $params['placeholder'],
-                    'position' => $params['position'],
+                    'id'           => $params['id'],
+                    'category'     => $categoryID,
+                    'placeholder'  => $params['placeholder'],
+                    'position'     => $params['position'],
                     'content_type' => $params['content_type'],
                 );
             }
@@ -182,8 +190,8 @@ class FrontpagesController extends Controller
             $savedProperly = \ContentManager::saveContentPositionsForHomePage($categoryID, $contents);
         }
 
-        $tcacheManager->delete($section . '|RSS');
-        $tcacheManager->delete($section . '|0');
+        $tcacheManager->delete($category . '|RSS');
+        $tcacheManager->delete($category . '|0');
 
         /* Notice log of this action */
         $logger = \Application::getLogger();
@@ -206,6 +214,41 @@ class FrontpagesController extends Controller
                 $response = new Response($errorMessage, 500);
             }
         }
+    }
+
+    /**
+     * Description of this action
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function pickLayoutAction(Request $request)
+    {
+        $category = $request->query->getDigits('category');
+        $layout = $request->query->filter('layout', null, FILTER_SANITIZE_STRING);
+
+        $availableLayouts = $this->container->getParameter('instance')->theme->getLayouts();
+        $availableLayouts = array_keys($availableLayouts);
+
+        $layoutValid  = in_array($layout, $availableLayouts);
+
+        if (!is_null($category)
+            && !is_null($layout)
+        ) {
+            s::set('frontpage_layout_'.$category, $layout);
+        }
+
+        if ($category == '0') {
+            $section = 'home';
+        } else {
+            $section = $category;
+        }
+
+        $tcacheManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
+        $tcacheManager->delete($section . '|0');
+
+        return $this->redirect($this->generateUrl('admin_frontpage_list', array('category' => $category)));
     }
 
     /**

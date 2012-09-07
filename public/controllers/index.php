@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  **/
 use Symfony\Component\HttpFoundation\Response;
+use Onm\Settings as s;
 
 // Start up and setup the app
 require_once '../bootstrap.php';
@@ -29,7 +30,7 @@ $cacheID = $tpl->generateCacheId($category_name, $subcategory_name, 0 /*$cache_p
 $actualCategory = (empty($subcategory_name))? $category_name : $subcategory_name;
 $tpl->assign(
     array(
-        'category_name' => $category_name,
+        'category_name'   => $category_name,
         'actual_category' => $actualCategory
     )
 );
@@ -104,7 +105,12 @@ if (
     }
     $tpl->assign('column', $contentsInHomepage);
 
-} // $tpl->is_cached('index.tpl')
+    $layout = s::get('frontpage_layout_'.$category, 'default');
+    $layoutFile = 'layouts/'.$layout.'.tpl';
+
+    $tpl->assign('layoutFile', $layoutFile);
+
+}
 
 $tpl->display('frontpage/frontpage.tpl', $cacheID);
 
