@@ -1,3 +1,6 @@
+ ALTER TABLE `polls` DROP `favorite`;
+ ALTER TABLE `kioskos` DROP `favorite`;
+
 -- Changes for alex branch
 ALTER TABLE `kioskos` ADD `price` DECIMAL NOT NULL DEFAULT '0';
 ALTER TABLE `users` ADD `type` TINYINT NOT NULL DEFAULT '0' COMMENT '0-backend, 1-frontend' AFTER `lastname`;
