@@ -70,7 +70,11 @@ class MenuItems
         }
 
         foreach ($menuItems as $id => $element) {
-            if ((int) $element->pk_father > 0) {
+            if (
+                ((int) $element->pk_father > 0)
+                && isset($menuItems[$element->pk_father])
+                && isset($menuItems[$element->pk_father]->submenu)
+            ) {
                 array_push($menuItems[$element->pk_father]->submenu, $element);
                 unset($menuItems[$id]);
 
