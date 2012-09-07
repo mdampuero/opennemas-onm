@@ -224,7 +224,7 @@ class FrontpagesController extends Controller
 
         $cm = new \ContentManager;
         $contentsRAW = $this->request->request->get('contents');
-        $contents = json_decode(json_decode($contentsRAW), true);
+        $contents = json_decode($contentsRAW, true);
 
         $contentsInHomepage = $cm->getContentsForHomepageFromArray($contents);
 
