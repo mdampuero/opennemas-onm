@@ -7,6 +7,7 @@
     $('#formulario').onmValidate({
         'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
     });
+    $('[rel=tooltip]').tooltip();
     </script>
 {/block}
 
@@ -312,7 +313,7 @@
                                         <img src="{$params.IMAGE_DIR}sync-icon.png"
                                              alt="{t}Sync{/t}" >
                                         <div class="btn-group actions" style="float:right;">
-                                            <a href="#" class="add-item"><i class="icon-plus"></i></a>
+                                            <a href="#" class="add-item" rel="tooltip" data-original-title="{t}Add to menu{/t}"><i class="icon-plus"></i></a>
                                             <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
                                             <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
                                         </div>
