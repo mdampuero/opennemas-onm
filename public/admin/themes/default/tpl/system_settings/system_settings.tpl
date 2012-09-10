@@ -482,6 +482,7 @@
                         </tbody>
                     </table>
                 </fieldset>
+
                 {acl isAllowed="ONLY_MASTERS"}
                 <fieldset>
                     <legend>{t}Piwik Statistics{/t}</legend>
@@ -552,6 +553,30 @@
                         </tbody>
                     </table>
 
+                </fieldset>
+
+                <fieldset>
+                    <legend>{t}Paypal Settings{/t}</legend>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <th scope="row">
+                                    <label for="paypal_account_email">{t}Account email:{/t}</label>
+                                </th>
+                                <td>
+                                    <input type="text" id="paypal_account_email" name="paypal_settings[email]" value="{$configs['paypal_settings']['email']|default:""}">
+                                </td>
+                                <td rowspan=2>
+                                    <div class="help-block margin-left-1">
+                                        <div class="title"><h4>{t}Get API keys{/t}</h4></div>
+                                        <div class="content">
+                                            {t escape=off}You can get your PayPal account email from <a href="https://www.paypal.com/">PayPal site</a>. This must be a business account for receiving payments{/t}
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </fieldset>
             </div>
         </div>

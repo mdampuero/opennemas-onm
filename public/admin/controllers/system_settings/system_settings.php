@@ -6,9 +6,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Onm\Settings as s,
-    Onm\Message as m,
-    Onm\Module\ModuleManager;
+use Onm\Settings as s;
+use Onm\Message as m;
+use Onm\Module\ModuleManager;
+
 /**
  * Setup app
 */
@@ -24,21 +25,21 @@ Acl::checkorForward('ONM_SETTINGS');
 $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 
 // Initialize request parameters
-$action = filter_input( INPUT_POST, 'action' , FILTER_SANITIZE_STRING );
+$action = filter_input(INPUT_POST, 'action', FILTER_SANITIZE_STRING);
 if (!isset($action)) {
-    $action = filter_input( INPUT_GET, 'action' , FILTER_SANITIZE_STRING, array('options' => array('default' => 'list')) );
+    $action = filter_input(INPUT_GET, 'action', FILTER_SANITIZE_STRING, array('options' => array('default' => 'list')));
 }
 
 switch($action) {
-
     case 'list':
 
         $configurationsKeys = array(
-                                    'site_title', 'site_logo', 'site_description','site_keywords','site_agency', 'site_footer',
-                                    'site_color', 'site_name', 'time_zone','site_language','site_footer',
+                                    'site_title', 'site_logo', 'site_description','site_keywords',
+                                    'site_agency', 'site_footer', 'site_color', 'site_name',
+                                    'time_zone','site_language','site_footer',
                                     'recaptcha', 'google_maps_api_key','google_custom_search_api_key',
                                     'facebook','facebook_page','facebook_id','twitter_page',
-                                    'google_analytics','piwik', 'section_settings',
+                                    'google_analytics','piwik', 'section_settings', 'paypal_settings',
                                     'items_per_page','refresh_interval',
                                     'webmastertools_google', 'webmastertools_bing'
                                     );
@@ -46,35 +47,34 @@ switch($action) {
         $configurations = s::get($configurationsKeys);
 
         $tpl->assign(
-                     array(
-                            'configs'   => $configurations,
-                            'timezones' => \DateTimeZone::listIdentifiers(),
-                            'languages' => array('en_US' => _("English"), 'es_ES' => _("Spanish"), 'gl_ES' => _("Galician")),
-                         )
-                    );
+            array(
+                'configs'   => $configurations,
+                'timezones' => \DateTimeZone::listIdentifiers(),
+                'languages' => array('en_US' => _("English"), 'es_ES' => _("Spanish"), 'gl_ES' => _("Galician")),
+             )
+        );
 
         $tpl->display('system_settings/system_settings.tpl');
         break;
-
     case 'save':
 
         unset($_POST['action']);
         unset($_POST['submit']);
 
-        if(!empty($_FILES) && isset($_FILES['site_logo'])) {
+        if (!empty($_FILES) && isset($_FILES['site_logo'])) {
             $nameFile = $_FILES['site_logo']['name'];
             $uploaddir= MEDIA_PATH.'/sections/'.$nameFile;
 
             if (move_uploaded_file($_FILES["site_logo"]["tmp_name"], $uploaddir)) {
-               $_POST['site_logo'] = $nameFile;
+                $_POST['site_logo'] = $nameFile;
             }
         }
-        if($_POST['section_settings']['allowLogo'] == 1){
+        if ($_POST['section_settings']['allowLogo'] == 1) {
             $path = MEDIA_PATH.'/sections';
             FilesManager::createDirectory($path);
         }
 
-        foreach ($_POST as $key => $value ) {
+        foreach ($_POST as $key => $value) {
             s::set($key, $value);
         }
 
@@ -84,12 +84,11 @@ switch($action) {
                             );
         Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($httpParams));
         break;
-
-
-    default: {
+    default:
         $httpParams = array(
                             array('action','list'),
                             );
         Application::forward($_SERVER['SCRIPT_NAME'] . '?'.StringUtils::toHttpParams($params));
-    } break;
+        break;
 }
+
