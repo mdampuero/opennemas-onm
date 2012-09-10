@@ -7,6 +7,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  **/
-$GLOBALS['Session'] = SessionManager::getInstance(OPENNEMAS_FRONTEND_SESSIONS);
-$GLOBALS['Session']->bootstrap();
+
+$sc = include '../../app/container.php';
+
+session_name('_onm_sess');
+$session = $sc->get('session');
+$session->start();
 
