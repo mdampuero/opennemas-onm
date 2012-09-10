@@ -105,11 +105,12 @@
     <div class="settings settings-panel">
         <div class="wrapper-content">
             <a href="#" class="close">×</a>
+        {if $available_layouts > 1}
             <h4>{t}Default layout for this frontpage{/t}</h4>
-                {foreach from=$available_layouts key=key item=avlayout}
+            {foreach from=$available_layouts key=key item=avlayout}
                 <a class="thumbnail" href="{url name=admin_frontpage_pick_layout category=$category layout=$key}">{$avlayout['name']}</a>
             {/foreach}
-            </dl>
+            {/if}
         </div>
     </div>
 

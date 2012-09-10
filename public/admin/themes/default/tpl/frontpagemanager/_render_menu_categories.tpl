@@ -25,13 +25,15 @@
             </select>
         </div>
         <div class="btn-group" id="frontpage-settings">
-          <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-            <i class="icon-cog"></i>
-            <span class="caret"></span>
-          </a>
-          <ul class="dropdown-menu pull-right">
-            <li><a tabindex="-1" href="#" id="pick-layout">{t}Pick layout{/t}</a></li>
-          </ul>
+            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                <i class="icon-cog"></i>
+                <span class="caret"></span>
+            </a>
+            {if $available_layouts > 1}
+            <ul class="dropdown-menu pull-right">
+                <li><a tabindex="-1" href="#" id="pick-layout">{t}Pick layout{/t}</a></li>
+            </ul>
+            {/if}
         </div>
     </div>
 </div>
