@@ -53,7 +53,7 @@ switch ($action) {
 
         // What happens when the CAPTCHA was entered incorrectly
         if (!$resp->is_valid) {
-            echo('The reCAPTCHA wasn\'t entered correctly. Please try it again.');
+            $tpl->assign('error', 'A comprobación do reCAPTCHA no es correcta. Ténteo de novo');
         } else {
 
             // Correct CAPTCHA - Filter $_POST vars from FORM
@@ -72,11 +72,11 @@ switch ($action) {
             //Build mail body
             $mailSubject  = utf8_decode("Alta usuario - ".$configSiteName);
             $mailBody = "Estimad@ ". $data['name'] .", \r\n";
-            $mailBody.= "Bienvenido a  ".$configSiteName;
+            $mailBody.= "Bienvenido a  ".$configSiteName.". ";
             $mailBody.= "Para activar su cuenta clica en el siguiente enlace:\r\n";
             $mailBody.= SITE_URL."activate/".$data['token']."/\r\n\n";
             $mailBody.= "Una vez activada, ";
-            $mailBody.= "podrás modificar tus datos siempre que quieras en las opciones de usuario\r\n";
+            $mailBody.= "podrás modificar tus datos siempre que quieras en las opciones de usuario.\r\n";
             $mailBody.= "Gracias por formar parte de la comunidad de ".$configSiteName.".\r\n";
             $mailBody.= "Un saludo,\r\n";
             $mailBody.= "El equipo de ".$configSiteName;
@@ -139,7 +139,7 @@ switch ($action) {
                     } else {
                         $tpl->assign(
                             'success',
-                            'A sua conta xa está creada.\nComprobe o seu correo para activala.'
+                            'A sua conta xa está creada. Comprobe o seu correo para activala.'
                         );
                     }
                 } else {
@@ -181,11 +181,21 @@ switch ($action) {
                 PrivilegesCheck::loadSessionExpireTime();
                 $GLOBALS['Session']->cleanExpiredSessionFiles();
             }
+
+            $paypalEmail = s::get("paypal_settings");
+            $subscriptionItems = Kiosko::getSubscriptionItems();
+
+            $tpl->assign(
+                array(
+                    'paypal_email' => $paypalEmail['email'],
+                    'subscription_items' => $subscriptionItems,
+                )
+            );
+            $tpl->display('login/deposit.tpl');
+        } else {
+            $tpl->assign('error', 'A ocurrido un erro na activación. Volva rexistrarse.');
+            Application::forward(SITE_URL.'/register/');
         }
-
-        // Redirect to a new page that handles deposit/subscription contact
-        Application::forward(SITE_URL.'estaticas/subscricion-semanario/');
-
         break;
     case 'user_box':
         $tpl->display('login/user_box.tpl');
@@ -271,7 +281,7 @@ switch ($action) {
             $mail->AddAddress($to, $to);
 
             if ($mail->Send()) {
-                $success = 'Comprobe a bandexa de entrada do seu correo electrónico para cambiar a contrasinal.';
+                $success = 'Comprobe a bandexa de entrada do seu correo electrónico para cambiar a contrasinal.</br>';
                 $success.= 'Esta páxina será redireccionada en 8 segundos.';
                 $tpl->assign('success', $success);
             } else {
@@ -351,7 +361,7 @@ switch ($action) {
                 PrivilegesCheck::loadSessionExpireTime();
                 $GLOBALS['Session']->cleanExpiredSessionFiles();
 
-                $success = 'Modificada con éxito a contrasinal. A páxina será redireccionada en 8 segundos';
+                $success = 'Modificada con éxito a contrasinal. A páxina será redireccionada en unos segundos';
                 $tpl->assign('success', $success);
                 $tpl->display('login/regenerate_pass.tpl');
             }

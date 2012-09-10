@@ -101,7 +101,6 @@ switch ($action) {
 
                 if (!empty($portadas)) {
                     $kiosko[] = array (
-
                         'portadas' => $portadas
                     );
                 }
@@ -160,9 +159,8 @@ switch ($action) {
          * Redirect to album frontpage if id_album wasn't provided
          */
         if (is_null($epaperId)) {
-            Application::forward301('/portadas_papel/');
+            Application::forward301('/kiosko/');
         }
-
 
         $cache_id = $tpl->generateCacheId('newsstand', $epaperId, $cache_page);
 
@@ -201,7 +199,7 @@ switch ($action) {
             $tpl->assign('kiosko', $kiosko);
 
         } else {
-            Application::forward301('/portadas_papel/');
+            Application::forward301('/kiosko/');
         }
         break;
 }
