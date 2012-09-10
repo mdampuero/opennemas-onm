@@ -65,10 +65,7 @@ switch ($action) {
                     // Store default expire time
                     $app::setCookieSecure('default_expire', $user->sessionexpire, 0, '/');
                     PrivilegesCheck::loadSessionExpireTime();
-                    $GLOBALS['Session']->cleanExpiredSessionFiles();
-                    $GLOBALS['Session']->cleanEmptySessionFiles();
 
-                    // Application::forward(SITE_URL);
                     $isLoginCorrect = true;
                     $tpl->assign('success', _('You have logged in correctly. You will be redirect to the Home page'));
                     $tpl->assign('login_ok', $isLoginCorrect);
