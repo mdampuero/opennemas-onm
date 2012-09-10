@@ -59,7 +59,7 @@ span.highlighted {
                         <select name="content_types[]" id="content_types" multiple>
                         {foreach name=contentTypes item=type from=$arrayTypes}
                             {if (!empty($string_search) && ($type['pk_content_type'] == 1 || $type['pk_content_type'] == 4))
-                                || (in_array($type['name'], $content_types_selected))}
+                                || (is_array($content_types_selected) && in_array($type['name'], $content_types_selected))}
                             <option value="{$type['name']}" selected="selected"/>{$type['name']|ucfirst}</option>
                             {else}
                             <option value="{$type['name']}" />{$type['name']|ucfirst}</option>
