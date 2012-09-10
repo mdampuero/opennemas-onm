@@ -105,11 +105,10 @@ if (
     }
     $tpl->assign('column', $contentsInHomepage);
 
-    $layout = s::get('frontpage_layout_'.$category, 'default');
+    $layout = s::get('frontpage_layout_'.$actualCategoryId, 'default');
     $layoutFile = 'layouts/'.$layout.'.tpl';
 
     $tpl->assign('layoutFile', $layoutFile);
-
 }
 
 $tpl->display('frontpage/frontpage.tpl', $cacheID);

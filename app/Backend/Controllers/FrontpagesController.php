@@ -225,8 +225,12 @@ class FrontpagesController extends Controller
      **/
     public function pickLayoutAction(Request $request)
     {
-        $category = $request->query->getDigits('category');
+        $category = $request->query->filter('category', '', FILTER_SANITIZE_STRING);
         $layout = $request->query->filter('layout', null, FILTER_SANITIZE_STRING);
+
+        if ($category == 'home') {
+            $category = 0;
+        }
 
         $availableLayouts = $this->container->getParameter('instance')->theme->getLayouts();
         $availableLayouts = array_keys($availableLayouts);
@@ -239,13 +243,14 @@ class FrontpagesController extends Controller
             s::set('frontpage_layout_'.$category, $layout);
         }
 
-        if ($category == '0') {
+        if ($category == 0) {
             $section = 'home';
         } else {
             $section = $category;
         }
 
         $tcacheManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
+        $tcacheManager->delete($section . '|RSS');
         $tcacheManager->delete($section . '|0');
 
         return $this->redirect($this->generateUrl('admin_frontpage_list', array('category' => $category)));

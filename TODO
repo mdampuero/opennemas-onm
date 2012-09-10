@@ -5,9 +5,18 @@ Opinions
 --------
 - Complete batch actions
 
-Frontpage manager
------------------
-- Review scheduling and colors
+Newsletter
+----------
+- Paginate newsletter listing
+
+Images
+------
+- Review image search, doesn't work at all
+- Improve layout of image preview in listing
+
+Articles
+--------
+- In the listing mark those that are in frontpage with a mark.
 
 LOW PRIORITY TASKS OR IDEAS
 --------------------------------------------------------------------------------
@@ -22,7 +31,6 @@ General
 Article
 -------
 - Check/Delete content relations when delete an article
-- In the listing mark those that are in frontpage with a mark.
 
 Opinion
 -------

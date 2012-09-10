@@ -226,7 +226,6 @@ class TemplateCacheManager
      */
     public function delete($cachefile, $tplFilename = null)
     {
-
         $cachefile = $this->getCacheFileName($cachefile, $tplFilename);
 
         if (is_array($cachefile) && count($cachefile) > 1) {
