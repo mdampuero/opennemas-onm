@@ -1,3 +1,20 @@
+-- Add type field in kiosko table
+ALTER TABLE `kioskos` ADD `type` TINYINT NOT NULL DEFAULT '0' COMMENT '0-item, 1-subscription';
+
+-- Table structure for table `orders`
+CREATE TABLE IF NOT EXISTS `orders` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) NOT NULL,
+  `content_id` bigint(20) NOT NULL,
+  `created` datetime NOT NULL,
+  `payment_id` varchar(50) NOT NULL,
+  `payment_status` varchar(150) NOT NULL,
+  `payment_amount` decimal(10,2) NOT NULL,
+  `payment_method` varchar(200) NOT NULL,
+  `params` longtext NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
 --17-08-2012
 ALTER TABLE `kioskos` ADD `price` DECIMAL NOT NULL DEFAULT '0';
 ALTER TABLE `users` ADD `type` TINYINT NOT NULL DEFAULT '0' COMMENT '0-backend, 1-frontend' AFTER `lastname`;
