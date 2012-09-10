@@ -21,7 +21,7 @@ class Articles
     * Get intance for contentManager
     * This is used in some actions at lists function
     */
-    function __construct()
+    public function __construct()
     {
         $this->cm = new ContentManager();
     }
@@ -37,7 +37,7 @@ class Articles
     *
     * @return mixed, array of contents
     */
-    public function lists ($opc = 'all', $param1 = null, $param2 = null)
+    public function lists($opc = 'all', $param1 = null, $param2 = null)
     {
 
         switch ($opc) {
@@ -93,7 +93,6 @@ class Articles
 
             case 'category':
 
-
                 break;
 
             case 'related':
@@ -116,10 +115,10 @@ class Articles
                         }
                     }
                 }
+
                 return $relatedContents;
 
                 break;
-
 
             case 'related-inner':
 
@@ -137,12 +136,12 @@ class Articles
                     $relatedContents = $this->cm->getInTime($relatedContents);
                     $relatedContents = $this->cm->getAvailable($relatedContents);
 
-
                     // Add category name
                     foreach ($relatedContents as &$content) {
                         $content->category_name = $ccm->get_category_name_by_content_id($content->id);
                     }
                 }
+
                 return $relatedContents;
 
                 break;
@@ -154,7 +153,7 @@ class Articles
                 $article = new Article($param1);
 
                 $machineSuggestedContents = array();
-                if(!empty($article->metadata)) {
+                if (!empty($article->metadata)) {
                     $objSearch    = cSearch::getInstance();
                     $machineSuggestedContents = $objSearch->SearchSuggestedContents(
                         $article->metadata,
@@ -187,7 +186,7 @@ class Articles
                     $title = StringUtils::get_title($article->title);
                     $print_url = '/imprimir/' . $title. '/' . $category_name . '/';
 
-                    if(!empty($subcategory_name)) {
+                    if (!empty($subcategory_name)) {
                         $breadcrub[] = array(
                             'text' => $ccm->get_title($subcategory_name),
                             'link' => '/seccion/' . $category_name . '/' . $subcategory_name . '/'
@@ -200,12 +199,12 @@ class Articles
                     $tpl->assign('print_url', $print_url);
 
                     $cat = $ccm->getByName($category_name);
-                    if(!is_null($cat) && $cat->inmenu) {
+                    if (!is_null($cat) && $cat->inmenu) {
                         $tpl->assign('breadcrub', $breadcrub);
                     }
 
                     // Foto interior
-                    if(isset($article->img2) and ($article->img2 != 0)){
+                    if (isset($article->img2) and ($article->img2 != 0)) {
                         $photoInt = new Photo($article->img2);
                         $tpl->assign('photoInt', $photoInt);
                     }
@@ -220,7 +219,6 @@ class Articles
 
             case 'media':
 
-
                 break;
 
             default:
@@ -229,6 +227,7 @@ class Articles
 
                 break;
         }
+
         return $article;
     }
 
@@ -241,7 +240,7 @@ class Articles
      *
      * @return $article
      */
-    public function index ( $id = null )
+    public function index( $id = null )
     {
         $article = array();
         $params = func_get_args();
@@ -270,7 +269,7 @@ class Articles
      *
      * @return void
      */
-    private function _validateInt ($number)
+    private function _validateInt($number)
     {
         if (!is_numeric($number)) {
             throw new RestException(400, 'parameter is not a number');
@@ -290,7 +289,7 @@ class Articles
      *
      * @return void
      */
-    private function _invalidUrlParam ()
+    private function _invalidUrlParam()
     {
         throw new RestException(400, 'parameter is not valid');
     }

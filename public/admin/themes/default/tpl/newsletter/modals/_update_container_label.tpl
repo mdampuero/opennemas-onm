@@ -1,6 +1,6 @@
 <div class="modal hide fade" id="modal-update-label">
     <div class="modal-header">
-        <a class="close" href="#">×</a>
+        <button type="button" class="close" data-dismiss="modal-update-label" aria-hidden="true">×</button>
         <h3>{t}Update Container label{/t}</h3>
     </div>
     <div class="modal-body clearfix">
@@ -13,6 +13,6 @@
         </div>
     </div>
     <div class="modal-footer">
-        <a class="btn primary save" href="#">{t}Save{/t}</a>
+        <a class="btn btn-primary save" href="#">{t}Save{/t}</a>
     </div>
 </div>

@@ -8,7 +8,10 @@
             </label>
         </td>
         <td rowspan="8">
-            {include file="advertisement/partials/advertisement_map_positions_opinion_interior.tpl"}
+            <div id="advertisement-mosaic-opinioninterior" style=" ">
+                <div id="advertisement-mosaic-opinioninterior-frame"></div>
+                <img src="{$params.IMAGE_DIR}advertisement/ArticleAds.png" width="240"  usemap="#mapOpinionInterior" />
+            </div>
         </td>
     </tr>
     <tr>
@@ -114,30 +117,3 @@
     </tr>
 </tbody>
 </table>
-
-<script type="text/javascript">
-/* <![CDATA[ */
-var adPositionOpinionInterior = null;
-
-var positions_opinion_interior = new Array();
-positions_opinion_interior[701] = '2,0,176,24';
-positions_opinion_interior[702] = '178,0,55,24';
-positions_opinion_interior[703] = '161,188,70,50';
-positions_opinion_interior[704] = '4,322,154,20';
-positions_opinion_interior[705] = '161,375,70,50';
-positions_opinion_interior[709] = '2,479,176,24';
-positions_opinion_interior[710] = '178,479,55,24';
-positions_opinion_interior[750] = '0,0,240,508';
-
-
-var options = { 'positions': positions_opinion_interior, 'radios': $('ads_type_interior_opinion').select('input[name=type_advertisement]') };
-// adPositionOpinionInterior = new AdPosition('advertisement-mosaic-opinioninterior', options );
-document.observe('dom:loaded', function() {
-
-    {if isset($advertisement) && !empty($advertisement->type_advertisement) && ($advertisement->type_advertisement gt 100) && $category == '4'}
- //   adPositionOpinionInterior.selectPosition({$advertisement->type_advertisement});
-    {/if}
-
-});
-/* ]]> */
-</script>

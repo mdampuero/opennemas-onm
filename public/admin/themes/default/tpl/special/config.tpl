@@ -22,7 +22,7 @@
 {/block}
 
 {block name="content"}
-<form action="{$smarty.server.PHP_SELF}" method="POST" name="formulario" id="formulario" {$formAttrs}>
+<form action="{url name=admin_specials_config}" method="POST" name="formulario" id="formulario" {$formAttrs}>
     <div class="top-action-bar">
         <div class="wrapper-content">
             <div class="title"><h2>{t}Special :: Configuration{/t}</h2></div>
@@ -40,12 +40,6 @@
         {render_messages}
 
         <div id="{$category}">
-
-            <table class="adminheading">
-                 <tr>
-                     <th align="left">{t}Information about special module settings{/t}</th>
-                 </tr>
-            </table>
 
             <table class="adminform" border="0">
                 <tr>
@@ -66,7 +60,7 @@
                         </div>
                     </td>
                     <td> <br/>
-                        <div class="help-block">
+                        <div class="onm-help-block">
 								<div class="title"><h4>{t}Definition values{/t}</h4></div>
                                 <div class="content">
                                     <ul>

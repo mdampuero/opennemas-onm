@@ -7,9 +7,12 @@
  * file that was distributed with this source code.
  */
 namespace Onm\Instance;
-use \FilesManager as fm,
-    \Onm\Message as m,
-    \Onm\Settings as s;
+
+use FilesManager as fm;
+use Onm\Message as m;
+use Onm\Settings as s;
+use Onm\Instance\Instance;
+
 /**
  * Class for manage ONM instances.
  *
@@ -24,12 +27,12 @@ class InstanceManager
     /**
      * The connection to the database
      **/
-    private $_connnection = null;
+    private $connection = null;
 
     /**
      * @var Onm\Request Singleton instance
      */
-    protected static $_instance;
+    protected static $instance;
 
     /*
      * Initializes the Request object
@@ -37,7 +40,7 @@ class InstanceManager
      */
     public function __construct()
     {
-        $this->_connection = self::getConnection();
+        $this->connection = self::getConnection();
 
         return $this;
     }
@@ -49,11 +52,11 @@ class InstanceManager
      */
     public static function getInstance()
     {
-        if (null === self::$_instance) {
-            self::$_instance = new self();
+        if (null === self::$instance) {
+            self::$instance = new self();
         }
 
-        return self::$_instance;
+        return self::$instance;
     }
 
     /**
@@ -65,52 +68,43 @@ class InstanceManager
      * @return stdClass dummy object with properties for the loaded instance
      * @return false    if the instance doesn't exists
      */
-    public function load( $serverName )
+    public function load($serverName)
     {
         //TODO: improve search for allowing subdomains with wildcards
         $sql = "SELECT SQL_CACHE * FROM instances"
             ." WHERE domains LIKE '%{$serverName}%' LIMIT 1";
-        $rs = $this->_connection->Execute($sql);
+        $rs = $this->connection->Execute($sql);
 
         if (!$rs) {
-            $this->_connection->ErrorMsg();
+            $this->connection->ErrorMsg();
 
             return false;
         }
 
         if (preg_match("@\/manager@", $_SERVER["PHP_SELF"])) {
-            $instance = new \stdClass();
-            $instance->internalName = 'onm_manager';
+            $instance = new Instance();
+            $instance->internal_name = 'onm_manager';
             $instance->activated = true;
-            $configs = array(
-                'INSTANCE_UNIQUE_NAME' => $instance->internalName,
-                'MEDIA_URL' => '',
-                'TEMPLATE_USER' => '',
+            $instance->settings = array(
+                'INSTANCE_UNIQUE_NAME' => $instance->internal_name,
+                'MEDIA_URL'            => '',
+                'TEMPLATE_USER'        => '',
             );
-            foreach ($configs as $key => $value) {
-                define($key, $value);
-            }
+
+            $instance->boot();
 
             return $instance;
         }
         //If found matching instance initialize its contants and return it
         if ($rs->fields) {
 
-            $instance = new \stdClass();
+            $instance = new Instance();
             foreach ($rs->fields as $key => $value) {
                 $instance->{$key} = $value;
             }
             define('INSTANCE_UNIQUE_NAME', $instance->internal_name);
 
-            // Transform all the intance settings into application constants.
-            $instance->settings = unserialize($instance->settings);
-            if (empty($instance->settings['MEDIA_URL'])) {
-                $instance->settings['MEDIA_URL'] = implode('',
-                    array('http://' ,$_SERVER['HTTP_HOST'], '/media'.'/'));
-            }
-            foreach ($instance->settings as $key => $value) {
-                define($key, $value);
-            }
+            $instance->boot();
 
             // If this instance is not activated throw an exception
             if ($instance->activated != '1') {
@@ -132,7 +126,7 @@ class InstanceManager
      *
      * @param $arg
      */
-    public static function getConnection($connectionData=null)
+    public static function getConnection($connectionData = null)
     {
         // Database
         global $onmInstancesConnection;
@@ -170,10 +164,9 @@ class InstanceManager
         } else {
             $sql = "SELECT * FROM instances ORDER BY id DESC";
         }
-        $rs = $this->_connection->Execute($sql);
+        $rs = $this->connection->Execute($sql);
 
         if (!$rs) {
-            $connection->ErrorMsg();
 
             return false;
         }
@@ -200,11 +193,12 @@ class InstanceManager
         $instances = array();
 
         $sql = "SELECT SQL_CACHE * FROM instances WHERE id = ?";
-        $rs = $this->_connection->Execute($sql, array($id));
-
+        $rs = $this->connection->Execute($sql, array($id));
         if (!$rs) {
-            $rs->ErrorMsg();
+            return false;
+        }
 
+        if ($rs->fields === false) {
             return false;
         }
 
@@ -254,8 +248,11 @@ class InstanceManager
                 }
             }
             if (extension_loaded('apc')) {
-                apc_store(APC_PREFIX . "getDBInformation_totals_"
-                    .$settings['BD_DATABASE'], $totals, 300);
+                apc_store(
+                    APC_PREFIX . "getDBInformation_totals_".$settings['BD_DATABASE'],
+                    $totals,
+                    300
+                );
             }
         }
 
@@ -288,11 +285,9 @@ class InstanceManager
     public function changeActivated($id, $flag)
     {
         $sql = "UPDATE instances SET activated = ? WHERE id = ?";
-        $rs = $this->_connection->Execute($sql, array($flag, $id));
+        $rs = $this->connection->Execute($sql, array($flag, $id));
 
         if (!$rs) {
-            $connection->ErrorMsg();
-
             return false;
         }
 
@@ -317,10 +312,8 @@ class InstanceManager
             $data['id']
         );
 
-        $rs = $this->_connection->Execute($sql, $values);
+        $rs = $this->connection->Execute($sql, $values);
         if (!$rs) {
-            $connection->ErrorMsg();
-
             return false;
         }
 
@@ -339,10 +332,8 @@ class InstanceManager
         $instance = $this->read($id);
 
         $sql = "DELETE FROM instances WHERE id=?";
-        $rs = $this->_connection->Execute($sql, array($instance->id));
+        $rs = $this->connection->Execute($sql, array($instance->id));
         if (!$rs) {
-            $this->_connection->ErrorMsg();
-
             return false;
         }
 
@@ -438,12 +429,12 @@ class InstanceManager
         // Check if the instance already exists
         $sql = "SELECT count(*) as instance_exists FROM instances "
              . "WHERE `internal_name` = ?";
-        $rs = $this->_connection->Execute($sql, array($data['internal_name']));
+        $rs = $this->connection->Execute($sql, array($data['internal_name']));
 
         // Check if the email already exists
         $checkMailSql = "SELECT count(*) as email_exists FROM instances "
               . "WHERE `contact_mail` = ?";
-        $checkMailRs = $this->_connection->Execute($checkMailSql, array($data['user_mail']));
+        $checkMailRs = $this->connection->Execute($checkMailSql, array($data['user_mail']));
 
         // If doesn´t exist the instance in the database and doesn't exist contact mail proceed
         if ($rs
@@ -464,11 +455,11 @@ class InstanceManager
                 $data['user_mail'],
             );
 
-            $createIntanceRs = $this->_connection->Execute($createIntanceSql, $values);
+            $createIntanceRs = $this->connection->Execute($createIntanceSql, $values);
             if (!$createIntanceRs) {
                 throw new InstanceNotRegisteredException(
                     "Could not create the instance reference into the instance "
-                    ."table: {$this->_connection->ErrorMsg()}"
+                    ."table: {$this->connection->ErrorMsg()}"
                 );
             }
 
@@ -516,7 +507,7 @@ class InstanceManager
         $sql = "DELETE FROM `instances` WHERE  `internal_name` = ?";
         $values = array($internalName);
 
-        if (!$this->_connection->Execute($sql, $values)) {
+        if (!$this->connection->Execute($sql, $values)) {
             return false;
         }
 
@@ -559,8 +550,6 @@ class InstanceManager
             if (file_put_contents($instanceConfigPath, $apacheConfString)) {
                 exec("sudo apachectl graceful", $output, $exitCode);
                 if ($exitCode > 0) {
-                    //"Unable to reload apache configuration
-                    //(exit code {$exitCode}): ".$output);
 
                     return false;
                 }
@@ -600,9 +589,11 @@ class InstanceManager
         // Gets global database connection and creates the requested database
         global $onmInstancesConnection;
         $conn = \ADONewConnection($onmInstancesConnection['BD_TYPE']);
-        $conn->Connect($onmInstancesConnection['BD_HOST'],
-                       $onmInstancesConnection['BD_USER'],
-                       $onmInstancesConnection['BD_PASS']);
+        $conn->Connect(
+            $onmInstancesConnection['BD_HOST'],
+            $onmInstancesConnection['BD_USER'],
+            $onmInstancesConnection['BD_PASS']
+        );
         $sql = "CREATE DATABASE `{$data['settings']['BD_DATABASE']}`";
         $rs = $conn->Execute($sql);
 
@@ -617,83 +608,100 @@ class InstanceManager
         $rs3 = $conn->Execute($sql3);
         $rs4 = $conn->Execute($sql4);
 
-        // If the database was created sucessfully now import the default data.
-        if ($rs && $rs2 && $rs3 && $rs4) {
-            $connection2         = self::getConnection($data['settings']);
-            $exampleDatabasePath = realpath(APPLICATION_PATH.DS.'db'.DS.'instance-default.sql');
-            $execLine = "mysql -h {$onmInstancesConnection['BD_HOST']} "
-                ."-u {$onmInstancesConnection['BD_USER']}"
-                ." -p{$onmInstancesConnection['BD_PASS']} "
-                ."{$data['settings']['BD_DATABASE']} < {$exampleDatabasePath}";
-            exec($execLine, $output, $exitCode);
-            if ($exitCode > 0) {
-                throw new DatabaseForInstanceNotCreatedException(
-                    'Could not create the default database for the instance:'
-                    .' EXEC_LINE: {$execLine} \n OUTPUT: {$output}'
-                );
-            }
-
-            // Insert user with data from the openhost form
-            //TODO: PROVISIONAL WHILE DONT DELETE $GLOBALS['application']->conn
-            //// is used in settings set
-            $im = $this->getInstance();
-            $GLOBALS['application']->conn =
-                $im->getConnection($data['settings']);
-
-            if (isset($data['user_name'])
-                && isset ($data['user_pass'])
-                && isset ($data['user_mail'])
-            ) {
-                $sql = "INSERT INTO users (`login`, `password`, `sessionexpire`,
-                                           `email`, `name`, `fk_user_group`)
-                        VALUES (?,?,?,?,?,?)";
-
-                $values = array($data['user_name'], md5($data['user_pass']),  60,
-                                $data['user_mail'], $data['user_name'],6);
-
-                if (!$connection2->Execute($sql, $values)) {
-                    return false;
-                }
-
-                $userPrivSql = "INSERT INTO `users_content_categories` "
-                        ."(`pk_fk_user`, `pk_fk_content_category`)"
-                        ."VALUES (134, 0), (134, 22), (134, 23), (134, 24), "
-                        ."       (134, 25), (134, 26), (134, 27), "
-                        ."       (134, 28), (134, 29), (134, 30), (134, 31)";
-
-                if (!$connection2->Execute($userPrivSql)) {
-                    return false;
-                }
-
-                s::set('contact_mail', $data['user_mail']);
-                s::set('contact_name', $data['user_name']);
-                s::set('contact_IP', $data['contact_IP']);
-            }
-
-            //Change and insert some data with instance information
-            s::set('site_name', $data['name']);
-            s::set('site_created', $data['site_created']);
-            s::set('site_title',
-                $data['name'].' - OpenNemas - Servicio online para tu periódico'
-                .' digital - Online service for digital newspapers');
-            s::set('site_description',
-                $data['name'].' - OpenNemas - Servicio online para tu periódico'
-                .' digital - Online service for digital newspapers');
-            s::set('site_keywords',
-                $data['internal_name'].', openNemas, servicio, online, '
-                .'periódico, digital, service, newspapers');
-            s::set('site_agency', $data['internal_name'].'.opennemas.com');
-            if (isset ($data['timezone'])) {
-                s::set('time_zone', $data['timezone']);
-            }
-
-        } else {
+        if (!$rs) {
             throw new DatabaseForInstanceNotCreatedException(
-                'Could not create the default database/user/grant/privileges'
-                .' for the instance/user...'
+                'Could not create the default database for the instance'
             );
+        }
+        if (!$rs2) {
+            throw new DatabaseForInstanceNotCreatedException(
+                'Could not create the default user for the instance'
+            );
+        }
 
-            return false;
+        if (!$rs3) {
+            throw new DatabaseForInstanceNotCreatedException(
+                'Could not grant usage to the default user for the instance database'
+            );
+        }
+        if (!$rs4) {
+            throw new DatabaseForInstanceNotCreatedException(
+                'Could not grant all privileges to the default user for the instance database'
+            );
+        }
+        // If the database was created sucessfully now import the default data.
+        $connection2         = self::getConnection($data['settings']);
+        $exampleDatabasePath = realpath(APPLICATION_PATH.DS.'db'.DS.'instance-default.sql');
+        $execLine = "mysql -h {$onmInstancesConnection['BD_HOST']} "
+            ."-u {$onmInstancesConnection['BD_USER']}"
+            ." -p{$onmInstancesConnection['BD_PASS']} "
+            ."{$data['settings']['BD_DATABASE']} < {$exampleDatabasePath}";
+        exec($execLine, $output, $exitCode);
+        if ($exitCode > 0) {
+            throw new DatabaseForInstanceNotCreatedException(
+                'Could not create the default database for the instance:'
+                .' EXEC_LINE: {$execLine} \n OUTPUT: {$output}'
+            );
+        }
+
+        // Insert user with data from the openhost form
+        //TODO: PROVISIONAL WHILE DONT DELETE $GLOBALS['application']->conn
+        //// is used in settings set
+        $im = $this->getInstance();
+        $GLOBALS['application']->conn =
+            $im->getConnection($data['settings']);
+
+        if (isset($data['user_name'])
+            && isset ($data['user_pass'])
+            && isset ($data['user_mail'])
+        ) {
+            $sql = "INSERT INTO users (`login`, `password`, `sessionexpire`,
+                                       `email`, `name`, `fk_user_group`)
+                    VALUES (?,?,?,?,?,?)";
+
+            $values = array($data['user_name'], md5($data['user_pass']),  60,
+                            $data['user_mail'], $data['user_name'],6);
+
+            if (!$connection2->Execute($sql, $values)) {
+                return false;
+            }
+
+            $userPrivSql = "INSERT INTO `users_content_categories` "
+                    ."(`pk_fk_user`, `pk_fk_content_category`)"
+                    ."VALUES (134, 0), (134, 22), (134, 23), (134, 24), "
+                    ."       (134, 25), (134, 26), (134, 27), "
+                    ."       (134, 28), (134, 29), (134, 30), (134, 31)";
+
+            if (!$connection2->Execute($userPrivSql)) {
+                return false;
+            }
+
+            s::set('contact_mail', $data['user_mail']);
+            s::set('contact_name', $data['user_name']);
+            s::set('contact_IP', $data['contact_IP']);
+        }
+
+        //Change and insert some data with instance information
+        s::set('site_name', $data['name']);
+        s::set('site_created', $data['site_created']);
+        s::set(
+            'site_title',
+            $data['name'].' - OpenNemas - Servicio online para tu periódico'
+            .' digital - Online service for digital newspapers'
+        );
+        s::set(
+            'site_description',
+            $data['name'].' - OpenNemas - Servicio online para tu periódico'
+            .' digital - Online service for digital newspapers'
+        );
+        s::set(
+            'site_keywords',
+            $data['internal_name'].', openNemas, servicio, online, '
+            .'periódico, digital, service, newspapers'
+        );
+        s::set('site_agency', $data['internal_name'].'.opennemas.com');
+        if (isset ($data['timezone'])) {
+            s::set('time_zone', $data['timezone']);
         }
 
         return true;
@@ -708,9 +716,9 @@ class InstanceManager
      **/
     public function deleteDatabaseForInstance($settings)
     {
-        $sql = "DROP DATABASE `{$settings['BD_DATABASE']}`";
+        $sql = "DROP DATABASE `{$settings['settings']['BD_DATABASE']}`";
 
-        if (!$this->_connection->Execute($sql)) {
+        if (!$this->connection->Execute($sql)) {
             return false;
         }
 
@@ -726,9 +734,9 @@ class InstanceManager
      **/
     public function deleteInstanceUserFromDatabaseManager($settings)
     {
-        $sql = "DROP USER `{$settings['BD_USER']}`@'localhost'";
+        $sql = "DROP USER `{$settings['settings']['BD_USER']}`@'localhost'";
 
-        if (!$this->_connection->Execute($sql)) {
+        if (!$this->connection->Execute($sql)) {
             return false;
         }
 
@@ -744,8 +752,10 @@ class InstanceManager
     {
         $mediaPath = SITE_PATH.DS.'media'.DS.$name;
         if (!file_exists($mediaPath)) {
-            return fm::recursiveCopy(SITE_PATH.DS.'media'.DS.'default',
-                $mediaPath);
+            return fm::recursiveCopy(
+                SITE_PATH.DS.'media'.DS.'default',
+                $mediaPath
+            );
         } else {
             //TODO: return codes for handling this errors
             return "The media folder {$name} already exists.";
@@ -805,7 +815,7 @@ class InstanceManager
         // Check if the generated InternalShortName already exists
         $sql = "SELECT count(*) as internalShort_exists FROM instances "
              . "WHERE `domains` LIKE '".$internalNameShort."%'";
-        $rs = $this->_connection->Execute($sql);
+        $rs = $this->connection->Execute($sql);
 
 
         if ($rs && $rs->fields['internalShort_exists'] > 0) {
@@ -823,17 +833,17 @@ class InstanceManager
  **/
 class InstanceNotRegisteredException extends \Exception
 {
-
 }
+
 class DatabaseForInstanceNotCreatedException extends \Exception
 {
-
 }
+
 class DefaultAssetsForInstanceNotCopiedException extends \Exception
 {
-
 }
+
 class ApacheConfigurationNotReloadedException extends \Exception
 {
-
 }
+

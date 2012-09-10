@@ -29,7 +29,7 @@ switch ($action) {
         $cacheID = $tpl->generateCacheId('Index', '', "RSS");
 
         // Fetch information for Advertisements
-        require_once "article_advertisement.php";
+        require_once 'article_advertisement.php';
 
         if (($tpl->caching == 0)
             || !$tpl->isCached('rss/index.tpl', $cacheID)
@@ -43,9 +43,10 @@ switch ($action) {
             $tpl->assign('opinionAuthors', $opinionAuthors);
         }
         $tpl->display('rss/index.tpl', $cacheID);
-        break;
 
+        break;
     case 'rss':
+
         // Initialicing variables
         $tpl->setConfig('rss');
         $title_rss = "";
@@ -111,7 +112,6 @@ switch ($action) {
 
                 $author = $request->query->filter('author', null, FILTER_SANITIZE_STRING);
 
-
                 // get all the authors of opinions
                 if (!isset($author) || empty($author)) {
                     $articles_home = $cm->getOpinionArticlesWithAuthorInfo(
@@ -139,7 +139,8 @@ switch ($action) {
                 foreach ($articles_home as &$art) {
                     $art['author_name_slug'] = StringUtils::get_title($art['name']);
 
-                    $art['uri'] = Uri::generate( 'opinion',
+                    $art['uri'] = Uri::generate(
+                        'opinion',
                         array(
                             'id'       => sprintf('%06d', $art['id']),
                             'date'     => date('YmdHis', strtotime($art['created'])),
@@ -149,10 +150,13 @@ switch ($action) {
                     );
                 }
             } elseif ($category_name == 'last') {
-                $articles_home = $cm->find('Article', 'available=1 AND content_status=1 AND fk_content_type=1',
-                           'ORDER BY created DESC, changed DESC LIMIT 0, 50');
+                $articles_home = $cm->find(
+                    'Article',
+                    'available=1 AND content_status=1 AND fk_content_type=1',
+                    'ORDER BY created DESC, changed DESC LIMIT 0, 50'
+                );
 
-                                // Fetch the photo and category name for this element
+                // Fetch the photo and category name for this element
                 foreach ($articles_home as $i => $article) {
 
                     if (isset($article->img1) && $article->img1 != 0) {
@@ -200,3 +204,4 @@ switch ($action) {
         $tpl->display('rss/rss.tpl', $cache_id);
         break;
 }
+

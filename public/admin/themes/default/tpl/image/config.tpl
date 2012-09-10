@@ -25,13 +25,13 @@
 {/block}
 
 {block name="content"}
-<form action="{$smarty.server.PHP_SELF}" method="POST" name="formulario" id="formulario" {$formAttrs}>
+<form action="{url name=admin_images_config}" method="POST" name="formulario" id="formulario" {$formAttrs}>
     <div class="top-action-bar">
         <div class="wrapper-content">
             <div class="title"><h2>{t}Image manager :: Configuration{/t}</h2></div>
             <ul class="old-button">
                 <li>
-                    <a href="{$smarty.server.PHP_SELF}" class="admin_add" value="{t}Go back to list{/t}" title="{t}Go back to list{/t}">
+                    <a href="{url name=admin_images_statistics}" class="admin_add" value="{t}Go back to list{/t}" title="{t}Go back to list{/t}">
                     <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Sync list  with server{/t}" alt="{t}Go back to list{/t}" ><br />{t}Go back to list{/t}
                     </a>
                 </li>
@@ -43,12 +43,6 @@
         {render_messages}
 
         <div id="{$category}">
-
-            <table class="adminheading">
-                 <tr>
-                     <th align="left">{t}Information about video module settings{/t}</th>
-                 </tr>
-            </table>
 
             <table class="adminform" border="0" style="padding:10px;">
                 <tr>
@@ -90,7 +84,7 @@
                         </div>
                     </td>
                     <td valign="top">
-                        <div class="help-block">
+                        <div class="onm-help-block">
                                 <div class="title"><h4>{t}Settings{/t}</h4></div>
                                 <div class="content">
                                     <ul>

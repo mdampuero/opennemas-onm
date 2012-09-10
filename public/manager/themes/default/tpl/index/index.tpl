@@ -8,18 +8,8 @@
         </div>
     </div>
 </div>
-<form action="{$smarty.server.PHP_SELF}" method="post" name="formulario" id="formulario">
-    <div class="wrapper-content">
-        <table class="adminform">
-            <tbody>
-                <tr valign="top">
-                    <td class="center">
-                        Here you will see some statistics about <strong>instances</strong> and other <br>
-                        awesome things that will blow out your imagination.
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</form>
+<div class="wrapper-content">
+    Here you will see some statistics about <strong>instances</strong> and other <br>
+    awesome things that will blow out your imagination.
+</div>
 {/block}

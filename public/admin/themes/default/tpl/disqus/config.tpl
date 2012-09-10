@@ -29,8 +29,8 @@
             <h2 class="disqus">{t}Comment manager{/t}:: {t}Configuration{/t}</h2>
             <ul class="old-button">
                 <li>
-                    <a href="{$smarty.server.PHP_SELF}?action=list" class="admin_add" value="{t}Go back to list{/t}" title="{t}Go back to list{/t}">
-                        <img border="0" src="{$params.IMAGE_DIR}previous.png" alt="{t}Go back to list{/t}" ><br />{t}Go back to list{/t}
+                    <a href="{url name=admin_comments_disqus}" title="{t}Go back to list{/t}">
+                        <img src="{$params.IMAGE_DIR}previous.png" alt="{t}Go back to list{/t}" ><br />{t}Go back to list{/t}
                     </a>
                 </li>
             </ul>
@@ -38,25 +38,9 @@
     </div>
 </div>
 <div class="wrapper-content">
-   <form action="{$smarty.server.PHP_SELF}" method="POST">
-        <br>
-
+   <form action="{url name=admin_comments_disqus_config}" method="POST">
         {render_messages}
-
-        {if (!empty($error))}
-        <div class="error">
-             {render_error}
-        </div>
-        {/if}
-
         <div>
-
-             <table class="adminheading">
-                 <tr>
-                     <th align="left">{t}Auth credentials{/t}</th>
-                 </tr>
-             </table>
-
              <table class="adminform" border=0>
 
                 <tr>
@@ -77,8 +61,6 @@
                 </div>
             </div>
         </div>
-
-        <input type="hidden" id="action" name="action" value="config" />
    </form>
 </div>
 {/block}

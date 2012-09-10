@@ -7,7 +7,7 @@ $advertisement = Advertisement::getInstance();
 // APC cache version
 /* $banners = $advertisement->cache->getAdvertisements(array(1,2,3, 6,7,8, 11,13), $category); */
 $banners = $advertisement->getAdvertisements(array(1, 2, 3, 6, 7, 8, 11, 13), $category);
-//$advertisement->render($banners, &$tpl);
+//$advertisement->renderMultiple($banners, &$tpl);
 if (!empty($intersticial)) {
-    $advertisement->render($banners, &$advertisement);
+    $advertisement->renderMultiple($banners, $advertisement);
 }

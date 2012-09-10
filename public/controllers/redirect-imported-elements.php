@@ -10,10 +10,8 @@
 require_once '../bootstrap.php';
 
 // Fetch HTTP variables
-$contentType = $request->query->filter('content_type',
-    'null', FILTER_SANITIZE_STRING);
-$contentId   = $request->query->filter('content_id',
-    null, FILTER_SANITIZE_STRING);
+$contentType = $request->query->filter('content_type', 'null', FILTER_SANITIZE_STRING);
+$contentId   = $request->query->filter('content_id', null, FILTER_SANITIZE_STRING);
 
 $url = SITE_URL;
 
@@ -37,19 +35,19 @@ if (!is_null($contentId)) {
                 $opinion = new Opinion($newContentID);
                 $url .=  $opinion->uri;
             }
-            break;
 
+            break;
         case 'category':
 
-            $newContentID =
-                getOriginalIDForContentTypeAndID($contentType, $contentId);
+            $newContentID = getOriginalIDForContentTypeAndID($contentType, $contentId);
 
             $cc = new ContentCategory($newContentID);
 
             $url .= Uri::generate('section', array('id' => $cc->name));
-            break;
 
+            break;
         default:
+
             break;
     }
 }
@@ -57,7 +55,7 @@ if (!is_null($contentId)) {
 if (isset($_REQUEST['stop_redirect'])) {
     echo $url;
 } else {
-    header( "HTTP/1.1 301 Moved Permanently" );
-    header( "Location: $url" );
+    header("HTTP/1.1 301 Moved Permanently");
+    header("Location: $url");
 }
 

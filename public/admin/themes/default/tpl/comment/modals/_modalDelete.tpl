@@ -1,6 +1,6 @@
 <div class="modal hide fade" id="modal-comment-delete">
     <div class="modal-header">
-      <a class="close" href="#">×</a>
+      <button type="button" class="close" data-dismiss="modal-comment-delete" aria-hidden="true">×</button>
       <h3>{t}Delete comment{/t}</h3>
     </div>
     <div class="modal-body">
@@ -8,7 +8,7 @@
 
     </div>
     <div class="modal-footer">
-        <a class="btn primary yes" href="#">{t}Yes, delete{/t}</a>
+        <a class="btn btn-primary yes" href="#">{t}Yes, delete{/t}</a>
         <a class="btn secondary no" href="#">{t}No{/t}</a>
     </div>
 </div>
@@ -16,24 +16,24 @@
 <script>
 jQuery("#modal-comment-delete").modal({
     backdrop: 'static', //Show a grey back drop
-    keyboard: true //Can close on escape
+    keyboard: true, //Can close on escape
+    show: false
 });
 
 jQuery('.del').click(function(e) {
     jQuery('#modal-comment-delete .modal-body span').html( jQuery(this).data('title') );
     //Sets up the modal
     jQuery("#modal-comment-delete").modal('show');
-    jQuery("body").data("selected-for-del", jQuery(this).data("id"));
+    jQuery("#modal-comment-delete").data('url', jQuery(this).data("url"));
     e.preventDefault();
 });
 
 jQuery('#modal-comment-delete a.btn.yes').on('click', function(){
-    var delId = jQuery("body").data("selected-for-del");
-    if(delId) {
+    var url = jQuery("#modal-comment-delete").data("url");
+    if(url) {
         jQuery.ajax({
-            url:  "{$smarty.server.SCRIPT_NAME}",
+            url:  url,
             type: "POST",
-            data: { action:"delete", id:delId },
             success: function(){
                 location.reload();
             }

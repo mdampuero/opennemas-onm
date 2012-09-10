@@ -18,7 +18,6 @@ namespace Onm\Import\Synchronizer;
  */
 class FTP
 {
-
     /*
      * Opens an FTP connection with the parameters of the object
      *
@@ -34,17 +33,24 @@ class FTP
         // test if the connection was successful
         if (!$this->ftpConnection) {
             throw new \Exception(
-                sprintf(_('Can\'t connect to server %s. Contact with your "
-                    ."administrator for support.'), $params['server'])
+                sprintf(
+                    _(
+                        'Can\'t connect to server %s. Contact with your "
+                        ."administrator for support.'
+                    ),
+                    $params['server']
+                )
             );
         }
 
         // if there is a ftp login configuration use it
         if (isset($params['user'])) {
 
-            $loginResult = ftp_login($this->ftpConnection,
-                                     $params['user'],
-                                     $params['password']);
+            $loginResult = ftp_login(
+                $this->ftpConnection,
+                $params['user'],
+                $params['password']
+            );
 
             if (!$loginResult) {
                 throw new \Exception(
@@ -54,11 +60,12 @@ class FTP
 
             if (isset($this->serverUrl['path'])) {
                 if (!@ftp_chdir($this->ftpConnection, $this->serverUrl['path'])) {
-                    throw new \Exception(sprintf(
-                        _("Directory '%s' doesn't exists or you "
-                            ."don't have enought permissions to acces it"),
-                        $this->serverUrl['path']
-                    ));
+                    throw new \Exception(
+                        sprintf(
+                            _("Directory '%s' doesn't exists or you don't have enought permissions to acces it"),
+                            $this->serverUrl['path']
+                        )
+                    );
                 }
             }
 
@@ -81,16 +88,23 @@ class FTP
         $maxAge = null
     ) {
         $files = ftp_rawlist(
-            $this->ftpConnection, ftp_pwd($this->ftpConnection), true
+            $this->ftpConnection,
+            ftp_pwd($this->ftpConnection),
+            true
         );
         $files = $this->_filterOldFiles(
-            $this->_formatRawFtpFileList($files), $maxAge
+            $this->_formatRawFtpFileList($files),
+            $maxAge
         );
 
         // Filter files by its creation
         self::cleanWeirdFiles($cacheDir);
-        $deletedFiles = self::cleanFiles($cacheDir,
-            $files, $excludedFiles, $maxAge);
+        $deletedFiles = self::cleanFiles(
+            $cacheDir,
+            $files,
+            $excludedFiles,
+            $maxAge
+        );
 
         $downloadedFiles = 0;
 
@@ -109,8 +123,12 @@ class FTP
                         $localFilePath =
                             $cacheDir.DIRECTORY_SEPARATOR.strtolower(basename($file['filename']));
                         if (!file_exists($localFilePath)) {
-                            @ftp_get($this->ftpConnection, $localFilePath,
-                                $file['filename'], FTP_BINARY);
+                            @ftp_get(
+                                $this->ftpConnection,
+                                $localFilePath,
+                                $file['filename'],
+                                FTP_BINARY
+                            );
 
                             $downloadedFiles++;
                         }
@@ -177,7 +195,6 @@ class FTP
             }
 
             foreach ($localFileList as $file) {
-                $filePath = $cacheDir.'/'.$file;
                 if (!in_array($file, $serverFileList)) {
                     unlink($cacheDir.'/'.$file);
                     $deletedFiles++;
@@ -193,7 +210,7 @@ class FTP
      *
      * @return array list of files with its properties
      **/
-    protected function _formatRawFtpFileList($rawFiles='')
+    protected function _formatRawFtpFileList($rawFiles = '')
     {
         // here the magic begins!
         $structure = array();
@@ -219,7 +236,8 @@ class FTP
                     'size'   => $this->_byteconvert($info[4]),
                     'chmod'  => $this->_chmodnum($info[0]),
                     'date'   => \DateTime::createFromFormat(
-                        'd M H:i', $info[6] . ' ' . $info[5] . ' ' . $info[7]
+                        'd M H:i',
+                        $info[6] . ' ' . $info[5] . ' ' . $info[7]
                     ),
                     'raw'    => $info,
                     'raw2'   => $rawfile,
@@ -246,8 +264,7 @@ class FTP
             $exp = 0;
         }
 
-        return sprintf('%.2f '.$symbol[$exp],
-            ($bytes/pow(1024, floor($exp))));
+        return sprintf('%.2f '.$symbol[$exp], ($bytes/pow(1024, floor($exp))));
     }
 
     /**
@@ -276,11 +293,15 @@ class FTP
     protected function _filterOldFiles($files, $maxAge)
     {
         if (!empty($maxAge)) {
-            $files = array_filter($files, function($item) use ($maxAge) {
-                return (time() - $maxAge) < $item['date']->getTimestamp();
-            });
+            $files = array_filter(
+                $files,
+                function ($item) use ($maxAge) {
+                    return (time() - $maxAge) < $item['date']->getTimestamp();
+                }
+            );
         }
 
         return $files;
     }
 }
+

@@ -7,6 +7,7 @@
  * file that was distributed with this source code.
  */
 namespace Onm\UI;
+
 /**
  * Class for generate charts with Open Flash Charts.
  *
@@ -133,5 +134,5 @@ class OFC
         return $g->render();
 
     }
-
 }
+

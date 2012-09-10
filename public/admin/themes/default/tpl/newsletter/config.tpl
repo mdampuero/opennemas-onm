@@ -46,7 +46,7 @@ jQuery(document).ready(function($){
     //If newsletter is changed to activated and recaptcha is missing show warning
     newsletterStatus.on('change', function() {
         if ($(this).val() == 'yes' && reCaptcha) {
-            $('#warnings-validation').replaceWith('<div class="notice">{t escape=off}Before using newsletter you have to fill the <a href="/admin/controllers/system_settings/system_settings.php#external"  target="_blank">reCaptcha keys on system settings</a>{/t}</div>');
+            $('#warnings-validation').replaceWith('<div class="alert alert-error">{t escape=off}Before using newsletter you have to fill the <a href="{url name=admin_system_settings}#external"  target="_blank">reCaptcha keys on system settings</a>{/t}</div>');
         } else {
             if ($('div.notice')) {
                 $('div.notice').replaceWith('<div id="warnings-validation"></div>');
@@ -58,7 +58,7 @@ jQuery(document).ready(function($){
     $('#formulario').on('submit', function(){
         if (newsletterStatus.val() == 'yes' && reCaptcha) {
             if ($('#warnings-validation')) {
-                $('#warnings-validation').replaceWith('<div class="notice">{t escape=off}Before using newsletter you have to fill the <a href="/admin/controllers/system_settings/system_settings.php#external"  target="_blank">reCaptcha keys on system settings</a>{/t}</div>');
+                $('#warnings-validation').replaceWith('<div class="alert alert-error">{t escape=off}Before using newsletter you have to fill the <a href="{url name=admin_system_settings}#external"  target="_blank">reCaptcha keys on system settings</a>{/t}</div>');
 
             }
             return false;
@@ -69,13 +69,19 @@ jQuery(document).ready(function($){
 {/block}
 
 {block name="content"}
-<form action="{$smarty.server.PHP_SELF}" method="POST" name="formulario" id="formulario" {$formAttrs}>
+<form action="{url name=admin_newsletter_config}" method="POST" name="formulario" id="formulario" {$formAttrs}>
     <div class="top-action-bar">
         <div class="wrapper-content">
             <div class="title"><h2>{t}Newsletter :: Configuration{/t}</h2></div>
             <ul class="old-button">
                 <li>
-                    <a href="{$smarty.server.PHP_SELF}" class="admin_add" title="{t}Go back to list{/t}">
+                    <button type="submit">
+                        <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}"><br>{t}Save{/t}
+                    </button>
+                </li>
+                <li class="separator"></li>
+                <li>
+                    <a href="{url name=admin_newsletters}" class="admin_add" title="{t}Go back to list{/t}">
                     <img src="{$params.IMAGE_DIR}previous.png" title="{t}Sync list  with server{/t}" alt="{t}Go back to list{/t}" ><br />{t}Go back to list{/t}
                     </a>
                 </li>
@@ -87,113 +93,78 @@ jQuery(document).ready(function($){
         {render_messages}
         <div id="warnings-validation"></div>
 
-        <div id="cat-{$category}">
 
-            <table class="adminheading">
-                 <tr>
-                     <th>{t}Information about newsletter receipt{/t}</th>
-                 </tr>
-            </table>
+        <div class="form-horizontal panel">
+            <fieldset>
+            <div class="control-group">
+                <label for="name" class="control-label">{t}Newsletter subject{/t}</label>
+                <div class="controls">
+                    <input type="text" id="name" name="newsletter_maillist[name]" value="{$configs['newsletter_maillist']['name']|default:""}" class="input-xlarge"/>
+                    <div class="help-block">{t}The subject of the emails in this bulletin{/t}</div>
+                </div>
+             </div>
 
-            <table class="adminform">
-                <tr>
-                    <th scope="row">
-                        <label>{t}Newsletter subject{/t}:</label>
-                    </th>
-                    <td>
-                        <input type="text" name="newsletter_maillist[name]" value="{$configs['newsletter_maillist']['name']|default:""}" />
-                    </td>
-                    <td rowspan="7">
-                        <div class="help-block margin-left-1">
-                            <div class="title"><h4>{t}Basic parameters{/t}</h4></div>
-                            <div class="content">
-                                <dl>
-                                    <dt><strong>{t}Newsletter subject{/t}</strong></dt>
-                                    <dd>{t}The subject of the emails in this bulletin{/t}</dd>
-                                    <dt><strong>{t}Mailing list address{/t}</strong></dt>
-                                    <dd>{t}If you have a mailing list service to deliver newsletters add the address here{/t}</dd>
-                                    <dt><strong>{t}Newsletter links points to{/t}</strong></dt>
-                                    <dd>{t}You can choose if you prefer that the links of the contents of the bulletin point within the content or contents on the frontpage{/t}</dd>
-                                    <dt><strong>{t}Newsletter subscription type{/t}</strong></dt>
-                                    <dd>{t escape=off}You can choose to receive new subscriptions with a checking email or using the <a href="/admin/controllers/newsletter/subscriptors.php?action=list" target="_blank">table of subscribers of the application</a>.
-                                    </br>If you choose email subscription, you must enter the address on a field that will appear{/t}</dd>
-                                    <dt><strong>{t}Enable frontpage subscription{/t}</strong></dt>
-                                    <dd>{t}If enabled, a link to newsletter subscription will appear at home frontpage header{/t}</dd>
-                                </dl>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">
-                        <label>{t}Mailing list address{/t}:</label>
-                    </th>
-                    <td colspan="2">
-                        <input type="text" name="newsletter_maillist[email]" value="{$configs['newsletter_maillist']['email']|default:""}" />
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">
-                        <label>{t}Newsletter links points to{/t}:</label>
-                    </th>
-                    <td colspan="2">
-                        <select name="newsletter_maillist[link]" id="newsletter_maillist[link]">
-                            <option value="inner" {if $configs['newsletter_maillist']['link'] eq 'inner'} selected {/if}>{t}Point to inner{/t}</option>
-                            <option value="front" {if $configs['newsletter_maillist']['link'] eq 'front'} selected {/if}>{t}Point to frontpage{/t}</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">
-                        <label>{t}Newsletter subscription type{/t}:</label>
-                    </th>
-                    <td colspan="2">
-                        <select name="newsletter_subscriptionType" id="newsletter_subscriptionType">
-                            <option value="submit" {if $configs['newsletter_subscriptionType'] eq 'submit'} selected {/if}>{t}Manage newsletter by e-mail{/t}</option>
-                            <option value="create_subscriptor" {if $configs['newsletter_subscriptionType'] eq 'create_subscriptor'} selected {/if}>{t}Manage newsletter by subscriptors table{/t}</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr id="sub-mail" {if $configs['newsletter_subscriptionType'] eq 'create_subscriptor'}style="display:none"{/if}>
-                    <div >
-                        <th scope="row">
-                            <label>{t}Mail address to receive new subscriptions{/t}:</label>
-                        </th>
-                        <td colspan="2">
-                            <input type="text" name="newsletter_maillist[subscription]" value="{$configs['newsletter_maillist']['subscription']|default:""}" />
-                        </td>
-                    </div>
-                </tr>
-                <tr>
-                    <div >
-                        <th scope="row">
-                            <label>{t}Mail sender {/t}:</label>
-                        </th>
-                        <td colspan="2">
-                            <input type="text" name="newsletter_maillist[sender]" value="{$configs['newsletter_maillist']['sender']|default:""}" />
-                        </td>
-                    </div>
-                </tr>
-                <tr>
-                    <th scope="row">
-                        <label>{t}Enable frontpage subscription{/t}:</label>
-                    </th>
-                    <td colspan="2">
-                        <select name="newsletter_enable" id="newsletter_enable">
-                            <option value="yes" {if $configs['newsletter_enable'] eq 'yes'} selected {/if}>{t}Enabled{/t}</option>
-                            <option value="no" {if $configs['newsletter_enable'] eq 'no' || is_null($configs['newsletter_enable'])} selected {/if}>{t}Disabled{/t}</option>
-                        </select>
-                    </td>
-                </tr>
-            </table>
-            <div class="action-bar clearfix">
-                <div class="right">
-                    <input type="submit" name="submit" value="{t}Save{/t}"  class="onm-button green">
+            <div class="control-group">
+                <label for="email" class="control-label">{t}Mailing list address{/t}</label>
+                <div class="controls">
+                    <input type="email" name="newsletter_maillist[email]" value="{$configs['newsletter_maillist']['email']|default:""}" id="email" class="input-xlarge" />
+                    <div class="help-block">{t}If you have a mailing list service to deliver newsletters add the address here{/t}</div>
                 </div>
             </div>
+
+            <div class="control-group">
+                <label for="newsletter_maillist_link" class="control-label">{t}Newsletter links points to{/t}</label>
+                <div class="controls">
+                    <select name="newsletter_maillist[link]" id="newsletter_maillist_link">
+                        <option value="inner" {if $configs['newsletter_maillist']['link'] eq 'inner'} selected {/if}>{t}Point to inner{/t}</option>
+                        <option value="front" {if $configs['newsletter_maillist']['link'] eq 'front'} selected {/if}>{t}Point to frontpage{/t}</option>
+                    </select>
+                    <div class="help-block">{t}You can choose if you prefer that the links of the contents of the bulletin point within the content or contents on the frontpage{/t}</div>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="newsletter_maillist_subs_type" class="control-label">{t}Newsletter subscription type{/t}</label>
+                <div class="controls">
+                    <select name="newsletter_subscriptionType" id="newsletter_maillist_subs_type">
+                        <option value="submit" {if $configs['newsletter_subscriptionType'] eq 'submit'} selected {/if}>{t}Manage newsletter by e-mail{/t}</option>
+                        <option value="create_subscriptor" {if $configs['newsletter_subscriptionType'] eq 'create_subscriptor'} selected {/if}>{t}Manage newsletter by subscriptors table{/t}</option>
+                    </select>
+                    <div class="help-block">
+                        {t escape=off}You can choose to receive new subscriptions with a checking email or using the <a href="{url name=admin_newsletter_subscriptions}" target="_blank">table of subscribers of the application</a>.
+                        </br>If you choose email subscription, you must enter the address on a field that will appear{/t}
+                    </div>
+                </div>
+            </div>
+
+            <div class="control-group" id="sub-mail" {if $configs['newsletter_subscriptionType'] eq 'create_subscriptor'}style="display:none"{/if}>
+                <label for="subscription" class="control-label">{t}Mail address to receive new subscriptions{/t}</label>
+                <div class="controls">
+                    <input type="text" id="subscription" name="newsletter_maillist[subscription]" value="{$configs['newsletter_maillist']['subscription']|default:""}" class="input-xlarge" />
+
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="sender" class="control-label">{t}Mail sender{/t}</label>
+                <div class="controls">
+                    <input type="text" id="sender" name="newsletter_maillist[sender]" value="{$configs['newsletter_maillist']['sender']|default:""}" class="input-xlarge"/>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="sender" class="control-label">{t}Enable frontpage subscription{/t}</label>
+                <div class="controls">
+                    <select name="newsletter_enable" id="newsletter_enable">
+                        <option value="yes" {if $configs['newsletter_enable'] eq 'yes'} selected {/if}>{t}Enabled{/t}</option>
+                        <option value="no" {if $configs['newsletter_enable'] eq 'no' || is_null($configs['newsletter_enable'])} selected {/if}>{t}Disabled{/t}</option>
+                    </select>
+                    <div class="help-block">{t}If enabled, a link to newsletter subscription will appear at home frontpage header{/t}</div>
+                </div>
+            </div>
+            </fieldset>
         </div>
 
-        <input type="hidden" id="action" name="action" value="save_config" />
    </div>
 </form>
 {/block}

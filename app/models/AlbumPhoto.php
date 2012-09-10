@@ -25,7 +25,7 @@ class AlbumPhoto
      *
      * @param strin $id the id of the album.
      **/
-    public function __construct($id=null)
+    public function __construct($id = null)
     {
         if (!is_null($id)) {
             $this->read($id);
@@ -85,3 +85,4 @@ class AlbumPhoto
         return $album;
     }
 }
+

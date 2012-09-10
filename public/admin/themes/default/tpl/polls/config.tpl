@@ -25,13 +25,13 @@ legend {
 {/block}
 
 {block name="content"}
-<form action="{$smarty.server.PHP_SELF}" method="POST" name="formulario" id="formulario" {$formAttrs}>
+<form action="{url name=admin_polls_config}" method="POST" name="formulario" id="formulario" {$formAttrs}>
     <div class="top-action-bar">
         <div class="wrapper-content">
             <div class="title"><h2>{t}Poll :: Configuration{/t}</h2></div>
             <ul class="old-button">
                 <li>
-                    <a href="{$smarty.server.PHP_SELF}" class="admin_add" value="{t}Go back to list{/t}" title="{t}Go back to list{/t}">
+                    <a href="{url name=admin_polls}" class="admin_add" value="{t}Go back to list{/t}" title="{t}Go back to list{/t}">
                     <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Sync list  with server{/t}" alt="{t}Go back to list{/t}" ><br />{t}Go back to list{/t}
                     </a>
                 </li>

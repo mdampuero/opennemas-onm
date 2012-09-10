@@ -6,7 +6,7 @@
 		<div class="title"><h2>{t}Cache Manager{/t} :: {t}Configuration{/t}</h2></div>
 		<ul class="old-button">
 			<li>
-				<a href="{$smarty.server.SCRIPT_NAME}" title="{t}Cancel{/t}">
+				<a href="{url name=admin_tpl_manager}" title="{t}Cancel{/t}">
 					<img src="{$params.IMAGE_DIR}previous.png" /><br />
 					{t}Go back{/t}
 				</a>
@@ -16,14 +16,14 @@
 </div>
 <div class="wrapper-content">
 
-	<form id="formulario" name="formulario" action="{$smarty.server.SCRIPT_NAME}" method="POST">
+	<form action="{url name=admin_tpl_manager_config}" method="POST">
 
 		<div style="width:700px; margin:0 auto;">
-            <table class="listing-table table table-striped">
+            <table class="table table-hover table-condensed">
                 <thead>
                     <tr>
 						<th class="center" style="width:10px">
-                            <input type="checkbox" id="toggleallcheckbox" value="" />
+                            <input type="checkbox" class="toggleallcheckbox" value="" />
                         </th>
 						<th >{t}Cache group{/t}</th>
 						<th class="right">{t}Expire time{/t}  <small>({t}seconds{/t})</small></th>

@@ -10,6 +10,7 @@
 namespace Onm\Import\DataSource;
 
 use Onm\Settings as s;
+
 /**
  * Class that handles an Europapress news provider xml file
  *
@@ -49,7 +50,9 @@ class Europapress
             }
 
             $this->_data = simplexml_load_file(
-                $xmlFile, null, LIBXML_NOERROR | LIBXML_NOWARNING
+                $xmlFile,
+                null,
+                LIBXML_NOERROR | LIBXML_NOWARNING
             );
             if (!$this->_data) {
                 throw new \Exception(
@@ -73,43 +76,42 @@ class Europapress
     public function __get($propertyName)
     {
         switch ($propertyName) {
-
             case 'id':
                 return (int) $this->_data->CODIGO;
-                break;
 
+                break;
             case 'agencyID':
                 return (string) $this->_data->AGENCIA;
-                break;
 
+                break;
             case 'priority':
                 return self::matchPriority((string) $this->_data->PRIORIDAD);
-                break;
 
+                break;
             case 'priorityNumber':
                 return self::$_priorityMap[(string) $this->_data->PRIORIDAD];
-                break;
 
+                break;
             case 'service':
                 return (string) $this->_data->SERVICIO;
-                break;
 
+                break;
             case 'category':
                 return self::matchCategoryName((string) $this->_data->SECCION);
-                break;
 
+                break;
             case 'originalCategory':
                 return (string) $this->_data->SECCION;
-                break;
 
+                break;
             case 'informationType':
                 return (string) $this->_data->TIPOINFO;
-                break;
 
+                break;
             case 'key':
                 return (string) $this->_data->CLAVE;
-                break;
 
+                break;
             case 'created_time':
 
                 $dateFormat = 'd/m/Y H:i:s';
@@ -117,65 +119,67 @@ class Europapress
                 $date = \DateTime::createFromFormat(
                     $dateFormat,
                     $originalDate,
-                    new \DateTimeZone('Europe/Madrid'));
+                    new \DateTimeZone('Europe/Madrid')
+                );
 
                 return $date;
-                break;
 
+                break;
             case 'pretitle':
                 return (string) $this->_data->ANTETITULO;
-                break;
 
+                break;
             case 'title':
                 return (string) $this->_data->TITULAR;
-                break;
 
+                break;
             case 'body':
                 return nl2br((string) $this->_data->CONTENIDO);
-                break;
 
+                break;
             case 'summary':
                 return (string) $this->_data->ENTRADILLA;
-                break;
 
+                break;
             case 'photos':
                 return (array) $this->_data->PHOTOS;
-                break;
 
+                break;
             case 'personajes':
                 return (array) $this->_data->PERSONAJES;
-                break;
 
+                break;
             case 'photos':
                 return (array) $this->_data->PHOTOS;
-                break;
 
+                break;
             case 'people':
                 return (array) $this->_data->PERSONAJES;
-                break;
 
+                break;
             case 'place':
                 return (array) $this->_data->LUGAR;
-                break;
 
+                break;
             case 'associatedDocs':
                 return (array) $this->_data->DOCS;
-                break;
 
+                break;
             case 'categories':
                 return (array) $this->_data->CATEGORIES;
-                break;
 
+                break;
             case 'dataCastID':
                 return (array) $this->_data->DATACASTID;
-                break;
 
+                break;
             case 'level':
                 return (array) $this->_data->LEVEL;
-                break;
 
+                break;
             case 'redactor':
                 return (array) $this->_data->FIRMA;
+
                 break;
         }
     }
@@ -304,3 +308,4 @@ class Europapress
         return false;
     }
 }
+

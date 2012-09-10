@@ -1,9 +1,8 @@
 <?php
-
 /**
  * Start up and setup the app
 */
-require_once('../bootstrap.php');
+require_once '../bootstrap.php';
 
 if ($_GET["name"]=="Portada") {
     $category_name = "";
@@ -16,3 +15,4 @@ if ($_GET["name"]=="Portada") {
 }
 
 Application::forward301('/rss/'.$category_name);
+

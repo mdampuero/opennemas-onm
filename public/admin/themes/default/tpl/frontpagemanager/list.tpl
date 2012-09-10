@@ -14,13 +14,24 @@
             remember_save_positions: "{t}Please, remember save positions after finish.{/t}",
             error_tab_content_provider: "{t}Couldn't load this tab. We'll try to fix this as soon as possible.{/t}"
         }
+        var frontpage_urls = {
+            save_positions: '{url name=admin_frontpage_savepositions category=$category}',
+            preview_frontpage: '{url name=admin_frontpage_preview category=$category}',
+            clean_frontpage: '{url name=admin_tpl_manager_cleanfrontpage}',
+            toggle_suggested: '{url name=admin_content_toggle_suggested}',
+            quick_info: '{url name=admin_content_quick_info}',
+            set_arquived: '{url name=admin_content_set_archived}',
+            send_to_trash: '{url name=admin_content_send_to_trash}',
+        };
         var content_states = {
             {foreach from=$frontpage_articles item=content}
+            {if $content->id}
             {$content->id}: {$content->getQuickInfo()|json_encode},
+            {/if}
             {/foreach}
         }
     </script>
-    {script_tag src="/jquery-onm/jquery.frontpagemanager.js"}
+    {script_tag src="/onm/frontpagemanager.js"}
 {/block}
 
 {block name="content"}
@@ -58,7 +69,7 @@
 
                 <li class="separator batch-actions"></li>
                 <li>
-                    <a href="/admin/article.php?action=new&amp;category={$category}" class="admin_add" title="{t}New article{/t}">
+                    <a href="{url name=admin_article_create}" class="admin_add" title="{t}New article{/t}">
                         <img src="{$params.IMAGE_DIR}/article_add.png" title="" alt="" />
                         <br />{t}New article{/t}
                     </a>
@@ -67,33 +78,43 @@
                 <li class="separator"></li>
 
                 <li>
-                     <a href="#" data-category="{$category}" id="button_clearcache">
-                         <img border="0" src="{$params.IMAGE_DIR}clearcache.png" title="{t}Clean cache{/t}" alt="" /><br />{t}Clean cache{/t}
-                     </a>
+                     <button data-category="{$category}" id="button_clearcache" title="{t}Clean cache{/t}">
+                         <img src="{$params.IMAGE_DIR}clearcache.png" alt="" /><br />{t}Clean cache{/t}
+                     </button>
                 </li>
 
                 <li>
                     <a href="#" id="button_previewfrontpage"  data-category-name="{if $category eq 0}{t}home{/t}{else}{$datos_cat[0]->name}{/if}" title="{t}Preview frontpage with actual content positions{/t}">
-                        <img border="0" src="{$params.IMAGE_DIR}preview.png" title="{t}Preview{/t}" alt="{t}Preview{/t}" ><br />{t}Preview{/t}
+                        <img src="{$params.IMAGE_DIR}preview.png" alt="{t}Preview{/t}" ><br />{t}Preview{/t}
                     </a>
                 </li>
                 <li>
-                    <a id="button_savepositions" href="#" class="admin_add" title="Guardar Positions" alt="Guardar Cambios">
-                        <img border="0" src="{$params.IMAGE_DIR}save.png" title="{t}Save changes{/t}" alt="{t}Save changes{/t}" ><br />{t}Save changes{/t}
+                    <a id="button_savepositions" href="#" class="admin_add"  title="{t}Save changes{/t}">
+                        <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save changes{/t}" ><br />{t}Save changes{/t}
                     </a>
                 </li>
                 <li>
-                     <a href="#" id="button_addnewcontents">
-                         <img border="0" src="{$params.IMAGE_DIR}list-add.png" title="{t}Add contents{/t}" alt="" /><br />{t}Add contents{/t}
+                     <a href="#" id="button_addnewcontents" title="{t}Add contents{/t}">
+                         <img src="{$params.IMAGE_DIR}list-add.png" alt="" /><br />{t}Add contents{/t}
                      </a>
                 </li>
             </ul><!-- /old-button -->
         </div><!-- /wrapper-content -->
     </div><!-- /top-action-bar -->
 
+    <div class="settings settings-panel">
+        <div class="wrapper-content">
+            <a href="#" class="close">×</a>
+        {if $available_layouts > 1}
+            <h4>{t}Default layout for this frontpage{/t}</h4>
+            {foreach from=$available_layouts key=key item=avlayout}
+                <a class="thumbnail" href="{url name=admin_frontpage_pick_layout category=$category layout=$key}">{$avlayout['name']}</a>
+            {/foreach}
+            {/if}
+        </div>
+    </div>
 
     <div class="wrapper-content">
-
         {include file="frontpagemanager/_render_menu_categories.tpl"}
 
         <div id="warnings-validation"></div><!-- /warnings-validation -->
@@ -109,42 +130,43 @@
                     {is_module_activated name="ARTICLE_MANAGER"}
                     {if empty($category) || $category eq 'home' || $category eq 0}
                     <li>
-                        <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/article.php?action=content-provider-suggested">{t}Suggested articles{/t}</a>
+                        <a href="{url name=admin_articles_content_provider_suggested category=$category}">{t}Suggested articles{/t}</a>
                     </li>
                     {else}
                     <li>
-                         <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/article.php?action=content-provider-category&amp;category={$category}">{t}Other articles in this category{/t}</a>
+                         <a href="{url name=admin_articles_content_provider_category category=$category}">{t}Other articles in this category{/t}</a>
                     </li>
                     {/if}
                     {/is_module_activated}
                     {is_module_activated name="ADVANCED_SEARCH"}
                     <li>
-                        <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/search_advanced/search_advanced.php?action=content-provider&amp;">{t}Search{/t}</a>
+                        <a href="{url name=admin_search_content_provider}"><i class="icon-search"></i></a>
                     </li>
                     {/is_module_activated}
                     {is_module_activated name="WIDGET_MANAGER"}
                     <li>
-                        <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/widget/widget.php?action=content-provider&amp;category={$category}">{t}Widgets{/t}</a>
+                        <a href="{url name=admin_widgets_content_provider category=$category}">{t}Widgets{/t}</a>
                     </li>
                     {/is_module_activated}
                     {is_module_activated name="OPINION_MANAGER"}
                     <li>
-                        <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/opinion/opinion.php?action=content-provider&amp;category={$category}">{t}Opinions{/t}</a>
+                        <a href="{url name=admin_opinions_content_provider category=$category}">{t}Opinions{/t}</a>
                     </li>
                     {/is_module_activated}
                     {is_module_activated name="VIDEO_MANAGER"}
                     <li>
-                        <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/video/video.php?action=content-provider&amp;category={$category}">{t}Videos{/t}</a>
+                        <a href="{url name=admin_videos_content_provider category=$category}">{t}Videos{/t}</a>
                     </li>
                     {/is_module_activated}
                     {is_module_activated name="ALBUM_MANAGER"}
                     <li>
-                        <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/album/album.php?action=content-provider&amp;category={$category}">{t}Albums{/t}</a>
+
+                        <a href="{url name=admin_albums_content_provider category=$category}">{t}Albums{/t}</a>
                     </li>
                     {/is_module_activated}
                     {is_module_activated name="ADS_MANAGER"}
                     <li>
-                        <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/advertisement/advertisement.php?action=content-provider&amp;category={$category}">{t}Advertisement{/t}</a>
+                        <a href="{url name=admin_ads_content_provider category=$category}">{t}Advertisement{/t}</a>
                     </li>
                     {/is_module_activated}
                 </ul>

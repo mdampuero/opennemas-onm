@@ -7,7 +7,7 @@ class Comments
     /*
     * @url GET /comments/count/:id
     */
-    function count ($id)
+    public function count($id)
     {
         $this->_validateInt(func_get_args());
 
@@ -22,7 +22,7 @@ class Comments
         return intval($rs);
     }
 
-    private function _validateInt ($number)
+    private function _validateInt($number)
     {
         foreach ($number as $value) {
             if (!is_numeric($value)) {

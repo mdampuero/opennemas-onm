@@ -17,8 +17,7 @@ namespace Onm\Import;
  */
 interface Importer
 {
-
     public function findAll();
     public function findAllBy($params);
+}
 
-} // END interface

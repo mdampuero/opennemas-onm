@@ -38,7 +38,9 @@ class NewsMLG1
             }
 
             $this->_data = simplexml_load_file(
-                $xmlFile, null, LIBXML_NOERROR | LIBXML_NOWARNING
+                $xmlFile,
+                null,
+                LIBXML_NOERROR | LIBXML_NOWARNING
             );
             if (!$this->_data) {
                 throw new \Exception(
@@ -63,29 +65,28 @@ class NewsMLG1
     public function __get($propertyName)
     {
         switch ($propertyName) {
-
             case 'id':
                 return (string) $this->getData()->NewsItem->Identification
                                     ->NewsIdentifier->NewsItemId;
-                break;
 
+                break;
             case 'urn':
                 return (string) $this->getData()->NewsItem->Identification
                                     ->NewsIdentifier->PublicIdentifier;
-                break;
 
+                break;
             case 'title':
                 return (string) $this->getData()->NewsItem->NewsComponent
                                     ->NewsLines->HeadLine;
-                break;
 
+                break;
             case 'priority':
                 $rawUrgency =  $this->getData()
                                 ->xpath("//NewsItem/NewsManagement/Urgency");
 
                 return (int) $rawUrgency[0]->attributes()->FormalName;
-                break;
 
+                break;
             case 'tags':
                 $rawCategory = $this->getData()->NewsItem->NewsComponent
                                 ->DescriptiveMetadata
@@ -100,8 +101,8 @@ class NewsMLG1
                 }
 
                 return $tags;
-                break;
 
+                break;
             case 'created_time':
                 $originalDate = (string) $this->getData()
                                             ->NewsItem->NewsManagement
@@ -114,16 +115,16 @@ class NewsMLG1
                     'Ymd\THis',
                     $originalDate
                 );
-                break;
 
+                break;
             case 'body':
                 if (count($this->texts) > 0) {
                     return $this->texts[0]->body;
                 }
 
                 return;
-                break;
 
+                break;
             case 'agency_name':
                 $rawAgencyName =
                     $this->getData()
@@ -131,8 +132,8 @@ class NewsMLG1
                          ->xpath("//Property[@FormalName=\"Organization\"]");
 
                 return (string) $rawAgencyName[0]->attributes()->Value;
-                break;
 
+                break;
             case 'texts':
             case 'photos':
             case 'videos':
@@ -140,6 +141,7 @@ class NewsMLG1
             case 'moddocs':
             case 'files':
                 return $this->{'get'.ucfirst($propertyName)}();
+
                 break;
 
         }
@@ -329,5 +331,5 @@ class NewsMLG1
 
         return false;
     }
-
 }
+

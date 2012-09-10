@@ -2,7 +2,7 @@
 
 
 /*
-V5.00 05 Feb 2007   (c) 2000-2007 John Lim (jlim#natsoft.com.my). All rights reserved.
+V5.17 17 May 2012  (c) 2000-2012 John Lim (jlim#natsoft.com). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence.
@@ -15,13 +15,17 @@ class ADODB_pdo_mysql extends ADODB_pdo {
 	var $metaColumnsSQL = "SHOW COLUMNS FROM `%s`";
 	var $sysDate = 'CURDATE()';
 	var $sysTimeStamp = 'NOW()';
+	var $hasGenID = true;
+	var $_genIDSQL = "update %s set id=LAST_INSERT_ID(id+1);";
+	var $_dropSeqSQL = "drop table %s";
+	var $fmtTimeStamp = "'Y-m-d, H:i:s'";
 	var $nameQuote = '`';
 
 	function _init($parentDriver)
 	{
 	
 		$parentDriver->hasTransactions = false;
-		$parentDriver->_bindInputArray = false;
+		#$parentDriver->_bindInputArray = false;
 		$parentDriver->hasInsertID = true;
 		$parentDriver->_connectionID->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY,true);
 	}
@@ -35,6 +39,16 @@ class ADODB_pdo_mysql extends ADODB_pdo {
 		return $date . ' + INTERVAL ' .	 $fraction.' SECOND';
 		
 //		return "from_unixtime(unix_timestamp($date)+$fraction)";
+	}
+	
+	function Concat() 
+	{	
+		$s = "";
+		$arr = func_get_args();
+
+		// suggestion by andrew005#mnogo.ru
+		$s = implode(',',$arr);
+		if (strlen($s) > 0) return "CONCAT($s)"; return ''; 
 	}
 	
 	function ServerInfo()
@@ -72,7 +86,7 @@ class ADODB_pdo_mysql extends ADODB_pdo {
 		$this->Execute("SET SESSION TRANSACTION ".$transaction_mode);
 	}
 	
- 	function MetaColumns($table) 
+ 	function MetaColumns($table,$normalize=true)
 	{
 		$this->_findschema($table,$schema);
 		if ($schema) {

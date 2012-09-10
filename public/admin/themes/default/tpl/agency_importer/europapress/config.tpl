@@ -1,105 +1,77 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-    <style type="text/css">
-    label {
-        width:150px;
-        padding-left:10px;
-        display:inline-block;
-    }
-    input[type="text"],
-    input[type="password"] {
-        width:300px;
-    }
-    .form-wrapper {
-        margin:10px auto;
-        width:50%;
-    }
-    </style>
+{block name="footer-js" append}
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+    $('#formulario').onmValidate({
+        'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
+    });
+});
+</script>
 {/block}
 
 {block name="content"}
+<form action="{url name=admin_importer_europapress_config}" method="POST" id="formulario">
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
         <div class="title"><h2>{t}EuropaPress importer{/t} :: {t}Module configuration{/t}</h2></div>
         <ul class="old-button">
             <li>
-                <a href="{$smarty.server.PHP_SELF}?action=list" class="admin_add" value="{t}Go back to list{/t}" title="{t}Go back to list{/t}">
-                <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Sync list  with server{/t}" alt="{t}Go back to list{/t}" ><br />{t}Go back to list{/t}
+                <button action="submit">
+                    <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save and exit{/t}"><br />{t}Save{/t}
+                </button>
+            </li>
+            <li class="separator"></li>
+            <li>
+                <a href="{url name=admin_importer_europapress}" title="{t}Go back to list{/t}">
+                    <img src="{$params.IMAGE_DIR}previous.png" alt="{t}Go back to list{/t}" ><br />{t}Go back to list{/t}
                 </a>
             </li>
         </ul>
     </div>
 </div>
 <div class="wrapper-content">
-   <form action="{$smarty.server.PHP_SELF}" method="POST" name="formulario" id="formulario">
-        <br>
 
-        {if $message}
-        <div class="error">
-             <ul>
-                {foreach from=$message item=msg}
-                <li>{$msg}</li>
-                {/foreach}
-             </ul>
-        </div>
-        {/if}
+        {render_messages}
 
-        {if (!empty($error))}
-        <div class="error">
-             {render_error}
-        </div>
-        {/if}
+        <div class="form-horizontal panel">
+            <div class="control-group">
+                <label for="server" class="control-label">{t}Server{/t}</label>
+                <div class="controls">
+                    <input type="text" id="server" name="server" value="{$server}" class="input-xlarge" required="required"/>
+                </div>
+            </div>
 
-        <div>
+            <div class="control-group">
+                <label for="username" class="control-label">{t}Username{/t}</label>
+                <div class="controls">
+                    <input type="text" id="username" name="username" value="{$username}" class="required input-xlarge" required="required"/>
+                </div>
+            </div>
 
-             <table class="adminheading">
-                 <tr>
-                     <th align="left">{t}Auth credentials{/t}</th>
-                 </tr>
-             </table>
+            <div class="control-group">
+                <label for="password" class="control-label">{t}Password{/t}</label>
+                <div class="controls">
+                    <input type="text" id="password" name="password" value="{$password}" class="required input-xlarge" required="required"/>
+                </div>
+            </div>
 
-             <table class="adminform" border=0>
+            <div class="control-group">
+                <label for="agency_string" class="control-label">{t}Agency{/t}</label>
+                <div class="controls">
+                    <input type="text" id="agency_string" name="agency_string" value="{$agency_string}" class="required input-xlarge" required="required"/>
+                </div>
+            </div>
 
-                <tr>
-                    <td>
-                        <div class="form-wrapper">
-                            <div>
-                                <label for="server">{t}Server:{/t}</label>
-                                <input type="text" class="required" name="server" value="{$server|default:""}" />
-                            </div>
-                            <div>
-                                <label for="username">{t}Username:{/t}</label>
-                                <input type="text" class="required" id="username" name="username" value="{$username|default:""}" />
-                            </div>
-                            <div>
-                                <label for="password">{t}Password:{/t}</label>
-                                <input type="password" class="required" id="password" name="password" value="{$password|default:""}" />
-                            </div>
-                            <div>
-                                <label for="password">{t}Agency:{/t}</label>
-                                <input type="text" class="required" id="agency_string" name="agency_string" value="{$agency_string|default:""}" />
-                            </div>
-                            <div>
-                                <label for="sync_from">{t}Sync elements newer than:{/t}</label>
-                                
-                                <select name="sync_from">
-                                    {html_options options=$sync_from selected=$sync_from_setting|default:""}
-                                </select>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-
-            </table>
-            <div class="action-bar clearfix">
-                <div class="right">
-                    <input type="submit" name="submit" value="{t}Save{/t}"  class="onm-button green">
+            <div class="control-group">
+                <label for="sync_from" class="control-label">{t}Sync elements newer than{/t}</label>
+                <div class="controls">
+                    <select name="sync_from" required>
+                        {html_options options=$sync_from selected=$sync_from_setting|default:""}
+                    </select>
                 </div>
             </div>
         </div>
-
-        <input type="hidden" id="action" name="action" value="config" />
-   </form>
 </div>
+</form>
 {/block}

@@ -1,20 +1,21 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
-    <style type="text/css">
-    .adminlist td {
-    	padding-top:4px;
-    	padding-bottom:4px;
+<style type="text/css">
+    .tooltip-inner {
+        max-width:500px !important;
+        text-align: justify;
     }
-    </style>
+</style>
 {/block}
 
 {block name="header-js" prepend}
     <script>
-    jQuery(document).ready(function (){
-        jQuery('.sync_with_server').click(function() {
-           jQuery('.warnings-validation').html('<div class="ui-blocker"></div><div class="ui-blocker-message"><img src="/admin/themes/default/images/ajax-loader.gif" /><br />{t}Downloading articles from EuropaPress, please wait...{/t}</div>');
+    jQuery(document).ready(function ($){
+        $('.sync_with_server').click(function() {
+           $('.warnings-validation').html('<div class="ui-blocker"></div><div class="ui-blocker-message"><progress style="width:100%"></progress><br /><br />{t}Downloading articles from EuropaPress, please wait...{/t}</div>');
         });
+        $('[rel="tooltip"]').tooltip({ placement: 'bottom' });
     });
     </script>
 {/block}
@@ -25,18 +26,18 @@
         <div class="title"><h2>{t}EuropaPress importer{/t} :: {t}Available articles{/t}</h2></div>
         <ul class="old-button">
 			<li>
-				<a href="{$smarty.server.PHP_SELF}?action=sync" class="sync_with_server" title="{t}Sync with server{/t}">
+				<a href="{url name=admin_importer_europapress_sync}" class="sync_with_server" title="{t}Sync with server{/t}">
 				    <img src="{$params.IMAGE_DIR}sync.png" title="{t}Sync list  with server{/t}" alt="{t}Sync with server{/t}" ><br />{t}Sync with server{/t}
 				</a>
 			</li>
 			<li>
-				<a href="{$smarty.server.PHP_SELF}" class="admin_add" title="{t}Reload list{/t}">
+				<a href="{url name=admin_importer_europapress}" title="{t}Reload list{/t}">
 				    <img src="{$params.IMAGE_DIR}template_manager/refresh48x48.png" title="{t}Sync list  with server{/t}" alt="{t}Reload list{/t}" ><br />{t}Reload list{/t}
 				</a>
 			</li>
 
 			<li>
-				<a href="{$smarty.server.PHP_SELF}?action=config" class="admin_add" title="{t}Reload list{/t}">
+				<a href="{url name=admin_importer_europapress_config}" class="admin_add" title="{t}Reload list{/t}">
 				    <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" title="{t}Config Europapress module{/t}" alt="{t}Config Europapress module{/t}" ><br />{t}Config{/t}
 				</a>
 			</li>
@@ -44,58 +45,36 @@
     </div>
 </div>
 <div class="wrapper-content">
+
+    {render_messages}
+
     <div class="warnings-validation"></div><!-- / -->
-    <form action="{$smarty.server.PHP_SELF}" method="get" name="formulario" id="formulario">
 
-	{render_messages}
+    <form action="{url name=admin_importer_europapress}" method="get" name="formulario" id="formulario">
 
-	{if ($message || ($minutes > 10))}
-	<div class="notice">
-	    <ul>
-    		{if $minutes > 10}
-    		<li>
-    			{if $minutes > 100}
-    			<span class="red">{t}A long time ago from synchronization.{/t}</span>
-    			{else}
-    			<span class="red">{t 1=$minutes}Last sync was %1 minutes ago.{/t}</span>
-    			{/if}
-    			{t}Try syncing the news list from server by clicking in "Sync with server" button above{/t}
-    		</li>
-    		{/if}
-	    </ul>
-	</div>
-	{/if}
-
-	{if (!empty($error))}
-	<div class="error">
-		 {render_error}
-	</div>
-	{/if}
-
-    <div class="table-info clearfix">
+        <div class="table-info clearfix">
             <div>
                 <div class="left"><label>Total: {$pagination->_totalItems} articles.</label></div>
                 <div class="right form-inline">
-                    <label for="username">
-                        {t}Filter by title or content{/t}
-                        <input id="username" name="filter_title" onchange="this.form.submit();" value="{$smarty.request.filter_title}" class="input-medium search-query"/>
-                    </label>
+                    <input type="search" id="username" name="filter_title" onchange="this.form.submit();" value="{$smarty.request.filter_title}" class="input-medium" placeholder="{t}Filter by title or content{/t}"/>
 
-                    <label for="usergroup">
-                        {t}and category:{/t}
-                        <select id="usergroup" name="filter_category" onchange="this.form.submit();">
-                            <option value="*">{t}All{/t}</option>
-                            {html_options options=$categories selected=$smarty.request.filter_group|default:""}
-                        </select>
-                    </label>
+                    <div class="input-append">
+                        <label for="usergroup">
+                            {t}and in{/t}
+                            <select id="usergroup" name="filter_category" onchange="this.form.submit();">
+                                <option value="*">{t}All categories{/t}</option>
+                                {html_options options=$categories selected=$smarty.request.filter_group|default:""}
+                            </select>
+                        </label>
 
-                    <button type="submit" class="btn">{t}Search{/t}</button>
+                        <button type="submit" class="btn"><i class="icon-search"></i></button>
+                    </div>
                 </div>
             </div>
         </div>
 
 
-    <table class="listing-table">
+    <table class="table table-hover table-condensed">
         <thead>
             <tr>
             {if count($elements) >0}
@@ -103,7 +82,7 @@
                 <th>{t}Title{/t}</th>
                 <th>{t}Date{/t}</th>
                 <th>{t}Section{/t}</th>
-                <th style="width:20px;">{t}Actions{/t}</th>
+                <th style="width:20px;" class="nowrap">{t}Actions{/t}</th>
             </tr>
             {else}
             <tr>
@@ -114,29 +93,29 @@
 
 
         <tbody>
-            {section name=c loop=$elements}
+            {foreach name=c from=$elements item=element}
             <tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;" >
 
                 <td style="text-align:center;">
-                   <img src="{$params.IMAGE_DIR}notifications/level-{$elements[c]->priorityNumber}.png" alt="{t 1=$elements[c]->priorityNumber}Priority %1{/t}" title="{t 1=$elements[c]->priorityNumber}Priority %1{/t}">
+                   <img src="{$params.IMAGE_DIR}notifications/level-{$element->priorityNumber}.png" alt="{t 1=$element->priorityNumber}Priority %1{/t}" title="{t 1=$element->priorityNumber}Priority %1{/t}">
                 </td>
-                <td onmouseout="UnTip()" onmouseover="Tip('{$elements[c]->body|regex_replace:"/[\r\t\n]/":" "|clearslash|regex_replace:"/'/":"\'"|escape:'html'}', SHADOW, false, ABOVE, false, WIDTH, 800)">
-                    <a href="{$smarty.server.PHP_SELF}?action=show&amp;id={$elements[c]->xmlFile|urlencode}" title="Importar">
-                        {$elements[c]->title}
+                <td rel="tooltip" data-original-title="{$element->body|clearslash|regex_replace:"/'/":"\'"|escape:'html'}">
+                    <a href="{url name=admin_importer_europapress_show id=$element->xmlFile|urlencode}">
+                        {$element->title}
                     </a>
                 </td>
                 <td>
-                        {$elements[c]->created_time->getTimestamp()|relative_date}
+                    {$element->created_time->getTimestamp()|relative_date}
                 </td>
 
                 <td>
-                    {$elements[c]->category|default:""}
+                    {$element->category|default:""}
                 </td>
 
-                <td class="right">
-                    <ul class="action-buttons">
+                <td class="right nowrap">
+                    <ul class="btn-group">
                         <li>
-                            <a class="btn btn-mini" href="{$smarty.server.PHP_SELF}?action=import&amp;id={$elements[c]->xmlFile}" title="{t}Import{/t}">
+                            <a class="btn btn-mini" href="{url name=admin_importer_europapress_import id=$element->xmlFile|urlencode}" title="{t}Import{/t}">
                                 {t}Import{/t}
                             </a>
                         </li>
@@ -144,8 +123,7 @@
                 </td>
 
                </tr>
-
-            {sectionelse}
+            {foreachelse}
             <tr>
                 <td colspan=5 class="empty">
                     <h2>
@@ -154,17 +132,19 @@
                     <p>{t}Try syncing from server by click over the "Sync with server" button above.{/t}</p>
                 </td>
             </tr>
-            {/section}
+            {/foreach}
         </tbody>
         <tfoot>
-             <tr class="pagination" >
-                 <td colspan="5">{$pagination->links|default:""}&nbsp;</td>
+            <tr>
+                <td colspan="5"  class="center">
+                    <div class="pagination">
+                        {$pagination->links}
+                    </div>
+                </td>
              </tr>
         </tfoot>
 
     </table>
-
-	<input type="hidden" id="action" name="action" value="list" />
 	</form>
 </div>
 {/block}

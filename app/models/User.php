@@ -22,6 +22,8 @@ class User
     public $name             = null;
     public $firstname        = null;
     public $lastname         = null;
+    public $address          = null;
+    public $phone            = null;
     public $authorize        = null;
     public $deposit          = null;
     public $type             = null;
@@ -37,7 +39,7 @@ class User
     public $clientLoginToken = null;
 
     /**
-     * Compatible PHP4 constructor
+     * Initializes the object instance
      *
      * @see MethodCacheManager
      * @param int $id User Id
@@ -62,10 +64,9 @@ class User
 
     public function create($data)
     {
-        $data['authorize'] = (!isset($data['authorize']))? 1: $data['authorize'];
-        $data['firstname'] = (!isset($data['firstname']))? '': $data['firstname'];
-        $data['lastname']  = (!isset($data['lastname']))? '': $data['lastname'];
-        $data['id_user_group'] = (!isset($data['id_user_group']))? 'null': $data['id_user_group'];
+        if ($this->checkIfUserExists($data)) {
+            throw new \Exception(_('Already exists one user with that information'));
+        }
 
         $sql = "INSERT INTO users (`login`, `password`, `sessionexpire`,
                                       `email`, `name`, `firstname`,
@@ -73,9 +74,16 @@ class User
                                       `fk_user_group`)
                     VALUES (?,?,?,?,?,?,?,?,?,?,?)";
         $values = array(
-            $data['login'], md5($data['password']),  $data['sessionexpire'],
-            $data['email'], $data['name'], $data['firstname'],
-            $data['lastname'], $data['type'], $data['token'], $data['authorize'],
+            $data['login'],
+			md5($data['password']),
+			$data['sessionexpire'],
+            $data['email'],
+			$data['name'],
+			$data['firstname'],
+            $data['lastname'],
+			$data['type'],
+			$data['token'],
+			$data['authorize'],
             $data['id_user_group']
         );
 
@@ -91,7 +99,7 @@ class User
             $this->createAccessCategoriesDB($data['ids_category']);
         }
 
-        return(true);
+        return true;
     }
 
     public function read($id)
@@ -123,9 +131,8 @@ class User
 
     public function update($data)
     {
-
         if (!isset($data['id_user_group']) || empty($data['id_user_group']) ) {
-            $data['id_user_group'] =$this->id_user_group;
+            $data['id_user_group'] = $this->id_user_group;
         }
 
         // Init transaction
@@ -136,13 +143,18 @@ class User
                     SET `login`=?, `password`= ?, `sessionexpire`=?,
                         `email`=?, `name`=?, `firstname`=?, `lastname`=?,
                         `fk_user_group`=?
-                    WHERE pk_user=".intval($data['id']);
+                    WHERE pk_user=?";
 
             $values = array(
-                $data['login'], md5($data['password']), $data['sessionexpire'],
-                $data['email'], $data['name'], $data['firstname'],
-                $data['lastname'], $data['address'],
-                $data['phone'], $data['id_user_group']
+                $data['login'],
+                md5($data['password']),
+                $data['sessionexpire'],
+                $data['email'],
+                $data['name'],
+                $data['firstname'],
+                $data['lastname'],
+                $data['id_user_group'],
+                intval($data['id'])
             );
 
         } else {
@@ -150,12 +162,17 @@ class User
                     SET `login`=?, `sessionexpire`=?, `email`=?,
                         `name`=?, `firstname`=?, `lastname`=?,
                         `fk_user_group`=?
-                    WHERE pk_user=".intval($data['id']);
+                    WHERE pk_user=?";
 
             $values = array(
-                $data['login'], $data['sessionexpire'], $data['email'],
-                $data['name'], $data['firstname'], $data['lastname'],
-                $data['id_user_group']
+                $data['login'],
+                $data['sessionexpire'],
+                $data['email'],
+                $data['name'],
+                $data['firstname'],
+                $data['lastname'],
+                $data['id_user_group'],
+                intval($data['id'])
             );
         }
 
@@ -179,15 +196,30 @@ class User
 
     public function delete($id)
     {
-        $sql = 'DELETE FROM users WHERE pk_user='.intval($id);
+        $sql = 'DELETE FROM users WHERE pk_user=?';
 
-        if ($GLOBALS['application']->conn->Execute($sql)===false) {
+        if ($GLOBALS['application']->conn->Execute($sql, array(intval($id)))===false) {
             \Application::logDatabaseError();
 
             return false;
         }
 
         return true;
+    }
+
+    /**
+     * Checks if a user exists given some information.
+     *
+     * @return bool true if user exists
+     **/
+    public function checkIfUserExists($data)
+    {
+        $sql = "SELECT login FROM users WHERE login=? OR email=?";
+
+        $values = array($data['login'], $data['email']);
+        $rs = $GLOBALS['application']->conn->GetOne($sql, $values);
+
+        return ($rs != false);
     }
 
     private function createAccessCategoriesDB($IdsCategory)
@@ -198,7 +230,7 @@ class User
                     VALUES (?,?)";
 
             $values = array();
-            for ($iIndex=0; $iIndex<count($IdsCategory); $iIndex++) {
+            for ($iIndex = 0; $iIndex < count($IdsCategory); $iIndex++) {
                 $values[] = array($this->id, $IdsCategory[$iIndex]);
             }
 
@@ -324,7 +356,12 @@ class User
         $result = false;
 
         if ($this->isValidEmail($login)) {
-            $result = $this->authGoogleClientLogin($login, $password, $loginToken, $loginCaptcha);
+            $result = $this->authGoogleClientLogin(
+                $login,
+                $password,
+                $loginToken,
+                $loginCaptcha
+            );
         } else {
             $result = $this->authDatabase($login, $password);
         }
@@ -379,69 +416,6 @@ class User
         $this->reset_values();
 
         return false;
-    }
-
-    /**
-     * Try authenticate from google account
-     *
-     * @param  string        $email
-     * @param  string        $passwd
-     * @param  string        $loginToken
-     * @param  string        $loginCaptcha
-     * @return boolean|array
-     */
-    public function authGoogleClientLogin(
-        $email,
-        $passwd,
-        $loginToken = null,
-        $loginCaptcha = null
-    ) {
-        require_once 'Zend/Loader.php';
-        Zend_Loader::loadClass('Zend_Gdata_ClientLogin');
-        Zend_Loader::loadClass('Zend_Gdata');
-
-        try {
-            $client = Zend_Gdata_ClientLogin::getHttpClient(
-                $email,
-                $passwd,
-                'xapi',
-                null,
-                'Zend-ZendFramework',
-                $loginToken,
-                $loginCaptcha
-            );
-
-            //$_SESSION['logintoken'] = $client->getAuthSubToken();
-            // header('Authorization: AuthSub ' . );
-            $this->clientLoginToken = $client->getClientLoginToken();
-
-            // Check exists account into database
-            $data = $this->getUserDataByEmail($email);
-
-            // User don't exist into database
-            if (empty($data)) {
-
-                return false;
-            }
-
-            // Set values to instance $this
-            $this->set_values($data);
-        } catch (Zend_Gdata_App_CaptchaRequiredException $cre) {
-            // Incorrect credentials, retry with captcha challenge
-            return array(
-                'token'   => $cre->getCaptchaToken(),
-                'captcha' => $cre->getCaptchaUrl()
-            );
-        } catch (Zend_Gdata_App_AuthException $ae) {
-            return false;
-        } catch (Exception $exp) {
-            return false;
-        }
-
-        // If wasn't thrown any exception then return true
-        $this->authMethod = 'google_clientlogin';
-
-        return true;
     }
 
     /**
@@ -567,15 +541,19 @@ class User
         }
 
         $categories = $this->accesscategories;
-        function sortInMenu($a, $b)
-        {
-            if ($a->posmenu == $b->posmenu) {
-                return 0;
-            }
 
-            return ($a->posmenu < $b->posmenu) ? -1 : 1;
-        }
-        usort($categories, 'sortInMenu');
+        usort(
+            $categories,
+            function (
+                $a,
+                $b
+            ) {
+                if ($a->posmenu == $b->posmenu) {
+                    return 0;
+                }
+                return ($a->posmenu < $b->posmenu) ? -1 : 1;
+            }
+        );
 
         $ids = array();
         foreach ($categories as $category) {
@@ -585,12 +563,12 @@ class User
         return $ids;
     }
 
-    public function get_users($filter = null, $_order_by = 'ORDER BY 1')
+    public function get_users($filter = null, $orderBy = 'ORDER BY 1')
     {
         $items = array();
         $_where = $this->buildFilter($filter);
 
-        $sql = 'SELECT * FROM `users` ' . $_where . ' ' . $_order_by;
+        $sql = 'SELECT * FROM `users` ' . $_where . ' ' . $orderBy;
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
         if ($rs !== false) {
@@ -609,7 +587,7 @@ class User
 
     private function buildFilter($filter)
     {
-        $newFilter = ' WHERE fk_user_group != 4';
+        $newFilter = ' WHERE 1=1 ';
 
         if (!is_null($filter) && is_string($filter)) {
             if (preg_match('/^[ ]*where/i', $filter)) {
@@ -617,6 +595,11 @@ class User
             }
         } elseif (!is_null($filter) && is_array($filter)) {
             $parts = array();
+
+            if (isset($filter['base']) && !empty($filter['base'])) {
+                $parts[] = $filter['base'];
+            }
+
             if (isset($filter['login']) && !empty($filter['login'])) {
                 $parts[] = '`login` LIKE "' . $filter['login'] . '%"';
             }
@@ -639,8 +622,8 @@ class User
 
     public function get_user_name($id)
     {
-        $sql = 'SELECT name, login FROM users WHERE pk_user='.$id;
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $sql = 'SELECT name, login FROM users WHERE pk_user=?';
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
         if (!$rs) {
             \Application::logDatabaseError();
 
@@ -650,47 +633,72 @@ class User
         return $rs->fields['login'];
     }
 
-    public function parseGmailInbox($token)
+    /**
+     * Sets user configurations given a named array
+     *
+     * @param int $userId   the user id to set configs to
+     * @param array  $userMeta a named array with settings and its values
+     *
+     * @return  boolean true if all went well
+     */
+    public function setMeta($userMeta = array())
     {
-        $messages = array('total' => 0, 'entries' => array());
+        $sql = 'REPLACE INTO usermeta (`user_id`, `meta_key`, `meta_value`) VALUES (?, ?, ?)';
 
-        if (function_exists('curl_init')) {
-            $curl = curl_init('https://mail.google.com/mail/feed/atom');
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
-            //curl_setopt($curl, CURLOPT_HEADER, 1);
-            curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
-            curl_setopt($curl, CURLOPT_USERPWD, $token); //$username.':'.$password);
-            $result = curl_exec($curl);
-            $code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        $values = array();
+        foreach ($userMeta as $key => $value) {
+            $values []= array($this->id, $key, $value);
+        }
 
-            if ($code != 200) {
-                return $messages;
-            }
-
-            $xml = simplexml_load_string($result);
-            $messages['total'] = (int) $xml->fullcount;
-
-            foreach ($xml->entry as $entry) {
-                //$link = $entry->xpath('link[@href]');
-                $link = $entry->link->attributes();
-                $link = $link['href'];
-
-                $messages['entries'][] = array(
-                    'title'   => (string) $entry->title,
-                    'summary' => (string) $entry->summary,
-                    'link'    => (string) $link[0],
-                    'name'    => (string) $entry->author->name,
-                    'email'   => (string) $entry->author->email
-                );
-            }
-
-            return $messages;
-        } else {
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        if (!$rs) {
             return false;
         }
-    }
 
+        return true;
+    }
+	/**
+     * Returns the values of a user meta option
+     *
+     * @param string/array $meta an array or an string with the user meta name
+     *
+     * @return array/string an 2-dimensional array or an string with the user option values
+     * @author
+     **/
+    public function getMeta($meta = array())
+    {
+        if (is_string($meta)) {
+            $cleanMeta = array($meta);
+        } else {
+            $cleanMeta = $meta;
+        }
+
+        $metaNameSQL = array();
+        foreach ($cleanMeta as $key) {
+            $metaNameSQL []= $GLOBALS['application']->conn->qstr($key);
+        }
+        $metaNameSQL = implode(', ', $metaNameSQL);
+
+        $sql = 'SELECT * FROM usermeta WHERE `user_id` = ? AND `meta_key` IN ('.$metaNameSQL.')';
+
+        $GLOBALS['application']->conn->fetchMode = ADODB_FETCH_ASSOC;
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($this->id));
+
+        if (!$rs) {
+            return false;
+        }
+
+        if (is_array($meta)) {
+            $returnValues = array();
+            foreach ($rs as $value) {
+                $returnValues [$rs->fields['meta_key']] = $rs->fields['meta_value'];
+            }
+        } else {
+            $returnValues = $rs->fields['meta_value'];
+        }
+
+        return $returnValues;
+    }
     /**
      * Sets an user state to disabled/not authorized
      *

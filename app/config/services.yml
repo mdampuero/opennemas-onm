@@ -1,0 +1,31 @@
+services:
+    context:
+        class: Symfony\Component\Routing\RequestContext
+        calls:
+            - [ fromRequest, [ %request% ] ]
+
+    matcher:
+        class: Symfony\Component\Routing\Matcher\UrlMatcher
+        arguments: [ %routes%, @context ]
+
+    url_generator:
+        class: Symfony\Component\Routing\Generator\UrlGenerator
+        arguments: [ %routes%, @context ]
+
+    db_conn:
+        class: Onm\DatabaseConnection
+        calls:
+            - [ connect, [ %database_params%] ]
+
+    session_storage:
+        class: Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage
+        arguments: [ %session_params% ]
+
+    session:
+        class: %session_handler_class%
+        arguments: [ @session_storage ]
+
+    logger:
+        class: Monolog\Logger
+        arguments: [ 'application_log' ]
+

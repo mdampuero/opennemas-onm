@@ -1,141 +1,124 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-js" append}
-    {script_tag src="/photos.js" defer="defer" language="javascript"}
+{block name="footer-js" append}
+<script type="text/javascript">
+    jQuery( ".author-photos" ).sortable({
+        containment : '.author-photos'
+    });
+    jQuery( ".author-photos" ).disableSelection();
+    jQuery(document).ready(function($) {
+        $('.delete-author-photo').on('click', function(e, ui) {
+            var element = $(this);
+            element.parent('.thumbnail').remove();
+        });
+
+        $('#formulario').onmValidate({
+            'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
+        });
+    });
+</script>
 {/block}
+
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
+<form action="{if $author->id}{url name=admin_opinion_author_update id=$author->id}{else}{url name=admin_opinion_author_create}{/if}" method="POST" enctype="multipart/form-data" id="formulario" >
     <div class="top-action-bar">
         <div class="wrapper-content">
-            <div class="title"><h2>{if $smarty.request.action eq "new"}{t}Opinion Manager :: New author{/t}{else}{t}Opinion Manager :: Edit author{/t}{/if}</div>
+            <div class="title"><h2>{if !isset($author)}{t}Opinion Manager :: New author{/t}{else}{t}Opinion Manager :: Edit author{/t}{/if}</div>
             <ul class="old-button">
                 <li>
-                    {if isset($author->pk_author)}
-                    <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'update', {$author->pk_author|default:""}, 'formulario');">
-                    {else}
-                    <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', 0, 'formulario');">
-                    {/if}
-                    <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar y salir" alt="Guardar y salir"><br />Guardar
-                    </a>
+                    <button type="submit">
+                        <img src="{$params.IMAGE_DIR}save.png" alt="Guardar y salir"><br />{t}Save{/t}
+                    </button>
                 </li>
                 <li>
-                    <a href="#" class="admin_add" onClick="sendFormValidate(this, '_self', 'validate', '{$author->pk_author|default:""}', 'formulario');" value="Validar" title="Validar">
-                        <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />Guardar y continuar
-                    </a>
+                    <button type="submit" name="continue" value="1">
+                        <img src="{$params.IMAGE_DIR}save_and_continue.png" alt="Guardar y continuar" ><br />{t}Save and continue{/t}
+                    </button>
                 </li>
                 <li class="separator"></li>
                 <li>
-                    {if $smarty.session._from eq 'opinion.php'}
-                    <a href="opinion.php" class="admin_add">
-                        <img border="0" src="{$params.IMAGE_DIR}previous.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
+                    <a href="{url name=admin_opinion_authors page=$page}" title="Cancelar">
+                        <img src="{$params.IMAGE_DIR}previous.png" alt="Cancelar" ><br />{t}Go back{/t}
                     </a>
-                    {else}
-                    <a href="{$smarty.server.PHP_SELF}?action=list&page=0" class="admin_add" title="Cancelar">
-                        <img border="0" src="{$params.IMAGE_DIR}previous.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
-                    </a>
-                    {/if}
                 </li>
 
             </ul>
         </div>
     </div>
     <div class="wrapper-content">
-        <div id="warnings-validation"></div>
-        <table class="adminheading">
-            <tr align="right">
-                <td>&nbsp;</td>
-            </tr>
-        </table>
-        <table  class="adminform">
-            <tbody>
-                <tr>
-                    <td valign="top" align="right" style="padding:4px;" width="200px">
-                        <label for="name">{t}Name{/t}</label>
-                    </td>
-                    <td >
-                        <input type="text" id="name" name="name" title="{t}Author name{/t}"
-                            value="{$author->name|default:""}" class="required"  size="50"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td valign="top" align="right">
-                        <label for="phone">{t}Condition{/t}:</label>
-                    </td>
-                    <td style="padding:4px;" nowrap="nowrap">
-                        <input type="text" id="condition" name="condition" title="{t}Condition{/t}" value="{$author->condition|default:""}"  size="50"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td valign="top" align="right">
-                        <label for="phone">{t}Blog name:{/t}</label>
-                    </td>
-                    <td>
-                        <input type="text" id="politics" name="politics" title="{t}Blog name{/t}" value="{$author->politics|default:""}"  size="50"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td valign="top" align="right" style="padding:4px;">
-                        <label for="phone">{t}Blog url:{/t}</label>
-                    </td>
-                    <td style="padding:4px;" nowrap="nowrap">
-                        <input type="text" id="blog" name="blog" title="{t}Blog url{/t}" value="{$author->blog}"  size="50"/>
-                    </td>
-                </tr>
-                 <tr>
-                    <td colspan="2">
-                        <label for="params[inrss]">{t}Show in rss:{/t}</label>
-                        <input type="checkbox" id="params[inrss]" name="params[inrss]" value="1"
-                            {if !isset($author->params['inrss']) || $author->params['inrss'] eq 1} checked="checked"{/if}>
-                            {t}If this option is activated this author will be showed in rss{/t}
-                    </td>
-                </tr>
-                <tr>
-                    <td valign="top" align="right">
-                        <b>{t}Author photos{/t}:</b>
-                        {if $photos}
-                        </br>
-                        <b style="font-size:0.8em;">({t}Double click on image to delete{/t})</b>
-                        {/if}
-                    </td>
-                    <td style="padding:4px;">
-                        <div id="contenedor" name="contenedor" style="display:none; "> </div>
-                        <div id="photos" class="photos" >
-                            <ul id='thelist'  class="gallery_list">
-                            {section name=as loop=$photos|default:array()}
-                                <li id='{$photos[as]->pk_img}'>
-                                    <a class="album" title="{t}Show image{/t}">
-                                         <img ondblclick="del_photo('{$photos[as]->pk_img}');"
-                                             style="{cssimagescale resolution=67 photo=$photos[as]}"
-                                             src="{$smarty.const.MEDIA_IMG_PATH_URL}{$photos[as]->path_img}"
-                                          />
-                                     </a>
-                                 </li>
-                            {/section}
-                            </ul>
-                        </div>
-                        <input type="hidden" id="action" name="action" value="">
-                        <input type="hidden" id="del_img" name="del_img" value="">
-                        <input type="hidden" id="fk_author_img" name="fk_author_img" value="" />
-                        <input type="hidden" name="id" id="id" value="{$author->id|default:"0"}" />
-                    </td>
-                </tr>
-                <tr>
-                    <td valign="top" align="right">
-                        <b>{t}Upload an image{/t}:</b>
-                    </td>
-                    <td style="padding:4px;" nowrap="nowrap"    >
-                        <div id="iframe" style="display: inline;">
-                            <iframe src="newPhoto.php?nameCat=authors&category=7" style=" background:#fff; height:300px; width:100%" align="center" frameborder="0" framespacing="0" scrolling="none" border="0"></iframe>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
 
-    <tfoot>
-        <tr class="pagination">
-            <td colspan=2></td>
-        </tr>
-    </tfoot>
-</table>
+        {render_messages}
+
+        <div id="warnings-validation"></div>
+
+        <div class="form-horizontal panel">
+            <fieldset>
+            <div class="control-group">
+                <label for="name" class="control-label">{t}Name{/t}</label>
+                <div class="controls">
+                    <input type="text" id="name" name="name" value="{$author->name|default:""}" class="input-xlarge" required="required" autofocus/>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="condition" class="control-label">{t}Condition{/t}</label>
+                <div class="controls">
+
+                    <textarea rows="3" name="condition" id="condition" class="input-xlarge">{$author->condition|default:""}</textarea>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="politics" class="control-label">{t}Blog name{/t}</label>
+                <div class="controls">
+                    <input type="text" id="politics" name="politics" value="{$author->politics|default:""}" class="input-xlarge"/>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="blog" class="control-label">{t}Blog url{/t}</label>
+                <div class="controls">
+                    <input type="text" id="blog" name="blog" value="{$author->blog|default:""}" class="input-xlarge"/>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="params[inrss]" class="control-label">{t}Show in RSS{/t}</label>
+                <div class="controls">
+                    <label class="checkbox">
+                        <input type="checkbox" name="params[inrss]" id="params[inrss]" {if !isset($author->params['inrss']) || $author->params['inrss'] eq 1} checked="checked"{/if}>
+                        {t}If this option is activated this author will be showed in rss{/t}
+                    </label>
+                </div>
+            </div>
+
+            {if count($photos) > 0}
+            <div class="control-group">
+                <label for="author-photos" class="control-label">{t}Author photos{/t}</label>
+                <div class="controls">
+                    <div class="author-photos">
+                        {foreach name=as from=$photos|default:array() item=photo}
+                        <div id='{$photo->pk_img}' class="thumbnail">
+                            <img src="{$smarty.const.MEDIA_IMG_PATH_URL}{$photo->path_img}" />
+                            <input type="hidden" name="photos[]" value="{$photo->fk_photo}">
+                            <a class="btn btn-danger btn-mini delete-author-photo" href="#">{t}Delete{/t}</a>
+                        </div>
+                        {/foreach}
+                    </div>
+                    <p class="help-block">{t}You can change the image order by drag and drop them.{/t}</p>
+                </div>
+            </div>
+            {/if}
+
+            <div class="control-group">
+                <label for="fileInput" class="control-label">{t}Add new photo{/t}</label>
+                <div class="controls">
+                    <input type="file" id="fileInput" class="input-file" name="photo-file">
+                </div>
+            </div>
+            </fieldset>
+            <input type="hidden" id="fk_author_img" name="fk_author_img" value="" />
+        </div>
+    </div>
 </form>
 {/block}

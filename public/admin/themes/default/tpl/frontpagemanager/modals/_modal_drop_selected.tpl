@@ -1,6 +1,6 @@
 <div class="modal hide fade" id="modal-batch-delete">
     <div class="modal-header">
-      <a class="close" href="#">×</a>
+      <button type="button" class="close" data-dismiss="modal-batch-delete" aria-hidden="true">×</button>
       <h3>{t}Drop these elements{/t}</h3>
     </div>
     <div class="modal-body">

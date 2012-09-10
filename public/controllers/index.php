@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  **/
 use Symfony\Component\HttpFoundation\Response;
+use Onm\Settings as s;
 
 // Start up and setup the app
 require_once '../bootstrap.php';
@@ -27,12 +28,15 @@ $tpl->setConfig('frontpages');
 $cacheID = $tpl->generateCacheId($category_name, $subcategory_name, 0 /*$cache_page*/);
 
 $actualCategory = (empty($subcategory_name))? $category_name : $subcategory_name;
-$tpl->assign(array(
-        'category_name' => $category_name,
-        'actual_category' => $actualCategory));
+$tpl->assign(
+    array(
+        'category_name'   => $category_name,
+        'actual_category' => $actualCategory
+    )
+);
 
 // Fetch information for Advertisements
-require_once "index_advertisement.php";
+require_once 'index_advertisement.php';
 
 // Avoid to run the entire app logic if is available a cache for this page
 if (
@@ -58,10 +62,12 @@ if (
 
 
     $actualCategoryId = $actual_category_id = $ccm->get_id($actualCategory);
-    $tpl->assign(array(
-        'actual_category_id' => $actualCategoryId,
-        'actual_category_title' => $ccm->get_title($category_name),
-    ));
+    $tpl->assign(
+        array(
+            'actual_category_id' => $actualCategoryId,
+            'actual_category_title' => $ccm->get_title($category_name),
+        )
+    );
 
     $cm = new ContentManager;
 
@@ -99,6 +105,11 @@ if (
     }
     $tpl->assign('column', $contentsInHomepage);
 
-} // $tpl->is_cached('index.tpl')
+    $layout = s::get('frontpage_layout_'.$actualCategoryId, 'default');
+    $layoutFile = 'layouts/'.$layout.'.tpl';
+
+    $tpl->assign('layoutFile', $layoutFile);
+}
 
 $tpl->display('frontpage/frontpage.tpl', $cacheID);
+

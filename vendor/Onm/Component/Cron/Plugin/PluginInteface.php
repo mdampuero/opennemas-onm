@@ -8,6 +8,7 @@
  * file that was distributed with this source code.
  **/
 namespace Onm\Component\Cron\Plugin;
+
 /**
  * Interface for Cron plugins
  *
@@ -21,5 +22,5 @@ interface PluginInterface
      * @return boolean true if the plugin was executed properly
      **/
     public function execute($params = array());
+}
 
-} // END class PluginInterface

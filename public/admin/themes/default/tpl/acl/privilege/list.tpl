@@ -1,14 +1,4 @@
 {extends file="base/admin.tpl"}
-
-{block name="header-css" append}
-<style>
-	table.adminlist td,
-	table.adminlist th {
-		padding: 8px;
-	}
-</style>
-{/block}
-
 {block name="content"}
 
 
@@ -18,7 +8,7 @@
 			<div class="title"><h2>{t}Privileges manager{/t}</h2></div>
             <ul class="old-button">
 				<li>
-					<a href="{$smarty.server.PHP_SELF}?action=new&id=0" accesskey="N" tabindex="1">
+					<a href="{url name="admin_acl_privileges_create"}" accesskey="N" tabindex="1">
 						<img border="0" src="{$params.IMAGE_DIR}user_add.png" title="Nuevo" alt="Nuevo"><br />{t}New Privilege{/t}
 					</a>
 				</li>
@@ -26,9 +16,8 @@
 		</div>
 	</div>
 
-    {render_messages}
-
     <div class="wrapper-content">
+        {render_messages}
         <div class="table-info clearfix">
             <div>
                 <div class="right form-inline">
@@ -44,20 +33,20 @@
             </div>
         </div>
 
-        <table class="listing-table table-striped">
+        <table class="table table-condensed">
             <thead>
                 <tr>
                     <th>{t}Privilege name{/t}</th>
                     <th>{t}Description{/t}</th>
                     <th>{t}Module{/t}</th>
-                    <th class="center" style="width:30px;">{t}Actions{/t}</th>
+                    <th class="center" style="width:110px;">{t}Actions{/t}</th>
                 </tr>
             </thead>
             <tbody>
                 {section name=c loop=$privileges}
                 <tr>
                     <td>
-                        <a href="{$smarty.server.PHP_SELF}?action=read&amp;id={$privileges[c]->id}" title="{t}Edit privilege{/t}">
+                        <a href="{url name="admin_acl_privileges_show" id=$privileges[c]->id}" title="{t}Edit privilege{/t}">
                             {$privileges[c]->name}
                         </a>
                     </td>
@@ -71,18 +60,14 @@
                     </td>
 
                     <td class="right">
-                        <ul class="action-buttons">
-                            <li>
-                                <a href="{$smarty.server.PHP_SELF}?action=read&amp;id={$privileges[c]->id}" title="{t}Edit privilege{/t}">
-                                    <img src="{$params.IMAGE_DIR}edit.png" border="0" />
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" onClick="javascript:confirmar(this, '{$privileges[c]->id}');" title="{t}Delete privilege{/t}">
-                                    <img src="{$params.IMAGE_DIR}trash.png" border="0" />
-                                </a>
-                            </li>
-                        </ul>
+                        <div class="btn-group">
+                            <a class="btn" href="{url name="admin_acl_privileges_show" id=$privileges[c]->id}" title="{t}Edit privilege{/t}">
+                                <i class="icon-pencil"></i> {t}Edit{/t}
+                            </a>
+                            <a class="btn btn-danger" href="{url name="admin_acl_privileges_delete" id=$privileges[c]->id}" title="{t}Delete privilege{/t}">
+                                <i class="icon-trash icon-white"></i>
+                            </a>
+                        </div>
                     </td>
                 </tr>
                 {sectionelse}
@@ -94,11 +79,11 @@
             <tfoot>
                 <tr>
                     <td colspan="5" align="center">
-                        {$paginacion->links|default:""}&nbsp;
+                        {$paginacion->links|default:"&nbsp;"}
                     </td>
                 </tr>
             </tfoot>
-        </table> <!--.listing-table-->
+        </table> <!--.table-->
 
     	<input type="hidden" id="action" name="action" value="" />
 		<input type="hidden" name="id" id="id" value="{$id|default:""}" />

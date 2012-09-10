@@ -7,7 +7,7 @@ class Contents
     /*
     * @url GET /contents/resolve/:id
     */
-    function resolve ($id)
+    public function resolve($id)
     {
         $this->_validateInt($id);
 
@@ -19,7 +19,7 @@ class Contents
     /*
     * @url GET /contents/contenttype/:contentId
     */
-    function contentType ($contentID)
+    public function contentType($contentID)
     {
 
         $this->_validateInt($contentID);
@@ -100,7 +100,6 @@ class Contents
                 }
             }
             if (empty($ads)) {
-
                 return false;
             }
 
@@ -119,7 +118,7 @@ class Contents
         }
     }
 
-    private function _validateInt ($number)
+    private function _validateInt($number)
     {
         if (!is_numeric($number)) {
             throw new RestException(400, 'parameter is not a number');

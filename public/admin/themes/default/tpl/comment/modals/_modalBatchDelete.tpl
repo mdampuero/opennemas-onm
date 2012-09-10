@@ -1,6 +1,6 @@
 <div class="modal hide fade" id="modal-comment-batchDelete">
     <div class="modal-header">
-      <a class="close" href="#">×</a>
+      <button type="button" class="close" data-dismiss="modal-comment-batchDelete" aria-hidden="true">×</button>
       <h3>{t}Delete comments{/t}</h3>
     </div>
     <div class="modal-body">
@@ -8,7 +8,7 @@
 
     </div>
     <div class="modal-footer">
-        <a class="btn primary yes" href="#">{t}Yes, delete all{/t}</a>
+        <a class="btn btn-primary yes" href="#">{t}Yes, delete all{/t}</a>
         <a class="btn secondary no" href="#">{t}No{/t}</a>
     </div>
 </div>
@@ -16,17 +16,17 @@
 <script>
 jQuery("#modal-comment-batchDelete").modal({
     backdrop: 'static', //Show a grey back drop
-    keyboard: true //Can close on escape
-
+    keyboard: true, //Can close on escape
+    show: false
 });
 
 jQuery('.delChecked').click(function(e) {
     var number = jQuery(".minput:checked").length;
     if(number >= 1 ) {
         jQuery('#modal-comment-batchDelete .modal-body span').html(number);
-        jQuery("#modal-comment-batchDelete").modal(true);
+        jQuery("#modal-comment-batchDelete").modal('show');
     }else{
-        jQuery("#modal-comment-batchDelete").modal(false);
+        jQuery("#modal-comment-batchDelete").modal('hide');
         jQuery("#modal-comment-accept").modal('show');
         jQuery('#modal-comment-accept .modal-body')
             .html("{t}You must select some elements.{/t}");
@@ -36,7 +36,7 @@ jQuery('.delChecked').click(function(e) {
 });
 
 jQuery('#modal-comment-batchDelete a.btn.yes').on('click', function(){
-    jQuery('#action').attr('value', "batchDelete");
+    jQuery('#formulario').attr('action', comments_manager_urls.batchDelete);
     jQuery('#formulario').submit();
     e.preventDefault();
 });

@@ -22,7 +22,7 @@ class ContentCategoryManager
     /**
      * @var ContentCategoryManager instance, singleton pattern
      **/
-    private static $_instance = null;
+    private static $instance = null;
 
     /**
      * @var MethodCacheManager cache, object to cache requests
@@ -31,29 +31,29 @@ class ContentCategoryManager
 
     public function __construct()
     {
-        if (is_null(self::$_instance)) {
+        if (is_null(self::$instance)) {
             // Posibilidad de cachear resultados de métodos
             $this->cache = new MethodCacheManager($this, array('ttl' => 300));
 
             // Rellenar categorías dende caché
             $this->categories = $this->cache->populateCategories();
 
-            self::$_instance = $this;
+            self::$instance = $this;
 
-            return self::$_instance;
+            return self::$instance;
         } else {
-            return self::$_instance;
+            return self::$instance;
         }
     }
 
     public static function get_instance()
     {
-        if (is_null(self::$_instance)) {
-            self::$_instance = new ContentCategoryManager();
+        if (is_null(self::$instance)) {
+            self::$instance = new ContentCategoryManager();
 
-            return self::$_instance;
+            return self::$instance;
         } else {
-            return self::$_instance;
+            return self::$instance;
         }
     }
 
@@ -75,8 +75,10 @@ class ContentCategoryManager
         }
 
         $result = apc_delete($key);
-        $result = call_user_func_array(array('ContentCategoryManager', $method),
-            $args);
+        $result = call_user_func_array(
+            array('ContentCategoryManager', $method),
+            $args
+        );
         apc_store($key, serialize($result), 300);
 
         return $result ;
@@ -117,7 +119,7 @@ class ContentCategoryManager
      * @param $subcategoryName Name of subcategory
      * @return array Return categoryName and subcategoryName fixed
     */
-    public function normalize($categoryName, $subcategoryName=null)
+    public function normalize($categoryName, $subcategoryName = null)
     {
         if (!empty($subcategoryName)) {
             // It's a father category
@@ -229,8 +231,7 @@ class ContentCategoryManager
         if (is_null($this->categories)) {
             $sql = 'SELECT pk_content_category '
                  . 'FROM content_categories WHERE name = ?';
-            $rs  = $GLOBALS['application']->conn->Execute($sql,
-                array($categoryName));
+            $rs  = $GLOBALS['application']->conn->Execute($sql, array($categoryName));
 
             if (!$rs) {
                 \Application::logDatabaseError();
@@ -267,8 +268,7 @@ class ContentCategoryManager
                    .' inmenu=1 AND internal_category=?'
                    .' ORDER BY posmenu LIMIT 1';
 
-            $rs = $GLOBALS['application']->conn->Execute($sql,
-                array($categoryType));
+            $rs = $GLOBALS['application']->conn->Execute($sql, array($categoryType));
 
             if (!$rs) {
                 \Application::logDatabaseError();
@@ -286,7 +286,6 @@ class ContentCategoryManager
             if (($category->internal_category == $categoryType)
                 && ($category->inmenu==1)
             ) {
-
                 return $category->name;
             }
         }
@@ -298,8 +297,7 @@ class ContentCategoryManager
         if (is_null($this->categories)) {
             $sql = 'SELECT title FROM content_categories WHERE name = ?';
 
-            $rs = $GLOBALS['application']->conn->Execute($sql,
-                array($categoryName));
+            $rs = $GLOBALS['application']->conn->Execute($sql, array($categoryName));
 
             if (!$rs) {
                 \Application::logDatabaseError();
@@ -325,8 +323,7 @@ class ContentCategoryManager
         if (is_null($this->categories)) {
             $sql = 'SELECT title FROM content_categories WHERE name = ?';
 
-            $rs = $GLOBALS['application']->conn->Execute($sql,
-                array($categoryName));
+            $rs = $GLOBALS['application']->conn->Execute($sql, array($categoryName));
 
             if (!$rs) {
                 \Application::logDatabaseError();
@@ -430,7 +427,10 @@ class ContentCategoryManager
 
         usort(
             $categories,
-            function($a, $b) {
+            function (
+                $a,
+                $b
+            ) {
                 if ($b->inmenu == 0) {
                     return 0;
                 }
@@ -454,7 +454,10 @@ class ContentCategoryManager
 
         usort(
             $categories,
-            function ($a, $b) {
+            function (
+                $a,
+                $b
+            ) {
                 //Las que no están en el menú colocarlas al final
                 if ($b->internal_category == 0) {
                      return 0;
@@ -596,8 +599,7 @@ class ContentCategoryManager
                     AND internal_category<>0
                     ORDER BY posmenu LIMIT 0,1';
 
-            $rs = $GLOBALS['application']->conn->Execute($sql,
-                array($categoryId));
+            $rs = $GLOBALS['application']->conn->Execute($sql, array($categoryId));
 
             if (!$rs) {
                 \Application::logDatabaseError();
@@ -631,8 +633,7 @@ class ContentCategoryManager
                 .'AND content1.fk_content_category='
                 .'content2.pk_content_category';
 
-            $rs = $GLOBALS['application']->conn->Execute($sql,
-                    array($category_name));
+            $rs = $GLOBALS['application']->conn->Execute($sql, array($category_name));
             if (!$rs) {
                 \Application::logDatabaseError();
 
@@ -763,7 +764,7 @@ class ContentCategoryManager
      *
      * @see ContentCategoryManager::countContentByType
      **/
-    public function countContentsByGroupType($type, $filter=null)
+    public function countContentsByGroupType($type, $filter = null)
     {
         $_where = '1=1';
         if (!is_null($filter)) {
@@ -791,7 +792,7 @@ class ContentCategoryManager
         return $groups;
     }
 
-    public function countMediaByTypeGroup($filter=null)
+    public function countMediaByTypeGroup($filter = null)
     {
         $_where = '1=1';
         if (!is_null($filter)) {
@@ -820,7 +821,7 @@ class ContentCategoryManager
         return $groups;
     }
 
-    public function dataMediaByTypeGroup($filter=null)
+    public function dataMediaByTypeGroup($filter = null)
     {
         $_where = '1=1';
         if (!is_null($filter)) {
@@ -959,5 +960,5 @@ class ContentCategoryManager
 
         return null;
     }
-
 }
+

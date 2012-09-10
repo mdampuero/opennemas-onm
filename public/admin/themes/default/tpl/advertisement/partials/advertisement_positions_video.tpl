@@ -8,7 +8,10 @@
             </label>
         </td>
         <td rowspan="7">
-            {include file="advertisement/partials/advertisement_map_positions_video.tpl"}
+            <div id="advertisement-mosaic-video" style="">
+                <div id="advertisement-mosaic-frame-video"></div>
+                <img src="{$params.IMAGE_DIR}advertisement/videoAds.png" width="240" height="401" usemap="#mapVideo" />
+            </div>
         </td>
     </tr>
     <tr>
@@ -64,28 +67,3 @@
     </tr>
 </tbody>
 </table>
-
-<script type="text/javascript">
-/* <![CDATA[ */
-var adPositionVideo = null;
-
-var positions_video = new Array();
-positions_video[201] = '1,0,176,24';
-positions_video[202] = '178,0,55,24';
-positions_video[209] = '1,348,176,24';
-positions_video[210] = '178,348,55,24';
-positions_video[250] = '0,0,240,401';
-
-
-
-var options = { 'positions': positions_video, 'radios': $('ads_type_video').select('input[name=type_advertisement]') };
-// adPositionVideo = new AdPosition('advertisement-mosaic-video', options );
-document.observe('dom:loaded', function() {
-
-    {if isset($advertisement) && !empty($advertisement->type_advertisement) && $category == '4'}
-//    adPositionVideo.selectPosition({$advertisement->type_advertisement});
-    {/if}
-
-});
-/* ]]> */
-</script>

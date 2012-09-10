@@ -8,7 +8,10 @@
             </label>
         </td>
         <td rowspan="11">
-            {include file="advertisement/partials/advertisement_map_positions.tpl"}
+            <div id="advertisement-mosaic">
+                <div id="advertisement-mosaic-frame"></div>
+                <img src="{$params.IMAGE_DIR}advertisement/front_advertisement.png" style="width:240px;height:628px;" usemap="#mapPortada" />
+            </div>
         </td>
     </tr>
     <tr>
@@ -25,6 +28,16 @@
             <label>
                 Top Right LeaderBoard  (234X90)
                 <input type="radio" name="type_advertisement" value="2" {if isset($advertisement) && $advertisement->type_advertisement == 2}checked="checked" {/if}/>
+            </label>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"><hr /></td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <label>{t}Floating ads (for drop them into columns){/t}
+                <input type="radio" name="type_advertisement" value="37" {if isset($advertisement) && $advertisement->type_advertisement == 37}checked="checked" {/if}/>
             </label>
         </td>
     </tr>
@@ -196,50 +209,3 @@
     </tr>
 </tbody>
 </table>
-
-<script type="text/javascript">
-/* <![CDATA[ */
-var adPositionPortada = null;
-
-var positions_portada = [ '0,0,0,0', '1,1,175,24', '180,1,58,24',
-                          '1,292,175,24', '180,292,58,24',
-                          '1,576,175,26', '180,576,58,26' ];
-
-positions_portada[11]='8,48,72,76';
-positions_portada[21]='86,48,72,76';
-positions_portada[31]='162,48,72,76';
-positions_portada[12]='8,134,72,76';
-positions_portada[22]='86,134,72,76',
-positions_portada[32]='162,135,72,76';
-
-positions_portada[13]='8,224,50,52';
-positions_portada[33]='184,224,50,54';
-
-positions_portada[14]='8,335,72,76';
-positions_portada[24]='86,335,72,76';
-positions_portada[34]='162,335,72,76';
-positions_portada[15]='8,422,72,76';
-positions_portada[25]='86,422,72,76',
-positions_portada[35]='162,422,72,76';
-
-positions_portada[16]='8,512,48,50';
-positions_portada[36]='186,509,50,54';
-
-
-// Intersticial banner
-positions_portada[50] = '0,0,240,620';
-
-var options  =  {
-                'positions': positions_portada,
-                'radios': $('ads_type_portada').select('input[name=type_advertisement]')
-                };
- //adPositionPortada = new AdPosition('advertisement-mosaic', options );
-document.observe('dom:loaded', function() {
-    {if isset($advertisement) && !empty($advertisement->type_advertisement)}
-   // adPositionPortada.selectPosition({ $advertisement->type_advertisement });
-    {else}
-   // adPositionPortada.selectPosition(1);
-    {/if}
-});
-/* ]]> */
-</script>

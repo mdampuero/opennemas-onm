@@ -9,6 +9,4 @@
  **/
 $GLOBALS['Session'] = SessionManager::getInstance(OPENNEMAS_FRONTEND_SESSIONS);
 $GLOBALS['Session']->bootstrap();
-// Check if session is expired
-// PrivilegesCheck::checkSessionExpireTime();
 

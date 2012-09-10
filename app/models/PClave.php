@@ -16,81 +16,28 @@ use \Onm\Settings as s;
  **/
 class PClave
 {
-    /**
-     * @var int Identifier of class
-     */
     public $id = null;
-
-    /**#@+
-     * Object value
-     *
-     * @access public
-     * @var string
-     */
     public $pclave = null;
     public $value  = null;
     public $tipo   = null;
-    /**#@-*/
 
     /**
      * @var MethodCacheManager Handler to call method cached
      */
     public $cache = null;
 
-    public static $instance = null;
-
     /**
      * constructor
      *
      * @param int $id
      */
-    public function __construct($id=null)
+    public function __construct($id = null)
     {
         if (!is_null($id)) {
             $this->read($id);
         }
 
         $this->cache = new MethodCacheManager($this, array('ttl' => 330));
-    }
-
-    public function getInstance()
-    {
-        if (is_null(self::$instance)) {
-            self::$instance = new PClave();
-        }
-
-        return self::$instance;
-    }
-
-    /**
-     * Create a new pclave in database
-     *
-     * @param  array  $data
-     * @return PClave
-     */
-    public function create($data)
-    {
-        // Clear  magic_quotes
-        StringUtils::disabled_magic_quotes($data);
-
-        $sql = "INSERT INTO `pclave` (`pclave`, `value`, `tipo`) "
-             . "VALUES (?, ?, ?)";
-
-        $values[] = $data['pclave'];
-        $values[] = $data['value'];
-        $values[] = $data['tipo'];
-        /*$this->sanitize( &$data );*/
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
-            return null;
-        }
-
-        $data['id'] = $GLOBALS['application']->conn->Insert_ID();
-        $this->load($data);
-
-        return $this;
     }
 
     /**
@@ -103,9 +50,7 @@ class PClave
     {
         $sql = "SELECT * FROM pclave WHERE id=?";
 
-        $values = array($id);
-
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
         if ($rs === false) {
             \Application::logDatabaseError();
 
@@ -115,6 +60,85 @@ class PClave
         $this->load($rs->fields);
 
         return $this;
+    }
+
+    /**
+     * Create a new pclave in database
+     *
+     * @param  array  $data
+     * @return PClave
+     */
+    public function create($data)
+    {
+        $sql = "INSERT INTO `pclave` (`pclave`, `value`, `tipo`) "
+             . "VALUES (?, ?, ?)";
+
+        $values = array(
+            $data['pclave'],
+            $data['tipo'],
+            $data['value'],
+        );
+
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        if ($rs === false) {
+            \Application::logDatabaseError();
+
+            return null;
+        }
+
+        $data['id'] = $GLOBALS['application']->conn->Insert_ID();
+        $this->load($data);
+
+        return $this;
+    }
+
+    /**
+     * Update
+     *
+     * @param  array   $data Array values
+     * @return boolean
+     */
+    public function update($data)
+    {
+        $sql = "UPDATE `pclave` "
+             . "SET `pclave`=?, `tipo`=?, `value`=? "
+             . "WHERE `id`=?";
+
+        $values = array(
+            $data['pclave'],
+            $data['tipo'],
+            $data['value'],
+            $data['id'],
+        );
+
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        if ($rs === false) {
+            \Application::logDatabaseError();
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Delete
+     *
+     * @param  int     $id Identifier
+     * @return boolean
+     */
+    public function delete($id)
+    {
+        $sql = "DELETE FROM pclave WHERE id=?";
+
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
+        if ($rs === false) {
+            \Application::logDatabaseError();
+
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -141,74 +165,11 @@ class PClave
     }
 
     /**
-     * Update
-     *
-     * @param  array   $data Array values
-     * @return boolean
-     */
-    public function update($data)
-    {
-        // Clear  magic_quotes
-        StringUtils::disabled_magic_quotes($data);
-
-        $sql = "UPDATE `pclave` "
-             . "SET `pclave`=?, `tipo`=?, `value`=? "
-             . "WHERE `id`=?";
-
-        $values[] = $data['pclave'];
-        $values[] = $data['tipo'];
-        $values[] = $data['value'];
-        $values[] = $data['id'];
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Save pclave into database
-     *
-     * @param array $data Post data
-     */
-    public function save($data)
-    {
-        if (empty($data['id'])) {
-            $this->create($data);
-        } else {
-            $this->update($data);
-        }
-    }
-
-    /**
-     * Delete
-     *
-     * @param  int     $id Identifier
-     * @return boolean
-     */
-    public function delete($id)
-    {
-        $sql = "DELETE FROM pclave WHERE id=?";
-        $values = array($id);
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * Get list of terms to substitute
      *
      * @return array Terms
      */
-    public function getList($filter=null)
+    public function find($filter = null)
     {
         $sql = 'SELECT * FROM `pclave`';
         if (!is_null($filter)) {
@@ -245,8 +206,10 @@ class PClave
 
         usort(
             $terms,
-            function ($a, $b)
-            {
+            function (
+                $a,
+                $b
+            ) {
                 if (strlen($a->pclave) == strlen($b->pclave)) {
                     return 0;
                 }
@@ -274,3 +237,4 @@ class PClave
         return trim($text);
     }
 }
+

@@ -8,8 +8,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  **/
-use Symfony\Component\HttpFoundation\Response,
-    Onm\Settings as s;
+use Symfony\Component\HttpFoundation\Response;
+use Onm\Settings as s;
 
 // Start up and setup the app
 require_once '../bootstrap.php';
@@ -29,8 +29,7 @@ $tpl->setConfig('frontpages');
 $cacheID = $tpl->generateCacheId($category_name, $subcategory_name, 0);
 
 // Fetch advertisement information from local
-require_once "index_advertisement.php";
-
+require_once 'index_advertisement.php';
 
 // Avoid to run the entire app logic if is available a cache for this page
 if (
@@ -55,7 +54,7 @@ if (
         }
     }
 
-    $existsCategory =file_get_contents($wsUrl.'/ws/categories/exist/'.$category_name );
+    $existsCategory =file_get_contents($wsUrl.'/ws/categories/exist/'.$category_name);
 
     // If no home category name
     if ($category_name != 'home') {
@@ -70,17 +69,19 @@ if (
 
     $actualCategory = (empty($subcategory_name))? $category_name : $subcategory_name;
     $actualCategoryId = $actual_category_id = $ccm->get_id($actualCategory);
-    $tpl->assign(array(
-        'category_name' => $category_name,
-        'actual_category' => $actualCategory,
-        'actual_category_id' => $actualCategoryId,
-        'actual_category_title' => $ccm->get_title($category_name),
-    ));
+    $tpl->assign(
+        array(
+            'category_name' => $category_name,
+            'actual_category' => $actualCategory,
+            'actual_category_id' => $actualCategoryId,
+            'actual_category_title' => $ccm->get_title($category_name),
+        )
+    );
 
     // Get category id correspondence with ws
-    $wsActualCategoryId = file_get_contents($wsUrl.'/ws/categories/id/'.$category_name );
+    $wsActualCategoryId = file_get_contents($wsUrl.'/ws/categories/id/'.$category_name);
 
-/*
+    /*
     // Fetch information for Advertisements from Web service
     $ads = json_decode(file_get_contents($wsUrl.'/ws/ads/frontpage/'.$wsActualCategoryId));
 
@@ -89,20 +90,20 @@ if (
 
     //Render ads
     $advertisement = Advertisement::getInstance();
-    $advertisement->render($banners, $advertisement,$wsUrl);
+    $advertisement->renderMultiple($banners, $advertisement,$wsUrl);
 
     // Render intersticial banner
     if (!empty($intersticial)) {
-        $advertisement->render(array($intersticial), $advertisement,$wsUrl);
+        $advertisement->renderMultiple(array($intersticial), $advertisement,$wsUrl);
     }
-*/
+    */
 
     $getContentsUrl = $wsUrl.'/ws/categories/allcontent/'.$wsActualCategoryId;
     $allContentsInHomepage = json_decode(file_get_contents($getContentsUrl), true);
 
     $contentsInHomepage = array();
     foreach ($allContentsInHomepage as $item) {
-        $getContentUrl = $wsUrl.'/ws/contents/contenttype/'.(int)$item['fk_content_type'];
+        $getContentUrl = $wsUrl.'/ws/contents/contenttype/'.(int) $item['fk_content_type'];
         $contentType = file_get_contents($getContentUrl);
         $contentType = str_replace('"', '', $contentType);
         $content = new $contentType();
@@ -118,7 +119,7 @@ if (
     $imageList = array();
     foreach ($contentsInHomepage as $content) {
         if (isset($content->img1) && $content->img1 != 0) {
-            $image = json_decode(file_get_contents($wsUrl.'/ws/images/id/'.(int)$content->img1));
+            $image = json_decode(file_get_contents($wsUrl.'/ws/images/id/'.(int) $content->img1));
             if (!empty($image)) {
                 $image->media_url = json_decode(file_get_contents($wsUrl.'/ws/instances/mediaurl/'));
                 $imageList []= $image;
@@ -163,7 +164,7 @@ if (
 
 
         foreach ($content->related_contents as &$item) {
-            $getContentUrl = $wsUrl.'/ws/contents/contenttype/'.(int)$item->fk_content_type;
+            $getContentUrl = $wsUrl.'/ws/contents/contenttype/'.(int) $item->fk_content_type;
             $contentType = file_get_contents($getContentUrl);
             $contentType = str_replace('"', '', $contentType);
             $contentRelated = new $contentType();
@@ -179,3 +180,4 @@ if (
 } // $tpl->is_cached('index.tpl')
 
 $tpl->display('frontpage/frontpage.tpl', $cacheID);
+

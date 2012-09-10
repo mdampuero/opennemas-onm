@@ -6,11 +6,12 @@
             depends="prepare,lint,phploc-ci,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpunit-ci,docblox" />
 
     <path id="project.paths.php">
+        <pathelement path="${basedir}/app/Backend" />
+        <pathelement path="${basedir}/app/Manager" />
         <pathelement path="${basedir}/app/models" />
-        <pathelement path="${basedir}/public/core" />
         <pathelement path="${basedir}/public/controllers" />
-        <!--pathelement path="${basedir}/public/admin/controllers" /-->
         <pathelement path="${basedir}/vendor/Onm" />
+        <pathelement path="${basedir}/vendor/core" />
         <!-- Take a look at lint target should be updated -->
     </path>
     <pathconvert pathsep=" " property="project.paths.php.space-separated" refid="project.paths.php"/>
@@ -47,6 +48,14 @@
         <mkdir dir="${basedir}/build/coverage"/>
         <mkdir dir="${basedir}/build/logs"/>
         <mkdir dir="${basedir}/build/pdepend"/>
+        <antcall target="install-dependencies" />
+    </target>
+
+    <target name="install-dependencies">
+        <exec executable="php" failonerror="true">
+            <arg path="${basedir}/bin/composer.phar" />
+            <arg line="install" />
+        </exec>
     </target>
 
     <target name="lint">
@@ -56,7 +65,6 @@
                 <include name="app/models/" />
                 <include name="public/core/" />
                 <include name="public/controllers/" />
-                <include name="public/admin/controllers" />
                 <include name="vendor/Onm/" />
             </fileset>
         </apply>
@@ -107,7 +115,8 @@
     <target name="phpcs"
         description="Find coding standard violations using PHP_CodeSniffer">
         <exec executable="phpcs">
-            <arg value="--standard=PSR" />
+            <arg line="-n" />
+            <arg value="--standard=PSR2" />
             <arg line="${project.paths.php.space-separated}" />
         </exec>
     </target>
@@ -115,8 +124,9 @@
     <target name="phpcs-ci"
         description="Find coding standard violations using PHP_CodeSniffer">
         <exec executable="phpcs" output="${basedir}/build/logs/checkstyle.xml">
+            <arg line="-n" />
             <arg line="--report=checkstyle" />
-            <arg value="--standard=PSR" />
+            <arg value="--standard=PSR2" />
             <arg line="${project.paths.php.space-separated}" />
         </exec>
     </target>

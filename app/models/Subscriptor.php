@@ -22,21 +22,25 @@ class Subscriptor
     public $name      = null;
     public $firstname = null;
     public $lastname  = null;
-    public $status = null;
+
     /**
      * status=0 - (mail se le envio pero aun no le dio al link del correo)
      * status=1 - (tras recibir el mail, el usuario ha clicado en el link y se ha aceptado)
      * status=2 - (El administrador ha aceptado la solicitud)
      * status=3 - (El administrador ha deshabilitado el usuario)
      **/
+    public $status = null;
+
+    /**
+     * Flag to check if user will receive the newsletter
+     **/
     public $subscription = null;
-    public $token = null;
 
     public $_errors = array();
 
     private $_tableName = '`pc_users`';
 
-    private static $_instance    = null;
+    private static $_instance = null;
 
     /**
      * Constructor
@@ -59,7 +63,6 @@ class Subscriptor
             return self::$_instance;
 
         } else {
-
             return self::$_instance;
         }
     }
@@ -69,18 +72,20 @@ class Subscriptor
         $data['status'] = (!isset($data['status']))? 0: $data['status'];
 
         // WARNING!!! By default, subscription=1
-        $data['subscription'] = (isset($data['subscription']))? $data['subscription']: 1;
+        $data['subscription'] =
+            (isset($data['subscription']))? $data['subscription']: 1;
+
         // By default first and last name are ""
         $data['firstname'] = (isset($data['firstname']))? $data['firstname']: "";
         $data['lastname'] = (isset($data['lastname']))? $data['lastname']: "";
 
         $sql = 'INSERT INTO ' . $this->_tableName . ' (
                   `email`, `name`, `firstname`, `lastname`,
-                 `status`, `subscription`, `token`) VALUES
-                ( ?,?,?,?,?,?,?)';
-        $values = array( $data['email'], $data['name'], $data['firstname'],
-                         $data['lastname'], $data['status'], $data['subscription'],
-                         $data['token'] );
+                 `status`, `subscription`) VALUES
+                ( ?,?,?,?, ?,?)';
+        $values = array( $data['email'],
+                         $data['name'], $data['firstname'],$data['lastname'],
+                         $data['status'], $data['subscription'] );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
@@ -233,8 +238,10 @@ class Subscriptor
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
+
+        return true;
     }
 
     public function set_status($id, $status)
@@ -311,7 +318,7 @@ class Subscriptor
         return $rs;
     }
 
-    public function getPager($items_page = 40, $total = null)
+    public function getPager($itemsPage = 40, $total = null)
     {
         if (is_null($total)) {
             $total = $this->countUsers();
@@ -320,7 +327,7 @@ class Subscriptor
         // Pager
         $pager_options = array(
             'mode'        => 'Sliding',
-            'perPage'     => $items_page,
+            'perPage'     => $itemsPage,
             'delta'       => 4,
             'clearIfVoid' => true,
             'append'      => false,

@@ -48,6 +48,7 @@ class StaticPage extends Content
             $this->read($id);
         }
         $this->cache = new MethodCacheManager($this, array('ttl' => 30));
+        $this->content_type_l10n_name = _('Static Page');
     }
     public function create($data)
     {
@@ -68,9 +69,7 @@ class StaticPage extends Content
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+            \Application::logDatabaseError();
 
             return false;
         }
@@ -104,9 +103,7 @@ class StaticPage extends Content
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
 
         if ($rs === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+            \Application::logDatabaseError();
 
             return null;
         }
@@ -164,9 +161,7 @@ class StaticPage extends Content
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+            \Application::logDatabaseError();
 
             return false;
         }
@@ -191,16 +186,13 @@ class StaticPage extends Content
      */
     public function remove($id, $lastEditor = '')
     {
-
         parent::remove($id);
         $sql = 'DELETE FROM `static_pages`
                 WHERE `static_pages`.`pk_static_page`=?';
         $values = array($id);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+            \Application::logDatabaseError();
 
             return false;
         }
@@ -259,8 +251,10 @@ class StaticPage extends Content
         $titles = array();
         $cm = new ContentManager();
         $pages = $cm->find(
-            'Static_Page', $filter,
-            'ORDER BY created DESC ', 'pk_content, pk_static_page, slug'
+            'Static_Page',
+            $filter,
+            'ORDER BY created DESC ',
+            'pk_content, pk_static_page, slug'
         );
         foreach ($pages as $p) {
             $titles[] = $p->slug;
@@ -269,3 +263,4 @@ class StaticPage extends Content
         return $titles;
     }
 }
+

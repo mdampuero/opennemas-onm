@@ -7,6 +7,7 @@
  * file that was distributed with this source code.
  */
 namespace Onm\UI;
+
 /**
  * Class for generate a menu from XML file, with support for ACLs system.
  *
@@ -68,9 +69,7 @@ class SimpleMenu
         if (preg_match("@#@", $url)) {
             $url = $url;
         }
-        if (!preg_match("@^http@", $url) && !preg_match("@#@", $url)) {
-            $url = $this->baseUrl."/".$url;
-        }
+        $url = htmlentities($url);
 
         $target = '';
         if ($external) {
@@ -109,12 +108,12 @@ class SimpleMenu
         switch ($element) {
             case 'submenu':
                 $output []= $this->renderSubMenu($element, $value);
-                break;
 
+                break;
             case 'node':
                 $output []= $this->renderNode($value);
-                break;
 
+                break;
             default:
                 # code...
                 break;
@@ -140,10 +139,13 @@ class SimpleMenu
         if (count($output) > 0) {
             $class = $this->getClass($value['class']);
             $html  = "<li {$class}>"
-                   . $this->getHref($value['title'],
-                        'menu_'.$value['id'], $value['link'])
-                   . "<ul>".implode("\n", $output)."</ul>"
-                   . "</li>";
+                    .$this->getHref(
+                        $value['title'],
+                        'menu_'.$value['id'],
+                        $value['link']
+                    )
+                    . "<ul>".implode("", $output)."</ul>"
+                    . "</li>";
         }
 
         return $html;
@@ -166,36 +168,13 @@ class SimpleMenu
                 $external = isset($value['target']);
                 $class = $this->getClass($value['class']);
                 $html .= "<li {$class}>"
-                      . $this->getHref($value['title'],
-                            'submenu_'.$value['id'], $value['link'], $external)
-                      . "</li>";
-            }
-        }
-
-        return $html;
-    }
-
-    /**
-     * Renders an submenu
-     *
-     * @return string the html for the submenu
-     **/
-    private function renderMenuComponent($submenu)
-    {
-
-        if ((!isset($submenu['privilege']) || $this->checkAcl($submenu['privilege']))
-            && (\Onm\Module\ModuleManager::isActivated((string) $submenu['module_name']))
-        ) {
-            if (($submenu['privilege']!='ONLY_MASTERS')
-                || ($submenu['privilege']=='ONLY_MASTERS')
-                && \Acl::isMaster()
-            ) {
-                $external = isset($submenu['target']);
-                $class = $this->getClass($submenu['class']);
-                $html.= "<li {$class}>";
-                    $html .= $this->getHref($submenu['title'],
-                        'submenu_'.$submenu['id'], $submenu['link'], $external);
-                $html.= "</li>";
+                        .$this->getHref(
+                            $value['title'],
+                            'submenu_'.$value['id'],
+                            $value['link'],
+                            $external
+                        )
+                        ."</li>";
             }
         }
 
@@ -219,12 +198,12 @@ class SimpleMenu
         }
 
         $menu = "<ul id='menu' class='clearfix'>"
-              . implode("\n", $output)."</ul>";
+              . implode("", $output)."</ul>";
         if ($params['doctype']) {
             $menu = "<nav>".$menu."</nav>";
         }
 
         return $menu;
     }
-
 }
+

@@ -1,10 +1,8 @@
 <ul id='thelist' class="gallery_list clearfix" style="width:100%; margin:0; padding:0">
-   {assign var=num value='1'}
-   {section name=n loop=$videos}
-
+{section name=n loop=$videos}
    {if $videos[n]->content_status eq 1}
-        <!-- {$videos[n]|var_dump} -->
-       <li style="display:inline-block;">
+   <li class="thumbnail">
+       <div>
            <a>
                 <img width="67"
                     style="width: 66px;"
@@ -19,14 +17,14 @@
                     data-tags="{$videos[n]->metadata}"
                 />
             </a>
-       </li>
-       {assign var=num value=$num+1}
+       </div>
+   </li>
     {/if}
-    {/section}
+{sectionelse}
+    {t}No available videos for your search criteria{/t}
+{/section}
 </ul>
-{if $videoPager}
-    <div class="pagination" align="center" style="clear:both; width:100%"> {$pager} </div>
-{/if}
+<div class="pagination" align="center" style="clear:both; width:100%">{$pagination}</div>
 <script>
 jQuery(document).ready(function($){
     $( "#videos-container #videos .draggable-handler").draggable({ opacity: 0.7, helper: "clone"});

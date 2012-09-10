@@ -1,110 +1,88 @@
 
-<table>
-    <tr>
-        <td>
-            <label for="title">{t}Title:{/t}</label>
-        </td>
-        <td valign="top">
-            <input  type="text" id="title" name="title" title="Título de la noticia"  style="width:60%"
-                    onChange="javascript:get_metadata(this.value);"
-                    {if (!empty($video->title))}
-                        value="{$video->title|clearslash|escape:"html"}"
-                    {else}
-                        value="{$information['title']|clearslash|escape:"html"}"
-                    {/if}
-                    class="required" />
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <label for="metadata">{t}Keywords:{/t} <small>{t}Comma separated{/t}</small></label>
-        </td>
-        <td valign="top">
-            <input type="text" id="metadata" name="metadata"title="Metadatos" value="{$video->metadata|default:""}" class="required"  style="width:70%" />
+<div class="control-group">
+    <label for="title" class="control-label">{t}Title{/t}</label>
+    <div class="controls">
+        <input  type="text" id="title" name="title"
+            {if (!empty($video->title))}
+                value="{$video->title}"
+            {else}
+                value="{$information['title']}"
+            {/if}
+            class="required" />
+    </div>
+</div>
 
-        </td>
-    </tr>
-     <tr>
-        <td>
-            <label for="title">{t}Description{/t}</label>
-        </td>
-        <td>
-            <textarea name="description" id="description" class="required" style="width:70%"
-                    title="{t}Video description{/t}">{$video->description|clearslash|default:""}</textarea>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <label for="title">{t}Service:{/t}</label>
-        </td>
-        <td valign="top">
-            <input type="text" id="author_name" name="author_name" title="author_name" style="width:70%"
+<div class="control-group">
+    <label for="metadata" class="control-label">{t}Keywords{/t}</label>
+    <div class="controls">
+        <input type="text" id="metadata" name="metadata" value="{$video->metadata|default:""}" required="required" class="input-xlarge"/>
+        <div class="help-block">{t}List of words separated by commas.{/t}</div>
+    </div>
+</div>
+<div class="control-group">
+    <label for="description" class="control-label">{t}Description{/t}</label>
+    <div class="controls">
+        <textarea name="description" id="description" required="required" class="input-xlarge">{$video->description|clearslash|default:""}</textarea>
+    </div>
+</div>
+<div class="control-group">
+    <label for="author_name" class="control-label">{t}Service:{/t}</label>
+    <div class="controls">
+        <input type="text" id="author_name" name="author_name" title="author_name" required="required"
                 {if (!empty($video->author_name))} value="{$video->author_name|clearslash|escape:"html"|default:""}"
                 {else} value="{$information['service']|clearslash|escape:"html"|default:""}" {/if} />
-        </td>
-    </tr>
-    {if (!empty($video->uri))}
-    <tr>
-        <td>
-            <label for="title">{t}Link:{/t}</label>
-        </td>
-        <td valign="top">
-            <a href="{$smarty.const.SITE_URL}{$video->uri}" target="_blank">
-                {$smarty.const.SITE_URL}{$video->uri}
-            </a>
-        </td>
-    </tr>
-    {/if}
-    <tr>
-        <td valign="top">
-            <label>{t}Preview:{/t}</label>
-        </td>
-        <td colspan=2 style="padding:5px; text-align:left;">
-            
-            <div class="video_player" style="max-width:500px; overflow:hidden;">
-                 {$information['embedHTML']}
-            </div>
+    </div>
+</div>
 
-            <input type="hidden" value="{json_encode($information)|escape:"html"}" name="information" />
+{if (!empty($video->uri))}
+<div class="control-group">
+    <label for="link" class="control-label">{t}Link{/t}</label>
+    <div class="controls">
+        <a href="{$smarty.const.SITE_URL}{$video->uri}" target="_blank">{$smarty.const.SITE_URL}{$video->uri}</a>
+    </div>
+</div>
+{/if}
 
-        </td>
-    </tr>
-    <tr>
-        <td valign="top">
-            <label for="title">{t}Other Information{/t}:</label>
-        </td>
-        <td>
-            <table style="width:80%; margin:20xp;">
-                <tr>
-                    <td width="100px"><strong>{t}Original Title{/t}</strong></td>
-                    <td>{$information['title']}</td>
-                </tr>
-                <tr>
-                    <td><strong>{t}FLV{/t}</strong></td>
-                    <td>{$information['FLV']}</td>
-                </tr>
-                <tr>
-                    <td><strong>{t}Download Url{/t}</strong></td>
-                    <td>{$information['downloadUrl']}</td>
-                </tr>
-                <tr>
-                    <td><strong>{t}Service{/t}</strong></td>
-                    <td>{$information['service']}</td>
-                </tr>
-                <tr>
-                    <td><strong>{t}Duration{/t}</strong></td>
-                    <td>{$information['duration']}</td>
-                </tr>
-                <tr>
-                    <td><strong>{t}Url Thumbnail{/t}</strong></td>
-                    <td>{$information['thumbnail']}</td>
-                </tr>
-                <tr>
-                    <td><strong>{t}Embed Url{/t}</strong></td>
-                    <td>{$information['embedUrl']}</td>
-                </tr>
-            </table>
-        </td>
-    </tr>
+<div class="control-group">
+    <label for="preview" class="control-label">{t}Preview{/t}</label>
+    <div class="controls">
+        <div class="video_player" style="max-width:500px; overflow:hidden;">{$information['embedHTML']}</div>
 
-</table>
+        <input type="hidden" value="{json_encode($information)|escape:"html"}" name="information" />
+    </div>
+</div>
+<div class="control-group">
+    <label for="other_info" class="control-label">{t}Other information{/t}</label>
+    <div class="controls">
+        <table style="width:80%; margin:20xp;">
+            <tr>
+                <td width="100px"><strong>{t}Original Title{/t}</strong></td>
+                <td>{$information['title']}</td>
+            </tr>
+            <tr>
+                <td><strong>{t}FLV{/t}</strong></td>
+                <td><a href="{$information['FLV']}">{$information['FLV']}</a></td>
+            </tr>
+            <tr>
+                <td><strong>{t}Download Url{/t}</strong></td>
+                <td><a href="{$information['downloadUrl']}">{$information['downloadUrl']}</a></td>
+            </tr>
+            <tr>
+                <td><strong>{t}Service{/t}</strong></td>
+                <td>{$information['service']}</td>
+            </tr>
+            <tr>
+                <td><strong>{t}Duration{/t}</strong></td>
+                <td>{$information['duration']}</td>
+            </tr>
+            <tr>
+                <td><strong>{t}Url Thumbnail{/t}</strong></td>
+                <td><img src="{$information['thumbnail']}" alt="" width="100"> {$information['thumbnail']}</td>
+            </tr>
+            <tr>
+                <td><strong>{t}Embed Url{/t}</strong></td>
+                <td><a href="{$information['embedUrl']}">{$information['embedUrl']}</a></td>
+            </tr>
+        </table>
+    </div>
+</div>

@@ -32,3 +32,4 @@ class WidgetFactory
         $this->tpl->assign('rnd_number', rand(5, 900));
     }
 }
+

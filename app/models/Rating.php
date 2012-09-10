@@ -28,7 +28,7 @@ class Rating
     /**
      * Messages to use in links and image
      */
-    private $_messages = array(
+    private $messages = array(
         '',
         'Sin interés',
         'Poco interesante',
@@ -139,7 +139,8 @@ class Rating
     {
 
         $this->ips_count_rating = $this->add_count(
-            $this->ips_count_rating, $ip
+            $this->ips_count_rating,
+            $ip
         );
 
         if (!$this->ips_count_rating) {
@@ -173,27 +174,27 @@ class Rating
         return (true);
     }
 
-    public function add_count($ips_count, $ip)
+    public function add_count($ipsCount, $ip)
     {
         $ips = array();
-        foreach ($ips_count as $ip_array) {
-            $ips[] = $ip_array['ip'];
+        foreach ($ipsCount as $ipArray) {
+            $ips[] = $ipArray['ip'];
         }
 
         //Se busca si existe algún voto desde la ip
         $countKIP = array_search($ip, $ips);
 
         if ($countKIP === false) {
-            $ips_count[] = array('ip' => $ip, 'count' => 1);
+            $ipsCount[] = array('ip' => $ip, 'count' => 1);
         } else {
 
-            if ($ips_count[$countKIP]['count'] == 50) {
+            if ($ipsCount[$countKIP]['count'] == 50) {
                 return false;
             }
-            $ips_count[$countKIP]['count']++;
+            $ipsCount[$countKIP]['count']++;
         }
 
-        return $ips_count;
+        return $ipsCount;
     }
 
     private function renderLink($i, $page, $pk_rating, $value)
@@ -204,7 +205,7 @@ class Rating
                 <a href=\"#votar\" onclick=\"javascript:"
                     ."rating('{$_SERVER['REMOTE_ADDR']}', "
                     ."{$i}, '{$page}', '{$pk_rating}'); ".
-                    "return false;\" title=\"{$this->_messages[$i]}\">
+                    "return false;\" title=\"{$this->messages[$i]}\">
                     <div class='vote-element {$active} {$pk_rating}_{$i}'
                         onmouseover=\"change_rating({$i}, '{$pk_rating}')\"
                         onmouseout=\"change_rating({$value}, '{$pk_rating}')\">
@@ -258,7 +259,10 @@ class Rating
         $votes_on_links = '';
         for ($i = 1; $i <= $this->num_of_stars; $i++) {
             $votes_on_links.= $this->renderLink(
-                $i, $pageType, $this->pk_rating, $actualVotes
+                $i,
+                $pageType,
+                $this->pk_rating,
+                $actualVotes
             );
         }
 
@@ -300,13 +304,15 @@ class Rating
                 if ($action == "vote") {
                     // Render links
                     $htmlOut.= $this->getVotesOnLinks(
-                        $actualVotes, $pageType
+                        $actualVotes,
+                        $pageType
                     );
                     //if the user can't vote render the static images
                 } elseif ($action === "result") {
                     // Render images
                     $htmlOut.= $this->getVotesOnImages(
-                        $actualVotes, $pageType
+                        $actualVotes,
+                        $pageType
                     );
                 }
                 $htmlOut.= "</ul> ";
@@ -317,8 +323,8 @@ class Rating
                         . $htmlOut
                         . "</span>";
                 }
-                break;
 
+                break;
             default:
                 $htmlOut = _(
                     'This content type has not '.
@@ -330,3 +336,4 @@ class Rating
         return $htmlOut;
     }
 }
+

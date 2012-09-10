@@ -1,0 +1,347 @@
+<?php
+/**
+ * This file is part of the Onm package.
+ *
+ * (c)  OpenHost S.L. <developers@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ **/
+namespace Backend\Controllers;
+
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Onm\Framework\Controller\Controller;
+use Onm\Settings as s;
+use Onm\Message as m;
+
+/**
+ * Handles the system users
+ *
+ * @package Backend_Controllers
+ * @author OpenHost Developers <developers@openhost.es>
+ **/
+class AclUserController extends Controller
+{
+
+    /**
+     * Common code for all the actions
+     *
+     * @return void
+     **/
+    public function init()
+    {
+        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
+    }
+
+    /**
+     * Show a paginated list of users
+     *
+     * @return Response the response object
+     **/
+    public function listAction(Request $request)
+    {
+        $this->checkAclOrForward('USER_ADMIN');
+
+        $filter    = $request->query->get('filter', array());
+
+        if (!$_SESSION['isMaster']) {
+            $filter ['base'] = 'fk_user_group != 4';
+        }
+
+        $user      = new \User();
+        $users     = $user->get_users($filter, ' ORDER BY login ');
+
+        $userGroup = new \UserGroup();
+        $groups     = $userGroup->find();
+
+        $groupsOptions = array();
+        $groupsOptions[] = _('--All--');
+        foreach ($groups as $cat) {
+            $groupsOptions[$cat->id] = $cat->name;
+        }
+
+        return $this->render(
+            'acl/user/list.tpl',
+            array(
+                'users'         => $users,
+                'user_groups'   => $groups,
+                'groupsOptions' => $groupsOptions,
+            )
+        );
+    }
+
+    /**
+     * Shows the user information given its id
+     *
+     * @return Response the response object
+     **/
+    public function showAction(Request $request)
+    {
+        //user can modify his data
+        $idRAW = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
+        if ($idRAW === 'me') {
+            $id = $_SESSION['userid'];
+        } else {
+            $id = $request->query->getDigits('id');
+        }
+
+        // Check if the user is the same as the one that we want edit or
+        // if we have permissions for editting other user information.
+        if ($id != $_SESSION['userid']) {
+            $this->checkAclOrForward('USER_UPDATE');
+        }
+
+        $ccm = new \ContentCategoryManager();
+
+        $user = new \User($id);
+        if (is_null($user->id)) {
+            m::add(sprintf(_("Unable to find the user with the id '%d'"), $id), m::ERROR);
+
+            return $this->redirect($this->generateUrl('admin_acl_user'));
+        }
+
+        $user->meta = array();
+        $user->meta['user_language'] = $user->getMeta('user_language') ?: 'default';
+
+        $userGroup = new \UserGroup();
+        $tree = $ccm->getCategoriesTree();
+        $languages = \Application::getAvailableLanguages();
+        $languages = array_merge(array('default' => _('Default system language')), $languages);
+
+
+        return $this->render(
+            'acl/user/new.tpl',
+            array(
+                'user'                      => $user,
+                'user_groups'               => $userGroup->find(),
+                'languages'                 => $languages,
+                'content_categories'        => $tree,
+                'content_categories_select' => $user->getAccessCategoryIds(),
+            )
+        );
+    }
+
+    /**
+     * Handles the update action for a user given its id
+     *
+     * After finish the task redirects the user to the proper place
+     *
+     * @return Response the response object
+     **/
+    public function updateAction(Request $request)
+    {
+        $userId = $request->query->getDigits('id');
+        $action = $request->request->filter('action', 'update', FILTER_SANITIZE_STRING);
+
+        if ($userId != $_SESSION['userid']) {
+            $this->checkAclOrForward('USER_UPDATE');
+        }
+
+        $data = array(
+            'id'              => $userId,
+            'login'           => $request->request->filter('login', null, FILTER_SANITIZE_STRING),
+            'email'           => $request->request->filter('email', null, FILTER_SANITIZE_STRING),
+            'password'        => $request->request->filter('password', null, FILTER_SANITIZE_STRING),
+            'passwordconfirm' => $request->request->filter('passwordconfirm', null, FILTER_SANITIZE_STRING),
+            'name'            => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
+            'firstname'       => $request->request->filter('firstname', null, FILTER_SANITIZE_STRING),
+            'lastname'        => $request->request->filter('lastname', null, FILTER_SANITIZE_STRING),
+            'sessionexpire'   => $request->request->getDigits('sessionexpire'),
+            'id_user_group'   => $request->request->getDigits('id_user_group'),
+            'ids_category'    => $request->request->get('ids_category'),
+            'address'         => '',
+            'phone'         => '',
+        );
+
+        // TODO: validar datos
+        $user = new \User($userId);
+        $user->update($data);
+
+        $userLanguage = $request->request->filter('user_language', 'default', FILTER_SANITIZE_STRING);
+        $user->setMeta(array('user_language' => $userLanguage));
+
+        if ($user->id == $_SESSION['userid']) {
+            $_SESSION['user_language'] = $userLanguage;
+        }
+
+        m::add(_('User data updated successfully.'), m::SUCCESS);
+        if ($action == 'validate') {
+            $redirectUrl = $this->generateUrl('admin_acl_user_show', array('id' => $userId));
+        } else {
+            // If a regular user is upating him/her information
+            // redirect to welcome page
+            if (($userId == $_SESSION['userid'])
+                && !\Acl::check('USER_UPDATE')
+            ) {
+                $redirectUrl = $this->generateUrl('admin_welcome');
+            } else {
+                $redirectUrl = $this->generateUrl('admin_acl_user');
+            }
+        }
+
+        return $this->redirect($redirectUrl);
+    }
+
+    /**
+     * Creates an user give some information
+     *
+     * @return string the response string
+     **/
+    public function createAction(Request $request)
+    {
+        $this->checkAclOrForward('USER_CREATE');
+
+        $action = $request->request->filter('action', null, FILTER_SANITIZE_STRING);
+
+        $user = new \User();
+
+        if ($request->getMethod() == 'POST') {
+            $data = array(
+                'login'           => $request->request->filter('login', null, FILTER_SANITIZE_STRING),
+                'email'           => $request->request->filter('email', null, FILTER_SANITIZE_STRING),
+                'password'        => $request->request->filter('password', null, FILTER_SANITIZE_STRING),
+                'passwordconfirm' => $request->request->filter('passwordconfirm', null, FILTER_SANITIZE_STRING),
+                'name'            => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
+                'firstname'       => $request->request->filter('firstname', null, FILTER_SANITIZE_STRING),
+                'lastname'        => $request->request->filter('lastname', null, FILTER_SANITIZE_STRING),
+                'sessionexpire'   => $request->request->getDigits('sessionexpire'),
+                'id_user_group'   => $request->request->getDigits('id_user_group'),
+                'ids_category'    => $request->request->get('ids_category'),
+                'address'         => '',
+                'phone'         => '',
+            );
+
+            try {
+                if ($user->create($data)) {
+
+                    $userLanguage = $request->request->filter('user_language', 'default', FILTER_SANITIZE_STRING);
+                    $user->setMeta(array('user_language' => $userLanguage));
+
+                    if ($action == 'validate') {
+                        return $this->redirect(
+                            $this->generateUrl(
+                                'admin_acl_user_show',
+                                array('id' => $user->id)
+                            )
+                        );
+                    }
+
+                    return $this->redirect($this->generateUrl('admin_acl_user'));
+                } else {
+                    m::add(_('Unable to create the user with that information'), m::ERROR);
+                }
+            } catch (\Exception $e) {
+                m::add($e->getMessage(), m::ERROR);
+            }
+        }
+
+        $ccm = \ContentCategoryManager::get_instance();
+        $userGroup = new \UserGroup();
+        $tree = $ccm->getCategoriesTree();
+
+        $languages = \Application::getAvailableLanguages();
+        $languages = array_merge(array('default' => _('Default system language')), $languages);
+
+        return $this->render(
+            'acl/user/new.tpl',
+            array(
+                'user'                      => $user,
+                'user_groups'               => $userGroup->find(),
+                'content_categories'        => $tree,
+                'languages'                 => $languages,
+                'content_categories_select' => $user->getAccessCategoryIds(),
+            )
+        );
+    }
+
+    /**
+     * Deletes a user given its id
+     *
+     * @return string the response string
+     **/
+    public function deleteAction(Request $request)
+    {
+        $this->checkAclOrForward('USER_DELETE');
+
+        $userId = $request->query->getDigits('id');
+
+        if (!is_null($userId)) {
+            $user = new \User();
+            $user->delete($userId);
+            if (!$request->isXmlHttpRequest()) {
+                return $this->redirect($this->generateUrl('admin_acl_user'));
+            }
+        }
+    }
+
+    /**
+     * Deletes multiple users at once given their ids
+     *
+     * @return string the string resposne
+     **/
+    public function batchDeleteAction(Request $request)
+    {
+        $this->checkAclOrForward('USER_DELETE');
+
+        $selected = $request->query->get('selected');
+
+        if (count($selected) > 0) {
+            $user = new \User();
+            foreach ($selected as $userId) {
+                $user->delete((int) $userId);
+            }
+            m::add(sprintf(_('You have deleted %d users.'), count($selected)), m::SUCCESS);
+        } else {
+            m::add(_('You haven\'t selected any user to delete.'), m::ERROR);
+        }
+
+        return $this->redirect($this->generateUrl('admin_acl_user'));
+    }
+
+    /**
+     * Returns a connected users panel
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function connectedUsersAction(Request $request)
+    {
+        $sessions = $GLOBALS['Session']->getSessions();
+
+        return $this->render(
+            'acl/panel/show_panel.ajax.html',
+            array('users' => $sessions)
+        );
+    }
+
+    /**
+     * Sets a user configuration given the meta key and the meta value
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function setMetaAction(Request $request)
+    {
+        $user = new \User();
+
+        $settings = array(
+            'default_language' => 'gl_ES',
+            'test2' => 1
+        );
+
+        $setted = $user->setMeta($_SESSION['userid'], $settings);
+        if ($setted) {
+            $message = 'Done';
+            $httpCode = 200;
+        } else {
+            $message = 'Failed';
+            $httpCode = 500;
+        }
+
+        return new Response($message, $httpCode);
+    }
+}
+

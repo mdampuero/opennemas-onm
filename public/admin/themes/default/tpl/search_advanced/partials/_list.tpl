@@ -1,49 +1,42 @@
-<table class="listing-table">
+<table class="table table-hover table-condensed">
     <thead>
-        <th class="center" style="width:30px;">{t}Type{/t}</th>
-        <th class="title" style="width:40%;">{t}Title{/t}</th>
-        <th class="center" style="width:50px;">{t}Category{/t}</th>
-        <th class="center" style="width:80px;">{t}Creation date{/t}</th>
+        <th class="title">{t}Title{/t}</th>
         <th class="center" style="width:10px;"></th>
-        <th class="center" style="width:30px;">{t}Actions{/t}</th>
+        <th class="right" style="width:10px;">{t}Actions{/t}</th>
     </thead>
     <tbody>
-        {section name=c loop=$arrayResults}
+        {foreach name=c from=$contents item=content}
         <tr>
-            <td  class="center">
-                {$arrayResults[c].type|htmlentities}
-            </td>
-            <td style="padding:10px;"><font size="2">{$arrayResults[c].titule|clearslash}</font><br>
-                {if $arrayResults[c].content_type neq 'comment'}
-                    <strong>{t}Metatags:{/t}</strong>  {$arrayResults[c].metadata|clearslash}</font>
-                {/if}
-            </td>
-            <td class="center">
-                {$arrayResults[c].catName}
-            </td>
-            <td class="center">
-                {$arrayResults[c].created}
+            <td style="padding:10px;">
+                <strong>[{$content.content_type|ucfirst|htmlentities}] {$content.titule|clearslash}</strong>
+                <br>
+                {if $content.content_type neq 'comment'}
+                <img src="{$params.IMAGE_DIR}/tag_red.png" alt="">  {$content.metadata|clearslash}
+                {/if}<br>
+                <strong>{t}Category{/t}:</strong> {$content.catName}
+                <br>
+                <strong>{t}Created{/t}:</strong> {$content.created}
             </td>
             <td class="center">
-                {if ($arrayResults[c].in_litter == 1)}
+                {if ($content.in_litter == 1)}
                     <img src="{$params.IMAGE_DIR}trash.png" height="16px" alt="En Papelera" title="En Papelera"/>
                 {else}
-                    {if ($arrayResults[c].type == 'artigo')}
-                        {if ($arrayResults[c].available eq 1) && ($arrayResults[c].content_status eq 1)}
+                    {if ($content.type == '')}
+                        {if ($content.available eq 1) && ($content.content_status eq 1)}
                             <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicada" title="Publicada"/>
-                        {elseif ($arrayResults[c].available eq 1) && ($arrayResults[c].content_status eq 0)}
+                        {elseif ($content.available eq 1) && ($content.content_status eq 0)}
                             <img src="{$params.IMAGE_DIR}save_hemeroteca_icon.png" border="0" alt="{t}In library{/t}" title="{t}In library{/t}" />
                         {else}
                             <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="{t}In pending{/t}" title="En Pendientes" />
                         {/if}
-                        {elseif $arrayResults[c].content_type eq 'photo'}
-                            {if ($arrayResults[c].content_status eq 1)}
+                        {elseif $content.content_type eq 'photo'}
+                            {if ($content.content_status eq 1)}
                                 <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="{t}Published{/t}" title="{t}Published{/t}" />
                             {else}
                                 <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="{t}In pending{/t}" title="{t}In pending{/t}" />
                             {/if}
                         {else}
-                            {if ($arrayResults[c].available eq 1)}
+                            {if ($content.available eq 1)}
                                 <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="{t}Published{/t}" title="{t}Published{/t}" />
                             {else}
                                 <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="{t}In pending{/t}" title="{t}In pending{/t}" />
@@ -51,52 +44,29 @@
                         {/if}
                  {/if}
             </td>
-            <td class="center">
-                <ul class="action-buttons">
-                    <li>
-                        {assign var="ct" value=$arrayResults[c].content_type}
-                        {if $arrayResults[c].content_type eq 'photo'}
-                                <a href="/admin/{$type2res.$ct}?action=image_data&amp;id={$arrayResults[c].id}&amp;category={$arrayResults[c].category}&amp;desde=search&amp;stringSearch={$smarty.request.stringSearch}&amp;page={$smarty.request.page|default:0}" title="Editar">
-                            <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
-                        {elseif $arrayResults[c].content_type eq 'widget'}
-                            <a href="/admin/{$type2res.$ct}?action=edit&amp;id={$arrayResults[c].id}&amp;stringSearch={$smarty.request.stringSearch}&amp;desde=search&amp;page={$smarty.request.page|default:0}" title="Editar">
-                            <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
-                        {else}
-                            <a href="/admin/{$type2res.$ct}?action=read&amp;id={$arrayResults[c].id}&amp;stringSearch={$smarty.request.stringSearch}&amp;desde=search&amp;page={$smarty.request.page|default:0}" title="Editar">
-                            <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
-                        {/if}
-                    </li>
-                    <li>
-                        {if ($arrayResults[c].in_litter == 1)}
-                            <a href="/admin/controllers/trash.php?action=no_in_litter&amp;desde=search&amp;id={$arrayResults[c].id}&amp;category={$arrayResults[c].category}" title="{t}Restore from trash{/t}">
-                               <img src="{$params.IMAGE_DIR}trash_no.png" border="0" width="24" alt="{t}Restore from trash{/t}" title="{t}Restore from trash{/t}" />
-                            </a>
-                       {else}
-                           {if ($arrayResults[c].type == 'Articulo')}
-                           {if ($arrayResults[c].available == 1) && ($arrayResults[c].content_status == 0)}
-                               <a href="/admin/{$type2res.$ct}?&amp;action=change_status&amp;status=1&amp;desde=search&amp;id={$arrayResults[c].id}&category={$arrayResults[c].category}" title="{t}Restore from library{/t}">
-                                     <img src="{$params.IMAGE_DIR}archive_no2.png" border="0" alt="Recuperar Hemeroteca" title="Recuperar de Hemeroteca"/>
-                                 </a>
-                           {/if}
-                           {/if}
-                      {/if}
-                    </li>
-                </ul>
+            <td class="right">
+                <div class="btn-group right">
+                    <a class="btn" href="{url name="admin_"|cat:$content['content_type']|cat:"_show" id=$content.id}" title="Editar">
+                        <i class="icon-pencil"></i>
+                    </a>
+                </div>
             </td>
         </tr>
 
-        {sectionelse}
+        {foreachelse}
         <tr>
-            <td class="empty" colspan=4>
+            <td class="empty" colspan=3>
                 {t}There isn't any existent elements that matches your search criteria{/t}
             </td>
         </tr>
-        {/section}
+        {/foreach}
     </tbody>
 
     <tfoot>
-        <td colspan="8" class="pagination">
-            {$pagination}
+        <td colspan="3" class="center">
+            <div class="pagination">
+                {$pagination->links}
+            </div>
         </td>
     </tfoot>
 </table>

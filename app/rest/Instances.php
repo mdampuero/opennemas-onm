@@ -7,7 +7,7 @@ class Instances
     /*
     * @url GET /instances/name/
     */
-    function name ()
+    public function name()
     {
         return INSTANCE_UNIQUE_NAME;
     }
@@ -15,7 +15,7 @@ class Instances
     /*
     * @url GET /instances/mediaurl/
     */
-    function mediaUrl ()
+    public function mediaUrl()
     {
         return MEDIA_IMG_PATH_WEB;
     }
@@ -23,7 +23,7 @@ class Instances
     /*
     * @url GET /instances/sitepath/
     */
-    function siteUrl ()
+    public function siteUrl()
     {
         return SITE_URL;
     }
@@ -31,7 +31,7 @@ class Instances
     /*
     * @url GET /instances/mediaimgpath/
     */
-    function mediaImgPath ()
+    public function mediaImgPath()
     {
         return MEDIA_IMG_PATH;
     }

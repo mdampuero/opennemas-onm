@@ -8,12 +8,12 @@
  * file that was distributed with this source code.
  */
 namespace Onm;
+
 /**
  * Loads an xml file and tries to generate the frontpage manager.
  *
  * @package    Onm
  * @subpackage LayoutManager
- * @author     me
  **/
 class LayoutManager
 {
@@ -39,15 +39,12 @@ class LayoutManager
             case 'wrapper':
                 $output []= $this->renderWrapper($element, $value, $last);
                 break;
-
             case 'placeholder':
                 $output []= $this->renderPlaceholder($element, $value, $last);
                 break;
-
             case 'static':
                 $output []= $this->renderStatic($element, $value, $last);
                 break;
-
             default:
                 # code...
                 break;
@@ -152,7 +149,7 @@ class LayoutManager
                     // TODO: Add logic here for delayed, in time or postponed elements
                     // that will be passed to the view
                     if (!empty($contentTypeName)) {
-                        $output .= $this->_renderContent($content);
+                        $output .= $this->renderContent($content);
                     }
                 }
             }
@@ -166,7 +163,7 @@ class LayoutManager
      *
      * @return string the html for the content
      **/
-    private function _renderContent($content)
+    private function renderContent($content)
     {
         $this->tpl->assign('content', $content);
         $this->tpl->assign('params', $this->params);
@@ -209,3 +206,4 @@ class LayoutManager
         return implode("\n", $output);
     }
 }
+

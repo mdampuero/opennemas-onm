@@ -1,5 +1,22 @@
 {extends file="base/admin.tpl"}
 
+{block name="footer-js" append}
+<script>
+jQuery(function($){
+    $('#batch-delete').click(function(e) {
+        //Sets up the modal
+        jQuery("#modal-delete-contents").modal('show');
+        e.preventDefault();
+    });
+    $('#batch-restore').click(function(e) {
+        //Sets up the modal
+        jQuery("#modal-restore-contents").modal('show');
+        e.preventDefault();
+    });
+});
+</script>
+{/block}
+
 {block name="admin_menu"}
 <div class="top-action-bar clearfix">
 	<div class="wrapper-content">
@@ -7,20 +24,14 @@
         <ul class="old-button">
             {acl isAllowed="TRASH_ADMIN"}
 			<li>
-				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mremove', 6);"  onmouseover="return escape('<u>E</u>liminar todos');">
-					<img border="0" src="{$params.IMAGE_DIR}trash.png" alt="Eliminar todos"><br />{t}Delete all{/t}
-				</a>
+                <button type="submit" id="batch-delete" title="{t}Deletes the selected elements{/t}">
+                    <img border="0" src="{$params.IMAGE_DIR}trash.png" title="Eliminar" alt="Eliminar"><br />{t}Delete{/t}
+                </button>
 			</li>
 			<li>
-				<a href="#" class="admin_add" onClick="javascript:enviar3(this, '_self', 'mremove', 0);" title="Eliminar">
-					<img border="0" src="{$params.IMAGE_DIR}trash.png" title="Eliminar" alt="Eliminar"><br />{t}Delete{/t}
-				</a>
-			</li>
-            <li class="separator"></li>
-			<li>
-				<a href="#" class="admin_add" onClick="javascript:enviar3(this, '_self', 'm_no_in_litter', 0);" title="Recuperar">
+				<button type="submit" id="batch-restore" title="{t}Restore{/t}">
 				    <img border="0" src="{$params.IMAGE_DIR}trash_no.png" title="Recuperar" alt="Recuperar"><br />{t}Restore{/t}
-				</a>
+				</button>
 			</li>
             {/acl}
 		</ul>
@@ -29,105 +40,47 @@
 {/block}
 
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""} >
+<form action="{url name=admin_trash}" method="post" id="trashform">
 {block name="admin_menu"}{/block}
 	<div class="wrapper-content">
-		<ul class="pills clearfix">
-			{*{section name=as loop=$types_content}
-				<li>
-					{assign var=ca value=`$types_content[as]`}
-					<a href="litter.php?action=list&amp;mytype={$ca}" {if $mytype==$ca}class="active"{/if}>{$types_content[as]}</a>
-				</li>
-			{/section} *}
-            {is_module_activated name="ARTICLE_MANAGER"}
-            {acl isAllowed="ARTICLE_TRASH"}
-                <li><a href="{$smarty.server.PHP_SELF}?action=list&amp;mytype=article" {if $mytype=='article'}class="active"{/if}>{t}Articles{/t}</a></li>
-            {/acl}{/is_module_activated}
+        {render_messages}
 
-            {is_module_activated name="OPINION_MANAGER"}
-            {acl isAllowed="OPINION_TRASH"}
-                <li><a href="{$smarty.server.PHP_SELF}?action=list&amp;mytype=opinion" {if $mytype=='opinion'}class="active"{/if}>{t}Opinions{/t}</a></li>
-            {/acl}{/is_module_activated}
+        {include file="trash/partials/_pills.tpl"}
 
-            {is_module_activated name="ADS_MANAGER"}
-            {acl isAllowed="ADVERTISEMENT_TRASH"}
-                <li><a href="{$smarty.server.PHP_SELF}?action=list&amp;mytype=advertisement" {if $mytype=='advertisement'}class="active"{/if}>{t}Ads{/t}</a></li>
-			{/acl}{/is_module_activated}
-
-            {is_module_activated name="COMMENT_MANAGER"}
-            {acl isAllowed="COMMENT_TRASH"}
-                <li><a href="{$smarty.server.PHP_SELF}?action=list&amp;mytype=comment" {if $mytype=='comment'}class="active"{/if}>{t}Coments{/t}</a></li>
-			{/acl}{/is_module_activated}
-
-            {is_module_activated name="ALBUM_MANAGER"}
-            {acl isAllowed="ALBUM_TRASH"}
-                <li><a href="{$smarty.server.PHP_SELF}?action=list&amp;mytype=album" {if $mytype=='album'}class="active"{/if}>{t}Albums{/t}</a></li>
-            {/acl}{/is_module_activated}
-
-            {is_module_activated name="IMAGE_MANAGER"}
-            {acl isAllowed="IMAGE_TRASH"}
-                <li><a href="{$smarty.server.PHP_SELF}?action=list&amp;mytype=photo" {if $mytype=='photo'}class="active"{/if}>{t}Photographies{/t}</a></li>
-			{/acl}{/is_module_activated}
-
-            {is_module_activated name="VIDEO_MANAGER"}
-            {acl isAllowed="VIDEO_TRASH"}
-                <li><a href="{$smarty.server.PHP_SELF}?action=list&amp;mytype=video" {if $mytype=='video'}class="active"{/if}>{t}Videos{/t}</a></li>
-			{/acl}{/is_module_activated}
-
-            {is_module_activated name="FILE_MANAGER"}
-            {acl isAllowed="FILE_DELETE"}
-                <li><a href="{$smarty.server.PHP_SELF}?action=list&amp;mytype=attachment" {if $mytype=='attachment'}class="active"{/if}>{t}Files{/t}</a></li>
-            {/acl}{/is_module_activated}
-
-            {is_module_activated name="POLL_MANAGER"}
-            {acl isAllowed="POLL_DELETE"}
-                <li><a href="{$smarty.server.PHP_SELF}?action=list&amp;mytype=poll" {if $mytype=='poll'}class="active"{/if}>{t}Polls{/t}</a></li>
-            {/acl}{/is_module_activated}
-
-            {is_module_activated name="STATIC_PAGES_MANAGER"}
-            {acl isAllowed="STATIC_DELETE"}
-                <li><a href="{$smarty.server.PHP_SELF}?action=list&amp;mytype=static_page" {if $mytype=='static_page'}class="active"{/if}>{t}Static Pages{/t}</a></li>
-            {/acl}{/is_module_activated}
-            {is_module_activated name="WIDGET_MANAGER"}
-            {acl isAllowed="WIDGET_DELETE"}
-                <li><a href="{$smarty.server.PHP_SELF}?action=list&amp;mytype=widget" {if $mytype=='widget'}class="active"{/if}>{t}Widgets{/t}</a></li>
-            {/acl}{/is_module_activated}
-		</ul>
-
-        <table class="listing-table">
+        <table class="table table-hover table-condensed">
 
             <thead>
                <tr>
                     <th style="width:15px;">
-                        <input type="checkbox" id="toggleallcheckbox">
+                        <input type="checkbox" class="toggleallcheckbox">
                     </th>
                     <th class='left'>{t}Title{/t}</th>
                     <th style="width:40px">{t}Section{/t}</th>
-                    <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
-                    <th class="center" style="width:110px;">{t}Date{/t}</th>
-                    <th class="center" style="width:200px;">{t}Actions{/t}</th>
+                    <th class="left" style="width:110px;">{t}Date{/t}</th>
+                    <th class="center" style="width:20px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
+                    <th class="nowrap center" style="width:40px;">{t}Actions{/t}</th>
                </tr>
             </thead>
 
             <tbody>
-                {section name=c loop=$litterelems}
+                {section name=c loop=$contents}
                 <tr>
                     <td >
-                        <input type="checkbox" class="minput"  id="selected{$smarty.section.c.iteration}" name="selected_fld[]" value="{$litterelems[c]->id}"  style="cursor:pointer;" >
+                        <input type="checkbox" name="selected[]" value="{$contents[c]->id}">
                     </td>
-                    <td onClick="javascript:document.getElementById('selected{$smarty.section.c.iteration}').click();">
-                        {$litterelems[c]->title|clearslash}
-                    </td>
-                    <td class="center">{$litterelems[c]->category_title}</td>
-                    <td class="center">{$litterelems[c]->views}</td>
-                    <td class="center">{$litterelems[c]->created}</td>
-                    <td class="right form-inline">
-                        <a class="btn btn-mini" href="{$smarty.server.PHP_SELF}?id={$litterelems[c]->id}&amp;action=no_in_litter&amp;mytype={$mytype}&amp;page={$paginacion->_currentPage}" title="Recuperar">
-                            {t}Restore{/t}
-                        </a>
-                        <a class="btn btn-danger btn-mini" href="{$smarty.server.PHP_SELF}?id={$litterelems[c]->id}&amp;action=remove&amp;mytype={$mytype}&amp;page={$paginacion->_currentPage}" title="{t}Delete{/t}">
-                            {t}Delete{/t}
-                        </a>
+                    <td>{$contents[c]->title|clearslash}</td>
+                    <td class="left">{$contents[c]->category_title}</td>
+                    <td class="center">{$contents[c]->created}</td>
+                    <td class="center">{$contents[c]->views}</td>
+                    <td class="nowrap right">
+                        <div class="btn-group">
+                            <a class="btn" href="{url name=admin_trash_restore id=$contents[c]->id mytype=$mytype page=$paginacion->_currentPage}" title="Recuperar">
+                                <i class="icon-retweet"></i> {t}Restore{/t}
+                            </a>
+                            <a class="btn btn-danger" href="{url name=admin_trash_delete id=$contents[c]->id mytype=$mytype page=$paginacion->_currentPage}" title="{t}Delete this content{/t}">
+                                <i class="icon-trash icon-white"></i>
+                            </a>
+                        </div>
                     </td>
                 </tr>
                 {sectionelse}
@@ -140,9 +93,11 @@
             </tbody>
 
             <tfoot>
-                <tr class="pagination">
-                    <td colspan="6">
-                        {$paginacion->links}&nbsp;
+                <tr>
+                    <td colspan="6" class="center">
+                        <div class="pagination">
+                            {$pagination->links}
+                        </div>
                     </td>
                 </tr>
             </tfoot>
@@ -150,8 +105,7 @@
         </table>
 
     </div>
-
-    <input type="hidden" id="action" name="action" value="" />
-    <input type="hidden" name="id" id="id" value="{$id|default:""}" />
 </form>
+{include file="trash/modals/_modalDelete.tpl"}
+{include file="trash/modals/_modalRestore.tpl"}
 {/block}

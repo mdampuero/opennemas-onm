@@ -70,3 +70,4 @@ class ArrayCache extends AbstractCache
         return true;
     }
 }
+

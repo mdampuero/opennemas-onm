@@ -7,7 +7,7 @@ class Videos
     /*
     * @url GET /videos/id/:id
     */
-    function id ($id)
+    public function id($id)
     {
         $this->_validateInt(func_get_args());
 
@@ -19,7 +19,7 @@ class Videos
     /*
     * @url GET /videos/category/:id
     */
-    function category ($id)
+    public function category($id)
     {
         $this->_validateInt(func_get_args());
 
@@ -37,7 +37,7 @@ class Videos
         return $video;
     }
 
-    private function _validateInt ($number)
+    private function _validateInt($number)
     {
         foreach ($number as $value) {
             if (!is_numeric($value)) {

@@ -29,7 +29,7 @@ $cache_id = $tpl->generateCacheId($category_name, $subcategory_name, $date);
 
 $tpl->assign('newslibraryDate', $date);
 // Fetch information for Advertisements
-require_once "index_advertisement.php";
+require_once 'index_advertisement.php';
 
 $ccm = ContentCategoryManager::get_instance();
 
@@ -58,12 +58,14 @@ if (($tpl->caching == 0)
 
                     $placeholder = ($actual_category_id == 0)
                         ? 'home_placeholder': 'placeholder';
-                    $content->load(array(
-                        $placeholder => $element['placeholder'],
-                        'position'   => $element['position'],
-                        'type'       => $element['content_type'],
-                        'params'     => unserialize($element['params']),
-                    ));
+                    $content->load(
+                        array(
+                            $placeholder => $element['placeholder'],
+                            'position'   => $element['position'],
+                            'type'       => $element['content_type'],
+                            'params'     => unserialize($element['params']),
+                        )
+                    );
 
                     if (!empty($content->fk_video)) {
                         $content->video = new Video($content->fk_video);
@@ -127,3 +129,4 @@ if (($tpl->caching == 0)
         $tpl->display('frontpage/fp_list_contents.tpl');
     }
 }
+

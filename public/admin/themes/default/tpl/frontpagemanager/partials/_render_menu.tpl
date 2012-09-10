@@ -1,22 +1,23 @@
-{assign var=url value="/admin/controllers/frontpagemanager/frontpagemanager.php?action=list&amp;category="}
-
 <ul id="categories" class="pills">
-{section  name=m loop=$menuItems}
-    {if $menuItems[m]->categoryID neq 4 && $menuItems[m]->type neq 'syncCategory'}
-    {acl hasCategoryAccess=$menuItems[m]->categoryID}
-    <li class="cat {if count($menuItems[m]->submenu) > 0}with-subcategories {/if} {if $category eq $menuItems[m]->categoryID} active {/if}">
-        <a href="{$url|cat:$menuItems[m]->categoryID}" title="Sección: {$menuItems[m]->title}"
-            class="{if $category eq $menuItems[m]->categoryID || ($datos_cat[0]->fk_content_category neq '0' && $menuItems[m]->categoryID eq $datos_cat[0]->fk_content_category)} active{/if}">
-            {$menuItems[m]->title}
+    <li>
+        <a href="{url name=admin_frontpage_list category=0}" class="{if $category == 'home' || $category == 0}active{/if}">{t}Home{/t}</a>
+    </li>
+{foreach from=$menuItems item=menuItem}
+    {if $menuItem->type == 'category'}
+    {acl hasCategoryAccess=$menuItem->categoryID}
+    <li class="cat {if count($menuItem->submenu) > 0}with-subcategories {/if} {if $category eq $menuItem->categoryID} active {/if}">
+        <a href="{url name=admin_frontpage_list category=$menuItem->categoryID}" title="Sección: {$menuItem->title}"
+            class="{if $category eq $menuItem->categoryID || ($datos_cat[0]->fk_content_category neq '0' && $menuItem->categoryID eq $datos_cat[0]->fk_content_category)} active{/if}">
+            {$menuItem->title}
         </a>
 
-        {if count($menuItems[m]->submenu) > 0}
-            {assign value=$menuItems[m]->submenu var=submenu}
+        {if count($menuItem->submenu) > 0}
+            {assign value=$menuItem->submenu var=submenu}
             <ul class="nav">
                 {section  name=s loop=$submenu}
                     {acl hasCategoryAccess=$submenu[s]->categoryID}
                         <li class="subcat {if $category eq $submenu[s]->categoryID}active{/if}">
-                            <a href="{$url|cat:$submenu[s]->categoryID}" title="{$submenu[s]->title|mb_lower}" class="cat {$menuItems[m]->link}{if $category eq $menuItems[m]->categoryID} active{/if}">
+                            <a href="{url name=admin_frontpage_list category=$submenu[s]->categoryID}" title="{$submenu[s]->title|mb_lower}" class="cat {$menuItem->link}{if $category eq $menuItem->categoryID} active{/if}">
                                 {$submenu[s]->title}
                             </a>
                         </li>
@@ -27,5 +28,5 @@
     </li>
     {/acl}
     {/if}
-{/section}
+{/foreach}
 </ul>

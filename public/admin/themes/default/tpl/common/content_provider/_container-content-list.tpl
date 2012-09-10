@@ -1,6 +1,6 @@
 {if isset($contentTypeCategories) && !empty($contentTypeCategories)}
-<select id="contentTypeCategories" data-href="{$smarty.server.SCRIPT_NAME}?action={$action|default:'content-list-provider'}">
-
+<select id="contentTypeCategories" data-href="{$contentProviderUrl}">
+        <option value="0">{t}-- All categories --{/t}</option>
         {section name=as loop=$contentTypeCategories}
             <option value="{$contentTypeCategories[as]->pk_content_category}"
                 {if $category eq $contentTypeCategories[as]->pk_content_category}selected{/if}>
@@ -14,17 +14,26 @@
 {/if}
 
 <div class="contents">
+    {if !empty($pagination)}
+        <div class="pagination"> {$pagination} </div>
+    {/if}
+
+    {if count($contents) > 0}
     <ul id='contentList'>
-        {section name=n loop=$contents}
-            <li data-id="{$contents[n]->id}" data-type="{$contentType}" data-title="{$contents[n]->title|clearslash}">
+        {foreach from=$contents item=content}
+            <li data-id="{$content->id}" data-type="{$contentType}" data-title="{$content->title|clearslash}">
                 <input type="checkbox" class="hidden-element" name="selected">
-                <span class="type">{t}{$contents[n]->content_type_name|ucwords}{/t} -</span>
-                <span class="date">{t}{$contents[n]->starttime|date_format:"%d-%m-%Y"}{/t} -</span>
-                {$contents[n]->title}
+                <span class="type">{t}{$content->content_type_l10n_name}{/t} -</span>
+                <span class="date">{t}{$content->starttime|date_format:"%d-%m-%Y"}{/t} -</span>
+                {$content->title}
                 <span class="icon"><i class="icon-trash"></i></span>
             </li>
-        {/section}
+        {/foreach}
     </ul>
-{if !empty($pagination)}
-    <div class="pagination"> {$pagination} </div>
-{/if}
+    {elseif $hidenoavailable != true}
+        {t}No available contents{/t}
+    {/if}
+    {if !empty($pagination)}
+        <div class="pagination"> {$pagination} </div>
+    {/if}
+</div>

@@ -7,6 +7,7 @@
  * file that was distributed with this source code.
  */
 namespace Onm;
+
 /**
  * Wrapper class to get/set settings in db with support of APC caching.
  *
@@ -41,7 +42,7 @@ class Settings
      * @return array  if was provided an array of names this function returns an array of name/values
      * @return false  if the key doesn't exists or is not setted
      */
-    public static function get( $settingName )
+    public static function get($settingName, $default = null)
     {
         // the setting name must be setted
         if (!isset($settingName) || empty($settingName)) {
@@ -61,18 +62,18 @@ class Settings
                 $sql = "SELECT value FROM `settings` WHERE name = \"{$settingName}\"";
                 $rs = $GLOBALS['application']->conn->GetOne($sql);
 
-
-                if (!$rs) {
-                    $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-                    if (!empty($errorMsg)) {
-                        $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-                        $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
-                    }
+                if ($rs === false) {
+                    \Application::logDatabaseError();
 
                     return false;
                 }
 
-                $settingValue = unserialize($rs);
+
+                if ($rs === null && !is_null($default)) {
+                    $settingValue = $default;
+                } else {
+                    $settingValue = unserialize($rs);
+                }
 
                 if (extension_loaded('apc')) {
                     apc_store(APC_PREFIX . ".".$settingName, $settingValue);
@@ -114,9 +115,7 @@ class Settings
                 $rs          = $GLOBALS['application']->conn->Execute($sql);
 
                 if (!$rs) {
-                    $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-                    $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-                    $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+                    \Application::logDatabaseError();
 
                     return false;
                 }
@@ -169,9 +168,7 @@ class Settings
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            \Application::logDatabaseError();
 
             return false;
         }
@@ -213,5 +210,5 @@ class Settings
 
         return true;
     }
-
 }
+

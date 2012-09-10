@@ -30,7 +30,7 @@
 /**
  * Start up and setup the app
 */
-require_once('../bootstrap.php');
+require_once '../bootstrap.php';
 
 // Check param
 if (!isset($_REQUEST['sid']) || !preg_match('/[0-9]{19}/', $_REQUEST['sid'])) {
@@ -48,3 +48,4 @@ header('Content-type: application/json');
 echo json_encode($response); */
 
 echo $code . ' ' . preg_replace('@([^:])[/]{2,}@', '\1/', SITE_URL . $url);
+

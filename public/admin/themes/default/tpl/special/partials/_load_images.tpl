@@ -38,18 +38,17 @@
         </td>
           <td style="width:430px">
             <div style="border:1px double #ccc; border-bottom:0 none; background-color:#EEE; padding:10px;">
-                <a onclick="new Effect.toggle($('photos_container'),'blind')" ><strong>{t}Available images{/t}</strong></a>
+                <a><strong>{t}Available images{/t}</strong></a>
             </div>
             <div id="photos_container" class="photos" style="border:1px solid #ccc;  padding:7px;min-height: 450px;">
                 <table>
                     <tr>
                         <td >
                             <input id="stringImageSearch" name="stringImageSearch" type="text"
-                               onkeypress="onImageKeyEnter(event, $('category_imag').options[$('category_imag').selectedIndex].value,encodeURIComponent($('stringImageSearch').value),1);"
-                               onclick="this.select();" placeholder="{t}Search images by title...{/t}" />
+                               placeholder="{t}Search images by title...{/t}" />
                         </td>
                         <td>
-                            <select style="width:140px" id="category_imag" name="category_imag" class="required" onChange="getGalleryImages('listByCategory',this.options[this.selectedIndex].value,'', 1);">
+                            <select style="width:140px" id="category_imag" name="category_imag">
                                 <option value="0">GLOBAL</option>
                                     {section name=as loop=$allcategorys}
                                         <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if}>{$allcategorys[as]->title}</option>
@@ -85,10 +84,7 @@ jQuery(document).ready(function($){
             parent.fadeTo('slow', 1);
         };
     });
-
-
 });
-//getGalleryImages('listByCategory','{$category}','','1');
 </script>
 
 

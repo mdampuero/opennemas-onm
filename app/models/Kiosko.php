@@ -6,7 +6,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Onm\Message as m;
 
 /**
  * Handles all the CRUD actions over kioko.
@@ -39,6 +38,7 @@ class Kiosko extends Content
 
         $this->kiosko_path = INSTANCE_MEDIA_PATH.'kiosko'.DS;
         $this->content_type = 'Kiosko';
+        $this->content_type_l10n_name = _('Cover');
     }
 
     public function initialize($data)
@@ -58,8 +58,9 @@ class Kiosko extends Content
     public function create($data)
     {
         if ($this->exists($data['path'], $data['category'])) {
-            m::add(_("There's other paper in this date & this category."));
+            throw new \Exception(_("There's other paper in this date & this category."));
         }
+
         // Check price
         if (!isset($data['price'])) {
             $data['price'] = 0;
@@ -78,23 +79,22 @@ class Kiosko extends Content
 
         $values = array(
             $this->id, $data['name'], $data['path'],
-            $data['date'], $data['price']
+            $data['date'], $data['price'], $data['type']
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            throw new \Exception(_("Unable to save the cover data into the database."));
             Application::logDatabaseError();
-
-            return(false);
         }
 
-        return(true);
+        return true;
     }
 
     public function read($id)
     {
         parent::read($id);
 
-        $sql = 'SELECT pk_kiosko, name, path, date, price FROM kioskos WHERE pk_kiosko=?';
+        $sql = 'SELECT pk_kiosko, name, path, date, price, type FROM kioskos WHERE pk_kiosko=?';
 
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
         if (!$rs) {
@@ -114,7 +114,6 @@ class Kiosko extends Content
         }
 
         $GLOBALS['application']->dispatch('onBeforeUpdate', $this);
-
 
         parent::update($data);
 

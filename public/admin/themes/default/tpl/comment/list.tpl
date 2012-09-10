@@ -1,14 +1,19 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-    <script type="text/javascript">
-        function submitFilters(frm) {
-            $('action').value='list';
-            $('page').value = 1;
+<script type="text/javascript">
+    $('[rel=tooltip]').tooltip({ placement : 'bottom' });
+</script>
+{/block}
 
-            frm.submit();
-        }
-    </script>
+{block name="header-css" append}
+<style type="text/css">
+    .table td { line-height:14px; }
+    .tooltip-inner {
+        max-width:500px !important;
+        text-align: justify;
+    }
+</style>
 {/block}
 
 {block name="content"}
@@ -17,225 +22,224 @@
         <div class="wrapper-content">
             <div class="title">
                 <h2>
-                    {$titulo_barra} ::
-                    {if $category eq 'home' ||  $category eq 'todos'} {$category|upper} {else} {$datos_cat[0]->title} {/if}
+                    Comment Manager ::
+                    {if $category eq 'home' ||  $category eq 'todos'} {$category|upper}
+                    {else} {$datos_cat[0]->title} {/if}
                 </h2>
             </div>
             <ul class="old-button">
                 {acl isAllowed="COMMENT_DELETE"}
-               <li>
+                <li>
                    <a class="delChecked" data-controls-modal="modal-comment-batchDelete" href="#" title="{t}Delete{/t}" alt="{t}Delete{/t}">
                        <img border="0" src="{$params.IMAGE_DIR}trash.png" title="Eliminar" alt="Eliminar"><br />Eliminar
                    </a>
-               </li>
-               {/acl}
-               {acl isAllowed="COMMENT_AVAILABLE"}
-               <li>
-                    <button value="batchReject" name="buton-batchReject" id="buton-batchReject" type="submit">
+                </li>
+                {/acl}
+                {acl isAllowed="COMMENT_AVAILABLE"}
+                {if $status neq '2'}
+                <li>
+                    <button name="status" value="0" id="buton-batchReject" type="submit">
                        <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="{t}Unpublish{/t}" alt="{t}Unpublish{/t}" ><br />{t}Unpublish{/t}
                    </button>
-               </li>
-               <li>
-                   <button value="batchFrontpage" name="buton-batchFrontpage" id="buton-batchFrontpage" type="submit">
+                </li>
+                {/if}
+                {if $status neq '1'}
+                <li>
+                   <button name="status" value="1" id="buton-batchFrontpage" type="submit">
                        <img border="0" src="{$params.IMAGE_DIR}publish.gif" title="{t}Publish{/t}" alt="{t}Publish{/t}" ><br />{t}Publish{/t}
                    </button>
-            </li>
+                </li>
+                {/if}
                {/acl}
             </ul>
         </div>
     </div>
+
     <div class="wrapper-content">
 
-		<div class="clearfix">
-
-            <ul class="pills">
-                <li>
-					<a id="pending-tab" href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}&module={$smarty.get.module}&comment_status=0" {if $comment_status==0}class="active"{/if} >{t}Pending{/t}</a>
-                </li>
-                <li>
-					<a id="published-tab" href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}&module={$smarty.get.module}&comment_status=1" {if $comment_status==1}class="active"{/if}>{t}Published{/t}</a>
-                </li>
-                <li>
-					<a id="rejected-tab" href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}&module={$smarty.get.module}&comment_status=2" {if $comment_status==2}class="active"{/if}>{t}Rejected{/t}</a>
-                </li>
-            </ul>
-
-        </div>
+        {render_messages}
 
         <div class="table-info clearfix">
-            <div>
-                <div class="right form-inline">
-                    <label for="category">
-                        {t}Category name:{/t}
-                        <select name="category" onchange="submitFilters(this.form);">
-                            <option value="todos" {if $category eq '0'}selected{/if}> {t}All{/t} </option>
-                            {section name=as loop=$allcategorys}
-                                 <option value="{$allcategorys[as]->pk_content_category}" {if isset($category) && ($category eq $allcategorys[as]->pk_content_category)}selected{/if}>{$allcategorys[as]->title}</option>
-                                 {section name=su loop=$subcat[as]}
-                                        {if $subcat[as][su]->internal_category eq 1}
-                                            <option value="{$subcat[as][su]->pk_content_category}"
-                                            {if $category eq $subcat[as][su]->pk_content_category || $article->category eq $subcat[as][su]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;|_&nbsp;&nbsp;{$subcat[as][su]->title}</option>
-                                        {/if}
-                                    {/section}
-                            {/section}
-                        </select>
-                    </label>
+            <div class="pull-right form-inline">
+                <label>{t}Status:{/t}
+                <select name="filter[status]" class="form-filters">
+                    <option value="0" {if $status eq '0'}selected{/if}> {t}Pending{/t} </option>
+                    <option value="1" {if $status eq '1'}selected{/if}> {t}Published{/t} </option>
+                    <option value="2" {if $status eq '2'}selected{/if}> {t}Rejected{/t} </option>
+                </select>
+                </label>
 
+                <label for="category">
+                    {t}Category:{/t}
+                    <select name="category" class="form-filters">
+                        <option value="all" {if $category eq '0'}selected{/if}> {t}All{/t} </option>
+                        {section name=as loop=$allcategorys}
+                             <option value="{$allcategorys[as]->pk_content_category}" {if isset($category) && ($category eq $allcategorys[as]->pk_content_category)}selected{/if}>{$allcategorys[as]->title}</option>
+                             {section name=su loop=$subcat[as]}
+                                    {if $subcat[as][su]->internal_category eq 1}
+                                        <option value="{$subcat[as][su]->pk_content_category}"
+                                        {if $category eq $subcat[as][su]->pk_content_category || $article->category eq $subcat[as][su]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;|_&nbsp;&nbsp;{$subcat[as][su]->title}</option>
+                                    {/if}
+                                {/section}
+                        {/section}
+                    </select>
+                </label>
+                <div class="input-append">
                     <label>{t}Module:{/t}
-                    <select name="module" onchange="submitFilters(this.form);">
+                    <select name="filter[module]" class="form-filters">
                         <option value="0" {if $module eq '0'}selected{/if}> {t}All{/t} </option>
                         {foreach from=$content_types key=i item=type}
-                        <option value="{$i}" {if $smarty.get.module eq $i}selected{/if}>{$type}</option>
+                        <option value="{$i}" {if $module eq $i}selected{/if}>{$type}</option>
                         {/foreach}
                     </select>
                     </label>
-                    <input type="hidden" id="page" name="page" value="{$smarty.request.page|default:"1"}" />
+                    <button type="submit" class="btn"><i class="icon-search"></i></button>
                 </div>
             </div>
         </div>
 
-		<div id="{$category}">
+		<table class="table table-hover table-condensed">
+			<thead>
+    			{if count($comments) > 0}
+                <tr>
+                    <th style='width:15px'>
+                        <input type="checkbox" class="toggleallcheckbox">
+                    </th>
+                    <th>{t}Title{/t} - {t}Comment (50 chars){/t}</th>
+                    <th style='width:6%;' class="left">{t}IP{/t}</th>
+                    {if $category eq 'all'}
+                        <th class="left">{t}Category{/t}</th>
+                    {/if}
+                    <th style='width:110px;' class="left">{t}Date{/t}</th>
+                    <th style='width:20px;' class="center">{t}Votes{/t}</th>
+                    <th style="width:10px;" class="center">{t}Published{/t}</th>
+                    <th style='width:80px;' class="right">{t}Actions{/t}</th>
+			   </tr>
+               {else}
+               <tr>
+                    <th>
+                        &nbsp;
+                    </th>
+               </tr>
+			   {/if}
+            </thead>
 
-			<table class="listing-table">
-				<thead>
-        			{if count($comments) > 0}
-                    <tr>
-                        <th style='width:15px'>
-                            <input type="checkbox" id="toggleallcheckbox">
-                        </th>
-                        <th>{t}Title{/t} - {t}Comment (50 chars){/t}</th>
-                        <th style='width:200px;'>{t}Commented on{/t}</th>
-                        <th  style='width:6%;' class="center">{t}IP{/t}</th>
-                        {if $category eq 'todos' || $category eq 'home'}
-                            <th class="center" style="width:5%;">{t}Category{/t}</th>
+			<tbody>
+            	{section name=c loop=$comments|default:array()}
+				<tr style="cursor:pointer;" >
+					<td >
+						<input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}"
+                            name="selected_fld[]" value="{$comments[c]->id}">
+					</td>
+					<td rel="tooltip" data-original-title="{$comments[c]->body|strip_tags|clearslash}">
+						<a href="{url name=admin_comments_show id=$comments[c]->id}"title="{t 1=$articles[c]->title}Edit comment %1{/t}">
+                            <strong>[{$comments[c]->title|strip_tags|clearslash|truncate:40:"..."}]</strong>
+                            {$comments[c]->body|strip_tags|clearslash|truncate:50}
+                        </a>
+                        <br>
+                        <strong>{t}Author{/t}</strong>
+                        {$comments[c]->author|strip_tags}
+                        {if preg_match('/@proxymail\.facebook\.com$/i', $comments[c]->email)}
+                            &lt;<span title="{$comments[c]->email}">{t}from facebook{/t}</span>&gt;
+                        {else}
+                            &lt;{$comments[c]->email}&gt;
                         {/if}
-                        <th  style='width:110px;' class="center">{t}Date{/t}</th>
-                        <th style='width:20px;' class="center">{t}Votes{/t}</th>
-                        <th style='width:90px;' class="center">{t}Actions{/t}</th>
-				   </tr>
-                   {else}
-                   <tr>
-                        <th>
-                            &nbsp;
-                        </th>
-                   </tr>
-    			   {/if}
-                </thead>
+                        <br>
+                        {assign var=type value=$contents[c]->content_type}
+                        <strong>[{$content_types[$type]}]</strong>
+                        {$contents[c]->title|strip_tags|clearslash}
+					</td>
+					<td class="left">
+						{$comments[c]->ip}
+					</td>
+					{if $category eq 'all'}
+					<td class="left">
+						{$contents[c]->category_name}
+                        {if $contents[c]->content_type==4}Opini&oacute;n{/if}
+					</td>
+					{/if}
+					<td class="left">
+						{$comments[c]->created}
+					</td>
+					<td class="center">
+						{$votes[c]->value_pos} /  {$votes[c]->value_pos}
+					</td>
+					<td class="center">
+                        {acl isAllowed="COMMENT_AVAILABLE"}
+							{if $status eq 0}
+								<a href="{url name=admin_comments_toggle_status id=$comments[c]->id status=1 category=$category page=$page return_status=$status}" title="Publicar">
+									<img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicar" /></a>
+								<a href="{url name=admin_comments_toggle_status id=$comments[c]->id status=2 category=$category page=$page return_status=$status}" title="Rechazar">
+									<img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Rechazar" /></a>
+							{elseif $status eq 2}
+								<a href="{url name=admin_comments_toggle_status id=$comments[c]->id status=1 category=$category page=$page return_status=$status}" title="Publicar">
+									<img border="0" src="{$params.IMAGE_DIR}publish_r.png">
+								</a>
+							{else}
+								<a href="{url name=admin_comments_toggle_status id=$comments[c]->id status=1 category=$category page=$page return_status=$status}" title="Rechazar">
+									<img border="0" src="{$params.IMAGE_DIR}publish_g.png">
+								</a>
+							{/if}
+                        {/acl}
+					</td>
+                    <td style="padding:1px; font-size:11px;" class="right">
+                        <div class="btn-group">
+                            {acl isAllowed="COMMENT_UPDATE"}
+                                <a class="btn" href="{url name=admin_comments_show id=$comments[c]->id}" title="{t}Edit{/t}" >
+                                    <i class="icon-pencil"></i>
+                                </a>
+                            {/acl}
+                            {acl isAllowed="COMMENT_DELETE"}
+								<a class="del btn btn-danger" data-controls-modal="modal-from-dom"
+                                   data-id="{$comments[c]->id}"
+                                   data-title="{$comments[c]->title|capitalize}"
+                                   data-url="{url name=admin_comments_delete id=$comments[c]->id}"
+                                   href="{url name=admin_comments_delete id=$comments[c]->id}" >
+								   <i class="icon-trash icon-white"></i>
+                                </a>
+                            {/acl}
+						</div>
+					</td>
+				</tr>
 
-				<tbody>
-                	{section name=c loop=$comments|default:array()}
-					<tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;" >
-						<td >
-							<input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$comments[c]->id}"  style="cursor:pointer;" >
-						</td>
-						<td onmouseout="UnTip()" onmouseover="Tip('{$comments[c]->body|nl2br|regex_replace:"/[\r\t\n]/":" "|clearslash|regex_replace:"/'/":"\'"|escape:'html'}', SHADOW, true, ABOVE, true, WIDTH, 600)" onClick="javascript:document.getElementById('selected_{$smarty.section.c.iteration}').click();">
-							<a href="{$smarty.server.PHP_SELF}?action=read&id={$comments[c]->pk_comment}" title="{t 1=$articles[c]->title}Edit article %1{/t}">
-                                {$comments[c]->author|strip_tags}
-                                {if preg_match('/@proxymail\.facebook\.com$/i', $comments[c]->email)}
-                                    &lt;<span title="{$comments[c]->email}">{t}from facebook{/t}</span>&gt;
-                                {else}
-                                    &lt;{$comments[c]->email}&gt;
-                                {/if}<br>
-								<strong>[{$comments[c]->title|strip_tags|clearslash|truncate:40:"..."}]</strong>
-                                {$comments[c]->body|strip_tags|clearslash|truncate:50}
-                            </a>
-						</td>
-						 {assign var=type value=$articles[c]->content_type}
-						<td >
-							<strong>[{$content_types[$type]}]</strong>
-							{$articles[c]->title|strip_tags|clearslash}
-						</td>
-						<td class="center">
-							{$comments[c]->ip}
-						</td>
-						{if $category eq 'todos' || $category eq 'home'}
-						<td class="center">
-							{$articles[c]->category_name} {if $articles[c]->content_type==4}Opini&oacute;n{/if}
-						</td>
-						{/if}
-						<td class="center">
-							{$comments[c]->created}
-						</td>
-						<td class="center">
-							{$votes[c]->value_pos} /  {$votes[c]->value_pos}
-						</td>
-						<td class="right">
-							<ul class="action-buttons">
-                                 {acl isAllowed="COMMENT_AVAILABLE"}
-								<li>
-									{if $category eq 'todos' || $comments[c]->content_status eq 0}
-										<a href="?id={$comments[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage|default:0}" title="Publicar">
-												<img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicar" /></a>
-										<a href="?id={$comments[c]->id}&amp;action=change_status&amp;status=2&amp;category={$category}&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage|default:0}" title="Rechazar">
-												<img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Rechazar" /></a>
-									{elseif $comments[c]->content_status eq 2}
-										<a href="?id={$comments[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage|default:0}" title="Publicar">
-											<img border="0" src="{$params.IMAGE_DIR}publish_g.png">
-										</a>
-									{else}
-										<a class="publishing" href="?id={$comments[c]->id}&amp;action=change_status&amp;status=2&amp;category={$category}&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage|default:0}" title="Rechazar">
-											<img border="0" src="{$params.IMAGE_DIR}publish_g.png">
-										</a>
-									{/if}
-								</li>
-                                {/acl}
-                                 {acl isAllowed="COMMENT_UPDATE"}
-								<li>
-									<a href="{$smarty.server.PHP_SELF}?action=read&id={$comments[c]->id}" title="Modificar">
-										<img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
-								</li>
-                                {/acl}
-                                {acl isAllowed="COMMENT_DELETE"}
-								<li>
-									<a class="del" data-controls-modal="modal-from-dom"
-                               data-id="{$comments[c]->id}"
-                               data-title="{$comments[c]->title|capitalize}"  href="#" >
-										<img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
-								</li>
-                                {/acl}
-							</ul>
-						</td>
-					</tr>
+				{sectionelse}
+				<tr>
+					<td class="empty" colspan=10>
+						{t}There is no comments here.{/t}
+					</td>
+				</tr>
+				{/section}
+			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan="13">
+                        <div class="pagination">
+                            {$paginacion->links|default:""}
+                        </div>
+                    </td>
+				</tr>
+			</tfoot>
 
-					{sectionelse}
-					<tr>
-						<td class="empty" colspan=10>
-							{t}There is no comments here.{/t}
-						</td>
-					</tr>
-					{/section}
-				</tbody>
-				<tfoot>
-					<tr class="pagination">
-						<td colspan="13">
-                            {$paginacion->links|default:""}&nbsp;
-                        </td>
-					</tr>
-				</tfoot>
-
-			</table>
-		</div>
+		</table>
     </div>
-
-    <input type="hidden" name="comment_status" id="comment_status" value="{$comment_status}" />
-    <input type="hidden" id="status" name="status" value="" />
-	<input type="hidden" id="action" name="action" value="" />
-	<input type="hidden" name="id" id="id" value="{$id|default:""}" />
 
 </form>
      <script>
         jQuery('#buton-batchReject').on('click', function(){
-            jQuery('#action').attr('value', "batchFrontpage");
-            jQuery('#status').attr('value', "2");
+            jQuery('#formulario').attr('action', "{url name=admin_comments_batch_status category=$category page=$page}");
             jQuery('#formulario').submit();
             e.preventDefault();
         });
         jQuery('#buton-batchFrontpage').on('click', function(){
-            jQuery('#action').attr('value', "batchFrontpage");
-            jQuery('#status').attr('value', "1");
+            jQuery('#formulario').attr('action', "{url name=admin_comments_batch_status category=$category page=$page}");
             jQuery('#formulario').submit();
             e.preventDefault();
         });
+
+        var comments_manager_urls = {
+            batchDelete: '{url name=admin_comments_batch_delete category=$category page=$page}',
+        }
+
     </script>
     {include file="comment/modals/_modalDelete.tpl"}
     {include file="comment/modals/_modalBatchDelete.tpl"}

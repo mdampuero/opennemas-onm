@@ -36,6 +36,7 @@ class Comment extends \Content
             $this->read($id);
         }
         $this->content_type = __CLASS__;
+        $this->content_type_l10n_name = _('Comment');
     }
 
     /**
@@ -271,7 +272,6 @@ class Comment extends \Content
     public function count_public_comments($contentID)
     {
         if (empty($contentID)) {
-
             return false;
         }
         $sql = 'SELECT count(pk_comment)
@@ -285,7 +285,8 @@ class Comment extends \Content
         return intval($rs);
     }
 
-    public function get_home_comments($filter = null)
+    // TODO: not used, should be dropped
+    public function getHomeComments($filter = null)
     {
         if (is_null($filter)) {
             $filter = "1=1";
@@ -324,7 +325,7 @@ class Comment extends \Content
     /**
      * Gets the number of pending comments
      **/
-    public function count_pending_comments()
+    public function countPendingComments()
     {
         $sql = 'SELECT count(pk_content)
                 FROM `contents`
@@ -338,3 +339,4 @@ class Comment extends \Content
         return intval($rs->fields['count(pk_content)']);
     }
 }
+
