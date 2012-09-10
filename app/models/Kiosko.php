@@ -22,6 +22,7 @@ class Kiosko extends Content
     public $date        = null;
     public $favorite    = 0;
     public $price       = 0;
+    public $type        = 0;
     public $kiosko_path = null;
 
     /**
@@ -47,6 +48,7 @@ class Kiosko extends Content
         $this->path=$data['path'];
         $this->date=$data['date'];
         $this->date=$data['price'];
+        $this->date=$data['type'];
 
         $this->category=$data['category'];
         $this->available=$data['available'];
@@ -58,15 +60,19 @@ class Kiosko extends Content
         if ($this->exists($data['path'], $data['category'])) {
             m::add(_("There's other paper in this date & this category."));
         }
-
+        // Check price
         if (!isset($data['price'])) {
             $data['price'] = 0;
+        }
+        //Check type
+        if (!isset($data['type'])) {
+            $data['type'] = 0;
         }
 
         parent::create($data);
 
-        $sql  = "INSERT INTO kioskos (`pk_kiosko`, `name`, `path`, `date`, `price` ) "
-                ." VALUES (?,?,?,?, ?)";
+        $sql  = "INSERT INTO kioskos (`pk_kiosko`, `name`, `path`, `date`, `price`, `type` )"
+                ." VALUES (?,?,?,?,?,?)";
 
         $this->createThumb($data['name'], $data['path']);
 
@@ -234,6 +240,27 @@ class Kiosko extends Content
         }
 
         return $items;
+    }
+
+    /**
+     * Get all subscription elements/items
+     *
+    */
+    public static function getSubscriptionItems()
+    {
+        $sql = 'SELECT `kioskos`.`pk_kiosko`, `kioskos`.`price` , `contents`.`title`
+                FROM kioskos, contents
+                WHERE `contents`.`pk_content`=`kioskos`.`pk_kiosko`
+                AND `kioskos`.`type`= 1 AND `contents`.`available` =1';
+
+        $rs = $GLOBALS['application']->conn->GetArray($sql);
+
+        if (!$rs) {
+            Application::logDatabaseError();
+            return false;
+        }
+
+        return $rs;
     }
 }
 
