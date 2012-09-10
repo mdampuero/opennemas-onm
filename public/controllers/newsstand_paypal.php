@@ -64,7 +64,8 @@ switch ($action) {
                     $portadas = $cm->find_by_category(
                         'Kiosko',
                         $theCategory->pk_content_category,
-                        ' `contents`.`available`=1 '.'AND YEAR(`kioskos`.date)='.$year.'',
+                        ' `contents`.`available`=1 '.
+                        'AND YEAR(`kioskos`.date)='.$year.' AND `kioskos`.`type`=0',
                         'ORDER BY `kioskos`.date DESC '
                     );
                     if (!empty($portadas)) {
@@ -95,7 +96,8 @@ switch ($action) {
                 $date = "$year-$month-$day";
                 $portadas = $cm->findAll(
                     'Kiosko',
-                    ' `contents`.`available`=1 AND  `kioskos`.date ="'.$date.'"',
+                    ' `contents`.`available`=1 '.
+                    'AND  `kioskos`.date ="'.$date.'" AND `kioskos`.`type`=0',
                     'ORDER BY `kioskos`.date DESC '
                 );
 
@@ -125,7 +127,7 @@ switch ($action) {
                         'Kiosko',
                         $theCategory->pk_content_category,
                         ' `contents`.`available`=1 AND MONTH(`kioskos`.date)='.$month.' AND'.
-                        ' YEAR(`kioskos`.date)='.$year.'',
+                        ' YEAR(`kioskos`.date)='.$year.' AND `kioskos`.`type`=0',
                         'ORDER BY `kioskos`.date DESC '
                     );
                     if (!empty($portadas)) {
