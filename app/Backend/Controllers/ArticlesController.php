@@ -197,19 +197,32 @@ class ArticlesController extends Controller
                 'category'  => $request->request->getDigits('category'),
                 'agency'    => $request->request->filter('agency', '', FILTER_SANITIZE_STRING),
                 'params' =>  array(
-                      'agencyBulletin'    => $params['agencyBulletin'],
-                      'imageHomeFooter'   => $params['imageHomeFooter'],
-                      'imageHome'         => $params['imageHome'],
-                      'titleSize'         => $params['titleSize'],
-                      'imagePosition'     => $params['imagePosition'],
-                      'titleHome'         => $params['titleHome'],
-                      'titleHomeSize'     => $params['titleHomeSize'],
-                      'subtitleHome'      => $params['subtitleHome'],
-                      'summaryHome'       => $params['summaryHome'],
-                      'imageHomePosition' => $params['imageHomePosition'],
-                      'withGallery'       => $params['withGallery'],
-                      'withGalleryInt'    => $params['withGalleryInt'],
-                      'withGalleryHome'   => $params['withGalleryHome'],
+                        'agencyBulletin'    =>
+                            array_key_exists('agencyBulletin', $params) ? $params['agencyBulletin'] : '',
+                        'imageHomeFooter'   =>
+                            array_key_exists('imageHomeFooter', $params) ? $params['imageHomeFooter'] : '',
+                        'imageHome'         =>
+                            array_key_exists('imageHome', $params) ? $params['imageHome'] : '',
+                        'titleSize'         =>
+                            array_key_exists('titleSize', $params) ? $params['titleSize'] : '',
+                        'imagePosition'     =>
+                            array_key_exists('imagePosition', $params) ? $params['imagePosition'] : '',
+                        'titleHome'         =>
+                            array_key_exists('titleHome', $params) ? $params['titleHome'] : '',
+                        'titleHomeSize'     =>
+                            array_key_exists('titleHomeSize', $params) ? $params['titleHomeSize'] : '',
+                        'subtitleHome'      =>
+                            array_key_exists('subtitleHome', $params) ? $params['subtitleHome'] : '',
+                        'summaryHome'       =>
+                            array_key_exists('summaryHome', $params) ? $params['summaryHome'] : '',
+                        'imageHomePosition' =>
+                            array_key_exists('imageHomePosition', $params) ? $params['imageHomePosition'] : '',
+                        'withGallery'       =>
+                            array_key_exists('withGallery', $params) ? $params['withGallery'] : '',
+                        'withGalleryInt'    =>
+                            array_key_exists('withGalleryInt', $params) ? $params['withGalleryInt'] : '',
+                        'withGalleryHome'   =>
+                            array_key_exists('withGalleryHome', $params) ? $params['withGalleryHome'] : '',
                 ),
                 'subtitle'          => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING),
                 'metadata'          => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
@@ -465,19 +478,32 @@ class ArticlesController extends Controller
                 'category'  => $request->request->getDigits('category'),
                 'agency'    => $request->request->filter('agency', '', FILTER_SANITIZE_STRING),
                 'params' =>  array(
-                      'agencyBulletin'    => $params['agencyBulletin'],
-                      'imageHomeFooter'   => $params['imageHomeFooter'],
-                      'imageHome'         => $params['imageHome'],
-                      'titleSize'         => $params['titleSize'],
-                      'imagePosition'     => $params['imagePosition'],
-                      'titleHome'         => $params['titleHome'],
-                      'titleHomeSize'     => $params['titleHomeSize'],
-                      'subtitleHome'      => $params['subtitleHome'],
-                      'summaryHome'       => $params['summaryHome'],
-                      'imageHomePosition' => $params['imageHomePosition'],
-                      'withGallery'       => $params['withGallery'],
-                      'withGalleryInt'    => $params['withGalleryInt'],
-                      'withGalleryHome'   => $params['withGalleryHome'],
+                        'agencyBulletin'    =>
+                            array_key_exists('agencyBulletin', $params) ? $params['agencyBulletin'] : '',
+                        'imageHomeFooter'   =>
+                            array_key_exists('imageHomeFooter', $params) ? $params['imageHomeFooter'] : '',
+                        'imageHome'         =>
+                            array_key_exists('imageHome', $params) ? $params['imageHome'] : '',
+                        'titleSize'         =>
+                            array_key_exists('titleSize', $params) ? $params['titleSize'] : '',
+                        'imagePosition'     =>
+                            array_key_exists('imagePosition', $params) ? $params['imagePosition'] : '',
+                        'titleHome'         =>
+                            array_key_exists('titleHome', $params) ? $params['titleHome'] : '',
+                        'titleHomeSize'     =>
+                            array_key_exists('titleHomeSize', $params) ? $params['titleHomeSize'] : '',
+                        'subtitleHome'      =>
+                            array_key_exists('subtitleHome', $params) ? $params['subtitleHome'] : '',
+                        'summaryHome'       =>
+                            array_key_exists('summaryHome', $params) ? $params['summaryHome'] : '',
+                        'imageHomePosition' =>
+                            array_key_exists('imageHomePosition', $params) ? $params['imageHomePosition'] : '',
+                        'withGallery'       =>
+                            array_key_exists('withGallery', $params) ? $params['withGallery'] : '',
+                        'withGalleryInt'    =>
+                            array_key_exists('withGalleryInt', $params) ? $params['withGalleryInt'] : '',
+                        'withGalleryHome'   =>
+                            array_key_exists('withGalleryHome', $params) ? $params['withGalleryHome'] : '',
                 ),
                 'subtitle'          => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING),
                 'metadata'          => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),

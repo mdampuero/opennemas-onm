@@ -475,7 +475,7 @@ class User
             $this->name          = $data['name'];
             $this->firstname     = $data['firstname'];
             $this->lastname      = $data['lastname'];
-            $this->deposit       = $data['deposit'];
+            $this->deposit       = array_key_exists('deposit', $data) ? $data['deposit'] : '';
             $this->type          = $data['type'];
             $this->token         = $data['token'];
             $this->authorize     = $data['authorize'];
