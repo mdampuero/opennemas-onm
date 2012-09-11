@@ -557,12 +557,16 @@ class ArticlesController extends Controller
                     )
                 );
             } else {
-                return $this->redirect(
-                    $this->generateUrl(
-                        'admin_articles',
-                        array('status' => $data['content_status'])
-                    )
-                );
+                if (!empty($_SESSION['_from'])) {
+                    return $this->redirect($_SESSION['_from']);
+                } else {
+                    return $this->redirect(
+                        $this->generateUrl(
+                            'admin_articles',
+                            array('status' => $data['content_status'])
+                        )
+                    );
+                }
             }
         }
 
