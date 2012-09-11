@@ -101,6 +101,7 @@ class AuthenticationController extends Controller
                         'realname'         => $user->name,
                         'username'         => $user->login,
                         'email'            => $user->email,
+                        'deposit'          => $user->deposit,
                         'isAdmin'          => ( \UserGroup::getGroupName($user->fk_user_group)=='Administrador' ),
                         'isMaster'         => ( \UserGroup::getGroupName($user->fk_user_group)=='Masters' ),
                         'privileges'       => \Privilege::get_privileges_by_user($user->id),
