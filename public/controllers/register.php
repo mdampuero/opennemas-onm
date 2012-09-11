@@ -92,14 +92,14 @@ switch ($action) {
             }
 
             // Check existing mail
-            $mailAlreadyExists = $user->checkIfExistsFrontUserEmail($data['email']);
+            $mailAlreadyExists = $user->checkIfExistsUserEmail($data['email']);
             if ($mailAlreadyExists) {
                 $warningMail = 'O enderezo eletrónico xa está en uso.';
                 $tpl->assign('warning_mail', $warningMail);
             }
 
             // Check existing user name
-            $userNameAlreadyExists = $user->checkIfExistsFrontUserName($data['name']);
+            $userNameAlreadyExists = $user->checkIfExistsUserName($data['name']);
             if ($userNameAlreadyExists) {
                 $warningUserName = 'O nome de usuario xa está en uso.';
                 $tpl->assign('warning_user_name', $warningUserName);
