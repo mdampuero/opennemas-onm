@@ -186,13 +186,13 @@ class WidgetsController extends Controller
      **/
     public function updateAction(Request $request)
     {
-        $post = $request->request;
+        $id = $request->query->getDigits('id');
         $page = $request->query->getDigits('page', 1);
-        // Need category to redirect to frontpage manager
-        $category = $request->query->get('category', null);
+
+        $post = $request->request;
 
         $widgetData = array(
-            'id'          => $post->getDigits('id'),
+            'id'          => $id,
             'action'      => $post->filter('action', null, FILTER_SANITIZE_STRING),
             'title'       => $post->filter('title', null, FILTER_SANITIZE_STRING),
             'available'   => $post->filter('available', null, FILTER_SANITIZE_STRING),
@@ -204,21 +204,17 @@ class WidgetsController extends Controller
 
         $widget = new \Widget();
         if (!$widget->update($widgetData)) {
-            m::add(_('There was an error while updating widget data.'), m::ERROR);
+            m::add(_('There was an error while updating the widget.'), m::ERROR);
 
             return $this->redirect(
                 $this->generateUrl('admin_widgets', array('page' => $page,))
             );
         }
 
-        m::add(_('Widget data updated successfully.'), m::SUCCESS);
-
-        if (!is_null($_SESSION['from'])) {
-            return $this->redirect($_SESSION['from']);
-        }
+        m::add(_('Widget updated successfully.'), m::SUCCESS);
 
         return $this->redirect(
-            $this->generateUrl('admin_widgets', array('page' => $page,))
+            $this->generateUrl('admin_widget_show', array('id' => $id,))
         );
     }
 

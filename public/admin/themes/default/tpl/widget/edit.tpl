@@ -12,7 +12,7 @@
 {/block}
 
 {block name="content" append}
-<form action="{if isset($widget)}{url name=admin_widget_update id=$widget->id page=$page}{else}{url name=admin_widget_create}{/if}" method="post" name="formulario" id="formulario">
+<form action="{if isset($widget)}{url name=admin_widget_update id=$widget->id}{else}{url name=admin_widget_create}{/if}" method="post" name="formulario" id="formulario">
     <div class="top-action-bar">
         <div class="wrapper-content">
             <div class="title">
@@ -42,6 +42,8 @@
     </div>
 
     <div class="wrapper-content">
+
+        {render_messages}
 
         <div class="form-horizontal panel">
             <div class="control-group">
@@ -117,9 +119,17 @@ tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
 OpenNeMas.tinyMceConfig.advanced.elements = "widget_content";
 {if isset($widget) && $widget->renderlet == 'html'}
     tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
+    jQuery(document).ready(function($) {
+        $('#formulario').on('submit', function() {
+            OpenNeMas.tinyMceFunctions.saveTiny('widget_content');
+            OpenNeMas.tinyMceFunctions.destroy('widget_content');
+        })
+    });
+
 {/if}
 
 jQuery(document).ready(function($) {
+
 
     $('#formulario').onmValidate({
         'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
