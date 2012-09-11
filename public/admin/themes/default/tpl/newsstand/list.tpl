@@ -105,7 +105,7 @@
         {else}
         <thead>
             <tr>
-                <th colspan="10">
+                <th colspan="11">
                     &nbsp;
                 </th>
 
@@ -190,13 +190,13 @@
         </tr>
         {foreachelse}
         <tr>
-            <td class="empty" colspan="10">{t}There is no covers{/t}</td>
+            <td class="empty" colspan="11">{t}There is no covers{/t}</td>
         </tr>
         {/foreach}
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="10" class="center">
+                <td colspan="11" class="center">
                     <div class="pagination">
                         {$pagination->links}
                     </div>
