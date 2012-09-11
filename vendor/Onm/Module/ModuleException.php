@@ -18,6 +18,5 @@ namespace Onm\Module;
  */
 class ModuleException extends \Exception
 {
-
 }
 

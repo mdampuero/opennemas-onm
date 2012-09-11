@@ -613,10 +613,7 @@ class PConecta_Newsletter_Accounts_Provider extends Newsletter_Accounts_Provider
         if ($rs!==false) {
             while (!$rs->EOF) {
                 $this->accounts[] = new Newsletter_Account(
-                    /* email */
                     $rs->fields['email'],
-
-                    /* firstname lastname, name */
                     $this->buildName(
                         $rs->fields['firstname'],
                         $rs->fields['lastname'],
