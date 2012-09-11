@@ -378,27 +378,17 @@
                 </fieldset>
 
                 <fieldset>
-                    <legend>{t}Paypal Settings{/t}</legend>
-                    <table>
-                        <tbody>
-                            <tr>
-                                <th scope="row">
-                                    <label for="paypal_account_email">{t}Account email:{/t}</label>
-                                </th>
-                                <td>
-                                    <input type="text" id="paypal_account_email" name="paypal_settings[email]" value="{$configs['paypal_settings']['email']|default:""}">
-                                </td>
-                                <td rowspan=2>
-                                    <div class="help-block margin-left-1">
-                                        <div class="title"><h4>{t}Get API keys{/t}</h4></div>
-                                        <div class="content">
-                                            {t escape=off}You can get your PayPal account email from <a href="https://www.paypal.com/">PayPal site</a>. This must be a business account for receiving payments{/t}
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+
+                    <h3 class="settings-header">{t}Paypal Settings{/t}</h3>
+
+                    <div class="control-group">
+                        <label for="recaptcha_public_key" class="control-label">{t}Account email:{/t}</label>
+                        <div class="controls">
+                            <input type="text" id="recaptcha_public_key" name="recaptcha[public_key]" value="{$configs['recaptcha']['public_key']|default:""}" class="input-xlarge">
+                            <div class="help-block">{t escape=off}You can get your PayPal account email from <a href="https://www.paypal.com/">PayPal site</a>. This must be a business account for receiving payments{/t}</div>
+                        </div>
+                    </div>
+
                 </fieldset>
             </div>
         </div>
