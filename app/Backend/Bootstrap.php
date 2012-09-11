@@ -61,6 +61,10 @@ class Bootstrap extends ModuleBootstrap
                 $response = new RedirectResponse($location, 301);
                 $response->send();
                 exit(0);
+            } elseif ($_SESSION['type'] != 0) {
+                $response = new RedirectResponse('/', 301);
+                $response->send();
+                exit(0);
             }
         } else {
             // Log this error event to the webserver logging sysmte
