@@ -1,4 +1,4 @@
-<div class="modal hide fade" id="c">
+<div class="modal hide fade" id="modal-edit-album-photo">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal-album-accept" aria-hidden="true">×</button>
         <h3>{t}Edit image properties{/t}</h3>
