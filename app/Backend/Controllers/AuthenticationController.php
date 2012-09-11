@@ -83,7 +83,7 @@ class AuthenticationController extends Controller
         } else {
 
             // Try to autenticate the user
-            if ($user->login($login, $password, $token, $captcha)) {
+            if ($user->login($login, $password, $token, $captcha) && $user->type == 0) {
 
                 // Check if user account is activated
                 if ($user->authorize != 1) {
