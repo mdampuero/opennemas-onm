@@ -22,7 +22,6 @@ class Video extends Content
     public $video_url  = null;
     public $author_name = null;
     public $content_type = null;
-    public $content_type_name = null;
 
     /**
      * Initializes the Video object
@@ -35,6 +34,7 @@ class Video extends Content
         }
         $this->content_type = 'Video';
         $this->content_type_l10n_name = _('Video');
+
     }
 
     public function __get($name)
