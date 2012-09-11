@@ -231,12 +231,14 @@ class CoversController extends Controller
             $postInfo = $request->request;
 
             $coverData = array(
-                'title'     => $postInfo->filter('title', null, FILTER_SANITIZE_STRING),
-                'metadata'  => $postInfo->filter('metadata', null, FILTER_SANITIZE_STRING),
-                'category'  => (int) $postInfo->getDigits('category'),
-                'available' => (int) $postInfo->getDigits('available', 1),
-                'favorite'  => (int) $postInfo->getDigits('favorite', 1),
-                'date'      => $postInfo->filter('date', null, FILTER_SANITIZE_STRING),
+                'title'        => $postInfo->filter('title', null, FILTER_SANITIZE_STRING),
+                'metadata'     => $postInfo->filter('metadata', null, FILTER_SANITIZE_STRING),
+                'type'         => (int) $postInfo->getDigits('type', 0),
+                'category'     => (int) $postInfo->getDigits('category'),
+                'available'    => (int) $postInfo->getDigits('available', 1),
+                'favorite'     => (int) $postInfo->getDigits('favorite', 1),
+                'date'         => $postInfo->filter('date', null, FILTER_SANITIZE_STRING),
+                'price'        => $postInfo->filter('price', null, FILTER_SANITIZE_NUMBER_FLOAT),
                 'fk_publisher' => (int) $_SESSION['userid'],
             );
 

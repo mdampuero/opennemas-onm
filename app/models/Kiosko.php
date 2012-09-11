@@ -120,7 +120,7 @@ class Kiosko extends Content
         $sql  = "UPDATE kioskos SET `date`=?, `price`=?"
                 ." WHERE pk_kiosko=?";
 
-        $values = array($data['date'], (float)$data['price'], $data['id']);
+        $values = array($data['date'], $data['price'], $data['id']);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             Application::logDatabaseError();

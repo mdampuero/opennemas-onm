@@ -87,16 +87,19 @@
         {if count($covers) > 0}
         <thead>
             <tr>
-                <th style="width:15px;"><input type="checkbox" class="toggleallcheckbox"></th>
-                <th class="center" style="width:80px;">{t}Thumbnail{/t}</th>
-                <th class="left">{t}Title{/t}</th>
-                {if $category=='widget' || $category == 'all'}<th style="width:65px;" class="center">{t}Section{/t}</th>{/if}
-                <th class="left" style="width:90px;">{t}Date{/t}</th>
-                <th class="left nowrap" style="width:90px;">{t}Last editor{/t}</th>
-                <th class="center" style="width:10px;">{t}Published{/t}</th>
-                <th class="center" style="width:35px;">{t}Favorite{/t}</th>
-                <th class="center" style="width:10px;">{t}Home{/t}</th>
-                <th class="right" style="width:110px;">{t}Actions{/t}</th>
+                <th><input type="checkbox" class="toggleallcheckbox"></th>
+                <th class="center">{t}Thumbnail{/t}</th>
+                <th class="center">{t}Title{/t}</th>
+                {if $category=='widget' || $category == 'all'}
+                    <th class="center">{t}Section{/t}</th>
+                {/if}
+                <th class="center">{t}Date{/t}</th>
+                <th class="center">{t}Price{/t}</th>
+                <th class="center">{t}Last editor{/t}</th>
+                <th class="center">{t}Published{/t}</th>
+                <th class="center">{t}Favorite{/t}</th>
+                <th class="center">{t}Home{/t}</th>
+                <th class="center">{t}Actions{/t}</th>
             </tr>
         </thead>
         {else}
@@ -117,9 +120,9 @@
             </td>
             <td class="center">
                 <img src="{$KIOSKO_IMG_URL}{$cover->path}{$cover->name|regex_replace:"/.pdf$/":".jpg"}"
-                    title="{$cover->title|clearslash}" alt="{$cover->title|clearslash}" height="80"/>
+                    title="{$cover->title|clearslash}" alt="{$cover->title|clearslash}" style="height:180px"/>
             </td>
-            <td >
+            <td class="center">
                 {$cover->title|clearslash}
             </td>
             {if $category == 'widget' || $category == 'all'}
@@ -127,10 +130,13 @@
                  {$cover->category_title}
             </td>
             {/if}
-            <td class="left nowrap">
+            <td class="center">
                 {$cover->date}
             </td>
-            <td  class="left">
+            <td class="center">
+                {$cover->price|number_format:2:".":","|default:"0"}€
+            </td>
+            <td  class="center">
                 {$cover->editor}
             </td>
              <td class="center">
@@ -164,7 +170,7 @@
                 {/if}
             {/acl}
             </td>
-            <td align="right">
+            <td class="center">
                 <div class="btn-group">
                     {acl isAllowed="KIOSKO_UPDATE"}
                     <a class="btn" href="{url name=admin_cover_show id=$cover->pk_kiosko}" title="{t}Edit{/t}">

@@ -82,7 +82,25 @@ jQuery(document).ready(function($) {
                 <label for="metadata" class="control-label">{t}Keywords{/t}</label>
                 <div class="controls">
                     <input type="text" id="metadata" name="metadata" value="{$cover->metadata}" required="required" class="input-xxlarge"/>
-                    <div class="help">List of words separated by commas.</div>
+                    <div class="help">{t}List of words separated by commas{/t}.</div>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="price" class="control-label">{t}Price{/t}</label>
+                <div class="controls">
+                    <input type="text" id="price" name="price" value="{$cover->price|number_format:2:".":","|default:"0"}" required="required" class="input-xxlarge"/>
+                    <div class="help">{t}Dot separates the pennies{/t}.</div>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="type" class="control-label">{t}Type{/t}</label>
+                <div class="controls">
+                    <select name="type" id="type" required="required">
+                        <option value="0" {if empty($cover) || $cover->type==0}selected{/if}>{t}Item{/t}</option>
+                        <option value="1" {if $cover->type==1}selected{/if}>{t}Subscription{/t}</option>
+                    </select>
                 </div>
             </div>
 
