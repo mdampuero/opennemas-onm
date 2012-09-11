@@ -52,15 +52,19 @@ switch ($action) {
                     session_regenerate_id();
 
                     $_SESSION = array(
-                        'userid'         => $user->id,
-                        'realname'       => $user->name,
-                        'username'       => $user->login,
-                        'email'          => $user->email,
-                        'deposit'        => $user->deposit,
-                        'authMethod'     => $user->authMethod,
-                        'default_expire' => $user->sessionexpire,
-                        'type'           => $user->type,
-                        'csrf'           => md5(uniqid(mt_rand(), true))
+                        'userid'           => $user->id,
+                        'realname'         => $user->name,
+                        'username'         => $user->login,
+                        'email'            => $user->email,
+                        'deposit'          => $user->deposit,
+                        'type'             => $user->type,
+                        'isAdmin'          => ( \UserGroup::getGroupName($user->fk_user_group)=='Administrador' ),
+                        'isMaster'         => ( \UserGroup::getGroupName($user->fk_user_group)=='Masters' ),
+                        'privileges'       => \Privilege::get_privileges_by_user($user->id),
+                        'accesscategories' => $user->getAccessCategoryIds(),
+                        'default_expire'   => $user->sessionexpire,
+                        'user_language'    => $user->getMeta('user_language'),
+                        'csrf'             => md5(uniqid(mt_rand(), true))
                     );
 
                     // Store default expire time
