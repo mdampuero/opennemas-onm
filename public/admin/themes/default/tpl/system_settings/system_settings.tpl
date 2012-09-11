@@ -253,6 +253,14 @@
                     </div>
 
                     <div class="control-group">
+                        <label for="google_page" class="control-label">{t}Google+ Page Url{/t}</label>
+                        <div class="controls">
+                            <input type="text" id="google_page" name="google_page" value="{$configs['google_page']|default:""}" class="input-xxlarge">
+                            <div class="help-block">{t escape=off}If you have a <b>Google+ page</b>, please complete this input.{/t}</div>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
                         <label for="facebook_page" class="control-label">{t}Facebook Page Url{/t}</label>
                         <div class="controls">
                             <input type="text" id="facebook_page" name="facebook_page" value="{$configs['facebook_page']|default:""}" class="input-xxlarge">
