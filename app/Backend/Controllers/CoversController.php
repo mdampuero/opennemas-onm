@@ -240,7 +240,7 @@ class CoversController extends Controller
                 'fk_publisher' => (int) $_SESSION['userid'],
             );
 
-            $dateTime = new \DateTime();
+            $dateTime = new \DateTime($coverData['date']);
             $coverData['name'] = $dateTime->format('Ymdhis').'-'.$coverData['category'].'.pdf';
             $coverData['path'] = $dateTime->format('Y/m/d').'/';
             $path = INSTANCE_MEDIA_PATH. KIOSKO_DIR. $coverData['path'];
