@@ -198,7 +198,7 @@ class Subscriptor
         return $this;
     }
 
-    public function get_users($filter = null, $limit = null, $_order_by = 'name')
+    public function getUsers($filter = null, $limit = null, $_order_by = 'name')
     {
         $items = array();
         $_where = '1=1';

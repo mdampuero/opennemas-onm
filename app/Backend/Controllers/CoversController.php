@@ -90,8 +90,8 @@ class CoversController extends Controller
         $aut = new \User();
         $ccm = \ContentCategoryManager::get_instance();
         foreach ($covers as &$cover) {
-            $cover->publisher      = $aut->get_user_name($cover->fk_publisher);
-            $cover->editor         = $aut->get_user_name($cover->fk_user_last_editor);
+            $cover->publisher      = $aut->getUserName($cover->fk_publisher);
+            $cover->editor         = $aut->getUserName($cover->fk_user_last_editor);
             $cover->category_name  = $ccm->get_name($cover->category);
             $cover->category_title = $ccm->get_title($cover->category_name);
         }
@@ -151,8 +151,8 @@ class CoversController extends Controller
         $aut = new \User();
         $ccm = \ContentCategoryManager::get_instance();
         foreach ($covers as &$cover) {
-            $cover->publisher      = $aut->get_user_name($cover->fk_publisher);
-            $cover->editor         = $aut->get_user_name($cover->fk_user_last_editor);
+            $cover->publisher      = $aut->getUserName($cover->fk_publisher);
+            $cover->editor         = $aut->getUserName($cover->fk_user_last_editor);
             $cover->category_name  = $ccm->get_name($cover->category);
             $cover->category_title = $ccm->get_title($cover->category_name);
         }

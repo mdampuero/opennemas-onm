@@ -22,12 +22,10 @@ class User
     public $name             = null;
     public $firstname        = null;
     public $lastname         = null;
-    public $address          = null;
-    public $phone            = null;
-    public $authorize        = null;
-    public $deposit          = null;
     public $type             = null;
+    public $deposit          = null;
     public $token            = null;
+    public $authorize        = null;
     public $id_user_group    = null;
     public $accesscategories = null;
     public $fk_user_group    = null;
@@ -75,15 +73,15 @@ class User
                     VALUES (?,?,?,?,?,?,?,?,?,?,?)";
         $values = array(
             $data['login'],
-			md5($data['password']),
-			$data['sessionexpire'],
+            md5($data['password']),
+            $data['sessionexpire'],
             $data['email'],
-			$data['name'],
-			$data['firstname'],
+            $data['name'],
+            $data['firstname'],
             $data['lastname'],
-			$data['type'],
-			$data['token'],
-			$data['authorize'],
+            $data['type'],
+            $data['token'],
+            $data['authorize'],
             $data['id_user_group']
         );
 
@@ -96,7 +94,7 @@ class User
 
         //Insertar las categorias de acceso.
         if (isset($data['ids_category'])) {
-            $this->createAccessCategoriesDB($data['ids_category']);
+            $this->createAccessCategoriesDb($data['ids_category']);
         }
 
         return true;
@@ -187,7 +185,7 @@ class User
 
         $this->id = $data['id'];
         if (isset($data['ids_category'])) {
-            $this->createAccessCategoriesDB($data['ids_category']);
+            $this->createAccessCategoriesDb($data['ids_category']);
         }
 
         // Finish transaction
@@ -222,9 +220,9 @@ class User
         return ($rs != false);
     }
 
-    private function createAccessCategoriesDB($IdsCategory)
+    private function createAccessCategoriesDb($IdsCategory)
     {
-        if ( $this->deleteAccessCategoriesDB() ) {
+        if ( $this->deleteAccessCategoriesDb() ) {
             $sql = "INSERT INTO users_content_categories
                                 (`pk_fk_user`, `pk_fk_content_category`)
                     VALUES (?,?)";
@@ -330,7 +328,7 @@ class User
         return $contentCategories;
     }
 
-    private function deleteAccessCategoriesDB()
+    private function deleteAccessCategoriesDb()
     {
         $sql = 'DELETE FROM users_content_categories WHERE pk_fk_user=?';
         $values = array(intval($this->id));
@@ -398,7 +396,7 @@ class User
             return false;
         }
 
-        $this->set_values($rs->fields);
+        $this->setValues($rs->fields);
         if ($this->password === md5($password)) {
             // Set access categories
             $this->accesscategories = $this->readAccessCategories();
@@ -413,7 +411,7 @@ class User
         }
 
         // Reset members properties
-        $this->reset_values();
+        $this->resetValues();
 
         return false;
     }
@@ -435,7 +433,7 @@ class User
             return false;
         }
 
-        $this->set_values($rs->fields);
+        $this->setValues($rs->fields);
 
         return $this->password;
     }
@@ -464,9 +462,9 @@ class User
      * Set internal status of this object. If $data is empty don't do anything
      *
      * @param Array $data
-     * @see User::reset_values
+     * @see User::resetValues
      */
-    public function set_values($data)
+    public function setValues($data)
     {
         if (!empty($data)) {
             $this->id            = $data['pk_user'];
@@ -493,9 +491,9 @@ class User
     /**
      * Set member properties to null
      *
-     * @see User::set_values
+     * @see User::setValues
      */
-    public function reset_values()
+    public function resetValues()
     {
         $this->id           = null;
         $this->login        = null;
@@ -505,9 +503,7 @@ class User
         $this->name         = null;
         $this->firstname    = null;
         $this->lastname     = null;
-        $this->address      = null;
         $this->authorize    = null;
-        $this->phone        = null;
         $this->fk_user_group= null;
         $this->accesscategories = null;
     }
@@ -563,7 +559,7 @@ class User
         return $ids;
     }
 
-    public function get_users($filter = null, $orderBy = 'ORDER BY 1')
+    public function getUsers($filter = null, $orderBy = 'ORDER BY 1')
     {
         $items = array();
         $_where = $this->buildFilter($filter);
@@ -575,7 +571,7 @@ class User
             while (!$rs->EOF) {
                 $user = new User();
 
-                $user->set_values($rs->fields);
+                $user->setValues($rs->fields);
                 $items[] = $user;
 
                 $rs->MoveNext();
@@ -620,7 +616,7 @@ class User
         return $newFilter;
     }
 
-    public function get_user_name($id)
+    public function getUserName($id)
     {
         $sql = 'SELECT name, login FROM users WHERE pk_user=?';
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
@@ -657,7 +653,8 @@ class User
 
         return true;
     }
-	/**
+
+    /**
      * Returns the values of a user meta option
      *
      * @param string/array $meta an array or an string with the user meta name
@@ -705,7 +702,7 @@ class User
      * @param  type $id
      * @return type
      */
-    public function unauthorize_user($id)
+    public function unauthorizeUser($id)
     {
         $sql = "UPDATE users SET `authorize`=0 WHERE pk_user=".intval($id);
 
@@ -722,7 +719,7 @@ class User
      * @param  type $id
      * @return type
      */
-    public function authorize_user($id)
+    public function authorizeUser($id)
     {
         $sql = "UPDATE users SET `authorize`=1 WHERE pk_user=".intval($id);
 
@@ -739,10 +736,10 @@ class User
      * @param  email $email
      * @return bool if is in use this email
      */
-    public function checkIfExistsFrontUserEmail($email)
+    public function checkIfExistsUserEmail($email)
     {
         $sql = 'SELECT count(*) AS num '
-            . 'FROM `users` WHERE email = "'.$email.'" AND type = 1';
+            . 'FROM `users` WHERE email = "'.$email.'"';
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
@@ -760,10 +757,10 @@ class User
      * @param  $userName The user name to log in
      * @return bool if is in use this user name (login)
      */
-    public function checkIfExistsFrontUserName($userName)
+    public function checkIfExistsUserName($userName)
     {
         $sql = 'SELECT count(*) AS num '
-            . 'FROM `users` WHERE login = "'.$userName.'" AND type = 1';
+            . 'FROM `users` WHERE login = "'.$userName.'"';
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {

@@ -46,7 +46,7 @@ class NewsletterSubscriptorsController extends Controller
         $itemsPerPage = 40;
 
         $user = new \Subscriptor();
-        $users = $user->get_users($where, ($itemsPerPage*($page-1)) . ',' . $itemsPerPage, $orderBy);
+        $users = $user->getUsers($where, ($itemsPerPage*($page-1)) . ',' . $itemsPerPage, $orderBy);
 
         $total = $user->countUsers($where);
         $pager = $user->getPager($itemsPerPage, $total);

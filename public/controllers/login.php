@@ -37,8 +37,8 @@ switch ($action) {
             $tpl->assign('message', _('Login token is not valid. Try to autenticate again.'));
         } else {
 
-            // Try to autenticate the user, not accept credencials from backend
-            if ($user->login($login, $password, $token, $captcha) && $user->type == 1) {
+            // Try to autenticate the user, accept credencials from backend
+            if ($user->login($login, $password, $token, $captcha)) {
 
                 // Check if user account is activated
                 if ($user->authorize != 1) {

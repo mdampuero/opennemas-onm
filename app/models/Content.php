@@ -103,13 +103,13 @@ class Content
             case 'publisher':
                 $user  = new User();
 
-                return $this->publisher = $user->get_user_name($this->fk_publisher);
+                return $this->publisher = $user->getUserName($this->fk_publisher);
 
                 break;
             case 'last_editor':
                 $user  = new User();
 
-                return $this->last_editor = $user->get_user_name($this->fk_user_last_editor);
+                return $this->last_editor = $user->getUserName($this->fk_user_last_editor);
 
                 break;
             case 'ratings':

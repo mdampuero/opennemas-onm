@@ -50,7 +50,7 @@ class AclUserController extends Controller
         }
 
         $user      = new \User();
-        $users     = $user->get_users($filter, ' ORDER BY login ');
+        $users     = $user->getUsers($filter, ' ORDER BY login ');
 
         $userGroup = new \UserGroup();
         $groups     = $userGroup->find();

@@ -59,8 +59,8 @@ switch ($action) {
             // Correct CAPTCHA - Filter $_POST vars from FORM
             $data['login']         = $request->request->filter('user_name', null, FILTER_SANITIZE_STRING);
             $data['name']          = $request->request->filter('full_name', null, FILTER_SANITIZE_STRING);
-            // $data['firstname']  = $request->request->filter('first_name', null, FILTER_SANITIZE_STRING);
-            // $data['lastname']   = $request->request->filter('last_name', null, FILTER_SANITIZE_STRING);
+            $data['firstname']     = ''; // Unused field for frontend user
+            $data['lastname']      = ''; // Unused field for frontend user
             $data['password']      = $request->request->filter('pwd', null, FILTER_SANITIZE_STRING);
             $data['cpwd']          = $request->request->filter('cpwd', null, FILTER_SANITIZE_STRING);
             $data['sessionexpire'] = 15;
@@ -159,7 +159,7 @@ switch ($action) {
         $userData = $user->getUserByToken($token);
 
         if ($userData) {
-            $user->authorize_user($userData['pk_user']);
+            $user->authorizeUser($userData['pk_user']);
 
             if ($user->login($userData['login'], $userData['password'], $userData['token'], $captcha)) {
                 // Increase security by regenerating the id

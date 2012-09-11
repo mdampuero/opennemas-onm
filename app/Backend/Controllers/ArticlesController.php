@@ -135,8 +135,8 @@ class ArticlesController extends Controller
 
             foreach ($articles as &$article) {
                 $article->category_name = $article->loadCategoryName($article->id);
-                $article->publisher = $user->get_user_name($article->fk_publisher);
-                $article->editor    = $user->get_user_name($article->fk_user_last_editor);
+                $article->publisher = $user->getUserName($article->fk_publisher);
+                $article->editor    = $user->getUserName($article->fk_user_last_editor);
                 $article->rating    = $rating->getValue($article->id);
                 $article->comment   = $comment->count_public_comments($article->id);
             }
