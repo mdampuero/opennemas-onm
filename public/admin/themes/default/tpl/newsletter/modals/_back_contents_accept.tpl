@@ -4,7 +4,7 @@
       <h3>{t}Potential lose of the actual generated HTML.{/t}</h3>
     </div>
     <div class="modal-body">
-        <p>{t escape=off}This newsletter alreay have a generated HTML, potentially changed by you.<br>If you update the newsletter contents the HTML will overwrite the actual HTML.{/t}</p>
+        <p>{t escape=off}This newsletter already have a generated HTML, potentially changed by you.<br>If you update the newsletter contents the HTML will overwrite the actual HTML.{/t}</p>
     </div>
     <div class="modal-footer">
         <a class="btn btn-primary accept" href="#">{t}Overwrite actual HTML{/t}</a>

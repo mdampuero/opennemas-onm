@@ -152,7 +152,7 @@ class StaticPagesController extends Controller
             );
 
             $staticPage->save($data);
-            m::add(sprintf(_('Static page "%s" created successfully.'), $data['title']));
+            m::add(_('Static page created successfully.'));
 
             return $this->redirect($this->generateUrl('admin_staticpages'));
         }

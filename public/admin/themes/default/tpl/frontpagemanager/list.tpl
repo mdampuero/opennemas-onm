@@ -84,7 +84,7 @@
                 </li>
 
                 <li>
-                    <a href="#" id="button_previewfrontpage"  data-category-name="{if $category eq 0}{t}home{/t}{else}{$datos_cat[0]->name}{/if}" title="{t}Preview frontpage with actual content positions{/t}">
+                    <a href="#" id="button_previewfrontpage"  data-category-name="{if $category eq 0}home{else}{$datos_cat[0]->name}{/if}" title="{t}Preview frontpage with actual content positions{/t}">
                         <img src="{$params.IMAGE_DIR}preview.png" alt="{t}Preview{/t}" ><br />{t}Preview{/t}
                     </a>
                 </li>

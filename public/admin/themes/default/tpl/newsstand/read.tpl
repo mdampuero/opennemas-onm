@@ -90,7 +90,7 @@ jQuery(document).ready(function($) {
                 <label for="price" class="control-label">{t}Price{/t}</label>
                 <div class="controls">
                     <input type="text" id="price" name="price" value="{$cover->price|number_format:2:".":","|default:"0"}" required="required" class="input-xxlarge"/>
-                    <div class="help">{t}Dot separates the pennies{/t}.</div>
+                    <div class="help">{t}Split decimals with a dot{/t}.</div>
                 </div>
             </div>
 

@@ -222,10 +222,10 @@
             </div>
         </div>
         <div class="control-group" style="{if !isset($advertisement) || $advertisement->type_advertisement != 50}display:none{/if};">
-            <label for="with_script" class="control-label">{t}Display time{/t}</label>
+            <label for="with_script" class="control-label">{t}Display banner while{/t}</label>
             <div class="controls">
                 <input type="text" id="timeout" name="timeout" value="{$advertisement->timeout|default:"4"}" />
-                <div class="help-block">{t}This banner blocks all the page so hide it after this amount of seconds.{/t}</div>
+                <div class="help-block">{t}Amount of seconds that this banner will block all the page..{/t}</div>
             </div>
         </div>
 

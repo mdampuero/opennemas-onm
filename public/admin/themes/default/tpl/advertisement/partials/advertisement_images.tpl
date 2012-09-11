@@ -63,7 +63,7 @@
             <!-- /related-images --> </td>
         <td id="photos_container">
             <div style="border:1px double #ccc; border-bottom:0 none; background-color:#EEE; padding:7px;">
-                <strong>{t}Images videos{/t}</strong>
+                <strong>{t}Available images{/t}</strong>
             </div>
             <div id="photos" class="photos clearfix">
             </div>

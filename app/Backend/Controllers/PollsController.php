@@ -215,9 +215,9 @@ class PollsController extends Controller
             );
 
             if ($poll->create($data)) {
-                m::add(_('Special successfully created.'), m::SUCCESS);
+                m::add(_('Poll successfully created.'), m::SUCCESS);
             } else {
-                m::add(_('Unable to create the new v.'), m::ERROR);
+                m::add(_('Unable to create the new poll.'), m::ERROR);
             }
 
             return $this->redirect(
@@ -263,7 +263,7 @@ class PollsController extends Controller
     }
 
     /**
-     * Updates the special information
+     * Updates the poll information
      *
      * @param Request $request the request object
      *
@@ -333,8 +333,8 @@ class PollsController extends Controller
         $page     = $request->query->getDigits('page', 1);
 
         if (!empty($id)) {
-            $special = new \Poll($id);
-            $special->delete($id);
+            $poll = new \Poll($id);
+            $poll->delete($id);
             m::add(_("Poll deleted successfully."), m::SUCCESS);
         } else {
             m::add(_('You must give an id for delete a poll.'), m::ERROR);
@@ -514,7 +514,7 @@ class PollsController extends Controller
      **/
     public function batchPublishAction(Request $request)
     {
-        $this->checkAclOrForward('SPECIAL_DELETE');
+        $this->checkAclOrForward('POLL_DELETE');
 
         $status   = $request->query->getDigits('status', 0);
         $selected = $request->query->get('selected_fld', null);

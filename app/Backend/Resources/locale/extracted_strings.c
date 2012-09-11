@@ -877,6 +877,66 @@ gettext("Dates grouped is recommended for weekly newspapers.");
 /* public/admin/themes/default/tpl//newsstand/config.tpl */
 gettext("Save");
 
+/* public/admin/themes/default/tpl//newsstand/new.tpl */
+gettext("ePaper Manager");
+
+/* public/admin/themes/default/tpl//newsstand/new.tpl */
+gettext("New ePaper");
+
+/* public/admin/themes/default/tpl//newsstand/new.tpl */
+gettext("Editing ePaper");
+
+/* public/admin/themes/default/tpl//newsstand/new.tpl */
+gettext("Cancel");
+
+/* public/admin/themes/default/tpl//newsstand/new.tpl */
+gettext("Title");
+
+/* public/admin/themes/default/tpl//newsstand/new.tpl */
+gettext("Category");
+
+/* public/admin/themes/default/tpl//newsstand/new.tpl */
+gettext("%1");
+
+/* public/admin/themes/default/tpl//newsstand/new.tpl */
+gettext("%1");
+
+/* public/admin/themes/default/tpl//newsstand/new.tpl */
+gettext("Available");
+
+/* public/admin/themes/default/tpl//newsstand/new.tpl */
+gettext("No");
+
+/* public/admin/themes/default/tpl//newsstand/new.tpl */
+gettext("Yes");
+
+/* public/admin/themes/default/tpl//newsstand/new.tpl */
+gettext("Favorite");
+
+/* public/admin/themes/default/tpl//newsstand/new.tpl */
+gettext("No");
+
+/* public/admin/themes/default/tpl//newsstand/new.tpl */
+gettext("Yes");
+
+/* public/admin/themes/default/tpl//newsstand/new.tpl */
+gettext("Keywords");
+
+/* public/admin/themes/default/tpl//newsstand/new.tpl */
+gettext("Separated by commas");
+
+/* public/admin/themes/default/tpl//newsstand/new.tpl */
+gettext("Price");
+
+/* public/admin/themes/default/tpl//newsstand/new.tpl */
+gettext("Date");
+
+/* public/admin/themes/default/tpl//newsstand/new.tpl */
+gettext("Upload PDF");
+
+/* public/admin/themes/default/tpl//newsstand/new.tpl */
+gettext("Save");
+
 /* public/admin/themes/default/tpl//newsstand/read.tpl */
 gettext("ePaper Manager");
 
@@ -912,6 +972,24 @@ gettext("Title");
 
 /* public/admin/themes/default/tpl//newsstand/read.tpl */
 gettext("Keywords");
+
+/* public/admin/themes/default/tpl//newsstand/read.tpl */
+gettext("List of words separated by commas");
+
+/* public/admin/themes/default/tpl//newsstand/read.tpl */
+gettext("Price");
+
+/* public/admin/themes/default/tpl//newsstand/read.tpl */
+gettext("Split decimals with a dot");
+
+/* public/admin/themes/default/tpl//newsstand/read.tpl */
+gettext("Type");
+
+/* public/admin/themes/default/tpl//newsstand/read.tpl */
+gettext("Item");
+
+/* public/admin/themes/default/tpl//newsstand/read.tpl */
+gettext("Subscription");
 
 /* public/admin/themes/default/tpl//newsstand/read.tpl */
 gettext("Category");
@@ -1014,6 +1092,9 @@ gettext("Section");
 
 /* public/admin/themes/default/tpl//newsstand/list.tpl */
 gettext("Date");
+
+/* public/admin/themes/default/tpl//newsstand/list.tpl */
+gettext("Price");
 
 /* public/admin/themes/default/tpl//newsstand/list.tpl */
 gettext("Last editor");
@@ -1542,6 +1623,9 @@ gettext("Sync Categories");
 
 /* public/admin/themes/default/tpl//menues/edit.tpl */
 gettext("Sync");
+
+/* public/admin/themes/default/tpl//menues/edit.tpl */
+gettext("Add to menu");
 
 /* public/admin/themes/default/tpl//menues/list.tpl */
 gettext("Menu manager");
@@ -2984,9 +3068,6 @@ gettext("Clean cache");
 gettext("Clean cache");
 
 /* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
-gettext("home");
-
-/* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
 gettext("Preview frontpage with actual content positions");
 
 /* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
@@ -3009,6 +3090,9 @@ gettext("Add contents");
 
 /* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
 gettext("Add contents");
+
+/* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
+gettext("Default layout for this frontpage");
 
 /* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
 gettext("Available contents");
@@ -3042,6 +3126,9 @@ gettext("%1");
 
 /* public/admin/themes/default/tpl//frontpagemanager/_render_menu_categories.tpl */
 gettext("%1");
+
+/* public/admin/themes/default/tpl//frontpagemanager/_render_menu_categories.tpl */
+gettext("Pick layout");
 
 /* public/admin/themes/default/tpl//frontpagemanager/modals/_modal_drop_selected.tpl */
 gettext("Drop these elements");
@@ -4895,16 +4982,25 @@ gettext("Image or flash from library");
 gettext("Custom HTML or Javascript code");
 
 /* public/admin/themes/default/tpl//advertisement/new.tpl */
+gettext("Size");
+
+/* public/admin/themes/default/tpl//advertisement/new.tpl */
+gettext("Width");
+
+/* public/admin/themes/default/tpl//advertisement/new.tpl */
+gettext("Height");
+
+/* public/admin/themes/default/tpl//advertisement/new.tpl */
 gettext("Hide Flash events");
 
 /* public/admin/themes/default/tpl//advertisement/new.tpl */
 gettext("Mark this if you want to overide the default click handler for Flash based ads.");
 
 /* public/admin/themes/default/tpl//advertisement/new.tpl */
-gettext("Display time");
+gettext("Display banner while");
 
 /* public/admin/themes/default/tpl//advertisement/new.tpl */
-gettext("This banner blocks all the page so hide it after this amount of seconds.");
+gettext("Amount of seconds that this banner will block all the page..");
 
 /* public/admin/themes/default/tpl//advertisement/new.tpl */
 gettext("Position");
@@ -5117,7 +5213,7 @@ gettext("Description");
 gettext("Tags");
 
 /* public/admin/themes/default/tpl//advertisement/partials/advertisement_images.tpl */
-gettext("Images videos");
+gettext("Available images");
 
 /* public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_poll_inner.tpl */
 gettext("Polls");
@@ -6452,6 +6548,12 @@ gettext("Twitter Page");
 gettext("If you also have a <b>twitter page</b>, add your profile name on the form. <br/>Default will be set with Opennemas.");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Google+ Page Url");
+
+/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
+gettext("If you have a <b>Google+ page</b>, please complete this input.");
+
+/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("Facebook Page Url");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
@@ -6522,6 +6624,15 @@ gettext("Used when we want to test if the user is an human and not a robot.");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("Private key");
+
+/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Paypal Settings");
+
+/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Account email:");
+
+/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
+gettext("You can get your PayPal account email from <a href=\"https://www.paypal.com/\">PayPal site</a>. This must be a business account for receiving payments");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("Save");
@@ -7028,7 +7139,7 @@ gettext("Save");
 gettext("Potential lose of the actual generated HTML.");
 
 /* public/admin/themes/default/tpl//newsletter/modals/_back_contents_accept.tpl */
-gettext("This newsletter alreay have a generated HTML, potentially changed by you.<br>If you update the newsletter contents the HTML will overwrite the actual HTML.");
+gettext("This newsletter already have a generated HTML, potentially changed by you.<br>If you update the newsletter contents the HTML will overwrite the actual HTML.");
 
 /* public/admin/themes/default/tpl//newsletter/modals/_back_contents_accept.tpl */
 gettext("Overwrite actual HTML");

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-04 15:33+0200\n"
+"POT-Creation-Date: 2012-09-12 00:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,6 +19,24 @@ msgstr ""
 
 #: public/controllers/letter.php:165
 msgid "Su Carta al Director <strong>no</strong> ha sido guardada."
+msgstr ""
+
+#: public/controllers/login.php:37
+msgid "Login token is not valid. Try to autenticate again."
+msgstr ""
+
+#: public/controllers/login.php:47
+msgid ""
+"You have to accept your subscription by e-mail first. Please check your "
+"inbox."
+msgstr ""
+
+#: public/controllers/login.php:75
+msgid "You have logged in correctly. You will be redirect to the Home page"
+msgstr ""
+
+#: public/controllers/login.php:80
+msgid "Username or password incorrect."
 msgstr ""
 
 #: public/controllers/rating.php:15
