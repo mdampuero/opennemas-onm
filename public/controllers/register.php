@@ -179,7 +179,6 @@ switch ($action) {
                 // Store default expire time
                 $app::setCookieSecure('default_expire', $user->sessionexpire, 0);
                 PrivilegesCheck::loadSessionExpireTime();
-                $GLOBALS['Session']->cleanExpiredSessionFiles();
             }
 
             $paypalEmail = s::get("paypal_settings");
@@ -414,6 +413,8 @@ switch ($action) {
                 && $data['password'] == $data['cpwd']) {
 
                 if ($user->update($data)) {
+                    var_dump($data);die();
+
                     $resp = true;
                     $tpl->assign('success', 'Os datos do usuario foron modificados correctamente');
                 } else {
@@ -421,16 +422,20 @@ switch ($action) {
                     $tpl->assign('error', $error);
                 }
             } else {
+
+                    var_dump($data);die();
                 $error = 'A ocurrido un erro de seguridade. Por favor, ténteo de novo.';
                 $tpl->assign('error', $error);
             }
         } else {
+
+                    var_dump($data);die();
             $error = 'A ocurrido un erro co usuario. Por favor, ténteo de novo.';
             $tpl->assign('error', $error);
         }
 
         $tpl->assign('resp_ok', $resp);
-        $tpl->display('login/register.tpl');
+        // $tpl->display('login/register.tpl');
 
         break;
     default:
