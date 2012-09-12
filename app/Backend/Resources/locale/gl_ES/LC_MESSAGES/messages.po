@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-09-12 00:14+0200\n"
-"PO-Revision-Date: 2012-09-12 00:59+0200\n"
+"PO-Revision-Date: 2012-09-12 03:43+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -192,78 +192,78 @@ msgid "Successfully deleted %d ads"
 msgstr "Elimináronse correctamente %d publicidades."
 
 #: app/Backend/Controllers/AdsController.php:452
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find an advertisement with the id \"%d\""
-msgstr "Non foi posíbel atopar unha foto con ese identificador"
+msgstr "Non foi posíbel atopar unha publicidade co identificador «%d»"
 
 #: app/Backend/Controllers/AdsController.php:458
 #, php-format
 msgid "Successfully changed the available status of %d ads"
-msgstr ""
+msgstr "Estado de dispoñibilidade cambiado correctamente para %d publicidades"
 
 #: app/Backend/Controllers/AdsController.php:493
 #, php-format
 msgid "Successfully changed availability for the ad \"%s\""
 msgstr ""
+"Estado de dispoñibilidade cambiado correctamente para a publicidade «%s»"
 
 #: app/Backend/Controllers/AlbumsController.php:160
 #, php-format
 msgid "You must put %d albums in the HOME widget"
-msgstr "Debe tes %d álbums para o widget de portada"
+msgstr "Débense ter %d álbums para o widget de portada"
 
 #: app/Backend/Controllers/AlbumsController.php:219
-#, fuzzy
 msgid "Album created successfully"
-msgstr "Ficheiro creado con éxito."
+msgstr "Álbum creado correctamente"
 
 #: app/Backend/Controllers/AlbumsController.php:269
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find an album with the id \"%d\"."
-msgstr "Non foi posíbel atopar unha foto con ese identificador"
+msgstr "Non foi posíbel atopar un álbum co identificador «%d»."
 
 #: app/Backend/Controllers/AlbumsController.php:276
-#, fuzzy
 msgid "Album delete successfully."
-msgstr "Categoría eliminada con éxito."
+msgstr "Álbum eliminado correctamente."
 
 #: app/Backend/Controllers/AlbumsController.php:304
 #: app/Backend/Controllers/AlbumsController.php:338
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find the album with the id \"%d\""
-msgstr "Non foi posíbel atopar unha foto con ese identificador"
+msgstr "Non foi posíbel atopar o álbum co identificador «%d»"
 
 #: app/Backend/Controllers/AlbumsController.php:347
-#, fuzzy
 msgid "You don't have enought privileges for modify this album."
-msgstr "Sentímolo, vostede non ten permisos dabondo"
+msgstr "Non ten permisos dabondo para modificar este álbum."
 
 #: app/Backend/Controllers/AlbumsController.php:371
-#, fuzzy
 msgid "Album updated successfully."
-msgstr "Ficheiro creado con éxito."
+msgstr "Álbum actualizado correctamente."
 
 #: app/Backend/Controllers/AlbumsController.php:410
 #: app/Backend/Controllers/AlbumsController.php:447
 #: app/Backend/Controllers/AlbumsController.php:483
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find album with id \"%d\""
-msgstr "Non foi posíbel atopar unha foto con ese identificador"
+msgstr "Non foi posíbel atopar un álbum co identificador «%d»"
 
 #: app/Backend/Controllers/AlbumsController.php:416
 #, php-format
 msgid "Successfully changed availability for album with id \"%d\""
 msgstr ""
+"Estado de dispoñibilidade cambiado correctamente para o álbum co "
+"identificador «%d»"
 
 #: app/Backend/Controllers/AlbumsController.php:451
 #: app/Backend/Controllers/AlbumsController.php:486
 #, php-format
 msgid "Successfully changed suggested flag for album with id \"%d\""
 msgstr ""
+"Estado de suxerido cambiado correctamente para o álbum co identificador «d»"
 
 #: app/Backend/Controllers/AlbumsController.php:525
-#, fuzzy, php-format
+#, php-format
 msgid "Album \"%s\" deleted successfully."
-msgstr "Categoría eliminada con éxito."
+msgstr "Álbum «%s» eliminado correctamente."
 
 #: app/Backend/Controllers/AlbumsController.php:730
 #: app/Backend/Controllers/CoversController.php:640
@@ -271,68 +271,65 @@ msgstr "Categoría eliminada con éxito."
 #: app/Backend/Controllers/PollsController.php:642
 #: app/Backend/Controllers/SpecialsController.php:631
 msgid "Settings saved successfully."
-msgstr "Configuracións gardadas con éxito."
+msgstr "Configuracións gardadas correctamente."
 
 #: app/Backend/Controllers/ArticlesController.php:71
-#, fuzzy
 msgid "You don't have enought privileges to see this category."
-msgstr "Sentímolo, vostede non ten permisos dabondo"
+msgstr "Non ten permisos dabondo para ver esta categoría."
 
 #: app/Backend/Controllers/ArticlesController.php:260
 msgid "Article successfully created."
-msgstr ""
+msgstr "Artígo creado correctamente."
 
 #: app/Backend/Controllers/ArticlesController.php:262
-#, fuzzy
 msgid "Unable to create the new article."
-msgstr "Crear novo artigo"
+msgstr "Non foi posíbel crear o novo artigo."
 
 #: app/Backend/Controllers/ArticlesController.php:324
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find the artucle with the id \"%d\""
-msgstr "Non foi posíbel atopar unha foto con ese identificador"
+msgstr "Non foi posíbel atopar o artigo co identificador «%d»"
 
 #: app/Backend/Controllers/ArticlesController.php:457
 msgid ""
 "You can't modify this article because you don't have enought privileges."
-msgstr "Non pode modificar este artigo porque non ten permisos dabondo."
+msgstr "Non ten permisos dabondo para modificar este artigo."
 
 #: app/Backend/Controllers/ArticlesController.php:546
 msgid "Article successfully updated."
-msgstr ""
+msgstr "Artigo actualizado correctamente."
 
 #: app/Backend/Controllers/ArticlesController.php:548
-#, fuzzy
 msgid "Unable to update the article."
-msgstr "Non foi posíbel atopar unha foto con ese identificador"
+msgstr "Non foi posíbel actualizar o artigo."
 
 #: app/Backend/Controllers/ArticlesController.php:596
-#, fuzzy
 msgid "Article deleted successfully."
-msgstr "Categoría eliminada con éxito."
+msgstr "Artigo eliminado correctamente."
 
 #: app/Backend/Controllers/ArticlesController.php:598
-#, fuzzy
 msgid "You must give an id for delete an article."
-msgstr "Debe fornecer un id para eliminar o álbum."
+msgstr "Debe fornecer un identificador para eliminar un artigo."
 
 #: app/Backend/Controllers/ArticlesController.php:633
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find article with id \"%d\""
-msgstr "Non foi posíbel atopar unha foto con ese identificador"
+msgstr "Non foi posíbel atopar un artigo co identificador «%d»"
 
 #: app/Backend/Controllers/ArticlesController.php:639
 #, php-format
 msgid "Successfully changed availability for article with id \"%d\""
 msgstr ""
+"Estado de dispoñibilidade cambiado correctamente para o artigo co "
+"identificador «%d»"
 
 #: app/Backend/Controllers/AuthenticationController.php:81
 msgid "Login token is not valid. Try to autenticate again."
-msgstr ""
+msgstr "O seu token de inicio de sesión non é válido. Téntao de novo."
 
 #: app/Backend/Controllers/AuthenticationController.php:90
 msgid "This user was deactivated. Please ask your administrator."
-msgstr "Este usuario está desactivado. Pregunte ao seu administrador."
+msgstr "Este usuario está desactivado. Pregunta ao teu administrador."
 
 #: app/Backend/Controllers/AuthenticationController.php:133
 msgid "Username or password incorrect."
@@ -342,7 +339,7 @@ msgstr "O usuario ou o contrasinal son incorrectos."
 #: app/Backend/Controllers/BooksController.php:184
 #, php-format
 msgid "You must put %d books in the HOME widget"
-msgstr "Debe ter %d libros para o Widget de portada"
+msgstr "Débense ter %d libros para o Widget de portada"
 
 #: app/Backend/Controllers/BooksController.php:257
 #, php-format
@@ -359,9 +356,9 @@ msgstr "Desculpe, non foi posíbel subir o ficheiro."
 #: app/Backend/Controllers/BooksController.php:281
 #: app/Backend/Controllers/BooksController.php:309
 #: app/Backend/Controllers/BooksController.php:388
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find the book with the id \"%d\""
-msgstr "Non foi posíbel atopar unha foto con ese identificador"
+msgstr "Non foi posíbel atopar o libro co identificador «%d»"
 
 #: app/Backend/Controllers/BooksController.php:317
 msgid ""
@@ -369,25 +366,28 @@ msgid ""
 msgstr "Non pode modificar este libro porque non ten permisos dabondo."
 
 #: app/Backend/Controllers/BooksController.php:429
-#, fuzzy, php-format
+#, php-format
 msgid "Book \"%s\" deleted successfully."
-msgstr "Categoría eliminada con éxito."
+msgstr "O libro «%s» foi eliminado correctamente."
 
 #: app/Backend/Controllers/BooksController.php:459
 #: app/Backend/Controllers/BooksController.php:496
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find book with id \"%d\""
-msgstr "Non foi posíbel atopar unha foto con ese identificador"
+msgstr "Non foi posíbel atopar o libro co identificador «%d»"
 
 #: app/Backend/Controllers/BooksController.php:465
 #, php-format
 msgid "Successfully changed availability for book with id \"%d\""
 msgstr ""
+"Estado de dispoñibilidade cambiado correctamente para o libro co "
+"identificador «%d»"
 
 #: app/Backend/Controllers/BooksController.php:499
 #, php-format
 msgid "Successfully changed suggested flag for book with id \"%d\""
 msgstr ""
+"Estado de suxerido cambiado correctamente para o libro co identificador «%d»"
 
 #: app/Backend/Controllers/BooksController.php:542
 #: app/Backend/Controllers/CoversController.php:600
@@ -396,7 +396,7 @@ msgstr ""
 #: app/Backend/Controllers/SpecialsController.php:400
 #: app/Backend/Controllers/VideosController.php:653
 msgid "Positions saved successfully."
-msgstr "Posicións gardadas con éxito."
+msgstr "Posicións gardadas correctamente."
 
 #: app/Backend/Controllers/BooksController.php:546
 #: app/Backend/Controllers/CoversController.php:604
@@ -411,12 +411,11 @@ msgstr ""
 
 #: app/Backend/Controllers/CacheManagerController.php:144
 msgid "FRONTPAGE"
-msgstr ""
+msgstr "PORTADA"
 
 #: app/Backend/Controllers/CacheManagerController.php:235
-#, fuzzy
 msgid "Cache configuration saved successfully."
-msgstr "Configuración de Disqus gardada correctamente"
+msgstr "Configuración de caché gardada correctamente."
 
 #: app/Backend/Controllers/CacheManagerController.php:246
 #: app/models/Frontpage.php:64
@@ -478,49 +477,43 @@ msgid "Sitemap"
 msgstr "Mapa do sitio"
 
 #: app/Backend/Controllers/CacheManagerController.php:295
-#, fuzzy, php-format
+#, php-format
 msgid "Frontpage for category %s"
-msgstr "Artigos de portada"
+msgstr "Portada para a categoría %s"
 
 #: app/Backend/Controllers/CacheManagerController.php:302
-#, fuzzy
 msgid "General frontpage"
-msgstr "Albúm: portada"
+msgstr "Portada: principal"
 
 #: app/Backend/Controllers/CacheManagerController.php:316
-#, fuzzy
 msgid "There was an error trying to delete the requested cache page."
-msgstr "Detectouse que o seu navegador enviou datos corruptos. Ténteo de novo."
+msgstr "Produciuse un erro ao tentar eliminar a caché da páxina solicitada."
 
 #: app/Backend/Controllers/CategoriesController.php:243
-#, fuzzy
 msgid "Unable to find a category for the give id."
-msgstr "Non foi posíbel atopar unha foto con ese identificador"
+msgstr "Non foi posíbel atopar unha categoría co identificador fornecido."
 
 #: app/Backend/Controllers/CategoriesController.php:293
-#, fuzzy, php-format
+#, php-format
 msgid "Category \"%s\" updated successfully."
-msgstr "Categoría eliminada con éxito."
+msgstr "Categoría «%s» actualizada correctamente."
 
 #: app/Backend/Controllers/CategoriesController.php:336
-#, fuzzy
 msgid "Category deleted successfully."
-msgstr "Categoría eliminada con éxito."
+msgstr "Categoría eliminada correctamente."
 
 #: app/Backend/Controllers/CategoriesController.php:338
-#, fuzzy
 msgid "To delete a category previously you have to empty it."
-msgstr "Para eliminar unha categoría primeiro debe baleirala."
+msgstr "Para eliminar unha categoría primeiro debe eliminar os seus contidos."
 
 #: app/Backend/Controllers/CategoriesController.php:342
-#, fuzzy
 msgid "You must give a valid id for delete the category."
-msgstr "Debe fornecer un identificador para eliminar un vídeo."
+msgstr "Debe fornecer un identificador para eliminar unha categoría."
 
 #: app/Backend/Controllers/CategoriesController.php:367
 #, fuzzy
 msgid "Category emptied successfully."
-msgstr "Categoría eliminada con éxito."
+msgstr "Categoría baleirada correctamente."
 
 #: app/Backend/Controllers/CategoriesController.php:371
 #, fuzzy, php-format
@@ -586,33 +579,33 @@ msgstr "O ID «%d» non existe"
 #: app/Backend/Controllers/CommentsController.php:243
 #, fuzzy
 msgid "Comment saved successfully."
-msgstr "Configuracións gardadas con éxito."
+msgstr "Configuracións gardadas correctamente."
 
 #: app/Backend/Controllers/CommentsController.php:268
 #, fuzzy
 msgid "Comment deleted successfully."
-msgstr "Categoría eliminada con éxito."
+msgstr "Categoría eliminada correctamente."
 
 #: app/Backend/Controllers/CommentsController.php:290
 #, fuzzy
 msgid "Comment was rejected successfully."
-msgstr "Ficheiro creado con éxito."
+msgstr "Ficheiro creado correctamente."
 
 #: app/Backend/Controllers/CommentsController.php:293
 #: app/Backend/Controllers/CommentsController.php:329
 #, fuzzy
 msgid "Comment was published successfully."
-msgstr "Configuracións gardadas con éxito."
+msgstr "Configuracións gardadas correctamente."
 
 #: app/Backend/Controllers/CommentsController.php:332
 #, fuzzy
 msgid "Comment was unpublished successfully."
-msgstr "Ficheiro creado con éxito."
+msgstr "Ficheiro creado correctamente."
 
 #: app/Backend/Controllers/CommentsController.php:364
 #, fuzzy
 msgid "Comments deleted successfully."
-msgstr "Categoría eliminada con éxito."
+msgstr "Categoría eliminada correctamente."
 
 #: app/Backend/Controllers/CommentsController.php:366
 #, fuzzy
@@ -678,7 +671,7 @@ msgstr "Non pode modificar este contenido porque non ten permisos dabondo."
 #: app/Backend/Controllers/CoversController.php:326
 #, fuzzy
 msgid "Cover updated successfully."
-msgstr "Ficheiro creado con éxito."
+msgstr "Ficheiro creado correctamente."
 
 #: app/Backend/Controllers/CoversController.php:373
 #, fuzzy
@@ -715,7 +708,7 @@ msgstr "Non foi posíbel atopar unha foto con ese identificador"
 #: app/Backend/Controllers/VideosController.php:474
 #, fuzzy, php-format
 msgid "Video \"%s\" deleted successfully."
-msgstr "Categoría eliminada con éxito."
+msgstr "Categoría eliminada correctamente."
 
 #: app/Backend/Controllers/DatabaseErrorsController.php:129
 msgid "SQL errors registered in database cleaned sucessfully."
@@ -728,7 +721,7 @@ msgstr ""
 
 #: app/Backend/Controllers/FilesController.php:320
 msgid "File created successfuly."
-msgstr "Ficheiro creado con éxito."
+msgstr "Ficheiro creado correctamente."
 
 #: app/Backend/Controllers/FilesController.php:323
 #, fuzzy
@@ -755,7 +748,7 @@ msgstr "Non foi posíbel atopar unha foto con ese identificador"
 #: app/Backend/Controllers/FilesController.php:401
 #, fuzzy, php-format
 msgid "File information updated successfuly."
-msgstr "Ficheiro creado con éxito."
+msgstr "Ficheiro creado correctamente."
 
 #: app/Backend/Controllers/FilesController.php:403
 #, fuzzy, php-format
@@ -770,7 +763,7 @@ msgstr "Non foi posíbel atopar unha foto con ese identificador"
 #: app/Backend/Controllers/FilesController.php:442
 #, fuzzy, php-format
 msgid "File with id '%d' deleted successfuly."
-msgstr "Ficheiro creado con éxito."
+msgstr "Ficheiro creado correctamente."
 
 #: app/Backend/Controllers/FilesController.php:475
 msgid "This file is not published so you can't define it as favorite."
@@ -794,7 +787,7 @@ msgstr ""
 #: app/Backend/Controllers/FilesController.php:589
 #, fuzzy, php-format
 msgid "Files \"%s\" deleted successfully."
-msgstr "Ficheiro creado con éxito."
+msgstr "Ficheiro creado correctamente."
 
 #: app/Backend/Controllers/FrontpagesController.php:206
 msgid "Content positions saved properly"
@@ -821,7 +814,7 @@ msgstr "Publicidade"
 
 #: app/Backend/Controllers/ImagesController.php:309
 msgid "Image module settings saved successfully."
-msgstr "Configuracións do módulo de imaxes gardadas con éxito."
+msgstr "Configuracións do módulo de imaxes gardadas correctamente."
 
 #: app/Backend/Controllers/ImagesController.php:479
 msgid "Please provide a valid category for upload images."
@@ -849,7 +842,7 @@ msgstr "Non foi posíbel atopar unha foto con ese identificador"
 #: app/Backend/Controllers/ImagesController.php:819
 #, fuzzy, php-format
 msgid "Image \"%s\" deleted successfully."
-msgstr "Categoría eliminada con éxito."
+msgstr "Categoría eliminada correctamente."
 
 #: app/Backend/Controllers/ImagesController.php:872
 #, fuzzy, php-format
@@ -1064,17 +1057,17 @@ msgstr "Correo electrónico"
 #: app/Backend/Controllers/KeywordsController.php:127
 #, fuzzy
 msgid "Keyword created sucessfully"
-msgstr "Ficheiro creado con éxito."
+msgstr "Ficheiro creado correctamente."
 
 #: app/Backend/Controllers/KeywordsController.php:168
 #, fuzzy
 msgid "Keyword updated sucessfully"
-msgstr "Ficheiro creado con éxito."
+msgstr "Ficheiro creado correctamente."
 
 #: app/Backend/Controllers/LettersController.php:114
 #, fuzzy
 msgid "Letter successfully created."
-msgstr "Configuracións gardadas con éxito."
+msgstr "Configuracións gardadas correctamente."
 
 #: app/Backend/Controllers/LettersController.php:116
 msgid "Unable to create the new letter."
@@ -1088,7 +1081,7 @@ msgstr "Non foi posíbel atopar unha foto con ese identificador"
 #: app/Backend/Controllers/LettersController.php:183
 #, fuzzy
 msgid "Letter successfully updated."
-msgstr "Configuracións gardadas con éxito."
+msgstr "Configuracións gardadas correctamente."
 
 #: app/Backend/Controllers/LettersController.php:185
 #, fuzzy
@@ -1098,7 +1091,7 @@ msgstr "Anovar lista"
 #: app/Backend/Controllers/LettersController.php:220
 #, fuzzy
 msgid "Letter deleted successfully."
-msgstr "Categoría eliminada con éxito."
+msgstr "Categoría eliminada correctamente."
 
 #: app/Backend/Controllers/LettersController.php:222
 #, fuzzy
@@ -1130,7 +1123,7 @@ msgstr ""
 #: app/Backend/Controllers/MenusController.php:164
 #, fuzzy, php-format
 msgid "Menu '%s' created successfully."
-msgstr "Ficheiro creado con éxito."
+msgstr "Ficheiro creado correctamente."
 
 #: app/Backend/Controllers/MenusController.php:166
 #, php-format
@@ -1145,7 +1138,7 @@ msgstr "Non foi posíbel atopar unha foto con ese identificador"
 #: app/Backend/Controllers/MenusController.php:264
 #, fuzzy
 msgid "Menu updated successfully."
-msgstr "Ficheiro creado con éxito."
+msgstr "Ficheiro creado correctamente."
 
 #: app/Backend/Controllers/MenusController.php:266
 #, fuzzy
@@ -1160,12 +1153,12 @@ msgstr "Debe fornecer un id para eliminar o álbum."
 #: app/Backend/Controllers/MenusController.php:301
 #, fuzzy, php-format
 msgid "Menu '%s' deleted successfully."
-msgstr "Categoría eliminada con éxito."
+msgstr "Categoría eliminada correctamente."
 
 #: app/Backend/Controllers/MenusController.php:337
 #, fuzzy, php-format
 msgid "Menu \"%s\" deleted successfully."
-msgstr "Categoría eliminada con éxito."
+msgstr "Categoría eliminada correctamente."
 
 #: app/Backend/Controllers/MenusController.php:339
 #, fuzzy, php-format
@@ -1177,7 +1170,7 @@ msgstr ""
 #: app/Backend/Controllers/NewsletterController.php:332
 #, fuzzy
 msgid "Newsletter deleted successfully."
-msgstr "Categoría eliminada con éxito."
+msgstr "Categoría eliminada correctamente."
 
 #: app/Backend/Controllers/NewsletterController.php:334
 #, fuzzy
@@ -1187,7 +1180,7 @@ msgstr "Debe fornecer un id para eliminar o álbum."
 #: app/Backend/Controllers/NewsletterController.php:362
 #, fuzzy
 msgid "Newsletter module settings saved successfully."
-msgstr "Configuracións do módulo de imaxes gardadas con éxito."
+msgstr "Configuracións do módulo de imaxes gardadas correctamente."
 
 #: app/Backend/Controllers/NewsletterController.php:405
 msgid ""
@@ -1208,7 +1201,7 @@ msgstr ""
 #: app/Backend/Controllers/NewsletterSubscriptorsController.php:88
 #, fuzzy
 msgid "Subscription successfully created."
-msgstr "Posicións gardadas con éxito."
+msgstr "Posicións gardadas correctamente."
 
 #: app/Backend/Controllers/NewsletterSubscriptorsController.php:90
 #, fuzzy, php-format
@@ -1218,7 +1211,7 @@ msgstr "Enderezo de correo electrónico no que recibir as novas subscricións"
 #: app/Backend/Controllers/NewsletterSubscriptorsController.php:134
 #, fuzzy
 msgid "Subscription successfully updated."
-msgstr "Posicións gardadas con éxito."
+msgstr "Posicións gardadas correctamente."
 
 #: app/Backend/Controllers/NewsletterSubscriptorsController.php:136
 #, fuzzy
@@ -1294,7 +1287,7 @@ msgstr ""
 #: app/Backend/Controllers/OpinionAuthorsController.php:264
 #, fuzzy
 msgid "Author deleted successfully."
-msgstr "Categoría eliminada con éxito."
+msgstr "Categoría eliminada correctamente."
 
 #: app/Backend/Controllers/OpinionAuthorsController.php:266
 #, fuzzy
@@ -1304,7 +1297,7 @@ msgstr "Debe fornecer un id para eliminar o álbum."
 #: app/Backend/Controllers/OpinionAuthorsController.php:353
 #, fuzzy, php-format
 msgid "Deleted the author successfully."
-msgstr "Ficheiro creado con éxito."
+msgstr "Ficheiro creado correctamente."
 
 #: app/Backend/Controllers/OpinionAuthorsController.php:355
 #, fuzzy, php-format
@@ -1326,7 +1319,7 @@ msgstr "Non foi posíbel atopar unha foto con ese identificador"
 #: app/Backend/Controllers/SpecialsController.php:205
 #, fuzzy
 msgid "Special successfully created."
-msgstr "Configuracións gardadas con éxito."
+msgstr "Configuracións gardadas correctamente."
 
 #: app/Backend/Controllers/OpinionsController.php:313
 #: app/Backend/Controllers/SpecialsController.php:207
@@ -1341,7 +1334,7 @@ msgstr "Non pode modificar esta opinión porque non ten permisos dabondo."
 #: app/Backend/Controllers/OpinionsController.php:385
 #, fuzzy
 msgid "Opinion successfully updated."
-msgstr "Posicións gardadas con éxito."
+msgstr "Posicións gardadas correctamente."
 
 #: app/Backend/Controllers/OpinionsController.php:387
 msgid "Unable to update the opinion."
@@ -1350,7 +1343,7 @@ msgstr ""
 #: app/Backend/Controllers/OpinionsController.php:428
 #, fuzzy
 msgid "Opinion deleted successfully."
-msgstr "Categoría eliminada con éxito."
+msgstr "Categoría eliminada correctamente."
 
 #: app/Backend/Controllers/OpinionsController.php:430
 #, fuzzy
@@ -1411,7 +1404,7 @@ msgstr "Debe poñer %d enquéritos na portada"
 #: app/Backend/Controllers/PollsController.php:218
 #, fuzzy
 msgid "Poll successfully created."
-msgstr "Configuracións gardadas con éxito."
+msgstr "Configuracións gardadas correctamente."
 
 #: app/Backend/Controllers/PollsController.php:220
 #, fuzzy
@@ -1437,154 +1430,146 @@ msgid "Unable to find a poll with the id \"%s\"."
 msgstr "Non foi posíbel atopar unha foto con ese identificador"
 
 #: app/Backend/Controllers/PollsController.php:338
-#, fuzzy
 msgid "Poll deleted successfully."
-msgstr "Categoría eliminada con éxito."
+msgstr "Enquérito eliminado correctamente."
 
 #: app/Backend/Controllers/PollsController.php:340
-#, fuzzy
 msgid "You must give an id for delete a poll."
-msgstr "Debe fornecer un id para eliminar o álbum."
+msgstr "Debe fornecer un identificador para eliminar un enquérito."
 
 #: app/Backend/Controllers/PollsController.php:373
 #: app/Backend/Controllers/PollsController.php:410
 #: app/Backend/Controllers/PollsController.php:444
 #: app/Backend/Controllers/PollsController.php:486
 #: app/Backend/Controllers/PollsController.php:537
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find a poll with the id \"%d\""
-msgstr "Non foi posíbel atopar unha foto con ese identificador"
+msgstr "Non foi posíbel atopar un enquérito co identificador «%d»"
 
 #: app/Backend/Controllers/PollsController.php:379
 #, php-format
 msgid "Successfully changed availability for the poll \"%s\""
-msgstr ""
+msgstr "Estado de dispoñibilidade cambiado correctamente para o enquérito «%s»"
 
 #: app/Backend/Controllers/PollsController.php:413
 #: app/Backend/Controllers/PollsController.php:447
 #, php-format
 msgid "Successfully changed suggested flag for the poll \"%s\""
-msgstr ""
+msgstr "Estado de suxerido cambiado correctamente para o enquérito «%s»"
 
 #: app/Backend/Controllers/PollsController.php:491
-#, fuzzy, php-format
+#, php-format
 msgid "Successfully deleted %d polls."
-msgstr "Datos para %d fotos gardados correctamente"
+msgstr "Elimináronse %d enquéritos correctamente."
 
 #: app/Backend/Controllers/PollsController.php:542
 #, php-format
 msgid "Successfully changed the available status of %d polls."
-msgstr ""
+msgstr "Cambiouse o estado de dispoñibilidade de %d enquéritos correctamente."
 
 #: app/Backend/Controllers/SpecialsController.php:148
 #, php-format
 msgid "You must put %d specials in the HOME widget"
-msgstr "Debe tes %d álbumes para o widget de portada"
+msgstr "Débense ter %d especiais para o widget de portada"
 
 #: app/Backend/Controllers/SpecialsController.php:236
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find the special with the id \"%d\""
-msgstr "Non foi posíbel atopar unha foto con ese identificador"
+msgstr "Non foi posíbel atopar un especial co identificador «%d»"
 
 #: app/Backend/Controllers/SpecialsController.php:309
-#, fuzzy
 msgid "Special successfully updated."
-msgstr "Configuracións gardadas con éxito."
+msgstr "Especial actualizado correctamente."
 
 #: app/Backend/Controllers/SpecialsController.php:311
 msgid "Unable to update the special."
-msgstr ""
+msgstr "Non foi posíbel actualizar o especial."
 
 #: app/Backend/Controllers/SpecialsController.php:351
-#, fuzzy
 msgid "Special deleted successfully."
-msgstr "Categoría eliminada con éxito."
+msgstr "Especial eliminado correctamente."
 
 #: app/Backend/Controllers/SpecialsController.php:353
-#, fuzzy
 msgid "You must give an id for delete a special."
-msgstr "Debe fornecer un id para eliminar o álbum."
+msgstr "Debe fornecer un identificador para eliminar un especial."
 
 #: app/Backend/Controllers/SpecialsController.php:433
 #: app/Backend/Controllers/SpecialsController.php:484
 #: app/Backend/Controllers/SpecialsController.php:520
 #: app/Backend/Controllers/SpecialsController.php:557
 #: app/Backend/Controllers/SpecialsController.php:591
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find a special with the id \"%d\""
-msgstr "Non foi posíbel atopar unha foto con ese identificador"
+msgstr "Non foi posíbel atopar un especial co identificador «%d»"
 
 #: app/Backend/Controllers/SpecialsController.php:438
 #, php-format
 msgid "Successfully deleted %d specials"
-msgstr ""
+msgstr "Elimináronse %d especiais correctamente"
 
 #: app/Backend/Controllers/SpecialsController.php:489
 #, php-format
 msgid "Successfully changed the available status of %d specials"
-msgstr ""
+msgstr "Estado de dispoñibilidade cambiado correctamente para %d especiais"
 
 #: app/Backend/Controllers/SpecialsController.php:526
 #, php-format
 msgid "Successfully changed availability for the special \"%s\""
-msgstr ""
+msgstr "Estado de dispoñibilidade para o especial «%s»"
 
 #: app/Backend/Controllers/SpecialsController.php:560
 #: app/Backend/Controllers/SpecialsController.php:594
 #, php-format
 msgid "Successfully changed suggested flag for the special \"%s\""
-msgstr ""
+msgstr "Estado de suxerido cambiado correctamente para o especial «%s»"
 
 #: app/Backend/Controllers/StaticPagesController.php:115
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find a static page with the id \"%d\"."
-msgstr "Non foi posíbel atopar unha foto con ese identificador"
+msgstr "Non foi posíbel atopar unha páxina estática co identificador «%d»."
 
 #: app/Backend/Controllers/StaticPagesController.php:155
-#, fuzzy
 msgid "Static page created successfully."
-msgstr "Ficheiro creado con éxito."
+msgstr "Páxina estática creada correctamente."
 
 #: app/Backend/Controllers/StaticPagesController.php:180
-#, fuzzy
 msgid ""
 "You can't modify this static page because you don't have enought privileges."
-msgstr "Non pode modificar este artigo porque non ten permisos dabondo."
+msgstr "Non ten permisos dabondo para modificar esta páxina estática."
 
 #: app/Backend/Controllers/StaticPagesController.php:201
-#, fuzzy
 msgid "Static page updated successfully."
-msgstr "Configuracións gardadas con éxito."
+msgstr "Páxina estática actualizada correctamente."
 
 #: app/Backend/Controllers/StaticPagesController.php:235
-#, fuzzy, php-format
+#, php-format
 msgid "Static Page '%s' deleted successfully."
-msgstr "Categoría eliminada con éxito."
+msgstr "Páxina estática «%s» eliminada correctamente."
 
 #: app/Backend/Controllers/StaticPagesController.php:237
-#, fuzzy
 msgid "You must provide a valid an id for delete the static page."
-msgstr "Debe fornecer un identificador para eliminar un vídeo."
+msgstr ""
+"Debe fornecer un identificador válido para eliminar unha páxina estática."
 
 #: app/Backend/Controllers/StaticPagesController.php:264
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find page with id \"%d\""
-msgstr "Non foi posíbel atopar unha foto con ese identificador"
+msgstr "Non foi posíbel atopar unha páxina estática co identificador «%d»"
 
 #: app/Backend/Controllers/StaticPagesController.php:272
 #, php-format
 msgid "Successfully changed availability for page with id \"%s\""
 msgstr ""
+"Estado de dispoñibilidade cambiado correctamente para a páxina estática co "
+"identificador «%s»"
 
 #: app/Backend/Controllers/StaticPagesController.php:307
-#, fuzzy
 msgid "Can't get static page title. Check the title"
-msgstr "Non é posíble obter información do vídeo. Comprobe o enderezo"
+msgstr "No foi posíbel obter o título da páxina estática. Comprobe o título"
 
 #: app/Backend/Controllers/StaticPagesController.php:330
-#, fuzzy
 msgid "Can't get static page metadata."
-msgstr "Escriba a información da páxina estática"
+msgstr "Non foi posíbel obter os metadatos da páxina estática."
 
 #: app/Backend/Controllers/SystemSettingsController.php:64
 msgid "English"
@@ -1604,68 +1589,68 @@ msgstr "Galego"
 #: app/Backend/Controllers/TrashController.php:166
 #: app/Backend/Controllers/TrashController.php:201
 #: app/Backend/Controllers/TrashController.php:239
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find content with id \"%d\"."
-msgstr "Non foi posíbel arquivar o contido co identificador %s: %s"
+msgstr "Non foi posíbel atopar o contido co identificador «%s»"
 
 #: app/Backend/Controllers/TrashController.php:205
-#, fuzzy
 msgid "You must specify contents for delete."
-msgstr "Debe seleccionar algún elemento."
+msgstr "Debe especificar os contidos a eliminar."
 
 #: app/Backend/Controllers/TrashController.php:243
-#, fuzzy
 msgid "You must specify contents for restore."
-msgstr "Debe seleccionar un contenedor."
+msgstr "Debe especificar os contidos para restaurar."
 
 #: app/Backend/Controllers/VideosController.php:148
 #, php-format
 msgid "You must put %d videos in the HOME widget"
-msgstr "Debe ter %d vídeos para o widget de portada"
+msgstr "Débense ter %d vídeos para o widget de portada"
 
 #: app/Backend/Controllers/VideosController.php:292
 msgid "You can't modify this video because you don't have enought privileges."
-msgstr "Non pode modificar este vídeo porque non ten permisos dabondo."
+msgstr "Non ten permisos dabondo para modificar este vídeo."
 
 #: app/Backend/Controllers/VideosController.php:295
-#, fuzzy
 msgid "Video updated successfully."
-msgstr "Ficheiro creado con éxito."
+msgstr "Vídeo creado correctamente."
 
 #: app/Backend/Controllers/VideosController.php:341
 msgid "You must give an id for delete the video."
 msgstr "Debe fornecer un identificador para eliminar un vídeo."
 
 #: app/Backend/Controllers/VideosController.php:369
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find the video with the id \"%d\""
-msgstr "Non foi posíbel atopar unha foto con ese identificador"
+msgstr "Non foi posíbel atopar o vídeo co identificador «%d»"
 
 #: app/Backend/Controllers/VideosController.php:406
 msgid "Can't get video information. Check the url"
-msgstr "Non é posíble obter información do vídeo. Comprobe o enderezo"
+msgstr "Non foi posíbel obter información do vídeo. Comprobe o enderezo."
 
 #: app/Backend/Controllers/VideosController.php:409
 msgid "Please check the video url, seems to be incorrect"
-msgstr "Comprobe o url do vídeo, parece ser incorrecto"
+msgstr "Comprobe o URL do vídeo, semella ser incorrecto"
 
 #: app/Backend/Controllers/VideosController.php:505
 #: app/Backend/Controllers/VideosController.php:541
 #: app/Backend/Controllers/VideosController.php:576
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find video with id \"%d\""
-msgstr "Non foi posíbel atopar unha foto con ese identificador"
+msgstr "Non foi posíbel atopar o vídeo co identificador «%d»"
 
 #: app/Backend/Controllers/VideosController.php:511
 #, php-format
 msgid "Successfully changed availability for video with id \"%d\""
 msgstr ""
+"Estado de dispoñibilidade cambiado correctamente para o vídeo co "
+"identificador «%s»"
 
 #: app/Backend/Controllers/VideosController.php:545
 #: app/Backend/Controllers/VideosController.php:579
 #, php-format
 msgid "Successfully changed suggested flag for video with id \"%d\""
 msgstr ""
+"Estado de suxerido cambiado correctamente para o vídeo co identificador «%s»"
 
 #: app/Backend/Controllers/VideosController.php:609
 #, php-format
@@ -1676,45 +1661,43 @@ msgstr "<br>O video ten relacións"
 msgid ""
 "Caution! Are you sure that you want to delete this video and its relations?"
 msgstr ""
-"Atención! Ten certeza que quere eliminar este vídeo e tódalas súas relacións?"
+"Atención! Tes certeza que queres eliminar este vídeo e tódalas súas "
+"relacións?"
 
 #: app/Backend/Controllers/VideosController.php:861
-#, fuzzy, php-format
+#, php-format
 msgid ""
 "<div><p>Unable to find any content matching your search criterira.</p></div>"
 msgstr ""
-"<div><p>Non é posíbel atopar calquera contido que coincida co seu criterio "
-"de busca.</p><p>A súa cadea de busca é <strong>"
+"<div><p>Non é posíbel atopar ningún contido que coincida co teu criterio de "
+"busca.</p></div>"
 
 #: app/Backend/Controllers/WidgetsController.php:98
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find a widget with the id \"%d\""
-msgstr "Non foi posíbel atopar unha foto con ese identificador"
+msgstr "Non foi posíbel atopar o widget co identificador «%d»"
 
 #: app/Backend/Controllers/WidgetsController.php:165
-#, fuzzy
 msgid "Widget created successfully."
-msgstr "Ficheiro creado con éxito."
+msgstr "Widget creado correctamente."
 
 #: app/Backend/Controllers/WidgetsController.php:207
-#, fuzzy
 msgid "There was an error while updating the widget."
-msgstr "Produciuse un erro ao gardar a configuración do módulo de Disqus"
+msgstr "Produciuse un erro ao actualizar o widget."
 
 #: app/Backend/Controllers/WidgetsController.php:214
-#, fuzzy
 msgid "Widget updated successfully."
-msgstr "Ficheiro creado con éxito."
+msgstr "Widget actualizado correctamente."
 
 #: app/Backend/Controllers/WidgetsController.php:234
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find widget with id \"%d\""
-msgstr "Non foi posíbel atopar unha foto con ese identificador"
+msgstr "Non foi posíbel atopar o widget co identificador «%d»"
 
 #: app/Backend/Controllers/WidgetsController.php:238
 #, php-format
 msgid "Successfully changed availability for \"%s\" widget"
-msgstr ""
+msgstr "Estado de dispoñibilidade cambiado correctamente para o widget «%s»"
 
 #: app/Backend/Resources/Menu.php:5
 msgid "Web site"
@@ -1740,12 +1723,11 @@ msgstr "Widgets"
 
 #: app/Backend/Resources/Menu.php:30
 msgid "Menus"
-msgstr ""
+msgstr "Menús"
 
 #: app/Backend/Resources/Menu.php:36
-#, fuzzy
 msgid "Sync Instances"
-msgstr "Xestor de menú"
+msgstr "Sincronización de instancias"
 
 #: app/Backend/Resources/Menu.php:43
 msgid "Contents"
@@ -1778,9 +1760,8 @@ msgid "Opinions"
 msgstr "Opinións"
 
 #: app/Backend/Resources/Menu.php:62
-#, fuzzy
 msgid "Authors"
-msgstr "Autor"
+msgstr "Autores"
 
 #: app/Backend/Resources/Menu.php:70
 #: app/Backend/Resources/locale/extracted_strings.c:2942
@@ -1885,9 +1866,8 @@ msgid "Utilities"
 msgstr "Utilidades"
 
 #: app/Backend/Resources/Menu.php:171
-#, fuzzy
 msgid "Global Search"
-msgstr "Buscar"
+msgstr "Busca global"
 
 #: app/Backend/Resources/Menu.php:178
 #: app/Backend/Resources/locale/extracted_strings.c:4550
@@ -1899,7 +1879,7 @@ msgstr "Lixo"
 #: app/Backend/Resources/locale/extracted_strings.c:7091
 #: app/Backend/Resources/locale/extracted_strings.c:7253
 msgid "Newsletter"
-msgstr "Boletín de noticias"
+msgstr "Boletín de novas"
 
 #: app/Backend/Resources/Menu.php:191
 #: app/Backend/Resources/locale/extracted_strings.c:773
@@ -1918,7 +1898,7 @@ msgstr "Palabras chave"
 
 #: app/Backend/Resources/Menu.php:198
 msgid "Agenda"
-msgstr "Agenda"
+msgstr "Axenda"
 
 #: app/Backend/Resources/Menu.php:204
 #: app/Backend/Resources/locale/extracted_strings.c:5741
@@ -1942,7 +1922,7 @@ msgstr "Estadísticas de Piwik"
 
 #: app/Backend/Resources/Menu.php:234
 msgid "Statistics Google Analytics"
-msgstr "Agrupados por datas se recomenda para xornais semanais"
+msgstr "Estatísticas de Google Analytics"
 
 #: app/Backend/Resources/Menu.php:240
 msgid "Mailman Manager"
@@ -2005,7 +1985,7 @@ msgstr "Mailman de Andalucía"
 #: app/Backend/Resources/locale/extracted_strings.c:7064
 #: app/Backend/Resources/locale/extracted_strings.c:7457
 msgid "Settings"
-msgstr "Opcións"
+msgstr "Preferencias"
 
 #: app/Backend/Resources/Menu.php:338
 #: vendor/Onm/Import/DataSource/Europapress.php:253
@@ -2025,7 +2005,7 @@ msgstr "Usuarios"
 
 #: app/Backend/Resources/Menu.php:355
 msgid "User Groups"
-msgstr "Grupos de usuario"
+msgstr "Grupos de usuarios"
 
 #: app/Backend/Resources/Menu.php:362
 #: app/Backend/Resources/locale/extracted_strings.c:5288
@@ -2055,26 +2035,26 @@ msgstr "Sentímolo, vostede non ten permisos dabondo"
 
 #: vendor/core/ImporterXml.php:82
 msgid "Can't read file. Please check xml file..."
-msgstr "Non é posíbel ler o ficheiro. Comprobe o ficheiro XML..."
+msgstr "Non é posíbel ler o ficheiro. Comprobe o ficheiro XML…"
 
 #: vendor/core/Uri.php:84 vendor/core/Uri.php:87
 msgid "Error: Uri::generate should get $contentType and parameters"
-msgstr "Erro: Uri::generate debe obter $contentType e os seus parámetros"
+msgstr "Erro: Uri::generate debe recibir $contentType e os seus parámetros"
 
 #: vendor/Onm/File/Image/Common.php:65
 #, php-format
 msgid "No valid operation (%s) for image transform. All operation string is %s"
 msgstr ""
-"\"%s\" non é unha operación de procesamento de imaxe válido. Operacións "
+"\"%s\" non é unha operación de procesamento de imaxe válido. As operacións "
 "válidas son %s"
 
 #: vendor/Onm/File/Image/Imagick.php:77
 msgid "Please initialize the image before get its width."
-msgstr "Inicialice a imaxe antes de obter o seu ancho."
+msgstr "Inicializa a imaxe antes de obter o seu ancho."
 
 #: vendor/Onm/File/Image/Imagick.php:90
 msgid "Please initialize the image before get its height."
-msgstr "Por favor, iniciar a imaxe antes de chegar á súa altura."
+msgstr "Por favor, inicializa a imaxe antes de obter á súa altura."
 
 #: vendor/Onm/Import/DataSource/Europapress.php:48
 #: vendor/Onm/Import/DataSource/Europapress.php:59
@@ -2092,7 +2072,7 @@ msgstr "O ficheiro «%d» non existe."
 
 #: vendor/Onm/Import/DataSource/Europapress.php:195
 msgid "Society"
-msgstr "Sociedad"
+msgstr "Sociedade"
 
 #: vendor/Onm/Import/DataSource/Europapress.php:196
 msgid "Agriculture"
@@ -2108,7 +2088,7 @@ msgstr "Sociedade (CUL)"
 
 #: vendor/Onm/Import/DataSource/Europapress.php:199
 msgid "Event CYA"
-msgstr "Sucesos CYA"
+msgstr "Eventos CYA"
 
 #: vendor/Onm/Import/DataSource/Europapress.php:200
 msgid "Society CYT"
@@ -2140,7 +2120,7 @@ msgstr "Xustiza"
 
 #: vendor/Onm/Import/DataSource/Europapress.php:207
 msgid "Environment"
-msgstr "Medio Ambiente"
+msgstr "Medio ambiente"
 
 #: vendor/Onm/Import/DataSource/Europapress.php:209
 msgid "Politics OPL"
@@ -2152,11 +2132,11 @@ msgstr "Política POL"
 
 #: vendor/Onm/Import/DataSource/Europapress.php:211
 msgid "TV Guide"
-msgstr "Programación televisión"
+msgstr "Programación TV"
 
 #: vendor/Onm/Import/DataSource/Europapress.php:212
 msgid "Society REL"
-msgstr "Sociedada REL"
+msgstr "Sociedade REL"
 
 #: vendor/Onm/Import/DataSource/Europapress.php:213
 msgid "Society SAN"
@@ -2168,7 +2148,7 @@ msgstr "Sociedade SOC"
 
 #: vendor/Onm/Import/DataSource/Europapress.php:215
 msgid "Event SUC"
-msgstr "Sucesos SUC"
+msgstr "Eventos SUC"
 
 #: vendor/Onm/Import/DataSource/Europapress.php:216
 msgid "Society SYS"
@@ -2176,7 +2156,7 @@ msgstr "Sociedade SYS"
 
 #: vendor/Onm/Import/DataSource/Europapress.php:217
 msgid "Society Toros"
-msgstr "Sociedade Toros"
+msgstr "Sociedade Touros"
 
 #: vendor/Onm/Import/DataSource/Europapress.php:218
 msgid "Justice"
@@ -2197,7 +2177,7 @@ msgid "Normal"
 msgstr "Normal"
 
 #: vendor/Onm/Import/Synchronizer/FTP.php:38
-#, fuzzy, php-format
+#, php-format
 msgid ""
 "Can't connect to server %s. Contact with your \"\n"
 "                        .\"administrator for support."
@@ -2208,15 +2188,14 @@ msgstr ""
 #: vendor/Onm/Import/Synchronizer/FTP.php:57
 #, php-format
 msgid "Can't login into server "
-msgstr "Non é posíbel iniciar sesión no servidor"
+msgstr "Non é posíbel iniciar a sesión no servidor"
 
 #: vendor/Onm/Import/Synchronizer/FTP.php:65
 #, php-format
 msgid ""
 "Directory '%s' doesn't exists or you don't have enought permissions to acces "
 "it"
-msgstr ""
-"O cartafol «%s» non existe ou non ten permisos dabondo para acceder a el"
+msgstr "O cartafol «%s» non existe ou non tes permiso para acceder a el"
 
 #: vendor/Onm/Import/Synchronizer/FTP.php:140
 #, php-format
@@ -2225,9 +2204,8 @@ msgstr "Non é posíbel escribir no cartafol «%s»."
 
 #: app/models/Attachment.php:61
 #: app/Backend/Resources/locale/extracted_strings.c:1025
-#, fuzzy
 msgid "File"
-msgstr "Ficheiros"
+msgstr "Ficheiro"
 
 #: app/models/Book.php:36
 #: app/Backend/Resources/locale/extracted_strings.c:3839
@@ -2235,9 +2213,8 @@ msgid "Book"
 msgstr "Libro"
 
 #: app/models/Comment.php:39
-#, fuzzy
 msgid "Comment"
-msgstr "Comentarios"
+msgstr "Comentario"
 
 #: app/models/Content.php:1549
 #, php-format
@@ -2245,26 +2222,24 @@ msgid "Homepage for category %s cleaned sucessfully."
 msgstr "A portadilla para a categoría «%s» foi limpada correctamente."
 
 #: app/models/Kiosko.php:41
-#, fuzzy
 msgid "Cover"
 msgstr "Portada"
 
 #: app/models/Kiosko.php:61
 msgid "There's other paper in this date & this category."
-msgstr "Xa hai outro ficheiro nesta data e categoría."
+msgstr "Xa hai outra portada nesta data e categoría."
 
 #: app/models/Kiosko.php:86
 msgid "Unable to save the cover data into the database."
-msgstr ""
+msgstr "Non foi posíbel gardar os datos da portada."
 
 #: app/models/Letter.php:32
-#, fuzzy
 msgid "Letter"
-msgstr "Cartas"
+msgstr "Carta"
 
 #: app/models/Menu.php:75
 msgid "Menu"
-msgstr ""
+msgstr "Menú"
 
 #: app/models/Photo.php:42
 #: app/Backend/Resources/locale/extracted_strings.c:296
@@ -2305,14 +2280,12 @@ msgid "Special"
 msgstr "Especial"
 
 #: app/models/StaticPage.php:51
-#, fuzzy
 msgid "Static Page"
-msgstr "Páxinas estáticas"
+msgstr "Páxina estática"
 
 #: app/models/User.php:66
-#, fuzzy
 msgid "Already exists one user with that information"
-msgstr "Editando información de usuario"
+msgstr "Xa existe un usuario con esa información"
 
 #: app/models/Video.php:175
 msgid "There was an error while processing your video file"
@@ -2449,6 +2422,8 @@ msgid ""
 " Use  total in widget special for define how many videos can see in widgets "
 "in newspaper frontpage"
 msgstr ""
+"Use «Total en widget de especiais» para definir cantos especiais se poden "
+"ver no widget da portada."
 
 #: app/Backend/Resources/locale/extracted_strings.c:32
 msgid ""
@@ -2518,11 +2493,11 @@ msgstr "Gardar"
 
 #: app/Backend/Resources/locale/extracted_strings.c:38
 msgid "Special manager"
-msgstr "Xestor especiais"
+msgstr "Xestor de especiais"
 
 #: app/Backend/Resources/locale/extracted_strings.c:41
 msgid "Creating Special"
-msgstr "Creado especial"
+msgstr "Creando especial"
 
 #: app/Backend/Resources/locale/extracted_strings.c:44
 msgid "Editing Special"
@@ -2691,9 +2666,8 @@ msgstr "Título"
 
 #: app/Backend/Resources/locale/extracted_strings.c:74
 #: app/Backend/Resources/locale/extracted_strings.c:2327
-#, fuzzy
 msgid "List of words separated by words."
-msgstr "algunhas, palabras, separadas, por, comas"
+msgstr "Lista de palabras separadas por comas."
 
 #: app/Backend/Resources/locale/extracted_strings.c:77
 #: app/Backend/Resources/locale/extracted_strings.c:440
@@ -2931,7 +2905,6 @@ msgid "Publish"
 msgstr "Publicar"
 
 #: app/Backend/Resources/locale/extracted_strings.c:128
-#, fuzzy
 msgid "New special"
 msgstr "Nova sección"
 
@@ -3236,7 +3209,7 @@ msgstr "Aceptar"
 
 #: app/Backend/Resources/locale/extracted_strings.c:218
 msgid "Are you sure you want to delete <span>%num%</span> specials?"
-msgstr "Ten certeza de que quere eliminar <span>%num%</span> especiais?"
+msgstr "Tes certeza de que queres eliminar <span>%num%</span> especiais?"
 
 #: app/Backend/Resources/locale/extracted_strings.c:221
 #: app/Backend/Resources/locale/extracted_strings.c:485
@@ -3256,7 +3229,7 @@ msgstr "Ten certeza de que quere eliminar <span>%num%</span> especiais?"
 #: app/Backend/Resources/locale/extracted_strings.c:7013
 #: app/Backend/Resources/locale/extracted_strings.c:7676
 msgid "Yes, delete all"
-msgstr "Si, eliminar todos"
+msgstr "Si, eliminalos todos"
 
 #: app/Backend/Resources/locale/extracted_strings.c:224
 #: app/Backend/Resources/locale/extracted_strings.c:239
@@ -3341,7 +3314,7 @@ msgstr "Eliminar especial"
 #: app/Backend/Resources/locale/extracted_strings.c:7685
 #: app/Backend/Resources/locale/extracted_strings.c:8177
 msgid "Are you sure that do you want delete \"<span>%title%</span>\"?"
-msgstr "Ten certeza de que quere eliminar «<span>%title%</span>»?"
+msgstr "Tes certeza de que queres eliminar «<span>%title%</span>»?"
 
 #: app/Backend/Resources/locale/extracted_strings.c:236
 #: app/Backend/Resources/locale/extracted_strings.c:500
@@ -3448,7 +3421,7 @@ msgstr "Imaxe dispoñíbel"
 #: app/Backend/Resources/locale/extracted_strings.c:1352
 #: app/Backend/Resources/locale/extracted_strings.c:2093
 msgid "Search images by title..."
-msgstr "Buscar imaxes polo título..."
+msgstr "Buscar imaxes polo título…"
 
 #: app/Backend/Resources/locale/extracted_strings.c:272
 msgid "Image for Special:"
@@ -3536,7 +3509,7 @@ msgstr "Autor"
 
 #: app/Backend/Resources/locale/extracted_strings.c:347
 msgid "Nickname"
-msgstr ""
+msgstr "Alcume"
 
 #: app/Backend/Resources/locale/extracted_strings.c:353
 msgid "Written on"
@@ -3573,12 +3546,11 @@ msgstr "Si"
 #: app/Backend/Resources/locale/extracted_strings.c:416
 #: app/Backend/Resources/locale/extracted_strings.c:6386
 msgid "Rejected"
-msgstr "Rexeitados"
+msgstr "Rexeitado"
 
 #: app/Backend/Resources/locale/extracted_strings.c:377
-#, fuzzy
 msgid "Comment title"
-msgstr "Contido do comentario"
+msgstr "Título do comentario"
 
 #: app/Backend/Resources/locale/extracted_strings.c:380
 #: app/Backend/Resources/locale/extracted_strings.c:1856
@@ -3641,9 +3613,8 @@ msgid "Votes"
 msgstr "Votos"
 
 #: app/Backend/Resources/locale/extracted_strings.c:455
-#, fuzzy
 msgid "Edit comment %1"
-msgstr "Editando comentario"
+msgstr "Editar comentario %1"
 
 #: app/Backend/Resources/locale/extracted_strings.c:461
 msgid "from facebook"
@@ -3660,7 +3631,7 @@ msgstr "Eliminar comentarios"
 
 #: app/Backend/Resources/locale/extracted_strings.c:482
 msgid "Are you sure you want to delete <span>%num%</span> comments?"
-msgstr "Ten certeza de que quere eliminar <span>%num%</span>  comentarios?"
+msgstr "Tes certeza de que queres eliminar <span>%num%</span>  comentarios?"
 
 #: app/Backend/Resources/locale/extracted_strings.c:494
 msgid "Delete comment"
@@ -3681,7 +3652,7 @@ msgstr "Subir un vídeo desde o meu computador"
 
 #: app/Backend/Resources/locale/extracted_strings.c:515
 msgid "Link video from other web video services"
-msgstr ""
+msgstr "Ligar un vídeo desde outros servizos web de vídeo"
 
 #: app/Backend/Resources/locale/extracted_strings.c:518
 #: app/Backend/Resources/locale/extracted_strings.c:1163
@@ -3745,17 +3716,16 @@ msgid "Send to trash"
 msgstr "Enviar ao lixo"
 
 #: app/Backend/Resources/locale/extracted_strings.c:548
-#, fuzzy
 msgid "Video :: Configuration"
 msgstr "Vídeo :: Configuración"
 
 #: app/Backend/Resources/locale/extracted_strings.c:569
 msgid "Total in video frontpage column:"
-msgstr "Elementos na columna da portada de vídeos:"
+msgstr "Total na columna da portada de vídeos:"
 
 #: app/Backend/Resources/locale/extracted_strings.c:572
 msgid "Total in video gallery:"
-msgstr "Elementos na galería de vídeos:"
+msgstr "Total na galería de vídeos:"
 
 #: app/Backend/Resources/locale/extracted_strings.c:578
 msgid ""
@@ -3814,11 +3784,8 @@ msgid "Section:"
 msgstr "Sección:"
 
 #: app/Backend/Resources/locale/extracted_strings.c:629
-#, fuzzy
 msgid "No available videos for your search criteria"
-msgstr ""
-"Non hai ningunha imaxes dispoñíbel<br> \n"
-"con este criterio de busca"
+msgstr "Non hai ningún vídeo dispoñíbel baixo o seu criterio de busca"
 
 #: app/Backend/Resources/locale/extracted_strings.c:632
 msgid "Video Manager :: Listing videos"
@@ -3836,7 +3803,6 @@ msgstr "Configuración do módulo de vídeo"
 #: app/Backend/Resources/locale/extracted_strings.c:716
 #: app/Backend/Resources/locale/extracted_strings.c:4310
 #: app/Backend/Resources/locale/extracted_strings.c:4313
-#, fuzzy
 msgid "Pendiente"
 msgstr "Pendente"
 
@@ -3853,7 +3819,7 @@ msgstr "Eliminar vídeos"
 
 #: app/Backend/Resources/locale/extracted_strings.c:746
 msgid "Are you sure you want to delete <span>%num%</span> videos?"
-msgstr "Ten certeza que quere eliminar <span>%num%</span> vídeos?"
+msgstr "Tes certeza que queres eliminar <span>%num%</span> vídeos?"
 
 #: app/Backend/Resources/locale/extracted_strings.c:758
 msgid "Delete video"
@@ -3861,9 +3827,8 @@ msgstr "Eliminar vídeo"
 
 #: app/Backend/Resources/locale/extracted_strings.c:776
 #: app/Backend/Resources/locale/extracted_strings.c:821
-#, fuzzy
 msgid "List of words separated by commas."
-msgstr "algunhas, palabras, separadas, por, comas"
+msgstr "Lista de palabras separadas por comas"
 
 #: app/Backend/Resources/locale/extracted_strings.c:782
 msgid "Service:"
@@ -3871,9 +3836,8 @@ msgstr "Servizo:"
 
 #: app/Backend/Resources/locale/extracted_strings.c:785
 #: app/Backend/Resources/locale/extracted_strings.c:1721
-#, fuzzy
 msgid "Link"
-msgstr "Ligazón:"
+msgstr "Ligazón"
 
 #: app/Backend/Resources/locale/extracted_strings.c:788
 #: app/Backend/Resources/locale/extracted_strings.c:827
@@ -3889,7 +3853,6 @@ msgid "Preview"
 msgstr "Previsualizar"
 
 #: app/Backend/Resources/locale/extracted_strings.c:791
-#, fuzzy
 msgid "Other information"
 msgstr "Outra información"
 
@@ -3922,19 +3885,16 @@ msgid "Embed Url"
 msgstr "URL de embebido"
 
 #: app/Backend/Resources/locale/extracted_strings.c:830
-#, fuzzy
 msgid "Pick a file to upload"
-msgstr "Pode incluír ficheiros para subir mediante:"
+msgstr "Escoller un ficheiro para subir"
 
 #: app/Backend/Resources/locale/extracted_strings.c:833
-#, fuzzy
 msgid "Video URL"
-msgstr "URL do vídeo:"
+msgstr "URL do vídeo"
 
 #: app/Backend/Resources/locale/extracted_strings.c:836
-#, fuzzy
 msgid "Get information"
-msgstr "Máis información"
+msgstr "Obter información"
 
 #: app/Backend/Resources/locale/extracted_strings.c:839
 msgid "Allowed video sources:"
@@ -3943,7 +3903,7 @@ msgstr "Orixes de vídeo permitidas:"
 #: app/Backend/Resources/locale/extracted_strings.c:842
 #: app/Backend/Resources/locale/extracted_strings.c:7814
 msgid "We already have being informed of this error: %1"
-msgstr ""
+msgstr "Xa fomos informados deste erro: %1"
 
 #: app/Backend/Resources/locale/extracted_strings.c:845
 msgid "Newsstand :: Configuration"
@@ -3968,10 +3928,11 @@ msgstr "Datas agrupadas"
 #: app/Backend/Resources/locale/extracted_strings.c:872
 msgid "Select if order newsstand's frontpage by dates or by section."
 msgstr ""
+"Seleccionese quere ordenar a portada de kioskos por datas ou por seccións"
 
 #: app/Backend/Resources/locale/extracted_strings.c:875
 msgid "Dates grouped is recommended for weekly newspapers."
-msgstr ""
+msgstr "Agrupado por datas é o recomendábel para periódicos semanais."
 
 #: app/Backend/Resources/locale/extracted_strings.c:881
 #: app/Backend/Resources/locale/extracted_strings.c:941
@@ -3984,9 +3945,8 @@ msgid "New ePaper"
 msgstr "Novo ePapel"
 
 #: app/Backend/Resources/locale/extracted_strings.c:887
-#, fuzzy
 msgid "Editing ePaper"
-msgstr "Edición de banner"
+msgstr "Edición de ePapel"
 
 #: app/Backend/Resources/locale/extracted_strings.c:890
 #: app/Backend/Resources/locale/extracted_strings.c:1790
@@ -4015,22 +3975,20 @@ msgstr "Separadas por comas"
 #: app/Backend/Resources/locale/extracted_strings.c:980
 #: app/Backend/Resources/locale/extracted_strings.c:1097
 msgid "Price"
-msgstr ""
+msgstr "Prezo"
 
 #: app/Backend/Resources/locale/extracted_strings.c:935
-#, fuzzy
 msgid "Upload PDF"
-msgstr "Subir"
+msgstr "Subir PDF"
 
 #: app/Backend/Resources/locale/extracted_strings.c:977
 #: app/Backend/Resources/locale/extracted_strings.c:1850
-#, fuzzy
 msgid "List of words separated by commas"
-msgstr "algunhas, palabras, separadas, por, comas"
+msgstr "Lista de palabras separadas por comas"
 
 #: app/Backend/Resources/locale/extracted_strings.c:983
 msgid "Split decimals with a dot"
-msgstr ""
+msgstr "Divida os decimais con un punto"
 
 #: app/Backend/Resources/locale/extracted_strings.c:986
 #: app/Backend/Resources/locale/extracted_strings.c:2780
@@ -4044,16 +4002,15 @@ msgstr "Tipo"
 
 #: app/Backend/Resources/locale/extracted_strings.c:989
 msgid "Item"
-msgstr ""
+msgstr "Elemento"
 
 #: app/Backend/Resources/locale/extracted_strings.c:992
 msgid "Subscription"
 msgstr "Suscrición"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1028
-#, fuzzy
 msgid "Covers Manager"
-msgstr "Xestor de comentarios"
+msgstr "Xestor de portadas"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1031
 #: app/Backend/Resources/locale/extracted_strings.c:2402
@@ -4065,32 +4022,28 @@ msgid "New cover"
 msgstr "Nova portada"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1067
-#, fuzzy
 msgid "Create"
-msgstr "Creado"
+msgstr "Crear"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1073
-#, fuzzy
 msgid "Config covers module"
-msgstr "Configuración do módulo de vídeo"
+msgstr "Configuración do módulo de portadas"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1079
 msgid "WIDGET"
 msgstr "WIDGET"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1085
-#, fuzzy
 msgid "Thumbnail"
-msgstr "Url da miniatura"
+msgstr "Miniatura"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1100
 msgid "Last editor"
 msgstr "Último editor"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1127
-#, fuzzy
 msgid "There is no covers"
-msgstr "Non hai ningún vídeo aínda."
+msgstr "Non hai ningunha portada aínda."
 
 #: app/Backend/Resources/locale/extracted_strings.c:1130
 #: app/Backend/Resources/locale/extracted_strings.c:3482
@@ -4103,16 +4056,15 @@ msgstr "Eliminar kioskos"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1142
 msgid "Are you sure you want to delete <span>%num%</span> kioskos?"
-msgstr "Ten certeza que quere eliminar <span>%num%</span> kioskos?"
+msgstr "Tes certeza que queres eliminar <span>%num%</span> kioskos?"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1151
 msgid "Delete kiosko"
 msgstr "Eliminar kiosko"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1154
-#, fuzzy
 msgid "Are you sure that do you want to delete the selected cover?"
-msgstr "Ten certeza de que quere eliminar o ficheiro de caché seleccionado?"
+msgstr "Ten certeza de que quere eliminar a portada seleccionada?"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1169
 #: app/Backend/Resources/locale/extracted_strings.c:1739
@@ -8433,7 +8385,7 @@ msgstr "Eliminar widget"
 #: app/Backend/Resources/locale/extracted_strings.c:7694
 #, fuzzy
 msgid "Files uploaded successfully"
-msgstr "Ficheiro creado con éxito."
+msgstr "Ficheiro creado correctamente."
 
 #: app/Backend/Resources/locale/extracted_strings.c:7697
 msgid "The dropped files are uploaded but you must ."
