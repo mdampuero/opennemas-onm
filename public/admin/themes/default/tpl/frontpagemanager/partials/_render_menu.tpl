@@ -1,6 +1,6 @@
 <ul id="categories" class="pills">
     <li>
-        <a href="{url name=admin_frontpage_list category=0}" class="{if $category == 'home' || $category == 0}active{/if}">{t}Home{/t}</a>
+        <a href="{url name=admin_frontpage_list category=home}" class="{if $category == 'home' || $category == 0}active{/if}">{t}Home{/t}</a>
     </li>
 {foreach from=$menuItems item=menuItem}
     {if $menuItem->type == 'category'}
