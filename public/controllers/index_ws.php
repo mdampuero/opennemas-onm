@@ -174,10 +174,14 @@ if (
             $item = $contentRelated;
         }
     }
-
     $tpl->assign('column', $contentsInHomepage);
 
-} // $tpl->is_cached('index.tpl')
+    $layout = s::get('frontpage_layout_'.$actualCategoryId, 'default');
+    $layoutFile = 'layouts/'.$layout.'.tpl';
+
+    $tpl->assign('layoutFile', $layoutFile);
+
+}
 
 $tpl->display('frontpage/frontpage.tpl', $cacheID);
 
