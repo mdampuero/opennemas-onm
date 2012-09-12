@@ -19,17 +19,17 @@ $tpl->setConfig('articles-mobile');
  * Getting request params
  **/
 $dirtyID = filter_var($_GET['pk_content'], FILTER_SANITIZE_STRING);
-if(empty($dirtyID)) {
-    $dirtyID = filter_input(INPUT_POST,'pk_content',FILTER_SANITIZE_STRING);
+if (empty($dirtyID)) {
+    $dirtyID = filter_input(INPUT_POST, 'pk_content', FILTER_SANITIZE_STRING);
 }
 
 $articleID = Content::resolveID($dirtyID);
-$cacheID = $tpl->generateCacheId('articles-mobile','',$articleID);
+$cacheID = $tpl->generateCacheId('articles-mobile', '', $articleID);
 
 /**
  * if cache is enabled and this content has an available cache
  **/
-if(($tpl->caching == 0)
+if (($tpl->caching == 0)
     || ! $tpl->isCached('mobile/article-inner.tpl', $cacheID)) {
 
     //$articleID = filter_input(INPUT_GET,'pk_content',FILTER_SANITIZE_STRING);
@@ -56,7 +56,7 @@ if(($tpl->caching == 0)
     $relat = $cm->cache->getAvailable($relat);
 
     //Nombre categoria correcto.
-    foreach($relat as $ril) {
+    foreach ($relat as $ril) {
         $ril->category_name = $ccm->get_title($ril->category_name);
     }
 
@@ -65,7 +65,7 @@ if(($tpl->caching == 0)
     $tpl->assign('section', $article->category_name);
 
     // Photo interior
-    if(isset($article->img2) and ($article->img2 != 0)){
+    if (isset($article->img2) and ($article->img2 != 0)) {
         $photo = new Photo($article->img2);
         $tpl->assign('photo', $photo->path_file . '140-100-' . $photo->name);
     }
@@ -74,3 +74,4 @@ if(($tpl->caching == 0)
 
 //TODO: define cache system
 $tpl->display('mobile/mobile-article-inner.tpl', $cacheID);
+

@@ -11,12 +11,12 @@ require_once '../bootstrap.php';
 $tpl = new Template(TEMPLATE_USER);
 $tpl->setConfig('frontpage-mobile');
 
-$url = filter_input(INPUT_GET, 'url', FILTER_SANITIZE_URL);
 //Is category initialized redirect the user to /
+$url = filter_input(INPUT_GET, 'url', FILTER_SANITIZE_URL);
 preg_match('%^seccion/(?P<category_name>[a-z0-9\-\._]+)/$%i', $url, $sections);
 
+//Get category vars
 $category_name = isset($sections[1])? $sections[1] : null;
-
 $subcategory_name = filter_input(INPUT_GET, 'subcategory_name', FILTER_SANITIZE_STRING);
 $page = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_STRING);
 
@@ -43,33 +43,25 @@ if (($tpl->caching == 0) || !$tpl->isCached('mobile/frontpage-mobile.tpl', $cach
     $section = (!empty($subcategory_name))? $subcategory_name: $category_name;
     $section = (is_null($section))? 'home': $section;
     $tpl->assign('section', $section);
-
     //$tpl->loadConfigOrDefault('template.conf', $section); // $category_name is a string
 
-    //Obtenemos los articulos
+    //Get Content manager instance
     $cm = new ContentManager();
 
-    /****************************************  NOTICIAS  *******************************************/
+    // Get rid of this when posible
     include 'sections.php';
 
-    $photos = array();
+    // Fetch news
     if ($section == 'home') {
-
         $actualCategoryId = 0;
-
         $contentsInHomepage = $cm->getContentsForHomepageOfCategory($actualCategoryId);
-
         // Filter articles if some of them has time scheduling and sort them by position
         $contentsInHomepage = $cm->getInTime($contentsInHomepage);
         $contentsInHomepage = $cm->sortArrayofObjectsByProperty($contentsInHomepage, 'starttime');
-
-
     } else {
         $tpl->assign('section', $category_name);
         $actualCategoryId =  $ccm->get_id($section);
-
         $contentsInHomepage = $cm->getContentsForHomepageOfCategory($actualCategoryId);
-
         // Filter articles if some of them has time scheduling and sort them by position
         $contentsInHomepage = $cm->getInTime($contentsInHomepage);
         $contentsInHomepage = $cm->sortArrayofObjectsByProperty($contentsInHomepage, 'starttime');
@@ -78,7 +70,7 @@ if (($tpl->caching == 0) || !$tpl->isCached('mobile/frontpage-mobile.tpl', $cach
     // Invert array order to put newest first
     $contentsInHomepage = array_reverse($contentsInHomepage);
 
-    /// Deleting Widgets {{{
+    // Deleting Widgets and get authors slug's for opinions
     $articles_home = array();
     foreach ($contentsInHomepage as $content) {
         if (isset($content->home_placeholder)
@@ -87,7 +79,7 @@ if (($tpl->caching == 0) || !$tpl->isCached('mobile/frontpage-mobile.tpl', $cach
             && ($content->content_type != 'Widget')
         ) {
             if ($content->content_type == 4) {
-                //Obtener los slug's de los autores
+                //Fetch authors slug's
                 $content->author_name_slug=StringUtils::get_title($content->author);
             }
 
@@ -96,23 +88,27 @@ if (($tpl->caching == 0) || !$tpl->isCached('mobile/frontpage-mobile.tpl', $cach
     }
     $tpl->assign('articles_home', $articles_home);
 
-    /**************************************  PHOTOS  ***********************************************/
+    //Get frontpage article image id, if not get inner image id
     $imagenes = array();
-    foreach ($articles_home as $i => $art) {
-        if (isset($art->img1)) {
+    foreach ($articles_home as $art) {
+        if (isset($art->img1) && !empty($art->img1)) {
             $imagenes[] = $art->img1;
+        } elseif (isset($art->img2) && !empty($art->img2)) {
+            $imagenes[] = $art->img2;
         }
     }
 
+    //Fetch the array of images
     if (count($imagenes)>0) {
         $imagenes = $cm->find('Photo', 'pk_content IN ('. implode(',', $imagenes) .')');
 
         $photos = array();
-        foreach ($articles_home as $i => $art) {
-            if (isset($art->img1)) {
-                // Buscar la imagen
+        foreach ($articles_home as $art) {
+            if ((isset($art->img1)  && !empty($art->img1))
+                || (isset($art->img2) && !empty($art->img2))) {
+                // Search the images and get path
                 foreach ($imagenes as $img) {
-                    if ($img->pk_content == $art->img1) {
+                    if ($img->pk_content == $art->img1 || $img->pk_content == $art->img2) {
                         // Use thumbnails
                         $photos[$art->id] = $img->path_file . $img->name;
                         break;
@@ -122,10 +118,8 @@ if (($tpl->caching == 0) || !$tpl->isCached('mobile/frontpage-mobile.tpl', $cach
         }
     }
 
-
     $tpl->assign('photosArticles', $photos);
-    /**************************************  PHOTOS  ***********************************************/
-
-} // $tpl->is_cached('mobile/portada.tpl') old version
+}
 
 $tpl->display('mobile/frontpage-mobile.tpl', $cacheID);
+
