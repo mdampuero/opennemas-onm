@@ -307,6 +307,16 @@ class FrontpagesController extends Controller
         }
         $this->view->assign('column', $contentsInHomepage);
 
+        /**
+         * Getting categories
+        */
+        $categoryID = ($categoryName == 'home') ? 0 : $category;
+
+        $layout = s::get('frontpage_layout_'.$categoryID, 'default');
+        $layoutFile = 'layouts/'.$layout.'.tpl';
+
+        $this->view->assign('layoutFile', $layoutFile);
+
         return $this->render('frontpage/frontpage.tpl');
     }
 }
