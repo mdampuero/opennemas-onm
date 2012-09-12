@@ -95,8 +95,8 @@ class MenusController extends Controller
 
         // Overload sync category color if exists
         if ($syncParams = s::get('sync_params')) {
-            $colorSites = s::get('sync_colors');
-            $allSites = array();
+            $colorSites = s::get('sync_colors', array());
+            $allSites = $colors = array();
             foreach ($syncParams as $siteUrl => $categories) {
                 $allSites[] = array ($siteUrl => $categories);
 
