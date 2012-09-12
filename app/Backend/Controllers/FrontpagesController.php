@@ -102,7 +102,7 @@ class FrontpagesController extends Controller
         // Sort all the elements by its position
         $contentElementsInFrontpage  = $cm->sortArrayofObjectsByProperty($contentElementsInFrontpage, 'position');
 
-        $layout = s::get('frontpage_layout_'.$category, 'default');
+        $layout = s::get('frontpage_layout_'.$categoryID, 'default');
 
         $lm  = new LayoutManager(
             SITE_PATH."/themes/".TEMPLATE_USER."/layouts/".$layout.".xml"
