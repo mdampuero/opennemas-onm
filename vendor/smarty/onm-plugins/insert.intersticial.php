@@ -8,13 +8,16 @@
  * @param boolean $cache Use cache
  * @todo Pasar toda logica a una clase con metodos para renderizar los distintos tipos de banners
 */
-function smarty_insert_intersticial($params, &$smarty) {
+function smarty_insert_intersticial($params, &$smarty)
+{
     // nested function to render intersticial
     // FIXME: include function into Advertisement static method
-    if(!function_exists('render_output')) {
-        function render_output($content, $banner) {
-
-            if(is_object($banner) && (($banner->type_advertisement + 50) % 100) == 0) {
+    if (!function_exists('render_output')) {
+        function render_output($content, $banner)
+        {
+            if (is_object($banner)
+                && (($banner->type_advertisement + 50) % 100) == 0
+            ) {
                 $content = json_encode($content);
                 $content = str_replace('\n', '', $content);
                 $content = preg_replace('/[ ][ ]+/', ' ', $content);
@@ -48,7 +51,9 @@ JSINTERSTICIAL;
     }
     $output = '';
     $type = $params['type'];
-    if(empty($type) || (defined('ADVERTISEMENT_ENABLE') && !ADVERTISEMENT_ENABLE)) {
+    if (empty($type)
+        || (defined('ADVERTISEMENT_ENABLE') && !ADVERTISEMENT_ENABLE)
+    ) {
         // Banners not enabled
         return $output;
     }
@@ -58,7 +63,7 @@ JSINTERSTICIAL;
     $banner = $advertisement->fetch('banner' . $type);
     $photo  = $advertisement->fetch('photo' . $type);
 
-    if(isset($photo)) {
+    if (isset($photo)) {
         $width  = $photo->width;
         $height = $photo->height;
     } else {
@@ -71,7 +76,7 @@ JSINTERSTICIAL;
     //$overlap  = (isset($params['cssclass']))? $params['cssclass']: 'wrapper_intersticial';
     $isBastardIE = preg_match('/MSIE /', $_SERVER['HTTP_USER_AGENT']);
 
-    if( isset($params['beforeHTML']) ) {
+    if (isset($params['beforeHTML'])) {
         $output .= $params['beforeHTML'];
     }
 
@@ -79,35 +84,24 @@ JSINTERSTICIAL;
     // Initial container
     $output .= '<div class="'.$cssclass.'" align="center">';
 
-    if( isset($banner->with_script) && $banner->with_script == 1 ) {
+    if (isset($banner->with_script) && $banner->with_script == 1) {
         // Original method
         // $output .= $banner->script;
-
         // Parallelized method using iframes
-        $output .= '<iframe src="'.SITE_URL.'/ads/get/' .
-                    date('YmdHis', strtotime($banner->created)).
-                    sprintf('%06d', $banner->pk_content)  . '.html" ' .
-                   'scrolling="no" frameborder="0" width="100%" height="100%" ' .
-                   'marginwidth="0" marginheight="0" rel="nofollow">Publicidad</iframe>';
 
-    } elseif( !empty($banner->pk_advertisement) ) {
+        if (preg_match('/iframe/', $banner->script)) {
+            $output .= $banner->script;
+        } else {
+            $output .= '<iframe src="'.SITE_URL.'ads/get/'
+                . date('YmdHis', strtotime($banner->created)).sprintf('%06d', $banner->pk_content)  . '.html" ' .
+               'scrolling="no" frameborder="0" width="' . $width . '" height="' . $height . '" ' .
+               'marginwidth="0" marginheight="0" rel="nofollow">Publicidad</iframe>';
+        }
 
-        // TODO: controlar los banners swf especiales con div por encima
-        /* if( strtolower($photo->type_img)=='swf' ) {
-            // Flash object
-            // FIXME: build flash object with all tags and params
-            $output .= '<a target="_blank" href="'.SITE_URL.'/ads/'. $banner->pk_advertisement .'.html" rel="nofollow">';
-            $output .= '<object>
-                    <param name="movie" value="'. MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name. '" />
-                    <param name="width" value="'.$width.'" />
-                    <param name="height" value="'.$height.'" />
-                    <embed src="'. MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name. '"
-                        width="'.$width.'" height="'.$height.'" alt="Publicidad '. $banner->title. '"></embed>
-                </object>';
-        } */
+    } elseif ( !empty($banner->pk_advertisement) ) {
 
-        if( strtolower($photo->type_img)=='swf' ) {
-            if(!$overlap && !$banner->overlap) {
+        if ( strtolower($photo->type_img)=='swf' ) {
+            if (!$overlap && !$banner->overlap) {
                 // Flash object
                 // FIXME: build flash object with all tags and params
                 $output .= '<a target="_blank" href="'.SITE_URL.'/ads/'.
@@ -125,17 +119,20 @@ JSINTERSTICIAL;
                 $output .= '</a>';
             } else {
 
-                if(!$isBastardIE) {
+                if (!$isBastardIE) {
                     $output .= '<div style="position:relative;width:'.$width.'px;height:'.$height.'px;">
-                        <div style="left:0px;top:0px;cursor:pointer;background-color:transparent;position:absolute;z-index:3344;
+                        <div style="left:0px;top:0px;cursor:pointer;'
+                            .'background-color:transparent;position:absolute;z-index:3344;
                             width:'.$width.'px;height:'.$height.'px;"></div>';
                 } else {
                     $output .= '<div style="position:relative;width:'.$width.'px;height:'.$height.'px;">
-                        <div style="left:0px;top:0px;cursor:pointer;background-color:#FFF;filter:alpha(opacity=0);position:absolute;z-index:3344;
+                        <div style="left:0px;top:0px;cursor:pointer;'
+                            .'background-color:#FFF;filter:alpha(opacity=0);position:absolute;z-index:3344;
                             width:'.$width.'px;height:'.$height.'px;"></div>';
                 }
 
-                $output .= '<div style="position: absolute; z-index: 0; width: '.$width.'px; left: 0px; margin: 0 auto;">
+                $output .= '<div style="position: absolute; z-index: 0; width: '
+                            .$width.'px; left: 0px; margin: 0 auto;">
                         <object width="'.$width.'" height="'.$height.'">
                             <param name="wmode" value="opaque" />
                             <param name="movie" value="'. MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name. '" />
@@ -148,7 +145,7 @@ JSINTERSTICIAL;
                     </div>
                   </div>';
 
-                if( isset($params['afterHTML']) ) {
+                if ( isset($params['afterHTML']) ) {
                     $output .= $params['afterHTML'];
                 }
             }
@@ -164,15 +161,17 @@ JSINTERSTICIAL;
     } else {
         // Empty banner, don't return anything
         $output = '';
+
         return render_output($output, $banner);
     }
 
     $output .= '</div>';
 
     // Post content of banner
-    if( isset($params['afterHTML']) ) {
+    if ( isset($params['afterHTML']) ) {
         $output .= $params['afterHTML'];
     }
 
     return render_output($output, $banner);
 }
+
