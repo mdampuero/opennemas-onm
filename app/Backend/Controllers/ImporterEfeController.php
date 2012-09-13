@@ -55,7 +55,7 @@ class ImporterEfeController extends Controller
      **/
     public function listAction(Request $request)
     {
-        $page = $this->request->query->filter('page', 0, FILTER_VALIDATE_INT);
+        $page = $this->request->query->filter('page', 1, FILTER_VALIDATE_INT);
 
         $efe = \Onm\Import\Efe::getInstance();
 
@@ -67,7 +67,7 @@ class ImporterEfeController extends Controller
         $queryParams = $this->request->query;
         $filterCategory = $queryParams->filter('filter_category', '*', FILTER_SANITIZE_STRING);
         $filterTitle = $queryParams->filter('filter_title', '*', FILTER_SANITIZE_STRING);
-        $page = $queryParams->filter('page', 0, FILTER_VALIDATE_INT);
+        $page = $queryParams->filter('page', 1, FILTER_VALIDATE_INT);
         $itemsPage =  s::get('items_per_page') ?: 20;
 
         $findParams = array(
@@ -162,7 +162,7 @@ class ImporterEfeController extends Controller
             // show him/her an error message
             m::add(sprintf(_('Unable to find an element with the id "%d"'), $id), m::ERROR);
 
-            $page = $this->request->query->filter('page', 0, FILTER_VALIDATE_INT);
+            $page = $this->request->query->filter('page', 1, FILTER_VALIDATE_INT);
 
             return $this->redirect(
                 $this->generateUrl('admin_importer_efe', array('page' => $page))
@@ -172,8 +172,8 @@ class ImporterEfeController extends Controller
         return $this->render(
             'agency_importer/efe/show.tpl',
             array(
-                'element'   => $element,
-                'imported'       => count($alreadyImported) > 0,
+                'element'  => $element,
+                'imported' => count($alreadyImported) > 0,
             )
         );
 
@@ -488,7 +488,7 @@ class ImporterEfeController extends Controller
      **/
     public function syncAction(Request $request)
     {
-        $page = $this->request->query->filter('page', 0, FILTER_VALIDATE_INT);
+        $page = $this->request->query->filter('page', 1, FILTER_VALIDATE_INT);
         try {
 
             $serverAuth = s::get('efe_server_auth');

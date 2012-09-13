@@ -160,8 +160,8 @@ switch ($action) {
                 $created = $comment->create(
                     array(
                         'id'   => $_POST['id'],
-                        'data' => $data, '
-                        ip'    => $ip
+                        'data' => $data,
+                        'ip'   => $ip
                     )
                 );
                 if ($created) {
