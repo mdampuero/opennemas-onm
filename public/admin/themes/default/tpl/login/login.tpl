@@ -40,7 +40,7 @@
 
     {block name="footer-js"}
         {block name="js-library"}{/block}
-        {script_tag src="/modernizr/modernizr-2.5.0.min.js"}
+        {script_tag src="/libs/modernizr.min.js"}
     {/block}
 
 </head>
