@@ -150,13 +150,10 @@ class OpinionsController extends Controller
         $rating = new \Rating();
         $comment = new \Comment();
 
-        list($countOpinions, $opinions)= $cm->getCountAndSlice(
+        $opinions = $cm->find(
             'Opinion',
-            null,
             'in_home=1 and available=1 and type_opinion=0',
-            'ORDER BY position ASC , created DESC',
-            $page,
-            $itemsPerPage
+            'ORDER BY position ASC , created DESC'
         );
 
         if ($numEditorial > 0) {
@@ -589,7 +586,7 @@ class OpinionsController extends Controller
      **/
     public function savePositionsAction(Request $request)
     {
-        $containers = json_decode(json_decode($request->get('positions')));
+        $containers = json_decode($request->get('positions'));
 
         if (isset($containers)
             && is_array($containers)
