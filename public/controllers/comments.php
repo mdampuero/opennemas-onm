@@ -141,6 +141,8 @@ switch ($action) {
                 }
             }
 
+            $sessionBeforeComment = $_SESSION;
+
             //Get $_SESSION values for userComment
             $_SESSION['username'] = $data['author'];
             $_SESSION['userid'] = 'comment #'.$_POST['id'];
@@ -184,6 +186,8 @@ switch ($action) {
         }
         $response = new Response($message, 200);
         $response->send();
+
+        $_SESSION = $sessionBeforeComment;
         break;
 }
 
