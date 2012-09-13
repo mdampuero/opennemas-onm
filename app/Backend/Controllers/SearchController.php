@@ -114,7 +114,7 @@ class SearchController extends Controller
     {
         $searchString = $request->query->filter('search_string', '', FILTER_SANITIZE_STRING);
         $page         = $request->query->getDigits('page', 1);
-        $related         = $request->query->filter('related', false, FILTER_SANITIZE_STRING);
+        $related      = (bool) $request->query->get('related', true);
 
         if (!empty($searchString)) {
 
@@ -164,12 +164,14 @@ class SearchController extends Controller
             $this->view->assign('results', $results);
 
             $this->view->assign('search_string', $searchString);
-            if (!is_null($related)) {
+
+            if ($related == true) {
                 return $this->render(
                     'search_advanced/content-provider-related.tpl',
                     array(
                         'contents'    => $results,
                         'contentType' => 'Content',
+                        'related'     => $related,
                     )
                 );
 
@@ -179,6 +181,7 @@ class SearchController extends Controller
                     array(
                         'contents'    => $results,
                         'contentType' => 'Content',
+                        'related'     => $related,
                     )
                 );
             }
