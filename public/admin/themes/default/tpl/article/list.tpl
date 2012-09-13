@@ -66,7 +66,7 @@
                 <li class="separator"></li>
                 {acl isAllowed="ARTICLE_CREATE"}
                 <li>
-                    <a href="{url name=admin_article_create}">
+                    <a href="{url name=admin_article_create category=$category}">
                         <img border="0" src="{$params.IMAGE_DIR}/article_add.png" alt="Nuevo"><br />{t}New article{/t}
                     </a>
                 </li>

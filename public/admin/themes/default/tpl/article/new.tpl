@@ -183,7 +183,7 @@
                                 {section name=as loop=$allcategorys}
                                 {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
                                 <option value="{$allcategorys[as]->pk_content_category}" data-name="{$allcategorys[as]->title}"
-                                {if (($category == $allcategorys[as]->pk_content_category) && $action == "new") || $article->category eq $allcategorys[as]->pk_content_category}selected{/if}>{$allcategorys[as]->title}</option>
+                                {if (($category == $allcategorys[as]->pk_content_category) && !is_object($article)) || $article->category eq $allcategorys[as]->pk_content_category}selected{/if}>{$allcategorys[as]->title}</option>
                                 {section name=su loop=$subcat[as]}
                                     {if $subcat[as][su]->internal_category eq 1}
                                         <option value="{$subcat[as][su]->pk_content_category}" data-name="{$subcat[as][su]->title}"
