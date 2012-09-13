@@ -375,7 +375,7 @@ class Opinion extends Content
         $tpl->assign('item', $this);
         $tpl->assign('cssclass', 'opinion');
 
-        return $tpl->fetch('frontpage/frontpage_opinion.tpl');
+        return $tpl->fetch('frontpage/contents/_opinion.tpl');
     }
 
     /**
