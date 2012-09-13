@@ -787,7 +787,7 @@ class Advertisement extends Content
         $photo = new \Photo($this->img);
 
         // Overlap flash?
-        $overlap  = (isset($params['overlap']))? $params['overlap']: false;
+        $overlap  = (isset($this->params['overlap']))? $this->params['overlap']: false;
         $isBastardIE = preg_match('/MSIE /', $_SERVER['HTTP_USER_AGENT']);
 
         if (isset($params['beforeHTML'])) {
