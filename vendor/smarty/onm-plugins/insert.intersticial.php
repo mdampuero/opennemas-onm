@@ -94,7 +94,7 @@ JSINTERSTICIAL;
         } else {
             $output .= '<iframe src="'.SITE_URL.'ads/get/'
                 . date('YmdHis', strtotime($banner->created)).sprintf('%06d', $banner->pk_content)  . '.html" ' .
-               'scrolling="no" frameborder="0" width="' . $width . '" height="' . $height . '" ' .
+               'scrolling="no" frameborder="0" width="100%" height="100%" ' .
                'marginwidth="0" marginheight="0" rel="nofollow">Publicidad</iframe>';
         }
 
