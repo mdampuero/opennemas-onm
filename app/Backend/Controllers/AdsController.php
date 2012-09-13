@@ -166,6 +166,7 @@ class AdsController extends Controller
     public function createAction(Request $request)
     {
         $this->checkAclOrForward('ADVERTISEMENT_CREATE');
+        $page = $request->request->getDigits('page', 1);
 
         if ('POST' == $request->getMethod()) {
 
@@ -179,8 +180,8 @@ class AdsController extends Controller
                 'metadata'           => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
                 'category'           => $firstCategory,
                 'categories'         => implode(',', $categories),
-                'available'          => $request->request->filter('available', 0, FILTER_SANITIZE_STRING),
-                'content_status'     => $request->request->filter('available', 0, FILTER_SANITIZE_STRING),
+                'available'          => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
+                'content_status'     => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
                 'with_script'        => $request->request->getDigits('with_script', 0),
                 'img1'               => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
                 'overlap'            => $request->request->filter('overlap', '', FILTER_SANITIZE_STRING),
