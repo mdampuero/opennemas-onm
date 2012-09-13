@@ -151,7 +151,7 @@ class AclUserController extends Controller
             'id_user_group'   => $request->request->getDigits('id_user_group'),
             'ids_category'    => $request->request->get('ids_category'),
             'address'         => '',
-            'phone'         => '',
+            'phone'           => '',
         );
 
         // TODO: validar datos
@@ -209,7 +209,11 @@ class AclUserController extends Controller
                 'id_user_group'   => $request->request->getDigits('id_user_group'),
                 'ids_category'    => $request->request->get('ids_category'),
                 'address'         => '',
-                'phone'         => '',
+                'phone'           => '',
+                'authorize'       => 1,
+                'type'            => 0,
+                'deposit'         => 0,
+                'token'           => null,
             );
 
             try {
