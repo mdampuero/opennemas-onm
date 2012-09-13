@@ -55,7 +55,7 @@ class ImporterEfeController extends Controller
      **/
     public function listAction(Request $request)
     {
-        $page = $this->request->query->filter('page', 0, FILTER_VALIDATE_INT);
+        $page = $this->request->query->filter('page', 1, FILTER_VALIDATE_INT);
 
         $efe = \Onm\Import\Efe::getInstance();
 
