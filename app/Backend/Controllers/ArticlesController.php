@@ -102,7 +102,7 @@ class ArticlesController extends Controller
             'Article',
             $categoryFilter,
             $filterSQL,
-            'ORDER BY available ASC, content_status ASC, changed, created DESC',
+            'ORDER BY available ASC, content_status ASC, starttime DESC',
             $page,
             $itemsPerPage
         );
