@@ -116,6 +116,8 @@ class SearchController extends Controller
         $page         = $request->query->getDigits('page', 1);
         $related      = (bool) $request->query->get('related', true);
 
+        $this->view->assign('related', $related);
+
         if (!empty($searchString)) {
 
             $searchStringArray = array_map(
@@ -171,7 +173,6 @@ class SearchController extends Controller
                     array(
                         'contents'    => $results,
                         'contentType' => 'Content',
-                        'related'     => $related,
                     )
                 );
 
@@ -181,7 +182,6 @@ class SearchController extends Controller
                     array(
                         'contents'    => $results,
                         'contentType' => 'Content',
-                        'related'     => $related,
                     )
                 );
             }

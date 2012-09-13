@@ -124,6 +124,10 @@ class Content
                 return $this->comments = $comment->count_public_comments($this->id);
 
                 break;
+            case 'content_type_l10n_name':
+                return get_class($this);
+
+                break;
             default:
 
                 break;
