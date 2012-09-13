@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-09-12 00:14+0200\n"
-"PO-Revision-Date: 2012-09-12 03:43+0200\n"
+"PO-Revision-Date: 2012-09-13 02:19+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -504,44 +504,46 @@ msgstr "Categoría eliminada correctamente."
 
 #: app/Backend/Controllers/CategoriesController.php:338
 msgid "To delete a category previously you have to empty it."
-msgstr "Para eliminar unha categoría primeiro debe eliminar os seus contidos."
+msgstr "Para eliminar unha categoría primeiro tes eliminar os seus contidos."
 
 #: app/Backend/Controllers/CategoriesController.php:342
 msgid "You must give a valid id for delete the category."
-msgstr "Debe fornecer un identificador para eliminar unha categoría."
+msgstr "Debes fornecer un identificador para eliminar unha categoría."
 
 #: app/Backend/Controllers/CategoriesController.php:367
-#, fuzzy
 msgid "Category emptied successfully."
 msgstr "Categoría baleirada correctamente."
 
 #: app/Backend/Controllers/CategoriesController.php:371
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to delete all the contents in the category '%s'"
-msgstr "Outros artigos nesta categoría"
+msgstr "Non foi posíbel eliminar todos os contidos da categoría «%s»"
 
 #: app/Backend/Controllers/CategoriesController.php:379
-#, fuzzy
 msgid "You must give a valid id for delete contents in a category."
-msgstr "Debe fornecer un identificador para eliminar un vídeo."
+msgstr ""
+"Debes fornecer un identificador dunha categoría para eliminar os seus "
+"contidos ."
 
 #: app/Backend/Controllers/CategoriesController.php:405
 #: app/Backend/Controllers/CategoriesController.php:439
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find a category with the id \"%d\""
-msgstr "Non foi posíbel atopar unha foto con ese identificador"
+msgstr "Non foi posíbel atopar unha categoría co identificador «%d»"
 
 #: app/Backend/Controllers/CategoriesController.php:415
 #: app/Backend/Controllers/CategoriesController.php:449
 #, php-format
 msgid "Successfully changed availability for category with id \"%d\""
 msgstr ""
+"Estado de dispoñibilidade cambiado correctamente para a categoría co "
+"identificador «%s»"
 
 #: app/Backend/Controllers/CategoriesController.php:475
 #: app/Backend/Controllers/SystemSettingsController.php:97
 #: app/Backend/Controllers/VideosController.php:432
 msgid "Settings saved."
-msgstr "Opciones gardadas."
+msgstr "Opcións gardadas."
 
 #: app/Backend/Controllers/CommentsController.php:53 app/models/Article.php:60
 #: app/Backend/Resources/locale/extracted_strings.c:1730
@@ -558,7 +560,7 @@ msgstr "Opinión"
 
 #: app/Backend/Controllers/CommentsController.php:55 app/models/Album.php:53
 msgid "Album"
-msgstr "Álbume"
+msgstr "Álbum"
 
 #: app/Backend/Controllers/CommentsController.php:56 app/models/Video.php:36
 #: app/Backend/Resources/locale/extracted_strings.c:3827
@@ -572,54 +574,46 @@ msgid "Poll"
 msgstr "Enquérito"
 
 #: app/Backend/Controllers/CommentsController.php:210
-#, fuzzy, php-format
+#, php-format
 msgid "Comment with id \"%d\" doesn't exists."
-msgstr "O ID «%d» non existe"
+msgstr "Non existe o comentario co identificador «%d»"
 
 #: app/Backend/Controllers/CommentsController.php:243
-#, fuzzy
 msgid "Comment saved successfully."
-msgstr "Configuracións gardadas correctamente."
+msgstr "Comentario gardado correctamente."
 
 #: app/Backend/Controllers/CommentsController.php:268
-#, fuzzy
 msgid "Comment deleted successfully."
-msgstr "Categoría eliminada correctamente."
+msgstr "Comentario eliminado correctamente."
 
 #: app/Backend/Controllers/CommentsController.php:290
-#, fuzzy
 msgid "Comment was rejected successfully."
-msgstr "Ficheiro creado correctamente."
+msgstr "Comentario rexeitado correctamente."
 
 #: app/Backend/Controllers/CommentsController.php:293
 #: app/Backend/Controllers/CommentsController.php:329
-#, fuzzy
 msgid "Comment was published successfully."
-msgstr "Configuracións gardadas correctamente."
+msgstr "Comentario publicado correctamente."
 
 #: app/Backend/Controllers/CommentsController.php:332
-#, fuzzy
 msgid "Comment was unpublished successfully."
-msgstr "Ficheiro creado correctamente."
+msgstr "Comentario despublicado correctamente."
 
 #: app/Backend/Controllers/CommentsController.php:364
-#, fuzzy
 msgid "Comments deleted successfully."
-msgstr "Categoría eliminada correctamente."
+msgstr "Comentario eliminado correctamente."
 
 #: app/Backend/Controllers/CommentsController.php:366
-#, fuzzy
 msgid "You haven't selected any comment to delete."
-msgstr "Debe seleccionar algún elemento."
+msgstr "Debe seleccionar un comentario para eliminar."
 
 #: app/Backend/Controllers/CommentsDisqusController.php:46
-#, fuzzy
 msgid ""
 "Please provide your Disqus configuration to start to use your Disqus "
 "Comments module"
 msgstr ""
-"Por favor complete a configuración para comenzar a usar o módulo de Boletín "
-"de novas"
+"Complete a configuración de Disqus para zar a usar o seu módulo de "
+"comentarios de Disqus"
 
 #: app/Backend/Controllers/CommentsDisqusController.php:84
 msgid "Disqus configuration saved successfully"
@@ -635,9 +629,9 @@ msgid "Unable to arquive content with id %s: %s"
 msgstr "Non foi posíbel arquivar o contido co identificador %s: %s"
 
 #: app/Backend/Controllers/ContentController.php:205
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to set suggested to frontpage state to content with id %s: %s"
-msgstr "Non foi posíbel arquivar o contido co identificador %s: %s"
+msgstr "Non foi posíbel suxerir a portada o contido co identificador %s: %s"
 
 #: app/Backend/Controllers/ContentController.php:287
 #, php-format
@@ -645,70 +639,66 @@ msgid "Content not available"
 msgstr "Contido non dispoñíbel"
 
 #: app/Backend/Controllers/CoversController.php:205
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find the cover with the id \"%d\""
-msgstr "Non foi posíbel atopar unha foto con ese identificador"
+msgstr "Non foi posíbel atopar unha portada co identificador «%d»"
 
 #: app/Backend/Controllers/CoversController.php:266
-#, fuzzy, php-format
+#, php-format
 msgid ""
 "There was an error while uploading the file. Try to upload a file smaller "
 "than %d MB or contact with your administrator"
 msgstr ""
-"Produciuse un erro ao subir o ficheiro. <br />Tente subir ficheiros máis "
-"pequenos ou contacte co seu administrador"
+"Produciuse un erro ao subir o ficheiro. Tente subir ficheiros máis pequenos "
+"que %d MB ou contacte co seu administrador"
 
 #: app/Backend/Controllers/CoversController.php:278
-#, fuzzy
 msgid "There was a problem with the cover data. Try again"
-msgstr "Os datos do kiosko non son válidos. Ténteo de novo"
+msgstr "Produciuse un erro ao analizar os datos da portada. Ténteo de novo."
 
 #: app/Backend/Controllers/CoversController.php:323
-#, fuzzy
 msgid "You can't modify this cover because you don't have enought privileges."
-msgstr "Non pode modificar este contenido porque non ten permisos dabondo."
+msgstr "Non ten permisos dabondo para modificar este contido."
 
 #: app/Backend/Controllers/CoversController.php:326
-#, fuzzy
 msgid "Cover updated successfully."
-msgstr "Ficheiro creado correctamente."
+msgstr "Portada actualizada correctamente"
 
 #: app/Backend/Controllers/CoversController.php:373
-#, fuzzy
 msgid "You must give an id for delete the cover."
-msgstr "Debe fornecer un identificador para eliminar un vídeo."
+msgstr "Debe fornecer un identificador para eliminar unha portada."
 
 #: app/Backend/Controllers/CoversController.php:404
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find a cover with id \"%d\""
-msgstr "Non foi posíbel atopar unha foto con ese identificador"
+msgstr "Non foi posíbel atopar unha portada co identificador «%d»"
 
 #: app/Backend/Controllers/CoversController.php:410
 #, php-format
 msgid "Successfully changed availability for the cover \"%s\""
-msgstr ""
+msgstr "Estado de dispoñibilidade cambiado correctamente para a portada «%s»"
 
 #: app/Backend/Controllers/CoversController.php:441
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find cover with id \"%d\""
-msgstr "Non foi posíbel atopar unha foto con ese identificador"
+msgstr "Non foi posíbel atopar unha portada co identificador «%d»"
 
 #: app/Backend/Controllers/CoversController.php:445
 #: app/Backend/Controllers/CoversController.php:480
 #, php-format
 msgid "Successfully changed suggested flag for cover \"%s\""
-msgstr ""
+msgstr "Estado de suxerido cambiado correctamente para a portada «%s»"
 
 #: app/Backend/Controllers/CoversController.php:477
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find a cover with the id \"%d\""
-msgstr "Non foi posíbel atopar unha foto con ese identificador"
+msgstr "Non foi posíbel atopar unha portada co identificador «%d»"
 
 #: app/Backend/Controllers/CoversController.php:519
 #: app/Backend/Controllers/VideosController.php:474
-#, fuzzy, php-format
+#, php-format
 msgid "Video \"%s\" deleted successfully."
-msgstr "Categoría eliminada correctamente."
+msgstr "Vídeo «%s» eliminada correctamente."
 
 #: app/Backend/Controllers/DatabaseErrorsController.php:129
 msgid "SQL errors registered in database cleaned sucessfully."
@@ -717,16 +707,15 @@ msgstr "Errores SQL registrados en la base de datos limpiados correctamente."
 #: app/Backend/Controllers/ErrorController.php:83
 msgid ""
 "Oups! Seems that we had an unknown problem while trying to run your request."
-msgstr ""
+msgstr "Oups! Semella que tivemos algún problema ao executar a súa consulta."
 
 #: app/Backend/Controllers/FilesController.php:320
 msgid "File created successfuly."
 msgstr "Ficheiro creado correctamente."
 
 #: app/Backend/Controllers/FilesController.php:323
-#, fuzzy
 msgid "Unable to upload the file: A file with the same name already exists."
-msgstr "Xa existe un ficheiro co mesmo nome."
+msgstr "Non foi posíbel subir o ficheiro: Xa existe un ficheiro co mesmo nome."
 
 #: app/Backend/Controllers/FilesController.php:328
 msgid ""
@@ -738,32 +727,32 @@ msgstr ""
 
 #: app/Backend/Controllers/FilesController.php:345
 msgid "Please select a file before send the form"
-msgstr "Seleccione un ficheiro antes de enviar o ficheiro"
+msgstr "Seleccione un ficheiro antes de enviar o formulario"
 
 #: app/Backend/Controllers/FilesController.php:368
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find the file with the id \"%s\""
-msgstr "Non foi posíbel atopar unha foto con ese identificador"
+msgstr "Non foi posíbel atopar o ficheiro co identificador «%s»"
 
 #: app/Backend/Controllers/FilesController.php:401
-#, fuzzy, php-format
+#, php-format
 msgid "File information updated successfuly."
-msgstr "Ficheiro creado correctamente."
+msgstr "Información do ficheiro actualizada correctamente."
 
 #: app/Backend/Controllers/FilesController.php:403
-#, fuzzy, php-format
+#, php-format
 msgid "There was a problem while saving the file information."
-msgstr "Produciuse un erro ao gardar a configuración do módulo de EFE"
+msgstr "Produciuse un erro ao gardar a información do ficheiro."
 
 #: app/Backend/Controllers/FilesController.php:430
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find the file with the id '%d'."
-msgstr "Non foi posíbel atopar unha foto con ese identificador"
+msgstr "Non foi posíbel atopar o ficheiro co identificador «%d»."
 
 #: app/Backend/Controllers/FilesController.php:442
-#, fuzzy, php-format
+#, php-format
 msgid "File with id '%d' deleted successfuly."
-msgstr "Ficheiro creado correctamente."
+msgstr "O ficheiro co identificador «%d» foi eliminado correctamente. "
 
 #: app/Backend/Controllers/FilesController.php:475
 msgid "This file is not published so you can't define it as favorite."
@@ -773,9 +762,9 @@ msgstr ""
 #: app/Backend/Controllers/FilesController.php:478
 #: app/Backend/Controllers/FilesController.php:515
 #: app/Backend/Controllers/FilesController.php:548
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find the file with id '%d'"
-msgstr "Non foi posíbel atopar unha foto con ese identificador"
+msgstr "Non foi posíbel atopar o ficheiro co identificador «%d»"
 
 #: app/Backend/Controllers/FilesController.php:512
 msgid ""
@@ -785,9 +774,9 @@ msgstr ""
 "widget de portada."
 
 #: app/Backend/Controllers/FilesController.php:589
-#, fuzzy, php-format
+#, php-format
 msgid "Files \"%s\" deleted successfully."
-msgstr "Ficheiro creado correctamente."
+msgstr "Ficheiro «%s» eliminado correctamente."
 
 #: app/Backend/Controllers/FrontpagesController.php:206
 msgid "Content positions saved properly"
@@ -818,12 +807,11 @@ msgstr "Configuracións do módulo de imaxes gardadas correctamente."
 
 #: app/Backend/Controllers/ImagesController.php:479
 msgid "Please provide a valid category for upload images."
-msgstr "Forneza unha categoría válida para subir as imaxes."
+msgstr "Selecciona unha categoría válida onde subir as imaxes."
 
 #: app/Backend/Controllers/ImagesController.php:513
-#, fuzzy
 msgid "Please provide a image id for show it."
-msgstr "Forneza unha categoría válida para subir as imaxes."
+msgstr "Forneza un identificador dunha imaxe para mostrala."
 
 #: app/Backend/Controllers/ImagesController.php:532
 msgid "Unable to find any photo with that id"
@@ -835,27 +823,28 @@ msgid "Data successfully saved for %d photos"
 msgstr "Datos para %d fotos gardados correctamente"
 
 #: app/Backend/Controllers/ImagesController.php:622
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find the photo with the id \"%d\""
-msgstr "Non foi posíbel atopar unha foto con ese identificador"
+msgstr "Non foi posíbel atopar a foto co identificador «%d»"
 
 #: app/Backend/Controllers/ImagesController.php:819
-#, fuzzy, php-format
+#, php-format
 msgid "Image \"%s\" deleted successfully."
-msgstr "Categoría eliminada correctamente."
+msgstr "Imaxe «%s» eliminada correctamente."
 
 #: app/Backend/Controllers/ImagesController.php:872
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find any content matching your search criterira."
-msgstr "Non foi posíbel atopar ningún contido co seu criterio de busca."
+msgstr ""
+"Non foi posíbel atopar ningún contido que coincida co seu criterio de busca."
 
 #: app/Backend/Controllers/ImporterEfeController.php:46
 msgid ""
 "Please provide your EFE auth credentials to start to use your EFE Importer "
 "module"
 msgstr ""
-"Por favor inserte as súas credenciais de EFE para comenzar a usar o módulo "
-"de importación de EFE"
+"Complete as súas credenciais de EFE para comezar a usar o módulo de "
+"importación de EFE"
 
 #: app/Backend/Controllers/ImporterEfeController.php:110
 #: app/Backend/Controllers/ImporterEuropapressController.php:104
@@ -864,9 +853,9 @@ msgstr "A última sincronización foi fai certo tempo."
 
 #: app/Backend/Controllers/ImporterEfeController.php:112
 #: app/Backend/Controllers/ImporterEuropapressController.php:106
-#, fuzzy, php-format
+#, php-format
 msgid "Last sync was %d minutes ago."
-msgstr "A última sincronización levouse a cabo fai %1 minuto/s."
+msgstr "A última sincronización levouse a cabo fai %d minuto/s."
 
 #: app/Backend/Controllers/ImporterEfeController.php:118
 #: app/Backend/Controllers/ImporterEuropapressController.php:112
@@ -874,13 +863,13 @@ msgid ""
 "Try syncing the news list from server by clicking in \"Sync with server\" "
 "button above"
 msgstr ""
-"Tente actualizar a lista desde o servidor premendo o botón «Sincronizar co "
-"servidor» de arriba."
+"Tente actualizar a lista de novas desde o servidor premendo o botón "
+"«Sincronizar co servidor» de arriba."
 
 #: app/Backend/Controllers/ImporterEfeController.php:163
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find an element with the id \"%d\""
-msgstr "Non foi posíbel atopar unha foto con ese identificador"
+msgstr "Non foi posíbel atopar o elemento co identificador «%d»"
 
 #: app/Backend/Controllers/ImporterEfeController.php:193
 #: app/Backend/Controllers/ImporterEfeController.php:216
@@ -896,9 +885,8 @@ msgid "The category you have chosen doesn't exists."
 msgstr "A categoría que seleccionou non existe."
 
 #: app/Backend/Controllers/ImporterEfeController.php:338
-#, fuzzy
 msgid "The article you want to import doesn't exists."
-msgstr "A categoría que seleccionou non existe."
+msgstr "O artigo que quere importar non existe."
 
 #: app/Backend/Controllers/ImporterEfeController.php:415
 #: app/Backend/Controllers/ImporterEuropapressController.php:237
@@ -956,7 +944,7 @@ msgstr "Produciuse un erro ao gardar a configuración do módulo de EFE"
 #: app/Backend/Controllers/ImporterEuropapressController.php:326
 #, php-format
 msgid "Downloaded %d new articles and deleted %d old ones."
-msgstr "Descargáronse %d novos artigos e elimináronse %d antigos."
+msgstr "Descargáronse %d artigos novos e elimináronse %d antigos."
 
 #: app/Backend/Controllers/ImporterEfeController.php:521
 #, php-format
@@ -968,13 +956,13 @@ msgid ""
 "Please provide your Europapress auth credentials to start to use your "
 "Europapress Importer module"
 msgstr ""
-"Por favor inserte as súas credenciais de EuropaPress para comenzar a usar o "
-"módulo de importación de EuropaPress"
+"Complete as súas credenciais de EuropaPress para comezar a usar o módulo de "
+"importación de EuropaPress"
 
 #: app/Backend/Controllers/ImporterEuropapressController.php:153
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find the nwe with id \"%d\"."
-msgstr "Non foi posíbel arquivar o contido co identificador %s: %s"
+msgstr "Non foi posíbel atopar a nova co identificador «%d»"
 
 #: app/Backend/Controllers/ImporterEuropapressController.php:278
 msgid "Europapress configuration saved successfully"
@@ -985,7 +973,7 @@ msgid "There was an error while saving Europapress configuration"
 msgstr "Produciuse un erro ao gardar a configuración de Europapress"
 
 #: app/Backend/Controllers/ImporterEuropapressController.php:337
-#, fuzzy, php-format
+#, php-format
 msgid "If you are sure <a href=\"%s\">try to unlock it</a>"
 msgstr "Está seguro que quere <a href=\"%s?action=unlock\">desbloquealo</a>."
 
@@ -995,7 +983,7 @@ msgstr "Forneza un esquema de ficheiro XML"
 
 #: app/Backend/Controllers/ImporterXmlfileController.php:64
 msgid "Form was sent in the wrong way."
-msgstr ""
+msgstr "O formulario enviouse de forma incorrecta."
 
 #: app/Backend/Controllers/ImporterXmlfileController.php:147
 #, php-format
@@ -1003,6 +991,8 @@ msgid ""
 "There was an error while uploading «%s» - «%s». Check its size before send "
 "it."
 msgstr ""
+"Produciuse un erro ao subir «%s» - «%s». Comprobe o seu tamaño antes de "
+"envialo."
 
 #: app/Backend/Controllers/ImporterXmlfileController.php:204
 msgid "Importer XML configuration saved successfully"
@@ -1013,24 +1003,22 @@ msgid "There was an error while saving importer XML configuration"
 msgstr "Produciuse un erro ao gardar a configuración do importador de XML"
 
 #: app/Backend/Controllers/InstanceSyncController.php:99
-#, fuzzy
 msgid "Instance sync module configuration saved successfully"
-msgstr "Configuración do módulo de EFE gardada correctamente"
+msgstr "Configuración do módulo de sincronización gardada correctamente"
 
 #: app/Backend/Controllers/InstanceSyncController.php:101
-#, fuzzy
 msgid "There was an error while saving the Instance sync module configuration"
-msgstr "Produciuse un erro ao gardar a configuración do módulo de Disqus"
+msgstr ""
+"Produciuse un erro ao gardar a configuración do módulo de Sincronización de "
+"instancias"
 
 #: app/Backend/Controllers/InstanceSyncController.php:246
-#, fuzzy
 msgid "Site configuration deleted successfully"
-msgstr "Configuración de Disqus gardada correctamente"
+msgstr "Configuración de sitio eliminada correctamente"
 
 #: app/Backend/Controllers/InstanceSyncController.php:248
-#, fuzzy
 msgid "There was an error while deleting this configuration"
-msgstr "Produciuse un erro ao gardar a configuración do módulo de Disqus"
+msgstr "Produciuse un erro ao eliminar esta configuración"
 
 #: app/Backend/Controllers/KeywordsController.php:98
 #: app/Backend/Controllers/KeywordsController.php:140
@@ -1042,7 +1030,7 @@ msgstr "URL"
 #: app/Backend/Controllers/KeywordsController.php:99
 #: app/Backend/Controllers/KeywordsController.php:141
 msgid "Internal search"
-msgstr "Búsqueda interna"
+msgstr "Busca interna"
 
 #: app/Backend/Controllers/KeywordsController.php:100
 #: app/Backend/Controllers/KeywordsController.php:142
@@ -1055,379 +1043,350 @@ msgid "Email"
 msgstr "Correo electrónico"
 
 #: app/Backend/Controllers/KeywordsController.php:127
-#, fuzzy
 msgid "Keyword created sucessfully"
-msgstr "Ficheiro creado correctamente."
+msgstr "Palabra chave creada correctamente."
 
 #: app/Backend/Controllers/KeywordsController.php:168
-#, fuzzy
 msgid "Keyword updated sucessfully"
-msgstr "Ficheiro creado correctamente."
+msgstr "Palabra chave actualizada correctamente."
 
 #: app/Backend/Controllers/LettersController.php:114
-#, fuzzy
 msgid "Letter successfully created."
-msgstr "Configuracións gardadas correctamente."
+msgstr "Carta creada correctamente."
 
 #: app/Backend/Controllers/LettersController.php:116
 msgid "Unable to create the new letter."
-msgstr ""
+msgstr "Non foi posíbel crear a nova carta."
 
 #: app/Backend/Controllers/LettersController.php:142
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find the letter with the id \"%d\""
-msgstr "Non foi posíbel atopar unha foto con ese identificador"
+msgstr "Non foi posíbel atopar a carta con identificador «%d»"
 
 #: app/Backend/Controllers/LettersController.php:183
-#, fuzzy
 msgid "Letter successfully updated."
-msgstr "Configuracións gardadas correctamente."
+msgstr "Carta gardada correctamente."
 
 #: app/Backend/Controllers/LettersController.php:185
-#, fuzzy
 msgid "Unable to update the letter."
-msgstr "Anovar lista"
+msgstr "Non foi posíbel actualizar a carta."
 
 #: app/Backend/Controllers/LettersController.php:220
-#, fuzzy
 msgid "Letter deleted successfully."
-msgstr "Categoría eliminada correctamente."
+msgstr "Carta eliminada correctamente."
 
 #: app/Backend/Controllers/LettersController.php:222
-#, fuzzy
 msgid "You must give an id for delete the letter."
-msgstr "Debe fornecer un id para eliminar o álbum."
+msgstr "Debe fornecer un identificador para eliminar a carta."
 
 #: app/Backend/Controllers/LettersController.php:255
 #: app/Backend/Controllers/LettersController.php:295
 #: app/Backend/Controllers/LettersController.php:336
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find a letter with the id \"%d\""
-msgstr "Non foi posíbel atopar unha foto con ese identificador"
+msgstr "Non foi posíbel atopar unha carta con identificador «%d»"
 
 #: app/Backend/Controllers/LettersController.php:258
 #, php-format
 msgid "Successfully changed availability for the letter \"%s\""
-msgstr ""
+msgstr "Estado de dispoñibilidade cambiado correctamente para a carta «%s»"
 
 #: app/Backend/Controllers/LettersController.php:300
 #, php-format
 msgid "Successfully deleted %d letters"
-msgstr ""
+msgstr "Elimináronse %d cartas correctamente"
 
 #: app/Backend/Controllers/LettersController.php:341
 #, php-format
 msgid "Successfully changed the available status of %d letters"
-msgstr ""
+msgstr "Estado de dispoñibilidade cambiado correctamente para %d cartas"
 
 #: app/Backend/Controllers/MenusController.php:164
-#, fuzzy, php-format
+#, php-format
 msgid "Menu '%s' created successfully."
-msgstr "Ficheiro creado correctamente."
+msgstr "Menú «%s» creado correctamente."
 
 #: app/Backend/Controllers/MenusController.php:166
 #, php-format
 msgid "Unable to create the menu"
-msgstr ""
+msgstr "Non foi posíbel crear o menú"
 
 #: app/Backend/Controllers/MenusController.php:247
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find a menu with the id \"%s\""
-msgstr "Non foi posíbel atopar unha foto con ese identificador"
+msgstr "Non foi posíbel atopar o menú co identificador «%s»"
 
 #: app/Backend/Controllers/MenusController.php:264
-#, fuzzy
 msgid "Menu updated successfully."
-msgstr "Ficheiro creado correctamente."
+msgstr "Menú actualizado correctamente."
 
 #: app/Backend/Controllers/MenusController.php:266
-#, fuzzy
 msgid "There was an error while updating the menu."
-msgstr "Produciuse un erro ao gardar a configuración do módulo de Disqus"
+msgstr "Produciuse un erro ao actualizar o menú."
 
 #: app/Backend/Controllers/MenusController.php:295
-#, fuzzy
 msgid "You must give an id for delete the menu."
-msgstr "Debe fornecer un id para eliminar o álbum."
+msgstr "Debe fornecer un identificador para eliminar o menú."
 
 #: app/Backend/Controllers/MenusController.php:301
-#, fuzzy, php-format
+#, php-format
 msgid "Menu '%s' deleted successfully."
-msgstr "Categoría eliminada correctamente."
+msgstr "Menú «%s» eliminado correctamente."
 
 #: app/Backend/Controllers/MenusController.php:337
-#, fuzzy, php-format
+#, php-format
 msgid "Menu \"%s\" deleted successfully."
-msgstr "Categoría eliminada correctamente."
+msgstr "Menú «%s» eliminado correctamente."
 
 #: app/Backend/Controllers/MenusController.php:339
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to delete the menu \"%s\" as is system internal."
-msgstr ""
-"Non é posíbel eliminar esta foto directamente xa que está sendo usada por "
-"algúns contidos."
+msgstr "Non foi posíbel eliminar o menú «%s» xa que é un menú interno."
 
 #: app/Backend/Controllers/NewsletterController.php:332
-#, fuzzy
 msgid "Newsletter deleted successfully."
-msgstr "Categoría eliminada correctamente."
+msgstr "Boletín de novas eliminado correctamente."
 
 #: app/Backend/Controllers/NewsletterController.php:334
-#, fuzzy
 msgid "You must give an id for delete a newsletter."
-msgstr "Debe fornecer un id para eliminar o álbum."
+msgstr "Debe fornecer un identificador para eliminar un boletín de novas."
 
 #: app/Backend/Controllers/NewsletterController.php:362
-#, fuzzy
 msgid "Newsletter module settings saved successfully."
-msgstr "Configuracións do módulo de imaxes gardadas correctamente."
+msgstr "Configuración do módulo de boletín de novas gardada correctamente."
 
 #: app/Backend/Controllers/NewsletterController.php:405
 msgid ""
 "Please provide your Newsletter configuration to start to use your Newsletter "
 "module"
 msgstr ""
-"Por favor complete a configuración para comenzar a usar o módulo de Boletín "
-"de novas"
+"Complete a configuración para comenzar a usar o módulo de Boletín de novas"
 
 #: app/Backend/Controllers/NewsletterController.php:415
 msgid ""
 "Your newsletter configuration is not complete. Please go to settings and "
 "complete the form."
 msgstr ""
-"A súa configuración de Boletín de novas non está completa. Vaia ao panel de "
-"configuracións e complete o formulario"
+"A configuración do boletín de novas non está completa. Vai ao panel de "
+"configuración e completa o formulario"
 
 #: app/Backend/Controllers/NewsletterSubscriptorsController.php:88
-#, fuzzy
 msgid "Subscription successfully created."
-msgstr "Posicións gardadas correctamente."
+msgstr "Subscrición creada correctamente."
 
 #: app/Backend/Controllers/NewsletterSubscriptorsController.php:90
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to create the new subscriptor: %s"
-msgstr "Enderezo de correo electrónico no que recibir as novas subscricións"
+msgstr "Non foi posíbel crear o novo subscritor: %s"
 
 #: app/Backend/Controllers/NewsletterSubscriptorsController.php:134
-#, fuzzy
 msgid "Subscription successfully updated."
-msgstr "Posicións gardadas correctamente."
+msgstr "Subscrición actualizada correctamente."
 
 #: app/Backend/Controllers/NewsletterSubscriptorsController.php:136
-#, fuzzy
 msgid "Unable to update the subscriptor information"
-msgstr "Activar subscrición na portada"
+msgstr "Non foi posíbel actualizar a información da subscrición"
 
 #: app/Backend/Controllers/NewsletterSubscriptorsController.php:166
 #: app/Backend/Controllers/NewsletterSubscriptorsController.php:191
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find the user with the id \"%d\""
-msgstr "Non foi posíbel atopar unha foto con ese identificador"
+msgstr "Non foi posíbel atopar o usuario co identificador «%d»"
 
 #: app/Backend/Controllers/NewsletterSubscriptorsController.php:195
-#, fuzzy, php-format
+#, php-format
 msgid "Subscritor with id \"%d\" deleted sucessfully"
-msgstr "Configuración de Disqus gardada correctamente"
+msgstr "Subscrición co identificador «%d» eliminada correctamente"
 
 #: app/Backend/Controllers/NewsletterSubscriptorsController.php:261
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to delete the subscriptor with the id %d."
-msgstr "Non foi posíbel atopar unha foto con ese identificador"
+msgstr "Non foi posíbel eliminar a subscrición co identificador %d."
 
 #: app/Backend/Controllers/NewsletterSubscriptorsController.php:265
-#, fuzzy, php-format
+#, php-format
 msgid "Successfully deleted %d subscriptors."
-msgstr "Subscritores ao boletín de novas"
+msgstr "Elimináronse %d subscricións correctamente"
 
 #: app/Backend/Controllers/NewsletterSubscriptorsController.php:267
-#, fuzzy
 msgid "Please specify a subscriptor id for delete it."
-msgstr "Especifique o artigo a importar."
+msgstr "Especifique un identificador dun subscritor para eliminalo."
 
 #: app/Backend/Controllers/NewsletterSubscriptorsController.php:297
 #, php-format
 msgid "Successfully changed subscribed state for %d subscriptors."
-msgstr ""
+msgstr "Estado de subscrición cambiado correctamente para %d subscritores."
 
 #: app/Backend/Controllers/NewsletterSubscriptorsController.php:299
 msgid "Please specify a subscriptor id for change its subscribed state it."
 msgstr ""
+"Especifique o identificador dun subscritor para cambiar o estado da súa "
+"subscrición."
 
 #: app/Backend/Controllers/OpinionAuthorsController.php:105
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find the author with the id \"%d\""
-msgstr "Non foi posíbel atopar unha foto con ese identificador"
+msgstr "Non foi posíbel atopar o autor co identificador «%d»"
 
 #: app/Backend/Controllers/OpinionAuthorsController.php:113
 #, php-format
 msgid "This author doesn't have an image associated please select one."
-msgstr ""
+msgstr "Este autor non ten unha imaxe asociada, seleccione unha."
 
 #: app/Backend/Controllers/OpinionAuthorsController.php:162
 msgid "Author successfully created."
-msgstr ""
+msgstr "Autor creado correctamente."
 
 #: app/Backend/Controllers/OpinionAuthorsController.php:164
 msgid "Unable to create the author."
-msgstr ""
+msgstr "Non foi posíbel crear o autor."
 
 #: app/Backend/Controllers/OpinionAuthorsController.php:168
 #: app/Backend/Controllers/OpinionAuthorsController.php:230
 msgid "Unable to upload the new author image."
-msgstr ""
+msgstr "Non foi posíbel actualizar a nova imaxe do autor."
 
 #: app/Backend/Controllers/OpinionAuthorsController.php:224
 msgid "Author successfully updated."
-msgstr ""
+msgstr "Autor actualizado correctamente."
 
 #: app/Backend/Controllers/OpinionAuthorsController.php:226
 msgid "Unable to update the author."
-msgstr ""
+msgstr "Non foi posíbel actualizar o autor."
 
 #: app/Backend/Controllers/OpinionAuthorsController.php:264
-#, fuzzy
 msgid "Author deleted successfully."
-msgstr "Categoría eliminada correctamente."
+msgstr "Autor eliminado correctamente."
 
 #: app/Backend/Controllers/OpinionAuthorsController.php:266
-#, fuzzy
 msgid "You must give an id for delete an opinion author."
-msgstr "Debe fornecer un id para eliminar o álbum."
+msgstr "Debe fornecer un identificador para eliminar un autor de opinión."
 
 #: app/Backend/Controllers/OpinionAuthorsController.php:353
-#, fuzzy, php-format
+#, php-format
 msgid "Deleted the author successfully."
-msgstr "Ficheiro creado correctamente."
+msgstr "Autor eliminado correctamente."
 
 #: app/Backend/Controllers/OpinionAuthorsController.php:355
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to delete the author with the id %s."
-msgstr "Non foi posíbel atopar unha foto con ese identificador"
+msgstr "Non foi posíbel eliminar o autor co identificador «%s»."
 
 #: app/Backend/Controllers/OpinionsController.php:178
 #: app/Backend/Controllers/OpinionsController.php:182
 #, php-format
 msgid "You must put %d opinions %s in the home widget"
-msgstr "Debe poñer %d opinións %s para o widget de portada"
+msgstr "Débense ter %d opinións %s para o widget de portada"
 
 #: app/Backend/Controllers/OpinionsController.php:248
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find the opinion with the id \"%d\""
-msgstr "Non foi posíbel atopar unha foto con ese identificador"
+msgstr "Non foi posíbel atopar unha opinión co identificador «%d»"
 
 #: app/Backend/Controllers/OpinionsController.php:311
 #: app/Backend/Controllers/SpecialsController.php:205
-#, fuzzy
 msgid "Special successfully created."
-msgstr "Configuracións gardadas correctamente."
+msgstr "Especial creado correctamente."
 
 #: app/Backend/Controllers/OpinionsController.php:313
 #: app/Backend/Controllers/SpecialsController.php:207
 msgid "Unable to create the new special."
-msgstr ""
+msgstr "Non foi posíbel crear o novo especial."
 
 #: app/Backend/Controllers/OpinionsController.php:356
 msgid ""
 "You can't modify this opinion because you don't have enought privileges."
-msgstr "Non pode modificar esta opinión porque non ten permisos dabondo."
+msgstr "Non ten permisos dabondo para modificar esta opinión"
 
 #: app/Backend/Controllers/OpinionsController.php:385
-#, fuzzy
 msgid "Opinion successfully updated."
-msgstr "Posicións gardadas correctamente."
+msgstr "Opinión actualizada correctamente."
 
 #: app/Backend/Controllers/OpinionsController.php:387
 msgid "Unable to update the opinion."
-msgstr ""
+msgstr "Non foi posíbel actualizar a opinión."
 
 #: app/Backend/Controllers/OpinionsController.php:428
-#, fuzzy
 msgid "Opinion deleted successfully."
-msgstr "Categoría eliminada correctamente."
+msgstr "Opinión eliminada correctamente."
 
 #: app/Backend/Controllers/OpinionsController.php:430
-#, fuzzy
 msgid "You must give an id for delete an opinion."
-msgstr "Debe fornecer un identificador para eliminar un vídeo."
+msgstr "Debe fornecer un identificador para eliminar unha opinión."
 
 #: app/Backend/Controllers/OpinionsController.php:464
 #: app/Backend/Controllers/OpinionsController.php:513
 #: app/Backend/Controllers/OpinionsController.php:551
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find an opinion with the id \"%d\""
-msgstr "Non foi posíbel atopar unha foto con ese identificador"
+msgstr "Non foi posíbel atopar a opinión co identificador «%d»"
 
 #: app/Backend/Controllers/OpinionsController.php:471
 #, php-format
 msgid "Successfully changed availability for the opinion \"%s\""
-msgstr ""
+msgstr "Estado de dispoñibilidade cambiado correctamente para o especial «%s»"
 
 #: app/Backend/Controllers/OpinionsController.php:516
 #, php-format
 msgid "Successfully changed in home state for the opinion \"%s\""
-msgstr ""
+msgstr "Estado de «En Portada» cambiado correctamente para a opinión «%s»"
 
 #: app/Backend/Controllers/OpinionsController.php:556
 #, php-format
 msgid "Successfully changed favorite state for the opinion \"%s\""
-msgstr ""
+msgstr "Estado de «Favorito» cambiado correctamente para a opinión «%s»"
 
 #: app/Backend/Controllers/OpinionsController.php:624
 #: app/Backend/Controllers/SpecialsController.php:402
-#, fuzzy
 msgid "Unable to save positions for the specials widget."
-msgstr ""
-"Non foi posíbel gardar as posicións dos contidos: Os datos que enviou o "
-"usuario non son válidos."
+msgstr "Non foi posíbel gardar as posicións do widget de especiais."
 
 #: app/Backend/Controllers/OpinionsController.php:660
 #: app/Backend/Controllers/OpinionsController.php:712
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find a opinion with the id \"%d\""
-msgstr "Non foi posíbel atopar unha foto con ese identificador"
+msgstr "Non foi posíbel atopar a opinión co identificador «%d»"
 
 #: app/Backend/Controllers/OpinionsController.php:665
-#, fuzzy, php-format
+#, php-format
 msgid "Successfully deleted %d opinions"
-msgstr "Datos para %d fotos gardados correctamente"
+msgstr "Elimináronse %d opinións correctamente"
 
 #: app/Backend/Controllers/OpinionsController.php:717
 #, php-format
 msgid "Successfully changed the available status of %d opinions"
-msgstr ""
+msgstr "Estado de dispoñibilidade cambiado correctamente para %d opinións"
 
 #: app/Backend/Controllers/PollsController.php:157
 #, php-format
 msgid "You must put %d polls in the HOME"
-msgstr "Debe poñer %d enquéritos na portada"
+msgstr "Débense ter %d enquéritos na portada"
 
 #: app/Backend/Controllers/PollsController.php:218
-#, fuzzy
 msgid "Poll successfully created."
-msgstr "Configuracións gardadas correctamente."
+msgstr "Enquérito gardada correctamente."
 
 #: app/Backend/Controllers/PollsController.php:220
-#, fuzzy
 msgid "Unable to create the new poll."
-msgstr "Crear novo artigo"
+msgstr "Non foi posíbel crear o novo enquérito"
 
 #: app/Backend/Controllers/PollsController.php:249
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find the poll with the id \"%d\""
-msgstr "Non foi posíbel atopar unha foto con ese identificador"
+msgstr "Non foi posíbel atopar o enquérito co identificador «%d»"
 
 #: app/Backend/Controllers/PollsController.php:297
 msgid "Poll successfully updated."
-msgstr ""
+msgstr "Enquérito actualizado correctamente."
 
 #: app/Backend/Controllers/PollsController.php:299
 msgid "Unable to update the poll."
-msgstr ""
+msgstr "Non foi posíbel actualizar o enquérito."
 
 #: app/Backend/Controllers/PollsController.php:312
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to find a poll with the id \"%s\"."
-msgstr "Non foi posíbel atopar unha foto con ese identificador"
+msgstr "Non foi posíbel atopar o enquérito co identificador «%s»."
 
 #: app/Backend/Controllers/PollsController.php:338
 msgid "Poll deleted successfully."
@@ -4115,24 +4074,32 @@ msgid ""
 "Use  total in widget album for define how many videos can see in widgets in "
 "newspaper frontpage"
 msgstr ""
+"Use «total en widget de álbum» para definir cantos vídeos se poden ver no "
+"widget da portada."
 
 #: app/Backend/Resources/locale/extracted_strings.c:1241
 msgid ""
 "Cover width in widget album  define image width for crop the cover used in "
 "widgets"
 msgstr ""
+"Ancho da miniatura no widget de álbum, define o ancho da imaxe usado nos "
+"widgets"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1244
 msgid ""
 "Cover height in widget album  define image height for crop the cover used in "
 "widgets"
 msgstr ""
+"Alto da miniatura no widget do álbum, define o alto da imaxe usado nos "
+"widgets"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1247
 msgid ""
 "Select if order album's frontpage by most views or albums checked as "
 "favorites."
 msgstr ""
+"Seleccione se quere ordenar o widget de álbums por máis vistos ou por "
+"favoritos."
 
 #: app/Backend/Resources/locale/extracted_strings.c:1250
 msgid ""
@@ -4140,6 +4107,8 @@ msgid ""
 "define the frontpage albums, the time range of the latest albums are the "
 "most viewed"
 msgstr ""
+"Se seleccionou previamente ordenar por máis vistos. Use esta opción para "
+"definir o rango de tempo dos últimos álbums vistos"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1259
 #: app/Backend/Resources/locale/extracted_strings.c:1328
@@ -4167,14 +4136,12 @@ msgid "Agency"
 msgstr "Axencia"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1316
-#, fuzzy
 msgid "List of terms separated by comas"
-msgstr "algunhas, palabras, separadas, por, comas"
+msgstr "Lista de termos separados por comas"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1319
-#, fuzzy
 msgid "Album images"
-msgstr "Xestor de álbumes"
+msgstr "Álbum de imaxes"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1322
 msgid "Images in this album"
@@ -4245,9 +4212,8 @@ msgid "Editing menu \"%1\""
 msgstr "Editando menú «%1»"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1550
-#, fuzzy
 msgid "Creating new menu"
-msgstr "Creando un novo widget…"
+msgstr "Creando novo menú"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1562
 msgid "Save and Exit"
@@ -4272,9 +4238,10 @@ msgid ""
 "Pick elements from the right column and drag them to the left column to "
 "include them as elements of this menu."
 msgstr ""
+"Seleccione elementos desde a columna dereita e arrástreos á esquerda para "
+"incluílos como elementos deste menú."
 
 #: app/Backend/Resources/locale/extracted_strings.c:1586
-#, fuzzy
 msgid "External link"
 msgstr "Engadir ligazón externa"
 
@@ -4284,6 +4251,8 @@ msgid ""
 "Fill the below form with the title and the external URL you want to add to "
 "the menu."
 msgstr ""
+"Complete o formulario de embaixo co título e a URL externa que quere engadir "
+"ao menú."
 
 #: app/Backend/Resources/locale/extracted_strings.c:1592
 #: app/Backend/Resources/locale/extracted_strings.c:1685
@@ -4299,9 +4268,8 @@ msgid "URL:"
 msgstr "URL:"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1598
-#, fuzzy
 msgid "Add"
-msgstr "Anuncios"
+msgstr "Engadir"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1601
 msgid "Global Categories"
@@ -4329,19 +4297,17 @@ msgid "Modules"
 msgstr "Modulos"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1622
-#, fuzzy
 msgid "Sync Categories"
-msgstr "Subcategorías"
+msgstr "Sincronizar categorías"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1625
 #: app/Backend/Resources/locale/extracted_strings.c:1712
 msgid "Sync"
-msgstr ""
+msgstr "Sincronizar"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1628
-#, fuzzy
 msgid "Add to menu"
-msgstr "Engadir seleccionado"
+msgstr "Engadir ao menú"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1634
 msgid "New menu"
@@ -4366,14 +4332,12 @@ msgid "Are you sure you want to delete <span>%num%</span> menus?"
 msgstr "Ten certeza que quere eliminar <span>%num%</span> menús?"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1679
-#, fuzzy
 msgid "Add an external link item."
-msgstr "Engadir ligazón externa"
+msgstr "Engadir ligazón externa."
 
 #: app/Backend/Resources/locale/extracted_strings.c:1691
-#, fuzzy
 msgid "Add element"
-msgstr "Engadir seleccionado"
+msgstr "Engadir elemento"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1694
 msgid "Delete menu"
@@ -4381,21 +4345,19 @@ msgstr "Eliminar menú"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1706
 msgid "Synchronized from %1"
-msgstr ""
+msgstr "Sincronizado con %1"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1709
-#, fuzzy
 msgid "External link:"
-msgstr "Engadir ligazón externa"
+msgstr "Ligazón externa:"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1718
-#, fuzzy
 msgid "Menu title..."
-msgstr "Título da páxina"
+msgstr "Título do menú…"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1724
 msgid "Menu link..."
-msgstr ""
+msgstr "Ligazón do menú…"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1763
 msgid "Article manager"
@@ -4434,14 +4396,12 @@ msgid "Allow coments"
 msgstr "Permitir comentarios"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1817
-#, fuzzy
 msgid "Put in category frontpage"
-msgstr "Poñer en portada de categoría:"
+msgstr "Poñer en portada de categoría"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1820
-#, fuzzy
 msgid "Suggested for frontpage"
-msgstr "Suxerido a portada principal:"
+msgstr "Suxerido a portada principal"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1826
 #: app/Backend/Resources/locale/extracted_strings.c:5654
@@ -4457,12 +4417,11 @@ msgstr "Descoñecido"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1838
 msgid "Signature"
-msgstr ""
+msgstr "Sinatura"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1841
-#, fuzzy
 msgid "Newsletter signature"
-msgstr "Asunto do boletín de novas"
+msgstr "Sinatura no boletín"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1844
 msgid "Pretitle"
@@ -4480,9 +4439,8 @@ msgstr "Activar/desactivar o editor mellorado"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1865
 #: app/Backend/Resources/locale/extracted_strings.c:2804
-#, fuzzy
 msgid "Publication start date"
-msgstr "Data de inicio de publicación:"
+msgstr "Data de inicio de publicación"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1868
 #: app/Backend/Resources/locale/extracted_strings.c:2807
@@ -4491,9 +4449,8 @@ msgstr "Hora do servidor:"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1871
 #: app/Backend/Resources/locale/extracted_strings.c:2810
-#, fuzzy
 msgid "Publication end date"
-msgstr "Data de final de publicación:"
+msgstr "Data de final de publicación"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1895
 msgid "Related in frontpage"
@@ -4526,14 +4483,12 @@ msgid "Gallery for Home"
 msgstr "Galería para portada"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1922
-#, fuzzy
 msgid "Article Manager"
 msgstr "Xestor de artigos"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1925
-#, fuzzy
 msgid "Listing articles"
-msgstr "Editar artigo"
+msgstr "Listado de artigos"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1931
 #: app/Backend/Resources/locale/extracted_strings.c:2819
@@ -4543,15 +4498,13 @@ msgstr "Acciones en lote"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1934
 #: app/Backend/Resources/locale/extracted_strings.c:2822
-#, fuzzy
 msgid "Batch publish"
-msgstr "Non publicado"
+msgstr "Publicar en lote"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1937
 #: app/Backend/Resources/locale/extracted_strings.c:2825
-#, fuzzy
 msgid "Batch unpublish"
-msgstr "Despublicar"
+msgstr "Despublicar en lote"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1940
 #: app/Backend/Resources/locale/extracted_strings.c:3059
@@ -4564,14 +4517,12 @@ msgstr "Novo artigo"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1946
 #: app/Backend/Resources/locale/extracted_strings.c:5903
-#, fuzzy
 msgid "%1 articles"
-msgstr "Artigos"
+msgstr "%1 artigos"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1949
-#, fuzzy
 msgid "Search by title:"
-msgstr "Buscar imaxes polo título..."
+msgstr "Buscar por título"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1973
 #: app/Backend/Resources/locale/extracted_strings.c:3269
@@ -4587,24 +4538,21 @@ msgid "Last Editor"
 msgstr "Último editor"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1985
-#, fuzzy
 msgid "Last author: %1"
-msgstr "Último editor"
+msgstr "Último autor: %1"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1988
 msgid "Unasigned"
 msgstr "Sen asignar"
 
 #: app/Backend/Resources/locale/extracted_strings.c:1994
-#, fuzzy
 msgid "No available articles."
-msgstr "Artigos dispoñíbeis"
+msgstr "No hai artígos dispoñíbeis."
 
 #: app/Backend/Resources/locale/extracted_strings.c:1997
 #: app/Backend/Resources/locale/extracted_strings.c:8174
-#, fuzzy
 msgid "Delete article"
-msgstr "Ver artigo"
+msgstr "Eliminar artigo"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2009
 #: app/Backend/Resources/locale/extracted_strings.c:2096
@@ -4662,14 +4610,12 @@ msgid "Search videos by title..."
 msgstr "Buscar vídeos polo título..."
 
 #: app/Backend/Resources/locale/extracted_strings.c:2144
-#, fuzzy
 msgid "Settings for frontpage"
-msgstr "Texto no footer das portadas:"
+msgstr "Preferencias para a portada"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2147
-#, fuzzy
 msgid "Text size for title"
-msgstr "Tamaño do título"
+msgstr "Tamaño do texto para o título"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2150
 #: app/Backend/Resources/locale/extracted_strings.c:2168
@@ -4677,12 +4623,10 @@ msgid "Image position"
 msgstr "Posición da imaxe"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2153
-#, fuzzy
 msgid "Settings home frontpage"
-msgstr "Texto no footer das portadas:"
+msgstr "Preferencias para a portada principal"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2156
-#, fuzzy
 msgid "Title for home frontpage"
 msgstr "Título para a portada principal"
 
@@ -4698,9 +4642,8 @@ msgid "Go to admin main page"
 msgstr "Ir á páxina principal do administrador"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2174
-#, fuzzy
 msgid "Visit site"
-msgstr "Visitas"
+msgstr "Visitar sitio web"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2177
 msgid "Search..."
@@ -4806,9 +4749,8 @@ msgid "Poll :: Configuration"
 msgstr "Enquéritos :: Configuración"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2258
-#, fuzzy
 msgid "Poll section preferences"
-msgstr "Tódalas seccións"
+msgstr "Preferencias dos enquéritos"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2261
 msgid "Values type"
@@ -4832,7 +4774,7 @@ msgstr "Anchura das gráficas"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2276
 msgid "Poll home widget preferences"
-msgstr ""
+msgstr "Preferencias para widget en Portada"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2279
 msgid "Elements in frontpage widget"
@@ -4847,31 +4789,28 @@ msgid "Chart height"
 msgstr "Altura da gráfica"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2291
-#, fuzzy
 msgid "Poll manager"
 msgstr "Xestor de enquéritos"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2294
-#, fuzzy
 msgid "Editing poll"
-msgstr "Editando páxina"
+msgstr "Editando enquérito"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2297
 msgid "Creating a poll"
 msgstr "Creado enquérito"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2333
-#, fuzzy
 msgid "Visualization format"
-msgstr "Visualización"
+msgstr "Formato de visualización"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2336
 msgid "Circular"
-msgstr ""
+msgstr "Circular"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2339
 msgid "Bars"
-msgstr ""
+msgstr "Barras"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2348
 #: app/Backend/Resources/locale/extracted_strings.c:2765
@@ -4891,7 +4830,6 @@ msgid "Polls manager"
 msgstr "Xestor de enquéritos"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2372
-#, fuzzy
 msgid "UnPublish"
 msgstr "Despublicar"
 
@@ -4904,7 +4842,7 @@ msgstr "Novo enquérito"
 #: app/Backend/Resources/locale/extracted_strings.c:2441
 #: app/Backend/Resources/locale/extracted_strings.c:2966
 msgid "NoFavorite"
-msgstr ""
+msgstr "NoFavorito"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2453
 msgid "There is no polls yet."
@@ -4966,9 +4904,8 @@ msgstr "Url do blogue"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2552
 #: app/Backend/Resources/locale/extracted_strings.c:3815
-#, fuzzy
 msgid "Show in RSS"
-msgstr "Mostrar en menú:"
+msgstr "Mostrar en RSS"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2555
 msgid "If this option is activated this author will be showed in rss"
@@ -4980,12 +4917,11 @@ msgstr "Fotos do autor"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2564
 msgid "You can change the image order by drag and drop them."
-msgstr ""
+msgstr "Pode cambiar a orde das imaxes arrastrándoas."
 
 #: app/Backend/Resources/locale/extracted_strings.c:2567
-#, fuzzy
 msgid "Add new photo"
-msgstr "Engadir novo subscritor"
+msgstr "Engadir nova foto"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2570
 #: app/Backend/Resources/locale/extracted_strings.c:2720
@@ -4994,9 +4930,8 @@ msgid "Opinion Manager"
 msgstr "Xestor de opinión"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2573
-#, fuzzy
 msgid "Authors list"
-msgstr "Autor"
+msgstr "Listado de autores"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2582
 #: app/Backend/Resources/locale/extracted_strings.c:2585
@@ -5050,49 +4985,42 @@ msgid "Opinion :: Configuration"
 msgstr "Opinión :: Configuración"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2702
-#, fuzzy
 msgid "Director opinions in Opinion frontpage"
-msgstr "Número de artigos do director no widget:"
+msgstr "Número de artigos do director na portada de opinión"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2705
-#, fuzzy
 msgid "How many director opinions will be shown in the opinion frontpage."
-msgstr "Número de artigos do director no widget:"
+msgstr "Cantas opinións do director se mostrarán na portada de opinión."
 
 #: app/Backend/Resources/locale/extracted_strings.c:2708
-#, fuzzy
 msgid "Editorial opinions in Opinion frontpage"
-msgstr "Número de artigos da editorial no widget:"
+msgstr "Número de opinións na portada de opinión"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2711
-#, fuzzy
 msgid "How many editorial opinions will be shown in the opinion frontpage."
-msgstr "Número de artigos da editorial no widget:"
+msgstr "Cantas opinións de editorial se mostrarán na portada de opinión."
 
 #: app/Backend/Resources/locale/extracted_strings.c:2714
-#, fuzzy
 msgid "Author opinions in frontpage opinion widget:"
-msgstr "Número de artigos de autores no widget:"
+msgstr "Opinións de autores no widget de portada de opinión:"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2717
-#, fuzzy
 msgid "How many author opinions will be shown in the widget."
-msgstr "Número de artigos do director no widget:"
+msgstr ""
+"Número de opinións de autores que se mostrarán no widget de opinión en "
+"portada."
 
 #: app/Backend/Resources/locale/extracted_strings.c:2723
-#, fuzzy
 msgid "Editing opinion \"%1\""
-msgstr "Editando a instancia «%1»"
+msgstr "Editando opinión «%1»"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2726
-#, fuzzy
 msgid "Creating new opinion"
-msgstr "Crear nova opinión"
+msgstr "Creando nova opinión"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2762
-#, fuzzy
 msgid "In homepage"
-msgstr "En portada"
+msgstr "En portada principal"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2774
 #: app/Backend/Resources/locale/extracted_strings.c:3350
@@ -5101,9 +5029,8 @@ msgid "Metadata"
 msgstr "Metadatos"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2777
-#, fuzzy
 msgid "List of words separated with commas."
-msgstr "algunhas, palabras, separadas, por, comas"
+msgstr "Lista de palabras separadas por comas."
 
 #: app/Backend/Resources/locale/extracted_strings.c:2783
 msgid "-- Pick an author --"
@@ -5130,14 +5057,12 @@ msgid "Listing opinions"
 msgstr "Listado de opinións"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2828
-#, fuzzy
 msgid "Batch in home"
-msgstr "Poñer en portada"
+msgstr "En portada en lote"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2831
-#, fuzzy
 msgid "Batch drop from home"
-msgstr "Sacar de portada"
+msgstr "Sacar de portada en lote"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2840
 #: app/Backend/Resources/locale/extracted_strings.c:4664
@@ -5160,9 +5085,8 @@ msgstr "Portada de opinión"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2864
 #: app/Backend/Resources/locale/extracted_strings.c:6707
-#, fuzzy
 msgid "Listing"
-msgstr "Listar"
+msgstr "Listado"
 
 #: app/Backend/Resources/locale/extracted_strings.c:2867
 #: app/Backend/Resources/locale/extracted_strings.c:2876
@@ -5254,9 +5178,8 @@ msgid "Add contents"
 msgstr "Engadir contidos"
 
 #: app/Backend/Resources/locale/extracted_strings.c:3095
-#, fuzzy
 msgid "Default layout for this frontpage"
-msgstr "Albúm para portada"
+msgstr "Disposición predeterminada para esta portada"
 
 #: app/Backend/Resources/locale/extracted_strings.c:3098
 msgid "Available contents"
@@ -5271,9 +5194,8 @@ msgid "Other articles in this category"
 msgstr "Outros artigos nesta categoría"
 
 #: app/Backend/Resources/locale/extracted_strings.c:3131
-#, fuzzy
 msgid "Pick layout"
-msgstr "Contía de clics"
+msgstr "Seleccionar disposición"
 
 #: app/Backend/Resources/locale/extracted_strings.c:3134
 msgid "Drop these elements"
@@ -5383,14 +5305,12 @@ msgstr ""
 "cambiando a outra."
 
 #: app/Backend/Resources/locale/extracted_strings.c:3230
-#, fuzzy
 msgid "Global search"
-msgstr "Estadísticas globais"
+msgstr "Busca global"
 
 #: app/Backend/Resources/locale/extracted_strings.c:3233
-#, fuzzy
 msgid "Please fill the form for searching contents"
-msgstr "Complete o formulario<br> do carón para buscar contidos"
+msgstr "Complete o formulario para buscar contidos"
 
 #: app/Backend/Resources/locale/extracted_strings.c:3236
 msgid "Content name"
@@ -5466,19 +5386,16 @@ msgid "TOTAL"
 msgstr "TOTAL"
 
 #: app/Backend/Resources/locale/extracted_strings.c:3329
-#, fuzzy
 msgid "Files manager ::"
 msgstr "Xestor de ficheiros ::"
 
 #: app/Backend/Resources/locale/extracted_strings.c:3332
-#, fuzzy
 msgid "Editing file \"%1\""
-msgstr "Editando widget «%1»"
+msgstr "Editando ficheiro «%1»"
 
 #: app/Backend/Resources/locale/extracted_strings.c:3335
-#, fuzzy
 msgid "Creating new file"
-msgstr "Creando novo artigo"
+msgstr "Creando novo ficheiro"
 
 #: app/Backend/Resources/locale/extracted_strings.c:3356
 #: app/Backend/Resources/locale/extracted_strings.c:3440
@@ -5501,14 +5418,12 @@ msgid "Unpublished"
 msgstr "Non publicado"
 
 #: app/Backend/Resources/locale/extracted_strings.c:3461
-#, fuzzy
 msgid "[Link]"
-msgstr "Ligazón:"
+msgstr "[Ligazón]"
 
 #: app/Backend/Resources/locale/extracted_strings.c:3476
-#, fuzzy
 msgid "Edit file"
-msgstr "Editar o meu perfíl"
+msgstr "Editar ficheiro"
 
 #: app/Backend/Resources/locale/extracted_strings.c:3479
 msgid "There is not files available here."
@@ -5558,9 +5473,8 @@ msgid "Delete cache"
 msgstr "Eliminar caché"
 
 #: app/Backend/Resources/locale/extracted_strings.c:3557
-#, fuzzy
 msgid "Get updated cache list"
-msgstr "Anovar lista"
+msgstr "Obter lista de cachés actualizada"
 
 #: app/Backend/Resources/locale/extracted_strings.c:3560
 #: app/Backend/Resources/locale/extracted_strings.c:3563
@@ -5760,9 +5674,8 @@ msgstr ""
 "web</a>"
 
 #: app/Backend/Resources/locale/extracted_strings.c:3722
-#, fuzzy
 msgid "Delete caches"
-msgstr "Eliminar caché"
+msgstr "Eliminar cachés"
 
 #: app/Backend/Resources/locale/extracted_strings.c:3731
 #: app/Backend/Resources/locale/extracted_strings.c:5153
@@ -5780,29 +5693,25 @@ msgid "Show change headers and color in frontpages:"
 msgstr "Mostrar cabeceiras e cores nas portadas:"
 
 #: app/Backend/Resources/locale/extracted_strings.c:3776
-#, fuzzy
 msgid "Delete all the contents in this category"
-msgstr "Outros artigos nesta categoría"
+msgstr "Eliminar todos os contidos nesta categoría"
 
 #: app/Backend/Resources/locale/extracted_strings.c:3779
 #: app/Backend/Resources/locale/extracted_strings.c:4100
-#, fuzzy
 msgid "Delete category"
-msgstr "Eliminar autor"
+msgstr "Eliminar categoría"
 
 #: app/Backend/Resources/locale/extracted_strings.c:3785
 msgid "Editing category"
 msgstr "Editando categoría"
 
 #: app/Backend/Resources/locale/extracted_strings.c:3788
-#, fuzzy
 msgid "Creating new category"
-msgstr "Creando novo artigo"
+msgstr "Creando nova categoría"
 
 #: app/Backend/Resources/locale/extracted_strings.c:3818
-#, fuzzy
 msgid "Category available for"
-msgstr "Categoría dispoñíbel para:"
+msgstr "Categoría dispoñíbel para"
 
 #: app/Backend/Resources/locale/extracted_strings.c:3821
 msgid "All contents"
@@ -5813,9 +5722,8 @@ msgid "ePaper"
 msgstr "ePapel"
 
 #: app/Backend/Resources/locale/extracted_strings.c:3842
-#, fuzzy
 msgid "Subsection of"
-msgstr "Subsección de:"
+msgstr "Subsección de"
 
 #: app/Backend/Resources/locale/extracted_strings.c:3845
 #: app/Backend/Resources/locale/extracted_strings.c:4814
@@ -5830,18 +5738,16 @@ msgid "Reset color"
 msgstr "Restabelecer cor"
 
 #: app/Backend/Resources/locale/extracted_strings.c:3851
-#, fuzzy
 msgid "Category logo"
-msgstr "Lista de categorías"
+msgstr "Logo da categoría"
 
 #: app/Backend/Resources/locale/extracted_strings.c:3854
 msgid "Image logo:"
 msgstr "Imaxe do logotipo:"
 
 #: app/Backend/Resources/locale/extracted_strings.c:3857
-#, fuzzy
 msgid "Subsections"
-msgstr "Subseccións:"
+msgstr "Subseccións"
 
 #: app/Backend/Resources/locale/extracted_strings.c:3863
 #: app/Backend/Resources/locale/extracted_strings.c:3920
@@ -5920,16 +5826,16 @@ msgid "No available categories for listing"
 msgstr "Non hai ningunha categoría dispoñíbel para mostrar"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4088
-#, fuzzy
 msgid "Delete all the contents in category"
-msgstr "Tipos dos contidos para esta categoría"
+msgstr "Eliminar todos os contidos nesta categoría"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4091
-#, fuzzy
 msgid ""
 "Are you sure that do you want delete all the contents in the category "
 "\"<span>%title%</span>\"?"
-msgstr "Ten certeza de que quere eliminar «<span>%title%</span>»?"
+msgstr ""
+"Tes certeza que queres eliminar todos os contidos na categoría \"<span>%title"
+"%</span>\"?"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4112
 #: app/Backend/Resources/locale/extracted_strings.c:4211
@@ -6071,9 +5977,8 @@ msgid "Short name:"
 msgstr "Nome curto:"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4535
-#, fuzzy
 msgid "Disqus module configuration"
-msgstr "Configuración de módulo"
+msgstr "Configuración de módulo Disqus"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4538
 msgid "Config disqus module"
@@ -6099,9 +6004,8 @@ msgid "Disqus not configured"
 msgstr "Disqus non está configurado"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4553
-#, fuzzy
 msgid "Deletes the selected elements"
-msgstr "Eliminar seleccionado"
+msgstr "Eliminar elementos seleccionados"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4559
 #: app/Backend/Resources/locale/extracted_strings.c:4562
@@ -6110,38 +6014,33 @@ msgid "Restore"
 msgstr "Restaurar"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4586
-#, fuzzy
 msgid "Delete this content"
-msgstr "Editar este contido"
+msgstr "Eliminar este contido"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4589
 msgid "There is no elements in the trash"
 msgstr "Non hai ningún elemento no lixo"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4592
-#, fuzzy
 msgid "Restore contents from trash"
-msgstr "Restaurar desde o lixo"
+msgstr "Restaurar contidos desde o lixo"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4595
-#, fuzzy
 msgid "Are you sure you want to restore from trash the selected contents?"
-msgstr "Ten certeza de que quere enviar ao lixo o seguinte elemento?"
+msgstr ""
+"Tes certeza que queres restaurar desde o lixo os contidos seleccionados?"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4598
-#, fuzzy
 msgid "Yes, restore"
-msgstr "Si, eliminar"
+msgstr "Si, restaurar"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4604
-#, fuzzy
 msgid "Delete contents"
-msgstr "Eliminar comentarios"
+msgstr "Eliminar contidos"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4607
-#, fuzzy
 msgid "Are you sure you want to delete the selected contents?"
-msgstr "Ten certeza de que quere eliminar o ficheiro de caché seleccionado?"
+msgstr "Tes certeza que queres eliminar os contidos seleccionados?"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4622
 #: app/Backend/Resources/locale/extracted_strings.c:8138
@@ -6153,9 +6052,8 @@ msgid "Coments"
 msgstr "Comentarios"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4628
-#, fuzzy
 msgid "Covers"
-msgstr "Portada"
+msgstr "Portadas"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4655
 msgid "Welcome to %1"
@@ -6180,9 +6078,8 @@ msgid "Create new article"
 msgstr "Crear novo artigo"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4694
-#, fuzzy
 msgid "Welcome to your OpenNemas site!"
-msgstr "Benvido ao xestor de instancias de OpenNeMas"
+msgstr "Benvido ao seu sitio OpenNeMas!"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4697
 msgid ""
@@ -6192,33 +6089,35 @@ msgid ""
 "do first when they set up\n"
 "           a new OpenNemas site."
 msgstr ""
+"Se precisa axuda incial comprobe a nosa documentación <a href=\"#\">Primeiros "
+"pasos con OpenNeMas</a>.\n"
+"Se pola contra queres indagar por ti mesmo, a continuación móstranse "
+"algunhas accións que realizan a maioría das persoas para configurar un novo "
+"sitio OpenNemas."
 
 #: app/Backend/Resources/locale/extracted_strings.c:4700
-#, fuzzy
 msgid "Basic Settings"
-msgstr "Opcións"
+msgstr "Preferencias básicas"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4703
 msgid "Change your site name and preferences"
-msgstr ""
+msgstr "Cambie o nome e preferencias do seu sitio web"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4706
 msgid "Select your tagline and time zone"
-msgstr ""
+msgstr "Seleccione as etiquetas e zona horaria"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4709
-#, fuzzy
 msgid "Fill in your profile"
-msgstr "Editar o meu perfíl de usuario"
+msgstr "Complete o seu perfíl"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4712
-#, fuzzy
 msgid "Add your own Content"
-msgstr "Engadir contidos"
+msgstr "Engada os seus propios contidos"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4715
 msgid "Do you want more information check out our documentation."
-msgstr ""
+msgstr "Se quere máis información comprobe a nosa documentación."
 
 #: app/Backend/Resources/locale/extracted_strings.c:4718
 msgid "Logged in users"
@@ -6235,9 +6134,8 @@ msgstr "Actualizar a lista para obter a lista de erros máis actual"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4739
 #: app/Backend/Resources/locale/extracted_strings.c:6941
-#, fuzzy
 msgid "Filter"
-msgstr "Filtrar lista"
+msgstr "Filtrar"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4745
 msgid "Error explanation"
@@ -6253,84 +6151,71 @@ msgstr "Non hai ningún erro SQL rexistrado na base de datos."
 
 #: app/Backend/Resources/locale/extracted_strings.c:4754
 #: app/Backend/Resources/locale/extracted_strings.c:4790
-#, fuzzy
 msgid "Sync Manager"
-msgstr "Xestor de menú"
+msgstr "Xestor de sincronización"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4757
-#, fuzzy
 msgid "Client configuration"
-msgstr "Configuración de módulo"
+msgstr "Configuración do cliente"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4766
-#, fuzzy
 msgid "Clients list"
-msgstr "Filtrar lista"
+msgstr "Lista de clientes"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4775
-#, fuzzy
 msgid "Site URL"
-msgstr "Logotipo do sitio:"
+msgstr "URL do sitio"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4778
-#, fuzzy
 msgid "Connect"
-msgstr "Usuarios conectados"
+msgstr "Conectar"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4781
 #: app/Backend/Resources/locale/extracted_strings.c:6470
-#, fuzzy
 msgid "Site color"
-msgstr "Cor do sitio:"
+msgstr "Cor do sitio"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4784
-#, fuzzy
 msgid "Available categories for sync"
-msgstr "Non hai ningunha categoría dispoñíbel para mostrar"
+msgstr "Categorías dispoñíbeis para sincronizar"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4793
-#, fuzzy
 msgid "Client side"
-msgstr "Widget intelixente"
+msgstr "Parte do cliente"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4796
 #: app/Backend/Resources/locale/extracted_strings.c:4799
 #: app/Backend/Resources/locale/extracted_strings.c:4802
 #: app/Backend/Resources/locale/extracted_strings.c:4805
 msgid "Add site to sync"
-msgstr ""
+msgstr "Engadir sitio para sincronizar"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4808
-#, fuzzy
 msgid "Site Url"
-msgstr "Logotipo do sitio:"
+msgstr "URL do sitio"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4811
-#, fuzzy
 msgid "Categories to Sync"
-msgstr "Categorías:"
+msgstr "Categorías a sincronizar"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4826
-#, fuzzy
 msgid "There are no synchorinize settings available"
-msgstr "Non hai ningunha configuración de caché dispoñíbel"
+msgstr "No hai ningunha configuración de sincronización dispoñíbel"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4829
 msgid "Try adding one site to synchronize on the config button above."
 msgstr ""
+"Tente engadir un sitio para sincronizar empregando o botón de configuración"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4832
-#, fuzzy
 msgid "There is no elements to sync"
-msgstr "Non hai elementos para importar"
+msgstr "Non hai ningún elemento para sincronizar"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4835
-#, fuzzy
 msgid "Check if the given site url is correct."
-msgstr "Comprobe se tódalas palabras están escritas correctamente."
+msgstr "Comprobe se o URL fornecido é correcto."
 
 #: app/Backend/Resources/locale/extracted_strings.c:4838
-#, fuzzy
 msgid "Advertisment"
 msgstr "Publicidade"
 
@@ -6347,18 +6232,17 @@ msgid "Editing banner"
 msgstr "Edición de banner"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4907
-#, fuzzy
 msgid "Actived"
 msgstr "Activado"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4910
+#, fuzzy
 msgid "Url"
-msgstr ""
+msgstr "URL"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4928
-#, fuzzy
 msgid "Restrictions"
-msgstr "Restricións de visualización"
+msgstr "Restricións"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4931
 msgid "Without limits"
@@ -6379,36 +6263,35 @@ msgstr "Rango de datas"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4943
 msgid "Show this ad if satisfy one condition"
-msgstr ""
+msgstr "Mostra esta publicidade só se cumpre unha condición"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4946
-#, fuzzy
 msgid "# of clics"
-msgstr "Nº de clics:"
+msgstr "Nº de clics"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4949
-#, fuzzy
 msgid "Actual click count:"
-msgstr "Contía de clics"
+msgstr "Contía de clics actual:"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4952
 msgid ""
 "Show this ad only if users had clicked in it less than a number of times."
 msgstr ""
+"Mostra esta publicidade se os usuarios premeron sobre ela menos que un "
+"número de veces."
 
 #: app/Backend/Resources/locale/extracted_strings.c:4955
 msgid "Max views"
 msgstr "Visualizacións máximas"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4958
-#, fuzzy
 msgid "Actual views count:"
-msgstr "Contía de visualizacións"
+msgstr "Número de visualizacións actual:"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4961
 msgid ""
 "Show this ad only if this add had been printed less than a number of times."
-msgstr ""
+msgstr "Mostra esta publicidade se foi impresa menos que un número de veces."
 
 #: app/Backend/Resources/locale/extracted_strings.c:4967
 #: app/Backend/Resources/locale/extracted_strings.c:7730
@@ -6417,51 +6300,47 @@ msgstr "Desde"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4970
 msgid "Until"
-msgstr ""
+msgstr "Até"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4973
 msgid "Show this ad within a range of dates."
-msgstr ""
+msgstr "Mostra esta publicidade durante un rango de datas."
 
 #: app/Backend/Resources/locale/extracted_strings.c:4979
-#, fuzzy
 msgid "Image or flash from library"
-msgstr "Restaurar desde hemeroteca"
+msgstr "Imaxe ou obxecto Flash desde a biblioteca"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4982
-#, fuzzy
 msgid "Custom HTML or Javascript code"
-msgstr "Probar código JavaScript"
+msgstr "Código HTML ou Javascript personalizado"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4988
-#, fuzzy
 msgid "Width"
-msgstr "Largura:"
+msgstr "Ancho"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4991
-#, fuzzy
 msgid "Height"
-msgstr "Altura:"
+msgstr "Alto"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4994
-#, fuzzy
 msgid "Hide Flash events"
-msgstr "Agochar eventos de Flash:"
+msgstr "Agochar eventos de Flash"
 
 #: app/Backend/Resources/locale/extracted_strings.c:4997
 msgid ""
 "Mark this if you want to overide the default click handler for Flash based "
 "ads."
 msgstr ""
+"Marque este campo se quere sobrescribir o xestor de clic por defecto das "
+"publicidades baseadas en Flash."
 
 #: app/Backend/Resources/locale/extracted_strings.c:5000
-#, fuzzy
 msgid "Display banner while"
-msgstr "Nome de ficheiro"
+msgstr "Mostrar a publicidade durante"
 
 #: app/Backend/Resources/locale/extracted_strings.c:5003
 msgid "Amount of seconds that this banner will block all the page.."
-msgstr ""
+msgstr "Cantidade de segundos que esta publicidade bloqueara toda a páxina…"
 
 #: app/Backend/Resources/locale/extracted_strings.c:5006
 msgid "Position"
@@ -6574,7 +6453,7 @@ msgstr "Pechar xanela"
 
 #: app/Backend/Resources/locale/extracted_strings.c:5225
 msgid "Floating ads (for drop them into columns)"
-msgstr ""
+msgstr "Publicidades flotantes (para arrastrar en columnas)"
 
 #: app/Backend/Resources/locale/extracted_strings.c:5228
 msgid "Editing user group"
@@ -6588,9 +6467,8 @@ msgstr "Eliminar usuario"
 
 #: app/Backend/Resources/locale/extracted_strings.c:5234
 #: app/Backend/Resources/locale/extracted_strings.c:5486
-#, fuzzy
 msgid "Are you sure that do you want to delete \"<span>%title%</span>\"?"
-msgstr "Ten certeza de que quere eliminar «<span>%title%</span>»?"
+msgstr "Tes certeza de que queres eliminar «<span>%title%</span>»?"
 
 #: app/Backend/Resources/locale/extracted_strings.c:5243
 #: app/Backend/Resources/locale/extracted_strings.c:5345
@@ -6611,24 +6489,22 @@ msgid "Basic information"
 msgstr "Información básica"
 
 #: app/Backend/Resources/locale/extracted_strings.c:5279
-#, fuzzy
 msgid "User info"
-msgstr "Notas para o usuario"
+msgstr "Información do usuario"
 
 #: app/Backend/Resources/locale/extracted_strings.c:5294
-#, fuzzy
 msgid ""
 "If you want a custom avatar sign up in <a href='http://www.gravatar."
 "com'>gravatar.com</a> with the same email address as you have here in "
 "OpenNemas"
 msgstr ""
-"Rexístrese en <a href=\"http://www.gravatar.com\">gravatar.com</a> e "
-"asegúrese de que usa o mesmo correo que ten en OpenNemas"
+"Se quieres usar un avatar personalizado rexístrate en <a "
+"href='http://www.gravatar.com'>gravatar.com</a> e asegúrate de usar o mesmo "
+"correo electrónico que tes aquí en OpenNemas"
 
 #: app/Backend/Resources/locale/extracted_strings.c:5297
-#, fuzzy
 msgid "User name"
-msgstr "Nome de usuario:"
+msgstr "Nome do usuario"
 
 #: app/Backend/Resources/locale/extracted_strings.c:5303
 #: app/Backend/Resources/locale/extracted_strings.c:5849
@@ -6638,14 +6514,12 @@ msgid "Password"
 msgstr "Contrasinal"
 
 #: app/Backend/Resources/locale/extracted_strings.c:5306
-#, fuzzy
 msgid "Confirm password"
-msgstr "Contrasinal do usuario:"
+msgstr "Confirmar contrasinal"
 
 #: app/Backend/Resources/locale/extracted_strings.c:5309
-#, fuzzy
 msgid "Display name"
-msgstr "Nome de ficheiro"
+msgstr "Nome en pantalla"
 
 #: app/Backend/Resources/locale/extracted_strings.c:5312
 #: app/Backend/Resources/locale/extracted_strings.c:6872
@@ -6653,9 +6527,8 @@ msgid "Surname"
 msgstr "Nome"
 
 #: app/Backend/Resources/locale/extracted_strings.c:5315
-#, fuzzy
 msgid "Maiden surname"
-msgstr "Segundo apelido:"
+msgstr "Apelido"
 
 #: app/Backend/Resources/locale/extracted_strings.c:5318
 msgid "Session expire time:"
@@ -6666,14 +6539,13 @@ msgid "minutes"
 msgstr "minutos"
 
 #: app/Backend/Resources/locale/extracted_strings.c:5324
-#, fuzzy
 msgid "User language"
-msgstr "Xestor de usuarios"
+msgstr "Idioma do usuario"
 
 #: app/Backend/Resources/locale/extracted_strings.c:5327
 #: app/Backend/Resources/locale/extracted_strings.c:6521
 msgid "Used for displayed messages, interface and measures in your page."
-msgstr ""
+msgstr "Usado para os mensaxes, interface e medidas na súa páxina web."
 
 #: app/Backend/Resources/locale/extracted_strings.c:5330
 #: app/Backend/Resources/locale/extracted_strings.c:5333
@@ -6685,19 +6557,16 @@ msgid "--Select one--"
 msgstr "--Seleccione un--"
 
 #: app/Backend/Resources/locale/extracted_strings.c:5339
-#, fuzzy
 msgid "Categories"
-msgstr "Categorías:"
+msgstr "Categorías"
 
 #: app/Backend/Resources/locale/extracted_strings.c:5348
-#, fuzzy
 msgid "Delete selected users"
-msgstr "Eliminar seleccionado"
+msgstr "Eliminar usuarios seleccionados"
 
 #: app/Backend/Resources/locale/extracted_strings.c:5357
-#, fuzzy
 msgid "Create new user"
-msgstr "Crear novo artigo"
+msgstr "Crear novo usuario"
 
 #: app/Backend/Resources/locale/extracted_strings.c:5360
 msgid "New user"
@@ -6705,12 +6574,11 @@ msgstr "Novo usuario"
 
 #: app/Backend/Resources/locale/extracted_strings.c:5366
 msgid "or"
-msgstr ""
+msgstr "ou"
 
 #: app/Backend/Resources/locale/extracted_strings.c:5369
-#, fuzzy
 msgid "username"
-msgstr "Nome de usuario"
+msgstr "nome de usuario"
 
 #: app/Backend/Resources/locale/extracted_strings.c:5372
 msgid "and group:"
@@ -6738,9 +6606,8 @@ msgid "Edit user"
 msgstr "Editar usuario"
 
 #: app/Backend/Resources/locale/extracted_strings.c:5396
-#, fuzzy
 msgid "Delete this user"
-msgstr "Eliminar usuario"
+msgstr "Eliminar este usuario"
 
 #: app/Backend/Resources/locale/extracted_strings.c:5399
 msgid ""
@@ -7047,15 +6914,13 @@ msgstr "Redactores:"
 
 #: app/Backend/Resources/locale/extracted_strings.c:5843
 #: app/Backend/Resources/locale/extracted_strings.c:6086
-#, fuzzy
 msgid "Server"
-msgstr "Servidor:"
+msgstr "Servidor"
 
 #: app/Backend/Resources/locale/extracted_strings.c:5855
 #: app/Backend/Resources/locale/extracted_strings.c:6098
-#, fuzzy
 msgid "Sync elements newer than"
-msgstr "Sincronizar elementos máis novos que:"
+msgstr "Sincronizar elementos máis actuais que"
 
 #: app/Backend/Resources/locale/extracted_strings.c:5858
 msgid "Downloading articles from EFE, please wait..."
@@ -7093,9 +6958,8 @@ msgstr "Filtrar por título ou contido"
 
 #: app/Backend/Resources/locale/extracted_strings.c:5909
 #: app/Backend/Resources/locale/extracted_strings.c:6149
-#, fuzzy
 msgid "and in"
-msgstr "Creado en"
+msgstr "e en"
 
 #: app/Backend/Resources/locale/extracted_strings.c:5915
 #: app/Backend/Resources/locale/extracted_strings.c:6155
@@ -7194,14 +7058,12 @@ msgid "More information"
 msgstr "Máis información"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6263
-#, fuzzy
 msgid "-- All categories --"
-msgstr "Tódalas categorías"
+msgstr "-- Todas as categorías --"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6266
-#, fuzzy
 msgid "No available contents"
-msgstr "Contidos dispoñíbeis"
+msgstr "No hai contidos dispoñíbeis"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6302
 msgid "Letter Manager"
@@ -7212,19 +7074,16 @@ msgid "Editing letter"
 msgstr "Editar carta"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6329
-#, fuzzy
 msgid "Author nickname"
 msgstr "Alcume do autor"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6344
-#, fuzzy
 msgid "Letter to the Editor manager"
 msgstr "Xestor de cartas ao editor"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6347
-#, fuzzy
 msgid "Listing letters"
-msgstr "Editar carta"
+msgstr "Listado de cartas"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6374
 msgid "New letter"
@@ -7256,9 +7115,8 @@ msgid "SEO"
 msgstr "SEO"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6452
-#, fuzzy
 msgid "Internal"
-msgstr "Configuracións internas"
+msgstr "Interno"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6455
 #: app/Backend/Resources/locale/extracted_strings.c:7859
@@ -7266,163 +7124,147 @@ msgid "External Services"
 msgstr "Servizos externos"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6458
-#, fuzzy
 msgid "Site name"
-msgstr "Nome do sitio:"
+msgstr "Nome do sitio"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6461
-#, fuzzy
 msgid "This will be displayed as your site name."
-msgstr ""
-"Aquí pode cambiar o nome do seu sitio web. Mostrarase como o nome do seu "
-"sitio"
+msgstr "Usado como o nome do seu sitio."
 
 #: app/Backend/Resources/locale/extracted_strings.c:6464
 msgid "Site agency"
 msgstr "Axencia do sitio"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6467
-#, fuzzy
 msgid "This will be displayed as the default article signature."
-msgstr ""
-"Aquí pode cambiar o nome do seu sitio web. Mostrarase como o nome do seu "
-"sitio"
+msgstr "Usado como firma nos artigos por omisión."
 
 #: app/Backend/Resources/locale/extracted_strings.c:6473
 msgid "Color used for links, menus and some widgets."
-msgstr ""
+msgstr "Cor usado para as ligazóns, menús e algúns widgets."
 
 #: app/Backend/Resources/locale/extracted_strings.c:6476
 msgid "Use custom logo"
-msgstr ""
+msgstr "Usar logotipo personalizado"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6485
-#, fuzzy
 msgid "Site logo"
-msgstr "Logotipo do sitio:"
+msgstr "Logotipo do sitio"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6488
-#, fuzzy
 msgid "Footer text"
-msgstr "Pé da imaxe:"
+msgstr "Texto do pé da páxina"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6491
 msgid ""
 "Text showed at the bottom of your page. Usually used for copyright notice."
 msgstr ""
+"Texto que se mostra na parte inferior da súa páxina. Normalmente usado para "
+"o copyright."
 
 #: app/Backend/Resources/locale/extracted_strings.c:6494
 msgid "SEO options"
 msgstr "Opcións de SEO"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6497
-#, fuzzy
 msgid "Site title"
-msgstr "Título do sitio:"
+msgstr "Título do sitio"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6500
-#, fuzzy
 msgid "Site description"
-msgstr "Descrición do sitio:"
+msgstr "Descrición do sitio"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6503
-#, fuzzy
 msgid "Site keywords"
-msgstr "Palabras chave do sitio:"
+msgstr "Palabras chave do sitio"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6506
 msgid "Web Master Tools"
 msgstr "Web Master Tools"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6509
-#, fuzzy
 msgid "Google Web Master Tools"
-msgstr "Google Web Master Tools:"
+msgstr "Google Web Master Tools"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6512
-#, fuzzy
 msgid "Bing Web Master Tools"
-msgstr "Bing Web Master Tools:"
+msgstr "Bing Web Master Tools"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6515
-#, fuzzy
 msgid "Language & Time"
-msgstr "Idioma:"
+msgstr "Idioma e hora"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6518
-#, fuzzy
 msgid "Default language"
-msgstr "Imaxe predeterminada:"
+msgstr "Idioma por omisión"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6524
-#, fuzzy
 msgid "Time Zone"
-msgstr "Fuso horario:"
+msgstr "Fuso horario"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6527
 msgid "Used for all the dates used in your webpage."
-msgstr ""
+msgstr "Usado en todas as datas usadas na súa páxina web."
 
 #: app/Backend/Resources/locale/extracted_strings.c:6530
-#, fuzzy
 msgid "Listing & sorting"
-msgstr "Listado de opinións"
+msgstr "Listados e ordenación"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6533
-#, fuzzy
 msgid "Refresh page interval"
-msgstr "Actualizar páxina cada (seg):"
+msgstr "Intervalo de actualización da páxina"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6536
 msgid ""
 "When a user visits pages and stay on it for a while, this setting allows to "
 "refresh the loaded page for updated it."
 msgstr ""
+"Cando un usuario visita unha páxina e quédase en ela durante un tempo, esta "
+"configuración permítelle recargar a páxina para actualizala."
 
 #: app/Backend/Resources/locale/extracted_strings.c:6539
-#, fuzzy
 msgid "Items per page"
-msgstr "Elementos por páxina:"
+msgstr "Elementos por página"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6542
 msgid "Social networks"
 msgstr "Redes sociais"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6545
-#, fuzzy
 msgid "Twitter Page"
-msgstr "Páxina de Facebook:"
+msgstr "Páxina en Twitter"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6548
 msgid ""
 "If you also have a <b>twitter page</b>, add your profile name on the form. "
 "<br/>Default will be set with Opennemas."
 msgstr ""
+"SE ten unha <b>páxina en Twitter</b>, engada o seu nome de perfíl no "
+"formulario.<br/>Por omisión usarase o de OpenNeMas."
 
 #: app/Backend/Resources/locale/extracted_strings.c:6551
-#, fuzzy
 msgid "Google+ Page Url"
-msgstr "URL da páxina de Facebook:"
+msgstr "Url da páxina de Google+"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6554
 msgid "If you have a <b>Google+ page</b>, please complete this input."
-msgstr ""
+msgstr "Si ten unha <b>páxina en Google+</b>, complete este campo."
 
 #: app/Backend/Resources/locale/extracted_strings.c:6557
-#, fuzzy
 msgid "Facebook Page Url"
-msgstr "URL da páxina de Facebook:"
+msgstr "Url da páxina de Facebook"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6560
 msgid ""
 "If you have a <b>facebook page</b>, please complete the form with your "
 "facebook page url and Id."
 msgstr ""
+"Se ten unha <b>páxina en Facebook</b>, complete o formulario coa URL da "
+"páxina de Facebook e o seu identificador."
 
 #: app/Backend/Resources/locale/extracted_strings.c:6563
-#, fuzzy
 msgid "Facebook Id"
-msgstr "Id de Facebook:"
+msgstr "Id de Facebook"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6566
 #: app/Backend/Resources/locale/extracted_strings.c:8015
@@ -7430,9 +7272,8 @@ msgid "Google Services"
 msgstr "Servizos de Google"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6569
-#, fuzzy
 msgid "Google Maps API key"
-msgstr "Chave da API de Google Maps:"
+msgstr "Chave da API de Google Maps"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6572
 msgid ""
@@ -7463,9 +7304,8 @@ msgid "Facebook"
 msgstr "Facebook"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6584
-#, fuzzy
 msgid "APP key"
-msgstr "Chave do aplicativo:"
+msgstr "Chave do aplicativo"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6587
 #: app/Backend/Resources/locale/extracted_strings.c:8039
@@ -7477,9 +7317,8 @@ msgstr ""
 "developers.facebook.com/apps\">o sitio web Facebook Developers</a>."
 
 #: app/Backend/Resources/locale/extracted_strings.c:6590
-#, fuzzy
 msgid "Secret key"
-msgstr "Chave secreta:"
+msgstr "Chave secreta"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6593
 #: app/Backend/Resources/locale/extracted_strings.c:8045
@@ -7487,21 +7326,18 @@ msgid "Google Analytics Statistics"
 msgstr "Estatísticas de Google Analytics"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6596
-#, fuzzy
 msgid "API key"
-msgstr "Chave da API:"
+msgstr "Chave da API"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6599
-#, fuzzy
 msgid ""
 "You can get your Google Analytics Site ID from <a href=\"https://www.google."
 "com/analytics/\">GAnalytics site</a> under the General Overview list (should "
 "be something like UA-546457-3)."
 msgstr ""
-"Pode obter o seu ID de sitio web de Google Analytics desde <a href=\"https://"
-"www.google.com/analytics/\">o sitio web de GAnalytics</a> baixo a lista da "
-"Vista previa (debería ser algo semellante a UA-546457-3). Pode deixar o "
-"campo «Dominio base» en branco se o desexa."
+"Pode obter o seu ID de sitio web de Google Analytics desde <a "
+"href=\"https://www.google.com/analytics/\">o sitio web de GAnalytics</a> baixo "
+"a lista da Vista previa (debería ser algo semellante a UA-546457-3)."
 
 #: app/Backend/Resources/locale/extracted_strings.c:6602
 #: app/Backend/Resources/locale/extracted_strings.c:8060
@@ -7509,18 +7345,16 @@ msgid "Piwik Statistics"
 msgstr "Estadísticas de Piwik"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6605
-#, fuzzy
 msgid "Page ID"
-msgstr "ID da páxina:"
+msgstr "ID da páxina"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6608
 msgid "Server URL"
 msgstr "URL do servidor"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6611
-#, fuzzy
 msgid "User token auth"
-msgstr "Token de autenticación do usuario:"
+msgstr "Token de autenticación do usuario"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6614
 #: app/Backend/Resources/locale/extracted_strings.c:8075
@@ -7528,43 +7362,41 @@ msgid "Recaptcha"
 msgstr "Recaptcha"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6617
-#, fuzzy
 msgid "Public key"
-msgstr "Chave pública:"
+msgstr "Chave pública"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6620
-#, fuzzy
 msgid ""
 "Get your reCaptcha key from <a href=\"http://www.google.com/recaptcha/"
 "whyrecaptcha\">this page</a>."
 msgstr ""
-"Pode obter as súas chaves de reCAPTCHA desde <a href=\"https://www.google."
-"com/recaptcha/admin/create\">o sitio web de reCAPTCHA</a>."
+"Pode obter as súas chaves de reCAPTCHA desde <a "
+"href=\"https://www.google.com/recaptcha/whyrecaptcha\">esta páxina</a>."
 
 #: app/Backend/Resources/locale/extracted_strings.c:6623
 msgid "Used when we want to test if the user is an human and not a robot."
-msgstr ""
+msgstr "Usado cando quere comprobar se un usuario é un humano e non un robot."
 
 #: app/Backend/Resources/locale/extracted_strings.c:6626
-#, fuzzy
 msgid "Private key"
-msgstr "Chave privada:"
+msgstr "Chave privada"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6629
-#, fuzzy
 msgid "Paypal Settings"
-msgstr "Opcións"
+msgstr "Opcións de Paypal"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6632
-#, fuzzy
 msgid "Account email:"
-msgstr "Correo-e do usuario de contacto"
+msgstr "Correo do usuario da conta"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6635
 msgid ""
 "You can get your PayPal account email from <a href=\"https://www.paypal.com/"
 "\">PayPal site</a>. This must be a business account for receiving payments"
 msgstr ""
+"Podes recibir correos electrónicos de <a "
+"href=\"https://www.paypal.com/\">PayPal</a>. Esta debe ser a túa conta de "
+"empresa onde recibir as notificacións de pagos."
 
 #: app/Backend/Resources/locale/extracted_strings.c:6641
 #: app/Backend/Resources/locale/extracted_strings.c:6704
@@ -7576,14 +7408,12 @@ msgid "Editing page"
 msgstr "Editando páxina"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6683
-#, fuzzy
 msgid "The slug component in the url"
-msgstr "Non hai ningún elemento no lixo"
+msgstr "O compoñente slug da url"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6710
-#, fuzzy
 msgid "Create new page"
-msgstr "Crear novo artigo"
+msgstr "Crear nova páxina"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6713
 msgid "New static page"
@@ -7594,9 +7424,8 @@ msgid "New page"
 msgstr "Nova páxina"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6719
-#, fuzzy
 msgid "Filter by title"
-msgstr "Filtrar por nome"
+msgstr "Filtrar por título"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6740
 msgid "Open in a new window"
@@ -7675,7 +7504,6 @@ msgid "Mail address to receive new subscriptions"
 msgstr "Enderezo de correo electrónico no que recibir as novas subscricións"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6830
-#, fuzzy
 msgid "Mail sender"
 msgstr "Emisor do correo"
 
@@ -7701,9 +7529,8 @@ msgstr ""
 
 #: app/Backend/Resources/locale/extracted_strings.c:6845
 #: app/Backend/Resources/locale/extracted_strings.c:6902
-#, fuzzy
 msgid "Newsletter Subscriptions"
-msgstr "Subscritores ao boletín de novas"
+msgstr "Subscricións ao boletín"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6848
 msgid "Creating new subscriptor"
@@ -7714,7 +7541,6 @@ msgid "Editing subscriptor \"%1\""
 msgstr "Editando o subscritor «%1»"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6875
-#, fuzzy
 msgid "LastName"
 msgstr "Apelido"
 
@@ -7744,29 +7570,24 @@ msgid "If is activated means that the user is ready to receive newsletters"
 msgstr "Se está activado significa que o usuario recibirá boletíns de novas"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6914
-#, fuzzy
 msgid "Unsubscribe"
-msgstr "Suscrito"
+msgstr "Anular a subscrición"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6917
-#, fuzzy
 msgid "Subscribe"
-msgstr "Suscrito"
+msgstr "Subscribir"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6926
-#, fuzzy
 msgid "Newsletters"
-msgstr "Boletín de noticias"
+msgstr "Boletíns de novas"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6929
-#, fuzzy
 msgid "Search by name"
 msgstr "Filtrar por nome"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6938
-#, fuzzy
 msgid "No subscribed"
-msgstr "Suscrito"
+msgstr "No subscrito"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6950
 msgid "Status"
@@ -7793,48 +7614,45 @@ msgid "There is no subscriptors yet"
 msgstr "Non hai ningún suscritor aínda."
 
 #: app/Backend/Resources/locale/extracted_strings.c:6986
-#, fuzzy
 msgid ""
 "Are you sure you want to toggle subscription status for those <span>%num%</"
 "span> subscriptors?"
-msgstr "Ten certeza de que quere eliminar <span>%num%</span> autores?"
+msgstr ""
+"Tes certeza de que queres cambiar o estado de subscrición para <span>%num%"
+"</span> subscritores?"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6998
-#, fuzzy
 msgid "Delete subscriptions"
-msgstr "Tipo de subscrición ao boletín de novas"
+msgstr "Eliminar subscricións"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7010
-#, fuzzy
 msgid "Are you sure you want to delete those <span>%num%</span> subscriptors?"
-msgstr "Ten certeza de que quere eliminar <span>%num%</span> autores?"
+msgstr "Tes certeza de que queres eliminar <span>%num%</span> subscritores?"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7022
-#, fuzzy
 msgid "Delete subscriptor"
-msgstr "Subscritores ao boletín de novas"
+msgstr "Eliminar subscritor"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7025
-#, fuzzy
 msgid ""
 "Are you sure that do you want delete the subscritor with the mail \"<span>"
 "%title%</span>\"?"
-msgstr "Ten certeza de que quere eliminar «<span>%title%</span>»?"
+msgstr ""
+"Tes certeza de que queres eliminar o subscritor co correo electrónico "
+"«<span>%title%</span>»?"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7034
 msgid "Articles in Frontpage"
 msgstr "Artigos en portada"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7052
-#, fuzzy
 msgid "Newsletter Manager"
-msgstr "Xestión de boletín"
+msgstr "Xestor de boletín"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7055
 #: app/Backend/Resources/locale/extracted_strings.c:7058
-#, fuzzy
 msgid "New newsletter"
-msgstr "Boletín de noticias"
+msgstr "Novo boletín"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7061
 msgid "Config newsletter module"
@@ -7849,12 +7667,11 @@ msgstr "Suscritores"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7085
 msgid "Sent"
-msgstr ""
+msgstr "Enviado"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7109
-#, fuzzy
 msgid "There is no newsletters yet."
-msgstr "Non hai ningunha carta ao editor."
+msgstr "Non hai ningún boletín aínda."
 
 #: app/Backend/Resources/locale/extracted_strings.c:7112
 msgid "There is no active container"
@@ -7879,7 +7696,7 @@ msgstr "Engadir unha etiqueta contedora"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7139
 msgid "Potential lose of the actual generated HTML."
-msgstr ""
+msgstr "Posíbel perda de HTML xerado actual."
 
 #: app/Backend/Resources/locale/extracted_strings.c:7142
 msgid ""
@@ -7887,20 +7704,21 @@ msgid ""
 "<br>If you update the newsletter contents the HTML will overwrite the actual "
 "HTML."
 msgstr ""
+"Este boletín xa ten un HTML xerado, potencialmente cambiado por "
+"vostede.<br>Se actualiza os contidos do boletín o HTML actual "
+"sobrescribirase."
 
 #: app/Backend/Resources/locale/extracted_strings.c:7145
 msgid "Overwrite actual HTML"
-msgstr ""
+msgstr "Sobrescribir HTML actual"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7151
-#, fuzzy
 msgid "Newsletter manager"
-msgstr "Xestión de boletín"
+msgstr "Xestor de boletín"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7154
-#, fuzzy
 msgid "Newsletter contents"
-msgstr "Eliminar comentarios"
+msgstr "Contidos do boletín"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7157
 #: app/Backend/Resources/locale/extracted_strings.c:7160
@@ -7919,7 +7737,6 @@ msgstr "Seguinte paso"
 #: app/Backend/Resources/locale/extracted_strings.c:7166
 #: app/Backend/Resources/locale/extracted_strings.c:7295
 #: app/Backend/Resources/locale/extracted_strings.c:7298
-#, fuzzy
 msgid "Back to list"
 msgstr "Volver á lista"
 
@@ -7930,7 +7747,7 @@ msgstr "Asunto da mensaxe"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7175
 msgid "Drag elements from the right column to include them into the newsletter"
-msgstr ""
+msgstr "Arrastra elementos desde a columna dereita para incluílos no boletín"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7178
 msgid "Add Container"
@@ -7941,14 +7758,12 @@ msgid "Clean containers"
 msgstr "Limpar contenedores"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7184
-#, fuzzy
 msgid "Clean contents"
-msgstr "Limpar contenedores"
+msgstr "Limpar contidos"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7187
-#, fuzzy
 msgid "In Frontpage"
-msgstr "Portada"
+msgstr "En portada"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7190
 #: app/Backend/Resources/locale/extracted_strings.c:7193
@@ -7960,9 +7775,8 @@ msgid "Add Selected items"
 msgstr "Engadir elementos seleccionados"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7199
-#, fuzzy
 msgid "Add selected contents"
-msgstr "Engadir elementos seleccionados"
+msgstr "Engadir contidos seleccionados"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7202
 msgid "Newsletter management"
@@ -7973,9 +7787,8 @@ msgid "Recipient selection"
 msgstr "Selección de destinatarios"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7214
-#, fuzzy
 msgid "Send newsletter"
-msgstr "Boletín de noticias"
+msgstr "Enviar boletín"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7217
 #: app/Backend/Resources/locale/extracted_strings.c:7220
@@ -7993,36 +7806,33 @@ msgid "Please select your desired persons to sent the newsletter to."
 msgstr "Seleccione as persoas ás que quere enviarlle o boletín de novas."
 
 #: app/Backend/Resources/locale/extracted_strings.c:7229
-#, fuzzy
 msgid "MailList"
-msgstr "Conta da rolda de correo"
+msgstr "Rolda de correo"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7232
-#, fuzzy
 msgid "Database accounts"
-msgstr "Base de datos de contas"
+msgstr "Contas da base de datos"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7235
-#, fuzzy
 msgid "Custom"
-msgstr "Personalizar"
+msgstr "Personalizado"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7238
 msgid "Select all"
 msgstr "Seleccionar todo"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7241
-#, fuzzy
 msgid "Add selected"
-msgstr "Engadir elementos seleccionados"
+msgstr "Engadir seleccionados"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7244
 msgid "Parse list & add"
-msgstr ""
+msgstr "Analizar lista e engadir"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7247
 msgid "Write a list of email address by writing one per line."
 msgstr ""
+"Escribe unha lista de enderezos de correo escribindo cada un nunha liña."
 
 #: app/Backend/Resources/locale/extracted_strings.c:7250
 msgid "Receivers"
@@ -8042,22 +7852,20 @@ msgid "Back"
 msgstr "Atrás"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7316
-#, fuzzy
 msgid "View recipients"
-msgstr "Contía de visualizacións"
+msgstr "Ver destinatarios"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7319
 msgid "OK"
-msgstr ""
+msgstr "Correcto"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7322
 msgid "failed"
-msgstr ""
+msgstr "Fallado"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7325
-#, fuzzy
 msgid "There was no recipients to sent to"
-msgstr "Non hai elementos para importar"
+msgstr "Non hai ningún destinatario ao que enviar"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7328
 msgid "Uploading images to \"%1\""
@@ -8196,11 +8004,8 @@ msgid "All sizes must be in pixels"
 msgstr "Todos os tamaños deben estar en pixeles"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7469
-#, fuzzy
 msgid "No available images with your search criteria"
-msgstr ""
-"Non hai ningunha imaxes dispoñíbel<br> \n"
-"con este criterio de busca"
+msgstr "Non hai ningunha imaxe dispoñíbel que coincida co seu criterio de busca"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7472
 msgid "Images manager :: General statistics"
@@ -8253,7 +8058,6 @@ msgid "No available description"
 msgstr "Descrición no dispoñíbel"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7538
-#, fuzzy
 msgid "Filename"
 msgstr "Nome de ficheiro"
 
@@ -8283,9 +8087,8 @@ msgid "EXIF &amp; IPTC"
 msgstr "EXIF &amp; IPTC"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7577
-#, fuzzy
 msgid "Original filename:"
-msgstr "Título orixinal"
+msgstr "Nome do ficheiro orixinal:"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7583
 msgid "Resolution:"
@@ -8297,11 +8100,11 @@ msgstr "Tamaño:"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7595
 msgid "Used for searches and automated suggestions."
-msgstr ""
+msgstr "Usado para buscas e suxestións automáticas."
 
 #: app/Backend/Resources/locale/extracted_strings.c:7598
 msgid "Copyright"
-msgstr ""
+msgstr "Copyright"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7610
 msgid "B/W"
@@ -8309,7 +8112,7 @@ msgstr "B/N"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7613
 msgid "Geolocate photo with my position"
-msgstr ""
+msgstr "Xeolocalizar foto coa miña posición"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7616
 msgid "EXIF Data:"
@@ -8332,19 +8135,16 @@ msgid "Image manager"
 msgstr "Xestor de imaxes"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7631
-#, fuzzy
 msgid "Category \"%1\""
-msgstr "Editando categoría"
+msgstr "Categoría «%1»"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7634
-#, fuzzy
 msgid "Category \"Advertisement\""
-msgstr "Imaxes de «Publicidade»"
+msgstr "Categoría «Publicidade»"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7637
-#, fuzzy
 msgid "Category \"GLOBAL\""
-msgstr "Imaxes en la categoría «GLOBAL»"
+msgstr "Categoría «GLOBAL»"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7643
 #: app/Backend/Resources/locale/extracted_strings.c:7703
@@ -8368,33 +8168,28 @@ msgstr "Estadísticas"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7661
 #: app/Backend/Resources/locale/extracted_strings.c:7670
-#, fuzzy
 msgid "Delete multiple images"
-msgstr "Eliminar especiais"
+msgstr "Eliminar múltiples imaxes"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7673
-#, fuzzy
 msgid "Are you sure you want to delete <span>%num%</span> images?"
-msgstr "Ten certeza de que quere eliminar <span>%num%</span> ficheiros?"
+msgstr "Tes certeza de que queres eliminar <span>%num%</span> imaxes?"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7682
-#, fuzzy
 msgid "Delete image"
-msgstr "Eliminar widget"
+msgstr "Eliminar imaxe"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7694
-#, fuzzy
 msgid "Files uploaded successfully"
-msgstr "Ficheiro creado correctamente."
+msgstr "Ficheiros actualizados correctamente."
 
 #: app/Backend/Resources/locale/extracted_strings.c:7697
 msgid "The dropped files are uploaded but you must ."
-msgstr ""
+msgstr "Os elementos soltados foron subidos porén debe "
 
 #: app/Backend/Resources/locale/extracted_strings.c:7700
-#, fuzzy
 msgid "Edit them"
-msgstr "Editar o nome do sitio"
+msgstr "Editalos"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7706
 msgid "Search result"
@@ -8464,7 +8259,7 @@ msgstr "Xestor de imaxes :: Editando «%1»"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7817
 msgid "Framework status"
-msgstr ""
+msgstr "Estado do framework"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7820
 msgid "Creating new intance"
@@ -8774,7 +8569,6 @@ msgid "There is no available instances yet"
 msgstr "Aínda non hai ningunha instancia"
 
 #: app/Backend/Resources/locale/extracted_strings.c:8216
-#, fuzzy
 msgid "Instance manager"
 msgstr "Xestor de instancias"
 

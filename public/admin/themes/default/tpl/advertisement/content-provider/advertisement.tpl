@@ -16,7 +16,7 @@
         </a>
         <ul class="dropdown-menu">
             <li>
-                <a title="{t 1=$content->title}Edit '%1'{/t}" href="{url name=admin_ads_show id=$content->id}">
+                <a title="{t 1=$content->title}Edit '%1'{/t}" href="{url name=admin_ad_show id=$content->id}">
                     <i class="icon-pencil"></i> {t}Edit{/t}
                 </a>
             </li>
