@@ -155,10 +155,16 @@ class SearchController extends Controller
                     array(
                         'mode'        => 'Sliding',
                         'perPage'     => s::get('items_per_page') ?: 20,
-                        'delta'       => 3,
+                        'append'      => false,
+                        'path'        => '',
+                        'delta'       => 1,
                         'clearIfVoid' => true,
                         'urlVar'      => 'page',
                         'totalItems'  => $resultSetSize,
+                        'fileName'    => $this->generateUrl(
+                            'admin_search_content_provider',
+                            array('search_string' => $searchString, 'related' => $related)
+                        ).'&page=%d',
                     )
                 );
                 $this->view->assign('pagination', $pagination->links);
