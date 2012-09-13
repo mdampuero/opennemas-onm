@@ -201,19 +201,20 @@ class FrontpagesController extends Controller
         );
 
         // If this request is Ajax return properly formated result.
-        if ($this->request->isXmlHttpRequest()) {
-            if ($savedProperly) {
-                return _("Content positions saved properly");
+        if ($savedProperly) {
+            $message = _("Content positions saved properly");
+            $response = new Response($message);
+        } else {
+            if ($validReceivedData == false) {
+                $errorMessage = _("Unable to save content positions: Data sent from the client were not valid.");
             } else {
-                if ($validReceivedData == false) {
-                    $errorMessage = _("Unable to save content positions: Data sent from the client were not valid.");
-                } else {
-                    $errorMessage = _("Unable to save content positions: Unknow reason");
-                }
-
-                $response = new Response($errorMessage, 500);
+                $errorMessage = _("Unable to save content positions: Unknow reason");
             }
+
+            $response = new Response($errorMessage, 500);
         }
+
+        return $response;
     }
 
     /**
