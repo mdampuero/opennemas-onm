@@ -82,7 +82,7 @@ class PollsController extends Controller
             'Poll',
             $categoryFilter,
             'in_litter != 1',
-            'ORDER BY created DESC ',
+            'ORDER BY content_status, available, created DESC ',
             $page,
             $itemsPerPage
         );
@@ -588,7 +588,7 @@ class PollsController extends Controller
                 'perPage'     => $itemsPerPage,
                 'append'      => false,
                 'path'        => '',
-                'delta'       => 4,
+                'delta'       => 1,
                 'clearIfVoid' => true,
                 'urlVar'      => 'page',
                 'totalItems'  => $countPolls,

@@ -784,7 +784,7 @@ class VideosController extends Controller
         list($countVideos, $videos) = $cm->getCountAndSlice(
             'Video',
             $categoryFilter,
-            'contents.available=1',
+            'contents.content_status=1',
             ' ORDER BY created DESC ',
             $page,
             $itemsPerPage
@@ -796,7 +796,7 @@ class VideosController extends Controller
                 'perPage'     => $itemsPerPage,
                 'append'      => false,
                 'path'        => '',
-                'delta'       => 4,
+                'delta'       => 1,
                 'clearIfVoid' => true,
                 'urlVar'      => 'page',
                 'totalItems'  => $countVideos,

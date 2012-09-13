@@ -113,7 +113,7 @@ class FilesController extends Controller
                 'perPage'     => $itemsPerPage,
                 'append'      => false,
                 'path'        => '',
-                'delta'       => 4,
+                'delta'       => 1,
                 'clearIfVoid' => true,
                 'urlVar'      => 'page',
                 'totalItems'  => $filesCount,

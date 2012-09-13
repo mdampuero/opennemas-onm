@@ -793,7 +793,7 @@ class ArticlesController extends Controller
         list($countArticles, $articles) = $cm->getCountAndSlice(
             'Article',
             $categoryFilter,
-            'contents.available=1',
+            'contents.content_status=1',
             ' ORDER BY created DESC ',
             $page,
             $itemsPerPage
@@ -805,7 +805,7 @@ class ArticlesController extends Controller
                 'perPage'     => $itemsPerPage,
                 'append'      => false,
                 'path'        => '',
-                'delta'       => 4,
+                'delta'       => 1,
                 'clearIfVoid' => true,
                 'urlVar'      => 'page',
                 'totalItems'  => $countArticles,
