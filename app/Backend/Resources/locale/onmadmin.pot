@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-13 10:45+0200\n"
+"POT-Creation-Date: 2012-09-13 12:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -751,7 +751,7 @@ msgstr ""
 msgid "Files \"%s\" deleted successfully."
 msgstr ""
 
-#: app/Backend/Controllers/FrontpagesController.php:206
+#: app/Backend/Controllers/FrontpagesController.php:205
 msgid "Content positions saved properly"
 msgstr ""
 

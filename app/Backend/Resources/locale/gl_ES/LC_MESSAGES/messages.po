@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-12 00:14+0200\n"
+"POT-Creation-Date: 2012-09-13 12:53+0200\n"
 "PO-Revision-Date: 2012-09-13 02:19+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
@@ -778,7 +778,7 @@ msgstr ""
 msgid "Files \"%s\" deleted successfully."
 msgstr "Ficheiro «%s» eliminado correctamente."
 
-#: app/Backend/Controllers/FrontpagesController.php:206
+#: app/Backend/Controllers/FrontpagesController.php:205
 msgid "Content positions saved properly"
 msgstr "Posicións dos contidos gardadas correctamente"
 
@@ -6089,8 +6089,8 @@ msgid ""
 "do first when they set up\n"
 "           a new OpenNemas site."
 msgstr ""
-"Se precisa axuda incial comprobe a nosa documentación <a href=\"#\">Primeiros "
-"pasos con OpenNeMas</a>.\n"
+"Se precisa axuda incial comprobe a nosa documentación <a href=\"#"
+"\">Primeiros pasos con OpenNeMas</a>.\n"
 "Se pola contra queres indagar por ti mesmo, a continuación móstranse "
 "algunhas accións que realizan a maioría das persoas para configurar un novo "
 "sitio OpenNemas."
@@ -6498,9 +6498,9 @@ msgid ""
 "com'>gravatar.com</a> with the same email address as you have here in "
 "OpenNemas"
 msgstr ""
-"Se quieres usar un avatar personalizado rexístrate en <a "
-"href='http://www.gravatar.com'>gravatar.com</a> e asegúrate de usar o mesmo "
-"correo electrónico que tes aquí en OpenNemas"
+"Se quieres usar un avatar personalizado rexístrate en <a href='http://www."
+"gravatar.com'>gravatar.com</a> e asegúrate de usar o mesmo correo "
+"electrónico que tes aquí en OpenNemas"
 
 #: app/Backend/Resources/locale/extracted_strings.c:5297
 msgid "User name"
@@ -7335,9 +7335,9 @@ msgid ""
 "com/analytics/\">GAnalytics site</a> under the General Overview list (should "
 "be something like UA-546457-3)."
 msgstr ""
-"Pode obter o seu ID de sitio web de Google Analytics desde <a "
-"href=\"https://www.google.com/analytics/\">o sitio web de GAnalytics</a> baixo "
-"a lista da Vista previa (debería ser algo semellante a UA-546457-3)."
+"Pode obter o seu ID de sitio web de Google Analytics desde <a href=\"https://"
+"www.google.com/analytics/\">o sitio web de GAnalytics</a> baixo a lista da "
+"Vista previa (debería ser algo semellante a UA-546457-3)."
 
 #: app/Backend/Resources/locale/extracted_strings.c:6602
 #: app/Backend/Resources/locale/extracted_strings.c:8060
@@ -7370,8 +7370,8 @@ msgid ""
 "Get your reCaptcha key from <a href=\"http://www.google.com/recaptcha/"
 "whyrecaptcha\">this page</a>."
 msgstr ""
-"Pode obter as súas chaves de reCAPTCHA desde <a "
-"href=\"https://www.google.com/recaptcha/whyrecaptcha\">esta páxina</a>."
+"Pode obter as súas chaves de reCAPTCHA desde <a href=\"https://www.google."
+"com/recaptcha/whyrecaptcha\">esta páxina</a>."
 
 #: app/Backend/Resources/locale/extracted_strings.c:6623
 msgid "Used when we want to test if the user is an human and not a robot."
@@ -7394,9 +7394,9 @@ msgid ""
 "You can get your PayPal account email from <a href=\"https://www.paypal.com/"
 "\">PayPal site</a>. This must be a business account for receiving payments"
 msgstr ""
-"Podes recibir correos electrónicos de <a "
-"href=\"https://www.paypal.com/\">PayPal</a>. Esta debe ser a túa conta de "
-"empresa onde recibir as notificacións de pagos."
+"Podes recibir correos electrónicos de <a href=\"https://www.paypal.com/"
+"\">PayPal</a>. Esta debe ser a túa conta de empresa onde recibir as "
+"notificacións de pagos."
 
 #: app/Backend/Resources/locale/extracted_strings.c:6641
 #: app/Backend/Resources/locale/extracted_strings.c:6704
@@ -7618,8 +7618,8 @@ msgid ""
 "Are you sure you want to toggle subscription status for those <span>%num%</"
 "span> subscriptors?"
 msgstr ""
-"Tes certeza de que queres cambiar o estado de subscrición para <span>%num%"
-"</span> subscritores?"
+"Tes certeza de que queres cambiar o estado de subscrición para <span>%num%</"
+"span> subscritores?"
 
 #: app/Backend/Resources/locale/extracted_strings.c:6998
 msgid "Delete subscriptions"
@@ -7638,8 +7638,8 @@ msgid ""
 "Are you sure that do you want delete the subscritor with the mail \"<span>"
 "%title%</span>\"?"
 msgstr ""
-"Tes certeza de que queres eliminar o subscritor co correo electrónico "
-"«<span>%title%</span>»?"
+"Tes certeza de que queres eliminar o subscritor co correo electrónico «<span>"
+"%title%</span>»?"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7034
 msgid "Articles in Frontpage"
@@ -7704,9 +7704,8 @@ msgid ""
 "<br>If you update the newsletter contents the HTML will overwrite the actual "
 "HTML."
 msgstr ""
-"Este boletín xa ten un HTML xerado, potencialmente cambiado por "
-"vostede.<br>Se actualiza os contidos do boletín o HTML actual "
-"sobrescribirase."
+"Este boletín xa ten un HTML xerado, potencialmente cambiado por vostede."
+"<br>Se actualiza os contidos do boletín o HTML actual sobrescribirase."
 
 #: app/Backend/Resources/locale/extracted_strings.c:7145
 msgid "Overwrite actual HTML"
@@ -8005,7 +8004,8 @@ msgstr "Todos os tamaños deben estar en pixeles"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7469
 msgid "No available images with your search criteria"
-msgstr "Non hai ningunha imaxe dispoñíbel que coincida co seu criterio de busca"
+msgstr ""
+"Non hai ningunha imaxe dispoñíbel que coincida co seu criterio de busca"
 
 #: app/Backend/Resources/locale/extracted_strings.c:7472
 msgid "Images manager :: General statistics"
