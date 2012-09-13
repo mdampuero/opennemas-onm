@@ -67,7 +67,7 @@ class ImporterEfeController extends Controller
         $queryParams = $this->request->query;
         $filterCategory = $queryParams->filter('filter_category', '*', FILTER_SANITIZE_STRING);
         $filterTitle = $queryParams->filter('filter_title', '*', FILTER_SANITIZE_STRING);
-        $page = $queryParams->filter('page', 0, FILTER_VALIDATE_INT);
+        $page = $queryParams->filter('page', 1, FILTER_VALIDATE_INT);
         $itemsPage =  s::get('items_per_page') ?: 20;
 
         $findParams = array(
