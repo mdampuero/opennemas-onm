@@ -96,7 +96,7 @@
         <div class="title"><h2>{t}Opinion Manager{/t} :: {t}Listing opinions{/t}</h2></div>
         <ul class="old-button">
             {acl isAllowed="OPINION_AVAILABLE"}
-            <li class="batch-actions">
+        {*    <li class="batch-actions">
 
                 <a href="#">
                     <img src="{$params.IMAGE_DIR}/select.png" title="" alt="" />
@@ -134,7 +134,7 @@
                 </ul>
 
             </li>
-
+            *}
             {/acl}
 
             {acl isAllowed="OPINION_CREATE"}
