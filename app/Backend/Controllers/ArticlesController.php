@@ -31,10 +31,10 @@ class ArticlesController extends Controller
     public function init()
     {
         //Check if module is activated in this onm instance
-        ModuleManager::checkActivatedOrForward('COMMENT_MANAGER');
+        ModuleManager::checkActivatedOrForward('ARTICLE_MANAGER');
 
         // Check if the user can admin video
-        $this->checkAclOrForward('COMMENT_ADMIN');
+        $this->checkAclOrForward('ARTICLE_ADMIN');
 
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
 
@@ -314,14 +314,14 @@ class ArticlesController extends Controller
      **/
     public function showAction(Request $request)
     {
-        $this->checkAclOrForward('OPINION_UPDATE');
+        $this->checkAclOrForward('ARTICLE_UPDATE');
 
         $id = $request->query->getDigits('id', null);
 
         $article = new \Article($id);
 
         if (is_null($article->id)) {
-            m::add(sprintf(_('Unable to find the artucle with the id "%d"'), $id));
+            m::add(sprintf(_('Unable to find the article with the id "%d"'), $id));
 
             return $this->redirect($this->generateUrl('admin_articles'));
         }
