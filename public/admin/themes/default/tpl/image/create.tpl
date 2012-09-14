@@ -22,7 +22,7 @@ var image_uploader ={
         <div class="title"><h2>{t 1=$datos_cat[0]->title}Uploading images to "%1"{/t}</h2></div>
         <ul class="old-button">
             <li>
-                <a href="{$smarty.server.PHP_SELF}?category={$category}&amp;action={$smarty.session.desde}">
+                <a href="{$smarty.server.SCRIPT_NAME}/images?category={$category}&amp;action={$smarty.session.desde}">
                     <img src="{$params.IMAGE_DIR}previous.png" alt="{t}Go back{/t}"><br />{t}Go back{/t}
                 </a>
             </li>
@@ -75,7 +75,7 @@ var image_uploader ={
         <!-- gallery-loader is the loading container animation -->
         <div id="gallery-loader"></div>
         <!-- gallery-modal is the modal dialog used for the image gallery -->
-        <div id="gallery-modal" class="modal hide fade">
+<!--         <div id="gallery-modal" class="modal hide fade">
             <div class="modal-header">
                 <a href="#" class="close">&times;</a>
                 <h3 class="title"></h3>
@@ -86,7 +86,7 @@ var image_uploader ={
                 <a class="btn info prev">Previous</a>
                 <a class="btn success download" target="_blank">Download</a>
             </div>
-        </div>
+        </div> -->
         <input type="hidden" name="category" value="{$category}" />
     </form>
     <div id="upload-helper" data-filecount=0></div>
