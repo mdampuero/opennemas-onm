@@ -44,9 +44,9 @@ while (!$rs->EOF) {
     );
     $conn2->SetFetchMode(ADODB_FETCH_ASSOC);
 
-    $privileges = $conn2->Execute('SELECT * FROM privileges');
+    $privileges = $conn2->Execute('SELECT * FROM privileges ORDER BY name');
 
-    echo "\$privileges = array(\n";
+    echo "<?php\n\$privileges = array(\n";
     while (!$privileges->EOF) {
 
         echo "\tarray(\n";
