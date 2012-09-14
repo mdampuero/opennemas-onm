@@ -58,6 +58,25 @@ class Theme
     public $layouts = array();
 
     /**
+     * Registered menus in the theme
+     *
+     * @var string
+     **/
+    public $menus = array();
+
+    /**
+     * Default property definitions for a menu
+     *
+     * @var string
+     **/
+    private $defaultMenu = array(
+        'description' => 'A simple menu',
+        'class'       => 'menu',
+        'before_menu' => '<div id="%1$s" class="menu %2$s">',
+        'after_menu'  => '</div>',
+    );
+
+    /**
      * Initializes the Theme instance
      *
      * @return Theme the object initialized
@@ -88,7 +107,7 @@ class Theme
     {
         $this->layouts[$name] = $file;
 
-        return true;
+        return $this;
     }
 
     /**
@@ -99,6 +118,50 @@ class Theme
     public function getLayouts()
     {
         return $this->layouts;
+    }
+
+    /**
+     * Registers a new menu in the theme
+     *
+     * @return Theme the object
+     **/
+    public function registerMenu($menuDefinition)
+    {
+        if (!array_key_exists('name', $menuDefinition)) {
+            throw new \ArgumentException(_('Please provide a menu name to register it.'));
+        }
+
+        $menu = array_merge(
+            $this->defaultMenu,
+            $menuDefinition
+        );
+
+        $this->menus[$menu['name']] = $menu;
+
+        return $this;
+    }
+
+    /**
+     * Returns the menu placeholder definition
+     *
+     * @return array the menu definitions
+     **/
+    public function getMenu($name)
+    {
+        if (!array_key_exists($name, $this->menus)) {
+            return false;
+        }
+        return $this->menus[$name];
+    }
+
+    /**
+     * Returns all the registered menus in this theme
+     *
+     * @return array the list of menu definitions
+     **/
+    public function getMenus()
+    {
+        return $this->menus;
     }
 }
 
