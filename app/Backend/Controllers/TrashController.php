@@ -53,7 +53,7 @@ class TrashController extends Controller
             $this->filterContentType,
             null,
             'in_litter=1',
-            'ORDER BY changed DESC ',
+            'ORDER BY created DESC ',
             $page,
             $itemsPerPage
         );

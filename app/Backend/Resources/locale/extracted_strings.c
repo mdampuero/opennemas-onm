@@ -3101,6 +3101,9 @@ gettext("Available contents");
 gettext("Suggested articles");
 
 /* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
+gettext("Latest articles");
+
+/* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
 gettext("Other articles in this category");
 
 /* public/admin/themes/default/tpl//frontpagemanager/list.tpl */

@@ -141,64 +141,67 @@ class FrontpagesController extends Controller
         if (!\Acl::check('ARTICLE_FRONTPAGE')) {
             \Acl::deny();
         }
+        $savedProperly = false;
+        $validReceivedData = false;
 
         $category      = $this->request->query->filter('category', null, FILTER_SANITIZE_STRING);
-        if ($category == '0') {
-            $category = 'home';
-        }
 
-        $tcacheManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
-
-        $ccm           = \ContentCategoryManager::get_instance();
-        $section       = $ccm->get_name($category);
-
-        // Get the form-encoded places from request
-        if (isset($_POST['contents_positions'])) {
-            $contentsPositions = $this->request->request->get('contents_positions');
-        } else {
-            $contentsPositions = null;
-        }
-
-        $categoryID = ($category == 'home') ? 0 : $category;
-        $validReceivedData = is_array($contentsPositions)
-                             && !empty($contentsPositions)
-                             && !is_null($categoryID);
-
-        $savedProperly = false;
-        if ($validReceivedData) {
-
-            $contents = array();
-            // Iterate over each element and populate its element to save.
-            foreach ($contentsPositions as $params) {
-                if (
-                    !isset($categoryID) || !isset($params['placeholder'])
-                    || !isset($params['position']) || !isset($params['content_type'])
-                    || strpos('placeholder', $params['placeholder'])
-                ) {
-                    continue;
-                }
-                $contents[] = array(
-                    'id'           => $params['id'],
-                    'category'     => $categoryID,
-                    'placeholder'  => $params['placeholder'],
-                    'position'     => $params['position'],
-                    'content_type' => $params['content_type'],
-                );
+        if (!is_null($category)) {
+            if ($category === '0') {
+                $category = 'home';
             }
 
-            // Save contents
-            $savedProperly = \ContentManager::saveContentPositionsForHomePage($categoryID, $contents);
+            $ccm     = \ContentCategoryManager::get_instance();
+            $section = $ccm->get_name($category);
+
+            // Get the form-encoded places from request
+            if (isset($_POST['contents_positions'])) {
+                $contentsPositions = $this->request->request->get('contents_positions');
+            } else {
+                $contentsPositions = null;
+            }
+
+            $categoryID = ($category == 'home') ? 0 : $category;
+            $validReceivedData = is_array($contentsPositions)
+                                 && !empty($contentsPositions)
+                                 && !is_null($categoryID);
+
+            if ($validReceivedData) {
+
+                $contents = array();
+                // Iterate over each element and populate its element to save.
+                foreach ($contentsPositions as $params) {
+                    if (
+                        !isset($categoryID) || !isset($params['placeholder'])
+                        || !isset($params['position']) || !isset($params['content_type'])
+                        || strpos('placeholder', $params['placeholder'])
+                    ) {
+                        continue;
+                    }
+                    $contents[] = array(
+                        'id'           => $params['id'],
+                        'category'     => $categoryID,
+                        'placeholder'  => $params['placeholder'],
+                        'position'     => $params['position'],
+                        'content_type' => $params['content_type'],
+                    );
+                }
+
+                // Save contents
+                $savedProperly = \ContentManager::saveContentPositionsForHomePage($categoryID, $contents);
+            }
+
+            $tcacheManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
+            $tcacheManager->delete($category . '|RSS');
+            $tcacheManager->delete($category . '|0');
+
+            /* Notice log of this action */
+            $logger = \Application::getLogger();
+            $logger->notice(
+                'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed'
+                .' action Frontpage save positions at '.$section.' Ids '.json_encode($contentsPositions)
+            );
         }
-
-        $tcacheManager->delete($category . '|RSS');
-        $tcacheManager->delete($category . '|0');
-
-        /* Notice log of this action */
-        $logger = \Application::getLogger();
-        $logger->notice(
-            'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed'
-            .' action Frontpage save positions at '.$section.' Ids '.json_encode($contentsPositions)
-        );
 
         // If this request is Ajax return properly formated result.
         if ($savedProperly) {

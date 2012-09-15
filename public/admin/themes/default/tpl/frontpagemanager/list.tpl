@@ -132,17 +132,16 @@
                     <li>
                         <a href="{url name=admin_articles_content_provider_suggested category=$category}">{t}Suggested articles{/t}</a>
                     </li>
+                    <li>
+                        <a href="{url name=admin_articles_content_provider_category}">{t}Latest articles{/t}</a>
+                    </li>
                     {else}
                     <li>
                          <a href="{url name=admin_articles_content_provider_category category=$category}">{t}Other articles in this category{/t}</a>
                     </li>
                     {/if}
                     {/is_module_activated}
-                    {is_module_activated name="ADVANCED_SEARCH"}
-                    <li>
-                        <a href="{url name=admin_search_content_provider related=0}"><i class="icon-search"></i></a>
-                    </li>
-                    {/is_module_activated}
+
                     {is_module_activated name="WIDGET_MANAGER"}
                     <li>
                         <a href="{url name=admin_widgets_content_provider category=$category}">{t}Widgets{/t}</a>
@@ -167,6 +166,11 @@
                     {is_module_activated name="ADS_MANAGER"}
                     <li>
                         <a href="{url name=admin_ads_content_provider category=$category}">{t}Advertisement{/t}</a>
+                    </li>
+                    {/is_module_activated}
+                    {is_module_activated name="ADVANCED_SEARCH"}
+                    <li>
+                        <a href="{url name=admin_search_content_provider related=0}"><i class="icon-search"></i></a>
                     </li>
                     {/is_module_activated}
                 </ul>
