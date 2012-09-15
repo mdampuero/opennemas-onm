@@ -132,15 +132,15 @@
                     <li>
                         <a href="{url name=admin_articles_content_provider_suggested category=$category}">{t}Suggested articles{/t}</a>
                     </li>
-                    <li>
-                        <a href="{url name=admin_articles_content_provider_category}">{t}Latest articles{/t}</a>
-                    </li>
                     {else}
                     <li>
                          <a href="{url name=admin_articles_content_provider_category category=$category}">{t}Other articles in this category{/t}</a>
                     </li>
                     {/if}
                     {/is_module_activated}
+                    <li>
+                        <a href="{url name=admin_articles_content_provider_category}">{t}Latest articles{/t}</a>
+                    </li>
 
                     {is_module_activated name="WIDGET_MANAGER"}
                     <li>
