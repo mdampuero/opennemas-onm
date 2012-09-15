@@ -170,11 +170,11 @@ class ContentController extends Controller
         if (count($error) > 0) {
             $code = 400;
         } else {
-            $error = 'Done';
+            $error = _('Contens arquived');
         }
 
         return new Response(
-            $message,
+            $error,
             $code,
             array('Content-Type' => 'application/json')
         );

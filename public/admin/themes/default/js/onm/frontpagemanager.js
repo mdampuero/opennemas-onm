@@ -186,13 +186,12 @@ jQuery(function($) {
     /***************************************************************************
     * Content elements in frontpage code
     ***************************************************************************/
+    // $('div.placeholder').on('click', '.content-provider-element input[type="checkbox"]', function() {
+    //     log('hola');
+    // });
     // Toggle content-provider-element checkbox if all the content-provider-elemnt is clicked
-    $('div.content').on('click', 'div.placeholder div.content-provider-element input[type="checkbox"]', function() {
-        checkbox = $(this).find('input[type="checkbox"]');
-        checkbox.attr(
-           'checked',
-           !checkbox.is(':checked')
-        );
+    $('div.placeholder').on('click', '.content-provider-element input[type="checkbox"]', function() {
+        checkbox = $(this);
         var checked_elements = $('div.placeholder div.content-provider-element input[type="checkbox"]:checked').length;
         if (checked_elements > 0) {
             $('.old-button .batch-actions').fadeIn('fast');
