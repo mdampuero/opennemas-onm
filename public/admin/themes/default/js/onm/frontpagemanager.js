@@ -371,7 +371,7 @@ jQuery(function($) {
         var els = get_contents_in_frontpage();
         var category = $('#frontpagemanager').data('category');
 
-        $.post(frontpage_urls.save_positions,
+        $.post(frontpage_urls.save_positions + '?category=' + category,
                 { 'contents_positions': els }
         ).success(function(data) {
             $('#warnings-validation').html(

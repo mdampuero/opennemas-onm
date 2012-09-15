@@ -15,7 +15,7 @@
             error_tab_content_provider: "{t}Couldn't load this tab. We'll try to fix this as soon as possible.{/t}"
         }
         var frontpage_urls = {
-            save_positions: '{url name=admin_frontpage_savepositions category=$category}',
+            save_positions: '{url name=admin_frontpage_savepositions}',
             preview_frontpage: '{url name=admin_frontpage_preview category=$category}',
             clean_frontpage: '{url name=admin_tpl_manager_cleanfrontpage}',
             toggle_suggested: '{url name=admin_content_toggle_suggested}',

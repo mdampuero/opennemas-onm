@@ -109,10 +109,9 @@ $adminRoutes->add(
 $adminRoutes->add(
     'admin_frontpage_savepositions',
     new Route(
-        '/frontpage/{category}/save-positions',
+        '/frontpage/save-positions',
         array(
-            '_controller' => 'Backend:Controllers:FrontpagesController:savePositions',
-            'category' => 'home',
+            '_controller' => 'Backend:Controllers:FrontpagesController:savePositions'
         )
     ),
     '/admin'

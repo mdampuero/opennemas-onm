@@ -138,15 +138,16 @@ class FrontpagesController extends Controller
      **/
     public function savePositionsAction(Request $request)
     {
-        if (!\Acl::check('ARTICLE_FRONTPAGE')) {
-            \Acl::deny();
-        }
+        $this->checkAclOrForward('ARTICLE_FRONTPAGE');
+
         $savedProperly = false;
         $validReceivedData = false;
 
-        $category      = $this->request->query->filter('category', null, FILTER_SANITIZE_STRING);
+        $category = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
 
-        if (!is_null($category)) {
+        if ($category !== null && $category !== '') {
+            $category = (int) $category;
+
             if ($category === '0') {
                 $category = 'home';
             }
