@@ -14,10 +14,6 @@ echo " - Updating onm instance\n";
 $output = exec('git pull');
 echo $output."\n\n";
 
-echo " - Updating vendor libraries\n";
-$output = exec($phpBinPath.' bin/composer.phar install');
-echo $output."\n\n";
-
 echo " - Updating public themes\n";
 foreach (glob($basePath.'/public/themes/*') as $theme) {
     // echo $theme."\n";
@@ -27,3 +23,7 @@ foreach (glob($basePath.'/public/themes/*') as $theme) {
     chdir($basePath);
     echo "\n";
 }
+
+echo " - Updating vendor libraries\n";
+$output = exec($phpBinPath.' bin/composer.phar install');
+echo $output."\n\n";
