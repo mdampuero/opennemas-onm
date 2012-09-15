@@ -1,6 +1,6 @@
 <div class="modal hide fade" id="modal-album-delete">
     <div class="modal-header">
-      <a class="close" href="#">×</a>
+      <button type="button" class="close" data-dismiss="modal-album-delete" aria-hidden="true">×</button>
       <h3>{t}Delete album{/t}</h3>
     </div>
     <div class="modal-body">
@@ -8,7 +8,7 @@
 
     </div>
     <div class="modal-footer">
-        <a class="btn primary yes" href="#">{t}Yes, delete{/t}</a>
+        <a class="btn btn-primary yes" href="#">{t}Yes, delete{/t}</a>
         <a class="btn secondary no" href="#">{t}No{/t}</a>
     </div>
 </div>
@@ -16,7 +16,8 @@
 <script>
 jQuery("#modal-album-delete").modal({
     backdrop: 'static', //Show a grey back drop
-    keyboard: true //Can close on escape
+    keyboard: true, //Can close on escape
+    show: false
 });
 
 jQuery('.del').click(function(e) {
@@ -24,17 +25,15 @@ jQuery('.del').click(function(e) {
     jQuery('#modal-album-delete .modal-body span').html( jQuery(this).data('title') );
     //Sets up the modal
     jQuery("#modal-album-delete").modal('show');
-    jQuery("body").data("selected-for-del", jQuery(this).data("id"));
+    jQuery("body").data("selected-for-del", jQuery(this).data("url"));
     e.preventDefault();
 });
 
 jQuery('#modal-album-delete a.btn.yes').on('click', function(){
-    var delId = jQuery("body").data("selected-for-del");
-    if(delId) {
+    var url = jQuery("body").data("selected-for-del");
+    if (url) {
         jQuery.ajax({
-            url:  "{$smarty.server.SCRIPT_NAME}",
-            type: "POST",
-            data: { action:"delete", id:delId },
+            url:  url,
             success: function(){
                 location.reload();
             }

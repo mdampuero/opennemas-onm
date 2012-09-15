@@ -7,11 +7,12 @@
  * file that was distributed with this source code.
  */
 use Onm\Settings as s;
+
 /**
  * Start up and setup the app
 */
-require_once('../bootstrap.php');
-require_once('recaptchalib.php');
+require_once '../bootstrap.php';
+require_once 'recaptchalib.php';
 
 /**
  * Setup view
@@ -45,18 +46,19 @@ switch ($action) {
         ) {
 
             $otherLetters = $cm->find_all(
-                'Letter', 'available=1 ',
+                'Letter',
+                'available=1 ',
                 'ORDER BY created DESC LIMIT 5'
             );
 
-            $tpl->assign( array('otherLetters'=> $otherLetters ) );
+            $tpl->assign(array('otherLetters'=> $otherLetters));
         }
 
-        require_once('letter_advertisement.php');
+        require_once 'letter_advertisement.php';
 
         $tpl->display('letter/letter_frontpage.tpl', $cacheID);
-        break;
 
+        break;
     case 'show':
 
         $tpl->setConfig('letter-inner');
@@ -81,7 +83,7 @@ switch ($action) {
 
             //if ($slug != $letter->slug) { }
 
-            $cacheID = $tpl->generateCacheId('letter-inner', '', $letterId );
+            $cacheID = $tpl->generateCacheId('letter-inner', '', $letterId);
 
             if (1==1 || ($tpl->caching == 0)
                 || !$tpl->isCached('letter/letter.tpl', $cacheID)
@@ -91,41 +93,47 @@ switch ($action) {
                 $comments = $comment->get_public_comments($letterId);
 
                 $otherLetters = $cm->find(
-                    'Letter', 'available=1 ',
+                    'Letter',
+                    'available=1 ',
                     'ORDER BY created DESC LIMIT 5'
                 );
 
-                $tpl->assign( array( 'letter'=>$letter,
-                    'num_comments'=> count($comments),
-                    'otherLetters'=>$otherLetters,
-                ));
+                $tpl->assign(
+                    array(
+                        'letter'       => $letter,
+                        'num_comments' => count($comments),
+                        'otherLetters' => $otherLetters,
+                    )
+                );
 
             } // end if $tpl->is_cached
 
-            require_once('letter_inner_advertisement.php');
+            require_once 'letter_inner_advertisement.php';
 
             $tpl->assign('contentId', $letterId); // Used on module_comments.tpl
 
             $tpl->display('letter/letter.tpl', $cacheID);
 
         }
-        break;
 
+        break;
     case 'save_letter':
 
-        $recaptcha_challenge_field = $request->query->
+        $recaptcha_challenge_field = $request->request->
                 filter('recaptcha_challenge_field', '', FILTER_SANITIZE_STRING);
-        $recaptcha_response_field = $request->query->
+        $recaptcha_response_field = $request->request->
                 filter('recaptcha_response_field', '', FILTER_SANITIZE_STRING);
 
         //Get config vars
         $configRecaptcha = s::get('recaptcha');
 
         // Get reCaptcha validate response
-        $resp = recaptcha_check_answer($configRecaptcha['private_key'],
-                $_SERVER["REMOTE_ADDR"],
-                $recaptcha_challenge_field,
-                $recaptcha_response_field);
+        $resp = recaptcha_check_answer(
+            $configRecaptcha['private_key'],
+            $_SERVER["REMOTE_ADDR"],
+            $recaptcha_challenge_field,
+            $recaptcha_response_field
+        );
 
         // What happens when the CAPTCHA was entered incorrectly
         if (!$resp->is_valid) {
@@ -133,34 +141,35 @@ switch ($action) {
             echo($msg);
         } else {
 
-            $lettertext = $request->query->filter('lettertext', '', FILTER_SANITIZE_STRING);
-            $security_code = $request->query->filter('security_code', '', FILTER_SANITIZE_STRING);
+            $lettertext    = $request->request->filter('lettertext', '', FILTER_SANITIZE_STRING);
+            $security_code = $request->request->filter('security_code', '', FILTER_SANITIZE_STRING);
 
-            if (!empty($lettertext) && !empty($security_code) ) {
-                $lettertext = $request->query->filter('lettertext', '', FILTER_SANITIZE_STRING);
-                $security_code = $request->query->filter('security_code', '', FILTER_SANITIZE_STRING);
+            if (!empty($lettertext) && empty($security_code) ) {
 
                 /*  Anonymous comment ************************* */
                 $data = array();
-                $name = $request->query->filter('name', '', FILTER_SANITIZE_STRING);
-                $subject = $request->query->filter('subject', '', FILTER_SANITIZE_STRING);
-                $mail = $request->query->filter('mail', '', FILTER_SANITIZE_STRING);
-                $data['body']     = $lettertext;
-                $data['author']   = $name;
-                $data['title']    = $subject;
-                $data['email']    = $mail;
+                $name    = $request->request->filter('name', '', FILTER_SANITIZE_STRING);
+                $subject = $request->request->filter('subject', '', FILTER_SANITIZE_STRING);
+                $mail    = $request->request->filter('mail', '', FILTER_SANITIZE_STRING);
+
+                $data['body']      = $lettertext;
+                $data['author']    = $name;
+                $data['title']     = $subject;
+                $data['email']     = $mail;
                 $data['available'] = 0; //pendding
 
                 $letter = new Letter();
                 $msg =  $letter->saveLetter($data);
 
             } else {
-                $msg = 'Su Carta al Director <strong>no</strong> ha sido guardada.';
+                $msg = _('Su Carta al Director <strong>no</strong> ha sido guardada.');
             }
             echo $msg;
         }
 
+        break;
     default:
         //  Application::forward301('index.php');
         break;
 }
+

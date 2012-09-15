@@ -18,7 +18,6 @@
 class Subscriptor
 {
     public $id        = null;
-
     public $email     = null;
     public $name      = null;
     public $firstname = null;
@@ -26,8 +25,7 @@ class Subscriptor
 
     /**
      * status=0 - (mail se le envio pero aun no le dio al link del correo)
-     * status=1 - (tas recibir el mail, el usuario ha clicado en
-     *             el link y se ha aceptado)
+     * status=1 - (tras recibir el mail, el usuario ha clicado en el link y se ha aceptado)
      * status=2 - (El administrador ha aceptado la solicitud)
      * status=3 - (El administrador ha deshabilitado el usuario)
      **/
@@ -42,7 +40,7 @@ class Subscriptor
 
     private $_tableName = '`pc_users`';
 
-    private static $_instance    = null;
+    private static $_instance = null;
 
     /**
      * Constructor
@@ -50,7 +48,7 @@ class Subscriptor
      * @see Privilege::Privilege
      * @param int $id Privilege Id
      **/
-    public function __construct($id=null)
+    public function __construct($id = null)
     {
         if (!is_null($id)) {
             $this->read($id);
@@ -65,7 +63,6 @@ class Subscriptor
             return self::$_instance;
 
         } else {
-
             return self::$_instance;
         }
     }
@@ -201,7 +198,7 @@ class Subscriptor
         return $this;
     }
 
-    public function get_users($filter=null, $limit=null, $_order_by='name')
+    public function getUsers($filter = null, $limit = null, $_order_by = 'name')
     {
         $items = array();
         $_where = '1=1';
@@ -241,8 +238,10 @@ class Subscriptor
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
+
+        return true;
     }
 
     public function set_status($id, $status)
@@ -279,7 +278,7 @@ class Subscriptor
      * @param string    $property
      * @param mixed     $value
     */
-    public function mUpdateProperty($id, $property, $value=null)
+    public function mUpdateProperty($id, $property, $value = null)
     {
         $sql = 'UPDATE ' . $this->_tableName
              . ' SET `' . $property . '`=? WHERE pk_pc_user=?';
@@ -304,7 +303,7 @@ class Subscriptor
         return true;
     }
 
-    public function countUsers($where=null)
+    public function countUsers($where = null)
     {
         $sql = 'SELECT count(*) FROM ' . $this->_tableName;
         if (!is_null($where)) {
@@ -319,7 +318,7 @@ class Subscriptor
         return $rs;
     }
 
-    public function getPager($items_page=40, $total=null)
+    public function getPager($itemsPage = 40, $total = null)
     {
         if (is_null($total)) {
             $total = $this->countUsers();
@@ -328,7 +327,7 @@ class Subscriptor
         // Pager
         $pager_options = array(
             'mode'        => 'Sliding',
-            'perPage'     => $items_page,
+            'perPage'     => $itemsPage,
             'delta'       => 4,
             'clearIfVoid' => true,
             'append'      => false,
@@ -342,5 +341,5 @@ class Subscriptor
 
         return $pager;
     }
-
 }
+

@@ -46,7 +46,7 @@ class Attachment extends Content
      * @param  integer $id, the id of the Attachment
      * @return null
      **/
-    public function __construct($id=null)
+    public function __construct($id = null)
     {
         $this->content_type = 'attachment';
         parent::__construct($id);
@@ -58,6 +58,7 @@ class Attachment extends Content
         }
 
         $this->content_type = 'attachment';
+        $this->content_type_l10n_name = _('File');
         $this->file_path = MEDIA_PATH.DIRECTORY_SEPARATOR.FILE_DIR;
     }
 
@@ -80,7 +81,6 @@ class Attachment extends Content
         //  $data['path'] = MEDIA_PATH.MEDIA_FILE_DIR.$dir_date ;
 
         if ($this->exists($data['path'], $data['category'])) {
-
             return false;
         }
 
@@ -123,8 +123,11 @@ class Attachment extends Content
         }
 
         if ($data['category']==8) {
-            $GLOBALS['application']->dispatch('onAfterCreateAttach',
-                $this, array('category'=>$data['category']));
+            $GLOBALS['application']->dispatch(
+                'onAfterCreateAttach',
+                $this,
+                array('category' => $data['category'])
+            );
         }
 
         return true;
@@ -185,8 +188,10 @@ class Attachment extends Content
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
+
+        return true;
     }
 
     /**
@@ -203,7 +208,6 @@ class Attachment extends Content
             MEDIA_PATH.DIRECTORY_SEPARATOR.FILE_DIR.'/'.$dirDateComponent;
 
         $filename   = $mediaPath.'/'.$this->path;
-
         if (file_exists($filename)) {
             unlink($filename);
         }
@@ -398,3 +402,4 @@ class Attachment extends Content
         return $html;
     }
 }
+

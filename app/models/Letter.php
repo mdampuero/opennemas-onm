@@ -18,7 +18,7 @@ class Letter extends Content
     public $author            = null;
     public $body              = null;
 
-    private static $_instance = null;
+    private static $instance = null;
 
     public function __construct($id = null)
     {
@@ -29,27 +29,27 @@ class Letter extends Content
         }
 
         $this->content_type = __CLASS__;
-
+        $this->content_type_l10n_name = _('Letter');
     }
 
-    public function get_instance()
+    public function getInstance()
     {
-        if ( is_null(self::$_instance) ) {
-            self::$_instance = new Letter();
+        if ( is_null(self::$instance) ) {
+            self::$instance = new Letter();
 
-            return self::$_instance;
+            return self::$instance;
 
         } else {
-
-            return self::$_instance;
+            return self::$instance;
         }
     }
 
     public function __get($name)
     {
         switch ($name) {
-            case 'uri': {
-                $uri =  Uri::generate('letter',
+            case 'uri':
+                $uri =  Uri::generate(
+                    'letter',
                     array(
                         'id'       => sprintf('%06d', $this->id),
                         'date'     => date('YmdHis', strtotime($this->created)),
@@ -58,18 +58,16 @@ class Letter extends Content
                     )
                 );
                 //'cartas-al-director/_AUTHOR_/_SLUG_/_DATE__ID_.html'
-
                 return $uri;
 
                 break;
-            }
-            case 'slug': {
+            case 'slug':
                 return StringUtils::get_title($this->title);
+
                 break;
-            }
-            default: {
+            default:
+
                 break;
-            }
         }
     }
 
@@ -138,10 +136,12 @@ class Letter extends Content
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
 
         $GLOBALS['application']->dispatch('onAfterUpdateLetter', $this);
+
+        return true;
     }
 
     //Elimina definitivamente
@@ -192,7 +192,7 @@ class Letter extends Content
                 ."de palabras malsonantes.";
         }
 
-        $ip = Application::getRealIP();
+        $ip = Application::getRealIp();
         $data["params"] = array('ip'=> $ip);
         if ($letter->create($data)) {
             return "Su carta ha sido guardada y está pendiente de publicación.";
@@ -201,5 +201,5 @@ class Letter extends Content
         return "Su carta no ha sido guardado.\nAsegúrese de cumplimentar "
             ."correctamente todos los campos.";
     }
-
 }
+

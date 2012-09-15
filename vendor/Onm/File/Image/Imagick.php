@@ -281,5 +281,5 @@ class Imagick extends Common implements ImageInterface
 
         die();
     }
+}
 
-} // END class ImageMagick

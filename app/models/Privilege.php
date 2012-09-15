@@ -29,7 +29,7 @@ class Privilege
      * @see Privilege::Privilege
      * @param int $id Privilege Id
     */
-    public function __construct($id=null)
+    public function __construct($id = null)
     {
         if (!is_null($id)) {
             $this->read($id);
@@ -162,7 +162,7 @@ class Privilege
      *
      * @param array Array of Privileges
      */
-    public function get_privileges($filter=null)
+    public function get_privileges($filter = null)
     {
         $privileges = array();
         if (is_null($filter)) {
@@ -221,7 +221,7 @@ class Privilege
      * @return array modules with each privileges
      *
      */
-    public function getPrivilegesByModules($filter=null)
+    public function getPrivilegesByModules($filter = null)
     {
         $privileges = array();
         if (is_null($filter)) {
@@ -248,13 +248,13 @@ class Privilege
     /**
      * @deprecated 0.5
     */
-    public static function get_privileges_by_user($id_user)
+    public static function get_privileges_by_user($idUser)
     {
         $privileges = array();
-        $sql = 'select t3.pk_privilege, t3.description, t3.name from users as t1
-                    inner join user_groups_privileges as t2 on t2.pk_fk_user_group = t1.fk_user_group
-                    inner join privileges as t3 on t3.pk_privilege = t2.pk_fk_privilege
-                where t1.pk_user = ' .intval($id_user);
+        $sql = 'SELECT t3.pk_privilege, t3.description, t3.name FROM users AS t1
+                    INNER JOIN user_groups_privileges AS t2 ON t2.pk_fk_user_group = t1.fk_user_group
+                    INNER JOIN privileges AS t3 ON t3.pk_privilege = t2.pk_fk_privilege
+                WHERE t1.pk_user = ' .intval($idUser);
         $rs = $GLOBALS['application']->conn->Execute($sql);
         while (!$rs->EOF) {
             $privileges[] = $rs->fields['name'];
@@ -263,5 +263,5 @@ class Privilege
 
         return $privileges;
     }
-
 }
+

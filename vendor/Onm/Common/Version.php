@@ -21,7 +21,7 @@ class Version
     /**
      * Current Doctrine Version
      */
-    const VERSION = '0.8.2.1';
+    const VERSION = '0.9.2.3';
 
     /**
      * Compares a Onm version with the current one.
@@ -39,3 +39,4 @@ class Version
         return version_compare($version, $currentVersion);
     }
 }
+

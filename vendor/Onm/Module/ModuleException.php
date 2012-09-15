@@ -7,6 +7,7 @@
  * file that was distributed with this source code.
  */
 namespace Onm\Module;
+
 /**
  * Handles exceptions for Onm\Module.
  *
@@ -17,5 +18,5 @@ namespace Onm\Module;
  */
 class ModuleException extends \Exception
 {
-
 }
+

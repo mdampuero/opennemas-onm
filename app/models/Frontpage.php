@@ -61,6 +61,7 @@ class Frontpage extends Content
         }
         $this->cache = new MethodCacheManager($this, array('ttl' => 300));
         $this->content_type = __CLASS__;
+        $this->content_type_l10n_name = _('Frontpage');
     }
 
     /**
@@ -87,13 +88,13 @@ class Frontpage extends Content
         $contents = (!isset($data['contents']) || empty($data['contents']))? null: serialize($data['contents']);
         $params = (!isset($data['params']) || empty($data['params']))? null: serialize($data['params']);
         $version = (empty($data['version']))? 0: $data['version'];
-        $promoted = (empty($data['promoted']))? null: intval($data['promoted']);;
-        $day_frontpage = (empty($data['day_frontpage']))? null: intval($data['day_frontpage']);;
+        $promoted = (empty($data['promoted'])) ? null : intval($data['promoted']);
+        $day_frontpage = (empty($data['day_frontpage'])) ? null: intval($data['day_frontpage']);
 
-        $resp = $GLOBALS['application']->conn->
-          GetOne('SELECT pk_frontpage FROM `frontpages` WHERE category = ? AND date= ?',
-                  array($category,$date)
-                );
+        $resp = $GLOBALS['application']->conn->GetOne(
+            'SELECT pk_frontpage FROM `frontpages` WHERE category = ? AND date= ?',
+            array($category,$date)
+        );
 
         if ($resp) {
             $promoted ="1";
@@ -117,9 +118,7 @@ class Frontpage extends Content
         }
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            \Application::logDatabaseError();
 
             return(false);
         }
@@ -143,9 +142,7 @@ class Frontpage extends Content
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
 
         if ($rs === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+            \Application::logDatabaseError();
 
             return null;
         }
@@ -259,7 +256,7 @@ class Frontpage extends Content
      * @return Widget Return instance to chaining method
      */
 
-    public function getFrontpage($date, $category=0, $version=null)
+    public function getFrontpage($date, $category = 0, $version = null)
     {
         // if category = 0 => home
         if ( is_null($category) && is_null($date)) {
@@ -271,9 +268,7 @@ class Frontpage extends Content
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+            \Application::logDatabaseError();
 
             return false;
         }
@@ -303,9 +298,7 @@ class Frontpage extends Content
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+            \Application::logDatabaseError();
 
             return false;
         }
@@ -317,5 +310,5 @@ class Frontpage extends Content
 
         return $items;
     }
+}
 
-} //end class

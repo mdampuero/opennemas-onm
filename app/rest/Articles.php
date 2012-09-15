@@ -1,26 +1,52 @@
 <?php
-
+/**
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ **/
+/**
+ * Handles all the CRUD actions over Related contents.
+ *
+ * @package    Onm
+ * @subpackage Rest
+ * @author     me
+ **/
 class Articles
 {
     public $restler;
 
-    function __construct(){
-
+    /**
+    * Get intance for contentManager
+    * This is used in some actions at lists function
+    */
+    public function __construct()
+    {
         $this->cm = new ContentManager();
-
     }
 
-    /*
-    * @url GET /articles/lists
+    /**
+    * Retrives many types of contents for article based on switch
+    *
+    * This is used for getting articles contents
+    *
+    * @param type $opc    the action that we are going to perform
+    * @param type $param1 extra param to perform some actions
+    * @param type $param2 extra param to perform some actions
+    *
+    * @return mixed, array of contents
     */
-    function lists ($opc = 'all', $param1 = null, $param2 = null)
+    public function lists($opc = 'all', $param1 = null, $param2 = null)
     {
 
         switch ($opc) {
             case 'all':
-                $article = $this->cm->find_all('Article', 'contents.available = 1 AND '.
-                                       'contents.fk_content_type=1 AND '.
-                                       'contents.content_status=1');
+                $article = $this->cm->find_all(
+                    'Article', 'contents.available = 1 AND '.
+                    'contents.fk_content_type=1 AND '.
+                    'contents.content_status=1'
+                );
 
                 break;
 
@@ -29,10 +55,11 @@ class Articles
 
                 //Validate date format else format exception
 
-                $article = $this->cm->find('Article',
-                                    'fk_content_type=1 AND available=1 AND '.
-                                    'created BETWEEN \'' . $param1 . '\' AND \''. $param2.'\'',
-                                    ' ORDER BY created DESC');
+                $article = $this->cm->find(
+                    'Article', 'fk_content_type=1 AND available=1 AND '.
+                    'created BETWEEN \'' . $param1 . '\' AND \''. $param2.'\'',
+                    ' ORDER BY created DESC'
+                );
 
                 break;
 
@@ -40,10 +67,11 @@ class Articles
 
                 $this->_validateInt($param1);
 
-                $article = $this->cm->find('Article',
-                                    'fk_content_type=1 AND available=1 AND '.
-                                    'created >=DATE_SUB(CURDATE(), INTERVAL ' . $param1 . ' DAY)  ',
-                                    ' ORDER BY created DESC');
+                $article = $this->cm->find(
+                    'Article', 'fk_content_type=1 AND available=1 AND '.
+                    'created >=DATE_SUB(CURDATE(), INTERVAL ' . $param1 . ' DAY)  ',
+                    ' ORDER BY created DESC'
+                );
 
                 break;
 
@@ -51,19 +79,19 @@ class Articles
 
                 // Apply get_title and replace - by blank space
                 // string1, string2, ... , stringN  => string1 string2 stringN
-                $param1 = preg_replace('/-/', ' ', \Onm\StringUtils::get_title($param1,false));
-                $article = $this->cm->find('Article',
-                        'fk_content_type=1 AND available=1 AND '.
-                        'MATCH (contents.metadata) AGAINST ( \''.$param1.'\' IN BOOLEAN MODE) '.
-                        'AND MATCH (contents.title) AGAINST ( \''.$param1.'\' IN BOOLEAN MODE) ',
-                        'ORDER BY _height DESC, created DESC',
-                        '*, MATCH (contents.metadata) AGAINST ( \''.$param1.'\' IN BOOLEAN MODE) + '.
-                        'MATCH (contents.title) AGAINST ( \''.$param1.'\' IN BOOLEAN MODE) as _height ');
+                $param1 = preg_replace('/-/', ' ', \Onm\StringUtils::get_title($param1, false));
+                $article = $this->cm->find(
+                    'Article', 'fk_content_type=1 AND available=1 AND '.
+                    'MATCH (contents.metadata) AGAINST ( \''.$param1.'\' IN BOOLEAN MODE) '.
+                    'AND MATCH (contents.title) AGAINST ( \''.$param1.'\' IN BOOLEAN MODE) ',
+                    'ORDER BY _height DESC, created DESC',
+                    '*, MATCH (contents.metadata) AGAINST ( \''.$param1.'\' IN BOOLEAN MODE) + '.
+                    'MATCH (contents.title) AGAINST ( \''.$param1.'\' IN BOOLEAN MODE) as _height '
+                );
 
                 break;
 
             case 'category':
-
 
                 break;
 
@@ -74,7 +102,7 @@ class Articles
                 $relationsHandler  = new RelatedContent();
                 $ccm = new ContentCategoryManager();
                 $relatedContents = array();
-                $relations = $relationsHandler->get_relations($param1);
+                $relations = $relationsHandler->getRelations($param1);
 
                 if (count($relations) > 0) {
                     foreach ($relations as $relatedContentId) {
@@ -87,10 +115,10 @@ class Articles
                         }
                     }
                 }
+
                 return $relatedContents;
 
                 break;
-
 
             case 'related-inner':
 
@@ -108,12 +136,12 @@ class Articles
                     $relatedContents = $this->cm->getInTime($relatedContents);
                     $relatedContents = $this->cm->getAvailable($relatedContents);
 
-
                     // Add category name
                     foreach ($relatedContents as &$content) {
                         $content->category_name = $ccm->get_category_name_by_content_id($content->id);
                     }
                 }
+
                 return $relatedContents;
 
                 break;
@@ -125,7 +153,7 @@ class Articles
                 $article = new Article($param1);
 
                 $machineSuggestedContents = array();
-                if(!empty($article->metadata)) {
+                if (!empty($article->metadata)) {
                     $objSearch    = cSearch::getInstance();
                     $machineSuggestedContents = $objSearch->SearchSuggestedContents(
                         $article->metadata,
@@ -158,7 +186,7 @@ class Articles
                     $title = StringUtils::get_title($article->title);
                     $print_url = '/imprimir/' . $title. '/' . $category_name . '/';
 
-                    if(!empty($subcategory_name)) {
+                    if (!empty($subcategory_name)) {
                         $breadcrub[] = array(
                             'text' => $ccm->get_title($subcategory_name),
                             'link' => '/seccion/' . $category_name . '/' . $subcategory_name . '/'
@@ -171,12 +199,12 @@ class Articles
                     $tpl->assign('print_url', $print_url);
 
                     $cat = $ccm->getByName($category_name);
-                    if(!is_null($cat) && $cat->inmenu) {
+                    if (!is_null($cat) && $cat->inmenu) {
                         $tpl->assign('breadcrub', $breadcrub);
                     }
 
                     // Foto interior
-                    if(isset($article->img2) and ($article->img2 != 0)){
+                    if (isset($article->img2) and ($article->img2 != 0)) {
                         $photoInt = new Photo($article->img2);
                         $tpl->assign('photoInt', $photoInt);
                     }
@@ -191,7 +219,6 @@ class Articles
 
             case 'media':
 
-
                 break;
 
             default:
@@ -200,13 +227,20 @@ class Articles
 
                 break;
         }
+
         return $article;
     }
 
-    /*
-    * @url GET /articles/:id
-    */
-    function index ( $id = null )
+    /**
+     * Retrives an article by it's id
+     *
+     * This is used for getting articles objects
+     *
+     * @param type $id the id of the requested article
+     *
+     * @return $article
+     */
+    public function index( $id = null )
     {
         $article = array();
         $params = func_get_args();
@@ -215,10 +249,10 @@ class Articles
         // If the first param is an valid id
         if (is_numeric($id) && !is_infinite($id)) {
             $article = new Article($id);
-        // If has no params list all articles
+            // If has no params list all articles
         } elseif (is_null($id)) {
             $article = $this->lists();
-        // Other case call list method
+            // Other case call list method
         } else {
             $this->_invalidUrlParam();
         }
@@ -226,10 +260,16 @@ class Articles
         return $article;
     }
 
-    /*
-    * Private function for validating int paramaters
-    */
-    private function _validateInt ($number)
+    /**
+     * Validates a finite number
+     *
+     * This is used for checking the int parameters
+     *
+     * @param type $number the number to validate
+     *
+     * @return void
+     */
+    private function _validateInt($number)
     {
         if (!is_numeric($number)) {
             throw new RestException(400, 'parameter is not a number');
@@ -242,7 +282,14 @@ class Articles
     /*
     * Private function for validating url paramaters
     */
-    private function _invalidUrlParam ()
+    /**
+     * Validates a url parameter
+     *
+     * This is used for checking the url parameters
+     *
+     * @return void
+     */
+    private function _invalidUrlParam()
     {
         throw new RestException(400, 'parameter is not valid');
     }

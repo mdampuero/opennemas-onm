@@ -1,6 +1,6 @@
 <div class="modal hide fade" id="modal-edit-user-group" style="width:70%; margin-left:-450px">
     <div class="modal-header">
-      <a class="close" href="#">×</a>
+      <button type="button" class="close" data-dismiss="modal-edit-user-group" aria-hidden="true">×</button>
       <h3>{t}Editing user group{/t}</h3>
     </div>
     <div class="modal-body"></div>
@@ -10,7 +10,8 @@
 jQuery(document).ready(function($) {
     jQuery("#modal-edit-user-group").modal({
         backdrop: 'static', //Show a grey back drop
-        keyboard: true
+        keyboard: true, //Can close on escape
+        show: false,
     });
     jQuery("#modal-edit-user-group").bind('show', function (){
         selectedGroup = $('#id_user_group').val();

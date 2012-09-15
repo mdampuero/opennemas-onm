@@ -34,7 +34,7 @@
         </tr>
         <tr>
             <td>
-                {include file="common/content_provider/content_provider.tpl"}
+                {include file="article/related/_related_provider.tpl"}
 
             </td>
         </tr>

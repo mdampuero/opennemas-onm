@@ -6,50 +6,34 @@
 <head>
     <meta charset="utf-8">
 
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-
     <meta name="author"    content="OpenHost,SL">
     <meta name="generator" content="OpenNemas - News Management System">
     <meta name="viewport" content="width=device-width">
 
     {block name="meta"}
-        <title>OpenNeMaS - Administration section</title>
+    <title>OpenNeMaS - Administration section</title>
     {/block}
 
     <link rel="icon" href="{$params.IMAGE_DIR}favicon.png">
     {block name="header-css"}
         {css_tag href="/bootstrap/bootstrap.css"}
         {css_tag href="/style.css"}
-        {css_tag href="/admin.css"}
         <!--[if IE]>{css_tag href="/ie.css"}<![endif]-->
-        {css_tag href="/buttons.css"}
         {css_tag href="/jquery/jquery-ui.css" media="all" type="text/css"}
-    {/block}
-
-    {block name="prototype"}
-        {script_tag src="/prototype.js"}
-        {script_tag src="/scriptaculous/scriptaculous.js"}
-        {script_tag src="/scriptaculous/effects.js"}
-        {script_tag src="/prototype-date-extensions.js"}
     {/block}
 
     {block name="js-library"}
         {script_tag src="/jquery/jquery.min.js"}
-        <script type="text/javascript">
-        jQuery.noConflict();
-        </script>
-        {script_tag src="/jquery/bootstrap-modal.js"}
+        {script_tag src="/libs/bootstrap.js"}
+        {script_tag src="/libs/jquery.tools.min.js"}
+        {script_tag src="/jquery-onm/jquery.onmvalidate.js"}
         {block name="prototype"}{/block}
     {/block}
 
     {block name="header-js"}
+        {script_tag src="/libs/modernizr.min.js"}
         {block name="js-library"}{/block}
         {script_tag src="/onm/scripts.js"}
-        {script_tag src="/modernizr/modernizr-2.5.0.min.js"}
-        {script_tag src="/utils.js"}
-        {script_tag src="/utils_header.js"}
-        {script_tag src="/utilsopinion.js"}
-        {script_tag src="/validation.js"}
         {script_tag src="/tiny_mce/tiny_mce_gzip.js"}
      {/block}
 
@@ -58,25 +42,12 @@
 
     <header class="global-nav manager clearfix">
         <div class="logoonm pull-right">
-            <a  href="{$smarty.const.SITE_URL}manager/" id="logo-onm" class="clearfix" title="{t}Go to admin main page{/t}">
+            <a  href="{url name=manager_welcome}" id="logo-onm" class="clearfix" title="{t}Go to admin main page{/t}">
                <img src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}images/logo-opennemas-small.png" alt="opennemas" width="132" height="27"/>
             </a>
         </div>
         <div class="global-menu pull-left">
-            {admin_menu}
-        </div>
-        <div class="global-user-tools pull-right">
-
-            <div class="global-search nofillonhover">
-                <form action="{$smarty.const.SITE_URL_ADMIN}/controllers/search_advanced/search_advanced.php" method="post">
-                    <input type="hidden" name="action" value="search" />
-                    <input type="hidden" name="article" value="on" />
-                    <input type="hidden" name="id" value="0" />
-                    <input type="hidden" name="opinion" value="on" />
-                    <input type="search" name="stringSearch" placeholder="{t}Search...{/t}" class="string-search">
-                </form>
-            </div>
-
+            {admin_menu file='/Manager/Resources/Menu.php' base=$smarty.const.APP_PATH}
         </div>
     </header>
 

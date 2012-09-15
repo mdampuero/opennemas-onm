@@ -1,7 +1,7 @@
 <ul id='thelist' class="gallery_list clearfix" style="width:100%; margin:0px; padding:0px">
    {assign var=num value='1'}
    {section name=n loop=$photos}
-        <li>
+        <li class="thumbnail">
             <div style="float: left;">
                 <a href="#">
                     {if $photos[n]->type_img=='swf' || $photos[n]->type_img=='SWF'}
@@ -58,11 +58,13 @@
             </div>
         </li>
         {assign var=num value=$num+1}
+    {sectionelse}
+    {t}No available images with your search criteria{/t}
     {/section}
 </ul>
-{if !empty($imagePager)}
-    <div class="pagination"> {$imagePager} </div>
-{/if}
+
+{$imagePager}
+
 <script>
 jQuery(document).ready(function($){
     $( "#photos_container #photos .draggable-handler" ).draggable({ opacity: 0.5, helper: "clone"});

@@ -7,6 +7,7 @@
  * file that was distributed with this source code.
  */
 namespace Onm\Module;
+
 /**
  * Class for handling activated and available modules.
  *
@@ -37,7 +38,7 @@ class ModuleManager
      *
      * @param array $params parameters for initilizing the module manager.
      */
-    public function __construct($params  = array())
+    public function __construct($params = array())
     {
         self::getActivatedModules();
     }
@@ -216,5 +217,5 @@ class ModuleManager
     {
         return in_array($moduleName, self::getAvailableModules());
     }
-
 }
+

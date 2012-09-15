@@ -1,6 +1,6 @@
 <div class="modal hide fade" id="modal-special-batchDelete">
     <div class="modal-header">
-      <a class="close" href="#">×</a>
+      <button type="button" class="close" data-dismiss="modal-special-batchDelete" aria-hidden="true">×</button>
       <h3>{t}Delete specials{/t}</h3>
     </div>
     <div class="modal-body">
@@ -8,7 +8,7 @@
 
     </div>
     <div class="modal-footer">
-        <a class="btn primary yes" href="#">{t}Yes, delete all{/t}</a>
+        <a class="btn btn-primary yes" href="#">{t}Yes, delete all{/t}</a>
         <a class="btn secondary no" href="#">{t}No{/t}</a>
     </div>
 </div>
@@ -16,7 +16,8 @@
 <script>
 jQuery("#modal-special-batchDelete").modal({
     backdrop: 'static', //Show a grey back drop
-    keyboard: true //Can close on escape
+    keyboard: true, //Can close on escape
+    show: false
 
 });
 
@@ -24,9 +25,9 @@ jQuery('.delChecked').click(function(e) {
     var number = jQuery(".minput:checked").length;
     if(number >= 1 ) {
         jQuery('#modal-special-batchDelete .modal-body span').html(number);
-        jQuery("#modal-special-batchDelete").modal(true);
+        jQuery("#modal-special-batchDelete").modal('show');
     }else{
-        jQuery("#modal-special-batchDelete").modal(false);
+        jQuery("#modal-special-batchDelete").modal('hide');
         jQuery("#modal-special-accept").modal('show');
         jQuery('#modal-special-accept .modal-body')
             .html("{t}You must select some elements.{/t}");
@@ -36,9 +37,8 @@ jQuery('.delChecked').click(function(e) {
 });
 
 jQuery('#modal-special-batchDelete a.btn.yes').on('click', function(){
-    jQuery('#action').attr('value', "batchDelete");
+    jQuery('#formulario').attr('action', "{url name=admin_specials_batchdelete category=$category page=$page}");
     jQuery('#formulario').submit();
-    e.preventDefault();
 });
 
 jQuery('#modal-special-batchDelete a.btn.no').on('click', function(e){

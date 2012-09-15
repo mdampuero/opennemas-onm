@@ -2,10 +2,6 @@
 
 {block name="header-css" append}
     <style type="text/css">
-    .adminlist td {
-	padding-top:4px;
-	padding-bottom:4px;
-    }
     .tags-hidden {
         position:absolute;
         width:30px;
@@ -39,15 +35,20 @@
         background:url({$params.IMAGE_DIR}/backgrounds/stripe-rows.png) top right repeat;
         background-color:none;
     }
+    .tooltip-inner {
+        max-width:500px !important;
+        text-align: justify;
+    }
     </style>
 {/block}
 
 {block name="header-js" prepend}
 <script type="text/javascript">
-    jQuery(document).ready(function (){
-        jQuery('.sync_with_server').click(function() {
-           jQuery('.warnings-validation').html('<div class="ui-blocker"></div><div class="ui-blocker-message"><img src="/admin/themes/default/images/ajax-loader.gif" /><br />{t}Downloading articles from EFE, please wait...{/t}</div>');
+    jQuery(document).ready(function ($){
+        jQuery('.sync_with_server').on('click',function() {
+           jQuery('.warnings-validation').html('<div class="ui-blocker"></div><div class="ui-blocker-message"><progress style="width:100%"></progress><br /><br />{t}Downloading articles from EFE, please wait...{/t}</div>');
         });
+        $('[rel="tooltip"]').tooltip({ placement: 'bottom' });
     });
 </script>
 {/block}
@@ -57,78 +58,50 @@
         <div class="title"><h2>{t}EFE importer{/t} :: {t}Available articles{/t}</h2></div>
         <ul class="old-button">
 			<li>
-				<a href="{$smarty.server.PHP_SELF}?action=sync" class="sync_with_server" title="{t}Sync with server{/t}">
-				<img src="{$params.IMAGE_DIR}sync.png" title="{t}Sync list  with server{/t}" alt="{t}Sync with server{/t}" ><br />{t}Sync with server{/t}
+				<a href="{url name=admin_importer_efe_sync}" class="sync_with_server" title="{t}Sync with server{/t}">
+				    <img src="{$params.IMAGE_DIR}sync.png" title="{t}Sync list  with server{/t}" alt="{t}Sync with server{/t}" ><br />{t}Sync with server{/t}
 				</a>
 			</li>
 			<li>
-				<a href="{$smarty.server.PHP_SELF}" class="admin_add" title="{t}Reload list{/t}">
-				<img src="{$params.IMAGE_DIR}template_manager/refresh48x48.png" title="{t}Sync list  with server{/t}" alt="{t}Reload list{/t}" ><br />{t}Reload list{/t}
+				<a href="{url name=admin_importer_efe}" class="admin_add" title="{t}Reload list{/t}">
+				    <img src="{$params.IMAGE_DIR}template_manager/refresh48x48.png" title="{t}Sync list  with server{/t}" alt="{t}Reload list{/t}" ><br />{t}Reload list{/t}
 				</a>
 			</li>
-
 			<li>
-				<a href="{$smarty.server.PHP_SELF}?action=config" class="admin_add" title="{t}Reload list{/t}">
-				<img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" title="{t}Config Europapress module{/t}" alt="{t}Config Europapress module{/t}" ><br />{t}Config{/t}
+				<a href="{url name=admin_importer_efe_config}" class="admin_add" title="{t}Reload list{/t}">
+				    <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" title="{t}Config Europapress module{/t}" alt="{t}Config Europapress module{/t}" ><br />{t}Config{/t}
 				</a>
 			</li>
         </ul>
     </div>
 </div>
 <div class="wrapper-content">
-
     <div class="warnings-validation"></div><!-- / -->
 
-    <form action="{$smarty.server.PHP_SELF}" method="GET" name="formulario" id="formulario">
+    <form action="{url name=admin_importer_efe}" method="GET">
 
     	{render_messages}
 
-    	{if ($message || ($minutes > 10))}
-    	<div class="notice">
-    	    <ul>
-        		{if $minutes > 10}
-        		<li>
-        			{if $minutes > 100}
-        			<span class="red">{t}A long time ago from synchronization.{/t}</span>
-        			{else}
-        			<span class="red">{t 1=$minutes}Last sync was %1 minutes ago.{/t}</span>
-        			{/if}
-        			{t}Try syncing the news list from server by clicking in "Sync with server" button above{/t}
-        		</li>
-    		    {/if}
-    	    </ul>
-    	</div>
-    	{/if}
-
-    	{if (!empty($error))}
-    	<div class="error">
-    		{render_error}
-    	</div>
-    	{/if}
-
         <div class="table-info clearfix">
-            <div>
-                <div class="left"><label>Total: {$pagination->_totalItems} articles.</label></div>
-                <div class="right form-inline">
-                    <label for="username">
-                        {t}Filter by title or content{/t}
-                        <input id="username" name="filter_title" onchange="this.form.submit();" value="{$smarty.request.filter_title}" class="input-medium search-query" />
-                    </label>
+            <div class="left"><strong>{t 1=$pagination->_totalItems}%1 articles{/t}</strong></div>
+            <div class="right form-inline">
+                <input type="search" id="username" name="filter_title" onchange="this.form.submit();" value="{$smarty.request.filter_title}" class="input-medium" placeholder="{t}Filter by title or content{/t}"/>
 
+                <div class="input-append">
                     <label for="usergroup">
-                        {t}and category:{/t}
+                        {t}and in{/t}
                         <select id="usergroup" name="filter_category" onchange="this.form.submit();">
-                            <option value="*">{t}All{/t}</option>
+                            <option value="*">{t}All categories{/t}</option>
                             {html_options options=$categories selected=$smarty.request.filter_group|default:""}
                         </select>
                     </label>
 
-                    <button type="submit" class="btn">{t}Search{/t}</button>
+                    <button type="submit" class="btn"><i class="icon-search"></i></button>
                 </div>
             </div>
         </div>
 
-        <table class="listing-table">
+        <table class="table table-hover table-condensed">
             <thead>
                 <tr>
                 {if count($elements) >0}
@@ -147,48 +120,48 @@
             </thead>
 
             <tbody>
-                {section name=c loop=$elements}
-                <tr class="{if is_array($already_imported) &&  in_array($elements[c]->urn,$already_imported)}already-imported{/if}"  style="cursor:pointer;" >
+                {foreach name=c from=$elements item=element}
+                <tr class="{if is_array($already_imported) &&  in_array($element->urn,$already_imported)}already-imported{/if}"  style="cursor:pointer;" >
 
                     <td style="text-align:center;">
-                       <img src="{$params.IMAGE_DIR}notifications/level-{if $elements[c]->priority > 4}4{else}{$elements[c]->priority}{/if}.png" alt="{t 1=$elements[c]->priority}Priority %1{/t}" title="{t 1=$elements[c]->priority}Priority %1{/t}">
+                       <img src="{$params.IMAGE_DIR}notifications/level-{if $element->priority > 4}4{else}{$element->priority}{/if}.png" alt="{t 1=$element->priority}Priority %1{/t}" title="{t 1=$element->priority}Priority %1{/t}">
                     </td>
-                    <td onmouseout="UnTip()" onmouseover="Tip('{$elements[c]->body|regex_replace:"/[\r\t\n]/":" "|clearslash|regex_replace:"/'/":"\'"|escape:'html'}', SHADOW, false, ABOVE, false, WIDTH, 800)">
-                        <a href="{$smarty.server.PHP_SELF}?action=show&amp;id={$elements[c]->xmlFile|urlencode}" title="{t}Import{/t}">
-                            {$elements[c]->title}
+                    <td rel="tooltip" data-original-title="{$element->body|clearslash|regex_replace:"/'/":"\'"|escape:'html'}">
+                        <a href="{url name=admin_importer_efe_show id=$element->xmlFile|urlencode}" >
+                            {$element->title}
                         </a>
                     </td>
 
                     <td>
-                        {if $elements[c]->hasPhotos()}
+                        {if $element->hasPhotos()}
                             <img src="{$params.IMAGE_DIR}template_manager/elements/gallery16x16.png" alt="[{t}With image{/t}] " title="{t}This new has attached images{/t}">
                         {/if}
-                        {if $elements[c]->hasVideos()}
+                        {if $element->hasVideos()}
                             <img src="{$params.IMAGE_DIR}template_manager/elements/video16x16.png" alt="[{t}With video{/t}] " title="{t}This new has attached videos{/t}">
                         {/if}
 
-                        {if $elements[c]->hasPhotos() && false}
+                        {if $element->hasPhotos() && false}
                             <img src="{$params.IMAGE_DIR}template_manager/elements/polls.png" alt="[{t}With files{/t}] " title="{t}This new has attached videos{/t}">
                         {/if}
 
-                        {if $elements[c]->hasPhotos() && false}
+                        {if $element->hasPhotos() && false}
                             <img src="{$params.IMAGE_DIR}template_manager/elements/article16x16.png" alt="[{t}With documentary modules{/t}] " title="{t}This new has attached videos{/t}">
                         {/if}
                     </td>
                     <td>
-                        {$elements[c]->created_time->getTimestamp()|relative_date}
+                        {$element->created_time->getTimestamp()|relative_date}
                     </td>
 
                     <td>
                         <div style="position:relative">
                             <div class="tags-hidden" >
                                 <span class="list-tags">
-                                {foreach from=$elements[c]->tags  key=key item=value name=loop1}
+                                {foreach from=$element->tags  key=key item=value name=loop1}
                                     {$key}
                                 {/foreach}
                                 </span>
                                 <ul>
-                                {foreach from=$elements[c]->tags item=tag name=loop1}
+                                {foreach from=$element->tags item=tag name=loop1}
                                     <li>{$tag}</li>
                                 {/foreach}
                                 </ul><!-- / -->
@@ -196,10 +169,10 @@
                         </div><!-- / -->
                     </td>
 
-                    <td class="right">
-                        <ul class="action-buttons">
+                    <td class="right nowrap">
+                        <ul class="btn-group">
                             <li>
-                                <a class="btn btn-mini" href="{$smarty.server.PHP_SELF}?action=import_select_category&amp;id={$elements[c]->xmlFile}" title="{t}Import{/t}">
+                                <a class="btn btn-mini" href="{url name=admin_importer_efe_import id=$element->xmlFile|urlencode}" title="{t}Import{/t}">
                                     {t}Import{/t}
                                 </a>
                             </li>
@@ -207,8 +180,7 @@
                     </td>
 
                 </tr>
-
-                {sectionelse}
+                {foreachelse}
                 <tr>
                     <td colspan=6 class="empty">
                         <h2>
@@ -217,17 +189,19 @@
                         <p>{t}Try syncing from server by click over the "Sync with server" button above.{/t}</p>
                     </td>
                 </tr>
-                {/section}
+                {/foreach}
             </tbody>
             <tfoot>
-                 <tr class="pagination">
-                     <td colspan="6">{$pagination->links|default:""}&nbsp;</td>
+                <tr>
+                    <td colspan="6" class="center">
+                        <div class="pagination">
+                            {$pagination->links|default:""}
+                        </div>
+                     </td>
                  </tr>
             </tfoot>
 
         </table>
-
-    	<input type="hidden" id="action" name="action" value="list" />
 	</form>
 </div>
 {/block}

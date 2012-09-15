@@ -15,7 +15,6 @@
  **/
 class Author
 {
-
     public $pk_author = null;
     public $name      = null;
     public $fk_user   = null;
@@ -27,10 +26,9 @@ class Author
 
     public $cache     = null;
 
-    // Static members for performance
-    private static $_photos   = null;
+    private $photos   = array();
 
-    private $_defaultValues = array(
+    private $defaultValues = array(
         'name'      =>'',
         'gender'    =>'',
         'blog'      =>'',
@@ -45,7 +43,7 @@ class Author
      *
      * @param strin $id the id of the author.
      **/
-    public function __construct($id=null)
+    public function __construct($id = null)
     {
 
         // Posibilidad de cachear resultados de métodos
@@ -65,7 +63,7 @@ class Author
      */
     public function create($data)
     {
-        $data = array_merge($this->_defaultValues, $data);
+        $data = array_merge($this->defaultValues, $data);
 
         $sql = "INSERT INTO authors
                 (`name`, `fk_user`, `blog`,`politics`, `condition`,`date_nac`, `params`)
@@ -75,7 +73,8 @@ class Author
             $data['condition'], $data['date_nac'],  serialize($data['params'])
         );
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        if ($rs === false) {
             Application::logDatabaseError();
 
             return(false);
@@ -134,51 +133,58 @@ class Author
      **/
     public function update($data)
     {
-
-        $data = array_merge($this->_defaultValues, $data);
+        $data = array_merge($this->defaultValues, $data);
 
         $sql = "UPDATE `authors`
                 SET `name`=?, `blog`=?, `politics`=?, `condition`=?, `params`=?
                 WHERE pk_author=?";
 
         $values = array(
-            $data['name'], $data['blog'],
-            $data['politics'], $data['condition'],
+            $data['name'],
+            $data['blog'],
+            $data['politics'],
+            $data['condition'],
             serialize($data['params']),
             $data['id']
         );
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            Application::logDatabaseError();
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        if ($rs === false) {
+            \Application::logDatabaseError();
 
-            return;
+            return false;
         }
 
         $this->pk_author = $data['id'];
 
-        //tabla author_imgs
-        $titles = $data['titles'];
-        if ($titles) {
-            foreach ($titles as $atid => $des) {
-                $sql = "INSERT INTO author_imgs
-                        (`fk_author`, `fk_photo`,`path_img`) VALUES ( ?,?,?)";
-                $values = array( $this->pk_author, $atid, $des );
+        // Drop image assignment
+        $sql = "DELETE FROM author_imgs WHERE fk_author=?";
+        $GLOBALS['application']->conn->Execute($sql, array($this->id));
 
-                $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-                if (!$rs) {
-                    Application::logDatabaseError();
-                }
+        $photoInstances = array();
+        foreach ($data['photos'] as $photoId) {
+            $photoInstances []= new \Photo($photoId);
+        }
+
+        if (array_key_exists('new_photo_id', $data) && !empty($data['new_photo_id'])) {
+            $photoInstances []= new \Photo($data['new_photo_id']);
+        }
+
+        foreach ($photoInstances as $photo) {
+            $sql = "INSERT INTO author_imgs
+                    (`fk_author`, `fk_photo`,`path_img`) VALUES ( ?,?,?)";
+
+            $values = array($this->pk_author, $photo->id, $photo->path_file.'/'.$photo->name);
+
+            $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+            if (!$rs) {
+                \Application::logDatabaseError();
+
+                return false;
             }
         }
 
-        if ($data['del_img']) {
-            $tok = strtok($data['del_img'], ",");
-            while (($tok !== false) AND ($tok !=" ")) {
-                $sql = "DELETE FROM author_imgs WHERE pk_img=".$tok;
-                $GLOBALS['application']->conn->Execute($sql);
-                $tok = strtok(",");
-            }
-        }
+        return true;
     }
 
     /**
@@ -188,20 +194,22 @@ class Author
      **/
     public function delete($id)
     {
-        $sql = 'DELETE FROM authors WHERE pk_author='.($id);
+        $sql = 'DELETE FROM authors WHERE pk_author = ?';
 
-        if ($GLOBALS['application']->conn->Execute($sql)===false) {
+        if ($GLOBALS['application']->conn->Execute($sql, array($id))===false) {
             Application::logDatabaseError();
 
-            return;
+            return false;
         }
-        $sql = 'DELETE FROM author_imgs WHERE fk_author='.($id);
+        $sql = 'DELETE FROM author_imgs WHERE fk_author = ?';
 
-        if ($GLOBALS['application']->conn->Execute($sql)===false) {
+        if ($GLOBALS['application']->conn->Execute($sql, array($id))===false) {
             Application::logDatabaseError();
 
-            return;
+            return false;
         }
+
+        return true;
     }
 
     public function load($properties)
@@ -232,7 +240,7 @@ class Author
      *
      * @return array the array of authors that matches the criteria
      **/
-    public function find($where, $orderBy='ORDER BY 1')
+    public function find($where, $orderBy = 'ORDER BY 1')
     {
         $sql =  'SELECT `authors`.`pk_author`, `authors`.`name` ,
                        `authors`.`blog` , `authors`.`politics` ,
@@ -305,39 +313,45 @@ class Author
      * @param  string $_orderBy, the ORDER BY sql part to sort authors with
      * @return mixed, array of all matched authors
      **/
-    public static function list_authors($filter=null, $_orderBy='ORDER BY 1')
-    {
+    public static function list_authors(
+        $filter = null,
+        $_orderBy = 'ORDER BY 1',
+        $page = null,
+        $itemsPerPage = 20
+    ) {
 
         $items = array();
         $_where = '1=1';
         if (!is_null($filter)) {
             $_where = $filter;
         }
+        $limit = '';
+        if (!is_null($page)) {
+            if ($page > 1) {
+                $limit = 'LIMIT '.(($page-1)*$itemsPerPage).', '.$itemsPerPage;
+            } else {
+                $limit = 'LIMIT '.$itemsPerPage;
+            }
+        }
 
-        $sql = 'SELECT `authors`.`pk_author`, `authors`.`name` ,
-                       `authors`.`blog` , `authors`.`politics` ,
-                       `authors`.`date_nac` , `authors`.`fk_user` ,
-                       `authors`.`condition`, `authors`.`params`
-                FROM `authors` WHERE '.$_where. ' '.$_orderBy ;
-
+        $sql = 'SELECT * FROM `authors` WHERE '.$_where. ' '.$_orderBy.' '.$limit ;
         $rs = $GLOBALS['application']->conn->Execute($sql);
-        $i  = 0;
+
         if ($rs) {
             while (!$rs->EOF) {
-                $items[$i] = new stdClass;
-                $items[$i]->id         = $rs->fields['pk_author'];
-                $items[$i]->pk_author  = $rs->fields['pk_author'];
-                $items[$i]->fk_user    = $rs->fields['fk_user'];
-                $items[$i]->name       = $rs->fields['name'];
-                $items[$i]->gender     = $rs->fields['blog'];
-                $items[$i]->politics   = $rs->fields['politics'];
-                $items[$i]->condition  = $rs->fields['condition'];
-                $items[$i]->params     = unserialize($rs->fields['params']);
-                $num                   = Author::count_author_photos($rs->fields['pk_author']);
-                $items[$i]->num_photos = $num;
+                $author = new Author();
+                $author->id        = $rs->fields['pk_author'];
+                $author->pk_author = $rs->fields['pk_author'];
+                $author->fk_user   = $rs->fields['fk_user'];
+                $author->name      = $rs->fields['name'];
+                $author->gender    = $rs->fields['blog'];
+                $author->politics  = $rs->fields['politics'];
+                $author->condition = $rs->fields['condition'];
+                $author->params    = unserialize($rs->fields['params']);
+                $author->numphotos = \Author::count_author_photos($rs->fields['pk_author']);
 
+                $items []= $author;
                 $rs->MoveNext();
-                  $i++;
             }
         }
 
@@ -352,9 +366,8 @@ class Author
      * @return array multidimensional array with information about
      *               matching authors
      **/
-    public function all_authors($filter=null, $_orderBy='ORDER BY 1')
+    public function all_authors($filter = null, $orderBy = 'ORDER BY 1')
     {
-
         $items = array();
         $_where = '1=1';
         if ( !is_null($filter) ) {
@@ -363,7 +376,7 @@ class Author
 
         $sql = 'SELECT authors.pk_author, authors.name
                 FROM authors
-                WHERE '.$_where.' '.$_orderBy;
+                WHERE '.$_where.' '.$orderBy;
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
         $i  = 0;
@@ -391,7 +404,7 @@ class Author
      **/
     public function get_photo($id)
     {
-        if (is_null(self::$_photos)) {
+        if (count($this->photos) <= 0) {
             $sql = 'SELECT author_imgs.pk_img, author_imgs.path_img,
                            author_imgs.description
                     FROM author_imgs';
@@ -404,14 +417,14 @@ class Author
                     $photo->path_file   = $rs->fields['path_img'];
                     $photo->description = $rs->fields['description'];
 
-                    self::$_photos[ $rs->fields['pk_img'] ] = $photo;
+                    $this->photos[ $rs->fields['pk_img'] ] = $photo;
                     $rs->MoveNext();
                 }
             }
         }
 
-        if (isset(self::$_photos[$id])) {
-            return self::$_photos[$id];
+        if (isset($this->photos[$id])) {
+            return $this->photos[$id];
         }
 
         return null;
@@ -426,8 +439,7 @@ class Author
      **/
     public function get_author_photos($id)
     {
-        $sql = 'SELECT author_imgs.fk_author, author_imgs.pk_img,
-                       author_imgs.path_img, author_imgs.description
+        $sql = 'SELECT *
                 FROM author_imgs WHERE fk_author = ? ORDER BY pk_img ASC';
         $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
 
@@ -443,14 +455,16 @@ class Author
             $photos[$i] = new stdClass();
 
             $photos[$i]->pk_img      = $rs->fields['pk_img'];
+            $photos[$i]->fk_author   = $rs->fields['fk_author'];
+            $photos[$i]->fk_photo    = $rs->fields['fk_photo'];
             $photos[$i]->path_img    = $rs->fields['path_img'];
             $photos[$i]->path_file   = $rs->fields['path_img'];
             $photos[$i]->description = $rs->fields['description'];
-            $photos[$i]->fk_author   = $rs->fields['fk_author'];
 
             $i++;
             $rs->MoveNext();
         }
+        $this->photos = $photos;
 
         return $photos;
     }
@@ -462,12 +476,14 @@ class Author
      *
      * @return int the number of photos
      **/
-    public static function count_author_photos($id)
+    public static function count_author_photos($id = null)
     {
-        $sql = 'SELECT COUNT(*) FROM author_imgs WHERE fk_author = '.($id);
-        $rs  = $GLOBALS['application']->conn->Execute($sql);
+        $sql = 'SELECT COUNT(*) FROM author_imgs WHERE fk_author = ?';
+        $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
+        // var_dump($rs);die();
 
-        return($rs->fields['COUNT(*)']);
+
+        return $rs->fields['COUNT(*)'];
     }
-
 }
+

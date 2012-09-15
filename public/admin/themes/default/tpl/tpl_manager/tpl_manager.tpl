@@ -2,43 +2,11 @@
 
 {block name="footer-js" append}
 <style type="text/css">
-.expired { color:#DA4F49; font-weight:bold; }
+    .expired { color:#DA4F49; font-weight:bold; }
 </style>
 {/block}
 {block name="footer-js" append}
 <script>
-    var previousValue = null;
-    document.observe('dom:loaded', function() {
-        if( $('tabla') ) {
-            $('tabla').select('tbody input[type=text]').each(function(item) {
-                item.observe('change', function() {
-                    this.up(2).select('input[type=checkbox]')[0].
-                        setAttribute('checked', 'checked');
-                });
-
-                new Control.DatePicker(item,{
-                    icon: '{$params.IMAGE_DIR}/template_manager/update16x16.png',
-                    locale: 'es_ES',
-                    timePicker: true,
-                    timePickerAdjacent: true,
-                    onSelect: function(fecha, instance) {
-                        instance.element.up(2).select('input[type=checkbox]')[0].
-                            setAttribute('checked', 'checked');
-                    },
-                    onHover: function(fecha, instance) {
-                        instance.element.up(2).select('input[type=checkbox]')[0].
-                            setAttribute('checked', 'checked');
-                    }
-                });
-            });
-        }
-    });
-
-
-    function sendForm(actionValue) {
-        $('action').value = actionValue;// FIXME: chequeos de seguridad
-        $('formulario').submit();
-    }
     jQuery(function($){
         $('#caches').on('click','.delete-cache-button', function(e, ui) {
             e.preventDefault();
@@ -55,14 +23,14 @@
                     });
                 }
             });
-        })
+        });
     });
 </script>
 {/block}
 
 
 {block name="content"}
-<form id="formulario" name="formulario" action="{$smarty.server.SCRIPT_NAME}" method="POST">
+<form  action="{url name=admin_tpl_manager}" method="get" id="tplform">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title">
@@ -70,33 +38,22 @@
             </div>
             <ul class="old-button">
                 <li>
-                    <a href="#delete" onclick="if(confirm('{t}Are you sure that you want to delete this selected cache files?{/t}')){ sendForm('delete'); }return false;" title="{t}Delete cache{/t}">
+                    <button type="submit" title="{t}Delete cache{/t}" id="delete-caches" class="delChecked">
                         <img src="{$params.IMAGE_DIR}template_manager/delete48x48.png" />
                         <br />
                         {t}Delete{/t}
+                    </button>
+                </li>
+                <li>
+                    <a title="{t}Get updated cache list{/t}" href="{url name=admin_tpl_manager}">
+                        <img alt="{t}Refresh list{/t}" src="{$params.IMAGE_DIR}/template_manager/refresh48x48.png"><br>
+                        {t}Refresh list{/t}
                     </a>
                 </li>
 
-                <li>
-                    <button type="submit" name="action" value="refresh"
-                    title="{t}Delete and generates a new cache with updated data. BE AWARE: If you apply this action to multiple files you could slow down the system.{/t}">
-                        <img src="{$params.IMAGE_DIR}template_manager/refresh48x48.png" />
-                        <br />
-                        {t}Regenerate{/t}
-                    </button>
-                </li>
-
-                <li>
-                    <button type="submit" name="action" value="update"
-                    title="{t}This changes the expire date but maintains the cache file contents{/t}">
-                        <img src="{$params.IMAGE_DIR}template_manager/update48x48.png" />
-                        <br />
-                        {t}Change expiration{/t}
-                    </button>
-                </li>
                 <li class="separator"></li>
                 <li>
-                    <a href="{$smarty.server.SCRIPT_NAME}?action=config" title="{t}Configurar cachés{/t}">
+                    <a href="{url name=admin_tpl_manager_config}" title="{t}Configurar cachés{/t}">
                         <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" />
                         <br />
                         {t}Settings{/t}
@@ -106,13 +63,13 @@
         </div>
     </div>
     <div class="wrapper-content">
-
+        {render_messages}
         <div class="table-info clearfix">
             <div>
                 <div class="right form-inline">
                     <label>
                         {t}Show{/t}
-                        <input type="text" name="items_page" id="items_page" value="{$smarty.request.items_page}"
+                        <input type="text" name="items_page" id="items_page" value="{$itemsperpage}"
                             size="3" maxlength="3" style="width:30px !important; text-align:right; margin-top:-2px; padding:2px 5px" />
                         {t}items/page with type{/t}
                     </label>
@@ -147,18 +104,18 @@
         </div>
         <div id="caches">
             {if count($caches)>0}
-            <table class="listing-table">
+            <table class="table table-hover table-condensed">
                 <thead>
                     <tr>
                         <th  style="width:10px;">
-                            <input type="checkbox" id="toggleallcheckbox" value="" />
+                            <input type="checkbox" class="toggleallcheckbox" value="" />
                         </th>
                         <th class="left">{t}Resource{/t}</th>
                         <th class="left" scope=col style="width:30px;">{t}Category{/t}</th>
-                        <th class="left" scope=col style="width:120px;">{t}Created in{/t}</th>
+                        <!-- <th class="left" scope=col style="width:120px;">{t}Created in{/t}</th> -->
                         <th class="left" scope=col style="width:100px;">{t}Valid until{/t}</th>
                         <th class="left" scope=col style="width:40px;">{t}Size{/t}</th>
-                        <th class="left" scope=col style="width:120px;">{t}Actions{/t}</th>
+                        <th class="center" scope=col style="width:40px;">{t}Actions{/t}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -168,7 +125,7 @@
                      {else}
                     <tr class="cache-element">
                         <td>
-                            <input type="checkbox" name="selected[]" value="{$smarty.section.c.index}" />
+                            <input type="checkbox" name="selected[]" value="{$smarty.section.c.index}"  class="minput"/>
                             <input type="hidden"   name="cacheid[]"  value="{$caches[c].category}|{$caches[c].resource}" />
                             <input type="hidden"   name="tpl[]"      value="{$caches[c].template}.tpl" />
                         </td>
@@ -314,20 +271,17 @@
                         {$ccm->get_title($caches[c].category)|clearslash|capitalize|default:$caches[c].category|capitalize}
                     </td>
 
-                    <td class="left">{$caches[c].created|date_format:"%H:%M:%S %d/%m/%Y"}</td>
+                    <!-- <td class="left">{$caches[c].created|date_format:"%H:%M:%S %d/%m/%Y"}</td> -->
 
                     <td class="left">
-                        <div class="valid-until-date {if $caches[c].expires < $smarty.now}expired{else}valid{/if}">
+                        <div class="valid-until-date {if $caches[c].expires < $smarty.now}expired{else}valid{/if} nowrap">
                             {$caches[c].expires|date_format:"%H:%M:%S %d/%m/%Y"}
                         </div>
                     </td>
-                    <td class="left">{$caches[c].size} KB</td>
-                    <td class="left">
-                        <a class="btn btn-mini" href="{$smarty.server.PHP_SELF}?action=refresh&amp;cacheid={$caches[c].category}|{$caches[c].resource}&amp;tpl={$caches[c].template}.tpl&amp;{$paramsUri}&amp;uris={$contentUris.$resource|urlencode}"
-                           title="{t}Regenerate cache file{/t}">{t}Regenerate{/t}</a>
-                        &nbsp;
-                        <a class="btn btn-mini btn-danger delete-cache-button" href="{$smarty.server.PHP_SELF}?action=delete&amp;cacheid={$caches[c].category}|{$caches[c].resource}&amp;tpl={$caches[c].template}.tpl&amp;{$paramsUri}"
-                            title="{t}Delete cache file{/t}">{t}Delete{/t}</a>
+                    <td class="center nowrap">{$caches[c].size} KB</td>
+                    <td class="right nowrap">
+                        <a class="btn btn-danger delete-cache-button" href="{url name=admin_tpl_manager_delete cacheid=$caches[c].cache_id  tpl=$caches[c].tpl}"
+                            title="{t}Delete cache file{/t}"><i class="icon-trash icon-white"></i></a>
                     </td>
                 </tr>
                 {/if}
@@ -336,16 +290,10 @@
 
             <tfoot>
                 <tr>
-                    <td colspan="8" class="pagination">
-                        <script>
-                        // <![CDATA[
-                        function paginate(page) {
-                            $('page').value = page;
-                            $('formulario').submit();
-                        }
-                        // ]]>
-                        </script>
-                        {$pager->links} &nbsp;
+                    <td colspan="8" class="center">
+                        <div class="pagination">
+                            {$pagination->links}
+                        </div>
                     </td>
                 </tr>
             </tfoot>
@@ -368,4 +316,6 @@
     <input type="hidden" id="action" name="action" value="" />
 </div>
 </form>
+{include file="tpl_manager/modals/_modalBatchDelete.tpl"}
+{include file="tpl_manager/modals/_modalAccept.tpl"}
 {/block}

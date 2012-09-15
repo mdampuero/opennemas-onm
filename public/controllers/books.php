@@ -7,10 +7,11 @@
  * file that was distributed with this source code.
  */
 use Onm\Settings as s;
+
 /**
  * Start up and setup the app
 */
-require_once('../bootstrap.php');
+require_once '../bootstrap.php';
 
 /**
  * Setup view
@@ -42,13 +43,12 @@ $action = $request->query->filter('action', 'list', FILTER_SANITIZE_STRING);
 
 $cm = new ContentManager();
 switch ($action) {
-
     case 'list':
         $categoryBooks = array();
         $i=0;
         foreach ($categories as $cat) {
             //only books categories
-            if ($cat->internal_category == $contentType ) {
+            if ($cat->internal_category == $contentType) {
                 $categoryBooks[$i] = new stdClass();
                 $categoryBooks[$i]->id    = $cat->pk_content_category;
                 $categoryBooks[$i]->title = $cat->title;
@@ -66,8 +66,8 @@ switch ($action) {
         $tpl->display('books/books_frontpage.tpl');
 
         break;
+    case 'view':
 
-    case 'view' :
         $dirtyID = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
 
         $id = Content::resolveID($dirtyID);
@@ -79,16 +79,19 @@ switch ($action) {
         $swf = preg_replace('%\.pdf%', '.swf', $book->file_name);
         $tpl->assign('archivo_swf', $swf);
 
-        $books = $cm->find_by_category('Book', $book->category, 'available=1',
-                    'ORDER BY position ASC, created DESC LIMIT 5');
+        $books = $cm->find_by_category(
+            'Book',
+            $book->category,
+            'available=1',
+            'ORDER BY position ASC, created DESC LIMIT 5'
+        );
 
         $tpl->assign('libros', $books);
 
         $tpl->display('books/book_viewer.tpl');
 
         break;
-
-    case 'more_books' :
+    case 'more_books':
 
         $category = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
         if ($page<1) {
@@ -97,23 +100,33 @@ switch ($action) {
         }
         $_limit = 'LIMIT '.(($page - 1) * 5).',  5';
 
-        $books = $cm->find_by_category('Book', $category, 'available=1',
-                'ORDER BY position ASC, created DESC  '. $_limit);
+        $books = $cm->find_by_category(
+            'Book',
+            $category,
+            'available=1',
+            'ORDER BY position ASC, created DESC  '. $_limit
+        );
 
         if (empty($books)) {
             $page = $page - 1;
             $tpl->assign('page', $page);
             $_limit = 'LIMIT '.(($page - 1) * 5).',  5';
 
-            $books = $cm->find_by_category('Book', $category, 'content_status=1',
-                'ORDER BY position ASC, created DESC  '. $_limit);
+            $books = $cm->find_by_category(
+                'Book',
+                $category,
+                'content_status=1',
+                'ORDER BY position ASC, created DESC  '. $_limit
+            );
 
         }
 
-        $tpl->assign(array(
-            'actualCat'=> $category,
-            'libros' => $books
-        ));
+        $tpl->assign(
+            array(
+                'actualCat'=> $category,
+                'libros' => $books
+            )
+        );
 
         $html = $tpl->fetch('books/widget_books.tpl');
 

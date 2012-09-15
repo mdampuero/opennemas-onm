@@ -42,3 +42,4 @@ if ($update) {
 }
 
 Application::ajaxOut($output);
+

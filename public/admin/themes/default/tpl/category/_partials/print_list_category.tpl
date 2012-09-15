@@ -1,6 +1,6 @@
 <tr>
     <td>
-        <a href="{$smarty.server.PHP_SELF}?action=read&amp;id={$category->pk_content_category}" title="Modificar">
+        <a href="{url name=admin_category_show id=$category->pk_content_category}" title="Modificar">
             {$category->title|clearslash|escape:"html"}
         </a>
     </td>
@@ -8,139 +8,155 @@
         {$category->name}
     </td>
     <td class="center">
-        {$num_contents.articles|default:0}
+        {$num_contents['articles']|default:0}
     </td>
     <td class="center">
-        {$num_contents.photos|default:0}
+        {$num_contents['photos']|default:0}
     </td>
     <td class="center">
-        {$num_contents.advertisements|default:0}
+        {$num_contents['advertisements']|default:0}
     </td>
     <td class="center">
     {if $category->inmenu==1}
-    {acl isAllowed="CATEGORY_AVAILABLE"}
-        <a href="?id={$category->pk_content_category}&amp;action=set_inmenu&amp;status=0" title="En menu">
-    {/acl}
-        <img src="{$params.IMAGE_DIR}publish_g.png" alt="Publicado" /></a>
+        {acl isAllowed="CATEGORY_AVAILABLE"}
+        <a href="{url name=admin_category_toggleavailable id=$category->pk_content_category status=0}" title="En menu">
+            <img src="{$params.IMAGE_DIR}publish_g.png" alt="Publicado" />
+        </a>
+        {/acl}
     {else}
-    {acl isAllowed="CATEGORY_AVAILABLE"}
-        <a href="?id={$category->pk_content_category}&amp;action=set_inmenu&amp;status=1" title="No en menu">
-    {/acl}
-        <img src="{$params.IMAGE_DIR}publish_r.png" alt="Pendiente" /></a>
+        {acl isAllowed="CATEGORY_AVAILABLE"}
+        <a href="{url name=admin_category_toggleavailable id=$category->pk_content_category status=1}" title="No en menu">
+            <img src="{$params.IMAGE_DIR}publish_r.png" alt="Pendiente" />
+        </a>
+        {/acl}
     {/if}
     </td>
     {if $category->internal_category eq '1'}
-        <td class="center">
-        {if $category->params['inrss'] eq 1 || !isset($category->params['inrss'])}
-            <a href="?id={$category->pk_content_category}&amp;action=set_inrss&amp;status=0" title="En rss">
-            <img src="{$params.IMAGE_DIR}publish_g.png" alt="Publicado" /></a>
-        {else}
-            <a href="?id={$category->pk_content_category}&amp;action=set_inrss&amp;status=1" title="No en rss">
-            <img src="{$params.IMAGE_DIR}publish_r.png" alt="Pendiente" /></a>
-        {/if}
-        </td>
-    {/if}
     <td class="center">
-        <ul class="action-buttons">
+        {if $category->params['inrss'] eq 1 || !isset($category->params['inrss'])}
+            <a href="{url name=admin_category_togglerss id=$category->pk_content_category status=0}" title="En rss">
+                <img src="{$params.IMAGE_DIR}publish_g.png" alt="Publicado" />
+            </a>
+        {else}
+            <a href="{url name=admin_category_togglerss id=$category->pk_content_category status=1}" title="No en rss">
+                <img src="{$params.IMAGE_DIR}publish_r.png" alt="Pendiente" />
+            </a>
+        {/if}
+    </td>
+    {/if}
+    <td class="right nowrap">
+        <div class="btn-group">
             {acl isAllowed="CATEGORY_UPDATE"}
-                <li>
                 {if $category->internal_category != 0 && $category->internal_category != 2}
-                    <a href="{$smarty.server.PHP_SELF}?action=read&amp;id={$category->pk_content_category}" title="Modificar">
-                        <img src="{$params.IMAGE_DIR}edit.png" />
-                    </a>
+                <a class="btn btn-mini" href="{url name=admin_category_show id=$category->pk_content_category}" title="Modificar">
+                    <i class="icon-pencil"></i>
+                </a>
                 {/if}
-                </li>
             {/acl}
             {acl isAllowed="CATEGORY_DELETE"}
-                <li>
                 {if $category->internal_category != 0}
-                    <a href="#" onClick="if( confirm('¿Está usted seguro que desea vaciar la sección? \n ¡Atención! Eliminará todos sus contenidos') ) {ldelim} enviar(this, '_self', 'empty', {$category->pk_content_category}); {rdelim}" title="Vaciar">
-                        <img src="{$params.IMAGE_DIR}removecomment.png" alt="vaciar" />
-                    </a>
+                <a class="btn btn-mini empty-category"
+                    href="{url name=admin_category_empty id=$category->pk_content_category}"
+                    data-url="{url name=admin_category_empty id=$category->pk_content_category}"
+                    data-title="{$category->title}"
+                    title="Vaciar">
+                    <i class="icon-fire"></i>
+                </a>
                 {/if}
-                </li>
-                <li>
                 {if $category->internal_category != 0 && $category->internal_category != 2}
-                    <a href="#" onClick="javascript:confirmar(this, {$category->pk_content_category});" title="Eliminar">
-                        <img src="{$params.IMAGE_DIR}trash.png" />
-                    </a>
+                <a class="btn btn-mini btn-danger del-category"
+                    href="{url name=admin_category_delete id=$category->pk_content_category}"
+                    data-url="{url name=admin_category_delete id=$category->pk_content_category}"
+                    data-title="{$category->title}"
+                    title="Eliminar">
+                    <i class="icon-trash icon-white"></i>
+                </a>
                 {/if}
-                </li>
             {/acl}
-        </ul>
+        </div>
     </td>
 </tr>
 {if count($subcategorys) >0}
-    {section name=su loop=$subcategorys|default:array()}
+    {assign var=i value=0}
+    {foreach from=$subcategorys item=subcategory}
     <tr>
         <td style="padding-left: 20px;">
             &rArr;
-            <a href="{$smarty.server.PHP_SELF}?action=read&amp;id={$subcategorys[su]->pk_content_category}" title="Modificar">
-                <strong>{$subcategorys[su]->title}</strong>
+            <a href="{url name=admin_category_show id=$subcategory->pk_content_category}" title="Modificar">
+                <strong>{$subcategory->title}</strong>
             </a>
         </td>
         <td>
-            {$subcategorys[su]->name}
+            {$subcategory->name}
         </td>
         <td class="center">
-            {$num_sub_contents[su].articles|default:0}
+            {$num_sub_contents[$i].articles|default:0}
         </td>
         <td class="center">
-            {$num_sub_contents[su].photos|default:0}
+            {$num_sub_contents[$i].photos|default:0}
         </td>
         <td class="center">
-            {$num_sub_contents[su].advertisements|default:0}
+            {$num_sub_contents[$i].advertisements|default:0}
         </td>
         <td class="center">
-        {if $subcategorys[su]->internal_category eq '1'}
-            {if $subcategorys[su]->inmenu==1}
+        {if $subcategory->internal_category eq '1'}
+            {if $subcategory->inmenu==1}
                 {acl isAllowed="CATEGORY_AVAILABLE"}
-                    <a href="?id={$subcategorys[su]->pk_content_category}&amp;action=set_inmenu&amp;status=0" title="En menu">
+                <a href="{url name=admin_category_toggleavailable id=$subcategory->pk_content_category status=0}" title="En menu">
+                    <img src="{$params.IMAGE_DIR}publish_g.png" alt="Publicado" />
+                </a>
                 {/acl}
-                    <img src="{$params.IMAGE_DIR}publish_g.png" alt="Publicado" /></a>
             {else}
                 {acl isAllowed="CATEGORY_AVAILABLE"}
-                    <a href="?id={$subcategorys[su]->pk_content_category}&amp;action=set_inmenu&amp;status=1" title="No en menu">
+                <a href="{url name=admin_category_toggleavailable id=$subcategory->pk_content_category status=1}" title="No en menu">
+                    <img src="{$params.IMAGE_DIR}publish_r.png" alt="Pendiente" />
+                </a>
                 {/acl}
-                    <img src="{$params.IMAGE_DIR}publish_r.png" alt="Pendiente" /></a>
             {/if}
         {/if}
         </td>
         <td class="center">
-            {if $subcategorys[su]->params['inrss'] eq 1 || !isset($subcategorys[su]->params['inrss'])}
-                    <a href="?id={$subcategorys[su]->pk_content_category}&amp;action=set_inrss&amp;status=0" title="En rss">
-                    <img src="{$params.IMAGE_DIR}publish_g.png" alt="Publicado" /></a>
+            {if $subcategory->params['inrss'] eq 1 || !isset($subcategory->params['inrss'])}
+                <a href="{url name=admin_category_togglerss id=$subcategory->pk_content_category status=0}" title="En rss">
+                    <img src="{$params.IMAGE_DIR}publish_g.png" alt="Publicado" />
+                </a>
             {else}
-                    <a href="?id={$subcategorys[su]->pk_content_category}&amp;action=set_inrss&amp;status=1" title="No en rss">
-                    <img src="{$params.IMAGE_DIR}publish_r.png" alt="Pendiente" /></a>
+                <a href="{url name=admin_category_togglerss id=$subcategory->pk_content_category status=1}" title="No en rss">
+                    <img src="{$params.IMAGE_DIR}publish_r.png" alt="Pendiente" />
+                </a>
             {/if}
         </td>
 
-        <td class="center">
-            <ul class="action-buttons">
+        <td class="right nowrap">
+            <div class="btn-group">
                 {acl isAllowed="CATEGORY_UPDATE"}
-                    <li>
-                        <a href="{$smarty.server.PHP_SELF}?action=read&amp;id={$subcategorys[su]->pk_content_category}" title="Modificar">
-                            <img src="{$params.IMAGE_DIR}edit.png" />
-                        </a>
-                    </li>
+                    <a class="btn btn-mini" href="{url name=admin_category_show id=$subcategory->pk_content_category}" title="Modificar">
+                        <i class="icon-pencil"></i>
+                    </a>
                 {/acl}
                 {acl isAllowed="CATEGORY_DELETE"}
-                    <li>
-                    {if ($subcategorys[su]->internal_category==1) && ($num_sub_contents[su].articles!=0 || $num_sub_contents[su].photos!=0 || $num_sub_contents[su].advertisements!=0)}
-                        <a href="#" onClick="if( confirm('¿Está usted seguro que desea vaciar la sección? ¡Atención! Eliminará todos sus contenidos') ) {ldelim} enviar(this, '_self', 'empty', {$subcategorys[su]->pk_content_category}); {rdelim}" title="Vaciar">
-                            <img src="{$params.IMAGE_DIR}removecomment.png" alt="vaciar" />
-                        </a>
+                    {if ($subcategory->internal_category==1) && ($num_sub_contents[$i].articles!=0 || $num_sub_contents[$i].photos!=0 || $num_sub_contents[$i].advertisements!=0)}
+                    <a class="btn btn-mini empty-category"
+                        href="{url name=admin_category_empty id=$subcategory->pk_content_category}"
+                        data-url="{url name=admin_category_empty id=$subcategory->pk_content_category}"
+                        data-title="{$subcategory->title}"
+                        title="{t}Delete all the contents in this category{/t}">
+                        <i class="icon-fire"></i>
+                    </a>
                     {/if}
-                    </li>
-                    <li>
-                        <a href="#" onClick="javascript:confirmar(this, {$subcategorys[su]->pk_content_category});" title="Eliminar">
-                            <img src="{$params.IMAGE_DIR}trash.png" />
-                        </a>
-                    </li>
+                    <a class="btn btn-mini btn-danger del-category"
+                        href="{url name=admin_category_delete id=$subcategory->pk_content_category}"
+                        data-url="{url name=admin_category_delete id=$subcategory->pk_content_category}"
+                        data-title="{$subcategory->title}"
+                        title="{t}Delete category{/t}">
+                        <i class="icon-trash icon-white"></i>
+                    </a>
                 {/acl}
-            </ul>
+            </div>
         </td>
     </tr>
-  {/section}
+    {capture}
+    {$i++}
+    {/capture}
+  {/foreach}
 {/if}

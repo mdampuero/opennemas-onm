@@ -56,7 +56,8 @@ class MemcacheCache extends AbstractCache
             if (is_array($slabs)) {
                 foreach (array_keys($slabs) as $slabId) {
                     $dump = $this->_memcache->getExtendedStats(
-                        'cachedump', (int) $slabId
+                        'cachedump',
+                        (int) $slabId
                     );
 
                     if ($dump) {
@@ -108,3 +109,4 @@ class MemcacheCache extends AbstractCache
         return $this->_memcache->delete($id);
     }
 }
+

@@ -1,14 +1,14 @@
 <span style="display:block; width:100%; text-align:center;">
-    <form action="/admin/controllers/search_advanced/search_advanced.php" method="get" style="display:inline-block;" id="search-form-content-provider">
-        <input type="hidden" name="action" value="{$action|default:"content-provider-related"}">
-        <input type="text" name="search_string" value="{$search_string}" placeholder="{t}Write here the text for search...{/t}">
-        <button type="submit" class="btn" id="search-content-provider-button">{t}Search{/t}</button>
+    <form action="{url name=admin_search_content_provider}" method="get" style="display:inline-block;" id="search-form-content-provider">
+        <input type="hidden" name="related" value="{$related}">
+        <div class="input-append">
+            <input type="text" name="search_string" value="{$search_string}" placeholder="{t}Write here the text for search...{/t}" class="input-xlarge">
+            <button type="submit" class="btn" id="search-content-provider-button"><i class="icon-search"></i></button>
+        </div>
     </form>
 </span>
 
-{if empty($results) && (!empty($search_string))}
-{t}No results{/t}
-{/if}
+{include file="common/content_provider/_container-content-list.tpl" hidenoavailable=true}
 <script>
 (function($){
     makeContentProviderAndPlaceholdersSortable();

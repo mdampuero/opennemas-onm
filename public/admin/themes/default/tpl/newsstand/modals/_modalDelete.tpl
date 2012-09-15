@@ -1,49 +1,51 @@
 <div class="modal hide fade" id="modal-kiosko-delete">
     <div class="modal-header">
-      <a class="close" href="#">×</a>
+      <button type="button" class="close" data-dismiss="modal-kiosko-delete" aria-hidden="true">×</button>
       <h3>{t}Delete kiosko{/t}</h3>
     </div>
     <div class="modal-body">
-        <p>{t escape=off}Are you sure that do you want delete "<span>%title%</span>"?{/t}</p>
+        <p>{t escape=off}Are you sure that do you want to delete the selected cover?{/t}</p>
 
     </div>
     <div class="modal-footer">
-        <a class="btn primary yes" href="#">{t}Yes, delete{/t}</a>
+        <a class="btn btn-primary yes" href="#">{t}Yes, delete{/t}</a>
         <a class="btn secondary no" href="#">{t}No{/t}</a>
     </div>
 </div>
 
 <script>
-jQuery("#modal-kiosko-delete").modal({
-    backdrop: 'static', //Show a grey back drop
-    keyboard: true //Can close on escape
-});
+(function($){
+    var modal_delete = $("#modal-kiosko-delete");
+    modal_delete.modal({
+        backdrop: 'static', //Show a grey back drop
+        keyboard: true, //Can close on escape
+        show: false
+    });
 
-jQuery('.del').click(function(e) {
-    jQuery('#modal-kiosko-delete .modal-body span').html( jQuery(this).data('title') );
-    //Sets up the modal
-    jQuery("#modal-kiosko-delete").modal('show');
-    jQuery("body").data("selected-for-del", jQuery(this).data("id"));
-    e.preventDefault();
-});
+    $('.del').click(function(e) {
+        e.preventDefault();
+        modal_delete.data("selected-for-del", $(this).data("url"));
+        //Sets up the modal
+        modal_delete.modal('show');
+    });
 
-jQuery('#modal-kiosko-delete a.btn.yes').on('click', function(){
-    var delId = jQuery("body").data("selected-for-del");
-    if(delId) {
-        jQuery.ajax({
-            url:  "{$smarty.server.SCRIPT_NAME}",
-            type: "POST",
-            data: { action:"delete", id:delId },
-            success: function(){
-                location.reload();
-            }
-        });
-    }
-    e.preventDefault();
-});
+    $('#modal-kiosko-delete a.btn.yes').on('click', function(e, ui){
+        e.preventDefault();
+        var url = modal_delete.data("selected-for-del");
+        if (url) {
+            $.ajax({
+                url:  url,
+                success: function(){
+                    location.reload();
+                }
+            });
+        }
+    });
 
-jQuery('#modal-kiosko-delete a.btn.no').on('click', function(e){
-    jQuery("#modal-kiosko-delete").modal('hide');
-    e.preventDefault();
-});
+    $('#modal-kiosko-delete a.btn.no').on('click', function(e){
+        modal_delete.modal('hide');
+        e.preventDefault();
+    });
+})(jQuery);
+
 </script>

@@ -19,7 +19,7 @@ class Schedule extends Content
 {
 
     //TODO: parent content
-    public function __construct($id=null)
+    public function __construct($id = null)
     {
         //  parent::__construct($id);
 
@@ -31,7 +31,7 @@ class Schedule extends Content
         $this->content_type = 'Schedule';
     }
 
-    public function getDataCalendars($limit=8)
+    public function getDataCalendars($limit = 8)
     {
         $sql = "SELECT * FROM phpc_AR_calendars "
              . "WHERE status=1 "
@@ -88,3 +88,4 @@ class Schedule extends Content
         return $events;
     }
 }
+

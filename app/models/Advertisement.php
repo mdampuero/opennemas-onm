@@ -53,6 +53,7 @@ class Advertisement extends Content
         34 => "Button Colunm 3 Position 4",
         35 => "Button Colunm 3 Position 5",
         36 => "Button Colunm 3 Position 6",
+        37 => "Floating banner",
 
         /* Intersticial banner noticia interior */
         150 => "[I] Banner Interticial noticia interior",
@@ -231,7 +232,7 @@ class Advertisement extends Content
      *
      * return Advertisement the instance of the advertisement class
      **/
-    public function __construct($id=null)
+    public function __construct($id = null)
     {
         // Fetch information from Content class
         parent::__construct($id);
@@ -278,10 +279,6 @@ class Advertisement extends Content
      **/
     public function create($data)
     {
-        // Clear magic_quotes StringUtils::fixScriptDeclaration
-        // & StringUtils::disabled_magic_quotes
-        StringUtils::disabled_magic_quotes($data);
-
         parent::create($data);
 
         if (!empty($data['script'])) {
@@ -394,11 +391,8 @@ class Advertisement extends Content
      **/
     public function update($data)
     {
+        $data['available'] = $data['content_status'];
         parent::update($data);
-
-        // Remove magic_quotes, StringUtils::fixScriptDeclaration
-        // & StringUtils::disabled_magic_quotes
-        StringUtils::disabled_magic_quotes($data);
 
         if (!empty($data['script'])) {
             //$data['script'] = StringUtils::fixScriptDeclaration($data['script']);
@@ -415,14 +409,14 @@ class Advertisement extends Content
         $sql = "UPDATE advertisements
                 SET `type_advertisement`=?, `fk_content_categories`=?,
                     `path`=?, `url`=?, `type_medida`=?, `num_clic`=?,
-                    `num_clic_count`=?, `num_view`=?,`with_script`=?,
+                    `num_view`=?,`with_script`=?,
                     `script`=?, `overlap`=?, `timeout`=?
                 WHERE pk_advertisement=".($data['id']);
 
         $values = array(
-            $data['type_advertisement'], $data['category'],
+            $data['type_advertisement'], $data['categories'],
             $data['img'], $data['url'], $data['type_medida'],
-            $data['num_clic'], $data['num_clic_count'],
+            $data['num_clic'],
             $data['num_view'], $data['with_script'], $data['script'],
             $data['overlap'], $data['timeout']
         );
@@ -445,7 +439,7 @@ class Advertisement extends Content
 
         // Necesarios para evento
         $this->pk_advertisement      = $this->id;
-        $this->available             = $data['available'];
+        $this->content_status        = $data['content_status'];
         $this->type_advertisement    = $data['type_advertisement'];
         $this->fk_content_categories = $data['category'];
 
@@ -595,8 +589,7 @@ class Advertisement extends Content
                     && is_object($banner)
                     && property_exists($banner, 'type_medida')
                 ) {
-                    $ad = new Advertisement($id);
-                    $ad->unpublishIfMaxViewsReached();
+                    $banner->unpublishIfMaxViewsReached();
                 }
             }
         } else {
@@ -622,12 +615,12 @@ class Advertisement extends Content
     /**
      * Get advertisement for a given type and category
      *
-     * @param array $types Types of advertisement
+     * @param array  $types    Types of advertisement
      * @param string $category Category of advertisement
      *
      * @return array $finalBanners of Advertisement objects
      **/
-    public function getAdvertisements($types=array(), $category='home')
+    public function getAdvertisements($types = array(), $category = 'home')
     {
         $banners = array();
         $finalBanners = array();
@@ -733,12 +726,12 @@ class Advertisement extends Content
     /**
      * Return banners for the interstitial position.
      *
-     * @param array $type the list of positions to get banners from.
+     * @param array  $type     the list of positions to get banners from.
      * @param string $category the category to get banners from.
      *
      * @return array
      **/
-    public function getIntersticial($type, $category='home')
+    public function getIntersticial($type, $category = 'home')
     {
         $interstitial = null;
 
@@ -765,13 +758,156 @@ class Advertisement extends Content
         return $interstitial;
     }
 
+
+    /**
+     * Renders the advertisment given a set of parameters
+     *
+     * @return string the final html for the ad
+     **/
+    public function render($params, $tpl = null)
+    {
+        $output = '';
+
+        $params['beforeHTML'] = "<div class=\"ad_in_column ad_horizontal_marker clearfix\"><div>";
+        $params['afterHTML'] = "</div></div>";
+
+        if (defined('ADVERTISEMENT_ENABLE')  && !ADVERTISEMENT_ENABLE) {
+            return $output;
+        }
+
+        $banner = $this;
+
+        $width  = $this->params['width'];
+        $height = $this->params['height'];
+
+        if ($this->with_script == 1) {
+            $photo = new \Photo($this->img);
+        }
+
+        $photo = new \Photo($this->img);
+
+        // Overlap flash?
+        $overlap  = (isset($this->params['overlap']))? $this->params['overlap']: false;
+        $isBastardIE = preg_match('/MSIE /', $_SERVER['HTTP_USER_AGENT']);
+
+        if (isset($params['beforeHTML'])) {
+            $output .= $params['beforeHTML'];
+        }
+
+        // Initial container
+        $output .= '<div class="'.$cssclass.'">';
+
+        if ($this->with_script == 1) {
+            // Original method
+            // $output .= $banner->script;
+            // Parallelized method using iframes
+            if (preg_match('/<iframe/', $this->script)) {
+                $output .= $this->script;
+            } else {
+                $output .=
+                    '<iframe src="'.SITE_URL.'ads/get/' . date('YmdHis', strtotime($this->created))
+                    .sprintf('%06d', $this->pk_content)  . '.html" ' .
+                   'scrolling="no" frameborder="0" width="'.$this->params['width']
+                   .'" height="'.$this->params['height'].'" ' .
+                   'marginwidth="0" marginheight="0" rel="nofollow"></iframe>';
+            }
+
+        } elseif( !empty($banner->pk_advertisement) ) {
+
+            // TODO: controlar los banners swf especiales con div por encima
+            if (strtolower($photo->type_img)=='swf') {
+
+                if (!$overlap && !$banner->overlap) {
+                    // Flash object
+                    // FIXME: build flash object with all tags and params
+
+                    $output .= '<a target="_blank" href="'
+                                .SITE_URL.'ads/'. date('YmdHis', strtotime($banner->created))
+                                .sprintf('%06d', $banner->pk_advertisement)
+                                .'.html" rel="nofollow" style="display:block;cursor:pointer">';
+                    $output .= '<object width="'.$width.'" height="'.$height.'" >
+                            <param name="wmode" value="transparent" />
+                            <param name="movie" value="'. MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name. '" />
+                            <param name="width" value="'.$width.'" />
+                            <param name="height" value="'.$height.'" />
+                            <embed src="'. MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name. '"
+                                width="100%" height="100%" SCALE="exactfit" alt="Publicidad '.$banner->title
+                                .'" wmode="transparent"></embed>
+                        </object>';
+                } else {
+                    if (!$isBastardIE) {
+                        $output .= '<div style="position: relative; width: 100%; height: '.$height.'px;">
+                            <div style="left:0px;top:0px;cursor:pointer;background-color:transparent;'
+                                .'position:absolute;z-index:100;width:'.
+                                $width.'px;height:'.$height.'px;"
+                                onclick="javascript:window.open(\''.SITE_URL.'ads/'
+                                .date('YmdHis', strtotime($banner->created)).sprintf('%06d', $banner->pk_advertisement)
+                                .'.html\', \'_blank\');return false;"></div>';
+                    } else {
+                        $output .= '<div style="position: relative; width: '.$width.'px; height: '.$height.'px;">
+                            <div style="left:0px;top:0px;cursor:pointer;background-color:#FFF;'
+                                .'filter:alpha(opacity=0);position:absolute;z-index:100;width:'.
+                                $width.'px;height:'.$height.'px;"
+                                onclick="javascript:window.open(\''.SITE_URL.'ads/'
+                                .date('YmdHis', strtotime($banner->created))
+                                .sprintf('%06d', $banner->pk_advertisement)
+                                .'.html\', \'_blank\');return false;"></div>';
+                    }
+
+                    $output .= '<div style="position: absolute; z-index: 0; width: '.$width.'px; left: 0px;">
+                            <object width="'.$width.'" height="'.$height.'">
+                                <param name="movie" value="'. MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name. '" />
+                                <param name="wmode" value="opaque" />
+                                <param name="width" value="'.$width.'" />
+                                <param name="height" value="'.$height.'" />
+                                <embed src="'. MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name. '" wmode="opaque"
+                                    width="100%" height="100%" alt="Publicidad '. $banner->title. '"></embed>
+                            </object>
+                        </div>
+                      </div>';
+
+                    $output .= '</div>';
+
+                    if (isset($params['afterHTML'])) {
+                        $output .= $params['afterHTML'];
+                    }
+
+
+                    return render_output($output, $banner);
+                }
+            } else {
+                // Image
+                $output .= '<a target="_blank" href="'.SITE_URL.'ads/'
+                        .date('YmdHis', strtotime($banner->created))
+                        .sprintf('%06d', $banner->pk_advertisement) .'.html" rel="nofollow">';
+                $output .= '<img src="'. MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name.'"
+                        alt="Publicidad '.$banner->title.'" width="'.$width.'" height="'.$height.'" />';
+            }
+
+            $output .= '</a>';
+        } else {
+            // Empty banner, don't return anything
+            $output = '';
+            return render_output($output, $banner);
+        }
+
+        $output .= '</div>';
+
+        // Post content of banner
+        if (isset($params['afterHTML'])) {
+            $output .= $params['afterHTML'];
+        }
+
+        return $output;
+    }
+
     /**
      * Inject banners into template
      *
-     * @param array $banners Array of Advertisement objects
-     * @param Smarty $tpl Template
+     * @param array  $banners Array of Advertisement objects
+     * @param Smarty $tpl     Template
      **/
-    public function render($banners, $tpl, $wsUrl = false)
+    public function renderMultiple($banners, $tpl, $wsUrl = false)
     {
         // Extract pk_photos to perform one query
         $pk_photos = array();
@@ -792,7 +928,7 @@ class Advertisement extends Content
         } else {
             $objsArray = array();
             foreach ($pk_photos as $photo) {
-                $objsArray[] = json_decode(file_get_contents($wsUrl.'/ws.php/images/id/'.(int)$photo));
+                $objsArray[] = json_decode(file_get_contents($wsUrl.'/ws/images/id/'.(int) $photo));
             }
             foreach ($objsArray as $item) {
                 $content = new Advertisement();
@@ -818,7 +954,7 @@ class Advertisement extends Content
                 $tpl->assign('banner'.$banner->type_advertisement, $banner);
             }
 
-			// FIXME: This is a workarround until decide what to do into
+            // FIXME: This is a workarround until decide what to do into
             // the Content class
             // This will avoid the the notice messages but doesn't keep
             // the code clean.
@@ -845,11 +981,13 @@ class Advertisement extends Content
                 //Evitar undefined index
                 if (isset($photos[$adv])) {
                     $tpl->assign(
-                        'photo'.$banner->type_advertisement, $photos[$adv]
+                        'photo'.$banner->type_advertisement,
+                        $photos[$adv]
                     );
                 }
             }
         }
+
         // Update numviews
         Advertisement::setNumViews($banners_selected);
     }
@@ -859,7 +997,7 @@ class Advertisement extends Content
      * workaround for Advertisement::render
      *
      * @param string $entry
-     * @param mixed $value
+     * @param mixed  $value
      **/
     public function assign($entry, $value)
     {
@@ -870,7 +1008,7 @@ class Advertisement extends Content
      * Fetch a entry from set of banners,
      * workaround for Advertisement::render
      *
-     * @param string $entry
+     * @param  string $entry
      * @return mixed
      **/
     public function fetch($entry)
@@ -919,3 +1057,4 @@ class Advertisement extends Content
         }
     }
 }
+

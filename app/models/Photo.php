@@ -7,9 +7,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
- use Onm\Message as m,
-     Onm\Settings as s,
-     Onm\StringUtils;
+use Onm\Message as m;
+use Onm\Settings as s;
+use Onm\StringUtils;
+
 /**
  * Photo
  *
@@ -30,7 +31,7 @@ class Photo extends Content
     public $media_type  = null;
     public $author_name = null;
 
-    public function __construct($id=null)
+    public function __construct($id = null)
     {
         parent::__construct($id);
         if (!is_null($id)) {
@@ -38,6 +39,7 @@ class Photo extends Content
         }
 
         $this->content_type = 'Photo';
+        $this->content_type_l10n_name = _('Image');
     }
 
     public function create($data)
@@ -78,7 +80,7 @@ class Photo extends Content
      * @params array $data the data for the photo, must content the
      *                     photo local_file
      **/
-    public function createFromLocalFile($dataSource, $dateForDirectory=null)
+    public function createFromLocalFile($dataSource, $dateForDirectory = null)
     {
 
         $filePath = $dataSource["local_file"];
@@ -133,7 +135,7 @@ class Photo extends Content
             'type_img'     => strtolower($filePathInfo['extension']),
             'media_type'   => 'image',
 
-            'author_name'  => '',
+            'author_name'  => $dataSource['author_name'],
             'pk_author'    => $_SESSION['userid'],
             'fk_publisher' => $_SESSION['userid'],
             'description'  => $dataSource['description'],
@@ -163,11 +165,13 @@ class Photo extends Content
             if ($photoID) {
 
                 if (preg_match('/^(jpeg|jpg|gif|png)$/', strtolower($filePathInfo['extension']))) {
-                    $imageThumbSize = s::get(array(
-                        'image_thumb_size',
-                        'image_inner_thumb_size',
-                        'image_front_thumb_size',
-                    ));
+                    $imageThumbSize = s::get(
+                        array(
+                            'image_thumb_size',
+                            'image_inner_thumb_size',
+                            'image_front_thumb_size',
+                        )
+                    );
 
                     // Thumbnail handler
                     $thumb = new Imagick(
@@ -208,16 +212,20 @@ class Photo extends Content
                     $thumb->writeImage(
                         $uploadDir.$imageThumbSize['image_thumb_size']['width']
                         .'-'.$imageThumbSize['image_thumb_size']['height']
-                        .'-'.$finalPhotoFileName);
+                        .'-'.$finalPhotoFileName
+                    );
 
                 }
 
             } else {
-                Application::getLogger()->notice(sprintf(
-                    'EFE Importer: Unable to register the '
-                    .'photo object %s (destination: %s).',
-                    $dataSource['local_file'], $uploadDir.$finalPhotoFileName
-                ));
+                Application::getLogger()->notice(
+                    sprintf(
+                        'EFE Importer: Unable to register the '
+                        .'photo object %s (destination: %s).',
+                        $dataSource['local_file'],
+                        $uploadDir.$finalPhotoFileName
+                    )
+                );
                 m::add(
                     sprintf(
                         'Unable to register the photo object into OpenNemas.',
@@ -233,11 +241,14 @@ class Photo extends Content
 
             $importedID = null;
 
-            Application::getLogger()->notice(sprintf(
-                'EFE Importer: Unable to creathe the '
-                .'photo file %s (destination: %s).',
-                $dataSource['local_file'], $uploadDir.$finalPhotoFileName
-            ));
+            Application::getLogger()->notice(
+                sprintf(
+                    'EFE Importer: Unable to creathe the '
+                    .'photo file %s (destination: %s).',
+                    $dataSource['local_file'],
+                    $uploadDir.$finalPhotoFileName
+                )
+            );
             m::add(
                 sprintf(
                     'Unable to copy the file of the photo '
@@ -342,11 +353,13 @@ class Photo extends Content
 
                     if (preg_match('/^(jpeg|jpg|gif|png)$/', strtolower($filePathInfo['extension']))) {
 
-                        $imageThumbSize = s::get(array(
-                            'image_thumb_size',
-                            'image_inner_thumb_size',
-                            'image_front_thumb_size',
-                        ));
+                        $imageThumbSize = s::get(
+                            array(
+                                'image_thumb_size',
+                                'image_inner_thumb_size',
+                                'image_front_thumb_size',
+                            )
+                        );
 
                         // Thumbnail handler
                         $thumb = new Imagick(realpath($uploadDir).DIRECTORY_SEPARATOR.$finalPhotoFileName);
@@ -390,16 +403,20 @@ class Photo extends Content
                     }
 
                 } else {
-                    Application::getLogger()->notice(sprintf(
-                        'EFE Importer: Unable to register '
-                        .'the photo object %s (destination: %s).',
-                        $dataSource['local_file'],
-                        $uploadDir.$finalPhotoFileName
-                    ));
-                    throw new Exception(sprintf(
-                        'Unable to register the photo object into OpenNemas.',
-                        $uploadDir.$finalPhotoFileName
-                    ));
+                    Application::getLogger()->notice(
+                        sprintf(
+                            'EFE Importer: Unable to register '
+                            .'the photo object %s (destination: %s).',
+                            $dataSource['local_file'],
+                            $uploadDir.$finalPhotoFileName
+                        )
+                    );
+                    throw new Exception(
+                        sprintf(
+                            'Unable to register the photo object into OpenNemas.',
+                            $uploadDir.$finalPhotoFileName
+                        )
+                    );
                 }
 
                 $photo = new Photo($photoID);
@@ -408,11 +425,14 @@ class Photo extends Content
 
                 $importedID = null;
 
-                Application::getLogger()->notice(sprintf(
-                    'EFE Importer: Unable to creathe the '
-                    .'photo file %s (destination: %s).',
-                    $dataSource['local_file'], $uploadDir.$finalPhotoFileName
-                ));
+                Application::getLogger()->notice(
+                    sprintf(
+                        'EFE Importer: Unable to creathe the '
+                        .'photo file %s (destination: %s).',
+                        $dataSource['local_file'],
+                        $uploadDir.$finalPhotoFileName
+                    )
+                );
                 throw new Exception(
                     sprintf(
                         'Unable to copy the file of the photo '
@@ -487,7 +507,18 @@ class Photo extends Content
         $photo->color       = $this->color;
         $photo->date        = $this->date;
         $photo->address     = $this->address;
+        $photo->latlong     = '';
         $photo->infor       = '';
+
+        if (!empty($photo->address)) {
+            $positions = explode(',', $photo->address);
+            if (is_array($positions)) {
+                $photo->latlong = array(
+                    'lat' => $positions[0],
+                    'long' => $positions[1],
+                );
+            }
+        }
 
         $image = MEDIA_IMG_PATH . $this->path_file.$this->name;
 
@@ -495,26 +526,26 @@ class Photo extends Content
             $size = getimagesize($image, $info);
 
             switch ($size['mime']) {
-                case "image/gif": {
+                case "image/gif":
                     $photo->infor = _("The image type is GIF </br>");
-                } break;
 
-                case "image/png": {
+                    break;
+                case "image/png":
                     $photo->infor = _("The image type is PNG </br>");
-                } break;
 
-                case "image/bmp": {
+                    break;
+                case "image/bmp":
                     $photo->infor = _("The image type is BMP </br>");
-                } break;
 
-                case 'image/jpeg': {
+                    break;
+                case 'image/jpeg':
 
                     $exif = array();
                     if (isset($info)) {
                         foreach ($info as $key => $val) {
                             if ($key != 'APP1') {
-                                $exifData =
-                                    read_exif_data($image, 0, true); break;
+                                $exifData = read_exif_data($image, 0, true);
+                                break;
                             }
                         }
                     }
@@ -613,7 +644,9 @@ class Photo extends Content
                             $photo->infor .=  _("No availabel IPTC data</br>");
                         }
                     }
-                } break;
+                    break;
+                default:
+                    break;
             } // endswitch;
 
         } else {
@@ -656,7 +689,7 @@ class Photo extends Content
         }
         parent::update($data);
 
-        $sql = "UPDATE `photos` SET `author_name`=?,`address`=?, `color`=?, "
+        $sql = "UPDATE `photos` SET `author_name`=?, `address`=?, `color`=?, "
              . "`date`=?, `resolution`=? WHERE `pk_photo`=?";
 
         $values = array(
@@ -755,5 +788,5 @@ class Photo extends Content
 
         return $result;
     }
+}
 
-} //end class

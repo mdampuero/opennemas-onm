@@ -22,10 +22,10 @@
 {/block}
 
 {block name="content"}
-<form action="{$smarty.server.PHP_SELF}" method="POST" name="formulario" id="formulario" {$formAttrs}>
+<form action="{url name=admin_videos_config}" method="POST" name="formulario" id="formulario">
     <div class="top-action-bar">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}video :: Configuration{/t}</h2></div>
+            <div class="title"><h2>{t}Video :: Configuration{/t}</h2></div>
             <ul class="old-button">
                 <li>
                     <a href="{$smarty.server.PHP_SELF}" class="admin_add" value="{t}Go back to list{/t}" title="{t}Go back to list{/t}">
@@ -40,12 +40,6 @@
         {render_messages}
 
         <div id="{$category}">
-
-            <table class="adminheading">
-                 <tr>
-                     <th align="left">{t}Information about video module settings{/t}</th>
-                 </tr>
-            </table>
 
             <table class="adminform" border="0">
                 <tr>
@@ -66,11 +60,11 @@
                                 <input type="text" class="required" id="name" name="video_settings[total_gallery]" value="{$configs['video_settings']['total_gallery']|default:"20"}" />
                             </div>
                             <br />
-                             
+
                         </div>
                     </td>
                     <td> <br/>
-                        <div class="help-block">
+                        <div class="onm-help-block">
 								<div class="title"><h4>{t}Settings{/t}</h4></div>
                                 <div class="content">
                                     <ul>

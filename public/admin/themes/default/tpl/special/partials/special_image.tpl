@@ -69,13 +69,11 @@
                 <tr>
                     <td align="left">
                         <div class="cajaBusqueda">
-                            <input id="stringImageSearch" name="stringImageSearch" type="text"
-                               onkeypress="onImageKeyEnter(event, $('category_imag').options[$('category_imag').selectedIndex].value,encodeURIComponent($('stringImageSearch').value),1);"
-                               onclick="this.select();" value="{t}Search images by title...{/t}"/>
+                            <input id="stringImageSearch" name="stringImageSearch" type="text" value="{t}Search images by title...{/t}"/>
                         </div>
                     </td>
                     <td align="right">
-                        <select id="category_imag" name="category_imag" class="required" onChange="getGalleryImages('list_by_category',this.options[this.selectedIndex].value,'',1);">
+                        <select id="category_imag" name="category_imag" class="required">
                             <option value="0">GLOBAL</option>
                                 {section name=as loop=$allcategorys}
                                     <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if}>{$allcategorys[as]->title}</option>

@@ -8,20 +8,19 @@
  * file that was distributed with this source code.
  **/
 use Onm\Settings as s;
+
 // Setup app
 require_once '../bootstrap.php';
-require_once '../libs/phpmailer/class.phpmailer.php';
+require_once SITE_VENDOR_PATH."/phpmailer/class.phpmailer.php";
 require_once 'recaptchalib.php';
 
 // Setup view
 $tpl = new Template(TEMPLATE_USER);
 
 // Fetch some code
-$category_name = $request->query->filter(
-    'category_name', 'home', FILTER_SANITIZE_STRING
-);
+$category_name = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
 
-require_once("statics_advertisement.php");
+require_once 'statics_advertisement.php';
 
 //If the form was sent
 $action = $request->request->filter('action', null, FILTER_SANITIZE_STRING);
@@ -36,12 +35,8 @@ if (isset($action)
     $configSiteName = s::get('site_name');
     $configMailTo = s::get('newsletter_maillist');
 
-    $recaptcha_challenge_field = $request->request->filter(
-        'recaptcha_challenge_field', null, FILTER_SANITIZE_STRING
-    );
-    $recaptcha_response_field = $request->request->filter(
-        'recaptcha_response_field', null, FILTER_SANITIZE_STRING
-    );
+    $recaptcha_challenge_field = $request->request->filter('recaptcha_challenge_field', null, FILTER_SANITIZE_STRING);
+    $recaptcha_response_field = $request->request->filter('recaptcha_response_field', null, FILTER_SANITIZE_STRING);
 
     // Get reCaptcha validate response
     $resp = recaptcha_check_answer(
@@ -146,14 +141,15 @@ if (isset($action)
                             .'<script>location.href="/home"</script>');
                     }
                     break;
-
                 case 'create_subscriptor':
+
                     if ($data['subscription'] == 'alta') {
                         $data['subscription'] = 1;
                         $data['status'] = 2;
 
                         $user = new Subscriptor();
-                        if ($user->create( $data )) {
+
+                        if ($user->create($data)) {
                             echo('<script language="JavaScript">(!alert("Se ha '
                                 .'subscrito correctamente al boletín."))</script>'
                                 .'<script language="javascript">location.href="/home"</script>');
@@ -170,7 +166,8 @@ if (isset($action)
                         $user = new Subscriptor();
                         $user = $user->getUserByEmail($data['email']);
                         $data['id'] = $user->id;
-                        if ($user->update( $data )) {
+
+                        if ($user->update($data)) {
                             echo('<script language="JavaScript">(!alert("Se ha dado de baja correctamente."))</script>
                                         <script language="javascript">location.href="/home"</script>');
                         } else {
@@ -187,4 +184,6 @@ if (isset($action)
     }
     $tpl->display('static_pages/subscription.tpl');
 }
+
 $tpl->display('static_pages/subscription.tpl');
+

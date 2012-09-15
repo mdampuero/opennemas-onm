@@ -1,15 +1,13 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-js" append}
+    <script>
+        var album_manager_urls = {
+            batch_delete: '{url name=admin_album_batchdelete category=$category}'
+        }
+    </script>
     {script_tag src="/onm/jquery-functions.js" language="javascript"}
 
-    {script_tag src="/utilsalbum.js" language="javascript"}
-
-{/block}
-
-{block name="footer-js" append}
-    {script_tag src="/cropper.js" language="javascript"}
-    {script_tag src="/utilsGallery.js" language="javascript"}
 {/block}
 
 {block name="content"}
@@ -17,7 +15,7 @@
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title">
-                <h2>{t}Album manager{/t} :: {if $category eq 0}Widget Home{else}{$datos_cat[0]->title}{/if}</h2>
+                <h2>{t}Album manager{/t} :: {if $category eq 'widget'}Widget Home{elseif $category eq 'all'}{t}All categories{/t}{else}{$datos_cat[0]->title}{/if}</h2>
             </div>
             <ul class="old-button">
                 {acl isAllowed="ALBUM_DELETE"}
@@ -29,12 +27,12 @@
 				{/acl}
 				{acl isAllowed="ALBUM_AVAILABLE"}
                 <li>
-                    <button value="batchnoFrontpage" name="buton-batchnoFrontpage" id="buton-batchnoFrontpage" type="submit">
+                    <button id="batch-publish" type="submit" name="status" value="0">
                        <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="{t}Unpublish{/t}" alt="{t}Unpublish{/t}" ><br />{t}Unpublish{/t}
                    </button>
                </li>
                <li>
-                   <button value="batchFrontpage" name="buton-batchFrontpage" id="buton-batchFrontpage" type="submit">
+                   <button id="batch-unpublish" type="submit" name="status" value="1">
                        <img border="0" src="{$params.IMAGE_DIR}publish.gif" title="{t}Publish{/t}" alt="{t}Publish{/t}" ><br />{t}Publish{/t}
                    </button>
                </li>
@@ -42,7 +40,7 @@
 
                 {acl isAllowed="ALBUM_CREATE"}
                 <li>
-                    <a href="{$smarty.server.PHP_SELF}?action=new&category={$category}" title="{t}New album{/t}" >
+                    <a href="{url name=admin_album_create category=$category}" title="{t}New album{/t}" >
                         <img src="{$params.IMAGE_DIR}/album.png" alt="{t}New album{/t}"><br />{t}New album{/t}
                     </a>
                 </li>
@@ -60,9 +58,9 @@
                 {acl isAllowed="ALBUM_SETTINGS"}
                 <li class="separator"></li>
                     <li>
-                        <a href="{$smarty.server.PHP_SELF}?action=config" title="{t}Config album module{/t}">
+                        <a href="{url name=admin_albums_config}" title="{t}Config album module{/t}">
                             <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
-                            {t}Configurations{/t}
+                            {t}Settings{/t}
                         </a>
                     </li>
                 {/acl}
@@ -75,62 +73,67 @@
 
         <ul class="pills clearfix">
             <li>
-                <a href="{$smarty.server.SCRIPT_NAME}?action=list&amp;category=widget" {if $category=='widget'}class="active"{/if}>{t}WIDGET HOME{/t}</a>
+                <a href="{url name=admin_albums_widget}" {if $category == 'widget'}class="active"{/if}>{t}WIDGET HOME{/t}</a>
             </li>
             <li>
-                <a href="{$smarty.server.SCRIPT_NAME}?action=list&amp;category=all" {if $category==='all'}class="active"{/if} >{t}All categories{/t}</a>
+                <a href="{url name=admin_albums category=all}" {if $category==='all'}class="active"{/if} >{t}All categories{/t}</a>
             </li>
-           {include file="menu_categories.tpl" home=$smarty.server.SCRIPT_NAME|cat:"?action=list"}
+           {include file="menu_categories.tpl" home={url name=admin_albums l=1}}
         </ul>
 
         {* MENSAJES DE AVISO GUARDAR POS******* *}
         <div id="warnings-validation"></div>
 
-        <table class="listing-table">
+        <table class="table table-hover table-condensed">
             <thead>
                 <tr>
                     <th style="width:15px;">
-                        <input type="checkbox" id="toggleallcheckbox">
+                        <input type="checkbox" class="toggleallcheckbox">
                     </th>
+                    <th></th>
                     <th class="title">{t}Title{/t}</th>
+                    {if $category=='widget' || $category=='all'}<th style="width:65px;" class="left">{t}Section{/t}</th>{/if}
+                    <th class="left nowrap" style="width:100px;">Created</th>
                     <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
-                    {if $category=='widget' || $category=='all'}<th style="width:65px;" class="center">{t}Section{/t}</th>{/if}
-                    <th class="center" style="width:100px;">Created</th>
                     <th class="center" style="width:35px;">{t}Published{/t}</th>
                     {if $category!='widget' && $category!='all'} <th class="center" style="width:35px;">{t}Favorite{/t}</th>{/if}
                     <th class="center" style="width:35px;">{t}Home{/t}</th>
-                    <th class="center" style="width:35px;">{t}Actions{/t}</th>
+                    <th class="right" style="width:110px;">{t}Actions{/t}</th>
                 </tr>
             </thead>
             <tbody class="sortable">
-            {section name=as loop=$albums}
-            <tr data-id="{$albums[as]->pk_album}">
+            {foreach name=as from=$albums item=album}
+            <tr data-id="{$album->pk_album}">
                 <td class="center">
-                    <input type="checkbox" class="minput"  id="selected_{$smarty.section.as.iteration}" name="selected_fld[]" value="{$albums[as]->id}"  style="cursor:pointer;" >
+                    <input type="checkbox" class="minput"  id="selected_{$smarty.section.as.iteration}" name="selected_fld[]" value="{$album->id}"  style="cursor:pointer;" >
                 </td>
                 <td>
-                    <a href="{$smarty.server.PHP_SELF}?action=read&amp;id={$albums[as]->pk_album}" title="{$albums[as]->title|clearslash}">
-                        {$albums[as]->title|clearslash}
+                    {if !empty($album->cover)}
+                        <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$album->cover}" style="max-height:60px; max-width:80px;"/>
+                    {else}
+                        <img src="http://placehold.it/80x60" />
+                    {/if}
+
+                </td>
+                <td>
+                    <a href="{url name=admin_album_show id=$album->pk_album}" title="{$album->title|clearslash}">
+                        {$album->title|clearslash}
                     </a>
                 </td>
-                 <td class="center">
-                    {$albums[as]->views}
-                </td>
                 {if $category=='widget' || $category=='all'}
-                <td class="center">
-                     {$albums[as]->category_title}
+                <td class="left">
+                     {$album->category_name}
                 </td>
                 {/if}
-                <td class="center">
-                         {$albums[as]->created}
-                </td>
+                <td class="center nowrap">{$album->created}</td>
+                <td class="center">{$album->views}</td>
                 <td class="center">
                     {acl isAllowed="ALBUM_AVAILABLE"}
-                        {if $albums[as]->available == 1}
-                                <a href="{$smarty.server.PHP_SELF}?id={$albums[as]->pk_album}&amp;action=change_status&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title="{t}Published{/t}">
+                        {if $album->available == 1}
+                                <a href="{url name=admin_album_toggle_available id=$album->pk_album status=0 category=$category page=$paginacion->_currentPage|default:1}" title="{t}Published{/t}">
                                         <img src="{$params.IMAGE_DIR}publish_g.png" alt="{t}Published{/t}" /></a>
                         {else}
-                                <a href="{$smarty.server.PHP_SELF}?id={$albums[as]->pk_album}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title="{t}Pending{/t}">
+                                <a href="{url name=admin_album_toggle_available id=$album->pk_album status=1 category=$category page=$paginacion->_currentPage|default:1}" title="{t}Pending{/t}">
                                         <img src="{$params.IMAGE_DIR}publish_r.png" alt="{t}Pending{/t}"/></a>
                         {/if}
                     {/acl}
@@ -138,85 +141,77 @@
                  {if $category!='widget' && $category!='all'}
                 <td class="center">
                     {acl isAllowed="ALBUM_FAVORITE"}
-                        {if $albums[as]->favorite == 1}
-                           <a href="{$smarty.server.PHP_SELF}?id={$albums[as]->id}&amp;action=change_favorite&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="favourite_on" title="{t}Take out from frontpage{/t}"></a>
+                        {if $album->favorite == 1}
+                           <a href="{url name=admin_album_toggle_favorite id=$album->pk_album status=0 category=$category page=$paginacion->_currentPage|default:1}" class="favourite_on" title="{t}Take out from frontpage{/t}"></a>
                         {else}
-                            <a href="{$smarty.server.PHP_SELF}?id={$albums[as]->id}&amp;action=change_favorite&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="favourite_off" title="{t}Put in frontpage{/t}"></a>
+                            <a href="{url name=admin_album_toggle_favorite id=$album->pk_album status=1 category=$category page=$paginacion->_currentPage|default:1}" class="favourite_off" title="{t}Put in frontpage{/t}"></a>
                         {/if}
                     {/acl}
                 </td>
                 {/if}
                 <td class="center">
                     {acl isAllowed="ALBUM_HOME"}
-                        {if $albums[as]->in_home == 1}
-                           <a href="{$smarty.server.PHP_SELF}?id={$albums[as]->id}&amp;action=change_inHome&amp;status=0&amp;category={$category}&amp;page={$page|default:0}" class="no_home" title="{t}Take out from home{/t}"></a>
+                        {if $album->in_home == 1}
+                           <a href="{url name=admin_album_toggle_inhome id=$album->pk_album status=0 category=$category page=$paginacion->_currentPage|default:1}" class="no_home" title="{t}Take out from home{/t}"></a>
                         {else}
-                            <a href="{$smarty.server.PHP_SELF}?id={$albums[as]->id}&amp;action=change_inHome&amp;status=1&amp;category={$category}&amp;page={$page|default:0}" class="go_home" title="{t}Put in home{/t}"></a>
+                            <a href="{url name=admin_album_toggle_inhome id=$album->pk_album status=1 category=$category page=$paginacion->_currentPage|default:1}" class="go_home" title="{t}Put in home{/t}"></a>
                         {/if}
                     {/acl}
                 </td>
-                <td class="center">
-                    <ul class="action-buttons">
+                <td class="right">
+                    <div class="btn-group">
                         {acl isAllowed="ALBUM_UPDATE"}
-                        <li>
-                           <a href="{$smarty.server.PHP_SELF}?action=read&amp;id={$albums[as]->pk_album}" title="{t}Edit{/t}" >
-                                <img src="{$params.IMAGE_DIR}edit.png" />
-                            </a>
-                        </li>
+                        <a class="btn" href="{url name=admin_album_show id=$album->id}" title="{t}Edit{/t}" >
+                            <i class="icon-pencil"></i> {t}Edit{/t}
+                        </a>
                         {/acl}
+
                         {acl isAllowed="ALBUM_DELETE"}
-                        <li>
-                            <a class="del" data-controls-modal="modal-from-dom" data-id="{$albums[as]->id}"
-                               data-title="{$albums[as]->title|capitalize}" href="#" title="{t}Delete{/t}">
-                               <img src="{$params.IMAGE_DIR}trash.png" />
-                            </a>
-                        </li>
+                        <a class="del btn btn-danger" data-controls-modal="modal-from-dom"
+                           data-id="{$album->id}"
+                           data-title="{$album->title|capitalize}"
+                           data-url="{url name=admin_album_delete id=$album->id}"
+                           href="{url name=admin_album_delete id=$album->id}" >
+                            <i class="icon-trash icon-white"></i>
+                        </a>
                         {/acl}
-                    </ul>
+                    </div>
                 </td>
 
             </tr>
-            {sectionelse}
+            {foreachelse}
             <tr>
                 <td class="empty" colspan=9>{t}There is no albums yet{/t}</td>
             </tr>
-            {/section}
+            {/foreach}
             </tbody>
             <tfoot>
-              <td colspan="9">
-                {$pagination|default:""}&nbsp;
+              <td colspan="9" class="center">
+                <div class="pagination">
+                    {$pagination->links|default:""}
+                </div>
               </td>
             </tfoot>
         </table>
 
-        <input type="hidden" name="page" id="page" value="{$page|default:0}" />
-        <input type="hidden" name="category" id="category" value="{$category}" />
-        <input type="hidden" id="status" name="status" value="" />
-        <input type="hidden" id="action" name="action" value="" />
-        <input type="hidden" name="id" id="id" value="{$id|default:""}" />
+        <input type="hidden" name="page" id="page" value="{$page}" />
     </div>
 </form>
     <script>
-        // <![CDATA[
-        jQuery('#buton-batchnoFrontpage').on('click', function(){
-            jQuery('#action').attr('value', "batchFrontpage");
-            jQuery('#status').attr('value', "0");
-            jQuery('#formulario').submit();
-            e.preventDefault();
+    // <![CDATA[
+        jQuery('#batch-publish').on('click', function(){
+            jQuery('#formulario').attr('action', '{url name=admin_album_batchpublish}');
         });
-        jQuery('#buton-batchFrontpage').on('click', function(){
-            jQuery('#action').attr('value', "batchFrontpage");
-            jQuery('#status').attr('value', "1");
-            jQuery('#formulario').submit();
-            e.preventDefault();
+        jQuery('#batch-unpublish').on('click', function(){
+            jQuery('#formulario').attr('action', '{url name=admin_album_batchpublish}');
         });
 
         {if $category eq 'widget'}
             jQuery(document).ready(function() {
                 makeSortable();
             });
-        // ]]>
         {/if}
+    // ]]>
     </script>
 
     {include file="album/modals/_modalDelete.tpl"}

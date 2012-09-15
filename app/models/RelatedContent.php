@@ -53,9 +53,15 @@ class RelatedContent
      *
      * @return boolean true if relation was created sucessfully.
      **/
-    public function create($contentID, $contentID2, $position = 1, $posint = 1,
-                           $verport = null, $verint = null, $relation = null)
-    {
+    public function create(
+        $contentID,
+        $contentID2,
+        $position = 1,
+        $posint = 1,
+        $verport = null,
+        $verint = null,
+        $relation = null
+    ) {
 
         $sql = "INSERT INTO related_contents
                 (`pk_content1`, `pk_content2`,
@@ -397,7 +403,7 @@ class RelatedContent
     public function getHomeRelations($contentID)
     {
         $sql = "SELECT DISTINCT pk_content2 FROM related_contents "
-             . "WHERE pk_content1=? AND verportada=2 ORDER BY position DESC";
+             . "WHERE pk_content1=? AND verportada=2 ORDER BY position ASC";
         $values = array($contentID);
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
@@ -452,3 +458,4 @@ class RelatedContent
         return $output;
     }
 }
+

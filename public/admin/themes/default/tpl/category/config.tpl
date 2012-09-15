@@ -19,13 +19,13 @@
 {/block}
 
 {block name="content"}
-<form action="{$smarty.server.PHP_SELF}" method="POST" name="formulario" id="formulario" {$formAttrs}>
+<form action="{url name=admin_categories_config}" method="POST" name="formulario" id="formulario">
     <div class="top-action-bar">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Sections :: Configuration{/t}</h2></div>
+            <div class="title"><h2>{t}Category manager{/t} :: {t}Configuration{/t}</h2></div>
             <ul class="old-button">
                 <li>
-                    <a href="{$smarty.server.PHP_SELF}" class="admin_add" title="{t}Go back to list{/t}">
+                    <a href="{url name=admin_categories}" class="admin_add" title="{t}Go back to list{/t}">
                     <img src="{$params.IMAGE_DIR}previous.png" title="{t}Sync list  with server{/t}" alt="{t}Go back to list{/t}" ><br />{t}Go back to list{/t}
                     </a>
                 </li>
@@ -37,12 +37,6 @@
         {render_messages}
 
         <div id="c-{$category}">
-
-            <table class="adminheading">
-                 <tr>
-                     <th>{t}Information about sections module settings{/t}</th>
-                 </tr>
-            </table>
 
             <table class="adminform">
                 <tbody>

@@ -1,5 +1,4 @@
 {is_module_activated name="IMAGE_MANAGER,VIDEO_MANAGER"}
-<h2>{t}Multimedia associated to this article:{/t}</h2>
 <table style="width:100%">
     {is_module_activated name="IMAGE_MANAGER"}
     <tr>
@@ -55,12 +54,12 @@
                                 {/if}
                             </div>
                             <div class="article-resource-image-info">
-                                <div><label>{t}File name{/t}</label>     <span class="filename">{$photo2->name|default:'default_img.jpg'}</span></div>
-                                <div><label>{t}Image size{/t}</label>    <span class="image_size">{$photo2->width|default:0} x {$photo1->height|default:0} (px)</span></div>
-                                <div><label>{t}File size{/t}</label>     <span class="file_size">{$photo2->size|default:0} Kb</span></div>
-                                <div><label>{t}Creation date{/t}</label> <span class="created_time">{$photo2->created|default:""}</span></div>
-                                <div><label>{t}Description{/t}</label>   <span class="description">{$photo2->description|escape:'html'}</span></div>
-                                <div><label>{t}Tags{/t}</label>          <span class="tags">{$photo2->metadata|default:""}</span></div>
+                                <div><strong>{t}File name{/t}</strong>     <span class="filename">{$photo2->name|default:'default_img.jpg'}</span></div>
+                                <div><strong>{t}Image size{/t}</strong>    <span class="image_size">{$photo2->width|default:0} x {$photo1->height|default:0} (px)</span></div>
+                                <div><strong>{t}File size{/t}</strong>     <span class="file_size">{$photo2->size|default:0} Kb</span></div>
+                                <div><strong>{t}Creation date{/t}</strong> <span class="created_time">{$photo2->created|default:""}</span></div>
+                                <div><strong>{t}Description{/t}</strong>   <span class="description">{$photo2->description|escape:'html'}</span></div>
+                                <div><strong>{t}Tags{/t}</strong>          <span class="tags">{$photo2->metadata|default:""}</span></div>
                             </div>
                         </div>
                         <div id="footer_img_interior" class="article-resource-footer">
@@ -107,29 +106,22 @@
         </td>
         <td style="width:430px">
             <div style="border:1px double #ccc; border-bottom:0 none; background-color:#EEE; padding:10px;">
-                <a onclick="new Effect.toggle($('photos_container'),'blind')" ><strong>{t}Available images{/t}</strong></a>
+                <strong>{t}Available images{/t}</strong>
             </div>
             <div id="photos_container" class="photos" style="border:1px solid #ccc;  padding:7px;">
-                <table>
-                    <tr>
-                        <td >
-                            <input id="stringImageSearch" name="stringImageSearch" type="text"
-                               onkeypress="onImageKeyEnter(event, $('category_imag').options[$('category_imag').selectedIndex].value,encodeURIComponent($('stringImageSearch').value),1);"
-                               onclick="this.select();" placeholder="{t}Search images by title...{/t}" style="width: 150px;"/>
-                        </td>
-                        <td>
-                            <select style="width:140px" id="category_imag" name="category_imag" class="required" onChange="getGalleryImages('listByCategory',this.options[this.selectedIndex].value,'', 1);">
-                                <option value="0">GLOBAL</option>
-                                    {section name=as loop=$allcategorys}
-                                        <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if}>{$allcategorys[as]->title}</option>
-                                        {section name=su loop=$subcat[as]}
-                                                <option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category}selected{/if}>&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
-                                        {/section}
-                                    {/section}
-                            </select>
-                        </td>
-                    </tr>
-                </table>
+                <div class="input-append">
+                    <input id="stringImageSearch" name="stringImageSearch" type="text"
+                       placeholder="{t}Search images by title...{/t}" style="width: 150px;" class="noentersubmit"/>
+                    <select style="width:140px" id="category_imag" name="category_imag">
+                        <option value="0">GLOBAL</option>
+                            {section name=as loop=$allcategorys}
+                                <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if}>{$allcategorys[as]->title}</option>
+                                {section name=su loop=$subcat[as]}
+                                        <option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category}selected{/if}>&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
+                                {/section}
+                            {/section}
+                    </select>
+                </div>
                 <div id="photos">
                     {*AJAX imageGallery *}
                 </div>
@@ -138,6 +130,8 @@
     </tr>
     {/is_module_activated}
 
+
+    {acl isAllowed="VIDEO_ADMIN"}
     {is_module_activated name="VIDEO_MANAGER"}
     <tr>
         <td colspan=2><hr></td>
@@ -180,7 +174,7 @@
                             </div>
                         </div><!-- / -->
                         <div class="article-resource-footer">
-                            <label for="title">{t}Footer text for frontpage image:{/t}</label>
+                            <!-- <label for="title">{t}Footer text for frontpage image:{/t}</label> -->
                             <!-- <textarea name="img1_footer" style="width:95%" class="related-element-footer">{$article->img1_footer|clearslash|escape:'html'}</textarea> -->
                             <input type="hidden" name="fk_video" value="{$article->fk_video|default:""}" class="related-element-id" />
                         </div>
@@ -225,38 +219,28 @@
                 <strong>{t}Available videos{/t}</strong>
             </div>
             <div id="videos-container" class="photos" style=" border:1px solid #ccc;  padding:7px;">
-                <table>
-                    <tr>
-                        <td>
-                            <div class="cajaBusqueda" style="width:100%;" >
-                                <input class="textoABuscar" id="stringVideoSearch" name="stringVideoSearch" type="text"
-                                       onkeypress="onVideoKeyEnter(event, $('category_imag').options[$('category_video').selectedIndex].value, $('stringVideoSearch').value,1);"
-                                       onclick="this.select();" placeholder="{t}Search videos by title...{/t}"  style="width: 150px;"
-                                       />
-                            </div>
-                        </td>
-                        <td>
-                            <select style="width:140px"  id="category_video" name="category_video" class="required" onChange="getGalleryVideos('listByCategory',this.options[this.selectedIndex].value,'', 1,'videos');">
-                                <option value="0">GLOBAL</option>
-                                {section name=as loop=$allcategorys}
-                                    <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if}>{$allcategorys[as]->title}</option>
-                                    {section name=su loop=$subcat[as]}
-                                            <option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category}selected{/if}>&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
-                                    {/section}
-                                {/section}
-                            </select>
-                        </td>
-                    </tr>
-                </table>
-                <br>
+                <div class="input-append">
+                    <input class="textoABuscar noentersubmit" id="stringVideoSearch" name="stringVideoSearch" type="text"
+                           placeholder="{t}Search videos by title...{/t}"  style="width: 150px;"
+                           />
+                    <select style="width:140px"  id="category_video" name="category_video">
+                        <option value="0">GLOBAL</option>
+                        {section name=as loop=$allcategorys}
+                            <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if}>{$allcategorys[as]->title}</option>
+                            {section name=su loop=$subcat[as]}
+                                    <option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category}selected{/if}>&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
+                            {/section}
+                        {/section}
+                    </select>
+                </div>
                 <div id="videos">
-                    {*AJAX videoGallery *}
+                    <!-- Ajax -->
                </div>
             </div>
         </td>
     </tr>
-
     {/is_module_activated}
+    {/acl}
 </table>
 
 {is_module_activated name="IMAGE_MANAGER"}
@@ -277,9 +261,43 @@ jQuery(document).ready(function($){
         };
     });
 
+    load_ajax_in_container('{url name=admin_images_content_provider_gallery category=$category}', $('#photos'));
+
+    $('#stringImageSearch, #category_imag').on('change', function(e, ui) {
+        var category = $('#category_imag option:selected').val();
+        var text = $('#stringImageSearch').val();
+        var url = '{url name=admin_images_content_provider_gallery}?'+'category='+category+'&metadatas='+encodeURIComponent(text);
+        load_ajax_in_container(
+            url,
+            $('#photos')
+        );
+    });
+
+    $('#photos').on('click', '.pager a', function(e, ui) {
+        e.preventDefault();
+        var link = $(this);
+        load_ajax_in_container(link.attr('href'), $('#photos'));
+    });
+
+    load_ajax_in_container('{url name=admin_videos_content_provider_gallery category=$category}', $('#videos'));
+
+    $('#stringVideoSearch, #category_video').on('change', function(e, ui) {
+        var category = $('#category_video option:selected').val();
+        var text = $('#stringVideoSearch').val();
+        var url = '{url name=admin_videos_content_provider_gallery}?'+'category='+category+'&metadatas='+encodeURIComponent(text);
+        load_ajax_in_container(
+            url,
+            $('#videos')
+        );
+    });
+
+    $('#videos').on('click', '.pager a', function(e, ui) {
+        e.preventDefault();
+        var link = $(this);
+        load_ajax_in_container(link.attr('href'), $('#videos'));
+    });
 
 });
-getGalleryImages('listByCategory','{$category}','','1');
 </script>
 {/is_module_activated}
 
@@ -301,7 +319,7 @@ jQuery(document).ready(function($){
         };
     });
 });
-getGalleryVideos('listByCategory','{$category}','','1', 'videos');
+// getGalleryVideos('listByCategory','{$category}','','1', 'videos');
 </script>
 {/is_module_activated}
 <script>

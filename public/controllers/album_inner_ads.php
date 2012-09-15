@@ -14,9 +14,10 @@ $banners = $advertisement->getAdvertisements(array(501, 502, 503, 509, 510), $ca
 $cm = new ContentManager();
 $banners = $cm->getInTime($banners);
 
-$advertisement->render($banners, $advertisement);
+$advertisement->renderMultiple($banners, $advertisement);
 
 $intersticial = $advertisement->getIntersticial(550, '$category');
 if (!empty($intersticial)) {
-    $advertisement->render(array($intersticial), $advertisement);
+    $advertisement->renderMultiple(array($intersticial), $advertisement);
 }
+

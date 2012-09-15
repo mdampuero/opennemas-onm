@@ -26,13 +26,12 @@ $page       = $request->query->filter('page', 1, FILTER_VALIDATE_INT);
 $tpl->assign('actual_category', 'opinion'); // Used in renderMenu
 
 // Fetch information for some uncached parts of the view
-require_once "opinion_index_advertisement.php";
+require_once 'opinion_index_advertisement.php';
 
 // Generate the ID for use it to fetch caches
 $cacheID = 'opinion|'.(($authorID != '') ? $authorID.'|' : '').$page;
 
 switch ($action) {
-
     // Index frontpage
     case 'list_opinions':
         // Don't execute the app logic if there are caches available
@@ -41,7 +40,8 @@ switch ($action) {
             $cm = new ContentManager();
 
             // Fetch last opinions from editorial
-            $editorial = $cm->find('Opinion',
+            $editorial = $cm->find(
+                'Opinion',
                 'opinions.type_opinion=1 '.
                 'AND contents.available=1 '.
                 'AND contents.in_home=1 '.
@@ -72,34 +72,50 @@ switch ($action) {
                 $tpl->assign('director', $director[0]);
             }
 
-            $_limit ='LIMIT '.(($page-1)*ITEMS_PAGE).', '.(($page)*ITEMS_PAGE);
-            $url    ='opinion';
+            if ($page == 1) {
 
-            $total_opinions = $cm->count(
+                // Fetch home opinions of contributors and
+                // paginate them by ITEM_PAGE
+                $opinions = $cm->find(
+                    'Opinion',
+                    'in_home=1 and available=1 and type_opinion=0',
+                    'ORDER BY position ASC, starttime DESC '
+                );
+                $totalHome = count($opinions);
+
+            } else {
+                $_limit ='LIMIT '.(($page-2)*ITEMS_PAGE).', '.(($page-1)*ITEMS_PAGE);
+                // Fetch last opinions of contributors and
+                // paginate them by ITEM_PAGE
+                $opinions = $cm->find(
+                    'Opinion',
+                    'in_home=0 and available=1 and type_opinion=0',
+                    'ORDER BY starttime DESC '.$_limit
+                );
+            }
+            // Added ITEMS_PAGE for count first page
+            $total_opinions =  ITEMS_PAGE + $cm->count(
                 'Opinion',
-                'in_home=1 and available=1 and type_opinion=0',
+                'in_home=0 and available=1 and type_opinion=0',
                 'ORDER BY type_opinion DESC, created DESC '
-            );
-
-            // Fetch last opinions of contributors and
-            // paginate them by ITEM_PAGE
-            $opinions = $cm->find(
-                'Opinion',
-                'in_home=1 and available=1 and type_opinion=0',
-                'ORDER BY type_opinion DESC, created DESC '.$_limit
             );
 
             foreach ($opinions as &$opinion) {
                 $opinion->author           = new Author($opinion->fk_author);
                 $opinion->author->photo    =
-                    $opinion->author->get_photo($opinion->fk_author_img);
+                        $opinion->author->get_photo($opinion->fk_author_img);
                 $opinion->name             = $opinion->author->name;
                 $opinion->author_name_slug = StringUtils::get_title($opinion->name);
             }
 
+            $url    ='opinion';
             $pagination = $cm->create_paginate(
                 $total_opinions,
-                ITEMS_PAGE, 2, 'URL', $url, ''
+                ITEMS_PAGE,
+                2,
+                'URL',
+                $url,
+                ''
             );
 
             $tpl->assign('editorial', $editorial);
@@ -109,8 +125,8 @@ switch ($action) {
         }
 
         $tpl->display('opinion/opinion_frontpage.tpl', $cacheID);
-        break;
 
+        break;
     case 'list_op_author':  // Author frontpage
 
         // Don't execute the app logic if there are caches available
@@ -174,25 +190,33 @@ switch ($action) {
             );
 
             $pagination = $cm->create_paginate(
-                $countOpinions, ITEMS_PAGE, 2, 'URL', $url, ''
+                $countOpinions,
+                ITEMS_PAGE,
+                2,
+                'URL',
+                $url,
+                ''
             );
 
             // Clean weird variables from this assign (must check
             // all the templates)
             // pagination_list cahnge to pagination
             // drop author_id, $author_name as they are inside author var
-            $tpl->assign(array(
-                'pagination_list' => $pagination,
-                'opinions'        => $opinions,
-                'author_id'       => $authorID,
-                'author_slug'     => strtolower($authorSlug),
-                'author'          => $author,
-                'author_name'     => $author->name,
-                'page'            => $page,
-            ));
+            $tpl->assign(
+                array(
+                    'pagination_list' => $pagination,
+                    'opinions'        => $opinions,
+                    'author_id'       => $authorID,
+                    'author_slug'     => strtolower($authorSlug),
+                    'author'          => $author,
+                    'author_name'     => $author->name,
+                    'page'            => $page,
+                )
+            );
 
         } // End if isCached
 
         $tpl->display('opinion/opinion_author_index.tpl', $cacheID);
         break;
 }
+

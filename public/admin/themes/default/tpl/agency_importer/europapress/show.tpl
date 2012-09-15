@@ -13,13 +13,13 @@
         <div class="title"><h2>{t}EuropaPress importer{/t} :: {t}Article information{/t}</h2></div>
         <ul class="old-button">
             <li>
-                <a href="{$smarty.server.PHP_SELF}?action=import&amp;id={$element->xmlFile}" title="{t}Import{/t}">
-                <img src="{$params.IMAGE_DIR}archive_no.png" alt="{t}Import{/t}" ><br />{t}Import{/t}
+                <a href="{url name=admin_importer_europapress_import id=$element->xmlFile}" title="{t}Import{/t}">
+                    <img src="{$params.IMAGE_DIR}archive_no.png" alt="{t}Import{/t}" ><br />{t}Import{/t}
                 </a>
             </li>
             <li>
-                <a href="{$smarty.server.PHP_SELF}?action=list" title="{t}Go back to list{/t}">
-                <img src="{$params.IMAGE_DIR}previous.png" alt="{t}Go back to list{/t}" ><br />{t}Go back to list{/t}
+                <a href="{url name=admin_importer_europapress}" title="{t}Go back to list{/t}">
+                    <img src="{$params.IMAGE_DIR}previous.png" alt="{t}Go back to list{/t}" ><br />{t}Go back to list{/t}
                 </a>
             </li>
         </ul>

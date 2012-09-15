@@ -12,11 +12,13 @@ function smarty_function_renderLink($params,&$smarty) {
 
     switch ($item->type){
         case 'category':
-            if( preg_match('/videos.php/',$_SERVER['SCRIPT_NAME']) ) {
+            if( preg_match('/videos.php/', $_SERVER['SCRIPT_NAME']) ) {
                 $name_url='video';
-            } elseif (preg_match('/album.php/',$_SERVER['SCRIPT_NAME']) ) {
+            } elseif (preg_match('/album.php/', $_SERVER['SCRIPT_NAME']) ) {
                 $name_url='album';
-            } elseif (preg_match('/poll.php/',$_SERVER['SCRIPT_NAME']) ) {
+            } elseif (preg_match('/special.php/', $_SERVER['SCRIPT_NAME']) ) {
+                $name_url='especiales';
+            } elseif (preg_match('/poll.php/', $_SERVER['SCRIPT_NAME']) ) {
                       $name_url='encuesta';
             }
             $link = "/$name_url/$item->link/";
@@ -41,7 +43,7 @@ function smarty_function_renderLink($params,&$smarty) {
              $link = "$item->link";
         break;
         case 'syncCategory':
-             $link = "/$name_url/$item->link/ext/";
+             $link = "/ext$name_url/$item->link/";
         break;
         default:
              $link = "/$item->link/";

@@ -2,57 +2,63 @@
 
 {block name="header-js" append}
     {script_tag src="/onm/jquery-functions.js" language="javascript"}
+    <script>
+    var cover_manager_urls = {
+        batchDelete: '{url name=admin_covers_batchdelete category=$category page=$page}',
+        saveWidgetPositions: '{url name=admin_covers_savepositions category=$category page=$page}'
+    }
+    </script>
 {/block}
 
 {block name="content"}
-<form action="#" method="get" name="formulario" id="formulario">
+<form action="{url name=admin_covers category=$category page=$page}" method="get" name="formulario" id="formulario">
 
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
-        <div class="title"><h2>{t}Newsstand Manager{/t}::&nbsp; {if !empty($datos_cat[0])}{$datos_cat[0]->title}{else}{t}Widget Home{/t}{/if}</h2></div>
+        <div class="title"><h2>{t}Covers Manager{/t}::&nbsp; {if !empty($datos_cat[0])}{$datos_cat[0]->title}{else}{t}Widget Home{/t}{/if}</h2></div>
         <ul class="old-button">
             {acl isAllowed="KIOSKO_DELETE"}
             <li>
-                <a class="delChecked" data-controls-modal="modal-kiosko-batchDelete" href="#" title="{t}Delete{/t}">
+                <a class="batch-delete-button" data-controls-modal="modal-kiosko-batchDelete" href="#" title="{t}Delete{/t}">
                     <img src="{$params.IMAGE_DIR}trash.png" border="0"  title="{t}Delete{/t}" alt="{t}Delete{/t}" ><br />{t}Delete{/t}
                 </a>
             </li>
             {/acl}
             {acl isAllowed="KIOSKO_AVAILABLE"}
             <li>
-                    <button value="batchnoFrontpage" name="buton-batchnoFrontpage" id="buton-batchnoFrontpage" type="submit">
+                <button name="status" value="0" id="batch-publish" type="submit">
                        <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="{t}Unpublish{/t}" alt="{t}Unpublish{/t}" ><br />{t}Unpublish{/t}
-                   </button>
-               </li>
-               <li>
-                   <button value="batchFrontpage" name="buton-batchFrontpage" id="buton-batchFrontpage" type="submit">
-                       <img border="0" src="{$params.IMAGE_DIR}publish.gif" title="{t}Publish{/t}" alt="{t}Publish{/t}" ><br />{t}Publish{/t}
-                   </button>
+                </button>
+            </li>
+            <li>
+                <button name="status" value="1" id="batch-unpublish" type="submit">
+                    <img border="0" src="{$params.IMAGE_DIR}publish.gif" title="{t}Publish{/t}" alt="{t}Publish{/t}" ><br />{t}Publish{/t}
+                </button>
             </li>
             {/acl}
             {acl isAllowed="KIOSKO_CREATE"}
             <li class="separator"></li>
             <li>
-                <a href="{$smarty.server.PHP_SELF}?action=new" title="{t}New cover{/t}">
-                    <img border="0" src="{$params.IMAGE_DIR}article_add.png" title="Nueva" alt="Nueva"><br />{t}New ePaper{/t}
+                <a href="{url name=admin_cover_create}" title="{t}New cover{/t}">
+                    <img border="0" src="{$params.IMAGE_DIR}article_add.png" title="Nueva" alt="Nueva"><br />{t}Create{/t}
                 </a>
             </li>
             {/acl}
+            {if $category eq 'widget'}
             {acl isAllowed="KIOSKO_HOME"}
-             {if $category eq 'favorite'}
                 <li>
-                    <a href="#" class="admin_add" onClick="javascript:saveSortPositions('{$smarty.server.PHP_SELF}');" title="Guardar Positions" alt="Guardar Posiciones">
+                    <a href="#" class="admin_add" onClick="javascript:saveSortPositions('{url name=admin_covers_savepositions}');" title="Guardar Positions" alt="Guardar Posiciones">
                         <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar Cambios" alt="Guardar Posiciones"><br />{t}Save positions{/t}
                     </a>
                 </li>
-            {/if}
             {/acl}
+            {/if}
             {acl isAllowed="KIOSKO_ADMIN"}
             <li class="separator"></li>
                 <li>
-                    <a href="{$smarty.server.PHP_SELF}?action=config" title="{t}Config kiosko module{/t}">
+                    <a href="{url name=admin_covers_config}" title="{t}Config covers module{/t}">
                         <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
-                        {t}Configurations{/t}
+                        {t}Settings{/t}
                     </a>
                 </li>
             {/acl}
@@ -63,43 +69,43 @@
 
 <div class="wrapper-content">
 
-{render_messages}
-
-    {* ZONA MENU CATEGORIAS ******* *}
+    {render_messages}
 
     <ul class="pills clearfix">
          <li>
-            <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=favorite" {if $category=='favorite'}class="active"{/if}>{t}WIDGET{/t}</a>
+            <a href="{url name=admin_covers_widget}" {if $category=='widget'}class="active"{/if}>{t}WIDGET{/t}</a>
          </li>
-         {include file="menu_categories.tpl" home=$smarty.server.SCRIPT_NAME|cat:"?action=list"}
+         <li>
+            <a href="{url name=admin_covers}" {if $category == 'all'}class="active"{/if}>{t}All{/t}</a>
+         </li>
+         {include file="menu_categories.tpl" home={url name=admin_covers l=1}}
     </ul>
-
-    <br />
-    {* MENSAJES DE AVISO GUARDAR POS******* *}
     <div id="warnings-validation"></div>
 
-    <table class="listing-table">
+    <table class="table table-hover table-condensed">
 
-        {if count($portadas) > 0}
+        {if count($covers) > 0}
         <thead>
             <tr>
-                <th style="width:15px;"><input type="checkbox" id="toggleallcheckbox"></th>
-                <th align="center" style="width:100px;">{t}Cover{/t}</th>
-                <th align="center">{t}Title{/t}</th>
-                {if $category=='widget' || $category=='all'}<th style="width:65px;" class="center">{t}Section{/t}</th>{/if}
-                <th align="center" style="width:90px;">{t}Date{/t}</th>
-                <th align="center" style="width:10px;">{t}Publisher{/t}</th>
-                <th align="center" style="width:90px;">{t}Last editor{/t}</th>
-                <th align="center" style="width:10px;">{t}Published{/t}</th>
-                {if $category!='widget' && $category!='all'} <th class="center" style="width:35px;">{t}Favorite{/t}</th>{/if}
-                <th align="center" style="width:10px;">{t}Home{/t}</th>
-                <th align="center" style="width:50px;">{t}Actions{/t}</th>
+                <th><input type="checkbox" class="toggleallcheckbox"></th>
+                <th class="center">{t}Thumbnail{/t}</th>
+                <th class="center">{t}Title{/t}</th>
+                {if $category=='widget' || $category == 'all'}
+                    <th class="center">{t}Section{/t}</th>
+                {/if}
+                <th class="center">{t}Date{/t}</th>
+                <th class="center">{t}Price{/t}</th>
+                <th class="center">{t}Last editor{/t}</th>
+                <th class="center">{t}Published{/t}</th>
+                <th class="center">{t}Favorite{/t}</th>
+                <th class="center">{t}Home{/t}</th>
+                <th class="center">{t}Actions{/t}</th>
             </tr>
         </thead>
         {else}
         <thead>
             <tr>
-                <th colspan="9">
+                <th colspan="11">
                     &nbsp;
                 </th>
 
@@ -107,138 +113,116 @@
         </thead>
         {/if}
         <tbody class="sortable">
-        {section name=as loop=$portadas}
-        <tr data-id="{$portadas[as]->pk_kiosko}">
+        {foreach from=$covers item=cover}
+        <tr data-id="{$cover->pk_kiosko}">
             <td class="center">
-                    <input type="checkbox" class="minput"  id="selected_{$smarty.section.as.iteration}" name="selected_fld[]" value="{$portadas[as]->id}"  style="cursor:pointer;" >
+                <input type="checkbox" class="minput"  id="selected_{$smarty.section.as.iteration}" name="selected_fld[]" value="{$cover->id}"  style="cursor:pointer;" >
             </td>
-            <td >
-                <img src="{$KIOSKO_IMG_URL}{$portadas[as]->path}{$portadas[as]->name|regex_replace:"/.pdf$/":".jpg"}"
-                     title="{$portadas[as]->title|clearslash}" alt="{$portadas[as]->title|clearslash}" height="80"
-                     onmouseover="Tip('<img src={$KIOSKO_IMG_URL}{$portadas[as]->path}650-{$portadas[as]->name|regex_replace:"/.pdf$/":".jpg"} >', SHADOW, true, ABOVE, true, WIDTH, 640)" onmouseout="UnTip()" />
+            <td class="center">
+                <img src="{$KIOSKO_IMG_URL}{$cover->path}{$cover->name|regex_replace:"/.pdf$/":".jpg"}"
+                    title="{$cover->title|clearslash}" alt="{$cover->title|clearslash}" style="height:180px"/>
             </td>
-            <td >
-                {$portadas[as]->title|clearslash}
+            <td class="center">
+                {$cover->title|clearslash}
             </td>
-            {if $category=='widget' || $category=='all'}
-                <td class="center">
-                     {$albums[as]->category_title}
-                </td>
+            {if $category == 'widget' || $category == 'all'}
+            <td class="center">
+                 {$cover->category_title}
+            </td>
             {/if}
-            <td align="center">
-                {$portadas[as]->date}
+            <td class="center">
+                {$cover->date}
             </td>
-            <td  align="center">
-                {$portadas[as]->publisher}
+            <td class="center">
+                {$cover->price|number_format:2:".":","|default:"0"}€
             </td>
-            <td  align="center">
-                {$portadas[as]->editor}
+            <td  class="center">
+                {$cover->editor}
             </td>
-             <td align="center">
+             <td class="center">
                 {acl isAllowed="KIOSKO_AVAILABLE"}
-                    {if $portadas[as]->available == 1}
-                        <a href="?id={$portadas[as]->pk_kiosko}&amp;action=change_status&amp;status=0&amp;page={$paginacion->_currentPage}&amp;category={$category}" title="Publicado">
+                    {if $cover->available == 1}
+                        <a href="{url name=admin_cover_toggleavailable id=$cover->id status=0 page=$page category=$category}" title="Publicado">
                             <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" />
                         </a>
                     {else}
-                        <a href="?id={$portadas[as]->pk_kiosko}&amp;action=change_status&amp;status=1&amp;page={$paginacion->_currentPage}&amp;category={$category}" title="Pendiente">
+                        <a href="{url name=admin_cover_toggleavailable id=$cover->id status=1 page=$page category=$category}" title="Pendiente">
                             <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" />
                         </a>
                     {/if}
                 {/acl}
             </td>
-            {if $category!='widget' && $category!='all'}
-            <td align="center">
+            <td class="center">
             {acl isAllowed="KIOSKO_UPDATE"}
-                {if $portadas[as]->favorite == 1}
-                    <a href="?id={$portadas[as]->id}&amp;action=change_favorite&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage}" class="favourite_on" title="Quitar de favorito"></a>
+                {if $cover->favorite == 1}
+                    <a href="{url name=admin_cover_togglefavorite id=$cover->id status=0 page=$page category=$category}" class="favourite_on" title="Quitar de favorito"></a>
                 {else}
-                    <a href="?id={$portadas[as]->id}&amp;action=change_favorite&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage}" class="favourite_off" title="Poner de favorito"></a>
+                    <a href="{url name=admin_cover_togglefavorite id=$cover->id status=1 page=$page category=$category}" class="favourite_off" title="Poner de favorito"></a>
                 {/if}
             {/acl}
             </td>
-            {/if}
             <td class="center">
-                {acl isAllowed="KIOSKO_HOME"}
-                    {if $portadas[as]->in_home == 1}
-                       <a href="?id={$portadas[as]->id}&amp;action=change_inHome&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="no_home" title="{t}Take out from home{/t}"></a>
-                    {else}
-                        <a href="?id={$portadas[as]->id}&amp;action=change_inHome&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="go_home" title="{t}Put in home{/t}"></a>
-                    {/if}
-                {/acl}
+            {acl isAllowed="KIOSKO_HOME"}
+                {if $cover->in_home == 1}
+                    <a href="{url name=admin_cover_toggleinhome id=$cover->id status=0 page=$page category=$category}" class="no_home" title="{t}Take out from home{/t}"></a>
+                {else}
+                    <a href="{url name=admin_cover_toggleinhome id=$cover->id status=1 page=$page category=$category}" class="go_home" title="{t}Put in home{/t}"></a>
+                {/if}
+            {/acl}
             </td>
-            <td align="center">
-                <ul class="action-buttons">
-                    <li>
-                        {acl isAllowed="KIOSKO_UPDATE"}
-                        <a href="{$smarty.server.PHP_SELF}?action=read&id={$portadas[as]->pk_kiosko}" title="Modificar">
-                            <img src="{$params.IMAGE_DIR}edit.png" border="0" />
-                        </a>
-                        {/acl}
-                    </li>
-                    <li>
-                        {acl isAllowed="KIOSKO_DELETE"}
-                        <a class="del" data-controls-modal="modal-from-dom"
-                               data-id="{$portadas[as]->pk_kiosko}"
-                               data-title="{$portadas[as]->title|capitalize}"  href="#" >
-                            <img src="{$params.IMAGE_DIR}trash.png" border="0" />
-                        </a>
-                        {/acl}
-                    </li>
-                </ul>
+            <td class="center">
+                <div class="btn-group">
+                    {acl isAllowed="KIOSKO_UPDATE"}
+                    <a class="btn" href="{url name=admin_cover_show id=$cover->pk_kiosko}" title="{t}Edit{/t}">
+                        <i class="icon-pencil"></i> {t}Edit{/t}
+                    </a>
+                    {/acl}
+                    {acl isAllowed="KIOSKO_DELETE"}
+                    <a class="del btn btn-danger" data-controls-modal="modal-from-dom"
+                           data-url="{url name=admin_cover_delete id=$cover->pk_kiosko}"
+                           href="{url name=admin_cover_delete id=$cover->pk_kiosko}" >
+                        <i class="icon-trash icon-white"></i>
+                    </a>
+                    {/acl}
+                </div>
             </td>
 
         </tr>
-        {sectionelse}
+        {foreachelse}
         <tr>
-            <td class="empty" colspan="10">{t}There is no stands{/t}</td>
+            <td class="empty" colspan="11">{t}There is no covers{/t}</td>
         </tr>
-        {/section}
+        {/foreach}
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="10" style="padding:10px;font-size: 12px;" align="center">
-                    {if count($portadas) gt 0}
-                        {$paginacion->links}
-                    {/if}
-                    &nbsp;
+                <td colspan="11" class="center">
+                    <div class="pagination">
+                        {$pagination->links}
+                    </div>
                 </td>
             </tr>
         </tfoot>
     </table>
     <input type="hidden" name="category" id="category" value="{$category}" />
-    <input type="hidden" id="status" name="status" value="" />
-    <input type="hidden" id="action" name="action" value="" />
-    <input type="hidden" name="id" id="id" value="{$id|default:""}" />
 
-     <script>
-        jQuery('#buton-batchnoFrontpage').on('click', function(){
-            jQuery('#action').attr('value', "batchFrontpage");
-            jQuery('#status').attr('value', "0");
-            jQuery('#formulario').submit();
-            e.preventDefault();
-        });
-        jQuery('#buton-batchFrontpage').on('click', function(){
-            jQuery('#action').attr('value', "batchFrontpage");
-            jQuery('#status').attr('value', "1");
-            jQuery('#formulario').submit();
-            e.preventDefault();
-        });
-    </script>
 </div>
 </form>
 {include file="newsstand/modals/_modalDelete.tpl"}
 {include file="newsstand/modals/_modalBatchDelete.tpl"}
 {include file="newsstand/modals/_modalAccept.tpl"}
 
-{if $category eq 'favorite'}
-    <script type="text/javascript">
+<script>
+// <![CDATA[
+    jQuery('#batch-publish, #batch-unpublish').on('click', function(e, ui){
+        jQuery('#formulario').attr('action', '{url name=admin_covers_batchpublish}');
+    });
 
-        // <![CDATA[
-            jQuery(document).ready(function() {
-                makeSortable();
-            });
-        // ]]>
-    </script>
-{/if}
+    {if $category eq 'widget'}
+        jQuery(document).ready(function() {
+            makeSortable();
+        });
+    {/if}
+// ]]>
+</script>
 {/block}

@@ -8,6 +8,7 @@
  * file that was distributed with this source code.
  */
 namespace Onm\Import\DataSource;
+
 /**
  * Handles all the operations for NITF data
  *
@@ -35,31 +36,30 @@ class NITF
     public function __get($propertyName)
     {
         switch ($propertyName) {
-
             case 'id':
                 return $this->getId();
-                break;
 
+                break;
             case 'title':
                 return $this->getTitle();
-                break;
 
+                break;
             case 'pretitle':
                 return $this->getPreTitle();
-                break;
 
+                break;
             case 'summary':
                 return $this->getSummary();
-                break;
 
+                break;
             case 'body':
                 return $this->getBody();
-                break;
 
+                break;
             case 'created_time':
                 return $this->getCreatedTime();
-                break;
 
+                break;
             case 'body':
                 if (count($this->texts) > 0) {
                     return $this->texts[0];
@@ -165,5 +165,5 @@ class NITF
             $originalDate
         );
     }
+}
 
-} // END class NITF

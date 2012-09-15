@@ -1,6 +1,6 @@
 <div class="modal hide fade" id="modal-element-suggest-to-home">
     <div class="modal-header">
-      <a class="close" href="#">×</a>
+      <button type="button" class="close" data-dismiss="modal-element-suggest-to-home" aria-hidden="true">×</button>
       <h3 class="enable">{t}Suggest element to frontpage{/t}</h3>
       <h3 class="disable">{t}Drop suggestion to frontpage{/t}</h3>
     </div>

@@ -64,21 +64,7 @@ OpenNeMas.tinyMceConfig = {
         theme_advanced_resize_horizontal : false,
         theme_advanced_resizing : true,
 
-        spellchecker_languages : "+Castellano=es,Galego=gl,English=en",
-
-        setup : function(ed) {
-            ed.onKeyUp.add(function(ed, e) {
-                if(counttiny && document.getElementById('counter_body')) {
-                    counttiny(document.getElementById('counter_body'), ed);
-                }
-            });
-
-            ed.onChange.add(function(ed, e) {
-                if(counttiny && document.getElementById('counter_body')) {
-                    counttiny(document.getElementById('counter_body'), ed);
-                }
-            });
-        }
+        spellchecker_languages : "+Castellano=es,Galego=gl,English=en"
     },
 
     'simple': {
@@ -133,17 +119,6 @@ OpenNeMas.tinyMceConfig = {
         spellchecker_languages : "+Castellano=es,Galego=gl,English=en",
 
         setup : function(ed) {
-            ed.onKeyUp.add(function(ed, e) {
-                if(counttiny && document.getElementById('counter_summary')) {
-                    counttiny(document.getElementById('counter_summary'), ed);
-                }
-            });
-
-            ed.onChange.add(function(ed, e) {
-                if(counttiny && document.getElementById('counter_summary')) {
-                    counttiny(document.getElementById('counter_summary'), ed);
-                }
-            });
         }
     },
 
@@ -264,12 +239,6 @@ OpenNeMas.tinyMceConfig = {
 
     }
 };
-
-// No es necesaria esta configuración para todos los casos
-//if(document.getElementById('category')) {
-//    OpenNeMas.tinyMceConfig.external_image_list_url = "/admin/images_tiny_external_list.php?category=" + document.getElementById('category').value;
-//    OpenNeMas.tinyMceConfig.media_external_list_url = "/admin/images_tiny_external_list.php?category=" + document.getElementById('category').value;
-//}
 
 OpenNeMas.tinyMceFunctions = {
     toggle: function(refId) {

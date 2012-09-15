@@ -1,39 +1,32 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-    <script type="text/javascript">
-        document.observe('dom:loaded', function(){
-            onChangeGroup( document.formulario.id_user_group, new Array('comboAccessCategory','labelAccessCategory') );
-
-            // Refrescar los elementos seleccionados
-            $('ids_category').select('option').each(function(item){
-                if( item.getAttribute('selected') ) {
-                    item.selected=true;
-                    item.setAttribute('selected', 'selected');
-                }
-            });
-
-            new SpinnerControl('sessionexpire', 'up', 'dn', { interval: 5,  min: 15, max: 250 });
-        });
-    </script>
+<script>
+jQuery(function($){
+	$('#batch-delete').on('click', function(){
+		var form = $('#userform');
+		form.attr('action', '{url name="admin_acl_user_batchdelete"}');
+	});
+});
+</script>
 {/block}
 
 
 {block name="content"}
-<form action="{$smarty.server.PHP_SELF}" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
+<form action="{url name=admin_user_list}" method="get" id="userform">
 	<div class="top-action-bar clearfix">
 		<div class="wrapper-content">
 			<div class="title"><h2>{t}User manager{/t}</h2></div>
 			<ul class="old-button">
 				<li>
-					<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" title="Eliminar">
-						<img src="{$params.IMAGE_DIR}trash.png" title="Eliminar" alt="Eliminar" ><br />Eliminar
-					</a>
+					<button type="submit" id="batch-delete" title="{t}Delete selected users{/t}">
+						<img src="{$params.IMAGE_DIR}trash.png" alt="{t}Delete{/t}" ><br />{t}Delete{/t}
+					</button>
 				</li>
 				<li class="separator"></li>
 				<li>
-					<a href="{$smarty.server.PHP_SELF}?action=new&amp;id=0" accesskey="N" tabindex="1">
-						<img src="{$params.IMAGE_DIR}user_add.png" title="Nuevo" alt="Nuevo"><br />{t}New user{/t}
+					<a href="{url name=admin_acl_user_create}" title="{t}Create new user{/t}">
+						<img src="{$params.IMAGE_DIR}user_add.png" alt="Nuevo"><br />{t}New user{/t}
 					</a>
 				</li>
 			</ul>
@@ -41,41 +34,39 @@
 	</div>
 	<div class="wrapper-content">
 
-		<table class="adminheading">
-			<tr>
-				<th class="form-inline">
-					<label for="username">{t}Filter by name{/t}
-						<input id="username" name="filter[name]" value="{$smarty.request.filter.name|default:""}" class  />
-					</label>
+		{render_messages}
 
-					<label for="userlogin">{t}or username:{/t}
-						<input id="userlogin" name="filter[login]" value="{$smarty.request.filter.login|default:""}" />
-					</label>
+		<div class="table-info clearfix">
+			<div class="pull-right form-inline">
+				<input type="text" id="username" name="filter[name]" value="{$smarty.request.filter.name|default:""}" placeholder="{t}Filter by name{/t}"  />
 
-					<label for="usergroup">{t}and group:{/t}
-						<select id="usergroup" name="filter[group]" class="span2">
-							{if isset($smarty.request.filter) && isset($smarty.request.filter.group)}
-								{assign var=filter_selected value=$smarty.request.filter.group}
-							{/if}
-							{html_options options=$groupsOptions selected=$filter_selected|default:""}
-						</select>
-					</label>
-					<button type="submit" class="btn">{t}Search{/t}</button>
-				</th>
-			</tr>
-		</table>
+				<label for="userlogin">{t}or{/t}</label>
+				<input type="text" id="userlogin" name="filter[login]" value="{$smarty.request.filter.login|default:""}" placeholder="{t}username{/t}" />
 
-		<table class="listing-table table-striped">
+
+				<label for="usergroup">{t}and group:{/t}</label>
+				<div class="input-append">
+					<select id="usergroup" name="filter[group]" class="span2">
+						{if isset($smarty.request.filter) && isset($smarty.request.filter.group)}
+							{assign var=filter_selected value=$smarty.request.filter.group}
+						{/if}
+						{html_options options=$groupsOptions selected=$filter_selected|default:""}
+					</select>
+					<button type="submit" class="btn"><i class="icon-search"></i></button>
+				</div>
+			</div>
+		</div>
+		<table class="table table-hover table-condensed">
 			{if count($users) gt 0}
 			<thead>
 				<tr>
 					<th style="width:15px;">
-                        <input type="checkbox" id="toggleallcheckbox">
+                        <input type="checkbox" class="toggleallcheckbox">
                     </th>
 					<th class="left">{t}Full name{/t}</th>
-					<th class="center">{t}Username{/t}</th>
-					<th class="center">{t}Group{/t}</th>
-					<th class="right">{t}Actions{/t}</th>
+					<th class="left" style="width:110px">{t}Username{/t}</th>
+					<th class="left" >{t}Group{/t}</th>
+					<th class="center" style="width:10px">{t}Actions{/t}</th>
 				</tr>
 			</thead>
 			{/if}
@@ -83,35 +74,36 @@
 				{foreach from=$users item=user name=user_listing}
 				<tr>
 					<td>
-						<input type="checkbox" class="minput"  id="selected_{$user->id}" name="selected_fld[]" value="{$user->id}"  style="cursor:pointer;">
+						<input type="checkbox" name="selected[]" value="{$user->id}">
 					</td>
 					<td class="left">
-						<a href="?action=read&amp;id={$user->id}" title="{t}Edit user{/t}">
+						<a href="{url name=admin_acl_user_show id=$user->id}" title="{t}Edit user{/t}">
 							{$user->name}&nbsp;{$user->firstname}&nbsp;{$user->lastname}</a>
 					</td>
-					<td class="center">
+					<td class="left">
 						{$user->login}
 					</td>
-					<td class="center">
+					<td class="left">
 						{section name=u loop=$user_groups}
 							{if $user_groups[u]->id == $user->fk_user_group}
 								{$user_groups[u]->name}
 							{/if}
 						{/section}
 					</td>
-					<td class="right">
-						<ul class="action-buttons">
-							<li>
-								<a href="{$smarty.server.PHP_SELF}?action=read&amp;id={$user->id}&amp;page={$page|default:0}" title="{t}Edit user{/t}">
-									<img src="{$params.IMAGE_DIR}edit.png" alt="{t}Edit user{/t}"/>
-								</a>
-							</li>
-							<li>
-								<a href="#" onClick="javascript:confirmar(this, {$user->id});" title="{t}Delete user{/t}">
-									<img src="{$params.IMAGE_DIR}trash.png" alt="{t}Delete user{/t}"/>
-								</a>
-							</li>
-						</ul>
+					<td class="right nowrap">
+						<div class="btn-group">
+							<a class="btn" href="{url name=admin_acl_user_show id=$user->id}" title="{t}Edit user{/t}">
+								<i class="icon-pencil"></i> {t}Edit{/t}
+							</a>
+
+							<a class="del btn btn-danger"
+								href="{url name=admin_acl_user_delete id=$user->id}"
+								data-url="{url name=admin_acl_user_delete id=$user->id}"
+								data-title="{$user->name}"
+								title="{t}Delete this user{/t}">
+								<i class="icon-trash icon-white"></i>
+							</a>
+						</div>
 					</td>
 				</tr>
 
@@ -131,10 +123,7 @@
 				</tr>
 			</tfoot>
 		</table>
-
-		<input type="hidden" id="action" name="action" value="list" />
-		<input type="hidden" name="id" id="id" value="{$id|default:""}" />
-
 	</div>
 </form>
+{include file="acl/user/modal/_modalDelete.tpl"}
 {/block}

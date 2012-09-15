@@ -1,18 +1,5 @@
 {extends file="base/admin.tpl"}
 
-
-{block name="header-js" append}
-    {script_tag src="/utilscategory.js"}
-{/block}
-{block name="header-css" append}
-    <style type="text/css">
-        .panel {
-            border:none !important;
-        }
-
-    </style>
-{/block}
-
 {block name="footer-js" append}
 <script>
 jQuery(document).ready(function ($){
@@ -30,7 +17,7 @@ jQuery(document).ready(function ($){
             <ul class="old-button">
                  {acl isAllowed="CATEGORY_CREATE"}
                 <li>
-                    <a href="{$smarty.server.PHP_SELF}?action=new" class="admin_add" accesskey="N" tabindex="1">
+                    <a href="{url name=admin_category_create}" class="admin_add" accesskey="N" tabindex="1">
                         <img src="{$params.IMAGE_DIR}list-add.png" title="Nueva" alt="Nueva"><br />{t}New section{/t}
                     </a>
                 </li>
@@ -47,8 +34,9 @@ jQuery(document).ready(function ($){
             </ul>
         </div>
     </div>
-    {render_messages}
     <div class="wrapper-content">
+
+        {render_messages}
 
         <div id="categories-types" class="tabs">
 
@@ -89,7 +77,7 @@ jQuery(document).ready(function ($){
             </ul>
 
             <div id="global">
-                <table class="listing-table">
+                <table class="table table-hover table-condensed">
                     <thead>
                         <tr>
                             <th>{t}Title{/t}</th>
@@ -98,8 +86,8 @@ jQuery(document).ready(function ($){
                             <th style="width:15px;">{t}Photos{/t}</th>
                             <th style="width:15px;">{t}Advertisements{/t}</th>
                             <th style="width:15px;">{t}Available{/t}</th>
-                            <th style="width:15px;">{t}Show in rss{/t}</th>
-                            <th style="width:70px;">{t}Actions{/t}</th>
+                            <th style="width:15px;" class="nowrap">{t}Show in rss{/t}</th>
+                            <th style="width:100px;">{t}Actions{/t}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -120,7 +108,7 @@ jQuery(document).ready(function ($){
                         {/section}
                     </tbody>
                     <tfoot>
-                        <tr class="pagination">
+                        <tr>
                             <td colspan="8">
                                 &nbsp;
                             </td>
@@ -130,7 +118,7 @@ jQuery(document).ready(function ($){
             </div>
              {is_module_activated name="ALBUM_MANAGER"}
             <div id="album">
-                <table class="listing-table">
+                <table class="table table-hover table-condensed">
                     <thead>
                         <tr>
                             <th>{t}Title{/t}</th>
@@ -139,13 +127,17 @@ jQuery(document).ready(function ($){
                             <th style="width:15px;">{t}Photos{/t}</th>
                             <th style="width:15px;">{t}Advertisements{/t}</th>
                             <th style="width:15px;">{t}Available{/t}</th>
-                            <th style="width:70px;">{t}Actions{/t}</th>
+                            <th style="width:100px;">{t}Actions{/t}</th>
                         </tr>
                     </thead>
                     <tbody>
                         {section name=c loop=$categorys}
                             {if $categorys[c]->internal_category eq '7'}
-                                {include file="category/_partials/print_list_category.tpl" category=$categorys[c] subcategorys=$subcategorys[c] num_contents=$num_contents[c] num_sub_contents=$num_sub_contents[c]}
+                                {include file="category/_partials/print_list_category.tpl"
+                                    category=$categorys[c]
+                                    subcategorys=$subcategorys[c]
+                                    num_contents=$num_contents[c]
+                                    num_sub_contents=$num_sub_contents[c]}
                             {/if}
                         {sectionelse}
                             <tr>
@@ -156,7 +148,7 @@ jQuery(document).ready(function ($){
                         {/section}
                     </tbody>
                     <tfoot>
-                        <tr class="pagination">
+                        <tr>
                             <td colspan="7"> </td>
                         </tr>
                     </tfoot>
@@ -165,7 +157,7 @@ jQuery(document).ready(function ($){
             {/is_module_activated}
             {is_module_activated name="VIDEO_MANAGER"}
             <div id="video">
-                <table class="listing-table">
+                <table class="table table-hover table-condensed">
                     <thead>
                         <tr>
                             <th>{t}Title{/t}</th>
@@ -174,13 +166,17 @@ jQuery(document).ready(function ($){
                             <th style="width:15px;">{t}Photos{/t}</th>
                             <th style="width:15px;">{t}Advertisements{/t}</th>
                             <th style="width:15px;">{t}Available{/t}</th>
-                            <th style="width:70px;">{t}Actions{/t}</th>
+                            <th style="width:100px;">{t}Actions{/t}</th>
                         </tr>
                     </thead>
                     <tbody>
                         {section name=c loop=$categorys}
                             {if $categorys[c]->internal_category eq '9'}
-                                {include file="category/_partials/print_list_category.tpl" category=$categorys[c] subcategorys=$subcategorys[c] num_contents=$num_contents[c] num_sub_contents=$num_sub_contents[c]}
+                                {include file="category/_partials/print_list_category.tpl"
+                                    category=$categorys[c]
+                                    subcategorys=$subcategorys[c]
+                                    num_contents=$num_contents[c]
+                                    num_sub_contents=$num_sub_contents[c]}
                             {/if}
                         {sectionelse}
                         <tr>
@@ -192,7 +188,7 @@ jQuery(document).ready(function ($){
 
                     </tbody>
                     <tfoot>
-                        <tr class="pagination">
+                        <tr>
                             <td colspan="7" > </td>
                         </tr>
                     </tfoot>
@@ -201,7 +197,7 @@ jQuery(document).ready(function ($){
             {/is_module_activated}
             {is_module_activated name="KIOSKO_MANAGER"}
             <div id="epapel">
-                <table class="listing-table">
+                <table class="table table-hover table-condensed">
                     <thead>
                         <tr>
                             <th>{t}Title{/t}</th>
@@ -210,13 +206,17 @@ jQuery(document).ready(function ($){
                             <th style="width:15px;">{t}Photos{/t}</th>
                             <th style="width:15px;">{t}Advertisements{/t}</th>
                             <th style="width:15px;">{t}Available{/t}</th>
-                            <th style="width:70px;">{t}Actions{/t}</th>
+                            <th style="width:100px;">{t}Actions{/t}</th>
                         </tr>
                     </thead>
                     <tbody>
                         {section name=c loop=$categorys}
                             {if $categorys[c]->internal_category eq '14'}
-                                {include file="category/_partials/print_list_category.tpl" category=$categorys[c] subcategorys=$subcategorys[c] num_contents=$num_contents[c] num_sub_contents=$num_sub_contents[c]}
+                                {include file="category/_partials/print_list_category.tpl"
+                                    category=$categorys[c]
+                                    subcategorys=$subcategorys[c]
+                                    num_contents=$num_contents[c]
+                                    num_sub_contents=$num_sub_contents[c]}
                             {/if}
                         {sectionelse}
                         <tr>
@@ -227,7 +227,7 @@ jQuery(document).ready(function ($){
                         {/section}
                     </tbody>
                     <tfoot>
-                        <tr class="pagination">
+                        <tr>
                             <td colspan="7">
                             </td>
                         </tr>
@@ -237,7 +237,7 @@ jQuery(document).ready(function ($){
              {/is_module_activated}
              {is_module_activated name="POLL_MANAGER"}
             <div id="poll">
-                <table class="listing-table">
+                <table class="table table-hover table-condensed">
                     <thead>
                         <tr>
                             <th>{t}Title{/t}</th>
@@ -246,13 +246,17 @@ jQuery(document).ready(function ($){
                             <th style="width:15px;">{t}Photos{/t}</th>
                             <th style="width:15px;">{t}Advertisements{/t}</th>
                             <th style="width:15px;">{t}Available{/t}</th>
-                            <th style="width:70px;">{t}Actions{/t}</th>
+                            <th style="width:100px;">{t}Actions{/t}</th>
                         </tr>
                     </thead>
                     <tbody>
                         {section name=c loop=$categorys}
                             {if $categorys[c]->internal_category eq '11'}
-                                {include file="category/_partials/print_list_category.tpl" category=$categorys[c] subcategorys=$subcategorys[c] num_contents=$num_contents[c] num_sub_contents=$num_sub_contents[c]}
+                                {include file="category/_partials/print_list_category.tpl"
+                                    category=$categorys[c]
+                                    subcategorys=$subcategorys[c]
+                                    num_contents=$num_contents[c]
+                                    num_sub_contents=$num_sub_contents[c]}
                             {/if}
                         {sectionelse}
                         <tr>
@@ -263,7 +267,7 @@ jQuery(document).ready(function ($){
                         {/section}
                     </tbody>
                     <tfoot>
-                        <tr class="pagination">
+                        <tr >
                             <td colspan="7">
                             </td>
                         </tr>
@@ -273,7 +277,7 @@ jQuery(document).ready(function ($){
             {/is_module_activated}
             {is_module_activated name="SPECIAL_MANAGER"}
             <div id="special">
-                <table class="listing-table">
+                <table class="table table-hover table-condensed">
                     <thead>
                         <tr>
                             <th>{t}Title{/t}</th>
@@ -288,7 +292,11 @@ jQuery(document).ready(function ($){
                     <tbody>
                         {section name=c loop=$categorys}
                             {if $categorys[c]->internal_category eq '10'}
-                                {include file="category/_partials/print_list_category.tpl" category=$categorys[c] subcategorys=$subcategorys[c] num_contents=$num_contents[c] num_sub_contents=$num_sub_contents[c]}
+                                {include file="category/_partials/print_list_category.tpl"
+                                    category=$categorys[c]
+                                    subcategorys=$subcategorys[c]
+                                    num_contents=$num_contents[c]
+                                    num_sub_contents=$num_sub_contents[c]}
                             {/if}
                         {sectionelse}
                         <tr>
@@ -299,7 +307,7 @@ jQuery(document).ready(function ($){
                         {/section}
                     </tbody>
                     <tfoot>
-                        <tr class="pagination">
+                        <tr >
                             <td colspan="7">
                             </td>
                         </tr>
@@ -309,7 +317,7 @@ jQuery(document).ready(function ($){
             {/is_module_activated}
             {is_module_activated name="BOOK_MANAGER"}
             <div id="book">
-                <table class="listing-table">
+                <table class="table table-hover table-condensed">
                     <thead>
                         <tr>
                             <th>{t}Title{/t}</th>
@@ -324,7 +332,11 @@ jQuery(document).ready(function ($){
                     <tbody>
                         {section name=c loop=$categorys}
                             {if $categorys[c]->internal_category eq '15'}
-                                {include file="category/_partials/print_list_category.tpl" category=$categorys[c] subcategorys=$subcategorys[c] num_contents=$num_contents[c] num_sub_contents=$num_sub_contents[c]}
+                                {include file="category/_partials/print_list_category.tpl"
+                                    category=$categorys[c]
+                                    subcategorys=$subcategorys[c]
+                                    num_contents=$num_contents[c]
+                                    num_sub_contents=$num_sub_contents[c]}
                             {/if}
                         {sectionelse}
                         <tr>
@@ -335,7 +347,7 @@ jQuery(document).ready(function ($){
                         {/section}
                     </tbody>
                     <tfoot>
-                        <tr class="pagination">
+                        <tr>
                             <td colspan="7">
                             </td>
                         </tr>
@@ -346,9 +358,8 @@ jQuery(document).ready(function ($){
         </div><!-- categories-tabs -->
 
     </div>
-
-    <input type="hidden" id="action" name="action" value="" />
-    <input type="hidden" name="id" id="id" value="{$id|default:""}" />
 </form>
 <!--fin wrapper-content-->
+{include file="category/modals/_modalDelete.tpl"}
+{include file="category/modals/_modalEmpty.tpl"}
 {/block}

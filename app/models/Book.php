@@ -7,7 +7,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  **/
-use Onm\StringUtils;
 /**
  * Book
  *
@@ -24,7 +23,7 @@ class Book extends Content
     public $editorial  = null;
     public $books_path = null;
 
-    public function __construct($id=null)
+    public function __construct($id = null)
     {
         parent::__construct($id);
 
@@ -34,6 +33,7 @@ class Book extends Content
         }
 
         $this->content_type = 'Book';
+        $this->content_type_l10n_name = _('Book');
         $this->books_path = INSTANCE_MEDIA_PATH.'/books/';
     }
 
@@ -41,12 +41,13 @@ class Book extends Content
     {
 
         switch ($name) {
-            case 'uri': {
+            case 'uri':
                 if (empty($this->category_name)) {
                     $this->category_name =
                         $this->loadCategoryName($this->pk_content);
                 }
-                $uri =  Uri::generate('book',
+                $uri =  Uri::generate(
+                    'book',
                     array(
                         'id'       => sprintf('%06d', $this->id),
                         'date'     => date('YmdHis', strtotime($this->created)),
@@ -56,12 +57,11 @@ class Book extends Content
                 );
 
                 return ($uri !== '') ? $uri : $this->permalink;
-                break;
-            }
 
-            default: {
                 break;
-            }
+            default:
+
+                break;
         }
 
         return parent::__get($name);
@@ -80,9 +80,9 @@ class Book extends Content
         }
 
         $this->file_name =
-            StringUtils::cleanFileName($_FILES['file']['name'], '');
+            FilesManager::cleanFileName($_FILES['file']['name'], '');
         $this->file_img  =
-            StringUtils::cleanFileName($_FILES['file_img']['name'], '');
+            FilesManager::cleanFileName($_FILES['file_img']['name'], '');
 
         $this->createThumb();
 
@@ -127,8 +127,8 @@ class Book extends Content
 
     public function update($data)
     {
-        $file_name = StringUtils::cleanFileName($_FILES['file']['name']);
-        $file_img  = StringUtils::cleanFileName($_FILES['file_img']['name']);
+        $file_name = FilesManager::cleanFileName($_FILES['file']['name']);
+        $file_img  = FilesManager::cleanFileName($_FILES['file_img']['name']);
 
         parent::update($data);
         $data['file_name'] = !empty($file_name)?$file_name:$this->file_name;
@@ -146,7 +146,9 @@ class Book extends Content
             intval($data['id']),
         );
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+
+        if ($rs === false) {
             \Application::logDatabaseError();
 
             return false;
@@ -206,3 +208,4 @@ class Book extends Content
         }
     }
 }
+

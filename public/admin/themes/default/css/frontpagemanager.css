@@ -1,3 +1,9 @@
+body {
+    font-size:13px;
+}
+#frontpagemanager {
+    font-size:12px;
+}
 #frontpagemanager .last {
     margin-right: 0 auto !important;
 }
@@ -169,18 +175,11 @@ div#content-provider div.content-action-buttons {
 div.content .content-action-buttons{
     display:none;
     position:absolute;
-    top:5px;
-    right:5px;
-    max-height:18px !important;
+    top:3px;
+    right:3px;
 }
 #frontpagemanager div.content div:hover .content-action-buttons {
     display:block;
-}
-#frontpagemanager div.content .btn-group .btn {
-    margin-left: 0;
-    padding: 3px 6px;
-    font-size: 0.9em;
-    color:Black;
 }
 
 #frontpagemanager div.content > div {
@@ -379,4 +378,35 @@ span.in_frontpage {
     width:20px;
     display:inline-block;
     vertical-align:middle;
+}
+
+[class*="span"] {
+    margin-left:0 !important;
+}
+
+#frontpage-settings {
+    display:inline-block;
+}
+div.clearfix div.menu-other-categories {
+    float:none !important;
+    display:inline-block;
+}
+div.menu-categories {
+    max-width:70%;
+}
+#categories {
+    margin-bottom:0;
+}
+.settings-panel {
+    display:none;
+    vertical-align: top;
+}
+.settings-panel a {
+    color:White;
+}
+.settings-panel .thumbnail {
+    display: inline-block;
+    margin:0 10px 10px 0;
+    width:100px;
+    vertical-align: top;
 }

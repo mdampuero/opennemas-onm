@@ -42,7 +42,7 @@ class Album extends Content
      *
      * @param strin $id the id of the album.
      **/
-    public function __construct($id=null)
+    public function __construct($id = null)
     {
         parent::__construct($id);
 
@@ -50,6 +50,7 @@ class Album extends Content
             $this->read($id);
         }
         $this->content_type = __CLASS__;
+        $this->content_type_l10n_name = _('Album');
 
         return $this;
     }
@@ -64,9 +65,9 @@ class Album extends Content
     public function __get($name)
     {
 
-        switch ($name) {
-
-            case 'uri': {
+        switch ($name)
+        {
+            case 'uri':
                 if (empty($this->category_name)) {
                     $this->category_name = $this->loadCategoryName($this->pk_content);
                 }
@@ -83,13 +84,11 @@ class Album extends Content
                 return ($uri !== '') ? $uri : $this->permalink;
 
                 break;
-            }
-            case 'slug': {
+            case 'slug':
                 return StringUtils::get_title($this->title);
-                break;
-            }
 
-            case 'content_type_name': {
+                break;
+            case 'content_type_name':
                 $contentTypeName = $GLOBALS['application']->conn->Execute(
                     'SELECT * FROM `content_types` '
                     .'WHERE pk_content_type = "'. $this->content_type
@@ -97,7 +96,7 @@ class Album extends Content
                 );
 
                 if (isset($contentTypeName->fields['name'])) {
-                    $returnValue = $contentTypeName;
+                    $returnValue = $contentTypeName->fields['name'];
                 } else {
                     $returnValue = $this->content_type;
                 }
@@ -106,11 +105,9 @@ class Album extends Content
                 return $returnValue;
 
                 break;
-            }
+            default:
 
-            default: {
                 break;
-            }
         }
 
         parent::__get($name);
@@ -178,7 +175,6 @@ class Album extends Content
         $this->cover       = $this->cover_image->path_file.$this->cover_image->name;
 
         // var_dump($rs->fields['cover_id'], $this->cover_image, $this);die();
-
         return $this;
     }
 
@@ -271,6 +267,49 @@ class Album extends Content
     }
 
     /**
+     * Returns a multidimensional array with the images related to this album
+     * and results are separated by pages
+     *
+     * @param int $albumID    the album id
+     * @param int $items_page the number of page to get
+     * @param int $page       the number of page to get
+     *
+     * @return mixed array of array(pk_photo, position, description)
+     */
+    public function getAttachedPhotosPaged($albumID, $items_page, $page = 1)
+    {
+
+        if ($albumID == null) {
+            return false ;
+        }
+
+        if (empty($page)) {
+            $limit= "LIMIT ".($items_page+1);
+        } else {
+            $limit= "LIMIT ".($page-1) * $items_page .', '.($items_page+1);
+        }
+
+        $sql = 'SELECT DISTINCT pk_photo, description, position'
+               .' FROM albums_photos '
+               .' WHERE pk_album =? ORDER BY position ASC '.$limit;
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($albumID));
+
+        $photosAlbum = array();
+        while (!$rs->EOF) {
+            $photosAlbum []= array(
+                'id'       => $rs->fields['pk_photo'],
+                'position' => $rs->fields['position'],
+                'description' => $rs->fields['description'],
+                'photo'    => new Photo($rs->fields['pk_photo']),
+            );
+
+            $rs->MoveNext();
+        }
+
+        return $photosAlbum;
+    }
+
+    /**
      * Saves the photos attached to one album
      *
      * @return void
@@ -334,7 +373,7 @@ class Album extends Content
         $tpl->assign('cssclass', $params['cssclass']);
 
         try {
-            $html = $tpl->fetch('frontpage/frontpage_album.tpl');
+            $html = $tpl->fetch('frontpage/contents/_album.tpl');
         } catch (\Exception $e) {
             $html = 'Album not available';
         }
@@ -342,3 +381,4 @@ class Album extends Content
         return $html;
     }
 }
+

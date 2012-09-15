@@ -8,7 +8,7 @@
 /**
  * Start up and setup the app
 */
-require_once('../bootstrap.php');
+require_once '../bootstrap.php';
 
 /**
  * Check general settings
@@ -40,4 +40,3 @@ foreach ($allcategorys as $category) {
         var_dump($msg);
     }
 }
-

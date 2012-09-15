@@ -36,14 +36,14 @@ abstract class ResourceAbstract
      */
     public function __get($propertyName)
     {
-        switch ($propertyName) {
-
+        switch ($propertyName)
+        {
             case 'id':
                 $attributes = $this->getData()->attributes();
 
                 return (string) $attributes->Euid;
-                break;
 
+                break;
             case 'title':
                 $content =
                     $this->getData()
@@ -51,8 +51,8 @@ abstract class ResourceAbstract
                     ->xpath('//body.content');
 
                 return (string) $content[1]->p;
-                break;
 
+                break;
             case 'file_type':
                 $fileType =
                     $this->getData()
@@ -60,8 +60,8 @@ abstract class ResourceAbstract
                     ->attributes()->FormalName;
 
                 return (string) $fileType;
-                break;
 
+                break;
             case 'file_path':
                 $filePath =
                     $this->getData()
@@ -69,8 +69,8 @@ abstract class ResourceAbstract
                     ->attributes()->Href;
 
                 return (string) $filePath;
-                break;
 
+                break;
             case 'created_time':
                 $originalDate =
                     (string) $this->getData()
@@ -79,6 +79,7 @@ abstract class ResourceAbstract
                 $originalDate = preg_replace('@\+(\d){4}$@', '', $originalDate);
 
                 return \DateTime::createFromFormat('Ymd\THis', $originalDate);
+
                 break;
         }
     }
@@ -90,5 +91,5 @@ abstract class ResourceAbstract
     {
         return $this->data;
     }
+}
 
-} // END class ResourceAbstract

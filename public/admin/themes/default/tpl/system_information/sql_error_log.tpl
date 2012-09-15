@@ -5,13 +5,13 @@
             <div class="title"><h2>{t}SQL error log{/t}</h2></div>
             <ul class="old-button">
                 <li>
-                    <a class="admin_add" href="{$smarty.server.PHP_SELF}?action=purge">
+                    <a class="admin_add" href="{url name="admin_databaseerrors_purge"}">
                         <img alt="{t}Clean{/t}" src="{$params.IMAGE_DIR}/editclear.png"><br>
                         {t}Clean{/t}
                     </a>
                 </li>
                 <li>
-                    <a title="{t}Refresh the list for getting newest error list{/t}" href="{$smarty.server.PHP_SELF}">
+                    <a title="{t}Refresh the list for getting newest error list{/t}" href="{url name=admin_databaseerrors}">
                         <img alt="{t}Refresh list{/t}" src="{$params.IMAGE_DIR}/template_manager/refresh48x48.png"><br>
                         {t}Refresh list{/t}
                     </a>
@@ -25,20 +25,20 @@
         {render_messages}
 
         <div class="table-info clearfix">
-            <div>
-                <div class="left">
-                    {$total_errors} registered SQL errors
-                </div>
-                <div class="right">
-                    <form method="GET" action="{$smarty.server.PHP_SELF}" class="form-inline form-search">
-                        <input type="search" name="search" value="{$search}" class="input-medium search-query">
-                        <button type="submit" class="btn">{t}Search{/t}</button>
-                    </form>
-                </div>
+            <div class="pull-left">
+                {$total_errors} registered SQL errors
+            </div>
+            <div class="pull-right">
+                <form method="GET" action="{$smarty.server.PHP_SELF}" class="form-inline">
+                    <div class="input-append">
+                        <input type="search" name="search" value="{$search}" class="input-medium" placeholder="{t}Filter{/t}">
+                        <button type="submit" class="btn"><i class="icon-search"></i></button>
+                    </div>
+                </form>
             </div>
         </div>
 
-        <table class="listing-table">
+        <table class="table table-hover table-condensed">
 
             <thead>
                <tr>
@@ -51,24 +51,15 @@
             <tbody>
                 {foreach from=$errors item=error name=errors}
                 <tr>
-                    <td class="center">
-                        {$smarty.foreach.errors.iteration+$elements_page}
-                    </td>
-                    <td class="center">
-                        {$error['created']}
-                    </td>
+                    <td class="center">{$smarty.foreach.errors.iteration+$elements_page}</td>
+                    <td class="center">{$error['created']}</td>
                     <td>
-                        <strong>{$error['tracer']}</strong>
-                        <br>
-                        <strong>SQL:</strong> {$error['sql1']}
-                        <br>
-                        <strong>Params:</strong> {$error['params']}
-                        <br>
+                        <strong>{$error['tracer']}</strong><br>
+                        <strong>SQL:</strong> {$error['sql1']}<br>
+                        <strong>Params:</strong> {$error['params']}<br>
                         <strong>Other info:</strong> {$error['sql0']}
                     </td>
-                    <td class="center">
-                        {$error['timer']}
-                    </td>
+                    <td class="center">{$error['timer']}</td>
                 </tr>
                 {foreachelse}
                     <tr>
@@ -80,15 +71,16 @@
             </tbody>
 
             <tfoot>
-                <tr class="pagination">
-                    <td colspan="4">{$pagination->links}</td>
+                <tr>
+                    <td colspan="4" class="center">
+                        <div class="pagination">
+                            {$pagination->links}
+                        </div>
+                    </td>
                 </tr>
             </tfoot>
 
          </table>
-
-        <input type="hidden" id="action" name="action" value="" />
-        <input type="hidden" name="id" id="id" value="{$id|default:""}" />
 
     </div>
 {/block}

@@ -10,6 +10,7 @@
 namespace Onm\File;
 
 use Onm\File\Image as Image;
+
 /**
  * Handles all the images operations, implements the factory pattern.
  *
@@ -33,5 +34,5 @@ class Image
 
         return $this;
     }
+}
 
-} // END class Image

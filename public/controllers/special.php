@@ -6,8 +6,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  **/
-
 use Onm\Settings as s;
+
 /**
  * Start up and setup the app
 */
@@ -18,8 +18,7 @@ require_once '../bootstrap.php';
  */
 $tpl = new Template(TEMPLATE_USER);
 
-$category_name = $request->query->filter('category_name', '',
-                    FILTER_SANITIZE_STRING);
+$category_name = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
 
 if (!empty($category_name)) {
     $ccm                = ContentCategoryManager::get_instance();
@@ -34,14 +33,16 @@ if (!empty($category_name)) {
     $actual_category_id = 0;
 }
 
-$tpl->assign(array(
-    'category_name'         => $category_name,
-    'category'              => $category,
-    'actual_category_id'    => $actual_category_id,
-    'category_real_name'    => $category_real_name,
-    'actual_category_title' => $category_real_name,
-    'actual_category'       => $category_name,
-));
+$tpl->assign(
+    array(
+        'category_name'         => $category_name,
+        'category'              => $category,
+        'actual_category_id'    => $actual_category_id,
+        'category_real_name'    => $category_real_name,
+        'actual_category_title' => $category_real_name,
+        'actual_category'       => $category_name,
+    )
+);
 
 /**
  * Route to the proper action
@@ -50,8 +51,7 @@ $action = $request->query->filter('action', 'list', FILTER_SANITIZE_STRING);
 
 switch ($action) {
     case 'show':
-        $dirtyID = $request->query->filter('special_id', '',
-            FILTER_SANITIZE_STRING);
+        $dirtyID = $request->query->filter('special_id', '', FILTER_SANITIZE_STRING);
 
         $specialID = Content::resolveID($dirtyID);
         $cacheID   = $tpl->generateCacheId($category_name, null, $specialID);
@@ -118,16 +118,26 @@ switch ($action) {
 
         $tpl->display('special/special.tpl', $cacheID);
 
-    break;
-
+        break;
     case 'list':
 
         $cacheID  = $tpl->generateCacheId($category_name, null, null);
         $cm       = new ContentManager();
-        $specials = $cm->find_by_category(
-                        'Special', $actual_category_id,
-                        'available=1',
-                        ' ORDER BY starttime DESC LIMIT 10');
+
+        if ( isset($actual_category_id) && !empty($actual_category_id) ) {
+            $specials = $cm->find_by_category(
+                'Special',
+                $actual_category_id,
+                'available=1',
+                ' ORDER BY starttime DESC LIMIT 14'
+            );
+        } else {
+            $specials = $cm->find(
+                'Special',
+                'available=1',
+                ' ORDER BY starttime DESC LIMIT 14'
+            );
+        }
 
         if (!empty($specials)) {
             foreach ($specials as &$special) {
@@ -144,9 +154,9 @@ switch ($action) {
             $tpl->assign('specials', $specials);
         }
         $tpl->display('special/frontpage_special.tpl', $cacheID);
-
-    break;
+        break;
 }
 
 // Fetch information for Advertisements
-require_once "index_advertisement.php";
+require_once 'index_advertisement.php';
+

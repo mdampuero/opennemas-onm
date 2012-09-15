@@ -40,7 +40,7 @@
 
     {block name="footer-js"}
         {block name="js-library"}{/block}
-        {script_tag src="/modernizr/modernizr-2.5.0.min.js"}
+        {script_tag src="/libs/modernizr.min.js"}
     {/block}
 
 </head>
@@ -48,7 +48,7 @@
 	<div id="login-wrapper"  class="span-16 last clearfix">
 		<div id="t_a_auth_container" class="clearfix">
 
-		<form method="post" action="login.php" id="loginform" name="loginform" class="clearfix">
+		<form method="post" action="{url name="admin_login_processform"}" id="loginform" name="loginform" class="clearfix">
 			<div class="span-16 last">
                 <div id="logo">
 					<h1>OpenNeMaS</h1>

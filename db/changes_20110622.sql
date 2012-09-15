@@ -1,3 +1,52 @@
+ ALTER TABLE `polls` DROP `favorite`;
+ ALTER TABLE `kioskos` DROP `favorite`;
+
+-- Changes for alex branch
+ALTER TABLE `kioskos` ADD `type` TINYINT NOT NULL DEFAULT '0' COMMENT '0-item, 1-subscription';
+CREATE TABLE IF NOT EXISTS `orders` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) NOT NULL,
+  `content_id` bigint(20) NOT NULL,
+  `created` datetime NOT NULL,
+  `payment_id` varchar(50) NOT NULL,
+  `payment_status` varchar(150) NOT NULL,
+  `payment_amount` decimal(10,2) NOT NULL,
+  `payment_method` varchar(200) NOT NULL,
+  `params` longtext NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+ALTER TABLE `kioskos` ADD `price` DECIMAL NOT NULL DEFAULT '0';
+ALTER TABLE `users` ADD `type` TINYINT NOT NULL DEFAULT '0' COMMENT '0-backend, 1-frontend' AFTER `lastname`;
+ALTER TABLE `users` ADD `token` VARCHAR( 50 ) NULL DEFAULT NULL AFTER `type`;
+ALTER TABLE `users` ADD `deposit` DECIMAL NOT NULL DEFAULT '0' AFTER  `type`;
+
+-- 22-08-2012
+CREATE TABLE IF NOT EXISTS `usermeta` (
+  `user_id` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `meta_key` varchar(255) DEFAULT NULL,
+  `meta_value` longtext,
+  PRIMARY KEY (`user_id`, `meta_key`),
+  KEY `user_id` (`user_id`),
+  KEY `meta_key` (`meta_key`)
+);
+DROP TABLE  `articles_clone`;
+
+
+-- 16-08-2012
+ALTER TABLE  `users` DROP  `address` , DROP  `phone`, DROP `online` ;
+
+-- 14-08-2012
+ALTER TABLE `newsletter_archive` ADD `title` VARCHAR( 255 ) NOT NULL AFTER `pk_newsletter`;
+ALTER TABLE `newsletter_archive` ADD `sent` VARCHAR( 255 ) NOT NULL;
+
+-- 03-08-2012
+ALTER TABLE  `author_imgs` DROP PRIMARY KEY , ADD PRIMARY KEY (  `pk_img` ,  `fk_author` );
+
+-- 13-07-2012
+ALTER TABLE  `menu_items` DROP PRIMARY KEY , ADD PRIMARY KEY (  `pk_item` ,  `pk_menu` );
+
+<===================================== Changes to do in productoin
+
 --11-06-2012
 ALTER TABLE `authors` ADD `params` TEXT NULL DEFAULT NULL;
 --09-05-2012
@@ -9,8 +58,8 @@ ALTER TABLE `books` ADD `file_img` VARCHAR( 255 ) NULL ;
 --27-02-2012
 INSERT INTO `privileges` (`pk_privilege`, `name`, `description`, `module`) VALUES
 (173, 'LETTER_ADMIN', 'Admon. cartas', 'LETTER'),
- (174, 'POLL_FAVORITE', 'Añadir a widgets', 'POLL'),
-('175', 'POLL_HOME', 'Añadir al widget de portada', 'POLL');
+(174, 'POLL_FAVORITE', 'Añadir a widgets', 'POLL'),
+(175, 'POLL_HOME', 'Añadir al widget de portada', 'POLL');
 
 --09-02-2012
 ALTER TABLE  `albums` CHANGE  `cover`  `cover_id` BIGINT( 255 ) NULL DEFAULT NULL;

@@ -43,7 +43,7 @@ class ContentManager
 
         if ($rs !== false) {
             while (!$rs->EOF) {
-                $contentType = ucfirst($contentType);
+                $contentType = classify($contentType);
                 $obj = new $contentType();
                 $obj->load($rs->fields);
 
@@ -58,9 +58,9 @@ class ContentManager
 
     public function find(
         $contentType,
-        $filter  = null,
+        $filter = null,
         $orderBy = 'ORDER BY 1',
-        $fields  = '*'
+        $fields = '*'
     ) {
         $this->init($contentType);
         $items = array();
@@ -90,9 +90,9 @@ class ContentManager
 
     public function find_all(
         $contentType,
-        $filter  =null,
-        $orderBy ='ORDER BY 1',
-        $fields  ='*'
+        $filter = null,
+        $orderBy = 'ORDER BY 1',
+        $fields = '*'
     ) {
         return $this->findAll($contentType, $filter, $orderBy, $fields);
     }
@@ -109,9 +109,9 @@ class ContentManager
      **/
     public function findAll(
         $contentType,
-        $filter  = null,
+        $filter = null,
         $orderBy = 'ORDER BY 1',
-        $fields  ='*'
+        $fields = '*'
     ) {
         $this->init($contentType);
         $items = array();
@@ -162,16 +162,19 @@ class ContentManager
             array((int) $categoryID, 0)
         );
 
-        $contentsInFrontpage = array_unique(array_map(
-            function($content) {
-                if ($content['frontpage_id'] == 0) {
-
-                    return $content['content_id'];
-                } else {
-                    return null;
-                }
-            },
-            $contentIds)
+        $contentsInFrontpage = array_unique(
+            array_map(
+                function (
+                    $content
+                ) {
+                    if ($content['frontpage_id'] == 0) {
+                        return $content['content_id'];
+                    } else {
+                        return null;
+                    }
+                },
+                $contentIds
+            )
         );
 
 
@@ -184,16 +187,16 @@ class ContentManager
                     continue;
                 }
 
-                $content = new $element['content_type'](
-                    $element['content_id']
-                );
+                $content = new $element['content_type']($element['content_id']);
 
                 // add all the additional properties related with positions
                 // and params
                 if ($content->in_litter == 0) {
-                    $content->load(array(
-                        'placeholder' => $element['placeholder'],
-                        'position'    => $element['position'],)
+                    $content->load(
+                        array(
+                            'placeholder' => $element['placeholder'],
+                            'position'    => $element['position'],
+                        )
                     );
                     if (is_array($content->params) && $content->params > 0) {
                         $content->params = array_merge(
@@ -262,7 +265,6 @@ class ContentManager
         return $contents;
     }
 
-
     /**
     * Fetches all the contents (articles, widgets, etc) for one specific
     * category given an array of content ids, position and placeholder
@@ -283,18 +285,22 @@ class ContentManager
         foreach ($contentsArray as $element) {
             $content = new $element['content_type']($element['id']);
 
-            if (!array_key_exists('params', $element)
-                || empty($element['params'])
-            ) {
-                $element['params'] = serialize(array());
-            }
             // only add it to the final results if is not in litter
             if ($content->in_litter == 0) {
-                $content->load(array(
-                    'placeholder' => $element['placeholder'],
-                    'position'    => $element['position'],
-                    'params'      => unserialize($element['params']),
-                ));
+                $content->load(
+                    array(
+                        'placeholder' => $element['placeholder'],
+                        'position'    => $element['position'],
+                    )
+                );
+                if (is_array($content->params) && $content->params > 0) {
+                    $content->params = array_merge(
+                        $content->params,
+                        (array) $element['params']
+                    );
+                } else {
+                    $content->params = $element['params'];
+                }
                 $contents[] = $content;
             }
         }
@@ -303,7 +309,6 @@ class ContentManager
         return $contents;
 
     }
-
 
     /**
      * Fetches all the contents (articles, widgets, etc) for one specific
@@ -441,13 +446,14 @@ class ContentManager
 
             /* Notice log of this action */
             $logger = Application::getLogger();
-            $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid']
-                .') has executed action drop suggested flag at '
-                .$contentIdsSQL.' ids');
-
+            $logger->notice(
+                'User '.$_SESSION['username'].' ('.$_SESSION['userid']
+                .') has executed action drop suggested flag at '.$contentIdsSQL.' ids'
+            );
 
             return true;
         }
+
         return false;
 
     }
@@ -478,28 +484,6 @@ class ContentManager
         return $returnValue;
     }
 
-    // TODO: I think that this method is not used anymore
-    public static function filterContentsbyProperty(
-        $array,
-        $property
-    ) {
-
-        $filterKeys   = array_keys($property);
-        $filterKey    = $filterKeys[0];
-        $filterValues = array_values($property);
-        $filterKey    = $filterKeys[0];
-        $filterValues = $filterValues[0];
-
-        $finalArray   = array();
-        foreach ($array as $element) {
-            if ($element->{$filterKey} == $filterValue) {
-                $finalArray[] = $element;
-            }
-        }
-
-        return $finalArray;
-    }
-
     public function sortByPosition($a, $b)
     {
         return ($a->position == $b->position)
@@ -507,12 +491,12 @@ class ContentManager
     }
 
     /**
-    * Sort one array of object by one of the object's property
-    *
-    * @param mixed $array, the array of objects
-    * @param mixed $property, the property to sort with
-    * @return mixed, the sorted $array
-    */
+     * Sort one array of object by one of the object's property
+     *
+     * @param mixed $array, the array of objects
+     * @param mixed $property, the property to sort with
+     * @return mixed, the sorted $array
+     */
     public static function sortArrayofObjectsByProperty($array, $property)
     {
         // Y si el array es vacio ????
@@ -566,11 +550,11 @@ class ContentManager
     }
 
     /**
-    * Gets the name of one content type by its ID
-    *
-    * @param int $contentID, the id of the content we want to work with
-    * @return string, the name of the content
-    */
+     * Gets the name of one content type by its ID
+     *
+     * @param int $contentID, the id of the content we want to work with
+     * @return string, the name of the content
+     */
     public static function getContentTypeNameFromId(
         $contentID,
         $ucfirst = false
@@ -600,15 +584,14 @@ class ContentManager
 
         return $return_value;
 
-
     }
 
-        /**
-    * Gets the path of one file type by its ID
-    *
-    * @param int $contentID, the id of the content we want to work with
-    * @return string, the name of the content
-    */
+    /**
+     * Gets the path of one file type by its ID
+     *
+     * @param int $contentID, the id of the content we want to work with
+     * @return string, the name of the content
+     */
     public static function getFilePathFromId($contentID, $ucfirst = false)
     {
         // Raise an error if $contentID is not a number
@@ -635,7 +618,6 @@ class ContentManager
         }
 
         return $returnValue;
-
 
     }
 
@@ -664,11 +646,11 @@ class ContentManager
     public function getMostViewedContent(
         $contentType,
         $notEmpty = false,
-        $category  = 0,
-        $author    =0,
-        $days      =2,
-        $num       =9,
-        $all       =false
+        $category = 0,
+        $author = 0,
+        $days = 2,
+        $num = 9,
+        $all = false
     ) {
         $this->init($contentType);
 
@@ -701,8 +683,6 @@ class ContentManager
             $_author = '';
         }
 
-
-
         $sql = 'SELECT * FROM '.$_tables
              . 'WHERE '.$_where.$_category.$_author.$_days
              . ' AND `contents`.`pk_content`=`pk_'.$this->content_type.'` '
@@ -722,7 +702,6 @@ class ContentManager
 
         return $this->getInTime($items);
     }
-
 
     /**
      * This function returns an array of objects $contentType of the most
@@ -746,10 +725,10 @@ class ContentManager
     public function getMostComentedContent(
         $contentType,
         $notEmpty = false,
-        $category  = 0,
-        $days      =2,
-        $num       =9,
-        $all       =false
+        $category = 0,
+        $days = 2,
+        $num = 9,
+        $all = false
     ) {
         $this->init($contentType);
         $items = array();
@@ -766,8 +745,11 @@ class ContentManager
 
         if (intval($category)>0) {
 
-            $pks = $this->find_by_category($contentType, $category,
-                $_where_slave.$_days.$_comented);
+            $pks = $this->find_by_category(
+                $contentType,
+                $category,
+                $_where_slave.$_days.$_comented
+            );
             if (!$all) {
                 $pks = $this->getInTime($pks);
             }
@@ -775,19 +757,24 @@ class ContentManager
             if (count($pks)<$num && $notEmpty) {
                 // En caso de que existan menos de 6 contenidos,
                 // lo hace referente a los 200 últimos contenidos
-                $pks = $this->find_by_category($contentType,
-                    $category, $_where_slave.$_comented,
+                $pks = $this->find_by_category(
+                    $contentType,
+                    $category,
+                    $_where_slave.$_comented,
                     'ORDER BY `contents`.`content_status` DESC, created DESC LIMIT 200',
-                    'pk_content, starttime, endtime');
+                    'pk_content, starttime, endtime'
+                );
                 if (!$all) {
                     $pks = $this->getInTime($pks);
                 }
             }
         } else {
-            $pks = $this->find($contentType,
+            $pks = $this->find(
+                $contentType,
                 $_where_slave.$_days.$_comented,
-                null, 'pk_content, starttime, endtime');
-
+                null,
+                'pk_content, starttime, endtime'
+            );
 
             if (!$all) {
                 $pks = $this->getInTime($pks);
@@ -796,10 +783,14 @@ class ContentManager
             if (count($pks)< $num && $notEmpty) {
                 // En caso de que existan menos de $num contenidos,
                 // lo hace referente a los 200 últimos contenidos
-                $pks = $this->getInTime($this->find($contentType,
-                    $_where_slave.$_comented,
-                    'ORDER BY created DESC LIMIT 200',
-                    'pk_content, starttime, endtime'));
+                $pks = $this->getInTime(
+                    $this->find(
+                        $contentType,
+                        $_where_slave.$_comented,
+                        'ORDER BY created DESC LIMIT 200',
+                        'pk_content, starttime, endtime'
+                    )
+                );
                 if (!$all) {
                     $pks = $this->getInTime($pks);
                 }
@@ -816,10 +807,12 @@ class ContentManager
         }
         $pk_list = substr($pk_list, 0, strlen($pk_list)-1);
 
-        $comments = $this->find('Comment',
+        $comments = $this->find(
+            'Comment',
             'available=1 AND fk_content IN ('.$pk_list.')',
             ' GROUP BY fk_content ORDER BY num DESC LIMIT 0 , 80',
-            ' fk_content, count(pk_comment) AS num');
+            ' fk_content, count(pk_comment) AS num'
+        );
 
         $pk_list = '';
         foreach ($comments as $comment) {
@@ -831,9 +824,12 @@ class ContentManager
         }
 
         $pk_list = substr($pk_list, 0, strlen($pk_list)-1);
-        $items = $this->find($contentType,
-            'pk_content IN('.$pk_list.')', $_limit,
-            '`contents`.`pk_content`, `contents`.`title`, `contents`.`slug`');
+        $items = $this->find(
+            $contentType,
+            'pk_content IN('.$pk_list.')',
+            $_limit,
+            '`contents`.`pk_content`, `contents`.`title`, `contents`.`slug`'
+        );
         if (empty($items)) {
             return array();
         }
@@ -856,7 +852,10 @@ class ContentManager
 
         uasort(
             $articles,
-            function($a, $b) {
+            function (
+                $a,
+                $b
+            ) {
                 if ($a['num'] == $b['num']) {
                     return 0;
                 }
@@ -867,7 +866,6 @@ class ContentManager
 
         return $articles;
     }
-
 
     /**
      * This function returns an array of objects $contentType of the most voted
@@ -896,11 +894,11 @@ class ContentManager
     public function getMostVotedContent(
         $contentType,
         $not_empty = false,
-        $category  = 0,
-        $author    = 0,
-        $days      = 2,
-        $num       = 8,
-        $all       = false
+        $category = 0,
+        $author = 0,
+        $days = 2,
+        $num = 8,
+        $all = false
     ) {
         $this->init($contentType);
         $items = array();
@@ -971,16 +969,18 @@ class ContentManager
     public function getLastComentsContent(
         $contentType,
         $not_empty = false,
-        $category  = 0,
-        $num       =6,
-        $all       =false
+        $category = 0,
+        $num = 6,
+        $all = false
     ) {
         $this->init($contentType);
         $items = array();
 
-
-        $comments = $this->find('Comment', 'available=1 ',
-                            ' GROUP BY fk_content ORDER BY changed DESC LIMIT 0 , 50');
+        $comments = $this->find(
+            'Comment',
+            'available=1 ',
+            ' GROUP BY fk_content ORDER BY changed DESC LIMIT 0 , 50'
+        );
 
         $pk_list = '';
         $pk_comment_list ='';
@@ -996,14 +996,18 @@ class ContentManager
         $pk_list = substr($pk_list, 0, strlen($pk_list)-1);
         $pk_comment_list = substr($pk_comment_list, 0, strlen($pk_comment_list)-1);
 
-        $items = $this->find($contentType, 'pk_content IN('.$pk_list.')', '',
-            '`contents`.`pk_content`, `contents`.`title`, `contents`.`slug`');
+        $items = $this->find(
+            $contentType,
+            'pk_content IN('.$pk_list.')',
+            '',
+            '`contents`.`pk_content`, `contents`.`title`, `contents`.`slug`'
+        );
         if (empty($items)) {
             return array();
         }
 
         $sql = 'SELECT * FROM `contents` '
-             . 'WHERE `pk_content` IN('.$pk_comment_list.')';
+             . 'WHERE `pk_content` IN ('.$pk_comment_list.')';
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
@@ -1082,7 +1086,6 @@ class ContentManager
         return $contents;
     }
 
-
      /**
      * This function returns an array of objects all types of the most viewed
      * in the last few days indicated.
@@ -1104,9 +1107,9 @@ class ContentManager
     public function getAllMostViewed(
         $notEmpty = false,
         $category = 0,
-        $days=2,
-        $num=6,
-        $all=false
+        $days = 2,
+        $num = 6,
+        $all = false
     ) {
         $items = array();
         $_tables = '`contents`  ';
@@ -1170,9 +1173,9 @@ class ContentManager
     public function getAllMostVoted(
         $notEmpty = false,
         $category = 0,
-        $days     = 2,
-        $num      = 6,
-        $all      = false
+        $days = 2,
+        $num = 6,
+        $all = false
     ) {
         $items = array();
 
@@ -1286,7 +1289,6 @@ class ContentManager
             }
         }
 
-
         $pk_list = '';
         foreach ($pks as $pk) {
             $pk_list .= ' '.$pk->id.',';
@@ -1337,7 +1339,10 @@ class ContentManager
 
         uasort(
             $articles,
-            function ($a, $b) {
+            function (
+                $a,
+                $b
+            ) {
                 if ($a['num'] == $b['num']) {
                     return 0;
                 }
@@ -1360,14 +1365,15 @@ class ContentManager
         $contents = array();
 
         $cm       = new ContentManager();
-        $contents = $cm->find_all('Article',
+        $contents = $cm->find_all(
+            'Article',
             'content_status=1 AND available=1 AND frontpage=1'.
             ' AND in_home=2',
-            'ORDER BY  created DESC,  title ASC ');
+            'ORDER BY  created DESC,  title ASC '
+        );
 
         return $contents;
     }
-
 
     /**
      * Filter content objects by starttime and endtime
@@ -1379,7 +1385,7 @@ class ContentManager
      *
      * @return array Items filtered
     */
-    public function getInTime($items, $time=null)
+    public function getInTime($items, $time = null)
     {
         $filtered = array();
         if (is_array($items)) {
@@ -1403,8 +1409,6 @@ class ContentManager
 
         return $filtered;
     }
-
-
 
     /**
      * Filter content objects by  available and not inlitter.
@@ -1438,45 +1442,43 @@ class ContentManager
      */
     public function count(
         $contentType,
-        $filter                 = null,
+        $filter = null,
         $pk_fk_content_category = null
     ) {
         $this->init($contentType);
         $items  = array();
-        $_where = 'in_litter=0';
+        $_where = 'AND in_litter=0';
 
-        if ( !is_null($filter) ) {
+        if (!is_null($filter) ) {
             if (($filter == ' `contents`.`in_litter`=1')
                 || ($filter == 'in_litter=1')
             ) {
-                  $_where = $filter;
+                $_where = ' AND '.$filter;
             } else {
-                $_where = ' `contents`.`in_litter`=0 AND '.$filter;
+                $_where .= ' AND '.$filter;
             }
         }
 
         if (intval($pk_fk_content_category) > 0) {
             $sql = 'SELECT COUNT(contents.pk_content) '
                  . 'FROM `contents_categories`, `contents`, ' . $this->table . '  '
-                 . ' WHERE '.$_where
-                 . ' AND `contents_categories`.`pk_fk_content_category`='
+                 . ' WHERE `contents_categories`.`pk_fk_content_category`='
                  . $pk_fk_content_category
-                 . '  AND pk_content=`'.$this->table
-                 .'`.`pk_'.strtolower($this->content_type)
-                 . '` AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` ';
+                 . '  AND pk_content=`'.$this->table. '`.`pk_'.$this->content_type
+                 . '` AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` '
+                 . $_where;
         } else {
             $sql = 'SELECT COUNT(contents.pk_content) AS total '
                 . 'FROM `contents`, `'.$this->table.'` '
-                . 'WHERE '.$_where
-                .' AND `contents`.`pk_content`=`'.$this->table
-                .'`.`pk_'.strtolower($this->content_type).'` ';
+                . 'WHERE `contents`.`pk_content`=`'.$this->table
+                . '`.`pk_'.$this->content_type.'` '
+                . $_where;
         }
 
         $rs = $GLOBALS['application']->conn->GetOne($sql);
 
         return $rs;
     }
-
 
     /**
      * find_pages: Se utiliza para generar los listados en la
@@ -1504,11 +1506,12 @@ class ContentManager
      */
     public function find_pages(
         $contentType,
-        $filter                 = null,
-        $_order_by              = 'ORDER BY 1',
-        $page                   = 1,
-        $items_page             = 10,
-        $pk_fk_content_category = null
+        $filter = null,
+        $_order_by = 'ORDER BY 1',
+        $page = 1,
+        $items_page = 10,
+        $pk_fk_content_category = null,
+        $url = null
     ) {
         $this->init($contentType);
         $items = array();
@@ -1529,7 +1532,6 @@ class ContentManager
             $page = 1;
         }
         $_limit=' LIMIT '.($page-1)*$items_page.', '.($items_page);
-
 
         if ( intval($pk_fk_content_category) > 0) {
             $sql = 'SELECT * FROM contents_categories, contents, '.$this->table.'  ' .
@@ -1556,17 +1558,84 @@ class ContentManager
             'urlVar'      => 'page',
             'totalItems'  => $countContents,
         );
+
+        if ($url != null) {
+            $pager_options['path'] = $url;
+        }
         $pager = Pager::factory($pager_options);
 
         return array($items, $pager);
     }
 
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function getCountAndSlice(
+        $contentType,
+        $categoryId,
+        $filter,
+        $orderBy,
+        $page = 1,
+        $numElements = 10,
+        $debug = false
+    ) {
+        $this->init($contentType);
+        $items  = array();
+        $_where = '';
+
+        if (empty($filter)) {
+            $filterCount = ' contents.in_litter != 1 ';
+            $filter = ' AND '. $filterCount;
+        } else {
+            $filterCount = $filter;
+            $filter = ' AND '. $filter;
+        }
+
+        $countContents = $this->count($contentType, $filterCount, $categoryId);
+
+        if ($page == 1) {
+            $limit = ' LIMIT '. $numElements;
+        } else {
+            $limit = ' LIMIT '.($page-1)*$numElements.', '.$numElements;
+        }
+
+        if (!is_null($categoryId)) {
+            $sql = 'SELECT * FROM contents_categories, contents, '.$this->table.' '
+                 . ' WHERE `contents_categories`.`pk_fk_content_category`='.$categoryId
+                 . ' AND `contents`.`pk_content`=`'.$this->table.'`.`pk_'.$this->content_type.'`'
+                 . ' AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` '
+                 . $filter
+                 . ' '
+                 . $orderBy
+                 . $limit;
+        } else {
+            $sql = 'SELECT * FROM `contents`, `'.$this->table.'` '
+                 . ' WHERE `contents`.`pk_content`=`'.$this->table.'`.`pk_'.$this->content_type.'` '
+                 . $filter
+                 . ' '
+                 . $orderBy
+                 . $limit;
+        }
+        if ($debug == true) {
+            var_dump($sql);
+            die();
+        }
+
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+
+        $items = $this->loadObject($rs, $contentType);
+
+        return array($countContents, $items);
+    }
 
     public function find_by_category(
         $contentType,
         $pk_fk_content_category,
-        $filter=null,
-        $_order_by='ORDER BY 1'
+        $filter = null,
+        $_order_by = 'ORDER BY 1'
     ) {
         $this->init($contentType);
 
@@ -1575,7 +1644,7 @@ class ContentManager
 
         if ( !is_null($filter) ) {
             //se busca desde la litter.php
-            if ( $filter == 'in_litter=1') {
+            if ($filter == 'in_litter=1') {
                 $_where = $filter;
             } else {
                 $_where = ' in_litter=0 AND '.$filter;
@@ -1601,12 +1670,11 @@ class ContentManager
         return $items;
     }
 
-
     public function find_by_category_name(
         $contentType,
         $category_name,
-        $filter=null,
-        $_order_by='ORDER BY 1'
+        $filter = null,
+        $_order_by = 'ORDER BY 1'
     ) {
         // recupera el id de la categoria del array.
         $this->init($contentType);
@@ -1636,51 +1704,9 @@ class ContentManager
         return $items;
     }
 
-
-    //this function returns last contents of Subcategories of a given category
-    // TODO: I think that this method is no used anymore
-    public function find_inSubcategory_by_categoryName(
-        $contentType,
-        $category_name,
-        $filter    = null,
-        $_order_by = 'ORDER BY 1'
-    ) {
-        $this->init($contentType);
-        $items = array();
-        $where = '1=1  AND in_litter=0';
-
-        if ( !is_null($filter) ) {
-            if ( $filter == 'in_litter=1') {
-                //se busca desde la litter.php
-                $where = $filter;
-            }
-
-            $where = $filter.' AND in_litter=0';
-        }
-
-        $sql = 'SELECT contents.pk_content '
-            . 'FROM contents,content_categories, contents_categories '
-            . $where
-            . ' AND content_categories.fk_content_category=\''.$this->get_id($category_name).'\''
-            . ' WHERE content_categories.pk_content_category=contents_categories.pk_fk_content_category '
-            . ' AND contents.pk_content = contents_categories.pk_fk_content '
-            . $_order_by;
-
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        if (!$rs) {
-            return( $items );
-
-        } else {
-            $items=$this->loadObject($rs, $contentType);
-        }
-
-        return( $items );
-    }
-
     //this function returns title,catName and slugs of last headlines from
     //Subcategories of a given category
-    public function findHeadlines(/*$filter=null, $_order_by='ORDER BY 1'*/)
+    public function findHeadlines()
     {
         $sql =
         'SELECT `contents`.`title`, `contents`.`pk_content` ,
@@ -1783,8 +1809,8 @@ class ContentManager
         $totalItems,
         $numPages,
         $delta,
-        $funcion   ='null',
-        $params    ='null',
+        $funcion = 'null',
+        $params = 'null',
         $separator = " | "
     ) {
         if (!isset($numPages)) {
@@ -1820,25 +1846,27 @@ class ContentManager
             $append = true;
         }
 
-        $pager = Pager::factory(array(
-            'mode'        => 'Sliding',
-            'perPage'     => $numPages,
-            'delta'       => $delta,
-            'clearIfVoid' => true,
-            'urlVar'      => $page,
-            'separator'   => $separator,
-            'spacesBeforeSeparator' => 1,
-            'spacesAfterSeparator' => 1,
-            'totalItems'  => $totalItems,
-            'append'      => $append,
-            'path'        => $path,
-            'fileName'    => $fun,
-            'altPage'     => 'Página %d',
-            'altFirst'    => 'Primera',
-            'altLast'     => 'Última',
-            'altPrev'     => 'Página previa',
-            'altNext'     => 'Siguiente página'
-        ));
+        $pager = Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $numPages,
+                'delta'       => $delta,
+                'clearIfVoid' => true,
+                'urlVar'      => $page,
+                'separator'   => $separator,
+                'spacesBeforeSeparator' => 1,
+                'spacesAfterSeparator' => 1,
+                'totalItems'  => $totalItems,
+                'append'      => $append,
+                'path'        => $path,
+                'fileName'    => $fun,
+                'altPage'     => 'Página %d',
+                'altFirst'    => 'Primera',
+                'altLast'     => 'Última',
+                'altPrev'     => 'Página previa',
+                'altNext'     => 'Siguiente página'
+            )
+        );
 
         return $pager;
     }
@@ -1848,7 +1876,7 @@ class ContentManager
     //index_paginate_articles
     //Admin  advertisement.php, advertisement_images.php,
     //opinion.php, preview_content.php
-    public function paginate_num($items, $numPages=20)
+    public function paginate_num($items, $numPages = 20)
     {
         $_items = array();
 
@@ -1856,24 +1884,26 @@ class ContentManager
             $_items[] = $v->id;
         }
 
-        $this->pager = &Pager::factory(array(
-            'itemData'    => $_items,
-            'perPage'     => $numPages,
-            'delta'       => 1, //Num de paginas antes y despues de la actual
-            'append'      => true,
-            'separator'   => '|',
-            'spacesBeforeSeparator' => 1,
-            'spacesAfterSeparator'  => 1,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'mode'        => 'Sliding',
-            'linkClass'   => 'pagination',
-            'altFirst'    => 'primera p&aacute;gina',
-            'altLast'     => '&uacute;ltima p&aacute;gina',
-            'altNext'     => 'p&aacute;gina seguinte',
-            'altPrev'     => 'p&aacute;gina anterior',
-            'altPage'     => 'p&aacute;gina'
-        ));
+        $this->pager = &Pager::factory(
+            array(
+                'itemData'    => $_items,
+                'perPage'     => $numPages,
+                'delta'       => 1, //Num de paginas antes y despues de la actual
+                'append'      => true,
+                'separator'   => '|',
+                'spacesBeforeSeparator' => 1,
+                'spacesAfterSeparator'  => 1,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'mode'        => 'Sliding',
+                'linkClass'   => 'pagination',
+                'altFirst'    => 'primera p&aacute;gina',
+                'altLast'     => '&uacute;ltima p&aacute;gina',
+                'altNext'     => 'p&aacute;gina seguinte',
+                'altPrev'     => 'p&aacute;gina anterior',
+                'altPage'     => 'p&aacute;gina'
+            )
+        );
         $data  = $this->pager->getPageData();
 
         $result = array();
@@ -1893,7 +1923,7 @@ class ContentManager
         $numPages,
         $delta,
         $funcion,
-        $params='null'
+        $params = 'null'
     ) {
         if (!isset($numPages)) {
             $numPages = 20;
@@ -1917,27 +1947,29 @@ class ContentManager
 
         $itemsPerPage = (defined(ITEMS_PAGE))? ITEMS_PAGE: $numPages;
 
-        $this->pager = &Pager::factory(array(
-            'itemData'      => $_items,
-            'perPage'       => $itemsPerPage,
-            'delta'         => $delta, // # of pages before and after this one
-            'append'        => true,
-            'separator'     => '|',
-            'spacesBeforeSeparator' => 1,
-            'spacesAfterSeparator' => 1,
-            'clearIfVoid'   => true,
-            'urlVar'        => 'page',
-            'mode'          => 'Sliding',
-            'append'        => false,
-             'path'         => '',
-            'fileName'      => 'javascript:'.$fun,
-            'linkClass'     => 'pagination',
-            'altFirst'      => 'primera p&aacute;gina',
-            'altLast'       => '&uacute;ltima p&aacute;gina',
-            'altNext'       => 'p&aacute;gina seguinte',
-            'altPrev'       => 'p&aacute;gina anterior',
-            'altPage'       => 'p&aacute;gina'
-        ));
+        $this->pager = &Pager::factory(
+            array(
+                'itemData'      => $_items,
+                'perPage'       => $itemsPerPage,
+                'delta'         => $delta, // # of pages before and after this one
+                'append'        => true,
+                'separator'     => '|',
+                'spacesBeforeSeparator' => 1,
+                'spacesAfterSeparator' => 1,
+                'clearIfVoid'   => true,
+                'urlVar'        => 'page',
+                'mode'          => 'Sliding',
+                'append'        => false,
+                 'path'         => '',
+                'fileName'      => 'javascript:'.$fun,
+                'linkClass'     => 'pagination',
+                'altFirst'      => 'primera p&aacute;gina',
+                'altLast'       => '&uacute;ltima p&aacute;gina',
+                'altNext'       => 'p&aacute;gina seguinte',
+                'altPrev'       => 'p&aacute;gina anterior',
+                'altPage'       => 'p&aacute;gina'
+            )
+        );
         $data  = $this->pager->getPageData();
 
         $result = array();
@@ -1979,9 +2011,9 @@ class ContentManager
     */
     public function getArrayOfArticlesInCategory(
         $categoryID,
-        $filter    = null,
-        $orderBy ='ORDER BY 1',
-        $limit    = 50
+        $filter = null,
+        $orderBy = 'ORDER BY 1',
+        $limit = 50
     ) {
         $items  = array();
         $where = '1=1  AND in_litter=0';
@@ -2026,7 +2058,7 @@ class ContentManager
         $_where = '1=1  AND in_litter=0';
 
         if ( !is_null($filter) ) {
-            if ( $filter == 'in_litter=1') {
+            if ($filter == 'in_litter=1') {
                 //se busca desde la litter.php
                 $_where = $filter;
             }
@@ -2077,9 +2109,9 @@ class ContentManager
     //Returns categoryName with the content Id
     public function getCategoryNameByContentId($contentId)
     {
-        $sql = 'SELECT pk_fk_contents_category FROM `contents_categories` '
+        $sql = 'SELECT pk_fk_content_category, catName FROM `contents_categories` '
              . 'WHERE pk_fk_content = ?';
-        $rs  = $GLOBALS['application']->conn->GetOne($sql, array($contentId));
+        $rs  = $GLOBALS['application']->conn->Execute($sql, array($contentId));
 
         if (!$rs) {
             Application::logDatabaseError();
@@ -2087,9 +2119,7 @@ class ContentManager
             return false;
         }
 
-        $category_name=$this->get_title($rs);
-
-        return $category_name;
+        return $rs->fields['catName'];
     }
 
     //Devuelve un array de objetos segun se pase un array de id's

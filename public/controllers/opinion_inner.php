@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  **/
 // Start and setup the app
-require_once('../bootstrap.php');
+require_once '../bootstrap.php';
 use Onm\Settings as s;
 
 // Redirect Mobile browsers to mobile site unless a cookie exists.
@@ -26,25 +26,29 @@ $category_name    = $request->query->filter('category_name', 'opinion', FILTER_S
 $subcategory_name = $request->query->filter('subcategory_name', '', FILTER_SANITIZE_STRING);
 $action           = $request->query->filter('action', null, FILTER_SANITIZE_STRING);
 
-$dirtyID          = $request->query->filter('opinion_id', '', FILTER_SANITIZE_STRING);
-$opinionID        = Content::resolveID($dirtyID);
+$dirtyID     = $request->query->filter('opinion_id', '', FILTER_SANITIZE_STRING);
+$slug        = $request->query->filter('opinion_title', '', FILTER_SANITIZE_STRING);
+$author_name = $request->query->filter('author_name', '', FILTER_SANITIZE_STRING);
+$opinionID   = Content::resolveID($dirtyID);
 
-$tpl->assign(array(
-    'contentId' => $opinionID,
-    'action'    => $action
-)); // Used on module_comments.tpl
+$tpl->assign(
+    array(
+        'contentId' => $opinionID,
+        'action'    => $action
+    )
+); // Used on module_comments.tpl
 
 // Fetch information for uncached sections
-require_once "opinion_inner_advertisement.php";
+require_once 'opinion_inner_advertisement.php';
 
 switch ($action) {
-    case 'read': { //Opinion de un autor
+    case 'read': //Opinion de un autor
         // Redirect to album frontpage if id_album wasn't provided
         if (is_null($opinionID)) {
             Application::forward301('/opinion/');
         }
 
-        $opinion = new Opinion($opinionID );
+        $opinion = new Opinion($opinionID);
 
         Content::setNumViews($opinionID);
 
@@ -68,8 +72,16 @@ switch ($action) {
                     '/controllers/opinion_inner.php?action=sendform&opinion_id=' . $dirtyID
                 );
                 // } Sacar broza
-
+                /*
                 $opinion->author_name_slug = StringUtils::get_title($opinion->name);
+                //Check slug
+                if (empty($slug) || ($opinion->slug != $slug)
+                    || ($opinion->author_name_slug != $author_name)) {
+                    Application::forward301(SITE_URL.$opinion->uri);
+                }
+                */
+
+
                 // Fetch rating for this opinion
                 $rating = new Rating($opinionID);
                 $tpl->assign('rating_bar', $rating->render('article', 'vote'));
@@ -108,9 +120,9 @@ switch ($action) {
                     $where=' opinions.fk_author='.($opinion->fk_author);
                 }
 
-                $otherOpinions = $cm->cache->find(  'Opinion',
-                    $where
-                    .' AND `pk_opinion` <>' .$opinionID
+                $otherOpinions = $cm->cache->find(
+                    'Opinion',
+                    $where.' AND `pk_opinion` <>' .$opinionID
                     .' AND available = 1  AND content_status=1',
                     ' ORDER BY created DESC LIMIT 0,9'
                 );
@@ -120,12 +132,14 @@ switch ($action) {
 
                 $author = new \Author($opinion->fk_author);
 
-                $tpl->assign(array(
-                    'other_opinions'  => $otherOpinions,
-                    'opinion'         => $opinion,
-                    'actual_category' => 'opinion',
-                    'author'          => $author,
-                ));
+                $tpl->assign(
+                    array(
+                        'other_opinions'  => $otherOpinions,
+                        'opinion'         => $opinion,
+                        'actual_category' => 'opinion',
+                        'author'          => $author,
+                    )
+                );
 
             }
 
@@ -135,9 +149,9 @@ switch ($action) {
         } else {
             Application::forward301('/404.html');
         }
-    } break;
 
-    case 'print': {
+        break;
+    case 'print':
 
         // Article
         $opinion = new Opinion($dirtyID);
@@ -154,12 +168,10 @@ switch ($action) {
         $tpl->display('opinion/opinion_printer.tpl');
         exit(0);
 
-    } break;
+        break;
+    case 'sendform':
 
-
-    case 'sendform': {
-
-        require_once('session_bootstrap.php');
+        require_once 'session_bootstrap.php';
         $token = $_SESSION['sendformtoken'] = md5(uniqid('sendform'));
 
         $opinion = new Opinion($opinionID);
@@ -171,11 +183,10 @@ switch ($action) {
         $tpl->display('opinion/partials/_opinion_sendform.tpl');
         exit(0);
 
-    } break;
+        break;
+    case 'send':
 
-    case 'send': {
-
-        require_once('session_bootstrap.php');
+        require_once 'session_bootstrap.php';
 
         // Check if magic_quotes is enabled and clear globals arrays
         StringUtils::disabled_magic_quotes();
@@ -187,7 +198,7 @@ switch ($action) {
         }
 
         // Send opinion to friend
-        require(SITE_LIBS_PATH."/phpmailer/class.phpmailer.php");
+        require_once SITE_VENDOR_PATH."/phpmailer/class.phpmailer.php";
 
         $tplMail = new Template(TEMPLATE_USER);
 
@@ -207,9 +218,12 @@ switch ($action) {
             $request->query->filter('sender', null, FILTER_SANITIZE_STRING);
         $mail->FromName =
             $request->query->filter('name_sender', null, FILTER_SANITIZE_STRING);
-        $mail->Subject = _(sprintf(
-            '%s ha compartido contigo un contenido de %s',
-            $mail->FromName, s::get('site_name'))
+        $mail->Subject = _(
+            sprintf(
+                '%s ha compartido contigo un contenido de %s',
+                $mail->FromName,
+                s::get('site_name')
+            )
         );
 
         $tplMail->assign('destination', 'amig@,');
@@ -262,7 +276,8 @@ switch ($action) {
         /*
             * Implementacion para enviar a multiples destinatarios separados por coma
             */
-        $destinatarios = explode(',',
+        $destinatarios = explode(
+            ',',
             $request->query->filter('destination', null, FILTER_SANITIZE_STRING)
         );
 
@@ -289,9 +304,10 @@ switch ($action) {
         $tpl->caching = 0;
         $tpl->display('opinion/partials/_opinion_sendform.tpl');
         exit(0);
-    } break;
 
-    case 'get_plus': {
+        break;
+    case 'get_plus':
+
         $cm = new ContentManager();
         $articles_viewed = $cm->cache->getMostViewedContent(
             $_REQUEST['content'],
@@ -316,9 +332,10 @@ switch ($action) {
         }
 
         Application::ajaxOut($output);
-    } break;
 
-    default: {
+        break;
+    default:
         Application::forward301('index.php');
-    } break;
+        break;
 }
+

@@ -7,6 +7,7 @@
  * file that was distributed with this source code.
  */
 namespace Onm\Benchmark;
+
 /**
  * Provides timing and profiling information..
  *
@@ -57,7 +58,7 @@ class Timer
      *
      * @throws <b>Exception</b> if the marker doesn't exists.
      */
-    public function stop( $marker = "default")
+    public function stop($marker = "default")
     {
         if (array_key_exists($marker, $this->markers)) {
             $this->markers[$marker]['endtime'] = $this->_getMicrotime();
@@ -100,3 +101,4 @@ class Timer
         return $microtime[1] . substr($microtime[0], 1);
     }
 }
+

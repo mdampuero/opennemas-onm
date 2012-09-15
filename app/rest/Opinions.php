@@ -7,7 +7,7 @@ class Opinions
     /*
     * @url GET /opinions/id/:id
     */
-    function id ($id)
+    public function id($id)
     {
         $this->_validateInt(func_get_args());
 
@@ -16,7 +16,7 @@ class Opinions
         return $opinion;
     }
 
-    private function _validateInt ($number)
+    private function _validateInt($number)
     {
         foreach ($number as $value) {
             if (!is_numeric($value)) {

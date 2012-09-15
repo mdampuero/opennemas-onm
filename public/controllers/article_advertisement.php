@@ -16,11 +16,12 @@ $banners = $advertisement->getAdvertisements($positions, $category);
 if (count($banners<=0)) {
     $cm = new ContentManager();
     $banners = $cm->getInTime($banners);
-    //$advertisement->render($banners, &$tpl);
-    $advertisement->render($banners, $advertisement);
+    //$advertisement->renderMultiple($banners, &$tpl);
+    $advertisement->renderMultiple($banners, $advertisement);
 }
 // Get intersticial banner,1,2,9,10
 $intersticial = $advertisement->getIntersticial(150, $category);
 if (!empty($intersticial)) {
-    $advertisement->render(array($intersticial), $advertisement);
+    $advertisement->renderMultiple(array($intersticial), $advertisement);
 }
+

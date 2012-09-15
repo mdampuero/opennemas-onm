@@ -8,6 +8,7 @@
  * file that was distributed with this source code.
  **/
 namespace Onm;
+
 /**
  * Class for handling Messages for showing to the user.
  *
@@ -115,30 +116,45 @@ class Message
         $noticeHTML = '';
 
         if (count($notices) > 0) {
-            $messages = '<ul>';
+            $messages = '';
             foreach ($notices as $msg) {
-                $messages .= "<li>{$msg}</li>";
+                $messages .= "{$msg}<br>";
             }
-            $messages .= '</ul>';
-            $noticeHTML = sprintf("<div class=\"notice\">%s</div>", $messages);
+            $noticeHTML = sprintf(
+                "<div class=\"alert alert-info\">"
+                ."<button class=\"close\" data-dismiss=\"alert\">×</button>"
+                ."%s"
+                ."</div>",
+                $messages
+            );
         }
 
         if (count($errors) > 0) {
-            $messages = '<ul>';
+            $messages = '';
             foreach ($errors as $msg) {
-                $messages .= "<li>{$msg}</li>";
+                $messages .= "{$msg}<br>";
             }
-            $messages .= '</ul>';
-            $noticeHTML .= sprintf("<div class=\"error\">%s</div>", $messages);
+            $noticeHTML .= sprintf(
+                "<div class=\"alert alert-error\">"
+                ."<button class=\"close\" data-dismiss=\"alert\">×</button>"
+                ."%s"
+                ."</div>",
+                $messages
+            );
         }
 
         if (count($sucess) > 0) {
-            $messages = '<ul>';
+            $messages = '';
             foreach ($sucess as $msg) {
-                $messages .= "<li>{$msg}</li>";
+                $messages .= "{$msg}<br>";
             }
-            $messages .= '</ul>';
-            $noticeHTML .= sprintf("<div class=\"success\">%s</div>", $messages);
+            $noticeHTML .= sprintf(
+                "<div class=\"alert alert-success\">"
+                ."<button class=\"close\" data-dismiss=\"alert\">×</button>"
+                ."%s"
+                ."</div>",
+                $messages
+            );
         }
 
         self::clean();
@@ -156,3 +172,4 @@ class Message
         }
     }
 }
+

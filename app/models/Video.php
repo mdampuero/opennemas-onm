@@ -7,6 +7,7 @@
  * file that was distributed with this source code.
  */
 use Onm\Message as m;
+
 /**
  * Handles video CRUD actions.
  *
@@ -21,7 +22,6 @@ class Video extends Content
     public $video_url  = null;
     public $author_name = null;
     public $content_type = null;
-    public $content_type_name = null;
 
     /**
      * Initializes the Video object
@@ -33,41 +33,28 @@ class Video extends Content
             $this->read($id);
         }
         $this->content_type = 'Video';
+        $this->content_type_l10n_name = _('Video');
+
     }
 
     public function __get($name)
     {
         switch ($name) {
             case 'uri':
-
                 return $this->getUri();
                 break;
             case 'slug':
                 return StringUtils::get_title($this->title);
+
                 break;
-
             case 'content_type_name':
-                $sql = 'SELECT * FROM `content_types`"
-                            ." WHERE pk_content_type = "?" LIMIT 1';
-                $values = array($this->content_type);
-                $contentTypeName = $GLOBALS['application']->conn->Execute(
-                    $sql,
-                    $values
-                );
-                if (isset($contentTypeName->fields['name'])) {
-                    $returnValue = $contentTypeName;
-                } else {
-                    $returnValue = $this->content_type;
-                }
-                $this->content_type_name = $returnValue;
-
-                return $returnValue;
+                return 'Video';
 
                 break;
             case 'thumb':
-
                 return $this->getThumb();
 
+                break;
             default:
                 break;
         }
@@ -197,12 +184,16 @@ class Video extends Content
         $videoInformation = array();
 
         if (empty($file["file_path"])) {
-            throw new Exception(sprintf(
-                _('Seems that the server limits file uploads up to %s Mb. '
-                  .'Try to upload files smaller than that size or '
-                  .'contact with your administrator'),
-                (int) (ini_get('upload_max_filesize'))
-            ));
+            throw new Exception(
+                sprintf(
+                    _(
+                        'Seems that the server limits file uploads up to %s Mb. '
+                        .'Try to upload files smaller than that size or '
+                        .'contact with your administrator'
+                    ),
+                    (int) ini_get('upload_max_filesize')
+                )
+            );
         }
         $convertedVideo = $this->convertVideotoFLV($file, $baseUploadpath);
 
@@ -260,26 +251,30 @@ class Video extends Content
             case 'video/msvideo':
             case 'video/x-msvideo':
                 // Dropped option -s 320x240
-                $shellCommand = escapeshellcmd($ffmpgePath." -i "
-                    .$temporaryVideoPath." -f flv  ".$videoSavePath). " 2>&1";
+                $shellCommand = escapeshellcmd(
+                    $ffmpgePath." -i "
+                    .$temporaryVideoPath." -f flv  ".$videoSavePath
+                ). " 2>&1";
                 exec($shellCommand, $outputExec, $returnExec);
                 unset($outputExec);
                 if ($returnExec !== 0) {
                     throw new \Exception(
-                        _('There was a problem while converting your video. '
-                            .'Please contact with your adminstrator.')
+                        _(
+                            'There was a problem while converting your video. '
+                            .'Please contact with your adminstrator.'
+                        )
                     );
                 };
-                break;
 
+                break;
             case 'video/x-flv':
                 copy($temporaryVideoPath, $videoSavePath);
-                break;
 
+                break;
             default:
-                $message =
-                    sprintf(_('Video format "%s" not supported'), $fileType);
+                $message = sprintf(_('Video format "%s" not supported'), $fileType);
                 throw new \Exception($message);
+
                 break;
         }
 
@@ -409,9 +404,20 @@ class Video extends Content
      **/
     public function render($params)
     {
-        unset($params);
+         //  if (!isset($tpl)) {
+            $tpl = new Template(TEMPLATE_USER);
+        //}
 
-        return "\n<!-- video rendering not implemented -->\n";
+        $tpl->assign('item', $this);
+        $tpl->assign('cssclass', $params['cssclass']);
+
+        try {
+            $html = $tpl->fetch('frontpage/contents/_video.tpl');
+        } catch (\Exception $e) {
+            $html = 'Video not available';
+        }
+
+        return $html;
     }
-
 }
+

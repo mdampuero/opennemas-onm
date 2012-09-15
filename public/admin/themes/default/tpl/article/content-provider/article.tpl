@@ -15,9 +15,9 @@
             <i class="icon-cog"></i>
             <span class="caret"></span>
         </a>
-        <ul class="dropdown-menu">
+        <ul class="dropdown-menu pull-right">
             <li>
-                <a title="{t 1=$content->title}Edit '%1'{/t}" href="/admin/article.php?action=read&amp;id={$content->id}&amp;category={$smarty.request.category}">
+                <a title="{t 1=$content->title}Edit '%1'{/t}" href="{url name=admin_article_show id=$content->id category=$category}">
                     <i class="icon-pencil"></i> {t}Edit{/t}
                 </a>
             </li>
@@ -40,7 +40,7 @@
             </li>
             <li class="divider"></li>
             <li>
-                <a href="{$smarty.server.PHP_SELF}?action=delete&amp;id={$content->id}&amp;category={$category}" title="{t}Delete{/t}" class="send-to-trash">
+                <a href="{url name=admin_article_delete id=$content->id category=$category}" title="{t}Delete{/t}" class="send-to-trash">
                     <i class="icon-trash"></i> {t}Send to trash{/t}
                 </a>
             </li>

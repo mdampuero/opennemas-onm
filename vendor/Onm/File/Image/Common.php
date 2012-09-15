@@ -8,6 +8,7 @@
  * file that was distributed with this source code.
  **/
 namespace Onm\File\Image;
+
 /**
  * Handles all the common operations with images
  *
@@ -36,25 +37,26 @@ abstract class Common
                 case 'flip':
                 case 'flop':
                     $this->$function();
-                    break;
 
+                    break;
                 case 'convert':
                 case 'alpha':
                     $this->$function($params[0]);
-                    break;
 
+                    break;
                 case 'thumbnail':
                 case 'rotate':
                     $this->$function($params[0], $params[1]);
-                    break;
 
+                    break;
                 case 'merge':
                 case 'resize':
                     $this->$function($params[0], $params[1], $params[2]);
-                    break;
 
+                    break;
                 case 'crop':
                     $this->$function($params[0], $params[1], $params[2], $params[3]);
+
                     break;
                 default:
                     throw new \Exception(
@@ -132,18 +134,18 @@ abstract class Common
             case 'top':
             case 'left':
                 $position = 0;
-                break;
 
+                break;
             case 'middle':
             case 'center':
                 $position = ($canvas/2) - ($size/2);
-                break;
 
+                break;
             case 'right':
             case 'bottom':
                 $position = $canvas - $size;
-                break;
 
+                break;
             default:
                 $position = 0;
         }
@@ -174,5 +176,5 @@ abstract class Common
 
         return ($w || $h) ? true : false;
     }
+}
 
-} // END class Common

@@ -3,7 +3,7 @@
 /**
  * Start up and setup the app
 */
-require_once('../bootstrap.php');
+require_once '../bootstrap.php';
 
 /**
  * Set up view
@@ -25,18 +25,15 @@ if (isset($slug) ) {
     //$page->setNumViews();
     Content::setNumViews($page->pk_static_page);
 
-
     $tpl->assign('category_real_name', $page->title);
     $tpl->assign('page', $page);
-
-
 
 } else {
     Application::forward('/');
 }
 /********************************* ADVERTISEMENTS  *********************************************/
-require_once ("statics_advertisement.php");
+require_once 'statics_advertisement.php';
 /********************************* ADVERTISEMENTS  *********************************************/
 
-
 $tpl->display('static_pages/statics.tpl');
+

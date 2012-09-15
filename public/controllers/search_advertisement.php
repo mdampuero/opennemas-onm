@@ -11,7 +11,8 @@ $advertisement = Advertisement::getInstance();
 $banners = $advertisement->getAdvertisements(array(1,2,3, 10,12, 11,13), $category);
 $cm = new ContentManager();
 $banners = $cm->getInTime($banners);
-//$advertisement->render($banners, &$tpl);
+//$advertisement->renderMultiple($banners, &$tpl);
 if (!empty($intersticial)) {
-    $advertisement->render($banners, &$advertisement);
+    $advertisement->renderMultiple($banners, $advertisement);
 }
+

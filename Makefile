@@ -20,52 +20,51 @@ all: l10n
 l10n: extracttrans updatepofiles compiletranslations extracttrans-backend updatepofiles-backend compiletranslations-backend
 
 extracttrans-backend:
-	@echo "Extracting translations";
-	@tsmarty2c $(TPL_FOLDER) > public/admin/locale/extracted_strings.c
-	@xgettext public/admin/controllers/**/* \
-	        public/admin/include/menu.php public/core/*.php \
+	@echo "Extracting backend translations";
+	@tsmarty2c $(TPL_FOLDER) > app/Backend/Resources/locale/extracted_strings.c
+	@xgettext app/Backend/Controllers/* \
+	        app/Backend/Resources/Menu.php vendor/core/*.php \
         	vendor/Onm/**/**/*.php \
 	        app/models/*.php \
-        	public/manager/controllers/**/*.php \
         	public/admin/themes/default/**/*.php \
-		  public/admin/locale/extracted_strings.c \
-		  -o public/admin/locale/onmadmin.pot --from-code=UTF-8
+		    app/Backend/Resources/locale/extracted_strings.c \
+		  -o app/Backend/Resources/locale/onmadmin.pot --from-code=UTF-8
 
 updatepofiles-backend:
-	@echo "Updating translations";
+	@echo "Updating backend translations";
 	@for i in $(LINGUAS); do \
 		echo " - $$i";	\
-		msgmerge -U "public/admin/locale/$$i/LC_MESSAGES/messages.po" \
-			'public/admin/locale/onmadmin.pot'; \
+		msgmerge -U "app/Backend/Resources/locale/$$i/LC_MESSAGES/messages.po" \
+			'app/Backend/Resources/locale/onmadmin.pot'; \
 	done
 
 compiletranslations-backend:
-	@echo "Compiling translations";
+	@echo "Compiling backend translations";
 	@for i in $(LINGUAS); do \
 		echo " - $$i: " && \
-		msgfmt -vf "public/admin/locale/$$i/LC_MESSAGES/messages.po" \
-			-o "public/admin/locale/$$i/LC_MESSAGES/messages.mo"; \
+		msgfmt -vf "app/Backend/Resources/locale/$$i/LC_MESSAGES/messages.po" \
+			-o "app/Backend/Resources/locale/$$i/LC_MESSAGES/messages.mo"; \
 	done
 
 extracttrans:
 	@echo "Extracting translations";
 	@xgettext public/controllers/* \
-		  -o public/locale/onmfront.pot --from-code=UTF-8
+		  -o app/Frontend/Resources/locale/onmfront.pot --from-code=UTF-8
 
 updatepofiles:
 	@echo "Updating translations";
 	@for i in $(LINGUAS); do \
 		echo " - $$i";	\
-		msgmerge -U "public/locale/$$i/LC_MESSAGES/messages.po" \
-			'public/locale/onmfront.pot'; \
+		msgmerge -U "app/Frontend/Resources/locale/$$i/LC_MESSAGES/messages.po" \
+			'app/Frontend/Resources/locale/onmfront.pot'; \
 	done
 
 compiletranslations:
 	@echo "Compiling translations";
 	@for i in $(LINGUAS); do \
 		echo " - $$i: " && \
-		msgfmt -vf "public/locale/$$i/LC_MESSAGES/messages.po" \
-			-o "public/locale/$$i/LC_MESSAGES/messages.mo"; \
+		msgfmt -vf "app/Frontend/Resources/locale/$$i/LC_MESSAGES/messages.po" \
+			-o "app/Frontend/Resources/locale/$$i/LC_MESSAGES/messages.mo"; \
 	done
 
 clean: cleancache cleaninstancefiles cleanlogs

@@ -1,0 +1,37 @@
+#: public/controllers/letter.php:165
+msgid "Su Carta al Director <strong>no</strong> ha sido guardada."
+msgstr ""
+
+#: public/controllers/login.php:37
+msgid "Login token is not valid. Try to autenticate again."
+msgstr ""
+
+#: public/controllers/login.php:47
+msgid ""
+"You have to accept your subscription by e-mail first. Please check your "
+"inbox."
+msgstr ""
+
+#: public/controllers/login.php:75
+msgid "You have logged in correctly. You will be redirect to the Home page"
+msgstr ""
+
+#: public/controllers/login.php:80
+msgid "Username or password incorrect."
+msgstr ""
+
+#: public/controllers/rating.php:15
+msgid "Action not recognized!"
+msgstr ""
+
+#: public/controllers/rating.php:25
+msgid "Problem with IP verification!"
+msgstr ""
+
+#: public/controllers/rating.php:32
+msgid "Content not available"
+msgstr ""
+
+#: public/controllers/rating.php:41
+msgid "You have voted this new previously."
+msgstr ""

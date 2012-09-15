@@ -8,5 +8,6 @@ $advertisement = Advertisement::getInstance();
 $banners = $advertisement->getAdvertisements(array(1, 2, 103, 105, 9, 10));
 $cm = new ContentManager();
 $banners = $cm->getInTime($banners);
-//$advertisement->render($banners, &$tpl);
-$advertisement->render($banners, $advertisement);
+//$advertisement->renderMultiple($banners, &$tpl);
+$advertisement->renderMultiple($banners, $advertisement);
+

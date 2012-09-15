@@ -13,19 +13,38 @@ $configFile = implode(DIRECTORY_SEPARATOR, array(
     APPLICATION_PATH, 'config', 'config.inc.php'
 ));
 
-if (!isset($request)) {
-    $request = Symfony\Component\HttpFoundation\Request::createFromGlobals();
+use Symfony\Component\HttpFoundation\Request,
+    Symfony\Component\Routing\RouteCollection,
+    Symfony\Component\Routing\Matcher\UrlMatcher,
+    Symfony\Component\Routing\RequestContext,
+    Symfony\Component\Routing\Route;
+
+// require __DIR__.'/../app/Backend/routes.php' ;
+if (!isset($routes)) {
+    $routes = new RouteCollection();
 }
+
+// Create the request object
+$request = Request::createFromGlobals();
+
+// Create the Request context from the request, useful for the matcher
+$context = new RequestContext();
+$context->fromRequest($request);
+
+// Inialize the url matcher
+$matcher = new UrlMatcher($routes, $context);
+
+//Initialize the url generator
+global $generator;
+$generator = new \Symfony\Component\Routing\Generator\UrlGenerator($routes, $context);
 
 if (file_exists($configFile)) {
 
     require $configFile;
-    require SITE_LIBS_PATH.'/functions.php';
     require_once 'Application.php';
-    \Application::initAutoloader();
 
     // Loads one ONM instance from database
-    $im = \Onm\Instance\InstanceManager::getInstance();
+    $im = new \Onm\Instance\InstanceManager($onmInstancesConnection);
     try {
         $instance = $im->load($_SERVER['SERVER_NAME']);
     } catch (\Onm\Instance\NotActivatedException $e) {
@@ -44,3 +63,4 @@ if (file_exists($configFile)) {
     echo $errorPage;
     die();
 }
+

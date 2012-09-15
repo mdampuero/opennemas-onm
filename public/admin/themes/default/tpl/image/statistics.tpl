@@ -1,26 +1,21 @@
 {extends file="base/admin.tpl"}
 
-
-{block name="footer-js" append}
-    {script_tag src="/photos.js" defer="defer"}
-{/block}
-
 {block name="content"}
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
     <div class="title"><h2>{t}Images manager :: General statistics{/t}</h2></div>
         <ul class="old-button">
             <li>
-                <a class="admin_add" href="{$smarty.server.PHP_SELF}?action=search">
-                    <img src="{$params.IMAGE_DIR}search.png" alt="Buscar Imágenes"><br />{t}Search{/t}
+                <a class="admin_add" href="{url name=admin_images_search}">
+                    <img src="{$params.IMAGE_DIR}search.png" alt="Buscar Imágenes"><br /><i class="icon-search"></i>
                 </a>
             </li>
             {acl isAllowed="IMAGE_SETTINGS"}
             <li class="separator"></li>
                 <li>
-                    <a href="{$smarty.server.PHP_SELF}?action=config" title="{t}Config video module{/t}">
-                        <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
-                        {t}Settings{/t}
+                    <a href="{url name=admin_images}" title="{t}Go back{/t}">
+                        <img src="{$params.IMAGE_DIR}previous.png" alt="" /><br />
+                        {t}Go back{/t}
                     </a>
                 </li>
             {/acl}
@@ -31,22 +26,7 @@
 
     {render_messages}
 
-    <ul class="pills">
-        <li>
-            <a href="{$smarty.server.PHP_SELF}?action=statistics" {if $category==0}class="active"{/if}>
-                {t}Global statistics{/t}
-            </a>
-        </li>
-        {acl isAllowed="ADVERTISEMENT_ADMIN"}
-            <li>
-                <a href="{$smarty.server.PHP_SELF}?action=today_catalog&amp;category=2" {if $category==2}class="active"{/if}>
-                    {t}Advertisement{/t}
-                </a>
-            </li>
-        {/acl}
-        {include file="menu_categories.tpl" home="{$smarty.server.PHP_SELF}?action=today_catalog"}
-    </ul>
-    <table class="listing-table">
+    <table class="table table-hover table-condensed">
         <thead>
             <tr>
                 <th>{t}Title{/t}</th>

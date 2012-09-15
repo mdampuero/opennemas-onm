@@ -29,7 +29,7 @@
                 <file>app/autoload.php</file>
             </exclude>
             <exclude>
-                <directory>bundles/*Bundle/Resources</directory>
+                <directory>bundles/*Bundles/Resources</directory>
             </exclude>
         </whitelist>
         <blacklist>

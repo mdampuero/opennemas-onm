@@ -1,6 +1,6 @@
 <div class="modal hide fade" id="modal-edit-album-photo">
     <div class="modal-header">
-        <a class="close" href="#">×</a>
+        <button type="button" class="close" data-dismiss="modal-album-accept" aria-hidden="true">×</button>
         <h3>{t}Edit image properties{/t}</h3>
     </div>
     <div class="modal-body clearfix">
@@ -12,13 +12,13 @@
             <div><label>{t}Image size{/t}</label>    <span class="image_size"></span></div>
             <div><label>{t}File size{/t}</label>     <span class="file_size"></span></div>
             <div><label>{t}Description{/t}</label>
-                <textarea name="footer_image" id="footer_image" class="footer_image"></textarea>
+                <textarea name="footer_image" id="footer_image" class="footer_image" autofocus></textarea>
                 <input type="hidden" name="id_image" id="id_image" value="">
             </div>
         </div>
     </div>
     <div class="modal-footer">
-        <a class="btn primary save" href="#">{t}Save{/t}</a>
+        <a class="btn btn-primary save" href="#">{t}Save{/t}</a>
     </div>
 </div>
 

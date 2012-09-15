@@ -17,5 +17,5 @@ namespace Onm\Import\DataSource\NewsMLG1Component;
  **/
 class Video extends ResourceAbstract
 {
+}
 
-} // END class Photo

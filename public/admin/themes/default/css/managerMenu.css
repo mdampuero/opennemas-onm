@@ -1,64 +1,111 @@
-.panel {
-    margin:0;
-    border:none;
-    padding:0 !important;
+.wrapper-menu-items {
+    border:1px solid #ccc;
+    padding:10px;
+    height:100%;
 }
-#menuelements { height:60px; border:1px solid #ccc; width:97%; }
-#menuelements, .elementsContainer { width:100%; margin:0; padding:10px; }
-#menuelements li, .elementsContainer li, .placeholder-element {
+.elementsContainer { margin:0; padding:10px; }
+.elementsContainer li {
     padding:5px 9px;
     list-style:none;
     border:1px solid #ddd;
-    cursor:pointer;
-    margin:2px;
-    display:inline-block;
-    font-size:1.1em;
+    margin:2px 0;
+    min-height:20px;
 }
-#menuelements li:hover, .elementsContainer li:hover { background:#FFF}
+.nested-sortable li:hover, .elementsContainer li:hover { background:#FFF; }
 
-.reveal-modal {
 
-    top: 90px;
-    left: 50%;
-    margin-left: -300px;
-    width: 440px;
-    height: 80px;
-    background: #FFF;
-    background: rgba(255,255,255,.9);
-    position: absolute;
-    z-index: 101;
-    padding: 30px 40px 34px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    border-radius: 5px;
-    -moz-box-shadow: 0 0 10px rgba(0,0,0,.4);
-    -webkit-box-shadow: 0 0 10px rgba(0,0,0,.4);
-    -box-shadow: 0 0 10px rgba(0,0,0,.4);
-    }
+#elements-provider > h3 { padding: 5px 10px 5px 30px !important;}
+#elements-provider > div ul {
+    margin:0;
+    padding:0;
+}
+#elements-provider > div {
+    padding:1em;
+}
 
-.reveal-modal .close-reveal-modal {
-    font-size: 22px;
-    line-height: .5;
-    position: absolute;
-    top: 8px;
-    right: 11px;
-    color: #aaa;
-    text-shadow: 0 -1px 1px rbga(0,0,0,.6);
-    font-weight: bold;
-    cursor: pointer;
-    }
-.save-button{
-    position: absolute;
-    top: 110px;
-    right: 20px;
-    cursor: pointer;
-		}
+#elements-provider .actions .edit-menu-item,
+#elements-provider .actions .delete-menu-item {
+    display:none;
+}
 
-.div-actions {
-    background: #CCCCCC;
-    background: rgba(255,255,255,.9);
-    -moz-box-shadow: 0 0 10px rgba(0,0,0,.4);
-    -webkit-box-shadow: 0 0 10px rgba(0,0,0,.4);
-    -box-shadow: 0 0 10px rgba(0,0,0,.4);
-    padding: 5px;
-    }
+.nested-sortable .actions .add-item {
+    display:none;
+}
+
+.placeholder-element {
+    border:1px dashed #ccc !important;
+    background:#efefef;
+}
+
+ol.placeholder-element {
+    margin: 0;
+    padding: 0;
+    padding-left: 30px;
+}
+
+.nested-sortable, .nested-sortable ol {
+    margin: 0 0 0 25px;
+    padding: 0;
+    list-style-type: none;
+}
+
+.nested-sortable {
+    margin: 0;
+}
+
+.nested-sortable > li:first-child {
+    margin-top:0;
+}
+.nested-sortable li {
+    margin: 5px 0 0 0;
+    padding: 0;
+}
+
+.nested-sortable li > div  {
+    border: 1px solid #d4d4d4;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    border-color: #D4D4D4 #D4D4D4 #BCBCBC;
+    padding: 6px;
+    margin: 0;
+    cursor: move;
+    background: #f6f6f6;
+    background: -moz-linear-gradient(top,  #ffffff 0%, #f6f6f6 47%, #ededed 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(47%,#f6f6f6), color-stop(100%,#ededed));
+    background: -webkit-linear-gradient(top,  #ffffff 0%,#f6f6f6 47%,#ededed 100%);
+    background: -o-linear-gradient(top,  #ffffff 0%,#f6f6f6 47%,#ededed 100%);
+    background: -ms-linear-gradient(top,  #ffffff 0%,#f6f6f6 47%,#ededed 100%);
+    background: linear-gradient(top,  #ffffff 0%,#f6f6f6 47%,#ededed 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed',GradientType=0 );
+
+}
+
+.placeholder {
+    border: 1px dashed #4183C4;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+
+.mjs-nestedSortable-error {
+    background: #fbe3e4;
+    border-color: transparent;
+}
+
+.menuItem > div {
+    position:relative;
+}
+.menuItem .edit-menu-form {
+    display:none;
+    width:100%;
+    background:White;
+    border-top:1px solid #ccc;
+    margin:3px -10px -3px -5px !important;
+    padding:5px;
+    margin-top:3px;
+
+}
+.menuItem .edit-menu-form .send-button-wrapper {
+    padding-left: 160px;
+}
