@@ -138,8 +138,9 @@ class SearchController extends Controller
 
             $sql = "SELECT pk_content, fk_content_type FROM contents".
                   " WHERE contents.available=1 AND fk_content_type ".
-                  " IN(1, 2, 3, 4, 7, 9, 10, 11) AND ".$matchString.
+                  " IN(1, 2, 3, 4, 7, 8, 9, 10, 11) AND ".$matchString.
                   " ORDER BY starttime DESC";
+
             $rs  = $GLOBALS['application']->conn->GetArray($sql);
 
             $results = array();
@@ -148,7 +149,10 @@ class SearchController extends Controller
                 $rs            = array_splice($rs, ($page-1)*9, 9);
 
                 foreach ($rs as $content) {
-                    $results[] = new \Content($content['pk_content']);
+                    $content = new \Content($content['pk_content']);
+                    $content->content_partial_path =
+                        $content->content_type_name.'/content-provider/'.$content->content_type_name.'.tpl';
+                    $results[] = $content;
                 }
 
                 $pagination = \Pager::factory(

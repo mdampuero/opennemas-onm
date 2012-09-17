@@ -10,7 +10,7 @@
 {if count($results) > 0}
 <div id="search_results_available" class="content-provider-block">
     {foreach from=$results item=content name=video_loop}
-        {include file="article/content-provider/article.tpl"}
+        {include file=$content->content_partial_path}
     {/foreach}
 </div>
 <div class="pagination clearfix">
