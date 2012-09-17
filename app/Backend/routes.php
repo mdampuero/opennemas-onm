@@ -591,6 +591,15 @@ $adminRoutes->add(
     '/admin'
 );
 
+$adminRoutes->add(
+    'admin_ads_config',
+    new Route(
+        '/ads/config',
+        array('_controller' => 'Backend:Controllers:AdsController:config')
+    ),
+    '/admin'
+);
+
 // Special manager routes
 $adminRoutes->add(
     'admin_specials',

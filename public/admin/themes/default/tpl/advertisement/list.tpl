@@ -34,6 +34,15 @@
                     </a>
                 </li>
                 {/acl}
+                {acl isAllowed="ALBUM_SETTINGS"}
+                <li class="separator"></li>
+                    <li>
+                        <a href="{url name=admin_ads_config}" title="{t}Config ads module{/t}">
+                            <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
+                            {t}Settings{/t}
+                        </a>
+                    </li>
+                {/acl}
             </ul>
         </div>
     </div>
