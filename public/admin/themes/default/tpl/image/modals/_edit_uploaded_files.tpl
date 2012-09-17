@@ -4,10 +4,16 @@
       <h3>{t}Files uploaded successfully{/t}</h3>
     </div>
     <div class="modal-body">
-        <p>{t}The dropped files are uploaded but you must .{/t}</p>
+        <p>{t}The dropped files are uploaded but you should complete their information.{/t}</p>
+        <p>{t}You can:{/t}</p>
+        <ul>
+            <li>{t}Edit them now{/t}</li>
+            <li>{t}Upload more images and complete the information later{/t}</li>
+        </ul>
     </div>
     <div class="modal-footer">
         <a class="btn btn-primary yes" href="#">{t}Edit them{/t}</a>
+        <a class="btn no" href="#">{t}Upload more images{/t}</a>
     </div>
 </div>
 
