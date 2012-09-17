@@ -99,12 +99,12 @@ var image_uploader ={
     {literal}
     <script>
     var fileUploadErrors = {
-        maxFileSize: 'File is too big',
-        minFileSize: 'File is too small',
-        acceptFileTypes: 'Filetype not allowed',
-        maxNumberOfFiles: 'Max number of files exceeded',
-        uploadedBytes: 'Uploaded bytes exceed file size',
-        emptyResult: 'Empty file upload result'
+        maxFileSize: '{t}File is too big{/t}',
+        minFileSize: '{t}File is too small{/t}',
+        acceptFileTypes: '{t}Filetype not allowed{/t}',
+        maxNumberOfFiles: '{t}Max number of files exceeded{/t}',
+        uploadedBytes: '{t}Uploaded bytes exceed file size{/t}',
+        emptyResult: '{t}Empty file upload result{/t}'
     };
     </script>
     <script id="template-upload" type="text/html">

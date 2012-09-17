@@ -28,6 +28,12 @@
             <div class="title"><h2>{t}Ads :: Configuration{/t}</h2></div>
             <ul class="old-button">
                 <li>
+                    <button type="submit">
+                        <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}" ><br>{t}Save{/t}
+                    </button>
+                </li>
+                <li class="separator"></li>
+                <li>
                     <a href="{url name=admin_ads}" class="admin_add" value="{t}Go back to list{/t}" title="{t}Go back to list{/t}">
                     <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Go back to list{/t}" alt="{t}Go back to list{/t}" ><br />{t}Go back to list{/t}
                     </a>
@@ -39,40 +45,15 @@
 
         {render_messages}
 
-        <div id="{$category}">
+        <div id="{$category}" class="form-horizontal panel">
 
-            <table class="adminform" border="0">
-                <tr>
-                    <td>
-                        <div class="form-wrapper">
-                            <div>
-                                <label for="ads_settings_lifetime_cookie">{t}Cookie lifetime for intersticials (min):{/t}</label>
-                                <input type="text" class="required" name="ads_settings_lifetime_cookie" id="ads_settings_lifetime_cookie" value="{$configs['ads_settings']['lifetime_cookie']|default:'300'}" />
-                            </div>
-                            <br />
-
-
-                            <br />
-
-
-                        </div>
-                    </td>
-                    <td> <br/>
-                        <div class="onm-help-block">
-								<div class="title"><h4>{t}Definition values{/t}</h4></div>
-                                <div class="content">
-                                    <ul>
-                                        <li>{t}Use cookie lifetime to define how long it will take to re-display the interstitial in frontpage (in minutes){/t}</li>
-                                    </ul>
-                                </div>
-                        </div>
-                    </td>
-                </tr>
-            </table>
-            <div class="action-bar clearfix">
-                <div class="right">
-                    <input type="submit" name="submit" value="{t}Save{/t}"  class="onm-button red">
-                </div><!-- / -->
+            <div class="control-group">
+                <label for="ads_settings_lifetime_cookie" class="control-label">{t}Cookie lifetime for intersticials{/t}</label>
+                <div class="controls">
+                    <input type="number" class="required" name="ads_settings_lifetime_cookie" id="ads_settings_lifetime_cookie" value="{$configs['ads_settings']['lifetime_cookie']|default:'300'}" />
+                    <div class="help-inline">in minutes</div>
+                    <div class="help-block">{t}This setting indicates how long will take to re-display the interstitial in frontpage.{/t}</div>
+                </div>
             </div>
         </div>
 
