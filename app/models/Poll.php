@@ -248,7 +248,8 @@ class Poll extends Content
         }
 
         //creamos la cookie
-        Application::setCookieSecure("polls".$this->id, 'true', time()+60*60*24*30);
+        //Application::setCookieSecure("polls".$this->id, 'true', time()+60*60*24*30);
+        setcookie("polls".$this->id, 'true', time()+3600);
 
         return true;
     }
