@@ -923,6 +923,15 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteCond %{QUERY_STRING} &?category=([^&]+)
     RewriteRule ^album.php$ /album/ [R=301,L,NC]
 
+    #http://www.cronicasdelaemigracion.com/hemeroteca.php?category=2&semmes=55&efecha=1248217200&month=7&year=2009
+    RewriteCond %{QUERY_STRING} &?category=([^&]+)&?semmes=([^&]+)&?efecha=([^&]+)&?month=([^&]+)&?year=([^&]+)
+    RewriteRule ^hemeroteca.php$ controllers/frontpages.php?date=%50%401&category_name=home [L,NC]
+
+    #newslibrary.php?semmes=45&efecha=-86400&category=0&continue=no&month=01&year=2010
+    RewriteCond %{QUERY_STRING} &?semmes=([^&]+)&?efecha=([^&]+)&?category=([^&]+)&?continue=([^&]+)&?month=([^&]+)&?year=([^&]+)
+    RewriteRule ^newslibrary.php$ controllers/frontpages.php?date=%60%501&category_name=home [L,NC]
+
+
     RewriteRule ^(.*)/boletin/?$  /boletin/ [R=301,L,NC]
 
     RewriteRule ^articulo/(.*)/([0-9]+).htm  /articulo/$1/$2.html [R=301,L,NC]
