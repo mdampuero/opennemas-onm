@@ -223,7 +223,7 @@ class Poll extends Content
         $this->total_votes++;
 
         $sql = "UPDATE poll_items SET `votes`=`votes`+1 WHERE pk_item=? ";
-        $values = array($votes, $pkItem);
+        $values = array($pkItem);
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
