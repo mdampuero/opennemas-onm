@@ -215,8 +215,8 @@ class Poll extends Content
     {
         $this->used_ips = $this->add_count($this->used_ips, $ip);
         if (!$this->used_ips) {
-            Application::setCookieSecure("polls".$this->id, 'true', time()+60*60*24*30);
-
+            // Application::setCookieSecure("polls".$this->id, 'true', time()+60*60*24*30);
+            setcookie("polls".$this->id, 'true', time()+3600);
             return false;
         }
 

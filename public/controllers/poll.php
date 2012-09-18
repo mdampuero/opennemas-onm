@@ -173,7 +173,8 @@ switch ($action) {
                         $msg = 'Ya ha votado esta encuesta';
                     } else {
                         $msg = 'Gracias, por su voto';
-                        Application::setCookieSecure($cookie, 'tks');
+                        //Application::setCookieSecure($cookie, 'tks');
+                        setcookie($cookie, 'tks', time()+3600);
                     }
                 }
                 $tpl->assign('msg', $msg);
@@ -205,7 +206,8 @@ switch ($action) {
         if (!empty($poll->id)) {
             $cookie = "polls".$pollId;
             if (isset($_COOKIE[$cookie])) {
-                 Application::setCookieSecure($cookie, 'tks');
+                 //Application::setCookieSecure($cookie, 'tks');
+                setcookie($cookie, 'tks', time()+3600);
             }
             $respEncuesta = $request->request->filter('respEncuesta', '', FILTER_SANITIZE_STRING);
 
