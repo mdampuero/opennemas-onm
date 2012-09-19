@@ -142,7 +142,7 @@ class CoversController extends Controller
         list($countCovers, $covers) = $cm->getCountAndSlice(
             'kiosko',
             $filter,
-            'contents.in_litter != 1 AND kioskos.favorite = 1',
+            'contents.in_litter != 1 AND favorite = 1',
             'ORDER BY position ASC, date DESC',
             $page,
             $itemsPerPage
