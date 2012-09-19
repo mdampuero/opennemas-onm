@@ -234,16 +234,18 @@ class ImporterEfeController extends Controller
                         'local_file'    => realpath($efe->_syncPath.DIRECTORY_SEPARATOR.$photo->file_path),
                         'fk_category'   => $category,
                         'category_name' => $categoryInstance->name,
+                        'category'      => $categoryInstance->name,
                         'metadata'      => \StringUtils::get_tags($photo->title),
-                        'author_name'   => '&copy; EFE '.date('Y')
+                        'author_name'   => '&copy; EFE '.date('Y'),
+                        'original_filename' => $photo->file_path
                     );
 
                     $photo = new \Photo();
-                    $photoID = $photo->createFromLocalFile($data);
+                    $photoObject = $photo->createFromLocalFileAjax($data);
 
                     // If this article has more than one photo take the first one
                     if (!isset($innerPhoto)) {
-                        $innerPhoto = new \Photo($photoID);
+                        $innerPhoto = new \Photo($photoObject->id);
                     }
                 }
 
@@ -301,7 +303,7 @@ class ImporterEfeController extends Controller
             'img1'           => '',
             'img1_footer'    => '',
             'img2'           => (isset($innerPhoto) ? $innerPhoto->id : ''),
-            'img2_footer'    => (isset($innerPhoto) ? $innerPhoto->title : ''),
+            'img2_footer'    => (isset($innerPhoto) ? $innerPhoto->description : ''),
             'fk_video'       => '',
             'fk_video2'      => (isset($innerVideo) ? $innerVideo->id : ''),
             'footer_video2'  => (isset($innerVideo) ? $innerVideo->title : ''),
