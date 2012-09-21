@@ -105,6 +105,7 @@ class Opinion extends Content
                     $authorObj->name = 'Director';
                 } else {
                     $authorObj = new Author($this->fk_author);
+                    $authorObj->get_author_photos();
                 }
 
                 return $authorObj;
