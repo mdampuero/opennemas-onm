@@ -43,45 +43,45 @@ class Articles
         switch ($opc) {
             case 'all':
                 $article = $this->cm->find_all(
-                    'Article', 'contents.available = 1 AND '.
+                    'Article',
+                    'contents.available = 1 AND '.
                     'contents.fk_content_type=1 AND '.
                     'contents.content_status=1'
                 );
 
                 break;
-
             case 'range':
                 // Date format YYYY-MM-DD
 
                 //Validate date format else format exception
-
                 $article = $this->cm->find(
-                    'Article', 'fk_content_type=1 AND available=1 AND '.
+                    'Article',
+                    'fk_content_type=1 AND available=1 AND '.
                     'created BETWEEN \'' . $param1 . '\' AND \''. $param2.'\'',
                     ' ORDER BY created DESC'
                 );
 
                 break;
-
             case 'last':
 
-                $this->_validateInt($param1);
+                $this->validateInt($param1);
 
                 $article = $this->cm->find(
-                    'Article', 'fk_content_type=1 AND available=1 AND '.
+                    'Article',
+                    'fk_content_type=1 AND available=1 AND '.
                     'created >=DATE_SUB(CURDATE(), INTERVAL ' . $param1 . ' DAY)  ',
                     ' ORDER BY created DESC'
                 );
 
                 break;
-
             case 'search':
 
                 // Apply get_title and replace - by blank space
                 // string1, string2, ... , stringN  => string1 string2 stringN
                 $param1 = preg_replace('/-/', ' ', \Onm\StringUtils::get_title($param1, false));
                 $article = $this->cm->find(
-                    'Article', 'fk_content_type=1 AND available=1 AND '.
+                    'Article',
+                    'fk_content_type=1 AND available=1 AND '.
                     'MATCH (contents.metadata) AGAINST ( \''.$param1.'\' IN BOOLEAN MODE) '.
                     'AND MATCH (contents.title) AGAINST ( \''.$param1.'\' IN BOOLEAN MODE) ',
                     'ORDER BY _height DESC, created DESC',
@@ -90,14 +90,12 @@ class Articles
                 );
 
                 break;
-
             case 'category':
 
                 break;
-
             case 'related':
 
-                $this->_validateInt($param1);
+                $this->validateInt($param1);
 
                 $relationsHandler  = new RelatedContent();
                 $ccm = new ContentCategoryManager();
@@ -119,10 +117,9 @@ class Articles
                 return $relatedContents;
 
                 break;
-
             case 'related-inner':
 
-                $this->_validateInt($param1);
+                $this->validateInt($param1);
 
                 $relationsHandler  = new RelatedContent();
                 $ccm = new ContentCategoryManager();
@@ -145,10 +142,9 @@ class Articles
                 return $relatedContents;
 
                 break;
-
             case 'machine-related':
 
-                $this->_validateInt($param1);
+                $this->validateInt($param1);
 
                 $article = new Article($param1);
 
@@ -168,62 +164,59 @@ class Articles
                 return $machineSuggestedContents;
 
                 break;
+            case 'print':
 
-                case 'print': {
+                // Article
+                $article = new Article($articleID);
 
-                    // Article
-                    $article = new Article($articleID);
+                // Breadcrub/Pathway
+                $breadcrub   = array();
+                $breadcrub[] = array(
+                    'text' => $ccm->get_title($category_name),
+                    'link' => '/seccion/' . $category_name . '/'
+                );
 
-                    // Breadcrub/Pathway
-                    $breadcrub   = array();
+                // URL impresión
+
+                $title = StringUtils::get_title($article->title);
+                $print_url = '/imprimir/' . $title. '/' . $category_name . '/';
+
+                if (!empty($subcategory_name)) {
                     $breadcrub[] = array(
-                        'text' => $ccm->get_title($category_name),
-                        'link' => '/seccion/' . $category_name . '/'
+                        'text' => $ccm->get_title($subcategory_name),
+                        'link' => '/seccion/' . $category_name . '/' . $subcategory_name . '/'
                     );
 
-                    // URL impresión
+                    $print_url .= $subcategory_name . '/';
+                }
 
-                    $title = StringUtils::get_title($article->title);
-                    $print_url = '/imprimir/' . $title. '/' . $category_name . '/';
+                $print_url .= $dirtyID . '.html';
+                $tpl->assign('print_url', $print_url);
 
-                    if (!empty($subcategory_name)) {
-                        $breadcrub[] = array(
-                            'text' => $ccm->get_title($subcategory_name),
-                            'link' => '/seccion/' . $category_name . '/' . $subcategory_name . '/'
-                        );
+                $cat = $ccm->getByName($category_name);
+                if (!is_null($cat) && $cat->inmenu) {
+                    $tpl->assign('breadcrub', $breadcrub);
+                }
 
-                        $print_url .= $subcategory_name . '/';
-                    }
+                // Foto interior
+                if (isset($article->img2) and ($article->img2 != 0)) {
+                    $photoInt = new Photo($article->img2);
+                    $tpl->assign('photoInt', $photoInt);
+                }
 
-                    $print_url .= $dirtyID . '.html';
-                    $tpl->assign('print_url', $print_url);
+                $tpl->caching = 0;
+                $tpl->assign('article', $article);
 
-                    $cat = $ccm->getByName($category_name);
-                    if (!is_null($cat) && $cat->inmenu) {
-                        $tpl->assign('breadcrub', $breadcrub);
-                    }
+                $tpl->display('article/article_printer.tpl');
+                exit(0);
 
-                    // Foto interior
-                    if (isset($article->img2) and ($article->img2 != 0)) {
-                        $photoInt = new Photo($article->img2);
-                        $tpl->assign('photoInt', $photoInt);
-                    }
-
-                    $tpl->caching = 0;
-                    $tpl->assign('article', $article);
-
-                    $tpl->display('article/article_printer.tpl');
-                    exit(0);
-
-                } break;
-
+                break;
             case 'media':
 
                 break;
-
             default:
 
-                $this->_invalidUrlParam();
+                $this->invalidUrlParam();
 
                 break;
         }
@@ -240,7 +233,7 @@ class Articles
      *
      * @return $article
      */
-    public function index( $id = null )
+    public function index($id = null)
     {
         $article = array();
         $params = func_get_args();
@@ -254,7 +247,7 @@ class Articles
             $article = $this->lists();
             // Other case call list method
         } else {
-            $this->_invalidUrlParam();
+            $this->invalidUrlParam();
         }
 
         return $article;
@@ -269,7 +262,7 @@ class Articles
      *
      * @return void
      */
-    private function _validateInt($number)
+    private function validateInt($number)
     {
         if (!is_numeric($number)) {
             throw new RestException(400, 'parameter is not a number');
@@ -289,9 +282,9 @@ class Articles
      *
      * @return void
      */
-    private function _invalidUrlParam()
+    private function invalidUrlParam()
     {
         throw new RestException(400, 'parameter is not valid');
     }
-
 }
+

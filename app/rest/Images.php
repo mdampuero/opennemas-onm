@@ -9,14 +9,14 @@ class Images
     */
     public function id($id)
     {
-        $this->_validateInt(func_get_args());
+        $this->validateInt(func_get_args());
 
         $image = new Photo($id);
 
         return $image;
     }
 
-    private function _validateInt($number)
+    private function validateInt($number)
     {
         foreach ($number as $value) {
             if (!is_numeric($value)) {
@@ -27,5 +27,5 @@ class Images
             }
         }
     }
-
 }
+

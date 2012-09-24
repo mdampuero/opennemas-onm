@@ -35,5 +35,5 @@ class Instances
     {
         return MEDIA_IMG_PATH;
     }
-
 }
+

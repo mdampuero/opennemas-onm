@@ -9,14 +9,14 @@ class Opinions
     */
     public function id($id)
     {
-        $this->_validateInt(func_get_args());
+        $this->validateInt(func_get_args());
 
         $opinion = new Opinion($id);
 
         return $opinion;
     }
 
-    private function _validateInt($number)
+    private function validateInt($number)
     {
         foreach ($number as $value) {
             if (!is_numeric($value)) {
@@ -27,5 +27,5 @@ class Opinions
             }
         }
     }
-
 }
+
