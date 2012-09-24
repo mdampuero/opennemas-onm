@@ -35,5 +35,13 @@ class Instances
     {
         return MEDIA_IMG_PATH;
     }
+
+    /*
+    * @url GET /instances/instancemedia/
+    */
+    public function instanceMedia()
+    {
+        return INSTANCE_MEDIA;
+    }
 }
 
