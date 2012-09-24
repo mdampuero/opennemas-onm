@@ -1,6 +1,6 @@
 <div class="modal hide fade" id="modal-edit-uploaded-files">
     <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal-edit-uploaded-files" aria-hidden="true">×</button>
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
       <h3>{t}Files uploaded successfully{/t}</h3>
     </div>
     <div class="modal-body">

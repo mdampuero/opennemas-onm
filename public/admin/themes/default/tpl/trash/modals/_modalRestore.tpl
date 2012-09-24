@@ -1,6 +1,6 @@
 <div class="modal hide fade" id="modal-restore-contents">
     <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal-restore-contents" aria-hidden="true">×</button>
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
       <h3>{t}Restore contents from trash{/t}</h3>
     </div>
     <div class="modal-body">

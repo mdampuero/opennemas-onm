@@ -1,6 +1,6 @@
 <div class="modal hide fade" id="modal-update-label">
     <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal-update-label" aria-hidden="true">×</button>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h3>{t}Update Container label{/t}</h3>
     </div>
     <div class="modal-body clearfix">

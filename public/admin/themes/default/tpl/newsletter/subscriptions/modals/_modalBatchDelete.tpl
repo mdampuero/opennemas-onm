@@ -1,6 +1,6 @@
 <div class="modal hide fade" id="modal-subscriptors-batchDelete">
     <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal-subscriptors-batchDelete" aria-hidden="true">×</button>
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
       <h3>{t}Delete videos{/t}</h3>
     </div>
     <div class="modal-body">

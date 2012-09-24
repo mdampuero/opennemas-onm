@@ -1,6 +1,6 @@
 <div class="modal hide fade" id="modal-logged-users">
     <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal-logged-users" aria-hidden="true">×</button>
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
       <h3>{t}Logged in users{/t}</h3>
     </div>
     <div class="modal-body"></div>
