@@ -54,7 +54,7 @@ if (
         }
     }
 
-    $existsCategory =file_get_contents($wsUrl.'/ws/categories/exist/'.$category_name);
+    $existsCategory = file_get_contents($wsUrl.'/ws/categories/exist/'.$category_name);
 
     // If no home category name
     if ($category_name != 'home') {
@@ -150,7 +150,6 @@ if (
 
         //Change uri for href links except widgets
         if ($content->content_type != 'Widget') {
-            //$content->uri = preg_replace('@.html@', '/ext.html', $content->uri);
             $content->uri = "ext".$content->uri;
         }
 
@@ -162,7 +161,7 @@ if (
         $relatedUrl = $wsUrl.'/ws/articles/lists/related/'.$content->id;
         $content->related_contents = json_decode(file_get_contents($relatedUrl));
 
-
+        // Generate uri for related content
         foreach ($content->related_contents as &$item) {
             $getContentUrl = $wsUrl.'/ws/contents/contenttype/'.(int) $item->fk_content_type;
             $contentType = file_get_contents($getContentUrl);
@@ -170,13 +169,27 @@ if (
             $contentRelated = new $contentType();
             $contentRelated->load($item);
             $contentRelated->category_name = $category_name;
-            $contentRelated->uri = "ext".$contentRelated->uri;
+            // Generate content uri if it's not an attachment
+            if ($item->fk_content_type != 3) {
+                $contentRelated->uri = "ext".$contentRelated->uri;
+            } else {
+                // Get instance media
+                $basePath = json_decode(file_get_contents($wsUrl.'/ws/instances/instancemedia/'));
+                // Get file path for attachments
+                $filePath = json_decode(
+                    file_get_contents($wsUrl.'/ws/contents/filepath/'.(int)$contentRelated->id)
+                );
+                // Compose the full url to the file
+                $contentRelated->fullFilePath = $basePath.FILE_DIR.$filePath;
+            }
+
             $item = $contentRelated;
         }
     }
     $tpl->assign('column', $contentsInHomepage);
 
-    $layout = s::get('frontpage_layout_'.$actualCategoryId, 'default');
+    // Fetch layout for categories
+    $layout = json_decode(@file_get_contents($wsUrl.'/ws/categories/layout/'.$category_name));
     $layoutFile = 'layouts/'.$layout.'.tpl';
 
     $tpl->assign('layoutFile', $layoutFile);
