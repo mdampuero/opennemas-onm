@@ -49,7 +49,7 @@
                      {if $category eq 'widget'}
                         <li class="separator"></li>
                         <li>
-                            <a href="#" onClick="javascript:saveSortPositions('{$smarty.server.PHP_SELF}');" title="{t}Save positions{/t}">
+                            <a href="#" onClick="javascript:saveSortPositions('{url name=admin_albums_savepositions}');" title="{t}Save positions{/t}">
                                 <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save positions{/t}"><br />{t}Save positions{/t}
                             </a>
                         </li>
