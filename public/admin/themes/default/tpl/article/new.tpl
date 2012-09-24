@@ -199,7 +199,7 @@
                     <div class="control-group">
                         <label for="agency" class="control-label">{t}Signature{/t}</label>
                         <div class="controls">
-                            <input  type="text" id="agency" name="agency" required="required"
+                            <input  type="text" id="agency" name="agency"
                                 {if is_object($article)}
                                     value="{$article->agency|clearslash|escape:"html"}"
                                 {else}
