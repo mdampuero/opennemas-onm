@@ -307,16 +307,16 @@ class OpinionsController extends Controller
             if ($opinion->create($data)) {
                 m::add(_('Special successfully created.'), m::SUCCESS);
             } else {
-                m::add(_('Unable to create the new special.'), m::ERROR);
+                m::add(_('Unable to create the new opinion.'), m::ERROR);
             }
 
-            if ($continue) {
+            if (isset($continue) && $continue==1) {
                 return $this->redirect(
-                    $this->generateUrl('admin_opinions', array('type_opinion' => $data['category']))
+                    $this->generateUrl('admin_opinion_show', array('id' => $opinion->id))
                 );
             } else {
                 return $this->redirect(
-                    $this->generateUrl('admin_opinion_show', array('id' => $opinion->id))
+                    $this->generateUrl('admin_opinions', array('type_opinion' => $data['category']))
                 );
             }
         } else {
