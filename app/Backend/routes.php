@@ -1275,6 +1275,15 @@ $adminRoutes->add(
 );
 
 $adminRoutes->add(
+    'admin_albums_savepositions',
+    new Route(
+        '/albums/save-positions',
+        array('_controller' => 'Backend:Controllers:CoversController:savePositions')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
     'admin_albums_content_provider',
     new Route(
         '/albums/content-provider',
