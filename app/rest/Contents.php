@@ -21,7 +21,6 @@ class Contents
     */
     public function contentType($contentID)
     {
-
         $this->validateInt($contentID);
 
         $sql = "SELECT name FROM content_types WHERE `pk_content_type`=$contentID";
@@ -34,6 +33,25 @@ class Contents
         }
 
         return $return_value;
+    }
+
+    /*
+    * @url GET /contents/filePath/:contentId
+    */
+    public function filePath($contentID)
+    {
+        $this->validateInt($contentID);
+
+        $sql = "SELECT path FROM attachments WHERE `pk_attachment`=$contentID";
+        $rs  = $GLOBALS['application']->conn->Execute($sql);
+
+        if ($rs->_numOfRows < 1) {
+            $returnValue = false;
+        } else {
+            $returnValue = $rs->fields['path'];
+        }
+
+        return $returnValue;
     }
 
     public function setNumViews($id = null)
