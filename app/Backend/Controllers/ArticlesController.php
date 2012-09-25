@@ -89,7 +89,7 @@ class ArticlesController extends Controller
 
         $filterSQL = array('in_litter != 1');
         if ($status >= 0) {
-            $filterSQL []= ' contents.content_status='.$status;
+            $filterSQL []= ' contents.available='.$status;
         }
         if (!empty($title)) {
             $filterSQL []= ' title LIKE \'%'.$title.'%\'';
@@ -102,7 +102,7 @@ class ArticlesController extends Controller
             'Article',
             $categoryFilter,
             $filterSQL,
-            'ORDER BY created DESC, content_status ASC',
+            'ORDER BY created DESC, available ASC',
             $page,
             $itemsPerPage
         );
