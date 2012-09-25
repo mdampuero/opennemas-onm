@@ -55,6 +55,10 @@ class Advertisement extends Content
         36 => "Button Colunm 3 Position 6",
         37 => "Floating banner",
 
+        9  => "Top Mega-LeaderBoard",
+        91 => "Left Skyscraper",
+        92 => "Right Skyscraper",
+
         /* Intersticial banner noticia interior */
         150 => "[I] Banner Interticial noticia interior",
 
