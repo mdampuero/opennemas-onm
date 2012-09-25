@@ -310,6 +310,7 @@ class OpinionsController extends Controller
                 m::add(_('Unable to create the new opinion.'), m::ERROR);
             }
 
+            $continue = $request->request->filter('continue', false, FILTER_SANITIZE_STRING);
             if (isset($continue) && $continue==1) {
                 return $this->redirect(
                     $this->generateUrl('admin_opinion_show', array('id' => $opinion->id))
@@ -389,13 +390,13 @@ class OpinionsController extends Controller
             $tplManager->delete('opinion|1');
 
             $continue = $request->request->filter('continue', false, FILTER_SANITIZE_STRING);
-            if ($continue) {
+            if (isset($continue) && $continue==1) {
                 return $this->redirect(
                     $this->generateUrl('admin_opinion_show', array('id' => $opinion->id))
                 );
             } else {
                 return $this->redirect(
-                    $this->generateUrl('admin_opinions', array('category' => $data['category']))
+                    $this->generateUrl('admin_opinions', array('type_opinion' => $data['category']))
                 );
             }
         }
