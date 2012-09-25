@@ -40,6 +40,7 @@
 
             jQuery('input#noticias_left').val(JSON.stringify(els));
         });
+
         $('#title').on('change', function(e, ui) {
             fill_tags($('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
         });
@@ -116,7 +117,7 @@
             </div>
 
             <div class="control-group">
-                <label for="metadata" class="control-label">{t}Title{/t}</label>
+                <label for="metadata" class="control-label">{t}Metadata{/t}</label>
                 <div class="controls">
                     <input type="text" id="metadata" name="metadata" required="required" class="input-xxlarge"
                             value="{$special->metadata|clearslash|escape:"html"}"/>
@@ -149,7 +150,7 @@
             <div class="control-group">
                 <label for="subtitle" class="control-label">{t}Subtitle{/t}</label>
                 <div class="controls">
-                    <input type="text" id="subtitle" name="subtitle" class="input-xxlarge" required="required" />
+                    <input type="text" id="subtitle" name="subtitle" class="input-xxlarge" value="{$special->subtitle|clearslash|escape:"html"}" />
                 </div>
             </div>
             <div class="control-group">
@@ -162,7 +163,7 @@
             <div class="control-group">
                 <label for="description" class="control-label">{t}Description{/t}</label>
                 <div class="controls">
-                    <textarea name="description" id="description" required="required" class="input-xxlarge">{t 1=$special->description|clearslash}%1{/t}</textarea>
+                    <textarea name="description" id="description" class="input-xxlarge">{t 1=$special->description|clearslash}%1{/t}</textarea>
                 </div>
             </div>
             {include file="special/partials/_load_images.tpl"}
