@@ -30,7 +30,8 @@ class CacheManagerController extends Controller
      **/
     public function init()
     {
-        $this->checkAclOrForward('BACKEND_ADMIN');
+        // Show review this
+        // $this->checkAclOrForward('CACHE_TPL_ADMIN');
 
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
 
