@@ -239,7 +239,7 @@ class TemplateAdmin extends Template
         $this->loadFilter("output", "trimwhitespace");
 
         // Parent variables
-        $this->templateBaseDir = SITE_PATH.DS.ADMIN_DIR.DS.'themes'.DS.$theme.DS;
+        $this->templateBaseDir = SITE_PATH.DS.'themes'.DS.$theme.DS;
 
         foreach (array('cache', 'compile') as $key => $value) {
             $directory = COMMON_CACHE_PATH.DS.'smarty'.DS.'admin'.DS.$value;

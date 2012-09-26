@@ -16,20 +16,24 @@ function smarty_function_css_tag($params, &$smarty) {
 
     $href = $params['href'];
 
-
     $mtime = '?';
     $server = '';
     $basepath = $params["basepath"] ?: "/css";
-    if ($smarty->theme == 'default') {
+
+    if ($smarty->theme == 'admin') {
         $file = TEMPLATE_ADMIN_PATH.$basepath.$href;
         if (file_exists($file)) {
             $mtime .= filemtime($file);
+            $server = TEMPLATE_ADMIN_URL.$basepath;
+        } else {
             $server = TEMPLATE_ADMIN_URL.$basepath;
         }
     } else {
         $file = TEMPLATE_USER_PATH.$basepath.$href;
         if (file_exists($file)) {
             $mtime .= filemtime($file);
+            $server = TEMPLATE_USER_URL.$basepath;
+        } else {
             $server = TEMPLATE_USER_URL.$basepath;
         }
     }
