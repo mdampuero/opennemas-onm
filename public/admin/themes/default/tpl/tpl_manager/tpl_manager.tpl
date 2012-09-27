@@ -30,7 +30,6 @@
 
 
 {block name="content"}
-<form  action="{url name=admin_tpl_manager}" method="get" id="tplform">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title">
@@ -65,6 +64,7 @@
     <div class="wrapper-content">
         {render_messages}
         <div class="table-info clearfix">
+            <form action="{url name=admin_tpl_manager}" name="search">
             <div>
                 <div class="right form-inline">
                     <label>
@@ -96,12 +96,14 @@
                         {html_options options=$sections selected=$smarty.request.section|default:""}
                     </select>
 
-                    <button onclick="javascript:paginate(1);return false;" class="btn"> <i class="icon-refresh"></i>
+                    <button type="submit" class="btn"><i class="icon-refresh"></i>
                         {t}Update list{/t}
                     </button>
                 </div>
             </div>
+            </form>
         </div>
+    <form  action="{url name=admin_tpl_manager}" method="get" id="tplform">
         <div id="caches">
             {if count($caches)>0}
             <table class="table table-hover table-condensed">
@@ -314,8 +316,8 @@
     </div>
     <input type="hidden" id="page" name="page" value="{$smarty.request.page|default:'1'}" />
     <input type="hidden" id="action" name="action" value="" />
-</div>
 </form>
+</div>
 {include file="tpl_manager/modals/_modalBatchDelete.tpl"}
 {include file="tpl_manager/modals/_modalAccept.tpl"}
 {/block}
