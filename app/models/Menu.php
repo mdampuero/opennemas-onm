@@ -85,15 +85,16 @@ class Menu
     public function create($data)
     {
         $sql = "INSERT INTO menues ".
-               " (`name`, `params`, `site`, `pk_father`, `type`) " .
-               " VALUES (?,?,?,?,?)";
+               " (`name`, `params`, `site`, `pk_father`, `type`, `position`) " .
+               " VALUES (?,?,?,?,?,?)";
 
         $values = array(
             $data["name"],
             $data["params"],
             $data["site"],
             $data['pk_father'],
-            'user'
+            'user',
+            $data['position']
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
@@ -131,8 +132,11 @@ class Menu
         $this->pk_menu   = $rs->fields['pk_menu'];
         $this->params    = unserialize($rs->fields['params']);
         $this->site      = $rs->fields['site'];
-        $this->type      = $rs->fields['type'];
+        $this->site      = $rs->fields['site'];
+        $this->position  = $rs->fields['position'];
         $this->pk_father = $rs->fields['pk_father'];
+
+        return $this;
     }
 
     public function update($data)
@@ -141,7 +145,7 @@ class Menu
             $data['pk_father'] = $this->pk_father;
         }
         $sql = "UPDATE menues"
-                ." SET  `name`=?, `params`=?, `site`=?, `pk_father`=? "
+                ." SET  `name`=?, `params`=?, `site`=?, `pk_father`=?, `position`=? "
                 ." WHERE pk_menu= ?" ;
 
         $values = array(
@@ -149,6 +153,7 @@ class Menu
             $data['params'],
             $data['site'],
             null,
+            $data['position'],
             $this->pk_menu
         );
 
@@ -217,8 +222,7 @@ class Menu
      */
     public function getMenu($name)
     {
-        $sql =  "SELECT pk_menu, site, params, type, pk_father"
-                ." FROM menues WHERE name=?";
+        $sql =  "SELECT * FROM menues WHERE name=?";
 
         $values = array($name);
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
@@ -232,6 +236,40 @@ class Menu
         $this->name      = $name;
         $this->pk_menu   = $rs->fields['pk_menu'];
         $this->params    = $rs->fields['params'];
+        $this->position  = $rs->fields['position'];
+        $this->site      = $rs->fields['site'];
+        $this->pk_father = $rs->fields['pk_father'];
+        $this->type      = $rs->fields['type'];
+        $this->items     = \MenuItems::getMenuItems($this->pk_menu);
+
+        return $this;
+
+    }
+
+    /**
+     * Gets a menu instance given its position
+     *
+     * @param array $data image
+     *
+     * @return array with categories order by positions
+     */
+    public function getMenuFromPosition($position)
+    {
+        $sql =  "SELECT * FROM menues WHERE position=? ORDER BY pk_menu LIMIT 1";
+
+        $values = array($position);
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+
+        if (!$rs) {
+            \Application::logDatabaseError();
+
+            return false;
+        }
+
+        $this->name      = $name;
+        $this->pk_menu   = $rs->fields['pk_menu'];
+        $this->params    = $rs->fields['params'];
+        $this->position  = $rs->fields['position'];
         $this->site      = $rs->fields['site'];
         $this->pk_father = $rs->fields['pk_father'];
         $this->type      = $rs->fields['type'];
@@ -248,8 +286,7 @@ class Menu
      **/
     public static function find($paramsConfig = 1)
     {
-        $sql =  "SELECT pk_menu, name, site, params, type, pk_father"
-                ." FROM menues WHERE {$paramsConfig}";
+        $sql =  "SELECT * FROM menues WHERE {$paramsConfig}";
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
@@ -264,6 +301,7 @@ class Menu
             $menu->name      = $rs->fields['name'];
             $menu->pk_menu   = $rs->fields['pk_menu'];
             $menu->params    = $rs->fields['params'];
+            $menu->position  = $rs->fields['position'];
             $menu->site      = $rs->fields['site'];
             $menu->type      = $rs->fields['type'];
             $menu->pk_father = $rs->fields['pk_father'];

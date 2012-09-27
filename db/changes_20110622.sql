@@ -1,5 +1,12 @@
- ALTER TABLE `polls` DROP `favorite`;
- ALTER TABLE `kioskos` DROP `favorite`;
+-- 27-09-2012
+ALTER TABLE  `menues` ADD  `position` VARCHAR( 50 ) AFTER  `type`
+ALTER TABLE  `menues` DROP INDEX  `pk_menu`;
+ALTER TABLE  `menues` DROP INDEX  `name_2`;
+ALTER TABLE  `menues` ADD INDEX  `position` (  `position` ( 50 ) )
+
+-- other changes
+ALTER TABLE `polls` DROP `favorite`;
+ALTER TABLE `kioskos` DROP `favorite`;
 
 -- Changes for alex branch
 ALTER TABLE `kioskos` ADD `type` TINYINT NOT NULL DEFAULT '0' COMMENT '0-item, 1-subscription';

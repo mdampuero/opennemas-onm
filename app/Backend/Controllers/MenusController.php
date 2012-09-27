@@ -42,6 +42,14 @@ class MenusController extends Controller
             'kiosko'    => 14,
             'boletin'   => 13,
         );
+
+        $this->menuPositions = array('' => _('Without position'));
+
+        $this->menuPositions = array_merge(
+            $this->menuPositions,
+            $this->container->getParameter('instance')->theme->getMenus()
+        );
+
     }
 
     /**
@@ -129,7 +137,8 @@ class MenusController extends Controller
                 'pollCategories'  => $pollCategories,
                 'staticPages'     => $staticPages,
                 'pages'           => $this->pages,
-                'menu'            => $menu
+                'menu'            => $menu,
+                'menu_positions'  => $this->menuPositions,
             )
         );
     }
@@ -157,6 +166,7 @@ class MenusController extends Controller
                 'site'      => SITE,
                 'pk_father' => $request->request->filter('pk_father', 'user', FILTER_SANITIZE_STRING),
                 'items'     => json_decode(json_decode($request->request->get('items'))),
+                'position'  => $request->request->filter('position', '', FILTER_SANITIZE_STRING),
             );
 
             $menu = new \Menu();
@@ -214,14 +224,15 @@ class MenusController extends Controller
             return $this->render(
                 'menues/edit.tpl',
                 array(
-                    'categories'=> $parentCategories,
-                    'subcat'=> $subcat,
-                    'albumCategories'=>$albumCategories,
-                    'videoCategories'=>$videoCategories,
-                    'pollCategories'=>$pollCategories,
-                    'staticPages'=> $staticPages,
-                    'menues'=> $menues,
-                    'pages'=> $this->pages
+                    'categories'      => $parentCategories,
+                    'subcat'          => $subcat,
+                    'albumCategories' => $albumCategories,
+                    'videoCategories' => $videoCategories,
+                    'pollCategories'  => $pollCategories,
+                    'staticPages'     => $staticPages,
+                    'menues'          => $menues,
+                    'pages'           => $this->pages,
+                    'menu_positions'  => $this->menuPositions,
                 )
             );
         }
@@ -258,6 +269,7 @@ class MenusController extends Controller
                 'site'      => SITE,
                 'pk_father' => $request->request->filter('pk_father', 'user', FILTER_SANITIZE_STRING),
                 'items'     => json_decode($request->request->get('items')),
+                'position'  => $request->request->filter('position', '', FILTER_SANITIZE_STRING),
             );
 
             if ($menu->update($data)) {

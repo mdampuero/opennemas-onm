@@ -54,6 +54,7 @@
                         <input type="checkbox" class="toggleallcheckbox">
                     </th>
                     <th>{t}Title{/t}</th>
+                    <th style="width:100px;">{t}Position{/t}</th>
                     <th class="right" style="width:100px;">{t}Actions{/t}</th>
                 </tr>
             </thead>
@@ -73,6 +74,9 @@
                                  {$menu->name|capitalize}
                             </a>
                             {/acl}
+                        </td>
+                        <td>
+                            {$menu->position}
                         </td>
                         <td class="right">
                             <div class="btn-group">
@@ -99,7 +103,7 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="3">&nbsp;</td>
+                    <td colspan="4">&nbsp;</td>
                 </tr>
             </tfoot>
         </table>
