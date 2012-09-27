@@ -107,7 +107,7 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="4">&nbsp;</td>
+                    <td colspan="3">&nbsp;</td>
                 </tr>
             </tfoot>
         </table>
