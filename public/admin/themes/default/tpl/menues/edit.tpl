@@ -46,13 +46,26 @@
         {render_messages}
 
         <div class="form-vertical panel">
-            <div class="control-group">
-                <label for="name" class="control-label">{t}Name{/t}</label>
-                <div class="controls">
-                    <input type="text" id="name" name="name" value="{$menu->name|default:""}"
-                           maxlength="120" tabindex="1" required="required" class="input-xxlarge"
-                           {if (!empty($menu) && $menu->type neq 'user')} readonly="readonly" {/if} />
+
+            <div class="form-inline-block">
+                <div class="control-group">
+                    <label for="name" class="control-label">{t}Name{/t}</label>
+                    <div class="controls">
+                        <input type="text" id="name" name="name" value="{$menu->name|default:""}"
+                               maxlength="120" tabindex="1" required="required" class="input-xxlarge"
+                               {if (!empty($menu) && $menu->type neq 'user')} readonly="readonly" {/if} />
+                    </div>
                 </div>
+
+                {if count($menu_positions) > 1}
+                <div class="control-group">
+                    <label for="name" class="control-label">{t}Position{/t}</label>
+                    <div class="controls">
+                        {html_options options=$menu_positions selected=$menu->position name=position}
+                    </div>
+                </div>
+                {/if}
+
             </div>
 
             <div class="control-group clearfix">

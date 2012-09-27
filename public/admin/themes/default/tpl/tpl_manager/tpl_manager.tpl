@@ -103,7 +103,7 @@
             </div>
             </form>
         </div>
-    <form  action="{url name=admin_tpl_manager}" method="get" id="tplform">
+    <form  action="{url name=admin_tpl_manager}" method="POST" id="tplform">
         <div id="caches">
             {if count($caches)>0}
             <table class="table table-hover table-condensed">

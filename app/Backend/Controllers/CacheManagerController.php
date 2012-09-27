@@ -175,9 +175,9 @@ class CacheManagerController extends Controller
      **/
     public function deleteAction(Request $request)
     {
-        $itemsSelected = $this->request->query->get('selected', null);
-        $itemsCacheIds = $this->request->query->get('cacheid');
-        $itemsTemplate = $this->request->query->get('tpl');
+        $itemsSelected = $request->request->get('selected', null);
+        $itemsCacheIds = $request->request->get('cacheid');
+        $itemsTemplate = $request->request->get('tpl');
 
         // If there was selected more than one item
         // delete them if not delete only one
@@ -217,9 +217,9 @@ class CacheManagerController extends Controller
         if ($this->request->getMethod() == 'POST') {
             $config = array();
 
-            $cacheGroups             = $this->request->request->get('group');
-            $cacheGroupsCacheEnabled = $this->request->request->get('caching');
-            $cacheGroupsLifeTime     = $this->request->request->get('cache_lifetime');
+            $cacheGroups             = $request->request->get('group');
+            $cacheGroupsCacheEnabled = $request->request->get('caching');
+            $cacheGroupsLifeTime     = $request->request->get('cache_lifetime');
 
             foreach ($cacheGroups as $i => $section) {
                 $caching          = (isset($cacheGroupsCacheEnabled[$section]))? 1: 0;

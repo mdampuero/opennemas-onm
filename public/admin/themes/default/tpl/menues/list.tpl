@@ -54,6 +54,9 @@
                         <input type="checkbox" class="toggleallcheckbox">
                     </th>
                     <th>{t}Title{/t}</th>
+                    {if count($menu_positions) > 1}
+                    <th style="width:100px;">{t}Position{/t}</th>
+                    {/if}
                     <th class="right" style="width:100px;">{t}Actions{/t}</th>
                 </tr>
             </thead>
@@ -74,6 +77,11 @@
                             </a>
                             {/acl}
                         </td>
+                        {if count($menu_positions) > 1}
+                        <td>
+                            {$menu->position}
+                        </td>
+                        {/if}
                         <td class="right">
                             <div class="btn-group">
                             {acl isAllowed="MENU_UPDATE"}
@@ -99,7 +107,7 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="3">&nbsp;</td>
+                    <td colspan="4">&nbsp;</td>
                 </tr>
             </tfoot>
         </table>

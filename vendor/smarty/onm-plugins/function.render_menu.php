@@ -7,17 +7,23 @@
 function smarty_function_render_menu($params, &$smarty) {
 
 	// Initialicing parameters
-	$menuName = (isset($params['name']) ? $params['name'] : null);
+    $menuName = (isset($params['name']) ? $params['name'] : null);
+    $position = (isset($params['position']) ? $params['position'] : null);
 	$tpl = (isset($params['tpl']) ? $params['tpl'] : null);
 
     $output = '';
-    if(empty($menuName)) {
+    if(empty($menuName) && empty($position)) {
         $smarty->trigger_error("Menu doesn't exists");
         return $output;
     }
 
     $menu = new Menu();
-    $menu->getMenu($menuName);
+    if (!empty($menuName)) {
+        $menu->getMenu($menuName);
+    } else {
+        // Get the menu by its position name
+        $menu->getMenuFromPosition($position);
+    }
 
     if (!empty($menu->items)) {
         $smarty->assign('menuItems', $menu->items);
