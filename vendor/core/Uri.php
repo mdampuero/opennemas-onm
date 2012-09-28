@@ -77,7 +77,11 @@ class Uri
     {
 
         $config = Uri::getConfig();
-        $config = $config[$contentType];
+        if (array_key_exists($contentType, $config)) {
+            $config = $config[$contentType];
+        } else {
+            return '';
+        }
 
         if (!isset($contentType)) {
             $GLOBALS['application']->logger->debug(

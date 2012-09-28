@@ -388,6 +388,7 @@ class OpinionsController extends Controller
             // TODO: Move this to a post update hook
             $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
             $tplManager->delete('opinion|1');
+            $tplManager->delete('opinion|'.$opinion->id);
 
             $continue = $request->request->filter('continue', false, FILTER_SANITIZE_STRING);
             if (isset($continue) && $continue==1) {

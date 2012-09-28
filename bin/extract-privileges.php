@@ -13,14 +13,6 @@ require SITE_VENDOR_PATH.'/../vendor/adodb5/adodb.inc.php';
 
 global $onmInstancesConnection;
 
-array(
-    'BD_TYPE' => "mysqli",
-    'BD_HOST' => "localhost",
-    'BD_USER' => "root",
-    'BD_PASS' => "1234",
-    'BD_DATABASE' => "onm-instances",
-);
-
 $conn = ADONewConnection($onmInstancesConnection['BD_TYPE']);
 $conn->Connect(
     $onmInstancesConnection['BD_HOST'],

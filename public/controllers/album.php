@@ -114,7 +114,7 @@ if (!is_null($action) ) {
             $items_page = 8;
             // Redirect to album frontpage if id_album wasn't provided
             if (is_null($albumID)) {
-                Application::forward301('/albumes/');
+                Application::forward301('/album/');
             }
 
             $tpl->setConfig('gallery-inner');
@@ -190,7 +190,7 @@ if (!is_null($action) ) {
             }
             // Redirect to album frontpage if id_album wasn't provided
             if (is_null($albumID)) {
-                Application::forward301('/albumes/');
+                Application::forward301('/album/');
             }
 
             // Get the album from the id and increment the numviews for it

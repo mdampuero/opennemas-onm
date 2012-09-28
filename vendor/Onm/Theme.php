@@ -127,8 +127,16 @@ class Theme
      **/
     public function registerMenu($menuDefinition)
     {
+        if (!is_array($menuDefinition)) {
+            throw new \Exception(_('Please provide a menu definition to register it.'));
+        }
+
         if (!array_key_exists('name', $menuDefinition)) {
-            throw new \ArgumentException(_('Please provide a menu name to register it.'));
+            throw new \Exception(_('Menu to register doesn\'t provide a name.'));
+        }
+
+        if (array_key_exists($menuDefinition['name'], $this->menus)) {
+            throw new \Exception(sprintf(_('Menu "%s" already registered.'), $menuDefinition['name']));
         }
 
         $menu = array_merge(
@@ -159,9 +167,23 @@ class Theme
      *
      * @return array the list of menu definitions
      **/
-    public function getMenus()
+    public function getMenuDefinitions()
     {
         return $this->menus;
+    }
+
+    /**
+     * Returns all the registered menus in this theme
+     *
+     * @return array the list of menu definitions
+     **/
+    public function getMenus()
+    {
+        $definitions = array();
+        foreach ($this->menus as $name => $value) {
+            $definitions[$name] = $value['description'];
+        }
+        return $definitions;
     }
 }
 
