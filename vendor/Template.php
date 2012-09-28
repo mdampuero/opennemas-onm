@@ -257,7 +257,7 @@ class TemplateAdmin extends Template
         $this->allow_php_tag = true;
 
         // Template variables
-        $baseUrl = SITE_URL.SS.'admin'.SS.'themes'.SS.$theme.SS;
+        $baseUrl = SS.'themes'.SS.$theme.SS;
 
         $this->locale_dir = $baseUrl.'locale/';
         $this->css_dir    = $baseUrl.'css/';

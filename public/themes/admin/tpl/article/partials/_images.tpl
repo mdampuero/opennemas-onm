@@ -14,7 +14,7 @@
                 <div id="frontpage-image" class="droppable-image-position droppable-position">
                     <div>
                         <a class="delete-button">
-                            <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/trash.png" id="remove_img1" alt="Eliminar" title="Eliminar" />
+                            <img src="/themes/admin/images/trash.png" id="remove_img1" alt="Eliminar" title="Eliminar" />
                         </a>
                         <div class="clearfix">
                             <div class="thumbnail article-resource-image">
@@ -43,7 +43,7 @@
                 <div id="inner-image" class="droppable-image-position droppable-position">
                     <div>
                         <a class="delete-button">
-                            <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/trash.png" id="remove_img2" alt="Eliminar" title="Eliminar" />
+                            <img src="/themes/admin/images/trash.png" id="remove_img2" alt="Eliminar" title="Eliminar" />
                         </a>
                         <div class="clearfix">
                             <div id="droppable_div2" class="thumbnail article-resource-image">
@@ -73,7 +73,7 @@
                 <div id="home-image" class="droppable-image-position droppable-position">
                     <div>
                         <a class="delete-button">
-                            <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/trash.png" id="remove_imgHome" alt="Eliminar" title="Eliminar" />
+                            <img src="/themes/admin/images/trash.png" id="remove_imgHome" alt="Eliminar" title="Eliminar" />
                         </a>
                         <div class="clearfix">
                             <div class="thumbnail article-resource-image">
@@ -147,7 +147,7 @@
                 <div id="frontpage-video" class="droppable-video-position droppable-position">
                     <div>
                         <a class="delete-button" onclick="javascript:recuperar_eliminar('video1');">
-                            <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/trash.png" id="remove_video1" alt="Eliminar" title="Eliminar" />
+                            <img src="/themes/admin/images/trash.png" id="remove_video1" alt="Eliminar" title="Eliminar" />
                         </a>
                         <div class="clearfix">
                             <div class="thumbnail article-resource-image">
@@ -184,7 +184,7 @@
                 <div id="inner-video" class="droppable-video-position droppable-position">
                     <div>
                         <a class="delete-button">
-                            <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/trash.png" id="remove_video2" alt="Eliminar" title="Eliminar" />
+                            <img src="/themes/admin/images/trash.png" id="remove_video2" alt="Eliminar" title="Eliminar" />
                         </a>
                         <div class="clearfix">
                             <div class="thumbnail article-resource-image">

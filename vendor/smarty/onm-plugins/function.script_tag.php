@@ -24,7 +24,7 @@ function smarty_function_script_tag($params, &$smarty) {
         $mtime = '?';
         $server = '';
         $basepath = $params["basepath"] ?: "/js";
-        if ($smarty->theme == 'default') {
+        if ($smarty->theme == 'admin') {
             $file = TEMPLATE_ADMIN_PATH.$basepath.$href;
             if (file_exists($file)) {
                 $mtime .= filemtime($file);

@@ -19,7 +19,7 @@ OpenNeMas.tinyMceConfig = {
         plugins : "wordcount,safari,style,advlink,inlinepopups,paste,noneditable,media,searchreplace,xornal,spellchecker,tabfocus,iframe,gtranslator,blockquote",
 
         /* css */
-        content_css: '/admin/themes/default/js/tiny_mce/opennemas-config.css?' + new Date().getTime(),
+        content_css: '/themes/admin/js/tiny_mce/opennemas-config.css?' + new Date().getTime(),
 
         theme_advanced_buttons1_add : "fontselect,fontsizeselect",
         theme_advanced_buttons2_add : "styleprops",
@@ -52,10 +52,10 @@ OpenNeMas.tinyMceConfig = {
         flash_quality : "high",
         flash_menu : "false",
 
-        //external_image_list_url : "/admin/themes/default/js/tiny_mce/imagesexternallist.js",
+        //external_image_list_url : "/themes/admin/js/tiny_mce/imagesexternallist.js",
         // Mirar o if de abaixo if(document.getElementById('category'))
-        external_image_list_url: (document.getElementById('category'))? "/admin/controllers/image/images_tiny_external_list.php?category=" + document.getElementById('category').value : '',
-        media_external_list_url: (document.getElementById('category'))? "/admin/controllers/image/images_tiny_external_list.php?category=" + document.getElementById('category').value: '',
+        external_image_list_url: (document.getElementById('category'))? "/controllers/image/images_tiny_external_list.php?category=" + document.getElementById('category').value : '',
+        media_external_list_url: (document.getElementById('category'))? "/controllers/image/images_tiny_external_list.php?category=" + document.getElementById('category').value: '',
 
         /* Iframe */
         /*extended_valid_elements: "iframe[src|width|height|name|align|frameborder|scrolling|marginheight|marginwidth],object[data|type|classid|codebase|width|height|align],param[name|value],embed[quality|type|pluginspage|width|height|src|align],img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name|obj|param|embed]",*/
@@ -75,7 +75,7 @@ OpenNeMas.tinyMceConfig = {
         skin : "cirkuit",
         //skin_variant : "silver",
         /* css */
-        content_css: '/admin/themes/default/js/tiny_mce/opennemas-config.css?' + new Date().getTime(),
+        content_css: '/themes/admin/js/tiny_mce/opennemas-config.css?' + new Date().getTime(),
 
         theme_advanced_buttons1 : "bold,italic,underline,|,justifyleft,justifycenter,justifyright,justifyfull,|,bullist,numlist,|,outdent,indent,|,copy,pastetext,|,undo,redo,|,removeformat,cleanup,code,|,link,unlink,|,image,media,iframe,spellchecker,gtranslator,xornalautolink",
         theme_advanced_buttons2 : "",
@@ -95,8 +95,8 @@ OpenNeMas.tinyMceConfig = {
         paste_text_use_dialog : true,
         paste_text_linebreaktype : "p",
 
-        /* external_image_list_url : "/admin/external_images.js",
-        media_external_list_url : "/admin/external_media.js", */
+        /* external_image_list_url : "/external_images.js",
+        media_external_list_url : "/external_media.js", */
 
         /* Tabfocus plugin */
         tabfocus_elements : ":prev,:next",
@@ -130,7 +130,7 @@ OpenNeMas.tinyMceConfig = {
         skin : "cirkuit",
         //skin_variant : "silver",
         /* css */
-        content_css: '/admin/themes/default/js/tiny_mce/opennemas-config.css?' + new Date().getTime(),
+        content_css: '/themes/admin/js/tiny_mce/opennemas-config.css?' + new Date().getTime(),
 
         theme_advanced_buttons1 : "bold,italic,underline,|,justifyleft,justifycenter,justifyright,justifyfull,|,bullist,numlist,|,outdent,indent,|,copy,pastetext",
         theme_advanced_buttons2 : "|,undo,redo,|,removeformat,cleanup,code,|,link,unlink,|,image,media,iframe,spellchecker,gtranslator,xornalautolink",
@@ -145,8 +145,8 @@ OpenNeMas.tinyMceConfig = {
         relative_urls: false,
         document_base_url: '/',
         convert_urls : false,
-        /* external_image_list_url : "/admin/external_images.js",
-        media_external_list_url : "/admin/external_media.js", */
+        /* external_image_list_url : "/external_images.js",
+        media_external_list_url : "/external_media.js", */
 
         /* Tabfocus plugin */
         tabfocus_elements : ":prev,:next",
@@ -180,22 +180,22 @@ OpenNeMas.tinyMceConfig = {
         plugins : "safari,style,advlink,inlinepopups,paste,noneditable,media,searchreplace,xornal,spellchecker,tabfocus,iframe,template,table,xhtmlxtras,layer,fullscreen",
 
         /* css */
-        content_css: '/admin/themes/default/js/tiny_mce/opennemas-config.css?' + new Date().getTime(),
+        content_css: '/themes/admin/js/tiny_mce/opennemas-config.css?' + new Date().getTime(),
 
         template_templates : [
             {
                 title : "Caja columna 1",
-                src : "/admin/themes/default/js/tiny_mce/templates/box_col_1.html",
+                src : "/themes/admin/js/tiny_mce/templates/box_col_1.html",
                 description : "Contenedor para columna 1."
             },
             {
                 title : "Caja columna 2",
-                src : "/admin/themes/default/js/tiny_mce/templates/box_col_2.html",
+                src : "/themes/admin/js/tiny_mce/templates/box_col_2.html",
                 description : "Contenedor para columna 2."
             },
             {
                 title : "Caja titulares",
-                src : "/admin/themes/default/js/tiny_mce/templates/box_titulares.html",
+                src : "/themes/admin/js/tiny_mce/templates/box_titulares.html",
                 description : "Contenedor para titulares del día."
             }
         ],
