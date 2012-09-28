@@ -23,7 +23,7 @@
         <div class="table-info clearfix">
             <div class="pull-left">
                 {$pagination->_totalItems} instances
-                <a href="{url name=manager_instances_list_export filter_name=$filter_name}">{image_tag src="/themes/default/images/csv.png" base_url="/manager"} Export list</a>
+                <a href="{url name=manager_instances_list_export filter_name=$filter_name}">{image_tag src="/themes/manager/images/csv.png" base_url=""} Export list</a>
             </div>
             <div class="pull-right form-inline">
                 <input type="text" id="username" placeholder="{t}Filter by name{/t}" name="filter_name" onchange="this.form.submit();" value="{$filter_title}" />

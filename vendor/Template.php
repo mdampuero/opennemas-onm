@@ -293,7 +293,7 @@ class TemplateManager extends Template
 
 
         // Parent variables
-        $this->templateBaseDir = SITE_PATH.DS.'manager'.DS.'themes'.DS.'default'.DS;
+        $this->templateBaseDir = SITE_PATH.DS.'themes'.DS.'manager'.DS;
 
         foreach (array('cache', 'compile') as $key => $value) {
             $directory = COMMON_CACHE_PATH.DS.'smarty'.DS.'manager'.DS.$value;
@@ -311,7 +311,7 @@ class TemplateManager extends Template
         $this->caching	     = false;
 
         // Template variables
-        $baseUrl = SITE_URL.SS.'admin'.SS.'themes'.SS.$theme.SS;
+        $baseUrl = SITE_URL.'themes'.SS.'admin'.SS;
 
         $this->locale_dir = $baseUrl.'locale/';
         $this->css_dir    = $baseUrl.'css/';
