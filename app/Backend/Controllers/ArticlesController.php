@@ -543,6 +543,10 @@ class ArticlesController extends Controller
                     $article->promoteToCategoryFrontpage($_POST['category']);
                 }
 
+                // TODO: Move this to a post update hook
+                $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
+                $tplManager->delete($article->category_name.'|'.$article->id);
+
                 m::add(_('Article successfully updated.'), m::SUCCESS);
             } else {
                 m::add(_('Unable to update the article.'), m::ERROR);
