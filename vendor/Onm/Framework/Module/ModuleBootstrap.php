@@ -23,7 +23,38 @@ class ModuleBootstrap
      **/
     public function __construct($container)
     {
+        $this->reflection = new \ReflectionClass($this);
         $this->container = $container;
+
+        $declaringClassFileName = $this->reflection->getFileName();
+        $this->moduleBasePath = dirname($declaringClassFileName);
+    }
+
+    /**
+     * Initializes all the event listener classes if available for a given module
+     *
+     * @return void
+     **/
+    public function initEventListeners()
+    {
+        try {
+            $dispatcher = $this->container->get('event_dispatcher');
+        } catch (\Exception $e) {
+            return false;
+        }
+
+        $eventListenersPath = $this->moduleBasePath.'/EventListeners';
+        if (is_dir($eventListenersPath)) {
+            $namespace = $this->reflection->getNamespaceName();
+
+            $listenerClasses = glob($eventListenersPath.'/*.php');
+            foreach ($listenerClasses as $className) {
+                $eventListenerClassName = $namespace.'\\EventListeners\\'.basename($className, '.php');
+                $listenerInstance = new $eventListenerClassName;
+
+                $dispatcher->addSubscriber($listenerInstance);
+            }
+        }
     }
 
     /**
@@ -34,8 +65,7 @@ class ModuleBootstrap
      **/
     public function init()
     {
-        $reflection = new \ReflectionClass($this);
-        $methods = $reflection->getMethods();
+        $methods = $this->reflection->getMethods();
         foreach ($methods as $method) {
             $methodName = $method->getName();
             $match = preg_match("@init(.)+@", $method->getName(), $matches);

@@ -67,6 +67,7 @@ $loader->registerNamespaces(
         'Symfony\Component\DependencyInjection' => __DIR__.'/../vendor/symfony/dependency-injection',
         'Symfony\Component\Config'             => __DIR__.'/../vendor/symfony/config',
         'Symfony\Component\Yaml'               => __DIR__.'/../vendor/symfony/yaml',
+        'Symfony\Component\EventDispatcher'               => __DIR__.'/../vendor/symfony/event-dispatcher',
         'Panorama'                             => __DIR__.'/../vendor/frandieguez/panorama-php/lib',
         'Monolog'                              => __DIR__.'/../vendor/monolog/monolog/src',
     )

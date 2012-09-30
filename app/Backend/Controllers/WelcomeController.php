@@ -39,6 +39,9 @@ class WelcomeController extends Controller
      **/
     public function defaultAction(Request $request)
     {
+
+        // $event = new \Symfony\Component\EventDispatcher\Event();
+        // $this->container->get('event_dispatcher')->dispatch('content.update', $event);
         // $instances = $this->get('db_conn')->Execute('SELECT count(*) FROM instances');
 
         $feeds = array (
