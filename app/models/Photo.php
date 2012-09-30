@@ -321,7 +321,7 @@ class Photo extends Content
                 'type_img'     => strtolower($filePathInfo['extension']),
                 'media_type'   => 'image',
 
-                'author_name'  => '',
+                'author_name'  => !isset($dataSource['author_name']) ?'':$dataSource['author_name'],
                 'pk_author'    => $_SESSION['userid'],
                 'fk_publisher' => $_SESSION['userid'],
                 'description'  => $dataSource['description'],

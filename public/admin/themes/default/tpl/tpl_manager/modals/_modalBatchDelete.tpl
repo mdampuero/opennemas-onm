@@ -1,10 +1,10 @@
 <div class="modal hide fade" id="modal-cache-batchDelete">
     <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal-cache-batchDelete" aria-hidden="true">×</button>
-      <h3>{t}Delete advertisements{/t}</h3>
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h3>{t}Delete cache elements{/t}</h3>
     </div>
     <div class="modal-body">
-        <p>{t escape=off}Are you sure you want to delete <span>%num%</span> advertisements?{/t}</p>
+        <p>{t escape=off}Are you sure you want to delete <span>%num%</span> cache elements?{/t}</p>
 
     </div>
     <div class="modal-footer">

@@ -144,7 +144,7 @@
             <div class="control-group">
                 <label for="body" class="control-label">{t}Body{/t}</label>
                 <div class="controls">
-                    <textarea name="body" id="body" required="required" style="width:100%; min-height:600px;">{$opinion->body|clearslash}</textarea>
+                    <textarea name="body" id="body" style="width:100%; min-height:600px;">{$opinion->body|clearslash}</textarea>
                 </div>
             </div>
 

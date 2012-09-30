@@ -7,11 +7,22 @@
                 <input type="radio" name="type_advertisement" value="50" {if isset($advertisement) && $advertisement->type_advertisement == 50}checked="checked" {/if}/>
             </label>
         </td>
-        <td rowspan="11">
-            <div id="advertisement-mosaic">
-                <div id="advertisement-mosaic-frame"></div>
-                <img src="{$params.IMAGE_DIR}advertisement/front_advertisement.png" style="width:240px;height:628px;" usemap="#mapPortada" />
-            </div>
+    </tr>
+    <tr>
+        <td colspan="2"><hr /></td>
+    </tr>
+    <tr>
+        <td>
+            <label>
+                 Left Skyscraper (160 x 600)
+                <input type="radio" name="type_advertisement" value="91" {if isset($advertisement) && $advertisement->type_advertisement == 91}checked="checked" {/if}/>
+            </label>
+        </td>
+        <td>
+            <label>
+                 Left Skyscraper (160 x 600)
+                <input type="radio" name="type_advertisement" value="92" {if isset($advertisement) && $advertisement->type_advertisement == 92}checked="checked" {/if}/>
+            </label>
         </td>
     </tr>
     <tr>
@@ -32,6 +43,20 @@
         </td>
     </tr>
     <tr>
+        <td colspan="2">
+             <label>
+                Top Mega-LeaderBoard  (972X90)
+                <input type="radio" name="type_advertisement" value="9" {if isset($advertisement) && $advertisement->type_advertisement == 9}checked="checked" {/if}/>
+            </label>
+        </td>
+        <td rowspan="11">
+            <div id="advertisement-mosaic">
+                <div id="advertisement-mosaic-frame"></div>
+                <img src="{$params.IMAGE_DIR}advertisement/front_advertisement.png" style="width:240px;height:628px;" usemap="#mapPortada" />
+            </div>
+        </td>
+    </tr>
+    <tr>
         <td colspan="2"><hr /></td>
     </tr>
     <tr>
@@ -44,6 +69,7 @@
     <tr>
         <td colspan="2"><hr /></td>
     </tr>
+
     <tr>
         <td colspan="2">
             <table>

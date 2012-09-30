@@ -1,6 +1,6 @@
 <div class="modal hide fade" id="modal-subscriptions-accept">
     <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal-subscriptions-accept" aria-hidden="true">×</button>
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
       <h3>{t}Delete subscriptions{/t}</h3>
     </div>
     <div class="modal-body">

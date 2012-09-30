@@ -73,9 +73,6 @@ switch ($action) {
             }
 
             if ($page == 1) {
-
-                // Fetch home opinions of contributors and
-                // paginate them by ITEM_PAGE
                 $opinions = $cm->find(
                     'Opinion',
                     'in_home=1 and available=1 and type_opinion=0',
@@ -100,10 +97,14 @@ switch ($action) {
                 'ORDER BY type_opinion DESC, created DESC '
             );
 
+            $authors = array();
             foreach ($opinions as &$opinion) {
-                $opinion->author           = new Author($opinion->fk_author);
-                $opinion->author->photo    =
-                        $opinion->author->get_photo($opinion->fk_author_img);
+                if (!array_key_exists($opinion->fk_author, $authors)) {
+                    $author = new Author($opinion->fk_author);
+                    $author->get_author_photos();
+                    $authors[$opinion->fk_author] = $author;
+                }
+                $opinion->author           = $authors[$opinion->fk_author];
                 $opinion->name             = $opinion->author->name;
                 $opinion->author_name_slug = StringUtils::get_title($opinion->name);
             }
@@ -120,6 +121,7 @@ switch ($action) {
 
             $tpl->assign('editorial', $editorial);
             $tpl->assign('opinions', $opinions);
+            $tpl->assign('authors', $authors);
             $tpl->assign('pagination', $pagination);
             $tpl->assign('page', $page);
         }
@@ -128,7 +130,6 @@ switch ($action) {
 
         break;
     case 'list_op_author':  // Author frontpage
-
         // Don't execute the app logic if there are caches available
         if (!$tpl->isCached('opinion/frontpage_author.tpl', $cacheID)) {
 
@@ -136,6 +137,8 @@ switch ($action) {
 
             // Get author info
             $author = new Author($authorID);
+            $author->get_author_photos();
+            $photos = $author->get_author_photos();
 
             // Setting filters for the further SQLs
             if ($authorID == 1 && strtolower($authorSlug) == 'editorial') {
@@ -176,16 +179,11 @@ switch ($action) {
                 }
             }
 
-            // If there aren't opinions just redirect to homepage opinion
-            if (empty($countOpinions)) {
-                Application::forward301('/seccion/opinion/');
-            }
-
             $url = Uri::generate(
                 'opinion_author_frontpage',
                 array(
-                    'slug' => $opinions[0]['author_name_slug'],
-                    'id' => $opinions[0]['pk_author']
+                    'slug' => $authorName,
+                    'id' => $author->pk_author
                 )
             );
 

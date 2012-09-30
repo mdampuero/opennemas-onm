@@ -307,16 +307,17 @@ class OpinionsController extends Controller
             if ($opinion->create($data)) {
                 m::add(_('Special successfully created.'), m::SUCCESS);
             } else {
-                m::add(_('Unable to create the new special.'), m::ERROR);
+                m::add(_('Unable to create the new opinion.'), m::ERROR);
             }
 
-            if ($continue) {
+            $continue = $request->request->filter('continue', false, FILTER_SANITIZE_STRING);
+            if (isset($continue) && $continue==1) {
                 return $this->redirect(
-                    $this->generateUrl('admin_opinions', array('type_opinion' => $data['category']))
+                    $this->generateUrl('admin_opinion_show', array('id' => $opinion->id))
                 );
             } else {
                 return $this->redirect(
-                    $this->generateUrl('admin_opinion_show', array('id' => $opinion->id))
+                    $this->generateUrl('admin_opinions', array('type_opinion' => $data['category']))
                 );
             }
         } else {
@@ -387,15 +388,16 @@ class OpinionsController extends Controller
             // TODO: Move this to a post update hook
             $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
             $tplManager->delete('opinion|1');
+            $tplManager->delete('opinion|'.$opinion->id);
 
             $continue = $request->request->filter('continue', false, FILTER_SANITIZE_STRING);
-            if ($continue) {
+            if (isset($continue) && $continue==1) {
                 return $this->redirect(
                     $this->generateUrl('admin_opinion_show', array('id' => $opinion->id))
                 );
             } else {
                 return $this->redirect(
-                    $this->generateUrl('admin_opinions', array('category' => $data['category']))
+                    $this->generateUrl('admin_opinions', array('type_opinion' => $data['category']))
                 );
             }
         }

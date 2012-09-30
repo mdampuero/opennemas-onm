@@ -87,7 +87,7 @@ if (($tpl->caching == 0)
 
     } elseif (\Onm\Module\ModuleManager::isActivated('STATIC_LIBRARY')) {
         //cronicas method
-        if ($category_name != 'home') {
+        if (($category_name != 'home') && !empty($category_name)) {
             $actual_category_id = $ccm->get_id($category_name);
         } else {
             $actual_category_id = 0;
@@ -96,10 +96,12 @@ if (($tpl->caching == 0)
         $path = preg_replace('/(\d{4})(\d{2})(\d{2})/', '/$1/$2/$3', $date);
 
         if ( !empty($date) ) {
+
             $html='';
             if (file_exists(MEDIA_PATH."/library/{$path}/{$category_name}.html")) {
                 $html = file_get_contents(INSTANCE_MEDIA."library/{$path}/{$category_name}.html");
             }
+
             if (!empty($html)) {
                 echo $html;
             } else {

@@ -217,6 +217,11 @@ div#content-provider span.type {
     display:none;
 }
 
+#search_results_available span.type {
+    display:inline-block !important;
+    font-weight:bold;
+}
+
 .ui-sortable-helper {
     max-width:400px;
 }

@@ -1,6 +1,6 @@
 <div class="modal hide fade" id="modal-edit-user-group" style="width:70%; margin-left:-450px">
     <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal-edit-user-group" aria-hidden="true">×</button>
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
       <h3>{t}Editing user group{/t}</h3>
     </div>
     <div class="modal-body"></div>

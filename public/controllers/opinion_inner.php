@@ -61,7 +61,11 @@ switch ($action) {
 
         if (($opinion->available == 1) && ($opinion->in_litter == 0)) {
 
-            if ( ($tpl->caching == 0) || !$tpl->isCached('opinion.tpl', $cacheID) ) {
+            if (($tpl->caching == 0) || !$tpl->isCached('opinion.tpl', $cacheID) ) {
+
+                $author = new \Author($opinion->fk_author);
+                $author->get_author_photos();
+                $opinion->author = $author;
 
                 // Please SACAR esta broza de aqui {
                 $title = \StringUtils::get_title($opinion->title);
@@ -126,11 +130,15 @@ switch ($action) {
                     .' AND available = 1  AND content_status=1',
                     ' ORDER BY created DESC LIMIT 0,9'
                 );
-                foreach ($otherOpinions as &$otOpinion) {
-                    $otOpinion->author_name_slug  = $opinion->author_name_slug;
-                }
+
 
                 $author = new \Author($opinion->fk_author);
+                $author->get_author_photos();
+
+                foreach ($otherOpinions as &$otOpinion) {
+                    $otOpinion->author = $author;
+                    $otOpinion->author_name_slug  = $opinion->author_name_slug;
+                }
 
                 $tpl->assign(
                     array(
@@ -152,13 +160,14 @@ switch ($action) {
 
         break;
     case 'print':
-
         // Article
         $opinion = new Opinion($dirtyID);
         $opinion->category_name = 'opinion';
         $opinion->author_name_slug = StringUtils::get_title($opinion->name);
 
         $author = new Author($opinion->fk_author);
+        $author->get_author_photos();
+        $opinion->author = $author;
 
         $tpl->assign('author', $author->name);
 

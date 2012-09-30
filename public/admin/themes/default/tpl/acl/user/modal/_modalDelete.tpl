@@ -1,6 +1,6 @@
 <div class="modal hide fade" id="modal-user-delete">
     <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal-user-delete" aria-hidden="true">×</button>
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
       <h3>{t}Delete user{/t}</h3>
     </div>
     <div class="modal-body">

@@ -9,7 +9,7 @@ class Contents
     */
     public function resolve($id)
     {
-        $this->_validateInt($id);
+        $this->validateInt($id);
 
         $refactorID = Content::resolveID($id);
 
@@ -21,8 +21,7 @@ class Contents
     */
     public function contentType($contentID)
     {
-
-        $this->_validateInt($contentID);
+        $this->validateInt($contentID);
 
         $sql = "SELECT name FROM content_types WHERE `pk_content_type`=$contentID";
         $rs = $GLOBALS['application']->conn->Execute($sql);
@@ -36,7 +35,26 @@ class Contents
         return $return_value;
     }
 
-    public function setNumViews($id=null)
+    /*
+    * @url GET /contents/filePath/:contentId
+    */
+    public function filePath($contentID)
+    {
+        $this->validateInt($contentID);
+
+        $sql = "SELECT path FROM attachments WHERE `pk_attachment`=$contentID";
+        $rs  = $GLOBALS['application']->conn->Execute($sql);
+
+        if ($rs->_numOfRows < 1) {
+            $returnValue = false;
+        } else {
+            $returnValue = $rs->fields['path'];
+        }
+
+        return $returnValue;
+    }
+
+    public function setNumViews($id = null)
     {
 
         if (!array_key_exists('HTTP_USER_AGENT', $_SERVER)
@@ -118,7 +136,7 @@ class Contents
         }
     }
 
-    private function _validateInt($number)
+    private function validateInt($number)
     {
         if (!is_numeric($number)) {
             throw new RestException(400, 'parameter is not a number');
@@ -127,5 +145,5 @@ class Contents
             throw new RestException(400, 'parameter is not finite');
         }
     }
-
 }
+

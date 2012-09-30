@@ -74,9 +74,9 @@ class ArticlesController extends Controller
             }
         }
 
-        $page   =  $request->query->getDigits('page', 1);
-        $title =  $request->query->filter('title', null, FILTER_VALIDATE_INT);
-        $status =  (int) $request->query->filter('status', -1, FILTER_VALIDATE_INT);
+        $page     =  $request->query->getDigits('page', 1);
+        $title    =  $request->query->filter('title', null, FILTER_VALIDATE_INT);
+        $status   =  (int) $request->query->get('status', -1);
         $category =  $request->query->filter('category', 0, FILTER_VALIDATE_INT);
 
         if (is_null($category) || $category == 0) {
@@ -89,7 +89,7 @@ class ArticlesController extends Controller
 
         $filterSQL = array('in_litter != 1');
         if ($status >= 0) {
-            $filterSQL []= ' available='.$status;
+            $filterSQL []= ' contents.available='.$status;
         }
         if (!empty($title)) {
             $filterSQL []= ' title LIKE \'%'.$title.'%\'';
@@ -102,7 +102,7 @@ class ArticlesController extends Controller
             'Article',
             $categoryFilter,
             $filterSQL,
-            'ORDER BY available ASC, content_status ASC, starttime DESC',
+            'ORDER BY created DESC, available ASC',
             $page,
             $itemsPerPage
         );
@@ -543,6 +543,10 @@ class ArticlesController extends Controller
                     $article->promoteToCategoryFrontpage($_POST['category']);
                 }
 
+                // TODO: Move this to a post update hook
+                $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
+                $tplManager->delete($article->category_name.'|'.$article->id);
+
                 m::add(_('Article successfully updated.'), m::SUCCESS);
             } else {
                 m::add(_('Unable to update the article.'), m::ERROR);
@@ -735,10 +739,14 @@ class ArticlesController extends Controller
             $sqlExcludedOpinions = ' AND `pk_article` NOT IN ('.$contentsExcluded.')';
         }
 
+        if ($category == 0) {
+            $category = null;
+        };
+
         list($countArticles, $articles) = $cm->getCountAndSlice(
             'Article',
             $category,
-            'contents.available=1 AND in_litter != 1 ' . $sqlExcludedOpinions,
+            'contents.content_status=1 AND in_litter != 1 ' . $sqlExcludedOpinions,
             ' ORDER BY created DESC ',
             $page,
             8

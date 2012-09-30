@@ -55,6 +55,10 @@ class Advertisement extends Content
         36 => "Button Colunm 3 Position 6",
         37 => "Floating banner",
 
+        9  => "Top Mega-LeaderBoard",
+        91 => "Left Skyscraper",
+        92 => "Right Skyscraper",
+
         /* Intersticial banner noticia interior */
         150 => "[I] Banner Interticial noticia interior",
 
@@ -735,7 +739,9 @@ class Advertisement extends Content
     {
         $interstitial = null;
 
-        if (in_array($type, array(50, 150)) && ADVERTISEMENT_ENABLE) {
+        if (((($type + 50) % 100) == 0)
+            && ADVERTISEMENT_ENABLE
+        ) {
             $category = (empty($category) || ($category=='home'))? 0: $category;
 
             $cm = new ContentManager();
@@ -743,7 +749,7 @@ class Advertisement extends Content
                 'Advertisement',
                 ' `type_advertisement`=' . $type
                 .' AND `available`=1'
-                .' AND `fk_content_categories`='.$category,
+                .' AND `fk_content_categories` LIKE "%'.$category.'%"',
                 ' ORDER BY type_advertisement, created'
             );
 

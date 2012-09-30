@@ -15,7 +15,7 @@
             error_tab_content_provider: "{t}Couldn't load this tab. We'll try to fix this as soon as possible.{/t}"
         }
         var frontpage_urls = {
-            save_positions: '{url name=admin_frontpage_savepositions category=$category}',
+            save_positions: '{url name=admin_frontpage_savepositions}',
             preview_frontpage: '{url name=admin_frontpage_preview category=$category}',
             clean_frontpage: '{url name=admin_tpl_manager_cleanfrontpage}',
             toggle_suggested: '{url name=admin_content_toggle_suggested}',
@@ -69,7 +69,7 @@
 
                 <li class="separator batch-actions"></li>
                 <li>
-                    <a href="{url name=admin_article_create}" class="admin_add" title="{t}New article{/t}">
+                    <a href="{url name=admin_article_create  category=$category}" class="admin_add" title="{t}New article{/t}">
                         <img src="{$params.IMAGE_DIR}/article_add.png" title="" alt="" />
                         <br />{t}New article{/t}
                     </a>
@@ -138,11 +138,10 @@
                     </li>
                     {/if}
                     {/is_module_activated}
-                    {is_module_activated name="ADVANCED_SEARCH"}
                     <li>
-                        <a href="{url name=admin_search_content_provider related=0}"><i class="icon-search"></i></a>
+                        <a href="{url name=admin_articles_content_provider_category}">{t}Latest articles{/t}</a>
                     </li>
-                    {/is_module_activated}
+
                     {is_module_activated name="WIDGET_MANAGER"}
                     <li>
                         <a href="{url name=admin_widgets_content_provider category=$category}">{t}Widgets{/t}</a>
@@ -167,6 +166,11 @@
                     {is_module_activated name="ADS_MANAGER"}
                     <li>
                         <a href="{url name=admin_ads_content_provider category=$category}">{t}Advertisement{/t}</a>
+                    </li>
+                    {/is_module_activated}
+                    {is_module_activated name="ADVANCED_SEARCH"}
+                    <li>
+                        <a href="{url name=admin_search_content_provider related=0}"><i class="icon-search"></i></a>
                     </li>
                     {/is_module_activated}
                 </ul>

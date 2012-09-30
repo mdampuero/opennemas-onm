@@ -1,5 +1,7 @@
 <?php
 
+use Onm\Settings as s;
+
 class Categories
 {
     public $restler;
@@ -9,7 +11,7 @@ class Categories
     */
     public function allContent($n1)
     {
-        $this->_validateInt(func_get_args());
+        $this->validateInt(func_get_args());
 
         $cm = new ContentManager();
         $categoryContents = $cm->getContentsForHomepageOfCategory($n1);
@@ -49,6 +51,18 @@ class Categories
     }
 
     /*
+    * @url GET /categories/layout/:category_id
+    */
+    public function layout($actualCategory)
+    {
+        $ccm = new ContentCategoryManager();
+        $actualCategoryId = $ccm->get_id($actualCategory);
+        $layout = s::get('frontpage_layout_'.$actualCategoryId, 'default');
+
+        return $layout;
+    }
+
+    /*
     * @url GET /categories/lists
     */
     public function lists()
@@ -59,7 +73,7 @@ class Categories
         return $menuCategories->items;
     }
 
-    private function _validateInt($number)
+    private function validateInt($number)
     {
         foreach ($number as $value) {
             if (!is_numeric($value)) {

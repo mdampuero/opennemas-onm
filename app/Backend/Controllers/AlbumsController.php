@@ -576,6 +576,45 @@ class AlbumsController extends Controller
     }
 
     /**
+     * Save positions for widget
+     *
+     * @return Response the response object
+     **/
+    public function savePositionsAction(Request $request)
+    {
+        $request = $this->get('request');
+
+        $positions = $request->query->get('positions');
+
+        $msg = '';
+        if (isset($positions)
+            && is_array($positions)
+            && count($positions) > 0
+        ) {
+            $_positions = array();
+
+            foreach ($positions as $pos => $id) {
+                $_positions[] = array($pos, '1', $id);
+            }
+
+            $album = new \Album();
+            $msg = $album->set_position($_positions, $_SESSION['userid']);
+        }
+
+        if ($msg) {
+            $msg = "<div class='alert alert-success'>"
+                ._("Positions saved successfully.")
+                .'<button data-dismiss="alert" class="close">×</button></div>';
+        } else {
+            $msg = "<div class='alert alert-error'>"
+                ._("Unable to save the new positions. Please contact with your system administrator.")
+                .'<button data-dismiss="alert" class="close">×</button></div>';
+        }
+
+        return new Response($msg);
+    }
+
+    /**
      * Render the content provider for albums
      *
      * @return Response the response object
@@ -662,7 +701,7 @@ class AlbumsController extends Controller
         list($countAlbums, $albums) = $cm->getCountAndSlice(
             'Album',
             $categoryFilter,
-            'contents.available=1',
+            '1=1',
             ' ORDER BY starttime DESC, contents.title ASC ',
             $page,
             $itemsPerPage

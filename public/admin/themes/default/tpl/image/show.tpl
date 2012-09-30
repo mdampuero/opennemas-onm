@@ -64,7 +64,7 @@ jQuery(document).ready(function($) {
                         <a href="{url name=admin_search stringSearch=$smarty.get.stringSearch} photo=on id=0"
                            title="Cancelar">
                     {/if}
-                        <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
+                        <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back to listing{/t}
                     </a>
                 </li>
             </ul>

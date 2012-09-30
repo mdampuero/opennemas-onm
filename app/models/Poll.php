@@ -215,15 +215,15 @@ class Poll extends Content
     {
         $this->used_ips = $this->add_count($this->used_ips, $ip);
         if (!$this->used_ips) {
-            Application::setCookieSecure("polls".$this->id, 'true', time()+60*60*24*30);
-
+            // Application::setCookieSecure("polls".$this->id, 'true', time()+60*60*24*30);
+            setcookie("polls".$this->id, 'true', time()+3600);
             return false;
         }
 
         $this->total_votes++;
 
         $sql = "UPDATE poll_items SET `votes`=`votes`+1 WHERE pk_item=? ";
-        $values = array($votes, $pkItem);
+        $values = array($pkItem);
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
@@ -248,7 +248,8 @@ class Poll extends Content
         }
 
         //creamos la cookie
-        Application::setCookieSecure("polls".$this->id, 'true', time()+60*60*24*30);
+        //Application::setCookieSecure("polls".$this->id, 'true', time()+60*60*24*30);
+        setcookie("polls".$this->id, 'true', time()+3600);
 
         return true;
     }

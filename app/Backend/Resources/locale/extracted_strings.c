@@ -3104,6 +3104,9 @@ gettext("Suggested articles");
 gettext("Other articles in this category");
 
 /* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
+gettext("Latest articles");
+
+/* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
 gettext("Widgets");
 
 /* public/admin/themes/default/tpl//frontpagemanager/list.tpl */
@@ -4867,6 +4870,36 @@ gettext("Delete");
 /* public/admin/themes/default/tpl//advertisement/content-provider/advertisement.tpl */
 gettext("Send to trash");
 
+/* public/admin/themes/default/tpl//advertisement/config.tpl */
+gettext("Ads :: Configuration");
+
+/* public/admin/themes/default/tpl//advertisement/config.tpl */
+gettext("Save");
+
+/* public/admin/themes/default/tpl//advertisement/config.tpl */
+gettext("Save");
+
+/* public/admin/themes/default/tpl//advertisement/config.tpl */
+gettext("Go back to list");
+
+/* public/admin/themes/default/tpl//advertisement/config.tpl */
+gettext("Go back to list");
+
+/* public/admin/themes/default/tpl//advertisement/config.tpl */
+gettext("Go back to list");
+
+/* public/admin/themes/default/tpl//advertisement/config.tpl */
+gettext("Go back to list");
+
+/* public/admin/themes/default/tpl//advertisement/config.tpl */
+gettext("Go back to list");
+
+/* public/admin/themes/default/tpl//advertisement/config.tpl */
+gettext("Cookie lifetime for intersticials");
+
+/* public/admin/themes/default/tpl//advertisement/config.tpl */
+gettext("This setting indicates how long will take to re-display the interstitial in frontpage.");
+
 /* public/admin/themes/default/tpl//advertisement/new.tpl */
 gettext("Ad manager");
 
@@ -5064,6 +5097,12 @@ gettext("New");
 
 /* public/admin/themes/default/tpl//advertisement/list.tpl */
 gettext("New");
+
+/* public/admin/themes/default/tpl//advertisement/list.tpl */
+gettext("Config ads module");
+
+/* public/admin/themes/default/tpl//advertisement/list.tpl */
+gettext("Settings");
 
 /* public/admin/themes/default/tpl//advertisement/list.tpl */
 gettext("HOMEPAGE");
@@ -7376,6 +7415,24 @@ gettext("The maximum file size for uploads is <strong>%1 MB</strong>.");
 gettext("Only image files (<strong>JPG, GIF, PNG</strong>) are allowed.");
 
 /* public/admin/themes/default/tpl//image/create.tpl */
+gettext("File is too big");
+
+/* public/admin/themes/default/tpl//image/create.tpl */
+gettext("File is too small");
+
+/* public/admin/themes/default/tpl//image/create.tpl */
+gettext("Filetype not allowed");
+
+/* public/admin/themes/default/tpl//image/create.tpl */
+gettext("Max number of files exceeded");
+
+/* public/admin/themes/default/tpl//image/create.tpl */
+gettext("Uploaded bytes exceed file size");
+
+/* public/admin/themes/default/tpl//image/create.tpl */
+gettext("Empty file upload result");
+
+/* public/admin/themes/default/tpl//image/create.tpl */
 gettext("Iniciar");
 
 /* public/admin/themes/default/tpl//image/create.tpl */
@@ -7694,10 +7751,22 @@ gettext("No");
 gettext("Files uploaded successfully");
 
 /* public/admin/themes/default/tpl//image/modals/_edit_uploaded_files.tpl */
-gettext("The dropped files are uploaded but you must .");
+gettext("The dropped files are uploaded but you should complete their information.");
+
+/* public/admin/themes/default/tpl//image/modals/_edit_uploaded_files.tpl */
+gettext("You can:");
+
+/* public/admin/themes/default/tpl//image/modals/_edit_uploaded_files.tpl */
+gettext("Edit them now");
+
+/* public/admin/themes/default/tpl//image/modals/_edit_uploaded_files.tpl */
+gettext("Upload more images and complete the information later");
 
 /* public/admin/themes/default/tpl//image/modals/_edit_uploaded_files.tpl */
 gettext("Edit them");
+
+/* public/admin/themes/default/tpl//image/modals/_edit_uploaded_files.tpl */
+gettext("Upload more images");
 
 /* public/admin/themes/default/tpl//image/search.tpl */
 gettext("Search images");
@@ -7808,7 +7877,7 @@ gettext("Go back");
 gettext("Go back");
 
 /* public/admin/themes/default/tpl//image/show.tpl */
-gettext("Go back");
+gettext("Go back to listing");
 
 /* public/manager/themes/default/tpl/error/404.tpl */
 gettext("We already have being informed of this error: %1");

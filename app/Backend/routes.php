@@ -109,10 +109,9 @@ $adminRoutes->add(
 $adminRoutes->add(
     'admin_frontpage_savepositions',
     new Route(
-        '/frontpage/{category}/save-positions',
+        '/frontpage/save-positions',
         array(
-            '_controller' => 'Backend:Controllers:FrontpagesController:savePositions',
-            'category' => 'home',
+            '_controller' => 'Backend:Controllers:FrontpagesController:savePositions'
         )
     ),
     '/admin'
@@ -588,6 +587,15 @@ $adminRoutes->add(
     new Route(
         '/ads/{id}/toggle-available',
         array('_controller' => 'Backend:Controllers:AdsController:toggleAvailable')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_ads_config',
+    new Route(
+        '/ads/config',
+        array('_controller' => 'Backend:Controllers:AdsController:config')
     ),
     '/admin'
 );
@@ -1262,6 +1270,15 @@ $adminRoutes->add(
     new Route(
         '/albums/batch-publish',
         array('_controller' => 'Backend:Controllers:AlbumsController:batchPublish')
+    ),
+    '/admin'
+);
+
+$adminRoutes->add(
+    'admin_albums_savepositions',
+    new Route(
+        '/albums/save-positions',
+        array('_controller' => 'Backend:Controllers:CoversController:savePositions')
     ),
     '/admin'
 );

@@ -236,7 +236,7 @@ class Article extends Content
             );
         }
 
-        $data['subtitle']=mb_strtoupper($data['subtitle'], 'UTF-8');
+        $data['subtitle'] = $data['subtitle'];
         $data['img1_footer'] =
             (!isset($data['img1_footer']) || empty($data['img1_footer']))
             ? ''

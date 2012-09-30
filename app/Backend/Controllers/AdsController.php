@@ -624,5 +624,44 @@ class AdsController extends Controller
             implode('&', $url)
         );
     }
+
+    /**
+     * Handles and shows the album configuration form
+     *
+     * @return Response the response object
+     **/
+    public function configAction(Request $request)
+    {
+        $this->checkAclOrForward('ADS_SETTINGS');
+
+        if ('POST' == $this->request->getMethod()) {
+
+            $formValues = $this->get('request')->request;
+
+            $settings = array(
+                'ads_settings' => array(
+
+                    'lifetime_cookie' => $formValues->getDigits('ads_settings_lifetime_cookie'),
+
+                )
+            );
+
+            foreach ($settings as $key => $value) {
+                s::set($key, $value);
+            }
+
+            m::add(_('Settings saved successfully.'), m::SUCCESS);
+
+            return $this->redirect($this->generateUrl('admin_ads'));
+        } else {
+            $configurationsKeys = array('ads_settings',);
+            $configurations = s::get($configurationsKeys);
+
+            return $this->render(
+                'advertisement/config.tpl',
+                array('configs'   => $configurations,)
+            );
+        }
+    }
 }
 

@@ -150,10 +150,10 @@ class CategoriesController extends Controller
             $data = array(
                 'title' => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
                 'inmenu' => $request->request->getDigits('inmenu', 0),
-                'fk_content_category' => $request->request->getDigits('subcategory'),
+                'subcategory' => $request->request->getDigits('subcategory'),
                 'internal_category' => $request->request->getDigits('internal_category'),
                 'logo_path' => $logoPath,
-                'color' => $request->request->getDigits('color'),
+                'color' => $request->request->filter('color', '', FILTER_SANITIZE_STRING),
                 'params' => array(
                     'inrss' => $params['inrss'],
                 ),
@@ -269,7 +269,7 @@ class CategoriesController extends Controller
             'inmenu'              => $request->request->getDigits('inmenu', 0),
             'subcategory'         => $request->request->getDigits('subcategory', 0),
             'internal_category'   => $request->request->getDigits('internal_category'),
-            'color'               => $request->request->getDigits('color'),
+            'color'               => $request->request->filter('color', '', FILTER_SANITIZE_STRING),
             'params'  => array(
                 'inrss' => $inrss,
             ),

@@ -70,7 +70,14 @@ class NewsletterController extends Controller
      **/
     public function createAction(Request $request)
     {
-        return $this->render('newsletter/steps/1-pick-elements.tpl');
+        $configurations = \Onm\Settings::get('newsletter_maillist');
+
+        return $this->render(
+            'newsletter/steps/1-pick-elements.tpl',
+            array(
+                'name'=>$configurations['name']
+                )
+        );
     }
 
     /**

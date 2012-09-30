@@ -9,7 +9,7 @@ class Videos
     */
     public function id($id)
     {
-        $this->_validateInt(func_get_args());
+        $this->validateInt(func_get_args());
 
         $videoInt = new Video($id);
 
@@ -21,23 +21,23 @@ class Videos
     */
     public function category($id)
     {
-        $this->_validateInt(func_get_args());
+        $this->validateInt(func_get_args());
 
         $ccm = new ContentCategoryManager();
         $categoryName = $ccm->get_name($id);
 
         $cm = new ContentManager();
         $video =  $cm->find_by_category_name(
-                        'Video',
-                        $categoryName,
-                        'contents.content_status=1',
-                        'ORDER BY created LIMIT 1'
-                    );
+            'Video',
+            $categoryName,
+            'contents.content_status=1',
+            'ORDER BY created LIMIT 1'
+        );
 
         return $video;
     }
 
-    private function _validateInt($number)
+    private function validateInt($number)
     {
         foreach ($number as $value) {
             if (!is_numeric($value)) {
@@ -48,5 +48,5 @@ class Videos
             }
         }
     }
-
 }
+

@@ -312,6 +312,8 @@ class AclUserController extends Controller
      **/
     public function connectedUsersAction(Request $request)
     {
+        $this->checkAclOrForward('BACKEND_ADMIN');
+
         $sessions = $GLOBALS['Session']->getSessions();
 
         return $this->render(

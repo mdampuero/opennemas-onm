@@ -58,7 +58,7 @@ switch ($action) {
 
             $videosSettings = s::get('video_settings');
 
-            $totalVideosFrontpage = isset($videosSettings['total_front'])?:2;
+            $totalVideosFrontpage = isset($videosSettings['total_front'])?$videosSettings['total_front']:2;
             $days = isset( $videosSettings['time_last'])?:365;
 
             if (isset($category_name)
@@ -76,13 +76,13 @@ switch ($action) {
                     'Video',
                     'available=1 AND `contents_categories`.`pk_fk_content_category` ='
                     . $actual_category_id . '',
-                    'ORDER BY views DESC LIMIT 3'
+                    'ORDER BY created DESC LIMIT '.$totalVideosFrontpage.',3'
                 );
 
                 $others_videos = $cm->find_all(
                     'Video',
                     'available=1 AND created >=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY)  ',
-                    'ORDER BY views DESC LIMIT 3, 9'
+                    'ORDER BY views DESC LIMIT 3, 6'
                 );
 
                 if (count($front_videos) > 0) {
@@ -112,8 +112,6 @@ switch ($action) {
                     $video->category_name  = $video->loadCategoryName($video->id);
                     $video->category_title = $video->loadCategoryTitle($video->id);
                 }
-            } else {
-                   // Application::forward301('/video/');
             }
 
             if (count($others_videos) > 0) {

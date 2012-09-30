@@ -253,7 +253,7 @@
             <div class="control-group">
                 <label for="agency" class="control-label">{t}Agency{/t}</label>
                 <div class="controls">
-                    <input type="text" id="agency" name="agency" required="required"
+                    <input type="text" id="agency" name="agency"
                         value="{$album->agency|clearslash|escape:"html"}" class="input-xlarge"/>
                 </div>
             </div>
@@ -261,7 +261,7 @@
             <div class="control-group">
                 <label for="description" class="control-label">{t}Description{/t}</label>
                 <div class="controls">
-                    <textarea name="description" id="description" required="required">{t 1=$album->description|clearslash|escape:"html"}%1{/t}</textarea>
+                    <textarea name="description" id="description" >{t 1=$album->description|clearslash|escape:"html"}%1{/t}</textarea>
                 </div>
             </div>
 
@@ -269,7 +269,7 @@
                 <label for="metadata" class="control-label">{t}Keywords{/t}</label>
                 <div class="controls">
                     <input type="text" id="metadata" name="metadata" class="input-xlarge"
-                        required="required" value="{$album->metadata}" />
+                         value="{$album->metadata}" />
                     <div class="help-block">{t}List of terms separated by comas{/t}</div>
                 </div>
             </div>

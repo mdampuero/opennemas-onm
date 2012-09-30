@@ -359,11 +359,11 @@ FileETag None
 # Option 1:
 # Rewrite "www.example.com -> example.com".
 
-<IfModule mod_rewrite.c>
-  RewriteCond %{HTTPS} !=on
-  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
-  RewriteRule ^ http://%1%{REQUEST_URI} [R=301,L]
-</IfModule>
+# <IfModule mod_rewrite.c>
+#   RewriteCond %{HTTPS} !=on
+#   RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+#   RewriteRule ^ http://%1%{REQUEST_URI} [R=301,L]
+# </IfModule>
 
 # ----------------------------------------------------------------------
 
@@ -794,6 +794,7 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     #Album
     #album/generic/2011-07-09/prueba/2011070918522200812.html
     RewriteRule ^album/?$ controllers/album.php?action=frontpage [L,NC]
+    RewriteRule ^albumes/?$ controllers/album.php?action=frontpage
     RewriteRule ^album/([0-9])?$ controllers/album.php?action=frontpage&c=$1 [L,NC]
     RewriteRule ^album/([a-z0-9\-]+)/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/(.*)/([0-9]+).html$ controllers/album.php?action=show&album_id=$6&category_name=$1 [L,NC]
     RewriteRule ^album/([a-z0-9\-]+)/(.*)/([0-9]+).html$ controllers/album.php?action=show&album_id=$3&category_name=$1 [L,NC]
@@ -922,6 +923,15 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     #album.php?category=2&album_id=6095&action=read
     RewriteCond %{QUERY_STRING} &?category=([^&]+)
     RewriteRule ^album.php$ /album/ [R=301,L,NC]
+
+    #http://www.cronicasdelaemigracion.com/hemeroteca.php?category=2&semmes=55&efecha=1248217200&month=7&year=2009
+    RewriteCond %{QUERY_STRING} &?category=([^&]+)&?semmes=([^&]+)&?efecha=([^&]+)&?month=([^&]+)&?year=([^&]+)
+    RewriteRule ^hemeroteca.php$ controllers/frontpages.php?date=%50%401&category_name=home [L,NC]
+
+    #newslibrary.php?semmes=45&efecha=-86400&category=0&continue=no&month=01&year=2010
+    RewriteCond %{QUERY_STRING} &?semmes=([^&]+)&?efecha=([^&]+)&?category=([^&]+)&?continue=([^&]+)&?month=([^&]+)&?year=([^&]+)
+    RewriteRule ^newslibrary.php$ controllers/frontpages.php?date=%60%501&category_name=home [L,NC]
+
 
     RewriteRule ^(.*)/boletin/?$  /boletin/ [R=301,L,NC]
 

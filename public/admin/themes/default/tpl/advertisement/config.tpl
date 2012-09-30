@@ -1,0 +1,64 @@
+{extends file="base/admin.tpl"}
+
+{block name="header-css" append}
+    <style type="text/css">
+    label {
+        width:150px;
+        padding-left:10px;
+        display:inline-block;
+    }
+    input[type="text"],
+    input[type="password"] {
+        width:300px;
+    }
+    .form-wrapper {
+        margin:10px auto;
+        width:90%;
+    }
+    .help-block {
+        max-width: 300px;
+    }
+    </style>
+{/block}
+
+{block name="content"}
+<form action="{url name=admin_ads_config}" method="POST">
+    <div class="top-action-bar">
+        <div class="wrapper-content">
+            <div class="title"><h2>{t}Ads :: Configuration{/t}</h2></div>
+            <ul class="old-button">
+                <li>
+                    <button type="submit">
+                        <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}" ><br>{t}Save{/t}
+                    </button>
+                </li>
+                <li class="separator"></li>
+                <li>
+                    <a href="{url name=admin_ads}" class="admin_add" value="{t}Go back to list{/t}" title="{t}Go back to list{/t}">
+                    <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Go back to list{/t}" alt="{t}Go back to list{/t}" ><br />{t}Go back to list{/t}
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="wrapper-content">
+
+        {render_messages}
+
+        <div id="{$category}" class="form-horizontal panel">
+
+            <div class="control-group">
+                <label for="ads_settings_lifetime_cookie" class="control-label">{t}Cookie lifetime for intersticials{/t}</label>
+                <div class="controls">
+                    <input type="number" class="required" name="ads_settings_lifetime_cookie" id="ads_settings_lifetime_cookie" value="{$configs['ads_settings']['lifetime_cookie']|default:'300'}" />
+                    <div class="help-inline">in minutes</div>
+                    <div class="help-block">{t}This setting indicates how long will take to re-display the interstitial in frontpage.{/t}</div>
+                </div>
+            </div>
+        </div>
+
+        <input type="hidden" id="action" name="action" value="config" />
+    </div>
+</form>
+
+{/block}

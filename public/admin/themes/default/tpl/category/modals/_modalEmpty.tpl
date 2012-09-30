@@ -1,6 +1,6 @@
 <div class="modal hide fade" id="modal-category-empty">
     <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal-category-empty" aria-hidden="true">×</button>
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
       <h3>{t}Delete all the contents in category{/t}</h3>
     </div>
     <div class="modal-body">

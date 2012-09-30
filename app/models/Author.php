@@ -23,10 +23,9 @@ class Author
     public $condition = null;
     public $date_nac  = null;
     public $params    = null;
+    public $photos   = array();
 
     public $cache     = null;
-
-    private $photos   = array();
 
     private $defaultValues = array(
         'name'      =>'',
@@ -437,8 +436,11 @@ class Author
      *
      * @return array list of dummy photo objects
      **/
-    public function get_author_photos($id)
+    public function get_author_photos($id = null)
     {
+        if (is_null($id)) {
+            $id = $this->id;
+        }
         $sql = 'SELECT *
                 FROM author_imgs WHERE fk_author = ? ORDER BY pk_img ASC';
         $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));

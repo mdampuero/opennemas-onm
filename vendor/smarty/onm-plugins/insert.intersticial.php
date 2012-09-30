@@ -8,37 +8,56 @@
  * @param boolean $cache Use cache
  * @todo Pasar toda logica a una clase con metodos para renderizar los distintos tipos de banners
 */
+use Onm\Settings as s;
+
 function smarty_insert_intersticial($params, &$smarty)
 {
     // nested function to render intersticial
     // FIXME: include function into Advertisement static method
-    if (!function_exists('render_output')) {
-        function render_output($content, $banner)
+    if (!function_exists('renderOutput')) {
+        function renderOutput($content, $banner, $params)
         {
             if (is_object($banner)
                 && (($banner->type_advertisement + 50) % 100) == 0
             ) {
-                $content = json_encode($content);
-                $content = str_replace('\n', '', $content);
-                $content = preg_replace('/[ ][ ]+/', ' ', $content);
-                $timeout = intval($banner->timeout) * 1000; // convert to ms
+                $content     = json_encode($content);
+                $content     = str_replace('\n', '', $content);
+                $content     = preg_replace('/[ ][ ]+/', ' ', $content);
+                $timeout     = intval($banner->timeout) * 1000; // convert to ms
+                $adsSettings = s::get('ads_settings');
+                $daysExpire  = 1;
+                if (!empty($adsSettings['lifetime_cookie'] )) {
+                    $daysExpire = $adsSettings['lifetime_cookie'] / 1440; // convert to days
+                    $daysExpire = number_format($daysExpire, 2);
+                }
                 $pk_advertisement = date('YmdHis', strtotime($banner->created)).
                                     sprintf('%06d', $banner->pk_advertisement);
 
+                // Fetch categoryId to generate distinct cookie for sections
+                if (isset($params['category'])) {
+                    $ccm = new ContentCategoryManager();
+                    $categoryId = $ccm->get_id($params['category']);
+                } else {
+                    $categoryId = 0;
+                }
                 /*
                  * intersticial = new IntersticialBanner({iframeSrc: '/sargadelos.html?cacheburst=1254325526',
                  *                                        timeout: -1,
                  *                                        useIframe: true});
                  */
+
                 $output = <<< JSINTERSTICIAL
         <script type="text/javascript" language="javascript">
         /* <![CDATA[ */
+
         var intersticial = new IntersticialBanner({
             publiId: "$pk_advertisement",
-            cookieName: "ib_$pk_advertisement",
+            cookieName: "ib_$pk_advertisement-$categoryId",
             content: $content,
+            daysExpire: $daysExpire,
             timeout: $timeout
         });
+
         /* ]]> */
         </script>
 JSINTERSTICIAL;
@@ -163,7 +182,7 @@ JSINTERSTICIAL;
         // Empty banner, don't return anything
         $output = '';
 
-        return render_output($output, $banner);
+        return renderOutput($output, $banner, $params);
     }
 
     $output .= '</div>';
@@ -173,6 +192,6 @@ JSINTERSTICIAL;
         $output .= $params['afterHTML'];
     }
 
-    return render_output($output, $banner);
+    return renderOutput($output, $banner, $params);
 }
 

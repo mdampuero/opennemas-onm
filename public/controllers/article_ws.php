@@ -154,7 +154,19 @@ switch ($action) {
                     // Load category related information
                     $content->category_name  = $category_name;
                     $content->category_title = $content->loadCategoryTitle($content->id);
-                    $content->uri = 'ext'.$content->uri;
+                    // Generate content uri if it's not an attachment
+                    if ($item->fk_content_type != 3) {
+                        $content->uri = "ext".$content->uri;
+                    } else {
+                        // Get instance media
+                        $basePath = json_decode(file_get_contents($wsUrl.'/ws/instances/instancemedia/'));
+                        // Get file path for attachments
+                        $filePath = json_decode(
+                            file_get_contents($wsUrl.'/ws/contents/filepath/'.(int)$content->id)
+                        );
+                        // Compose the full url to the file
+                        $content->fullFilePath = $basePath.FILE_DIR.$filePath;
+                    }
                     $relatedContents[] = $content;
                 }
 

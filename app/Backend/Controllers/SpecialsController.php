@@ -197,8 +197,8 @@ class SpecialsController extends Controller
                 'available'      => $request->request->filter('available', 0, FILTER_SANITIZE_STRING),
                 'img1'           => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
                 'category_imag'  => $request->request->filter('category_imag', '', FILTER_SANITIZE_STRING),
-                'noticias_right' => json_decode(json_decode($request->request->get('noticias_right')), true),
-                'noticias_left'  => json_decode(json_decode($request->request->get('noticias_left')), true),
+                'noticias_right' => json_decode($request->request->get('noticias_right')),
+                'noticias_left'  => json_decode($request->request->get('noticias_left')),
             );
 
             if ($special->create($data)) {

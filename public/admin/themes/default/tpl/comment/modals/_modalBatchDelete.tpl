@@ -1,6 +1,6 @@
 <div class="modal hide fade" id="modal-comment-batchDelete">
     <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal-comment-batchDelete" aria-hidden="true">×</button>
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
       <h3>{t}Delete comments{/t}</h3>
     </div>
     <div class="modal-body">
