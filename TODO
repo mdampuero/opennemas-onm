@@ -1,5 +1,9 @@
 TODO:
 
+ALL Contents:
+☐ AutoGenerate slug
+☐ AutoGenerate metadata (important! images when change description)
+
 Opinions:
 
   ☐ Complete batch actions
@@ -12,6 +16,8 @@ Images:
 
  ☐ Review image search, doesn't work at all
  ☐ Improve layout of image preview in listing
+ ☐ Delete button in upload manager
+ ☐ Go back to upload images when select category
 
 Articles:
 
