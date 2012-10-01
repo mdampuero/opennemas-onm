@@ -241,16 +241,9 @@
 
 
             <div id="external" class="form-horizontal">
-                <fieldset>
-                    <h3 class="settings-header">{t}Social networks{/t}</h3>
 
-                    <div class="control-group">
-                        <label for="twitter_page" class="control-label">{t}Twitter Page{/t}</label>
-                        <div class="controls">
-                            <input type="text" id="twitter_page" name="twitter_page" value="{$configs['twitter_page']|default:""}" class="input-xxlarge">
-                            <div class="help-block">{t escape=off}If you also have a <b>twitter page</b>, add your profile name on the form. <br/>Default will be set with Opennemas.{/t}</div>
-                        </div>
-                    </div>
+                <fieldset>
+                    <h3 class="settings-header">{t}Google Services{/t}</h3>
 
                     <div class="control-group">
                         <label for="google_page" class="control-label">{t}Google+ Page Url{/t}</label>
@@ -259,6 +252,43 @@
                             <div class="help-block">{t escape=off}If you have a <b>Google+ page</b>, please complete this input.{/t}</div>
                         </div>
                     </div>
+
+                    <div class="control-group">
+                        <label for="google_maps_api_key" class="control-label">{t}Google Maps API key{/t}</label>
+                        <div class="controls">
+                            <input type="text" id="google_maps_api_key" name="google_maps_api_key" value="{$configs['google_maps_api_key']|default:""}" class="input-xlarge">
+                            <div class="help-block">{t escape=off}You can get your Google <strong>Maps</strong> API Key from <a href="http://code.google.com/apis/maps/signup.html" target="_blank">Google maps sign up website</a>.{/t}</div>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="google_custom_search_api_key" class="control-label">{t}Google Search API key:{/t}</label>
+                        <div class="controls">
+                            <input type="text" id="google_custom_search_api_key" name="google_custom_search_api_key" value="{$configs['google_custom_search_api_key']|default:""}" class="input-xlarge">
+                            <div class="help-block">{t escape=off}You can get your Google <strong>Search</strong> API Key from <a href="http://www.google.com/cse/manage/create" target="_blank">Google Search sign up website</a>.{/t}</div>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="google_analytics_api_key" class="control-label">{t}Google Analytics API key{/t}</label>
+                        <div class="controls">
+                            <input type="text" id="google_analytics_api_key" name="google_analytics[api_key]" value="{$configs['google_analytics']['api_key']|default:""}" class="input-xlarge">
+                            <div class="help-block">{t escape=off}You can get your Google Analytics Site ID from <a href="https://www.google.com/analytics/" target="_blank">GAnalytics site</a> under the General Overview list (should be something like UA-546457-3).{/t}</div>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="google_news_name" class="control-label">{t}Publication name in Google News{/t}</label>
+                        <div class="controls">
+                            <input type="text" id="google_news_name" name="google_news_name" value="{$configs['google_news_name']|default:""}" class="input-xlarge">
+                            <div class="help-block">{t escape=off}You can get your Publication name in <a href="https://www.google.es/search?num=100&hl=es&safe=off&gl=es&tbm=nws&q={$smarty.server.HTTP_HOST}&oq={$smarty.server.HTTP_HOST}" target="_blank">Google News search</a> for your site.{/t}</div>
+                        </div>
+                    </div>
+
+                </fieldset>
+                <hr>
+                <fieldset>
+                    <h3 class="settings-header">{t}Facebook{/t}</h3>
 
                     <div class="control-group">
                         <label for="facebook_page" class="control-label">{t}Facebook Page Url{/t}</label>
@@ -275,36 +305,11 @@
                         </div>
                     </div>
 
-                </fieldset>
-                <hr>
-                <fieldset>
-                    <h3 class="settings-header">{t}Google Services{/t}</h3>
-
-                    <div class="control-group">
-                        <label for="google_maps_api_key" class="control-label">{t}Google Maps API key{/t}</label>
-                        <div class="controls">
-                            <input type="text" id="google_maps_api_key" name="google_maps_api_key" value="{$configs['google_maps_api_key']|default:""}" class="input-xlarge">
-                            <div class="help-block">{t escape=off}You can get your Google <strong>Maps</strong> API Key from <a href="http://code.google.com/apis/maps/signup.html"  target="_blank">Google maps sign up website</a>.{/t}</div>
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label for="google_custom_search_api_key" class="control-label">{t}Google Search API key:{/t}</label>
-                        <div class="controls">
-                            <input type="text" id="google_custom_search_api_key" name="google_custom_search_api_key" value="{$configs['google_custom_search_api_key']|default:""}" class="input-xlarge">
-                            <div class="help-block">{t escape=off}You can get your Google <strong>Search</strong> API Key from <a href="http://www.google.com/cse/manage/create"  target="_blank">Google Search sign up website</a>.{/t}</div>
-                        </div>
-                    </div>
-                </fieldset>
-                <hr>
-                <fieldset>
-                    <h3 class="settings-header">{t}Facebook{/t}</h3>
-
                     <div class="control-group">
                         <label for="facebook_api_key" class="control-label">{t}APP key{/t}</label>
                         <div class="controls">
                             <input type="text" id="facebook_api_key" name="facebook[api_key]" value="{$configs['facebook']['api_key']|default:""}" class="input-xlarge">
-                            <div class="help-block">{t escape=off}You can get your Facebook App Keys from <a href="https://developers.facebook.com/apps">Facebook Developers website</a>.{/t}</div>
+                            <div class="help-block">{t escape=off}You can get your Facebook App Keys from <a href="https://developers.facebook.com/apps" target="_blank">Facebook Developers website</a>.{/t}</div>
                         </div>
                     </div>
 
@@ -318,17 +323,17 @@
                 </fieldset>
                 <hr>
                 <fieldset>
-                    <h3 class="settings-header">{t}Google Analytics Statistics{/t}</h3>
+                    <h3 class="settings-header">{t}Twitter{/t}</h3>
 
                     <div class="control-group">
-                        <label for="google_analytics_api_key" class="control-label">{t}API key{/t}</label>
+                        <label for="twitter_page" class="control-label">{t}Twitter Page{/t}</label>
                         <div class="controls">
-                            <input type="text" id="google_analytics_api_key" name="google_analytics[api_key]" value="{$configs['google_analytics']['api_key']|default:""}" class="input-xlarge">
-                            <div class="help-block">{t escape=off}You can get your Google Analytics Site ID from <a href="https://www.google.com/analytics/">GAnalytics site</a> under the General Overview list (should be something like UA-546457-3).{/t}</div>
+                            <input type="text" id="twitter_page" name="twitter_page" value="{$configs['twitter_page']|default:""}" class="input-xxlarge">
+                            <div class="help-block">{t escape=off}If you also have a <b>twitter page</b>, add your profile name on the form. <br/>Default will be set with Opennemas.{/t}</div>
                         </div>
                     </div>
-                </fieldset>
 
+                </fieldset>
                 {acl isAllowed="ONLY_MASTERS"}
                 <hr>
                 <fieldset>
@@ -364,7 +369,7 @@
                         <label for="recaptcha_public_key" class="control-label">{t}Public key{/t}</label>
                         <div class="controls">
                             <input type="text" id="recaptcha_public_key" name="recaptcha[public_key]" value="{$configs['recaptcha']['public_key']|default:""}" class="input-xlarge">
-                            <div class="help-block">{t escape=off}Get your reCaptcha key from <a href="http://www.google.com/recaptcha/whyrecaptcha">this page</a>.{/t}<br>{t}Used when we want to test if the user is an human and not a robot.{/t}</div>
+                            <div class="help-block">{t escape=off}Get your reCaptcha key from <a href="http://www.google.com/recaptcha/whyrecaptcha" target="_blank">this page</a>.{/t}<br>{t}Used when we want to test if the user is an human and not a robot.{/t}</div>
                         </div>
                     </div>
 
@@ -377,15 +382,16 @@
 
                 </fieldset>
 
+                <hr>
                 <fieldset>
 
                     <h3 class="settings-header">{t}Paypal Settings{/t}</h3>
 
                     <div class="control-group">
-                        <label for="recaptcha_public_key" class="control-label">{t}Account email:{/t}</label>
+                        <label for="paypal_mail" class="control-label">{t}Account email:{/t}</label>
                         <div class="controls">
-                            <input type="text" id="recaptcha_public_key" name="recaptcha[public_key]" value="{$configs['recaptcha']['public_key']|default:""}" class="input-xlarge">
-                            <div class="help-block">{t escape=off}You can get your PayPal account email from <a href="https://www.paypal.com/">PayPal site</a>. This must be a business account for receiving payments{/t}</div>
+                            <input type="text" id="paypal_mail" name="paypal_mail" value="{$configs['paypal_mail']|default:""}" class="input-xlarge">
+                            <div class="help-block">{t escape=off}You can get your PayPal account email from <a href="https://www.paypal.com/us/cgi-bin/webscr?cmd=_registration-run" target="_blank">PayPal site</a>. This must be a business account for receiving payments{/t}</div>
                         </div>
                     </div>
 
