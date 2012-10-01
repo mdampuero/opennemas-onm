@@ -61,7 +61,7 @@
                     <label for="author_name[{$photo->id}]" class="control-label">{t}Copyright{/t}</label>
                     <div class="controls">
                         <input type="text" id="author_name[{$photo->id}]" name="author_name[{$photo->id}]"
-                            value='{$photo->author_name|clearslash|escape:'html'}' required="required"/>
+                            value='{$photo->author_name|clearslash|escape:'html'}'/>
                     </div>
                 </div>
 
