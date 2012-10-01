@@ -28,7 +28,7 @@ class ContentSubscriber implements EventSubscriberInterface
 
     public function onContentUpdate(Event $event)
     {
-        var_dump('content.update event fired and handled');die();
+        var_dump('content.update event fired and handled', $event->getArgument('content'));die();
 
         return false;
     }
