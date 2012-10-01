@@ -106,8 +106,9 @@ class MenuItems
             $saved = true;
 
             foreach ($items as $item) {
+                // Get an null Id for synchronized categorys
                 $values = array(
-                    filter_var($item->id, FILTER_VALIDATE_INT),
+                    ($item->type == 'syncCategory') ? null : filter_var($item->id, FILTER_VALIDATE_INT),
                     (int) $id,
                     filter_var($item->title, FILTER_SANITIZE_STRING),
                     filter_var($item->link, FILTER_SANITIZE_STRING),
