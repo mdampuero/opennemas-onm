@@ -64,10 +64,12 @@ if (
     $actualCategoryId = $actual_category_id = $ccm->get_id($actualCategory);
     $tpl->assign(
         array(
-            'actual_category_id' => $actualCategoryId,
+            'actual_category_id'    => $actualCategoryId,
             'actual_category_title' => $ccm->get_title($category_name),
+            'category_data'         => $ccm->categories[$actualCategoryId],
         )
     );
+
 
     $cm = new ContentManager;
 
