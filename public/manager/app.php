@@ -10,7 +10,7 @@
 
 require '../../app/autoload.php';
 
-require __DIR__.'/../../app/Manager/routes.php';
+require __DIR__.'/../../app/Manager/Resources/Routes/Routes.php';
 
 require '../bootstrap.php';
 
