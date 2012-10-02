@@ -140,8 +140,8 @@
             <tfoot>
                 <tr>
                     <td colspan="7" class="center">
-                        <div class="pagintaion">
-                            {$paginacion->links|default:""}
+                        <div class="pagination">
+                            {$pager->links|default:""}
                         </div>
                     </td>
                 </tr>

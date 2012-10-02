@@ -40,16 +40,34 @@ class NewsletterSubscriptorsController extends Controller
      **/
     public function listAction(Request $request)
     {
-        $filters = $request->query->get('filters');
-        $page = $request->query->getDigits('page', 1);
+        $filters      = $request->query->get('filters');
+        $page         = $request->query->getDigits('page', 1);
+        $itemsPerPage = s::get('items_per_page') ?: 20;
+
+        // Build filters for sql
         list($where, $orderBy) = $this->buildFilter($filters);
-        $itemsPerPage = 40;
 
         $user = new \Subscriptor();
         $users = $user->getUsers($where, ($itemsPerPage*($page-1)) . ',' . $itemsPerPage, $orderBy);
 
         $total = $user->countUsers($where);
-        $pager = $user->getPager($itemsPerPage, $total);
+
+        // Pager
+        $pager = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'append'      => false,
+                'path'        => '',
+                'urlVar'      => 'page',
+                'totalItems'  => $total,
+                'fileName'    => $this->generateUrl(
+                    'admin_newsletter_subscriptors'
+                ).'?page=%d',
+            )
+        );
 
         return $this->render(
             'newsletter/subscriptions/list.tpl',
