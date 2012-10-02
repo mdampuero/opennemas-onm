@@ -156,7 +156,7 @@ class Instance
         * Template settings
         **/
         define('TEMPLATE_USER_PATH', SITE_PATH.DS."themes".DS.TEMPLATE_USER.DS);
-        define('TEMPLATE_USER_URL', SITE_URL."themes".SS.TEMPLATE_USER.SS);
+        define('TEMPLATE_USER_URL', "/themes".SS.TEMPLATE_USER.SS);
 
         define('TEMPLATE_ADMIN', "admin");
         define('TEMPLATE_ADMIN_PATH', SITE_PATH.DS.DS."themes".DS.TEMPLATE_ADMIN.SS);
