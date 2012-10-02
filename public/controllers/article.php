@@ -112,16 +112,21 @@ switch ($action) {
                 // Categories code -------------------------------------------
                 // TODO: Seems that this is trash, evaluate its removal
 
-                $actualCategory       =$category_name;
+                $actualCategory      = $category_name;
                 $actualCategoryId    = $ccm->get_id($actualCategory);
                 $actualCategoryTitle = $ccm->get_title($actualCategory);
+                $categoryData        = null;
+                if ($actualCategoryId != 0 && array_key_exists($actualCategoryId, $ccm->categories)) {
+                    $categoryData = $ccm->categories[$actualCategoryId];
+                }
 
                 $tpl->assign(
                     array(
                         'category_name'         => $actualCategory ,
                         'actual_category_title' => $actualCategoryTitle,
                         'actual_category'       => $actualCategory,
-                        'actual_category_id'    =>$actualCategoryId,
+                        'actual_category_id'    => $actualCategoryId,
+                        'category_data'         => $categoryData,
                     )
                 );
 
