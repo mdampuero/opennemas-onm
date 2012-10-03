@@ -237,6 +237,17 @@
                         </div>
                     </div>
                 </fieldset>
+                <fieldset>
+                    <h3 class="settings-header">{t}Sessions{/t}</h3>
+                    <div class="control-group">
+                        <label for="max_session_lifetime" class="control-label">{t}Max session lifetime{/t}</label>
+                        <div class="controls">
+                            <input type="number" id="max_session_lifetime" name="max_session_lifetime" class="input-xlarge" value="{$configs['max_session_lifetime']|default:"30"}">
+                            <div class="help-block">{t}Minutes after a user session is considered as invalid.{/t}</div>
+                        </div>
+                    </div>
+                </fieldset>
+                <hr>
             </div>
 
 

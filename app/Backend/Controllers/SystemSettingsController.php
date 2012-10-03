@@ -51,7 +51,7 @@ class SystemSettingsController extends Controller
             'google_analytics','piwik', 'section_settings', 'paypal_settings',
             'items_per_page','refresh_interval', 'google_news_name',
             'webmastertools_google', 'webmastertools_bing',
-            'max_session_lifetime'
+            'max_session_lifetime',
         );
 
         $configurations = s::get($configurationsKeys);

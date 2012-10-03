@@ -799,6 +799,8 @@ class InstanceManager
             $name              = $parts[count($parts)-1];
             $templates [$name] = ucfirst($name);
         }
+        unset($templates['admin']);
+        unset($templates['manager']);
 
         return $templates;
     }
