@@ -111,7 +111,7 @@ jQuery(document).ready(function($){
             jQuery.ajax({
                 url:  "{url name=admin_staticpages_build_slug id=$page->id}",
                 type: "POST",
-                data: { action:"buildSlug", id:{$page->id}, slug:slugy, title:jQuery('#title').attr('value') },
+                data: { action:"buildSlug", id:'{$page->id}', slug:slugy, title:jQuery('#title').attr('value') },
                 success: function(data){
                     jQuery('#slug').attr('value', data);
                     previous = jQuery('#slug').value;
@@ -124,7 +124,7 @@ jQuery(document).ready(function($){
         jQuery.ajax({
             url:  "{url name=admin_staticpages_clean_metadata id=$page->id}",
             type: "POST",
-            data: { action:"cleanMetadata", id:{$page->id}, metadata:jQuery('#metadata').attr('value') },
+            data: { action:"cleanMetadata", id:'{$page->id}', metadata:jQuery('#metadata').attr('value') },
             success: function(data){
                 jQuery('#slug').attr('value', data);
                 previous = jQuery('#slug').attr('value');
