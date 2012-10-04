@@ -105,7 +105,7 @@
                         </option>
                         {section name=su loop=$subcat[as]}
                             <option value="{$subcat[as][su]->pk_content_category}"
-                                {if isset($advertisement) && in_array($allcategorys[as]->pk_content_category,$advertisement->fk_content_categories)}selected="selected"{/if}>
+                                {if isset($advertisement) && in_array($subcat[as][su]->pk_content_category,$advertisement->fk_content_categories)}selected="selected"{/if}>
                                 &nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}
                             </option>
                         {/section}
