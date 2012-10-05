@@ -96,23 +96,23 @@ class ImporterXmlfileController extends Controller
                         ? 0 : $_REQUEST['check_pendientes'][$i];
 
                     if ($extension == "zip") {
-                        $dataZIP = FilesManager::decompressZIP($uploaddir.$name);
+                        $dataZIP = \FilesManager::decompressZIP($uploaddir.$name);
 
                         @chmod($uploaddir.$name, 0775);
                         sort($dataZIP);
                         foreach ($dataZIP as $elementZIP) {
                             @chmod($uploaddir.$elementZIP, 0775);
 
-                            $importer = ImporterXml::getInstance();
+                            $importer = \ImporterXml::getInstance();
                             $eltoXML  = $importer->importXML($uploaddir.$elementZIP);
                             if ($eltoXML) {
                                 $XMLFile[$j] = $elementZIP;
 
                                 $values      = $importer->getXMLData($eltoXML);
                                 if (!empty($dryRun)) {
-                                    $article = new Article();
+                                    $article = new \Article();
                                     $article->create($values);
-                                    $photo = new Photo($values['img1']);
+                                    $photo = new \Photo($values['img1']);
                                     $values['photo'] =
                                         INSTANCE_MEDIA.IMG_DIR.
                                         $photo->path_file.$photo->name;

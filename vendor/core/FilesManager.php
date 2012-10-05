@@ -175,7 +175,13 @@ class FilesManager
             $dataZIP[$x] = $file['name'];
         }
 
-        $zip->extractTo(SITE_TMP_PATH.DS);
+        $uploaddir = APPLICATION_PATH .DS.'tmp'.DS.'instances'.DS.INSTANCE_UNIQUE_NAME.DS.'xml'.DS;
+
+        if (!file_exists($uploaddir)) {
+            mkdir($uploaddir, 0775);
+        }
+
+        $zip->extractTo($uploaddir);
 
         $zip->close();
 
