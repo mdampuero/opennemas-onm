@@ -48,7 +48,7 @@ class SystemSettingsController extends Controller
             'site_color', 'site_name', 'time_zone','site_language','site_footer',
             'recaptcha', 'google_maps_api_key','google_custom_search_api_key',
             'facebook','facebook_page','facebook_id','twitter_page', 'googleplus_page',
-            'google_analytics','piwik', 'section_settings', 'paypal_settings',
+            'google_analytics','piwik', 'ojd', 'section_settings', 'paypal_settings',
             'items_per_page','refresh_interval', 'google_news_name',
             'webmastertools_google', 'webmastertools_bing',
             'max_session_lifetime',

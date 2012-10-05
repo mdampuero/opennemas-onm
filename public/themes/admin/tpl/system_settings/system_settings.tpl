@@ -374,6 +374,19 @@
                 {/acl}
                 <hr>
                 <fieldset>
+                    <h3 class="settings-header">{t}OJD Statistics{/t}</h3>
+
+                    <div class="control-group">
+                        <label for="ojd_page_id" class="control-label">{t}OJD Page ID{/t}</label>
+                        <div class="controls">
+                            <input type="text" id="ojd_page_id" name="ojd[page_id]" value="{$configs['ojd']['page_id']|default:""}" class="input-xlarge">
+                            <div class="help-block">{t escape=off}If you also have a <b>OJD statistics service</b>, add your page id{/t}</div>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <hr>
+                <fieldset>
                     <h3 class="settings-header">{t}Recaptcha{/t}</h3>
 
                     <div class="control-group">
