@@ -9,17 +9,17 @@
 
 {block name="content"}
 
-<form action="#" method="POST" enctype="multipart/form-data">
+<form action="{url name=admin_importer_xmlfile_import}" method="POST" enctype="multipart/form-data">
 
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
              <div class="title"><h2>{t}XML importer{/t} :: {t}Select files{/t}</h2></div>
             <ul class="old-button">
-                <li>
+                {*<li>
                     <button type="submit" name="dryrun" value="1">
                         <img src="{$params.IMAGE_DIR}checkout.png" alt="Importar"><br />{t}Check{/t}
                     </button>
-                </li>
+                </li>*}
                 <li>
                     <button type="submit">
                         <img src="{$params.IMAGE_DIR}checkout.png" alt="Importar"><br />{t}Import{/t}
