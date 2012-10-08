@@ -459,6 +459,12 @@ class ArticlesController extends Controller
                 return $this->redirect($this->generateUrl('admin_articles'));
             }
 
+            if (count($request->request) < 1) {
+                m::add(_("Article data sent not valid."), m::ERROR);
+
+                return $this->redirect($this->generateUrl('admin_article_show', array('id' => $id)));
+            }
+
             $article = new \Article();
 
             $params = $request->request->get('params');

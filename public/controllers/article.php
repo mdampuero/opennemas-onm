@@ -196,7 +196,6 @@ switch ($action) {
 
                 $tpl->assign('layoutFile', $layoutFile);
 
-
             } else {
                 Application::forward301('/404.html');
             }
