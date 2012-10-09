@@ -64,8 +64,10 @@ function previewArticle(formID) {
         },
         success: function(data) {
             previewWindow = window.open('', '_blank', '');
-            previewWindow.document.write(data);
-            previewWindow.focus();
+            if (previewWindow !== undefined) {
+                previewWindow.document.write(data);
+                previewWindow.focus();
+            };
         }
     });
 
@@ -74,14 +76,14 @@ function previewArticle(formID) {
 
 jQuery(function($) {
 
-    $('a#button_preview').on('click', function(e, ui) {
+    $('#button_preview').on('click', function(e, ui) {
         e.preventDefault();
 
-        // Save tiny content to textarea
+        // // Save tiny content to textarea
         OpenNeMas.tinyMceFunctions.saveTiny('summary');
         OpenNeMas.tinyMceFunctions.saveTiny('body');
 
-        // Fetch related news and others
+        // // Fetch related news and others
         save_related_contents();
 
         previewArticle('formulario');
