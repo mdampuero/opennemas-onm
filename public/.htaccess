@@ -362,7 +362,7 @@ FileETag None
 # <IfModule mod_rewrite.c>
 #   RewriteCond %{HTTPS} !=on
 #   RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
-#   RewriteRule ^ http://%1%{REQUEST_URI} [R=301,L]
+# RewriteRule ^ http://%1%{REQUEST_URI} [R=301,L]
 # </IfModule>
 
 # ----------------------------------------------------------------------
@@ -375,7 +375,7 @@ FileETag None
 # <IfModule mod_rewrite.c>
 #   RewriteCond %{HTTPS} !=on
 #   RewriteCond %{HTTP_HOST} !^www\..+$ [NC]
-#   RewriteRule ^ http://www.%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+# RewriteRule ^ http://www.%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 # </IfModule>
 
 
@@ -393,7 +393,7 @@ FileETag None
 # <IfModule mod_rewrite.c>
 #   RewriteCond %{REQUEST_FILENAME} !-f
 #   RewriteCond %{REQUEST_FILENAME} !-d
-#   RewriteRule ^(.+)\.(\d+)\.(js|css|png|jpg|gif)$ $1.$3 [L]
+# RewriteRule ^(.+)\.(\d+)\.(js|css|png|jpg|gif)$ $1.$3 [L]
 # </IfModule>
 
 
@@ -406,7 +406,7 @@ FileETag None
 
 # <IfModule mod_rewrite.c>
 #   RewriteCond %{SERVER_PORT} !^443
-#   RewriteRule ^ https://example-domain-please-change-me.com%{REQUEST_URI} [R=301,L]
+# RewriteRule ^ https://example-domain-please-change-me.com%{REQUEST_URI} [R=301,L]
 # </IfModule>
 
 
@@ -564,41 +564,40 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
 
-
     #--------------------------------------------------------
     #Redirection from old http://www.correodiplomatico.com/
 
-      #http://www.correodiplomatico.com/category/politica
-      #http://www.correodiplomatico.com/category/tendencias/medios-comunicacion
+    # http://www.correodiplomatico.com/category/politica
+    # http://www.correodiplomatico.com/category/tendencias/medios-comunicacion
     # opinion categories
- #   RewriteRule ^category/opinion/?$ /opinion/ [R=301,L,NC]
- #   RewriteRule ^category/opinion/colaboradores/?$ /opinion/ [R=301,L,NC]
- #   RewriteRule ^category/opinion/analisis-opinion/?$ /opinion/ [R=301,L,NC]
- #   RewriteRule ^category/opinion/debates/?$ /opinion/ [R=301,L,NC]
+    # RewriteRule ^category/opinion/?$ /opinion/ [R=301,L,NC]
+    # RewriteRule ^category/opinion/colaboradores/?$ /opinion/ [R=301,L,NC]
+    # RewriteRule ^category/opinion/analisis-opinion/?$ /opinion/ [R=301,L,NC]
+    # RewriteRule ^category/opinion/debates/?$ /opinion/ [R=301,L,NC]
 
- #   RewriteRule ^category/([a-z0-9\-]+)/?$ /seccion/$1/ [R=301,L,NC]
- #   RewriteRule ^category/([a-z0-9\-]+)/([a-z0-9\-]+)/?$ /seccion/$2/ [R=301,L,NC]
+    # RewriteRule ^category/([a-z0-9\-]+)/?$ /seccion/$1/ [R=301,L,NC]
+    # RewriteRule ^category/([a-z0-9\-]+)/([a-z0-9\-]+)/?$ /seccion/$2/ [R=301,L,NC]
 
-      #tags
-    #http://www.correodiplomatico.com/tag/consejo-nacional-de-transicion
- #   RewriteRule ^tag/([a-z0-9\-]+)/?$ /seccion/$1/ [R=301,L,NC]
+    #tags
+    # http://www.correodiplomatico.com/tag/consejo-nacional-de-transicion
+    # RewriteRule ^tag/([a-z0-9\-]+)/?$ /seccion/$1/ [R=301,L,NC]
 
-      #Old Static pages
- #   RewriteRule ^contacto /estaticas/contacto.html [R=301,L,NC]
- #   RewriteRule ^contacto-2 /estaticas/contacto.html [R=301,L,NC]
- #   RewriteRule ^quienes-somos /estaticas/quienes-somos.html [R=301,L,NC]
- #  # RewriteRule ^publicidad /estaticas/publicidad.html [R=301,L,NC]
- #   RewriteRule ^venta-de-contenidos-multimedia /estaticas/contacto.html [R=301,L,NC]
- #   RewriteRule ^feed/?$ /rss/listado [R=301,L,NC]
+    #Old Static pages
+    # RewriteRule ^contacto /estaticas/contacto.html [R=301,L,NC]
+    # RewriteRule ^contacto-2 /estaticas/contacto.html [R=301,L,NC]
+    # RewriteRule ^quienes-somos /estaticas/quienes-somos.html [R=301,L,NC]
+    # RewriteRule ^publicidad /estaticas/publicidad.html [R=301,L,NC]
+    # RewriteRule ^venta-de-contenidos-multimedia /estaticas/contacto.html [R=301,L,NC]
+    # RewriteRule ^feed/?$ /rss/listado [R=301,L,NC]
 
-      #Inner Article - Opinion
+    #Inner Article - Opinion
     #http://www.correodiplomatico.com/3501-madrid-y-rabat-sellan-un-pacto-secreto-de-ayuda-mutua.html
- #   RewriteRule ^([0-9]+)\-([a-z0-9\-]+).html?$ /controllers/redirect-imported-elements.php?content_type=article&content_id=$1 [L,NC]
+    # RewriteRule ^([0-9]+)\-([a-z0-9\-]+).html?$ /controllers/redirect-imported-elements.php?content_type=article&content_id=$1 [L,NC]
 
-     #Images
-     #http://www.correodiplomatico.com/wp-content/uploads/2011/08/Nestor-Kirchner.jpg
+    #Images
+    # http://www.correodiplomatico.com/wp-content/uploads/2011/08/Nestor-Kirchner.jpg
 
- #    RewriteRule ^wp-content/uploads/([0-9]+)/([0-9]+)/([a-z0-9\-]+).([a-z]+)?$ / [R=301,L,NC]
+    # RewriteRule ^wp-content/uploads/([0-9]+)/([0-9]+)/([a-z0-9\-]+).([a-z]+)?$ / [R=301,L,NC]
 
 
     #--------------------------------------------------------
