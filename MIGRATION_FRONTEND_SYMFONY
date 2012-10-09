@@ -1,57 +1,69 @@
 Migration to symfony
 --------------------
 
-advertisement.php
-album.php
-article.php (máis acción preview)
-authentication.php
-books.php
-comments.php
-error.php
-frontpages.php
-frontpages_generator.php
-index.php (acción normal e preview)
-letter.php
-newsstand.php
-newsstand_paypal.php
-opinion.php (index e inner)
-poll.php
-rating.php
-redirect-from-editmaker.php
-redirect-imported-elements.php
-redirector.php
-robots.php
-rss.php
-search.php
-sitemap.php
-special.php
-statics.php
-subscriptions.php
-videos.php
-ws.php (frontpage, opinion, article)
+advertisement.php              => AdvertisementController
+album.php                      => AlbumController
+article.php                    => ArticlesController
+article_ws.php                 => ArticlesController
+books.php                      => BooksController
+comments.php                   => CommentsController
+error.php                      => ErrorController
+frontpages.php                 => FrontpagesController
+getrss.php                     => RssController
+index.php                      => IndexController
+index_ws.php                   => IndexController
+letter.php                     => LettersController
+login.php                      => AuthenticationController
+logout.php                     => AuthenticationController
+newsstand_paypal.php           => NewStandPaypalController
+newsstand.php                  => NewStandController
+opinion_index.php              => OpinionsController
+opinion_inner.php              => OpinionsController
+opinion_inner_ws.php           => OpinionsController
+poll.php                       => PollsController
+preview_content.php            => ArticlesController
+preview.php                    => IndexController
+rating.php                     => RatingsController
+redirect-from-editmaker.php    => RedirectorsController
+redirect-imported-elements.php => RedirectorsController
+redirector.php                 => RedirectorsController
+register.php                   => AuthenticationController
+robots.php                     => RobotsController
+rss.php                        => RssController
+search.php                     => SearchController
+sitemap.php                    => SitemapsController
+special.php                    => SpecialsController
+statics.php                    => StaticPagesController
+subscriptions.php              => SubscriptionsController
+user.php                       => UsersController
+videos.php                     => VideosController
+
 
 
 new controllers
 ---------------
-Advertisement
-Album
-Article
-Authentication
-Books
-Comments
-Error
-Frontpages
-Index
-Letter
-NewStand
-NewStandPaypal
-Opinion
-Poll
-Ratings
-Search
-Sitemap
-Specials
-StaticPages
-Subscriptions
-Videos
-WebService
+AdvertisementController
+AlbumController
+ArticlesController
+AuthenticationController
+BooksController
+CommentsController
+ErrorController
+FrontpagesController
+IndexController
+LettersController
+NewStandController
+NewStandPaypalController
+OpinionsController
+PollsController
+RatingsController
+RedirectorsController
+RobotsController
+RssController
+SearchController
+SitemapsController
+SpecialsController
+StaticPagesController
+SubscriptionsController
+UsersController
+VideosController
