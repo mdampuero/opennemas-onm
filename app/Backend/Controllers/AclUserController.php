@@ -349,5 +349,31 @@ class AclUserController extends Controller
 
         return new Response($message, $httpCode);
     }
+
+    /**
+     * Toogle an user state to enabled/disabled
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function toogleEnabledAction(Request $request)
+    {
+        $userId = $request->query->getDigits('id');
+
+        if (!is_null($userId)) {
+            $user = new \User($userId);
+
+            if ($user->authorize == 1) {
+                $user->unauthorizeUser($userId);
+            } else {
+                $user->authorizeUser($userId);
+            }
+
+            if (!$request->isXmlHttpRequest()) {
+                return $this->redirect($this->generateUrl('admin_acl_user'));
+            }
+        }
+    }
 }
 
