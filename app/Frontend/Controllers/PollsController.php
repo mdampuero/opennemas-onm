@@ -20,7 +20,7 @@ use Onm\Settings as s;
  *
  * @package Backend_Controllers
  **/
-class Controller extends Controller
+class PollsController extends Controller
 {
     /**
      * Common code for all the actions
@@ -42,4 +42,4 @@ class Controller extends Controller
 
     }
 
-} // END class Controller
+} // END class PollsController
