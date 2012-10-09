@@ -948,4 +948,9 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     ErrorDocument 403 /controllers/error.php?errordoc=403
     ErrorDocument 404 /controllers/error.php?errordoc=404
     ErrorDocument 500 /controllers/error.php?errordoc=500
+
+    RewriteCond $1 !\.(php)$ [NC]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^(.*)$ app.php [QSA,L]
+
 </IfModule>

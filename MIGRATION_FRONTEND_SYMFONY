@@ -1,0 +1,57 @@
+Migration to symfony
+--------------------
+
+advertisement.php
+album.php
+article.php (máis acción preview)
+authentication.php
+books.php
+comments.php
+error.php
+frontpages.php
+frontpages_generator.php
+index.php (acción normal e preview)
+letter.php
+newsstand.php
+newsstand_paypal.php
+opinion.php (index e inner)
+poll.php
+rating.php
+redirect-from-editmaker.php
+redirect-imported-elements.php
+redirector.php
+robots.php
+rss.php
+search.php
+sitemap.php
+special.php
+statics.php
+subscriptions.php
+videos.php
+ws.php (frontpage, opinion, article)
+
+
+new controllers
+---------------
+Advertisement
+Album
+Article
+Authentication
+Books
+Comments
+Error
+Frontpages
+Index
+Letter
+NewStand
+NewStandPaypal
+Opinion
+Poll
+Ratings
+Search
+Sitemap
+Specials
+StaticPages
+Subscriptions
+Videos
+WebService
