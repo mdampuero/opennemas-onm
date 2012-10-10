@@ -770,7 +770,7 @@ class ArticlesController extends Controller
                 'totalItems'  => $countArticles,
                 'fileName'    => $this->generateUrl(
                     'admin_articles_content_provider_category',
-                    array('category' => $category,)
+                    array('category' => (empty($category) ? '0' : $category),)
                 ).'&page=%d',
             )
         );
