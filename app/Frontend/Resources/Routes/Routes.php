@@ -19,9 +19,10 @@ $frontendRoutes = new RouteCollection();
 $frontendRoutes->add(
     'frontend_ad_get',
     new Route(
-        '/adss/get/{id}',
+        '/ads/get/{id}.{_format}',
         array(
             '_controller' => 'Frontend:Controllers:AdvertisementController:get',
+            '_format' => 'html',
         )
     )
 );
@@ -29,9 +30,10 @@ $frontendRoutes->add(
 $frontendRoutes->add(
     'frontend_ad_redirect',
     new Route(
-        '/adss/show/{id}',
+        '/ads/{id}.{_format}',
         array(
             '_controller' => 'Frontend:Controllers:AdvertisementController:redirect',
+            '_format' => 'html',
         )
     )
 );

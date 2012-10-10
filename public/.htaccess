@@ -786,10 +786,6 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     #Robots.txt
     RewriteRule ^robots.txt?$ controllers/robots.php [L,NC]
 
-    #Advertisement
-    RewriteRule ^ads/get/([0-9]+).html$ controllers/advertisement.php?action=get&id=$1 [L,NC]
-    RewriteRule ^ads/([0-9]+).html$ controllers/advertisement.php?action=show&publi_id=$1 [L,NC]
-
     #Album
     #album/generic/2011-07-09/prueba/2011070918522200812.html
     RewriteRule ^album/?$ controllers/album.php?action=frontpage [L,NC]

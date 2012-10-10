@@ -42,7 +42,7 @@ videos.php                     => VideosController
 
 new controllers
 ---------------
-AdvertisementController
+AdvertisementController DONE
 AlbumController
 ArticlesController
 AuthenticationController
