@@ -1,8 +1,8 @@
 #!/usr/bin/make
 
 TPL_FOLDER = \
-	public/admin/themes/default/tpl/ \
-	public/manager/themes/default/tpl
+	public/themes/admin/tpl/ \
+	public/themes/manager/tpl
 
 CACHE_FOLDER = 'tmp/cache'
 
@@ -26,7 +26,7 @@ extracttrans-backend:
 	        app/Backend/Resources/Menu.php vendor/core/*.php \
         	vendor/Onm/**/**/*.php \
 	        app/models/*.php \
-        	public/admin/themes/default/**/*.php \
+        	public/themes/admin/**/*.php \
 		    app/Backend/Resources/locale/extracted_strings.c \
 		  -o app/Backend/Resources/locale/onmadmin.pot --from-code=UTF-8
 

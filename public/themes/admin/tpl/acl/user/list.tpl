@@ -66,6 +66,7 @@ jQuery(function($){
 					<th class="left">{t}Full name{/t}</th>
 					<th class="left" style="width:110px">{t}Username{/t}</th>
 					<th class="left" >{t}Group{/t}</th>
+					<th class="center" >{t}Activated{/t}</th>
 					<th class="center" style="width:10px">{t}Actions{/t}</th>
 				</tr>
 			</thead>
@@ -89,6 +90,17 @@ jQuery(function($){
 								{$user_groups[u]->name}
 							{/if}
 						{/section}
+					</td>
+					<td class="center">
+						<div class="btn-group">
+							<a class="btn" href="{url name=admin_acl_user_toogle_enabled id=$user->id}" title="{t}Activate user{/t}">
+								{if $user->authorize eq 1}
+									<i class="icon16 icon-ok"></i>
+								{else}
+									<i class="icon16 icon-remove"></i>
+								{/if}
+							</a>
+						</div>
 					</td>
 					<td class="right nowrap">
 						<div class="btn-group">
@@ -117,7 +129,7 @@ jQuery(function($){
 			</tbody>
 			<tfoot>
 				<tr>
-					<td colspan="5">
+					<td colspan="6">
 						&nbsp;
 					</td>
 				</tr>

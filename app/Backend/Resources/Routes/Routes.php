@@ -2776,6 +2776,15 @@ $adminRoutes->add(
     '/admin'
 );
 
+$adminRoutes->add(
+    'admin_acl_user_toogle_enabled',
+    new Route(
+        '/acl/user/{id}/toogle-enabled',
+        array('_controller' => 'Backend:Controllers:AclUserController:toogleEnabled')
+    ),
+    '/admin'
+);
+
 // Privilege management routes
 $adminRoutes->add(
     'admin_acl_privileges',
