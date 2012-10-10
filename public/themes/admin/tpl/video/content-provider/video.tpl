@@ -19,11 +19,11 @@
             </li>
             <li>
                 <a href="#" title="{t}Delete{/t}" class="drop-element">
-                    <i class="icon-trash"></i> {t}Remove{/t}
+                    <i class="icon-trash"></i> {t}Drop from this frontpage{/t}
                 </a>
             </li>
             <li>
-                <a title="{t}Arquive{/t}" href="#" class="arquive">
+                <a title="{t}Drop from all frontpages{/t}" href="#" class="arquive">
                     <i class="icon-inbox"></i> {t}Arquive{/t}
                 </a>
             </li>
