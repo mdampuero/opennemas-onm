@@ -99,6 +99,16 @@ $frontendRoutes->add(
     )
 );
 
+$frontendRoutes->add(
+    'frontend_robots',
+    new Route(
+        '/robots.txt',
+        array(
+            '_controller' => 'Frontend:Controllers:RobotsController:index',
+        )
+    )
+);
+
 
 
 $routes->addCollection($frontendRoutes);
