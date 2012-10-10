@@ -109,6 +109,53 @@ $frontendRoutes->add(
     )
 );
 
+$frontendRoutes->add(
+    'frontend_sitemapnews',
+    new Route(
+        '/sitemapnews.{_format}',
+        array(
+            '_controller' => 'Frontend:Controllers:SitemapController:news',
+            '_format' => 'xml'
+        ),
+        array(
+            '_format' => 'xml|xml.gz'
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_sitemapweb',
+    new Route(
+        '/sitemapweb.{_format}',
+        array(
+            '_controller' => 'Frontend:Controllers:SitemapController:web',
+            '_format' => 'xml'
+        ),
+        array(
+            '_format' => 'xml|xml.gz'
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_sitemapindex',
+    new Route(
+        '/sitemap.{_format}',
+        array(
+            '_controller' => 'Frontend:Controllers:SitemapController:index',
+            '_format' => 'xml'
+        ),
+        array(
+            '_format' => 'xml|xml.gz'
+        )
+    )
+);
+
+    // RewriteRule ^sitemapnews.xml?$ controllers/sitemap.php?action=news [L,NC]
+    // RewriteRule ^sitemapweb.xml?$ controllers/sitemap.php?action=web [L,NC]
+    // RewriteRule ^sitemapnews.xml.gz?$ controllers/sitemap.php?action=news&format=gz [L,NC]
+    // RewriteRule ^sitemapweb.xml.gz?$ controllers/sitemap.php?action=web&format=gz [L,NC]
+    // RewriteRule ^sitemap.xml?$ controllers/sitemap.php [L,NC]
 
 
 $routes->addCollection($frontendRoutes);

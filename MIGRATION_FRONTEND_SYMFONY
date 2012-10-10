@@ -59,9 +59,9 @@ PollsController
 RatingsController
 RedirectorsController
 RobotsController
-RssController
+RssController DONE
 SearchController
-SitemapsController
+SitemapsController DONE
 SpecialsController
 StaticPagesController
 SubscriptionsController
