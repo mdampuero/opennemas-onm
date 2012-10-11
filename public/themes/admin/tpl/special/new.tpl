@@ -144,7 +144,7 @@
             <div class="control-group">
                 <label for="available" class="control-label">{t}Available{/t}</label>
                 <div class="controls">
-                    <input type="checkbox" name="avilable" id="available" value="1" {if $special->available eq 1}checked="checked"{/if}>
+                    <input type="checkbox" name="available" id="available" value="1" {if $special->available eq 1} checked="checked"{/if}>
                 </div>
             </div>
             <div class="control-group">
