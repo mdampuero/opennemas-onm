@@ -564,12 +564,12 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
 
-    #--------------------------------------------------------
-    #Redirection from old elidealgallego.com
+  # Redirections for elidealgallego.com --------------------------------------------------------------------------------
+
     #Inner Article
     RewriteRule ^index\.php/[a-z0-9\-]+/[a-z0-9\-]+/([0-9]+)\-[a-z0-9\-]+/?$ /controllers/redirect-imported-elements.php?content_type=article&content_id=$1 [L,NC]
     RewriteRule ^index\.php/opinion/[a-z0-9\-]+/([0-9]+)\-[a-z]/?$ /controllers/redirect-from-editmaker.php?content_type=opinion&content_id=$1 [L,NC]
-    #------------------------
+
     RewriteRule ^index.php/?$ / [R=301,L,NC]
     RewriteRule ^index.php/inicio/?$ / [R=301,L,NC]
     RewriteRule ^index.php/opinion.*/?$ /opinion/ [R=301,L,NC]
@@ -589,14 +589,12 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteRule ^index.php/farmacias/?$ /estaticas/farmacia.html [R=301,L,NC]
     RewriteRule ^index.php/galerias/?$ /album/ [R=301,L,NC]
     RewriteRule ^index.php/.*/?$ / [R=301,L,NC]
-    #--------------------------------------------------------
 
-    # provisional cronicas
-    RewriteRule ^agenda/?$   http://agenda.cronicasdelaemigracion.com/ [R=301,L,NC]
-    RewriteRule ^agenda/(.*)$   http://agenda.cronicasdelaemigracion.com/$1 [R=301,L,NC]
-    RewriteRule ^agenda_colectividad/(.*)$   http://agenda.cronicasdelaemigracion.com/$1 [R=301,L,NC]
+  # END Redirections for elidealgallego.com --------------------------------------------------------------------------------
+
 
   # Redirections for semosgaliza.com --------------------------------------------------------------------------------
+
     RewriteRule ^media/prepro-sermosgaliza/(.*)$ http://www.sermosgaliza.com/media/sermosgaliza/$1 [R=301,L]
 
   # END Redirections for semosgaliza.com --------------------------------------------------------------------------------
@@ -656,6 +654,11 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
 
 
   # Redirection from cronicasdelaemigración.com --------------------------------------------------------------------------------
+
+    RewriteRule ^agenda/?$   http://agenda.cronicasdelaemigracion.com/ [R=301,L,NC]
+    RewriteRule ^agenda/(.*)$   http://agenda.cronicasdelaemigracion.com/$1 [R=301,L,NC]
+    RewriteRule ^agenda_colectividad/(.*)$   http://agenda.cronicasdelaemigracion.com/$1 [R=301,L,NC]
+
     RewriteRule ^cronicas/?$ /seccion/cronicas/ [R=301,L,NC]
     RewriteRule ^galicia/?$ /seccion/galicia/ [R=301,L,NC]
     RewriteRule ^castillaleon/?$ /seccion/castillaleon/ [R=301,L,NC]
@@ -718,7 +721,6 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     #Old Static pages
     RewriteRule ^contacto($|/$) /estaticas/contacto? [R=301,L,NC]
     RewriteRule ^estaticas/boletin.html /boletin/ [R=301,L,NC]
-
 
     #Articles articulo/2008/09/29/galicia/ourense/titulo-noticia-separada-guiones/1222692016.html
     #Articles articulo/2008/09/29/galicia/titulo-noticia-separada-guiones/1222692016.html
