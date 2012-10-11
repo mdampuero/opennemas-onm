@@ -217,7 +217,13 @@ class CanariasToOnm
 
         $image = new Photo();
         if (is_null($dateForDirectory)) {
-            $date = new DateTime($data['created']);
+            try {
+                $date = new DateTime(substr($data['created'], 0, 9));
+            } catch (Exception $e) {
+                $this->helper->log("problem with date ".$e->getMessage() ." \n ");
+                $date = new DateTime();
+            }
+
             $dateForDirectory = date_format($date, "/Y/m/d/");
         }
         $newimageID = $image->createFromLocalFile($values, $dateForDirectory);
@@ -895,7 +901,7 @@ class CanariasToOnm
                         $errorMsg = 'Problem '.$originalArticleID.' - '.$title;
                         $this->helper->log('\n insert article : '.$errorMsg);
                         $this->helper->log(
-                            "\n Problem inserting article {$rs->fields['title']}-{$rs->fields['pk_content']}\n "
+                            "\n Problem inserting article {$rs->fields['id']} \n "
                         );
                     }
                 }
@@ -919,7 +925,7 @@ class CanariasToOnm
      *
      * @throws <b>Exception</b> Explanation of exception.
      */
-    public function importArticles($limit)
+    public function importArticles()
     {
 
          $sql = 'SELECT `id`, `fecha`, `fecha_activar`, `hora`, `hora_activar`,
@@ -934,7 +940,7 @@ class CanariasToOnm
             `galeria_relacion`, `susfotos_relacion`, `encuesta_relacion`,
             `fuerteventuraahora_relacion`, `diversia_relacion`, `activar_diversia`,
             `deportes_portada`, `empresarios_url`, `radio`, `activar`, `texto`
-            FROM `noticias` '   .$limit;
+            FROM `noticias` ';
 
         $request = self::$originConn->Prepare($sql);
         $rs = self::$originConn->Execute($request);
@@ -1142,7 +1148,7 @@ class CanariasToOnm
         $sql = "SELECT  `id`, `fecha`, `hora`, `titulo`, `antetitulo`, "
             ."`entradilla`, `autor`, `email`, `texto`, `foto`, `orden`, "
             ."`activar`, `nohemeroteca`, `opinion_destacada`, `opinion_jorgebatista`"
-            ." FROM `opinion` ";
+            ." FROM `opinion` ORDER BY id ASC ";
 
         $request = self::$originConn->Prepare($sql);
         $rs = self::$originConn->Execute($request);
@@ -1155,9 +1161,10 @@ class CanariasToOnm
 
             $totalRows = $rs->_numOfRows;
             $current = 1;
+            $opinion = new Opinion();
 
-            $authorData = array();
             while (!$rs->EOF) {
+                echo 'rs'.$rs->fields['id'];
                  $originalOpinionID = $rs->fields['id'];
 
                 if ($this->helper->elementIsImported($originalOpinionID, 'opinion') ) {
@@ -1165,86 +1172,51 @@ class CanariasToOnm
                 } else {
 
                     $name = $this->helper->getSlug($rs->fields['autor']);
-                    $authorData['id'] = $this->helper->authorIsImported($name);
-
-                    if (empty($authorData['id'])) {
-                        $values = array(
-                            'name' => $rs->fields['autor'],
-                            'fk_user' =>0,
-                            'blog' =>'',
-                            'politics' =>'',
-                            'condition' =>'',
-                            'date_nac`' =>''
-                        );
-                        $newAuthor = new Author();
-                        $authorData['id'] = $newAuthor->create($values);
-
-                        echo "new id  {$authorData['id']}  [DONE]\n";
-                        $this->helper->insertAuthorTranslated($authorData['id'], $name, 'author');
-                        if (empty($authorData['id'])) {
-                            echo "\n Author not exists {$name}\n ";
-                             $this->helper->log("\n Author not exists {$name}\n ");
-                        }
-                    }
-                     echo " Check image ";
-                    $authorData['img'] = $this->helper->imageIsImported($rs->fields['img'], 'image');
-                    if (empty($authorData['img'])) {
-
-                        $sql2 = "SELECT pk_img FROM author_imgs WHERE fk_author = ? ORDER BY fk_photo DESC  LIMIT 1 ";
-                        $values2 = array( $authorData['id'] );
-                        $rs2 = $GLOBALS['application']->conn->Execute($sql2, $values2);
-                        if (!$rs2) {
-                            echo($sql2.' '. $GLOBALS['application']->conn->ErrorMsg());
-                        }
-                        $authorData['img'] = $rs2->fields['fk_photo'];
-                    }
+                    $authorID = $this->helper->authorIsImported($name);
+                    $title= utf8_encode($rs->fields['titulo']);
                     //Check opinion data
-                    echo "[{$current}/{$totalRows}] Importing opinion with id {$originalOpinionID} - n";
+                    echo "[{$current}/{$totalRows}] Importing opinion with id {$originalOpinionID} ";
                     $values =
                         array(
-                            'title' => $rs->fields['title'],
+                            'title' => $title,
                             'category' => '4',
                             'category_name' => 'opinion',
                             'type_opinion' => 0,
-                            'body' => $rs->fields['body'],
-                            'metadata' =>  StringUtils::get_tags($rs->fields['author'])
-                                .', '.$rs->fields['metadata'].', opinion',
-                            'description' => 'opinion '.$rs->fields['author']
-                                .' '.strip_tags(substr($data['body'], 0, 100)),
-                            'fk_author' => $authorData['id'],
-                            'fk_author_img' =>$authorData['img'],
-                            'fk_author_img_widget' =>$authorData['img'],
-                            'available' => $rs->fields['available'],
+                            'body' => $rs->fields['texto'],
+                            'metadata' => \StringUtils::get_tags($titulo.', '.$rs->fields['autor']).', opinion',
+                            'description' => 'opinion '.$rs->fields['autor']
+                                .' '.strip_tags(substr($rs->fields['texto'], 0, 100)),
+                            'fk_author' => $authorID,
+                            'available' => $rs->fields['activar'],
                             'with_comment' => 0,
-                            'in_home' => $rs->fields['in_home'],
-                            'content_status' => $rs->fields['content_status'],
-                            'created' => $rs->fields['created'],
-                            'starttime' => $rs->fields['created'],
-                            'changed' => $rs->fields['changed'],
+                            'content_status' =>  $rs->fields['activar'],
+                            'created' => $rs->fields['fecha'].' '.$rs->fields['hora'],
+                            'starttime' => $rs->fields['fecha'].' '.$rs->fields['hora'],
+                            'changed' => $rs->fields['fecha'].' '.$rs->fields['hora'],
                             'fk_user' => USER_ID,
                             'fk_publisher' => USER_ID,
-                            'views' => $rs->fields['views'],
-                            'frontpage' => $rs->fields['frontpage'],
-                            'slug' => $rs->fields['slug'],
+                            'slug' => \StringUtils::get_title($title),
 
                         );
 
-                    $opinion = new Opinion();
-                    $newOpinionID = $opinion->create($values);
+
+                        $newOpinionID = $opinion->create($values);
 
                     if (is_string($newOpinionID)) {
 
                         $this->helper->insertRefactorID($originalOpinionID, $newOpinionID, 'opinion');
-
+                        echo "\n new id {$newOpinionID} [DONE]\n";
                     } else {
                          $this->helper->log("\n Problem inserting opinion {$rs->fields['id']}\n ");
                     }
-                    echo "new id {$newOpinionID} [DONE]\n";
+
                 }
 
                 $current++;
                 $rs->MoveNext();
+                //var_dump($rs->EOF);
             }
+
             $rs->Close(); # optional
         }
     }

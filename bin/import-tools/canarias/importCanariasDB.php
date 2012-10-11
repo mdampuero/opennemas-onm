@@ -57,19 +57,19 @@ $importer = new CanariasToOnm($configOldDB, $configNewDB);
 
 $importer->importCategories();
 
-/*
+ /*
 $importer->helper->log('IMPORTING AUTHORS AND OPINIONS');
 
 $importer->importAuthorsOpinion();
 
 $importer->importPhotoAuthorsOpinion();
 printf("Check author names (Problem with similar name author)");
-exit();
+
 $importer->importOpinions();
 
 $importer->helper->log('IMPORTING ARTICLES AND IMAGES');
 
-$importer->importHemeroteca();
+/*$importer->importHemeroteca();
 $importer->importHemerotecaTopSecret();
 
 $importer->importAyuntamientos();
@@ -77,16 +77,16 @@ $importer->importAyuntamientos();
 $importer->importTopSecret();
 
 $importer->importFauna();
+*/
 
-$limit = ' LIMIT 0, 63500';
 
-$importer->importImagesArticles();
-$importer->importArticles($limit);
+//$importer->importImagesArticles();
+$importer->importArticles();
 
-/**/
 
+/*
 $importer->helper->log("\n IMPORTING OTHER CONTENTS \n");
-/*$importer->importLetters();
+$importer->importLetters();
 
 $importer->importImagesHumor();
 
