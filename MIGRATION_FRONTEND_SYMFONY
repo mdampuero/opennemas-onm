@@ -48,7 +48,7 @@ ArticlesController
 AuthenticationController
 BooksController
 CommentsController
-ErrorController
+ErrorController DONE
 FrontpagesController
 IndexController
 LettersController
