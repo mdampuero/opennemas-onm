@@ -40,7 +40,7 @@ videos.php                     => VideosController
 
 
 
-new controllers
+New controllers
 ---------------
 AdvertisementController DONE
 AlbumController
@@ -58,12 +58,12 @@ OpinionsController
 PollsController
 RatingsController
 RedirectorsController
-RobotsController
+RobotsController DONE
 RssController DONE
 SearchController
 SitemapsController DONE
 SpecialsController
-StaticPagesController
+StaticPagesController DONE
 SubscriptionsController
 UsersController
 VideosController

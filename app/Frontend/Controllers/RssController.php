@@ -156,7 +156,7 @@ class RssController extends Controller
                 foreach ($articles_home as &$art) {
                     $art['author_name_slug'] = \StringUtils::get_title($art['name']);
 
-                    $art['uri'] = Uri::generate(
+                    $art['uri'] = \Uri::generate(
                         'opinion',
                         array(
                             'id'       => sprintf('%06d', $art['id']),
