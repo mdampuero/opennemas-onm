@@ -40,16 +40,15 @@ class ErrorController extends Controller
      **/
     public function defaultAction(Request $request)
     {
-        $errorCode     = $request->query->filter('errordoc', null, FILTER_SANITIZE_STRING);
+        $errorCode     = $request->query->filter('errordoc', 404, FILTER_SANITIZE_STRING);
         $category_name = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
         $cache_page    = $request->query->filter('page', 0, FILTER_VALIDATE_INT);
 
         // Look how to get advertisements without this require.
         require_once 'controllers/statics_advertisement.php';
-
         if ($errorCode =='404' || empty($errorCode)) {
             $code = 404;
-            $this->view->display('static_pages/404.tpl');
+            $content = $this->view->fetch('static_pages/404.tpl');
         } else {
             $code = 500;
             $page = new \stdClass();
@@ -58,12 +57,12 @@ class ErrorController extends Controller
             $page->title   = 'No hemos podido encontrar la página que buscas.';
             $page->content = 'Whoups!';
 
-            $this->view->assign('category_real_name', $page->title);
-            $this->view->assign('page', $page);
-
+            $content = $this->renderView('static_pages/statics.tpl', array(
+                'category_real_name' => $page->title,
+                'page'               => $page,
+            ));
         }
 
-        $content = $this->renderView('static_pages/statics.tpl');
         return new Response($content, $code);
     }
 }
