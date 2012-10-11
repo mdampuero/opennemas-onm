@@ -151,11 +151,22 @@ $frontendRoutes->add(
     )
 );
 
-    // RewriteRule ^sitemapnews.xml?$ controllers/sitemap.php?action=news [L,NC]
-    // RewriteRule ^sitemapweb.xml?$ controllers/sitemap.php?action=web [L,NC]
-    // RewriteRule ^sitemapnews.xml.gz?$ controllers/sitemap.php?action=news&format=gz [L,NC]
-    // RewriteRule ^sitemapweb.xml.gz?$ controllers/sitemap.php?action=web&format=gz [L,NC]
-    // RewriteRule ^sitemap.xml?$ controllers/sitemap.php [L,NC]
+$frontendRoutes->add(
+    'frontend_staticpage',
+    new Route(
+        '/estaticas/{slug}.{_format}',
+        array(
+            '_controller' => 'Frontend:Controllers:StaticPagesController:show',
+            '_format' => 'html'
+        ),
+        array(
+            '_format' => 'html|htm',
+            'slug' => '[A-Za-z\d-]+',
+        )
+    )
+);
+
+
 
 
 $routes->addCollection($frontendRoutes);

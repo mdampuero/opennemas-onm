@@ -9,6 +9,7 @@
  **/
 namespace Frontend\Controllers;
 
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
@@ -37,9 +38,33 @@ class StaticPagesController extends Controller
      *
      * @return Response the response object
      **/
-    public function defaultAction(Request $request)
+    public function showAction(Request $request)
     {
+        $slug = $request->query->filter('slug', null, FILTER_SANITIZE_STRING);
 
+        if (isset($slug) ) {
+
+            // TODO: review this advertisement
+            // require_once 'statics_advertisement.php';
+
+            $page = \StaticPage::getPageBySlug($slug);
+
+            // if static page doesn't exist redirect to 404 error page.
+            if (is_null($page) || (!$page->available)) {
+                throw new ResourceNotFoundException();
+            }
+
+            // increment visits for this page
+            \Content::setNumViews($page->pk_static_page);
+
+            $this->view->assign('category_real_name', $page->title);
+            $this->view->assign('page', $page);
+
+        } else {
+            throw new ResourceNotFoundException();
+        }
+
+        return $this->render('static_pages/statics.tpl');
     }
 
 } // END class StaticPagesController
