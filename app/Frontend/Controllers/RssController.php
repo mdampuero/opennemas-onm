@@ -122,7 +122,7 @@ class RssController extends Controller
                 // Fetch the photo and category name for this element
                 foreach ($articles_home as $i => $article) {
                     if (isset($article->img1) && $article->img1 != 0) {
-                        $photos[$article->id] = new Photo($article->img1);
+                        $photos[$article->id] = new \Photo($article->img1);
                     }
 
                     $article->category_name = $article->loadCategoryName($article->id);
@@ -177,7 +177,7 @@ class RssController extends Controller
                 foreach ($articles_home as $i => $article) {
 
                     if (isset($article->img1) && $article->img1 != 0) {
-                        $photos[$article->id] = new Photo($article->img1);
+                        $photos[$article->id] = new \Photo($article->img1);
                     }
 
                     $article->category_name = $article->loadCategoryName($article->id);
