@@ -1,0 +1,9 @@
+#!/usr/bin/env php
+# app/console
+<?php
+require __DIR__.'/../app/autoload.php';
+
+use Symfony\Component\Console\Application;
+
+$application = new Application();
+$application->run();
