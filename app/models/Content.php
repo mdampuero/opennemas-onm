@@ -538,12 +538,21 @@ class Content
         if ($id == null) {
             $id = $this->id;
         }
-        $sql = 'UPDATE `contents` '
-               .'SET `available` = (`available` + 1) % 2, '
-                    .'`content_status` = (`content_status` + 1) % 2 '
-               . 'WHERE `pk_content`=?';
+        $status = ($this->available + 1) % 2;
+        $date = $this->starttime;
+        if ($status == 1) {
+            $date = date("Y-m-d H:i:s");
+        }
 
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
+        $sql = 'UPDATE `contents` '
+               .'SET `available` = ?, '
+               .'`content_status` = ?, '
+               .'`starttime` = ? '
+               .'WHERE `pk_content`=?';
+
+        $values = array($status, $status, $date, $id);
+
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
             Application::logDatabaseError();
 

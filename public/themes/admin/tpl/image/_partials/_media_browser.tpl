@@ -61,6 +61,7 @@
             {if !empty($photo->author_name)}
                 <span class="author"><strong>{t}Author:{/t}</strong> {$photo->author_name|clearslash|escape:'html'|default:""}</span>
             {/if}
+            <br><span class="url"> <a href="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}" target="_blank">{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}</a></span>
         </td>
         <td class="nowrap">
             {$photo->date|date_format:"%Y-%m-%d %H:%M:%S"|default:""}

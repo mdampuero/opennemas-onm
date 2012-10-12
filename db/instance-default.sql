@@ -670,6 +670,21 @@ INSERT INTO `contents` (`pk_content`, `fk_content_type`, `title`, `description`,
 (236, 12, 'Opinion - Lista de opiniones favoritas', '', '', '2012-10-01 13:09:37', '0000-00-00 00:00:00', '2012-10-01 13:09:37', '2012-10-01 13:09:37', 0, 7, 7, 7, 1, 2, 0, 0, 0, 100, 'opinion-lista-de-opiniones-favoritas', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, '0', NULL, NULL),
 (237, 12, 'Noticias de Hoy', '', '', '2012-10-01 13:09:57', '0000-00-00 00:00:00', '2012-10-01 13:09:57', '2012-10-01 13:09:57', 0, 7, 7, 7, 1, 2, 0, 0, 0, 100, 'noticias-de-hoy', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, '0', NULL, NULL);
 
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `contentmeta`
+--
+
+CREATE TABLE IF NOT EXISTS `contentmeta` (
+  `fk_content` bigint(20) NOT NULL,
+  `meta_name` varchar(255) NOT NULL,
+  `meta_value` text,
+  PRIMARY KEY (`fk_content`,`meta_name`),
+  KEY `fk_content` (`fk_content`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 -- --------------------------------------------------------
 
 --
