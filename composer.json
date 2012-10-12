@@ -12,7 +12,6 @@
             "email": "developers@openhost.es"
         }
     ],
-    "minimum-stability": "dev",
     "require": {
         "php": ">=5.3.2",
         "symfony/class-loader"        : "2.1.*",
