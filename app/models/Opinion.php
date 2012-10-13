@@ -65,6 +65,8 @@ class Opinion extends Content
                         $authorName = 'Editorial';
                     } elseif ((int) $this->type_opinion == 2) {
                         $authorName = 'Director';
+                    } else {
+                        $authorName = 'author';
                     }
 
                 } else {
