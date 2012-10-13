@@ -17,8 +17,9 @@
  * @copyright  Copyright (c) 2009 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-use Onm\Settings as s,
-    Onm\Message  as m;
+use Onm\Settings as s;
+use Onm\Message  as m;
+
 /**
  * Setup app
  */
@@ -38,6 +39,7 @@ $r->addAPIClass('Comments');
 $r->addAPIClass('Images');
 $r->addAPIClass('Videos');
 $r->addAPIClass('Categories');
+$r->addAPIClass('Authors');
 
 $r->handle();
 
