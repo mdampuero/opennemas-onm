@@ -25,11 +25,10 @@ $cm = new ContentManager();
 $category_name    = $request->query->filter('category_name', 'opinion', FILTER_SANITIZE_STRING);
 $subcategory_name = $request->query->filter('subcategory_name', '', FILTER_SANITIZE_STRING);
 $action           = $request->query->filter('action', null, FILTER_SANITIZE_STRING);
-
-$dirtyID     = $request->query->filter('opinion_id', '', FILTER_SANITIZE_STRING);
-$slug        = $request->query->filter('opinion_title', '', FILTER_SANITIZE_STRING);
-$author_name = $request->query->filter('author_name', '', FILTER_SANITIZE_STRING);
-$opinionID   = Content::resolveID($dirtyID);
+$dirtyID          = $request->query->filter('opinion_id', '', FILTER_SANITIZE_STRING);
+$slug             = $request->query->filter('opinion_title', '', FILTER_SANITIZE_STRING);
+$author_name      = $request->query->filter('author_name', '', FILTER_SANITIZE_STRING);
+$opinionID        = Content::resolveID($dirtyID);
 
 $tpl->assign(
     array(
@@ -108,6 +107,15 @@ switch ($action) {
                     } else {
                         $suggest['author_name_slug'] = "author";
                     }
+                    $suggest['uri'] = Uri::generate(
+                        'opinion',
+                        array(
+                            'id'       => $suggest['pk_content'],
+                            'date'     => date('YmdHis', strtotime($suggest['created'])),
+                            'category' => $suggest['author_name_slug'],
+                            'slug'     => StringUtils::get_title($suggest['title']),
+                        )
+                    );
                 }
 
                 $suggestedContents= $cm->getInTime($suggestedContents);
@@ -138,6 +146,7 @@ switch ($action) {
                 foreach ($otherOpinions as &$otOpinion) {
                     $otOpinion->author = $author;
                     $otOpinion->author_name_slug  = $opinion->author_name_slug;
+                    $otOpinion->uri  = $otOpinion->uri;
                 }
 
                 $tpl->assign(
