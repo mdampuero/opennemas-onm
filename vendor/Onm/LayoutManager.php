@@ -90,11 +90,15 @@ class LayoutManager
         $last = ($isLast)?" last":"";
 
         $description  = '';
+        $order = 'normal';
         if (!empty($innerValues['description'])) {
             $description = '<div class="title">'.$innerValues['description'].'</div>';
         }
         if (!empty($innerValues['class'])) {
             $description = '<div class="title">'.$innerValues['description'].'</div>';
+        }
+        if (!empty($innerValues['order'])) {
+            $order = $innerValues['order'];
         }
         $output  =
             '<div class="placeholder clearfix '.$innerValues['class']
@@ -102,7 +106,7 @@ class LayoutManager
             .'" data-placeholder="'.$innerValues['name'].'">'
             .$description
             .'<div class="content">'
-            .$this->renderContentsForPlaceholder($innerValues['name'])
+            .$this->renderContentsForPlaceholder($innerValues['name'], $order)
             .'<!-- {placeholder-content-'.$innerValues['name']. '} --></div>'
             .'</div><!-- end wrapper -->';
 
@@ -139,23 +143,49 @@ class LayoutManager
      *
      * @return string
      **/
-    public function renderContentsForPlaceholder($placeholderName)
+    public function renderContentsForPlaceholder($placeholderName, $order)
     {
         if (isset($this->contents) && count($this->contents) > 0) {
             $output = '';
+            $filteredContents = array();
             foreach ($this->contents as $content) {
                 if ($content->placeholder == $placeholderName) {
                     $contentTypeName = $content->content_type_name;
                     // TODO: Add logic here for delayed, in time or postponed elements
                     // that will be passed to the view
                     if (!empty($contentTypeName)) {
-                        $output .= $this->renderContent($content);
+                        $filteredContents []= $content;
                     }
                 }
             }
 
+            $this->orderContents($filteredContents, (string) $order);
+
+            foreach ($filteredContents as $content) {
+                $output .= $this->renderContent($content);
+            }
+
             return $output;
         }
+    }
+
+    /**
+     * Sorts contents by one of its properties
+     * @param array $contents the array of objects to sort
+     * @param string $order the sort method
+     *
+     * @return array the sorted array of contents
+     **/
+    public static function orderContents(&$contents, $order)
+    {
+        if ($order = 'date DESC') {
+            $contents = \ContentManager::sortArrayofObjectsByProperty($contents, 'starttime');
+            $contents = array_reverse($contents);
+        } elseif ($order = 'date') {
+            $contents = \ContentManager::sortArrayofObjectsByProperty($contents, 'starttime');
+        }
+
+        return $contents;
     }
 
     /**
