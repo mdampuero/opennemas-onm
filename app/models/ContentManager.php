@@ -2278,5 +2278,32 @@ class ContentManager
 
         return false;
     }
+
+    /**
+    * Fetches the content for one specific url
+    *
+    * This is used for getting information from Onm Rest Api
+    *
+    * @param $url the url we want to get contents from
+    * @param $decodeJson if true apply json_decode before return content
+    *
+    * @return false | the content retrieved by the url
+    */
+    public function getUrlContent ($url, $decodeJson = false)
+    {
+        $c  = curl_init($url);
+        curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
+
+        if ($decodeJson) {
+            $content = json_decode(curl_exec($c));
+        } else {
+            $content = curl_exec($c);
+        }
+
+        curl_close($c);
+
+        return $content;
+
+    }
 }
 

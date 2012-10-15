@@ -133,9 +133,17 @@ class Articles
                     $relatedContents = $this->cm->getInTime($relatedContents);
                     $relatedContents = $this->cm->getAvailable($relatedContents);
 
-                    // Add category name
+                    // Add category name and external Uri
                     foreach ($relatedContents as &$content) {
                         $content->category_name = $ccm->get_category_name_by_content_id($content->id);
+
+                        // Get author_name_slug for opinions
+                        if ($content->content_type == 'opinion') {
+                            // Generate opinion uri
+                            $content->uri = preg_replace('@//@', '/author/', $content->uri);
+                        }
+
+                        $content->uri = 'ext'.$content->uri;
                     }
                 }
 
@@ -150,7 +158,7 @@ class Articles
 
                 $machineSuggestedContents = array();
                 if (!empty($article->metadata)) {
-                    $objSearch    = cSearch::getInstance();
+                    $objSearch = cSearch::getInstance();
                     $machineSuggestedContents = $objSearch->SearchSuggestedContents(
                         $article->metadata,
                         'Article',

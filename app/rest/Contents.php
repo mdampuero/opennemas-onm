@@ -54,6 +54,38 @@ class Contents
         return $returnValue;
     }
 
+    /*
+    * @url GET /contents/loadcategoryname/:contentId
+    */
+    public function loadCategoryName($id)
+    {
+        $ccm = ContentCategoryManager::get_instance();
+
+        $sql = 'SELECT pk_fk_content_category FROM `contents_categories` WHERE pk_fk_content =?';
+
+        $rs = $GLOBALS['application']->conn->GetOne($sql, $id);
+
+        return $ccm->get_name($rs);
+
+    }
+
+    /*
+    * @url GET /contents/loadcategorytitle/:contentId
+    */
+    public function loadCategoryTitle($id)
+    {
+        $ccm = ContentCategoryManager::get_instance();
+
+        $sql = 'SELECT pk_fk_content_category FROM `contents_categories` WHERE pk_fk_content =?';
+
+        $rs = $GLOBALS['application']->conn->GetOne($sql, $id);
+
+        return $ccm->get_title($rs);
+    }
+
+    /*
+    * @url GET /contents/setnumviews/:contentId
+    */
     public function setNumViews($id = null)
     {
 

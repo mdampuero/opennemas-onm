@@ -39,8 +39,6 @@ function smarty_function_renderTypeRelated($params, &$smarty)
             //Opinion
             $class = 'class="res-opinion" ';
             $content->content_type = 'opinion';
-            $opinion = new Opinion($content->id);
-            $content->uri =   $opinion->uri;
 
             break;
         case 7:

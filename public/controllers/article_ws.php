@@ -1,15 +1,18 @@
 <?php
+/**
+ * This file is part of the Onm package.
+ *
+ * (c)  OpenHost S.L. <developers@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ **/
 
 /**
  * Start up and setup the app
 */
 require_once '../bootstrap.php';
 use Onm\Settings as s;
-
-/**
- * Redirect Mobile browsers to mobile site unless a cookie exists.
-*/
-// $app->mobileRouter();
 
 /**
  * Setup view
@@ -25,8 +28,6 @@ $dirtyID          = $request->query->filter('article_id', '', FILTER_SANITIZE_ST
 $category_name    = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
 $subcategory_name = null;
 $action           = $request->query->filter('action', '', FILTER_SANITIZE_STRING);
-$ext              = $request->query->filter('ext', 0, FILTER_VALIDATE_INT);
-$tpl->assign('ext', $ext); // Used on _other-contents.tpl
 
 /**
  * Getting Synchronize setting params
@@ -44,8 +45,8 @@ foreach ($syncParams as $siteUrl => $categoriesToSync) {
 /**
  * Getting resolved Id and category title
  */
-$articleID = json_decode(file_get_contents($wsUrl.'/ws/contents/resolve/'.$dirtyID));
-$actualCategoryTitle = json_decode(file_get_contents($wsUrl.'/ws/categories/title/'.$category_name));
+$articleID = $cm->getUrlContent($wsUrl.'/ws/contents/resolve/'.$dirtyID, true);
+$actualCategoryTitle = $cm->getUrlContent($wsUrl.'/ws/categories/title/'.$category_name, true);
 $tpl->assign('contentId', $articleID); // Used on module_comments.tpl
 $tpl->assign('actual_category_title', $actualCategoryTitle); // Used on module_comments.tpl
 
@@ -68,36 +69,18 @@ switch ($action) {
         // Assign category name
         $tpl->assign('category_name', $category_name);
 
-        // Increment numviews if it's accesible
-        //Content::setNumViews($articleID);
-
         // Get category id correspondence with ws
-        $wsActualCategoryId = file_get_contents($wsUrl.'/ws/categories/id/'.$category_name);
+        $wsActualCategoryId = $cm->getUrlContent($wsUrl.'/ws/categories/id/'.$category_name);
 
         // Fetch information for Advertisements
         include_once 'article_advertisement.php';
-        /*
-        $ads = json_decode(file_get_contents($wsUrl.'/ws/ads/article/'.$wsActualCategoryId));
 
-        $intersticial = $ads[0];
-        $banners = $ads[1];
-
-        //Render ads
-        $advertisement = Advertisement::getInstance();
-        $advertisement->renderMultiple($banners, $advertisement, $wsUrl);
-        */
-
-        // Render intersticial banner
-        if (!empty($intersticial)) {
-            $advertisement->renderMultiple(array($intersticial), $advertisement, $wsUrl);
-        }
-
-        $cacheID = $tpl->generateCacheId($category_name, $subcategory_name, $articleID);
+        $cacheID = $tpl->generateCacheId('sync'.$category_name, $subcategory_name, $articleID);
 
         if (($tpl->caching == 0) || !$tpl->isCached('article/article.tpl', $cacheID)) {
 
             // Fetch and load article information
-            $ext = json_decode(file_get_contents($wsUrl.'/ws/articles/'.(int) $articleID));
+            $ext = $cm->getUrlContent($wsUrl.'/ws/articles/'.(int)$articleID, true);
             $article = new Article();
             $article->load($ext);
             $article->category_name = $category_name;
@@ -120,69 +103,77 @@ switch ($action) {
 
                 // Get associated media code from Web service
                 if (isset($article->img2) && ($article->img2 != 0)) {
-                    $photoWs = json_decode(file_get_contents($wsUrl.'/ws/images/id/'.$article->img2));
+                    $photoWs = $cm->getUrlContent($wsUrl.'/ws/images/id/'.$article->img2, true);
                     $photoInt = new Photo();
                     $photoInt->load($photoWs);
-                    $photoInt->media_url = json_decode(file_get_contents($wsUrl.'/ws/instances/mediaurl/'));
+                    $photoInt->media_url = $cm->getUrlContent($wsUrl.'/ws/instances/mediaurl/', true);
                     $tpl->assign('photoInt', $photoInt);
                 }
 
                 if (isset($article->fk_video2) && ($article->fk_video2 != 0)) {
-                    $videoWs = json_decode(file_get_contents($wsUrl.'/ws/videos/id/'.$article->fk_video2));
+                    $videoWs = $cm->getUrlContent($wsUrl.'/ws/videos/id/'.$article->fk_video2, true);
                     $videoInt = new Video();
                     $videoInt->load($videoWs);
                     $tpl->assign('videoInt', $videoInt);
                 } else {
-                    $videoWs = json_decode(file_get_contents($wsUrl.'/ws/videos/category/'.$wsActualCategoryId));
+                    $videoWs = $cm->getUrlContent($wsUrl.'/ws/videos/category/'.$wsActualCategoryId, true);
                     $videoInt = new Video();
                     $videoInt->load($videoWs);
                     $tpl->assign('videoInt', $videoInt);
                 }
 
                 // Get inner Related contents
-                $relatedContentsWs = json_decode(
-                    file_get_contents($wsUrl.'/ws/articles/lists/related-inner/'.$articleID)
+                $relatedContentsWs = $cm->getUrlContent(
+                    $wsUrl.'/ws/articles/lists/related-inner/'.$articleID,
+                    true
                 );
 
                 $relatedContents = array();
                 foreach ($relatedContentsWs as $item) {
-                    $getContentUrl = $wsUrl.'/ws/contents/contenttype/'.(int) $item->fk_content_type;
-                    $contentType = file_get_contents($getContentUrl);
+                    $contentType = $cm->getUrlContent(
+                        $wsUrl.'/ws/contents/contenttype/'.(int) $item->fk_content_type
+                    );
                     $contentType = str_replace('"', '', $contentType);
                     $content = new $contentType();
                     $content->load($item);
                     // Load category related information
                     $content->category_name  = $category_name;
                     $content->category_title = $content->loadCategoryTitle($content->id);
-                    // Generate content uri if it's not an attachment
-                    if ($item->fk_content_type != 3) {
-                        $content->uri = "ext".$content->uri;
-                    } else {
-                        // Get instance media
-                        $basePath = json_decode(file_get_contents($wsUrl.'/ws/instances/instancemedia/'));
-                        // Get file path for attachments
-                        $filePath = json_decode(
-                            file_get_contents($wsUrl.'/ws/contents/filepath/'.(int)$content->id)
-                        );
-                        // Compose the full url to the file
-                        $content->fullFilePath = $basePath.FILE_DIR.$filePath;
-                    }
+
+                    // Get instance media
+                    $basePath = $cm->getUrlContent(
+                        $wsUrl.'/ws/instances/instancemedia/',
+                        true
+                    );
+
+                    // Get file path for attachments
+                    $filePath = $cm->getUrlContent(
+                        $wsUrl.'/ws/contents/filepath/'.(int)$content->id,
+                        true
+                    );
+
+                    // Compose the full url to the file
+                    $content->fullFilePath = $basePath.FILE_DIR.$filePath;
+
                     $relatedContents[] = $content;
                 }
 
                 $tpl->assign('relationed', $relatedContents);
 
                 // Get Machine suggested contents
-                $machineRelated = json_decode(
-                    file_get_contents($wsUrl.'/ws/articles/lists/machine-related/'.$articleID)
+                $machineRelated = $cm->getUrlContent(
+                    $wsUrl.'/ws/articles/lists/machine-related/'.$articleID,
+                    true
                 );
 
                 $machineSuggestedContents = array();
                 foreach ($machineRelated as $content) {
-                    $machineSuggestedContents[] = (array)$content;
+                    $content->uri = 'ext'.$content->uri;
+                    $machineSuggestedContents[] = (array)$content; // _other-contents.tpl
                 }
 
                 $tpl->assign('suggested', $machineSuggestedContents);
+                $tpl->assign('ext', 1);
 
             } else {
                 Application::forward301('/404.html');
@@ -283,9 +274,9 @@ switch ($action) {
         if (!$tpl->isCached('article/article_printer.tpl', $cacheID)) {
 
             // Get cleaned article Id
-            $articleID = json_decode(file_get_contents($wsUrl.'/ws/contents/resolve/'.$dirtyID));
+            $articleID = $cm->getUrlContent($wsUrl.'/ws/contents/resolve/'.$dirtyID, true);
             // Get article
-            $articleWs  = json_decode(file_get_contents($wsUrl.'/ws/articles/'.$articleID));
+            $articleWs = $cm->getUrlContent($wsUrl.'/ws/articles/'.$articleID, true);
             $article = new Article();
             $article->load($articleWs);
 
@@ -320,7 +311,7 @@ switch ($action) {
 
             // Inner Photo
             if (isset($article->img2) && ($article->img2 != 0)) {
-                $photoWs = json_decode(file_get_contents($wsUrl.'/ws/images/id/'.$article->img2));
+                $photoWs = $cm->getUrlContent($wsUrl.'/ws/images/id/'.$article->img2, true);
                 $photoInt = new Photo();
                 $photoInt->load($photoWs);
                 $tpl->assign('photoInt', $photoInt);

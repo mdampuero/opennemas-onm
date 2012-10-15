@@ -9,6 +9,7 @@
  **/
 // Start up and setup the app
 require_once '../bootstrap.php';
+use Onm\Settings as s;
 
 // Redirect Mobile browsers to mobile site unless a cookie exists.
 // $app->mobileRouter();
@@ -16,6 +17,7 @@ require_once '../bootstrap.php';
 //Setup view
 $tpl = new Template(TEMPLATE_USER);
 $tpl->setConfig('opinion');
+$cm = new ContentManager();
 
 // HTTP variables
 $action     = $request->query->filter('action', 'list', FILTER_SANITIZE_STRING);
@@ -25,11 +27,27 @@ $page       = $request->query->filter('page', 1, FILTER_VALIDATE_INT);
 
 $tpl->assign('actual_category', 'opinion'); // Used in renderMenu
 
+/**
+ * Getting Synchronize setting params
+ **/
+$wsUrl = '';
+$syncParams = s::get('sync_params');
+
+foreach ($syncParams as $siteUrl => $categoriesToSync) {
+    foreach ($categoriesToSync as $value) {
+        if (preg_match('/opinion/i', $value)) {
+            $wsUrl = $siteUrl;
+        }
+    }
+}
+// Get external media url for author images
+$externalMediaUrl = $cm->getUrlContent($wsUrl.'/ws/instances/mediaurl/', true);
+
 // Fetch information for some uncached parts of the view
 require_once 'opinion_index_advertisement.php';
 
 // Generate the ID for use it to fetch caches
-$cacheID = 'opinion|'.(($authorID != '') ? $authorID.'|' : '').$page;
+$cacheID = 'syncopinion|'.(($authorID != '') ? $authorID.'|' : '').$page;
 
 switch ($action) {
     // Index frontpage
@@ -37,77 +55,53 @@ switch ($action) {
         // Don't execute the app logic if there are caches available
         if (!$tpl->isCached('opinion/opinion_index.tpl', $cacheID)) {
 
-            $cm = new ContentManager();
 
-            // Fetch last opinions from editorial
-            $editorial = $cm->find(
-                'Opinion',
-                'opinions.type_opinion=1 '.
-                'AND contents.available=1 '.
-                'AND contents.in_home=1 '.
-                'AND contents.content_status=1 ',
-                'ORDER BY position ASC, created DESC '.
-                'LIMIT 2'
-            );
+            $editorial = $cm->getUrlContent($wsUrl.'/ws/opinions/editorialinhome/', true);
 
-            // Fetch last opinions from director
-            $director = $cm->find(
-                'Opinion',
-                'opinions.type_opinion=2 '.
-                'AND contents.available=1 '.
-                'AND contents.in_home=1 '.
-                'AND contents.content_status=1 ',
-                'ORDER BY created DESC LIMIT 2'
-            );
+            $director = $cm->getUrlContent($wsUrl.'/ws/opinions/directorinhome/', true);
 
+            // Some director logic
             if (isset($director) && !empty($director)) {
                 // Fetch the photo images of the director
-                $aut = new Author($director[0]->fk_author);
-                $foto = $aut->get_photo($director[0]->fk_author_img);
+                $aut = $cm->getUrlContent($wsUrl.'/ws/authors/id/'.$director[0]->fk_author, true);
+                $foto = $cm->getUrlContent(
+                    $wsUrl.'/ws/authors/photo/'.$director[0]->fk_author,
+                    true
+                );
+
                 if (isset($foto->path_img)) {
                     $dir['photo'] = $foto->path_img;
                 }
+
                 $dir['name'] = $aut->name;
                 $tpl->assign('dir', $dir);
                 $tpl->assign('director', $director[0]);
             }
 
             if ($page == 1) {
-                $opinions = $cm->find(
-                    'Opinion',
-                    'in_home=1 and available=1 and type_opinion=0',
-                    'ORDER BY position ASC, starttime DESC '
-                );
+                $opinions = $cm->getUrlContent($wsUrl.'/ws/opinions/authorsinhome/', true);
                 $totalHome = count($opinions);
-
             } else {
-                $_limit ='LIMIT '.(($page-2)*ITEMS_PAGE).', '.(($page-1)*ITEMS_PAGE);
-                // Fetch last opinions of contributors and
-                // paginate them by ITEM_PAGE
-                $opinions = $cm->find(
-                    'Opinion',
-                    'in_home=0 and available=1 and type_opinion=0',
-                    'ORDER BY starttime DESC '.$_limit
-                );
+                // Fetch last opinions of contributors and paginate them by ITEM_PAGE
+                $opinions = $cm->getUrlContent($wsUrl.'/ws/opinions/authorsnotinhomepaged/'.$page, true);
             }
-            // Added ITEMS_PAGE for count first page
-            $total_opinions =  ITEMS_PAGE + $cm->count(
-                'Opinion',
-                'in_home=0 and available=1 and type_opinion=0',
-                'ORDER BY type_opinion DESC, created DESC '
+
+            // Sum of total opinions in home + not in home for the pager
+            $totalOpinions =  ITEMS_PAGE + (int)$cm->getUrlContent(
+                $wsUrl.'/ws/opinions/countauthorsnotinhome/',
+                true
             );
 
             $authors = array();
             foreach ($opinions as &$opinion) {
                 if (!array_key_exists($opinion->fk_author, $authors)) {
-                    $author = new Author($opinion->fk_author);
-                    $author->get_author_photos();
+                    $author = $cm->getUrlContent($wsUrl.'/ws/authors/id/'.$opinion->fk_author, true);
                     $authors[$opinion->fk_author] = $author;
                 }
                 $opinion->author           = $authors[$opinion->fk_author];
                 $opinion->name             = $opinion->author->name;
                 $opinion->author_name_slug = StringUtils::get_title($opinion->name);
-                $opinion->author->uri = Uri::generate(
+                $opinion->author->uri = 'ext'.Uri::generate(
                     'opinion_author_frontpage',
                     array(
                         'slug' => $opinion->author->name,
@@ -116,9 +110,9 @@ switch ($action) {
                 );
             }
 
-            $url    ='opinion';
+            $url    ='extopinion';
             $pagination = $cm->create_paginate(
-                $total_opinions,
+                $totalOpinions,
                 ITEMS_PAGE,
                 2,
                 'URL',
@@ -126,11 +120,16 @@ switch ($action) {
                 ''
             );
 
-            $tpl->assign('editorial', $editorial);
-            $tpl->assign('opinions', $opinions);
-            $tpl->assign('authors', $authors);
-            $tpl->assign('pagination', $pagination);
-            $tpl->assign('page', $page);
+            $tpl->assign(
+                array(
+                    'editorial'  => $editorial,
+                    'opinions'   => $opinions,
+                    'authors'    => $authors,
+                    'pagination' => $pagination,
+                    'page'       => $page,
+                    'ext'        => $externalMediaUrl,
+                )
+            );
         }
 
         $tpl->display('opinion/opinion_frontpage.tpl', $cacheID);
@@ -140,66 +139,67 @@ switch ($action) {
         // Don't execute the app logic if there are caches available
         if (!$tpl->isCached('opinion/frontpage_author.tpl', $cacheID)) {
 
-            $cm = new ContentManager();
-
             // Get author info
-            $author = new Author($authorID);
-            $author->get_author_photos();
-            $photos = $author->get_author_photos();
+            $author = $cm->getUrlContent($wsUrl.'/ws/authors/id/'.$authorID, true);
 
             // Setting filters for the further SQLs
             if ($authorID == 1 && strtolower($authorSlug) == 'editorial') {
                 // Editorial
-                $filter = 'opinions.type_opinion=1';
                 $authorName = 'editorial';
+                $countOpinions = $cm->getUrlContent(
+                    $wsUrl.'/ws/opinions/counteditorialopinions/',
+                    true
+                );
+                $opinions = $cm->getUrlContent(
+                    $wsUrl.'/ws/opinions/allopinionseditorial/'.$page,
+                    true
+                );
             } elseif ($authorID == 2 && strtolower($authorSlug) == 'director') {
                 // Director
-                $filter =  'opinions.type_opinion=2';
                 $authorName = 'director';
+                $countOpinions = $cm->getUrlContent(
+                    $wsUrl.'/ws/opinions/countdirectoropinions/',
+                    true
+                );
+                $opinions = $cm->getUrlContent(
+                    $wsUrl.'/ws/opinions/allopinionsdirector/'.$page,
+                    true
+                );
             } else {
                 // Regular authors
-                $filter = 'opinions.type_opinion=0 AND opinions.fk_author='.$authorID;
                 $authorName = StringUtils::get_title($author->name);
+                $countOpinions = $cm->getUrlContent(
+                    $wsUrl.'/ws/opinions/countauthoropinions/'.$authorID,
+                    true
+                );
+                $opinions = $cm->getUrlContent(
+                    $wsUrl.'/ws/opinions/allopinionsauthor/'.$page.'/'.$authorID,
+                    true
+                );
             }
-
-            $_limit=' LIMIT '.(($page-1)*ITEMS_PAGE).', '.(ITEMS_PAGE);
-
-            // Get the number of total opinions for this
-            // author for pagination purpouses
-            $countOpinions = $cm->cache->count(
-                'Opinion',
-                $filter
-                .' AND contents.available=1  and contents.content_status=1 '
-            );
-
-            // Get the list articles for this author
-            $opinions = $cm->getOpinionArticlesWithAuthorInfo(
-                $filter
-                .' AND contents.available=1 and contents.content_status=1',
-                'ORDER BY created DESC '.$_limit
-            );
 
             if (!empty($opinions)) {
                 foreach ($opinions as &$opinion) {
-                    $opinion['pk_author'] = $authorID;
-                    $opinion['author_name_slug']  = $authorName;
-                    $opinion['uri'] = Uri::generate(
+                    $opinion->author_name_slug  = $authorName;
+                    // Overload opinion uri on opinion Object
+                    $opinion->uri = 'ext'.Uri::generate(
                         'opinion',
                         array(
-                            'id'       => $opinion['id'],
-                            'date'     => date('YmdHis', strtotime($opinion['created'])),
-                            'category' => $opinion['author_name_slug'],
-                            'slug'     => $opinion['slug'],
+                            'id'       => $opinion->id,
+                            'date'     => date('YmdHis', strtotime($opinion->created)),
+                            'category' => StringUtils::get_title($opinion->name),
+                            'slug'     => $opinion->slug,
                         )
                     );
-
-                    $opinion['author_uri'] = Uri::generate(
+                    // Overload author uri on opinion Object
+                    $opinion->author_uri = 'ext'.Uri::generate(
                         'opinion_author_frontpage',
                         array(
-                            'slug' => $opinion['author_name_slug'],
-                            'id' => $opinion['pk_author']
+                            'slug' => StringUtils::get_title($opinion->name),
+                            'id' => $opinion->pk_author
                         )
                     );
+                    $opinion = (array)$opinion; // template dependency
                 }
             }
 
@@ -233,6 +233,7 @@ switch ($action) {
                     'author'          => $author,
                     'author_name'     => $author->name,
                     'page'            => $page,
+                    'ext'             => $externalMediaUrl,
                 )
             );
 
