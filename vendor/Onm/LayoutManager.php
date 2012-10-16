@@ -178,10 +178,10 @@ class LayoutManager
      **/
     public static function orderContents(&$contents, $order)
     {
-        if ($order = 'date DESC') {
+        if ($order == 'date DESC') {
             $contents = \ContentManager::sortArrayofObjectsByProperty($contents, 'starttime');
             $contents = array_reverse($contents);
-        } elseif ($order = 'date') {
+        } elseif ($order == 'date') {
             $contents = \ContentManager::sortArrayofObjectsByProperty($contents, 'starttime');
         }
 
