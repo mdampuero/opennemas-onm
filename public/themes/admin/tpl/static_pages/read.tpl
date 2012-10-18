@@ -26,7 +26,6 @@
     	</div>
     </div>
     <div class="wrapper-content">
-
         <div class="form-horizontal panel">
             <div class="control-group">
                 <label for="name" class="control-label">{t}Title{/t}</label>
@@ -37,7 +36,7 @@
             </div>
 
             <div class="control-group">
-                <label for="url" class="control-label">{t}URL{/t}</label>
+                <label for="slug" class="control-label">{t}URL{/t}</label>
                 <div class="controls">
                     <input type="text" id="slug" name="slug" value="{$page->slug|default:""}"
                            maxlength="120" tabindex="2" required="required"  class="input-xxlarge"/>
@@ -47,7 +46,7 @@
 
             {acl isAllowed="STATIC_AVAILABLE"}
             <div class="control-group">
-                <label for="name" class="control-label">{t}Published{/t}</label>
+                <label for="available" class="control-label">{t}Published{/t}</label>
                 <div class="controls">
                     <select name="available" id="available" tabindex="3">
                         <option value="1"{if isset($page->available) && $page->available eq 1} selected="selected"{/if}>{t}Yes{/t}</option>
@@ -109,9 +108,9 @@ jQuery(document).ready(function($){
         if ((slugy.length <= 0) && (previous!=slugy)) {
 
             jQuery.ajax({
-                url:  "{url name=admin_staticpages_build_slug id=$page->id}",
+                url:  "{url name=admin_staticpages_build_slug id=$page->id|default:0}",
                 type: "POST",
-                data: { action:"buildSlug", id:'{$page->id}', slug:slugy, title:jQuery('#title').attr('value') },
+                data: { action:"buildSlug", id:'{$page->id|default:0}', slug:slugy, title:jQuery('#title').attr('value') },
                 success: function(data){
                     jQuery('#slug').attr('value', data);
                     previous = jQuery('#slug').value;
@@ -122,9 +121,9 @@ jQuery(document).ready(function($){
 
     jQuery("#metadata").on('change', '', function(e){
         jQuery.ajax({
-            url:  "{url name=admin_staticpages_clean_metadata id=$page->id}",
+            url:  "{url name=admin_staticpages_clean_metadata id=$page->id|default:0}",
             type: "POST",
-            data: { action:"cleanMetadata", id:'{$page->id}', metadata:jQuery('#metadata').attr('value') },
+            data: { action:"cleanMetadata", id:'{$page->id|default:0}', metadata:jQuery('#metadata').attr('value') },
             success: function(data){
                 jQuery('#slug').attr('value', data);
                 previous = jQuery('#slug').attr('value');

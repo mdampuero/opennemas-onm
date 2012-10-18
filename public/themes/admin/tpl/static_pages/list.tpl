@@ -64,11 +64,11 @@
                     <td class="center">
                         {acl isAllowed="STATIC_AVAILABLE"}
                         {if $pages[k]->available eq 1}
-                            <a href="{url name=admin_staticpages_toggle_availability id=$pages[k]->id status=0 page=$page}" class="unavailable">
+                            <a href="{url name=admin_staticpages_toggle_available id=$pages[k]->id status=0 page=$page}" class="unavailable">
                                 <img src="{$params.IMAGE_DIR}publish_g.png" border="0" title="{t}Published{/t}" />
                             </a>
                         {else}
-                            <a href="{url name=admin_staticpages_toggle_availability id=$pages[k]->id status=1 page=$page}" class="available">
+                            <a href="{url name=admin_staticpages_toggle_available id=$pages[k]->id status=1 page=$page}" class="available">
                                 <img src="{$params.IMAGE_DIR}publish_r.png" border="0" title="{t}Unpublished{/t}" />
                             </a>
                         {/if}
