@@ -143,7 +143,7 @@ class ImportHelper
         preg_match_all("/src=[\"']?([^\"']?.*(png|jpg|gif|jpeg))[\"']?/i", $imageSrc, $matches);
         $res = explode('/', $matches[1][0]);
         $metadata = implode(', ', $res);
-        $localPath = "/var/www/idealgallego/onm-instance/public/media/hibridos/".urldecode($matches[1][0]);
+        $localPath = "/home/webdev-manager/public_html/public/media/hibridos/".urldecode($matches[1][0]);
 
         $imgData = array(
             'title' => $res[3],
