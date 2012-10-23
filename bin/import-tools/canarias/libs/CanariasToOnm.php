@@ -75,13 +75,13 @@ class CanariasToOnm
     {
         $category = $this->helper->convertToUtf8($category);
         $category = \Onm\StringUtils::setSeparator(strtolower($category), '-');
+        $key = $this->categoriesMatches[$category];
 
-        $keys = array_keys($this->categoriesMatches, $category);
-        if (empty($keys)) {
+        if (empty($key)) {
             $this->helper->log(" Category not found: {$category} \n ");
             return 20;
         }
-        return $keys[0];
+        return $key;
 
     }
 
@@ -98,88 +98,90 @@ class CanariasToOnm
     {
 
         $this->categoriesMatches = array(
-            1 => 'photo',
-            2 => 'publicidad',
-            3 => 'album',
-            4 => 'opinion',
-            5 => 'comment',
-            6 => 'video',
-            7 => 'author',
-            8 => 'portada',
-            20 => 'unknown',
-            22 => 'deportes',
-            23 => 'economía',
-            24 => 'politica',
-            25 => 'cultura',
-            26 => 'sociedad',
-            27 => 'musica',
-            28 => 'cine',
-            29 => 'television',
-            30 => 'curiosidades',
-            31 => 'fotos-de-hoy',
-            32 => 'portadas',
-            33 => 'top-secret',
-            36 => 'canarias',
-            37 => 'nacional',
-            38 => 'internacional',
-            39 => 'tecnología',
-            40 => 'wique',
-            41 => 'fauna-por-eduardo-pomares',
-            42 => 'educación',
-            43 => 'sanidad',
-            44 => 'sucesos',
-            45 => 'tribunales',
-            46 => 'medio-ambiente',
-            47 => 'futbol',
-            48 => 'baloncesto',
-            49 => 'otros-deportes',
-            50 => 'derbi',
-            51 => 'empresas-de-exito',
-            52 => 'gran-canaria',
-            53 => 'tenerife',
-            54 => 'lanzarote',
-            55 => 'fuerteventura',
-            56 => 'la-gomera',
-            57 => 'la-palma',
-            58 => 'el-hierro',
-            59 => 'humor',
-            60 => 'portadas-del-dia',
-            61 => 'elecciones',
-            62 => 'ayuntamientos',
-            63 => 'canal-energia',
-            64 => 'gran-canaria1',
-            65 => 'tenerife1',
-            66 => 'fuerteventura1',
-            67 => 'lanzarote1',
-            68 => 'la-gomera1',
-            69 => 'la-palma1',
-            70 => 'el-hierro1',
-            71 => 'sector',
-            72 => 'eolica',
-            73 => 'solar',
-            74 => 'bioenergia',
-            75 => 'otras_fuentes',
-            76 => 'ahorro',
-            77 => 'empleo',
-            78 => 'emprendiduria',
-            79 => 'empresas-de-éxito',
-            80 => 'encuesta-del-dia',
-            81 => 'sus-fotos',
-            82 => 'frontera',
-            83 => 'valverde',
-            84 => 'hermigua',
-            85 => 'agulo',
-            86 => 'club-de-lectores',
-            87 => 'elecciones-20n',
-            88 => 'exterior',
-            89 => 'análisis',
-            90 => 'españa',
-            91 => 'futbolgc',
-            92 => 'futboltf',
-            93 => 'motor',
-            94 => 'parlamento',
-            95 => 'tweet-coberturas',
-            96 => 'galerias',
+            'photo' => 1,
+            'publicidad'=> 2,
+            'album' => 3,
+            'opinion' => 4,
+            'comment' => 5,
+            'video' => 6,
+            'author' => 7,
+            'portada' => 8,
+            'unknown' => 20,
+            'deportes' => 22,
+            'economía' => 23,
+            'politica' => 24,
+            'cultura' => 25,
+            'sociedad' => 26,
+            'musica' => 27,
+            'cine' => 28,
+            'television' => 29,
+            'curiosidades' => 30,
+            'fotos-de-hoy' => 31,
+            'portadas' => 32,
+            'top-secret' => 33,
+            'canarias' => 34,
+            'nacional' => 37,
+            'internacional'  => 38,
+            'tecnología' => 39,
+            'wique' => 40,
+            'fauna-por-eduardo-pomares' => 41,
+            'educación' => 42,
+            'sanidad' => 43,
+            'sucesos' => 44,
+            'tribunales' => 45,
+            'medio-ambiente' => 46,
+            'futbol' => 47,
+            'baloncesto' => 48,
+            'otros-deportes' => 49,
+            'derbi' => 50,
+            'empresas-de-exito' => 51,
+            'gran-canaria' => 52,
+            'tenerife' => 53,
+            'lanzarote' => 54,
+            'fuerteventura' => 55,
+            'la-gomera'  => 56,
+            'la-palma' => 57,
+            'el-hierro' => 58,
+            'humor' => 59,
+            'portadas-del-dia' => 60,
+            'elecciones' => 61,
+            'ayuntamientos' => 62,
+            'canal-energia' => 63,
+            'gran-canaria1' => 64,
+            'tenerife1' => 65,
+            'fuerteventura1' => 66,
+            'lanzarote1' => 67,
+            'la-gomera1' => 68,
+            'la-palma1' => 69,
+            'el-hierro1' => 70,
+            'sector' => 71,
+            'eolica' => 72,
+            'solar' => 73,
+            'bioenergia' => 74,
+            'otras_fuentes' => 75,
+            'ahorro' => 76,
+            'empleo' => 77,
+            'emprendiduria' => 78,
+            'empresas-de-éxito' => 79,
+            'encuesta-del-dia' => 80,
+            'sus-fotos' => 81,
+            'frontera' => 82,
+            'valverde' => 83,
+            'hermigua' => 84,
+            'agulo' => 85,
+            'club-de-lectores' => 86,
+            'elecciones-20n' => 87,
+            'exterior' => 88,
+            'análisis' => 89,
+            'españa' => 37,
+            'futbolgc' => 91,
+            'futboltf' => 92,
+            'motor' => 93,
+            'parlamento' => 94,
+            'tweet-coberturas' => 95,
+            'galerias' => 96,
+            'balongc' => 97,
+            'cabildos' => 98,
         );
 
         $this->categoriesData = ContentCategoryManager::get_instance()->categories;
@@ -282,7 +284,7 @@ class CanariasToOnm
 
 
                 if (!$photoName && !$photoName2) {
-                    $this->helper->log("{$rs->fields['id']} no photo src  \n");
+                    // $this->helper->log("{$rs->fields['id']} no photo src  \n");
                 } else {
 
                     // echo("$photoName, $title,  \n");
@@ -452,14 +454,20 @@ class CanariasToOnm
                         'agency' => '',
                         'summary'=>substr($this->helper->convertToUtf8($rs->fields['texto']), 0, 250),
                         'body' =>  $this->helper->convertToUtf8($rs->fields['texto']),
-                        'img1' => $this->helper->imageIsImported($rs->fields['foto_gran'], 'image'),
+                        'img1' => $this->helper->imageIsImported(
+                            $this->helper->clearImgTag($rs->fields['foto_gran']),
+                            'image'
+                        ),
                         'img1_footer' =>  $this->helper->convertToUtf8($rs->fields['foto_texto']),
-                        'img2' => $this->helper->imageIsImported($rs->fields['foto_gran'], 'image'),
+                        'img2' => $this->helper->imageIsImported(
+                            $this->helper->clearImgTag($rs->fields['foto_gran']),
+                            'image'
+                        ),
                         'img2_footer' =>  $this->helper->convertToUtf8($rs->fields['foto_texto']),
                         'category_name'=>  $category_name,
-                        'description' => substr($this->helper->convertToUtf($rs->fields['texto']), 0, 120),
-                        'content_status' => $rs->fields['activar'],
-                        'available' => $rs->fields['activar'],
+                        'description' => substr($this->helper->convertToUtf8($rs->fields['texto']), 0, 120),
+                        'content_status' => ($rs->fields['activar'] === 0)? 0:1,
+                        'available' => ($rs->fields['activar'] === 0)? 0:1,
                         'created' => $rs->fields['fecha'].' '.$rs->fields['hora'],
                         'changed' => $rs->fields['fecha'].' '.$rs->fields['hora'],
                         'starttime' => $rs->fields['fecha'].' '.$rs->fields['hora'],
@@ -619,14 +627,20 @@ class CanariasToOnm
                         'agency' => '',
                         'summary' => substr($this->helper->convertToUtf8($rs->fields['texto']), 0, 250 . '...'),
                         'body' => $this->helper->convertToUtf8($rs->fields['texto']),
-                        'img1' =>$this->helper->imageIsImported($rs->fields['foto_gran'], 'image'),
+                        'img1' =>$this->helper->imageIsImported(
+                            $this->helper->clearImgTag($rs->fields['foto_gran']),
+                            'image'
+                        ),
                         'img1_footer' => $this->helper->convertToUtf8($rs->fields['foto_texto']),
-                        'img2' =>$this->helper->imageIsImported($rs->fields['foto_gran'], 'image'),
+                        'img2' =>$this->helper->imageIsImported(
+                            $this->helper->clearImgTag($rs->fields['foto_gran']),
+                            'image'
+                        ),
                         'img2_footer' =>$this->helper->convertToUtf8($rs->fields['foto_texto']),
                         'category_name'=>  $category_name,
                         'description' => substr($this->helper->convertToUtf8($rs->fields['texto']), 0, 120 . '...'),
-                        'content_status' => $rs->fields['activar'],
-                        'available' => $rs->fields['activar'],
+                        'content_status' => ($rs->fields['activar'] === 0)? 0:1,
+                        'available' => ($rs->fields['activar'] === 0)? 0:1,
                         'created' => $rs->fields['fecha'].' '.$rs->fields['hora'],
                         'changed' => $rs->fields['fecha'].' '.$rs->fields['hora'],
                         'starttime' => $rs->fields['fecha'].' '.$rs->fields['hora'],
@@ -713,8 +727,8 @@ class CanariasToOnm
                         'body' =>$this->helper->convertToUtf8($rs->fields['texto']),
                         'category_name'=>  $category_name,
                         'description' => substr($this->helper->convertToUtf8($rs->fields['texto']), 0, 120 . '...'),
-                        'content_status' => $rs->fields['activar'],
-                        'available' => $rs->fields['activar'],
+                        'content_status' => ($rs->fields['activar'] === 0)? 0:1,
+                        'available' => ($rs->fields['activar'] === 0)? 0:1,
                         'created' => $rs->fields['fecha'].' '.$rs->fields['hora'],
                         'changed' => $rs->fields['fecha'].' '.$rs->fields['hora'],
                         'starttime' => $rs->fields['fecha'].' '.$rs->fields['hora'],
@@ -879,14 +893,20 @@ class CanariasToOnm
                         'agency' => $this->helper->convertToUtf8($rs->fields['firma']),
                         'summary' => $this->helper->convertToUtf8($rs->fields['entradilla']),
                         'body' => $this->helper->convertToUtf8($rs->fields['texto']),
-                        'img1' =>$this->helper->imageIsImported($rs->fields['foto_seccion'], 'image'),
+                        'img1' => $this->helper->imageIsImported(
+                            $this->helper->clearImgTag($rs->fields['foto_seccion']),
+                            'image'
+                        ),
                         'img1_footer' => $this->helper->convertToUtf8($rs->fields['piedefoto']),
-                        'img2' =>$this->helper->imageIsImported($rs->fields['foto_noti_ampliada'], 'image'),
+                        'img2' =>$this->helper->imageIsImported(
+                            $this->helper->clearImgTag($rs->fields['foto_noti_ampliada']),
+                            'image'
+                        ),
                         'img2_footer' => $this->helper->convertToUtf8($rs->fields['piedefoto']),
                         'category_name'=>  $category_name,
                         'description' => $this->helper->convertToUtf8($rs->fields['entradilla']),
-                        'content_status' => $rs->fields['activar'],
-                        'available' => $rs->fields['activar'],
+                        'content_status' => ($rs->fields['activar'] === 0)? 0:1,
+                        'available' => ($rs->fields['activar'] === 0)? 0:1,
                         'created' => $rs->fields['fecha'].' '.$rs->fields['hora'],
                         'changed' => $rs->fields['fecha'].' '.$rs->fields['hora'],
                         'starttime' => $rs->fields['fecha'].' '.$rs->fields['hora'],
@@ -961,9 +981,9 @@ class CanariasToOnm
 
                 $originalArticleID = $rs->fields['id'];
                 $title =  $this->helper->convertToUtf8($rs->fields['titulo']);
-                if (empty($title) || $this->helper->elementIsImported($originalArticleID, 'article') ) {
+                if ($this->helper->elementIsImported($originalArticleID, 'article')) {
                     echo "[{$current}/{$totalRows}] Article with id {$originalArticleID} already imported\n";
-                } else {
+                } elseif (!empty($title)) {
                     echo "[{$current}/{$totalRows}] Importing article with id {$originalArticleID} - ";
 
                     $seccion = !empty($rs->fields['subseccion']) ?$rs->fields['subseccion']:$rs->fields['seccion'];
@@ -977,14 +997,20 @@ class CanariasToOnm
                         'agency' => $this->helper->convertToUtf8($rs->fields['firma']),
                         'summary' => $this->helper->convertToUtf8($rs->fields['entradilla']),
                         'body' => $this->helper->convertToUtf8($rs->fields['texto']),
-                        'img1' => $this->helper->imageIsImported($rs->fields['foto_seccion'], 'image'),
+                        'img1' => $this->helper->imageIsImported(
+                            $this->helper->clearImgTag($rs->fields['foto_seccion']),
+                            'image'
+                        ),
                         'img1_footer' => $this->helper->convertToUtf8($rs->fields['piedefoto']),
-                        'img2' => $this->helper->imageIsImported($rs->fields['foto_noti_ampliada'], 'image'),
+                        'img2' => $this->helper->imageIsImported(
+                            $this->helper->clearImgTag($rs->fields['foto_noti_ampliada']),
+                            'image'
+                        ),
                         'img2_footer' =>$this->helper->convertToUtf8($rs->fields['piedefoto']),
                         'category_name'=>  $category_name,
                         'description' => $this->helper->convertToUtf8($rs->fields['entradilla']),
-                        'content_status' => $rs->fields['activar'],
-                        'available' => $rs->fields['activar'],
+                        'content_status' => ($rs->fields['activar'] === 0)? 0:1,
+                        'available' => ($rs->fields['activar'] === 0)? 0:1,
                         'created' => $rs->fields['fecha'].' '.$rs->fields['hora'],
                         'changed' => $rs->fields['fecha'].' '.$rs->fields['hora'],
                         'starttime' => $rs->fields['fecha'].' '.$rs->fields['hora'],
@@ -1076,6 +1102,29 @@ class CanariasToOnm
         return true;
     }
 
+
+    public function createDefaultAuthors()
+    {
+
+        $sql = "INSERT INTO `authors` "
+            ."(`pk_author`, `name`, `politics`, `date_nac`, `fk_user`, `condition`, `blog`, `params`) "
+            ."VALUES "
+            ."(3, 'Colaboradores', '', '0000-00-00 00:00:00', 0, '', '', NULL), "
+            ."(2, 'Director', '', '0000-00-00 00:00:00', 0, '', '', NULL), "
+            ."(1, 'Editorial', '', '0000-00-00 00:00:00', 0, '', '', NULL)";
+
+
+        $request = $GLOBALS['application']->conn->Prepare($sql);
+        $rs = $GLOBALS['application']->conn->Execute($request);
+
+        if (!$rs) {
+            CanariasHelper::log('insertAuthor : '.self::$originConn->ErrorMsg());
+
+            return false;
+        }
+    }
+
+
     public function importPhotoAuthorsOpinion()
     {
 
@@ -1114,6 +1163,7 @@ class CanariasToOnm
                         'metadata' => StringUtils::get_tags($this->helper->convertToUtf8($rs->fields['autor'])).', opinion',
                         'description' => $this->helper->convertToUtf8($rs->fields['autor']),
                         'created' => $rs->fields['fecha'],
+                        'starttime' => $rs->fields['fecha'],
                         'changed' => $rs->fields['fecha'],
                         'oldName' => $photoName,
                     );
@@ -1146,6 +1196,8 @@ class CanariasToOnm
 
     public function importOpinions()
     {
+        //$this->importAuthorsOpinion();
+        //$this->importPhotoAuthorsOpinion();
 
         echo "IMPORTING OPINIONS\n";
         $sql = "SELECT  `id`, `fecha`, `hora`, `titulo`, `antetitulo`, "
@@ -1172,11 +1224,10 @@ class CanariasToOnm
 
                 if ($this->helper->elementIsImported($originalOpinionID, 'opinion') ) {
                     echo "[{$current}/{$totalRows}] Opinion with id {$originalOpinionID} already imported\n";
-                } else {
-
+                } elseif(!empty($rs->fields['titulo'])) {
                     $name = $this->helper->getSlug($rs->fields['autor']);
                     $authorID = $this->helper->authorIsImported($name);
-                    $title= $this->helper->convertToUtf8($rs->fields['titulo']);
+                    $title = $this->helper->convertToUtf8($rs->fields['titulo']. ' por '.$rs->fields['autor']);
                     //Check opinion data
                     echo "[{$current}/{$totalRows}] Importing opinion with id {$originalOpinionID} ";
                     $values =
@@ -1186,13 +1237,13 @@ class CanariasToOnm
                             'category_name' => 'opinion',
                             'type_opinion' => 0,
                             'body' => $this->helper->convertToUtf8($rs->fields['texto']),
-                            'metadata' => \StringUtils::get_tags($title.', '.$this->helper->convertToUtf8($rs->fields['autor'])).', opinion',
-                            'description' => 'opinion '.$rs->fields['autor']
+                            'metadata' => \StringUtils::get_tags($title.',  opinion'),
+                            'description' => 'opinion colaborador'.$rs->fields['autor']
                                 .' '.strip_tags(substr($rs->fields['texto'], 0, 100)),
-                            'fk_author' => $authorID,
-                            'available' => $rs->fields['activar'],
+                            'fk_author' => 3,
+                            'available' => ($rs->fields['activar'] === 0)? 0:1,
                             'with_comment' => 0,
-                            'content_status' =>  $rs->fields['activar'],
+                            'content_status' => ($rs->fields['activar'] === 0)? 0:1,
                             'created' => $rs->fields['fecha'].' '.$rs->fields['hora'],
                             'starttime' => $rs->fields['fecha'].' '.$rs->fields['hora'],
                             'changed' => $rs->fields['fecha'].' '.$rs->fields['hora'],
@@ -1217,7 +1268,6 @@ class CanariasToOnm
 
                 $current++;
                 $rs->MoveNext();
-                //var_dump($rs->EOF);
             }
 
             $rs->Close(); # optional
@@ -1342,10 +1392,10 @@ class CanariasToOnm
                             'description' => 'opinion '.$rs->fields['autor']
                                 .' '.strip_tags(substr($this->helper->convertToUtf8($data['texto']), 0, 100)),
                             'author' => $rs->fields['autor'],
-                            'available' => $rs->fields['activar'],
+                            'available' => ($rs->fields['activar'] === 0)? 0:1,
                             'with_comment' => 0,
                             'in_home' => 0,
-                            'content_status' => $rs->fields['activar'],
+                            'content_status' => ($rs->fields['activar'] === 0)? 0:1,
                             'created' => $rs->fields['fecha'],
                             'starttime' => $rs->fields['fecha'],
                             'changed' => $rs->fields['fecha'],
@@ -1537,8 +1587,8 @@ class CanariasToOnm
                         'title' => $title,
                         'category' => $this->matchInternalCategory($rs->fields['pk_fk_content_category']),
                         'with_comment' => 0,
-                        'content_status' =>$rs->fields['activar'],
-                        'available' => $rs->fields['activar'],
+                        'content_status' => ($rs->fields['activar'] === 0)? 0:1,
+                        'available' => ($rs->fields['activar'] === 0)? 0:1,
                         'metadata' => \StringUtils::get_tags($rs->fields['title']),
                         'subtitle' => '',
                         'agency' => $this->helper->convertToUtf8($rs->fields['firma']),
@@ -1638,7 +1688,7 @@ class CanariasToOnm
                             'fk_author' => USER_ID,
                             'slug' => '',
                             'fk_content' => $content->pk_content,
-                            'available' => $rs->fields['activar'],
+                            'available' => ($rs->fields['activar'] === 0)? 0:1,
                             );
 
                         $commentID = $comment->create($data)->id;
@@ -1721,7 +1771,7 @@ class CanariasToOnm
                     $data['title'] = $title;
                     $data['category'] = $category;
                     $data['category_name'] = $category_name;
-                    $data['available'] = $rs->fields['activar'];
+                    $data['available'] = ($rs->fields['activar'] === 0)? 0:1;
 
                     $data['description'] = $title;
                     $data['metadata'] = StringUtils::get_tags($title.', '.$category_name);

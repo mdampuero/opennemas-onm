@@ -52,36 +52,32 @@ set_include_path(
 $importer = new CanariasToOnm($configOldDB, $configNewDB);
 
 
-//$importer->helper->sqlClearData(); //delete old data in tables
-//$importer->helper->clearLog();
+$importer->helper->sqlClearData(); //delete old data in tables
+$importer->helper->clearLog();
 
 $importer->importCategories();
 
- /*
+
 $importer->helper->log('IMPORTING AUTHORS AND OPINIONS');
 
-$importer->importAuthorsOpinion();
-
-$importer->importPhotoAuthorsOpinion();
-printf("Check author names (Problem with similar name author)");
+$importer->createDefaultAuthors();
 
 $importer->importOpinions();
 
 $importer->helper->log('IMPORTING ARTICLES AND IMAGES');
 
-/*$importer->importHemeroteca();
+$importer->importHemeroteca();
 $importer->importHemerotecaTopSecret();
 
-$importer->importAyuntamientos();
+//$importer->importAyuntamientos();
 
-$importer->importTopSecret();
+ $importer->importTopSecret();
 
 $importer->importFauna();
 
 
-
-//$importer->importImagesArticles();
-//$importer->importArticles();
+$importer->importImagesArticles();
+$importer->importArticles();
 
 
 
@@ -89,21 +85,17 @@ $importer->helper->log("\n IMPORTING OTHER CONTENTS \n");
 $importer->importLetters();
 
 $importer->importImagesHumor();
-*/
+
+
 $importer->importAlbums();
 
-//$importer->importAttachments();
+$importer->importAttachments();
+/*
+// $importer->importComments();
 
-//$importer->importComments();
-
-//$importer->importRelatedContents();
+ //$importer->importRelatedContents();
 
 /**/
 printf("OpenNemas database is ok for Canarias Ahora \n");
 
 $importer->helper->printResults();
-
-
-
-
-
