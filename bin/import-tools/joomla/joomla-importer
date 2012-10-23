@@ -13,12 +13,15 @@ define('DS', '/');
 define('APPLICATION_PATH', realpath(__DIR__.'/../../../'));
 define('SITE_PATH',        realpath(APPLICATION_PATH. DIRECTORY_SEPARATOR . "public" ).DIRECTORY_SEPARATOR);
 define('SITE_LIBS_PATH',   realpath(SITE_PATH . "libs") . DIRECTORY_SEPARATOR);
-define('SITE_CORE_PATH',   realpath(SITE_PATH.DIRECTORY_SEPARATOR."core").DIRECTORY_SEPARATOR);
 define('SITE_VENDOR_PATH', realpath(APPLICATION_PATH.DIRECTORY_SEPARATOR."vendor").DIRECTORY_SEPARATOR);
-define('SITE_MODELS_PATH', realpath(SITE_PATH.DIRECTORY_SEPARATOR."models").DIRECTORY_SEPARATOR);
+define('SITE_CORE_PATH',   realpath(SITE_VENDOR_PATH.DIRECTORY_SEPARATOR."core").DIRECTORY_SEPARATOR);
+define('SITE_MODELS_PATH', realpath(APPLICATION_PATH.DIRECTORY_SEPARATOR."app".DIRECTORY_SEPARATOR."models").DIRECTORY_SEPARATOR);
 define('APC_PREFIX', 'joomla-importer');
 error_reporting(E_ALL ^ E_NOTICE);
 
+// Constants for creating images from local
+define('MEDIA_PATH', SITE_PATH. 'media');
+define('IMG_DIR', 'hibridos/images');
 
 // Ensure library/ is on include_path
 set_include_path(implode(PATH_SEPARATOR, array(
@@ -30,11 +33,10 @@ require '/usr/share/php/libzend-framework-php/Zend/Console/Getopt/Exception.php'
 require SITE_VENDOR_PATH.'/adodb5/adodb.inc.php';
 
 $availableActions = array(
-    'import-articles', 'show-categories',
+    'import-articles', 'show-categories'
 );
 
-require SITE_PATH.'/autoload.php';
-Application::initAutoloader();
+require APPLICATION_PATH.'/app/autoload.php';
 
 require 'JoomlaImporter.php';
 
