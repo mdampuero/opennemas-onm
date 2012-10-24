@@ -2291,16 +2291,21 @@ class ContentManager
     */
     public function getUrlContent ($url, $decodeJson = false)
     {
-        $c  = curl_init($url);
-        curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
 
-        if ($decodeJson) {
-            $content = json_decode(curl_exec($c));
-        } else {
-            $content = curl_exec($c);
+        $externalContent = apc_fetch(APC_PREFIX.$url, $success);
+        if (!$success) {
+            $c  = curl_init($url);
+            curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
+            $externalContent = curl_exec($c);
+            apc_add(APC_PREFIX.$url, $externalContent, 300);
+            curl_close($c);
         }
 
-        curl_close($c);
+        if ($decodeJson) {
+            $content = json_decode($externalContent);
+        } else {
+            $content = $externalContent;
+        }
 
         return $content;
 

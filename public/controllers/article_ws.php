@@ -19,7 +19,7 @@ use Onm\Settings as s;
 */
 $tpl = new Template(TEMPLATE_USER);
 $cm  = new ContentManager();
-$ccm = ContentCategoryManager::get_instance();
+$tpl->setConfig('articles');
 
 /**
  * Getting request params
@@ -42,53 +42,30 @@ foreach ($syncParams as $siteUrl => $categoriesToSync) {
     }
 }
 
-/**
- * Getting resolved Id and category title
- */
-$articleID = $cm->getUrlContent($wsUrl.'/ws/contents/resolve/'.$dirtyID, true);
-$actualCategoryTitle = $cm->getUrlContent($wsUrl.'/ws/categories/title/'.$category_name, true);
-$tpl->assign('contentId', $articleID); // Used on module_comments.tpl
-$tpl->assign('actual_category_title', $actualCategoryTitle); // Used on module_comments.tpl
-
-if (isset($category_name) && !empty($category_name)) {
-        $category = $ccm->get_id($category_name);
-} elseif (isset($_REQUEST["action"]) && ( $_REQUEST["action"]!="vote" && $_REQUEST["action"]!="get_plus")) {
-    Application::forward301('/');
-}
-
 // Redirect if no action
 if ( empty($action) ) {
     Application::forward301('/404.html');
 }
+
 switch ($action) {
     case 'read':
 
-        // Load config
-        $tpl->setConfig('articles');
-
-        // Assign category name
-        $tpl->assign('category_name', $category_name);
-
-        // Get category id correspondence with ws
-        $wsActualCategoryId = $cm->getUrlContent($wsUrl.'/ws/categories/id/'.$category_name);
-
-        // Fetch information for Advertisements
-        include_once 'article_advertisement.php';
-
-        $cacheID = $tpl->generateCacheId('sync'.$category_name, $subcategory_name, $articleID);
+        $cacheID = $tpl->generateCacheId('sync'.$category_name, $subcategory_name, $dirtyID);
 
         if (($tpl->caching == 0) || !$tpl->isCached('article/article.tpl', $cacheID)) {
 
-            // Fetch and load article information
-            $ext = $cm->getUrlContent($wsUrl.'/ws/articles/'.(int)$articleID, true);
-            $article = new Article();
-            $article->load($ext);
-            $article->category_name = $category_name;
+            // Fetch information for Advertisements
+            include_once 'article_advertisement.php';
+
+            // Get full article
+            $article = $cm->getUrlContent($wsUrl.'/ws/articles/complete/'.$dirtyID, true);
+            $article = unserialize($article);
 
             if (($article->available==1) && ($article->in_litter==0)
                 && ($article->isStarted())
             ) {
 
+                // Logic for print
                 $title = StringUtils::get_title($article->title);
                 $printUrl = '/extimprimir/'.$title.'/'.$category_name.'/'.$dirtyID.'.html';
                 $sendMailUrl ='/controllers/article.php?action=sendform
@@ -99,87 +76,28 @@ switch ($action) {
                 $tpl->assign('print_url', $printUrl);
                 $tpl->assign('sendform_url', $sendMailUrl);
 
-                $tpl->assign('article', $article);
-
-                // Get associated media code from Web service
-                if (isset($article->img2) && ($article->img2 != 0)) {
-                    $photoWs = $cm->getUrlContent($wsUrl.'/ws/images/id/'.$article->img2, true);
-                    $photoInt = new Photo();
-                    $photoInt->load($photoWs);
-                    $photoInt->media_url = $cm->getUrlContent($wsUrl.'/ws/instances/mediaurl/', true);
-                    $tpl->assign('photoInt', $photoInt);
-                }
-
-                if (isset($article->fk_video2) && ($article->fk_video2 != 0)) {
-                    $videoWs = $cm->getUrlContent($wsUrl.'/ws/videos/id/'.$article->fk_video2, true);
-                    $videoInt = new Video();
-                    $videoInt->load($videoWs);
-                    $tpl->assign('videoInt', $videoInt);
-                } else {
-                    $videoWs = $cm->getUrlContent($wsUrl.'/ws/videos/category/'.$wsActualCategoryId, true);
-                    $videoInt = new Video();
-                    $videoInt->load($videoWs);
-                    $tpl->assign('videoInt', $videoInt);
-                }
-
-                // Get inner Related contents
-                $relatedContentsWs = $cm->getUrlContent(
-                    $wsUrl.'/ws/articles/lists/related-inner/'.$articleID,
-                    true
+                // Template vars
+                $tpl->assign(
+                    array(
+                        'article'               => $article,
+                        'photoInt'              => $article->photoInt,
+                        'videoInt'              => $article->videoInt,
+                        'relationed'            => $article->relatedContents,
+                        'contentId'             => $article->id,// Used on module_comments.tpl
+                        'actual_category_title' => $article->category_title,
+                        'suggested'             => $article->suggested,
+                        'ext'                   => 1,
+                    )
                 );
-
-                $relatedContents = array();
-                foreach ($relatedContentsWs as $item) {
-                    $contentType = $cm->getUrlContent(
-                        $wsUrl.'/ws/contents/contenttype/'.(int) $item->fk_content_type
-                    );
-                    $contentType = str_replace('"', '', $contentType);
-                    $content = new $contentType();
-                    $content->load($item);
-                    // Load category related information
-                    $content->category_name  = $category_name;
-                    $content->category_title = $content->loadCategoryTitle($content->id);
-
-                    // Get instance media
-                    $basePath = $cm->getUrlContent(
-                        $wsUrl.'/ws/instances/instancemedia/',
-                        true
-                    );
-
-                    // Get file path for attachments
-                    $filePath = $cm->getUrlContent(
-                        $wsUrl.'/ws/contents/filepath/'.(int)$content->id,
-                        true
-                    );
-
-                    // Compose the full url to the file
-                    $content->fullFilePath = $basePath.FILE_DIR.$filePath;
-
-                    $relatedContents[] = $content;
-                }
-
-                $tpl->assign('relationed', $relatedContents);
-
-                // Get Machine suggested contents
-                $machineRelated = $cm->getUrlContent(
-                    $wsUrl.'/ws/articles/lists/machine-related/'.$articleID,
-                    true
-                );
-
-                $machineSuggestedContents = array();
-                foreach ($machineRelated as $content) {
-                    $content->uri = 'ext'.$content->uri;
-                    $machineSuggestedContents[] = (array)$content; // _other-contents.tpl
-                }
-
-                $tpl->assign('suggested', $machineSuggestedContents);
-                $tpl->assign('ext', 1);
 
             } else {
                 Application::forward301('/404.html');
             }
 
         } // end if $tpl->is_cached
+
+        // Assign category name
+        $tpl->assign('category_name', $category_name);
 
         $tpl->display('article/article.tpl', $cacheID);
 
@@ -269,12 +187,14 @@ switch ($action) {
         break;
     case 'print':
 
+        // Get cleaned article Id
+        $articleID = $cm->getUrlContent($wsUrl.'/ws/contents/resolve/'.$dirtyID, true);
+
+        $ccm = ContentCategoryManager::get_instance();
+
         $cacheID = $tpl->generateCacheId($category_name, $subcategory_name, $articleID);
 
         if (!$tpl->isCached('article/article_printer.tpl', $cacheID)) {
-
-            // Get cleaned article Id
-            $articleID = $cm->getUrlContent($wsUrl.'/ws/contents/resolve/'.$dirtyID, true);
             // Get article
             $articleWs = $cm->getUrlContent($wsUrl.'/ws/articles/'.$articleID, true);
             $article = new Article();

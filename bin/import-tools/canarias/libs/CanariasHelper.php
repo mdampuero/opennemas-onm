@@ -13,6 +13,8 @@ class CanariasHelper
         fclose($handle);
     }
 
+
+
     public function clearLog ()
     {
         echo "\n Log was Cleaned \n ";
@@ -144,6 +146,16 @@ class CanariasHelper
         if (!$rss) {
             $this->log('element failed register import. function: '.$GLOBALS['application']->conn->ErrorMsg());
         }
+    }
+
+     /**
+     * Converts a given string to UTF-8 codification
+     *
+     * @return string
+     **/
+    public function convertToUtf8($string)
+    {
+        return mb_convert_encoding($string, 'UTF-8');
     }
 
 

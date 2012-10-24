@@ -18,7 +18,7 @@
                             <img id="draggable_img{$num}"
                                  class="draggable-handler"
                                  style="width:16px;height:16px;"
-                                 src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/flash.gif"
+                                 src="/themes/admin/images/flash.gif"
                                  data-id="{$photos[n]->pk_photo}"
                                  data-url="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photos[n]->path_file}"
                                  data-filename="{$photos[n]->name}"

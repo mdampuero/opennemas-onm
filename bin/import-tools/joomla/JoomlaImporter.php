@@ -15,8 +15,6 @@
  **/
 class JoomlaImporter
 {
-
-
     const CONF_FILE = 'configuration.ini';
 
     public static $configuration = '';
@@ -39,9 +37,13 @@ class JoomlaImporter
 
         self::$reflector = new \ReflectionClass('JoomlaImporter');
         // $action = strtolower(str_replace('-','',$action));
-        $action = preg_replace_callback('/-([a-zA-Z])/', function ($match) {
-            return ucfirst($match[1]);
-        }, $action);
+        $action = preg_replace_callback(
+            '/-([a-zA-Z])/',
+            function ($match) {
+                return ucfirst($match[1]);
+            },
+            $action
+        );
 
         if (method_exists('JoomlaImporter', $action)) {
             return self::$action($args);
@@ -97,17 +99,19 @@ class JoomlaImporter
     {
 
         echo "Initialicing source database connection...".PHP_EOL;
-        if (isset($config['host'])
+        if (
+            isset($config['host'])
             && isset($config['database'])
             && isset($config['user'])
             && isset($config['password'])
-            && isset($config['type']))
-        {
-
+            && isset($config['type'])
+        ) {
             self::$originalDatabaseConn = ADONewConnection($config['type']);
             self::$originalDatabaseConn->PConnect(
-                $config['host'], $config['user'],
-                $config['password'], $config['database']
+                $config['host'],
+                $config['user'],
+                $config['password'],
+                $config['database']
             );
 
         } else {
@@ -143,8 +147,10 @@ class JoomlaImporter
 
             $values = array($contentID, $contentType);
             $views_update_sql = $GLOBALS['application']->conn->Prepare($sql);
-            $rss = $GLOBALS['application']->conn->Execute($views_update_sql,
-                                                          $values);
+            $rss = $GLOBALS['application']->conn->Execute(
+                $views_update_sql,
+                $values
+            );
 
             if (!$rss) {
                 echo $GLOBALS['application']->conn->ErrorMsg();
@@ -159,13 +165,15 @@ class JoomlaImporter
 
     public function updateCreateDate($contentID, $date)
     {
-        if(isset($contentID) && isset($date)) {
+        if (isset($contentID) && isset($date)) {
             $sql = 'UPDATE `contents` SET `created`=?, `changed`=? WHERE pk_content=?';
 
             $values = array($date, $date, $contentID);
             $date_update_sql = $GLOBALS['application']->conn->Prepare($sql);
-            $rss = $GLOBALS['application']->conn->Execute($date_update_sql,
-                                                          $values);
+            $rss = $GLOBALS['application']->conn->Execute(
+                $date_update_sql,
+                $values
+            );
             if (!$rss) {
                 echo $GLOBALS['application']->conn->ErrorMsg();
             }
@@ -184,8 +192,10 @@ class JoomlaImporter
                                        VALUES (?, ?, ?)';
         $translation_values = array($original, $final, $type);
         $translation_ids_request = $GLOBALS['application']->conn->Prepare($sql_translation_request);
-        $rss = $GLOBALS['application']->conn->Execute($translation_ids_request,
-                                                      $translation_values);
+        $rss = $GLOBALS['application']->conn->Execute(
+            $translation_ids_request,
+            $translation_values
+        );
 
         if (!$rss) {
             echo $GLOBALS['application']->conn->ErrorMsg();
@@ -232,7 +242,6 @@ class JoomlaImporter
 
         $current = $imported = 0;
 
-
         while (!$originalContents->EOF) {
 
             if (isset($args->max) && $imported >= $args->max) {
@@ -247,6 +256,29 @@ class JoomlaImporter
 
                 $originalArticleID = $originalContents->fields['id'];
 
+                preg_match_all('/(<img .*?>)/', $originalContents->fields['introtext'], $summaryResult);
+                preg_match_all('/(<img .*?>)/', $originalContents->fields['fulltext'], $bodyResult);
+
+                foreach ($bodyResult[0] as $res) {
+                    ImportHelper::importImages($originalContents->fields, $res);
+                }
+                foreach ($summaryResult[0] as $res) {
+                    ImportHelper::importImages($originalContents->fields, $res);
+                }
+
+                // Change images url on introtext
+                $originalContents->fields['introtext'] = preg_replace(
+                    '/(<img .*?>)/',
+                    '',
+                    $originalContents->fields['introtext']
+                );
+                // Change images url on fulltext
+                $originalContents->fields['fulltext'] = preg_replace(
+                    '/src="images/',
+                    'src="/media/hibridos/images',
+                    $originalContents->fields['fulltext']
+                );
+
                 $values = array(
                     'title' => ImportHelper::convertoUTF8($originalContents->fields['title']),
                     'category' => self::matchCategory($originalContents->fields['catid']),
@@ -257,15 +289,14 @@ class JoomlaImporter
                     'title_int' => ImportHelper::convertoUTF8($originalContents->fields['title']),
                     'metadata' => StringUtils::get_tags(ImportHelper::convertoUTF8($originalContents->fields['title'])),
                     'subtitle' => '',
-                    'agency' => 'Redaccion',
+                    'agency' => 'hibridosyelectricos.com',
                     'summary' => ImportHelper::convertoUTF8($originalContents->fields['introtext']),
-                    'body' => ImportHelper::convertoUTF8($originalContents->fields['introtext']. ' '.$originalContents->fields['fulltext']),
+                    'body' => ImportHelper::convertoUTF8($originalContents->fields['fulltext']),
                     'posic' => 0,
                     'id' => 0,
-                    'fk_user' => 125,
-                    'fk_publisher' => 125
+                    'fk_user' => 135,
+                    'fk_publisher' => 135
                 );
-
 
                 $article = new Article();
                 $newArticleID = $article->create($values);
@@ -276,8 +307,8 @@ class JoomlaImporter
                     ImportHelper::log('Content with ID '.$originalContents->fields['id']." imported.\n");
                     $imported++;
                 }
-
             }
+
             $bar->update($current);
             $current++;
 
@@ -287,9 +318,5 @@ class JoomlaImporter
         $originalContents->Close(); # optional
 
     }
+}
 
-
-
-
-
-} // END class JoomlaImporter

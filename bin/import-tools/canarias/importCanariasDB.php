@@ -77,21 +77,21 @@ $importer->importAyuntamientos();
 $importer->importTopSecret();
 
 $importer->importFauna();
-*/
+
 
 
 //$importer->importImagesArticles();
-$importer->importArticles();
+//$importer->importArticles();
 
 
-/*
+
 $importer->helper->log("\n IMPORTING OTHER CONTENTS \n");
 $importer->importLetters();
 
 $importer->importImagesHumor();
-
-$importer->importAlbums();
 */
+$importer->importAlbums();
+
 //$importer->importAttachments();
 
 //$importer->importComments();

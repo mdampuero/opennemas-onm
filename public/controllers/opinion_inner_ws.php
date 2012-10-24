@@ -44,39 +44,23 @@ foreach ($syncParams as $siteUrl => $categoriesToSync) {
     }
 }
 
-/**
- * Getting resolved Id
- */
-$opinionID = $cm->getUrlContent($wsUrl.'/ws/contents/resolve/'.$dirtyID, true);
-$tpl->assign('contentId', $opinionID); // Used on module_comments.tpl
-
 // Redirect if no action
 if (empty($action)) {
     Application::forward301('/404.html');
 }
 switch ($action) {
     case 'read':
-        $tpl->setConfig('opinion');
 
-        // Get category id correspondence with ws
-        $wsActualCategoryId = $cm->getUrlContent($wsUrl.'/ws/categories/id/'.$category_name);
-
-        //Fetch information for Advertisements
-        require_once 'opinion_inner_advertisement.php';
-
-        $cache_id = $tpl->generateCacheId('sync'.$category_name, $subcategory_name, $opinionID);
+        $cache_id = $tpl->generateCacheId('sync'.$category_name, $subcategory_name, $dirtyID);
 
         if (($tpl->caching == 0) || !$tpl->isCached('opinion.tpl', $cache_id)) {
 
-            // Fetch and load opinion information
-            $ext = $cm->getUrlContent($wsUrl.'/ws/opinions/id/'.(int) $opinionID, true);
-            $opinion = new Opinion();
-            $opinion->load($ext);
-            $opinion->category_name = $category_name;
+            // Get full opinion
+            $opinion = $cm->getUrlContent($wsUrl.'/ws/opinions/complete/'.$dirtyID, true);
+            $opinion = unserialize($opinion);
 
-            // Get author information
-            $author = $cm->getUrlContent($wsUrl.'/ws/authors/id/'.$opinion->fk_author, true);
-            $opinion->author = $author;
+            //Fetch information for Advertisements
+            require_once 'opinion_inner_advertisement.php';
 
             if (($opinion->available==1) && ($opinion->in_litter == 0)) {
 
@@ -91,30 +75,14 @@ switch ($action) {
                 );
                 // } Sacar broza
 
-                $opinion->author_name_slug = StringUtils::get_title($opinion->name);
-
-                // Get Machine suggested contents
-                $machineRelated = $cm->getUrlContent(
-                    $wsUrl.'/ws/opinions/machinerelated/'.$opinionID,
-                    true
-                );
-
-                //Fetch the other opinions for this author
-                $otherOpinions = $cm->getUrlContent(
-                    $wsUrl.'/ws/opinions/others/'.$opinionID,
-                    true
-                );
-
-                // Get external media url for author images
-                $externalMediaUrl = $cm->getUrlContent($wsUrl.'/ws/instances/mediaurl/', true);
-
                 $tpl->assign(
                     array(
-                        'other_opinions'  => $otherOpinions,
-                        'suggested'       => $machineRelated,
+                        'other_opinions'  => $opinion->otherOpinions,
+                        'suggested'       => $opinion->machineRelated,
                         'opinion'         => $opinion,
                         'actual_category' => 'opinion',
-                        'media_url'       => $externalMediaUrl,
+                        'media_url'       => $opinion->externalMediaUrl,
+                        'contentId'       => $opinion->id, // Used on module_comments.tpl
                         'ext'             => 1 //Used on widget_opinions_authors
                     )
                 );

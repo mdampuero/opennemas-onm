@@ -552,6 +552,8 @@ class ArticlesController extends Controller
                 // TODO: Move this to a post update hook
                 $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
                 $tplManager->delete($article->category_name.'|'.$article->id);
+                $tplManager->delete('home|0');
+                $tplManager->delete($_POST['category'] . '|0');
 
                 m::add(_('Article successfully updated.'), m::SUCCESS);
             } else {

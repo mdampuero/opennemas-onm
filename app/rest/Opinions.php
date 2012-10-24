@@ -5,6 +5,39 @@ class Opinions
     public $restler;
 
     /*
+    * @url GET /opinions/complete/:id
+    */
+    public function complete($id = null)
+    {
+        $this->validateInt($id);
+
+        // Resolve dirty Id
+        $opinionId = Content::resolveID($id);
+
+        // Load opinion
+        $opinion = new Opinion($opinionId);
+
+        // Get author information
+        $author = new \Author($opinion->fk_author);
+        $author->get_author_photos();
+        $opinion->author = $author;
+
+        // Get author name slug
+        $opinion->author_name_slug = StringUtils::get_title($opinion->name);
+
+        // Get machine related contents
+        $opinion->machineRelated = $this->machineRelated($opinionId);
+
+        //Fetch the other opinions for this author
+        $opinion->otherOpinions = $this->others($opinionId);
+
+        // Get external media url
+        $opinion->externalMediaUrl = MEDIA_IMG_PATH_WEB;
+
+        return serialize($opinion);
+    }
+
+    /*
     * @url GET /opinions/id/:id
     */
     public function id($id = null)

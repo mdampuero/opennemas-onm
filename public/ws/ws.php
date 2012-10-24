@@ -40,6 +40,7 @@ $r->addAPIClass('Images');
 $r->addAPIClass('Videos');
 $r->addAPIClass('Categories');
 $r->addAPIClass('Authors');
+$r->addAPIClass('Frontpages');
 
 $r->handle();
 

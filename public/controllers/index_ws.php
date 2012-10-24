@@ -21,7 +21,6 @@ require_once '../bootstrap.php';
 $category_name    = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
 $subcategory_name = $request->query->filter('subcategory_name', '', FILTER_SANITIZE_STRING);
 $cache_page       = $request->query->filter('page', 0, FILTER_VALIDATE_INT);
-$ext = $request->query->filter('ext', 0, FILTER_VALIDATE_INT);
 
 // Setup view
 $tpl = new Template(TEMPLATE_USER);
@@ -54,7 +53,7 @@ if (
         }
     }
 
-    // Check if category exists with file_get_contents
+    // Check if category exists
     $existsCategory = $cm->getUrlContent($wsUrl.'/ws/categories/exist/'.$category_name);
 
     // If no home category name
@@ -69,139 +68,25 @@ if (
     }
 
     $actualCategory = (empty($subcategory_name))? $category_name : $subcategory_name;
-    $actualCategoryId = $actual_category_id = $ccm->get_id($actualCategory);
+    // Get category id correspondence
+    $wsActualCategoryId = $cm->getUrlContent($wsUrl.'/ws/categories/id/'.$category_name);
     $tpl->assign(
         array(
             'category_name' => $category_name,
             'actual_category' => $actualCategory,
-            'actual_category_id' => $actualCategoryId,
+            'actual_category_id' => $wsActualCategoryId,
             'actual_category_title' => $ccm->get_title($category_name),
         )
     );
 
-    // Get category id correspondence
-    $wsActualCategoryId = $cm->getUrlContent($wsUrl.'/ws/categories/id/'.$category_name);
 
-    /*
-    // Fetch information for Advertisements from Web service
-    $ads = json_decode(file_get_contents($wsUrl.'/ws/ads/frontpage/'.$wsActualCategoryId));
-
-    $intersticial = $ads[0];
-    $banners = $ads[1];
-
-    //Render ads
-    $advertisement = Advertisement::getInstance();
-    $advertisement->renderMultiple($banners, $advertisement,$wsUrl);
-
-    // Render intersticial banner
-    if (!empty($intersticial)) {
-        $advertisement->renderMultiple(array($intersticial), $advertisement,$wsUrl);
-    }
-    */
-
+    // Get all contents for this frontpage
     $allContentsInHomepage = $cm->getUrlContent(
-        $wsUrl.'/ws/categories/allcontent/'.$wsActualCategoryId,
+        $wsUrl.'/ws/frontpages/allcontent/'.$category_name,
         true
     );
 
-    $contentsInHomepage = array();
-    foreach ($allContentsInHomepage as $item) {
-        $contentType = $cm->getUrlContent(
-            $wsUrl.'/ws/contents/contenttype/'.(int)$item->fk_content_type
-        );
-        $contentType = str_replace('"', '', $contentType);
-        $content = new $contentType();
-        $content->load($item);
-        $contentsInHomepage[] = $content;
-    }
-
-    // Filter articles if some of them has time scheduling and sort them by position
-    $contentsInHomepage = $cm->getInTime($contentsInHomepage);
-    $contentsInHomepage = $cm->sortArrayofObjectsByProperty($contentsInHomepage, 'position');
-
-    // Get all frontpages images
-    $imageList = array();
-    foreach ($contentsInHomepage as $content) {
-        if (isset($content->img1) && $content->img1 != 0) {
-            $image = $cm->getUrlContent($wsUrl.'/ws/images/id/'.(int)$content->img1, true);
-            if (!empty($image)) {
-                $image->media_url = $cm->getUrlContent($wsUrl.'/ws/instances/mediaurl/', true);
-                $imageList []= $image;
-            }
-        }
-    }
-
-    // Overloading information for contents
-    foreach ($contentsInHomepage as &$content) {
-
-        // Load category related information
-        $content->category_name  = $category_name;
-        $content->category_title = $cm->getUrlContent(
-            $wsUrl.'/ws/contents/loadcategorytitle/'.$content->id,
-            true
-        );
-
-        // Get author_name_slug for opinions
-        if ($content->content_type == '4') {
-            if ($content->type_opinion == 1) {
-                $content->author_name_slug = 'editorial';
-            } elseif ($content->type_opinion == 2) {
-                $content->author_name_slug = 'director';
-            } else {
-                $content->author_name_slug = StringUtils::get_title($content->name);
-            }
-            // Generate opinion uri with author_name_slug
-            $content->uri = preg_replace('@author@', $content->author_name_slug, $content->uri);
-        }
-
-        //Change uri for href links except widgets
-        if ($content->content_type != 'Widget') {
-            $content->uri = "ext".$content->uri;
-        }
-
-        // Load attached  from array
-        $content->loadFrontpageImageFromHydratedArray($imageList)
-                ->loadAttachedVideo();
-
-        // Load related contents from ws
-        $content->related_contents = $cm->getUrlContent(
-            $wsUrl.'/ws/articles/lists/related/'.$content->id,
-            true
-        );
-
-        // Generate uri for related content
-        foreach ($content->related_contents as &$item) {
-            $contentType = $cm->getUrlContent(
-                $wsUrl.'/ws/contents/contenttype/'.(int) $item->fk_content_type,
-                true
-            );
-            $contentType = str_replace('"', '', $contentType);
-            $contentRelated = new $contentType();
-            $contentRelated->load($item);
-            $contentRelated->category_name = $category_name;
-            // Generate content uri if it's not an attachment
-            if ($item->fk_content_type != 3) {
-                $contentRelated->uri = "ext".$contentRelated->uri;
-            } else {
-                // Get instance media
-                $basePath = $cm->getUrlContent(
-                    $wsUrl.'/ws/instances/instancemedia/',
-                    true
-                );
-                // Get file path for attachments
-                $filePath = $cm->getUrlContent(
-                    $wsUrl.'/ws/contents/filepath/'.(int)$contentRelated->id,
-                    true
-                );
-                // Compose the full url to the file
-                $contentRelated->fullFilePath = $basePath.FILE_DIR.$filePath;
-            }
-
-            $item = $contentRelated;
-        }
-    }
-
-    $tpl->assign('column', $contentsInHomepage);
+    $tpl->assign('column', unserialize($allContentsInHomepage));
 
     // Fetch layout for categories
     $layout = $cm->getUrlContent($wsUrl.'/ws/categories/layout/'.$category_name, true);

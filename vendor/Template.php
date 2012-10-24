@@ -66,8 +66,8 @@ class Template extends Smarty
         $this->error_reporting = E_ALL & ~E_NOTICE;
 
         // Add global plugins path
-        $this->plugins_dir[]    = realpath(SMARTY_DIR.DS.'../'.DS.'onm-plugins/');
         $this->plugins_dir[]    = realpath($this->templateBaseDir.'plugins/').'/';
+        $this->plugins_dir[]    = realpath(SMARTY_DIR.DS.'../'.DS.'onm-plugins/');
         $this->caching          = false;
         $this->allow_php_tag    = true;
 
