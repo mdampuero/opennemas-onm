@@ -111,11 +111,11 @@
                                     <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Rechazar" /></a>
                         {elseif $letter->content_status eq 2}
                             <a href="{url name=admin_letter_toggleavailable id=$letter->id status=1 letterStatus=$letterStatus page=$page}" title="Publicar">
-                                <img border="0" src="{$params.IMAGE_DIR}publish_g.png">
+                                <img border="0" src="{$params.IMAGE_DIR}publish_r.png">
                             </a>
                         {else}
                             <a class="publishing" href="{url name=admin_letter_toggleavailable id=$letter->id status=2 letterStatus=$letterStatus page=$page}" title="Rechazar">
-                                <img border="0" src="{$params.IMAGE_DIR}publish_r.png">
+                                <img border="0" src="{$params.IMAGE_DIR}publish_g.png">
                             </a>
                         {/if}
                     {/acl}
