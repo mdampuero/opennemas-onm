@@ -2030,7 +2030,7 @@ class Content
     public function setProperty($property, $value)
     {
         $sql = "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
-                        ." VALUES ('{$id}', '{$property}', '{$value}')"
+                        ." VALUES ('{$this->id}', '{$property}', '{$value}')"
                         ." ON DUPLICATE KEY UPDATE `meta_value`='{$value}'";
 
         if ($id > 0) {

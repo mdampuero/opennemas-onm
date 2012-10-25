@@ -392,7 +392,7 @@ $adminRoutes->add(
     '/admin'
 );
 
-// Letter manager routes
+// Polls manager routes
 $adminRoutes->add(
     'admin_polls',
     new Route(

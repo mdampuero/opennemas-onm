@@ -356,8 +356,19 @@ div#content-provider #toggler{
 }
 
 #frontpagemanager:not(.home) .suggested {
-    background:#FFFFE0 !important;
-    border:1px solid #BDB76B !important;
+    border:1px solid #BDB76B;
+}
+
+#frontpagemanager:not(.home) .suggested {
+    border:1px solid #BDB76B;
+}
+
+#frontpagemanager:not(.home) .suggested .content-icon-suggested {
+    display: inline-block;
+}
+
+#frontpagemanager:not(.home)  .content-icon-suggested {
+    display: none;
 }
 
 .scheduled { border-left:3px solid Black !important; }

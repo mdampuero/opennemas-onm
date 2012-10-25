@@ -3213,4 +3213,23 @@
   Problem with image: /var/www/canariasSw/canariasahora_20http://www.youtube.com/v/L8Tg3tmCRTc&amp;hl=es&amp;fs=1&amp; 
  Can't get video information. Check the http://www.youtube.com/v/L8Tg3tmCRTc&amp;hl=es&amp;fs=1&amp; Problem with video: http://www.youtube.com/v/L8Tg3tmCRTc&amp;hl=es&amp;fs=1&amp; 
   Problem with image: /var/www/canariasSw/canariasahora_20http://www.youtube.com/v/KlZIL2aIVEk&amp;hl=es&amp;fs=1&amp; 
+  Problem with image: /var/www/canariasSw/canariasahora_20http://www.youtube.com/v/KlZIL2aIVEk&amp;hl=es&amp;fs=1&amp; 
+  Problem with image: /var/www/canariasSw/canariasahora_20http://www.youtube.com/v/KlZIL2aIVEk&amp;hl=es&amp;fs=1&amp; 
+ 
+ 1 Can't get video information. Check the http://www.youtube.com/v/KlZIL2aIVEk&amp;hl=es&amp;fs=1&amp;2 Problem with video: http://www.youtube.com/v/KlZIL2aIVEk&amp;hl=es&amp;fs=1&amp; 
+  Problem with image: /var/www/canariasSw/canariasahora_20http://www.youtube.com/v/0VfzCoI77pQ&amp;hl=es&amp;fs=1&amp; 
+ 
+ 1 Can't get video information. Check the http://www.youtube.com/v/0VfzCoI77pQ&amp;hl=es&amp;fs=1&amp;2 Problem with video: http://www.youtube.com/v/0VfzCoI77pQ&amp;hl=es&amp;fs=1&amp; 
+  Problem with image: /var/www/canariasSw/canariasahora_20http://www.youtube.com/v/bvxQoG41EUU&amp;hl=es&amp;fs=1&amp; 
+ 
+ 1 Can't get video information. Check the http://www.youtube.com/v/bvxQoG41EUU&amp;hl=es&amp;fs=1&amp;2 Problem with video: http://www.youtube.com/v/bvxQoG41EUU&amp;hl=es&amp;fs=1&amp; 
+  Problem with image: /var/www/canariasSw/canariasahora_20http://www.youtube.com/v/l0Efz-TqtQ0&amp;hl=es&amp;fs=1&amp; 
+ 
+ 1 Can't get video information. Check the http://www.youtube.com/v/l0Efz-TqtQ0&amp;hl=es&amp;fs=1&amp;2 Problem with video: http://www.youtube.com/v/l0Efz-TqtQ0&amp;hl=es&amp;fs=1&amp; 
+  Problem with image: /var/www/canariasSw/canariasahora_20http://www.youtube.com/v/lz17kEwvk0k&amp;hl=es&amp;fs=1&amp; 
+ 
+ 1 Can't get video information. Check the http://www.youtube.com/v/lz17kEwvk0k&amp;hl=es&amp;fs=1&amp;2 Problem with video: http://www.youtube.com/v/lz17kEwvk0k&amp;hl=es&amp;fs=1&amp; 
+  Problem with image: /var/www/canariasSw/canariasahora_20http://www.youtube.com/embed/Zk4GPRXgPgQ 
+ 
+ 1 Can't get video information. Check the http://www.youtube.com/embed/Zk4GPRXgPgQ2 Problem with video: http://www.youtube.com/embed/Zk4GPRXgPgQ 
  
