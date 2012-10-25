@@ -22,6 +22,7 @@
             quick_info: '{url name=admin_content_quick_info}',
             set_arquived: '{url name=admin_content_set_archived}',
             send_to_trash: '{url name=admin_content_send_to_trash}',
+            change_color: '{url name=admin_content_update_property}'
         };
         var content_states = {
             {foreach from=$frontpage_articles item=content}
@@ -188,4 +189,7 @@
 {include file="frontpagemanager/modals/_modal_suggest_to_frontpage.tpl"}
 {include file="frontpagemanager/modals/_modal_drop_selected.tpl"}
 {include file="frontpagemanager/modals/_modal_arquive_selected.tpl"}
+{is_module_activated name="AVANCED_FRONTPAGE_MANAGER"}
+{include file="frontpagemanager/modals/_modal_change_bgcolor.tpl"}
+{/is_module_activated}
 {/block}

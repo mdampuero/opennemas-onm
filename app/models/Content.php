@@ -2005,5 +2005,99 @@ class Content
 
         return ($rs != false);
     }
+
+    /**
+     * Load content specific property given the category id
+     *
+     * @return boolean true if it is in the category
+     **/
+
+    public function getProperty($contentID, $property)
+    {
+
+        if ($contentID == null) {
+            $contentID = $this->id;
+        }
+        $sql = 'SELECT `meta_value` FROM `contentmeta` WHERE fk_content=? AND `meta_name`=?';
+        $values = array($this->id, $property);
+
+        $content = $GLOBALS['application']->conn->GetOne($sql, $values);
+
+        return $content;
+    }
+
+
+    public function setProperty($property, $value)
+    {
+        $sql = "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
+                        ." VALUES ('{$id}', '{$property}', '{$value}')"
+                        ." ON DUPLICATE KEY UPDATE `meta_value`='{$value}'";
+
+        if ($id > 0) {
+            $rs = $GLOBALS['application']->conn->Execute($sql);
+
+            if ($rs === false) {
+                Application::logDatabaseError();
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Load content properties given the content id
+     *
+     * @return array if it is in the contentmeta table
+     **/
+
+    public function loadAllContentProperties()
+    {
+        if ($this->id == null) {
+            return false;
+        }
+
+        $sql = 'SELECT `meta_name`, `meta_value` FROM `contentmeta` WHERE fk_content=?';
+        $values = array($this->id);
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        $items = array();
+
+        if ($rs !== false) {
+            while (!$rs->EOF) {
+                $name = $rs->fields['meta_name'];
+                $this->{$name} = $rs->fields['meta_value'];
+
+                $rs->MoveNext();
+            }
+        }
+
+        return true;
+    }
+
+
+    /**
+     * Update content property given the content id, property & value
+     *
+     * @return boolean true if it is in the category
+     **/
+
+    public function updateAllContentProperties($values)
+    {
+        $sql = "INSERT INTO contentmeta (name_meta, meta_value, fk_content)
+                            VALUES (?, ?, ?)";
+        if (count($values) > 0) {
+            $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+            if ($rs === false) {
+                Application::logDatabaseError();
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
 }
 

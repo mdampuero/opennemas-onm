@@ -26,6 +26,13 @@
                     <i class="icon-trash"></i> {t}Drop from this frontpage{/t}
                 </a>
             </li>
+            {is_module_activated name="AVANCED_FRONTPAGE_MANAGER"}
+            <li>
+                <a title="{t}Change background color in frontpage{/t}" href="#" class="change-color">
+                    <i class="icon-color" style="background-color:{$content->background-color|default:'#FFF'}"></i> {t}Change background color{/t}
+                </a>
+            </li>
+            {/is_module_activated}
             <li>
                 <a title="{t}Drop from all frontpages{/t}" href="#" class="arquive">
                     <i class="icon-inbox"></i> {t}Arquive{/t}
