@@ -51,12 +51,13 @@ set_include_path(
 
 $importer = new CanariasToOnm($configOldDB, $configNewDB);
 
-
+/*
 $importer->helper->sqlClearData(); //delete old data in tables
 $importer->helper->clearLog();
-
+*/
 $importer->importCategories();
-
+// $importer->importAuthorsOpinion();
+/*
 
 $importer->helper->log('IMPORTING AUTHORS AND OPINIONS');
 
@@ -75,21 +76,22 @@ $importer->importHemerotecaTopSecret();
 
 $importer->importFauna();
 
-
+*/
 $importer->importImagesArticles();
-$importer->importArticles();
+/*$importer->importArticles();
 
 
 
 $importer->helper->log("\n IMPORTING OTHER CONTENTS \n");
-$importer->importLetters();
+ $importer->importLetters();
 
 $importer->importImagesHumor();
 
-
-$importer->importAlbums();
-
 $importer->importAttachments();
+*/
+
+//$importer->importAlbums();
+
 /*
 // $importer->importComments();
 
