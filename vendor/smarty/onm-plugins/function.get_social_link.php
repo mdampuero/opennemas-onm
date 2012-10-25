@@ -27,7 +27,8 @@ function smarty_function_get_social_link($params, &$smarty)
             if (!empty($twitterPage)) {
                 $output =
                 '<li>
-                    <a href="'.s::get('twitter_page').'" target="_blank" title="Visita nuestro perfíl en Twitter">
+                    <a href="http://twitter.com/'.s::get('twitter_page').
+                    '" target="_blank" title="Visita nuestro perfíl en Twitter">
                        <img src="'.$params['img'].'" alt="" />
                     </a>
                 </li>';
