@@ -129,7 +129,8 @@ class ModuleManager
                 'SYNC_MANAGER',
                 'FRONTPAGES_LIBRARY',
                 'STATIC_LIBRARY',
-                'CRONICAS_MODULES'
+                'CRONICAS_MODULES',
+                'AVANCED_FRONTPAGE_MANAGER',
             );
         }
 
