@@ -189,7 +189,6 @@
 {include file="frontpagemanager/modals/_modal_suggest_to_frontpage.tpl"}
 {include file="frontpagemanager/modals/_modal_drop_selected.tpl"}
 {include file="frontpagemanager/modals/_modal_arquive_selected.tpl"}
-{is_module_activated name="AVANCED_FRONTPAGE_MANAGER"}
+
 {include file="frontpagemanager/modals/_modal_change_bgcolor.tpl"}
-{/is_module_activated}
 {/block}
