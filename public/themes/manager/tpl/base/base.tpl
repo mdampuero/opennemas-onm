@@ -16,25 +16,25 @@
 
     <link rel="icon" href="{$params.IMAGE_DIR}favicon.png">
     {block name="header-css"}
-        {css_tag href="/bootstrap/bootstrap.css"}
+        {css_tag href="/bootstrap/bootstrap.css" common="1"}
         {css_tag href="/style.css"}
         <!--[if IE]>{css_tag href="/ie.css"}<![endif]-->
-        {css_tag href="/jquery/jquery-ui.css" media="all" type="text/css"}
+        {css_tag href="/jquery/jquery-ui.css" media="all" type="text/css" common="1"}
     {/block}
 
     {block name="js-library"}
-        {script_tag src="/jquery/jquery.min.js"}
-        {script_tag src="/libs/bootstrap.js"}
-        {script_tag src="/libs/jquery.tools.min.js"}
-        {script_tag src="/jquery-onm/jquery.onmvalidate.js"}
+        {script_tag src="/jquery/jquery.min.js" common="1"}
+        {script_tag src="/libs/bootstrap.js" common="1"}
+        {script_tag src="/libs/jquery.tools.min.js" common="1"}
+        {script_tag src="/jquery-onm/jquery.onmvalidate.js" common="1"}
         {block name="prototype"}{/block}
     {/block}
 
     {block name="header-js"}
-        {script_tag src="/libs/modernizr.min.js"}
+        {script_tag src="/libs/modernizr.min.js" common="1"}
         {block name="js-library"}{/block}
-        {script_tag src="/onm/scripts.js"}
-        {script_tag src="/tiny_mce/tiny_mce_gzip.js"}
+        {script_tag src="/onm/scripts.js" common="1"}
+        {script_tag src="/tiny_mce/tiny_mce_gzip.js" common="1"}
      {/block}
 
 </head>

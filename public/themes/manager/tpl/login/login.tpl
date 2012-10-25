@@ -19,7 +19,7 @@
     <title>OpenNeMaS - Manager section</title>
 
     {block name="header-css"}
-        {css_tag href="/bp/screen.css" media="screen, projection"}
+        {css_tag href="/bp/screen.css" media="screen, projection" common="1"}
         {css_tag href="/style.css" media="screen, projection"}
         {css_tag href="/loginadmin.css"}
         <!--[if lt IE 8]{css_tag href="/bp/ie.css" media="screen, projection"}[endif]-->
@@ -27,8 +27,8 @@
 
 
     {block name="js-library"}
-        {script_tag src="/jquery/jquery.min.js"}
-        {script_tag src="/jquery/jquery-ui.custom.min.js"}
+        {script_tag src="/jquery/jquery.min.js" common="1"}
+        {script_tag src="/jquery/jquery-ui.custom.min.js" common="1"}
         <script type="text/javascript">
             jQuery(document).ready(function ($){
                 jQuery.noConflict();
@@ -38,7 +38,7 @@
 
     {block name="footer-js"}
         {block name="js-library"}{/block}
-        {script_tag src="/modernizr/modernizr-2.5.0.min.js"}
+        {script_tag src="/libs/modernizr.min.js" common="1"}
     {/block}
 
 </head>
