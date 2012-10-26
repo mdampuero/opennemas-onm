@@ -165,11 +165,11 @@
                 <td class="center">
                     {acl isAllowed="BOOK_AVAILABLE"}
                         {if $books[as]->available == 1}
-                            <a href="{url name=admin_books_toggle_availability id=$books[as]->id status=0 category=$category page=$page|default:1}" title="{t}Published{/t}">
+                            <a href="{url name=admin_books_toggle_available id=$books[as]->id status=0 category=$category page=$page|default:1}" title="{t}Published{/t}">
                                 <img src="{$params.IMAGE_DIR}publish_g.png" alt="{t}Published{/t}" />
                             </a>
                         {else}
-                            <a href="{url name=admin_book_toggle_availability id=$books[as]->id status=1 category=$category page=$page|default:1}" title="{t}Pendiente{/t}">
+                            <a href="{url name=admin_books_toggle_available id=$books[as]->id status=1 category=$category page=$page|default:1}" title="{t}Pendiente{/t}">
                                 <img src="{$params.IMAGE_DIR}publish_r.png" alt="{t}Pendiente{/t}" />
                             </a>
                         {/if}
@@ -214,7 +214,9 @@
         </tbody>
         <tfoot>
           <td colspan="9">
-            {$paginacion->links|default:""}&nbsp;
+            <div class="pagination" class="center">
+                {$pagination->links|default:""}
+            </div>
           </td>
         </tfoot>
     </table>

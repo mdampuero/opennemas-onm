@@ -122,8 +122,12 @@ class CanariasHelper
             $this->log('clear contents '.$sql.' function: '.$GLOBALS['application']->conn->ErrorMsg());
         }
 
-        $sql = "ALTER TABLE `authors` AUTO_INCREMENT =3";
+        $sql = "ALTER TABLE `authors` AUTO_INCREMENT =4";
 
+        $rss = $GLOBALS['application']->conn->Execute($sql);
+
+
+        $sql = " TRUNCATE TABLE `failed_import`";
         $rss = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rss) {
@@ -170,9 +174,21 @@ class CanariasHelper
 
     public function clearImgTag($html)
     {
-        preg_match_all('@src *= *["\']?([^"\']*)@', $html, $result);
 
-        return $result[1][0];
+        //deleted http://canariasahora.com/ http://canariasahora.es/ ../../.. http://www.canariasahora.es/
+        $pattern = array(
+            "@http://canariasahora.com/@",
+            "@http://www.canariasahora.com/@",
+            "@http://www.canariasahora.es/@",
+            "@http://canariasahora.es/@",
+            "@../../../../@",
+            "@../../../@"
+        );
+        $replacement = array("/", "/", "/", "/", "/", "/");
+        preg_match_all('@src *= *["\']?([^"\']*)@', $html, $result);
+        $source = preg_replace($pattern, $replacement, $result[1][0]);
+
+        return $source;
     }
 
 
@@ -195,6 +211,8 @@ class CanariasHelper
     public function imageIsImported($url, $contentType)
     {
         if (isset($url) && isset($contentType)) {
+
+
             $sql = 'SELECT * FROM `images_translated` WHERE `url`=? AND type=?';
 
             $values  = array($url, $contentType);
@@ -356,10 +374,10 @@ class CanariasHelper
     public function printResults()
     {
 
-        echo "\n AUTHORS OPINION \n";
+        /*echo "\n AUTHORS OPINION \n";
         $sql = "SELECT count(*) as total FROM `author_opinion` ";
         $rs = $GLOBALS['application']->conn->Execute($sql);
-
+        */
         if (!$rs) {
             echo $GLOBALS['application']->conn->ErrorMsg();
         } else {

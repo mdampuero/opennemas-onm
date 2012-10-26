@@ -1,8 +1,12 @@
-<div data-content-id="{$content->id}" data-class="Article" class="content-provider-element {schedule_class item=$content} {suggested_class item=$content} {in_frontpage_class item=$content} clearfix">
+<div data-content-id="{$content->id}" data-class="Article" {getProperty item=$content category=$params['category'] property='bgcolor'}
+    class="content-provider-element {schedule_class item=$content} {suggested_class item=$content} {in_frontpage_class item=$content} clearfix">
     <div class="description">
         <input type="checkbox" class="action-button" name="selected-{$smarty.foreach.article_loop.index}">
         <div class="title">
-            {if $content->in_frontpage && ($params['home'] != true)}<span class="in_frontpage"></span>{/if}
+            {if $content->in_frontpage && ($params['home'] != true)}<span class="in_frontpage"></span>
+            {else}
+            <i class="icon-star content-icon-suggested"></i>
+            {/if}
             <span class="type">{t}Article{/t}</span>
             {$content->title}
         </div>
@@ -26,6 +30,13 @@
                     <i class="icon-trash"></i> {t}Drop from this frontpage{/t}
                 </a>
             </li>
+            {is_module_activated name="AVANCED_FRONTPAGE_MANAGER"}
+            <li>
+                <a title="{t}Change background color in frontpage{/t}" href="#" class="change-color">
+                    <i class="icon-color" style="background-color:{$content->background-color|default:'#FFF'}"></i> {t}Change background color{/t}
+                </a>
+            </li>
+            {/is_module_activated}
             <li>
                 <a title="{t}Drop from all frontpages{/t}" href="#" class="arquive">
                     <i class="icon-inbox"></i> {t}Arquive{/t}

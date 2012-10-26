@@ -28,7 +28,7 @@ jQuery('.del').click(function(e) {
     e.preventDefault();
 });
 
-jQuery('#modal-letter-delete a.btn.yes').on('click', function(){
+jQuery('#modal-letter-delete a.btn.yes').on('click', function(e){
     var url = jQuery("body").data("selected-for-del");
     if (url) {
         jQuery.ajax({
