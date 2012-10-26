@@ -16,6 +16,7 @@ require '../bootstrap.php';
 
 $sc = include '../../app/container.php';
 
+$sc->setParameter('instance', $instance);
 $sc->setParameter('dispatcher.exceptionhandler', 'Backend:Controllers:ErrorController:default');
 // Dispatch the response
 $dispatcher = new \Onm\Framework\Dispatcher\Dispatcher($matcher, $request, $sc);
