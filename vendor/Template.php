@@ -15,6 +15,7 @@ class Template extends Smarty
     public $css_dir	= null;
     public $image_dir      = null;
     public $js_dir         = null;
+    public $comon_dir      = null;
     public $js_includes    = array( 'head' => array() );
     public $css_includes   = array( 'head' => array() );
     public $metatags       = array();
@@ -74,10 +75,11 @@ class Template extends Smarty
 
         // Template variables
         $baseUrl = SITE_URL.SS.'themes'.SS.$theme.SS;
-        $this->locale_dir       = $baseUrl.'locale/';
-        $this->css_dir          = $baseUrl.'css/';
-        $this->image_dir        = $baseUrl.'images/';
-        $this->js_dir           = $baseUrl.'js/';
+        $this->locale_dir       = $baseUrl.'locale'.SS;
+        $this->css_dir          = $baseUrl.'css'.SS;
+        $this->image_dir        = $baseUrl.'images'.SS;
+        $this->js_dir           = $baseUrl.'js'.SS;
+        $this->comon_dir        = SITE_URL.SS.'assets'.SS;
 
         // Set filters: $filters = array('pre' => array(), 'post' => array(), 'output' => array())
         $this->setFilters($filters);
@@ -89,6 +91,7 @@ class Template extends Smarty
                 'CSS_DIR'	 =>    $this->css_dir,
                 'IMAGE_DIR'  =>    $this->image_dir,
                 'JS_DIR'	 =>    $this->js_dir,
+                'COMMON_DIR' =>    $this->common_dir,
                 'THEME'      =>    $theme,
             )
         );
