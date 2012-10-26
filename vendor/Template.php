@@ -10,18 +10,20 @@ use FilesManager as fm;
 class Template extends Smarty
 {
     // Private properties
-    public $theme          = null;
-    public $locale_dir	= null;
-    public $css_dir	= null;
-    public $image_dir      = null;
-    public $js_dir         = null;
-    public $comon_dir      = null;
-    public $js_includes    = array( 'head' => array() );
-    public $css_includes   = array( 'head' => array() );
-    public $metatags       = array();
-    public $filters        = array( 'pre'    => array(),
-                          'post'   => array(),
-                          'output' => array(), );
+    public $theme               = null;
+    public $locale_dir	        = null;
+    public $css_dir	            = null;
+    public $image_dir           = null;
+    public $js_dir              = null;
+    public $common_asset_dir    = null;
+    public $js_includes         = array( 'head' => array() );
+    public $css_includes        = array( 'head' => array() );
+    public $metatags            = array();
+    public $filters             = array( 
+                                    'pre'    => array(),
+                                    'post'   => array(),
+                                    'output' => array(),
+                                  );
 
     public $relative_path = null;
     static public $registry = array();
@@ -79,7 +81,7 @@ class Template extends Smarty
         $this->css_dir          = $baseUrl.'css'.SS;
         $this->image_dir        = $baseUrl.'images'.SS;
         $this->js_dir           = $baseUrl.'js'.SS;
-        $this->comon_dir        = SITE_URL.SS.'assets'.SS;
+        $this->common_asset_dir = SITE_URL.SS.'assets'.SS;
 
         // Set filters: $filters = array('pre' => array(), 'post' => array(), 'output' => array())
         $this->setFilters($filters);
@@ -91,7 +93,7 @@ class Template extends Smarty
                 'CSS_DIR'	 =>    $this->css_dir,
                 'IMAGE_DIR'  =>    $this->image_dir,
                 'JS_DIR'	 =>    $this->js_dir,
-                'COMMON_DIR' =>    $this->common_dir,
+                'COMMON_DIR' =>    $this->common_asset_dir,
                 'THEME'      =>    $theme,
             )
         );
