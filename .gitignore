@@ -5,8 +5,8 @@ config/*
 nbproject/
 public/admin/themes/default/compile/*
 public/media/
-public/themes/
-!public/themes/admin
+public/themes/*
+!public/themes/admin/
 *.sublime-*
 tmp/*
 vendor/autoload.php
