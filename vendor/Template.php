@@ -17,13 +17,8 @@ class Template extends Smarty
     public $js_dir              = null;
     public $common_asset_dir    = null;
     public $js_includes         = array( 'head' => array() );
-    public $css_includes        = array( 'head' => array() );
+    public $css_includes        = array( 'head' => array(), 'footer' => array() );
     public $metatags            = array();
-    public $filters             = array( 
-                                    'pre'    => array(),
-                                    'post'   => array(),
-                                    'output' => array(),
-                                  );
 
     public $relative_path = null;
     static public $registry = array();
@@ -68,6 +63,9 @@ class Template extends Smarty
 
         $this->error_reporting = E_ALL & ~E_NOTICE;
 
+        $this->theme = $theme;
+        $this->assign('THEME', $theme);
+
         // Add global plugins path
         $this->plugins_dir[]    = realpath($this->templateBaseDir.'plugins/').'/';
         $this->plugins_dir[]    = realpath(SMARTY_DIR.DS.'../'.DS.'onm-plugins/');
@@ -83,8 +81,8 @@ class Template extends Smarty
         $this->js_dir           = $baseUrl.'js'.SS;
         $this->common_asset_dir = SITE_URL.SS.'assets'.SS;
 
-        // Set filters: $filters = array('pre' => array(), 'post' => array(), 'output' => array())
-        $this->setFilters($filters);
+        $this->loadFilter("output", "js_includes");
+        $this->loadFilter("output", "css_includes");
 
         $this->assign(
             'params',
@@ -97,17 +95,16 @@ class Template extends Smarty
                 'THEME'            => $theme,
             )
         );
-
-        $this->theme = $theme;
-        $this->assign('THEME', $theme);
-
     }
 
 
     public function setFilters($filters = array())
     {
-        $this->filters = $filters;
-        $this->autoload_filters = $filters;
+        if (count($filters) > 0) {
+            $this->filters = $filters;
+            $this->autoload_filters = $filters;
+        }
+        return $this;
     }
 
 
@@ -213,33 +210,15 @@ class Template extends Smarty
             //$this->setCaching(0);
         }
     }
-
-    public function setUpLocale()
-    {
-        /* GetText configuration **********************************************/
-        // I18N support information here
-        $language = (isset($_REQUEST['lang']))? $_REQUEST['lang']: 'en';
-        putenv("LANG=$language");
-        setlocale(LC_ALL, $language);
-
-        // Set the text domain as 'messages'
-        $domain = 'messages';
-        bindtextdomain($domain, $this->locale_dir);
-        textdomain($domain);
-        /**********************************************************************/
-    }
 }
 
 class TemplateAdmin extends Template
 {
-
     public function __construct($theme, $filters = array())
     {
 
         // Call the parent constructor
         parent::__construct($theme, $filters);
-
-        $this->setFilters($filters);
 
         $this->loadFilter("output", "trimwhitespace");
 
@@ -294,9 +273,6 @@ class TemplateManager extends Template
 
         // Call the parent constructor
         parent::__construct($theme, $filters);
-
-        $this->setFilters($filters);
-
 
         // Parent variables
         $this->templateBaseDir = SITE_PATH.DS.'themes'.DS.'manager'.DS;
