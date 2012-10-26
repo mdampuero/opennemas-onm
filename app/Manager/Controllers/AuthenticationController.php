@@ -30,7 +30,7 @@ class AuthenticationController extends Controller
     public function init()
     {
         // Setup view
-        $this->view = new \TemplateManager(TEMPLATE_ADMIN);
+        $this->view = new \TemplateManager('manager');
         $this->view->assign('version', \Onm\Common\Version::VERSION);
     }
 

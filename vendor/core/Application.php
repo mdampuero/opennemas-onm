@@ -45,21 +45,19 @@ class Application
 
         if (!isset($GLOBALS['application']) || $GLOBALS['application']==null) {
             // Setting up static Constants
-
+            
             $GLOBALS['application'] = new Application();
 
-            if (INSTANCE_UNIQUE_NAME != 'onm_manager') {
-                // Setting up DataBase connection
-                self::initDatabase();
+            // Setting up DataBase connection
+            self::initDatabase();
 
-                // Setting up Logger
-                self::initLogger();
+            // Setting up Logger
+            self::initLogger();
 
-                // Setting up Gettext
-                self::initL10nSystem();
+            // Setting up Gettext
+            self::initL10nSystem();
 
-                self::initTimeZone();
-            }
+            self::initTimeZone();
         }
 
         return $GLOBALS['application'];

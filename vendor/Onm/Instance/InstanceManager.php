@@ -82,15 +82,23 @@ class InstanceManager
         }
 
         if (preg_match("@\/manager@", $_SERVER["PHP_SELF"])) {
+            global $onmInstancesConnection;
+            
             $instance = new Instance();
             $instance->internal_name = 'onm_manager';
             $instance->activated = true;
+            
             $instance->settings = array(
                 'INSTANCE_UNIQUE_NAME' => $instance->internal_name,
                 'MEDIA_URL'            => '',
                 'TEMPLATE_USER'        => '',
+                'BD_HOST'              => $onmInstancesConnection['BD_HOST'],
+                'BD_USER'              => $onmInstancesConnection['BD_USER'],
+                'BD_PASS'              => $onmInstancesConnection['BD_PASS'],
+                'BD_DATABASE'          => $onmInstancesConnection['BD_DATABASE'],
+                'BD_TYPE'              => $onmInstancesConnection['BD_TYPE'],
             );
-
+            
             $instance->boot();
 
             return $instance;
