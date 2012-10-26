@@ -89,12 +89,12 @@ class Template extends Smarty
         $this->assign(
             'params',
             array(
-                'LOCALE_DIR' =>    $this->locale_dir,
-                'CSS_DIR'	 =>    $this->css_dir,
-                'IMAGE_DIR'  =>    $this->image_dir,
-                'JS_DIR'	 =>    $this->js_dir,
-                'COMMON_DIR' =>    $this->common_asset_dir,
-                'THEME'      =>    $theme,
+                'LOCALE_DIR'       => $this->locale_dir,
+                'CSS_DIR'          => $this->css_dir,
+                'IMAGE_DIR'        => $this->image_dir,
+                'JS_DIR'           => $this->js_dir,
+                'COMMON_ASSET_DIR' => $this->common_asset_dir,
+                'THEME'            => $theme,
             )
         );
 
@@ -272,10 +272,11 @@ class TemplateAdmin extends Template
         $this->assign(
             'params',
             array(
-                'LOCALE_DIR' =>    $this->locale_dir,
-                'CSS_DIR'	 =>    $this->css_dir,
-                'IMAGE_DIR'  =>    $this->image_dir,
-                'JS_DIR'	 =>    $this->js_dir
+                'LOCALE_DIR'       =>    $this->locale_dir,
+                'CSS_DIR'	       =>    $this->css_dir,
+                'IMAGE_DIR'        =>    $this->image_dir,
+                'JS_DIR'	       =>    $this->js_dir,
+                'COMMON_ASSET_DIR' => $this->common_asset_dir,
             )
         );
 
@@ -326,10 +327,11 @@ class TemplateManager extends Template
         $this->assign(
             'params',
             array(
-                'LOCALE_DIR' =>    $this->locale_dir,
-                'CSS_DIR'    =>    $this->css_dir,
-                'IMAGE_DIR'  =>    $this->image_dir,
-                'JS_DIR'     =>    $this->js_dir
+                'LOCALE_DIR'       =>    $this->locale_dir,
+                'CSS_DIR'          =>    $this->css_dir,
+                'IMAGE_DIR'        =>    $this->image_dir,
+                'JS_DIR'           =>    $this->js_dir,
+                'COMMON_ASSET_DIR' => $this->common_asset_dir,
             )
         );
 
