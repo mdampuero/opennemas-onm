@@ -34,7 +34,7 @@ class InstancesController extends Controller
     {
         global $onmInstancesConnection;
         $this->instanceManager = new im($onmInstancesConnection);
-        $this->view = new \TemplateManager(TEMPLATE_ADMIN);
+        $this->view = new \TemplateManager(TEMPLATE_MANAGER);
     }
 
     /**

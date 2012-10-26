@@ -163,6 +163,7 @@ class Instance
         define('TEMPLATE_ADMIN_URL', SS."themes".SS.TEMPLATE_ADMIN.SS);
         define('ADVERTISEMENT_ENABLE', true);
 
+        define('TEMPLATE_MANAGER', "manager");
 
         /**
          * Mail settings

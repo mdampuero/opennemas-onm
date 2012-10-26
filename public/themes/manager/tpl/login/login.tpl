@@ -20,9 +20,9 @@
 
     {block name="header-css"}
         {css_tag href="/bp/screen.css" media="screen, projection" common="1"}
-        {css_tag href="/style.css" media="screen, projection"}
-        {css_tag href="/loginadmin.css"}
-        <!--[if lt IE 8]{css_tag href="/bp/ie.css" media="screen, projection"}[endif]-->
+        {css_tag href="/style-backend.css" media="screen, projection" common="1"}
+        {css_tag href="/login-backend.css" common="1"}
+        <!--[if lt IE 8]{css_tag href="/bp/ie.css" media="screen, projection" common="1"}[endif]-->
     {/block}
 
 

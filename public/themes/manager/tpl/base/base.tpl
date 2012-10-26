@@ -17,8 +17,8 @@
     <link rel="icon" href="{$params.IMAGE_DIR}favicon.png">
     {block name="header-css"}
         {css_tag href="/bootstrap/bootstrap.css" common="1"}
-        {css_tag href="/style.css"}
-        <!--[if IE]>{css_tag href="/ie.css"}<![endif]-->
+        {css_tag href="/style-backend.css" common="1"}
+        <!--[if IE]>{css_tag href="/ie.css" common="1"}<![endif]-->
         {css_tag href="/jquery/jquery-ui.css" media="all" type="text/css" common="1"}
     {/block}
 
@@ -43,7 +43,7 @@
     <header class="global-nav manager clearfix">
         <div class="logoonm pull-right">
             <a  href="{url name=manager_welcome}" id="logo-onm" class="clearfix" title="{t}Go to admin main page{/t}">
-               <img src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}images/logo-opennemas-small.png" alt="opennemas" width="132" height="27"/>
+               <img src="{$params.COMMON_ASSET_DIR}images/logos/logo-opennemas-small.png" alt="opennemas" width="132" height="27"/>
             </a>
         </div>
         <div class="global-menu pull-left">
@@ -77,7 +77,7 @@
 
     {block name="footer-js"}
         {browser_update}
-        {script_tag src="/onm/footer-functions.js"}
+        {script_tag src="/onm/footer-functions.js" common="1"}
 
         {if isset($smarty.request.action) && ($smarty.request.action == 'new' || $smarty.request.action == 'read')}
         <script type="text/javascript">

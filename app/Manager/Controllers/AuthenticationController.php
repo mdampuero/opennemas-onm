@@ -30,7 +30,7 @@ class AuthenticationController extends Controller
     public function init()
     {
         // Setup view
-        $this->view = new \TemplateManager('manager');
+        $this->view = new \TemplateManager(TEMPLATE_MANAGER);
         $this->view->assign('version', \Onm\Common\Version::VERSION);
     }
 
@@ -105,7 +105,7 @@ class AuthenticationController extends Controller
                     );
 
                     // Store default expire time
-                    global $app;
+                    // global $app;
                     // $app::setCookieSecure(
                     //     '_onm_session_'.session_id(),
                     //     time()+($user->sessionexpire)*60, 0, '/admin/'

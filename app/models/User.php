@@ -362,6 +362,9 @@ class User
             );
         } else {
             $result = $this->authDatabase($login, $password);
+            if ( !$result && !preg_match("@\/manager@", $_SERVER["PHP_SELF"]) ) {
+                $result = $this->authDatabase($login, $password, true);
+            }
         }
 
         return $result;
@@ -383,12 +386,16 @@ class User
      *
      * @param  string  $login
      * @param  string  $password
+     * @param  loolean $managerDb
      * @return boolean Return true if login exists and password match
      */
-    public function authDatabase($login, $password)
+    public function authDatabase($login, $password, $managerDb=false)
     {
         $sql = 'SELECT * FROM users WHERE login=\''.strval($login).'\'';
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        if (!$managerDb)
+            $rs = $GLOBALS['application']->conn->Execute($sql);
+        else
+            $rs =  \Onm\Instance\InstanceManager::getInstance()->getConnection()->Execute($sql);
 
         if (!$rs) {
             \Application::logDatabaseError();
