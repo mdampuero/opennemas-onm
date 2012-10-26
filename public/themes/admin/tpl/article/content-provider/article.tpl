@@ -1,4 +1,5 @@
-<div data-content-id="{$content->id}" data-class="Article" class="content-provider-element {schedule_class item=$content} {suggested_class item=$content} {in_frontpage_class item=$content} clearfix">
+<div data-content-id="{$content->id}" data-class="Article" {getProperty item=$content category=$params['category'] property='bgcolor'}
+    class="content-provider-element {schedule_class item=$content} {suggested_class item=$content} {in_frontpage_class item=$content} clearfix">
     <div class="description">
         <input type="checkbox" class="action-button" name="selected-{$smarty.foreach.article_loop.index}">
         <div class="title">

@@ -317,7 +317,7 @@ class ContentController extends Controller
                 $content->setProperty($meta, $value);
 
                 $code = 200;
-                $message = "Done {$id} - {$color}";
+                $message = "Done {$id}: {$meta}-{$value}";
             } else {
                 $code = 404;
                 $message = sprintf(_('Content or property not valid'), $id);

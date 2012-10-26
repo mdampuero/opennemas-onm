@@ -331,11 +331,12 @@ jQuery(function($) {
         var elementID = $('#modal-element-change-bgcolor').data('selected-for-change-bgcolor');
         var url =  frontpage_urls.change_color;
         var colorValue = "#"+$('#color').val();
+        var property = 'bgcolor_' + $('#frontpagemanager').data('category');
 
         if (elementID) {
             $.get(
                 url,
-                { 'id': elementID, meta: 'color', value: colorValue }
+                { 'id': elementID, meta: property, value: colorValue }
             ).success(function(data) {
                  $('#modal-element-change-bgcolor').data('element-for-change-bgcolor').animate({ 'backgroundColor': colorValue },300);
             }).error(function(data) {
