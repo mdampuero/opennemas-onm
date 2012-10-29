@@ -462,9 +462,11 @@ class OpinionsController extends Controller
         if (is_null($opinion->id)) {
             m::add(sprintf(_('Unable to find an opinion with the id "%d"'), $id), m::ERROR);
         } else {
-            $opinion->set_available($status, $_SESSION['userid']);
             if ($status == 0) {
+                $opinion->setDraft();
                 $opinion->set_inhome($status, $_SESSION['userid']);
+            } else {
+                $opinion->setAvailable();
             }
             m::add(
                 sprintf(_('Successfully changed availability for the opinion "%s"'), $opinion->title),
@@ -700,11 +702,12 @@ class OpinionsController extends Controller
             $changes = 0;
             foreach ($selected as $id) {
                 $opinion = new \Opinion((int) $id);
-
                 if (!is_null($opinion->id)) {
-                    $opinion->set_available($status, $_SESSION['userid']);
                     if ($status == 0) {
+                        $opinion->setDraft();
                         $opinion->set_favorite($status);
+                    } else {
+                        $opinion->setAvailable();
                     }
                     $changes++;
                 } else {
