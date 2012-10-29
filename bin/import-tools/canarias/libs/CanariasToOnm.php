@@ -1950,7 +1950,7 @@ class CanariasToOnm
                     $this->helper->insertfailImport('video', $e->getMessage());
                     $this->helper->log("1 Problem with video: {$e->getMessage()} {$url} \n ");
 
-                    var_dump($$information);
+                    var_dump($information);
 
                 }
                 if (is_string($newVideoID)) {
