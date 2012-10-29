@@ -1465,6 +1465,8 @@ class Content
 
             return false;
         }
+
+        return true;
     }
 
     //TODO Check (xornal function)

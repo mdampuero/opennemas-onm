@@ -120,9 +120,6 @@ if (!is_null($action) ) {
             $tpl->setConfig('gallery-inner');
             $cacheID = $tpl->generateCacheId($category_name, null, $albumID);
 
-            // Increment views for this content
-            Content::setNumViews($albumID);
-
             $tpl->assign('contentId', $albumID);
 
             include_once 'album_inner_ads.php';
