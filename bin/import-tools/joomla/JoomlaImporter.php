@@ -68,6 +68,13 @@ class JoomlaImporter
         }
         self::$configuration = parse_ini_file($configurationFile, true);
 
+        defined('MEDIA_PATH')
+            || define('MEDIA_PATH', SITE_PATH. 'media');
+
+        defined('IMG_DIR')
+            || define('IMG_DIR', self::$configuration['media']['instance-name'].'images');
+
+
     }
 
     public function initOriginalDatabaseConnection($config = array())
@@ -132,8 +139,13 @@ class JoomlaImporter
 
     public function matchCategory($category)
     {
-
-        return self::$configuration['categories'][$category];
+        if (array_key_exists($category, self::$configuration['categories'])) {
+            ImportHelper::log("{$category} = ".self::$configuration['categories'][$category]."  - ");
+            return self::$configuration['categories'][$category];
+        } else {
+            ImportHelper::log("- NOT {$category} =>".self::$configuration['categories'][0]."  \n");
+            return self::$configuration['categories'][0];
+        }
 
     }
 
@@ -152,6 +164,12 @@ class JoomlaImporter
         foreach ($categories as $key => $value) {
             echo "{$key} => {$value} \n";
         }
+        echo "dump some infornation \n";
+        echo self::$configuration['media']['old-media']."\n";
+        echo self::$configuration['media']['instance-name']."\n";
+        echo self::$configuration['data']['userId']."\n";
+        echo self::$configuration['data']['agency']."\n";
+
     }
 
 
@@ -319,10 +337,10 @@ class JoomlaImporter
                     'starttime' => $originalContents->fields['publish_up'],
                     'endtime' => $originalContents->fields['publish_down'],
                     'changed' => $originalContents->fields['modified'],
-                    'agency' => self::$configuration['agency'],
+                    'agency' => self::$configuration['data']['agency'],
                     'id' => 0,
-                    'fk_user' => self::$configuration['userId'],
-                    'fk_publisher' => self::$configuration['userId'],
+                    'fk_user' => self::$configuration['data']['userId'],
+                    'fk_publisher' => self::$configuration['data']['userId'],
                     'description' => substr(ImportHelper::convertoUTF8($data['introtext']), 0, 120),
                     'slug' => \StringUtils::get_title(ImportHelper::convertoUTF8($rs->fields['title'])),
                 );
@@ -372,7 +390,7 @@ class JoomlaImporter
         // Change images url on fulltext
         $originalContents->fields['fulltext'] = preg_replace(
             '/src="images/',
-            'src="'.self::$configuration['actual-directory'],
+            'src="'.self::$configuration['media']['actual-directory'],
             $originalContents->fields['fulltext']
         );
 
@@ -392,10 +410,10 @@ class JoomlaImporter
             preg_match_all("/(.*).(png|jpg|gif|jpeg)(.*)||/i", $originalData['images'], $matches, PREG_SET_ORDER);
 
 
-            if (!empty($matches[0])) {
+            if (!empty($matches[0][1])) {
                 $data['img1'] = ImportHelper::importImage($originalData, $matches[0][1].".".$matches[0][2]);
             }
-            if (!empty($matches[1])) {
+            if (!empty($matches[1][1])) {
                 $data['img2'] = ImportHelper::importImage($originalData, $matches[1][1].".".$matches[1][2]);
             }
         }
