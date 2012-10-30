@@ -14,7 +14,7 @@
     <title>OpenNeMaS - Administration section</title>
     {/block}
 
-    <link rel="icon" href="{$params.IMAGE_DIR}favicon.png">
+    <link rel="icon" href="{$params.COMMON_ASSET_DIR}images/favicon.png">
     {block name="header-css"}
         {css_tag href="/bootstrap/bootstrap.css" common="1"}
         {css_tag href="/style-backend.css" common="1"}

@@ -142,7 +142,7 @@ class AuthenticationController extends Controller
 
         // Only perform session destroy if cross-site request
         // forgery matches the session variable.
-        if ($csrf === $_SESSION['csrf']) {
+        //if ($csrf === $_SESSION['csrf']) {
             $_SESSION = array();
             if (isset($_COOKIE[session_name()])) {
                 setcookie(session_name(), '', time()-42000, '/');
@@ -151,9 +151,9 @@ class AuthenticationController extends Controller
 
             return $this->redirect($this->generateUrl('manager_login_form'));
 
-        } else {
-            return Response('Are you hijacking my session dude?!');
-        }
+        // } else {
+        //     return new Response('Are you hijacking my session dude?!');
+        // }
     }
 }
 

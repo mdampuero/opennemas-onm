@@ -96,6 +96,11 @@
         <nav class="left">
             <ul>
                 <li>&copy; {strftime("%Y")} OpenHost S.L.</li>
+                {foreach from=$languages key=key item=language}
+                    <li>
+                        <a href="?language={$key}" title="{$language}" {if $key == $current_language}class="active"{/if}>{$language}</a>
+                    </li>
+                {/foreach}
             </ul><!-- / -->
         </nav>
         <nav class="right">

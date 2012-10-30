@@ -71,6 +71,7 @@ class Theme
      **/
     private $defaultMenu = array(
         'description' => 'A simple menu',
+        'default_menu'        => 'frontpage',
         'class'       => 'menu',
         'before_menu' => '<div id="%1$s" class="menu %2$s">',
         'after_menu'  => '</div>',
@@ -118,6 +119,19 @@ class Theme
     public function getLayouts()
     {
         return $this->layouts;
+    }
+
+    /**
+     * Returns the configuration array for a layout
+     *
+     * @return array
+     **/
+    public function getLayout($name)
+    {
+        if (!array_key_exists($name, $this->layouts)) {
+            return false;
+        }
+        return $this->layouts[$name];
     }
 
     /**

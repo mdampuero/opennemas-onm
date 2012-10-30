@@ -163,7 +163,7 @@ class AuthenticationController extends Controller
             return $this->redirect($this->generateUrl('admin_login_form'));
 
         } else {
-            return Response('Are you hijacking my session dude?!');
+            return new Response('Are you hijacking my session dude?!');
         }
     }
 }
