@@ -182,6 +182,8 @@ class ImportHelper
      **/
     public function importImage($data, $imageSrc)
     {
+        $date = new DateTime($data['created']);
+        $dateForDirectory = $date->format("/Y/m/d/");
         $imgData = array(
             'title' => $imageSrc,
             'category' => JoomlaImporter::matchCategory($data['catid']),
@@ -195,16 +197,18 @@ class ImportHelper
             'id' => 0,
             'created' => $data['created'],
             'changed' => $data['modified'],
-            'local_file' => JoomlaImporter::$configuration['old-media'],
+            'local_file' => JoomlaImporter::$configuration['media']['old-media'].$imageSrc,
         );
 
 
 
         $image = new Photo();
 
-        $newimageID = $image->createFromLocalFile($imgData);
+        $newimageID = $image->createFromLocalFile($imgData, $dateForDirectory);
+
         if (is_string($newimageID)) {
             ImportHelper::log('Image with ID '.$newimageID." imported.\n");
+            return $newimageID;
         } else {
             ImportHelper::log('Image '.$imageSrc." from article ".$data['id']." NOT imported.\n");
         }
@@ -220,12 +224,9 @@ class ImportHelper
     {
 
         try {
+            $url = rawurldecode($url);
             $videoP = new \Panorama\Video($url);
-            var_dump($videoP);
-
             $information = $videoP->getVideoDetails();
-            var_dump($url);
-            var_dump($information);
 
             $values = array(
                 'file_path'      => $url,
@@ -237,18 +238,31 @@ class ImportHelper
                 'description'    => $data['title'].' video '.$data['introtext'],
                 'author_name'    => $data['origin'],
             );
+            $values['information'] = $information;
 
         } catch (\Exception $e) {
-            ImportHelper::log("\n 1 Can't get video information. Check the $url");
+            ImportHelper::log("\n 1 Can't get video information. Check the $url\n ");
+            return;
         }
 
-        $video = new \Video();
-        $values['information'] = json_decode($information, true);
+
         try {
+
+            $video = new \Video();
             $newVideoID = $video->create($values);
+
+            if (is_string($newVideoID)) {
+                ImportHelper::log('Video with ID '.$newVideoID." imported.\n");
+                return $newVideoID;
+            } else {
+                ImportHelper::log('Video '.$url." from article ".$data['id']." NOT created.\n");
+
+            }
+
+
         } catch (\Exception $e) {
 
-            ImportHelper::log("Problem with video: {$e->getMessage()} {$url} \n ");
+            ImportHelper::log("\n Problem with video: {$e->getMessage()} {$url} \n ");
         }
 
 
@@ -263,11 +277,12 @@ class ImportHelper
 
         echo "\n Database was Cleaned \n ";
         //emtpy tables
-        $tables = array('articles', 'albums', 'albums_photos',
-            'attachments', 'authors', 'author_imgs', 'comments', 'letters',
-            'content_positions', 'kioskos', 'opinions', 'pclave', 'photos', 'polls', 'poll_items',
-            'ratings', 'related_contents', 'specials', 'special_contents', 'videos', 'votes',
-            'translation_ids', 'author_opinion', 'images_translated');
+        $tables = array('articles', 'videos', 'photos', 'contents_categories',
+          /*  'attachments', 'authors', 'author_imgs', 'comments', 'letters',
+            'content_positions', 'kioskos', 'opinions', 'pclave',  'polls', 'poll_items',
+            'ratings', 'related_contents', 'specials', 'special_contents',  'votes',
+            'author_opinion', 'images_translated', album, album_photos */
+            'translation_ids');
 
         foreach ($tables as $table) {
             $sql="TRUNCATE TABLE {$table}";
