@@ -131,7 +131,7 @@ class Bootstrap extends ModuleBootstrap
             define('CURRENT_LANGUAGE', $shortLanguage);
         }
 
-        $localeDir = realpath(APP_PATH.'/Manager/Resources/locale/');
+        $localeDir = realpath(APP_PATH.'/Backend/Resources/locale/');
 
         if (isset($_GET["locale"])) {
             $locale = $_GET["locale"].'.UTF-8';
@@ -140,7 +140,7 @@ class Bootstrap extends ModuleBootstrap
         putenv("LC_MESSAGES=$locale");
         setlocale(LC_ALL, $locale);
         bindtextdomain($domain, $localeDir);
-        textdomain($domain);        
+        textdomain($domain);
     }
 
 }

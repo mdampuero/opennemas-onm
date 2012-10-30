@@ -17,12 +17,17 @@ LINGUAS = \
 
 all: l10n
 
-l10n: extracttrans updatepofiles compiletranslations extracttrans-backend updatepofiles-backend compiletranslations-backend
+l10n: l10n-frontend l10n-backend
+
+l10n-frontend: extracttrans updatepofiles compiletranslations
+
+l10n-backend: extracttrans-backend updatepofiles-backend compiletranslations-backend
 
 extracttrans-backend:
 	@echo "Extracting backend translations";
 	@tsmarty2c $(TPL_FOLDER) > app/Backend/Resources/locale/extracted_strings.c
-	@xgettext app/Backend/Controllers/* \
+	@xgettext app/Manager/Controllers/* app/Manager/Resources/Menu.php \
+			app/Backend/Controllers/* \
 	        app/Backend/Resources/Menu.php vendor/core/*.php \
         	vendor/Onm/**/**/*.php \
 	        app/models/*.php \
