@@ -59,7 +59,7 @@ switch ($action) {
 
         if ($special->available == 1) {
 
-            Content::setNumViews($specialID);
+            $tpl->assign('contentId', $specialID);
             $contents = $special->getContents($specialID);
             $columns  = array();
 

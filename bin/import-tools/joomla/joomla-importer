@@ -33,7 +33,7 @@ require '/usr/share/php/libzend-framework-php/Zend/Console/Getopt/Exception.php'
 require SITE_VENDOR_PATH.'/adodb5/adodb.inc.php';
 
 $availableActions = array(
-    'import-articles', 'show-categories'
+    'import-articles', 'show-categories', 'clear-database'
 );
 
 require APPLICATION_PATH.'/app/autoload.php';

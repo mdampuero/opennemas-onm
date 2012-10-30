@@ -52,13 +52,12 @@ switch ($action) {
         if (empty($articleID) ) {
             Application::forward301('/404.html');
         }
-        // Increment numviews if it's accesible
-        Content::setNumViews($articleID);
 
         // Load config
         $tpl->setConfig('articles');
 
         $tpl->assign('category_name', $category_name);
+        $tpl->assign('contentId', $articleID);
 
         $cm = new ContentManager();
 

@@ -180,28 +180,24 @@ switch ($action) {
         ) {
 
             $video = new Video($videoID);
-            $tpl->assign('contentId', $videoID); // Used on module_comments.tpl
             $category = $video->category;
-
-            Content::setNumViews($video->id);
             $video->category_name = $video->loadCategoryName($video->id);
             $video->category_title = $video->loadCategoryTitle($video->id);
+
             $tpl->assign(
                 array(
-                    'category' => $category,
+                    'category'      => $category,
                     'category_name' => $video->category_name,
-                    'contentId' => $videoID,
-                    'video' => $video,
-                    'action' => 'inner',
+                    'contentId'     => $videoID,
+                    'video'         => $video,
+                    'action'        => 'inner',
+                    'contentId'     => $video->id
                 )
             );
 
             require_once 'video_inner_advertisement.php';
 
         } //end iscached
-
-        //Fetch comments for this opinion
-        $tpl->assign('contentId', $videoID);
 
         /******* SUGGESTED CONTENTS *******/
         $objSearch = cSearch::getInstance();
@@ -214,7 +210,6 @@ switch ($action) {
         );
         $tpl->assign('suggested', $arrayResults);
 
-        Content::setNumViews($videoID);
         $tpl->display('video/video_inner.tpl', $cacheID);
 
         break;

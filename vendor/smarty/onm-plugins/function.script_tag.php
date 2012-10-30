@@ -64,8 +64,8 @@ function smarty_function_script_tag($params, &$smarty) {
         $resource = $server.SS.$src;
     }
 
-    $resource = preg_replace('/(\/+)/','/',$resource);
-    $resource = preg_replace('@(?<!:)//@', '/', $resource);
+    // $resource = preg_replace('/(\/+)/','/',$resource);
+    // $resource = preg_replace('@(?<!:)//@', '/', $resource);
 
     $output = "<script {$type} src=\"{$resource}{$mtime}\" {$properties} ></script>";
 

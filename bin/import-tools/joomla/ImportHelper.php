@@ -173,5 +173,143 @@ class ImportHelper
             ImportHelper::log('Image '.$matches[1][0]." from article ".$data['id']." NOT imported.\n");
         }
     }
+
+    /**
+     * Function that creates images from local and inserts it on ONM Database
+     *
+     * @return boolean
+     * @author
+     **/
+    public function importImage($data, $imageSrc)
+    {
+        $imgData = array(
+            'title' => $imageSrc,
+            'category' => JoomlaImporter::matchCategory($data['catid']),
+            'fk_category' => JoomlaImporter::matchCategory($data['catid']),
+            'category_name'=> 'image',
+            'content_status' => 1,
+            'frontpage' => 0,
+            'in_home' => 0,
+            'metadata' => $imageSrc,
+            'description' => self::convertoUTF8($data['title']),
+            'id' => 0,
+            'created' => $data['created'],
+            'changed' => $data['modified'],
+            'local_file' => JoomlaImporter::$configuration['old-media'],
+        );
+
+
+
+        $image = new Photo();
+
+        $newimageID = $image->createFromLocalFile($imgData);
+        if (is_string($newimageID)) {
+            ImportHelper::log('Image with ID '.$newimageID." imported.\n");
+        } else {
+            ImportHelper::log('Image '.$imageSrc." from article ".$data['id']." NOT imported.\n");
+        }
+    }
+
+    /**
+     * Function that creates video from url and inserts it on ONM Database
+     *
+     * @return boolean
+     * @author
+     **/
+    public function importVideo($data, $url)
+    {
+
+        try {
+            $videoP = new \Panorama\Video($url);
+            var_dump($videoP);
+
+            $information = $videoP->getVideoDetails();
+            var_dump($url);
+            var_dump($information);
+
+            $values = array(
+                'file_path'      => $url,
+                'category'       => JoomlaImporter::matchCategory($data['catid']),
+                'available'      => 1,
+                'content_status' => 1,
+                'title'          =>  ImportHelper::convertoUTF8($data['title']),
+                'metadata'       => $data['metadata'],
+                'description'    => $data['title'].' video '.$data['introtext'],
+                'author_name'    => $data['origin'],
+            );
+
+        } catch (\Exception $e) {
+            ImportHelper::log("\n 1 Can't get video information. Check the $url");
+        }
+
+        $video = new \Video();
+        $values['information'] = json_decode($information, true);
+        try {
+            $newVideoID = $video->create($values);
+        } catch (\Exception $e) {
+
+            ImportHelper::log("Problem with video: {$e->getMessage()} {$url} \n ");
+        }
+
+
+    }
+
+    /***
+        Clear default contents in target database
+    */
+
+    public function sqlClearData()
+    {
+
+        echo "\n Database was Cleaned \n ";
+        //emtpy tables
+        $tables = array('articles', 'albums', 'albums_photos',
+            'attachments', 'authors', 'author_imgs', 'comments', 'letters',
+            'content_positions', 'kioskos', 'opinions', 'pclave', 'photos', 'polls', 'poll_items',
+            'ratings', 'related_contents', 'specials', 'special_contents', 'videos', 'votes',
+            'translation_ids', 'author_opinion', 'images_translated');
+
+        foreach ($tables as $table) {
+            $sql="TRUNCATE TABLE {$table}";
+            $rss = $GLOBALS['application']->conn->Execute($sql);
+            if (!$rss) {
+                ImportHelper::log('clearsql function: '.$GLOBALS['application']->conn->ErrorMsg());
+            }
+        }
+
+        $sql = "SELECT pk_content FROM contents WHERE fk_content_type = 2".
+        " OR fk_content_type = 12 OR fk_content_type = 13";
+        $rss = $GLOBALS['application']->conn->Execute($sql);
+
+        $result= $rss->GetArray();
+        $contents= '';
+        foreach ($result as $res) {
+            $contents .= $res['pk_content'] .', ';
+        }
+
+        $sql = "DELETE FROM contents WHERE pk_content NOT IN ($contents 0)";
+
+        $rss = $GLOBALS['application']->conn->Execute($sql);
+        $sql = "DELETE FROM contents_categories WHERE pk_fk_content NOT IN  ($contents 0)";
+        $rss = $GLOBALS['application']->conn->Execute($sql);
+
+        if (!$rss) {
+            ImportHelper::log('clear contents function: '.$GLOBALS['application']->conn->ErrorMsg());
+        }
+
+        $sql = "ALTER TABLE `contents` AUTO_INCREMENT =1";
+
+        $rss = $GLOBALS['application']->conn->Execute($sql);
+
+        if (!$rss) {
+            ImportHelper::log('clear contents '.$sql.' function: '.$GLOBALS['application']->conn->ErrorMsg());
+        }
+
+        $sql = "ALTER TABLE `authors` AUTO_INCREMENT =4";
+
+        $rss = $GLOBALS['application']->conn->Execute($sql);
+
+
+    }
 }
 

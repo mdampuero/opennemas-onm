@@ -67,31 +67,6 @@ class JoomlaImporter
             die();
         }
         self::$configuration = parse_ini_file($configurationFile, true);
-    }
-
-    /**
-     * Fetches the original categories
-     *
-     **/
-    public function getOriginalCategories()
-    {
-        return array_keys(self::$configuration['categories']);
-    }
-
-    /**
-     * Fetches the target categories
-     *
-     **/
-    public function getTargetCategories()
-    {
-        return array_values(self::$configuration['categories']);
-    }
-
-
-    public function matchCategory($category)
-    {
-
-        return self::$configuration['categories'][$category];
 
     }
 
@@ -136,6 +111,62 @@ class JoomlaImporter
         Application::initLogger();
     }
 
+    /**
+     * Fetches the original categories
+     *
+     **/
+    public function getOriginalCategories()
+    {
+        return array_keys(self::$configuration['categories']);
+    }
+
+    /**
+     * Fetches the target categories
+     *
+     **/
+    public function getTargetCategories()
+    {
+        return array_values(self::$configuration['categories']);
+    }
+
+
+    public function matchCategory($category)
+    {
+
+        return self::$configuration['categories'][$category];
+
+    }
+
+    /**
+     * Show categories.
+     *
+     **/
+    public function showCategories()
+    {
+        require 'Console/ProgressBar.php';
+        require 'ImportHelper.php';
+
+        // Retrieve original articles
+        echo "\tGetting original categories...".PHP_EOL;
+        $categories = self::$configuration['categories'];
+        foreach ($categories as $key => $value) {
+            echo "{$key} => {$value} \n";
+        }
+    }
+
+
+     /**
+     * Show categories.
+     *
+     **/
+    public function clearDatabase()
+    {
+
+        ImportHelper::sqlClearData();
+
+        return true;
+
+    }
     /**
      * Checks if the content with $contentID is imported.
      *
@@ -255,55 +286,55 @@ class JoomlaImporter
             } else {
 
                 $originalArticleID = $originalContents->fields['id'];
+                $data = array();
 
-                preg_match_all('/(<img .*?>)/', $originalContents->fields['introtext'], $summaryResult);
-                preg_match_all('/(<img .*?>)/', $originalContents->fields['fulltext'], $bodyResult);
-
-                foreach ($bodyResult[0] as $res) {
-                    ImportHelper::importImages($originalContents->fields, $res);
+                if (self::$configuration['ImageMethod'] == 'inText') {
+                    $data['img1'] = $data['img2'] = '';
+                    $data['video'] = $data['video2'] = '';
+                    list($data['introtext'], $data['fulltext'])
+                    = self::importImageFromText($originalContents);
+                } else {
+                    $data = self::importMediaContents($originalContents->fields);
                 }
-                foreach ($summaryResult[0] as $res) {
-                    ImportHelper::importImages($originalContents->fields, $res);
-                }
 
-                // Change images url on introtext
-                $originalContents->fields['introtext'] = preg_replace(
-                    '/(<img .*?>)/',
-                    '',
-                    $originalContents->fields['introtext']
-                );
-                // Change images url on fulltext
-                $originalContents->fields['fulltext'] = preg_replace(
-                    '/src="images/',
-                    'src="/media/hibridos/images',
-                    $originalContents->fields['fulltext']
-                );
-
+                $category = self::matchCategory($originalContents->fields['catid']);
                 $values = array(
                     'title' => ImportHelper::convertoUTF8($originalContents->fields['title']),
-                    'category' => self::matchCategory($originalContents->fields['catid']),
+                    'category' => $category,
                     'with_comment' => 1,
-                    'content_status' => 1,
+                    'content_status' => ($originalContents->fields['state'] == 1)?1:0,
+                    'available' => ($originalContents->fields['state'] == 1)?1:0,
                     'frontpage' => 0,
                     'in_home' => 0,
                     'title_int' => ImportHelper::convertoUTF8($originalContents->fields['title']),
                     'metadata' => StringUtils::get_tags(ImportHelper::convertoUTF8($originalContents->fields['title'])),
                     'subtitle' => '',
-                    'agency' => 'hibridosyelectricos.com',
-                    'summary' => ImportHelper::convertoUTF8($originalContents->fields['introtext']),
-                    'body' => ImportHelper::convertoUTF8($originalContents->fields['fulltext']),
-                    'posic' => 0,
+                    'img1' => $data['img1'],
+                    'img2' => $data['img2'],
+                    'fk_video' => $data['video'],
+                    'fk_video2' => $data['video2'],
+                    'summary' => ImportHelper::convertoUTF8($data['introtext']),
+                    'body' => ImportHelper::convertoUTF8($data['fulltext']),
+                    'created' => $originalContents->fields['created'],
+                    'starttime' => $originalContents->fields['publish_up'],
+                    'endtime' => $originalContents->fields['publish_down'],
+                    'changed' => $originalContents->fields['modified'],
+                    'agency' => self::$configuration['agency'],
                     'id' => 0,
-                    'fk_user' => 135,
-                    'fk_publisher' => 135
+                    'fk_user' => self::$configuration['userId'],
+                    'fk_publisher' => self::$configuration['userId'],
+                    'description' => substr(ImportHelper::convertoUTF8($data['introtext']), 0, 120),
+                    'slug' => \StringUtils::get_title(ImportHelper::convertoUTF8($rs->fields['title'])),
                 );
+
+
 
                 $article = new Article();
                 $newArticleID = $article->create($values);
 
                 if (is_string($newArticleID)) {
                     ImportHelper::logElementInsert($originalArticleID, $newArticleID, 'article');
-                    ImportHelper::updateCreateDate($newArticleID, $originalContents->fields['created']);
+                    // ImportHelper::updateCreateDate($newArticleID, $originalContents->fields['created']);
                     ImportHelper::log('Content with ID '.$originalContents->fields['id']." imported.\n");
                     $imported++;
                 }
@@ -317,6 +348,84 @@ class JoomlaImporter
 
         $originalContents->Close(); # optional
 
+    }
+
+
+    public static function importImageFromText($originalContents)
+    {
+        preg_match_all('/(<img .*?>)/', $originalContents->fields['introtext'], $summaryResult);
+        preg_match_all('/(<img .*?>)/', $originalContents->fields['fulltext'], $bodyResult);
+
+        foreach ($bodyResult[0] as $res) {
+            ImportHelper::importImages($originalContents->fields, $res);
+        }
+        foreach ($summaryResult[0] as $res) {
+            ImportHelper::importImages($originalContents->fields, $res);
+        }
+
+        // Change images url on introtext
+        $originalContents->fields['introtext'] = preg_replace(
+            '/(<img .*?>)/',
+            '',
+            $originalContents->fields['introtext']
+        );
+        // Change images url on fulltext
+        $originalContents->fields['fulltext'] = preg_replace(
+            '/src="images/',
+            'src="'.self::$configuration['actual-directory'],
+            $originalContents->fields['fulltext']
+        );
+
+        return array($originalContents->fields['introtext'], $originalContents->fields['fulltext'] );
+    }
+
+
+    public static function importMediaContents($originalData)
+    {
+        $data = array();
+        if (!empty($originalData['images'])) {
+            /* example values
+            salidateenrumi.jpg|left||0||bottom||
+            salidateennnn.jpg|left||0||bottom||
+            */
+
+            preg_match_all("/(.*).(png|jpg|gif|jpeg)(.*)||/i", $originalData['images'], $matches, PREG_SET_ORDER);
+
+
+            if (!empty($matches[0])) {
+                $data['img1'] = ImportHelper::importImage($originalData, $matches[0][1].".".$matches[0][2]);
+            }
+            if (!empty($matches[1])) {
+                $data['img2'] = ImportHelper::importImage($originalData, $matches[1][1].".".$matches[1][2]);
+            }
+        }
+        //videos {youtube}npj0K0IFv0Y{/youtube}
+        $youtube = "http://www.youtube.com/watch?v=";
+        $originalData['origin'] = 'youtube';
+        preg_match_all("/{youtube}(.*){\/youtube}/i", $originalData['introtext'], $matches, PREG_SET_ORDER);
+
+        if (!empty($matches[0][1])) {
+            $data['fk_video'] = ImportHelper::importVideo($originalData, $youtube.$matches[0][1]);
+        }
+
+        preg_match_all("/{youtube}(.*){\/youtube}/i", $originalData['fulltext'], $matches);
+        if (!empty($matches[0][1])) {
+            $data['fk_video2'] = ImportHelper::importVideo($originalData, $youtube.$matches[0][1]);
+        }
+
+        $data['introtext'] = preg_replace(
+            array('/{mosimage}/', '/{youtube}(.*){\/youtube}/'),
+            array(" ", ""),
+            $originalData['introtext']
+        );
+        // Change images url on fulltext
+        $data['fulltext'] = preg_replace(
+            array('/{mosimage}/', '/{youtube}(.*){\/youtube}/'),
+            array(" ", ""),
+            $originalData['fulltext']
+        );
+
+        return $data;
     }
 }
 

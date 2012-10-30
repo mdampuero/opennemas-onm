@@ -22,8 +22,7 @@ if (isset($slug) ) {
     }
 
     // increment visits for this page
-    //$page->setNumViews();
-    Content::setNumViews($page->pk_static_page);
+    $tpl->assign('contentId', $page->id);
 
     $tpl->assign('category_real_name', $page->title);
     $tpl->assign('page', $page);
