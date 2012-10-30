@@ -116,7 +116,7 @@ class AuthenticationController extends Controller
                     if (!is_null($forwardTo) && !empty($forwardTo)) {
                         return $this->redirect($forwardTo);
                     } else {
-                        return $this->redirect(SITE_URL_ADMIN);
+                        return $this->redirect($this->generateUrl('manager_welcome'));
                     }
                 }
 
