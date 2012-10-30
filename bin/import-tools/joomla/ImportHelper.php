@@ -230,6 +230,7 @@ class ImportHelper
 
             $values = array(
                 'file_path'      => $url,
+                'video_url'      => $url,
                 'category'       => JoomlaImporter::matchCategory($data['catid']),
                 'available'      => 1,
                 'content_status' => 1,
