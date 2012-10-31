@@ -320,6 +320,11 @@ class CanariasToOnm
                             'local_file' =>OLD_MEDIA,
                         );
 
+                       /* preg_match_all("/(http:\/\/www.youtube.com\/v.*&amp;(.*)/i", $photoName, $matches, PREG_SET_ORDER);
+                        var_dump($matches);
+                        preg_match_all("/(http:\/\/www.youtube.com\/v.*&amp;(.*)/i", $photoName2, $matches2, PREG_SET_ORDER);
+                        var_dump($matches2); */
+                        die();
                         if (!empty($photoName)) {
                             $resp = $this->createImage($imageData);
                             if ($resp =='other') {
@@ -685,6 +690,89 @@ class CanariasToOnm
 
     }
 
+    public function importMunicipios()
+    {
+
+        $this->categoriesMatches = array();
+
+        $sql = "SELECT islas FROM `ayuntamientos_islas`";
+        $request = self::$originConn->Prepare($sql);
+        $rs = self::$originConn->Execute($request);
+
+        if (!$rs) {
+            echo self::$originConn->ErrorMsg();
+            $this->helper->log('problem import categories = islas'.self::$originConn->ErrorMsg());
+        } else {
+            $totalRows = $rs->_numOfRows;
+
+            $current = 1;
+            $category = new \ContentCategory();
+
+            while (!$rs->EOF) {
+                $title = $this->helper->convertToUtf8(strtolower($rs->fields['islas']));
+                $data = array();
+                $data['name'] = \StringUtils::normalize_name($title);
+                $data['title'] = $title;
+                $data['inmenu']=1;
+                $data['subcategory'] =0;
+                $data['internal_category'] =1;
+                $data['logo_path'] ='';
+                $data['color']  ='';
+                $data['params']  ='';
+
+                if ($category->create($data)) {
+                    $this->helper->log("added municipio {$title} \n");
+                    $title = \Onm\StringUtils::setSeparator(strtolower($title), '-');
+                    $this->categoriesMatches[$title] = $category->pk_content_category;
+                } else {
+                    $this->helper->log("problem creating {$title} \n");
+                }
+
+                $rs->MoveNext();
+            }
+        }
+
+        $sql = 'SELECT `municipio`, islas FROM `ayuntamientos_municipios` ORDER BY islas DESC';
+        $request = self::$originConn->Prepare($sql);
+        $rs = self::$originConn->Execute($request);
+
+        if (!$rs) {
+            echo self::$originConn->ErrorMsg();
+            $this->helper->log('problem import categories = municipios'.self::$originConn->ErrorMsg());
+        } else {
+            $totalRows = $rs->_numOfRows;
+
+            $current = 1;
+            $category = new \ContentCategory();
+
+            while (!$rs->EOF) {
+                $title = $this->helper->convertToUtf8(strtolower($rs->fields['municipio']));
+                $isla = $this->helper->convertToUtf8(strtolower($rs->fields['islas']));
+                $isla = \Onm\StringUtils::setSeparator(strtolower($isla), '-');
+
+                $data = array();
+                $data['name'] = \StringUtils::normalize_name($title);
+                $data['title'] = $title;
+                $data['inmenu']=1;
+                $data['subcategory'] = $this->categoriesMatches[$isla];
+                $data['internal_category'] =1;
+                $data['logo_path'] ='';
+                $data['color']  ='';
+                $data['params']  ='';
+
+                if ($category->create($data)) {
+                    $title = \Onm\StringUtils::setSeparator(strtolower($title), '-');
+                    $this->helper->log("added municipio {$title} \n");
+                    $this->categoriesMatches[$title] = $category->pk_content_category;
+                } else {
+                    $this->helper->log("problem creating {$title} \n");
+                }
+
+                $rs->MoveNext();
+            }
+        }
+    }
+
     /**
      * create articles from ayuntamientos, in new DB.
      *
@@ -696,8 +784,9 @@ class CanariasToOnm
      */
     public function importAyuntamientos()
     {
+        $this->importMunicipios();
 
-         $sql = 'SELECT `noticia`, `fecha`, `hora`, `antetitulo`, `titulo`, '.
+        $sql = 'SELECT `noticia`, `fecha`, `hora`, `antetitulo`, `titulo`, '.
          ' `texto`, `isla`, `municipio`, `activar` FROM `ayuntamientos_noticias` ';
 
         $request = self::$originConn->Prepare($sql);
@@ -720,13 +809,9 @@ class CanariasToOnm
                     echo "[{$current}/{$totalRows}] Article Ayuntamientos with ".
                     "id {$originalArticleID} already imported\n";
                 } else {
-                    echo "\n [{$current}/{$totalRows}] Importing article Ayuntamientos with id {$originalArticleID} - ";
-
                     $title = $this->helper->convertToUtf8($rs->fields['titulo']);
 
-                    $category = $this->matchInternalCategory('top-secret');
-                    $category_name = $this->categoriesData[$category]->name;
-                    $seccion = !empty($rs->fields['isla']) ?$rs->fields['isla']:'ayuntamientos';
+                    $seccion = !empty($rs->fields['municipio']) ?$rs->fields['municipio']: $rs->fields['isla'];
                     $category = $this->matchInternalCategory($seccion);
                     $category_name = $this->categoriesData[$category]->name;
 
@@ -750,7 +835,7 @@ class CanariasToOnm
                         );
 
                     $articleID = $article->create($data);
-
+                    echo "\n [{$current}/{$totalRows}] Importing article Ayuntamientos with id {$originalArticleID} - in {$seccion}  ";
                     if (!empty($articleID) ) {
                         $this->helper->insertRefactorID($originalArticleID, $articleID, 'Ayuntamientos');
 
@@ -1918,24 +2003,24 @@ class CanariasToOnm
 
             if ($url) {
 
-                    $videoP = new \Panorama\Video($url);var_dump($videoP);
+                try {
+                    $videoP = new \Panorama\Video($url);
+                    var_dump($videoP);
 
                     $information = $videoP->getVideoDetails();
                     var_dump($url);
                     var_dump($information);
 
-                try {
-
                     $values = array(
-                        'file_type'      => 'flv', //$data['type']
                         'file_path'      => $url,
+                        'video_url'      => $url,
                         'category'       => $data['category'],
                         'available'      => 1,
                         'content_status' => 1,
                         'title'          => $this->helper->convertToUtf8($data['title']),
                         'metadata'       => $data['metadata'],
                         'description'    => $data['name'].' video '.$data['texto'],
-                        'author_name'    => $request->filter('author_name', null, FILTER_SANITIZE_STRING),
+                        'author_name'    => $data['origin'],
                     );
 
                 } catch (\Exception $e) {
