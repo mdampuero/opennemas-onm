@@ -270,9 +270,14 @@ class JoomlaImporter
         echo "\tGetting original articles...".PHP_EOL;
         $categories = self::getOriginalCategories();
 
-        $originalContents = self::$originalDatabaseConn->Execute(
-            "SELECT * FROM jos_content WHERE catid IN (".implode(",", $categories).")"
-        );
+        $sql = "SELECT * FROM jos_content WHERE catid IN (".implode(",", $categories).")";
+
+        if (!empty($args->limit)) {
+            $sql = "SELECT * FROM jos_content  LIMIT 0, ".((int)$args->limit);
+        }
+
+        $originalContents = self::$originalDatabaseConn->Execute($sql);
+
         if (!$originalContents) {
             echo self::$originalDatabaseConn->ErrorMsg();
         }
@@ -329,8 +334,8 @@ class JoomlaImporter
                     'subtitle' => '',
                     'img1' => $data['img1'],
                     'img2' => $data['img2'],
-                    'fk_video' => $data['video'],
-                    'fk_video2' => $data['video2'],
+                    'fk_video' => $data['fk_video'],
+                    'fk_video2' => $data['fk_video2'],
                     'summary' => ImportHelper::convertoUTF8($data['introtext']),
                     'body' => ImportHelper::convertoUTF8($data['fulltext']),
                     'created' => $originalContents->fields['created'],
