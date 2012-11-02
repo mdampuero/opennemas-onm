@@ -11,7 +11,7 @@ $menuXml = '<?xml version="1.0"?>
     </submenu>
     <submenu title="'.htmlspecialchars(_("Framework"), ENT_QUOTES).'" id="system" link="#">
         <node
-            title="'.htmlspecialchars(_("Status"), ENT_QUOTES).'"
+            title="'.htmlspecialchars(_("Framework status"), ENT_QUOTES).'"
             id="support_help"
             link="'.url('manager_framework_check_dependencies').'"
         />

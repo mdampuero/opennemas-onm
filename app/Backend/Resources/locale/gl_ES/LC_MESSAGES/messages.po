@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-30 12:51+0100\n"
+"POT-Creation-Date: 2012-11-02 11:46+0100\n"
 "PO-Revision-Date: 2012-10-24 18:08+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
@@ -103,7 +103,7 @@ msgstr "Non foi posíbel atopar unha foto con identificador «%d»"
 #: app/Manager/Resources/Menu.php:5
 #, fuzzy
 msgid "Instances"
-msgstr "Sincronización de instancias"
+msgstr "Instancias"
 
 #: app/Manager/Resources/Menu.php:7
 #: app/Backend/Resources/locale/extracted_strings.c:7940
@@ -113,17 +113,17 @@ msgstr "Xestor de instancias"
 #: app/Manager/Resources/Menu.php:12
 #, fuzzy
 msgid "Framework"
-msgstr "Estado do framework"
+msgstr "Framework"
 
 #: app/Manager/Resources/Menu.php:14
-#: app/Backend/Resources/locale/extracted_strings.c:1955
-msgid "Status"
-msgstr "Estado"
+#: app/Backend/Resources/locale/extracted_strings.c:8306
+msgid "Framework status"
+msgstr "Estado do framework"
 
 #: app/Manager/Resources/Menu.php:19
 #, fuzzy
 msgid "APC status"
-msgstr "Estado"
+msgstr "Estado APC"
 
 #: app/Backend/Controllers/AclPrivilegesController.php:145
 #, php-format
@@ -4997,6 +4997,10 @@ msgstr "No subscrito"
 msgid "Filter"
 msgstr "Filtrar"
 
+#: app/Backend/Resources/locale/extracted_strings.c:1955
+msgid "Status"
+msgstr "Estado"
+
 #: app/Backend/Resources/locale/extracted_strings.c:1958
 #: app/Backend/Resources/locale/extracted_strings.c:2033
 #: app/Backend/Resources/locale/extracted_strings.c:6935
@@ -8801,10 +8805,6 @@ msgstr "Manazas fóra!"
 #: app/Backend/Resources/locale/extracted_strings.c:8300
 msgid "This section is experimental and could not work as espected"
 msgstr "Esta sección é experimental e pode que non se comporte como se espera"
-
-#: app/Backend/Resources/locale/extracted_strings.c:8306
-msgid "Framework status"
-msgstr "Estado do framework"
 
 #: app/Backend/Resources/locale/extracted_strings.c:8312
 msgid "Welcome to OpenNeMas instance manager"

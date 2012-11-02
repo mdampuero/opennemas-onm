@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-30 12:51+0100\n"
+"POT-Creation-Date: 2012-11-02 11:46+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -109,8 +109,8 @@ msgid "Framework"
 msgstr ""
 
 #: app/Manager/Resources/Menu.php:14
-#: app/Backend/Resources/locale/extracted_strings.c:1955
-msgid "Status"
+#: app/Backend/Resources/locale/extracted_strings.c:8306
+msgid "Framework status"
 msgstr ""
 
 #: app/Manager/Resources/Menu.php:19
@@ -4900,6 +4900,10 @@ msgstr ""
 msgid "Filter"
 msgstr ""
 
+#: app/Backend/Resources/locale/extracted_strings.c:1955
+msgid "Status"
+msgstr ""
+
 #: app/Backend/Resources/locale/extracted_strings.c:1958
 #: app/Backend/Resources/locale/extracted_strings.c:2033
 #: app/Backend/Resources/locale/extracted_strings.c:6935
@@ -8584,10 +8588,6 @@ msgstr ""
 
 #: app/Backend/Resources/locale/extracted_strings.c:8300
 msgid "This section is experimental and could not work as espected"
-msgstr ""
-
-#: app/Backend/Resources/locale/extracted_strings.c:8306
-msgid "Framework status"
 msgstr ""
 
 #: app/Backend/Resources/locale/extracted_strings.c:8312
