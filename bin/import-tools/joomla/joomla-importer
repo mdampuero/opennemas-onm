@@ -29,7 +29,7 @@ require '/usr/share/php/libzend-framework-php/Zend/Console/Getopt/Exception.php'
 require SITE_VENDOR_PATH.'/adodb5/adodb.inc.php';
 
 $availableActions = array(
-    'import-articles', 'show-categories', 'clear-database'
+    'import-articles', 'show-categories', 'update-video', 'clear-database'
 );
 
 require APPLICATION_PATH.'/app/autoload.php';

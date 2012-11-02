@@ -450,5 +450,96 @@ class JoomlaImporter
 
         return $data;
     }
+
+
+
+    /**
+     * Generates a bunch of error files for one modules section
+     *
+     * @return boolean
+     * @author
+     **/
+    public static function updateVideo($args)
+    {
+
+        require 'Console/ProgressBar.php';
+        require 'ImportHelper.php';
+
+        echo PHP_EOL.'Updating fk_video in articles from joomla'.PHP_EOL;
+
+        // Retrieve original articles
+        echo "\tGetting original videos...".PHP_EOL;
+        $categories = self::getOriginalCategories();
+
+        $sql = "SELECT * FROM jos_content WHERE catid IN (".implode(",", $categories).")";
+
+        $originalContents = self::$originalDatabaseConn->Execute($sql);
+
+        if (!$originalContents) {
+            echo self::$originalDatabaseConn->ErrorMsg();
+        }
+
+        echo "\tStarting to import videos".PHP_EOL;
+
+        $format = "\t[%bar%] %percent% (%current%/%max%) ";
+        $filler = '=>';
+        $empty  = ' ';
+        $width  = 70;
+        $size   = $originalContents->_numOfRows;
+        $bar = new Console_ProgressBar($format, $filler, $empty, $width, $size);
+
+
+
+        $current = $imported = 0;
+
+        while (!$originalContents->EOF) {
+
+            $newArticleID = ImportHelper::elementTranslated($originalContents->fields['id'], 'article');
+            if (!empty($newArticleID)) {
+
+                $data = array();
+
+                $youtube = "http://www.youtube.com/watch?v=";
+                $originalData = $originalContents->fields;
+                $originalData['origin'] = 'youtube';
+                preg_match_all(
+                    "/{youtube}(.*){\/youtube}/i",
+                    $originalContents->fields['introtext'],
+                    $matches,
+                    PREG_SET_ORDER
+                );
+                $data['fk_video'] =0;
+                if (!empty($matches[0][1])) {
+                    $data['fk_video'] = ImportHelper::searchVideo($youtube.$matches[0][1]);
+                    if (empty($data['fk_video'])) {
+                        $data['fk_video'] = ImportHelper::importVideo($originalData, $youtube.$matches[0][1]);
+                    }
+                }
+
+                $data['fk_video2'] =0;
+                preg_match_all("/{youtube}(.*){\/youtube}/i", $originalContents->fields['fulltext'], $matches);
+                if (!empty($matches[0][1])) {
+                    $data['fk_video2'] = ImportHelper::searchVideo($youtube.$matches[0][1]);
+                    if (empty($data['fk_video2'])) {
+                        $data['fk_video2'] = ImportHelper::importVideo($originalData, $youtube.$matches[0][1]);
+                    }
+                }
+
+
+                if (!empty($newArticleID) && (!empty($data['fk_video']) || !empty($data['fk_video2']))) {
+                      ImportHelper::updateVideoElements($newArticleID, $data);
+
+                }
+            }
+
+            $bar->update($current);
+            $current++;
+
+            $originalContents->MoveNext();
+        }
+
+        $originalContents->Close(); # optional
+
+    }
 }
 
