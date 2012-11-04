@@ -33,3 +33,7 @@ services:
         class: Onm\Mailer
         arguments: [ %swiftmailer% ]
 
+    cache:
+        class: %cache_handler%
+        arguments: [ %cache_handler_params% ]
+
