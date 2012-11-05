@@ -278,6 +278,12 @@ class PollsController extends Controller
 
         $poll = new \Poll($id);
         if ($poll->id != null) {
+            // Check empty data
+            if (count($request->request) < 1) {
+                m::add(_("Poll data sent not valid."), m::ERROR);
+
+                return $this->redirect($this->generateUrl('admin_poll_show', array('id' => $id)));
+            }
 
             $data = array(
                 'id'            => $id,

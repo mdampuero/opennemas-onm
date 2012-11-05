@@ -262,6 +262,13 @@ class CategoriesController extends Controller
         $params = $request->request->get('params');
         $inrss = (array_key_exists('inrss', $params) && $params['inrss'] == true);
 
+        // Check empty data
+        if (count($request->request) < 1) {
+            m::add(_("Category data sent not valid."), m::ERROR);
+
+            return $this->redirect($this->generateUrl('admin_category_show', array('id' => $id)));
+        }
+
         $data = array(
             'id'                  => $id,
             'name'                => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
