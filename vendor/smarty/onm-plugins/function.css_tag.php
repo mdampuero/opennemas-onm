@@ -16,22 +16,20 @@ function smarty_function_css_tag($params, &$smarty) {
 
     $href = $params['href'];
 
+    $server = '';
+    $file = '';
+    if (array_key_exists('common', $params)) {
+        $file = SITE_PATH.SS."assets".SS."css".SS.$href;
+        $server = SS."assets".SS."css".SS;
+    } else {
+        $basepath = $params["basepath"] ?: SS."css";
+        $file = SITE_PATH.SS."themes".SS.$smarty->theme.SS.$basepath.$href;
+        $server = SS."themes".SS.$smarty->theme.SS.$basepath;
+    }
 
     $mtime = '?';
-    $server = '';
-    $basepath = $params["basepath"] ?: "/css";
-    if ($smarty->theme == 'default') {
-        $file = TEMPLATE_ADMIN_PATH.$basepath.$href;
-        if (file_exists($file)) {
-            $mtime .= filemtime($file);
-            $server = TEMPLATE_ADMIN_URL.$basepath;
-        }
-    } else {
-        $file = TEMPLATE_USER_PATH.$basepath.$href;
-        if (file_exists($file)) {
-            $mtime .= filemtime($file);
-            $server = TEMPLATE_USER_URL.$basepath;
-        }
+    if (file_exists($file)) {
+        $mtime .= filemtime($file);
     }
 
     //Comprobar si tiene type definido
@@ -48,18 +46,17 @@ function smarty_function_css_tag($params, &$smarty) {
         $rel = "rel=\"stylesheet\"";
     }
 
-
-
     unset($params['rel']);
     unset($params['href']);
     unset($params['type']);
     unset($params['basepath']);
+    unset($params['common']);
     $properties = '';
     foreach($params as $key => $value) {
         $properties .= " {$key}=\"{$value}\"";
     }
 
-    $resource = $server.DS.$href;
+    $resource = preg_replace('/(\/+)/','/',$server.SS.$href);
     $resource = preg_replace('@(?<!:)//@', '/', $resource);
 
     $output = "<link {$rel} {$type} href=\"{$resource}{$mtime}\" {$properties}>";

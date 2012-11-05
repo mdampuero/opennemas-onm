@@ -39,6 +39,8 @@ class WelcomeController extends Controller
      **/
     public function defaultAction(Request $request)
     {
+
+        // $this->dispatchEvent('content.update', array('content' => new \Article()));
         // $instances = $this->get('db_conn')->Execute('SELECT count(*) FROM instances');
 
         $feeds = array (

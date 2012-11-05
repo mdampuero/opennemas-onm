@@ -73,7 +73,6 @@ switch ($action) {
         $id = Content::resolveID($dirtyID);
 
         $book = new Book($id);
-        Content::setNumViews($id);
         $book->category_title = $book->loadCategoryTitle($book->id);
         $tpl->assign('book', $book);
         $swf = preg_replace('%\.pdf%', '.swf', $book->file_name);
@@ -87,6 +86,7 @@ switch ($action) {
         );
 
         $tpl->assign('libros', $books);
+        $tpl->assign('contentId', $id);
 
         $tpl->display('books/book_viewer.tpl');
 

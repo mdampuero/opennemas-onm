@@ -133,9 +133,17 @@ class Articles
                     $relatedContents = $this->cm->getInTime($relatedContents);
                     $relatedContents = $this->cm->getAvailable($relatedContents);
 
-                    // Add category name
+                    // Add category name and external Uri
                     foreach ($relatedContents as &$content) {
                         $content->category_name = $ccm->get_category_name_by_content_id($content->id);
+
+                        // Get author_name_slug for opinions
+                        if ($content->content_type == 'opinion') {
+                            // Generate opinion uri
+                            $content->uri = preg_replace('@//@', '/author/', $content->uri);
+                        }
+
+                        $content->uri = 'ext'.$content->uri;
                     }
                 }
 
@@ -150,7 +158,7 @@ class Articles
 
                 $machineSuggestedContents = array();
                 if (!empty($article->metadata)) {
-                    $objSearch    = cSearch::getInstance();
+                    $objSearch = cSearch::getInstance();
                     $machineSuggestedContents = $objSearch->SearchSuggestedContents(
                         $article->metadata,
                         'Article',
@@ -251,6 +259,109 @@ class Articles
         }
 
         return $article;
+    }
+
+    /**
+     * Get a complete article
+     *
+     * @param type $id the id of the requested article
+     *
+     * @return $article
+     */
+    public function complete($id = null)
+    {
+        $ccm = ContentCategoryManager::get_instance();
+        $cm  = new ContentManager();
+
+        // Resolve dirty Id
+        $articleId = Content::resolveID($id);
+
+        // Load article
+        $article = new Article($articleId);
+
+        // Get category title used on tpl's
+        $article->category_title = $ccm->get_title($article->category_name);
+
+        $article->actualCategoryId = $ccm->get_id($article->category_name);
+
+        // Get inner image for this article
+        if (isset($article->img2) && ($article->img2 != 0)) {
+            $photoInt = new Photo($article->img2);
+            $photoInt->media_url = MEDIA_IMG_PATH_WEB;
+            $article->photoInt = $photoInt;
+        }
+
+        // Get inner video for this article
+        if (isset($article->fk_video2)) {
+            $videoInt = new Video($article->fk_video2);
+            $article->videoInt = $videoInt;
+        } else {
+            $video =  $cm->find_by_category_name(
+                'Video',
+                $actualCategory,
+                'contents.content_status=1',
+                'ORDER BY created DESC LIMIT 0 , 1'
+            );
+            if (isset($video[0])) {
+                $article->videoInt = $video[0];
+            }
+        }
+
+        // Get Related contents
+        $relContent      = new RelatedContent();
+        $relatedContents = array();
+
+        $relationIDs     = $relContent->cache->getRelationsForInner($articleId);
+        if (count($relationIDs) > 0) {
+            $relatedContents = $cm->cache->getContents($relationIDs);
+
+            // Drop contents that are not available or not in time
+            $relatedContents = $cm->getInTime($relatedContents);
+            $relatedContents = $cm->cache->getAvailable($relatedContents);
+
+            // Add category name
+            foreach ($relatedContents as &$content) {
+                $content->category_name = $ccm->get_category_name_by_content_id($content->id);
+                // Generate content uri if it's not an attachment
+                if ($content->fk_content_type == '4') {
+                    $content->uri = "ext".preg_replace('@//@', '/author/', $content->uri);
+                } elseif ($content->fk_content_type == 3) {
+                    // Get instance media
+                    $basePath = INSTANCE_MEDIA;
+
+                    // Get file path for attachments
+                    $filePath = ContentManager::getFilePathFromId($content->id);
+
+                    // Compose the full url to the file
+                    $content->fullFilePath = $basePath.FILE_DIR.$filePath;
+                } else {
+                    $content->uri = "ext".$content->uri;
+                }
+            }
+        }
+        $article->relatedContents = $relatedContents;
+
+        // Get Machine suggested
+        $machineSuggestedContents = array();
+        if (!empty($article->metadata)) {
+            $objSearch    = cSearch::getInstance();
+            $machineSuggestedContents =
+                $objSearch->searchSuggestedContents(
+                    $article->metadata,
+                    'Article',
+                    "pk_fk_content_category= ".$article->category.
+                    " AND contents.available=1 AND pk_content = pk_fk_content",
+                    4
+                );
+            $machineSuggestedContents = $cm->getInTime($machineSuggestedContents);
+
+            foreach ($machineSuggestedContents as &$content) {
+                $content['uri'] = 'ext'.$content['uri'];
+            }
+        }
+        $article->suggested = $machineSuggestedContents;
+
+        return serialize($article);
     }
 
     /**

@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
+use Onm\Message as m;
 use Onm\LayoutManager;
 
 /**
@@ -102,11 +103,13 @@ class FrontpagesController extends Controller
         // Sort all the elements by its position
         $contentElementsInFrontpage  = $cm->sortArrayofObjectsByProperty($contentElementsInFrontpage, 'position');
 
-        $layout = s::get('frontpage_layout_'.$categoryID, 'default');
+        $layoutTheme = s::get('frontpage_layout_'.$categoryID, 'default');
 
         $lm  = new LayoutManager(
-            SITE_PATH."/themes/".TEMPLATE_USER."/layouts/".$layout.".xml"
+            SITE_PATH."/themes/".TEMPLATE_USER."/layouts/".$layoutTheme.".xml"
         );
+
+        $layoutTheme = $this->container->getParameter('instance')->theme->getLayout($layoutTheme);
 
         $layout = $lm->render(
             array(
@@ -127,6 +130,7 @@ class FrontpagesController extends Controller
                 'frontpage_articles' => $contentElementsInFrontpage,
                 'layout'             => $layout,
                 'available_layouts'  => $layouts,
+                'layout_theme'       => $layoutTheme,
             )
         );
     }
@@ -244,8 +248,14 @@ class FrontpagesController extends Controller
 
         if (!is_null($category)
             && !is_null($layout)
+            && $layoutValid
         ) {
             s::set('frontpage_layout_'.$category, $layout);
+
+            m::add(sprintf(_('Layout %s seleted.'), $layout), m::SUCCESS);
+        } else {
+            m::add(_('Layout or category not valid.'), m::ERROR);
+
         }
 
         if ($category == 0) {

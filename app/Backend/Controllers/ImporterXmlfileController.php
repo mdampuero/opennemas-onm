@@ -60,10 +60,17 @@ class ImporterXmlfileController extends Controller
      **/
     public function importAction(Request $request)
     {
+
         if ('POST' != $this->request->getMethod()) {
             m::add(_('Form was sent in the wrong way.'));
 
             return $this->redirect($this->generateUrl('admin_importer_xmlfile'));
+        }
+
+        $uploaddir = APPLICATION_PATH .DS.'tmp'.DS.'instances'.DS.INSTANCE_UNIQUE_NAME.DS.'xml'.DS;
+
+        if (!file_exists($uploaddir)) {
+            mkdir($uploaddir, 0775);
         }
 
         $numCategories='0';
@@ -76,7 +83,6 @@ class ImporterXmlfileController extends Controller
                 $nameFile  = $_FILES["file"]["name"][$i];
 
                 $datos     = pathinfo($nameFile);//sacamos info del archivo
-
                 // Preparamos el nuevo nombre YYYYMMDDHHMMSSmmmmmm
                 $extension = $datos['extension'];
                 $t         = gettimeofday();
@@ -90,23 +96,23 @@ class ImporterXmlfileController extends Controller
                         ? 0 : $_REQUEST['check_pendientes'][$i];
 
                     if ($extension == "zip") {
-                        $dataZIP = FilesManager::decompressZIP($uploaddir.$name);
+                        $dataZIP = \FilesManager::decompressZIP($uploaddir.$name);
 
                         @chmod($uploaddir.$name, 0775);
                         sort($dataZIP);
                         foreach ($dataZIP as $elementZIP) {
                             @chmod($uploaddir.$elementZIP, 0775);
 
-                            $importer = ImporterXml::getInstance();
+                            $importer = \ImporterXml::getInstance();
                             $eltoXML  = $importer->importXML($uploaddir.$elementZIP);
                             if ($eltoXML) {
                                 $XMLFile[$j] = $elementZIP;
 
                                 $values      = $importer->getXMLData($eltoXML);
                                 if (!empty($dryRun)) {
-                                    $article = new Article();
+                                    $article = new \Article();
                                     $article->create($values);
-                                    $photo = new Photo($values['img1']);
+                                    $photo = new \Photo($values['img1']);
                                     $values['photo'] =
                                         INSTANCE_MEDIA.IMG_DIR.
                                         $photo->path_file.$photo->name;
@@ -120,7 +126,7 @@ class ImporterXmlfileController extends Controller
                             }
                         }
                     } else {
-                        $importer    = ImporterXml::getInstance();
+                        $importer    = \ImporterXml::getInstance();
 
                         $eltoXML     = $importer->importXML($uploaddir.$name);
 
@@ -128,9 +134,9 @@ class ImporterXmlfileController extends Controller
 
                         $values      = $importer->getXMLData($eltoXML);
                         if (!empty($dryRun)) {
-                            $article = new Article();
+                            $article = new \Article();
                             $article->create($values);
-                            $photo = new Photo($values['img1']);
+                            $photo = new \Photo($values['img1']);
                             $values['photo'] =
                                 INSTANCE_MEDIA.IMG_DIR.
                                 $photo->path_file.$photo->name;
@@ -138,6 +144,7 @@ class ImporterXmlfileController extends Controller
                         }
 
                         $dataXML[$j] = $values;
+
                         $j++;
                     }
 
@@ -152,18 +159,19 @@ class ImporterXmlfileController extends Controller
                 }
             }
 
-            $this->view->assign(
-                array(
-                    'numCategories' => $numCategories,
-                    'XMLFile' => $XMLFile,
-                    'dataXML' => $dataXML,
-                    'action' => "import",
-                    'total_num' => $j,
-                )
-            );
 
         }
-        $tpl->display('agency_importer/xml-file/list.tpl');
+
+        return $this->render(
+            'agency_importer/xml-file/list.tpl',
+            array(
+                'numCategories' => $numCategories,
+                'XMLFile' => $XMLFile,
+                'dataXML' => $dataXML,
+                'action' => "import",
+                'total_num' => $j,
+            )
+        );
     }
 
     /**

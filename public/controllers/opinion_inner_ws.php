@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of the Onm package.
+ *
+ * (c)  OpenHost S.L. <developers@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ **/
 
 /**
  * Start up and setup the app
@@ -6,30 +14,28 @@
 require_once '../bootstrap.php';
 use Onm\Settings as s;
 
-/**
- * Redirect Mobile browsers to mobile site unless a cookie exists.
-*/
-// $app->mobileRouter();
-
-/**
- * Setup view
-*/
+// Setup view
 $tpl = new Template(TEMPLATE_USER);
+$tpl->setConfig('opinion');
+
+// Setup Content Manager
 $cm = new ContentManager();
 
-/**
- * Fetch HTTP variables
-*/
-$dirtyID          = $request->query->filter('opinion_id', '', FILTER_SANITIZE_STRING);
-$category_name    = $request->query->filter('category_name', 'opinion', FILTER_SANITIZE_STRING);
-$subcategory_name = $request->query->filter('subcategory_name', '', FILTER_SANITIZE_STRING);
+// Fetch HTTP variables
+$category_name    = $request->query->filter('category_name', 'extopinion', FILTER_SANITIZE_STRING);
+$subcategory_name = $request->query->filter('subcategory_name', null, FILTER_SANITIZE_STRING);
 $action           = $request->query->filter('action', null, FILTER_SANITIZE_STRING);
+
+$dirtyID          = $request->query->filter('opinion_id', '', FILTER_SANITIZE_STRING);
+$slug             = $request->query->filter('opinion_title', '', FILTER_SANITIZE_STRING);
+$author_name      = $request->query->filter('author_name', '', FILTER_SANITIZE_STRING);
 
 /**
  * Getting Synchronize setting params
  **/
 $wsUrl = '';
 $syncParams = s::get('sync_params');
+
 foreach ($syncParams as $siteUrl => $categoriesToSync) {
     foreach ($categoriesToSync as $value) {
         if (preg_match('/'.$category_name.'/i', $value)) {
@@ -38,55 +44,30 @@ foreach ($syncParams as $siteUrl => $categoriesToSync) {
     }
 }
 
-/**
- * Getting resolved Id
- */
-$opinionID = json_decode(file_get_contents($wsUrl.'/ws/contents/resolve/'.$dirtyID));
-$tpl->assign('contentId', $opinionID); // Used on module_comments.tpl
-
 // Redirect if no action
 if (empty($action)) {
     Application::forward301('/404.html');
 }
 switch ($action) {
     case 'read':
-        $tpl->setConfig('opinion');
 
-        // Increment numviews if it's accesible
-        // Content::setNumViews($opinionID);
+        $cache_id = $tpl->generateCacheId('sync'.$category_name, $subcategory_name, $dirtyID);
 
-        // Get category id correspondence with ws
-        $wsActualCategoryId = file_get_contents($wsUrl.'/ws/categories/id/'.$category_name);
-        // Fetch information for Advertisements
-        $ads = json_decode(file_get_contents($wsUrl.'/ws/ads/opinion/'.$wsActualCategoryId));
+        if (($tpl->caching == 0) || !$tpl->isCached('opinion.tpl', $cache_id)) {
 
-        $intersticial = $ads[0];
-        $banners = $ads[1];
+            // Get full opinion
+            $opinion = $cm->getUrlContent($wsUrl.'/ws/opinions/complete/'.$dirtyID, true);
+            $opinion = unserialize($opinion);
 
-        //Render ads
-        $advertisement = Advertisement::getInstance();
-        $advertisement->renderMultiple($banners, $advertisement, $wsUrl);
+            //Fetch information for Advertisements
+            require_once 'opinion_inner_advertisement.php';
 
-        // Render intersticial banner
-        if (!empty($intersticial)) {
-            $advertisement->renderMultiple(array($intersticial), $advertisement, $wsUrl);
-        }
-
-        // Fetch and load opinion information
-        $ext = json_decode(file_get_contents($wsUrl.'/ws/articles/'.(int) $opinionID));
-        $opinion = new Opinion();
-        $opinion->load($ext);
-
-        if (($opinion->available==1) && ($opinion->in_litter == 0)) {
-
-            $cache_id = $tpl->generateCacheId($category_name, $subcategory_name, $opinionID);
-
-            if (($tpl->caching == 0) || !$tpl->isCached('opinion.tpl', $cache_id)) {
+            if (($opinion->available==1) && ($opinion->in_litter == 0)) {
 
                 // Please SACAR esta broza de aqui {
                 $str = new StringUtils();
                 $title = $str->get_title($opinion->title);
-                $print_url = '/extimprimir/' . $title. '/'. $opinion->pk_content . '.html';
+                $print_url = '/extimprimir/'.$title.'/'.$dirtyID.'.html';
                 $tpl->assign('print_url', $print_url);
                 $tpl->assign(
                     'sendform_url',
@@ -94,64 +75,25 @@ switch ($action) {
                 );
                 // } Sacar broza
 
-
-
-                $opinion->author_name_slug = StringUtils::get_title($opinion->name);
-
-
-                // Fetch rating for this opinion
-                $rating = new Rating($opinionID);
-                $tpl->assign('rating_bar', $rating->render('article', 'vote'));
-
-
-                // Fetch suggested contents
-                $objSearch = cSearch::Instance();
-                $suggestedContents = $objSearch->SearchSuggestedContents(
-                    $opinion->metadata,
-                    'Opinion',
-                    " contents.available=1 AND pk_content = pk_fk_content",
-                    4
+                $tpl->assign(
+                    array(
+                        'other_opinions'  => $opinion->otherOpinions,
+                        'suggested'       => $opinion->machineRelated,
+                        'opinion'         => $opinion,
+                        'actual_category' => 'opinion',
+                        'media_url'       => $opinion->externalMediaUrl,
+                        'contentId'       => $opinion->id, // Used on module_comments.tpl
+                        'ext'             => 1 //Used on widget_opinions_authors
+                    )
                 );
 
-                $suggestedContents= $cm->getInTime($suggestedContents);
-                $tpl->assign('suggested', $suggestedContents);
-
-                /**
-                    * Fetch the other opinions for this author
-                */
-                if ($opinion->type_opinion == 1) {
-                        $where=' opinions.type_opinion = 1';
-                        $opinion->name ='Editorial';
-                } elseif ($opinion->type_opinion == 2) {
-                        $where=' opinions.type_opinion = 2';
-                        $opinion->name ='Director';
-                } else {
-                    $where=' opinions.fk_author='.($opinion->fk_author);
-                }
-                $otherOpinions = $cm->cache->find(
-                    'Opinion',
-                    $where
-                    .' AND `pk_opinion` <>' .$opinionID
-                    .' AND available = 1  AND content_status=1',
-                    ' ORDER BY created DESC '
-                    .' LIMIT 0,9'
-                );
-                foreach ($otherOpinions as &$otherOpinion) {
-                    $otherOpinion->author_name_slug  = $opinion->author_name_slug;
-                }
-
-                $tpl->assign('other_opinions', $otherOpinions);
-                $tpl->assign('opinion', $opinion);
-                $tpl->assign('actual_category', 'opinion');
-
+            } else {
+                Application::forward301('/404.html');
             }
-
-            // Show in Frontpage
-            $tpl->display('opinion/opinion.tpl', $cache_id);
-
-        } else {
-            Application::forward301('/404.html');
         }
+
+        // Show in Frontpage
+        $tpl->display('opinion/opinion.tpl', $cache_id);
 
         break;
     case 'captcha':

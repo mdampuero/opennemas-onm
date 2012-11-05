@@ -20,6 +20,6 @@ $onmInstancesConnection = array(
     'BD_TYPE' => "mysqli",
     'BD_HOST' => "localhost",
     'BD_USER' => "root",
-    'BD_PASS' => "1234",
+    'BD_PASS' => "root",
     'BD_DATABASE' => "onm-instances",
 );

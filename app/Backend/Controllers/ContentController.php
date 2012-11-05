@@ -297,5 +297,41 @@ class ContentController extends Controller
             array('Content-Type' => 'application/json')
         );
     }
+
+    /**
+     * Changed background color
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function updatePropertyAction(Request $request)
+    {
+        $id = (int) $request->query->getDigits('id', null);
+
+        if ($id > 0) {
+            $content = new \Content($id);
+            $meta = $request->query->get('meta', null);
+            if ($content->id != null && $meta != null) {
+                $value = $request->query->get('value', null);
+                $content->setProperty($meta, $value);
+
+                $code = 200;
+                $message = "Done {$id}: {$meta}-{$value}";
+            } else {
+                $code = 404;
+                $message = sprintf(_('Content or property not valid'), $id);
+            }
+        } else {
+            $code = 400;
+            $message = 'Please specify an content id';
+        }
+
+        return new Response(
+            json_encode($message),
+            $code,
+            array('Content-Type' => 'application/json')
+        );
+    }
 }
 

@@ -11,6 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher;
 
 $sc = new ContainerBuilder();
 
@@ -20,6 +21,7 @@ $loader = new YamlFileLoader($sc, new FileLocator(__DIR__.'/config/'));
 $sc->setParameter('routes', $routes);
 $sc->setParameter('request', $request);
 $sc->setParameter('instance', $instance);
+$sc->set('event_dispatcher', new ContainerAwareEventDispatcher($sc));
 
 $loader->load('app.yml');
 

@@ -288,8 +288,8 @@ class cSearch
         $szMatch = $this->defineMatchOfSentence($szSourceTags2); //Match con metadata
         $szMatch2 = $this->defineMatchOfSentence2($szSourceTags);//Match con contents.title
 
-        $szSqlSentence = "SELECT `contents`.`pk_content`, `contents`.`title`, "
-            ."`contents`.`metadata`, `contents`.`created`,  " . (($szMatch))
+        $szSqlSentence = "SELECT `contents`.`pk_content`, `contents`.`title`, `contents_categories`.`catName` ,"
+            ."`contents`.`metadata`, `contents`.`created`,  `contents`.`category_name`," . (($szMatch))
             .'+'.(($szMatch2)) . " AS rel  FROM contents, contents_categories ";
         //$szSqlWhere  = " WHERE MATCH ( " . cSearch::FULL_TEXT_COLUMN . ")
         // AGAINST ( '" . $szSourceTags . "  IN BOOLEAN MODE') ";
@@ -306,6 +306,18 @@ class cSearch
         $result = null;
         if (!empty($resultSet)) {
             $result= $resultSet->GetArray();
+        }
+
+        foreach ($result as &$res) {
+            $res['uri'] = Uri::generate(
+                'article',
+                array(
+                    'id'       => $res['pk_content'],
+                    'date'     => date('YmdHis', strtotime($res['created'])),
+                    'category' => $res['catName'],
+                    'slug'     => StringUtils::get_title($res['title']),
+                )
+            );
         }
 
         return $result;

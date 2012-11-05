@@ -602,12 +602,14 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
 
 
     #--------------------------------------------------------
-    #Redirection from old elidealgallego.com
+    #Redirection from old elidealgallego.com and hibridosyelectricos.com
     #Inner Article
-    RewriteRule ^index\.php/[a-z0-9\-]+/[a-z0-9\-]+/([0-9]+)\-[a-z0-9\-]+/?$ /controllers/redirect-imported-elements.php?content_type=article&content_id=$1 [L,NC]
+    RewriteRule ^index\.php/[a-z0-9\-]+/[a-z0-9\-]+/([0-9]+)\-[a-z0-9\-\.]+/?$ /controllers/redirect-imported-elements.php?content_type=article&content_id=$1 [L,NC]
+    RewriteRule ^index\.php/[a-z0-9\-]+/[a-z0-9\-]+/[a-z0-9\-]+/([0-9]+)\-[a-z0-9\-\.]+/?$ /controllers/redirect-imported-elements.php?content_type=article&content_id=$1 [L,NC]
+    RewriteRule ^index\.php/[a-z0-9\-]+/[a-z0-9\-]+/[a-z0-9\-]+/[a-z0-9\-]+/([0-9]+)\-[a-z0-9\-\.]+/?$ /controllers/redirect-imported-elements.php?content_type=article&content_id=$1 [L,NC]
     RewriteRule ^index\.php/opinion/[a-z0-9\-]+/([0-9]+)\-[a-z]/?$ /controllers/redirect-from-editmaker.php?content_type=opinion&content_id=$1 [L,NC]
-    #------------------------
-    RewriteRule ^index.php/?$ / [R=301,L,NC]
+    #------------------------  Secciones de elidealgallego.com
+
     RewriteRule ^index.php/inicio/?$ / [R=301,L,NC]
     RewriteRule ^index.php/opinion.*/?$ /opinion/ [R=301,L,NC]
     RewriteRule ^index.php/iberia/?$ /seccion/espana/ [R=301,L,NC]
@@ -625,8 +627,36 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteRule ^index.php/aeropuertos/?$ /estaticas/aeropuertos.html [R=301,L,NC]
     RewriteRule ^index.php/farmacias/?$ /estaticas/farmacia.html [R=301,L,NC]
     RewriteRule ^index.php/galerias/?$ /album/ [R=301,L,NC]
-    RewriteRule ^index.php/.*/?$ / [R=301,L,NC]
+    #------------------------  Secciones de hibridosyelectricos.com
+    RewriteRule ^index.php/actualidad.*?$ /seccion/actualidad/ [R=301,L,NC]
+    RewriteRule ^index.php/marcas-y-fabricantes.*/?$ /seccion/mercado/ [R=301,L,NC]
+    RewriteRule ^index.php/tecnologia.*/?$ /seccion/tecnologia/ [R=301,L,NC]
+    RewriteRule ^index.php/posventa.*/?$ /seccion/sector/ [R=301,L,NC]
+    RewriteRule ^index.php/ecosostenible.*/?$ /seccion/sostenibilidad/ [R=301,L,NC]
+    RewriteRule ^index.php/revista.*/?$ /portadas-papel/ [R=301,L,NC]
+
+    #------------------------  Secciones de prontoar ----------------------
+
+    #index.php?option=com_content&task=view&id=47077&Itemid=677
+    RewriteCond %{QUERY_STRING} &?option=com_content&?task=blogcategory&?id=([^&]+)&?Itemid=([^&]+)
+    RewriteRule ^index.php$  /seccion/espectaculos/ [R=301,L,NC]
+    RewriteCond %{QUERY_STRING} &?option=com_content&?task=view&?id=2843&?Itemid=([^&]+)
+    RewriteRule ^index.php$  /seccion/magazine/ [R=301,L,NC]
+    RewriteCond %{QUERY_STRING} &?option=com_content&?task=view&?id=41048&?Itemid=([^&]+)
+    RewriteRule ^index.php$  /seccion/famosos/ [R=301,L,NC]
+    RewriteCond %{QUERY_STRING} &?option=com_content&?task=view&?id=40913&?Itemid=([^&]+)
+    RewriteRule ^index.php$  /seccion/looks/ [R=301,L,NC]
+    RewriteCond %{QUERY_STRING} &?option=com_content&?task=view&?id=38215&?Itemid=([^&]+)
+    RewriteRule ^index.php$  /seccion/diosas-pronto/ [R=301,L,NC]
+
+    #index.php?option=com_content&task=view&id=47077&Itemid=677
+    RewriteCond %{QUERY_STRING} &?option=com_content&?task=view&?id=([^&]+)&?Itemid=([^&]+)
+    RewriteRule ^index.php$ controllers/redirect-imported-elements.php?content_type=article&content_id=%1  [R=301,L,NC]
+
     #--------------------------------------------------------
+    RewriteRule ^index.php/?$ / [R=301,L,NC]
+    RewriteRule ^index.php/.*/?$ / [R=301,L,NC]
+
 
     # provisional cronicas
     RewriteRule ^agenda/?$   http://agenda.cronicasdelaemigracion.com/ [R=301,L,NC]
@@ -697,7 +727,7 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     #Articles articulo/2008/09/29/galicia/ourense/titulo-noticia-separada-guiones/1222692016.html
     #Articles articulo/2008/09/29/galicia/titulo-noticia-separada-guiones/1222692016.html
     RewriteRule ^articulo/([a-z0-9\-]+)?/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/([a-z0-9\-]+)/([0-9]+).html$ controllers/article.php?category_name=$1&year=$2&month=$3&day=$4&article_id=$6&action=read&article_title=$5 [L,NC]
-    RewriteRule ^extarticulo/([a-z0-9\-]+)?/.*/([0-9]+).html$ controllers/article_ws.php?category_name=$1&article_id=$2&action=read&ext=1 [L,NC]
+    RewriteRule ^extarticulo/([a-z0-9\-]+)?/.*/([0-9]+).html$ controllers/article_ws.php?category_name=$1&article_id=$2&action=read [L,NC]
     RewriteRule ^articulo/([a-z0-9\-]+)?/(.*)/([0-9]+).html$ controllers/article.php?category_name=$1&article_id=$3&action=read&article_title=$2 [L,NC]
     RewriteRule ^artigo/([a-z0-9\-]+)?/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/([a-z0-9\-]+)/([0-9]+).html$ controllers/article.php?category_name=$1&year=$2&month=$3&day=$4&article_id=$6&action=read&article_title=$5 [L,NC]
     RewriteRule ^artigo/([a-z0-9\-]+)?/.*/([0-9]+).html$ controllers/article.php?category_name=$1&article_id=$2&action=read [L,NC]
@@ -717,26 +747,35 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteRule ^opinion/([0-9]+)/$ controllers/opinion_index.php?category_name=opinion&action=list_opinions&page=$1 [L,NC]
     RewriteRule ^opinion/?$ controllers/opinion_index.php?category_name=opinion&action=list_opinions [L,NC]
 
+    #Sync Opinion Frontpage
+    RewriteRule ^extopinion/([0-9]+)/$ controllers/opinion_index_ws.php?category_name=opinion&action=list_opinions&page=$1 [L,NC]
+    RewriteRule ^extopinion/?$ controllers/opinion_index_ws.php?category_name=opinion&action=list_opinions [L,NC]
+
     #Opinion Autor index
     RewriteRule ^opinion/autor/([0-9]+)/(.*)/([0-9]*)/$ controllers/opinion_index.php?alt=pag&category_name=opinion&action=list_op_author&author_slug=$2&author_id=$1&page=$3 [L,NC]
     RewriteRule ^opinion/autor/([0-9]+)/(.*)$ controllers/opinion_index.php?alt=nopag&category_name=opinion&action=list_op_author&author_id=$1&author_slug=$2 [L,NC]
 
-    #Opinion Inner Web Service
-    RewriteRule ^extopinion(|/.+)?/([a-z0-9\-]+)?/(.*)?/([0-9]+).html$ controllers/opinion_inner.php?opinion_id=$4&category_name=opinion&action=read&t=$1 [L,NC]
+    #Sync Opinion Autor index
+    RewriteRule ^extopinion/autor/([0-9]+)/(.*)/([0-9]*)/$ controllers/opinion_index_ws.php?alt=pag&category_name=opinion&action=list_op_author&author_slug=$2&author_id=$1&page=$3 [L,NC]
+    RewriteRule ^extopinion/autor/([0-9]+)/(.*)$ controllers/opinion_index_ws.php?alt=nopag&category_name=opinion&action=list_op_author&author_id=$1&author_slug=$2 [L,NC]
 
     #Opinion Inner
     RewriteRule ^opinion(|/.+)?/([a-z0-9\-]+)?/(.*)?/([0-9]+).html$ controllers/opinion_inner.php?opinion_id=$4&category_name=opinion&action=read&t=$1&author_name=$2&opinion_title=$3 [L,NC]
     RewriteRule ^opinion(|/.+)?/(.*)?/([0-9]+).html$ controllers/opinion_inner.php?opinion_id=$3&category_name=opinion&action=read&t=$1 [L,NC]
 
-    #Articulos print Web Service
-    RewriteRule ^extimprimir/[^/]+/([a-z0-9\-_]+)/([a-z0-9\-_]+)/([0-9]+).html$ controllers/article_ws.php?action=print&article_id=$3&category_name=$1&subcategory_name=$2 [L,NC]
-    RewriteRule ^extimprimir/[^/]+/([a-z0-9\-_]+)/([0-9]+).html$ controllers/article_ws.php?action=print&article_id=$2&category_name=$1& [L,NC]
-    RewriteRule ^extimprimir/[^/]+/([0-9]+).html$ controllers/opinion_inner_ws.php?action=print&opinion_id=$1 [L,NC]
+    #Sync Opinion Inner
+    RewriteRule ^extopinion(|/.+)?/([a-z0-9\-]+)?/(.*)?/([0-9]+).html$ controllers/opinion_inner_ws.php?opinion_id=$4&category_name=opinion&action=read&t=$1&author_name=$2&opinion_title=$3 [L,NC]
+    RewriteRule ^extopinion(|/.+)?/(.*)?/([0-9]+).html$ controllers/opinion_inner_ws.php?opinion_id=$3&category_name=opinion&action=read&t=$1 [L,NC]
 
-    #articulos print
+    #Articulos print
     RewriteRule ^imprimir/[^/]+/([a-z0-9\-_]+)/([a-z0-9\-_]+)/([0-9]+).html$ controllers/article.php?action=print&article_id=$3&category_name=$1&subcategory_name=$2 [L,NC]
     RewriteRule ^imprimir/[^/]+/([a-z0-9\-_]+)/([0-9]+).html$ controllers/article.php?action=print&article_id=$2&category_name=$1 [L,NC]
     RewriteRule ^imprimir/[^/]+/([0-9]+).html$ controllers/opinion_inner.php?action=print&opinion_id=$1 [L,NC]
+
+    #Sync Articulos print
+    RewriteRule ^extimprimir/[^/]+/([a-z0-9\-_]+)/([a-z0-9\-_]+)/([0-9]+).html$ controllers/article_ws.php?action=print&article_id=$3&category_name=$1&subcategory_name=$2 [L,NC]
+    RewriteRule ^extimprimir/[^/]+/([a-z0-9\-_]+)/([0-9]+).html$ controllers/article_ws.php?action=print&article_id=$2&category_name=$1& [L,NC]
+    RewriteRule ^extimprimir/[^/]+/([0-9]+).html$ controllers/opinion_inner_ws.php?action=print&opinion_id=$1 [L,NC]
 
     #Home
     RewriteRule ^/?$ controllers/index.php?category_name=home [L,NC]
@@ -757,18 +796,17 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteRule ^regenerate/pass/check/([a-f0-9]{32})/?$ controllers/register.php?action=regenerate_pass_check&token=$1 [L,NC]
     RewriteRule ^regenerate/pass/([a-f0-9]{32})/?$ controllers/register.php?action=regenerate_pass&token=$1 [L,NC]
 
-
-    #Sections external Web service
-    RewriteRule ^extseccion/([a-z0-9\-]+)/?$ controllers/index_ws.php?category_name=$1 [L,NC]
-    RewriteRule ^extseccion/([a-z0-9\-]+)/([0-9]+)/?$ controllers/index_ws.php?category_name=$1&page=$2 [L,NC]
-    RewriteRule ^extseccion/([a-z0-9\-]+)/([a-z0-9\-]+)/?$ controllers/index_ws.php?category_name=$1&subcategory_name=$2 [L,NC]
-    RewriteRule ^extseccion/([a-z0-9\-]+)/([a-z0-9\-]+)/([0-9]+)/?$ controllers/index_ws.php?category_name=$1&subcategory_name=$2&page=$3 [L,NC]
-
     #Sections
     RewriteRule ^seccion/([a-z0-9\-]+)/?$ controllers/index.php?category_name=$1 [L,NC]
     RewriteRule ^seccion/([a-z0-9\-]+)/([0-9]+)/?$ controllers/index.php?category_name=$1&page=$2 [L,NC]
     RewriteRule ^seccion/([a-z0-9\-]+)/([a-z0-9\-]+)/?$ controllers/index.php?category_name=$1&subcategory_name=$2 [L,NC]
     RewriteRule ^seccion/([a-z0-9\-]+)/([a-z0-9\-]+)/([0-9]+)/?$ controllers/index.php?category_name=$1&subcategory_name=$2&page=$3 [L,NC]
+
+    #Sync Sections
+    RewriteRule ^extseccion/([a-z0-9\-]+)/?$ controllers/index_ws.php?category_name=$1 [L,NC]
+    RewriteRule ^extseccion/([a-z0-9\-]+)/([0-9]+)/?$ controllers/index_ws.php?category_name=$1&page=$2 [L,NC]
+    RewriteRule ^extseccion/([a-z0-9\-]+)/([a-z0-9\-]+)/?$ controllers/index_ws.php?category_name=$1&subcategory_name=$2 [L,NC]
+    RewriteRule ^extseccion/([a-z0-9\-]+)/([a-z0-9\-]+)/([0-9]+)/?$ controllers/index_ws.php?category_name=$1&subcategory_name=$2&page=$3 [L,NC]
 
     #RSS
     RewriteRule ^rss/?$ controllers/rss.php?action=rss [L,NC]

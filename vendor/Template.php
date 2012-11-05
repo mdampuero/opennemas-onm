@@ -10,18 +10,17 @@ use FilesManager as fm;
 class Template extends Smarty
 {
     // Private properties
-    public $theme          = null;
-    public $locale_dir	= null;
-    public $css_dir	= null;
-    public $image_dir      = null;
-    public $js_dir         = null;
-    public $js_includes    = array( 'head' => array() );
-    public $css_includes   = array( 'head' => array() );
-    public $metatags       = array();
-    public $filters        = array( 'pre'    => array(),
-                          'post'   => array(),
-                          'output' => array(), );
+    public $theme               = null;
+    public $locale_dir	        = null;
+    public $css_dir	            = null;
+    public $image_dir           = null;
+    public $js_dir              = null;
+    public $common_asset_dir    = null;
+    public $js_includes         = array( 'head' => array() );
+    public $css_includes        = array( 'head' => array(), 'footer' => array() );
+    public $metatags            = array();
     public $templateBaseDir;
+    public $allow_php_tag;
 
     public $relative_path = null;
     static public $registry = array();
@@ -34,8 +33,6 @@ class Template extends Smarty
         if (!file_exists(CACHE_PATH.DS.'smarty')) {
             mkdir(CACHE_PATH.DS.'smarty', 0775);
         }
-
-        self::$_CHARSET = 'UTF-8';
 
         // Parent variables
         $this->templateBaseDir = SITE_PATH.DS.'themes'.DS.$theme.DS;
@@ -68,30 +65,36 @@ class Template extends Smarty
 
         $this->error_reporting = E_ALL & ~E_NOTICE;
 
+        $this->theme = $theme;
+        $this->assign('THEME', $theme);
+
         // Add global plugins path
         $this->addPluginsDir(realpath(SMARTY_DIR.DS.'../'.DS.'onm-plugins/'));
         $this->addPluginsDir(realpath($this->templateBaseDir.'plugins/').'/');
         $this->caching          = false;
+        $this->allow_php_tag    = true;
 
 
         // Template variables
         $baseUrl = SITE_URL.SS.'themes'.SS.$theme.SS;
-        $this->locale_dir       = $baseUrl.'locale/';
-        $this->css_dir          = $baseUrl.'css/';
-        $this->image_dir        = $baseUrl.'images/';
-        $this->js_dir           = $baseUrl.'js/';
+        $this->locale_dir       = $baseUrl.'locale'.SS;
+        $this->css_dir          = $baseUrl.'css'.SS;
+        $this->image_dir        = $baseUrl.'images'.SS;
+        $this->js_dir           = $baseUrl.'js'.SS;
+        $this->common_asset_dir = SITE_URL.SS.'assets'.SS;
 
-        // Set filters: $filters = array('pre' => array(), 'post' => array(), 'output' => array())
-        $this->setFilters($filters);
+        $this->loadFilter("output", "js_includes");
+        $this->loadFilter("output", "css_includes");
 
         $this->assign(
             'params',
             array(
-                'LOCALE_DIR' =>    $this->locale_dir,
-                'CSS_DIR'	 =>    $this->css_dir,
-                'IMAGE_DIR'  =>    $this->image_dir,
-                'JS_DIR'	 =>    $this->js_dir,
-                'THEME'      =>    $theme,
+                'LOCALE_DIR'       => $this->locale_dir,
+                'CSS_DIR'          => $this->css_dir,
+                'IMAGE_DIR'        => $this->image_dir,
+                'JS_DIR'           => $this->js_dir,
+                'COMMON_ASSET_DIR' => $this->common_asset_dir,
+                'THEME'            => $theme,
             )
         );
 
@@ -103,8 +106,11 @@ class Template extends Smarty
 
     public function setFilters($filters = array())
     {
-        $this->filters = $filters;
-        $this->autoload_filters = $filters;
+        if (count($filters) > 0) {
+            $this->filters = $filters;
+            $this->autoload_filters = $filters;
+        }
+        return $this;
     }
 
 
@@ -210,38 +216,20 @@ class Template extends Smarty
             //$this->setCaching(0);
         }
     }
-
-    public function setUpLocale()
-    {
-        /* GetText configuration **********************************************/
-        // I18N support information here
-        $language = (isset($_REQUEST['lang']))? $_REQUEST['lang']: 'en';
-        putenv("LANG=$language");
-        setlocale(LC_ALL, $language);
-
-        // Set the text domain as 'messages'
-        $domain = 'messages';
-        bindtextdomain($domain, $this->locale_dir);
-        textdomain($domain);
-        /**********************************************************************/
-    }
 }
 
 class TemplateAdmin extends Template
 {
-
     public function __construct($theme, $filters = array())
     {
 
         // Call the parent constructor
         parent::__construct($theme, $filters);
 
-        $this->setFilters($filters);
-
         $this->loadFilter("output", "trimwhitespace");
 
         // Parent variables
-        $this->templateBaseDir = SITE_PATH.DS.ADMIN_DIR.DS.'themes'.DS.$theme.DS;
+        $this->templateBaseDir = SITE_PATH.DS.'themes'.DS.$theme.DS;
 
         foreach (array('cache', 'compile') as $key => $value) {
             $directory = COMMON_CACHE_PATH.DS.'smarty'.DS.'admin'.DS.$value;
@@ -258,7 +246,7 @@ class TemplateAdmin extends Template
         $this->caching	= false;
 
         // Template variables
-        $baseUrl = SITE_URL.SS.'admin'.SS.'themes'.SS.$theme.SS;
+        $baseUrl = SS.'themes'.SS.$theme.SS;
 
         $this->locale_dir = $baseUrl.'locale/';
         $this->css_dir    = $baseUrl.'css/';
@@ -268,10 +256,11 @@ class TemplateAdmin extends Template
         $this->assign(
             'params',
             array(
-                'LOCALE_DIR' =>    $this->locale_dir,
-                'CSS_DIR'	 =>    $this->css_dir,
-                'IMAGE_DIR'  =>    $this->image_dir,
-                'JS_DIR'	 =>    $this->js_dir
+                'LOCALE_DIR'       =>    $this->locale_dir,
+                'CSS_DIR'	       =>    $this->css_dir,
+                'IMAGE_DIR'        =>    $this->image_dir,
+                'JS_DIR'	       =>    $this->js_dir,
+                'COMMON_ASSET_DIR' => $this->common_asset_dir,
             )
         );
 
@@ -290,11 +279,8 @@ class TemplateManager extends Template
         // Call the parent constructor
         parent::__construct($theme, $filters);
 
-        $this->setFilters($filters);
-
-
         // Parent variables
-        $this->templateBaseDir = SITE_PATH.DS.'manager'.DS.'themes'.DS.'default'.DS;
+        $this->templateBaseDir = SITE_PATH.DS.'themes'.DS.'manager'.DS;
 
         foreach (array('cache', 'compile') as $key => $value) {
             $directory = COMMON_CACHE_PATH.DS.'smarty'.DS.'manager'.DS.$value;
@@ -312,7 +298,7 @@ class TemplateManager extends Template
         $this->caching	     = false;
 
         // Template variables
-        $baseUrl = SITE_URL.SS.'admin'.SS.'themes'.SS.$theme.SS;
+        $baseUrl = SITE_URL.'themes'.SS.'admin'.SS;
 
         $this->locale_dir = $baseUrl.'locale/';
         $this->css_dir    = $baseUrl.'css/';
@@ -322,10 +308,11 @@ class TemplateManager extends Template
         $this->assign(
             'params',
             array(
-                'LOCALE_DIR' =>    $this->locale_dir,
-                'CSS_DIR'    =>    $this->css_dir,
-                'IMAGE_DIR'  =>    $this->image_dir,
-                'JS_DIR'     =>    $this->js_dir
+                'LOCALE_DIR'       =>    $this->locale_dir,
+                'CSS_DIR'          =>    $this->css_dir,
+                'IMAGE_DIR'        =>    $this->image_dir,
+                'JS_DIR'           =>    $this->js_dir,
+                'COMMON_ASSET_DIR' => $this->common_asset_dir,
             )
         );
 

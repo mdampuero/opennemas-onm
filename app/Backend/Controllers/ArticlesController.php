@@ -459,6 +459,12 @@ class ArticlesController extends Controller
                 return $this->redirect($this->generateUrl('admin_articles'));
             }
 
+            if (count($request->request) < 1) {
+                m::add(_("Article data sent not valid."), m::ERROR);
+
+                return $this->redirect($this->generateUrl('admin_article_show', array('id' => $id)));
+            }
+
             $article = new \Article();
 
             $params = $request->request->get('params');
@@ -546,6 +552,8 @@ class ArticlesController extends Controller
                 // TODO: Move this to a post update hook
                 $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
                 $tplManager->delete($article->category_name.'|'.$article->id);
+                $tplManager->delete('home|0');
+                $tplManager->delete($_POST['category'] . '|0');
 
                 m::add(_('Article successfully updated.'), m::SUCCESS);
             } else {
@@ -764,7 +772,7 @@ class ArticlesController extends Controller
                 'totalItems'  => $countArticles,
                 'fileName'    => $this->generateUrl(
                     'admin_articles_content_provider_category',
-                    array('category' => $category,)
+                    array('category' => (empty($category) ? '0' : $category),)
                 ).'&page=%d',
             )
         );

@@ -41,12 +41,21 @@ class Bootstrap extends ModuleBootstrap
     {
         $request = $this->container->get('request');
 
+        $sessionLifeTime = (int) s::get('max_session_lifetime', 60);
+        if ((int) $sessionLifeTime > 0) {
+            ini_set('session.cookie_lifetime',  $sessionLifeTime*60);
+        } else {
+            s::set('max_session_lifetime', 60*30);
+        }
+
+
         $isAsset = preg_match('@.*\.(png|gif|jpg|ico|css|js)$@', $request->getPathInfo());
         if ($isAsset != 1) {
 
             session_name('_onm_sess');
             $session = $this->container->get('session');
             $session->start();
+            $this->container->get('request')->setSession($session);
 
             if (!isset($_SESSION['userid'])
                 && !preg_match('@^/login@', $request->getPathInfo())

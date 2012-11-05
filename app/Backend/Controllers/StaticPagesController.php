@@ -139,6 +139,7 @@ class StaticPagesController extends Controller
                     'slug'         => $request->request->filter('slug', null, FILTER_SANITIZE_STRING),
                     'description'  => $request->request->filter('description', null, FILTER_SANITIZE_STRING),
                     'metadata'     => $request->request->filter('metadata', null, FILTER_SANITIZE_STRING),
+                    'available'    => $request->request->filter('available', null, FILTER_SANITIZE_STRING),
                     'fk_publisher' => $_SESSION['userid'],
                     'category'     => 0,
                     'id'           => 0,
@@ -186,6 +187,7 @@ class StaticPagesController extends Controller
                     'slug'         => $request->request->filter('slug', null, FILTER_SANITIZE_STRING),
                     'description'  => $request->request->filter('description', null, FILTER_SANITIZE_STRING),
                     'metadata'     => $request->request->filter('metadata', null, FILTER_SANITIZE_STRING),
+                    'available'    => $request->request->filter('available', null, FILTER_SANITIZE_STRING),
                     'fk_publisher' => $_SESSION['userid'],
                     'id'           => $id,
                 );

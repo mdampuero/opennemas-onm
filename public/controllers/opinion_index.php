@@ -107,6 +107,13 @@ switch ($action) {
                 $opinion->author           = $authors[$opinion->fk_author];
                 $opinion->name             = $opinion->author->name;
                 $opinion->author_name_slug = StringUtils::get_title($opinion->name);
+                $opinion->author->uri = Uri::generate(
+                    'opinion_author_frontpage',
+                    array(
+                        'slug' => $opinion->author->name,
+                        'id' => $opinion->author->pk_author
+                    )
+                );
             }
 
             $url    ='opinion';
@@ -176,6 +183,23 @@ switch ($action) {
                 foreach ($opinions as &$opinion) {
                     $opinion['pk_author'] = $authorID;
                     $opinion['author_name_slug']  = $authorName;
+                    $opinion['uri'] = Uri::generate(
+                        'opinion',
+                        array(
+                            'id'       => $opinion['id'],
+                            'date'     => date('YmdHis', strtotime($opinion['created'])),
+                            'category' => $opinion['author_name_slug'],
+                            'slug'     => $opinion['slug'],
+                        )
+                    );
+
+                    $opinion['author_uri'] = Uri::generate(
+                        'opinion_author_frontpage',
+                        array(
+                            'slug' => $opinion['author_name_slug'],
+                            'id' => $opinion['pk_author']
+                        )
+                    );
                 }
             }
 

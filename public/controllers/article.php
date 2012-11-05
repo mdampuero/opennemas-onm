@@ -52,13 +52,12 @@ switch ($action) {
         if (empty($articleID) ) {
             Application::forward301('/404.html');
         }
-        // Increment numviews if it's accesible
-        Content::setNumViews($articleID);
 
         // Load config
         $tpl->setConfig('articles');
 
         $tpl->assign('category_name', $category_name);
+        $tpl->assign('contentId', $articleID);
 
         $cm = new ContentManager();
 
@@ -112,16 +111,21 @@ switch ($action) {
                 // Categories code -------------------------------------------
                 // TODO: Seems that this is trash, evaluate its removal
 
-                $actual_category       =$category_name;
-                $actual_category_id    = $ccm->get_id($actual_category);
-                $actual_category_title = $ccm->get_title($actual_category);
+                $actualCategory      = $category_name;
+                $actualCategoryId    = $ccm->get_id($actualCategory);
+                $actualCategoryTitle = $ccm->get_title($actualCategory);
+                $categoryData        = null;
+                if ($actualCategoryId != 0 && array_key_exists($actualCategoryId, $ccm->categories)) {
+                    $categoryData = $ccm->categories[$actualCategoryId];
+                }
 
                 $tpl->assign(
                     array(
-                        'category_name'         => $actual_category ,
-                        'actual_category_title' => $actual_category_title,
-                        'actual_category'       => $actual_category,
-                        'actual_category_id'    =>$actual_category_id,
+                        'category_name'         => $actualCategory ,
+                        'actual_category_title' => $actualCategoryTitle,
+                        'actual_category'       => $actualCategory,
+                        'actual_category_id'    => $actualCategoryId,
+                        'category_data'         => $categoryData,
                     )
                 );
 
@@ -139,7 +143,7 @@ switch ($action) {
                 } else {
                     $video =  $cm->find_by_category_name(
                         'Video',
-                        $actual_category,
+                        $actualCategory,
                         'contents.content_status=1',
                         'ORDER BY created DESC LIMIT 0 , 1'
                     );
@@ -186,13 +190,18 @@ switch ($action) {
                 }
                 $tpl->assign('suggested', $machineSuggestedContents);
 
+                $layout = s::get('frontpage_layout_'.$actualCategoryId, 'default');
+                $layoutFile = 'layouts/'.$layout.'.tpl';
+
+                $tpl->assign('layoutFile', $layoutFile);
+
             } else {
                 Application::forward301('/404.html');
             }
 
         } // end if $tpl->is_cached
 
-        $tpl->display('article/article.tpl', $cacheID);
+        $tpl->display("extends:{$layoutFile}|article/article.tpl", $cacheID);
 
         break;
     case 'vote':

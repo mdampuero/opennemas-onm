@@ -211,6 +211,9 @@ class ContentManager
                     } else {
                         $content->in_frontpage = false;
                     }
+                    if (\Onm\Module\ModuleManager::isActivated('AVANCED_FRONTPAGE_MANAGER')) {
+                        $content->loadAllContentProperties();
+                    }
                     $contents[] = $content;
                 }
             }
@@ -2277,6 +2280,38 @@ class ContentManager
         }
 
         return false;
+    }
+
+    /**
+    * Fetches the content for one specific url
+    *
+    * This is used for getting information from Onm Rest Api
+    *
+    * @param $url the url we want to get contents from
+    * @param $decodeJson if true apply json_decode before return content
+    *
+    * @return false | the content retrieved by the url
+    */
+    public function getUrlContent ($url, $decodeJson = false)
+    {
+
+        $externalContent = apc_fetch(APC_PREFIX.$url, $success);
+        if (!$success) {
+            $c  = curl_init($url);
+            curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
+            $externalContent = curl_exec($c);
+            apc_add(APC_PREFIX.$url, $externalContent, 300);
+            curl_close($c);
+        }
+
+        if ($decodeJson) {
+            $content = json_decode($externalContent);
+        } else {
+            $content = $externalContent;
+        }
+
+        return $content;
+
     }
 }
 

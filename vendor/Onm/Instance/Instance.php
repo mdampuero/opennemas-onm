@@ -44,6 +44,7 @@ class Instance
                 '',
                 array('http://' , $_SERVER['HTTP_HOST'], '/media'.'/')
             );
+
         }
 
         foreach ($this->settings as $key => $value) {
@@ -76,7 +77,6 @@ class Instance
      */
     public function initInternalConstants()
     {
-
         if (!empty($_SERVER['HTTPS'])
             && $_SERVER['HTTPS'] !== 'off'
             || $_SERVER['SERVER_PORT'] == 443
@@ -155,12 +155,12 @@ class Instance
         * Template settings
         **/
         define('TEMPLATE_USER_PATH', SITE_PATH.DS."themes".DS.TEMPLATE_USER.DS);
-        define('TEMPLATE_USER_URL', SITE_URL."themes".SS.TEMPLATE_USER.SS);
+        define('TEMPLATE_USER_URL', "/themes".SS.TEMPLATE_USER.SS);
 
-        define('TEMPLATE_ADMIN', "default");
-        define('TEMPLATE_ADMIN_PATH', SITE_PATH.DS.ADMIN_DIR.DS."themes".DS.TEMPLATE_ADMIN);
-        define('TEMPLATE_ADMIN_PATH_WEB', SS.ADMIN_DIR.SS."themes".SS.TEMPLATE_ADMIN.SS);
-        define('TEMPLATE_ADMIN_URL', SITE_URL_ADMIN.SS."themes".SS.TEMPLATE_ADMIN.SS);
+        define('TEMPLATE_ADMIN', "admin");
+        define('TEMPLATE_ADMIN_PATH', SITE_PATH.DS.DS."themes".DS.TEMPLATE_ADMIN.SS);
+        define('TEMPLATE_ADMIN_PATH_WEB', SS."themes".SS.TEMPLATE_ADMIN.SS);
+        define('TEMPLATE_ADMIN_URL', SS."themes".SS.TEMPLATE_ADMIN.SS);
         define('ADVERTISEMENT_ENABLE', true);
 
 

@@ -1,3 +1,10 @@
+
+ <===========  Please use new changes sql file. (changes-01102012.sql) ==========================>
+
+-- This changes are doing in instance-default.sql until 01-10-2012
+
+
+
 -- 27-09-2012
 ALTER TABLE  `menues` ADD  `position` VARCHAR( 50 ) AFTER  `type`;
 ALTER TABLE  `menues` DROP INDEX  `pk_menu`;

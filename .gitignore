@@ -5,7 +5,8 @@ config/*
 nbproject/
 public/admin/themes/default/compile/*
 public/media/
-public/themes/
+public/themes/*
+!public/themes/admin/
 *.sublime-*
 tmp/*
 vendor/autoload.php
@@ -16,3 +17,7 @@ vendor/symfony
 vendor/monolog
 vendor/swiftmailer
 app/config/parameters.yml
+/bin/import-tools/joomla/importer.log
+/bin/import-tools/joomla/configuration.ini
+/bin/import-tools/joomla/configuration.ini-ideal
+/bin/import-tools/joomla/configuration.ini-hibridos

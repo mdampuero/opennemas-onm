@@ -65,6 +65,8 @@ class Opinion extends Content
                         $authorName = 'Editorial';
                     } elseif ((int) $this->type_opinion == 2) {
                         $authorName = 'Director';
+                    } else {
+                        $authorName = 'author';
                     }
 
                 } else {
@@ -397,11 +399,21 @@ class Opinion extends Content
         $_sql_limit = " LIMIT {$options['limit']}";
 
         $cm = new ContentManager();
+
+        // TODO: Review this function called in a opinion widget in tribuna theme
+        // getInstance function was deleted - print fatal error in widget
+
+        /*
         $ccm = ContentCategoryManager::getInstance();
 
         // Excluding opinions already present in this frontpage
         $category = (isset($_REQUEST['category']))
             ? $ccm->get_id($_REQUEST['category']) :  0;
+
+        */
+
+        $category = 0;
+
         $contentsSuggestedInFrontpage =
             $cm->getContentsForHomepageOfCategory($category);
         foreach ($contentsSuggestedInFrontpage as $content) {

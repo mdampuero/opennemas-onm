@@ -62,12 +62,18 @@ if (
 
 
     $actualCategoryId = $actual_category_id = $ccm->get_id($actualCategory);
+    $categoryData = null;
+    if ($actualCategoryId != 0 && array_key_exists($actualCategoryId, $ccm->categories)) {
+        $categoryData = $ccm->categories[$actualCategoryId];
+    }
     $tpl->assign(
         array(
-            'actual_category_id' => $actualCategoryId,
+            'actual_category_id'    => $actualCategoryId,
             'actual_category_title' => $ccm->get_title($category_name),
+            'category_data'         => $categoryData,
         )
     );
+
 
     $cm = new ContentManager;
 
