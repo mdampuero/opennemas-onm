@@ -18,6 +18,7 @@
     {block name="header-css"}
         {css_tag href="/bootstrap/bootstrap.css" common="1"}
         {css_tag href="/style-backend.css" common="1"}
+        {css_tag href="/style.css"}
         <!--[if IE]>{css_tag href="/ie.css" common="1"}<![endif]-->
         {css_tag href="/jquery/jquery-ui.css" media="all" type="text/css" common="1"}
     {/block}
@@ -48,6 +49,29 @@
         </div>
         <div class="global-menu pull-left">
             {admin_menu file='/Manager/Resources/Menu.php' base=$smarty.const.APP_PATH}
+        </div>
+        <div class="global-user-tools pull-right">
+            <div class="usermenu">
+                <a href="#" class="menu"><span class="icon">&nbsp;</span></a>
+                <div>
+                    <div class="avatar">
+                        {gravatar email=$smarty.session.email image_dir=$params.IMAGE_DIR image=true size="50"}
+                    </div><!-- /.avatar -->
+                    <div class="user-info">
+                        <div class="complete-name">{$smarty.session.realname|ucfirst}</div>
+                        <div class="login-name">{$smarty.session.username}</div>
+                        <ul class="links">
+                            {*
+                            <li><a id="settings" title="{t}Edit my profile{/t}" href="{url name=admin_acl_user_show id=me}">{t}Edit my profile{/t}</a></li>
+                            {if Acl::check('BACKEND_ADMIN') eq true}
+                            <li><a href="#" id="user_activity" title="{t}Active users in backend{/t}">{t}Connected users{/t} ({count_sessions})</a></li>
+                            {/if}
+                            *}
+                            <li><a href="javascript:salir('{t}Do you really want to exit from backend?{/t}','{url name="admin_logout"  csrf=$smarty.session.csrf}');" id="logout" class="logout" title="{t}Logout from control panel{/t}">{t}Log out{/t}</a></li>
+                        </ul><!-- /.links -->
+                    </div><!-- /.user-info -->
+                </div>
+            </div>
         </div>
     </header>
 
