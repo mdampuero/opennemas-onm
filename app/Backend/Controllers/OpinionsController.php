@@ -360,6 +360,13 @@ class OpinionsController extends Controller
             $inhome      = $request->request->filter('in_home', '', FILTER_SANITIZE_STRING);
             $withComment = $request->request->filter('with_comment', '', FILTER_SANITIZE_STRING);
 
+            // Check empty data
+            if (count($request->request) < 1) {
+                m::add(_("Opinion data sent not valid."), m::ERROR);
+
+                return $this->redirect($this->generateUrl('admin_opinion_show', array('id' => $id)));
+            }
+
             $data = array(
                 'id'                   => $id,
                 'title'                => $request->request->filter('title', '', FILTER_SANITIZE_STRING),

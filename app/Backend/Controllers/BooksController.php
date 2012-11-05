@@ -317,6 +317,12 @@ class BooksController extends Controller
             m::add(_("You can't modify this book data because you don't have enought privileges."));
 
         } else {
+            // Check empty data
+            if (count($request->request) < 1) {
+                m::add(_("Book data sent not valid."), m::ERROR);
+
+                return $this->redirect($this->generateUrl('admin_books_show', array('id' => $id)));
+            }
 
             $bookSavePath = INSTANCE_MEDIA_PATH.'/books/';
 

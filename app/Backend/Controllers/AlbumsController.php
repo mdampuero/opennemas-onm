@@ -353,6 +353,13 @@ class AlbumsController extends Controller
                 )
             );
         } else {
+            // Check empty data
+            if (count($request->request) < 1) {
+                m::add(_("Album data sent not valid."), m::ERROR);
+
+                return $this->redirect($this->generateUrl('admin_album_show', array('id' => $id)));
+            }
+
             $data = array(
                 'id'          => $id,
                 'available'   => $request->request->getDigits('available', 0, FILTER_SANITIZE_STRING),

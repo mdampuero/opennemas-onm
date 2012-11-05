@@ -289,7 +289,12 @@ class SpecialsController extends Controller
         $special = new \Special($id);
 
         if ($special->id != null) {
+            // Check empty data
+            if (count($request->request) < 1) {
+                m::add(_("Special data sent not valid."), m::ERROR);
 
+                return $this->redirect($this->generateUrl('admin_special_show', array('id' => $id)));
+            }
             $data = array(
                 'id'             => $id,
                 'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),

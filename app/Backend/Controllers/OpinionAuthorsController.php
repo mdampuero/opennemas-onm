@@ -199,6 +199,12 @@ class OpinionAuthorsController extends Controller
         $author = new \Author($id);
 
         if ($author->id != null) {
+            // Check empty data
+            if (count($request->request) < 1) {
+                m::add(_("Author data sent not valid."), m::ERROR);
+
+                return $this->redirect($this->generateUrl('admin_opinion_author_show', array('id' => $id)));
+            }
 
             $data = array(
                 'id'            => $id,
