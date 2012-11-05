@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Onm\Common\Cache;
+namespace Onm\Cache;
 
 /**
  * Xcache cache driver.
