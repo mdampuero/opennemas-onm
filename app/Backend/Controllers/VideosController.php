@@ -579,6 +579,13 @@ class VideosController extends Controller
             m::add(sprintf(_('Successfully changed suggested flag for video with id "%d"'), $id), m::SUCCESS);
         }
 
+        if ($category == 'widget') {
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_videos_widget'
+                )
+            );
+        }
         return $this->redirect(
             $this->generateUrl(
                 'admin_videos',

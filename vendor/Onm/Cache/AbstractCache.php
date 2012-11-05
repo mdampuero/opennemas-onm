@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Onm\Common\Cache;
+namespace Onm\Cache;
 
 /**
  * Base class for cache driver implementations.
@@ -15,7 +15,7 @@ namespace Onm\Common\Cache;
  * @since 0.8
  * @author  Fran Dieguez <fran@openhost.es>
  */
-abstract class AbstractCache implements Cache
+abstract class AbstractCache implements CacheInterface
 {
     /** @var string The namespace to prefix all cache ids with */
     private $_namespace = '';

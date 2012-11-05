@@ -486,6 +486,13 @@ class AlbumsController extends Controller
             m::add(sprintf(_('Successfully changed suggested flag for album with id "%d"'), $id), m::SUCCESS);
         }
 
+        if ($category == 'widget') {
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_albums_widget'
+                )
+            );
+        }
         return $this->redirect(
             $this->generateUrl(
                 'admin_albums',

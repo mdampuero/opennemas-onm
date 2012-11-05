@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Onm\Common\Cache;
+namespace Onm\Cache;
 
 /**
  * APC cache driver.
@@ -15,7 +15,7 @@ namespace Onm\Common\Cache;
  * @since 0.8
  * @author  Fran Dieguez <fran@openhost.es>
  */
-class APCCache extends AbstractCache
+class Apc extends AbstractCache
 {
 
     /**

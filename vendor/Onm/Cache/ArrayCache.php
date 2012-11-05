@@ -7,30 +7,27 @@
  * file that was distributed with this source code.
  */
 
-namespace Onm\Common\Cache;
+namespace Onm\Cache;
 
 /**
- * Zend Data Cache cache driver.
+ * Array cache driver.
  *
  * @since 0.8
  * @author  Fran Dieguez <fran@openhost.es>
  */
-class ZendDataCache extends AbstractCache
+class ArrayCache extends AbstractCache
 {
-    public function __construct()
-    {
-        // zend data cache format for namespaces ends in ::
-        $this->setNamespace('onm::');
-    }
+    /**
+     * @var array $data
+     */
+    private $_data = array();
 
     /**
      * {@inheritdoc}
      */
     public function getIds()
     {
-        throw new \BadMethodCallException(
-            "getIds() is not supported by ZendDataCache"
-        );
+        return array_keys($this->_data);
     }
 
     /**
@@ -38,7 +35,11 @@ class ZendDataCache extends AbstractCache
      */
     protected function doFetch($id)
     {
-        return zend_shm_cache_fetch($id);
+        if (isset($this->_data[$id])) {
+            return $this->_data[$id];
+        }
+
+        return false;
     }
 
     /**
@@ -46,7 +47,7 @@ class ZendDataCache extends AbstractCache
      */
     protected function doContains($id)
     {
-        return (zend_shm_cache_fetch($id) !== false);
+        return isset($this->_data[$id]);
     }
 
     /**
@@ -54,7 +55,9 @@ class ZendDataCache extends AbstractCache
      */
     protected function doSave($id, $data, $lifeTime = 0)
     {
-        return zend_shm_cache_store($id, $data, $lifeTime);
+        $this->_data[$id] = $data;
+
+        return true;
     }
 
     /**
@@ -62,7 +65,9 @@ class ZendDataCache extends AbstractCache
      */
     protected function doDelete($id)
     {
-        return zend_shm_cache_delete($id);
+        unset($this->_data[$id]);
+
+        return true;
     }
 }
 

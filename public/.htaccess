@@ -609,7 +609,7 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteRule ^index\.php/[a-z0-9\-]+/[a-z0-9\-]+/[a-z0-9\-]+/[a-z0-9\-]+/([0-9]+)\-[a-z0-9\-\.]+/?$ /controllers/redirect-imported-elements.php?content_type=article&content_id=$1 [L,NC]
     RewriteRule ^index\.php/opinion/[a-z0-9\-]+/([0-9]+)\-[a-z]/?$ /controllers/redirect-from-editmaker.php?content_type=opinion&content_id=$1 [L,NC]
     #------------------------  Secciones de elidealgallego.com
-    RewriteRule ^index.php/?$ / [R=301,L,NC]
+
     RewriteRule ^index.php/inicio/?$ / [R=301,L,NC]
     RewriteRule ^index.php/opinion.*/?$ /opinion/ [R=301,L,NC]
     RewriteRule ^index.php/iberia/?$ /seccion/espana/ [R=301,L,NC]
@@ -634,8 +634,29 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteRule ^index.php/posventa.*/?$ /seccion/sector/ [R=301,L,NC]
     RewriteRule ^index.php/ecosostenible.*/?$ /seccion/sostenibilidad/ [R=301,L,NC]
     RewriteRule ^index.php/revista.*/?$ /portadas-papel/ [R=301,L,NC]
+
+    #------------------------  Secciones de prontoar ----------------------
+
+    #index.php?option=com_content&task=view&id=47077&Itemid=677
+    RewriteCond %{QUERY_STRING} &?option=com_content&?task=blogcategory&?id=([^&]+)&?Itemid=([^&]+)
+    RewriteRule ^index.php$  /seccion/espectaculos/ [R=301,L,NC]
+    RewriteCond %{QUERY_STRING} &?option=com_content&?task=view&?id=2843&?Itemid=([^&]+)
+    RewriteRule ^index.php$  /seccion/magazine/ [R=301,L,NC]
+    RewriteCond %{QUERY_STRING} &?option=com_content&?task=view&?id=41048&?Itemid=([^&]+)
+    RewriteRule ^index.php$  /seccion/famosos/ [R=301,L,NC]
+    RewriteCond %{QUERY_STRING} &?option=com_content&?task=view&?id=40913&?Itemid=([^&]+)
+    RewriteRule ^index.php$  /seccion/looks/ [R=301,L,NC]
+    RewriteCond %{QUERY_STRING} &?option=com_content&?task=view&?id=38215&?Itemid=([^&]+)
+    RewriteRule ^index.php$  /seccion/diosas-pronto/ [R=301,L,NC]
+
+    #index.php?option=com_content&task=view&id=47077&Itemid=677
+    RewriteCond %{QUERY_STRING} &?option=com_content&?task=view&?id=([^&]+)&?Itemid=([^&]+)
+    RewriteRule ^index.php$ controllers/redirect-imported-elements.php?content_type=article&content_id=%1  [R=301,L,NC]
+
     #--------------------------------------------------------
+    RewriteRule ^index.php/?$ / [R=301,L,NC]
     RewriteRule ^index.php/.*/?$ / [R=301,L,NC]
+
 
     # provisional cronicas
     RewriteRule ^agenda/?$   http://agenda.cronicasdelaemigracion.com/ [R=301,L,NC]

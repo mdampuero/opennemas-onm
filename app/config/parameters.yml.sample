@@ -16,11 +16,17 @@ parameters:
     mailer_user:       ~
     mailer_password:   ~
 
+    cache_handler:     Onm\Cache\Apc
+    cache_handler_params:
+        server: localhost
+        port: 11211
+
+    session_handler: ~
+    session_handler_params:
+        save_path:     tmp/instances
+
     locale:            en
     secret:            ThisTokenIsNotSoSecretChangeIt
 
-    cache_handler:     apc
     dispatcher.exceptionhandler: "Framework:Controllers:ErrorController:default"
     environment:       production
-    session_params:
-        save_path:     tmp/instances

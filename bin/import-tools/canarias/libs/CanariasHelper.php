@@ -80,7 +80,7 @@ class CanariasHelper
 
         echo "\n Database was Cleaned \n ";
         //emtpy tables
-        $tables = array('articles', 'albums', 'albums_photos',
+        $tables = array('articles', 'albums', 'albums_photos', 'contents_categories',
             'attachments', 'authors', 'author_imgs', 'comments', 'letters',
             'content_positions', 'kioskos', 'opinions', 'pclave', 'photos', 'polls', 'poll_items',
             'ratings', 'related_contents', 'specials', 'special_contents', 'videos', 'votes',
@@ -133,6 +133,21 @@ class CanariasHelper
         if (!$rss) {
             $this->log('clear contents '.$sql.' function: '.$GLOBALS['application']->conn->ErrorMsg());
         }
+
+    }
+
+    public function clearCategories()
+    {
+
+        $sql="DELETE FROM `content_categories` WHERE pk_content_category >20";
+        $rss = $GLOBALS['application']->conn->Execute($sql);
+        if (!$rss) {
+            $this->log('clearCategories function: '.$GLOBALS['application']->conn->ErrorMsg());
+        }
+        $sql = "ALTER TABLE `authors` AUTO_INCREMENT =20";
+
+        $rss = $GLOBALS['application']->conn->Execute($sql);
+
 
     }
 
@@ -269,42 +284,6 @@ class CanariasHelper
         }
         return false;
     }
-
-
-    public function updateViews($contentID, $views)
-    {
-        if (isset($contentID) && isset($views)) {
-            $sql = 'UPDATE `contents` SET `views`=? WHERE pk_content=?';
-
-            $values = array($views,  $contentID);
-            $request = $GLOBALS['application']->conn->Prepare($sql);
-            $rss = $GLOBALS['application']->conn->Execute($request, $values);
-            if (!$rss) {
-                echo $GLOBALS['application']->conn->ErrorMsg();
-            }
-
-        } else {
-            echo "Please provide a contentID and views to update it.";
-        }
-    }
-
-    public function updateParams($contentID, $params)
-    {
-        if (isset($contentID) && isset($views)) {
-            $sql = 'UPDATE `contents` SET `params`=?  WHERE pk_content=?';
-
-            $values = array($params, $contentID);
-            $request = $GLOBALS['application']->conn->Prepare($sql);
-            $rss = $GLOBALS['application']->conn->Execute($request, $values);
-            if (!$rss) {
-                echo $GLOBALS['application']->conn->ErrorMsg();
-            }
-
-        } else {
-            echo "Please provide a contentID and views to update it.";
-        }
-    }
-
 
     public function updateCover($contentID, $coverId)
     {

@@ -109,6 +109,29 @@ class ImportHelper
         }
     }
 
+    public function updateVideoElements($contentID, $data)
+    {
+        if (isset($contentID) && !empty($data)) {
+            $sql = 'UPDATE `articles` SET `fk_video`=?, `fk_video2`=? WHERE pk_article=?';
+
+            $values = array($data['fk_video'], $data['fk_video2'], $contentID);
+
+            $date_update_sql = $GLOBALS['application']->conn->Prepare($sql);
+            $rss = $GLOBALS['application']->conn->Execute(
+                $date_update_sql,
+                $values
+            );
+            if (!$rss) {
+                echo $GLOBALS['application']->conn->ErrorMsg();
+            } else {
+                echo "-".$data['fk_video'].", ".$data['fk_video2'].", elem ".$contentID." updated ok. \n";
+            }
+
+        } else {
+            echo "Please provide a contentID and video to update it.";
+        }
+    }
+
     public function elementIsImported($contentID, $contentType)
     {
         if (isset($contentID) && isset($contentType)) {
@@ -130,6 +153,26 @@ class ImportHelper
         } else {
             echo "Please provide a contentID and views to update it.";
         }
+    }
+
+    public function elementTranslated($contentID, $contentType)
+    {
+        if (!empty($contentID)) {
+            $sql = 'SELECT * FROM `translation_ids` WHERE `pk_content_old`=? AND type=?';
+
+            $values = array($contentID, $contentType);
+            $request = $GLOBALS['application']->conn->Prepare($sql);
+            $rss = $GLOBALS['application']->conn->Execute($request, $values);
+
+            if (!$rss) {
+                echo $GLOBALS['application']->conn->ErrorMsg()."\n";
+                return 0;
+            } else {
+                return ($rss->fields['pk_content']);
+            }
+
+        }
+        return 0;
     }
 
     /**
@@ -230,6 +273,7 @@ class ImportHelper
 
             $values = array(
                 'file_path'      => $url,
+                'video_url'      => $url,
                 'category'       => JoomlaImporter::matchCategory($data['catid']),
                 'available'      => 1,
                 'content_status' => 1,
@@ -244,7 +288,6 @@ class ImportHelper
             ImportHelper::log("\n 1 Can't get video information. Check the $url\n ");
             return;
         }
-
 
         try {
 
@@ -268,8 +311,39 @@ class ImportHelper
 
     }
 
-    /***
-        Clear default contents in target database
+    /**
+     * Function that creates video from url and inserts it on ONM Database
+     *
+     * @return boolean
+     * @author
+     **/
+    public function searchVideo($url)
+    {
+        if (isset($url)) {
+            $sql = 'SELECT pk_video FROM `videos` WHERE `video_url`=?';
+
+            $values = array($url);
+            $r_sql = $GLOBALS['application']->conn->Prepare($sql);
+            $rss = $GLOBALS['application']->conn->Execute(
+                $r_sql,
+                $values
+            );
+
+            if (!$rss) {
+                echo $GLOBALS['application']->conn->ErrorMsg()."\n";
+                return 0;
+            } else {
+                return ($rss->fields['pk_video']);
+            }
+
+        } else {
+             return 0;
+        }
+
+    }
+
+    /**
+    *    Clear default contents in target database
     */
 
     public function sqlClearData()

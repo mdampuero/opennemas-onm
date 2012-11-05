@@ -6,10 +6,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Onm\Cache;
 
-namespace Onm\Common\Cache;
-
-use \Memcache;
+use \Memcache as BaseMemcache;
 
 /**
  * Memcache cache driver.
@@ -17,7 +16,7 @@ use \Memcache;
  * @since 0.8
  * @author  Fran Dieguez <fran@openhost.es>
  */
-class MemcacheCache extends AbstractCache
+class Memcache extends AbstractCache
 {
     /**
      * @var Memcache
@@ -25,11 +24,30 @@ class MemcacheCache extends AbstractCache
     private $_memcache;
 
     /**
+     * Initializes the database layer
+     *
+     * @return void
+     **/
+    public function __construct($options)
+    {
+        if (
+            array_key_exists('server', $options)
+            && array_key_exists('port', $options)
+        ) {
+            $memcache = new \Memcache();
+            $memcache->connect($options['server'], $options['port']);
+            $this->setMemcache($memcache);
+        }
+
+        return $this;
+    }
+
+    /**
      * Sets the memcache instance to use.
      *
      * @param Memcache $memcache
      */
-    public function setMemcache(Memcache $memcache)
+    public function setMemcache(BaseMemcache $memcache)
     {
         $this->_memcache = $memcache;
     }
