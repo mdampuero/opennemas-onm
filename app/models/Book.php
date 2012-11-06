@@ -72,25 +72,14 @@ class Book extends Content
         parent::create($data);
 
         $sql = "INSERT INTO books "
-             . "(`pk_book`, `author`, `file`, `file_img`,`editorial`) "
+             . "(`pk_book`, `author`, `file`, `file_img`, `editorial`) "
              . "VALUES (?,?,?,?,?)";
-
-        if (!file_exists($this->books_path) ) {
-            FilesManager::createDirectory($this->books_path);
-        }
-
-        $this->file_name =
-            FilesManager::cleanFileName($_FILES['file']['name'], '');
-        $this->file_img  =
-            FilesManager::cleanFileName($_FILES['file_img']['name'], '');
-
-        $this->createThumb();
 
         $values = array(
             $this->id,
             $data['author'],
-            $this->file_name,
-            $this->file_img,
+            $data['file_name'],
+            $data['file_img'],
             $data['editorial']
         );
 
@@ -127,12 +116,8 @@ class Book extends Content
 
     public function update($data)
     {
-        $file_name = FilesManager::cleanFileName($_FILES['file']['name']);
-        $file_img  = FilesManager::cleanFileName($_FILES['file_img']['name']);
 
         parent::update($data);
-        $data['file_name'] = !empty($file_name)?$file_name:$this->file_name;
-        $data['file_img'] = !empty($file_img)?$file_img:$this->file_img;
 
         $sql = "UPDATE books "
              . "SET  `author`=?,`file`=?,`file_img`=?, `editorial`=? "
@@ -173,38 +158,6 @@ class Book extends Content
             \Application::logDatabaseError();
 
             return;
-        }
-    }
-
-    public function createThumb()
-    {
-        $imageName   = basename($this->file_name, ".pdf") . '.jpg';
-        $tmpName   = '/tmp/' . basename($this->file_name, ".pdf") . '.png';
-
-        if (!file_exists($this->book_path.'/'.$imageName)
-            && (file_exists($this->book_path.'/'.$this->file_name))
-        ) {
-            try {
-                //// Thumbnail first page (see [0])
-                $imagick =
-                    new Imagick($this->books_path.'/'.$this->file_name.'[0]');
-
-                $imagick->thumbnailImage(180, 0);
-
-                // First, save to PNG (*.pdf => /tmp/xxx.png)
-                $imagick->writeImage($tmpName);
-
-                // finally, save to jpg (/tmp/xxx.png => *.jpg)
-                // to avoid problems with the image
-                $imagick = new Imagick($tmpName);
-                $imagick->writeImage($this->books_path.'/'.$imageName);
-
-                //remove temp image
-                unlink($tmpName);
-
-            } catch (Exception $e) {
-                // Nothing
-            }
         }
     }
 }
