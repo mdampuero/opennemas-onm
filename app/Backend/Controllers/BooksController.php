@@ -216,7 +216,7 @@ class BooksController extends Controller
 
             // Move uploaded pdf
             $uploadStatusPdf    = @move_uploaded_file($_FILES['file']['tmp_name'], $bookSavePath.$fileName);
-            $uploadStatusPdfImg = @move_uploaded_file($$_FILES['file_img']['tmp_name'], $bookSavePath.$imageName);
+            $uploadStatusPdfImg = @move_uploaded_file($_FILES['file_img']['tmp_name'], $bookSavePath.$imageName);
 
             $data = array(
                 'title'       => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
@@ -336,7 +336,7 @@ class BooksController extends Controller
 
             if (!empty($_FILES['file_img']['name'])) {
                 $imageName = StringUtils::cleanFileName($_FILES['file_img']['name']);
-                $uploadStatusPdfImg = @move_uploaded_file($$_FILES['file_img']['tmp_name'], $bookSavePath.$imageName);
+                $uploadStatusPdfImg = @move_uploaded_file($_FILES['file_img']['tmp_name'], $bookSavePath.$imageName);
             } else {
                 $imageName = $book->file_img;
             }
