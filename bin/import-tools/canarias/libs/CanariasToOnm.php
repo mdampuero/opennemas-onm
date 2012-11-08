@@ -320,23 +320,23 @@ class CanariasToOnm
                             'local_file' =>OLD_MEDIA,
                         );
 
-                       /* preg_match_all("/(http:\/\/www.youtube.com\/v.*&amp;(.*)/i", $photoName, $matches, PREG_SET_ORDER);
-                        var_dump($matches);
-                        preg_match_all("/(http:\/\/www.youtube.com\/v.*&amp;(.*)/i", $photoName2, $matches2, PREG_SET_ORDER);
-                        var_dump($matches2); */
-                        die();
                         if (!empty($photoName)) {
-                            $resp = $this->createImage($imageData);
-                            if ($resp =='other') {
+                            preg_match_all("@http://www.youtube.com/(.*)@i", $photoName, $matches, PREG_SET_ORDER);
+                            if (!empty($matches[0][1])) {
                                 $resp = $this->createVideo($imageData);
+                            } else {
+                                $resp = $this->createImage($imageData);
                             }
                         }
                         if (!empty($photoName2) && ($photoName != $photoName2)) {
                             $imageData['name'] = $photoName2;
                             $imageData['oldName'] = $photoName2;
-                            $this->createImage($imageData);
-                            if ($resp =='other') {
+                            preg_match_all("@http://www.youtube.com/(.*)@", $photoName2, $matches);
+                            if (!empty($matches[0][1])) {
                                 $resp = $this->createVideo($imageData);
+
+                            } else {
+                                $this->createImage($imageData);
                             }
                         }
 
@@ -835,7 +835,8 @@ class CanariasToOnm
                         );
 
                     $articleID = $article->create($data);
-                    echo "\n [{$current}/{$totalRows}] Importing article Ayuntamientos with id {$originalArticleID} - in {$seccion}  ";
+                    echo "\n [{$current}/{$totalRows}] Importing article "
+                        ."Ayuntamientos with id {$originalArticleID} - in {$seccion} ";
                     if (!empty($articleID) ) {
                         $this->helper->insertRefactorID($originalArticleID, $articleID, 'Ayuntamientos');
 
@@ -1149,7 +1150,6 @@ class CanariasToOnm
      *
      */
 
-
     public function createDefaultAuthors()
     {
 
@@ -1173,9 +1173,11 @@ class CanariasToOnm
         /*
         Belén Molina, Thalía Rodríguez, Alexis González
          Noé Ramón  Jaime Puig, Martín Macho,
+
         */
 
-        $editorial = array('beln-molina', 'thala-rodrguez', 'alexis-gonzlez', 'editorial');
+        $editorial = array('beln-molina', 'thala-rodrguez', 'alexis-gonzlez', 'editorial',
+         'noe-ramon', 'jaime-puig', 'martin-macho');
         if (in_array($name, $editorial)) {
             return 1;
         }
@@ -1187,7 +1189,7 @@ class CanariasToOnm
 
         $authors = array(
             '-cristbal-d-peate', '-joaquin-sagaseta-de-ilurdoz-paradas', '-jos-a-alemn',
-            '-salvador-garca-llanos', 'antonio-gonzlez-vieitez', 'cristbal-d-peate',
+            '-salvador-garca-llanos', 'antonio-gonzlez-vieitez', 'cristbal-d-peate', 'francisco-morote',
             'cristbal-d-penate', 'cristbal-peate', 'cristobal-d-peate', 'eduardo-serradilla-sanchs',
             'faustino-garca-mrquez', 'joaquin-sagaseta-de-ilurdoz-paradas',
             'joaqun-sagaseta-de-ilurdoz-paradas',
@@ -1229,6 +1231,7 @@ class CanariasToOnm
         while (!$rs->EOF) {
 
             $name =  $this->helper->getSlug($rs->fields['autor']);
+            var_dump($name);
             if (!empty($name) &&$this->isOpinionAuthors($name) == 0) {
                 $authorID = $this->helper->authorIsImported($name);
 
@@ -1241,24 +1244,21 @@ class CanariasToOnm
                             'condition' =>$name,
                             'date_nac`' =>''
                         );
-
-
+                        var_dump($values);
                         $authorID = $author->create($values);
 
                         echo "\n new id {$authorID} [DONE]\n";
                         $this->helper->insertAuthorTranslated($authorID, $name);
 
-                } else {
-                    echo "\n name -".$name.$authorID;
-                    $cont++;
                 }
+                $cont++;
+
             }
             echo '.';
             $rs->MoveNext();
         }
         $rs->Close(); # optional
-        echo "\n Please Check duplicate entries or similar texts in author names. ("
-            .$cont." duplicated)\n";
+
         return true;
     }
 
@@ -1338,8 +1338,6 @@ class CanariasToOnm
 
     public function importOpinions()
     {
-        //$this->importAuthorsOpinion();
-        //$this->importPhotoAuthorsOpinion();
 
         echo "IMPORTING OPINIONS\n";
         $sql = "SELECT  `id`, `fecha`, `hora`, `titulo`, `antetitulo`, "
@@ -1368,14 +1366,16 @@ class CanariasToOnm
                     echo "[{$current}/{$totalRows}] Opinion with id {$originalOpinionID} already imported\n";
                 } elseif(!empty($rs->fields['titulo'])) {
                     $name = $this->helper->getSlug($rs->fields['autor']);
-                    //   $authorID = $this->helper->authorIsImported($name);
+
                     $fkAuthor = 0;
                     $typeOpinion =$this->isOpinionAuthors($name);
+                    $colab ='';
                     if ($typeOpinion == 3) {
                         //Colaboradores
                         $typeOpinion = 0;
                         $fkAuthor = 3;
-                    } elseif($typeOpinion == 3) {
+                        $colab =  $this->helper->convertToUtf8($rs->fields['autor']);
+                    } elseif($typeOpinion == 0) {
                         $fkAuthor = $this->helper->authorIsImported($name);
                     }
 
@@ -1384,14 +1384,13 @@ class CanariasToOnm
                     echo "[{$current}/{$totalRows}] Importing opinion with id {$originalOpinionID} ";
                     $values =
                         array(
-                            'title' => $title,
+                            'title' => $title .$colab,
                             'category' => '4',
                             'category_name' => 'opinion',
                             'type_opinion' => $typeOpinion,
-                            'body' => $this->helper->convertToUtf8($rs->fields['texto']),
-                            'metadata' => \StringUtils::get_tags($title.',  opinion'),
-                            'description' => 'opinion colaborador'.$rs->fields['autor']
-                                .' '.strip_tags(substr($rs->fields['texto'], 0, 100)),
+                            'body' => $this->helper->convertToUtf8($rs->fields['texto'])." <br> ".$colab,
+                            'metadata' => \StringUtils::get_tags($title.',  opinion', $colab),
+                            'description' => $this->helper->convertToUtf8('opinion '.strip_tags(substr($rs->fields['texto'], 0, 100))),
                             'fk_author' => $fkAuthor,
                             'available' => ($rs->fields['activar'] == 0)? 0:1,
                             'with_comment' => 0,

@@ -79,10 +79,10 @@ switch ($option) {
         break;
     case 'articles':
         $importer->helper->log('IMPORTING ARTICLES AND IMAGES');
-        $importer->importHemeroteca();
+      /*  $importer->importHemeroteca();
         $importer->importHemerotecaTopSecret();
         $importer->importTopSecret();
-        $importer->importFauna();
+        $importer->importFauna(); */
         $importer->importImagesArticles();
         $importer->importArticles();
 

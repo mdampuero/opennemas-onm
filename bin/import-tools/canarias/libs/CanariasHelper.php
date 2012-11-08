@@ -303,6 +303,63 @@ class CanariasHelper
         }
     }
 
+
+
+    /**
+     * Function that creates video from url and inserts it on ONM Database
+     *
+     * @return boolean
+     * @author
+     **/
+    public function importVideo($data, $url)
+    {
+
+        try {
+            $url = rawurldecode($url);
+            $videoP = new \Panorama\Video($url);
+            $information = $videoP->getVideoDetails();
+
+            $values = array(
+                'file_path'      => $url,
+                'video_url'      => $url,
+                'category'       => JoomlaImporter::matchCategory($data['catid']),
+                'available'      => 1,
+                'content_status' => 1,
+                'title'          =>  ImportHelper::convertoUTF8($data['title']),
+                'metadata'       => $data['metadata'],
+                'description'    => $data['title'].' video '.$data['introtext'],
+                'author_name'    => $data['origin'],
+            );
+            $values['information'] = $information;
+
+        } catch (\Exception $e) {
+            ImportHelper::log("\n 1 Can't get video information. Check the $url\n ");
+            return;
+        }
+
+        try {
+
+            $video = new \Video();
+            $newVideoID = $video->create($values);
+
+            if (is_string($newVideoID)) {
+                ImportHelper::log('Video with ID '.$newVideoID." imported.\n");
+                return $newVideoID;
+            } else {
+                ImportHelper::log('Video '.$url." from article ".$data['id']." NOT created.\n");
+
+            }
+
+
+        } catch (\Exception $e) {
+
+            ImportHelper::log("\n Problem with video: {$e->getMessage()} {$url} \n ");
+        }
+
+
+    }
+
+
     /**
      * Load properties in a object.
      *
