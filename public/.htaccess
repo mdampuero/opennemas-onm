@@ -658,8 +658,10 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteRule ^index2.php$ controllers/redirect-imported-elements.php?content_type=article&content_id=%1  [R=301,L,NC]
 
     #index2.php?option=com_content&task=emailform&id=24576&itemid=362
-    RewriteCond %{QUERY_STRING} &?option=com_content&?task=([^&]+)&?id=([^&]+)&?Itemid=([^&]+)
-    RewriteRule ^index2.php$ controllers/redirect-imported-elements.php?content_type=article&content_id=%1  [R=301,L,NC]
+    RewriteCond %{QUERY_STRING} &?option=com_content&?task=([^&]+)&?id=([^&]+)
+    RewriteRule ^index2.php$ controllers/redirect-imported-elements.php?content_type=article&content_id=%2  [R=301,L,NC]
+    RewriteCond %{QUERY_STRING} &?option=com_content&?task=([^&]+)&?id=([^&]+)&?itemid=([^&]+)
+    RewriteRule ^index2.php$ controllers/redirect-imported-elements.php?content_type=article&content_id=%2  [R=301,L,NC]
 
 
     #--------------------------------------------------------
