@@ -19,6 +19,8 @@ class Template extends Smarty
     public $js_includes         = array( 'head' => array() );
     public $css_includes        = array( 'head' => array(), 'footer' => array() );
     public $metatags            = array();
+    public $templateBaseDir;
+    public $allow_php_tag;
 
     public $relative_path = null;
     static public $registry = array();
@@ -67,8 +69,8 @@ class Template extends Smarty
         $this->assign('THEME', $theme);
 
         // Add global plugins path
-        $this->plugins_dir[]    = realpath($this->templateBaseDir.'plugins/').'/';
-        $this->plugins_dir[]    = realpath(SMARTY_DIR.DS.'../'.DS.'onm-plugins/');
+        $this->addPluginsDir(realpath(SMARTY_DIR.DS.'../'.DS.'onm-plugins/'));
+        $this->addPluginsDir(realpath($this->templateBaseDir.'plugins/').'/');
         $this->caching          = false;
         $this->allow_php_tag    = true;
 
@@ -95,6 +97,10 @@ class Template extends Smarty
                 'THEME'            => $theme,
             )
         );
+
+        $this->theme = $theme;
+        $this->assign('THEME', $theme);
+
     }
 
 
@@ -234,11 +240,10 @@ class TemplateAdmin extends Template
             $this->{$value."_dir"} = realpath($directory).'/';
         }
 
-        $this->template_dir  = $this->templateBaseDir.'tpl/';
-        $this->config_dir    = $this->templateBaseDir.'config/';
-        $this->plugins_dir[] = $this->templateBaseDir.'plugins/';
-        $this->caching       = false;
-        $this->allow_php_tag = true;
+        $this->template_dir	= $this->templateBaseDir.'tpl/';
+        $this->config_dir	= $this->templateBaseDir.'config/';
+        $this->addPluginsDir($this->templateBaseDir.'plugins/');
+        $this->caching	= false;
 
         // Template variables
         $baseUrl = SS.'themes'.SS.$theme.SS;
@@ -289,7 +294,7 @@ class TemplateManager extends Template
         $this->template_dir	= $this->templateBaseDir.'tpl/';
 
         $this->config_dir	 = $this->templateBaseDir.'config/';
-        $this->plugins_dir   []= $this->templateBaseDir.'plugins/';
+        $this->addPluginsDir($this->templateBaseDir.'plugins/');
         $this->caching	     = false;
 
         // Template variables
