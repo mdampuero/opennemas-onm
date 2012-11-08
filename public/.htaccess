@@ -653,10 +653,14 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteCond %{QUERY_STRING} &?option=com_content&?task=view&?id=([^&]+)&?Itemid=([^&]+)
     RewriteRule ^index.php$ controllers/redirect-imported-elements.php?content_type=article&content_id=%1  [R=301,L,NC]
 
+    #index2.php?option=com_content&task=view&id=22897&pop=1&page=21400&Itemid=677
+    RewriteCond %{QUERY_STRING} &?option=com_content&?task=view&?id=([^&]+)&?pop=([^&]+)&?page=([^&]+)&?Itemid=([^&]+)
+    RewriteRule ^index2.php$ controllers/redirect-imported-elements.php?content_type=article&content_id=%1  [R=301,L,NC]
+
     #--------------------------------------------------------
     RewriteRule ^index.php/?$ / [R=301,L,NC]
     RewriteRule ^index.php/.*/?$ / [R=301,L,NC]
-
+    RewriteRule ^index?.php/.*/?$ / [R=301,L,NC]
 
     # provisional cronicas
     RewriteRule ^agenda/?$   http://agenda.cronicasdelaemigracion.com/ [R=301,L,NC]
