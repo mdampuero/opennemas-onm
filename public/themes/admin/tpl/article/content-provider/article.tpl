@@ -31,7 +31,7 @@
             {is_module_activated name="AVANCED_FRONTPAGE_MANAGER"}
             <li>
                 <a title="{t}Change background color in frontpage{/t}" href="#" class="change-color">
-                    <i class="icon-color" style="background-color:{$content->background-color|default:'#FFF'}"></i> {t}Change background color{/t}
+                    <i class="icon-color" {getProperty item=$content category=$params['category'] property='bgcolor'}"></i> {t}Change background color{/t}
                 </a>
             </li>
             {/is_module_activated}
