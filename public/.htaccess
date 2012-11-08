@@ -657,6 +657,11 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteCond %{QUERY_STRING} &?option=com_content&?task=view&?id=([^&]+)&?pop=([^&]+)&?page=([^&]+)&?Itemid=([^&]+)
     RewriteRule ^index2.php$ controllers/redirect-imported-elements.php?content_type=article&content_id=%1  [R=301,L,NC]
 
+    #index2.php?option=com_content&task=emailform&id=24576&itemid=362
+    RewriteCond %{QUERY_STRING} &?option=com_content&?task=([^&]+)&?id=([^&]+)&?Itemid=([^&]+)
+    RewriteRule ^index2.php$ controllers/redirect-imported-elements.php?content_type=article&content_id=%1  [R=301,L,NC]
+
+
     #--------------------------------------------------------
     RewriteRule ^index.php/?$ / [R=301,L,NC]
     RewriteRule ^index.php/.*/?$ / [R=301,L,NC]
