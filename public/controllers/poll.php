@@ -135,8 +135,8 @@ switch ($action) {
         }
 
         if (($poll->available==1) && ($poll->in_litter==0)) {
-            // Increment numviews if it's accesible
-            $poll->setNumViews($pollId);
+            $tpl->assign('contentId', $pollId);
+
             $poll->items   = $poll->get_items($pollId);
             $items         = $poll->items;
             $poll->dirtyId = $dirtyID;

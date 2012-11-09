@@ -93,6 +93,18 @@ $adminRoutes->add(
     '/admin'
 );
 
+
+$adminRoutes->add(
+    'admin_content_update_property',
+    new Route(
+        '/content/update-property',
+        array(
+            '_controller' => 'Backend:Controllers:ContentController:updateProperty',
+        )
+    ),
+    '/admin'
+);
+
 // Frontpage management routes
 $adminRoutes->add(
     'admin_frontpage_list',
@@ -380,7 +392,7 @@ $adminRoutes->add(
     '/admin'
 );
 
-// Letter manager routes
+// Polls manager routes
 $adminRoutes->add(
     'admin_polls',
     new Route(

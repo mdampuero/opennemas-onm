@@ -55,6 +55,7 @@ class SitemapController extends Controller
         ) {
 
         }
+
         return $this->buildResponse($format, $cacheID, null);
     }
 

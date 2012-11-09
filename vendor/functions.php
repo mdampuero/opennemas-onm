@@ -32,7 +32,7 @@ function tableize($name) {
     return pluralize(underscore($name));
 }
 
-    function pluralize($name)
+function pluralize($name)
 {
     $name = strtolower($name);
     return $name . 's';
@@ -50,10 +50,15 @@ function clearslash($string)
 /**
 * Stablishes a cookie value in a secure way
 */
-function setCookieSecure($name, $value, $expires=0, $domain='/') {
+function setCookieSecure($name, $value, $expires = 0, $domain = '/') {
     setcookie(
-        $name, $value, $expires, $domain,
-        $_SERVER['SERVER_NAME'], isset($_SERVER['HTTPS']), true
+        $name,
+        $value,
+        $expires,
+        $domain,
+        $_SERVER['SERVER_NAME'],
+        isset($_SERVER['HTTPS']),
+        true
     );
 }
 
@@ -343,5 +348,40 @@ function stripslashes_deep($value)
                 stripslashes($value);
 
     return $value;
+}
+
+function render_output($content, $banner)
+{
+    if (is_object($banner)
+        && property_exists($banner, 'type_advertisement')
+        && ((($banner->type_advertisement + 50)%100) == 0)
+    ) {
+        $content = json_encode($content);
+
+        $timeout = intval($banner->timeout) * 1000; // convert to ms
+        $pk_advertisement = date('YmdHis', strtotime($banner->created)).
+                            sprintf('%06d', $banner->pk_advertisement);
+
+        /*
+         * intersticial = new IntersticialBanner({iframeSrc: '/sargadelos.html?cacheburst=1254325526',
+         *                                        timeout: -1,
+         *                                        useIframe: true});
+         */
+        $output = <<< JSINTERSTICIAL
+<script type="text/javascript" language="javascript">
+/* <![CDATA[ */
+var intersticial = new IntersticialBanner({
+publiId: "$pk_advertisement",
+cookieName: "ib_$pk_advertisement",
+content: $content,
+timeout: $timeout});
+/* ]]> */
+</script>
+JSINTERSTICIAL;
+
+        return $output;
+    }
+
+    return $content;
 }
 

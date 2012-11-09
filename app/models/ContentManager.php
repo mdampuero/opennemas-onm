@@ -211,6 +211,9 @@ class ContentManager
                     } else {
                         $content->in_frontpage = false;
                     }
+                    if (\Onm\Module\ModuleManager::isActivated('AVANCED_FRONTPAGE_MANAGER')) {
+                        $content->loadAllContentProperties();
+                    }
                     $contents[] = $content;
                 }
             }

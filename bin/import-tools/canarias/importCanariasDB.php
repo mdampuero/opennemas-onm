@@ -52,58 +52,62 @@ set_include_path(
 $importer = new CanariasToOnm($configOldDB, $configNewDB);
 
 
-//$importer->helper->sqlClearData(); //delete old data in tables
-//$importer->helper->clearLog();
+$option = 'articles';
+
+switch ($option) {
+    case 'clear':
+        $importer->helper->sqlClearData(); //delete old data in tables
+        $importer->helper->clearLog();
+
+        break;
+    case 'clearCategories':
+        $importer->helper->clearCategories(); //delete old categories
+        $importer->helper->sqlClearData(); //delete old data in tables
+        $importer->helper->clearLog();
+        echo 'clear completele';
+
+        break;
+    case 'ayuntamientos':
+        $importer->importAyuntamientos();
+
+        break;
+    case 'opinion':
+        $importer->helper->log('IMPORTING AUTHORS AND OPINIONS');
+        $importer->createDefaultAuthors();
+        $importer->importAuthorsOpinion();
+        $importer->importOpinions();
+        break;
+    case 'articles':
+        $importer->helper->log('IMPORTING ARTICLES AND IMAGES');
+        $importer->importHemeroteca();
+        $importer->importHemerotecaTopSecret();
+        $importer->importTopSecret();
+        $importer->importFauna();
+        $importer->importImagesArticles();
+        $importer->importArticles();
+
+        break;
+    case 'other-contents':
+        $importer->helper->log("\n IMPORTING OTHER CONTENTS \n");
+        $importer->importLetters();
+
+        $importer->importImagesHumor();
+
+        $importer->importAttachments();
+
+        $importer->importAlbums();
+        /*
+        // $importer->importComments();
+         //$importer->importRelatedContents();
+        */
+        break;
+    default:
+        # code...
+        break;
+}
 
 $importer->importCategories();
 
- /*
-$importer->helper->log('IMPORTING AUTHORS AND OPINIONS');
-
-$importer->importAuthorsOpinion();
-
-$importer->importPhotoAuthorsOpinion();
-printf("Check author names (Problem with similar name author)");
-
-$importer->importOpinions();
-
-$importer->helper->log('IMPORTING ARTICLES AND IMAGES');
-
-/*$importer->importHemeroteca();
-$importer->importHemerotecaTopSecret();
-
-$importer->importAyuntamientos();
-
-$importer->importTopSecret();
-
-$importer->importFauna();
-
-
-
-//$importer->importImagesArticles();
-//$importer->importArticles();
-
-
-
-$importer->helper->log("\n IMPORTING OTHER CONTENTS \n");
-$importer->importLetters();
-
-$importer->importImagesHumor();
-*/
-$importer->importAlbums();
-
-//$importer->importAttachments();
-
-//$importer->importComments();
-
-//$importer->importRelatedContents();
-
-/**/
 printf("OpenNemas database is ok for Canarias Ahora \n");
 
 $importer->helper->printResults();
-
-
-
-
-

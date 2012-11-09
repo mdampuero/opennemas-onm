@@ -55,6 +55,7 @@ class Bootstrap extends ModuleBootstrap
             session_name('_onm_sess');
             $session = $this->container->get('session');
             $session->start();
+            $this->container->get('request')->setSession($session);
 
             if (!isset($_SESSION['userid'])
                 && !preg_match('@^/login@', $request->getPathInfo())

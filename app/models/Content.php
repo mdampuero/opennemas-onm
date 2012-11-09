@@ -204,12 +204,18 @@ class Content
             `slug`, `category_name`, `urn_source`, `params`)".
            " VALUES (?,?,?, ?,?,?, ?,?,?, ?,?,?,?,?, ?,?,?, ?,?,?, ?,?,?,?)";
 
-        $data['starttime']        =
-            (!isset($data['starttime']) || empty($data['starttime'])
-             || ($data['starttime'])=='0000-00-00 00:00:00') ? date("Y-m-d H:i:s"): $data['starttime'];
-        $data['endtime']          = (empty($data['endtime']))? '0000-00-00 00:00:00': $data['endtime'];
+
         $data['content_status']   = (empty($data['content_status']))? 0: intval($data['content_status']);
         $data['available']        = (empty($data['available']))? 0: intval($data['available']);
+        if (!isset($data['starttime']) || empty($data['starttime'])) {
+            if ($data['available'] == 0) {
+                $data['starttime'] = '0000-00-00 00:00:00';
+            } else {
+                $data['starttime'] = date("Y-m-d H:i:s");
+            }
+        }
+
+        $data['endtime']          = (empty($data['endtime']))? '0000-00-00 00:00:00': $data['endtime'];
         $data['frontpage']        = (!isset($data['frontpage']) || empty($data['frontpage']))
                                     ? 0: intval($data['frontpage']);
         $data['placeholder']      = (!isset($data['placeholder']) || empty($data['placeholder']))
@@ -338,6 +344,10 @@ class Content
                 WHERE pk_content= ?";
 
         $this->read($data['id']);
+
+        if (($data['available'] == 1) && ($data['starttime'] =='0000-00-00 00:00:00')) {
+            $data['starttime'] = date("Y-m-d H:i:s");
+        }
 
         $values = array(
             'changed'        => date("Y-m-d H:i:s"),
@@ -476,7 +486,7 @@ class Content
         $changed = date("Y-m-d H:i:s");
 
         $data = array(0, 0, $lastEditor, $changed, $id);
-        $this->set_available(array($data), $lastEditor);
+        $this->set_available(0, $lastEditor);
 
         $sql = 'UPDATE contents SET `in_litter`=?, `changed`=?, '
              . '`fk_user_last_editor`=? WHERE pk_content=?';
@@ -540,7 +550,7 @@ class Content
         }
         $status = ($this->available + 1) % 2;
         $date = $this->starttime;
-        if ($status == 1) {
+        if (($status == 1) && ($date =='0000-00-00 00:00:00')) {
             $date = date("Y-m-d H:i:s");
         }
 
@@ -601,14 +611,18 @@ class Content
         }
 
         $sql = 'UPDATE contents '
-             . 'SET `available`=?, `content_status`=?, '
+             . 'SET `available`=?, `content_status`=?, `starttime`=?, '
              . '`fk_user_last_editor`=? WHERE `pk_content`=?';
         $stmt = $GLOBALS['application']->conn->Prepare($sql);
 
         if (!is_array($status)) {
+            if (($status == 1) && ($this->starttime =='0000-00-00 00:00:00')) {
+                $this->starttime = date("Y-m-d H:i:s");
+            }
             $values = array(
                 $status,
                 $status,
+                $this->starttime,
                 $lastEditor,
                 $this->id
             );
@@ -700,14 +714,20 @@ class Content
             return false;
         }
 
+        if ($this->starttime =='0000-00-00 00:00:00') {
+            $this->starttime = date("Y-m-d H:i:s");
+        }
+
         $GLOBALS['application']->dispatch('onBeforeAvailable', $this);
 
         $sql = 'UPDATE contents SET `available`=1, `content_status`=1, '
-                .'`fk_user_last_editor`=?, `starttime`=? WHERE `pk_content`=?';
+                .'`fk_user_last_editor`=?, `starttime`=?, `changed`=? WHERE `pk_content`=?';
         $stmt = $GLOBALS['application']->conn->Prepare($sql);
+
 
         $values = array(
             $_SESSION['userid'],
+            $this->starttime,
             date("Y-m-d H:i:s"),
             $this->id
         );
@@ -1445,6 +1465,8 @@ class Content
 
             return false;
         }
+
+        return true;
     }
 
     //TODO Check (xornal function)
@@ -2005,5 +2027,107 @@ class Content
 
         return ($rs != false);
     }
+
+    /**
+     * Load content specific property given the category id
+     *
+     * @return boolean true if it is in the category
+     **/
+
+    public function getProperty($property)
+    {
+        if ($this->id == null) {
+            return false;
+        }
+
+        $sql = 'SELECT `meta_value` FROM `contentmeta` WHERE fk_content=? AND `meta_name`=?';
+        $values = array($this->id, $property);
+
+        $value = $GLOBALS['application']->conn->GetOne($sql, $values);
+
+        return $value;
+    }
+
+
+    public function setProperty($property, $value)
+    {
+        if ($this->id == null) {
+            return false;
+        }
+
+        $sql = "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
+                        ." VALUES ('{$this->id}', '{$property}', '{$value}')"
+                        ." ON DUPLICATE KEY UPDATE `meta_value`='{$value}'";
+
+        if (!empty($property)) {
+            $rs = $GLOBALS['application']->conn->Execute($sql);
+
+            if ($rs === false) {
+                Application::logDatabaseError();
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Load content properties given the content id
+     *
+     * @return array if it is in the contentmeta table
+     **/
+
+    public function loadAllContentProperties()
+    {
+        if ($this->id == null) {
+            return false;
+        }
+
+        $sql = 'SELECT `meta_name`, `meta_value` FROM `contentmeta` WHERE fk_content=?';
+        $values = array($this->id);
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        $items = array();
+
+        if ($rs !== false) {
+            while (!$rs->EOF) {
+                $name = $rs->fields['meta_name'];
+                $this->{$name} = $rs->fields['meta_value'];
+
+                $rs->MoveNext();
+            }
+        }
+
+        return true;
+    }
+
+
+    /**
+     * Update content property given the content id, property & value
+     *
+     * @return boolean true if it is in the category
+     **/
+
+    public function updateAllContentProperties($values)
+    {
+        if ($this->id == null) {
+            return false;
+        }
+
+        $sql = "INSERT INTO contentmeta (name_meta, meta_value, fk_content)
+                            VALUES (?, ?, ?)";
+        if (count($values) > 0) {
+            $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+            if ($rs === false) {
+                Application::logDatabaseError();
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
 }
 

@@ -225,6 +225,13 @@ class CommentsController extends Controller
         $id      = $request->query->getDigits('id');
         $comment = new \Comment($id);
 
+        // Check empty data
+        if (count($request->request) < 1) {
+            m::add(_("Comment data sent not valid."), m::ERROR);
+
+            return $this->redirect($this->generateUrl('admin_comments_show', array('id' => $id)));
+        }
+
         $data = array(
             'id'             => $id,
             'author'         => $request->request->filter('author', '', FILTER_SANITIZE_STRING),

@@ -837,7 +837,8 @@ class Advertisement extends Content
                             <param name="width" value="'.$width.'" />
                             <param name="height" value="'.$height.'" />
                             <embed src="'. MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name. '"
-                                width="100%" height="100%" SCALE="exactfit" alt="Publicidad '.$banner->title
+                                width="'.$width.'" height="'.$height.'" SCALE="exactfit" alt="Publicidad '
+                                .$banner->title
                                 .'" wmode="transparent"></embed>
                         </object>';
                 } else {

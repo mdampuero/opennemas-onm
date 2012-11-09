@@ -19,10 +19,6 @@ define('SITE_MODELS_PATH', realpath(APPLICATION_PATH.DIRECTORY_SEPARATOR."app".D
 define('APC_PREFIX', 'joomla-importer');
 error_reporting(E_ALL ^ E_NOTICE);
 
-// Constants for creating images from local
-define('MEDIA_PATH', SITE_PATH. 'media');
-define('IMG_DIR', 'hibridos/images');
-
 // Ensure library/ is on include_path
 set_include_path(implode(PATH_SEPARATOR, array(
     SITE_CORE_PATH, SITE_LIBS_PATH, SITE_VENDOR_PATH, SITE_MODELS_PATH,
@@ -33,7 +29,7 @@ require '/usr/share/php/libzend-framework-php/Zend/Console/Getopt/Exception.php'
 require SITE_VENDOR_PATH.'/adodb5/adodb.inc.php';
 
 $availableActions = array(
-    'import-articles', 'show-categories'
+    'import-articles', 'show-categories', 'update-video', 'clear-database'
 );
 
 require APPLICATION_PATH.'/app/autoload.php';
@@ -47,6 +43,7 @@ $config = array(
     'action|a=s'    => 'Action to perform ['. implode(', ', $availableActions).' ]',
     'categories|c=s'    => 'Module (string)',
     'max|m=i'       => 'Maximum files',
+    'limit|l=i'     => 'max id for import',
 );
 
 try {
@@ -66,6 +63,7 @@ try {
                     $options->action,
                     $options
                 );
+
             } catch (\Exception $e) {
                 echo "Exception: ".$e->getMessage();
             }

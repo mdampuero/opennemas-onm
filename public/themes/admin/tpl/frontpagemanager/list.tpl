@@ -22,6 +22,7 @@
             quick_info: '{url name=admin_content_quick_info}',
             set_arquived: '{url name=admin_content_set_archived}',
             send_to_trash: '{url name=admin_content_send_to_trash}',
+            change_color: '{url name=admin_content_update_property}'
         };
         var content_states = {
             {foreach from=$frontpage_articles item=content}
@@ -38,7 +39,7 @@
 <form action="#" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
     <div class="top-action-bar">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Frontpage Manager{/t} :: {if $category eq 0}{t}HOME{/t}{else}{$datos_cat[0]->title}{/if}</h2></div>
+            <div class="title"><h2>{t}Frontpage Manager{/t} :: {if $category eq 0}{t}HOME{/t}{else}{$datos_cat[0]->title}{/if} {if $available_layouts > 1} <small>({$layout_theme['name']})</small> {/if}</h2></div>
             <ul class="old-button">
                 <li class="batch-actions">
                     <a href="#">
@@ -188,4 +189,8 @@
 {include file="frontpagemanager/modals/_modal_suggest_to_frontpage.tpl"}
 {include file="frontpagemanager/modals/_modal_drop_selected.tpl"}
 {include file="frontpagemanager/modals/_modal_arquive_selected.tpl"}
+{is_module_activated name="AVANCED_FRONTPAGE_MANAGER"}
+{include file="frontpagemanager/modals/_modal_change_bgcolor.tpl"}
+{/is_module_activated}
+
 {/block}

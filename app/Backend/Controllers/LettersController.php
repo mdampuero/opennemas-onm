@@ -10,6 +10,7 @@
 namespace Backend\Controllers;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Onm\Framework\Controller\Controller;
 use Onm\Message as m;
 use Onm\Settings as s;
@@ -52,7 +53,7 @@ class LettersController extends Controller
         list($countLetters, $letters) =$cm->getCountAndSlice(
             'Letter',
             null,
-            "content_status = ".$letterStatus,
+            "contents.in_litter !=1 AND content_status = ".$letterStatus,
             'ORDER BY created DESC ',
             $page,
             $itemsPerPage
@@ -168,6 +169,12 @@ class LettersController extends Controller
         $letter = new \Letter($id);
 
         if ($letter->id != null) {
+            // Check empty data
+            if (count($request->request) < 1) {
+                m::add(_("Letter data sent not valid."), m::ERROR);
+
+                return $this->redirect($this->generateUrl('admin_letter_show', array('id' => $id)));
+            }
 
             $data = array(
                 'id'        => $id,
@@ -210,7 +217,6 @@ class LettersController extends Controller
         $this->checkAclOrForward('LETTER_DELETE');
 
         $id   = $request->query->getDigits('id');
-        $page = $request->query->getDigits('contentStatus', 1);
         $page = $request->query->getDigits('page', 1);
 
         if (!empty($id)) {
@@ -227,11 +233,12 @@ class LettersController extends Controller
                 $this->generateUrl(
                     'admin_letters',
                     array(
-                        'contentStatus' => $contentStatus,
                         'page' => $page
                     )
                 )
             );
+        } else {
+            return new Response('ok', 200);
         }
     }
 
@@ -364,7 +371,7 @@ class LettersController extends Controller
 
         list($countLetters, $letters)= $cm->getCountAndSlice(
             'Letter',
-            "content_status=1",
+            "content_status=1 AND contents.in_litter !=1",
             "ORDER BY starttime DESC",
             $page,
             $itemsPerPage

@@ -79,9 +79,7 @@ switch ($action) {
 
         if (($letter->available==1) && ($letter->in_litter==0)) {
             // Increment numviews if it's accesible
-            $letter->setNumViews($letterId);
-
-            //if ($slug != $letter->slug) { }
+            $tpl->assign('contentId', $letterId);
 
             $cacheID = $tpl->generateCacheId('letter-inner', '', $letterId);
 

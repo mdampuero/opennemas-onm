@@ -260,6 +260,13 @@ class MenusController extends Controller
 
             return $this->redirect($this->generateUrl('admin_menus'));
         } else {
+            // Check empty data
+            if (count($request->request) < 1) {
+                m::add(_("Menu data sent not valid."), m::ERROR);
+
+                return $this->redirect($this->generateUrl('admin_menu_show', array('id' => $id)));
+            }
+
             $data = array(
                 'name'      => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
                 'params'    => serialize(

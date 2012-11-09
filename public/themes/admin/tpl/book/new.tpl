@@ -85,7 +85,7 @@ input[type="text"].required {
                     <div class="book-preview">
                         <label for="title">{t}Preview:{/t}</label><br>
                         <a href="{$smarty.const.INSTANCE_MEDIA}/books/{$book->file_name}" target="_blank">
-                            <img src="{$smarty.const.INSTANCE_MEDIA}/books/{$book->file_img}" style=" width:164px;" />
+                            <img src="{$smarty.const.INSTANCE_MEDIA}/books/{$book->file_img}" style=" width:164px;" alt="{$book->file_img}" />
                         </a>
                     </div>
                     {/if}
@@ -118,7 +118,7 @@ input[type="text"].required {
                 </td>
                 <td>
                     {if (isset($book->file_img) && !empty($book->file_img) )}
-                         <input name="file_img" type="text" readonly="readonly" value="{$book->file_img|default:''}"/>
+                         <input name="file_img_name" type="text" readonly="readonly" value="{$book->file_img|default:''}"/>
                      {/if}
                       <input name="file_img" type="file"/>
                 </td>

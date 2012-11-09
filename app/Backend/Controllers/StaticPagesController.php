@@ -180,6 +180,12 @@ class StaticPagesController extends Controller
                 && $staticPage->pk_user != $_SESSION['userid']) {
                 m::add(_("You can't modify this static page because you don't have enought privileges."));
             } else {
+                // Check empty data
+                if (count($request->request) < 1) {
+                    m::add(_("Static Page data sent not valid."), m::ERROR);
+
+                    return $this->redirect($this->generateUrl('admin_staticpage_show', array('id' => $id)));
+                }
 
                 $data = array(
                     'title'        => $request->request->filter('title', null, FILTER_SANITIZE_STRING),

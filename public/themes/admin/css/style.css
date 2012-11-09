@@ -82,6 +82,12 @@ a.btn-primary.active,a.btn-warning.active,a.btn-danger.active,a.btn-success.acti
 .dropdown-menu a { color:#555555;}
 .dropdown-menu li>a:hover,.dropdown-menu .active>a,.dropdown-menu .active>a:hover{color:#ffffff;}
 
+.icon-color {
+  background-color: #FFF;
+  border: 1px solid #CCC;
+}
+
+
 /* -------------------------------------------------------------
   LISTINGS
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */

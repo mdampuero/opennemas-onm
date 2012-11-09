@@ -191,6 +191,13 @@ class WidgetsController extends Controller
 
         $post = $request->request;
 
+        // Check empty data
+        if (count($request->request) < 1) {
+            m::add(_("Widget data sent not valid."), m::ERROR);
+
+            return $this->redirect($this->generateUrl('admin_widget_show', array('id' => $id)));
+        }
+
         $widgetData = array(
             'id'          => $id,
             'action'      => $post->filter('action', null, FILTER_SANITIZE_STRING),

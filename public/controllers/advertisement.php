@@ -21,7 +21,7 @@ switch ($action) {
         if (isset($id)) {
             $advertisement = new Advertisement();
             /* $banner = $advertisement->cache->read($id); */
-            $advertisement->setNumClics($id);
+            $advertisement->setNumViews($id);
             $banner = $advertisement->read($id);
             // Assign to template
             $tpl = new Template(TEMPLATE_USER);
@@ -40,7 +40,6 @@ switch ($action) {
             $url = $advertisement->getUrl($publi_id);
             if ($url) {
                 $advertisement->setNumClics($publi_id);
-                // Application::forward( $url);
                 header("Location: $url");
             } else {
                 $advertisement->setNumClics($publi_id);

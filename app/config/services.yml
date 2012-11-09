@@ -29,3 +29,11 @@ services:
         class: Monolog\Logger
         arguments: [ 'application_log' ]
 
+    mailer:
+        class: Onm\Mailer
+        arguments: [ %swiftmailer% ]
+
+    cache:
+        class: %cache_handler%
+        arguments: [ %cache_handler_params% ]
+

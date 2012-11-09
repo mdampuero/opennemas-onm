@@ -49,8 +49,6 @@ switch ($action) {
 
         $opinion = new Opinion($opinionID);
 
-        Content::setNumViews($opinionID);
-
         // Fetch comments for this opinion
         $com = new Comment();
         $comments = $com->get_public_comments($opinionID);
@@ -61,6 +59,8 @@ switch ($action) {
         if (($opinion->available == 1) && ($opinion->in_litter == 0)) {
 
             if (($tpl->caching == 0) || !$tpl->isCached('opinion.tpl', $cacheID) ) {
+
+                $tpl->assign('contentId', $opinionID);
 
                 $author = new \Author($opinion->fk_author);
                 $author->get_author_photos();
