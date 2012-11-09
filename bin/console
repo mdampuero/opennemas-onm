@@ -1,0 +1,24 @@
+#!/usr/bin/env php
+<?php
+require __DIR__.'/../app/autoload.php';
+
+use Symfony\Component\Console\Application;
+
+$application = new Application();
+
+// Iterate over all the available command classes and register them into the
+// console application
+$basePath = APPLICATION_PATH.'/app/';
+$availableCommandClases = glob($basePath.'*/Commands/*');
+foreach ($availableCommandClases as $file) {
+    $commandClass = str_replace(
+        array($basePath, '.php', '/'),
+        array('', '', '\\'),
+        $file
+    );
+
+    if (class_exists($commandClass)) {
+        $application->add(new $commandClass);
+    }
+}
+$application->run();

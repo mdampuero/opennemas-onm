@@ -71,9 +71,16 @@ class Controller extends ContainerAware
      */
     public function renderView($view, array $parameters = array())
     {
+        // If a cache_id parameter was passed use it to cache view results
+        $cacheID = null;
+        if (array_key_exists('cache_id', $parameters)) {
+            $cacheID = $parameters['cache_id'];
+            unset($parameters['cache_id']);
+        }
+
         $this->view->assign($parameters);
 
-        return $this->view->fetch($view);
+        return $this->view->fetch($view, $cacheID);
     }
 
     /**

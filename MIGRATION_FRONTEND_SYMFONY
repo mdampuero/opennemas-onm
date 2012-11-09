@@ -1,0 +1,69 @@
+Migration to symfony
+--------------------
+
+advertisement.php              => AdvertisementController
+album.php                      => AlbumController
+article.php                    => ArticlesController
+article_ws.php                 => ArticlesController
+books.php                      => BooksController
+comments.php                   => CommentsController
+error.php                      => ErrorController
+frontpages.php                 => FrontpagesController
+getrss.php                     => RssController
+index.php                      => IndexController
+index_ws.php                   => IndexController
+letter.php                     => LettersController
+login.php                      => AuthenticationController
+logout.php                     => AuthenticationController
+newsstand_paypal.php           => NewStandPaypalController
+newsstand.php                  => NewStandController
+opinion_index.php              => OpinionsController
+opinion_inner.php              => OpinionsController
+opinion_inner_ws.php           => OpinionsController
+poll.php                       => PollsController
+preview_content.php            => ArticlesController
+preview.php                    => IndexController
+rating.php                     => RatingsController
+redirect-from-editmaker.php    => RedirectorsController
+redirect-imported-elements.php => RedirectorsController
+redirector.php                 => RedirectorsController
+register.php                   => AuthenticationController
+robots.php                     => RobotsController
+rss.php                        => RssController
+search.php                     => SearchController
+sitemap.php                    => SitemapsController
+special.php                    => SpecialsController
+statics.php                    => StaticPagesController
+subscriptions.php              => SubscriptionsController
+user.php                       => UsersController
+videos.php                     => VideosController
+
+
+
+New controllers
+---------------
+AdvertisementController DONE
+AlbumController
+ArticlesController
+AuthenticationController
+BooksController
+CommentsController
+ErrorController DONE
+FrontpagesController
+IndexController
+LettersController
+NewStandController
+NewStandPaypalController
+OpinionsController
+PollsController
+RatingsController
+RedirectorsController
+RobotsController DONE
+RssController DONE
+SearchController
+SitemapsController DONE
+SpecialsController
+StaticPagesController DONE
+SubscriptionsController
+UsersController
+VideosController

@@ -564,49 +564,10 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
 
+  # Redirections for elidealgallego.com --------------------------------------------------------------------------------
 
-    #--------------------------------------------------------
-    #Redirection from old http://www.correodiplomatico.com/
-
-      #http://www.correodiplomatico.com/category/politica
-      #http://www.correodiplomatico.com/category/tendencias/medios-comunicacion
-    # opinion categories
- #   RewriteRule ^category/opinion/?$ /opinion/ [R=301,L,NC]
- #   RewriteRule ^category/opinion/colaboradores/?$ /opinion/ [R=301,L,NC]
- #   RewriteRule ^category/opinion/analisis-opinion/?$ /opinion/ [R=301,L,NC]
- #   RewriteRule ^category/opinion/debates/?$ /opinion/ [R=301,L,NC]
-
- #   RewriteRule ^category/([a-z0-9\-]+)/?$ /seccion/$1/ [R=301,L,NC]
- #   RewriteRule ^category/([a-z0-9\-]+)/([a-z0-9\-]+)/?$ /seccion/$2/ [R=301,L,NC]
-
-      #tags
-    #http://www.correodiplomatico.com/tag/consejo-nacional-de-transicion
- #   RewriteRule ^tag/([a-z0-9\-]+)/?$ /seccion/$1/ [R=301,L,NC]
-
-      #Old Static pages
- #   RewriteRule ^contacto /estaticas/contacto.html [R=301,L,NC]
- #   RewriteRule ^contacto-2 /estaticas/contacto.html [R=301,L,NC]
- #   RewriteRule ^quienes-somos /estaticas/quienes-somos.html [R=301,L,NC]
- #  # RewriteRule ^publicidad /estaticas/publicidad.html [R=301,L,NC]
- #   RewriteRule ^venta-de-contenidos-multimedia /estaticas/contacto.html [R=301,L,NC]
- #   RewriteRule ^feed/?$ /rss/listado [R=301,L,NC]
-
-      #Inner Article - Opinion
-    #http://www.correodiplomatico.com/3501-madrid-y-rabat-sellan-un-pacto-secreto-de-ayuda-mutua.html
- #   RewriteRule ^([0-9]+)\-([a-z0-9\-]+).html?$ /controllers/redirect-imported-elements.php?content_type=article&content_id=$1 [L,NC]
-
-     #Images
-     #http://www.correodiplomatico.com/wp-content/uploads/2011/08/Nestor-Kirchner.jpg
-
- #    RewriteRule ^wp-content/uploads/([0-9]+)/([0-9]+)/([a-z0-9\-]+).([a-z]+)?$ / [R=301,L,NC]
-
-
-    #--------------------------------------------------------
-    #Redirection from old elidealgallego.com and hibridosyelectricos.com
     #Inner Article
-    RewriteRule ^index\.php/[a-z0-9\-]+/[a-z0-9\-]+/([0-9]+)\-[a-z0-9\-\.]+/?$ /controllers/redirect-imported-elements.php?content_type=article&content_id=$1 [L,NC]
-    RewriteRule ^index\.php/[a-z0-9\-]+/[a-z0-9\-]+/[a-z0-9\-]+/([0-9]+)\-[a-z0-9\-\.]+/?$ /controllers/redirect-imported-elements.php?content_type=article&content_id=$1 [L,NC]
-    RewriteRule ^index\.php/[a-z0-9\-]+/[a-z0-9\-]+/[a-z0-9\-]+/[a-z0-9\-]+/([0-9]+)\-[a-z0-9\-\.]+/?$ /controllers/redirect-imported-elements.php?content_type=article&content_id=$1 [L,NC]
+    RewriteRule ^index\.php/[a-z0-9\-]+/[a-z0-9\-]+/([0-9]+)\-[a-z0-9\-]+/?$ /controllers/redirect-imported-elements.php?content_type=article&content_id=$1 [L,NC]
     RewriteRule ^index\.php/opinion/[a-z0-9\-]+/([0-9]+)\-[a-z]/?$ /controllers/redirect-from-editmaker.php?content_type=opinion&content_id=$1 [L,NC]
     #------------------------  Secciones de elidealgallego.com
 
@@ -658,8 +619,10 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteRule ^index2.php$ controllers/redirect-imported-elements.php?content_type=article&content_id=%1  [R=301,L,NC]
 
     #index2.php?option=com_content&task=emailform&id=24576&itemid=362
-    RewriteCond %{QUERY_STRING} &?option=com_content&?task=([^&]+)&?id=([^&]+)&?Itemid=([^&]+)
-    RewriteRule ^index2.php$ controllers/redirect-imported-elements.php?content_type=article&content_id=%1  [R=301,L,NC]
+    RewriteCond %{QUERY_STRING} &?option=com_content&?task=([^&]+)&?id=([^&]+)
+    RewriteRule ^index2.php$ controllers/redirect-imported-elements.php?content_type=article&content_id=%2  [R=301,L,NC]
+    RewriteCond %{QUERY_STRING} &?option=com_content&?task=([^&]+)&?id=([^&]+)&?itemid=([^&]+)
+    RewriteRule ^index2.php$ controllers/redirect-imported-elements.php?content_type=article&content_id=%2  [R=301,L,NC]
 
 
     #--------------------------------------------------------
@@ -685,15 +648,15 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteCond %{QUERY_STRING} &?ref=([^&]+)
     RewriteRule ^noticia\.asp$ /controllers/redirect-from-editmaker.php?content_type=article&content_id=%1 [L,NC]
 
-    #-------------------------
+
     RewriteCond %{QUERY_STRING} &?ref=([^&]+)&?pos=([^&]+) [OR]
     RewriteCond %{QUERY_STRING} &?ref=([^&]+)
     RewriteRule ^noticia\.asp$ /controllers/redirect-from-editmaker.php?content_type=article&content_id=%1 [L,NC]
-    #-------------------------
+
     RewriteCond %{QUERY_STRING} &?id=([^&]+)&?pg=([^&]+) [OR]
     RewriteCond %{QUERY_STRING} &?id=([^&]+)
     RewriteRule ^foros/mostrar_foro\.asp$ /controllers/redirect-from-editmaker.php?content_type=article&content_id=%1 [L,NC]
-    #-------------------------
+
     RewriteCond %{QUERY_STRING} &?pg=([^&]+)&?[(pf=)|(s=)]([^&]+)
     RewriteRule ^pda/noticia\.asp$ /mobile/? [R=301,L,NC]
 
@@ -731,7 +694,6 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     #Old Static pages
     RewriteRule ^contacto($|/$) /estaticas/contacto? [R=301,L,NC]
     RewriteRule ^estaticas/boletin.html /boletin/ [R=301,L,NC]
-    #--------------------------------------------------------
 
     #Articles articulo/2008/09/29/galicia/ourense/titulo-noticia-separada-guiones/1222692016.html
     #Articles articulo/2008/09/29/galicia/titulo-noticia-separada-guiones/1222692016.html
@@ -817,27 +779,6 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteRule ^extseccion/([a-z0-9\-]+)/([a-z0-9\-]+)/?$ controllers/index_ws.php?category_name=$1&subcategory_name=$2 [L,NC]
     RewriteRule ^extseccion/([a-z0-9\-]+)/([a-z0-9\-]+)/([0-9]+)/?$ controllers/index_ws.php?category_name=$1&subcategory_name=$2&page=$3 [L,NC]
 
-    #RSS
-    RewriteRule ^rss/?$ controllers/rss.php?action=rss [L,NC]
-    RewriteRule ^rss/listado/?$ controllers/rss.php?action=index_rss [L,NC]
-    RewriteRule ^rss/opinion/([0-9]+)/?$ controllers/rss.php?category_name=opinion&author=$1&action=rss [L,NC]
-    RewriteRule ^rss/([a-z0-9-]+)/([a-z0-9-]+)/?$ controllers/rss.php?category_name=$1&subcategory_name=$2&action=rss [L,NC]
-    RewriteRule ^rss/([a-z0-9-]+)/?$ controllers/rss.php?category_name=$1&action=rss [L,NC]
-
-    #Sitemap
-    RewriteRule ^sitemapnews.xml?$ controllers/sitemap.php?action=news [L,NC]
-    RewriteRule ^sitemapweb.xml?$ controllers/sitemap.php?action=web [L,NC]
-    RewriteRule ^sitemapnews.xml.gz?$ controllers/sitemap.php?action=news&format=gz [L,NC]
-    RewriteRule ^sitemapweb.xml.gz?$ controllers/sitemap.php?action=web&format=gz [L,NC]
-    RewriteRule ^sitemap.xml?$ controllers/sitemap.php [L,NC]
-
-    #Robots.txt
-    RewriteRule ^robots.txt?$ controllers/robots.php [L,NC]
-
-    #Advertisement
-    RewriteRule ^ads/get/([0-9]+).html$ controllers/advertisement.php?action=get&id=$1 [L,NC]
-    RewriteRule ^ads/([0-9]+).html$ controllers/advertisement.php?action=show&publi_id=$1 [L,NC]
-
     #Album
     #album/generic/2011-07-09/prueba/2011070918522200812.html
     RewriteRule ^album/?$ controllers/album.php?action=frontpage [L,NC]
@@ -869,9 +810,6 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
 
     #Search
     RewriteRule ^search/google/(.*)$ controllers/search.php?stringSearch=$1&googleSearch=on [L,NC]
-
-    #Static pages
-    RewriteRule ^estaticas/([a-z0-9\-]+)(\.html|/)?$ controllers/statics.php?slug=$1 [L,NC]
 
     #Newsletter links
     #RewriteRule ^([a-z0-9\-]+)/([0-9]{4}-[0-1][0-9]-[0-3][0-9])/([0-9]+)/$ /seccion/$1/#$3 [R=301,NE,NC,L]
@@ -995,4 +933,9 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     ErrorDocument 403 /controllers/error.php?errordoc=403
     ErrorDocument 404 /controllers/error.php?errordoc=404
     ErrorDocument 500 /controllers/error.php?errordoc=500
+
+    RewriteCond $1 !\.(php)$ [NC]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^(.*)$ app.php [QSA,L]
+
 </IfModule>
