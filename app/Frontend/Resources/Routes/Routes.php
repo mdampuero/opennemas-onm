@@ -166,6 +166,26 @@ $frontendRoutes->add(
     )
 );
 
+$frontendRoutes->add(
+    'frontend_search_internal',
+    new Route(
+        '/search/',
+        array(
+            '_controller' => 'Frontend:Controllers:SearchController:internal',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_search_google',
+    new Route(
+        '/search/google',
+        array(
+            '_controller' => 'Frontend:Controllers:SearchController:google',
+        )
+    )
+);
+
 
 
 $routes->addCollection($frontendRoutes);

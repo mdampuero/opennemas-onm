@@ -43,12 +43,18 @@ videos.php                     => VideosController
 New controllers
 ---------------
 AdvertisementController DONE
+RobotsController DONE
+RssController DONE
+SearchController DONE, we must change all the template urls
+SitemapsController DONE
+ErrorController DONE
+StaticPagesController DONE
+
 AlbumController
 ArticlesController
 AuthenticationController
 BooksController
 CommentsController
-ErrorController DONE
 FrontpagesController
 IndexController
 LettersController
@@ -58,12 +64,7 @@ OpinionsController
 PollsController
 RatingsController
 RedirectorsController
-RobotsController DONE
-RssController DONE
-SearchController
-SitemapsController DONE
 SpecialsController
-StaticPagesController DONE
 SubscriptionsController
 UsersController
 VideosController

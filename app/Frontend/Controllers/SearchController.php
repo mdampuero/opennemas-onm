@@ -37,9 +37,23 @@ class SearchController extends Controller
      *
      * @return Response the response object
      **/
-    public function defaultAction(Request $request)
+    public function googleAction(Request $request)
     {
+        require_once APP_PATH.'/../public/controllers/index_advertisement.php';
 
+        return $this->render('search/search.tpl');
     }
+
+    /**
+     * Displays the search results with the internal algorithm
+     *
+     * @return Response the response object
+     **/
+    public function internalAction($request)
+    {
+        // TODO: Implement
+        return new Response('Not implemented', 501);
+    }
+
 
 } // END class SearchController
