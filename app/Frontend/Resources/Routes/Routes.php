@@ -196,6 +196,47 @@ $frontendRoutes->add(
     )
 );
 
+$frontendRoutes->add(
+    'frontend_comments_get',
+    new Route(
+        '/comments/get',
+        array(
+            '_controller' => 'Frontend:Controllers:CommentsController:get',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_comments_vote',
+    new Route(
+        '/comments/vote',
+        array(
+            '_controller' => 'Frontend:Controllers:CommentsController:vote',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_comments_paginate',
+    new Route(
+        '/comments/paginate',
+        array(
+            '_controller' => 'Frontend:Controllers:CommentsController:paginateComments',
+        )
+    )
+);
+
+
+$frontendRoutes->add(
+    'frontend_comments_save',
+    new Route(
+        '/comments/save',
+        array(
+            '_controller' => 'Frontend:Controllers:CommentsController:save',
+        )
+    )
+);
+
 
 
 $routes->addCollection($frontendRoutes);
