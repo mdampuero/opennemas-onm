@@ -33,13 +33,41 @@ class RatingsController extends Controller
     }
 
     /**
-     * Description of the action
+     * Registers a vote for a content given its id
      *
      * @return Response the response object
      **/
-    public function defaultAction(Request $request)
+    public function voteAction(Request $request)
     {
+        // Retrieve data
+        $ip        = $request->server->get('REMOTE_ADDR');
+        $ipFrom    = $request->query->filter('i', null, FILTER_SANITIZE_STRING);
+        $voteValue = $request->query->filter('v', null, FILTER_VALIDATE_INT);
+        $page      = $request->query->filter('p', null, FILTER_SANITIZE_STRING);
+        $contentId = $request->query->filter('a', null, FILTER_SANITIZE_STRING);
 
+        // WEIRD SECUTIRY CHECK: Check if the remote address matches the passed in.
+        if ($ip != $ipFrom) {
+            return new Response(_('Problem with IP verification!'), 400);
+        }
+
+        // Check if the content to vote exists
+        $content = new \Content($contentId);
+
+        if (is_null($content->id)) {
+            return new Response(_("Content not available"), 404);
+        }
+
+        // Register the vote
+        $rating = new \Rating($content->id);
+        if ($rating->update($voteValue, $ip)) {
+            $output = $rating->render($page, 'result', 1);
+        } else {
+            $output = _("You have voted this new previously.");
+        }
+
+        // Return the response
+        return new Response($output, 200);
     }
 
-} // END class RatingsController
+}

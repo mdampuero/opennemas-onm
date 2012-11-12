@@ -186,6 +186,16 @@ $frontendRoutes->add(
     )
 );
 
+$frontendRoutes->add(
+    'frontend_rating_vote',
+    new Route(
+        '/ratings/vote',
+        array(
+            '_controller' => 'Frontend:Controllers:RatingsController:vote',
+        )
+    )
+);
+
 
 
 $routes->addCollection($frontendRoutes);
