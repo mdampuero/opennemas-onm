@@ -321,8 +321,15 @@ class CanariasToOnm
                         );
 
                         if (!empty($photoName)) {
-                            preg_match_all("@http://www.youtube.com/(.*)@i", $photoName, $matches, PREG_SET_ORDER);
-                            if (!empty($matches[0][1])) {
+                            preg_match(
+                                '%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i',
+                                $photoName,
+                                $match
+                            );
+
+                            if (!empty($match[1])) {
+
+                                $imageData['oldName'] = "http://www.youtube.com/watch?v=".$match[1] ;
                                 $resp = $this->createVideo($imageData);
                             } else {
                                 $resp = $this->createImage($imageData);
@@ -330,12 +337,17 @@ class CanariasToOnm
                         }
                         if (!empty($photoName2) && ($photoName != $photoName2)) {
                             $imageData['name'] = $photoName2;
-                            $imageData['oldName'] = $photoName2;
-                            preg_match_all("@http://www.youtube.com/(.*)@", $photoName2, $matches);
-                            if (!empty($matches[0][1])) {
+                            preg_match(
+                                '%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i',
+                                $photoName2,
+                                $match
+                            );
+                            if (!empty($match[1])) {
+                                $imageData['oldName'] = "http://www.youtube.com/watch?v=".$match[1];
                                 $resp = $this->createVideo($imageData);
 
                             } else {
+                                $imageData['oldName'] = $photoName2;
                                 $this->createImage($imageData);
                             }
                         }
@@ -1176,7 +1188,7 @@ class CanariasToOnm
 
         */
 
-        $editorial = array('beln-molina', 'thala-rodrguez', 'alexis-gonzlez', 'editorial',
+        $editorial = array('belen-molina', 'thalia-rodriguez', 'alexis-gonzalez', 'editorial',
          'noe-ramon', 'jaime-puig', 'martin-macho');
         if (in_array($name, $editorial)) {
             return 1;
@@ -1188,15 +1200,18 @@ class CanariasToOnm
         */
 
         $authors = array(
-            '-cristbal-d-peate', '-joaquin-sagaseta-de-ilurdoz-paradas', '-jos-a-alemn',
-            '-salvador-garca-llanos', 'antonio-gonzlez-vieitez', 'cristbal-d-peate', 'francisco-morote',
-            'cristbal-d-penate', 'cristbal-peate', 'cristobal-d-peate', 'eduardo-serradilla-sanchs',
-            'faustino-garca-mrquez', 'joaquin-sagaseta-de-ilurdoz-paradas',
-            'joaqun-sagaseta-de-ilurdoz-paradas',
-            'joaqun-sagaseta-paradas', 'jos-a-aleman', 'jos-a-alemn',
-            'octavio-hernndez', 'rafael-gonzlez-morera', 'salvador-garca-llanos',
-            'salvador-graca-llanos', 'salvador-martnez-gonzlez'
+            'jose-aleman', 'jose-a-aleman',
+            'antonio-gonzalez-vieitez',
+            'francisco-morote',
+            'cristobal-penate', 'cristobal-peate', 'cristobal-d-penate',
+            'eduardo-serradilla',
+            'faustino-garcia-marquez',
+            'joaquin-sagaseta-de-ilurdoz-paradas', 'joaquin-sagaseta',
+            'octavio-hernandez',
+            'rafael-gonzalez-morera',
+            'salvador-garcia-llanos',
         );
+
         if (in_array($name, $authors)) {
             return 0;
         }
@@ -1784,92 +1799,6 @@ class CanariasToOnm
 
 
     /**
-     * create comments
-     *
-     * @param string $topic string for search articles in old database.
-     *
-     * @return datatype Explanation of returned data
-     *
-     * @throws <b>Exception</b> Explanation of exception.
-     */
-    public function importComments()
-    {
-        $sql = 'SELECT `id`, `fecha`, `hora`, `nombre`, `email`, `asunto`, '.
-            ' `texto`, `seccion`, `idnoticia`, `ip_real`, `revisado`, `activar`'.
-            ' FROM opinion_lectores'
-                .$limit;
-
-        $request = self::$originConn->Prepare($sql);
-        $rs = self::$originConn->Execute($request);
-
-        if (!$rs) {
-            echo self::$originConn->ErrorMsg();
-            $this->helper->log(self::$originConn->ErrorMsg());
-        } else {
-            $totalRows = $rs->_numOfRows;
-
-            $current = 1;
-
-            $comment = new Comment();
-            while (!$rs->EOF) {
-
-                $originalCommentID = $rs->fields['id'];
-                if ($this->helper->elementIsImported($originalCommentID, 'comment') ) {
-                    echo "[{$current}/{$totalRows}] comment with id {$originalCommentID} already imported\n";
-                } else {
-                    $contentId = $this->helper->elementIsImported($$rs->fields['idnoticia'], 'article');
-                    $content = new Article($contentId);
-                    if (!empty($content->pk_content)) {
-                        echo "[{$current}/{$totalRows}] Importing comment with id {$originalCommentID} - ";
-                        $title = $this->helper->convertToUtf8($rs->fields['asunto']);
-                        $category = $content->category;
-                        $category_name = $content->category_name;
-
-                        $data = array(
-                            'title' => $title,
-                            'category' => $category,
-                            'summary' => $title,
-                            'body' => $this->helper->convertToUtf8($rs->fields['texto']),
-                            'category_name'=>  $category_name,
-                            'description' => $title,
-                            'created' => $rs->fields['fecha']." ".$rs->fields['hora'],
-                            'changed' => $rs->fields['fecha']." ". $rs->fields['hora'],
-                            'starttime' => $rs->fields['fecha']." ".$rs->fields['hora'],
-                            'fk_user' => USER_ID,
-                            'fk_author' => USER_ID,
-                            'slug' => '',
-                            'fk_content' => $content->pk_content,
-                            'available' => ($rs->fields['activar'] == 0)? 0:1,
-                            );
-
-                        $commentID = $comment->create($data)->id;
-
-                        if (!empty($commentID) ) {
-                            $this->helper->insertRefactorID($originalCommentID, $commentID, 'comment');
-
-
-                        } else {
-                            $errorMsg = 'Problem '.$originalCommentID.' - '.$title;
-                            $this->helper->log('insert comment : '.$originalCommentID. $errorMsg);
-                            $this->helper->log("\n Problem inserting ads {$rs->fields['id']}\n ");
-                        }
-                    } else {
-                        $this->helper->log('insert comment no content: '.$originalCommentID. $contentId);
-                    }
-                }
-
-                $current++;
-                $rs->MoveNext();
-            }
-            $rs->Close(); # optional
-        }
-
-        return true;
-
-    }
-
-
-    /**
      * create Attachments & import image ads in new DB.
      *
      * @param string $topic string for search articles in old database.
@@ -1922,7 +1851,7 @@ class CanariasToOnm
                     $data['title'] = $title;
                     $data['category'] = $category;
                     $data['category_name'] = $category_name;
-                    $data['available'] = ($rs->fields['activar'] == 0)? 0:1;
+                    $data['available'] = 1;
 
                     $data['description'] = $title;
                     $data['metadata'] = StringUtils::get_tags($title.', '.$category_name);
@@ -1962,54 +1891,109 @@ class CanariasToOnm
     }
 
 
-     /* create new image */
+     /**
+     * create Videos & import image ads in new DB.
+     *
+     * @param string $topic string for search articles in old database.
+     *
+     * @return datatype Explanation of returned data
+     *
+     * @throws <b>Exception</b> Explanation of exception.
+     */
+    public function importVideos()
+    {
+        $sql = 'SELECT `id`, `fecha`, `hora`, `titulo`, `texto`, `imagen`, `video`, `activar` FROM `videos`';
+
+        //$sql = 'SELECT * FROM rel_radio';
+
+        $request = self::$originConn->Prepare($sql);
+        $rs = self::$originConn->Execute($request);
+
+        if (!$rs) {
+            echo self::$originConn->ErrorMsg();
+            $this->helper->log(self::$originConn->ErrorMsg());
+        } else {
+            $totalRows = $rs->_numOfRows;
+
+            $current = 1;
+
+            while (!$rs->EOF) {
+
+                $originalAdID = $rs->fields['id'];
+                if ($this->helper->elementIsImported($originalAdID, 'video') ) {
+                    echo "[{$current}/{$totalRows}] video with id {$originalAdID} already imported\n";
+                } else {
+                    echo "[{$current}/{$totalRows}] Importing video with id {$originalAdID} - ";
+                    $title = $this->helper->convertToUtf8($rs->fields['titulo']);
+                    $category  = 20;
+                    $videoData = array(
+                            'title' => $title,
+                            'name' => $rs->fields['video'],
+                            'available' =>1,
+                            'category'=> $category,
+                            'metadata' => StringUtils::get_tags($photoName),
+                            'description' => $rs->fields['texto'],
+                            'created' => $rs->fields['fecha'].' '.$rs->fields['hora'],
+                            'changed' => $rs->fields['fecha'].' '.$rs->fields['hora'],
+                            'oldName' => $rs->fields['video'],
+                            'author_name' => 'internal',
+                        );
+                        $this->createVideo($videoData, 'file');
+                }
+                $current++;
+                $rs->MoveNext();
+            }
+
+            echo "\n fail $originalAdID video \n";
+            $rs->Close(); # optional
+        }
+
+        return true;
+
+    }
+
+
+     /* create new video */
 
     public function createVideo($data, $type = 'web-source', $dateForDirectory = null)
     {
         $newVideoID = null;
         if ($type === 'file') {
-            $oldPath = OLD_MEDIA.$data['oldName'];
+            $oldFile = OLD_MEDIA.'/videos/'.$data['oldName'];
             // Check if the video file entry was completed
-            if (!(file_exists($data['oldName']))
+            if (!(file_exists($oldFile))
             ) {
-                $this->helper->log(" Problem no exists video file: {$e->getMessage()} {$oldPath} \n ");
+                $this->helper->log(" Problem no exists video file:   {$oldFile} \n ");
             } else {
-
                 $videoFileData = array(
-                    'file_type'      => 'flv', //$data['type']
-                    'file_path'      => $oldPath,
+                    'file_type'      => 'video/x-flv', //$data['type']
+                    'file_path'      => $oldFile,
                     'category'       => $data['category'],
                     'available'      => 1,
                     'content_status' => 1,
-                    'title'          => $this->helper->convertToUtf8($data['title']),
+                    'title'          => $data['title'],
                     'metadata'       => $data['metadata'],
-                    'description'    => $data['name'].' video '.$data['texto'],
-                    'author_name'    => $request->filter('author_name', null, FILTER_SANITIZE_STRING),
+                    'description'    => $data['description'],
+                    'author_name'    => $data['author_name'],
                 );
 
                 try {
                     $video = new \Video();
                     $newVideoID = $video->createFromLocalFile($videoFileData);
                 } catch (\Exception $e) {
-                    m::add($e->getMessage(), m::ERROR);
-                    $this->helper->log(" Problem with video file: {$e->getMessage()} {$oldPath} \n ");
+                    $this->helper->log(" Problem with video file: {$e->getMessage()} {$oldFile} \n ");
                 }
             }
 
         } elseif ($type == 'web-source') {
+            var_dump($data['oldName']);
 
             $url = rawurldecode($data['oldName']);
 
             if ($url) {
-
                 try {
                     $videoP = new \Panorama\Video($url);
-                    var_dump($videoP);
-
                     $information = $videoP->getVideoDetails();
-                    var_dump($url);
-                    var_dump($information);
-
                     $values = array(
                         'file_path'      => $url,
                         'video_url'      => $url,
@@ -2024,10 +2008,12 @@ class CanariasToOnm
 
                 } catch (\Exception $e) {
                     $this->helper->log("\n 1 Can't get video information. Check the $url");
+                    return;
                 }
 
                 $video = new \Video();
-                $values['information'] = json_decode($information, true);
+                $values['information'] = $information;
+
                 try {
                     $newVideoID = $video->create($values);
                 } catch (\Exception $e) {
@@ -2068,7 +2054,7 @@ class CanariasToOnm
     public function importRelatedContents()
     {
         $sql = 'SELECT id, opinion_relacion, video_relacion, radio_relacion,
-        documentos_relacion, galeria_relacion, encuesta_relacion, noti_relacion FROM noticias ';
+        documentos_relacion, galeria_relacion,  noti_relacion FROM noticias ';
         $request = self::$originConn->Prepare($sql);
         $rs = self::$originConn->Execute($request);
         $related = new RelatedContent();

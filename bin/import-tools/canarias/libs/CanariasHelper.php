@@ -180,9 +180,8 @@ class CanariasHelper
 
     public function getSlug($text)
     {
-        $text = \StringUtils::get_title(utf8_encode($text));
-        //$text = \Onm\StringUtils::normalize($text);
-        //$text = \Onm\StringUtils::get_title($text);
+
+        $text =  \Onm\StringUtils::generateSlug(utf8_encode($text));
 
         return $text;
     }

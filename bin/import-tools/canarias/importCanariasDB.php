@@ -47,14 +47,11 @@ set_include_path(
     )
 );
 
-
-
 $importer = new CanariasToOnm($configOldDB, $configNewDB);
 
 
-$option = 'articles';
 
-switch ($option) {
+switch ($argv[1]) {
     case 'clear':
         $importer->helper->sqlClearData(); //delete old data in tables
         $importer->helper->clearLog();
@@ -78,8 +75,9 @@ switch ($option) {
         $importer->importOpinions();
         break;
     case 'articles':
+
         $importer->helper->log('IMPORTING ARTICLES AND IMAGES');
-      /*  $importer->importHemeroteca();
+        /*  $importer->importHemeroteca();
         $importer->importHemerotecaTopSecret();
         $importer->importTopSecret();
         $importer->importFauna(); */
@@ -87,8 +85,13 @@ switch ($option) {
         $importer->importArticles();
 
         break;
-    case 'other-contents':
+    case 'otherContents':
         $importer->helper->log("\n IMPORTING OTHER CONTENTS \n");
+
+        $importer->importVideos();
+
+        $importer->importImagesHumor();
+
         $importer->importLetters();
 
         $importer->importImagesHumor();
@@ -96,17 +99,15 @@ switch ($option) {
         $importer->importAttachments();
 
         $importer->importAlbums();
-        /*
-        // $importer->importComments();
-         //$importer->importRelatedContents();
-        */
+
+        // $importer->importRelatedContents();
+
         break;
     default:
         # code...
+        echo "You can use options: clear, clearCategories, ayuntamientos, articles, otherContents \n";
         break;
 }
-
-$importer->importCategories();
 
 printf("OpenNemas database is ok for Canarias Ahora \n");
 
