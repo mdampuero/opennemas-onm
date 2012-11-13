@@ -12,6 +12,7 @@ function smarty_function_renderplaceholder($params, &$smarty) {
     $cssclass      = $params['cssclass'];
     $order         = (array_key_exists('order', $params))? $params['order'] : 'normal';
     $category_name = $smarty->getTemplateVars('category_name');
+    $params['categoryId']  = $smarty->getTemplateVars('actual_category_id');
     $varname       = (!isset($params['varname']))? 'item': $params['varname'];
 
     // Doing some checks if this method was called properly

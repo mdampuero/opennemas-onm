@@ -422,6 +422,7 @@ class Article extends Content
 
         $tpl->assign('item', $this);
         $tpl->assign('cssclass', $params['cssclass']);
+        $tpl->assign('categoryId', $params['categoryId']);
 
         try {
             $html = $tpl->fetch($params['tpl']);
