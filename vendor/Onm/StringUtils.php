@@ -39,7 +39,7 @@ class StringUtils
      **/
     public static function normalize($name)
     {
-        $name = mb_strtolower($name);
+        $name = mb_strtolower($name, 'UTF-8');
         $trade = array(
             'á'=>'a', 'à'=>'a', 'ã'=>'a', 'ä'=>'a', 'â'=>'a', 'Á'=>'A',
             'À'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Â'=>'A', 'é'=>'e', 'è'=>'e',
@@ -104,6 +104,7 @@ class StringUtils
      **/
     public static function get_title($title, $useStopList = true)
     {
+
         $title = self::clearSpecialChars($title);
         $title = self::normalize_name($title);
         $title = mb_ereg_replace('[^a-z0-9\- ]', '', $title);
@@ -527,6 +528,30 @@ EOF;
         $name = StringUtils::normalize($name);
 
         return $name;
+    }
+
+     /**
+     * Clean the special chars and add - for separate words
+     *
+     * @access static
+     * @param  string  $text, the string to transform
+     * @return string, the string cleaned
+     **/
+    public static function generateSlug($text)
+    {
+
+        $text = trim($text);
+
+        $text = html_entity_decode($text, ENT_COMPAT, 'UTF-8');
+
+        $text = self::normalize($text);
+        $text = self::remove_shorts($text);
+
+        $text = preg_replace('/[ ]+/', '-', $text);
+        $text = preg_replace('/[\-]+/', '-', $text);
+        $text = mb_ereg_replace('[^a-z0-9\-]', '', $text);
+
+        return $text;
     }
 }
 
