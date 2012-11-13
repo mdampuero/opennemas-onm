@@ -25,8 +25,8 @@ preview_content.php            => ArticlesController
 preview.php                    => IndexController
 rating.php                     => RatingsController
 redirect-from-editmaker.php    => RedirectorsController
-redirect-imported-elements.php => RedirectorsController
-redirector.php                 => RedirectorsController
+redirect-imported-elements.php => RedirectorsController, almost the same as previous, merge them.
+redirector.php                 => DELETE
 register.php                   => AuthenticationController
 robots.php                     => RobotsController
 rss.php                        => RssController
@@ -43,7 +43,7 @@ videos.php                     => VideosController
 New controllers
 ---------------
 AdvertisementController DONE
-CommentsController DONE
+CommentsController DONE, review the save action
 ErrorController DONE
 RatingsController DONE
 RobotsController DONE
@@ -51,6 +51,7 @@ RssController DONE
 SearchController DONE, we must change all the template urls
 SitemapsController DONE
 StaticPagesController DONE
+RedirectorsController DONE, review how to handle previous redirections.
 
 AlbumController
 ArticlesController
@@ -63,7 +64,6 @@ NewStandController
 NewStandPaypalController
 OpinionsController
 PollsController
-RedirectorsController
 SpecialsController
 SubscriptionsController
 UsersController

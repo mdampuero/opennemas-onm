@@ -226,7 +226,6 @@ $frontendRoutes->add(
     )
 );
 
-
 $frontendRoutes->add(
     'frontend_comments_save',
     new Route(
@@ -237,6 +236,24 @@ $frontendRoutes->add(
     )
 );
 
+$frontendRoutes->add(
+    'frontend_redirect_content',
+    new Route(
+        '/redirect/content',
+        array(
+            '_controller' => 'Frontend:Controllers:RedirectorsController:content',
+        )
+    )
+);
 
+$frontendRoutes->add(
+    'frontend_redirect_category',
+    new Route(
+        '/redirect/category',
+        array(
+            '_controller' => 'Frontend:Controllers:RedirectorsController:category',
+        )
+    )
+);
 
 $routes->addCollection($frontendRoutes);
