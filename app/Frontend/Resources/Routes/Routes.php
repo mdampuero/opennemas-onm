@@ -256,4 +256,14 @@ $frontendRoutes->add(
     )
 );
 
+$frontendRoutes->add(
+    'frontend_playground',
+    new Route(
+        '/playground/{action}',
+        array(
+            '_controller' => 'Frontend:Controllers:PlaygroundController:default',
+        )
+    )
+);
+
 $routes->addCollection($frontendRoutes);
