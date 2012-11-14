@@ -34,14 +34,12 @@ class Redis extends AbstractCache
         }
 
         if (
-            is_string($options) ||
-            (
-                array_key_exists('server', $options)
-                && array_key_exists('port', $options)
-            )
+            // is_string($options)
+            true
         ) {
             // $redis = new \Predis\Client($options);
             $redis = new \Predis\Client();
+
             $this->setRedis($redis);
         }
 
@@ -83,7 +81,14 @@ class Redis extends AbstractCache
      */
     protected function doFetch($id)
     {
-        return $this->redis->get($id);
+        $data = $this->redis->get($id);
+
+        $dataUnserialized = @unserialize($data);
+        if ($data !== false || $str === 'b:0;') {
+            return $data;
+        } else {
+            return $dataUnserialized;
+        }
     }
 
     /**
@@ -91,15 +96,25 @@ class Redis extends AbstractCache
      */
     protected function doContains($id)
     {
-        return (bool) $this->redis->get($id);
+        return (bool) $this->redis->exists($id);
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function doSave($id, $data, $lifeTime = 0)
+    protected function doSave($id, $data, $lifeTime = -1)
     {
-        return $this->redis->set($id, $data);
+        if (!is_string($data)) {
+            $data = serialize($data);
+        }
+
+        $saved = $this->redis->set($id, $data);
+
+        // Set the expire time for this key if valid lifeTime
+        if ($lifeTime > -1) {
+            $this->redis->expire($id, $lifeTime);
+        }
+        return $saved;
     }
 
     /**

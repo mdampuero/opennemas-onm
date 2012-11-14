@@ -100,9 +100,13 @@ class PlaygroundController extends Controller
      **/
     public function redis()
     {
+
         $cache = $this->container->get('cache');
-        $cache->save('test', 'hola');
-        var_dump($cache->fetch('test', 'hola'));die();
+        var_dump($cache->fetch('test'));
+        $cache->save('test', 'hola', 5);
+        $cache->save('test:category', 'cousa juapa chico');
+        $cache->save('test:array', array(1, 3, 5, 7));
+        var_dump($cache->fetch('test'), $cache->contains('test'));die();
 
     }
 
