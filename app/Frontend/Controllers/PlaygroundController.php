@@ -93,4 +93,17 @@ class PlaygroundController extends Controller
         die();
     }
 
+    /**
+     * Playground for redis testing
+     *
+     * @return Response the response instance
+     **/
+    public function redis()
+    {
+        $cache = $this->container->get('cache');
+        $cache->save('test', 'hola');
+        var_dump($cache->fetch('test', 'hola'));die();
+
+    }
+
 }

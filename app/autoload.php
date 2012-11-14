@@ -71,6 +71,7 @@ $loader->registerNamespaces(
         'Symfony\Component\EventDispatcher'     => __DIR__.'/../vendor/symfony/event-dispatcher',
         'Panorama'                              => __DIR__.'/../vendor/frandieguez/panorama-php/lib',
         'Monolog'                               => __DIR__.'/../vendor/monolog/monolog/src',
+        'Predis'                                => __DIR__.'/../vendor/predis/predis/lib',
     )
 );
 

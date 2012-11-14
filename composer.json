@@ -24,6 +24,7 @@
         "symfony/console"             : "2.1.*",
         "swiftmailer/swiftmailer"     : "4.1.7",
         "monolog/monolog"             : "1.1.0",
-        "frandieguez/panorama-php"    : "1.0.2"
+        "frandieguez/panorama-php"    : "1.0.2",
+        "predis/predis": "0.8.*"
     }
 }
