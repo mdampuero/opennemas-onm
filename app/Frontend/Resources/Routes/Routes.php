@@ -261,7 +261,57 @@ $frontendRoutes->add(
     new Route(
         '/playground/{action}',
         array(
-            '_controller' => 'Frontend:Controllers:PlaygroundController:default',
+            '_controller' => 'Frontend:Controllers:PlaygroundController:frontpage',
+        )
+    )
+);
+
+
+$frontendRoutes->add(
+    'frontend_books',
+    new Route(
+        '/libros',
+        array(
+            '_controller' => 'Frontend:Controllers:BooksController:frontpage',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_book_show',
+    new Route(
+        '/libro/{id}.{_format}',
+        array(
+            '_controller' => 'Frontend:Controllers:BooksController:show',
+            '_format'     => 'html',
+            'id'          => '([0-9]+)'
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_book_show_with_slug',
+    new Route(
+        '/libro/{category_name}/{slug}/{id}.{_format}',
+        array(
+            '_controller' => 'Frontend:Controllers:BooksController:show',
+            '_format' => 'html',
+        ),
+        array(
+            'category_name' => '[a-z0-9\-]+',
+            'slug'          => '([a-z0-9\-]+)?',
+            'id'            => '([0-9]+)'
+        )
+    )
+);
+
+
+$frontendRoutes->add(
+    'frontend_books_widget',
+    new Route(
+        '/libros/widget',
+        array(
+            '_controller' => 'Frontend:Controllers:BooksController:ajaxPaginationList',
         )
     )
 );
@@ -273,7 +323,8 @@ $frontendRoutes->add(
         array(
             '_controller' => 'Frontend:Controllers:AlbumsController:frontpage',
             'page' => 1
-        ), array(
+        ),
+        array(
             'page' => '([0-9]+)?'
         )
     )
@@ -323,3 +374,4 @@ $frontendRoutes->add(
 );
 
 $routes->addCollection($frontendRoutes);
+
