@@ -39,7 +39,7 @@ class AlbumsController extends Controller
         $subcategoryName = null;
         $action           = $this->request->query->filter('action', 'frontpage', FILTER_SANITIZE_STRING);
 
-        if (!empty($category_name)) {
+        if (!empty($this->categoryName)) {
             $category = $this->ccm->get_id($this->categoryName);
             $actual_category_id = $category; // FOR WIDGETS
             $category_real_name = $this->ccm->get_title($this->categoryName); //used in title
@@ -89,8 +89,8 @@ class AlbumsController extends Controller
             $order = isset($albumSettings['orderFrontpage'])?$albumSettings['orderFrontpage']:'views';
 
 
-            if (isset($category)
-                && !empty($category)
+            if (isset($this->category)
+                && !empty($this->category)
             ) {
                 $albums = $this->cm->find_by_category(
                     'Album',
@@ -213,6 +213,48 @@ class AlbumsController extends Controller
                 'cache_id' => $cacheID,
             )
         );
+    }
+
+    /**
+     * Returns the
+     *
+     * @return Response|RedirectResponse
+     **/
+    public function ajaxPaginatedAction(Request $request)
+    {
+        // Items_page refers to the widget
+        $albumID   = $request->query->filter('album_id', null, FILTER_SANITIZE_STRING);
+        $page      = $request->query->filter('page', 1, FILTER_VALIDATE_INT);
+        $itemsPage = 8;
+
+        // Redirect to album frontpage if id_album wasn't provided
+        if (is_null($albumID)) {
+            return new RedirectResponse($this->generateUrl('frontend_album_frontpage'));
+        }
+
+        // Get the album from the id and increment the numviews for it
+        $album = new \Album($albumID);
+        $this->view->assign('album', $album);
+
+        $album->category_name  = $album->loadCategoryName($album->id);
+        $album->category_title = $album->loadCategoryTitle($album->id);
+        $_albumArray           = $album->_getAttachedPhotos($album->id);
+        $_albumArrayPaged      = $album->getAttachedPhotosPaged($album->id, 8, $page);
+
+        if (count($_albumArrayPaged) > $itemsPage) {
+            array_pop($_albumArrayPaged);
+        }
+
+        return $this->render(
+            'widgets/widget_gallery_thumbs.tpl',
+            array(
+                'album_photos'       => $_albumArray,
+                'album_photos_paged' => $_albumArrayPaged,
+                'page'               => $page,
+                'items_page'         => $itemsPage,
+            )
+        );
+
     }
 
 } // END class AlbumsController

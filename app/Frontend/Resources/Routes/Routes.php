@@ -317,6 +317,16 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
+    'frontend_album_ajax',
+    new Route(
+        '/album/ajax',
+        array(
+            '_controller' => 'Frontend:Controllers:AlbumsController:ajaxPaginated',
+        )
+    )
+);
+
+$frontendRoutes->add(
     'frontend_album_frontpage',
     new Route(
         '/album/{page}',
@@ -364,11 +374,18 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
-    'frontend_album_frontpage_2',
+    'frontend_album_show_with_date_slug',
     new Route(
-        '/albumes',
+        '/album/{category_name}/{slug}/{album_id}.{_format}',
         array(
-            '_controller' => 'Frontend:Controllers:AlbumsController:frontpage',
+            '_controller' => 'Frontend:Controllers:AlbumsController:show',
+            '_format' => 'html',
+            'page' => 1
+        ),
+        array(
+            'category_name' => '[a-z0-9\-]+',
+            'slug'          => '[a-z0-9\-]+',
+            'album_id'      => '([0-9]+)'
         )
     )
 );

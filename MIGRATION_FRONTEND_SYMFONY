@@ -42,6 +42,7 @@ videos.php                     => VideosController
 
 New controllers
 ---------------
+AlbumController, DONE, change ajax action urls in templates
 AdvertisementController DONE
 CommentsController DONE, review the save action
 ErrorController DONE
@@ -53,7 +54,6 @@ SitemapsController DONE
 StaticPagesController DONE
 RedirectorsController DONE, review how to handle previous redirections.
 
-AlbumController
 ArticlesController
 AuthenticationController
 BooksController
