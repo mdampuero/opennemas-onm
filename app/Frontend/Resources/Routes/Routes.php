@@ -266,4 +266,60 @@ $frontendRoutes->add(
     )
 );
 
+$frontendRoutes->add(
+    'frontend_album_frontpage',
+    new Route(
+        '/album/{page}',
+        array(
+            '_controller' => 'Frontend:Controllers:AlbumsController:frontpage',
+            'page' => 1
+        ), array(
+            'page' => '([0-9]+)?'
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_album_frontpage_category',
+    new Route(
+        '/album/{category_name}/{page}',
+        array(
+            '_controller' => 'Frontend:Controllers:AlbumsController:frontpage',
+            'page' => 1
+        ),
+        array(
+            'category_name' => '[a-z0-9\-]+',
+            'page'          => '([0-9]+)?'
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_album_show_with_date_slug',
+    new Route(
+        '/album/{category_name}/{date}/{slug}/{album_id}.{_format}',
+        array(
+            '_controller' => 'Frontend:Controllers:AlbumsController:show',
+            '_format' => 'html',
+            'page' => 1
+        ),
+        array(
+            'category_name' => '[a-z0-9\-]+',
+            'date'          => '([0-9]{4})-([0-1][0-9])-([0-3][0-9])',
+            'slug'          => '[a-z0-9\-]+',
+            'album_id'      => '([0-9]+)'
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_album_frontpage_2',
+    new Route(
+        '/albumes',
+        array(
+            '_controller' => 'Frontend:Controllers:AlbumsController:frontpage',
+        )
+    )
+);
+
 $routes->addCollection($frontendRoutes);

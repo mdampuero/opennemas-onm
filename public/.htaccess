@@ -782,12 +782,12 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
 
     #Album
     #album/generic/2011-07-09/prueba/2011070918522200812.html
-    RewriteRule ^album/?$ controllers/album.php?action=frontpage [L,NC]
-    RewriteRule ^albumes/?$ controllers/album.php?action=frontpage
-    RewriteRule ^album/([0-9])?$ controllers/album.php?action=frontpage&c=$1 [L,NC]
-    RewriteRule ^album/([a-z0-9\-]+)/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/(.*)/([0-9]+).html$ controllers/album.php?action=show&album_id=$6&category_name=$1 [L,NC]
-    RewriteRule ^album/([a-z0-9\-]+)/(.*)/([0-9]+).html$ controllers/album.php?action=show&album_id=$3&category_name=$1 [L,NC]
-    RewriteRule ^album/([a-z0-9\-]+)/?$ controllers/album.php?action=frontpage&category_name=$1 [L,NC]
+    # RewriteRule ^album/?$ controllers/album.php?action=frontpage [L,NC]
+    # RewriteRule ^albumes/?$ controllers/album.php?action=frontpage
+    # RewriteRule ^album/([0-9])?$ controllers/album.php?action=frontpage&c=$1 [L,NC]
+    # RewriteRule ^album/([a-z0-9\-]+)/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/(.*)/([0-9]+).html$ controllers/album.php?action=show&album_id=$6&category_name=$1 [L,NC]
+    # RewriteRule ^album/([a-z0-9\-]+)/(.*)/([0-9]+).html$ controllers/album.php?action=show&album_id=$3&category_name=$1 [L,NC]
+    # RewriteRule ^album/([a-z0-9\-]+)/?$ controllers/album.php?action=frontpage&category_name=$1 [L,NC]
 
     #Video
     #/video/0/2008/12/08/200812081741363340.html
