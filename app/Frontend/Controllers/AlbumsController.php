@@ -72,7 +72,7 @@ class AlbumsController extends Controller
      **/
     public function frontpageAction(Request $request)
     {
-        $this->page = $this->request->query->getDigits('page', 1);
+        $this->page = $request->query->getDigits('page', 1);
 
         // Setup caching system
         $this->view->setConfig('gallery-frontpage');
@@ -139,7 +139,7 @@ class AlbumsController extends Controller
      **/
     public function showAction(Request $request)
     {
-        $this->page = $this->request->query->getDigits('page', 1);
+        $this->page = $request->query->getDigits('page', 1);
 
         // Items_page refers to the widget
         $dirtyID    = $request->query->filter('album_id', null, FILTER_SANITIZE_STRING);
