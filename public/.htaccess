@@ -696,24 +696,7 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteRule ^contacto($|/$) /estaticas/contacto? [R=301,L,NC]
     RewriteRule ^estaticas/boletin.html /boletin/ [R=301,L,NC]
 
-    #Articles articulo/2008/09/29/galicia/ourense/titulo-noticia-separada-guiones/1222692016.html
-    #Articles articulo/2008/09/29/galicia/titulo-noticia-separada-guiones/1222692016.html
-    RewriteRule ^articulo/([a-z0-9\-]+)?/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/([a-z0-9\-]+)/([0-9]+).html$ controllers/article.php?category_name=$1&year=$2&month=$3&day=$4&article_id=$6&action=read&article_title=$5 [L,NC]
     RewriteRule ^extarticulo/([a-z0-9\-]+)?/.*/([0-9]+).html$ controllers/article_ws.php?category_name=$1&article_id=$2&action=read [L,NC]
-    RewriteRule ^articulo/([a-z0-9\-]+)?/(.*)/([0-9]+).html$ controllers/article.php?category_name=$1&article_id=$3&action=read&article_title=$2 [L,NC]
-    RewriteRule ^artigo/([a-z0-9\-]+)?/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/([a-z0-9\-]+)/([0-9]+).html$ controllers/article.php?category_name=$1&year=$2&month=$3&day=$4&article_id=$6&action=read&article_title=$5 [L,NC]
-    RewriteRule ^artigo/([a-z0-9\-]+)?/.*/([0-9]+).html$ controllers/article.php?category_name=$1&article_id=$2&action=read [L,NC]
-
-    RewriteRule ^articulo/([a-z0-9\-]+)/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/(.*)/([0-9]+).html$ controllers/article.php?category_name=$1&article_id=$6&action=read [L,NC]
-    RewriteRule ^articulo/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z0-9\-]+)/(.*)/([0-9]+).html$ controllers/article.php?year=$1&month=$2&day=$3&category_name=$4&article_title=$5&article_id=$6&action=read [L,NC]
-    RewriteRule ^articulo/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([0-9]+\-[a-z])/(.*)/([0-9]+).html$ controllers/article.php?year=$1&month=$2&day=$3&category_name=$4&article_title=$5&article_id=$6&action=read [L,NC]
-    RewriteRule ^artigo/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z0-9\-]+)/(.*)/([0-9]+).html$ controllers/article.php?year=$1&month=$2&day=$3&category_name=$4&article_title=$5&article_id=$6&action=read [L,NC]
-    RewriteRule ^artigo/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([0-9]+\-[a-z])/(.*)/([0-9]+).html$ controllers/article.php?year=$1&month=$2&day=$3&category_name=$4&article_title=$5&article_id=$6&action=read [L,NC]
-
-    RewriteRule ^articulo/captcha/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z]+)/([a-z]+)/(.*)/([0-9]+).jpg$ controllers/article.php?category_name=$4&subcategory_name=$5&article_id=$7&action=captcha [L,NC]
-    RewriteRule ^articulo/captcha/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([0-9]+\-[a-z]+)/([a-z]+)/(.*)/([0-9]+).jpg$ controllers/article.php?category_name=$4&article_id=$6&action=captcha [L,NC]
-    RewriteRule ^articulo/captcha/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([0-9]+\-[a-z]+)/(.*)/([0-9]+).jpg$ controllers/article.php?category_name=$4&article_id=$6&action=captcha [L,NC]
-    RewriteRule ^articulo/captcha/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z]+)/(.*)/([0-9]+).jpg$ controllers/article.php?category_name=$4&article_id=$6&action=captcha [L,NC]
 
     #Opinion Frontpage
     RewriteRule ^opinion/([0-9]+)/$ controllers/opinion_index.php?category_name=opinion&action=list_opinions&page=$1 [L,NC]
@@ -738,11 +721,6 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     #Sync Opinion Inner
     RewriteRule ^extopinion(|/.+)?/([a-z0-9\-]+)?/(.*)?/([0-9]+).html$ controllers/opinion_inner_ws.php?opinion_id=$4&category_name=opinion&action=read&t=$1&author_name=$2&opinion_title=$3 [L,NC]
     RewriteRule ^extopinion(|/.+)?/(.*)?/([0-9]+).html$ controllers/opinion_inner_ws.php?opinion_id=$3&category_name=opinion&action=read&t=$1 [L,NC]
-
-    #Articulos print
-    RewriteRule ^imprimir/[^/]+/([a-z0-9\-_]+)/([a-z0-9\-_]+)/([0-9]+).html$ controllers/article.php?action=print&article_id=$3&category_name=$1&subcategory_name=$2 [L,NC]
-    RewriteRule ^imprimir/[^/]+/([a-z0-9\-_]+)/([0-9]+).html$ controllers/article.php?action=print&article_id=$2&category_name=$1 [L,NC]
-    RewriteRule ^imprimir/[^/]+/([0-9]+).html$ controllers/opinion_inner.php?action=print&opinion_id=$1 [L,NC]
 
     #Sync Articulos print
     RewriteRule ^extimprimir/[^/]+/([a-z0-9\-_]+)/([a-z0-9\-_]+)/([0-9]+).html$ controllers/article_ws.php?action=print&article_id=$3&category_name=$1&subcategory_name=$2 [L,NC]
@@ -779,15 +757,6 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteRule ^extseccion/([a-z0-9\-]+)/([0-9]+)/?$ controllers/index_ws.php?category_name=$1&page=$2 [L,NC]
     RewriteRule ^extseccion/([a-z0-9\-]+)/([a-z0-9\-]+)/?$ controllers/index_ws.php?category_name=$1&subcategory_name=$2 [L,NC]
     RewriteRule ^extseccion/([a-z0-9\-]+)/([a-z0-9\-]+)/([0-9]+)/?$ controllers/index_ws.php?category_name=$1&subcategory_name=$2&page=$3 [L,NC]
-
-    #Album
-    #album/generic/2011-07-09/prueba/2011070918522200812.html
-    # RewriteRule ^album/?$ controllers/album.php?action=frontpage [L,NC]
-    # RewriteRule ^albumes/?$ controllers/album.php?action=frontpage
-    # RewriteRule ^album/([0-9])?$ controllers/album.php?action=frontpage&c=$1 [L,NC]
-    # RewriteRule ^album/([a-z0-9\-]+)/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/(.*)/([0-9]+).html$ controllers/album.php?action=show&album_id=$6&category_name=$1 [L,NC]
-    # RewriteRule ^album/([a-z0-9\-]+)/(.*)/([0-9]+).html$ controllers/album.php?action=show&album_id=$3&category_name=$1 [L,NC]
-    # RewriteRule ^album/([a-z0-9\-]+)/?$ controllers/album.php?action=frontpage&category_name=$1 [L,NC]
 
     #Video
     #/video/0/2008/12/08/200812081741363340.html
@@ -898,8 +867,8 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
 
     RewriteRule ^(.*)/boletin/?$  /boletin/ [R=301,L,NC]
 
-    RewriteRule ^articulo/(.*)/([0-9]+).htm  /articulo/$1/$2.html [R=301,L,NC]
-    RewriteRule ^opinion/(.*)/([0-9]+).htm  /opinion/$1/$2.html [R=301,L,NC]
+    # RewriteRule ^articulo/(.*)/([0-9]+).htm  /articulo/$1/$2.html [R=301,L,NC]
+    # RewriteRule ^opinion/(.*)/([0-9]+).htm  /opinion/$1/$2.html [R=301,L,NC]
 
     #Default Rules
     # RewriteCond %{REQUEST_URI} !^/controllers/index.php

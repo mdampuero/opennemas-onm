@@ -331,7 +331,7 @@ $frontendRoutes->add(
         '/album/{page}',
         array(
             '_controller' => 'Frontend:Controllers:AlbumsController:frontpage',
-            'page' => 1
+            'page'        => 1
         ),
         array(
             'page' => '([0-9]+)?'
@@ -345,7 +345,7 @@ $frontendRoutes->add(
         '/album/{category_name}/{page}',
         array(
             '_controller' => 'Frontend:Controllers:AlbumsController:frontpage',
-            'page' => 1
+            'page'        => 1
         ),
         array(
             'category_name' => '[a-z0-9\-]+',
@@ -360,8 +360,8 @@ $frontendRoutes->add(
         '/album/{category_name}/{date}/{slug}/{album_id}.{_format}',
         array(
             '_controller' => 'Frontend:Controllers:AlbumsController:show',
-            '_format' => 'html',
-            'page' => 1
+            '_format'     => 'html',
+            'page'        => 1
         ),
         array(
             'category_name' => '[a-z0-9\-]+',
@@ -378,8 +378,8 @@ $frontendRoutes->add(
         '/album/{category_name}/{slug}/{album_id}.{_format}',
         array(
             '_controller' => 'Frontend:Controllers:AlbumsController:show',
-            '_format' => 'html',
-            'page' => 1
+            '_format'     => 'html',
+            'page'        => 1
         ),
         array(
             'category_name' => '[a-z0-9\-]+',
@@ -572,4 +572,57 @@ $frontendRoutes->add(
     )
 );
 
+$frontendRoutes->add(
+    'frontend_article_show',
+    new Route(
+        '/articulo/{category_name}/{slug}/{article_id}.{_format}',
+        array(
+            '_controller' => 'Frontend:Controllers:ArticlesController:show',
+            '_format'     => 'html',
+            'page'        => 1
+        ),
+        array(
+            'category_name' => '[a-z0-9\-]+',
+            'slug'          => '[a-z0-9\-]+',
+            'article_id'    => '([0-9]+)',
+            '_format'       => 'html|htm'
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_article_show_gl',
+    new Route(
+        '/artigo/{category_name}/{slug}/{article_id}.{_format}',
+        array(
+            '_controller' => 'Frontend:Controllers:ArticlesController:show',
+            '_format'     => 'html',
+            'page'        => 1
+        ),
+        array(
+            'category_name' => '[a-z0-9\-]+',
+            'slug'          => '[a-z0-9\-]+',
+            'article_id'    => '([0-9]+)',
+            '_format'       => 'html|htm'
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_contente_print',
+    new Route(
+        '/content/print/{slug}/{content_id}.{_format}',
+        array(
+            '_controller' => 'Frontend:Controllers:ContentsController:print',
+            '_format'     => 'html',
+            'page'        => 1
+        ),
+        array(
+            'slug'          => '[a-z0-9\-]+',
+            'content_id'    => '([0-9]+)',
+        )
+    )
+);
+
 $routes->addCollection($frontendRoutes);
+

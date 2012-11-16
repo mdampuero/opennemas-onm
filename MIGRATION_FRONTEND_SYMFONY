@@ -10,8 +10,8 @@ comments.php                   => CommentsController
 error.php                      => ErrorController
 frontpages.php                 => FrontpagesController
 getrss.php                     => RssController
-index.php                      => IndexController
-index_ws.php                   => IndexController
+index.php                      => FrontpageController
+index_ws.php                   => FrontpageController
 letter.php                     => LettersController
 login.php                      => AuthenticationController
 logout.php                     => AuthenticationController
@@ -42,6 +42,7 @@ videos.php                     => VideosController
 
 New controllers
 ---------------
+ArticlesController, send, sendform and print actions migrated to contentcontroller
 AlbumController, DONE, change ajax action urls in templates
 AdvertisementController DONE
 BooksController DONE
@@ -59,10 +60,10 @@ RedirectorsController DONE, review how to handle previous redirections.
 VideosController DONE, review show action because not work (the problme is in the widget_ratings which check the name of old controller)
 
 
-ArticlesController
 AuthenticationController
+ContentController, common actions for all contents
 NewslibraryController (old frontpages)
-IndexController
+FrontpagesController
 LettersController
 NewStandController
 NewStandPaypalController
