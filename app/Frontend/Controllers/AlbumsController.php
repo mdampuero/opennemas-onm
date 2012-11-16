@@ -9,6 +9,7 @@
  **/
 namespace Frontend\Controllers;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
@@ -153,9 +154,7 @@ class AlbumsController extends Controller
         $this->view->setConfig('gallery-inner');
         $cacheID = $this->view->generateCacheId($this->categoryName, null, $albumID);
 
-        $this->view->assign('contentId', $albumID);
-
-        require_once APP_PATH.'/../public/controllers/album_inner_ads.php';
+        $this->adsInner();
 
         if (($this->view->caching == 0)
             || (!$this->view->isCached('gallery/gallery.tpl', $cacheID))
@@ -170,7 +169,7 @@ class AlbumsController extends Controller
             $total = isset($settings['total_front'])?($settings['total_front']):2;
             $days = isset($settings['time_last'])?($settings['time_last']):4;
 
-            $otherAlbums = $cm->find(
+            $otherAlbums = $this->cm->find(
                 'Album',
                 'available=1 AND pk_content !='.$albumID
                 .' AND created >=DATE_SUB(CURDATE(), INTERVAL '
@@ -210,7 +209,8 @@ class AlbumsController extends Controller
         return $this->render(
             'album/album.tpl',
             array(
-                'cache_id' => $cacheID,
+                'cache_id'  => $cacheID,
+                'contentId' => $albumID
             )
         );
     }
@@ -255,6 +255,34 @@ class AlbumsController extends Controller
             )
         );
 
+    }
+
+    /**
+     * Fetches the advertisement
+     *
+     * @return
+     **/
+    private function adsInner()
+    {
+        $ccm = \ContentCategoryManager::get_instance();
+        $category_name='album';
+        $category = $ccm->get_id($category_name);
+
+        $category = (!isset($category) || ($category=='home'))? 0: $category;
+        $advertisement = \Advertisement::getInstance();
+
+        // Load internal banners, principal banners (1,2,3,11,13) and use cache to performance
+        $banners = $advertisement->getAdvertisements(array(501, 502, 503, 509, 510), $category);
+
+        $this->cm = new \ContentManager();
+        $banners = $this->cm->getInTime($banners);
+
+        $advertisement->renderMultiple($banners, $advertisement);
+
+        $intersticial = $advertisement->getIntersticial(550, '$category');
+        if (!empty($intersticial)) {
+            $advertisement->renderMultiple(array($intersticial), $advertisement);
+        }
     }
 
 } // END class AlbumsController
