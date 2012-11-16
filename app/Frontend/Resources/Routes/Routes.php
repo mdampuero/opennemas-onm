@@ -481,5 +481,95 @@ $frontendRoutes->add(
     )
 );
 
-$routes->addCollection($frontendRoutes);
+$frontendRoutes->add(
+    'frontend_video_ajax_more',
+    new Route(
+        '/video/more/{category}',
+        array(
+            '_controller' => 'Frontend:Controllers:VideosController:ajaxMore',
+            'page' => 1
+        ),
+        array(
+            'category' => '([0-9]+)'
+        )
+    )
+);
 
+$frontendRoutes->add(
+    'frontend_video_ajax_incategory',
+    new Route(
+        '/video/incategory/{category}',
+        array(
+            '_controller' => 'Frontend:Controllers:VideosController:ajaxInCategory',
+            'page' => 1
+        ),
+        array(
+            'category' => '([0-9]+)'
+        )
+    )
+);
+
+$frontendRoutes->add(
+   'frontend_video_frontpage',
+   new Route(
+       '/video/{page}',
+       array(
+           '_controller' => 'Frontend:Controllers:VideosController:frontpage',
+           'page' => 1
+       ), array(
+           'page' => '([0-9]+)?'
+       )
+   )
+);
+
+$frontendRoutes->add(
+   'frontend_video_frontpage_category',
+   new Route(
+       '/video/{category_name}/{page}',
+       array(
+           '_controller' => 'Frontend:Controllers:VideosController:frontpage',
+           'page'        => 1
+       ),
+       array(
+           'category_name' => '[a-z0-9\-]+',
+           'page'          => '([0-9]+)?'
+       )
+   )
+);
+
+$frontendRoutes->add(
+    'frontend_video_show_with_slug',
+    new Route(
+        '/video/{category_name}/{slug}/{video_id}.{_format}',
+        array(
+            '_controller' => 'Frontend:Controllers:VideosController:show',
+            '_format' => 'html',
+            'page' => 1
+        ),
+        array(
+            'category_name' => '[a-z0-9\-]+',
+            'slug'          => '[a-z0-9\-]+',
+            'video_id'      => '([0-9]+)'
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_video_show_with_date_slug',
+    new Route(
+        '/video/{category_name}/{date}/{slug}/{video_id}.{_format}',
+        array(
+            '_controller' => 'Frontend:Controllers:VideosController:show',
+            '_format' => 'html',
+            'page' => 1
+        ),
+        array(
+            'category_name' => '[a-z0-9\-]+',
+            'date'          => '([0-9]{4})-([0-1][0-9])-([0-3][0-9])',
+            'slug'          => '[a-z0-9\-]+',
+            'video_id'      => '([0-9]+)'
+        )
+    )
+);
+
+$routes->addCollection($frontendRoutes);

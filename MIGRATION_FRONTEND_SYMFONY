@@ -56,6 +56,7 @@ SearchController DONE, we must change all the template urls
 SitemapsController DONE
 StaticPagesController DONE
 RedirectorsController DONE, review how to handle previous redirections.
+VideosController DONE, review show action because not work (the problme is in the widget_ratings which check the name of old controller)
 
 
 ArticlesController
@@ -68,4 +69,3 @@ NewStandPaypalController
 OpinionsController
 SubscriptionsController
 UsersController
-VideosController
