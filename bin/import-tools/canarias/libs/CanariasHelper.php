@@ -107,7 +107,7 @@ class CanariasHelper
         $sql = "DELETE FROM contents WHERE pk_content NOT IN ($contents 0)";
 
         $rss = $GLOBALS['application']->conn->Execute($sql);
-        $sql = "DELETE FROM contents_categories WHERE pk_fk_content NOT IN  ($contents 0)";
+        $sql = "DELETE FROM contents_categories WHERE pk_fk_content NOT IN  ($contents 0) AND pk_fk_content_category != 0";
         $rss = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rss) {
@@ -144,7 +144,7 @@ class CanariasHelper
         if (!$rss) {
             $this->log('clearCategories function: '.$GLOBALS['application']->conn->ErrorMsg());
         }
-        $sql = "ALTER TABLE `authors` AUTO_INCREMENT =20";
+        $sql = "ALTER TABLE `content_categories` AUTO_INCREMENT =20";
 
         $rss = $GLOBALS['application']->conn->Execute($sql);
 
