@@ -28,7 +28,7 @@ class ContentsController extends Controller
      **/
     public function init()
     {
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
+        $this->view = new \Template(TEMPLATE_USER);
     }
 
     /**
@@ -46,7 +46,7 @@ class ContentsController extends Controller
         $contentID        = \Content::resolveID($dirtyID);
         $cacheID = $this->view->generateCacheId('article', null, $contentID);
 
-        if (!$this->view->isCached('article/article_printer.tpl', $cacheID)) {
+        // if (!$this->view->isCached('article/article_printer.tpl', $cacheID)) {
             $article = new \Article($contentID);
 
             // Foto interior
@@ -56,7 +56,8 @@ class ContentsController extends Controller
             }
 
             $this->view->assign('article', $article);
-        }
+        // }
+
 
         return $this->render(
             'article/article_printer.tpl',

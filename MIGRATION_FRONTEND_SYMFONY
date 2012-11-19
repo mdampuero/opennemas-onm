@@ -42,26 +42,26 @@ videos.php                     => VideosController
 
 New controllers
 ---------------
-ArticlesController, send, sendform and print actions migrated to contentcontroller
-AlbumController, DONE, change ajax action urls in templates
+ArticlesController
+AlbumController, DONE
 AdvertisementController DONE
 BooksController DONE
-CommentsController DONE, review the save action
+CommentsController DONE
+ContentController, common actions for all contents
 ErrorController DONE
 MonographsController DONE (old specials)
-PollsController DONE, review addVote function, use symfony cookie & transform ajax response
+PollsController DONE
 RatingsController DONE
 RobotsController DONE
 RssController DONE
-SearchController DONE, we must change all the template urls
+SearchController DONE
 SitemapsController DONE
 StaticPagesController DONE
-RedirectorsController DONE, review how to handle previous redirections.
-VideosController DONE, review show action because not work (the problme is in the widget_ratings which check the name of old controller)
+RedirectorsController DONE
+VideosController DONE
 
 
 AuthenticationController
-ContentController, common actions for all contents
 NewslibraryController (old frontpages)
 FrontpagesController
 LettersController
@@ -70,3 +70,15 @@ NewStandPaypalController
 OpinionsController
 SubscriptionsController
 UsersController
+
+Work after migration
+--------------------
+- VideosController, review show action because not work (the problme is in the widget_ratings which check the name of old controller)
+- RedirectrosController, review how to handle previous redirections.
+- SearchController, we must change all the template urls
+- PollsController, review addVote function, use symfony cookie & transform ajax response
+- CommentsController, review the save action and urls in templates
+- Albumcontroller, change ajax action urls in templates
+- ArticlesController, send, sendform and print actions migrated to contentcontroller
+- Contentscontroller, migrate send, sendform actions from article.php
+- RatingsController, change url in templates

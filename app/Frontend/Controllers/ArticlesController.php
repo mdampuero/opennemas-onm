@@ -231,6 +231,4 @@ class ArticlesController extends Controller
         }
     }
 
-
-
-} // END class ArticleController
+}
