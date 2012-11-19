@@ -49,6 +49,7 @@ BooksController DONE
 CommentsController DONE
 ContentController, common actions for all contents
 ErrorController DONE
+FrontpagesController
 MonographsController DONE (old specials)
 PollsController DONE
 RatingsController DONE
@@ -63,7 +64,6 @@ VideosController DONE
 
 AuthenticationController
 NewslibraryController (old frontpages)
-FrontpagesController
 LettersController
 NewStandController
 NewStandPaypalController
