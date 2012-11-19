@@ -609,7 +609,7 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
-    'frontend_contente_print',
+    'frontend_content_print',
     new Route(
         '/content/print/{slug}/{content_id}.{_format}',
         array(
@@ -623,6 +623,37 @@ $frontendRoutes->add(
         )
     )
 );
+
+$frontendRoutes->add(
+    'frontend_frontpage',
+    new Route(
+        '/{category}',
+        array(
+            '_controller' => 'Frontend:Controllers:FrontpagesController:show',
+            'category'    => 'home'
+        ),
+        array(
+            'category'          => '[a-z0-9\-]+',
+        )
+    )
+);
+
+
+$frontendRoutes->add(
+    'frontend_frontpage_category',
+    new Route(
+        '/seccion/{category}',
+        array(
+            '_controller' => 'Frontend:Controllers:FrontpagesController:show',
+            'category'    => 'home'
+        ),
+        array(
+            'category'          => '[a-z0-9\-]+',
+        )
+    )
+);
+
+
 
 $routes->addCollection($frontendRoutes);
 

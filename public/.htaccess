@@ -639,8 +639,8 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     # provisional sermos
     RewriteRule ^media/prepro-sermosgaliza/(.*)$ http://www.sermosgaliza.com/media/sermosgaliza/$1 [R=301,L]
 
-    #--------------------------------------------------------
-    #Redirection from old nuevatribuna.es
+  #--------------------------------------------------------
+  #Redirection from old nuevatribuna.es
 
     #Inner Article
     RewriteRule ^noticia/([0-9]+)($|/$|.+/$|.+html$) /controllers/redirect-from-editmaker.php?content_type=article&content_id=$1 [L,NC]
@@ -727,10 +727,6 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteRule ^extimprimir/[^/]+/([a-z0-9\-_]+)/([0-9]+).html$ controllers/article_ws.php?action=print&article_id=$2&category_name=$1& [L,NC]
     RewriteRule ^extimprimir/[^/]+/([0-9]+).html$ controllers/opinion_inner_ws.php?action=print&opinion_id=$1 [L,NC]
 
-    #Home
-    RewriteRule ^/?$ controllers/index.php?category_name=home [L,NC]
-    RewriteRule ^home/?$ controllers/index.php?category_name=home [L,NC]
-
     #Login, Login from activation mail, register and activate register
     RewriteRule ^login/?$ controllers/login.php [L,NC]
     RewriteRule ^login/login/?$ controllers/login.php?action=login [L,NC]
@@ -746,24 +742,12 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteRule ^regenerate/pass/check/([a-f0-9]{32})/?$ controllers/register.php?action=regenerate_pass_check&token=$1 [L,NC]
     RewriteRule ^regenerate/pass/([a-f0-9]{32})/?$ controllers/register.php?action=regenerate_pass&token=$1 [L,NC]
 
-    #Sections
-    RewriteRule ^seccion/([a-z0-9\-]+)/?$ controllers/index.php?category_name=$1 [L,NC]
-    RewriteRule ^seccion/([a-z0-9\-]+)/([0-9]+)/?$ controllers/index.php?category_name=$1&page=$2 [L,NC]
-    RewriteRule ^seccion/([a-z0-9\-]+)/([a-z0-9\-]+)/?$ controllers/index.php?category_name=$1&subcategory_name=$2 [L,NC]
-    RewriteRule ^seccion/([a-z0-9\-]+)/([a-z0-9\-]+)/([0-9]+)/?$ controllers/index.php?category_name=$1&subcategory_name=$2&page=$3 [L,NC]
 
     #Sync Sections
     RewriteRule ^extseccion/([a-z0-9\-]+)/?$ controllers/index_ws.php?category_name=$1 [L,NC]
     RewriteRule ^extseccion/([a-z0-9\-]+)/([0-9]+)/?$ controllers/index_ws.php?category_name=$1&page=$2 [L,NC]
     RewriteRule ^extseccion/([a-z0-9\-]+)/([a-z0-9\-]+)/?$ controllers/index_ws.php?category_name=$1&subcategory_name=$2 [L,NC]
     RewriteRule ^extseccion/([a-z0-9\-]+)/([a-z0-9\-]+)/([0-9]+)/?$ controllers/index_ws.php?category_name=$1&subcategory_name=$2&page=$3 [L,NC]
-
-    #Video
-    #/video/0/2008/12/08/200812081741363340.html
-    # RewriteRule ^video/?$ controllers/videos.php?action=list [L,NC]
-    # RewriteRule ^video/([a-z0-9\-]+)/?$ controllers/videos.php?action=list&category_name=$1 [L,NC]
-    # RewriteRule ^video/([a-z0-9\-]+)/(.*)/([0-9]+).html$ controllers/videos.php?action=inner&id=$3&category_name=$1 [L,NC]
-    # RewriteRule ^video/([a-z0-9\-]+)/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/(.*)/([0-9]+).html$ controllers/videos.php?action=inner&id=$6&category_name=$1 [L,NC]
 
     #Files
     RewriteRule ^ficheiro/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/[a-z0-9_\-]+/([a-z0-9_\-]+)/([a-z0-9_\-]+)\.([a-z0-9]{2,4})$ /media/files/$1/$2/$3/$5.$6 [L,NC]
@@ -866,9 +850,6 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
 
 
     RewriteRule ^(.*)/boletin/?$  /boletin/ [R=301,L,NC]
-
-    # RewriteRule ^articulo/(.*)/([0-9]+).htm  /articulo/$1/$2.html [R=301,L,NC]
-    # RewriteRule ^opinion/(.*)/([0-9]+).htm  /opinion/$1/$2.html [R=301,L,NC]
 
     #Default Rules
     # RewriteCond %{REQUEST_URI} !^/controllers/index.php
