@@ -80,7 +80,7 @@ class CanariasHelper
 
         echo "\n Database was Cleaned \n ";
         //emtpy tables
-        $tables = array('articles', 'albums', 'albums_photos', 'contents_categories',
+        $tables = array('articles', 'albums', 'albums_photos',
             'attachments', 'authors', 'author_imgs', 'comments', 'letters',
             'content_positions', 'kioskos', 'opinions', 'pclave', 'photos', 'polls', 'poll_items',
             'ratings', 'related_contents', 'specials', 'special_contents', 'videos', 'votes',
