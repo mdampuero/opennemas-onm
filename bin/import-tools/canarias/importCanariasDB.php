@@ -70,23 +70,26 @@ switch ($argv[1]) {
         break;
     case 'opinion':
         $importer->helper->log('IMPORTING AUTHORS AND OPINIONS');
+        $importer->importCategories();
         $importer->createDefaultAuthors();
         $importer->importAuthorsOpinion();
         $importer->importOpinions();
         break;
     case 'articles':
-
         $importer->helper->log('IMPORTING ARTICLES AND IMAGES');
-        /*  $importer->importHemeroteca();
+        $importer->importCategories();
+        $importer->importHemeroteca();
         $importer->importHemerotecaTopSecret();
         $importer->importTopSecret();
-        $importer->importFauna(); */
+        $importer->importFauna();
         $importer->importImagesArticles();
         $importer->importArticles();
 
         break;
     case 'otherContents':
         $importer->helper->log("\n IMPORTING OTHER CONTENTS \n");
+
+        $importer->importCategories();
 
         $importer->importVideos();
 
@@ -105,10 +108,11 @@ switch ($argv[1]) {
         break;
     default:
         # code...
-        echo "You can use options: clear, clearCategories, ayuntamientos, articles, otherContents \n";
+
         break;
 }
 
+echo "You can use options: clear, clearCategories, opinion, ayuntamientos, articles, otherContents \n";
 printf("OpenNemas database is ok for Canarias Ahora \n");
 
 $importer->helper->printResults();
