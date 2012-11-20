@@ -91,8 +91,6 @@ switch ($argv[1]) {
 
         $importer->importCategories();
 
-        $importer->importVideos();
-
         $importer->importImagesHumor();
 
         $importer->importLetters();
@@ -103,7 +101,7 @@ switch ($argv[1]) {
 
         $importer->importAlbums();
 
-        // $importer->importRelatedContents();
+         $importer->importVideos();
 
         break;
     default:

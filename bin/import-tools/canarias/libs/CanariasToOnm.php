@@ -1918,27 +1918,28 @@ class CanariasToOnm
             $current = 1;
 
             while (!$rs->EOF) {
-
-                $originalAdID = $rs->fields['id'];
-                if ($this->helper->elementIsImported($originalAdID, 'video') ) {
-                    echo "[{$current}/{$totalRows}] video with id {$originalAdID} already imported\n";
-                } else {
-                    echo "[{$current}/{$totalRows}] Importing video with id {$originalAdID} - ";
-                    $title = $this->helper->convertToUtf8($rs->fields['titulo']);
-                    $category  = 20;
-                    $videoData = array(
-                            'title' => $title,
-                            'name' => $rs->fields['video'],
-                            'available' =>1,
-                            'category'=> $category,
-                            'metadata' => StringUtils::get_tags($photoName),
-                            'description' => $rs->fields['texto'],
-                            'created' => $rs->fields['fecha'].' '.$rs->fields['hora'],
-                            'changed' => $rs->fields['fecha'].' '.$rs->fields['hora'],
-                            'oldName' => $rs->fields['video'],
-                            'author_name' => 'internal',
-                        );
-                        $this->createVideo($videoData, 'file');
+                if (!empty($rs->fields['video'])) {
+                    $originalAdID = $rs->fields['id'];
+                    if ($this->helper->elementIsImported($originalAdID, 'video') ) {
+                        echo "[{$current}/{$totalRows}] video with id {$originalAdID} already imported\n";
+                    } else {
+                        echo "[{$current}/{$totalRows}] Importing video with id {$originalAdID} - ";
+                        $title = $this->helper->convertToUtf8($rs->fields['titulo']);
+                        $category  = 20;
+                        $videoData = array(
+                                'title' => $title,
+                                'name' => $rs->fields['video'],
+                                'available' =>1,
+                                'category'=> $category,
+                                'metadata' => StringUtils::get_tags($photoName),
+                                'description' => $rs->fields['texto'],
+                                'created' => $rs->fields['fecha'].' '.$rs->fields['hora'],
+                                'changed' => $rs->fields['fecha'].' '.$rs->fields['hora'],
+                                'oldName' => $rs->fields['video'],
+                                'author_name' => 'internal',
+                            );
+                            $this->createVideo($videoData, 'file');
+                    }
                 }
                 $current++;
                 $rs->MoveNext();
