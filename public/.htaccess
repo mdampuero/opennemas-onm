@@ -750,10 +750,10 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteRule ^extimprimir/[^/]+/([0-9]+).html$ controllers/opinion_inner_ws.php?action=print&opinion_id=$1 [L,NC]
 
     #Login, Login from activation mail, register and activate register
-    RewriteRule ^login/?$ controllers/login.php [L,NC]
-    RewriteRule ^login/login/?$ controllers/login.php?action=login [L,NC]
-    RewriteRule ^logout/([a-f0-9]{32})/?$ controllers/logout.php?csrf=$1 [L,NC]
-    RewriteRule ^login/activation/([a-f0-9]{32})/?$ controllers/login.php?action=mail_login&token=$1 [L,NC]
+    # RewriteRule ^login/?$ controllers/login.php [L,NC]
+    # RewriteRule ^login/login/?$ controllers/login.php?action=login [L,NC]
+    # RewriteRule ^logout/([a-f0-9]{32})/?$ controllers/logout.php?csrf=$1 [L,NC]
+    # RewriteRule ^login/activation/([a-f0-9]{32})/?$ controllers/login.php?action=mail_login&token=$1 [L,NC]
     RewriteRule ^register/?$ controllers/register.php [L,NC]
     RewriteRule ^activate/([a-f0-9]{32})/?$ controllers/register.php?action=activate&token=$1 [L,NC]
     RewriteRule ^user/?$ controllers/register.php?action=user_box [L,NC]

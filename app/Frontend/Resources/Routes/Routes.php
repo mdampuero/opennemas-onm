@@ -15,6 +15,26 @@ $routes = new RouteCollection();
 
 $frontendRoutes = new RouteCollection();
 
+$frontendRoutes->add(
+    'frontend_auth_login',
+    new Route(
+        '/login',
+        array(
+            '_controller' => 'Frontend:Controllers:AuthenticationController:login',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_auth_logout',
+    new Route(
+        '/logout',
+        array(
+            '_controller' => 'Frontend:Controllers:AuthenticationController:logout',
+        )
+    )
+);
+
 // Common content management routes
 $frontendRoutes->add(
     'frontend_ad_get',
@@ -652,6 +672,17 @@ $frontendRoutes->add(
         )
     )
 );
+
+$frontendRoutes->add(
+    'frontend_user_user_box',
+    new Route(
+        '/user/user_box',
+        array(
+            '_controller' => 'Frontend:Controllers:UserController:userBox',
+        )
+    )
+);
+
 
 
 
