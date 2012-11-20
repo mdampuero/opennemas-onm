@@ -1146,9 +1146,9 @@ class CanariasToOnm
                 $current++;
                 $rs->MoveNext();
             }
-
+            $rs->Close(); # optional
         }
-        $rs->Close(); # optional
+
         return true;
 
     }
