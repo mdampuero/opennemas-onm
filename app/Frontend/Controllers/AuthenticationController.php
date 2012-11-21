@@ -108,7 +108,7 @@ class AuthenticationController extends Controller
                     }
 
                 } else {
-                    $tpl->assign('message', _('Username or password incorrect.'));
+                    $this->view->assign('message', _('Username or password incorrect.'));
                 }
             }
 
@@ -144,4 +144,41 @@ class AuthenticationController extends Controller
         }
     }
 
-} // END class UserController
+    /**
+     * Regenerates the password for a given user
+     *
+     * @return Response the response object
+     **/
+    public function regeneratePassword(Request $request)
+    {
+    }
+
+    /**
+     * Sends the user password to the his email address.
+     *
+     * @return Response the response object
+     **/
+    public function recoverPass(Request $request)
+    {
+    }
+
+    /**
+     * Shows the profile page of a user
+     *
+     * @return
+     * @author
+     **/
+    public function show(Request $request)
+    {
+    }
+
+    /**
+     * Updates the user information given POST data
+     *
+     * @return Response the response object
+     **/
+    public function update(Request $request)
+    {
+    }
+
+}

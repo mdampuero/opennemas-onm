@@ -35,6 +35,77 @@ $frontendRoutes->add(
     )
 );
 
+$frontendRoutes->add(
+    'frontend_user_register',
+    new Route(
+        '/user/register',
+        array(
+            '_controller' => 'Frontend:Controllers:UserController:register',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_user_show',
+    new Route(
+        '/user/me',
+        array(
+            '_controller' => 'Frontend:Controllers:UserController:show',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_user_update',
+    new Route(
+        '/user/update',
+        array(
+            '_controller' => 'Frontend:Controllers:UserController:update',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_user_recoverpass',
+    new Route(
+        '/user/recover-pass',
+        array(
+            '_controller' => 'Frontend:Controllers:UserController:recoverPass',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_user_regeneratepass',
+    new Route(
+        '/user/regenerate-pass',
+        array(
+            '_controller' => 'Frontend:Controllers:UserController:regeneratePassword',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_user_activate',
+    new Route(
+        '/user/activate/{token}',
+        array(
+            '_controller' => 'Frontend:Controllers:UserController:activate',
+        )
+    )
+);
+
+
+$frontendRoutes->add(
+    'frontend_user_user_box',
+    new Route(
+        '/user/user_box',
+        array(
+            '_controller' => 'Frontend:Controllers:UserController:userBox',
+        )
+    )
+);
+
 // Common content management routes
 $frontendRoutes->add(
     'frontend_ad_get',
@@ -595,8 +666,7 @@ $frontendRoutes->add(
        array(
            '_controller' => 'Frontend:Controllers:VideosController:frontpage',
            'page' => 1
-       ),
-       array(
+       ), array(
            'page' => '([0-9]+)?'
        )
    )
@@ -857,3 +927,4 @@ $frontendRoutes->add(
 );
 
 $routes->addCollection($frontendRoutes);
+
