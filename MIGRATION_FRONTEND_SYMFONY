@@ -51,6 +51,8 @@ ContentController, common actions for all contents
 ErrorController DONE
 FrontpagesController
 MonographsController DONE (old specials)
+NewStandController DONE
+NewStandPaypalController DONE Very similar to NewsStand (¿extend it?)
 PollsController DONE
 RatingsController DONE
 RobotsController DONE
@@ -58,16 +60,14 @@ RssController DONE
 SearchController DONE
 SitemapsController DONE
 StaticPagesController DONE
-RedirectorsController DONE
-VideosController DONE
+RedirectorsController DONE, review how to handle previous redirections.
+VideosController DONE, review show action because not work (the problem is in the widget_ratings which check the name of old controller)
 
 
+OpinionsController
 AuthenticationController
 NewslibraryController (old frontpages)
 LettersController
-NewStandController
-NewStandPaypalController
-OpinionsController
 SubscriptionsController
 UsersController
 
