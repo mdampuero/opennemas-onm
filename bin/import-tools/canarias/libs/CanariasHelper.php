@@ -38,6 +38,33 @@ class CanariasHelper
     public function elementIsImported($contentID, $contentType)
     {
         if (isset($contentID) && isset($contentType)) {
+            if (!empty($this->importedContents)) {
+                $newID = $this->importedContents[$contentType][$contentID];
+                if (!empty($newID)) {
+                    return $newID;
+                }
+            } else {
+                $this->importedContents = array();
+                $sql = 'SELECT * FROM `translation_ids`';
+                $rs  = $GLOBALS['application']->conn->Execute($sql);
+                if (!$rs) {
+                    echo self::$originConn->ErrorMsg();
+                    $this->helper->log(self::$originConn->ErrorMsg());
+                } else {
+
+                    $totalRows = $rs->_numOfRows;
+                    $current = 1;
+                    while (!$rs->EOF) {
+                        $i = $rs->fields['type'];
+                        $j = $rs->fields['pk_content_old'];
+                        $this->importedContents[$i][$j] = $rs->fields['pk_content'];
+
+                        $rs->MoveNext();
+                    }
+                    $rs->Close();
+                }
+            }
+
             $sql = 'SELECT * FROM `translation_ids` WHERE `pk_content_old`=? AND type=?';
 
             $values  = array($contentID, $contentType);
@@ -226,6 +253,32 @@ class CanariasHelper
     {
         if (isset($url) && isset($contentType)) {
 
+            if (!empty($this->importedImages)) {
+                $newID = $this->importedImages[$contentType][$url];
+                if (!empty($newID)) {
+                    return $newID;
+                }
+            } else {
+                $this->importedImages = array();
+                $sql = 'SELECT * FROM `images_translated`';
+                $rs  = $GLOBALS['application']->conn->Execute($sql);
+                if (!$rs) {
+                    echo self::$originConn->ErrorMsg();
+                    $this->helper->log(self::$originConn->ErrorMsg());
+                } else {
+
+                    $totalRows = $rs->_numOfRows;
+                    $current = 1;
+                    while (!$rs->EOF) {
+                        $i = $rs->fields['type'];
+                        $j = $rs->fields['url'];
+                        $this->importedImages[$i][$j] = $rs->fields['pk_content'];
+
+                        $rs->MoveNext();
+                    }
+                    $rs->Close();
+                }
+            }
 
             $sql = 'SELECT * FROM `images_translated` WHERE `url`=? AND type=?';
 

@@ -101,7 +101,35 @@ switch ($argv[1]) {
 
         $importer->importAlbums();
 
-         $importer->importVideos();
+        $importer->importVideos();
+
+        break;
+    case 'all':
+        $importer->helper->log("\n IMPORTING CONTENTS \n");
+
+        $importer->importCategories();
+
+        $importer->importOpinions();
+
+        $importer->importTopSecret();
+
+        $importer->importFauna();
+
+        $importer->importImagesArticles();
+
+        $importer->importArticles();
+
+        $importer->importImagesHumor();
+
+        $importer->importLetters();
+
+        $importer->importImagesHumor();
+
+        $importer->importAttachments();
+
+        $importer->importAlbums();
+
+        $importer->importVideos();
 
         break;
     default:
@@ -110,7 +138,7 @@ switch ($argv[1]) {
         break;
 }
 
-echo "You can use options: clear, clearCategories, opinion, ayuntamientos, articles, otherContents \n";
+echo "You can use options: clear, clearCategories, opinion, ayuntamientos, articles, otherContents, all \n";
 printf("OpenNemas database is ok for Canarias Ahora \n");
 
 $importer->helper->printResults();
