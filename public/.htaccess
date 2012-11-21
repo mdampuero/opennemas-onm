@@ -771,6 +771,30 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteRule ^extseccion/([a-z0-9\-]+)/([a-z0-9\-]+)/?$ controllers/index_ws.php?category_name=$1&subcategory_name=$2 [L,NC]
     RewriteRule ^extseccion/([a-z0-9\-]+)/([a-z0-9\-]+)/([0-9]+)/?$ controllers/index_ws.php?category_name=$1&subcategory_name=$2&page=$3 [L,NC]
 
+    #Album
+    #album/generic/2011-07-09/prueba/2011070918522200812.html
+    # RewriteRule ^album/?$ controllers/album.php?action=frontpage [L,NC]
+    # RewriteRule ^albumes/?$ controllers/album.php?action=frontpage
+    # RewriteRule ^album/([0-9])?$ controllers/album.php?action=frontpage&c=$1 [L,NC]
+    # RewriteRule ^album/([a-z0-9\-]+)/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/(.*)/([0-9]+).html$ controllers/album.php?action=show&album_id=$6&category_name=$1 [L,NC]
+    # RewriteRule ^album/([a-z0-9\-]+)/(.*)/([0-9]+).html$ controllers/album.php?action=show&album_id=$3&category_name=$1 [L,NC]
+    # RewriteRule ^album/([a-z0-9\-]+)/?$ controllers/album.php?action=frontpage&category_name=$1 [L,NC]
+
+    #Video
+    #/video/0/2008/12/08/200812081741363340.html
+    # RewriteRule ^video/?$ controllers/videos.php?action=list [L,NC]
+    # RewriteRule ^video/([a-z0-9\-]+)/?$ controllers/videos.php?action=list&category_name=$1 [L,NC]
+    # RewriteRule ^video/([a-z0-9\-]+)/(.*)/([0-9]+).html$ controllers/videos.php?action=inner&id=$3&category_name=$1 [L,NC]
+    # RewriteRule ^video/([a-z0-9\-]+)/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/(.*)/([0-9]+).html$ controllers/videos.php?action=inner&id=$6&category_name=$1 [L,NC]
+
+    #Polls
+    #encuesta/deportes/2011-08-24/quien-gana-la-liga-2012/2011082410083600163.html
+    RewriteRule ^poll/?$ controllers/poll.php?action=frontpage [L,NC]
+    RewriteRule ^encuesta/?$ controllers/poll.php?action=frontpage [L,NC]
+    RewriteRule ^encuesta/([a-z0-9\-]+)/?$ controllers/poll.php?action=frontpage&category_name=$1 [L,NC]
+    RewriteRule ^encuesta/([a-z0-9\-]+)/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/(.*)/([0-9]+).html$ controllers/poll.php?action=show&id=$6&category_name=$1 [L,NC]
+    RewriteRule ^encuesta/([a-z0-9\-]+)/(.*)/([0-9]+).html$ controllers/poll.php?action=show&id=$3&category_name=$1 [L,NC]
+
     #Files
     RewriteRule ^ficheiro/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/[a-z0-9_\-]+/([a-z0-9_\-]+)/([a-z0-9_\-]+)\.([a-z0-9]{2,4})$ /media/files/$1/$2/$3/$5.$6 [L,NC]
     RewriteRule ^ficheiro/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z0-9_\-]+)/([a-z0-9_\-]+)\.([a-z0-9]{2,4})$ /media/files/$1/$2/$3/$5.$6 [L,NC]
@@ -793,20 +817,20 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
 
 
     # Newsstand
-    RewriteRule ^portadas-papel/?$ controllers/newsstand.php [L,NC]
-    RewriteRule ^portadas-papel/([0-9]{4})/([0-9]{1,2})/([0-3][0-9])/?$ controllers/newsstand.php?year=$1&month=$2&day=$3 [L,NC]
-    RewriteRule ^portadas-papel/([0-9]{4})/([0-9]{1,2})/?$ controllers/newsstand.php?year=$1&month=$2 [L,NC]
-    RewriteRule ^portadas-papel/([0-9]{4})/?$ controllers/newsstand.php?year=$1 [L,NC]
-    RewriteRule ^portadas-papel/([a-z0-9\-]+)/([0-9]{4})/([0-9]{1,2})/?$ controllers/newsstand.php?category_name=$1&year=$2&month=$3 [L,NC]
-    RewriteRule ^portadas-papel/([a-z0-9\-]+)/([0-9]+).html$ controllers/newsstand.php?category_name=$1&id=$2&action=read [L,NC]
+    #RewriteRule ^portadas-papel/?$ controllers/newsstand.php [L,NC]
+    #RewriteRule ^portadas-papel/([0-9]{4})/([0-9]{1,2})/([0-3][0-9])/?$ controllers/newsstand.php?year=$1&month=$2&day=$3 [L,NC]
+    #RewriteRule ^portadas-papel/([0-9]{4})/([0-9]{1,2})/?$ controllers/newsstand.php?year=$1&month=$2 [L,NC]
+    #RewriteRule ^portadas-papel/([0-9]{4})/?$ controllers/newsstand.php?year=$1 [L,NC]
+    #RewriteRule ^portadas-papel/([a-z0-9\-]+)/([0-9]{4})/([0-9]{1,2})/?$ controllers/newsstand.php?category_name=$1&year=$2&month=$3 [L,NC]
+    #RewriteRule ^portadas-papel/([a-z0-9\-]+)/([0-9]+).html$ controllers/newsstand.php?category_name=$1&id=$2&action=read [L,NC]
 
     # Newsstand with paypal
-    RewriteRule ^kiosko/?$ controllers/newsstand_paypal.php [L,NC]
-    RewriteRule ^kiosko/([0-9]{4})/([0-9]{1,2})/([0-3][0-9])/?$ controllers/newsstand_paypal.php?year=$1&month=$2&day=$3 [L,NC]
-    RewriteRule ^kiosko/([0-9]{4})/([0-9]{1,2})/?$ controllers/newsstand_paypal.php?year=$1&month=$2 [L,NC]
-    RewriteRule ^kiosko/([0-9]{4})/?$ controllers/newsstand_paypal.php?year=$1 [L,NC]
-    RewriteRule ^kiosko/([a-z0-9\-]+)/([0-9]{4})/([0-9]{1,2})/?$ controllers/newsstand_paypal.php?category_name=$1&year=$2&month=$3 [L,NC]
-    RewriteRule ^kiosko/([a-z0-9\-]+)/([0-9]+).html$ controllers/newsstand_paypal.php?category_name=$1&id=$2&action=read [L,NC]
+    #RewriteRule ^kiosko/?$ controllers/newsstand_paypal.php [L,NC]
+    #RewriteRule ^kiosko/([0-9]{4})/([0-9]{1,2})/([0-3][0-9])/?$ controllers/newsstand_paypal.php?year=$1&month=$2&day=$3 [L,NC]
+    #RewriteRule ^kiosko/([0-9]{4})/([0-9]{1,2})/?$ controllers/newsstand_paypal.php?year=$1&month=$2 [L,NC]
+    #RewriteRule ^kiosko/([0-9]{4})/?$ controllers/newsstand_paypal.php?year=$1 [L,NC]
+    #RewriteRule ^kiosko/([a-z0-9\-]+)/([0-9]{4})/([0-9]{1,2})/?$ controllers/newsstand_paypal.php?category_name=$1&year=$2&month=$3 [L,NC]
+    #RewriteRule ^kiosko/([a-z0-9\-]+)/([0-9]+).html$ controllers/newsstand_paypal.php?category_name=$1&id=$2&action=read [L,NC]
 
     #opinion.php?opinion_id=5709&action=read
     RewriteCond %{QUERY_STRING} &?opinion_id=([^&]+)&?action=read

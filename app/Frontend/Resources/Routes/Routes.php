@@ -536,7 +536,8 @@ $frontendRoutes->add(
        array(
            '_controller' => 'Frontend:Controllers:VideosController:frontpage',
            'page' => 1
-       ), array(
+       ),
+       array(
            'page' => '([0-9]+)?'
        )
    )
@@ -645,6 +646,120 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
+   'frontend_newstand_frontpage',
+   new Route(
+       '/portadas-papel',
+       array(
+           '_controller' => 'Frontend:Controllers:NewStandController:frontpage',
+       )
+   )
+);
+
+$frontendRoutes->add(
+   'frontend_newstand_frontpage_date',
+   new Route(
+       '/portadas-papel/{year}/{month}/{day}',
+       array(
+           '_controller' => 'Frontend:Controllers:NewStandController:frontpage',
+           'month'       => date('n'),
+           'day'         => 1,
+       ),
+       array(
+           'year'   => '[0-9]{4}',
+           'month'  => '[0-9]{1,2}',
+           'day'    => '[0-3][0-9]'
+       )
+   )
+);
+
+$frontendRoutes->add(
+   'frontend_newstand_frontpage_category',
+   new Route(
+       '/portadas-papel/{category_name}/{year}/{month}',
+       array(
+           '_controller' => 'Frontend:Controllers:NewStandController:frontpage',
+       ),
+       array(
+           'category_name'  => '[a-z0-9\-]+',
+           'year'           => '([0-9]{4})',
+           'month'          => '([0-9]{1,2})'
+       )
+   )
+);
+
+$frontendRoutes->add(
+    'frontend_newstand_show',
+    new Route(
+        '/portadas-papel/{category_name}/{id}.{_format}',
+        array(
+            '_controller' => 'Frontend:Controllers:NewStandController:show',
+            '_format' => 'html',
+        ),
+        array(
+            'category_name' => '[a-z0-9\-]+',
+            'id'            => '([0-9]+)'
+       )
+   )
+);
+
+$frontendRoutes->add(
+   'frontend_newstandPaypal_frontpage',
+   new Route(
+       '/kiosko',
+       array(
+           '_controller' => 'Frontend:Controllers:NewStandPaypalController:frontpage',
+       )
+   )
+);
+
+$frontendRoutes->add(
+   'frontend_newstandPaypal_frontpage_date',
+   new Route(
+       '/kiosko/{year}/{month}/{day}',
+       array(
+           '_controller' => 'Frontend:Controllers:NewStandPaypalController:frontpage',
+           'month'       => date('n'),
+           'day'         => 1,
+       ),
+       array(
+           'year'   => '[0-9]{4}',
+           'month'  => '[0-9]{1,2}',
+           'day'    => '[0-3][0-9]'
+       )
+   )
+);
+
+$frontendRoutes->add(
+   'frontend_newstandPaypal_frontpage_category',
+   new Route(
+       '/kiosko/{category_name}/{year}/{month}',
+       array(
+           '_controller' => 'Frontend:Controllers:NewStandPaypalController:frontpage',
+       ),
+       array(
+           'category_name'  => '[a-z0-9\-]+',
+           'year'           => '([0-9]{4})',
+           'month'          => '([0-9]{1,2})'
+       )
+   )
+);
+
+$frontendRoutes->add(
+    'frontend_newstandPaypal_show',
+    new Route(
+        '/kiosko/{category_name}/{id}.{_format}',
+        array(
+            '_controller' => 'Frontend:Controllers:NewStandPaypalController:show',
+            '_format' => 'html',
+        ),
+        array(
+            'category_name' => '[a-z0-9\-]+',
+            'id'            => '([0-9]+)'
+        )
+    )
+);
+
+$frontendRoutes->add(
     'frontend_frontpage',
     new Route(
         '/{category}',
@@ -657,7 +772,6 @@ $frontendRoutes->add(
         )
     )
 );
-
 
 $frontendRoutes->add(
     'frontend_frontpage_category',
@@ -683,8 +797,4 @@ $frontendRoutes->add(
     )
 );
 
-
-
-
 $routes->addCollection($frontendRoutes);
-
