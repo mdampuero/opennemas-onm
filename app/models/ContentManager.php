@@ -2246,7 +2246,7 @@ class ContentManager
               .'AND DATE(starttime) = "'.$date.'" '
               .'AND available=1 AND in_litter=0 '
               .'AND pk_fk_content = pk_content '
-              .'ORDER BY pk_fk_content_category, starttime DESC ';
+              .'ORDER BY  fk_content_type ASC, starttime DESC ';
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
