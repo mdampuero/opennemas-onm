@@ -63,11 +63,11 @@ StaticPagesController DONE
 RedirectorsController DONE, review how to handle previous redirections.
 VideosController DONE, review show action because not work (the problem is in the widget_ratings which check the name of old controller)
 
+NewslibraryController (old frontpages) Problem with routes, (slash /) 'date' =([0-9]+)\/([0-9]+)\/([0-9]+)\/'
+LettersController,  no finished show, saveAction submit form to send letter. Change require advertisement by a function
 
 OpinionsController
 AuthenticationController
-NewslibraryController (old frontpages)
-LettersController
 SubscriptionsController
 UsersController
 

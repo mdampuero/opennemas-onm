@@ -502,6 +502,65 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
+    'frontend_frontpage_newslibrary',
+    new Route(
+        '/hemeroteca/{date}/',
+        array(
+            '_controller' => 'Frontend:Controllers:NewslibraryController:frontpage',
+            'page'        => 1
+        ),
+        array(
+            'date'            => '([0-9]+)\/([0-9]+)\/([0-9]+)\/'
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_frontpage_newslibrary_by_category',
+    new Route(
+        '/hemeroteca/{date}/{category_name}.{_format}',
+        array(
+            '_controller' => 'Frontend:Controllers:NewslibraryController:frontpage',
+            '_format'     => 'html',
+            'page'        => 1
+        ),
+        array(
+            'category_name' => '[a-z0-9\-]+',
+            'date'          => '([0-9]+)-([0-9]+)-([0-9]+)'
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_letter_frontpage',
+    new Route(
+        '/cartas-al-director',
+        array(
+            '_controller' => 'Frontend:Controllers:LetterController:frontpage',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_letter_show',
+    new Route(
+        '/cartas-al-director/{author}/{slug}/{id}.{_format}',
+        array(
+            '_controller' => 'Frontend:Controllers:LetterController:show',
+            '_format' => 'html',
+        ),
+        array(
+            'author'   => '([a-z0-9\-]+)',
+            'slug'     => '[a-z0-9\-]+',
+            'video_id' => '([0-9]+)'
+        )
+    )
+);
+
+
+
+
+$frontendRoutes->add(
     'frontend_video_ajax_more',
     new Route(
         '/video/more/{category}',
