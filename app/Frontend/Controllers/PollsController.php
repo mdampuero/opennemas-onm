@@ -9,6 +9,7 @@
  **/
 namespace Frontend\Controllers;
 
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,8 +31,9 @@ class PollsController extends Controller
      **/
     public function init()
     {
+
         $this->view = new \Template(TEMPLATE_USER);
-        $this->cm  = new \ContentManager();
+        $this->cm   = new \ContentManager();
 
         $action = $this->request->query->filter('action', 'frontpage', FILTER_SANITIZE_STRING);
 
@@ -75,6 +77,9 @@ class PollsController extends Controller
      **/
     public function frontpageAction(Request $request)
     {
+        if (!\Onm\Module\ModuleManager::isActivated('POLL_MANAGER')) {
+            throw new ResourceNotFoundException();
+        }
         $this->page = $request->query->getDigits('page', 1);
 
         $this->view->setConfig('poll-frontpage');
@@ -158,13 +163,13 @@ class PollsController extends Controller
 
         // Redirect to album frontpage if id_album wasn't provided
         if (is_null($pollId)) {
-            return new RedirectResponse($this->generateUrl('frontend_poll_frontpage'));
+            throw new ResourceNotFoundException();
         }
 
         $poll = new \Poll($pollId);
 
         if (empty($poll->id)) {
-            return new RedirectResponse($this->generateUrl('frontend_poll_frontpage'));
+            throw new ResourceNotFoundException();
         }
 
         $cacheID = $this->view->generateCacheId($this->categoryName, '', $pollId);
@@ -242,7 +247,7 @@ class PollsController extends Controller
 
         // Redirect to album frontpage if id_album wasn't provided
         if (is_null($pollId)) {
-            return new RedirectResponse($this->generateUrl('frontend_poll_frontpage'));
+            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 
         $poll = new Poll($pollId);
