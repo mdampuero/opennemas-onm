@@ -42,39 +42,38 @@ videos.php                     => VideosController
 
 New controllers
 ---------------
-AuthenticationController
+AdvertisementController
+AlbumController
 ArticlesController
-AlbumController, DONE
-AdvertisementController DONE
-BooksController DONE
-CommentsController DONE
-ContentController, common actions for all contents
-ErrorController DONE
-FrontpagesController
-MonographsController DONE (old specials)
-NewStandController DONE
-NewStandPaypalController DONE Very similar to NewsStand (¿extend it?)
-PollsController DONE
-RatingsController DONE
-RobotsController DONE
-RssController DONE
-SearchController DONE
-SitemapsController DONE
-StaticPagesController DONE
-RedirectorsController DONE, review how to handle previous redirections.
-VideosController DONE, review show action because not work (the problem is in the widget_ratings which check the name of old controller)
-NewslibraryController (old frontpages) Problem with routes, (slash /) 'date' =([0-9]+)\/([0-9]+)\/([0-9]+)\/'
-LettersController,  no finished show, saveAction submit form to send letter. Change require advertisement by a function
-OpinionsController
 AuthenticationController
-UsersController
-VideosController DONE, review show action because it doesn't work (PROBLEM: widget_ratings checks the old controller name)
-
+AuthenticationController
+BooksController
+CommentsController
+ContentController, common actions for all contents
+ErrorController
+FrontpagesController
+LettersController,  no finished show, saveAction submit form to send letter. Change require advertisement by a function
+MonographsController (old specials)
+NewslibraryController (old frontpages) Problem with routes, (slash /) 'date' =([0-9]+)\/([0-9]+)\/([0-9]+)\/'
+NewStandController
+NewStandPaypalController Very similar to NewsStand (¿extend it?)
+OpinionsController
+PollsController
+RatingsController
+RedirectorsController, review how to handle previous redirections.
+RobotsController
+RssController
+SearchController
+SitemapsController
+StaticPagesController
 SubscriptionsController
+UsersController
+VideosController, review show action because it doesn't work (PROBLEM: widget_ratings checks the old controller name)
+
 
 Work after migration
 --------------------
-- VideosController, review show action because not work (the problme is in the widget_ratings which check the name of old controller)
+- VideosController, review show action because it doesn't work (PROBLEM: widget_ratings checks the old controller name)
 - RedirectrosController, review how to handle previous redirections.
 - SearchController, we must change all the template urls
 - PollsController, review addVote function, use symfony cookie & transform ajax response
@@ -83,3 +82,4 @@ Work after migration
 - ArticlesController, send, sendform and print actions migrated to contentcontroller
 - Contentscontroller, migrate send, sendform actions from article.php
 - RatingsController, change url in templates
+- Subscriptions, needs further checking and change form send urls
