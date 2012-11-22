@@ -69,8 +69,8 @@ class Template extends Smarty
         $this->assign('THEME', $theme);
 
         // Add global plugins path
-        $this->addPluginsDir(realpath(SMARTY_DIR.DS.'../'.DS.'onm-plugins/'));
         $this->addPluginsDir(realpath($this->templateBaseDir.'plugins/').'/');
+        $this->addPluginsDir(realpath(SMARTY_DIR.DS.'../'.DS.'onm-plugins/'));
         $this->caching          = false;
         $this->allow_php_tag    = true;
 

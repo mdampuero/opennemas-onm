@@ -171,8 +171,14 @@ switch ($action) {
                 if (isset($_COOKIE[$cookie])) {
                     if ($_COOKIE[$cookie]=='tks') {
                         $msg = 'Ya ha votado esta encuesta';
+                        if (preg_match('@sermos@', $_SERVER['SERVER_NAME'])) {
+                            $msg = "Xa votou este enquérito";
+                        }
                     } else {
                         $msg = 'Gracias, por su voto';
+                        if (preg_match('@sermos@', $_SERVER['SERVER_NAME'])) {
+                            $msg = "Grazas polo seu voto";
+                        }
                         //Application::setCookieSecure($cookie, 'tks');
                         setcookie($cookie, 'tks', time()+3600);
                     }

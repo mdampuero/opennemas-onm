@@ -38,6 +38,33 @@ class CanariasHelper
     public function elementIsImported($contentID, $contentType)
     {
         if (isset($contentID) && isset($contentType)) {
+            if (!empty($this->importedContents)) {
+                $newID = $this->importedContents[$contentType][$contentID];
+                if (!empty($newID)) {
+                    return $newID;
+                }
+            } else {
+                $this->importedContents = array();
+                $sql = 'SELECT * FROM `translation_ids`';
+                $rs  = $GLOBALS['application']->conn->Execute($sql);
+                if (!$rs) {
+                    echo self::$originConn->ErrorMsg();
+                    $this->helper->log(self::$originConn->ErrorMsg());
+                } else {
+
+                    $totalRows = $rs->_numOfRows;
+                    $current = 1;
+                    while (!$rs->EOF) {
+                        $i = $rs->fields['type'];
+                        $j = $rs->fields['pk_content_old'];
+                        $this->importedContents[$i][$j] = $rs->fields['pk_content'];
+
+                        $rs->MoveNext();
+                    }
+                    $rs->Close();
+                }
+            }
+
             $sql = 'SELECT * FROM `translation_ids` WHERE `pk_content_old`=? AND type=?';
 
             $values  = array($contentID, $contentType);
@@ -80,7 +107,7 @@ class CanariasHelper
 
         echo "\n Database was Cleaned \n ";
         //emtpy tables
-        $tables = array('articles', 'albums', 'albums_photos', 'contents_categories',
+        $tables = array('articles', 'albums', 'albums_photos',
             'attachments', 'authors', 'author_imgs', 'comments', 'letters',
             'content_positions', 'kioskos', 'opinions', 'pclave', 'photos', 'polls', 'poll_items',
             'ratings', 'related_contents', 'specials', 'special_contents', 'videos', 'votes',
@@ -107,7 +134,7 @@ class CanariasHelper
         $sql = "DELETE FROM contents WHERE pk_content NOT IN ($contents 0)";
 
         $rss = $GLOBALS['application']->conn->Execute($sql);
-        $sql = "DELETE FROM contents_categories WHERE pk_fk_content NOT IN  ($contents 0)";
+        $sql = "DELETE FROM contents_categories WHERE pk_fk_content NOT IN  ($contents 0) AND pk_fk_content_category != 0";
         $rss = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rss) {
@@ -144,7 +171,7 @@ class CanariasHelper
         if (!$rss) {
             $this->log('clearCategories function: '.$GLOBALS['application']->conn->ErrorMsg());
         }
-        $sql = "ALTER TABLE `authors` AUTO_INCREMENT =20";
+        $sql = "ALTER TABLE `content_categories` AUTO_INCREMENT =20";
 
         $rss = $GLOBALS['application']->conn->Execute($sql);
 
@@ -180,9 +207,8 @@ class CanariasHelper
 
     public function getSlug($text)
     {
-        $text = \StringUtils::get_title(utf8_encode($text));
-        //$text = \Onm\StringUtils::normalize($text);
-        //$text = \Onm\StringUtils::get_title($text);
+
+        $text =  \Onm\StringUtils::generateSlug(utf8_encode($text));
 
         return $text;
     }
@@ -227,6 +253,32 @@ class CanariasHelper
     {
         if (isset($url) && isset($contentType)) {
 
+            if (!empty($this->importedImages)) {
+                $newID = $this->importedImages[$contentType][$url];
+                if (!empty($newID)) {
+                    return $newID;
+                }
+            } else {
+                $this->importedImages = array();
+                $sql = 'SELECT * FROM `images_translated`';
+                $rs  = $GLOBALS['application']->conn->Execute($sql);
+                if (!$rs) {
+                    echo self::$originConn->ErrorMsg();
+                    $this->helper->log(self::$originConn->ErrorMsg());
+                } else {
+
+                    $totalRows = $rs->_numOfRows;
+                    $current = 1;
+                    while (!$rs->EOF) {
+                        $i = $rs->fields['type'];
+                        $j = $rs->fields['url'];
+                        $this->importedImages[$i][$j] = $rs->fields['pk_content'];
+
+                        $rs->MoveNext();
+                    }
+                    $rs->Close();
+                }
+            }
 
             $sql = 'SELECT * FROM `images_translated` WHERE `url`=? AND type=?';
 
@@ -302,6 +354,63 @@ class CanariasHelper
             echo "Please provide a contentID and coverid to update it.";
         }
     }
+
+
+
+    /**
+     * Function that creates video from url and inserts it on ONM Database
+     *
+     * @return boolean
+     * @author
+     **/
+    public function importVideo($data, $url)
+    {
+
+        try {
+            $url = rawurldecode($url);
+            $videoP = new \Panorama\Video($url);
+            $information = $videoP->getVideoDetails();
+
+            $values = array(
+                'file_path'      => $url,
+                'video_url'      => $url,
+                'category'       => JoomlaImporter::matchCategory($data['catid']),
+                'available'      => 1,
+                'content_status' => 1,
+                'title'          =>  ImportHelper::convertoUTF8($data['title']),
+                'metadata'       => $data['metadata'],
+                'description'    => $data['title'].' video '.$data['introtext'],
+                'author_name'    => $data['origin'],
+            );
+            $values['information'] = $information;
+
+        } catch (\Exception $e) {
+            ImportHelper::log("\n 1 Can't get video information. Check the $url\n ");
+            return;
+        }
+
+        try {
+
+            $video = new \Video();
+            $newVideoID = $video->create($values);
+
+            if (is_string($newVideoID)) {
+                ImportHelper::log('Video with ID '.$newVideoID." imported.\n");
+                return $newVideoID;
+            } else {
+                ImportHelper::log('Video '.$url." from article ".$data['id']." NOT created.\n");
+
+            }
+
+
+        } catch (\Exception $e) {
+
+            ImportHelper::log("\n Problem with video: {$e->getMessage()} {$url} \n ");
+        }
+
+
+    }
+
 
     /**
      * Load properties in a object.
