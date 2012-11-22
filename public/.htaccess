@@ -564,15 +564,15 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
 
-  # Redirections for elidealgallego.com and hibridosyelectricos.com --------------------------------------------------------------------------------
-
+  # Redirections for elidealgallego.com and hibridosyelectricos.com ------------
     #Inner Article
     RewriteRule ^index\.php/[a-z0-9\-]+/[a-z0-9\-]+/([0-9]+)\-[a-z0-9\-\.]+/?$ /controllers/redirect-imported-elements.php?content_type=article&content_id=$1 [L,NC]
     RewriteRule ^index\.php/[a-z0-9\-]+/[a-z0-9\-]+/[a-z0-9\-]+/([0-9]+)\-[a-z0-9\-\.]+/?$ /controllers/redirect-imported-elements.php?content_type=article&content_id=$1 [L,NC]
     RewriteRule ^index\.php/[a-z0-9\-]+/[a-z0-9\-]+/[a-z0-9\-]+/[a-z0-9\-]+/([0-9]+)\-[a-z0-9\-\.]+/?$ /controllers/redirect-imported-elements.php?content_type=article&content_id=$1 [L,NC]
     RewriteRule ^index\.php/opinion/[a-z0-9\-]+/([0-9]+)\-[a-z]/?$ /controllers/redirect-from-editmaker.php?content_type=opinion&content_id=$1 [L,NC]
+  #-----------------------------------------------------------------------------
 
-    # Secciones de elidealgallego.com ------------------------------------------
+  # Secciones de elidealgallego.com --------------------------------------------
     RewriteRule ^index.php/inicio/?$ / [R=301,L,NC]
     RewriteRule ^index.php/opinion.*/?$ /opinion/ [R=301,L,NC]
     RewriteRule ^index.php/iberia/?$ /seccion/espana/ [R=301,L,NC]
@@ -590,16 +590,18 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteRule ^index.php/aeropuertos/?$ /estaticas/aeropuertos.html [R=301,L,NC]
     RewriteRule ^index.php/farmacias/?$ /estaticas/farmacia.html [R=301,L,NC]
     RewriteRule ^index.php/galerias/?$ /album/ [R=301,L,NC]
+  #--------------------------------------------------------
 
-    # Secciones de hibridosyelectricos.com--------------------------------------
+  # Secciones de hibridosyelectricos.com----------------------------------------
     RewriteRule ^index.php/actualidad.*?$ /seccion/actualidad/ [R=301,L,NC]
     RewriteRule ^index.php/marcas-y-fabricantes.*/?$ /seccion/mercado/ [R=301,L,NC]
     RewriteRule ^index.php/tecnologia.*/?$ /seccion/tecnologia/ [R=301,L,NC]
     RewriteRule ^index.php/posventa.*/?$ /seccion/sector/ [R=301,L,NC]
     RewriteRule ^index.php/ecosostenible.*/?$ /seccion/sostenibilidad/ [R=301,L,NC]
     RewriteRule ^index.php/revista.*/?$ /portadas-papel/ [R=301,L,NC]
+  #-----------------------------------------------------------------------------
 
-    # Secciones de prontoar ----------------------------------------------------
+  # Secciones de prontoar ------------------------------------------------------
     #index.php?option=com_content&task=view&id=47077&Itemid=677
     RewriteCond %{QUERY_STRING} &?option=com_content&?task=blogcategory&?id=([^&]+)&?Itemid=([^&]+)
     RewriteRule ^index.php$  /seccion/espectaculos/ [R=301,L,NC]
@@ -625,21 +627,20 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteRule ^index2.php$ controllers/redirect-imported-elements.php?content_type=article&content_id=%1  [R=301,L,NC]
     RewriteCond %{QUERY_STRING} &?option=com_content&?task=[^&]+&?id=([^&]+)&?itemid=([^&]+)&?[^&]+
     RewriteRule ^index2.php$ controllers/redirect-imported-elements.php?content_type=article&content_id=%1  [R=301,L,NC]
+  # ----------------------------------------------------------------------------
 
 
-    # Rules for sermosgaliza.com -----------------------------------------------
+  # Rules for sermosgaliza.com -------------------------------------------------
     RewriteRule ^media/prepro-sermosgaliza/(.*)$ http://www.sermosgaliza.com/media/sermosgaliza/$1 [R=301,L]
+  # ----------------------------------------------------------------------------
 
-  #--------------------------------------------------------
-  #Redirection from old nuevatribuna.es
-
+  #Redirection from old nuevatribuna.es ----------------------------------------
     #Inner Article
     RewriteRule ^noticia/([0-9]+)($|/$|.+/$|.+html$) /controllers/redirect-from-editmaker.php?content_type=article&content_id=$1 [L,NC]
 
     RewriteCond %{QUERY_STRING} &?ref=([^&]+)&?pos=([^&]+) [OR]
     RewriteCond %{QUERY_STRING} &?ref=([^&]+)
     RewriteRule ^noticia\.asp$ /controllers/redirect-from-editmaker.php?content_type=article&content_id=%1 [L,NC]
-
 
     RewriteCond %{QUERY_STRING} &?ref=([^&]+)&?pos=([^&]+) [OR]
     RewriteCond %{QUERY_STRING} &?ref=([^&]+)
@@ -712,6 +713,26 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteRule ^agenda/?$   http://agenda.cronicasdelaemigracion.com/ [R=301,L,NC]
     RewriteRule ^agenda/(.*)$   http://agenda.cronicasdelaemigracion.com/$1 [R=301,L,NC]
     RewriteRule ^agenda_colectividad/(.*)$   http://agenda.cronicasdelaemigracion.com/$1 [R=301,L,NC]
+
+    #opinion.php?opinion_id=5709&action=read
+    RewriteCond %{QUERY_STRING} &?opinion_id=([^&]+)&?action=read
+    RewriteRule ^opinion.php$ controllers/opinion_inner.php?opinion_id=%1&action=read [L,NC]
+
+    #article.php?article_id=6980&category=1&action=read
+    RewriteCond %{QUERY_STRING} &?article_id=([^&]+)&?category=([^&]+)&?action=read
+    RewriteRule ^article.php$ controllers/article.php?article_id=%1&action=read [L,NC]
+
+    #album.php?category=2&album_id=6095&action=read
+    RewriteCond %{QUERY_STRING} &?category=([^&]+)
+    RewriteRule ^album.php$ /album/ [R=301,L,NC]
+
+    #http://www.cronicasdelaemigracion.com/hemeroteca.php?category=2&semmes=55&efecha=1248217200&month=7&year=2009
+    RewriteCond %{QUERY_STRING} &?category=([^&]+)&?semmes=([^&]+)&?efecha=([^&]+)&?month=([^&]+)&?year=([^&]+)
+    RewriteRule ^hemeroteca.php$ controllers/frontpages.php?date=%50%401&category_name=home [L,NC]
+
+    #newslibrary.php?semmes=45&efecha=-86400&category=0&continue=no&month=01&year=2010
+    RewriteCond %{QUERY_STRING} &?semmes=([^&]+)&?efecha=([^&]+)&?category=([^&]+)&?continue=([^&]+)&?month=([^&]+)&?year=([^&]+)
+    RewriteRule ^newslibrary.php$ controllers/frontpages.php?date=%60%501&category_name=home [L,NC]
   # END CRONNICAS --------------------------------------------------------
 
     #Old Static pages
@@ -753,7 +774,6 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     # RewriteRule ^regenerate/pass/check/([a-f0-9]{32})/?$ controllers/register.php?action=regenerate_pass_check&token=$1 [L,NC]
     # RewriteRule ^regenerate/pass/([a-f0-9]{32})/?$ controllers/register.php?action=regenerate_pass&token=$1 [L,NC]
 
-
     #Sync Sections
     RewriteRule ^extseccion/([a-z0-9\-]+)/?$ controllers/index_ws.php?category_name=$1 [L,NC]
     RewriteRule ^extseccion/([a-z0-9\-]+)/([0-9]+)/?$ controllers/index_ws.php?category_name=$1&page=$2 [L,NC]
@@ -768,36 +788,10 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteRule ^encuesta/([a-z0-9\-]+)/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/(.*)/([0-9]+).html$ controllers/poll.php?action=show&id=$6&category_name=$1 [L,NC]
     RewriteRule ^encuesta/([a-z0-9\-]+)/(.*)/([0-9]+).html$ controllers/poll.php?action=show&id=$3&category_name=$1 [L,NC]
 
-    #Files
-    RewriteRule ^ficheiro/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/[a-z0-9_\-]+/([a-z0-9_\-]+)/([a-z0-9_\-]+)\.([a-z0-9]{2,4})$ /media/files/$1/$2/$3/$5.$6 [L,NC]
-    RewriteRule ^ficheiro/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z0-9_\-]+)/([a-z0-9_\-]+)\.([a-z0-9]{2,4})$ /media/files/$1/$2/$3/$5.$6 [L,NC]
-
     #Newsletter links
     #RewriteRule ^([a-z0-9\-]+)/([0-9]{4}-[0-1][0-9]-[0-3][0-9])/([0-9]+)/$ /seccion/$1/#$3 [R=301,NE,NC,L]
     RewriteRule ^newsletter/?$  controllers/subscriptions.php [L,NC]
     RewriteRule ^boletin/?$  controllers/subscriptions.php [L,NC]
-
-    #opinion.php?opinion_id=5709&action=read
-    RewriteCond %{QUERY_STRING} &?opinion_id=([^&]+)&?action=read
-    RewriteRule ^opinion.php$ controllers/opinion_inner.php?opinion_id=%1&action=read [L,NC]
-
-    #article.php?article_id=6980&category=1&action=read
-    RewriteCond %{QUERY_STRING} &?article_id=([^&]+)&?category=([^&]+)&?action=read
-    RewriteRule ^article.php$ controllers/article.php?article_id=%1&action=read [L,NC]
-
-    #album.php?category=2&album_id=6095&action=read
-    RewriteCond %{QUERY_STRING} &?category=([^&]+)
-    RewriteRule ^album.php$ /album/ [R=301,L,NC]
-
-    #http://www.cronicasdelaemigracion.com/hemeroteca.php?category=2&semmes=55&efecha=1248217200&month=7&year=2009
-    RewriteCond %{QUERY_STRING} &?category=([^&]+)&?semmes=([^&]+)&?efecha=([^&]+)&?month=([^&]+)&?year=([^&]+)
-    RewriteRule ^hemeroteca.php$ controllers/frontpages.php?date=%50%401&category_name=home [L,NC]
-
-    #newslibrary.php?semmes=45&efecha=-86400&category=0&continue=no&month=01&year=2010
-    RewriteCond %{QUERY_STRING} &?semmes=([^&]+)&?efecha=([^&]+)&?category=([^&]+)&?continue=([^&]+)&?month=([^&]+)&?year=([^&]+)
-    RewriteRule ^newslibrary.php$ controllers/frontpages.php?date=%60%501&category_name=home [L,NC]
-
-    RewriteRule ^(.*)/boletin/?$  /boletin/ [R=301,L,NC]
 
     RewriteRule ^boletin.html$ newsletter/
 
