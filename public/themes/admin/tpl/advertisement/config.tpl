@@ -55,8 +55,17 @@
                     <div class="help-block">{t}This setting indicates how long will take to re-display the interstitial in frontpage.{/t}</div>
                 </div>
             </div>
+            <div class="control-group">
+                <label for="ads_settings_no_generics" class="control-label">{t}Allow generic advertisement{/t}</label>
+                <div class="controls">
+                    <select name="ads_settings_no_generics" id="ads_settings_no_generics">
+                        <option value="0">{t}Yes{/t}</option>
+                        <option value="1" {if $configs['ads_settings']['no_generics'] eq "1"} selected {/if}>{t}No{/t}</option>
+                    </select>
+                    <div class="help-block">{t}This settings allow print home ads when ads in category is empty.{/t}</div>
+                </div>
+            </div>
         </div>
-
         <input type="hidden" id="action" name="action" value="config" />
     </div>
 </form>
