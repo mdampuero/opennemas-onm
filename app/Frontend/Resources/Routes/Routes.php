@@ -16,6 +16,37 @@ $routes = new RouteCollection();
 $frontendRoutes = new RouteCollection();
 
 $frontendRoutes->add(
+    'frontend_newsletter_subscribe_show',
+    new Route(
+        '/newsletter',
+        array(
+            '_controller' => 'Frontend:Controllers:SubscriptionsController:show',
+        )
+    )
+);
+
+
+$frontendRoutes->add(
+    'frontend_newsletter_subscribe_es',
+    new Route(
+        '/boletin',
+        array(
+            '_controller' => 'Frontend:Controllers:SubscriptionsController:show',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_newsletter_subscribe_create',
+    new Route(
+        '/newsletter/subscription/create',
+        array(
+            '_controller' => 'Frontend:Controllers:SubscriptionsController:create',
+        )
+    )
+);
+
+$frontendRoutes->add(
     'frontend_auth_login',
     new Route(
         '/login',

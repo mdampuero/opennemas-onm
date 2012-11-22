@@ -790,8 +790,8 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
 
     #Newsletter links
     #RewriteRule ^([a-z0-9\-]+)/([0-9]{4}-[0-1][0-9]-[0-3][0-9])/([0-9]+)/$ /seccion/$1/#$3 [R=301,NE,NC,L]
-    RewriteRule ^newsletter/?$  controllers/subscriptions.php [L,NC]
-    RewriteRule ^boletin/?$  controllers/subscriptions.php [L,NC]
+    # RewriteRule ^newsletter/?$  controllers/subscriptions.php [L,NC]
+    # RewriteRule ^boletin/?$  controllers/subscriptions.php [L,NC]
 
     RewriteRule ^boletin.html$ newsletter/
 
