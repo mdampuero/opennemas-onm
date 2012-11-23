@@ -47,12 +47,14 @@
                 </a>
                 {/if}
             </li>
+            {*
             <li class="divider"></li>
             <li>
                 <a href="{url name=admin_article_delete id=$content->id category=$category}" title="{t}Delete{/t}" class="send-to-trash">
                     <i class="icon-trash"></i> {t}Send to trash{/t}
                 </a>
             </li>
+            *}
         </ul>
     </div>
 </div>
