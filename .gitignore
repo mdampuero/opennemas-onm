@@ -21,3 +21,4 @@ app/config/parameters.yml
 /bin/import-tools/joomla/configuration.ini
 /bin/import-tools/joomla/configuration.ini-ideal
 /bin/import-tools/joomla/configuration.ini-hibridos
+/bin/import-tools/canarias/libs/canariasImport-config.inc.php-dist

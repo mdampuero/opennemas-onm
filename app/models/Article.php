@@ -420,11 +420,12 @@ class Article extends Content
             $tpl = new Template(TEMPLATE_USER);
         //}
 
-        $tpl->assign('item', $this);
-        $tpl->assign('cssclass', $params['cssclass']);
+        $params['item'] = $this;
+        // $params'cssclass', $params['cssclass']);
+        // $tpl->assign('categoryId', $params['categoryId']);
 
         try {
-            $html = $tpl->fetch($params['tpl']);
+            $html = $tpl->fetch($params['tpl'], $params);
         } catch (\Exception $e) {
             $html = 'Article not available';
         }
