@@ -81,8 +81,11 @@ class FrontpagesController extends Controller
             $this->view->assign('category', $_REQUEST['category']);
         }
 
+        $layoutTheme = s::get('frontpage_layout_'.$categoryID, 'default');
+        $layoutSettings = $this->container->getParameter('instance')->theme->getLayout($layoutTheme);
+
         $menu = new \Menu();
-        $menu->getMenu('frontpage');
+        $menu->getMenu($layoutSettings['menu']);
         if (!empty($menu->items )) {
             foreach ($menu->items as &$item) {
                 $item->categoryID = $ccm->get_id($item->link);
@@ -103,13 +106,9 @@ class FrontpagesController extends Controller
         // Sort all the elements by its position
         $contentElementsInFrontpage  = $cm->sortArrayofObjectsByProperty($contentElementsInFrontpage, 'position');
 
-        $layoutTheme = s::get('frontpage_layout_'.$categoryID, 'default');
-
         $lm  = new LayoutManager(
             SITE_PATH."/themes/".TEMPLATE_USER."/layouts/".$layoutTheme.".xml"
         );
-
-        $layoutTheme = $this->container->getParameter('instance')->theme->getLayout($layoutTheme);
 
         $layout = $lm->render(
             array(
@@ -130,7 +129,7 @@ class FrontpagesController extends Controller
                 'frontpage_articles' => $contentElementsInFrontpage,
                 'layout'             => $layout,
                 'available_layouts'  => $layouts,
-                'layout_theme'       => $layoutTheme,
+                'layout_theme'       => $layoutSettings,
             )
         );
     }
