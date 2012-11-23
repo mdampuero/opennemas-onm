@@ -78,6 +78,16 @@ class Theme
     );
 
     /**
+     * Default property definitions for a layout
+     *
+     * @var string
+     **/
+    private $defaultLayout = array(
+        'name'        => 'Layout name',
+        'menu'        => 'frontpage',
+    );
+
+    /**
      * Initializes the Theme instance
      *
      * @return Theme the object initialized
@@ -106,6 +116,7 @@ class Theme
      **/
     public function registerLayout($name, $file)
     {
+        $file = array_merge($this->defaultLayout, $file);
         $this->layouts[$name] = $file;
 
         return $this;
