@@ -119,7 +119,7 @@ class CanariasToOnm
             'fotos-de-hoy' => 31,
             'portadas' => 32,
             'top-secret' => 33,
-            'canarias' => 34,
+            'canarias' => 36,
             'nacional' => 37,
             'internacional'  => 38,
             'tecnología' => 39,
@@ -1981,6 +1981,7 @@ class CanariasToOnm
                 try {
                     $video = new \Video();
                     $newVideoID = $video->createFromLocalFile($videoFileData);
+                    $this->helper->insertImageTranslated($newVideoID, $oldFile, 'video');
                 } catch (\Exception $e) {
                     $this->helper->log(" Problem with video file: {$e->getMessage()} {$oldFile} \n ");
                 }

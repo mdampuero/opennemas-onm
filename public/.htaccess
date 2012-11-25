@@ -639,6 +639,61 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     # provisional sermos
     RewriteRule ^media/prepro-sermosgaliza/(.*)$ http://www.sermosgaliza.com/media/sermosgaliza/$1 [R=301,L]
 
+
+ #--------------------------------------------------------
+    #Redirection from old canariasahora.es
+    #http://www2.canariasahora.es/noticia/242988/
+
+    RewriteCond %{SERVER_NAME} ^canariasahora.local$ [OR]
+    RewriteCond %{SERVER_NAME} ^www.canariasahora.es$
+    RewriteRule ^noticia/([0-9]+)/?$ controllers/redirect-imported-elements.php?content_type=article&content_id=$1   [R=301,L,NC]
+
+    RewriteCond %{SERVER_NAME} ^canariasahora.local$ [OR]
+    RewriteCond %{SERVER_NAME} ^www.canariasahora.es$
+    RewriteRule ^fauna/ampliar/([0-9]+)/?$ controllers/redirect-imported-elements.php?content_type=article&content_id=$1   [R=301,L,NC]
+
+    RewriteCond %{SERVER_NAME} ^canariasahora.local$ [OR]
+    RewriteCond %{SERVER_NAME} ^www.canariasahora.es$
+    RewriteRule ^opinion/([0-9]+)/?$ controllers/redirect-imported-elements.php?content_type=article&content_id=$1  [R=301,L,NC]
+
+    RewriteCond %{SERVER_NAME} ^canariasahora.local$ [OR]
+    RewriteCond %{SERVER_NAME} ^www.canariasahora.es$
+    RewriteRule ^suopinion/([0-9]+)/?$ /opinion/  [R=301,L,NC]
+
+    RewriteCond %{SERVER_NAME} ^canariasahora.local$ [OR]
+    RewriteCond %{SERVER_NAME} ^www.canariasahora.es$
+    RewriteRule ^encuestas/?$ /encuesta  [R=301,L,NC]
+
+    RewriteCond %{SERVER_NAME} ^canariasahora.local$ [OR]
+    RewriteCond %{SERVER_NAME} ^www.canariasahora.es$
+    RewriteRule ^publicidad/?$ estaticas/publicidad/  [R=301,L,NC]
+
+    RewriteCond %{SERVER_NAME} ^canariasahora.local$ [OR]
+    RewriteCond %{SERVER_NAME} ^www.canariasahora.es$
+    RewriteRule ^nosotros/?$ estaticas/contacto/  [R=301,L,NC]
+
+    RewriteCond %{SERVER_NAME} ^canariasahora.local$ [OR]
+    RewriteCond %{SERVER_NAME} ^www.canariasahora.es$
+    RewriteRule ^cartasaldirector/(.*)$ cartas-al-director/  [R=301,L,NC]
+
+    RewriteCond %{SERVER_NAME} ^canariasahora.local$ [OR]
+    RewriteCond %{SERVER_NAME} ^www.canariasahora.es$
+    RewriteRule ^videos/?$ video/  [R=301,L,NC]
+
+    RewriteCond %{SERVER_NAME} ^canariasahora.local$ [OR]
+    RewriteCond %{SERVER_NAME} ^www.canariasahora.es$
+    RewriteRule ^galerias_de_fotos/?$ album/  [R=301,L,NC]
+
+    RewriteCond %{SERVER_NAME} ^canariasahora.local$ [OR]
+    RewriteCond %{SERVER_NAME} ^www.canariasahora.es$
+    RewriteRule galeria/([0-9]+)/foto/(.*)$ controllers/redirect-imported-elements.php?content_type=article&content_id=$1   [R=301,L,NC]
+
+    #http://www2.canariasahora.es/internacional/
+    RewriteCond %{SERVER_NAME} ^canariasahora.local$ [OR]
+    RewriteCond %{SERVER_NAME} ^www.canariasahora.es$
+    RewriteRule ^([a-zA-Z0-9\-]+)/?$ seccion/$1  [R=301,L,NC]
+
+
     #--------------------------------------------------------
     #Redirection from old nuevatribuna.es
 
