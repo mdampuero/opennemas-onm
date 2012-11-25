@@ -125,7 +125,7 @@ class Poll extends Content
         if ($data['item']) {
             //Insertamos
             foreach ($data['item'] as $item) {
-                $sql    ='REPLACE INTO poll_items (`fk_pk_poll`, `item`,`votes`) VALUES (?,?)';
+                $sql    ='REPLACE INTO poll_items (`fk_pk_poll`, `item`) VALUES (?,?)';
                 $values = array((int) $data['id'], $item);
 
                 if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
