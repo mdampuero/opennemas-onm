@@ -31,10 +31,10 @@ function smarty_function_include_google_analytics_code($params, &$smarty) {
             $utmUrl = $utmGifLocation."?".
                 "utmwv=4".
                 "&utmn=".rand(0, 0x7fffffff).
-                "&utmdt='Newsletter ".urlencode(SITE_URL)." [".date('%d/%m/%Y')."] ".
+                "&utmdt=Newsletter [".date('d/m/Y')."] ".
                 "&utmhn=".urlencode(SITE_URL).
-                "&utmr=".urlencode(SITE_URL.'newsletter/'.date("YmdHis")).
-                "&utmp=".urlencode('newsletter/'.date("YmdHis")) .
+                "&utmr=".urlencode(SITE_URL.'newsletter/'.date("Ymd")).
+                "&utmp=".urlencode('newsletter/'.date("Ymd")) .
                 "&utmac=".$apiKey.
                 "&utmcc=__utma%3D999.999.999.999.999.1%3B";
 
