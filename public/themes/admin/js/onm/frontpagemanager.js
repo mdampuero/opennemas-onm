@@ -7,7 +7,7 @@ function makeContentProviderAndPlaceholdersSortable() {
         update: function(event,ui) {
             initializePopovers();
             show_save_frontpage_dialog();
-
+            frontpage_info.changed = true
         },
         tolerance: 'pointer'
         //containment: '#content-with-ticker'
@@ -21,6 +21,7 @@ function makeContentProviderAndPlaceholdersSortable() {
         update: function(event,ui) {
             initializePopovers();
             show_save_frontpage_dialog();
+            frontpage_info.changed = true
         },
         tolerance: 'pointer'
         //containment: '#content-with-ticker'
@@ -42,6 +43,8 @@ function check_available_new_version() {
     });
     return exists_version;
 }
+
+
 
 function get_tooltip_content(elem) {
     var parent_content_div = elem.closest('div.content-provider-element');
@@ -131,10 +134,6 @@ function get_contents_in_frontpage() {
 
 function show_save_frontpage_dialog() {
     jQuery('#warnings-validation').html('<div class="alert alert-notice"><button class="close" data-dismiss="alert">×</button>' + frontpage_messages.remember_save_positions + '</div>');
-    if (check_available_new_version()) {
-        $('#modal-new-version').modal('show');
-    };
-
 }
 
 
@@ -154,6 +153,14 @@ function initializePopovers() {
 }
 jQuery(function($) {
 
+    window.setInterval(function(){
+        // Frontpage has changed and needs to be reloaded
+        if (frontpage_info.changed) {
+            if (check_available_new_version()) {
+                $('#modal-new-version').modal('show');
+            };
+        };
+    }, 12000);
     /***************************************************************************
     * Sortable handlers
     ***************************************************************************/
@@ -442,7 +449,7 @@ jQuery(function($) {
         e.preventDefault();
         var els = get_contents_in_frontpage();
         var category = $('#frontpagemanager').data('category');
-        var new_version_available = check_available_new_version();
+        var new_version_available = check_available_new_version(false);
 
         // If there is a new version available for this frontpage avoid to save
         if (new_version_available) {
