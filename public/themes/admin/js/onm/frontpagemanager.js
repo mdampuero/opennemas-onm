@@ -6,7 +6,8 @@ function makeContentProviderAndPlaceholdersSortable() {
         handle: '.description',
         update: function(event,ui) {
             initializePopovers();
-            jQuery('#warnings-validation').html('<div class="notice">' + frontpage_messages.remember_save_positions + '</div>');
+            show_save_frontpage_dialog();
+
         },
         tolerance: 'pointer'
         //containment: '#content-with-ticker'
@@ -19,7 +20,7 @@ function makeContentProviderAndPlaceholdersSortable() {
         handle: '.description',
         update: function(event,ui) {
             initializePopovers();
-            jQuery('#warnings-validation').html('<div class="alert alert-notice"><button class="close" data-dismiss="alert">×</button>' + frontpage_messages.remember_save_positions + '</div>');
+            show_save_frontpage_dialog();
         },
         tolerance: 'pointer'
         //containment: '#content-with-ticker'
@@ -129,7 +130,11 @@ function get_contents_in_frontpage() {
 }
 
 function show_save_frontpage_dialog() {
-    jQuery('#warnings-validation').html('<div class="notice">' + frontpage_messages.remember_save_positions + '</div>');
+    jQuery('#warnings-validation').html('<div class="alert alert-notice"><button class="close" data-dismiss="alert">×</button>' + frontpage_messages.remember_save_positions + '</div>');
+    if (check_available_new_version()) {
+        $('#modal-new-version').modal('show');
+    };
+
 }
 
 
@@ -439,12 +444,10 @@ jQuery(function($) {
         var category = $('#frontpagemanager').data('category');
         var new_version_available = check_available_new_version();
 
-        log('returned', typeof new_version_available);
         // If there is a new version available for this frontpage avoid to save
         if (new_version_available) {
             $('#modal-new-version').modal('show');
         } else {
-            log('about to save positions', new_version_available)
             $.ajax({
                 url: frontpage_urls.save_positions + '?category=' + category,
                 asynx: false,
@@ -469,9 +472,6 @@ jQuery(function($) {
                 }
             });
         }
-        log('after save button push')
-
-
     });
 
     $('#button_clearcache').on('click', function(e, ui) {
