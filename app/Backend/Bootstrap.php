@@ -61,6 +61,7 @@ class Bootstrap extends ModuleBootstrap
                 && !preg_match('@^/login@', $request->getPathInfo())
             ) {
                 $url = $request->getPathInfo();
+                error_log("User unlogged: ".var_export($_SESSION), 0);
 
                 if (!empty($url)) {
                     $redirectTo = urlencode($request->getUri());

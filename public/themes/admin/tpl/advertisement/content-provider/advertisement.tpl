@@ -37,12 +37,14 @@
                 </a>
                 {/if}
             </li>
+            {*
             <li class="divider"></li>
             <li>
                 <a href="{$smarty.server.PHP_SELF}?action=delete&amp;id={$content->id}&amp;category={$category}" title="{t}Delete{/t}" class="send-to-trash">
                     <i class="icon-trash"></i> {t}Send to trash{/t}
                 </a>
             </li>
+            *}
         </ul>
     </div>
 </div>

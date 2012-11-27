@@ -26,6 +26,22 @@ function makeContentProviderAndPlaceholdersSortable() {
     }).disableSelection();
 }
 
+function check_available_new_version() {
+    var $version = frontpage_info.last_saved;
+    var category = $('#frontpagemanager').data('category');
+    var exists_version = true;
+    $.ajax({
+        url: frontpage_urls.check_version + '?date=' + encodeURIComponent($version) + '&category=' + category,
+        method: 'get',
+        async: false,
+        type: 'json',
+        success: function(data) {
+            exists_version = (data == 'true')
+        }
+    });
+    return exists_version;
+}
+
 function get_tooltip_content(elem) {
     var parent_content_div = elem.closest('div.content-provider-element');
     var content_html = '';
@@ -138,6 +154,14 @@ jQuery(function($) {
     ***************************************************************************/
     makeContentProviderAndPlaceholdersSortable();
 
+    /***************************************************************************
+    * Frontpage version control
+    ***************************************************************************/
+    $('#modal-new-version').modal({ backdrop: 'static', keyboard: true, show: false });
+    $('#modal-new-version').on('click', 'a.btn.no', function(e,ui) {
+        e.preventDefault();
+        $('#modal-new-version').modal('hide');
+    });
     /***************************************************************************
     * Batch Actions
     ***************************************************************************/
@@ -413,23 +437,41 @@ jQuery(function($) {
         e.preventDefault();
         var els = get_contents_in_frontpage();
         var category = $('#frontpagemanager').data('category');
+        var new_version_available = check_available_new_version();
 
-        $.post(frontpage_urls.save_positions + '?category=' + category,
-                { 'contents_positions': els }
-        ).success(function(data) {
-            $('#warnings-validation').html(
-                "<div class='alert alert-success'>" +
-                    "<button class='close' data-dismiss='alert'>×</button>" +
-                    data +
-                '</div>');
-        }).error(function(data) {
-            $('#warnings-validation').html(
-                "<div class='alert alert-error'>" +
-                    "<button class='close' data-dismiss='alert'>×</button>" +
-                    data.responseText +
-                '</div>'
-            );
-        });
+        log('returned', typeof new_version_available);
+        // If there is a new version available for this frontpage avoid to save
+        if (new_version_available) {
+            $('#modal-new-version').modal('show');
+        } else {
+            log('about to save positions', new_version_available)
+            $.ajax({
+                url: frontpage_urls.save_positions + '?category=' + category,
+                asynx: false,
+                type: 'POST',
+                dataType: 'json',
+                data: { 'contents_positions': els },
+                success: function(data) {
+                    $('#warnings-validation').html(
+                        "<div class='alert alert-success'>" +
+                            "<button class='close' data-dismiss='alert'>×</button>" +
+                            data.message +
+                        '</div>');
+                    frontpage_info.last_saved = data.date;
+                },
+                error: function(data) {
+                    $('#warnings-validation').html(
+                        "<div class='alert alert-error'>" +
+                            "<button class='close' data-dismiss='alert'>×</button>" +
+                            data.message +
+                        '</div>'
+                    );
+                }
+            });
+        }
+        log('after save button push')
+
+
     });
 
     $('#button_clearcache').on('click', function(e, ui) {

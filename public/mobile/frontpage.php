@@ -77,6 +77,7 @@ if (($tpl->caching == 0) || !$tpl->isCached('mobile/frontpage-mobile.tpl', $cach
             && !empty($content->home_placeholder)
             && ($content->home_placeholder != '')
             && ($content->content_type != 'Widget')
+            && ($content->content_type != '2')
         ) {
             if ($content->content_type == 4) {
                 //Fetch authors slug's
@@ -116,9 +117,9 @@ if (($tpl->caching == 0) || !$tpl->isCached('mobile/frontpage-mobile.tpl', $cach
                 }
             }
         }
+        $tpl->assign('photosArticles', $photos);
     }
 
-    $tpl->assign('photosArticles', $photos);
 }
 
 $tpl->display('mobile/frontpage-mobile.tpl', $cacheID);
