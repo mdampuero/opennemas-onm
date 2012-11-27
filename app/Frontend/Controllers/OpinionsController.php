@@ -431,7 +431,6 @@ class OpinionsController extends Controller
     /**
      * Fetches the advertisement
      *
-     * @return
      **/
     private function advertisements( $context='frontpage' )
     {
