@@ -155,12 +155,10 @@ jQuery(function($) {
 
     window.setInterval(function(){
         // Frontpage has changed and needs to be reloaded
-        if (frontpage_info.changed) {
-            if (check_available_new_version()) {
-                $('#modal-new-version').modal('show');
-            };
+        if (check_available_new_version()) {
+            $('#modal-new-version').modal('show');
         };
-    }, 12000);
+    }, 10000);
     /***************************************************************************
     * Sortable handlers
     ***************************************************************************/
