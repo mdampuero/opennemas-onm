@@ -34,8 +34,11 @@ if (!is_null($contentId)) {
             } elseif ($type == 'opinion') {
                 $opinion = new Opinion($newContentID);
                 $url .=  $opinion->uri;
+            }elseif ($type == 'Fauna' || $type == 'TopSecret') {
+                $article = new Article($newContentID);
+                $article->category_name = $article->catName;
+                $url .=  $article->uri;
             }
-
             break;
         case 'category':
 
