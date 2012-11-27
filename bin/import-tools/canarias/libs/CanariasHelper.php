@@ -408,9 +408,34 @@ class CanariasHelper
             ImportHelper::log("\n Problem with video: {$e->getMessage()} {$url} \n ");
         }
 
+    }
+
+    public function updatePolls($total, $id)
+    {
+
+        $sql = "UPDATE `polls` SET `total_votes`=?  WHERE `pk_poll`=?";
+        $values= array($total, $id);
+
+        $request = $GLOBALS['application']->conn->Prepare($sql);
+        $rss     = $GLOBALS['application']->conn->Execute($request, $values);
+        if (!$rss) {
+            echo $GLOBALS['application']->conn->ErrorMsg();
+        }
 
     }
 
+    public function updatePollVotes($votes)
+    {
+
+        $sql = "UPDATE `poll_items` SET `votes`=?  WHERE `fk_pk_poll`=? AND item LIKE ?";
+
+        $request = $GLOBALS['application']->conn->Prepare($sql);
+        $rss     = $GLOBALS['application']->conn->Execute($request, $votes);
+        if (!$rss) {
+            echo $GLOBALS['application']->conn->ErrorMsg();
+        }
+
+    }
 
     /**
      * Load properties in a object.

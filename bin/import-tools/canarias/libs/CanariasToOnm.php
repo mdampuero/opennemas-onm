@@ -119,7 +119,7 @@ class CanariasToOnm
             'fotos-de-hoy' => 31,
             'portadas' => 32,
             'top-secret' => 33,
-            'canarias' => 34,
+            'canarias' => 36,
             'nacional' => 37,
             'internacional'  => 38,
             'tecnología' => 39,
@@ -796,7 +796,7 @@ class CanariasToOnm
      */
     public function importAyuntamientos()
     {
-        $this->importMunicipios();
+      //  $this->importMunicipios();
 
         $sql = 'SELECT `noticia`, `fecha`, `hora`, `antetitulo`, `titulo`, '.
          ' `texto`, `isla`, `municipio`, `activar` FROM `ayuntamientos_noticias` ';
@@ -1981,6 +1981,7 @@ class CanariasToOnm
                 try {
                     $video = new \Video();
                     $newVideoID = $video->createFromLocalFile($videoFileData);
+                    $this->helper->insertImageTranslated($newVideoID, $oldFile, 'video');
                 } catch (\Exception $e) {
                     $this->helper->log(" Problem with video file: {$e->getMessage()} {$oldFile} \n ");
                 }
@@ -2084,6 +2085,128 @@ class CanariasToOnm
 
         $rs->Close(); # optional
         */
+    }
+
+
+    public function importPolls()
+    {
+
+
+        $sql= 'SELECT `id`, `fecha`, `seccion`, `pregunta`, `foto`, '
+            .'`respuesta1`, `respuesta2`, `respuesta3`, `respuesta4`, '
+            .'`voto1`, `voto2`, `voto3`, `voto4`, `cerrar`, `activar` FROM `encuestas` ';
+
+        $request = self::$originConn->Prepare($sql);
+        $rs = self::$originConn->Execute($request);
+
+
+        if (!$rs) {
+            echo self::$originConn->ErrorMsg();
+            $this->helper->log(self::$originConn->ErrorMsg());
+        } else {
+            $totalRows = $rs->_numOfRows;
+
+            $current = 1;
+
+            $poll = new Poll();
+            while (!$rs->EOF) {
+
+                $originalPollID = $rs->fields['id'];
+                if ($this->helper->elementIsImported($originalPollID, 'poll') ) {
+                    echo "[{$current}/{$totalRows}] Polls with id {$originalPollID} already imported\n";
+                } elseif (!empty($rs->fields['pregunta']) && !empty($rs->fields['respuesta1'])) {
+                    echo "[{$current}/{$totalRows}] Importing poll with id {$originalPollID}  \n";
+                    $title= $this->helper->convertToUtf8($rs->fields['pregunta']);
+
+                    $seccion = 'encuesta-del-dia';
+                    $category = '80';
+                    $category_name = 'Encuesta del día';
+
+
+                    $data = array(
+                        'title' => $title,
+                        'category' => $category,
+                        'with_comment' => 0,
+                        'content_status' => ($rs->fields['activar'] === 0)? 0:1,
+                        'available' => ($rs->fields['activar'] === 0)? 0:1,
+                        'metadata' => \StringUtils::get_tags($title),
+                        'subtitle' => '',
+                        'agency' => '',
+                        'summary' => '',
+                        'fuente' => '',
+                        'category_name'=>  $category_name,
+                        'description' => $title,
+                        'created' => $rs->fields['fecha'].' 00:00:00',
+                        'changed' => $rs->fields['fecha'].' 00:00:00',
+                        'starttime' => $rs->fields['fecha'].' 00:00:00',
+                        'fk_user' => USER_ID,
+                        'fk_author' => USER_ID,
+                        'slug' => \Onm\StringUtils::get_title($title),
+                        'visualization' => 1,
+                        );
+
+                    $data['item'] = array();
+                    $total_votes = 0;
+
+                    if (!empty($rs->fields['respuesta1'])) {
+                        $data['item'][] = $this->helper->convertToUtf8($rs->fields['respuesta1']);
+                        $total_votes  += (int)$rs->fields['voto1'];
+                    }
+                    if (!empty($rs->fields['respuesta2'])) {
+                        $data['item'][] = $this->helper->convertToUtf8($rs->fields['respuesta2']);
+                        $total_votes += (int)$rs->fields['voto2'];
+                    }
+                    if (!empty($rs->fields['respuesta3'])) {
+                        $data['item'][] = $this->helper->convertToUtf8($rs->fields['respuesta3']);
+                        $total_votes += (int)$rs->fields['voto3'];
+                    }
+                    if (!empty($rs->fields['respuesta4'])) {
+                        $data['item'][] = $this->helper->convertToUtf8($rs->fields['respuesta4']);
+                        $total_votes  += (int)$rs->fields['voto4'];
+                    }
+
+                    $poll->create($data);
+
+                    $votes = array();
+                    $i=0;
+                    if (!empty($rs->fields['respuesta1'])) {
+                        $votes[$i] = array($rs->fields['voto1'], $poll->id, $this->helper->convertToUtf8($rs->fields['respuesta1']));
+
+                        $i++;
+                    }
+                    if (!empty($rs->fields['respuesta2'])) {
+                        $votes[$i] = array($rs->fields['voto2'], $poll->id, $this->helper->convertToUtf8($rs->fields['respuesta2']));
+                        $i++;
+                    }
+                    if (!empty($rs->fields['respuesta3'])) {
+                        $votes[$i] = array($rs->fields['voto3'], $poll->id, $this->helper->convertToUtf8($rs->fields['respuesta3']));
+                        $i++;
+                    }
+                    if (!empty($rs->fields['respuesta4'])) {
+                        $votes[$i] = array($rs->fields['voto4'], $poll->id, $this->helper->convertToUtf8($rs->fields['respuesta4']));
+                        $i++;
+                    }
+
+
+                    if (!empty($poll->id) ) {
+                        $this->helper->insertRefactorID($originalPollID, $poll->id, 'poll');
+                        $this->helper->updatePolls($total_votes, $poll->id);
+                        $this->helper->updatePollVotes($votes);
+                    } else {
+                        $errorMsg = 'Problem '.$originalPollID.' - '.$title;
+                        $this->helper->log('insert poll : '.$errorMsg);
+                        $this->helper->log("\n Problem inserting poll {$rs->fields['id']} \n ");
+                    }
+                }
+
+                $current++;
+                $rs->MoveNext();
+            }
+            $rs->Close(); # optional
+        }
+
+         return true;
+
     }
 }
 
