@@ -455,7 +455,7 @@ jQuery(function($) {
         } else {
             $.ajax({
                 url: frontpage_urls.save_positions + '?category=' + category,
-                asynx: false,
+                async: false,
                 type: 'POST',
                 dataType: 'json',
                 data: { 'contents_positions': els },
