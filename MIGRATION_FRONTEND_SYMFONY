@@ -46,10 +46,9 @@ AdvertisementController
 AlbumController
 ArticlesController
 AuthenticationController
-AuthenticationController
 BooksController
 CommentsController
-ContentController, common actions for all contents
+ContentController, common actions for all contents (send, sendform, get_plus and print)
 ErrorController
 FrontpagesController
 LettersController,  no finished show, saveAction submit form to send letter. Change require advertisement by a function
@@ -79,7 +78,14 @@ Work after migration
 - PollsController, review addVote function, use symfony cookie & transform ajax response
 - CommentsController, review the save action and urls in templates
 - Albumcontroller, change ajax action urls in templates
-- ArticlesController, send, sendform and print actions migrated to contentcontroller
+- ArticlesController, send, sendform, get_plus and print actions migrated to contentcontroller
 - Contentscontroller, migrate send, sendform actions from article.php
 - RatingsController, change url in templates
 - Subscriptions, needs further checking and change form send urls
+- OpinionsControllers, send, sendform, get_plus and print actions migrated to contentcontroller
+	* Frontpage action: The template opinion_frontpage.tpl acces to $smarty.get and $smarty.request variables
+		* Pager:
+			- The url generator create a additional slash {SITE}[/]/opinion and not match with symfony routes
+			- When access to a particual page (ex:2) in the list always mark the page 1
+	* Show action: review show action because not work (the problem is in the widget_ratings which check the name of old controller)
+

@@ -741,25 +741,13 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
 
     RewriteRule ^extarticulo/([a-z0-9\-]+)?/.*/([0-9]+).html$ controllers/article_ws.php?category_name=$1&article_id=$2&action=read [L,NC]
 
-    #Opinion Frontpage
-    RewriteRule ^opinion/([0-9]+)/$ controllers/opinion_index.php?category_name=opinion&action=list_opinions&page=$1 [L,NC]
-    RewriteRule ^opinion/?$ controllers/opinion_index.php?category_name=opinion&action=list_opinions [L,NC]
-
     #Sync Opinion Frontpage
     RewriteRule ^extopinion/([0-9]+)/$ controllers/opinion_index_ws.php?category_name=opinion&action=list_opinions&page=$1 [L,NC]
     RewriteRule ^extopinion/?$ controllers/opinion_index_ws.php?category_name=opinion&action=list_opinions [L,NC]
 
-    #Opinion Autor index
-    RewriteRule ^opinion/autor/([0-9]+)/(.*)/([0-9]*)/$ controllers/opinion_index.php?alt=pag&category_name=opinion&action=list_op_author&author_slug=$2&author_id=$1&page=$3 [L,NC]
-    RewriteRule ^opinion/autor/([0-9]+)/(.*)$ controllers/opinion_index.php?alt=nopag&category_name=opinion&action=list_op_author&author_id=$1&author_slug=$2 [L,NC]
-
     #Sync Opinion Autor index
     RewriteRule ^extopinion/autor/([0-9]+)/(.*)/([0-9]*)/$ controllers/opinion_index_ws.php?alt=pag&category_name=opinion&action=list_op_author&author_slug=$2&author_id=$1&page=$3 [L,NC]
     RewriteRule ^extopinion/autor/([0-9]+)/(.*)$ controllers/opinion_index_ws.php?alt=nopag&category_name=opinion&action=list_op_author&author_id=$1&author_slug=$2 [L,NC]
-
-    #Opinion Inner
-    RewriteRule ^opinion(|/.+)?/([a-z0-9\-]+)?/(.*)?/([0-9]+).html$ controllers/opinion_inner.php?opinion_id=$4&category_name=opinion&action=read&t=$1&author_name=$2&opinion_title=$3 [L,NC]
-    RewriteRule ^opinion(|/.+)?/(.*)?/([0-9]+).html$ controllers/opinion_inner.php?opinion_id=$3&category_name=opinion&action=read&t=$1 [L,NC]
 
     #Sync Opinion Inner
     RewriteRule ^extopinion(|/.+)?/([a-z0-9\-]+)?/(.*)?/([0-9]+).html$ controllers/opinion_inner_ws.php?opinion_id=$4&category_name=opinion&action=read&t=$1&author_name=$2&opinion_title=$3 [L,NC]
