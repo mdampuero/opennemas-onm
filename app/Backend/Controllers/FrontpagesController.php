@@ -120,16 +120,18 @@ class FrontpagesController extends Controller
         );
 
         $layouts = $this->container->getParameter('instance')->theme->getLayouts();
+        $lastSaved = s::get('frontpage_'.$categoryID.'_last_saved');
 
         return $this->render(
             'frontpagemanager/list.tpl',
             array(
-                'category'           => $category,
-                'category_id'        => $categoryID,
-                'frontpage_articles' => $contentElementsInFrontpage,
-                'layout'             => $layout,
-                'available_layouts'  => $layouts,
-                'layout_theme'       => $layoutSettings,
+                'category'             => $category,
+                'category_id'          => $categoryID,
+                'frontpage_articles'   => $contentElementsInFrontpage,
+                'layout'               => $layout,
+                'available_layouts'    => $layouts,
+                'layout_theme'         => $layoutSettings,
+                'frontpage_last_saved' => $lastSaved,
             )
         );
     }
@@ -209,8 +211,17 @@ class FrontpagesController extends Controller
 
         // If this request is Ajax return properly formated result.
         if ($savedProperly) {
+            // Save the actual date for
+            $date = new \Datetime("now");
+            $dateForDB = $date->format(\DateTime::ISO8601);
+            s::set('frontpage_'.$category.'_last_saved', $dateForDB);
+
             $message = _("Content positions saved properly");
-            $response = new Response($message);
+            $responseData = array(
+                'message' => $message,
+                'date'    => $dateForDB,
+            );
+            $response = new Response(json_encode($responseData));
         } else {
             if ($validReceivedData == false) {
                 $errorMessage = _("Unable to save content positions: Data sent from the client were not valid.");
@@ -218,7 +229,11 @@ class FrontpagesController extends Controller
                 $errorMessage = _("Unable to save content positions: Unknow reason");
             }
 
-            $response = new Response($errorMessage, 500);
+            $responseData = array(
+                'message' => $errorMessage,
+            );
+
+            $response = new Response(json_encode($responseData), 500);
         }
 
         return $response;
@@ -271,7 +286,31 @@ class FrontpagesController extends Controller
     }
 
     /**
+     * Returns the last version for a particular frontpage
      *
+     * @return Response the response instance
+     **/
+    public function lastVersionAction(Request $request)
+    {
+        $dateRequest = $request->query->filter('date', null, FILTER_SANITIZE_STRING);
+        $category    = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
+
+        if ($category == 'home') {
+            $category = 0;
+        }
+
+        $date = s::get('frontpage_'.$category.'_last_saved');
+
+        $frontpageVersion = new \DateTime($date);
+        $requestVersion = new \DateTime($dateRequest);
+
+        $newVersionAvailable = $frontpageVersion > $requestVersion;
+
+        return new Response(json_encode($newVersionAvailable));
+    }
+
+    /**
+     * Generates a preview for a particular frontpage given the required information
      *
      * @return void
      * @author
@@ -334,4 +373,3 @@ class FrontpagesController extends Controller
         return $this->render('frontpage/frontpage.tpl');
     }
 }
-

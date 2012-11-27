@@ -151,6 +151,17 @@ $adminRoutes->add(
     '/admin'
 );
 
+$adminRoutes->add(
+    'admin_frontpage_last_version',
+    new Route(
+        '/frontpages/{category}/last-version',
+        array(
+            '_controller' => 'Backend:Controllers:FrontpagesController:lastVersion',
+        )
+    ),
+    '/admin'
+);
+
 // Static Pages controller
 $adminRoutes->add(
     'admin_staticpages',
