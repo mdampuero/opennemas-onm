@@ -215,6 +215,7 @@ class RssController extends Controller
 
             $this->view->assign('photos', $photos);
             $this->view->assign('RSS_URL', $rss_url);
+            $this->view->assign('category_name', $categoryName);
         } // end if(!$this->view->is_cached('rss.tpl', $cache_id)) (2)
 
         $response = new Response('', 200, array('Content-Type' => 'application/rss+xml; charset=utf-8'));

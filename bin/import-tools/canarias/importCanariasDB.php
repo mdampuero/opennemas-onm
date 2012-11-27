@@ -104,6 +104,14 @@ switch ($argv[1]) {
         $importer->importVideos();
 
         break;
+    case 'polls':
+        $importer->helper->log("\n IMPORTING OTHER CONTENTS \n");
+
+        $importer->importCategories();
+
+        $importer->importPolls();
+
+        break;
     case 'all':
         $importer->helper->log("\n IMPORTING CONTENTS \n");
 
@@ -138,7 +146,7 @@ switch ($argv[1]) {
         break;
 }
 
-echo "You can use options: clear, clearCategories, opinion, ayuntamientos, articles, otherContents, all \n";
+echo "You can use options: clear, clearCategories, opinion, ayuntamientos, articles, polls, otherContents, all \n";
 printf("OpenNemas database is ok for Canarias Ahora \n");
 
 $importer->helper->printResults();

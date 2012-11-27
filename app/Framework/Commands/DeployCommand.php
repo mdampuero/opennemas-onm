@@ -13,6 +13,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class DeployCommand extends Command
@@ -32,21 +33,38 @@ class DeployCommand extends Command
 
         chdir($basePath);
 
+        // Update onm-core
         $output->writeln(" - Updating onm instance");
         $gitOutput = exec('git pull');
         $output->writeln($gitOutput."\n");
 
-        $output->writeln(" - Updating public themes\n");
+        // Update themes
+        $output->write(" - Updating public themes");
         foreach (glob($basePath.'/public/themes/*') as $theme) {
+            // Avoid to execute pull in admin and manager themes.
+            if (basename($theme) == 'admin' || basename($theme) == 'manager') {
+                continue;
+            }
             chdir($theme);
-            $output->writeln("     * Updating ".basename($theme)." path");
+            $output->write("\n     * Updating ".basename($theme)." theme ");
             $gitOutput = exec('git pull');
             chdir($basePath);
-            $output->writeln("");
+            // $output->writeln("");
         }
+        $output->writeln('');
 
+        // Update dependencies
         $output->writeln(" - Updating vendor libraries");
         $composerOutput = exec($phpBinPath.' '.$basePath.'/bin/composer.phar install');
         $output->writeln($composerOutput."\n");
+
+        // Clean cache and compiles
+        $command = $this->getApplication()->find('cache:clean');
+        $arguments = array(
+            'command' => 'cache:clean',
+        );
+
+        $input = new ArrayInput($arguments);
+        $returnCode = $command->run($input, $output);
     }
 }

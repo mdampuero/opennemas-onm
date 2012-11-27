@@ -564,7 +564,8 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
 
-  # Redirections for elidealgallego.com and hibridosyelectricos.com ------------
+  # Redirections for elidealgallego.com and hibridosyelectricos.com --------------------------------------------------------------------------------
+
     #Inner Article
     RewriteRule ^index\.php/[a-z0-9\-]+/[a-z0-9\-]+/([0-9]+)\-[a-z0-9\-\.]+/?$ /controllers/redirect-imported-elements.php?content_type=article&content_id=$1 [L,NC]
     RewriteRule ^index\.php/[a-z0-9\-]+/[a-z0-9\-]+/[a-z0-9\-]+/([0-9]+)\-[a-z0-9\-\.]+/?$ /controllers/redirect-imported-elements.php?content_type=article&content_id=$1 [L,NC]
@@ -633,6 +634,37 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
   # Rules for sermosgaliza.com -------------------------------------------------
     RewriteRule ^media/prepro-sermosgaliza/(.*)$ http://www.sermosgaliza.com/media/sermosgaliza/$1 [R=301,L]
   # ----------------------------------------------------------------------------
+
+  # Redirection from old canariasahora.es --------------------------------------
+    #http://www2.canariasahora.es/noticia/242988/
+
+    RewriteCond %{SERVER_NAME} ^canariasahora.es$ [OR]
+    RewriteCond %{SERVER_NAME} ^www.canariasahora.es$
+    RewriteRule ^noticia/([0-9]+)/(.*)?$ controllers/redirect-imported-elements.php?content_type=article&content_id=$1   [R=301,L,NC]
+    RewriteRule ^imprimir/noticia/([0-9]+)/?$ controllers/redirect-imported-elements.php?content_type=article&content_id=$1   [R=301,L,NC]
+    RewriteRule ^enviar/noticia/([0-9]+)/?$ controllers/redirect-imported-elements.php?content_type=article&content_id=$1   [R=301,L,NC]
+    RewriteRule ^fauna/ampliar/([0-9]+)/?$ controllers/redirect-imported-elements.php?content_type=article&content_id=$1&section=fauna   [R=301,L,NC]
+    RewriteRule ^topsecret/ampliar/([0-9]+)/?$ controllers/redirect-imported-elements.php?content_type=article&content_id=$1&section=top   [R=301,L,NC]
+    RewriteRule ^opinion/([0-9]+)/?$ controllers/redirect-imported-elements.php?content_type=article&content_id=$1  [R=301,L,NC]
+    RewriteRule ^suopinion/([0-9]+)/?$ /opinion/  [R=301,L,NC]
+    RewriteRule ^encuestas/?$ /encuesta  [R=301,L,NC]
+    RewriteRule ^publicidad/?$ estaticas/publicidad/  [R=301,L,NC]
+    RewriteRule ^nosotros/?$ estaticas/contacto/  [R=301,L,NC]
+    RewriteRule ^cartasaldirector/(.*)$ cartas-al-director/  [R=301,L,NC]
+    RewriteRule ^videos/(.*)?$ video/  [R=301,L,NC]
+    RewriteRule ^galerias_de_fotos/?$ album/  [R=301,L,NC]
+    RewriteRule ^(top|topsecret)/(.*)?$ seccion/top-secret/  [R=301,L,NC]
+    RewriteRule ^fauna/(.*)?$ seccion/fauna-por-eduardo-pomares/  [R=301,L,NC]
+    RewriteRule galeria/([0-9]+)/foto/(.*)/?$ controllers/redirect-imported-elements.php?content_type=article&content_id=$1   [R=301,L,NC]
+
+    RewriteRule ^ayuntamientos/?$   http://ayuntamientos.canariasahora.es/ [R=301,L,NC]
+    RewriteRule ^ayuntamientos/(.*)$   http://ayuntamientos.canariasahora.es/$1 [R=301,L,NC]
+
+
+    RewriteCond %{SERVER_NAME} ^canariasahora.es$ [OR]
+    RewriteCond %{SERVER_NAME} ^www.canariasahora.es$
+    RewriteRule ^(top-secret|canarias|nacional|internacional|economia|deportes|sociedad|cultura|tecnologia)/?$ seccion/$1 [R=301,L,NC]
+
 
   #Redirection from old nuevatribuna.es ----------------------------------------
     #Inner Article
