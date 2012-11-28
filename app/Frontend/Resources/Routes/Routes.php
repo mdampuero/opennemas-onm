@@ -691,31 +691,32 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
-   'frontend_video_frontpage',
-   new Route(
-       '/video/{page}',
-       array(
+    'frontend_video_frontpage',
+    new Route(
+        '/video/{page}',
+        array(
            '_controller' => 'Frontend:Controllers:VideosController:frontpage',
            'page' => 1
-       ), array(
+        ),
+        array(
            'page' => '([0-9]+)?'
-       )
-   )
+        )
+    )
 );
 
 $frontendRoutes->add(
-   'frontend_video_frontpage_category',
-   new Route(
-       '/video/{category_name}/{page}',
-       array(
-           '_controller' => 'Frontend:Controllers:VideosController:frontpage',
+    'frontend_video_frontpage_category',
+    new Route(
+        '/video/{category_name}/{page}',
+        array(
+            '_controller' => 'Frontend:Controllers:VideosController:frontpage',
            'page'        => 1
-       ),
-       array(
+        ),
+        array(
            'category_name' => '[a-z0-9\-]+',
            'page'          => '([0-9]+)?'
-       )
-   )
+        )
+    )
 );
 
 $frontendRoutes->add(
@@ -806,45 +807,45 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
-   'frontend_newstand_frontpage',
-   new Route(
-       '/portadas-papel',
-       array(
+    'frontend_newstand_frontpage',
+    new Route(
+        '/portadas-papel',
+        array(
            '_controller' => 'Frontend:Controllers:NewStandController:frontpage',
        )
-   )
+    )
 );
 
 $frontendRoutes->add(
-   'frontend_newstand_frontpage_date',
-   new Route(
-       '/portadas-papel/{year}/{month}/{day}',
-       array(
+    'frontend_newstand_frontpage_date',
+    new Route(
+        '/portadas-papel/{year}/{month}/{day}',
+        array(
            '_controller' => 'Frontend:Controllers:NewStandController:frontpage',
            'month'       => date('n'),
            'day'         => 1,
-       ),
-       array(
+        ),
+        array(
            'year'   => '[0-9]{4}',
            'month'  => '[0-9]{1,2}',
            'day'    => '[0-3][0-9]'
        )
-   )
+    )
 );
 
 $frontendRoutes->add(
-   'frontend_newstand_frontpage_category',
-   new Route(
-       '/portadas-papel/{category_name}/{year}/{month}',
-       array(
+    'frontend_newstand_frontpage_category',
+    new Route(
+        '/portadas-papel/{category_name}/{year}/{month}',
+        array(
            '_controller' => 'Frontend:Controllers:NewStandController:frontpage',
-       ),
-       array(
+        ),
+        array(
            'category_name'  => '[a-z0-9\-]+',
            'year'           => '([0-9]{4})',
            'month'          => '([0-9]{1,2})'
        )
-   )
+    )
 );
 
 $frontendRoutes->add(
@@ -859,49 +860,49 @@ $frontendRoutes->add(
             'category_name' => '[a-z0-9\-]+',
             'id'            => '([0-9]+)'
        )
-   )
+    )
 );
 
 $frontendRoutes->add(
-   'frontend_newstandPaypal_frontpage',
-   new Route(
-       '/kiosko',
-       array(
+    'frontend_newstandPaypal_frontpage',
+    new Route(
+        '/kiosko',
+        array(
            '_controller' => 'Frontend:Controllers:NewStandPaypalController:frontpage',
-       )
-   )
+        )
+    )
 );
 
 $frontendRoutes->add(
-   'frontend_newstandPaypal_frontpage_date',
-   new Route(
-       '/kiosko/{year}/{month}/{day}',
-       array(
+    'frontend_newstandPaypal_frontpage_date',
+    new Route(
+        '/kiosko/{year}/{month}/{day}',
+        array(
            '_controller' => 'Frontend:Controllers:NewStandPaypalController:frontpage',
            'month'       => date('n'),
            'day'         => 1,
-       ),
-       array(
+        ),
+        array(
            'year'   => '[0-9]{4}',
            'month'  => '[0-9]{1,2}',
            'day'    => '[0-3][0-9]'
        )
-   )
+    )
 );
 
 $frontendRoutes->add(
-   'frontend_newstandPaypal_frontpage_category',
-   new Route(
-       '/kiosko/{category_name}/{year}/{month}',
-       array(
+    'frontend_newstandPaypal_frontpage_category',
+    new Route(
+        '/kiosko/{category_name}/{year}/{month}',
+        array(
            '_controller' => 'Frontend:Controllers:NewStandPaypalController:frontpage',
        ),
-       array(
+        array(
            'category_name'  => '[a-z0-9\-]+',
            'year'           => '([0-9]{4})',
            'month'          => '([0-9]{1,2})'
        )
-   )
+    )
 );
 
 $frontendRoutes->add(
@@ -926,19 +927,19 @@ $frontendRoutes->add(
 */
 
 $frontendRoutes->add(
-   'frontend_opinion_author_frontpage',
-   new Route(
-       '/opinion/autor/{author_id}/{author_slug}/{page}',
-       array(
+    'frontend_opinion_author_frontpage',
+    new Route(
+        '/opinion/autor/{author_id}/{author_slug}/{page}',
+        array(
            '_controller' => 'Frontend:Controllers:OpinionsController:frontpageAuthor',
            'page'        => 1
-       ),
-       array(
+        ),
+        array(
            'author_slug'    => '(.*)?',
            'author_id'      => '([0-9]+)',
            'page'           => '([0-9]+)?'
-       )
-   )
+        )
+    )
 );
 
 // RewriteRule ^opinion(|/.+)?/([a-z0-9\-]+)?/(.*)?/([0-9]+).html$
@@ -968,31 +969,31 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
-   'frontend_opinion_show',
-   new Route(
-       '/opinion/{opinion_title}/{opinion_id}',
-       array(
+    'frontend_opinion_show',
+    new Route(
+        '/opinion/{opinion_title}/{opinion_id}',
+        array(
            '_controller' => 'Frontend:Controllers:OpinionsController:show',
-       ),
-       array(
+        ),
+        array(
             'opinion_title' => '[a-z0-9\-]+',
             'opinion_id'    => '[a-z0-9\-]+',
        )
-   )
+    )
 );
 
 $frontendRoutes->add(
-   'frontend_opinion_frontpage',
-   new Route(
-       '/opinion/{page}',
-       array(
+    'frontend_opinion_frontpage',
+    new Route(
+        '/opinion/{page}',
+        array(
            '_controller' => 'Frontend:Controllers:OpinionsController:frontpage',
            'page' => 1,
        ),
-       array(
+        array(
            'page' => '([0-9]+)?'
-       )
-   )
+        )
+    )
 );
 
 $frontendRoutes->add(
@@ -1024,6 +1025,35 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
+    'frontend_externalfrontpage_category',
+    new Route(
+        '/extseccion/{category}',
+        array(
+            '_controller' => 'Frontend:Controllers:FrontpagesController:extShow',
+            'category'    => 'home'
+        ),
+        array(
+            'category'          => '[a-z0-9\-]+',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_externalfrontpage_category_page',
+    new Route(
+        '/extseccion/{category}/{page}',
+        array(
+            '_controller' => 'Frontend:Controllers:FrontpagesController:extShow',
+            'category'    => 'home'
+        ),
+        array(
+            'category'          => '[a-z0-9\-]+',
+            'page'          => '[0-9]+',
+        )
+    )
+);
+
+$frontendRoutes->add(
     'frontend_user_user_box',
     new Route(
         '/user/user_box',
@@ -1034,4 +1064,3 @@ $frontendRoutes->add(
 );
 
 $routes->addCollection($frontendRoutes);
-

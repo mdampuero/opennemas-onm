@@ -133,10 +133,103 @@ class FrontpagesController extends Controller
             $this->view->assign('layoutFile', $layoutFile);
         }
 
-        return $this->render('frontpage/frontpage.tpl', array(
-            'cache_id' => $cacheID,
-        ));
+        return $this->render(
+            'frontpage/frontpage.tpl',
+            array(
+                'cache_id' => $cacheID,
+            )
+        );
 
+    }
+
+    /**
+     * Displays an external frontpage by sync
+     *
+     * @return Response the response instance
+     **/
+    public function extShowAction(Request $request)
+    {
+        // Fetch HTTP variables
+        $categoryName    = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
+        $this->view->setConfig('frontpages');
+
+        // Setup view
+        $cacheID = $this->view->generateCacheId('sync'.$categoryName, null, 0);
+
+        // Fetch advertisement information from local
+        $this->getAds();
+        require_once APP_PATH.'/../public/controllers/index_advertisement.php';
+
+        // Avoid to run the entire app logic if is available a cache for this page
+        if (
+            $this->view->caching == 0
+            || !$this->view->isCached('frontpage/frontpage.tpl', $cacheID)
+        ) {
+
+            /**
+             * Init the Content and Database object
+            */
+            $ccm = \ContentCategoryManager::get_instance();
+            $cm = new \ContentManager;
+
+            // Get sync params
+            $wsUrl = '';
+            $syncParams = s::get('sync_params');
+            foreach ($syncParams as $siteUrl => $categoriesToSync) {
+                foreach ($categoriesToSync as $value) {
+                    if (preg_match('/'.$categoryName.'/i', $value)) {
+                        $wsUrl = $siteUrl;
+                    }
+                }
+            }
+
+            // Check if category exists
+            $existsCategory = $cm->getUrlContent($wsUrl.'/ws/categories/exist/'.$categoryName);
+
+            // If no home category name
+            if ($categoryName != 'home') {
+                // Redirect to home page if the desired category doesn't exist
+                if (empty($categoryName) || !$ccm->exists($categoryName)) {
+                    throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+                }
+            }
+
+            $actualCategory = (empty($subcategory_name))? $categoryName : $subcategory_name;
+            // Get category id correspondence
+            $wsActualCategoryId = $cm->getUrlContent($wsUrl.'/ws/categories/id/'.$categoryName);
+            $this->view->assign(
+                array(
+                    'category_name'         => $categoryName,
+                    'actual_category'       => $actualCategory,
+                    'actual_category_id'    => $wsActualCategoryId,
+                    'actual_category_title' => $ccm->get_title($categoryName),
+                )
+            );
+
+
+            // Get all contents for this frontpage
+            $allContentsInHomepage = $cm->getUrlContent(
+                $wsUrl.'/ws/frontpages/allcontent/'.$categoryName,
+                true
+            );
+
+            $this->view->assign('column', unserialize($allContentsInHomepage));
+
+            // Fetch layout for categories
+            $layout = $cm->getUrlContent($wsUrl.'/ws/categories/layout/'.$categoryName, true);
+
+            $layoutFile = 'layouts/'.$layout.'.tpl';
+
+            $this->view->assign('layoutFile', $layoutFile);
+
+        }
+
+        return $this->render(
+            'frontpage/frontpage.tpl',
+            array(
+                'cache_id' => $cacheID,
+            )
+        );
     }
 
     /**
@@ -173,5 +266,4 @@ class FrontpagesController extends Controller
             $advertisement->renderMultiple(array($intersticial), $advertisement);
         }
     }
-
-} // END class FrontpagesController
+}
