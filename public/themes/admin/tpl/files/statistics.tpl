@@ -36,7 +36,7 @@
                         {$num_photos[c]}
                     </td>
                     <td style="width:10%;" class="center">
-                        {math equation="x / y" x=$size[c]|default:0 y=1024*100 format="%.2f"} MB
+                        {math equation="x / y" x=$size[c]|default:0 y=1024*1024 format="%.2f"} MB
                     </td>
 
                 </tr>
@@ -49,7 +49,7 @@
                         {$num_sub_photos[c][$subcategorys[c][su]->pk_content_category]}
                     </td>
                     <td style="padding: 0px 10px; width:10%;" class="center">
-                        {math equation="x / y" x=$sub_size[c][$subcategorys[c][su]->pk_content_category]|default:0 y=1024*100 format="%.2f"} MB</a>
+                        {math equation="x / y" x=$sub_size[c][$subcategorys[c][su]->pk_content_category]|default:0 y=1024*1024 format="%.2f"} MB</a>
                     </td>
                  </tr>
                 {/section}
@@ -82,7 +82,7 @@
                         {$total_img}
                     </td>
                     <td style="width:10%;" class="center">
-                        {math equation="x / y" x=$total_size|default:0 y=1024*100 format="%.2f"} MB
+                        {math equation="x / y" x=$total_size|default:0 y=1024*1024 format="%.2f"} MB
                     </td>
                 </tr>
             </tfoot>
