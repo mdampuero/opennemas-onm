@@ -650,7 +650,6 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteRule ^enviar/noticia/([0-9]+)/?$ controllers/redirect-imported-elements.php?content_type=article&content_id=$1   [R=301,L,NC]
     RewriteRule ^fauna/ampliar/([0-9]+)/?$ controllers/redirect-imported-elements.php?content_type=article&content_id=$1&section=fauna   [R=301,L,NC]
     RewriteRule ^topsecret/ampliar/([0-9]+)/?$ controllers/redirect-imported-elements.php?content_type=article&content_id=$1&section=top   [R=301,L,NC]
-    RewriteRule ^opinion/([0-9]+)/?$ controllers/redirect-imported-elements.php?content_type=article&content_id=$1  [R=301,L,NC]
     RewriteRule ^suopinion/([0-9]+)/?$ /opinion/  [R=301,L,NC]
     RewriteRule ^encuestas/?$ /encuesta  [R=301,L,NC]
     RewriteRule ^publicidad/?$ estaticas/publicidad/  [R=301,L,NC]
