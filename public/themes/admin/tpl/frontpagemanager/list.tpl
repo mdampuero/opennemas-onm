@@ -33,7 +33,8 @@
             {/foreach}
         }
         var frontpage_info = {
-            last_saved : '{$frontpage_last_saved}'
+            last_saved : '{$frontpage_last_saved}',
+            changed: false
         }
     </script>
     {script_tag src="/onm/frontpagemanager.js"}

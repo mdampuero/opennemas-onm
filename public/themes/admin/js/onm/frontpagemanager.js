@@ -6,7 +6,8 @@ function makeContentProviderAndPlaceholdersSortable() {
         handle: '.description',
         update: function(event,ui) {
             initializePopovers();
-            jQuery('#warnings-validation').html('<div class="notice">' + frontpage_messages.remember_save_positions + '</div>');
+            show_save_frontpage_dialog();
+            frontpage_info.changed = true
         },
         tolerance: 'pointer'
         //containment: '#content-with-ticker'
@@ -19,7 +20,8 @@ function makeContentProviderAndPlaceholdersSortable() {
         handle: '.description',
         update: function(event,ui) {
             initializePopovers();
-            jQuery('#warnings-validation').html('<div class="alert alert-notice"><button class="close" data-dismiss="alert">×</button>' + frontpage_messages.remember_save_positions + '</div>');
+            show_save_frontpage_dialog();
+            frontpage_info.changed = true
         },
         tolerance: 'pointer'
         //containment: '#content-with-ticker'
@@ -41,6 +43,8 @@ function check_available_new_version() {
     });
     return exists_version;
 }
+
+
 
 function get_tooltip_content(elem) {
     var parent_content_div = elem.closest('div.content-provider-element');
@@ -129,7 +133,7 @@ function get_contents_in_frontpage() {
 }
 
 function show_save_frontpage_dialog() {
-    jQuery('#warnings-validation').html('<div class="notice">' + frontpage_messages.remember_save_positions + '</div>');
+    jQuery('#warnings-validation').html('<div class="alert alert-notice"><button class="close" data-dismiss="alert">×</button>' + frontpage_messages.remember_save_positions + '</div>');
 }
 
 
@@ -149,6 +153,12 @@ function initializePopovers() {
 }
 jQuery(function($) {
 
+    window.setInterval(function(){
+        // Frontpage has changed and needs to be reloaded
+        if (check_available_new_version()) {
+            $('#modal-new-version').modal('show');
+        };
+    }, 10000);
     /***************************************************************************
     * Sortable handlers
     ***************************************************************************/
@@ -437,17 +447,15 @@ jQuery(function($) {
         e.preventDefault();
         var els = get_contents_in_frontpage();
         var category = $('#frontpagemanager').data('category');
-        var new_version_available = check_available_new_version();
+        var new_version_available = check_available_new_version(false);
 
-        log('returned', typeof new_version_available);
         // If there is a new version available for this frontpage avoid to save
         if (new_version_available) {
             $('#modal-new-version').modal('show');
         } else {
-            log('about to save positions', new_version_available)
             $.ajax({
                 url: frontpage_urls.save_positions + '?category=' + category,
-                asynx: false,
+                async: false,
                 type: 'POST',
                 dataType: 'json',
                 data: { 'contents_positions': els },
@@ -469,9 +477,6 @@ jQuery(function($) {
                 }
             });
         }
-        log('after save button push')
-
-
     });
 
     $('#button_clearcache').on('click', function(e, ui) {

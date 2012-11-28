@@ -122,6 +122,14 @@ class FrontpagesController extends Controller
         $layouts = $this->container->getParameter('instance')->theme->getLayouts();
         $lastSaved = s::get('frontpage_'.$categoryID.'_last_saved');
 
+        if ($lastSaved == false) {
+            // Save the actual date for
+            $date = new \Datetime("now");
+            $dateForDB = $date->format(\DateTime::ISO8601);
+            s::set('frontpage_'.$categoryID.'_last_saved', $dateForDB);
+            $lastSaved = $dateForDB;
+        }
+
         return $this->render(
             'frontpagemanager/list.tpl',
             array(

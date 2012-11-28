@@ -353,16 +353,7 @@ class User
     ) {
         $result = false;
 
-        if ($this->isValidEmail($login)) {
-            $result = $this->authGoogleClientLogin(
-                $login,
-                $password,
-                $loginToken,
-                $loginCaptcha
-            );
-        } else {
-            $result = $this->authDatabase($login, $password);
-        }
+        $result = $this->authDatabase($login, $password);
 
         return $result;
     }

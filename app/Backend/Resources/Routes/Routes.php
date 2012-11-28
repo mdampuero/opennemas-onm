@@ -154,7 +154,7 @@ $adminRoutes->add(
 $adminRoutes->add(
     'admin_frontpage_last_version',
     new Route(
-        '/frontpages/{category}/last-version',
+        '/frontpages/{category}/exists-new-version',
         array(
             '_controller' => 'Backend:Controllers:FrontpagesController:lastVersion',
         )

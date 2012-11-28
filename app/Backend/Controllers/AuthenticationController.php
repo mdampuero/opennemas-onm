@@ -89,12 +89,10 @@ class AuthenticationController extends Controller
                 if ($user->authorize != 1) {
                     $this->view->assign('message', _('This user was deactivated. Please ask your administrator.'));
                 } else {
-
                     // Increase security by regenerating the id
-                    session_regenerate_id();
+                    $request->getSession()->migrate();
 
-                    //Delete the cache that handles the number of active sessions
-                    apc_delete(APC_PREFIX ."_"."num_sessions");
+                    $maxSessionLifeTime = (int) s::get('max_session_lifetime', 60);
 
                     $_SESSION = array(
                         'userid'           => $user->id,
@@ -107,26 +105,15 @@ class AuthenticationController extends Controller
                         'isMaster'         => ( \UserGroup::getGroupName($user->fk_user_group)=='Masters' ),
                         'privileges'       => \Privilege::get_privileges_by_user($user->id),
                         'accesscategories' => $user->getAccessCategoryIds(),
-                        'default_expire'   => $user->sessionexpire,
+                        'updated'          => time(),
+                        'session_lifetime' => $maxSessionLifeTime * 60,
                         'user_language'    => $user->getMeta('user_language'),
                         'csrf'             => md5(uniqid(mt_rand(), true))
                     );
 
-                    // Store default expire time
-                    global $app;
-                    // $app::setCookieSecure(
-                    //     '_onm_session_'.session_id(),
-                    //     time()+($user->sessionexpire)*60, 0, '/admin/'
-                    // );
-                    \PrivilegesCheck::loadSessionExpireTime();
-                    // $GLOBALS['Session']->cleanExpiredSessionFiles();
+                    $forwardTo = $request->request->filter('forward_to', null, FILTER_SANITIZE_STRING);
 
-                    $forwardTo = filter_input(INPUT_POST, 'forward_to');
-                    if (!is_null($forwardTo) && !empty($forwardTo)) {
-                        return $this->redirect($forwardTo);
-                    } else {
-                        return $this->redirect(SITE_URL_ADMIN);
-                    }
+                    return $this->redirect($forwardTo ?: SITE_URL_ADMIN);
                 }
 
             } else {
@@ -167,4 +154,3 @@ class AuthenticationController extends Controller
         }
     }
 }
-

@@ -30,3 +30,7 @@ parameters:
 
     dispatcher.exceptionhandler: "Framework:Controllers:ErrorController:default"
     environment:       production
+
+    session_params:
+        save_path:     tmp/instances
+        name: _onm_sess
