@@ -73,7 +73,7 @@ if (!is_null($action) ) {
                         'Album',
                         $category,
                         'fk_content_type=7 AND available=1',
-                        'ORDER BY  created DESC LIMIT 2'
+                        'ORDER BY  created DESC LIMIT '.$total
                     );
                 } else {
                     if ($order == 'favorite') {
