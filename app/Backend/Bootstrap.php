@@ -83,7 +83,10 @@ class Bootstrap extends ModuleBootstrap
                     }
 
                     $session->invalidate();
+                    $response = new RedirectResponse(SITE_URL_ADMIN);
+                    $reponse->send();
                 }
+
                 $_SESSION['updated'] = time();
             }
         } else {
