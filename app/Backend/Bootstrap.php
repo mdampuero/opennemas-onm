@@ -84,7 +84,7 @@ class Bootstrap extends ModuleBootstrap
 
                     $session->invalidate();
                     $response = new RedirectResponse(SITE_URL_ADMIN);
-                    $reponse->send();
+                    $response->send();
                 }
 
                 $_SESSION['updated'] = time();
