@@ -99,9 +99,8 @@
             </div>
         </div>
 
-        {if !is_null($attaches)}
+        {if !is_null($attaches->id)}
         <input type="hidden" id="id" name="id"  value="{$attaches->id|default:""}" />
-        <input type="hidden" id="category" name="category" value="{$attaches->category}" />
         <input type="hidden" id="fich" name="fich" value="{$attaches->pk_attachment}" />
         {/if}
         <input type="hidden" name="page" id="page" value="{$page|default:"1"}" />
