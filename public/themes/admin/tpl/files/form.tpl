@@ -80,7 +80,6 @@
                 <label for="category" class="control-label">{t}Category{/t}</label>
                 <div class="controls">
                     <select name="category" id="category" required="required">
-                        <option value="20" data-name="{t}Unknown{/t}" {if !isset($category)}selected{/if}>{t}Unknown{/t}</option>
                         {section name=as loop=$allcategorys}
                             {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
                             <option value="{$allcategorys[as]->pk_content_category}" data-name="{$allcategorys[as]->title}"
@@ -94,6 +93,7 @@
                             {/section}
                             {/acl}
                         {/section}
+                        <option value="20" data-name="{t}Unknown{/t}">{t}Unknown{/t}</option>
                     </select>
                 </div>
             </div>
