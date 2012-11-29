@@ -184,10 +184,13 @@ class NewslibraryController extends Controller
 
             $library = array();
             $contents= $this->cm->getContentsForLibrary($this->date);
+
             if (!empty($contents)) {
                 foreach ($contents as $content) {
                     $categoryID = $content->category;
-                    $library[$categoryID] = new stdClass();
+                    if (!isset($library[$categoryID])) {
+                        $library[$categoryID] = new stdClass();
+                    }
                     $library[$categoryID]->id = $categoryID;
                     $library[$categoryID]->title = $allCategories[$categoryID]->title;
                     $library[$categoryID]->contents[] = $content;
