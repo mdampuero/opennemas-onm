@@ -5,7 +5,9 @@
     <div class="pull-right">
         <div class="menu-other-categories btn-group">
             <select name="category" id="categoryItem">
+                {acl hasCategoryAccess=0}
                 <option value="0" {if $category eq 0}selected{/if}>{t}Home{/t}</option>
+                {/acl}
                 {section name=as loop=$allcategorys}
                     {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
                     <option value="{$allcategorys[as]->pk_content_category}"
@@ -14,7 +16,7 @@
                     </option>
                     {/acl}
                     {section name=su loop=$subcat[as]}
-                        {acl hasCategoryAccess=$subcat[as]->pk_content_category}
+                        {acl hasCategoryAccess=$subcat[as][su]->pk_content_category}
                         <option value="{$subcat[as][su]->pk_content_category}"
                             {if $category eq $subcat[as][su]->pk_content_category} selected ="selected" {/if} >
                             &nbsp;&nbsp;|_&nbsp;&nbsp;{t 1=$subcat[as][su]->title}%1{/t}
