@@ -1,7 +1,9 @@
 <ul id="categories" class="pills">
+    {acl hasCategoryAccess=0}
     <li>
         <a href="{url name=admin_frontpage_list category=home}" class="{if $category == 'home' || $category == 0}active{/if}">{t}Home{/t}</a>
     </li>
+    {/acl}
 {foreach from=$menuItems item=menuItem}
     {if $menuItem->type == 'category'}
     {acl hasCategoryAccess=$menuItem->categoryID}
