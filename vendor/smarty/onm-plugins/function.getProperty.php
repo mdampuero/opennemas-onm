@@ -9,7 +9,12 @@ function smarty_function_getProperty($params, &$smarty)
     }
 
     $item = $params['item'];
-    $category = $params['category'];
+    if ($params['category'] == 'home') {
+        $category = 0;
+    } else {
+        $category = $params['category'];
+    }
+
     $property = $params['property']."_".$category;
 
     $value = $item->getProperty($property);
