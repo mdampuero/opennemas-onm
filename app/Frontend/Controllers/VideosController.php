@@ -163,14 +163,19 @@ class VideosController extends Controller
             && !empty($this->category_name)
             && $this->category_name != 'home'
         ) {
-            return $this->render('video/video_frontpage.tpl', array(
-                'cache_id' => $cacheID,
-            ));
-            //$this->view->display('video/video_frontpage.tpl', $cacheID);
+            return $this->render(
+                'video/video_frontpage.tpl',
+                array(
+                    'cache_id' => $cacheID,
+                )
+            );
         } else {
-            return $this->render('video/video_main_frontpage.tpl', array(
-                'cache_id' => $cacheID,
-            ));
+            return $this->render(
+                'video/video_main_frontpage.tpl',
+                array(
+                    'cache_id' => $cacheID,
+                )
+            );
         }
     }
 
@@ -195,7 +200,7 @@ class VideosController extends Controller
             ' available=1 AND pk_content <> '.$videoID,
             ' ORDER BY created DESC LIMIT 4'
         );
-        
+
         if (count($others_videos) > 0) {
             foreach ($others_videos as &$otherVideo) {
                 $otherVideo->category_name  = $otherVideo->loadCategoryName($otherVideo->id);
@@ -247,7 +252,6 @@ class VideosController extends Controller
                 'cache_id' => $cacheID,
             )
         );
-        
     }
 
     /**
@@ -277,10 +281,11 @@ class VideosController extends Controller
                 $video->category_title = $video->loadCategoryTitle($video->id);
             }
         } else {
-            //Application::forward('/controllers/videos.php?action=videos_more&category=' . $this->category . '&page=1');
-            return new RedirectResponse($this->generateUrl('frontend_video_ajax_more',array('category'=>$this->category)));
+            return new RedirectResponse(
+                $this->generateUrl('frontend_video_ajax_more', array('category' => $this->category))
+            );
         }
-        
+
         return $this->render(
             'video/partials/_widget_video_more_interesting.tpl',
             array(
@@ -290,7 +295,6 @@ class VideosController extends Controller
                 'total_more'         => 4,
             )
         );
-
     }
 
     /**
@@ -320,8 +324,9 @@ class VideosController extends Controller
                 $video->category_title = $video->loadCategoryTitle($video->id);
             }
         } else {
-            //Application::forward('/controllers/videos.php?action=videos_incategory&category=' . $category . '&page=1');
-            return new RedirectResponse($this->generateUrl('frontend_video_ajax_incategory',array('category' => $this->category)));
+            return new RedirectResponse(
+                $this->generateUrl('frontend_video_ajax_incategory', array('category' => $this->category))
+            );
         }
 
         return $this->render(
@@ -333,7 +338,6 @@ class VideosController extends Controller
                 'total_incategory'   => 9,
             )
         );
-
     }
 
     /**
@@ -375,14 +379,13 @@ class VideosController extends Controller
                 'items_page'         => $itemsPage,
             )
         );
-
     }
-
 
     /**
     * Render advertisement on videos
     */
-    private function videoAdvertisement( $context = 'frontpage' ) {
+    private function videoAdvertisement($context = 'frontpage')
+    {
         if ( $context == 'inner' ) {
             $positions = array(901, 902, 903, 905, 909, 910);
             $intersticialId = 950;
@@ -410,5 +413,4 @@ class VideosController extends Controller
             $advertisement->renderMultiple(array($intersticial), $advertisement);
         }
     }
-
-} // END class VideosController
+}

@@ -52,6 +52,8 @@ class PollsController extends Controller
             $actual_category_id = 0;
         }
 
+        $pollSettings = s::get('poll_settings');
+
         $this->view->assign(
             array(
                 'category_name'         => $this->categoryName,
@@ -60,18 +62,15 @@ class PollsController extends Controller
                 'category_real_name'    => $category_real_name,
                 'actual_category_title' => $category_real_name,
                 'actual_category'       => $this->categoryName,
+                'settings'              => $pollSettings
             )
-        );
-
-        $pollSettings = s::get('poll_settings');
-
-        $this->view->assign(
-            array('settings' => $pollSettings)
         );
     }
 
     /**
      * Renders the album frontpage
+     *
+     * @param int page the page to show
      *
      * @return Response the response object
      **/
@@ -86,10 +85,8 @@ class PollsController extends Controller
 
         $cacheID = $this->view->generateCacheId('poll'.$this->categoryName, '', $this->page);
 
-        /**
-         * Don't execute action logic if was cached before
-         */
-        if ( ($this->view->caching == 0)
+        // Don't execute action logic if was cached before
+        if (($this->view->caching == 0)
            || (!$this->view->isCached('poll/poll-frontpage.tpl', $cacheID))) {
 
             if (isset($this->category) && !empty($this->category)) {
@@ -147,7 +144,10 @@ class PollsController extends Controller
     }
 
     /**
-     * Shows an inner poll
+     * Shows a poll given its id
+     *
+     * @param int id the identifier of the poll
+     * @param int page the page
      *
      * @return Response the response object
      **/
@@ -158,7 +158,6 @@ class PollsController extends Controller
         $this->view->setConfig('poll-inner');
 
         $dirtyID = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
-
         $pollId = \Content::resolveID($dirtyID);
 
         // Redirect to album frontpage if id_album wasn't provided
@@ -236,6 +235,8 @@ class PollsController extends Controller
     /**
      * Add vote & show poll result
      *
+     * @param [type] [varname] [description]
+     *
      * @return Response the response object
      **/
     public function addVoteAction(Request $request)
@@ -303,5 +304,3 @@ class PollsController extends Controller
         return new Response('ok');
     }
 }
-// END class PollsController
-

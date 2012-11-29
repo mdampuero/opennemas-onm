@@ -63,7 +63,9 @@ class RssController extends Controller
     /**
      * Displays the RSS feed for a given category, opinion or topic
      *
-     * @param Request $request the request object
+     * @param string category_name the category name to show
+     * @param string subcategory_name the subcategory name to show
+     * @param string author the to show
      *
      * @return Response the response object
      **/
@@ -71,7 +73,6 @@ class RssController extends Controller
     {
         $categoryName    = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
         $subcategoryName = $request->query->filter('subcategory_name', null, FILTER_SANITIZE_STRING);
-        $cache_page      = $request->query->filter('cache_page', 0, FILTER_VALIDATE_INT);
         $author          = $request->query->filter('author', null, FILTER_SANITIZE_STRING);
 
         $this->view->setConfig('rss');
@@ -206,17 +207,19 @@ class RssController extends Controller
 
             }
 
-            // Filter by scheduled {{{
+            // Filter by scheduled
             $articles_home = $cm->getInTime($articles_home);
-            // }}}
 
-            $this->view->assign('title_rss', $title_rss);
-            $this->view->assign('rss', $articles_home);
-
-            $this->view->assign('photos', $photos);
-            $this->view->assign('RSS_URL', $rss_url);
-            $this->view->assign('category_name', $categoryName);
-        } // end if(!$this->view->is_cached('rss.tpl', $cache_id)) (2)
+            $this->view->assign(
+                array(
+                    'title_rss'     => $title_rss,
+                    'rss'           => $articles_home,
+                    'photos'        => $photos,
+                    'RSS_URL'       => $rss_url,
+                    'category_name' => $categoryName,
+                )
+            );
+        } // IS CACHED
 
         $response = new Response('', 200, array('Content-Type' => 'application/rss+xml; charset=utf-8'));
 
@@ -226,5 +229,4 @@ class RssController extends Controller
             $response
         );
     }
-
-} // END class RssController
+}

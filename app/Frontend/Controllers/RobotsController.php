@@ -33,7 +33,7 @@ class RobotsController extends Controller
     }
 
     /**
-     * Description of the action
+     * Displays a prebuild robots.txt file
      *
      * @return Response the response object
      **/
@@ -52,5 +52,4 @@ Sitemap: ".SITE_URL."sitemapweb.xml.gz
 ";
         return new Response($content, 200, array('Content-Type' => 'text/plain'));
     }
-
-} // END class RobotsController
+}

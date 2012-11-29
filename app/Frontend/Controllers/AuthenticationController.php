@@ -38,7 +38,7 @@ class AuthenticationController extends Controller
     }
 
     /**
-     * Description of the action
+     * Perfoms the login action
      *
      * @return Response the response object
      **/
@@ -78,7 +78,6 @@ class AuthenticationController extends Controller
                             _('You have to accept your subscription by e-mail first. Please check your inbox.')
                         );
                     } else {
-
                         // Increase security by regenerating the id
                         session_regenerate_id();
 
@@ -103,7 +102,10 @@ class AuthenticationController extends Controller
                         \PrivilegesCheck::loadSessionExpireTime();
 
                         $isLoginCorrect = true;
-                        $this->view->assign('success', _('You have logged in correctly. You will be redirect to the Home page'));
+                        $this->view->assign(
+                            'success',
+                            _('You have logged in correctly. You will be redirect to the Home page')
+                        );
                         $this->view->assign('login_ok', $isLoginCorrect);
                     }
 
@@ -115,15 +117,18 @@ class AuthenticationController extends Controller
             $token = md5(uniqid(mt_rand(), true));
             $_SESSION['csrf'] = $token;
 
-            return $this->render('login/login_form.tpl', array(
-                'token'    => $token,
-                'login_ok' => $isLoginCorrect
-            ));
+            return $this->render(
+                'login/login_form.tpl',
+                array(
+                    'token'    => $token,
+                    'login_ok' => $isLoginCorrect
+                )
+            );
         }
     }
 
     /**
-     * Description of the action
+     * Performs the log out action
      *
      * @return Response the response object
      **/
@@ -166,7 +171,6 @@ class AuthenticationController extends Controller
      * Shows the profile page of a user
      *
      * @return
-     * @author
      **/
     public function show(Request $request)
     {
@@ -180,5 +184,4 @@ class AuthenticationController extends Controller
     public function update(Request $request)
     {
     }
-
 }

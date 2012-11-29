@@ -17,7 +17,7 @@ use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
- * Handles the actions for advertisements
+ * Handles the actions for frontend albums
  *
  * @package Backend_Controllers
  **/
@@ -36,30 +36,30 @@ class AlbumsController extends Controller
         $this->ccm = new \ContentCategoryManager();
         $this->cm  = new \ContentManager();
 
-        $this->categoryName    = $this->request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
-        $subcategoryName = null;
-        $action           = $this->request->query->filter('action', 'frontpage', FILTER_SANITIZE_STRING);
+        $this->categoryName = $this->request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+        $subcategoryName    = null;
+        $action             = $this->request->query->filter('action', 'frontpage', FILTER_SANITIZE_STRING);
 
         if (!empty($this->categoryName)) {
             $category = $this->ccm->get_id($this->categoryName);
             $actual_category_id = $category; // FOR WIDGETS
-            $category_real_name = $this->ccm->get_title($this->categoryName); //used in title
+            $categoryRealName = $this->ccm->get_title($this->categoryName); //used in title
             $this->view->assign(
                 array(
                     'category_name'         => $this->categoryName ,
                     'category'              => $category ,
                     'actual_category_id'    => $actual_category_id ,
-                    'actual_category_title' => $category_real_name,
-                    'category_real_name'    => $category_real_name ,
+                    'actual_category_title' => $categoryRealName,
+                    'category_real_name'    => $categoryRealName ,
                 )
             );
         } else {
             //$category_name = 'Portada';
-            $category_real_name = 'Portada';
+            $categoryRealName = 'Portada';
             $this->view->assign(
                 array(
-                    'actual_category_title' => $category_real_name,
-                    'category_real_name'    => $category_real_name,
+                    'actual_category_title' => $categoryRealName,
+                    'category_real_name'    => $categoryRealName,
                 )
             );
         }
@@ -68,6 +68,8 @@ class AlbumsController extends Controller
 
     /**
      * Renders the album frontpage
+     *
+     * @param int page the pagination of this frontpage
      *
      * @return Response the response object
      **/
@@ -79,16 +81,16 @@ class AlbumsController extends Controller
         $this->view->setConfig('gallery-frontpage');
         $cacheID = $this->view->generateCacheId($this->categoryName, '', $this->page);
 
+        require_once APP_PATH.'/../public/controllers/album_front_ads.php';
+
         // Don't execute the action logic if was cached before
         if (($this->view->caching == 0)
            || (!$this->view->isCached('gallery/gallery-frontpage.tpl', $cacheID))
         ) {
-
             $albumSettings = s::get('album_settings');
-            $total = isset($albumSettings['total_front'])?$albumSettings['total_front']:2;
-            $days  = isset($albumSettings['time_last'])?$albumSettings['time_last']:4;
-            $order = isset($albumSettings['orderFrontpage'])?$albumSettings['orderFrontpage']:'views';
-
+            $total = isset($albumSettings['total_front']) ? $albumSettings['total_front'] : 2;
+            $days  = isset($albumSettings['time_last']) ? $albumSettings['time_last'] : 4;
+            $order = isset($albumSettings['orderFrontpage']) ? $albumSettings['orderFrontpage'] : 'views';
 
             if (isset($this->category)
                 && !empty($this->category)
@@ -122,19 +124,22 @@ class AlbumsController extends Controller
             }
 
             $this->view->assign('albums', $albums);
-
         }
 
-        require_once APP_PATH.'/../public/controllers/album_front_ads.php';
-
         // Send the response to the user
-        return $this->render('album/album_frontpage.tpl', array(
-            'cache_id' => $cacheID,
-        ));
+        return $this->render(
+            'album/album_frontpage.tpl',
+            array(
+                'cache_id' => $cacheID,
+            )
+        );
     }
 
     /**
      * Shows an inner album
+     *
+     * @param int album_id the id of the album to show
+     * @param int page the number of the page to show
      *
      * @return Response the response instance
      **/
@@ -145,29 +150,30 @@ class AlbumsController extends Controller
         // Items_page refers to the widget
         $dirtyID    = $request->query->filter('album_id', null, FILTER_SANITIZE_STRING);
         $albumID    = \Content::resolveID($dirtyID);
-        $items_page = 8;
+        $itemsPerPage = 8;
+
         // Redirect to album frontpage if id_album wasn't provided
         if (is_null($albumID)) {
             return new RedirectResponse($this->generateUrl('frontend_album_frontpage'));
         }
 
         $this->view->setConfig('gallery-inner');
-        $cacheID = $this->view->generateCacheId($this->categoryName, null, $albumID);
 
+        // Load advertisement for this action
         $this->adsInner();
 
+        $cacheID = $this->view->generateCacheId($this->categoryName, null, $albumID);
         if (($this->view->caching == 0)
             || (!$this->view->isCached('gallery/gallery.tpl', $cacheID))
         ) {
-
             // Get the album from the id and increment the numviews for it
             $album = new \Album($albumID);
             $this->view->assign('album', $album);
 
             // Get the other albums for the albums widget
             $settings = s::get('album_settings');
-            $total = isset($settings['total_front'])?($settings['total_front']):2;
-            $days = isset($settings['time_last'])?($settings['time_last']):4;
+            $total    = isset($settings['total_front'])?($settings['total_front']):2;
+            $days     = isset($settings['time_last'])?($settings['time_last']):4;
 
             $otherAlbums = $this->cm->find(
                 'Album',
@@ -184,14 +190,12 @@ class AlbumsController extends Controller
                 $content->category_title = $content->loadCategoryTitle($content->id);
             }
 
-            $this->view->assign('gallerys', $otherAlbums);
-
             $album->category_name  = $album->loadCategoryName($album->id);
             $album->category_title = $album->loadCategoryTitle($album->id);
             $_albumArray           = $album->_getAttachedPhotos($album->id);
             $_albumArrayPaged      = $album->getAttachedPhotosPaged($album->id, 8, $this->page);
 
-            if ( count($_albumArrayPaged) > $items_page ) {
+            if (count($_albumArrayPaged) > $itemsPerPage) {
                 array_pop($_albumArrayPaged);
             }
 
@@ -200,10 +204,10 @@ class AlbumsController extends Controller
                     'album_photos'       => $_albumArray,
                     'album_photos_paged' => $_albumArrayPaged,
                     'page'               => $this->page,
-                    'items_page'         => $items_page,
+                    'items_page'         => $itemsPerPage,
+                    'gallerys'           => $otherAlbums,
                 )
             );
-
         } // END iscached
 
         return $this->render(
@@ -234,7 +238,6 @@ class AlbumsController extends Controller
 
         // Get the album from the id and increment the numviews for it
         $album = new \Album($albumID);
-        $this->view->assign('album', $album);
 
         $album->category_name  = $album->loadCategoryName($album->id);
         $album->category_title = $album->loadCategoryTitle($album->id);
@@ -252,6 +255,7 @@ class AlbumsController extends Controller
                 'album_photos_paged' => $_albumArrayPaged,
                 'page'               => $page,
                 'items_page'         => $itemsPage,
+                'album'              => $album,
             )
         );
 
@@ -265,14 +269,17 @@ class AlbumsController extends Controller
     private function adsInner()
     {
         $ccm = \ContentCategoryManager::get_instance();
-        $category_name='album';
-        $category = $ccm->get_id($category_name);
+        $categoryName ='album';
+        $category = $ccm->get_id($categoryName);
 
-        $category = (!isset($category) || ($category=='home'))? 0: $category;
+        $category = (!isset($category) || ($category=='home')) ? 0 : $category;
         $advertisement = \Advertisement::getInstance();
 
         // Load internal banners, principal banners (1,2,3,11,13) and use cache to performance
-        $banners = $advertisement->getAdvertisements(array(501, 502, 503, 509, 510), $category);
+        $banners = $advertisement->getAdvertisements(
+            array(501, 502, 503, 509, 510),
+            $category
+        );
 
         $this->cm = new \ContentManager();
         $banners = $this->cm->getInTime($banners);
@@ -284,5 +291,4 @@ class AlbumsController extends Controller
             $advertisement->renderMultiple(array($intersticial), $advertisement);
         }
     }
-
-} // END class AlbumsController
+}

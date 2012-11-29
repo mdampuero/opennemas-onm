@@ -33,7 +33,9 @@ class AdvertisementController extends Controller
     }
 
     /**
-     * Description of the action
+     * Displays an advertisement given its id
+     *
+     * @param integer id the id of the advertisement
      *
      * @return Response the response object
      **/
@@ -57,7 +59,7 @@ class AdvertisementController extends Controller
     /**
      * Redirects the user to the target url defined by an advertisement
      *
-     * @param Request $request the request object
+     * @param int id the id of the advertisement
      *
      * @return Response the response object
      **/
@@ -83,5 +85,4 @@ class AdvertisementController extends Controller
 
         return new Response($content);
     }
-
-} // END class AdvertisementController
+}

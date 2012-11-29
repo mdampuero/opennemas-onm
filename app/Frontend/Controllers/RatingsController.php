@@ -35,6 +35,11 @@ class RatingsController extends Controller
     /**
      * Registers a vote for a content given its id
      *
+     * @param string i the ip that sends the request
+     * @param int    v the vote value
+     * @param string i the page
+     * @param string a the content id
+     *
      * @return Response the response object
      **/
     public function voteAction(Request $request)
@@ -69,5 +74,4 @@ class RatingsController extends Controller
         // Return the response
         return new Response($output, 200);
     }
-
 }

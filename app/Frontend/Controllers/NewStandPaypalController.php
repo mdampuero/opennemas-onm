@@ -36,12 +36,8 @@ class NewStandPaypalController extends Controller
         $this->view->setConfig('kiosko');
 
         $this->cm = new \ContentManager();
-        
-        // Esta variable no se utiliza?¿ Ni tp viene por .htaccess
-        // $subcategory_name = $request->query->filter('subcategory_name', '', FILTER_SANITIZE_STRING);
-        // solo se usa al cachear en show (tiene sentido?¿) Tp viene por .htaccess
-        // $page  = $request->query->getDigits('page', 1);
-        $this->category_name    = $this->request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
+
+        $this->category_name = $this->request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
 
         $this->view->assign(array( 'actual_category' => $this->category_name, ));
 
@@ -96,9 +92,10 @@ class NewStandPaypalController extends Controller
                     }
                 }
             }
-        // Order by categories
+
         } elseif ($order =='sections') {
-            $day        = $request->query->getDigits('day',1);
+            // Order by categories
+            $day        = $request->query->getDigits('day', 1);
             $cache_date = $year.$month.$day;
             $cacheID = $this->view->generateCacheId('newsstand', $this->category_name, $cache_date);
             $kiosko =array();
@@ -125,9 +122,9 @@ class NewStandPaypalController extends Controller
                 }
 
             }
-        // Order by simple date
-        } else {
 
+        } else {
+            // Order by simple date
             $cacheDate = $year.$month;
             $cacheID   = $this->view->generateCacheId('newsstand', $this->category_name, $cacheDate);
             $kiosko     = array();
@@ -254,7 +251,7 @@ class NewStandPaypalController extends Controller
     /**
      * calculates the months of the covers existing
      *
-     * @return 
+     * @return
      **/
     public function widgetNewsstandDates()
     {
@@ -283,14 +280,14 @@ class NewStandPaypalController extends Controller
 
         // Load 1-16 banners and use cache to performance
         //$banners = $advertisement->getAdvertisements(range(1, 16), $category); // 4,9 unused
-        $banners = $advertisement->getAdvertisements( $positions, $category);
+        $banners = $advertisement->getAdvertisements($positions, $category);
 
         $banners = $this->cm->getInTime($banners);
         //$advertisement->renderMultiple($banners, &$tpl);
         $advertisement->renderMultiple($banners, $advertisement);
 
         // Get intersticial banner
-        $intersticial = $advertisement->getIntersticial( $intersticialId, $category);
+        $intersticial = $advertisement->getIntersticial($intersticialId, $category);
         if (!empty($intersticial)) {
             $advertisement->renderMultiple(array($intersticial), $advertisement);
         }
@@ -300,7 +297,7 @@ class NewStandPaypalController extends Controller
     {
         $sessionLifeTime = (int) s::get('max_session_lifetime', 60);
         if ((int) $sessionLifeTime > 0) {
-            ini_set('session.cookie_lifetime',  $sessionLifeTime*60);
+            ini_set('session.cookie_lifetime', $sessionLifeTime*60);
         } else {
             s::set('max_session_lifetime', 60*30);
         }
@@ -316,5 +313,4 @@ class NewStandPaypalController extends Controller
             return new RedirectResponse('/');
         }
     }
-
-} // END class NewStandPaypalController
+}

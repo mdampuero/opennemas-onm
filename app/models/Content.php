@@ -1855,7 +1855,6 @@ class Content
             // Can't do because sometimes id is empty,
             // example rss in article.php
         }
-
     }
 
 

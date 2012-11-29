@@ -40,34 +40,33 @@ class BooksController extends Controller
     }
 
     /**
-     * Render books frontpage
+     * Renders the books frontpage
+     *
+     * @param int page the page to show
      *
      * @return Response the response object
      **/
     public function frontpageAction(Request $request)
     {
-        // Setup caching system
         $this->page = $request->query->getDigits('page', 1);
 
         $this->view->setConfig('gallery-frontpage');
-        $cacheID = $this->view->generateCacheId($this->categoryName, '', $this->page);
+        $cacheID = $this->view->generateCacheId($this->categoryName, null, $this->page);
 
-        /**************  CATEGORIES & SUBCATEGORIES  *********************************/
-        /**
-         * Setting up available categories for menu.
-        */// Setup caching system
+        // Setup caching system
         $this->view->setConfig('book-frontpage');
-        $cacheID = $this->view->generateCacheId($this->categoryName, '', $this->page);
+        $cacheID = $this->view->generateCacheId($this->categoryName, null, $this->page);
 
         $contentType = \Content::getIDContentType('book');
 
+        // Setting up available categories for menu.
         $this->cm  = new \ContentManager();
         $this->ccm = \ContentCategoryManager::get_instance();
         list($parentCategories, $subcat, $categoryData) =
             $this->ccm->getArraysMenu('', $contentType);
 
         $bookCategories = array();
-        $i=0;
+        $i = 0;
         foreach ($parentCategories as $cat) {
             //only books categories
             if ($cat->internal_category == $contentType) {
@@ -95,91 +94,95 @@ class BooksController extends Controller
     }
 
     /**
-     * Show book
+     * Shows a book given its id
+     *
+     * @param int id the identificator of the book to show
      *
      * @return Response the response object
      **/
     public function showAction(Request $request)
     {
-
-
         $dirtyID = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
         $id      = \Content::resolveID($dirtyID);
 
+        if (empty($id)) {
+            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+        }
+
         $book = new \Book($id);
-        if (!empty($book->id)) {
-            $this->view->setConfig('book-inner');
-            $cacheID = $this->view->generateCacheId($this->categoryName, null, $book->id);
 
-            if (($this->view->caching == 0)
+        $this->view->setConfig('book-inner');
+        $cacheID = $this->view->generateCacheId($this->categoryName, null, $book->id);
+
+        if ($this->view->caching == 0
             || (!$this->view->isCached('books/book_viewer.tpl', $cacheID))
-            ) {
-                $book->category_title = $book->loadCategoryTitle($book->id);
+        ) {
+            $book->category_title = $book->loadCategoryTitle($book->id);
 
-                $swf = preg_replace('%\.pdf%', '.swf', $book->file_name);
+            $swf = preg_replace('%\.pdf%', '.swf', $book->file_name);
 
-                $this->cm  = new \ContentManager();
-                $books = $this->cm->find_by_category(
-                    'Book',
-                    $book->category,
-                    'available=1',
-                    'ORDER BY position ASC, created DESC LIMIT 5'
-                );
+            $this->cm  = new \ContentManager();
+            $books = $this->cm->find_by_category(
+                'Book',
+                $book->category,
+                'available=1',
+                'ORDER BY position ASC, created DESC LIMIT 5'
+            );
 
-                return $this->render(
-                    'books/book_viewer.tpl',
-                    array(
-                        'book'      => $book,
-                        'libros'    => $books,
-                        'contentId' => $id,
-                        'category'  => $book->category,
-                        'archivo_swf'=> $swf,
-                        'cache_id'  => $cacheID,
-                    )
-                );
-            }
-            return $this->render(
-                'books/book_viewer.tpl',
+            return $this->view->assign(
                 array(
-                    'cache_id' => $cacheID,
+                    'book'        => $book,
+                    'libros'      => $books,
+                    'contentId'   => $id,
+                    'category'    => $book->category,
+                    'archivo_swf' => $swf,
+                    'cache_id'    => $cacheID,
                 )
             );
         }
 
+        return $this->render(
+            'books/book_viewer.tpl',
+            array(
+                'cache_id' => $cacheID,
+            )
+        );
     }
 
     /**
-     * Description of the action
+     * Shows a paginated list of books for a category
+     *
+     * @param string category the category name to show
+     * @param int page the page to show
      *
      * @return Response the response object
      **/
     public function ajaxPaginationListAction(Request $request)
     {
-
-        $this->cm  = new \ContentManager();
-        $category = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
+        $this->cm   = new \ContentManager();
+        $category   = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
         $this->page = $request->query->getDigits('page', 1);
-        $last = false;
-        if ($this->page<1) {
+        $last       = false;
+        if ($this->page < 1) {
             $this->page = 1;
         }
 
-        $_limit = 'LIMIT '.(($this->page - 1) * 5).',  5';
+        $limit = 'LIMIT '.(($this->page - 1) * 5).',  5';
         $books = $this->cm->find_by_category(
             'Book',
             $category,
             'available=1',
-            'ORDER BY position ASC, created DESC  '. $_limit
+            'ORDER BY position ASC, created DESC '. $limit
         );
 
         if (count($books) == 0) {
             $this->page = $this->page - 1;
-            $_limit = 'LIMIT '.(($this->page - 1) * 5).',  5';
-            $books = $this->cm->find_by_category(
+            $limit = 'LIMIT '.(($this->page - 1) * 5).',  5';
+            $books  = $this->cm->find_by_category(
                 'Book',
                 $category,
                 'available=1',
-                'ORDER BY position ASC, created DESC  '. $_limit
+                'ORDER BY position ASC, created DESC '. $limit
             );
             $last = true;
 
@@ -188,15 +191,13 @@ class BooksController extends Controller
         $output = $this->renderView(
             'books/widget_books.tpl',
             array(
-                'actualCat'=> $category,
-                'page' => $this->page,
-                'last' =>$last,
-                'libros' => $books,
+                'actualCat' => $category,
+                'page'      => $this->page,
+                'last'      => $last,
+                'libros'    => $books,
             )
         );
-        return new Response($output);
 
+        return new Response($output);
     }
 }
-// END class BooksController
-

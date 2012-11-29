@@ -18,7 +18,7 @@ use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
- * Handles the actions for advertisements
+ * Handles the actions for the articles
  *
  * @package Backend_Controllers
  **/
@@ -33,12 +33,16 @@ class ArticlesController extends Controller
     {
         $this->view = new \Template(TEMPLATE_USER);
 
-        $this->cm  = new \ContentManager();
-        $this->ccm = \ContentCategoryManager::get_instance();
+        $this->cm   = new \ContentManager();
+        $this->ccm  = \ContentCategoryManager::get_instance();
     }
 
     /**
-     * Description of the action
+     * Displays the article given its id or slug
+     *
+     * @param int article_id the identifier of the article
+     * @param string slug the slug of the article
+     * @param string category the category name
      *
      * @return Response the response object
      **/
@@ -49,7 +53,7 @@ class ArticlesController extends Controller
         $slug         = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
 
         // Resolve article ID
-        $articleID        = \Content::resolveID($dirtyID);
+        $articleID = \Content::resolveID($dirtyID);
         if (empty($articleID)) {
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
@@ -64,40 +68,32 @@ class ArticlesController extends Controller
 
         $cacheID = $this->view->generateCacheId($categoryName, null, $articleID);
 
-        if (($this->view->caching == 0) || !$this->view->isCached('article/article.tpl', $cacheID) ) {
-
+        if (($this->view->caching == 0)
+            || !$this->view->isCached('article/article.tpl', $cacheID)
+        ) {
             $article = new \Article($articleID);
 
-            if (($article->available==1) && ($article->in_litter==0)
+            if (($article->available == 1) && ($article->in_litter == 0)
                 && ($article->isStarted())
             ) {
-                /*
-                //Check slug
-                if (empty($slug) || ($article->slug != $slug)
-                    || empty($categoryName) || $article->category_name != $categoryName)
-                {
-                    Application::forward301(SITE_URL.$article->uri);
-                }
-                **/
+                // //Check slug
+                // if (empty($slug) || ($article->slug != $slug)
+                //     || empty($categoryName) || $article->category_name != $categoryName)
+                // {
+                //     Application::forward301(SITE_URL.$article->uri);
+                // }
 
                 // Print url, breadcrumb code ----------------------------------
                 // TODO: Seems that this is trash, evaluate its removal
-
                 $title = StringUtils::get_title($article->title);
 
-                $print_url = '/imprimir/' . $title. '/' . $categoryName . '/';
+                $printUrl = '/imprimir/'.$title.'/'.$categoryName.'/'.$dirtyID.'.html';
 
-                $breadcrub   = array();
-                $breadcrub[] = array('text' => $this->ccm->get_title($categoryName),
-                                        'link' => '/seccion/' . $categoryName . '/' );
-
-                $print_url .= $dirtyID . '.html';
-                $this->view->assign('print_url', $print_url);
+                $this->view->assign('print_url', $printUrl);
                 $this->view->assign(
                     'sendform_url',
                     '/controllers/article.php?action=sendform&article_id='
-                    . $articleID . '&category_name=' .
-                    $categoryName
+                    .$articleID.'&category_name='.$categoryName
                 );
 
                 // Categories code -------------------------------------------
@@ -205,6 +201,8 @@ class ArticlesController extends Controller
     /**
      * Fetches advertisements for article inner
      *
+     * @param int category the category identifier
+     *
      * @return void
      **/
     private function innerAds($category)
@@ -230,5 +228,4 @@ class ArticlesController extends Controller
             $advertisement->renderMultiple(array($intersticial), $advertisement);
         }
     }
-
 }

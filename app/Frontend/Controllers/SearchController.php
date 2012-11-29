@@ -16,7 +16,7 @@ use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
- * Handles the actions for advertisements
+ * Handles the actions for searches
  *
  * @package Backend_Controllers
  **/
@@ -33,7 +33,7 @@ class SearchController extends Controller
     }
 
     /**
-     * Description of the action
+     * Displays the search results with the google algorithm
      *
      * @return Response the response object
      **/
@@ -54,6 +54,4 @@ class SearchController extends Controller
         // TODO: Implement
         return new Response('Not implemented', 501);
     }
-
-
-} // END class SearchController
+}

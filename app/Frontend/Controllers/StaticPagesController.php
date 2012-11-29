@@ -34,16 +34,15 @@ class StaticPagesController extends Controller
     }
 
     /**
-     * Description of the action
+     * Displays the static page given its id
+     *
+     * @param string slug the slug that identifies the page
      *
      * @return Response the response object
      **/
     public function showAction(Request $request)
     {
         $slug = $request->query->filter('slug', null, FILTER_SANITIZE_STRING);
-
-        // TODO: review this advertisement
-        // require_once 'statics_advertisement.php';
 
         $page = \StaticPage::getPageBySlug($slug);
 
@@ -52,13 +51,16 @@ class StaticPagesController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        // increment visits for this page
-        \Content::setNumViews($page->pk_static_page);
+        // TODO: review this advertisement
+        // require_once 'statics_advertisement.php';
 
-        $this->view->assign('category_real_name', $page->title);
-        $this->view->assign('page', $page);
-
-        return $this->render('static_pages/statics.tpl');
+        return $this->render(
+            'static_pages/statics.tpl',
+            array(
+                'category_real_name' => $page->title,
+                'page'               => $page,
+                'content_id'         => $content->id
+            )
+        );
     }
-
-} // END class StaticPagesController
+}

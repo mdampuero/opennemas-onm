@@ -34,24 +34,25 @@ class RedirectorsController extends Controller
     /**
      * Handles the redirections for all the contents.
      *
+     * @param int content_id the content to detect
+     *
      * @return Response the response object
      **/
     public function contentAction(Request $request)
     {
         $contentId   = $request->query->filter('content_id', null, FILTER_SANITIZE_STRING);
 
-        list($type,$newContentID) = getOriginalIdAndContentTypeFromID($contentId);
-
-        $url = SITE_URL;
+        list($type, $newContentID) = getOriginalIdAndContentTypeFromID($contentId);
 
         if ($type == 'article') {
-            $article = new \Article($newContentID);
-            $article->category_name = $article->catName;
-            $url .=  $article->uri;
+            $content = new \Article($newContentID);
+            $content->category_name = $content->catName;
+
+            $url .=  $content->uri;
         } elseif ($type == 'opinion') {
-            $opinion = new \Opinion($newContentID);
-            $url .=  $opinion->uri;
+            $content = new \Opinion($newContentID);
         }
+        $url =  SITE_URL . $content->uri;
 
         return new RedirectResponse($url);
     }
@@ -70,10 +71,8 @@ class RedirectorsController extends Controller
 
         $cc = new \ContentCategory($newContentID);
 
-        $url = SITE_URL;
-        $url .= \Uri::generate('section', array('id' => $cc->name));
+        $url = SITE_URL . \Uri::generate('section', array('id' => $cc->name));
 
         return new RedirectResponse($url);
     }
-
-} // END class RedirectorController
+}
