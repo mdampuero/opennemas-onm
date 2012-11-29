@@ -2112,7 +2112,7 @@ class CanariasToOnm
             while (!$rs->EOF) {
 
                 $originalPollID = $rs->fields['id'];
-                if ($this->helper->elementIsImported($originalPollID, 'poll') ) {
+                if ($this->helper->elementIsImported($originalPollID, 'poll')) {
                     echo "[{$current}/{$totalRows}] Polls with id {$originalPollID} already imported\n";
                 } elseif (!empty($rs->fields['pregunta']) && !empty($rs->fields['respuesta1'])) {
                     echo "[{$current}/{$totalRows}] Importing poll with id {$originalPollID}  \n";
@@ -2206,6 +2206,81 @@ class CanariasToOnm
         }
 
          return true;
+
+    }
+
+
+
+    public function updateFiles()
+    {
+
+        $sql = "SELECT * FROM `documentos` ";
+        $rs  = self::$originConn->Execute($sql);
+        if (!$rs) {
+            echo self::$originConn->ErrorMsg();
+            $this->helper->log(self::$originConn->ErrorMsg());
+        } else {
+
+            $totalRows = $rs->_numOfRows;
+            $current = 1;
+            $valuesContents = array();
+            $valuesAttach = array();
+            while (!$rs->EOF) {
+                $id = $this->helper->elementIsImported($originalPollID, 'attachment');
+
+                $valuesContents = array($rs, $metadata, $id);
+                $valuesAttach = array($rs, $metadata, $id);
+                $rs->MoveNext();
+            }
+            $rs->Close();
+            //update
+            if (!empty($values)) {
+
+                $sql = 'UPDATE `contents` SET `metadata`=?  WHERE pk_content=?';
+
+                $request = $GLOBALS['application']->conn->Prepare($sql);
+                $rss     = $GLOBALS['application']->conn->Execute($request, $values);
+                if (!$rss) {
+                    echo $GLOBALS['application']->conn->ErrorMsg();
+                }
+            }
+            $rss->Close(); # optional
+        }
+
+    }
+
+    public function updateContents()
+    {
+
+        $sql = "SELECT title, pk_content FROM `contents` WHERE metadata=''";
+        $rs  = $GLOBALS['application']->conn->Execute($sql);
+        if (!$rs) {
+            echo  $GLOBALS['application']->conn->ErrorMsg();
+            $this->helper->log($GLOBALS['application']->conn->ErrorMsg());
+        } else {
+
+            $totalRows = $rs->_numOfRows;
+            $current = 1;
+            $values = array();
+            while (!$rs->EOF) {
+                $metadata = $this->helper->getSlug($rs->fields['title']);
+                $values = array($metadata, $rs->fields['pk_content']);
+                $rs->MoveNext();
+            }
+            $rs->Close();
+            //update
+            if (!empty($values)) {
+
+                $sql = 'UPDATE `contents` SET `metadata`=?  WHERE pk_content=?';
+
+                $request = $GLOBALS['application']->conn->Prepare($sql);
+                $rss     = $GLOBALS['application']->conn->Execute($request, $values);
+                if (!$rss) {
+                    echo $GLOBALS['application']->conn->ErrorMsg();
+                }
+            }
+            $rss->Close(); # optional
+        }
 
     }
 }
