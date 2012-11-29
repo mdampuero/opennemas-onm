@@ -181,9 +181,9 @@ class Attachment extends Content
     {
         parent::update($data);
 
-        $sql = "UPDATE attachments SET `title`=? "
+        $sql = "UPDATE attachments SET `title`=?, category=? "
              . "WHERE pk_attachment=?";
-        $values = array($data['title'], $data['id']);
+        $values = array($data['title'], $data['category'], $data['id']);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();

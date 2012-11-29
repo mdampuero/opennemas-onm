@@ -128,6 +128,13 @@ class InstanceSyncController extends Controller
 
                 $availableCategories = array();
                 foreach ($categories as $category) {
+
+                    if (!empty($category->submenu)) {
+                        foreach ($category->submenu as $subcategory) {
+
+                            $category->items[] = $subcategory;
+                        }
+                    }
                     $availableCategories[] = $category;
                 }
             }

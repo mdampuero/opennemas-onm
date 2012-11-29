@@ -10,6 +10,21 @@
                 </label>
             </td>
         </tr>
+        {if !empty($category->submenu)}
+            {foreach name=d from=$category->submenu item=subcategory}
+            <tr>
+                <td>
+                    <label>
+                        <blockquote>
+                            <input type="checkbox" name="categories[]" value="{$subcategory->link}"
+                            {if in_array($subcategory->link, $categories_checked)}checked="checked"{/if} />
+                            {$subcategory->title|ucfirst}
+                        </blockquote>
+                    </label>
+                </td>
+            </tr>
+            {/foreach}
+        {/if}
         {foreachelse}
         <tr>
             <td class="empty">

@@ -233,7 +233,8 @@ class FilesController extends Controller
                         }
                     }
                 }
-            }$total_size += $size[$i];
+            }
+            $total_size += $size[$i];
             $i++;
         }
         if (!empty($parentCategories) && !empty($aux_categories)) {
@@ -304,7 +305,7 @@ class FilesController extends Controller
                 $data = array(
                     'title'        => $request->request->filter('title', null, FILTER_SANITIZE_STRING),
                     'path'         => $directoryDate.$fileName,
-                    'category'     => $this->category,
+                    'category'     => $request->request->filter('category', null, FILTER_SANITIZE_STRING),
                     'available'    => 1,
                     'description'  => $request->request->filter('description', null, FILTER_SANITIZE_STRING),
                     'metadata'     => $request->request->filter('metadata', null, FILTER_SANITIZE_STRING),
@@ -392,12 +393,21 @@ class FilesController extends Controller
         $request = $this->request;
         $id      = $request->request->getDigits('id');
 
-        $category = $request->request->getDigits('category');
+        $category = $request->request->filter('category', null, FILTER_SANITIZE_STRING);
         $page     = $request->request->getDigits('page', 1);
 
         $file = new \Attachment($id);
+          $data = array(
+                    'title'        => $request->request->filter('title', null, FILTER_SANITIZE_STRING),
+                    'category'     => $request->request->filter('category', null, FILTER_SANITIZE_STRING),
+                    'available'    => 1,
+                    'id'           => $id,
+                    'description'  => $request->request->filter('description', null, FILTER_SANITIZE_STRING),
+                    'metadata'     => $request->request->filter('metadata', null, FILTER_SANITIZE_STRING),
+                    'fk_publisher' => $_SESSION['userid'],
+                );
 
-        if ($file->update($_REQUEST)) {
+        if ($file->update($data)) {
             m::add(sprintf(_('File information updated successfuly.')), m::SUCCESS);
         } else {
             m::add(sprintf(_('There was a problem while saving the file information.')), m::ERROR);
