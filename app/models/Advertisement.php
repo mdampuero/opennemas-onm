@@ -859,7 +859,7 @@ class Advertisement extends Content
                     } else {
                         $output .= '<div style="position: relative; width: '.$width.'px; height: '.$height.'px;">
                             <div style="left:0px;top:0px;cursor:pointer;background-color:#FFF;'
-                                .'filter:alpha(opacity=0);position:absolute;z-index:100;width:'.
+                                .'filter:alpha(opacity=0);opacity:0;position:absolute;z-index:100;width:'.
                                 $width.'px;height:'.$height.'px;"
                                 onclick="javascript:window.open(\''.SITE_URL.'ads/'
                                 .date('YmdHis', strtotime($banner->created))

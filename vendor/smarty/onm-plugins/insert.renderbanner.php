@@ -165,7 +165,7 @@ JSINTERSTICIAL;
                             .sprintf('%06d', $banner->pk_advertisement).'.html\', \'_blank\');return false;"></div>';
                 } else {
                     $output .= '<div style="position: relative; width: '.$width.'px; height: '.$height.'px;">
-                        <div style="left:0px;top:0px;cursor:pointer;'
+                        <div style="left:0px;top:0px;cursor:pointer;opacity:0;'
                             .'background-color:#FFF;filter:alpha(opacity=0);position:absolute;z-index:100;width:'.
                             $width.'px;height:'.$height.'px;"
                             onclick="javascript:window.open(\''.SITE_URL.'ads/'
