@@ -151,8 +151,8 @@
                             {foreach name=i from=$items item=answer}
                                 <div class="poll_answer">
                                     <div class="input-append">
-                                        <input type="text" name="item[]" value="{$answer.item}"/>
-                                        <input type="hidden" name="votes[]" value="{$answer.votes}">
+                                        <input type="text" name="item[{$answer.pk_item}]" value="{$answer.item}"/>
+                                        <input type="hidden" name="votes[{$answer.pk_item}]" value="{$answer.votes}">
                                         <div class="btn addon del">
                                             <i class="icon-trash"></i>
                                         </div>
