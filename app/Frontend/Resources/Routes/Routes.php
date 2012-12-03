@@ -560,13 +560,14 @@ $frontendRoutes->add(
 $frontendRoutes->add(
     'frontend_poll_frontpage',
     new Route(
-        '/encuesta/{page}',
+        '/{component}/{page}',
         array(
             '_controller' => 'Frontend:Controllers:PollsController:frontpage',
             'page'        => 1
         ),
         array(
-            'page' => '([0-9]+)?'
+            'page'      => '([0-9]+)?',
+            'component' => 'encuesta|poll|enquerito|enquisa',
         )
     )
 );
@@ -574,14 +575,15 @@ $frontendRoutes->add(
 $frontendRoutes->add(
     'frontend_poll_frontpage_category',
     new Route(
-        '/encuesta/{category_name}/{page}',
+        '/{component}/{category_name}/{page}',
         array(
             '_controller' => 'Frontend:Controllers:PollsController:frontpage',
             'page'        => 1
         ),
         array(
             'category_name' => '[a-z0-9\-]+',
-            'page'          => '([0-9]+)?'
+            'page'          => '([0-9]+)?',
+            'component' => 'encuesta|poll|enquerito|enquisa',
         )
     )
 );
@@ -589,7 +591,7 @@ $frontendRoutes->add(
 $frontendRoutes->add(
     'frontend_poll_show',
     new Route(
-        '/encuesta/{category_name}/{slug}/{id}.{_format}',
+        '/{component}/{category_name}/{slug}/{id}.{_format}',
         array(
             '_controller' => 'Frontend:Controllers:PollsController:show',
             '_format'     => 'html',
@@ -598,7 +600,8 @@ $frontendRoutes->add(
         array(
             'category_name' => '[a-z0-9\-]+',
             'slug'          => '[a-z0-9\-]+',
-            'id'            => '([0-9]+)'
+            'id'            => '([0-9]+)',
+            'component' => 'encuesta|poll|enquerito|enquisa',
         )
     )
 );
@@ -695,11 +698,11 @@ $frontendRoutes->add(
     new Route(
         '/video/{page}',
         array(
-           '_controller' => 'Frontend:Controllers:VideosController:frontpage',
-           'page' => 1
+            '_controller' => 'Frontend:Controllers:VideosController:frontpage',
+            'page' => 1
         ),
         array(
-           'page' => '([0-9]+)?'
+            'page' => '([0-9]+)?'
         )
     )
 );
@@ -710,11 +713,11 @@ $frontendRoutes->add(
         '/video/{category_name}/{page}',
         array(
             '_controller' => 'Frontend:Controllers:VideosController:frontpage',
-           'page'        => 1
+            'page'        => 1
         ),
         array(
-           'category_name' => '[a-z0-9\-]+',
-           'page'          => '([0-9]+)?'
+            'category_name' => '[a-z0-9\-]+',
+            'page'          => '([0-9]+)?'
         )
     )
 );

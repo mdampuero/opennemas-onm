@@ -35,8 +35,6 @@ class MonographsController extends Controller
         $this->ccm = new \ContentCategoryManager();
         $this->cm  = new \ContentManager();
 
-        $action = $this->request->query->filter('action', 'frontpage', FILTER_SANITIZE_STRING);
-
         $this->categoryName = $this->get('request')->query->filter('category_name', '', FILTER_SANITIZE_STRING);
 
         if (!empty($this->categoryName)) {
@@ -109,7 +107,7 @@ class MonographsController extends Controller
 
                 $this->view->assign(
                     array(
-                        'specials'=> $monographs
+                        'specials' => $monographs
                     )
                 );
             }
@@ -127,7 +125,6 @@ class MonographsController extends Controller
 
     public function showAction(Request $request)
     {
-
         $dirtyID = $request->query->filter('special_id', '', FILTER_SANITIZE_STRING);
 
         $specialID = \Content::resolveID($dirtyID);
@@ -137,71 +134,69 @@ class MonographsController extends Controller
         if (($this->view->caching == 0)
             || (!$this->view->isCached('special/special.tpl', $cacheID))
         ) {
-            if ($special->available == 1) {
-
-                $contents = $special->getContents($specialID);
-                $columns  = array();
-
-                if (!empty($contents)) {
-                    if ((count($contents) == 1)  &&
-                        (($contents[0]['type_content']=='Attachment')
-                        || ($contents[0]['type_content']=='3'))) {
-
-                        $content = \Content::get($contents[0]['fk_content']);
-
-                        $special->pdf_path = $content->path;
-                    } else {
-                        foreach ($contents as $item) {
-
-                            $content = \Content::get($item['fk_content']);
-
-                            if (isset($content->img1)) {
-                                $img                = new \Photo($content->img1);
-                                $content->img1_path = $img->path_file.$img->name;
-                                $content->img1      = $img;
-                            }
-                            if (isset($content->fk_video)) {
-                                $video              = new \Video($content->fk_video);
-                                $content->obj_video = $video;
-                            }
-
-                            if (($item['position']%2) == 0) {
-                                $content->placeholder = 'placeholder_0_1';
-                            } else {
-                                $content->placeholder = 'placeholder_1_1';
-                            }
-
-                            $content->category_name  =
-                                $content->loadCategoryName($item['fk_content']);
-                            $content->category_title =
-                                $content->loadCategoryTitle($item['fk_content']);
-                             // Load attached and related contents from array
-                            $content->loadAttachedVideo()
-                                    ->loadRelatedContents($this->categoryName);
-
-                            $columns[] = $content;
-
-                        }
-                    }
-                }
-
-                if (!empty($special->img1)) {
-                    $img               = new \Photo($special->img1);
-                    $special->path_img = $img->path_file.$img->name;
-                    $special->img      = $img;
-                }
-
-                $this->view->assign(
-                    array(
-                        'special'   => $special,
-                        'columns'   => $columns,
-                        'contentId' => $specialID,
-                    )
-                );
-
-            } else {
+            if ($special->available != 1
+                || $special->in_litter != 0
+            ) {
                 return new RedirectResponse($this->generateUrl('frontend_monograph_frontpage'));
             }
+
+            $contents = $special->getContents($specialID);
+            $columns  = array();
+
+            if (!empty($contents)) {
+                if ((count($contents) == 1)  &&
+                    (($contents[0]['type_content']=='Attachment')
+                    || ($contents[0]['type_content']=='3'))
+                ) {
+                    $content = \Content::get($contents[0]['fk_content']);
+
+                    $special->pdf_path = $content->path;
+                } else {
+                    foreach ($contents as $item) {
+                        $content = \Content::get($item['fk_content']);
+
+                        if (isset($content->img1)) {
+                            $photo                = new \Photo($content->img1);
+                            $content->img1_path = $photo->path_file.$photo->name;
+                            $content->img1      = $photo;
+                        }
+
+                        if (isset($content->fk_video)) {
+                            $video              = new \Video($content->fk_video);
+                            $content->obj_video = $video;
+                        }
+
+                        if (($item['position'] % 2) == 0) {
+                            $content->placeholder = 'placeholder_0_1';
+                        } else {
+                            $content->placeholder = 'placeholder_1_1';
+                        }
+
+                        $content->category_name  = $content->loadCategoryName($item['fk_content']);
+                        $content->category_title = $content->loadCategoryTitle($item['fk_content']);
+
+                         // Load attached and related contents from array
+                        $content->loadAttachedVideo()
+                                ->loadRelatedContents($this->categoryName);
+
+                        $columns[] = $content;
+                    }
+                }
+            }
+
+            if (!empty($special->img1)) {
+                $photo               = new \Photo($special->img1);
+                $special->path_img = $photo->path_file.$photo->name;
+                $special->img      = $photo;
+            }
+
+            $this->view->assign(
+                array(
+                    'special'   => $special,
+                    'columns'   => $columns,
+                    'contentId' => $specialID,
+                )
+            );
         }
 
         return $this->render(
@@ -210,7 +205,5 @@ class MonographsController extends Controller
                 'cache_id' => $cacheID,
             )
         );
-
     }
-} // END class Controller
-
+}

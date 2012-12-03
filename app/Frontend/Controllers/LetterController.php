@@ -30,11 +30,7 @@ class LetterController extends Controller
      **/
     public function init()
     {
-
         $this->view = new \Template(TEMPLATE_USER);
-
-        $this->cm =new \ContentManager();
-
     }
 
     /**
@@ -44,19 +40,17 @@ class LetterController extends Controller
      **/
     public function frontpageAction(Request $request)
     {
-        $this->view->setConfig('letter-frontpage');
-
         $this->page = $request->query->filter('page', '0', FILTER_SANITIZE_STRING);
 
-        $cacheID = $this->view->generateCacheId('letter-frontpage', '', $this->page);
+        $cm = new \ContentManager();
 
-        /**
-         * Don't execute action logic if was cached before
-         */
+        $this->view->setConfig('letter-frontpage');
+
+        $cacheID = $this->view->generateCacheId('letter-frontpage', '', $this->page);
         if ($this->view->caching == 0
             || !$this->view->isCached('letter/letter-frontpage.tpl', $cacheID)
         ) {
-            $otherLetters = $this->cm->find_all(
+            $otherLetters = $cm->find_all(
                 'Letter',
                 'available=1 ',
                 'ORDER BY created DESC LIMIT 5'
@@ -91,71 +85,62 @@ class LetterController extends Controller
 
         $letterId = \Content::resolveID($dirtyID);
 
-        // Redirect to album frontpage if id_album wasn't provided
-        if (is_null($letterId)) {
-            Application::forward301('/cartas-al-director/');
+        if (empty($letterId)) {
+            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 
-        $letter = new \Letter($letterId);
+        $cacheID = $this->view->generateCacheId('letter-inner', '', $letterId);
+        if ($this->view->caching == 0
+            || !$this->view->isCached('letter/letter.tpl', $cacheID)
+        ) {
+            $letter = new \Letter($letterId);
 
-        if (empty($letter)) {
-            Application::forward301('/404.html');
-        }
-
-        if (($letter->available==1) && ($letter->in_litter==0)) {
-            // Increment numviews if it's accesible
-            $this->view->assign('contentId', $letterId);
-
-            $cacheID = $this->view->generateCacheId('letter-inner', '', $letterId);
-
-            if (1==1 || ($this->view->caching == 0)
-                || !$this->view->isCached('letter/letter.tpl', $cacheID)
+            if (empty($letter)
+                && ($letter->available != 1 || $letter->in_litter != 0)
             ) {
+                throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+            }
 
-                $comment  = new \Comment();
-                $comments = $comment->get_public_comments($letterId);
+            $otherLetters = $cm->find(
+                'Letter',
+                'available=1 ',
+                'ORDER BY created DESC LIMIT 5'
+            );
 
-                $otherLetters = $this->cm->find(
-                    'Letter',
-                    'available=1 ',
-                    'ORDER BY created DESC LIMIT 5'
-                );
-
-                $this->view->assign(
-                    array(
-                        'letter'       => $letter,
-                        'num_comments' => count($comments),
-                        'otherLetters' => $otherLetters,
-                    )
-                );
-
-            } // end if $tpl->is_cached
-
-            require_once APP_PATH.'/../public/controllers/letter_inner_advertisement.php';
-
-            $tpl->assign('contentId', $letterId); // Used on module_comments.tpl
-
-            return $this->render(
-                'letter/letter.tpl',
+            $this->view->assign('contentId', $letterId); // Used on module_comments.tpl
+            $this->view->assign(
                 array(
-                    'cache_id' => $cacheID,
+                    'letter'       => $letter,
+                    'num_comments' => count($comments),
+                    'otherLetters' => $otherLetters,
                 )
             );
+
         }
 
+        // require_once APP_PATH.'/../public/controllers/letter_inner_advertisement.php';
+        $this->getAds();
+
+
+        return $this->render(
+            'letter/letter.tpl',
+            array(
+                'cache_id' => $cacheID,
+            )
+        );
     }
 
     /**
-     * Description of the action
+     * Saves a letter into database
      *
      * @return Response the response object
      **/
     public function saveAction(Request $request)
     {
-        $recaptcha_challenge_field = $request->request->
-                filter('recaptcha_challenge_field', '', FILTER_SANITIZE_STRING);
-        $recaptcha_response_field = $request->request->
-                filter('recaptcha_response_field', '', FILTER_SANITIZE_STRING);
+        $recaptcha_challenge_field =
+            $request->request->filter('recaptcha_challenge_field', '', FILTER_SANITIZE_STRING);
+        $recaptcha_response_field =
+            $request->request->filter('recaptcha_response_field', '', FILTER_SANITIZE_STRING);
 
         //Get config vars
         $configRecaptcha = s::get('recaptcha');
@@ -170,16 +155,12 @@ class LetterController extends Controller
 
         // What happens when the CAPTCHA was entered incorrectly
         if (!$resp->is_valid) {
-            $msg="reCAPTCHA no fue introducido correctamente. Intentelo de nuevo.";
-            echo($msg);
+            $msg = "reCAPTCHA no fue introducido correctamente. Intentelo de nuevo.";
         } else {
-
             $lettertext    = $request->request->filter('lettertext', '', FILTER_SANITIZE_STRING);
             $security_code = $request->request->filter('security_code', '', FILTER_SANITIZE_STRING);
 
             if (!empty($lettertext) && empty($security_code) ) {
-
-                /*  Anonymous comment ************************* */
                 $data = array();
                 $name    = $request->request->filter('name', '', FILTER_SANITIZE_STRING);
                 $subject = $request->request->filter('subject', '', FILTER_SANITIZE_STRING);
@@ -192,14 +173,39 @@ class LetterController extends Controller
                 $data['available'] = 0; //pendding
 
                 $letter = new Letter();
-                $msg =  $letter->saveLetter($data);
+                $msg = $letter->saveLetter($data);
 
             } else {
                 $msg = _('Su Carta al Director <strong>no</strong> ha sido guardada.');
             }
-            echo $msg;
         }
 
+        return new Response($msg);
     }
-} // END class LetterController
 
+    /**
+     * Gets the advertisement
+     *
+     * @return void
+     **/
+    public function getAds()
+    {
+        $this->ccm = \ContentCategoryManager::get_instance();
+
+        $category = (!isset($category) || ($category=='home'))? 0: $category;
+        $advertisement = \Advertisement::getInstance();
+
+        // Load internal banners, principal banners (1,2,3,11,13) and use cache to performance
+        /* $banners = $advertisement->cache->getAdvertisements(array(1, 2, 3, 10, 12, 11, 13), $category); */
+        $banners = $advertisement->getAdvertisements(array(101, 102, 103, 105, 109, 110), $category);
+        $cm = new \ContentManager();
+        $banners = $cm->getInTime($banners);
+        //$advertisement->renderMultiple($banners, &$tpl);
+        $advertisement->renderMultiple($banners, $advertisement);
+
+        $intersticial = $advertisement->getIntersticial(150, "$category");
+        if (!empty($intersticial)) {
+            $advertisement->renderMultiple(array($intersticial), $advertisement);
+        }
+    }
+}

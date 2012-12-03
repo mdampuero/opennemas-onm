@@ -735,10 +735,6 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteRule ^newslibrary.php$ controllers/frontpages.php?date=%60%501&category_name=home [L,NC]
   # END CRONNICAS --------------------------------------------------------
 
-    #Old Static pages
-    RewriteRule ^contacto($|/$) /estaticas/contacto? [R=301,L,NC]
-    RewriteRule ^estaticas/boletin.html /boletin/ [R=301,L,NC]
-
     RewriteRule ^extarticulo/([a-z0-9\-]+)?/.*/([0-9]+).html$ controllers/article_ws.php?category_name=$1&article_id=$2&action=read [L,NC]
 
     #Sync Opinion Frontpage
@@ -761,20 +757,6 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     #Login, Login from activation mail, register and activate register
     # RewriteRule ^regenerate/pass/check/([a-f0-9]{32})/?$ controllers/register.php?action=regenerate_pass_check&token=$1 [L,NC]
     # RewriteRule ^regenerate/pass/([a-f0-9]{32})/?$ controllers/register.php?action=regenerate_pass&token=$1 [L,NC]
-
-    #Sync Sections
-    # RewriteRule ^extseccion/([a-z0-9\-]+)/?$ controllers/index_ws.php?category_name=$1 [L,NC]
-    # RewriteRule ^extseccion/([a-z0-9\-]+)/([0-9]+)/?$ controllers/index_ws.php?category_name=$1&page=$2 [L,NC]
-    # RewriteRule ^extseccion/([a-z0-9\-]+)/([a-z0-9\-]+)/?$ controllers/index_ws.php?category_name=$1&subcategory_name=$2 [L,NC]
-    # RewriteRule ^extseccion/([a-z0-9\-]+)/([a-z0-9\-]+)/([0-9]+)/?$ controllers/index_ws.php?category_name=$1&subcategory_name=$2&page=$3 [L,NC]
-
-    #Polls
-    #encuesta/deportes/2011-08-24/quien-gana-la-liga-2012/2011082410083600163.html
-    RewriteRule ^poll/?$ controllers/poll.php?action=frontpage [L,NC]
-    RewriteRule ^encuesta/?$ controllers/poll.php?action=frontpage [L,NC]
-    RewriteRule ^encuesta/([a-z0-9\-]+)/?$ controllers/poll.php?action=frontpage&category_name=$1 [L,NC]
-    RewriteRule ^encuesta/([a-z0-9\-]+)/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/(.*)/([0-9]+).html$ controllers/poll.php?action=show&id=$6&category_name=$1 [L,NC]
-    RewriteRule ^encuesta/([a-z0-9\-]+)/(.*)/([0-9]+).html$ controllers/poll.php?action=show&id=$3&category_name=$1 [L,NC]
 
     RewriteRule ^boletin.html$ newsletter/
 

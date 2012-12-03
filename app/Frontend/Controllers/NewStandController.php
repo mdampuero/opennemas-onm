@@ -34,7 +34,7 @@ class NewStandController extends Controller
         $this->view->setConfig('kiosko');
 
         $this->cm = new \ContentManager();
-        
+
         // Esta variable no se utiliza?¿ Ni tp viene por .htaccess
         // $subcategory_name = $this->request->query->filter('subcategory_name', '', FILTER_SANITIZE_STRING);
         // solo se usa al cachear en show (tiene sentido?¿) Tp viene por .htaccess
@@ -74,7 +74,7 @@ class NewStandController extends Controller
                 $ccm = \ContentCategoryManager::get_instance();
                 $contentType = \Content::getIDContentType('kiosko');
                 $category = $ccm->get_id($this->category_name);
-                
+
                 list($allcategorys, $subcat, $categoryData) =
                     $ccm->getArraysMenu($category, $contentType);
 
@@ -96,7 +96,7 @@ class NewStandController extends Controller
             }
 
         } elseif ($order =='sections') {
-            $day        = $request->query->getDigits('day',1);
+            $day        = $request->query->getDigits('day', 1);
             $cache_date = $year.$month.$day;
             $cacheID = $this->view->generateCacheId('newsstand', $this->category_name, $cache_date);
             $kiosko =array();
@@ -120,14 +120,11 @@ class NewStandController extends Controller
                         'portadas' => $portadas
                     );
                 }
-
             }
-
         } else {
-
             $cacheDate = $year.$month;
             $cacheID   = $this->view->generateCacheId('newsstand', $this->category_name, $cacheDate);
-            $kiosko     = array();
+            $kiosko    = array();
             if (($this->view->caching == 0)
                || !$this->view->isCached('newsstand/newsstand.tpl', $cacheID)
             ) {
@@ -153,7 +150,6 @@ class NewStandController extends Controller
                         );
                     }
                 }
-
             }
         }
 
@@ -168,7 +164,7 @@ class NewStandController extends Controller
         );
 
         $this->widgetNewsstandDates();
-        $this->advertisements();
+        $this->getAds();
 
         // Show in Frontpage
         return $this->render(
@@ -181,26 +177,22 @@ class NewStandController extends Controller
     }
 
     /**
-     * Render a particular cover
+     * Renders a particular cover given its id
      *
      * @return Response the response object
      **/
     public function showAction(Request $request)
     {
-
         $dirtyID = $request->query->getDigits('id', null);
 
         $epaperId = \Content::resolveID($dirtyID);
 
-        /**
-         * Redirect to album frontpage if id_album wasn't provided
-         */
+        // Redirect to album frontpage if id_album wasn't provided
         if (is_null($epaperId)) {
             return new RedirectResponse($this->generateUrl('frontend_newspaper_frontpage'));
         }
 
         $cacheID = $this->view->generateCacheId('newsstand', null, $epaperId);
-
         if (($this->view->caching == 0)
             || (!$this->view->isCached('newsstand/newsstand.tpl', $cacheID))
         ) {
@@ -237,22 +229,20 @@ class NewStandController extends Controller
         }
 
         $this->widgetNewsstandDates();
-        $this->advertisements();
+        $this->getAds();
 
-        // Show in Frontpage
         return $this->render(
             'newsstand/newsstand.tpl',
             array(
                 'cache_id' => $cacheID,
             )
         );
-
     }
 
     /**
      * calculates the months of the covers existing
      *
-     * @return 
+     * @return
      **/
     public function widgetNewsstandDates()
     {
@@ -268,9 +258,13 @@ class NewStandController extends Controller
      *
      * @return
      **/
-    private function advertisements()
+    private function getAds()
     {
-        $positions = array(1,2, 3,4, 5,6, 11,12,13,14,15,16, 21,22,24,25, 31,32,33,34,35,36,103,105, 9, 91, 92);
+        $positions = array(
+            1, 2, 3, 4, 5, 6, 11, 12, 13, 14, 15,
+            16, 21, 22, 24, 25, 31, 32, 33, 34, 35,
+            36, 103, 105, 9, 91, 92
+        );
         $intersticialId = 50;
 
         // Asignacion de valores y comprobaciones realizadas en init
@@ -281,17 +275,16 @@ class NewStandController extends Controller
 
         // Load 1-16 banners and use cache to performance
         //$banners = $advertisement->getAdvertisements(range(1, 16), $category); // 4,9 unused
-        $banners = $advertisement->getAdvertisements( $positions, $category);
+        $banners = $advertisement->getAdvertisements($positions, $category);
 
         $banners = $this->cm->getInTime($banners);
         //$advertisement->renderMultiple($banners, &$tpl);
         $advertisement->renderMultiple($banners, $advertisement);
 
         // Get intersticial banner
-        $intersticial = $advertisement->getIntersticial( $intersticialId, $category);
+        $intersticial = $advertisement->getIntersticial($intersticialId, $category);
         if (!empty($intersticial)) {
             $advertisement->renderMultiple(array($intersticial), $advertisement);
         }
     }
-
-} // END class NewStandController
+}

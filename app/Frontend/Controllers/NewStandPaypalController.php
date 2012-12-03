@@ -54,12 +54,10 @@ class NewStandPaypalController extends Controller
      **/
     public function frontpageAction(Request $request)
     {
-
-        // Get config vars
-        $configurations = s::get('kiosko_settings');
         $month = $request->query->getDigits('month', date('n'));
         $year  = $request->query->getDigits('year', date('Y'));
 
+        $configurations = s::get('kiosko_settings');
         $order = $configurations['orderFrontpage'];
 
         // Order by grouped dates

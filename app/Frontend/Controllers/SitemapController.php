@@ -50,11 +50,6 @@ class SitemapController extends Controller
     {
         $format = $request->query->filter('_format', 'xml', FILTER_SANITIZE_STRING);
         $cacheID = $this->view->generateCacheId('sitemap', '', '');
-        if (($this->view->caching == 0)
-            || !$this->view->isCached('sitemap/sitemap.tpl', $cacheID)
-        ) {
-
-        }
 
         return $this->buildResponse($format, $cacheID, null);
     }
@@ -192,5 +187,4 @@ class SitemapController extends Controller
 
         return new Response($contents, 200, $headers);
     }
-
-} // END class SitemapController
+}

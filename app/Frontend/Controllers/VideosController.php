@@ -72,23 +72,25 @@ class VideosController extends Controller
      **/
     public function frontpageAction(Request $request)
     {
-        # If is not cached process this action
-        $cacheID = $this->view->generateCacheId($this->category_name, '', $this->page);
+        $categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
 
+        $this->getAds();
+
+        # If is not cached process this action
+        $cacheID = $this->view->generateCacheId($categoryName, '', $this->page);
         if (($this->view->caching == 0)
             || !$this->view->isCached('video/video_frontpage.tpl', $cacheID)
         ) {
-
             $videosSettings = s::get('video_settings');
 
             $totalVideosFrontpage = isset($videosSettings['total_front'])?$videosSettings['total_front']:2;
-            $days = isset( $videosSettings['time_last'])?:365;
+            $days = isset($videosSettings['time_last']) ?: 365;
 
-            if (isset($this->category_name)
-                && !empty($this->category_name)
-                && $this->category_name != 'home'
+            if (isset($categoryName)
+                && !empty($categoryName)
+                && $categoryName != 'home'
             ) {
-                $front_videos = $this->cm->find_all(
+                $frontVideos = $this->cm->find_all(
                     'Video',
                     'available=1 AND `contents_categories`.`pk_fk_content_category` ='
                     . $this->category . '',
@@ -97,24 +99,23 @@ class VideosController extends Controller
 
                 $videos = $this->cm->find_all(
                     'Video',
-                    'available=1 AND `contents_categories`.`pk_fk_content_category` ='
-                    . $this->category . '',
+                    'available=1 AND `contents_categories`.`pk_fk_content_category` ='.$this->category,
                     'ORDER BY created DESC LIMIT '.$totalVideosFrontpage.',3'
                 );
 
-                $others_videos = $this->cm->find_all(
+                $othersVideos = $this->cm->find_all(
                     'Video',
                     'available=1 AND created >=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY)  ',
                     'ORDER BY views DESC LIMIT 3, 6'
                 );
 
-                if (count($front_videos) > 0) {
-                    foreach ($front_videos as &$video) {
-                        $video->category_name = $video->loadCategoryName($video->id);
+                if (count($videos) > 0) {
+                    foreach ($videos as &$video) {
+                        $video->category_name  = $video->loadCategoryName($video->id);
                         $video->category_title = $video->loadCategoryTitle($video->id);
                     }
                 }
-                $this->view->assign('front_videos', $front_videos);
+                $this->view->assign('front_videos', $frontVideos);
 
             } else {
                 $videos = $this->cm->find_all(
@@ -123,9 +124,9 @@ class VideosController extends Controller
                     'ORDER BY created DESC LIMIT 3'
                 );
 
-                $others_videos = $this->cm->find_all(
+                $othersVideos = $this->cm->find_all(
                     'Video',
-                    ' available=1 AND created >=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY)  ',
+                    ' available=1 AND created >= DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY)  ',
                     'ORDER BY starttime DESC LIMIT 3,12'
                 );
             }
@@ -137,8 +138,8 @@ class VideosController extends Controller
                 }
             }
 
-            if (count($others_videos) > 0) {
-                foreach ($others_videos as &$video) {
+            if (count($othersVideos) > 0) {
+                foreach ($othersVideos as &$video) {
                     $video->category_name = $video->loadCategoryName($video->id);
                     $video->category_title = $video->loadCategoryTitle($video->id);
                 }
@@ -146,22 +147,20 @@ class VideosController extends Controller
 
             $this->view->assign(
                 array(
-                    'videos' => $videos,
-                    'others_videos' => $others_videos,
-                    'page' => '1'
+                    'videos'        => $videos,
+                    'others_videos' => $othersVideos,
+                    'page'          => '1'
                 )
             );
         }
-
-        $this->videoAdvertisement();
 
         // Get last comments to show in video frontpage
         $latestComments = $this->cm->cache->getLastComentsContent('Video', true, $this->category, 4);
         $this->view->assign('lasts_comments', $latestComments);
 
-        if (isset($this->category_name)
-            && !empty($this->category_name)
-            && $this->category_name != 'home'
+        if (isset($categoryName)
+            && !empty($categoryName)
+            && $categoryName != 'home'
         ) {
             return $this->render(
                 'video/video_frontpage.tpl',
@@ -180,7 +179,7 @@ class VideosController extends Controller
     }
 
     /**
-     * Shows an inner video
+     * Shows an inner video given its id
      *
      * @return Response the response object
      **/
@@ -194,26 +193,11 @@ class VideosController extends Controller
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 
-        //Get other_videos for widget video most
-        $others_videos = $this->cm->find_all(
-            'Video',
-            ' available=1 AND pk_content <> '.$videoID,
-            ' ORDER BY created DESC LIMIT 4'
-        );
-
-        if (count($others_videos) > 0) {
-            foreach ($others_videos as &$otherVideo) {
-                $otherVideo->category_name  = $otherVideo->loadCategoryName($otherVideo->id);
-                $otherVideo->category_title = $otherVideo->loadCategoryTitle($otherVideo->id);
-            }
-        }
-
-        $this->view->assign('others_videos', $others_videos);
+        $this->getAds('inner');
 
         # If is not cached process this action
         $cacheID = $this->view->generateCacheId($this->category_name, null, $videoID);
-
-        if (($this->view->caching == 0)
+        if ($this->view->caching == 0
             || !$this->view->isCached('video/video_inner.tpl', $videoID)
         ) {
 
@@ -221,6 +205,29 @@ class VideosController extends Controller
             $video->category_name = $video->loadCategoryName($video->id);
             $video->category_title = $video->loadCategoryTitle($video->id);
 
+            //Get other_videos for widget video most
+            $otherVideos = $this->cm->find_all(
+                'Video',
+                ' available=1 AND pk_content <> '.$videoID,
+                ' ORDER BY created DESC LIMIT 4'
+            );
+
+            if (count($otherVideos) > 0) {
+                foreach ($otherVideos as &$otherVideo) {
+                    $otherVideo->category_name  = $otherVideo->loadCategoryName($otherVideo->id);
+                    $otherVideo->category_title = $otherVideo->loadCategoryTitle($otherVideo->id);
+                }
+            }
+
+            /******* SUGGESTED CONTENTS *******/
+            $objSearch = \cSearch::getInstance();
+            $machineRelatedContent = $objSearch->searchSuggestedContents(
+                $video->metadata,
+                'Video',
+                "pk_fk_content_category= ".$video->category.
+                " AND contents.available=1 AND pk_content = pk_fk_content",
+                4
+            );
             $this->view->assign(
                 array(
                     'category'      => $video->category,
@@ -228,23 +235,11 @@ class VideosController extends Controller
                     'contentId'     => $video->id,
                     'video'         => $video,
                     'action'        => 'inner',
+                    'others_videos' => $otherVideos,
+                    'suggested'     => $machineRelatedContent
                 )
             );
-
-            $this->videoAdvertisement('inner');
-
         } //end iscached
-
-        /******* SUGGESTED CONTENTS *******/
-        $objSearch = \cSearch::getInstance();
-        $arrayResults=$objSearch->searchSuggestedContents(
-            $video->metadata,
-            'Video',
-            "pk_fk_content_category= ".$video->category.
-            " AND contents.available=1 AND pk_content = pk_fk_content",
-            4
-        );
-        $this->view->assign('suggested', $arrayResults);
 
         return $this->render(
             'video/video_inner.tpl',
@@ -267,16 +262,16 @@ class VideosController extends Controller
             $itemsPage = 3;
         }
 
-        $_limit = 'LIMIT ' . ($this->page - 1) * $itemsPage . ', ' . ($itemsPage);
+        $limit = 'LIMIT ' . ($this->page - 1) * $itemsPage . ', ' . ($itemsPage);
 
-        $others_videos = $this->cm->find_all(
+        $videos = $this->cm->find_all(
             'Video',
             'available=1 AND `contents_categories`.`pk_fk_content_category` <> ' . $this->category . '',
-            'ORDER BY created DESC ' . $_limit
+            'ORDER BY created DESC ' . $limit
         );
 
-        if (count($others_videos) > 0) {
-            foreach ($others_videos as &$video) {
+        if (count($videos) > 0) {
+            foreach ($videos as &$video) {
                 $video->category_name  = $video->loadCategoryName($video->id);
                 $video->category_title = $video->loadCategoryTitle($video->id);
             }
@@ -289,7 +284,7 @@ class VideosController extends Controller
         return $this->render(
             'video/partials/_widget_video_more_interesting.tpl',
             array(
-                'others_videos'      => $others_videos,
+                'others_videos'      => $videos,
                 'actual_category_id' => $this->category,
                 'page'               => $this->page,
                 'total_more'         => 4,
@@ -384,7 +379,7 @@ class VideosController extends Controller
     /**
     * Render advertisement on videos
     */
-    private function videoAdvertisement($context = 'frontpage')
+    private function getAds($context = 'frontpage')
     {
         if ( $context == 'inner' ) {
             $positions = array(901, 902, 903, 905, 909, 910);

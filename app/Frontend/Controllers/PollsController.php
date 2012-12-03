@@ -35,8 +35,6 @@ class PollsController extends Controller
         $this->view = new \Template(TEMPLATE_USER);
         $this->cm   = new \ContentManager();
 
-        $action = $this->request->query->filter('action', 'frontpage', FILTER_SANITIZE_STRING);
-
         $this->categoryName = $this->get('request')->query->filter('category_name', '', FILTER_SANITIZE_STRING);
 
         if (!empty($this->categoryName)) {
@@ -83,9 +81,8 @@ class PollsController extends Controller
 
         $this->view->setConfig('poll-frontpage');
 
-        $cacheID = $this->view->generateCacheId('poll'.$this->categoryName, '', $this->page);
-
         // Don't execute action logic if was cached before
+        $cacheID = $this->view->generateCacheId('poll'.$this->categoryName, '', $this->page);
         if (($this->view->caching == 0)
            || (!$this->view->isCached('poll/poll-frontpage.tpl', $cacheID))) {
 
@@ -131,7 +128,7 @@ class PollsController extends Controller
         }
 
         //  require_once APP_PATH.'/../public/controllers/poll_advertisement.php';
-        $this->pollAdvertisement('frontpage');
+        $this->getAds('frontpage');
 
         return $this->render(
             'poll/poll_frontpage.tpl',
@@ -139,8 +136,6 @@ class PollsController extends Controller
                 'cache_id' => $cacheID,
             )
         );
-
-
     }
 
     /**
@@ -176,14 +171,12 @@ class PollsController extends Controller
         if ($this->view->caching == 0
             || !$this->view->isCached('poll/poll.tpl', $cacheID)
         ) {
-            if (($poll->available==1) && ($poll->in_litter==0)) {
-
+            if ($poll->available == 1
+                && $poll->in_litter == 0
+            ) {
                 $poll->items   = $poll->get_items($pollId);
                 $items         = $poll->items;
                 $poll->dirtyId = $dirtyID;
-
-                $comment  = new \Comment();
-                $comments = $comment->get_public_comments($pollId);
 
                 $otherPolls = $this->cm->find(
                     'Poll',
@@ -196,16 +189,13 @@ class PollsController extends Controller
                         'contentId'    => $pollId,
                         'poll'         => $poll,
                         'items'        => $items,
-                        'num_comments' => count($comments),
                         'otherPolls'   => $otherPolls,
                     )
                 );
             } // end if $tpl->is_cached
 
-
             // Used on module_comments.tpl
             $this->view->assign('contentId', $pollId);
-
         }
 
         $cookie = "polls".$pollId;
@@ -222,7 +212,7 @@ class PollsController extends Controller
 
         $this->view->assign('msg', $msg);
 
-        $this->pollAdvertisement('inner');
+        $this->getAds('inner');
 
         return $this->render(
             'poll/poll.tpl',
@@ -235,13 +225,12 @@ class PollsController extends Controller
     /**
      * Add vote & show poll result
      *
-     * @param [type] [varname] [description]
+     * @param string id the identificator of the poll
      *
      * @return Response the response object
      **/
     public function addVoteAction(Request $request)
     {
-
         $dirtyID = $request->request->filter('id', '', FILTER_SANITIZE_STRING);
 
         $pollId = Content::resolveID($dirtyID);
@@ -253,32 +242,34 @@ class PollsController extends Controller
 
         $poll = new Poll($pollId);
 
-        if (!empty($poll->id)) {
-            $cookie = "polls".$pollId;
-            if (isset($_COOKIE[$cookie])) {
-                 //Application::setCookieSecure($cookie, 'tks');
-                setcookie($cookie, 'tks', time()+3600);
-            }
-            $respEncuesta = $request->request->filter('respEncuesta', '', FILTER_SANITIZE_STRING);
-
-            if (!empty($respEncuesta) && !isset($_COOKIE[$cookie])) {
-                $ip = $_SERVER['REMOTE_ADDR'];
-                $poll->vote($respEncuesta, $ip);
-            }
-
-            $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
-            $cacheID    = $this->view->generateCacheId($this->categoryName, '', $pollId);
-            $tplManager->delete($cacheID, 'poll.tpl');
-
-            $cacheID = $this->view->generateCacheId('poll'.$this->categoryName, '', $this->page);
-            $tplManager->delete($cacheID, 'poll_frontpage.tpl');
-
-            return new RedirectResponse(SITE_URL.$poll->uri);
+        if (empty($poll->id)) {
+            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
+
+        $cookie = "polls".$pollId;
+        if (isset($_COOKIE[$cookie])) {
+             //Application::setCookieSecure($cookie, 'tks');
+            setcookie($cookie, 'tks', time()+3600);
+        }
+        $respEncuesta = $request->request->filter('respEncuesta', '', FILTER_SANITIZE_STRING);
+
+        if (!empty($respEncuesta) && !isset($_COOKIE[$cookie])) {
+            $ip = $_SERVER['REMOTE_ADDR'];
+            $poll->vote($respEncuesta, $ip);
+        }
+
+        $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
+        $cacheID    = $this->view->generateCacheId($this->categoryName, '', $pollId);
+        $tplManager->delete($cacheID, 'poll.tpl');
+
+        $cacheID = $this->view->generateCacheId('poll'.$this->categoryName, '', $this->page);
+        $tplManager->delete($cacheID, 'poll_frontpage.tpl');
+
+        return new RedirectResponse(SITE_URL.$poll->uri);
     }
 
 
-    protected function pollAdvertisement($context = 'frontpage')
+    protected function getAds($context = 'frontpage')
     {
         $advertisement = \Advertisement::getInstance();
 

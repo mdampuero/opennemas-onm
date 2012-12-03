@@ -64,7 +64,6 @@ class FrontpagesController extends Controller
         if ($this->view->caching == 0
             || !$this->view->isCached('frontpage/frontpage.tpl', $cacheID)
         ) {
-
             // Init the Content and Database object
             $ccm = \ContentCategoryManager::get_instance();
 
@@ -77,7 +76,7 @@ class FrontpagesController extends Controller
             }
 
 
-            $actualCategoryId = $actual_category_id = $ccm->get_id($actualCategory);
+            $actualCategoryId = $ccm->get_id($actualCategory);
             $categoryData = null;
             if ($actualCategoryId != 0 && array_key_exists($actualCategoryId, $ccm->categories)) {
                 $categoryData = $ccm->categories[$actualCategoryId];
