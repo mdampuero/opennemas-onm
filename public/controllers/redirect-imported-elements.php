@@ -57,6 +57,7 @@ if (!is_null($contentId)) {
 
 if (isset($_REQUEST['stop_redirect'])) {
     echo $url;
+    die();
 } else {
     header("HTTP/1.1 301 Moved Permanently");
     header("Location: $url");
