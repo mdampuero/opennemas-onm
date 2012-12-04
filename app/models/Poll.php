@@ -124,15 +124,25 @@ class Poll extends Content
 
         if ($data['item']) {
             //Insertamos
-            foreach ($data['item'] as $item) {
-                $sql    ='REPLACE INTO poll_items (`fk_pk_poll`, `item`) VALUES (?,?)';
-                $values = array((int) $data['id'], $item);
+            $keys =  '';
+            foreach ($data['item'] as $k => $item) {
+                $sql    ='REPLACE INTO poll_items (`pk_item`, `fk_pk_poll`,`item`) VALUES (?,?,?)';
+                $values = array((int) $k, $this->id, $item);
 
                 if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
                     \Application::logDatabaseError();
                 }
+                $keys .= $k.', ';
             }
+
+            $sql ="DELETE FROM poll_items WHERE pk_item NOT IN ({$keys} 0) AND fk_pk_poll =?";
+            $values = array((int)$this->id);
+            if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+                \Application::logDatabaseError();
+            }
+
         }
+
         $sql = "UPDATE polls SET `subtitle`=?, `visualization`=?, `with_comment`=?
                         WHERE pk_poll= ?";
 

@@ -140,6 +140,12 @@ switch ($argv[1]) {
         $importer->importVideos();
 
         break;
+    case 'updateMetadata':
+        $importer->helper->log("\n UPDATING METADATA CONTENTS \n");
+
+        $importer->updateContents();
+
+        break;
     default:
         # code...
 

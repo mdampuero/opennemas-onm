@@ -437,6 +437,8 @@ class CanariasHelper
 
     }
 
+
+
     /**
      * Load properties in a object.
      *
