@@ -1373,7 +1373,7 @@ class CanariasToOnm
                     $name = $this->helper->getSlug($rs->fields['autor']);
 
                     $fkAuthor = 0;
-                    $typeOpinion =$this->isOpinionAuthors($name);
+                    $typeOpinion = 0;//$this->isOpinionAuthors($name);
                     $colab ='';
                     if ($typeOpinion == 3) {
                         //Colaboradores
@@ -1915,7 +1915,9 @@ class CanariasToOnm
                     } else {
                         echo "[{$current}/{$totalRows}] Importing video with id {$originalAdID} - ";
                         $title = $this->helper->convertToUtf8($rs->fields['titulo']);
-                        $category  = 20;
+                        $seccion = 'otros';
+                        $category = $this->matchInternalCategory($seccion);
+                        $category_name = $this->categoriesData[$category]->name;
                         $videoData = array(
                                 'title' => $title,
                                 'name' => $rs->fields['video'],
@@ -2323,12 +2325,12 @@ class CanariasToOnm
                 $rs->MoveNext();
             }
 
-            $others = array('galerias', 'otros');
+            $others = array('Galerias', 'Otros');
             foreach ($others as $nombre) {
                 $title = $this->helper->convertToUtf8(strtolower($nombre));
                 $data = array();
                 $data['name'] = \StringUtils::normalize_name($title);
-                $data['title'] = $title;
+                $data['title'] = ucfirst($title);
                 $data['inmenu']=1;
                 $data['subcategory'] =0;
                 $data['internal_category'] =1;

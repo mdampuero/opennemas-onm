@@ -37,16 +37,16 @@ define('USER_ID', '135');
 
 //define('OLD_MEDIA', '/var/www/canariasSw/canariasahora_20');
 //define('OLD_MEDIA', '/var/www/canariasSw/fuerteventura');
-//define('OLD_MEDIA', '/var/www/canariasSw/lanzarote');
-define('OLD_MEDIA', '/var/www/canariasSw/lapalma');
+define('OLD_MEDIA', '/var/www/canariasSw/lanzarote');
+//define('OLD_MEDIA', '/var/www/canariasSw/lapalma');
 
 defined('MEDIA_PATH')
     || define('MEDIA_PATH', SITE_PATH. 'media');
 
 defined('IMG_DIR')
-    || define('IMG_DIR', 'INSTANCE_UNIQUE_NAME/images');
+    || define('IMG_DIR', INSTANCE_UNIQUE_NAME.'/images');
 
 
 defined('FILE_DIR')
-    || define('FILE_DIR', 'INSTANCE_UNIQUE_NAME/files');
+    || define('FILE_DIR', INSTANCE_UNIQUE_NAME.'/files');
 
