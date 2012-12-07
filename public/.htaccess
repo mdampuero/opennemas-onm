@@ -666,6 +666,7 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteRule ^documentos/(.*)?$ /  [R=301,L,NC]
     RewriteRule ^elecciones/(.*)?$ seccion/elecciones/  [R=301,L,NC]
     RewriteRule ^hemeroteca/resultado(.*)?$ / [R=301,L,NC]
+    RewriteRule ^portada/(.*)?$ /  [R=301,L,NC]
     RewriteRule ^sociedad/(.*)?$ seccion/sociedad/  [R=301,L,NC]
     RewriteRule ^galeria/([0-9]+)/foto/(.*)/?$ controllers/redirect-imported-elements.php?content_type=article&content_id=$1   [R=301,L,NC]
     RewriteRule ^(titulares|emision_endirecto)/(.*)?$ /  [R=301,L,NC]
