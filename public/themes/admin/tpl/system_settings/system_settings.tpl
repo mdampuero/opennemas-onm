@@ -414,7 +414,7 @@
                     <div class="control-group">
                         <label for="paypal_mail" class="control-label">{t}Account email:{/t}</label>
                         <div class="controls">
-                            <input type="text" id="paypal_mail" name="paypal_mail" value="{$configs['paypal_mail']|default:""}" class="input-xlarge">
+                            <input type="text" id="paypal_mail" name="paypal_mail" value="{$configs['paypal_settings']['email']|default:""}" class="input-xlarge">
                             <div class="help-block">{t escape=off}You can get your PayPal account email from <a href="https://www.paypal.com/us/cgi-bin/webscr?cmd=_registration-run" target="_blank">PayPal site</a>. This must be a business account for receiving payments{/t}</div>
                         </div>
                     </div>
