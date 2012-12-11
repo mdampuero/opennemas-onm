@@ -89,7 +89,7 @@
         </ul>
 
         <div class="table-info clearfix">
-            <div class="pull-left"><strong>{t 1=$totalArticles}%1 articles{/t}</strong></div>
+            {acl hasCategoryAccess=$category}<div class="pull-left"><strong>{t 1=$totalArticles}%1 articles{/t}</strong></div> {/acl}
             <div class="pull-right">
                 <div class="form-inline">
                     <input type="text" placeholder="{t}Search by title:{/t}" name="title" value="{$title}"/>
@@ -118,6 +118,7 @@
                 <th class="center" style="width:10px;">{t}Available{/t}</th>
                 <th class="right" style="width:70px;">{t}Actions{/t}</th>
             </thead>
+            {acl hasCategoryAccess=$category}
             <tbody>
             {foreach name=c from=$articles item=article}
                 <tr>
@@ -169,6 +170,7 @@
                         </div>
                     </td>
                 </tr>
+
             {foreachelse}
                 <tr>
                     <td class="empty" colspan="10">{t}No available articles.{/t}</td>
@@ -184,6 +186,7 @@
                     </td>
                 </tr>
             </tfoot>
+            {/acl}
         </table>
 
     </div>
