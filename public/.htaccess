@@ -590,6 +590,7 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteRule ^index.php/aeropuertos/?$ /estaticas/aeropuertos.html [R=301,L,NC]
     RewriteRule ^index.php/farmacias/?$ /estaticas/farmacia.html [R=301,L,NC]
     RewriteRule ^index.php/galerias/?$ /album/ [R=301,L,NC]
+    RewriteRule ^index.php/galeria/.*?$ /album/ [R=301,L,NC]
     #------------------------  Secciones de hibridosyelectricos.com
     RewriteRule ^index.php/actualidad.*?$ /seccion/actualidad/ [R=301,L,NC]
     RewriteRule ^index.php/marcas-y-fabricantes.*/?$ /seccion/mercado/ [R=301,L,NC]
@@ -645,7 +646,7 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
 
     RewriteCond %{HTTP_HOST} ^canariasahora.es$ [OR]
     RewriteCond %{HTTP_HOST} ^www.canariasahora.es$ [NC]
-    RewriteRule ^noticia/([0-9]+)/(.*)?$ controllers/redirect-imported-elements.php?content_type=article&content_id=$1   [R=301,L,NC]
+    RewriteRule ^noticia/([0-9]+)/?(.*)?$ controllers/redirect-imported-elements.php?content_type=article&content_id=$1   [R=301,L,NC]
     RewriteRule ^fauna/(.*)?$ seccion/fauna-por-eduardo-pomares/  [R=301,L,NC]
     RewriteRule ^imprimir/noticia/([0-9]+)/?$ controllers/redirect-imported-elements.php?content_type=article&content_id=$1   [R=301,L,NC]
     RewriteRule ^enviar/noticia/([0-9]+)/?$ controllers/redirect-imported-elements.php?content_type=article&content_id=$1   [R=301,L,NC]
@@ -655,6 +656,7 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteRule ^encuestas/?$ /encuesta  [R=301,L,NC]
     RewriteRule ^publicidad/?$ estaticas/publicidad/  [R=301,L,NC]
     RewriteRule ^nosotros/?$ estaticas/contacto/  [R=301,L,NC]
+    RewriteRule ^avisolega/?$ estaticas/avisolegal/  [R=301,L,NC]
     RewriteRule ^cartasaldirector/(.*)$ cartas-al-director/  [R=301,L,NC]
     RewriteRule ^videos/(.*)?$ video/  [R=301,L,NC]
     RewriteRule ^galerias_de_fotos/?$ album/  [R=301,L,NC]
@@ -742,7 +744,8 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     #Articles articulo/2008/09/29/galicia/titulo-noticia-separada-guiones/1222692016.html
     RewriteRule ^articulo/([a-z0-9\-]+)?/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/([a-z0-9\-]+)/([0-9]+).html$ controllers/article.php?category_name=$1&year=$2&month=$3&day=$4&article_id=$6&action=read&article_title=$5 [L,NC]
     RewriteRule ^extarticulo/([a-z0-9\-]+)?/.*/([0-9]+).html$ controllers/article_ws.php?category_name=$1&article_id=$2&action=read [L,NC]
-    RewriteRule ^articulo/([a-z0-9\-]+)?/(.*)/([0-9]+).html$ controllers/article.php?category_name=$1&article_id=$3&action=read&article_title=$2 [L,NC]
+
+    RewriteRule ^articulo/([a-z0-9\-]*)?/(.*)/([0-9]+).html$ controllers/article.php?category_name=$1&article_id=$3&action=read&article_title=$2 [L,NC]
     RewriteRule ^artigo/([a-z0-9\-]+)?/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/([a-z0-9\-]+)/([0-9]+).html$ controllers/article.php?category_name=$1&year=$2&month=$3&day=$4&article_id=$6&action=read&article_title=$5 [L,NC]
     RewriteRule ^artigo/([a-z0-9\-]+)?/.*/([0-9]+).html$ controllers/article.php?category_name=$1&article_id=$2&action=read [L,NC]
 
