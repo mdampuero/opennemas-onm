@@ -28,11 +28,10 @@ class WebServiceController extends Controller
      **/
     public function init()
     {
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
     }
 
     /**
-     * Description of the action
+     * Forwards all the web service requests to Restler
      *
      * @return Response the response object
      **/
@@ -43,6 +42,10 @@ class WebServiceController extends Controller
 
         // Change the request uri to trick Restler
         $_SERVER['REQUEST_URI'] = str_replace('/ws', '', $_SERVER['REQUEST_URI']);
+
+        if ($_SERVER['REQUEST_URI'] == '') {
+            $_SERVER['REQUEST_URI'] = '/';
+        }
 
         $r = new \Restler();
         $r->setSupportedFormats('JsonFormat', 'XmlFormat');

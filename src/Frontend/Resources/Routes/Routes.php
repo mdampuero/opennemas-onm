@@ -1004,7 +1004,7 @@ $frontendRoutes->add(
             'category'    => 'home'
         ),
         array(
-            'category'  => '[a-z0-9\-]+',
+            'category'  => '(^[mobile])', // [a-z0-9\-]+
         )
     )
 );

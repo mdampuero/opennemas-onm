@@ -7,7 +7,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  **/
-
 // Define path to application directory
 defined('APPLICATION_PATH')
     || define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../'));
@@ -15,12 +14,11 @@ defined('APPLICATION_PATH')
 // Paths settings
 define('SRC_PATH', realpath(APPLICATION_PATH.DIRECTORY_SEPARATOR."src/").DIRECTORY_SEPARATOR);
 define('SITE_PATH', realpath(APPLICATION_PATH.DIRECTORY_SEPARATOR."public").DIRECTORY_SEPARATOR);
-define('SITE_LIBS_PATH', realpath(SITE_PATH . "libs") . DIRECTORY_SEPARATOR);
 define('SITE_VENDOR_PATH', realpath(APPLICATION_PATH.DIRECTORY_SEPARATOR."vendor").DIRECTORY_SEPARATOR);
 define('SITE_CORE_PATH', realpath(SITE_VENDOR_PATH.DIRECTORY_SEPARATOR."core").DIRECTORY_SEPARATOR);
 define('SITE_MODELS_PATH', realpath(APPLICATION_PATH.DIRECTORY_SEPARATOR."app/models").DIRECTORY_SEPARATOR);
 define('APP_PATH', realpath(APPLICATION_PATH.DIRECTORY_SEPARATOR."app/").DIRECTORY_SEPARATOR);
-define('SITE_WS_API_PATH', realpath(APPLICATION_PATH.DIRECTORY_SEPARATOR."app/rest").DIRECTORY_SEPARATOR);
+define('SITE_WS_API_PATH', realpath(SRC_PATH.DIRECTORY_SEPARATOR."WebService/Handlers").DIRECTORY_SEPARATOR);
 
 // Ensure library/ is on include_path
 set_include_path(
@@ -28,7 +26,6 @@ set_include_path(
         PATH_SEPARATOR,
         array(
             SITE_CORE_PATH,
-            SITE_LIBS_PATH,
             SITE_VENDOR_PATH,
             SITE_MODELS_PATH,
             APP_PATH,
@@ -96,4 +93,3 @@ $loader->registerNamespaceFallback(SITE_WS_API_PATH);
 $loader->useIncludePath(true);
 
 $loader->register();
-
