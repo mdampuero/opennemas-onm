@@ -13,11 +13,16 @@ $configFile = implode(DIRECTORY_SEPARATOR, array(
     APPLICATION_PATH, 'config', 'config.inc.php'
 ));
 
-use Symfony\Component\HttpFoundation\Request,
-    Symfony\Component\Routing\RouteCollection,
-    Symfony\Component\Routing\Matcher\UrlMatcher,
-    Symfony\Component\Routing\RequestContext,
-    Symfony\Component\Routing\Route;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\Routing\Matcher\UrlMatcher;
+use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Routing\Route;
+
+// We have to use this for ws and mobile
+if (!isset($routes)) {
+    $routes = new RouteCollection();
+}
 
 // Create the request object
 $request = Request::createFromGlobals();
@@ -58,4 +63,3 @@ if (file_exists($configFile)) {
     echo $errorPage;
     die();
 }
-
