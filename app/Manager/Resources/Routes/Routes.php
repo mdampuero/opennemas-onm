@@ -10,9 +10,6 @@
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
-// Load the available route collection
-$routes = new RouteCollection();
-
 $managerRoutes = new RouteCollection();
 
 $managerRoutes->add(
@@ -22,8 +19,7 @@ $managerRoutes->add(
         array(
             '_controller' => 'Manager:Controllers:InstancesController:list',
         )
-    ),
-    'manager'
+    )
 );
 
 $managerRoutes->add(
@@ -33,8 +29,7 @@ $managerRoutes->add(
         array(
             '_controller' => 'Manager:Controllers:InstancesController:listExport',
         )
-    ),
-    'manager'
+    )
 );
 
 $managerRoutes->add(
@@ -44,8 +39,7 @@ $managerRoutes->add(
         array(
             '_controller' => 'Manager:Controllers:InstancesController:show',
         )
-    ),
-    'manager'
+    )
 );
 
 $managerRoutes->add(
@@ -55,8 +49,7 @@ $managerRoutes->add(
         array(
             '_controller' => 'Manager:Controllers:InstancesController:create',
         )
-    ),
-    'manager'
+    )
 );
 
 $managerRoutes->add(
@@ -66,8 +59,7 @@ $managerRoutes->add(
         array(
             '_controller' => 'Manager:Controllers:InstancesController:update',
         )
-    ),
-    'manager'
+    )
 );
 
 $managerRoutes->add(
@@ -77,8 +69,7 @@ $managerRoutes->add(
         array(
             '_controller' => 'Manager:Controllers:InstancesController:delete',
         )
-    ),
-    'manager'
+    )
 );
 
 $managerRoutes->add(
@@ -88,8 +79,7 @@ $managerRoutes->add(
         array(
             '_controller' => 'Manager:Controllers:InstancesController:toggleAvailable',
         )
-    ),
-    'manager'
+    )
 );
 
 $managerRoutes->add(
@@ -99,8 +89,7 @@ $managerRoutes->add(
         array(
             '_controller' => 'Manager:Controllers:FrameworkStatusController:checkDependencies',
         )
-    ),
-    'manager'
+    )
 );
 
 $managerRoutes->add(
@@ -110,17 +99,7 @@ $managerRoutes->add(
         array(
             '_controller' => 'Manager:Controllers:FrameworkStatusController:apcStatus',
         )
-    ),
-    'manager'
-);
-
-$managerRoutes->add(
-    'manager_welcome',
-    new Route(
-        '/',
-        array('_controller' => 'Manager:Controllers:WelcomeController:default')
-    ),
-    'manager'
+    )
 );
 
 $managerRoutes->add(
@@ -128,8 +107,7 @@ $managerRoutes->add(
     new Route(
         '/login',
         array('_controller' => 'Manager:Controllers:AuthenticationController:default')
-    ),
-    'manager'
+    )
 );
 $managerRoutes->add(
     'manager_login_processform',
@@ -137,17 +115,23 @@ $managerRoutes->add(
         '/login/process',
         array('_controller' => 'Manager:Controllers:AuthenticationController:processform'),
         array('_method' => 'POST')
-    ),
-    'manager'
+    )
 );
 $managerRoutes->add(
     'manager_logout',
     new Route(
         '/logout',
         array('_controller' => 'Manager:Controllers:AuthenticationController:logout')
-    ),
-    'manager'
+    )
 );
 
-$routes->addCollection($managerRoutes);
+$routes->add(
+    'manager_welcome',
+    new Route(
+        '/manager',
+        array('_controller' => 'Manager:Controllers:WelcomeController:default')
+    )
+);
+
+$routes->addCollection($managerRoutes, 'manager');
 

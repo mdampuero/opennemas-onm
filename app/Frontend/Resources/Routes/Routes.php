@@ -10,9 +10,6 @@
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
-// Load the available route collection
-$routes = new RouteCollection();
-
 $frontendRoutes = new RouteCollection();
 
 $frontendRoutes->add(
@@ -24,7 +21,6 @@ $frontendRoutes->add(
         )
     )
 );
-
 
 $frontendRoutes->add(
     'frontend_newsletter_subscribe_es',

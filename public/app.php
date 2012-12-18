@@ -10,14 +10,26 @@
 
 require '../app/autoload.php';
 
+// Load the available route collection
+$routes = new \Symfony\Component\Routing\RouteCollection();
+
+require __DIR__.'/../app/Backend/Resources/Routes/Routes.php';
+require __DIR__.'/../app/Manager/Resources/Routes/Routes.php';
 require __DIR__.'/../app/Frontend/Resources/Routes/Routes.php';
+
 
 require 'bootstrap.php';
 
 $sc = include '../app/container.php';
 
-$sc->setParameter('dispatcher.exceptionhandler', 'Frontend:Controllers:ErrorController:default');
+if (preg_match('@^/admin@', $request->getRequestUri(), $matches)) {
+    $sc->setParameter('dispatcher.exceptionhandler', 'Backend:Controllers:ErrorController:default');
+} elseif (preg_match('@^/manager@', $request->getRequestUri(), $matches)) {
+    $sc->setParameter('dispatcher.exceptionhandler', 'Manager:Controllers:ErrorController:default');
+} else {
+    $sc->setParameter('dispatcher.exceptionhandler', 'Frontend:Controllers:ErrorController:default');
+}
+
 // Dispatch the response
 $dispatcher = new \Onm\Framework\Dispatcher\Dispatcher($matcher, $request, $sc);
 $dispatcher->dispatch();
-

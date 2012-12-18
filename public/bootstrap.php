@@ -19,11 +19,6 @@ use Symfony\Component\HttpFoundation\Request,
     Symfony\Component\Routing\RequestContext,
     Symfony\Component\Routing\Route;
 
-// require __DIR__.'/../app/Backend/routes.php' ;
-if (!isset($routes)) {
-    $routes = new RouteCollection();
-}
-
 // Create the request object
 $request = Request::createFromGlobals();
 
