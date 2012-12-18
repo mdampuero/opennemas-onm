@@ -15,7 +15,7 @@ $routes = new \Symfony\Component\Routing\RouteCollection();
 
 require __DIR__.'/../app/Backend/Resources/Routes/Routes.php';
 require __DIR__.'/../app/Manager/Resources/Routes/Routes.php';
-require __DIR__.'/../app/Frontend/Resources/Routes/Routes.php';
+require __DIR__.'/../src/Frontend/Resources/Routes/Routes.php';
 
 
 require 'bootstrap.php';

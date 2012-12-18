@@ -82,7 +82,6 @@ class Bootstrap extends ModuleBootstrap
                         }
                     }
 
-                    $this->get('generator')
                     $session->invalidate();
                     $response = new RedirectResponse(SITE_URL_ADMIN);
                     $response->send();

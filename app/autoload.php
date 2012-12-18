@@ -13,6 +13,7 @@ defined('APPLICATION_PATH')
     || define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../'));
 
 // Paths settings
+define('SRC_PATH', realpath(APPLICATION_PATH.DIRECTORY_SEPARATOR."src/").DIRECTORY_SEPARATOR);
 define('SITE_PATH', realpath(APPLICATION_PATH.DIRECTORY_SEPARATOR."public").DIRECTORY_SEPARATOR);
 define('SITE_LIBS_PATH', realpath(SITE_PATH . "libs") . DIRECTORY_SEPARATOR);
 define('SITE_VENDOR_PATH', realpath(APPLICATION_PATH.DIRECTORY_SEPARATOR."vendor").DIRECTORY_SEPARATOR);
@@ -31,6 +32,7 @@ set_include_path(
             SITE_VENDOR_PATH,
             SITE_MODELS_PATH,
             APP_PATH,
+            SRC_PATH,
             SITE_WS_API_PATH,
             get_include_path(),
         )
