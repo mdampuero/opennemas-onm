@@ -47,7 +47,7 @@
             </ul>
         </div>
         <div class="global-menu pull-left">
-            {admin_menu file='/Backend/Resources/Menu.php' base=$smarty.const.APP_PATH}
+            {admin_menu file='/Backend/Resources/Menu.php' base=$smarty.const.SRC_PATH}
         </div>
         <div class="global-user-tools pull-right">
 
