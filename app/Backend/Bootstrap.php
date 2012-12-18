@@ -54,14 +54,14 @@ class Bootstrap extends ModuleBootstrap
             $this->container->get('request')->setSession($session);
 
             if (!isset($_SESSION['userid'])
-                && !preg_match('@^/login@', $request->getPathInfo())
+                && !preg_match('@^/admin/login@', $request->getPathInfo())
             ) {
                 $url = $request->getPathInfo();
 
                 if (!empty($url)) {
                     $redirectTo = urlencode($request->getUri());
                 }
-                $location = $request->getBaseUrl() .'/login/?forward_to='.$redirectTo;
+                $location = $request->getBaseUrl() .'/admin/login/?forward_to='.$redirectTo;
 
                 $response = new RedirectResponse($location, 301);
                 $response->send();
@@ -82,6 +82,7 @@ class Bootstrap extends ModuleBootstrap
                         }
                     }
 
+                    $this->get('generator')
                     $session->invalidate();
                     $response = new RedirectResponse(SITE_URL_ADMIN);
                     $response->send();
