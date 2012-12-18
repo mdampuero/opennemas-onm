@@ -13,7 +13,6 @@ use Onm\Settings as s;
  *
  * @package    Onm
  * @subpackage Core
- * @author     Fran Dieguez <fran@openhost.es>
  **/
 class Application
 {
@@ -23,12 +22,9 @@ class Application
     public $adodb          = null;
     public $smarty         = null;
     public $log            = null;
-    public $template       = null;
-    public $sesion         = null;
     public $cache          = null;
     public $events         = array();
-    public static $language    = '';
-    public static $request        = null;
+    public static $language = null;
 
     /**
     * Setup the Application instance and assigns it to a global variable
@@ -67,7 +63,7 @@ class Application
 
     public static function initDatabase()
     {
-        // Database
+        // Databasew
         $GLOBALS['application']->conn = \ADONewConnection(BD_TYPE);
         $GLOBALS['application']->conn->Connect(BD_HOST, BD_USER, BD_PASS, BD_DATABASE);
 
@@ -88,7 +84,7 @@ class Application
 
         // Composite Logger (file + mail)
         // http://www.indelible.org/php/Log/guide.html#composite-handlers
-        if ( s::get('log_enabled') == 1) {
+        if ( s::get('log_enabled') == 'on') {
             $GLOBALS['application']->logger = \Log::singleton('composite');
 
             $conf = array('mode' => 0600,
@@ -135,7 +131,7 @@ class Application
             $locale = self::$language.".UTF-8";
             $domain = 'messages';
 
-            $localeDir = realpath(APP_PATH.'/Frontend/Resources/locale/');
+            $localeDir = realpath(SRC_PATH.'/Frontend/Resources/locale/');
 
             if (isset($_GET["locale"])) {
                 $locale = $_GET["locale"].'.UTF-8';
@@ -418,7 +414,6 @@ class Application
      * Register in the log one event in the content
      *
      * @return void
-     * @author
      **/
     public static function logContentEvent($action = null, $content = null)
     {
@@ -429,6 +424,7 @@ class Application
         if (!empty($content)) {
             $msg.=' at '.get_class($content).' (ID:'.$content->id.')';
         }
+        // var_dump($msg, $logger);die();
 
         $logger->notice($msg);
     }
@@ -438,7 +434,6 @@ class Application
      * Register in the Database error handler one error message
      *
      * @return boolean true if all was sucessfully performed
-     * @author
      **/
     public static function logDatabaseError()
     {
@@ -447,10 +442,6 @@ class Application
         $logger = Application::getLogger();
         $logger->notice('[Database Error] '.$errorMsg, 'normal');
 
-        $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-        $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
-
         return $errorMsg;
     }
 }
-
