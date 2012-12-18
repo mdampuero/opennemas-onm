@@ -154,7 +154,7 @@ class ArticlesController extends Controller
                     // Add category name
                     foreach ($relatedContents as &$content) {
                         $content->category_name =
-                            $ccm->get_category_name_by_content_id($content->id);
+                            $this->ccm->get_category_name_by_content_id($content->id);
                     }
                 }
                 $this->view->assign('relationed', $relatedContents);
