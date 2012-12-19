@@ -622,6 +622,8 @@ class ArticlesController extends Controller
                     )
                 )
             );
+        } else {
+            return new Response('ok');
         }
     }
 
