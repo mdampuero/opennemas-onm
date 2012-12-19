@@ -210,7 +210,7 @@
                         </div>
                     </div>
 
-                    {is_module_activated name="AVANCED_ARTICLE_MANAGER"}
+                    {is_module_activated name="CRONICAS_MODULES"}
                     <div class="control-group">
                         <label for="agency_bulletin" class="control-label">{t}Newsletter signature{/t}</label>
                         <div class="">
