@@ -368,6 +368,8 @@ class SpecialsController extends Controller
                     )
                 )
             );
+        } else {
+            return new Response('ok');
         }
     }
 
