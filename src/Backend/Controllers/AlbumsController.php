@@ -716,7 +716,7 @@ class AlbumsController extends Controller
             'Album',
             $categoryFilter,
             '1=1',
-            ' ORDER BY starttime DESC, contents.title ASC ',
+            ' ORDER BY created DESC, contents.title ASC ',
             $page,
             $itemsPerPage
         );
