@@ -2263,7 +2263,9 @@ class CanariasToOnm
                     echo "- $metadata, ".$rs->fields['pk_content']." \n";
                     $values[] = array($metadata, $rs->fields['pk_content']);
                 }
+
                  $rs->MoveNext();
+
             }
             $rs->Close();
             //update
@@ -2281,9 +2283,7 @@ class CanariasToOnm
         }
 
     }
-
-
-    //New functions for satelite instaces
+ //New functions for satelite instaces
 
 
     public function createCategories()
