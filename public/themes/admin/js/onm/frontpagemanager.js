@@ -6,7 +6,8 @@ function makeContentProviderAndPlaceholdersSortable() {
         handle: '.description',
         update: function(event,ui) {
             initializePopovers();
-            jQuery('#warnings-validation').html('<div class="notice">' + frontpage_messages.remember_save_positions + '</div>');
+            show_save_frontpage_dialog();
+            frontpage_info.changed = true
         },
         tolerance: 'pointer'
         //containment: '#content-with-ticker'
@@ -19,12 +20,31 @@ function makeContentProviderAndPlaceholdersSortable() {
         handle: '.description',
         update: function(event,ui) {
             initializePopovers();
-            jQuery('#warnings-validation').html('<div class="alert alert-notice"><button class="close" data-dismiss="alert">×</button>' + frontpage_messages.remember_save_positions + '</div>');
+            show_save_frontpage_dialog();
+            frontpage_info.changed = true
         },
         tolerance: 'pointer'
         //containment: '#content-with-ticker'
     }).disableSelection();
 }
+
+function check_available_new_version() {
+    var $version = frontpage_info.last_saved;
+    var category = $('#frontpagemanager').data('category');
+    var exists_version = true;
+    $.ajax({
+        url: frontpage_urls.check_version + '?date=' + encodeURIComponent($version) + '&category=' + category,
+        method: 'get',
+        async: false,
+        type: 'json',
+        success: function(data) {
+            exists_version = (data == 'true')
+        }
+    });
+    return exists_version;
+}
+
+
 
 function get_tooltip_content(elem) {
     var parent_content_div = elem.closest('div.content-provider-element');
@@ -113,7 +133,7 @@ function get_contents_in_frontpage() {
 }
 
 function show_save_frontpage_dialog() {
-    jQuery('#warnings-validation').html('<div class="notice">' + frontpage_messages.remember_save_positions + '</div>');
+    jQuery('#warnings-validation').html('<div class="alert alert-notice"><button class="close" data-dismiss="alert">×</button>' + frontpage_messages.remember_save_positions + '</div>');
 }
 
 
@@ -133,11 +153,25 @@ function initializePopovers() {
 }
 jQuery(function($) {
 
+    window.setInterval(function(){
+        // Frontpage has changed and needs to be reloaded
+        if (check_available_new_version()) {
+            $('#modal-new-version').modal('show');
+        };
+    }, 10000);
     /***************************************************************************
     * Sortable handlers
     ***************************************************************************/
     makeContentProviderAndPlaceholdersSortable();
 
+    /***************************************************************************
+    * Frontpage version control
+    ***************************************************************************/
+    $('#modal-new-version').modal({ backdrop: 'static', keyboard: true, show: false });
+    $('#modal-new-version').on('click', 'a.btn.no', function(e,ui) {
+        e.preventDefault();
+        $('#modal-new-version').modal('hide');
+    });
     /***************************************************************************
     * Batch Actions
     ***************************************************************************/
@@ -413,23 +447,36 @@ jQuery(function($) {
         e.preventDefault();
         var els = get_contents_in_frontpage();
         var category = $('#frontpagemanager').data('category');
+        var new_version_available = check_available_new_version(false);
 
-        $.post(frontpage_urls.save_positions + '?category=' + category,
-                { 'contents_positions': els }
-        ).success(function(data) {
-            $('#warnings-validation').html(
-                "<div class='alert alert-success'>" +
-                    "<button class='close' data-dismiss='alert'>×</button>" +
-                    data +
-                '</div>');
-        }).error(function(data) {
-            $('#warnings-validation').html(
-                "<div class='alert alert-error'>" +
-                    "<button class='close' data-dismiss='alert'>×</button>" +
-                    data.responseText +
-                '</div>'
-            );
-        });
+        // If there is a new version available for this frontpage avoid to save
+        if (new_version_available) {
+            $('#modal-new-version').modal('show');
+        } else {
+            $.ajax({
+                url: frontpage_urls.save_positions + '?category=' + category,
+                async: false,
+                type: 'POST',
+                dataType: 'json',
+                data: { 'contents_positions': els },
+                success: function(data) {
+                    $('#warnings-validation').html(
+                        "<div class='alert alert-success'>" +
+                            "<button class='close' data-dismiss='alert'>×</button>" +
+                            data.message +
+                        '</div>');
+                    frontpage_info.last_saved = data.date;
+                },
+                error: function(data) {
+                    $('#warnings-validation').html(
+                        "<div class='alert alert-error'>" +
+                            "<button class='close' data-dismiss='alert'>×</button>" +
+                            data.message +
+                        '</div>'
+                    );
+                }
+            });
+        }
     });
 
     $('#button_clearcache').on('click', function(e, ui) {

@@ -21,8 +21,9 @@
         "symfony/dependency-injection": "2.1.*",
         "symfony/config"              : "2.1.*",
         "symfony/yaml"                : "2.1.*",
+        "symfony/console"             : "2.1.*",
         "swiftmailer/swiftmailer"     : "4.1.7",
-        "monolog/monolog"             : "1.1.0",
+        "monolog/monolog"             : "1.2.*",
         "frandieguez/panorama-php"    : "1.0.2"
     }
 }

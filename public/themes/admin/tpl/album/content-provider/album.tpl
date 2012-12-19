@@ -34,12 +34,13 @@
                 </a>
                 {/if}
             </li>
+            {*
             <li class="divider"></li>
             <li>
                 <a href="{url name=admin_album_delete id=$content->id category=$category}" title="{t}Delete{/t}" class="send-to-trash">
                     <i class="icon-trash"></i> {t}Send to trash{/t}
                 </a>
-            </li>
+            </li>*}
         </ul>
     </div>
 </div>

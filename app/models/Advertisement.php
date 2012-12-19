@@ -6,6 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use Onm\Settings as s;
 /**
  * Advertisement class
  *
@@ -637,15 +638,20 @@ class Advertisement extends Content
 
             // Get string of types separeted by coma
             $types = implode(',', $types);
-
+            $config = s::get(array('ads_settings'));
+            if (isset($config['ads_settings']['no_generics'])
+                && ($config['ads_settings']['no_generics'] == '1')) {
+                $generics = '';
+            } else {
+                $generics = ' OR fk_content_categories=0';
+            }
             // Generate sql with or without category
             $cm = new ContentManager();
             if ($category!=0) {
                 $rsBanner = $cm->find(
                     'Advertisement',
                     ' type_advertisement IN ('.$types.') AND available=1 AND
-                    (fk_content_categories LIKE \'%'.$category.'%\'
-                    OR fk_content_categories=0)',
+                    (fk_content_categories LIKE \'%'.$category.'%\' '.$generics.')',
                     'ORDER BY type_advertisement, created'
                 );
             } else {
@@ -853,7 +859,7 @@ class Advertisement extends Content
                     } else {
                         $output .= '<div style="position: relative; width: '.$width.'px; height: '.$height.'px;">
                             <div style="left:0px;top:0px;cursor:pointer;background-color:#FFF;'
-                                .'filter:alpha(opacity=0);position:absolute;z-index:100;width:'.
+                                .'filter:alpha(opacity=0);opacity:0;position:absolute;z-index:100;width:'.
                                 $width.'px;height:'.$height.'px;"
                                 onclick="javascript:window.open(\''.SITE_URL.'ads/'
                                 .date('YmdHis', strtotime($banner->created))

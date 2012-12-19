@@ -365,7 +365,7 @@ class TemplateCacheManager
     public function dumpConfig()
     {
 
-        $filename = $this->_smarty->config_dir . 'cache.conf';
+        $filename = $this->_smarty->config_dir[0] . 'cache.conf';
 
         return parse_ini_file($filename, true);
     }
@@ -373,7 +373,7 @@ class TemplateCacheManager
     public function saveConfig($config)
     {
 
-        $filename = $this->_smarty->config_dir . 'cache.conf';
+        $filename = $this->_smarty->config_dir[0] . 'cache.conf';
         $fp = @fopen($filename, 'w');
 
         if ($fp !== false) {

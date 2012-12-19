@@ -19,12 +19,14 @@
  */
 use Onm\Settings as s;
 use Onm\Message  as m;
+use Onm\Instance;
 
 /**
  * Setup app
  */
 require_once '../bootstrap.php';
 
+//require_once SITE_VENDOR_PATH.'/Restler/v2.2/restler.php';
 require_once SITE_VENDOR_PATH.'/Restler/restler.php';
 require_once SITE_VENDOR_PATH.'/Restler/xmlformat.php';
 
@@ -41,6 +43,8 @@ $r->addAPIClass('Videos');
 $r->addAPIClass('Categories');
 $r->addAPIClass('Authors');
 $r->addAPIClass('Frontpages');
+
+$r->addAuthenticationClass('AuthSystem');
 
 $r->handle();
 

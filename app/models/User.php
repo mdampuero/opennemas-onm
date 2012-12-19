@@ -353,6 +353,7 @@ class User
     ) {
         $result = false;
 
+<<<<<<< HEAD
         if ($this->isValidEmail($login)) {
             $result = $this->authGoogleClientLogin(
                 $login,
@@ -366,6 +367,9 @@ class User
                 $result = $this->authDatabase($login, $password, true);
             }
         }
+=======
+        $result = $this->authDatabase($login, $password);
+>>>>>>> 4b8fa5bea53ab3c8a61082ba4377e9c25676ed4e
 
         return $result;
     }

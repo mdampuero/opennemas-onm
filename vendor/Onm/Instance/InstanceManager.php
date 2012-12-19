@@ -435,21 +435,13 @@ class InstanceManager
         }
 
         // Check if the instance already exists
-        $sql = "SELECT count(*) as instance_exists FROM instances "
-             . "WHERE `internal_name` = ?";
-        $rs = $this->connection->Execute($sql, array($data['internal_name']));
+        $instanceExists = $this->checkInstanceExists($data['internal_name']);
 
         // Check if the email already exists
-        $checkMailSql = "SELECT count(*) as email_exists FROM instances "
-              . "WHERE `contact_mail` = ?";
-        $checkMailRs = $this->connection->Execute($checkMailSql, array($data['user_mail']));
+        $emailExists = $this->checkMailExists($data['user_mail']);
 
         // If doesn´t exist the instance in the database and doesn't exist contact mail proceed
-        if ($rs
-            && !(bool) $rs->fields['instance_exists']
-            && $checkMailRs
-            && !(bool) $checkMailRs->fields['email_exists']
-        ) {
+        if (!$instanceExists && !$emailExists) {
             $createIntanceSql = "INSERT INTO instances "
                   . "(name, internal_name, domains, "
                   . "activated, settings, contact_mail) "
@@ -476,22 +468,20 @@ class InstanceManager
         } elseif (isset ($_POST['timezone'])) {
             // If instance name or contact mail already
             // exists and comes from openhost form
-            if ($rs && (bool) $rs->fields['instance_exists']) {
+            if ($instanceExists) {
                 echo 'instance_exists';
-            } elseif ($checkMailRs
-                && (bool) $checkMailRs->fields['email_exists']
-            ) {
+            } elseif ($emailExists) {
                 echo 'mail_exists';
             }
 
             die();
         } else {
             //If instance name or contact mail already exists and comes from manager
-            if ($rs && (bool) $rs->fields['instance_exists']) {
+            if ($instanceExists) {
                 throw new InstanceNotRegisteredException(
                     _("Instance internal name is already in use.")
                 );
-            } elseif ( $checkMailRs && (bool) $checkMailRs->fields['email_exists']) {
+            } elseif ($emailExists) {
                 throw new InstanceNotRegisteredException(
                     _("Instance contact mail is already in use.")
                 );
@@ -835,6 +825,51 @@ class InstanceManager
         }
 
         return $data;
+    }
+
+    /*
+     * Check for repeated internalNameShort
+     *
+     */
+    public function checkInstanceExists($internalName)
+    {
+        $sql = "SELECT count(*) as instance_exists FROM instances "
+             . "WHERE `internal_name` = ?";
+        $rs = $this->connection->Execute($sql, array($internalName));
+
+        if ($rs && $rs->fields['instance_exists'] > 0) {
+            return true;
+        } elseif (!$rs) {
+            throw new Exception(
+                'Error in sql execution:'
+                .' EXEC_LINE: {$execLine} \n OUTPUT: {$output}'
+            );
+        }
+
+        return false;
+    }
+
+    /*
+     * Check for repeated internalNameShort
+     *
+     */
+    public function checkMailExists($mail)
+    {
+        // Check if the email already exists
+        $sql = "SELECT count(*) as email_exists FROM instances "
+              . "WHERE `contact_mail` = ?";
+        $rs = $this->connection->Execute($sql, array($mail));
+
+        if ($rs && $rs->fields['email_exists'] > 0) {
+            return true;
+        } elseif (!$rs) {
+            throw new Exception(
+                'Error in sql execution:'
+                .' EXEC_LINE: {$execLine} \n OUTPUT: {$output}'
+            );
+        }
+
+        return false;
     }
 }
 

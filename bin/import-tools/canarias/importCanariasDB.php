@@ -28,6 +28,9 @@ define('SITE_PATH', realpath(APPLICATION_PATH. DIRECTORY_SEPARATOR ."public").DI
 
 define('APC_PREFIX', 'canarias-importer');
 
+//require 'libs/lanzaroteImport-config.inc.php';
+//require 'libs/fuerteventuraImport-config.inc.php';
+//require 'libs/lapalmaImport-config.inc.php';
 require 'libs/canariasImport-config.inc.php';
 
 require SITE_PATH.'../app/autoload.php';
@@ -47,14 +50,11 @@ set_include_path(
     )
 );
 
-
-
 $importer = new CanariasToOnm($configOldDB, $configNewDB);
 
 
-$option = 'articles';
 
-switch ($option) {
+switch ($argv[1]) {
     case 'clear':
         $importer->helper->sqlClearData(); //delete old data in tables
         $importer->helper->clearLog();
@@ -73,12 +73,14 @@ switch ($option) {
         break;
     case 'opinion':
         $importer->helper->log('IMPORTING AUTHORS AND OPINIONS');
+        $importer->importCategories();
         $importer->createDefaultAuthors();
         $importer->importAuthorsOpinion();
         $importer->importOpinions();
         break;
     case 'articles':
         $importer->helper->log('IMPORTING ARTICLES AND IMAGES');
+        $importer->importCategories();
         $importer->importHemeroteca();
         $importer->importHemerotecaTopSecret();
         $importer->importTopSecret();
@@ -87,8 +89,13 @@ switch ($option) {
         $importer->importArticles();
 
         break;
-    case 'other-contents':
+    case 'otherContents':
         $importer->helper->log("\n IMPORTING OTHER CONTENTS \n");
+
+        $importer->importCategories();
+
+        $importer->importImagesHumor();
+
         $importer->importLetters();
 
         $importer->importImagesHumor();
@@ -96,18 +103,55 @@ switch ($option) {
         $importer->importAttachments();
 
         $importer->importAlbums();
-        /*
-        // $importer->importComments();
-         //$importer->importRelatedContents();
-        */
+
+        $importer->importVideos();
+
+        break;
+    case 'polls':
+        $importer->helper->log("\n IMPORTING OTHER CONTENTS \n");
+
+        $importer->importCategories();
+
+        $importer->importPolls();
+
+        break;
+    case 'all':
+        $importer->helper->log("\n IMPORTING CONTENTS \n");
+
+        $importer->createCategories();
+
+        $importer->importAuthorsOpinion();
+
+        $importer->importOpinions();
+
+        $importer->importTopSecret();
+
+        $importer->importImagesArticles();
+
+        $importer->importArticles();
+
+        $importer->importAttachments();
+
+        $importer->importAlbums();
+
+        $importer->importVideos();
+
+        break;
+    case 'updateMetadata':
+        $importer->helper->log("\n UPDATING METADATA CONTENTS \n");
+
+        $importer->getFilesData();
+
+        $importer->updateContents();
+
         break;
     default:
         # code...
+
         break;
 }
 
-$importer->importCategories();
-
+echo "You can use options: clear, clearCategories, opinion, ayuntamientos, articles, polls, otherContents, all \n";
 printf("OpenNemas database is ok for Canarias Ahora \n");
 
 $importer->helper->printResults();

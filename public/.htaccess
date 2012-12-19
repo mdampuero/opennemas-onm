@@ -564,45 +564,8 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
 
+  # Redirections for elidealgallego.com and hibridosyelectricos.com --------------------------------------------------------------------------------
 
-    #--------------------------------------------------------
-    #Redirection from old http://www.correodiplomatico.com/
-
-      #http://www.correodiplomatico.com/category/politica
-      #http://www.correodiplomatico.com/category/tendencias/medios-comunicacion
-    # opinion categories
- #   RewriteRule ^category/opinion/?$ /opinion/ [R=301,L,NC]
- #   RewriteRule ^category/opinion/colaboradores/?$ /opinion/ [R=301,L,NC]
- #   RewriteRule ^category/opinion/analisis-opinion/?$ /opinion/ [R=301,L,NC]
- #   RewriteRule ^category/opinion/debates/?$ /opinion/ [R=301,L,NC]
-
- #   RewriteRule ^category/([a-z0-9\-]+)/?$ /seccion/$1/ [R=301,L,NC]
- #   RewriteRule ^category/([a-z0-9\-]+)/([a-z0-9\-]+)/?$ /seccion/$2/ [R=301,L,NC]
-
-      #tags
-    #http://www.correodiplomatico.com/tag/consejo-nacional-de-transicion
- #   RewriteRule ^tag/([a-z0-9\-]+)/?$ /seccion/$1/ [R=301,L,NC]
-
-      #Old Static pages
- #   RewriteRule ^contacto /estaticas/contacto.html [R=301,L,NC]
- #   RewriteRule ^contacto-2 /estaticas/contacto.html [R=301,L,NC]
- #   RewriteRule ^quienes-somos /estaticas/quienes-somos.html [R=301,L,NC]
- #  # RewriteRule ^publicidad /estaticas/publicidad.html [R=301,L,NC]
- #   RewriteRule ^venta-de-contenidos-multimedia /estaticas/contacto.html [R=301,L,NC]
- #   RewriteRule ^feed/?$ /rss/listado [R=301,L,NC]
-
-      #Inner Article - Opinion
-    #http://www.correodiplomatico.com/3501-madrid-y-rabat-sellan-un-pacto-secreto-de-ayuda-mutua.html
- #   RewriteRule ^([0-9]+)\-([a-z0-9\-]+).html?$ /controllers/redirect-imported-elements.php?content_type=article&content_id=$1 [L,NC]
-
-     #Images
-     #http://www.correodiplomatico.com/wp-content/uploads/2011/08/Nestor-Kirchner.jpg
-
- #    RewriteRule ^wp-content/uploads/([0-9]+)/([0-9]+)/([a-z0-9\-]+).([a-z]+)?$ / [R=301,L,NC]
-
-
-    #--------------------------------------------------------
-    #Redirection from old elidealgallego.com and hibridosyelectricos.com
     #Inner Article
     RewriteRule ^index\.php/[a-z0-9\-]+/[a-z0-9\-]+/([0-9]+)\-[a-z0-9\-\.]+/?$ /controllers/redirect-imported-elements.php?content_type=article&content_id=$1 [L,NC]
     RewriteRule ^index\.php/[a-z0-9\-]+/[a-z0-9\-]+/[a-z0-9\-]+/([0-9]+)\-[a-z0-9\-\.]+/?$ /controllers/redirect-imported-elements.php?content_type=article&content_id=$1 [L,NC]
@@ -627,6 +590,7 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteRule ^index.php/aeropuertos/?$ /estaticas/aeropuertos.html [R=301,L,NC]
     RewriteRule ^index.php/farmacias/?$ /estaticas/farmacia.html [R=301,L,NC]
     RewriteRule ^index.php/galerias/?$ /album/ [R=301,L,NC]
+    RewriteRule ^index.php/galeria/.*?$ /album/ [R=301,L,NC]
     #------------------------  Secciones de hibridosyelectricos.com
     RewriteRule ^index.php/actualidad.*?$ /seccion/actualidad/ [R=301,L,NC]
     RewriteRule ^index.php/marcas-y-fabricantes.*/?$ /seccion/mercado/ [R=301,L,NC]
@@ -650,13 +614,23 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteRule ^index.php$  /seccion/diosas-pronto/ [R=301,L,NC]
 
     #index.php?option=com_content&task=view&id=47077&Itemid=677
-    RewriteCond %{QUERY_STRING} &?option=com_content&?task=view&?id=([^&]+)&?Itemid=([^&]+)
+    RewriteCond %{QUERY_STRING} &?option=com_content&?task=[^&]+&?id=([^&]+)&?Itemid=([^&]+)&?[^&]+
     RewriteRule ^index.php$ controllers/redirect-imported-elements.php?content_type=article&content_id=%1  [R=301,L,NC]
+
+    #index2.php?option=com_content&task=view&id=22897&pop=1&page=21400&Itemid=677
+    RewriteCond %{QUERY_STRING} &?option=com_content&?task=[^&]+&?id=([^&]+)&?pop=([^&]+)&?page=([^&]+)&?Itemid=([^&]+)&?[^&]+
+    RewriteRule ^index2.php$ controllers/redirect-imported-elements.php?content_type=article&content_id=%1  [R=301,L,NC]
+
+    #index2.php?option=com_content&task=emailform&id=24576&itemid=362
+    RewriteCond %{QUERY_STRING} &?option=com_content&?task=[^&]+&?id=([^&]+)&?[^&]+
+    RewriteRule ^index2.php$ controllers/redirect-imported-elements.php?content_type=article&content_id=%1  [R=301,L,NC]
+    RewriteCond %{QUERY_STRING} &?option=com_content&?task=[^&]+&?id=([^&]+)&?itemid=([^&]+)&?[^&]+
+    RewriteRule ^index2.php$ controllers/redirect-imported-elements.php?content_type=article&content_id=%1  [R=301,L,NC]
 
     #--------------------------------------------------------
     RewriteRule ^index.php/?$ / [R=301,L,NC]
     RewriteRule ^index.php/.*/?$ / [R=301,L,NC]
-
+    RewriteRule ^index?.php/.*/?$ / [R=301,L,NC]
 
     # provisional cronicas
     RewriteRule ^agenda/?$   http://agenda.cronicasdelaemigracion.com/ [R=301,L,NC]
@@ -665,6 +639,49 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
 
     # provisional sermos
     RewriteRule ^media/prepro-sermosgaliza/(.*)$ http://www.sermosgaliza.com/media/sermosgaliza/$1 [R=301,L]
+
+#--------------------------------------------------------
+    #Redirection from old canariasahora.es
+    #http://www2.canariasahora.es/noticia/242988/
+
+    RewriteCond %{HTTP_HOST} ^canariasahora.es$ [OR]
+    RewriteCond %{HTTP_HOST} ^www.canariasahora.es$ [NC]
+    RewriteRule ^noticia/([0-9]+)/?(.*)?$ controllers/redirect-imported-elements.php?content_type=article&content_id=$1   [R=301,L,NC]
+    RewriteRule ^fauna/(.*)?$ seccion/fauna-por-eduardo-pomares/  [R=301,L,NC]
+    RewriteRule ^imprimir/noticia/([0-9]+)/?$ controllers/redirect-imported-elements.php?content_type=article&content_id=$1   [R=301,L,NC]
+    RewriteRule ^enviar/noticia/([0-9]+)/?$ controllers/redirect-imported-elements.php?content_type=article&content_id=$1   [R=301,L,NC]
+    RewriteRule ^fauna/ampliar/([0-9]+)/?$ controllers/redirect-imported-elements.php?content_type=article&content_id=$1&section=fauna   [R=301,L,NC]
+    RewriteRule ^topsecret/ampliar/([0-9]+)/?$ controllers/redirect-imported-elements.php?content_type=article&content_id=$1&section=top   [R=301,L,NC]
+    RewriteRule ^suopinion/([0-9]+)/?$ /opinion/  [R=301,L,NC]
+    RewriteRule ^encuestas/?$ /encuesta  [R=301,L,NC]
+    RewriteRule ^publicidad/?$ estaticas/publicidad/  [R=301,L,NC]
+    RewriteRule ^nosotros/?$ estaticas/contacto/  [R=301,L,NC]
+    RewriteRule ^avisolega/?$ estaticas/avisolegal/  [R=301,L,NC]
+    RewriteRule ^cartasaldirector/(.*)$ cartas-al-director/  [R=301,L,NC]
+    RewriteRule ^videos/(.*)?$ video/  [R=301,L,NC]
+    RewriteRule ^galerias_de_fotos/?$ album/  [R=301,L,NC]
+    RewriteRule ^(top|topsecret)/(.*)?$ seccion/top-secret/  [R=301,L,NC]
+    RewriteCond %{HTTP_HOST} ^canariasahora.es$ [OR]
+    RewriteCond %{HTTP_HOST} ^www.canariasahora.es$ [NC]
+    RewriteRule ^especiales/(.*)?$ album/  [R=301,L,NC]
+    RewriteRule ^(imagenes|imagen)/(.*)?$ album/  [R=301,L,NC]
+    RewriteRule ^documentos/(.*)?$ /  [R=301,L,NC]
+    RewriteRule ^elecciones/(.*)?$ seccion/elecciones/  [R=301,L,NC]
+    RewriteRule ^hemeroteca/resultado(.*)?$ / [R=301,L,NC]
+    RewriteRule ^portada/(.*)?$ /  [R=301,L,NC]
+    RewriteRule ^sociedad/(.*)?$ seccion/sociedad/  [R=301,L,NC]
+    RewriteRule ^galeria/([0-9]+)/foto/(.*)/?$ controllers/redirect-imported-elements.php?content_type=article&content_id=$1   [R=301,L,NC]
+    RewriteRule ^(titulares|emision_endirecto)/(.*)?$ /  [R=301,L,NC]
+    RewriteCond %{HTTP_HOST} ^canariasahora.es$ [OR]
+    RewriteCond %{HTTP_HOST} ^www.canariasahora.es$ [NC]
+    RewriteRule ^ayuntamientos/?$   http://ayuntamientos.canariasahora.es/ [R=301,L,NC]
+    RewriteRule ^ayuntamientos/(.*)$   http://ayuntamientos.canariasahora.es/$1 [R=301,L,NC]
+
+
+    RewriteCond %{SERVER_NAME} ^canariasahora.es$ [OR]
+    RewriteCond %{SERVER_NAME} ^www.canariasahora.es$
+    RewriteRule ^(top-secret|canarias|nacional|internacional|economia|deportes|sociedad|cultura|tecnologia)/?$ seccion/$1 [R=301,L,NC]
+
 
     #--------------------------------------------------------
     #Redirection from old nuevatribuna.es
@@ -676,15 +693,15 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteCond %{QUERY_STRING} &?ref=([^&]+)
     RewriteRule ^noticia\.asp$ /controllers/redirect-from-editmaker.php?content_type=article&content_id=%1 [L,NC]
 
-    #-------------------------
+
     RewriteCond %{QUERY_STRING} &?ref=([^&]+)&?pos=([^&]+) [OR]
     RewriteCond %{QUERY_STRING} &?ref=([^&]+)
     RewriteRule ^noticia\.asp$ /controllers/redirect-from-editmaker.php?content_type=article&content_id=%1 [L,NC]
-    #-------------------------
+
     RewriteCond %{QUERY_STRING} &?id=([^&]+)&?pg=([^&]+) [OR]
     RewriteCond %{QUERY_STRING} &?id=([^&]+)
     RewriteRule ^foros/mostrar_foro\.asp$ /controllers/redirect-from-editmaker.php?content_type=article&content_id=%1 [L,NC]
-    #-------------------------
+
     RewriteCond %{QUERY_STRING} &?pg=([^&]+)&?[(pf=)|(s=)]([^&]+)
     RewriteRule ^pda/noticia\.asp$ /mobile/? [R=301,L,NC]
 
@@ -722,13 +739,13 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     #Old Static pages
     RewriteRule ^contacto($|/$) /estaticas/contacto? [R=301,L,NC]
     RewriteRule ^estaticas/boletin.html /boletin/ [R=301,L,NC]
-    #--------------------------------------------------------
 
     #Articles articulo/2008/09/29/galicia/ourense/titulo-noticia-separada-guiones/1222692016.html
     #Articles articulo/2008/09/29/galicia/titulo-noticia-separada-guiones/1222692016.html
     RewriteRule ^articulo/([a-z0-9\-]+)?/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/([a-z0-9\-]+)/([0-9]+).html$ controllers/article.php?category_name=$1&year=$2&month=$3&day=$4&article_id=$6&action=read&article_title=$5 [L,NC]
     RewriteRule ^extarticulo/([a-z0-9\-]+)?/.*/([0-9]+).html$ controllers/article_ws.php?category_name=$1&article_id=$2&action=read [L,NC]
-    RewriteRule ^articulo/([a-z0-9\-]+)?/(.*)/([0-9]+).html$ controllers/article.php?category_name=$1&article_id=$3&action=read&article_title=$2 [L,NC]
+
+    RewriteRule ^articulo/([a-z0-9\-]*)?/(.*)/([0-9]+).html$ controllers/article.php?category_name=$1&article_id=$3&action=read&article_title=$2 [L,NC]
     RewriteRule ^artigo/([a-z0-9\-]+)?/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/([a-z0-9\-]+)/([0-9]+).html$ controllers/article.php?category_name=$1&year=$2&month=$3&day=$4&article_id=$6&action=read&article_title=$5 [L,NC]
     RewriteRule ^artigo/([a-z0-9\-]+)?/.*/([0-9]+).html$ controllers/article.php?category_name=$1&article_id=$2&action=read [L,NC]
 
@@ -808,27 +825,6 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteRule ^extseccion/([a-z0-9\-]+)/([a-z0-9\-]+)/?$ controllers/index_ws.php?category_name=$1&subcategory_name=$2 [L,NC]
     RewriteRule ^extseccion/([a-z0-9\-]+)/([a-z0-9\-]+)/([0-9]+)/?$ controllers/index_ws.php?category_name=$1&subcategory_name=$2&page=$3 [L,NC]
 
-    #RSS
-    RewriteRule ^rss/?$ controllers/rss.php?action=rss [L,NC]
-    RewriteRule ^rss/listado/?$ controllers/rss.php?action=index_rss [L,NC]
-    RewriteRule ^rss/opinion/([0-9]+)/?$ controllers/rss.php?category_name=opinion&author=$1&action=rss [L,NC]
-    RewriteRule ^rss/([a-z0-9-]+)/([a-z0-9-]+)/?$ controllers/rss.php?category_name=$1&subcategory_name=$2&action=rss [L,NC]
-    RewriteRule ^rss/([a-z0-9-]+)/?$ controllers/rss.php?category_name=$1&action=rss [L,NC]
-
-    #Sitemap
-    RewriteRule ^sitemapnews.xml?$ controllers/sitemap.php?action=news [L,NC]
-    RewriteRule ^sitemapweb.xml?$ controllers/sitemap.php?action=web [L,NC]
-    RewriteRule ^sitemapnews.xml.gz?$ controllers/sitemap.php?action=news&format=gz [L,NC]
-    RewriteRule ^sitemapweb.xml.gz?$ controllers/sitemap.php?action=web&format=gz [L,NC]
-    RewriteRule ^sitemap.xml?$ controllers/sitemap.php [L,NC]
-
-    #Robots.txt
-    RewriteRule ^robots.txt?$ controllers/robots.php [L,NC]
-
-    #Advertisement
-    RewriteRule ^ads/get/([0-9]+).html$ controllers/advertisement.php?action=get&id=$1 [L,NC]
-    RewriteRule ^ads/([0-9]+).html$ controllers/advertisement.php?action=show&publi_id=$1 [L,NC]
-
     #Album
     #album/generic/2011-07-09/prueba/2011070918522200812.html
     RewriteRule ^album/?$ controllers/album.php?action=frontpage [L,NC]
@@ -860,9 +856,6 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
 
     #Search
     RewriteRule ^search/google/(.*)$ controllers/search.php?stringSearch=$1&googleSearch=on [L,NC]
-
-    #Static pages
-    RewriteRule ^estaticas/([a-z0-9\-]+)(\.html|/)?$ controllers/statics.php?slug=$1 [L,NC]
 
     #Newsletter links
     #RewriteRule ^([a-z0-9\-]+)/([0-9]{4}-[0-1][0-9]-[0-3][0-9])/([0-9]+)/$ /seccion/$1/#$3 [R=301,NE,NC,L]
@@ -986,4 +979,9 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     ErrorDocument 403 /controllers/error.php?errordoc=403
     ErrorDocument 404 /controllers/error.php?errordoc=404
     ErrorDocument 500 /controllers/error.php?errordoc=500
+
+    RewriteCond $1 !\.(php)$ [NC]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^(.*)$ app.php [QSA,L]
+
 </IfModule>

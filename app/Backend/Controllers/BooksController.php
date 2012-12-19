@@ -216,7 +216,7 @@ class BooksController extends Controller
 
             // Move uploaded pdf
             $uploadStatusPdf    = @move_uploaded_file($_FILES['file']['tmp_name'], $bookSavePath.$fileName);
-            $uploadStatusPdfImg = @move_uploaded_file($$_FILES['file_img']['tmp_name'], $bookSavePath.$imageName);
+            $uploadStatusPdfImg = @move_uploaded_file($_FILES['file_img']['tmp_name'], $bookSavePath.$imageName);
 
             $data = array(
                 'title'       => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
@@ -317,6 +317,12 @@ class BooksController extends Controller
             m::add(_("You can't modify this book data because you don't have enought privileges."));
 
         } else {
+            // Check empty data
+            if (count($request->request) < 1) {
+                m::add(_("Book data sent not valid."), m::ERROR);
+
+                return $this->redirect($this->generateUrl('admin_books_show', array('id' => $id)));
+            }
 
             $bookSavePath = INSTANCE_MEDIA_PATH.'/books/';
 
@@ -330,7 +336,7 @@ class BooksController extends Controller
 
             if (!empty($_FILES['file_img']['name'])) {
                 $imageName = StringUtils::cleanFileName($_FILES['file_img']['name']);
-                $uploadStatusPdfImg = @move_uploaded_file($$_FILES['file_img']['tmp_name'], $bookSavePath.$imageName);
+                $uploadStatusPdfImg = @move_uploaded_file($_FILES['file_img']['tmp_name'], $bookSavePath.$imageName);
             } else {
                 $imageName = $book->file_img;
             }

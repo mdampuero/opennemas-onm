@@ -31,7 +31,7 @@
             {is_module_activated name="AVANCED_FRONTPAGE_MANAGER"}
             <li>
                 <a title="{t}Change background color in frontpage{/t}" href="#" class="change-color">
-                    <i class="icon-color" style="background-color:{$content->background-color|default:'#FFF'}"></i> {t}Change background color{/t}
+                    <i class="icon-color" {getProperty item=$content category=$params['category'] property='bgcolor'}"></i> {t}Change background color{/t}
                 </a>
             </li>
             {/is_module_activated}
@@ -47,12 +47,14 @@
                 </a>
                 {/if}
             </li>
+            {*
             <li class="divider"></li>
             <li>
                 <a href="{url name=admin_article_delete id=$content->id category=$category}" title="{t}Delete{/t}" class="send-to-trash">
                     <i class="icon-trash"></i> {t}Send to trash{/t}
                 </a>
             </li>
+            *}
         </ul>
     </div>
 </div>

@@ -117,10 +117,13 @@ if (($tpl->caching == 0)
 
         $library = array();
         $contents= $cm->getContentsForLibrary($date);
+
         if (!empty($contents)) {
             foreach ($contents as $content) {
                 $categoryID = $content->category;
-                $library[$categoryID] = new stdClass();
+                if (!isset($library[$categoryID])) {
+                    $library[$categoryID] = new stdClass();
+                }
                 $library[$categoryID]->id = $categoryID;
                 $library[$categoryID]->title = $allCategories[$categoryID]->title;
                 $library[$categoryID]->contents[] = $content;

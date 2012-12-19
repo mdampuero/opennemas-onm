@@ -179,6 +179,12 @@ class CacheManagerController extends Controller
         $itemsCacheIds = $request->request->get('cacheid');
         $itemsTemplate = $request->request->get('tpl');
 
+        if (is_null($itemsSelected) && is_null($itemsCacheIds) && is_null($itemsTemplate)) {
+            $itemsSelected = $request->query->get('selected', null);
+            $itemsCacheIds = $request->query->get('cacheid');
+            $itemsTemplate = $request->query->get('tpl');
+        }
+
         // If there was selected more than one item
         // delete them if not delete only one
         if (count($itemsSelected) > 0) {
@@ -192,6 +198,7 @@ class CacheManagerController extends Controller
         if (!$this->request->isXmlHttpRequest()) {
             return $this->redirect($this->generateUrl('admin_tpl_manager'));
         }
+        return new Response('OK', 200);
     }
 
     /**

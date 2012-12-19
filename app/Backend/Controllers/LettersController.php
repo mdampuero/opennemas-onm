@@ -169,6 +169,12 @@ class LettersController extends Controller
         $letter = new \Letter($id);
 
         if ($letter->id != null) {
+            // Check empty data
+            if (count($request->request) < 1) {
+                m::add(_("Letter data sent not valid."), m::ERROR);
+
+                return $this->redirect($this->generateUrl('admin_letter_show', array('id' => $id)));
+            }
 
             $data = array(
                 'id'        => $id,

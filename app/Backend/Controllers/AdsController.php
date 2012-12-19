@@ -642,6 +642,7 @@ class AdsController extends Controller
                 'ads_settings' => array(
 
                     'lifetime_cookie' => $formValues->getDigits('ads_settings_lifetime_cookie'),
+                    'no_generics'      => $formValues->getDigits('ads_settings_no_generics'),
 
                 )
             );

@@ -1,0 +1,120 @@
+<?php
+/**
+ * This file is part of the Onm package.
+ *
+ * (c)  OpenHost S.L. <developers@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ **/
+namespace Frontend\Controllers;
+
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Onm\Framework\Controller\Controller;
+use Onm\Settings as s;
+
+/**
+ * Handles the actions for the system information
+ *
+ * @package Backend_Controllers
+ * @author
+ **/
+class ErrorController extends Controller
+{
+    /**
+     * Common code for all the actions
+     *
+     * @return void
+     * @author
+     **/
+    public function init()
+    {
+        $this->view = new \Template(TEMPLATE_USER);
+    }
+
+    /**
+     * Description of the action
+     *
+     * @return void
+     **/
+    public function defaultAction(Request $request)
+    {
+        $errorCode     = $request->query->filter('errordoc', 404, FILTER_SANITIZE_STRING);
+        $category_name = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
+        $cache_page    = $request->query->filter('page', 0, FILTER_VALIDATE_INT);
+
+        $error = unserialize($request->get('error'));
+
+        if ($this->container->hasParameter('environment')) {
+            $environment = $this->container->getParameter('environment');
+        }
+
+        $name = join('', array_slice(explode('\\', get_class($error)), -1));
+
+        $errorID = strtoupper(INSTANCE_UNIQUE_NAME.'_'.uniqid());
+
+
+        switch ($name) {
+            case 'ResourceNotFoundException':
+                $trace = $error->getTrace();
+                $path = $trace[0]['args'][0];
+
+
+                $page = new \stdClass();
+
+                // Dummy content while testing this feature
+                $page->title   = 'No hemos podido encontrar la página que buscas.';
+                $page->content = 'Whoups!';
+
+                $errorMessage = sprintf('Oups! We can\'t find anything at "%s".', $path);
+                error_log('File not found: '.$path.'ERROR_ID: '.$errorID);
+                if ($this->request->isXmlHttpRequest()) {
+                    $content = $errorMesage;
+                } else {
+                    $content = $this->renderView(
+                        'static_pages/404.tpl',
+                        array(
+                            'category_real_name' => $page->title,
+                            'page'               => $page,
+                        )
+                    );
+                }
+
+                return new Response($content, 404);
+                break;
+            default:
+                // Change this handle to a more generic error template
+                $errorMessage = _('Oups! Seems that we had an unknown problem while trying to run your request.');
+                error_log('Unknown error. ERROR_ID: '.$errorID);
+
+                if ($environment == 'development') {
+                    $errorMessage = $error->getMessage();
+                }
+
+                $page = new \stdClass();
+
+                // Dummy content while testing this feature
+                $page->title   = $errorMessage;
+                $page->content = 'Whoups!';
+
+                $content = $this->renderView(
+                    'static_pages/statics.tpl',
+                    array(
+                        'category_real_name' => $page->title,
+                        'page'               => $page,
+                        'error_message' => $errorMessage,
+                        'error'         => $error,
+                        'error_id'      => $errorID,
+                        'environment'   => $environment,
+                        'backtrace'     => array_reverse($error->getTrace()),
+                    )
+                );
+
+                return new Response($content, 500);
+
+                break;
+        }
+    }
+}
+

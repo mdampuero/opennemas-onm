@@ -42,17 +42,13 @@ class Bootstrap extends ModuleBootstrap
         $request = $this->container->get('request');
 
         $sessionLifeTime = (int) s::get('max_session_lifetime', 60);
-        if ((int) $sessionLifeTime > 0) {
-            ini_set('session.cookie_lifetime',  $sessionLifeTime*60);
-        } else {
+        if ((int) $sessionLifeTime <= 0) {
             s::set('max_session_lifetime', 60*30);
         }
-
 
         $isAsset = preg_match('@.*\.(png|gif|jpg|ico|css|js)$@', $request->getPathInfo());
         if ($isAsset != 1) {
 
-            session_name('_onm_sess');
             $session = $this->container->get('session');
             $session->start();
             $this->container->get('request')->setSession($session);
@@ -74,6 +70,24 @@ class Bootstrap extends ModuleBootstrap
                 $response = new RedirectResponse('/', 301);
                 $response->send();
                 exit(0);
+            } else {
+                if (isset($_SESSION)
+                    && array_key_exists('updated', $_SESSION)
+                    && array_key_exists('session_lifetime', $_SESSION)
+                    && (time() > ($_SESSION['updated'] + $_SESSION['session_lifetime']))
+                ) {
+                    foreach ($_COOKIE as $name => $value) {
+                        if (preg_match('@^_onm_session_.*@', $name)) {
+                            setcookie($name, '', time() - 60000);
+                        }
+                    }
+
+                    $session->invalidate();
+                    $response = new RedirectResponse(SITE_URL_ADMIN);
+                    $response->send();
+                }
+
+                $_SESSION['updated'] = time();
             }
         } else {
             // Log this error event to the webserver logging sysmte
@@ -162,4 +176,3 @@ class Bootstrap extends ModuleBootstrap
         $GLOBALS['application']->register('onAfterCreateAttach', 'refreshHome');
     }
 }
-

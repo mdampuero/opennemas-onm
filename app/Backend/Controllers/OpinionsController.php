@@ -305,7 +305,7 @@ class OpinionsController extends Controller
             );
 
             if ($opinion->create($data)) {
-                m::add(_('Special successfully created.'), m::SUCCESS);
+                m::add(_('Opinion successfully created.'), m::SUCCESS);
             } else {
                 m::add(_('Unable to create the new opinion.'), m::ERROR);
             }
@@ -359,6 +359,13 @@ class OpinionsController extends Controller
             $available   = $request->request->filter('available', '', FILTER_SANITIZE_STRING);
             $inhome      = $request->request->filter('in_home', '', FILTER_SANITIZE_STRING);
             $withComment = $request->request->filter('with_comment', '', FILTER_SANITIZE_STRING);
+
+            // Check empty data
+            if (count($request->request) < 1) {
+                m::add(_("Opinion data sent not valid."), m::ERROR);
+
+                return $this->redirect($this->generateUrl('admin_opinion_show', array('id' => $id)));
+            }
 
             $data = array(
                 'id'                   => $id,
@@ -582,7 +589,7 @@ class OpinionsController extends Controller
     }
 
     /**
-     * Saves the widget specials content positions
+     * Saves the widget opinions content positions
      *
      * @param Request $request the request object
      *
@@ -622,7 +629,7 @@ class OpinionsController extends Controller
                 $message
             );
         } else {
-            $output = _('Unable to save positions for the specials widget.');
+            $output = _('Unable to save positions for the opinions widget.');
             $output = sprintf(
                 '<div class="alert alert-error">%s<button data-dismiss="alert" class="close">×</button></div>',
                 $message
@@ -633,7 +640,7 @@ class OpinionsController extends Controller
     }
 
     /**
-     * Deletes multiple specials at once given their ids
+     * Deletes multiple opinions at once given their ids
      *
      * @param Request $request the request object
      *

@@ -135,6 +135,26 @@ class Content
     }
 
     /**
+     * Checks if a content exists given its id
+     *
+     * @return boolean true if the content exists
+     **/
+    public static function checkExists($id)
+    {
+        $exists = false;
+
+        $sql = 'SELECT pk_content FROM `contents` '
+             . 'WHERE pk_content = ? LIMIT 1';
+        $values = array($id);
+        $rs =
+            $GLOBALS['application']->conn->Execute($sql, $values);
+
+        $exists = ($rs != false);
+
+        return $exists;
+    }
+
+    /**
      * Returns the URI for this content
      *
      * @return string the uri
