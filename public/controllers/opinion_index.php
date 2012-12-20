@@ -72,29 +72,38 @@ switch ($action) {
                 $tpl->assign('director', $director[0]);
             }
 
+            list($countOpinions, $otherOpinions)= $cm->getCountAndSlice(
+                'Opinion',
+                null,
+                'in_litter != 1 AND in_home=0 AND available=1 AND type_opinion=0',
+                'ORDER BY starttime DESC',
+                $page-1,
+                ITEMS_PAGE
+            );
+
             if ($page == 1) {
                 $opinions = $cm->find(
                     'Opinion',
                     'in_home=1 and available=1 and type_opinion=0',
                     'ORDER BY position ASC, starttime DESC '
                 );
-                $totalHome = count($opinions);
-
             } else {
-                $_limit ='LIMIT '.(($page-2)*ITEMS_PAGE).', '.(($page-1)*ITEMS_PAGE);
-                // Fetch last opinions of contributors and
-                // paginate them by ITEM_PAGE
-                $opinions = $cm->find(
-                    'Opinion',
-                    'in_home=0 and available=1 and type_opinion=0',
-                    'ORDER BY starttime DESC '.$_limit
-                );
+                $opinions = $otherOpinions;
             }
-            // Added ITEMS_PAGE for count first page
-            $total_opinions =  ITEMS_PAGE + $cm->count(
-                'Opinion',
-                'in_home=0 and available=1 and type_opinion=0',
-                'ORDER BY type_opinion DESC, created DESC '
+
+            $pagination = \Pager::factory(
+                array(
+                    'mode'        => 'Sliding',
+                    'perPage'     => ITEMS_PAGE,
+                    'append'      => false,
+                    'path'        => '',
+                    'delta'       => 2,
+                    'clearIfVoid' => true,
+                    'urlVar'      => 'page',
+                    'separator'   => '',
+                    'totalItems'  => $countOpinions,
+                    'fileName'    => '/opinion/%d/',
+                )
             );
 
             $authors = array();
@@ -115,16 +124,6 @@ switch ($action) {
                     )
                 );
             }
-
-            $url    ='opinion';
-            $pagination = $cm->create_paginate(
-                $total_opinions,
-                ITEMS_PAGE,
-                2,
-                'URL',
-                $url,
-                ''
-            );
 
             $tpl->assign('editorial', $editorial);
             $tpl->assign('opinions', $opinions);
