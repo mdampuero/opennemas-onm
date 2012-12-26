@@ -15,17 +15,24 @@ function smarty_function_getProperty($params, &$smarty)
         $category = $params['category'];
     }
 
-    $property = $params['property']."_".$category;
-
-    $value = $item->getProperty($property);
-    if (empty($value)) {
-        return '';
+    $properties = explode(', ', $params['property']);
+    $output = '';
+    if (is_array($properties)) {
+        $output = " style =\"";
+        foreach ($properties as $key => $property) {
+            $prop = $property."_".$category;
+            $value = $item->getProperty($prop);
+            if (!empty($value)) {
+                if ($property == 'bgcolor') {
+                    $output .= "background-color:{$value};";
+                } else {
+                    $output .= "{$property}:{$value};";
+                }
+            }
+        }
+        $output .= "\"";
     }
 
-    if ($params['property'] == 'bgcolor') {
-        return " style = \"background-color:{$value}\"";
-    }
-
-    return $value;
+    return $output;
 }
 
