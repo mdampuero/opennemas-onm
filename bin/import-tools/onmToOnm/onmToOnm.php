@@ -1,0 +1,81 @@
+#!/usr/bin/php5
+<?php
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ * Description of refactorize
+ *
+ * @author sandra
+ */
+
+
+printf("Welcome to OpenNemas database Importer \n");
+
+/**
+ * Setting up the import application
+*/
+
+error_reporting(E_ALL ^ E_NOTICE);
+
+
+define('DS', '/');
+
+define('APPLICATION_PATH', realpath(__DIR__.'/../../../'));
+define('SITE_PATH', realpath(APPLICATION_PATH. DIRECTORY_SEPARATOR ."public").DIRECTORY_SEPARATOR);
+
+define('APC_PREFIX', 'onm-importer');
+
+require 'libs/onm-config.inc.php';
+
+require SITE_PATH.'../app/autoload.php';
+
+// Ensure library/ is on include_path
+set_include_path(
+    implode(
+        PATH_SEPARATOR,
+        array(
+            __DIR__.'/libs/',
+            SITE_CORE_PATH,
+            SITE_VENDOR_PATH,
+            SITE_MODELS_PATH,
+            '/usr/share/php/',
+            get_include_path(),
+        )
+    )
+);
+
+$importer = new ContentsImporter($configOldDB, $configNewDB);
+
+
+
+switch ($argv[1]) {
+    case 'opinions':
+        $importer->helper->log('IMPORTING   OPINIONS');
+        $importer->importOpinions();
+
+        break;
+    case 'clear':
+        $importer->helper->sqlClear();
+
+        break;
+     case 'clear-opinion':
+        $importer->helper->sqlClearOpinions();
+
+        break;
+    case 'create-tables':
+        $importer->helper->sqlExecute();
+
+        break;
+    default:
+        # code...
+
+        break;
+}
+
+echo "You can use options:  clear, clear-opinion, create-tables, opinions,    \n";
+printf("OpenNemas database is ok for Canarias Ahora \n");
+
+$importer->helper->printResults();
