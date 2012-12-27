@@ -30,8 +30,8 @@
             </li>
             {is_module_activated name="AVANCED_FRONTPAGE_MANAGER"}
             <li>
-                <a title="{t}Change background color in frontpage{/t}" href="#" class="change-color">
-                    <i class="icon-color" {getProperty item=$content category=$params['category'] property='bgcolor'}"></i> {t}Change background color{/t}
+                <a title="{t}Customize in frontpage{/t}" href="#" class="change-color">
+                    <i class="icon-color"></i> {t}Customize content{/t}
                 </a>
             </li>
             {/is_module_activated}

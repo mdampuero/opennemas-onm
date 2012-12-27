@@ -19,8 +19,7 @@ function smarty_function_renderStyleSheet($params, &$smarty)
     // Styles to print each item
     $rules = '';
     //content_id | title_catID | serialize(font-family:;font-size:;color:)
-
-    if (is_array($properties)) {
+    if (is_array($items)) {
         foreach ($items as $k => $item) {
             $element = 'title'."_".$current;
             $properties = unserialize($item->getProperty($element));

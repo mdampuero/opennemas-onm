@@ -196,7 +196,7 @@
 {include file="frontpagemanager/modals/_modal_arquive_selected.tpl"}
 {include file="frontpagemanager/modals/_modal_new_version.tpl"}
 {is_module_activated name="AVANCED_FRONTPAGE_MANAGER"}
-{include file="frontpagemanager/modals/_modal_change_bgcolor.tpl"}
+{include file="frontpagemanager/modals/_modal_customize_content.tpl"}
 {/is_module_activated}
 
 {/block}
