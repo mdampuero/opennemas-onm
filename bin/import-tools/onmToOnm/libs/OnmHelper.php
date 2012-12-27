@@ -205,6 +205,8 @@ class OnmHelper
         if (!$rss) {
             $this->log('clear contents '.$sql.' function: '.$GLOBALS['application']->conn->ErrorMsg());
         }
+
+        echo "\n Database imported tables was Cleaned \n ";
     }
 
     public function sqlClearOpinions()
@@ -235,6 +237,30 @@ class OnmHelper
         }
 
         $sql = "ALTER TABLE `contents` AUTO_INCREMENT =100";
+
+    }
+
+
+    public function clearContentsCategoriesTable()
+    {
+
+        $sql = "SELECT pk_content FROM contents";
+        $rss = $GLOBALS['application']->conn->Execute($sql);
+
+        $result= $rss->GetArray();
+        $contents= '';
+        foreach ($result as $res) {
+            $contents .= $res['pk_content'] .', ';
+        }
+
+        $sql = "DELETE FROM contents_categories WHERE pk_fk_content  NOT IN ($contents 0)";
+        $rss = $GLOBALS['application']->conn->Execute($sql);
+
+        if (!$rss) {
+            $this->log('clear contentscategories function: '.$GLOBALS['application']->conn->ErrorMsg());
+        }
+
+         echo "\n ContentsCategories Table was Cleaned \n ";
 
     }
 
@@ -323,6 +349,7 @@ class OnmHelper
 
         $rss = $GLOBALS['application']->conn->Execute($sql);
 
+        echo "\n Database- import tables was Created \n \n ";
     }
 }
 
