@@ -1,0 +1,25 @@
+<?php
+
+/**
+ * General configurations
+*/
+
+$configOldDB = array(
+                          'host' => 'localhost',
+                          'database' => 'onm-idealgallego',
+                          'user' => 'root',
+                          'password' => 'root' ,
+                          'type' => 'mysql' ,
+                          );
+
+$configNewDB = array(
+                          'host' => 'localhost',
+                          'database' => 'c-ferrol',
+                          'user' => 'root',
+                          'password' => 'root' ,
+                          'type' => 'mysql' ,
+                          );
+
+
+//define internal name instance from manager
+define('INSTANCE_UNIQUE_NAME', 'diariodeferrol');
