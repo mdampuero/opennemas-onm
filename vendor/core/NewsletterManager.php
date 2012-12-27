@@ -211,7 +211,11 @@ class NewsletterManager
                         if (isset($content->img1)) {
                             $item->photo = $cm->find('Photo', 'pk_content ='.$content->img1);
                         }
-
+                        if (isset($content->summary)) {
+                            $item->summary  = $content->summary;
+                        } else {
+                            $item->summary = substr($content->body, 0, 250).'...';
+                        }
                         //Fetch opinion author photos
                         if (!empty($content->fk_author_img)) {
                             $item->author = new Author($content->fk_author);

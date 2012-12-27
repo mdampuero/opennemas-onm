@@ -590,6 +590,7 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteRule ^index.php/aeropuertos/?$ /estaticas/aeropuertos.html [R=301,L,NC]
     RewriteRule ^index.php/farmacias/?$ /estaticas/farmacia.html [R=301,L,NC]
     RewriteRule ^index.php/galerias/?$ /album/ [R=301,L,NC]
+    RewriteRule ^index.php/galeria/.*?$ /album/ [R=301,L,NC]
   #--------------------------------------------------------
 
   # Secciones de hibridosyelectricos.com----------------------------------------
@@ -634,7 +635,67 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteRule ^media/prepro-sermosgaliza/(.*)$ http://www.sermosgaliza.com/media/sermosgaliza/$1 [R=301,L]
   # ----------------------------------------------------------------------------
 
-  #Redirection from old nuevatribuna.es ----------------------------------------
+#--------------------------------------------------------
+    #Redirection from old canariasahora.es
+    #http://www2.canariasahora.es/noticia/242988/
+
+    RewriteCond %{HTTP_HOST} ^canariasahora.es$ [OR]
+    RewriteCond %{HTTP_HOST} ^www.canariasahora.es$ [NC]
+    RewriteRule ^noticia/([0-9]+)/?(.*)?$ controllers/redirect-imported-elements.php?content_type=article&content_id=$1   [R=301,L,NC]
+    RewriteRule ^fauna/(.*)?$ seccion/fauna-por-eduardo-pomares/  [R=301,L,NC]
+    RewriteRule ^imprimir/noticia/([0-9]+)/?$ controllers/redirect-imported-elements.php?content_type=article&content_id=$1   [R=301,L,NC]
+    RewriteRule ^enviar/noticia/([0-9]+)/?$ controllers/redirect-imported-elements.php?content_type=article&content_id=$1   [R=301,L,NC]
+    RewriteRule ^fauna/ampliar/([0-9]+)/?$ controllers/redirect-imported-elements.php?content_type=article&content_id=$1&section=fauna   [R=301,L,NC]
+    RewriteRule ^topsecret/ampliar/([0-9]+)/?$ controllers/redirect-imported-elements.php?content_type=article&content_id=$1&section=top   [R=301,L,NC]
+    RewriteRule ^suopinion/([0-9]+)/?$ /opinion/  [R=301,L,NC]
+    RewriteRule ^encuestas/?$ /encuesta  [R=301,L,NC]
+    RewriteRule ^publicidad/?$ estaticas/publicidad/  [R=301,L,NC]
+    RewriteRule ^nosotros/?$ estaticas/contacto/  [R=301,L,NC]
+    RewriteRule ^avisolega/?$ estaticas/avisolegal/  [R=301,L,NC]
+    RewriteRule ^cartasaldirector/(.*)$ cartas-al-director/  [R=301,L,NC]
+    RewriteRule ^videos/(.*)?$ video/  [R=301,L,NC]
+    RewriteRule ^galerias_de_fotos/?$ album/  [R=301,L,NC]
+    RewriteRule ^humor/?$ album/humor/  [R=301,L,NC]
+    RewriteRule ^(imprimir|enviar)/opinion/(.*)?$ opinion/  [R=301,L,NC]
+    RewriteRule ^(.*)/(top|topsecret|principios|ultima)/(.*)?$ seccion/top-secret/  [R=301,L,NC]
+
+    RewriteCond %{HTTP_HOST} ^canariasahora.es$ [OR]
+    RewriteCond %{HTTP_HOST} ^www.canariasahora.es$ [NC]
+    RewriteRule ^especiales/(.*)?$ album/  [R=301,L,NC]
+    RewriteRule ^documentos/(.*)?$ /  [R=301,L,NC]
+    RewriteRule ^elecciones/(.*)?$ seccion/elecciones/  [R=301,L,NC]
+    RewriteRule ^hemeroteca/resultado(.*)?$ / [R=301,L,NC]
+    RewriteRule ^hemeroteca/titulares/(.*)?$ / [R=301,L,NC]
+    RewriteRule ^portada/(.*)?$ /  [R=301,L,NC]
+    RewriteRule ^sociedad/(.*)?$ seccion/sociedad/  [R=301,L,NC]
+    RewriteRule ^deportes/(.*)?$ seccion/deportes/  [R=301,L,NC]
+    RewriteRule ^galeria/([0-9]+)/foto/(.*)/?$ controllers/redirect-imported-elements.php?content_type=article&content_id=$1   [R=301,L,NC]
+    RewriteRule ^(galeria|imagenes|imagen|enimagenes|susfotos)/(.*)?$ album/  [R=301,L,NC]
+    RewriteRule ^(titulares|emision_endirecto|noticiasdeldia|principios|blogs|plantillas)/(.*)?$ /  [R=301,L,NC]
+    RewriteRule ^(.*)/pagina/(.*)?$ /  [R=301,L,NC]
+    RewriteRule ^radio/(.*)?$ seccion/cultura/ [R=301,L,NC]
+    RewriteRule ^diversia/(.*)?$ seccion/cultura/ [R=301,L,NC]
+    RewriteRule ^diversiadigital/(.*)?$ seccion/cultura/ [R=301,L,NC]
+    RewriteRule ^seccion/empresas-de-exito/(.*)?$ / [R=301,L,NC]
+    RewriteRule ^publi_(.*)/(.*)?$ / [R=301,L,NC]
+    RewriteRule ^documentos/(.*)?$ / [R=301,L,NC]
+    RewriteRule ^energia/(.*)?$ seccion/canal-energia/ [R=301,L,NC]
+    RewriteRule ^rss/(.*).xml?$ /rss/listado [R=301,L,NC]
+
+    RewriteCond %{HTTP_HOST} ^canariasahora.es$ [OR]
+    RewriteCond %{HTTP_HOST} ^www.canariasahora.es$ [NC]
+    RewriteRule ^ayuntamientos/?$   http://ayuntamientos.canariasahora.es/ [R=301,L,NC]
+    RewriteRule ^ayuntamientos/(.*)$   http://ayuntamientos.canariasahora.es/$1 [R=301,L,NC]
+    RewriteRule ^ayuntamiento/(.*)$   http://ayuntamientos.canariasahora.es/$1 [R=301,L,NC]
+
+    RewriteCond %{SERVER_NAME} ^canariasahora.es$ [OR]
+    RewriteCond %{SERVER_NAME} ^www.canariasahora.es$
+    RewriteRule ^(top-secret|canarias|nacional|internacional|economia|deportes|sociedad|cultura|tecnologia)/?$ seccion/$1 [R=301,L,NC]
+
+
+    #--------------------------------------------------------
+    #Redirection from old nuevatribuna.es
+
     #Inner Article
     RewriteRule ^noticia/([0-9]+)($|/$|.+/$|.+html$) /controllers/redirect-from-editmaker.php?content_type=article&content_id=$1 [L,NC]
 
