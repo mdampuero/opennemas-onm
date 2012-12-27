@@ -92,6 +92,22 @@ function smarty_block_t($params, $text, Smarty_Internal_Template $template, &$re
                 unset($params['count']);
             }
         }
+        if (isset($params['domain'])) {
+            $domain = $params['domain'];
+            // use plural if required parameters are set
+            if (isset($count) && isset($plural)) {
+                $text = dngettext($domain, $text, $plural, $count);
+            } else { // use normal
+                $text = dgettext($domain, $text);
+            }
+        } else {
+            // use plural if required parameters are set
+            if (isset($count) && isset($plural)) {
+                $text = ngettext($text, $plural, $count);
+            } else { // use normal
+                $text = gettext($text);
+            }
+        }
 
         // use plural if required parameters are set
         if (isset($count) && isset($plural)) {
@@ -106,8 +122,8 @@ function smarty_block_t($params, $text, Smarty_Internal_Template $template, &$re
         }
 
         if (!isset($escape) || $escape == 'html') { // html escape, default
-           $text = nl2br(htmlspecialchars($text));
-       } elseif (isset($escape)) {
+            $text = nl2br(htmlspecialchars($text));
+        } elseif (isset($escape)) {
             switch ($escape) {
                 case 'javascript':
                 case 'js':
@@ -123,4 +139,3 @@ function smarty_block_t($params, $text, Smarty_Internal_Template $template, &$re
         return $text;
     }
 }
-

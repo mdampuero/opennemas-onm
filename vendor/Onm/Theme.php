@@ -210,5 +210,14 @@ class Theme
         }
         return $definitions;
     }
-}
 
+    /**
+     * Registers theme translations for allowing to translate templates
+     *
+     * @return void
+     **/
+    public function registerTranslationsDomain($domain, $translationsDir)
+    {
+        bindtextdomain($domain, $translationsDir);
+    }
+}
