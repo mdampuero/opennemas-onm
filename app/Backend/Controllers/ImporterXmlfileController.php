@@ -182,6 +182,7 @@ class ImporterXmlfileController extends Controller
     public function configAction(Request $request)
     {
         if ('POST' == $this->request->getMethod()) {
+            $config =$request->request->get('config');
 
             $config = array_map(
                 function ($item) {
