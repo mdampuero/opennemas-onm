@@ -57,11 +57,16 @@ switch ($argv[1]) {
         $importer->importOpinions();
 
         break;
+    case 'update-authors':
+        $importer->helper->log('UPDATING   OPINIONS');
+        $importer->updateOpinionAuthors();
+
+        break;
     case 'clear':
         $importer->helper->sqlClear();
 
         break;
-     case 'clear-opinion':
+    case 'clear-opinion':
         $importer->helper->sqlClearOpinions();
 
         break;
@@ -75,7 +80,7 @@ switch ($argv[1]) {
         break;
 }
 
-echo "You can use options:  clear, clear-opinion, create-tables, opinions,    \n";
+echo "You can use options:  clear, clear-opinion, create-tables, opinions, update-authors  \n";
 printf("OpenNemas database is ok for Canarias Ahora \n");
 
 $importer->helper->printResults();

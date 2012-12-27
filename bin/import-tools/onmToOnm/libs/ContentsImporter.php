@@ -134,5 +134,45 @@ class ContentsImporter
             $rs->Close(); # optional
         }
     }
+
+    public function updateOpinionAuthors()
+    {
+        echo "IMPORTING OPINIONS\n";
+        $sql ="SELECT pk_opinion, fk_author FROM opinions";
+
+        $request = self::$originConn->Prepare($sql);
+        $rs = self::$originConn->Execute($request);
+
+        $opinion = new Opinion();
+
+        if (!$rs) {
+            $this->helper->log(self::$originConn->ErrorMsg());
+        } else {
+
+            $totalRows = $rs->_numOfRows;
+            $current = 1;
+
+            $authorData = array();
+            while (!$rs->EOF) {
+                $originalOpinionID = $rs->fields['pk_opinion'];
+                $newOpinionID = $this->helper->elementTranslate($originalOpinionID);
+                if (!empty($newOpinionID)) {
+                    $sql = 'UPDATE `opinions` SET `fk_author`=? WHERE pk_opinion=?';
+
+                    $values = array($rs->fields['fk_author'],  $newOpinionID);
+                    $update_sql = $GLOBALS['application']->conn->Prepare($sql);
+                    $rss = $GLOBALS['application']->conn->Execute($update_sql, $values);
+                    if (!$rss) {
+                        echo $GLOBALS['application']->conn->ErrorMsg();
+                    }
+                }
+
+                $current++;
+                $rs->MoveNext();
+            }
+            $rs->Close(); # optional
+        }
+
+    }
 }
 
