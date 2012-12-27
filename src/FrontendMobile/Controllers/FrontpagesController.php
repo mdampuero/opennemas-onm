@@ -40,112 +40,86 @@ class FrontpagesController extends Controller
     {
         $this->view->setConfig('frontpage-mobile');
 
-        $url = $request->query->filter('url', '', FILTER_SANITIZE_URL);
-
         //Get category vars
-        $category_name = isset($sections[1])? $sections[1] : null;
-        $subcategory_name = filter_input(INPUT_GET, 'subcategory_name', FILTER_SANITIZE_STRING);
-        $page = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_STRING);
+        $categoryName = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
+        $page = $request->query->getDigits('page', 1);
 
-        $ccm = \ContentCategoryManager::get_instance();
-        list($category_name, $subcategory_name) = $ccm->normalize($category_name, $subcategory_name);
-
-        if (($category_name!='home') && ($category_name!='')) {
-            if ($ccm->isEmpty($category_name) && is_null($subcategory_name)) {
-                $subcategory_name = $ccm->getFirstSubcategory($ccm->get_id($category_name));
-                if (is_null($subcategory_name)) {
-                    \Application::forward301('/mobile/');
-                } else {
-                    \Application::forward301('/mobile/seccion/'.$category_name.'/'.$subcategory_name.'/');
-                }
-            }
-        }
-
-        $this->view->assign('ccm', $ccm);
-
-        $cacheID = $this->view->generateCacheId($category_name, $subcategory_name, 0);
-
-        if (($this->view->caching == 0) || !$this->view->isCached('mobile/frontpage-mobile.tpl', $cacheID)) {
-
-            $section = (!empty($subcategory_name))? $subcategory_name: $category_name;
-            $section = (is_null($section))? 'home': $section;
-            $this->view->assign('section', $section);
-            //$this->view->loadConfigOrDefault('template.conf', $section); // $category_name is a string
-
-            //Get Content manager instance
+        $cacheID = $this->view->generateCacheId($categoryName, '', 0);
+        if (($this->view->caching == 0)
+            || !$this->view->isCached('mobile/frontpage-mobile.tpl', $cacheID)
+        ) {
+            $ccm = \ContentCategoryManager::get_instance();
             $cm = new \ContentManager();
 
-            // Get rid of this when posible
-            // include 'sections.php';
+            $this->view->assign('section', $categoryName);
+
+            // TODO: Get rid of this when posible
+            require __DIR__.'/../sections.php';
 
             // Fetch news
-            if ($section == 'home') {
+            if ($categoryName == 'home') {
                 $actualCategoryId = 0;
-                $contentsInHomepage = $cm->getContentsForHomepageOfCategory($actualCategoryId);
-                // Filter articles if some of them has time scheduling and sort them by position
-                $contentsInHomepage = $cm->getInTime($contentsInHomepage);
-                $contentsInHomepage = $cm->sortArrayofObjectsByProperty($contentsInHomepage, 'starttime');
             } else {
-                $this->view->assign('section', $category_name);
-                $actualCategoryId =  $ccm->get_id($section);
-                $contentsInHomepage = $cm->getContentsForHomepageOfCategory($actualCategoryId);
-                // Filter articles if some of them has time scheduling and sort them by position
-                $contentsInHomepage = $cm->getInTime($contentsInHomepage);
-                $contentsInHomepage = $cm->sortArrayofObjectsByProperty($contentsInHomepage, 'starttime');
+                $actualCategoryId = $ccm->get_id($categoryName);
             }
 
-            // Invert array order to put newest first
+            $contentsInHomepage = $cm->getContentsForHomepageOfCategory($actualCategoryId);
+            $contentsInHomepage = $cm->getInTime($contentsInHomepage);
+            $contentsInHomepage = $cm->sortArrayofObjectsByProperty($contentsInHomepage, 'starttime');
+
+            // Invert array order for getting newest first
             $contentsInHomepage = array_reverse($contentsInHomepage);
 
             // Deleting Widgets and get authors slug's for opinions
-            $articles_home = array();
+            $contents = array();
+            $photoIds   = array();
             foreach ($contentsInHomepage as $content) {
-                if (isset($content->home_placeholder)
-                    && !empty($content->home_placeholder)
-                    && ($content->home_placeholder != '')
-                    && ($content->content_type != 'Widget')
-                    && ($content->content_type != '2')
+                if ($content->content_type != 'Widget'
+                    && $content->content_type != '2'
                 ) {
+                    // If the content is an opinion fetch its authors slug's
                     if ($content->content_type == 4) {
-                        //Fetch authors slug's
                         $content->author_name_slug = \StringUtils::get_title($content->author);
                     }
 
-                    $articles_home[] = $content;
-                }
-            }
-            $this->view->assign('articles_home', $articles_home);
+                    if (isset($content->img1) && !empty($content->img1)) {
+                        $photoIds[] = (int) $content->img1;
+                    } elseif (isset($content->img2) && !empty($content->img2)) {
+                        $photoIds[] = (int) $content->img2;
+                    }
 
-            // Get frontpage article image id, if not get inner image id
-            $imagenes = array();
-            foreach ($articles_home as $art) {
-                if (isset($art->img1) && !empty($art->img1)) {
-                    $imagenes[] = $art->img1;
-                } elseif (isset($art->img2) && !empty($art->img2)) {
-                    $imagenes[] = $art->img2;
+                    $contents[] = $content;
                 }
             }
 
             // Fetch the array of images
-            if (count($imagenes)>0) {
-                $imagenes = $cm->find('Photo', 'pk_content IN ('. implode(',', $imagenes) .')');
+            $photosContents = array();
+            if (count($photoIds) > 0) {
+                $photos = $cm->find('Photo', 'pk_content IN ('. implode(',', $photoIds) .')');
 
-                $photos = array();
-                foreach ($articles_home as $art) {
-                    if ((isset($art->img1)  && !empty($art->img1))
-                        || (isset($art->img2) && !empty($art->img2))) {
+                foreach ($contents as $content) {
+                    if ((isset($content->img1)  && !empty($content->img1))
+                        || (isset($content->img2) && !empty($content->img2))
+                    ) {
                         // Search the images and get path
-                        foreach ($imagenes as $img) {
-                            if ($img->pk_content == $art->img1 || $img->pk_content == $art->img2) {
+                        foreach ($photos as $photo) {
+                            if ($photo->pk_content == $content->img1 || $photo->pk_content == $content->img2) {
                                 // Use thumbnails
-                                $photos[$art->id] = $img->path_file . $img->name;
+                                $photosContents[$content->id] = $photo->path_file . $photo->name;
                                 break;
                             }
                         }
                     }
                 }
-                $this->view->assign('photosArticles', $photos);
             }
+
+            $this->view->assign(
+                array(
+                    'ccm'            => $ccm,
+                    'photosArticles' => $photosContents,
+                    'articles_home'  => $contents
+                )
+            );
         }
 
         return $this->render(
@@ -161,79 +135,62 @@ class FrontpagesController extends Controller
      **/
     public function latestNewsAction(Request $request)
     {
-        //Is category initialized redirect the user to /
-        $category_name    = 'ultimas';
-        $subcategory_name = null;
-        $page = $_GET['page'] = 0;
-
-        $ccm = \ContentCategoryManager::get_instance();
-        $this->view->assign('ccm', $ccm);
-
-        //Get rid of this when posible
-        // require_once 'sections.php';
-
-        $section = (!empty($subcategory_name))? $subcategory_name: $category_name;
-        $section = (is_null($section))? 'home': $section;
-        $this->view->assign('section', $section);
-        //$this->view->loadConfigOrDefault('template.conf', $section); // $category_name is a string
-
-        //Get content manager instance
         $cm = new \ContentManager();
+        $ccm = \ContentCategoryManager::get_instance();
 
-        $articles_home = $cm->find(
+        //Is category initialized redirect the user to /
+        $categoryName    = 'ultimas';
+
+        // TODO: Get rid of this when posible
+        require __DIR__.'/../sections.php';
+
+        $contents = $cm->find(
             'Article',
             'available=1 AND content_status=1 AND fk_content_type=1',
-            'ORDER BY created DESC, changed DESC LIMIT 0, 20'
+            'ORDER BY created DESC, changed DESC LIMIT 20'
         );
-        if (empty($articles_home)) {
-
-            //Fetching content
+        if (empty($contents)) {
             $contentsInHomepage = $cm->getContentsForHomepageOfCategory(0);
 
             //Deleting widgets
             foreach ($contentsInHomepage as $content) {
-                if (isset($content->home_placeholder)
-                   && !empty($content->home_placeholder)
-                   && ($content->home_placeholder != '')
-                   && ($content->content_type == 4)
+                if ($content->content_type != 'Widget'
+                    && $content->content_type != '2'
                 ) {
-                    $articles_home[] = $content;
+                    $contents[] = $content;
                 }
             }
+            $contents = $cm->sortArrayofObjectsByProperty($contents, 'starttime');
         }
         //Filter by scheduled
-        $articles_home = $cm->getInTime($articles_home);
+        $contents = $cm->getInTime($contents);
 
-        //Load category for articles
-        foreach ($articles_home as $i => $article) {
-            $articles_home[$i]->category_name = $articles_home[$i]->loadCategoryName($articles_home[$i]->id);
-        }
+        // Load category for articles
+        $photoIds = array();
+        foreach ($contents as &$content) {
+            $content->category_name = $content->loadCategoryName($content->id);
 
-        $this->view->assign('articles_home', $articles_home);
-
-        //Get frontpage article image id, if not get inner image id
-        $imagenes = array();
-        foreach ($articles_home as $art) {
-            if (isset($art->img1) && !empty($art->img1)) {
-                $imagenes[] = $art->img1;
-            } elseif (isset($art->img2) && !empty($art->img2)) {
-                $imagenes[] = $art->img2;
+            if (isset($content->img1) && !empty($content->img1)) {
+                $photoIds[] = $content->img1;
+            } elseif (isset($content->img2) && !empty($content->img2)) {
+                $photoIds[] = $content->img2;
             }
         }
 
-        //Fetch the array of images
-        if (count($imagenes)>0) {
-            $imagenes = $cm->find('Photo', 'pk_content IN ('. implode(',', $imagenes) .')');
+        // Fetch the array of images
+        $photos = array();
+        if (count($photoIds) > 0) {
+            $photos = $cm->find('Photo', 'pk_content IN ('. implode(',', $photoIds) .')');
 
-            $photos = array();
-            foreach ($articles_home as $art) {
-                if ((isset($art->img1)  && !empty($art->img1))
-                    || (isset($art->img2) && !empty($art->img2))) {
+            foreach ($contents as $content) {
+                if ((isset($content->img1)  && !empty($content->img1))
+                    || (isset($content->img2) && !empty($content->img2))) {
                     // Search the images and get path
-                    foreach ($imagenes as $img) {
-                        if ($img->pk_content == $art->img1 || $img->pk_content == $art->img2) {
-                            // Use thumbnails
-                            $photos[$art->id] = $img->path_file . $img->name;
+                    foreach ($photos as $photo) {
+                        if ($photo->pk_content == $content->img1
+                            || $photo->pk_content == $content->img2
+                        ) {
+                            $photos[$content->id] = $photo->path_file . $photo->name;
                             break;
                         }
                     }
@@ -241,11 +198,13 @@ class FrontpagesController extends Controller
             }
         }
 
-        // Without cache because is a lastest news section
         return $this->render(
             'mobile/frontpage-mobile.tpl',
             array(
-                'photosArticles' => $photos
+                'photosArticles' => $photos,
+                'ccm'            => $ccm,
+                'articles_home'  => $contents,
+                'section'        => 'ultimas'
             )
         );
     }

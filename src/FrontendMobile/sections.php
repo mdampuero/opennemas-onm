@@ -1,17 +1,16 @@
 <?php
-
 $category_name = (isset($category_name))? $category_name: null;
 $subcategory_name = (isset($subcategory_name))? $subcategory_name: null;
 
 $category = $ccm->get_id($category_name);
-$tpl->assign('category', $category);
-$tpl->assign('category_name', $category_name);
-$tpl->assign('category_real_name', $ccm->get_title($category_name));
+$this->view->assign('category', $category);
+$this->view->assign('category_name', $category_name);
+$this->view->assign('category_real_name', $ccm->get_title($category_name));
 
 $subcategory = $ccm->get_id($subcategory_name);
-$tpl->assign('subcategory', $subcategory);
-$tpl->assign('subcategory_name', $subcategory_name);
-$tpl->assign('subcategory_real_name', $ccm->get_title($subcategory_name));
+$this->view->assign('subcategory', $subcategory);
+$this->view->assign('subcategory_name', $subcategory_name);
+$this->view->assign('subcategory_real_name', $ccm->get_title($subcategory_name));
 
 if (preg_match('/videos\.php/', $_SERVER['SCRIPT_NAME'])) {
     $allcategorys = $ccm->cache->find(
@@ -58,14 +57,14 @@ foreach ($allcategorys as $prima) {
     }
 }
 
-$tpl->assign('categories', $categories);
+$this->view->assign('categories', $categories);
 
 if (isset($categories_data)) {
-    $tpl->assign('category_data', $category_data);
+    $this->view->assign('category_data', $category_data);
 }
 
 if (!is_null($category) ) {
-    $tpl->assign('posmenu', $ccm->get_pos($category));
+    $this->view->assign('posmenu', $ccm->get_pos($category));
 }
 
 // Styles to print each category's new
@@ -86,12 +85,12 @@ if (empty($category_data['color'])) {
     $styles .= "\t#navbar > li,"
             ." .transparent-logo{ background-color:".$category_data['color']." !important; }\n";
 
-    $tpl->assign('categories_styles', $styles);
+    $this->view->assign('categories_styles', $styles);
 
 $numCategoriesOnMobile = 2;
 $mobileCategories = array_slice($allcategorys, 0, $numCategoriesOnMobile);
 
-$tpl->assign('mobileCategories', $mobileCategories);
+$this->view->assign('mobileCategories', $mobileCategories);
 
 if (!isset($menuMobile) || empty($menuMobile->items)) {
     $menu = new Menu();
@@ -99,6 +98,5 @@ if (!isset($menuMobile) || empty($menuMobile->items)) {
 }
 
 if (!empty($menuMobile->items)) {
-    $tpl->assign('menuMobile', $menuMobile->items);
+    $this->view->assign('menuMobile', $menuMobile->items);
 }
-

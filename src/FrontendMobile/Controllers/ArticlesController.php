@@ -53,39 +53,41 @@ class ArticlesController extends Controller
             $ccm = \ContentCategoryManager::get_instance();
             $cm = new \ContentManager();
 
-            // require('sections.php');
+            // TODO: Get rid of this when posible
+            require __DIR__.'/../sections.php';
 
             $article = new \Article($articleID);
             $article->category_name = $ccm->get_name($article->category);
 
-
-            /******* RELATED  CONTENT *******/
-            $rel= new \RelatedContent();
-
-            $relationes = $rel->cache->getRelationsForInner($articleID);
-            $relat = $cm->cache->getContents($relationes);
-            $relat = $cm->getInTime($relat);
-            //Filter availables and not inlitter.
-            $relat = $cm->cache->getAvailable($relat);
-
-            //Nombre categoria correcto.
-            foreach ($relat as $ril) {
-                $ril->category_name = $ccm->get_title($ril->category_name);
-            }
-
-            $this->view->assign('related_articles', $relat);
-            $this->view->assign('article', $article);
-            $this->view->assign('section', $article->category_name);
-
-            // Photo interior
+            // Set inner photo if available
             if (isset($article->img2) and ($article->img2 != 0)) {
                 $photo = new \Photo($article->img2);
+                $article->photo = $photo;
                 $this->view->assign('photo', $photo->path_file . '140-100-' . $photo->name);
             }
 
+            $relContentManager = new \RelatedContent();
+            $relatedContentIds = $relContentManager->getRelationsForInner($articleID);
+
+            $relatedContents = $cm->getContents($relatedContentIds);
+            $relatedContents = $cm->getInTime($relatedContents);
+            $relatedContents = $cm->getAvailable($relatedContents);
+
+            //Nombre categoria correcto.
+            foreach ($relatedContents as &$relContent) {
+                $relContent->category_name = $ccm->get_title($relContent->category_name);
+            }
+
+            $this->view->assign(
+                array(
+                    'article' => $article,
+                    'related' => $relatedContents,
+                    'section' => $article->category_name,
+                    'ccm'     => $ccm,
+                )
+            );
         }
 
-        //TODO: define cache system
         return $this->render(
             'mobile/mobile-article-inner.tpl',
             array(

@@ -39,23 +39,15 @@ class OpinionsController extends Controller
      **/
     public function frontpageAction(Request $request)
     {
-        // Necesaria esta asignación para que funcione en index_sections.php e o menú
-        $category_name = $_GET['category_name'] = 'opinion';
-        $subcategory_name = null;
-        $section = $category_name;
+        $categoryName = 'opinion';
 
+        $cm  = new \ContentManager();
         $ccm = \ContentCategoryManager::get_instance();
-        list($category_name, $subcategory_name) = $ccm->normalize($category_name, $subcategory_name);
-        // $this->view->assign('ccm', $ccm);
 
-        //Get rid of this as soon as posible
+        // Get rid of this as soon as posible
         // require_once 'sections.php';
 
-        $section = (!empty($subcategory_name))? $subcategory_name: $category_name;
-        $section = (is_null($section))? 'home': $section;
-
         //Fetch opinions
-        $cm = new \ContentManager();
         $director  = $cm->find(
             'Opinion',
             'type_opinion=2 AND in_home=1 AND available=1 AND content_status=1',
@@ -70,23 +62,21 @@ class OpinionsController extends Controller
             'available=1 AND type_opinion=0 AND content_status=1',
             'ORDER BY in_home DESC, position ASC, created DESC LIMIT 0,10'
         );
-
-        $this->view->assign('editorial', $editorial);
         if (isset ($director[0])) {
             $director[0]->name = 'Director';
             $this->view->assign('director', $director[0]);
         }
 
-        //Obtener los slug's de los autores
-        foreach ($opinions as $i => $op) {
-            $opinions[$i]['author_name_slug'] = \StringUtils::get_title($op['name']);
+        foreach ($opinions as &$opinion) {
+            $opinion['author_name_slug'] = \StringUtils::get_title($opinion['name']);
         }
 
         return $this->render(
             'mobile/opinion-index.tpl',
             array(
-                'opinions' => $opinions,
-                'section'  => $section
+                'editorial' => $editorial,
+                'opinions'  => $opinions,
+                'section'   => 'opinion'
             )
         );
     }
