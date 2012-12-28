@@ -94,7 +94,6 @@ class OnmHelper
         }
     }
 
-
     public function imageIsImported($url, $contentType)
     {
         if (isset($url) && isset($contentType)) {
@@ -219,6 +218,37 @@ class OnmHelper
         }
 
         $sql = "SELECT pk_content FROM contents WHERE fk_content_type = 4";
+        $rss = $GLOBALS['application']->conn->Execute($sql);
+
+        $result= $rss->GetArray();
+        $contents= '';
+        foreach ($result as $res) {
+            $contents .= $res['pk_content'] .', ';
+        }
+
+        $sql = "DELETE FROM contents WHERE pk_content IN ($contents 0)";
+        $rss = $GLOBALS['application']->conn->Execute($sql);
+        $sql = "DELETE FROM contents_categories WHERE pk_fk_content IN  ($contents 0)";
+        $rss = $GLOBALS['application']->conn->Execute($sql);
+
+        if (!$rss) {
+            $this->log('clear contents function: '.$GLOBALS['application']->conn->ErrorMsg());
+        }
+
+        $sql = "ALTER TABLE `contents` AUTO_INCREMENT =100";
+
+    }
+
+    public function sqlClearNewsstand()
+    {
+        $sql = " TRUNCATE TABLE `kioskos`";
+        $rss = $GLOBALS['application']->conn->Execute($sql);
+
+        if (!$rss) {
+            $this->log('clear contents '.$sql.' function: '.$GLOBALS['application']->conn->ErrorMsg());
+        }
+
+        $sql = "SELECT pk_content FROM contents WHERE fk_content_type = 14";
         $rss = $GLOBALS['application']->conn->Execute($sql);
 
         $result= $rss->GetArray();
