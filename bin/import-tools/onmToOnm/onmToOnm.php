@@ -52,14 +52,24 @@ $importer = new ContentsImporter($configOldDB, $configNewDB);
 
 
 switch ($argv[1]) {
-    case 'opinions':
+    case 'import-opinions':
         $importer->helper->log('IMPORTING   OPINIONS');
         $importer->importOpinions();
 
         break;
+    case 'import-newsstand':
+        $importer->helper->log('IMPORTING NEWSSTAND');
+        $importer->helper->sqlClearOpinions();
+        $importer->importNewsstand();
+
+        break;
     case 'update-authors':
-        $importer->helper->log('UPDATING   OPINIONS');
+        $importer->helper->log('UPDATING  AUTHOR OPINIONS');
         $importer->updateOpinionAuthors();
+
+        break;
+    case 'create-tables':
+        $importer->helper->sqlExecute();
 
         break;
     case 'clear':
@@ -70,8 +80,8 @@ switch ($argv[1]) {
         $importer->helper->sqlClearOpinions();
 
         break;
-    case 'create-tables':
-        $importer->helper->sqlExecute();
+    case 'clear-newsstand':
+        $importer->helper->sqlClearNewsstand();
 
         break;
     case 'clear-contentsCategories':
@@ -84,9 +94,11 @@ switch ($argv[1]) {
         break;
 }
 
-echo "\nYou can use options: \n -clear: clear importer tables, \n-clear-opinion: clear old opinions, ".
-    "\n-create-tables: create importer tables, \n- clear-contentsCategories: clear contents-categories table ".
-    "\n-opinions: import opinions, \n-update-authors: update author id in opinios \n";
+echo "\nYou can use options: \n \n-create-tables: create importer tables, -clear: clear importer tables, ".
+    " \n-clear-opinion: clear  opinions, \n-clear-newsstand: clear  newsstand, ".
+    " \n- clear-contentsCategories: clear contents-categories table ".
+    "\n-import-opinions: import opinions, \n-update-authors: update author id in opinios \n".
+    "\n-import-newsstand: import kiosko files \n";
 
 
 $importer->helper->printResults();

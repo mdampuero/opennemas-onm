@@ -23,3 +23,7 @@ $configNewDB = array(
 
 //define internal name instance from manager
 define('INSTANCE_UNIQUE_NAME', 'diariodeferrol');
+
+
+defined('INSTANCE_MEDIA_PATH')
+    || define('INSTANCE_MEDIA_PATH', SITE_PATH.'media/'.INSTANCE_UNIQUE_NAME.'/');

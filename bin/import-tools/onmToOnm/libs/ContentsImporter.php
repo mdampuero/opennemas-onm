@@ -172,7 +172,80 @@ class ContentsImporter
             }
             $rs->Close(); # optional
         }
+    }
 
+    public function importNewsstand()
+    {
+        echo "IMPORTING NEWSSTAND\n";
+        $sql ="SELECT * FROM kioskos, contents_categories, contents WHERE in_litter=0 ".
+                " AND pk_kiosko = pk_content AND pk_fk_content = pk_content";
+
+        $request = self::$originConn->Prepare($sql);
+        $rs = self::$originConn->Execute($request);
+
+        $opinion = new Opinion();
+
+        if (!$rs) {
+            $this->helper->log(self::$originConn->ErrorMsg());
+        } else {
+
+            $totalRows = $rs->_numOfRows;
+            $current = 1;
+
+            $authorData = array();
+            while (!$rs->EOF) {
+                 $originalID = $rs->fields['pk_kiosko'];
+
+                if ($this->helper->elementIsImported($originalID, 'kiosko') ) {
+                    echo "[{$current}/{$totalRows}] kiosko with id {$originalOpinionID} already imported\n";
+                } else {
+
+                    //Check opinion data
+                    echo "[{$current}/{$totalRows}] Importing kiosko with id {$originalID} - ";
+                    $values =
+                        array(
+                            'title'                => $rs->fields['title'],
+                            'category'             => $rs->fields['pk_fk_content_category'],
+                            'content_type'         => $rs->fields['content_type'],
+                            'category_name'        => $rs->fields['catName'],
+                            'description'          => $rs->fields['description'],
+                            'available'            => $rs->fields['available'],
+                            'in_home'              => $rs->fields['in_home'],
+                            'content_status'       => $rs->fields['content_status'],
+                            'created'              => $rs->fields['created'],
+                            'starttime'            => $rs->fields['starttime'],
+                            'changed'              => $rs->fields['changed'],
+                            'fk_user'              => $rs->fields['fk_user'],
+                            'fk_publisher'         => $rs->fields['fk_publisher'],
+                            'fk_user_last_editor'  => $rs->fields['fk_user_last_editor'],
+                            'views'                => $rs->fields['views'],
+                            'favorite'             => $rs->fields['favorite'],
+                            'slug'                 => $rs->fields['slug'],
+                            'metadata'             => $rs->fields['metadata'],
+                            'name'                 => $rs->fields['name'],
+                            'path'                 => $rs->fields['path'],
+                            'date'                 => $rs->fields['date'],
+                            'price'                => $rs->fields['price'],
+                            'type'                 => $rs->fields['type'],
+                        );
+
+                    $kiosko = new Kiosko();
+                    $newID = $kiosko->create($values);
+
+                    if (is_string($newID)) {
+                        $this->helper->insertRefactorID($originalID, $newID, 'kiosko');
+                    } else {
+                        $this->helper->log("\n Problem kiosko {$rs->fields['title']}-{$rs->fields['pk_content']}\n ");
+                    }
+                    $this->helper->updateViews($newID, $rs->fields['views']);
+                    echo "new id {$newID} [DONE]\n";
+                }
+
+                $current++;
+                $rs->MoveNext();
+            }
+            $rs->Close(); # optional
+        }
     }
 }
 
