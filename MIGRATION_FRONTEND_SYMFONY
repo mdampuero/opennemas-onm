@@ -1,90 +1,23 @@
-Migration to symfony
---------------------
-
-advertisement.php              => AdvertisementController
-album.php                      => AlbumController
-article.php                    => ArticlesController
-article_ws.php                 => ArticlesController
-books.php                      => BooksController
-comments.php                   => CommentsController
-error.php                      => ErrorController
-frontpages.php                 => FrontpagesController
-getrss.php                     => RssController
-index.php                      => FrontpageController
-index_ws.php                   => FrontpageController
-letter.php                     => LettersController
-login.php                      => AuthenticationController
-logout.php                     => AuthenticationController
-newsstand_paypal.php           => NewStandPaypalController
-newsstand.php                  => NewStandController
-opinion_index.php              => OpinionsController
-opinion_inner.php              => OpinionsController
-opinion_inner_ws.php           => OpinionsController
-poll.php                       => PollsController
-preview_content.php            => ArticlesController
-preview.php                    => IndexController
-rating.php                     => RatingsController
-redirect-from-editmaker.php    => RedirectorsController
-redirect-imported-elements.php => RedirectorsController, almost the same as previous, merge them.
-redirector.php                 => DELETE
-register.php                   => AuthenticationController
-robots.php                     => RobotsController
-rss.php                        => RssController
-search.php                     => SearchController
-sitemap.php                    => SitemapsController
-special.php                    => SpecialsController
-statics.php                    => StaticPagesController
-subscriptions.php              => SubscriptionsController
-user.php                       => UsersController
-videos.php                     => VideosController
-
-
-
-New controllers
----------------
-AdvertisementController
-AlbumController
-ArticlesController
-AuthenticationController
-BooksController
-CommentsController
-ContentController, common actions for all contents (send, sendform, get_plus and print)
-ErrorController
-FrontpagesController
-LettersController,  no finished show, saveAction submit form to send letter. Change require advertisement by a function
-MonographsController (old specials)
-NewslibraryController (old frontpages) Problem with routes, (slash /) 'date' =([0-9]+)\/([0-9]+)\/([0-9]+)\/'
-NewStandController
-NewStandPaypalController Very similar to NewsStand (¿extend it?)
-OpinionsController
-PollsController
-RatingsController
-RedirectorsController, review how to handle previous redirections.
-RobotsController
-RssController
-SearchController
-SitemapsController
-StaticPagesController
-SubscriptionsController
-UsersController
-VideosController, review show action because it doesn't work (PROBLEM: widget_ratings checks the old controller name)
-
-
 Work after migration
 --------------------
-- VideosController, review show action because it doesn't work (PROBLEM: widget_ratings checks the old controller name)
-- RedirectrosController, review how to handle previous redirections.
-- SearchController, we must change all the template urls
-- PollsController, review addVote function, use symfony cookie & transform ajax response
-- CommentsController, review the save action and urls in templates
 - Albumcontroller, change ajax action urls in templates
 - ArticlesController, send, sendform, get_plus and print actions migrated to contentcontroller
+- CommentsController, review the save action and urls in templates
+- ContentController, common actions for all contents (send, sendform, get_plus and print)
 - Contentscontroller, migrate send, sendform actions from article.php
-- RatingsController, change url in templates
-- Subscriptions, needs further checking and change form send urls
+- LettersController,  no finished show, saveAction submit form to send letter. Change require advertisement by a function
+- NewslibraryController (old frontpages) Problem with routes, (slash /) 'date' =([0-9]+)\/([0-9]+)\/([0-9]+)\/'
+- NewStandPaypalController Very similar to NewsStand (¿extend it?) (Integrate it into the original one)
 - OpinionsControllers, send, sendform, get_plus and print actions migrated to contentcontroller
-	* Frontpage action: The template opinion_frontpage.tpl acces to $smarty.get and $smarty.request variables
-		* Pager:
-			- The url generator create a additional slash {SITE}[/]/opinion and not match with symfony routes
-			- When access to a particual page (ex:2) in the list always mark the page 1
-	* Show action: review show action because not work (the problem is in the widget_ratings which check the name of old controller)
+    * Frontpage action: The template opinion_frontpage.tpl acces to $smarty.get and $smarty.request variables
+        * Pager:
+            - The url generator create a additional slash {SITE}[/]/opinion and not match with symfony routes
+            - When access to a particual page (ex:2) in the list always mark the page 1
+    * Show action: review show action because not work (the problem is in the widget_ratings which check the name of old controller)
+- PollsController, review addVote function, use symfony cookie & transform ajax response
+- RatingsController, change url in templates
+- RedirectorsController, review how to handle previous redirections.
+- RedirectrosController, review how to handle previous redirections.
+- SearchController, we must change all the template urls
+- Subscriptions, needs further checking and change form send urls
+- VideosController, review show action because it doesn't work (PROBLEM: widget_ratings checks the old controller name)

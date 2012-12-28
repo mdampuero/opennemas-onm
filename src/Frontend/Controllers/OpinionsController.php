@@ -310,11 +310,6 @@ class OpinionsController extends Controller
         $opinion = new \Opinion($opinionID);
 
         // TODO: Think that this comments related code can be deleted.
-        // Fetch comments for this opinion
-        $com = new \Comment();
-        $comments = $com->get_public_comments($opinionID);
-        $this->view->assign('num_comments', count($comments));
-
         if (($opinion->available != 1) || ($opinion->in_litter != 0)) {
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
