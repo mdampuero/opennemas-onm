@@ -43,16 +43,12 @@ require_once 'opinion_inner_advertisement.php';
 switch ($action) {
     case 'read': //Opinion de un autor
         // Redirect to album frontpage if id_album wasn't provided
-        if (is_null($opinionID)) {
+        if (empty($opinionID)) {
             Application::forward301('/opinion/');
         }
 
         $opinion = new Opinion($opinionID);
 
-        // Fetch comments for this opinion
-        $com = new Comment();
-        $comments = $com->get_public_comments($opinionID);
-        $tpl->assign('num_comments', count($comments));
 
         $cacheID = $tpl->generateCacheId($category_name, $subcategory_name, $opinionID);
 
@@ -74,6 +70,12 @@ switch ($action) {
                     'sendform_url',
                     '/controllers/opinion_inner.php?action=sendform&opinion_id=' . $dirtyID
                 );
+
+                ///¿Es necesario???
+                // Fetch comments for this opinion
+                $com = new Comment();
+                $comments = $com->get_public_comments($opinionID);
+                $tpl->assign('num_comments', count($comments));
                 // } Sacar broza
                 /*
                 $opinion->author_name_slug = StringUtils::get_title($opinion->name);
