@@ -156,7 +156,7 @@
             <div class="control-group">
                 <label for="slug" class="control-label">{t}Slug{/t}</label>
                 <div class="controls">
-                    <input  type="text" id="slug" name="slug" class="input-xlarge" required="required"
+                    <input  type="text" id="slug" name="slug" class="input-xlarge"
                             value="{$special->slug|clearslash|escape:"html"}" />
                 </div>
             </div>

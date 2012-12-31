@@ -387,7 +387,7 @@ class ArticlesController extends Controller
         }
         $this->view->assign('orderInner', $orderInner);
 
-        if (ModuleManager::isActivated('AVANCED_ARTICLE_MANAGER') && is_array($article->params)) {
+        if (ModuleManager::isActivated('CRONICAS_MODULES') && is_array($article->params)) {
             $galleries = array();
             if (array_key_exists('withGalleryHome', $article->params)) {
                 $galleries['home'] = new \Album($article->params['withGalleryHome']);
@@ -622,6 +622,8 @@ class ArticlesController extends Controller
                     )
                 )
             );
+        } else {
+            return new Response('ok');
         }
     }
 
