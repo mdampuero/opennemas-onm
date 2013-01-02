@@ -76,20 +76,8 @@ class ArticlesController extends Controller
             if (($article->available == 1) && ($article->in_litter == 0)
                 && ($article->isStarted())
             ) {
-                // //Check slug
-                // if (empty($slug) || ($article->slug != $slug)
-                //     || empty($categoryName) || $article->category_name != $categoryName)
-                // {
-                //     Application::forward301(SITE_URL.$article->uri);
-                // }
 
-                // Print url, breadcrumb code ----------------------------------
-                // TODO: Seems that this is trash, evaluate its removal
-                $title = StringUtils::get_title($article->title);
 
-                $printUrl = '/imprimir/'.$title.'/'.$categoryName.'/'.$dirtyID.'.html';
-
-                $this->view->assign('print_url', $printUrl);
                 $this->view->assign(
                     'sendform_url',
                     '/controllers/article.php?action=sendform&article_id='
@@ -116,7 +104,12 @@ class ArticlesController extends Controller
                     )
                 );
 
-                $this->view->assign('article', $article);
+                $this->view->assign(
+                    array(
+                        'article' => $article,
+                        'content' => $article,
+                    )
+                );
 
                 // Associated media code --------------------------------------
                 if (isset($article->img2) && ($article->img2 > 0)) {
@@ -193,7 +186,6 @@ class ArticlesController extends Controller
                 'cache_id'      => $cacheID,
                 'contentId'     => $articleID,
                 'category_name' => $categoryName,
-                'contentId'     => $articleID,
             )
         );
     }

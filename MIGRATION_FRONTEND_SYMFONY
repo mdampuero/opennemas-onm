@@ -1,10 +1,7 @@
 Work after migration
 --------------------
 - Albumcontroller, change ajax action urls in templates
-- ArticlesController, send, sendform, get_plus and print actions migrated to contentcontroller
 - CommentsController, review the save action and urls in templates
-- ContentController, common actions for all contents (send, sendform, get_plus and print)
-- Contentscontroller, migrate send, sendform actions from article.php
 - LettersController,  no finished show, saveAction submit form to send letter. Change require advertisement by a function
 - NewslibraryController (old frontpages) Problem with routes, (slash /) 'date' =([0-9]+)\/([0-9]+)\/([0-9]+)\/'
 - NewStandPaypalController Very similar to NewsStand (¿extend it?) (Integrate it into the original one)
@@ -13,11 +10,6 @@ Work after migration
         * Pager:
             - The url generator create a additional slash {SITE}[/]/opinion and not match with symfony routes
             - When access to a particual page (ex:2) in the list always mark the page 1
-    * Show action: review show action because not work (the problem is in the widget_ratings which check the name of old controller)
 - PollsController, review addVote function, use symfony cookie & transform ajax response
-- RatingsController, change url in templates
 - RedirectorsController, review how to handle previous redirections.
-- RedirectrosController, review how to handle previous redirections.
-- SearchController, we must change all the template urls
 - Subscriptions, needs further checking and change form send urls
-- VideosController, review show action because it doesn't work (PROBLEM: widget_ratings checks the old controller name)

@@ -806,6 +806,15 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
+    'frontend_content_share_by_mail',
+    new Route(
+        '/content/share-by-email',
+        array(
+            '_controller' => 'Frontend:Controllers:ContentsController:shareByEmail',
+        )
+    )
+);
+$frontendRoutes->add(
     'frontend_content_vote',
     new Route(
         '/content/rate',

@@ -156,7 +156,7 @@ class OpinionsController extends Controller
             $this->view->assign('page', $this->page);
         }
 
-        $this->advertisements();
+        $this->getAds();
 
         return $this->render(
             'opinion/opinion_frontpage.tpl',
