@@ -87,7 +87,7 @@ class Rating
 
             return false;
         }
-        $this->pk_rating = $pk_rating;
+        $this->pk_rating = $contentId;
         $this->total_votes = $rs->fields['total_votes'];
         $this->total_value = $rs->fields['total_value'];
         $this->ips_count_rating = unserialize($rs->fields['ips_count_rating']);
