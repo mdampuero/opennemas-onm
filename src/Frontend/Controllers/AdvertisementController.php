@@ -52,7 +52,10 @@ class AdvertisementController extends Controller
 
         return $this->render(
             'ads/advertisement.tpl',
-            array('banner' => $banner)
+            array(
+                'banner'  => $banner,
+                'content' => $banner
+            )
         );
     }
 

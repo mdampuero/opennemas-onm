@@ -9,6 +9,8 @@
  **/
 namespace Frontend\Controllers;
 
+
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -201,6 +203,8 @@ class AlbumsController extends Controller
 
             $this->view->assign(
                 array(
+                    'album'              => $album,
+                    'content'            => $album,
                     'album_photos'       => $_albumArray,
                     'album_photos_paged' => $_albumArrayPaged,
                     'page'               => $this->page,

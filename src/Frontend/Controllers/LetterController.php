@@ -111,6 +111,7 @@ class LetterController extends Controller
             $this->view->assign(
                 array(
                     'letter'       => $letter,
+                    'content'      => $letter,
                     'num_comments' => count($comments),
                     'otherLetters' => $otherLetters,
                 )

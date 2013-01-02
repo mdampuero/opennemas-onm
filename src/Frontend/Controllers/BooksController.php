@@ -9,6 +9,7 @@
  **/
 namespace Frontend\Controllers;
 
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
@@ -132,6 +133,7 @@ class BooksController extends Controller
             return $this->view->assign(
                 array(
                     'book'        => $book,
+                    'content'     => $book,
                     'libros'      => $books,
                     'contentId'   => $id,
                     'category'    => $book->category,

@@ -9,6 +9,7 @@
  **/
 namespace Frontend\Controllers;
 
+
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -186,10 +187,11 @@ class PollsController extends Controller
 
                 $this->view->assign(
                     array(
-                        'contentId'    => $pollId,
-                        'poll'         => $poll,
-                        'items'        => $items,
-                        'otherPolls'   => $otherPolls,
+                        'poll'       => $poll,
+                        'content'    => $poll,
+                        'contentId'  => $pollId,
+                        'items'      => $items,
+                        'otherPolls' => $otherPolls,
                     )
                 );
             } // end if $tpl->is_cached
@@ -237,13 +239,13 @@ class PollsController extends Controller
 
         // Redirect to album frontpage if id_album wasn't provided
         if (is_null($pollId)) {
-            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+            throw new ResourceNotFoundException();
         }
 
         $poll = new Poll($pollId);
 
         if (empty($poll->id)) {
-            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+            throw new ResourceNotFoundException();
         }
 
         $cookie = "polls".$pollId;

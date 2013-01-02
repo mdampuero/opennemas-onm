@@ -161,7 +161,8 @@ class NewStandPaypalController extends Controller
                 'date'           => '1-'.$month.'-'.$year,
                 'MONTH'          => $month,
                 'YEAR'           => $year,
-                'kiosko'         => $kiosko
+                'kiosko'         => $kiosko,
+                'content'        => $epaper,
             )
         );
 
@@ -189,9 +190,7 @@ class NewStandPaypalController extends Controller
 
         $epaperId = \Content::resolveID($dirtyID);
 
-        /**
-         * Redirect to album frontpage if id_album wasn't provided
-         */
+        // Redirect to album frontpage if id_album wasn't provided
         if (is_null($epaperId)) {
             return new RedirectResponse($this->generateUrl('frontend_kiosko_frontpage'));
         }
@@ -223,12 +222,13 @@ class NewStandPaypalController extends Controller
             }
             $this->view->assign(
                 array(
-                    'KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR,
+                    'epaper'         => $epaper,
+                    'content'         => $epaper,
                     'date'           => '1-'.$month.'-'.$year,
                     'MONTH'          => $month,
                     'YEAR'           => $year,
-                    'epaper'         => $epaper,
-                    'kiosko'         => $kiosko
+                    'kiosko'         => $kiosko,
+                    'KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR,
                 )
             );
         }

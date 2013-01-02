@@ -57,8 +57,9 @@ class StaticPagesController extends Controller
         return $this->render(
             'static_pages/statics.tpl',
             array(
-                'category_real_name' => $page->title,
                 'page'               => $page,
+                'content'            => $page,
+                'category_real_name' => $page->title,
                 'content_id'         => $content->id
             )
         );

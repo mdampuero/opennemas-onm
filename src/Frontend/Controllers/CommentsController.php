@@ -34,7 +34,7 @@ class CommentsController extends Controller
     }
 
     /**
-     * Description of the action
+     * Renders
      *
      * @return Response the response object
      **/

@@ -193,6 +193,7 @@ class MonographsController extends Controller
             $this->view->assign(
                 array(
                     'special'   => $special,
+                    'content'   => $special,
                     'columns'   => $columns,
                     'contentId' => $specialID,
                 )

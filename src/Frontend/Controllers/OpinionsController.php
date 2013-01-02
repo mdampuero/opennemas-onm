@@ -139,7 +139,7 @@ class OpinionsController extends Controller
                 );
             }
 
-            $url ='opinion';
+            $url = 'opinion';
             $pagination = $this->cm->create_paginate(
                 $total_opinions,
                 ITEMS_PAGE,
@@ -149,11 +149,15 @@ class OpinionsController extends Controller
                 ''
             );
 
-            $this->view->assign('editorial', $editorial);
-            $this->view->assign('opinions', $opinions);
-            $this->view->assign('authors', $authors);
-            $this->view->assign('pagination', $pagination);
-            $this->view->assign('page', $this->page);
+            $this->view->assign(
+                array(
+                    'editorial'  => $editorial,
+                    'opinions'   => $opinions,
+                    'authors'    => $authors,
+                    'pagination' => $pagination,
+                    'page'       => $this->page
+                )
+            );
         }
 
         $this->getAds();
@@ -411,8 +415,9 @@ class OpinionsController extends Controller
 
             $this->view->assign(
                 array(
-                    'other_opinions'  => $otherOpinions,
                     'opinion'         => $opinion,
+                    'content'         => $opinion,
+                    'other_opinions'  => $otherOpinions,
                     'author'          => $author,
                 )
             );

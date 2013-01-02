@@ -230,10 +230,11 @@ class VideosController extends Controller
             );
             $this->view->assign(
                 array(
+                    'video'         => $video,
+                    'content'       => $video,
                     'category'      => $video->category,
                     'category_name' => $video->category_name,
                     'contentId'     => $video->id,
-                    'video'         => $video,
                     'action'        => 'inner',
                     'others_videos' => $otherVideos,
                     'suggested'     => $machineRelatedContent

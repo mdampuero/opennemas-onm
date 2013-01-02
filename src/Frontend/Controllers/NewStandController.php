@@ -223,6 +223,7 @@ class NewStandController extends Controller
                     'MONTH'          => $month,
                     'YEAR'           => $year,
                     'epaper'         => $epaper,
+                    'content'        => $epaper,
                     'kiosko'         => $kiosko
                 )
             );
