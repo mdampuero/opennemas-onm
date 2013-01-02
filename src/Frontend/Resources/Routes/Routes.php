@@ -806,6 +806,26 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
+    'frontend_content_vote',
+    new Route(
+        '/content/rate',
+        array(
+            '_controller' => 'Frontend:Controllers:ContentsController:rateContent',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_content_stats',
+    new Route(
+        '/content/stats',
+        array(
+            '_controller' => 'Frontend:Controllers:ContentsController:stats',
+        )
+    )
+);
+
+$frontendRoutes->add(
     'frontend_newstand_frontpage',
     new Route(
         '/portadas-papel',

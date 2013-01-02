@@ -66,11 +66,11 @@ class User
             throw new \Exception(_('Already exists one user with that information'));
         }
 
-        $sql = "INSERT INTO users (`login`, `password`, `sessionexpire`,
-                                      `email`, `name`, `firstname`,
-                                      `lastname`, `type`, `token`, `authorize`,
-                                      `fk_user_group`)
-                    VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+        $sql =
+            "INSERT INTO users "
+            ."(`login`, `password`, `sessionexpire`, `email`, `name`, `firstname`, "
+            ."`lastname`, `type`, `token`, `authorize`, `fk_user_group`) "
+            ."VALUES (?,?,?,?,?,?,?,?,?,?,?)";
         $values = array(
             $data['login'],
             md5($data['password']),

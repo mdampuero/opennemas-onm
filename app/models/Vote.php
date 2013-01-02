@@ -111,7 +111,7 @@ class Vote
             $this->ips_count_vote = unserialize($rs->fields['ips_count_vote']);
         }
 
-        return (true);
+        return true;
     }
 
     /**
