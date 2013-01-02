@@ -75,12 +75,7 @@
                 {acl isAllowed="ARTICLE_UPDATE"}
                 <li>
                     <button type="submit" name="continue" value="1">
-                        <img src="{$params.IMAGE_DIR}save_and_continue.png" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
-                    </button>
-                </li>
-                <li>
-                    <button type="submit">
-                        <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save and exit{/t}" ><br />{t}Save and exit{/t}
+                        <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
                     </button>
                 </li>
                 {/acl}

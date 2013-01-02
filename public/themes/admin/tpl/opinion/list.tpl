@@ -137,14 +137,6 @@
             *}
             {/acl}
 
-            {acl isAllowed="OPINION_CREATE"}
-            <li>
-                <a href="{url name=admin_opinion_create}" class="admin_add" accesskey="N" tabindex="1">
-                    <img border="0" src="{$params.IMAGE_DIR}opinion.png" title="Nuevo" alt="Nuevo"><br />{t escape="off"}New opinion{/t}
-                </a>
-            </li>
-            {/acl}
-            <li class="separator"></li>
             {acl isAllowed="OPINION_FRONTPAGE"}
             {if $home}
                 <li>
@@ -161,11 +153,18 @@
                     <br />{t}Clean cache{/t}
                 </button>
             </li>
-            <li class="separator"></li>
             <li>
                 <a href="{url name=admin_opinions_config}" class="admin_add" title="{t}Config album module{/t}">
                     <img border="0" src="{$params.IMAGE_DIR}template_manager/configure48x48.png" /><br />
                     {t}Settings{/t}
+                </a>
+            </li>
+            {/acl}
+            <li class="separator"></li>
+            {acl isAllowed="OPINION_CREATE"}
+            <li>
+                <a href="{url name=admin_opinion_create}" class="admin_add" accesskey="N" tabindex="1">
+                    <img border="0" src="{$params.IMAGE_DIR}opinion.png" title="Nuevo" alt="Nuevo"><br />{t escape="off"}New opinion{/t}
                 </a>
             </li>
             {/acl}

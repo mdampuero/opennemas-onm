@@ -26,14 +26,6 @@
                     </button>
                 </li>
                 {/acl}
-                {acl isAllowed="ADVERTISEMENT_CREATE"}
-                <li class="separator"></li>
-                <li>
-                    <a href="{url name=admin_ad_create category=$category page=$page}" class="admin_add" accesskey="N" tabindex="1">
-                        <img src="{$params.IMAGE_DIR}list-add.png" alt="{t}New{/t}"><br />{t}New{/t}
-                    </a>
-                </li>
-                {/acl}
                 {acl isAllowed="ALBUM_SETTINGS"}
                 <li class="separator"></li>
                     <li>
@@ -42,6 +34,14 @@
                             {t}Settings{/t}
                         </a>
                     </li>
+                {/acl}
+                {acl isAllowed="ADVERTISEMENT_CREATE"}
+                <li class="separator"></li>
+                <li>
+                    <a href="{url name=admin_ad_create category=$category page=$page}" class="admin_add" accesskey="N" tabindex="1">
+                        <img src="{$params.IMAGE_DIR}list-add.png" alt="{t}New{/t}"><br />{t}New{/t}
+                    </a>
+                </li>
                 {/acl}
             </ul>
         </div>

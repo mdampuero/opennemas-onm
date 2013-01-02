@@ -29,13 +29,6 @@
                     </button>
                 </li>
                 {/acl}
-                {acl isAllowed="SPECIAL_CREATE"}
-                <li>
-                    <a href="{url name=admin_special_create}">
-                        <img src="{$params.IMAGE_DIR}special.png" alt="Nuevo Special"><br />{t}New special{/t}
-                    </a>
-                </li>
-                {/acl}
                 {acl isAllowed="SPECIAL_WIDGET"}
                      {if $category eq 'widget'}
                         <li class="separator"></li>
@@ -47,13 +40,20 @@
                     {/if}
                 {/acl}
                 {acl isAllowed="SPECIAL_SETTINGS"}
-                <li class="separator"></li>
                     <li>
                         <a href="{url name=admin_specials_config}" class="admin_add" title="{t}Config special module{/t}">
                             <img border="0" src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
                             {t}Configurations{/t}
                         </a>
                     </li>
+                {/acl}
+                {acl isAllowed="SPECIAL_CREATE"}
+                <li class="separator"></li>
+                <li>
+                    <a href="{url name=admin_special_create}">
+                        <img src="{$params.IMAGE_DIR}special.png" alt="Nuevo Special"><br />{t}New special{/t}
+                    </a>
+                </li>
                 {/acl}
             </ul>
         </div>

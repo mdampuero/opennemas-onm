@@ -25,14 +25,6 @@
                     </button>
                 </li>
                 {/acl}
-                {acl isAllowed="POLL_CREATE"}
-                <li class="separator"></li>
-                <li>
-                    <a href="{url name=admin_poll_create}" title="{t}New poll{/t}">
-                        <img src="{$params.IMAGE_DIR}/poll-new.png" alt="{t}New poll{/t}"><br />{t}New poll{/t}
-                    </a>
-                </li>
-                {/acl}
                 {acl isAllowed="POLL_SETTINGS"}
                 <li class="separator"></li>
                     <li>
@@ -42,13 +34,19 @@
                         </a>
                     </li>
                 {/acl}
+                {acl isAllowed="POLL_CREATE"}
+                <li class="separator"></li>
+                <li>
+                    <a href="{url name=admin_poll_create}" title="{t}New poll{/t}">
+                        <img src="{$params.IMAGE_DIR}/poll-new.png" alt="{t}New poll{/t}"><br />{t}New poll{/t}
+                    </a>
+                </li>
+                {/acl}
             </ul>
         </div>
     </div>
 
     <div class="wrapper-content">
-
-        {render_messages}
 
         <ul class="pills" style="margin-bottom: 28px;">
             <li>
@@ -61,6 +59,7 @@
 
         </ul>
 
+        {render_messages}
 
         <table class="table table-hover table-condensed">
 
@@ -78,7 +77,7 @@
                         <th style="width:40px;" class="center">{t}Published{/t}</th>
                         <th class="center" style="width:35px;">{t}Favorite{/t}</th>
                         <th style="width:40px;" class="center">{t}Home{/t}</th>
-                        <th style="width:110px;" class="right">{t}Actions{/t}</th>
+                        <th class="center">{t}Actions{/t}</th>
                     {else}
                         <th scope="col" colspan="10">&nbsp;</th>
                     {/if}
@@ -148,7 +147,7 @@
                             <a class="btn"
                                 href="{url name=admin_poll_show id=$poll->id}"
                                 title="Modificar">
-                                <i class="icon-pencil"></i> {t}Edit{/t}
+                                <i class="icon-pencil"></i>
                             </a>
                             {/acl}
                             {acl isAllowed="POLL_DELETE"}
