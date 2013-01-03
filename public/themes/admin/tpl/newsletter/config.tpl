@@ -124,9 +124,9 @@ jQuery(document).ready(function($){
             </div>
 
             <div class="control-group">
-                <label for="newsletter_maillist_subs_type" class="control-label">{t}Newsletter subscription type{/t}</label>
+                <label for="newsletter_subscriptionType" class="control-label">{t}Newsletter subscription type{/t}</label>
                 <div class="controls">
-                    <select name="newsletter_subscriptionType" id="newsletter_maillist_subs_type">
+                    <select name="newsletter_subscriptionType" id="newsletter_subscriptionType">
                         <option value="submit" {if $configs['newsletter_subscriptionType'] eq 'submit'} selected {/if}>{t}Manage newsletter by e-mail{/t}</option>
                         <option value="create_subscriptor" {if $configs['newsletter_subscriptionType'] eq 'create_subscriptor'} selected {/if}>{t}Manage newsletter by subscriptors table{/t}</option>
                     </select>
@@ -141,7 +141,6 @@ jQuery(document).ready(function($){
                 <label for="subscription" class="control-label">{t}Mail address to receive new subscriptions{/t}</label>
                 <div class="controls">
                     <input type="text" id="subscription" name="newsletter_maillist[subscription]" value="{$configs['newsletter_maillist']['subscription']|default:""}" class="input-xlarge" />
-
                 </div>
             </div>
 
@@ -149,6 +148,7 @@ jQuery(document).ready(function($){
                 <label for="sender" class="control-label">{t}Mail sender{/t}</label>
                 <div class="controls">
                     <input type="text" id="sender" name="newsletter_maillist[sender]" value="{$configs['newsletter_maillist']['sender']|default:""}" class="input-xlarge"/>
+                <div class="help-block">{t escape=off}Verify that the domain has enabled <a href="http://en.wikipedia.org/wiki/Sender_Policy_Framework" target="_blank">SPF</a> settings for sending{/t}</div>
                 </div>
             </div>
 
