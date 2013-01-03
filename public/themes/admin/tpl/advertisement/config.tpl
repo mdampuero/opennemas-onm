@@ -62,7 +62,7 @@
                         <option value="0">{t}Yes{/t}</option>
                         <option value="1" {if $configs['ads_settings']['no_generics'] eq "1"} selected {/if}>{t}No{/t}</option>
                     </select>
-                    <div class="help-block">{t}This settings allow print home ads when ads in category is empty.{/t}</div>
+                    <div class="help-block">{t}This settings allow printing home ads when ads in category are empty.{/t}</div>
                 </div>
             </div>
         </div>
