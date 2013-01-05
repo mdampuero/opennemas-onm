@@ -325,21 +325,21 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
-    'frontend_comments_vote',
+    'frontend_comments_ajax',
     new Route(
-        '/comments/vote',
+        '/comments/ajax',
         array(
-            '_controller' => 'Frontend:Controllers:CommentsController:vote',
+            '_controller' => 'Frontend:Controllers:CommentsController:ajax',
         )
     )
 );
 
 $frontendRoutes->add(
-    'frontend_comments_paginate',
+    'frontend_comments_vote',
     new Route(
-        '/comments/paginate',
+        '/comments/vote',
         array(
-            '_controller' => 'Frontend:Controllers:CommentsController:paginateComments',
+            '_controller' => 'Frontend:Controllers:CommentsController:vote',
         )
     )
 );

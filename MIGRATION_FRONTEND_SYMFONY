@@ -1,11 +1,9 @@
 Work after migration
 --------------------
 - Albumcontroller, change ajax action urls in templates
-- CommentsController, review the save action and urls in templates
 - LettersController,  no finished show, saveAction submit form to send letter. Change require advertisement by a function
 - NewslibraryController (old frontpages) Problem with routes, (slash /) 'date' =([0-9]+)\/([0-9]+)\/([0-9]+)\/'
-- NewStandPaypalController Very similar to NewsStand (¿extend it?) (Integrate it into the original one)
-- OpinionsControllers, send, sendform, get_plus and print actions migrated to contentcontroller
+- OpinionsControllers,
     * Frontpage action: The template opinion_frontpage.tpl acces to $smarty.get and $smarty.request variables
         * Pager:
             - The url generator create a additional slash {SITE}[/]/opinion and not match with symfony routes

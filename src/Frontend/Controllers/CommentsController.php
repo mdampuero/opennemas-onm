@@ -40,26 +40,86 @@ class CommentsController extends Controller
      **/
     public function getAction(Request $request)
     {
-        $contentID = $request->query->filter('content_id', null, FILTER_SANITIZE_NUMBER_INT);
+        $contentID   = $request->query->filter('content_id', null, FILTER_SANITIZE_NUMBER_INT);
+        $elemsByPage = $request->query->getDigits('elems_per_page', 10);
+        $offset      = $request->query->getDigits('offset', 1);
+        $darkTheme   = $request->query->getDigits('dark_theme', 0);
 
-        if (\Content::checkExists($contentID)) {
+        if (!empty($contentID)
+            && \Content::checkExists($contentID)
+        ) {
             // Getting comments for current article
-            $comment = new \Comment();
-            $comments = $comment->get_public_comments($contentID);
+            list($total, $comments) = \Comment::getPublicCommentsAndTotalCount(
+                $contentID,
+                $elemsByPage,
+                $offset
+            );
 
             $output = $this->renderView(
-                'comments/comments.tpl',
+                'comments/loader.tpl',
                 array(
-                    'num_comments' => count($comments),
-                    'comments'     => $comments,
-                    'contentId'    => $contentID,
-                    'content'      => $contentID,
+                    'total'          => $total,
+                    'comments'       => $comments,
+                    'contentId'      => $contentID,
+                    'elems_per_page' => $elemsByPage,
+                    'offset'         => $offset,
+                    'dark_theme'     => $darkTheme,
                 )
             );
 
             $response = new Response($output, 200);
         } else {
-            $response = new Response(_('Content not available'), 404);
+            $response = new Response('', 404);
+        }
+        return $response;
+    }
+
+    /**
+     * Shows the comments lists given a page number
+     *
+     * @return Response the response object
+     **/
+    public function ajaxAction(Request $request)
+    {
+        $contentID   = $request->query->filter('content_id', null, FILTER_SANITIZE_NUMBER_INT);
+        $elemsByPage = $request->query->getDigits('elems_per_page', 10);
+        $offset      = $request->query->getDigits('offset', 1);
+
+        if (!empty($contentID)
+            && \Content::checkExists($contentID)
+        ) {
+            // Getting comments for current article
+            list($total, $comments) = \Comment::getPublicCommentsAndTotalCount(
+                $contentID,
+                $elemsByPage,
+                $offset
+            );
+
+            $contents = $this->renderView(
+                'comments/partials/comment_element.tpl',
+                array(
+                    'total'          => $total,
+                    'comments'       => $comments,
+                    'contentId'      => $contentID,
+                    'elems_per_page' => $elemsByPage,
+                    'offset'         => $offset,
+                )
+            );
+
+            // Inform the client if there is more elements
+            $more = true;
+            if ($total < ($elemsByPage + ($elemsByPage*$offset))) {
+                $more = false;
+            }
+
+            $output = array(
+                'contents' => $contents,
+                'more'     => $more,
+            );
+
+            $response = new Response(json_encode($output), 200);
+        } else {
+            $response = new Response('', 404);
         }
         return $response;
     }
@@ -72,60 +132,50 @@ class CommentsController extends Controller
     public function voteAction(Request $request)
     {
         // Retrieve request data
-        $ip         = $request->server->filter('REMOTE_ADDR', null, FILTER_SANITIZE_STRING);
-        $ipFrom     = $request->query->filter('i', null, FILTER_SANITIZE_STRING);
-        $vote_value = $request->query->getDigits('v', null); // 1 A favor o 2 en contra
-        $page       = $request->query->getDigits('p', 0);
-        $commentId  = $request->query->getDigits('a', 0);
+        $voteValue = $request->request->filter('vote', null, FILTER_SANITIZE_STRING);
+        $commentId = $request->request->getDigits('comment_id', 0);
+        $ip        = $request->getClientIp();
+        $cookie    = $request->cookies->get('comment-vote-'.$commentId);
 
-        if ($ip != $ipFrom) {
-            return new Response(_("Error no ip vote!"), 400);
+        // User already voted this comment
+        if (!is_null($cookie)) {
+            return new Response(_('Already voted.'), 400);
         }
 
+        // Reject the request is not sent by POST
+        if ('POST' !== $request->getMethod()) {
+            return new Response(_('Not valid request method'), 400);
+        }
+
+        // Reject the vote action if the vote value is not valid
+        if (!in_array($voteValue, array('up', 'down'))) {
+            return new Response(_('Not valid vote value'), 400);
+        }
+
+        // 1 A favor o 2 en contra
+        if ($voteValue == 'up') {
+            $voteValue = 1;
+        } else {
+            $voteValue = 2;
+        }
+
+        // Create the vote
         $vote = new \Vote($commentId);
         if (is_null($vote)) {
-            return new Response(_("Error no  vote value!", 400));
+            return new Response(_("Error no vote value!", 400));
         }
-        $update = $vote->update($vote_value, $ip);
+        $update = $vote->update($voteValue, $ip);
 
         if ($update) {
-            $response = new Response($vote->render($page, 'result', 1), 200);
-            $response->headers->setCookie(new Cookie('vote'.$commentId, true));
+            $response = new Response('ok', 200);
+            $response->headers->setCookie(
+                new Cookie('comment-vote-'.$commentId, true, new \DateTime('+3 days'))
+            );
         } else {
-            $response = new Response(_("Ya ha votado anteriormente este comentario."), 400);
+            $response = new Response(_("You have voted this comment previously."), 400);
         }
 
         return $response;
-    }
-
-    /**
-     * Shows the comments lists given a page number
-     *
-     * @return Response the response object
-     **/
-    public function paginateCommentsAction(Request $request)
-    {
-        // Retrieve all the comments for a given content id
-        $contentId = $request->query->getDigits('id', null);
-        $comment = new \Comment();
-        $comments = $comment->get_public_comments($contentId);
-
-        $cm = new \ContentManager();
-        $comments = $cm->paginate_num_js($comments, 9, 1, 'get_paginate_comments', "'".$contentId."'");
-
-        $caching = $this->view->caching;
-        $this->view->caching = 0;
-        $output = $this->renderView(
-            'internal_widgets/module_print_comments.tpl',
-            array(
-                'num_comments_total' => count($comments),
-                'paginacion'         => $cm->pager,
-                'comments'           => $comments
-                )
-        );
-
-        $this->view->caching = $caching;
-        return new Response($output);
     }
 
     /**
@@ -136,101 +186,55 @@ class CommentsController extends Controller
      **/
     public function saveAction(Request $request)
     {
-        $text     = $request->request->filter('textareacomentario', '', FILTER_SANITIZE_STRING);
-        $secCode  = $request->request->filter('security_code', '', FILTER_SANITIZE_STRING);
-        $author   = $request->request->filter('nombre', '', FILTER_SANITIZE_STRING);
-        $title    = $request->request->filter('title', '', FILTER_SANITIZE_STRING);
-        $category = $request->request->filter('category', '', FILTER_SANITIZE_STRING);
-        $email    = $request->request->filter('email', '', FILTER_SANITIZE_STRING);
-        $id       = $request->request->filter('id', '', FILTER_SANITIZE_STRING);
+        $body        = $request->request->filter('body', '', FILTER_SANITIZE_STRING);
+        $authorName  = $request->request->filter('author-name', '', FILTER_SANITIZE_STRING);
+        $authorEmail = $request->request->filter('author-email', '', FILTER_SANITIZE_STRING);
+        $contentId   = $request->request->getDigits('content-id');
+        $ip          = $request->getClientIp();
 
-        var_dump($text, $secCode, $author, $title, $category, $email, $id);die();
+        $session = $this->get('session')->start();
+
+        $httpCode = 200;
+
+        $sessionBeforeComment = $_SESSION;
+        if (!empty($body) && !empty($authorName) && !empty($authorEmail) && !empty($contentId)) {
+            $data = array(
+                'body'     => $body,
+                'author'   => $authorName,
+                'email'    => $authorEmail,
+            );
 
 
-        if (!empty($text)) {
-            if (empty($secCode) ) {
-                // Normal comment
-                $data = array(
-                    'body'     => $text,
-                    'author'   => $author,
-                    'title'    => $title,
-                    'category' => $category,
-                    'email'    => $email,
-                );
-            } else {
-                // Facebook comment
-                require_once dirname(__FILE__) . '/fb/facebook.php';
-                $fb = new Facebook(FB_APP_APIKEY, FB_APP_SECRET);
-                $facebookUser = $fb->get_loggedin_user();
-
-                // If user is logged
-                if ($facebookUser) {
-                    $userInformation = $fb->api_client->users_getInfo($facebookUser, array('name', 'proxied_email'));
-
-                    $data = array(
-                        'body'     => $text,
-                        'author'   => $userInformation[0]['name'],
-                        'title'    => $title,
-                        'category' => $category,
-                        'email'    => $userInformation[0]['proxied_email'],
-                    );
-
-                } else {
-                    if (preg_match('@territoris@', $_SERVER['SERVER_NAME'])) {
-                        $message = "El seu comentari no ha estat guardat.\nSembla que està no connectat a Facebook.";
-                    } else {
-                        $message = "Su comentario no ha sido guardado.\nParece que está no conectado a Facebook.";
-                    }
-                }
-            }
-
-            $sessionBeforeComment = $_SESSION;
-
-            //Get $_SESSION values for userComment
+            // Get $_SESSION values for userComment
             $_SESSION['username'] = $data['author'];
-            $_SESSION['userid'] = 'comment #'.$_POST['id'];
-            $comment = new Comment();
+            $_SESSION['userid'] = 'on-content#'.$contentId;
 
             // Prevent XSS attack
             $data = array_map('strip_tags', $data);
 
-            if ($comment->hasBadWorsComment($data)) {
-                if (preg_match('@territoris@', $_SERVER['SERVER_NAME'])) {
-                    $message = "El seu comentari va ser rebutjat per l'ús de paraules malsonants.";
-                } else {
-                    $message = "Su comentario fue rechazado debido al uso de palabras malsonantes.";
-                }
+            $comment = new \Comment();
+            if ($comment->hasBadWordsComment($data)) {
+                $message = _('Your comment was rejected due insults usage.');
+                $httpCode = 400;
             } else {
-                $ip = Application::getRealIp();
                 $created = $comment->create(
                     array(
-                        'id'   => $_POST['id'],
+                        'id'   => $contentId,
                         'data' => $data,
                         'ip'   => $ip
                     )
                 );
                 if ($created) {
-                    if (preg_match('@territoris@', $_SERVER['SERVER_NAME'])) {
-                        $message = "El seu comentari ha estat emmagatzemat i està pendent de publicar-se.";
-                    } else {
-                        $message = "Su comentario ha sido guardado y está pendiente de publicación.";
-                    }
+                    $message = _('Your comment was accepted and now we have to moderate it.');
                 }
             }
 
         } else {
-            if (preg_match('@territoris@', $_SERVER['SERVER_NAME'])) {
-                $message = "El seu comentari no ha estat guardat.\n"
-                    ."Assegureu-vos emplenar correctament tots els camps";
-            } else {
-                $message = "Su comentario no ha sido guardado.\n"
-                    ."Asegúrese de cumplimentar correctamente todos los campos.";
-            }
+            $message = _('Ensure you have completed all the form fields.');
+            $httpCode = 400;
         }
-        $response = new Response($message, 200);
-        $response->send();
-
         $_SESSION = $sessionBeforeComment;
-    }
 
-} // END class CommentsController
+        return  new Response($message, $httpCode);
+    }
+}
