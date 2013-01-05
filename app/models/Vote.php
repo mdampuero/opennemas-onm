@@ -147,13 +147,6 @@ class Vote
             return (false);
         }
 
-        //creamos la cookie
-        Application::setCookieSecure(
-            "vote" . $this->pk_vote,
-            'true',
-            time() + 60 * 60 * 24 * 30
-        );
-
         return true;
     }
 
