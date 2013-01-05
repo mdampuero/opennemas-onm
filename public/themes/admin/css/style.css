@@ -87,7 +87,7 @@ a.btn-primary.active,a.btn-warning.active,a.btn-danger.active,a.btn-success.acti
   border: 1px solid #CCC;
 }
 
-
+.help-block-inline { display: inline-block;}
 /* -------------------------------------------------------------
   LISTINGS
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */

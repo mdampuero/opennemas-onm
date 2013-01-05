@@ -50,7 +50,14 @@
                    </button>
                 </li>
                 {/if}
-               {/acl}
+                {/acl}
+                <li class="separator"></li>
+                <li>
+                    <a href="{url name=admin_comments_config}" title="{t}Config comments module{/t}">
+                        <img border="0" src="/themes/admin/images/template_manager/configure48x48.png" alt=""><br>
+                        {t}Settings{/t}
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

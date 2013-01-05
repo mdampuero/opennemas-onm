@@ -381,5 +381,33 @@ class CommentsController extends Controller
 
         return $this->redirect($this->generateUrl('admin_comments', $params));
     }
-}
 
+    /**
+     * Shows the disqus configuration form and stores its values
+     *
+     * @return string the response string
+     **/
+    public function configAction(Request $request)
+    {
+        if ('POST' == $this->request->getMethod()) {
+            $configs = $this->request->request->filter('configs', array(), FILTER_SANITIZE_STRING);
+
+            $defaultConfigs = array(
+                'moderation' => false,
+            );
+            $configs = array_merge($defaultConfigs, $configs);
+
+            if (s::set('comments_config', $configs)) {
+                m::add(_('Settings saved.'), m::SUCCESS);
+            } else {
+                m::add(_('There was an error while saving the settings'), m::ERROR);
+            }
+
+            return $this->redirect($this->generateUrl('admin_comments_config'));
+        } else {
+            $configs = s::get('comments_config');
+
+            return $this->render('comment/config.tpl', array('configs' => $configs,));
+        }
+    }
+}

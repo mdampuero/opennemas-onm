@@ -2119,6 +2119,16 @@ $adminRoutes->add(
 );
 
 $adminRoutes->add(
+    'admin_comments_config',
+    new Route(
+        '/comments/config',
+        array(
+            '_controller' => 'Backend:Controllers:CommentsController:config',
+        )
+    )
+);
+
+$adminRoutes->add(
     'admin_comments_show',
     new Route(
         '/comments/{id}/show',
