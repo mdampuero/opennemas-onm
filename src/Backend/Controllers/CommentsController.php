@@ -393,7 +393,8 @@ class CommentsController extends Controller
             $configs = $this->request->request->filter('configs', array(), FILTER_SANITIZE_STRING);
 
             $defaultConfigs = array(
-                'moderation' => false,
+                'moderation'      => false,
+                'number_elements' => 10,
             );
             $configs = array_merge($defaultConfigs, $configs);
 

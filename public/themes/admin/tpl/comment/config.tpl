@@ -50,9 +50,16 @@
         <div class="form-horizontal panel">
             <fieldset>
                 <div class="control-group">
+                    <label for="config[number_elements]" class="control-label">{t}Display{/t}</label>
+                    <div class="controls">
+                        <input type="number" id="name" name="configs[number_elements]" value="{$configs['number_elements']|default:10}" class="input-small">
+                        <div class="help-block">{t}Number of comments to show by page{/t}</div>
+                    </div>
+                </div>
+                <div class="control-group">
                     <label for="config[autoaccept]" class="control-label">{t}Before a comment appears{/t}</label>
                     <div class="controls">
-                        <input type="checkbox" id="name" name="config[moderation]" value="1" {if $configs['moderation'] == true}checked="checked"{/if} >
+                        <input type="checkbox" id="name" name="configs[moderation]" value="1" {if $configs['moderation'] == true}checked="checked"{/if} >
                         <div class="help-block help-block-inline">{t}An administrator must always approve the comment {/t}</div>
                     </div>
                 </div>
