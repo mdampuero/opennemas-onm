@@ -3,11 +3,6 @@ Work after migration
 - Albumcontroller, change ajax action urls in templates
 - LettersController,  no finished show, saveAction submit form to send letter. Change require advertisement by a function
 - NewslibraryController (old frontpages) Problem with routes, (slash /) 'date' =([0-9]+)\/([0-9]+)\/([0-9]+)\/'
-- OpinionsControllers,
-    * Frontpage action: The template opinion_frontpage.tpl acces to $smarty.get and $smarty.request variables
-        * Pager:
-            - The url generator create a additional slash {SITE}[/]/opinion and not match with symfony routes
-            - When access to a particual page (ex:2) in the list always mark the page 1
 - PollsController, review addVote function, use symfony cookie & transform ajax response
 
 

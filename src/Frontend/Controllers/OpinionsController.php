@@ -48,12 +48,7 @@ class OpinionsController extends Controller
      **/
     public function frontpageAction(Request $request)
     {
-        //*** LITTLE HACK TO TEST THIS ACTION BECAUSE IN opinion/opinion_frontpage.tpl
-        //*** IS ACCESS TO $smarty.get AND $smarty.request
-        //*** Change this (It is inclide in TODO on MIGRATION_FRONTEND_SYMFONY)
-        $_REQUEST["action"] = "list_opinions";
-        $_GET["page"] = $this->page;
-        //*** <--------------------------------------------
+        $cm = new \ContentManager();
 
         // Index frontpage
         $cacheID = $this->view->generateCacheId($this->category_name, '', $this->page);
@@ -95,29 +90,31 @@ class OpinionsController extends Controller
                 $this->view->assign('director', $director[0]);
             }
 
-            if ($this->page == 1) {
-                $opinions = $this->cm->find(
-                    'Opinion',
-                    'in_home=1 and available=1 and type_opinion=0',
-                    'ORDER BY position ASC, starttime DESC '
-                );
-                $totalHome = count($opinions);
+            $itemsPerPage = s::get('items_per_page');
 
-            } else {
-                $_limit ='LIMIT '.(($this->page-2)*ITEMS_PAGE).', '.(($this->page-1)*ITEMS_PAGE);
-                // Fetch last opinions of contributors and
-                // paginate them by ITEM_PAGE
-                $opinions = $this->cm->find(
-                    'Opinion',
-                    'in_home=0 and available=1 and type_opinion=0',
-                    'ORDER BY starttime DESC '.$_limit
-                );
-            }
-            // Added ITEMS_PAGE for count first page
-            $total_opinions =  ITEMS_PAGE + $this->cm->count(
+            list($countOpinions, $opinions)= $cm->getCountAndSlice(
                 'Opinion',
+                null,
                 'in_home=0 and available=1 and type_opinion=0',
-                'ORDER BY type_opinion DESC, created DESC '
+                'ORDER BY starttime ASC',
+                $this->page,
+                $itemsPerPage
+            );
+
+            $pagination = \Pager::factory(
+                array(
+                    'mode'        => 'Sliding',
+                    'perPage'     => $itemsPerPage,
+                    'append'      => false,
+                    'path'        => '',
+                    'delta'       => 4,
+                    'clearIfVoid' => true,
+                    'urlVar'      => 'page',
+                    'totalItems'  => $countOpinions,
+                    'fileName'    => $this->generateUrl(
+                        'frontend_opinion_frontpage'
+                    ).'/?page=%d',
+                )
             );
 
             $authors = array();
@@ -138,16 +135,6 @@ class OpinionsController extends Controller
                     )
                 );
             }
-
-            $url = 'opinion';
-            $pagination = $this->cm->create_paginate(
-                $total_opinions,
-                ITEMS_PAGE,
-                2,
-                'URL',
-                $url,
-                ''
-            );
 
             $this->view->assign(
                 array(

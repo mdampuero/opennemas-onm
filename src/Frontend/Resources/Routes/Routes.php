@@ -1013,13 +1013,10 @@ $frontendRoutes->add(
 $frontendRoutes->add(
     'frontend_opinion_frontpage',
     new Route(
-        '/opinion/{page}',
+        '/opinion',
         array(
            '_controller' => 'Frontend:Controllers:OpinionsController:frontpage',
            'page' => 1,
-       ),
-        array(
-           'page' => '([0-9]+)?'
         )
     )
 );
