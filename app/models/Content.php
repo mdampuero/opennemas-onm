@@ -1851,6 +1851,7 @@ class Content
 
             return $contentID;
         } else {
+            return 0;
             // header("HTTP/1.0 404 Not Found");
             // Can't do because sometimes id is empty,
             // example rss in article.php
