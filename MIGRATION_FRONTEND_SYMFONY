@@ -9,5 +9,6 @@ Work after migration
             - The url generator create a additional slash {SITE}[/]/opinion and not match with symfony routes
             - When access to a particual page (ex:2) in the list always mark the page 1
 - PollsController, review addVote function, use symfony cookie & transform ajax response
+
+
 - RedirectorsController, review how to handle previous redirections.
-- Subscriptions, needs further checking and change form send urls

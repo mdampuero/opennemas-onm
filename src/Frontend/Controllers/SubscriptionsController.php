@@ -35,6 +35,9 @@ class SubscriptionsController extends Controller
         require_once SITE_VENDOR_PATH."/phpmailer/class.phpmailer.php";
         require_once 'recaptchalib.php';
         require_once APP_PATH.'/../public/controllers/statics_advertisement.php';
+
+        $this->session = $this->get('session');
+        $this->session->start();
     }
 
     /**
@@ -64,35 +67,29 @@ class SubscriptionsController extends Controller
 
         // Get request params
         $action                    = $request->request->filter('action', null, FILTER_SANITIZE_STRING);
-        $recaptcha_challenge_field = $request->request->filter('recaptcha_challenge_field', null, FILTER_SANITIZE_STRING);
-        $recaptcha_response_field  = $request->request->filter('recaptcha_response_field', null, FILTER_SANITIZE_STRING);
+        $rcChallengeField = $request->request->filter('recaptcha_challenge_field', null, FILTER_SANITIZE_STRING);
+        $rcResponseField  = $request->request->filter('recaptcha_response_field', null, FILTER_SANITIZE_STRING);
 
         // Get reCaptcha validate response
         $resp = recaptcha_check_answer(
             $configRecaptcha['private_key'],
-            $_SERVER["REMOTE_ADDR"],
-            $recaptcha_challenge_field,
-            $recaptcha_response_field
+            $request->getClientIp(),
+            $rcChallengeField,
+            $rcResponseField
         );
 
+        $message = null;
         // What happens when the CAPTCHA was entered incorrectly
         if (!$resp->is_valid) {
-            return new Response(
-                '<script>(!alert("The reCAPTCHA wasn\'t entered correctly. '
-                  . 'Go back and try it again."))</script>'
-                  . '<script>location.href="#"</script>'
-            );
+            $message = _("The reCAPTCHA wasn't entered correctly. Go back and try it again.");
         } else {
             // Correct CAPTCHA, bad mail and name empty
             $email = $request->request->filter('email', null, FILTER_SANITIZE_STRING);
             $name  = $request->request->filter('name', null, FILTER_SANITIZE_STRING);
 
             if (empty($email) || empty($name)) {
-                return new Response(
-                    '<script>(!alert("Lo sentimos, no se ha podido completar'
-                    . ' su solicitud.\nVerifique el formulario y vuelva intentarlo."))</script>'
-                    . '<script>location.href="#"</script>'
-                );
+                $message = "Lo sentimos, no se ha podido completar su solicitud.\n"
+                        ."Verifique el formulario y vuelva intentarlo.";
             } else {
                 // Correct CAPTCHA, correct mail and name not empty
 
@@ -123,26 +120,21 @@ class SubscriptionsController extends Controller
 
                         // Checking the type of action to do (alta/baja)
                         if ($data['subscription'] == 'alta') {
-                            $subject  = utf8_decode("Solicitud de ALTA - Boletín ".$configSiteName);
+                            $subject = utf8_decode("Solicitud de ALTA - Boletín ".$configSiteName);
+                            $body    =  "Solicitud de Alta en el boletín de: \r\n". $formulario;
 
-                            $body =  "Solicitud de Alta en el boletín de: \r\n". $formulario;
-
-                            $resp = '<script language="JavaScript">(!alert("Se ha '
-                                  . 'subscrito correctamente al boletín."))</script>'
-                                  . '<script language="javascript">location.href="/home"</script>';
+                            $message = _("You have been subscribed to the newsletter.");
                         } else {
-                            $subject  = utf8_decode("Solicitud de BAJA - Boletín ".$configSiteName);
+                            $subject = utf8_decode("Solicitud de BAJA - Boletín ".$configSiteName);
+                            $body    =  "Solicitud de Baja en el boletín de: \r\n". $formulario;
 
-                            $body =  "Solicitud de Baja en el boletín de: \r\n". $formulario;
-
-                            $resp = '<script>(!alert("Se ha dado de baja del boletín correctamente."))</script>
-                                    <script>location.href="/home"</script>';
+                            $message = _("Se ha dado de baja del boletín correctamente.");
                         }
 
                         //Send mail
                         $to = $configMailTo['subscription'];
 
-                        $mail = new PHPMailer();
+                        $mail = new \PHPMailer();
                         $mail->SetLanguage('es');
                         $mail->IsSMTP();
                         $mail->Host = MAIL_HOST;
@@ -162,15 +154,10 @@ class SubscriptionsController extends Controller
 
                         $mail->AddAddress($to, $to);
 
-                        if ($mail->Send()) {
-                            return new Response($resp);
-                        } else {
-                            return new Response(
-                                '<script>(!alert("Lo sentimos, no se ha podido '
+                        if (!$mail->Send()) {
+                            $message = "Lo sentimos, no se ha podido '
                                 .'completar su solicitud.\nVerifique el formulario '
-                                .'y vuelva intentarlo."))</script>'
-                                .'<script>location.href="/home"</script>'
-                            );
+                                .'y vuelva intentarlo.";
                         }
                         break;
                     case 'create_subscriptor':
@@ -179,46 +166,37 @@ class SubscriptionsController extends Controller
                             $data['subscription'] = 1;
                             $data['status'] = 2;
 
-                            $user = new Subscriptor();
+                            $user = new \Subscriptor();
 
                             if ($user->create($data)) {
-                                return new Response(
-                                    '<script language="JavaScript">(!alert("Se ha '
-                                    .'subscrito correctamente al boletín."))</script>'
-                                    .'<script language="javascript">location.href="/home"</script>'
-                                );
+                                $message = _("You have been subscribed to our newsletter.");
                             } else {
-                                return new Response(
-                                    '<script>(!alert("Lo sentimos, no se ha podido '
-                                    .'completar su solicitud.\nVerifique el formulario '
-                                    .'y vuelva intentarlo."))</script>'
-                                    .'<script>location.href="/home"</script>'
+                                $message = _(
+                                    "Sorry, we were unable to complete your request.\n"
+                                    ."Check the form and try again"
                                 );
                             }
                         } else {
                             $data['subscription'] = 0;
                             $data['status'] = 3;
 
-                            $user = new Subscriptor();
+                            $user = new \Subscriptor();
                             $user = $user->getUserByEmail($data['email']);
                             $data['id'] = $user->id;
 
                             if ($user->update($data)) {
-                                return new Response('<script language="JavaScript">(!alert("Se ha dado de baja correctamente."))</script>
-                                            <script language="javascript">location.href="/home"</script>');
+                                $message = _("You have been unsubscribed from our newsletter");
                             } else {
-                                return new Response('<script>(!alert("Lo sentimos, no se ha podido '
-                                    .'completar su solicitud.\nVerifique el '
-                                    .'formulario y vuelva intentarlo."))</script>'
-                                    .'<script>location.href="/home"</script>');
+                                $message = _(
+                                    "Sorry, we were unable to complete your request.\n"
+                                    ."Check the form and try again"
+                                );
                             }
                         }
                         break;
                 }
             }
-            return $this->render('static_pages/subscription.tpl');
         }
-        return $this->render('static_pages/subscription.tpl');
+        return $this->render('static_pages/subscription.tpl', array('message' => $message));
     }
-
-} // END class SubscriptionsController
+}
