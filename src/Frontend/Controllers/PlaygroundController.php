@@ -71,7 +71,7 @@ class PlaygroundController extends Controller
         foreach ($allSlabs as $server => $slabs) {
             foreach ($slabs as $slabId => $slabMeta) {
 
-                $cdump = @$memcache->getExtendedStats('cachedump',(int)$slabId);
+                $cdump = @$memcache->getExtendedStats('cachedump', (int)$slabId);
                 foreach ($cdump as $server => $entries) {
                     if ($entries) {
                         foreach ($entries as $eName => $eData) {
@@ -93,4 +93,38 @@ class PlaygroundController extends Controller
         die();
     }
 
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function logger(Request $request)
+    {
+
+        $session = $this->get('session');
+        $session->start();
+        $this->get('session')->setFlash(
+            'notice',
+            'Your changes were saved!'
+        );
+
+
+
+
+        var_dump($_SESSION);
+
+foreach ($session->getFlashBag()->get('notice', array()) as $message) {
+            echo "<div class='flash-notice'>$message</div>";
+        }
+
+        var_dump($_SESSION);die();
+        $logger = $this->get('logger');
+
+        $output = $logger->notice('error test');
+
+        var_dump($output);
+        die();
+
+    }
 }

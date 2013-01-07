@@ -379,7 +379,7 @@ $frontendRoutes->add(
     new Route(
         '/playground/{action}',
         array(
-            '_controller' => 'Frontend:Controllers:PlaygroundController:frontpage',
+            '_controller' => 'Frontend:Controllers:PlaygroundController:default',
         )
     )
 );
