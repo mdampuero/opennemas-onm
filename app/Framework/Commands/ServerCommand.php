@@ -36,8 +36,14 @@ class ServerCommand extends Command
                 InputOption::VALUE_REQUIRED,
                 'The base domain where listen for requests from',
                 'localhost'
+            )
+            ->addOption(
+                'v',
+                'verbose',
+                InputOption::VALUE_REQUIRED,
+                'The base domain where listen for requests from',
+                'localhost'
             );
-        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -48,7 +54,7 @@ class ServerCommand extends Command
         $port   = $input->getOption('port');
         $domain = $input->getOption('domain');
 
-        $output->writeln(" - Iniciating opennemas server at $domain:$port");
+        $output->writeln("<info>Initiazing opennemas server at $domain:$port</info>");
 
         exec($phpBinPath." -S $domain:$port -t ".$webPath." ".$webPath."/app.php");
     }

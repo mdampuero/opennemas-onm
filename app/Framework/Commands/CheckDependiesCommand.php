@@ -23,12 +23,11 @@ class CheckDependiesCommand extends Command
             ->setName('framework:check-dependencies')
             ->setDescription('Checks if all the dependencies for the framework is installed')
             ->addOption(
-               'html',
-               null,
-               InputOption::VALUE_NONE,
-               'If set, the task will output in html format'
-            )
-        ;
+                'html',
+                null,
+                InputOption::VALUE_NONE,
+                'If set, the task will output in html format'
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
