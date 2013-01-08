@@ -16,6 +16,7 @@ vendor/frandieguez
 vendor/symfony
 vendor/monolog
 vendor/swiftmailer
+vendor/psr
 app/config/parameters.yml
 /bin/import-tools/joomla/importer.log
 /bin/import-tools/joomla/configuration.ini
