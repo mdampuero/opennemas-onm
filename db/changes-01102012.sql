@@ -11,3 +11,6 @@ CREATE TABLE IF NOT EXISTS `contentmeta` (
   PRIMARY KEY (`fk_content`,`meta_name`),
   KEY `fk_content` (`fk_content`)
 ) ENGINE = MYISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+-- 01-08-2012
+DROP TABLE privileges;
