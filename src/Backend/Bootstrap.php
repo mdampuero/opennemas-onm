@@ -48,7 +48,6 @@ class Bootstrap extends ModuleBootstrap
 
         $isAsset = preg_match('@.*\.(png|gif|jpg|ico|css|js)$@', $request->getPathInfo());
         if ($isAsset != 1) {
-
             $session = $this->container->get('session');
             $session->start();
             $this->container->get('request')->setSession($session);
@@ -71,10 +70,10 @@ class Bootstrap extends ModuleBootstrap
                 $response->send();
                 exit(0);
             } else {
+
                 if (isset($_SESSION)
                     && array_key_exists('updated', $_SESSION)
-                    && array_key_exists('session_lifetime', $_SESSION)
-                    && (time() > ($_SESSION['updated'] + $_SESSION['session_lifetime']))
+                    && (time() > ($_SESSION['updated'] + ($sessionLifeTime * 60)))
                 ) {
                     foreach ($_COOKIE as $name => $value) {
                         if (preg_match('@^_onm_session_.*@', $name)) {
