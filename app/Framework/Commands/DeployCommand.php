@@ -61,7 +61,7 @@ class DeployCommand extends Command
         // Clean cache and compiles
         $command = $this->getApplication()->find('cache:clean');
         $arguments = array(
-            'command' => 'cache:clean',
+            'command' => 'clean:smarty-cache',
         );
 
         $input = new ArrayInput($arguments);
