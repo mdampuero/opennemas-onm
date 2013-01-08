@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  **/
 
-require '../app/autoload.php';
+require __DIR__.'/../app/autoload.php';
 
 // Load the available route collection
 $routes = new \Symfony\Component\Routing\RouteCollection();
@@ -20,7 +20,7 @@ foreach ($routeFiles as $routeFile) {
 
 require 'bootstrap.php';
 
-$sc = include '../app/container.php';
+$sc = include __DIR__.'/../app/container.php';
 
 if (preg_match('@^/admin@', $request->getRequestUri(), $matches)) {
     $sc->setParameter('dispatcher.exceptionhandler', 'Backend:Controllers:ErrorController:default');

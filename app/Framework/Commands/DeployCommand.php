@@ -21,8 +21,8 @@ class DeployCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('framework:deploy')
-            ->setDescription('Deploys the application to the latest version')
+            ->setName('app:deploy')
+            ->setDescription('Deploys the application to the latest version');
         ;
     }
 
