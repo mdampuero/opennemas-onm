@@ -242,7 +242,7 @@ class CacheManagerController extends Controller
 
             m::add(_('Cache configuration saved successfully.'), m::SUCCESS);
 
-            return $this->redirect($this->generateUrl('admin_tpl_manager'));
+            return $this->redirect($this->generateUrl('admin_tpl_manager_config'));
         } else {
             $config = $this->templateManager->dumpConfig();
 

@@ -116,7 +116,7 @@
                 <th class="center" style="width:130px;">{t}Created{/t}</th>
                 <th class="center" style="width:80px;">{t}Last Editor{/t}</th>
                 <th class="center" style="width:10px;">{t}Available{/t}</th>
-                <th class="right" style="width:70px;">{t}Actions{/t}</th>
+                <th class="center" style="width:70px;">{t}Actions{/t}</th>
             </thead>
             {acl hasCategoryAccess=$category}
             <tbody>

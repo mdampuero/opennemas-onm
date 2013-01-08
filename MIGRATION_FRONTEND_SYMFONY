@@ -5,5 +5,4 @@ Work after migration
 - NewslibraryController (old frontpages) Problem with routes, (slash /) 'date' =([0-9]+)\/([0-9]+)\/([0-9]+)\/'
 - PollsController, review addVote function, use symfony cookie & transform ajax response
 
-
 - RedirectorsController, review how to handle previous redirections.

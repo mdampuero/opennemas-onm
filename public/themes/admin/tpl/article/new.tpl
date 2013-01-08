@@ -75,7 +75,7 @@
                 {acl isAllowed="ARTICLE_UPDATE"}
                 <li>
                     <button type="submit" name="continue" value="1">
-                        <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
+                        <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}" ><br />{if isset($article->id)}{t}Update{/t}{else}{t}Save{/t}{/if}
                     </button>
                 </li>
                 {/acl}
