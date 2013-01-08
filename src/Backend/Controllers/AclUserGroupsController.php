@@ -187,4 +187,3 @@ class AclUserGroupsController extends Controller
         return $this->redirect($this->generateUrl('admin_acl_usergroups'));
     }
 }
-

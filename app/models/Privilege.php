@@ -13,15 +13,14 @@
  *
  * @package    Onm
  * @subpackage Acl
- * @author     Fran Dieguez <fran@openhost.es>
  **/
 class Privilege
 {
-    public $id           = null;
-    public $pk_privilege = null;
-    public $description = null;
-    public $name        = null;
-    public $module      = null;
+    public $id                = null;
+    public $pk_privilege      = null;
+    public $description       = null;
+    public $name              = null;
+    public $module            = null;
     public static $privileges = null;
 
     /**
@@ -32,54 +31,28 @@ class Privilege
     */
     public function __construct($id = null)
     {
+        self::loadPrivileges();
+
         if (!is_null($id)) {
             $this->read($id);
         }
     }
 
     /**
-     * Create a new Privilege
-     *
-     * @param  array   $data Data values to insert into database
-     * @return boolean
-     */
-    public function create($data)
-    {
-        $sql = 'INSERT INTO `privileges` (`name`, `module`, `description`) VALUES (?, ?, ?)';
-        $values = array($data['name'], $data['module'], $data['description']);
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
-            return false;
-        }
-
-        $this->id = $GLOBALS['application']->conn->Insert_ID();
-    }
-
-    /**
      * Read a privilege
      *
      * @param int $id Privilege Id
-     * @return
      */
     public function read($id)
     {
-        $sql = 'SELECT * FROM `privileges` WHERE `pk_privilege`=?';
+        foreach (self::$privileges as $privilege) {
 
-        // Set fetch method to ADODB_FETCH_ASSOC
-        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
+            if ($privilege['pk_privilege'] == $id) {
+                $this->load($privilege);
 
-        $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
-        if (!$rs) {
-            \Application::logDatabaseError();
-
-            return;
+                return $this;
+            }
         }
-
-        $this->load($rs->fields);
-
-        return $this;
     }
 
     /**
@@ -106,82 +79,17 @@ class Privilege
     }
 
     /**
-     * Update privilege
-     *
-     * @param  array             $data
-     * @return boolean|Privilege Return this instance or false if update operation fail
-     */
-    public function update($data)
-    {
-        $sql = "UPDATE `privileges` "
-             . "SET `name`=?, `module`=?, `description`=? "
-             . "WHERE `pk_privilege`=?";
-
-        $values = array(
-            $data['name'],
-            $data['module'],
-            $data['description'],
-            $data['id']
-        );
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
-            return false;
-        }
-
-        $this->load($values);
-
-        return $this;
-    }
-
-    /**
-     * Remove a privilege
-     *
-     * @param  int     $id Privilege Id
-     * @return boolean
-     */
-    public function delete($id)
-    {
-        $sql = 'DELETE FROM `privileges` WHERE `pk_privilege`=?';
-        $values = array($id);
-
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-        if ($rs === false) {
-            \Application::logDatabaseError();
-
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * Get privileges of system
      *
      * @param array Array of Privileges
      */
-    public function get_privileges($filter = null)
+    public function find($filter = null)
     {
-        $privileges = array();
-        if (is_null($filter)) {
-            $sql = 'SELECT * FROM privileges ORDER BY module';
-        } else {
-            $sql = 'SELECT * FROM privileges WHERE '.$filter
-                 . ' ORDER BY module, pk_privilege';
-        }
-
-        // Set fetch method to ADODB_FETCH_ASSOC
-        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
-
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        while (!$rs->EOF) {
+        foreach (self::$privileges as $privilegeData) {
             $privilege = new Privilege();
-            $privilege->load($rs->fields);
+            $privilege->load($privilegeData);
 
             $privileges[]  = $privilege;
-            $rs->MoveNext();
         }
 
         return $privileges;
@@ -194,22 +102,18 @@ class Privilege
      */
     public function getModuleNames()
     {
+        self::loadPrivileges();
+        $privileges = self::$privileges;
+
         $modules = array();
-        $sql = 'SELECT `module` FROM `privileges` '
-             . 'WHERE (`module` IS NOT NULL) AND (`module`<> "") '
-             . 'GROUP BY `module`';
-
-        // Set fetch method to ADODB_FETCH_ASSOC
-        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
-
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        while (!$rs->EOF) {
-            $modules[] = $rs->fields['module'];
-            $rs->MoveNext();
+        foreach ($privileges as $privilege) {
+            $modules []= $privilege['module'];
         }
 
-        return $modules;
+        $modules = array_unique($modules);
+        asort($modules);
+
+        return array_values($modules);
     }
 
     /**
@@ -222,41 +126,35 @@ class Privilege
      */
     public function getPrivilegesByModules($filter = null)
     {
-        $privileges = array();
-        if (is_null($filter)) {
-            $sql = 'SELECT * FROM privileges ORDER BY module';
-        } else {
-            $sql = 'SELECT * FROM privileges WHERE '.$filter
-                 . ' GROUP BY module';
-        }
+        self::loadPrivileges();
+        $privileges = self::$privileges;
 
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        while (!$rs->EOF) {
+        $groupedPrivileges = array();
+        foreach ($privileges as $privilegeData) {
             $privilege = new Privilege();
-            $privilege->load($rs->fields);
+            $privilege->load($privilegeData);
 
-            $module = $rs->fields['module'];
-            $privileges[$module][] = $privilege;
-            $rs->MoveNext();
+            if (!array_key_exists($privilegeData['module'], $groupedPrivileges)) {
+                $groupedPrivileges[$privilegeData['module']] = array();
+            }
+            $groupedPrivileges[$privilegeData['module']] []= $privilege;
         }
 
-        return $privileges;
+        return $groupedPrivileges;
     }
 
     /**
      * @deprecated 0.5
     */
-    public static function get_privileges_by_user($idUser)
+    public static function getPrivilegesForUserGroup($userGroupId)
     {
         self::loadPrivileges();
-        $privileges = array();
-        $sql = 'SELECT user_groups_privileges.pk_fk_privilege FROM users
-                    INNER JOIN user_groups_privileges
-                    ON user_groups_privileges.pk_fk_user_group = users.fk_user_group
-                WHERE users.pk_user = ?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($idUser)));
 
+        $sql = 'SELECT pk_fk_privilege FROM users, user_groups_privileges
+                WHERE pk_fk_user_group = ?';
+        $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($userGroupId)));
+
+        $privileges = array();
         while (!$rs->EOF) {
             if (array_key_exists($rs->fields['pk_fk_privilege'], self::$privileges)) {
                 $privilege = self::$privileges[$rs->fields['pk_fk_privilege']];
@@ -915,7 +813,7 @@ class Privilege
             array(
                 'pk_privilege' => '116',
                 'name'         => 'TRASH_ADMIN',
-                'description'  => _('GestiÃ³n papelera'),
+                'description'  => _('Gestión papelera'),
                 'module'       => 'TRASH',
             ),
             array(

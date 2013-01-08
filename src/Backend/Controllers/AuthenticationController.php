@@ -94,6 +94,8 @@ class AuthenticationController extends Controller
 
                     $maxSessionLifeTime = (int) s::get('max_session_lifetime', 60);
 
+                    $group = \UserGroup::getGroupName($user->fk_user_group);
+
                     $_SESSION = array(
                         'userid'           => $user->id,
                         'realname'         => $user->name,
@@ -101,9 +103,9 @@ class AuthenticationController extends Controller
                         'email'            => $user->email,
                         'deposit'          => $user->deposit,
                         'type'             => $user->type,
-                        'isAdmin'          => ( \UserGroup::getGroupName($user->fk_user_group)=='Administrador' ),
-                        'isMaster'         => ( \UserGroup::getGroupName($user->fk_user_group)=='Masters' ),
-                        'privileges'       => \Privilege::get_privileges_by_user($user->id),
+                        'isAdmin'          => ($group == 'Administrador'),
+                        'isMaster'         => ($group == 'Masters'),
+                        'privileges'       => \Privilege::getPrivilegesForUserGroup($user->fk_user_group),
                         'accesscategories' => $user->getAccessCategoryIds(),
                         'updated'          => time(),
                         'session_lifetime' => $maxSessionLifeTime * 60,
