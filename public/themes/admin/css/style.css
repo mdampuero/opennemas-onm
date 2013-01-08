@@ -42,11 +42,13 @@ td {
 /* =============================================================================
    Bootstrap customization
    ========================================================================== */
-select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {margin-bottom:0px}
+select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {font-size: 1em; margin-bottom:0px}
 label { font-size:13px;}
 input[type="radio"], input[type="checkbox"] { margin-top:0; }
 .input-xxxlarge{ margin-left:630px}
-
+.input-append input, .input-prepend input, .input-append select, .input-prepend select, .input-append .uneditable-input, .input-prepend .uneditable-input, .input-append .dropdown-menu, .input-prepend .dropdown-menu {
+font-size: 13px;
+}
 a.btn:not(.btn-mini) { padding:4px 8px;}
 a.btn-primary,a.btn-primary:hover,a.btn-warning,a.btn-warning:hover,a.btn-danger,a.btn-danger:hover,a.btn-success,a.btn-success:hover,a.btn-info,a.btn-info:hover,a.btn-inverse,a.btn-inverse:hover{text-shadow:0 -1px 0 rgba(0, 0, 0, 0.25);color:#ffffff;}
 a.btn-primary.active,a.btn-warning.active,a.btn-danger.active,a.btn-success.active,a.btn-info.active,a.btn-dark.active{color:rgba(255, 255, 255, 0.75);}
@@ -58,7 +60,6 @@ a.btn-primary.active,a.btn-warning.active,a.btn-danger.active,a.btn-success.acti
 .table a {font-weight:bold;}
 .table a.btn {font-weight:normal}
 .table input[type="checkbox"] {margin-top:0;}
-.table tfoot td { padding:3px 9px !important; }
 .table tbody td.empty { padding:30px; text-align: center; font-size:13px;}
 .table th, .table tfoot td { background: #343434; color: #FFFFFF; font-size: 12px; font-weight: normal; padding: 9px; text-align: left; }
 
@@ -88,6 +89,52 @@ a.btn-primary.active,a.btn-warning.active,a.btn-danger.active,a.btn-success.acti
 }
 
 .help-block-inline { display: inline-block;}
+
+.alert {
+    background: #308dbf url("/assets/images/alert-info.png") no-repeat 16px;
+    color: white;
+    margin: 15px 0;
+    padding: 10px 15px 10px 55px;
+    text-shadow:none;
+    border:none;
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    border-radius: 0px;
+}
+.alert.alert-success {
+    background: #468847 url("/assets/images/alert-ok.png") no-repeat 16px;
+
+}
+
+.alert.alert-danger {
+    background: #B22222 url("/assets/images/alert-error.png") no-repeat 16px;
+
+}
+
+.alert .close {
+    top:0px;
+    right:-5px;
+    color: white;
+    text-shadow: none;
+    opacity: 1;
+    filter:alpha(opacity=100)
+}
+
+.btn-group > .btn, .btn-group > .dropdown-menu, .btn-group > .popover {
+    font-size: 12px;
+}
+
+a.btn {
+    color:#424E51
+}
+a.btn [class^="icon-"] {
+    font-size:14px;
+}
+a.btn-danger {
+    color:White;
+}
+.input-append .add-on, .input-prepend .add-on { font-size:13px; }
+
 /* -------------------------------------------------------------
   LISTINGS
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -496,15 +543,16 @@ div.utilities-conf input[type="text"]{
   New top action bar
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 .top-action-bar {
-  background: none repeat scroll 0 0 #F1F1F1;
+    background: #F1F1F1;
     border: none;
     border-bottom: 1px solid #D2D2D2;
     clear: both;
     position: relative;
     width: 100%;
-  margin:0;
-  margin-top:-13px;
-  margin-bottom:5px;
+    margin:0;
+    margin-top:-13px;
+    margin-bottom:5px;
+
 }
   .top-action-bar .title {
     padding:0;
@@ -516,13 +564,13 @@ div.utilities-conf input[type="text"]{
     }
     .top-action-bar .title img { margin-left:10px; }
     .top-action-bar .title h2 {
-      color:#464646;
+      color: #464646;
       font-size:1.5em;
       vertical-align:bottom;
-      font-family: Georgia,"Times New Roman","Bitstream Charter",Times,serif;
-      font-style:italic;
-      font-weight:normal;
-      text-shadow:0 1px 0 #FFFFFF;
+      font-family: "HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",sans-serif;
+      font-size: 1.6em;
+      /*font-weight:normal;*/
+      /*text-shadow:0 1px 0 #FFFFFF;*/
       margin:0;
       padding:20px 0;
       font-size:1.6em;
@@ -2030,4 +2078,9 @@ progress {
     box-shadow: 0 0 1px rgba(255,255,255,.3), inset 0 0 5px rgba(0,0,0,1.0);
     -moz-box-shadow: 0 0 1px rgba(255,255,255,.3), inset 0 0 5px rgba(0,0,0,1.0);
     -webkit-box-shadow: 0 0 1px rgba(255,255,255,.3), inset 0 0 5px rgba(0,0,0,1.0);
+}
+
+
+.nowrap {
+    wrap: no-wrap;
 }
