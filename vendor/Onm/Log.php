@@ -91,7 +91,7 @@ class Log extends \Zend_Log
     */
     protected function errorWriter($loglevel)
     {
-        $writer = new \Zend_Log_Writer_Stream(SYS_LOG_PATH.'/onm.log');
+        $writer = new \Zend_Log_Writer_Stream(SYS_LOG_PATH.'/'.INSTANCE_UNIQUE_NAME.'-onm.log');
         switch ($loglevel) {
             case 'normal':
                 $writer->addFilter(new \Zend_Log_Filter_Priority(\Zend_Log::NOTICE, '>='));

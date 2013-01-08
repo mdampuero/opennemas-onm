@@ -118,7 +118,7 @@ class Instance
          * Logging settings
          **/
         define('SYS_LOG_PATH', realpath(SITE_PATH.DS.'..'.DS."tmp/logs"));
-        define('SYS_LOG_FILENAME', SYS_LOG_PATH.DS.'application.log');
+        define('SYS_LOG_FILENAME', SYS_LOG_PATH.DS.INSTANCE_UNIQUE_NAME.'-application.log');
 
         // TODO: delete from application
         define('SYS_NAME_GROUP_ADMIN', 'Administrador');
