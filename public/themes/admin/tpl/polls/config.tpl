@@ -31,6 +31,13 @@ legend {
             <div class="title"><h2>{t}Poll :: Configuration{/t}</h2></div>
             <ul class="old-button">
                 <li>
+                    <button type="submit">
+                        <img border="0" src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}" ><br />
+                        {t}Save{/t}
+                    </button>
+                </li>
+                <li class="separator"></li>
+                <li>
                     <a href="{url name=admin_polls}" class="admin_add" value="{t}Go back to list{/t}" title="{t}Go back to list{/t}">
                     <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Sync list  with server{/t}" alt="{t}Go back to list{/t}" ><br />{t}Go back to list{/t}
                     </a>
@@ -83,12 +90,6 @@ legend {
 
             </fieldset>
         </div><!-- / -->
-
-        <div class="action-bar clearfix">
-            <div class="right">
-                <input type="submit" name="submit" value="{t}Save{/t}"  class="onm-button green">
-            </div>
-        </div>
 
         <input type="hidden" id="action" name="action" value="save_config" />
     </div>

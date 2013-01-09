@@ -34,7 +34,7 @@
 <form action="{url name=admin_files}" method="GET" name="formulario" id="formulario" {$formAttrs|default:""} >
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Files manager :: {/t}{if $category eq '0'}{t}General statistics{/t}{else}{$datos_cat[0]->title}{/if}</h2></div>
+            <div class="title"><h2>{t}Files manager{/t}{if $category eq '0'} :: {t}General statistics{/t}{else} :: {$datos_cat[0]->title}{/if}</h2></div>
             {if $category != ''}
             <ul class="old-button">
                 <li>
@@ -136,7 +136,7 @@
                     {if $category!='widget'} <th class="center" style="width:20px;">{t}Favorite{/t}</th>{/if}
                     <th class="center" style="width:20px;">{t}Home{/t}</th>
                     <th class="center" style="width:20px">{t}Published{/t}</th>
-                    <th style="width:100px" class="center">{t}Actions{/t}</th>
+                    <th style="width:10px" class="center">{t}Actions{/t}</th>
                 </tr>
             </thead>
             <tbody class="sortable">
@@ -189,7 +189,7 @@
                         {/if}
                     {/acl}
                     </td>
-                    <td class="center">
+                    <td class="rigth nowrap">
                         <div class="btn-group">
                             {acl isAllowed="FILE_UPDATE"}
                                 <a class="btn"  href="{url name=admin_files_show id=$attaches[c]->id}" title="{t}Edit file{/t}">

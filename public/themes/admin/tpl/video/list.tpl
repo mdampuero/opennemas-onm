@@ -102,7 +102,7 @@
                     <th class="center" style="width:35px;">{t}Published{/t}</th>
                     {if $category!='widget' && $category!='all'} <th class="center" style="width:35px;">{t}Favorite{/t}</th>{/if}
                     <th class="center" style="width:35px;">{t}Home{/t}</th>
-                    <th class="right" style="width:100px;">{t}Actions{/t}</th>
+                    <th class="center" style="width:100px;">{t}Actions{/t}</th>
                     {else}
                     <th class="center">
                         &nbsp;
@@ -124,7 +124,7 @@
                     </td>
                     {if $category=='widget' || $category=='all'}
                     <td >
-                         {$video->category_title}
+                        {$video->category_title}
                     </td>
                     {/if}
                     </td class="center">

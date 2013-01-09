@@ -105,7 +105,7 @@ class StaticPagesController extends Controller
             $staticPage->read($id);
 
             return $this->render(
-                'static_pages/read.tpl',
+                'static_pages/new.tpl',
                 array(
                     'id'   => $id,
                     'page' => $staticPage,
@@ -128,7 +128,7 @@ class StaticPagesController extends Controller
     public function createAction(Request $request)
     {
         if ('POST' != $request->getMethod()) {
-            return $this->render('static_pages/read.tpl');
+            return $this->render('static_pages/new.tpl');
         } else {
 
             $staticPage = new \StaticPage();
@@ -184,7 +184,7 @@ class StaticPagesController extends Controller
                 if (count($request->request) < 1) {
                     m::add(_("Static Page data sent not valid."), m::ERROR);
 
-                    return $this->redirect($this->generateUrl('admin_staticpage_show', array('id' => $id)));
+                    return $this->redirect($this->generateUrl('admin_staticpages_show', array('id' => $id)));
                 }
 
                 $data = array(
@@ -211,7 +211,7 @@ class StaticPagesController extends Controller
 
             if ($continue) {
                 return $this->redirect(
-                    $this->generateUrl('admin_staticpage_show', array('id' => $staticPage->id))
+                    $this->generateUrl('admin_staticpages_show', array('id' => $staticPage->id))
                 );
             } else {
                 $page = $request->request->getDigits('page', 1);

@@ -43,7 +43,7 @@
                     <li>
                         <a href="{url name=admin_specials_config}" class="admin_add" title="{t}Config special module{/t}">
                             <img border="0" src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
-                            {t}Configurations{/t}
+                            {t}Settings{/t}
                         </a>
                     </li>
                 {/acl}
@@ -73,7 +73,6 @@
            {include file="menu_categories.tpl" home={url name=admin_specials l=1}}
         </ul>
 
-        {* MENSAJES DE AVISO GUARDAR POS******* *}
         <table class="table table-hover table-condensed">
             <thead>
                 <tr>

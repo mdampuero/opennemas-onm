@@ -105,7 +105,7 @@ class WidgetsController extends Controller
         $_SESSION['from'] = $request->server->get("HTTP_REFERER").'?'.$request->getQueryString();
 
         return $this->render(
-            'widget/edit.tpl',
+            'widget/new.tpl',
             array(
                 'all_widgets' => $allInteligentWidgets,
                 'id'          => $id,
@@ -170,7 +170,7 @@ class WidgetsController extends Controller
             $allInteligentWidgets = \Widget::getAllInteligentWidgets();
 
             return $this->render(
-                'widget/edit.tpl',
+                'widget/new.tpl',
                 array(
                     'all_widgets' => $allInteligentWidgets,
                     'action'      => 'new',

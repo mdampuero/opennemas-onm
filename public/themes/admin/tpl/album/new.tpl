@@ -182,23 +182,16 @@
             <div class="title"><h2>{t}Album manager{/t} :: {if $smarty.request.action eq "new"}{t}Creating Album{/t}{else}{t}Editing Album{/t}{/if}</h2></div>
             <ul class="old-button">
                 <li>
-                    {acl isAllowed="ALBUM_CREATE"}
-                    <button type="submit" name="continue" value="true"  id="form-validate-button">
-                        <img src="{$params.IMAGE_DIR}save_and_continue.png" title="Guardar y continuar" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
-                    </button>
-                    {/acl}
-                </li>
-                <li>
                     {if isset($album->id)}
                         {acl isAllowed="ALBUM_UPDATE"}
-                        <button type="submit" id="form-send-button">
-                            <img src="{$params.IMAGE_DIR}save.png" title="Guardar y continuar" alt="{t}Save{/t}" ><br />{t}Save{/t}
+                        <button type="submit" id="form-send-button"  name="continue" value="true">
+                            <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}" ><br />{t}Save{/t}
                         </button>
                         {/acl}
                     {else}
                         {acl isAllowed="ALBUM_CREATE"}
-                        <button type="submit" id="form-send-button">
-                            <img src="{$params.IMAGE_DIR}save.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />{t}Save{/t}
+                        <button type="submit" id="form-send-button"  name="continue" value="true">
+                            <img src="{$params.IMAGE_DIR}save.png" alt="Guardar y continuar" ><br />{t}Save{/t}
                         </button>
                         {/acl}
                     {/if}

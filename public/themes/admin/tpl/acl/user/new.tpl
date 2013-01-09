@@ -48,13 +48,8 @@ label {
 			<div class="title"><h2>{t}User manager{/t} :: {t}Editing user information{/t}</h2></div>
 			<ul class="old-button">
                 <li>
-                    <button action="submit">
+                    <button action="submit"  name="action" value="validate">
                         <img src="{$params.IMAGE_DIR}save.png" title="{t}Save and exit{/t}" alt="{t}Save and exit{/t}"><br />{t}Save{/t}
-                    </button>
-                </li>
-                <li>
-                    <button action="submit" name="action" value="validate">
-                        <img src="{$params.IMAGE_DIR}save_and_continue.png" title="{t}Save and continue{/t}" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
                     </button>
                 </li>
                 <li class="separator"></li>
@@ -79,8 +74,9 @@ label {
                 <div class="avatar">
                     <div class="avatar-image thumbnail"  rel="tooltip" data-original-title="{t escape=off}If you want a custom avatar sign up in <a href='http://www.gravatar.com'>gravatar.com</a> with the same email address as you have here in OpenNemas{/t}">
                         {if $user}
-                            <img src="{$params.IMAGE_DIR}default_avatar.png" alt="Default avatar" width=150>
+                            {gravatar email=$user->email image_dir=$params.IMAGE_DIR image=true size="150"}
                         {else}
+                            <img src="{$params.IMAGE_DIR}default_avatar.png" alt="Default avatar" width=150>
                             {gravatar email="fake@mail.com" image_dir=$params.IMAGE_DIR image=true size=150}
                         {/if}
                     </div>

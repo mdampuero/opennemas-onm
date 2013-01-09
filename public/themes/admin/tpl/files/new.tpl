@@ -28,6 +28,7 @@
                         <img src="{$params.IMAGE_DIR}save.png" title="Guardar y salir" alt="{t}Save{/t}"><br />{t}Save{/t}
                     </button>
                 </li>
+                <li class="separator"></li>
                 <li>
                     <a href="{url name=admin_files}" class="admin_add" value="Cancelar" title="Cancelar">
                         <img border="0" src="{$params.IMAGE_DIR}previous.png" title="Cancelar" alt="Cancelar" ><br />{t}Go back{/t}
@@ -37,10 +38,10 @@
         </div>
     </div>
 
-    <div class="wrapper-content panel">
-
+    <div class="wrapper-content">
         {render_messages}
-
+    </div>
+    <div class="wrapper-content panel">
         <div class="form-horizontal">
             <div class="control-group">
                 <label for="" class="control-label">{t}Title{/t}</label>

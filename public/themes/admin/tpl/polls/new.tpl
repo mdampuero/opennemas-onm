@@ -56,13 +56,8 @@
             <div class="title"><h2>{t}Poll manager{/t} :: {if $poll->id}{t}Editing poll{/t}{else}{t}Creating a poll{/t}{/if}</h2></div>
             <ul class="old-button">
                 <li>
-                    <button type="submit">
-                        <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}"><br />{t}Save{/t}
-                    </button>
-                </li>
-                <li>
                     <button type="submit" name="continue" value="1">
-                        <img src="{$params.IMAGE_DIR}save_and_continue.png" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
+                        <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}"><br />{t}Save{/t}
                     </button>
                 </li>
                 <li class="separator"></li>

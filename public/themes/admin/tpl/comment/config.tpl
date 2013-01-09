@@ -1,48 +1,28 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-<style type="text/css">
-    label {
-        width:150px;
-        padding-left:10px;
-        display:inline-block;
-    }
-    input[type="text"],
-    input[type="password"] {
-        width:300px;
-    }
-    .form-wrapper {
-        margin:10px auto;
-        width:50%;
-    }
-    .top-action-bar .title > * {
-        display: inline-block;
-        padding: 0;
-    }
-    </style>
-{/block}
 
 {block name="content"}
 <form action="{url name=admin_comments_config}" method="POST">
     <div class="top-action-bar">
         <div class="wrapper-content">
             <div class="title">
-                <h2>{t}Comment manager{/t}:: {t}Settings{/t}</h2>
-                <ul class="old-button">
-                    <li>
-                        <button type="submit">
-                            <img src="{$params.IMAGE_DIR}save.png" alt="Save"><br>{t}Save{/t}
-                        </button>
-                    </li>
-                    <li>
-                        <a href="{url name=admin_comments}" title="{t}Go back to list{/t}">
-                            <img src="{$params.IMAGE_DIR}previous.png" alt="{t}Go back to list{/t}" >
-                            <br />
-                            {t}Go back to list{/t}
-                        </a>
-                    </li>
-                </ul>
+                <h2>{t}Comment manager{/t} :: {t}Settings{/t}</h2>
             </div>
+            <ul class="old-button">
+                <li>
+                    <button type="submit">
+                        <img src="{$params.IMAGE_DIR}save.png" alt="Save"><br>{t}Save{/t}
+                    </button>
+                </li>
+                <li class="separator"></li>
+                <li>
+                    <a href="{url name=admin_comments}" title="{t}Go back to list{/t}">
+                        <img src="{$params.IMAGE_DIR}previous.png" alt="{t}Go back to list{/t}" >
+                        <br />
+                        {t}Go back to list{/t}
+                    </a>
+                </li>
+            </ul>
         </div>
     </div>
     <div class="wrapper-content">

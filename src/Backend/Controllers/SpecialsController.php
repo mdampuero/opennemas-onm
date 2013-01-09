@@ -637,7 +637,7 @@ class SpecialsController extends Controller
             }
             m::add(_('Settings saved successfully.'), m::SUCCESS);
 
-            return $this->redirect($this->generateUrl('admin_specials'));
+            return $this->redirect($this->generateUrl('admin_specials_config'));
         } else {
             $configurations = s::get(array('special_settings',));
 

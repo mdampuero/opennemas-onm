@@ -119,13 +119,14 @@ class OpinionsController extends Controller
         return $this->render(
             'opinion/list.tpl',
             array(
-                'autores'  => $authors,
-                'opinions' => $opinions,
-                'page'     => $page,
-                'status'   => $status,
-                'author'   => $author,
-                'home'     => false,
+                'autores'    => $authors,
+                'opinions'   => $opinions,
+                'page'       => $page,
+                'status'     => $status,
+                'author'     => $author,
+                'home'       => false,
                 'pagination' => $pagination,
+                'total'      => $countOpinions,
             )
         );
     }
@@ -882,7 +883,7 @@ class OpinionsController extends Controller
 
             m::add(_('Settings saved successfully.'), m::SUCCESS);
 
-            return $this->redirect($this->generateUrl('admin_opinions'));
+            return $this->redirect($this->generateUrl('admin_opinions_config'));
         } else {
             $configurations = s::get(array('opinion_settings',));
 
@@ -893,4 +894,3 @@ class OpinionsController extends Controller
         }
     }
 }
-

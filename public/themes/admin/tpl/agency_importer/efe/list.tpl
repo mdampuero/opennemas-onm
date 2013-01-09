@@ -126,8 +126,8 @@
                     <td style="text-align:center;">
                        <img src="{$params.IMAGE_DIR}notifications/level-{if $element->priority > 4}4{else}{$element->priority}{/if}.png" alt="{t 1=$element->priority}Priority %1{/t}" title="{t 1=$element->priority}Priority %1{/t}">
                     </td>
-                    <td rel="tooltip" data-original-title="{$element->body|clearslash|regex_replace:"/'/":"\'"|escape:'html'}">
-                        <a href="{url name=admin_importer_efe_show id=$element->xmlFile|urlencode}" >
+                    <td >
+                        <a href="{url name=admin_importer_efe_show id=$element->xmlFile|urlencode}" rel="tooltip" data-original-title="{$element->body|clearslash|regex_replace:"/'/":"\'"|escape:'html'}">
                             {$element->title}
                         </a>
                     </td>

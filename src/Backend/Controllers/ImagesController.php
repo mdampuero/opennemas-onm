@@ -543,7 +543,7 @@ class ImagesController extends Controller
         }
 
         return $this->render(
-            'image/show.tpl',
+            'image/new.tpl',
             array(
                 'photos'        => $photos,
                 'MEDIA_IMG_URL' => $this->imgUrl,
@@ -923,4 +923,3 @@ class ImagesController extends Controller
         );
     }
 }
-

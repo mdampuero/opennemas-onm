@@ -22,9 +22,9 @@
         <div class="wrapper-content">
             <div class="title">
                 <h2>
-                    Comment Manager ::
+                    Comment Manager
                     {if $category eq 'home' ||  $category eq 'todos'} {$category|upper}
-                    {else} {$datos_cat[0]->title} {/if}
+                    {else} ::  {$datos_cat[0]->title} {/if}
                 </h2>
             </div>
             <ul class="old-button">
@@ -70,16 +70,16 @@
             <div class="pull-right form-inline">
                 <label>{t}Status:{/t}
                 <select name="filter[status]" class="form-filters">
-                    <option value="0" {if $status eq '0'}selected{/if}> {t}Pending{/t} </option>
-                    <option value="1" {if $status eq '1'}selected{/if}> {t}Published{/t} </option>
-                    <option value="2" {if $status eq '2'}selected{/if}> {t}Rejected{/t} </option>
+                    <option value="0" {if $status eq '0'}selected{/if}>{t}Pending{/t}</option>
+                    <option value="1" {if $status eq '1'}selected{/if}>{t}Published{/t}</option>
+                    <option value="2" {if $status eq '2'}selected{/if}>{t}Rejected{/t}</option>
                 </select>
                 </label>
 
                 <label for="category">
                     {t}Category:{/t}
                     <select name="category" class="form-filters">
-                        <option value="all" {if $category eq '0'}selected{/if}> {t}All{/t} </option>
+                        <option value="all" {if $category eq '0'}selected{/if}>{t}-- All --{/t} </option>
                         {section name=as loop=$allcategorys}
                              <option value="{$allcategorys[as]->pk_content_category}" {if isset($category) && ($category eq $allcategorys[as]->pk_content_category)}selected{/if}>{$allcategorys[as]->title}</option>
                              {section name=su loop=$subcat[as]}
@@ -94,7 +94,7 @@
                 <div class="input-append">
                     <label>{t}Module:{/t}
                     <select name="filter[module]" class="form-filters">
-                        <option value="0" {if $module eq '0'}selected{/if}> {t}All{/t} </option>
+                        <option value="0" {if $module eq '0'}selected{/if}>{t}-- All --{/t}</option>
                         {foreach from=$content_types key=i item=type}
                         <option value="{$i}" {if $module eq $i}selected{/if}>{$type}</option>
                         {/foreach}
@@ -138,10 +138,10 @@
 						<input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}"
                             name="selected_fld[]" value="{$comments[c]->id}">
 					</td>
-					<td rel="tooltip" data-original-title="{$comments[c]->body|strip_tags|clearslash}">
-						<a href="{url name=admin_comments_show id=$comments[c]->id}"title="{t 1=$articles[c]->title}Edit comment %1{/t}">
+					<td>
+						<a href="{url name=admin_comments_show id=$comments[c]->id}" title="{t 1=$articles[c]->title}Edit comment %1{/t}">
                             <strong>[{$comments[c]->title|strip_tags|clearslash|truncate:40:"..."}]</strong>
-                            {$comments[c]->body|strip_tags|clearslash|truncate:50}
+                            <span rel="tooltip" data-original-title="{$comments[c]->body|strip_tags|clearslash}">{$comments[c]->body|strip_tags|clearslash|truncate:50}</span>
                         </a>
                         <br>
                         <strong>{t}Author{/t}</strong>

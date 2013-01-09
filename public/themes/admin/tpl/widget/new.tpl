@@ -49,7 +49,7 @@
             <div class="control-group">
                 <label for="metadata" class="control-label">{t}Widget name{/t}</label>
                 <div class="controls">
-                    <input type="text" id="title" name="title" value="{$widget->title|default:""}" required="required" size="30" maxlength="60"/>
+                    <input type="text" id="title" name="title" value="{$widget->title|default:""}" required="required" class="input-xxlarge"/>
                 </div>
             </div>
 

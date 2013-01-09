@@ -129,7 +129,7 @@ class MenusController extends Controller
         }
 
         return $this->render(
-            'menues/edit.tpl',
+            'menues/new.tpl',
             array(
                 'categories'      => $parentCategories,
                 'subcat'          => $subcat,
@@ -223,7 +223,7 @@ class MenusController extends Controller
             }
 
             return $this->render(
-                'menues/edit.tpl',
+                'menues/new.tpl',
                 array(
                     'categories'      => $parentCategories,
                     'subcat'          => $subcat,
@@ -372,4 +372,3 @@ class MenusController extends Controller
         );
     }
 }
-

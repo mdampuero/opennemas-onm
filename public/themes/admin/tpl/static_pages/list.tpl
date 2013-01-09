@@ -38,7 +38,7 @@
                     <th>{t}URL{/t}</th>
                     <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
                     <th class="center" style="width:20px;">{t}Published{/t}</th>
-                    <th class="center" style="width:100px;">{t}Actions{/t}</th>
+                    <th class="center" style="width:80px;">{t}Actions{/t}</th>
                 {else}
                 {/if}
                 </tr>
@@ -75,7 +75,7 @@
                         {/acl}
                     </td>
 
-                    <td class="center nowrap">
+                    <td class="right nowrap">
                         <div class="btn-group">
                         {acl isAllowed="STATIC_UPDATE"}
                             <a class="btn" href="{url name=admin_staticpages_show id=$pages[k]->id}" title="{t}Modify{/t}">

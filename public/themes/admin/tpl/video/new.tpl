@@ -36,26 +36,16 @@
                 <li>
                 {if isset($video->id)}
                     {acl isAllowed="VIDEO_UPDATE"}
-                        <button href="{url name=admin_videos_update id=$video->id}">
+                        <button href="{url name=admin_videos_update id=$video->id}" name="continue" value="1">
                     {/acl}
                 {else}
                     {acl isAllowed="VIDEO_CREATE"}
-                        <button href="{url name=admin_videos_create}">
+                        <button href="{url name=admin_videos_create}"  name="continue" value="1">
                     {/acl}
                 {/if}
-                        <img src="{$params.IMAGE_DIR}save.png" title="Guardar y salir" alt="{t}Save{/t}"><br />{t}Save{/t}
+                        <img src="{$params.IMAGE_DIR}save.png" title="Guardar" alt="{t}Save{/t}"><br />{t}Save{/t}
                     </button>
                 </li>
-                {if isset($video->id)}
-                {acl isAllowed="VIDEO_CREATE"}
-                <li>
-                    <button name="continue" value="1">
-                        <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />
-                        {t}Save and continue{/t}
-                    </button>
-                </li>
-                {/acl}
-                {/if}
                 <li class="separator"></li>
                 <li>
                     <a href="{url name=admin_videos category=$category|default:""}" value="{t}Go Back{/t}" title="{t}Go Back{/t}">

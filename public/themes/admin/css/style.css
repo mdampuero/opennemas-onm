@@ -106,7 +106,7 @@ a.btn-primary.active,a.btn-warning.active,a.btn-danger.active,a.btn-success.acti
 
 }
 
-.alert.alert-danger {
+.alert.alert-error {
     background: #B22222 url("/assets/images/alert-error.png") no-repeat 16px;
 
 }
@@ -135,6 +135,14 @@ a.btn-danger {
 }
 .input-append .add-on, .input-prepend .add-on { font-size:13px; }
 
+.btn-group [class^="icon-"], .btn-group [class*=" icon-"] {
+  font-size: 14px !important;
+  color:#434343;
+}
+
+.btn-group .btn-danger [class^="icon-"], .btn-group .btn-danger [class*=" icon-"] {
+  color:White;
+}
 /* -------------------------------------------------------------
   LISTINGS
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -1695,60 +1703,6 @@ div.upload {
     height: 335px;
 }
 
-#dashboard_enlaces {
-    margin-top:20px;
-    font-size: 13px;
-}
-
-#dashboard_enlaces a{
-    text-decoration:underline;
-    font-weight:bold;
-}
-
-#dashboard_enlaces a:hover {
-    text-decoration:underline overline;
-}
-
-div.dashboardBox {
-    background-color: #FFF;
-    background-image: url('../images/dashboardbox_top.png');
-    background-repeat: repeat-x;
-    background-position: top;
-    border: 1px solid #ccc;
-    border-top:none;
-    margin: 0.5em 0.2em;
-    min-height: 100px;
-    min-height:200px;
-}
-
-div.dashboardBox h2 {
-    font-weight: bold;
-    color:white;
-    font-size: 1.2em;
-    cursor: pointer;
-    padding: 0 1em;
-    text-shadow:none;
-}
-
-div.dashboardBox > p{
-    background:White;
-    padding:50px 20px;
-    text-align:center;
-    margin-bottom:10px;
-    border: 1px solid #ccc;
-}
-
-div.dashboardBox div {
-    padding: 4px;
-    margin-bottom: 2px;
-}
-
-div.dashboardBox div.table {
-    margin: 0px;
-    margin-bottom: 2px;
-    overflow: auto;
-}
-
 .clearer {
     clear: both;
 }
@@ -1758,8 +1712,6 @@ div.dashboardBox div.table {
     width:16px;
     height:16px;
 }
-
-.pagination a{float:none !important; }
 
 .content-action-buttons .btn .caret { margin-top: 5px; margin-left: 0; }
 .modal-header h3 {
@@ -1891,10 +1843,9 @@ div.newsletter-contents .container-buttons {
 }
 .welcome-page .hero-unit h1 {
     color:#333;
-    font-size:4em;
 }
 .welcome-page .hero-unit p.lean {
-    font-size:20px;
+    font-size:19px;
     margin-bottom: 18px;
     font-weight: 300;
     line-height:27px;
@@ -2083,4 +2034,8 @@ progress {
 
 .nowrap {
     wrap: no-wrap;
+}
+
+*[rel="tooltip"] {
+  position:relative;
 }

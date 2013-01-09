@@ -81,9 +81,10 @@ class AuthenticationController extends Controller
                 _('Login token is not valid. Try to autenticate again.')
             );
         } else {
-
             // Try to autenticate the user
-            if ($user->login($login, $password, $token, $captcha) && $user->type == 0) {
+            if ($user->login($login, $password, $token, $captcha)
+                && $user->type == 0
+            ) {
 
                 // Check if user account is activated
                 if ($user->authorize != 1) {
@@ -138,8 +139,7 @@ class AuthenticationController extends Controller
     {
         $csrf = filter_input(INPUT_GET, 'csrf');
 
-        // Only perform session destroy if cross-site request
-        // forgery matches the session variable.
+        // Only perform session destroy if csrf token matches the session variable.
         if ($csrf === $_SESSION['csrf']) {
             $_SESSION = array();
             if (isset($_COOKIE[session_name()])) {

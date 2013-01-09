@@ -69,12 +69,7 @@
             <ul class="old-button">
                 <li>
                     <button type="submit" name="continue" value="1">
-                        <img src="{$params.IMAGE_DIR}save_and_continue.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />{t}Save and continue{/t}
-                    </button>
-                </li>
-                <li>
-                    <button type="submit">
-                        <img src="{$params.IMAGE_DIR}save.png" title="Guardar y salir" alt="Guardar y salir"><br />{t}Save and exit{/t}
+                        <img src="{$params.IMAGE_DIR}save.png"><br />{t}Save{/t}
                     </button>
                 </li>
                 <li class="separator"></li>

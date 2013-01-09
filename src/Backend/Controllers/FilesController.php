@@ -282,7 +282,7 @@ class FilesController extends Controller
         $request = $this->request;
 
         if ('POST' != $request->getMethod()) {
-            return $this->render('files/form.tpl', array('category' => $this->category,));
+            return $this->render('files/new.tpl', array('category' => $this->category,));
 
         } else {
             set_time_limit(0);
@@ -373,7 +373,7 @@ class FilesController extends Controller
 
         // Show the
         return $this->render(
-            'files/form.tpl',
+            'files/new.tpl',
             array(
                 'attaches' => $file,
                 'page'     => $page,
@@ -415,10 +415,9 @@ class FilesController extends Controller
 
         return $this->redirect(
             $this->generateUrl(
-                'admin_files',
+                'admin_files_show',
                 array(
-                    'category' => $category,
-                    'page'     => $page
+                    'id' => $id,
                 )
             )
         );
@@ -744,4 +743,3 @@ class FilesController extends Controller
         );
     }
 }
-

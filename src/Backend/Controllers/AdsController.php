@@ -640,10 +640,8 @@ class AdsController extends Controller
 
             $settings = array(
                 'ads_settings' => array(
-
                     'lifetime_cookie' => $formValues->getDigits('ads_settings_lifetime_cookie'),
                     'no_generics'      => $formValues->getDigits('ads_settings_no_generics'),
-
                 )
             );
 
@@ -653,7 +651,7 @@ class AdsController extends Controller
 
             m::add(_('Settings saved successfully.'), m::SUCCESS);
 
-            return $this->redirect($this->generateUrl('admin_ads'));
+            return $this->redirect($this->generateUrl('admin_ads_config'));
         } else {
             $configurationsKeys = array('ads_settings',);
             $configurations = s::get($configurationsKeys);
@@ -665,4 +663,3 @@ class AdsController extends Controller
         }
     }
 }
-

@@ -192,7 +192,7 @@ class CategoriesController extends Controller
             }
 
             return $this->render(
-                'category/form.tpl',
+                'category/new.tpl',
                 array(
                     'configurations' => $configurations,
                     'allcategorys'   => $categories,
@@ -231,7 +231,7 @@ class CategoriesController extends Controller
             }
 
             return $this->render(
-                'category/form.tpl',
+                'category/new.tpl',
                 array(
                     'allcategorys'   => $categories,
                     'configurations' => s::get('section_settings'),
@@ -481,7 +481,7 @@ class CategoriesController extends Controller
 
             m::add(_('Settings saved.'), m::SUCCESS);
 
-            return $this->redirect($this->generateUrl('admin_categories'));
+            return $this->redirect($this->generateUrl('admin_categories_config'));
         } else {
             $configurations = s::get(array('section_settings',));
 

@@ -125,8 +125,8 @@
                     <td>
                         <input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$article->id}"  style="cursor:pointer;" />
                     </td>
-                    <td class="left" rel="tooltip" data-original-title="{t 1=$article->editor}Last author: %1{/t}">
-                        {$article->title|clearslash}
+                    <td class="left" >
+                        <span  rel="tooltip" data-original-title="{t 1=$article->editor}Last author: %1{/t}">{$article->title|clearslash}</span>
                     </td>
                     {if $category eq 'all' || $category == 0}
                     <td class="left">

@@ -5,7 +5,7 @@
 <form action="{url name=admin_ads}" method="get" name="formulario" id="formulario">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Advertisement manager{/t}::&nbsp; {if $category eq 0}HOME{else}{$datos_cat[0]->title}{/if}</h2></div>
+            <div class="title"><h2>{t}Advertisement manager{/t} :: {if $category eq 0}HOME{else}{$datos_cat[0]->title}{/if}</h2></div>
             <ul class="old-button">
                 {acl isAllowed="ADVERTISEMENT_DELETE"}
                 <li>
@@ -110,7 +110,7 @@
                     <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}clicked.png" alt="{t}Clicks{/t}" title="{t}Clicks{/t}"></th>
                     <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
                     {acl isAllowed="ADVERTISEMENT_AVAILA"}
-                    <th class="center">{t}Available{/t}</th>
+                    <th class="center" style="width:40px;">{t}Available{/t}</th>
                     {/acl}
                     <th class="right" style="width:70px">{t}Actions{/t}</th>
                 </tr>
@@ -159,7 +159,7 @@
                          {$ad->views|number_format:0:',':'.'}
                     </td>
                     {acl isAllowed="ADVERTISEMENT_AVAILA"}
-                    <td class="center">
+                    <td class="center" style="width:40px;">
                         {if $ad->available == 1}
                             <a href="{url name=admin_ad_toggleavailable id=$ad->id category=$category status=0 page=$page}"
                                 title={t}"Published"{/t}>

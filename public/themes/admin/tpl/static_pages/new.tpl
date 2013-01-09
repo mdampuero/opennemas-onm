@@ -7,13 +7,8 @@
             <div class="title"><h2>{t}Static Pages Manager{/t} :: {t}Editing page{/t}</h2></div>
                 <ul class="old-button">
                 <li>
-                    <button type="submit" name="action" value="validate" id="save-continue" title="Validar">
-                        <img src="{$params.IMAGE_DIR}save_and_continue.png" title="{t}Save and continue{/t}" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
-                    </button>
-                </li>
-                <li>
-                    <button type="submit" name="action" value="save" id="save-exit" title="{t}Save and exit{/t}">
-                        <img src="{$params.IMAGE_DIR}save.png" title="{t}Save and exit{/t}" alt="{t}Save and exit{/t}" /><br />{t}Save and exit{/t}
+                    <button type="submit" name="continue" value="1" id="save-continue" title="Validar">
+                        <img src="{$params.IMAGE_DIR}save.png" title="{t}Save{/t}" alt="{t}Save{/t}" ><br />{t}Save{/t}
                     </button>
                 </li>
                 <li class="separator"></li>
@@ -26,6 +21,7 @@
     	</div>
     </div>
     <div class="wrapper-content">
+        {render_messages}
         <div class="form-horizontal panel">
             <div class="control-group">
                 <label for="name" class="control-label">{t}Title{/t}</label>

@@ -647,7 +647,7 @@ class PollsController extends Controller
             }
             m::add(_('Settings saved successfully.'), m::SUCCESS);
 
-            return $this->redirect($this->generateUrl('admin_polls'));
+            return $this->redirect($this->generateUrl('admin_polls_config'));
         } else {
             $configurations = s::get(array('poll_settings',));
 
