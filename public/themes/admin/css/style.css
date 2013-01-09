@@ -1003,25 +1003,6 @@ div.ui-blocker-message img {
 
 
 /* -------------------------------------------------------------
-  Action bar definitions
- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-
-div.action-bar {
-  width:100%;
-    background: none repeat scroll 0 0 #ececec;
-    border:1px solid #BFBFBF;
-    border-top:0 none !important;
-    margin-bottom: 18px;
-}
-div.action-bar .right{
-  float:right;
-    text-align:right;
-  padding: 17px 20px 18px 150px;
-
-}
-
-
-/* -------------------------------------------------------------
   media-browser
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 .simple_overlay {
@@ -2026,11 +2007,6 @@ progress {
     -webkit-box-shadow: 0 0 1px rgba(255,255,255,.3), inset 0 0 5px rgba(0,0,0,1.0);
 }
 
-
 .nowrap {
     wrap: no-wrap;
-}
-
-*[rel="tooltip"] {
-  position:relative;
 }
