@@ -365,7 +365,10 @@ class Content
 
         $this->read($data['id']);
 
-        if (($data['available'] == 1) && ($data['starttime'] =='0000-00-00 00:00:00')) {
+        if ($data['available'] == 1
+            && array_key_exists('starttime', $data)
+            && ($data['starttime'] =='0000-00-00 00:00:00')
+        ) {
             $data['starttime'] = date("Y-m-d H:i:s");
         }
 
