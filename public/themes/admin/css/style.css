@@ -573,12 +573,7 @@ div.utilities-conf input[type="text"]{
     .top-action-bar .title img { margin-left:10px; }
     .top-action-bar .title h2 {
       color: #464646;
-      font-size:1.5em;
       vertical-align:bottom;
-      font-family: "HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",sans-serif;
-      font-size: 1.6em;
-      /*font-weight:normal;*/
-      /*text-shadow:0 1px 0 #FFFFFF;*/
       margin:0;
       padding:20px 0;
       font-size:1.6em;
