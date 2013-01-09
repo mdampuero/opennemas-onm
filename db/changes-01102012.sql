@@ -14,3 +14,7 @@ CREATE TABLE IF NOT EXISTS `contentmeta` (
 
 -- 01-08-2012
 DROP TABLE privileges;
+
+-- 01-09-2012
+UPDATE users SET name = CONCAT(name, ' ', firstname, ' ', lastname);
+ALTER TABLE  `users` DROP  `firstname` , DROP  `lastname` ;

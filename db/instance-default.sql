@@ -2068,8 +2068,6 @@ CREATE TABLE IF NOT EXISTS `users` (
   `sessionexpire` tinyint(2) unsigned NOT NULL DEFAULT '15',
   `email` varchar(255) DEFAULT NULL,
   `name` varchar(100) DEFAULT NULL,
-  `firstname` varchar(100) DEFAULT NULL,
-  `lastname` varchar(100) DEFAULT NULL,
   `type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0-backend, 1-frontend',
   `deposit` decimal(10,0) NOT NULL DEFAULT '0',
   `token` varchar(50) DEFAULT NULL,
@@ -2083,13 +2081,13 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`pk_user`, `login`, `password`, `sessionexpire`, `email`, `name`, `firstname`, `lastname`, `type`, `deposit`, `token`, `authorize`, `fk_user_group`) VALUES
-(3, 'macada', '2f575705daf41049194613e47027200b', 30, 'david.martinez@openhost.es', 'David', 'Martinez', 'Carballo', 0, '0', NULL, 1, 4),
-(5, 'fran', '6d87cd9493f11b830bbfdf628c2c4f08', 65, 'fran@openhost.es', 'Francisco ', 'DiÃ©guez', 'Souto', 0, '0', NULL, 1, 4),
-(4, 'alex', '4c246829b53bc5712d52ee777c52ebe7', 60, 'alex@openhost.es', 'Alexandre', 'Rico', '', 0, '0', NULL, 1, 4),
-(7, 'Sandra', 'bd80e7c35b56dccd2d1796cf39cd05f6', 99, 'sandra@openhost.es', 'Sandra', 'Pereira', 'Alvarez', 0, '0', NULL, 1, 4),
-(132, 'admin', 'b7592fd66feb65282791ab64685e4af4', 45, 'admin@opennemas.com', 'administrator', 'administrator', '', 0, '0', NULL, 1, 5),
-(136, 'user', '5c3255479eeaf373aa596db83444e4d1', 66, 'user@user.com', 'usuario', 'usuario', '', 0, '0', NULL, 1, 6),
-(9, 'Toni', '4f2e7812dfe802a5cb0d5e465abb7ffc', 66, 'toni@openhost.es', 'Toni', 'Martinez', 'Carballo', 0, '0', NULL, 1, 4);
+(3, 'macada', '2f575705daf41049194613e47027200b', 30, 'david.martinez@openhost.es', 'David Martinez', 0, '0', NULL, 1, 4),
+(5, 'fran', '6d87cd9493f11b830bbfdf628c2c4f08', 65, 'fran@openhost.es', 'Francisco DiÃ©guez', 0, '0', NULL, 1, 4),
+(4, 'alex', '4c246829b53bc5712d52ee777c52ebe7', 60, 'alex@openhost.es', 'Alexandre Rico', 0, '0', NULL, 1, 4),
+(7, 'Sandra', 'bd80e7c35b56dccd2d1796cf39cd05f6', 99, 'sandra@openhost.es', 'Sandra Pereira', 0, '0', NULL, 1, 4),
+(132, 'admin', 'b7592fd66feb65282791ab64685e4af4', 45, 'admin@opennemas.com', 'administrator', 0, '0', NULL, 1, 5),
+(136, 'user', '5c3255479eeaf373aa596db83444e4d1', 66, 'user@user.com', 'usuario', '', 0, '0', NULL, 1, 6),
+(9, 'Toni', '4f2e7812dfe802a5cb0d5e465abb7ffc', 66, 'toni@openhost.es', 'Toni Martinez Carballo', 0, '0', NULL, 1, 4);
 
 -- --------------------------------------------------------
 

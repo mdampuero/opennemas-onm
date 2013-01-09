@@ -82,6 +82,16 @@ label {
                     </div>
                 </div>
                 <div class="user-info form-vertical">
+
+                    <fieldset>
+                        <div class="control-group">
+                            <label for="name" class="control-label">{t}Display name{/t}</label>
+                            <div class="controls">
+                                <input type="text" id="name" name="name" value="{$user->name|default:""}" class="input-xlarge required" maxlength="50"/>
+                            </div>
+                        </div>
+                    </fieldset>
+
                     <fieldset>
                         <div class="control-group">
                             <label for="login" class="control-label">{t}User name{/t}</label>
@@ -94,7 +104,7 @@ label {
                             <label for="login" class="control-label">{t}Email{/t}</label>
                             <div class="controls">
                                 <div class="input-prepend">
-                                    <span class="add-on">@</span><input class="span2" id="email" type="email" name="email" value="{$user->email}" required="required"  size="50">
+                                    <span class="add-on">@</span><input class=" input-large" id="email" type="email" name="email" value="{$user->email}" required="required">
                                 </div>
                             </div>
                         </div>
@@ -104,40 +114,23 @@ label {
                         <div class="control-group">
                             <label for="password" class="control-label">{t}Password{/t}</label>
                             <div class="controls">
-                                <input type="password" id="password" name="password" value="" class="input-medium {if $smarty.request.action eq "new"}required{/if}" maxlength="20"/>
+                                <div class="input-prepend">
+                                    <span class="add-on"><i class="icon-key"></i></span>
+                                    <input type="password" id="password" name="password" value="" class="input-medium {if $smarty.request.action eq "new"}required{/if}" maxlength="20"/>
+                                </div>
                             </div>
                         </div>
 
                         <div class="control-group">
                             <label for="passwordconfirm" class="control-label">{t}Confirm password{/t}</label>
                             <div class="controls">
-                                <input type="password" id="passwordconfirm" name="passwordconfirm" value="" data-password-equals="password" class="input-medium {if $smarty.request.action eq "new"}required{/if} validate-password-confirm" maxlength="20"/>
+                                <div class="input-prepend">
+                                    <span class="add-on"><i class="icon-key"></i></span>
+                                    <input type="password" id="passwordconfirm" name="passwordconfirm" value="" data-password-equals="password" class="input-medium {if $smarty.request.action eq "new"}required{/if} validate-password-confirm" maxlength="20"/>
+                                </div>
                             </div>
                         </div>
                     <fieldset>
-
-                    <fieldset>
-                        <div class="control-group">
-                            <label for="name" class="control-label">{t}Display name{/t}</label>
-                            <div class="controls">
-                                <input type="text" id="name" name="name" value="{$user->name|default:""}" class="input-xlarge required" maxlength="50"/>
-                            </div>
-                        </div>
-
-                        <div class="control-group">
-                            <label for="firstname" class="control-label">{t}Surname{/t}</label>
-                            <div class="controls">
-                                <input type="text" id="firstname" name="firstname" value="{$user->firstname|default:""}" class="input-xlarge required" maxlength="50"/>
-                            </div>
-                        </div>
-
-                        <div class="control-group">
-                            <label for="lastname" class="control-label">{t}Maiden surname{/t}</label>
-                            <div class="controls">
-                                <input type="text" id="lastname" name="lastname" value="{$user->lastname|default:""}" class="input-xlarge required" maxlength="50"/>
-                            </div>
-                        </div>
-                    </fieldset>
                 </div>
 
             </div><!-- /personal -->

@@ -20,8 +20,6 @@ class User
     public $sessionexpire    = null;
     public $email            = null;
     public $name             = null;
-    public $firstname        = null;
-    public $lastname         = null;
     public $type             = null;
     public $deposit          = null;
     public $token            = null;
@@ -68,8 +66,8 @@ class User
 
         $sql =
             "INSERT INTO users "
-            ."(`login`, `password`, `sessionexpire`, `email`, `name`, `firstname`, "
-            ."`lastname`, `type`, `token`, `authorize`, `fk_user_group`) "
+            ."(`login`, `password`, `sessionexpire`, `email`, `name`, "
+            ."`type`, `token`, `authorize`, `fk_user_group`) "
             ."VALUES (?,?,?,?,?,?,?,?,?,?,?)";
         $values = array(
             $data['login'],
@@ -77,8 +75,6 @@ class User
             $data['sessionexpire'],
             $data['email'],
             $data['name'],
-            $data['firstname'],
-            $data['lastname'],
             $data['type'],
             $data['token'],
             $data['authorize'],
@@ -117,8 +113,6 @@ class User
         $this->sessionexpire    = $rs->fields['sessionexpire'];
         $this->email            = $rs->fields['email'];
         $this->name             = $rs->fields['name'];
-        $this->firstname        = $rs->fields['firstname'];
-        $this->lastname         = $rs->fields['lastname'];
         $this->deposit          = $rs->fields['deposit'];
         $this->type             = $rs->fields['type'];
         $this->token            = $rs->fields['token'];
@@ -139,8 +133,7 @@ class User
         if (isset($data['password']) && (strlen($data['password']) > 0)) {
             $sql = "UPDATE users
                     SET `login`=?, `password`= ?, `sessionexpire`=?,
-                        `email`=?, `name`=?, `firstname`=?, `lastname`=?,
-                        `fk_user_group`=?
+                        `email`=?, `name`=?, `fk_user_group`=?
                     WHERE pk_user=?";
 
             $values = array(
@@ -149,8 +142,6 @@ class User
                 $data['sessionexpire'],
                 $data['email'],
                 $data['name'],
-                $data['firstname'],
-                $data['lastname'],
                 $data['id_user_group'],
                 intval($data['id'])
             );
@@ -158,8 +149,7 @@ class User
         } else {
             $sql = "UPDATE users
                     SET `login`=?, `sessionexpire`=?, `email`=?,
-                        `name`=?, `firstname`=?, `lastname`=?,
-                        `fk_user_group`=?
+                        `name`=?, `fk_user_group`=?
                     WHERE pk_user=?";
 
             $values = array(
@@ -167,8 +157,6 @@ class User
                 $data['sessionexpire'],
                 $data['email'],
                 $data['name'],
-                $data['firstname'],
-                $data['lastname'],
                 $data['id_user_group'],
                 intval($data['id'])
             );
@@ -454,8 +442,6 @@ class User
             $this->sessionexpire = $data['sessionexpire'];
             $this->email         = $data['email'];
             $this->name          = $data['name'];
-            $this->firstname     = $data['firstname'];
-            $this->lastname      = $data['lastname'];
             $this->deposit       = array_key_exists('deposit', $data) ? $data['deposit'] : '';
             $this->type          = $data['type'];
             $this->token         = $data['token'];
@@ -481,8 +467,6 @@ class User
         $this->sessionexpire= null;
         $this->email        = null;
         $this->name         = null;
-        $this->firstname    = null;
-        $this->lastname     = null;
         $this->authorize    = null;
         $this->fk_user_group= null;
         $this->accesscategories = null;
@@ -775,7 +759,7 @@ class User
             }
 
             if (isset($filter['name']) && !empty($filter['name'])) {
-                $parts[] = 'MATCH(`name`, `firstname`, `lastname`) AGAINST ("' . $filter['name'] . '" IN BOOLEAN MODE)';
+                $parts[] = 'MATCH(`name`) AGAINST ("' . $filter['name'] . '" IN BOOLEAN MODE)';
             }
 
             if (isset($filter['group']) && intval($filter['group'])>0) {

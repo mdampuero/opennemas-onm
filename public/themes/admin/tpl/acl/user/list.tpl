@@ -79,7 +79,8 @@ jQuery(function($){
 					</td>
 					<td class="left">
 						<a href="{url name=admin_acl_user_show id=$user->id}" title="{t}Edit user{/t}">
-							{$user->name}&nbsp;{$user->firstname}&nbsp;{$user->lastname}</a>
+							{$user->name}
+						</a>
 					</td>
 					<td class="left">
 						{$user->login}

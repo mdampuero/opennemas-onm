@@ -76,8 +76,6 @@ class UserController extends Controller
             // Correct CAPTCHA - Filter $_POST vars from FORM
             $data['login']         = $request->request->filter('user_name', null, FILTER_SANITIZE_STRING);
             $data['name']          = $request->request->filter('full_name', null, FILTER_SANITIZE_STRING);
-            $data['firstname']     = ''; // Unused field for frontend user
-            $data['lastname']      = ''; // Unused field for frontend user
             $data['password']      = $request->request->filter('pwd', null, FILTER_SANITIZE_STRING);
             $data['cpwd']          = $request->request->filter('cpwd', null, FILTER_SANITIZE_STRING);
             $data['sessionexpire'] = 15;
