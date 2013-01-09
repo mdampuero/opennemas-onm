@@ -356,13 +356,6 @@ $menuXml = '<?xml version="1.0"?>
                     id="user_group_manager"
                     link="'.url("admin_acl_usergroups", array()).'"
                 />
-                <node
-                    module_name="PRIVILEGE_MANAGER"
-                    privilege="ONLY_MASTERS"
-                    title="'.htmlspecialchars(_("Privileges"), ENT_QUOTES).'"
-                    id="privilege_manager"
-                    link="'.url("admin_acl_privileges", array()).'"
-                />
             </submenu>
         <node class="divider" />
         <node
