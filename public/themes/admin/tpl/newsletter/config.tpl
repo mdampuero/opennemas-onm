@@ -1,30 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-    <style type="text/css">
-    label {
-        width:200px;
-        padding-left:10px;
-        display:inline-block;
-    }
-    input[type="text"],
-    input[type="password"] {
-        width:400px;
-    }
-    th {
-        vertical-align: top;
-        text-align: left;
-        padding: 10px;
-        width: 200px;
-        font-size: 13px;
-    }
-    .form-wrapper {
-        margin:10px auto;
-        width:70%;
-    }
-    </style>
-{/block}
-
 {block name="footer-js" append}
 <script type="text/javascript">
 jQuery(document).ready(function($){

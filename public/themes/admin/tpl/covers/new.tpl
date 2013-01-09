@@ -7,12 +7,19 @@
 {/block}
 
 {block name="content"}
+<form id="formulario" enctype="multipart/form-data"  name="formulario" action="{$smarty.server.SCRIPT_NAME}" method="POST">
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
         <div class="title">
             <h2>{t}ePaper Manager{/t} :: {if $smarty.request.action eq "new"}{t}New ePaper{/t}{else}{t}Editing ePaper{/t}{/if}</h2>
         </div>
         <ul class="old-button">
+            <li>
+                <button action="submit">
+                    <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save and exit{/t}"><br />{t}Save{/t}
+                </button>
+            </li>
+            <li class="separator"></li>
             <li>
                 <a href="{$smarty.server.PHP_SELF}?action=list" title="Cancelar">
                     <img border="0" src="{$params.IMAGE_DIR}previous.png" title="Cancelar" alt="Cancelar" ><br />{t}Cancel{/t}
@@ -26,7 +33,6 @@
 
 <div class="wrapper-content">
 
-<form id="formulario" enctype="multipart/form-data"  name="formulario" action="{$smarty.server.SCRIPT_NAME}" method="POST">
     <div id="content-wrapper">
         <table class="adminheading">
             <th>
@@ -153,11 +159,6 @@
                 {/if}
             </tbody>
         </table>
-        <div class="action-bar clearfix">
-            <div class="right">
-                <button type="submit" class="onm-button red">{t}Save{/t}</button>
-            </div>
-        </div>
 
     </div><!--fin content-wrapper-->
 

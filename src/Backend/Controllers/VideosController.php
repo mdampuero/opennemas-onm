@@ -431,7 +431,7 @@ class VideosController extends Controller
 
             m::add(_('Settings saved.'), m::SUCCESS);
 
-            return $this->redirect($this->generateUrl('admin_videos'));
+            return $this->redirect($this->generateUrl('admin_videos_config'));
         } else {
 
             $configurationsKeys = array(

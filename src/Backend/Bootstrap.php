@@ -71,8 +71,7 @@ class Bootstrap extends ModuleBootstrap
                 exit(0);
             } else {
 
-                if (isset($_SESSION)
-                    && array_key_exists('updated', $_SESSION)
+                if (array_key_exists('updated', $_SESSION)
                     && (time() > ($_SESSION['updated'] + ($sessionLifeTime * 60)))
                 ) {
                     foreach ($_COOKIE as $name => $value) {

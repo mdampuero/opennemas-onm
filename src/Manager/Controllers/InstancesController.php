@@ -376,18 +376,14 @@ class InstancesController extends Controller
         $errors = $this->instanceManager->update($data);
 
         if (is_array($errors) && count($errors) > 0) {
-            m::add($errors);
-
-            return $this->redirect(
-                $this->generateUrl('manager_instance_show', array('id' => $id))
-            );
+            m::add($errors, m::ERROR);
+        } else {
+            m::add('Instance saved successfully.', m::SUCCESS);
         }
 
-        if ($errors) {
-            m::add('Instance saved successfully.');
-        }
-
-        return $this->redirect($this->generateUrl('manager_instances'));
+        return $this->redirect(
+            $this->generateUrl('manager_instance_show', array('id' => $id))
+        );
     }
 
     /**
@@ -443,4 +439,3 @@ class InstancesController extends Controller
         return $this->redirect($this->generateUrl('manager_instances'));
     }
 }
-

@@ -368,7 +368,7 @@ class NewsletterController extends Controller
 
             m::add(_('Newsletter module settings saved successfully.'), m::SUCCESS);
 
-            return $this->redirect($this->generateUrl('admin_newsletters'));
+            return $this->redirect($this->generateUrl('admin_newsletter_config'));
         } else {
             $configurations = s::get(
                 array(

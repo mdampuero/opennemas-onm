@@ -115,7 +115,7 @@ class CoversController extends Controller
         );
 
         return $this->render(
-            'newsstand/list.tpl',
+            'covers/list.tpl',
             array(
                 'KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR,
                 'pagination'     => $pagination,
@@ -176,7 +176,7 @@ class CoversController extends Controller
         );
 
         return $this->render(
-            'newsstand/list.tpl',
+            'covers/list.tpl',
             array(
                 'KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR,
                 'pagination'     => $pagination,
@@ -208,7 +208,7 @@ class CoversController extends Controller
         }
 
         return $this->render(
-            'newsstand/read.tpl',
+            'covers/read.tpl',
             array(
                 'cover'          => $cover,
                 'KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR,
@@ -295,7 +295,7 @@ class CoversController extends Controller
                 );
             }
         } else {
-            return $this->render('newsstand/read.tpl');
+            return $this->render('covers/read.tpl');
         }
     }
 
@@ -622,7 +622,7 @@ class CoversController extends Controller
             $configurations = s::get($configurationsKeys);
 
             return $this->render(
-                'newsstand/config.tpl',
+                'covers/config.tpl',
                 array('configs'   => $configurations,)
             );
         } else {
@@ -641,8 +641,7 @@ class CoversController extends Controller
 
             $httpParams = array(array('action'=>'list'),);
 
-            return $this->redirect($this->generateUrl('admin_covers'));
+            return $this->redirect($this->generateUrl('admin_covers_config'));
         }
     }
 }
-

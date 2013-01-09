@@ -782,7 +782,7 @@ class AlbumsController extends Controller
 
             m::add(_('Settings saved successfully.'), m::SUCCESS);
 
-            return $this->redirect($this->generateUrl('admin_albums'));
+            return $this->redirect($this->generateUrl('admin_albums_config'));
         } else {
             $configurationsKeys = array('album_settings',);
             $configurations = s::get($configurationsKeys);
@@ -794,4 +794,3 @@ class AlbumsController extends Controller
         }
     }
 }
-

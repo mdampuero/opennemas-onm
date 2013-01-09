@@ -23,11 +23,19 @@
 {/block}
 
 {block name="content"}
+<form action="{url name=admin_comments_disqus_config}" method="POST">
 <div class="top-action-bar">
     <div class="wrapper-content">
         <div class="title">
             <h2 class="disqus">{t}Comment manager{/t}:: {t}Configuration{/t}</h2>
             <ul class="old-button">
+                <li>
+                    <button type="submit">
+                        <img border="0" src="{$params.IMAGE_DIR}save.png"><br />
+                        {t}Save{/t}
+                    </button>
+                </li>
+                <li class="separator"></li>
                 <li>
                     <a href="{url name=admin_comments_disqus}" title="{t}Go back to list{/t}">
                         <img src="{$params.IMAGE_DIR}previous.png" alt="{t}Go back to list{/t}" ><br />{t}Go back to list{/t}
@@ -38,29 +46,23 @@
     </div>
 </div>
 <div class="wrapper-content">
-   <form action="{url name=admin_comments_disqus_config}" method="POST">
-        {render_messages}
-        <div>
-             <table class="adminform" border=0>
+    {render_messages}
+    <div>
+         <table class="adminform" border=0>
 
-                <tr>
-                    <td>
-                        <div class="form-wrapper">
-                            <div>
-                                <label for="server">{t}Short name:{/t}</label>
-                                <input type="text" class="required" name="shortname" value="{$shortname|default:""}" />
-                            </div>
+            <tr>
+                <td>
+                    <div class="form-wrapper">
+                        <div>
+                            <label for="server">{t}Short name:{/t}</label>
+                            <input type="text" class="required" name="shortname" value="{$shortname|default:""}" />
                         </div>
-                    </td>
-                </tr>
+                    </div>
+                </td>
+            </tr>
 
-            </table>
-            <div class="action-bar clearfix">
-                <div class="right">
-                    <input type="submit" name="submit" value="{t}Save{/t}"  class="onm-button green">
-                </div>
-            </div>
-        </div>
-   </form>
+        </table>
+    </div>
 </div>
+</form>
 {/block}

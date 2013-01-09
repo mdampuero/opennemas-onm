@@ -208,9 +208,9 @@
 
 </div>
 </form>
-{include file="newsstand/modals/_modalDelete.tpl"}
-{include file="newsstand/modals/_modalBatchDelete.tpl"}
-{include file="newsstand/modals/_modalAccept.tpl"}
+{include file="covers/modals/_modalDelete.tpl"}
+{include file="covers/modals/_modalBatchDelete.tpl"}
+{include file="covers/modals/_modalAccept.tpl"}
 
 <script>
 // <![CDATA[

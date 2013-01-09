@@ -19,16 +19,13 @@ use Onm\Message as m;
  * Handles the actions for the system information
  *
  * @package Backend_Controllers
- * @author
  **/
 class ImporterXmlfileController extends Controller
 {
-
     /**
      * Common code for all the actions
      *
      * @return void
-     * @author
      **/
     public function init()
     {
@@ -215,7 +212,7 @@ class ImporterXmlfileController extends Controller
                 m::add(_('There was an error while saving importer XML configuration'), m::ERROR);
             }
 
-            return $this->redirect($this->generateUrl('admin_importer_xmlfile'));
+            return $this->redirect($this->generateUrl('admin_importer_xmlfile_config'));
         } else {
             if ( $config = s::get('xml_file_schema') ) {
 
@@ -245,4 +242,3 @@ class ImporterXmlfileController extends Controller
         }
     }
 }
-

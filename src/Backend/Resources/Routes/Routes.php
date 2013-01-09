@@ -1284,7 +1284,7 @@ $adminRoutes->add(
 $adminRoutes->add(
     'admin_covers_config',
     new Route(
-        '/cover/config',
+        '/covers/config',
         array('_controller' => 'Backend:Controllers:CoversController:config')
     )
 );

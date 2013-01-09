@@ -308,7 +308,7 @@ class ImagesController extends Controller
 
             m::add(_('Image module settings saved successfully.'), m::SUCCESS);
 
-            return $this->redirect($this->generateUrl('admin_videos'));
+            return $this->redirect($this->generateUrl('admin_images_config'));
         } else {
             $configurations = s::get(
                 array(
