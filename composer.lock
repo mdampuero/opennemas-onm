@@ -1,5 +1,5 @@
 {
-    "hash": "0aa0dd5a38713510ac9ef6db17082265",
+    "hash": "cc137883b2cbf4897f046be6f3272ddf",
     "packages": [
         {
             "name": "frandieguez/panorama-php",
@@ -145,24 +145,35 @@
         },
         {
             "name": "swiftmailer/swiftmailer",
-            "version": "4.1.7",
+            "version": "v4.3.0",
             "source": {
                 "type": "git",
                 "url": "git://github.com/swiftmailer/swiftmailer.git",
-                "reference": "v4.1.7"
+                "reference": "v4.3.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/swiftmailer/swiftmailer/zipball/v4.1.7",
-                "reference": "v4.1.7",
+                "url": "https://github.com/swiftmailer/swiftmailer/archive/v4.3.0.zip",
+                "reference": "v4.3.0",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2.4"
             },
-            "time": "2012-04-26 09:57:24",
+            "time": "2013-01-08 15:50:34",
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.3-dev"
+                }
+            },
             "installation-source": "dist",
+            "autoload": {
+                "files": [
+                    "lib/swift_required.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "LGPL"
             ],
