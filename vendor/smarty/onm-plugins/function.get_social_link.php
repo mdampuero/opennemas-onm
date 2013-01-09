@@ -27,8 +27,7 @@ function smarty_function_get_social_link($params, &$smarty)
             if (!empty($twitterPage)) {
                 $output =
                 '<li>
-                    <a href="http://twitter.com/'.s::get('twitter_page').
-                    '" target="_blank" title="Visita nuestro perfíl en Twitter">
+                    <a href="'.$twitterPage.'" target="_blank" title="Visita nuestro perfíl en Twitter">
                        <img src="'.$params['img'].'" alt="" />
                     </a>
                 </li>';
@@ -58,12 +57,12 @@ function smarty_function_get_social_link($params, &$smarty)
             $googlePage = s::get('google_page');
 
             if (!empty($googlePage)) {
-            $output =
-                '<li>
-                    <a href="'.$googlePage.'" target="_blank" title="Visita nuestro perfíl en Google Plus">
-                       <img src="'.$params['img'].'" alt="" />
-                    </a>
-                </li>';
+                $output =
+                    '<li>
+                        <a href="'.$googlePage.'" target="_blank" title="Visita nuestro perfíl en Google Plus">
+                           <img src="'.$params['img'].'" alt="" />
+                        </a>
+                    </li>';
             }
             break;
         default:
