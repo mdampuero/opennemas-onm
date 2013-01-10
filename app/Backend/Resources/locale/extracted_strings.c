@@ -1223,6 +1223,9 @@ gettext("Blog name");
 gettext("Blog url");
 
 /* public/themes/admin/tpl//opinion/authors/new.tpl */
+gettext("Twitter user");
+
+/* public/themes/admin/tpl//opinion/authors/new.tpl */
 gettext("Show in RSS");
 
 /* public/themes/admin/tpl//opinion/authors/new.tpl */
@@ -1992,6 +1995,108 @@ gettext("Dates grouped is recommended for weekly newspapers.");
 
 /* public/themes/admin/tpl//newsstand/config.tpl */
 gettext("Save");
+
+/* public/themes/admin/tpl//newsstand/list_orders.tpl */
+gettext("Newsstand Manager");
+
+/* public/themes/admin/tpl//newsstand/list_orders.tpl */
+gettext("Orders list");
+
+/* public/themes/admin/tpl//newsstand/list_orders.tpl */
+gettext("Delete");
+
+/* public/themes/admin/tpl//newsstand/list_orders.tpl */
+gettext("Delete");
+
+/* public/themes/admin/tpl//newsstand/list_orders.tpl */
+gettext("Delete");
+
+/* public/themes/admin/tpl//newsstand/list_orders.tpl */
+gettext("Delete");
+
+/* public/themes/admin/tpl//newsstand/list_orders.tpl */
+gettext("Unpublish");
+
+/* public/themes/admin/tpl//newsstand/list_orders.tpl */
+gettext("Unpublish");
+
+/* public/themes/admin/tpl//newsstand/list_orders.tpl */
+gettext("Unpublish");
+
+/* public/themes/admin/tpl//newsstand/list_orders.tpl */
+gettext("Publish");
+
+/* public/themes/admin/tpl//newsstand/list_orders.tpl */
+gettext("Publish");
+
+/* public/themes/admin/tpl//newsstand/list_orders.tpl */
+gettext("Publish");
+
+/* public/themes/admin/tpl//newsstand/list_orders.tpl */
+gettext("New cover");
+
+/* public/themes/admin/tpl//newsstand/list_orders.tpl */
+gettext("New cover");
+
+/* public/themes/admin/tpl//newsstand/list_orders.tpl */
+gettext("New cover");
+
+/* public/themes/admin/tpl//newsstand/list_orders.tpl */
+gettext("Create");
+
+/* public/themes/admin/tpl//newsstand/list_orders.tpl */
+gettext("List orders");
+
+/* public/themes/admin/tpl//newsstand/list_orders.tpl */
+gettext("List Orders");
+
+/* public/themes/admin/tpl//newsstand/list_orders.tpl */
+gettext("List Orders");
+
+/* public/themes/admin/tpl//newsstand/list_orders.tpl */
+gettext("List Orders");
+
+/* public/themes/admin/tpl//newsstand/list_orders.tpl */
+gettext("Save positions");
+
+/* public/themes/admin/tpl//newsstand/list_orders.tpl */
+gettext("Save positions");
+
+/* public/themes/admin/tpl//newsstand/list_orders.tpl */
+gettext("Save positions");
+
+/* public/themes/admin/tpl//newsstand/list_orders.tpl */
+gettext("Save positions");
+
+/* public/themes/admin/tpl//newsstand/list_orders.tpl */
+gettext("Config covers module");
+
+/* public/themes/admin/tpl//newsstand/list_orders.tpl */
+gettext("Config covers module");
+
+/* public/themes/admin/tpl//newsstand/list_orders.tpl */
+gettext("Settings");
+
+/* public/themes/admin/tpl//newsstand/list_orders.tpl */
+gettext("Title");
+
+/* public/themes/admin/tpl//newsstand/list_orders.tpl */
+gettext("Date");
+
+/* public/themes/admin/tpl//newsstand/list_orders.tpl */
+gettext("Buyer");
+
+/* public/themes/admin/tpl//newsstand/list_orders.tpl */
+gettext("Email");
+
+/* public/themes/admin/tpl//newsstand/list_orders.tpl */
+gettext("Price");
+
+/* public/themes/admin/tpl//newsstand/list_orders.tpl */
+gettext("Edit user");
+
+/* public/themes/admin/tpl//newsstand/list_orders.tpl */
+gettext("There is no orders");
 
 /* public/themes/admin/tpl//newsstand/list.tpl */
 gettext("Covers Manager");
