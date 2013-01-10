@@ -83,6 +83,13 @@
             </div>
 
             <div class="control-group">
+                <label for="params[twitter]" class="control-label">{t}Twitter user{/t}</label>
+                <div class="controls">
+                    <input type="text" id="params[twitter]" name="params[twitter]" value="{$author->params['twitter']|default:""}" class="input-xlarge"/>
+                </div>
+            </div>
+
+            <div class="control-group">
                 <label for="params[inrss]" class="control-label">{t}Show in RSS{/t}</label>
                 <div class="controls">
                     <label class="checkbox">
