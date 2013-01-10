@@ -94,4 +94,3 @@ $loader->registerNamespaceFallback(SITE_WS_API_PATH);
 $loader->useIncludePath(true);
 
 $loader->register();
-

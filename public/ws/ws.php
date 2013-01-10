@@ -26,7 +26,6 @@ use Onm\Instance;
  */
 require_once '../bootstrap.php';
 
-//require_once SITE_VENDOR_PATH.'/Restler/v2.2/restler.php';
 require_once SITE_VENDOR_PATH.'/Restler/restler.php';
 require_once SITE_VENDOR_PATH.'/Restler/xmlformat.php';
 
@@ -47,4 +46,3 @@ $r->addAPIClass('Frontpages');
 $r->addAuthenticationClass('AuthSystem');
 
 $r->handle();
-

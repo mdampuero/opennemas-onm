@@ -169,7 +169,6 @@ class Settings
 
         if (!$rs) {
             \Application::logDatabaseError();
-
             return false;
         }
         if (extension_loaded('apc')) {

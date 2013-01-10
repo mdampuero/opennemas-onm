@@ -353,23 +353,10 @@ class User
     ) {
         $result = false;
 
-<<<<<<< HEAD
-        if ($this->isValidEmail($login)) {
-            $result = $this->authGoogleClientLogin(
-                $login,
-                $password,
-                $loginToken,
-                $loginCaptcha
-            );
-        } else {
-            $result = $this->authDatabase($login, $password);
-            if ( !$result && !preg_match("@\/manager@", $_SERVER["PHP_SELF"]) ) {
-                $result = $this->authDatabase($login, $password, true);
-            }
-        }
-=======
         $result = $this->authDatabase($login, $password);
->>>>>>> 4b8fa5bea53ab3c8a61082ba4377e9c25676ed4e
+        if ( !$result && !preg_match("@\/manager@", $_SERVER["PHP_SELF"]) ) {
+            $result = $this->authDatabase($login, $password, true);
+        }
 
         return $result;
     }

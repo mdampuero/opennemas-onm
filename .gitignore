@@ -1,6 +1,7 @@
 *~
 build
 cache.properties
+backups/*
 config/*
 nbproject/
 public/admin/themes/default/compile/*

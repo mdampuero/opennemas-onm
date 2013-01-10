@@ -204,12 +204,12 @@ class InstancesController extends Controller
             $password = \Onm\StringUtils::generatePassword(16);
             $settings = array(
                 'TEMPLATE_USER' => "retrincos",
-                'MEDIA_URL' => "http://media.opennemas.com",
-                'BD_TYPE' => "mysqli",
-                'BD_HOST' => "localhost",
-                'BD_USER' => $internalNameShort,
-                'BD_PASS' => $password,
-                'BD_DATABASE' => "c-".$internalNameShort,
+                'MEDIA_URL'     => "http://media.opennemas.com",
+                'BD_TYPE'       => "mysqli",
+                'BD_HOST'       => "localhost",
+                'BD_USER'       => $internalNameShort,
+                'BD_PASS'       => $password,
+                'BD_DATABASE'   => "c-".$internalNameShort,
             );
 
             //Get all the Post data
@@ -402,12 +402,15 @@ class InstancesController extends Controller
         $id = $request->query->getDigits('id');
 
         if (!empty($id)) {
-            if ($deletion = $this->instanceManager->delete($id)) {
-                m::add(_("Instance deleted successfully."), m::SUCCESS);
-            } else {
+            $delete = $this->instanceManager->delete($id);
+            if (!$delete) {
                 m::add(_("Unable to delete the instance."), m::ERROR);
+                if (is_array($delete) && count($delete) > 0) {
+                    m::add($delete, m::ERROR);
+                }
+            } else {
+                m::add(_("Instance deleted successfully."), m::SUCCESS);
             }
-
         } else {
             m::add(_('You must provide an id for delete an instance.'), m::ERROR);
         }
@@ -443,4 +446,3 @@ class InstancesController extends Controller
         return $this->redirect($this->generateUrl('manager_instances'));
     }
 }
-

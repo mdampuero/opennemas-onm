@@ -2087,9 +2087,9 @@ INSERT INTO `users` (`pk_user`, `login`, `password`, `sessionexpire`, `email`, `
 (5, 'fran', '6d87cd9493f11b830bbfdf628c2c4f08', 65, 'fran@openhost.es', 'Francisco ', 'DiÃ©guez', 'Souto', 0, '0', NULL, 1, 4),
 (4, 'alex', '4c246829b53bc5712d52ee777c52ebe7', 60, 'alex@openhost.es', 'Alexandre', 'Rico', '', 0, '0', NULL, 1, 4),
 (7, 'Sandra', 'bd80e7c35b56dccd2d1796cf39cd05f6', 99, 'sandra@openhost.es', 'Sandra', 'Pereira', 'Alvarez', 0, '0', NULL, 1, 4),
+(8, 'toni', '4f2e7812dfe802a5cb0d5e465abb7ffc', 66, 'toni@openhost.es', 'Toni', 'Martinez', 'Carballo', 0, '0', NULL, 1, 4),
 (132, 'admin', 'b7592fd66feb65282791ab64685e4af4', 45, 'admin@opennemas.com', 'administrator', 'administrator', '', 0, '0', NULL, 1, 5),
-(136, 'user', '5c3255479eeaf373aa596db83444e4d1', 66, 'user@user.com', 'usuario', 'usuario', '', 0, '0', NULL, 1, 6),
-(9, 'Toni', '4f2e7812dfe802a5cb0d5e465abb7ffc', 66, 'toni@openhost.es', 'Toni', 'Martinez', 'Carballo', 0, '0', NULL, 1, 4);
+(136, 'user', '5c3255479eeaf373aa596db83444e4d1', 66, 'user@user.com', 'usuario', 'usuario', '', 0, '0', NULL, 1, 6);
 
 -- --------------------------------------------------------
 

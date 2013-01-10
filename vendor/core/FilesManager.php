@@ -66,13 +66,16 @@ class FilesManager
     {
         // Delete destination if exists
         if (file_exists($destination)) {
-            unlink($destination);
+            this::deleteDirectoryRecursively($destination);
         }
 
         // if is dir try to recursive copy it, if is a file copy it directly
         if (is_dir($source)) {
             if (!file_exists($destination)) {
-                mkdir($destination, 0775, true);
+                if (!is_writable(dirname($destination))
+                    || !mkdir($destination, 0775, true)) {
+                    return false;
+                }
             }
             $files = scandir($source);
             foreach ($files as $file) {
@@ -84,7 +87,7 @@ class FilesManager
                 }
             }
         } elseif (file_exists($source)) {
-            copy($source, $destination);
+            return copy($source, $destination);
         };
 
         return true;
@@ -92,8 +95,6 @@ class FilesManager
 
     /**
      * Delete a directory is it exists
-     *
-     * @param string $path Directory to delete
      */
     public function deleteDirectory($path)
     {
@@ -104,6 +105,35 @@ class FilesManager
                 );
             }
         }
+    }
+
+    /**
+     * Delete a directory recursively. Delete
+     * a directiry with content.
+     *
+     * @param string $path Directory to delete
+     * @return  Returns TRUE on success or FALSE on failure.
+     */
+    public static function deleteDirectoryRecursively($path)
+    {
+        if (!is_dir($path)) {
+            return false;
+        }
+
+        $objects = scandir($path);
+
+        foreach ($objects as $object) {
+            if ($object != "." && $object != "..") {
+                if (is_dir($path."/".$object)) {
+                    FilesManager::deleteDirectoryRecursively($path."/".$object);
+                } else {
+                    unlink($path."/".$object);
+                }
+            }
+        }
+        reset($objects);
+
+        return rmdir($path);
     }
 
     /**
@@ -140,8 +170,8 @@ class FilesManager
         if (!fwrite($handle, $input)) {
             return false; // failed.
         } else {
-            return true; //success.
             fclose($handle);
+            return true; //success.
         }
 
     }
@@ -188,6 +218,46 @@ class FilesManager
         return $dataZIP;
     }
 
+    /**
+     * Compress archives in a Tgz
+     *
+     * @param string $file name
+     * @param string $compressFile name
+     *
+     */
+    public static function compressTgz($file, $compressFile)
+    {
+        $command = "tar cpfz $compressFile $file";
+
+        exec($command, $output, $return_var);
+
+        if ($return_var!=0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Decompress archives Tgz
+     *
+     * @param string $file name
+     * @param string $compressFile name
+     *
+     */
+    public static function decompressTgz($compressFile, $destination)
+    {
+        $actualPath = getcwd();
+        $command = "tar xpfz $compressFile -C $destination";
+        exec($command, $output, $return_var);
+
+        if ($return_var!=0) {
+            return false;
+        }
+
+        return true;
+    }
+
      /**
      * Clean the special chars into a file name
      *
@@ -204,4 +274,3 @@ class FilesManager
         return $name;
     }
 }
-

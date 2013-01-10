@@ -45,7 +45,7 @@ class Application
 
         if (!isset($GLOBALS['application']) || $GLOBALS['application']==null) {
             // Setting up static Constants
-            
+
             $GLOBALS['application'] = new Application();
 
             // Setting up DataBase connection

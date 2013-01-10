@@ -91,8 +91,7 @@ class AuthenticationController extends Controller
                     // Increase security by regenerating the id
                     session_regenerate_id();
 
-                    //Delete the cache that handles the number of active sessions
-                    apc_delete(APC_PREFIX ."_"."num_sessions");
+                    $maxSessionLifeTime = (int) s::get('max_session_lifetime', 60);
 
                     $_SESSION = array(
                         'userid'           => $user->id,
@@ -104,20 +103,9 @@ class AuthenticationController extends Controller
                         'csrf'             => md5(uniqid(mt_rand(), true))
                     );
 
-                    // Store default expire time
-                    // global $app;
-                    // $app::setCookieSecure(
-                    //     '_onm_session_'.session_id(),
-                    //     time()+($user->sessionexpire)*60, 0, '/admin/'
-                    // );
-                    \PrivilegesCheck::loadSessionExpireTime();
-
-                    $forwardTo = filter_input(INPUT_POST, 'forward_to');
-                    if (!is_null($forwardTo) && !empty($forwardTo)) {
-                        return $this->redirect($forwardTo);
-                    } else {
-                        return $this->redirect($this->generateUrl('manager_welcome'));
-                    }
+                    $forwardTo = $request->request->filter('forward_to', null, FILTER_SANITIZE_STRING);
+                    
+                    return $this->redirect($forwardTo?:$this->generateUrl('manager_welcome'));
                 }
 
             } else {
