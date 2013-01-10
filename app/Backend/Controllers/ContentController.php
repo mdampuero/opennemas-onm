@@ -311,13 +311,17 @@ class ContentController extends Controller
 
         if ($id > 0) {
             $content = new \Content($id);
-            $meta = $request->query->get('meta', null);
-            if ($content->id != null && $meta != null) {
-                $value = $request->query->get('value', null);
-                $content->setProperty($meta, $value);
-
+            $properties = $request->query->get('properties', null);
+            $properties = json_decode($properties);
+            if ($content->id != null && $properties != null) {
+                foreach ($properties as $name => $value) {
+                        foreach ($value as $n => $v) {
+                            $content->setProperty($n, $v);
+                        }
+                }
+                die();
                 $code = 200;
-                $message = "Done {$id}: {$meta}-{$value}";
+                $message = "Done {$id}:". serialize($properties)." \n";
             } else {
                 $code = 404;
                 $message = sprintf(_('Content or property not valid'), $id);

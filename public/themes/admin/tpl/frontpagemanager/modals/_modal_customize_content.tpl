@@ -6,7 +6,6 @@
     </div>
     <div class="modal-body">
         <p>
-
             <div class="controls">
                 <label for="color" class="control-label">{t}Background Color{/t}</label>
                 <input type="text" id="bg-color" name="bg-color" value="{$category->color|default:$smarty.capture.websiteColor|trim}">
@@ -68,6 +67,7 @@
                 </select>
 
             </div>
+
             <div class="controls">
                 <label for="font-color" class="control-label">{t}Title font color{/t}</label>
                 <input type="text" id="font-color" name="font-color" value="">

@@ -347,43 +347,84 @@ jQuery(function($) {
 
 
     // Change-background-color
-    $('#modal-element-change-bgcolor').modal({ backdrop: 'static', keyboard: true, show: false });
+    $('#modal-element-customize-content').modal({ backdrop: 'static', keyboard: true, show: false });
     $('#frontpagemanager').on('click', 'div.placeholder div.content-provider-element a.change-color', function(e) {
         var element = $(this).closest('.content-provider-element');
         var elementID = element.data('content-id');
-        var modal = $('#modal-element-change-bgcolor');
-        modal.data('element-for-change-bgcolor', element);
+        var modal = $('#modal-element-customize-content');
+        modal.data('element-for-customize-content', element);
 
-        modal.data('selected-for-change-bgcolor', elementID);
+        modal.data('selected-for-customize-content', elementID);
 
         modal.find('.modal-body span.color').html('<strong>' + element.find('.color').html() + '</strong>');
         modal.modal('show');
         e.preventDefault();
     });
 
-    $('#modal-element-change-bgcolor').on('click', 'a.btn.yes', function(e, ui) {
-        var elementID = $('#modal-element-change-bgcolor').data('selected-for-change-bgcolor');
-        var url =  frontpage_urls.change_color;
-        var colorValue = "#"+$('#color').val();
-        var property = 'bgcolor_' + $('#frontpagemanager').data('category');
+    $('#modal-element-customize-content').on('click', 'a.btn.yes', function(e, ui) {
+        var elementID = $('#modal-element-customize-content').data('selected-for-customize-content');
+        var url = frontpage_urls.customize_content;
+        var bgcolorValue    = $('#bg-color').val();
+        var titleValues = '';
+        var fontFamilyValue = $('#font-family').val();
+        var fontSizeValue   = $('#font-size').val();
+        var fontStyleValue  = $('#font-style').val();
+        var fontColorValue  = $('#font-color').val();
+        if(fontFamilyValue.length>0 && fontFamilyValue!='Auto') {
+            titleValues = titleValues +
+               '"font-family" :"'+ fontFamilyValue+'", ';
+        }
+        if(fontSizeValue.length>0 && fontSizeValue!='Auto') {
+            titleValues = titleValues +
+                '"font-size" :"'+ fontSizeValue+'", ';
+        }
+        if(fontStyleValue.length>0 && fontStyleValue!='Auto') {
+            titleValues = titleValues +
+                '"font-style" :"'+ fontStyleValue+'", ';
+        }
+        if(fontColorValue.length>0 && fontColorValue!='Auto') {
+            titleValues = titleValues +
+                '"color" :"'+ fontColorValue+'", ';
+        }
 
+        var properties = [];
+        var name ='';
         if (elementID) {
+            if(bgcolorValue.length>0) {
+                name = 'bgcolor_' + $('#frontpagemanager').data('category');
+            /*    properties.push({
+                   name :'bgcolor_' + $('#frontpagemanager').data('category'),
+                   value :bgcolorValue
+                })*/
+                properties[name] = bgcolorValue;
+            }
+            if(titleValues.length>0) {
+                name = 'title_' + $('#frontpagemanager').data('category');
+              /*  properties.push({
+                    name : 'title_' + $('#frontpagemanager').data('category'),
+                    value :'{'+titleValues+'}'
+                }) */
+                properties[name] = '{'+titleValues+'}';
+            }
+            console.log(properties);
+            properties = JSON.stringify(properties);
+            console.log(properties);
             $.get(
                 url,
-                { 'id': elementID, meta: property, value: colorValue }
+                { 'id': elementID, 'properties': properties }
             ).success(function(data) {
-                 $('#modal-element-change-bgcolor').data('element-for-change-bgcolor').animate({ 'backgroundColor': colorValue },300);
+                 $('#modal-element-customize-content').data('element-for-customize-content').animate({ 'backgroundColor': bgcolorValue },300);
             }).error(function(data) {
             });
         }
-        $('#modal-element-change-bgcolor').modal('hide');
+        $('#modal-element-customize-content').modal('hide');
 
         e.preventDefault();
 
     });
 
-    $('#modal-element-change-bgcolor').on('click', 'a.btn.no', function(e) {
-        $('#modal-element-change-bgcolor').modal('hide');
+    $('#modal-element-customize-content').on('click', 'a.btn.no', function(e) {
+        $('#modal-element-customize-content').modal('hide');
         e.preventDefault();
     });
 

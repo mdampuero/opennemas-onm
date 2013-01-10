@@ -22,7 +22,7 @@
             quick_info: '{url name=admin_content_quick_info}',
             set_arquived: '{url name=admin_content_set_archived}',
             send_to_trash: '{url name=admin_content_send_to_trash}',
-            change_color: '{url name=admin_content_update_property}',
+            customize_content: '{url name=admin_content_update_property}',
             check_version: '{url name=admin_frontpage_last_version category=$category}'
         };
         var content_states = {
