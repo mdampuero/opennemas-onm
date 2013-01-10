@@ -312,7 +312,10 @@ class ContentController extends Controller
         if ($id > 0) {
             $content = new \Content($id);
             $properties = $request->query->get('properties', null);
+            var_dump($properties);
             $properties = json_decode($properties);
+            var_dump($properties);
+            die();
             if ($content->id != null && $properties != null) {
                 foreach ($properties as $name => $value) {
                         foreach ($value as $n => $v) {

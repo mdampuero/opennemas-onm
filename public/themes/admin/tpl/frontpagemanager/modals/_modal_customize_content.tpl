@@ -1,5 +1,6 @@
 
 <div class="modal hide fade" id="modal-element-customize-content">
+  <form id="customize-content">
     <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
       <h3>{t}Customize font and color for this element{/t}</h3>
@@ -35,7 +36,6 @@
                     <option value="#ff887c">Red</option>
                     <option value="#dc2127">Bold red</option>
                 </select>
-
             </div>
         </p>
         <p>
@@ -104,6 +104,7 @@
         <a class="btn btn-primary yes" href="#">{t}Save{/t}</a>
         <a class="btn no" href="#">{t}Cancel{/t}</a>
     </div>
+  </form>
 </div>
 
     {css_tag href="jquery.simplecolorpicker.css" basepath="js/jquery/jquery_simplecolorpicker/"}

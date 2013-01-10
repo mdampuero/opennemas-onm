@@ -30,8 +30,8 @@ function smarty_function_renderStyleSheet($params, &$smarty)
             $properties = json_decode($properties);
 
             if (!empty($properties)) {
-                // article#81088.onm-new h3.onm-new-title a
-                $rules .="article#new-{$item->pk_content} .onm-new-title a {\n";
+                // article#content-81088.onm-new h3.onm-new-title a
+                $rules .="article#content-{$item->pk_content} .onm-new-title a {\n";
                 foreach ($properties as $property => $value) {
                     if (!empty($value)) {
                             $rules .= "\t{$property}:{$value}; \n";
@@ -39,7 +39,7 @@ function smarty_function_renderStyleSheet($params, &$smarty)
                 }
                 $rules .= "}\n";
 
-                $rules .="article#new-{$item->pk_content} {\n";
+                $rules .="article#content-{$item->pk_content} {\n";
                 if (!empty($bgcolor)) {
                         $rules .= "\tbackground-color:{$bgcolor}; \n";
                 }

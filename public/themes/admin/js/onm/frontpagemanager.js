@@ -387,8 +387,9 @@ jQuery(function($) {
                 '"color" :"'+ fontColorValue+'", ';
         }
 
-        var properties = [];
+        var properties ='';//= [];
         var name ='';
+        console.log($("#customize_content").serialize());
         if (elementID) {
             if(bgcolorValue.length>0) {
                 name = 'bgcolor_' + $('#frontpagemanager').data('category');
@@ -396,7 +397,8 @@ jQuery(function($) {
                    name :'bgcolor_' + $('#frontpagemanager').data('category'),
                    value :bgcolorValue
                 })*/
-                properties[name] = bgcolorValue;
+               // properties[name] = bgcolorValue;
+                properties = '{"'+ name + '" : "' +  bgcolorValue + '"}';
             }
             if(titleValues.length>0) {
                 name = 'title_' + $('#frontpagemanager').data('category');
@@ -404,14 +406,19 @@ jQuery(function($) {
                     name : 'title_' + $('#frontpagemanager').data('category'),
                     value :'{'+titleValues+'}'
                 }) */
-                properties[name] = '{'+titleValues+'}';
+               // properties[name] = '{'+titleValues+'}';
+                if(properties.length > 0) {
+                    properties =  '{'+ properties + ', {"'+ name + '" : {' +  titleValues + '}}}';
+                } else {
+                    properties = '{"'+ name + '" : {' +  titleValues + '}}';
+                }
             }
             console.log(properties);
-            properties = JSON.stringify(properties);
+             properties = JSON.stringify({bgcolor_14 : "#ff887c"}) + ', '+JSON.stringify({title_14 : {"font-family" :"Arial", "font-size" :"30", "font-style" :"Bold", "color" :"#7bd148",}});
             console.log(properties);
             $.get(
                 url,
-                { 'id': elementID, 'properties': properties }
+                { 'id': elementID, 'properties': ''+ properties+'' }
             ).success(function(data) {
                  $('#modal-element-customize-content').data('element-for-customize-content').animate({ 'backgroundColor': bgcolorValue },300);
             }).error(function(data) {
