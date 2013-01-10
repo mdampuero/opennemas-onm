@@ -260,10 +260,7 @@ class CanariasToOnm
     public function importImagesArticles()
     {
 
-        $sql = 'SELECT `id`, `fecha`, `hora`, `seccion`, `subseccion`,
-            `islas`, `titulo`, `antetitulo`, `titulo_home`,
-            `piedefoto`, `foto_noti_ampliada`, `foto_portada`, `foto_seccion`,
-            `foto_panoramica`  FROM `noticias` ';
+        $sql = 'SELECT *  FROM `noticias` ';
 
         $request = self::$originConn->Prepare($sql);
         $rs = self::$originConn->Execute($request);
@@ -312,7 +309,7 @@ class CanariasToOnm
                             'available' =>1,
                             'category'=> $category,
                             'category_name'=>  $category_name,
-                            'metadata' => \StringUtils::get_tags($slug.', '.$category_name),
+                            'metadata' => \StringUtils::get_tags($title.', '.$category_name),
                             'description' => $title.' '.$category_name,
                             'created' => $rs->fields['fecha'].' '.$rs->fields['hora'],
                             'changed' => $rs->fields['fecha'].' '.$rs->fields['hora'],
@@ -414,7 +411,7 @@ class CanariasToOnm
                             'available' =>1,
                             'category'=> $category,
                             'category_name'=>  $category_name,
-                            'metadata' => StringUtils::get_tags($slug.', '.$category_name),
+                            'metadata' => StringUtils::get_tags($title.', '.$category_name),
                             'description' => $title.' '.$category_name,
                             'created' => $rs->fields['fecha'].' '.$rs->fields['hora'],
                             'changed' => $rs->fields['fecha'].' '.$rs->fields['hora'],
@@ -654,6 +651,7 @@ class CanariasToOnm
                         'category' => $category,
                         'subtitle' => $this->helper->convertToUtf8($rs->fields['antetitulo']),
                         'agency' => '',
+                        'metadata' => \StringUtils::get_tags($title.', '.$category_name),
                         'summary' => substr($this->helper->convertToUtf8($rs->fields['texto']), 0, 250 . '...'),
                         'body' => $this->helper->convertToUtf8($rs->fields['texto']),
                         'img1' =>$this->helper->imageIsImported(
@@ -832,6 +830,7 @@ class CanariasToOnm
                         'category' => $category,
                         'subtitle' => $this->helper->convertToUtf8($rs->fields['antetitulo']),
                         'agency' => '',
+                        'metadata' => \StringUtils::get_tags($title.', '.$category_name),
                         'summary' => substr($this->helper->convertToUtf8($rs->fields['texto']), 0, 250 . '...'),
                         'body' =>$this->helper->convertToUtf8($rs->fields['texto']),
                         'category_name'=>  $category_name,
@@ -920,6 +919,7 @@ class CanariasToOnm
                         'summary' => substr($this->helper->convertToUtf8($rs->fields['texto']), 0, 250 . '...'),
                         'body' => $this->helper->convertToUtf8($rs->fields['texto']),
                         'category_name'=>  $category_name,
+                        'metadata' => \StringUtils::get_tags($title.', '.$category_name),
                         'description' => substr($rs->fields['texto'], 0, 120 . '...'),
                         'content_status' =>1,
                         'available' => 1,
@@ -1017,6 +1017,7 @@ class CanariasToOnm
                         'description' => $this->helper->convertToUtf8($rs->fields['entradilla']),
                         'content_status' => 1,
                         'available' => 1,
+                        'metadata' => \StringUtils::get_tags($title.', '.$category_name),
                         'created' => $rs->fields['fecha'].' '.$rs->fields['hora'],
                         'changed' => $rs->fields['fecha'].' '.$rs->fields['hora'],
                         'starttime' => $rs->fields['fecha'].' '.$rs->fields['hora'],
@@ -1061,19 +1062,7 @@ class CanariasToOnm
     public function importArticles()
     {
 
-         $sql = 'SELECT `id`, `fecha`, `fecha_activar`, `hora`, `hora_activar`,
-            `especiales`, `tipo`, `EFE_motor`, `efe_id`, `version`, `texto_id`,
-            `EFE_seccion`, `canal`, `seccion`, `seccion_activar`, `subseccion`,
-            `islas`, `titulo`, `antetitulo`, `titulo_home`, `titulo_premium`,
-            `antetitulo_premium`, `entradilla_premium`, `antetitulo_home`,
-            `entradilla`, `data`, `firma`, `firma_activar`, `piedefoto`,
-            `foto_noti_ampliada`, `foto_portada`, `foto_seccion`,
-            `foto_panoramica`, `noti_relacion`, `opinion_relacion`,
-            `documentos_relacion`, `audio_relacion`, `video_relacion`,
-            `galeria_relacion`, `susfotos_relacion`, `encuesta_relacion`,
-            `fuerteventuraahora_relacion`, `diversia_relacion`, `activar_diversia`,
-            `deportes_portada`, `empresarios_url`, `radio`, `activar`, `texto`
-            FROM `noticias` ';
+         $sql = 'SELECT * FROM `noticias` ';
 
         $request = self::$originConn->Prepare($sql);
         $rs = self::$originConn->Execute($request);
@@ -1103,6 +1092,7 @@ class CanariasToOnm
                     $data = array(
                         'title' => $title,
                         'category' => $category,
+                        'metadata' => \StringUtils::get_tags($title.', '.$category_name),
                         'subtitle' => $this->helper->convertToUtf8($rs->fields['antetitulo']),
                         'agency' => $this->helper->convertToUtf8($rs->fields['firma']),
                         'summary' => $this->helper->convertToUtf8($rs->fields['entradilla']),
@@ -1246,8 +1236,8 @@ class CanariasToOnm
         while (!$rs->EOF) {
 
             $name =  $this->helper->getSlug($rs->fields['autor']);
-            var_dump($name);
-            if (!empty($name) &&$this->isOpinionAuthors($name) == 0) {
+
+            if (!empty($name)) {  //&& $this->isOpinionAuthors($name) == 0) {
                 $authorID = $this->helper->authorIsImported($name);
 
                 if (!$authorID) {
@@ -1259,7 +1249,7 @@ class CanariasToOnm
                             'condition' =>$name,
                             'date_nac`' =>''
                         );
-                        var_dump($values);
+
                         $authorID = $author->create($values);
 
                         echo "\n new id {$authorID} [DONE]\n";
@@ -1383,7 +1373,7 @@ class CanariasToOnm
                     $name = $this->helper->getSlug($rs->fields['autor']);
 
                     $fkAuthor = 0;
-                    $typeOpinion =$this->isOpinionAuthors($name);
+                    $typeOpinion = 0;//$this->isOpinionAuthors($name);
                     $colab ='';
                     if ($typeOpinion == 3) {
                         //Colaboradores
@@ -1841,7 +1831,7 @@ class CanariasToOnm
                     echo "[{$current}/{$totalRows}] attachment with id {$originalAdID} already imported\n";
                 } else {
                     echo "[{$current}/{$totalRows}] Importing attachment with id {$originalAdID} - ";
-                    $title= $this->helper->convertToUtf8($rs->fields['asunto']);
+                    $title= $this->helper->convertToUtf8($rs->fields['titulo']);
                     $name = $rs->fields['url'];
                     $category = 9;
                     $category_name = 'files';
@@ -1925,7 +1915,9 @@ class CanariasToOnm
                     } else {
                         echo "[{$current}/{$totalRows}] Importing video with id {$originalAdID} - ";
                         $title = $this->helper->convertToUtf8($rs->fields['titulo']);
-                        $category  = 20;
+                        $seccion = 'otros';
+                        $category = $this->matchInternalCategory($seccion);
+                        $category_name = $this->categoriesData[$category]->name;
                         $videoData = array(
                                 'title' => $title,
                                 'name' => $rs->fields['video'],
@@ -2211,10 +2203,12 @@ class CanariasToOnm
 
 
 
-    public function updateFiles()
+
+    public function getFilesData()
     {
 
-        $sql = "SELECT * FROM `documentos` ";
+        $sql = "SELECT * FROM `rela_documentos` ";
+
         $rs  = self::$originConn->Execute($sql);
         if (!$rs) {
             echo self::$originConn->ErrorMsg();
@@ -2223,28 +2217,31 @@ class CanariasToOnm
 
             $totalRows = $rs->_numOfRows;
             $current = 1;
-            $valuesContents = array();
-            $valuesAttach = array();
-            while (!$rs->EOF) {
-                $id = $this->helper->elementIsImported($originalPollID, 'attachment');
 
-                $valuesContents = array($rs, $metadata, $id);
-                $valuesAttach = array($rs, $metadata, $id);
+            $handle = fopen(__DIR__."/../log/updateFiles.txt", "w");
+            while (!$rs->EOF) {
+                $id = $this->helper->elementIsImported($rs->fields['id'], 'attachment');
+                if (!empty($id)) {
+                    $sql = '';
+                    $sqlContents = "UPDATE `contents` SET "
+                        ."`title`='".addslashes($rs->fields['titulo'])."', "
+                        ."`metadata`='".StringUtils::get_tags($rs->fields['titulo'])."' "
+                        ." WHERE pk_content=".$id.";  \n";
+
+                    $sqlAttach = "UPDATE `attachments` SET "
+                        ."`title`='".addslashes($rs->fields['titulo'])."' "
+                        ." WHERE pk_attachment=".$id."; \n ";
+
+                    $datawritten = fwrite($handle, $sqlContents);
+                    $datawritten = fwrite($handle, $sqlAttach);
+                }
                 $rs->MoveNext();
             }
+
+            fclose($handle);
             $rs->Close();
-            //update
-            if (!empty($values)) {
 
-                $sql = 'UPDATE `contents` SET `metadata`=?  WHERE pk_content=?';
 
-                $request = $GLOBALS['application']->conn->Prepare($sql);
-                $rss     = $GLOBALS['application']->conn->Execute($request, $values);
-                if (!$rss) {
-                    echo $GLOBALS['application']->conn->ErrorMsg();
-                }
-            }
-            $rss->Close(); # optional
         }
 
     }
@@ -2263,8 +2260,13 @@ class CanariasToOnm
             $current = 1;
             $values = array();
             while (!$rs->EOF) {
-                $metadata = $this->helper->getSlug($rs->fields['title']);
-                $values = array($metadata, $rs->fields['pk_content']);
+
+                if (!empty($rs->fields['title'])) {
+                    $metadata = $this->helper->getSlug($rs->fields['title']);
+                    echo "- $metadata, ".$rs->fields['pk_content']." \n";
+                    $values[] = array($metadata, $rs->fields['pk_content']);
+                }
+
                 $rs->MoveNext();
             }
             $rs->Close();
@@ -2283,5 +2285,78 @@ class CanariasToOnm
         }
 
     }
+
+
+    //New functions for satelite instaces
+
+
+    public function createCategories()
+    {
+
+        $this->categoriesMatches = array();
+
+        $sql = "SELECT nombre FROM `secciones`";
+        $request = self::$originConn->Prepare($sql);
+        $rs = self::$originConn->Execute($request);
+
+        if (!$rs) {
+            echo self::$originConn->ErrorMsg();
+            $this->helper->log('problem import categories = seccion'.self::$originConn->ErrorMsg());
+        } else {
+            $totalRows = $rs->_numOfRows;
+
+            $current = 1;
+            $category = new \ContentCategory();
+
+            while (!$rs->EOF) {
+                $title = $this->helper->convertToUtf8(strtolower($rs->fields['nombre']));
+                $data = array();
+                $data['name'] = \StringUtils::normalize_name($title);
+                $data['title'] = $title;
+                $data['inmenu']=1;
+                $data['subcategory'] =0;
+                $data['internal_category'] =1;
+                $data['logo_path'] ='';
+                $data['color']  ='';
+                $data['params']  ='';
+
+                if ($category->create($data)) {
+                    $this->helper->log("added seccion {$title} \n");
+                    $title = \Onm\StringUtils::setSeparator(strtolower($title), '-');
+                    $this->categoriesMatches[$title] = $category->pk_content_category;
+                } else {
+                    $this->helper->log("problem creating {$title} \n");
+                }
+
+                $rs->MoveNext();
+            }
+
+            $others = array('Galerias', 'Otros');
+            foreach ($others as $nombre) {
+                $title = $this->helper->convertToUtf8(strtolower($nombre));
+                $data = array();
+                $data['name'] = \StringUtils::normalize_name($title);
+                $data['title'] = ucfirst($title);
+                $data['inmenu']=1;
+                $data['subcategory'] =0;
+                $data['internal_category'] =1;
+                $data['logo_path'] ='';
+                $data['color']  ='';
+                $data['params']  ='';
+
+                if ($category->create($data)) {
+                    $this->helper->log("added seccion {$title} \n");
+                    $title = \Onm\StringUtils::setSeparator(strtolower($title), '-');
+                    $this->categoriesMatches[$title] = $category->pk_content_category;
+                } else {
+                    $this->helper->log("problem creating {$title} \n");
+                }
+
+            }
+
+        }
+
+    }
+
 }
 

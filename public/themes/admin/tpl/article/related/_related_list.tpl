@@ -48,6 +48,8 @@
                         {/foreach}
                         </ul>
                     </div>
+                {/is_module_activated}
+                {is_module_activated name="CRONICAS_MODULES"}
                     <div id="gallery-Frontpage" class="column-receiver gallery">
                         <h5>{t}Gallery for frontpage{/t}(*{t}Only one album{/t})</h5>
                         <ul class="content-receiver" >

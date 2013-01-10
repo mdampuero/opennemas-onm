@@ -105,6 +105,32 @@ class CanariasHelper
     public function sqlClearData()
     {
 
+        $sql = "CREATE TABLE IF NOT EXISTS `images_translated` (
+                  `pk_content` bigint(10) NOT NULL,
+                  `url` varchar(250) DEFAULT NULL,
+                  `type` varchar(20) DEFAULT NULL,
+                  PRIMARY KEY (`pk_content`)
+                ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+                ";
+        $rss = $GLOBALS['application']->conn->Execute($sql);
+
+
+        $sql = "CREATE TABLE IF NOT EXISTS `author_opinion` (
+              `pk_author` int(10) NOT NULL,
+              `text` varchar(255) NOT NULL
+            ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+            ";
+        $rss = $GLOBALS['application']->conn->Execute($sql);
+
+        $sql = "CREATE TABLE IF NOT EXISTS `failed_import` (
+          `id` int(11) NOT NULL AUTO_INCREMENT,
+          `text` varchar(255) DEFAULT NULL,
+          `type` varchar(255) DEFAULT NULL,
+          PRIMARY KEY (`id`)
+        ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1" ;
+
+        $rss = $GLOBALS['application']->conn->Execute($sql);
+
         echo "\n Database was Cleaned \n ";
         //emtpy tables
         $tables = array('articles', 'albums', 'albums_photos',
@@ -132,7 +158,6 @@ class CanariasHelper
         }
 
         $sql = "DELETE FROM contents WHERE pk_content NOT IN ($contents 0)";
-
         $rss = $GLOBALS['application']->conn->Execute($sql);
         $sql = "DELETE FROM contents_categories WHERE pk_fk_content NOT IN  ($contents 0) AND pk_fk_content_category != 0";
         $rss = $GLOBALS['application']->conn->Execute($sql);
@@ -263,7 +288,7 @@ class CanariasHelper
                 $sql = 'SELECT * FROM `images_translated`';
                 $rs  = $GLOBALS['application']->conn->Execute($sql);
                 if (!$rs) {
-                    echo self::$originConn->ErrorMsg();
+                    echo $GLOBALS['application']->conn->ErrorMsg();
                     $this->helper->log(self::$originConn->ErrorMsg());
                 } else {
 

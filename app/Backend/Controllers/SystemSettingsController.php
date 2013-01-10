@@ -44,11 +44,12 @@ class SystemSettingsController extends Controller
     public function defaultAction(Request $request)
     {
         $configurationsKeys = array(
-            'site_title', 'site_logo', 'site_description','site_keywords','site_agency', 'site_footer',
+            'site_title', 'site_logo', 'site_description','site_keywords','site_agency',
+            'site_footer', 'mobile_logo', 'favico',
             'site_color', 'site_name', 'time_zone','site_language','site_footer',
             'recaptcha', 'google_maps_api_key','google_custom_search_api_key',
             'facebook','facebook_page','facebook_id','twitter_page', 'googleplus_page',
-            'google_analytics','piwik', 'ojd', 'section_settings', 'paypal_settings',
+            'google_analytics','piwik', 'ojd', 'section_settings', 'paypal_mail',
             'items_per_page','refresh_interval', 'google_news_name', 'google_page',
             'webmastertools_google', 'webmastertools_bing',
             'max_session_lifetime',
@@ -83,6 +84,22 @@ class SystemSettingsController extends Controller
 
             if (move_uploaded_file($_FILES["site_logo"]["tmp_name"], $uploaddir)) {
                 $_POST['site_logo'] = $nameFile;
+            }
+        }
+        if (!empty($_FILES) && isset($_FILES['favico'])) {
+            $nameFile = $_FILES['favico']['name'];
+            $uploaddir= MEDIA_PATH.'/sections/'.$nameFile;
+
+            if (move_uploaded_file($_FILES["favico"]["tmp_name"], $uploaddir)) {
+                $_POST['favico'] = $nameFile;
+            }
+        }
+        if (!empty($_FILES) && isset($_FILES['mobile_logo'])) {
+            $nameFile = $_FILES['mobile_logo']['name'];
+            $uploaddir= MEDIA_PATH.'/sections/'.$nameFile;
+
+            if (move_uploaded_file($_FILES["mobile_logo"]["tmp_name"], $uploaddir)) {
+                $_POST['mobile_logo'] = $nameFile;
             }
         }
         if ($_POST['section_settings']['allowLogo'] == 1) {

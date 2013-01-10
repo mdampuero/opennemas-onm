@@ -24,7 +24,7 @@
             <li data-id="{$content->id}" data-type="{$contentType}" data-title="{$content->title|clearslash}">
                 <input type="checkbox" class="hidden-element" name="selected">
                 <span class="type">{t}{$content->content_type_l10n_name}{/t} -</span>
-                <span class="date">{t}{$content->starttime|date_format:"%d-%m-%Y"}{/t} -</span>
+                <span class="date">{t}{$content->created|date_format:"%d-%m-%Y"}{/t} -</span>
                 {$content->title}
                 <span class="icon"><i class="icon-trash"></i></span>
             </li>

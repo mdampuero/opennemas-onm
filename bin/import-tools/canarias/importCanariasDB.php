@@ -28,6 +28,9 @@ define('SITE_PATH', realpath(APPLICATION_PATH. DIRECTORY_SEPARATOR ."public").DI
 
 define('APC_PREFIX', 'canarias-importer');
 
+//require 'libs/lanzaroteImport-config.inc.php';
+//require 'libs/fuerteventuraImport-config.inc.php';
+//require 'libs/lapalmaImport-config.inc.php';
 require 'libs/canariasImport-config.inc.php';
 
 require SITE_PATH.'../app/autoload.php';
@@ -115,23 +118,17 @@ switch ($argv[1]) {
     case 'all':
         $importer->helper->log("\n IMPORTING CONTENTS \n");
 
-        $importer->importCategories();
+        $importer->createCategories();
+
+        $importer->importAuthorsOpinion();
 
         $importer->importOpinions();
 
         $importer->importTopSecret();
 
-        $importer->importFauna();
-
         $importer->importImagesArticles();
 
         $importer->importArticles();
-
-        $importer->importImagesHumor();
-
-        $importer->importLetters();
-
-        $importer->importImagesHumor();
 
         $importer->importAttachments();
 
@@ -142,6 +139,9 @@ switch ($argv[1]) {
         break;
     case 'updateMetadata':
         $importer->helper->log("\n UPDATING METADATA CONTENTS \n");
+
+ 
+        $importer->getFilesData();
 
         $importer->updateContents();
 

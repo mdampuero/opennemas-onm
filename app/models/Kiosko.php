@@ -58,7 +58,7 @@ class Kiosko extends Content
     public function create($data)
     {
         if ($this->exists($data['path'], $data['category'])) {
-            throw new \Exception(_("There's other paper in this date & this category."));
+          //  throw new \Exception(_("There's other paper in this date & this category."));
         }
 
         // Check price
@@ -87,7 +87,7 @@ class Kiosko extends Content
             Application::logDatabaseError();
         }
 
-        return true;
+        return $this->id;
     }
 
     public function read($id)
