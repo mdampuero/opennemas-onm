@@ -62,7 +62,7 @@
                 <label for="font-size" class="control-label">{t}Title font size{/t}</label>
                 {assign var='availableSizes'  value=','|explode:"12,14,16,18,20,22,24,26,28,30"}
                 <select id="font-size" name="font-size">
-                   <option value="">auto</option>
+                   <option value="">Auto</option>
                     {html_options values=$availableSizes output=$availableSizes selected=auto}
                 </select>
 

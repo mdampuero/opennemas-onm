@@ -364,63 +364,55 @@ jQuery(function($) {
     $('#modal-element-customize-content').on('click', 'a.btn.yes', function(e, ui) {
         var elementID = $('#modal-element-customize-content').data('selected-for-customize-content');
         var url = frontpage_urls.customize_content;
-        var bgcolorValue    = $('#bg-color').val();
-        var titleValues = '';
+
+        var titleValues = new Object();
+        var keys = new Array();
         var fontFamilyValue = $('#font-family').val();
         var fontSizeValue   = $('#font-size').val();
         var fontStyleValue  = $('#font-style').val();
         var fontColorValue  = $('#font-color').val();
         if(fontFamilyValue.length>0 && fontFamilyValue!='Auto') {
-            titleValues = titleValues +
-               '"font-family" :"'+ fontFamilyValue+'", ';
+            titleValues["font-family"] = fontFamilyValue;
+            keys[0] = "font-family";
         }
         if(fontSizeValue.length>0 && fontSizeValue!='Auto') {
-            titleValues = titleValues +
-                '"font-size" :"'+ fontSizeValue+'", ';
+            titleValues["font-size"] = fontSizeValue+'px';
+            keys[1] = "font-size";
         }
         if(fontStyleValue.length>0 && fontStyleValue!='Auto') {
-            titleValues = titleValues +
-                '"font-style" :"'+ fontStyleValue+'", ';
+            titleValues["font-style"] = fontStyleValue;
+            keys[2] = "font-style";
         }
-        if(fontColorValue.length>0 && fontColorValue!='Auto') {
-            titleValues = titleValues +
-                '"color" :"'+ fontColorValue+'", ';
+        if(fontColorValue.length>0 && fontColorValue!='Auto' && fontColorValue!='#000000') {
+            titleValues["color"] = fontColorValue;
+            keys[3] = "color";
         }
 
-        var properties ='';//= [];
-        var name ='';
-        console.log($("#customize_content").serialize());
+        var jsonTitle = JSON.stringify(titleValues, keys);
+        var properties = new Object();
+        var memberfilter = new Array();
+        var name = '';
+        if(jsonTitle.length>4) {
+            name = 'title_' + $('#frontpagemanager').data('category');
+            properties[name] = jsonTitle;
+            memberfilter[0]  = name;
+        }
+
+        if($('#bg-color').val().length>0 && fontColorValue!='#ffffff') {
+            name ='bgcolor_' + $('#frontpagemanager').data('category');
+            properties[name] = $('#bg-color').val();
+            memberfilter[1]  = name;
+        }
+
+        var jsonProperties = JSON.stringify(properties, memberfilter, "\t");
+
         if (elementID) {
-            if(bgcolorValue.length>0) {
-                name = 'bgcolor_' + $('#frontpagemanager').data('category');
-            /*    properties.push({
-                   name :'bgcolor_' + $('#frontpagemanager').data('category'),
-                   value :bgcolorValue
-                })*/
-               // properties[name] = bgcolorValue;
-                properties = '{"'+ name + '" : "' +  bgcolorValue + '"}';
-            }
-            if(titleValues.length>0) {
-                name = 'title_' + $('#frontpagemanager').data('category');
-              /*  properties.push({
-                    name : 'title_' + $('#frontpagemanager').data('category'),
-                    value :'{'+titleValues+'}'
-                }) */
-               // properties[name] = '{'+titleValues+'}';
-                if(properties.length > 0) {
-                    properties =  '{'+ properties + ', {"'+ name + '" : {' +  titleValues + '}}}';
-                } else {
-                    properties = '{"'+ name + '" : {' +  titleValues + '}}';
-                }
-            }
-            console.log(properties);
-             properties = JSON.stringify({bgcolor_14 : "#ff887c"}) + ', '+JSON.stringify({title_14 : {"font-family" :"Arial", "font-size" :"30", "font-style" :"Bold", "color" :"#7bd148",}});
-            console.log(properties);
+
             $.get(
                 url,
-                { 'id': elementID, 'properties': ''+ properties+'' }
+                { 'id': elementID, 'properties' : jsonProperties}
             ).success(function(data) {
-                 $('#modal-element-customize-content').data('element-for-customize-content').animate({ 'backgroundColor': bgcolorValue },300);
+                 $('#modal-element-customize-content').data('element-for-customize-content').animate({ 'backgroundColor': $('#bg-color').val() },300);
             }).error(function(data) {
             });
         }

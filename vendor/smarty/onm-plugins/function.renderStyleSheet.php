@@ -21,29 +21,31 @@ function smarty_function_renderStyleSheet($params, &$smarty)
     //content_id | title_catID | serialize(font-family:;font-size:;color:)
     if (is_array($items)) {
         foreach ($items as $k => $item) {
-            $element = 'title'."_".$current;
-            $properties = $item->getProperty($element);
-
             $element = 'bgcolor_'.$current;
             $bgcolor = $item->getProperty($element);
 
-            $properties = json_decode($properties);
+            $element = 'title'."_".$current;
+            $properties = $item->getProperty($element);
 
             if (!empty($properties)) {
-                // article#content-81088.onm-new h3.onm-new-title a
-                $rules .="article#content-{$item->pk_content} .onm-new-title a {\n";
-                foreach ($properties as $property => $value) {
-                    if (!empty($value)) {
-                            $rules .= "\t{$property}:{$value}; \n";
-                    }
-                }
-                $rules .= "}\n";
+                 $properties = json_decode($properties);
 
-                $rules .="article#content-{$item->pk_content} {\n";
-                if (!empty($bgcolor)) {
-                        $rules .= "\tbackground-color:{$bgcolor}; \n";
+                if (!empty($properties)) {
+                    // article#content-81088.onm-new h3.onm-new-title a
+                    $rules .="article#content-{$item->pk_content} .onm-new-title a {\n";
+                    foreach ($properties as $property => $value) {
+                        if (!empty($value)) {
+                                $rules .= "\t{$property}:{$value}; \n";
+                        }
+                    }
+                    $rules .= "}\n";
+
+                    $rules .="article#content-{$item->pk_content} {\n";
+                    if (!empty($bgcolor)) {
+                            $rules .= "\tbackground-color:{$bgcolor}; \n";
+                    }
+                    $rules .= "}\n";
                 }
-                $rules .= "}\n";
             }
         }
 

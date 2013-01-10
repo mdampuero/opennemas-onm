@@ -25,6 +25,13 @@
                     <i class="icon-trash"></i> {t}Drop from this frontpage{/t}
                 </a>
             </li>
+            {is_module_activated name="AVANCED_FRONTPAGE_MANAGER"}
+            <li>
+                <a title="{t}Customize in frontpage{/t}" href="#" class="change-color">
+                    <i class="icon-color"></i> {t}Customize content{/t}
+                </a>
+            </li>
+            {/is_module_activated}
             <li>
                 <a title="{t}Drop from all frontpages{/t}" href="#" class="arquive">
                     <i class="icon-inbox"></i> {t}Arquive{/t}
