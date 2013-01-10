@@ -124,11 +124,13 @@ a.btn-primary.active,a.btn-warning.active,a.btn-danger.active,a.btn-success.acti
     font-size: 12px;
 }
 
-a.btn {
-    color:#424E51
-}
+
 a.btn [class^="icon-"] {
     font-size:14px;
+}
+
+a[class^="btn-"] {
+    color:White;
 }
 a.btn-danger {
     color:White;
@@ -159,7 +161,7 @@ table.adminform {
   padding: 0px;
   border: 1px solid #bfbfbf;
   border-top:none;
-    border-spacing: 0;
+  border-spacing: 0;
   color: #333;
 }
 table.adminform {
@@ -579,84 +581,12 @@ div.utilities-conf input[type="text"]{
       font-size:1.6em;
     }
 
-  .top-action-bar .buttons {
-    position:absolute;
-    right:0;
-    bottom:15px;
-  }
-
-    .top-action-bar .buttons .button:first-child {
-      margin-right:-4px;
-      border-radius:2px 0 0 2px;
-    }
-    .top-action-bar .buttons .button:last-child {
-      margin-left:-4px;
-      border-radius:0px 2px 2px 0;
-    }
-
-
-    .top-action-bar .buttons .button:hover:active {
-      background: #F8F8F8; /* for non-css3 browsers */
-      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F8F8F8', endColorstr='#F1F1F1'); /* for IE */
-      background: -webkit-gradient(linear, left top, left bottom, from(#F8F8F8), to(#F1F1F1)); /* for webkit browsers */
-      background: -moz-linear-gradient(top,  #F8F8F8,  #F1F1F1); /* for firefox 3.6+ */
-      border-color: #3366CC;
-      box-shadow: 0 1px 5px #CCCCCC inset;
-      z-index: 2;
-    }
-
-    .top-action-bar .buttons .button:hover,
-    .top-action-bar .buttons .button.active{
-      background: #F5F5F5; /* for non-css3 browsers */
-      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F5F5F5', endColorstr='#F1F1F1'); /* for IE */
-      background: -webkit-gradient(linear, left top, left bottom, from(#F5F5F5), to(#F1F1F1)); /* for webkit browsers */
-      background: -moz-linear-gradient(top,  #F5F5F5,  #F1F1F1); /* for firefox 3.6+ */
-      box-shadow: 0 1px 5px #CCCCCC inset;
-      border-color: #C0C0C0;
-    }
-
-    .top-action-bar .buttons .button {
-      background: #F5F5F5; /* for non-css3 browsers */
-      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F5F5F5', endColorstr='#F1F1F1'); /* for IE */
-      background: -webkit-gradient(linear, left top, left bottom, from(#F5F5F5), to(#F1F1F1)); /* for webkit browsers */
-      background: -moz-linear-gradient(top,  #F5F5F5,  #F1F1F1); /* for firefox 3.6+ */
-      border: 1px solid #D9D9D9;
-      border-radius:2px;
-      height: 35px;
-      text-align: center;
-      vertical-align: middle;
-      width: 50px;
-      color: #ccc !important;
-      outline: medium none;
-      text-decoration: none;
-      display: inline-block;
-      position: relative;
-      cursor: pointer;
-      text-indent:-9999px;
-    }
-
-    .buttons .button span.icon {
-      height: 18px;
-      width: 18px;
-      display:block;
-      margin:0 auto;
-      margin-top:8px;
-    }
-
-    .buttons .button span.icon.home {
-      background: url("https://ssl.gstatic.com/s2/oz/images/sprites/common-full-2fd6df831c52ccf15a88279322948103.png") no-repeat scroll 0 -137px transparent;
-    }
-
-    .buttons .button span.icon img {
-      height:100%
-    }
-
 /* =============================================================================
    logoonm rules
    ========================================================================== */
-   .logoonm {
-    position:relative;
-   }
+.logoonm {
+  position:relative;
+}
 .logoonm:hover ul {
     display:block;
 }
@@ -877,9 +807,6 @@ h2.disqus {
   }
   .onm-help-block dl { margin-top:0; }
   .onm-help-block dd { margin:10px 0 10px 20px; }
-
-  .margin-right-1 { margin-right:1em; }
-  .margin-left-1 { margin-left:1em; }
 
 /* -------------------------------------------------------------
   Footer
@@ -1268,7 +1195,6 @@ img[src="non"] { display:none !important; }
   Ajax file upload
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
  .fileupload-buttonbar {
-    width:100%;
     margin-bottom:5px;
  }
 .fileupload-buttonbar .right {
