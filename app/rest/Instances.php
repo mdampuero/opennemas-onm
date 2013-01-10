@@ -116,7 +116,7 @@ class Instances extends RestBase
         }
 
         $companyMail = filter_var($companyMail, FILTER_SANITIZE_STRING);
-        $domain = filter_var($domains, FILTER_SANITIZE_STRING);
+        $domain = filter_var($domain, FILTER_SANITIZE_STRING);
         $this->sendMails($data, $companyMail, $domain);
 
         return true;
