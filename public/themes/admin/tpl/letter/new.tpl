@@ -7,6 +7,10 @@
 
 <script>
 jQuery(document).ready(function($) {
+    $('#formulario').onmValidate({
+        'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
+    });
+
     $('#letter-edit').tabs();
 
     $('#created').datetimepicker({
@@ -71,7 +75,7 @@ tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
             <div class="control-group">
                 <label for="title" class="control-label">{t}Title{/t}</label>
                 <div class="controls">
-                    <input type="text" id="title" name="title" title="Título de la noticia" value="{$letter->title|clearslash|escape:"html"}" class="required input-xxlarge" />
+                    <input type="text" id="title" name="title" value="{$letter->title|clearslash|escape:"html"}" required="required" class="input-xxlarge" />
                 </div>
             </div>
 
@@ -79,7 +83,7 @@ tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
             <div class="control-group">
                 <label for="available" class="control-label">{t}Published{/t}</label>
                 <div class="controls">
-                    <select name="available" id="available" class="required">
+                    <select name="available" id="available" required="required">
                         <option value="1" {if $letter->available eq 1} selected {/if}>Si</option>
                         <option value="0" {if $letter->available eq 0} selected {/if}>No</option>
                     </select>
@@ -124,7 +128,7 @@ tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
             <div class="control-group">
                 <label for="body" class="control-label">{t}Body{/t}</label>
                 <div class="controls">
-                    <textarea name="body" id="body" style="width:100%; height:20em;">{$letter->body|clearslash}</textarea>
+                    <textarea name="body" id="body" style="width:100%; height:20em;" required="required">{$letter->body|clearslash}</textarea>
                 </div>
             </div>
         </div>

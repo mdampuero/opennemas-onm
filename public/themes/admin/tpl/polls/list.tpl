@@ -48,6 +48,8 @@
 
     <div class="wrapper-content">
 
+        {render_messages}
+
         <ul class="pills" style="margin-bottom: 28px;">
             <li>
                 <a href="{url name=admin_polls_widget}" {if $category=='widget'}class="active"{/if}>{t}Widget Home{/t}</a>
@@ -58,8 +60,6 @@
             {include file="menu_categories.tpl" home="{url name=admin_polls l=1}"}
 
         </ul>
-
-        {render_messages}
 
         <table class="table table-hover table-condensed">
 

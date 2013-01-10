@@ -120,7 +120,7 @@ class LettersController extends Controller
             return $this->redirect($this->generateUrl('admin_letters'));
 
         } else {
-            return $this->render('letter/read.tpl');
+            return $this->render('letter/new.tpl');
         }
     }
 
@@ -146,7 +146,7 @@ class LettersController extends Controller
         }
 
         return $this->render(
-            'letter/read.tpl',
+            'letter/new.tpl',
             array('letter' => $letter,)
         );
 
@@ -401,4 +401,3 @@ class LettersController extends Controller
         );
     }
 }
-
