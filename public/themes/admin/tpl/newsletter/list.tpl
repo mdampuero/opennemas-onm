@@ -10,14 +10,11 @@
         <div class="wrapper-content">
             <div class="title"><h2>{t}Newsletter Manager{/t}</h2></div>
             <ul class="old-button">
-                {acl isAllowed="NEWSLETTER_CREATE"}
                 <li>
                     <a href="{url name=admin_newsletter_create}" accesskey="N" tabindex="1">
                         <img border="0" src="{$params.IMAGE_DIR}/list-add.png" alt="{t}New newsletter{/t}"><br />{t}New newsletter{/t}
                     </a>
                 </li>
-                {/acl}
-                {acl isAllowed="NEWSLETTER_SETTINGS"}
                 <li class="separator"></li>
                 <li>
                     <a href="{url name=admin_newsletter_config}" class="admin_add" title="{t}Config newsletter module{/t}">
@@ -25,7 +22,6 @@
                         {t}Settings{/t}
                     </a>
                 </li>
-                {/acl}
                 <li class="separator"></li>
                 <li>
                     <a href="{url name=admin_newsletter_subscriptors}" class="admin_add" id="submit_mult" title="{t}Subscriptors{/t}">
@@ -85,23 +81,19 @@
                     </td>
                     <td style="padding:1px; font-size:11px;" class="right">
                         <div class="btn-group">
-                            {acl isAllowed="NEWSLETTER_UPDATE"}
                             <a class="btn" href="{url name=admin_newsletter_show_contents id=$newsletter->id}" title="{t}Edit{/t}" >
                                 <i class="icon-pencil"></i> {t}Edit{/t}
                             </a>
-                            {/acl}
 
                             <a href="{url name=admin_newsletter_preview id=$newsletter->id}" title="{t}Preview{/t}" class="btn">
                                 <i class="icon-eye-open"></i>
                             </a>
 
-                            {acl isAllowed="NEWSLETTER_DELETE"}
                             <a class="del btn btn-danger"
                                data-id="{$newsletter->id}"
                                href="{url name=admin_newsletter_delete id=$newsletter->id}" >
                                 <i class="icon-trash icon-white"></i>
                             </a>
-                            {/acl}
                         </div>
                     </td>
                 </tr>
