@@ -47,9 +47,9 @@
                 </li>
                 {/acl}
                 <li>
-                    <a href="{url name=admin_images_config">
-                        <img src="{$params.IMAGE_DIR}" alt=""><br>
-                        {t}
+                    <a href="{url name=admin_images_config}">
+                        <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt=""><br>
+                        {t}Settings{/t}
                     </a>
                 </li>
                 <li>

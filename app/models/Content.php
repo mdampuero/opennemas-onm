@@ -1304,7 +1304,7 @@ class Content
         Application::logContentEvent(__METHOD__, $this);
     }
 
-    public function set_inhome($status, $lastEditor)
+    public function set_inhome($status, $lastEditor = null)
     {
         $GLOBALS['application']->dispatch('onBeforeSetInhome', $this);
 
