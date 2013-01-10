@@ -15,6 +15,11 @@ function smarty_function_get_social_link($params, &$smarty)
         return;
     }
 
+    $style ='';
+    if (!isset($params['style'])) {
+        $style .= ' style = "'. $params['style'].'"';
+    }
+
     $output = '';
     switch ($params['page']) {
         case 'twitter':
@@ -26,7 +31,7 @@ function smarty_function_get_social_link($params, &$smarty)
 
             if (!empty($twitterPage)) {
                 $output =
-                '<li>
+                '<li '.$style.'>
                     <a href="'.$twitterPage.'" target="_blank" title="Visita nuestro perfíl en Twitter">
                        <img src="'.$params['img'].'" alt="" />
                     </a>
@@ -42,7 +47,7 @@ function smarty_function_get_social_link($params, &$smarty)
 
             if (!empty($facebookPage)) {
                 $output =
-                '<li>
+                '<li '.$style.'>
                     <a href="'.$facebookPage.'" target="_blank" title="Visita nuestro perfíl en Facebook">
                        <img src="'.$params['img'].'" alt="" />
                     </a>
@@ -57,8 +62,8 @@ function smarty_function_get_social_link($params, &$smarty)
             $googlePage = s::get('google_page');
 
             if (!empty($googlePage)) {
-                $output =
-                    '<li>
+                $output = 
+                    '<li '.$style.'>
                         <a href="'.$googlePage.'" target="_blank" title="Visita nuestro perfíl en Google Plus">
                            <img src="'.$params['img'].'" alt="" />
                         </a>
@@ -66,6 +71,18 @@ function smarty_function_get_social_link($params, &$smarty)
             }
             break;
         default:
+            if (!isset($params['img'])) {
+                $output = '';
+            }
+            if (!empty($params['page']) && !empty($params['img'])) {
+                $output =
+                '<li '.$style.'>
+                    <a href="'.$params['page'].'" target="_blank" title="Visitanos">
+                       <img src="'.$params['img'].'" alt="" />
+                    </a>
+                </li>';
+ 
+            }
             break;
     }
 
