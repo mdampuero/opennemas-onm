@@ -180,9 +180,7 @@
             <tfoot>
                 <tr>
                     <td colspan="10" class="center">
-                        <div class="pagination">
-                            {$pagination->links}&nbsp;
-                        </div>
+                        <div class="pagination">{$pagination->links}</div>
                     </td>
                 </tr>
             </tfoot>

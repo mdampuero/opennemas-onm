@@ -82,5 +82,6 @@
         </div>
 
 	</div>
+    <input type="hidden" name="id" value="{$user_group->id}">
 </form>
 {/block}

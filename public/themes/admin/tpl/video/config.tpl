@@ -46,44 +46,30 @@
 
         {render_messages}
 
-        <div id="{$category}">
+        <div class="form-horizontal panel">
+            <div class="control-group">
+                <label for="video[total_widget]" class="control-label">{t}Total in widget home{/t}</label>
+                <div class="controls">
+                    <input type="number" name="video_settings[total_widget]" value="{$configs['video_settings']['total_widget']|default:"4"}" required />
+                    <div class="help-block">{t} Use  total in widget home for define how many videos can see in widgets in newspaper frontpage{/t}</div>
+                </div>
+            </div>
 
-            <table class="adminform" border="0">
-                <tr>
-                    <td>
-                        <div class="form-wrapper">
-                            <div>
-                                <label for="video[total_widget]">{t}Total in widget home:{/t}</label>
-                                <input type="text" class="required" name="video_settings[total_widget]" value="{$configs['video_settings']['total_widget']|default:"4"}" />
-                            </div>
-                            <br />
-                            <div>
-                                <label for="video[total_front]">{t}Total in video frontpage column:{/t}</label>
-                                <input type="text" class="required" id="name" name="video_settings[total_front]" value="{$configs['video_settings']['total_front']|default:"2"}" />
-                            </div>
-                            <br />
-                            <div>
-                                <label for="video[total_front]">{t}Total in video gallery:{/t}</label>
-                                <input type="text" class="required" id="name" name="video_settings[total_gallery]" value="{$configs['video_settings']['total_gallery']|default:"20"}" />
-                            </div>
-                            <br />
+            <div class="control-group">
+                <label for="video[total_front]" class="control-label">{t}Total in video frontpage column{/t}</label>
+                <div class="controls">
+                    <input type="number" name="video_settings[total_front]" value="{$configs['video_settings']['total_front']|default:"2"}" required />
+                    <div class="help-block">{t}Use  total in video frontpage column for define how many videos can see in the column left in video frontpage categories{/t}</div>
+                </div>
+            </div>
 
-                        </div>
-                    </td>
-                    <td> <br/>
-                        <div class="onm-help-block">
-								<div class="title"><h4>{t}Settings{/t}</h4></div>
-                                <div class="content">
-                                    <ul>
-                                        <li>{t} Use  total in widget home for define how many videos can see in widgets in newspaper frontpage{/t}</li>
-                                        <li> {t} Use  total in video frontpage column for define how many videos can see in the column left in video frontpage categories{/t}</li>
-                                        <li> {t} Use  Total in video gallery for define how many videos can see in the gallery when you edit or create one article{/t}</li>
-                                    </ul>
-                                </div>
-                        </div>
-                    </td>
-                </tr>
-            </table>
+            <div class="control-group">
+                <label for="video[total_widget]" class="control-label">{t}Total in video gallery{/t}</label>
+                <div class="controls">
+                    <input type="number" name="video_settings[total_gallery]" value="{$configs['video_settings']['total_gallery']|default:"20"}" required />
+                    <div class="help-block">{t}Use  Total in video gallery for define how many videos can see in the gallery when you edit or create one article{/t}</div>
+                </div>
+            </div>
         </div>
 
         <input type="hidden" id="action" name="action" value="save_config" />

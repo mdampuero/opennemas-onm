@@ -1,26 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-    <style type="text/css">
-    label {
-        width:150px;
-        padding-left:10px;
-        display:inline-block;
-    }
-    input[type="text"],
-    input[type="password"] {
-        width:300px;
-    }
-    .form-wrapper {
-        margin:10px auto;
-        width:90%;
-    }
-    .help-block {
-        max-width: 300px;
-    }
-    </style>
-{/block}
-
 {block name="content"}
 <form action="{url name=admin_covers_config}" method="POST">
     <div class="top-action-bar">
@@ -46,35 +25,22 @@
 
         {render_messages}
 
-        <table class="adminform" border="0">
-            <tr>
-                <td>
-                    <div class="form-wrapper">
-
-                         <div>
-                            <label for="kiosko_settings[orderFrontpage]">{t}Order newsstand frontpage by:{/t}</label>
-                             <select name="kiosko_settings[orderFrontpage]" id="kiosko_settings[orderFrontpage]" class="required">
-                                <option value="sections" {if $configs['kiosko_settings']['orderFrontpage'] eq "sections"} selected {/if}>{t}Sections{/t}</option>
-                                <option value="dates" {if $configs['kiosko_settings']['orderFrontpage'] eq "dates"} selected {/if}>{t}Dates{/t}</option>
-                                <option value="grouped" {if $configs['kiosko_settings']['orderFrontpage'] eq "grouped"} selected {/if}>{t}Dates grouped{/t}</option>
-                            </select>
-                        </div>
-                        <br />
+        <div class="form-horizontal panel">
+            <div class="control-group">
+                <label for="kiosko_settings[orderFrontpage]" class="control-label">{t}Order newsstand frontpage by{/t}</label>
+                <div class="controls">
+                    <select name="kiosko_settings[orderFrontpage]" id="kiosko_settings[orderFrontpage]" class="required">
+                        <option value="sections" {if $configs['kiosko_settings']['orderFrontpage'] eq "sections"} selected {/if}>{t}Sections{/t}</option>
+                        <option value="dates" {if $configs['kiosko_settings']['orderFrontpage'] eq "dates"} selected {/if}>{t}Dates{/t}</option>
+                        <option value="grouped" {if $configs['kiosko_settings']['orderFrontpage'] eq "grouped"} selected {/if}>{t}Dates grouped{/t}</option>
+                    </select>
+                    <div class="help-block">
+                        {t}Select if order newsstand's frontpage by dates or by section.{/t} <br>
+                        {t}Dates grouped is recommended for weekly newspapers.{/t}
                     </div>
-                </td>
-                <td> <br/>
-                    <div class="onm-help-block">
-							<div class="title"><h4>{t}Definition values{/t}</h4></div>
-                            <div class="content">
-                                <ul>
-                                    <li>{t}Select if order newsstand's frontpage by dates or by section.{/t} </li>
-                                    <li>{t}Dates grouped is recommended for weekly newspapers.{/t} </li>
-                                </ul>
-                            </div>
-                    </div>
-                </td>
-            </tr>
-        </table>
+                </div>
+            </div>
+        </div>
     </div>
 </form>
 {/block}

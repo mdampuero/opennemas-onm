@@ -1,26 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-    <style type="text/css">
-    label {
-        width:150px;
-        padding-left:10px;
-        display:inline-block;
-    }
-    input[type="text"],
-    input[type="password"] {
-        width:300px;
-    }
-    .form-wrapper {
-        margin:10px auto;
-        width:90%;
-    }
-    .help-block {
-        max-width: 300px;
-    }
-    </style>
-{/block}
-
 {block name="content"}
 <form action="{url name=admin_specials_config}" method="POST" name="formulario" id="formulario" {$formAttrs}>
     <div class="top-action-bar">
@@ -50,7 +29,7 @@
             <div class="control-group">
                 <label for="special[total_widget]" class="control-label">{t}Number of elements in widget home{/t}</label>
                 <div class="controls">
-                    <input type="text" class="required" name="special_settings[total_widget]" value="{$configs['special_settings']['total_widget']|default:"2"}" />
+                    <input type="number" class="required" name="special_settings[total_widget]" value="{$configs['special_settings']['total_widget']|default:"2"}" />
                     <div class="help-block">
                         {t}Use  total in widget special for define how many videos can see in widgets in newspaper frontpage{/t}
                     </div>
@@ -60,7 +39,7 @@
             <div class="control-group">
                 <label for="special[time_last]" class="control-label">{t}Time of the last special most viewed (days):{/t}</label>
                 <div class="controls">
-                    <input type="text" class="required" id="name" name="special_settings[time_last]" value="{$configs['special_settings']['time_last']|default:"100"}" />
+                    <input type="number" class="required" id="name" name="special_settings[time_last]" value="{$configs['special_settings']['time_last']|default:"100"}" />
                     <div class="help-block">
                         {t}Used to define the frontpage specials, the time range of the latest specials are the most viewed{/t}
                     </div>

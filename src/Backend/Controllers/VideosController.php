@@ -918,4 +918,3 @@ class VideosController extends Controller
         );
     }
 }
-

@@ -137,7 +137,7 @@ class AclUserGroupsController extends Controller
         $userGroup = new \UserGroup();
 
         $data = array(
-            'id' => $request->query->getDigits('id'),
+            'id'         => $request->query->getDigits('id'),
             'name'       => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
             'privileges' => $request->request->get('privileges'),
         );
@@ -146,7 +146,7 @@ class AclUserGroupsController extends Controller
             m::add(_('User group updated successfully.'), m::SUCCESS);
         } else {
             m::add(
-                sprintf(_('Unable to update the user group with id "%d"'), $id),
+                sprintf(_('Unable to update the user group with id "%d"'), $data['id']),
                 m::ERROR
             );
         }
