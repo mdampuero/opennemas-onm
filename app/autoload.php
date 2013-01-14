@@ -37,6 +37,7 @@ set_include_path(
 );
 define('INSTALLATION_HASH', substr(hash('md5', APPLICATION_PATH), 0, 8));
 
+require SITE_VENDOR_PATH.'/autoload.php';
 require_once SITE_VENDOR_PATH.'functions.php';
 require_once SITE_VENDOR_PATH.'/adodb5/adodb.inc.php';
 require_once SITE_VENDOR_PATH.'/Pager/Pager.php';
@@ -46,30 +47,12 @@ require_once SITE_VENDOR_PATH.'/Template.php';
 
 require_once __DIR__.'/../vendor/symfony/class-loader/Symfony/Component/ClassLoader/UniversalClassLoader.php';
 
-// Initialize the autoloader (use apc if available)
-use Symfony\Component\ClassLoader\UniversalClassLoader;
-
-if (extension_loaded('apc')) {
-    require_once __DIR__.'/../vendor/symfony/class-loader/Symfony/Component/ClassLoader/ApcUniversalClassLoader.php';
-    $loader = new Symfony\Component\ClassLoader\ApcUniversalClassLoader(INSTALLATION_HASH.'.');
-} else {
-    $loader = new UniversalClassLoader();
-}
+$loader = new Symfony\Component\ClassLoader\UniversalClassLoader();
 
 // Registering namespaces
 $loader->registerNamespaces(
     array(
         'Onm'                                   => __DIR__.'/../vendor',
-        'Symfony\Component\Routing'             => __DIR__.'/../vendor/symfony/routing',
-        'Symfony\Component\HttpFoundation'      => __DIR__.'/../vendor/symfony/http-foundation',
-        'Symfony\Component\ClasLoader'          => __DIR__.'/../vendor/symfony/class-loader',
-        'Symfony\Component\DependencyInjection' => __DIR__.'/../vendor/symfony/dependency-injection',
-        'Symfony\Component\Config'              => __DIR__.'/../vendor/symfony/config',
-        'Symfony\Component\Yaml'                => __DIR__.'/../vendor/symfony/yaml',
-        'Symfony\Component\Console'             => __DIR__.'/../vendor/symfony/console',
-        'Symfony\Component\EventDispatcher'     => __DIR__.'/../vendor/symfony/event-dispatcher',
-        'Panorama'                              => __DIR__.'/../vendor/frandieguez/panorama-php/lib',
-        'Monolog'                               => __DIR__.'/../vendor/monolog/monolog/src',
     )
 );
 
