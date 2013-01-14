@@ -17,13 +17,22 @@ class Mailer
 
     public function __construct($mailerParameters)
     {
+        $this->defaultParams = array(
+            'transport'        => 'mail',
+            'username'         => '',
+            'password'         => '',
+            'port'             => 25,
+            'sendmail_command' => '/usr/sbin/sendmail -bs',
+        );
+        $mailerParameters = array_merge($this->defaultParams, $mailerParameters);
+
         // Create the Transport
         if ($mailerParameters['transport'] == 'smtp') {
-            $transport = \Swift_SmtpTransport::newInstance($mailerParameters['host'], 25)
-              ->setUsername($mailerParameters['username'])
-              ->setPassword($mailerParameters['password']);
+            $transport = \Swift_SmtpTransport::newInstance($mailerParameters['host'], $mailerParameters['port'])
+                ->setUsername($mailerParameters['username'])
+                ->setPassword($mailerParameters['password']);
         } elseif ($mailerParameters['transport'] == 'sendmail') {
-            $transport = \Swift_SendmailTransport::newInstance('/usr/sbin/sendmail -bs');
+            $transport = \Swift_SendmailTransport::newInstance($mailerParameters['sendmail_command']);
         } elseif ($mailerParameters['transport'] == 'mail') {
             $transport = \Swift_MailTransport::newInstance();
         }
