@@ -38,10 +38,9 @@ class Log extends \Zend_Log
     public function __construct($loglevel = 'normal')
     {
         // set formatter, add %class% to save class name
-        $format = date('Y-m-d H:i:s', time()).' (%priorityName%-%priority%) %message%'
-        . PHP_EOL;
+        $format = date('Y-m-d H:i:s', time()).' (%priorityName%-%priority%) %message%'.PHP_EOL;
         $this->_formatter = new \Zend_Log_Formatter_Simple($format);
-        parent::addWriter($this->_errorWriter($loglevel));
+        parent::addWriter($this->errorWriter($loglevel));
         parent::__construct();
     }
 
@@ -90,27 +89,23 @@ class Log extends \Zend_Log
     * Error log message will write to file error.log
     * This will only log messages of level <= 3
     */
-    protected function _errorWriter($loglevel)
+    protected function errorWriter($loglevel)
     {
-        if (s::get('log_db_enabled') == 1) {
-            $writer = new \Zend_Log_Writer_Stream(SYS_LOG_PATH.'/onm.log');
-            switch ($loglevel) {
-                case 'normal':
-                    $writer->addFilter(new \Zend_Log_Filter_Priority(\Zend_Log::NOTICE, '>='));
-                    break;
-                case 'verbose':
-                    $writer->addFilter(new \Zend_Log_Filter_Priority(\Zend_Log::ERR, '>='));
-                    break;
-                case 'all':
-                    $writer->addFilter(new \Zend_Log_Filter_Priority(\Zend_Log::EMERG, '>='));
-                    break;
-            }
-        } else {
-            $writer = new \Zend_Log_Writer_Mock;
+        $writer = new \Zend_Log_Writer_Stream(SYS_LOG_PATH.'/'.INSTANCE_UNIQUE_NAME.'-onm.log');
+        switch ($loglevel) {
+            case 'normal':
+                $writer->addFilter(new \Zend_Log_Filter_Priority(\Zend_Log::NOTICE, '>='));
+                break;
+            case 'verbose':
+                $writer->addFilter(new \Zend_Log_Filter_Priority(\Zend_Log::ERR, '>='));
+                break;
+            case 'all':
+                $writer->addFilter(new \Zend_Log_Filter_Priority(\Zend_Log::EMERG, '>='));
+                break;
         }
+
         $writer->setFormatter($this->_formatter);
 
         return $writer;
     }
 }
-
