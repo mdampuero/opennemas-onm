@@ -153,7 +153,7 @@ class FrontpagesController extends Controller
     {
         $this->checkAclOrForward('ARTICLE_FRONTPAGE');
 
-        $savedProperly = false;
+        $savedProperly     = false;
         $validReceivedData = false;
 
         $category = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
@@ -161,37 +161,36 @@ class FrontpagesController extends Controller
         if ($category !== null && $category !== '') {
             $category = (int) $category;
 
-            if ($category === '0') {
-                $category = 'home';
-            }
-
-            $ccm     = \ContentCategoryManager::get_instance();
-            $section = $ccm->get_name($category);
-
             // Get the form-encoded places from request
-            if (isset($_POST['contents_positions'])) {
-                $contentsPositions = $this->request->request->get('contents_positions');
-            } else {
-                $contentsPositions = null;
-            }
+            $contentsPositions = $this->request->request->get('contents_positions', null);
+            $lastVersion       = $this->request->request->get('last_version', null);
 
             $categoryID = ($category == 'home') ? 0 : $category;
+
+            // Check if data send by user is valid
             $validReceivedData = is_array($contentsPositions)
                                  && !empty($contentsPositions)
-                                 && !is_null($categoryID);
+                                 && !is_null($categoryID)
+                                 && !is_null($lastVersion);
 
             if ($validReceivedData) {
-
-                $contents = array();
-                // Iterate over each element and populate its element to save.
                 foreach ($contentsPositions as $params) {
-                    if (
-                        !isset($categoryID) || !isset($params['placeholder'])
-                        || !isset($params['position']) || !isset($params['content_type'])
+                    if (!isset($params['id'])
+                        || !isset($params['placeholder'])
+                        || !isset($params['position'])
+                        || !isset($params['content_type'])
                         || strpos('placeholder', $params['placeholder'])
                     ) {
-                        continue;
+                        $validReceivedData = false;
+                        break;
                     }
+                }
+            }
+
+            if ($validReceivedData) {
+                $contents = array();
+                // Iterate over each element and fetch its parameters to save.
+                foreach ($contentsPositions as $params) {
                     $contents[] = array(
                         'id'           => $params['id'],
                         'category'     => $categoryID,
@@ -205,6 +204,7 @@ class FrontpagesController extends Controller
                 $savedProperly = \ContentManager::saveContentPositionsForHomePage($categoryID, $contents);
             }
 
+            // Clean caches
             $tcacheManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
             $tcacheManager->delete($category . '|RSS');
             $tcacheManager->delete($category . '|0');
@@ -213,7 +213,7 @@ class FrontpagesController extends Controller
             $logger = \Application::getLogger();
             $logger->notice(
                 'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed'
-                .' action Frontpage save positions at '.$section.' Ids '.json_encode($contentsPositions)
+                .' action Frontpage save positions at category '.$categoryID.' Ids '.json_encode($contentsPositions)
             );
         }
 

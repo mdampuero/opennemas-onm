@@ -449,6 +449,8 @@ jQuery(function($) {
         var category = $('#frontpagemanager').data('category');
         var new_version_available = check_available_new_version(false);
 
+        console.log(frontpage_info.last_saved)
+
         // If there is a new version available for this frontpage avoid to save
         if (new_version_available) {
             $('#modal-new-version').modal('show');
@@ -458,7 +460,7 @@ jQuery(function($) {
                 async: false,
                 type: 'POST',
                 dataType: 'json',
-                data: { 'contents_positions': els },
+                data: { 'contents_positions': els, 'last_version': frontpage_info.last_saved },
                 success: function(data) {
                     $('#warnings-validation').html(
                         "<div class='alert alert-success'>" +
