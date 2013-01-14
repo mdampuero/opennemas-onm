@@ -52,7 +52,7 @@ $loader = new Symfony\Component\ClassLoader\UniversalClassLoader();
 // Registering namespaces
 $loader->registerNamespaces(
     array(
-        'Onm'                                   => __DIR__.'/../vendor',
+        'Onm' => __DIR__.'/../vendor',
     )
 );
 

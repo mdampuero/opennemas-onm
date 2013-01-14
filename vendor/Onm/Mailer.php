@@ -8,6 +8,7 @@
  * file that was distributed with this source code.
  **/
 namespace Onm;
+
 /**
 * Mailer
 */
@@ -16,68 +17,30 @@ class Mailer
 
     public function __construct($mailerParameters)
     {
-        // Get smarty instance
-
-        // Get underlying mailer service
-        require SITE_VENDOR_PATH."/phpmailer/class.phpmailer.php";
-        $this->mailer = new \PHPMailer();
-        $this->mailer->SetLanguage('es');
-        $this->mailer->IsSMTP();
-        $this->mailer->Host = $mailerParameters['host'];
-        if (!empty($mailerParameters['username'])
-            && !empty($mailerParameters['password'])
-        ) {
-            $this->mailer->SMTPAuth = true;
-        } else {
-            $this->mailer->SMTPAuth = false;
+        // Create the Transport
+        if ($mailerParameters['transport'] == 'smtp') {
+            $transport = \Swift_SmtpTransport::newInstance($mailerParameters['host'], 25)
+              ->setUsername($mailerParameters['username'])
+              ->setPassword($mailerParameters['password']);
+        } elseif ($mailerParameters['transport'] == 'sendmail') {
+            $transport = \Swift_SendmailTransport::newInstance('/usr/sbin/sendmail -bs');
+        } elseif ($mailerParameters['transport'] == 'mail') {
+            $transport = \Swift_MailTransport::newInstance();
         }
 
-        $this->mailer->CharSet = 'utf-8';
-
-        $this->mailer->Username = $mailerParameters['username'];
-        $this->mailer->Password = $mailerParameters['password'];
+        // Create the Mailer using your created Transport
+        $this->mailer = \Swift_Mailer::newInstance($transport);
 
         return $this;
     }
 
     /**
-     * Generates and sends a mail to a set of addressses given a set of parameters
+     * Redirects all the calls to the Swift_Mailer call
      *
-     * @param array $mailerParameters the parameters for sending the email
-     *
-     * @return Mailer the mailer instance
-     * @throws Exception If any problem raises while sending the email.
+     * @return void
      **/
-    public function send($mailerParameters = array())
+    public function __call($method, $params)
     {
-        if (!(count($mailerParameters) > 0)) {
-            throw new \Exception('Please provide the necessary parameters for send the mail.');
-        }
-
-        // Inject values by $mailerParameters array
-        $this->mailer->From     = $mailerParameters['mail_from'];
-        $this->mailer->FromName = $mailerParameters['mail_from_name'];
-        $this->mailer->IsHTML(true);
-        $this->HTML = $htmlcontent;
-
-        $this->mailer->AddAddress($mailbox->email, $mailbox->name);
-
-        $subject = (!isset($mailerParameters['subject']))? '[Xornal]': $mailerParameters['subject'];
-        $this->mailer->Subject  = $subject;
-
-        // TODO: crear un filtro
-        $this->HTML = preg_replace('/(>[^<"]*)["]+([^<"]*<)/', "$1&#34;$2", $this->HTML);
-        $this->HTML = preg_replace("/(>[^<']*)[']+([^<']*<)/", "$1&#39;$2", $this->HTML);
-        $this->HTML = str_replace('“', '&#8220;', $this->HTML);
-        $this->HTML = str_replace('”', '&#8221;', $this->HTML);
-        $this->HTML = str_replace('‘', '&#8216;', $this->HTML);
-        $this->HTML = str_replace('’', '&#8217;', $this->HTML);
-
-        $this->mailer->Body = $this->HTML;
-
-        if (!$this->mailer->Send()) {
-            throw new \Exception("Error en el envío del mensaje ".$this->mailer->ErrorInfo);
-        }
-        return $this;
+        return call_user_func_array(array($this->mailer, $method), $params);
     }
 }

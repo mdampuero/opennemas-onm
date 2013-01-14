@@ -102,6 +102,49 @@ class PlaygroundController extends Controller
     public function logger(Request $request)
     {
 
+        $logger = $this->get('logger');
+
+        $logger->notice('texto de prueba');
+
+        var_dump($logger);
+    }
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     **/
+    public function mailer(Request $request)
+    {
+        // Pass it as a parameter when you create the message
+        $message = \Swift_Message::newInstance('Subject here', 'My amazing body');
+
+        $message->setFrom('fran@openhost.es');
+
+        // Or set it after like this
+        $message->setBody('My <em>amazing</em> body', 'text/html');
+
+        // Add alternative parts with addPart()
+        $message->addPart('My amazing body in plain text', 'text/plain');
+
+        $message->setTo(array('fran@openhost.es' => 'Fran Dieguez',));
+
+        // var_dump($message);die();
+
+        $mailer = $this->get('mailer');
+
+        $mailer->send($message);
+
+        var_dump($mailer);
+    }
+
+    /**
+     * Tests for session in container
+     *
+     * @return void
+     **/
+    public function session(Request $request)
+    {
         $session = $this->get('session');
         $session->start();
         $this->get('session')->setFlash(
@@ -109,22 +152,8 @@ class PlaygroundController extends Controller
             'Your changes were saved!'
         );
 
-
-
-
-        var_dump($_SESSION);
-
-foreach ($session->getFlashBag()->get('notice', array()) as $message) {
+        foreach ($session->getFlashBag()->get('notice', array()) as $message) {
             echo "<div class='flash-notice'>$message</div>";
         }
-
-        var_dump($_SESSION);die();
-        $logger = $this->get('logger');
-
-        $output = $logger->notice('error test');
-
-        var_dump($output);
-        die();
-
     }
 }
