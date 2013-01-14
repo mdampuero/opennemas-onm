@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  **/
-namespace Framework\Commands;
+namespace Framework\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -42,7 +42,15 @@ class ServerCommand extends Command
                 'verbose',
                 InputOption::VALUE_REQUIRED,
                 'The base domain where listen for requests from',
-                'localhost'
+                false
+            )
+            ->setHelp(
+                <<<EOF
+The <info>server</info> starts a PHP built-in server.
+
+<info>php app/console server --port=10 --domain=localhost -v</info>
+
+EOF
             );
     }
 

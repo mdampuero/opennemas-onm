@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  **/
-namespace Framework\Commands;
+namespace Framework\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -22,8 +22,16 @@ class DeployCommand extends Command
     {
         $this
             ->setName('app:deploy')
-            ->setDescription('Deploys the application to the latest version');
-        ;
+            ->setDescription('Deploys the application to the latest version')
+            ->setHelp(
+                <<<EOF
+The <info>app:deploy</info> checks out the latest code for core and templates.
+And updates all library dependencies in vendor/.
+
+<info>php app/console app:deploy</info>
+
+EOF
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

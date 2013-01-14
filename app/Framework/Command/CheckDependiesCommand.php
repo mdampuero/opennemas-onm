@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  **/
-namespace Framework\Commands;
+namespace Framework\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -27,6 +27,15 @@ class CheckDependiesCommand extends Command
                 null,
                 InputOption::VALUE_NONE,
                 'If set, the task will output in html format'
+            )
+            ->setHelp(
+                <<<EOF
+The <info>framework:check-dependencies</info> checks if all the required dependencies
+are fulfilled for executing the onm application.
+
+<info>php app/console framework:check-dependencies</info>
+
+EOF
             );
     }
 

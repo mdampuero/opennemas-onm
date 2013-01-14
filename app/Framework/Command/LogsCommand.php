@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  **/
-namespace Framework\Commands;
+namespace Framework\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -21,7 +21,15 @@ class LogsCommand extends Command
     {
         $this
             ->setName('clean:logs')
-            ->setDescription('Removes all the log files');
+            ->setDescription('Removes all the log files')
+            ->setHelp(
+                <<<EOF
+The <info>clean:logs</info> removes all the files from the tmp/logs directory.
+
+<info>php app/console clean:logs</info>
+
+EOF
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

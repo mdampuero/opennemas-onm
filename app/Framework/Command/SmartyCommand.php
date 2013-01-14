@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  **/
-namespace Framework\Commands;
+namespace Framework\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -21,8 +21,7 @@ class SmartyCommand extends Command
     {
         $this
             ->setName('clean:smarty-cache')
-            ->setDescription('Cleans the smarty cache and compile files')
-        ;
+            ->setDescription('Cleans the smarty cache and compile files');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
