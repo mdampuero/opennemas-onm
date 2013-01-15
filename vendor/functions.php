@@ -115,8 +115,8 @@ function getUserRealIP()
                 $foundIP = preg_replace($privateIp, $clientIp, $ipList[1]);
 
                 if ($clientIp != $foundIP) {
-                   $clientIp = $foundIP;
-                   break;
+                    $clientIp = $foundIP;
+                    break;
                 }
             }
         }
@@ -138,13 +138,15 @@ function getUserRealIP()
  *
  * @return void
  **/
-function logContentEvent($action = NULL, $content = NULL)
+function logContentEvent($action=NULL, $content=NULL)
 {
     $logger = Application::getLogger();
 
     $msg = 'User '.$_SESSION['username'].'(ID:'.$_SESSION['userid'].') has executed '
     .'the action '.$action;
-    if(!empty($content)){ $msg.=' at '.get_class($content).' (ID:'.$content->id.')';}
+    if (!empty($content)) {
+        $msg.=' at '.get_class($content).' (ID:'.$content->id.')';
+    }
 
     $logger->notice( $msg );
 }
