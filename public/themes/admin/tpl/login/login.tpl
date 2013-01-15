@@ -23,13 +23,6 @@
         {css_tag href="/loginadmin.css" media="screen" common=1}
     {/block}
 
-    {block name="footer-js"}
-        {script_tag src="/jquery/jquery.min.js" common=1}
-        {script_tag src="/libs/bootstrap.js" common=1}
-        {script_tag src="/libs/modernizr.min.js" common=1}
-        {script_tag src="/admin.js"}
-    {/block}
-
 </head>
 <body id="loginpage">
 
@@ -74,10 +67,17 @@
             </div>
         </div>
     </footer>
-    <script type="text/javascript">
-    jQuery(document).ready(function($) {
-        LoginAdmin.init()
-    });
-    </script>
+
+    {block name="footer-js"}
+        {script_tag src="/jquery/jquery.min.js" common=1}
+        {script_tag src="/libs/bootstrap.js" common=1}
+        {script_tag src="/libs/modernizr.min.js" common=1}
+        {script_tag src="/admin.js"}
+        <script type="text/javascript">
+        jQuery(document).ready(function($) {
+            LoginAdmin.init()
+        });
+        </script>
+    {/block}
 </body>
 </html>
