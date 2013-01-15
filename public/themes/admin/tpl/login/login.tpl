@@ -9,7 +9,7 @@
 
     <meta name="author"    content="OpenHost,SL">
     <meta name="generator" content="OpenNemas - News Management System">
-    <meta name="viewport"  content="width=device-width,initial-scale=1">
+    <meta name="viewport"  content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="robots" content="noindex, nofollow" />
     <meta name="description" content="OpenNeMaS - An specialized CMS focused in journalism." />
     <meta name="keywords" content="CMS, Opennemas, OpenHost, journalism" />
@@ -21,16 +21,16 @@
     {/block}
 
     {block name="header-css"}
-        {css_tag href="/bp/screen.css" media="screen, projection"}
-        {css_tag href="/style.css" media="screen, projection"}
-        {css_tag href="/loginadmin.css"}
-        <!--[if lt IE 8]{css_tag href="/bp/ie.css" media="screen, projection"}[endif]-->
+        {css_tag href="/bp/screen.css" media="screen" common=1}
+        {css_tag href="/style.css" media="screen"}
+        {css_tag href="/loginadmin.css" media="screen" common=1}
+        <!--[if lt IE 8]{css_tag href="/bp/ie.css" media="screen"}[endif]-->
     {/block}
 
 
     {block name="js-library"}
-        {script_tag src="/jquery/jquery.min.js"}
-        {script_tag src="/jquery/jquery-ui.custom.min.js"}
+        {script_tag src="/jquery/jquery.min.js" common=1}
+        {script_tag src="/jquery/jquery-ui.custom.min.js" common=1}
         <script type="text/javascript">
             jQuery(document).ready(function ($){
                 jQuery.noConflict();
@@ -63,29 +63,24 @@
 				</div>
 				{/if}
 
-				<div class="span-16 last">
-					<div class="span-8">
-						<label for="user_login">{t}User name:{/t}</label>
-					</div>
-					<div class="span-8 last">
-						<label for="password">{t}Password:{/t}</label>
-					</div>
-				</div>
+				<div class="form-wrapper">
+                    <div class="span-16 inputs last">
+                        <div class="span-7 append-1">
+                            <label for="user_login">{t}User name{/t}</label>
+                            <input name="login" id="user_login" type="text" tabindex="1" value="{$smarty.cookies.login_username|default:""}" autofocus>
+                        </div>
+                        <div class="span-7 last">
+                            <label for="password">{t}Password{/t}</label>
+                            <input type="password" name="password" id="password" tabindex="2" value="{$smarty.cookies.login_password|default:""}">
+                        </div>
+                    </div>
 
-				<div class="span-16 last">
-					<div class="span-7 append-1">
-						<input name="login" id="user_login" type="text" tabindex="1" value="{$smarty.cookies.login_username|default:""}" autofocus>
-					</div>
-					<div class="span-7 last">
-						<input type="password" name="password" id="password" tabindex="2" value="{$smarty.cookies.login_password|default:""}">
-					</div>
-				</div>
-
-				<div class="span-16 last clearfix submit-remember-block">
-					<div class="span-16 last right">
-						<button id="submit-button" type="submit" tabindex="4" class="onm-button blue"><span>{t}Enter{/t}</span></button>
-					</div>
-				</div>
+                    <div class="span-16 last clearfix submit-remember-block">
+                        <div class="span-16 last right">
+                            <button id="submit-button" type="submit" tabindex="4" class="onm-button blue"><span>{t}Enter{/t}</span></button>
+                        </div>
+                    </div>
+                </div>
 			</div>
 			<input type="hidden" id="action" name="action" value="login">
             <input type="hidden" name="token" value="{$smarty.session.csrf}">
@@ -97,8 +92,8 @@
 
     <footer>
         <nav class="left">
+            &copy; {strftime("%Y")} OpenHost S.L.
             <ul>
-                <li>&copy; {strftime("%Y")} OpenHost S.L.</li>
                 {foreach from=$languages key=key item=language}
                     <li>
                         <a href="?language={$key}" title="{$language}" {if $key == $current_language}class="active"{/if}>{$language}</a>

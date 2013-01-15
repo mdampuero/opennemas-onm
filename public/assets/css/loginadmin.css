@@ -132,3 +132,108 @@ footer nav a, footer nav a:active {
 	-moz-transition: color 0.3s ease 0s;
 }
 footer nav a:hover, footer nav a.active { color:White !important; }
+
+
+/* Media Queries for iPhone Portrait */
+@media only screen and (max-width:479px)  {
+	body {
+		background-image:none !important;
+	}
+	#loginpage {
+		margin-top:0px;
+	}
+
+	#logo {
+		margin:0 auto;
+		background:White;
+		margin-top:0px;
+		padding:30px 0;
+	}
+	.span-16, .span-7 {
+		display:block;
+		width:100%;
+	}
+	.form-wrapper {
+		padding:10px;
+		margin:0 auto;
+	}
+	.form-wrapper input, .form-wrapper button {
+		width:90%;
+		margin-bottom:10px;
+	}
+	.form-wrapper button {
+		padding:10px;
+		width:97%
+	}
+	footer {
+		height:auto;
+		position:relative;
+		margin-top:30px;
+	}
+	footer nav.left, footer nav.right {
+		float:none;
+		text-align:center;
+		right:none;
+		left:none;
+	}
+	footer nav {
+		width:100%;
+		bottom:none;
+		position:relative;
+	}
+	footer nav li {
+		display:inline-block;
+	}
+	footer nav.right, footer nav.left {
+		float:none !important;
+	}
+	footer nav ul {
+		display:block;
+	}
+}
+/* Media Queries for iPhone Landscap CSS */
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+	body {
+		background-image:none !important;
+	}
+	#loginpage {
+		margin-top:0px;
+	}
+
+	#logo {
+		margin:0 auto;
+		background:White;
+		margin-top:0px;
+		padding:30px 0;
+	}
+	.form-wrapper {
+		padding:10px;
+		margin:0 auto;
+	}
+	.form-wrapper input, .form-wrapper button {
+		width:90%;
+		margin-bottom:10px;
+	}
+	.form-wrapper button {
+		padding:10px;
+		width:97%
+	}
+	.span-16, .span-7 {
+		display:block;
+		width:100%;
+	}
+}
+/* Media Queries for iPad Portrait */
+@media only screen and (min-width: 768px) and (max-width: 799px) {
+
+	body {
+		background:yellow
+	}
+}
+/*Media Queries for Normal */
+@media only screen and (min-width: 1024px) and (max-width: 1200px) {
+
+	body {
+		background:purple
+	}
+}
