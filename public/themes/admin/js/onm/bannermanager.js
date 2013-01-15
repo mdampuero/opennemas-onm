@@ -4,10 +4,14 @@ jQuery(document).ready(function($) {
             $('#script_content').show();
             $('#normal_content').hide();
             $('#hide_flash').hide();
+            $('#div_url1').hide();
+            $('#url').removeAttr('required');
         } else {
             $('#normal_content').show();
             $('#script_content').hide();
             $('#hide_flash').show();
+            $('#div_url1').show();
+            $('#url').attr('required', 'required');
         }
     });
 
