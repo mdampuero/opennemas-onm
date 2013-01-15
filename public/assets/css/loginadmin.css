@@ -1,35 +1,21 @@
-.clearfix:after
-{
-		content: ".";
-		display: block;
-		clear: both;
-		visibility: hidden;
-		line-height: 0;
-		height: 0;
+html,
+body {
+	height: 100%;
+	padding:0;
+	margin:0
 }
 
-.clearfix
-{
-		display: inline-block;
-}
-
-html[xmlns] .clearfix
-{
-		display: block;
-}
-
-* html .clearfix
-{
-		height: 1%;
-}
-html {
-	background:none !important;
-	overflow-y: visible !important;
+body {
+	background:#1a1a1a ;
+	color:White;
 }
 
 #logo {
-	margin:220px auto;
-	margin-bottom:40px;
+	margin:0 auto;
+	background:White;
+	margin-top:0;
+	padding:60px 0;
+	margin-bottom:20px;
 	text-align:center;
 }
 #logo h1 {
@@ -48,192 +34,86 @@ html {
 	color:#777;
 }
 
-body {
-	background:#1a1a1a url('../images/backgrounds/a_auth_body_bg.jpg') top left repeat-x !important;
-	color:White;
-	font-family:Ubuntu,Arial;
-}
-
-#content-wrapper {
-	margin:0 auto;
-	float:none !important;
-}
-
-label {
-	text-transform:uppercase
-}
-
-input[type="text"],
-input[type="password"]{
-	width:100%;
-	border:0px;
-	padding:10px !important;
-	border-radius:3px;
-}
-
-input[type="checkbox"] {
-	margin-left:0px;
-	vertical-align:middle;
-}
-
-.left { text-align:left; }
-.right { text-align:right; }
-
 footer {
 	width:100%;
-	height:30px;
 	vertical-align:middle;
-	text-align:right;
 	position:absolute;
 	bottom:0px;
 	left:0px;
-}
-
-div.submit-remember-block {
-	padding-top:10px;
-}
-button {
-	border:none;
-	margin-right:20px;
-}
-
-#login-wrapper {
-	margin:0 auto;
-	display:block;
-	float:none !important;
-}
-
-footer {
 	text-align:left;
 	font-size:11px;
+	padding-bottom:10px;
 }
 footer nav {
-	position:absolute;
-	width:30%;
-	bottom:15px;
-}
-footer nav.right {
-	right:15px;
-	text-align:right;
-}
-footer nav.left {
-	left:15px;
+	display:inline-block;
+	width:auto;
 }
 footer nav ul { margin:0; padding:0; }
 footer nav ul li {
 	display:inline-block;
 	color: #555;
 }
-footer nav a, footer nav a:active {
+footer nav a, footer nav a:focus {
 	color: #666 !important;
 	text-decoration:none;
 	outline:none;
-	padding:0px 6px !important;
+	padding:0px 3px !important;
 	-moz-transition: color 0.3s ease 0s;
 }
 footer nav a:hover, footer nav a.active { color:White !important; }
+footer select {
+	background:none;
+	border:none;
+	color: #555;
+	border-radius:2px;
+	text-align:center
+}
 
+.form-wrapper {
+	max-width:450px;
+	margin:0 auto
+}
 
-/* Media Queries for iPhone Portrait */
-@media only screen and (max-width:479px)  {
-	body {
-		background-image:none !important;
-	}
+.form-wrapper input {
+	margin-bottom:10px;
+	margin:10 -20px;
+	padding:6px 10px;
+	display:inline-block
+}
+.form-wrapper button[type=submit] {
+	float:right;
+	max-width:100px;
+}
+
+/* Media Queries for iPhone Portrait and Landscape */
+@media only screen and (max-width: 767px)  {
 	#loginpage {
 		margin-top:0px;
-	}
-
-	#logo {
-		margin:0 auto;
-		background:White;
-		margin-top:0px;
-		padding:30px 0;
-	}
-	.span-16, .span-7 {
-		display:block;
-		width:100%;
-	}
-	.form-wrapper {
-		padding:10px;
-		margin:0 auto;
-	}
-	.form-wrapper input, .form-wrapper button {
-		width:90%;
-		margin-bottom:10px;
-	}
-	.form-wrapper button {
-		padding:10px;
-		width:97%
 	}
 	footer {
-		height:auto;
-		position:relative;
-		margin-top:30px;
+		text-align:center !important;
 	}
-	footer nav.left, footer nav.right {
-		float:none;
-		text-align:center;
-		right:none;
-		left:none;
-	}
-	footer nav {
-		width:100%;
-		bottom:none;
-		position:relative;
-	}
-	footer nav li {
-		display:inline-block;
-	}
-	footer nav.right, footer nav.left {
-		float:none !important;
-	}
-	footer nav ul {
-		display:block;
-	}
-}
-/* Media Queries for iPhone Landscap CSS */
-@media only screen and (min-width: 480px) and (max-width: 767px) {
-	body {
-		background-image:none !important;
-	}
-	#loginpage {
-		margin-top:0px;
-	}
-
-	#logo {
-		margin:0 auto;
-		background:White;
-		margin-top:0px;
-		padding:30px 0;
+	.alert .close {
+		display: none;
 	}
 	.form-wrapper {
 		padding:10px;
-		margin:0 auto;
+		padding-top:0px;
 	}
+
 	.form-wrapper input, .form-wrapper button {
-		width:90%;
-		margin-bottom:10px;
+		width:91% !important;
 	}
-	.form-wrapper button {
-		padding:10px;
-		width:97%
-	}
-	.span-16, .span-7 {
-		display:block;
-		width:100%;
+
+	.form-wrapper button[type=submit] {
+		width:99% !important;
+		float:none;
+		max-width:100%;
 	}
 }
-/* Media Queries for iPad Portrait */
-@media only screen and (min-width: 768px) and (max-width: 799px) {
-
-	body {
-		background:yellow
-	}
-}
-/*Media Queries for Normal */
-@media only screen and (min-width: 1024px) and (max-width: 1200px) {
-
-	body {
-		background:purple
+/* Media Queries for iPad Portrait and Laptop */
+@media only screen and (min-width: 768px)  (max-width: 1200px) {
+	.form-wrapper input, .form-wrapper button {
+		width:200px;
 	}
 }

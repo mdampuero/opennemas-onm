@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
+use Onm\Message as m;
 
 /**
  * Handles all the request for Welcome actions
@@ -32,6 +33,7 @@ class AuthenticationController extends Controller
         // Setup view
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
         $this->view->assign('version', \Onm\Common\Version::VERSION);
+        $this->view->assign('languages', $this->container->getParameter('available_languages'));
     }
 
     /**
@@ -44,13 +46,11 @@ class AuthenticationController extends Controller
         $token = md5(uniqid(mt_rand(), true));
 
         $_SESSION['csrf'] = $token;
-        $languages        = $this->container->getParameter('available_languages');
         $currentLanguage  = \Application::$language;
 
         return $this->render(
             'login/login.tpl',
             array(
-                'languages'        => $languages,
                 'current_language' => $currentLanguage,
                 'token'            => $token,
             )
@@ -76,10 +76,8 @@ class AuthenticationController extends Controller
         if (array_key_exists('csrf', $_SESSION)
             && $_SESSION['csrf'] !== $token
         ) {
-            $this->view->assign(
-                'message',
-                _('Login token is not valid. Try to autenticate again.')
-            );
+            m::add(_('Login token is not valid. Try to autenticate again.'), m::ERROR);
+            return $this->redirect($this->generateUrl('admin_login_form'));
         } else {
             // Try to autenticate the user
             if ($user->login($login, $password, $token, $captcha)
@@ -88,7 +86,8 @@ class AuthenticationController extends Controller
 
                 // Check if user account is activated
                 if ($user->authorize != 1) {
-                    $this->view->assign('message', _('This user was deactivated. Please ask your administrator.'));
+                    m::add(_('This user was deactivated. Please ask your administrator.'), m::ERROR);
+                    return $this->redirect($this->generateUrl('admin_login_form'));
                 } else {
                     // Increase security by regenerating the id
                     $request->getSession()->migrate();
@@ -120,8 +119,8 @@ class AuthenticationController extends Controller
                 }
 
             } else {
-                $message = _('Username or password incorrect.');
-                $this->view->assign('message', $message);
+                m::add(_('Username or password incorrect.'), m::ERROR);
+                return $this->redirect($this->generateUrl('admin_login_form'));
             }
         }
         $token = md5(uniqid(mt_rand(), true));
