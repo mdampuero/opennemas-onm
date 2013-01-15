@@ -77,7 +77,7 @@ class Application
 
         // Composite Logger (file + mail)
         // http://www.indelible.org/php/Log/guide.html#composite-handlers
-        if ( s::get('log_enabled') == 'on') {
+        if (s::get('log_enabled') == 'on') {
             $GLOBALS['application']->logger = \Log::singleton('composite');
 
             $conf = array('mode' => 0600,

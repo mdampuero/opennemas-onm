@@ -75,7 +75,7 @@
         {script_tag src="/admin.js"}
         <script type="text/javascript">
         jQuery(document).ready(function($) {
-            LoginAdmin.init()
+            BackendAuthentication.init()
         });
         </script>
     {/block}

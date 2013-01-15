@@ -1,4 +1,4 @@
-var LoginAdmin = {
+var BackendAuthentication = {
 
     init: function () {
         var logo = $('#logo');
@@ -8,9 +8,9 @@ var LoginAdmin = {
             document.location.href = '?language='+$(this).find('option:selected').val();
         });
 
-        LoginAdmin.redrawLogo(logo);
+        parent.redrawLogo(logo);
         $(window).resize(function() {
-            LoginAdmin.redrawLogo(logo);
+            parent.redrawLogo(logo);
         });
     },
 
