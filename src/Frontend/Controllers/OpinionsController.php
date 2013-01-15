@@ -334,7 +334,7 @@ class OpinionsController extends Controller
             //Check slug
             if (empty($slug) || ($opinion->slug != $slug)
                 || ($opinion->author_name_slug != $author_name)) {
-                Application::forward301(SITE_URL.$opinion->uri);
+                $this->redirect(SITE_URL.$opinion->uri);
             }
             */
 

@@ -110,7 +110,7 @@ class Bootstrap extends ModuleBootstrap
         /* Set internal character encoding to UTF-8 */
         mb_internal_encoding("UTF-8");
 
-        $availableLanguages = \Application::getAvailableLanguages();
+        $availableLanguages = $this->container->getParameter('available_languages');
         $forceLanguage = filter_input(INPUT_GET, 'language', FILTER_SANITIZE_STRING);
 
         if ($forceLanguage !== null

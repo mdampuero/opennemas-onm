@@ -29,10 +29,6 @@ class Application
     /**
     * Setup the Application instance and assigns it to a global variable
     *
-    * If global variable application doesn't exists create an instance of it,
-    * and setup up DB conection, Adodb logger instance, Workflow
-    * logger instance,
-    *
     * @return object $GLOBALS['application']
     */
     public static function load()
@@ -50,9 +46,6 @@ class Application
 
                 // Setting up Logger
                 self::initLogger();
-
-                // Setting up Gettext
-                self::initL10nSystem();
 
                 self::initTimeZone();
             }
@@ -103,57 +96,16 @@ class Application
     }
 
     /**
-     * Set up gettext translations.
-     */
-    public static function initL10nSystem()
-    {
-        $timezone = s::get('time_zone');
-        if (isset($timezone)) {
-            $availableTimezones = \DateTimeZone::listIdentifiers();
-            date_default_timezone_set($availableTimezones[$timezone]);
-        }
-
-        /* Set internal character encoding to UTF-8 */
-        mb_internal_encoding("UTF-8");
-
-        if (!self::isBackend()) {
-            $availableLanguages = self::getAvailableLanguages();
-            $forceLanguage = filter_input(INPUT_GET, 'language', FILTER_SANITIZE_STRING);
-
-            if ($forceLanguage !== null
-                && in_array($forceLanguage, array_keys($availableLanguages))
-            ) {
-                self::$language = $forceLanguage;
-            } else {
-                self::$language = s::get('site_language');
-            }
-
-            $locale = self::$language.".UTF-8";
-            $domain = 'messages';
-
-            $localeDir = realpath(SRC_PATH.'/Frontend/Resources/locale/');
-
-            if (isset($_GET["locale"])) {
-                $locale = $_GET["locale"].'.UTF-8';
-            }
-
-            putenv("LC_MESSAGES=$locale");
-            setlocale(LC_ALL, $locale);
-            bindtextdomain($domain, $localeDir);
-            textdomain($domain);
-        }
-    }
-
-    /**
      * Sets the timezone for this app from the instance settings
      *
      * @return void
      **/
     public static function initTimeZone()
     {
-        if ($timezone = s::get('time_zone')) {
-            $availableTimeZones = \DateTimeZone::listIdentifiers();
-            date_default_timezone_set($availableTimeZones[(int) $timezone]);
+        $timezone = s::get('time_zone');
+        if (isset($timezone)) {
+            $availableTimezones = \DateTimeZone::listIdentifiers();
+            date_default_timezone_set($availableTimezones[$timezone]);
         }
     }
 
@@ -175,21 +127,6 @@ class Application
             ini_set('expose_php', 'off');
         }
         ini_set('apc.slam_defense', '0');
-    }
-
-    // TODO: move to a separated file called functions.php
-    /**
-     * Returns the available languages
-     *
-     * @return array the list of languages
-     **/
-    public static function getAvailableLanguages()
-    {
-        return array(
-            'en_US' => "English",
-            'es_ES' => "Español",
-            'gl_ES' => "Galego"
-        );
     }
 
     /**
@@ -234,20 +171,6 @@ class Application
     }
 
     // TODO: move to a separated file called functions.php
-    /**
-    * Raise an HTTP redirection to given url
-    *
-    * Use the header PHP function to redirect browser to another page
-    *
-    * @param string $url the url to redirect to
-    */
-    public static function forward($url)
-    {
-        header("Location: ".$url);
-        exit(0);
-    }
-
-    // TODO: move to a separated file called functions.php
     // TODO: rename the function to isMobile()
     /**
      * Detect a mobile device and redirect to mobile version
@@ -277,7 +200,8 @@ class Application
             && !(isset($_COOKIE['confirm_mobile']))
         ) {
             if ($autoRedirect) {
-                Application::forward('/mobile' . $_SERVER['REQUEST_URI']);
+                header("Location: ".'/mobile' . $_SERVER['REQUEST_URI']);
+                exit(0);
             } else {
                 $isMobileDevice = true;
             }
@@ -286,18 +210,6 @@ class Application
         return $isMobileDevice;
     }
 
-    // TODO: move to a separated file called functions.php
-    /**
-     * Check if current request is from backend
-     *
-     * Checks if the current URI requrested belongs to admin panel
-     *
-     * @return boolean true if request is from backend
-    */
-    public static function isBackend()
-    {
-        return strncasecmp($_SERVER['REQUEST_URI'], '/admin/', 7) === 0;
-    }
 
     /**
     * Perform a permanently redirection (301)
@@ -313,25 +225,9 @@ class Application
         exit(0);
     }
 
-    // TODO: move to a separated file called functions.php
     /**
-    * Wrapper to output content to AJAX requests
-    *
-    * @param string $htmlout, the content to output
-    * @return null
-    */
-    public static function ajaxOut($htmlout)
-    {
-        header("Cache-Control: no-cache");
-        header("Pragma: nocache");
-        echo $htmlout;
-        exit(0);
-    }
-
-    // TODO: move to a separated file called functions.php
-    /**
-    * Stablishes a cookie value in a secure way
-    */
+     * Stablishes a cookie value in a secure way
+     */
     public static function setCookieSecure($name, $value, $expires = 0, $domain = '/')
     {
         setcookie($name, $value, $expires, $domain, $_SERVER['SERVER_NAME'], isset($_SERVER['HTTPS']), true);
