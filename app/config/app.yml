@@ -23,6 +23,8 @@ parameters:
         host:      %mailer_host%
         username:  %mailer_user%
         password:  %mailer_password%
+        protocol:  %mailer_protocol%
+        port:      %mailer_port%
         spool:     { type: memory }
 
     # Cache Configuration

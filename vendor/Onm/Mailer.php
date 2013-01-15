@@ -14,26 +14,46 @@ namespace Onm;
 */
 class Mailer
 {
+    private $allowedServerEncriptions = array('ssl', 'tls');
+
+    private $defaultParams = array(
+        'transport'        => 'mail',
+        'username'         => '',
+        'password'         => '',
+        'port'             => 25,
+        'sendmail_command' => '/usr/sbin/sendmail -bs',
+        'protocol'         => 'none',
+    );
 
     public function __construct($mailerParameters)
     {
-        $this->defaultParams = array(
-            'transport'        => 'mail',
-            'username'         => '',
-            'password'         => '',
-            'port'             => 25,
-            'sendmail_command' => '/usr/sbin/sendmail -bs',
-        );
         $mailerParameters = array_merge($this->defaultParams, $mailerParameters);
 
         // Create the Transport
         if ($mailerParameters['transport'] == 'smtp') {
-            $transport = \Swift_SmtpTransport::newInstance($mailerParameters['host'], $mailerParameters['port'])
+            if (in_array($mailerParameters['protocol'], $this->allowedServerEncriptions)) {
+                // Use the smtp transport with encryption
+                $transport = \Swift_SmtpTransport::newInstance(
+                    $mailerParameters['host'],
+                    $mailerParameters['port'],
+                    $mailerParameters['protocol']
+                );
+            } else {
+                $transport = \Swift_SmtpTransport::newInstance(
+                    $mailerParameters['host'],
+                    $mailerParameters['port']
+                );
+            }
+
+            $transport
                 ->setUsername($mailerParameters['username'])
                 ->setPassword($mailerParameters['password']);
+
         } elseif ($mailerParameters['transport'] == 'sendmail') {
+            // Use the Sendmail transport
             $transport = \Swift_SendmailTransport::newInstance($mailerParameters['sendmail_command']);
         } elseif ($mailerParameters['transport'] == 'mail') {
+            // Use the php built-in mail function
             $transport = \Swift_MailTransport::newInstance();
         }
 
