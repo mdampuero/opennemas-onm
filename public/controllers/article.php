@@ -345,7 +345,10 @@ switch ($action) {
         require_once 'session_bootstrap.php';
         $token = $_SESSION['sendformtoken'] = md5(uniqid('sendform'));
 
-        $article = new Article($_REQUEST['article_id']);
+        $dirtyID   = $request->query->filter('article_id', '', FILTER_SANITIZE_STRING);
+        $articleID = Content::resolveID($dirtyID);
+        $article   = new Article($articleID);
+
         $tpl->assign('article', $article);
         $tpl->assign('article_id', $dirtyID);
 
@@ -392,8 +395,8 @@ switch ($action) {
 
         $tplMail->assign('destination', 'amig@,');
 
-        // Load permalink to embed into content
-        $article = new Article($articleID);
+        $articleID = $request->query->filter('article_id', '', FILTER_SANITIZE_STRING);
+        $article   = new Article($articleID);
 
         $tplMail->assign('mail', $mail);
         $tplMail->assign('article', $article);
