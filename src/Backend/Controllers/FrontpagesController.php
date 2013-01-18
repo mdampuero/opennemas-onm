@@ -155,6 +155,7 @@ class FrontpagesController extends Controller
 
         $savedProperly     = false;
         $validReceivedData = false;
+        $dataPositionsNotValid = false;
 
         $category = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
 
@@ -182,10 +183,13 @@ class FrontpagesController extends Controller
                         || strpos('placeholder', $params['placeholder'])
                     ) {
                         $validReceivedData = false;
+                        $dataPositionsNotValid = true;
                         break;
                     }
                 }
             }
+
+            $logger = \Application::getLogger();
 
             if ($validReceivedData) {
                 $contents = array();
@@ -202,19 +206,27 @@ class FrontpagesController extends Controller
 
                 // Save contents
                 $savedProperly = \ContentManager::saveContentPositionsForHomePage($categoryID, $contents);
+
+                /* Notice log of this action */
+                $logger->notice(
+                    'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed'
+                    .' action Frontpage save positions at category '.$categoryID.' Ids '.json_encode($contentsPositions)
+                );
+            } else {
+                $message = '';
+                if ($dataPositionsNotValid) {
+                    $message = '[data positions not valid]';
+                }
+                $logger->notice(
+                    'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') was failed '.$message.' to execute'
+                    .' action Frontpage save positions at category '.$categoryID.' Ids '.json_encode($contentsPositions)
+                );
             }
 
             // Clean caches
             $tcacheManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
             $tcacheManager->delete($category . '|RSS');
             $tcacheManager->delete($category . '|0');
-
-            /* Notice log of this action */
-            $logger = \Application::getLogger();
-            $logger->notice(
-                'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed'
-                .' action Frontpage save positions at category '.$categoryID.' Ids '.json_encode($contentsPositions)
-            );
         }
 
         // If this request is Ajax return properly formated result.
@@ -241,7 +253,7 @@ class FrontpagesController extends Controller
                 'message' => $errorMessage,
             );
 
-            $response = new Response(json_encode($responseData), 500);
+            $response = new Response(json_encode($responseData), 400);
         }
 
         return $response;
