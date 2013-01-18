@@ -17,8 +17,13 @@ function smarty_function_getProperty($params, &$smarty)
 
     $properties = explode(', ', $params['property']);
     $output = '';
+    $end='';
+
     if (is_array($properties)) {
-        $output = " style =\"";
+        if (!empty($params['style'])) {
+            $output = " style =\"";
+            $end = "\"";
+        }
         foreach ($properties as $key => $property) {
             $prop = $property."_".$category;
             $value = $item->getProperty($prop);
@@ -26,13 +31,12 @@ function smarty_function_getProperty($params, &$smarty)
                 if ($property == 'bgcolor') {
                     $output .= "background-color:{$value};";
                 } else {
-                    $output .= "{$property}:{$value};";
+                    $output .= "{$value};";
                 }
             }
         }
-        $output .= "\"";
     }
 
-    return $output;
+    return $output.$end;
 }
 

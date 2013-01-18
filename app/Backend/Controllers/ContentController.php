@@ -307,20 +307,16 @@ class ContentController extends Controller
      **/
     public function updatePropertyAction(Request $request)
     {
-        $id = (int) $request->query->getDigits('id', null);
+        $id = (int) $request->request->getDigits('id', null);
 
         if ($id > 0) {
             $content = new \Content($id);
-            $properties = $request->query->get('properties', null);
-
-            $properties = json_decode($properties);
+            $properties = $request->request->get('properties', null);
 
             if ($content->id != null && $properties != null) {
                 foreach ($properties as $name => $value) {
                     $content->setProperty($name, $value);
                 }
-
-
                 $code = 200;
                 $message = "Done {$id}:". serialize($properties)." \n";
             } else {

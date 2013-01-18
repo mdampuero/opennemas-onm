@@ -351,21 +351,51 @@ jQuery(function($) {
     $('#frontpagemanager').on('click', 'div.placeholder div.content-provider-element a.change-color', function(e) {
         var element = $(this).closest('.content-provider-element');
         var elementID = element.data('content-id');
+
         var modal = $('#modal-element-customize-content');
         modal.data('element-for-customize-content', element);
 
         modal.data('selected-for-customize-content', elementID);
 
-        modal.find('.modal-body span.color').html('<strong>' + element.find('.color').html() + '</strong>');
+
+        var title = element.data('title')
+
+        if (title['font-size'] !== undefined) {
+            console.log(title['font-size']);
+            var size = title['font-size'].substring(0,2);
+            modal.find('.modal-body #font-size option[value='+size+']').attr('selected', 'selected');
+        }
+        if (title['font-family'] !== undefined) {
+           modal.find('.modal-body #font-family').val(title['font-family']);
+        }
+        if (title['font-style'] !== undefined) {
+            modal.find('.modal-body #font-style').val(title['font-style']);
+        }
+        if (title['font-weight'] !== undefined) {
+            modal.find('.modal-body #font-style').val(title['font-weight']);
+        }
+        if (title['color'] !== undefined) {
+            modal.find('.modal-body .fontcolor span.simplecolorpicker').css('background-color', title['color']);
+            modal.find('.modal-body input#font-color').val(title['color']);
+        }
+
+        if (element.data('bg').length>0) {
+            var bgcolor = element.data('bg').substring(17,24);
+            modal.find('.modal-body .background span.simplecolorpicker').css('background-color', bgcolor);
+            modal.find('.modal-body input#bg-color').val(bgcolor);
+        }
         modal.modal('show');
         e.preventDefault();
     });
 
     $('#modal-element-customize-content').on('click', 'a.btn.yes', function(e, ui) {
+
         var elementID = $('#modal-element-customize-content').data('selected-for-customize-content');
+        var element = $('[data-content-id='+elementID+']');
         var url = frontpage_urls.customize_content;
 
         var titleValues = new Object();
+
         var keys = new Array();
         var fontFamilyValue = $('#font-family').val();
         var fontSizeValue   = $('#font-size').val();
@@ -387,33 +417,39 @@ jQuery(function($) {
             titleValues["color"] = fontColorValue;
             keys[3] = "color";
         }
+        if(fontStyleValue.length>0 && fontStyleValue!='Auto') {
+            titleValues["font-weight"] = fontStyleValue;
+            keys[2] = "font-weight";
+        }
 
         var jsonTitle = JSON.stringify(titleValues, keys);
         var properties = new Object();
-        var memberfilter = new Array();
-        var name = '';
-        if(jsonTitle.length>4) {
-            name = 'title_' + $('#frontpagemanager').data('category');
+
+        if(!$.isEmptyObject(titleValues)) {
+             var name = 'title_' + $('#frontpagemanager').data('category');
             properties[name] = jsonTitle;
-            memberfilter[0]  = name;
         }
+        var bgcolor =$('#bg-color').val();
+        if(bgcolor.length>0 && bgcolor !='#ffffff') {
 
-        if($('#bg-color').val().length>0 && fontColorValue!='#ffffff') {
-            name ='bgcolor_' + $('#frontpagemanager').data('category');
-            properties[name] = $('#bg-color').val();
-            memberfilter[1]  = name;
+            var name2='bgcolor_' + $('#frontpagemanager').data('category');
+            properties[name2] = bgcolor;
+
         }
-
-        var jsonProperties = JSON.stringify(properties, memberfilter, "\t");
-
+console.log(properties);
         if (elementID) {
+            $.ajax({
+                url:url,
+                type:'POST',
+                dataType: 'json',
+                data: { 'id': elementID, 'properties' : properties}
+            }).done(function(data) {
+                 $('#modal-element-customize-content').data('element-for-customize-content').animate({ 'backgroundColor': bgcolor },300);
+                  element.data('bg', 'background-color:'+bgcolor);
+                  element.data('title', jsonTitle);
 
-            $.get(
-                url,
-                { 'id': elementID, 'properties' : jsonProperties}
-            ).success(function(data) {
-                 $('#modal-element-customize-content').data('element-for-customize-content').animate({ 'backgroundColor': $('#bg-color').val() },300);
             }).error(function(data) {
+                //data.message
             });
         }
         $('#modal-element-customize-content').modal('hide');

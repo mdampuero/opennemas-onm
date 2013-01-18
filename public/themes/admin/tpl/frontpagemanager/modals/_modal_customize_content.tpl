@@ -1,4 +1,3 @@
-
 <div class="modal hide fade" id="modal-element-customize-content">
   <form id="customize-content">
     <div class="modal-header">
@@ -7,34 +6,34 @@
     </div>
     <div class="modal-body">
         <p>
-            <div class="controls">
+            <div class="controls background">
                 <label for="color" class="control-label">{t}Background Color{/t}</label>
                 <input type="text" id="bg-color" name="bg-color" value="{$category->color|default:$smarty.capture.websiteColor|trim}">
                 <select name="colorpicker-background">
-                    <option value="#ffffff">White</option>
-                    <option value="#e8edfa">Light Blue</option>
-                    <option value="#f1e5e5">Light Red</option>
-                    <option value="#ffe5d1">Light Orange</option>
-                    <option value="#ece5f1">Light purple</option>
-                    <option value="#e3f7e2">Light green</option>
-                    <option value="#fcfbdf">Light yellow</option>
-                    <option value="#7bd148">Green</option>
-                    <option value="#5484ed">Bold blue</option>
-                    <option value="#a4bdfc">Blue</option>
-                    <option value="#46d6db">Turquoise</option>
-                    <option value="#7ae7bf">Light green</option>
-                    <option value="#51b749">Bold green</option>
-                    <option value="#fbd75b">Yellow</option>
-                    <option value="#ffb878">Orange</option>
-                    <option value="#ff887c">Red</option>
-                    <option value="#dc2127">Bold red</option>
-                    <option value="#dbadff">Purple</option>
-                    <option value="#e1e1e1">Gray</option>
-                    <option value="#000000">Black</option>
-                    <option value="#fbd75b">Yellow</option>
-                    <option value="#ffb878">Orange</option>
-                    <option value="#ff887c">Red</option>
-                    <option value="#dc2127">Bold red</option>
+                    <option value="#ffffff">{t}White{/t}</option>
+                    <option value="#e8edfa">{t}Light Blue{/t}</option>
+                    <option value="#f1e5e5">{t}Light Red{/t}</option>
+                    <option value="#ffe5d1">{t}Light Orange{/t}</option>
+                    <option value="#ece5f1">{t}Light purple{/t}</option>
+                    <option value="#e3f7e2">{t}Light green{/t}</option>
+                    <option value="#fcfbdf">{t}Light yellow{/t}</option>
+                    <option value="#7bd148">{t}Green{/t}</option>
+                    <option value="#5484ed">{t}Bold blue{/t}</option>
+                    <option value="#a4bdfc">{t}Blue{/t}</option>
+                    <option value="#46d6db">{t}Turquoise{/t}</option>
+                    <option value="#7ae7bf">{t}Light green{/t}</option>
+                    <option value="#51b749">{t}Bold green{/t}</option>
+                    <option value="#fbd75b">{t}Yellow{/t}</option>
+                    <option value="#ffb878">{t}Orange{/t}</option>
+                    <option value="#ff887c">{t}Red{/t}</option>
+                    <option value="#dc2127">{t}Bold red{/t}</option>
+                    <option value="#dbadff">{t}Purple{/t}</option>
+                    <option value="#e1e1e1">{t}Gray{/t}</option>
+                    <option value="#000000">{t}Black{/t}</option>
+                    <option value="#fbd75b">{t}Yellow{/t}</option>
+                    <option value="#ffb878">{t}Orange{/t}</option>
+                    <option value="#ff887c">{t}Red{/t}</option>
+                    <option value="#dc2127">{t}Bold red{/t}</option>
                 </select>
             </div>
         </p>
@@ -51,7 +50,16 @@
         <p>
             <div class="controls">
                 <label for="font-style" class="control-label">{t}Title font style{/t}</label>
-                {assign var='availableStyle'  value=','|explode:"Auto,Italic,Bold,Normal"}
+                {assign var='availableStyle'  value=','|explode:"Auto,Italic,Oblique,Normal"}
+                <select id="font-style" name="font-style">
+                    {html_options values=$availableStyle output=$availableStyle selected=Auto}
+                </select>
+            </div>
+        </p>
+        <p>
+            <div class="controls">
+                <label for="font-style" class="control-label">{t}Title font weight{/t}</label>
+                {assign var='availableStyle'  value=','|explode:"Auto,bolder,bold,lighter,Normal"}
                 <select id="font-style" name="font-style">
                     {html_options values=$availableStyle output=$availableStyle selected=Auto}
                 </select>
@@ -63,39 +71,39 @@
                 {assign var='availableSizes'  value=','|explode:"12,14,16,18,20,22,24,26,28,30"}
                 <select id="font-size" name="font-size">
                    <option value="">Auto</option>
-                    {html_options values=$availableSizes output=$availableSizes selected=auto}
+                    {html_options values=$availableSizes output=$availableSizes selected=Auto}
                 </select>
 
             </div>
 
-            <div class="controls">
+            <div class="controls fontcolor">
                 <label for="font-color" class="control-label">{t}Title font color{/t}</label>
                 <input type="text" id="font-color" name="font-color" value="">
                 <select name="colorpicker-font">
-                  <option value="#000000">Black</option>
-                  <option value="#7bd148">Green</option>
-                  <option value="#5484ed">Bold blue</option>
-                  <option value="#a4bdfc">Blue</option>
-                  <option value="#46d6db">Turquoise</option>
-                  <option value="#7ae7bf">Light green</option>
-                  <option value="#51b749">Bold green</option>
-                  <option value="#fbd75b">Yellow</option>
-                  <option value="#ffb878">Orange</option>
-                  <option value="#ff887c">Red</option>
-                  <option value="#dc2127">Bold red</option>
-                  <option value="#dbadff">Purple</option>
-                  <option value="#e1e1e1">Gray</option>
-                  <option value="#000000">Black</option>
-                  <option value="#7bd148">Green</option>
-                  <option value="#5484ed">Bold blue</option>
-                  <option value="#a4bdfc">Blue</option>
-                  <option value="#46d6db">Turquoise</option>
-                  <option value="#7ae7bf">Light green</option>
-                  <option value="#51b749">Bold green</option>
-                  <option value="#fbd75b">Yellow</option>
-                  <option value="#ffb878">Orange</option>
-                  <option value="#ff887c">Red</option>
-                  <option value="#dc2127">Bold red</option>
+                  <option value="#000000">{t}Black{/t}</option>
+                  <option value="#7bd148">{t}Green{/t}</option>
+                  <option value="#5484ed">{t}Bold blue{/t}</option>
+                  <option value="#a4bdfc">{t}Blue{/t}</option>
+                  <option value="#46d6db">{t}Turquoise{/t}</option>
+                  <option value="#7ae7bf">{t}Light green{/t}</option>
+                  <option value="#51b749">{t}Bold green{/t}</option>
+                  <option value="#fbd75b">{t}Yellow{/t}</option>
+                  <option value="#ffb878">{t}Orange{/t}</option>
+                  <option value="#ff887c">{t}Red{/t}</option>
+                  <option value="#dc2127">{t}Bold red{/t}</option>
+                  <option value="#dbadff">{t}Purple{/t}</option>
+                  <option value="#e1e1e1">{t}Gray{/t}</option>
+                  <option value="#ffffff">{t}White{/t}</option>
+                  <option value="#7bd148">{t}Green{/t}</option>
+                  <option value="#5484ed">{t}Bold blue{/t}</option>
+                  <option value="#a4bdfc">{t}Blue{/t}</option>
+                  <option value="#46d6db">{t}Turquoise{/t}</option>
+                  <option value="#7ae7bf">{t}Light green{/t}</option>
+                  <option value="#51b749">{t}Bold green{/t}</option>
+                  <option value="#fbd75b">{t}Yellow{/t}</option>
+                  <option value="#ffb878">{t}Orange{/t}</option>
+                  <option value="#ff887c">{t}Red{/t}</option>
+                  <option value="#dc2127">{t}Bold red{/t}</option>
                 </select>
             </div>
         </p>
