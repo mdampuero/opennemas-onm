@@ -84,7 +84,7 @@ class AlbumsController extends Controller
         list($albumCount, $albums) = $cm->getCountAndSlice(
             'album',
             $categoryForLimit,
-            'contents.in_litter !=1',
+            'contents.in_litter!=1',
             'ORDER BY created DESC',
             $page,
             $itemsPerPage
