@@ -272,7 +272,7 @@ class OpinionsController extends Controller
 
         } // End if isCached
 
-        $this->advertisements();
+        $this->getAds();
 
         return $this->render(
             'opinion/opinion_author_index.tpl',
@@ -385,9 +385,6 @@ class OpinionsController extends Controller
                 ' ORDER BY created DESC LIMIT 0,9'
             );
 
-            $author = new \Author($opinion->fk_author);
-            $author->get_author_photos();
-
             foreach ($otherOpinions as &$otOpinion) {
                 $otOpinion->author = $author;
                 $otOpinion->author_name_slug  = $opinion->author_name_slug;
@@ -444,3 +441,4 @@ class OpinionsController extends Controller
         }
     }
 }
+
