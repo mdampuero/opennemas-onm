@@ -60,7 +60,7 @@ class StaticPagesController extends Controller
                 'page'               => $page,
                 'content'            => $page,
                 'category_real_name' => $page->title,
-                'content_id'         => $content->id
+                'content_id'         => $page->id
             )
         );
     }
