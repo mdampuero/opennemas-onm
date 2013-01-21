@@ -360,14 +360,8 @@ class OpinionsController extends Controller
                 } else {
                     $suggest['author_name_slug'] = "author";
                 }
-                $suggest['uri'] = $this->generateUrl(
-                    'frontend_opinion_show_with_author_slug',
-                    array(
-                        'opinion_id'    => date('YmdHis', strtotime($suggest['created'])).$suggest['pk_content'],
-                        'author_name'   => $suggest['author_name_slug'],
-                        'opinion_title' => \StringUtils::get_title($suggest['title']),
-                    )
-                );
+                $suggest['uri'] = $element->uri;
+
             }
 
             $suggestedContents= $this->cm->getInTime($suggestedContents);
