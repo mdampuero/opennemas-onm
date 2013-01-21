@@ -231,7 +231,7 @@ class AlbumsController extends Controller
     public function ajaxPaginatedAction(Request $request)
     {
         // Items_page refers to the widget
-        $albumID   = $request->query->filter('album_id', null, FILTER_SANITIZE_STRING);
+        $albumID   = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
         $page      = $request->query->filter('page', 1, FILTER_VALIDATE_INT);
         $itemsPage = 8;
 
@@ -253,7 +253,7 @@ class AlbumsController extends Controller
         }
 
         return $this->render(
-            'widgets/widget_gallery_thumbs.tpl',
+            'album/partials/_gallery_thumbs.tpl',
             array(
                 'album_photos'       => $_albumArray,
                 'album_photos_paged' => $_albumArrayPaged,
@@ -296,3 +296,4 @@ class AlbumsController extends Controller
         }
     }
 }
+
