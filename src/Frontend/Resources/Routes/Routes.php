@@ -659,6 +659,16 @@ $frontendRoutes->add(
 );
 
 
+$frontendRoutes->add(
+    'frontend_letter_save',
+    new Route(
+        '/cartas-al-director/save',
+        array(
+            '_controller' => 'Frontend:Controllers:LetterController:save',
+
+        )
+    )
+);
 
 
 $frontendRoutes->add(
