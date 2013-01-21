@@ -1049,6 +1049,21 @@ $frontendRoutes->add(
     )
 );
 
+
+$frontendRoutes->add(
+    'frontend_frontpage_category_css',
+    new Route(
+        '/seccion/{category}.css',
+        array(
+            '_controller' => 'Frontend:Controllers:FrontpagesController:css',
+            'category'    => 'home'
+        ),
+        array(
+            'category'          => '[a-z0-9\-]+',
+        )
+    )
+);
+
 $frontendRoutes->add(
     'frontend_externalfrontpage_category',
     new Route(

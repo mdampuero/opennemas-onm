@@ -86,6 +86,7 @@ class FrontpagesController extends Controller
                     'actual_category_id'    => $actualCategoryId,
                     'actual_category_title' => $ccm->get_title($categoryName),
                     'category_data'         => $categoryData,
+                    'time'                  => time(),
                 )
             );
 
@@ -265,4 +266,61 @@ class FrontpagesController extends Controller
             $advertisement->renderMultiple(array($intersticial), $advertisement);
         }
     }
+
+     /**
+     * Retrieves the styleSheet rules for the frontpage
+     *
+     * @return void
+     **/
+    public function cssAction(Request $request)
+    {
+
+
+        $categoryName = $this->request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
+        $cm = new \ContentManager;
+        $ccm = \ContentCategoryManager::get_instance();
+        $actualCategoryId = $ccm->get_id($categoryName);
+        $contentsInHomepage = $cm->getContentsForHomepageOfCategory($actualCategoryId);
+
+        $output = "";
+
+
+        // Styles to print each item
+        $rules = '';
+        //content_id | title_catID | serialize(font-family:;font-size:;color:)
+        if (is_array($contentsInHomepage)) {
+            foreach ($contentsInHomepage as $k => $item) {
+                $element = 'bgcolor_'.$actualCategoryId;
+                $bgcolor = $item->getProperty($element);
+                if (!empty($bgcolor)) {
+                    $rules .="article#content-{$item->pk_content} {\n";
+                    $rules .= "\tbackground-color:{$bgcolor}; \n";
+                    $rules .= "}\n";
+                }
+
+                $element = 'title'."_".$actualCategoryId;
+                $properties = $item->getProperty($element);
+                if (!empty($properties)) {
+                    $properties = json_decode($properties);
+                    if (!empty($properties)) {
+                        // article#content-81088.onm-new h3.onm-new-title a
+                        $rules .="article#content-{$item->pk_content} .nw-title a {\n";
+                        foreach ($properties as $property => $value) {
+                            if (!empty($value)) {
+                                    $rules .= "\t{$property}:{$value}; \n";
+                            }
+                        }
+                        $rules .= "}\n";
+                    }
+                }
+            }
+        }
+
+        $output ="<style type=\"text/css\">\n {$rules} </style>\n ";
+
+        return new Response($output, 200, array('Expire' => new \DateTime("+5 min")));
+
+
+    }
 }
+
