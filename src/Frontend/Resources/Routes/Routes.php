@@ -735,7 +735,6 @@ $frontendRoutes->add(
         array(
             '_controller' => 'Frontend:Controllers:VideosController:show',
             '_format' => 'html',
-            'page' => 1
         ),
         array(
             'category_name' => '[a-z0-9\-]+',
@@ -752,7 +751,6 @@ $frontendRoutes->add(
         array(
             '_controller' => 'Frontend:Controllers:VideosController:show',
             '_format' => 'html',
-            'page' => 1
         ),
         array(
             'category_name' => '[a-z0-9\-]+',
@@ -967,15 +965,13 @@ $frontendRoutes->add(
 $frontendRoutes->add(
     'frontend_opinion_author_frontpage',
     new Route(
-        '/opinion/autor/{author_id}/{author_slug}/{page}',
+        '/opinion/autor/{author_id}/{author_slug}',
         array(
            '_controller' => 'Frontend:Controllers:OpinionsController:frontpageAuthor',
-           'page'        => 1
         ),
         array(
            'author_slug'    => '(.*)?',
-           'author_id'      => '([0-9]+)',
-           'page'           => '([0-9]+)?'
+           'author_id'      => '([0-9]+)'
         )
     )
 );
@@ -1026,7 +1022,6 @@ $frontendRoutes->add(
         '/opinion',
         array(
            '_controller' => 'Frontend:Controllers:OpinionsController:frontpage',
-           'page' => 1,
         )
     )
 );

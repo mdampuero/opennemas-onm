@@ -176,7 +176,6 @@ class OpinionsController extends Controller
 
             // Get author info
             $author = new \Author($authorID);
-            $author->get_author_photos();
             $photos = $author->get_author_photos();
 
             $authorSlug = $request->query->filter('author_slug', null, FILTER_SANITIZE_STRING);
@@ -197,6 +196,8 @@ class OpinionsController extends Controller
             }
 
             $_limit=' LIMIT '.(($this->page-1)*ITEMS_PAGE).', '.(ITEMS_PAGE);
+
+            $itemsPerPage = s::get('items_per_page');
 
             // Get the number of total opinions for this
             // author for pagination purpouses
@@ -237,21 +238,24 @@ class OpinionsController extends Controller
                 }
             }
 
-            $url = $this->generateUrl(
-                'frontend_opinion_author_frontpage',
+            $pagination = \Pager::factory(
                 array(
-                    'author_id' => $author->pk_author,
-                    'author_slug' => $authorName,
+                    'mode'        => 'Sliding',
+                    'perPage'     => $itemsPerPage,
+                    'append'      => false,
+                    'path'        => '',
+                    'delta'       => 4,
+                    'clearIfVoid' => true,
+                    'urlVar'      => 'page',
+                    'totalItems'  => $countOpinions,
+                    'fileName'    => $this->generateUrl(
+                        'frontend_opinion_author_frontpage',
+                        array(
+                            'author_id' => $author->pk_author,
+                            'author_slug' => $authorName,
+                        )
+                    ).'/?page=%d',
                 )
-            );
-
-            $pagination = $this->cm->create_paginate(
-                $countOpinions,
-                ITEMS_PAGE,
-                2,
-                'URL',
-                $url,
-                ''
             );
 
             // Clean weird variables from this assign (must check
@@ -310,7 +314,8 @@ class OpinionsController extends Controller
         // Don't execute the app logic if there are caches available
         $cacheID = $this->view->generateCacheId($this->category_name, '', $opinionID);
         if (($this->view->caching == 0)
-            || !$this->view->isCached('opinion/opinion.tpl', $cacheID)) {
+            || !$this->view->isCached('opinion/opinion.tpl', $cacheID)
+        ) {
 
             $this->view->assign('contentId', $opinionID);
 
@@ -318,29 +323,8 @@ class OpinionsController extends Controller
             $author->get_author_photos();
             $opinion->author = $author;
 
-            // Please SACAR esta broza de aqui {
-            $title = \StringUtils::get_title($opinion->title);
-            $print_url = '/imprimir/' . $title. '/'. $opinion->pk_content . '.html';
-            $this->view->assign('print_url', $print_url);
-            $this->view->assign(
-                'sendform_url',
-                '/controllers/opinion_inner.php?action=sendform&opinion_id=' . $dirtyID
-            );
-            // } Sacar broza
-
-            //Rescato esta asignación para que genere correctamente el enlace a frontpage de opinion
+            // Rescato esta asignación para que genere correctamente el enlace a frontpage de opinion
             $opinion->author_name_slug = \StringUtils::get_title($opinion->name);
-            /*
-            //Check slug
-            if (empty($slug) || ($opinion->slug != $slug)
-                || ($opinion->author_name_slug != $author_name)) {
-                $this->redirect(SITE_URL.$opinion->uri);
-            }
-            */
-
-            // Fetch rating for this opinion
-            $rating = new \Rating($opinionID);
-            $this->view->assign('rating_bar', $rating->render('article', 'vote'));
 
             // Fetch suggested contents
             $objSearch = \cSearch::getInstance();
@@ -378,7 +362,7 @@ class OpinionsController extends Controller
                 $where =' opinions.fk_author='.($opinion->fk_author);
             }
 
-            $otherOpinions = $this->cm->cache->find(
+            $otherOpinions = $this->cm->find(
                 'Opinion',
                 $where.' AND `pk_opinion` <>' .$opinionID
                 .' AND available = 1  AND content_status=1',
@@ -411,7 +395,6 @@ class OpinionsController extends Controller
 
     /**
      * Fetches the advertisement
-     *
      **/
     private function getAds($context = 'frontpage')
     {
@@ -441,4 +424,3 @@ class OpinionsController extends Controller
         }
     }
 }
-
