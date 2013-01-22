@@ -204,6 +204,7 @@ class VideosController extends Controller
             $video = new \Video($videoID);
             $video->category_name = $video->loadCategoryName($video->id);
             $video->category_title = $video->loadCategoryTitle($video->id);
+            $video->with_comment = 1;
 
             //Get other_videos for widget video most
             $otherVideos = $this->cm->find_all(

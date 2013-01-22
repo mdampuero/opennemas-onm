@@ -171,6 +171,7 @@ class AlbumsController extends Controller
             // Get the album from the id and increment the numviews for it
             $album = new \Album($albumID);
             $this->view->assign('album', $album);
+            $album->with_comment = 1;
 
             // Get the other albums for the albums widget
             $settings = s::get('album_settings');
