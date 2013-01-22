@@ -603,31 +603,53 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
-    'frontend_frontpage_newslibrary',
+    'frontend_archive',
     new Route(
-        '/hemeroteca/{date}/',
+        '/archive/content/{year}/{month}/{day}/',
         array(
-            '_controller' => 'Frontend:Controllers:NewslibraryController:frontpage',
+            '_controller' => 'Frontend:Controllers:ArchiveController:archive',
             'page'        => 1
         ),
         array(
-            'date'            => '([0-9]+)\/([0-9]+)\/([0-9]+)\/'
+            'year'       => '([0-9]+)',
+            'month'      => '([0-9]+)',
+            'day'        => '([0-9]+)',
         )
     )
 );
 
 $frontendRoutes->add(
-    'frontend_frontpage_newslibrary_by_category',
+    'frontend_archive_category',
     new Route(
-        '/hemeroteca/{date}/{category_name}.{_format}',
+        '/archive/content/{year}/{month}/{day}/{category_name}.{_format}',
         array(
-            '_controller' => 'Frontend:Controllers:NewslibraryController:frontpage',
+            '_controller' => 'Frontend:Controllers:ArchiveController:archiveCategory',
+            'page'        => 1
+        ),
+        array(
+            'category_name'  => '[a-z0-9\-]+',
+            'year'       => '([0-9]+)',
+            'month'      => '([0-9]+)',
+            'day'        => '([0-9]+)',
+        )
+    )
+);
+
+
+$frontendRoutes->add(
+    'frontend_digital_frontpage',
+    new Route(
+        '/archive/digital/{year}/{month}/{day}/{category_name}.{_format}',
+        array(
+            '_controller' => 'Frontend:Controllers:ArchiveController:digitalFrontpage',
             '_format'     => 'html',
             'page'        => 1
         ),
         array(
             'category_name' => '[a-z0-9\-]+',
-            'date'          => '([0-9]+)-([0-9]+)-([0-9]+)'
+            'year'       => '([0-9]+)',
+            'month'      => '([0-9]+)',
+            'day'        => '([0-9]+)',
         )
     )
 );

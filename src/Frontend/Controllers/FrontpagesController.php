@@ -62,7 +62,7 @@ class FrontpagesController extends Controller
         require_once APP_PATH.'/../public/controllers/index_advertisement.php';
 
         if ($this->view->caching == 0
-            || !$this->view->isCached('frontpage/frontpage.tpl', $cacheID)
+            || !$this->view->isCched('frontpage/frontpage.tpl', $cacheID)
         ) {
             // Init the Content and Database object
             $ccm = \ContentCategoryManager::get_instance();
