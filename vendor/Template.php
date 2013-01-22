@@ -37,7 +37,7 @@ class Template extends Smarty
         // Parent variables
         $this->templateBaseDir = SITE_PATH.DS.'themes'.DS.$theme.DS;
         $this->setTemplateDir(realpath($this->templateBaseDir.'tpl').DS);
-        // $this->addTemplateDir(SITE_PATH.DS.'themes'.DS.'base'.DS);
+        $this->addTemplateDir(SITE_PATH.DS.'themes'.DS.'base'.DS.'tpl');
 
         $cachePath = CACHE_PATH.DS.'smarty'.DS.'config'.DS;
         $cacheFilePath = $cachePath.'cache.conf';
