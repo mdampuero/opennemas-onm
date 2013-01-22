@@ -83,7 +83,7 @@
                         })
                         .on('mouseleave', function (e, ui) {
                             // reset
-                            log('reset current value');
+                           // log('reset current value');
                         })
                         .on('click', settings.clickable, function (e, ui) {
                             helpers.vote(elem, $(this));
