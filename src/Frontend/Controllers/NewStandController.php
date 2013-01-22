@@ -55,9 +55,7 @@ class NewStandController extends Controller
      **/
     public function frontpageAction(Request $request)
     {
-        /**
-         * Avoid to run the entire app logic if is available a cache for this page
-        */
+        // Avoid to run the entire app logic if is available a cache for this page
         $configurations = s::get('kiosko_settings');
         $month = $request->query->getDigits('month', date('n'));
         $year  = $request->query->getDigits('year', date('Y'));
@@ -65,7 +63,6 @@ class NewStandController extends Controller
         $order = $configurations['orderFrontpage'];
 
         if ($order =='grouped') {
-
             $cacheID = $this->view->generateCacheId('newsstand', $this->category_name, $year);
             $kiosko =array();
             if (($this->view->caching == 0)
@@ -93,12 +90,11 @@ class NewStandController extends Controller
                     }
                 }
             }
-
         } elseif ($order =='sections') {
             $day        = $request->query->getDigits('day', 1);
             $cache_date = $year.$month.$day;
-            $cacheID = $this->view->generateCacheId('newsstand', $this->category_name, $cache_date);
-            $kiosko =array();
+            $cacheID    = $this->view->generateCacheId('newsstand', $this->category_name, $cache_date);
+            $kiosko     = array();
             if (($this->view->caching == 0)
                || !$this->view->isCached('newsstand/newsstand.tpl', $cacheID)
             ) {
@@ -130,8 +126,7 @@ class NewStandController extends Controller
                 $ccm = \ContentCategoryManager::get_instance();
                 $contentType = \Content::getIDContentType('kiosko');
                 $category = $ccm->get_id($this->category_name);
-                list($allcategorys, $subcat, $categoryData) =
-                    $ccm->getArraysMenu($category, $contentType);
+                list($allcategorys, $subcat, $categoryData) = $ccm->getArraysMenu($category, $contentType);
 
                 foreach ($allcategorys as $theCategory) {
                     $portadas = $this->cm->find_by_category(
@@ -152,16 +147,6 @@ class NewStandController extends Controller
             }
         }
 
-        $this->view->assign(
-            array(
-                'KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR,
-                'date'           => '1-'.$month.'-'.$year,
-                'MONTH'          => $month,
-                'YEAR'           => $year,
-                'kiosko'         => $kiosko
-            )
-        );
-
         $this->widgetNewsstandDates();
         $this->getAds();
 
@@ -170,6 +155,11 @@ class NewStandController extends Controller
             'newsstand/newsstand.tpl',
             array(
                 'cache_id' => $cacheID,
+                'KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR,
+                'date'           => '1-'.$month.'-'.$year,
+                'MONTH'          => $month,
+                'YEAR'           => $year,
+                'kiosko'         => $kiosko
             )
         );
 
