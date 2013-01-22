@@ -49,10 +49,11 @@ class ContentsController extends Controller
         $contentID = \Content::resolveID($dirtyID);
         $cacheID   = $this->view->generateCacheId('article', null, $contentID);
 
-        $article = new \Article($contentID);
+        $content = new \Content($contentID);
+        $content = $content->get($contentID);
 
-        if (isset($article->img2) && ($article->img2 != 0)) {
-            $photoInt = new \Photo($article->img2);
+        if (isset($content->img2) && ($content->img2 != 0)) {
+            $photoInt = new \Photo($content->img2);
             $this->view->assign('photoInt', $photoInt);
         }
 
@@ -60,8 +61,8 @@ class ContentsController extends Controller
             'article/article_printer.tpl',
             array(
                 'cache_id' => $cacheID,
-                'content'  => $article,
-                'article'  => $article
+                'content'  => $content,
+                'article'  => $content
             )
         );
     }
