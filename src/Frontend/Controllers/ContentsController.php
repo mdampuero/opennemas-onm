@@ -142,9 +142,9 @@ class ContentsController extends Controller
             $tplMail->assign('date', $date);
 
             $tplMail->caching = 0;
-            $mail->Body = $tplMail->fetch('article/email_send_to_friend.tpl');
+            $mail->Body = $tplMail->fetch('email/send_to_friend.tpl');
 
-            $mail->AltBody = $tplMail->fetch('article/email_send_to_friend_just_text.tpl');
+            $mail->AltBody = $tplMail->fetch('email/send_to_friend_just_text.tpl');
 
             /**
              * Implementacion para enviar a multiples destinatarios
@@ -173,7 +173,7 @@ class ContentsController extends Controller
 
                 $httpCode = 500;
             }
-            $content = $this->render('article/article_sendform.tpl');
+            $content = $this->render('common/share_by_mail.tpl');
 
             return new Response($content, $httpCode);
         } else {
@@ -187,7 +187,7 @@ class ContentsController extends Controller
             $article = new \Content($contentId);
 
             return $this->render(
-                'article/article_sendform.tpl',
+                'common/share_by_mail.tpl',
                 array(
                     'content'    => $article,
                     'content_id' => $contentId,
