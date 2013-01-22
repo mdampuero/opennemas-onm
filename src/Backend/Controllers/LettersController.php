@@ -299,12 +299,12 @@ class LettersController extends Controller
                     $letter->delete($id, $_SESSION['userid']);
                     $changes++;
                 } else {
-                    m::add(sprintf(_('Unable to find a letter with the id "%d"'), $id));
+                    m::add(sprintf(_('Unable to find a letter with the id "%d"'), $id), m::ERROR);
                 }
             }
         }
         if ($changes > 0) {
-            m::add(sprintf(_('Successfully deleted %d letters'), $changes));
+            m::add(sprintf(_('Successfully deleted %d letters'), $changes), m::SUCCESS);
         }
 
         return $this->redirect(

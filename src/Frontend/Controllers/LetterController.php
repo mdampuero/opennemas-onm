@@ -101,6 +101,8 @@ class LetterController extends Controller
                 throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
             }
 
+            $cm = new \ContentManager();
+
             $otherLetters = $cm->find(
                 'Letter',
                 'available=1 ',
@@ -112,16 +114,12 @@ class LetterController extends Controller
                 array(
                     'letter'       => $letter,
                     'content'      => $letter,
-                    'num_comments' => count($comments),
                     'otherLetters' => $otherLetters,
                 )
             );
-
         }
 
-        // require_once APP_PATH.'/../public/controllers/letter_inner_advertisement.php';
         $this->getAds();
-
 
         return $this->render(
             'letter/letter.tpl',
@@ -138,6 +136,8 @@ class LetterController extends Controller
      **/
     public function saveAction(Request $request)
     {
+        require_once 'recaptchalib.php';
+
         $recaptcha_challenge_field =
             $request->request->filter('recaptcha_challenge_field', '', FILTER_SANITIZE_STRING);
         $recaptcha_response_field =
@@ -147,7 +147,7 @@ class LetterController extends Controller
         $configRecaptcha = s::get('recaptcha');
 
         // Get reCaptcha validate response
-        $resp = recaptcha_check_answer(
+        $resp = \recaptcha_check_answer(
             $configRecaptcha['private_key'],
             $_SERVER["REMOTE_ADDR"],
             $recaptcha_challenge_field,
@@ -173,7 +173,7 @@ class LetterController extends Controller
                 $data['email']     = $mail;
                 $data['available'] = 0; //pendding
 
-                $letter = new Letter();
+                $letter = new \Letter();
                 $msg = $letter->saveLetter($data);
 
             } else {
