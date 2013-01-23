@@ -52,7 +52,7 @@ class StaticPagesController extends Controller
         }
 
         // TODO: review this advertisement
-        // require_once 'statics_advertisement.php';
+        $this->getAds();
 
         return $this->render(
             'static_pages/statics.tpl',
@@ -63,5 +63,22 @@ class StaticPagesController extends Controller
                 'content_id'         => $page->id
             )
         );
+    }
+
+    /**
+     * Returns all the advertisements for an static page
+     *
+     * @return void
+     **/
+    public static function getAds()
+    {
+        $advertisement = \Advertisement::getInstance();
+
+        // APC cache version
+        $banners = $advertisement->getAdvertisements(array(1, 2, 103, 105, 9, 10));
+
+        $cm = new \ContentManager();
+        $banners = $cm->getInTime($banners);
+        $advertisement->renderMultiple($banners, $advertisement);
     }
 }

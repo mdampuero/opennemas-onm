@@ -42,8 +42,7 @@ class RssController extends Controller
         $cacheID = $this->view->generateCacheId('Index', '', "RSS");
 
         // Fetch information for Advertisements
-        // TODO: review this
-        // require_once 'article_advertisement.php';
+        \Frontend\Controllers\ArticlesController::getInnerAds();
 
         if (($this->view->caching == 0)
             || !$this->view->isCached('rss/index.tpl', $cacheID)
