@@ -59,7 +59,6 @@ class FrontpagesController extends Controller
         );
 
         $this->getAds();
-        require_once APP_PATH.'/../public/controllers/index_advertisement.php';
 
         if ($this->view->caching == 0
             || !$this->view->isCched('frontpage/frontpage.tpl', $cacheID)
@@ -139,7 +138,6 @@ class FrontpagesController extends Controller
                 'cache_id' => $cacheID,
             )
         );
-
     }
 
     /**
@@ -157,8 +155,7 @@ class FrontpagesController extends Controller
         $cacheID = $this->view->generateCacheId('sync'.$categoryName, null, 0);
 
         // Fetch advertisement information from local
-        $this->getAds();
-        require_once APP_PATH.'/../public/controllers/index_advertisement.php';
+        $this->getAds($categoryName);
 
         // Avoid to run the entire app logic if is available a cache for this page
         if (
@@ -237,11 +234,8 @@ class FrontpagesController extends Controller
      *
      * @return void
      **/
-    public function getAds()
+    public static function getAds($categoryName = 'home')
     {
-        // Fetch HTTP vars
-        $categoryName = $this->request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
-
         $ccm = \ContentCategoryManager::get_instance();
         $category = $ccm->get_id($categoryName);
 

@@ -39,7 +39,7 @@ class SearchController extends Controller
      **/
     public function googleAction(Request $request)
     {
-        require_once APP_PATH.'/../public/controllers/index_advertisement.php';
+        \Frontend\Controllers\FrontpagesController::getAds();
 
         return $this->render('search/search.tpl');
     }

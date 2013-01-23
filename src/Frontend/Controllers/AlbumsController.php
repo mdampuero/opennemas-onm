@@ -56,7 +56,6 @@ class AlbumsController extends Controller
                 )
             );
         } else {
-            //$category_name = 'Portada';
             $categoryRealName = 'Portada';
             $this->view->assign(
                 array(
@@ -83,7 +82,7 @@ class AlbumsController extends Controller
         $this->view->setConfig('gallery-frontpage');
         $cacheID = $this->view->generateCacheId($this->categoryName, '', $this->page);
 
-        require_once APP_PATH.'/../public/controllers/album_front_ads.php';
+        $this->getAds();
 
         // Don't execute the action logic if was cached before
         if (($this->view->caching == 0)
@@ -162,7 +161,7 @@ class AlbumsController extends Controller
         $this->view->setConfig('gallery-inner');
 
         // Load advertisement for this action
-        $this->adsInner();
+        $this->getAdsInner();
 
         $cacheID = $this->view->generateCacheId($this->categoryName, null, $albumID);
         if (($this->view->caching == 0)
@@ -267,11 +266,39 @@ class AlbumsController extends Controller
     }
 
     /**
+     * Returns the advertisements for the albums frontpage
+     *
+     * @return void
+     **/
+    public function getAds()
+    {
+        $ccm = \ContentCategoryManager::get_instance();
+        $category_name='album';
+        $category = $ccm->get_id($category_name);
+
+        $category = (!isset($category) || ($category=='home'))? 0: $category;
+        $advertisement = \Advertisement::getInstance();
+
+        // Load internal banners, principal banners (1,2,3,11,13) and use cache to performance
+        $banners = $advertisement->getAdvertisements(array(401, 402, 403, 405, 409, 410), $category);
+
+        $cm = new \ContentManager();
+        $banners = $cm->getInTime($banners);
+
+        $advertisement->renderMultiple($banners, $advertisement);
+
+        $intersticial = $advertisement->getIntersticial(450, '$category');
+        if (!empty($intersticial)) {
+            $advertisement->renderMultiple(array($intersticial), $advertisement);
+        }
+    }
+
+    /**
      * Fetches the advertisement
      *
      * @return
      **/
-    private function adsInner()
+    private function getAdsInner()
     {
         $ccm = \ContentCategoryManager::get_instance();
         $categoryName ='album';
@@ -297,4 +324,3 @@ class AlbumsController extends Controller
         }
     }
 }
-

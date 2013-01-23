@@ -360,8 +360,6 @@ class UserController extends Controller
      **/
     public function userBoxAction(Request $request)
     {
-        require APP_PATH.'../public/controllers/statics_advertisement.php';
-
         return $this->render('login/user_box.tpl');
     }
 

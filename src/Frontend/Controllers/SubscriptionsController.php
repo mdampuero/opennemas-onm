@@ -34,7 +34,8 @@ class SubscriptionsController extends Controller
 
         require_once SITE_VENDOR_PATH."/phpmailer/class.phpmailer.php";
         require_once 'recaptchalib.php';
-        require_once APP_PATH.'/../public/controllers/statics_advertisement.php';
+
+        \Frontend\Controllers\StaticPagesController::getAds();
 
         $this->session = $this->get('session');
         $this->session->start();

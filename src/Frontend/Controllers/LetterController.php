@@ -63,7 +63,7 @@ class LetterController extends Controller
             );
         }
 
-        require_once APP_PATH.'/../public/controllers/letter_advertisement.php';
+        $this->getAds();
 
         return $this->render(
             'letter/letter_frontpage.tpl',
@@ -119,7 +119,7 @@ class LetterController extends Controller
             );
         }
 
-        $this->getAds();
+        $this->getAdsInner();
 
         return $this->render(
             'letter/letter.tpl',
@@ -185,11 +185,37 @@ class LetterController extends Controller
     }
 
     /**
+     * Returns the advertisements for the letters frontpage
+     *
+     * @return array
+     **/
+    public function getAds()
+    {
+        $ccm = \ContentCategoryManager::get_instance();
+
+        $category = (!isset($category) || ($category=='home'))? 0: $category;
+        $advertisement = \Advertisement::getInstance();
+
+        // Load internal banners, principal banners (1,2,3,11,13) and use cache to performance
+        /* $banners = $advertisement->cache->getAdvertisements(array(1, 2, 3, 10, 12, 11, 13), $category); */
+        $banners = $advertisement->getAdvertisements(array(1, 2, 103, 105, 5, 6), $category);
+         $cm = new \ContentManager();
+        $banners = $cm->getInTime($banners);
+        //$advertisement->renderMultiple($banners, &$tpl);
+        $advertisement->renderMultiple($banners, $advertisement);
+
+        $intersticial = $advertisement->getIntersticial(50, '$category');
+        if (!empty($intersticial)) {
+            $advertisement->renderMultiple(array($intersticial), $advertisement);
+        }
+    }
+
+    /**
      * Gets the advertisement
      *
      * @return void
      **/
-    public function getAds()
+    public function getAdsInner()
     {
         $this->ccm = \ContentCategoryManager::get_instance();
 

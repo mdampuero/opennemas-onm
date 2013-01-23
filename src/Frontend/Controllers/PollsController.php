@@ -128,7 +128,6 @@ class PollsController extends Controller
             );
         }
 
-        //  require_once APP_PATH.'/../public/controllers/poll_advertisement.php';
         $this->getAds('frontpage');
 
         return $this->render(
