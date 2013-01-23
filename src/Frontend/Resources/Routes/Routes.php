@@ -603,17 +603,17 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
-    'frontend_archive',
+    'frontend_archive_content',
     new Route(
-        '/archive/content/{year}/{month}/{day}/',
+        '/archive/content/{year}/{month}/{day}',
         array(
             '_controller' => 'Frontend:Controllers:ArchiveController:archive',
             'page'        => 1
         ),
         array(
-            'year'       => '([0-9]+)',
-            'month'      => '([0-9]+)',
-            'day'        => '([0-9]+)',
+            'year'       => '[0-9]+',
+            'month'      => '[0-9]+',
+            'day'        => '[0-9]+',
         )
     )
 );

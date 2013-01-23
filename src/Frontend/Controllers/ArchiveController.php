@@ -9,6 +9,7 @@
  **/
 namespace Frontend\Controllers;
 
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
@@ -31,29 +32,16 @@ class ArchiveController extends Controller
     {
         $this->view = new \Template(TEMPLATE_USER);
         $this->ccm = new \ContentCategoryManager();
+        $this->request = $this->get('request');
 
         // Fetch HTTP variables
-        $this->categoryName  = $this->get('request')->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
-        $this->page          = $this->get('request')->query->getDigits('page', 1);
-        $this->year          = $this->get('request')->query->filter('year', '', FILTER_SANITIZE_STRING);
-        $this->month         = $this->get('request')->query->filter('month', '', FILTER_SANITIZE_STRING);
-        $this->day           = $this->get('request')->query->filter('day', '', FILTER_SANITIZE_STRING);
-        //$this->date          = $this->get('request')->query->filter('date', '', FILTER_SANITIZE_STRING);
-        $this->date          = "{$this->year}-{$this->month}-{$this->day}";
+        $this->categoryName  = $this->request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+        $this->page          = $this->request->query->getDigits('page', 1);
+        $this->year          = $this->request->query->filter('year', '', FILTER_SANITIZE_STRING);
+        $this->month         = $this->request->query->filter('month', '', FILTER_SANITIZE_STRING);
+        $this->day           = $this->request->query->filter('day', '', FILTER_SANITIZE_STRING);
 
-        if (!empty($this->categoryName) || ($this->categoryName == 'home')) {
-            $this->category = 0;
-            $this->categoryName = 'home';
-        } else {
-            $this->category = $this->ccm->get_id($this->categoryName);
-        }
 
-        $this->view->assign(
-            array(
-                'newslibraryDate' => $this->date,
-                'category_name'   => $this->categoryName,
-            )
-        );
     }
 
 
@@ -65,23 +53,24 @@ class ArchiveController extends Controller
     public function archiveAction()
     {
         $this->view->setConfig('newslibrary');
-        $cacheID = $this->view->generateCacheId($this->date.'_'.$this->categoryName, '', $this->page);
+        $date = "{$this->year}-{$this->month}-{$this->day}";
+        $cacheID = $this->view->generateCacheId($date, '', $this->page);
 
         if (($this->view->caching == 0)
-           || (!$this->view->isCached('archive/newslibrary.tpl', $cacheID))) {
+           || (!$this->view->isCached('archive/archive.tpl', $cacheID))) {
 
             $fp = new \Frontpage();
             $cm = new \ContentManager();
             $allCategories = $this->ccm->categories;
 
             $library  = array();
-            $contents = $cm->getContentsForLibrary($this->date);
+            $contents = $cm->getContentsForLibrary($date);
 
             if (!empty($contents)) {
                 foreach ($contents as $content) {
                     $categoryID = $content->category;
                     if (!isset($library[$categoryID])) {
-                        $library[$categoryID] = new stdClass();
+                        $library[$categoryID] = new \stdClass();
                     }
                     $library[$categoryID]->id         = $categoryID;
                     $library[$categoryID]->title      = $allCategories[$categoryID]->title;
@@ -92,12 +81,14 @@ class ArchiveController extends Controller
             $this->view->assign('library', $library);
         }
 
-        $this->getAds();
+       // $this->getAds();
 
         return $this->render(
-            'archive/list_contents.tpl',
+            'archive/archive.tpl',
             array(
                 'cache_id' => $cacheID,
+                'newslibraryDate' => $date,
+               // 'category_name'   => $this->categoryName,
             )
         );
     }
@@ -109,22 +100,31 @@ class ArchiveController extends Controller
      **/
     public function archiveCategoryAction()
     {
+
+        if (empty($this->categoryName) || ($this->categoryName == 'home')) {
+            $categoryID = 0;
+            $this->categoryName = 'home';
+        } else {
+            $categoryID = $this->ccm->get_id($this->categoryName);
+        }
+
+        $date = "{$this->year}-{$this->month}-{$this->day}";
         $this->view->setConfig('newslibrary');
-        $cacheID = $this->view->generateCacheId($this->date.'_'.$this->categoryName, '', $this->page);
+        $cacheID = $this->view->generateCacheId($date.'_'.$this->categoryName, '', $this->page);
 
         if (($this->view->caching == 0)
-           || (!$this->view->isCached('archive/newslibrary.tpl', $cacheID))) {
+           || (!$this->view->isCached('archive/archive.tpl', $cacheID))) {
 
              $cm = new \ContentManager();
 
             $library  = array();
-            $library[$categoryID] = new stdClass();
-            $contents = $cm->getContentsForLibrary($this->date, $category);
+            $library[$categoryID] = new \stdClass();
+            $contents = $cm->getContentsForLibrary($date, $categoryID);
 
             if (!empty($contents)) {
                 foreach ($contents as $content) {
                     $library[$categoryID]->id         = $categoryID;
-                    $library[$categoryID]->title      = $categoryName;
+                    $library[$categoryID]->title      = $this->categoryName;
                     $library[$categoryID]->contents[] = $content;
                 }
             }
@@ -132,12 +132,14 @@ class ArchiveController extends Controller
             $this->view->assign('library', $library);
         }
 
-        $this->getAds();
+       // $this->getAds();
 
         return $this->render(
-            'archive/list_contents.tpl',
+            'archive/archive.tpl',
             array(
                 'cache_id' => $cacheID,
+                'category_name'   => $this->categoryName,
+                'newslibraryDate' => $date,
             )
         );
     }
@@ -149,20 +151,21 @@ class ArchiveController extends Controller
      **/
     public function digitalFrontpageAction()
     {
-        if (!empty($this->date)) {
-            $html = '';
-            $path = preg_replace('/(\d{4})-(\d{2})-(\d{2})/', '/$1/$2/$3', $this->date);
-            if (file_exists(MEDIA_PATH."/library/{$path}/{$this->categoryName}.html")) {
-                $html = file_get_contents(INSTANCE_MEDIA."library/{$path}/{$this->categoryName}.html");
-            }
 
-            if (empty($html)) {
-                throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
-            }
-
-            $response = new Response($html);
-            return $response->send();
+        $path = "{$this->year}/{$this->month}/{$this->day}";
+        $html = '';
+        $file =MEDIA_PATH."/library/{$path}/{$this->categoryName}.html";
+        if (file_exists($file) && is_readable($file)) {
+            $html = file_get_contents(INSTANCE_MEDIA."library/{$path}/{$this->categoryName}.html");
+        } else {
+            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
+
+        if (empty($html)) {
+            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+        }
+
+        return new Response($html);
     }
 }
 
