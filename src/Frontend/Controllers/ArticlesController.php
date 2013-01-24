@@ -197,7 +197,7 @@ class ArticlesController extends Controller
      *
      * @return void
      **/
-    public static function getInnerAds($category)
+    public static function getInnerAds($category='home')
     {
         $category = (!isset($category) || ($category=='home'))? 0: $category;
 
