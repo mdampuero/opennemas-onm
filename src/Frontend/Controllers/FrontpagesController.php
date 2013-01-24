@@ -61,7 +61,7 @@ class FrontpagesController extends Controller
         $this->getAds();
 
         if ($this->view->caching == 0
-            || !$this->view->isCched('frontpage/frontpage.tpl', $cacheID)
+            || !$this->view->isCached('frontpage/frontpage.tpl', $cacheID)
         ) {
             // Init the Content and Database object
             $ccm = \ContentCategoryManager::get_instance();
