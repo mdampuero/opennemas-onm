@@ -182,7 +182,7 @@ class FrontpagesController extends Controller
             // If no home category name
             if ($categoryName != 'home') {
                 // Redirect to home page if the desired category doesn't exist
-                if (empty($categoryName) || !$ccm->exists($categoryName)) {
+                if (empty($categoryName) || !$existsCategory) {
                     throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
                 }
             }
