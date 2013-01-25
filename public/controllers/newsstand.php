@@ -59,13 +59,12 @@ switch ($action) {
                     $portadas = $cm->find_by_category(
                         'Kiosko',
                         $theCategory->pk_content_category,
-                        ' `contents`.`available`=1   '.
-                        'AND YEAR(`kioskos`.date)='.$year.'',
-                        'ORDER BY `kioskos`.date DESC '
+                        ' `contents`.`available`=1   ',
+                        ' ORDER BY `kioskos`.date DESC  LIMIT 24'
                     );
                     if (!empty($portadas)) {
                         $kiosko[] = array (
-                            'category' => $theCategory->title,
+                           'category' => $theCategory->title,
                            'portadas' => $portadas
                         );
                     }

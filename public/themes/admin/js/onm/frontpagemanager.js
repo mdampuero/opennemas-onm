@@ -7,7 +7,7 @@ function makeContentProviderAndPlaceholdersSortable() {
         update: function(event,ui) {
             initializePopovers();
             show_save_frontpage_dialog();
-            frontpage_info.changed = true
+            frontpage_info.changed=true;
         },
         tolerance: 'pointer'
         //containment: '#content-with-ticker'
@@ -21,7 +21,7 @@ function makeContentProviderAndPlaceholdersSortable() {
         update: function(event,ui) {
             initializePopovers();
             show_save_frontpage_dialog();
-            frontpage_info.changed = true
+            frontpage_info.changed=true;
         },
         tolerance: 'pointer'
         //containment: '#content-with-ticker'
@@ -36,10 +36,9 @@ function check_available_new_version() {
         url: frontpage_urls.check_version + '?date=' + encodeURIComponent($version) + '&category=' + category,
         method: 'get',
         async: false,
-        type: 'json',
-        success: function(data) {
-            exists_version = (data == 'true')
-        }
+        type: 'json'
+    }).done(function(data) {
+        exists_version = (data == 'true');
     });
     return exists_version;
 }
@@ -89,7 +88,7 @@ function get_tooltip_title(elem) {
         jQuery.ajax({
             url: $url,
             async: false
-        }).success(function(data) {
+        }).done(function(data) {
             content_states[id] = data;
             if (content_states.hasOwnProperty('id') && content_states[id].hasOwnProperty('title')) {
                 return content_states[id].title;
@@ -157,7 +156,7 @@ jQuery(function($) {
         // Frontpage has changed and needs to be reloaded
         if (check_available_new_version()) {
             $('#modal-new-version').modal('show');
-        };
+        }
     }, 10000);
     /***************************************************************************
     * Sortable handlers
@@ -495,17 +494,14 @@ console.log(properties);
         var parent = $(this).closest('.ui-tabs-panel');
         $.ajax({
             url: $(this).attr('href'),
-            success: function(data) {
-                parent.html(data);
-                makeContentProviderAndPlaceholdersSortable();
-            },
-            complete: function() {
-                $('#content-provider .spinner').hide();
-            },
             beforeSend: function() {
                 $('#content-provider .spinner').show();
-
-           }
+            }
+        }).done(function(data) {
+            parent.html(data);
+            makeContentProviderAndPlaceholdersSortable();
+        }).always(function() {
+            $('#content-provider .spinner').hide();
         });
     });
 
@@ -525,8 +521,6 @@ console.log(properties);
         var category = $('#frontpagemanager').data('category');
         var new_version_available = check_available_new_version(false);
 
-        console.log(frontpage_info.last_saved)
-
         // If there is a new version available for this frontpage avoid to save
         if (new_version_available) {
             $('#modal-new-version').modal('show');
@@ -537,22 +531,28 @@ console.log(properties);
                 type: 'POST',
                 dataType: 'json',
                 data: { 'contents_positions': els, 'last_version': frontpage_info.last_saved },
-                success: function(data) {
+                beforeSend: function(xhr) {
                     $('#warnings-validation').html(
-                        "<div class='alert alert-success'>" +
-                            "<button class='close' data-dismiss='alert'>×</button>" +
-                            data.message +
-                        '</div>');
-                    frontpage_info.last_saved = data.date;
-                },
-                error: function(data) {
-                    $('#warnings-validation').html(
-                        "<div class='alert alert-error'>" +
-                            "<button class='close' data-dismiss='alert'>×</button>" +
-                            data.message +
-                        '</div>'
-                    );
+                    "<div class='alert alert-notice'>" +
+                        "<button class='close' data-dismiss='alert'>×</button>"+
+                        "Saving"+
+                    '</div>');
                 }
+            }).done(function(data) {
+                $('#warnings-validation').html(
+                    "<div class='alert alert-success'>" +
+                        "<button class='close' data-dismiss='alert'>×</button>" +
+                        data.message +
+                    '</div>');
+                frontpage_info.last_saved = data.date;
+            }).fail(function(data, ajaxOptions, thrownError) {
+                var response = $.parseJSON(data.responseText);
+                $('#warnings-validation').html(
+                    "<div class='alert alert-error'>" +
+                        "<button class='close' data-dismiss='alert'>×</button>" +
+                        response.message +
+                    '</div>'
+                );
             });
         }
     });
@@ -565,10 +565,9 @@ console.log(properties);
             url: frontpage_urls.clean_frontpage,
             data: {
                 'category' : category
-            },
-            success: function(data) {
-                $('#warnings-validation').html(data);
             }
+        }).done(function(data) {
+            $('#warnings-validation').html(data);
         });
     });
 
@@ -585,11 +584,19 @@ console.log(properties);
                 'contents': encodedContents,
                 'category_name': category
             },
-            success: function(data) {
-                previewWindow = window.open('', '_blank', '');
-                previewWindow.document.write(data);
-                previewWindow.focus();
+            beforeSend: function(xhr) {
+                $('#warnings-validation').html(
+                    "<div class='alert alert-notice'>" +
+                        "<button class='close' data-dismiss='alert'>×</button>" +
+                        "Generating frontpage. Please wait..." +
+                    '</div>'
+                );
             }
+        }).done(function(data) {
+            previewWindow = window.open('', '_blank', '');
+            previewWindow.document.write(data);
+            previewWindow.focus();
+            $('#warnings-validation').html('');
         });
     });
 
@@ -622,8 +629,8 @@ console.log(properties);
             $.get(
                 frontpage_urls.toggle_suggested,
                 { 'ids': contentIds }
-            ).success(function(data) {
-            }).error(function(data) {
+            ).done(function(data) {
+            }).fail(function(data) {
             });
         }
     });
