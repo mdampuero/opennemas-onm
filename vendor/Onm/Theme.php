@@ -232,9 +232,6 @@ class Theme
         $this->translationsDir = $translationsDir;
 
         bindtextdomain($domain, $translationsDir);
-
-        var_dump($domain, $translationsDir, dgettext($domain, 'RSS for'));
-        die();
     }
 
     /**
