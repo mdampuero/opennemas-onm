@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-24 20:48+0100\n"
+"POT-Creation-Date: 2013-01-25 19:34+0100\n"
 "PO-Revision-Date: 2012-03-09 11:34+0100\n"
 "Last-Translator: Fran Dieguez <fran@openhost.es>\n"
 "Language-Team: Galician\n"
@@ -1751,7 +1751,7 @@ msgid "Ensure you have completed all the form fields."
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controllers/LetterController.php:180
-msgid "Su Carta al Director <strong>no</strong> ha sido guardada."
+msgid "<strong>Unable</strong> to save the letter."
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controllers/RatingsController.php:56
@@ -1771,7 +1771,7 @@ msgid "You have been subscribed to the newsletter."
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controllers/SubscriptionsController.php:132
-msgid "Se ha dado de baja del boletín correctamente."
+msgid "You have been unsusbscribed from the newsletter."
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controllers/SubscriptionsController.php:173
@@ -2409,31 +2409,127 @@ msgid "Invalid image file"
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:181
-msgid "List categories"
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:211
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:277
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:319
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:367
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:409
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:445
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:481
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:517
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:547
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:583
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:613
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:637
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:661
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:685
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:703
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:715
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:775
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:805
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:883
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:931
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1099
+msgid "List"
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:187
-msgid "Activate/deactivate categories"
+msgid "Activate/deactivate"
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:193
-msgid "Edit categories"
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:235
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:289
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:337
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:385
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:421
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:457
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:493
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:529
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:559
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:595
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:619
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:643
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:667
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:691
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:727
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:787
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:817
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:913
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:961
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1069
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:110
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:113
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:116
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:260
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:263
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1052
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1199
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1202
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1538
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1541
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1550
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1694
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2819
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3155
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3413
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3449
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3461
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3473
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3746
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3749
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3764
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4676
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4961
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5093
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5096
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5318
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5549
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5561
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6008
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6116
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6221
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6428
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6440
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6890
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6893
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6902
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7553
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7910
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7925
+msgid "Edit"
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:199
-msgid "Remove categories"
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3494
+msgid "Remove"
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:205
-msgid "Create categories"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:211
-msgid "List articles"
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:247
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:301
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:355
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:397
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:433
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:469
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:541
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:571
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:607
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:631
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:655
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:679
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:709
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:739
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:799
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:889
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:937
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1093
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1145
+msgid "Create"
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:217
-msgid "Frontpages administration"
+msgid "Manage frontpages"
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:223
@@ -2441,616 +2537,269 @@ msgid "List pending articles"
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:229
-msgid "Publish/unpublish articles"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:235
-msgid "Edit articles"
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:283
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:331
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:415
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:451
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:487
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:523
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:553
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:589
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:781
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:811
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:901
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:949
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1081
+msgid "Publish/unpublish"
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:241
-msgid "Delete articles"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:247
-msgid "Create articles"
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:295
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:349
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:391
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:427
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:463
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:499
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:535
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:565
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:601
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:625
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:649
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:673
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:697
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:733
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:793
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:919
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:967
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1045
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1063
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:353
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:356
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1055
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1112
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1115
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1118
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1121
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1430
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1433
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1436
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1439
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1571
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2018
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2273
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2276
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2279
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2282
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2453
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2456
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2459
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2732
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2735
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2909
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2972
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2975
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3086
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3116
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3119
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3176
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3416
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3452
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3464
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3476
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3752
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3767
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3785
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4568
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4571
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4574
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4577
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4799
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4802
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4964
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5006
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5009
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5012
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5099
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5486
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5588
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6011
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6173
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6176
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6320
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6323
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6326
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6329
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6461
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6800
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6803
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6806
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6809
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6905
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6923
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7205
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7283
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7556
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7727
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7928
+msgid "Delete"
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:253
-msgid "Arquive/unarquive articles"
+msgid "Arquive/unarquive"
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:259
-msgid "Clone articles"
+msgid "Manage home frontpage"
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:265
-msgid "Home frontpage administration"
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:307
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:361
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:403
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:439
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:475
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:511
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:925
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:973
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1057
+msgid "Send to trash and restore"
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:271
-msgid "Send/restore articles to trash"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:277
 msgid "List articles in arquive"
 msgstr ""
 
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:283
-msgid "List advertisements"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:289
-msgid "Publish/unpublish advertisements"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:295
-msgid "Edit advertisements"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:301
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6521
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6530
-msgid "Delete advertisements"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:307
-msgid "Create advertisements"
-msgstr ""
-
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:313
-msgid "Send/restore advertisements to trash"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:319
-msgid "Adminstrate advertisments for homepage"
+msgid "Manage advertisments for homepage"
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:325
-msgid "List opinion articles"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:331
-msgid "Manage opinions frontpage"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:337
-msgid "Publish/unpublish opinion articles"
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:577
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:991
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1003
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1111
+msgid "Manage frontpage"
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:343
-msgid "Edit opinion articles"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:349
 msgid "Administrate opinion widget"
 msgstr ""
 
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:355
-msgid "Delete opinion articles"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:361
-msgid "Create opinion articles"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:367
-msgid "Send/restore opinion articles to trash"
-msgstr ""
-
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:373
-msgid "List comments"
+msgid "Manage poll comments"
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:379
-msgid "Administrer poll comments"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:385
-msgid "Administer home comments"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:391
-msgid "Approve/reject comments"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:397
-msgid "Edit comments"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:403
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2855
-msgid "Delete comment"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:409
-msgid "Create comment"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:415
-msgid "Sent/Restore comments from trash"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:421
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:457
-msgid "List albums"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:427
-msgid "Publish/unpublish albums"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:433
-msgid "Edit album"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:439
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1628
-msgid "Delete album"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:445
-msgid "Create album"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:451
-msgid "Send/restore albums from trash"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:463
-msgid "Publish/unpublish videos"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:469
-msgid "Edit videos"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:475
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:449
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:464
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6980
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6989
-msgid "Delete videos"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:481
-msgid "Create videos"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:487
-msgid "Send/Restore videos from trash"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:493
-msgid "List images"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:499
-msgid "Publish/unpublish images"
+msgid "Approve/reject"
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:505
-msgid "Edit images"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:511
-msgid "Delete images"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:517
-msgid "Create/upoad images"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:523
-msgid "Send/restore images from trash"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:529
-msgid "List static pages"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:535
-msgid "Publish/unpublish static pages"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:541
-msgid "Edit static pages"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:547
-msgid "Delete static pages"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:553
-msgid "Create static pages"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:559
-msgid "List epapers"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:565
-msgid "Publish/unpublish epapers"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:571
-msgid "Edit epapers"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:577
-msgid "Delete epapers"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:583
-msgid "Create epapers"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:589
-msgid "Administer home epapers"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:595
-msgid "List polls"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:601
-msgid "Publish/unpublish polls"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:607
-msgid "Edit polls"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:613
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2606
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2615
-msgid "Delete polls"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:619
-msgid "Create polls"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:625
-msgid "List opinion authors"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:631
-msgid "Edit authors"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:637
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3017
-msgid "Delete authors"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:643
-msgid "Create author"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:649
-msgid "List users"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:655
-msgid "Edit users"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:661
-msgid "Delete users"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:667
-msgid "Create users"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:673
-msgid "Listado de palabras clave"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:679
-msgid "Modificar Palabra Clave"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:685
-msgid "Eliminar Palabra Clave"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:691
-msgid "Crear Palabra Clave"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:697
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:715
-msgid "List user groups"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:703
-msgid "Edit user groups"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:709
-msgid "Delete user groups"
+msgid "Create/upload"
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:721
-msgid "Create user groups"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:727
-msgid "List files"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:733
-msgid "GestiÃ³n de portadas"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:739
-msgid "Edit files"
+msgid "File Fronts"
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:745
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2396
-msgid "Delete files"
+msgid "Manage Newsletter"
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:751
-msgid "Create files"
+msgid "Backend manager"
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:757
-msgid "Newsletter administration"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:763
-msgid "Manage backend settings"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:769
 msgid "Manage caches"
 msgstr ""
 
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:775
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:763
 msgid "Use search"
 msgstr ""
 
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:781
-msgid "Gestión papelera"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:787
-msgid "List widgets"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:793
-msgid "Publish/unpublish widgets"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:799
-msgid "Edit widgets"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:805
-msgid "Delete widgets"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:811
-msgid "Create widgets"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:817
-msgid "List menus"
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:769
+msgid "List trashed elementes"
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:823
-msgid "Publish/unpublish menu"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:829
-msgid "Edit menus"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:835
 msgid "Import agency"
 msgstr ""
 
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:841
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:829
 msgid "Import EuropaPress articles"
 msgstr ""
 
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:847
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:835
 msgid "Import XML files"
 msgstr ""
 
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:853
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:841
 msgid "Import EFE articles"
 msgstr ""
 
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:847
+msgid "Manage global settings"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:853
+msgid "Access instance manager"
+msgstr ""
+
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:859
-msgid "Manage opennemas settings"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:865
-msgid "Access opennemas manager"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:871
 msgid "Modify other users's content"
 msgstr ""
 
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:877
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:865
 msgid "Delete other users's content"
 msgstr ""
 
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:883
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:871
 msgid "Configure system-wide settings"
 msgstr ""
 
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:889
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:877
 msgid "Change the user group from one user"
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:895
-msgid "List books"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:901
-msgid "Create books"
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:943
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1087
+msgid "Manage widget"
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:907
-msgid "Manage books widget elements"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:913
-msgid "Publish/unpublish books"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:919
-msgid "Manage book module settings"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:925
-msgid "Edit books"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:931
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4694
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4703
-msgid "Delete books"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:937
-msgid "Send/restore books from trash"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:943
-msgid "List specials"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:949
-msgid "Create specials"
+msgid "Administrate settings"
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:955
-msgid "Manage specials widget elements"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:961
-msgid "Publish/unpublish specials"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:967
-msgid "Manage specials module settings"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:973
-msgid "Edit specials"
-msgstr ""
-
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:979
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5144
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5153
-msgid "Delete specials"
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1033
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1039
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1075
+msgid "Manage module settings"
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:985
-msgid "Send/restore specials from trash"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:991
-msgid "Manage agenda settings"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:997
 msgid "Manage agenda"
 msgstr ""
 
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1003
-msgid "Manage videos frontpage"
-msgstr ""
-
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:997
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1009
-msgid "Manage favorite flag for videos"
+msgid "Manage favorite flag"
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1015
-msgid "Manage albums frontpage"
-msgstr ""
-
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1021
-msgid "Manage favorite flags for albums"
-msgstr ""
-
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1027
-msgid "Manage albums module setting"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1033
-msgid "Manage polls module setting"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1039
-msgid "Manage opinions module setting"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1045
-msgid "Manage categories module settings"
+msgid "Manage module setting"
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1051
-msgid "Manage videos module settings"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1057
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5336
-msgid "Delete menu"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1063
 msgid "Import EFE articles file"
 msgstr ""
 
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1069
-msgid "Send/restore letters from trash"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1075
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4868
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4877
-msgid "Delete letters"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1081
-msgid "Edit letters"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1087
-msgid "Manage letters module settings"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1093
-msgid "Publish/unpublish letters"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1099
-msgid "Manage letter's widget"
-msgstr ""
-
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1105
-msgid "Create letters"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1111
-msgid "List letters"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1117
-msgid "Añadir a widgets"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1123
-msgid "Añadir al widget de portada"
+msgid "Manage favourite flag"
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Special.php:49
@@ -3243,48 +2992,6 @@ msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:107
 msgid "Previous step"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:110
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:113
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:116
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:260
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:263
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1052
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1199
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1202
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1538
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1541
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1550
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1694
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2819
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3155
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3413
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3449
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3461
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3473
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3746
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3749
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3764
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4676
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4961
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5093
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5096
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5318
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5549
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5561
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6008
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6116
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6221
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6428
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6440
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6890
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6893
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6902
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7553
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7910
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7925
-msgid "Edit"
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:119
@@ -3896,77 +3603,6 @@ msgstr ""
 msgid "New"
 msgstr ""
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:353
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:356
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1055
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1112
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1115
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1118
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1121
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1430
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1433
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1436
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1439
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1571
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2018
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2273
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2276
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2279
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2282
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2453
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2456
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2459
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2732
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2735
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2909
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2972
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2975
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3086
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3116
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3119
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3176
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3416
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3452
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3464
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3476
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3752
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3767
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3785
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4568
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4571
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4574
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4577
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4799
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4802
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4964
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5006
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5009
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5012
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5099
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5486
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5588
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6011
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6173
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6176
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6320
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6323
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6326
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6329
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6461
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6800
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6803
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6806
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6809
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6905
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6923
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7205
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7283
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7556
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7727
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7928
-msgid "Delete"
-msgstr ""
-
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:359
 msgid "Unsubscribe"
 msgstr ""
@@ -4154,6 +3790,13 @@ msgstr ""
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6986
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7373
 msgid "Accept"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:449
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:464
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6980
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6989
+msgid "Delete videos"
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:452
@@ -4740,10 +4383,6 @@ msgstr ""
 msgid "New cover"
 msgstr ""
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1145
-msgid "Create"
-msgstr ""
-
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1148
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1469
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1472
@@ -5157,7 +4796,7 @@ msgid ""
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1604
-msgid "Cover size in widget album (width x crop_height)"
+msgid "Cover size in widget album (width x height)"
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1607
@@ -5191,6 +4830,10 @@ msgid ""
 "If previus select most views for order the album's frontpage. Use this to "
 "define the frontpage albums, the time range of the latest albums are the "
 "most viewed"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1628
+msgid "Delete album"
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1640
@@ -5985,6 +5628,10 @@ msgstr ""
 msgid "Delete file"
 msgstr ""
 
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2396
+msgid "Delete files"
+msgstr ""
+
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2399
 msgid "Are you sure you want to delete <span>%num%</span> files?"
 msgstr ""
@@ -6092,6 +5739,11 @@ msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2594
 msgid "Delete poll"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2606
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2615
+msgid "Delete polls"
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2618
@@ -6220,6 +5872,10 @@ msgstr ""
 msgid "An administrator must always approve the comment "
 msgstr ""
 
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2855
+msgid "Delete comment"
+msgstr ""
+
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2867
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2876
 msgid "Delete comments"
@@ -6317,6 +5973,10 @@ msgstr ""
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3005
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3026
 msgid "Delete author"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3017
+msgid "Delete authors"
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3029
@@ -6567,10 +6227,6 @@ msgstr ""
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3488
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6314
 msgid "HOME"
-msgstr ""
-
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3494
-msgid "Remove"
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3500
@@ -7284,6 +6940,11 @@ msgstr ""
 msgid "Delete book"
 msgstr ""
 
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4694
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4703
+msgid "Delete books"
+msgstr ""
+
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4706
 msgid "Are you sure you want to delete <span>%num%</span> books?"
 msgstr ""
@@ -7342,6 +7003,11 @@ msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4856
 msgid "Delete letter"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4868
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4877
+msgid "Delete letters"
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4880
@@ -7449,6 +7115,11 @@ msgstr ""
 msgid "Delete special"
 msgstr ""
 
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5144
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5153
+msgid "Delete specials"
+msgstr ""
+
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5156
 msgid "Are you sure you want to delete <span>%num%</span> specials?"
 msgstr ""
@@ -7548,6 +7219,10 @@ msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5333
 msgid "Add element"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5336
+msgid "Delete menu"
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5348
@@ -8164,6 +7839,11 @@ msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6509
 msgid "Delete advertisement"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6521
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6530
+msgid "Delete advertisements"
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6533

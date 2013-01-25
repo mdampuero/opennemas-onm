@@ -129,7 +129,7 @@ class SubscriptionsController extends Controller
                             $subject = utf8_decode("Solicitud de BAJA - Boletín ".$configSiteName);
                             $body    =  "Solicitud de Baja en el boletín de: \r\n". $formulario;
 
-                            $message = _("Se ha dado de baja del boletín correctamente.");
+                            $message = _("You have been unsusbscribed from the newsletter.");
                         }
 
                         //Send mail

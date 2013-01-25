@@ -37,7 +37,7 @@
         </div>
 
         <div class="control-group">
-            <label for="album_settings_crop_width" class="control-label">{t}Cover size in widget album (width x crop_height){/t}</label>
+            <label for="album_settings_crop_width" class="control-label">{t}Cover size in widget album (width x height){/t}</label>
             <div class="controls">
                 <div class="form-inline-block">
                     <input type="number" id="name" name="album_settings_crop_width" value="{$configs['album_settings']['crop_width']|default:"300"}" required />

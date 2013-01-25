@@ -177,7 +177,7 @@ class LetterController extends Controller
                 $msg = $letter->saveLetter($data);
 
             } else {
-                $msg = _('Su Carta al Director <strong>no</strong> ha sido guardada.');
+                $msg = _('<strong>Unable</strong> to save the letter.');
             }
         }
 

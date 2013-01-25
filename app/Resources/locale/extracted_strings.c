@@ -1601,7 +1601,7 @@ gettext("Total in widget home");
 gettext("Use  total in widget album for define how many videos can see in widgets in newspaper frontpage");
 
 /* public/themes/admin/tpl//album/config.tpl */
-gettext("Cover size in widget album (width x crop_height)");
+gettext("Cover size in widget album (width x height)");
 
 /* public/themes/admin/tpl//album/config.tpl */
 gettext("Order album's frontpage by");

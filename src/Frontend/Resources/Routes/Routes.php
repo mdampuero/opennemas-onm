@@ -838,9 +838,6 @@ $frontendRoutes->add(
     )
 );
 
-// /articulo/medio-ambiente/2012-04-02/destruccion-medioambiental-sa-ii/2012040219110100763.html
-// /articulo/medio-ambiente/2012-04-02/destruccion-medioambiental-sa-ii/20120916180240005176.html
-
 $frontendRoutes->add(
     'frontend_content_print',
     new Route(
