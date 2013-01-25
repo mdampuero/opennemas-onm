@@ -63,5 +63,8 @@ class Bootstrap extends ModuleBootstrap
         setlocale(LC_ALL, $locale);
         bindtextdomain($domain, $localeDir);
         textdomain($domain);
+
+        // Bind text domain of base theme
+        bindtextdomain('base', APPLICATION_PATH.'/public/themes/base/locale');
     }
 }
