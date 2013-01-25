@@ -1051,6 +1051,17 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
+    'frontend_frontpage_home',
+    new Route(
+        '/home',
+        array(
+            '_controller' => 'Frontend:Controllers:FrontpagesController:show',
+            'category'    => 'home'
+        )
+    )
+);
+
+$frontendRoutes->add(
     'frontend_frontpage',
     new Route(
         '/{category}',
