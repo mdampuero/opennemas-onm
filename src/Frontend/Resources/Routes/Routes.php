@@ -820,6 +820,28 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
+    'frontend_article_show_old_with_date',
+    new Route(
+        '/articulo/{category_name}/{date}/{slug}/{article_id}.{_format}',
+        array(
+            '_controller' => 'Frontend:Controllers:ArticlesController:show',
+            '_format'     => 'html',
+            'page'        => 1
+        ),
+        array(
+            'category_name' => '[a-z0-9\-]+',
+            'slug'          => '[a-z0-9\-]+',
+            'article_id'    => '([0-9]+)',
+            '_format'       => 'html|htm',
+            'date'          => '([0-9]{4})-([0-1][0-9])-([0-3][0-9])',
+        )
+    )
+);
+
+// /articulo/medio-ambiente/2012-04-02/destruccion-medioambiental-sa-ii/2012040219110100763.html
+// /articulo/medio-ambiente/2012-04-02/destruccion-medioambiental-sa-ii/20120916180240005176.html
+
+$frontendRoutes->add(
     'frontend_content_print',
     new Route(
         '/content/print/{slug}/{content_id}.{_format}',
