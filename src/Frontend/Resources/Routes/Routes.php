@@ -1014,6 +1014,7 @@ $frontendRoutes->add(
         '/opinion/{author_name}/{opinion_title}/{opinion_id}.{_format}',
         array(
             '_controller' => 'Frontend:Controllers:OpinionsController:show',
+            'author_name' => 'author',
             '_format'     => 'html'
         ),
         array(
@@ -1027,9 +1028,10 @@ $frontendRoutes->add(
 $frontendRoutes->add(
     'frontend_opinion_show',
     new Route(
-        '/opinion/{opinion_title}/{opinion_id}',
+        '/opinion/{opinion_title}/{opinion_id}.{_format}',
         array(
            '_controller' => 'Frontend:Controllers:OpinionsController:show',
+           '_format'     => 'html'
         ),
         array(
             'opinion_title' => '[a-z0-9\-]+',
