@@ -50,6 +50,13 @@ class OpinionsController extends Controller
     {
         $cm = new \ContentManager();
 
+        if ($this->page == 1) {
+            $where = '';
+            $orderBy='ORDER BY contents.in_home DESC, position ASC, created DESC ';
+        } else {
+            $where = 'AND contents.in_home=0 ';
+            $orderBy='ORDER BY created DESC ';
+        }
         // Index frontpage
         $cacheID = $this->view->generateCacheId($this->category_name, '', $this->page);
 
@@ -62,9 +69,9 @@ class OpinionsController extends Controller
                 'Opinion',
                 'opinions.type_opinion=1 '.
                 'AND contents.available=1 '.
-                'AND contents.in_home=1 '.
+                $where.
                 'AND contents.content_status=1 ',
-                'ORDER BY position ASC, created DESC '.
+                $orderBy.
                 'LIMIT 2'
             );
 
@@ -73,9 +80,9 @@ class OpinionsController extends Controller
                 'Opinion',
                 'opinions.type_opinion=2 '.
                 'AND contents.available=1 '.
-                'AND contents.in_home=1 '.
+                $where.
                 'AND contents.content_status=1 ',
-                'ORDER BY created DESC LIMIT 2'
+                $orderBy.' LIMIT 2'
             );
 
             if (isset($director) && !empty($director)) {
@@ -92,22 +99,25 @@ class OpinionsController extends Controller
 
             $itemsPerPage = s::get('items_per_page');
 
+
             list($countOpinions, $opinions)= $cm->getCountAndSlice(
                 'Opinion',
                 null,
-                'in_home=0 and available=1 and type_opinion=0',
-                'ORDER BY starttime ASC',
+                'opinions.type_opinion=0 '.
+                $where.
+                'AND contents.available=1 '.
+                'AND contents.content_status=1 ',
+                $orderBy,
                 $this->page,
                 $itemsPerPage
             );
-
             $pagination = \Pager::factory(
                 array(
                     'mode'        => 'Sliding',
                     'perPage'     => $itemsPerPage,
                     'append'      => false,
                     'path'        => '',
-                    'delta'       => 4,
+                    'delta'       => 3,
                     'clearIfVoid' => true,
                     'urlVar'      => 'page',
                     'totalItems'  => $countOpinions,
@@ -154,6 +164,7 @@ class OpinionsController extends Controller
             array('cache_id' => $cacheID)
         );
     }
+
 
     /**
      * Renders the opinion author's frontpage
