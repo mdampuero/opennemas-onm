@@ -1962,6 +1962,9 @@ class Content
 
                 // Only include content is is in time and available.
                 if ($content->isReadyForPublish()) {
+                    if($content->fk_content_type ==4) {
+                         $content = $content->get($relatedContentId);
+                    }
                     $content->categoryName = $ccm->get_name($content->category);
                     $this->related_contents []= $content;
                 }
