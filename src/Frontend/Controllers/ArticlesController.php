@@ -64,7 +64,8 @@ class ArticlesController extends Controller
         $cm = new \ContentManager();
 
         // Advertisements for single article NO CACHE
-        $this->getInnerAds($categoryName);
+        $actualCategoryId    = $this->ccm->get_id($categoryName);
+        $this->getInnerAds($actualCategoryId);
 
         $cacheID = $this->view->generateCacheId($categoryName, null, $articleID);
 
@@ -197,7 +198,7 @@ class ArticlesController extends Controller
      *
      * @return void
      **/
-    public static function getInnerAds($category='home')
+    public static function getInnerAds($category = 'home')
     {
         $category = (!isset($category) || ($category=='home'))? 0: $category;
 
