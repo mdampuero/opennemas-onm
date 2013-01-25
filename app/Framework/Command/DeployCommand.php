@@ -67,7 +67,7 @@ EOF
         $output->writeln($composerOutput."\n");
 
         // Clean cache and compiles
-        $command = $this->getApplication()->find('cache:clean');
+        $command = $this->getApplication()->find('clean:smarty-cache');
         $arguments = array(
             'command' => 'clean:smarty-cache',
         );
