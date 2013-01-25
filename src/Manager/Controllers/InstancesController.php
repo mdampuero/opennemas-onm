@@ -203,13 +203,13 @@ class InstancesController extends Controller
 
             $password = \Onm\StringUtils::generatePassword(16);
             $settings = array(
-                'TEMPLATE_USER' => "retrincos",
-                'MEDIA_URL' => "http://media.opennemas.com",
-                'BD_TYPE' => "mysqli",
-                'BD_HOST' => "localhost",
-                'BD_USER' => $internalNameShort,
-                'BD_PASS' => $password,
-                'BD_DATABASE' => "c-".$internalNameShort,
+                'TEMPLATE_USER' => "base",
+                'MEDIA_URL'     => "",
+                'BD_TYPE'       => "mysqli",
+                'BD_HOST'       => "localhost",
+                'BD_USER'       => $internalNameShort,
+                'BD_PASS'       => $password,
+                'BD_DATABASE'   => "c-".$internalNameShort,
             );
 
             //Get all the Post data
