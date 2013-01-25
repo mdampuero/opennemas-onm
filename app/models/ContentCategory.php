@@ -259,9 +259,6 @@ class ContentCategory
                 .'WHERE `pk_content` IN ('.$contents.')';
             $sqls []= 'DELETE FROM articles '
                 .' WHERE `pk_article` IN ('.$contents.')';
-            $sqls []= 'DELETE FROM articles_clone  '
-                .'WHERE `pk_original` IN (' . $contents . ')  '
-                .'OR `pk_clone` IN ('.$contents.')';
             $sqls []= 'DELETE FROM advertisements  '
                 .'WHERE `pk_advertisement` IN ('.$contents.')';
             $sqls []= 'DELETE FROM albums  '

@@ -307,17 +307,18 @@ class ContentController extends Controller
      **/
     public function updatePropertyAction(Request $request)
     {
-        $id = (int) $request->query->getDigits('id', null);
+        $id = (int) $request->request->getDigits('id', null);
 
         if ($id > 0) {
             $content = new \Content($id);
-            $meta = $request->query->get('meta', null);
-            if ($content->id != null && $meta != null) {
-                $value = $request->query->get('value', null);
-                $content->setProperty($meta, $value);
+            $properties = $request->request->get('properties', null);
 
+            if ($content->id != null && $properties != null) {
+                foreach ($properties as $name => $value) {
+                    $content->setProperty($name, $value);
+                }
                 $code = 200;
-                $message = "Done {$id}: {$meta}-{$value}";
+                $message = "Done {$id}:". serialize($properties)." \n";
             } else {
                 $code = 404;
                 $message = sprintf(_('Content or property not valid'), $id);
