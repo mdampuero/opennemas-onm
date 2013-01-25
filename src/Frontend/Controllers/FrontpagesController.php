@@ -279,8 +279,8 @@ class FrontpagesController extends Controller
                 $element = 'bgcolor_'.$actualCategoryId;
                 $bgcolor = $item->getProperty($element);
                 if (!empty($bgcolor)) {
-                    $rules .="article#content-{$item->pk_content} {\n";
-                    $rules .= "\tbackground-color:{$bgcolor}; \n";
+                    $rules .="#content-{$item->pk_content}.onm-new {\n";
+                    $rules .= "\tbackground-color:{$bgcolor} !important; \n";
                     $rules .= "}\n";
                 }
 
@@ -289,8 +289,8 @@ class FrontpagesController extends Controller
                 if (!empty($properties)) {
                     $properties = json_decode($properties);
                     if (!empty($properties)) {
-                        // article#content-81088.onm-new h3.onm-new-title a
-                        $rules .="article#content-{$item->pk_content} .nw-title a {\n";
+                        // #content-81115.onm-new h3.nw-title a
+                        $rules .="#content-{$item->pk_content} .nw-title a {\n";
                         foreach ($properties as $property => $value) {
                             if (!empty($value)) {
                                     $rules .= "\t{$property}:{$value}; \n";
@@ -302,8 +302,15 @@ class FrontpagesController extends Controller
             }
         }
 
-        $output ="<style type=\"text/css\">\n {$rules} </style>\n ";
+        $output = $rules;
 
-        return new Response($output, 200, array('Expire' => new \DateTime("+5 min")));
+        return new Response(
+            $output,
+            200,
+            array(
+                'Expire'       => new \DateTime("+5 min"),
+                'Content-Type' => 'text/css',
+            )
+        );
     }
 }
