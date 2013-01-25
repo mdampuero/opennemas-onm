@@ -2138,13 +2138,7 @@ class ContentManager
             if ($rs !== false) {
                 while (!$rs->EOF) {
                     $obj = new Content();
-                    $obj->load($rs->fields);
-                    $sql = 'SELECT name FROM `content_types`
-                            WHERE pk_content_type = "' .
-                            $obj->fk_content_type . '"';
-                    $obj->content_type =
-                        $GLOBALS['application']->conn->GetOne($sql);
-                    $obj->category_name = $obj->loadCategoryName($obj->id);
+                     $contents[] = $obj->get($rs->fields['pk_content']);
 
                     $contents[] = $obj;
                     $rs->MoveNext();
