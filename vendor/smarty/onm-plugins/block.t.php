@@ -69,6 +69,7 @@ function smarty_gettext_strarg($str)
  *       - 'no'/'off'/0 - turns off escaping
  *   - plural - The plural version of the text (2nd parameter of ngettext())
  *   - count - The item count for plural mode (3rd parameter of ngettext())
+ *   - domain - The domain where look for translation in
  */
 function smarty_block_t($params, $text, Smarty_Internal_Template $template, &$repeat)
 {

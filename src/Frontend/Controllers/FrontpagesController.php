@@ -33,8 +33,6 @@ class FrontpagesController extends Controller
 
         // Redirect Mobile browsers to mobile site unless a cookie exists.
         // $app->mobileRouter();
-
-        // Setup view
     }
 
     /**
@@ -163,9 +161,7 @@ class FrontpagesController extends Controller
             || !$this->view->isCached('frontpage/frontpage.tpl', $cacheID)
         ) {
 
-            /**
-             * Init the Content and Database object
-            */
+            // Init the Content and Database object
             $ccm = \ContentCategoryManager::get_instance();
             $cm = new \ContentManager;
 
@@ -202,7 +198,6 @@ class FrontpagesController extends Controller
                     'actual_category_title' => $ccm->get_title($categoryName),
                 )
             );
-
 
             // Get all contents for this frontpage
             $allContentsInHomepage = $cm->getUrlContent(
@@ -268,8 +263,6 @@ class FrontpagesController extends Controller
      **/
     public function cssAction(Request $request)
     {
-
-
         $categoryName = $this->request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
         $cm = new \ContentManager;
         $ccm = \ContentCategoryManager::get_instance();
@@ -277,7 +270,6 @@ class FrontpagesController extends Controller
         $contentsInHomepage = $cm->getContentsForHomepageOfCategory($actualCategoryId);
 
         $output = "";
-
 
         // Styles to print each item
         $rules = '';
@@ -313,8 +305,5 @@ class FrontpagesController extends Controller
         $output ="<style type=\"text/css\">\n {$rules} </style>\n ";
 
         return new Response($output, 200, array('Expire' => new \DateTime("+5 min")));
-
-
     }
 }
-

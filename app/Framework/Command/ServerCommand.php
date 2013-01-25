@@ -21,49 +21,47 @@ class ServerCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('server')
-            ->setDescription('Starts a new PHP server using Opennemas as SaaS')
-            ->addOption(
-                'port',
-                null,
-                InputOption::VALUE_REQUIRED,
-                'The port where listen for requests from',
-                8000
+            ->setDefinition(
+                array(
+                    new InputArgument('address', InputArgument::OPTIONAL, 'Address:port', 'localhost:8000'),
+                    new InputOption('docroot', 'd', InputOption::VALUE_REQUIRED, 'Document root', 'web/'),
+                    new InputOption('router', 'r', InputOption::VALUE_REQUIRED, 'Path to custom router script'),
+                )
             )
-            ->addOption(
-                'domain',
-                null,
-                InputOption::VALUE_REQUIRED,
-                'The base domain where listen for requests from',
-                'localhost'
-            )
-            ->addOption(
-                'v',
-                'verbose',
-                InputOption::VALUE_REQUIRED,
-                'The base domain where listen for requests from',
-                false
-            )
+            ->setName('server:run')
+            ->setDescription('Runs PHP built-in web server')
             ->setHelp(
-                <<<EOF
-The <info>server</info> starts a PHP built-in server.
+<<<EOF
+The <info>%command.name%</info> runs PHP built-in web server:
 
-<info>php app/console server --port=10 --domain=localhost -v</info>
+  <info>%command.full_name%</info>
 
+To change default bind address and port use the <info>address</info> argument:
+
+  <info>%command.full_name% 127.0.0.1:8080</info>
+
+To change default docroot directory use the <info>--docroot</info> option:
+
+  <info>%command.full_name% --docroot=htdocs/</info>
+
+If you have custom docroot directory layout, you can specify your own
+router script using <info>--router</info> option:
+
+  <info>%command.full_name% --router=app/config/router.php</info>
+
+See also: http://www.php.net/manual/en/features.commandline.webserver.php
 EOF
             );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $webPath    = APPLICATION_PATH."/public/";
-        $phpBinPath = exec('which php');
+        $output->writeln(sprintf("Server running on <info>%s</info>\n", $input->getArgument('address')));
 
-        $port   = $input->getOption('port');
-        $domain = $input->getOption('domain');
+        $webPath = APPLICATION_PATH."/public/";
 
-        $output->writeln("<info>Initiazing opennemas server at $domain:$port</info>");
+        $command = implode(' ', array(PHP_BINARY, '-S', $input->getArgument('address'), $webPath, $webPath."app.php"));
 
-        exec($phpBinPath." -S $domain:$port -t ".$webPath." ".$webPath."/app.php");
+        exec($command);
     }
 }

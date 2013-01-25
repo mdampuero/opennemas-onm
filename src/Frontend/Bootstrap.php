@@ -57,7 +57,7 @@ class Bootstrap extends ModuleBootstrap
             define('CURRENT_LANGUAGE', $shortLanguage);
         }
 
-        $localeDir = realpath(SRC_PATH.'/Frontend/Resources/locale/');
+        $localeDir = realpath(APP_PATH.'/Resources/locale/');
 
         putenv("LC_MESSAGES=$locale");
         setlocale(LC_ALL, $locale);
