@@ -339,7 +339,7 @@ $frontendRoutes->add(
     new Route(
         '/comments/vote',
         array(
-            '_controller' => 'Frontend:Controllers:CommentsController:vote',
+            '_controller' => 'Frontend:Controllers:CommentsController:addvote',
         )
     )
 );
@@ -564,6 +564,21 @@ $frontendRoutes->add(
         array(
             'page'      => '([0-9]+)?',
             'component' => 'encuesta|poll|enquerito|enquisa',
+        )
+    )
+);
+
+
+
+$frontendRoutes->add(
+    'frontend_poll_vote',
+    new Route(
+        '/poll/addvote/{id}',
+        array(
+            '_controller' => 'Frontend:Controllers:PollsController:addVote',
+        ),
+        array(
+            'id'            => '([0-9]+)',
         )
     )
 );

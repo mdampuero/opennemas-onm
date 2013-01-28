@@ -14,6 +14,7 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Cookie;
 use Onm\Framework\Controller\Controller;
 use Onm\Message as m;
 use Onm\Settings as s;
@@ -199,26 +200,34 @@ class PollsController extends Controller
             $this->view->assign('contentId', $pollId);
         }
 
-        $cookie = "polls".$pollId;
-        $msg    = '';
-        if (isset($_COOKIE[$cookie])) {
-            if ($_COOKIE[$cookie]=='tks') {
-                $msg = 'Ya ha votado esta encuesta';
-            } else {
-                $msg = 'Gracias, por su voto';
-                //Application::setCookieSecure($cookie, 'tks');
-                setcookie($cookie, 'tks', time()+3600);
-            }
-        }
+        $cookieName = "poll-".$poll->id;
+        $cookie = $request->cookies->get($cookieName);
 
-        $this->view->assign('msg', $msg);
+
+        $message = null;
+        $alreadyVoted = false;
+        if (!isset($cookie)) {
+            $voted = (int) $request->query->getDigits('voted', 0);
+            $valid = (int) $request->query->getDigits('valid', null);
+
+            if ($voted == 1 && $valid === 1) {
+                $message = _('Thanks for participating.');
+            } elseif ($voted == 1 && $valid === 0) {
+                $message = _('Please select a valid poll answer.');
+            }
+        } else {
+            $alreadyVoted = true;
+            $message = _('You have voted this poll previously.');
+        }
 
         $this->getAds('inner');
 
         return $this->render(
             'poll/poll.tpl',
             array(
-                'cache_id' => $cacheID,
+                'cache_id'      => $cacheID,
+                'msg'           => $message,
+                'already_voted' => $alreadyVoted,
             )
         );
     }
@@ -233,40 +242,47 @@ class PollsController extends Controller
     public function addVoteAction(Request $request)
     {
         $dirtyID = $request->request->filter('id', '', FILTER_SANITIZE_STRING);
+        $answer = $request->request->filter('answer', '', FILTER_SANITIZE_STRING);
+        $page = 0;
 
-        $pollId = Content::resolveID($dirtyID);
+        $pollId = \Content::resolveID($dirtyID);
 
         // Redirect to album frontpage if id_album wasn't provided
         if (is_null($pollId)) {
             throw new ResourceNotFoundException();
         }
 
-        $poll = new Poll($pollId);
+        $poll = new \Poll($pollId);
 
         if (empty($poll->id)) {
             throw new ResourceNotFoundException();
         }
 
-        $cookie = "polls".$pollId;
-        if (isset($_COOKIE[$cookie])) {
-             //Application::setCookieSecure($cookie, 'tks');
-            setcookie($cookie, 'tks', time()+3600);
+        $cookieName = "poll-".$pollId;
+        $cookie = $request->cookies->get($cookieName);
+
+        $valid = 0;
+        $voted = 0;
+        if (!empty($answer) && !isset($cookie)) {
+            $ip = $request->server->get('REMOTE_ADDR');
+            $voted = $poll->vote($answer, $ip);
+
+            $valid = 1;
+
+            $cookieVoted = new Cookie($cookieName, 'voted', time() + (3600 * 1));
+
+            $this->cleanCache($pollId, $page);
+        } elseif (empty($answer)) {
+            $valid = 0;
+            $voted = 1;
         }
-        $respEncuesta = $request->request->filter('respEncuesta', '', FILTER_SANITIZE_STRING);
 
-        if (!empty($respEncuesta) && !isset($_COOKIE[$cookie])) {
-            $ip = $_SERVER['REMOTE_ADDR'];
-            $poll->vote($respEncuesta, $ip);
+        $response = new RedirectResponse(SITE_URL.$poll->uri.'?voted='.$voted.'&valid='.$valid);
+        if (isset($cookieVoted)) {
+            $response->headers->setCookie($cookieVoted);
         }
 
-        $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
-        $cacheID    = $this->view->generateCacheId($this->categoryName, '', $pollId);
-        $tplManager->delete($cacheID, 'poll.tpl');
-
-        $cacheID = $this->view->generateCacheId('poll'.$this->categoryName, '', $this->page);
-        $tplManager->delete($cacheID, 'poll_frontpage.tpl');
-
-        return new RedirectResponse(SITE_URL.$poll->uri);
+        return $response;
     }
 
 
@@ -294,5 +310,20 @@ class PollsController extends Controller
         }
 
         return new Response('ok');
+    }
+
+    /**
+     * Clean the cache for a given poll
+     *
+     * @return void
+     **/
+    protected function cleanCache($pollId, $page)
+    {
+        $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
+        $cacheID    = $this->view->generateCacheId($this->categoryName, '', $pollId);
+        $tplManager->delete($cacheID, 'poll.tpl');
+
+        $cacheID = $this->view->generateCacheId('poll'.$this->categoryName, '', $page);
+        $tplManager->delete($cacheID, 'poll_frontpage.tpl');
     }
 }
