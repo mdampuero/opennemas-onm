@@ -635,7 +635,7 @@ console.log(properties);
         }
     });
 
-    $('#pick-layout').click('click', function(e, ui) {
+    $('#pick-layout, .settings-panel .close').click('click', function(e, ui) {
         $('.settings-panel').slideToggle();
     });
 
