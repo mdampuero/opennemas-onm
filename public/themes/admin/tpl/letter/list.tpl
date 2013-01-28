@@ -8,6 +8,7 @@
 
             frm.submit();
         }
+        $('[rel=tooltip]').tooltip({ placement : 'bottom' });
     </script>
 {/block}
 
@@ -99,7 +100,7 @@
                     <td >
                         <input type="checkbox" class="minput" id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$letter->id}"  style="cursor:pointer;" >
                     </td>
-                    <td>{$letter->title}</td>
+                    <td><span rel="tooltip" data-original-title="{$letter->body|strip_tags|clearslash}">{$letter->title}</span></td>
                     <td>{$letter->author}: {$letter->email}</td>
                     <td class="left"> {$letter->created} </td>
                     <td class="center">
