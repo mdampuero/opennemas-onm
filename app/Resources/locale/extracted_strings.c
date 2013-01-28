@@ -3161,6 +3161,12 @@ gettext("Remove element from this frontpage");
 gettext("Drop from this frontpage");
 
 /* public/themes/admin/tpl//opinion/content-provider/opinion.tpl */
+gettext("Customize in frontpage");
+
+/* public/themes/admin/tpl//opinion/content-provider/opinion.tpl */
+gettext("Customize content");
+
+/* public/themes/admin/tpl//opinion/content-provider/opinion.tpl */
 gettext("Drop from all frontpages");
 
 /* public/themes/admin/tpl//opinion/content-provider/opinion.tpl */
@@ -3572,16 +3578,163 @@ gettext("Customize font and color for this element");
 gettext("Background Color");
 
 /* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("White");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Light Blue");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Light Red");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Light Orange");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Light purple");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Light green");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Light yellow");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Green");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Bold blue");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Blue");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Turquoise");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Light green");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Bold green");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Yellow");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Orange");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Red");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Bold red");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Purple");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Gray");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Black");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Yellow");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Orange");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Red");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Bold red");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
 gettext("Title font family");
 
 /* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
 gettext("Title font style");
 
 /* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Title font weight");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
 gettext("Title font size");
 
 /* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
 gettext("Title font color");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Black");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Green");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Bold blue");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Blue");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Turquoise");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Light green");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Bold green");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Yellow");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Orange");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Red");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Bold red");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Purple");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Gray");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("White");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Green");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Bold blue");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Blue");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Turquoise");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Light green");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Bold green");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Yellow");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Orange");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Red");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Bold red");
 
 /* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
 gettext("Save");
@@ -3641,24 +3794,6 @@ gettext("Are you sure that do you want to send to trash the next element?");
 gettext("Send to trash");
 
 /* public/themes/admin/tpl//frontpagemanager/modals/_modal_send_to_trash.tpl */
-gettext("Keep");
-
-/* public/themes/admin/tpl//frontpagemanager/modals/_modal_change_bgcolor.tpl */
-gettext("Change background color element");
-
-/* public/themes/admin/tpl//frontpagemanager/modals/_modal_change_bgcolor.tpl */
-gettext("Select color for this element");
-
-/* public/themes/admin/tpl//frontpagemanager/modals/_modal_change_bgcolor.tpl */
-gettext("Color");
-
-/* public/themes/admin/tpl//frontpagemanager/modals/_modal_change_bgcolor.tpl */
-gettext("Reset color");
-
-/* public/themes/admin/tpl//frontpagemanager/modals/_modal_change_bgcolor.tpl */
-gettext("Save");
-
-/* public/themes/admin/tpl//frontpagemanager/modals/_modal_change_bgcolor.tpl */
 gettext("Keep");
 
 /* public/themes/admin/tpl//frontpagemanager/modals/_modal_arquive_selected.tpl */
@@ -5567,10 +5702,10 @@ gettext("Remove element from this frontpage");
 gettext("Drop from this frontpage");
 
 /* public/themes/admin/tpl//article/content-provider/article.tpl */
-gettext("Change background color in frontpage");
+gettext("Customize in frontpage");
 
 /* public/themes/admin/tpl//article/content-provider/article.tpl */
-gettext("Change background color");
+gettext("Customize content");
 
 /* public/themes/admin/tpl//article/content-provider/article.tpl */
 gettext("Drop from all frontpages");

@@ -1,5 +1,0 @@
-Work after migration
---------------------
-- PollsController, review addVote function, use symfony cookie & transform ajax response
-
-- RedirectorsController, review how to handle previous redirections.
