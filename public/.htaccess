@@ -566,10 +566,10 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
 
   # Redirections for elidealgallego.com and hibridosyelectricos.com ------------
     #Inner Article
-    RewriteRule ^index\.php/[a-z0-9\-]+/[a-z0-9\-]+/([0-9]+)\-[a-z0-9\-\.]+/?$ /controllers/redirect-imported-elements.php?content_type=article&content_id=$1 [L,NC]
-    RewriteRule ^index\.php/[a-z0-9\-]+/[a-z0-9\-]+/[a-z0-9\-]+/([0-9]+)\-[a-z0-9\-\.]+/?$ /controllers/redirect-imported-elements.php?content_type=article&content_id=$1 [L,NC]
-    RewriteRule ^index\.php/[a-z0-9\-]+/[a-z0-9\-]+/[a-z0-9\-]+/[a-z0-9\-]+/([0-9]+)\-[a-z0-9\-\.]+/?$ /controllers/redirect-imported-elements.php?content_type=article&content_id=$1 [L,NC]
-    RewriteRule ^index\.php/opinion/[a-z0-9\-]+/([0-9]+)\-[a-z]/?$ /controllers/redirect-from-editmaker.php?content_type=opinion&content_id=$1 [L,NC]
+    RewriteRule ^index\.php/[a-z0-9\-]+/[a-z0-9\-]+/([0-9]+)\-[a-z0-9\-\.]+/?$ /redirect/content?content_type=article&content_id=$1 [L,NC]
+    RewriteRule ^index\.php/[a-z0-9\-]+/[a-z0-9\-]+/[a-z0-9\-]+/([0-9]+)\-[a-z0-9\-\.]+/?$ /redirect/content?content_type=article&content_id=$1 [L,NC]
+    RewriteRule ^index\.php/[a-z0-9\-]+/[a-z0-9\-]+/[a-z0-9\-]+/[a-z0-9\-]+/([0-9]+)\-[a-z0-9\-\.]+/?$ /redirect/content?content_type=article&content_id=$1 [L,NC]
+    RewriteRule ^index\.php/opinion/[a-z0-9\-]+/([0-9]+)\-[a-z]/?$ /redirect/content?content_type=opinion&content_id=$1 [L,NC]
   #-----------------------------------------------------------------------------
 
   # Secciones de elidealgallego.com --------------------------------------------
@@ -617,17 +617,17 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
 
     #index.php?option=com_content&task=view&id=47077&Itemid=677
     RewriteCond %{QUERY_STRING} &?option=com_content&?task=[^&]+&?id=([^&]+)&?Itemid=([^&]+)&?[^&]+
-    RewriteRule ^index.php$ controllers/redirect-imported-elements.php?content_type=article&content_id=%1  [R=301,L,NC]
+    RewriteRule ^index.php$ /redirect/content?content_type=article&content_id=%1  [R=301,L,NC]
 
     #index2.php?option=com_content&task=view&id=22897&pop=1&page=21400&Itemid=677
     RewriteCond %{QUERY_STRING} &?option=com_content&?task=[^&]+&?id=([^&]+)&?pop=([^&]+)&?page=([^&]+)&?Itemid=([^&]+)&?[^&]+
-    RewriteRule ^index2.php$ controllers/redirect-imported-elements.php?content_type=article&content_id=%1  [R=301,L,NC]
+    RewriteRule ^index2.php$ /redirect/content?content_type=article&content_id=%1  [R=301,L,NC]
 
     #index2.php?option=com_content&task=emailform&id=24576&itemid=362
     RewriteCond %{QUERY_STRING} &?option=com_content&?task=[^&]+&?id=([^&]+)&?[^&]+
-    RewriteRule ^index2.php$ controllers/redirect-imported-elements.php?content_type=article&content_id=%1  [R=301,L,NC]
+    RewriteRule ^index2.php$ /redirect/content?content_type=article&content_id=%1  [R=301,L,NC]
     RewriteCond %{QUERY_STRING} &?option=com_content&?task=[^&]+&?id=([^&]+)&?itemid=([^&]+)&?[^&]+
-    RewriteRule ^index2.php$ controllers/redirect-imported-elements.php?content_type=article&content_id=%1  [R=301,L,NC]
+    RewriteRule ^index2.php$ /redirect/content?content_type=article&content_id=%1  [R=301,L,NC]
   # ----------------------------------------------------------------------------
 
 
@@ -641,12 +641,12 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
 
     RewriteCond %{HTTP_HOST} ^canariasahora.es$ [OR]
     RewriteCond %{HTTP_HOST} ^www.canariasahora.es$ [NC]
-    RewriteRule ^noticia/([0-9]+)/?(.*)?$ controllers/redirect-imported-elements.php?content_type=article&content_id=$1   [R=301,L,NC]
+    RewriteRule ^noticia/([0-9]+)/?(.*)?$ /redirect/content?content_type=article&content_id=$1   [R=301,L,NC]
     RewriteRule ^fauna/(.*)?$ seccion/fauna-por-eduardo-pomares/  [R=301,L,NC]
-    RewriteRule ^imprimir/noticia/([0-9]+)/?$ controllers/redirect-imported-elements.php?content_type=article&content_id=$1   [R=301,L,NC]
-    RewriteRule ^enviar/noticia/([0-9]+)/?$ controllers/redirect-imported-elements.php?content_type=article&content_id=$1   [R=301,L,NC]
-    RewriteRule ^fauna/ampliar/([0-9]+)/?$ controllers/redirect-imported-elements.php?content_type=article&content_id=$1&section=fauna   [R=301,L,NC]
-    RewriteRule ^topsecret/ampliar/([0-9]+)/?$ controllers/redirect-imported-elements.php?content_type=article&content_id=$1&section=top   [R=301,L,NC]
+    RewriteRule ^imprimir/noticia/([0-9]+)/?$ /redirect/content?content_type=article&content_id=$1   [R=301,L,NC]
+    RewriteRule ^enviar/noticia/([0-9]+)/?$ /redirect/content?content_type=article&content_id=$1   [R=301,L,NC]
+    RewriteRule ^fauna/ampliar/([0-9]+)/?$ /redirect/content?content_type=article&content_id=$1&section=fauna   [R=301,L,NC]
+    RewriteRule ^topsecret/ampliar/([0-9]+)/?$ /redirect/content?content_type=article&content_id=$1&section=top   [R=301,L,NC]
     RewriteRule ^suopinion/([0-9]+)/?$ /opinion/  [R=301,L,NC]
     RewriteRule ^encuestas/?$ /encuesta  [R=301,L,NC]
     RewriteRule ^publicidad/?$ estaticas/publicidad/  [R=301,L,NC]
@@ -669,7 +669,7 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteRule ^portada/(.*)?$ /  [R=301,L,NC]
     RewriteRule ^sociedad/(.*)?$ seccion/sociedad/  [R=301,L,NC]
     RewriteRule ^deportes/(.*)?$ seccion/deportes/  [R=301,L,NC]
-    RewriteRule ^galeria/([0-9]+)/foto/(.*)/?$ controllers/redirect-imported-elements.php?content_type=article&content_id=$1   [R=301,L,NC]
+    RewriteRule ^galeria/([0-9]+)/foto/(.*)/?$ /redirect/content?content_type=article&content_id=$1   [R=301,L,NC]
     RewriteRule ^(galeria|imagenes|imagen|enimagenes|susfotos)/(.*)?$ album/  [R=301,L,NC]
     RewriteRule ^(titulares|emision_endirecto|noticiasdeldia|principios|blogs|plantillas)/(.*)?$ /  [R=301,L,NC]
     RewriteRule ^(.*)/pagina/(.*)?$ /  [R=301,L,NC]
@@ -697,42 +697,42 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     #Redirection from old nuevatribuna.es
 
     #Inner Article
-    RewriteRule ^noticia/([0-9]+)($|/$|.+/$|.+html$) /controllers/redirect-from-editmaker.php?content_type=article&content_id=$1 [L,NC]
+    RewriteRule ^noticia/([0-9]+)($|/$|.+/$|.+html$) /redirect/content?content_type=article&content_id=$1 [L,NC]
 
     RewriteCond %{QUERY_STRING} &?ref=([^&]+)&?pos=([^&]+) [OR]
     RewriteCond %{QUERY_STRING} &?ref=([^&]+)
-    RewriteRule ^noticia\.asp$ /controllers/redirect-from-editmaker.php?content_type=article&content_id=%1 [L,NC]
+    RewriteRule ^noticia\.asp$ /redirect/content?content_type=article&content_id=%1 [L,NC]
 
     RewriteCond %{QUERY_STRING} &?ref=([^&]+)&?pos=([^&]+) [OR]
     RewriteCond %{QUERY_STRING} &?ref=([^&]+)
-    RewriteRule ^noticia\.asp$ /controllers/redirect-from-editmaker.php?content_type=article&content_id=%1 [L,NC]
+    RewriteRule ^noticia\.asp$ /redirect/content?content_type=article&content_id=%1 [L,NC]
 
     RewriteCond %{QUERY_STRING} &?id=([^&]+)&?pg=([^&]+) [OR]
     RewriteCond %{QUERY_STRING} &?id=([^&]+)
-    RewriteRule ^foros/mostrar_foro\.asp$ /controllers/redirect-from-editmaker.php?content_type=article&content_id=%1 [L,NC]
+    RewriteRule ^foros/mostrar_foro\.asp$ /redirect/content?content_type=article&content_id=%1 [L,NC]
 
     RewriteCond %{QUERY_STRING} &?pg=([^&]+)&?[(pf=)|(s=)]([^&]+)
     RewriteRule ^pda/noticia\.asp$ /mobile/? [R=301,L,NC]
 
     #Inner Opinion
-    RewriteRule ^noticia/([0-9]+)/OPINI.+/($|.+html$) /controllers/redirect-from-editmaker.php?content_type=article&content_id=$1 [L,NC]
+    RewriteRule ^noticia/([0-9]+)/OPINI.+/($|.+html$) /redirect/content?content_type=article&content_id=$1 [L,NC]
 
     #Section
     RewriteCond %{QUERY_STRING} ref=58
     RewriteRule ^seccion\.asp$ /estaticas/quienes-somos.html? [R=301,L,NC]
     RewriteCond %{QUERY_STRING} ref=54
     RewriteRule ^seccion\.asp$ /estaticas/aviso-legal.html? [R=301,L,NC]
-    RewriteCond %{QUERY_STRING} &?ref=([^&]+)
-    RewriteRule ^seccion\.asp$ /controllers/redirect-from-editmaker.php?content_type=category&content_id=%1 [L,NC]
+    RewriteCond %{QUERY_STRING} ref=([^&]+)
+    RewriteRule ^seccion\.asp$ /redirect/category?content_type=category&content_id=%1 [L,NC]
 
     #SECTIONS: seccion/51/SOCIEDAD/
     RewriteCond %{QUERY_STRING} &?s=([^&]+)
-    RewriteRule ^pda/seccion\.asp$ /controllers/redirect-from-editmaker.php?content_type=category&content_id=%1 [L,NC]
+    RewriteRule ^pda/seccion\.asp$ /redirect/category?content_type=category&content_id=%1 [L,NC]
     #TODO:send former pda URL to new mobile URL section
 
     #SECTIONS: seccion/51/SOCIEDAD/
     RewriteCond %{REQUEST_URI} [A-Z]
-    RewriteRule ^seccion/([0-9]+)/(.+)/ /controllers/redirect-from-editmaker.php?content_type=category&content_id=$1 [L,NC]
+    RewriteRule ^seccion/([0-9]+)/(.+)/ /redirect/category?content_type=category&content_id=$1 [L,NC]
     #RewriteRule ^seccion/[0-9]+/([a-zA-Z0-9\-]+)/ /seccion/${lc:$1}/ [R=301,L,NC]
 
     #Other issues/topics/modules
@@ -821,10 +821,6 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
 
     RewriteRule ^boletin.html$ newsletter/
 
-    ErrorDocument 400 /controllers/error.php?errordoc=400
-    ErrorDocument 403 /controllers/error.php?errordoc=403
-    ErrorDocument 404 /controllers/error.php?errordoc=404
-    ErrorDocument 500 /controllers/error.php?errordoc=500
 
     RewriteCond $1 !\.(php)$ [NC]
     RewriteCond %{REQUEST_FILENAME} !-f

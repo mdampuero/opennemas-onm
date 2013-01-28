@@ -47,8 +47,6 @@ class RedirectorsController extends Controller
         if ($type == 'article') {
             $content = new \Article($newContentID);
             $content->category_name = $content->catName;
-
-            $url .=  $content->uri;
         } elseif ($type == 'opinion') {
             $content = new \Opinion($newContentID);
         }

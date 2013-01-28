@@ -1,8 +1,5 @@
 Work after migration
 --------------------
-- Albumcontroller, change ajax action urls in templates
-- LettersController,  no finished show, saveAction submit form to send letter. Change require advertisement by a function
-- NewslibraryController (old frontpages) Problem with routes, (slash /) 'date' =([0-9]+)\/([0-9]+)\/([0-9]+)\/'
 - PollsController, review addVote function, use symfony cookie & transform ajax response
 
 - RedirectorsController, review how to handle previous redirections.
