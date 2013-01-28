@@ -25,7 +25,7 @@ $mobileRoutes->add(
 $mobileRoutes->add(
     'frontendmobile_opinion_frontpage',
     new Route(
-        '/opinions',
+        '/opinion',
         array(
             '_controller' => 'FrontendMobile:Controllers:OpinionsController:frontpage',
         )
@@ -101,7 +101,7 @@ $mobileRoutes->add(
             '_format'     => 'html'
         ),
         array(
-            'author_name'    => '[a-z0-9\-]+',
+            'author_name'    => '[a-zA-Z0-9\-]+',
             'opinion_title'  => '[a-z0-9\-]+',
             'opinion_id'     => '[a-z0-9\-]+',
         )
