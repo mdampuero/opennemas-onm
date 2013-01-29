@@ -339,7 +339,7 @@ $frontendRoutes->add(
     new Route(
         '/comments/vote',
         array(
-            '_controller' => 'Frontend:Controllers:CommentsController:addvote',
+            '_controller' => 'Frontend:Controllers:CommentsController:vote',
         )
     )
 );
