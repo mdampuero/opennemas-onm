@@ -2692,6 +2692,12 @@ gettext("Votes");
 /* public/themes/admin/tpl//polls/new.tpl */
 gettext("Add new answer");
 
+/* public/themes/admin/tpl//common/drop_down_categories.tpl */
+gettext("Categories");
+
+/* public/themes/admin/tpl//common/drop_down_categories.tpl */
+gettext("All categories");
+
 /* public/themes/admin/tpl//common/content_provider/content_provider.tpl */
 gettext("Articles");
 
@@ -6410,7 +6416,7 @@ gettext("Categories");
 gettext("HOME");
 
 /* public/themes/admin/tpl//advertisement/list.tpl */
-gettext("Advertisement manager");
+gettext("Advertisements");
 
 /* public/themes/admin/tpl//advertisement/list.tpl */
 gettext("Delete");
@@ -6636,9 +6642,6 @@ gettext("No");
 
 /* public/themes/admin/tpl//advertisement/modals/_modalBatchDelete.tpl */
 gettext("You must select some elements.");
-
-/* public/themes/admin/tpl//advertisement/new.tpl */
-gettext("Ad manager");
 
 /* public/themes/admin/tpl//advertisement/new.tpl */
 gettext("Creating banner");
@@ -7368,6 +7371,9 @@ gettext("TOTAL");
 
 /* public/themes/admin/tpl//image/list.tpl */
 gettext("Images");
+
+/* public/themes/admin/tpl//image/list.tpl */
+gettext("All categories");
 
 /* public/themes/admin/tpl//image/list.tpl */
 gettext("Delete");

@@ -587,7 +587,7 @@ div.utilities-conf input[type="text"]{
     margin:0;
     margin-bottom:5px;
     padding-top: 40px;
-
+    min-height: 60px;
 }
   .top-action-bar .title > * {
     display:inline-block;
