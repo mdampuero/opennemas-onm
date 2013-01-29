@@ -4,7 +4,7 @@
 <form action="{url name=admin_opinion_authors}" method="GET" name="formulario" id="formulario">
 	<div class="top-action-bar">
 		<div class="wrapper-content">
-            <div class="title"><h2>{t}Opinion Manager{/t} :: {t}Authors list{/t}</div>
+            <div class="title"><h2>{t}Opinion authors{/t}</div>
             <ul class="old-button">
                  {acl isAllowed="AUTHOR_DELETE"}
                 <li>

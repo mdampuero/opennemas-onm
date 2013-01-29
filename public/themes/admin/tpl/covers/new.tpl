@@ -11,7 +11,7 @@
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
         <div class="title">
-            <h2>{t}ePaper Manager{/t} :: {if $smarty.request.action eq "new"}{t}New ePaper{/t}{else}{t}Editing ePaper{/t}{/if}</h2>
+            <h2>{if !isset($kiosko->id)}{t}New ePaper{/t}{else}{t}Editing ePaper{/t}{/if}</h2>
         </div>
         <ul class="old-button">
             <li>

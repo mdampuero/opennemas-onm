@@ -15,7 +15,7 @@
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title">
-                <h2>{t}Album manager{/t} :: {if $category eq 'widget'}Widget Home{elseif $category eq 'all'}{t}All categories{/t}{else}{$datos_cat[0]->title}{/if}</h2>
+                <h2>{t}Albums{/t}</h2>
             </div>
             <ul class="old-button">
                 {acl isAllowed="ALBUM_DELETE"}

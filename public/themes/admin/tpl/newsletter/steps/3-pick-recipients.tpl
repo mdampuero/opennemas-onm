@@ -81,7 +81,7 @@
     <div id="buttons-recipients" class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title">
-                <h2>{t}Newsletter management{/t} :: {t}Recipient selection{/t}</h2>
+                <h2>{t}Newsletter{/t} :: {t}Recipient selection{/t}</h2>
             </div>
 
             <ul class="old-button">

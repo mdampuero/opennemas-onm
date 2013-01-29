@@ -3,7 +3,7 @@
 {block name="content"}
 <div class="top-action-bar">
 	<div class="wrapper-content">
-		<div class="title"><h2>{t}Static Pages Manager{/t} :: {t}Listing{/t}</h2></div>
+		<div class="title"><h2>{t}Static pages{/t}</h2></div>
 		<ul class="old-button">
 			<li>
 				<a href="{url name=admin_staticpages_create}" title="{t}Create new page{/t}">

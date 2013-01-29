@@ -39,13 +39,15 @@
 {block name="content"}
 <div class="top-action-bar clearfix">
 	<div class="wrapper-content">
-		<div class="title"><h2>{t}Video manager{/t} :: {t}Which type of video do you want to add?{/t}</h2></div>
+		<div class="title"><h2>{t}Videos{/t}</h2></div>
 	</div>
 </div>
 
 <div class="wrapper-content">
 
     {render_messages}
+
+    <h4>{t}Pick the method to add the video:{/t}</h4>
 
     <ul class="video-type-selector">
         <li class="file">

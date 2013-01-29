@@ -4,7 +4,7 @@
 <form action="{url name=admin_specials_config}" method="POST" name="formulario" id="formulario" {$formAttrs}>
     <div class="top-action-bar">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Special :: Configuration{/t}</h2></div>
+            <div class="title"><h2>{t}Specials{/t} :: {t}Settings{/t}</h2></div>
             <ul class="old-button">
                 <li>
                     <button type="submit">

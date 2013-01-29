@@ -38,7 +38,7 @@ jQuery(document).ready(function(){
 <div class="top-action-bar">
     <div class="wrapper-content">
         <div class="title">
-            <h2 class="disqus">{t}Comment manager{/t}</h2>
+            <h2 class="disqus">{t}Comments{/t}</h2>
             <ul class="old-button">
                 <li>
                     <a href="{url name=admin_comments_disqus_config}" title="{t}Disqus module configuration{/t}">
@@ -50,10 +50,12 @@ jQuery(document).ready(function(){
     </div>
 </div>
 <div class="iframe">
-    {if isset($disqus_shortname)}
+    {if !empty($disqus_shortname)}
     <iframe src="http://{$disqus_shortname}.disqus.com/admin/moderate/?template=wordpress" style="width: 100%; height: 80%; min-height:700px;"></iframe>
     {else}
-        {t}Disqus not configured{/t}
+        <div class="wrapper-content center">
+            <h3>{t}Disqus not configured{/t}</h3>
+        </div>
     {/if}
 </div>
 {/block}

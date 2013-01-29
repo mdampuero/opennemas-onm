@@ -236,7 +236,7 @@ class AclUserController extends Controller
         $userGroup = new \UserGroup();
         $tree = $ccm->getCategoriesTree();
 
-        $languages = \Application::getAvailableLanguages();
+        $languages = $this->container->getParameter('available_languages');
         $languages = array_merge(array('default' => _('Default system language')), $languages);
 
         return $this->render(

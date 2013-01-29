@@ -3,11 +3,11 @@
 {block name="content"}
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
-    <div class="title"><h2>{t}Images manager :: General statistics{/t}</h2></div>
+    <div class="title"><h2>{t}Images{/t} :: {t}Statistics{/t}</h2></div>
         <ul class="old-button">
             <li>
                 <a class="admin_add" href="{url name=admin_images_search}">
-                    <img src="{$params.IMAGE_DIR}search.png" alt="Buscar Imágenes"><br /><i class="icon-search"></i>
+                    <img src="{$params.IMAGE_DIR}search.png" alt="Buscar Imágenes"><br />{t}Search{/t}
                 </a>
             </li>
             {acl isAllowed="IMAGE_SETTINGS"}

@@ -4,7 +4,7 @@
 <form action="{url name=admin_categories_config}" method="POST" name="formulario" id="formulario">
     <div class="top-action-bar">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Category manager{/t} :: {t}Settings{/t}</h2></div>
+            <div class="title"><h2>{t}Categories{/t} :: {t}Settings{/t}</h2></div>
             <ul class="old-button">
                 <li>
                     <button type="submit">

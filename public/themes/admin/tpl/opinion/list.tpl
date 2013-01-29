@@ -93,7 +93,7 @@
 <form action="{url name=admin_opinions}" method="get" name="formulario" id="formulario">
 <div class="top-action-bar">
     <div class="wrapper-content">
-        <div class="title"><h2>{t}Opinion Manager{/t} :: {t}Listing opinions{/t}</h2></div>
+        <div class="title"><h2>{t}Opinions{/t}</h2></div>
         <ul class="old-button">
             {acl isAllowed="OPINION_AVAILABLE"}
         {*    <li class="batch-actions">

@@ -22,9 +22,7 @@
         <div class="wrapper-content">
             <div class="title">
                 <h2>
-                    Comment Manager
-                    {if $category eq 'home' ||  $category eq 'todos'} {$category|upper}
-                    {else} ::  {$datos_cat[0]->title} {/if}
+                    {t}Comments{/t}
                 </h2>
             </div>
             <ul class="old-button">

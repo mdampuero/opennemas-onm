@@ -27,7 +27,7 @@
 <div class="top-action-bar">
     <div class="wrapper-content">
         <div class="title">
-            <h2 class="disqus">{t}Comment manager{/t}:: {t}Configuration{/t}</h2>
+            <h2 class="disqus">{t}Settings{/t}</h2>
             <ul class="old-button">
                 <li>
                     <button type="submit">

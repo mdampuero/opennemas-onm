@@ -4,7 +4,7 @@
 <form action="{url name=admin_covers_config}" method="POST">
     <div class="top-action-bar">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Newsstand :: Configuration{/t}</h2></div>
+            <div class="title"><h2>{t}ePaper{/t} :: {t}Configuration{/t}</h2></div>
             <ul class="old-button">
                 <li>
                     <button type="submit">

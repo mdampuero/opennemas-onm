@@ -48,7 +48,7 @@ tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
 <form action="{if isset($letter->id)}{url name=admin_letter_update id=$letter->id}{else}{url name=admin_letter_create}{/if}" method="POST" name="formulario" id="formulario">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Letter Manager{/t} :: {t}Editing letter{/t}</h2></div>
+            <div class="title"><h2>{if isset($letter->id)}{t}Editing letter{/t}{else}{t}Creating letter{/t}{/if}</h2></div>
             <ul class="old-button">
                 <li>
                     <button value="1" name="continue" type="submit">

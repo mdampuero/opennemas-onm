@@ -21,13 +21,13 @@
 <form action="{url name=admin_menus}" method="GET" name="formulario" id="formulario">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Menu manager{/t}</h2></div>
+            <div class="title"><h2>{t}Menus{/t}</h2></div>
               <ul class="old-button">
                   {acl isAllowed="MENU_DELETE"}
                 <li>
-                     <a class="delChecked" data-controls-modal="modal-menu-batchDelete" href="#" title="Eliminar" alt="Eliminar">
-                            <img src="{$params.IMAGE_DIR}trash.png" border="0"  title="Eliminar" alt="Eliminar" ><br />Eliminar
-                        </a>
+                    <a class="delChecked" data-controls-modal="modal-menu-batchDelete" href="#" title="Eliminar" alt="Eliminar">
+                        <img src="{$params.IMAGE_DIR}trash.png" border="0"  title="Eliminar" alt="Eliminar" ><br />Eliminar
+                    </a>
                 </li>
                 {/acl}
 

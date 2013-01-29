@@ -34,7 +34,7 @@
 <form action="{url name=admin_files}" method="GET" name="formulario" id="formulario" {$formAttrs|default:""} >
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Files manager{/t}{if $category eq '0'} :: {t}General statistics{/t}{else} :: {$datos_cat[0]->title}{/if}</h2></div>
+            <div class="title"><h2>{t}Files{/t}</h2></div>
             {if $category != ''}
             <ul class="old-button">
                 <li>
@@ -86,6 +86,9 @@
         <ul class="pills">
             <li>
                 <a href="{url name=admin_files_widget}" {if $category eq 'widget'}class="active"{/if}>{t}WIDGET HOME{/t}</a>
+            </li>
+            <li>
+                <a href="{url name=admin_files}" {if $category eq 'all'}class="active"{/if}>{t}All categories{/t}</a>
             </li>
         </ul>
 

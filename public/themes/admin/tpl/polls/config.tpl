@@ -4,7 +4,7 @@
 <form action="{url name=admin_polls_config}" method="POST" name="formulario" id="formulario" {$formAttrs}>
     <div class="top-action-bar">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Poll :: Configuration{/t}</h2></div>
+            <div class="title"><h2>{t}Polls{/t} :: {t}Settings{/t}</h2></div>
             <ul class="old-button">
                 <li>
                     <button type="submit">

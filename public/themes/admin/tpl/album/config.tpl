@@ -4,7 +4,7 @@
 <form action="{url name=admin_albums_config}" method="POST">
 <div class="top-action-bar">
     <div class="wrapper-content">
-        <div class="title"><h2>{t}Album :: Configuration{/t}</h2></div>
+        <div class="title"><h2>{t}Albums{/t} :: {t}Configuration{/t}</h2></div>
         <ul class="old-button">
             <li>
                 <button type="submit">

@@ -23,7 +23,7 @@
 <form action="{if $author->id}{url name=admin_opinion_author_update id=$author->id}{else}{url name=admin_opinion_author_create}{/if}" method="POST" enctype="multipart/form-data" id="formulario" >
     <div class="top-action-bar">
         <div class="wrapper-content">
-            <div class="title"><h2>{if !isset($author)}{t}Opinion Manager :: New author{/t}{else}{t}Opinion Manager :: Edit author{/t}{/if}</div>
+            <div class="title"><h2>{if !isset($author)}{t}Creating opinion author{/t}{else}{t}Editing opinion author{/t}{/if}</div>
             <ul class="old-button">
                 <li>
                     <button type="submit" name="continue" value="1">

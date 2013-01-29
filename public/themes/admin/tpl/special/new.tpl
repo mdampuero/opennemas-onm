@@ -72,7 +72,7 @@
 
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Special manager{/t} :: {if $smarty.request.action eq "new"}{t}Creating Special{/t}{else}{t}Editing Special{/t}{/if}</h2></div>
+            <div class="title"><h2>{if !isset($special->id)}{t}Creating special{/t}{else}{t}Editing special{/t}{/if}</h2></div>
             <ul class="old-button">
                 <li>
                 {if isset($special->id)}

@@ -4,7 +4,7 @@
 <form action="#" method="GET" name="formulario" id="formulario">
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
-        <div class="title"><h2>{t}Files manager :: {/t}{t}General statistics{/t}</h2></div>
+        <div class="title"><h2>{t}Files{/t} :: {t}Statistics{/t}</h2></div>
 
     </div>
 </div>

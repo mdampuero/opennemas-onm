@@ -44,11 +44,12 @@ class KeywordsController extends Controller
      **/
     public function listAction(Request $request)
     {
-        $filter = $this->request->query->get('filter', null);
+        $name = $this->request->query->filter('name', null, FILTER_SANITIZE_STRING);
         $page   = $this->request->query->getDigits('page', 1);
 
-        if (isset($filter) && !empty($filter['pclave'])) {
-            $filter = '`pclave` LIKE "%' . $filter['pclave'] . '%"';
+        $filter = '';
+        if (!empty($name)) {
+            $filter = '`pclave` LIKE "%' . $name . '%"';
         }
 
         $keywordManager = new \PClave();
@@ -72,6 +73,8 @@ class KeywordsController extends Controller
             array(
                 'keywords'   => $keywords,
                 'pagination' => $pagination,
+                'name'       => $name,
+                'types'      => \PClave::getTypes(),
             )
         );
     }
@@ -94,11 +97,7 @@ class KeywordsController extends Controller
             'keywords/new.tpl',
             array(
                 'keyword' => $keyword,
-                'tipos'  => array(
-                    'url'       => _('URL'),
-                    'intsearch' => _('Internal search'),
-                    'email'     => _('Email')
-                ),
+                'tipos'   => \PClave::getTypes(),
             )
         );
     }
@@ -136,11 +135,7 @@ class KeywordsController extends Controller
             return $this->render(
                 'keywords/new.tpl',
                 array(
-                    'tipos' => array(
-                        'url'       => _('URL'),
-                        'intsearch' => _('Internal search'),
-                        'email'     => _('Email')
-                    )
+                    'tipos' => \PClave::getTypes(),
                 )
             );
         }

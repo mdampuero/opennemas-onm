@@ -15,7 +15,7 @@
 
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
-        <div class="title"><h2>{t}Covers Manager{/t}::&nbsp; {if !empty($datos_cat[0])}{$datos_cat[0]->title}{else}{t}Widget Home{/t}{/if}</h2></div>
+        <div class="title"><h2>{t}ePapers{/t}</h2></div>
         <ul class="old-button">
             {acl isAllowed="KIOSKO_DELETE"}
             <li>
@@ -40,7 +40,7 @@
             <li class="separator"></li>
             <li>
                 <a href="{url name=admin_cover_create}" title="{t}New cover{/t}">
-                    <img border="0" src="{$params.IMAGE_DIR}article_add.png" title="Nueva" alt="Nueva"><br />{t}Create{/t}
+                    <img border="0" src="{$params.IMAGE_DIR}article_add.png" title="Nueva" alt="Nueva"><br />{t}New ePaper{/t}
                 </a>
             </li>
             {/acl}

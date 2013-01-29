@@ -70,7 +70,7 @@
 <form action="{if isset($article->id)}{url name=admin_article_update id=$article->id}{else}{url name=admin_article_create}{/if}" method="POST" name="formulario" id="formulario">
     <div class="top-action-bar">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Article manager{/t} :: {if isset($article->id)}{t}Creating new article{/t}{else}{t}Editing article{/t}{/if}</h2></div>
+            <div class="title"><h2>{if isset($article->id)}{t}Creating article{/t}{else}{t}Editing article{/t}{/if}</h2></div>
             <ul class="old-button">
                 {acl isAllowed="ARTICLE_UPDATE"}
                 <li>

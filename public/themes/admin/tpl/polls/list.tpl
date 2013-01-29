@@ -4,7 +4,7 @@
 <form action="{url name=admin_polls category=$category page=$page}" method="GET" name="formulario" id="formulario" {$formAttrs}>
     <div class="top-action-bar">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Polls manager{/t}</h2></div>
+            <div class="title"><h2>{t}Polls{/t}</h2></div>
             <ul class="old-button">
                 {acl isAllowed="POLL_DELETE"}
                 <li>

@@ -4,7 +4,7 @@
 <form action="{url name=admin_tpl_manager_config}" method="POST">
     <div class="top-action-bar clearfix">
     	<div class="wrapper-content">
-    		<div class="title"><h2>{t}Cache Manager{/t} :: {t}Configuration{/t}</h2></div>
+    		<div class="title"><h2>{t}Cache Manager{/t} :: {t}Settings{/t}</h2></div>
     		<ul class="old-button">
                 <li>
                     <button type="submit" name="continue" value="1">

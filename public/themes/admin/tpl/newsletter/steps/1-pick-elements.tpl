@@ -74,7 +74,7 @@
     <div id="buttons-contents" class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title">
-                <h2>{t}Newsletter manager{/t} :: {t}Newsletter contents{/t}</h2>
+                <h2>{t}Newsletter{/t} :: {t}Newsletter contents{/t}</h2>
             </div>
 
             <ul class="old-button">

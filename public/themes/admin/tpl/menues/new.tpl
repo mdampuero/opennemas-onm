@@ -19,7 +19,7 @@
 <form action="{if isset($menu->pk_menu)}{url name=admin_menu_update id=$menu->pk_menu}{else}{url name=admin_menu_create}{/if}" method="post" name="formulario" id="formulario">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Menu manager{/t} :: {if isset($menu->id)}{t 1=$menu->name}Editing menu "%1"{/t}{else}{t}Creating new menu{/t}{/if}</h2></div>
+            <div class="title"><h2>{if isset($menu->name)}{t}Editing menu{/t}{else}{t}Creating menu{/t}{/if}</h2></div>
             <ul class="old-button">
                 <li>
                     <button type="submit" name="continue" value="1">

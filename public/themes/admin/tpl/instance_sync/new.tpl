@@ -60,7 +60,7 @@
 <form action="{url name=admin_instance_sync_create}" method="POST" name="formulario" id="formulario">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Sync Manager{/t} :: {t}Client configuration{/t}</h2></div>
+            <div class="title"><h2>{t}Adding site to synchronization{/t}</h2></div>
             <ul class="old-button">
                 <li>
                     <button type="submit">

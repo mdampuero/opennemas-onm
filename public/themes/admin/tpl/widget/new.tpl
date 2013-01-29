@@ -16,13 +16,7 @@
     <div class="top-action-bar">
         <div class="wrapper-content">
             <div class="title">
-                <h2>
-                    {if $action eq "new"}
-                        {t}Creating new widget{/t}
-                    {else}
-                        {t 1=$widget->title}Editing widget "%1"{/t}
-                    {/if}
-                </h2>
+                <h2>{if !isset($widget->id)}{t}Creating widget{/t}{else}{t}Editing widget{/t}{/if}</h2>
             </div>
             <ul class="old-button">
                 <li>

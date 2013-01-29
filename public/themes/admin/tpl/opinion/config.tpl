@@ -23,7 +23,7 @@
 <form action="{url name=admin_opinions_config}" method="POST" name="formulario" id="formulario">
     <div class="top-action-bar">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Opinion :: Configuration{/t}</h2></div>
+            <div class="title"><h2>{t}Opinions{/t} :: {t}Settings{/t}</h2></div>
             <ul class="old-button">
                 <li>
                     <button type="submit">

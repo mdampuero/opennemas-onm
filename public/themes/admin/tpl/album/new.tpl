@@ -179,7 +179,7 @@
 
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Album manager{/t} :: {if $smarty.request.action eq "new"}{t}Creating Album{/t}{else}{t}Editing Album{/t}{/if}</h2></div>
+            <div class="title"><h2>{if isset($album->id)}{t}Editing album{/t}{else}{t}Creating Album{/t}{/if}</h2></div>
             <ul class="old-button">
                 <li>
                     {if isset($album->id)}
@@ -268,7 +268,7 @@
             </div>
 
             <div id="album-images">
-                <h5>{t}Album images{/t}</h5>
+                <h5>{t}Images for this album{/t}</h5>
                 <div id="album-contents" style="width:590px;display:inline-block;" class="tabs resource-container clearfix">
                     <ul>
                         <li><a href="#list-of-images">{t}Images in this album{/t}</a></li>
