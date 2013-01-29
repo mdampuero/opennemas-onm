@@ -36,7 +36,7 @@
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
             <div class="title">
-                <h2>{t}Ad manager{/t} :: {if $advertisement}{t}Creating banner{/t}{else}{t}Editing banner{/t}{/if}</h2>
+                <h2>{if $advertisement}{t}Creating banner{/t}{else}{t}Editing banner{/t}{/if}</h2>
             </div>
             <ul class="old-button">
                 <li>

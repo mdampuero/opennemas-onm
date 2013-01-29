@@ -5,7 +5,7 @@
 <form action="{url name=admin_ads}" method="get" name="formulario" id="formulario">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Advertisement manager{/t} :: {if $category eq 0}HOME{else}{$datos_cat[0]->title}{/if}</h2></div>
+            <div class="title"><h2>{t}Advertisements{/t}</h2></div>
             <ul class="old-button">
                 {acl isAllowed="ADVERTISEMENT_DELETE"}
                 <li>

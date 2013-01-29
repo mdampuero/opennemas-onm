@@ -50,12 +50,12 @@
            If you’d rather dive right in, here are a few things most people do first when they set up
            a new OpenNemas site.{/t}
         </p>
-        <p><a class="onm-button blue">Learn more</a></p>
+        <p><a class="onm-button blue">{t}Learn more{/t}</a></p>
     </div>
     <div class="welcome-panel-column-container">
         <div class="welcome-panel-column">
             <h4><span class="icon16 icon-cog"></span> {t}Basic Settings{/t}</h4>
-            <p>Here are a few easy things you can do to get your feet wet. Make sure to click Save on each Settings screen.</p>
+            <p>{t}Here are a few easy things you can do to get your feet wet. Make sure to click Save on each Settings screen.{/t}</p>
             <ul>
             <li><a href="{url name=admin_system_settings}">{t}Change your site name and preferences{/t}</a></li>
             <li><a href="{url name=admin_system_settings}#misc">{t}Select your tagline and time zone{/t}</a></li>
@@ -64,21 +64,17 @@
         </div>
         <div class="welcome-panel-column">
             <h4><span class="icon16 icon-th-large"></span> {t}Add your own Content{/t}</h4>
-            <p>Check out the <a href="#">sample page</a> &amp; <a href="#">post</a> editors to see how it all works, then delete the default content and write your own!</p>
+            <p>{t escape=off}Check out the <a href="#">sample page</a> &amp; <a href="#">post</a> editors to see how it all works, then delete the default content and write your own!{/t}</p>
             <ul>
-            <li>View the <a href="{url name=admin_staticpages_create}">sample page</a> and <a href="#">post</a></li>
-            <li>Delete the <a href="{url name=admin_staticpages}">sample page</a> and <a href="#">post</a></li>
-            <li><a href="#">Create an About Me page</a></li>
-            <li><a href="#">Write your first article</a></li>
+            <li>{t escape=off 1={url name=admin_staticpages_create} 2={url name=admin_article_create}}Create a <a href="%1">new page</a> and <a href="%2">article</a>{/t}</li>
             </ul>
         </div>
         <div class="welcome-panel-column welcome-panel-last">
-            <h4><span class="icon16 icon-book"></span> Customize Your Site</h4>
+            <h4><span class="icon16 icon-book"></span>{t}Customize Your Site{/t}</h4>
             <p>{t}Do you want more information check out our documentation.{/t}</p>
             <ul>
-                <li><a href="#">Set a background color</a></li>
-                <li><a href="#">Select a new header image</a></li>
-                <li><a href="#">Add some widgets</a></li>
+                <li><a href="{url name=admin_system_settings}">{t}Set a background color{/t}</a></li>
+                <li><a href="{url name=admin_system_settings}">{t}Select a new header image{/t}</a></li>
             </ul>
         </div>
     </div>
