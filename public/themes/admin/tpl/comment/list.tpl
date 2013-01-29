@@ -18,7 +18,7 @@
 
 {block name="content"}
 <form action="#" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
-    <div class="top-action-bar" class="clearfix">
+    <div class="top-action-bar clearfix" class="clearfix">
         <div class="wrapper-content">
             <div class="title">
                 <h2>

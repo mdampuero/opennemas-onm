@@ -14,7 +14,7 @@
 
 {block name="content"}
 <form action="{url name=admin_letters}" method="GET" name="formulario" id="formulario">
-    <div class="top-action-bar" class="clearfix">
+    <div class="top-action-bar clearfix" class="clearfix">
         <div class="wrapper-content">
             <div class="title">
                 <h2> {t}Letters to the Editor{/t}</h2>

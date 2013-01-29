@@ -51,7 +51,7 @@
 
 {block name="content"}
 <form action="{if $poll->id}{url name=admin_poll_update id=$poll->id}{else}{url name=admin_poll_create}{/if}" method="post" id="formulario">
-    <div class="top-action-bar">
+    <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title"><h2>{if $poll->id}{t}Editing poll{/t}{else}{t}Creating a poll{/t}{/if}</h2></div>
             <ul class="old-button">

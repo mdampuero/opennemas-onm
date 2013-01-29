@@ -610,6 +610,7 @@ div.utilities-conf input[type="text"]{
       margin:0;
       font-size:1.6em;
       font-weight:normal !important;
+      text-shadow: 1px 1px 0px white;
     }
 
 /* =============================================================================
@@ -754,7 +755,7 @@ ul#menu.manager a { color:White !important; }
             position: relative;
             text-align: center;
             text-decoration: none;
-            border-radius:4px;
+            border-radius:0px;
         }
 
         .old-button > li.separator{
@@ -2033,7 +2034,6 @@ progress {
     column-count:3;
     -moz-column-gap:5px; /* Firefox */
     -webkit-column-gap:5px; /* Safari and Chrome */
-    column-gap:80px;
   }
   .section-picker .options ul li {
     display:block;
@@ -2041,6 +2041,7 @@ progress {
   .section-picker .options ul li a {
     wrap: no-wrap;
     display:block;
+    padding:13px 0;
   }
   .section-picker:hover .options {
     display:block;

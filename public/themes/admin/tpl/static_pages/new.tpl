@@ -2,7 +2,7 @@
 
 {block name="content"}
 <form action="{if isset($page->id)}{url name=admin_staticpages_update id=$page->id}{else}{url name=admin_staticpages_create}{/if}" method="POST" id="formulario">
-    <div class="top-action-bar">
+    <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title"><h2>{if !isset($page->id)}{t}Creating static page{/t}{else}{t}Editing page{/t}{/if}</h2></div>
                 <ul class="old-button">

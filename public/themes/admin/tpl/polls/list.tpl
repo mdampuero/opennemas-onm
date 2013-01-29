@@ -2,7 +2,7 @@
 
 {block name="content"}
 <form action="{url name=admin_polls category=$category page=$page}" method="GET" name="formulario" id="formulario" {$formAttrs}>
-    <div class="top-action-bar">
+    <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title"><h2>{t}Polls{/t}</h2></div>
             <ul class="old-button">

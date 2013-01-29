@@ -91,7 +91,7 @@
 
 {block name="content"}
 <form action="{url name=admin_opinions}" method="get" name="formulario" id="formulario">
-<div class="top-action-bar">
+<div class="top-action-bar clearfix">
     <div class="wrapper-content">
         <div class="title"><h2>{t}Opinions{/t}</h2></div>
         <ul class="old-button">

@@ -2,7 +2,7 @@
 
 {block name="content"}
 <form action="{url name=admin_opinion_authors}" method="GET" name="formulario" id="formulario">
-	<div class="top-action-bar">
+	<div class="top-action-bar clearfix">
 		<div class="wrapper-content">
             <div class="title"><h2>{t}Opinion authors{/t}</div>
             <ul class="old-button">

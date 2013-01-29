@@ -35,18 +35,18 @@ jQuery(document).ready(function(){
 {/block}
 
 {block name="content"}
-<div class="top-action-bar">
+<div class="top-action-bar clearfix">
     <div class="wrapper-content">
         <div class="title">
             <h2 class="disqus">{t}Comments{/t}</h2>
-            <ul class="old-button">
-                <li>
-                    <a href="{url name=admin_comments_disqus_config}" title="{t}Disqus module configuration{/t}">
-                        <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" title="{t}Config disqus module{/t}" alt="{t}Config Europapress module{/t}" ><br />{t}Config{/t}
-                    </a>
-                </li>
-            </ul>
         </div>
+        <ul class="old-button">
+            <li>
+                <a href="{url name=admin_comments_disqus_config}" title="{t}Disqus module configuration{/t}">
+                    <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" title="{t}Config disqus module{/t}" alt="{t}Config Europapress module{/t}" ><br />{t}Config{/t}
+                </a>
+            </li>
+        </ul>
     </div>
 </div>
 <div class="iframe">

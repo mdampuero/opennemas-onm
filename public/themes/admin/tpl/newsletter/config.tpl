@@ -45,7 +45,7 @@ jQuery(document).ready(function($){
 
 {block name="content"}
 <form action="{url name=admin_newsletter_config}" method="POST" name="formulario" id="formulario" {$formAttrs}>
-    <div class="top-action-bar">
+    <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title"><h2>{t}Newsletters{/t} :: {t}Configuration{/t}</h2></div>
             <ul class="old-button">

@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div class="top-action-bar">
+<div class="top-action-bar clearfix">
 	<div class="wrapper-content">
 		<div class="title"><h2>{t}Static pages{/t}</h2></div>
 		<ul class="old-button">

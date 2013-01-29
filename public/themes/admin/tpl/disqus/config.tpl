@@ -24,25 +24,25 @@
 
 {block name="content"}
 <form action="{url name=admin_comments_disqus_config}" method="POST">
-<div class="top-action-bar">
+<div class="top-action-bar clearfix">
     <div class="wrapper-content">
         <div class="title">
             <h2 class="disqus">{t}Settings{/t}</h2>
-            <ul class="old-button">
-                <li>
-                    <button type="submit">
-                        <img border="0" src="{$params.IMAGE_DIR}save.png"><br />
-                        {t}Save{/t}
-                    </button>
-                </li>
-                <li class="separator"></li>
-                <li>
-                    <a href="{url name=admin_comments_disqus}" title="{t}Go back to list{/t}">
-                        <img src="{$params.IMAGE_DIR}previous.png" alt="{t}Go back to list{/t}" ><br />{t}Go back to list{/t}
-                    </a>
-                </li>
-            </ul>
         </div>
+        <ul class="old-button">
+            <li>
+                <button type="submit">
+                    <img border="0" src="{$params.IMAGE_DIR}save.png"><br />
+                    {t}Save{/t}
+                </button>
+            </li>
+            <li class="separator"></li>
+            <li>
+                <a href="{url name=admin_comments_disqus}" title="{t}Go back to list{/t}">
+                    <img src="{$params.IMAGE_DIR}previous.png" alt="{t}Go back to list{/t}" ><br />{t}Go back to list{/t}
+                </a>
+            </li>
+        </ul>
     </div>
 </div>
 <div class="wrapper-content">

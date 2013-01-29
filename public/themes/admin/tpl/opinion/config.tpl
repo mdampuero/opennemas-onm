@@ -21,7 +21,7 @@
 
 {block name="content"}
 <form action="{url name=admin_opinions_config}" method="POST" name="formulario" id="formulario">
-    <div class="top-action-bar">
+    <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title"><h2>{t}Opinions{/t} :: {t}Settings{/t}</h2></div>
             <ul class="old-button">

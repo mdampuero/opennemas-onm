@@ -36,7 +36,7 @@ jQuery(document).ready(function($) {
 
 {block name="content"}
 <form id="formulario" name="form_upload" action="{url name=admin_image_update}" method="POST">
-    <div class="top-action-bar">
+    <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title"><h2>{t}Editing image{/t}</h2></div>
             <ul class="old-button">

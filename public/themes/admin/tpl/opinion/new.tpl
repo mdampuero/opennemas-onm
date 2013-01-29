@@ -40,7 +40,7 @@
 
 {block name="content"}
 <form action="{iF $opinion->id}{url name=admin_opinion_update id=$opinion->id}{else}{url name=admin_opinion_create}{/if}" method="POST" id="formulario">
-<div class="top-action-bar">
+<div class="top-action-bar clearfix">
     <div class="wrapper-content">
         <div class="title"><h2>{if $opinion->id}{t}Editing opinion{/t}{else}{t}Creating opinion{/t}{/if}</h2></div>
         <ul class="old-button">
