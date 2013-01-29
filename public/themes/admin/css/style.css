@@ -586,7 +586,7 @@ div.utilities-conf input[type="text"]{
     width: 100%;
     margin:0;
     margin-bottom:5px;
-    padding-top: 40px;
+    padding-top: 45px;
     min-height: 60px;
 }
   .top-action-bar .title > * {
@@ -1987,7 +1987,7 @@ progress {
   .section-picker .title-picker {
     font-family:"OpenSans";
     background:White;
-    font-size:1.2em;
+    font-size:1.5em;
     padding:5px;
     background:none;
     border:1px solid rgba(0,0,0,0);
@@ -2004,7 +2004,7 @@ progress {
     display:none;
     position:absolute;
     top:99%;
-    left:0px;
+    left:0;
     z-index:99;
     background:White;
     border:1px solid #ccc;
@@ -2016,12 +2016,17 @@ progress {
   }
     .section-picker .options > * {
       vertical-align:top;
+      margin-left:10px;
+    }
+    .section-picker .options h4 {
+      margin-left:0;
     }
     .section-picker .options ul {
-      margin-left:15px;
+      margin-left:10px;
     }
     .section-picker .options ul ul {
-      list-style: disc;
+      margin-left:15px;
+      list-style-type:square !important;
     }
     .section-picker .options .component {
       margin-right:10px;
@@ -2029,11 +2034,14 @@ progress {
       vertical-align: top;
     }
   .section-picker .options .categories {
+    -ms-column-count:3; /* Firefox */
     -moz-column-count:3; /* Firefox */
     -webkit-column-count:3; /* Safari and Chrome */
     column-count:3;
-    -moz-column-gap:5px; /* Firefox */
-    -webkit-column-gap:5px; /* Safari and Chrome */
+    -ms-column-gap:10px; /* Firefox */
+    -moz-column-gap:vpx; /* Firefox */
+    -webkit-column-gap:10px; /* Safari and Chrome */
+    column-gap:10px;
   }
   .section-picker .options ul li {
     display:block;
@@ -2041,14 +2049,14 @@ progress {
   .section-picker .options ul li a {
     wrap: no-wrap;
     display:block;
-    padding:13px 0;
+    padding:5px 0;
   }
   .section-picker:hover .options {
     display:block;
   }
+  .section-picker .options .active {
+    background: #0B55C4;
+    color:White;
+    padding:5px 2px;
+  }
 
-.rot90 {
-   -webkit-transform: rotate(-90deg);
-   -moz-transform: rotate(-90deg);
-    width:100px;
-}
