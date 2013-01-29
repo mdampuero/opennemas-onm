@@ -13,10 +13,17 @@
 
 {block name="content"}
 <form action="#" method="post" name="formulario" id="formulario">
-
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Images{/t}</h2></div>
+            <div class="title">
+                <h2>{t}Images{/t} :: </h2>
+                <div class="section-picker">
+                    <div class="title-picker btn"><span class="text">{if !isset($datos_cat[0]->title)}{t}All categories{/t}{else}{$datos_cat[0]->title}{/if}</span> <span class="caret"></span></div>
+                    <div class="options">
+                        {include file="common/drop_down_categories.tpl" home="{url name=admin_images l=a}"}
+                    </div>
+                </div>
+            </div>
             <ul class="old-button">
                 {acl isAllowed="IMAGE_DELETE"}
                 <li>
@@ -57,8 +64,6 @@
     <div class="wrapper-content">
 
         {render_messages}
-
-        {include file="image/_partials/categories.tpl" home="{url name=admin_images l=a}"}
 
         {include file="image/_partials/_media_browser.tpl"}
 
