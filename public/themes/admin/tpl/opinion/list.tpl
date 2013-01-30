@@ -1,94 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="footer-js" append}
-    <script>
-    jQuery(document).ready(function($) {
-        $('.minput, #toggleallcheckbox').on('click', function() {
-            checkbox = $(this).find('input[type="checkbox"]');
-            checkbox.attr(
-               'checked',
-               !checkbox.is(':checked')
-            );
-            var checked_elements = $('input[type="checkbox"]:checked').length;
-            if (checked_elements > 0) {
-                $('.old-button .batch-actions').fadeIn('fast');
-            } else {
-                $('.old-button .batch-actions').fadeOut('fast');
-            }
-        });
-        $('#batch-inhome, #batch-noinhome').on('click', function(e, ui){
-            e.preventDefault();
-            $('#formulario').attr('action', "{url name=admin_opinions_batch_inhome}");
-            $('#formulario').submit();
-        });
-        $('#batch-publish, batch-unpublish').on('click', function(e, ui){
-            e.preventDefault();
-            $('#formulario').attr('action', "{url name=admin_opinions_batch_publish}");
-            $('#formulario').submit();
-        });
-        $('#batch-delete').on('click', function(e, ui){
-            e.preventDefault();
-            $('#formulario').attr('action', "{url name=admin_opinions_batch_delete}");
-            $('#formulario').attr('method', "POST");
-            $('#formulario').submit();
-        });
-
-        $('#opinion_clearcache').on('click', function(e, ui) {
-            e.preventDefault();
-            jQuery.ajax({
-                url: "{url name=admin_tpl_manager_cleanfrontpage category=opinion}",
-                success: function(data){
-                    jQuery('#warnings-validation').html(data);
-                }
-            });
-        });
-
-        {if $home}
-        $( "#list_opinion tbody" ).sortable({
-            items: "tr:not(.header)",
-            containment: 'parent'
-        });
-        $( "#sortable" ).disableSelection();
-
-        $('#save_positions').on('click', function(e, ui) {
-            e.preventDefault();
-            var content_positions = [
-                'director-opinion',
-                'editorial-opinion',
-                'normal-opinion'
-            ];
-            var elements = [];
-            $.each(content_positions, function(key, position_name) {
-
-                var name = '.'+position_name
-                var items = jQuery(name);
-
-                var elements_in_position = [];
-                items.each(function(key, item) {
-                    elements_in_position.push($(item).data('id'));
-                });
-
-                if (elements_in_position.length > 0) {
-                    elements.push(elements_in_position);
-                };
-            });
-            $.ajax({
-                url : '{url name=admin_opinions_savepositions}',
-                method: 'POST',
-                data: { positions: JSON.stringify(elements)},
-                success: function(data) {
-                    $('#warnings-validation').html(data);
-                }
-            });
-        });
-        {/if}
-
-
-    });
-    </script>
-{/block}
-
-
 {block name="content"}
 <form action="{url name=admin_opinions}" method="get" name="formulario" id="formulario">
 <div class="top-action-bar clearfix">
@@ -198,4 +109,93 @@
     {include file="opinion/modals/_modalDelete.tpl"}
     {include file="opinion/modals/_modalBatchDelete.tpl"}
     {include file="opinion/modals/_modalAccept.tpl"}
+{/block}
+
+
+{block name="footer-js" append}
+    <script>
+    jQuery(document).ready(function($) {
+        $('.minput, #toggleallcheckbox').on('click', function() {
+            checkbox = $(this).find('input[type="checkbox"]');
+            checkbox.attr(
+               'checked',
+               !checkbox.is(':checked')
+            );
+            var checked_elements = $('input[type="checkbox"]:checked').length;
+            if (checked_elements > 0) {
+                $('.old-button .batch-actions').fadeIn('fast');
+            } else {
+                $('.old-button .batch-actions').fadeOut('fast');
+            }
+        });
+        $('#batch-inhome, #batch-noinhome').on('click', function(e, ui){
+            e.preventDefault();
+            $('#formulario').attr('action', "{url name=admin_opinions_batch_inhome}");
+            $('#formulario').submit();
+        });
+        $('#batch-publish, batch-unpublish').on('click', function(e, ui){
+            e.preventDefault();
+            $('#formulario').attr('action', "{url name=admin_opinions_batch_publish}");
+            $('#formulario').submit();
+        });
+        $('#batch-delete').on('click', function(e, ui){
+            e.preventDefault();
+            $('#formulario').attr('action', "{url name=admin_opinions_batch_delete}");
+            $('#formulario').attr('method', "POST");
+            $('#formulario').submit();
+        });
+
+        $('#opinion_clearcache').on('click', function(e, ui) {
+            e.preventDefault();
+            jQuery.ajax({
+                url: "{url name=admin_tpl_manager_cleanfrontpage category=opinion}",
+                success: function(data){
+                    jQuery('#warnings-validation').html(data);
+                }
+            });
+        });
+
+        {if $home}
+        $( "#list_opinion tbody" ).sortable({
+            items: "tr:not(.header)",
+            containment: 'parent'
+        });
+        $( "#sortable" ).disableSelection();
+
+        $('#save_positions').on('click', function(e, ui) {
+            e.preventDefault();
+            var content_positions = [
+                'director-opinion',
+                'editorial-opinion',
+                'normal-opinion'
+            ];
+            var elements = [];
+            $.each(content_positions, function(key, position_name) {
+
+                var name = '.'+position_name
+                var items = jQuery(name);
+
+                var elements_in_position = [];
+                items.each(function(key, item) {
+                    elements_in_position.push($(item).data('id'));
+                });
+
+                if (elements_in_position.length > 0) {
+                    elements.push(elements_in_position);
+                };
+            });
+            $.ajax({
+                url : '{url name=admin_opinions_savepositions}',
+                method: 'POST',
+                data: { positions: JSON.stringify(elements)},
+                success: function(data) {
+                    $('#warnings-validation').html(data);
+                }
+            });
+        });
+        {/if}
+
+
+    });
+    </script>
 {/block}
