@@ -17,6 +17,19 @@ class Contents
     }
 
     /*
+    * @url GET /contents/read/:contentID
+    */
+    public function read($contentID)
+    {
+        $this->validateInt($contentID);
+
+        $content = new \Content($contentID);
+        $content = $content->get($contentID);
+
+        return serialize($content);
+    }
+
+    /*
     * @url GET /contents/contenttype/:contentId
     */
     public function contentType($contentID)

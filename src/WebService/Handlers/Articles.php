@@ -298,7 +298,7 @@ class Articles
         } else {
             $video =  $cm->find_by_category_name(
                 'Video',
-                $actualCategory,
+                $article->category_name,
                 'contents.content_status=1',
                 'ORDER BY created DESC LIMIT 0 , 1'
             );
