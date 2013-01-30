@@ -68,6 +68,7 @@ class CommentsController extends Controller
                     'elems_per_page' => $elemsByPage,
                     'offset'         => $offset,
                     'dark_theme'     => $darkTheme,
+                    'count'          => $total,
                 )
             );
 
