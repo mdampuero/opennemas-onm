@@ -93,7 +93,16 @@
 <form action="{url name=admin_opinions}" method="get" name="formulario" id="formulario">
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
-        <div class="title"><h2>{t}Opinions{/t}</h2></div>
+        <div class="title">
+            <h2>{t}Opinions{/t} :: </h2>
+            <div class="section-picker">
+                <div class="title-picker btn"><span class="text">{if $home}{t}Opinion frontpage{/t}{else}{t}Listing{/t}{/if}</span> <span class="caret"></span></div>
+                <div class="options">
+                    <a href="{url name=admin_opinions_frontpage}" {if $home}class="active"{/if}>{t}Opinion frontpage{/t}</a>
+                    <a href="{url name=admin_opinions}" {if !$home}class="active"{/if}>{t}Listing{/t}</a>
+                </div>
+            </div>
+        </div>
         <ul class="old-button">
             {acl isAllowed="OPINION_AVAILABLE"}
         {*    <li class="batch-actions">
@@ -177,24 +186,13 @@
 
         <div id="warnings-validation"></div><!-- /warnings-validation -->
 
-        <div>
-            <ul class="pills clearfix">
-                <li>
-                <a href="{url name=admin_opinions_frontpage}" {if $home}class="active"{/if}>{t}Opinion frontpage{/t}</a>
-                </li>
-                <li>
-                    <a href="{url name=admin_opinions}" {if !$home}class="active"{/if}>{t}Listing{/t}</a>
-                </li>
-            </ul>
-
-            <div id="list_opinion">
-            {if $home}
-                {include file="opinion/partials/_opinion_list_home.tpl"}
-            {else}
-                {include file="opinion/partials/_opinion_list.tpl"}
-            {/if}
-            </div>
-         </div>
+        <div id="list_opinion">
+        {if $home}
+            {include file="opinion/partials/_opinion_list_home.tpl"}
+        {else}
+            {include file="opinion/partials/_opinion_list.tpl"}
+        {/if}
+        </div>
     </div>
 </form>
     {include file="opinion/modals/_modalDelete.tpl"}

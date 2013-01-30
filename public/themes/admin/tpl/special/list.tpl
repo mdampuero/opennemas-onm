@@ -8,7 +8,17 @@
 <form action="{url name=admin_specials}" method="get" name="formulario" id="formulario">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Specials{/t}</h2></div>
+            <div class="title">
+                <h2>{t}Specials{/t} :: </h2>
+                <div class="section-picker">
+                    <div class="title-picker btn"><span class="text">{if $category == 'widget'}{t}WIDGET HOME{/t}{elseif $category == 'all'}{t}All categories{/t}{else}{$datos_cat[0]->title}{/if}</span> <span class="caret"></span></div>
+                    <div class="options">
+                        <h4>{t}Special elements{/t}</h4>
+                        <a href="{url name=admin_specials_widget}" {if $category=='widget'}class="active"{/if}>{t}WIDGET HOME{/t}</a>
+                        {include file="common/drop_down_categories.tpl" home={url name=admin_specials l=1}}
+                    </div>
+                </div>
+            </div>
             <ul class="old-button">
                 {acl isAllowed="SPECIAL_DELETE"}
                 <li>
@@ -62,16 +72,6 @@
 
         {render_messages}
         <div id="warnings-validation"></div>
-
-        <ul class="pills clearfix">
-            <li>
-                <a href="{url name=admin_specials_widget}" {if $category=='widget'}class="active"{/if}>{t}WIDGET HOME{/t}</a>
-            </li>
-            <li>
-                <a href="{url name=admin_specials}" {if $category=='all'}class="active"{/if}>{t}All{/t}</a>
-            </li>
-           {include file="menu_categories.tpl" home={url name=admin_specials l=1}}
-        </ul>
 
         <table class="table table-hover table-condensed">
             <thead>

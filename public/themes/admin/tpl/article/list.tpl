@@ -1,37 +1,18 @@
 {extends file="base/admin.tpl"}
 
-{block name="footer-js" append}
-    <script>
-    jQuery(document).ready(function ($){
-        $('[rel="tooltip"]').tooltip();
-
-        $('.minput').on('click', function() {
-            checkbox = $(this).find('input[type="checkbox"]');
-            var checked_elements = $('.table tbody input[type="checkbox"]:checked').length;
-            if (checked_elements > 0) {
-                $('.old-button .batch-actions').fadeIn('fast');
-            } else {
-                $('.old-button .batch-actions').fadeOut('fast');
-            }
-        });
-
-        var form = $('#formulario');
-        $('#batch-publish, #batch-unpublish').on('click', function (e, ui) {
-            form.attr('action', '{url name=admin_articles_batchpublish}');
-        });
-
-        $('#batch-delete').on('click', function (e, ui) {
-            form.attr('action', '{url name=admin_articles_batchdelete}');
-        });
-    });
-    </script>
-{/block}
-
 {block name="content"}
 <form action="{url name=admin_articles}" method="GET" name="formulario" id="formulario">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Articles{/t}</h2></div>
+            <div class="title">
+                <h2>{t}Articles{/t} :: </h2>
+                <div class="section-picker">
+                    <div class="title-picker btn"><span class="text">{if !isset($datos_cat[0]->title)}{t}All categories{/t}{else}{$datos_cat[0]->title}{/if}</span> <span class="caret"></span></div>
+                    <div class="options">
+                        {include file="common/drop_down_categories.tpl" home="{url name=admin_articles l=1 status=$status}"}
+                    </div>
+                </div>
+            </div>
             <ul class="old-button">
                 {acl isAllowed="ARTICLE_DELETE"}
                 <li>
@@ -43,25 +24,25 @@
                 {acl isAllowed="ARTICLE_AVAILABLE"}
                 <li class="batch-actions">
 
-                <a href="#">
-                    <img src="{$params.IMAGE_DIR}/select.png" title="" alt="" />
-                    <br/>{t}Batch actions{/t}
-                </a>
+                    <a href="#">
+                        <img src="{$params.IMAGE_DIR}/select.png" title="" alt="" />
+                        <br/>{t}Batch actions{/t}
+                    </a>
 
-                <ul class="dropdown-menu">
-                    <li>
-                        <button type="submit" name="new_status" value="1" href="#" id="batch-publish">
-                            {t}Batch publish{/t}
-                        </button>
-                    </li>
-                    <li>
-                        <button type="submit" name="new_status" value="0" id="batch-unpublish">
-                            {t}Batch unpublish{/t}
-                        </button>
-                    </li>
-                </ul>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <button type="submit" name="new_status" value="1" href="#" id="batch-publish">
+                                {t}Batch publish{/t}
+                            </button>
+                        </li>
+                        <li>
+                            <button type="submit" name="new_status" value="0" id="batch-unpublish">
+                                {t}Batch unpublish{/t}
+                            </button>
+                        </li>
+                    </ul>
+                </li>
 
-            </li>
                 {/acl}
                 <li class="separator"></li>
                 {acl isAllowed="ARTICLE_CREATE"}
@@ -78,15 +59,6 @@
     <div class="wrapper-content">
 
         {render_messages}
-
-        <ul class="pills">
-            {acl hasCategoryAccess=0}
-            <li>
-                <a href="{url name=admin_articles}"  {if $category=='all' || $category == 0}class="active"{/if}>{t}All categories{/t}</font></a>
-            </li>
-            {/acl}
-            {include file="menu_categories.tpl" home="{url name=admin_articles l=1 status=$status}"}
-        </ul>
 
         <div class="table-info clearfix">
             {acl hasCategoryAccess=$category}<div class="pull-left"><strong>{t 1=$totalArticles}%1 articles{/t}</strong></div> {/acl}
@@ -191,4 +163,32 @@
     <input type="hidden" name="category" value="{$category}">
 </form>
 {include file="article/modals/_modalDelete.tpl"}
+{/block}
+
+
+{block name="footer-js" append}
+    <script>
+    jQuery(document).ready(function ($){
+        $('[rel="tooltip"]').tooltip();
+
+        $('.minput').on('click', function() {
+            checkbox = $(this).find('input[type="checkbox"]');
+            var checked_elements = $('.table tbody input[type="checkbox"]:checked').length;
+            if (checked_elements > 0) {
+                $('.old-button .batch-actions').fadeIn('fast');
+            } else {
+                $('.old-button .batch-actions').fadeOut('fast');
+            }
+        });
+
+        var form = $('#formulario');
+        $('#batch-publish, #batch-unpublish').on('click', function (e, ui) {
+            form.attr('action', '{url name=admin_articles_batchpublish}');
+        });
+
+        $('#batch-delete').on('click', function (e, ui) {
+            form.attr('action', '{url name=admin_articles_batchdelete}');
+        });
+    });
+    </script>
 {/block}

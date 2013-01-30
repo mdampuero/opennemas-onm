@@ -1,8 +1,8 @@
 <h4>{t}Categories{/t}</h4>
 <div class="component">
-    {if $hide_all === true}
+    {if $hide_all != true}
         {acl hasCategoryAccess=0}
-        <a href="{$home}" {if $category == 'all'}class="active"{/if}>{t}All categories{/t}</a>
+        <a href="{$home}" class="all {if $category == 'all'}active{/if}">{t}All categories{/t}</a>
         {/acl}
     {/if}
     <ul class="categories">
@@ -15,6 +15,7 @@
                     id="link_{$ca}"
                     class="links {if $category==$ca}active{else}{if $ca eq $datos_cat[0]->fk_content_category}active {/if}{/if}" >
                     {$allcategorys[as]->title}
+                    {if $allcategorys[as]->inmenu eq 0}<span class="inactive">{t}(inactive){/t}</span>{/if}
                 </a>
 
                 <ul>
@@ -27,6 +28,7 @@
                                 class="links"
                                 {if $category==$subca}active {else}{if $subca eq $datos_cat[0]->fk_content_category}active{/if} {/if}>
                                 &rarr; {$subcat[as][su]->title}
+                                {if $subcat[as][su]->inmenu eq 0 || $allcategorys[as]->inmenu eq 0}<span class="inactive">{t}(inactive){/t}</span>{/if}
                             </a>
                         </li>
                         {else}
@@ -36,6 +38,7 @@
                                     class="links"
                                     {if $category==$subca}active {else}{if $subca eq $datos_cat[0]->fk_content_category}active{/if} {/if}>
                                     &rarr; {$subcat[as][su]->title}
+                                    {if $subcat[as][su]->inmenu eq 0 || $allcategorys[as]->inmenu eq 0}<span class="inactive">{t}(inactive){/t}</span>{/if}
                                 </a>
                             </li>
                         {/if}

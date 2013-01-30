@@ -1973,7 +1973,7 @@ progress {
 }
 
 .nowrap {
-    wrap: no-wrap;
+    word-wrap: no-wrap;
 }
 
 /* =============================================================================
@@ -1986,7 +1986,6 @@ progress {
 }
   .section-picker .title-picker {
     font-family:"OpenSans";
-    background:White;
     font-size:1.5em;
     padding:5px;
     background:none;
@@ -1998,6 +1997,9 @@ progress {
     border-bottom: 0 none;
     border-radius:4px 4px 0 0;
     z-index:100;
+    -moz-box-shadow: 0 0 0 White;
+    -wekbit-box-shadow: 0 0 0 White;
+    box-shadow:0 0 0 White;
   }
 
   .section-picker .options {
@@ -2010,8 +2012,7 @@ progress {
     border:1px solid #ccc;
     padding:10px;
     max-width:900px;
-    min-width:500px;
-    wrap:no-wrap;
+    min-width:600px;
     margin-top:-1px;
   }
     .section-picker .options > * {
@@ -2022,7 +2023,7 @@ progress {
       margin-left:0;
     }
     .section-picker .options ul {
-      margin-left:0px;
+      margin-left:0;
     }
     .section-picker .options ul ul {
       margin-left:15px;
@@ -2031,7 +2032,6 @@ progress {
     .section-picker .options .component {
       margin-right:10px;
       display:block;
-      vertical-align: top;
     }
   .section-picker .options .categories {
     -ms-column-count:3; /* Firefox */
@@ -2047,16 +2047,24 @@ progress {
     display:block;
   }
   .section-picker .options ul li a {
-    wrap: no-wrap;
+    word-wrap: no-wrap;
     display:block;
-    padding:5px 0;
+    padding:3px 0;
   }
   .section-picker:hover .options {
+    display:block;
+  }
+  .section-picker .options .all {
+    margin-bottom:5px;
     display:block;
   }
   .section-picker .options .active {
     background: #0B55C4;
     color:White;
-    padding:5px 2px;
+    padding:5px;
+    border-radius:2px;
+  }
+  .section-picker .options .inactive {
+    color:#888;
   }
 
