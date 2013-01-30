@@ -68,6 +68,52 @@ class ContentsController extends Controller
     }
 
     /**
+     * Print an external article
+     *
+     * @return Response the response object
+     **/
+    public function extPrintAction(Request $request)
+    {
+        $dirtyID      = $request->query->filter('content_id', '', FILTER_SANITIZE_STRING);
+        $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+
+        $cm = new \ContentManager;
+
+        // Getting Synchronize setting params
+        $wsUrl = '';
+        $syncParams = s::get('sync_params');
+        foreach ($syncParams as $siteUrl => $categoriesToSync) {
+            foreach ($categoriesToSync as $value) {
+                if (preg_match('/'.$categoryName.'/i', $value)) {
+                    $wsUrl = $siteUrl;
+                }
+            }
+        }
+
+        // Resolve article ID
+        $contentID = $cm->getUrlContent($wsUrl.'/ws/contents/resolve/'.$dirtyID, true);
+        $cacheID   = $this->view->generateCacheId('article', null, $contentID);
+
+        // Fetch content
+        $content = $cm->getUrlContent($wsUrl.'/ws/contents/read/'.$contentID, true);
+        $content = unserialize($content);
+
+        if (isset($content->img2) && ($content->img2 != 0)) {
+            $photoInt = new \Photo($content->img2);
+            $this->view->assign('photoInt', $photoInt);
+        }
+
+        return $this->render(
+            'article/article_printer.tpl',
+            array(
+                'cache_id' => $cacheID,
+                'content'  => $content,
+                'article'  => $content
+            )
+        );
+    }
+
+    /**
      * Shares an content by email
      *
      * @return Response the response object
@@ -103,9 +149,16 @@ class ContentsController extends Controller
 
             $tplMail->assign('destination', 'amig@,');
 
-            $articleID = $request->request->getDigits('content_id', null);
-            // Load permalink to embed into content
-            $content = new \Content($articleID);
+            $contentID = $request->request->getDigits('content_id', null);
+
+            if ($ext == 1) {
+                // External load content
+                $content = $cm->getUrlContent($wsUrl.'/ws/contents/read/'.$contentID, true);
+                $content = unserialize($content);
+            } else {
+                // Locally load content
+                $content = new \Content($contentID);
+            }
 
             $tplMail->assign('mail', $mail);
             $tplMail->assign('article', $content);
