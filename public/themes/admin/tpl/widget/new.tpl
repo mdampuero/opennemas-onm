@@ -13,16 +13,10 @@
 
 {block name="content" append}
 <form action="{if isset($widget)}{url name=admin_widget_update id=$widget->id}{else}{url name=admin_widget_create}{/if}" method="post" name="formulario" id="formulario">
-    <div class="top-action-bar">
+    <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title">
-                <h2>
-                    {if $action eq "new"}
-                        {t}Creating new widget{/t}
-                    {else}
-                        {t 1=$widget->title}Editing widget "%1"{/t}
-                    {/if}
-                </h2>
+                <h2>{if !isset($widget->id)}{t}Creating widget{/t}{else}{t}Editing widget{/t}{/if}</h2>
             </div>
             <ul class="old-button">
                 <li>

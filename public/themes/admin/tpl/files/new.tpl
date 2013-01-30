@@ -21,7 +21,7 @@
 
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Files manager ::{/t} {if $attaches}{t 1=$attaches->title}Editing file "%1"{/t}{else}{t}Creating new file{/t}{/if}</h2></div>
+            <div class="title"><h2>{if $attaches}{t}Editing file{/t}{else}{t}Creating file{/t}{/if}</h2></div>
             <ul class="old-button">
                 <li>
                     <button  type="submit" >
@@ -41,6 +41,7 @@
     <div class="wrapper-content">
         {render_messages}
     </div>
+
     <div class="wrapper-content panel">
         <div class="form-horizontal">
             <div class="control-group">

@@ -33,7 +33,7 @@ input[type="text"].required {
 
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Book manager{/t} :: {if $smarty.request.action eq "new"}{t}Creating Book{/t}{else}{t}Editing Book{/t}{/if}</h2></div>
+            <div class="title"><h2>{if !isset($book->id)}{t}Creating Book{/t}{else}{t}Editing Book{/t}{/if}</h2></div>
             <ul class="old-button">
                 {if isset($book->id)}
                     {acl isAllowed="BOOK_UPDATE"}

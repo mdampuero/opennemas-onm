@@ -16,7 +16,7 @@ jQuery(function($){
 <form action="{url name=admin_user_list}" method="get" id="userform">
 	<div class="top-action-bar clearfix">
 		<div class="wrapper-content">
-			<div class="title"><h2>{t}User manager{/t}</h2></div>
+			<div class="title"><h2>{t}Users{/t}</h2></div>
 			<ul class="old-button">
 				<li>
 					<button type="submit" id="batch-delete" title="{t}Delete selected users{/t}">

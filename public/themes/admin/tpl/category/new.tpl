@@ -65,7 +65,7 @@
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
 
-            <div class="title"><h2>{t}Category manager{/t} :: {if $category->pk_content_category}{t}Editing category{/t}{else}{t}Creating new category{/t}{/if}</h2></div>
+            <div class="title"><h2>{if $category->pk_content_category}{t}Editing category{/t}{else}{t}Creating category{/t}{/if}</h2></div>
             <ul class="old-button">
                 <li>
                     <button type="submit" name="continue" value="1">

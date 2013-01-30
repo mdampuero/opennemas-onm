@@ -14,10 +14,10 @@
 
 {block name="content"}
 <form action="{url name=admin_letters}" method="GET" name="formulario" id="formulario">
-    <div class="top-action-bar" class="clearfix">
+    <div class="top-action-bar clearfix" class="clearfix">
         <div class="wrapper-content">
             <div class="title">
-                <h2> {t}Letter to the Editor manager{/t} :: {t}Listing letters{/t}</h2>
+                <h2> {t}Letters to the Editor{/t}</h2>
             </div>
             <ul class="old-button">
                {acl isAllowed="LETTER_DELETE"}

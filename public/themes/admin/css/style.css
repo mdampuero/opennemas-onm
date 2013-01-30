@@ -1,3 +1,15 @@
+/* Fonts */
+@font-face { font-family: 'OpenSans'; src: url('../fonts/OpenSans-Light-webfont.eot'); src: url('../fonts/OpenSans-Light-webfont.eot?#iefix') format("embedded-opentype"), url('../fonts/OpenSans-Light-webfont.woff') format("woff"), url('../fonts/OpenSans-Light-webfont.ttf') format("truetype"), url('../fonts/OpenSans-Light-webfont.svg#OpenSansLight') format("svg"); font-weight: light; font-weight: 300; font-style: normal; }
+@font-face { font-family: 'OpenSans'; src: url('../fonts/OpenSans-LightItalic-webfont.eot'); src: url('../fonts/OpenSans-LightItalic-webfont.eot?#iefix') format("embedded-opentype"), url('../fonts/OpenSans-LightItalic-webfont.woff') format("woff"), url('../fonts/OpenSans-LightItalic-webfont.ttf') format("truetype"), url('../fonts/OpenSans-LightItalic-webfont.svg#OpenSansLightItalic') format("svg"); font-weight: light; font-weight: 300; font-style: italic; }
+@font-face { font-family: 'OpenSans'; src: url('../fonts/OpenSans-Regular-webfont.eot'); src: url('../fonts/OpenSans-Regular-webfont.eot?#iefix') format("embedded-opentype"), url('../fonts/OpenSans-Regular-webfont.woff') format("woff"), url('../fonts/OpenSans-Regular-webfont.ttf') format("truetype"), url('../fonts/OpenSans-Regular-webfont.svg#OpenSansRegular') format("svg"); font-weight: normal; font-weight: 500; font-style: normal; }
+@font-face { font-family: 'OpenSans'; src: url('../fonts/OpenSans-Italic-webfont.eot'); src: url('../fonts/OpenSans-Italic-webfont.eot?#iefix') format("embedded-opentype"), url('../fonts/OpenSans-Italic-webfont.woff') format("woff"), url('../fonts/OpenSans-Italic-webfont.ttf') format("truetype"), url('../fonts/OpenSans-Italic-webfont.svg#OpenSansItalic') format("svg"); font-weight: normal; font-weight: 500; font-style: italic; }
+@font-face { font-family: 'OpenSans'; src: url('../fonts/OpenSans-Semibold-webfont.eot'); src: url('../fonts/OpenSans-Semibold-webfont.eot?#iefix') format("embedded-opentype"), url('../fonts/OpenSans-Semibold-webfont.woff') format("woff"), url('../fonts/OpenSans-Semibold-webfont.ttf') format("truetype"), url('../fonts/OpenSans-Semibold-webfont.svg#OpenSansSemibold') format("svg"); font-weight: bold; font-weight: 600; font-style: normal; }
+@font-face { font-family: 'OpenSans'; src: url('../fonts/OpenSans-SemiboldItalic-webfont.eot'); src: url('../fonts/OpenSans-SemiboldItalic-webfont.eot?#iefix') format("embedded-opentype"), url('../fonts/OpenSans-SemiboldItalic-webfont.woff') format("woff"), url('../fonts/OpenSans-SemiboldItalic-webfont.ttf') format("truetype"), url('../fonts/OpenSans-SemiboldItalic-webfont.svg#OpenSansSemiboldItalic') format("svg"); font-weight: bold; font-weight: 600; font-style: italic; }
+@font-face { font-family: 'OpenSans'; src: url('../fonts/OpenSans-Bold-webfont.eot'); src: url('../fonts/OpenSans-Bold-webfont.eot?#iefix') format("embedded-opentype"), url('../fonts/OpenSans-Bold-webfont.woff') format("woff"), url('../fonts/OpenSans-Bold-webfont.ttf') format("truetype"), url('../fonts/OpenSans-Bold-webfont.svg#OpenSansBold') format("svg"); font-weight: bold; font-weight: 700; font-style: normal; }
+@font-face { font-family: 'OpenSans'; src: url('../fonts/OpenSans-BoldItalic-webfont.eot'); src: url('../fonts/OpenSans-BoldItalic-webfont.eot?#iefix') format("embedded-opentype"), url('../fonts/OpenSans-BoldItalic-webfont.woff') format("woff"), url('../fonts/OpenSans-BoldItalic-webfont.ttf') format("truetype"), url('../fonts/OpenSans-BoldItalic-webfont.svg#OpenSansBoldItalic') format("svg"); font-weight: bold; font-weight: 700; font-style: italic; }
+@font-face { font-family: 'OpenSans'; src: url('../fonts/OpenSans-ExtraBold-webfont.eot'); src: url('../fonts/OpenSans-ExtraBold-webfont.eot?#iefix') format("embedded-opentype"), url('../fonts/OpenSans-ExtraBold-webfont.woff') format("woff"), url('../fonts/OpenSans-ExtraBold-webfont.ttf') format("truetype"), url('../fonts/OpenSans-ExtraBold-webfont.svg#OpenSansExtrabold') format("svg"); font-weight: bold; font-weight: 900; font-style: normal; }
+@font-face { font-family: 'OpenSans'; src: url('../fonts/OpenSans-ExtraBoldItalic-webfont.eot'); src: url('../fonts/OpenSans-ExtraBoldItalic-webfont.eot?#iefix') format("embedded-opentype"), url('../fonts/OpenSans-ExtraBoldItalic-webfont.woff') format("woff"), url('../fonts/OpenSans-ExtraBoldItalic-webfont.ttf') format("truetype"), url('../fonts/OpenSans-ExtraBoldItalic-webfont.svg#OpenSansExtraboldItalic') format("svg"); font-weight: bold; font-weight: 900; font-style: italic; }
+
 /* =============================================================================
    Main styles
    ========================================================================== */
@@ -8,8 +20,8 @@ body {
     margin:0;
     min-height:100%;
     background: #fff;
-    margin-top: 24px;
     font-size:13px;
+    padding:0;
 }
 
 img { border: 0 none; }
@@ -24,11 +36,15 @@ td {
   vertical-align: top;
 }
 
+h1,h2,h3,h4,h5,h6 {
+  font-family: "OpenSans", "Helvetica Neue", "Helvetica", Arial, Verdana, sans-serif;
+}
+
 ::-moz-selection { background: #357AE8; color: #fff; text-shadow: none; }
 ::selection { background: #357AE8; color: #fff; text-shadow: none; }
 
 
-#content { margin-top: 52px; width:100% }
+#content { width:100% }
 
 .wrapper-content {
     margin: 0 auto;
@@ -39,10 +55,12 @@ td {
 
 .nowrap {white-space: nowrap}
 
+:focus { -moz-outline-style: none; }
+
 /* =============================================================================
    Bootstrap customization
    ========================================================================== */
-select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {font-size: 1em; margin-bottom:0px}
+select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {font-size: 1em; margin-bottom:0}
 label { font-size:13px;}
 input[type="radio"], input[type="checkbox"] { margin-top:0; }
 .input-xxxlarge{ margin-left:630px}
@@ -68,7 +86,6 @@ a.btn-primary.active,a.btn-warning.active,a.btn-danger.active,a.btn-success.acti
 .table .pagination a { background: #3f3f3f !important; border: 1px solid #666; color:White !important; text-shadow:none; }
 .table .pagination a:hover { background:#3c3c3c; }
 .form-horizontal .help-block {margin-top:3px;}
-
 
 .form-inline-block > *{ vertical-align: top; }
 .form-inline-block .control-group { display:inline-block; }
@@ -101,18 +118,12 @@ a.btn-primary.active,a.btn-warning.active,a.btn-danger.active,a.btn-success.acti
     -moz-border-radius: 0px;
     border-radius: 0px;
 }
-.alert.alert-success {
-    background: #468847 url("/assets/images/alert-ok.png") no-repeat 16px;
+.alert.alert-success { background: #468847 url("/assets/images/alert-ok.png") no-repeat 16px; }
 
-}
-
-.alert.alert-error {
-    background: #B22222 url("/assets/images/alert-error.png") no-repeat 16px;
-
-}
+.alert.alert-error { background: #B22222 url("/assets/images/alert-error.png") no-repeat 16px; }
 
 .alert .close {
-    top:0px;
+    top:0;
     right:-5px;
     color: white;
     text-shadow: none;
@@ -120,21 +131,12 @@ a.btn-primary.active,a.btn-warning.active,a.btn-danger.active,a.btn-success.acti
     filter:alpha(opacity=100)
 }
 
-.btn-group > .btn, .btn-group > .dropdown-menu, .btn-group > .popover {
-    font-size: 12px;
-}
+.btn-group > .btn, .btn-group > .dropdown-menu, .btn-group > .popover { font-size: 12px; }
 
+a.btn [class^="icon-"] { font-size:14px; }
 
-a.btn [class^="icon-"] {
-    font-size:14px;
-}
-
-a[class^="btn-"] {
-    color:White;
-}
-a.btn-danger {
-    color:White;
-}
+a[class^="btn-"] { color:White; }
+a.btn-danger { color:White; }
 .input-append .add-on, .input-prepend .add-on { font-size:13px; }
 
 .btn-group [class^="icon-"], .btn-group [class*=" icon-"] {
@@ -144,6 +146,16 @@ a.btn-danger {
 
 .btn-group .btn-danger [class^="icon-"], .btn-group .btn-danger [class*=" icon-"] {
   color:White;
+}
+.table a.btn {
+  color:#434343 !important;
+}
+.modal {
+  border-radius:2px;
+}
+.modal-header h3 { font-family: "OpenSans"; font-weight: 600; }
+.modal .modal-footer {
+  padding: 8px 15px 10px 15px;
 }
 /* -------------------------------------------------------------
   LISTINGS
@@ -233,8 +245,6 @@ a.go_home {
 a.go_home:hover {
   text-decoration:none;
   background-image: url("../images/gohome.png");
-  width: 16px;
-  height: 16px;
 }
 
 a.no_home {
@@ -247,8 +257,6 @@ a.no_home {
 a.no_home:hover {
   text-decoration:none;
   background-image: url("../images/home_no.png");
-  width: 16px;
-  height: 16px;
 }
 
 a.no_suggest {
@@ -261,8 +269,6 @@ a.no_suggest {
 a.no_suggest:hover {
   text-decoration:none;
   background-image: url("../images/home_no.png");
-  width: 16px;
-  height: 16px;
 }
 
 
@@ -271,15 +277,13 @@ a.favourite_on {
   display: inline-block;
   width: 17px;
   height: 17px;
-    display:inline-block;
-    text-indent:-9999px;
+  display:inline-block;
+  text-indent:-9999px;
 }
 
 a.favourite_on:hover {
   text-decoration:none;
   background-image: url("../images/no_selected.png");
-  width: 17px;
-  height: 17px;
 }
 
 a.favourite_off {
@@ -292,8 +296,6 @@ a.favourite_off {
 a.favourite_off:hover {
   text-decoration:none;
   background-image: url("../images/selected.png");
-  width: 17px;
-  height: 17px;
 }
 
 a.publishing {
@@ -306,8 +308,6 @@ a.publishing {
 a.publishing:hover {
   text-decoration:none;
   background-image: url("../images/publish_r.png");
-  width: 16px;
-  height: 16px;
 }
 
 
@@ -321,8 +321,6 @@ a.unpublishing {
 a.unpublishing:hover {
   text-decoration:none;
   background-image: url("../images/publish_g.png");
-  width: 16px;
-  height: 16px;
 }
 
 
@@ -362,8 +360,6 @@ a.unpublishing:hover {
 .panel-ads.active-tab-body {
     display: block;
 }
-
-:focus { -moz-outline-style: none; }
 
 
 div.utilities-conf{
@@ -560,25 +556,32 @@ div.utilities-conf input[type="text"]{
     position: relative;
     width: 100%;
     margin:0;
-    margin-top:-13px;
     margin-bottom:5px;
-
+    padding-top: 45px;
+    min-height: 60px;
 }
+  .top-action-bar .title > * {
+    display:inline-block;
+  }
   .top-action-bar .title {
     padding:0;
     margin:0;
+    float:left;
+    margin-top:10px;
   }
     .top-action-bar .title > * {
       display:inline-block;
-      padding:10px 0;
+      padding:0;
+      vertical-align:middle;
     }
     .top-action-bar .title img { margin-left:10px; }
     .top-action-bar .title h2 {
       color: #464646;
       vertical-align:bottom;
       margin:0;
-      padding:20px 0;
       font-size:1.6em;
+      font-weight:normal !important;
+      text-shadow: 1px 1px 0px white;
     }
 
 /* =============================================================================
@@ -666,6 +669,9 @@ ul#menu.manager a { color:White !important; }
     list-style: none;
     margin: 0 0 0 5px;
     padding: 0px;
+    display:inline-block;
+    vertical-align: middle;
+    float:right;
   }
 
     .old-button > li {
@@ -720,7 +726,7 @@ ul#menu.manager a { color:White !important; }
             position: relative;
             text-align: center;
             text-decoration: none;
-            border-radius:4px;
+            border-radius:0px;
         }
 
         .old-button > li.separator{
@@ -730,12 +736,6 @@ ul#menu.manager a { color:White !important; }
             margin:0 2px;
             width:4px;
             vertical-align:middle
-        }
-
-        .old-button {
-            position:absolute;
-            right:0;
-            bottom:3px;
         }
         .old-button img{
           height:35px !important;
@@ -1740,17 +1740,27 @@ div.newsletter-contents .container-buttons {
 /* =============================================================================
    Welcome page rules
    ========================================================================== */
+
 .welcome-page .hero-unit {
-    padding: 35px 50px;
+    background: #f2f2f2;
+    border: solid 1px #e6e6e6;
+    margin: 0 0 22px 0;
+    padding: 20px;
+    border-radius:0;
 }
 .welcome-page .hero-unit h1 {
     color:#333;
+    font-size:2.2em;
+    padding-bottom:10px;
+    font-weight: 600;
 }
-.welcome-page .hero-unit p.lean {
-    font-size:19px;
-    margin-bottom: 18px;
+.welcome-page .hero-unit .lean {
+    font-size:13px !important;
+    line-height: 1.3;
+    color: #6f6f6f;
     font-weight: 300;
-    line-height:27px;
+    margin-bottom: 17px;
+    font-family: "OpenSans", Arial;
 }
 .welcome-page .welcome-panel-column {
     display:inline-block;
@@ -1933,6 +1943,95 @@ progress {
     -webkit-box-shadow: 0 0 1px rgba(255,255,255,.3), inset 0 0 5px rgba(0,0,0,1.0);
 }
 
-.nowrap {
-    wrap: no-wrap;
+/* =============================================================================
+   Section picker
+   ========================================================================== */
+
+.section-picker {
+  position:relative;
+  margin-bottom:4px;
 }
+  .section-picker .title-picker {
+    font-family:"OpenSans";
+    font-size:1.5em;
+    padding:5px;
+    background:none;
+    border:1px solid rgba(0,0,0,0);
+  }
+  .section-picker:hover .title-picker {
+    background:White;
+    border:1px solid #ccc;
+    border-bottom: 0 none;
+    border-radius:4px 4px 0 0;
+    z-index:100;
+    -moz-box-shadow: 0 0 0 White;
+    -wekbit-box-shadow: 0 0 0 White;
+    box-shadow:0 0 0 White;
+  }
+
+  .section-picker .options {
+    display:none;
+    position:absolute;
+    top:99%;
+    left:0;
+    z-index:99;
+    background:White;
+    border:1px solid #ccc;
+    padding:10px;
+    max-width:900px;
+    min-width:600px;
+    margin-top:-1px;
+  }
+    .section-picker .options > * {
+      vertical-align:top;
+      margin-left:10px;
+    }
+    .section-picker .options h4 {
+      margin-left:0;
+    }
+    .section-picker .options ul {
+      margin-left:0;
+    }
+    .section-picker .options ul ul {
+      margin-left:15px;
+      list-style-type:square !important;
+    }
+    .section-picker .options .component {
+      margin-right:10px;
+      display:block;
+    }
+  .section-picker .options .categories {
+    -ms-column-count:3; /* Firefox */
+    -moz-column-count:3; /* Firefox */
+    -webkit-column-count:3; /* Safari and Chrome */
+    column-count:3;
+    -ms-column-gap:10px; /* Firefox */
+    -moz-column-gap:vpx; /* Firefox */
+    -webkit-column-gap:10px; /* Safari and Chrome */
+    column-gap:10px;
+  }
+  .section-picker .options ul li {
+    display:block;
+  }
+  .section-picker .options ul li a {
+    word-wrap: no-wrap;
+    display:block;
+    padding:3px 0;
+  }
+  .section-picker:hover .options {
+    display:block;
+  }
+  .section-picker .options .all {
+    margin-bottom:5px;
+    display:block;
+  }
+  .section-picker .options .active {
+    background: #0B55C4;
+    color:White;
+    padding:5px;
+    border-radius:2px;
+  }
+  .section-picker .options .inactive {
+    color:#888;
+  }
+

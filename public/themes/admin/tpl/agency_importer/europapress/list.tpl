@@ -23,7 +23,7 @@
 {block name="content"}
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
-        <div class="title"><h2>{t}EuropaPress importer{/t} :: {t}Available articles{/t}</h2></div>
+        <div class="title"><h2>{t}EuropaPress articles{/t}</h2></div>
         <ul class="old-button">
 			<li>
 				<a href="{url name=admin_importer_europapress_sync}" class="sync_with_server" title="{t}Sync with server{/t}">
@@ -54,7 +54,7 @@
 
         <div class="table-info clearfix">
             <div>
-                <div class="left"><label>Total: {$pagination->_totalItems} articles.</label></div>
+                <div class="left"><label>{t 1=$pagination->_totalItems}%1 articles{/t}</label></div>
                 <div class="right form-inline">
                     <input type="search" id="username" name="filter_title" onchange="this.form.submit();" value="{$smarty.request.filter_title}" class="input-medium" placeholder="{t}Filter by title or content{/t}"/>
 
@@ -85,9 +85,6 @@
                 <th style="width:20px;" class="nowrap">{t}Actions{/t}</th>
             </tr>
             {else}
-            <tr>
-                <th coslpan=5>&nbsp;</th>
-            </tr>
             {/if}
         </thead>
 
@@ -134,6 +131,7 @@
             </tr>
             {/foreach}
         </tbody>
+
         <tfoot>
             <tr>
                 <td colspan="5"  class="center">

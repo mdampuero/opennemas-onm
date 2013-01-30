@@ -71,7 +71,7 @@
 <form action="{url name="admin_system_settings_save"}" enctype="multipart/form-data" method="POST" id="formulario">
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
-        <div class="title"><h2>{t}System Wide Settings{/t}</h2></div>
+        <div class="title"><h2>{t}System settings{/t}</h2></div>
         <div class="buttons" style="display:none">
             <a href="" class="button"><span class="icon home">&nbsp;</span>  </a>
             <a href="" class="button"><span class="icon home">&nbsp;</span></a>

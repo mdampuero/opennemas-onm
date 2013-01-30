@@ -5,7 +5,19 @@
 <form action="{url name=admin_ads}" method="get" name="formulario" id="formulario">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Advertisement manager{/t} :: {if $category eq 0}HOME{else}{$datos_cat[0]->title}{/if}</h2></div>
+            <div class="title">
+                <h2>{t}Advertisements{/t} :: </h2>
+                <div class="section-picker">
+                    <div class="title-picker btn"><span class="text">{if $category==0}{t}HOMEPAGE{/t}{elseif $category==4}{t}OPINION{/t}{else}{$datos_cat[0]->title}{/if}</span> <span class="caret"></span></div>
+                    <div class="options">
+                        <h4>{t}Special elements{/t}</h4>
+                        <a href="{url name=admin_ads category=0}" {if $category==0}class="active"{/if}>{t}HOMEPAGE{/t} </a>
+                        <a href="{url name=admin_ads category=4}" {if $category==4}class="active"{/if}>{t}OPINION{/t} </a>
+
+                        {include file="common/drop_down_categories.tpl" home={url name=admin_ads l=1} hide_all=true}
+                    </div>
+                </div>
+            </div>
             <ul class="old-button">
                 {acl isAllowed="ADVERTISEMENT_DELETE"}
                 <li>
@@ -49,17 +61,6 @@
     <div class="wrapper-content">
 
         {render_messages}
-
-        <ul class="pills clearfix">
-            <li>
-                <a href="{url name=admin_ads category=0}" {if $category==0}class="active"{/if}>{t}HOMEPAGE{/t} </a>
-            </li>
-            <li>
-                <a href="{url name=admin_ads category=4}" {if $category==4}class="active"{/if}>{t}OPINION{/t} </a>
-            </li>
-            {include file="menu_categories.tpl" home={url name=admin_ads l=1}}
-        </ul>
-
 
         <div class="table-info clearfix">
             <div class="pull-right form-inline">

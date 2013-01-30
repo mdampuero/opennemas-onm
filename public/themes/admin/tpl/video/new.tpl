@@ -31,7 +31,7 @@
 
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Video manager{/t} :: {if !isset($video)}{t}Creating video{/t}{else}{t}Editing video{/t}{/if}</h2></div>
+            <div class="title"><h2>{if !isset($video)}{t}Creating video{/t}{else}{t}Editing video{/t}{/if}</h2></div>
             <ul class="old-button">
                 <li>
                 {if isset($video->id)}

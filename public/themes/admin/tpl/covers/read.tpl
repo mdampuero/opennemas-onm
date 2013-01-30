@@ -35,7 +35,7 @@ jQuery(document).ready(function($) {
 
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
-        <div class="title"><h2>{t}ePaper Manager{/t} :: {t}New ePaper{/t}</h2></div>
+        <div class="title"><h2>{if !isset($cover->id)}{t}New ePaper{/t}{else}{t}Editing ePaper{/t}{/if}</h2></div>
         <ul class="old-button">
             <li>
             {if isset($video->id)}

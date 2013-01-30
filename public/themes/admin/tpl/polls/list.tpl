@@ -2,9 +2,19 @@
 
 {block name="content"}
 <form action="{url name=admin_polls category=$category page=$page}" method="GET" name="formulario" id="formulario" {$formAttrs}>
-    <div class="top-action-bar">
+    <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Polls manager{/t}</h2></div>
+            <div class="title">
+                <h2>{t}Polls{/t} :: </h2>
+                <div class="section-picker">
+                    <div class="title-picker btn"><span class="text">{if $category == 'widget'}{t}WIDGET HOME{/t}{elseif $category == 'all'}{t}All categories{/t}{else}{$datos_cat[0]->title}{/if}</span> <span class="caret"></span></div>
+                    <div class="options">
+                        <h4>{t}Special elements{/t}</h4>
+                        <a href="{url name=admin_polls_widget}" {if $category=='widget'}class="active"{/if}>{t}WIDGET HOME{/t}</a>
+                        {include file="common/drop_down_categories.tpl" home={url name=admin_polls l=1}}
+                    </div>
+                </div>
+            </div>
             <ul class="old-button">
                 {acl isAllowed="POLL_DELETE"}
                 <li>
@@ -49,17 +59,6 @@
     <div class="wrapper-content">
 
         {render_messages}
-
-        <ul class="pills" style="margin-bottom: 28px;">
-            <li>
-                <a href="{url name=admin_polls_widget}" {if $category=='widget'}class="active"{/if}>{t}Widget Home{/t}</a>
-            </li>
-            <li>
-                <a href="{url name=admin_polls category=all}" {if $category==='all'}class="active"{/if} >{t}All categories{/t}</a>
-            </li>
-            {include file="menu_categories.tpl" home="{url name=admin_polls l=1}"}
-
-        </ul>
 
         <table class="table table-hover table-condensed">
 

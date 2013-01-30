@@ -45,6 +45,10 @@ class CommentsController extends Controller
         $offset      = $request->query->getDigits('offset', 1);
         $darkTheme   = $request->query->getDigits('dark_theme', 0);
 
+        if (empty($elemsByPage)) {
+            $elemsByPage = 10;
+        }
+
         if (!empty($contentID)
             && \Content::checkExists($contentID)
         ) {
@@ -64,6 +68,7 @@ class CommentsController extends Controller
                     'elems_per_page' => $elemsByPage,
                     'offset'         => $offset,
                     'dark_theme'     => $darkTheme,
+                    'count'          => $total,
                 )
             );
 

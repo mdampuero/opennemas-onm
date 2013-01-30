@@ -42,9 +42,9 @@
 
 {block name="content"}
 <form action="#" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
-    <div class="top-action-bar">
+    <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Frontpage Manager{/t} :: {if $category eq 0}{t}HOME{/t}{else}{$datos_cat[0]->title}{/if} {if $available_layouts > 1} <small>({$layout_theme['name']})</small> {/if}</h2></div>
+            <div class="title"><h2>{t}Frontpages{/t} :: {if $category eq 0}{t}Home{/t}{else}{$datos_cat[0]->title}{/if} {if $available_layouts > 1} <small>({$layout_theme['name']})</small> {/if}</h2></div>
             <ul class="old-button">
                 <li class="batch-actions">
                     <a href="#">

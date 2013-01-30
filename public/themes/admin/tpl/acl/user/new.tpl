@@ -45,7 +45,7 @@ label {
 
 	<div class="top-action-bar clearfix">
 		<div class="wrapper-content">
-			<div class="title"><h2>{t}User manager{/t} :: {t}Editing user information{/t}</h2></div>
+			<div class="title"><h2>{if isset($user->id)}{t}Editing user{/t}{else}{t}Creating user{/t}{/if}</h2></div>
 			<ul class="old-button">
                 <li>
                     <button action="submit"  name="action" value="validate">

@@ -24,7 +24,7 @@
 <form action="{url name=admin_comments_update id=$comment->id}" method="POST" name="formulario" id="formulario">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Comment Manager{/t} :: {t}Editing comment{/t}</h2></div>
+            <div class="title"><h2>{t}Editing comment{/t}</h2></div>
             <ul class="old-button">
 
                 <li>

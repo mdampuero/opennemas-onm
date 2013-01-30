@@ -15,7 +15,7 @@
 
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}User group manager{/t} :: {t 1=$user_group->name}Editing %1{/t}</h2></div>
+            <div class="title"><h2>{if isset($user_group->id)}{t}Editing group{/t}{else}{t}Creating user group{/t}{/if}</h2></div>
             <ul class="old-button">
                 <li>
                     <button type="submit" name="action" value="validate">

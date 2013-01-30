@@ -10,7 +10,7 @@
 {block name="content"}
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
-        <div class="title"><h2>{t}EuropaPress importer{/t} :: {t}Article information{/t}</h2></div>
+        <div class="title"><h2>{t}EuropaPress articles{/t}</h2></div>
         <ul class="old-button">
             <li>
                 <a href="{url name=admin_importer_europapress_import id=$element->xmlFile}" title="{t}Import{/t}">

@@ -1,5 +1,117 @@
 {extends file="base/admin.tpl"}
 
+{block name="content"}
+<form action="{url name=admin_opinions}" method="get" name="formulario" id="formulario">
+<div class="top-action-bar clearfix">
+    <div class="wrapper-content">
+        <div class="title">
+            <h2>{t}Opinions{/t} :: </h2>
+            <div class="section-picker">
+                <div class="title-picker btn"><span class="text">{if $home}{t}Opinion frontpage{/t}{else}{t}Listing{/t}{/if}</span> <span class="caret"></span></div>
+                <div class="options">
+                    <a href="{url name=admin_opinions_frontpage}" {if $home}class="active"{/if}>{t}Opinion frontpage{/t}</a>
+                    <a href="{url name=admin_opinions}" {if !$home}class="active"{/if}>{t}Listing{/t}</a>
+                </div>
+            </div>
+        </div>
+        <ul class="old-button">
+            {acl isAllowed="OPINION_AVAILABLE"}
+        {*    <li class="batch-actions">
+
+                <a href="#">
+                    <img src="{$params.IMAGE_DIR}/select.png" title="" alt="" />
+                    <br/>{t}Batch actions{/t}
+                </a>
+
+                <ul class="dropdown-menu">
+                    <li>
+                        <button type="submit" name="status" value="0" href="#" id="batch-publish">
+                            {t}Batch publish{/t}
+                        </button>
+                    </li>
+                    <li>
+                        <button type="submit" name="status" value="1" id="batch-unpublish">
+                            {t}Batch unpublish{/t}
+                        </a>
+                    </li>
+                    <li>
+                        <button type="submit" name="status" value="0" id="batch-inhome">
+                            {t escape="off"}Batch in home{/t}
+                        </a>
+                    </li>
+                    <li>
+                        <button type="submit" name="status" value="1" id="batch-noinhome">
+                            {t escape="off"}Batch drop from home{/t}
+                        </a>
+                    </li>
+                    {acl isAllowed="OPINION_DELETE"}
+                    <li>
+                        <button type="submit" id="batch-delete" title="{t}Delete{/t}">
+                            {t}Delete{/t}
+                        </button>
+                    </li>
+                    {/acl}
+                </ul>
+
+            </li>
+            *}
+            {/acl}
+
+            {acl isAllowed="OPINION_FRONTPAGE"}
+            {if $home}
+                <li>
+                    <button id="save_positions" title="{t}Save positions{/t}">
+                        <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar Cambios" alt="Guardar Posiciones"><br />{t}Save positions{/t}
+                    </button>
+                </li>
+            {/if}
+            {/acl}
+            {acl isAllowed="OPINION_SETTINGS"}
+            <li>
+                <button type="submit" id="opinion_clearcache">
+                    <img border="0" src="{$params.IMAGE_DIR}clearcache.png" title="{t}Clean cache{/t}"/>
+                    <br />{t}Clean cache{/t}
+                </button>
+            </li>
+            <li>
+                <a href="{url name=admin_opinions_config}" class="admin_add" title="{t}Config album module{/t}">
+                    <img border="0" src="{$params.IMAGE_DIR}template_manager/configure48x48.png" /><br />
+                    {t}Settings{/t}
+                </a>
+            </li>
+            {/acl}
+            <li class="separator"></li>
+            {acl isAllowed="OPINION_CREATE"}
+            <li>
+                <a href="{url name=admin_opinion_create}" class="admin_add" accesskey="N" tabindex="1">
+                    <img border="0" src="{$params.IMAGE_DIR}opinion.png" title="Nuevo" alt="Nuevo"><br />{t escape="off"}New opinion{/t}
+                </a>
+            </li>
+            {/acl}
+        </ul>
+    </div>
+</div>
+    <div class="wrapper-content">
+
+        {render_messages}
+
+        <div id="warnings-validation"></div><!-- /warnings-validation -->
+
+        <div id="list_opinion">
+        {if $home}
+            {include file="opinion/partials/_opinion_list_home.tpl"}
+        {else}
+            {include file="opinion/partials/_opinion_list.tpl"}
+        {/if}
+        </div>
+    </div>
+</form>
+    {include file="opinion/modals/_modalDelete.tpl"}
+    {include file="opinion/modals/_modalBatchDelete.tpl"}
+    {include file="opinion/modals/_modalAccept.tpl"}
+{/block}
+
+
 {block name="footer-js" append}
     <script>
     jQuery(document).ready(function($) {
@@ -86,118 +198,4 @@
 
     });
     </script>
-{/block}
-
-
-{block name="content"}
-<form action="{url name=admin_opinions}" method="get" name="formulario" id="formulario">
-<div class="top-action-bar">
-    <div class="wrapper-content">
-        <div class="title"><h2>{t}Opinion Manager{/t} :: {t}Listing opinions{/t}</h2></div>
-        <ul class="old-button">
-            {acl isAllowed="OPINION_AVAILABLE"}
-        {*    <li class="batch-actions">
-
-                <a href="#">
-                    <img src="{$params.IMAGE_DIR}/select.png" title="" alt="" />
-                    <br/>{t}Batch actions{/t}
-                </a>
-
-                <ul class="dropdown-menu">
-                    <li>
-                        <button type="submit" name="status" value="0" href="#" id="batch-publish">
-                            {t}Batch publish{/t}
-                        </button>
-                    </li>
-                    <li>
-                        <button type="submit" name="status" value="1" id="batch-unpublish">
-                            {t}Batch unpublish{/t}
-                        </a>
-                    </li>
-                    <li>
-                        <button type="submit" name="status" value="0" id="batch-inhome">
-                            {t escape="off"}Batch in home{/t}
-                        </a>
-                    </li>
-                    <li>
-                        <button type="submit" name="status" value="1" id="batch-noinhome">
-                            {t escape="off"}Batch drop from home{/t}
-                        </a>
-                    </li>
-                    {acl isAllowed="OPINION_DELETE"}
-                    <li>
-                        <button type="submit" id="batch-delete" title="{t}Delete{/t}">
-                            {t}Delete{/t}
-                        </button>
-                    </li>
-                    {/acl}
-                </ul>
-
-            </li>
-            *}
-            {/acl}
-
-            {acl isAllowed="OPINION_FRONTPAGE"}
-            {if $home}
-                <li>
-                    <button id="save_positions" title="{t}Save positions{/t}">
-                        <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar Cambios" alt="Guardar Posiciones"><br />{t}Save positions{/t}
-                    </button>
-                </li>
-            {/if}
-            {/acl}
-            {acl isAllowed="OPINION_SETTINGS"}
-            <li>
-                <button type="submit" id="opinion_clearcache">
-                    <img border="0" src="{$params.IMAGE_DIR}clearcache.png" title="{t}Clean cache{/t}"/>
-                    <br />{t}Clean cache{/t}
-                </button>
-            </li>
-            <li>
-                <a href="{url name=admin_opinions_config}" class="admin_add" title="{t}Config album module{/t}">
-                    <img border="0" src="{$params.IMAGE_DIR}template_manager/configure48x48.png" /><br />
-                    {t}Settings{/t}
-                </a>
-            </li>
-            {/acl}
-            <li class="separator"></li>
-            {acl isAllowed="OPINION_CREATE"}
-            <li>
-                <a href="{url name=admin_opinion_create}" class="admin_add" accesskey="N" tabindex="1">
-                    <img border="0" src="{$params.IMAGE_DIR}opinion.png" title="Nuevo" alt="Nuevo"><br />{t escape="off"}New opinion{/t}
-                </a>
-            </li>
-            {/acl}
-        </ul>
-    </div>
-</div>
-    <div class="wrapper-content">
-
-        {render_messages}
-
-        <div id="warnings-validation"></div><!-- /warnings-validation -->
-
-        <div>
-            <ul class="pills clearfix">
-                <li>
-                <a href="{url name=admin_opinions_frontpage}" {if $home}class="active"{/if}>{t}Opinion frontpage{/t}</a>
-                </li>
-                <li>
-                    <a href="{url name=admin_opinions}" {if !$home}class="active"{/if}>{t}Listing{/t}</a>
-                </li>
-            </ul>
-
-            <div id="list_opinion">
-            {if $home}
-                {include file="opinion/partials/_opinion_list_home.tpl"}
-            {else}
-                {include file="opinion/partials/_opinion_list.tpl"}
-            {/if}
-            </div>
-         </div>
-    </div>
-</form>
-    {include file="opinion/modals/_modalDelete.tpl"}
-    {include file="opinion/modals/_modalBatchDelete.tpl"}
-    {include file="opinion/modals/_modalAccept.tpl"}
 {/block}

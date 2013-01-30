@@ -32,7 +32,7 @@ gettext("Legal");
 gettext("Legal");
 
 /* public/themes/admin/tpl//newsletter/steps/3-pick-recipients.tpl */
-gettext("Newsletter management");
+gettext("Newsletter");
 
 /* public/themes/admin/tpl//newsletter/steps/3-pick-recipients.tpl */
 gettext("Recipient selection");
@@ -137,7 +137,7 @@ gettext("Email subject");
 gettext("Preview");
 
 /* public/themes/admin/tpl//newsletter/steps/1-pick-elements.tpl */
-gettext("Newsletter manager");
+gettext("Newsletter");
 
 /* public/themes/admin/tpl//newsletter/steps/1-pick-elements.tpl */
 gettext("Newsletter contents");
@@ -209,7 +209,7 @@ gettext("failed");
 gettext("There was no recipients to sent to");
 
 /* public/themes/admin/tpl//newsletter/list.tpl */
-gettext("Newsletter Manager");
+gettext("Newsletters");
 
 /* public/themes/admin/tpl//newsletter/list.tpl */
 gettext("New newsletter");
@@ -269,7 +269,10 @@ gettext("Preview");
 gettext("There is no newsletters yet.");
 
 /* public/themes/admin/tpl//newsletter/config.tpl */
-gettext("Newsletter :: Configuration");
+gettext("Newsletters");
+
+/* public/themes/admin/tpl//newsletter/config.tpl */
+gettext("Configuration");
 
 /* public/themes/admin/tpl//newsletter/config.tpl */
 gettext("Save");
@@ -344,7 +347,10 @@ gettext("Disabled");
 gettext("If enabled, a link to newsletter subscription will appear at home frontpage header");
 
 /* public/themes/admin/tpl//newsletter/subscriptions/list.tpl */
-gettext("Newsletter Subscriptions");
+gettext("Newsletter");
+
+/* public/themes/admin/tpl//newsletter/subscriptions/list.tpl */
+gettext("Subscriptions");
 
 /* public/themes/admin/tpl//newsletter/subscriptions/list.tpl */
 gettext("New");
@@ -476,10 +482,10 @@ gettext("No");
 gettext("You must select some elements.");
 
 /* public/themes/admin/tpl//newsletter/subscriptions/new.tpl */
-gettext("Newsletter Subscriptions");
+gettext("Newsletter");
 
 /* public/themes/admin/tpl//newsletter/subscriptions/new.tpl */
-gettext("Creating new subscriptor");
+gettext("Creating subscriptor");
 
 /* public/themes/admin/tpl//newsletter/subscriptions/new.tpl */
 gettext("Editing subscriptor \"%1\"");
@@ -590,10 +596,10 @@ gettext("Polls");
 gettext("Files");
 
 /* public/themes/admin/tpl//category/list.tpl */
-gettext("Category manager");
+gettext("Categories");
 
 /* public/themes/admin/tpl//category/list.tpl */
-gettext("Listing categories");
+gettext("New category");
 
 /* public/themes/admin/tpl//category/list.tpl */
 gettext("Config categories module");
@@ -602,28 +608,25 @@ gettext("Config categories module");
 gettext("Settings");
 
 /* public/themes/admin/tpl//category/list.tpl */
-gettext("New section");
+gettext("For articles");
 
 /* public/themes/admin/tpl//category/list.tpl */
-gettext("Article categories");
+gettext("For albums");
 
 /* public/themes/admin/tpl//category/list.tpl */
-gettext("Album categories");
+gettext("For videos");
 
 /* public/themes/admin/tpl//category/list.tpl */
-gettext("Video categories");
+gettext("For ePapers");
 
 /* public/themes/admin/tpl//category/list.tpl */
-gettext("ePapel categories");
+gettext("For polls");
 
 /* public/themes/admin/tpl//category/list.tpl */
-gettext("Poll categories");
+gettext("For Specials");
 
 /* public/themes/admin/tpl//category/list.tpl */
-gettext("Special categories");
-
-/* public/themes/admin/tpl//category/list.tpl */
-gettext("Book categories");
+gettext("For books");
 
 /* public/themes/admin/tpl//category/list.tpl */
 gettext("Title");
@@ -797,7 +800,7 @@ gettext("Actions");
 gettext("No available categories for listing");
 
 /* public/themes/admin/tpl//category/config.tpl */
-gettext("Category manager");
+gettext("Categories");
 
 /* public/themes/admin/tpl//category/config.tpl */
 gettext("Settings");
@@ -851,13 +854,10 @@ gettext("Yes, delete");
 gettext("No");
 
 /* public/themes/admin/tpl//category/new.tpl */
-gettext("Category manager");
-
-/* public/themes/admin/tpl//category/new.tpl */
 gettext("Editing category");
 
 /* public/themes/admin/tpl//category/new.tpl */
-gettext("Creating new category");
+gettext("Creating category");
 
 /* public/themes/admin/tpl//category/new.tpl */
 gettext("Save");
@@ -998,7 +998,13 @@ gettext("Welcome to your OpenNemas site!");
 gettext("If you need help getting started, check out our documentation on <a href=\"#\">First Steps with OpenNemas</a>.\n           If you’d rather dive right in, here are a few things most people do first when they set up\n           a new OpenNemas site.");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
+gettext("Learn more");
+
+/* public/themes/admin/tpl//welcome/index.tpl */
 gettext("Basic Settings");
+
+/* public/themes/admin/tpl//welcome/index.tpl */
+gettext("Here are a few easy things you can do to get your feet wet. Make sure to click Save on each Settings screen.");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
 gettext("Change your site name and preferences");
@@ -1013,16 +1019,25 @@ gettext("Fill in your profile");
 gettext("Add your own Content");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
+gettext("Check out the <a href=\"#\">sample page</a> &amp; <a href=\"#\">post</a> editors to see how it all works, then delete the default content and write your own!");
+
+/* public/themes/admin/tpl//welcome/index.tpl */
+gettext("Customize Your Site");
+
+/* public/themes/admin/tpl//welcome/index.tpl */
 gettext("Do you want more information check out our documentation.");
+
+/* public/themes/admin/tpl//welcome/index.tpl */
+gettext("Set a background color");
+
+/* public/themes/admin/tpl//welcome/index.tpl */
+gettext("Select a new header image");
 
 /* public/themes/admin/tpl//welcome/modals/_modal_users.tpl */
 gettext("Logged in users");
 
 /* public/themes/admin/tpl//instance_sync/list.tpl */
-gettext("Sync Manager");
-
-/* public/themes/admin/tpl//instance_sync/list.tpl */
-gettext("Client side");
+gettext("Instance synchronization");
 
 /* public/themes/admin/tpl//instance_sync/list.tpl */
 gettext("Add site to sync");
@@ -1061,10 +1076,7 @@ gettext("There are no synchorinize settings available");
 gettext("Try adding one site to synchronize on the config button above.");
 
 /* public/themes/admin/tpl//instance_sync/new.tpl */
-gettext("Sync Manager");
-
-/* public/themes/admin/tpl//instance_sync/new.tpl */
-gettext("Client configuration");
+gettext("Adding site to synchronization");
 
 /* public/themes/admin/tpl//instance_sync/new.tpl */
 gettext("Save");
@@ -1103,10 +1115,7 @@ gettext("There is no elements to sync");
 gettext("Check if the given site url is correct.");
 
 /* public/themes/admin/tpl//covers/list.tpl */
-gettext("Covers Manager");
-
-/* public/themes/admin/tpl//covers/list.tpl */
-gettext("Widget Home");
+gettext("ePapers");
 
 /* public/themes/admin/tpl//covers/list.tpl */
 gettext("Delete");
@@ -1142,7 +1151,7 @@ gettext("Publish");
 gettext("New cover");
 
 /* public/themes/admin/tpl//covers/list.tpl */
-gettext("Create");
+gettext("New ePaper");
 
 /* public/themes/admin/tpl//covers/list.tpl */
 gettext("Save positions");
@@ -1205,7 +1214,10 @@ gettext("Edit");
 gettext("There is no covers");
 
 /* public/themes/admin/tpl//covers/config.tpl */
-gettext("Newsstand :: Configuration");
+gettext("ePaper");
+
+/* public/themes/admin/tpl//covers/config.tpl */
+gettext("Configuration");
 
 /* public/themes/admin/tpl//covers/config.tpl */
 gettext("Save");
@@ -1271,9 +1283,6 @@ gettext("Yes, delete all");
 gettext("No");
 
 /* public/themes/admin/tpl//covers/new.tpl */
-gettext("ePaper Manager");
-
-/* public/themes/admin/tpl//covers/new.tpl */
 gettext("New ePaper");
 
 /* public/themes/admin/tpl//covers/new.tpl */
@@ -1334,10 +1343,10 @@ gettext("Date");
 gettext("Upload PDF");
 
 /* public/themes/admin/tpl//covers/read.tpl */
-gettext("ePaper Manager");
+gettext("New ePaper");
 
 /* public/themes/admin/tpl//covers/read.tpl */
-gettext("New ePaper");
+gettext("Editing ePaper");
 
 /* public/themes/admin/tpl//covers/read.tpl */
 gettext("Save");
@@ -1421,10 +1430,7 @@ gettext("Date");
 gettext("File");
 
 /* public/themes/admin/tpl//album/list.tpl */
-gettext("Album manager");
-
-/* public/themes/admin/tpl//album/list.tpl */
-gettext("All categories");
+gettext("Albums");
 
 /* public/themes/admin/tpl//album/list.tpl */
 gettext("Delete");
@@ -1574,7 +1580,10 @@ gettext("Delete");
 gettext("Send to trash");
 
 /* public/themes/admin/tpl//album/config.tpl */
-gettext("Album :: Configuration");
+gettext("Albums");
+
+/* public/themes/admin/tpl//album/config.tpl */
+gettext("Configuration");
 
 /* public/themes/admin/tpl//album/config.tpl */
 gettext("Save");
@@ -1697,13 +1706,10 @@ gettext("Edit");
 gettext("Drop");
 
 /* public/themes/admin/tpl//album/new.tpl */
-gettext("Album manager");
+gettext("Editing album");
 
 /* public/themes/admin/tpl//album/new.tpl */
 gettext("Creating Album");
-
-/* public/themes/admin/tpl//album/new.tpl */
-gettext("Editing Album");
 
 /* public/themes/admin/tpl//album/new.tpl */
 gettext("Save");
@@ -1748,7 +1754,7 @@ gettext("Keywords");
 gettext("List of terms separated by comas");
 
 /* public/themes/admin/tpl//album/new.tpl */
-gettext("Album images");
+gettext("Images for this album");
 
 /* public/themes/admin/tpl//album/new.tpl */
 gettext("Images in this album");
@@ -1784,7 +1790,7 @@ gettext("Available images");
 gettext("Search images by title...");
 
 /* public/themes/admin/tpl//system_settings/system_settings.tpl */
-gettext("System Wide Settings");
+gettext("System settings");
 
 /* public/themes/admin/tpl//system_settings/system_settings.tpl */
 gettext("Save");
@@ -2186,7 +2192,7 @@ gettext("Visit some pages in\n                <a href=\"%1\" title=\"Visit your 
 gettext("Cache Manager");
 
 /* public/themes/admin/tpl//tpl_manager/config.tpl */
-gettext("Configuration");
+gettext("Settings");
 
 /* public/themes/admin/tpl//tpl_manager/config.tpl */
 gettext("Save");
@@ -2237,10 +2243,10 @@ gettext("No");
 gettext("You must select some elements.");
 
 /* public/themes/admin/tpl//files/statistics.tpl */
-gettext("Files manager :: ");
+gettext("Files");
 
 /* public/themes/admin/tpl//files/statistics.tpl */
-gettext("General statistics");
+gettext("Statistics");
 
 /* public/themes/admin/tpl//files/statistics.tpl */
 gettext("WIDGET HOME");
@@ -2258,10 +2264,7 @@ gettext("Size (MB)");
 gettext("TOTAL");
 
 /* public/themes/admin/tpl//files/list.tpl */
-gettext("Files manager");
-
-/* public/themes/admin/tpl//files/list.tpl */
-gettext("General statistics");
+gettext("Files");
 
 /* public/themes/admin/tpl//files/list.tpl */
 gettext("Upload file");
@@ -2310,6 +2313,9 @@ gettext("Save positions");
 
 /* public/themes/admin/tpl//files/list.tpl */
 gettext("WIDGET HOME");
+
+/* public/themes/admin/tpl//files/list.tpl */
+gettext("All categories");
 
 /* public/themes/admin/tpl//files/list.tpl */
 gettext("Status:");
@@ -2408,13 +2414,10 @@ gettext("No");
 gettext("You must select some elements.");
 
 /* public/themes/admin/tpl//files/new.tpl */
-gettext("Files manager ::");
+gettext("Editing file");
 
 /* public/themes/admin/tpl//files/new.tpl */
-gettext("Editing file \"%1\"");
-
-/* public/themes/admin/tpl//files/new.tpl */
-gettext("Creating new file");
+gettext("Creating file");
 
 /* public/themes/admin/tpl//files/new.tpl */
 gettext("Save");
@@ -2447,7 +2450,7 @@ gettext("Unknown");
 gettext("Unknown");
 
 /* public/themes/admin/tpl//polls/list.tpl */
-gettext("Polls manager");
+gettext("Polls");
 
 /* public/themes/admin/tpl//polls/list.tpl */
 gettext("Delete");
@@ -2540,7 +2543,10 @@ gettext("Put in home");
 gettext("There is no polls yet.");
 
 /* public/themes/admin/tpl//polls/config.tpl */
-gettext("Poll :: Configuration");
+gettext("Polls");
+
+/* public/themes/admin/tpl//polls/config.tpl */
+gettext("Settings");
 
 /* public/themes/admin/tpl//polls/config.tpl */
 gettext("Save");
@@ -2627,9 +2633,6 @@ gettext("No");
 gettext("You must select some elements.");
 
 /* public/themes/admin/tpl//polls/new.tpl */
-gettext("Poll manager");
-
-/* public/themes/admin/tpl//polls/new.tpl */
 gettext("Editing poll");
 
 /* public/themes/admin/tpl//polls/new.tpl */
@@ -2689,6 +2692,12 @@ gettext("Votes");
 /* public/themes/admin/tpl//polls/new.tpl */
 gettext("Add new answer");
 
+/* public/themes/admin/tpl//common/drop_down_categories.tpl */
+gettext("Categories");
+
+/* public/themes/admin/tpl//common/drop_down_categories.tpl */
+gettext("All categories");
+
 /* public/themes/admin/tpl//common/content_provider/content_provider.tpl */
 gettext("Articles");
 
@@ -2727,6 +2736,9 @@ gettext("-- All categories --");
 
 /* public/themes/admin/tpl//common/content_provider/_container-content-list.tpl */
 gettext("No available contents");
+
+/* public/themes/admin/tpl//comment/list.tpl */
+gettext("Comments");
 
 /* public/themes/admin/tpl//comment/list.tpl */
 gettext("Delete");
@@ -2822,7 +2834,7 @@ gettext("Edit");
 gettext("There is no comments here.");
 
 /* public/themes/admin/tpl//comment/config.tpl */
-gettext("Comment manager");
+gettext("Comments");
 
 /* public/themes/admin/tpl//comment/config.tpl */
 gettext("Settings");
@@ -2886,9 +2898,6 @@ gettext("No");
 
 /* public/themes/admin/tpl//comment/modals/_modalBatchDelete.tpl */
 gettext("You must select some elements.");
-
-/* public/themes/admin/tpl//comment/read.tpl */
-gettext("Comment Manager");
 
 /* public/themes/admin/tpl//comment/read.tpl */
 gettext("Editing comment");
@@ -2963,10 +2972,7 @@ gettext("Comment title");
 gettext("Body");
 
 /* public/themes/admin/tpl//opinion/authors/list.tpl */
-gettext("Opinion Manager");
-
-/* public/themes/admin/tpl//opinion/authors/list.tpl */
-gettext("Authors list");
+gettext("Opinion authors");
 
 /* public/themes/admin/tpl//opinion/authors/list.tpl */
 gettext("Delete");
@@ -3038,10 +3044,10 @@ gettext("No");
 gettext("You must select some elements.");
 
 /* public/themes/admin/tpl//opinion/authors/new.tpl */
-gettext("Opinion Manager :: New author");
+gettext("Creating opinion author");
 
 /* public/themes/admin/tpl//opinion/authors/new.tpl */
-gettext("Opinion Manager :: Edit author");
+gettext("Editing opinion author");
 
 /* public/themes/admin/tpl//opinion/authors/new.tpl */
 gettext("Save");
@@ -3092,10 +3098,7 @@ gettext("You can change the image order by drag and drop them.");
 gettext("Add new photo");
 
 /* public/themes/admin/tpl//opinion/list.tpl */
-gettext("Opinion Manager");
-
-/* public/themes/admin/tpl//opinion/list.tpl */
-gettext("Listing opinions");
+gettext("Opinions");
 
 /* public/themes/admin/tpl//opinion/list.tpl */
 gettext("Batch actions");
@@ -3185,7 +3188,10 @@ gettext("Delete");
 gettext("Send to trash");
 
 /* public/themes/admin/tpl//opinion/config.tpl */
-gettext("Opinion :: Configuration");
+gettext("Opinions");
+
+/* public/themes/admin/tpl//opinion/config.tpl */
+gettext("Settings");
 
 /* public/themes/admin/tpl//opinion/config.tpl */
 gettext("Save");
@@ -3257,13 +3263,10 @@ gettext("No");
 gettext("You must select some elements.");
 
 /* public/themes/admin/tpl//opinion/new.tpl */
-gettext("Opinion Manager");
+gettext("Editing opinion");
 
 /* public/themes/admin/tpl//opinion/new.tpl */
-gettext("Editing opinion \"%1\"");
-
-/* public/themes/admin/tpl//opinion/new.tpl */
-gettext("Creating new opinion");
+gettext("Creating opinion");
 
 /* public/themes/admin/tpl//opinion/new.tpl */
 gettext("Save");
@@ -3488,10 +3491,10 @@ gettext("Please, remember save positions after finish.");
 gettext("Couldn't load this tab. We'll try to fix this as soon as possible.");
 
 /* public/themes/admin/tpl//frontpagemanager/list.tpl */
-gettext("Frontpage Manager");
+gettext("Frontpages");
 
 /* public/themes/admin/tpl//frontpagemanager/list.tpl */
-gettext("HOME");
+gettext("Home");
 
 /* public/themes/admin/tpl//frontpagemanager/list.tpl */
 gettext("Batch actions");
@@ -3848,7 +3851,7 @@ gettext("%1");
 gettext("Pick layout");
 
 /* public/themes/admin/tpl//widget/list.tpl */
-gettext("Widget Manager");
+gettext("Widgets");
 
 /* public/themes/admin/tpl//widget/list.tpl */
 gettext("New widget");
@@ -3935,10 +3938,10 @@ gettext("Yes, delete");
 gettext("No");
 
 /* public/themes/admin/tpl//widget/new.tpl */
-gettext("Creating new widget");
+gettext("Creating widget");
 
 /* public/themes/admin/tpl//widget/new.tpl */
-gettext("Editing widget \"%1\"");
+gettext("Editing widget");
 
 /* public/themes/admin/tpl//widget/new.tpl */
 gettext("Save");
@@ -4064,10 +4067,7 @@ gettext("Legal");
 gettext("Downloading articles from EFE, please wait...");
 
 /* public/themes/admin/tpl//agency_importer/efe/list.tpl */
-gettext("EFE importer");
-
-/* public/themes/admin/tpl//agency_importer/efe/list.tpl */
-gettext("Available articles");
+gettext("EFE articles");
 
 /* public/themes/admin/tpl//agency_importer/efe/list.tpl */
 gettext("Sync with server");
@@ -4202,10 +4202,10 @@ gettext("Import");
 gettext("Go back");
 
 /* public/themes/admin/tpl//agency_importer/efe/config.tpl */
-gettext("EFE importer");
+gettext("EFE articles");
 
 /* public/themes/admin/tpl//agency_importer/efe/config.tpl */
-gettext("Module configuration");
+gettext("Configuration");
 
 /* public/themes/admin/tpl//agency_importer/efe/config.tpl */
 gettext("Save and exit");
@@ -4244,10 +4244,7 @@ gettext("Agency");
 gettext("Sync elements newer than");
 
 /* public/themes/admin/tpl//agency_importer/efe/show.tpl */
-gettext("EFE importer");
-
-/* public/themes/admin/tpl//agency_importer/efe/show.tpl */
-gettext("Article information");
+gettext("EFE articles");
 
 /* public/themes/admin/tpl//agency_importer/efe/show.tpl */
 gettext("Import");
@@ -4499,10 +4496,7 @@ gettext("Redactors:");
 gettext("Downloading articles from EuropaPress, please wait...");
 
 /* public/themes/admin/tpl//agency_importer/europapress/list.tpl */
-gettext("EuropaPress importer");
-
-/* public/themes/admin/tpl//agency_importer/europapress/list.tpl */
-gettext("Available articles");
+gettext("EuropaPress articles");
 
 /* public/themes/admin/tpl//agency_importer/europapress/list.tpl */
 gettext("Sync with server");
@@ -4539,6 +4533,9 @@ gettext("Config Europapress module");
 
 /* public/themes/admin/tpl//agency_importer/europapress/list.tpl */
 gettext("Config");
+
+/* public/themes/admin/tpl//agency_importer/europapress/list.tpl */
+gettext("%1 articles");
 
 /* public/themes/admin/tpl//agency_importer/europapress/list.tpl */
 gettext("Filter by title or content");
@@ -4583,10 +4580,10 @@ gettext("There is no elements to import");
 gettext("Try syncing from server by click over the \"Sync with server\" button above.");
 
 /* public/themes/admin/tpl//agency_importer/europapress/config.tpl */
-gettext("EuropaPress importer");
+gettext("EuropaPress articles");
 
 /* public/themes/admin/tpl//agency_importer/europapress/config.tpl */
-gettext("Module configuration");
+gettext("Configuration");
 
 /* public/themes/admin/tpl//agency_importer/europapress/config.tpl */
 gettext("Save and exit");
@@ -4619,10 +4616,7 @@ gettext("Agency");
 gettext("Sync elements newer than");
 
 /* public/themes/admin/tpl//agency_importer/europapress/show.tpl */
-gettext("EuropaPress importer");
-
-/* public/themes/admin/tpl//agency_importer/europapress/show.tpl */
-gettext("Article information");
+gettext("EuropaPress articles");
 
 /* public/themes/admin/tpl//agency_importer/europapress/show.tpl */
 gettext("Import");
@@ -4694,10 +4688,7 @@ gettext("Level:");
 gettext("Redactors:");
 
 /* public/themes/admin/tpl//book/list.tpl */
-gettext("Book manager");
-
-/* public/themes/admin/tpl//book/list.tpl */
-gettext("ALL");
+gettext("Books");
 
 /* public/themes/admin/tpl//book/list.tpl */
 gettext("Delete");
@@ -4850,9 +4841,6 @@ gettext("No");
 gettext("You must select some elements.");
 
 /* public/themes/admin/tpl//book/new.tpl */
-gettext("Book manager");
-
-/* public/themes/admin/tpl//book/new.tpl */
 gettext("Creating Book");
 
 /* public/themes/admin/tpl//book/new.tpl */
@@ -4925,10 +4913,7 @@ gettext("Keywords:");
 gettext("Separated by coma");
 
 /* public/themes/admin/tpl//letter/list.tpl */
-gettext("Letter to the Editor manager");
-
-/* public/themes/admin/tpl//letter/list.tpl */
-gettext("Listing letters");
+gettext("Letters to the Editor");
 
 /* public/themes/admin/tpl//letter/list.tpl */
 gettext("Delete");
@@ -5024,10 +5009,10 @@ gettext("No");
 gettext("You must select some elements.");
 
 /* public/themes/admin/tpl//letter/new.tpl */
-gettext("Letter Manager");
+gettext("Editing letter");
 
 /* public/themes/admin/tpl//letter/new.tpl */
-gettext("Editing letter");
+gettext("Creating letter");
 
 /* public/themes/admin/tpl//letter/new.tpl */
 gettext("Save");
@@ -5066,10 +5051,7 @@ gettext("Created at");
 gettext("Body");
 
 /* public/themes/admin/tpl//keywords/list.tpl */
-gettext("Keyword Manager");
-
-/* public/themes/admin/tpl//keywords/list.tpl */
-gettext("Listing keywords");
+gettext("Keywords");
 
 /* public/themes/admin/tpl//keywords/list.tpl */
 gettext("New");
@@ -5102,10 +5084,10 @@ gettext("Delete");
 gettext("No available keywords yet.");
 
 /* public/themes/admin/tpl//keywords/new.tpl */
-gettext("Keyword Manager");
+gettext("Editing keyword");
 
 /* public/themes/admin/tpl//keywords/new.tpl */
-gettext("Editing keyword information");
+gettext("Creating keyword");
 
 /* public/themes/admin/tpl//keywords/new.tpl */
 gettext("Save and continue");
@@ -5132,10 +5114,7 @@ gettext("Type");
 gettext("Value");
 
 /* public/themes/admin/tpl//special/list.tpl */
-gettext("Specials manager");
-
-/* public/themes/admin/tpl//special/list.tpl */
-gettext("All categories");
+gettext("Specials");
 
 /* public/themes/admin/tpl//special/list.tpl */
 gettext("Delete");
@@ -5237,7 +5216,10 @@ gettext("Delete");
 gettext("There is no specials yet");
 
 /* public/themes/admin/tpl//special/config.tpl */
-gettext("Special :: Configuration");
+gettext("Specials");
+
+/* public/themes/admin/tpl//special/config.tpl */
+gettext("Settings");
 
 /* public/themes/admin/tpl//special/config.tpl */
 gettext("Save");
@@ -5300,13 +5282,10 @@ gettext("No");
 gettext("You must select some elements.");
 
 /* public/themes/admin/tpl//special/new.tpl */
-gettext("Special manager");
+gettext("Creating special");
 
 /* public/themes/admin/tpl//special/new.tpl */
-gettext("Creating Special");
-
-/* public/themes/admin/tpl//special/new.tpl */
-gettext("Editing Special");
+gettext("Editing special");
 
 /* public/themes/admin/tpl//special/new.tpl */
 gettext("Save");
@@ -5423,7 +5402,7 @@ gettext("Available images");
 gettext("Search images by title...");
 
 /* public/themes/admin/tpl//menues/list.tpl */
-gettext("Menu manager");
+gettext("Menus");
 
 /* public/themes/admin/tpl//menues/list.tpl */
 gettext("New menu");
@@ -5504,13 +5483,10 @@ gettext("No");
 gettext("You must select some elements.");
 
 /* public/themes/admin/tpl//menues/new.tpl */
-gettext("Menu manager");
+gettext("Editing menu");
 
 /* public/themes/admin/tpl//menues/new.tpl */
-gettext("Editing menu \"%1\"");
-
-/* public/themes/admin/tpl//menues/new.tpl */
-gettext("Creating new menu");
+gettext("Creating menu");
 
 /* public/themes/admin/tpl//menues/new.tpl */
 gettext("Save");
@@ -5612,10 +5588,7 @@ gettext("Menu link...");
 gettext("Update");
 
 /* public/themes/admin/tpl//article/list.tpl */
-gettext("Article Manager");
-
-/* public/themes/admin/tpl//article/list.tpl */
-gettext("Listing articles");
+gettext("Articles");
 
 /* public/themes/admin/tpl//article/list.tpl */
 gettext("Delete");
@@ -5738,10 +5711,7 @@ gettext("Yes, delete");
 gettext("No");
 
 /* public/themes/admin/tpl//article/new.tpl */
-gettext("Article manager");
-
-/* public/themes/admin/tpl//article/new.tpl */
-gettext("Creating new article");
+gettext("Creating article");
 
 /* public/themes/admin/tpl//article/new.tpl */
 gettext("Editing article");
@@ -6092,10 +6062,7 @@ gettext("There is no SQL errors registered in database.");
 gettext("We already have being informed of this error: %1");
 
 /* public/themes/admin/tpl//static_pages/list.tpl */
-gettext("Static Pages Manager");
-
-/* public/themes/admin/tpl//static_pages/list.tpl */
-gettext("Listing");
+gettext("Static pages");
 
 /* public/themes/admin/tpl//static_pages/list.tpl */
 gettext("Create new page");
@@ -6161,7 +6128,7 @@ gettext("Yes, delete");
 gettext("No");
 
 /* public/themes/admin/tpl//static_pages/new.tpl */
-gettext("Static Pages Manager");
+gettext("Creating static page");
 
 /* public/themes/admin/tpl//static_pages/new.tpl */
 gettext("Editing page");
@@ -6224,7 +6191,7 @@ gettext("Yes, delete");
 gettext("No");
 
 /* public/themes/admin/tpl//acl/user_group/list.tpl */
-gettext("User group management");
+gettext("User groups");
 
 /* public/themes/admin/tpl//acl/user_group/list.tpl */
 gettext("New Privilege");
@@ -6257,10 +6224,10 @@ gettext("Delete group");
 gettext("There is no groups created yet.");
 
 /* public/themes/admin/tpl//acl/user_group/new.tpl */
-gettext("User group manager");
+gettext("Editing group");
 
 /* public/themes/admin/tpl//acl/user_group/new.tpl */
-gettext("Editing %1");
+gettext("Creating user group");
 
 /* public/themes/admin/tpl//acl/user_group/new.tpl */
 gettext("Save");
@@ -6299,7 +6266,7 @@ gettext("No");
 gettext("Editing user group");
 
 /* public/themes/admin/tpl//acl/user/list.tpl */
-gettext("User manager");
+gettext("Users");
 
 /* public/themes/admin/tpl//acl/user/list.tpl */
 gettext("Delete selected users");
@@ -6362,10 +6329,10 @@ gettext("Delete this user");
 gettext("There is no users created yet or <br/>your search don't match your criteria");
 
 /* public/themes/admin/tpl//acl/user/new.tpl */
-gettext("User manager");
+gettext("Editing user");
 
 /* public/themes/admin/tpl//acl/user/new.tpl */
-gettext("Editing user information");
+gettext("Creating user");
 
 /* public/themes/admin/tpl//acl/user/new.tpl */
 gettext("Save and exit");
@@ -6449,7 +6416,7 @@ gettext("Categories");
 gettext("HOME");
 
 /* public/themes/admin/tpl//advertisement/list.tpl */
-gettext("Advertisement manager");
+gettext("Advertisements");
 
 /* public/themes/admin/tpl//advertisement/list.tpl */
 gettext("Delete");
@@ -6677,9 +6644,6 @@ gettext("No");
 gettext("You must select some elements.");
 
 /* public/themes/admin/tpl//advertisement/new.tpl */
-gettext("Ad manager");
-
-/* public/themes/admin/tpl//advertisement/new.tpl */
 gettext("Creating banner");
 
 /* public/themes/admin/tpl//advertisement/new.tpl */
@@ -6887,7 +6851,7 @@ gettext("Close window");
 gettext("Close");
 
 /* public/themes/admin/tpl//disqus/list.tpl */
-gettext("Comment manager");
+gettext("Comments");
 
 /* public/themes/admin/tpl//disqus/list.tpl */
 gettext("Disqus module configuration");
@@ -6905,10 +6869,7 @@ gettext("Config");
 gettext("Disqus not configured");
 
 /* public/themes/admin/tpl//disqus/config.tpl */
-gettext("Comment manager");
-
-/* public/themes/admin/tpl//disqus/config.tpl */
-gettext("Configuration");
+gettext("Settings");
 
 /* public/themes/admin/tpl//disqus/config.tpl */
 gettext("Save");
@@ -6929,7 +6890,7 @@ gettext("Short name:");
 gettext("No available videos for your search criteria");
 
 /* public/themes/admin/tpl//video/list.tpl */
-gettext("Video Manager :: Listing videos");
+gettext("Videos");
 
 /* public/themes/admin/tpl//video/list.tpl */
 gettext("Delete");
@@ -7061,7 +7022,10 @@ gettext("Delete");
 gettext("Send to trash");
 
 /* public/themes/admin/tpl//video/config.tpl */
-gettext("Video :: Configuration");
+gettext("Videos");
+
+/* public/themes/admin/tpl//video/config.tpl */
+gettext("Settings");
 
 /* public/themes/admin/tpl//video/config.tpl */
 gettext("Save");
@@ -7134,9 +7098,6 @@ gettext("No");
 
 /* public/themes/admin/tpl//video/modals/_modalBatchDelete.tpl */
 gettext("You must select some elements.");
-
-/* public/themes/admin/tpl//video/new.tpl */
-gettext("Video manager");
 
 /* public/themes/admin/tpl//video/new.tpl */
 gettext("Creating video");
@@ -7244,10 +7205,10 @@ gettext("Get information");
 gettext("Allowed video sources:");
 
 /* public/themes/admin/tpl//video/selecttype.tpl */
-gettext("Video manager");
+gettext("Videos");
 
 /* public/themes/admin/tpl//video/selecttype.tpl */
-gettext("Which type of video do you want to add?");
+gettext("Pick the method to add the video:");
 
 /* public/themes/admin/tpl//video/selecttype.tpl */
 gettext("Upload file from my computer");
@@ -7358,7 +7319,13 @@ gettext("Uploaded bytes exceed file size");
 gettext("Empty file upload result");
 
 /* public/themes/admin/tpl//image/statistics.tpl */
-gettext("Images manager :: General statistics");
+gettext("Images");
+
+/* public/themes/admin/tpl//image/statistics.tpl */
+gettext("Statistics");
+
+/* public/themes/admin/tpl//image/statistics.tpl */
+gettext("Search");
 
 /* public/themes/admin/tpl//image/statistics.tpl */
 gettext("Go back");
@@ -7403,19 +7370,19 @@ gettext("Specials");
 gettext("TOTAL");
 
 /* public/themes/admin/tpl//image/list.tpl */
-gettext("Image manager");
+gettext("Images");
 
 /* public/themes/admin/tpl//image/list.tpl */
-gettext("Category \"%1\"");
-
-/* public/themes/admin/tpl//image/list.tpl */
-gettext("Category \"Advertisement\"");
-
-/* public/themes/admin/tpl//image/list.tpl */
-gettext("Category \"GLOBAL\"");
+gettext("All categories");
 
 /* public/themes/admin/tpl//image/list.tpl */
 gettext("Delete");
+
+/* public/themes/admin/tpl//image/list.tpl */
+gettext("Upload");
+
+/* public/themes/admin/tpl//image/list.tpl */
+gettext("Upload");
 
 /* public/themes/admin/tpl//image/list.tpl */
 gettext("Search images");
@@ -7424,22 +7391,19 @@ gettext("Search images");
 gettext("Search");
 
 /* public/themes/admin/tpl//image/list.tpl */
-gettext("Upload");
+gettext("Statistics");
 
 /* public/themes/admin/tpl//image/list.tpl */
-gettext("Upload");
+gettext("Statistics");
 
 /* public/themes/admin/tpl//image/list.tpl */
 gettext("Settings");
 
-/* public/themes/admin/tpl//image/list.tpl */
-gettext("Statistics");
-
-/* public/themes/admin/tpl//image/list.tpl */
-gettext("Statistics");
+/* public/themes/admin/tpl//image/config.tpl */
+gettext("Images");
 
 /* public/themes/admin/tpl//image/config.tpl */
-gettext("Image manager :: Configuration");
+gettext("Configuration");
 
 /* public/themes/admin/tpl//image/config.tpl */
 gettext("Save");
@@ -7541,7 +7505,7 @@ gettext("Edit them");
 gettext("Upload more images");
 
 /* public/themes/admin/tpl//image/new.tpl */
-gettext("Image manager:: Editing \"%1\"");
+gettext("Editing image");
 
 /* public/themes/admin/tpl//image/new.tpl */
 gettext("Save");
