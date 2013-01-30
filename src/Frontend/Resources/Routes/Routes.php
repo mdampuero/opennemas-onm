@@ -817,6 +817,24 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
+    'frontend_external_article_show',
+    new Route(
+        '/extarticulo/{category_name}/{slug}/{article_id}.{_format}',
+        array(
+            '_controller' => 'Frontend:Controllers:ArticlesController:extShow',
+            '_format'     => 'html',
+            'page'        => 1
+        ),
+        array(
+            'category_name' => '[a-z0-9\-]+',
+            'slug'          => '[a-z0-9\-]+',
+            'article_id'    => '([0-9]+)',
+            '_format'       => 'html|htm'
+        )
+    )
+);
+
+$frontendRoutes->add(
     'frontend_article_show_gl',
     new Route(
         '/artigo/{category_name}/{slug}/{article_id}.{_format}',
@@ -870,9 +888,26 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
+    'frontend_external_content_print',
+    new Route(
+        '/content/extprint/{category_name}/{slug}/{content_id}.{_format}',
+        array(
+            '_controller' => 'Frontend:Controllers:ContentsController:extPrint',
+            '_format'     => 'html',
+            'page'        => 1
+        ),
+        array(
+            'category_name' => '[a-z0-9\-]+',
+            'slug'          => '[a-z0-9\-]+',
+            'content_id'    => '([0-9]+)',
+        )
+    )
+);
+
+$frontendRoutes->add(
     'frontend_content_share_by_mail',
     new Route(
-        '/content/share-by-email',
+        '/content/share-by-email/{content_id}',
         array(
             '_controller' => 'Frontend:Controllers:ContentsController:shareByEmail',
         )
@@ -1032,6 +1067,20 @@ $frontendRoutes->add(
     )
 );
 
+$frontendRoutes->add(
+    'frontend_opinion_external_author_frontpage',
+    new Route(
+        '/extopinion/autor/{author_id}/{author_slug}',
+        array(
+           '_controller' => 'Frontend:Controllers:OpinionsController:extFrontpageAuthor',
+        ),
+        array(
+           'author_slug'    => '(.*)?',
+           'author_id'      => '([0-9]+)'
+        )
+    )
+);
+
 // RewriteRule ^opinion(|/.+)?/([a-z0-9\-]+)?/(.*)?/([0-9]+).html$
                  // controllers/opinion_inner.php?opinion_id=$4&category_name=opinion&action=read&t=$1&author_name=$2&opinion_title=$3 [L,NC]
 //RewriteRule ^opinion(|/.+)?/(.*)?/([0-9]+).html$ controllers/opinion_inner.php?opinion_id=$3&category_name=opinion&action=read&t=$1 [L,NC]
@@ -1075,11 +1124,53 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
+    'frontend_opinion_external_show_with_author_slug',
+    new Route(
+        '/extopinion/{author_name}/{opinion_title}/{opinion_id}.{_format}',
+        array(
+            '_controller' => 'Frontend:Controllers:OpinionsController:extShow',
+            'author_name' => 'author',
+            '_format'     => 'html'
+        ),
+        array(
+            'author_name'    => '[a-z0-9\-]+',
+            'opinion_title'  => '[a-z0-9\-]+',
+            'opinion_id'     => '[a-z0-9\-]+',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_opinion_external_show',
+    new Route(
+        '/extopinion/{opinion_title}/{opinion_id}.{_format}',
+        array(
+           '_controller' => 'Frontend:Controllers:OpinionsController:extShow',
+           '_format'     => 'html'
+        ),
+        array(
+            'opinion_title' => '[a-z0-9\-]+',
+            'opinion_id'    => '[a-z0-9\-]+',
+       )
+    )
+);
+
+$frontendRoutes->add(
     'frontend_opinion_frontpage',
     new Route(
         '/opinion',
         array(
            '_controller' => 'Frontend:Controllers:OpinionsController:frontpage',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_opinion_external_frontpage',
+    new Route(
+        '/extseccion/opinion',
+        array(
+           '_controller' => 'Frontend:Controllers:OpinionsController:extFrontpage',
         )
     )
 );

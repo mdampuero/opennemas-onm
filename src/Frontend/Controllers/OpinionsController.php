@@ -48,8 +48,6 @@ class OpinionsController extends Controller
      **/
     public function frontpageAction(Request $request)
     {
-        $cm = new \ContentManager();
-
         if ($this->page == 1) {
             $where = '';
             $orderBy='ORDER BY contents.in_home DESC, position ASC, created DESC ';
@@ -99,8 +97,7 @@ class OpinionsController extends Controller
 
             $itemsPerPage = s::get('items_per_page');
 
-
-            list($countOpinions, $opinions)= $cm->getCountAndSlice(
+            list($countOpinions, $opinions)= $this->cm->getCountAndSlice(
                 'Opinion',
                 null,
                 'opinions.type_opinion=0 '.
@@ -153,6 +150,134 @@ class OpinionsController extends Controller
                     'authors'    => $authors,
                     'pagination' => $pagination,
                     'page'       => $this->page
+                )
+            );
+        }
+
+        $this->getAds();
+
+        return $this->render(
+            'opinion/opinion_frontpage.tpl',
+            array('cache_id' => $cacheID)
+        );
+    }
+
+    /**
+     * Renders the opinion frontpage
+     *
+     * @return Response the response object
+     **/
+    public function extFrontpageAction(Request $request)
+    {
+        if ($this->page == 1) {
+            $where = '';
+            $orderBy='ORDER BY contents.in_home DESC, position ASC, created DESC ';
+        } else {
+            $where = 'AND contents.in_home=0 ';
+            $orderBy='ORDER BY created DESC ';
+        }
+        // Index frontpage
+        $cacheID = $this->view->generateCacheId($this->category_name, '', $this->page);
+
+        // Don't execute the app logic if there are caches available
+        if (($this->view->caching == 0)
+            || !$this->view->isCached('opinion/opinion_index.tpl', $cacheID)) {
+
+            // Getting Synchronize setting params
+            $wsUrl = '';
+            $syncParams = s::get('sync_params');
+            foreach ($syncParams as $siteUrl => $categoriesToSync) {
+                foreach ($categoriesToSync as $value) {
+                    if (preg_match('/'.$this->category_name.'/i', $value)) {
+                        $wsUrl = $siteUrl;
+                    }
+                }
+            }
+
+            // Fetch last external opinions from editorial
+            $editorial = $this->cm->getUrlContent($wsUrl.'/ws/opinions/editorialinhome/', true);
+
+            // Fetch last external opinions from director
+            $director = $this->cm->getUrlContent($wsUrl.'/ws/opinions/directorinhome/', true);
+
+            // Some director logic
+            if (isset($director) && !empty($director)) {
+                // Fetch the photo images of the director
+                $aut = $this->cm->getUrlContent($wsUrl.'/ws/authors/id/'.$director[0]->fk_author, true);
+                $foto = $this->cm->getUrlContent(
+                    $wsUrl.'/ws/authors/photo/'.$director[0]->fk_author,
+                    true
+                );
+
+                if (isset($foto->path_img)) {
+                    $dir['photo'] = $foto->path_img;
+                }
+
+                $dir['name'] = $aut->name;
+                $this->view->assign('dir', $dir);
+                $this->view->assign('director', $director[0]);
+            }
+
+            if ($this->page == 1) {
+                $opinions = $this->cm->getUrlContent($wsUrl.'/ws/opinions/authorsinhome/', true);
+                $totalHome = count($opinions);
+            } else {
+                // Fetch last opinions of contributors and paginate them by ITEM_PAGE
+                $opinions = $this->cm->getUrlContent($wsUrl.'/ws/opinions/authorsnotinhomepaged/'.$this->page, true);
+            }
+
+            // Sum of total opinions in home + not in home for the pager
+            $totalOpinions =  ITEMS_PAGE + (int)$this->cm->getUrlContent(
+                $wsUrl.'/ws/opinions/countauthorsnotinhome/',
+                true
+            );
+
+            $authors = array();
+            foreach ($opinions as &$opinion) {
+                if (!array_key_exists($opinion->fk_author, $authors)) {
+                    $author = $this->cm->getUrlContent($wsUrl.'/ws/authors/id/'.$opinion->fk_author, true);
+                    $authors[$opinion->fk_author] = $author;
+                }
+                $opinion->author           = $authors[$opinion->fk_author];
+                $opinion->name             = $opinion->author->name;
+                $opinion->author_name_slug = \StringUtils::get_title($opinion->name);
+                $opinion->author->uri = $this->generateUrl(
+                    'frontend_opinion_external_author_frontpage',
+                    array(
+                        'author_id' => $opinion->fk_author,
+                        'author_slug' => $opinion->author_name_slug,
+                    )
+                );
+            }
+
+            $itemsPerPage = s::get('items_per_page');
+            // Get external media url for author images
+            $externalMediaUrl = $this->cm->getUrlContent($wsUrl.'/ws/instances/mediaurl/', true);
+
+            $pagination = \Pager::factory(
+                array(
+                    'mode'        => 'Sliding',
+                    'perPage'     => $itemsPerPage,
+                    'append'      => false,
+                    'path'        => '',
+                    'delta'       => 3,
+                    'clearIfVoid' => true,
+                    'urlVar'      => 'page',
+                    'totalItems'  => $totalOpinions,
+                    'fileName'    => $this->generateUrl(
+                        'frontend_opinion_external_frontpage'
+                    ).'/?page=%d',
+                )
+            );
+
+            $this->view->assign(
+                array(
+                    'editorial'  => $editorial,
+                    'opinions'   => $opinions,
+                    'authors'    => $authors,
+                    'pagination' => $pagination,
+                    'page'       => $this->page,
+                    'ext'        => $externalMediaUrl,
                 )
             );
         }
@@ -271,7 +396,7 @@ class OpinionsController extends Controller
 
             // Clean weird variables from this assign (must check
             // all the templates)
-            // pagination_list cahnge to pagination
+            // pagination_list change to pagination
             // drop author_id, $author_name as they are inside author var
             $this->view->assign(
                 array(
@@ -294,6 +419,155 @@ class OpinionsController extends Controller
             array('cache_id' => $cacheID)
         );
 
+    }
+
+
+    /**
+     * Renders the external opinion author's frontpage
+     *
+     * @return Response the response object
+     **/
+    public function extFrontpageAuthorAction(Request $request)
+    {
+        // Fetch HTTP params
+        $authorID   = $request->query->getDigits('author_id', null);
+        $authorSlug = $request->query->filter('author_slug', null, FILTER_SANITIZE_STRING);
+
+        if (empty($authorID)) {
+            return new RedirectResponse($this->generateUrl('frontend_opinion_frontpage'));
+        }
+
+        // Author frontpage
+        $cacheID = $this->view->generateCacheId($this->category_name, $authorID, $this->page);
+        // Don't execute the app logic if there are caches available
+        if (($this->view->caching == 0)
+            || !$this->view->isCached('opinion/frontpage_author.tpl', $cacheID)) {
+
+            // Getting Synchronize setting params
+            $wsUrl = '';
+            $syncParams = s::get('sync_params');
+            foreach ($syncParams as $siteUrl => $categoriesToSync) {
+                foreach ($categoriesToSync as $value) {
+                    if (preg_match('/'.$this->category_name.'/i', $value)) {
+                        $wsUrl = $siteUrl;
+                    }
+                }
+            }
+
+            // Get author info
+            $author = $this->cm->getUrlContent($wsUrl.'/ws/authors/id/'.$authorID, true);
+
+            // Setting filters for the further SQLs
+            if ($authorID == 1 && strtolower($authorSlug) == 'editorial') {
+                // Editorial
+                $authorName = 'editorial';
+                $countOpinions = $this->cm->getUrlContent(
+                    $wsUrl.'/ws/opinions/counteditorialopinions/',
+                    true
+                );
+                $opinions = $this->cm->getUrlContent(
+                    $wsUrl.'/ws/opinions/allopinionseditorial/'.$this->page,
+                    true
+                );
+            } elseif ($authorID == 2 && strtolower($authorSlug) == 'director') {
+                // Director
+                $authorName = 'director';
+                $countOpinions = $this->cm->getUrlContent(
+                    $wsUrl.'/ws/opinions/countdirectoropinions/',
+                    true
+                );
+                $opinions = $this->cm->getUrlContent(
+                    $wsUrl.'/ws/opinions/allopinionsdirector/'.$this->page,
+                    true
+                );
+            } else {
+                // Regular authors
+                $authorName = \StringUtils::get_title($author->name);
+                $countOpinions = $this->cm->getUrlContent(
+                    $wsUrl.'/ws/opinions/countauthoropinions/'.$authorID,
+                    true
+                );
+                $opinions = $this->cm->getUrlContent(
+                    $wsUrl.'/ws/opinions/allopinionsauthor/'.$this->page.'/'.$authorID,
+                    true
+                );
+            }
+
+            if (!empty($opinions)) {
+                foreach ($opinions as &$opinion) {
+                    $opinion->author_name_slug  = $authorName;
+                    // Overload opinion uri on opinion Object
+
+                    $opinion->uri = $this->generateUrl(
+                        'frontend_opinion_external_show_with_author_slug',
+                        array(
+                            'opinion_id'    => date('YmdHis', strtotime($opinion->created)).$opinion->id,
+                            'author_name'   => $authorName,
+                            'opinion_title' => $opinion->slug,
+                        )
+                    );
+
+                    $opinion->author_uri = $this->generateUrl(
+                        'frontend_opinion_external_author_frontpage',
+                        array(
+                            'author_id' => $authorID,
+                            'author_slug' => $authorName,
+                        )
+                    );
+
+                    $opinion = (array)$opinion; // template dependency
+                }
+            }
+
+            $itemsPerPage = s::get('items_per_page');
+            // Get external media url for author images
+            $externalMediaUrl = $this->cm->getUrlContent($wsUrl.'/ws/instances/mediaurl/', true);
+
+            $pagination = \Pager::factory(
+                array(
+                    'mode'        => 'Sliding',
+                    'perPage'     => $itemsPerPage,
+                    'append'      => false,
+                    'path'        => '',
+                    'delta'       => 4,
+                    'clearIfVoid' => true,
+                    'urlVar'      => 'page',
+                    'totalItems'  => $countOpinions,
+                    'fileName'    => $this->generateUrl(
+                        'frontend_opinion_external_author_frontpage',
+                        array(
+                            'author_id' => $authorID,
+                            'author_slug' => $authorName,
+                        )
+                    ).'/?page=%d',
+                )
+            );
+
+            // Clean weird variables from this assign (must check
+            // all the templates)
+            // pagination_list change to pagination
+            // drop author_id, $author_name as they are inside author var
+            $this->view->assign(
+                array(
+                    'pagination_list' => $pagination,
+                    'opinions'        => $opinions,
+                    'author_id'       => $authorID,
+                    'author_slug'     => strtolower($authorSlug),
+                    'author'          => $author,
+                    'author_name'     => $author->name,
+                    'page'            => $this->page,
+                    'ext'             => $externalMediaUrl,
+                )
+            );
+
+        } // End if isCached
+
+        $this->getAds();
+
+        return $this->render(
+            'opinion/opinion_author_index.tpl',
+            array('cache_id' => $cacheID)
+        );
     }
 
     /**
@@ -405,6 +679,74 @@ class OpinionsController extends Controller
     }
 
     /**
+     * Displays an external opinion given its id
+     *
+     * @param int opinion_id the identificator of the opinion to show
+     *
+     * @return Response the response object
+     **/
+    public function extShowAction(Request $request)
+    {
+        // Fetch HTTP params
+        $dirtyID       = $request->query->getDigits('opinion_id');
+
+        // Redirect to opinion frontpage if opinion_id wasn't provided
+        if (empty($dirtyID)) {
+            return new RedirectResponse($this->generateUrl('frontend_opinion_frontpage'));
+        }
+
+        // Getting Synchronize setting params
+        $wsUrl = '';
+        $syncParams = s::get('sync_params');
+        foreach ($syncParams as $siteUrl => $categoriesToSync) {
+            foreach ($categoriesToSync as $value) {
+                if (preg_match('/'.$this->category_name.'/i', $value)) {
+                    $wsUrl = $siteUrl;
+                }
+            }
+        }
+
+        $cacheID = $this->view->generateCacheId('sync'.$this->category_name, null, $dirtyID);
+
+        if (($this->view->caching == 0) || !$this->view->isCached('opinion.tpl', $cacheID)) {
+
+            $opinion = $this->cm->getUrlContent($wsUrl.'/ws/opinions/complete/'.$dirtyID, true);
+            $opinion = unserialize($opinion);
+
+            // Overload opinion object with category_name (used on ext_print)
+            $opinion->category_name = $this->category_name;
+
+            //Fetch information for Advertisements
+            $this->getAds('inner');
+
+            if (($opinion->available==1) && ($opinion->in_litter == 0)) {
+
+                $this->view->assign(
+                    array(
+                        'other_opinions'  => $opinion->otherOpinions,
+                        'suggested'       => $opinion->machineRelated,
+                        'opinion'         => $opinion,
+                        'content'         => $opinion,
+                        'actual_category' => 'opinion',
+                        'media_url'       => $opinion->externalMediaUrl,
+                        'contentId'       => $opinion->id, // Used on comments
+                        'ext'             => 1 //Used on widgets
+                    )
+                );
+
+            } else {
+                throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+            }
+        } // End if isCached
+
+        // Show in Frontpage
+        return $this->render(
+            'opinion/opinion.tpl',
+            array('cache_id' => $cacheID)
+        );
+    }
+
+    /**
      * Fetches the advertisement
      **/
     private function getAds($context = 'frontpage')
@@ -435,3 +777,4 @@ class OpinionsController extends Controller
         }
     }
 }
+

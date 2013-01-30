@@ -37,6 +37,7 @@ class ArticlesController extends Controller
         $this->ccm  = \ContentCategoryManager::get_instance();
     }
 
+
     /**
      * Displays the article given its id or slug
      *
@@ -77,13 +78,6 @@ class ArticlesController extends Controller
             if (($article->available == 1) && ($article->in_litter == 0)
                 && ($article->isStarted())
             ) {
-
-
-                $this->view->assign(
-                    'sendform_url',
-                    '/controllers/article.php?action=sendform&article_id='
-                    .$articleID.'&category_name='.$categoryName
-                );
 
                 // Categories code -------------------------------------------
                 // TODO: Seems that this is rubbish, evaluate its removal
@@ -179,13 +173,92 @@ class ArticlesController extends Controller
                 throw new ResourceNotFoundException();
             }
 
-        } // end if $tpl->is_cached
+        } // end if $this->view->is_cached
 
         return $this->render(
             "extends:{$layoutFile}|article/article.tpl",
             array(
                 'cache_id'      => $cacheID,
                 'contentId'     => $articleID,
+                'category_name' => $categoryName,
+            )
+        );
+    }
+
+    /**
+     * Displays the external article given its id or slug
+     *
+     * @param int article_id the identifier of the article
+     * @param string slug the slug of the article
+     * @param string category the category name
+     *
+     * @return Response the response object
+     **/
+    public function extShowAction(Request $request)
+    {
+        // Fetch HTTP variables
+        $dirtyID      = $request->query->filter('article_id', '', FILTER_SANITIZE_STRING);
+        $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+        $slug         = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
+
+        // Setup view
+        $this->view->setConfig('articles');
+        $cacheID = $this->view->generateCacheId('sync'.$categoryName, null, $dirtyID);
+
+        // Advertisements for single article NO CACHE
+        $this->getInnerAds($categoryName);
+
+        if (
+            $this->view->caching == 0
+            || !$this->view->isCached('article/article.tpl', $cacheID)
+        ) {
+
+            // Init the Content and Database object
+            $cm = new \ContentManager();
+
+            // Getting Synchronize setting params
+            $wsUrl = '';
+            $syncParams = s::get('sync_params');
+            foreach ($syncParams as $siteUrl => $categoriesToSync) {
+                foreach ($categoriesToSync as $value) {
+                    if (preg_match('/'.$categoryName.'/i', $value)) {
+                        $wsUrl = $siteUrl;
+                    }
+                }
+            }
+
+            // Get full article
+            $article = $cm->getUrlContent($wsUrl.'/ws/articles/complete/'.$dirtyID, true);
+            $article = unserialize($article);
+
+            if (($article->available==1) && ($article->in_litter==0)
+                && ($article->isStarted())
+            ) {
+                // Template vars
+                $this->view->assign(
+                    array(
+                        'article'               => $article,
+                        'content'               => $article,
+                        'photoInt'              => $article->photoInt,
+                        'videoInt'              => $article->videoInt,
+                        'relationed'            => $article->relatedContents,
+                        'contentId'             => $article->id,// Used on module_comments.tpl
+                        'actual_category_title' => $article->category_title,
+                        'suggested'             => $article->suggested,
+                        'ext'                   => 1,
+                    )
+                );
+
+            } else {
+                throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+            }
+
+        } // end if $this->view->is_cached
+
+        return $this->render(
+            'article/article.tpl',
+            array(
+                'cache_id' => $cacheID,
                 'category_name' => $categoryName,
             )
         );
@@ -220,3 +293,4 @@ class ArticlesController extends Controller
         }
     }
 }
+
