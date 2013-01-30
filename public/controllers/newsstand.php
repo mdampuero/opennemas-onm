@@ -60,7 +60,7 @@ switch ($action) {
                         'Kiosko',
                         $theCategory->pk_content_category,
                         ' `contents`.`available`=1   ',
-                        ' ORDER BY `kioskos`.date DESC  LIMIT 24'
+                        ' ORDER BY `kioskos`.date DESC  LIMIT 48'
                     );
                     if (!empty($portadas)) {
                         $kiosko[] = array (
