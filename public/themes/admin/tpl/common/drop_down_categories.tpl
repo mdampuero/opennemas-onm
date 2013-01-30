@@ -1,6 +1,10 @@
+<h4>{t}Categories{/t}</h4>
 <div class="component">
-    <a href="{$home}" {if $category == 'all'}class="active"{/if}>{t}All categories{/t}</a>
-    <h4>{t}Other Categories{/t}</h4>
+    {if $hide_all === true}
+        {acl hasCategoryAccess=0}
+        <a href="{$home}" {if $category == 'all'}class="active"{/if}>{t}All categories{/t}</a>
+        {/acl}
+    {/if}
     <ul class="categories">
         {section name=as loop=$allcategorys}
         {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
