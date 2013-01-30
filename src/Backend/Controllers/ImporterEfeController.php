@@ -402,35 +402,33 @@ class ImporterEfeController extends Controller
     public function configAction(Request $request)
     {
         if (count($_POST) <= 0) {
-            if ($serverAuth = s::get('efe_server_auth')) {
+            $serverAuth = s::get('efe_server_auth');
 
-                $message = $this->request->query->filter('message', null, FILTER_SANITIZE_STRING);
+            $message = $this->request->query->filter('message', null, FILTER_SANITIZE_STRING);
 
-                $this->view->assign(
-                    array(
-                        'server'        => $serverAuth['server'],
-                        'username'      => $serverAuth['username'],
-                        'password'      => $serverAuth['password'],
-                        'message'       => $message,
-                        'agency_string' => s::get('efe_agency_string'),
-                        'sync_from'     => array(
-                            'no_limits'     => _('No limit'),
-                            '21600'         => sprintf(_('%d hours'), '6'),
-                            '43200'         => sprintf(_('%d hours'), '12'),
-                            '86400'         => _('1 day'),
-                            '172800'        => sprintf(_('%d days'), '2'),
-                            '259200'        => sprintf(_('%d days'), '3'),
-                            '345600'        => sprintf(_('%d days'), '4'),
-                            '432000'        => sprintf(_('%d days'), '5'),
-                            '518400'        => sprintf(_('%d days'), '6'),
-                            '604800'        => sprintf(_('%d week'), '1'),
-                            '1209600'       => sprintf(_('%d weeks'), '2'),
-                        ),
-                        'sync_from_setting'=> s::get('efe_sync_from_limit'),
-                    )
-                );
-
-            }
+            $this->view->assign(
+                array(
+                    'server'        => $serverAuth['server'],
+                    'username'      => $serverAuth['username'],
+                    'password'      => $serverAuth['password'],
+                    'message'       => $message,
+                    'agency_string' => s::get('efe_agency_string'),
+                    'sync_from'     => array(
+                        'no_limits'     => _('No limit'),
+                        '21600'         => sprintf(_('%d hours'), '6'),
+                        '43200'         => sprintf(_('%d hours'), '12'),
+                        '86400'         => _('1 day'),
+                        '172800'        => sprintf(_('%d days'), '2'),
+                        '259200'        => sprintf(_('%d days'), '3'),
+                        '345600'        => sprintf(_('%d days'), '4'),
+                        '432000'        => sprintf(_('%d days'), '5'),
+                        '518400'        => sprintf(_('%d days'), '6'),
+                        '604800'        => sprintf(_('%d week'), '1'),
+                        '1209600'       => sprintf(_('%d weeks'), '2'),
+                    ),
+                    'sync_from_setting'=> s::get('efe_sync_from_limit'),
+                )
+            );
 
             return $this->render('agency_importer/efe/config.tpl');
         } else {
@@ -461,7 +459,7 @@ class ImporterEfeController extends Controller
                 m::add(_('There was an error while saving the EFE module configuration'), m::ERROR);
             }
 
-            return $this->redirect($this->generateUrl('admin_importer_efe'));
+            return $this->redirect($this->generateUrl('admin_importer_efe_config'));
         }
     }
 
