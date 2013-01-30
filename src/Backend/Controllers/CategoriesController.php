@@ -400,7 +400,7 @@ class CategoriesController extends Controller
      **/
     public function toggleAvailableAction(Request $request)
     {
-        $this->checkAclOrForward('BOOK_AVAILABLE');
+        $this->checkAclOrForward('CATEGORY_AVAILABLE');
 
         $request  = $this->get('request');
         $id       = $request->query->getDigits('id', 0);
