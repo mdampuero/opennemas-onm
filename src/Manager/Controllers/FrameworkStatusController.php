@@ -38,10 +38,10 @@ class FrameworkStatusController extends Controller
      **/
     public function checkDependenciesAction(Request $request)
     {
-        ob_start();
-        include(APPLICATION_PATH.'/bin/check-dependencies.php');
-        $status = ob_get_contents();
-        ob_end_clean();
+        // ob_start();
+        chdir(APPLICATION_PATH);
+        $command = APPLICATION_PATH.'/bin/console framework:check-dependencies';
+        $status = shell_exec($command);
 
         return $this->render(
             'framework/status.tpl',
