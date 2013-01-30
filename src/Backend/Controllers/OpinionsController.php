@@ -278,7 +278,7 @@ class OpinionsController extends Controller
      **/
     public function createAction(Request $request)
     {
-        $this->checkAclOrForward('SPECIAL_CREATE');
+        $this->checkAclOrForward('OPINION_CREATE');
 
         if ('POST' == $request->getMethod()) {
             $opinion = new \Opinion();
