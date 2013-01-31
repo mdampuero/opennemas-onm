@@ -46,6 +46,8 @@ class OpinionsController extends Controller
 
         // Get rid of this as soon as posible
         // require_once 'sections.php';
+        // TODO: Get rid of this when posible
+         require __DIR__.'/../sections.php';
 
         //Fetch opinions
         $director  = $cm->find(
