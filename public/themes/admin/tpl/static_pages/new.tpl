@@ -53,13 +53,6 @@
             {/acl}
 
             <div class="control-group">
-                <label for="description" class="control-label">{t}Description{/t}</label>
-                <div class="controls">
-                    <input type="text" name="description" id="description" rows="4" tabindex="5" class="input-xxlarge" value="{$page->description|default:""}">
-                </div>
-            </div>
-
-            <div class="control-group">
                 <label for="body" class="control-label">{t}Body{/t}</label>
                 <div class="controls">
                     <textarea name="body" id="body" rows="5" required="required" tabindex="5" style="height:20em;" class="input-xxxlarge">{$page->body|default:""}</textarea>
