@@ -103,6 +103,7 @@ class BooksController extends Controller
      **/
     public function showAction(Request $request)
     {
+
         $dirtyID = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
         $id      = \Content::resolveID($dirtyID);
 
@@ -130,7 +131,7 @@ class BooksController extends Controller
                 'ORDER BY position ASC, created DESC LIMIT 5'
             );
 
-            return $this->view->assign(
+            $this->view->assign(
                 array(
                     'book'        => $book,
                     'content'     => $book,
