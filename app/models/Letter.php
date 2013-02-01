@@ -186,6 +186,7 @@ class Letter extends Content
 
         // Prevent XSS attack
         $data = array_map('strip_tags', $data);
+        $data['body'] = nl2br($data['body']);
 
         if ($letter->hasBadWorsComment($data)) {
             return "Su comentario fue rechazado debido al uso "
