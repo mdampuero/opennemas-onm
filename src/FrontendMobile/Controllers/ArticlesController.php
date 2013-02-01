@@ -73,11 +73,6 @@ class ArticlesController extends Controller
             $relatedContents = $cm->getInTime($relatedContents);
             $relatedContents = $cm->getAvailable($relatedContents);
 
-            //Nombre categoria correcto.
-            foreach ($relatedContents as &$relContent) {
-                $relContent->category_name = $ccm->get_title($relContent->category_name);
-            }
-
             $this->view->assign(
                 array(
                     'article' => $article,
@@ -96,3 +91,4 @@ class ArticlesController extends Controller
         );
     }
 }
+
