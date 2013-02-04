@@ -13,6 +13,21 @@ use Symfony\Component\Routing\RouteCollection;
 $managerRoutes = new RouteCollection();
 
 $managerRoutes->add(
+    'manager_framework_commands',
+    new Route(
+        '/commands',
+        array('_controller' => 'Manager:Controllers:CommandsController:list')
+    )
+);
+$managerRoutes->add(
+    'manager_framework_command_execute',
+    new Route(
+        '/commands/execute',
+        array('_controller' => 'Manager:Controllers:CommandsController:executeCommand')
+    )
+);
+
+$managerRoutes->add(
     'manager_instances',
     new Route(
         '/instances',
@@ -132,6 +147,7 @@ $routes->add(
         array('_controller' => 'Manager:Controllers:WelcomeController:default')
     )
 );
+
 
 $routes->addCollection($managerRoutes, 'manager');
 

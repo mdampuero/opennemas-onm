@@ -133,7 +133,7 @@ a.btn-primary.active,a.btn-warning.active,a.btn-danger.active,a.btn-success.acti
 
 .btn-group > .btn, .btn-group > .dropdown-menu, .btn-group > .popover { font-size: 12px; }
 
-a.btn [class^="icon-"] { font-size:14px; }
+/*a.btn [class^="icon-"] { font-size:14px; }*/
 
 a[class^="btn-"] { color:White; }
 a.btn-danger { color:White; }
@@ -149,6 +149,9 @@ a.btn-danger { color:White; }
 }
 .table a.btn {
   color:#434343 !important;
+}
+.table a.btn-danger {
+  color:White !important;
 }
 .modal {
   border-radius:2px;
