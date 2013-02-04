@@ -13,7 +13,7 @@ $_SERVER['REQUEST_PORT']  = '80';
 $_SERVER['SERVER_PORT']   = '80';
 $_SERVER['HTTP_HOST']     ='www.cronicasdelaemigracion.com';
 
-require __DIR__.'/../bootstrap.php';
+require __DIR__.'/../app/bootstrap.php';
 
 /**
  * Setup view
