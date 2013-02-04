@@ -72,20 +72,12 @@
 
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Special manager{/t} :: {if $smarty.request.action eq "new"}{t}Creating Special{/t}{else}{t}Editing Special{/t}{/if}</h2></div>
+            <div class="title"><h2>{if !isset($special->id)}{t}Creating special{/t}{else}{t}Editing special{/t}{/if}</h2></div>
             <ul class="old-button">
-
-                 <li>
-                    {acl isAllowed="SPECIAL_CREATE"}
-                    <button type="submit" name="continue" value="1">
-                        <img src="{$params.IMAGE_DIR}save_and_continue.png" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
-                    </button>
-                    {/acl}
-                </li>
                 <li>
                 {if isset($special->id)}
                     {acl isAllowed="SPECIAL_UPDATE"}
-                    <button type="submit">
+                    <button type="submit" name="continue" value=1>
                         <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}" ><br />{t}Save{/t}
                     </button>
                     {/acl}
@@ -107,6 +99,7 @@
         </div>
     </div>
     <div class="wrapper-content">
+        {render_messages}
         <div class="form-horizontal panel">
             <div class="control-group">
                 <label for="title" class="control-label">{t}Title{/t}</label>

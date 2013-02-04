@@ -1,24 +1,29 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div class="top-action-bar clearfix">
-	<div class="wrapper-content">
-		<div class="title"><h2>{t}Cache Manager{/t} :: {t}Configuration{/t}</h2></div>
-		<ul class="old-button">
-			<li>
-				<a href="{url name=admin_tpl_manager}" title="{t}Cancel{/t}">
-					<img src="{$params.IMAGE_DIR}previous.png" /><br />
-					{t}Go back{/t}
-				</a>
-			</li>
-		</ul>
-	</div>
-</div>
-<div class="wrapper-content">
-
-	<form action="{url name=admin_tpl_manager_config}" method="POST">
-
+<form action="{url name=admin_tpl_manager_config}" method="POST">
+    <div class="top-action-bar clearfix">
+    	<div class="wrapper-content">
+    		<div class="title"><h2>{t}Cache Manager{/t} :: {t}Settings{/t}</h2></div>
+    		<ul class="old-button">
+                <li>
+                    <button type="submit" name="continue" value="1">
+                        <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}" ><br />{t}Save{/t}
+                    </button>
+                </li>
+                <li class="separator"></li>
+    			<li>
+    				<a href="{url name=admin_tpl_manager}" title="{t}Cancel{/t}">
+    					<img src="{$params.IMAGE_DIR}previous.png" /><br />
+    					{t}Go back{/t}
+    				</a>
+    			</li>
+    		</ul>
+    	</div>
+    </div>
+    <div class="wrapper-content">
 		<div style="width:700px; margin:0 auto;">
+            {render_messages}
             <table class="table table-hover table-condensed">
                 <thead>
                     <tr>
@@ -54,13 +59,9 @@
 					{/foreach}
 				</tbody>
             </table>
-            <div class="form-actions">
-                <button type="submit" class="btn btn-primary">{t}Save{/t}</button>
-                <button class="btn">{t}Cancel{/t}</button>
-            </div>
 		</div>
 
 		<input type="hidden" id="action" name="action" value="config" />
-	</form>
-</div>
+    </div>
+</form>
 {/block}

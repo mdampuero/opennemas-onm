@@ -23,6 +23,8 @@ parameters:
         host:      %mailer_host%
         username:  %mailer_user%
         password:  %mailer_password%
+        protocol:  %mailer_protocol%
+        port:      %mailer_port%
         spool:     { type: memory }
 
     # Cache Configuration
@@ -30,12 +32,17 @@ parameters:
         default:
             handler: %cache_handler%
 
+    logger:
+        level: %logger_level%
+
     # Session Configuration
     session_storage_class: "Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage"
     session_handler_class: "Symfony\Component\HttpFoundation\Session\Session"
     session:
         handler: %session_handler%
         params:  %session_params%
+
+    available_languages: {'en_US' : "English", 'es_ES' : "Español", 'gl_ES' : "Galego"}
 
 imports:
     - { resource: parameters.yml }

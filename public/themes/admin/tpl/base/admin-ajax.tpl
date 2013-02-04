@@ -17,7 +17,7 @@
 
     <link rel="icon" href="{$params.IMAGE_DIR}favicon.png">
     {block name="header-css"}
-    {css_tag href="/bootstrap/bootstrap.css"}
+        {css_tag href="/bootstrap/bootstrap.css" common=1}
         {css_tag href="/style.css"}
         {css_tag href="/admin.css"}
         <!--[if IE]>{css_tag href="/ie.css"}<![endif]-->

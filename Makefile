@@ -67,20 +67,8 @@ compiletranslations:
 			-o "app/Frontend/Resources/locale/$$i/LC_MESSAGES/messages.mo"; \
 	done
 
-clean: cleancache cleaninstancefiles cleanlogs
-
-cleancache:
-	@echo "Cleaning cache...";
-	rm -rf $(CACHE_FOLDER)/*
+clean: cleaninstancefiles
 
 cleaninstancefiles:
 	@echo "Cleaning temporal instance files..."
 	rm tmp/instances/* -rf
-
-cleanlogs:
-	@echo "Cleaning logs..."
-	rm tmp/logs/*.log -f
-
-cleansmarty:
-	@echo "Cleaning smarty remporary files..."
-	rm tmp/instances/*/smarty/ -r

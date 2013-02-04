@@ -646,8 +646,9 @@ class Advertisement extends Content
                 $generics = ' OR fk_content_categories=0';
             }
             // Generate sql with or without category
-            $cm = new ContentManager();
-            if ($category!=0) {
+
+             $cm = new \ContentManager();
+            if ($category !== 0) {
                 $rsBanner = $cm->find(
                     'Advertisement',
                     ' type_advertisement IN ('.$types.') AND available=1 AND

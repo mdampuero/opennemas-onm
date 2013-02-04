@@ -172,9 +172,10 @@ class PClave
     public function find($filter = null)
     {
         $sql = 'SELECT * FROM `pclave`';
-        if (!is_null($filter)) {
+        if (!empty($filter)) {
             $sql = 'SELECT * FROM `pclave` WHERE ' . $filter;
         }
+
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         $terms = array();
@@ -236,5 +237,20 @@ class PClave
 
         return trim($text);
     }
-}
 
+    /**
+     * Returns the available keyword types
+     *
+     * @return array the list of types
+     **/
+    public static function getTypes()
+    {
+        $types = array(
+            'url'       => _('URL'),
+            'intsearch' => _('Internal search'),
+            'email'     => _('Email')
+        );
+
+        return $types;
+    }
+}

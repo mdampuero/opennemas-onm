@@ -5,7 +5,19 @@
 <form action="{url name=admin_ads}" method="get" name="formulario" id="formulario">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Advertisement manager{/t}::&nbsp; {if $category eq 0}HOME{else}{$datos_cat[0]->title}{/if}</h2></div>
+            <div class="title">
+                <h2>{t}Advertisements{/t} :: </h2>
+                <div class="section-picker">
+                    <div class="title-picker btn"><span class="text">{if $category==0}{t}HOMEPAGE{/t}{elseif $category==4}{t}OPINION{/t}{else}{$datos_cat[0]->title}{/if}</span> <span class="caret"></span></div>
+                    <div class="options">
+                        <h4>{t}Special elements{/t}</h4>
+                        <a href="{url name=admin_ads category=0}" {if $category==0}class="active"{/if}>{t}HOMEPAGE{/t} </a>
+                        <a href="{url name=admin_ads category=4}" {if $category==4}class="active"{/if}>{t}OPINION{/t} </a>
+
+                        {include file="common/drop_down_categories.tpl" home={url name=admin_ads l=1} hide_all=true}
+                    </div>
+                </div>
+            </div>
             <ul class="old-button">
                 {acl isAllowed="ADVERTISEMENT_DELETE"}
                 <li>
@@ -26,14 +38,6 @@
                     </button>
                 </li>
                 {/acl}
-                {acl isAllowed="ADVERTISEMENT_CREATE"}
-                <li class="separator"></li>
-                <li>
-                    <a href="{url name=admin_ad_create category=$category page=$page}" class="admin_add" accesskey="N" tabindex="1">
-                        <img src="{$params.IMAGE_DIR}list-add.png" alt="{t}New{/t}"><br />{t}New{/t}
-                    </a>
-                </li>
-                {/acl}
                 {acl isAllowed="ALBUM_SETTINGS"}
                 <li class="separator"></li>
                     <li>
@@ -43,23 +47,20 @@
                         </a>
                     </li>
                 {/acl}
+                {acl isAllowed="ADVERTISEMENT_CREATE"}
+                <li class="separator"></li>
+                <li>
+                    <a href="{url name=admin_ad_create category=$category page=$page}" class="admin_add" accesskey="N" tabindex="1">
+                        <img src="{$params.IMAGE_DIR}list-add.png" alt="{t}New{/t}"><br />{t}New{/t}
+                    </a>
+                </li>
+                {/acl}
             </ul>
         </div>
     </div>
     <div class="wrapper-content">
 
         {render_messages}
-
-        <ul class="pills clearfix">
-            <li>
-                <a href="{url name=admin_ads category=0}" {if $category==0}class="active"{/if}>{t}HOMEPAGE{/t} </a>
-            </li>
-            <li>
-                <a href="{url name=admin_ads category=4}" {if $category==4}class="active"{/if}>{t}OPINION{/t} </a>
-            </li>
-            {include file="menu_categories.tpl" home={url name=admin_ads l=1}}
-        </ul>
-
 
         <div class="table-info clearfix">
             <div class="pull-right form-inline">
@@ -110,7 +111,7 @@
                     <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}clicked.png" alt="{t}Clicks{/t}" title="{t}Clicks{/t}"></th>
                     <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
                     {acl isAllowed="ADVERTISEMENT_AVAILA"}
-                    <th class="center">{t}Available{/t}</th>
+                    <th class="center" style="width:40px;">{t}Available{/t}</th>
                     {/acl}
                     <th class="right" style="width:70px">{t}Actions{/t}</th>
                 </tr>
@@ -159,7 +160,7 @@
                          {$ad->views|number_format:0:',':'.'}
                     </td>
                     {acl isAllowed="ADVERTISEMENT_AVAILA"}
-                    <td class="center">
+                    <td class="center" style="width:40px;">
                         {if $ad->available == 1}
                             <a href="{url name=admin_ad_toggleavailable id=$ad->id category=$category status=0 page=$page}"
                                 title={t}"Published"{/t}>

@@ -1,21 +1,18 @@
 <?php
-
-/*
- * This file is part of the onm package.
- * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+/**
+ * This file is part of the Onm package.
+ *
+ * (c)  OpenHost S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
-*/
+ **/
 /**
  * Handles all the CRUD operations for Ratings.
  *
  * @package    Onm
  * @subpackage Model
- * @author     Fran Dieguez <fran@openhost.es>
- *
  */
-
 class Rating
 {
 
@@ -26,99 +23,83 @@ class Rating
     public $num_of_stars = 5;
 
     /**
-     * Messages to use in links and image
-     */
-    private $messages = array(
-        '',
-        'Sin interés',
-        'Poco interesante',
-        'De interés',
-        'Muy interesante',
-        'Imprescindible'
-    );
-
-    /**
-     * Constructor PHP5
-     */
+     * Loads ratings for a given content id
+     *
+     * @return void
+     **/
     public function __construct($id = null)
     {
-        // Si existe idcontenido, entonces cargamos los datos correspondientes
-
         if (!is_null($id)) {
             $this->read($id);
         }
     }
 
-    public function create($pk_rating)
+    /**
+     * Adds a rating for a given content id
+     *
+     * @return void
+     **/
+    public function create($contentId)
     {
 
         $sql = "INSERT INTO ratings (`pk_rating`,`total_votes`,
                                      `total_value`, `ips_count_rating`)
                 VALUES (?,?,?,?)";
-        $values = array($pk_rating, 0, 0, serialize(array()));
+        $values = array($contentId, 0, 0, serialize(array()));
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
 
-            return (false);
+            return false;
         }
 
-        return (true);
+        return true;
     }
 
-    public function read($pk_rating)
+    /**
+     * Reads all the rating information for a given content id
+     *
+     * @param int $contentId the content id to load ratings from
+     *
+     * @return Rating|null the object with all the properties loaded
+     **/
+    public function read($contentId)
     {
         $sql = 'SELECT total_votes, total_value, ips_count_rating
-                FROM ratings WHERE pk_rating =' . $pk_rating;
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+                FROM ratings WHERE pk_rating =?';
+        $values = array($contentId);
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
 
+        // If doesn't exists a previous rating create an empty one.
         if ($rs->EOF) {
-
-            //Si no existe un valoración para dicho contenido
-            //comprobamos que el contenido exista y
-            //despues creamos la valoración
-
-            //$this->create($pk_rating);
-
-            $this->pk_rating = $pk_rating;
+            $this->pk_rating = $contentId;
             $this->total_value = 0;
             $this->total_votes = 0;
             $this->ips_count_rating = array();
 
-            //Lo creamos en la bd
-            $sql = "INSERT INTO ratings (`pk_rating`,`total_votes`,
-                                        `total_value`, `ips_count_rating`)
-                        VALUES (?,?,?,?)";
-            $values = array(
-                $this->pk_rating, $this->total_votes,
-                $this->total_value, serialize($this->ips_count_rating)
-            );
-            $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-            if (!$rs) {
-                \Application::logDatabaseError();
+            $this->create($contentId);
 
-                return (false);
-            }
-
-            return;
+            return $this;
         }
 
         if (!$rs) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
-        $this->pk_rating = $pk_rating;
+        $this->pk_rating = $contentId;
         $this->total_votes = $rs->fields['total_votes'];
         $this->total_value = $rs->fields['total_value'];
         $this->ips_count_rating = unserialize($rs->fields['ips_count_rating']);
+
+        return $this;
     }
 
-    public function getValue($pk_rating)
+    public function getValue($contentId)
     {
         $sql = 'SELECT total_votes, total_value
-                FROM ratings WHERE pk_rating =' . $pk_rating;
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+                FROM ratings WHERE pk_rating =?';
+        $rs  = $GLOBALS['application']->conn->Execute($sql, array($contentId));
 
         if (!$rs) {
             \Application::logDatabaseError();
@@ -128,8 +109,8 @@ class Rating
         $value = 0;
 
         if ($rs->fields['total_votes'] != 0) {
-            $valor = $rs->fields['total_value'] / $rs->fields['total_votes'];
-            $value = round($valor * 100) / 100;
+            $value = $rs->fields['total_value'] / $rs->fields['total_votes'];
+            $value = round($value * 100) / 100;
         }
 
         return $value;
@@ -161,17 +142,10 @@ class Rating
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
 
-            return (false);
+            return false;
         }
 
-        //creamos la cookie
-        Application::setCookieSecure(
-            "vote" . $this->pk_rating,
-            'true',
-            time() + 60 * 60 * 24 * 30
-        );
-
-        return (true);
+        return true;
     }
 
     public function add_count($ipsCount, $ip)
@@ -199,17 +173,11 @@ class Rating
 
     private function renderLink($i, $page, $pk_rating, $value)
     {
-
         $active = ($value >= $i) ? 'active' : '';
-        $output = "<li>
-                <a href=\"#votar\" onclick=\"javascript:"
-                    ."rating('{$_SERVER['REMOTE_ADDR']}', "
-                    ."{$i}, '{$page}', '{$pk_rating}'); ".
-                    "return false;\" title=\"{$this->messages[$i]}\">
-                    <div class='vote-element {$active} {$pk_rating}_{$i}'
-                        onmouseover=\"change_rating({$i}, '{$pk_rating}')\"
-                        onmouseout=\"change_rating({$value}, '{$pk_rating}')\">
-                    </div>
+        $output =
+            "<li>
+                <a href=\"#votar-{$i}\" data-vote=\"{$i}\">
+                    <div class='vote-element {$active} {$pk_rating}_{$i}'></div>
                 </a>
             </li>";
 
@@ -229,9 +197,8 @@ class Rating
      *
      * @param  dobule $actualVotes average of votes
      * @param  string $pageType    the kind of page this'll be rendered in
+     *
      * @return string elements imgs representing the actual votes
-     * @author  Fran Dieguez <fran@openhost.es>
-     * @since   Mon Sep 13 2010 18:12:58 GMT+0200 (CEST)
      */
     private function getVotesOnImages($actualVotes, $pageType)
     {
@@ -249,9 +216,8 @@ class Rating
      *
      * @param  dobule $actualVotes average of votes
      * @param  string $pageType    the kind of page this'll be rendered in
+     *
      * @return string elements links representing the actual votes
-     * @author  Fran Dieguez <fran@openhost.es>
-     * @since   Mon Sep 13 2010 18:12:58 GMT+0200 (CEST)
      */
     private function getVotesOnLinks($actualVotes, $pageType)
     {
@@ -274,66 +240,36 @@ class Rating
      *
      * @param  string $page num of votes
      * @param  string $type the type of
+     *
      * @return string description
-     * @author  Fran Dieguez <fran@openhost.es>
-     * @since   Mon Sep 13 2010 18:12:58 GMT+0200 (CEST)
      */
     public function render($pageType, $action, $ajax = 0)
     {
-        // If the vote+id cookie exist just show the
-        // results and don't allow to vote again
-        if (isset($_COOKIE["vote" . $this->pk_rating])) {
-            $action = "result";
-        }
-
         // Calculate the total votes to render
         if ($this->total_votes == 0) {
             $actualVotes = 0;
         } else {
-            $actualVotes =
-                (int) floor($this->total_value / $this->total_votes);
+            $actualVotes = (int) floor($this->total_value / $this->total_votes);
         }
-        $htmlOut = "";
 
-        switch ($pageType) {
-            case "home":
-            case "article":
-            case "video":
-                $htmlOut.= "<ul class=\"voting\">";
-                // if the user can vote render the links to vote
-                if ($action == "vote") {
-                    // Render links
-                    $htmlOut.= $this->getVotesOnLinks(
-                        $actualVotes,
-                        $pageType
-                    );
-                    //if the user can't vote render the static images
-                } elseif ($action === "result") {
-                    // Render images
-                    $htmlOut.= $this->getVotesOnImages(
-                        $actualVotes,
-                        $pageType
-                    );
-                }
-                $htmlOut.= "</ul> ";
+        $htmlOut = "<ul class=\"voting\">";
+        // if the user can vote render the links to vote
+        if ($action == "vote") {
+            // Render the static images, so the user can't read
+            $htmlOut.= $this->getVotesOnLinks($actualVotes, $pageType);
+        } elseif ($action === "result") {
+            // Render images
+            $htmlOut.= $this->getVotesOnImages($actualVotes, $pageType);
+        }
+        $htmlOut.= "</ul> ";
 
-                if (!$ajax) {
-                    $htmlOut =
-                        "<span class=\"vota" . $this->pk_rating . "\">"
-                        . $htmlOut
-                        . "</span>";
-                }
-
-                break;
-            default:
-                $htmlOut = _(
-                    'This content type has not '.
-                    'support for the voting system'
-                );
-                break;
+        if (!$ajax) {
+            $htmlOut =
+                "<span class=\"vota" . $this->pk_rating . "\">"
+                . $htmlOut
+                . "</span>";
         }
 
         return $htmlOut;
     }
 }
-
