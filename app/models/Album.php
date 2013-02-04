@@ -193,13 +193,14 @@ class Album extends Content
 
         $sql = "UPDATE albums "
              . "SET  `subtitle`=?, `agency`=?, `fuente`=?, `cover_id`=? "
-             ." WHERE pk_album=".($data['id']);
+             ." WHERE pk_album=?";
 
         $values = array(
             $data['subtitle'],
             $data['agency'],
             $data['fuente'],
             $data['album_frontpage_image'],
+            $data['id']
         );
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if (!$rs) {
@@ -224,8 +225,8 @@ class Album extends Content
 
         parent::remove($id);
 
-        $sql = 'DELETE FROM albums WHERE pk_album='.$id;
-        if ($GLOBALS['application']->conn->Execute($sql) === false) {
+        $sql = 'DELETE FROM albums WHERE pk_album=?';
+        if ($GLOBALS['application']->conn->Execute($sql, array($id)) === false) {
             return Application::logDatabaseError();
         }
 
@@ -297,10 +298,10 @@ class Album extends Content
         $photosAlbum = array();
         while (!$rs->EOF) {
             $photosAlbum []= array(
-                'id'       => $rs->fields['pk_photo'],
-                'position' => $rs->fields['position'],
+                'id'          => $rs->fields['pk_photo'],
+                'position'    => $rs->fields['position'],
                 'description' => $rs->fields['description'],
-                'photo'    => new Photo($rs->fields['pk_photo']),
+                'photo'       => new Photo($rs->fields['pk_photo']),
             );
 
             $rs->MoveNext();
@@ -381,4 +382,3 @@ class Album extends Content
         return $html;
     }
 }
-

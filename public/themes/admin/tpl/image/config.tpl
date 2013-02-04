@@ -10,7 +10,7 @@
         width:150px;
         display:inline-block;
     }
-    input[type="text"],
+    input[type="number"],
     input[type="password"] {
         width:300px;
     }
@@ -26,84 +26,90 @@
 
 {block name="content"}
 <form action="{url name=admin_images_config}" method="POST" name="formulario" id="formulario" {$formAttrs}>
-    <div class="top-action-bar">
-        <div class="wrapper-content">
-            <div class="title"><h2>{t}Image manager :: Configuration{/t}</h2></div>
-            <ul class="old-button">
-                <li>
-                    <a href="{url name=admin_images_statistics}" class="admin_add" value="{t}Go back to list{/t}" title="{t}Go back to list{/t}">
-                    <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Sync list  with server{/t}" alt="{t}Go back to list{/t}" ><br />{t}Go back to list{/t}
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
+<div class="top-action-bar clearfix">
     <div class="wrapper-content">
+        <div class="title"><h2>{t}Images{/t} :: {t}Configuration{/t}</h2></div>
+        <ul class="old-button">
+            <li>
+                <button type="submit">
+                    <img border="0" src="{$params.IMAGE_DIR}save.png"><br />
+                    {t}Save{/t}
+                </button>
+            </li>
+            <li class="separator"></li>
+            <li>
+                <a href="{url name=admin_images_statistics}" class="admin_add" value="{t}Go back to list{/t}" title="{t}Go back to list{/t}">
+                <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Sync list  with server{/t}" alt="{t}Go back to list{/t}" ><br />{t}Go back to list{/t}
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="wrapper-content">
 
-        {render_messages}
+    {render_messages}
 
-        <div id="{$category}">
-
-            <table class="adminform" border="0" style="padding:10px;">
-                <tr>
-                    <td>
-                        <div class="form-wrapper">
-                            <fieldset>
-                                <legend>{t}Main image thumbnails{/t}</legend>
-
-                                <label for="image_thumb_size[width]">{t}Width:{/t}</label>
-                                <input type="text" class="required" name="image_thumb_size[width]" value="{$configs['image_thumb_size']['width']|default:"140"}" />
-                                <br><br>
-
-                                <label for="image_thumb_size[height]">{t}Height:{/t}</label>
-                                <input type="text" class="required" name="image_thumb_size[height]" value="{$configs['image_thumb_size']['height']|default:"100"}" />
-                            </fieldset>
-
-                            <fieldset>
-                                <legend>{t}Inner article image thumbnails{/t}</legend>
-
-                                <label for="image_front_thumb_size[width]">{t}Width:{/t}</label>
-                                <input type="text" class="required" name="image_front_thumb_size[width]" value="{$configs['image_front_thumb_size']['width']|default:"350"}" />
-                                <br><br>
-
-                                <label for="image_front_thumb_size[height]">{t}Height:{/t}</label>
-                                <input type="text" class="required" name="image_front_thumb_size[height]" value="{$configs['image_front_thumb_size']['height']|default:"250"}" />
-                            </fieldset>
-
-                            <fieldset>
-                                <legend>{t}Inner article image thumbnails{/t}</legend>
-
-                                <label for="image_inner_thumb_size[width]">{t}Width:{/t}</label>
-                                <input type="text" class="required" name="image_inner_thumb_size[width]" value="{$configs['image_inner_thumb_size']['width']|default:"480"}" />
-                                <br><br>
-
-                                <label for="image_inner_thumb_size[height]">{t}Height:{/t}</label>
-                                <input type="text" class="required" name="image_inner_thumb_size[height]" value="{$configs['image_inner_thumb_size']['height']|default:"250"}" />
-                            </fieldset>
-
+    <div class="form-horizontal panel">
+        <div class="control-group">
+            <label for="" class="control-label">{t}Main image thumbnails{/t}</label>
+            <div class="controls">
+                <div class="form-inline-block">
+                    <div class="control-group">
+                        <label for="image_thumb_size[width]" class="control-label">{t}Width{/t}</label>
+                        <div class="controls">
+                            <input type="number" name="image_thumb_size[width]" value="{$configs['image_thumb_size']['width']|default:"140"}" required />
                         </div>
-                    </td>
-                    <td valign="top">
-                        <div class="onm-help-block">
-                                <div class="title"><h4>{t}Settings{/t}</h4></div>
-                                <div class="content">
-                                    <ul>
-                                        <li>{t}From here you can set all the generated image thumbnails sizes.{/t}</li>
-                                        <li>{t}All sizes must be in pixels{/t}</li>
-                                    </ul>
-                                </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="image_thumb_size[height]" class="control-label">{t}Height{/t}</label>
+                        <div class="controls">
+                            <input type="number" class="required" name="image_thumb_size[height]" value="{$configs['image_thumb_size']['height']|default:"100"}" />
                         </div>
-                    </td>
-                </tr>
-            </table>
-            <div class="action-bar clearfix">
-                <div class="right">
-                    <input type="submit" name="submit" value="{t}Save{/t}"  class="onm-button green">
-                </div><!-- / -->
+                    </div>
+                </div>
             </div>
         </div>
+        <div class="control-group">
+            <label for="" class="control-group">{t}Frontpage image thumbnails{/t}</label>
+            <div class="controls">
+                <div class="form-inline-block">
+                    <div class="control-group">
+                        <label for="image_front_thumb_size[width]" class="control-label">{t}Width:{/t}</label>
+                        <div class="controls">
+                            <input type="number" name="image_front_thumb_size[width]" value="{$configs['image_front_thumb_size']['width']|default:"350"}" required/>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="image_front_thumb_size[height]" class="control-label">{t}Height:{/t}</label>
+                        <div class="controls">
+                            <input type="number" name="image_front_thumb_size[height]" value="{$configs['image_front_thumb_size']['height']|default:"250"}" required />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="control-group">
+            <label for="" class="control-label">{t}Inner article image thumbnails{/t}</label>
+            <div class="controls">
+                <div class="form-inline-block">
+                    <div class="control-group">
+                        <label for="image_inner_thumb_size[width]" class="control-label">{t}Width:{/t}</label>
+                        <div class="controls">
+                            <input type="number" name="image_inner_thumb_size[width]" value="{$configs['image_inner_thumb_size']['width']|default:"350"}" required/>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="image_inner_thumb_size[height]" class="control-label">{t}Height:{/t}</label>
+                        <div class="controls">
+                            <input type="number" name="image_inner_thumb_size[height]" value="{$configs['image_inner_thumb_size']['height']|default:"250"}" required />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        <input type="hidden" id="action" name="action" value="config" />
-   </form>
+    <input type="hidden" id="action" name="action" value="config" />
 </div>
+</form>
 {/block}

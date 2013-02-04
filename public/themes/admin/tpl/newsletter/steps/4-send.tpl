@@ -23,7 +23,7 @@
 {block name="content"}
 
 <form action="#" method="post" name="newsletterForm" id="newsletterForm" {$formAttrs}>
-    <div class="top-action-bar" id="buttons-send">
+    <div class="top-action-bar clearfix" id="buttons-send">
         <div class="wrapper-content">
             <div class="title">
                 <h2>{t}Delivered newsletter report{/t} </h2>

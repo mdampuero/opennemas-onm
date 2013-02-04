@@ -42,7 +42,7 @@ function toggleAdvanced() {
 <form action="{url name=admin_images_search}" method="GET">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{if $action eq 'search'} {t}Search images{/t}{else}{t}Search result{/t}{/if} </h2></div>
+            <div class="title"><h2>{if is_null($smarty.get.string_search)} {t}Search images{/t}{else}{t}Search result{/t}{/if} </h2></div>
             <ul class="old-button">
                 <li>
                     <a class="admin_add" href="{url name=admin_images category=$category}" name="submit_mult" value="Listado de Categorias">

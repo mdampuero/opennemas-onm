@@ -10,7 +10,7 @@
                 {else}
                     {assign var=defaultValue value=26}
                 {/if}
-                <select name="params[titleSize]">}
+                <select name="params[titleSize]">
                     {html_options values=$availableSizes options=$availableSizes selected=$defaultValue}
                 </select>
             </div>

@@ -10,4 +10,11 @@ CREATE TABLE IF NOT EXISTS `contentmeta` (
   `meta_value` text,
   PRIMARY KEY (`fk_content`,`meta_name`),
   KEY `fk_content` (`fk_content`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE = MYISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+-- 01-08-2012
+DROP TABLE privileges;
+
+-- 01-09-2012
+UPDATE users SET name = CONCAT(name, ' ', firstname, ' ', lastname);
+ALTER TABLE  `users` DROP  `firstname` , DROP  `lastname` ;

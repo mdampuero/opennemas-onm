@@ -1,10 +1,10 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form id="formulario" name="formulario" action="{$smarty.server.SCRIPT_NAME}" method="POST">
+<form id="formulario" name="formulario" action="{url name=admin_keywords}" method="GET">
 	<div class="top-action-bar clearfix">
 		<div class="wrapper-content">
-			<div class="title"><h2>{t}Keyword Manager{/t} :: {t}Listing keywords{/t}</h2></div>
+			<div class="title"><h2>{t}Keywords{/t}</h2></div>
 			<ul class="old-button">
 				<li>
 					<a href="{url name=admin_keyword_create}" class="admin_add" title="Nueva palabra clave">
@@ -28,7 +28,7 @@
 					<div class="input-append">
 						<label for="filter">
 							{t}Search keyworks containing {/t}
-							<input type="search" name="filter[pclave]" value="{$filterPClave|default:""}" class="input-medium" />
+							<input type="search" name="name" value="{$name|default:""}" class="input-medium" />
 						</label>
 						<button type="submit" class="btn"><i class="icon-search"></i></button>
 					</div>
@@ -38,7 +38,7 @@
 		<table class="table table-hover table-condensed">
 			<thead>
 				<tr>
-					<th style="width:20px;">{t}Type{/t}</th>
+					<th style="width:20px;" class="nowrap">{t}Type{/t}</th>
 					<th scope=col>{t}Keyword{/t}</th>
 					<th scope=col>{t}Replacement value{/t}</th>
 					<th scope=col style="width:100px;" class="right nowrap">{t}Actions{/t}</th>
@@ -48,8 +48,8 @@
 			<tbody>
 				{foreach name=k from=$keywords|default:array() item=keyword}
 				<tr>
-					<td class="center">
-						<img src="{$params.IMAGE_DIR}iconos/{$keyword->tipo}.gif" border="0" alt="{$keyword->tipo}" />
+					<td class="center nowrap">
+						{$types[$keyword->tipo]}
 					</td>
 					<td>
 						{$keyword->pclave}

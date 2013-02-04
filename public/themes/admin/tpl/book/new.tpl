@@ -33,33 +33,21 @@ input[type="text"].required {
 
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Book manager{/t} :: {if $smarty.request.action eq "new"}{t}Creating Book{/t}{else}{t}Editing Book{/t}{/if}</h2></div>
+            <div class="title"><h2>{if !isset($book->id)}{t}Creating Book{/t}{else}{t}Editing Book{/t}{/if}</h2></div>
             <ul class="old-button">
                 {if isset($book->id)}
                     {acl isAllowed="BOOK_UPDATE"}
                     <li>
-                        <button href="{url name=admin_books_update id=$book->id}">
-                            <img src="{$params.IMAGE_DIR}save.png" title="Guardar y salir" alt="{t}Save{/t}"><br />{t}Save{/t}
-                        </button>
-                    </li>
-                    <li>
-                        <button name="continue" value="1">
-                            <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="{t}Save and continue{/t}" alt="{t}Save and continue{/t}" ><br />
-                            {t}Save and continue{/t}
+                        <button href="{url name=admin_books_update id=$book->id}" name="continue" value="1">
+                            <img src="{$params.IMAGE_DIR}save.png"><br />{t}Save{/t}
                         </button>
                     </li>
                     {/acl}
                 {else}
                     {acl isAllowed="BOOK_CREATE"}
                     <li>
-                        <button href="{url name=admin_books_create}">
-                             <img src="{$params.IMAGE_DIR}save.png" title="Guardar y salir" alt="{t}Save{/t}"><br />{t}Save{/t}
-                        </button>
-                    </li>
-                    <li>
-                        <button name="continue" value="1">
-                            <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="{t}Save and continue{/t}" alt="{t}Save and continue{/t}" ><br />
-                            {t}Save and continue{/t}
+                        <button href="{url name=admin_books_create}" name="continue" value="1">
+                             <img src="{$params.IMAGE_DIR}save.png"><br />{t}Save{/t}
                         </button>
                     </li>
                     {/acl}

@@ -365,7 +365,10 @@ class Content
 
         $this->read($data['id']);
 
-        if (($data['available'] == 1) && ($data['starttime'] =='0000-00-00 00:00:00')) {
+        if ($data['available'] == 1
+            && array_key_exists('starttime', $data)
+            && ($data['starttime'] =='0000-00-00 00:00:00')
+        ) {
             $data['starttime'] = date("Y-m-d H:i:s");
         }
 
@@ -1301,7 +1304,7 @@ class Content
         Application::logContentEvent(__METHOD__, $this);
     }
 
-    public function set_inhome($status, $lastEditor)
+    public function set_inhome($status, $lastEditor = null)
     {
         $GLOBALS['application']->dispatch('onBeforeSetInhome', $this);
 
@@ -1856,7 +1859,6 @@ class Content
             // Can't do because sometimes id is empty,
             // example rss in article.php
         }
-
     }
 
 
@@ -1960,6 +1962,9 @@ class Content
 
                 // Only include content is is in time and available.
                 if ($content->isReadyForPublish()) {
+                    if($content->fk_content_type ==4) {
+                         $content = $content->get($relatedContentId);
+                    }
                     $content->categoryName = $ccm->get_name($content->category);
                     $this->related_contents []= $content;
                 }

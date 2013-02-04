@@ -5,7 +5,7 @@
 
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}User group management{/t}</h2></div>
+            <div class="title"><h2>{t}User groups{/t}</h2></div>
             <ul class="old-button">
                 <li>
                     <a href="{url name="admin_acl_usergroups_create"}">

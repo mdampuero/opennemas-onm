@@ -8,7 +8,7 @@
 <form action="#" method="get" name="formulario" id="formulario">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Newsletter Manager{/t}</h2></div>
+            <div class="title"><h2>{t}Newsletters{/t}</h2></div>
             <ul class="old-button">
                 <li>
                     <a href="{url name=admin_newsletter_create}" accesskey="N" tabindex="1">

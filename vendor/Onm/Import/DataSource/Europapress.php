@@ -54,11 +54,14 @@ class Europapress
                 null,
                 LIBXML_NOERROR | LIBXML_NOWARNING
             );
+
             if (!$this->_data) {
                 throw new \Exception(
                     sprintf(_("File '%d' can't be loaded."), $xmlFile)
                 );
             }
+
+            $this->checkFileFormat();
         } else {
             throw new \Exception(
                 sprintf(_("File '%d' doesn't exists."), $xmlFile)
@@ -306,6 +309,20 @@ class Europapress
         }
 
         return false;
+    }
+
+    /**
+     * Checks if the file loaded is an article with Europapress format
+     *
+     * @return boolean true if the format
+     * @throws Exception If the format is not valid
+     **/
+    public function checkFileFormat()
+    {
+        if (!(string) $this->_data->CODIGO) {
+            throw new \Exception(sprintf(_('File %s is not a valid Europapress file'), $this->xmlFile));
+        }
+        return true;
     }
 }
 

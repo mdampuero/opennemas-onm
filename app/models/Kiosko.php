@@ -203,13 +203,13 @@ class Kiosko extends Content
         if (file_exists($this->kiosko_path.$path. $file_pdf)) {
             try {
 
-                $imagick = new Imagick($this->kiosko_path.$path.$file_pdf.'[0]');
+                $imagick = new \Imagick($this->kiosko_path.$path.$file_pdf.'[0]');
                 $imagick->thumbnailImage(650, 0);
                 // First, save to PNG (*.pdf => /tmp/xxx.png)
                 $imagick->writeImage($tmp_name);
                 // finally, save to jpg (/tmp/xxx.png => *.jpg)
                 // to avoid problems with the image
-                $imagick = new Imagick($tmp_name);
+                $imagick = new \Imagick($tmp_name);
 
                 $imagick->writeImage($this->kiosko_path.$path.'650-'.$img_name);
 
@@ -233,6 +233,7 @@ class Kiosko extends Content
                ."YEAR(date) as year FROM `kioskos` ORDER BY year, month DESC";
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
+        $items = null;
         while (!$rs->EOF) {
             $items[$rs->fields['year']][] = $rs->fields['month'];
             $rs->MoveNext();

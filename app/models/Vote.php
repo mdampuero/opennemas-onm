@@ -111,7 +111,7 @@ class Vote
             $this->ips_count_vote = unserialize($rs->fields['ips_count_vote']);
         }
 
-        return (true);
+        return true;
     }
 
     /**
@@ -146,13 +146,6 @@ class Vote
 
             return (false);
         }
-
-        //creamos la cookie
-        Application::setCookieSecure(
-            "vote" . $this->pk_vote,
-            'true',
-            time() + 60 * 60 * 24 * 30
-        );
 
         return true;
     }

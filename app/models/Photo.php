@@ -666,10 +666,17 @@ class Photo extends Content
              . "WHERE pk_photo=?";
 
         $values = array(
-            $data['pk_photo'], $data['name'], $data['path_file'],
-            $data['size'], $data['width'], $data['height'],
-            $data['type_img'], $data['author_name'],
-            $data['date'], $data['color'], $data['id']
+            $data['pk_photo'],
+            $data['name'],
+            $data['path_file'],
+            $data['size'],
+            $data['width'],
+            $data['height'],
+            $data['type_img'],
+            $data['author_name'],
+            $data['date'],
+            $data['color'],
+            $data['id']
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {

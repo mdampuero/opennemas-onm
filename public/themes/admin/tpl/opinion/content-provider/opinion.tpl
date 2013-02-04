@@ -1,6 +1,9 @@
-<div data-content-id="{$content->id}" data-class="Opinion" class="content-provider-element {schedule_class item=$content} {suggested_class item=$content} clearfix">
+<div data-content-id="{$content->id}" data-class="Opinion" {getProperty item=$content category=$params['category'] property='bgcolor' style='true'}
+    data-bg ='{getProperty item=$content category=$params['category'] property='bgcolor'}'
+    data-title='{getProperty item=$content category=$params['category'] property='title'}'
+    class="content-provider-element {schedule_class item=$content} {suggested_class item=$content} clearfix">
     <div class="description">
-        <input type="checkbox" class="action-button" name="selected-{$smarty.foreach.opinions_loop.index}">
+        <input type="checkbox" class="action-button" name="selected-{$content->id}">
         <div class="title">
             <span class="type">{t}Opinion{/t}</span>
             {$content->author_object->name} - {$content->title}
@@ -25,6 +28,13 @@
                     <i class="icon-trash"></i> {t}Drop from this frontpage{/t}
                 </a>
             </li>
+            {is_module_activated name="AVANCED_FRONTPAGE_MANAGER"}
+            <li>
+                <a title="{t}Customize in frontpage{/t}" href="#" class="change-color">
+                    <i class="icon-color"></i> {t}Customize content{/t}
+                </a>
+            </li>
+            {/is_module_activated}
             <li>
                 <a title="{t}Drop from all frontpages{/t}" href="#" class="arquive">
                     <i class="icon-inbox"></i> {t}Arquive{/t}

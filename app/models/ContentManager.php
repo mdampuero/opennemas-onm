@@ -2138,13 +2138,7 @@ class ContentManager
             if ($rs !== false) {
                 while (!$rs->EOF) {
                     $obj = new Content();
-                    $obj->load($rs->fields);
-                    $sql = 'SELECT name FROM `content_types`
-                            WHERE pk_content_type = "' .
-                            $obj->fk_content_type . '"';
-                    $obj->content_type =
-                        $GLOBALS['application']->conn->GetOne($sql);
-                    $obj->category_name = $obj->loadCategoryName($obj->id);
+                     $contents[] = $obj->get($rs->fields['pk_content']);
 
                     $contents[] = $obj;
                     $rs->MoveNext();
@@ -2233,10 +2227,15 @@ class ContentManager
     * @param type $category_id category id we want to get contents from
     * @return null|array array of contents
     */
-    public function getContentsForLibrary($date)
+    public function getContentsForLibrary($date, $categoryID=0)
     {
         if (empty($date)) {
             return false;
+        }
+
+        $where ='';
+        if (!empty($categoryID)) {
+            $where =' AND pk_fk_content_category = '.$categoryID;
         }
         // Initialization of variables
         $contents = array();
@@ -2245,18 +2244,14 @@ class ContentManager
               .'WHERE fk_content_type IN (1,3,7,9,10,11,17) '
               .'AND DATE(starttime) = "'.$date.'" '
               .'AND available=1 AND in_litter=0 '
-              .'AND pk_fk_content = pk_content '
-              .'ORDER BY pk_fk_content_category, starttime DESC ';
+              .'AND pk_fk_content = pk_content '.$where
+              .' ORDER BY  fk_content_type ASC, starttime DESC ';
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
-
         if ($rs !== false) {
-
             $contents = array();
-
             while (!$rs->EOF) {
-
                 if ($rs->fields['fk_content_type'] == 1) {
                     $content = new Article($rs->fields['pk_fk_content']);
                     if (!empty($content->fk_video)) {

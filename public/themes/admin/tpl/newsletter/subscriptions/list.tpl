@@ -4,7 +4,7 @@
 <form action="{url name=admin_newsletter_subscriptors}" name="formulario" id="formulario">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Newsletter Subscriptions{/t}</h2></div>
+            <div class="title"><h2>{t}Newsletter{/t} :: {t}Subscriptions{/t}</h2></div>
             <ul class="old-button">
                 <li>
                     <a href="{url name=admin_newsletter_subscriptor_create}" class="admin_add" accesskey="N">

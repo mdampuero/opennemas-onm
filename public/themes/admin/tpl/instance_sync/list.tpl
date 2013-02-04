@@ -13,7 +13,7 @@
 {block name="content"}
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
-        <div class="title"><h2>{t}Sync Manager{/t} :: {t}Client side{/t}</h2></div>
+        <div class="title"><h2>{t}Instance synchronization{/t}</h2></div>
         <ul class="old-button">
             <li>
                 <a href="{url name=admin_instance_sync_create}" class="admin_add" title="{t}Add site to sync{/t}">

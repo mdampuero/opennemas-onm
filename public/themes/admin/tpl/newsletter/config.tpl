@@ -1,30 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-    <style type="text/css">
-    label {
-        width:200px;
-        padding-left:10px;
-        display:inline-block;
-    }
-    input[type="text"],
-    input[type="password"] {
-        width:400px;
-    }
-    th {
-        vertical-align: top;
-        text-align: left;
-        padding: 10px;
-        width: 200px;
-        font-size: 13px;
-    }
-    .form-wrapper {
-        margin:10px auto;
-        width:70%;
-    }
-    </style>
-{/block}
-
 {block name="footer-js" append}
 <script type="text/javascript">
 jQuery(document).ready(function($){
@@ -70,9 +45,9 @@ jQuery(document).ready(function($){
 
 {block name="content"}
 <form action="{url name=admin_newsletter_config}" method="POST" name="formulario" id="formulario" {$formAttrs}>
-    <div class="top-action-bar">
+    <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Newsletter :: Configuration{/t}</h2></div>
+            <div class="title"><h2>{t}Newsletters{/t} :: {t}Configuration{/t}</h2></div>
             <ul class="old-button">
                 <li>
                     <button type="submit">
