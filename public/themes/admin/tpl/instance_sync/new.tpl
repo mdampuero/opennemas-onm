@@ -60,8 +60,15 @@
 <form action="{url name=admin_instance_sync_create}" method="POST" name="formulario" id="formulario">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Sync Manager{/t} :: {t}Client configuration{/t}</h2></div>
+            <div class="title"><h2>{t}Adding site to synchronization{/t}</h2></div>
             <ul class="old-button">
+                <li>
+                    <button type="submit">
+                        <img border="0" src="{$params.IMAGE_DIR}save.png"><br />
+                        {t}Save{/t}
+                    </button>
+                </li>
+                <li class="separator"></li>
                 <li>
                     <a href="{url name=admin_instance_sync}" class="admin_add" value="{t}Go back{/t}" title="{t}Go back{/t}">
                     <img src="{$params.IMAGE_DIR}previous.png" title="{t}Clients list{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
@@ -92,12 +99,6 @@
                     <div class="controls">
                         {$output}
                     </div>
-                </div>
-            </div>
-
-            <div class="action-bar clearfix">
-                <div class="right">
-                    <input type="submit" name="submit" value="{t}Save{/t}"  class="onm-button green">
                 </div>
             </div>
 

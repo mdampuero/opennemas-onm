@@ -161,4 +161,3 @@ class Book extends Content
         }
     }
 }
-

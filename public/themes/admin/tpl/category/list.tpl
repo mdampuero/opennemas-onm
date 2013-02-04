@@ -1,5 +1,16 @@
 {extends file="base/admin.tpl"}
 
+{block name="header-css" append}
+<style type="text/css">
+    .ui-tabs .ui-tabs-panel {
+        padding:0 !important;
+    }
+    .ui-tabs-panel, .tabs > div {
+        border:0 none !important;
+    }
+</style>
+{/block}
+
 {block name="footer-js" append}
 <script>
 jQuery(document).ready(function ($){
@@ -13,24 +24,22 @@ jQuery(document).ready(function ($){
 
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Category manager{/t} :: {t}Listing categories{/t}</h2></div>
+            <div class="title"><h2>{t}Categories{/t}</h2></div>
             <ul class="old-button">
-                 {acl isAllowed="CATEGORY_CREATE"}
+                {acl isAllowed="CATEGORY_CREATE"}
                 <li>
                     <a href="{url name=admin_category_create}" class="admin_add" accesskey="N" tabindex="1">
-                        <img src="{$params.IMAGE_DIR}list-add.png" title="Nueva" alt="Nueva"><br />{t}New section{/t}
+                        <img src="{$params.IMAGE_DIR}list-add.png" title="Nueva" alt="Nueva"><br />{t}New category{/t}
                     </a>
                 </li>
                 {/acl}
-                {*acl isAllowed="CATEGORY_SETTINGS"}
                 <li class="separator"></li>
                 <li>
-                    <a href="{$smarty.server.PHP_SELF}?action=config" class="admin_add" title="{t}Config album module{/t}">
+                    <a href="{url name=admin_categories_config}" class="admin_add" title="{t}Config categories module{/t}">
                         <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
-                        {t}Configurations{/t}
+                        {t}Settings{/t}
                     </a>
                 </li>
-                {/acl*}
             </ul>
         </div>
     </div>
@@ -42,36 +51,36 @@ jQuery(document).ready(function ($){
 
             <ul>
                 <li>
-                    <a href="#global" id="global-tab" class="active-tab">{t}Article categories{/t}</a>
+                    <a href="#global" id="global-tab" class="active-tab">{t}For articles{/t}</a>
                 </li>
                 {is_module_activated name="ALBUM_MANAGER"}
                 <li>
-                    <a href="#album" id="album-tab">{t}Album categories{/t}</a>
+                    <a href="#album" id="album-tab">{t}For albums{/t}</a>
                 </li>
                 {/is_module_activated}
                 {is_module_activated name="VIDEO_MANAGER"}
                 <li>
-                    <a href="#video" id="video-tab">{t}Video categories{/t}</a>
+                    <a href="#video" id="video-tab">{t}For videos{/t}</a>
                 </li>
                 {/is_module_activated}
                 {is_module_activated name="KIOSKO_MANAGER"}
                 <li>
-                    <a href="#epapel" id="epapel-tab">{t}ePapel categories{/t}</a>
+                    <a href="#epapel" id="epapel-tab">{t}For ePapers{/t}</a>
                 </li>
                 {/is_module_activated}
                 {is_module_activated name="POLL_MANAGER"}
                 <li>
-                    <a href="#poll" id="poll-tab">{t}Poll categories{/t}</a>
+                    <a href="#poll" id="poll-tab">{t}For polls{/t}</a>
                 </li>
                 {/is_module_activated}
                 {is_module_activated name="SPECIAL_MANAGER"}
                 <li>
-                    <a href="#special" id="special-tab">{t}Special categories{/t}</a>
+                    <a href="#special" id="special-tab">{t}For Specials{/t}</a>
                 </li>
                 {/is_module_activated}
                 {is_module_activated name="BOOK_MANAGER"}
                 <li>
-                    <a href="#book" id="book-tab">{t}Book categories{/t}</a>
+                    <a href="#book" id="book-tab">{t}For books{/t}</a>
                 </li>
                 {/is_module_activated}
             </ul>

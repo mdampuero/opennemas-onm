@@ -15,7 +15,7 @@ jQuery(document).ready(function($) {
 
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Keyword Manager{/t} :: {t}Editing keyword information{/t}</h2></div>
+            <div class="title"><h2>{if isset($keyword->id)}{t}Editing keyword{/t}{else}{t}Creating keyword{/t}{/if}</h2></div>
             <ul class="old-button">
                 <li>
                     <button action="submit">

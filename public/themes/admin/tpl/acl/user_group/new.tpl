@@ -15,16 +15,11 @@
 
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}User group manager{/t} :: {t 1=$user_group->name}Editing %1{/t}</h2></div>
+            <div class="title"><h2>{if isset($user_group->id)}{t}Editing group{/t}{else}{t}Creating user group{/t}{/if}</h2></div>
             <ul class="old-button">
                 <li>
                     <button type="submit" name="action" value="validate">
-                        <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="{t}Save and continue{/t}" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
-                    </button>
-                </li>
-                <li>
-                    <button type="submit">
-                        <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}"><br />{t}Save{/t}
+                        <img border="0" src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}" ><br />{t}Save{/t}
                     </button>
                 </li>
                 <li class="separator"></li>
@@ -87,5 +82,6 @@
         </div>
 
 	</div>
+    <input type="hidden" name="id" value="{$user_group->id}">
 </form>
 {/block}

@@ -10,4 +10,3 @@
 class SyncronizationException extends Exception
 {
 }
-

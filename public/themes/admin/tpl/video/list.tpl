@@ -18,7 +18,17 @@
 <form action="#" method="get" name="formulario" id="formulario">
 	<div class="top-action-bar clearfix">
 		<div class="wrapper-content">
-			<div class="title"><h2>{t}Video Manager :: Listing videos{/t} {if $category eq 'all'}HOME{elseif $category eq 'widget'}WIDGET{else}{$datos_cat[0]->title}{/if}</h2></div>
+			<div class="title">
+                <h2>{t}Videos{/t} :: </h2>
+                <div class="section-picker">
+                    <div class="title-picker btn"><span class="text">{if $category == 'widget'}{t}WIDGET HOME{/t}{elseif $category == 'all'}{t}All categories{/t}{else}{$datos_cat[0]->title}{/if}</span> <span class="caret"></span></div>
+                    <div class="options">
+                        <h4>{t}Special elements{/t}</h4>
+                        <a href="{url name=admin_videos_widget}" {if $category=='widget'}class="active"{/if}>{t}WIDGET HOME{/t}</a>
+                        {include file="common/drop_down_categories.tpl" home={url name=admin_videos l=1}}
+                    </div>
+                </div>
+            </div>
 			<ul class="old-button">
 				{acl isAllowed="VIDEO_DELETE"}
 				<li>
@@ -75,18 +85,6 @@
         {render_messages}
         <div id="warnings-validation"></div>
 
-        <ul class="pills clearfix">
-            <li>
-                <a href="{url name=admin_videos_widget}" {if $category === 'widget'}class="active"{elseif $ca eq $datos_cat[0]->fk_content_category}{*class="active"*}{/if}>WIDGET HOME</a>
-            </li>
-
-            <li>
-                <a href="{url name=admin_videos category=all}" {if $category==='all'}class="active"{/if} >{t}All categories{/t}</a>
-            </li>
-
-            {include file="menu_categories.tpl" home="{url name=admin_videos a=l}"}
-        </ul>
-
         <table class="table table-hover table-condensed">
             <thead>
                 <tr>
@@ -102,7 +100,7 @@
                     <th class="center" style="width:35px;">{t}Published{/t}</th>
                     {if $category!='widget' && $category!='all'} <th class="center" style="width:35px;">{t}Favorite{/t}</th>{/if}
                     <th class="center" style="width:35px;">{t}Home{/t}</th>
-                    <th class="right" style="width:100px;">{t}Actions{/t}</th>
+                    <th class="center" style="width:100px;">{t}Actions{/t}</th>
                     {else}
                     <th class="center">
                         &nbsp;
@@ -124,7 +122,7 @@
                     </td>
                     {if $category=='widget' || $category=='all'}
                     <td >
-                         {$video->category_title}
+                        {$video->category_title}
                     </td>
                     {/if}
                     </td class="center">

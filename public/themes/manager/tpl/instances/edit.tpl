@@ -58,25 +58,32 @@ jQuery(document).ready(function($) {
 {/block}
 
 {block name="content" append}
-<div class="top-action-bar">
-    <div class="wrapper-content">
-        <div class="title">
-            <h2>{if !isset($instance->id)}{t}Creating new intance{/t}{else}{t 1=$instance->name}Editing instance "%1"{/t}{/if}</h2>
-        </div>
-        <ul class="old-button">
-            <li>
-                <a href="{url name=manager_instances}" class="admin_add" value="{t}Cancel{/t}" title="{t}Cancel{/t}">
-                    <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Cancel{/t}" alt="{t}Cancel{/t}" /><br />
-                    {t}Go back{/t}
-                </a>
-            </li>
-        </ul>
-    </div>
-</div>
-<div class="wrapper-content">
-    {render_messages}
-</div><!-- / -->
 <form action="{if !isset($instance->id)}{url name=manager_instance_create}{else}{url name=manager_instance_update id=$instance->id}{/if}" method="post" name="formulario" id="formulario">
+    <div class="top-action-bar">
+        <div class="wrapper-content">
+            <div class="title">
+                <h2>{if !isset($instance->id)}{t}Creating new intance{/t}{else}{t 1=$instance->name}Editing instance "%1"{/t}{/if}</h2>
+            </div>
+            <ul class="old-button">
+                <li>
+                    <button type="submit">
+                        <img border="0" src="{$params.IMAGE_DIR}save.png"><br />
+                        {t}Save{/t}
+                    </button>
+                </li>
+                <li class="separator"></li>
+                <li>
+                    <a href="{url name=manager_instances}" class="admin_add" value="{t}Cancel{/t}" title="{t}Cancel{/t}">
+                        <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Cancel{/t}" alt="{t}Cancel{/t}" /><br />
+                        {t}Go back{/t}
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="wrapper-content">
+        {render_messages}
+    </div><!-- / -->
     <div class="wrapper-content">
 
         <div id="instance-edit" class="tabs">
@@ -674,12 +681,6 @@ jQuery(document).ready(function($) {
                 </table>
             </div>
             {/if}
-        </div>
-
-        <div class="action-bar clearfix">
-            <div class="right">
-                <button type="submit" class="onm-button red">{t}Save{/t}</button>
-            </div>
         </div>
     </div>
 </form>

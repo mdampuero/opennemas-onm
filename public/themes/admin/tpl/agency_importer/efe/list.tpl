@@ -55,7 +55,7 @@
 {block name="content"}
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
-        <div class="title"><h2>{t}EFE importer{/t} :: {t}Available articles{/t}</h2></div>
+        <div class="title"><h2>{t}EFE articles{/t}</h2></div>
         <ul class="old-button">
 			<li>
 				<a href="{url name=admin_importer_efe_sync}" class="sync_with_server" title="{t}Sync with server{/t}">
@@ -112,10 +112,6 @@
                     <th style="width:40px;">{t}Tags{/t}</th>
                     <th style="width:20px;">{t}Actions{/t}</th>
                 </tr>
-                {else}
-                <tr>
-                    <th coslpan=6>&nbsp;</th>
-                </tr>
                 {/if}
             </thead>
 
@@ -126,8 +122,8 @@
                     <td style="text-align:center;">
                        <img src="{$params.IMAGE_DIR}notifications/level-{if $element->priority > 4}4{else}{$element->priority}{/if}.png" alt="{t 1=$element->priority}Priority %1{/t}" title="{t 1=$element->priority}Priority %1{/t}">
                     </td>
-                    <td rel="tooltip" data-original-title="{$element->body|clearslash|regex_replace:"/'/":"\'"|escape:'html'}">
-                        <a href="{url name=admin_importer_efe_show id=$element->xmlFile|urlencode}" >
+                    <td >
+                        <a href="{url name=admin_importer_efe_show id=$element->xmlFile|urlencode}" rel="tooltip" data-original-title="{$element->body|clearslash|regex_replace:"/'/":"\'"|escape:'html'}">
                             {$element->title}
                         </a>
                     </td>

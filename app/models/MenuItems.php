@@ -42,7 +42,6 @@ class MenuItems
      *
      * @return array with categories order by positions
      */
-
     public static function getMenuItems($id)
     {
         $sql = "SELECT * FROM menu_items WHERE pk_menu=? ORDER BY position ASC";
@@ -55,7 +54,7 @@ class MenuItems
         }
 
         $menuItems = array();
-        $i=0;
+        $i         =0;
         while (!$rs->EOF) {
             $menuItems[$rs->fields['pk_item']] = new stdClass();
             $menuItems[$rs->fields['pk_item']]->pk_item   = $rs->fields['pk_item'];
@@ -93,44 +92,45 @@ class MenuItems
      */
     public static function setMenuElements($id, $items = array())
     {
-        self::emptyMenu($id);
-
-        if (!empty($id) && !empty($items)) {
-
-            $stmt = "INSERT INTO menu_items ".
-                    " (`pk_item`, `pk_menu`, `title`, `link_name`, `type`, `position`, `pk_father`) ".
-                    " VALUES (?, ?, ?, ?, ?, ?, ?)";
-
-            $values = array();
-            $i = 1;
-            $saved = true;
-
-            foreach ($items as $item) {
-                // Get an null Id for synchronized categorys
-                $values = array(
-                    ($item->type == 'syncCategory') ? null : filter_var($item->id, FILTER_VALIDATE_INT),
-                    (int) $id,
-                    filter_var($item->title, FILTER_SANITIZE_STRING),
-                    filter_var($item->link, FILTER_SANITIZE_STRING),
-                    filter_var($item->type, FILTER_SANITIZE_STRING),
-                    $i,
-                    filter_var($item->parent_id, FILTER_VALIDATE_INT) ?: 0,
-                );
-                $i++;
-
-                $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
-                if ($rs === false) {
-                    $saved = $saved && false;
-                    \Application::logDatabaseError();
-                } else {
-                    $saved = $saved && true;
-                }
-            }
-
-            return $saved;
+        // Check if id and $items are not empty
+        if (empty($id) || empty($items)) {
+            return false;
         }
 
-        return false;
+        // Delete previous menu elements
+        self::emptyMenu($id);
+
+        $stmt = "INSERT INTO menu_items ".
+                " (`pk_item`, `pk_menu`, `title`, `link_name`, `type`, `position`, `pk_father`) ".
+                " VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        $values = array();
+        $i      = 1;
+        $saved  = true;
+
+        foreach ($items as $item) {
+            // Get an null Id for synchronized categorys
+            $values = array(
+                ($item->type == 'syncCategory') ? null : filter_var($item->id, FILTER_VALIDATE_INT),
+                (int) $id,
+                filter_var($item->title, FILTER_SANITIZE_STRING),
+                filter_var($item->link, FILTER_SANITIZE_STRING),
+                filter_var($item->type, FILTER_SANITIZE_STRING),
+                $i,
+                filter_var($item->parent_id, FILTER_VALIDATE_INT) ?: 0,
+            );
+            $i++;
+
+            $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
+            if ($rs === false) {
+                $saved = $saved && false;
+                \Application::logDatabaseError();
+            } else {
+                $saved = $saved && true;
+            }
+        }
+
+        return $saved;
     }
 
     /**
@@ -159,4 +159,3 @@ class MenuItems
         return true;
     }
 }
-

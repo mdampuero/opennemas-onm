@@ -179,26 +179,19 @@
 
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Album manager{/t} :: {if $smarty.request.action eq "new"}{t}Creating Album{/t}{else}{t}Editing Album{/t}{/if}</h2></div>
+            <div class="title"><h2>{if isset($album->id)}{t}Editing album{/t}{else}{t}Creating Album{/t}{/if}</h2></div>
             <ul class="old-button">
-                <li>
-                    {acl isAllowed="ALBUM_CREATE"}
-                    <button type="submit" name="continue" value="true"  id="form-validate-button">
-                        <img src="{$params.IMAGE_DIR}save_and_continue.png" title="Guardar y continuar" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
-                    </button>
-                    {/acl}
-                </li>
                 <li>
                     {if isset($album->id)}
                         {acl isAllowed="ALBUM_UPDATE"}
-                        <button type="submit" id="form-send-button">
-                            <img src="{$params.IMAGE_DIR}save.png" title="Guardar y continuar" alt="{t}Save{/t}" ><br />{t}Save{/t}
+                        <button type="submit" id="form-send-button"  name="continue" value="true">
+                            <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}" ><br />{t}Save{/t}
                         </button>
                         {/acl}
                     {else}
                         {acl isAllowed="ALBUM_CREATE"}
-                        <button type="submit" id="form-send-button">
-                            <img src="{$params.IMAGE_DIR}save.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />{t}Save{/t}
+                        <button type="submit" id="form-send-button"  name="continue" value="true">
+                            <img src="{$params.IMAGE_DIR}save.png" alt="Guardar y continuar" ><br />{t}Save{/t}
                         </button>
                         {/acl}
                     {/if}
@@ -228,7 +221,7 @@
             <div class="control-group">
                 <label for="title" class="control-label">{t}Available{/t}</label>
                 <div class="controls">
-                    <input type="checkbox" value="{$album->available}" id="available" name="available" {if $album->available eq 1}checked="checked"{/if}>
+                    <input type="checkbox" value="1" id="available" name="available" {if $album->available eq 1}checked="checked"{/if}>
                 </div>
             </div>
 
@@ -275,7 +268,7 @@
             </div>
 
             <div id="album-images">
-                <h5>{t}Album images{/t}</h5>
+                <h5>{t}Images for this album{/t}</h5>
                 <div id="album-contents" style="width:590px;display:inline-block;" class="tabs resource-container clearfix">
                     <ul>
                         <li><a href="#list-of-images">{t}Images in this album{/t}</a></li>

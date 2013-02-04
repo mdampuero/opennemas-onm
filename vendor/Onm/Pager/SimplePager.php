@@ -16,7 +16,6 @@ namespace Onm\Pager;
  */
 class SimplePager
 {
-
     const ITEMS = 20;
 
     public $next = null;
@@ -118,4 +117,3 @@ class SimplePager
         return $output;
     }
 }
-

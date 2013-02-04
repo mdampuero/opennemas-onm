@@ -15,7 +15,6 @@
  * @author     Fran Dieguez <fran@openhost.es>
  *
  **/
-
 class Widget extends Content
 {
     public $pk_widget = null;
@@ -105,8 +104,8 @@ class Widget extends Content
      */
     public function read($id)
     {
-
         parent::read($id);
+
         $this->id = $id;
         $sql      = "SELECT * FROM `widgets` WHERE `pk_widget`=?";
         $values   = array($id);
@@ -128,7 +127,6 @@ class Widget extends Content
      */
     public function readIntelligentFromName($content)
     {
-
         $sqlSearchWidget = "SELECT * FROM `widgets` WHERE `content`=?";
         $rs = $GLOBALS['application']->conn->Execute(
             $sqlSearchWidget,
@@ -182,10 +180,11 @@ class Widget extends Content
     }
 
     /**
-     * Update
+     * Updates the widget information
      *
-     * @param  array   $data Array values
-     * @return boolean
+     * @param  array $data Array values
+     *
+     * @return boolean true if all went well
      */
     public function update($data)
     {
@@ -213,23 +212,6 @@ class Widget extends Content
 
         // Commit transaction
         $GLOBALS['application']->conn->CommitTrans();
-
-        return true;
-    }
-    /**
-     * @deprecated
-     */
-    public function setPlaceholder($placeholder, $id)
-    {
-        // Insert placeholder manually
-        $sql = 'UPDATE `contents` SET `placeholder`=? WHERE pk_content=?';
-        $values = array($placeholder, $id);
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
-            return false;
-        }
 
         return true;
     }
@@ -375,4 +357,3 @@ class Widget extends Content
         return $class->render($params);
     }
 }
-

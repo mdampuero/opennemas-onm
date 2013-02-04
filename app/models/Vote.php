@@ -16,7 +16,6 @@
  **/
 class Vote
 {
-
     public $pk_vote        = null;
     public $value_pos      = null;
     public $value_neg      = null;
@@ -48,19 +47,19 @@ class Vote
     public function create($votePK, $vote, $ip)
     {
 
-        $sql = "INSERT INTO votes (`pk_vote`,`value_pos`,
-                                   `value_neg`, `karma`, `ips_count_vote`)
+        $sql = "INSERT INTO votes
+                    (`pk_vote`,`value_pos`, `value_neg`, `karma`, `ips_count_vote`)
                 VALUES (?,?,?,?,?)";
 
         // En contra
         if ($vote == '2') {
             $negValue = 1;
-            $karma = 100 - 1;
+            $karma    = 100 - 1;
             $posValue = 0;
         } else {
             // A favor
             $posValue = 1;
-            $karma = 100 + 1;
+            $karma    = 100 + 1;
             $negValue = 0;
         }
         $ipsCountVote[] = array('ip' => $ip, 'count' => 1);
@@ -71,10 +70,10 @@ class Vote
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
 
-            return (false);
+            return false;
         }
 
-        return (true);
+        return true;
     }
 
     public function read($votePK)
@@ -111,7 +110,7 @@ class Vote
             $this->ips_count_vote = unserialize($rs->fields['ips_count_vote']);
         }
 
-        return (true);
+        return true;
     }
 
     /**
@@ -144,15 +143,8 @@ class Vote
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
 
-            return (false);
+            return false;
         }
-
-        //creamos la cookie
-        Application::setCookieSecure(
-            "vote" . $this->pk_vote,
-            'true',
-            time() + 60 * 60 * 24 * 30
-        );
 
         return true;
     }
@@ -199,7 +191,7 @@ class Vote
         return $outputHTML;
     }
 
-    //ADD adressIP to votes array. Only permit 50 from  IP.
+    // Add adressIP to votes array. Only permit 50 from  IP.
     public function add_count($countIPs, $ip)
     {
 
@@ -233,7 +225,6 @@ class Vote
      **/
     public function get_karma($votePk)
     {
-
         $sql = 'SELECT karma FROM votes WHERE pk_vote=?';
         $rs = $GLOBALS['application']->conn->Execute($sql, array($votePk));
 
@@ -254,7 +245,6 @@ class Vote
      **/
     private function renderImg($i)
     {
-
         $imgPath = TEMPLATE_USER_URL . "images/utilities/";
         $imageTpl = '<img src="%s%s.png" style="vertical-align:middle;" alt="%s" title="%s" /> ( %d ) ';
 
@@ -306,4 +296,3 @@ LINKTPLDOC;
         );
     }
 }
-

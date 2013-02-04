@@ -23,7 +23,7 @@
 
 {block name="content"}
 <form action="{url name=admin_ads_config}" method="POST">
-    <div class="top-action-bar">
+    <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title"><h2>{t}Ads :: Configuration{/t}</h2></div>
             <ul class="old-button">

@@ -47,6 +47,8 @@ class NewsMLG1
                     sprintf(_("File '%d' can't be loaded."), $xmlFile)
                 );
             }
+
+            $this->checkFileFormat();
         } else {
             throw new \Exception(
                 sprintf(_("File '%d' doesn't exists."), $xmlFile)
@@ -331,5 +333,18 @@ class NewsMLG1
 
         return false;
     }
-}
 
+    /**
+     * Checks if the file loaded is an article with NewsMLG1 format
+     *
+     * @return boolean true if the format
+     * @throws Exception If the format is not valid
+     **/
+    public function checkFileFormat()
+    {
+        if (!(string) $this->_data->NewsEnvelope) {
+            throw new \Exception(sprintf(_('File %s is not a valid Europapress file'), $this->xmlFile));
+        }
+        return true;
+    }
+}

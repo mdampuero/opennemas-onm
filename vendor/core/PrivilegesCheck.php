@@ -11,11 +11,9 @@
  *
  * @package    Onm
  * @subpackage Acl
- * @author     Fran Dieguez <fran@openhost.es>
  **/
 class PrivilegesCheck
 {
-
     /**
      * Checks if the current user has access to category given its id.
      *

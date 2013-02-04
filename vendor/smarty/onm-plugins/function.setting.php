@@ -13,9 +13,11 @@ function smarty_function_setting($params, &$smarty)
         $key = $params['name'];
         if (array_key_exists('field',$params)) {
             $key_value = \Onm\Settings::get($key);
-            foreach ($key_value as $name => $value) {
-                if ($name == $params['field']) {
-                    $output = $value;
+            if (is_array($key_value)) {
+                foreach ($key_value as $name => $value) {
+                    if ($name == $params['field']) {
+                        $output = $value;
+                    }
                 }
             }
         } else {

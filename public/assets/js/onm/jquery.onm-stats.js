@@ -16,7 +16,7 @@
         onmStats: function( options ) {
 
             var defaultOptions = {
-                controller: "/controllers/stats.php"
+                controller: "/content/stats"
             };
 
             var settings = $.extend({}, defaultOptions, options);

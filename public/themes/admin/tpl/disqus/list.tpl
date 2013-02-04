@@ -35,25 +35,27 @@ jQuery(document).ready(function(){
 {/block}
 
 {block name="content"}
-<div class="top-action-bar">
+<div class="top-action-bar clearfix">
     <div class="wrapper-content">
         <div class="title">
-            <h2 class="disqus">{t}Comment manager{/t}</h2>
-            <ul class="old-button">
-                <li>
-                    <a href="{url name=admin_comments_disqus_config}" title="{t}Disqus module configuration{/t}">
-                        <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" title="{t}Config disqus module{/t}" alt="{t}Config Europapress module{/t}" ><br />{t}Config{/t}
-                    </a>
-                </li>
-            </ul>
+            <h2 class="disqus">{t}Comments{/t}</h2>
         </div>
+        <ul class="old-button">
+            <li>
+                <a href="{url name=admin_comments_disqus_config}" title="{t}Disqus module configuration{/t}">
+                    <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" title="{t}Config disqus module{/t}" alt="{t}Config Europapress module{/t}" ><br />{t}Config{/t}
+                </a>
+            </li>
+        </ul>
     </div>
 </div>
 <div class="iframe">
-    {if isset($disqus_shortname)}
+    {if !empty($disqus_shortname)}
     <iframe src="http://{$disqus_shortname}.disqus.com/admin/moderate/?template=wordpress" style="width: 100%; height: 80%; min-height:700px;"></iframe>
     {else}
-        {t}Disqus not configured{/t}
+        <div class="wrapper-content center">
+            <h3>{t}Disqus not configured{/t}</h3>
+        </div>
     {/if}
 </div>
 {/block}
