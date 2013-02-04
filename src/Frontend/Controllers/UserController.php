@@ -255,8 +255,9 @@ class UserController extends Controller
                 $mail->AddAddress($to, $to);
 
                 if ($mail->Send()) {
-                    $success = 'Comprobe a bandexa de entrada do seu correo electrónico para cambiar a contrasinal.</br>';
-                    $success.= 'Esta páxina será redireccionada en 8 segundos.';
+                    $success = 'Comprobe a bandexa de entrada do seu correo electrónico'
+                            .' para cambiar a contrasinal.</br>'
+                            . 'Esta páxina será redireccionada en 8 segundos.';
                     $this->view->assign('success', $success);
                 } else {
                     $error = 'A ocurrido un erro. Por favor, ténteo de novo.';
@@ -427,5 +428,4 @@ class UserController extends Controller
     {
 
     }
-
-} // END class UserController
+}

@@ -96,4 +96,3 @@ class ErrorController extends Controller
         return new Response($content, 500);
     }
 }
-

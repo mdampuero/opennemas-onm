@@ -148,6 +148,4 @@ $routes->add(
     )
 );
 
-
 $routes->addCollection($managerRoutes, 'manager');
-
