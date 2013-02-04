@@ -117,4 +117,3 @@ class SystemSettingsController extends Controller
         return $this->redirect($this->generateUrl('admin_system_settings', array(), true));
     }
 }
-

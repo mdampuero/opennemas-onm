@@ -44,7 +44,6 @@ class Author
      **/
     public function __construct($id = null)
     {
-
         // Posibilidad de cachear resultados de métodos
         $this->cache = new MethodCacheManager($this, array('ttl' => 30));
 
@@ -488,4 +487,3 @@ class Author
         return $rs->fields['COUNT(*)'];
     }
 }
-

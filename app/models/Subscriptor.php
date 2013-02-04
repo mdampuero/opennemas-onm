@@ -13,7 +13,6 @@
  *
  * @package    Onm
  * @subpackage Newsletter
- * @author     Sandra Pereira <sandra@openhost.es>
  **/
 class Subscriptor
 {
@@ -38,14 +37,13 @@ class Subscriptor
 
     public $_errors = array();
 
-    private $_tableName = '`pc_users`';
+    private $tableName = '`pc_users`';
 
-    private static $_instance = null;
+    private static $instance = null;
 
     /**
      * Constructor
      *
-     * @see Privilege::Privilege
      * @param int $id Privilege Id
      **/
     public function __construct($id = null)
@@ -57,13 +55,13 @@ class Subscriptor
 
     public function get_instance()
     {
-        if ( is_null(self::$_instance) ) {
-            self::$_instance = new Subscriptor();
+        if ( is_null(self::$instance) ) {
+            self::$instance = new Subscriptor();
 
-            return self::$_instance;
+            return self::$instance;
 
         } else {
-            return self::$_instance;
+            return self::$instance;
         }
     }
 
@@ -79,7 +77,7 @@ class Subscriptor
         $data['firstname'] = (isset($data['firstname']))? $data['firstname']: "";
         $data['lastname'] = (isset($data['lastname']))? $data['lastname']: "";
 
-        $sql = 'INSERT INTO ' . $this->_tableName . ' (
+        $sql = 'INSERT INTO ' . $this->tableName . ' (
                   `email`, `name`, `firstname`, `lastname`,
                  `status`, `subscription`) VALUES
                 ( ?,?,?,?, ?,?)';
@@ -100,7 +98,7 @@ class Subscriptor
 
     public function read($id)
     {
-        $sql = 'SELECT * FROM ' . $this->_tableName . ' WHERE pk_pc_user = ?';
+        $sql = 'SELECT * FROM ' . $this->tableName . ' WHERE pk_pc_user = ?';
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
@@ -143,11 +141,11 @@ class Subscriptor
     public function update($data, $isBackend = false)
     {
         if ($isBackend) {
-            $sql = 'UPDATE ' . $this->_tableName
+            $sql = 'UPDATE ' . $this->tableName
                  . ' SET `subscription`=?, `status`=?,'
                  . ' `email`=?, `name`=?, `firstname`=?, `lastname`=?  ';
         } else {
-            $sql = 'UPDATE ' . $this->_tableName
+            $sql = 'UPDATE ' . $this->tableName
                  . ' SET `subscription`= ?, `status`=?';
         }
 
@@ -184,7 +182,7 @@ class Subscriptor
     */
     public function getUserByEmail($email)
     {
-        $sql = 'SELECT * FROM ' . $this->_tableName . ' WHERE `email`=?';
+        $sql = 'SELECT * FROM ' . $this->tableName . ' WHERE `email`=?';
         $rs  = $GLOBALS['application']->conn->Execute($sql, array($email));
 
         if ($rs===false) {
@@ -206,7 +204,7 @@ class Subscriptor
             $_where = $filter;
         }
 
-        $sql = 'SELECT * FROM ' . $this->_tableName . ' WHERE ' . $_where;
+        $sql = 'SELECT * FROM ' . $this->tableName . ' WHERE ' . $_where;
         $sql .= ' ORDER BY ' . $_order_by;
 
         if (!is_null($limit)) {
@@ -231,7 +229,7 @@ class Subscriptor
 
     public function delete($id)
     {
-        $sql = 'DELETE FROM ' . $this->_tableName
+        $sql = 'DELETE FROM ' . $this->tableName
              . ' WHERE pk_pc_user=?';
         $values = array(intval($id));
 
@@ -246,7 +244,7 @@ class Subscriptor
 
     public function set_status($id, $status)
     {
-        $sql = 'UPDATE ' . $this->_tableName
+        $sql = 'UPDATE ' . $this->tableName
              . ' SET `status`='.$status.' WHERE pk_pc_user='.intval($id);
 
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
@@ -280,7 +278,7 @@ class Subscriptor
     */
     public function mUpdateProperty($id, $property, $value = null)
     {
-        $sql = 'UPDATE ' . $this->_tableName
+        $sql = 'UPDATE ' . $this->tableName
              . ' SET `' . $property . '`=? WHERE pk_pc_user=?';
         if (!is_array($id)) {
             $values = array($value, $id);
@@ -305,7 +303,7 @@ class Subscriptor
 
     public function countUsers($where = null)
     {
-        $sql = 'SELECT count(*) FROM ' . $this->_tableName;
+        $sql = 'SELECT count(*) FROM ' . $this->tableName;
         if (!is_null($where)) {
             $sql .= ' WHERE ' . $where;
         }
@@ -342,4 +340,3 @@ class Subscriptor
         return $pager;
     }
 }
-

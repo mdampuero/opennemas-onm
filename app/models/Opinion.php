@@ -15,7 +15,6 @@
  **/
 class Opinion extends Content
 {
-
     public $pk_opinion            = null;
     public $fk_content_categories = null;
     public $fk_author             = null;
@@ -384,6 +383,8 @@ class Opinion extends Content
     /**
     * Get latest Opinions without opinions present in frontpage
     *
+    * @param array $params list of parameters
+    *
     * @return mixed, latest opinions sorted by creation time
     */
     public static function getLatestAvailableOpinions($params = array())
@@ -452,6 +453,8 @@ class Opinion extends Content
     /**
     * Get all latest Opinions
     *
+    * @param array $params list of parameters
+    *
     * @return mixed, all latest opinions sorted by creation time
     */
     public static function getAllLatestOpinions($params = array())
@@ -491,6 +494,9 @@ class Opinion extends Content
     /**
     * Get all latest Opinions from an author given his id
     *
+    * @param int $authorId the identificator of the author
+    * @param array params list of parameters
+    *
     * @return mixed, all latest opinions sorted by creation time
     */
     public static function getLatestOpinionsForAuthor(
@@ -504,7 +510,7 @@ class Opinion extends Content
             'limit' => 6,
         );
         $options  = array_merge($defaultParams, $params);
-        $sqlLimit = " LIMIT {$options['limit']}";
+        $sqlLimit = " LIMIT ".$options['limit'];
 
         if (!isset($authorID)) {
             return array();
@@ -535,4 +541,3 @@ class Opinion extends Content
         return $contents;
     }
 }
-

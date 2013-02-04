@@ -16,7 +16,6 @@ use Onm\Message as m;
  **/
 class Video extends Content
 {
-
     public $pk_video = null;
     public $information  = null;
     public $video_url  = null;
@@ -34,7 +33,6 @@ class Video extends Content
         }
         $this->content_type = 'Video';
         $this->content_type_l10n_name = _('Video');
-
     }
 
     public function __get($name)
@@ -124,13 +122,6 @@ class Video extends Content
 
     public function remove($id)
     {
-
-        //if ($this->author_name == 'internal') {
-        //    var_dump($this->);
-        //    die();
-        //}
-        //unlink($this->information['thumbnails'])
-
         parent::remove($id);
 
         $sql = 'DELETE FROM videos WHERE pk_video='.$id;
@@ -138,8 +129,10 @@ class Video extends Content
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
+
+        return true;
     }
 
     /**
@@ -287,9 +280,11 @@ class Video extends Content
 
     /*
      * Function that creates thumbnails for one flv vídeo
+     *
      * @param $flvPath, $sizes
+     *
+     * return array the list of paths to the generated thumbnails
      */
-
     public static function createThumbnailsfromFLV($flvPath, $sizes = array())
     {
         $defaultThumbnailSizes = array(
@@ -404,7 +399,7 @@ class Video extends Content
      **/
     public function render($params)
     {
-         //  if (!isset($tpl)) {
+        //  if (!isset($tpl)) {
             $tpl = new Template(TEMPLATE_USER);
         //}
 
@@ -420,4 +415,3 @@ class Video extends Content
         return $html;
     }
 }
-

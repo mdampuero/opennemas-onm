@@ -16,24 +16,28 @@
  * @author     Fran Dieguez <fran@openhost.es>
  *
  */
-
 class StaticPage extends Content
 {
     /**
      * @var pk_static_page Page identifier
      */
     public $pk_static_page = null;
+
     //  public $content_type = __CLASS__;
     public $content_type = 'static_page';
+
     /**
      * @var string Content of body
      */
     public $body = null;
+
     public $slug = null;
+
     /**
      * @var MethodCacheManager Handler to call method cached
      */
     public $cache = null;
+
     /**
      * constructor
      *
@@ -50,6 +54,7 @@ class StaticPage extends Content
         $this->cache = new MethodCacheManager($this, array('ttl' => 30));
         $this->content_type_l10n_name = _('Static Page');
     }
+
     public function create($data)
     {
 
@@ -76,6 +81,7 @@ class StaticPage extends Content
 
         return true;
     }
+
     protected function commonData($data)
     {
 
@@ -87,6 +93,7 @@ class StaticPage extends Content
         $this->permalink = '/' . STATIC_PAGE_PATH . $data['slug'] . '.html';
         $data['permalink'] = $this->permalink;
     }
+
     /**
      * Read, get a specific object
      *
@@ -111,6 +118,7 @@ class StaticPage extends Content
 
         return $this;
     }
+
     /**
      * Load properties into this instance
      *
@@ -137,6 +145,7 @@ class StaticPage extends Content
         }
         $this->id = $this->pk_static_page;
     }
+
     /**
      * Update
      *
@@ -177,6 +186,7 @@ class StaticPage extends Content
             $this->create($data);
         }
     }
+
     /**
      * Delete static page
      *
@@ -199,9 +209,7 @@ class StaticPage extends Content
 
         return true;
     }
-    /**
-     *
-     */
+
     public function buildSlug($slug, $id, $title = null)
     {
 
@@ -220,9 +228,7 @@ class StaticPage extends Content
 
         return $tmp;
     }
-    /**
-     *
-     */
+
     public static function getPageBySlug($slug)
     {
 
@@ -242,9 +248,7 @@ class StaticPage extends Content
 
         return new StaticPage($id);
     }
-    /**
-     *
-     */
+
     public function getSlugs($filter = null)
     {
 
@@ -263,4 +267,3 @@ class StaticPage extends Content
         return $titles;
     }
 }
-

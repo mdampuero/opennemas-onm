@@ -184,4 +184,3 @@ class StringUtils
         return \Onm\StringUtils::generatePassword($length);
     }
 }
-

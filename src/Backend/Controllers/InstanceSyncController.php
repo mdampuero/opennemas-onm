@@ -260,4 +260,3 @@ class InstanceSyncController extends Controller
         return $this->redirect($this->generateUrl('admin_instance_sync'));
     }
 }
-

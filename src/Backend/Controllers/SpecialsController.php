@@ -648,4 +648,3 @@ class SpecialsController extends Controller
         }
     }
 }
-

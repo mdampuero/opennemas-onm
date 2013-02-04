@@ -211,4 +211,3 @@ class Settings
         return true;
     }
 }
-

@@ -110,4 +110,3 @@ class Uri
         return trim($finaluri[0]);
     }
 }
-

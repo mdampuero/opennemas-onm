@@ -796,4 +796,3 @@ class Photo extends Content
         return $result;
     }
 }
-
