@@ -18,4 +18,3 @@ namespace Onm\Import\DataSource\NewsMLG1Component;
 class Photo extends ResourceAbstract
 {
 }
-

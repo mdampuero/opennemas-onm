@@ -85,4 +85,3 @@ class MethodCacheManager
         return $this->methods;
     }
 }
-

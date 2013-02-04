@@ -282,4 +282,3 @@ class Imagick extends Common implements ImageInterface
         die();
     }
 }
-

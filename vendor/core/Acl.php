@@ -119,4 +119,3 @@ class Acl
         Application::forward('/admin/');
     }
 }
-

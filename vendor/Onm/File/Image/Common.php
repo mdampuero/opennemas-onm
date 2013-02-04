@@ -177,4 +177,3 @@ abstract class Common
         return ($w || $h) ? true : false;
     }
 }
-

@@ -11,27 +11,7 @@
  *
  * @package    Onm
  * @subpackage Model
- * @author     Sandra Pereira <sandra@openhost.es>
  **/
-
-/*
- *
- *
- CREATE TABLE IF NOT EXISTS `frontpages` (
-   `pk_frontpage` bigint(20) NOT NULL COMMENT '',
-   `date` int(11) NOT NULL COMMENT 'date as 20110720',
-   `category` int(11) NOT NULL COMMENT 'category',
-   `version` bigint(20) DEFAULT NULL,
-   `content_positions` longtext NOT NULL COMMENT 'serialized id of contents',
-   `promoted` tinyint(1) DEFAULT NULL,
-   `day_frontpage` tinyint(1) DEFAULT NULL,
-   `params` longtext NOT NULL COMMENT 'serialized params',
-   PRIMARY KEY (`date`,`category`)
-
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
- *
- */
 class Frontpage extends Content
 {
     public $pk_frontpage = null;
@@ -73,22 +53,21 @@ class Frontpage extends Content
      */
     public function create($data)
     {
-
         $data['content_status'] = 1;
-        $data['available'] =1;
-        $data['position']   =  1;
+        $data['available']      = 1;
+        $data['position']       = 1;
 
         parent::create($data);
 
         if ( is_null($data['category']) ) {
             return false;
         }
-        $date = (!isset($data['date']) || empty($data['date']))? date("Ymd") : $data['date'];
-        $category = $data['category'];
-        $contents = (!isset($data['contents']) || empty($data['contents']))? null: serialize($data['contents']);
-        $params = (!isset($data['params']) || empty($data['params']))? null: serialize($data['params']);
-        $version = (empty($data['version']))? 0: $data['version'];
-        $promoted = (empty($data['promoted'])) ? null : intval($data['promoted']);
+        $date          = (!isset($data['date']) || empty($data['date']))? date("Ymd") : $data['date'];
+        $category      = $data['category'];
+        $contents      = (!isset($data['contents']) || empty($data['contents']))? null: serialize($data['contents']);
+        $params        = (!isset($data['params']) || empty($data['params']))? null: serialize($data['params']);
+        $version       = (empty($data['version']))? 0: $data['version'];
+        $promoted      = (empty($data['promoted'])) ? null : intval($data['promoted']);
         $day_frontpage = (empty($data['day_frontpage'])) ? null: intval($data['day_frontpage']);
 
         $resp = $GLOBALS['application']->conn->GetOne(
@@ -97,7 +76,7 @@ class Frontpage extends Content
         );
 
         if ($resp) {
-            $promoted ="1";
+            $promoted = "1";
             $sql = "UPDATE frontpages SET  `content_positions`=?,,
                                            `version` =?,
                                            `promoted` =?,
@@ -107,7 +86,7 @@ class Frontpage extends Content
 
             $values = array($contents, $version, $promoted, $day_frontpage, $params);
         } else {
-            $promoted ="2";
+            $promoted = "2";
             $sql = "INSERT INTO frontpages (`date`,`category`,`content_positions`,
                                             `version`, `promoted`, `day_frontpage`,
                                             `params`)
@@ -120,18 +99,18 @@ class Frontpage extends Content
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
 
-            return(false);
+            return false;
         }
 
         return true;
-
     }
 
     /**
      * Read, get a specific object
      *
      * @param  int       $id Object ID
-     * @return Frontpage Return
+     *
+     * @return Frontpage the frontpage object instance
      */
     public function read($id)
     {
@@ -148,6 +127,8 @@ class Frontpage extends Content
         }
 
         $this->load($rs->fields);
+
+        return $this;
     }
 
     /**
@@ -189,7 +170,6 @@ class Frontpage extends Content
     */
     public function getContentsPositionsInCategory($category)
     {
-
         // Initialization of variables
         $contents = array();
 
@@ -290,10 +270,10 @@ class Frontpage extends Content
     {
         // if category = 0 => home
         if ( is_null($category) && is_null($date)) {
-              return false;
+            return false;
         }
 
-        $sql = "SELECT category FROM `frontpages` WHERE `date`=? ";
+        $sql = "SELECT category FROM `frontpages` WHERE `date`=?";
         $values = array($date);
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
@@ -311,4 +291,3 @@ class Frontpage extends Content
         return $items;
     }
 }
-

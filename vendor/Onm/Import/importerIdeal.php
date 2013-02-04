@@ -168,4 +168,3 @@ class importerIdeal
         return $bodyutf;
     }
 }
-

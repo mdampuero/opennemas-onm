@@ -85,4 +85,3 @@ class AlbumPhoto
         return $album;
     }
 }
-

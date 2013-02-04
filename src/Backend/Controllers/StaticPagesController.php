@@ -340,4 +340,3 @@ class StaticPagesController extends Controller
         return new Response($output);
     }
 }
-

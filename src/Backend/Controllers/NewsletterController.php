@@ -433,4 +433,3 @@ class NewsletterController extends Controller
         return false;
     }
 }
-

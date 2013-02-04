@@ -313,4 +313,3 @@ class WidgetsController extends Controller
         );
     }
 }
-

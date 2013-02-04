@@ -76,4 +76,3 @@ class ModuleBootstrap
         return $this;
     }
 }
-

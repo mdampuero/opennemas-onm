@@ -92,4 +92,3 @@ abstract class ResourceAbstract
         return $this->data;
     }
 }
-

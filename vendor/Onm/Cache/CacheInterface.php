@@ -58,4 +58,3 @@ interface CacheInterface
      */
     public function delete($id);
 }
-

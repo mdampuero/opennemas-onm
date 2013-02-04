@@ -288,4 +288,3 @@ class Poll extends Content
         return $ips_count;
     }
 }
-

@@ -14,7 +14,6 @@
  */
 class ContentManager
 {
-
     public $content_type = null;
     public $table = null;
     public $pager = null;
@@ -2203,8 +2202,8 @@ class ContentManager
             $content = new Content($contentID);
             // Filter by scheduled {{{
             if ($content->isInTime()
-                && $content->available==1
-                && $content->in_litter==0
+                && $content->available == 1
+                && $content->in_litter == 0
             ) {
                 $content->category_name = $ccm->get_name($content->category);
                 $relatedContent[] = $content;
@@ -2227,7 +2226,7 @@ class ContentManager
     * @param type $category_id category id we want to get contents from
     * @return null|array array of contents
     */
-    public function getContentsForLibrary($date, $categoryID=0)
+    public function getContentsForLibrary($date, $categoryID = 0)
     {
         if (empty($date)) {
             return false;
@@ -2289,7 +2288,6 @@ class ContentManager
     */
     public function getUrlContent ($url, $decodeJson = false)
     {
-
         $externalContent = apc_fetch(APC_PREFIX.$url, $success);
         if (!$success) {
             $c  = curl_init($url);
@@ -2306,7 +2304,5 @@ class ContentManager
         }
 
         return $content;
-
     }
 }
-

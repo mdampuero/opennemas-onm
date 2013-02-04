@@ -58,7 +58,7 @@ class Kiosko extends Content
     public function create($data)
     {
         if ($this->exists($data['path'], $data['category'])) {
-          //  throw new \Exception(_("There's other paper in this date & this category."));
+            //  throw new \Exception(_("There's other paper in this date & this category."));
         }
 
         // Check price
@@ -222,9 +222,7 @@ class Kiosko extends Content
             } catch (Exception $e) {
                 // Nothing
             }
-
         }
-
     }
 
     public function get_months_by_years()
@@ -263,4 +261,3 @@ class Kiosko extends Content
         return $rs;
     }
 }
-

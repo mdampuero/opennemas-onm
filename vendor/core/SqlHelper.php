@@ -143,4 +143,3 @@ class SqlHelper
         SqlHelper::insert($table, $merged, $conn);
     }
 }
-

@@ -411,7 +411,7 @@ class CategoriesController extends Controller
         if (is_null($category->pk_content_category)) {
             m::add(sprintf(_('Unable to find a category with the id "%d"'), $id), m::ERROR);
         } else {
-            $category->set_inmenu($status);
+            $category->setInMenu($status);
 
             $ccm = \ContentCategoryManager::get_instance();
             $ccm->reloadCategories();
@@ -492,4 +492,3 @@ class CategoriesController extends Controller
         }
     }
 }
-
