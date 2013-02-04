@@ -286,4 +286,3 @@ class ImporterXml
         return ($this->data);
     }
 }
-

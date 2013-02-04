@@ -230,4 +230,3 @@ class Controller extends ContainerAware
         return \Acl::checkOrForward($aclName);
     }
 }
-

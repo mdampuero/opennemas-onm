@@ -210,4 +210,3 @@ abstract class AbstractCache implements CacheInterface
      */
     abstract public function getIds();
 }
-

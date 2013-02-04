@@ -321,15 +321,15 @@ class Article extends Content
     {
         parent::remove($id);
 
-        $sql = 'DELETE FROM articles WHERE pk_article='.($id);
+        $sql = 'DELETE FROM articles WHERE pk_article=?';
 
         $rel = new RelatedContent();
         $rel->delete($id); //Eliminamos con los que esta relacionados.
 
         $rel = new Comment();
-        $rel->delete_comments($id); //Eliminamos  los comentarios.
+        $rel->deleteComments($id); //Eliminamos  los comentarios.
 
-        if ($GLOBALS['application']->conn->Execute($sql)===false) {
+        if ($GLOBALS['application']->conn->Execute($sql, array($id))===false) {
             \Application::logDatabaseError();
 
             return;
@@ -454,4 +454,3 @@ class Article extends Content
         }
     }
 }
-

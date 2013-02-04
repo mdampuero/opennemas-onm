@@ -368,4 +368,3 @@ class OpinionAuthorsController extends Controller
         );
     }
 }
-

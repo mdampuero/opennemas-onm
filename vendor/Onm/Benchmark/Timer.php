@@ -48,7 +48,7 @@ class Timer
      */
     public function start($marker = "default")
     {
-        $this->markers[$marker]['starttime'] = $this->_getMicrotime();
+        $this->markers[$marker]['starttime'] = $this->getMicrotime();
     }
 
     /**
@@ -61,7 +61,7 @@ class Timer
     public function stop($marker = "default")
     {
         if (array_key_exists($marker, $this->markers)) {
-            $this->markers[$marker]['endtime'] = $this->_getMicrotime();
+            $this->markers[$marker]['endtime'] = $this->getMicrotime();
         } else {
             throw new \Exception("Marker '{$marker}' doesn't exists.");
         }
@@ -94,11 +94,10 @@ class Timer
      * @access private
      * @since  1.3.0
      */
-    private function _getMicrotime()
+    private function getMicrotime()
     {
         $microtime = explode(' ', microtime());
 
         return $microtime[1] . substr($microtime[0], 1);
     }
 }
-

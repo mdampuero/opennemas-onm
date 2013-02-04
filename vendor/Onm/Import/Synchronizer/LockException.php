@@ -19,4 +19,3 @@ namespace Onm\Import\Synchronizer;
 class LockException extends \Exception
 {
 }
-

@@ -658,4 +658,3 @@ class PollsController extends Controller
         }
     }
 }
-

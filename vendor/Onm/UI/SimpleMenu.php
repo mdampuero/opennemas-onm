@@ -16,9 +16,8 @@ namespace Onm\UI;
  */
 class SimpleMenu
 {
-
-    private $_menu = null;
-    private $_errors = null;
+    private $menu = null;
+    private $errors = null;
 
     /**
      * Initilizes the object from an XML file
@@ -45,10 +44,10 @@ class SimpleMenu
             foreach (libxml_get_errors() as $error) {
                 $errors .= "\t".$error->message."\n";
             }
-            $this->_errors = $errors;
+            $this->errors = $errors;
 
         } else {
-            $this->_menu = $menu;
+            $this->menu = $menu;
         }
 
     }
@@ -193,7 +192,7 @@ class SimpleMenu
         }
 
         $output = '';
-        foreach ($this->_menu as $element => $value) {
+        foreach ($this->menu as $element => $value) {
             $output []= $this->renderElement($element, $value, false);
         }
 
@@ -206,4 +205,3 @@ class SimpleMenu
         return $menu;
     }
 }
-

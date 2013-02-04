@@ -65,4 +65,3 @@ class ZendData extends AbstractCache
         return zend_shm_cache_delete($id);
     }
 }
-

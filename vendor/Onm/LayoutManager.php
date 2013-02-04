@@ -236,4 +236,3 @@ class LayoutManager
         return implode("\n", $output);
     }
 }
-

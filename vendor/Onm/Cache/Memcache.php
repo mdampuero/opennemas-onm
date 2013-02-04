@@ -127,4 +127,3 @@ class Memcache extends AbstractCache
         return $this->_memcache->delete($id);
     }
 }
-

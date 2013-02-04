@@ -164,7 +164,7 @@ class Comment extends \Content
      * @param  $contentID
      * @return null
      **/
-    public function delete_comments($contentID)
+    public function deleteComments($contentID)
     {
         if ($contentID) {
             $sql = 'DELETE FROM `comments`, `contents`

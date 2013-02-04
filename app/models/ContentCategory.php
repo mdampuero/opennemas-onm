@@ -307,7 +307,7 @@ class ContentCategory
      *
      * @param string $status the status to set to the category.
      **/
-    public function set_inmenu($status)
+    public function setInMenu($status)
     {
         if ($this->pk_content_category == null) {
             return false;
@@ -356,4 +356,3 @@ class ContentCategory
         return $this;
     }
 }
-

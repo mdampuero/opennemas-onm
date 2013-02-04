@@ -204,4 +204,3 @@ class FilesManager
         return $name;
     }
 }
-

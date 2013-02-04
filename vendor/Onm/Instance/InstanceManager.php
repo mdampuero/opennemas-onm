@@ -848,4 +848,3 @@ class DefaultAssetsForInstanceNotCopiedException extends \Exception
 class ApacheConfigurationNotReloadedException extends \Exception
 {
 }
-

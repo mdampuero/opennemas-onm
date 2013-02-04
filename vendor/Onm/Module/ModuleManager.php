@@ -18,7 +18,6 @@ namespace Onm\Module;
  */
 class ModuleManager
 {
-
     /**
      * Stores the activatedModules over all instances of ModuleManager
      *
@@ -219,4 +218,3 @@ class ModuleManager
         return in_array($moduleName, self::getAvailableModules());
     }
 }
-

@@ -15,7 +15,6 @@
  */
 class Rating
 {
-
     public $pk_rating = null;
     public $total_votes = null;
     public $total_value = null;
@@ -41,7 +40,6 @@ class Rating
      **/
     public function create($contentId)
     {
-
         $sql = "INSERT INTO ratings (`pk_rating`,`total_votes`,
                                      `total_value`, `ips_count_rating`)
                 VALUES (?,?,?,?)";
@@ -118,7 +116,6 @@ class Rating
 
     public function update($vote_value, $ip)
     {
-
         $this->ips_count_rating = $this->add_count(
             $this->ips_count_rating,
             $ip
@@ -202,7 +199,6 @@ class Rating
      */
     private function getVotesOnImages($actualVotes, $pageType)
     {
-
         $votes_on_images = '';
         for ($i = 1; $i <= $this->num_of_stars; $i++) {
             $votes_on_images.= $this->renderImg($i, $actualVotes, $pageType);
@@ -221,7 +217,6 @@ class Rating
      */
     private function getVotesOnLinks($actualVotes, $pageType)
     {
-
         $votes_on_links = '';
         for ($i = 1; $i <= $this->num_of_stars; $i++) {
             $votes_on_links.= $this->renderLink(

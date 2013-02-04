@@ -348,4 +348,3 @@ class NewsMLG1
         return true;
     }
 }
-

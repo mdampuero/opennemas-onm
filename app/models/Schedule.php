@@ -11,13 +11,10 @@
  *
  * @package    Onm
  * @subpackage Model
- * @author     Sandra Pereira <sandra@openhost.es>, Mon Oct 24 10:07:22 2011
  **/
-
 //TODO redefine agenda_colectividad adapt to php 5.3
 class Schedule extends Content
 {
-
     //TODO: parent content
     public function __construct($id = null)
     {
@@ -60,7 +57,6 @@ class Schedule extends Content
     // returns all the events for a particular where. Using in sitemap
     public function getEventsByWhere($where)
     {
-
         $sql = 'SELECT * FROM phpc_AR_events '
             ."WHERE  ".$where
             ." ORDER BY  starttime DESC";
@@ -88,4 +84,3 @@ class Schedule extends Content
         return $events;
     }
 }
-
