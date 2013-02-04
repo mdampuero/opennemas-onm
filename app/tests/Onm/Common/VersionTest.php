@@ -32,7 +32,7 @@ class VersionTest extends \PHPUnit_Framework_TestCase
      **/
     public function testVersionIsANumberedFormatedVersion()
     {
-        preg_match('@(\d\.){3,}@', Version::VERSION, $matches);
+        preg_match('@(\d\.?){2,}@', Version::VERSION, $matches);
         $this->assertTrue(count($matches) > 0);
     }
 
