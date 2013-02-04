@@ -14,7 +14,7 @@ use Symfony\Component\EventDispatcher\Event;
 
 class ContentSubscriber implements EventSubscriberInterface
 {
-    static public function getSubscribedEvents()
+    public static function getSubscribedEvents()
     {
         return array(
             'content.update' => array(
@@ -28,7 +28,8 @@ class ContentSubscriber implements EventSubscriberInterface
 
     public function onContentUpdate(Event $event)
     {
-        var_dump('content.update event fired and handled', $event->getArgument('content'));die();
+        var_dump('content.update event fired and handled', $event->getArgument('content'));
+        die();
 
         return false;
     }

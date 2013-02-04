@@ -777,4 +777,3 @@ class OpinionsController extends Controller
         }
     }
 }
-

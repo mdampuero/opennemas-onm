@@ -81,7 +81,7 @@ class ArchiveController extends Controller
             $this->view->assign('library', $library);
         }
 
-       // $this->getAds();
+        // $this->getAds();
 
         return $this->render(
             'archive/archive.tpl',
@@ -132,7 +132,7 @@ class ArchiveController extends Controller
             $this->view->assign('library', $library);
         }
 
-       // $this->getAds();
+        // $this->getAds();
 
         return $this->render(
             'archive/archive.tpl',
@@ -168,4 +168,3 @@ class ArchiveController extends Controller
         return new Response($html);
     }
 }
-
