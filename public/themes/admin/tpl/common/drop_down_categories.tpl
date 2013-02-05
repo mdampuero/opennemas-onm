@@ -5,6 +5,11 @@
         <a href="{$home}" class="all {if $category == 'all'}active{/if}">{t}All categories{/t}</a>
         {/acl}
     {/if}
+    {if $ads == true}
+        {acl hasCategoryAccess=2}
+        <a href="{$home}&category=2" class="all {if $category == 2}active{/if}">{t}Advertisement{/t}</a>
+        {/acl}
+    {/if}
     <ul class="categories">
         {section name=as loop=$allcategorys}
         {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
@@ -13,7 +18,7 @@
             <li >
                 <a  {if $home}href="{$home}&amp;category={$ca}"{/if}
                     id="link_{$ca}"
-                    class="links {if $category==$ca}active{else}{if $ca eq $datos_cat[0]->fk_content_category}active {/if}{/if}" >
+                    class="links {if $category==$ca}active{/if}">
                     {$allcategorys[as]->title}
                     {if $allcategorys[as]->inmenu eq 0}<span class="inactive">{t}(inactive){/t}</span>{/if}
                 </a>
@@ -25,8 +30,7 @@
                         {if $allcategorys[as]->pk_content_category eq $category}
                         <li>
                             <a  href="{$home}&amp;category={$subcat[as][su]->pk_content_category}"
-                                class="links"
-                                {if $category==$subca}active {else}{if $subca eq $datos_cat[0]->fk_content_category}active{/if} {/if}>
+                                class="links {if $category==$subca}active{/if}">
                                 &rarr; {$subcat[as][su]->title}
                                 {if $subcat[as][su]->inmenu eq 0 || $allcategorys[as]->inmenu eq 0}<span class="inactive">{t}(inactive){/t}</span>{/if}
                             </a>
@@ -35,8 +39,7 @@
                             {assign var=subca value=$subcat[as][su]->pk_content_category}
                             <li>
                                 <a  href="{$home}&amp;category={$subcat[as][su]->pk_content_category}"
-                                    class="links"
-                                    {if $category==$subca}active {else}{if $subca eq $datos_cat[0]->fk_content_category}active{/if} {/if}>
+                                    class="links {if $category==$subca}active{/if}">
                                     &rarr; {$subcat[as][su]->title}
                                     {if $subcat[as][su]->inmenu eq 0 || $allcategorys[as]->inmenu eq 0}<span class="inactive">{t}(inactive){/t}</span>{/if}
                                 </a>
