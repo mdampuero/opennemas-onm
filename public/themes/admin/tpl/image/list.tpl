@@ -18,9 +18,9 @@
             <div class="title">
                 <h2>{t}Images{/t} :: </h2>
                 <div class="section-picker">
-                    <div class="title-picker btn"><span class="text">{if !isset($datos_cat[0]->title)}{t}All categories{/t}{else}{$datos_cat[0]->title}{/if}</span> <span class="caret"></span></div>
+                    <div class="title-picker btn"><span class="text">{if !isset($datos_cat[0]->title)}{t}All categories{/t}{elseif ($category == 2)}{t}Advertisement{/t}{else}{$datos_cat[0]->title}{/if}</span> <span class="caret"></span></div>
                     <div class="options">
-                        {include file="common/drop_down_categories.tpl" home="{url name=admin_images l=a}"}
+                        {include file="common/drop_down_categories.tpl" home="{url name=admin_images l=a}" ads=1}
                     </div>
                 </div>
             </div>

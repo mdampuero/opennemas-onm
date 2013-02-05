@@ -7,7 +7,7 @@
             <div class="title">
                 <h2>{t}Articles{/t} :: </h2>
                 <div class="section-picker">
-                    <div class="title-picker btn"><span class="text">{if !isset($datos_cat[0]->title)}{t}All categories{/t}{else}{$datos_cat[0]->title}{/if}</span> <span class="caret"></span></div>
+                    <div class="title-picker btn"><span class="text">{if !isset($datos_cat[0]->title) || ($category == 0)}{t}All categories{/t}{else}{$datos_cat[0]->title}{/if}</span> <span class="caret"></span></div>
                     <div class="options">
                         {include file="common/drop_down_categories.tpl" home="{url name=admin_articles l=1 status=$status}"}
                     </div>
