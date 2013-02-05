@@ -150,12 +150,12 @@ class Privilege
     public static function getPrivilegesForUserGroup($userGroupId)
     {
         self::loadPrivileges();
+
         $sql = 'SELECT pk_fk_privilege FROM users, user_groups_privileges
                 WHERE pk_fk_user_group = ? ORDER BY pk_fk_privilege';
         $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($userGroupId)));
 
         $privileges = array();
-        $allPrivileges = self::loadPrivileges();
 
         while (!$rs->EOF) {
 
