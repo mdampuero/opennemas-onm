@@ -154,6 +154,8 @@ class Privilege
         $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($userGroupId)));
 
         $privileges = array();
+        $allPrivileges = self::loadPrivileges();
+
         while (!$rs->EOF) {
             if (array_key_exists($rs->fields['pk_fk_privilege'], self::$privileges)) {
                 $privilege = self::$privileges[$rs->fields['pk_fk_privilege']];
@@ -161,8 +163,6 @@ class Privilege
             }
             $rs->MoveNext();
         }
-
-
 
         return $privileges;
     }
