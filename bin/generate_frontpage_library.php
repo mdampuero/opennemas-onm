@@ -64,9 +64,26 @@ do {
 
 } while ($running > 0);
 
+
+// change menu to stay in archive fronpages
+$pattern     = array();
+$replacement = array();
+
+foreach ($items as $category) {
+    $pattern[] = "@href=\"/seccion/{$category}\"@";
+    //archive/digital/2013/02/02/home.html
+    $replacement[] = "href=\"/archive/digital{$directoryDate}{$category}.html\"";
+}
+    array_push($pattern, "@href=\"/\"@");
+    //archive/digital/2013/02/02/home.html
+    array_push($replacement, "href=\"/archive/digital{$directoryDate}home.html\"");
+
   // get content and remove handles
 foreach ($curly as $category_name => $c) {
     $htmlOut = curl_multi_getcontent($c);
+
+    $htmlOut = preg_replace($pattern, $replacement, $htmlOut);
+
     $newFile = $basePath.$category_name.".html";
     $result  = file_put_contents($newFile, $htmlOut);
 
