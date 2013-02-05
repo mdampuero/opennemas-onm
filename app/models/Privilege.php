@@ -156,15 +156,12 @@ class Privilege
 
         $privileges = array();
         while (!$rs->EOF) {
-
             if (array_key_exists($rs->fields['pk_fk_privilege'], self::$privileges)) {
                 $privilege = self::$privileges[$rs->fields['pk_fk_privilege']];
                 $privileges[$privilege['pk_privilege']] = $privilege['name'];
             }
             $rs->MoveNext();
         }
-
-
 
         return $privileges;
     }
