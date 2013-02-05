@@ -1549,11 +1549,11 @@ class Content
             );
 
             // Deleting home cache files
-            if (isset($this->in_home) && $this->in_home) {
+            // if (isset($this->in_home) && $this->in_home) {
                 $tplManager->delete('home|0');
-                $tplManager->fetch(SITE_URL);
-                $tplManager->delete('home|RSS');
-            }
+            // }
+            $tplManager->delete('home|RSS');
+            $tplManager->delete('last|RSS');
 
             if (isset($this->frontpage)
                 && $this->frontpage
@@ -1623,6 +1623,7 @@ class Content
 
         // Delete all the available Homepage cache files
         $tplManager->delete('home|RSS');
+        $tplManager->delete('last|RSS');
         $tplManager->delete('home|0');
 
         // Generate the cache file again
