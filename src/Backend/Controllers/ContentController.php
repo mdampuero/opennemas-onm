@@ -315,7 +315,11 @@ class ContentController extends Controller
 
             if ($content->id != null && $properties != null) {
                 foreach ($properties as $name => $value) {
-                    $content->setProperty($name, $value);
+                    if (!empty($value)) {
+                        $content->setProperty($name, $value);
+                    } else {
+                        $content->clearProperty($name);
+                    }
                 }
                 $code = 200;
                 $message = "Done {$id}:". serialize($properties)." \n";

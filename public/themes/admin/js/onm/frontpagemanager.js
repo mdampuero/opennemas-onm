@@ -424,18 +424,20 @@ jQuery(function($) {
         var jsonTitle = JSON.stringify(titleValues, keys);
         var properties = new Object();
 
+                    var name = 'title_' + $('#frontpagemanager').data('category');
         if(!$.isEmptyObject(titleValues)) {
-             var name = 'title_' + $('#frontpagemanager').data('category');
             properties[name] = jsonTitle;
+        } else {
+            properties[name] = '';
         }
         var bgcolor =$('#bg-color').val();
+        var name2='bgcolor_' + $('#frontpagemanager').data('category');
         if(bgcolor.length>0 && bgcolor !='#ffffff') {
-
-            var name2='bgcolor_' + $('#frontpagemanager').data('category');
             properties[name2] = bgcolor;
-
+        } else {
+            properties[name2] = '';
         }
-console.log(properties);
+
         if (elementID) {
             $.ajax({
                 url:url,

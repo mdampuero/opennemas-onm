@@ -2097,6 +2097,26 @@ class Content
         return true;
     }
 
+    public function clearProperty($property)
+    {
+        if ($this->id == null) {
+            return false;
+        }
+
+        $sql = "DELETE FROM contentmeta WHERE `fk_content` = '{$this->id}' "
+            ."AND `meta_name` = '{$property}'";
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+
+        if ($rs === false) {
+            Application::logDatabaseError();
+
+            return false;
+        }
+
+
+        return true;
+    }
+
     /**
      * Load content properties given the content id
      *
