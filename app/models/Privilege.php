@@ -474,7 +474,7 @@ class Privilege
                 'description'  => _('Send to trash and restore'),
                 'module'       => 'VIDEO',
             ),
-            54 => array(
+            60 => array(
                 'pk_privilege' => '60',
                 'name'         => 'IMAGE_ADMIN',
                 'description'  => _('List'),

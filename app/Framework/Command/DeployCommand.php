@@ -21,6 +21,11 @@ class DeployCommand extends Command
     protected function configure()
     {
         $this
+            ->setDefinition(
+                array(
+                    new InputOption('skip-cleaning', 's', InputOption::VALUE_NONE, 'Skip cleaning caches'),
+                )
+            )
             ->setName('app:deploy')
             ->setDescription('Deploys the application to the latest version')
             ->setHelp(
@@ -66,13 +71,16 @@ EOF
         $composerOutput = exec($phpBinPath.' '.$basePath.'/bin/composer.phar install');
         $output->writeln($composerOutput."\n");
 
-        // Clean cache and compiles
-        $command = $this->getApplication()->find('clean:smarty-cache');
-        $arguments = array(
-            'command' => 'clean:smarty-cache',
-        );
+        $skipCleaning = $input->getOption('skip-cleaning');
+        if (!$skipCleaning) {
+            // Clean cache and compiles
+            $command = $this->getApplication()->find('clean:smarty-cache');
+            $arguments = array(
+                'command' => 'clean:smarty-cache',
+            );
 
-        $input = new ArrayInput($arguments);
-        $returnCode = $command->run($input, $output);
+            $input = new ArrayInput($arguments);
+            $returnCode = $command->run($input, $output);
+        }
     }
 }
