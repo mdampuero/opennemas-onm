@@ -5,6 +5,11 @@
         <a href="{$home}" class="all {if $category == 'all'}active{/if}">{t}All categories{/t}</a>
         {/acl}
     {/if}
+    {if $ads == true}
+        {acl hasCategoryAccess=2}
+        <a href="{$home}&category=2" class="all {if $category == 2}active{/if}">{t}Advertisement{/t}</a>
+        {/acl}
+    {/if}
     <ul class="categories">
         {section name=as loop=$allcategorys}
         {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
