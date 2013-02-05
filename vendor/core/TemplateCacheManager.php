@@ -18,8 +18,8 @@ class TemplateCacheManager
 {
     public $cacheGroups = array();
     public $properties = array();
-    protected $_cacheDir = null;
-    protected $_smarty = null;
+    protected $cacheDir = null;
+    protected $smarty = null;
 
     /**
      * Construct
@@ -29,11 +29,11 @@ class TemplateCacheManager
     public function __construct($themeDir, $smarty = null)
     {
         if (!is_null($smarty)) {
-            $this->_smarty = $smarty;
+            $this->smarty = $smarty;
         } else {
-            $this->_smarty = new Template($themeDir);
+            $this->smarty = new Template($themeDir);
         }
-        $this->_cacheDir = $this->_smarty->cache_dir;
+        $this->cacheDir = $this->smarty->cache_dir;
 
     }
 
@@ -45,12 +45,10 @@ class TemplateCacheManager
      */
     public function scan($filter = null)
     {
-
-        $caches = array();
+        $caches  = array();
         $matches = array();
-        $dirIt = new DirectoryIterator($this->_cacheDir);
+        $dirIt   = new DirectoryIterator($this->cacheDir);
         foreach ($dirIt as $item) {
-
             if ($item->isDot()) {
                 continue;
             }
@@ -114,11 +112,11 @@ class TemplateCacheManager
         /* clearstatcache(); */
 
         $data = null;
-        if (file_exists($this->_cacheDir . $cacheFileName)) {
+        if (file_exists($this->cacheDir . $cacheFileName)) {
             $data = $this->getHeaderInfoFromCacheFile(
-                $this->_cacheDir . $cacheFileName
+                $this->cacheDir . $cacheFileName
             );
-            $data['timestamp'] = filectime($this->_cacheDir . $cacheFileName);
+            $data['timestamp'] = filectime($this->cacheDir . $cacheFileName);
             $data['expires'] = $data['timestamp'] + $data['cache_lifetime'];
         }
 
@@ -230,11 +228,11 @@ class TemplateCacheManager
 
         if (is_array($cachefile) && count($cachefile) > 1) {
             foreach ($cachefile as $name) {
-                $filename = $this->_cacheDir . $name;
+                $filename = $this->cacheDir . $name;
                 $this->removeFile($filename);
             }
         } elseif (!empty($cachefile)) {
-            $cachefile = $this->_cacheDir . $cachefile;
+            $cachefile = $this->cacheDir . $cachefile;
             $this->removeFile($cachefile);
 
             return true;
@@ -251,7 +249,7 @@ class TemplateCacheManager
     public function clearGroupCache($cacheGroup)
     {
 
-        $this->_smarty->clear_cache(null, $cacheGroup);
+        $this->smarty->clear_cache(null, $cacheGroup);
     }
 
     /**
@@ -278,7 +276,7 @@ class TemplateCacheManager
                 throw new Exception($message);
             }
         }
-        $cachefile = $this->_cacheDir . $cachefile;
+        $cachefile = $this->cacheDir . $cachefile;
 
         if (file_exists($cachefile)) {
 
@@ -365,7 +363,7 @@ class TemplateCacheManager
     public function dumpConfig()
     {
 
-        $filename = $this->_smarty->config_dir[0] . 'cache.conf';
+        $filename = $this->smarty->config_dir[0] . 'cache.conf';
 
         return parse_ini_file($filename, true);
     }
@@ -373,7 +371,7 @@ class TemplateCacheManager
     public function saveConfig($config)
     {
 
-        $filename = $this->_smarty->config_dir[0] . 'cache.conf';
+        $filename = $this->smarty->config_dir[0] . 'cache.conf';
         $fp = @fopen($filename, 'w');
 
         if ($fp !== false) {
