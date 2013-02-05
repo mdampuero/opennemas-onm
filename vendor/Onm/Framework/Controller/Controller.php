@@ -136,14 +136,14 @@ class Controller extends ContainerAware
             $response->setContent($contents);
         }
 
-        if (array_key_exists('cache_id', $parameters)) {
-            $expires = $this->getExpireDate();
-            if (!is_null($expires)) {
-                $response->setDate($expires['creation_date']);
-                $response->setExpires($expires['expire_date']);
-                $response->setSharedMaxAge($expires['max_age']);
-            }
-        }
+        // if (array_key_exists('cache_id', $parameters)) {
+        //     $expires = $this->getExpireDate();
+        //     if (!is_null($expires)) {
+        //         $response->setDate($expires['creation_date']);
+        //         $response->setExpires($expires['expire_date']);
+        //         $response->setSharedMaxAge($expires['max_age']);
+        //     }
+        // }
 
         return $response;
     }
