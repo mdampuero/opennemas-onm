@@ -56,7 +56,7 @@ class FrontpagesController extends Controller
             )
         );
 
-        $this->getAds();
+        $this->getAds($categoryName);
 
         if ($this->view->caching == 0
             || !$this->view->isCached('frontpage/frontpage.tpl', $cacheID)
