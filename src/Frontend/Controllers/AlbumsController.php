@@ -92,9 +92,9 @@ class AlbumsController extends Controller
             $total = isset($albumSettings['total_front']) ? $albumSettings['total_front'] : 2;
             $days  = isset($albumSettings['time_last']) ? $albumSettings['time_last'] : 4;
             $order = isset($albumSettings['orderFrontpage']) ? $albumSettings['orderFrontpage'] : 'views';
-
-            if (isset($this->category)
-                && !empty($this->category)
+            $category = $this->ccm->get_id($this->categoryName);
+            if (isset($category)
+                && !empty($category)
             ) {
                 $albums = $this->cm->find_by_category(
                     'Album',

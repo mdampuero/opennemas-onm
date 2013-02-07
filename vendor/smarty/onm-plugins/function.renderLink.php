@@ -8,21 +8,22 @@
 function smarty_function_renderLink($params,&$smarty) {
 
     $item = $params['item'];
-    $name_url='seccion';
-
+    $nameMenu = $params['name'];
+    $nameUrl = 'seccion';
+    if (isset($nameMenu) && !empty($nameMenu)) {
+        if( $nameMenu == 'video') {
+            $nameUrl='video';
+        } elseif ($nameMenu == 'album') {
+            $nameUrl='album';
+        } elseif ($nameMenu == 'special') {
+            $nameUrl='especiales';
+        } elseif ($nameMenu == 'encuesta') {
+            $nameUrl='encuesta';
+        }
+    }
     switch ($item->type){
         case 'category':
-            if( preg_match('/videos.php/', $_SERVER['SCRIPT_NAME']) ) {
-                $name_url='video';
-            } elseif (preg_match('/album.php/', $_SERVER['SCRIPT_NAME']) ) {
-                $name_url='album';
-            } elseif (preg_match('/special.php/', $_SERVER['SCRIPT_NAME']) ) {
-                $name_url='especiales';
-            } elseif (preg_match('/poll.php/', $_SERVER['SCRIPT_NAME']) ) {
-                      $name_url='encuesta';
-            }
-            $link = "/$name_url/$item->link/";
-
+            $link = "/$nameUrl/$item->link/";
         break;
         case 'videoCategory':
             $link = "/video/$item->link/";
@@ -43,7 +44,7 @@ function smarty_function_renderLink($params,&$smarty) {
              $link = "$item->link";
         break;
         case 'syncCategory':
-             $link = "/ext$name_url/$item->link/";
+             $link = "/ext$nameUrl/$item->link/";
         break;
         default:
              $link = "/$item->link/";
