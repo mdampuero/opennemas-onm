@@ -68,7 +68,7 @@ class User
             "INSERT INTO users "
             ."(`login`, `password`, `sessionexpire`, `email`, `name`, "
             ."`type`, `token`, `authorize`, `fk_user_group`) "
-            ."VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+            ."VALUES (?,?,?,?,?,?,?,?,?)";
         $values = array(
             $data['login'],
             md5($data['password']),
