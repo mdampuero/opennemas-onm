@@ -120,13 +120,11 @@
         <script type="text/javascript">
         Tinycon.setBubble({count_pending_comments});
         </script>
+        {uservoice_widget}
 	{/block}
 
     {if Acl::check('USER_ADMIN') eq true}
     {*include file="welcome/modals/_modal_users.tpl"*}
     {/if}
-
-    {uservoice_widget}
-
 </body>
 </html>
