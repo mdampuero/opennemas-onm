@@ -664,7 +664,7 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteRule ^especiales/(.*)?$ album/  [R=301,L,NC]
     RewriteRule ^documentos/(.*)?$ /  [R=301,L,NC]
     RewriteRule ^elecciones/(.*)?$ seccion/elecciones/  [R=301,L,NC]
-    RewriteRule ^hemeroteca/resultado(.*)?$ / [R=301,L,NC]
+    RewriteRule ^hemeroteca/(.*)/resulta(.*)?$ / [R=301,L,NC]
     RewriteRule ^hemeroteca/titulares/(.*)?$ / [R=301,L,NC]
     RewriteRule ^portada/(.*)?$ /  [R=301,L,NC]
     RewriteRule ^sociedad/(.*)?$ seccion/sociedad/  [R=301,L,NC]
@@ -768,6 +768,10 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     #Login, Login from activation mail, register and activate register
     # RewriteRule ^regenerate/pass/check/([a-f0-9]{32})/?$ controllers/register.php?action=regenerate_pass_check&token=$1 [L,NC]
     # RewriteRule ^regenerate/pass/([a-f0-9]{32})/?$ controllers/register.php?action=regenerate_pass&token=$1 [L,NC]
+
+    # Changes 02-2013
+    RewriteRule ^hemeroteca/([0-9]+)/([0-9]+)/([0-9]+)  archive/content/$1/$2/$3/ [R=301,L,NC]
+    RewriteRule ^hemeroteca/([0-9]+)-([0-9]+)-([0-9]+)/([a-zA-Z0-9\-]+).html  archive/digital/$1/$2/$3/$4.html [R=301,L,NC]
 
     RewriteRule ^boletin.html$ newsletter/
 
