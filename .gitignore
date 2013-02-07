@@ -2,11 +2,11 @@
 build
 cache.properties
 config/*
-nbproject/
-public/admin/themes/default/compile/*
+#public/admin/themes/default/compile/*
 public/media/
 public/themes/*
-!public/themes/admin/
+!public/themes/admin
+!public/themes/manager
 *.sublime-*
 tmp/*
 vendor/autoload.php

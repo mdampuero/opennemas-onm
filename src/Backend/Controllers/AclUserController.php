@@ -210,20 +210,17 @@ class AclUserController extends Controller
 
             try {
                 if ($user->create($data)) {
-
                     $userLanguage = $request->request->filter('user_language', 'default', FILTER_SANITIZE_STRING);
                     $user->setMeta(array('user_language' => $userLanguage));
 
-                    if ($action == 'validate') {
-                        return $this->redirect(
-                            $this->generateUrl(
-                                'admin_acl_user_show',
-                                array('id' => $user->id)
-                            )
-                        );
-                    }
+                    m::add(_('User created successfully.'), m::SUCCESS);
 
-                    return $this->redirect($this->generateUrl('admin_acl_user'));
+                    return $this->redirect(
+                        $this->generateUrl(
+                            'admin_acl_user_show',
+                            array('id' => $user->id)
+                        )
+                    );
                 } else {
                     m::add(_('Unable to create the user with that information'), m::ERROR);
                 }
