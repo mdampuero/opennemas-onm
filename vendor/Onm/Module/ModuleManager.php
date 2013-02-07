@@ -116,6 +116,7 @@ class ModuleManager
                 'TRASH_MANAGER',
                 'USER_GROUP_MANAGER',
                 'USER_MANAGER',
+                'USERVOICE_SUPPORT',
                 'VIDEO_MANAGER',
                 'WIDGET_MANAGER',
                 'LOG_SQL',

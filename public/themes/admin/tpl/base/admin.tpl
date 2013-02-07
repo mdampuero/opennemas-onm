@@ -50,6 +50,7 @@
             {admin_menu file='/Backend/Resources/Menu.php' base=$smarty.const.SRC_PATH}
         </div>
         <div class="global-user-tools pull-right">
+            <a href="javascript:UserVoice.showPopupWidget();" class="support-button">{t}Support{/t}</a>
 
             <div class="global-search nofillonhover">
                 <form action="{url name=admin_search}">
@@ -119,11 +120,11 @@
         <script type="text/javascript">
         Tinycon.setBubble({count_pending_comments});
         </script>
+        {uservoice_widget}
 	{/block}
 
     {if Acl::check('USER_ADMIN') eq true}
     {*include file="welcome/modals/_modal_users.tpl"*}
     {/if}
-
 </body>
 </html>
