@@ -41,14 +41,20 @@
 </head>
 <body class="manager">
 
-    <header class="global-nav manager clearfix">
-        <div class="logoonm pull-right">
-            <a  href="{url name=manager_welcome}" id="logo-onm" class="clearfix" title="{t}Go to admin main page{/t}">
-               <img src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}images/logo-opennemas-small.png" alt="opennemas" width="132" height="27"/>
-            </a>
-        </div>
-        <div class="global-menu pull-left">
-            {admin_menu file='/Manager/Resources/Menu.php' base=$smarty.const.SRC_PATH}
+    <header class="clearfix">
+        <div class="navbar navbar-inverse global-nav manager" style="position:fixed">
+            <div class="navbar-inner">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-inverse-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+
+                <a  href="{url name=manager_welcome}" class="brand ir logoonm" title="{t}Go to admin main page{/t}">OpenNemas</a>
+                <div class="nav pull-left" accesskey="m">
+                    {admin_menu file='/Manager/Resources/Menu.php' base=$smarty.const.SRC_PATH}
+                </div>
+            </div>
         </div>
     </header>
 
