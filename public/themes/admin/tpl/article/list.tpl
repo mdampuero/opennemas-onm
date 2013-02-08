@@ -90,9 +90,10 @@
                 <th class="center" style="width:10px;">{t}Available{/t}</th>
                 <th class="center" style="width:70px;">{t}Actions{/t}</th>
             </thead>
-            {acl hasCategoryAccess=$category}
+            {*acl hasCategoryAccess=$category*}
             <tbody>
             {foreach name=c from=$articles item=article}
+             {acl hasCategoryAccess=$article->category}
                 <tr>
                     <td>
                         <input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$article->id}"  style="cursor:pointer;" />
@@ -142,7 +143,7 @@
                         </div>
                     </td>
                 </tr>
-
+                {/acl}
             {foreachelse}
                 <tr>
                     <td class="empty" colspan="10">{t}No available articles.{/t}</td>
@@ -156,7 +157,7 @@
                     </td>
                 </tr>
             </tfoot>
-            {/acl}
+            {*/acl*}
         </table>
 
     </div>
