@@ -2038,3 +2038,9 @@ progress {
     color:#888;
   }
 
+select#category option {
+   color:#333;
+}
+select#category option.unavailable {
+  color:#777;
+}
