@@ -127,107 +127,91 @@ class ContentsController extends Controller
                 throw new ResourceNotFoundException();
             }
 
-            // Send article to friend
-            require_once SITE_VENDOR_PATH."/phpmailer/class.phpmailer.php";
-
-            $tplMail = new \Template(TEMPLATE_USER);
-
-            $mail = new \PHPMailer();
-
-            $mail->Host     = "localhost";
-            $mail->Mailer   = "smtp";
-
-            $mail->CharSet = 'UTF-8';
-            $mail->Priority = 5; // Low priority
-            $mail->IsHTML(true);
-
-            $mail->From     = $request->request->filter('sender', null, FILTER_SANITIZE_STRING);
-            $mail->FromName = $request->request->filter('name_sender', null, FILTER_SANITIZE_STRING);
-            $mail->Subject  =
-                $request->request->filter('name_sender', null, FILTER_SANITIZE_STRING)
-                .' ha compartido contigo un contenido de '.s::get('site_name');
-
-            $tplMail->assign('destination', 'amig@,');
-
+            // If the content is external load it from the external webservice
             $contentID = $request->request->getDigits('content_id', null);
-
-            if ($ext == 1) {
-                // External load content
+            if (false && $ext == 1) {
                 $content = $cm->getUrlContent($wsUrl.'/ws/contents/read/'.$contentID, true);
                 $content = unserialize($content);
             } else {
-                // Locally load content
                 $content = new \Content($contentID);
             }
 
-            $tplMail->assign('mail', $mail);
-            $tplMail->assign('article', $content);
-
-            // Filter tags before send
-            $permalink = preg_replace('@([^:])//@', '\1/', SITE_URL . $content->uri);
-            $message = $request->request->filter('body', null, FILTER_SANITIZE_STRING);
-            $tplMail->assign('body', $message);
-            if (!empty($content->agency)) {
-                $agency = $content->agency;
-            } else {
-                $agency = s::get('site_name');
+            // Check if the content exists
+            if (is_null($content->id)) {
+                throw new ResourceNotFoundException();
             }
-            $tplMail->assign('agency', $agency);
 
-            if (empty($content->summary)) {
-                $summary = substr(strip_tags(stripslashes($content->body)), 0, 300)."...";
-            } else {
-                $summary = stripslashes($content->summary);
+            // Fetch information required for sending the mail
+            $senderEmail  = $request->request->filter('sender_email', null, FILTER_VALIDATE_EMAIL);
+            $senderName   = $request->request->filter('sender_name', null, FILTER_SANITIZE_STRING);
+            $mailSubject  = sprintf(
+                _('%s ha compartido contigo un contenido de %s.'),
+                $senderName,
+                s::get('site_name')
+            );
+            $recipients   = explode(',', $request->request->get('recipients', array()));
+
+            $errors = array();
+            if (empty($senderEmail)) {
+                $errors []= _('Fill your Email address');
             }
-            $tplMail->assign('summary', $summary);
-
-            foreach ($this->view->plugins_dir as $value) {
-                $filepath = $value ."/function.articledate.php";
-                if (file_exists($filepath)) {
-                    require_once $filepath;
+            if (empty($senderName)) {
+                $errors []= _('Complete your name');
+            }
+            $cleanRecipients = array();
+            foreach ($recipients as $recipient) {
+                if (filter_var($recipient, FILTER_VALIDATE_EMAIL)) {
+                    $cleanRecipients []= $recipient;
                 }
             }
+            if (count($cleanRecipients) <= 0) {
+                $errors []= _('Provide a list of valid emails separated by commas.');
+            }
 
-            //require_once $tpl->_get_plugin_filepath('function', 'articledate');
-            $params['created'] = $content->created;
-            $params['updated'] = $content->updated;
-            $params['article'] = $content;
-            $date = smarty_function_articledate($params, $this->view);
-            $tplMail->assign('date', $date);
+            if (count($errors) > 0) {
+                $content = json_encode($errors);
+                $httpCode = 400;
 
+                return new Response($content, $httpCode);
+            }
+
+            $tplMail = new \Template(TEMPLATE_USER);
             $tplMail->caching = 0;
-            $mail->Body = $tplMail->fetch('email/send_to_friend.tpl');
+            $tplMail->assign(
+                array(
+                    'content'     => $content,
+                    'senderName'  => $senderName,
+                    'senderEmail' => $senderEmail,
+                )
+            );
 
-            $mail->AltBody = $tplMail->fetch('email/send_to_friend_just_text.tpl');
+            $mailBody     = $tplMail->fetch('email/send_to_friend.tpl');
+            $mailBodyText = $tplMail->fetch('email/send_to_friend_just_text.tpl');
 
-            /**
-             * Implementacion para enviar a multiples destinatarios
-             * separados por coma
-             */
-            $destinatarios = explode(',', $_REQUEST['destination']);
+            //  Build the message
+            $message = \Swift_Message::newInstance();
+            $message
+                ->setSubject($mailSubject)
+                ->setBody($mailBody)
+                ->addPart($mailBodyText, 'text/plain')
+                ->setTo($recipients[0])
+                ->setFrom(array($senderEmail => $senderName))
+                ->setSender(array('no-reply@opennemas.com' => s::get('site_name')))
+                ->setBcc($recipients);
 
-            foreach ($destinatarios as $dest) {
-                $mail->AddBCC(trim($dest));
-            }
+            try {
+                $mailer = $this->get('mailer');
+                $mailer->send($message);
 
-            if ( $mail->Send() ) {
-                $this->view->assign('message', 'Noticia enviada correctamente.');
+                $content = _('Article sent successfully');
                 $httpCode = 200;
-            } else {
-                if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])
-                    && ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')
-                ) {
-                    header("HTTP/1.0 404 Not Found");
-                }
-                $this->view->assign(
-                    'message',
-                    'La noticia no pudo ser enviada, inténtelo de nuevo más tarde.'
-                    .'<br /> Disculpe las molestias.'
-                );
+            } catch (\Exception $e) {
+                $content = array(_('Unable to send the email. Please try to send it later.'));
+
+                $content = json_encode($content);
 
                 $httpCode = 500;
             }
-            $content = $this->render('common/share_by_mail.tpl');
 
             return new Response($content, $httpCode);
         } else {
@@ -238,12 +222,12 @@ class ContentsController extends Controller
             $token = md5(uniqid('sendform'));
             $session->set('sendformtoken', $token);
 
-            $article = new \Content($contentId);
+            $content = new \Content($contentId);
 
             return $this->render(
                 'common/share_by_mail.tpl',
                 array(
-                    'content'    => $article,
+                    'content'    => $content,
                     'content_id' => $contentId,
                     'token'      => $token,
                 )
