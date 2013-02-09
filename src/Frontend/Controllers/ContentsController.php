@@ -206,6 +206,10 @@ class ContentsController extends Controller
                 $content = _('Article sent successfully');
                 $httpCode = 200;
             } catch (\Exception $e) {
+                // Log this error
+                $logger = $this->get('logger');
+                $logger->notice("Unable to send by email the content [$contentID]: ".$e->getMessage());
+
                 $content = array(_('Unable to send the email. Please try to send it later.'));
 
                 $content = json_encode($content);
