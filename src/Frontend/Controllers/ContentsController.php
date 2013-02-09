@@ -192,7 +192,7 @@ class ContentsController extends Controller
             $message = \Swift_Message::newInstance();
             $message
                 ->setSubject($mailSubject)
-                ->setBody($mailBodyPlain)
+                ->setBody($mailBodyPlain, 'text/plain')
                 ->addPart($mailBody, 'text/html')
                 ->setTo($recipients[0])
                 ->setFrom(array($senderEmail => $senderName))
