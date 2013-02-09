@@ -185,15 +185,15 @@ class ContentsController extends Controller
                 )
             );
 
-            $mailBody     = $tplMail->fetch('email/send_to_friend.tpl');
-            $mailBodyText = $tplMail->fetch('email/send_to_friend_just_text.tpl');
+            $mailBody      = $tplMail->fetch('email/send_to_friend.tpl');
+            $mailBodyPlain = $tplMail->fetch('email/send_to_friend_just_text.tpl');
 
             //  Build the message
             $message = \Swift_Message::newInstance();
             $message
                 ->setSubject($mailSubject)
-                ->setBody($mailBody)
-                ->addPart($mailBodyText, 'text/plain')
+                ->setBody($mailBodyPlain)
+                ->addPart($mailBody, 'text/html')
                 ->setTo($recipients[0])
                 ->setFrom(array($senderEmail => $senderName))
                 ->setSender(array('no-reply@opennemas.com' => s::get('site_name')))
