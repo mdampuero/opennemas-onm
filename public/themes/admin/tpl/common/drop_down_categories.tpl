@@ -6,7 +6,7 @@
         {/acl}
     {/if}
     {if $ads == true}
-        {acl hasCategoryAccess=2}
+        {acl isAllowed="ADVERTISEMENT_CREATE"}
         <a href="{$home}&category=2" class="all {if $category == 2}active{/if}">{t}Advertisement{/t}</a>
         {/acl}
     {/if}
