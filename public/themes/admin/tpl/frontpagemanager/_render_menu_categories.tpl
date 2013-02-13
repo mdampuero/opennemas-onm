@@ -3,7 +3,7 @@
         {include file="frontpagemanager/partials/_render_menu.tpl"}
     </div>
     <div class="pull-right">
-        <div class="menu-other-categories btn-group">
+        <div class="menu-other-categories">
             <select name="category" id="categoryItem">
 
                 {acl hasCategoryAccess=0}
