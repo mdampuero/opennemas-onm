@@ -9,6 +9,7 @@
             <th class="center" style="width:130px;">Fecha</th>
             <th class="center" style="width:10px;">Home</th>
             <th class="center" style="width:10px;">{t}Available{/t}</th>
+            <th class="center" style="width:20px;">{t}Favorite{/t}</th>
             <th class="center" style="width:90px;">{t}Actions{/t}</th>
         </tr>
     </thead>
@@ -62,6 +63,11 @@
                     </a>
                 {/if}
             {/acl}
+            </td>
+            <td class="center">
+                <a href="#" class="favourite_off" title="{t}NoFavorite{/t}">
+                    &nbsp;
+                </a>
             </td>
             <td class="center">
                 <div class="btn-group">
@@ -134,6 +140,11 @@
             </a>
         {/if}
         {/acl}
+        </td>
+        <td class="center">
+            <a href="#" class="favourite_off" title="{t}NoFavorite{/t}">
+                &nbsp;
+            </a>
         </td>
         <td class="center">
             <div class="btn-group">
@@ -223,6 +234,19 @@
                 </a>
             {/if}
             {/acl}
+        </td>
+        <td class="center">
+        {acl isAllowed="OPINION_ADMIN"}
+            {if $opinion->favorite == 1 && $opinion->type_opinion == 0}
+            <a href="{url name=admin_opinion_togglefavorite id=$opinion->id status=0  type=$type page=$page}" class="favourite_on" title="{t}Favorite{/t}">
+                &nbsp;
+            </a>
+            {elseif $opinion->type_opinion == 0}
+            <a href="{url name=admin_opinion_togglefavorite id=$opinion->id status=1  type=$type page=$page}" class="favourite_off" title="{t}NoFavorite{/t}">
+                &nbsp;
+            </a>
+            {/if}
+        {/acl}
         </td>
         <td class="center">
             <div class="btn-group">
