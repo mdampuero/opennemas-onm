@@ -980,7 +980,7 @@ class ArticlesController extends Controller
 
         // Fetch all article properties and generate a new object
         foreach ($articleContents as $key => $value) {
-            if ( isset($value['name']) && !empty($value['name'])) {
+            if (isset($value['name']) && !empty($value['name'])) {
                 $article->$value['name'] = $value['value'];
             }
         }
@@ -998,9 +998,6 @@ class ArticlesController extends Controller
         $category_name = $ccm->get_name($article->category);
         $actual_category_title = $ccm->get_title($category_name);
 
-        // Advertisements for single article NO CACHE
-        require_once SITE_PATH.'controllers/article_advertisement.php';
-
         // Fetch media associated to the article
         if (isset($article->img2)
             && ($article->img2 != 0)
@@ -1014,16 +1011,6 @@ class ArticlesController extends Controller
         ) {
             $videoInt = new \Video($article->fk_video2);
             $this->view->assign('videoInt', $videoInt);
-        } else {
-            $video = $cm->find_by_category_name(
-                'Video',
-                $category_name,
-                'contents.content_status=1',
-                'ORDER BY created DESC LIMIT 0 , 1'
-            );
-            if (isset($video[0])) {
-                $this->view->assign('videoInt', $video[0]);
-            }
         }
 
         // Fetch related contents to the inner article

@@ -398,7 +398,7 @@ div.utilities-conf input[type="text"]{
   Global navigation bar
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 .global-nav{
-  background: #464646;
+  background: #464646 !important;
   position: fixed;
   top: 0;
   left: 0;
@@ -407,38 +407,29 @@ div.utilities-conf input[type="text"]{
   z-index:99;
   max-height:38px;
   background:#232323;
-  -webkit-box-shadow:0 1px 5px rgba(0, 0, 0, 0.3);
-  box-shadow:0 1px 5px rgba(0, 0, 0, 0.3);}
 }
-
-  .global-nav .pull-right, .global-nav .pull-left { display:inline-block; }
-  .global-nav .pull-right { float:right; }
-  .global-nav .pull-left  { float:left; }
-
-  .global-nav div.info-left { float:right; display:inline-block; }
-  .global-nav .logoonm, .global-nav > nav { float:left; display:inline-block; }
-  .global-nav .logoonm:hover, .global-nav .logoonm:active { text-decoration:none; outline: none; }
+  .global-nav .navbar-inner {
+    border-radius:0 !important;
+    padding-left:10px;
+    padding-right:10px;
+    min-height:36px;
+    border:none !important;
+  }
 
   .global-nav a, .global-nav{ color:#ddd; white-space:nowrap; }
-  .global-nav .logoonm { width:140px; margin:0; padding:0; height:35px;}
-    .global-nav .logoonm a{ color: White; height:35px; vertical-align:center;}
-    .global-nav .logoonm div { display:block; float:left; }
-    .global-nav .logoonm a#logo-onm { display:block !important; text-indent:-9999px; width:132px; height:38px; background-image:url(../images/logo-opennemas-small.png); background-position:center center; background-repeat: no-repeat;}
-    .global-nav .logoonm img{ vertical-align:middle; outline:none; padding-top:5px }
-    .global-nav .logoonm div.site-name{ padding-top:10px; }
-    .global-nav .logoonm > a { text-indent:-9999px; }
-
-  .global-nav .brand {
-    -moz-transition: all 0.2s linear 0s;
-    color: #000000;
-    float: right;
-    font-weight: bold;
-    margin-left: 20px;
-    padding-left: 0;
-    padding-right: 0;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.1), 0 0 30px rgba(255, 255, 255, 0.125);
-  }
-.global-nav.manager {
+  .global-nav .logoonm {
+    width:140px;
+    margin:0; padding:0;
+    display: block !important;
+    text-indent: -9999px;
+    width: 117px;
+    height: 38px;
+    background-image: url(../images/logo-opennemas-small.png);
+    background-position: -9px center;
+    background-repeat: no-repeat;
+}
+.global-nav.manager { border:0 none !important; background: none !important}
+.global-nav.manager .navbar-inner {
     background: #049CDB !important;
     background-color: #049CDB !important;
     background-repeat: repeat-x !important;
@@ -450,6 +441,7 @@ div.utilities-conf input[type="text"]{
     background-image: -o-linear-gradient(#049CDB, #0064CD) !important;
     background-image: linear-gradient(#049CDB, #0064CD) !important;
 }
+
 .global-nav.manager li a, .global-nav.manager li:hover a { color:White !important; }
 
 .global-nav input{background-color:#444;background-color:rgba(255, 255, 255, 0.3);font-weight:13px;line-height:1;padding:4px 9px;color:#ffffff;color:rgba(255, 255, 255, 0.75);border:1px solid #111;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;-webkit-box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.1),0 1px 0px rgba(255, 255, 255, 0.25);-moz-box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.1),0 1px 0px rgba(255, 255, 255, 0.25);box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.1),0 1px 0px rgba(255, 255, 255, 0.25);-webkit-transition:none;-moz-transition:none;-ms-transition:none;-o-transition:none;transition:none;}
@@ -458,95 +450,95 @@ div.utilities-conf input[type="text"]{
 .global-nav input:hover{background-color:#bfbfbf;background-color:rgba(255, 255, 255, 0.5);color:#ffffff;}
 .global-nav input:focus,.topbar input.focused{outline:0;background-color:#ffffff;color:#404040;text-shadow:0 1px 0 #ffffff;border: 1px solid #111111;padding:4px 9px;-webkit-box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.1),0 1px 0px rgba(255, 255, 255, 0.25);-moz-box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.1),0 1px 0px rgba(255, 255, 255, 0.25);box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.1),0 1px 0px rgba(255, 255, 255, 0.25);}
 
-.global-nav, .global-nav .fill {
-    background-color: #222222;
+.global-nav .navbar-inner, .global-nav .navbar-inner .fill {
+    background: #222222;
     background-repeat: repeat-x;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), 0 -1px 0 rgba(0, 0, 0, 0.1) inset;
 }
 
-
 /* -------------------------------------------------------------
   Global user tools inside Global nav
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-.global-user-tools { margin-right:5px;}
-.global-user-tools *{ vertical-align:middle; }
-.global-user-tools > *{ display:inline-block; }
-
-.global-user-tools > div { padding:0 3px; background: url(../images/sprite-divider-menu.png) top left no-repeat; height:38px; vertical-align:middle;}
-.global-user-tools > div:first-child { background:none; }
-
-.global-user-tools > div:hover { background-color: #222222; box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.3) inset; }
-.global-user-tools div.nofillonhover:hover { background:none; box-shadow:none !important; }
-
-.global-user-tools .global-search .string-search {
+.global-search .string-search {
   background:url(../images/global-search-box.png) 5px 3px no-repeat; padding-left:25px; width:110px; border-radius:13px; line-height:1.25em;
   -webkit-transition:all .2s ease-in-out;-moz-transition:all .2s ease-in-out;transition:all .2s ease-in-out;
-  display:block; margin-top:5px; background-color:#444;
+  display:block; margin-top:0px; background-color:#444;
 }
-.global-user-tools .global-search .string-search:focus { background:url(../images/global-search-box-blur.png) 5px 3px no-repeat; padding-left:25px; width:250px; background-color:#ffffff; }
+.global-search .string-search:focus { background:url(../images/global-search-box-blur.png) 5px 3px no-repeat; padding-left:25px; background-color:#ffffff; }
 
-.global-user-tools .usermenu { position:relative; }
-.global-user-tools .usermenu:hover > div { display:block !important; margin:0; }
-.global-user-tools .usermenu > div {
-  margin: 0; margin-left:3px; padding:0; display: none; position: absolute; top: 99%; right: 0px;
-  background-color: #222; border-radius: 0 0 5px 5px; cursor:default;
-  box-shadow: 0 0px 5px rgba(0, 0, 0, 0.9) inset, 0 1px 2px rgba(0, 0, 0, 0.2);
+@media (min-width:1060px) {
+  .global-search .string-search:focus {
+    width:250px;
+  }
 }
-  .global-user-tools .usermenu a.menu { display:block; background: url(../images/topbar-admin-usermenu.png) 5px 10px no-repeat !important; width:20px; height:20px; padding: 9px 10px !important; margin:0px; }
-  .global-user-tools .usermenu:hover a.menu { text-indent:-9999px; background: url(../images/topbar-admin-usermenu.png) 5px -20px no-repeat !important; }
-    .global-user-tools .usermenu span.icon:hover { text-decoration:none; }
-    .global-user-tools .usermenu span.icon:after{
-      position:absolute;
-      top:48%;
-      right:5px;
-      display: inline-block;
-      content: "&darr;";
-      text-indent: -99999px;
-      vertical-align: top;
-      border-left: 4px solid transparent;
-      border-right: 4px solid transparent;
-      border-top: 4px solid #fff;
-      opacity: 0.5; filter: alpha(opacity=50); -khtml-opacity: 0.5; -moz-opacity: 0.5;
-    }
-.global-user-tools .usermenu li a:hover { text-decoration:underline !important; }
-.global-user-tools .usermenu .avatar { float:left; box-shadow: 0 0px 3px rgba(0, 0, 0, 0.6); padding:1px; width:50px; height:50px; position:absolute; top:10px; left:20px; }
-.global-user-tools .usermenu .user-info { padding-left:70px; margin:10px 25px 10px 20px; }
-  .global-user-tools .usermenu .user-info ul { width:100%; margin:0; padding:0; }
-    .global-user-tools .usermenu .user-info li { display:block !important; clear:both; width:100%; }
-      .global-user-tools  .usermenu .complete-name { color: White; font-size:1.2em; font-weight:bold; }
-      .global-user-tools  .usermenu .login-name { font-size:.95em; color:#999; margin-bottom:10px; }
-      .global-user-tools  .usermenu .links { margin-bottom:15px; }
-        .global-user-tools .usermenu .links li { margin:2px 0; }
-          .global-user-tools .usermenu .logout { padding:5px 0 4px 0; display:block; }
 
-.global-user-tools .notification-messages { padding:0 5px;}
-.global-user-tools  .notification-messages .comments-available {
-  background: #4a9cdd; /* for non-css3 browsers */
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#4a9cdd', endColorstr='#1d68a7'); /* for IE */
-  background: -webkit-gradient(linear, left top, left bottom, from(#4a9cdd), to(#1d68a7)); /* for webkit browsers */
-  background: -moz-linear-gradient(top,  #4a9cdd,  #1d68a7); /* for firefox 3.6+ */
-  border-radius:5px;
-  /*padding:0 !important;*/
-  line-height:1em;
-  display:inline-block;
-  border:1px solid #111111;
+.usermenu .usericon { background: url(../images/topbar-admin-usermenu.png) 0px -20px no-repeat !important; width:20px; height:20px; padding: 9px 10px !important; margin:0px; }
+.usermenu .links li a{ background:none; color:White; padding:3px 10px; }
+@media (max-width:891px) {
+  .wrapper-content { width:95%;}
+  .usermenu .avatar { float:left; box-shadow: 0 0px 3px rgba(0, 0, 0, 0.6); padding:1px; width:50px; height:50px; }
+  .usermenu .user-info {
+    padding-left:70px;
+  }
+  .usermenu .links { margin-bottom:15px; }
+    .usermenu a, .comments-available a{ color:White; }
+      .usermenu .logout { padding:5px 0 4px 0; display:block; }
+  .navbar-inverse .nav-collapse .nav > li > a, .navbar-inverse .nav-collapse .dropdown-menu a { color:white }
+}
+@media (min-width:900px) {
+  .usermenu .avatar { position:absolute; top:10px; left:20px; width:50px; height:50px; }
+  .usermenu li a:hover { text-decoration:underline !important; }
+  .usermenu .dropdown-menu {
+    background: #222;
+    border-radius:0 0 3px 3px;
+    margin-top:0px;
+    box-shadow: 0 0px 5px rgba(0, 0, 0, 0.9) inset, 0 1px 2px rgba(0, 0, 0, 0.2);
+  }
+  .usermenu .dropdown-menu:after,
+  .usermenu .dropdown-menu:before { display:none; }
+  .usermenu .user-info { padding-left:70px; margin:5px 10px 5px 10px; }
+    .usermenu .user-info ul { width:100%; margin:0; padding:0; }
+      .usermenu .user-info li { display:block !important; clear:both; width:100%; }
+         .usermenu .complete-name { color: White; font-size:1.2em; font-weight:bold; }
+         .usermenu .login-name { font-size:.95em; color:#999; margin-bottom:0px; }
+  .longtext {
+    display: none;
+  }
+}
+
+.navbar .btn, .navbar .btn-group {
+  margin-top: 8px;
+}
+.global-nav .notification-messages { padding:0 5px;}
+.global-nav  .notification-messages .comments-available {
+    background: #4a9cdd; /* for non-css3 browsers */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#4a9cdd', endColorstr='#1d68a7'); /* for IE */
+    background: -webkit-gradient(linear, left top, left bottom, from(#4a9cdd), to(#1d68a7)); /* for webkit browsers */
+    background: -moz-linear-gradient(top,  #4a9cdd,  #1d68a7); /* for firefox 3.6+ */
+    border-radius:5px;
+    /*padding:0 !important;*/
+    line-height:1em;
+    display:inline-block;
+    border:1px solid #111111;
     box-shadow: 0 1px 0 rgba(255, 255, 255, 0.15) inset;
     color: White;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3) !important;
     outline:none;
     margin-top:5px;
-    display:block
+    display:block;
+    padding:5px 8px;
+    color:White
 }
 
-.global-user-tools .notification-messages .comments-available:hover {
+.global-nav .notification-messages .comments-available:hover {
   background: #5babe4; /* for non-css3 browsers */
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#5babe4', endColorstr='#2578b4'); /* for IE */
   background: -webkit-gradient(linear, left top, left bottom, from(#5babe4), to(#2578b4)); /* for webkit browsers */
   background: -moz-linear-gradient(top,  #5babe4,  #2578b4); /* for firefox 3.6+ */
 }
-.global-user-tools .notification-messages .comments-available a, .global-user-tools .comments-available a:hover { text-decoration:none; }
-.global-user-tools .notification-messages .comments-available span.icon { margin: 5px 8px; display:block; padding: 2px 0px 2px 20px; background: url(../images/messaging_system/new-message-icon.png) top left no-repeat; vertical-align:middle; }
-.global-user-tools .notification-messages .comments-available:hover span.icon { background-position:bottom left; }
+.global-nav .notification-messages .comments-available a, .comments-available a:hover { text-decoration:none;  }
+.global-nav .notification-messages .comments-available span.icon { margin: 0; display:block; padding: 2px 0px 2px 20px; background: url(../images/messaging_system/new-message-icon.png) top left no-repeat; vertical-align:middle; }
+/*.global-nav .notification-messages .comments-available:hover span.icon { background-position:bottom left; }*/
 
 /* -------------------------------------------------------------
   New top action bar
@@ -587,42 +579,11 @@ div.utilities-conf input[type="text"]{
       text-shadow: 1px 1px 0px white;
     }
 
-/* =============================================================================
-   logoonm rules
-   ========================================================================== */
-.logoonm {
-  position:relative;
-}
-.logoonm:hover ul {
-    display:block;
-}
-.logoonm ul {
-  position:absolute;
-  top:100%;
-  left:0px;
-  display:none;
-  margin:0;
-  padding:0;
-  background-color: #1d1d1d; box-shadow: 0 0px 5px rgba(0, 0, 0, 0.9) inset, 0 1px 2px rgba(0, 0, 0, 0.6);
-  border-radius:0 0 5px 5px;
-  min-width:100%
-}
-.logoonm ul li {
-  padding:4px 10px 4px 20px;
-}
-.logoonm ul li:last-child {
-
-}
-.logoonm ul a:hover {
-  color:White; background-color: rgba(255, 255, 255, 0.1);
-  display:block;
-}
-
 /* -------------------------------------------------------------
   Main admin menu   //// Root = Horizontal, Secondary = Vertical
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 /* Global menu properties*/
-ul#menu { margin: 0; padding: 0; list-style: none; display:block; height:100% }
+ul#menu { margin: 0; padding: 0; list-style: none; display:block; height:100%; z-index:2; }
 ul#menu a { display: block; color: #CCCCCC; white-space:nowrap; vertical-align:middle; text-decoration: none; }
   ul#menu li:hover > a, ul#menu a:hover,
   ul#menu li:focus > a, ul#menu a:focus { color:White; background-color: rgba(255, 255, 255, 0.1); }
@@ -2038,9 +1999,21 @@ progress {
     color:#888;
   }
 
+
+/* =============================================================================
+   Support button
+   ========================================================================== */
+.support-button {
+  font-size:.9em;
+  margin-right:4px;
+}
+.support-button:hover {
+  color:White;
+
 select#category option {
    color:#333;
 }
 select#category option.unavailable {
   color:#777;
 }
+ 
