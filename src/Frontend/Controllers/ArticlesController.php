@@ -115,16 +115,6 @@ class ArticlesController extends Controller
                 if (isset($article->fk_video2) && ($article->fk_video2 > 0)) {
                     $videoInt = new \Video($article->fk_video2);
                     $this->view->assign('videoInt', $videoInt);
-                } else {
-                    $video =  $cm->find_by_category_name(
-                        'Video',
-                        $actualCategory,
-                        'contents.content_status=1',
-                        'ORDER BY created DESC LIMIT 0 , 1'
-                    );
-                    if (isset($video[0])) {
-                        $this->view->assign('videoInt', $video[0]);
-                    }
                 }
 
                 // Related contents code ---------------------------------------
