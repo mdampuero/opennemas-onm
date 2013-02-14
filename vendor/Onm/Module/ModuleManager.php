@@ -18,7 +18,6 @@ namespace Onm\Module;
  */
 class ModuleManager
 {
-
     /**
      * Stores the activatedModules over all instances of ModuleManager
      *
@@ -117,6 +116,7 @@ class ModuleManager
                 'TRASH_MANAGER',
                 'USER_GROUP_MANAGER',
                 'USER_MANAGER',
+                'USERVOICE_SUPPORT',
                 'VIDEO_MANAGER',
                 'WIDGET_MANAGER',
                 'LOG_SQL',
@@ -219,4 +219,3 @@ class ModuleManager
         return in_array($moduleName, self::getAvailableModules());
     }
 }
-

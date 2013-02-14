@@ -1,0 +1,28 @@
+parameters:
+    environment:       development # production
+    database_params:
+        database_replication: false
+        connections:
+            -
+                database_driver:   mysqli
+                database_host:     localhost
+                database_port:     3306
+                database_name:     onm-instances
+                database_user:     root
+                database_password: 1234
+                # slave:            true
+
+    mailer_transport:  mail
+    mailer_host:       localhost
+    mailer_user:       ~
+    mailer_password:   ~
+    mailer_protocol:   ~
+    mailer_port:       ~
+    mailer_no_reply_address: no-reply@postman.opennemas.com
+
+    session_params:
+        save_path:     tmp/instances
+        name: _onm_sess
+
+    logger_file_path: tmp/log/application.log
+    dev_token: 1234

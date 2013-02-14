@@ -22,7 +22,7 @@ class Cron
      *
      * @var array
      **/
-    private $_registeredPlugins;
+    private $registeredPlugins;
     /**
      * Initializes the cron handler
      *
@@ -52,7 +52,7 @@ class Cron
                 class_implements($plugin)
             )
         ) {
-            $this->_registeredPlugins []= $plugin;
+            $this->registeredPlugins []= $plugin;
 
             return true;
         } elseif (is_string($plugin)) {
@@ -81,4 +81,3 @@ class Cron
         return $loaded;
     }
 }
-

@@ -29,8 +29,6 @@ use Onm\Settings as s;
  *
  * @package    Onm
  * @subpackage Log
- * @author     Alexandre Rico <alex@openhost.es>
- * @version    GIT: Id:  Mar Xuñ 28 10:44:51 2011 Alexandre
  */
 class Log extends \Zend_Log
 {

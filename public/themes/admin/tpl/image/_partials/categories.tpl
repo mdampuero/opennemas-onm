@@ -4,7 +4,7 @@
             {t}All{/t}
         </a>
     </li>
-    {acl isAllowed="ADVERTISEMENT_ADMIN"}
+    {acl isAllowed="ADVERTISEMENT_CREATE"}
     <li>
         <a href="{url name=admin_images category=2}" {if $category==2}class="active"{/if}>
             {t}Advertisement{/t}

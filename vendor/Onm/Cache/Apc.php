@@ -91,4 +91,3 @@ class Apc extends AbstractCache
         return apc_delete($id);
     }
 }
-

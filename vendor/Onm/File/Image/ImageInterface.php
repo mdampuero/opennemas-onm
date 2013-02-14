@@ -41,4 +41,3 @@ interface ImageInterface
 
     public function output();
 }
-

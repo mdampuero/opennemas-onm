@@ -835,4 +835,3 @@ class PConecta_Opinion_Newsletter_Item extends Newsletter_Item
     public $author;
     public $type_opinion;
 }
-

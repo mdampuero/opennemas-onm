@@ -20,8 +20,6 @@ class User
     public $sessionexpire    = null;
     public $email            = null;
     public $name             = null;
-    public $firstname        = null;
-    public $lastname         = null;
     public $type             = null;
     public $deposit          = null;
     public $token            = null;
@@ -66,19 +64,17 @@ class User
             throw new \Exception(_('Already exists one user with that information'));
         }
 
-        $sql = "INSERT INTO users (`login`, `password`, `sessionexpire`,
-                                      `email`, `name`, `firstname`,
-                                      `lastname`, `type`, `token`, `authorize`,
-                                      `fk_user_group`)
-                    VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+        $sql =
+            "INSERT INTO users "
+            ."(`login`, `password`, `sessionexpire`, `email`, `name`, "
+            ."`type`, `token`, `authorize`, `fk_user_group`) "
+            ."VALUES (?,?,?,?,?,?,?,?,?)";
         $values = array(
             $data['login'],
             md5($data['password']),
             $data['sessionexpire'],
             $data['email'],
             $data['name'],
-            $data['firstname'],
-            $data['lastname'],
             $data['type'],
             $data['token'],
             $data['authorize'],
@@ -117,8 +113,6 @@ class User
         $this->sessionexpire    = $rs->fields['sessionexpire'];
         $this->email            = $rs->fields['email'];
         $this->name             = $rs->fields['name'];
-        $this->firstname        = $rs->fields['firstname'];
-        $this->lastname         = $rs->fields['lastname'];
         $this->deposit          = $rs->fields['deposit'];
         $this->type             = $rs->fields['type'];
         $this->token            = $rs->fields['token'];
@@ -139,8 +133,7 @@ class User
         if (isset($data['password']) && (strlen($data['password']) > 0)) {
             $sql = "UPDATE users
                     SET `login`=?, `password`= ?, `sessionexpire`=?,
-                        `email`=?, `name`=?, `firstname`=?, `lastname`=?,
-                        `fk_user_group`=?
+                        `email`=?, `name`=?, `fk_user_group`=?
                     WHERE pk_user=?";
 
             $values = array(
@@ -149,8 +142,6 @@ class User
                 $data['sessionexpire'],
                 $data['email'],
                 $data['name'],
-                $data['firstname'],
-                $data['lastname'],
                 $data['id_user_group'],
                 intval($data['id'])
             );
@@ -158,8 +149,7 @@ class User
         } else {
             $sql = "UPDATE users
                     SET `login`=?, `sessionexpire`=?, `email`=?,
-                        `name`=?, `firstname`=?, `lastname`=?,
-                        `fk_user_group`=?
+                        `name`=?, `fk_user_group`=?
                     WHERE pk_user=?";
 
             $values = array(
@@ -167,8 +157,6 @@ class User
                 $data['sessionexpire'],
                 $data['email'],
                 $data['name'],
-                $data['firstname'],
-                $data['lastname'],
                 $data['id_user_group'],
                 intval($data['id'])
             );
@@ -354,26 +342,12 @@ class User
         $result = false;
 
         $result = $this->authDatabase($login, $password);
-        if ( !$result && !preg_match("@\/manager@", $_SERVER["PHP_SELF"]) ) {
-            $result = $this->authDatabase($login, $password, true);
-        }
 
         return $result;
     }
 
     /**
-     * Check email is valid to login
-     *
-     * @param  string  $email
-     * @return boolean
-     */
-    public function isValidEmail($email)
-    {
-        return preg_match('/.+@.+\..+/', $email);
-    }
-
-    /**
-     * Try authenticate with database
+     * Aauthenticate by using the database
      *
      * @param  string  $login
      * @param  string  $password
@@ -415,28 +389,6 @@ class User
     }
 
     /**
-     * Get a password from a login
-     *
-     * @param  string $login
-     * @return string Return the password of login
-     */
-    public function getPwd($login)
-    {
-        $sql = 'SELECT password FROM users WHERE login=\''.strval($login).'\'';
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        if (!$rs) {
-            \Application::logDatabaseError();
-
-            return false;
-        }
-
-        $this->setValues($rs->fields);
-
-        return $this->password;
-    }
-
-    /**
      * Get user data by email
      *
      * @param  string     $email
@@ -457,6 +409,28 @@ class User
     }
 
     /**
+     * Check if the token for registration is same user token and get user data
+     *
+     * @return user if exists false otherwise
+     **/
+    public function getUserByToken($token)
+    {
+        $sql   = 'SELECT count(*) FROM users WHERE token=?';
+        $rs = $GLOBALS['application']->conn->GetOne($sql, $token);
+
+        if ($rs === false) {
+            return 0;
+        } elseif ($rs != 1) {
+            return 0;
+        }
+
+        $sql2   = 'SELECT * FROM users WHERE token=?';
+        $rs2 = $GLOBALS['application']->conn->Execute($sql2, $token);
+
+        return $rs2->fields;
+    }
+
+    /**
      * Set internal status of this object. If $data is empty don't do anything
      *
      * @param Array $data
@@ -471,8 +445,6 @@ class User
             $this->sessionexpire = $data['sessionexpire'];
             $this->email         = $data['email'];
             $this->name          = $data['name'];
-            $this->firstname     = $data['firstname'];
-            $this->lastname      = $data['lastname'];
             $this->deposit       = array_key_exists('deposit', $data) ? $data['deposit'] : '';
             $this->type          = $data['type'];
             $this->token         = $data['token'];
@@ -480,8 +452,7 @@ class User
             $this->fk_user_group = $data['fk_user_group'];
 
             if (isset($data['ids_category'])) {
-                $this->accesscategories =
-                    $this->setAccessCategories($data['ids_category']);
+                $this->accesscategories = $this->setAccessCategories($data['ids_category']);
             }
         }
     }
@@ -499,17 +470,15 @@ class User
         $this->sessionexpire= null;
         $this->email        = null;
         $this->name         = null;
-        $this->firstname    = null;
-        $this->lastname     = null;
         $this->authorize    = null;
         $this->fk_user_group= null;
         $this->accesscategories = null;
     }
 
-    public function setAccessCategories($IdsCategory)
+    public function setAccessCategories($categoryIds)
     {
-        for ($iIndex=0; $iIndex<count($IdsCategory); $iIndex++) {
-            $contentCategories[] = new ContentCategory($IdsCategory[$iIndex]);
+        for ($iIndex=0; $iIndex < count($categoryIds); $iIndex++) {
+            $contentCategories[] = new ContentCategory($categoryIds[$iIndex]);
         }
 
         return $contentCategories;
@@ -579,41 +548,6 @@ class User
         return $items;
     }
 
-    private function buildFilter($filter)
-    {
-        $newFilter = ' WHERE 1=1 ';
-
-        if (!is_null($filter) && is_string($filter)) {
-            if (preg_match('/^[ ]*where/i', $filter)) {
-                $newFilter .= '  AND ' . $filter;
-            }
-        } elseif (!is_null($filter) && is_array($filter)) {
-            $parts = array();
-
-            if (isset($filter['base']) && !empty($filter['base'])) {
-                $parts[] = $filter['base'];
-            }
-
-            if (isset($filter['login']) && !empty($filter['login'])) {
-                $parts[] = '`login` LIKE "' . $filter['login'] . '%"';
-            }
-
-            if (isset($filter['name']) && !empty($filter['name'])) {
-                $parts[] = 'MATCH(`name`, `firstname`, `lastname`) AGAINST ("' . $filter['name'] . '" IN BOOLEAN MODE)';
-            }
-
-            if (isset($filter['group']) && intval($filter['group'])>0) {
-                $parts[] = '`fk_user_group` = ' . $filter['group'] . '';
-            }
-
-            if (count($parts) > 0) {
-                $newFilter .= ' AND ' . implode(' OR ', $parts);
-            }
-        }
-
-        return $newFilter;
-    }
-
     public function getUserName($id)
     {
         $sql = 'SELECT name, login FROM users WHERE pk_user=?';
@@ -658,7 +592,6 @@ class User
      * @param string/array $meta an array or an string with the user meta name
      *
      * @return array/string an 2-dimensional array or an string with the user option values
-     * @author
      **/
     public function getMeta($meta = array())
     {
@@ -698,7 +631,8 @@ class User
      * Sets an user state to disabled/not authorized
      *
      * @param  type $id
-     * @return type
+     *
+     * @return void
      */
     public function unauthorizeUser($id)
     {
@@ -731,15 +665,15 @@ class User
     /**
      * Checks if an email is already in use by frontend users
      *
-     * @param  email $email
+     * @param  email $email the email address to look for
+     *
      * @return bool if is in use this email
      */
     public function checkIfExistsUserEmail($email)
     {
-        $sql = 'SELECT count(*) AS num '
-            . 'FROM `users` WHERE email = "'.$email.'"';
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $sql = 'SELECT count(*) AS num  FROM `users` WHERE email = ?';
 
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($email));
         if (!$rs) {
             \Application::logDatabaseError();
 
@@ -771,28 +705,6 @@ class User
     }
 
     /**
-     * Check if the token for registration is same user token and get user data
-     *
-     * @return user if exists false otherwise
-     **/
-    public function getUserByToken($token)
-    {
-        $sql   = 'SELECT count(*) FROM users WHERE token=?';
-        $rs = $GLOBALS['application']->conn->GetOne($sql, $token);
-
-        if ($rs === false) {
-            return 0;
-        } elseif ($rs != 1) {
-            return 0;
-        }
-
-        $sql2   = 'SELECT * FROM users WHERE token=?';
-        $rs2 = $GLOBALS['application']->conn->Execute($sql2, $token);
-
-        return $rs2->fields;
-    }
-
-    /**
      * Generate new token and update user with it
      *
      * @return true|false
@@ -813,12 +725,12 @@ class User
     /**
      * Update users password
      *
-     * @return true|false
+     * @return boolean
      **/
     public function updateUserPassword($id, $pass)
     {
-        $sql = "UPDATE users SET `password`= '".$pass."' WHERE pk_user=".intval($id);
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $sql = "UPDATE users SET `password`= '".$pass."' WHERE pk_user=?";
+        $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($id)));
 
         if ($rs === false) {
             \Application::logDatabaseError();
@@ -826,6 +738,43 @@ class User
         }
 
         return true;
+    }
+
+
+
+    private function buildFilter($filter)
+    {
+        $newFilter = ' WHERE 1=1 ';
+
+        if (!is_null($filter) && is_string($filter)) {
+            if (preg_match('/^[ ]*where/i', $filter)) {
+                $newFilter .= '  AND ' . $filter;
+            }
+        } elseif (!is_null($filter) && is_array($filter)) {
+            $parts = array();
+
+            if (isset($filter['base']) && !empty($filter['base'])) {
+                $parts[] = $filter['base'];
+            }
+
+            if (isset($filter['login']) && !empty($filter['login'])) {
+                $parts[] = '`login` LIKE "' . $filter['login'] . '%"';
+            }
+
+            if (isset($filter['name']) && !empty($filter['name'])) {
+                $parts[] = 'MATCH(`name`) AGAINST ("' . $filter['name'] . '" IN BOOLEAN MODE)';
+            }
+
+            if (isset($filter['group']) && intval($filter['group'])>0) {
+                $parts[] = '`fk_user_group` = ' . $filter['group'] . '';
+            }
+
+            if (count($parts) > 0) {
+                $newFilter .= ' AND ' . implode(' OR ', $parts);
+            }
+        }
+
+        return $newFilter;
     }
 }
 

@@ -7,6 +7,7 @@
  * file that was distributed with this source code.
  */
 use Onm\Settings as s;
+
 /**
  * Advertisement class
  *
@@ -646,8 +647,9 @@ class Advertisement extends Content
                 $generics = ' OR fk_content_categories=0';
             }
             // Generate sql with or without category
-            $cm = new ContentManager();
-            if ($category!=0) {
+
+             $cm = new \ContentManager();
+            if ($category !== 0) {
                 $rsBanner = $cm->find(
                     'Advertisement',
                     ' type_advertisement IN ('.$types.') AND available=1 AND
@@ -824,7 +826,7 @@ class Advertisement extends Content
                    'marginwidth="0" marginheight="0" rel="nofollow"></iframe>';
             }
 
-        } elseif( !empty($banner->pk_advertisement) ) {
+        } elseif (!empty($banner->pk_advertisement)) {
 
             // TODO: controlar los banners swf especiales con div por encima
             if (strtolower($photo->type_img)=='swf') {
@@ -1070,4 +1072,3 @@ class Advertisement extends Content
         }
     }
 }
-

@@ -25,10 +25,10 @@ function smarty_insert_intersticial($params, &$smarty)
                 $content     = preg_replace('/[ ][ ]+/', ' ', $content);
                 $timeout     = intval($banner->timeout) * 1000; // convert to ms
                 $adsSettings = s::get('ads_settings');
-                $daysExpire  = 1;
+                $minutesExpire  = 1;
                 if (!empty($adsSettings['lifetime_cookie'] )) {
-                    $daysExpire = $adsSettings['lifetime_cookie'] / 1440; // convert to days
-                    $daysExpire = number_format($daysExpire, 2);
+                    $minutesExpire = $adsSettings['lifetime_cookie']; // convert to days
+                    // $daysExpire = number_format($daysExpire, 2);
                 }
                 $pk_advertisement = date('YmdHis', strtotime($banner->created)).
                                     sprintf('%06d', $banner->pk_advertisement);
@@ -54,7 +54,7 @@ function smarty_insert_intersticial($params, &$smarty)
             publiId: "$pk_advertisement",
             cookieName: "ib_$pk_advertisement-$categoryId",
             content: $content,
-            daysExpire: $daysExpire,
+            daysExpire: $minutesExpire,
             timeout: $timeout
         });
 

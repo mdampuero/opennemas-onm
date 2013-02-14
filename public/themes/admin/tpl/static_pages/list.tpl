@@ -1,9 +1,9 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div class="top-action-bar">
+<div class="top-action-bar clearfix">
 	<div class="wrapper-content">
-		<div class="title"><h2>{t}Static Pages Manager{/t} :: {t}Listing{/t}</h2></div>
+		<div class="title"><h2>{t}Static pages{/t}</h2></div>
 		<ul class="old-button">
 			<li>
 				<a href="{url name=admin_staticpages_create}" title="{t}Create new page{/t}">
@@ -38,7 +38,7 @@
                     <th>{t}URL{/t}</th>
                     <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
                     <th class="center" style="width:20px;">{t}Published{/t}</th>
-                    <th class="center" style="width:100px;">{t}Actions{/t}</th>
+                    <th class="center" style="width:80px;">{t}Actions{/t}</th>
                 {else}
                 {/if}
                 </tr>
@@ -75,7 +75,7 @@
                         {/acl}
                     </td>
 
-                    <td class="center nowrap">
+                    <td class="right nowrap">
                         <div class="btn-group">
                         {acl isAllowed="STATIC_UPDATE"}
                             <a class="btn" href="{url name=admin_staticpages_show id=$pages[k]->id}" title="{t}Modify{/t}">

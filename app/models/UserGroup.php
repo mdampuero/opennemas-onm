@@ -206,4 +206,3 @@ class UserGroup
         $this->name = $data['name'];
     }
 }
-

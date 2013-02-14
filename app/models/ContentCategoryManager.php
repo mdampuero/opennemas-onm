@@ -961,4 +961,3 @@ class ContentCategoryManager
         return null;
     }
 }
-

@@ -15,9 +15,9 @@
         <div class="wrapper-content">
             <div class="title">
                 <h2>
-                    {t}Newsletter Subscriptions{/t} ::
+                    {t}Newsletter{/t} ::
                     {if !is_object($user)}
-                        {t}Creating new subscriptor{/t}
+                        {t}Creating subscriptor{/t}
                     {else}
                         {t 1=$user->name}Editing subscriptor "%1"{/t}
                     {/if}

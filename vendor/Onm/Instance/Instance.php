@@ -186,4 +186,3 @@ class Instance
         define('ITEMS_PAGE', "20"); // TODO: delete from application
     }
 }
-

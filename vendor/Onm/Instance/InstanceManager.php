@@ -80,8 +80,7 @@ class InstanceManager
             return false;
         }
 
-        if (preg_match("@\/manager@", $_SERVER["PHP_SELF"])
-            || preg_match("/^\/manager\/ws\/$/", $_SERVER["PHP_SELF"])) {
+        if (preg_match("@\/manager@", $_SERVER["PHP_SELF"])) {
             global $onmInstancesConnection;
 
             $instance = new Instance();
@@ -156,33 +155,6 @@ class InstanceManager
         $conn->LogSQL();
 
         return $conn;
-    }
-
-    /*
-     * Get a particular instance
-     *
-     */
-    public function findByInternalName($internalName = null)
-    {
-        if (is_null($internalName)) {
-            return false;
-        }
-
-        $sql = "SELECT * FROM instances "
-             ."WHERE internal_name = '".$internalName."'";
-
-        $rs = $this->connection->Execute($sql);
-        if (!$rs) {
-            return false;
-        }
-
-        $instance = new \stdClass();
-        foreach ($rs->fields as $key => $value) {
-            $instance->{$key} = $value;
-        }
-        $instance->settings = unserialize($instance->settings);
-
-        return $instance;
     }
 
     /*
@@ -810,7 +782,6 @@ class InstanceManager
      **/
     public function createDatabaseForInstance($data)
     {
-
         // Gets global database connection and creates the requested database
         global $onmInstancesConnection;
         $conn = \ADONewConnection($onmInstancesConnection['BD_TYPE']);
@@ -820,7 +791,6 @@ class InstanceManager
             $onmInstancesConnection['BD_PASS']
         );
         $sql = "CREATE DATABASE `{$data['settings']['BD_DATABASE']}`";
-
         $rs = $conn->Execute($sql);
 
         //Create new mysql user for this instance and grant usage and privileges
@@ -875,7 +845,6 @@ class InstanceManager
         $im = $this->getInstance();
         $GLOBALS['application']->conn =
             $im->getConnection($data['settings']);
-
 
         if (isset($data['user_name'])
             && isset ($data['user_pass'])

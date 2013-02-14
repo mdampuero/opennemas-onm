@@ -174,9 +174,9 @@ class ContentType
     /*
      * Get the content type object given the id of one content.
      *
-     * @return int pk_content_type.
      * @param  int $id The id of a content
-     *
+
+     * @return int pk_content_type.
      */
     public static function getContentTypeByContentId($id)
     {
@@ -192,4 +192,3 @@ class ContentType
         return $rs;
     }
 }
-

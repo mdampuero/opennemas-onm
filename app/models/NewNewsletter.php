@@ -16,7 +16,6 @@
  */
 class NewNewsletter
 {
-
     /**
      * The title of the newsletter
      *
@@ -216,4 +215,3 @@ class NewNewsletter
         return $this;
     }
 }
-

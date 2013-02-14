@@ -14,62 +14,46 @@
     <title>OpenNeMaS - Administration section</title>
     {/block}
 
-    <link rel="icon" href="{$params.COMMON_ASSET_DIR}images/favicon.png">
+    <link rel="icon" href="{$params.IMAGE_DIR}favicon.png">
     {block name="header-css"}
-        {css_tag href="/bootstrap/bootstrap.css" common="1"}
-        {css_tag href="/style-backend.css" common="1"}
+        {css_tag href="/bootstrap/bootstrap.css" common=1}
+        {css_tag href="/fontawesome/font-awesome.min.css" common=1}
+		{css_tag href="/style-backend.css" common="1"}
         {css_tag href="/style.css"}
-        <!--[if IE]>{css_tag href="/ie.css" common="1"}<![endif]-->
-        {css_tag href="/jquery/jquery-ui.css" media="all" type="text/css" common="1"}
+        <!--[if IE]>{css_tag href="/ie.css"}<![endif]-->
+        {css_tag href="/jquery/jquery-ui.css" media="all" type="text/css" common=1}
     {/block}
 
     {block name="js-library"}
-        {script_tag src="/jquery/jquery.min.js" common="1"}
-        {script_tag src="/libs/bootstrap.js" common="1"}
-        {script_tag src="/libs/jquery.tools.min.js" common="1"}
-        {script_tag src="/jquery-onm/jquery.onmvalidate.js" common="1"}
+        {script_tag src="/jquery/jquery.min.js" common=1}
+        {script_tag src="/libs/bootstrap.js" common=1}
+        {script_tag src="/libs/jquery.tools.min.js" common=1}
+        {script_tag src="/jquery-onm/jquery.onmvalidate.js" common=1}
         {block name="prototype"}{/block}
     {/block}
 
     {block name="header-js"}
-        {script_tag src="/libs/modernizr.min.js" common="1"}
+        {script_tag src="/libs/modernizr.min.js" common=1}
         {block name="js-library"}{/block}
-        {script_tag src="/onm/scripts.js" common="1"}
-        {script_tag src="/tiny_mce/tiny_mce_gzip.js" common="1"}
+        {script_tag src="/onm/scripts.js"}
+        {script_tag src="/tiny_mce/tiny_mce_gzip.js" common=1}
      {/block}
 
 </head>
 <body class="manager">
 
-    <header class="global-nav manager clearfix">
-        <div class="logoonm pull-right">
-            <a  href="{url name=manager_welcome}" id="logo-onm" class="clearfix" title="{t}Go to admin main page{/t}">
-               <img src="{$params.COMMON_ASSET_DIR}images/logos/logo-opennemas-small.png" alt="opennemas" width="132" height="27"/>
-            </a>
-        </div>
-        <div class="global-menu pull-left">
-            {admin_menu file='/Manager/Resources/Menu.php' base=$smarty.const.APP_PATH}
-        </div>
-        <div class="global-user-tools pull-right">
-            <div class="usermenu">
-                <a href="#" class="menu"><span class="icon">&nbsp;</span></a>
-                <div>
-                    <div class="avatar">
-                        {gravatar email=$smarty.session.email image_dir=$params.IMAGE_DIR image=true size="50"}
-                    </div><!-- /.avatar -->
-                    <div class="user-info">
-                        <div class="complete-name">{$smarty.session.realname|ucfirst}</div>
-                        <div class="login-name">{$smarty.session.username}</div>
-                        <ul class="links">
-                            {*
-                            <li><a id="settings" title="{t}Edit my profile{/t}" href="{url name=admin_acl_user_show id=me}">{t}Edit my profile{/t}</a></li>
-                            {if Acl::check('BACKEND_ADMIN') eq true}
-                            <li><a href="#" id="user_activity" title="{t}Active users in backend{/t}">{t}Connected users{/t} ({count_sessions})</a></li>
-                            {/if}
-                            *}
-                            <li><a href="javascript:salir('{t}Do you really want to exit from backend?{/t}','{url name="manager_logout"  csrf=$smarty.session.csrf}');" id="logout" class="logout" title="{t}Logout from control panel{/t}">{t}Log out{/t}</a></li>
-                        </ul><!-- /.links -->
-                    </div><!-- /.user-info -->
+    <header class="clearfix">
+        <div class="navbar navbar-inverse global-nav manager" style="position:fixed">
+            <div class="navbar-inner">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-inverse-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+
+                <a  href="{url name=manager_welcome}" class="brand ir logoonm" title="{t}Go to admin main page{/t}">OpenNemas</a>
+                <div class="nav pull-left" accesskey="m">
+                    {admin_menu file='/Manager/Resources/Menu.php' base=$smarty.const.SRC_PATH}
                 </div>
             </div>
         </div>
@@ -101,7 +85,7 @@
 
     {block name="footer-js"}
         {browser_update}
-        {script_tag src="/onm/footer-functions.js" common="1"}
+        {script_tag src="/onm/footer-functions.js"}
 
         {if isset($smarty.request.action) && ($smarty.request.action == 'new' || $smarty.request.action == 'read')}
         <script type="text/javascript">

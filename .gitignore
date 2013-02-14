@@ -3,12 +3,11 @@ build
 cache.properties
 backups/*
 config/*
-nbproject/
-public/admin/themes/default/compile/*
+#public/admin/themes/default/compile/*
 public/media/
 public/themes/*
-!public/themes/admin/
-!public/themes/manager/
+!public/themes/admin
+!public/themes/manager
 *.sublime-*
 tmp/*
 vendor/autoload.php
@@ -18,6 +17,7 @@ vendor/frandieguez
 vendor/symfony
 vendor/monolog
 vendor/swiftmailer
+vendor/psr
 vendor/luracast
 vendor/bin/restler.php
 app/config/parameters.yml

@@ -22,7 +22,7 @@ var image_uploader ={
         <div class="title"><h2>{t 1=$datos_cat[0]->title}Uploading images to "%1"{/t}</h2></div>
         <ul class="old-button">
             <li>
-                <a href="{$smarty.server.SCRIPT_NAME}/images?category={$category}&amp;action={$smarty.session.desde}">
+                <a href="{url name=admin_images category=$category}">
                     <img src="{$params.IMAGE_DIR}previous.png" alt="{t}Go back{/t}"><br />{t}Go back{/t}
                 </a>
             </li>
@@ -44,16 +44,33 @@ var image_uploader ={
 
     <form id="fileupload" action="{url name=admin_image_create category=$category}" method="POST" enctype="multipart/form-data">
 
-        <div class="fileupload-buttonbar clearfix">
-            <button type="reset" class="onm-button blue cancel right">{t}Cancel upload{/t}</button>
-            <button type="submit" class="onm-button green start right">{t}Start upload{/t}</button>
-            <div class="progressbar fileupload-progressbar fade right"><div style="width:0%;"></div></div>
-            <div class="onm-button blue fileinput-button input-hidden left">
-                {t}Add files...{/t}
-                <input type="file" name="files[]" multiple>
+        <div class="clearfix">
+            <div class="fileupload-buttonbar pull-left">
+                <div class="btn-group">
+                    <div class="btn fileinput-button input-hidden">
+                        <i class="icon-plus-sign"></i>
+                        {t}Add files...{/t}
+                        <input type="file" name="files[]" multiple>
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-success start">{t}Start upload{/t}</button>
+                    <button type="reset" class="btn btn-danger cancel">{t}Cancel upload{/t}</button>
+                </div>
             </div>
-            <button type="button" class="onm-button red delete left">{t}Delete selected{/t}</button>
-            <input type="checkbox" class="toggle left">
+            <div class="pull-left">
+                <div class="progressbar fileupload-progressbar fade">
+                    <div style="width:0%;"></div>
+                </div>
+            </div>
+            <div class="fileupload-buttonbar pull-right">
+                <div class="btn-group">
+                    <a href="#" class="btn">
+                        <input type="checkbox" class="toggle">
+                    </a>
+                    <button type="button" class="btn btn-danger delete">{t}Delete selected{/t}</button>
+                </div>
+            </div>
         </div>
         <div id="dropzone" class="fade well">{t}Drop files here{/t}</div>
         <table class="zebra-striped condensed"><tbody class="files"></tbody></table>
@@ -118,12 +135,12 @@ var image_uploader ={
             {% } else if (o.files.valid && !i) { %}
                 <td class="progress"><div class="progressbar"><div style="width:0%;"></div></div></td>
                 <td colspan=2>
-                    <span class="start">{% if (!o.options.autoUpload) { %}<button class="onm-button green">{/literal}{t}Iniciar{/t}{literal}</button>{% } %}</span>
-                    <span class="cancel">{% if (!i) { %}<button class="onm-button blue">{/literal}{t}Cancel{/t}{literal}</button>{% } %}</span>
+                    <span class="start">{% if (!o.options.autoUpload) { %}<button class="btn btn-success">{/literal}{t}Iniciar{/t}{literal}</button>{% } %}</span>
+                    <span class="cancel">{% if (!i) { %}<button class="btn btn-danger">{/literal}{t}Cancel{/t}{literal}</button>{% } %}</span>
                 </td>
             {% } else { %}
                 <td colspan="3">
-                    <span class="cancel">{% if (!i) { %}<button class="onm-button blue">{/literal}{t}Cancel{/t}{literal}</button>{% } %}</span>
+                    <span class="cancel">{% if (!i) { %}<button class="btn">{/literal}{t}Cancel{/t}{literal}</button>{% } %}</span>
                 </td>
             {% } %}
         </tr>
@@ -149,7 +166,7 @@ var image_uploader ={
             {% } %}
             <td class="delete">
                 <input type="checkbox" name="delete" value="1">
-                <button class="onm-button red" data-type="{%=file.delete_type%}" data-url="{%=file.delete_url%}">{/literal}{t}Delete{/t}{literal}</button>
+                <button class="btn btn-danger" data-type="{%=file.delete_type%}" data-url="{%=file.delete_url%}">{/literal}{t}Delete{/t}{literal}</button>
             </td>
         </tr>
     {% } %}

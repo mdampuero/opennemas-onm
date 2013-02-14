@@ -14,7 +14,6 @@ use Onm\Message  as m;
  */
 class NewsletterManager
 {
-
     /**
      * Performs searches in newsletters
      *
@@ -280,4 +279,3 @@ class NewsletterManager
         json_encode($htmlContent);
     }
 }
-

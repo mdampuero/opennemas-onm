@@ -407,6 +407,16 @@ div.clearfix div.menu-other-categories {
     float:none !important;
     display:inline-block;
 }
+
+div.menu-other-categories select#categoryItem option{
+    font-size: 12px;
+    line-height: 14px;
+    color:#333;
+}
+div.menu-other-categories select#categoryItem option.unavailable{
+    color:#777;
+}
+
 div.menu-categories {
     max-width:70%;
 }

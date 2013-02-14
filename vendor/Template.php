@@ -36,7 +36,8 @@ class Template extends Smarty
 
         // Parent variables
         $this->templateBaseDir = SITE_PATH.DS.'themes'.DS.$theme.DS;
-        $this->template_dir     = realpath($this->templateBaseDir.'tpl').DS;
+        $this->setTemplateDir(realpath($this->templateBaseDir.'tpl').DS);
+        $this->addTemplateDir(SITE_PATH.DS.'themes'.DS.'base'.DS.'tpl');
 
         $cachePath = CACHE_PATH.DS.'smarty'.DS.'config'.DS;
         $cacheFilePath = $cachePath.'cache.conf';
@@ -217,107 +218,3 @@ class Template extends Smarty
         }
     }
 }
-
-class TemplateAdmin extends Template
-{
-    public function __construct($theme, $filters = array())
-    {
-
-        // Call the parent constructor
-        parent::__construct($theme, $filters);
-
-        $this->loadFilter("output", "trimwhitespace");
-
-        // Parent variables
-        $this->templateBaseDir = SITE_PATH.DS.'themes'.DS.$theme.DS;
-
-        foreach (array('cache', 'compile') as $key => $value) {
-            $directory = COMMON_CACHE_PATH.DS.'smarty'.DS.'admin'.DS.$value;
-
-            if (!is_dir($directory)) {
-                mkdir($directory, 0755, true);
-            }
-            $this->{$value."_dir"} = realpath($directory).'/';
-        }
-
-        $this->template_dir	= $this->templateBaseDir.'tpl/';
-        $this->config_dir	= $this->templateBaseDir.'config/';
-        $this->addPluginsDir($this->templateBaseDir.'plugins/');
-        $this->caching	= false;
-
-        // Template variables
-        $baseUrl = SS.'themes'.SS.$theme.SS;
-
-        $this->locale_dir = $baseUrl.'locale/';
-        $this->css_dir    = $baseUrl.'css/';
-        $this->image_dir  = $baseUrl.'images/';
-        $this->js_dir     = $baseUrl.'js/';
-
-        $this->assign(
-            'params',
-            array(
-                'LOCALE_DIR'       =>    $this->locale_dir,
-                'CSS_DIR'	       =>    $this->css_dir,
-                'IMAGE_DIR'        =>    $this->image_dir,
-                'JS_DIR'	       =>    $this->js_dir,
-                'COMMON_ASSET_DIR' => $this->common_asset_dir,
-            )
-        );
-
-        $this->theme = $theme;
-        $this->assign('THEME', $theme);
-
-    }
-}
-
-class TemplateManager extends Template
-{
-
-    public function __construct($theme, $filters = array())
-    {
-
-        // Call the parent constructor
-        parent::__construct($theme, $filters);
-
-        // Parent variables
-        $this->templateBaseDir = SITE_PATH.DS.'themes'.DS.$theme.DS;
-
-        foreach (array('cache', 'compile') as $key => $value) {
-            $directory = COMMON_CACHE_PATH.DS.'smarty'.DS.'manager'.DS.$value;
-
-            if (!file_exists($directory)) {
-                mkdir($directory, 0755, true);
-            }
-            $this->{$value."_dir"} = realpath($directory).'/';
-        }
-
-        $this->template_dir	= $this->templateBaseDir.'tpl/';
-        $this->config_dir	 = $this->templateBaseDir.'config/';
-        $this->addPluginsDir($this->templateBaseDir.'plugins/');
-        $this->caching	     = false;
-        $this->allow_php_tag = true;
-
-        // Template variables
-        $baseUrl = SITE_URL.'themes'.SS.$theme.SS;
-
-        $this->locale_dir = $baseUrl.'locale/';
-        $this->css_dir    = $baseUrl.'css/';
-        $this->image_dir  = $baseUrl.'images/';
-        $this->js_dir     = $baseUrl.'js/';
-
-        $this->assign(
-            'params',
-            array(
-                'LOCALE_DIR'       =>    $this->locale_dir,
-                'CSS_DIR'          =>    $this->css_dir,
-                'IMAGE_DIR'        =>    $this->image_dir,
-                'JS_DIR'           =>    $this->js_dir,
-                'COMMON_ASSET_DIR' => $this->common_asset_dir,
-            )
-        );
-
-        $this->theme = $theme;
-        $this->assign('THEME', $theme);
-    }
-}
-

@@ -39,9 +39,7 @@
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title">
-                <h2>{t}Book manager{/t} :: {if $category eq 'widget'} Widget
-                {elseif $category eq 'all'}{t}ALL{/t}
-                {else}{$datos_cat[0]->title}{/if}</h2>
+                <h2>{t}Books{/t}</h2>
             </div>
 
             <ul class="old-button">
@@ -89,6 +87,9 @@
         <ul class="pills clearfix">
             <li>
                 <a href="{url name=admin_books_widget}" {if $category == 'widget'}class="active"{elseif $ca eq $datos_cat[0]->fk_content_category}{*class="active"*}{/if}>WIDGET HOME</a>
+            </li>
+            <li>
+                <a href="{url name=admin_books}" {if $category == 'all'}class="active"{elseif $ca eq $datos_cat[0]->fk_content_category}{*class="active"*}{/if}>All categories</a>
             </li>
         </ul>
 

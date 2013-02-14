@@ -169,4 +169,3 @@ class Europapress extends ImporterAbstract implements ImporterInterface
         return  $element;
     }
 }
-

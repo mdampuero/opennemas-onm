@@ -2,9 +2,19 @@
 
 {block name="content"}
 <form action="{url name=admin_polls category=$category page=$page}" method="GET" name="formulario" id="formulario" {$formAttrs}>
-    <div class="top-action-bar">
+    <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Polls manager{/t}</h2></div>
+            <div class="title">
+                <h2>{t}Polls{/t} :: </h2>
+                <div class="section-picker">
+                    <div class="title-picker btn"><span class="text">{if $category == 'widget'}{t}WIDGET HOME{/t}{elseif $category == 'all'}{t}All categories{/t}{else}{$datos_cat[0]->title}{/if}</span> <span class="caret"></span></div>
+                    <div class="options">
+                        <h4>{t}Special elements{/t}</h4>
+                        <a href="{url name=admin_polls_widget}" {if $category=='widget'}class="active"{/if}>{t}WIDGET HOME{/t}</a>
+                        {include file="common/drop_down_categories.tpl" home={url name=admin_polls l=1}}
+                    </div>
+                </div>
+            </div>
             <ul class="old-button">
                 {acl isAllowed="POLL_DELETE"}
                 <li>
@@ -25,14 +35,6 @@
                     </button>
                 </li>
                 {/acl}
-                {acl isAllowed="POLL_CREATE"}
-                <li class="separator"></li>
-                <li>
-                    <a href="{url name=admin_poll_create}" title="{t}New poll{/t}">
-                        <img src="{$params.IMAGE_DIR}/poll-new.png" alt="{t}New poll{/t}"><br />{t}New poll{/t}
-                    </a>
-                </li>
-                {/acl}
                 {acl isAllowed="POLL_SETTINGS"}
                 <li class="separator"></li>
                     <li>
@@ -42,6 +44,14 @@
                         </a>
                     </li>
                 {/acl}
+                {acl isAllowed="POLL_CREATE"}
+                <li class="separator"></li>
+                <li>
+                    <a href="{url name=admin_poll_create}" title="{t}New poll{/t}">
+                        <img src="{$params.IMAGE_DIR}/poll-new.png" alt="{t}New poll{/t}"><br />{t}New poll{/t}
+                    </a>
+                </li>
+                {/acl}
             </ul>
         </div>
     </div>
@@ -49,18 +59,6 @@
     <div class="wrapper-content">
 
         {render_messages}
-
-        <ul class="pills" style="margin-bottom: 28px;">
-            <li>
-                <a href="{url name=admin_polls_widget}" {if $category=='widget'}class="active"{/if}>{t}Widget Home{/t}</a>
-            </li>
-            <li>
-                <a href="{url name=admin_polls category=all}" {if $category==='all'}class="active"{/if} >{t}All categories{/t}</a>
-            </li>
-            {include file="menu_categories.tpl" home="{url name=admin_polls l=1}"}
-
-        </ul>
-
 
         <table class="table table-hover table-condensed">
 
@@ -78,7 +76,7 @@
                         <th style="width:40px;" class="center">{t}Published{/t}</th>
                         <th class="center" style="width:35px;">{t}Favorite{/t}</th>
                         <th style="width:40px;" class="center">{t}Home{/t}</th>
-                        <th style="width:110px;" class="right">{t}Actions{/t}</th>
+                        <th class="center">{t}Actions{/t}</th>
                     {else}
                         <th scope="col" colspan="10">&nbsp;</th>
                     {/if}
@@ -148,7 +146,7 @@
                             <a class="btn"
                                 href="{url name=admin_poll_show id=$poll->id}"
                                 title="Modificar">
-                                <i class="icon-pencil"></i> {t}Edit{/t}
+                                <i class="icon-pencil"></i>
                             </a>
                             {/acl}
                             {acl isAllowed="POLL_DELETE"}

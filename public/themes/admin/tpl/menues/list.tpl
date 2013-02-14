@@ -21,13 +21,13 @@
 <form action="{url name=admin_menus}" method="GET" name="formulario" id="formulario">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Menu manager{/t}</h2></div>
+            <div class="title"><h2>{t}Menus{/t}</h2></div>
               <ul class="old-button">
                   {acl isAllowed="MENU_DELETE"}
                 <li>
-                     <a class="delChecked" data-controls-modal="modal-menu-batchDelete" href="#" title="Eliminar" alt="Eliminar">
-                            <img src="{$params.IMAGE_DIR}trash.png" border="0"  title="Eliminar" alt="Eliminar" ><br />Eliminar
-                        </a>
+                    <a class="delChecked" data-controls-modal="modal-menu-batchDelete" href="#" title="Eliminar" alt="Eliminar">
+                        <img src="{$params.IMAGE_DIR}trash.png" border="0"  title="Eliminar" alt="Eliminar" ><br />Eliminar
+                    </a>
                 </li>
                 {/acl}
 
@@ -55,9 +55,9 @@
                     </th>
                     <th>{t}Title{/t}</th>
                     {if count($menu_positions) > 1}
-                    <th style="width:100px;">{t}Position{/t}</th>
+                    <th class="nowrap center" style="width:100px;">{t}Menu position assigned{/t}</th>
                     {/if}
-                    <th class="right" style="width:100px;">{t}Actions{/t}</th>
+                    <th class="center" style="width:100px;">{t}Actions{/t}</th>
                 </tr>
             </thead>
             <tbody>
@@ -78,8 +78,8 @@
                             {/acl}
                         </td>
                         {if count($menu_positions) > 1}
-                        <td>
-                            {$menu->position}
+                        <td class="left">
+                            {if !empty($menu->position)}{$menu->position}{else}{t}Unasigned{/t}{/if}
                         </td>
                         {/if}
                         <td class="right">
@@ -107,7 +107,7 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="3">&nbsp;</td>
+                    <td colspan="4">&nbsp;</td>
                 </tr>
             </tfoot>
         </table>

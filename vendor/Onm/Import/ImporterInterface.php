@@ -20,4 +20,3 @@ interface ImporterInterface
     public function findAll();
     public function findAllBy($params);
 }
-

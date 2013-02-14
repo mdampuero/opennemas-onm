@@ -3,6 +3,6 @@
         {include file="album/content-provider/album.tpl"}
     {/foreach}
 </div>
-<div class="pagination clearfix">
+<div class="pagination pagination-mini clearfix">
     {$pager->links}
 </div><!-- / -->

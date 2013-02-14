@@ -16,7 +16,6 @@
  **/
 class Content
 {
-
     public $id                  = null;
     public $content_type        = null;
     public $title               = null;
@@ -365,7 +364,10 @@ class Content
 
         $this->read($data['id']);
 
-        if (($data['available'] == 1) && ($data['starttime'] =='0000-00-00 00:00:00')) {
+        if ($data['available'] == 1
+            && array_key_exists('starttime', $data)
+            && ($data['starttime'] =='0000-00-00 00:00:00')
+        ) {
             $data['starttime'] = date("Y-m-d H:i:s");
         }
 
@@ -1301,7 +1303,7 @@ class Content
         Application::logContentEvent(__METHOD__, $this);
     }
 
-    public function set_inhome($status, $lastEditor)
+    public function set_inhome($status, $lastEditor = null)
     {
         $GLOBALS['application']->dispatch('onBeforeSetInhome', $this);
 
@@ -1547,11 +1549,11 @@ class Content
             );
 
             // Deleting home cache files
-            if (isset($this->in_home) && $this->in_home) {
+            // if (isset($this->in_home) && $this->in_home) {
                 $tplManager->delete('home|0');
-                $tplManager->fetch(SITE_URL);
-                $tplManager->delete('home|RSS');
-            }
+            // }
+            $tplManager->delete('home|RSS');
+            $tplManager->delete('last|RSS');
 
             if (isset($this->frontpage)
                 && $this->frontpage
@@ -1621,6 +1623,7 @@ class Content
 
         // Delete all the available Homepage cache files
         $tplManager->delete('home|RSS');
+        $tplManager->delete('last|RSS');
         $tplManager->delete('home|0');
 
         // Generate the cache file again
@@ -1856,7 +1859,6 @@ class Content
             // Can't do because sometimes id is empty,
             // example rss in article.php
         }
-
     }
 
 
@@ -1960,6 +1962,9 @@ class Content
 
                 // Only include content is is in time and available.
                 if ($content->isReadyForPublish()) {
+                    if ($content->fk_content_type == 4) {
+                         $content = $content->get($relatedContentId);
+                    }
                     $content->categoryName = $ccm->get_name($content->category);
                     $this->related_contents []= $content;
                 }
@@ -2093,6 +2098,26 @@ class Content
         return true;
     }
 
+    public function clearProperty($property)
+    {
+        if ($this->id == null) {
+            return false;
+        }
+
+        $sql = "DELETE FROM contentmeta WHERE `fk_content` = '{$this->id}' "
+            ."AND `meta_name` = '{$property}'";
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+
+        if ($rs === false) {
+            Application::logDatabaseError();
+
+            return false;
+        }
+
+
+        return true;
+    }
+
     /**
      * Load content properties given the content id
      *
@@ -2148,7 +2173,4 @@ class Content
 
         return true;
     }
-
-
 }
-

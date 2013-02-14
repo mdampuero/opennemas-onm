@@ -210,4 +210,3 @@ class Settings
         return true;
     }
 }
-

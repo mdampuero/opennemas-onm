@@ -65,6 +65,13 @@ class Theme
     public $menus = array();
 
     /**
+     * undocumented class variable
+     *
+     * @var string
+     **/
+    public $l10ndomain = null;
+
+    /**
      * Default property definitions for a menu
      *
      * @var string
@@ -210,5 +217,58 @@ class Theme
         }
         return $definitions;
     }
-}
 
+    /**
+     * Registers theme translations for allowing to translate templates
+     *
+     * @param string $domain the domain to register
+     * @param string $translationsdir the directory where translations are stored
+     *
+     * @return void
+     **/
+    public function registerTranslationsDomain($domain, $translationsDir)
+    {
+        $this->l10ndomain = $domain;
+        $this->translationsDir = $translationsDir;
+
+        bindtextdomain($domain, $translationsDir);
+    }
+
+    /**
+     * Returns the translation domain for this theme or false if it doesn't have
+     * support for translations
+     *
+     * @return string|false the translation domain
+     **/
+    public function getTranslationDomain()
+    {
+        if ($this->hasL10nSupport()) {
+            return $this->l10ndomain;
+        }
+        return false;
+    }
+
+    /**
+     * Returns the translations folder for this theme or false if it doesn't have
+     * support for translations
+     *
+     * @return string|false the folder where the translations are
+     **/
+    public function getTranslationsDir()
+    {
+        if ($this->hasL10nSupport()) {
+            return $this->translationsDir;
+        }
+        return false;
+    }
+
+    /**
+     * Checks if the theme has l10n support registered
+     *
+     * @return boolean true if this theme has support for translations
+     **/
+    public function hasL10nSupport()
+    {
+        return ($this->l10ndomain !== null);
+    }
+}

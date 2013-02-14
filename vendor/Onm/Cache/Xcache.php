@@ -87,4 +87,3 @@ class XcacheCache extends AbstractCache
         }
     }
 }
-

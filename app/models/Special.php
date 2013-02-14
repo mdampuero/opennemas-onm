@@ -16,19 +16,19 @@
 class Special extends Content
 {
     /**
-     * the special id
+     * The special id
      */
     public $pk_special = null;
      /**
-     * the subtitle for this album
+     * The subtitle for this album
      */
     public $subtitle = null;
      /**
-     * path for get a pdf file
+     * Path for get a pdf file
      */
     public $pdf_path = null;
      /**
-     * the id of the image that is the cover for this album
+     * The id of the image that is the cover for this album
      */
     public $img1 = null;
 
@@ -58,7 +58,6 @@ class Special extends Content
      **/
     public function __get($name)
     {
-
         switch ($name) {
             case 'uri':
                 if (empty($this->category_name)) {
@@ -284,8 +283,16 @@ class Special extends Content
     }
 
     /**
-     *   Set contents into special column
-    **/
+     * Sets a cotnent into a special column
+     *
+     * @param int $id the special id
+     * @param int $pkContent the content id to put into the special column
+     * @param string $position the position where to store the content
+     * @param string $name
+     * @param string $typeContent
+     *
+     * @return boolean true if all went well
+     **/
     public function setContents($id, $pkContent, $position, $name, $typeContent)
     {
         if ($id == null) {
@@ -313,12 +320,17 @@ class Special extends Content
             return false;
         }
 
-         return true;
+        return true;
     }
 
     /**
-     * Drop one content into a special
-    **/
+     * Deletes one content relataion from a given special
+     *
+     * @param int $id the special id
+     * @param int $contentId the content to delete from the special
+     *
+     * @return boolean true if all went well
+     **/
     public function deleteContents($id, $contentId)
     {
         if (is_null($id)) {
@@ -332,10 +344,19 @@ class Special extends Content
         if ($rs === false) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
+
+        return true;
     }
 
+    /**
+     * Deletes the content relations for a given special
+     *
+     * @param int $id the special id
+     *
+     * @return boolean true if all went well
+     **/
     public function deleteAllContents($id)
     {
         if (is_null($id)) {
@@ -348,8 +369,9 @@ class Special extends Content
         if ($rs === false) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
+
+        return true;
     }
 }
-
