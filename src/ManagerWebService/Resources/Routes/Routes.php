@@ -10,13 +10,10 @@
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
-// Load the available route collection
-$routes = new RouteCollection();
-
 $routes->add(
     'managerws_root',
     new Route(
-        '/{url}',
+        '/managerws/{url}',
         array(
             '_controller' => 'ManagerWebService:Controllers:WebServiceController:default',
             'url' => 'default'

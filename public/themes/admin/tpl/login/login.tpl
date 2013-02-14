@@ -72,7 +72,7 @@
         {script_tag src="/jquery/jquery.min.js" common=1}
         {script_tag src="/libs/bootstrap.js" common=1}
         {script_tag src="/libs/modernizr.min.js" common=1}
-        {script_tag src="/admin.js"}
+        {script_tag src="/admin.js" common=1}
         <script type="text/javascript">
         jQuery(document).ready(function($) {
             BackendAuthentication.init()

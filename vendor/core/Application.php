@@ -46,9 +46,6 @@ class Application
             // Setting up Logger
             self::initLogger();
 
-            // Setting up Gettext
-            self::initL10nSystem();
-
             self::initTimeZone();
         }
 

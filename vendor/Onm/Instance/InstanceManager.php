@@ -80,7 +80,7 @@ class InstanceManager
             return false;
         }
 
-        if (preg_match("@\/manager@", $_SERVER["PHP_SELF"])) {
+        if (preg_match("@\/manager@", $_SERVER["REQUEST_URI"])) {
             global $onmInstancesConnection;
 
             $instance = new Instance();

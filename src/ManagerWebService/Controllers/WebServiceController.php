@@ -38,6 +38,13 @@ class WebServiceController extends Controller
     {
         require_once SITE_VENDOR_PATH.'luracast/restler/vendor/restler.php';
 
+        // Change the request uri to trick Restler
+        $_SERVER['REQUEST_URI'] = str_replace('/managerws', '', $_SERVER['REQUEST_URI']);
+
+        if ($_SERVER['REQUEST_URI'] == '') {
+            $_SERVER['REQUEST_URI'] = '/';
+        }
+
         \Luracast\Restler\Defaults::$cacheDirectory = CACHE_PATH.DS."managerws".DS;
         $production = ($this->container->getParameter("environment")=="production")?true:false;
         $r = new \Luracast\Restler\Restler($production);

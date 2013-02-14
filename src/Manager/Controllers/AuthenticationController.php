@@ -44,7 +44,7 @@ class AuthenticationController extends Controller
         $token = md5(uniqid(mt_rand(), true));
 
         $_SESSION['csrf'] = $token;
-        $languages        = \Application::getAvailableLanguages();
+        $languages        = $this->container->getParameter('available_languages');
         $currentLanguage  = \Application::$language;
 
         return $this->render(
@@ -104,7 +104,7 @@ class AuthenticationController extends Controller
                     );
 
                     $forwardTo = $request->request->filter('forward_to', null, FILTER_SANITIZE_STRING);
-                    
+
                     return $this->redirect($forwardTo?:$this->generateUrl('manager_welcome'));
                 }
 

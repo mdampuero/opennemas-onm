@@ -19,7 +19,6 @@ namespace Onm\Rest\Manager;
 class Instances extends \Onm\Rest\RestBase
 {
     public $restler;
-    private $mailer;
 
     /**
      * @url POST create
@@ -111,13 +110,6 @@ class Instances extends \Onm\Rest\RestBase
 
     private function sendMails($data, $companyMail, $domain, $language)
     {
-        require_once SITE_VENDOR_PATH.'/swiftmailer/swiftmailer/lib/swift_required.php';
-
-        // $transport = \Swift_MailTransport::newInstance();
-        $transport = \Swift_SmtpTransport::newInstance('smtp.gmail.com', 587, "tls")
-            ->setUsername('toni@openhost.es')
-            ->setPassword('_b4D3l2F1_');
-        $this->mailer = \Swift_Mailer::newInstance($transport);
         $this->sendMailToUser($data, $companyMail, $domain);
         $this->sendMailToCompany($data, $companyMail, $domain);
     }
@@ -142,7 +134,9 @@ class Instances extends \Onm\Rest\RestBase
         $message->setBody($body);
         $message->setFrom($companyMail, "no-reply");
 
-        $this->mailer->send($message);
+        // Send the email
+        $mailer = $this->container->get('mailer');
+        $mailer->send($message);
     }
 
     private function sendMailToCompany($data, $companyMail, $domain)
@@ -167,7 +161,8 @@ class Instances extends \Onm\Rest\RestBase
         $message->setFrom($companyMail, "no-reply");
 
         // Send the email
-        $this->mailer->send($message);
+        $mailer = $this->container->get('mailer');
+        $mailer->send($message);
     }
 
     /**

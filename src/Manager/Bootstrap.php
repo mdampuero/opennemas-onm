@@ -58,14 +58,14 @@ class Bootstrap extends ModuleBootstrap
             $session->start();
 
             if (!isset($_SESSION['userid'])
-                && !preg_match('@^/login@', $request->getPathInfo())
+                && !preg_match('@^/manager/login@', $request->getPathInfo())
             ) {
                 $url = $request->getPathInfo();
 
                 if (!empty($url)) {
                     $redirectTo = urlencode($request->getUri());
                 }
-                $location = $request->getBaseUrl() .'/login/?forward_to='.$redirectTo;
+                $location = $request->getBaseUrl() .'/manager/login/?forward_to='.$redirectTo;
 
                 $response = new RedirectResponse($location, 301);
                 $response->send();
@@ -98,7 +98,7 @@ class Bootstrap extends ModuleBootstrap
         /* Set internal character encoding to UTF-8 */
         mb_internal_encoding("UTF-8");
 
-        $availableLanguages = \Application::getAvailableLanguages();
+        $availableLanguages = $this->container->getParameter('available_languages');
         $forceLanguage = filter_input(INPUT_GET, 'language', FILTER_SANITIZE_STRING);
 
         if ($forceLanguage !== null
