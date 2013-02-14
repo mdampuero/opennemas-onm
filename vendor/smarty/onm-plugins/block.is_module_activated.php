@@ -18,27 +18,27 @@
  * @return string Return a HTML code of the message board
  */
 
-function smarty_block_is_module_activated($params, $content, &$smarty, $open) {
-
-    if (!isset($params['name']))
-    {
-        $output = '';
-    }
-
-    $modules = (preg_split('@,@', $params['name']));
-
-    $output = '';
-
-    if (count($modules) > 1) {
-        $returnContent = false;
-        foreach ($modules as $module)
-        {
-            $returnContent = ($returnContent || \Onm\Module\ModuleManager::isActivated($module));
+function smarty_block_is_module_activated($params, $content, &$smarty, &$repeat)
+{
+    if (!$repeat) {
+        if (!isset($params['name'])) {
+            $output = '';
         }
-        $output = ($returnContent) ?  $content : "";
-    } else {
-        $output = (\Onm\Module\ModuleManager::isActivated($params['name'])) ?  $content : "";
-    }
-    return $output;
 
+        $modules = (preg_split('@,@', $params['name']));
+
+        $output = '';
+
+        if (count($modules) > 1) {
+            $returnContent = false;
+            foreach ($modules as $module) {
+                $returnContent = ($returnContent || \Onm\Module\ModuleManager::isActivated($module));
+            }
+            $output = ($returnContent) ?  $content : "";
+        } else {
+            $output = (\Onm\Module\ModuleManager::isActivated($params['name'])) ?  $content : "";
+        }
+        return $output;
+    }
 }
+
