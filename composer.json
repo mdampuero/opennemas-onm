@@ -7,10 +7,10 @@
     "license": "closed source",
     "version": "0.8.3",
     "authors": [
-        {
-            "name": "OpenHost developers",
-            "email": "developers@openhost.es"
-        }
+    {
+        "name": "OpenHost developers",
+        "email": "developers@openhost.es"
+    }
     ],
     "require": {
         "php": ">=5.3.2",
@@ -24,6 +24,7 @@
         "symfony/console"             : "2.1.*",
         "swiftmailer/swiftmailer"     : "4.1.7",
         "monolog/monolog"             : "1.2.*",
-        "frandieguez/panorama-php"    : "1.0.2"
+        "frandieguez/panorama-php"    : "1.0.2",
+        "luracast/restler"            : "3.0.0@dev"
     }
 }
