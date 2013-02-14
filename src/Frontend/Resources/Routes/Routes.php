@@ -1046,12 +1046,6 @@ $frontendRoutes->add(
         )
     )
 );
-/*
-#RewriteRule ^opinion/autor/([0-9]+)/(.*)/([0-9]*)/$
-                controllers/opinion_index.php?alt=pag&category_name=opinion&action=list_op_author&author_slug=$2&author_id=$1&page=$3 [L,NC]
-#RewriteRule ^opinion/autor/([0-9]+)/(.*)$
-                controllers/opinion_index.php?alt=nopag&category_name=opinion&action=list_op_author&author_id=$1&author_slug=$2 [L,NC]
-*/
 
 $frontendRoutes->add(
     'frontend_opinion_author_frontpage',
@@ -1081,16 +1075,6 @@ $frontendRoutes->add(
     )
 );
 
-// RewriteRule ^opinion(|/.+)?/([a-z0-9\-]+)?/(.*)?/([0-9]+).html$
-                 // controllers/opinion_inner.php?opinion_id=$4&category_name=opinion&action=read&t=$1&author_name=$2&opinion_title=$3 [L,NC]
-//RewriteRule ^opinion(|/.+)?/(.*)?/([0-9]+).html$ controllers/opinion_inner.php?opinion_id=$3&category_name=opinion&action=read&t=$1 [L,NC]
-//'opinion'    =>  array( 'opinion/_CATEGORY_/_SLUG_/_DATE__ID_.html'),
-/*
-'opinion_id'    => $opinion['id'],
-    //'date'     => date('YmdHis', strtotime($opinion['created'])), ?¿?¿??¿
-    'author_name'   => $opinion['author_name_slug'],
-    'opinion_title' => $opinion['slug'],
-*/
 $frontendRoutes->add(
     'frontend_opinion_show_with_author_slug',
     new Route(
@@ -1104,6 +1088,24 @@ $frontendRoutes->add(
             'author_name'    => '[a-z0-9\-]+',
             'opinion_title'  => '[a-z0-9\-]+',
             'opinion_id'     => '[a-z0-9\-]+',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_opinion_show_with_author_slug_and_date',
+    new Route(
+        '/opinion/{author_name}/{date}/{opinion_title}/{opinion_id}.{_format}',
+        array(
+            '_controller' => 'Frontend:Controllers:OpinionsController:show',
+            'author_name' => 'author',
+            '_format'     => 'html'
+        ),
+        array(
+            'author_name'   => '[a-z0-9\-]+',
+            'opinion_title' => '[a-z0-9\-]+',
+            'opinion_id'    => '[a-z0-9\-]+',
+            'date'          => '([0-9]{4})-([0-1][0-9])-([0-3][0-9])',
         )
     )
 );
