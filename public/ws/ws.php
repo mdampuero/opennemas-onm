@@ -44,6 +44,4 @@ $r->addAPIClass('Categories');
 $r->addAPIClass('Authors');
 $r->addAPIClass('Frontpages');
 
-$r->addAuthenticationClass('AuthSystem');
-
 $r->handle();
