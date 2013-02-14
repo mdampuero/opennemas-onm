@@ -11,7 +11,7 @@
     <meta name="viewport"  content="width=device-width">
 
     {block name="meta"}
-        <title>{setting name=site_name} - OpenNeMaS administration</title>
+        <title>{setting name=site_name} - {t}OpenNeMaS administration{/t}</title>
     {/block}
 
     <link rel="icon" href="{$params.IMAGE_DIR}favicon.png">
@@ -39,52 +39,68 @@
 
 </head>
 <body>
-    <header class="global-nav clearfix">
-        <div class="logoonm pull-right">
-            <a  href="{url name=admin_welcome}" id="logo-onm" class="brand ir" title="{t}Go to admin main page{/t}">OpenNemas</a>
-            <ul>
-               <li><a href="/">{t}Visit site{/t}</a></li>
-            </ul>
-        </div>
-        <div class="global-menu pull-left">
-            {admin_menu file='/Backend/Resources/Menu.php' base=$smarty.const.SRC_PATH}
-        </div>
-        <div class="global-user-tools pull-right">
-
-            <div class="global-search nofillonhover">
-                <form action="{url name=admin_search}">
-                    <input type="search" name="search_string" placeholder="{t}Search...{/t}" class="string-search">
-                </form>
-            </div>
-
-            {if {count_pending_comments} gt 0}
-            <div class="notification-messages">
-                <a  class="comments-available" title="{t}There are new comments to moderate{/t}"
-                    href="{url name=admin_comments}">
-                    <span class="icon">{count_pending_comments}</span>
+    <header class="clearfix">
+        <div class="navbar navbar-inverse global-nav" style="position:fixed">
+            <div class="navbar-inner">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-inverse-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
                 </a>
-            </div>
-            {/if}
 
-            <div class="usermenu">
-                <a href="#" class="menu"><span class="icon">&nbsp;</span></a>
-    			<div>
-                    <div class="avatar">
-                        {gravatar email=$smarty.session.email image_dir=$params.IMAGE_DIR image=true size="150"}
-                    </div><!-- /.avatar -->
-    				<div class="user-info">
-                        <div class="complete-name">{$smarty.session.realname|ucfirst}</div>
-                        <div class="login-name">{$smarty.session.username}</div>
-                        <ul class="links">
-                            <li><a id="settings" title="{t}Edit my profile{/t}" href="{url name=admin_acl_user_show id=me}">{t}Edit my profile{/t}</a></li>
-                            {if Acl::check('BACKEND_ADMIN') eq true}
-                            {*<li><a href="#" id="user_activity" title="{t}Active users in backend{/t}">{t}Connected users{/t} ({count_sessions})</a></li>*}
-                            {/if}
-                            <li><a href="javascript:salir('{t}Do you really want to exit from backend?{/t}','{url name="admin_logout"  csrf=$smarty.session.csrf}');" id="logout" class="logout" title="{t}Logout from control panel{/t}">{t}Log out{/t}</a></li>
-                        </ul><!-- /.links -->
-                    </div><!-- /.user-info -->
-			    </div>
-    		</div>
+                <a  href="{url name=admin_welcome}" class="brand ir logoonm" title="{t}Go to admin main page{/t}">OpenNemas</a>
+                <div class="nav pull-left" accesskey="m">
+                    {admin_menu file='/Backend/Resources/Menu.php' base=$smarty.const.SRC_PATH}
+                </div>
+                <div class="nav-collapse collapse navbar-inverse-collapse">
+                    <ul class="nav pull-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{t}Help{/t} <b class="caret"></b></a>
+                            <div class="dropdown-menu">
+                                <ul>
+                                    <li>
+                                        <a href="javascript:UserVoice.showPopupWidget();" class="support-button">{t}Contact support{/t}</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <form action="{url name=admin_search}" class="navbar-search global-search nofillonhover pull-right">
+                                <input type="search" name="search_string" placeholder="{t}Search...{/t}" class="string-search" accesskey="s">
+                            </form>
+                        </li>
+                        {if {count_pending_comments} gt 0}
+                        <li class="notification-messages">
+                            <a  class="comments-available" title="{t}There are new comments to moderate{/t}"
+                                href="{url name=admin_comments}">
+                                <span class="icon">{count_pending_comments} <span class="longtext">{t}Pending comments{/t}</span></span>
+
+                            </a>
+                        </li>
+                        {/if}
+                        <li class="dropdown usermenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="usericon"></span> <span class="longtext">{$smarty.session.username}</span> <b class="caret"></b></a>
+                            <div class="dropdown-menu">
+                                <div class="avatar">
+                                    {gravatar email=$smarty.session.email image_dir=$params.IMAGE_DIR image=true size="150"}
+                                </div><!-- /.avatar -->
+                                <div class="user-info">
+                                    <div class="complete-name">{$smarty.session.realname|ucfirst}</div>
+                                    <div class="login-name">{$smarty.session.username}</div>
+                                    <ul class="links">
+                                        <li><a id="settings" title="{t}Edit my profile{/t}" href="{url name=admin_acl_user_show id=me}">{t}Edit my profile{/t}</a></li>
+                                        {if Acl::check('BACKEND_ADMIN') eq true}
+                                        {*<li><a href="#" id="user_activity" title="{t}Active users in backend{/t}">{t}Connected users{/t} ({count_sessions})</a></li>*}
+                                        {/if}
+                                        <li><a href="javascript:salir('{t}Do you really want to exit from backend?{/t}','{url name="admin_logout"  csrf=$smarty.session.csrf}');" id="logout" class="logout" title="{t}Logout from control panel{/t}">{t}Log out{/t}</a></li>
+                                    </ul><!-- /.links -->
+                                </div><!-- /.user-info -->
+                            </div>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
         </div>
     </header>
 
@@ -103,7 +119,7 @@
             <nav class="right">
                 <ul>
                     <li><a href="http://www.openhost.es/opennemas" title="Go to opennemas website">{t}About{/t}</a></li>
-                    <li><a href="#help" title="{t}Help{/t}">{t}Help{/t}</a></li>
+                    <!-- <li><a href="#help" title="{t}Help{/t}">{t}Help{/t}</a></li> -->
                     <li><a href="#privacypolicy" title="{t}Privacy Policy{/t}">{t}Privacy Policy{/t}</a></li>
                     <li><a href="#legal" title="{t}Legal{/t}">{t}Legal{/t}</a></li>
                 </ul>
@@ -119,6 +135,7 @@
         <script type="text/javascript">
         Tinycon.setBubble({count_pending_comments});
         </script>
+        {uservoice_widget}
 	{/block}
 
     {if Acl::check('USER_ADMIN') eq true}

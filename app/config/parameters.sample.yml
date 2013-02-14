@@ -1,4 +1,5 @@
 parameters:
+    environment:       development # production
     database_params:
         database_replication: false
         connections:
@@ -11,26 +12,17 @@ parameters:
                 database_password: 1234
                 # slave:            true
 
-    mailer_transport:  smtp
+    mailer_transport:  mail
     mailer_host:       localhost
     mailer_user:       ~
     mailer_password:   ~
-
-    cache_handler:     Onm\Cache\Apc
-    cache_handler_params:
-        server: localhost
-        port: 11211
-
-    session_handler: ~
-    session_handler_params:
-        save_path:     tmp/instances
-
-    locale:            en
-    secret:            ThisTokenIsNotSoSecretChangeIt
-
-    dispatcher.exceptionhandler: "Framework:Controllers:ErrorController:default"
-    environment:       production
+    mailer_protocol:   ~
+    mailer_port:       ~
+    mailer_no_reply_address: no-reply@postman.opennemas.com
 
     session_params:
         save_path:     tmp/instances
         name: _onm_sess
+
+    logger_file_path: tmp/log/application.log
+    dev_token: 1234
