@@ -566,10 +566,10 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
 
   # Redirections for elidealgallego.com and hibridosyelectricos.com ------------
     #Inner Article
-    RewriteRule ^index\.php/[a-z0-9\-]+/[a-z0-9\-]+/([0-9]+)\-[a-z0-9\-\.]+/?$ /redirect/content?content_type=article&content_id=$1 [L,NC]
-    RewriteRule ^index\.php/[a-z0-9\-]+/[a-z0-9\-]+/[a-z0-9\-]+/([0-9]+)\-[a-z0-9\-\.]+/?$ /redirect/content?content_type=article&content_id=$1 [L,NC]
-    RewriteRule ^index\.php/[a-z0-9\-]+/[a-z0-9\-]+/[a-z0-9\-]+/[a-z0-9\-]+/([0-9]+)\-[a-z0-9\-\.]+/?$ /redirect/content?content_type=article&content_id=$1 [L,NC]
-    RewriteRule ^index\.php/opinion/[a-z0-9\-]+/([0-9]+)\-[a-z]/?$ /redirect/content?content_type=opinion&content_id=$1 [L,NC]
+    RewriteRule ^index\.php/[a-z0-9\-]+/[a-z0-9\-]+/([0-9]+)\-[a-z0-9\-\.]+/?$ /redirect/content?content_type=article&content_id=$1 [R=301,L,NC]
+    RewriteRule ^index\.php/[a-z0-9\-]+/[a-z0-9\-]+/[a-z0-9\-]+/([0-9]+)\-[a-z0-9\-\.]+/?$ /redirect/content?content_type=article&content_id=$1 [R=301,L,NC]
+    RewriteRule ^index\.php/[a-z0-9\-]+/[a-z0-9\-]+/[a-z0-9\-]+/[a-z0-9\-]+/([0-9]+)\-[a-z0-9\-\.]+/?$ /redirect/content?content_type=article&content_id=$1 [R=301,L,NC]
+    RewriteRule ^index\.php/opinion/[a-z0-9\-]+/([0-9]+)\-[a-z]/?$ /redirect/content?content_type=opinion&content_id=$1 [R=301,L,NC]
   #-----------------------------------------------------------------------------
 
   # Secciones de elidealgallego.com --------------------------------------------
@@ -697,25 +697,25 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     #Redirection from old nuevatribuna.es
 
     #Inner Article
-    RewriteRule ^noticia/([0-9]+)($|/$|.+/$|.+html$) /redirect/content?content_type=article&content_id=$1 [L,NC]
+    RewriteRule ^noticia/([0-9]+)($|/$|.+/$|.+html$) /redirect/content?content_type=article&content_id=$1 [R=301,L,NC]
 
     RewriteCond %{QUERY_STRING} &?ref=([^&]+)&?pos=([^&]+) [OR]
     RewriteCond %{QUERY_STRING} &?ref=([^&]+)
-    RewriteRule ^noticia\.asp$ /redirect/content?content_type=article&content_id=%1 [L,NC]
+    RewriteRule ^noticia\.asp$ /redirect/content?content_type=article&content_id=%1 [R=301,L,NC]
 
     RewriteCond %{QUERY_STRING} &?ref=([^&]+)&?pos=([^&]+) [OR]
     RewriteCond %{QUERY_STRING} &?ref=([^&]+)
-    RewriteRule ^noticia\.asp$ /redirect/content?content_type=article&content_id=%1 [L,NC]
+    RewriteRule ^noticia\.asp$ /redirect/content?content_type=article&content_id=%1 [R=301,L,NC]
 
     RewriteCond %{QUERY_STRING} &?id=([^&]+)&?pg=([^&]+) [OR]
     RewriteCond %{QUERY_STRING} &?id=([^&]+)
-    RewriteRule ^foros/mostrar_foro\.asp$ /redirect/content?content_type=article&content_id=%1 [L,NC]
+    RewriteRule ^foros/mostrar_foro\.asp$ /redirect/content?content_type=article&content_id=%1 [R=301,L,NC]
 
     RewriteCond %{QUERY_STRING} &?pg=([^&]+)&?[(pf=)|(s=)]([^&]+)
     RewriteRule ^pda/noticia\.asp$ /mobile/? [R=301,L,NC]
 
     #Inner Opinion
-    RewriteRule ^noticia/([0-9]+)/OPINI.+/($|.+html$) /redirect/content?content_type=article&content_id=$1 [L,NC]
+    RewriteRule ^noticia/([0-9]+)/OPINI.+/($|.+html$) /redirect/content?content_type=article&content_id=$1 [R=301,L,NC]
 
     #Section
     RewriteCond %{QUERY_STRING} ref=58
@@ -723,16 +723,16 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteCond %{QUERY_STRING} ref=54
     RewriteRule ^seccion\.asp$ /estaticas/aviso-legal.html? [R=301,L,NC]
     RewriteCond %{QUERY_STRING} ref=([^&]+)
-    RewriteRule ^seccion\.asp$ /redirect/category?content_type=category&content_id=%1 [L,NC]
+    RewriteRule ^seccion\.asp$ /redirect/category?content_type=category&content_id=%1 [R=301,L,NC]
 
     #SECTIONS: seccion/51/SOCIEDAD/
     RewriteCond %{QUERY_STRING} &?s=([^&]+)
-    RewriteRule ^pda/seccion\.asp$ /redirect/category?content_type=category&content_id=%1 [L,NC]
+    RewriteRule ^pda/seccion\.asp$ /redirect/category?content_type=category&content_id=%1 [R=301,L,NC]
     #TODO:send former pda URL to new mobile URL section
 
     #SECTIONS: seccion/51/SOCIEDAD/
     RewriteCond %{REQUEST_URI} [A-Z]
-    RewriteRule ^seccion/([0-9]+)/(.+)/ /redirect/category?content_type=category&content_id=$1 [L,NC]
+    RewriteRule ^seccion/([0-9]+)/(.+)/ /redirect/category?content_type=category&content_id=$1 [R=301,L,NC]
     #RewriteRule ^seccion/[0-9]+/([a-zA-Z0-9\-]+)/ /seccion/${lc:$1}/ [R=301,L,NC]
 
     #Other issues/topics/modules
@@ -759,6 +759,18 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteRule ^media/files/cantabria/(.*)?$ /media/cronicas/files/cantabria/$1 [R=301,L,NC]
     RewriteRule ^media/files/advertisements/(.*)?$ /media/cronicas/files/advertisements/$1 [R=301,L,NC]
 
+    RewriteRule ^cronicas/?$ /seccion/cronicas/ [R=301,L,NC]
+    RewriteRule ^galicia/?$ /seccion/galicia/ [R=301,L,NC]
+    RewriteRule ^castillaleon/?$ /seccion/castillaleon/ [R=301,L,NC]
+    RewriteRule ^asturias/?$ /seccion/asturias/ [R=301,L,NC]
+    RewriteRule ^madrid/?$ /seccion/madrid/ [R=301,L,NC]
+    RewriteRule ^canarias/?$ /seccion/canarias/ [R=301,L,NC]
+    RewriteRule ^andalucia/?$ /seccion/andalucia/ [R=301,L,NC]
+    RewriteRule ^cantabria/?$ /seccion/cantabria/ [R=301,L,NC]
+    RewriteRule ^baleares/?$ /seccion/baleares/ [R=301,L,NC]
+    RewriteRule ^paisvasco/?$ /seccion/paisvasco/ [R=301,L,NC]
+
+
     RewriteRule ^agenda/?$   http://agenda.cronicasdelaemigracion.com/ [R=301,L,NC]
     RewriteRule ^agenda/(.*)$   http://agenda.cronicasdelaemigracion.com/$1 [R=301,L,NC]
     RewriteRule ^agenda_colectividad/(.*)$   http://agenda.cronicasdelaemigracion.com/$1 [R=301,L,NC]
@@ -772,8 +784,18 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     # Changes 02-2013
     RewriteRule ^hemeroteca/([0-9]+)/([0-9]+)/([0-9]+)  archive/content/$1/$2/$3/ [R=301,L,NC]
     RewriteRule ^hemeroteca/([0-9]+)-([0-9]+)-([0-9]+)/([a-zA-Z0-9\-]+).html  archive/digital/$1/$2/$3/$4.html [R=301,L,NC]
+    RewriteRule ^hemeroteca/([a-zA-Z0-9\-]+)/([0-9]+)-([0-9]+)-([0-9]+).html  archive/digital/$1/$2/$3/$4.html [R=301,L,NC]
+
+    RewriteRule ^opinion/([a-z0-9\-]+)/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/(.*)/([0-9]+).html$  opinion/$1/$5/$6.html [R=301,L,NC]
+    RewriteRule ^album/([a-z0-9\-]+)/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/(.*)/([0-9]+).html$  album/$1/$5/$6.html [R=301,L,NC]
+    RewriteRule ^imprimir/([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-]+)/([0-9]+).html    content/print/$1/$3 [R=301,L,NC]
+
+    RewriteRule ^mobile/opinions/$ mobile/opinion [R=301,L,NC]
+    RewriteRule ^opiniones/$ /opinion/ [R=301,L,NC]
+    RewriteRule ^opinion/([0-9]+)$ /opinion?page=$1 [R=301,L,NC]
 
     RewriteRule ^boletin.html$ newsletter/
+
 
     RewriteCond $1 !\.(php)$ [NC]
     RewriteCond %{REQUEST_FILENAME} !-f
