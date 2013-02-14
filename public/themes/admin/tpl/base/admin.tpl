@@ -54,6 +54,7 @@
                 </div>
                 <div class="nav-collapse collapse navbar-inverse-collapse">
                     <ul class="nav pull-right">
+                        {is_module_activated name="USERVOICE_SUPPORT"}
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">{t}Help{/t} <b class="caret"></b></a>
                             <div class="dropdown-menu">
@@ -64,6 +65,7 @@
                                 </ul>
                             </div>
                         </li>
+                        {/is_module_activated}
                         <li>
                             <form action="{url name=admin_search}" class="navbar-search global-search nofillonhover pull-right">
                                 <input type="search" name="search_string" placeholder="{t}Search...{/t}" class="string-search" accesskey="s">
