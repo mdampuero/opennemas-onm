@@ -33,7 +33,7 @@
                     <option value="#fbd75b">{t}Yellow{/t}</option>
                     <option value="#ffb878">{t}Orange{/t}</option>
                     <option value="#ff887c">{t}Red{/t}</option>
-                    <option value="#dc2127">{t}Bold red{/t}</option>
+                    <option value="#980101">{t}Bold red{/t}</option>
                 </select>
             </div>
         </p>
@@ -60,7 +60,7 @@
             <div class="controls">
                 <label for="font-style" class="control-label">{t}Title font weight{/t}</label>
                 {assign var='availableStyle'  value=','|explode:"Auto,bolder,bold,lighter,Normal"}
-                <select id="font-style" name="font-style">
+                <select id="font-weight" name="font-weight">
                     {html_options values=$availableStyle output=$availableStyle selected=Auto}
                 </select>
             </div>
@@ -68,7 +68,7 @@
         <p>
             <div class="controls">
                 <label for="font-size" class="control-label">{t}Title font size{/t}</label>
-                {assign var='availableSizes'  value=','|explode:"12,14,16,18,20,22,24,26,28,30"}
+                {assign var='availableSizes'  value=','|explode:"12,14,16,18,20,22,24,26,28,30,32,36,40,48,72"}
                 <select id="font-size" name="font-size">
                    <option value="">Auto</option>
                     {html_options values=$availableSizes output=$availableSizes selected=Auto}
@@ -103,7 +103,7 @@
                   <option value="#fbd75b">{t}Yellow{/t}</option>
                   <option value="#ffb878">{t}Orange{/t}</option>
                   <option value="#ff887c">{t}Red{/t}</option>
-                  <option value="#dc2127">{t}Bold red{/t}</option>
+                  <option value="#980101">{t}Bold red{/t}</option>
                 </select>
             </div>
         </p>

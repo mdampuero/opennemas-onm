@@ -371,7 +371,7 @@ jQuery(function($) {
             modal.find('.modal-body #font-style').val(title['font-style']);
         }
         if (title['font-weight'] !== undefined) {
-            modal.find('.modal-body #font-style').val(title['font-weight']);
+            modal.find('.modal-body #font-weight').val(title['font-weight']);
         }
         if (title['color'] !== undefined) {
             modal.find('.modal-body .fontcolor span.simplecolorpicker').css('background-color', title['color']);
@@ -399,6 +399,7 @@ jQuery(function($) {
         var fontFamilyValue = $('#font-family').val();
         var fontSizeValue   = $('#font-size').val();
         var fontStyleValue  = $('#font-style').val();
+        var fontWeightValue  = $('#font-weight').val();
         var fontColorValue  = $('#font-color').val();
         if(fontFamilyValue.length>0 && fontFamilyValue!='Auto') {
             titleValues["font-family"] = fontFamilyValue;
@@ -416,9 +417,9 @@ jQuery(function($) {
             titleValues["color"] = fontColorValue;
             keys[3] = "color";
         }
-        if(fontStyleValue.length>0 && fontStyleValue!='Auto') {
-            titleValues["font-weight"] = fontStyleValue;
-            keys[2] = "font-weight";
+        if(fontWeightValue.length>0 && fontStyleValue!='Auto') {
+            titleValues["font-weight"] = fontWeightValue;
+            keys[4] = "font-weight";
         }
 
         var jsonTitle = JSON.stringify(titleValues, keys);
