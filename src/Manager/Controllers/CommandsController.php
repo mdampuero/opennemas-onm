@@ -31,7 +31,7 @@ class CommandsController extends Controller
      **/
     public function init()
     {
-        $this->view = new \TemplateManager(TEMPLATE_ADMIN);
+        $this->view = new \TemplateManager(TEMPLATE_MANAGER);
     }
 
     /**

@@ -548,7 +548,7 @@ class Restler {
 	protected function getRequestData()
 	{
 		try{
-			$r = file_get_contents('php://input');
+			$r = file_get_contents('php://input');			
 			if(is_null($r))return $_GET;
 			$r =$this->request_format->decode($r);
 			return is_null($r) ? array(): $r;
@@ -1078,6 +1078,7 @@ class DocParser {
 	}
 
 	private function parseLines($lines) {
+		//$desc = array();
 		foreach($lines as $line) {
 			$parsedLine = $this->parseLine($line); //Parse the line
 

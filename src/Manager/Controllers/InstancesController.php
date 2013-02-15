@@ -34,7 +34,7 @@ class InstancesController extends Controller
     {
         global $onmInstancesConnection;
         $this->instanceManager = new im($onmInstancesConnection);
-        $this->view = new \TemplateManager(TEMPLATE_ADMIN);
+        $this->view = new \TemplateManager(TEMPLATE_MANAGER);
     }
 
     /**
@@ -398,12 +398,15 @@ class InstancesController extends Controller
         $id = $request->query->getDigits('id');
 
         if (!empty($id)) {
-            if ($deletion = $this->instanceManager->delete($id)) {
-                m::add(_("Instance deleted successfully."), m::SUCCESS);
-            } else {
+            $delete = $this->instanceManager->delete($id);
+            if (!$delete) {
                 m::add(_("Unable to delete the instance."), m::ERROR);
+                if (is_array($delete) && count($delete) > 0) {
+                    m::add($delete, m::ERROR);
+                }
+            } else {
+                m::add(_("Instance deleted successfully."), m::SUCCESS);
             }
-
         } else {
             m::add(_('You must provide an id for delete an instance.'), m::ERROR);
         }

@@ -40,15 +40,13 @@ class Application
 
             $GLOBALS['application'] = new Application();
 
-            if (INSTANCE_UNIQUE_NAME != 'onm_manager') {
-                // Setting up DataBase connection
-                self::initDatabase();
+            // Setting up DataBase connection
+            self::initDatabase();
 
-                // Setting up Logger
-                self::initLogger();
+            // Setting up Logger
+            self::initLogger();
 
-                self::initTimeZone();
-            }
+            self::initTimeZone();
         }
 
         return $GLOBALS['application'];
@@ -56,7 +54,7 @@ class Application
 
     public static function initDatabase()
     {
-        // Databasew
+        // Database
         $GLOBALS['application']->conn = \ADONewConnection(BD_TYPE);
         $GLOBALS['application']->conn->Connect(BD_HOST, BD_USER, BD_PASS, BD_DATABASE);
 
@@ -320,7 +318,6 @@ class Application
         if (!empty($content)) {
             $msg.=' at '.get_class($content).' (ID:'.$content->id.')';
         }
-        // var_dump($msg, $logger);die();
 
         $logger->notice($msg);
     }

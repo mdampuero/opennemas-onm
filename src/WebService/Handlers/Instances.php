@@ -3,6 +3,7 @@
 class Instances
 {
     public $restler;
+    private $mailer;
 
     /*
     * @url GET /instances/name/
@@ -44,4 +45,3 @@ class Instances
         return INSTANCE_MEDIA;
     }
 }
-

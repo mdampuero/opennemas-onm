@@ -1,6 +1,7 @@
 *~
 build
 cache.properties
+backups/*
 config/*
 #public/admin/themes/default/compile/*
 public/media/

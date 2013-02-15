@@ -10,7 +10,7 @@
             <li>
                 <a href="{url name=manager_instance_create}" class="admin_add"
                    title="{t}New widget{/t}">
-                    <img border="0" src="{$params.IMAGE_DIR}list-add.png" title="" alt="" />
+                    <img border="0" src="{$params.COMMON_ASSET_DIR}images/list-add.png" title="" alt="" />
                     <br />{t}New{/t}
                 </a>
             </li>
@@ -23,7 +23,7 @@
         <div class="table-info clearfix">
             <div class="pull-left">
                 {$pagination->_totalItems} instances
-                <a href="{url name=manager_instances_list_export filter_name=$filter_name}">{image_tag src="/themes/manager/images/csv.png" base_url=""} Export list</a>
+                <a href="{url name=manager_instances_list_export filter_name=$filter_name}">{image_tag src="{$params.COMMON_ASSET_DIR}images/csv.png" base_url=""} Export list</a>
             </div>
             <div class="pull-right form-inline">
                 <input type="text" id="username" placeholder="{t}Filter by name{/t}" name="filter_name" onchange="this.form.submit();" value="{$filter_title}" />
@@ -98,10 +98,10 @@
                     <td class="center">
                         {if $instance->activated == 1}
                         <a href="{url name=manager_instance_toggleavailable id=$instance->id}" title="{t}Published{/t}">
-                            <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="{t}Published{/t}" /></a>
+                            <img src="{$params.COMMON_ASSET_DIR}images/publish_g.png" border="0" alt="{t}Published{/t}" /></a>
                         {else}
                         <a href="{url name=manager_instance_toggleavailable id=$instance->id}" title="{t}Unpublished{/t}">
-                            <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="{t}Unpublished{/t}" /></a>
+                            <img src="{$params.COMMON_ASSET_DIR}images/publish_r.png" border="0" alt="{t}Unpublished{/t}" /></a>
                         {/if}
                     </td>
 

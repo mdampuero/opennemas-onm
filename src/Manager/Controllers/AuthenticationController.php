@@ -30,7 +30,7 @@ class AuthenticationController extends Controller
     public function init()
     {
         // Setup view
-        $this->view = new \TemplateManager(TEMPLATE_ADMIN);
+        $this->view = new \TemplateManager(TEMPLATE_MANAGER);
         $this->view->assign('version', \Onm\Common\Version::VERSION);
     }
 
@@ -44,7 +44,7 @@ class AuthenticationController extends Controller
         $token = md5(uniqid(mt_rand(), true));
 
         $_SESSION['csrf'] = $token;
-        $languages        = \Application::getAvailableLanguages();
+        $languages        = $this->container->getParameter('available_languages');
         $currentLanguage  = \Application::$language;
 
         return $this->render(
@@ -91,8 +91,7 @@ class AuthenticationController extends Controller
                     // Increase security by regenerating the id
                     session_regenerate_id();
 
-                    //Delete the cache that handles the number of active sessions
-                    apc_delete(APC_PREFIX ."_"."num_sessions");
+                    $maxSessionLifeTime = (int) s::get('max_session_lifetime', 60);
 
                     $_SESSION = array(
                         'userid'           => $user->id,
@@ -104,20 +103,9 @@ class AuthenticationController extends Controller
                         'csrf'             => md5(uniqid(mt_rand(), true))
                     );
 
-                    // Store default expire time
-                    global $app;
-                    // $app::setCookieSecure(
-                    //     '_onm_session_'.session_id(),
-                    //     time()+($user->sessionexpire)*60, 0, '/admin/'
-                    // );
-                    \PrivilegesCheck::loadSessionExpireTime();
+                    $forwardTo = $request->request->filter('forward_to', null, FILTER_SANITIZE_STRING);
 
-                    $forwardTo = filter_input(INPUT_POST, 'forward_to');
-                    if (!is_null($forwardTo) && !empty($forwardTo)) {
-                        return $this->redirect($forwardTo);
-                    } else {
-                        return $this->redirect(SITE_URL_ADMIN);
-                    }
+                    return $this->redirect($forwardTo?:$this->generateUrl('manager_welcome'));
                 }
 
             } else {
@@ -142,7 +130,7 @@ class AuthenticationController extends Controller
 
         // Only perform session destroy if cross-site request
         // forgery matches the session variable.
-        if ($csrf === $_SESSION['csrf']) {
+        //if ($csrf === $_SESSION['csrf']) {
             $_SESSION = array();
             if (isset($_COOKIE[session_name()])) {
                 setcookie(session_name(), '', time()-42000, '/');
@@ -151,8 +139,8 @@ class AuthenticationController extends Controller
 
             return $this->redirect($this->generateUrl('manager_login_form'));
 
-        } else {
-            return Response('Are you hijacking my session dude?!');
-        }
+        // } else {
+        //     return new Response('Are you hijacking my session dude?!');
+        // }
     }
 }

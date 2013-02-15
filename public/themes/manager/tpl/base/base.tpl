@@ -18,7 +18,8 @@
     {block name="header-css"}
         {css_tag href="/bootstrap/bootstrap.css" common=1}
         {css_tag href="/fontawesome/font-awesome.min.css" common=1}
-        {css_tag href="/style.css"}
+        {css_tag href="/style.css" common=1}
+        {css_tag href="/style-navbar.css"}
         <!--[if IE]>{css_tag href="/ie.css"}<![endif]-->
         {css_tag href="/jquery/jquery-ui.css" media="all" type="text/css" common=1}
     {/block}
@@ -27,7 +28,7 @@
         {script_tag src="/jquery/jquery.min.js" common=1}
         {script_tag src="/libs/bootstrap.js" common=1}
         {script_tag src="/libs/jquery.tools.min.js" common=1}
-        {script_tag src="/jquery-onm/jquery.onmvalidate.js"}
+        {script_tag src="/jquery-onm/jquery.onmvalidate.js" common=1}
         {block name="prototype"}{/block}
     {/block}
 
@@ -35,7 +36,7 @@
         {script_tag src="/libs/modernizr.min.js" common=1}
         {block name="js-library"}{/block}
         {script_tag src="/onm/scripts.js"}
-        {script_tag src="/tiny_mce/tiny_mce_gzip.js"}
+        {script_tag src="/tiny_mce/tiny_mce_gzip.js" common=1}
      {/block}
 
 </head>

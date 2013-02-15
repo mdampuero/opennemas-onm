@@ -114,6 +114,9 @@ class Instance
         }
         define('COMMON_CACHE_PATH', realpath($commonCachepath));
 
+        // Backup paths
+        define('BACKUP_PATH', realpath(SITE_PATH.DS.'..'.DS."backups"));
+
         /**
          * Logging settings
          **/
@@ -163,6 +166,7 @@ class Instance
         define('TEMPLATE_ADMIN_URL', SS."themes".SS.TEMPLATE_ADMIN.SS);
         define('ADVERTISEMENT_ENABLE', true);
 
+        define('TEMPLATE_MANAGER', "manager");
 
         /**
          * Mail settings

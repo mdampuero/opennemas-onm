@@ -77,18 +77,25 @@ class InstanceManager
 
         if (!$rs) {
             $this->connection->ErrorMsg();
-
             return false;
         }
 
         if (preg_match("@\/manager@", $_SERVER["REQUEST_URI"])) {
+            global $onmInstancesConnection;
+
             $instance = new Instance();
             $instance->internal_name = 'onm_manager';
             $instance->activated = true;
+
             $instance->settings = array(
                 'INSTANCE_UNIQUE_NAME' => $instance->internal_name,
                 'MEDIA_URL'            => '',
                 'TEMPLATE_USER'        => '',
+                'BD_HOST'              => $onmInstancesConnection['BD_HOST'],
+                'BD_USER'              => $onmInstancesConnection['BD_USER'],
+                'BD_PASS'              => $onmInstancesConnection['BD_PASS'],
+                'BD_DATABASE'          => $onmInstancesConnection['BD_DATABASE'],
+                'BD_TYPE'              => $onmInstancesConnection['BD_TYPE'],
             );
 
             $instance->boot();
@@ -331,18 +338,55 @@ class InstanceManager
     {
         $instance = $this->read($id);
 
-        $sql = "DELETE FROM instances WHERE id=?";
-        $rs = $this->connection->Execute($sql, array($instance->id));
-        if (!$rs) {
+        if (!$instance) {
             return false;
         }
 
-        $assetFolder = SITE_PATH.DS.'media'.DS.$instance->internal_name;
-        $this->deleteDefaultAssetsForInstance($assetFolder);
-        $this->deleteDatabaseForInstance($instance->settings);
-        $this->deleteInstanceUserFromDatabaseManager($instance->settings);
-        $this->deleteInstanceWithInternalName($instance->internal_name);
-        $this->deleteApacheConfAndReloadConfiguration($instance->internal_name);
+        $errors = array();
+        $backupPath = BACKUP_PATH.DS.$instance->id."-".$instance->internal_name.
+                          DS."DELETED-".date("YmdHi");
+        try {
+            $this->backupInstanceReferenceInManager($id, $backupPath);
+            $this->deleteInstanceReferenceInManager($id);
+
+            $assetFolder = realpath(SITE_PATH.DS.'media'.DS.$instance->internal_name);
+            $this->backupAssetsForInstance($assetFolder, $backupPath);
+            $this->deleteDefaultAssetsForInstance($assetFolder);
+
+            $database = $instance->settings['BD_DATABASE'];
+            $this->backupDatabaseForInstance($database, $backupPath);
+            $this->deleteDatabaseForInstance($database);
+
+            $user = $instance->settings['BD_USER'];
+            $this->backupInstanceUserFromDatabaseManager($user, $backupPath);
+            $this->deleteInstanceUserFromDatabaseManager($user);
+
+            $this->backupApacheConfAndReloadConfiguration($instance->internal_name, $backupPath);
+            $this->deleteApacheConfAndReloadConfiguration($instance->internal_name);
+        } catch (DeleteRegisteredInstanceException $e) {
+            $errors []= $e->getMessage();
+        } catch (DefaultAssetsForInstanceNotDeletedException $e) {
+            $errors []= $e->getMessage();
+            $this->restoreInstanceReferenceInManager($backupPath);
+        } catch (DatabaseForInstanceNotDeletedException $e) {
+            $errors []= $e->getMessage();
+            $this->restoreInstanceReferenceInManager($backupPath);
+            $this->restoreAssetsForInstance($backupPath);
+            $this->restoreDatabaseForInstance($backupPath);
+            $this->restoreInstanceUserFromDatabaseManager($backupPath);
+        } catch (ApacheConfigurationNotDeletedException $e) {
+            $errors []= $e->getMessage();
+            $this->restoreInstanceReferenceInManager($backupPath);
+            $this->restoreAssetsForInstance($backupPath);
+            $this->restoreDatabaseForInstance($backupPath);
+            $this->restoreInstanceUserFromDatabaseManager($backupPath);
+            $this->restoreApacheConfAndReloadConfiguration($backupPath);
+        }
+
+        if (count($errors) > 0) {
+            return $errors;
+        }
+
 
         return true;
     }
@@ -360,7 +404,7 @@ class InstanceManager
 
         try {
 
-            $this->createInstanceReferenceInManager($data);
+            $data = $this->createInstanceReferenceInManager($data);
 
             $this->createDatabaseForInstance($data);
 
@@ -369,33 +413,24 @@ class InstanceManager
             $this->copyApacheAndReloadConfiguration($data);
 
         } catch (InstanceNotRegisteredException $e) {
-
             $errors []= $e->getMessage();
-            $this->deleteInstanceWithInternalName($data['internal_name']);
-
         } catch (DatabaseForInstanceNotCreatedException $e) {
             $errors []= $e->getMessage();
-            $this->deleteDatabaseForInstance($data);
-            $this->deleteInstanceUserFromDatabaseManager($data);
-            $this->deleteInstanceWithInternalName($data['internal_name']);
-
+            $this->deleteDatabaseForInstance($data['settings']['BD_DATABASE']);
+            $this->deleteInstanceUserFromDatabaseManager($data['settings']['BD_USER']);
+            $this->deleteInstanceReferenceInManager($data['id']);
         } catch (DefaultAssetsForInstanceNotCopiedException $e) {
-
             $errors []= $e->getMessage();
             $assetFolder = SITE_PATH.DS.'media'.DS.$data['internal_name'];
             $this->deleteDefaultAssetsForInstance($assetFolder);
-            $this->deleteDatabaseForInstance($data);
-            $this->deleteInstanceWithInternalName($data['internal_name']);
-
+            $this->deleteDatabaseForInstance($data['settings']['BD_DATABASE']);
         } catch (ApacheConfigurationNotCreatedException $e) {
-
             $errors []= $e->getMessage();
             $assetFolder = SITE_PATH.DS.'media'.DS.$data['internal_name'];
             $this->deleteDefaultAssetsForInstance($assetFolder);
-            $this->deleteDatabaseForInstance($data);
-            $this->deleteInstanceWithInternalName($data['internal_name']);
+            $this->deleteDatabaseForInstance($data['settings']['BD_DATABASE']);
+            $this->deleteInstanceReferenceInManager($data['id']);
             $this->deleteApacheConfAndReloadConfiguration($data['internal_name']);
-
         }
 
         if (count($errors) > 0) {
@@ -418,7 +453,7 @@ class InstanceManager
             empty($data['name'])
             || empty($data['internal_name'])
             || empty($data['domains'])
-            || empty($data['activated'])
+            || !isset($data['activated'])
             || empty($data['user_mail'])
         ) {
             throw new InstanceNotRegisteredException(
@@ -427,21 +462,13 @@ class InstanceManager
         }
 
         // Check if the instance already exists
-        $sql = "SELECT count(*) as instance_exists FROM instances "
-             . "WHERE `internal_name` = ?";
-        $rs = $this->connection->Execute($sql, array($data['internal_name']));
+        $instanceExists = $this->checkInstanceExists($data['internal_name']);
 
         // Check if the email already exists
-        $checkMailSql = "SELECT count(*) as email_exists FROM instances "
-              . "WHERE `contact_mail` = ?";
-        $checkMailRs = $this->connection->Execute($checkMailSql, array($data['user_mail']));
+        $emailExists = $this->checkMailExists($data['user_mail']);
 
         // If doesn´t exist the instance in the database and doesn't exist contact mail proceed
-        if ($rs
-            && !(bool) $rs->fields['instance_exists']
-            && $checkMailRs
-            && !(bool) $checkMailRs->fields['email_exists']
-        ) {
+        if (!$instanceExists && !$emailExists) {
             $createIntanceSql = "INSERT INTO instances "
                   . "(name, internal_name, domains, "
                   . "activated, settings, contact_mail) "
@@ -463,27 +490,48 @@ class InstanceManager
                 );
             }
 
-            return true;
+            $data['id'] = $this->connection->Insert_ID();
+            if (!$this->update($data)) {
+                $delSql = "DELETE FROM instances WHERE id=?";
+                $rs = $this->connection->Execute($delSql, array($data['id']));
+                if (!$rs) {
+                    return false;
+                }
+                throw new InstanceNotRegisteredException(
+                    "Could not create the instance reference into the instance "
+                    ."table: {$this->connection->ErrorMsg()}"
+                );
+            }
+
+            $data['settings']['BD_USER'] = $data['id'];
+            $data['settings']['BD_DATABASE'] = $data['id'];
+
+            if (!$this->update($data)) {
+                throw new InstanceNotRegisteredException(
+                    "Could not create the instance reference into the instance "
+                    ."table: {$this->connection->ErrorMsg()}"
+                );
+            }
+
+            return $data;
 
         } elseif (isset ($_POST['timezone'])) {
             // If instance name or contact mail already
             // exists and comes from openhost form
-            if ($rs && (bool) $rs->fields['instance_exists']) {
+            if ($instanceExists) {
                 echo 'instance_exists';
-            } elseif ($checkMailRs
-                && (bool) $checkMailRs->fields['email_exists']
-            ) {
+            } elseif ($emailExists) {
                 echo 'mail_exists';
             }
 
             die();
         } else {
             //If instance name or contact mail already exists and comes from manager
-            if ($rs && (bool) $rs->fields['instance_exists']) {
+            if ($instanceExists) {
                 throw new InstanceNotRegisteredException(
                     _("Instance internal name is already in use.")
                 );
-            } elseif ( $checkMailRs && (bool) $checkMailRs->fields['email_exists']) {
+            } elseif ($emailExists) {
                 throw new InstanceNotRegisteredException(
                     _("Instance contact mail is already in use.")
                 );
@@ -507,7 +555,88 @@ class InstanceManager
         $sql = "DELETE FROM `instances` WHERE  `internal_name` = ?";
         $values = array($internalName);
 
-        if (!$this->connection->Execute($sql, $values)) {
+        if (!$this->connection->Execute($sql, $values)
+            || $this->connection->Affected_Rows()==0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Delete one instance reference from the instances table.
+     * In case of error, throw a DeleteRegisteredInstanceException.
+     *
+     * @param int $id the id of the instance we need to delete
+     * @param String $backupPath Backups directory
+     *
+     **/
+    public function deleteInstanceReferenceInManager($id)
+    {
+        $sql = "DELETE FROM instances WHERE id=?";
+        $rs = $this->connection->Execute($sql, array($id));
+
+        if (!$rs || $this->connection->Affected_Rows()==0) {
+            throw new DeleteRegisteredInstanceException(
+                "Could not delete instance reference."
+            );
+        }
+    }
+
+    /**
+     * Backup data of a particular instance from the instances table.
+     * In case of error, throw a DeleteRegisteredInstanceException.
+     *
+     * @param int $id the id of the instance we need to dump
+     * @param String $backupPath Backups directory
+     *
+     * @author
+     **/
+    public function backupInstanceReferenceInManager($id, $backupPath)
+    {
+        if (!fm::createDirectory($backupPath)) {
+            return false;
+        }
+
+        global $onmInstancesConnection;
+
+        $dump = "mysqldump -u".$onmInstancesConnection['BD_USER'].
+                " -p".$onmInstancesConnection['BD_PASS'].
+                " --no-create-info --where 'id=".$id."' ".
+                $onmInstancesConnection['BD_DATABASE'].
+                " instances > ".$backupPath.DS."instanceReference.sql";
+
+        exec($dump, $output, $return_var);
+
+        if ($return_var!=0) {
+            fm::deleteDirectoryRecursively($backupPath);
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Restore instance reference data to the instances table.
+     *
+     * @param String $backupPath Backups directory
+     *
+     * @return boolean false if something went wrong
+     *
+     * @author
+     **/
+    public function restoreInstanceReferenceInManager($backupPath)
+    {
+        global $onmInstancesConnection;
+
+        $dump = "mysql -u".$onmInstancesConnection['BD_USER'].
+                " -p".$onmInstancesConnection['BD_PASS'].
+                " ".$onmInstancesConnection['BD_DATABASE'].
+                " < ".$backupPath.DS."instanceReference.sql";
+
+        exec($dump, $output, $return_var);
+
+        if ($return_var!=0) {
             return false;
         }
 
@@ -527,7 +656,14 @@ class InstanceManager
 
         // If default file exists proceed
         if (!empty($configPath)) {
-            $apacheConfString = file_get_contents($configPath.DS.'vhost.conf');
+            $apacheConfFile = $configPath.DS.'vhost.conf';
+            if (!file_exists($apacheConfFile)) {
+                throw new ApacheConfigurationNotCreatedException(
+                    "Could not create the Apache vhost config for the instance"
+                );
+            }
+
+            $apacheConfString = file_get_contents($apacheConfFile);
 
             // Replace wildcards with the proper settings.
             $replacements = array(
@@ -548,12 +684,17 @@ class InstanceManager
 
             // If we can create the instance configuration file reload apache
             if (file_put_contents($instanceConfigPath, $apacheConfString)) {
-                exec("sudo apachectl graceful", $output, $exitCode);
+                //exec("sudo apachectl graceful", $output, $exitCode);
+                $apacheCtl = "/usr/sbin/apache2ctl";
+                echo exec("sudo $apacheCtl graceful", $output, $exitCode);
                 if ($exitCode > 0) {
-
-                    return false;
+                    throw new ApacheConfigurationNotCreatedException(
+                        "Could not create the Apache vhost config for the instance,".
+                        " problems restarting Apache."
+                    );
                 }
             } else {
+
                 throw new ApacheConfigurationNotCreatedException(
                     "Could not create the Apache vhost config for the instance",
                     1
@@ -577,6 +718,61 @@ class InstanceManager
         }
 
         return false;
+    }
+
+    /**
+     * Backup the vhost Apache configuration
+     *
+     * @param String $internalName instance
+     * @param String $backupPath Backups directory
+     *
+     * @author
+     **/
+    public function backupApacheConfAndReloadConfiguration($internalName, $backupPath)
+    {
+        if (!fm::createDirectory($backupPath)) {
+            return false;
+        }
+
+        $configPath = realpath(APPLICATION_PATH.DS.'config'.DS."vhosts.d");
+        $vhostFile = $configPath.DS.$internalName;
+        if (!file_exists($vhostFile) || !is_writable($backupPath)) {
+            return false;
+        }
+
+        $backupFile = $backupPath.DS.$internalName.".vhost";
+        if (!copy($vhostFile, $backupFile)) {
+            return false;
+        }
+
+        return true;
+
+    }
+
+    /**
+     * Restore the vhost Apache configuration
+     *
+     * @param String $backupPath Backups directory
+     *
+     * @return boolean false if something went wrong
+     *
+     * @author
+     **/
+    public function restoreApacheConfAndReloadConfiguration($backupPath)
+    {
+        $vhostPattern = $backupPath.DS."*.vhost";
+        $vhostFile = glob($vhostPattern);
+        if (!is_array($vhostFile) && count($vhostFile) != 1) {
+            return false;
+        }
+        $configPath = realpath(APPLICATION_PATH.DS.'config'.DS."vhosts.d");
+        $vhostFile = basename($vhostFile[0]);
+        $newvHost = substr($vhostFile, 0, -6);
+        if (!copy($backupPath.DS.$vhostFile, $configPath.DS.$newvHost)) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -629,18 +825,17 @@ class InstanceManager
                 'Could not grant all privileges to the default user for the instance database'
             );
         }
-        // If the database was created sucessfully now import the default data.
-        $connection2         = self::getConnection($data['settings']);
+
         $exampleDatabasePath = realpath(APPLICATION_PATH.DS.'db'.DS.'instance-default.sql');
         $execLine = "mysql -h {$onmInstancesConnection['BD_HOST']} "
-            ."-u {$onmInstancesConnection['BD_USER']}"
+            ."-u{$onmInstancesConnection['BD_USER']}"
             ." -p{$onmInstancesConnection['BD_PASS']} "
             ."{$data['settings']['BD_DATABASE']} < {$exampleDatabasePath}";
         exec($execLine, $output, $exitCode);
         if ($exitCode > 0) {
             throw new DatabaseForInstanceNotCreatedException(
                 'Could not create the default database for the instance:'
-                .' EXEC_LINE: {$execLine} \n OUTPUT: {$output}'
+                .' EXEC_LINE: {'.$execLine.'} \n OUTPUT: {'.$output.'}'
             );
         }
 
@@ -662,46 +857,90 @@ class InstanceManager
             $values = array($data['user_name'], md5($data['user_pass']),  60,
                             $data['user_mail'], $data['user_name'],6);
 
-            if (!$connection2->Execute($sql, $values)) {
-                return false;
+            if (!$GLOBALS['application']->conn->Execute($sql, $values)) {
+                throw new DatabaseForInstanceNotCreatedException(
+                    'Could not create the default database for the instance'
+                );
             }
 
+            $idNewUser = $GLOBALS['application']->conn->Insert_ID();
             $userPrivSql = "INSERT INTO `users_content_categories` "
-                    ."(`pk_fk_user`, `pk_fk_content_category`)"
-                    ."VALUES (134, 0), (134, 22), (134, 23), (134, 24), "
-                    ."       (134, 25), (134, 26), (134, 27), "
-                    ."       (134, 28), (134, 29), (134, 30), (134, 31)";
+                    ."(`pk_fk_user`, `pk_fk_content_category`) "
+                    ."VALUES ({$idNewUser}, 0), ({$idNewUser}, 22), ({$idNewUser}, 23), ({$idNewUser}, 24), "
+                    ."       ({$idNewUser}, 25), ({$idNewUser}, 26), ({$idNewUser}, 27), "
+                    ."       ({$idNewUser}, 28), ({$idNewUser}, 29), ({$idNewUser}, 30), ({$idNewUser}, 31)";
 
-            if (!$connection2->Execute($userPrivSql)) {
-                return false;
+            if (!$GLOBALS['application']->conn->Execute($userPrivSql)) {
+                throw new DatabaseForInstanceNotCreatedException(
+                    'Could not create the default database for the instance'
+                );
             }
-
-            s::set('contact_mail', $data['user_mail']);
-            s::set('contact_name', $data['user_name']);
-            s::set('contact_IP', $data['contact_IP']);
+            if (!s::set('contact_mail', $data['user_mail'])) {
+                throw new DatabaseForInstanceNotCreatedException(
+                    'Could not create the default database for the instance'
+                );
+            }
+            if (!s::set('contact_name', $data['user_name'])) {
+                throw new DatabaseForInstanceNotCreatedException(
+                    'Could not create the default database for the instance'
+                );
+            }
+            if (!s::set('contact_IP', $data['contact_IP'])) {
+                throw new DatabaseForInstanceNotCreatedException(
+                    'Could not create the default database for the instance'
+                );
+            }
         }
 
         //Change and insert some data with instance information
-        s::set('site_name', $data['name']);
-        s::set('site_created', $data['site_created']);
-        s::set(
+        if (!s::set('site_name', $data['name'])) {
+            throw new DatabaseForInstanceNotCreatedException(
+                'Could not create the default database for the instance'
+            );
+        }
+        if (!s::set('site_created', $data['site_created'])) {
+            throw new DatabaseForInstanceNotCreatedException(
+                'Could not create the default database for the instance'
+            );
+        }
+        if (!s::set(
             'site_title',
             $data['name'].' - OpenNemas - Servicio online para tu periódico'
             .' digital - Online service for digital newspapers'
-        );
-        s::set(
+        )) {
+            throw new DatabaseForInstanceNotCreatedException(
+                'Could not create the default database for the instance'
+            );
+        }
+        if (!s::set(
             'site_description',
             $data['name'].' - OpenNemas - Servicio online para tu periódico'
             .' digital - Online service for digital newspapers'
-        );
-        s::set(
+        )) {
+            throw new DatabaseForInstanceNotCreatedException(
+                'Could not create the default database for the instance'
+            );
+        }
+        if (!s::set(
             'site_keywords',
             $data['internal_name'].', openNemas, servicio, online, '
             .'periódico, digital, service, newspapers'
-        );
-        s::set('site_agency', $data['internal_name'].'.opennemas.com');
+        )) {
+            throw new DatabaseForInstanceNotCreatedException(
+                'Could not create the default database for the instance'
+            );
+        }
+        if (!s::set('site_agency', $data['internal_name'].'.opennemas.com')) {
+            throw new DatabaseForInstanceNotCreatedException(
+                'Could not create the default database for the instance'
+            );
+        }
         if (isset ($data['timezone'])) {
-            s::set('time_zone', $data['timezone']);
+            if (!s::set('time_zone', $data['timezone'])) {
+                throw new DatabaseForInstanceNotCreatedException(
+                    'Could not create the default database for the instance'
+                );
+            }
         }
 
         return true;
@@ -714,11 +953,67 @@ class InstanceManager
      * @return void
      * @author
      **/
-    public function deleteDatabaseForInstance($settings)
+    public function deleteDatabaseForInstance($database)
     {
-        $sql = "DROP DATABASE `{$settings['settings']['BD_DATABASE']}`";
+        $sql = "DROP DATABASE `$database`";
 
         if (!$this->connection->Execute($sql)) {
+            throw new DatabaseForInstanceNotDeletedException(
+                "Could not drop the database"
+            );
+        }
+
+        return true;
+    }
+
+    /**
+     * Backup database of a particular instance.
+     * In case of error, throw a DeleteRegisteredInstanceException.
+     *
+     *
+     * @author
+     **/
+    public function backupDatabaseForInstance($database, $backupPath)
+    {
+        if (!fm::createDirectory($backupPath)) {
+            return false;
+        }
+
+        global $onmInstancesConnection;
+
+        $dump = "mysqldump -u".$onmInstancesConnection['BD_USER'].
+                " -p".$onmInstancesConnection['BD_PASS']." --databases ".
+                "'".$database."'".
+                " > ".$backupPath.DS."database.sql";
+
+        exec($dump, $output, $return_var);
+
+        if ($return_var!=0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Restore instance database.
+     *
+     *
+     * @return boolean false if something went wrong
+     *
+     * @author
+     **/
+    public function restoreDatabaseForInstance($backupPath)
+    {
+        global $onmInstancesConnection;
+
+        $dump = "mysql -u".$onmInstancesConnection['BD_USER'].
+                " -p".$onmInstancesConnection['BD_PASS'].
+                " < ".$backupPath.DS."database.sql";
+
+        exec($dump, $output, $return_var);
+
+        if ($return_var!=0) {
             return false;
         }
 
@@ -732,11 +1027,71 @@ class InstanceManager
      * @return void
      * @author
      **/
-    public function deleteInstanceUserFromDatabaseManager($settings)
+    public function deleteInstanceUserFromDatabaseManager($user)
     {
-        $sql = "DROP USER `{$settings['settings']['BD_USER']}`@'localhost'";
+        $sql = "DROP USER `{$user}`@'localhost'";
 
         if (!$this->connection->Execute($sql)) {
+            throw new DatabaseForInstanceNotDeletedException(
+                "Could not drop the database user"
+            );
+        }
+
+        return true;
+    }
+
+        /**
+     * Backup instance database user.
+     * In case of error, throw a DeleteRegisteredInstanceException.
+     *
+     *
+     * @author
+     **/
+    public function backupInstanceUserFromDatabaseManager($user, $backupPath)
+    {
+        if (!fm::createDirectory($backupPath)) {
+            return false;
+        }
+
+        $sql = "show grants for `{$user}`@'localhost'";
+        $rs = $this->connection->Execute($sql);
+
+        if (!$rs || $rs->fields === false) {
+            return false;
+        }
+
+        if (!is_writable($backupPath)) {
+            return false;
+        }
+        $filePath = $backupPath.DS."user.sql";
+        $handle = fopen($filePath, "w");
+        foreach ($rs as $userInfo) {
+            fwrite($handle, $userInfo[0].";\n");
+        }
+        fclose($handle);
+
+        return true;
+    }
+
+    /**
+     * Restore instance database user.
+     *
+     *
+     * @return boolean false if something went wrong
+     *
+     * @author
+     **/
+    public function restoreInstanceUserFromDatabaseManager($backupPath)
+    {
+        global $onmInstancesConnection;
+
+        $dump = "mysql -u".$onmInstancesConnection['BD_USER'].
+                " -p".$onmInstancesConnection['BD_PASS'].
+                " < ".$backupPath.DS."user.sql";
+
+        exec($dump, $output, $return_var);
+
+        if ($return_var!=0) {
             return false;
         }
 
@@ -752,10 +1107,16 @@ class InstanceManager
     {
         $mediaPath = SITE_PATH.DS.'media'.DS.$name;
         if (!file_exists($mediaPath)) {
-            return fm::recursiveCopy(
+            if (!fm::recursiveCopy(
                 SITE_PATH.DS.'media'.DS.'default',
                 $mediaPath
-            );
+            )) {
+                throw new DefaultAssetsForInstanceNotCopiedException(
+                    "Could not copy default assets for the instance"
+                );
+            } else {
+                return true;
+            }
         } else {
             //TODO: return codes for handling this errors
             return "The media folder {$name} already exists.";
@@ -766,25 +1127,69 @@ class InstanceManager
      * Copies the default assets for the new instance given its internal name
      *
      * @param $name the name of the instance
+     * @param String $backupPath Backups directory
+     *
      */
     public function deleteDefaultAssetsForInstance($mediaPath)
     {
-        if (!is_dirr($mediaPath)) {
+        if (!is_dir($mediaPath)) {
+            throw new DefaultAssetsForInstanceNotDeletedException(
+                "Could not delete assets of the instance"
+            );
+        }
+
+        if (!fm::deleteDirectoryRecursively($mediaPath)) {
+            throw new DefaultAssetsForInstanceNotDeletedException(
+                "Could not delete assets directory."
+            );
+        }
+
+        return true;
+    }
+
+    /**
+     * Backup assets data of a particular instance.
+     * In case of error, throw a DeleteRegisteredInstanceException.
+     *
+     * @param String $mediaPath Assets directory
+     * @param String $backupPath Backups directory
+     *
+     * @author
+     **/
+    public function backupAssetsForInstance($mediaPath, $backupPath)
+    {
+        if (!fm::createDirectory($backupPath)) {
             return false;
         }
-        $objects = scandir($mediaPath);
-        foreach ($objects as $object) {
-            if ($object != "." && $object != "..") {
-                if (filetype($mediaPath."/".$object) == "dir") {
-                    $this->deleteDefaultAssetsForInstance($mediaPath."/".$object);
-                } else {
-                    unlink($mediaPath."/".$object);
-                }
-            }
-        }
-        reset($objects);
 
-        return rmdir($mediaPath);
+        $tgzFile = $backupPath.DS."media.tar.gz";
+        if (!fm::compressTgz($mediaPath, $tgzFile)) {
+            return false;
+        }
+
+        return true;
+
+    }
+
+    /**
+     * Restore instance reference data to the instances table.
+     *
+     * @param int $id the id of the instance we need to dump
+     *
+     * @return boolean false if something went wrong
+     *
+     * @author
+     **/
+    public function restoreAssetsForInstance($backupPath)
+    {
+        $tgzFile = $backupPath.DS."media.tar.gz";
+        if (!fm::decompressTgz($tgzFile, "/")) {
+            throw new DefaultAssetsForInstanceNotDeletedException(
+                "Could not compress assets directory."
+            );
+        }
+
+        return true;
     }
 
     /*
@@ -816,7 +1221,8 @@ class InstanceManager
 
         // Check if the generated InternalShortName already exists
         $sql = "SELECT count(*) as internalShort_exists FROM instances "
-             . "WHERE `domains` LIKE '".$internalNameShort."%'";
+             . "WHERE `settings` REGEXP '".$internalNameShort."[0-9]*'";
+
         $rs = $this->connection->Execute($sql);
 
 
@@ -827,6 +1233,51 @@ class InstanceManager
         }
 
         return $data;
+    }
+
+    /*
+     * Check for repeated internalNameShort
+     *
+     */
+    public function checkInstanceExists($internalName)
+    {
+        $sql = "SELECT count(*) as instance_exists FROM instances "
+             . "WHERE `internal_name` = ?";
+        $rs = $this->connection->Execute($sql, array($internalName));
+
+        if ($rs && $rs->fields['instance_exists'] > 0) {
+            return true;
+        } elseif (!$rs) {
+            throw new Exception(
+                'Error in sql execution:'
+                .' EXEC_LINE: {$execLine} \n OUTPUT: {$output}'
+            );
+        }
+
+        return false;
+    }
+
+    /*
+     * Check for repeated internalNameShort
+     *
+     */
+    public function checkMailExists($mail)
+    {
+        // Check if the email already exists
+        $sql = "SELECT count(*) as email_exists FROM instances "
+              . "WHERE `contact_mail` = ?";
+        $rs = $this->connection->Execute($sql, array($mail));
+
+        if ($rs && $rs->fields['email_exists'] > 0) {
+            return true;
+        } elseif (!$rs) {
+            throw new Exception(
+                'Error in sql execution:'
+                .' EXEC_LINE: {$execLine} \n OUTPUT: {$output}'
+            );
+        }
+
+        return false;
     }
 }
 
@@ -845,6 +1296,25 @@ class DefaultAssetsForInstanceNotCopiedException extends \Exception
 {
 }
 
-class ApacheConfigurationNotReloadedException extends \Exception
+class ApacheConfigurationNotCreatedException extends \Exception
+{
+}
+
+/**
+ * Exceptions for handling unsuccessfull instance deletion
+ **/
+class DeleteRegisteredInstanceException extends \Exception
+{
+}
+
+class DatabaseForInstanceNotDeletedException extends \Exception
+{
+}
+
+class DefaultAssetsForInstanceNotDeletedException extends \Exception
+{
+}
+
+class ApacheConfigurationNotDeletedException extends \Exception
 {
 }
