@@ -828,14 +828,14 @@ class InstanceManager
 
         $exampleDatabasePath = realpath(APPLICATION_PATH.DS.'db'.DS.'instance-default.sql');
         $execLine = "mysql -h {$onmInstancesConnection['BD_HOST']} "
-            ."-u {$onmInstancesConnection['BD_USER']}"
+            ."-u{$onmInstancesConnection['BD_USER']}"
             ." -p{$onmInstancesConnection['BD_PASS']} "
             ."{$data['settings']['BD_DATABASE']} < {$exampleDatabasePath}";
         exec($execLine, $output, $exitCode);
         if ($exitCode > 0) {
             throw new DatabaseForInstanceNotCreatedException(
                 'Could not create the default database for the instance:'
-                .' EXEC_LINE: {$execLine} \n OUTPUT: {$output}'
+                .' EXEC_LINE: {'.$execLine.'} \n OUTPUT: {'.$output.'}'
             );
         }
 
