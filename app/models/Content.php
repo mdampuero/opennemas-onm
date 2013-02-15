@@ -249,7 +249,7 @@ class Content
             (!isset($data['params'])
             || empty($data['params'])) ? null: serialize($data['params']);
 
-        if (empty($data['slug'] ) || !isset($data['slug']) ) {
+        if (empty($data['slug'] ) || !isset($data['slug'])) {
             $data['slug'] = mb_strtolower(StringUtils::get_title($data['title']));
         }
 
@@ -402,7 +402,7 @@ class Content
             && !isset ($data['fk_user_last_editor'])) {
             $data['fk_user_last_editor'] = $_SESSION['userid'];
         }
-        if (empty($data['slug'] ) || !isset($data['slug']) ) {
+        if (empty($data['slug'] ) || !isset($data['slug'])) {
             $data['slug'] = mb_strtolower(StringUtils::get_title($data['title']));
         }
         if (empty($data['description'] ) && !isset ($data['description'])) {
@@ -1011,14 +1011,14 @@ class Content
     {
         if (is_array($properties)) {
             foreach ($properties as $k => $v) {
-                if ( !is_numeric($k) ) {
+                if (!is_numeric($k)) {
                     $this->{$k} = $v;
                 }
             }
         } elseif (is_object($properties)) {
             $properties = get_object_vars($properties);
             foreach ($properties as $k => $v) {
-                if ( !is_numeric($k) ) {
+                if (!is_numeric($k)) {
                     $this->{$k} = $v;
                 }
             }
@@ -1234,6 +1234,15 @@ class Content
         return false;
     }
 
+    /**
+     * Sets the content_status flag for the actual content, given the status value
+     * @deprecated not valid anymore
+     *
+     * @param int $status the content_status value
+     * @param int $last_editor the author id that performs the action
+     *
+     * @return void
+     **/
     public function set_status($status, $last_editor)
     {
         if (($this->id == null) && !is_array($status)) {
@@ -1455,7 +1464,7 @@ class Content
 
         // Multiple exec SQL
         $sqlValues = array();
-        if (is_array($id) ) {
+        if (is_array($id)) {
             $ads = array();
 
             if (count($id)>0) {
@@ -2008,8 +2017,7 @@ class Content
     public function loadAttachedVideo($force = false)
     {
 
-        if (
-            ($force || empty($this->img1))
+        if (($force || empty($this->img1))
             && !empty($this->fk_video)
         ) {
             $this->obj_video = new Video($this->fk_video);
