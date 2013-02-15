@@ -135,7 +135,7 @@ class Instances extends \Onm\Rest\RestBase
         $message->setFrom($companyMail, "no-reply");
 
         // Send the email
-        $mailer = $this->container->get('mailer');
+        $mailer = $this->restler->container->get('mailer');
         $mailer->send($message);
     }
 
@@ -161,7 +161,7 @@ class Instances extends \Onm\Rest\RestBase
         $message->setFrom($companyMail, "no-reply");
 
         // Send the email
-        $mailer = $this->container->get('mailer');
+        $mailer = $this->restler->container->get('mailer');
         $mailer->send($message);
     }
 
