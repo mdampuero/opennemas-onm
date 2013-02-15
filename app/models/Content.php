@@ -1447,9 +1447,6 @@ class Content
             if (stristr($httpUserAgent, $bot) != false) {
                 return false;
             }
-            // if (preg_match("@".strtolower($httpUserAgent)."@", $bot) > 0) {
-            //     return false;
-            // }
         }
 
         if (is_null($id) || empty($id)) {
@@ -1457,6 +1454,7 @@ class Content
         }
 
         // Multiple exec SQL
+        $sqlValues = array();
         if (is_array($id) ) {
             $ads = array();
 
@@ -1479,10 +1477,12 @@ class Content
 
         } else {
             $sql =  'UPDATE `contents` SET `views`=`views`+1 '
-                    .'WHERE `available`=1 AND `pk_content`='.$id;
+                    .'WHERE `pk_content`=?';
+            $sqlValues = array($id);
         }
+        $rs = $GLOBALS['application']->conn->Execute($sql, $sqlValues);
 
-        if ($GLOBALS['application']->conn->Execute($sql) === false) {
+        if ($rs === false) {
             Application::logDatabaseError();
 
             return false;
@@ -1520,20 +1520,20 @@ class Content
      * @param  string $pk_content Content identifier
      * @return object Instance of an specific object in function of content type
     */
-    public static function get($pk_content)
+    public static function get($contentId)
     {
         $sql  = 'SELECT `content_types`.name '
               . 'FROM `contents`, `content_types` '
               . 'WHERE pk_content=? AND fk_content_type=pk_content_type';
-        $type = $GLOBALS['application']->conn->GetOne($sql, array($pk_content));
+        $type = $GLOBALS['application']->conn->GetOne($sql, array($contentId));
 
         if ($type === false) {
             return null;
         }
 
-        $type = ucfirst($type);
+        $type = classify($type);
         try {
-            return new $type($pk_content);
+            return new $type($contentId);
         } catch (Exception $e) {
             return null;
         }

@@ -115,18 +115,10 @@ class RssController extends Controller
             // If is home retrive all the articles available in there
             if ($categoryName == 'home') {
                 $contentsInHomepage = $cm->getContentsForHomepageOfCategory($category);
+
                 // Filter articles if some of them has time scheduling and sort them by position
                 $contentsInHomepage = $cm->getInTime($contentsInHomepage);
                 $articles_home = $cm->sortArrayofObjectsByProperty($contentsInHomepage, 'position');
-
-                // Fetch the photo and category name for this element
-                foreach ($articles_home as $i => $article) {
-                    if (isset($article->img1) && $article->img1 != 0) {
-                        $photos[$article->id] = new \Photo($article->img1);
-                    }
-
-                    $article->category_name = $article->loadCategoryName($article->id);
-                }
             } elseif ($categoryName == 'opinion') {
                 $author = $request->query->filter('author', null, FILTER_SANITIZE_STRING);
 
@@ -134,7 +126,7 @@ class RssController extends Controller
                 if (!isset($author) || empty($author)) {
                     $articles_home = $cm->getOpinionArticlesWithAuthorInfo(
                         'contents.available=1 and contents.content_status=1',
-                        'ORDER BY created DESC LIMIT 0,50'
+                        'ORDER BY created DESC LIMIT 50'
                     );
                     $title_rss = 'Últimas Opiniones';
                 } else {
@@ -143,7 +135,7 @@ class RssController extends Controller
                         'opinions.fk_author='.((int) $author)
                         .' AND  contents.available=1  '
                         .'AND contents.content_status=1',
-                        'ORDER BY created DESC  LIMIT 0,50'
+                        'ORDER BY created DESC  LIMIT 50'
                     );
 
                     if (count($articles_home)) {
@@ -170,18 +162,9 @@ class RssController extends Controller
                 $articles_home = $cm->find(
                     'Article',
                     'available=1 AND content_status=1 AND fk_content_type=1',
-                    'ORDER BY created DESC, changed DESC LIMIT 0, 50'
+                    'ORDER BY created DESC, changed DESC LIMIT 50'
                 );
 
-                // Fetch the photo and category name for this element
-                foreach ($articles_home as $i => $article) {
-
-                    if (isset($article->img1) && $article->img1 != 0) {
-                        $photos[$article->id] = new \Photo($article->img1);
-                    }
-
-                    $article->category_name = $article->loadCategoryName($article->id);
-                }
                 $title_rss = 'Últimas Noticias';
             } else {
                 // Get the RSS for the rest of categories
@@ -193,21 +176,21 @@ class RssController extends Controller
                     $categoryName,
                     'contents.content_status=1 AND '
                     .'contents.available=1 AND contents.fk_content_type=1',
-                    'ORDER BY created DESC LIMIT 0,50'
+                    'ORDER BY created DESC LIMIT 50'
                 );
-
-                foreach ($articles_home as $i => $article) {
-                    if (isset($article->img1) && $article->img1 != 0) {
-                        $photos[$article->id] = new \Photo($article->img1);
-                    }
-
-                    $article->category_name = $article->loadCategoryName($article->id);
-                }
-
             }
 
             // Filter by scheduled
             $articles_home = $cm->getInTime($articles_home);
+
+            // Fetch the photo and category name for this element
+            foreach ($articles_home as $i => $article) {
+                if (isset($article->img1) && $article->img1 != 0) {
+                    $photos[$article->id] = new \Photo($article->img1);
+                }
+
+                $article->category_name = $article->loadCategoryName($article->id);
+            }
 
             $this->view->assign(
                 array(
