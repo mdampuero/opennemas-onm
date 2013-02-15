@@ -18,8 +18,8 @@
     {block name="header-css"}
         {css_tag href="/bootstrap/bootstrap.css" common=1}
         {css_tag href="/fontawesome/font-awesome.min.css" common=1}
-		{css_tag href="/style-backend.css" common="1"}
-        {css_tag href="/style.css"}
+        {css_tag href="/style.css" common=1}
+        {css_tag href="/style-navbar.css"}
         <!--[if IE]>{css_tag href="/ie.css"}<![endif]-->
         {css_tag href="/jquery/jquery-ui.css" media="all" type="text/css" common=1}
     {/block}
