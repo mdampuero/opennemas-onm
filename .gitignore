@@ -18,8 +18,6 @@ vendor/symfony
 vendor/monolog
 vendor/swiftmailer
 vendor/psr
-vendor/luracast
-vendor/bin/restler.php
 app/config/parameters.yml
 /bin/import-tools/joomla/importer.log
 /bin/import-tools/joomla/configuration.ini
