@@ -38,6 +38,7 @@ class PollsController extends Controller
         $this->cm   = new \ContentManager();
 
         $this->categoryName = $this->get('request')->query->filter('category_name', '', FILTER_SANITIZE_STRING);
+        $this->page         = $this->get('request')->query->getDigits('page', 1);
 
         if (!empty($this->categoryName)) {
             $this->ccm = new \ContentCategoryManager();
@@ -79,7 +80,6 @@ class PollsController extends Controller
         if (!\Onm\Module\ModuleManager::isActivated('POLL_MANAGER')) {
             throw new ResourceNotFoundException();
         }
-        $this->page = $request->query->getDigits('page', 1);
 
         $this->view->setConfig('poll-frontpage');
 
@@ -203,19 +203,17 @@ class PollsController extends Controller
         $cookieName = "poll-".$poll->id;
         $cookie = $request->cookies->get($cookieName);
 
-
         $message = null;
         $alreadyVoted = false;
-        if (!isset($cookie)) {
-            $voted = (int) $request->query->getDigits('voted', 0);
-            $valid = (int) $request->query->getDigits('valid', null);
-
+        $voted = (int) $request->query->getDigits('voted', 0);
+        $valid = (int) $request->query->getDigits('valid', null);
+        if ($voted == 1) {
             if ($voted == 1 && $valid === 1) {
                 $message = _('Thanks for participating.');
             } elseif ($voted == 1 && $valid === 0) {
                 $message = _('Please select a valid poll answer.');
             }
-        } else {
+        } elseif(isset($cookie)) {
             $alreadyVoted = true;
             $message = _('You have voted this poll previously.');
         }
@@ -244,14 +242,13 @@ class PollsController extends Controller
         $dirtyID = $request->request->filter('id', '', FILTER_SANITIZE_STRING);
         $answer = $request->request->filter('answer', '', FILTER_SANITIZE_STRING);
         $page = 0;
-
         $pollId = \Content::resolveID($dirtyID);
+
 
         // Redirect to album frontpage if id_album wasn't provided
         if (is_null($pollId)) {
             throw new ResourceNotFoundException();
         }
-
         $poll = new \Poll($pollId);
 
         if (empty($poll->id)) {
@@ -263,6 +260,7 @@ class PollsController extends Controller
 
         $valid = 0;
         $voted = 0;
+
         if (!empty($answer) && !isset($cookie)) {
             $ip = $request->server->get('REMOTE_ADDR');
             $voted = $poll->vote($answer, $ip);
@@ -271,7 +269,7 @@ class PollsController extends Controller
 
             $cookieVoted = new Cookie($cookieName, 'voted', time() + (3600 * 1));
 
-            $this->cleanCache($pollId, $page);
+            $this->cleanCache($poll->category_name, $pollId);
         } elseif (empty($answer)) {
             $valid = 0;
             $voted = 1;
@@ -317,13 +315,16 @@ class PollsController extends Controller
      *
      * @return void
      **/
-    protected function cleanCache($pollId, $page)
+    protected function cleanCache($categoryName, $pollId)
     {
-        $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
-        $cacheID    = $this->view->generateCacheId($this->categoryName, '', $pollId);
-        $tplManager->delete($cacheID, 'poll.tpl');
+        $tplManager = new \TemplateCacheManager($this->view->templateBaseDir);
+        $cacheID    = $this->view->generateCacheId($categoryName, '', $pollId);
+        $result = $tplManager->delete($cacheID, 'poll.tpl');
 
-        $cacheID = $this->view->generateCacheId('poll'.$this->categoryName, '', $page);
+        $cacheID = $this->view->generateCacheId('poll'.$categoryName, '', $this->page);
+        $tplManager->delete($cacheID, 'poll_frontpage.tpl');
+
+        $cacheID = $this->view->generateCacheId('poll'.$this->categoryName, '', $this->page);
         $tplManager->delete($cacheID, 'poll_frontpage.tpl');
     }
 }
