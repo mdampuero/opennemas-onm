@@ -2125,37 +2125,21 @@ class ContentManager
     }
 
     //Devuelve un array de objetos segun se pase un array de id's
-    public function getContents($pk_contents)
+    public function getContents($contentIds)
     {
         $contents = array();
-        if ( is_array($pk_contents) && count($pk_contents) > 0 ) {
-            $sql = 'SELECT * FROM `contents` '
-                 . 'WHERE fk_content_type != 8 '
-                 . 'AND pk_content IN ('.implode(',', $pk_contents).')';
-            $rs  = $GLOBALS['application']->conn->Execute($sql);
+        $content = new Content();
+        if (is_array($contentIds) && count($contentIds) > 0 ) {
+            foreach ($contentIds as $contentId) {
+                $content = $content->get($contentId);
 
-            if ($rs !== false) {
-                while (!$rs->EOF) {
-                    $obj = new Content();
-                     $contents[] = $obj->get($rs->fields['pk_content']);
-
-                    $contents[] = $obj;
-                    $rs->MoveNext();
+                if ($content->pk_content == $contentId) {
+                    $contents []= $content;
                 }
             }
         }
 
-        $contentsOrdered = array();
-        foreach ($pk_contents as $pk_content) {
-            foreach ($contents as $content) {
-                if ($content->pk_content == $pk_content) {
-                    $contentsOrdered[] = $content;
-                    break;
-                }
-            }
-        }
-
-        return $contentsOrdered;
+        return $contents;
     }
 
 

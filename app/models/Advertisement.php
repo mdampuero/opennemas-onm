@@ -652,16 +652,16 @@ class Advertisement extends Content
             if ($category !== 0) {
                 $rsBanner = $cm->find(
                     'Advertisement',
-                    ' type_advertisement IN ('.$types.') AND available=1 AND
-                    (fk_content_categories LIKE \'%'.$category.'%\' '.$generics.')',
-                    'ORDER BY type_advertisement, created'
+                    ' contents.available=1 AND advertisements.type_advertisement IN ('.$types.') AND
+                    (advertisements.fk_content_categories LIKE \'%'.$category.'%\' '.$generics.')',
+                    'ORDER BY contents.created'
                 );
             } else {
                 $rsBanner = $cm->find(
                     'Advertisement',
-                    ' type_advertisement IN ('.$types.') AND available=1 AND
-                    fk_content_categories=0',
-                    'ORDER BY type_advertisement, created'
+                    ' contents.available=1 AND advertisements.type_advertisement IN ('.$types.') AND
+                    advertisements.fk_content_categories=0',
+                    'ORDER BY contents.created'
                 );
             }
 
@@ -755,10 +755,10 @@ class Advertisement extends Content
             $cm = new ContentManager();
             $rsBanner = $cm->find(
                 'Advertisement',
-                ' `type_advertisement`=' . $type
-                .' AND `available`=1'
-                .' AND `fk_content_categories` LIKE "%'.$category.'%"',
-                ' ORDER BY type_advertisement, created'
+                ' `contents`.`available`=1'
+                .' AND `advertisements`.`type_advertisement`=' . $type
+                .' AND `advertisements`.`fk_content_categories` LIKE "%'.$category.'%"',
+                ' ORDER BY `contents`.created'
             );
 
             $numBanner = array_rand($rsBanner);
