@@ -209,8 +209,9 @@ class Dispatcher
         } else {
             $normalizedUrl = $url;
         }
+
         while (strpos($normalizedUrl, '//') != false) {
-            $normalizedUrl = str_replace('//', '/', $url);
+            $normalizedUrl = str_replace('//', '/', $normalizedUrl);
         }
 
         return $normalizedUrl;
