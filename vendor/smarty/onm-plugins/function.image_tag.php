@@ -4,9 +4,8 @@
  * File:     	function.image_tag.php
  * Prints an img html tag gitven src url file.
  */
-
-function smarty_function_image_tag($params, &$smarty) {
-
+function smarty_function_image_tag($params, &$smarty)
+{
     $output = "";
 
     if (empty($params['src'])) {
@@ -21,7 +20,7 @@ function smarty_function_image_tag($params, &$smarty) {
         $baseUrl = '';
     } elseif (!array_key_exists('base_url', $params)) {
         $baseUrl = INSTANCE_MEDIA.'images';
-    } else{
+    } else {
         $baseUrl = $params['base_url'].DS;
     }
 
@@ -31,7 +30,7 @@ function smarty_function_image_tag($params, &$smarty) {
     unset($params['src']);
     unset($params['base_url']);
     $properties = '';
-    foreach($params as $key => $value) {
+    foreach ($params as $key => $value) {
         $properties .= " {$key}=\"{$value}\"";
     }
 
