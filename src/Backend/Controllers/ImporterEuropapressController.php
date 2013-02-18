@@ -220,6 +220,7 @@ class ImporterEuropapressController extends Controller
      **/
     public function configAction(Request $request)
     {
+        $this->checkAclOrForward('IMPORT_EPRESS_CONFIG');
         // If request is post save the information
         if ('POST' != $this->request->getMethod()) {
             $message    = $this->request->query->filter('message', null, FILTER_SANITIZE_STRING);

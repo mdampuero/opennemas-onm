@@ -401,6 +401,8 @@ class ImporterEfeController extends Controller
      **/
     public function configAction(Request $request)
     {
+        $this->checkAclOrForward('IMPORT_EFE_CONFIG');
+
         if (count($_POST) <= 0) {
             $serverAuth = s::get('efe_server_auth');
 
