@@ -1110,6 +1110,19 @@ class Privilege
                 'description'  => _('Manage frontpage'),
                 'module'       => 'POLL',
             ),
+
+            176 => array(
+                'pk_privilege' => '176',
+                'name'         => 'IMPORT_EPRESS_CONFIG',
+                'description'  => _('Config Import EuropaPress'),
+                'module'       => 'IMPORT',
+            ),
+            177 => array(
+                'pk_privilege' => '177',
+                'name'         => 'IMPORT_EFE_CONFIG',
+                'description'  => _('Config Import EFE'),
+                'module'       => 'IMPORT',
+            ),
         );
     }
 }
