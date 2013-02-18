@@ -16,15 +16,15 @@ use Onm\Settings as s;
  **/
 class Application
 {
-    public $conn           = null;
-    public $logger         = null;
-    public $errors         = array();
-    public $adodb          = null;
-    public $smarty         = null;
-    public $log            = null;
-    public $cache          = null;
-    public $events         = array();
-    public static $language = null;
+    public $conn                = null;
+    public $logger              = null;
+    public static $loggerStatic = null;
+    public $errors              = array();
+    public $adodb               = null;
+    public $smarty              = null;
+    public $cache               = null;
+    public $events              = array();
+    public static $language     = null;
 
     /**
     * Setup the Application instance and assigns it to a global variable
@@ -59,38 +59,13 @@ class Application
         $GLOBALS['application']->conn->Connect(BD_HOST, BD_USER, BD_PASS, BD_DATABASE);
 
         $GLOBALS['application']->conn->bulkBind = true;
-
-        // Check if adodb is log enabled
-        if (s::get('log_db_enabled') == 1) {
-            $GLOBALS['application']->conn->LogSQL();
-        }
+        $GLOBALS['application']->conn->LogSQL();
     }
 
     public static function initLogger()
     {
-        // init Logger
-        $logLevel = (s::get('log_level'))?: 'normal';
-        $logger = new \Onm\Log($logLevel);
-        Zend_Registry::set('logger', $logger);
-
-        // Composite Logger (file + mail)
-        // http://www.indelible.org/php/Log/guide.html#composite-handlers
-        if (s::get('log_enabled') == 'on') {
-            $GLOBALS['application']->logger = \Log::singleton('composite');
-
-            $conf = array('mode' => 0600,
-                          'timeFormat' => '[%Y-%m-%d %H:%M:%S]',
-                          'lineFormat' => '%1$s %2$s [%3$s] %4$s %5$s %6$s');
-            $fileLogger = &Log::singleton(
-                'file',
-                SYS_LOG_FILENAME,
-                'application',
-                $conf
-            );
-            $GLOBALS['application']->logger->addChild($fileLogger);
-        } else {
-            $GLOBALS['application']->logger = \Log::singleton('null');
-        }
+        self::$loggerStatic = new \Onm\Log('normal');
+        $GLOBALS['application']->logger = self::$loggerStatic;
     }
 
     /**
@@ -134,7 +109,7 @@ class Application
     */
     public static function getLogger()
     {
-        return \Zend_Registry::get('logger');
+        return self::$loggerStatic;
     }
 
 
@@ -192,8 +167,7 @@ class Application
         $bc = new \Browscap(APPLICATION_PATH .DS.'tmp'.DS.'cache');
         $browser = $bc->getBrowser(); //isBanned
 
-        if (
-            !empty($browser->isMobileDevice)
+        if (!empty($browser->isMobileDevice)
             && ($browser->isMobileDevice == true)
             && !(isset($_COOKIE['confirm_mobile']))
         ) {
@@ -249,8 +223,7 @@ class Application
         // IP que partiendo del REMOTE_ADDR original irá indicando los proxys
         // por los que ha pasado.
 
-        if (
-            isset($_SERVER['HTTP_X_FORWARDED_FOR'])
+        if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])
             && $_SERVER['HTTP_X_FORWARDED_FOR'] != ''
         ) {
             $clientIp = ( !empty($_SERVER['REMOTE_ADDR']) ) ?
@@ -333,7 +306,7 @@ class Application
         $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
 
         $logger = Application::getLogger();
-        $logger->notice('[Database Error] '.$errorMsg, 'normal');
+        $logger->notice('[Database Error] '.$errorMsg);
 
         return $errorMsg;
     }

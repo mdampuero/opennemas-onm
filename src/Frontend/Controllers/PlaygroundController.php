@@ -105,6 +105,7 @@ class PlaygroundController extends Controller
         $logger = $this->get('logger');
 
         $logger->notice('texto de prueba');
+        $logger->error('error de prueba');
 
         var_dump($logger);
     }
