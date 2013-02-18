@@ -53,6 +53,7 @@ class FilesManager
                 "Error creating directory: " . $path
             );
         }
+
         return $created;
     }
 
